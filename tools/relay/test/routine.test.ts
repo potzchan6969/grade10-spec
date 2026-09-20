@@ -8,7 +8,7 @@ afterEach(() => {
 });
 
 describe("the fire", () => {
-  it("carries the payload as text and answers the session's id and url", async () => {
+  it("carries the payload as text and answers the session's url", async () => {
     const calls: { url: string; init: RequestInit }[] = [];
     vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
       calls.push({ url, init });
@@ -19,11 +19,14 @@ describe("the fire", () => {
         }),
       );
     });
-    const run = await fireRoutine(
+    const fired = await fireRoutine(
       { url: "https://runner.example/fire", token: "the-routine-token" },
       '{"change":null}',
     );
-    expect(run).toEqual({ id: "s1", url: "https://runs.example/s1" });
+    expect(fired).toEqual({
+      ok: true,
+      run: { url: "https://runs.example/s1" },
+    });
     expect(calls[0].url).toBe("https://runner.example/fire");
     expect(calls[0].init.method).toBe("POST");
     const headers = calls[0].init.headers as Record<string, string>;
@@ -32,18 +35,25 @@ describe("the fire", () => {
       "experimental-cc-routine-2026-04-01",
     );
     expect(headers["anthropic-version"]).toBe("2023-06-01");
+    expect(headers["content-type"]).toBe("application/json");
     expect(JSON.parse(String(calls[0].init.body))).toEqual({
       text: '{"change":null}',
     });
   });
 
-  it("stops when the runner refuses the fire", async () => {
+  it("answers what the runner said when it refuses the fire", async () => {
     vi.stubGlobal(
       "fetch",
       async () => new Response("no such routine", { status: 404 }),
     );
-    await expect(
-      fireRoutine({ url: "https://runner.example/fire", token: "t" }, "{}"),
-    ).rejects.toThrow("routine fire: 404");
+    expect(
+      await fireRoutine(
+        { url: "https://runner.example/fire", token: "t" },
+        "{}",
+      ),
+    ).toEqual({
+      ok: false,
+      why: "the runner answered 404 no such routine",
+    });
   });
 });

@@ -1,13 +1,14 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import type { Env } from "../src/env.ts";
-import type { RoomOp } from "../src/room.ts";
+import type { RoomOp } from "../src/rpc.ts";
 import { signSlackRequest } from "../src/slack.ts";
 import { mintWakeToken } from "../src/token.ts";
 import worker from "../src/worker.ts";
 
-/** The router: Slack answered inside three seconds with the work behind it, the
- * workflow's wake, and the four calls a running session makes. Every room is a
- * stub here — the state machine is read in `room-state.test.ts`. */
+/** The router: the entry that refuses a deployment missing a secret, Slack
+ * answered inside three seconds with the work behind it, the workflow's wake,
+ * and the four calls a running session makes. Every room is a stub here — the
+ * room itself is read in `room.test.ts`. */
 
 const SIGNING = "the-signing-secret";
 const WAKE = "the-workflow's-wake-token";
@@ -21,7 +22,7 @@ interface Sent {
   op: RoomOp;
 }
 
-function testEnv(sent: Sent[]): Env {
+function testEnv(sent: Sent[], over: Partial<Env> = {}): Env {
   const namespace = {
     idFromName: (name: string) => ({ toString: () => `name:${name}` }),
     idFromString: (hex: string) => ({ toString: () => hex }),
@@ -40,6 +41,7 @@ function testEnv(sent: Sent[]): Env {
     PLANNING_CHANNEL: CHANNEL,
     REPO: "9gag/grade10-spec",
     RELAY_URL: "https://grade10-relay.workers.dev",
+    SLACK_APP_USER: APP,
     SLACK_SIGNING_SECRET: SIGNING,
     SLACK_BOT_TOKEN: "xoxb-in-the-environment-alone",
     ROUTINE_FIRE_URL: "https://runner.example/fire",
@@ -47,6 +49,7 @@ function testEnv(sent: Sent[]): Env {
     GITHUB_TOKEN: "the-code-host-token",
     TOKEN_SECRET,
     WAKE_TOKEN: WAKE,
+    ...over,
   };
 }
 
@@ -97,6 +100,38 @@ afterEach(() => {
   vi.unstubAllGlobals();
 });
 
+describe("the entry", () => {
+  it("refuses a deployment with a secret unset, and names it", async () => {
+    for (const secret of [
+      "SLACK_SIGNING_SECRET",
+      "ROUTINE_TOKEN",
+      "GITHUB_TOKEN",
+      "TOKEN_SECRET",
+      "WAKE_TOKEN",
+    ] as const) {
+      const response = await worker.fetch(
+        new Request("https://relay.example/wake", { method: "POST" }),
+        testEnv([], { [secret]: "  " }),
+        context([]),
+      );
+      expect(response.status).toBe(500);
+      expect(await response.json()).toEqual({
+        reason: "missing-secret",
+        secret,
+      });
+    }
+  });
+
+  it("names the secret and never its value", async () => {
+    const response = await worker.fetch(
+      new Request("https://relay.example/wake", { method: "POST" }),
+      testEnv([], { TOKEN_SECRET: "" }),
+      context([]),
+    );
+    expect(await response.text()).not.toContain(WAKE);
+  });
+});
+
 describe("/slack/events", () => {
   it("echoes a url_verification challenge", async () => {
     const response = await slack(testEnv([]), [], {
@@ -125,6 +160,25 @@ describe("/slack/events", () => {
     expect(await response.json()).toEqual({ reason: "bad-signature" });
   });
 
+  it("refuses a signed body that is not JSON", async () => {
+    const body = "not json at all";
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const response = await worker.fetch(
+      new Request("https://relay.example/slack/events", {
+        method: "POST",
+        headers: {
+          "x-slack-request-timestamp": timestamp,
+          "x-slack-signature": await signSlackRequest(SIGNING, timestamp, body),
+        },
+        body,
+      }),
+      testEnv([]),
+      context([]),
+    );
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ reason: "not-json" });
+  });
+
   it("opens a room on a first sentence and answers before the work", async () => {
     const sent: Sent[] = [];
     const env = testEnv(sent);
@@ -136,7 +190,7 @@ describe("/slack/events", () => {
       op: "enqueue",
       reason: "plan",
       requireRoom: false,
-      eventId: "Ev1",
+      dedupe: `slack:${CHANNEL}/1700000000.000100`,
       thread: { channel: CHANNEL, ts: "1700000000.000100" },
       message: {
         slack: "U0PM",
@@ -144,6 +198,19 @@ describe("/slack/events", () => {
         ts: "1700000000.000100",
       },
     });
+  });
+
+  it("keys one message by its channel and its ts, whatever the event id", async () => {
+    const sent: Sent[] = [];
+    const env = testEnv(sent);
+    await slack(env, [], mention(`<@${APP}> plan the badge`));
+    await slack(
+      env,
+      [],
+      mention(`<@${APP}> plan the badge`, { event_id: "Ev2" }),
+    );
+    expect(sent).toHaveLength(2);
+    expect(sent[0].op).toEqual(sent[1].op);
   });
 
   it("wakes nothing for the app's own reply", async () => {
@@ -170,25 +237,29 @@ describe("/slack/events", () => {
 });
 
 describe("/wake", () => {
-  it("shared-planning-agent-rounds-SC-66 - the /wake endpoint queues one wake per landing", async () => {
-    const sent: Sent[] = [];
-    const response = await worker.fetch(
+  async function wake(env: Env, body: unknown, token = WAKE) {
+    return worker.fetch(
       new Request("https://relay.example/wake", {
         method: "POST",
         headers: {
-          authorization: `Bearer ${WAKE}`,
+          authorization: `Bearer ${token}`,
           "content-type": "application/json",
         },
-        body: JSON.stringify({
-          change: "nav-cart-count-badge",
-          reason: "landing",
-          base: "aaaaaaa",
-          head: "bbbbbbb",
-        }),
+        body: typeof body === "string" ? body : JSON.stringify(body),
       }),
-      testEnv(sent),
+      env,
       context([]),
     );
+  }
+
+  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change", async () => {
+    const sent: Sent[] = [];
+    const response = await wake(testEnv(sent), {
+      change: "nav-cart-count-badge",
+      reason: "landing",
+      base: "aaaaaaa",
+      head: "bbbbbbb",
+    });
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ queued: true });
     expect(sent).toEqual([
@@ -197,7 +268,8 @@ describe("/wake", () => {
         op: {
           op: "enqueue",
           reason: "landing",
-          landing: { base: "aaaaaaa", head: "bbbbbbb" },
+          change: "nav-cart-count-badge",
+          dedupe: "wake:nav-cart-count-badge/bbbbbbb",
         },
       },
     ]);
@@ -205,16 +277,22 @@ describe("/wake", () => {
 
   it("refuses a wake with the wrong token", async () => {
     const sent: Sent[] = [];
-    const response = await worker.fetch(
-      new Request("https://relay.example/wake", {
-        method: "POST",
-        headers: { authorization: "Bearer not-the-wake-token" },
-        body: JSON.stringify({ change: "nav-cart-count-badge" }),
-      }),
+    const response = await wake(
       testEnv(sent),
-      context([]),
+      { change: "nav-cart-count-badge" },
+      "not-the-wake-token",
     );
     expect(response.status).toBe(401);
+    expect(sent).toEqual([]);
+  });
+
+  it("refuses a wake that names no change, and a body that is not JSON", async () => {
+    const sent: Sent[] = [];
+    const env = testEnv(sent);
+    expect((await wake(env, { base: "aaa", head: "bbb" })).status).toBe(400);
+    const notJson = await wake(env, "{");
+    expect(notJson.status).toBe(400);
+    expect(await notJson.json()).toEqual({ reason: "not-json" });
     expect(sent).toEqual([]);
   });
 });
@@ -232,14 +310,14 @@ describe("/runs/:token", () => {
       new Request(`https://relay.example/runs/${token}/${name}`, {
         method: "POST",
         headers: { "content-type": "application/json" },
-        body: JSON.stringify(body),
+        body: typeof body === "string" ? body : JSON.stringify(body),
       }),
       env,
       context([]),
     );
   }
 
-  it("shared-planning-agent-rounds-SC-74 - a post needs a valid wake token", async () => {
+  it("shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token", async () => {
     const sent: Sent[] = [];
     const env = testEnv(sent);
     const bad = await call(env, "not.atoken", "post", { text: "drafted" });
@@ -286,15 +364,25 @@ describe("/runs/:token", () => {
         kind: "reviewed",
         artifact: "proposal",
       },
-      { op: "done", wake: 1, summary: "landed the proposal" },
+      { op: "done", wake: 1 },
     ]);
     expect(new Set(sent.map((one) => one.room))).toEqual(new Set([ROOM_ID]));
+  });
+
+  it("refuses a body that is not JSON", async () => {
+    const sent: Sent[] = [];
+    const token = await mintWakeToken(TOKEN_SECRET, claims);
+    const response = await call(testEnv(sent), token, "post", "{");
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ reason: "not-json" });
+    expect(sent).toEqual([]);
   });
 
   it("knows no other call", async () => {
     const token = await mintWakeToken(TOKEN_SECRET, claims);
     const response = await call(testEnv([]), token, "archive", {});
     expect(response.status).toBe(404);
+    expect(await response.json()).toEqual({ reason: "unknown-call" });
   });
 });
 

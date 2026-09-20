@@ -1,0 +1,917 @@
+import { afterEach, describe, expect, it, vi } from "vitest";
+import type { Env } from "../src/env.ts";
+import { Room } from "../src/room.ts";
+import type { RoomState } from "../src/room-state.ts";
+import type { RoomOp } from "../src/rpc.ts";
+
+/** The room, driven over a stub `DurableObjectState` — a storage map and one
+ * alarm — with the code host, the runner and Slack all answered by an
+ * injected `fetch`.
+ *
+ * The transitions themselves are read in `room-state.test.ts` and the checks
+ * in `land.test.ts`; what is read here is the wiring: what the room forwards,
+ * what it dedupes, what it reads at which sha, where it posts and what it
+ * answers a session that lands. */
+
+const NOW = 1_700_000_000_000;
+const CHANGE = "nav-cart-count-badge";
+const SHA = "abc1230000000000000000000000000000000000";
+const CHANNEL = "C0PLAN";
+const THREAD = { channel: CHANNEL, ts: "1700000000.000100" };
+const THREAD_ROOM = `${CHANNEL}/1700000000.000100`;
+const CHANGE_ROOM = `change/${CHANGE}`;
+const RECORD_PATH = `openspec/changes/${CHANGE}/.openspec.yaml`;
+const SCHEMA_PATH = "openspec/schemas/grade10-planning/schema.yaml";
+
+const TEAM = `handles:
+  ecchochan:
+    email: ecchochan@gmail.com
+    slack: U0PM
+    roles: [pm, tech, dev]
+  kinisworking:
+    slack: U0DEV
+    roles: [dev]
+channels: {}
+`;
+
+const SCHEMA = `name: grade10-planning
+artifacts:
+  - id: proposal
+    teammate: product-manager
+    hand: pm
+  - id: specs
+    required: true
+  - id: tasks
+    teammate: engineer
+    hand: dev
+`;
+
+const RECORD = `schema: grade10-planning
+hands:
+  pm: "@ecchochan"
+  dev: "@kinisworking"
+landed_by:
+  proposal: "@ecchochan"
+reviewed:
+  ui-design: 1a2b3c4d
+`;
+
+/** The record on `main`, which names the thread the change posts to. */
+const RECORD_AT_MAIN = `${RECORD}thread: C0RECORDED/1700000000.000900
+`;
+
+interface Call {
+  url: string;
+  init?: RequestInit;
+}
+
+interface Answers {
+  /** `<path>@<ref>` against the file's text. */
+  files: Record<string, string>;
+  compare: { status?: number; body?: unknown };
+  advance: { status?: number; body?: unknown };
+  fire: { status?: number; body?: unknown };
+}
+
+/** What the store reads as, unless a test says otherwise. A test that names
+ * `files` names them all, so it can leave one out. */
+const FILES: Record<string, string> = {
+  "docs/prds/team.yaml@main": TEAM,
+  [`${SCHEMA_PATH}@${SHA}`]: SCHEMA,
+  [`${RECORD_PATH}@${SHA}`]: RECORD,
+  [`${RECORD_PATH}@main`]: RECORD_AT_MAIN,
+};
+
+function answers(over: Partial<Answers> = {}): Answers {
+  return {
+    files: over.files ?? FILES,
+    compare: over.compare ?? {
+      body: {
+        files: [
+          { filename: `openspec/changes/${CHANGE}/proposal.md` },
+          { filename: `openspec/changes/${CHANGE}/.openspec.yaml` },
+        ],
+      },
+    },
+    advance: over.advance ?? { body: { object: { sha: SHA } } },
+    fire: over.fire ?? {
+      body: {
+        claude_code_session_id: "s1",
+        claude_code_session_url: "https://runs.example/s1",
+      },
+    },
+  };
+}
+
+class Storage {
+  readonly held = new Map<string, unknown>();
+  alarm: number | null = null;
+
+  async get<T>(key: string): Promise<T | undefined> {
+    return this.held.get(key) as T | undefined;
+  }
+
+  async put(key: string, value: unknown): Promise<void> {
+    // The runtime stores what it can serialize, so a state that stopped being
+    // plain data would fail here rather than in production.
+    this.held.set(key, JSON.parse(JSON.stringify(value)));
+  }
+
+  async delete(key: string): Promise<boolean> {
+    return this.held.delete(key);
+  }
+
+  async setAlarm(at: number): Promise<void> {
+    this.alarm = at;
+  }
+
+  async deleteAlarm(): Promise<void> {
+    this.alarm = null;
+  }
+}
+
+function harness(over: Partial<Answers> = {}) {
+  const table = answers(over);
+  const calls: Call[] = [];
+  const rooms = new Map<string, { room: Room; storage: Storage }>();
+
+  const namespace = {
+    idFromName: (name: string) => ({ toString: () => name }),
+    idFromString: (name: string) => ({ toString: () => name }),
+    get: (id: { toString(): string }) => ({
+      fetch: (request: Request) => of(id.toString()).room.fetch(request),
+    }),
+  };
+
+  const env: Env = {
+    ROOM: namespace as unknown as DurableObjectNamespace,
+    PLANNING_CHANNEL: CHANNEL,
+    REPO: "9gag/grade10-spec",
+    RELAY_URL: "https://grade10-relay.workers.dev",
+    SLACK_APP_USER: "U0APP",
+    SLACK_SIGNING_SECRET: "the-signing-secret",
+    SLACK_BOT_TOKEN: "xoxb-in-the-environment-alone",
+    ROUTINE_FIRE_URL: "https://runner.example/fire",
+    ROUTINE_TOKEN: "the-routine-token",
+    GITHUB_TOKEN: "the-code-host-token",
+    TOKEN_SECRET: "the-relay's-own-hmac-secret",
+    WAKE_TOKEN: "the-workflow's-wake-token",
+  };
+
+  function of(name: string) {
+    let held = rooms.get(name);
+    if (!held) {
+      const storage = new Storage();
+      const ctx = {
+        id: { toString: () => name },
+        storage,
+      } as unknown as DurableObjectState;
+      held = { room: new Room(ctx, env), storage };
+      rooms.set(name, held);
+    }
+    return held;
+  }
+
+  function answer(status: number | undefined, body: unknown): Response {
+    return new Response(
+      typeof body === "string" ? body : JSON.stringify(body ?? {}),
+      { status: status ?? 200 },
+    );
+  }
+
+  vi.stubGlobal("fetch", async (url: string, init?: RequestInit) => {
+    calls.push({ url, init });
+    if (url.includes("/compare/"))
+      return answer(table.compare.status, table.compare.body);
+    if (url.includes("/contents/")) {
+      const [, rest] = url.split("/contents/");
+      const [path, query] = rest.split("?ref=");
+      const text = table.files[`${decodeURIComponent(path)}@${query}`];
+      return text === undefined
+        ? answer(404, { message: "Not Found" })
+        : answer(200, { content: btoa(text), encoding: "base64" });
+    }
+    if (url.includes("/git/refs/heads/main"))
+      return answer(table.advance.status, table.advance.body);
+    if (url.includes("runner.example"))
+      return answer(table.fire.status, table.fire.body);
+    if (url.includes("chat.postMessage"))
+      return answer(200, { ok: true, ts: "1700000009.000100" });
+    throw new Error(`no answer for ${url}`);
+  });
+
+  return {
+    calls,
+    async send(name: string, op: RoomOp): Promise<Response> {
+      return of(name).room.fetch(
+        new Request("https://relay.invalid/room", {
+          method: "POST",
+          headers: { "content-type": "application/json" },
+          body: JSON.stringify(op),
+        }),
+      );
+    },
+    async alarm(name: string): Promise<void> {
+      await of(name).room.alarm();
+    },
+    state(name: string): RoomState | undefined {
+      return of(name).storage.held.get("state") as RoomState | undefined;
+    },
+    storage(name: string): Storage {
+      return of(name).storage;
+    },
+    /** What the room asked the runner to fire, as the run reads it. */
+    payload(): {
+      change: string | null;
+      reason: string;
+      thread: { channel: string; ts: string } | null;
+      sender: { slack: string; handle: string | null } | null;
+      messages: { text: string; handle: string | null }[];
+      relay: { url: string; token: string };
+    } {
+      const fired = calls.find((call) => call.url.includes("runner.example"));
+      if (!fired) throw new Error("nothing was fired");
+      const { text } = JSON.parse(String(fired.init?.body)) as {
+        text: string;
+      };
+      return JSON.parse(text);
+    },
+    posts(): { channel: string; text: string; thread_ts?: string }[] {
+      return calls
+        .filter((call) => call.url.includes("chat.postMessage"))
+        .map(
+          (call) =>
+            JSON.parse(String(call.init?.body)) as {
+              channel: string;
+              text: string;
+              thread_ts?: string;
+            },
+        );
+    },
+    /** The calls on the code host, from the call named on: a wake reads the
+     * team map for its payload, so a landing's own reads start after it. */
+    hostCalls(from = 0): Call[] {
+      return calls
+        .slice(from)
+        .filter((call) => call.url.includes("api.github.com"));
+    },
+    /** How many calls have been made, so a test can read what one op did. */
+    mark(): number {
+      return calls.length;
+    },
+  };
+}
+
+/** One message said in the thread. */
+function said(text: string, ts: string, slack = "U0PM"): RoomOp {
+  return {
+    op: "enqueue",
+    reason: "message",
+    thread: THREAD,
+    dedupe: `slack:${CHANNEL}/${ts}`,
+    message: { slack, text, ts },
+  };
+}
+
+/** A thread room woken by a first sentence, fired, and bound to the change:
+ * the shape every later call arrives in. */
+async function bound(relay: ReturnType<typeof harness>): Promise<void> {
+  await relay.send(THREAD_ROOM, {
+    op: "enqueue",
+    reason: "plan",
+    thread: THREAD,
+    message: { slack: "U0PM", text: "<@U0APP> plan the badge", ts: "1.1" },
+  });
+  await relay.alarm(THREAD_ROOM);
+  await relay.send(THREAD_ROOM, { op: "bind", wake: 1, change: CHANGE });
+}
+
+/** A change room running a wake the word `land` started, said by the handle
+ * given: what a landing call arrives at. */
+async function landing(
+  relay: ReturnType<typeof harness>,
+  word = "land",
+  slack = "U0PM",
+): Promise<void> {
+  await relay.send(CHANGE_ROOM, {
+    op: "enqueue",
+    reason: "message",
+    change: CHANGE,
+    thread: THREAD,
+    message: { slack, text: word, ts: "1.5" },
+  });
+  await relay.alarm(CHANGE_ROOM);
+}
+
+afterEach(() => {
+  vi.unstubAllGlobals();
+});
+
+describe("what the room answers twice", () => {
+  it("drops a delivery it has already answered", async () => {
+    const relay = harness();
+    const first = await relay.send(THREAD_ROOM, said("land", "1.1"));
+    expect(await first.json()).toEqual({ queued: true });
+    const again = await relay.send(THREAD_ROOM, said("land", "1.1"));
+    expect(again.status).toBe(200);
+    expect(await again.json()).toEqual({ queued: false, why: "duplicate" });
+    expect(relay.state(THREAD_ROOM)?.pending).toHaveLength(1);
+  });
+
+  it("keeps the arrivals it remembers in its own state", async () => {
+    const relay = harness();
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    expect(relay.state(THREAD_ROOM)?.seen).toEqual([`slack:${CHANNEL}/1.1`]);
+    expect([...relay.storage(THREAD_ROOM).held.keys()]).toEqual(["state"]);
+  });
+
+  it("answers a reply that mentions nobody where no room exists", async () => {
+    const relay = harness();
+    const response = await relay.send(THREAD_ROOM, {
+      ...said("carry on", "1.2"),
+      requireRoom: true,
+    } as RoomOp);
+    expect(await response.json()).toEqual({ queued: false, why: "no-room" });
+    expect(relay.state(THREAD_ROOM)).toBe(undefined);
+  });
+});
+
+describe("the fire", () => {
+  it("fires once for a burst and carries both messages", async () => {
+    const relay = harness();
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    await relay.send(THREAD_ROOM, said("hold on", "1.2", "U0DEV"));
+    await relay.alarm(THREAD_ROOM);
+
+    expect(
+      relay.calls.filter((call) => call.url.includes("runner.example")),
+    ).toHaveLength(1);
+    const payload = relay.payload();
+    expect(payload.messages).toEqual([
+      { handle: "ecchochan", slack: "U0PM", text: "land", ts: "1.1" },
+      { handle: "kinisworking", slack: "U0DEV", text: "hold on", ts: "1.2" },
+    ]);
+    // The wake's sender is the last word of the burst, not the first.
+    expect(payload.sender).toEqual({ slack: "U0DEV", handle: "kinisworking" });
+    expect(payload.reason).toBe("message");
+    expect(payload.thread).toEqual(THREAD);
+    expect(payload.relay.url).toBe("https://grade10-relay.workers.dev");
+    expect(payload.relay.token).toMatch(/^[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+$/);
+  });
+
+  it("acks with the run's link and sets the budget", async () => {
+    const relay = harness();
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    await relay.alarm(THREAD_ROOM);
+    expect(relay.posts()).toEqual([
+      {
+        channel: CHANNEL,
+        text: "Reading… https://runs.example/s1",
+        thread_ts: THREAD.ts,
+      },
+    ]);
+    expect(relay.storage(THREAD_ROOM).alarm).toBe(
+      relay.state(THREAD_ROOM)?.alarm?.at,
+    );
+    expect(relay.state(THREAD_ROOM)?.alarm?.kind).toBe("budget");
+  });
+
+  it("says in the thread what the runner answered, and frees the room", async () => {
+    const relay = harness({
+      fire: { status: 404, body: "no such routine" },
+    });
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    await relay.alarm(THREAD_ROOM);
+    expect(relay.posts()).toEqual([
+      {
+        channel: CHANNEL,
+        text: "The reply of this thread did not start: the runner answered 404 no such routine",
+        thread_ts: THREAD.ts,
+      },
+    ]);
+    expect(relay.state(THREAD_ROOM)).toMatchObject({
+      status: "idle",
+      queued: null,
+      alarm: null,
+    });
+    expect(relay.storage(THREAD_ROOM).alarm).toBe(null);
+  });
+
+  it("answers nothing on an alarm the room is not running a wake for", async () => {
+    const relay = harness();
+    // A room that already answered its wake, whose alarm the runtime rings
+    // once more.
+    relay.storage(CHANGE_ROOM).held.set("state", {
+      status: "idle",
+      wake: 1,
+      reason: null,
+      queued: null,
+      pending: [],
+      thread: THREAD,
+      change: CHANGE,
+      word: null,
+      senderSlack: null,
+      run: null,
+      seen: [],
+      alarm: { kind: "budget", at: NOW },
+    } satisfies RoomState);
+    await relay.alarm(CHANGE_ROOM);
+    expect(relay.posts()).toEqual([]);
+    expect(relay.calls).toEqual([]);
+  });
+});
+
+describe("the change's room", () => {
+  it("takes the running wake over at bind and forwards what comes after", async () => {
+    const relay = harness();
+    await bound(relay);
+
+    expect(relay.state(THREAD_ROOM)).toBe(undefined);
+    expect(await relay.storage(THREAD_ROOM).get("forward")).toBe(CHANGE_ROOM);
+    expect(relay.storage(THREAD_ROOM).alarm).toBe(null);
+    expect(relay.state(CHANGE_ROOM)).toMatchObject({
+      status: "running",
+      wake: 1,
+      change: CHANGE,
+      thread: THREAD,
+      reason: "plan",
+    });
+    expect(relay.storage(CHANGE_ROOM).alarm).toBe(
+      relay.state(CHANGE_ROOM)?.alarm?.at,
+    );
+
+    // The token a session holds names the thread's room, so every later call
+    // arrives there and is forwarded.
+    const posted = await relay.send(THREAD_ROOM, {
+      op: "post",
+      wake: 1,
+      text: "drafted the proposal",
+    });
+    expect(posted.status).toBe(200);
+    expect(relay.posts().at(-1)).toEqual({
+      channel: CHANNEL,
+      text: "drafted the proposal",
+      thread_ts: THREAD.ts,
+    });
+
+    const queued = await relay.send(THREAD_ROOM, said("one more thing", "1.9"));
+    expect(await queued.json()).toEqual({ queued: true });
+    expect(relay.state(CHANGE_ROOM)?.queued).toBe("message");
+    expect(relay.state(THREAD_ROOM)).toBe(undefined);
+  });
+
+  it("keeps its own wake when a thread offers one it cannot take", async () => {
+    const relay = harness();
+    await landing(relay);
+    expect(relay.state(CHANGE_ROOM)?.status).toBe("running");
+
+    await relay.send(THREAD_ROOM, {
+      op: "enqueue",
+      reason: "plan",
+      thread: THREAD,
+      message: { slack: "U0PM", text: "<@U0APP> plan it", ts: "2.1" },
+    });
+    await relay.alarm(THREAD_ROOM);
+    const bind = await relay.send(THREAD_ROOM, {
+      op: "bind",
+      wake: 1,
+      change: CHANGE,
+    });
+    expect(bind.status).toBe(409);
+    expect(await bind.json()).toEqual({ taken: false, reason: "room-busy" });
+    expect(relay.state(CHANGE_ROOM)?.word).toBe("land");
+    expect(await relay.storage(THREAD_ROOM).get("forward")).toBe(undefined);
+  });
+
+  it("binds the change on its own room without forwarding to itself", async () => {
+    const relay = harness();
+    await landing(relay);
+    const bound = await relay.send(CHANGE_ROOM, {
+      op: "bind",
+      wake: 1,
+      change: CHANGE,
+    });
+    expect(await bound.json()).toEqual({ bound: CHANGE });
+    expect(await relay.storage(CHANGE_ROOM).get("forward")).toBe(undefined);
+  });
+
+  it("refuses every call of a wake that is not the one running", async () => {
+    const relay = harness();
+    await landing(relay);
+    for (const op of [
+      { op: "post", wake: 2, text: "from the wake before" },
+      { op: "bind", wake: 2, change: CHANGE },
+      { op: "done", wake: 2 },
+      { op: "land", wake: 2, sha: SHA, kind: "word", artifact: "proposal" },
+    ] as RoomOp[]) {
+      const response = await relay.send(CHANGE_ROOM, op);
+      expect(response.status).toBe(401);
+      expect(await response.json()).toEqual({ reason: "stale-wake" });
+    }
+  });
+
+  it("frees the room on done, and fires again for what waited", async () => {
+    const relay = harness();
+    await landing(relay);
+    await relay.send(CHANGE_ROOM, said("and one more", "1.7"));
+    const done = await relay.send(CHANGE_ROOM, { op: "done", wake: 1 });
+    expect(await done.json()).toEqual({ done: true });
+    expect(relay.state(CHANGE_ROOM)).toMatchObject({
+      status: "running",
+      wake: 2,
+    });
+    expect(
+      relay.calls.filter((call) => call.url.includes("runner.example")),
+    ).toHaveLength(2);
+  });
+
+  it("answers an op it does not know", async () => {
+    const relay = harness();
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "archive",
+    } as unknown as RoomOp);
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ reason: "unknown-op" });
+  });
+});
+
+describe("where a room posts", () => {
+  it("posts to the thread the record names when it has none of its own", async () => {
+    const relay = harness();
+    await relay.send(CHANGE_ROOM, {
+      op: "enqueue",
+      reason: "landing",
+      change: CHANGE,
+    });
+    await relay.alarm(CHANGE_ROOM);
+    expect(relay.posts()).toEqual([
+      {
+        channel: "C0RECORDED",
+        text: "Reading… https://runs.example/s1",
+        thread_ts: "1700000000.000900",
+      },
+    ]);
+    expect(relay.payload().thread).toBe(null);
+  });
+
+  it("falls back to the planning channel where the record names no thread", async () => {
+    const relay = harness({
+      files: { ...FILES, [`${RECORD_PATH}@main`]: RECORD },
+    });
+    await relay.send(CHANGE_ROOM, {
+      op: "enqueue",
+      reason: "landing",
+      change: CHANGE,
+    });
+    await relay.alarm(CHANGE_ROOM);
+    expect(relay.posts()).toEqual([
+      { channel: CHANNEL, text: "Reading… https://runs.example/s1" },
+    ]);
+  });
+
+  it("falls back to the planning channel where it cannot read the record", async () => {
+    const relay = harness({ files: { "docs/prds/team.yaml@main": TEAM } });
+    await relay.send(CHANGE_ROOM, {
+      op: "enqueue",
+      reason: "landing",
+      change: CHANGE,
+    });
+    await relay.alarm(CHANGE_ROOM);
+    expect(relay.posts()).toEqual([
+      { channel: CHANNEL, text: "Reading… https://runs.example/s1" },
+    ]);
+  });
+});
+
+describe("a landing on a word", () => {
+  it("shared-planning-agent-rounds-SC-73 - A run lands through the relay, which checks the word", async () => {
+    const relay = harness();
+    await landing(relay);
+    const before = relay.mark();
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ landed: SHA });
+
+    const host = relay.hostCalls(before);
+    const headers = {
+      authorization: "Bearer the-code-host-token",
+      accept: "application/vnd.github+json",
+      "x-github-api-version": "2022-11-28",
+      "user-agent": "grade10-relay",
+    };
+    expect(host.map((call) => call.url)).toEqual([
+      `https://api.github.com/repos/9gag/grade10-spec/compare/main...${SHA}`,
+      `https://api.github.com/repos/9gag/grade10-spec/contents/${RECORD_PATH}?ref=${SHA}`,
+      `https://api.github.com/repos/9gag/grade10-spec/contents/${SCHEMA_PATH}?ref=${SHA}`,
+      "https://api.github.com/repos/9gag/grade10-spec/git/refs/heads/main",
+    ]);
+    for (const call of host.slice(0, 3)) {
+      expect(call.init?.method).toBe(undefined);
+      expect(call.init?.headers).toEqual(headers);
+    }
+    const move = host.at(-1);
+    expect(move?.init?.method).toBe("PATCH");
+    expect(move?.init?.headers).toEqual({
+      ...headers,
+      "content-type": "application/json",
+    });
+    expect(JSON.parse(String(move?.init?.body))).toEqual({
+      sha: SHA,
+      force: false,
+    });
+  });
+
+  it("moves nothing on a word nobody said, or a hand who did not say it", async () => {
+    const relay = harness();
+    await landing(relay, "hold on");
+    const refused = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    });
+    expect(refused.status).toBe(403);
+    expect(await refused.json()).toEqual({ reason: "word-not-said" });
+
+    const other = harness();
+    await landing(other, "land", "U0DEV");
+    expect(
+      await (
+        await other.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "proposal",
+        })
+      ).json(),
+    ).toEqual({ reason: "not-the-hand" });
+  });
+
+  it("reads the team map again before it says it knows nobody", async () => {
+    const relay = harness({
+      files: { ...FILES, "docs/prds/team.yaml@main": "handles: {}\n" },
+    });
+    await landing(relay);
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    });
+    expect(await response.json()).toEqual({ reason: "sender-unknown" });
+    expect(
+      relay.hostCalls().filter((call) => call.url.includes("team.yaml")),
+    ).toHaveLength(2);
+  });
+
+  it("moves nothing where the commit's landed_by is somebody else", async () => {
+    const relay = harness({
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: `hands:\n  pm: "@ecchochan"\nlanded_by:\n  proposal: "@dee"\n`,
+      },
+    });
+    await landing(relay);
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "proposal",
+        })
+      ).json(),
+    ).toEqual({ reason: "landed-by-mismatch" });
+  });
+
+  it("moves nothing for a file outside the change's writable set", async () => {
+    const relay = harness({
+      compare: {
+        body: {
+          files: [{ filename: "packages/ui/src/blocks/cart/badge.tsx" }],
+        },
+      },
+    });
+    await landing(relay);
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "proposal",
+        })
+      ).json(),
+    ).toEqual({ reason: "file-outside-change" });
+  });
+
+  it("takes a task group's code, whose paths the run's own guard holds", async () => {
+    const relay = harness({
+      compare: {
+        body: {
+          files: [{ filename: "packages/ui/src/blocks/cart/badge.tsx" }],
+        },
+      },
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: `hands:\n  dev: "@kinisworking"\nlanded_by:\n  "2": "@kinisworking"\n`,
+      },
+    });
+    await landing(relay, "land", "U0DEV");
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "2",
+        })
+      ).json(),
+    ).toEqual({ landed: SHA });
+  });
+
+  it("moves nothing for an artifact the schema does not name", async () => {
+    const relay = harness();
+    await landing(relay);
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "rounds",
+        })
+      ).json(),
+    ).toEqual({ reason: "unknown-artifact" });
+  });
+
+  it("refuses a landing on a room with no change bound", async () => {
+    const relay = harness();
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    await relay.alarm(THREAD_ROOM);
+    const response = await relay.send(THREAD_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    });
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ reason: "no-change-bound" });
+  });
+});
+
+describe("a landing on a read again", () => {
+  it("shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word", async () => {
+    const relay = harness({
+      compare: { body: { files: [{ filename: RECORD_PATH }] } },
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: `${RECORD}  tech-design: 5e6f7a8b\n`,
+        [`${RECORD_PATH}@main`]: RECORD,
+      },
+    });
+    await landing(relay, "hold on");
+    const before = relay.mark();
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "reviewed",
+      artifact: "ui-design",
+    });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ landed: SHA });
+    // No word, so no team map and no schema: the record at both ends is all
+    // this landing reads.
+    expect(relay.hostCalls(before).map((call) => call.url)).toEqual([
+      `https://api.github.com/repos/9gag/grade10-spec/compare/main...${SHA}`,
+      `https://api.github.com/repos/9gag/grade10-spec/contents/${RECORD_PATH}?ref=main`,
+      `https://api.github.com/repos/9gag/grade10-spec/contents/${RECORD_PATH}?ref=${SHA}`,
+      "https://api.github.com/repos/9gag/grade10-spec/git/refs/heads/main",
+    ]);
+  });
+
+  it("moves nothing where the record says more than reviewed", async () => {
+    const relay = harness({
+      compare: { body: { files: [{ filename: RECORD_PATH }] } },
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: `${RECORD.replace("@ecchochan", "@dee")}  tech-design: 5e6f7a8b\n`,
+        [`${RECORD_PATH}@main`]: RECORD,
+      },
+    });
+    await landing(relay, "hold on");
+    const response = await relay.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "reviewed",
+      artifact: "ui-design",
+    });
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ reason: "not-only-reviewed" });
+  });
+
+  it("moves nothing where another artifact's line was dropped", async () => {
+    const relay = harness({
+      compare: { body: { files: [{ filename: RECORD_PATH }] } },
+      files: {
+        ...FILES,
+        [`${RECORD_PATH}@${SHA}`]: RECORD.replace(
+          "reviewed:\n  ui-design: 1a2b3c4d\n",
+          "reviewed:\n  tech-design: 5e6f7a8b\n",
+        ),
+        [`${RECORD_PATH}@main`]: RECORD,
+      },
+    });
+    await landing(relay, "hold on");
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "reviewed",
+          artifact: "tech-design",
+        })
+      ).json(),
+    ).toEqual({ reason: "reviewed-line-removed" });
+  });
+});
+
+describe("what the code host answers", () => {
+  const land: RoomOp = {
+    op: "land",
+    wake: 1,
+    sha: SHA,
+    kind: "word",
+    artifact: "proposal",
+  };
+
+  it("refuses a compare the host listed only some of", async () => {
+    const files = Array.from({ length: 300 }, (_one, index) => ({
+      filename: `docs/prds/page-${index}.md`,
+    }));
+    const relay = harness({ compare: { body: { files } } });
+    await landing(relay);
+    const response = await relay.send(CHANGE_ROOM, land);
+    expect(response.status).toBe(403);
+    expect(await response.json()).toEqual({ reason: "compare-truncated" });
+  });
+
+  it("answers a host that refused the read as the host being unavailable", async () => {
+    const relay = harness({
+      compare: { status: 502, body: { message: "Bad gateway" } },
+    });
+    await landing(relay);
+    const response = await relay.send(CHANGE_ROOM, land);
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({
+      reason: "host-unavailable",
+      status: 502,
+    });
+  });
+
+  it("shared-planning-agent-rounds-SC-69 - A run that loses the race says so and stops", async () => {
+    const relay = harness({
+      advance: {
+        status: 422,
+        body: { message: "Update is not a fast forward" },
+      },
+    });
+    await landing(relay);
+    const response = await relay.send(CHANGE_ROOM, land);
+    expect(response.status).toBe(409);
+    expect(await response.json()).toEqual({ reason: "not-fast-forward" });
+  });
+
+  it("answers any other refusal of the move with what the host said", async () => {
+    const relay = harness({
+      advance: {
+        status: 422,
+        body: { message: "Required status check is expected" },
+      },
+    });
+    await landing(relay);
+    const response = await relay.send(CHANGE_ROOM, land);
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({
+      reason: "host-refused",
+      message: "Required status check is expected",
+    });
+  });
+});

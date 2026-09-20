@@ -1,12 +1,19 @@
 import { describe, expect, it } from "vitest";
-import { checkLanding, type LandInputs, roleFor } from "../src/land.ts";
+import {
+  checkReviewed,
+  checkWord,
+  isLandingWord,
+  type ReviewedLanding,
+  roleFor,
+  type WordLanding,
+} from "../src/land.ts";
 
 /** The checks behind a moved `main`, over inputs already fetched.
  *
  * The record's `hands:` is read by the artifact's `hand:` in the schema — its
  * role key, beside the `teammate:` that titles whoever writes it. These
- * fixtures carry both names, as the store's schema does, and a task group's
- * hand is the `apply:` block's where the schema names one. */
+ * fixtures carry both names, as the store's schema does, and a task group
+ * takes the plan's hand. */
 
 const SCHEMA = `name: grade10-planning
 artifacts:
@@ -20,12 +27,11 @@ artifacts:
     hand: qa
   - id: specs
     required: true
-`;
-
-/** The same schema with a hand on its `apply:` block, which the store's own
- * schema does not carry yet. */
-const SCHEMA_WITH_APPLY_HAND = `${SCHEMA}apply:
-  hand: qa
+  - id: tasks
+    teammate: engineer
+    hand: dev
+  - id: release-notes
+    hand: chief
 `;
 
 const RECORD = `schema: grade10-planning
@@ -35,281 +41,318 @@ hands:
   design: "@dee"
   qa: "@quinn"
   dev: "@kinisworking"
+landed_by:
+  proposal: "@ecchochan"
+  ui-design: "@dee"
+  "3": "@kinisworking"
 `;
 
 const CHANGE = "nav-cart-count-badge";
 
-const REVIEWED_PATCH = `@@ -2,3 +2,6 @@
- promoted_by: "@ecchochan"
-+reviewed:
-+  proposal: 1a2b3c4d
-+  decisions: 5e6f7a8b
-`;
-
-function inputs(over: Partial<LandInputs> = {}): LandInputs {
+function word(over: Partial<WordLanding> = {}): WordLanding {
   return {
-    kind: "word",
     change: CHANGE,
     artifact: "proposal",
     word: "land",
-    senderHandle: "@ecchochan",
+    senderHandle: "ecchochan",
     record: RECORD,
     schema: SCHEMA,
-    files: [
-      { path: `openspec/changes/${CHANGE}/proposal.md`, patch: "" },
-      { path: `openspec/changes/${CHANGE}/rounds.md`, patch: "" },
+    paths: [
+      `openspec/changes/${CHANGE}/proposal.md`,
+      `openspec/changes/${CHANGE}/rounds.md`,
     ],
     ...over,
   };
 }
 
+const AT_MAIN = `schema: grade10-planning
+hands:
+  pm: "@ecchochan"
+reviewed:
+  ui-design: 1a2b3c4d
+`;
+
+function reviewed(over: Partial<ReviewedLanding> = {}): ReviewedLanding {
+  return {
+    change: CHANGE,
+    paths: [`openspec/changes/${CHANGE}/.openspec.yaml`],
+    atMain: AT_MAIN,
+    atSha: `${AT_MAIN}  tech-design: 5e6f7a8b\n`,
+    ...over,
+  };
+}
+
+describe("the word", () => {
+  it("takes land and land with recommendations, trimmed and in any case", () => {
+    expect(isLandingWord("land")).toBe(true);
+    expect(isLandingWord("  Land With Recommendations ")).toBe(true);
+    expect(isLandingWord("LAND")).toBe(true);
+  });
+
+  it("takes the word behind a mention of the app", () => {
+    expect(isLandingWord("<@U0APP> land")).toBe(true);
+    expect(isLandingWord("  <@U0APP>  land with recommendations")).toBe(true);
+  });
+
+  it("is no word at all in a sentence", () => {
+    expect(isLandingWord("land the proposal please")).toBe(false);
+    expect(isLandingWord("ship it")).toBe(false);
+    expect(isLandingWord("please <@U0APP> land")).toBe(false);
+    expect(isLandingWord(null)).toBe(false);
+  });
+});
+
 describe("whose word lands which artifact", () => {
   it("reads the role off the artifact's hand, not its teammate", () => {
-    expect(roleFor(SCHEMA, "proposal")).toBe("pm");
-    expect(roleFor(SCHEMA, "ui-design")).toBe("design");
-    expect(roleFor(SCHEMA, "test-cases")).toBe("qa");
+    expect(roleFor(SCHEMA, "proposal")).toEqual({ role: "pm" });
+    expect(roleFor(SCHEMA, "ui-design")).toEqual({ role: "design" });
+    expect(roleFor(SCHEMA, "test-cases")).toEqual({ role: "qa" });
   });
 
-  it("reads a task group's role off the apply block, or dev without one", () => {
-    expect(roleFor(SCHEMA_WITH_APPLY_HAND, "2")).toBe("qa");
-    expect(roleFor(SCHEMA, "2")).toBe("dev");
+  it("reads a task group's role off the plan's hand", () => {
+    expect(roleFor(SCHEMA, "3")).toEqual({ role: "dev" });
+    expect(roleFor(SCHEMA, " 12 ")).toEqual({ role: "dev" });
   });
 
-  it("falls back to dev where the schema names no hand", () => {
-    expect(roleFor(SCHEMA, "specs")).toBe("dev");
-    expect(roleFor(SCHEMA, "not-an-artifact")).toBe("dev");
+  it("refuses an id the schema does not name", () => {
+    expect(roleFor(SCHEMA, "not-an-artifact")).toEqual({
+      check: "unknown-artifact",
+    });
+    expect(roleFor("name: grade10-planning\n", "2")).toEqual({
+      check: "unknown-artifact",
+    });
+  });
+
+  it("refuses an artifact the schema gives no role in the six", () => {
+    expect(roleFor(SCHEMA, "specs")).toEqual({ check: "unknown-role" });
+    expect(roleFor(SCHEMA, "release-notes")).toEqual({ check: "unknown-role" });
   });
 });
 
 describe("a landing on a word", () => {
-  it("shared-planning-agent-rounds-SC-73 - a word landing passes only after its checks", () => {
-    expect(checkLanding(inputs())).toEqual({ ok: true });
-  });
-
-  it("takes land with recommendations, trimmed and in any case", () => {
-    expect(
-      checkLanding(inputs({ word: "  Land With Recommendations " })),
-    ).toEqual({ ok: true });
-    expect(checkLanding(inputs({ word: "LAND" }))).toEqual({ ok: true });
+  it("shared-planning-agent-rounds-SC-73 - A run lands through the relay, which checks the word", () => {
+    expect(checkWord(word())).toEqual({ ok: true });
   });
 
   it("refuses a wake no word started", () => {
-    expect(checkLanding(inputs({ word: "ship it" }))).toEqual({
+    expect(checkWord(word({ word: "ship it" }))).toEqual({
       ok: false,
       check: "word-not-said",
     });
-    expect(checkLanding(inputs({ word: null }))).toEqual({
+    expect(checkWord(word({ word: null }))).toEqual({
       ok: false,
       check: "word-not-said",
     });
   });
 
   it("refuses a member the team map does not name", () => {
-    expect(checkLanding(inputs({ senderHandle: null }))).toEqual({
+    expect(checkWord(word({ senderHandle: null }))).toEqual({
       ok: false,
       check: "sender-unknown",
+    });
+  });
+
+  it("refuses an artifact the schema does not name, and one with no role", () => {
+    expect(checkWord(word({ artifact: "not-an-artifact" }))).toEqual({
+      ok: false,
+      check: "unknown-artifact",
+    });
+    expect(checkWord(word({ artifact: "specs" }))).toEqual({
+      ok: false,
+      check: "unknown-role",
     });
   });
 
   it("matches the artifact's hand against the record's hands", () => {
     // The proposal's hand is `pm`, whom the record names @ecchochan; the
     // design's is `design`, whom it names @dee.
-    expect(checkLanding(inputs())).toEqual({ ok: true });
-    expect(checkLanding(inputs({ senderHandle: "@dee" }))).toEqual({
+    expect(checkWord(word({ senderHandle: "dee" }))).toEqual({
       ok: false,
       check: "not-the-hand",
     });
     expect(
-      checkLanding(inputs({ artifact: "ui-design", senderHandle: "@dee" })),
+      checkWord(
+        word({
+          artifact: "ui-design",
+          senderHandle: "dee",
+          paths: [`openspec/changes/${CHANGE}/ui-design.md`],
+        }),
+      ),
     ).toEqual({ ok: true });
-    expect(checkLanding(inputs({ artifact: "ui-design" }))).toEqual({
+  });
+
+  it("reads the hand and the handle in one spelling", () => {
+    expect(checkWord(word({ senderHandle: "@Ecchochan" }))).toEqual({
+      ok: true,
+    });
+  });
+
+  it("refuses a record that names no hand for the role", () => {
+    expect(checkWord(word({ record: `hands:\n  design: "@dee"\n` }))).toEqual({
       ok: false,
       check: "not-the-hand",
     });
   });
 
-  it("lands a task group on the apply block's hand, or on dev without one", () => {
+  it("refuses a commit whose landed_by is somebody else, or missing", () => {
     expect(
-      checkLanding(
-        inputs({
-          artifact: "3",
-          schema: SCHEMA_WITH_APPLY_HAND,
-          senderHandle: "@quinn",
+      checkWord(
+        word({
+          record: `hands:\n  pm: "@ecchochan"\nlanded_by:\n  proposal: "@dee"\n`,
         }),
       ),
-    ).toEqual({ ok: true });
-    expect(
-      checkLanding(inputs({ artifact: "3", schema: SCHEMA_WITH_APPLY_HAND })),
-    ).toEqual({ ok: false, check: "not-the-hand" });
-    expect(
-      checkLanding(inputs({ artifact: "3", senderHandle: "@kinisworking" })),
-    ).toEqual({ ok: true });
-    expect(checkLanding(inputs({ artifact: "3" }))).toEqual({
-      ok: false,
-      check: "not-the-hand",
-    });
+    ).toEqual({ ok: false, check: "landed-by-mismatch" });
+    expect(checkWord(word({ record: `hands:\n  pm: "@ecchochan"\n` }))).toEqual(
+      { ok: false, check: "landed-by-mismatch" },
+    );
   });
 
   it("takes the change's own directory, the manual's pages and the references", () => {
     expect(
-      checkLanding(
-        inputs({
-          files: [
-            { path: `openspec/changes/${CHANGE}/decisions.md`, patch: "" },
-            {
-              path: "docs/prds/products/grade10-site/store/cart.md",
-              patch: "",
-            },
-            { path: "docs/references/agent-runner.md", patch: "" },
+      checkWord(
+        word({
+          paths: [
+            `openspec/changes/${CHANGE}/decisions.md`,
+            "docs/prds/products/grade10-site/store/cart.md",
+            "docs/references/agent-runner.md",
           ],
         }),
       ),
     ).toEqual({ ok: true });
   });
 
-  it("refuses a file outside them", () => {
+  it("refuses a file outside them, and another change's directory", () => {
     expect(
-      checkLanding(
-        inputs({
-          files: [
-            { path: `openspec/changes/${CHANGE}/proposal.md`, patch: "" },
-            { path: "packages/ui/src/blocks/cart/cart-badge.tsx", patch: "" },
+      checkWord(
+        word({
+          paths: [
+            `openspec/changes/${CHANGE}/proposal.md`,
+            "packages/ui/src/blocks/cart/cart-badge.tsx",
           ],
         }),
       ),
     ).toEqual({ ok: false, check: "file-outside-change" });
-  });
-
-  it("refuses another change's directory", () => {
     expect(
-      checkLanding(
-        inputs({
-          files: [
-            { path: "openspec/changes/another-change/proposal.md", patch: "" },
-          ],
-        }),
+      checkWord(
+        word({ paths: ["openspec/changes/another-change/proposal.md"] }),
       ),
     ).toEqual({ ok: false, check: "file-outside-change" });
   });
 
-  it("refuses a record that names no hand for the role", () => {
-    expect(
-      checkLanding(inputs({ record: `hands:\n  design: "@dee"\n` })),
-    ).toEqual({ ok: false, check: "not-the-hand" });
+  it("holds a task group to the word, the hand and its own landed_by line", () => {
+    // A group lands code: its paths are the group's own, held by the run's
+    // guard before it pushes, so the relay checks everything but them (`Q68`).
+    const group = {
+      artifact: "3",
+      senderHandle: "kinisworking",
+      paths: [
+        "packages/ui/src/blocks/cart/cart-badge.tsx",
+        `openspec/changes/${CHANGE}/tasks.md`,
+      ],
+    };
+    expect(checkWord(word(group))).toEqual({ ok: true });
+    expect(checkWord(word({ ...group, senderHandle: "dee" }))).toEqual({
+      ok: false,
+      check: "not-the-hand",
+    });
+    expect(checkWord(word({ ...group, word: "ship it" }))).toEqual({
+      ok: false,
+      check: "word-not-said",
+    });
+    expect(checkWord(word({ ...group, artifact: "4" }))).toEqual({
+      ok: false,
+      check: "landed-by-mismatch",
+    });
   });
 });
 
 describe("a landing on a read again", () => {
-  it("shared-planning-agent-rounds-SC-77 - a reviewed-only landing needs no word", () => {
+  it("shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word", () => {
+    expect(checkReviewed(reviewed())).toEqual({ ok: true });
+  });
+
+  it("takes a line rewritten in place", () => {
     expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          word: null,
-          senderHandle: null,
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/.openspec.yaml`,
-              patch: REVIEWED_PATCH,
-            },
-          ],
+      checkReviewed(
+        reviewed({
+          atSha: AT_MAIN.replace("1a2b3c4d", "9f8e7d6c"),
         }),
       ),
     ).toEqual({ ok: true });
   });
 
-  it("refuses a second file", () => {
+  it("takes the first line of a record that had none", () => {
     expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/.openspec.yaml`,
-              patch: REVIEWED_PATCH,
-            },
-            { path: `openspec/changes/${CHANGE}/rounds.md`, patch: "" },
-          ],
-        }),
-      ),
-    ).toEqual({ ok: false, check: "not-only-reviewed" });
-  });
-
-  it("refuses another file of the record's own directory", () => {
-    expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/rounds.md`,
-              patch: REVIEWED_PATCH,
-            },
-          ],
-        }),
-      ),
-    ).toEqual({ ok: false, check: "not-only-reviewed" });
-  });
-
-  it("refuses a line that is not the reviewed key or an artifact's sha", () => {
-    expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/.openspec.yaml`,
-              patch: `@@ -2,2 +2,3 @@\n promoted_by: "@ecchochan"\n+reviewed:\n+  proposal: 1a2b3c4d\n+landed_by: "@ecchochan"\n`,
-            },
-          ],
-        }),
-      ),
-    ).toEqual({ ok: false, check: "not-only-reviewed" });
-  });
-
-  it("refuses a sha that is not eight hex", () => {
-    expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/.openspec.yaml`,
-              patch: "@@ -2,2 +2,3 @@\n+reviewed:\n+  proposal: mainline\n",
-            },
-          ],
-        }),
-      ),
-    ).toEqual({ ok: false, check: "not-only-reviewed" });
-  });
-
-  it("refuses a patch that changed nothing", () => {
-    expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            { path: `openspec/changes/${CHANGE}/.openspec.yaml`, patch: "" },
-          ],
-        }),
-      ),
-    ).toEqual({ ok: false, check: "not-only-reviewed" });
-  });
-
-  it("takes a sha rewritten in place", () => {
-    expect(
-      checkLanding(
-        inputs({
-          kind: "reviewed",
-          files: [
-            {
-              path: `openspec/changes/${CHANGE}/.openspec.yaml`,
-              patch:
-                "@@ -4,3 +4,3 @@\n reviewed:\n-  proposal: 1a2b3c4d\n+  proposal: 9f8e7d6c\n",
-            },
-          ],
+      checkReviewed(
+        reviewed({
+          atMain: "schema: grade10-planning\n",
+          atSha: "schema: grade10-planning\nreviewed:\n  proposal: 1a2b3c4d\n",
         }),
       ),
     ).toEqual({ ok: true });
+  });
+
+  it("refuses a second file, and another file of the change's directory", () => {
+    expect(
+      checkReviewed(
+        reviewed({
+          paths: [
+            `openspec/changes/${CHANGE}/.openspec.yaml`,
+            `openspec/changes/${CHANGE}/rounds.md`,
+          ],
+        }),
+      ),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+    expect(
+      checkReviewed(
+        reviewed({ paths: [`openspec/changes/${CHANGE}/rounds.md`] }),
+      ),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+  });
+
+  it("refuses another key of the record moving with it", () => {
+    expect(
+      checkReviewed(
+        reviewed({
+          atSha: `${AT_MAIN}  tech-design: 5e6f7a8b\nlanded_by:\n  proposal: "@ecchochan"\n`,
+        }),
+      ),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+    expect(
+      checkReviewed(
+        reviewed({
+          atSha: `${AT_MAIN.replace("@ecchochan", "@dee")}  tech-design: 5e6f7a8b\n`,
+        }),
+      ),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+  });
+
+  it("refuses a record that says the same thing at both ends", () => {
+    expect(checkReviewed(reviewed({ atSha: AT_MAIN }))).toEqual({
+      ok: false,
+      check: "not-only-reviewed",
+    });
+  });
+
+  it("refuses a line that is not an artifact against a content id", () => {
+    expect(
+      checkReviewed(reviewed({ atSha: `${AT_MAIN}  tech-design: mainline\n` })),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+    expect(
+      checkReviewed(
+        reviewed({ atSha: "schema: grade10-planning\nreviewed: yesterday\n" }),
+      ),
+    ).toEqual({ ok: false, check: "not-only-reviewed" });
+  });
+
+  it("refuses a line another artifact's read again wrote being dropped", () => {
+    expect(
+      checkReviewed(
+        reviewed({
+          atMain: `${AT_MAIN}  tech-design: 5e6f7a8b\n`,
+          atSha: AT_MAIN.replace("1a2b3c4d", "9f8e7d6c"),
+        }),
+      ),
+    ).toEqual({ ok: false, check: "reviewed-line-removed" });
   });
 });

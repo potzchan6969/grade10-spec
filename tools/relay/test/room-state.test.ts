@@ -7,11 +7,14 @@ import {
   done,
   enqueue,
   fired,
+  fireFailed,
   freshRoom,
   isRunningWake,
   onAlarm,
-  posted,
   type RoomState,
+  remember,
+  SEEN_MAX,
+  seenBefore,
   type Wake,
 } from "../src/room-state.ts";
 
@@ -40,7 +43,7 @@ function running(state: Partial<RoomState> = {}): RoomState {
     reason: "message",
     thread: THREAD,
     change: "nav-cart-count-badge",
-    run: { id: "s1", url: "https://runs.example/s1" },
+    run: { url: "https://runs.example/s1" },
     alarm: { kind: "budget", at: NOW + BUDGET_MS.message },
     ...state,
   };
@@ -73,15 +76,15 @@ describe("the debounce", () => {
     expect(DEBOUNCE_MS.plan).toBe(0);
   });
 
-  it("shared-planning-agent-rounds-SC-66 - the /wake endpoint queues one wake per landing", () => {
+  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change", () => {
     const step = enqueue(
       freshRoom(),
-      { reason: "landing", landing: { base: "aaa", head: "bbb" } },
+      { reason: "landing", change: "nav-cart-count-badge" },
       NOW,
     );
     expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW }]);
     expect(step.state.queued).toBe("landing");
-    expect(step.state.landing).toEqual({ base: "aaa", head: "bbb" });
+    expect(step.state.change).toBe("nav-cart-count-badge");
     expect(DEBOUNCE_MS.landing).toBe(0);
   });
 
@@ -110,41 +113,77 @@ describe("the debounce", () => {
       { reason: "message", thread: THREAD, message: saidAt("1.1", "one") },
       NOW,
     );
-    const second = enqueue(
-      first.state,
-      { reason: "landing", landing: { base: "aaa", head: "bbb" } },
-      NOW + 10_000,
-    );
+    const second = enqueue(first.state, { reason: "landing" }, NOW + 10_000);
     expect(second.commands).toEqual([{ kind: "setAlarm", at: NOW + 10_000 }]);
     // A plan and a landing both need the longer budget of the two reasons
     // waiting, and a landing needs no debounce.
     expect(second.state.queued).toBe("landing");
   });
+
+  it("answers a debounce with nothing behind it by clearing the alarm", () => {
+    const step = onAlarm(
+      { ...freshRoom(), alarm: { kind: "debounce", at: NOW } },
+      NOW,
+    );
+    expect(step.commands).toEqual([{ kind: "clearAlarm" }]);
+    expect(step.state.status).toBe("idle");
+  });
+});
+
+describe("what a room remembers", () => {
+  it("knows an arrival it has answered before", () => {
+    const state = remember(freshRoom(), "slack:C0PLAN/1.1");
+    expect(seenBefore(state, "slack:C0PLAN/1.1")).toBe(true);
+    expect(seenBefore(state, "slack:C0PLAN/1.2")).toBe(false);
+  });
+
+  it("holds the newest 200 and drops the oldest", () => {
+    let state = freshRoom();
+    for (let i = 0; i < SEEN_MAX + 5; i += 1) state = remember(state, `k${i}`);
+    expect(state.seen).toHaveLength(SEEN_MAX);
+    expect(seenBefore(state, "k0")).toBe(false);
+    expect(seenBefore(state, `k${SEEN_MAX + 4}`)).toBe(true);
+  });
 });
 
 describe("the fire", () => {
-  it("carries the wake, its messages and its expiry", () => {
+  it("carries the wake, its messages, its word and its expiry", () => {
     const queued = enqueue(
       { ...freshRoom(), change: "nav-cart-count-badge" },
       { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
       NOW,
     );
     const step = onAlarm(queued.state, NOW + 60_000);
-    const wake = fireOf(step.commands);
-    expect(wake).toEqual({
+    expect(fireOf(step.commands)).toEqual({
       wake: 1,
       reason: "message",
       change: "nav-cart-count-badge",
       thread: THREAD,
       messages: [saidAt("1.1", "land")],
-      landing: null,
+      word: "land",
+      sender: "U0PM",
       expiresAt: NOW + 60_000 + 30 * 60_000,
     });
     expect(step.state.status).toBe("running");
     expect(step.state.pending).toEqual([]);
-    expect(step.commands).toContainEqual({
+  });
+
+  it("sets the budget before it fires", () => {
+    const queued = enqueue(
+      freshRoom(),
+      { reason: "plan", thread: THREAD, message: saidAt("1.1", "plan it") },
+      NOW,
+    );
+    const step = onAlarm(queued.state, NOW);
+    // A fire that never answers still leaves the room with an alarm to free
+    // it, which it would not if the alarm were set after.
+    expect(step.commands.map((command) => command.kind)).toEqual([
+      "setAlarm",
+      "fire",
+    ]);
+    expect(step.commands[0]).toEqual({
       kind: "setAlarm",
-      at: NOW + 60_000 + 30 * 60_000,
+      at: NOW + 120 * 60_000,
     });
   });
 
@@ -157,6 +196,29 @@ describe("the fire", () => {
     const step = onAlarm(queued.state, NOW + 60_000);
     expect(step.state.word).toBe("land");
     expect(step.state.senderSlack).toBe("U0PM");
+  });
+
+  it("takes the last word of a burst, never an earlier one", () => {
+    const first = enqueue(
+      freshRoom(),
+      { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+      NOW,
+    );
+    const second = enqueue(
+      first.state,
+      {
+        reason: "message",
+        message: { slack: "U0DEV", text: "hold on", ts: "1.2" },
+      },
+      NOW + 10_000,
+    );
+    const step = onAlarm(second.state, NOW + 60_000);
+    expect(step.state.word).toBe("hold on");
+    expect(step.state.senderSlack).toBe("U0DEV");
+    expect(fireOf(step.commands).messages.map((one) => one.text)).toEqual([
+      "land",
+      "hold on",
+    ]);
   });
 
   it("takes 30 minutes for a message, 30 for a landing and 120 for a plan", () => {
@@ -172,30 +234,45 @@ describe("the fire", () => {
 
   it("the ack carries the run url", () => {
     const step = fired(running({ run: null }), {
-      id: "s2",
       url: "https://runs.example/s2",
     });
     expect(step.commands).toEqual([
       { kind: "post", text: "Reading… https://runs.example/s2" },
     ]);
-    expect(step.state.run).toEqual({
-      id: "s2",
-      url: "https://runs.example/s2",
+    expect(step.state.run).toEqual({ url: "https://runs.example/s2" });
+  });
+
+  it("says in the thread what the runner answered, and frees the room", () => {
+    const step = fireFailed(
+      running({ run: null, reason: "plan" }),
+      "the runner answered 429 rate limited",
+    );
+    expect(step.commands).toEqual([
+      {
+        kind: "post",
+        text: "The plan of nav-cart-count-badge did not start: the runner answered 429 rate limited",
+      },
+      { kind: "clearAlarm" },
+    ]);
+    expect(step.state).toMatchObject({
+      status: "idle",
+      reason: null,
+      queued: null,
+      alarm: null,
     });
   });
 });
 
 describe("one running wake per room", () => {
-  it("shared-planning-agent-rounds-SC-76 - a second message during a run fires again after it, never alongside", () => {
-    const state = running();
+  it("shared-planning-agent-rounds-SC-76 - One wake runs per thread, and a message during a run fires again after it", () => {
     const arrived = enqueue(
-      state,
+      running(),
       { reason: "message", message: saidAt("1.9", "one more thing") },
       NOW + 60_000,
     );
     expect(arrived.commands).toEqual([]);
     expect(arrived.state.status).toBe("running");
-    expect(arrived.state.dirty).toBe(true);
+    expect(arrived.state.queued).toBe("message");
     expect(arrived.state.wake).toBe(1);
 
     const after = done(arrived.state, NOW + 120_000);
@@ -205,21 +282,16 @@ describe("one running wake per room", () => {
       "one more thing",
     ]);
     expect(after.commands[0]).toEqual({ kind: "clearAlarm" });
-    expect(after.state.dirty).toBe(false);
+    expect(after.state.queued).toBe(null);
   });
 
-  it("shared-planning-agent-rounds-SC-66 - a landing that arrives during a run waits for it", () => {
-    const arrived = enqueue(
-      running(),
-      { reason: "landing", landing: { base: "aaa", head: "bbb" } },
-      NOW + 60_000,
-    );
+  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change", () => {
+    const arrived = enqueue(running(), { reason: "landing" }, NOW + 60_000);
     expect(arrived.commands).toEqual([]);
     expect(arrived.state.queued).toBe("landing");
     const after = done(arrived.state, NOW + 120_000);
     const wake = fireOf(after.commands);
     expect(wake.reason).toBe("landing");
-    expect(wake.landing).toEqual({ base: "aaa", head: "bbb" });
     expect(wake.expiresAt).toBe(NOW + 120_000 + 30 * 60_000);
   });
 
@@ -244,14 +316,30 @@ describe("one running wake per room", () => {
 });
 
 describe("the budget", () => {
-  it("shared-planning-agent-rounds-SC-75 - a wake past its budget posts the failure line with the run link", () => {
+  it("shared-planning-agent-rounds-SC-75 - A wake that does not finish says so", () => {
     const step = onAlarm(running(), NOW + BUDGET_MS.message);
     expect(step.commands[0]).toEqual({
       kind: "post",
-      text: "The read again of nav-cart-count-badge did not finish: https://runs.example/s1",
+      text: "The reply of nav-cart-count-badge did not finish: https://runs.example/s1",
     });
     expect(step.state.status).toBe("idle");
     expect(step.commands).toContainEqual({ kind: "clearAlarm" });
+  });
+
+  it("names the wake's own reason", () => {
+    expect(
+      onAlarm(running({ reason: "plan" }), NOW + BUDGET_MS.plan).commands[0],
+    ).toEqual({
+      kind: "post",
+      text: "The plan of nav-cart-count-badge did not finish: https://runs.example/s1",
+    });
+    expect(
+      onAlarm(running({ reason: "landing" }), NOW + BUDGET_MS.landing)
+        .commands[0],
+    ).toEqual({
+      kind: "post",
+      text: "The read again of nav-cart-count-badge did not finish: https://runs.example/s1",
+    });
   });
 
   it("posts the line and fires again when something is behind", () => {
@@ -269,17 +357,35 @@ describe("the budget", () => {
     const step = onAlarm(running({ run: null }), NOW + BUDGET_MS.message);
     expect(step.commands[0]).toEqual({
       kind: "post",
-      text: "The read again of nav-cart-count-badge did not start.",
+      text: "The reply of nav-cart-count-badge did not start.",
+    });
+  });
+
+  it("answers nothing at all on a room that is not running", () => {
+    const idle = {
+      ...freshRoom(),
+      alarm: { kind: "budget" as const, at: NOW },
+    };
+    expect(onAlarm(idle, NOW + 60_000)).toEqual({
+      state: idle,
+      commands: [],
+    });
+  });
+
+  it("names the thread where the room has no change", () => {
+    expect(
+      onAlarm(running({ change: null }), NOW + BUDGET_MS.message).commands[0],
+    ).toEqual({
+      kind: "post",
+      text: "The reply of this thread did not finish: https://runs.example/s1",
     });
   });
 });
 
 describe("what the run tells the room", () => {
-  it("binds the change and marks its last post", () => {
-    const state = bind(freshRoom(), "nav-cart-count-badge");
-    expect(state.change).toBe("nav-cart-count-badge");
-    expect(posted(state, "1700000003.000100").lastPostTs).toBe(
-      "1700000003.000100",
+  it("binds the change", () => {
+    expect(bind(freshRoom(), "nav-cart-count-badge").change).toBe(
+      "nav-cart-count-badge",
     );
   });
 });

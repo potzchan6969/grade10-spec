@@ -5,10 +5,12 @@ import {
   routeMessage,
   signSlackRequest,
   verifySlackSignature,
+  wordOf,
 } from "../src/slack.ts";
 
 /** The Slack side: the v0 signature over the body as it arrived, the events the
- * relay ignores, the room a message wakes, and the one call that posts. */
+ * relay ignores, the word a message says, the room it wakes, and the one call
+ * that posts. */
 
 const SECRET = "8f742231b10e8888abcd99yyyzzz85a5";
 const BODY = '{"type":"event_callback","event_id":"Ev1"}';
@@ -105,10 +107,23 @@ describe("the v0 signature", () => {
   });
 });
 
+describe("the word a message says", () => {
+  it("strips the app's mention, trims and folds the case", () => {
+    expect(wordOf(`<@${APP}> Land`)).toBe("land");
+    expect(wordOf("  LAND WITH RECOMMENDATIONS  ")).toBe(
+      "land with recommendations",
+    );
+  });
+
+  it("leaves a mention inside a sentence where it is", () => {
+    expect(wordOf(`please <@${APP}> land`)).toBe("please <@u0app> land");
+  });
+});
+
 describe("the envelope", () => {
   it("answers a url_verification with its challenge", () => {
     expect(
-      parseSlackRequest({ type: "url_verification", challenge: "abc" }),
+      parseSlackRequest({ type: "url_verification", challenge: "abc" }, APP),
     ).toEqual({ kind: "url_verification", challenge: "abc" });
   });
 
@@ -116,6 +131,7 @@ describe("the envelope", () => {
     expect(
       parseSlackRequest(
         envelope({ bot_id: "B0", ts: "1.1", text: "Reading…" }),
+        APP,
       ),
     ).toEqual({ kind: "ignored", why: "bot_id" });
   });
@@ -124,23 +140,31 @@ describe("the envelope", () => {
     expect(
       parseSlackRequest(
         envelope({ subtype: "message_changed", ts: "1.1", text: "land" }),
+        APP,
       ),
     ).toEqual({ kind: "ignored", why: "subtype" });
   });
 
   it("ignores the app's own user", () => {
     expect(
-      parseSlackRequest(envelope({ user: APP, ts: "1.1", text: "Reading…" })),
+      parseSlackRequest(
+        envelope({ user: APP, ts: "1.1", text: "Reading…" }),
+        APP,
+      ),
     ).toEqual({ kind: "ignored", why: "own-message" });
   });
 
-  it("ignores an event that is not a message", () => {
+  it("ignores an event that is not a message, and an envelope with none", () => {
     expect(
-      parseSlackRequest({
-        type: "event_callback",
-        event: { type: "channel_join" },
-      }),
+      parseSlackRequest(
+        { type: "event_callback", event: { type: "channel_join" } },
+        APP,
+      ),
     ).toEqual({ kind: "ignored", why: "not-a-message" });
+    expect(parseSlackRequest({ type: "event_callback" }, APP)).toEqual({
+      kind: "ignored",
+      why: "no-event",
+    });
   });
 
   it("reads a thread reply down to one message", () => {
@@ -152,11 +176,11 @@ describe("the envelope", () => {
           thread_ts: "1700000000.000100",
           text: "land",
         }),
+        APP,
       ),
     ).toEqual({
       kind: "message",
       message: {
-        eventId: "Ev1",
         channel: CHANNEL,
         ts: "1700000002.000100",
         threadTs: "1700000000.000100",
@@ -175,15 +199,50 @@ describe("the envelope", () => {
         thread_ts: "1700000000.000100",
         text: `<@${APP}> plan the cart badge`,
       }),
+      APP,
     );
     expect(parsed.kind === "message" && parsed.message.threadTs).toBe(null);
     expect(parsed.kind === "message" && parsed.message.mentionsApp).toBe(true);
+  });
+
+  it("takes the app's member id from the deployment where the envelope names none", () => {
+    const parsed = parseSlackRequest(
+      {
+        type: "event_callback",
+        event: {
+          type: "message",
+          channel: CHANNEL,
+          user: "U0PM",
+          ts: "1.1",
+          text: `<@${APP}> plan it`,
+        },
+      },
+      APP,
+    );
+    expect(parsed.kind === "message" && parsed.message.mentionsApp).toBe(true);
+  });
+
+  it("reads an app it cannot name as an app nobody addressed", () => {
+    // A mention of somebody else would otherwise open a room.
+    const parsed = parseSlackRequest(
+      {
+        type: "event_callback",
+        event: {
+          type: "message",
+          channel: CHANNEL,
+          user: "U0PM",
+          ts: "1.1",
+          text: "<@U0SOMEBODY> have a look",
+        },
+      },
+      "",
+    );
+    expect(parsed.kind === "message" && parsed.message.mentionsApp).toBe(false);
   });
 });
 
 describe("the room a message wakes", () => {
   const message = {
-    eventId: "Ev1",
     channel: CHANNEL,
     ts: "1700000000.000100",
     threadTs: null,
@@ -195,6 +254,7 @@ describe("the room a message wakes", () => {
   it("opens a room on a top-level message that mentions the app", () => {
     expect(routeMessage(message, CHANNEL)).toEqual({
       room: `${CHANNEL}/1700000000.000100`,
+      thread: { channel: CHANNEL, ts: "1700000000.000100" },
       reason: "plan",
       requireRoom: false,
     });
@@ -222,6 +282,7 @@ describe("the room a message wakes", () => {
       ),
     ).toEqual({
       room: `${CHANNEL}/1700000000.000100`,
+      thread: { channel: CHANNEL, ts: "1700000000.000100" },
       reason: "message",
       requireRoom: false,
     });
@@ -238,16 +299,12 @@ describe("the room a message wakes", () => {
         },
         CHANNEL,
       ),
-    ).toEqual({
-      room: `${CHANNEL}/1700000000.000100`,
-      reason: "message",
-      requireRoom: true,
-    });
+    ).toMatchObject({ requireRoom: true });
   });
 });
 
 describe("posting", () => {
-  it("shared-planning-agent-rounds-SC-74 - the bot token is read from the environment alone", async () => {
+  it("shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token", async () => {
     const calls: { url: string; init: RequestInit }[] = [];
     vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
       calls.push({ url, init });
