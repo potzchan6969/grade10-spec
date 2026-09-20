@@ -366,23 +366,21 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
-* **Layer:** unit
-* **Automation status:** automated
-* **Testability:** automation
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-01
 
-**Decided by:** `scripts/openspec/changed-changes.test.mjs`
-
 **Pre-conditions:**
-<change L> sits at Proposed with its designer and its tech PIC named. The team map knows the handle whose e-mail a terminal's commits carry, and not the one a hosted run's carry.
+<change L> sits at Proposed with its designer and its tech PIC named. A landing a run cut carries the `Wake:` trailer, which `pnpm run plan:land` writes on the commit only when a wake fired the run; a landing pushed from a terminal carries none.
 
 **Test data:**
 
 | What the push carries | What the change's thread holds |
 | --- | --- |
-| A landing of <change L>, whose record names a thread, pushed by a committer the team map names | one reply naming what landed, whose word landed it, the stage now and the two hands whose turn it is |
-| The same landing pushed by a committer the team map does not name | nothing: the run that landed it tells the thread itself |
-| A landing of a change whose record names no thread | nothing, and no message is addressed anywhere else |
+| A landing of <change L>, whose record names a thread, in a commit carrying no `Wake:` trailer | one reply naming what landed, whose word landed it, the stage now and the two hands whose turn it is |
+| The same landing in a commit carrying the `Wake:` trailer | nothing: the run that landed it tells the thread itself |
+| A landing of a change whose record names no thread | nothing in the thread; the change's own Your turn messages still go out |
 
 **Steps:**
 
@@ -1827,6 +1825,7 @@ Every journey is walked by at least one case. The six feature set root groups ar
 What stays manual after the walk (task 8.3/8.5), and why.
 
 - **US1's messages and the digest** — `US1-TC1-1` through `US1-TC8-1` read Slack, git history and the notify script's own sent-key file; a browser walk opens the manual, not a workspace or a repository's commits, so these are `scripts/openspec/*.test.mjs`'s to prove
+- **US1-TC12-1** — the thread's landing reply reads Slack, and the marker it turns on is a trailer on a commit: `changed-changes.test.mjs` decides the reply, its key and the marker over a fixture repository, and `plan-land-relay.test.mjs` the trailer a wake's landing writes, so what is left for a person is the reply arriving in the workspace
 - **US2-TC1-1** — the lane order and "each change in one lane only" are unwalked; `board.walk.ts`'s `SC-51` proves only the third claim, a card's own facts, so the case stays whole and manual
 - **US2-TC3-1** — the four-row idle table (6/7/29/30 days) needs a repository-wide commit moving no change's day count, which `NO_GIT` cannot stage; `board.walk.ts`'s `SC-56` proves the fixture's own one row (idle 45 days, on the shelf) as a spec-level scenario, not this case whole
 - **US2-TC5-1** — the Mine row needs a chosen handle narrowing the board, which no walk drives; `SC-54`, `SC-55` and `board.walk.ts`'s own `SC-05` prove the other four filters and the unchosen-handle refusal, not the whole per-row case

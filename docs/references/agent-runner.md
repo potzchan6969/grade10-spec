@@ -115,7 +115,7 @@ Every `vars.*` and secret `proposal-notify.yml` and `digest.yml` read.
 | `SLACK_PLANNING_CHANNEL_ID` | Variable | `notify` | The planning channel for the channel post |
 | `SLACK_CHANNEL_ID` | Variable | `notify` | Read where `SLACK_PLANNING_CHANNEL_ID` is unset — the older name, kept so a workspace that set it first is not broken |
 | `SLACK_WORKSPACE_URL` | Variable | `notify` | Builds the permalink a direct message and a `your-turn` reply link to |
-| `NOTIFY_DMS` | Variable | `notify` | Turns the per-hand direct messages on; the channel post runs without it |
+| `NOTIFY_DMS` | Variable | `notify` | Turns the per-hand messages on, a role's channel among them; the channel post and a landing's reply in the change's thread run without it |
 | `TCS_SHEET_URL` | Variable | `notify` | Named in the message that tells QA to walk a run sheet |
 | `AGENT_REREAD` | Variable | `reread` | The wake's switch; unset or not `"true"` wakes nothing |
 | `AGENT_WAKE_URL` | Variable | `reread` | The relay's URL |

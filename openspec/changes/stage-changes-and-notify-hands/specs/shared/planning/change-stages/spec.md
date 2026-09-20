@@ -561,7 +561,7 @@ Every message the push workflow and the digest send SHALL be one of the kinds
 below and SHALL be sent once for the key it carries, so a re-run of the same
 push sends nothing again.
 
-- **Five kinds** — nothing else SHALL be sent: a written wait and a change
+- **Six kinds** — nothing else SHALL be sent: a written wait and a change
   freed by a dependency SHALL be lines of the digest, and the round's own
   replies are `shared/planning/agent-rounds` — ❓ the recommendation of `Q31`,
   open on the product manager; another answer adds a message for a written wait
@@ -575,7 +575,8 @@ push sends nothing again.
 | Your turn | a push to `main` moves the change to a hand | that hand, by direct message; the role's channel when the hand is unnamed | the change, the stage and the role |
 | Staging | a change reaches On staging | its QA hand, with the run sheet | the change, the stage and QA |
 | Behind | an artifact is newly behind | the hand of the earliest behind artifact | the change and the artifact |
-| Landed | every push to `main` | the channel | the push |
+| Landed | a push lands an artifact of a change whose record names a thread | that thread | the change and the push's head |
+| Push post | every push to `main` | the planning channel | the push |
 | Digest | Monday 09:00 on the Hong Kong clock | each person with a line to say | the person and the week |
 
 #### Scenario: shared-planning-change-stages-SC-36 - One message per key
@@ -665,12 +666,6 @@ Two moves that are not a stage landing still reach a person.
 - **Staging** — a change reaching On staging SHALL send one message to its QA
   hand, naming the change and the run sheet to walk, and one Your turn message
   to its release hand
-- **A landing from a terminal** — a push whose `landed_by:` gained or changed
-  an entry SHALL post one reply in the change's thread, naming what landed,
-  whose word landed it, the stage the change is at now and whose turn it is;
-  it SHALL post nothing where the record names no thread, and nothing where
-  the committer of the record's last commit in the push is a handle the team
-  map does not name, which is a run's own landing and already told
 
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
@@ -686,13 +681,31 @@ Two moves that are not a stage landing still reach a person.
 **THEN** one direct message SHALL be sent to its QA hand, naming the change and the run sheet
 **AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
 
+### Requirement: A landing from a terminal is told in the thread
+
+The thread is the record of a change wherever the word was said, so a landing
+pushed from a terminal is one reply in it.
+
+- **The reply** — a push whose `landed_by:` gained or changed an entry SHALL
+  post one reply in the change's thread, naming what landed, whose word landed
+  it, the stage the change is at now and whose turn it is
+- **No thread** — a change whose record names no thread SHALL be told nothing,
+  and the reply SHALL NOT be addressed anywhere else
+- **A run's own landing** — a landing whose commit carries the marker a run
+  writes SHALL post nothing: the run replies in the thread itself, and no
+  reading of who pushed the commit decides it
+- **An open hand** — a role of the stage the change names no hand for SHALL be
+  named in the reply as open, never left out and never written as its channel
+- **No hand at all** — a stage that waits on no role SHALL read `your turn:
+  nobody`
+
 #### Scenario: shared-planning-change-stages-SC-70 - A terminal landing is told in the thread
 **Serves:** shared-planning-change-stages-US-01 - the next hand reads in the thread what a teammate landed from a terminal
 
 **GIVEN** a change whose record names a thread
 **WHEN** a push from a terminal lands artifacts of it and writes `landed_by:` for each
 **THEN** one reply SHALL be posted in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
-**AND** a landing whose committer the team map does not name SHALL post nothing
+**AND** a landing whose commit carries the marker a run writes SHALL post nothing
 **AND** a change whose record names no thread SHALL post nothing
 
 ### Requirement: The channel post per push and the weekly digest
