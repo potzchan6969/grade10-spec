@@ -107,7 +107,7 @@ const marking = (extra: Partial<ChangeEntry> = {}) =>
 describe("the lines the change marks", () => {
   const html = render(marking());
 
-  it("names the page and the section, linked to where the line sits", () => {
+  it("shared-planning-change-stages-SC-71 - names the page and the section, linked to where the line sits", () => {
     expect(html).toContain("Alpha");
     expect(html).toContain("Points");
     expect(html).toContain('href="/p/demo-product/alpha#points"');

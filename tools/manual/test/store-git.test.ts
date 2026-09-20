@@ -80,7 +80,13 @@ describe("a walk git refuses", () => {
   const refused = (root: string) =>
     walkGit(root, ["log", "--format=%H", "no-such-ref"], "no thread");
 
-  const plain = () => mkdtempSync(join(tmpdir(), "manual-unwalked-"));
+  /** An empty repository, so the refusal is the ref's and not the directory's
+   * wherever the temp directory sits. */
+  const plain = () => {
+    const root = mkdtempSync(join(tmpdir(), "manual-unwalked-"));
+    execFileSync("git", ["init", "-q", root]);
+    return root;
+  };
 
   it("answers nothing, says what is lost and carries git's own words", () => {
     const root = plain();
