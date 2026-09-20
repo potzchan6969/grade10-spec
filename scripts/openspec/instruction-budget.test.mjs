@@ -23,6 +23,12 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // reads it — so a row costs what a row costs, and the raise buys a little
 // headroom rather than a blank cheque.
 const AGENTS_BUDGET = 2570;
+// The `round` skill loads on every artifact of every change, and the seven
+// line skills load it rather than restating it, so it carries the procedure
+// for all of them. 3200 is its size after the pass that gave the landing,
+// the wake and the chain one home each (`Q77`): the next rule earns its
+// words by cutting others, or raises this number in a commit that says why.
+const ROUND_BUDGET = 3200;
 const RULES_BUDGET = {
   proposal: 110,
   // Back to one block after the artifact split was undone: two passes over one
@@ -42,6 +48,15 @@ test("AGENTS.md holds to its word budget", () => {
   assert.ok(
     count <= AGENTS_BUDGET,
     `AGENTS.md is ${count} words; the budget is ${AGENTS_BUDGET}. Move the rule to the document that owns it and link the heading, or raise the budget here and say why in the commit.`,
+  );
+});
+
+test("the round skill holds to its word budget", () => {
+  const skill = ".claude/skills/round/SKILL.md";
+  const count = words(read(skill));
+  assert.ok(
+    count <= ROUND_BUDGET,
+    `${skill} is ${count} words; the budget is ${ROUND_BUDGET}. Point at the document or the script header that owns the rule, or raise the budget here and say why in the commit.`,
   );
 });
 
