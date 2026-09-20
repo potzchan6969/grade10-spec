@@ -258,6 +258,11 @@ The screens are drawn on two canvases. The blueprint page holds the mock-ups
 of each surface; the [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk)
 canvas holds the flow between them: the loop every hand runs, one hand's day as
 a walkthrough, each hand's six steps, what one push does, and an example week.
+The onboarding page,
+[Cross-sell, Start to Finish](https://claude.ai/artifact/D1eDUFmtgWwGsdr7nw8Edp),
+walks one store feature through the rounds message by message: what each hand
+says, what the agent drafts, what each surface shows, and what lands, with
+phase two opened as a change of its own.
 
 ## Rails
 
