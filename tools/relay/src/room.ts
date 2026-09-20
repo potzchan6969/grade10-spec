@@ -5,8 +5,9 @@
  * The change is the room's identity, because a landing wake is addressed by
  * the change and a thread is not always known when it arrives. A run names the
  * change with `bind`: the change's room takes that thread as its alias, so
- * every later message in the thread queues there — and the wake stays where it
- * started, because the token the session holds names this room.
+ * every later message in the thread queues there and the queue this room had
+ * gathered is handed across — and the wake stays where it started, because the
+ * token the session holds names this room.
  *
  * It holds no rules. Every decision is `room-state.ts`'s, and this class does
  * what the commands say: keep the state, set the one alarm, fire the Routine,
@@ -149,6 +150,7 @@ export class Room {
       thread: op.thread,
       change: op.change,
       message: op.message,
+      dropped: op.dropped,
     };
     await this.apply(
       enqueue(
@@ -199,9 +201,43 @@ export class Room {
       thread: state.thread,
     });
     if (!answer.ok) return answer;
-    await this.put(bound);
+    // The pointer sends what arrives from now on, so what already arrived is
+    // handed across with it: a reply that queued between this wake's start
+    // and the bind would otherwise wait in a room nothing wakes again.
+    await this.put({ ...bound, queued: null, pending: [], dropped: 0 });
     await this.ctx.storage.put(CHANGE_ROOM, changeRoom(op.change));
+    await this.hand(this.env.ROOM.get(id), op.change, state.thread, bound);
     return json(200, { bound: op.change });
+  }
+
+  /** The queue this room gathered, enqueued on the change's room: one call
+   * per line, keyed the way the router keys it so a Slack retry of that line
+   * is a duplicate there, and one message-less call for a reason that waited
+   * with no line behind it. What this room dropped is counted into the first
+   * line handed over, which is the wake there that says so. */
+  private async hand(
+    to: DurableObjectStub,
+    change: string,
+    thread: Thread,
+    state: RoomState,
+  ): Promise<void> {
+    const reason = state.queued;
+    if (!reason) return;
+    let dropped = state.dropped;
+    for (const message of state.pending) {
+      await callRoom(to, {
+        op: "enqueue",
+        reason,
+        dedupe: `slack:${thread.channel}/${message.ts}`,
+        thread,
+        change,
+        message,
+        dropped,
+      });
+      dropped = 0;
+    }
+    if (state.pending.length === 0)
+      await callRoom(to, { op: "enqueue", reason, thread, change });
   }
 
   private async onPost(op: Extract<RoomOp, { op: "post" }>): Promise<Response> {
@@ -223,11 +259,15 @@ export class Room {
     return json(200, { alive: true });
   }
 
+  /** The run's last act, and where the word is spent: one word lands every
+   * artifact of the chain (`Q60`) and the run lands them one call at a time,
+   * so the word is the wake's until the wake ends. A wake the budget cut
+   * keeps it, which is how the next wake finishes the chain. */
   private async onDone(op: Extract<RoomOp, { op: "done" }>): Promise<Response> {
     const state = await this.load();
     if (!isRunningWake(state, op.wake))
       return json(401, { reason: "stale-wake" });
-    await this.apply(done(state, Date.now()));
+    await this.apply(done(consumeWord(state), Date.now()));
     return json(200, { done: true });
   }
 
@@ -281,10 +321,9 @@ export class Room {
     if (!isRunningWake(now, op.wake))
       return json(401, { reason: "stale-wake" });
     const advance = await advanceMain(repo, op.sha);
-    if ("landed" in advance) {
-      await this.put(consumeWord(await this.load()));
-      return json(200, { landed: advance.landed });
-    }
+    // The word is not spent here: the chain is one word and one call per
+    // artifact, and `done` is what ends it.
+    if ("landed" in advance) return json(200, { landed: advance.landed });
     return advance.refused === "not-fast-forward"
       ? json(409, { reason: "not-fast-forward" })
       : json(502, { reason: "host-refused", message: advance.message });

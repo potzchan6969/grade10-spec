@@ -88,8 +88,9 @@ export interface RoomState {
    * to. */
   opened: string | null;
   /** The latest landing word said in this room, and the member who said it,
-   * kept until a landing consumes them: `land` then `thanks!` lands, and a
-   * chain the budget cut is finished by the next wake on the same word. */
+   * kept until the run that may land on them says it is done: `land` then
+   * `thanks!` lands, one word lands every artifact of the chain, and a chain
+   * the budget cut is finished by the next wake on the same word. */
   word: string | null;
   senderSlack: string | null;
   run: RunHandle | null;
@@ -105,8 +106,8 @@ export interface Wake {
   change: string | null;
   thread: Thread | null;
   messages: RoomMessage[];
-  /** The member who woke the room: the latest line of the burst. A landing
-   * wake has none. */
+  /** The member whose word this wake may land, else the latest line. A
+   * landing wake has none. */
   sender: string | null;
   /** The token's `exp`: this wake's start plus its budget. */
   expiresAt: number;
@@ -130,6 +131,10 @@ export interface EnqueueInput {
    * is addressed by the change, and a first sentence is not. */
   change?: string;
   message?: RoomMessage;
+  /** Lines another room dropped before it handed this one over, counted into
+   * this room's own: a bind moves the queue, and what the queue never carried
+   * moves with it. */
+  dropped?: number;
 }
 
 export function freshRoom(): RoomState {
@@ -188,7 +193,8 @@ export function enqueue(
       state.opened ??
       (input.message ? firstWords(input.message.text) : state.opened),
     pending,
-    dropped: state.dropped + (said.length - pending.length),
+    dropped:
+      state.dropped + (said.length - pending.length) + (input.dropped ?? 0),
     queued: stronger(state.queued, input.reason),
   };
   if (state.reason !== null) return { state: next, commands: [] };
@@ -210,7 +216,8 @@ function startWake(state: RoomState, reason: Reason, now: number): Step {
   const wake = state.wake + 1;
   const expiresAt = now + BUDGET_MS[reason];
   // The word is the latest landing word of the burst, and a burst that says
-  // none leaves the one the room already held: a landing is what spends it.
+  // none leaves the one the room already held: the run's `done` is what
+  // spends it.
   const said = [...state.pending]
     .reverse()
     .find((message) => isLandingWord(message.text));
@@ -225,7 +232,12 @@ function startWake(state: RoomState, reason: Reason, now: number): Step {
       change: state.change,
       thread: state.thread,
       messages: state.pending,
-      sender: state.pending.at(-1)?.slack ?? null,
+      // Whose word this wake may land: the member who said it, whoever spoke
+      // after. A burst that said none leaves the word the room already held,
+      // so its sayer is the sender of that wake too, and a wake with no word
+      // at either end is the latest line's.
+      sender:
+        said?.slack ?? state.senderSlack ?? state.pending.at(-1)?.slack ?? null,
       expiresAt,
     },
   });
@@ -341,8 +353,9 @@ export function bind(state: RoomState, change: string): RoomState {
   return { ...state, change };
 }
 
-/** A landing took the word: the next wake starts without it, so one word
- * lands one chain. */
+/** The run that the word woke is done with it: the next wake starts without
+ * it, so one word lands one chain and no more. A landing does not spend it —
+ * a chain is one word and one landing call per artifact. */
 export function consumeWord(state: RoomState): RoomState {
   return { ...state, word: null, senderSlack: null };
 }

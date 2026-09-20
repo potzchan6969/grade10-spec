@@ -21,7 +21,8 @@ export interface RelayPayload {
   change: string | null;
   reason: Reason;
   thread: Thread | null;
-  /** Who woke the room. A landing wake has no sender. */
+  /** The member whose word this wake may land, else the latest line. A
+   * landing wake has no sender. */
   sender: { slack: string; handle: string | null } | null;
   messages: PayloadMessage[];
 }
@@ -32,7 +33,8 @@ export interface PayloadInput {
   change: string | null;
   reason: Reason;
   thread: Thread | null;
-  /** The member the wake carries. A landing wake carries none. */
+  /** The member the wake carries: whose word it may land, else the latest
+   * line. A landing wake carries none. */
   sender: string | null;
   /** What queued since the previous wake, oldest first. */
   messages: RoomMessage[];
