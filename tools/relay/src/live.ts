@@ -23,6 +23,12 @@ import { json, type LiveOp, reasonOf } from "./rpc.ts";
 /** Where the head is kept. */
 const HEAD = "head";
 
+/** What a page sends to tell an open line from one the network has abandoned,
+ * and what it is answered. The runtime answers it from the pair, so a page's
+ * half-minute ping does not wake an object that is asleep. */
+const PING = "ping";
+const PONG = "pong";
+
 export class Live {
   private readonly ctx: DurableObjectState;
 
@@ -53,6 +59,9 @@ export class Live {
     const client = pair[0];
     const server = pair[1];
     this.ctx.acceptWebSocket(server);
+    this.ctx.setWebSocketAutoResponse(
+      new WebSocketRequestResponsePair(PING, PONG),
+    );
     server.send(headText(await this.stored()));
     return new Response(null, { status: 101, webSocket: client });
   }
