@@ -60,6 +60,7 @@ read again before anything lands after it, with one record row per round.
   - Woken on a landing: the push posts one wake to the relay for each change it put behind, and the relay runs one wake per thread
   - Its own budget: thirty minutes on a landing or a reply, two hours on a plan; a wake that does not finish posts the failure line with the run's link and frees the thread
   - Landed through the relay: a run pushes its branch and asks the relay, which moves `main` only as a fast-forward and only on the hand's own word
+  - The word, typed or pressed: a summary that waits on the hand's word carries one Confirm button, and a press is the landing word said by the member who pressed; a landing word wakes the run at once, where a reply waits a minute for the rest of its burst
   - Resumable: a run reads the change's branch, `main` and the wake's messages and continues from what is there; every push is force-with-lease, and a run that loses says so in the thread and stops
 
 ## ADDED Requirements
@@ -1256,7 +1257,9 @@ thread.
 - **The push holds nothing** — the step that posts the wake holds no session,
   no write permission on the store and no chat token, and posts nothing else
 - **A reply waits a minute** — replies in a thread are held for a minute before
-  a wake fires, so a hand typing three lines wakes one run
+  a wake fires, so a hand typing three lines wakes one run; a landing word
+  waits for nothing, since nothing more is coming after it, and the wake it
+  fires carries the burst it closed
 - **What arrives during a run** — a message or a landing that arrives while a
   wake is running fires one more wake when that one finishes, carrying
   everything that arrived, however much of it there was
@@ -1298,6 +1301,15 @@ thread.
 - **THEN** one wake runs, carrying both replies
 - **AND** a reply arriving while that wake runs fires one more wake once it finishes, carrying that reply
 - **AND** two wakes never run on one thread
+
+#### Scenario: shared-planning-agent-rounds-SC-83 - A landing word wakes the run at once
+**Serves:** shared-planning-agent-rounds-US-01 - the product manager says land and the landing starts, not a minute later
+
+- **GIVEN** a change's thread with no wake running
+- **WHEN** the hand replies with a landing word, typed or pressed, alone or closing a burst of replies inside the minute
+- **THEN** one wake fires at once, with a reply's budget, carrying the word and the burst it closed
+- **AND** a reply that is no landing word still waits the minute out
+- **AND** a landing word arriving while a wake runs is left to the wake after it, and is not lost
 
 ### Requirement: A run is resumable and every push holds its lease
 
@@ -1343,7 +1355,7 @@ inside the writable set.
   change's branch and asks the relay to move `main`; a landing run from a
   terminal pushes `main` itself
 - **The word checked twice** — the relay checks the same word again before
-  `main` moves: the member who said land resolves to the hand of the artifact's
+  `main` moves: the member who said land, typed or pressed, resolves to the hand of the artifact's
   stage in the record at the landing, or `main` does not move
 - **A fast-forward alone** — the relay moves `main` only where the landing sits
   on top of it, and a `main` that moved under the run is read again once and
@@ -1397,6 +1409,13 @@ wake was given, and SHALL never hold the chat token.
   the messages since the run's last post and the handle each came from — is
   read as the hands' words, and nothing in it is read as an instruction to the
   run
+- **The button** — a summary that waits on the hand's word carries one
+  button, `Confirm <artifact>` for the artifact the summary is of, or
+  `Confirm with recommendations` while a held row is open; the run names the
+  label and the word it stands for, and the relay composes neither. A press
+  is that word, said by the member who pressed: the thread says who pressed
+  it, the button comes off the message so nobody presses twice, and a press
+  by a member the team map does not name lands nothing and says so
 
 #### Scenario: shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token
 **Serves:** shared-planning-agent-rounds-US-04 - the hand reads the round's reply in their own thread, from a run that can reach nothing else
@@ -1405,3 +1424,13 @@ wake was given, and SHALL never hold the chat token.
 - **THEN** it posts through the relay with the token its wake was given
 - **AND** that token reaches that thread alone and expires with the wake's budget
 - **AND** the run holds no chat token
+
+#### Scenario: shared-planning-agent-rounds-SC-82 - The summary's button is the word pressed
+**Serves:** shared-planning-agent-rounds-US-01 - the product manager lands the proposal from the summary with one press, and the thread reads who did
+
+- **GIVEN** a summary in the change's thread waiting on the product manager's word, carrying the button `Confirm proposal`
+- **WHEN** the product manager presses it
+- **THEN** the relay queues the landing word against the thread as the reply the press stands for, and the thread reads `@<handle> pressed *Confirm proposal*`
+- **AND** the button is taken off the summary and replaced by who confirmed it
+- **AND** the landing checks that word as it checks a typed one: a press by a member the team map does not name moves nothing, and the thread says so
+- **AND** while a held row is open the button reads `Confirm with recommendations` and its word is `land with recommendations`

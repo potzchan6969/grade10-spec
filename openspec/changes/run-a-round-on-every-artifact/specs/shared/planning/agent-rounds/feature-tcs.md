@@ -229,6 +229,74 @@
 * The cases are drawn from the anchors, beside the requirements and never from the requirements themselves.
 * Each draft's summary names the perspectives that read it, the branch carries a push per artifact, and nothing is on `main`.
 
+### shared-planning-agent-rounds-US1-TC8-1: The summary's button is the word pressed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Decided by:** `tools/relay/test/worker.test.ts`, `tools/relay/test/slack.test.ts`
+
+**Pre-conditions:**
+
+* admin(product manager) is in <change thread>, where the proposal's summary waits on their word and carries the button `Confirm proposal`.
+* A second member, whom the team map does not name, is in the same thread.
+
+**Steps:**
+
+1. Press `Confirm proposal`.
+2. Read the summary and the replies in <change thread>.
+3. Read `main` once the wake that follows says it is done.
+4. As the unnamed member, press the button on another summary.
+
+**Expected Results:**
+
+* The thread reads `@<handle> pressed *Confirm proposal*`, and the button is replaced on the summary by who confirmed it.
+* The proposal lands as it lands on a typed `land`: the same check, the same `landed_by:` line.
+* The unnamed member's press lands nothing, and the thread says the team map does not name them.
+
+### shared-planning-agent-rounds-US1-TC9-1: A landing word wakes the run at once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Decided by:** `tools/relay/test/room-state.test.ts`
+
+**Pre-conditions:**
+
+* admin(product manager) is in <change thread>, and no wake is running on it.
+
+**Steps:**
+
+1. Reply `land` and read when the acknowledgment arrives.
+2. In a fresh thread, reply one sentence, then `land` inside the same minute.
+3. Reply one sentence that is no landing word, and read when its acknowledgment arrives.
+
+**Expected Results:**
+
+* The first `land` is acknowledged at once, with no minute's wait.
+* The second wake fires on the `land` and carries the sentence before it.
+* The sentence alone is acknowledged after the minute.
+
 ---
 
 ## shared-planning-agent-rounds-US2: Designer tweaks a proposed design
