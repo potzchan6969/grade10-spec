@@ -53,7 +53,7 @@ Three things you say in the thread, and one you can do anywhere.
 
 | Move | You say | What happens |
 | --- | --- | --- |
-| Answer | `Q4: the second` | The row is written in and the question closes |
+| Answer | `Q4: the second` · `Q4` takes the recommendation | The row is written in and the question closes |
 | Remark | `The empty state is a link, not a button` | Applied as written; only the perspectives it touches read again |
 | Land | `land`, or `land with recommendations` | Every drafted artifact of your hand lands on `main` in order, with your handle on it; while a held question is open, `land` lands nothing and names it, and `land with recommendations` takes the recommendations and goes on |
 | Edit | An edit you push yourself, from a terminal or from GitHub | The same round: the push is your word for the lines it touched |

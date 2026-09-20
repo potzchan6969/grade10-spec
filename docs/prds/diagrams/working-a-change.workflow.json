@@ -16,11 +16,7 @@
     },
     {
       "id": "design",
-      "label": "Designer"
-    },
-    {
-      "id": "tech",
-      "label": "Tech PIC"
+      "label": "Designer · Tech PIC"
     },
     {
       "id": "qa",
@@ -31,23 +27,23 @@
       "label": "Engineer"
     },
     {
-      "id": "store",
-      "label": "The store"
+      "id": "release",
+      "label": "QA · Release hand"
     }
   ],
   "mainPath": [
-    "the-chain-and-the-two-held-rows",
-    "the-first-word",
-    "the-first-word_journeys",
-    "the-mirror-and-the-rule",
-    "the-requirements-and-the-cases",
-    "the-requirements-and-the-cases_spec",
-    "built-and-walked",
-    "the-fold-then-phase-two"
+    "pm-the-sentence",
+    "pm-the-first-word",
+    "pm-the-first-word_journeys",
+    "tech-pic-the-mirror-and-the-rule",
+    "qa-the-two-readings",
+    "qa-the-two-readings_spec",
+    "engineer-the-plan-then-the-build",
+    "qa-release-hand-staging-the-cut-the-fold"
   ],
   "nodes": [
     {
-      "id": "the-chain-and-the-two-held-rows",
+      "id": "pm-the-sentence",
       "lane": "pm",
       "col": 0,
       "type": "backend",
@@ -56,7 +52,7 @@
       "width": 132
     },
     {
-      "id": "the-first-word",
+      "id": "pm-the-first-word",
       "lane": "pm",
       "col": 1,
       "type": "backend",
@@ -65,7 +61,7 @@
       "width": 132
     },
     {
-      "id": "the-first-word_journeys",
+      "id": "pm-the-first-word_journeys",
       "lane": "pm",
       "col": 2,
       "type": "backend",
@@ -74,7 +70,7 @@
       "width": 132
     },
     {
-      "id": "the-rail-and-its-states",
+      "id": "designer-the-rail",
       "lane": "design",
       "col": 2,
       "type": "frontend",
@@ -83,8 +79,8 @@
       "width": 132
     },
     {
-      "id": "the-mirror-and-the-rule",
-      "lane": "tech",
+      "id": "tech-pic-the-mirror-and-the-rule",
+      "lane": "design",
       "col": 3,
       "type": "messagebus",
       "label": "tech-design.md",
@@ -92,7 +88,7 @@
       "width": 132
     },
     {
-      "id": "the-requirements-and-the-cases",
+      "id": "qa-the-two-readings",
       "lane": "qa",
       "col": 3,
       "type": "security",
@@ -101,7 +97,7 @@
       "width": 132
     },
     {
-      "id": "the-requirements-and-the-cases_spec",
+      "id": "qa-the-two-readings_spec",
       "lane": "qa",
       "col": 4,
       "type": "security",
@@ -110,7 +106,7 @@
       "width": 132
     },
     {
-      "id": "built-and-walked",
+      "id": "engineer-the-plan-then-the-build",
       "lane": "eng",
       "col": 4,
       "type": "cloud",
@@ -119,89 +115,74 @@
       "width": 132
     },
     {
-      "id": "the-fold-then-phase-two",
-      "lane": "store",
+      "id": "qa-release-hand-staging-the-cut-the-fold",
+      "lane": "release",
       "col": 4,
       "type": "database",
       "label": "The archive",
       "sublabel": "the cut, then the fold",
       "width": 132
-    },
-    {
-      "id": "the-fold-then-phase-two_next",
-      "lane": "store",
-      "col": 5,
-      "type": "database",
-      "label": "Phase two",
-      "sublabel": "add-store-also-bought",
-      "width": 132
     }
   ],
   "edges": [
     {
-      "from": "the-chain-and-the-two-held-rows",
-      "to": "the-first-word",
+      "from": "pm-the-sentence",
+      "to": "pm-the-first-word",
       "variant": "emphasis"
     },
     {
-      "from": "the-first-word",
-      "to": "the-first-word_journeys",
+      "from": "pm-the-first-word",
+      "to": "pm-the-first-word_journeys",
       "variant": "emphasis"
     },
     {
-      "from": "the-first-word_journeys",
-      "to": "the-rail-and-its-states",
+      "from": "pm-the-first-word_journeys",
+      "to": "designer-the-rail",
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
     },
     {
-      "from": "the-first-word_journeys",
-      "to": "the-mirror-and-the-rule",
+      "from": "pm-the-first-word_journeys",
+      "to": "tech-pic-the-mirror-and-the-rule",
       "variant": "emphasis",
       "fromSide": "right",
       "toSide": "top"
     },
     {
-      "from": "the-rail-and-its-states",
-      "to": "the-requirements-and-the-cases",
+      "from": "designer-the-rail",
+      "to": "qa-the-two-readings",
       "variant": "dashed"
     },
     {
-      "from": "the-mirror-and-the-rule",
-      "to": "the-requirements-and-the-cases",
+      "from": "tech-pic-the-mirror-and-the-rule",
+      "to": "qa-the-two-readings",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
     },
     {
-      "from": "the-requirements-and-the-cases",
-      "to": "the-requirements-and-the-cases_spec",
+      "from": "qa-the-two-readings",
+      "to": "qa-the-two-readings_spec",
       "variant": "emphasis"
     },
     {
-      "from": "the-requirements-and-the-cases_spec",
-      "to": "built-and-walked",
+      "from": "qa-the-two-readings_spec",
+      "to": "engineer-the-plan-then-the-build",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
     },
     {
-      "from": "built-and-walked",
-      "to": "the-fold-then-phase-two",
+      "from": "engineer-the-plan-then-the-build",
+      "to": "qa-release-hand-staging-the-cut-the-fold",
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
-    },
-    {
-      "from": "the-fold-then-phase-two",
-      "to": "the-fold-then-phase-two_next",
-      "label": "depends_on",
-      "variant": "dashed"
     }
   ]
 }

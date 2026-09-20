@@ -808,7 +808,7 @@ artifacts:
       - tech-design
   - id: test-cases
     required: true
-    hand: qa
+    hand: pm
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md

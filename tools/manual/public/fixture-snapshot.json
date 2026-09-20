@@ -1573,7 +1573,7 @@
       {
         "id": "test-cases",
         "generates": "specs/**/feature-tcs.md",
-        "hand": "qa",
+        "hand": "pm",
         "requires": [
           "specs"
         ],

@@ -94,7 +94,7 @@ describe("what each artifact is called", () => {
     expect(artifactMeaning("user-journeys")).toContain(
       "walks the requirements",
     );
-    expect(artifactMeaning("test-cases")).toContain("QA's suite");
+    expect(artifactMeaning("test-cases")).toContain("drawn blind");
     expect(artifactMeaning("ui-design")).toContain("visual plan");
     expect(artifactMeaning("tech-design")).toContain("high-level design");
     expect(artifactMeaning("tasks")).toContain("agent-driven implementation");

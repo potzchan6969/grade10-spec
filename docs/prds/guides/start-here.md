@@ -25,8 +25,8 @@ the first hour is different depending on what you came to do, so pick a path.
   nobody has written, journeys and suites nobody has derived.
 - [How we plan](/guides/how-we-plan) — where a proposal stops and a spec
   starts.
-- [Working a change](/guides/working-a-change) — `/plan`, following
-  `planning-pm`'s rules, and what to leave the three hands after you.
+- [Working a change](/guides/working-a-change) — the sentence that opens a
+  change, the questions it holds for you, and the word that lands your files.
 
 ## If you are a designer
 
@@ -59,8 +59,8 @@ over, or hand the change id to a PM or engineer.
   its author wrote saying what is missing. A change asks by writing
   `awaiting:` with `ui-design: <what nobody has drawn>` in its
   `.openspec.yaml`; nothing else puts it on your section.
-- [Working a change](/guides/working-a-change) — `/design`, following
-  `planning-design`'s rules, and when a change needs no `ui-design.md` at all.
+- [Working a change](/guides/working-a-change) — `/design`, the screen the
+  journeys ask for, and the word that lands it.
 
 ## If you are in QA
 
@@ -87,8 +87,8 @@ classified cases, is
   what a passing verification does not claim.
 - [In Flight](/in-flight) — what is moving, so a test plan is written against the
   right version.
-- [Working a change](/guides/working-a-change) — `/specify`, following
-  `planning-qa`'s rules, and the two pull requests a suite rides in.
+- [Working a change](/guides/working-a-change) — the two blind readings of a
+  change, and the one word that lands the requirements and the cases together.
 
 ## If you are an engineer
 
@@ -104,9 +104,8 @@ classified cases, is
   services with the most decisions per line of code.
 - [Pending](/pending) — the specified changes with no plan yet, oldest first.
   Taking one is writing its `tasks.md`.
-- [Working a change](/guides/working-a-change) — `/tech` and `/tasks`,
-  following `planning-dev`'s rules, taking a change in hand, and the archive
-  debt `tasks.md` has to carry.
+- [Working a change](/guides/working-a-change) — `/tech` and `/tasks`, the
+  groups each with its test task first, and the walk the last group leaves.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when
   you document what you built.
 

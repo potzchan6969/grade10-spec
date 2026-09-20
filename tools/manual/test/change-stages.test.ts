@@ -524,7 +524,7 @@ describe("which artifact is whose hand", () => {
       "ui-design": "design",
       "tech-design": "tech",
       specs: "pm",
-      "test-cases": "qa",
+      "test-cases": "pm",
       tasks: "dev",
     });
   });
