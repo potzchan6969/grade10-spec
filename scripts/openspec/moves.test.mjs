@@ -1,7 +1,13 @@
 import assert from "node:assert/strict";
 import { test } from "node:test";
 
-import { messagesOf, movesBetween, newlyBehind } from "./lib/moves.mjs";
+import {
+  landedBetween,
+  landedText,
+  messagesOf,
+  movesBetween,
+  newlyBehind,
+} from "./lib/moves.mjs";
 
 /**
  * `movesBetween`, `newlyBehind` and `messagesOf` over two plain `Map`s — no
@@ -22,6 +28,7 @@ function at(id, overrides = {}) {
     hands: { dev: "erin" },
     thread: undefined,
     behind: [],
+    landedBy: {},
     ...overrides,
   };
 }
@@ -172,4 +179,155 @@ test("messagesOf keys a behind message by the change and the artifact, with the 
   assert.equal(messages[0].kind, "behind");
   assert.match(messages[0].text, /tasks/);
   assert.match(messages[0].text, /decisions/);
+});
+
+test("landedBetween names the `landed_by:` entries a push added", () => {
+  const base = new Map([
+    ["probe", at("probe", { landedBy: { proposal: "dana" } })],
+  ]);
+  const head = new Map([
+    [
+      "probe",
+      at("probe", { landedBy: { proposal: "dana", decisions: "dana" } }),
+    ],
+  ]);
+
+  assert.deepEqual(landedBetween(base, head), [
+    { id: "probe", landed: [{ artifact: "decisions", by: "dana" }] },
+  ]);
+});
+
+test("landedBetween reads an entry that changed hands as a landing", () => {
+  const base = new Map([
+    ["probe", at("probe", { landedBy: { tasks: "dana" } })],
+  ]);
+  const head = new Map([
+    ["probe", at("probe", { landedBy: { tasks: "erin" } })],
+  ]);
+
+  assert.deepEqual(landedBetween(base, head), [
+    { id: "probe", landed: [{ artifact: "tasks", by: "erin" }] },
+  ]);
+});
+
+test("landedBetween says nothing where no entry moved", () => {
+  const base = new Map([
+    ["probe", at("probe", { landedBy: { tasks: "dana" } })],
+  ]);
+  const head = new Map([
+    ["probe", at("probe", { landedBy: { tasks: "dana" } })],
+  ]);
+
+  assert.deepEqual(landedBetween(base, head), []);
+});
+
+test("shared-planning-change-stages-SC-70 - landedText names what landed, whose word it was, the stage and whose turn it is", () => {
+  const line = landedText(
+    at("probe", {
+      stage: "proposed",
+      roles: ["design", "tech"],
+      hands: { design: "dana", tech: "erin" },
+    }),
+    [
+      { artifact: "proposal", by: "dana" },
+      { artifact: "decisions", by: "dana" },
+      { artifact: "user-journeys", by: "dana" },
+    ],
+  );
+
+  assert.equal(
+    line,
+    "*Landed* — `proposal`, `decisions`, `user-journeys` by @dana · now at *Proposed* · your turn: @dana (designer), @erin (tech PIC)",
+  );
+});
+
+test("landedText names the hands the stage has and never a role's channel", () => {
+  const line = landedText(
+    at("probe", {
+      stage: "on-staging",
+      roles: ["qa", "release"],
+      hands: { qa: "hana" },
+    }),
+    [{ artifact: "tasks", by: "erin" }],
+  );
+
+  assert.equal(
+    line,
+    "*Landed* — `tasks` by @erin · now at *On staging* · your turn: @hana (QA)",
+  );
+});
+
+test("landedText says nobody where the stage names no hand", () => {
+  const line = landedText(
+    at("probe", { stage: "designed", roles: [], hands: {} }),
+    [{ artifact: "ui-design", by: "dana" }],
+  );
+
+  assert.equal(
+    line,
+    "*Landed* — `ui-design` by @dana · now at *Designed* · your turn: nobody",
+  );
+});
+
+test("landedText names each word where one push carries two", () => {
+  const line = landedText(at("probe", { stage: "designed", roles: [] }), [
+    { artifact: "ui-design", by: "dana" },
+    { artifact: "tech-design", by: "erin" },
+  ]);
+
+  assert.match(line, /`ui-design` by @dana, `tech-design` by @erin/);
+});
+
+test("shared-planning-change-stages-SC-70 - messagesOf replies in the change's thread for a landing a person pushed", () => {
+  const thread = "C0AB/1700000000.000100";
+  const base = new Map([["probe", at("probe", { thread })]]);
+  const head = new Map([
+    ["probe", at("probe", { thread, landedBy: { tasks: "dana" } })],
+  ]);
+
+  const { messages } = messagesOf(base, head, TEAM, {
+    ...options,
+    pushHead: "abc1234",
+    pushedBy: new Map([["probe", "dana"]]),
+  });
+
+  assert.equal(messages.length, 1);
+  assert.equal(messages[0].key, "probe:landed:abc1234");
+  assert.equal(messages[0].id, "probe");
+  assert.equal(messages[0].kind, "landed");
+  assert.equal(messages[0].to, "channel");
+  assert.equal(messages[0].channel, "C0AB");
+  assert.equal(messages[0].threadTs, "1700000000.000100");
+  assert.match(messages[0].text, /\*Landed\* — `tasks` by @dana/);
+});
+
+test("shared-planning-change-stages-SC-70 - messagesOf says nothing for a landing whose pusher the team map does not name", () => {
+  const thread = "C0AB/1700000000.000100";
+  const base = new Map([["probe", at("probe", { thread })]]);
+  const head = new Map([
+    ["probe", at("probe", { thread, landedBy: { tasks: "dana" } })],
+  ]);
+
+  const { messages } = messagesOf(base, head, TEAM, {
+    ...options,
+    pushHead: "abc1234",
+    pushedBy: new Map(),
+  });
+
+  assert.deepEqual(messages, []);
+});
+
+test("shared-planning-change-stages-SC-70 - messagesOf posts no landing reply for a change with no thread", () => {
+  const base = new Map([["probe", at("probe")]]);
+  const head = new Map([
+    ["probe", at("probe", { landedBy: { tasks: "dana" } })],
+  ]);
+
+  const { messages } = messagesOf(base, head, TEAM, {
+    ...options,
+    pushHead: "abc1234",
+    pushedBy: new Map([["probe", "dana"]]),
+  });
+
+  assert.deepEqual(messages, []);
 });

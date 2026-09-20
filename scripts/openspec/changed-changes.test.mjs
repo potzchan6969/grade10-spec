@@ -396,11 +396,19 @@ const throughSpecs = (change = CHANGE) => ({
 
 function sandbox() {
   const root = mkdtempSync(join(tmpdir(), "notify-store-"));
-  const git = (args, daysAgo = 0) => {
+  /** `dana@test` unless a case says otherwise: the committer is what the team
+   * map resolves to a handle, so a landing pushed by a run is one argument. */
+  const git = (args, daysAgo = 0, email = "dana@test") => {
     const at = new Date(Date.now() - daysAgo * DAY).toISOString();
     return execFileSync(
       "git",
-      ["-c", "user.email=dana@test", "-c", "user.name=dana", ...args],
+      [
+        "-c",
+        `user.email=${email}`,
+        "-c",
+        `user.name=${email.split("@")[0]}`,
+        ...args,
+      ],
       {
         cwd: root,
         encoding: "utf8",
@@ -416,9 +424,9 @@ function sandbox() {
     }
   };
   const drop = (path) => rmSync(join(root, path), { force: true });
-  const commit = (message, daysAgo = 0) => {
-    git(["add", "-A"]);
-    git(["commit", "--quiet", "-m", message], daysAgo);
+  const commit = (message, daysAgo = 0, email) => {
+    git(["add", "-A"], 0, email);
+    git(["commit", "--quiet", "-m", message], daysAgo, email);
     return git(["rev-parse", "HEAD"]);
   };
   git(["init", "--quiet", "--initial-branch=main", "."]);
@@ -895,6 +903,103 @@ test("--stages says the words when no run sheet is configured", () => {
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
   assert.match(textOf(messages, "probe:on-staging:qa"), /the run sheet/);
+});
+
+/** A landing as `plan:land` writes it: the artifacts, and the record naming
+ * whose word landed each. */
+const landedRecord = (...lines) =>
+  record(
+    ...HANDS,
+    ...lines,
+    "landed_by:",
+    "  proposal: dana",
+    "  decisions: dana",
+    "  user-journeys: dana",
+  );
+
+/** What the landing of Proposed's second half carries beside the record. */
+const PROPOSED = {
+  [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+};
+
+test("shared-planning-change-stages-SC-70 - --stages replies in the thread when a person's push lands artifacts", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  const landed = messages.find((one) => one.kind === "landed");
+  assert.equal(landed.key, `probe:landed:${head}`);
+  assert.equal(landed.id, CHANGE);
+  assert.equal(landed.to, "channel");
+  assert.equal(landed.channel, "C0AB");
+  assert.equal(landed.threadTs, "1700000000.000100");
+  assert.match(
+    landed.text,
+    /\*Landed\* — `proposal`, `decisions`, `user-journeys` by @dana/,
+  );
+  assert.match(landed.text, /now at \*Proposed\*/);
+  assert.match(
+    landed.text,
+    /your turn: @dana \(designer\), @erin \(tech PIC\)/,
+  );
+});
+
+test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing the team map cannot place", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  // A hosted run's landing: its committer is nobody the map names, and the
+  // run has replied in the thread itself.
+  const head = commit("land the three of probe on @dana", 1, "runner@test");
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(messages.map((one) => one.key).sort(), [
+    "probe:proposed:design",
+    "probe:proposed:tech",
+  ]);
+});
+
+test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for a change whose record names no thread", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({ [`${DIR}/.openspec.yaml`]: landedRecord(), ...PROPOSED });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(messages.map((one) => one.kind).sort(), [
+    "your-turn",
+    "your-turn",
+  ]);
 });
 
 test("--stages matrix names the change the push touched, as its id alone", () => {
