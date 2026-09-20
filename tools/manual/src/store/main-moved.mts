@@ -4,7 +4,7 @@ import type {
   PullOutcome,
   RelayUrl,
 } from "../api/types.ts";
-import { git, type GitRun, tryGit } from "./git.mts";
+import { type GitRun, git, tryGit } from "./git.mts";
 
 /**
  * What the store answers about `main` moving: the relay a page listens to,

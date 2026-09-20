@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { CheckoutStanding } from "../src/api/types";
-import { git as runGit, type GitRun } from "../src/store/git.mts";
+import { type GitRun, git as runGit } from "../src/store/git.mts";
 import { liveBodies, originMain, relayOf } from "../src/store/main-moved.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import type { Store } from "../src/store/snapshot.mts";
@@ -67,10 +67,14 @@ function checkout() {
   const endpoints = storeEndpoints(
     rootsOf(root),
     artifacts,
-    originMain(root, () => at, (where, args, run) => {
-      calls.push({ args, run });
-      return runGit(where, args, run);
-    }),
+    originMain(
+      root,
+      () => at,
+      (where, args, run) => {
+        calls.push({ args, run });
+        return runGit(where, args, run);
+      },
+    ),
   );
   return {
     api: async (request: StoreRequest) => body(await endpoints(request)),
@@ -169,7 +173,9 @@ describe("what the checkout stands at", () => {
     const first = await upstreamOf(store.api);
     const again = await upstreamOf(store.api);
 
-    expect(store.calls.filter((one) => one.args[0] === "fetch")).toHaveLength(1);
+    expect(store.calls.filter((one) => one.args[0] === "fetch")).toHaveLength(
+      1,
+    );
     expect(first.fetchedAt).toBeUndefined();
     expect(again.fetchedAt).toBeUndefined();
   });

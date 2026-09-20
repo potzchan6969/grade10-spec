@@ -78,11 +78,7 @@ function fakeFocus() {
 
 /** A head `main` reached `minutes` ago, which is what the sentence dates
  * itself by. */
-function movedHead(
-  minutes: number,
-  main = MOVED,
-  subject = SUBJECT,
-): MainHead {
+function movedHead(minutes: number, main = MOVED, subject = SUBJECT): MainHead {
   return {
     at: new Date(Date.now() - minutes * 60_000).toISOString(),
     main,

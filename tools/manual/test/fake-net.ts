@@ -57,7 +57,9 @@ export function fakeClock() {
     const one =
       after === undefined
         ? waits.at(-1)
-        : waits.findLast((one) => one.after === after && one.cancelled !== true);
+        : waits.findLast(
+            (one) => one.after === after && one.cancelled !== true,
+          );
     if (one === undefined) {
       throw new Error(
         after === undefined ? "nothing is waiting" : `nothing waits ${after}ms`,

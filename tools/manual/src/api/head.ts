@@ -170,10 +170,14 @@ export function watchMainHead(watch: HeadWatch): () => void {
      * holds. */
     const poll = () => {
       if (stopPoll !== null) return;
-      stopPoll = every(wait, () => HEAD_POLL_MS, async () => {
-        const found = headOf(await readJson(http, head));
-        if (found !== null) watch.onHead(found);
-      });
+      stopPoll = every(
+        wait,
+        () => HEAD_POLL_MS,
+        async () => {
+          const found = headOf(await readJson(http, head));
+          if (found !== null) watch.onHead(found);
+        },
+      );
     };
 
     if (!open) {
@@ -316,10 +320,14 @@ export type CheckoutWatch = {
 export function watchCheckout(watch: CheckoutWatch): () => void {
   const http = watch.http ?? fetch;
   const wait = watch.wait ?? onTimers;
-  return every(wait, () => CHECKOUT_POLL_MS, async () => {
-    const found = await readCheckout(http);
-    if (found !== null) watch.onStanding(found);
-  });
+  return every(
+    wait,
+    () => CHECKOUT_POLL_MS,
+    async () => {
+      const found = await readCheckout(http);
+      if (found !== null) watch.onStanding(found);
+    },
+  );
 }
 
 export type CheckoutReading = {
