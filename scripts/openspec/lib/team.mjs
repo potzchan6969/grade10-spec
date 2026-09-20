@@ -11,18 +11,21 @@
  * home of its own is one constant here; a caller that was handed another
  * path — a script's `--team`, a fixture's own map — passes it beside the
  * root rather than reading the file itself.
+ *
+ * The text itself is read by `team-parse.mjs`, which imports nothing of
+ * node's: the relay reads the same map from the code host at a sha, where
+ * there is no file to open.
  */
 import { readFileSync } from "node:fs";
 import { join } from "node:path";
-import YAML from "yaml";
 import { handleOf, isHandle } from "./handle.mjs";
+import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";
 
-/** Both pure, and read by a browser as well as this reader — `handle.mjs`'s
- * own reason for existing beside this file, which imports `node:fs`. */
-export { handleOf, isHandle };
-
-/** Where the map lives while Operations' own item is open. */
-export const TEAM_MAP = "docs/prds/team.yaml";
+/** All four pure, and read by a browser and by the relay as well as by this
+ * reader — `handle.mjs`'s and `team-parse.mjs`'s own reason for existing
+ * beside this file, which imports `node:fs`. They are re-exported here so the
+ * store's callers still have one module. */
+export { handleOf, isHandle, parseTeamMap, TEAM_MAP };
 
 /**
  * The hands a change passes through, in the order it passes through them.
@@ -53,57 +56,7 @@ export function readTeamMap(root, path = TEAM_MAP) {
   } catch {
     return { handles: {}, channels: {} };
   }
-
-  let parsed;
-  try {
-    parsed = YAML.parse(text) ?? {};
-  } catch (cause) {
-    throw new Error(`${TEAM_MAP} is not valid YAML: ${cause.message}`);
-  }
-  if (!isMapping(parsed)) throw new Error(`${TEAM_MAP} must be a mapping`);
-
-  const handles = {};
-  for (const [handle, entry] of Object.entries(
-    mappingOf(parsed.handles, "handles"),
-  )) {
-    if (!isMapping(entry)) {
-      throw new Error(
-        `${TEAM_MAP}: \`handles.${handle}\` must carry that person's e-mail, Slack member and roles`,
-      );
-    }
-    const spelled = handleOf(handle);
-    // Two spellings of one handle are one person written twice: the second
-    // entry would silently replace the first, and whichever e-mail and roles
-    // survived would be whichever the file happened to list last.
-    if (spelled in handles) {
-      throw new Error(
-        `${TEAM_MAP}: \`handles.${handle}\` is \`${spelled}\` again - one entry per person`,
-      );
-    }
-    const email = line(entry.email, `handles.${handle}.email`);
-    const slack = line(entry.slack, `handles.${handle}.slack`);
-    handles[spelled] = {
-      // An address is matched case-insensitively, so it is held one way.
-      ...(email ? { email: email.toLowerCase() } : {}),
-      ...(slack ? { slack } : {}),
-      roles: roles(entry.roles, `handles.${handle}.roles`),
-    };
-  }
-
-  const channels = {};
-  for (const [role, id] of Object.entries(
-    mappingOf(parsed.channels, "channels"),
-  )) {
-    const written = line(id, `channels.${role}`);
-    if (!written) {
-      throw new Error(
-        `${TEAM_MAP}: \`channels.${role}\` must name one channel`,
-      );
-    }
-    channels[role] = written;
-  }
-
-  return { handles, channels };
+  return parseTeamMap(text);
 }
 
 /** The person a handle names, however the record spelled it; nobody where the
@@ -126,33 +79,4 @@ export function handleOfEmail(map, email) {
     if (member.email === wanted) return handle;
   }
   return undefined;
-}
-
-const isMapping = (value) =>
-  typeof value === "object" && value !== null && !Array.isArray(value);
-
-function mappingOf(value, key) {
-  if (value === undefined || value === null) return {};
-  if (!isMapping(value)) {
-    throw new Error(`${TEAM_MAP}: \`${key}\` must be a mapping`);
-  }
-  return value;
-}
-
-/** A written line, or nothing where the key is absent or blank. Anything but
- * text is a malformed map, for the reason a record's key is. */
-function line(value, key) {
-  if (value === undefined || value === null) return undefined;
-  if (typeof value !== "string") {
-    throw new Error(`${TEAM_MAP}: \`${key}\` must be a line of text`);
-  }
-  return value.trim() === "" ? undefined : value.trim();
-}
-
-function roles(value, key) {
-  if (value === undefined || value === null) return [];
-  if (!Array.isArray(value) || value.some((one) => typeof one !== "string")) {
-    throw new Error(`${TEAM_MAP}: \`${key}\` must be a list of roles`);
-  }
-  return value.map((one) => one.trim());
 }
