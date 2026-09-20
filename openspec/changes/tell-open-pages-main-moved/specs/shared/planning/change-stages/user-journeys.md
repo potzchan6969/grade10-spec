@@ -1,10 +1,10 @@
 ## ADDED User journeys
 
-### shared-planning-change-stages-US-10: Hand with a page open learns that `main` moved
+### shared-planning-change-stages-US-10: Teammate with a page open learns that `main` moved
 
-**As a** hand with a change page open,
+**As a** teammate with a page of the hosted manual open,
 **I want** to be told when `main` moves and to see what landed without reloading by hand,
-**so that** I answer on what the store holds rather than on what the page held when I opened it.
+**so that** I read and answer on what the store holds rather than on what the page held when I opened it.
 
 ### shared-planning-change-stages-US-11: Teammate on the locally run manual pulls what landed
 
