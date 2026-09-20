@@ -4,6 +4,8 @@ packages:
   # Exactly `tools/manual`, not `tools/*`: `tools/openspec-viewer` is a
   # submodule with its own pnpm workspace and must not join this one.
   - "tools/manual"
+  # The relay: a Cloudflare Worker, deployed with wrangler as the manual is.
+  - "tools/relay"
 allowBuilds:
   esbuild: true
 enableGlobalVirtualStore: true

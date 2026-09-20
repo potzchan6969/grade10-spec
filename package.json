@@ -51,7 +51,7 @@
     "tokens:push": "node scripts/tokens-sync/figma-plugins/push.mjs",
     "tokens:plugin": "node scripts/tokens-sync/figma-plugins/build-plugin.mjs",
     "tokens:pull": "pnpm tokens:import && pnpm tokens:build",
-    "typecheck": "pnpm --dir tools/manual exec tsc -b && pnpm --dir apps/preview exec tsc -b && pnpm --dir apps/emails run typecheck && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/test run typecheck && pnpm --filter @grade10/ui run typecheck",
+    "typecheck": "pnpm --dir tools/manual exec tsc -b && pnpm --dir tools/relay exec tsc --noEmit && pnpm --dir apps/preview exec tsc -b && pnpm --dir apps/emails run typecheck && pnpm --filter @grade10/design-system run typecheck && pnpm --filter @grade10/i18n run typecheck && pnpm --filter @grade10/test run typecheck && pnpm --filter @grade10/ui run typecheck",
     "email:dev": "pnpm --dir apps/emails dev",
     "email:build": "pnpm --dir apps/emails run build",
     "email:deploy:staging": "pnpm --dir apps/emails run deploy:staging",
