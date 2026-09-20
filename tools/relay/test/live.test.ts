@@ -35,6 +35,15 @@ class FakePair {
   readonly 1 = new FakeSocket();
 }
 
+/** The request and its answer, as the runtime holds them: the object hands one
+ * over and the runtime answers every page's ping from it, without waking. */
+class FakeRequestResponse {
+  constructor(
+    readonly request: string,
+    readonly response: string,
+  ) {}
+}
+
 /**
  * Node's `Response` refuses a status under 200 and the runtime answers an
  * upgrade with 101, so every answer the object builds here is one of these: the
@@ -62,6 +71,7 @@ class Answer {
 function harness() {
   const storage = storageMap();
   const accepted: FakeSocket[] = [];
+  let answered: FakeRequestResponse | null = null;
   const ctx = {
     id: { toString: () => "main" },
     storage,
@@ -69,15 +79,22 @@ function harness() {
       accepted.push(socket);
     },
     getWebSockets: () => accepted,
+    setWebSocketAutoResponse: (pair: FakeRequestResponse) => {
+      answered = pair;
+    },
   } as unknown as DurableObjectState;
   const live = new Live(ctx);
 
   vi.stubGlobal("Response", Answer);
   vi.stubGlobal("WebSocketPair", FakePair);
+  vi.stubGlobal("WebSocketRequestResponsePair", FakeRequestResponse);
 
   return {
     /** The sockets the object holds, as a page's own end reads them. */
     accepted,
+    /** What the runtime answers a page's ping with, once the object has said
+     * so. */
+    answered: (): FakeRequestResponse | null => answered,
     live,
     async send(op: LiveOp): Promise<Answer> {
       return (await live.fetch(
@@ -115,6 +132,16 @@ describe("a page's socket", () => {
     expect(answer.socket).not.toBeNull();
     expect(relay.accepted).toHaveLength(1);
     expect(relay.accepted[0].sent).toEqual([headText(HEAD)]);
+  });
+
+  it("is answered `pong` by the runtime, without waking the object", async () => {
+    // A page pings to tell an open line from one the network has abandoned.
+    // The runtime answers it from the pair, so a page's half-minute ping does
+    // not wake an object that is asleep.
+    const relay = harness();
+    await relay.upgrade();
+
+    expect(relay.answered()).toEqual({ request: "ping", response: "pong" });
   });
 
   it("is sent `main` as null while nothing has pushed", async () => {
