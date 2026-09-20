@@ -6,6 +6,8 @@ import {
   CaretDown,
   CaretRight,
   type Icon,
+  Kanban,
+  ListChecks,
 } from "@phosphor-icons/react";
 import { type MouseEvent, use, useCallback, useEffect, useState } from "react";
 import { NavLink, useLocation } from "react-router";
@@ -22,7 +24,14 @@ import {
   SectionLinks,
 } from "./page-sections";
 
-const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [];
+/** The two views that are about the work rather than about a capability: the
+ * board of everything in flight, and what is on the reader. Above the product
+ * groups because neither belongs to one, and fixed because a rail built from
+ * the store's pages cannot reach either. */
+const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
+  { to: "/in-flight", label: "In flight", icon: Kanban },
+  { to: "/my-turn", label: "My turn", icon: ListChecks },
+];
 
 /** One row shape for everything in the rail — the fixed views, products and
  * leaves differ in tone, never in geometry. */

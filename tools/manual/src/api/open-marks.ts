@@ -29,7 +29,21 @@ export type OpenMark<P extends MarkedPage = MarkedPage> = {
   text: string;
 };
 
-const OPEN = /❓|\bTBC\b/;
+/**
+ * What may sit before a mark that leads its line: the whitespace and the
+ * markers that open a line rather than say anything on it — a list marker, a
+ * blockquote's `>`, a bold or italic opener, a backtick — and a table cell's
+ * own `|`.
+ */
+const LEADS = String.raw`(?:^|\|)[\s>]*(?:(?:[-*+]|\d+\.)[\s>]*)?[*_~\`]*\s*`;
+
+/**
+ * A mark leads its line, or a cell of its row: `- ❓ **Term** — …`, a
+ * paragraph opening on the mark, `| ❓ Open |`. A ❓ inside a sentence is
+ * prose about the grammar — "or a ❓ line on the page" — and nobody owes it an
+ * answer, so it is read as words.
+ */
+const OPEN = new RegExp(`${LEADS}(?:❓|\\bTBC\\b)`);
 export const BUILDING = /🚧/;
 const HEADING = /^##\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;

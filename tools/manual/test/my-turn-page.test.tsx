@@ -249,4 +249,16 @@ describe("the page's own order", () => {
     expect(html).toContain("C0123ABC");
     expect(html).toContain("/tasks now-change");
   });
+
+  it("names Pending at its foot, for a hand nobody has named", () => {
+    // This page replaces Pending for a person, so the per-role page is
+    // reached from here rather than from the rail.
+    const html = render([], "robin");
+
+    expect(html).toContain("A hand nobody has named is on");
+    expect(html).toContain('href="/pending"');
+    expect(html.indexOf('href="/pending"')).toBeGreaterThan(
+      html.indexOf("Nothing on you"),
+    );
+  });
 });

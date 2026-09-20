@@ -11,6 +11,7 @@ import type {
   SchemaArtifact,
   Snapshot,
 } from "../src/api/types";
+import { HandoffRow } from "../src/blocks/artifact-list";
 import type { ContentStore } from "../src/editor/store";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
@@ -238,19 +239,32 @@ describe("the stepper", () => {
   });
 
   it("A lane heading and a stepper step with the agent mark and the hand's move", () => {
-    expect(html).toContain("agent drafts the plan");
-    expect(html).toContain("agent drafts each group, test first");
-    expect(html).toContain("read each landing");
+    const steps = html.slice(html.indexOf('data-stepper="steps"'));
+
+    // One step of eight is a tenth of the reading column, so the caption is
+    // the agent and the hand's move — the whole sentence clipped to a pill.
+    expect(steps).toContain("<span>agent drafts</span>");
+    expect(steps).toContain("read each landing");
+    expect(steps).not.toContain(">agent drafts each group, test first<");
+    // Nothing is lost: the sentence is the element's own title and label.
+    const whole =
+      "agent drafts each group, test first \u00b7 read each landing";
+    expect(steps).toContain(`title="${whole}"`);
+    expect(steps).toContain(`aria-label="${whole}"`);
     expect(html).not.toMatch(
       /data-stage="on-staging"[\s\S]{0,400}agent drafts/,
     );
   });
 
   it("The change page's stepper below `sm`, on one line", () => {
-    const line = html.slice(html.indexOf('data-stepper="one-line"'));
+    const line = html.slice(
+      html.indexOf('data-stepper="one-line"'),
+      html.indexOf('data-stepper="steps"'),
+    );
 
     expect(line).toContain("Step 5 of 8");
     expect(line).toContain("Building");
+    // The one line has the width, so it reads the sentence itself.
     expect(line).toContain("agent drafts each group, test first");
     // Both readings render; which one shows at a given width is the walk's
     // own case (8.3), not a unit test's — this only asserts both exist.
@@ -272,7 +286,7 @@ describe("the stepper", () => {
     }
     const steps = markup.slice(markup.indexOf('data-stepper="steps"'));
 
-    expect(steps).toContain("agent drafts each group, test first");
+    expect(steps).toContain("<span>agent drafts</span>");
     expect(steps).toContain("held by");
     for (const paragraph of paragraphs(steps)) {
       expect(paragraph).not.toMatch(
@@ -379,11 +393,31 @@ describe("the Your turn card", () => {
 
     // The page's own job is to offer what `handlesFor` ordered — the rule is
     // the role's own handles first, then the rest, each group alphabetical,
-    // and `stage-view.test.ts` holds the rule itself. The default role is
-    // `pm`, and the empty option `allowEmpty` draws carries no handle.
+    // and `stage-view.test.ts` holds the rule itself. The role the form opens
+    // on is the one this stage waits on, Building's engineer, so the
+    // engineer's own handle is offered first; the empty option `allowEmpty`
+    // draws carries no handle.
     expect(
       [...options.matchAll(/<option value="([^"]+)"/g)].map((one) => one[1]),
-    ).toEqual(["robin", "dana", "sam"]);
+    ).toEqual(["sam", "dana", "robin"]);
+  });
+
+  it("opens the Role picker on the hand this stage waits on", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change({ stage: "specified" }), store);
+    const card = html.slice(html.indexOf("Your turn"));
+    const roles = card.slice(card.indexOf("Role"), card.indexOf("</select"));
+
+    // Specified waits on the product manager; Building on the engineer. The
+    // picker opens on the stage's own hand rather than on the first of the
+    // six, which is the hand a reader came to the card to name.
+    expect(roles).toContain('<option value="pm" selected=""');
+    const building = render(change(), store);
+    const chosen = building.slice(
+      building.indexOf("Role"),
+      building.indexOf("</select", building.indexOf("Role")),
+    );
+    expect(chosen).toContain('<option value="dev" selected=""');
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {
@@ -793,6 +827,38 @@ describe("delivery and the handoff", () => {
     expect(handoff).toContain("Planned");
     expect(handoff).toContain("so far");
   });
+
+  it("says today for a stage still open on the day it landed, and names a landing nothing dates", () => {
+    const day = "2026-09-20T02:00:00.000Z";
+    const html = renderToStaticMarkup(
+      <HandoffRow
+        handoffs={[
+          { stage: "proposed", landed: day, days: 0, open: true },
+          { stage: "designed", landed: day, days: 1, open: true },
+          { stage: "specified", open: true },
+          {
+            stage: "planned",
+            landed: day,
+            days: 3,
+            open: false,
+            role: "dev",
+            hand: "sam",
+          },
+        ]}
+      />,
+    );
+
+    // A stage that landed today and is still waiting reads as today, not as
+    // a count of nothing.
+    expect(html).toContain("today");
+    expect(html).not.toContain("0 days");
+    expect(html).toContain("1 day so far");
+    // A stage no commit dates has no landing yet.
+    expect(html).toContain("no landing yet");
+    // A stage somebody answered keeps its plain count.
+    expect(html).toContain("3 days");
+    expect(html).toContain("@sam");
+  });
 });
 
 describe("the questions a change still carries", () => {
@@ -815,6 +881,64 @@ describe("the questions a change still carries", () => {
     expect(html).toContain("Whether the shelf is a page of its own");
     expect(html).toContain("Q7");
     expect(html).toContain(">Building<");
+  });
+
+  it("links the change's thread once, under the rows", () => {
+    const html = render(
+      change({
+        thread: "C0123ABC/1758170000.001200",
+        questions: [
+          {
+            id: "Q7",
+            artifact: "decisions",
+            role: "design",
+            hand: "dana",
+            text: "Whether the shelf is a page of its own",
+          },
+          {
+            id: "Q8",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Whether the shelf keeps its own count",
+          },
+        ],
+      }),
+    );
+    const open = html.slice(
+      html.indexOf(">Open questions<"),
+      html.indexOf(">Owners<"),
+    );
+
+    // A question is answered by its id in the thread, so the rows carry the
+    // way to it — once, because the rows are one change's.
+    expect(open).toContain("C0123ABC");
+    expect(open.match(/slack\.com\/archives/g)).toHaveLength(1);
+  });
+
+  it("reads a question's own bold and backticks", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q9",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "**A question, not a guess** — a row in `decisions.md`",
+          },
+        ],
+      }),
+    );
+    const open = html.slice(
+      html.indexOf(">Open questions<"),
+      html.indexOf(">Owners<"),
+    );
+
+    expect(open).toContain("<strong>A question, not a guess</strong>");
+    expect(open).toContain("<code");
+    expect(open).toContain("decisions.md");
+    expect(open).not.toContain("**");
   });
 
   it("names the role's own label for a question the change names no hand for", () => {

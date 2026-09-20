@@ -70,7 +70,7 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `QuestionList` gains 
 | --- | --- | --- |
 | Open questions above the changes | One row per question: the change, the question id, the question's first line, and the thread link | `shared-planning-agent-rounds-SC-26` |
 | No open question | The changes on the reader alone, with no question rows above them | `shared-planning-agent-rounds-SC-27` |
-| ❓ Question row with no thread | `no thread is recorded for this change yet`, linking the change page in the thread's place; the designer confirms the words | `shared-planning-agent-rounds-SC-26` |
+| Question row with no thread | "This page is the link to share: no thread is recorded for this change yet.", linking the change page in the thread's place | `shared-planning-agent-rounds-SC-26` |
 
 ### Run sheet
 

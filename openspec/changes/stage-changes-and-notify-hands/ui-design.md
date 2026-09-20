@@ -10,11 +10,11 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### Change page
 
-[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move under each of its first five steps; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move as a short caption under each drafted step, the whole sentence on hover; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
-[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named.
+[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named. Reached from the rail's fixed entries beside In flight.
 
 ### Page ribbon and pip
 
@@ -48,7 +48,7 @@ Design-system primitives, from `@grade10/design-system/components/`:
 
 The manual's own blocks, in `tools/manual/src/blocks/`, kept: `ChangeCard`, `ChangeStatus`, `TaskProgress`, `CopyableCommand`, `Attribution`, `IdleBadge`, `DependencyPills`, `NextAction`, `ChangeRibbon`, `CapabilityPip`.
 
-New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/changed-changes.mjs`.
+New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/lib/moves.mjs` (Your turn, On staging, Behind) and `scripts/openspec/digest.mjs` (the digest), with only the channel post in `scripts/openspec/changed-changes.mjs`.
 
 ## States
 
@@ -76,7 +76,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - My turn with open questions above the changes - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-60`
 - My turn before a handle is chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-62`
 - My turn for a handle the team map does not know - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-64`
-- ❓ design - this list draws the pip's two edge cases (archived, two changes) but not its base state - a section's in-flight row naming the stage and the hand, and its 🚧 line wearing that stage's own pip - confirm the plain outline `Badge` built for it - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-65`
+- A section's in-flight row naming the stage and the hand, and its 🚧 line wearing that stage's own pip - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-65`
 - A 🚧 line whose change has archived, wearing no pip - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-66`
 - A 🚧 line delivered by two changes, wearing the further stage - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-67`
 - A Your turn message for a change reaching a stage twice, sent once - `shared-planning-change-stages-US-01` - `shared-planning-change-stages-SC-36`

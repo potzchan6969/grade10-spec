@@ -18,6 +18,8 @@ import type {
 import { waiverOf } from "../api/waivers";
 import { HandFace } from "./change-hand";
 import { ClampedText } from "./clamped-text";
+import { InlineMarkdown } from "./inline-markdown";
+import { ThreadLink } from "./your-turn-card";
 
 /**
  * Each artifact of a change: whether it is fresh, behind, not owed or not yet
@@ -219,7 +221,8 @@ export function DeliveryRow({ change }: { change: ChangeEntry }) {
  *
  * A stage nothing has answered yet counts to today and says so far, because a
  * stage that landed a fortnight ago with no word after it is the reading worth
- * having. A stage no commit dates says that instead of reading as none.
+ * having. A stage no commit dates says there is no landing yet, instead of
+ * reading as none.
  */
 export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
   if (handoffs.length === 0) return null;
@@ -236,13 +239,11 @@ export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
           </Text>
           {handoff.days === undefined ? (
             <Text as="span" size="xs" tone="secondary">
-              no landing dates it
+              no landing yet
             </Text>
           ) : (
             <Badge size="sm" variant="outline">
-              {`${handoff.days} ${handoff.days === 1 ? "day" : "days"}${
-                handoff.open ? " so far" : ""
-              }`}
+              {daysShown(handoff.days, handoff.open)}
             </Badge>
           )}
           {handoff.role === undefined ? (
@@ -264,6 +265,14 @@ export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
   );
 }
 
+/** How long a stage has been waiting, as the row says it: a stage that landed
+ * today and is still open says today, because "0 days so far" reads as a
+ * count of nothing rather than as the day it is. */
+function daysShown(days: number, open: boolean): string {
+  if (open && days === 0) return "today";
+  return `${days} ${days === 1 ? "day" : "days"}${open ? " so far" : ""}`;
+}
+
 /** A question's role by its label, where it is one of the six the change
  * page otherwise names, or the raw word a row named some other confirmer by
  * (`operations`), unchanged — read against nothing rather than guessed. */
@@ -273,45 +282,62 @@ function roleLabelOf(role: string): string {
 
 /**
  * What nobody has settled: one line per open question, with the number the
- * decisions row carries and the hand it is addressed to.
+ * decisions row carries and the hand it is addressed to, and the change's
+ * thread under them all.
  *
  * A stage moving does not close a question — the questions are listed
  * whatever rung the change has reached, which is what keeps one from being
  * lost behind a stage that moved on without it.
+ *
+ * The thread is the row's answer: a question is answered by its id in the
+ * thread, so the link sits once under the list rather than on each row — the
+ * rows are one change's, and the thread is the change's.
  */
-export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
+export function QuestionList({
+  change,
+  questions,
+}: {
+  change: ChangeEntry;
+  questions: OpenQuestion[];
+}) {
   if (questions.length === 0) return null;
 
   return (
-    <ul className="flex flex-col gap-1">
-      {questions.map((question) => (
-        <li
-          className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
-          key={`${question.artifact}:${question.id ?? question.section}:${question.text}`}
-        >
-          {question.id ? (
-            <Badge size="sm" variant="outline">
-              {question.id}
-            </Badge>
-          ) : null}
-          <Text as="span" size="xs">
-            {question.text}
-          </Text>
-          {/* The hand is the handle the change names for that role, and the
-              role itself where it names nobody — said as a role rather than
-              as a handle nobody answers to. */}
-          {question.hand === question.role ? (
-            <Text as="span" size="xs" tone="secondary">
-              {`${roleLabelOf(question.role)} — open`}
+    <div className="flex flex-col gap-1.5">
+      <ul className="flex flex-col gap-1">
+        {questions.map((question) => (
+          <li
+            className="flex flex-wrap items-baseline gap-x-2 gap-y-1"
+            key={`${question.artifact}:${question.id ?? question.section}:${question.text}`}
+          >
+            {question.id ? (
+              <Badge size="sm" variant="outline">
+                {question.id}
+              </Badge>
+            ) : null}
+            {/* A page's ❓ line and a decisions cell are both store prose, so
+                the row reads their bold and their backticks rather than the
+                marks around them. */}
+            <Text as="span" size="xs">
+              <InlineMarkdown text={question.text} />
             </Text>
-          ) : (
-            <Text as="span" className="font-mono" size="xs" tone="secondary">
-              {`@${question.hand}`}
-            </Text>
-          )}
-        </li>
-      ))}
-    </ul>
+            {/* The hand is the handle the change names for that role, and the
+                role itself where it names nobody — said as a role rather than
+                as a handle nobody answers to. */}
+            {question.hand === question.role ? (
+              <Text as="span" size="xs" tone="secondary">
+                {`${roleLabelOf(question.role)} — open`}
+              </Text>
+            ) : (
+              <Text as="span" className="font-mono" size="xs" tone="secondary">
+                {`@${question.hand}`}
+              </Text>
+            )}
+          </li>
+        ))}
+      </ul>
+      <ThreadLink change={change} />
+    </div>
   );
 }
 

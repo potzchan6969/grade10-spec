@@ -22,6 +22,10 @@ import { StageMark } from "./stage-mark";
  * name, and the mark and the move beneath it. Both are rendered and the
  * viewport picks: the alternative is measuring the window, which gives a
  * first paint that is wrong on every phone.
+ *
+ * One step of eight is a tenth of the reading column, so the eight-step
+ * reading takes the short mark — the agent and the hand's move, the whole
+ * sentence on hover — and the one line takes the sentence itself.
  */
 export function StageStepper({
   stage,
@@ -62,12 +66,12 @@ export function StageStepper({
                     // A `span`, not a `div`: the design system draws the
                     // description as a paragraph, so what a step is handed is
                     // inline content however it lays itself out.
-                    <span className="flex flex-col gap-1">
-                      {draftedOf(one) ? <StageMark stage={one} /> : null}
+                    <span className="flex flex-col items-center gap-1">
+                      {draftedOf(one) ? <StageMark short stage={one} /> : null}
                       {held ? <HeldBy label={held} /> : null}
                     </span>
                   ) : draftedOf(one) ? (
-                    <StageMark stage={one} />
+                    <StageMark short stage={one} />
                   ) : null
                 }
                 label={STAGE_LABEL[one]}

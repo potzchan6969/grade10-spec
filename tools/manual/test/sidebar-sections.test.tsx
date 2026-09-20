@@ -52,6 +52,27 @@ function render(at: string, sections: PageSection[], active?: string): string {
   );
 }
 
+/**
+ * The two views the rail carries itself: neither is a page of the store, so
+ * a rail built from the store's pages reaches neither.
+ */
+describe("the rail's fixed entries", () => {
+  const html = render("/guides/start-here", []);
+
+  it("opens on In flight and My turn, above the products", () => {
+    expect(html).toContain('href="/in-flight"');
+    expect(html).toContain("In flight");
+    expect(html).toContain('href="/my-turn"');
+    expect(html).toContain("My turn");
+    expect(html.indexOf('href="/in-flight"')).toBeLessThan(
+      html.indexOf('href="/my-turn"'),
+    );
+    expect(html.indexOf('href="/my-turn"')).toBeLessThan(
+      html.indexOf("Guides"),
+    );
+  });
+});
+
 describe("the row of the page being read", () => {
   const html = render("/guides/start-here", SECTIONS, "decisions");
 

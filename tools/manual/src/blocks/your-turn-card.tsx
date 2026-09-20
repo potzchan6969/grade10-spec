@@ -16,7 +16,7 @@ import {
   ROLES,
   roleTitle,
 } from "../api/stage-view";
-import { DRAFTED, handOf } from "../api/stages";
+import { DRAFTED, handOf, rolesAtStage } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { SelectField } from "../editor/fields";
@@ -108,7 +108,7 @@ export function YourTurnCard({
           </div>
         ) : null}
 
-        <Assign change={change} />
+        <Assign change={change} stage={stage} />
       </CardContent>
     </Card>
   );
@@ -181,7 +181,7 @@ export function ThreadLink({ change }: { change: ChangeEntry }) {
  * yet. `ReadOnlyNotice` is the one sentence for that state everywhere else in
  * the manual, composed here rather than a second copy of its words.
  */
-function Assign({ change }: { change: ChangeEntry }) {
+function Assign({ change, stage }: { change: ChangeEntry; stage: Stage }) {
   const { status, store } = useEditorSession();
   if (status !== "ready") return null;
 
@@ -196,7 +196,7 @@ function Assign({ change }: { change: ChangeEntry }) {
     );
   }
 
-  return <AssignForm change={change} store={store} />;
+  return <AssignForm change={change} stage={stage} store={store} />;
 }
 
 type AssignState =
@@ -216,13 +216,19 @@ type AssignState =
  */
 function AssignForm({
   change,
+  stage,
   store,
 }: {
   change: ChangeEntry;
+  stage: Stage;
   store: ContentStore;
 }) {
   const index = useManualIndex();
-  const [role, setRole] = useState<Role>(ROLES[0]);
+  // The hand the reader came to name is the one the stage waits on, so the
+  // picker opens there rather than on the first of the six. A stage that
+  // names nobody — Designed, Released, Archived — opens on the first, which
+  // is a reader naming a hand for a stage still to come.
+  const [role, setRole] = useState<Role>(rolesAtStage(stage)[0] ?? ROLES[0]);
   const [handle, setHandle] = useState("");
   const [state, setState] = useState<AssignState>({ kind: "idle" });
 

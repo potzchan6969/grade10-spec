@@ -130,3 +130,70 @@ describe("the boundary both readers draw", () => {
     expect(rows[0].where?.anchor).toBe("detail-product-decisions");
   });
 });
+
+/**
+ * A mark leads its line. The store's grammar marks a line by opening it with
+ * ❓ or `TBC` — a list item, a paragraph, a table cell — so a mark inside a
+ * sentence is a page writing about the grammar and nobody owes it an answer.
+ */
+
+/** One page's marks, from markdown alone: what the grammar reads, with no
+ * fixture file to keep in step with the rule. */
+function marksOf(markdown: string): string[] {
+  return openMarksOfPage({
+    path: "docs/prds/products/demo-product/rules.md",
+    ast: parsePage(`---\ntitle: Rules\n---\n\n${markdown}\n`),
+  }).map((one) => one.text);
+}
+
+describe("a mark that leads its line", () => {
+  it("opens an item, a paragraph, a cell or a quote", () => {
+    expect(marksOf("- ❓ **Floor** — whether a reserve is shown")).toEqual([
+      "❓ **Floor** — whether a reserve is shown",
+    ]);
+    expect(marksOf("❓ Whether a video counts")).toEqual([
+      "❓ Whether a video counts",
+    ]);
+    expect(marksOf("1. ❓ Which day it is judged on")).toEqual([
+      "❓ Which day it is judged on",
+    ]);
+    expect(marksOf("- **❓ Floor** — whether it is shown")).toEqual([
+      "**❓ Floor** — whether it is shown",
+    ]);
+    expect(marksOf("> ❓ Whether the quote counts")).toEqual([
+      "> ❓ Whether the quote counts",
+    ]);
+  });
+
+  it("opens a cell of a row, wherever the cell sits", () => {
+    const table = [
+      "| Decision | Status | Owner |",
+      "| --- | --- | --- |",
+      "| Preview size | ❓ Open | Design |",
+      "| Gallery | `TBC` | Design |",
+    ].join("\n");
+
+    expect(marksOf(table)).toEqual([
+      "Preview size · ❓ Open · Design",
+      "Gallery · `TBC` · Design",
+    ]);
+  });
+});
+
+describe("a mark inside a sentence", () => {
+  it("is words, not a question anybody owes an answer to", () => {
+    expect(
+      marksOf(
+        "- **A question, not a guess** — a row, or a ❓ line on the page",
+      ),
+    ).toEqual([]);
+    expect(marksOf("Three at most, and a ❓ line says which")).toEqual([]);
+    expect(
+      marksOf(
+        ["| Item | Status |", "| --- | --- |", "| A ❓ row | Pending |"].join(
+          "\n",
+        ),
+      ),
+    ).toEqual([]);
+  });
+});

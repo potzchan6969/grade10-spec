@@ -51,6 +51,16 @@ export function MyTurnPage() {
       ) : (
         <MyTurnBody handle={handle} />
       )}
+
+      {/* The per-role page this one replaces for a person: a change whose
+          stage names a role nobody holds is on nobody's My turn, so the way
+          to it stays named here. */}
+      <Text as="p" size="xs" tone="secondary">
+        A hand nobody has named is on{" "}
+        <Link className="underline underline-offset-2" to="/pending">
+          Pending
+        </Link>
+      </Text>
     </>
   );
 }
@@ -97,8 +107,11 @@ function MyTurnBody({ handle }: { handle: string }) {
                 >
                   <InlineMarkdown text={change.title} />
                 </Link>
+                {/* The question is store prose — a page's ❓ line or a
+                    decisions cell — so the row reads its bold and its
+                    backticks rather than the marks around them. */}
                 <Text as="span" size="sm">
-                  {question.text}
+                  <InlineMarkdown text={question.text} />
                 </Text>
                 <ThreadLink change={change} />
               </li>
