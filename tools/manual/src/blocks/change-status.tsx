@@ -112,7 +112,7 @@ export function ChangeStatus({
 
       {questions.length > 0 ? (
         <Row label="Open questions">
-          <QuestionList change={change} questions={questions} />
+          <QuestionList questions={questions} />
         </Row>
       ) : null}
 

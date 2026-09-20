@@ -147,80 +147,74 @@ export function Sidebar({ open, onNavigate }: SidebarProps) {
       data-slot="manual-sidebar"
     >
       <div className="flex flex-col gap-5 px-3 py-6">
-        {FIXED_ENTRIES.length > 0 ? (
-          <nav aria-label="Manual">
-            <ul className="space-y-0.5">
-              {FIXED_ENTRIES.map((entry) => (
-                <li key={entry.to}>
-                  <NavLink
-                    className={({ isActive }: { isActive: boolean }) =>
-                      cn(ROW, isActive && "bg-muted font-medium")
-                    }
-                    end
-                    onClick={onNavigate}
-                    to={entry.to}
-                  >
-                    <entry.icon aria-hidden size={16} />
-                    {entry.label}
-                  </NavLink>
-                  <RowSections onNavigate={onNavigate} to={entry.to} />
-                </li>
-              ))}
-            </ul>
-          </nav>
-        ) : null}
+        {/* One landmark: the fixed views and the store's contents are two
+         * lists of the same rail, and two `nav`s named alike gave a screen
+         * reader's landmark list two entries a reader could not tell apart.
+         * The divider is the second list's own top border. */}
+        <nav aria-label="Manual">
+          <ul className="space-y-0.5">
+            {FIXED_ENTRIES.map((entry) => (
+              <li key={entry.to}>
+                <NavLink
+                  className={({ isActive }: { isActive: boolean }) =>
+                    cn(ROW, isActive && "bg-muted font-medium")
+                  }
+                  end
+                  onClick={onNavigate}
+                  to={entry.to}
+                >
+                  <entry.icon aria-hidden size={16} />
+                  {entry.label}
+                </NavLink>
+                <RowSections onNavigate={onNavigate} to={entry.to} />
+              </li>
+            ))}
+          </ul>
 
-        {index === null ? (
-          <Text as="p" className="px-4" size="xs" tone="secondary">
-            Navigation appears once the snapshot is in hand.
-          </Text>
-        ) : (
-          <nav
-            aria-label="Manual contents"
-            className={cn(
-              "flex flex-col gap-5",
-              FIXED_ENTRIES.length > 0
-                ? "pt-4 border-t border-border-subtle"
-                : "",
-            )}
-          >
-            {index.groups.map((group) => (
-              <GroupSection
-                group={group}
-                key={group.title}
-                memory={memory}
-                onNavigate={onNavigate}
-              />
-            ))}
-            {index.topicGroups.map((group) => (
+          {index === null ? (
+            <Text as="p" className="px-4 pt-5" size="xs" tone="secondary">
+              Navigation appears once the snapshot is in hand.
+            </Text>
+          ) : (
+            <div className="mt-5 flex flex-col gap-5 border-border-subtle border-t pt-4">
+              {index.groups.map((group) => (
+                <GroupSection
+                  group={group}
+                  key={group.title}
+                  memory={memory}
+                  onNavigate={onNavigate}
+                />
+              ))}
+              {index.topicGroups.map((group) => (
+                <FlatSection
+                  items={group.topics}
+                  key={group.title}
+                  memory={memory}
+                  onNavigate={onNavigate}
+                  title={group.title}
+                />
+              ))}
               <FlatSection
-                items={group.topics}
-                key={group.title}
+                items={index.guides}
                 memory={memory}
                 onNavigate={onNavigate}
-                title={group.title}
+                title="Guides"
               />
-            ))}
-            <FlatSection
-              items={index.guides}
-              memory={memory}
-              onNavigate={onNavigate}
-              title="Guides"
-            />
-            <FlatSection
-              items={index.references}
-              memory={memory}
-              onNavigate={onNavigate}
-              title="References"
-              to={REFERENCES_ROUTE}
-            />
-            <IncubatingSection
-              items={index.incubating}
-              memory={memory}
-              onNavigate={onNavigate}
-            />
-          </nav>
-        )}
+              <FlatSection
+                items={index.references}
+                memory={memory}
+                onNavigate={onNavigate}
+                title="References"
+                to={REFERENCES_ROUTE}
+              />
+              <IncubatingSection
+                items={index.incubating}
+                memory={memory}
+                onNavigate={onNavigate}
+              />
+            </div>
+          )}
+        </nav>
 
         <NewPageAction />
       </div>

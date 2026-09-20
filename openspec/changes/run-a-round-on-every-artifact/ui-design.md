@@ -22,6 +22,8 @@ The tab `/run-sheet` writes lives in the run spreadsheet, and no frame draws it:
 
 [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), the canvas beside the blueprint page: the loop every hand runs, the product manager's thread from the first sentence to the three files landing, the designer's and the tech PIC's reads of a draft, the re-read after a landing, and the walk at the end of Building. A flow the canvas draws that the page does not name is a design choice: a question's recommendation is accepted by answering with its id alone.
 
+The onboarding walkthrough [Cross-sell, Start to Finish](https://claude.ai/artifact/D1eDUFmtgWwGsdr7nw8Edp) walks one change through these screens step by step.
+
 ## Components
 
 The thread is Slack's own surface: message text, quoted blocks for a question, and a link. The manual's screens sit in the shell as `stage-changes-and-notify-hands` draws them; the new pieces stack in the reading column.
@@ -31,7 +33,7 @@ The thread is Slack's own surface: message text, quoted blocks for a question, a
 | `Badge` (`sm`, `outline`) | The question count on an artifact row; the automated count on the Delivery row |
 | `Text`, `Button` | The rounds rows and the thread links, as the manual composes them today |
 
-New in `tools/manual`, work in grade10-spec: `RoundsList`, `QuestionList` gains the thread link, `ArtifactList` gains the question ids. No `packages/i18n` key is owed; the thread's message bodies live in `scripts/openspec/changed-changes.mjs` and the round skill.
+New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s question rows gain the thread link, `ArtifactList` gains the question ids. No `packages/i18n` key is owed; the push's channel post and direct messages are composed in `scripts/openspec/lib/moves.mjs` and `scripts/openspec/digest.mjs`, and the thread's own replies come from the round through `scripts/openspec/relay-post.mjs`.
 
 ## States
 

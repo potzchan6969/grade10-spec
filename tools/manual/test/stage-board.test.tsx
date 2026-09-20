@@ -273,7 +273,7 @@ describe("the lanes", () => {
     expect(laneOpen(html, "specified")).toBe("shut");
   });
 
-  it("A lane heading and a stepper step with the agent mark and the hand's move", () => {
+  it("A lane heading with the agent mark and the hand's move, the whole sentence", () => {
     const html = render([at("proposed"), at("building")]);
 
     expect(html).toContain(

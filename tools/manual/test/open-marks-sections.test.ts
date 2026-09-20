@@ -132,9 +132,12 @@ describe("the boundary both readers draw", () => {
 });
 
 /**
- * A mark leads its line. The store's grammar marks a line by opening it with
- * ❓ or `TBC` — a list item, a paragraph, a table cell — so a mark inside a
- * sentence is a page writing about the grammar and nobody owes it an answer.
+ * A mark leads its line, after the key term at most. The store's grammar
+ * marks a line by opening it with ❓ or `TBC`, or by putting the mark on the
+ * term the line is about — `**Birthday month** \`TBC\` — …`, `| Birthday
+ * \`TBC\` | …` — so a mark further into a sentence, past a comma, a
+ * semicolon, a dash or a colon, is a page writing about the grammar and
+ * nobody owes it an answer.
  */
 
 /** One page's marks, from markdown alone: what the grammar reads, with no
@@ -178,6 +181,42 @@ describe("a mark that leads its line", () => {
       "Gallery · `TBC` · Design",
     ]);
   });
+
+  it("follows the key term the line or the cell is about", () => {
+    // `coupons.md` marks the term rather than the line, and the reader still
+    // owes it an answer, so the mark counts.
+    expect(
+      marksOf(
+        [
+          "- **Birthday month** `TBC` — a definition can hold a coupon to the",
+          "  month of the member's birthday",
+        ].join("\n"),
+      ),
+    ).toEqual([
+      "**Birthday month** `TBC` — a definition can hold a coupon to the month of the member's birthday",
+    ]);
+
+    // `rewards.md` marks the row's first cell the same way.
+    expect(
+      marksOf(
+        [
+          "| Way | When | Costs |",
+          "| --- | --- | --- |",
+          "| Birthday `TBC` | Once a year, on the birthday | None |",
+        ].join("\n"),
+      ),
+    ).toEqual(["Birthday `TBC` · Once a year, on the birthday · None"]);
+  });
+
+  it("counts a cell whose mark follows its first word", () => {
+    expect(
+      marksOf(
+        ["| Item | Status |", "| --- | --- |", "| A ❓ row | Pending |"].join(
+          "\n",
+        ),
+      ),
+    ).toEqual(["A ❓ row · Pending"]);
+  });
 });
 
 describe("a mark inside a sentence", () => {
@@ -190,9 +229,16 @@ describe("a mark inside a sentence", () => {
     expect(marksOf("Three at most, and a ❓ line says which")).toEqual([]);
     expect(
       marksOf(
-        ["| Item | Status |", "| --- | --- |", "| A ❓ row | Pending |"].join(
-          "\n",
-        ),
+        "- **Overdue penalties** — a missed deadline suspends the bidder; ❓ what the letters mean beyond that",
+      ),
+    ).toEqual([]);
+    expect(
+      marksOf(
+        [
+          "| Stage | Status |",
+          "| --- | --- |",
+          "| Proposed | One stage: the product manager settles the three in one sitting, and an open item stays ❓ instead of holding a gate |",
+        ].join("\n"),
       ),
     ).toEqual([]);
   });

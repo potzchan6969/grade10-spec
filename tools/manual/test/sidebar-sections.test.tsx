@@ -71,6 +71,15 @@ describe("the rail's fixed entries", () => {
       html.indexOf("Guides"),
     );
   });
+
+  it("sits in the rail's one landmark, above the store's own lists", () => {
+    // Two `nav`s named alike gave a screen reader's landmark list two
+    // entries a reader could not tell apart, so the fixed views and the
+    // store's contents are two lists of one nav.
+    expect(html.match(/<nav\b/g)).toHaveLength(1);
+    expect(html).toContain('aria-label="Manual"');
+    expect(html).not.toContain("Manual contents");
+  });
 });
 
 describe("the row of the page being read", () => {

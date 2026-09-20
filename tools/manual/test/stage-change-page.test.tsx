@@ -238,19 +238,19 @@ describe("the stepper", () => {
     );
   });
 
-  it("A lane heading and a stepper step with the agent mark and the hand's move", () => {
+  it("A stepper step with the agent and the hand's move as a short caption", () => {
     const steps = html.slice(html.indexOf('data-stepper="steps"'));
 
-    // One step of eight is a tenth of the reading column, so the caption is
-    // the agent and the hand's move — the whole sentence clipped to a pill.
-    expect(steps).toContain("<span>agent drafts</span>");
+    // One step of eight is a tenth of the reading column, so the caption
+    // shows the agent and the hand's move, and nothing else.
+    expect(steps).toContain("agent drafts");
     expect(steps).toContain("read each landing");
-    expect(steps).not.toContain(">agent drafts each group, test first<");
-    // Nothing is lost: the sentence is the element's own title and label.
+    // Nothing is lost: the mark stays in the DOM for a screen reader, and the
+    // whole sentence is the element's own title.
+    expect(steps).toContain("each group, test first");
     const whole =
       "agent drafts each group, test first \u00b7 read each landing";
     expect(steps).toContain(`title="${whole}"`);
-    expect(steps).toContain(`aria-label="${whole}"`);
     expect(html).not.toMatch(
       /data-stage="on-staging"[\s\S]{0,400}agent drafts/,
     );
@@ -286,7 +286,7 @@ describe("the stepper", () => {
     }
     const steps = markup.slice(markup.indexOf('data-stepper="steps"'));
 
-    expect(steps).toContain("<span>agent drafts</span>");
+    expect(steps).toContain("agent drafts");
     expect(steps).toContain("held by");
     for (const paragraph of paragraphs(steps)) {
       expect(paragraph).not.toMatch(
@@ -418,6 +418,16 @@ describe("the Your turn card", () => {
       building.indexOf("</select", building.indexOf("Role")),
     );
     expect(chosen).toContain('<option value="dev" selected=""');
+
+    // Proposed's second half is the designer's and the tech PIC's, and the
+    // card reads that hand itself: the picker opens on the designer rather
+    // than back on the product manager the stage table names.
+    const proposed = render(change({ stage: "proposed" }), store);
+    const second = proposed.slice(
+      proposed.indexOf("Role"),
+      proposed.indexOf("</select", proposed.indexOf("Role")),
+    );
+    expect(second).toContain('<option value="design" selected=""');
   });
 
   it("The change page for a change waiting on a stage whose hand is unnamed", () => {
@@ -828,7 +838,7 @@ describe("delivery and the handoff", () => {
     expect(handoff).toContain("so far");
   });
 
-  it("says today for a stage still open on the day it landed, and names a landing nothing dates", () => {
+  it("says landed today for a stage still open on the day it landed, and names a landing nothing dates", () => {
     const day = "2026-09-20T02:00:00.000Z";
     const html = renderToStaticMarkup(
       <HandoffRow
@@ -848,13 +858,14 @@ describe("delivery and the handoff", () => {
       />,
     );
 
-    // A stage that landed today and is still waiting reads as today, not as
-    // a count of nothing.
-    expect(html).toContain("today");
+    // A stage that landed today and is still waiting reads as landed today,
+    // not as a count of nothing.
+    expect(html).toContain("landed today");
     expect(html).not.toContain("0 days");
     expect(html).toContain("1 day so far");
-    // A stage no commit dates has no landing yet.
-    expect(html).toContain("no landing yet");
+    // A stage whose landing no commit dates says the landing is undated: the
+    // row cannot tell that from a landing that never happened.
+    expect(html).toContain("no dated landing");
     // A stage somebody answered keeps its plain count.
     expect(html).toContain("3 days");
     expect(html).toContain("@sam");
@@ -883,7 +894,7 @@ describe("the questions a change still carries", () => {
     expect(html).toContain(">Building<");
   });
 
-  it("links the change's thread once, under the rows", () => {
+  it("names each question's id and leaves the thread to the card", () => {
     const html = render(
       change({
         thread: "C0123ABC/1758170000.001200",
@@ -910,10 +921,11 @@ describe("the questions a change still carries", () => {
       html.indexOf(">Owners<"),
     );
 
-    // A question is answered by its id in the thread, so the rows carry the
-    // way to it — once, because the rows are one change's.
-    expect(open).toContain("C0123ABC");
-    expect(open.match(/slack\.com\/archives/g)).toHaveLength(1);
+    // A question is answered by its id. The page is one change's already, so
+    // the thread link is the Your turn card's and the rows carry the ids.
+    expect(open).toContain(">Q7<");
+    expect(open).toContain(">Q8<");
+    expect(open).not.toContain("slack.com/archives");
   });
 
   it("reads a question's own bold and backticks", () => {

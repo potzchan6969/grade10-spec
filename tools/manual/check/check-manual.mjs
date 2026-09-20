@@ -72,7 +72,7 @@ import {
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
-import { checkMarks } from "./marks.mjs";
+import { checkMarkInProse, checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
@@ -173,6 +173,7 @@ export async function runChecks(
     );
   }
   checkMarks(ctx, changes, pages);
+  checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {

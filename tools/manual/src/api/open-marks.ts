@@ -30,20 +30,27 @@ export type OpenMark<P extends MarkedPage = MarkedPage> = {
 };
 
 /**
- * What may sit before a mark that leads its line: the whitespace and the
- * markers that open a line rather than say anything on it — a list marker, a
- * blockquote's `>`, a bold or italic opener, a backtick — and a table cell's
- * own `|`.
+ * What may sit before a mark and leave it still leading: the start of the
+ * line, a table cell's own `|`, or a sentence just ended; then whitespace, a
+ * blockquote's `>`, a list marker, and the lead term at most — up to 40
+ * characters carrying none of `—`, `,`, `;`, `:`, `.`, `!` or `?`.
  */
-const LEADS = String.raw`(?:^|\|)[\s>]*(?:(?:[-*+]|\d+\.)[\s>]*)?[*_~\`]*\s*`;
+const LEADS = String.raw`(?:^|\||(?<=[.]\s))[\s>]*(?:(?:[-*+]|\d+\.)[\s>]*)?[^—,;:.!?|]{0,40}?`;
 
 /**
- * A mark leads its line, or a cell of its row: `- ❓ **Term** — …`, a
- * paragraph opening on the mark, `| ❓ Open |`. A ❓ inside a sentence is
- * prose about the grammar — "or a ❓ line on the page" — and nobody owes it an
- * answer, so it is read as words.
+ * Counted: a mark leading its line, its bullet or its cell, after the key
+ * term at most — `- ❓ **Term** — …`, `- **Birthday month** \`TBC\` — …`,
+ * `| Birthday \`TBC\` | …`, a paragraph or a sentence opening on the mark.
+ * Read as words: a mark further into a sentence, past a comma, a semicolon, a
+ * dash, a colon or more than 40 characters of running text — "or a ❓ line on
+ * the page" is prose about the grammar, and nobody owes it an answer.
  */
 const OPEN = new RegExp(`${LEADS}(?:❓|\\bTBC\\b)`);
+
+/** Every ❓ and `TBC` a page writes, wherever on its line it sits. The check
+ * reads this against what `openMarksOfPage` counts, so an author learns a
+ * mark of theirs is being read as words. */
+export const MARKED = /❓|\bTBC\b/;
 export const BUILDING = /🚧/;
 const HEADING = /^##\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;

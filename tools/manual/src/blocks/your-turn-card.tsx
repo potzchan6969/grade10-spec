@@ -16,7 +16,7 @@ import {
   ROLES,
   roleTitle,
 } from "../api/stage-view";
-import { DRAFTED, handOf, rolesAtStage } from "../api/stages";
+import { DRAFTED, handOf } from "../api/stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { SelectField } from "../editor/fields";
@@ -108,7 +108,7 @@ export function YourTurnCard({
           </div>
         ) : null}
 
-        <Assign change={change} stage={stage} />
+        <Assign change={change} role={roles[0] ?? ROLES[0]} />
       </CardContent>
     </Card>
   );
@@ -181,7 +181,15 @@ export function ThreadLink({ change }: { change: ChangeEntry }) {
  * yet. `ReadOnlyNotice` is the one sentence for that state everywhere else in
  * the manual, composed here rather than a second copy of its words.
  */
-function Assign({ change, stage }: { change: ChangeEntry; stage: Stage }) {
+function Assign({
+  change,
+  role,
+}: {
+  change: ChangeEntry;
+  /** The hand the reader came to name — the first the stage waits on, as the
+   * card read it above. */
+  role: Role;
+}) {
   const { status, store } = useEditorSession();
   if (status !== "ready") return null;
 
@@ -196,7 +204,7 @@ function Assign({ change, stage }: { change: ChangeEntry; stage: Stage }) {
     );
   }
 
-  return <AssignForm change={change} stage={stage} store={store} />;
+  return <AssignForm change={change} role={role} store={store} />;
 }
 
 type AssignState =
@@ -216,19 +224,22 @@ type AssignState =
  */
 function AssignForm({
   change,
-  stage,
+  role: waiting,
   store,
 }: {
   change: ChangeEntry;
-  stage: Stage;
+  /** The hand the stage waits on, as the card read it: the picker opens
+   * there rather than on the first of the six, because that is the hand a
+   * reader came to the card to name. A stage that names nobody — Designed,
+   * Released, Archived — opens on the first, which is a reader naming a hand
+   * for a stage still to come. Read from the card's own `handOf`, so
+   * Proposed's second half opens on the designer rather than back on the
+   * product manager. */
+  role: Role;
   store: ContentStore;
 }) {
   const index = useManualIndex();
-  // The hand the reader came to name is the one the stage waits on, so the
-  // picker opens there rather than on the first of the six. A stage that
-  // names nobody — Designed, Released, Archived — opens on the first, which
-  // is a reader naming a hand for a stage still to come.
-  const [role, setRole] = useState<Role>(rolesAtStage(stage)[0] ?? ROLES[0]);
+  const [role, setRole] = useState<Role>(waiting);
   const [handle, setHandle] = useState("");
   const [state, setState] = useState<AssignState>({ kind: "idle" });
 

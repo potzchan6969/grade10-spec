@@ -1,4 +1,5 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
+import { Text } from "@grade10/design-system/components/display/text";
 import { draftedOf, moveShown } from "../api/stage-view";
 import type { Stage } from "../api/types";
 
@@ -13,10 +14,13 @@ import type { Stage } from "../api/types";
  *
  * `short` is the eight-step stepper's reading: one step of eight is a tenth of
  * the reading column, and the whole sentence in it came out as a truncated
- * pill. So the caption there is the agent and the hand's move, the sentence
- * stays on the element as its `title` and its `aria-label`, and what is left
- * wraps rather than clips. The lane heading and the one-line stepper have the
- * width, and read the sentence itself.
+ * pill. So the caption there is the design system's own `Text` rather than a
+ * badge wearing overrides: the words `agent drafts · <move>`, the agent's mark
+ * between them in an `sr-only` span so a screen reader still hears the whole
+ * sentence, and that sentence on the element's `title` for a pointer. The dot
+ * sits in the same text run as the move, so a caption that wraps never leaves
+ * it hanging. The lane heading and the one-line stepper have the width, and
+ * read the sentence itself.
  */
 export function StageMark({
   stage,
@@ -30,24 +34,17 @@ export function StageMark({
   const move = moveShown(drafted.moves);
 
   if (short) {
-    const whole = `agent drafts ${drafted.mark} · ${move}`;
     return (
-      <Badge
-        aria-label={whole}
-        className="h-auto min-h-5 max-w-full flex-wrap whitespace-normal py-0.5"
-        size="sm"
-        title={whole}
-        variant="outline"
+      <Text
+        as="span"
+        size="xs"
+        title={`agent drafts ${drafted.mark} · ${move}`}
+        tone="secondary"
       >
-        <span>agent drafts</span>
-        {/* The separator travels with the move, so a caption that wraps
-         * breaks between the two rather than leaving the dot hanging at the
-         * end of the first line. */}
-        <span className="inline-flex items-center gap-1">
-          <span aria-hidden>·</span>
-          <span>{move}</span>
-        </span>
-      </Badge>
+        {"agent drafts"}
+        <span className="sr-only">{` ${drafted.mark}`}</span>
+        {` · ${move}`}
+      </Text>
     );
   }
 

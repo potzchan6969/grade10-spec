@@ -192,10 +192,12 @@ describe("the pages' own open marks", () => {
               "",
               "- ❓ **Floor** — whether a reserve is shown, and",
               "  how it is worded",
+              "- **Birthday month** `TBC` — the month the coupon holds to",
               "",
               "| Item | Status |",
               "| --- | --- |",
               "| Gallery | `TBC` |",
+              "| Birthday `TBC` | Once a year |",
               "",
               "```",
               "❓ not this one",
@@ -231,6 +233,19 @@ describe("the pages' own open marks", () => {
     expect(html).toContain("/p/demo-admin/auction/listing#reserve");
     expect(html).toContain("#detail-product-decisions");
     expect(html).not.toContain("not this one");
+  });
+
+  it("finds a mark written on the key term, in an item and in a cell", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter>
+        <ProductPendingSpec id={PRODUCT} index={marked()} />
+      </MemoryRouter>,
+    );
+
+    // The pages mark the term the line is about, not the line: the reader
+    // still owes each an answer.
+    expect(html).toContain("the month the coupon holds to");
+    expect(html).toContain("Once a year");
   });
 
   it("reads a mark inside a sentence as words, not as a question", () => {

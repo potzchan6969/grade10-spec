@@ -14,7 +14,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### My turn
 
-[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named. Reached from the rail's fixed entries beside In flight.
+[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named. My turn is reached from the rail's fixed entries, beside In flight; Pending from the foot of My turn.
 
 ### Page ribbon and pip
 
@@ -28,6 +28,8 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk), a canvas beside the blueprint page: the loop every hand runs (told, open, answer, read, land, next), the hands and the agent against the eight stages, one hand's day as a walkthrough (the message, the change page, the thread, the landed messages), My turn, the board, the page, the Storybook walk, the release page, the remaining Slack messages, each hand's six steps, what one push does, and an example week. The states below are the ones those screens show. A flow the canvas draws that the page does not name is a design choice: every message and card carries the thread link, and the thread shows the summary before anything lands. My turn takes no keyboard shortcut of its own - the rows are links, and the command is a `CopyableCommand` as the manual composes it everywhere else.
 
+The onboarding walkthrough [Cross-sell, Start to Finish](https://claude.ai/artifact/D1eDUFmtgWwGsdr7nw8Edp) walks one change through these screens step by step.
+
 ## Components
 
 Every manual screen sits in the manual's shell as it is: the header, the rail, the 896px reading column, `PageHeading`, the card, and the `ChangeStatus` label-and-value rows. The new blocks stack in that column; none opens a second column.
@@ -38,7 +40,8 @@ Design-system primitives, from `@grade10/design-system/components/`:
 | --- | --- |
 | `Stepper`, `Step`, `StepIndicator` | The change page's stepper, one `Step` per stage |
 | `Badge` (`sm`, `outline`) with the stage number | The pip on a page's 🚧 line and in the section's in-flight row; the hover names the change and the hand |
-| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | On a lane heading and under a stepper step, from Proposed to Building; the text carries the meaning, and no mark beside it - the design system draws no hollow dashed dot, and a variant Figma does not define is not ours to add |
+| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | A lane heading, from Proposed to Building; the text carries the meaning, and no mark beside it - the design system draws no hollow dashed dot, and a variant Figma does not define is not ours to add |
+| `Text` (`xs`, `secondary`) with the agent and the hand's move | A stepper step, from Proposed to Building; one step of eight is a tenth of the reading column, so the caption reads `agent drafts · <move>`, the mark stays in an `sr-only` span between them, and the whole sentence sits on the element's `title` |
 | `Badge` | Every overlay chip, the suite's verdict, and who landed an artifact |
 | `Avatar`, `AvatarFallback` | The hand on a card and in the hands table |
 | `Card`, `CardHeader`, `CardContent` | The Your turn card and the board's cards |
@@ -55,7 +58,8 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - Board with no change in flight - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-53`
 - A lane with no change in it, collapsed to its heading - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-52`
 - A lane whose stage names nobody, collapsed while a lane on a hand is open - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-51`
-- A lane heading and a stepper step with the agent mark and the hand's move - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-10`
+- A lane heading with the agent mark and the hand's move, the whole sentence - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-10`
+- A stepper step with the agent and the hand's move as a short caption, the whole sentence on hover and in the DOM for a screen reader - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-10`
 - A card in Proposed on the product manager, and one on the designer once the decisions and the journeys are in - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-15`
 - A card whose hand is unnamed, showing the hand as open - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
 - A card waiting, with the line and its date - `shared-planning-change-stages-US-06` - `shared-planning-change-stages-SC-21`

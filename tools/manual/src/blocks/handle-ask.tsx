@@ -1,7 +1,7 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useState } from "react";
 
 /**
  * The one place a reader is asked who they are: the board's Mine filter and
@@ -16,10 +16,9 @@ import { useEffect, useId, useState } from "react";
  *
  * The prompt is the label a reader sees, and the field's own is read out
  * rather than drawn: two labels over one box put "Your handle" above the
- * field and the sentence beside it, aligned with neither. The `sr-only`
- * label is this block's own and not the shell's, because the shell draws its
- * label in the flow — hidden text in it still holds the line it would have
- * taken, and the box sits a line below the prompt again.
+ * field and the sentence beside it, aligned with neither. So the field
+ * carries its name as an `aria-label`, the way the propose dialog's search
+ * field does.
  */
 export function HandleAsk({
   current,
@@ -30,7 +29,6 @@ export function HandleAsk({
 }) {
   const [written, setWritten] = useState(current ?? "");
   useEffect(() => setWritten(current ?? ""), [current]);
-  const field = useId();
 
   return (
     <form
@@ -45,13 +43,10 @@ export function HandleAsk({
           ? "Choose a handle to see the changes you are a hand of"
           : "Reading as"}
       </Text>
-      <label className="sr-only" htmlFor={field}>
-        Your handle
-      </label>
       <div className="w-40">
         <TextInput
+          aria-label="Your handle"
           autoComplete="off"
-          id={field}
           onChange={(event) => setWritten(event.target.value)}
           placeholder="handle"
           spellCheck={false}

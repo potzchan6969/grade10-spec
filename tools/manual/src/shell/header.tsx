@@ -51,7 +51,7 @@ export function Header({ navOpen, onToggleNav, onNavigate }: HeaderProps) {
             className="whitespace-nowrap rounded-(--radius-md) px-2 py-1 text-muted-foreground text-sm outline-none hover:text-foreground focus-visible:ring-3 focus-visible:ring-ring/50 max-sm:hidden"
             href="/openspec/"
           >
-            Plan board
+            OpenSpec viewer
           </a>
           <ManualSearch />
           <RecentBell />

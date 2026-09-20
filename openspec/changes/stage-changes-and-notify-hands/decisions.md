@@ -87,7 +87,9 @@
 | Q60 | Do the messages go out on the push to main, or after the manual deploys? | On the push: the run reads the push's base and its head, keyed per run, and a message links the page the next deploy renders. The owner's word on 2026-09-20, when main's post-deploy job met this workflow | A job after the manual's deploy comparing the previous successful deployment, which main carried for the change list alone and which holds every message on a deploy it does not need |
 | Q61 | Does Assign clear the chosen handle when the role changes? | No, the pick stays - decided by the round: the offered list no longer depends on the role, and a handle the map stops naming is dropped by the read that normalises it | Clearing it, which re-disables Assign on a pick the list still offers |
 | Q62 | Does the picker show where the role's own handles end? | No, one flat list with the role's own first - decided by the round | Option groups labelled by role, a cue the owner's word did not ask for |
-| Q63 | The pip's base state and the no-thread words | The plain outline badge with the stage number, and "This page is the link to share: no thread is recorded for this change yet." as built - decided by the round | A frame drawn for each, which the design system already answers |
+| Q63 | What does a 🚧 line's pip look like at rest? | The plain outline badge with the stage number, as built - decided by the round | A frame for it, which the design system already answers |
+| Q64 | What does a question row say when no thread is recorded? | The sentence the States row of `run-a-round-on-every-artifact/ui-design.md` quotes, linking the change page in the thread's place - decided by the round | Quoting it here a third time |
+| Q65 | Which role does Assign open on? | The hand the stage waits on, by the card's own reading; a stage that names nobody opens on the first of the six - decided by the round | The first of the six every time |
 
 ## Raised
 
