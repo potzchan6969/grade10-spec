@@ -1,29 +1,11 @@
 {
-  "compilerOptions": {
-    "target": "es2023",
-    "lib": ["ES2023"],
-    // The Worker runtime, not Node: the relay uses WebCrypto, fetch and the
-    // Durable Object API, and nothing from `node:*`. The tests run the same
-    // modules under vitest, which gives them the same globals.
-    "types": ["@cloudflare/workers-types"],
-    "skipLibCheck": true,
-    // The store's own pure modules — `handle.mjs`, `team-parse.mjs` — are
-    // plain JavaScript with a `.d.mts` beside them, as the manual's browser
-    // project reads them.
-    "allowJs": false,
-
-    "module": "esnext",
-    "moduleResolution": "bundler",
-    "allowImportingTsExtensions": true,
-    "verbatimModuleSyntax": true,
-    "moduleDetection": "force",
-    "noEmit": true,
-
-    "strict": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "erasableSyntaxOnly": true,
-    "noFallthroughCasesInSwitch": true
-  },
-  "include": ["src", "test"]
+  // Two projects, as the manual's are: `src` runs in a Worker, where there is
+  // no `node:*` at all, and `test` runs under vitest, which is Node. One
+  // project over both would give the Worker's modules Node's types and hide
+  // the import that does not deploy.
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.src.json" },
+    { "path": "./tsconfig.test.json" }
+  ]
 }

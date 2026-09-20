@@ -280,7 +280,7 @@ is no page.
       );
       if (!page.startsWith("docs/prds/")) continue;
       try {
-        readFileSync(new URL(page, root), "utf8");
+        readFileSync(`${decodeURIComponent(root.pathname)}${page}`, "utf8");
       } catch {
         continue;
       }

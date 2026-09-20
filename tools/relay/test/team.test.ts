@@ -11,11 +11,11 @@ import { slackHandles, TEAM_TTL_MS, TeamMap } from "../src/team.ts";
  * with, written out by hand: a projection asserted against a second
  * projection is two readings agreeing about nothing. */
 
+/** The store's root on the disk. A test reads the store; `src` never does. */
+const ROOT = decodeURIComponent(new URL("../../../", import.meta.url).pathname);
+
 /** The store's own map, read from the file the store reads. */
-const STORE_MAP = readFileSync(
-  new URL(`../../../${TEAM_MAP}`, import.meta.url),
-  "utf8",
-);
+const STORE_MAP = readFileSync(`${ROOT}${TEAM_MAP}`, "utf8");
 
 /** One map in the store's shape, with the edges the real file does not carry
  * yet: two handles with a member id, one without, and a handle spelled with
