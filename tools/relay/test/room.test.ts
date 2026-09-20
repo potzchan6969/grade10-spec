@@ -351,8 +351,8 @@ describe("the fire", () => {
       { handle: "ecchochan", slack: "U0PM", text: "land", ts: "1.1" },
       { handle: "kinisworking", slack: "U0DEV", text: "hold on", ts: "1.2" },
     ]);
-    // The wake's sender is the last word of the burst, not the first.
-    expect(payload.sender).toEqual({ slack: "U0DEV", handle: "kinisworking" });
+    // The wake's sender is whose word it may land, not whoever spoke last.
+    expect(payload.sender).toEqual({ slack: "U0PM", handle: "ecchochan" });
     expect(payload.reason).toBe("message");
     expect(payload.thread).toEqual(THREAD);
     expect(payload.relay.url).toBe("https://grade10-relay.workers.dev");
@@ -416,14 +416,14 @@ describe("the fire", () => {
     expect(relay.storage(THREAD_ROOM).alarm).toBe(null);
   });
 
-  it("acks a fire the runner named no session for as a run that did not start", async () => {
+  it("acks a fire the runner named no session as a wake with no link", async () => {
     const relay = harness({ fire: { body: { claude_code_session_id: "s1" } } });
     await relay.send(THREAD_ROOM, said("land", "1.1"));
     await relay.alarm(THREAD_ROOM);
     expect(relay.posts()).toEqual([
       {
         channel: CHANNEL,
-        text: "The reply of land did not start.",
+        text: "Reading land… (the runner named no session)",
         thread_ts: THREAD.ts,
       },
     ]);
@@ -454,7 +454,7 @@ describe("the fire", () => {
     told.mockRestore();
   });
 
-  it("answers nothing on an alarm the room is not running a wake for", async () => {
+  it("clears a stale alarm on a room running no wake, and says nothing", async () => {
     const relay = harness();
     // A room that already answered its wake, whose alarm the runtime rings
     // once more.
@@ -465,9 +465,14 @@ describe("the fire", () => {
       change: CHANGE,
       alarm: { kind: "budget", at: 1_700_000_000_000 },
     } satisfies RoomState);
+    relay.storage(CHANGE_ROOM).alarm = 1_700_000_000_000;
     await relay.alarm(CHANGE_ROOM);
     expect(relay.posts()).toEqual([]);
     expect(relay.calls).toEqual([]);
+    // The alarm goes with the wake it was set for: an alarm left armed on an
+    // idle room rings again for nothing.
+    expect(relay.state(CHANGE_ROOM)?.alarm).toBe(null);
+    expect(relay.storage(CHANGE_ROOM).alarm).toBe(null);
   });
 
   it("posts the budget line with the run's link, frees the room and clears its alarm", async () => {
@@ -549,6 +554,55 @@ describe("the change's room", () => {
       channel: CHANNEL,
       text: "drafted the proposal",
       thread_ts: THREAD.ts,
+    });
+  });
+
+  it("hands the queue the thread gathered to the change at bind", async () => {
+    const relay = harness();
+    await relay.send(THREAD_ROOM, {
+      op: "enqueue",
+      reason: "plan",
+      thread: THREAD,
+      message: { slack: "U0PM", text: "<@U0APP> plan the badge", ts: "1.1" },
+    });
+    await relay.alarm(THREAD_ROOM);
+    // The reply arrives after the wake started and before the run named the
+    // change, so it is queued in a room nothing will wake again.
+    await relay.send(THREAD_ROOM, said("one more thing", "1.9"));
+    await relay.send(THREAD_ROOM, { op: "bind", wake: 1, change: CHANGE });
+
+    expect(relay.state(THREAD_ROOM)).toMatchObject({
+      queued: null,
+      pending: [],
+      dropped: 0,
+    });
+    expect(relay.state(CHANGE_ROOM)).toMatchObject({
+      queued: "message",
+      // The key travels with the line, so a Slack retry of it is a duplicate
+      // in the room that now holds the thread.
+      seen: [`slack:${CHANNEL}/1.9`],
+    });
+    expect(relay.state(CHANGE_ROOM)?.pending.map((one) => one.text)).toEqual([
+      "one more thing",
+    ]);
+
+    const fires = () =>
+      relay.calls.filter((call) => call.url.includes("runner.example")).length;
+    const before = fires();
+    await relay.alarm(CHANGE_ROOM);
+    expect(fires()).toBe(before + 1);
+    expect(relay.state(CHANGE_ROOM)).toMatchObject({
+      reason: "message",
+      change: CHANGE,
+    });
+
+    // The thread's own room has nothing behind it: the line fired once, in
+    // the change's room.
+    await relay.send(THREAD_ROOM, { op: "done", wake: 1 });
+    expect(fires()).toBe(before + 1);
+    expect(relay.state(THREAD_ROOM)).toMatchObject({
+      reason: null,
+      queued: null,
     });
   });
 
@@ -738,6 +792,15 @@ describe("where a room posts", () => {
     expect(relay.posts()).toEqual([
       { channel: CHANNEL, text: `Reading ${CHANGE}… https://runs.example/s1` },
     ]);
+    // Nothing was named, so nothing is held: the `thread:` the round has
+    // just written is read by the line after it.
+    const before = relay.mark();
+    await relay.send(CHANGE_ROOM, { op: "post", wake: 1, text: "read again" });
+    expect(
+      relay
+        .hostCalls(before)
+        .filter((call) => call.url.includes(".openspec.yaml")),
+    ).toHaveLength(1);
   });
 
   it("falls back to the planning channel where it cannot read the record", async () => {
@@ -758,7 +821,7 @@ describe("where a room posts", () => {
     told.mockRestore();
   });
 
-  it("reads the record again for the next post, caching no thread", async () => {
+  it("reads the record once for the thread it named, and posts there again", async () => {
     const relay = harness();
     await relay.send(CHANGE_ROOM, {
       op: "enqueue",
@@ -768,11 +831,13 @@ describe("where a room posts", () => {
     await relay.alarm(CHANGE_ROOM);
     const before = relay.mark();
     await relay.send(CHANGE_ROOM, { op: "post", wake: 1, text: "read again" });
+    // A thread the record named moves nowhere, so the second line posts to
+    // the one the first read.
     expect(
       relay
         .hostCalls(before)
         .filter((call) => call.url.includes(".openspec.yaml")),
-    ).toHaveLength(1);
+    ).toEqual([]);
     expect(relay.posts().at(-1)).toEqual({
       channel: "C0RECORDED",
       text: "read again",
@@ -825,7 +890,7 @@ describe("a landing on a word", () => {
     });
   });
 
-  it("spends the word on the landing it checked", async () => {
+  it("keeps the word through a landing and spends it when the run is done", async () => {
     const relay = harness();
     await landing(relay);
     expect(relay.state(CHANGE_ROOM)?.word).toBe("land");
@@ -836,9 +901,33 @@ describe("a landing on a word", () => {
       kind: "word",
       artifact: "proposal",
     });
-    // The next wake starts with no word: one word lands one chain.
+    // One word lands a chain, and the run lands one artifact per call: the
+    // word is still the room's for the artifact after this one.
+    expect(relay.state(CHANGE_ROOM)?.word).toBe("land");
+    expect(relay.state(CHANGE_ROOM)?.senderSlack).toBe("U0PM");
+
+    await relay.send(CHANGE_ROOM, { op: "done", wake: 1 });
+    // The run's last act spends it: the next wake starts with no word.
     expect(relay.state(CHANGE_ROOM)?.word).toBe(null);
     expect(relay.state(CHANGE_ROOM)?.senderSlack).toBe(null);
+  });
+
+  it("lands two artifacts of the chain on the one word", async () => {
+    const relay = harness();
+    await landing(relay);
+    const land: RoomOp = {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    };
+    expect(await (await relay.send(CHANGE_ROOM, land)).json()).toEqual({
+      landed: SHA,
+    });
+    expect(await (await relay.send(CHANGE_ROOM, land)).json()).toEqual({
+      landed: SHA,
+    });
   });
 
   it("moves nothing where the wake ended while the checks ran", async () => {

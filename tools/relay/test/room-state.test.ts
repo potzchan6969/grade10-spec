@@ -275,8 +275,47 @@ describe("the fire", () => {
       "land",
       "thanks!",
     ]);
-    // The wake's sender is who woke it, which is the latest line's member.
+    // The wake's sender is whose word it may land, which is the member who
+    // said the word and not the one who spoke last.
+    expect(fireOf(step.commands).sender).toBe("U0PM");
+  });
+
+  it("takes the latest line's member where the burst said no word", () => {
+    const first = enqueue(
+      freshRoom(),
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1.1", "how is it going"),
+      },
+      NOW,
+    );
+    const second = enqueue(
+      first.state,
+      { reason: "message", message: saidAt("1.2", "any news?", "U0DEV") },
+      NOW + 10_000,
+    );
+    const step = onAlarm(second.state, NOW + 60_000);
+    expect(step.state.word).toBe(null);
     expect(fireOf(step.commands).sender).toBe("U0DEV");
+  });
+
+  it("takes the kept word's sayer where the burst said none", () => {
+    // The chain the budget cut is finished by the next wake on the same word,
+    // so that wake is the same member's however who spoke since.
+    const step = onAlarm(
+      {
+        ...freshRoom(),
+        word: "land",
+        senderSlack: "U0PM",
+        thread: THREAD,
+        queued: "message",
+        pending: [saidAt("1.9", "any news?", "U0DEV")],
+        alarm: { kind: "debounce", at: NOW },
+      },
+      NOW,
+    );
+    expect(fireOf(step.commands).sender).toBe("U0PM");
   });
 
   it("strips a mention off the word and folds its case", () => {
@@ -371,12 +410,15 @@ describe("the fire", () => {
     ]);
   });
 
-  it("the ack says the run did not start where the runner named no session", () => {
+  it("the ack says the link is missing where the runner named no session", () => {
     const step = fired(running({ run: null }), null);
+    // The runner took the fire, so the wake started: what it never named is
+    // the link, and only the budget and a refused fire say a wake did not
+    // start.
     expect(step.commands).toEqual([
       {
         kind: "post",
-        text: "The reply of nav-cart-count-badge did not start.",
+        text: "Reading nav-cart-count-badge… (the runner named no session)",
       },
     ]);
     expect(step.state.run).toBe(null);
@@ -499,26 +541,32 @@ describe("the budget", () => {
     });
   });
 
-  it("answers nothing before the budget it was set for", () => {
+  it("arms the budget again where the alarm rang before its time", () => {
+    // The runtime's alarm is one per room, and an early ring would otherwise
+    // leave the wake with no alarm to free it.
     const state = running();
     expect(onAlarm(state, NOW + BUDGET_MS.message - 1)).toEqual({
       state,
-      commands: [],
+      commands: [{ kind: "setAlarm", at: NOW + BUDGET_MS.message }],
     });
     expect(onAlarm(state, NOW + BUDGET_MS.message).commands[0].kind).toBe(
       "post",
     );
   });
 
-  it("answers nothing at all on a room that is not running", () => {
+  it("clears a budget alarm left on a room that is not running", () => {
     const idle = {
       ...freshRoom(),
       alarm: { kind: "budget" as const, at: NOW },
     };
-    expect(onAlarm(idle, NOW + 60_000)).toEqual({
-      state: idle,
-      commands: [],
-    });
+    const step = onAlarm(idle, NOW + 60_000);
+    expect(step.commands).toEqual([{ kind: "clearAlarm" }]);
+    expect(step.state).toEqual({ ...idle, alarm: null });
+  });
+
+  it("answers nothing on an alarm no wake of this room set", () => {
+    const none = { ...freshRoom(), reason: "message" as const, wake: 1 };
+    expect(onAlarm(none, NOW)).toEqual({ state: none, commands: [] });
   });
 
   it("names the thread where the room has no change", () => {
