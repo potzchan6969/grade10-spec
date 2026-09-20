@@ -36,7 +36,7 @@ import {
 } from "../editor/propose.ts";
 import { changeFile, confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
-import { type OriginMain, originMain, relayOf } from "./main-moved.mts";
+import { liveBodies, type OriginMain, originMain } from "./main-moved.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
 import {
   readHeads,
@@ -257,11 +257,12 @@ async function route(
     }
     if (path === "/api/dirty") return reply(200, await readDirty(roots));
     // The three the live line adds. `/api/relay` and `/api/head` are what the
-    // build writes as files, answered here from the same two readings, so a
-    // page listens the same way on both transports.
-    if (path === "/api/relay") return reply(200, relayOf());
-    if (path === "/api/head")
-      return reply(200, { storeHead: (await artifacts()).snapshot.storeHead });
+    // build writes as files, answered here from the same reading, so a page
+    // listens the same way on both transports.
+    if (path === "/api/relay" || path === "/api/head") {
+      const live = liveBodies((await artifacts()).snapshot.storeHead);
+      return reply(200, path === "/api/relay" ? live.relay : live.head);
+    }
     if (path === "/api/upstream") return reply(200, await origin.standing());
     if (path === "/api/page")
       return readPage(roots, url.searchParams.get("path"));

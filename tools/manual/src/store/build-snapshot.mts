@@ -1,7 +1,7 @@
 import { cpSync, existsSync, mkdirSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { relayOf } from "./main-moved.mts";
+import { liveBodies } from "./main-moved.mts";
 import { resolveRoots } from "./roots.mts";
 import { readStore } from "./snapshot.mts";
 
@@ -26,11 +26,9 @@ mkdirSync(join(dist, "api", "change"), { recursive: true });
 mkdirSync(join(dist, "api", "reference"), { recursive: true });
 writeFileSync(join(dist, "api", "snapshot"), JSON.stringify(snapshot));
 writeFileSync(join(dist, "api", "archive"), JSON.stringify(archive));
-writeFileSync(join(dist, "api", "relay"), JSON.stringify(relayOf()));
-writeFileSync(
-  join(dist, "api", "head"),
-  JSON.stringify({ storeHead: snapshot.storeHead }),
-);
+const live = liveBodies(snapshot.storeHead);
+writeFileSync(join(dist, "api", "relay"), JSON.stringify(live.relay));
+writeFileSync(join(dist, "api", "head"), JSON.stringify(live.head));
 for (const document of documents) {
   writeFileSync(
     join(dist, "api", "change", document.id),

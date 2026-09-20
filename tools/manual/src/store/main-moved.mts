@@ -1,4 +1,9 @@
-import type { CheckoutStanding, PullOutcome, RelayUrl } from "../api/types.ts";
+import type {
+  CheckoutStanding,
+  DeployedHead,
+  PullOutcome,
+  RelayUrl,
+} from "../api/types.ts";
 import { git, type GitRun, tryGit } from "./git.mts";
 
 /**
@@ -38,6 +43,17 @@ const OVER_THE_NETWORK: GitRun = {
 export function relayOf(env: NodeJS.ProcessEnv = process.env): RelayUrl {
   const url = env.RELAY_URL?.trim();
   return url ? { url } : {};
+}
+
+/** The two readings a page open in a browser waits on: the relay it listens
+ * to, and the head this site was built from. The build writes them as files
+ * and the dev server answers them per request, both from here, so a page
+ * reads the same keys whichever served it. */
+export function liveBodies(
+  storeHead: string,
+  env: NodeJS.ProcessEnv = process.env,
+): { relay: RelayUrl; head: DeployedHead } {
+  return { head: { storeHead }, relay: relayOf(env) };
 }
 
 /** A git call as this module makes them, so a test reads what each leg was
