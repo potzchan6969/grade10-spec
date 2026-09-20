@@ -116,7 +116,7 @@ The run writes it whole to `.round/relay.json`, which `lib/relay.mjs` - the one 
 | `behindOf(entry, tree)`, `contentIdOf(texts)` | From `stage-changes-and-notify-hands` | The artifact ids behind and the content id every writer here imports |
 | `pnpm run plan:land <change> <artifact\|group>` | The committer's e-mail and the change's record | One landing commit on `main`, or a refusal naming the artifact behind or the hand it waits on |
 | A thread reply | `Q<n>: <answer>`, `Q<n>`, `land`, `land with recommendations`, or any other text | An answer written, the recommendation taken, the chain landed or the held rows named, the held rows taken and the chain landed, or a remark applied |
-| `node scripts/openspec/relay-post.mjs` | `--message-file`, `--text`, `--bind <change>`, `--done`, through `lib/relay.mjs` | The relay's call from a wake, the text printed from a terminal, and a loud failure where a wake was expected |
+| `node scripts/openspec/relay-post.mjs` | `--message-file`, `--bind <change>`, `--done`, through `lib/relay.mjs` | The relay's call from a wake, the text printed from a terminal, and a loud failure where a wake was expected |
 | `pnpm plan done` | A change id and a task id | Refused when the task names a scenario id no test in the group's tree cites; taken when the task names none |
 
 The record's new keys:

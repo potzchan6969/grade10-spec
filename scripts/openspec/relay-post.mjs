@@ -3,12 +3,14 @@
  * What a run tells the relay: a thread reply, that it is done, or which
  * change it opened.
  *
- * `.round/relay.json` is the wake's own file — the run writes the payload's
- * `relay`, `change`, `sender` and `thread` there first, before it does
- * anything else. `lib/relay.mjs` reads it and makes every call, here and in
- * `plan-land.mjs`; its token is scoped to this wake, signed by the relay and
- * expiring with its budget, so this script never holds a chat token and never
- * prints the one it is given. A terminal round has no such file: it prints
+ * `.round/relay.json` is the wake's own file — the session writes the
+ * Routine's payload there whole, before it does anything else; the `round`
+ * skill names its six keys. `lib/relay.mjs` reads it and makes every call,
+ * here and in `plan-land.mjs`; its token is scoped to this wake, signed by
+ * the relay and expiring with its budget, so this script never holds a chat
+ * token and never prints the one it is given. `--bind` tells the relay which
+ * change a plan wake opened, so the change's room takes the thread as its
+ * alias; the skill says when. A terminal round has no such file: it prints
  * what it would have posted and stops there, since a push is what tells the
  * thread outside a wake.
  *
