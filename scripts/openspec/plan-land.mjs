@@ -59,10 +59,10 @@
  *              `git push --force-with-lease=refs/heads/<branch>:<the sha the run read>`
  *   9 again    On a 409 from the relay, or a push of `main` or the branch the
  *              remote rejected because the ref moved under it, re-read `main`
- *              once and retry from 3; losing again, reply in the thread and
- *              stop. Every other status the relay gives and every other way
- *              git can refuse a push stops the run, naming the status and
- *              the relay's reason or git's own stderr - the side ref
+ *              once and retry from 3; losing again, say so in the run's log
+ *              and stop. Every other status the relay gives and every other
+ *              way git can refuse a push stops the run, naming the status
+ *              and the relay's reason or git's own stderr - the side ref
  *              included, which this run alone owns and nobody races it for
  *
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
@@ -534,11 +534,17 @@ async function attemptLanding(attempt) {
     remove(ref);
     if (answer.status === 409) return false;
     if (answer.status !== 200) {
-      // The check that refused, as a sentence: a hand reading the thread is
-      // owed what went wrong, not the relay's own token. The status stays on
-      // its own line, for whoever is reading the run rather than the thread.
+      // What the relay answered, as a sentence in the run's log: `fail`
+      // writes stderr, and whoever reads it is owed what went wrong rather
+      // than the relay's own token. The round's own reply is what reaches
+      // the thread. The status stays on its own line, and the host's words
+      // ride along where the answer carried them.
       fail(
-        `${refusalOf(answer.body?.reason, { artifact: landing, change })}\nthe relay answered ${answer.status}`,
+        `${refusalOf(answer.body?.reason, {
+          artifact: landing,
+          change,
+          message: answer.body?.message,
+        })}\nthe relay answered ${answer.status}`,
       );
     }
     say("land", `the relay moved ${mainBranch} to ${short(commit)}`);

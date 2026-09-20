@@ -122,29 +122,53 @@ export function relayOf(wake) {
 }
 
 /**
- * The relay's refusal as a sentence, for the thread and the run's log.
+ * The relay's answer as a sentence, for the run's log.
  *
  * The relay answers a refused landing with the check that refused it, which
- * is a token: `not-the-hand` says nothing to the hand reading the reply. One
+ * is a token: `not-the-hand` says nothing to the hand reading the run. One
  * pure function, so the words are written once and every entry point that
- * reports a refusal says the same thing. A token nothing here names is
+ * reports an answer says the same thing. A token nothing here names is
  * printed as it came, because a check the relay grows is better read raw
  * than reported as something else.
  *
- * `tools/relay/src/land.ts` issues every check but two: `room.ts` adds
- * `not-fast-forward`, which a run retries rather than reports, and
- * `host-refused`.
+ * Two openings, because not every status `/land` answers with is a check
+ * refusing: a wake the room no longer runs, a room with no change bound, and
+ * a code host that could not be reached or would not move `main` are the
+ * relay not taking the landing at all. A hand told such a landing was
+ * refused goes looking for the rule it broke, so those say the relay would
+ * not take it, and the host's own words are appended where the answer
+ * carries them — the relay knows nothing more about them than it was told.
+ *
+ * `tools/relay/src/land.ts` declares the checks the word and the read are
+ * refused by. The rest are about the run rather than its landing: `room.ts`
+ * issues `stale-wake` and `no-change-bound` and answers `github.ts`'s
+ * `HostError` as `host-unavailable`, and `github.ts` names `host-refused`
+ * and `not-fast-forward`, which a run retries rather than reports.
  */
-export function refusalOf(reason, { artifact, change } = {}) {
-  const said = SENTENCE[reason];
+export function refusalOf(reason, { artifact, change, message } = {}) {
+  const answered = ANSWERED[reason];
+  const said = answered ?? SENTENCE[reason];
   const what = said
     ? said({
         artifact: named(artifact, "the artifact"),
         change: named(change, "the change"),
       })
     : (reason ?? "no reason given");
-  return `the relay refused the landing: ${what}`;
+  const detail = message ? ` — ${message}` : "";
+  const opening = answered
+    ? "the relay would not take the landing"
+    : "the relay refused the landing";
+  return `${opening}: ${what}${detail}`;
 }
+
+/** One sentence per status `/land` answers with that is not a check refusing
+ * — the room about itself, and the code host. */
+const ANSWERED = {
+  "stale-wake": () => "the room is running another wake now",
+  "no-change-bound": () => "no change is bound to the room yet",
+  "host-unavailable": () => "the code host could not be reached",
+  "host-refused": () => "the code host would not move `main`",
+};
 
 /** One sentence per check, in the order `land.ts` runs them. */
 const SENTENCE = {
@@ -167,7 +191,6 @@ const SENTENCE = {
     "the code host listed only some of what the landing changed",
   "map-unreadable": () => "the team map would not parse",
   "not-fast-forward": () => "`main` moved under the run",
-  "host-refused": () => "the code host would not move `main`",
 };
 
 /** A name the sentence quotes, or the plain word where the call has none. */
