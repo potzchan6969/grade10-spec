@@ -303,7 +303,7 @@ test("shared-planning-agent-rounds-SC-20 - a design needs a frame nobody drew", 
   assert.match(skill, /the draft describes no screen of its own in its place/i);
 });
 
-test("shared-planning-agent-rounds-SC-21 - a preference becomes a numbered question", () => {
+test("shared-planning-agent-rounds-SC-21 - a preference is decided by the round, or held as a numbered row", () => {
   const skill = claims(ROUND);
   assert.match(
     skill,
@@ -376,7 +376,7 @@ test("shared-planning-agent-rounds-SC-71 - a wake drafts the chain and lands not
   assert.match(plan, /The Whole Plan in One Wake/i);
   assert.match(
     plan,
-    /`\/design` where a surface moves, `\/specify`,\s+`\/tech` and `\/tasks` in turn/i,
+    /`\/design` where a surface moves, `\/tech`, `\/specify`\s+and `\/tasks` in turn/i,
   );
   assert.match(plan, /landed nowhere/i);
 });

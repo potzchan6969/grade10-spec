@@ -32,8 +32,8 @@ One round per artifact, and one per task group while the change is building.
   round decides on the best option and records as decided by the round, and
   one reply from you overturns it
 - 🚧 **One sentence plans the change** — the first message drafts the proposal,
-  the decisions, the journeys, the design where a surface moves, the
-  requirements and the cases, the tech design and the plan, each from the one
+  the decisions, the journeys, the design where a surface moves, the tech
+  design, the requirements and the cases, and the plan, each from the one
   before it and each read by its perspectives, and lands nothing; you read the
   held questions, not seven documents
 - 🚧 **A finding goes where it belongs** — a product detail to the page, a

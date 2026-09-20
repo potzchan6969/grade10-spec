@@ -51,9 +51,10 @@ files land one at a time on the product manager's word.
 ## The Whole Plan in One Wake
 
 The three files are the start of the chain, not the end of the run. Draft
-ahead, as `round` says: `/design` where a surface moves, `/specify`,
-`/tech` and `/tasks` in turn, each from the draft before it and each read by
-its own perspectives, pushed after every artifact and landed nowhere. A held
+ahead, as `round` says: `/design` where a surface moves, `/tech`, `/specify`
+and `/tasks` in turn - the tech design before the requirements, as the
+schema orders them - each from the draft before it and each read by its own
+perspectives, pushed after every artifact and landed nowhere. A held
 question does not stop the chain - draft on its recommendation and list it
 first in the summary; a dated `awaiting:` line does, for what depends on it.
 The product manager then reads the held questions, not seven documents, and

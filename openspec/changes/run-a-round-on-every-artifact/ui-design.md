@@ -36,11 +36,11 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `QuestionList` gains 
 ## States
 
 - A thread whose first message is the product manager's sentence, with the agent's first reply naming the change id - `shared-planning-agent-rounds-US-01` - `shared-planning-agent-rounds-SC-17`
-- A draft summary with numbered questions, each with its recommendation - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-21`
+- A draft summary with the held questions first, each with its recommendation, and the ids the round decided on one line - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-21`
 - A question answered by its id alone, closing on the recommendation - `shared-planning-agent-rounds-US-04` - `shared-planning-agent-rounds-SC-11`
 - A remark applied as written, with the perspectives it re-ran named in the reply - `shared-planning-agent-rounds-US-02` - `shared-planning-agent-rounds-SC-12`
 - A challenge from the tech PIC recorded as a decisions row with the agent's answer - `shared-planning-agent-rounds-US-03` - `shared-planning-agent-rounds-SC-13`
-- A landing reply naming the artifact, the handle and the stage it moved - `shared-planning-agent-rounds-US-02` - `shared-planning-agent-rounds-SC-04`
+- A landing reply naming every artifact that landed on the word, the handle, the stage the change reached and the hand it stopped at - `shared-planning-agent-rounds-US-02` - `shared-planning-agent-rounds-SC-04`
 - A re-read reply saying what was read and that nothing changed - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-39`
 - A re-read reply opening a round for a hand, with the change that reached the artifact - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-40`
 - A round refused to land because an artifact before it is behind, saying which - `shared-planning-agent-rounds-US-05` - `shared-planning-agent-rounds-SC-43`
