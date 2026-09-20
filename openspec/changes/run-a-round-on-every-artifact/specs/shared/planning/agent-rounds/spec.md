@@ -409,7 +409,7 @@ group of work.
 **Serves:** shared-planning-agent-rounds-US-04 - the hand is asked the choices only they can take and reads the rest already decided
 
 - **WHEN** a round keeps a finding that is a preference or a product decision
-- **THEN** a choice that moves the change's scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is written as `❓ <role> - recommended: <option>`, and the draft chooses neither option
+- **THEN** a choice that moves the change's scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is written as `❓ <role> - recommended: <option>`, and the draft ahead of it takes the recommendation until the hand answers, when the cascade redraws what turned on it
 - **AND** every other preference is written as `<option> - decided by the round` with what it passed over beside it, and the draft takes that option
 - **AND** the held row is an open question and the row the round decided is none
 - **AND** any hand's reply overturns a row the round decided

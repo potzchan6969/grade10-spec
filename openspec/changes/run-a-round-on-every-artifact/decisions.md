@@ -97,6 +97,10 @@
 | Q72 | Does the run sheet name what decides the cases it leaves out? | Yes: the left-out ids with their deciding paths, under the count - decided by the round | The count alone, which points at no file |
 | Q73 | Does the manual's suite reader carry the line? | No: nothing on the surface shows it, and an unshown field is dead data - decided by the round | Carrying `decidedBy` through the reader for a later surface |
 | Q74 | Is a flip held to the commit that lands its test? | By construction: `tcs:automated` takes the deciding path and writes the status and the line in one edit, and refuses a flip that names none; no commit-pairing check - decided by the round | A preflight comparing the flip's commit with the path it names |
+| Q75 | What does the chain draft on while a row is held? | The recommendation: the draft ahead of a held row takes it, the hand's answer redraws what turned on it, and `land with recommendations` lands what was drafted; the requirement says so - decided by the round | Leaving the held choice open and drafting nothing that turns on it, which stops the chain at every held row and hands the product manager seven documents to read after their answer instead of before |
+| Q76 | Does `AGENTS.md`'s artifact table number the chain in the schema's order? | Yes: the tech design is 5, the requirements 6, the cases 7, as the schema orders them and the chain drafts them - decided by the round | Keeping the numbers and saying the schema orders the chain, two always-loaded surfaces disagreeing on what a wake drafts next |
+| Q77 | Does the round skill have a word budget? | Yes, in the instruction budget test, set at its size after this pass rounded up to the hundred, so the next rule earns its words or raises the number in a commit that says why - decided by the round | No budget, the style's prose rules alone |
+| Q78 | Is the writable set guarded on every drafting push, or once before the landing? | On every push: a stray path is found at the push that made it, and the run rewinds one commit - decided by the round | Once before the landing, which finds it after several drafts |
 
 ## Raised
 

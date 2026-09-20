@@ -680,7 +680,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The row reads `❓ <role> - recommended: <option>`, with the options it was chosen over beside it.
-* It carries a number and names the hand it waits on, and the draft chooses neither option.
+* It carries a number and names the hand it waits on, and the draft after it takes the recommendation until the hand answers.
 * Only a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is held.
 
 ### shared-planning-agent-rounds-US4-TC2-1: An answer writes the row and closes the question
