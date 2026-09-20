@@ -88,6 +88,27 @@ jobs:
             exit 1
           fi
 
+      # The same courtesy over the two things a wake needs, said once per push
+      # rather than once per change: the `reread` job runs on a matrix, so a
+      # preflight inside it repeats itself as many times as the push moved
+      # changes — and says it only after the matrix was computed. Behind the
+      # same variable that job is, so a store that never turned the cascade on
+      # is not told what it did not set for it.
+      - name: Check the wake is configured
+        if: vars.AGENT_REREAD == 'true'
+        env:
+          AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
+          AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
+        run: |
+          missing=""
+          [ -n "$AGENT_WAKE_URL" ] || missing="$missing AGENT_WAKE_URL"
+          [ -n "$AGENT_WAKE_TOKEN" ] || missing="$missing AGENT_WAKE_TOKEN"
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
       # No `restore-keys`: a prefix fallback would drag the previous push's
       # keys in and silence a stage re-entered after a revert (decisions Q26).
       - name: Restore the keys this run has sent
@@ -145,6 +166,11 @@ jobs:
   # the only credential the wake step reads; the bot token lives in the plain
   # step below it, which says in the channel that a wake never arrived, and
   # reaches no session either way (Q62).
+  #
+  # Two steps, and the preflight is not one of them: what Operations has not
+  # set is said once by `notify`, above the matrix, rather than once per
+  # change inside it. So the only step here that can fail is the wake, which
+  # is exactly what the failure line reports.
   reread:
     needs: notify
     # Two gates: the variable is how Operations turns the cascade on, and the
@@ -158,23 +184,6 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
-      # Say which piece of setup is missing, rather than failing inside a
-      # curl about a variable nobody set — the same courtesy the notify job
-      # opens with, over the two things a wake needs.
-      - name: Check the wake is configured
-        env:
-          AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
-          AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
-        run: |
-          missing=""
-          [ -n "$AGENT_WAKE_URL" ] || missing="$missing AGENT_WAKE_URL"
-          [ -n "$AGENT_WAKE_TOKEN" ] || missing="$missing AGENT_WAKE_TOKEN"
-          if [ -n "$missing" ]; then
-            echo "::error::Not configured:$missing"
-            echo "Settings → Secrets and variables → Actions."
-            exit 1
-          fi
-
       # The change's id reaches the body through the environment and `jq
       # --arg`, off a quoted heredoc: an id is a string a push computed, and
       # a string spliced into a shell word is a shell word.
@@ -183,16 +192,14 @@ jobs:
           AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
           AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
           CHANGE: ${{ matrix.id }}
-          BEFORE: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
           filter="$(cat <<'JQ'
-          { change: $change, reason: "landing", base: $base, head: $head }
+          { change: $change, reason: "landing", head: $head }
           JQ
           )"
           body="$(jq -nc \
             --arg change "$CHANGE" \
-            --arg base "$BEFORE" \
             --arg head "$HEAD_SHA" \
             "$filter")"
           curl -fsS -X POST "$AGENT_WAKE_URL/wake" \
