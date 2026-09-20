@@ -37,6 +37,7 @@ read again before anything lands after it, with one record row per round.
   - No-op read: a read that changes nothing writes the `reviewed:` line alone and says so in the thread; a read that edits opens a round for the artifact's hand
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
   - Moved goals: a goal or non-goal that moved is a question to the product manager, extend, supersede or split, and nothing is rewritten in place
+  - Overlap in flight: a sentence naming no change that overlaps an active change's capability or the page sections it would mark is answered in that change's thread, and that change's stage says whether it is extended, held for its product manager, or depended on by a new change
   - Raised rows: a landed Raised row puts the requirements and the cases behind
   - Tech design first: a requirement that reaches the tech design writes a dated wait on the tech PIC, cleared by their edit or a read
 - The record
@@ -850,6 +851,14 @@ nothing in place.
 - **Until the answer** — nothing after `decisions.md` lands
 - **Never in place** — no artifact is redrawn to the moved goal before the
   product manager answers
+- **A sentence that overlaps** — a sentence naming no change that overlaps an
+  active change — its deltas name the capability the sentence is about, or its
+  proposal links the page sections the sentence would mark — SHALL be answered
+  in that change's thread, and that change's stage SHALL decide: Proposed or
+  Designed with the same product manager is extended by the round, Specified,
+  Planned or Building holds a row on its product manager to extend, split or
+  supersede, and a change on staging or later is named in a new change's
+  `depends_on:`
 
 #### Scenario: shared-planning-agent-rounds-SC-45 - A moved goal asks the product manager
 **Serves:** shared-planning-agent-rounds-US-07 - the product manager is asked before a change mid-build becomes another change
@@ -876,6 +885,14 @@ nothing in place.
 - **AND** supersede opens a new change from the moved goal and withdraws this one
 - **AND** split opens a new change for the moved part and leaves the rest here
 - **AND** the answer is written as a decisions row
+
+#### Scenario: shared-planning-agent-rounds-SC-80 - A sentence overlaps a change in flight
+**Serves:** shared-planning-agent-rounds-US-07 - the product manager says whether a new sentence belongs to the change they already have
+
+- **GIVEN** an active change whose deltas name a capability, or whose proposal links a page's sections
+- **WHEN** a sentence naming no change asks for something on that capability or those sections
+- **THEN** the run answers in that change's thread
+- **AND** the change's stage decides: Proposed or Designed with the same product manager is extended by the round, Specified, Planned or Building holds a row on its product manager to extend, split or supersede, and a change on staging or later is named in a new change's `depends_on:`
 
 ### Requirement: A landed Raised row puts the requirements and the cases behind
 

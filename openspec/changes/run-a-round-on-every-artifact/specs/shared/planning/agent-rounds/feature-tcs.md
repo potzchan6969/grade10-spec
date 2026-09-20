@@ -1929,6 +1929,49 @@ Runs once per row of **Test data**.
 * `tasks.md` does not reach `main`.
 * The reply names the open moved-goal question.
 
+### shared-planning-agent-rounds-US7-TC4-1: A sentence overlapping a change in flight is answered in its thread
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-07
+
+**Pre-conditions:**
+
+* <change> is in flight with its deltas naming <capability>, and <change thread> is its thread.
+* The asker is in <planning channel> and names no change in what they post.
+
+**Test data:**
+
+| <change>'s stage, and who asks | What the run does |
+| --- | --- |
+| Proposed or Designed, its own product manager asking | extends <change>, the round deciding it, and the reply names <change> |
+| Proposed or Designed, another hand asking | holds a row on <change>'s product manager, recommending extend |
+| Specified or Planned | holds a row recommending extend where the moved part is smaller than a task group of work, split otherwise |
+| Building | holds a row recommending split, or supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | opens a new change whose `depends_on:` names <change> |
+
+**Steps:**
+
+1. Post a sentence about <capability> in <planning channel>, naming no change.
+2. Read <change thread>.
+3. Read the changes in flight and <change>'s decisions.
+
+**Expected Results:**
+
+* The reply is in <change thread> and names <change>.
+* What the row names has happened, and no second change on <capability> is opened except where the row says one is.
+
 ---
 
 ## shared-planning-agent-rounds-US8: QA walks only what staging proves
