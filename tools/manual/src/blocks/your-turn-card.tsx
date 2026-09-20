@@ -200,11 +200,11 @@ type AssignState =
   | { kind: "error"; message: string };
 
 /**
- * A role picker and a handle picker over the team map's handles, filtered by
- * the chosen role — decided over the free-text field this form drew at
- * first: a handle Assign can write is one `docs/prds/team.yaml` already
- * carries for that role, so offering only those is a form that cannot be
- * filled out wrong.
+ * A role picker and a handle picker over every handle the team map knows,
+ * the chosen role's own listed first — decided over the free-text field this
+ * form drew at first: the record rule is membership-only, so a handle
+ * standing in for a role the map does not list it under is one write, and
+ * the picker offers exactly what that write accepts.
  */
 function AssignForm({
   change,
@@ -218,10 +218,10 @@ function AssignForm({
   const [handle, setHandle] = useState("");
   const [state, setState] = useState<AssignState>({ kind: "idle" });
 
-  const handles = Object.entries(index.snapshot.team.handles)
-    .filter(([, roles]) => roles.includes(role))
-    .map(([one]) => one)
-    .sort();
+  const entries = Object.entries(index.snapshot.team.handles);
+  const own = entries.filter(([, roles]) => roles.includes(role));
+  const rest = entries.filter(([, roles]) => !roles.includes(role));
+  const handles = [...own, ...rest].map(([one]) => one);
   const chosen = handles.includes(handle) ? handle : "";
 
   return (
@@ -255,9 +255,7 @@ function AssignForm({
         <SelectField
           allowEmpty
           hint={
-            handles.length === 0
-              ? `no handle in the team map takes ${ROLE_LABEL[role]}`
-              : undefined
+            handles.length === 0 ? "the team map has no handles" : undefined
           }
           label="Handle"
           onChange={setHandle}
