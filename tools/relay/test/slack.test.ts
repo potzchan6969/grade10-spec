@@ -481,16 +481,26 @@ describe("a press", () => {
   it("says in the thread who pressed it, and what the map does not name", () => {
     const press = pressed();
     if (press.kind !== "confirm") throw new Error("the press was ignored");
-    expect(pressedLine(press.press, "ecchochan")).toBe(
+    expect(pressedLine(press.press, { handle: "ecchochan" })).toBe(
       "@ecchochan pressed *Confirm proposal*",
     );
-    expect(pressedLine(press.press, null)).toBe(
+    expect(pressedLine(press.press, { map: "unknown" })).toBe(
       "<@U0PM> pressed *Confirm proposal* — the team map does not name this member, so nothing lands on it",
     );
-    expect(confirmedLine(press.press, "ecchochan")).toBe(
+    // A map the relay could not read names nobody either way, and only the
+    // map that answered says a press lands nothing.
+    expect(pressedLine(press.press, { map: "unreadable" })).toBe(
+      "<@U0PM> pressed *Confirm proposal* — the word is queued; the team map could not be read, so the landing checks it again",
+    );
+    expect(confirmedLine(press.press, { handle: "ecchochan" })).toBe(
       "Confirmed by @ecchochan",
     );
-    expect(confirmedLine(press.press, null)).toBe("Confirmed by <@U0PM>");
+    expect(confirmedLine(press.press, { map: "unknown" })).toBe(
+      "Confirmed by <@U0PM>",
+    );
+    expect(confirmedLine(press.press, { map: "unreadable" })).toBe(
+      "Confirmed by <@U0PM>",
+    );
   });
 });
 
