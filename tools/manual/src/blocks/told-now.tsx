@@ -13,9 +13,10 @@ import { SlackText } from "./slack-text";
  * said cannot tell a message that never arrived from one that said something
  * else, and the composer is shared so the two can never differ.
  *
- * Nothing at all where nobody is being told anything: a stage that waits on
- * no hand sends no message, and a quoted block with nothing in it would read
- * as a message that said nothing.
+ * One line where nobody is being told anything: Designed, Released and
+ * Archived are a design pair's, a cut's and the fold's, and a reader who was
+ * shown nothing could not tell a stage that sends no message from a block
+ * that failed to render.
  */
 export function ToldNow({
   change,
@@ -29,7 +30,6 @@ export function ToldNow({
   artifacts: SchemaArtifact[];
 }) {
   const told = toldNowOf(change, stage, artifacts);
-  if (told.length === 0) return null;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -41,22 +41,31 @@ export function ToldNow({
           what the message says
         </Text>
       </div>
-      <ul className="flex flex-col gap-1.5">
-        {told.map((one) => (
-          <li className="flex flex-col gap-0.5" key={`${one.kind}:${one.role}`}>
-            <Text as="span" className="font-mono" size="xs" tone="secondary">
-              {one.hand
-                ? `@${one.hand}`
-                : `the ${ROLE_LABEL[one.role]} channel`}
-            </Text>
-            <blockquote className="border-border border-l-2 pl-2.5">
-              <Text as="p" size="xs">
-                <SlackText text={one.text} />
+      {told.length === 0 ? (
+        <Text as="p" size="xs" tone="secondary">
+          No message: this stage waits on no hand.
+        </Text>
+      ) : (
+        <ul className="flex flex-col gap-1.5">
+          {told.map((one) => (
+            <li
+              className="flex flex-col gap-0.5"
+              key={`${one.kind}:${one.role}`}
+            >
+              <Text as="span" className="font-mono" size="xs" tone="secondary">
+                {one.hand
+                  ? `@${one.hand}`
+                  : `the ${ROLE_LABEL[one.role]} channel`}
               </Text>
-            </blockquote>
-          </li>
-        ))}
-      </ul>
+              <blockquote className="border-border border-l-2 pl-2.5">
+                <Text as="p" size="xs">
+                  <SlackText text={one.text} />
+                </Text>
+              </blockquote>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }
