@@ -158,31 +158,82 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 10
     steps:
+      # Say which piece of setup is missing, rather than failing inside a
+      # curl about a variable nobody set — the same courtesy the notify job
+      # opens with, over the two things a wake needs.
+      - name: Check the wake is configured
+        env:
+          AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
+          AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
+        run: |
+          missing=""
+          [ -n "$AGENT_WAKE_URL" ] || missing="$missing AGENT_WAKE_URL"
+          [ -n "$AGENT_WAKE_TOKEN" ] || missing="$missing AGENT_WAKE_TOKEN"
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      # The change's id reaches the body through the environment and `jq
+      # --arg`, off a quoted heredoc: an id is a string a push computed, and
+      # a string spliced into a shell word is a shell word.
       - name: Wake the relay
         env:
           AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
           AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
+          CHANGE: ${{ matrix.id }}
           BEFORE: ${{ github.event.before }}
           HEAD_SHA: ${{ github.sha }}
         run: |
+          filter="$(cat <<'JQ'
+          { change: $change, reason: "landing", base: $base, head: $head }
+          JQ
+          )"
+          body="$(jq -nc \
+            --arg change "$CHANGE" \
+            --arg base "$BEFORE" \
+            --arg head "$HEAD_SHA" \
+            "$filter")"
           curl -fsS -X POST "$AGENT_WAKE_URL/wake" \
             -H "Authorization: Bearer $AGENT_WAKE_TOKEN" \
             -H 'content-type: application/json' \
-            -d "{\"change\":\"${{ matrix.id }}\",\"reason\":\"landing\",\"base\":\"$BEFORE\",\"head\":\"$HEAD_SHA\"}"
+            -d "$body"
 
       # A wake that never arrived is a re-read nobody is waiting for and a
       # thread nobody told: the relay cannot post its own failure line for a
-      # wake it never took. So this plain step says it in the channel, naming
-      # the change and the head, and it is the only step here that reads the
-      # bot token.
+      # wake it never took. So this plain step says it in the channel the
+      # notify job posts to, naming the change and the head, and it is the
+      # only step here that reads the bot token. Slack answers 200 with
+      # `ok: false` on a channel it will not post to, so the answer is read
+      # rather than the status: a failure line nobody received is a failure
+      # nobody knows about.
       - name: Say the wake did not reach the relay
         if: failure()
         env:
           SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
-          CHANNEL: ${{ vars.PLANNING_CHANNEL }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
+          CHANGE: ${{ matrix.id }}
           HEAD_SHA: ${{ github.sha }}
         run: |
-          curl -fsS -X POST https://slack.com/api/chat.postMessage \
+          filter="$(cat <<'JQ'
+          {
+            channel: $channel,
+            text: ("The wake for `" + $change + "` at " + $head
+              + " did not reach the relay: nothing is reading it again.")
+          }
+          JQ
+          )"
+          body="$(jq -nc \
+            --arg channel "$CHANNEL" \
+            --arg change "$CHANGE" \
+            --arg head "${HEAD_SHA:0:8}" \
+            "$filter")"
+          said="$(curl -sS -X POST https://slack.com/api/chat.postMessage \
             -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
             -H 'content-type: application/json; charset=utf-8' \
-            -d "{\"channel\":\"$CHANNEL\",\"text\":\"The wake for \`${{ matrix.id }}\` at ${HEAD_SHA:0:8} did not reach the relay: nothing is reading it again.\"}"
+            -d "$body")"
+          if [ "$(printf '%s' "$said" | jq -r '.ok')" != "true" ]; then
+            echo "::error::Slack refused the line: $(printf '%s' "$said" | jq -r '.error // "no reason given"')"
+            exit 1
+          fi
