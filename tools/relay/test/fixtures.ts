@@ -1,6 +1,7 @@
 /**
- * What the router's tests and the room's tests both need: one deployment, and
- * one Durable Object namespace whose rooms are whatever the test answers with.
+ * What the router's tests, the room's tests and the live object's tests all
+ * need: one deployment, and a Durable Object namespace whose objects are
+ * whatever the test answers with.
  *
  * Written once here because a second copy of the deployment drifts: a secret
  * the router reads under one name and the room under another is a test that
@@ -19,6 +20,7 @@ export const RELAY_URL = "https://grade10-relay.workers.dev";
 export const FIRE_URL = "https://runner.example/fire";
 export const ROUTINE_TOKEN = "the-routine-token";
 export const GITHUB_TOKEN = "the-code-host-token";
+export const WEBHOOK_SECRET = "the-code-host-webhook-secret";
 
 /**
  * A namespace whose rooms are one function: the name the caller addressed and
@@ -45,6 +47,9 @@ export function testEnv(over: Partial<Env> = {}): Env {
     ROOM: stubNamespace(async () => {
       throw new Error("this test reaches no room");
     }),
+    LIVE: stubNamespace(async () => {
+      throw new Error("this test reaches no live object");
+    }),
     PLANNING_CHANNEL: CHANNEL,
     REPO,
     RELAY_URL,
@@ -56,6 +61,7 @@ export function testEnv(over: Partial<Env> = {}): Env {
     GITHUB_TOKEN,
     TOKEN_SECRET,
     WAKE_TOKEN: WAKE,
+    GITHUB_WEBHOOK_SECRET: WEBHOOK_SECRET,
     ...over,
   };
 }

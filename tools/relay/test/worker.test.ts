@@ -1,6 +1,8 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import { type Env, REQUIRED_SECRETS } from "../src/env.ts";
-import type { RoomOp } from "../src/rpc.ts";
+import { signGithubEvent } from "../src/github-events.ts";
+import type { Head } from "../src/live-state.ts";
+import type { LiveOp, RoomOp } from "../src/rpc.ts";
 import { signSlackRequest } from "../src/slack.ts";
 import { mintWakeToken } from "../src/token.ts";
 import worker from "../src/worker.ts";
@@ -8,11 +10,13 @@ import {
   APP,
   BOT_TOKEN,
   CHANNEL,
+  REPO,
   SIGNING,
   stubNamespace,
   TOKEN_SECRET,
   testEnv,
   WAKE,
+  WEBHOOK_SECRET,
 } from "./fixtures.ts";
 
 /** The router: the entry that refuses a deployment missing a secret, Slack
@@ -38,6 +42,33 @@ function rooms(
   return {
     ROOM: stubNamespace(async (room, request) => {
       sent.push({ room, op: (await request.json()) as RoomOp });
+      return answer();
+    }),
+  };
+}
+
+/** What the live object was asked: an op, or the socket a page is opening. */
+interface Asked {
+  name: string;
+  op: LiveOp | null;
+  upgrade: boolean;
+}
+
+/** The live object of one test: every ask it took, and what it answers. */
+function liveStub(
+  asked: Asked[],
+  answer: () => Response = () =>
+    new Response(JSON.stringify({ told: 0 }), { status: 200 }),
+): Partial<Env> {
+  return {
+    LIVE: stubNamespace(async (name, request) => {
+      // An upgrade is forwarded as it arrived, and carries no body to read.
+      const upgrade = (request.headers.get("upgrade") ?? "") !== "";
+      asked.push({
+        name,
+        op: upgrade ? null : ((await request.json()) as LiveOp),
+        upgrade,
+      });
       return answer();
     }),
   };
@@ -100,6 +131,7 @@ describe("the entry", () => {
       "GITHUB_TOKEN",
       "TOKEN_SECRET",
       "WAKE_TOKEN",
+      "GITHUB_WEBHOOK_SECRET",
     ]);
     for (const secret of REQUIRED_SECRETS) {
       const response = await worker.fetch(
@@ -568,6 +600,215 @@ describe("/runs/:token", () => {
     const response = await call(testEnv(), token, "archive", {});
     expect(response.status).toBe(404);
     expect(await response.json()).toEqual({ reason: "unknown-call" });
+  });
+});
+
+const HEAD: Head = {
+  main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
+  at: "2026-09-20T14:02:11+08:00",
+  subject: "docs(planning): the live line",
+};
+
+/** A push of `main`, with whatever this test changes of it. */
+function push(over: Record<string, unknown> = {}): unknown {
+  return {
+    ref: "refs/heads/main",
+    after: HEAD.main,
+    repository: { full_name: REPO },
+    head_commit: {
+      timestamp: HEAD.at,
+      message: `${HEAD.subject}\n\nThe body a page never shows.`,
+    },
+    ...over,
+  };
+}
+
+describe("/github/events", () => {
+  async function delivery(
+    env: Env,
+    event: string,
+    body: unknown,
+    signature?: string,
+  ) {
+    const text = typeof body === "string" ? body : JSON.stringify(body);
+    return worker.fetch(
+      new Request("https://relay.example/github/events", {
+        method: "POST",
+        headers: {
+          "x-github-event": event,
+          "x-hub-signature-256":
+            signature ?? (await signGithubEvent(WEBHOOK_SECRET, text)),
+          "content-type": "application/json",
+        },
+        body: text,
+      }),
+      env,
+      context([]),
+    );
+  }
+
+  it("tells the live object where `main` is", async () => {
+    const asked: Asked[] = [];
+    const response = await delivery(testEnv(liveStub(asked)), "push", push());
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ told: 0 });
+    expect(asked).toEqual([
+      { name: "main", op: { op: "moved", ...HEAD }, upgrade: false },
+    ]);
+  });
+
+  it("answers the ping the code host sends when the webhook is saved", async () => {
+    const asked: Asked[] = [];
+    const response = await delivery(testEnv(liveStub(asked)), "ping", {
+      zen: "Keep it logically awesome.",
+    });
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual({ pong: true });
+    expect(asked).toEqual([]);
+  });
+
+  it("refuses a delivery the webhook secret does not sign", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(liveStub(asked));
+    const wrong = await delivery(
+      env,
+      "push",
+      push(),
+      await signGithubEvent("another-secret", JSON.stringify(push())),
+    );
+    expect(wrong.status).toBe(401);
+    expect(await wrong.json()).toEqual({ reason: "bad-signature" });
+    const none = await delivery(env, "push", push(), "");
+    expect(none.status).toBe(401);
+    expect(asked).toEqual([]);
+  });
+
+  it("names the secret in no answer it writes", async () => {
+    const response = await delivery(testEnv(), "push", push(), "sha256=00");
+    expect(await response.text()).not.toContain(WEBHOOK_SECRET);
+  });
+
+  it("tells nobody about another branch, another repository or no commit", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(liveStub(asked));
+    for (const [body, why] of [
+      [
+        push({ ref: "refs/heads/claude/tell-open-pages-main-moved" }),
+        "another-branch",
+      ],
+      [
+        push({ repository: { full_name: "9gag/grade10" } }),
+        "another-repository",
+      ],
+      [push({ head_commit: null }), "no-commit"],
+    ] as const) {
+      const response = await delivery(env, "push", body);
+      expect(response.status).toBe(200);
+      expect(await response.json()).toEqual({ ignored: why });
+    }
+    const other = await delivery(env, "issues", {});
+    expect(await other.json()).toEqual({ ignored: "not-a-push" });
+    expect(asked).toEqual([]);
+  });
+
+  it("refuses a body that is not JSON, and a read", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(liveStub(asked));
+    const broken = await delivery(env, "push", "{");
+    expect(broken.status).toBe(400);
+    expect(await broken.json()).toEqual({ reason: "not-json" });
+    const read = await worker.fetch(
+      new Request("https://relay.example/github/events"),
+      env,
+      context([]),
+    );
+    expect(read.status).toBe(405);
+    expect(await read.json()).toEqual({ reason: "post-only" });
+    expect(asked).toEqual([]);
+  });
+});
+
+describe("/head", () => {
+  it("answers where `main` is, readable from any origin and cached nowhere", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(
+      liveStub(
+        asked,
+        () => new Response(JSON.stringify(HEAD), { status: 200 }),
+      ),
+    );
+    const response = await worker.fetch(
+      new Request("https://relay.example/head"),
+      env,
+      context([]),
+    );
+    expect(response.status).toBe(200);
+    expect(await response.json()).toEqual(HEAD);
+    expect(response.headers.get("access-control-allow-origin")).toBe("*");
+    expect(response.headers.get("cache-control")).toBe("no-store");
+    expect(asked).toEqual([
+      { name: "main", op: { op: "head" }, upgrade: false },
+    ]);
+  });
+
+  it("answers the preflight a browser sends before it reads the head", async () => {
+    const response = await worker.fetch(
+      new Request("https://relay.example/head", { method: "OPTIONS" }),
+      testEnv(),
+      context([]),
+    );
+    expect(response.status).toBe(204);
+    expect(response.headers.get("access-control-allow-origin")).toBe("*");
+    expect(response.headers.get("access-control-allow-methods")).toBe(
+      "GET, OPTIONS",
+    );
+  });
+
+  it("refuses a write of the head", async () => {
+    const asked: Asked[] = [];
+    const response = await worker.fetch(
+      new Request("https://relay.example/head", { method: "POST" }),
+      testEnv(liveStub(asked)),
+      context([]),
+    );
+    expect(response.status).toBe(405);
+    expect(await response.json()).toEqual({ reason: "get-only" });
+    expect(asked).toEqual([]);
+  });
+});
+
+describe("/live", () => {
+  it("hands a page's upgrade to the live object", async () => {
+    const asked: Asked[] = [];
+    const response = await worker.fetch(
+      new Request("https://relay.example/live", {
+        headers: { upgrade: "WebSocket" },
+      }),
+      testEnv(liveStub(asked)),
+      context([]),
+    );
+    expect(response.status).toBe(200);
+    expect(asked).toEqual([{ name: "main", op: null, upgrade: true }]);
+  });
+
+  it("tells a read that is not an upgrade so, and opens nothing", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(liveStub(asked));
+    const plain = await worker.fetch(
+      new Request("https://relay.example/live"),
+      env,
+      context([]),
+    );
+    expect(plain.status).toBe(426);
+    expect(await plain.json()).toEqual({ reason: "upgrade-required" });
+    const written = await worker.fetch(
+      new Request("https://relay.example/live", { method: "POST" }),
+      env,
+      context([]),
+    );
+    expect(written.status).toBe(405);
+    expect(await written.json()).toEqual({ reason: "get-only" });
+    expect(asked).toEqual([]);
   });
 });
 
