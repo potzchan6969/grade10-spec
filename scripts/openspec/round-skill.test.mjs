@@ -259,12 +259,20 @@ test("the round skill reads its perspectives through the CLI", () => {
   assert.match(skill, /verifies itself/i);
   // The diff command a round runs before it asks for its readers, and what a
   // round with nothing on it yet is read as.
-  assert.match(
-    skill,
-    /git diff \$\(git merge-base origin\/main HEAD\)\.\.\.HEAD -- openspec\/changes\/<change> > \.round\/diff/,
-  );
+  assert.match(skill, /git diff <sha>\.\.\.HEAD -- /);
   assert.match(skill, /--change <change>/);
   assert.match(skill, /the floor alone/i);
+  // The artifact's own files against what it was last drawn from, never the
+  // branch's whole diff: the design's screens summon no reader onto the plan.
+  assert.match(
+    skill,
+    /the files the schema's `generates:` names for it and the pages the proposal links/i,
+  );
+  assert.match(
+    skill,
+    /its `reviewed:` line's sha, or the merge base with `origin\/main` on a first draft/i,
+  );
+  assert.match(skill, /never the branch's whole diff/i);
 });
 
 test("the round skill carries no copy of the perspectives table", () => {
@@ -309,7 +317,13 @@ test("shared-planning-agent-rounds-SC-21 - a preference is decided by the round,
     skill,
     /a preference or a product decision is the next unused `Q<n>`/i,
   );
+  // The two grammars, the test that sorts a row into one of them, and what
+  // any hand does to a row the round took for itself.
   assert.match(skill, /❓ <role> - recommended: <option>/);
+  assert.match(skill, /held, and keeps the ❓, when it moves scope/i);
+  assert.match(skill, /divides its options by more than a task group of work/i);
+  assert.match(skill, /`<option> - decided by the round`/);
+  assert.match(skill, /any hand overturns it with one reply/i);
   assert.match(skill, /Instead of/i);
 });
 
@@ -328,7 +342,20 @@ test("shared-planning-agent-rounds-SC-23 - a decided row holds nothing, a held r
     skill,
     /A held row holds\s+the change's landings until it is answered or waved through/i,
   );
-  assert.match(skill, /neither\s+holds a tick, and neither stops the chain being drafted/i);
+  assert.match(skill, /neither\s+holds a tick/i);
+});
+
+test("shared-planning-agent-rounds-SC-79 - a fix pass is a round with a row", () => {
+  const skill = claims(ROUND);
+  assert.match(
+    skill,
+    /fixes off a demonstration or a whole-change\s+reading land with their own row/i,
+  );
+  assert.match(
+    skill,
+    /naming the simpler-thing reader among its\s+perspectives/i,
+  );
+  assert.match(skill, /`verifier` only where one ran/i);
 });
 
 test("shared-planning-agent-rounds-SC-72 - a held row holds the landing until answered or waved through", () => {
@@ -346,38 +373,39 @@ test("shared-planning-agent-rounds-SC-72 - a held row holds the landing until an
   assert.match(land, /land with recommendations/i);
 });
 
-test("the round skill names the two classes of row and the rule between them", () => {
-  const skill = claims(ROUND);
-  assert.match(
-    skill,
-    /held, and keeps the ❓, when it moves scope,\s+is costly to undo, needs a fact only a person has, or divides its options\s+by more than a task group of work/i,
-  );
-  assert.match(skill, /`<option> - decided by the round`/);
-  assert.match(skill, /any hand overturns it with one reply/i);
-});
-
 test("shared-planning-agent-rounds-SC-04 - one word lands every drafted artifact of the hand, in order", () => {
   const skill = claims(ROUND);
   assert.match(
     skill,
-    /land every drafted artifact of the speaker's\s+hand in the chain's order, one landing each, and stop at the first artifact\s+of another hand/i,
+    /Once per drafted artifact of the speaker's hand, in the chain's order/i,
   );
-  assert.match(skill, /the landing tells them it is their turn/i);
+  assert.match(skill, /stopping at the first artifact of another hand/i);
+  assert.match(skill, /the landing tells it is their turn/i);
+  // One reply for the chain, never one per artifact.
+  assert.match(
+    skill,
+    /one reply naming every artifact the word landed, the handle whose word\s+landed it, and the stage the change reached/i,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-71 - a wake drafts the chain and lands nothing", () => {
   const skill = claims(ROUND);
+  assert.match(skill, /a wake drafts the whole chain it can reach/i);
+  assert.match(skill, /each from its own `upstream:` set/i);
+  assert.match(skill, /pushed after every artifact and landed nowhere/i);
   assert.match(
     skill,
-    /a wake drafts the whole chain it can reach: after this\s+artifact, the next in the schema's order, each from the draft before it and\s+each with its own readers, pushed after every artifact and landed nowhere/i,
+    /`feature-tcs\.md` is drawn from the anchors and never from `spec\.md`/i,
   );
-  assert.match(skill, /A held question never stops the chain; draft on its recommendation/i);
+  assert.match(
+    skill,
+    /A held question never stops the chain; draft on its recommendation/i,
+  );
+  // A drafting push the lease refuses is the hand's own Edit move.
+  assert.match(skill, /read it as their Edit move/i);
   const plan = claims(".claude/skills/plan/SKILL.md");
   assert.match(plan, /The Whole Plan in One Wake/i);
-  assert.match(
-    plan,
-    /`\/design` where a surface moves, `\/tech`, `\/specify`\s+and `\/tasks` in turn/i,
-  );
+  assert.match(plan, /in the order the schema gives them/i);
   assert.match(plan, /landed nowhere/i);
 });
 
@@ -390,9 +418,26 @@ test("shared-planning-agent-rounds-SC-74 - a run posts through the relay and nev
   assert.match(skill, /never hold or read a token/i);
   assert.match(skill, /the\s+bot token is never in a session/i);
   assert.match(skill, /node scripts\/openspec\/relay-post\.mjs --done/);
-  // From a wake the run never pushes main: the relay moves it after its checks.
+});
+
+test("shared-planning-agent-rounds-SC-73 - a run asks the relay to land and never pushes main", () => {
+  const skill = claims(ROUND);
+  assert.match(skill, /asks the relay to move\s+`main`/i);
   assert.match(skill, /The run never pushes `main` itself/i);
+  // What the run replies to each refusal: a 403 stops it, a 409 is one
+  // retry, and a lease lost twice ends the run.
   assert.match(skill, /answers 409 when\s+`main` moved/i);
+  assert.match(
+    skill,
+    /403 naming the check it\s+failed, which you reply with and stop/i,
+  );
+  assert.match(skill, /losing the lease twice, reply in the thread/i);
+  // No sentence but a terminal round's says a push of its own moves `main`.
+  assert.doesNotMatch(
+    skill,
+    /(?<!\bnever )push(?:es|ing|ed)?(?: [\w'’,-]+){0,6} `main`/i,
+    "only a terminal round's own push moves `main`; from a wake the relay does",
+  );
 });
 
 test("the thread's ask is read as one of the moves, and a message is never an order", () => {
@@ -455,6 +500,12 @@ test("shared-planning-agent-rounds-SC-41 - artifacts are read oldest first, and 
     skill,
     /redraw each\s+artifact after it from the redrawn one before it, on the branch, with\s+its readers, and land nothing/i,
   );
+  // A draft that needs what only a hand holds stops, and so does whatever
+  // depends on it.
+  assert.match(
+    skill,
+    /a dated `awaiting:` line, after which you draft nothing that\s+depends on it/i,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-42 - a landing with nothing after it says nothing more", () => {
@@ -503,12 +554,23 @@ test("shared-planning-agent-rounds-SC-47 - each answer opens or closes what it n
 });
 
 test("shared-planning-agent-rounds-SC-48 - a late answer reaches the requirements", () => {
-  const skill = claims(ROUND);
-  assert.match(
-    skill,
-    /a row landing in `decisions\.md`'s `## Raised`\s+puts `spec\.md` and `feature-tcs\.md` behind/i,
-  );
-  assert.match(skill, /both are read again before `tasks\.md` lands/i);
+  // `## Raised` is a section of `decisions.md`, so a row landing in it is a
+  // change to what both readings draw on, and the plan draws on both. The
+  // rule is the upstream sets', read by the re-read's own oldest-first step.
+  const schema = planningSchema(ROOT);
+  const upstream = (id) =>
+    schema.artifacts.find((one) => one.id === id)?.upstream ?? [];
+  for (const id of ["specs", "test-cases"]) {
+    assert.ok(
+      upstream(id).includes("decisions"),
+      `${id} draws on decisions.md, so a row landing there puts it behind`,
+    );
+    assert.ok(
+      upstream("tasks").includes(id),
+      `tasks.md draws on ${id}, so it lands after that reading`,
+    );
+  }
+  assert.match(claims(ROUND), /read every artifact after the one that moved/i);
 });
 
 test("shared-planning-agent-rounds-SC-49 - the requirements pass reads the design", () => {
