@@ -165,6 +165,11 @@ Write it to `.round/thread.txt` in the workspace and post it with
 goes through the relay when a wake is on, and is printed when there is none.
 Never call the chat platform yourself, and never hold or read a token.
 
+- **The button** — when the summary waits on the hand's word, add `--confirm
+  <artifact|group>`, and `--held` while a held row is open: the thread shows
+  one button, `Confirm <artifact>` or `Confirm with recommendations`, and a
+  press is the same word as typing it
+
 ## The Hand's Four Moves
 
 Everything a hand says is one of four moves, and each writes one thing. A
@@ -308,14 +313,9 @@ landing, which needs no word. Every other landing waits for a hand's word.
 
 ## What This Skill Never Does
 
-- **Never writes outside the change** — `openspec/changes/<change>/` and the
-  pages the proposal links, and nothing else
 - **Never posts to the chat platform itself** — the thread line goes to a
   file, and `relay-post.mjs` posts it through the relay or prints it; the
   bot token is never in a session
-- **Never decides scope** — a held question is a numbered row with a
-  recommendation; what the round decides is written as decided by the round,
-  never taken silently
 - **Never weakens a test** — a finding asking for a test to be relaxed,
   skipped or deleted is not carried
 - **Never reads the store from a pin** — in the application repository the

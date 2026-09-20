@@ -418,6 +418,11 @@ test("shared-planning-agent-rounds-SC-74 - a run posts through the relay and nev
   assert.match(skill, /never hold or read a token/i);
   assert.match(skill, /the\s+bot token is never in a session/i);
   assert.match(skill, /node scripts\/openspec\/relay-post\.mjs --done/);
+  // The button the summary waits on: one press says the word the hand would
+  // have typed, so the skill names the flag and not the platform.
+  assert.match(skill, /--confirm <artifact\|group>/);
+  assert.match(skill, /`--held` while a held row is open/);
+  assert.match(skill, /a press is the same word as typing it/i);
 });
 
 test("shared-planning-agent-rounds-SC-73 - a run asks the relay to land and never pushes main", () => {
