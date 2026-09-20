@@ -18,9 +18,13 @@ together, and there is no separate row-writing step. One word lands the chain:
 order, and stops at the first artifact of another hand, who is told it is
 their turn. While a held row is open the command refuses and names the rows;
 `land with recommendations` is the same word with `--with-recommendations`,
-which writes each held row's recommendation in the landing commit. From a
-wake, the hand is the wake's sender and `main` moves through the relay, never
-by the run's own push. The perspectives named are ones the
+which writes each held row's recommendation in the landing commit, as
+`<option> - decided by the round`, and a `reviewed:` line beside it for every
+drafted artifact after the decisions. From a wake, the hand is the wake's
+sender and `main` moves through the relay, never by the run's own push. The
+landing commit is cut from `main` and carries that one artifact; the drafts
+above it stay on the branch, which is rebased onto the landing. The
+perspectives named are ones the
 artifact's list issues, every `always` reader among them; a task group whose
 tasks cite a scenario id owes `--tests` an entry per id, and the landing
 names the ids left out.
@@ -44,6 +48,9 @@ this skill names no copy of them, only what you do with each refusal.
   re-read and one retry
 - **Behind** — say which artifact is behind and whose hand it is, and run
   `/round reread <change>`
+- **A branch that will not rebase onto the landing** — `main` holds the
+  landing already: say which artifact it names and stop, and the branch is
+  resolved by hand
 - **A lost lease twice** — reply in the thread saying the run lost and is
   stopping, and make no further push
 - **The gate** — fix what it names, or say what it refuses; never pass it a

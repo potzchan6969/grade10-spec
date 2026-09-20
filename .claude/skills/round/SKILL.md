@@ -85,8 +85,9 @@ then the change's earlier artifacts in the schema's order - and from the ask.
 - **Push after every artifact** — `git push --force-with-lease` to
   `claude/<id>` as each draft settles, so a wake that dies loses one artifact;
   before every push run `node scripts/openspec/reread-guard.mjs <change>
-  --before <sha>` with the sha the run read at its start, and a path outside
-  the change's writable set stops the push
+  --before <sha> --alive` with the sha the run read at its start, and a path
+  outside the change's writable set, or a wake the relay no longer holds open,
+  stops the push
 
 ## Steps 3 and 4: The Readers
 
@@ -238,9 +239,11 @@ whose tasks cite none lands with `-`. There is no separate row-writing step:
 
 `plan:land` refuses a dirty tree, an e-mail the team map does not name, a
 handle that is not the hand of the stage, and anything before the artifact
-being behind - naming the artifact and its hand. It commits `landed_by:` and
-the row together, pushes the branch with a lease and `main` as a fast-forward,
-and on a lost lease re-reads once and retries.
+being behind - naming the artifact and its hand. It cuts one commit from
+`main` carrying that artifact's own files, `landed_by:` and the row together,
+runs the gate against that commit's tree, moves `main` onto it as a
+fast-forward, and rebases the branch on top so the drafts sit above the
+landing; on a lost lease it re-reads once and retries.
 
 - **From a wake** — with `.round/relay.json` present the command takes the
   hand from the wake's sender, pushes the branch, and asks the relay to move
