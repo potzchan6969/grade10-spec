@@ -364,10 +364,17 @@ const walk = (root, dir) => {
   return found;
 };
 
-/** The page sections the change's proposal marks: every `docs/prds/` link it
- * carries, with its anchor. The proposal is where a change names the pages it
- * moves, so this is the store's own reading of "what is before it" — and,
- * through `lib/writable.mjs`, of what a re-read of that change may write. */
+/** The two trees a proposal's link can reach: the pages it marks, and the
+ * evidence it cites. A reference is explanatory rather than authoritative,
+ * and it is a round's to correct the same way a page is — the relay's own
+ * coarser set has held both since Q55. */
+const LINKED = ["docs/prds/", "docs/references/"];
+
+/** The page sections the change's proposal marks: every `docs/prds/` and
+ * `docs/references/` link it carries, with its anchor. The proposal is where
+ * a change names the pages it moves, so this is the store's own reading of
+ * "what is before it" — and, through `lib/writable.mjs`, of what a re-read of
+ * that change may write. */
 export const pageSections = (root, dir) => {
   const proposal = join(root, dir, "proposal.md");
   if (!existsSync(proposal)) return [];
@@ -397,7 +404,10 @@ const pageOf = (root, dir, target) => {
   const candidates = [posix(relative(root, resolve(join(root, dir), target)))];
   if (target.startsWith("docs/")) candidates.push(target);
   for (const path of candidates)
-    if (path.startsWith("docs/prds/") && existsSync(join(root, path)))
+    if (
+      LINKED.some((one) => path.startsWith(one)) &&
+      existsSync(join(root, path))
+    )
       return path;
   return undefined;
 };

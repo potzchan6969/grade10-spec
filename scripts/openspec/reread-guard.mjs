@@ -7,12 +7,12 @@
  * rather than the agent's: the session runs it itself before every push it
  * makes, and it fails loudly rather than reverting quietly when one of the
  * commits it made touched a path the round has no business in — a page the
- * proposal never linked included, since `docs/prds/` is where the pages it
- * may mark live and nothing narrower denies the rest of it up front. The
- * relay checks its own coarser set again before it moves `main` — the
- * change's own directory, `docs/prds/` and `docs/references/` (Q55) — so a
- * session that skipped this guard is still caught, just later and more
- * broadly.
+ * proposal never linked included, since `docs/prds/` and `docs/references/`
+ * are where the pages it may mark and the evidence it may correct live, and
+ * nothing narrower denies the rest of them up front. The relay checks its own
+ * coarser set again before it moves `main` — the change's own directory and
+ * those two trees whole (Q55) — so a session that skipped this guard is still
+ * caught, just later and more broadly.
  *
  *   node scripts/openspec/reread-guard.mjs <change> <artifact|group> [--alive] [--root <dir>]
  *
