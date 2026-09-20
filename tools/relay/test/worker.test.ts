@@ -432,7 +432,7 @@ describe("/slack/actions", () => {
     return response;
   }
 
-  it("queues the word as the thread reply it stands for, and answers Slack with nothing", async () => {
+  it("shared-planning-agent-rounds-SC-82 - The summary's button is the word pressed, and the thread reads who pressed it", async () => {
     const slack = answered();
     const sent: Sent[] = [];
     const response = await press(testEnv(rooms(sent)));

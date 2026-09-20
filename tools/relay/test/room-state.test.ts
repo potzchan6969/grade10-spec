@@ -131,7 +131,7 @@ describe("the debounce", () => {
     expect(second.state.queued).toBe("landing");
   });
 
-  it("wakes at once on a landing word, with the reply's own budget", () => {
+  it("shared-planning-agent-rounds-SC-83 - A landing word wakes the run at once, with the reply's own budget", () => {
     // Nothing more is coming after `land`, so the minute the rest of a burst
     // is waited for is not waited for here. The reason stays `message`: the
     // wake keeps the reply's thirty minutes.
@@ -143,6 +143,27 @@ describe("the debounce", () => {
     expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW }]);
     expect(step.state.alarm).toEqual({ kind: "debounce", at: NOW });
     expect(step.state.queued).toBe("message");
+  });
+
+  it("shared-planning-agent-rounds-SC-83 - A press's word wakes the run at once, as a typed one does", () => {
+    // The router queues a press as the thread reply it stands for: the line
+    // is the press's own `action_ts` and the word its button carried, so the
+    // rule reads off the word and not off how it was said.
+    const step = enqueue(
+      freshRoom(),
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1700000009.000100", "land"),
+      },
+      NOW,
+    );
+    expect(step.commands).toEqual([{ kind: "setAlarm", at: NOW }]);
+    expect(step.state.alarm).toEqual({ kind: "debounce", at: NOW });
+    expect(step.state.queued).toBe("message");
+    expect(step.state.pending.map((message) => message.ts)).toEqual([
+      "1700000009.000100",
+    ]);
   });
 
   it("wakes at once on a landing word behind a mention of the app", () => {
