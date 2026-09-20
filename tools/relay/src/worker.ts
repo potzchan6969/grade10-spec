@@ -200,7 +200,10 @@ async function onSlackActions(
   if (!(await slackSigned(request, env, body)))
     return json(401, { reason: "bad-signature" });
   const payload = actionPayload(body);
-  if (payload === null) return notJson();
+  // A signed body with no press in it is Slack's own, not a bad request:
+  // `ssl_check=1` arrives here when the request URL is saved, and a 400 would
+  // fail that save.
+  if (payload === null) return empty();
   const action = parseSlackAction(payload);
   if (action.kind === "ignored") return empty();
   const route = routeMessage(
