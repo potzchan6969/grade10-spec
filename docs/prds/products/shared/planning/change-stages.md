@@ -137,11 +137,11 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **Actions on the hosted manual** — Assign stays on the locally run
   manual until the hosted site has a sign-in
 - 🚧 **A page open while `main` moves** — the hosted manual says `main` moved,
-  with the commit's subject and how long ago, and refreshes on its own once the
-  site has caught up; nothing is reloaded under a reader who is typing
-- 🚧 **The locally run manual and `main`** — says how many commits behind
-  `main` the checkout is, and pulls on one click when the tree is clean and
-  nothing is ahead
+  with the commit's subject and how long ago, offers Refresh now, and refreshes
+  itself once the site has caught up, never under a reader who is typing
+- 🚧 **The locally run manual** — says how many commits behind `main` the
+  checkout is, pulls on one click, and names what is in the way of a pull it
+  cannot make
 
 :::detail{title="Product decisions" for="pm"}
 A change passes through five hands and nobody is told when it reaches theirs;
