@@ -13,7 +13,9 @@ import { isLandingWord, wordOf } from "./slack.ts";
 export type Reason = "plan" | "message" | "landing";
 
 /** A message waits 60 s so a hand's three sentences are one wake; a plan and a
- * landing wake at once, because nothing more is coming. */
+ * landing wake at once, because nothing more is coming. A message that says a
+ * landing word waits for nothing either, which `debounceFor` reads off the
+ * line itself rather than off the reason. */
 export const DEBOUNCE_MS: Record<Reason, number> = {
   message: 60_000,
   plan: 0,
@@ -177,9 +179,10 @@ export function remember(state: RoomState, key: string): RoomState {
 
 /**
  * A message, a first sentence or a landing arrives. An idle room starts its
- * debounce; a running room only remembers that something came in, because a
- * room runs one wake at a time and the run reads the branch and the thread
- * again when it fires.
+ * debounce, and a landing word starts none — it wakes the run at once; a
+ * running room only remembers that something came in, because a room runs one
+ * wake at a time and the run reads the branch and the thread again when it
+ * fires.
  */
 export function enqueue(
   state: RoomState,
@@ -203,15 +206,24 @@ export function enqueue(
     queued: stronger(state.queued, input.reason),
   };
   if (state.reason !== null) return { state: next, commands: [] };
-  const at = now + DEBOUNCE_MS[input.reason];
+  const at = now + debounceFor(input);
   // A second message inside the debounce does not push the wake further out —
   // otherwise a thread that keeps talking never wakes at all. A reason that
-  // needs no debounce pulls the alarm in.
+  // needs no debounce, and a landing word that closes the burst, pull the
+  // alarm in.
   if (state.alarm && state.alarm.at <= at) return { state: next, commands: [] };
   return {
     state: { ...next, alarm: { kind: "debounce", at } },
     commands: [{ kind: "setAlarm", at }],
   };
+}
+
+/** How long this arrival waits. A landing word waits for nothing — nothing
+ * more is coming after `land` — and its reason stays `message`, so the wake
+ * it starts keeps the reply's own budget. */
+function debounceFor(input: EnqueueInput): number {
+  if (isLandingWord(input.message?.text ?? null)) return 0;
+  return DEBOUNCE_MS[input.reason];
 }
 
 /** The debounce elapsed, or a run finished with something behind it: the wake
