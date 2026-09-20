@@ -94,7 +94,7 @@ import {
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
-import { heldRowsOf, takeRecommendations } from "./lib/held.mjs";
+import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, LANDED } from "./lib/landed.mjs";
 import {
   isGroup,
@@ -350,7 +350,7 @@ async function attemptLanding(attempt) {
   let held = [];
   if (decisions !== undefined) {
     try {
-      held = heldRowsOf(decisions).map((one) => one.id);
+      held = heldIdsOf(decisions);
     } catch (cause) {
       fail(cause.message);
     }
