@@ -10,6 +10,8 @@ Drawn from [Agent Rounds · Surfaces](../../docs/prds/products/shared/planning/a
 
 [Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The artifact rows from `stage-changes-and-notify-hands` gain, per artifact, the open question ids as a link to the decisions tab; a Rounds row under Tasks lists one line per round from `rounds.md`: the artifact or group, the perspectives run, what stood, what was asked. The Your turn card links the thread first and the command second. The Delivery row shows the suite's automated count against its total.
 
+Told now sits inside the Your turn card, under the thread link: one quoted block per hand of the stage, and one for the earliest behind artifact, carrying the message that hand is being sent word for word, with the hand or the role's channel above it and a `Text xs secondary` line "what the message says" beside the title so nobody reads it as a second status. A Thread row is the last row of the page, after every state row: the change's own commits on `main`, oldest first, one line each, with the round a landing recorded as a second line under it and the questions still held at the end, undated. A sentence over it says what it is - "What the change's thread shows, read from `main`."
+
 ### My turn
 
 [Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). The open questions addressed to the reader sit above the changes on them, one row each: the change, the question id, the first line of the question, and the thread link.
@@ -32,8 +34,9 @@ The thread is Slack's own surface: message text, quoted blocks for a question, a
 | --- | --- |
 | `Badge` (`sm`, `outline`) | The question count on an artifact row; the automated count on the Delivery row |
 | `Text`, `Button` | The rounds rows and the thread links, as the manual composes them today |
+| `EmptyState` (`compact`) | A thread with no commits to show |
 
-New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s question rows gain the thread link, `ArtifactList` gains the question ids. No `packages/i18n` key is owed; the push's channel post and direct messages are composed in `scripts/openspec/lib/moves.mjs` and `scripts/openspec/digest.mjs`, and the thread's own replies come from the round through `scripts/openspec/relay-post.mjs`.
+New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s question rows gain the thread link, `ArtifactList` gains the question ids, `ToldNow` and `SlackText` on the Your turn card, `ThreadSection` as the page's last row. No `packages/i18n` key is owed; the push's channel post and direct messages are composed in `scripts/openspec/lib/wording.mjs` - which the manual imports, so Told now and Slack read the same words - and `scripts/openspec/digest.mjs`, and the thread's own replies come from the round through `scripts/openspec/relay-post.mjs`.
 
 ## States
 
@@ -65,6 +68,18 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s questi
 | --- | --- | --- |
 | Rounds row | One line per round: the artifact or group, the perspectives run, what stood, what was asked | `shared-planning-agent-rounds-SC-51` |
 | Group with no round | A ticked task group shown as having no row | `shared-planning-agent-rounds-SC-51` |
+| Told now, a stage on a hand | One block per hand: the handle, then the message with its bold, its code and its link read | `shared-planning-agent-rounds-SC-81` |
+| Told now, a hand the change does not name | The role's channel in the handle's place, carrying the same message | `shared-planning-agent-rounds-SC-81` |
+| Told now, a stage that waits on no hand | Nothing at all — no block, and no title over one | `shared-planning-agent-rounds-SC-81` |
+| Told now, an artifact behind | A second block to that artifact's hand, naming what changed before it | `shared-planning-agent-rounds-SC-81` |
+| Thread, the change opened | One row, dated: who opened it | `shared-planning-agent-rounds-SC-81` |
+| Thread, an artifact landed | What landed and whose word landed it, with that landing's round under it | `shared-planning-agent-rounds-SC-81` |
+| Thread, a re-read that changed nothing | What was read, and that nothing changed | `shared-planning-agent-rounds-SC-81` |
+| Thread, a hand named | The handle and the role the record wrote | `shared-planning-agent-rounds-SC-81` |
+| Thread, tasks ticked | The task ids that commit ticked | `shared-planning-agent-rounds-SC-81` |
+| Thread, any other commit | Its subject, as written | `shared-planning-agent-rounds-SC-81` |
+| Thread, a question still held | Its number, the role it is held for, and what was asked — undated, at the end | `shared-planning-agent-rounds-SC-81` |
+| Thread with no commits | "No history — this reading has no commits" | `shared-planning-agent-rounds-SC-81` |
 
 ### My turn
 

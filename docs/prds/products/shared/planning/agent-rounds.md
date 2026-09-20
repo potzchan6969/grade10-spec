@@ -142,9 +142,9 @@ Building ends by showing the change works, end to end.
   first message; the draft's summary, the numbered questions, each landing
   and each re-read are replies, and the direct message that says it is your
   turn points at it
-- 🚧 **Change page** — each artifact with fresh or behind, its open questions
-  by hand, and who landed it; the rounds run on the change, one row each; the
-  Delivery row's automated count against the suite's total
+- 🚧 **Change page** — the open questions on each artifact by hand; the rounds,
+  one row each; the Delivery row's automated count against the suite's total;
+  the thread as `main` records it, and the message the hands are being told now
 - 🚧 **My turn** — the open questions addressed to the reader, above the
   changes on them
 - 🚧 **The record** — one row per round: the artifact or group, the readers,

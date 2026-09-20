@@ -127,8 +127,8 @@ Slack tells one person, once per move, in the change's thread.
 - 🚧 **Change page** — the stage as a stepper, the agent mark and the hand's
   move under each drafted step; a Your turn card with the thread and the
   command; the hands; each artifact with fresh or behind, its open questions
-  and who landed it; tasks by group; where the code is: `main`, staging, a
-  release
+  and who landed it; the marked lines it delivers, by page and section; tasks
+  by group; where the code is: `main`, staging, a release
 - 🚧 **[My turn](/my-turn)** — the open questions addressed to the reader, then the
   changes whose current stage names them, then the ones that are theirs
   later; the handle is chosen once per browser
