@@ -1,5 +1,5 @@
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
+import { spawn } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { createServer } from "node:http";
 import { tmpdir } from "node:os";
@@ -13,13 +13,29 @@ import { fileURLToPath } from "node:url";
  * chat token of the run's own. A `node:http` stub stands in for the relay,
  * so the request itself (its path, its body, its headers) is what each test
  * reads, not a mock of the fetch call.
+ *
+ * `spawn`, not `spawnSync`: the stub server runs in this same process, and a
+ * synchronous child would block the event loop the server needs to answer
+ * it — the two would deadlock until the child's own network call timed out.
  */
 
 const SCRIPT = fileURLToPath(new URL("./relay-post.mjs", import.meta.url));
 const TOKEN = "wake-token-abc123";
 
-const run = (args) =>
-  spawnSync(process.execPath, [SCRIPT, ...args], { encoding: "utf8" });
+function run(args) {
+  return new Promise((resolve) => {
+    const child = spawn(process.execPath, [SCRIPT, ...args]);
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    child.on("close", (status) => resolve({ status, stdout, stderr }));
+  });
+}
 
 function bareRoot() {
   return mkdtempSync(join(tmpdir(), "relay-post-"));
@@ -61,8 +77,8 @@ const urlOf = (server) => `http://127.0.0.1:${server.address().port}`;
 
 // ── No relay bound: a terminal round posts nothing ──────────────────────────
 
-test("with no .round/relay.json, --text prints the message and exits 0", () => {
-  const result = run([
+test("with no .round/relay.json, --text prints the message and exits 0", async () => {
+  const result = await run([
     "--text",
     "the read again changed nothing",
     "--root",
@@ -73,15 +89,15 @@ test("with no .round/relay.json, --text prints the message and exits 0", () => {
   assert.match(result.stdout, /the read again changed nothing/);
 });
 
-test("with no .round/relay.json, --done prints done", () => {
-  const result = run(["--done", "--root", bareRoot()]);
+test("with no .round/relay.json, --done prints done", async () => {
+  const result = await run(["--done", "--root", bareRoot()]);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /done/);
 });
 
-test("with no .round/relay.json, --bind prints the change it would have bound", () => {
-  const result = run(["--bind", "demo-change", "--root", bareRoot()]);
+test("with no .round/relay.json, --bind prints the change it would have bound", async () => {
+  const result = await run(["--bind", "demo-change", "--root", bareRoot()]);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /demo-change/);
@@ -97,7 +113,7 @@ test("an empty message file posts nothing, and makes no request", async () => {
   const file = join(root, "thread.txt");
   writeFileSync(file, "\n");
 
-  const result = run(["--message-file", file, "--root", root]);
+  const result = await run(["--message-file", file, "--root", root]);
   server.close();
 
   assert.equal(result.status, 0, result.stderr);
@@ -110,7 +126,7 @@ test("a --message-file that does not exist posts nothing either", async () => {
   });
   const root = relayRoot(urlOf(server));
 
-  const result = run([
+  const result = await run([
     "--message-file",
     join(root, "never-written.txt"),
     "--root",
@@ -140,7 +156,7 @@ test("shared-planning-agent-rounds-SC-74 - a run posts through the relay with it
   const file = join(root, "thread.txt");
   writeFileSync(file, "the read again changed nothing\n");
 
-  const result = run(["--message-file", file, "--root", root]);
+  const result = await run(["--message-file", file, "--root", root]);
   server.close();
 
   assert.equal(result.status, 0, result.stderr);
@@ -163,7 +179,7 @@ test("--text posts the given text directly, with no file", async () => {
   });
   const root = relayRoot(urlOf(server));
 
-  const result = run([
+  const result = await run([
     "--text",
     "Reading… <https://example.test|Run>",
     "--root",
@@ -185,7 +201,7 @@ test("--done posts to /done with an empty body", async () => {
   });
   const root = relayRoot(urlOf(server));
 
-  const result = run(["--done", "--root", root]);
+  const result = await run(["--done", "--root", root]);
   server.close();
 
   assert.equal(result.status, 0, result.stderr);
@@ -203,7 +219,7 @@ test("--bind posts the change to /bind", async () => {
   });
   const root = relayRoot(urlOf(server));
 
-  const result = run(["--bind", "demo-change", "--root", root]);
+  const result = await run(["--bind", "demo-change", "--root", root]);
   server.close();
 
   assert.equal(result.status, 0, result.stderr);
@@ -214,13 +230,13 @@ test("--bind posts the change to /bind", async () => {
 // ── A refusal from the relay ─────────────────────────────────────────────────
 
 test("a non-2xx answer prints the status and body to stderr and exits 1, and holds no token", async () => {
-  const server = await stubRelay((req, res) => {
+  const server = await stubRelay((_req, res) => {
     res.writeHead(403, { "content-type": "text/plain" });
     res.end("this wake has expired");
   });
   const root = relayRoot(urlOf(server));
 
-  const result = run(["--text", "land", "--root", root]);
+  const result = await run(["--text", "land", "--root", root]);
   server.close();
 
   assert.equal(result.status, 1);
@@ -232,15 +248,15 @@ test("a non-2xx answer prints the status and body to stderr and exits 1, and hol
 
 // ── Usage ────────────────────────────────────────────────────────────────────
 
-test("refuses with no mode given", () => {
-  const result = run(["--root", bareRoot()]);
+test("refuses with no mode given", async () => {
+  const result = await run(["--root", bareRoot()]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /usage: node relay-post\.mjs/);
 });
 
-test("refuses two modes at once", () => {
-  const result = run(["--text", "a", "--done", "--root", bareRoot()]);
+test("refuses two modes at once", async () => {
+  const result = await run(["--text", "a", "--done", "--root", bareRoot()]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /usage: node relay-post\.mjs/);
