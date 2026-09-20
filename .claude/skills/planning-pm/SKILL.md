@@ -129,14 +129,17 @@ Everything this run produces is `draft`. Nothing in it claims review.
    author confirms shared understanding. The interview scales with the open
    questions, not the change's size.
 
-   A question settles four ways: answered, accepted as recommended, **held**
-   against your challenge, or **deferred** - the author saying they are not
-   the right person for it. The first three are rows in `decisions.md`: the
-   second written `<option> - decided by the round` so a later reader knows
-   how firm it is, the third with your alternative and its reason in `Instead
-   of`, so the next reader sees the row was contested rather than re-opening
-   it. A
-   deferred question is not a decision: it goes under the proposal's open
+   A question the author answers is a row in their own words, whichever way
+   the answer arrived - given, taken as offered, or kept against your
+   challenge, which carries your alternative and its reason in `Instead of`
+   so the next reader sees the row was contested rather than re-opening it.
+   Every question they have not answered is one of the store's two classes,
+   under `round`'s **Questions: Held, or Decided by the Round**: held on a
+   person as `❓ <role> - recommended: <option>`, or `<option> - decided by
+   the round`. The ❓ opening the `Decided` cell is the one marker the tooling
+   reads, and a cell that opens it and names no role that way reaches no
+   list. A deferred question - the author saying they are not the right
+   person for it - is no decision: it goes under the proposal's open
    questions with a note on who should settle it, and as a ❓ row on the PRD,
    and it does not hold the draft. Sizing, export names, and what code a
    change touches are never the author's to answer.

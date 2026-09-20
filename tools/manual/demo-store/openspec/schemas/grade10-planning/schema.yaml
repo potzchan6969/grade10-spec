@@ -170,10 +170,10 @@ artifacts:
       - **Decisions**: a table, one row per question the interview settled, in
       the order the rounds asked them - `Q | Asked | Decided | Instead of`. The
       `Q` number is the round's own, so a decision leads back to the question
-      that raised it. `(recommended)` marks one the author took as offered
-      rather than chose; `(held)` marks one the author kept against the
-      interview's challenge, and `Instead of` then carries the interview's
-      alternative and why it lost.
+      that raised it. A row the round decided reads `<option> - decided by
+      the round`; a row held for a person reads `❓ <role> - recommended:
+      <option>` until they answer, and `Instead of` carries the alternative
+      and why it lost.
 
       - **Raised**: the blind suite pass's own output, written into this file by
       the run that takes the readings - `Capability | Raised | Landed`, one row
@@ -191,8 +191,8 @@ artifacts:
       the row; and asks what is missing - the edge cases, the failure modes,
       who else is affected, and what this change is not doing, which is where
       a non-goal comes from. Where the interview's reading differs from the
-      author's it says so with the reason, and the author decides: `(held)`
-      on the row, the alternative in `Instead of`.
+      author's it says so with the reason, and the author decides, the
+      alternative in `Instead of`.
 
 
       **Every raised row lands before the change merges.** It becomes a
