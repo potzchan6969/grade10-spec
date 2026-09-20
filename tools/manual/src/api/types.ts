@@ -700,6 +700,43 @@ export type ChangeDeltaDocument = {
   error?: ItemError;
 };
 
+/** What one commit of a change was, as its thread would tell it. A commit
+ * nothing else names keeps its subject: it happened either way. */
+export type ThreadEventKind =
+  /** The commit that brought `proposal.md`. */
+  | "opened"
+  /** `chore(openspec): land <target> of <id> on @<handle>`. */
+  | "landed"
+  /** `chore(openspec): <target> of <id> read again, nothing changed`. */
+  | "read-again"
+  /** A commit whose record wrote a line under `hands:`. */
+  | "hand"
+  /** A commit whose `tasks.md` patch ticked a box. */
+  | "tick"
+  | "commit";
+
+/** One event of a change's own history on `main` — the file-derived mirror of
+ * what its Slack thread shows. Read per commit of the change's directory,
+ * never stored. */
+export type ThreadEvent = {
+  sha: string;
+  /** ISO commit date. */
+  date: string;
+  kind: ThreadEventKind;
+  /** The commit subject, as written — the line a kind nothing else names
+   * shows. */
+  subject: string;
+  /** The artifact or the task group a landing and a re-read name. */
+  target?: string;
+  /** The handle whose word landed it, where the subject names one. A task
+   * group's landing names none: the tick is its proof. */
+  handle?: string;
+  /** Each hand the commit's record wrote, role against handle. */
+  hands?: { role: string; handle: string }[];
+  /** The task ids the commit ticked. */
+  ticked?: string[];
+};
+
 /** `/api/change/<id>` — one in-flight change's files, fetched only by the
  * change page. The snapshot's `ChangeEntry` stays the board's light row; this
  * is the reading. */
@@ -713,6 +750,10 @@ export type ChangeDocument = {
   schemaKnown: boolean;
   artifacts: ChangeArtifact[];
   deltas: ChangeDeltaDocument[];
+  /** The change's own commits, oldest first. Empty where no history dates
+   * them — a store that is not a checkout, and the bundled fixture, which is
+   * read with none. */
+  history: ThreadEvent[];
 };
 
 /** A `check:manual` warning the build ships so the app can show it —

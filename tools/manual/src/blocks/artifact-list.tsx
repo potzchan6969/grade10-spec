@@ -4,13 +4,17 @@ import { Link } from "react-router";
 import { artifactLabel } from "../api/change-artifacts";
 import type { Handoff } from "../api/handoff";
 import { askedIdsOf, roundArtifactOf, roundlessGroupsOf } from "../api/rounds";
-import { behindLabelOf, ROLE_LABEL, STAGE_LABEL } from "../api/stage-view";
+import {
+  behindLabelOf,
+  ROLE_LABEL,
+  roleLabelOf,
+  STAGE_LABEL,
+} from "../api/stage-view";
 import { behindOf } from "../api/stages";
 import { suiteTotalsOf } from "../api/suites";
 import type {
   ChangeEntry,
   OpenQuestion,
-  Role,
   RoundRow,
   SchemaArtifact,
   TaskGroup,
@@ -271,13 +275,6 @@ export function HandoffRow({ handoffs }: { handoffs: Handoff[] }) {
 function daysShown(days: number, open: boolean): string {
   if (open && days === 0) return "landed today";
   return `${days} ${days === 1 ? "day" : "days"}${open ? " so far" : ""}`;
-}
-
-/** A question's role by its label, where it is one of the six the change
- * page otherwise names, or the raw word a row named some other confirmer by
- * (`operations`), unchanged — read against nothing rather than guessed. */
-function roleLabelOf(role: string): string {
-  return role in ROLE_LABEL ? ROLE_LABEL[role as Role] : role;
 }
 
 /**

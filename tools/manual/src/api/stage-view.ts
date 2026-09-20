@@ -60,6 +60,14 @@ export function handlesFor(team: SnapshotTeam, role: Role): string[] {
   return [...own.sort(byHandle), ...rest.sort(byHandle)];
 }
 
+/** A role by its label, where it is one of the six, or the raw word some
+ * other confirmer was named by (`operations`) as it was written — read
+ * against nothing rather than guessed. Any surface that shows a role a
+ * decisions row or a page line named reads it through here. */
+export function roleLabelOf(role: string): string {
+  return role in ROLE_LABEL ? ROLE_LABEL[role as Role] : role;
+}
+
 /** A role as a row's own label, where it opens a line rather than sitting in
  * one. `QA` is already a name and is left as it is written. */
 export function roleTitle(role: Role): string {

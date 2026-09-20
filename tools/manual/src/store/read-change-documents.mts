@@ -18,6 +18,7 @@ import {
 } from "./disk.mts";
 import type { GitIndex, StoreMain } from "./git.mts";
 import { findSection, leadingTitle, outline } from "./markdown.mts";
+import { readChangeHistory } from "./read-change-history.mts";
 import {
   deltaFiles,
   deltaKindOf,
@@ -94,6 +95,10 @@ export function readChangeDocument(
       planOf(dir, id, main).text !== undefined,
     ),
     deltas,
+    // Only where the index found a repository: the fixture is read with none,
+    // and a reading whose commits nobody can look up would be a thread the
+    // machine that wrote it invented.
+    history: git.head === "" ? [] : readChangeHistory(root, rel),
   };
 }
 

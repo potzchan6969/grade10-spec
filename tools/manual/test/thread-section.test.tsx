@@ -9,7 +9,8 @@ import { changeEntry } from "./manual-fixture";
 /**
  * The change's own thread, read from `main`: one row per event, oldest first,
  * each line the words the thread would carry. One case per event kind the
- * design record lists, plus the order and the empty reading.
+ * design record lists, plus the order and the empty reading. The row's own
+ * label is `ChangeStatus`'s, which is why nothing here asserts it.
  */
 
 const AT = "2026-09-18T09:00:00+08:00";
@@ -167,8 +168,7 @@ describe("the reading as a whole", () => {
   it("says it is the thread read from main", () => {
     const html = render([event("opened")]);
 
-    expect(html).toContain("Thread");
-    expect(html).toContain("What the change&#x27;s thread shows, read from");
+    expect(html).toContain("thread shows, read from");
     expect(html).toContain("main");
   });
 
@@ -195,7 +195,7 @@ describe("the reading as a whole", () => {
     const html = render([]);
 
     expect(html).toContain("No history");
-    expect(html).toContain("this reading has no commits");
+    expect(html).toContain("This reading has no commits");
     expect(html).not.toContain("<li");
   });
 });
