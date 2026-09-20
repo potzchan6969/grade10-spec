@@ -22,7 +22,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### Slack messages
 
-[Blueprint · 4.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Staging deployed and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No interactive buttons until the identity map is settled.
+[Blueprint · 4.6 Slack](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#slack). Your turn, Behind, Landed on main, Staging deployed and the weekly digest; each carries the link to the change's thread and to the change page, and the command as text. No button on these five: the one button a round's summary carries is the round change's.
 
 ## Flows
 

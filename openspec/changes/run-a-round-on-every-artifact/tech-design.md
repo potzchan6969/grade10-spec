@@ -22,7 +22,7 @@ Drawn from [Agent Rounds](../../docs/prds/products/shared/planning/agent-rounds.
 
 - A runner of our own: the session is the vendor's hosted Routine, and the relay is glue between Slack, the Routine and the code host that holds no model
 - `pnpm land` as the one gate for both repositories - the round's landing step runs the same checks until that change lands
-- Interactive Slack messages
+- A Slack surface beyond the one Confirm button a summary carries (`Q90`)
 
 ## Decisions
 

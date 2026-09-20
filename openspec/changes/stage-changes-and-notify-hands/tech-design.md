@@ -21,7 +21,7 @@ Drawn from [Change Stages](../../docs/prds/products/shared/planning/change-stage
 
 - Writing the read record, refusing a landing, or waking an agent: `run-a-round-on-every-artifact`
 - A sign-in on the hosted manual
-- A Slack app with interactive buttons; every message links the thread and the change page and carries the command as text until the team map's open item settles (decisions Q40)
+- A button on the messages this change sends; every message links the thread and the change page and carries the command as text. The one button a round's summary carries is the round change's (its decisions `Q90`)
 - Reading tags or deploys out of `grade10`; the store reads only what `pnpm plan` writes into it
 
 ## Decisions

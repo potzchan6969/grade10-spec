@@ -1,14 +1,15 @@
 # Delivery Workflow Blueprint
 
 The owner's brief for the way a change moves from a product idea to a
-released feature, as of 2026-09-17 and 2026-09-19, and the shape drawn from
-it: five phases, eight stages, a round on every artifact with an agent
-drafting and a person's word landing, the screens, the messages and the
-rails. The illustrated version is the
+released feature, as of 2026-09-17, 2026-09-19 and 2026-09-20, and the
+shape drawn from it: five phases, eight stages, a round on every artifact
+with an agent drafting and a person's word landing, the screens, the
+messages and the rails. The illustrated version is the
 [blueprint page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC); this
 document is the text of record. The changes it led to are
-`stage-changes-and-notify-hands` and `run-a-round-on-every-artifact`; the
-rest are named under the first change's follow-on changes. Read this as the
+`stage-changes-and-notify-hands`, `run-a-round-on-every-artifact` and
+`tell-open-pages-main-moved`; the rest are named under the first change's
+follow-on changes. Read this as the
 shape the tooling starts from, not as its requirements.
 
 ## The Brief
@@ -78,6 +79,30 @@ The owner's points of 2026-09-19, on the first draft of this shape.
 - **Everything written the same way** — documentation, comments, briefings,
   commit messages, replies, agent prompts: the reasoning stays in the record
   it belongs to, and only the conclusion is delivered
+
+### The Third Brief
+
+The owner's questions of 2026-09-20, on the line as built. Each is answered
+in the section named beside it.
+
+- **From the sentence to `main`** — does the sentence start a Routine and a
+  branch, and how does `main` move with the shortest delay — The Word
+- **Where teammates look** — after a Slack message, a hosted page that shows
+  `main` without delay, or a local dev server after a pull — Where You Look
+- **The manual as the draft** — the agent's draft is the pages, organised
+  and worded, with charts and flows where they help, and one screen to
+  review them on — The Draft Is the Manual
+- **A change that overlaps one in flight** — reconciled efficiently, agents
+  deciding where they can — A Change That Moves While in Flight
+- **A button for the word** — `land` as a Slack button, and the full plan,
+  review and verify on every artifact — The Word
+- **Local iteration** — a designer or a tech PIC working with agents in a
+  terminal, with a proceed the agents notice — Local and Hosted, One Round
+- **Five outcomes** — async work and real-time local iteration together;
+  agents push `main`; one branch for every teammate, told when it moves; the
+  thread and the messages mirrored in the manual before the Slack app;
+  everything works when Slack or Cloudflare is down — the same sections, and
+  When a Part Is Down
 
 ### What Helps
 
@@ -180,12 +205,13 @@ the thread is where a person works it. The page is
 | 2 Draft | The agent | Writes the artifact on `claude/<id>` from what is before it and what you asked |
 | 3 Challenge | Agents, one per perspective | Each reads the draft as one reader would |
 | 4 Verify | Agents, one per group of findings | Argues whether each finding stands; what stands changes the draft |
-| 5 Read | You | The summary and the numbered questions in the thread: answer, remark, or say land |
+| 5 Read | You | The summary and the numbered questions in the thread: answer, remark, say land, or press Confirm |
 | 6 Land | The agent | On your word: `main`, `landed_by:`, a `rounds.md` row; the next hand is told; what comes after is read again |
 
 - **Your moves** — `Q4: the second` answers; a remark is applied as written
-  and re-read only by the perspectives it touches; `land` lands; an edit you
-  push yourself is the same round
+  and re-read only by the perspectives it touches; `land` lands, and the
+  summary's button is the same word pressed; an edit you push yourself is
+  the same round
 - **Questions** — numbered rows in the change's decisions with the agent's
   recommendation, or ❓ lines on the page; ids never reused; My turn lists
   the open ones per hand
@@ -211,9 +237,57 @@ the thread is where a person works it. The page is
   flips the cases it automates, leaves the E2E suite that runs on every push
   to `main` and its smoke cases on every staging deploy and cut; the run
   sheet leaves automated cases out
-- **The runner** — the thread's app answers a hand there; the store's push
-  workflow runs the re-read; ❓ which app, its approval and where the secret
-  lives, Operations and the tech PIC confirm
+- **The runner** — a custom Slack app in front of the relay in
+  `tools/relay`, and a hosted Routine that is a fresh session every wake;
+  the relay checks the word before `main` moves — [the runner](agent-runner.md)
+
+## The Word
+
+From the sentence to `main`, in the order it happens.
+
+1. **The sentence** — a message to the app in the planning channel; the
+   relay verifies it and fires the Routine with the thread's words as data
+2. **The draft** — the run drafts every artifact it can reach on
+   `claude/<id>`, pushing after each one, and lands nothing
+3. **The summary** — one reply in the thread: the draft, who read it, what
+   stood, the held rows, and one button
+4. **The word** — `land`, `land with recommendations`, or the button; the
+   relay wakes the run at once, with no minute's wait
+5. **The landing** — the run cuts one commit per artifact from `main`, runs
+   the gate on it, and asks the relay; the relay checks that the member who
+   said the word is the hand of the artifact's stage, and fast-forwards
+   `main`; from a terminal, `plan:land` pushes `main` itself
+6. **The push** — the workflow tells the next hand, replies in the thread
+   for a terminal landing, wakes the re-read where something went behind,
+   and rebuilds the site; a page already open is told `main` moved
+
+| Between the word and `main` | Takes |
+| --- | --- |
+| The wake | Seconds: a landing word waits no debounce; a reply waits a minute for the rest of its burst |
+| The session's start | About a minute, the runner's |
+| The gate | `validate:changes`, `check:manual`, `tcs:validate` on the landing commit's tree |
+| The fast-forward | Seconds |
+| The site | Minutes, rebuilt on the push; the open page says `main` moved meanwhile |
+
+- **No pull request** — the relay's fast-forward and a terminal's push are
+  the two ways onto `main`; `main` requires linear history and no pull
+  request
+- **The button** — one per summary, `Confirm <artifact>`; while a held row
+  is open, `Confirm with recommendations`; a press is the word, echoed in
+  the thread as who pressed what, and the button is replaced by who confirmed
+
+| Stage | The button says |
+| --- | --- |
+| Proposed | `Confirm proposal` — the proposal, the decisions and the journeys |
+| Proposed, the second turn | `Confirm design` · `Confirm tech design` |
+| Specified | `Confirm requirements` — the requirements and the cases |
+| Planned | `Confirm plan` |
+| Building | `Confirm group <n>` |
+
+- **Plan, review, verify** — every round is the three: the run reads what
+  is before the artifact, one reader per perspective challenges the draft,
+  one verifier per group of findings argues each; the button lands only what
+  came through that
 
 ## Hands and Messages
 
@@ -231,7 +305,11 @@ the thread is where a person works it. The page is
 - **Behind** — one message to the hand of the earliest behind artifact:
   the artifact, and what changed before it
 - **Landed** — the channel post per push stays, and names the stage each
-  change moved into
+  change moved into; a landing from a terminal is one reply in the change's
+  thread naming what landed and whose word, so the thread stays the record
+  wherever the word was said
+- **Told now** — the change page shows the message the hands of the stage
+  are being told, in the words the workflow sends
 - **Main is red** — a direct message to the pusher naming the rule that
   failed
 - **Staging deployed** — the channel, and the QA hands of the changes
@@ -247,12 +325,13 @@ the thread is where a person works it. The page is
 | Surface | Route | Shows | Actions, local only |
 | --- | --- | --- | --- |
 | Board | `/board` | Eight lanes, one per stage, stacked as In Flight stacks four today, the five drafted lanes with the agent mark and the hand's move in their heading; each card the hand, the age, the overlays, the task bar; filters Mine, Waiting, Idle, Behind, Blocked; the shelf | — |
-| Change page | `/change/<id>` | The stepper with the agent mark and the move under its first five steps; the Your turn card with the thread and the command; the hands table; each artifact fresh or behind, its open questions, who landed it; the rounds; tasks by group; the delivery row: main, staging, release | Assign to me, reassign, say I am waiting |
+| Change page | `/change/<id>` | The stepper with the agent mark and the move under its first five steps; the Your turn card with the thread, the command and Told now; the thread as `main` records it; On the pages, every line the change marks; the hands table; each artifact fresh or behind, its open questions, who landed it; the rounds; tasks by group; the delivery row: main, staging, release | Assign to me, reassign, say I am waiting |
 | My turn | `/mine` | The open questions on the reader; the changes whose current stage names them; then theirs later | Pick a handle |
 | The thread | Slack | One per change: the first sentence, the draft summaries, the numbered questions, each landing and re-read | Answer, remark, land |
 | PRD page | `/p/…` | Unchanged prose; the in-flight ribbon names the stage and the hand; each 🚧 line wears the pip of its change's stage | Propose |
 | Release | `/release` | The production tag and what it carried; what is on staging and ready to cut; pending migrations; hotfixes; flags per environment | Cut a release |
-| Slack | — | The messages above, each with the thread and the link | Open the thread; Not me; I am waiting on… |
+| Main moved | Every page | A line under the header when `main` moved since the site was built, with the commit's subject and how long ago; the page refreshes on its own once the site has caught up. Locally: how many commits behind `main` the checkout is | Pull, local only |
+| Slack | — | The messages above, each with the thread and the link; the summary's Confirm button | Open the thread; press Confirm |
 
 The screens are drawn on two canvases. The blueprint page holds the mock-ups
 of each surface; the [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk)
@@ -264,10 +343,43 @@ walks one store feature through the rounds message by message: what each hand
 says, what the agent drafts, what each surface shows, and what lands, with
 phase two opened as a change of its own.
 
+### Where You Look
+
+| You want | Open |
+| --- | --- |
+| What is on you, across every change | My turn, in the manual's rail; the handle is chosen once per browser |
+| Where one change stands, who is on it, what landed, what the thread says | The change page: the stepper, Your turn with Told now, the thread, On the pages, the artifacts, the rounds |
+| Every change, by stage | In flight: eight lanes, the filters, the shelf |
+| The draft, the questions, the button | The change's thread in Slack, which every message links |
+| What a page promises and what is being built | The page: 🚧 lines wearing the pip of their change's stage |
+| A hand nobody has named | Pending, per role |
+
+- **The hosted manual is the reading surface** — the message links it;
+  every push to `main` rebuilds it, and a page already open is told `main`
+  moved and refreshes when the site has caught up
+- **The local manual is the writing surface** — Assign, Propose and Pull;
+  it says how far behind `main` the checkout is
+
+### The Draft Is the Manual
+
+- **The page first** — a product detail lands on the page under
+  `docs/prds/`, marked, before the artifact that depends on it; the round's
+  reader perspective reads the words a reader sees, and `check:manual` holds
+  the page grammar and warns on density
+- **Charts on the page** — a flow between systems is a `:::flow` block with
+  a rendered chart from `docs/prds/diagrams/`, held to its source in CI; a
+  set is a table; a rule that moves numbers gets a worked example
+- **The proposal links, never restates** — it names the sections it marked;
+  the change page's On the pages lists every marked line by page and
+  section, so a reviewer reads the change's effect on the manual on one
+  screen
+
 ## Rails
 
 ### Land Without a Pull Request
 
+- **Today** — `pnpm run plan:land` is the landing: from a wake it asks the
+  relay to fast-forward `main`; from a terminal it pushes `main` itself
 - **`pnpm land`** — rebases onto `origin/main`, runs the gate CI runs,
   pushes; a non-fast-forward rebases again, up to three times
 - **The gate** — store: `check:manual`, `validate:changes` on the changes
@@ -281,6 +393,24 @@ phase two opened as a change of its own.
 - **Still a pull request** — ❓ a breaking public export contract; auth,
   payments and migrations in `grade10` when the tech PIC asks; a decision
   the PM wants a second reader on. The engineering lead confirms the list
+
+### Local and Hosted, One Round
+
+A designer or a tech PIC iterating with agents in a terminal runs the same
+round the thread runs.
+
+| Step | In a terminal |
+| --- | --- |
+| Ask | `/design <id>` or `/tech <id>`; the frames and the challenge as you would say them |
+| Draft | On `claude/<id>`, pushed with a lease; the hosted run reads the branch and `main` before every wake and continues from what is there |
+| Read | The summary printed, with the button's line as text |
+| Land | `land` to the local agent: `plan:land` resolves you from `git config user.email` through the team map, refuses a hand that is not the stage's, cuts the landing commit, runs the gate and pushes `main` |
+| Told | The push replies in the thread that you landed, tells the next hand, and rebuilds the site |
+
+- **One branch** — a local push and a hosted push meet on `claude/<id>`; a
+  push the lease refuses is read as the other's Edit move, never overwritten
+- **One word** — `land` in the thread and `land` in the terminal run the same
+  landing, and the relay or the push tells the same thread
 
 ### A Change That Moves While in Flight
 
@@ -300,6 +430,27 @@ phase two opened as a change of its own.
 | Nothing after it depends on what moved | Writes `reviewed:` alone, and says so in the thread | A read that changed nothing needs no person |
 | A goal or a non-goal moved | Asks the PM: extend, supersede or split | A change mid-build is never rewritten in place without their word |
 | Building has started and only part of the scope moved | Asks the PM to split | The settled part ships; the moved part opens its own change with `depends_on` |
+
+A sentence that overlaps a change in flight is answered in that change's
+thread, and the change's stage says what happens:
+
+| The change in flight is | The run does |
+| --- | --- |
+| Proposed or Designed, the sentence its product manager's | Extends it: the sentence is a remark on its proposal and the chain is redrawn; decided by the round |
+| Proposed or Designed, another hand's sentence | A held row on its product manager: extend, recommended |
+| Specified or Planned | A held row: extend where the moved part is smaller than a task group of work, split otherwise |
+| Building | A held row: split, recommended; supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | A new change with `depends_on:` naming it |
+
+### When a Part Is Down
+
+| Down | Still works | Catches up |
+| --- | --- | --- |
+| Slack | Terminal rounds and landings; My turn, Told now and the thread on the manual, read from files | The push's messages go out when Slack answers; the digest on Monday |
+| The relay, on Cloudflare | Terminal rounds and landings, which push `main` themselves; the local manual | A wake that did not reach the relay is said in the channel; `/round reread <id>` from a terminal reads again |
+| The hosted manual, on Cloudflare | The local manual, `pnpm manual`, on the same files | The next push redeploys it |
+| GitHub Actions | The relay's landings and the thread's replies | The messages, the re-read and the site on the next push |
+| The Routine | The same round from a terminal | The next wake |
 
 ### Release and Hotfix
 
@@ -405,7 +556,9 @@ One meaning per word, as the line uses it.
 | Overlay | Waiting, blocked, idle, suite, flag, hotfix - a fact beside the stage | A stage |
 | Hand | The person a stage names, from `hands:` | An owner, who claimed a task group |
 | Wait | An `awaiting:` line: what the change cannot write until somebody answers | Idle |
-| Land | A push to `main` through the gate | A merge, a deploy |
+| Land | A push to `main` through the gate, on the hand's word: typed, or pressed as Confirm | A merge, a deploy |
+| Confirm | The summary's button: the landing word, pressed | A second approval |
+| Told now | The message the hands of the stage receive, shown on the change page in the same words | A status |
 | Deploy | Staging from `main`; production from a tag | A release |
 | Release | A tag on `production` and the deploy it names | A deploy to staging |
 | Hotfix | A branch from a release tag that ends as the next tag | A fix on `main` |
@@ -422,7 +575,8 @@ One meaning per word, as the line uses it.
 | Milestone | Change | Done when |
 | --- | --- | --- |
 | M1 Stages and hands | `stage-changes-and-notify-hands` - open, on the planned page [Change Stages](../prds/products/shared/planning/change-stages.md), with its journeys, `ui-design.md` and `tech-design.md`, waiting on `/planning-qa` for the requirements | A change moving on `main` tells the next hand within a minute, and the board shows eight lanes with the agent mark and the hand's move on five |
-| M2 Rounds | `run-a-round-on-every-artifact` - open, on the planned page [Agent Rounds](../prds/products/shared/planning/agent-rounds.md), depending on M1 | A PM opens a change from one sentence in Slack and lands the three files from the thread; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
+| M2 Rounds | `run-a-round-on-every-artifact` - open, on the planned page [Agent Rounds](../prds/products/shared/planning/agent-rounds.md), depending on M1 | A PM opens a change from one sentence in Slack and lands the three files from the thread, by word or by button; a designer and a tech PIC land a draft they tweaked or challenged; an artifact behind is read again before anything lands after it; a change ends with its walk |
+| M2b Live pages | `tell-open-pages-main-moved` - open, on [Change Stages · Surfaces](../prds/products/shared/planning/change-stages.md#surfaces), depending on M1 | A page open while `main` moves is told within seconds and refreshes when the site has caught up; the local manual says how far behind it is and pulls |
 | M3 Land without a pull request | `land-on-main-through-the-gate` | A week of landings with no pull request and no red `main` older than an hour; `pnpm land` is the round's landing step |
 | M4 Release line | `cut-releases-from-a-tag` | One release cut from the page and one hotfix walked end to end |
 | M5 Keep it small | `keep-the-store-small` | The archive holds one quarter; a newcomer reads three pages and lands a change |
@@ -441,4 +595,6 @@ One meaning per word, as the line uses it.
 | ❓ 8 | Tag format and cadence? | `vYYYY.MM.DD`, `.n` for a second cut or a hotfix, on demand | Release hand |
 | ❓ 9 | Which changes still get a pull request? | A breaking export contract; auth, payments, migrations when the tech PIC asks; a second reader a PM asks for | Engineering lead |
 | ❓ 10 | Can the hosted manual take Assign? | Local first; hosted waits for a sign-in | Operations |
-| ❓ 11 | Which app holds a change's thread, and which run re-reads on a landing? | The vendor's Slack app for the thread, in a channel thread per change; the store's push workflow for the re-read; the secret in the workflow | Operations, tech PIC |
+| 11 | Which app holds a change's thread, and which run re-reads on a landing? | Decided (`run-a-round-on-every-artifact` Q52): a custom Slack app, the relay, a hosted Routine; the push workflow wakes the relay | — |
+| ❓ 12 | Interactivity on the Slack app, and the repository's push webhook to the relay | Both set at the first deploy, as [the runner](agent-runner.md) lists them | Operations |
+| ❓ 13 | `main` protection | Linear history required, no pull request required, the relay's token and every teammate allowed to push | Operations |

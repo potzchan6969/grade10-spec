@@ -90,6 +90,8 @@
 | Q63 | What does a 🚧 line's pip look like at rest? | The plain outline badge with the stage number, as built - decided by the round | A frame for it, which the design system already answers |
 | Q64 | What does a question row say when no thread is recorded? | The sentence the design's state for `shared-planning-agent-rounds-SC-26` quotes, linking the change page in the thread's place - decided by the round | Quoting it here a third time |
 | Q65 | Which role does Assign open on? | The hand the stage waits on, by the card's own reading; a stage that names nobody opens on the first of the six - decided by the round | The first of the six every time |
+| Q66 | Is a terminal landing told in the thread? | Yes: one reply per push in the change's thread naming what landed, whose word and the stage reached, sent when the record's last commit in the push has a committer the team map names - a person at a terminal; a run's landing has a committer the map does not name and posts its own reply - decided by the round | The push telling every landing, which repeats the run's reply; or nothing, which leaves a designer's terminal landing out of the thread |
+| Q67 | Does the change page list the lines the change marks? | Yes: On the pages, every 🚧 and ❓ line of each page section the proposal links, by page and section, each ❓ with its hand, so a reviewer reads the change's effect on the manual on one screen - decided by the round | The proposal restating the marked lines, which the page grammar forbids; or a reviewer opening each page |
 
 ## Raised
 
