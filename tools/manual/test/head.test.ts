@@ -1,14 +1,18 @@
 import { describe, expect, it } from "vitest";
 import {
+  CHECKOUT_POLL_MS,
   HEAD_POLL_MS,
-  type Line,
   type MainHead,
-  type OpenLine,
+  PING,
+  PING_MS,
+  QUIET_PINGS,
   RECONNECT_MS,
   relayEndpoints,
+  watchCheckout,
   watchMainHead,
 } from "../src/api/head";
-import { fakeClock, fakeHttp, settle } from "./fake-net";
+import type { CheckoutStanding } from "../src/api/types";
+import { fakeClock, fakeHttp, fakeLines, settle } from "./fake-net";
 
 /**
  * Where `main` is, as the relay says it.
@@ -27,39 +31,8 @@ const HEAD: MainHead = {
 
 const RELAY = "https://relay.test";
 const RELAY_URL = "/api/relay";
-
-/** The lines a watch opened, each one still holding the events it was given —
- * a message arrives because the test hands it over, and a close because the
- * test says the line dropped. */
-function fakeLines() {
-  const opened: {
-    url: string;
-    closed: boolean;
-    message: (text: string) => void;
-    drop: () => void;
-  }[] = [];
-  const open: OpenLine = (url, events) => {
-    const line = {
-      closed: false,
-      drop: events.closed,
-      message: events.message,
-      url,
-    };
-    opened.push(line);
-    const handle: Line = {
-      close: () => {
-        line.closed = true;
-      },
-    };
-    return handle;
-  };
-  const last = () => {
-    const line = opened.at(-1);
-    if (line === undefined) throw new Error("no line was opened");
-    return line;
-  };
-  return { last, open, opened, urls: () => opened.map((one) => one.url) };
-}
+const RELAY_HEAD = "https://relay.test/head";
+const UPSTREAM = "/api/upstream";
 
 describe("the relay's own addresses", () => {
   it.each([
@@ -78,7 +51,10 @@ describe("the relay's own addresses", () => {
 
 describe("a relay with a socket", () => {
   const watch = () => {
-    const { asked, http } = fakeHttp({ [RELAY_URL]: { url: RELAY } });
+    const { asked, http } = fakeHttp({
+      [RELAY_URL]: { url: RELAY },
+      [RELAY_HEAD]: HEAD,
+    });
     const lines = fakeLines();
     const clock = fakeClock();
     const heads: MainHead[] = [];
@@ -149,8 +125,73 @@ describe("a relay with a socket", () => {
     stop();
     lines.last().drop();
 
-    expect(clock.waits).toEqual([]);
+    expect(clock.waits.filter((one) => one.cancelled !== true)).toEqual([]);
     expect(lines.urls()).toHaveLength(1);
+  });
+
+  it("shared-planning-change-stages-SC-72 - reads the relay's head once the reconnects stop finding a line", async () => {
+    // A network that allows https and blocks the upgrade reconnects forever
+    // and is told nothing. Every rung walked, and the head is read on a timer
+    // until a line holds again.
+    const { asked, clock, heads, lines } = watch();
+    await settle();
+
+    for (const _rung of RECONNECT_MS) {
+      lines.last().drop();
+      await clock.fire();
+    }
+
+    expect(asked).toContain(RELAY_HEAD);
+    expect(heads).toEqual([HEAD]);
+    expect(clock.next()).toBe(HEAD_POLL_MS);
+  });
+
+  it("stops reading the head once a line holds again", async () => {
+    const { asked, clock, lines } = watch();
+    await settle();
+    for (const _rung of RECONNECT_MS) {
+      lines.last().drop();
+      await clock.fire();
+    }
+    const read = asked.filter((url) => url === RELAY_HEAD).length;
+
+    lines.last().message(JSON.stringify(HEAD));
+    await clock.fire();
+
+    expect(asked.filter((url) => url === RELAY_HEAD)).toHaveLength(read);
+  });
+
+  it("pings the line, and drops it where two pings bring nothing back", async () => {
+    // The relay answers `ping` with `pong` without waking, so a line that
+    // brings nothing back for two intervals is open in name only.
+    const { clock, lines } = watch();
+    await settle();
+    lines.last().message(JSON.stringify(HEAD));
+
+    expect(clock.next()).toBe(PING_MS);
+
+    await clock.fire();
+    expect(lines.last().sent).toEqual([PING]);
+
+    for (let quiet = 1; quiet <= QUIET_PINGS; quiet += 1) {
+      await clock.fire();
+    }
+
+    expect(lines.opened[0].closed).toBe(true);
+    expect(clock.next()).toBe(RECONNECT_MS[0]);
+  });
+
+  it("keeps the line while something is arriving on it", async () => {
+    const { clock, lines } = watch();
+    await settle();
+
+    for (let ping = 0; ping < QUIET_PINGS + 2; ping += 1) {
+      await clock.fire();
+      lines.last().message('{"main":null}');
+    }
+
+    expect(lines.last().closed).toBe(false);
+    expect(lines.last().sent).toHaveLength(QUIET_PINGS + 2);
   });
 });
 
@@ -186,6 +227,9 @@ describe("no relay", () => {
     ["the endpoint names none", { [RELAY_URL]: {} }],
     ["the endpoint names an empty one", { [RELAY_URL]: { url: "" } }],
     ["nothing serves the endpoint", {}],
+    // A variable nobody can read is a relay nobody can listen to: the page
+    // shows no banner rather than failing inside a watch nothing is awaiting.
+    ["the url cannot be read", { [RELAY_URL]: { url: "https://[oops" } }],
   ])("does nothing where %s", async (_what, answers) => {
     const { http } = fakeHttp(answers);
     const lines = fakeLines();
@@ -203,5 +247,48 @@ describe("no relay", () => {
     expect(lines.opened).toEqual([]);
     expect(clock.waits).toEqual([]);
     expect(heads).toEqual([]);
+  });
+});
+
+describe("the checkout the page is run out of", () => {
+  it("reads the standing now, and again every minute", async () => {
+    const standing: CheckoutStanding = { ahead: 0, behind: 2, dirty: false };
+    const { asked, http } = fakeHttp({ [UPSTREAM]: standing });
+    const clock = fakeClock();
+    const read: CheckoutStanding[] = [];
+
+    const stop = watchCheckout({
+      http,
+      onStanding: (one) => read.push(one),
+      wait: clock.wait,
+    });
+    await settle();
+
+    expect(asked).toEqual([UPSTREAM]);
+    expect(read).toEqual([standing]);
+    expect(clock.next()).toBe(CHECKOUT_POLL_MS);
+
+    await clock.fire();
+    expect(read).toHaveLength(2);
+
+    stop();
+    await clock.fire();
+    expect(read).toHaveLength(2);
+  });
+
+  it("says nothing where no dev server answers", async () => {
+    const { http } = fakeHttp({});
+    const clock = fakeClock();
+    const read: CheckoutStanding[] = [];
+
+    watchCheckout({
+      http,
+      onStanding: (one) => read.push(one),
+      wait: clock.wait,
+    });
+    await settle();
+
+    expect(read).toEqual([]);
+    expect(clock.next()).toBe(CHECKOUT_POLL_MS);
   });
 });
