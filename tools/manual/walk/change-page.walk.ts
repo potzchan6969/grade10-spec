@@ -115,9 +115,11 @@ test("shared-planning-change-stages-SC-58 - the Your turn card", async () => {
     )
     .toBeVisible();
 
-  // The command: Planned's own move, the change's id written in.
+  // The command: Planned's own move, the change's id written in - the one
+  // offered to paste, named by its own copy control, because Told now quotes
+  // the same line inside the message below it.
   await expect
-    .element(card.getByText("/tasks demo-planned", { exact: true }))
+    .element(card.getByRole("button", { name: "Copy /tasks demo-planned" }))
     .toBeVisible();
   await expect
     .element(card.getByText("Engineer: read", { exact: true }))

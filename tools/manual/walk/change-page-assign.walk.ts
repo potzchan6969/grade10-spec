@@ -30,9 +30,12 @@ test("shared-planning-change-stages-SC-69 - the hosted manual", async () => {
   const cardEl = document.querySelector('[data-slot="card"]');
   if (!cardEl) throw new Error("no Your turn card");
   const card = page.elementLocator(cardEl);
-  await expect
-    .element(card.getByText("Your turn", { exact: true }))
-    .toBeVisible();
+  // The card's own title, read off its slot: the message Told now quotes
+  // inside the card opens on the same two words.
+  const titleEl = cardEl.querySelector('[data-slot="card-title"]');
+  if (!titleEl) throw new Error("no title on the Your turn card");
+  await expect.element(page.elementLocator(titleEl)).toBeVisible();
+  expect(titleEl.textContent?.trim()).toBe("Your turn");
   await expect
     .element(
       card.getByText(
