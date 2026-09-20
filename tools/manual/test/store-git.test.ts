@@ -2,8 +2,13 @@ import { execFileSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
-import { describe, expect, it } from "vitest";
-import { mainStateOf, readGitIndex, readMain } from "../src/store/git.mts";
+import { describe, expect, it, vi } from "vitest";
+import {
+  mainStateOf,
+  readGitIndex,
+  readMain,
+  walkGit,
+} from "../src/store/git.mts";
 
 /** The git reader against real repositories, because both things it gets
  * wrong are things only git can show: how it prints a path, and how long a
@@ -68,6 +73,51 @@ describe.each(["sha1", "sha256"] as const)("a %s repository", (format) => {
  * the board has to say both. Main is read off the refs the clone has —
  * `origin/main` here is a plain remote-tracking ref, which is all the reader
  * asks for. */
+describe("a walk git refuses", () => {
+  /** A walk on a ref that does not resolve: what a store whose `main` the
+   * clone does not hold gives, and what a depth-1 checkout gives past its one
+   * commit. */
+  const refused = (root: string) =>
+    walkGit(root, ["log", "--format=%H", "no-such-ref"], "no thread");
+
+  const plain = () => mkdtempSync(join(tmpdir(), "manual-unwalked-"));
+
+  it("answers nothing, says what is lost and carries git's own words", () => {
+    const root = plain();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      expect(refused(root)).toBeUndefined();
+
+      const said = warn.mock.calls.map((call) => String(call[0])).join("\n");
+      expect(said).toContain(root);
+      expect(said).toContain("log");
+      expect(said).toContain("no thread");
+      // git's own reason, not a line that only says something failed.
+      expect(said).toContain("no-such-ref");
+    } finally {
+      warn.mockRestore();
+    }
+  });
+
+  it("says it once per root, and again for another store", () => {
+    const one = plain();
+    const two = plain();
+    const warn = vi.spyOn(console, "warn").mockImplementation(() => {});
+
+    try {
+      refused(one);
+      refused(one);
+      expect(warn).toHaveBeenCalledTimes(1);
+
+      refused(two);
+      expect(warn).toHaveBeenCalledTimes(2);
+    } finally {
+      warn.mockRestore();
+    }
+  });
+});
+
 describe("the store's main", () => {
   function storeWith(): { root: string; run: Git } {
     const root = mkdtempSync(join(tmpdir(), "manual-main-"));
