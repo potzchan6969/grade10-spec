@@ -206,6 +206,130 @@ test("shared-planning-agent-rounds-SC-74 - --bind posts the change to /bind", as
   assert.match(result.stdout, /bound demo-change/);
 });
 
+test("--confirm posts the artifact's button beside the text", async () => {
+  let seen;
+  const server = await stubRelay((req, res, body) => {
+    seen = { url: req.url, body: JSON.parse(body) };
+    res.writeHead(200);
+    res.end("{}");
+  });
+  const root = relayRoot(urlOf(server));
+
+  const result = await run([
+    "--message-file",
+    threadFile(root, "*What is next* \u2014 your word on the proposal\n"),
+    "--confirm",
+    "proposal",
+    "--root",
+    root,
+  ]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(seen.url, `/runs/${TOKEN}/post`);
+  assert.deepEqual(seen.body, {
+    text: "*What is next* \u2014 your word on the proposal",
+    confirm: { label: "Confirm proposal", word: "land" },
+  });
+});
+
+test("--held posts the button that confirms the recommendations", async () => {
+  let seen;
+  const server = await stubRelay((req, res, body) => {
+    seen = JSON.parse(body);
+    res.writeHead(200);
+    res.end("{}");
+  });
+  const root = relayRoot(urlOf(server));
+
+  const result = await run([
+    "--message-file",
+    threadFile(root, "one held row\n"),
+    "--confirm",
+    "specs",
+    "--held",
+    "--root",
+    root,
+  ]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.deepEqual(seen.confirm, {
+    label: "Confirm with recommendations",
+    word: "land with recommendations",
+  });
+});
+
+test("a task group's button names the group", async () => {
+  let seen;
+  const server = await stubRelay((req, res, body) => {
+    seen = JSON.parse(body);
+    res.writeHead(200);
+    res.end("{}");
+  });
+  const root = relayRoot(urlOf(server));
+
+  await run([
+    "--message-file",
+    threadFile(root, "group 2 is drafted\n"),
+    "--confirm",
+    "2",
+    "--root",
+    root,
+  ]);
+  server.close();
+
+  assert.deepEqual(seen.confirm, { label: "Confirm group 2", word: "land" });
+});
+
+test("with no .round/relay.json, the button prints on its own line", async () => {
+  const root = bareRoot();
+
+  const result = await run([
+    "--message-file",
+    threadFile(root, "your word on the proposal\n"),
+    "--confirm",
+    "proposal",
+    "--root",
+    root,
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(
+    result.stdout,
+    "your word on the proposal\n[Confirm proposal]\n",
+  );
+});
+
+test("refuses a --confirm the chain issues no button for", async () => {
+  const root = bareRoot();
+
+  const result = await run([
+    "--message-file",
+    threadFile(root, "a line\n"),
+    "--confirm",
+    "rounds",
+    "--root",
+    root,
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /rounds/);
+});
+
+test("refuses a button on --done: a button rides a message", async () => {
+  const result = await run([
+    "--done",
+    "--confirm",
+    "proposal",
+    "--root",
+    bareRoot(),
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--confirm/);
+});
+
 // ── A refusal from the relay ─────────────────────────────────────────────────
 
 test("a non-2xx answer prints the status and body to stderr and exits 1, and holds no token", async () => {

@@ -5,7 +5,13 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { pathToFileURL } from "node:url";
-import { RELAY_FILE, readWake, relayOf } from "./lib/relay.mjs";
+import {
+  CONFIRM_LABEL,
+  confirmOf,
+  RELAY_FILE,
+  readWake,
+  relayOf,
+} from "./lib/relay.mjs";
 import { stubRelay, urlOf } from "./test/stub-relay.mjs";
 
 /**
@@ -143,6 +149,21 @@ test("shared-planning-agent-rounds-SC-74 - post asks /post with the text, the wa
   assert.equal(result.status, 200);
 });
 
+test("post asks /post with the button the round wrote", async () => {
+  const { seen } = await seenFor((relay) =>
+    relay.post("your word on the proposal", {
+      label: "Confirm proposal",
+      word: "land",
+    }),
+  );
+
+  assert.equal(seen.url, `/runs/${TOKEN}/post`);
+  assert.deepEqual(seen.body, {
+    text: "your word on the proposal",
+    confirm: { label: "Confirm proposal", word: "land" },
+  });
+});
+
 test("shared-planning-agent-rounds-SC-74 - done asks /done with an empty body", async () => {
   const { seen } = await seenFor((relay) => relay.done());
 
@@ -199,4 +220,51 @@ test("shared-planning-agent-rounds-SC-74 - a relay nobody can reach is thrown, s
   const wake = readWake(wakeRoot("http://127.0.0.1:1"));
 
   await assert.rejects(() => relayOf(wake).done());
+});
+
+// ── The button's words ─────────────────────────────────────────────
+
+test("every artifact of the chain has a label, and its word is land", () => {
+  assert.deepEqual(Object.keys(CONFIRM_LABEL), [
+    "proposal",
+    "decisions",
+    "user-journeys",
+    "ui-design",
+    "tech-design",
+    "specs",
+    "test-cases",
+    "tasks",
+  ]);
+  for (const [artifact, label] of Object.entries(CONFIRM_LABEL)) {
+    assert.deepEqual(confirmOf(artifact), { label, word: "land" });
+  }
+  // One hand's three artifacts share one button, so a product manager never
+  // confirms the proposal twice; the Specified stage's button is the one that
+  // says requirements.
+  assert.equal(CONFIRM_LABEL.decisions, "Confirm proposal");
+  assert.equal(CONFIRM_LABEL["user-journeys"], "Confirm proposal");
+  assert.equal(CONFIRM_LABEL.specs, "Confirm requirements");
+  assert.equal(CONFIRM_LABEL["test-cases"], "Confirm requirements");
+});
+
+test("a task group's button names the group, and a name the chain does not issue has none", () => {
+  assert.deepEqual(confirmOf("2"), { label: "Confirm group 2", word: "land" });
+  assert.deepEqual(confirmOf("10"), {
+    label: "Confirm group 10",
+    word: "land",
+  });
+  assert.equal(confirmOf("rounds"), null);
+  assert.equal(confirmOf(""), null);
+  assert.equal(confirmOf(undefined), null);
+});
+
+test("a held row's button confirms the recommendations", () => {
+  const held = {
+    label: "Confirm with recommendations",
+    word: "land with recommendations",
+  };
+  assert.deepEqual(confirmOf(undefined, true), held);
+  // While a held row is open the label is the row's, whatever artifact the
+  // round is on.
+  assert.deepEqual(confirmOf("specs", true), held);
 });
