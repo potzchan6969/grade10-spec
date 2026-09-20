@@ -1,25 +1,25 @@
-import type { ReactNode } from "react";
+import type { InlineToken } from "../content/inline";
+import { render } from "./inline-markdown";
 
 /**
  * Slack `mrkdwn`, read: `*bold*`, `` `code` `` and `<url|title>`.
  *
- * Its own small reader rather than the markdown pipeline, because it is not
+ * Its own small parser rather than the markdown pipeline, because it is not
  * markdown: `*one star*` is bold in Slack and italic in markdown, and a link
  * is written the other way round. Three forms is the whole dialect the
  * messages in `scripts/openspec/lib/wording.mjs` use, so three forms is what
  * this reads — anything else stays the text it is, which is what Slack does
  * with it too.
  *
+ * The parser is the only thing here. Its three forms are `InlineToken`s, so
+ * the elements are `inline-markdown.tsx`'s: a message's chip and a message's
+ * link read exactly as one of the store's own lines does, and a link is the
+ * router's or a new tab's by the one rule that decides it.
+ *
  * The three entities `escapeSlackText` writes are read back, so a change
  * titled with an `&` shows the `&` a hand would see rather than the escape
  * the message carries.
  */
-
-type SlackToken =
-  | { kind: "text"; text: string }
-  | { kind: "bold"; text: string }
-  | { kind: "code"; text: string }
-  | { kind: "link"; href: string; title: string };
 
 // Order is precedence: a span of code before bold, so a `*` inside code stays
 // as it is written; bold may not open or close on whitespace or run over a
@@ -37,8 +37,12 @@ function spoken(text: string): string {
     .replaceAll("&amp;", "&");
 }
 
-function parseMrkdwn(text: string): SlackToken[] {
-  const tokens: SlackToken[] = [];
+/** The words of one token, which is all a message's bold, code and link
+ * titles ever hold: `mrkdwn` nests nothing. */
+const words = (text: string): InlineToken[] => [{ kind: "text", text }];
+
+function parseMrkdwn(text: string): InlineToken[] {
+  const tokens: InlineToken[] = [];
   let cut = 0;
   for (const match of text.matchAll(MRKDWN)) {
     const [whole, code, bold, href, title] = match;
@@ -49,46 +53,19 @@ function parseMrkdwn(text: string): SlackToken[] {
 
     if (code !== undefined) tokens.push({ kind: "code", text: code });
     else if (bold !== undefined) {
-      tokens.push({ kind: "bold", text: spoken(bold) });
+      tokens.push({ kind: "strong", children: words(spoken(bold)) });
     } else if (href !== undefined && SAFE_HREF.test(href)) {
-      tokens.push({ kind: "link", href, title: spoken(title ?? href) });
+      tokens.push({
+        kind: "link",
+        href,
+        children: words(spoken(title ?? href)),
+      });
     } else tokens.push({ kind: "text", text: spoken(whole) });
   }
   if (cut < text.length) {
     tokens.push({ kind: "text", text: spoken(text.slice(cut)) });
   }
   return tokens;
-}
-
-function render(tokens: SlackToken[]): ReactNode[] {
-  return tokens.map((token, position) => {
-    const key = `${token.kind}-${position}`;
-    switch (token.kind) {
-      case "bold":
-        return <strong key={key}>{token.text}</strong>;
-      case "code":
-        return (
-          <code
-            className="rounded-(--radius-sm) bg-muted px-1 py-px font-mono text-[0.9em]"
-            key={key}
-          >
-            {token.text}
-          </code>
-        );
-      case "link":
-        return (
-          <a
-            className="underline decoration-border-strong underline-offset-2"
-            href={token.href}
-            key={key}
-          >
-            {token.title}
-          </a>
-        );
-      default:
-        return token.text;
-    }
-  });
 }
 
 /** One message, whole: its own newlines are kept as lines, because that is
