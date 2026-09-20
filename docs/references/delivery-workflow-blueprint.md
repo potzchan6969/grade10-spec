@@ -177,7 +177,7 @@ the thread is where a person works it. The page is
 | Step | Who | What happens |
 | --- | --- | --- |
 | 1 Ask | You | Say what is wanted, in the change's thread, a terminal, or an edit you push yourself |
-| 2 Draft | The agent | Writes the artifact on `change/<id>` from what is before it and what you asked |
+| 2 Draft | The agent | Writes the artifact on `claude/<id>` from what is before it and what you asked |
 | 3 Challenge | Agents, one per perspective | Each reads the draft as one reader would |
 | 4 Verify | Agents, one per group of findings | Argues whether each finding stands; what stands changes the draft |
 | 5 Read | You | The summary and the numbered questions in the thread: answer, remark, or say land |

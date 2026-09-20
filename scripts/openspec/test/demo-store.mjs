@@ -22,7 +22,7 @@ import { dirname, join } from "node:path";
 
 export const CHANGE = "round-probe";
 export const DIR = `openspec/changes/${CHANGE}`;
-export const BRANCH = `change/${CHANGE}`;
+export const BRANCH = `claude/${CHANGE}`;
 
 export const PROPOSAL = [
   "# Round probe",

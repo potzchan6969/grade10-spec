@@ -27,7 +27,7 @@ import { CHANGE, DIR, record, sandbox } from "./test/demo-store.mjs";
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const BRANCH = `change/${CHANGE}`;
+const BRANCH = `claude/${CHANGE}`;
 
 /**
  * Hand-computed: the content id of what is before `decisions` — the

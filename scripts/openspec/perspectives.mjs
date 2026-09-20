@@ -29,8 +29,8 @@
  * not what a change with a broken record meant.
  *
  * The change may be left out where `--change` names it or the branch is
- * `change/<id>`. `--root` reads a store other than this one, which is how the
- * tests read a fixture.
+ * `claude/<id>` (Q53). `--root` reads a store other than this one, which is
+ * how the tests read a fixture.
  */
 import { execFileSync } from "node:child_process";
 import { existsSync, readFileSync } from "node:fs";
@@ -64,7 +64,7 @@ const change =
 if (!target) fail(USAGE);
 if (!change)
   fail(
-    `name the change: a first argument, --change <id>, or a branch called change/<id>\n${USAGE}`,
+    `name the change: a first argument, --change <id>, or a branch called claude/<id>\n${USAGE}`,
   );
 if (!existsSync(join(root, "openspec", "changes", change)))
   fail(`no change ${change} in ${root}/openspec/changes`);
@@ -121,7 +121,7 @@ function onBranch(store) {
       ["-C", store, "rev-parse", "--abbrev-ref", "HEAD"],
       { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] },
     ).trim();
-    const named = /^change\/(.+)$/.exec(branch);
+    const named = /^claude\/(.+)$/.exec(branch);
     return named ? named[1] : undefined;
   } catch {
     return undefined;
