@@ -288,11 +288,13 @@ describe("the reading as a whole", () => {
     expect(html.match(/<li/g)).toHaveLength(1);
   });
 
-  it("says a reading with no commits has none", () => {
+  it("says a reading with no commits has none, in one compact line", () => {
     const html = render([]);
 
-    expect(html).toContain("No history");
-    expect(html).toContain("This reading has no commits");
+    expect(html).toContain("No history: this reading has no commits");
     expect(html).not.toContain("<li");
+    // The compact secondary line every sibling row of `ChangeStatus` says
+    // "nothing here" with, not a card inside a grid cell.
+    expect(html).not.toContain("data-slot=\"empty-state\"");
   });
 });
