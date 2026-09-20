@@ -41,6 +41,11 @@ const UNLINKED_REFERENCE = "docs/references/other-notes.md";
 /** A sha no checkout holds: what a `.round/landed` line reads as when the
  * landing that wrote it is gone. */
 const NO_SUCH_SHA = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
+/** The round's target, which the guard reads: an artifact writes the change
+ * and the pages it links, and a task group writes code no writable set can
+ * hold. */
+const ARTIFACT = "proposal";
+const GROUP = "2";
 
 /** A throwaway store with a bare remote: `main` carries two changes, and the
  * checkout is on `main`, as the session's own checkout is. */
@@ -106,21 +111,30 @@ function sandbox() {
   return { root, remote, git, write, before };
 }
 
-/** The guard, run over a store. */
-const guard = (root, args = []) =>
+/** The guard, run over a store on one target — an artifact unless a case
+ * names the group. */
+const guard = (root, args = [], target = ARTIFACT) =>
   spawnSync(
     process.execPath,
-    [join(SCRIPTS, "reread-guard.mjs"), CHANGE, "--root", root, ...args],
+    [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      target,
+      "--root",
+      root,
+      ...args,
+    ],
     { encoding: "utf8" },
   );
 
 /** The guard in a child that does not block this process's event loop: what
  * the `--alive` cases need, since the stub relay answers from here. */
-const guardAsync = (root, args = []) =>
+const guardAsync = (root, args = [], target = ARTIFACT) =>
   new Promise((resolve) => {
     const child = spawn(process.execPath, [
       join(SCRIPTS, "reread-guard.mjs"),
       CHANGE,
+      target,
       "--root",
       root,
       ...args,
@@ -161,11 +175,24 @@ const refusal = (script, args) =>
   });
 
 test("the guard takes no range: an option outside its set is refused, for the log to read", () => {
-  const result = refusal("reread-guard.mjs", [CHANGE, "--before", "HEAD"]);
+  const result = refusal("reread-guard.mjs", [
+    CHANGE,
+    ARTIFACT,
+    "--before",
+    "HEAD",
+  ]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::unknown option --before/);
   assert.match(result.stderr, /usage: node reread-guard\.mjs/);
+});
+
+test("the guard names the target in its usage, and refuses a change with none", () => {
+  const result = refusal("reread-guard.mjs", [CHANGE]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::usage: node reread-guard\.mjs/);
+  assert.match(result.stderr, /<change> <artifact\|group>/);
 });
 
 // ── What a re-read may write ────────────────────────────────────────────────
@@ -359,6 +386,39 @@ test("the guard needs no fetch: it reads the checkout it was given", () => {
   assert.match(result.stdout, /^reread-probe: 0 path\(s\)/);
 });
 
+// ── The target: an artifact's pages, or a group's code ──────────────────────
+
+test("a task group writes what its tasks name: the guard checks no path", () => {
+  const { root, write, git } = sandbox();
+  // What a build round pushes: a package, a script, a workflow — none of it
+  // in any writable set an artifact round is held to.
+  write({
+    "packages/design-system/README.md": "the group's own work\n",
+    "tools/manual/check/rounds.mjs": "// the group's own work\n",
+  });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the group's code");
+
+  const result = guard(root, [], GROUP);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /a task group writes what its tasks name/);
+  assert.doesNotMatch(result.stdout, /path\(s\)/);
+});
+
+test("the same code pushed on an artifact target is still refused", () => {
+  const { root, write, git } = sandbox();
+  write({ "packages/design-system/README.md": "rewritten by a page round\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "an artifact round reached into a package");
+
+  const result = guard(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, /packages\/design-system\/README\.md/);
+});
+
 // ── A git that refuses: loudly, never as nothing to read ────────────────────
 
 test("a sha in .round/landed the checkout does not hold stops the guard, naming it", () => {
@@ -413,6 +473,21 @@ test("shared-planning-agent-rounds-SC-74 - --alive passes while the wake is the 
   assert.equal(seen.method, "GET");
   assert.equal(seen.url, "/runs/wake-tok-9/alive");
   assert.match(result.stdout, /the wake is alive/);
+});
+
+test("shared-planning-agent-rounds-SC-74 - --alive stops a group's push too, though no path is checked", async () => {
+  const server = await stubRelay((_req, res) => {
+    answer(res, 401, { reason: "this wake is closed" });
+  });
+  const { root } = sandbox();
+  writeRelayFile(root, urlOf(server));
+
+  const result = await guardAsync(root, ["--alive"], GROUP);
+  server.close();
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /401/);
+  assert.doesNotMatch(result.stdout, /a task group writes/);
 });
 
 test("shared-planning-agent-rounds-SC-74 - --alive stops the run where the relay has closed its wake", async () => {

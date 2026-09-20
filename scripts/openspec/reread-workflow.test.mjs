@@ -67,7 +67,6 @@ test("shared-planning-agent-rounds-SC-66 - a landing wakes the relay once per ch
     wake.env.AGENT_WAKE_TOKEN,
     /^\$\{\{ secrets\.AGENT_WAKE_TOKEN \}\}$/,
   );
-  assert.match(wake.env.BEFORE, /^\$\{\{ github\.event\.before \}\}$/);
   assert.match(wake.env.HEAD_SHA, /^\$\{\{ github\.sha \}\}$/);
 });
 
@@ -82,8 +81,10 @@ test("shared-planning-agent-rounds-SC-66 - the matrix entry reaches the wake's b
   assert.match(wake.run, /<<'JQ'/);
   assert.match(wake.run, /--arg change "\$CHANGE"/);
   assert.match(wake.run, /reason: "landing"/);
-  assert.match(wake.run, /--arg base "\$BEFORE"/);
   assert.match(wake.run, /--arg head "\$HEAD_SHA"/);
+  // The push's base is no part of the wake: the change, the reason and the
+  // head are the whole of what the relay is told.
+  assert.doesNotMatch(wake.run, /\$BEFORE/);
 });
 
 test("shared-planning-agent-rounds-SC-66 - the notify job says which piece of setup is missing once, before the matrix", () => {
