@@ -12,6 +12,7 @@ import {
   RELAY_FILE,
   readWake,
   relayOf,
+  wakeIdOf,
 } from "./lib/relay.mjs";
 import { stubRelay, urlOf } from "./test/stub-relay.mjs";
 
@@ -115,6 +116,32 @@ test("shared-planning-agent-rounds-SC-74 - a wake's file naming no url and token
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /names no relay\.url and relay\.token/);
+});
+
+test("shared-planning-change-stages-SC-70 - wakeIdOf names the change and the thread the word was said in", () => {
+  assert.equal(
+    wakeIdOf(readWake(wakeRoot("https://relay.test"))),
+    "demo-change@C1/1.1",
+  );
+});
+
+test("shared-planning-change-stages-SC-70 - wakeIdOf names the change alone where the wake has no thread", () => {
+  const root = wakeRoot(
+    "https://relay.test",
+    JSON.stringify({
+      relay: { url: "https://relay.test", token: TOKEN },
+      change: "demo-change",
+    }),
+  );
+
+  assert.equal(wakeIdOf(readWake(root)), "demo-change");
+});
+
+test("shared-planning-change-stages-SC-70 - wakeIdOf never reads the token, which is the run's one credential", () => {
+  assert.doesNotMatch(
+    wakeIdOf(readWake(wakeRoot("https://relay.test"))),
+    /tok/,
+  );
 });
 
 // ── The calls ───────────────────────────────────────────────────────────────

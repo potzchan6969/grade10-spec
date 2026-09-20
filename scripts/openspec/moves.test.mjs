@@ -10,10 +10,16 @@ import {
 } from "./lib/moves.mjs";
 
 /**
- * `movesBetween`, `newlyBehind` and `messagesOf` over two plain `Map`s — no
- * git, no filesystem, no worktree. `readingOf` is what builds a `Map` like
- * this from a store; these three never call it, so a case here is exact about
- * what changed between two readings rather than about a fixture repository.
+ * What a push moved and who hears about it: `movesBetween`, `newlyBehind`,
+ * `landedBetween`, `messagesOf` and the landing reply's own words,
+ * `landedText`, over two plain `Map`s — no git, no filesystem, no worktree.
+ * `readingOf` is what builds a `Map` like this from a store; nothing here
+ * calls it, so a case is exact about what changed between two readings rather
+ * than about a fixture repository.
+ *
+ * `landedText` is read here rather than in `wording.test.mjs` because its
+ * sentence is drawn from a whole reading — the stage, the roles that stage
+ * names and the hand each of them holds — which is what these two `Map`s are.
  */
 
 /** One change's reading, as `readingOf` would return it for one entry — every
@@ -241,7 +247,7 @@ test("shared-planning-change-stages-SC-70 - landedText names what landed, whose 
   );
 });
 
-test("landedText names the hands the stage has and never a role's channel", () => {
+test("shared-planning-change-stages-SC-70 - landedText names a role the change has no hand for as open", () => {
   const line = landedText(
     at("probe", {
       stage: "on-staging",
@@ -253,11 +259,11 @@ test("landedText names the hands the stage has and never a role's channel", () =
 
   assert.equal(
     line,
-    "*Landed* — `tasks` by @erin · now at *On staging* · your turn: @hana (QA)",
+    "*Landed* — `tasks` by @erin · now at *On staging* · your turn: @hana (QA), release hand (open)",
   );
 });
 
-test("landedText says nobody where the stage names no hand", () => {
+test("shared-planning-change-stages-SC-70 - landedText says nobody where the stage names no role", () => {
   const line = landedText(
     at("probe", { stage: "designed", roles: [], hands: {} }),
     [{ artifact: "ui-design", by: "dana" }],
@@ -278,7 +284,7 @@ test("landedText names each word where one push carries two", () => {
   assert.match(line, /`ui-design` by @dana, `tech-design` by @erin/);
 });
 
-test("shared-planning-change-stages-SC-70 - messagesOf replies in the change's thread for a landing a person pushed", () => {
+test("shared-planning-change-stages-SC-70 - messagesOf replies in the thread for every landing the change has a thread for", () => {
   const thread = "C0AB/1700000000.000100";
   const base = new Map([["probe", at("probe", { thread })]]);
   const head = new Map([
@@ -288,7 +294,6 @@ test("shared-planning-change-stages-SC-70 - messagesOf replies in the change's t
   const { messages } = messagesOf(base, head, TEAM, {
     ...options,
     pushHead: "abc1234",
-    pushedBy: new Map([["probe", "dana"]]),
   });
 
   assert.equal(messages.length, 1);
@@ -301,22 +306,6 @@ test("shared-planning-change-stages-SC-70 - messagesOf replies in the change's t
   assert.match(messages[0].text, /\*Landed\* — `tasks` by @dana/);
 });
 
-test("shared-planning-change-stages-SC-70 - messagesOf says nothing for a landing whose pusher the team map does not name", () => {
-  const thread = "C0AB/1700000000.000100";
-  const base = new Map([["probe", at("probe", { thread })]]);
-  const head = new Map([
-    ["probe", at("probe", { thread, landedBy: { tasks: "dana" } })],
-  ]);
-
-  const { messages } = messagesOf(base, head, TEAM, {
-    ...options,
-    pushHead: "abc1234",
-    pushedBy: new Map(),
-  });
-
-  assert.deepEqual(messages, []);
-});
-
 test("shared-planning-change-stages-SC-70 - messagesOf posts no landing reply for a change with no thread", () => {
   const base = new Map([["probe", at("probe")]]);
   const head = new Map([
@@ -326,7 +315,6 @@ test("shared-planning-change-stages-SC-70 - messagesOf posts no landing reply fo
   const { messages } = messagesOf(base, head, TEAM, {
     ...options,
     pushHead: "abc1234",
-    pushedBy: new Map([["probe", "dana"]]),
   });
 
   assert.deepEqual(messages, []);

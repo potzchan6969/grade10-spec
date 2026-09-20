@@ -637,7 +637,7 @@ test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push on
   assert.match(payload.blocks[0].text.text, /probe.*Building/s);
 });
 
-test("--stages names no change for a push that only writes the record's keys", () => {
+test("shared-planning-change-stages-SC-70 - --stages names no change for a push that only writes the record's keys, and the thread still hears what landed", () => {
   const { root, write, commit } = sandbox();
   write({
     ...throughSpecs(),
@@ -670,7 +670,15 @@ test("--stages names no change for a push that only writes the record's keys", (
   ]);
   const { messages, changes, matrix } = read();
 
-  assert.deepEqual(messages, []);
+  // Nobody's turn moved, the change is named nowhere and the re-read matrix is
+  // empty. The one message owed is the thread's: `landed_by:` gained an entry,
+  // and the reply is about that very line, so a landing whose only file is the
+  // record is told all the same.
+  assert.deepEqual(
+    messages.map((one) => one.kind),
+    ["landed"],
+  );
+  assert.equal(messages[0].key, `probe:landed:${head}`);
   assert.deepEqual(changes.updated, []);
   assert.deepEqual(matrix, []);
   assert.match(readFileSync(output, "utf8"), /^matrix=\[\]$/m);
@@ -923,7 +931,11 @@ const PROPOSED = {
   [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
 };
 
-test("shared-planning-change-stages-SC-70 - --stages replies in the thread when a person's push lands artifacts", () => {
+/** The trailer `plan:land` writes in wake mode, and only there: the landing
+ * commit says it was a run's, so the push leaves the reply to the run. */
+const WAKE_TRAILER = "\n\nWake: probe@C0AB/1700000000.000100";
+
+test("shared-planning-change-stages-SC-70 - --stages replies in the thread when a landing commit carries no `Wake:` trailer", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record(
@@ -958,7 +970,7 @@ test("shared-planning-change-stages-SC-70 - --stages replies in the thread when 
   );
 });
 
-test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing the team map cannot place", () => {
+test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing a run marked with the `Wake:` trailer", () => {
   const { root, write, commit } = sandbox();
   write({
     [`${DIR}/.openspec.yaml`]: record(
@@ -972,16 +984,44 @@ test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread 
     [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
     ...PROPOSED,
   });
-  // A hosted run's landing: its committer is nobody the map names, and the
-  // run has replied in the thread itself.
-  const head = commit("land the three of probe on @dana", 1, "runner@test");
+  // A hosted run's landing, pushed by the same e-mail a person's would be:
+  // what says it is the run's is the trailer the run wrote, and the run has
+  // replied in the thread itself.
+  const head = commit(`land the three of probe on @dana${WAKE_TRAILER}`, 1);
 
   const { messages } = stages(root, ["--base", base, "--head", head]).read();
 
+  // Nothing in the thread, and the change's own Your turn messages still go
+  // out: the marker says who told the thread, not whether the push moved
+  // anybody.
   assert.deepEqual(messages.map((one) => one.key).sort(), [
     "probe:proposed:design",
     "probe:proposed:tech",
   ]);
+});
+
+test("shared-planning-change-stages-SC-70 - the thread's reply goes out whatever --dms says", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const done = stages(root, ["--base", base, "--head", head, "--dms", "false"]);
+
+  // `--dms false` is the per-hand messages turned off; the reply in the
+  // thread is nobody's inbox and is delivered either way.
+  assert.match(done.stderr, new RegExp(`\\[probe:landed:${head}\\]`));
+  assert.doesNotMatch(done.stderr, /probe:proposed:design/);
 });
 
 test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for a change whose record names no thread", () => {

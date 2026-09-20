@@ -127,6 +127,12 @@ const textAt = (repo, commit, path) =>
     encoding: "utf8",
   });
 
+/** One commit's whole message, the trailers with it. */
+const messageAt = (repo, commit) =>
+  execFileSync("git", ["-C", repo, "log", "-1", "--format=%B", commit], {
+    encoding: "utf8",
+  });
+
 const shaOf = (repo, ref) =>
   execFileSync("git", ["-C", repo, "rev-parse", ref], {
     encoding: "utf8",
@@ -772,6 +778,36 @@ test("shared-planning-agent-rounds-SC-73 - a wake the relay has closed lands not
   assert.equal(result.stderr.trim().split("\n").length, 1);
   assert.equal(shaOf(remote, "main"), before);
   assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
+test("shared-planning-change-stages-SC-70 - a wake's landing commit carries the `Wake:` trailer, naming the wake", async () => {
+  const seen = {};
+  const server = await landingRelay(granted(seen));
+  const { root } = sandbox();
+  writeRelayFile(root, urlOf(server));
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  const message = messageAt(root, seen.sha);
+  // The subject is the landing's own; the trailer is what marks the commit as
+  // a run's, so the push leaves this landing's reply to the run itself.
+  assert.match(message, /^chore\(openspec\): land ui-design of round-probe/);
+  assert.match(message, /^Wake: round-probe@C1\/1\.1$/m);
+  // The wake's token is the run's one credential and rides in no commit.
+  assert.doesNotMatch(message, /wake-tok/);
+});
+
+test("shared-planning-change-stages-SC-70 - a terminal landing's commit carries no `Wake:` trailer", async () => {
+  const { root, remote } = sandbox();
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
+
+  assert.equal(result.status, 0, result.stderr);
+  const message = messageAt(remote, "main");
+  assert.match(message, /^chore\(openspec\): land ui-design of round-probe/);
+  assert.doesNotMatch(message, /Wake:/);
 });
 
 test("relay mode reads the hand from sender.handle, never git config user.email", async () => {
