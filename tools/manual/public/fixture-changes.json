@@ -256,7 +256,53 @@
       }
     ],
     "deltas": [],
-    "history": []
+    "history": [
+      {
+        "sha": "1111111111111111111111111111111111111111",
+        "date": "2026-09-04T09:00:00+08:00",
+        "kind": "opened",
+        "subject": "Open demo-building"
+      },
+      {
+        "sha": "2222222222222222222222222222222222222222",
+        "date": "2026-09-05T09:00:00+08:00",
+        "kind": "landed",
+        "subject": "chore(openspec): land proposal of demo-building on @tester",
+        "target": "proposal",
+        "handle": "tester"
+      },
+      {
+        "sha": "3333333333333333333333333333333333333333",
+        "date": "2026-09-06T09:00:00+08:00",
+        "kind": "hand",
+        "subject": "chore(openspec): name the hands of demo-building",
+        "hands": [
+          {
+            "role": "dev",
+            "handle": "tester"
+          }
+        ]
+      },
+      {
+        "sha": "4444444444444444444444444444444444444444",
+        "date": "2026-09-08T09:00:00+08:00",
+        "kind": "read-again",
+        "subject": "chore(openspec): tasks of demo-building read again, nothing changed",
+        "target": "tasks"
+      },
+      {
+        "sha": "5555555555555555555555555555555555555555",
+        "date": "2026-09-09T09:00:00+08:00",
+        "kind": "tick",
+        "subject": "feat(demo): publish the contract",
+        "ticked": [
+          "1.1"
+        ]
+      }
+    ],
+    "askedAt": {
+      "Q1": "2026-09-07T09:00:00+08:00"
+    }
   },
   "demo-designed": {
     "id": "demo-designed",

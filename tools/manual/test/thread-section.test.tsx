@@ -295,6 +295,6 @@ describe("the reading as a whole", () => {
     expect(html).not.toContain("<li");
     // The compact secondary line every sibling row of `ChangeStatus` says
     // "nothing here" with, not a card inside a grid cell.
-    expect(html).not.toContain("data-slot=\"empty-state\"");
+    expect(html).not.toContain('data-slot="empty-state"');
   });
 });

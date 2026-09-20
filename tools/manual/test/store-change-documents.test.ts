@@ -72,6 +72,19 @@ describe("the artifacts a change has", () => {
   });
 });
 
+describe("the thread a reading with no git shows", () => {
+  it("borrows nothing from the repository the store sits inside", () => {
+    // `demo-store` is a directory of this checkout, so a walk of it resolves
+    // against the enclosing repository: the read is handed `NO_GIT`, and a
+    // document that carried those commits would put this machine's own
+    // history into the fixture and onto every walked page.
+    for (const one of readChangeDocuments(FIXTURE, NO_GIT, null)) {
+      expect(one.history).toEqual([]);
+      expect(one.askedAt).toBeUndefined();
+    }
+  });
+});
+
 describe("a delta read as the contract it proposes", () => {
   const [delta] = document.deltas;
 

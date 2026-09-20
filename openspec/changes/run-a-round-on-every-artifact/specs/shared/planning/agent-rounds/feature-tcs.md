@@ -2561,7 +2561,7 @@ None yet - the first blind pass.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-09
 
-**Decided by:** `tools/manual/test/thread-section.test.tsx`, `tools/manual/test/told-now.test.tsx`, `tools/manual/test/read-change-history.test.ts`, `scripts/openspec/wording.test.mjs`
+**Decided by:** `tools/manual/walk/change-page-thread.walk.ts`, `tools/manual/test/thread-section.test.tsx`, `tools/manual/test/told-now.test.tsx`, `tools/manual/test/read-change-history.test.ts`, `scripts/openspec/wording.test.mjs`
 
 **Pre-conditions:**
 

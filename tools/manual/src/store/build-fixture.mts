@@ -1,6 +1,11 @@
 import { readFileSync, writeFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
-import type { ChangeDocument, ChangeEntry, Snapshot } from "../api/types.ts";
+import type {
+  ChangeDocument,
+  ChangeEntry,
+  Snapshot,
+  ThreadEvent,
+} from "../api/types.ts";
 import { NO_GIT } from "./git.mts";
 import { rootsOf } from "./roots.mts";
 import { composeStore } from "./snapshot.mts";
@@ -54,8 +59,73 @@ export function fixtureSnapshot(): Snapshot {
 export function fixtureChanges(): Record<string, ChangeDocument> {
   const { documents } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
   return Object.fromEntries(
-    documents.map((document) => [document.id, landed(document)]),
+    documents.map((document) => [document.id, threaded(landed(document))]),
   );
+}
+
+/**
+ * One demo change's thread, as data.
+ *
+ * `NO_GIT` leaves every reading's history empty, and it has to: `demo-store`
+ * sits inside this repository's checkout, so a walk of it resolves against the
+ * enclosing repository and would write this machine's own commits into a
+ * committed file. The walked surface still needs a thread to show, so
+ * `demo-building`'s is written here in the shape the store's own reader
+ * returns — one event per commit, oldest first, and the day its held row was
+ * asked on. The shas are pinned and nothing reads them as shas, the way
+ * `FIXTURE_COMMIT` is.
+ */
+const FIXTURE_HISTORY: Record<
+  string,
+  { history: ThreadEvent[]; askedAt?: Record<string, string> }
+> = {
+  "demo-building": {
+    history: [
+      {
+        sha: "1".repeat(40),
+        date: "2026-09-04T09:00:00+08:00",
+        kind: "opened",
+        subject: "Open demo-building",
+      },
+      {
+        sha: "2".repeat(40),
+        date: "2026-09-05T09:00:00+08:00",
+        kind: "landed",
+        subject: "chore(openspec): land proposal of demo-building on @tester",
+        target: "proposal",
+        handle: "tester",
+      },
+      {
+        sha: "3".repeat(40),
+        date: "2026-09-06T09:00:00+08:00",
+        kind: "hand",
+        subject: "chore(openspec): name the hands of demo-building",
+        hands: [{ role: "dev", handle: "tester" }],
+      },
+      {
+        sha: "4".repeat(40),
+        date: "2026-09-08T09:00:00+08:00",
+        kind: "read-again",
+        subject:
+          "chore(openspec): tasks of demo-building read again, nothing changed",
+        target: "tasks",
+      },
+      {
+        sha: "5".repeat(40),
+        date: "2026-09-09T09:00:00+08:00",
+        kind: "tick",
+        subject: "feat(demo): publish the contract",
+        ticked: ["1.1"],
+      },
+    ],
+    askedAt: { Q1: "2026-09-07T09:00:00+08:00" },
+  },
+};
+
+/** The same document with that thread written in, where the file names one. */
+function threaded(document: ChangeDocument): ChangeDocument {
+  const thread = FIXTURE_HISTORY[document.id];
+  return thread ? { ...document, ...thread } : document;
 }
 
 /**
