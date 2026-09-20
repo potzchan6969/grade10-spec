@@ -235,7 +235,7 @@ test("--confirm posts the artifact's button beside the text", async () => {
 
 test("--held posts the button that confirms the recommendations", async () => {
   let seen;
-  const server = await stubRelay((req, res, body) => {
+  const server = await stubRelay((_req, res, body) => {
     seen = JSON.parse(body);
     res.writeHead(200);
     res.end("{}");
@@ -262,7 +262,7 @@ test("--held posts the button that confirms the recommendations", async () => {
 
 test("a task group's button names the group", async () => {
   let seen;
-  const server = await stubRelay((req, res, body) => {
+  const server = await stubRelay((_req, res, body) => {
     seen = JSON.parse(body);
     res.writeHead(200);
     res.end("{}");
