@@ -25,6 +25,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { roundArtifactOf } from "../../../tools/manual/src/store/read-rounds.mts";
 
 /** The wake's own file, root-relative — what a refusal names. */
 export const RELAY_FILE = join(".round", "relay.json");
@@ -147,21 +148,25 @@ export const CONFIRM_LABEL = {
   tasks: "Confirm plan",
 };
 
-/** The button a held row carries: the recommendations, in one press. */
-export const HELD_CONFIRM = {
-  label: "Confirm with recommendations",
-  word: "land with recommendations",
-};
-
 /**
  * The button for one artifact, one task group's number, or a held row — the
  * label and the word the relay posts. Null is a name the chain issues no
  * button for, which the caller refuses by name rather than posting a button
  * nobody asked for.
+ *
+ * A group reaches this in any of the spellings the store issues — `5`, `5.`,
+ * `group 5` — so the name is read by `roundArtifactOf`, the reader every
+ * other place tells a group from an artifact id with. A task and the round's
+ * own `apply` are neither, and are refused by name.
  */
 export function confirmOf(name, held = false) {
-  if (held) return { ...HELD_CONFIRM };
-  const target = String(name ?? "").trim();
+  if (held)
+    return {
+      label: "Confirm with recommendations",
+      word: "land with recommendations",
+    };
+  const target = roundArtifactOf(String(name ?? ""));
+  if (target === null) return null;
   if (/^\d+$/.test(target))
     return { label: `Confirm group ${target}`, word: "land" };
   const label = CONFIRM_LABEL[target];
