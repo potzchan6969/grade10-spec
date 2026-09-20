@@ -30,6 +30,7 @@ const BODY = `Prose.
 ## Points
 
 - 🚧 **Points expire** — a year after the last order
+- 🚧 **Points show on the receipt** — under the total
 - ❓ **Birthday month** — whether it doubles the month's points
 - A line nobody marked
 - **A question, not a guess** — a row, or a ❓ line on the page
@@ -43,6 +44,7 @@ const BODY = `Prose.
 ## Tiers
 
 - 🚧 **Gold at 500** — a tier this change never touched
+- ❓ **Tier discount** — whether Finance funds the gold rate
 `;
 
 const asked = {
@@ -52,6 +54,18 @@ const asked = {
   role: "pm",
   hand: "robin",
   text: "**Birthday month** — whether it doubles the month's points",
+};
+
+/** The ❓ line of the second section, addressed to a confirmer outside the six
+ * roles — the store routes it to that word, and nothing narrows it to one of
+ * the six on the way to the page. */
+const askedOfFinance = {
+  artifact: "proposal",
+  page: PAGE,
+  section: "tiers",
+  role: "finance",
+  hand: "finance",
+  text: "**Tier discount** — whether Finance funds the gold rate",
 };
 
 function render(change: ChangeEntry): string {
@@ -142,6 +156,36 @@ describe("the lines the change marks", () => {
     // change that ever touched it, which is the boundary the store's own
     // questions are written on.
     expect(html).not.toContain("Tier window");
+  });
+});
+
+describe("two linked sections, as the scenario reads them", () => {
+  const html = render(
+    marking({
+      sections: [
+        { page: PAGE, slug: "points" },
+        { page: PAGE, slug: "tiers" },
+      ],
+      questions: [asked, askedOfFinance],
+    }),
+  );
+
+  it("lists each section under its page's title, in the order linked", () => {
+    expect(html).toContain("Alpha › Points");
+    expect(html).toContain("Alpha › Tiers");
+    expect(html.indexOf("Points")).toBeLessThan(html.indexOf("Tiers"));
+    expect(html).toContain('href="/p/demo-product/alpha#tiers"');
+  });
+
+  it("shows every marked line of both sections", () => {
+    expect(html).toContain("Points expire");
+    expect(html).toContain("Points show on the receipt");
+    expect(html).toContain("Gold at 500");
+    expect(html).toContain("Tier discount");
+  });
+
+  it("names a hand outside the six roles by the word the row wrote", () => {
+    expect(html).toContain("finance — open");
   });
 });
 
