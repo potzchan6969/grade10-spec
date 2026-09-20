@@ -34,10 +34,11 @@ export interface Env {
 
 /**
  * Every secret the design names, refused blank at the router's entry: a relay
- * deployed without one of them would verify every Slack request, or every push
- * the code host sends, against the empty string, sign every wake token with it,
- * move `main` with no credential at all, or fire nothing and post nothing while
- * answering as though it had.
+ * deployed without one of them would verify every Slack request against the
+ * empty string, sign every wake token with it, move `main` with no credential
+ * at all, or fire nothing and post nothing while answering as though it had.
+ * The code host's push is refused the same way: a relay with no webhook secret
+ * would take a push from anybody as a move of `main`.
  *
  * All eight, not the five a check turns on: a deployment missing one is a
  * deployment, and the entry naming it is how Operations finds that out in one

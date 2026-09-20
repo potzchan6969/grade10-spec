@@ -21,6 +21,8 @@
       { "name": "LIVE", "class_name": "Live" }
     ]
   },
+  // Append-only: a tag that has run on this Worker stays in the list as it
+  // stands, and a new class is a new tag after it.
   "migrations": [
     { "tag": "v1", "new_sqlite_classes": ["Room"] },
     { "tag": "v2", "new_sqlite_classes": ["Live"] }
