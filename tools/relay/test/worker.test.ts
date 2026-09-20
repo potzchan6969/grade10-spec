@@ -980,6 +980,44 @@ describe("/github/events", () => {
     expect(asked).toEqual([]);
   });
 
+  it("answers a live object it could not reach with a reason, and logs it", async () => {
+    // An unwrapped call leaves the fetch handler rejecting with nothing said,
+    // which is a push no page was told about and no log to find it in.
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    const env = testEnv({
+      LIVE: stubNamespace(async () => {
+        throw new Error("the live object could not be started");
+      }),
+    });
+    const response = await delivery(env, "push", push());
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({ reason: "live-unreachable" });
+    expect(told).toHaveBeenCalledTimes(1);
+    expect(String(told.mock.calls[0][0])).toContain(
+      "the live object could not be started",
+    );
+    told.mockRestore();
+  });
+
+  it("answers the delivery with what the live object answered", async () => {
+    // The code host reads in its own delivery log that the move reached the
+    // object, so the object's answer is the delivery's whatever it says.
+    const asked: Asked[] = [];
+    const env = testEnv(
+      liveStub(
+        asked,
+        () =>
+          new Response(JSON.stringify({ reason: "unknown-op" }), {
+            status: 400,
+          }),
+      ),
+    );
+    const response = await delivery(env, "push", push());
+    expect(response.status).toBe(400);
+    expect(await response.json()).toEqual({ reason: "unknown-op" });
+    expect(asked).toHaveLength(1);
+  });
+
   it("refuses a body that is not JSON, and a read", async () => {
     const asked: Asked[] = [];
     const env = testEnv(liveStub(asked));
@@ -1020,17 +1058,19 @@ describe("/head", () => {
     ]);
   });
 
-  it("answers the preflight a browser sends before it reads the head", async () => {
+  it("is read with a plain GET and answers no preflight", async () => {
+    // A cross-origin read of the head is a simple request — no header a
+    // browser would ask about first — and a socket handshake is never
+    // preflighted, so `OPTIONS` is a method this surface does not answer.
+    const asked: Asked[] = [];
     const response = await worker.fetch(
       new Request("https://relay.example/head", { method: "OPTIONS" }),
-      testEnv(),
+      testEnv(liveStub(asked)),
       context([]),
     );
-    expect(response.status).toBe(204);
-    expect(response.headers.get("access-control-allow-origin")).toBe("*");
-    expect(response.headers.get("access-control-allow-methods")).toBe(
-      "GET, OPTIONS",
-    );
+    expect(response.status).toBe(405);
+    expect(await response.json()).toEqual({ reason: "get-only" });
+    expect(asked).toEqual([]);
   });
 
   it("refuses a write of the head", async () => {
@@ -1043,6 +1083,70 @@ describe("/head", () => {
     expect(response.status).toBe(405);
     expect(await response.json()).toEqual({ reason: "get-only" });
     expect(asked).toEqual([]);
+  });
+
+  it("carries the head's own headers on every answer, refusals included", async () => {
+    // A page whose read is refused reads the refusal: an answer with no such
+    // header reaches it as a CORS error and nothing else.
+    const refused = await worker.fetch(
+      new Request("https://relay.example/head", { method: "POST" }),
+      testEnv(),
+      context([]),
+    );
+    expect(refused.headers.get("access-control-allow-origin")).toBe("*");
+    expect(refused.headers.get("cache-control")).toBe("no-store");
+
+    const missing = await worker.fetch(
+      new Request("https://relay.example/head"),
+      testEnv({ GITHUB_WEBHOOK_SECRET: "" }),
+      context([]),
+    );
+    expect(missing.status).toBe(500);
+    expect(await missing.json()).toEqual({
+      reason: "missing-secret",
+      secret: "GITHUB_WEBHOOK_SECRET",
+    });
+    expect(missing.headers.get("access-control-allow-origin")).toBe("*");
+  });
+
+  it("answers a live object it could not reach with a reason, and logs it", async () => {
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    const env = testEnv({
+      LIVE: stubNamespace(async () => {
+        throw new Error("the live object could not be started");
+      }),
+    });
+    const response = await worker.fetch(
+      new Request("https://relay.example/head"),
+      env,
+      context([]),
+    );
+    expect(response.status).toBe(502);
+    expect(await response.json()).toEqual({ reason: "live-unreachable" });
+    expect(response.headers.get("access-control-allow-origin")).toBe("*");
+    expect(told).toHaveBeenCalledTimes(1);
+    expect(String(told.mock.calls[0][0])).toContain(
+      "the live object could not be started",
+    );
+    told.mockRestore();
+  });
+
+  it("passes the live object's own answer through", async () => {
+    const asked: Asked[] = [];
+    const env = testEnv(
+      liveStub(
+        asked,
+        () => new Response(JSON.stringify({ main: null }), { status: 503 }),
+      ),
+    );
+    const response = await worker.fetch(
+      new Request("https://relay.example/head"),
+      env,
+      context([]),
+    );
+    expect(response.status).toBe(503);
+    expect(await response.json()).toEqual({ main: null });
+    expect(response.headers.get("cache-control")).toBe("no-store");
   });
 });
 
@@ -1082,25 +1186,42 @@ describe("/live", () => {
 });
 
 describe("everything else", () => {
-  it("answers a path it does not serve with 404 and a read with 405", async () => {
+  it("answers a path it does not serve with 404, whatever the method", async () => {
     const env = testEnv();
-    expect(
-      (
-        await worker.fetch(
-          new Request("https://relay.example/nowhere", { method: "POST" }),
-          env,
-          context([]),
-        )
-      ).status,
-    ).toBe(404);
-    expect(
-      (
-        await worker.fetch(
-          new Request("https://relay.example/wake"),
-          env,
-          context([]),
-        )
-      ).status,
-    ).toBe(405);
+    for (const method of ["GET", "POST"]) {
+      const response = await worker.fetch(
+        new Request("https://relay.example/nowhere", { method }),
+        env,
+        context([]),
+      );
+      expect(response.status).toBe(404);
+      expect(await response.json()).toEqual({ reason: "no-route" });
+    }
+  });
+
+  it("refuses the wrong method on every surface it serves", async () => {
+    // The method a surface answers and what answers it are one table: a
+    // surface in the dispatch and not in the method list would refuse the
+    // read it serves, and nothing would say so.
+    const env = testEnv();
+    for (const [path, method, reason] of [
+      ["/slack/events", "GET", "post-only"],
+      ["/slack/actions", "GET", "post-only"],
+      ["/github/events", "GET", "post-only"],
+      ["/wake", "GET", "post-only"],
+      ["/head", "POST", "get-only"],
+      ["/live", "POST", "get-only"],
+    ] as const) {
+      const response = await worker.fetch(
+        new Request(`https://relay.example${path}`, { method }),
+        env,
+        context([]),
+      );
+      expect([path, response.status, await response.json()]).toEqual([
+        path,
+        405,
+        { reason },
+      ]);
+    }
   });
 });
