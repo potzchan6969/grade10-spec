@@ -9,7 +9,7 @@
  * differently, is a test that passes while the relay refuses.
  */
 import type { Env } from "../src/env.ts";
-import type { Head } from "../src/live-state.ts";
+import type { Head, Push } from "../src/live-state.ts";
 
 export const CHANNEL = "C0PLAN";
 export const APP = "U0APP";
@@ -68,19 +68,24 @@ export function testEnv(over: Partial<Env> = {}): Env {
   };
 }
 
-/** Where `main` is, as the code host's push names it. */
+/** Where `main` is: the commit a push named, and the stamp the object wrote
+ * when it arrived. Written as the object's own clock reads one, so a test can
+ * set the clock to it. */
 export const HEAD: Head = {
   main: "d6fde92930d4715a2b49857d24b940956b26d2d3",
-  at: "2026-09-20T14:02:11+08:00",
+  at: "2026-09-20T06:02:11.000Z",
   subject: "docs(planning): the live line",
 };
 
 /** The commit after it, for a second move. */
 export const NEXT: Head = {
   main: "9f1c0a7b2d3e4f5061728394a5b6c7d8e9f01234",
-  at: "2026-09-20T15:11:02+08:00",
+  at: "2026-09-20T07:11:02.000Z",
   subject: "feat(relay): the eighth secret",
 };
+
+/** The push behind a head: what the code host named, with no stamp on it. */
+export const pushOf = ({ main, subject }: Head): Push => ({ main, subject });
 
 /** A push of `main` as the code host sends one, with whatever this test
  * changes of it. */

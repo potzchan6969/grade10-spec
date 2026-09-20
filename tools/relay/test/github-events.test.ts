@@ -4,7 +4,7 @@ import {
   signGithubEvent,
   verifyGithubSignature,
 } from "../src/github-events.ts";
-import { HEAD, push, REPO } from "./fixtures.ts";
+import { HEAD, push, pushOf, REPO } from "./fixtures.ts";
 
 /** The code host's side: the signature over the body as it arrived, the push
  * read down to one move, and the deliveries that tell nobody. */
@@ -81,10 +81,10 @@ describe("the delivery", () => {
     });
   });
 
-  it("reads a push of `main` as the commit, its time and its subject", () => {
+  it("reads a push of `main` as the commit and its subject", () => {
     expect(parseGithubEvent("push", push(), REPO)).toEqual({
       kind: "moved",
-      head: HEAD,
+      push: pushOf(HEAD),
     });
   });
 
@@ -130,11 +130,10 @@ describe("the delivery", () => {
     );
   });
 
-  it("ignores a push whose commit names no time", () => {
-    // A page says how long ago the commit landed, and a commit with no
-    // timestamp answers that with nothing: it is the same refusal as a push
-    // with no commit at all.
-    for (const timestamp of [undefined, "", "   "]) {
+  it("reads a push whose commit names no time", () => {
+    // What a page shows is how long ago the move arrived, stamped by the
+    // object's own clock, so the commit's own time is never read.
+    for (const timestamp of [undefined, "", "2026-09-20T14:02:11+08:00"]) {
       expect(
         parseGithubEvent(
           "push",
@@ -143,7 +142,10 @@ describe("the delivery", () => {
           }),
           REPO,
         ),
-      ).toEqual({ kind: "ignored", why: "no-commit" });
+      ).toEqual({
+        kind: "moved",
+        push: { main: HEAD.main, subject: "docs(planning): a line" },
+      });
     }
   });
 
@@ -151,14 +153,10 @@ describe("the delivery", () => {
     // A commit written with no message still moved `main`, so the page shows
     // the sha it can read back to the commit rather than an empty line.
     expect(
-      parseGithubEvent(
-        "push",
-        push({ head_commit: { timestamp: HEAD.at, message: "" } }),
-        REPO,
-      ),
+      parseGithubEvent("push", push({ head_commit: { message: "" } }), REPO),
     ).toEqual({
       kind: "moved",
-      head: { main: HEAD.main, at: HEAD.at, subject: HEAD.main.slice(0, 7) },
+      push: { main: HEAD.main, subject: HEAD.main.slice(0, 7) },
     });
   });
 

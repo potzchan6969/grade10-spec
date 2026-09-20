@@ -1,8 +1,8 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { Live } from "../src/live.ts";
 import { type Head, headText } from "../src/live-state.ts";
 import type { LiveOp } from "../src/rpc.ts";
-import { HEAD, NEXT, storageMap } from "./fixtures.ts";
+import { HEAD, NEXT, pushOf, storageMap } from "./fixtures.ts";
 
 /** The live object, driven over a stub `DurableObjectState` — a storage map and
  * a list of sockets — with no runtime behind it.
@@ -119,14 +119,26 @@ function harness() {
   };
 }
 
+/** The object's own clock, in the test's hand: what it reads when a push
+ * arrives is the stamp the move is written with. */
+const clockAt = (at: string) => {
+  vi.setSystemTime(new Date(at));
+};
+
+beforeEach(() => {
+  vi.useFakeTimers({ toFake: ["Date"] });
+  clockAt(HEAD.at);
+});
+
 afterEach(() => {
+  vi.useRealTimers();
   vi.unstubAllGlobals();
 });
 
 describe("a page's socket", () => {
   it("is accepted and sent where `main` is", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", head: HEAD });
+    await relay.send({ op: "moved", push: pushOf(HEAD) });
     const answer = await relay.upgrade();
     expect(answer.status).toBe(101);
     expect(answer.socket).not.toBeNull();
@@ -152,7 +164,7 @@ describe("a page's socket", () => {
 
   it("is answered with the head whatever it says", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", head: HEAD });
+    await relay.send({ op: "moved", push: pushOf(HEAD) });
     await relay.upgrade();
     const socket = relay.accepted[0];
     socket.sent.length = 0;
@@ -228,7 +240,7 @@ describe("a move", () => {
     await relay.upgrade();
     for (const socket of relay.accepted) socket.sent.length = 0;
 
-    const answer = await relay.send({ op: "moved", head: HEAD });
+    const answer = await relay.send({ op: "moved", push: pushOf(HEAD) });
     expect(answer.status).toBe(200);
     expect(answer.read()).toEqual({ moved: true, told: 2 });
     expect(relay.stored()).toEqual(HEAD);
@@ -245,7 +257,7 @@ describe("a move", () => {
     open.sent.length = 0;
     const told = vi.spyOn(console, "error").mockImplementation(() => {});
 
-    const answer = await relay.send({ op: "moved", head: HEAD });
+    const answer = await relay.send({ op: "moved", push: pushOf(HEAD) });
     expect(answer.read()).toEqual({ moved: true, told: 1 });
     expect(open.sent).toEqual([headText(HEAD)]);
     expect(relay.stored()).toEqual(HEAD);
@@ -256,11 +268,25 @@ describe("a move", () => {
     told.mockRestore();
   });
 
+  it("stamps the head with its own clock, the moment the push arrived", async () => {
+    // The commit's own time is the author's; what a page shows is how long ago
+    // the move reached the relay.
+    const relay = harness();
+    clockAt("2026-09-20T06:30:00.000Z");
+
+    await relay.send({ op: "moved", push: pushOf(HEAD) });
+
+    expect(relay.stored()).toEqual({
+      ...HEAD,
+      at: "2026-09-20T06:30:00.000Z",
+    });
+  });
+
   it("says it moved the head where no page was open to be told", async () => {
     // A relay nobody has a page on still moved `main`: the delivery log reads
     // the move, where a count alone reads the same as a replay.
     const relay = harness();
-    const answer = await relay.send({ op: "moved", head: HEAD });
+    const answer = await relay.send({ op: "moved", push: pushOf(HEAD) });
     expect(answer.read()).toEqual({ moved: true, told: 0 });
     expect(relay.stored()).toEqual(HEAD);
   });
@@ -271,12 +297,13 @@ describe("a move", () => {
     const socket = relay.accepted[0];
     socket.sent.length = 0;
 
-    await relay.send({ op: "moved", head: HEAD });
-    const again = await relay.send({ op: "moved", head: HEAD });
+    await relay.send({ op: "moved", push: pushOf(HEAD) });
+    const again = await relay.send({ op: "moved", push: pushOf(HEAD) });
     expect(again.read()).toEqual({ moved: false, told: 0 });
     expect(socket.sent).toEqual([headText(HEAD)]);
 
-    await relay.send({ op: "moved", head: NEXT });
+    clockAt(NEXT.at);
+    await relay.send({ op: "moved", push: pushOf(NEXT) });
     expect(socket.sent).toEqual([headText(HEAD), headText(NEXT)]);
     expect(relay.stored()).toEqual(NEXT);
   });
@@ -292,7 +319,7 @@ describe("where `main` is", () => {
 
   it("answers the head the last push stored", async () => {
     const relay = harness();
-    await relay.send({ op: "moved", head: HEAD });
+    await relay.send({ op: "moved", push: pushOf(HEAD) });
     expect((await relay.send({ op: "head" })).read()).toEqual(HEAD);
   });
 });

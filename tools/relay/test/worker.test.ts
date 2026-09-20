@@ -10,6 +10,7 @@ import {
   BOT_TOKEN,
   CHANNEL,
   HEAD,
+  pushOf,
   push,
   SIGNING,
   stubNamespace,
@@ -1048,7 +1049,11 @@ describe("/github/events", () => {
     expect(response.status).toBe(200);
     expect(await response.json()).toEqual({ moved: true, told: 2 });
     expect(asked).toEqual([
-      { name: "main", op: { op: "moved", head: HEAD }, upgrade: false },
+      {
+        name: "main",
+        op: { op: "moved", push: pushOf(HEAD) },
+        upgrade: false,
+      },
     ]);
   });
 
