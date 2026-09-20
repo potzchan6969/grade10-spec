@@ -61,6 +61,10 @@ interface PushEnvelope {
 /** The first line of a commit's message, which is the subject a page shows. */
 const firstLine = (message: string): string => message.split("\n")[0].trim();
 
+/** A store's name, folded: the code host's owner and repository names are
+ * case-insensitive, and `REPO` is typed into `wrangler.jsonc` by hand. */
+const folded = (name: string): string => name.trim().toLowerCase();
+
 /**
  * The delivery as one move, or the reason nothing is told. The webhook is
  * subscribed to `push` alone and the code host sends a `ping` the moment it is
@@ -79,7 +83,7 @@ export function parseGithubEvent(
   if (event === "ping") return { kind: "ping" };
   if (event !== "push") return { kind: "ignored", why: "not-a-push" };
   const body = (raw ?? {}) as PushEnvelope;
-  if (String(body.repository?.full_name ?? "") !== repo)
+  if (folded(String(body.repository?.full_name ?? "")) !== folded(repo))
     return { kind: "ignored", why: "another-repository" };
   if (String(body.ref ?? "") !== MAIN_REF)
     return { kind: "ignored", why: "another-branch" };
@@ -89,12 +93,18 @@ export function parseGithubEvent(
   // no commit a page could read.
   if (!IS_SHA.test(main) || !commit)
     return { kind: "ignored", why: "no-commit" };
+  const at = String(commit.timestamp ?? "").trim();
+  // A page says how long ago the commit landed, so a commit naming no time is
+  // the same refusal: nothing a page could read arrived.
+  if (at === "") return { kind: "ignored", why: "no-commit" };
   return {
     kind: "moved",
     head: {
       main,
-      at: String(commit.timestamp ?? ""),
-      subject: firstLine(String(commit.message ?? "")),
+      at,
+      // A commit written with no message still moved `main`: the page shows the
+      // short sha, which reads back to the commit, rather than an empty line.
+      subject: firstLine(String(commit.message ?? "")) || main.slice(0, 7),
     },
   };
 }
