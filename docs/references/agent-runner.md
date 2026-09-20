@@ -22,15 +22,21 @@ tested but the relay's own code.
 
 1. A teammate writes in the planning channel, or replies in a change's
    thread. The relay verifies the event, drops a repeat and a bot's post,
-   waits a minute for the rest of the burst, and fires the Routine with a
+   waits a minute for the rest of the burst — a landing word waits for
+   nothing, since nothing more is coming after it — and fires the Routine with a
    payload: the change, why it woke, the messages since the previous wake
    with the senders' handles, and a token for posting back. A repeat of an
    event, or of the workflow's wake, wakes nothing twice.
-2. The relay posts "Reading…" with the run's link in the thread.
+2. The relay posts "Reading…" with the run's link in the thread. Every later
+   line is the run's, posted through the relay, and a summary that waits on
+   the hand's word carries one button — `Confirm <artifact>`, or `Confirm
+   with recommendations` while a held row is open.
 3. The run writes the payload to `.round/relay.json`, runs the round from the
    branch, `main` and the thread, pushes `claude/<id>` after every artifact,
    and posts its summary through the relay.
-4. On `land`, the run cuts the landing commit from `main` with that
+4. On `land` — typed in the thread, or the Confirm button pressed, which the
+   relay queues as the same word and says in the thread who pressed it — the
+   run cuts the landing commit from `main` with that
    artifact's files alone, pushes it to its branch and asks the relay. The
    relay checks that the Slack member who said land is, through the team map
    at `main`, the hand of the artifact's stage in the record at that sha, that the record's `landed_by:`
@@ -51,6 +57,7 @@ tested but the relay's own code.
 | Item | Value |
 | --- | --- |
 | **Event subscriptions** | `message.channels`; request URL `<relay>/slack/events`, pointed at the relay after its secrets are set |
+| **Interactivity** | On; request URL `<relay>/slack/actions`, where a Confirm button's press arrives. No new scope: `chat:write` posts the button and takes it off |
 | **Bot scopes** | `chat:write`, `channels:history` |
 | **Installed** | To the workspace, and the bot invited to the planning channel |
 | **Members** | Each teammate's Slack member id written in [`docs/prds/team.yaml`](../prds/team.yaml) as `slack:` beside the e-mail; a handle with no member is sent nothing and can land nothing from Slack |

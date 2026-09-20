@@ -28,6 +28,12 @@ every artifact of the chain, and a chain the budget cut halfway is finished by
 the next wake on the same word. A thread that has said
 no landing word leaves `main` where it is.
 
+A button press is the word: the relay writes `land` into the room as the
+thread reply it stands for, says in the thread who pressed it, and takes the
+button off the message so nobody presses twice. The label and the word are
+the run's own — `--confirm <artifact|group>` and `--held` on
+`relay-post.mjs` — and the relay composes neither.
+
 ## The Prompt
 
 [`routine-prompt.md`](routine-prompt.md), pasted into the Routine as written.
@@ -66,7 +72,9 @@ In this order, because each step needs the one before it:
    `Live` classes, and the deploy prints the Worker's own origin
 4. **The event subscription**, pointed at `<origin>/slack/events` and saved:
    the relay answers Slack's `url_verification` challenge, and the bot is
-   invited to the planning channel
+   invited to the planning channel. Interactivity is turned on beside it,
+   with `<origin>/slack/actions` as its request URL, which is where a Confirm
+   button's press arrives
 5. **The Routine**, created against that origin, which gives the real
    `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` — put both again over their
    placeholders
