@@ -10,9 +10,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### Change page
 
-[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move as a short caption under each drafted step, the whole sentence on hover; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, On the pages, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
-
-On the pages sits straight after Artifacts, because it is what the artifacts are written about: for each page section the proposal links, the page title and the section heading as one link, and under it every 🚧 and ❓ line of that section as the page writes it, each open line carrying the hand it waits on. A change that links no section says so in one sentence rather than drawing a heading over nothing.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move as a short caption under each drafted step, the whole sentence on hover; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
@@ -53,7 +51,7 @@ Design-system primitives, from `@grade10/design-system/components/`:
 
 The manual's own blocks, in `tools/manual/src/blocks/`, kept: `ChangeCard`, `ChangeStatus`, `TaskProgress`, `CopyableCommand`, `Attribution`, `IdleBadge`, `DependencyPills`, `NextAction`, `ChangeRibbon`, `CapabilityPip`.
 
-New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `OnThePages`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/lib/moves.mjs` (Your turn, On staging, Behind) and `scripts/openspec/digest.mjs` (the digest), with only the channel post in `scripts/openspec/changed-changes.mjs`.
+New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/lib/moves.mjs` (Your turn, On staging, Behind) and `scripts/openspec/digest.mjs` (the digest), with only the channel post in `scripts/openspec/changed-changes.mjs`.
 
 ## States
 
@@ -78,7 +76,6 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`
 - An artifact behind, with the chip naming what changed before it - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-25`
 - An artifact with open questions, counted, and one landed, with the handle - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-34`
-- The change page's On the pages row, every marked line of each linked section with the hand each open line waits on, and one sentence where the change links none - `shared-planning-change-stages-US-07` - `shared-planning-change-stages-SC-71`
 - My turn with nothing on the reader - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-61`
 - My turn with open questions above the changes - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-60`
 - My turn before a handle is chosen - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-62`
