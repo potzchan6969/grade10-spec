@@ -7,7 +7,7 @@
  * the host are `github.ts`'s; this is what the host sends.
  */
 import { signedHmac, verifiedHmac } from "./bytes.ts";
-import type { Head } from "./live-state.ts";
+import type { Push } from "./live-state.ts";
 
 /** The one branch a page is told about. Every other branch is a draft. */
 export const MAIN_REF = "refs/heads/main";
@@ -30,7 +30,7 @@ export type PushIgnored =
 
 export type GithubEvent =
   | { kind: "ping" }
-  | { kind: "moved"; head: Head }
+  | { kind: "moved"; push: Push }
   | { kind: "ignored"; why: PushIgnored };
 
 /**
@@ -55,7 +55,7 @@ interface PushEnvelope {
   ref?: string;
   after?: string;
   repository?: { full_name?: string };
-  head_commit?: { timestamp?: string; message?: string } | null;
+  head_commit?: { message?: string } | null;
 }
 
 /** The first line of a commit's message, which is the subject a page shows. */
@@ -93,15 +93,12 @@ export function parseGithubEvent(
   // no commit a page could read.
   if (!IS_SHA.test(main) || !commit)
     return { kind: "ignored", why: "no-commit" };
-  const at = String(commit.timestamp ?? "").trim();
-  // A page says how long ago the commit landed, so a commit naming no time is
-  // the same refusal: nothing a page could read arrived.
-  if (at === "") return { kind: "ignored", why: "no-commit" };
+  // The commit's own time is not read: what a page shows is how long ago the
+  // move arrived, which the live object stamps from its own clock.
   return {
     kind: "moved",
-    head: {
+    push: {
       main,
-      at,
       // A commit written with no message still moved `main`: the page shows the
       // short sha, which reads back to the commit, rather than an empty line.
       subject: firstLine(String(commit.message ?? "")) || main.slice(0, 7),

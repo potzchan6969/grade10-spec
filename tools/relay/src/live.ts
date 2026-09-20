@@ -23,6 +23,10 @@ import { json, type LiveOp, reasonOf } from "./rpc.ts";
 /** Where the head is kept. */
 const HEAD = "head";
 
+/** When a push arrived, by this object's own clock: the one clock a page and
+ * the relay share. */
+const arrivedNow = (): string => new Date().toISOString();
+
 /** What a page sends to tell an open line from one the network has abandoned,
  * and what it is answered. The runtime answers it from the pair, so a page's
  * half-minute ping does not wake an object that is asleep. */
@@ -66,14 +70,14 @@ export class Live {
     return new Response(null, { status: 101, webSocket: client });
   }
 
-  /** The move stored, and every open socket told it. The answer names the move
-   * beside the count: a first push with no page open moved `main` as much as
-   * one that reached ten, and a count alone reads the same as a delivery the
-   * host sent twice. */
+  /** The move stored, stamped with this object's own clock, and every open
+   * socket told it. The answer names the move beside the count: a first push
+   * with no page open moved `main` as much as one that reached ten, and a count
+   * alone reads the same as a delivery the host sent twice. */
   private async onMoved(
     op: Extract<LiveOp, { op: "moved" }>,
   ): Promise<Response> {
-    const step = moved(await this.stored(), op.head);
+    const step = moved(await this.stored(), op.push, arrivedNow);
     await this.ctx.storage.put(HEAD, step.head);
     const told = step.broadcast === null ? 0 : this.tell(step.broadcast);
     return json(200, { moved: step.broadcast !== null, told });

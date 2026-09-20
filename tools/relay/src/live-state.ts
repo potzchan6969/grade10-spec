@@ -11,11 +11,18 @@
 export interface Head {
   /** The commit `main` now points at. */
   main: string;
-  /** When that commit was made, ISO 8601 as the code host sends it. */
+  /** When the push arrived, ISO 8601 by this object's own clock. The commit's
+   * own time is the author's, and a page and the relay share no other clock —
+   * what a page shows is how long ago the move reached here. */
   at: string;
   /** The first line of its message. */
   subject: string;
 }
+
+/** What a push names: the commit and its subject. The stamp is not the push's
+ * to give, so a delivery replayed an hour later is still stamped when it
+ * arrived. */
+export type Push = Omit<Head, "at">;
 
 /** The head, or the shape before any push: a relay deployed and not yet told
  * anything answers a page rather than nothing. */
@@ -37,16 +44,23 @@ export interface LiveStep {
 }
 
 /**
- * `main` moved. The next head is the push's, and every open page is told it
- * once.
+ * `main` moved. The next head is the push's, stamped `now`, and every open
+ * page is told it once.
  *
- * A push whose commit is the head already stored tells nobody: the code host
- * retries a delivery it did not see answered, and a page told twice would
- * refresh twice for one move.
+ * A push whose commit is the head already stored tells nobody and is stamped
+ * again by nothing: the code host retries a delivery it did not see answered,
+ * and a page told twice would refresh twice for one move.
  */
-export function moved(head: Head | null, push: Head): LiveStep {
+export function moved(
+  head: Head | null,
+  push: Push,
+  now: () => string,
+): LiveStep {
   if (head && head.main === push.main) return { head, broadcast: null };
-  return { head: push, broadcast: headText(push) };
+  // The keys in the order the shape names them: a page reads the text, and two
+  // orders of the same head read as two heads in a log.
+  const next: Head = { main: push.main, at: now(), subject: push.subject };
+  return { head: next, broadcast: headText(next) };
 }
 
 /** A read of `/live` is a page opening a socket. The header is the whole of the

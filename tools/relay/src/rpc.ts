@@ -7,7 +7,7 @@
  * builds that request and one type it accepts: a call the object does not know
  * is a call this file does not let anybody make.
  */
-import type { Head } from "./live-state.ts";
+import type { Push } from "./live-state.ts";
 import type { EnqueueInput, Thread } from "./room-state.ts";
 import type { Confirm } from "./slack.ts";
 
@@ -27,7 +27,7 @@ export type RoomOp =
 /** What the live object is asked: `main` moved, or where is it. A page's socket
  * is not an op — the upgrade is forwarded as it arrived, because the object
  * answers it with the socket itself. */
-export type LiveOp = { op: "moved"; head: Head } | { op: "head" };
+export type LiveOp = { op: "moved"; push: Push } | { op: "head" };
 
 /** What went wrong, in the words a log can read. Every surface here says a
  * failure the same way, so one reading answers the router, the room and the

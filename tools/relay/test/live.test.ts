@@ -38,10 +38,13 @@ class FakePair {
 /** The request and its answer, as the runtime holds them: the object hands one
  * over and the runtime answers every page's ping from it, without waking. */
 class FakeRequestResponse {
-  constructor(
-    readonly request: string,
-    readonly response: string,
-  ) {}
+  readonly request: string;
+  readonly response: string;
+
+  constructor(request: string, response: string) {
+    this.request = request;
+    this.response = response;
+  }
 }
 
 /**
