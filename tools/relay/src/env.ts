@@ -29,17 +29,19 @@ export interface Env {
 }
 
 /**
- * The secrets nothing works without, refused blank at the router's entry: a
- * relay deployed with one of them unset would otherwise verify every Slack
- * request against the empty string, sign every wake token with it, or move
- * `main` with no credential at all.
+ * Every secret the design names, refused blank at the router's entry: a relay
+ * deployed without one of them would verify every Slack request against the
+ * empty string, sign every wake token with it, move `main` with no credential
+ * at all, or fire nothing and post nothing while answering as though it had.
  *
- * `SLACK_BOT_TOKEN` and `ROUTINE_FIRE_URL` are not here: a relay that cannot
- * post or cannot fire says so in the thread, or in the answer to the wake,
- * and neither one makes a check pass that should have refused.
+ * All seven, not the five a check turns on: a deployment missing one is a
+ * deployment, and the entry naming it is how Operations finds that out in one
+ * call rather than from a thread that stays quiet.
  */
 export const REQUIRED_SECRETS = [
   "SLACK_SIGNING_SECRET",
+  "SLACK_BOT_TOKEN",
+  "ROUTINE_FIRE_URL",
   "ROUTINE_TOKEN",
   "GITHUB_TOKEN",
   "TOKEN_SECRET",

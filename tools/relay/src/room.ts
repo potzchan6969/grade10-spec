@@ -17,6 +17,7 @@
 import type { Env } from "./env.ts";
 import { advanceMain, compareFiles, HostError, readFileAt } from "./github.ts";
 import { checkReviewed, checkWord, type Verdict } from "./land.ts";
+import { recordPath, SCHEMA_PATH } from "./paths.ts";
 import { payloadText } from "./payload.ts";
 import {
   bind,
@@ -42,9 +43,6 @@ import { callRoom, json, type RoomOp } from "./rpc.ts";
 import { postMessage } from "./slack.ts";
 import { TEAM_MAP, TeamMap } from "./team.ts";
 import { mintWakeToken } from "./token.ts";
-
-/** The planning schema a landing's role is read from. */
-const SCHEMA_PATH = "openspec/schemas/grade10-planning/schema.yaml";
 
 /** Where the change's room is kept, once a run has named the change this
  * thread is about. */
@@ -243,7 +241,7 @@ export class Room {
     const compare = await compareFiles(repo, "main", op.sha);
     if ("truncated" in compare)
       return json(403, { reason: "compare-truncated" });
-    const record = `openspec/changes/${change}/.openspec.yaml`;
+    const record = recordPath(change);
     let verdict: Verdict;
     if (op.kind === "reviewed") {
       verdict = checkReviewed({
@@ -328,11 +326,7 @@ export class Room {
     if (!state.change) return null;
     let text: string;
     try {
-      text = await readFileAt(
-        this.repo(),
-        `openspec/changes/${state.change}/.openspec.yaml`,
-        "main",
-      );
+      text = await readFileAt(this.repo(), recordPath(state.change), "main");
     } catch (error) {
       if (!this.toldOfRecord) {
         this.toldOfRecord = true;

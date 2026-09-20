@@ -14,10 +14,10 @@
  */
 import { parse } from "yaml";
 import { handleOf } from "../../../scripts/openspec/lib/handle.mjs";
-import { handOfArtifact } from "../../manual/src/api/stages.ts";
 import type { Role, SchemaArtifact } from "../../manual/src/api/types.ts";
 import { ROLES } from "../../manual/src/api/types.ts";
-import { wordOf } from "./slack.ts";
+import { changeDir, recordPath } from "./paths.ts";
+import { isLandingWord } from "./slack.ts";
 
 export type LandCheck =
   | "word-not-said"
@@ -32,9 +32,6 @@ export type LandCheck =
 
 export type Verdict = { ok: true } | { ok: false; check: LandCheck };
 
-/** The two words that land, as `wordOf` leaves them. */
-export const LANDING_WORDS = ["land", "land with recommendations"];
-
 /** Where an artifact's landing may write, beside the change's own directory.
  * Everything else on the sha is somebody's unrelated work riding the
  * fast-forward. A task group writes code, so it is held to its paths by the
@@ -46,6 +43,10 @@ export const LANDING_PATHS = ["docs/prds/", "docs/references/"];
 const GROUP_ARTIFACT = "tasks";
 
 const IS_GROUP = /^\d+$/;
+
+/** Whether the landing names a task group rather than an artifact: a group is
+ * one row of the plan, and lands code. */
+const isGroup = (artifact: string): boolean => IS_GROUP.test(artifact.trim());
 
 export interface WordLanding {
   change: string;
@@ -73,36 +74,26 @@ export interface ReviewedLanding {
   atSha: string;
 }
 
-/** The word a message says, or nothing: a landing is one of two words and
- * nothing else, however the rest of the thread reads. */
-export function isLandingWord(text: string | null): boolean {
-  return LANDING_WORDS.includes(wordOf(text ?? ""));
-}
-
 /**
  * The role whose word lands one artifact: the artifact's `hand:` in the
- * schema, read the way the manual reads it. A task group takes the plan's
- * hand, because a group is one row of the plan.
+ * schema. A task group takes the plan's hand, because a group is one row of
+ * the plan.
  *
  * Nothing is guessed. An id the schema does not issue is refused, and so is
  * one it issues with a role outside the six — a schema that names a seventh
- * role names nobody the record's `hands:` can be keyed by.
+ * role names nobody the record's `hands:` can be keyed by. One `find`, so the
+ * artifact and the `hand:` on it are one reading of the file.
  */
 export function roleFor(
   schemaText: string,
   artifact: string,
 ): { role: Role } | { check: "unknown-artifact" | "unknown-role" } {
-  const wanted = IS_GROUP.test(artifact.trim())
-    ? GROUP_ARTIFACT
-    : artifact.trim();
-  const artifacts = schemaArtifacts(schemaText);
-  if (!artifacts.some((one) => one.id === wanted))
-    return { check: "unknown-artifact" };
-  // `handOfArtifact` is the manual's own reading of `hand:`, imported rather
-  // than repeated: it reads an artifact's `id` and `hand` and nothing else,
-  // which is what this parses.
-  const role = handOfArtifact(wanted, artifacts as SchemaArtifact[]);
-  return role === undefined ? { check: "unknown-role" } : { role };
+  const wanted = isGroup(artifact) ? GROUP_ARTIFACT : artifact.trim();
+  const found = schemaArtifacts(schemaText).find((one) => one.id === wanted);
+  if (!found) return { check: "unknown-artifact" };
+  return found.hand === undefined
+    ? { check: "unknown-role" }
+    : { role: found.hand };
 }
 
 /** The schema's artifacts as their ids and their roles. A `hand:` outside the
@@ -163,11 +154,11 @@ export function checkWord(landing: WordLanding): Verdict {
   // group, and its paths are the group's own, held by the run's guard before
   // it pushes (`Q68`). An artifact lands text, claims its hand in the record,
   // and text has one writable set.
-  if (IS_GROUP.test(landing.artifact.trim())) return { ok: true };
+  if (isGroup(landing.artifact)) return { ok: true };
   const landed = landedBy(landing.record, landing.artifact);
   if (!landed || handleOf(landed) !== sender)
     return refuse("landed-by-mismatch");
-  const allowed = [`openspec/changes/${landing.change}/`, ...LANDING_PATHS];
+  const allowed = [`${changeDir(landing.change)}/`, ...LANDING_PATHS];
   const inside = landing.paths.every((path) =>
     allowed.some((prefix) => path.startsWith(prefix)),
   );
@@ -183,7 +174,7 @@ export function checkWord(landing: WordLanding): Verdict {
  * `reviewed:` says something different now.
  */
 export function checkReviewed(landing: ReviewedLanding): Verdict {
-  const record = `openspec/changes/${landing.change}/.openspec.yaml`;
+  const record = recordPath(landing.change);
   if (landing.paths.length !== 1 || landing.paths[0] !== record)
     return refuse("not-only-reviewed");
 

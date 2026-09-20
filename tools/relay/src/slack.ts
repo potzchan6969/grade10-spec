@@ -155,7 +155,7 @@ export function parseSlackRequest(raw: unknown, appUser: string): SlackRequest {
  * envelope names none. */
 function appOf(body: SlackEnvelope, appUser: string): string {
   const named = body.authorizations?.find((one) => one.user_id)?.user_id;
-  return String(named ?? appUser ?? "").trim();
+  return (named ?? appUser).trim();
 }
 
 export interface SlackRoute {
