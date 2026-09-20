@@ -40,7 +40,7 @@ answer in that change's thread and let its stage decide:
 | Building | A held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
 | On staging, Released or Archived | A new change, with `depends_on:` naming it |
 
-What a sentence with no change in flight behind it opens:
+Where no change is in flight on it, what the sentence opens:
 
 1. **The id** — drawn from the sentence with `slugOf` as
    [`tools/manual/src/editor/propose.ts`](../../../tools/manual/src/editor/propose.ts)
