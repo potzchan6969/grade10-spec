@@ -106,8 +106,11 @@ export function relayOf(wake) {
   return {
     url: wake.url,
     /** A reply in the change's thread, or in the planning channel where the
-     * record names no thread. */
-    post: (text) => call("POST", "/post", { text }),
+     * record names no thread. `confirm` is the button under it, from
+     * `confirmOf`: the thread then shows one button, and a press is the same
+     * word as typing it. */
+    post: (text, confirm) =>
+      call("POST", "/post", confirm ? { text, confirm } : { text }),
     /** The wake closed; the room fires again when it is dirty. */
     done: () => call("POST", "/done", {}),
     /** The room's mapping warmed with the change this run opened. */
@@ -119,6 +122,50 @@ export function relayOf(wake) {
     /** 200 while this wake is still the room's current one. */
     alive: () => call("GET", "/alive"),
   };
+}
+
+/**
+ * What a Confirm button reads, per artifact of the chain.
+ *
+ * One hand's artifacts share one button, so a product manager confirms the
+ * proposal once rather than confirming "requirements" twice: the Proposed
+ * stage's button says proposal, and the Specified stage's says requirements.
+ * A task group's button is named by its number, and a held row's by the
+ * recommendations it carries.
+ *
+ * The words are the round's, here, because the relay composes none: it posts
+ * the label it is given and sends the word back as a thread reply.
+ */
+export const CONFIRM_LABEL = {
+  proposal: "Confirm proposal",
+  decisions: "Confirm proposal",
+  "user-journeys": "Confirm proposal",
+  "ui-design": "Confirm design",
+  "tech-design": "Confirm tech design",
+  specs: "Confirm requirements",
+  "test-cases": "Confirm requirements",
+  tasks: "Confirm plan",
+};
+
+/** The button a held row carries: the recommendations, in one press. */
+export const HELD_CONFIRM = {
+  label: "Confirm with recommendations",
+  word: "land with recommendations",
+};
+
+/**
+ * The button for one artifact, one task group's number, or a held row — the
+ * label and the word the relay posts. Null is a name the chain issues no
+ * button for, which the caller refuses by name rather than posting a button
+ * nobody asked for.
+ */
+export function confirmOf(name, held = false) {
+  if (held) return { ...HELD_CONFIRM };
+  const target = String(name ?? "").trim();
+  if (/^\d+$/.test(target))
+    return { label: `Confirm group ${target}`, word: "land" };
+  const label = CONFIRM_LABEL[target];
+  return label ? { label, word: "land" } : null;
 }
 
 /**
