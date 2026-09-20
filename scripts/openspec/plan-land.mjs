@@ -95,7 +95,7 @@ import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
-import { appendLanded, LANDED } from "./lib/landed.mjs";
+import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import {
   isGroup,
   perspectivesOf,
@@ -388,7 +388,7 @@ async function attemptLanding(attempt) {
   const cells = reviewedOnly ? undefined : rowOf(read, artifact, group);
   const tip = git(["rev-parse", "HEAD"]);
   const base = group ? tip : MAIN;
-  const changed = changedPaths(MAIN, tip);
+  const changed = changedPaths(root, MAIN, tip);
   // The pages the change may write, held to the exact set the guard holds
   // every push of this run to: the change's own directory is carried by the
   // legs above this one, artifact by artifact, so the pages are what is left
@@ -608,12 +608,6 @@ function filesOf(changed, artifacts, artifact) {
   return changed.filter(
     (path) => path.startsWith(`${dir}/specs/`) && path.endsWith(`/${name}`),
   );
-}
-
-/** Every path the branch changed against `main`, the landing's own menu. */
-function changedPaths(base, tip) {
-  const listed = git(["diff", "--name-only", "-z", base, tip]);
-  return (listed ?? "").split("\0").filter(Boolean);
 }
 
 /**

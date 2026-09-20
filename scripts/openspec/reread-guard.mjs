@@ -14,7 +14,17 @@
  * session that skipped this guard is still caught, just later and more
  * broadly.
  *
- *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--alive] [--root <dir>]
+ *   node scripts/openspec/reread-guard.mjs <change> [--before <sha>] [--alive] [--root <dir>]
+ *
+ * The commits it reads are what this run made, which is two facts about a
+ * checkout and not one range: the landings, which `.round/landed` names and
+ * which `main` holds already because the landing is what pushed them, and
+ * every commit on `HEAD` that `main` does not hold — the drafts, pushed to
+ * the change's branch or about to be. Their union is what is read, so a
+ * `main` that moved under the run is no part of it: `plan:land` rebases the
+ * branch on a moved `origin/main`, and every commit `main` gained while the
+ * round was reading arrives in the checkout and would otherwise read as a
+ * path the re-read pushed.
  *
  * `--alive` asks the relay, before the paths are read, whether this run's
  * wake is still the room's own: a run whose lease the relay has closed under
@@ -22,59 +32,48 @@
  * rather than pushing work no thread is waiting for. With no wake there is
  * nothing to ask and nothing to refuse, which is the terminal round.
  *
- * `--before` is the branch tip the session read at the start, before its
- * first push. The commits this run made are the ones `plan:land` named in
- * `.round/landed` as it committed them, not the range `<before>..HEAD`: the
- * landing rebases the change's branch on a moved `origin/main`, so every
- * commit `main` gained while the round was reading arrives in the checkout
- * and would read as a path the re-read pushed. `--before` is the fallback for
- * a run that committed nothing through the landing, and the guard says which
- * of the two it read.
+ * `--before` is the branch tip the session read at the start. It selects
+ * nothing any more — the union above is read from the checkout itself — and
+ * is taken for the push step that passes it.
  */
-import { execFileSync } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
-import { LANDED, landedShas } from "./lib/landed.mjs";
+import { commitPaths, LANDED, landedShas } from "./lib/landed.mjs";
 import { readWake, relayOf } from "./lib/relay.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
+import { git, storeMain } from "./store-main.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** What a workflow log reads as an annotation: every refusal here opens with
  * it, the usage refusal the parser prints included. */
 const ERROR = "::error::";
 const USAGE =
-  "usage: node reread-guard.mjs <change> --before <sha> [--alive] [--root <dir>]";
-
-/** Every path a range of commits touched, oldest first. */
-export function pushedPaths(root, before, after) {
-  const stdout = execFileSync(
-    "git",
-    ["diff", "--name-only", "-z", before, after],
-    { cwd: root, encoding: "utf8" },
-  );
-  return stdout.split("\0").filter(Boolean);
-}
-
-/** Every path a named set of commits touched, each commit against its own
- * parent and each path once: what this run wrote, whatever else the checkout
- * gained while it ran. */
-export function commitPaths(root, shas) {
-  const paths = new Set();
-  for (const sha of shas) {
-    const stdout = execFileSync(
-      "git",
-      ["diff-tree", "--no-commit-id", "--name-only", "-r", "-z", sha],
-      { cwd: root, encoding: "utf8" },
-    );
-    for (const path of stdout.split("\0").filter(Boolean)) paths.add(path);
-  }
-  return [...paths];
-}
+  "usage: node reread-guard.mjs <change> [--before <sha>] [--alive] [--root <dir>]";
 
 /** The paths of those the writable set does not hold. */
 export function outOfBounds(paths, writable) {
   return paths.filter((path) => !isWritable(writable, path));
+}
+
+/**
+ * The commits this run made: the landings it named, and everything `HEAD`
+ * holds that `main` does not. Read with no fetch — the checkout's own
+ * `origin/main` is what the run has been landing against — and each sha
+ * once, since a landing that is also unpushed is one commit either way.
+ */
+export function runCommits(root) {
+  const main = storeMain(root, { fetch: false });
+  const unpushed = main
+    ? (git(root, ["rev-list", "HEAD", "--not", main.ref]) ?? "")
+        .split("\n")
+        .map((line) => line.trim())
+        .filter(Boolean)
+    : [];
+  return {
+    ref: main?.ref,
+    shas: [...new Set([...landedShas(root), ...unpushed])],
+  };
 }
 
 /** The wake this run was fired with, asked whether it is still the room's
@@ -109,21 +108,15 @@ async function main() {
     prefix: ERROR,
   });
   const [change] = positional;
-  if (!change || !flags.before) fail(USAGE);
+  if (!change) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
 
   if (flags.alive) await checkAlive(root);
 
   const writable = writableBy(root, change);
-  const shas = landedShas(root);
-  const paths =
-    shas.length > 0
-      ? commitPaths(root, shas)
-      : pushedPaths(root, flags.before, "HEAD");
-  const read =
-    shas.length > 0
-      ? `the ${shas.length} commit(s) ${LANDED} names`
-      : `${flags.before}..HEAD, no ${LANDED} to read`;
+  const { ref, shas } = runCommits(root);
+  const paths = commitPaths(root, shas);
+  const read = `the ${shas.length} commit(s) this run made — ${LANDED}, and HEAD above ${ref ?? "no main"}`;
   const bad = outOfBounds(paths, writable);
   if (bad.length > 0) {
     fail(
@@ -133,7 +126,7 @@ async function main() {
     );
   }
   console.log(
-    `${change}: ${paths.length} path(s) pushed in ${read}, all inside ${writable.join(", ")}`,
+    `${change}: ${paths.length} path(s) in ${read}, all inside ${writable.join(", ")}`,
   );
 }
 

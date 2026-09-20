@@ -13,9 +13,16 @@
  * thread outside a wake.
  *
  *   node scripts/openspec/relay-post.mjs --message-file <path> [--root <dir>]
- *   node scripts/openspec/relay-post.mjs --text "<text>" [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --done [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --bind <change> [--root <dir>]
+ *
+ * One table below holds the three, keyed by the flag that names each: the
+ * call it makes on the wake, the line a terminal round prints instead, and
+ * what a call that went through says. A reply is the file the round wrote —
+ * `.round/thread.txt` — and never a string on the command line: a summary
+ * with a newline, a quote or a Slack link in it is a file, and one that is
+ * spliced into an argument is a quoting bug waiting for the run that writes
+ * it.
  *
  * `--bind` is the plan's own call, made right after `openspec new change`: it
  * warms the room's mapping with the change the run opened, and never defines
@@ -33,24 +40,37 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
 import { readWake, relayOf } from "./lib/relay.mjs";
 
-const USAGE =
-  'usage: node relay-post.mjs --message-file <path> | --text "<text>" | --done | --bind <change> [--root <dir>]';
+/**
+ * The modes, one row each: `read` takes the flag's value off the arguments,
+ * `call` is what the wake is asked, `printed` is what a terminal round says
+ * instead, `confirmed` is what a call that went through says, and `nothing`
+ * is the value that makes the whole run a no-op.
+ */
+const KINDS = {
+  "message-file": {
+    read: (flags) => messageFileText(flags["message-file"]),
+    call: (relay, text) => relay.post(text),
+    printed: (text) => text,
+    confirmed: () => "posted",
+    nothing: (text) => text === "",
+  },
+  done: {
+    read: () => true,
+    call: (relay) => relay.done(),
+    printed: () => "done",
+    confirmed: () => "done",
+  },
+  bind: {
+    read: (flags) => flags.bind,
+    call: (relay, change) => relay.bind(change),
+    printed: (change) => `bind ${change}`,
+    confirmed: (change) => `bound ${change}`,
+  },
+};
 
-/** The one action this call makes, read off which flag was given: `post` for
- * a message (from a file or given directly), `done`, or `bind`. */
-function actionOf(flags) {
-  const modes = ["message-file", "text", "done", "bind"].filter(
-    (key) => flags[key] !== undefined,
-  );
-  if (modes.length !== 1)
-    fail(`one of --message-file, --text, --done, --bind\n${USAGE}`);
-  if (flags.done) return { kind: "done" };
-  if (flags.bind !== undefined) return { kind: "bind", change: flags.bind };
-  if (flags.text !== undefined)
-    return { kind: "post", text: flags.text.trim() };
-  const text = messageFileText(flags["message-file"]);
-  return { kind: "post", text };
-}
+const MODES = Object.keys(KINDS);
+const USAGE =
+  "usage: node relay-post.mjs --message-file <path> | --done | --bind <change> [--root <dir>]";
 
 /** The file's trimmed text, or the empty string where it is missing or
  * blank — a round posts only when it has something to say. */
@@ -59,51 +79,39 @@ function messageFileText(path) {
   return readFileSync(path, "utf8").trim();
 }
 
-/** What the action prints when there is no relay to post it through. */
-function printed(action) {
-  if (action.kind === "done") return "done";
-  if (action.kind === "bind") return `bind ${action.change}`;
-  return action.text;
-}
-
-/** The call one action makes on the wake, through the one client. */
-function callFor(relay, action) {
-  if (action.kind === "done") return relay.done();
-  if (action.kind === "bind") return relay.bind(action.change);
-  return relay.post(action.text);
-}
-
-/** What a successful call prints — nothing that could double as a log of the
- * token, which the client's own path and header carry. */
-function confirmed(action) {
-  if (action.kind === "done") return "done";
-  if (action.kind === "bind") return `bound ${action.change}`;
-  return "posted";
-}
-
 async function main() {
   const { flags } = parseArgs(process.argv.slice(2), {
-    keys: ["message-file", "text", "bind", "root"],
+    keys: ["message-file", "bind", "root"],
     booleans: ["done"],
     usage: USAGE,
   });
   const root = flags.root ?? process.cwd();
-  const action = actionOf(flags);
+  const given = MODES.filter((one) => flags[one] !== undefined);
+  if (given.length !== 1) {
+    fail(`one of ${MODES.map((one) => `--${one}`).join(", ")}\n${USAGE}`);
+  }
+  const kind = KINDS[given[0]];
+  const value = kind.read(flags);
 
-  if (action.kind === "post" && action.text === "") {
+  if (kind.nothing?.(value)) {
     console.log("nothing to post");
     return;
   }
 
-  const wake = readWake(root);
+  let wake;
+  try {
+    wake = readWake(root);
+  } catch (cause) {
+    fail(cause.message);
+  }
   if (!wake) {
-    console.log(printed(action));
+    console.log(kind.printed(value));
     return;
   }
 
   let answer;
   try {
-    answer = await callFor(relayOf(wake), action);
+    answer = await kind.call(relayOf(wake), value);
   } catch (cause) {
     fail(`the relay could not be reached: ${cause.message}`);
     return;
@@ -112,7 +120,7 @@ async function main() {
     fail(`the relay refused: ${answer.status}\n${answer.text}`);
     return;
   }
-  console.log(confirmed(action));
+  console.log(kind.confirmed(value));
 }
 
 function fail(message) {
@@ -121,5 +129,5 @@ function fail(message) {
 }
 
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
-  main();
+  main().catch((cause) => fail(cause.message));
 }

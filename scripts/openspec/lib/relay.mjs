@@ -9,8 +9,14 @@
  * the day an endpoint moves or the token stops riding the path.
  *
  * The token is the wake's own — HMAC over the room, the wake and its expiry,
- * signed by the relay and expiring with the wake's budget. It is carried as
- * the bearer of every call and never printed. No chat token reaches a run.
+ * signed by the relay and expiring with the wake's budget. It rides the path
+ * of every call, which is where the relay verifies it, and no call bears it
+ * twice: a header nothing reads is the same secret in one more log. It is
+ * never printed, and no chat token reaches a run.
+ *
+ * Nothing here exits the process. A wake's file that no run can use is thrown
+ * as a `RelayError`, and the entry point that read it prints the message in
+ * its own voice — `::error::` where a workflow log is reading — and exits 1.
  *
  * `openspec/changes/run-a-round-on-every-artifact/tech-design.md`, The relay:
  * "The run writes it whole to `.round/relay.json`, which `lib/relay.mjs` —
@@ -23,6 +29,16 @@ import { join } from "node:path";
 /** The wake's own file, root-relative — what a refusal names. */
 export const RELAY_FILE = join(".round", "relay.json");
 
+/** A wake nothing can be made of: the file missing where one was expected, or
+ * written in a way no call can be built from. Its message is the whole of
+ * what a caller prints. */
+export class RelayError extends Error {
+  constructor(message) {
+    super(message);
+    this.name = "RelayError";
+  }
+}
+
 /**
  * The wake this run was fired with, or `null` where there is none: a terminal
  * round has no wake, prints what it would have posted and pushes `main`
@@ -30,24 +46,25 @@ export const RELAY_FILE = join(".round", "relay.json");
  *
  * `ROUND_WAKE=relay` says a wake was expected. Then a missing or unreadable
  * file is not a terminal round, it is a run that lost the payload it was
- * given — so it fails loudly rather than quietly printing into a thread
- * nobody is reading.
+ * given — so it throws rather than quietly printing into a thread nobody is
+ * reading, and the entry point reports it and exits 1.
  */
 export function readWake(root = process.cwd()) {
   const file = join(root, RELAY_FILE);
   const expected = process.env.ROUND_WAKE === "relay";
   if (!existsSync(file)) {
-    if (expected) die(`${RELAY_FILE} is not there, and ROUND_WAKE=relay`);
+    if (expected)
+      throw new RelayError(`${RELAY_FILE} is not there, and ROUND_WAKE=relay`);
     return null;
   }
   let parsed;
   try {
     parsed = JSON.parse(readFileSync(file, "utf8"));
   } catch (cause) {
-    die(`${RELAY_FILE} is not JSON: ${cause.message}`);
+    throw new RelayError(`${RELAY_FILE} is not JSON: ${cause.message}`);
   }
   if (!parsed.relay?.url || !parsed.relay?.token) {
-    die(`${RELAY_FILE} names no relay.url and relay.token`);
+    throw new RelayError(`${RELAY_FILE} names no relay.url and relay.token`);
   }
   return {
     url: String(parsed.relay.url).replace(/\/+$/, ""),
@@ -70,11 +87,12 @@ export function relayOf(wake) {
   const call = async (method, path, body) => {
     const response = await fetch(`${wake.url}/runs/${wake.token}${path}`, {
       method,
-      headers: {
-        authorization: `Bearer ${wake.token}`,
-        ...(body === undefined ? {} : { "content-type": "application/json" }),
-      },
-      ...(body === undefined ? {} : { body: JSON.stringify(body) }),
+      ...(body === undefined
+        ? {}
+        : {
+            headers: { "content-type": "application/json" },
+            body: JSON.stringify(body),
+          }),
     });
     const text = await response.text().catch(() => "");
     let parsed;
@@ -101,9 +119,4 @@ export function relayOf(wake) {
     /** 200 while this wake is still the room's current one. */
     alive: () => call("GET", "/alive"),
   };
-}
-
-function die(message) {
-  console.error(message);
-  process.exit(1);
 }
