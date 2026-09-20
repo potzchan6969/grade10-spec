@@ -2,7 +2,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 import { formatDate, relativeTime } from "../src/api/time";
-import type { ChangeEntry, ThreadEvent } from "../src/api/types";
+import type { ChangeEntry, RoundRow, ThreadEvent } from "../src/api/types";
 import { ThreadSection } from "../src/blocks/thread-section";
 import { changeEntry } from "./manual-fixture";
 
@@ -23,6 +23,22 @@ function event(kind: ThreadEvent["kind"], extra: Partial<ThreadEvent> = {}) {
     subject: "chore(openspec): something happened",
     ...extra,
   } satisfies ThreadEvent;
+}
+
+function round(
+  number: number,
+  artifact: string,
+  extra: Partial<RoundRow> = {},
+): RoundRow {
+  return {
+    round: number,
+    artifact,
+    perspectives: "simpler-thing; missing-pieces",
+    stood: "the empty state is a link",
+    asked: "-",
+    tests: "-",
+    ...extra,
+  };
 }
 
 const change: ChangeEntry = changeEntry("gift-cards", [], {
@@ -108,14 +124,10 @@ describe("what the files say beside the commits", () => {
     const withRound: ChangeEntry = {
       ...change,
       rounds: [
-        {
-          round: 1,
-          artifact: "proposal",
-          perspectives: "simpler-thing; missing-pieces",
+        round(1, "proposal", {
           stood: "the empty state is a link; the title is the outcome",
           asked: "Q4",
-          tests: "-",
-        },
+        }),
       ],
     };
     const html = render(
@@ -129,6 +141,50 @@ describe("what the files say beside the commits", () => {
     expect(html).toContain("stood: the empty state is a link");
     expect(html).toContain("asked");
     expect(html).toContain("Q4");
+  });
+
+  it("pairs the nth landing of an artifact with the nth round of it", () => {
+    const twice: ChangeEntry = {
+      ...change,
+      rounds: [
+        round(1, "proposal", { stood: "the first reading" }),
+        round(2, "specs", { stood: "the reading nothing landed" }),
+        round(3, "proposal", { stood: "the second reading" }),
+      ],
+    };
+    const html = render(
+      [
+        event("landed", { sha: "a".repeat(40), target: "proposal" }),
+        event("landed", { sha: "b".repeat(40), target: "proposal" }),
+      ],
+      twice,
+    );
+
+    // Round 1 under the first landing of the proposal and round 3 under the
+    // second, in that order: a round is not the artifact it read.
+    expect(html.indexOf("the first reading")).toBeLessThan(
+      html.indexOf("the second reading"),
+    );
+    expect(html).toContain("Round 1");
+    expect(html).toContain("Round 3");
+  });
+
+  it("gives a round no landing on this reading accounts for its own row", () => {
+    const withRounds: ChangeEntry = {
+      ...change,
+      rounds: [
+        round(1, "proposal", { stood: "the reading under the landing" }),
+        round(2, "specs", { stood: "the reading with no landing in hand" }),
+      ],
+    };
+    const html = render(
+      [event("landed", { target: "proposal", handle: "robin" })],
+      withRounds,
+    );
+
+    expect(html).toContain("the reading with no landing in hand");
+    expect(html).toContain("Round 2");
+    expect(html).toContain("<code");
   });
 
   it("lists a held question at the end, undated, and never a decided row", () => {
