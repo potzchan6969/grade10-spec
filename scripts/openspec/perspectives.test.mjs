@@ -389,6 +389,26 @@ test("the change may be named by the flag rather than the first argument", () =>
   assert.equal(printed.bundle.draft, "openspec/changes/demo/decisions.md");
 });
 
+test("the change may be read off a claude/<id> branch, where neither argument names one", () => {
+  const root = fixture();
+  execFileSync("git", ["init", "--quiet", "-b", "claude/demo", root]);
+  execFileSync("git", ["-C", root, "config", "user.email", "a@test"]);
+  execFileSync("git", ["-C", root, "config", "user.name", "a"]);
+  execFileSync("git", ["-C", root, "add", "-A"]);
+  execFileSync("git", [
+    "-C",
+    root,
+    "commit",
+    "--quiet",
+    "-m",
+    "the demo change",
+  ]);
+
+  const printed = cli(root, ["decisions", "--diff", diffOf(root, WORDS)]);
+
+  assert.equal(printed.bundle.draft, "openspec/changes/demo/decisions.md");
+});
+
 // The one argv parser: `lib/args.mjs` refuses a valued option given no
 // value, naming the flag beside the usage. This entry point reads its own
 // arguments through it rather than a copy of the loop.
