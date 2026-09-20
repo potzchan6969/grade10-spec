@@ -69,7 +69,7 @@ This group is its own test task: the walks are what prove the change. The job th
 
 - [x] 7.1 The walks of `shared-planning-agent-rounds-US-08` and `shared-planning-agent-rounds-US-09` in the harness `stage-changes-and-notify-hands`' group 8 leaves, one file per journey, against its demo-store fixtures - `shared-planning-agent-rounds-SC-51`, `shared-planning-agent-rounds-SC-61`
 - [ ] 7.2 The journeys and the cases no script drives - the moves a hand makes in Slack's own client and the round inside an agent's session - walked once by hand in 8.2's first walk, their cases left manual with the reason on each, and named in that walk's `rounds.md` row; the walks 7.1 landed flipped their cases in their own commits - `shared-planning-agent-rounds-SC-59`
-- [ ] 7.3 One reader argues the simpler shape for the whole change after the last group lands and before it goes to staging, with its row in `rounds.md`, which is the fix pass's row `US9-TC10-1` reads on the change page; the reading taken before the relay (row 8) reads a shape that no longer exists
+- [x] 7.3 One reader argues the simpler shape for the whole change after the last group lands and before it goes to staging, with its row in `rounds.md`, which is the fix pass's row `US9-TC10-1` reads on the change page; the reading taken before the relay (row 8) reads a shape that no longer exists
 
 ## 8. The deploy and the first walk (grade10-spec)
 

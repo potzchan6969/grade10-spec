@@ -138,6 +138,7 @@ thread: C0456EFGH/1758270000.000100
 - [A group lands by hand without a round] → the `round` rule refuses the tick, date-fenced to changes opened after it, and the fix is one row saying what happened
 - [The requirements move after the tech design and nothing notices] → the requirements pass writes the dated wait on the tech PIC; a wait holds no stage
 - [The perspectives table grows into a checklist] → a perspective is a reader with a `when`; a reader with no `when` a draft can summon is deleted
+- [A thread room bound to a change has its wake cut by the budget] → its carried lines go back to its own queue, which the change's room no longer drains; the failure line in the thread says the wake did not finish, and the hand's next reply, forwarded to the change's room, is what wakes the change again. Known, left for the first walk (8.2)
 
 ## Migration Plan
 
