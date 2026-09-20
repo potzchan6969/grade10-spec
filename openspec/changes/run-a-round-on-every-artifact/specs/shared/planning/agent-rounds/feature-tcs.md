@@ -643,7 +643,7 @@ Runs once per row of **Test data**.
 ## shared-planning-agent-rounds-US4: Hand answers only what only they can
 
 **As a** hand,
-**I want** the agent to ask a preference or a product decision as a numbered question with its recommendation, and to decide nothing else,
+**I want** the agent to ask me what moves scope, is costly to undo or needs a fact only I have, as a numbered question with its recommendation, and to decide the rest on the best option and say so,
 **so that** I answer once and never argue with a draft.
 
 ### shared-planning-agent-rounds-US4-TC1-1: Numbered question carries a recommendation and the hand
