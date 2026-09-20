@@ -218,11 +218,37 @@ export interface Confirm {
  * this is what the two calls take rather than a model of Block Kit. */
 export type SlackBlock = Record<string, unknown>;
 
-/** A line and one button under it. The text stays the message's own `text`
+/** What Slack takes in one `section`. A block past it is refused whole, and a
+ * summary is as long as the round wrote it. */
+export const SECTION_MAX = 3000;
+
+/**
+ * The text as sections Slack takes. A section ends on the last line break
+ * that fits, so a line is not cut in half, and a block of text with none is
+ * cut at the cap; nothing is dropped, and the message's own `text` carries
+ * the whole of it as the fallback either way.
+ */
+function sections(text: string): SlackBlock[] {
+  const parts: string[] = [];
+  let rest = text;
+  while (rest.length > SECTION_MAX) {
+    const cut = rest.slice(0, SECTION_MAX).lastIndexOf("\n");
+    const at = cut > 0 ? cut + 1 : SECTION_MAX;
+    parts.push(rest.slice(0, at));
+    rest = rest.slice(at);
+  }
+  parts.push(rest);
+  return parts.map((part) => ({
+    type: "section",
+    text: { type: "mrkdwn", text: part },
+  }));
+}
+
+/** The line and one button under it. The text stays the message's own `text`
  * too, which is what a notification and a client with no blocks read. */
 export function confirmBlocks(text: string, confirm: Confirm): SlackBlock[] {
   return [
-    { type: "section", text: { type: "mrkdwn", text } },
+    ...sections(text),
     {
       type: "actions",
       elements: [
@@ -242,7 +268,7 @@ export function confirmBlocks(text: string, confirm: Confirm): SlackBlock[] {
  * press is in, and nobody presses twice. */
 export function confirmedBlocks(text: string, note: string): SlackBlock[] {
   return [
-    { type: "section", text: { type: "mrkdwn", text } },
+    ...sections(text),
     { type: "context", elements: [{ type: "mrkdwn", text: note }] },
   ];
 }
