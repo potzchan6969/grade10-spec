@@ -21,6 +21,7 @@ read again before anything lands after it, with one record row per round.
   - Land: one word lands every drafted artifact of your own hand, in the chain's order, and stops at the first artifact of another hand
   - Edit: a push from a terminal or GitHub is the hand's word for the lines it touched
   - First sentence: a message in the planning channel naming no change opens one, with the asker as its product manager
+  - Overlap in flight: a sentence naming no change that overlaps an active change's capability or the page sections it would mark is answered in that change's thread, and that change's stage and who asks say whether it is extended, held for its product manager, or depended on by a new change
 - Questions, never guesses
   - Decided by the round: a preference the round can take is decided on the best option and recorded as a numbered `## Decisions` row, and one reply from any hand overturns it
   - Held for its hand: a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work waits on its hand and holds the change's landings
@@ -37,7 +38,6 @@ read again before anything lands after it, with one record row per round.
   - No-op read: a read that changes nothing writes the `reviewed:` line alone and says so in the thread; a read that edits opens a round for the artifact's hand
   - Landing refused: an artifact lands only when everything before it is fresh, the fold at archive refuses a behind delta, and a tick, a claim and a wait are never held
   - Moved goals: a goal or non-goal that moved is a question to the product manager, extend, supersede or split, and nothing is rewritten in place
-  - Overlap in flight: a sentence naming no change that overlaps an active change's capability or the page sections it would mark is answered in that change's thread, and that change's stage says whether it is extended, held for its product manager, or depended on by a new change
   - Raised rows: a landed Raised row puts the requirements and the cases behind
   - Tech design first: a requirement that reaches the tech design writes a dated wait on the tech PIC, cleared by their edit or a read
 - The record
@@ -328,7 +328,7 @@ taken as a remark.
 
 A change can start from one message, with nobody opening a terminal.
 
-A message in the planning channel that addresses the app and names no existing change SHALL open one.
+A message in the planning channel that addresses the app and names no existing change SHALL open one where no active change overlaps it.
 
 - **The id** — chosen from the sentence
 - **The hand** — the asker's handle written as the change's `hands: pm`
@@ -337,10 +337,32 @@ A message in the planning channel that addresses the app and names no existing c
 - **The reply** — the change's id said back in the thread that message started
 - **Every later hand** — a message naming a change that exists is answered in
   that change's thread, the reply names that change's id, and nothing is opened
+- **A sentence that overlaps** — a sentence naming no change SHALL be answered
+  in the thread of any active change whose deltas name the capability it is
+  about, or whose proposal links the page sections it would mark, and the row
+  below for that change's stage and the asker SHALL decide what happens
+
+| The change in flight is | The run does |
+| --- | --- |
+| Proposed or Designed, and the sentence is its product manager's | Extends it: the sentence is a remark on its proposal, the chain is redrawn, and the reply names the change - decided by the round |
+| Proposed or Designed, and the sentence is another hand's | Writes a held row on its product manager: extend, recommended |
+| Specified or Planned | Writes a held row on its product manager: extend where the moved part is smaller than a task group of work, split otherwise |
+| Building | Writes a held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | Opens a new change, with `depends_on:` naming it |
+
+- **The held row's home** — a row this rule holds is written in the overlapped
+  change's `decisions.md`, and holds that change's landings as any held row
+  does
+- **Two overlapped changes** — the run answers in the thread of the change
+  furthest along, and the reply names the others
+- **No product manager named** — an overlapped change whose product manager
+  the team map does not name takes the held row unaddressed, and the row asks
+  for the handle
 
 #### Scenario: shared-planning-agent-rounds-SC-17 - A product manager opens a change from one sentence
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says what is wanted and never opens a terminal
 
+- **GIVEN** no active change overlaps the sentence
 - **WHEN** a product manager writes in the planning channel what is wanted, addressing the app and naming no change
 - **THEN** a change is opened whose id is drawn from that sentence
 - **AND** the asker's handle is written as its `hands: pm`
@@ -360,6 +382,15 @@ A message in the planning channel that addresses the app and names no existing c
 - **WHEN** they write in the planning channel what is wanted, addressing the app and naming no change
 - **THEN** the change opens with its product manager unnamed
 - **AND** the reply says the hand is unnamed and asks for the handle
+
+#### Scenario: shared-planning-agent-rounds-SC-80 - A sentence overlaps a change in flight
+**Serves:** shared-planning-agent-rounds-US-01 - the product manager's next sentence reaches the change that already covers it instead of opening a second one
+
+- **GIVEN** an active change whose deltas name a capability, or whose proposal links a page's sections
+- **WHEN** a sentence naming no change asks for something on that capability or those sections
+- **THEN** the run answers in that change's thread
+- **AND** the row for the change's stage and the asker decides
+- **AND** a row the run holds is written in that change's `decisions.md`
 
 ### Requirement: A draft waits for what only its hand can give
 
@@ -852,13 +883,6 @@ nothing in place.
 - **Until the answer** — nothing after `decisions.md` lands
 - **Never in place** — no artifact is redrawn to the moved goal before the
   product manager answers
-- **A sentence that overlaps** — a sentence naming no change SHALL be answered
-  in the thread of any active change whose deltas name the capability it is
-  about, or whose proposal links the page sections it would mark, and that
-  change's stage SHALL decide: Proposed or Designed with the same product
-  manager is extended by the round, Specified, Planned or Building holds a row
-  on its product manager to extend, split or supersede, and a change on
-  staging or later is named in a new change's `depends_on:`
 
 #### Scenario: shared-planning-agent-rounds-SC-45 - A moved goal asks the product manager
 **Serves:** shared-planning-agent-rounds-US-07 - the product manager is asked before a change mid-build becomes another change
@@ -885,14 +909,6 @@ nothing in place.
 - **AND** supersede opens a new change from the moved goal and withdraws this one
 - **AND** split opens a new change for the moved part and leaves the rest here
 - **AND** the answer is written as a decisions row
-
-#### Scenario: shared-planning-agent-rounds-SC-80 - A sentence overlaps a change in flight
-**Serves:** shared-planning-agent-rounds-US-07 - the product manager says whether a new sentence belongs to the change they already have
-
-- **GIVEN** an active change whose deltas name a capability, or whose proposal links a page's sections
-- **WHEN** a sentence naming no change asks for something on that capability or those sections
-- **THEN** the run answers in that change's thread
-- **AND** the change's stage decides: Proposed or Designed with the same product manager is extended by the round, Specified, Planned or Building holds a row on its product manager to extend, split or supersede, and a change on staging or later is named in a new change's `depends_on:`
 
 ### Requirement: A landed Raised row puts the requirements and the cases behind
 
