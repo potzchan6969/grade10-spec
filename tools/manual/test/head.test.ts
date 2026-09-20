@@ -230,24 +230,27 @@ describe("no relay", () => {
     // A variable nobody can read is a relay nobody can listen to: the page
     // shows no banner rather than failing inside a watch nothing is awaiting.
     ["the url cannot be read", { [RELAY_URL]: { url: "https://[oops" } }],
-  ])("shared-planning-change-stages-SC-75 - does nothing where %s", async (_what, answers) => {
-    const { http } = fakeHttp(answers);
-    const lines = fakeLines();
-    const clock = fakeClock();
-    const heads: MainHead[] = [];
+  ])(
+    "shared-planning-change-stages-SC-75 - does nothing where %s",
+    async (_what, answers) => {
+      const { http } = fakeHttp(answers);
+      const lines = fakeLines();
+      const clock = fakeClock();
+      const heads: MainHead[] = [];
 
-    watchMainHead({
-      http,
-      onHead: (head) => heads.push(head),
-      open: lines.open,
-      wait: clock.wait,
-    });
-    await settle();
+      watchMainHead({
+        http,
+        onHead: (head) => heads.push(head),
+        open: lines.open,
+        wait: clock.wait,
+      });
+      await settle();
 
-    expect(lines.opened).toEqual([]);
-    expect(clock.waits).toEqual([]);
-    expect(heads).toEqual([]);
-  });
+      expect(lines.opened).toEqual([]);
+      expect(clock.waits).toEqual([]);
+      expect(heads).toEqual([]);
+    },
+  );
 });
 
 describe("the checkout the page is run out of", () => {
