@@ -46,10 +46,10 @@ test("shared-planning-agent-rounds-SC-66 - a landing wakes the relay once per ch
   assert.match(wake.name, /Wake the relay/);
   assert.match(wake.run, /-X POST "\$AGENT_WAKE_URL\/wake"/);
   assert.match(wake.run, /-H "Authorization: Bearer \$AGENT_WAKE_TOKEN"/);
-  assert.match(wake.run, /"change":"\$\{\{ matrix\.id \}\}"/);
-  assert.match(wake.run, /"reason":"landing"/);
-  assert.match(wake.run, /"base":"\$BEFORE"/);
-  assert.match(wake.run, /"head":"\$HEAD_SHA"/);
+  assert.match(wake.run, /\\"change\\":\\"\$\{\{ matrix\.id \}\}\\"/);
+  assert.match(wake.run, /\\"reason\\":\\"landing\\"/);
+  assert.match(wake.run, /\\"base\\":\\"\$BEFORE\\"/);
+  assert.match(wake.run, /\\"head\\":\\"\$HEAD_SHA\\"/);
   assert.match(wake.env.AGENT_WAKE_URL, /^\$\{\{ vars\.AGENT_WAKE_URL \}\}$/);
   assert.match(
     wake.env.AGENT_WAKE_TOKEN,
