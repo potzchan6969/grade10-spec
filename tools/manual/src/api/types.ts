@@ -857,3 +857,35 @@ export type Archive = {
   storeHead: string;
   changes: ChangeEntry[];
 };
+
+/** `/api/relay` — the relay a page listens to for `main` moving, written at
+ * build from `RELAY_URL`. No relay is the honest default: the feature is off
+ * and no page opens a socket. */
+export type RelayUrl = { url?: string };
+
+/** `/api/head` — the store head this site was built from. A page told `main`
+ * moved polls it, and re-reads the snapshot once it answers with `main`. */
+export type DeployedHead = { storeHead: string };
+
+/** `/api/upstream` — how the checkout the dev server runs on stands against
+ * `main`. Dev only: the hosted site is static files and serves no such
+ * endpoint. */
+export type CheckoutStanding = {
+  /** Commits on `origin/main` this checkout does not have. */
+  behind: number;
+  /** Commits this checkout has that `origin/main` does not. */
+  ahead: number;
+  /** Anything uncommitted in the working tree, tracked or not. */
+  dirty: boolean;
+  /** Whether `origin` was read for these counts. False where the checkout has
+   * no `origin`, or the read failed — the counts are then whatever refs the
+   * clone already had. */
+  fetched: boolean;
+  /** When `origin` was last read, absent where it never was. */
+  fetchedAt?: string;
+};
+
+/** `POST /api/pull` — the fast-forward onto `main`, or the reason it is
+ * refused. The endpoint owns the words: the banner shows the reason it is
+ * given. */
+export type PullOutcome = { pulled: true; head: string } | { reason: string };

@@ -36,6 +36,7 @@ import {
 } from "../editor/propose.ts";
 import { changeFile, confine, storePath } from "./disk.mts";
 import { git } from "./git.mts";
+import { type OriginMain, originMain, relayOf } from "./main-moved.mts";
 import { type Roots, resolveRoots } from "./roots.mts";
 import {
   readHeads,
@@ -51,6 +52,9 @@ import { viewerMount } from "./viewer-mount.mts";
  * per request — memoized on git heads plus the newest mtime, so an editor can
  * poll them — and every write is confined to the content root's manual,
  * except a proposal, which goes to the store's `openspec/changes/`.
+ *
+ * One reading of `origin/main` per server, so the tabs a teammate has open
+ * share one fetch rather than one each.
  */
 export function manualStorePlugin(): Plugin {
   const roots = resolveRoots();
@@ -64,11 +68,15 @@ export function manualStorePlugin(): Plugin {
       // would be the manual's not-found page. The built site has the viewer
       // as files at the same address, so a link works on both.
       server.middlewares.use("/openspec", viewerMount(roots));
-      server.middlewares.use(middleware(roots, live(roots)));
+      server.middlewares.use(
+        middleware(roots, live(roots), originMain(roots.store)),
+      );
     },
     configurePreviewServer(server) {
       const built = join(server.config.root, server.config.build.outDir);
-      server.middlewares.use(middleware(roots, fromDist(built)));
+      server.middlewares.use(
+        middleware(roots, fromDist(built), originMain(roots.store)),
+      );
     },
   };
 }
@@ -157,9 +165,10 @@ export type StoreRequest = {
 export function storeEndpoints(
   roots: Roots,
   artifacts: Artifacts = live(roots),
+  origin: OriginMain = originMain(roots.store),
 ): (request: StoreRequest) => Promise<Reply> {
   return (request) =>
-    route(roots, artifacts, {
+    route(roots, artifacts, origin, {
       method: request.method ?? "GET",
       url: new URL(request.path, "http://manual.local"),
       header: (name) => request.headers?.[name],
@@ -167,7 +176,7 @@ export function storeEndpoints(
     });
 }
 
-function middleware(roots: Roots, artifacts: Artifacts) {
+function middleware(roots: Roots, artifacts: Artifacts, origin: OriginMain) {
   return (
     req: IncomingMessage,
     res: ServerResponse,
@@ -179,7 +188,7 @@ function middleware(roots: Roots, artifacts: Artifacts) {
       next();
       return;
     }
-    route(roots, artifacts, incoming(req, url))
+    route(roots, artifacts, origin, incoming(req, url))
       .catch((cause) => {
         console.error(`manual-store: ${path} failed`, cause);
         return reply(500, { error: describe(cause) });
@@ -203,6 +212,7 @@ function incoming(req: IncomingMessage, url: URL): Incoming {
 async function route(
   roots: Roots,
   artifacts: Artifacts,
+  origin: OriginMain,
   req: Incoming,
 ): Promise<Reply> {
   const method = req.method;
@@ -246,6 +256,13 @@ async function route(
         : reply(404, { error: `no reference: ${slug}` });
     }
     if (path === "/api/dirty") return reply(200, await readDirty(roots));
+    // The three the live line adds. `/api/relay` and `/api/head` are what the
+    // build writes as files, answered here from the same two readings, so a
+    // page listens the same way on both transports.
+    if (path === "/api/relay") return reply(200, relayOf());
+    if (path === "/api/head")
+      return reply(200, { storeHead: (await artifacts()).snapshot.storeHead });
+    if (path === "/api/upstream") return reply(200, await origin.standing());
     if (path === "/api/page")
       return readPage(roots, url.searchParams.get("path"));
     return reply(404, { error: `no such endpoint: ${path}` });
@@ -255,6 +272,11 @@ async function route(
     return reply(404, { error: `no such endpoint: ${path}` });
   }
   if (method !== "POST") return notAllowed(method);
+
+  if (path === "/api/pull") {
+    const outcome = await origin.pull();
+    return reply("pulled" in outcome ? 200 : 409, outcome);
+  }
 
   const body = await req.json();
   if (path === "/api/page") return writePage(roots, body);
