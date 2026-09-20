@@ -21,14 +21,21 @@ One round per artifact, and one per task group while the change is building.
 | 3 Challenge | Agents, one per perspective | Each reads the draft as one reader would and says what is wrong, missing or simpler |
 | 4 Verify | Agents, one per group of findings | Argues whether each finding stands; what stands changes the draft |
 | 5 Read | You | Read the summary and the questions in the thread; answer, remark, or say land |
-| 6 Land | The agent | On your word: the artifact lands on `main`, the stage moves, the next hand is told, and what comes after it is read again |
+| 6 Land | The agent | On your word: every drafted artifact of your hand lands on `main` in order, the stage moves, the next hand is told, and what comes after it is read again |
 
 - 🚧 **Your word lands it** — nothing reaches `main` without a person's word,
   and the change records whose
-- 🚧 **A question, not a guess** — what is a preference or a product decision
+- 🚧 **A question, not a guess** — what moves scope, is costly to undo, needs a
+  fact only you have, or divides the options by more than a task group of work
   is asked, never chosen: a numbered row in the change's decisions with the
-  agent's recommendation, or a ❓ line on the page; an open question holds
-  nothing
+  agent's recommendation, or a ❓ line on the page. Every other preference the
+  round decides on the best option and records as decided by the round, and
+  one reply from you overturns it
+- 🚧 **One sentence plans the change** — the first message drafts the proposal,
+  the decisions, the journeys, the design where a surface moves, the
+  requirements and the cases, the tech design and the plan, each from the one
+  before it and each read by its perspectives, and lands nothing; you read the
+  held questions, not seven documents
 - 🚧 **A finding goes where it belongs** — a product detail to the page, a
   scope fact to the decisions, a state to the design, a mechanism to the tech
   design, before the draft that depends on it
@@ -48,7 +55,7 @@ Three things you say in the thread, and one you can do anywhere.
 | --- | --- | --- |
 | Answer | `Q4: the second` | The row is written in and the question closes |
 | Remark | `The empty state is a link, not a button` | Applied as written; only the perspectives it touches read again |
-| Land | `land` | The artifact lands on `main`, with your handle on it |
+| Land | `land`, or `land with recommendations` | Every drafted artifact of your hand lands on `main` in order, with your handle on it; while a held question is open, `land` lands nothing and names it, and `land with recommendations` takes the recommendations and goes on |
 | Edit | An edit you push yourself, from a terminal or from GitHub | The same round: the push is your word for the lines it touched |
 
 - 🚧 **The first sentence opens the change** — a product manager's message to
@@ -60,8 +67,9 @@ Three things you say in the thread, and one you can do anywhere.
   a draft that needs a frame nobody has drawn writes a dated wait on the
   designer, never a screen in prose
 - 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
-- ❓ **Only the hand lands** — another teammate's land is refused and names
-  whose word it waits on; the product manager confirms
+- 🚧 **Only the hand lands** — another teammate's land is refused and names
+  whose word it waits on, and the relay checks the same word a second time
+  before `main` moves
 
 ## Perspectives
 
@@ -99,10 +107,11 @@ them all.
 
 - 🚧 **Behind** — an artifact is behind when what is before it changed after
   the artifact was drawn or last read again; read from the content, never set
-- 🚧 **Read again, in order** — a landing wakes the change's agent, which
-  reads every artifact after it: where the change reaches one, a round opens
-  for that artifact's hand; where it does not, the record says it was read,
-  and the thread says what was read
+- 🚧 **Read again, ahead** — a landing wakes the change's agent, which reads
+  every artifact after it in order and redraws each one the landing reached
+  from the redrawn one before it, on the branch, for its hand's word; where
+  nothing reached one, the record says it was read, and the thread says what
+  was read
 - 🚧 **Nothing is built on a behind artifact** — an artifact lands only when
   everything before it is fresh, and the fold at archive refuses a behind
   delta; a tick, a claim and a wait are never held
@@ -111,8 +120,9 @@ them all.
   superseded or split, and lands nothing until they answer
 - 🚧 **A waived artifact is fresh** — a waiver says nothing is owed, so
   nothing after it waits
-- ❓ **Extend, supersede, split** — extend reads everything after the proposal again, supersede opens a new
-  change and withdraws this one, split opens a new change for the moved part; the product manager confirms
+- 🚧 **Extend, supersede, split** — extend reads everything after the proposal
+  again, supersede opens a new change and withdraws this one, split opens a
+  new change for the moved part
 
 ## The Walk
 
@@ -142,9 +152,11 @@ Building ends by showing the change works, end to end.
   changes on them
 - 🚧 **The record** — one row per round: the artifact or group, the readers,
   what stood, what was asked, the tests per scenario; archived with the change
-- ❓ **The runner** — which agent holds a change's thread, which wakes on a
-  landing, and what the Slack workspace needs for them; Operations confirms
-  against [the runner](/references/agent-runner)
+- 🚧 **The runner** — a custom Slack app in front of the relay, one queue per
+  thread, and a hosted run that is a fresh session every time, reading the
+  files and the thread; a run posts and lands through the relay, and a run
+  that does not finish is said so in the thread with its link; what
+  Operations sets up is [the runner](/references/agent-runner)
 
 :::detail{title="Product decisions" for="pm"}
 The owner's brief asks that the product manager start with what is wanted and
@@ -156,10 +168,10 @@ propose, and that every step passes through layers of checks. The brief is
 | --- | --- | --- | --- |
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
 | Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation. | Product, QA, Engineering |
-| Questions | Decided | Numbered rows in the change's decisions, or ❓ lines on the page, with a recommendation; an open question never holds a stage. | Product |
+| Questions | Decided | Numbered rows in the change's decisions, or ❓ lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; behind holds only a landing and the fold, never a tick. | Product, Engineering |
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA and the build's readings on the plan and a task group - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused on a change opened after the rule. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards every deploy and cut. | QA, Engineering |
-| Runner | ❓ Open | Which agent holds the thread and which wakes on a landing, and what the workspace needs for them. | Operations |
+| Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
 :::

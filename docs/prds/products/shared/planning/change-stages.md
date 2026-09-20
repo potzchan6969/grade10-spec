@@ -66,8 +66,8 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 - 🚧 **Suite** — shown beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
   hotfix branch are read where releases are cut, not here
-- ❓ **Day bounds** — whole calendar days on the Hong Kong date, the chip from
-  the seventh and the shelf from the thirtieth; the product manager confirms
+- 🚧 **Day bounds** — whole calendar days on the Hong Kong date, the chip from
+  the seventh and the shelf from the thirtieth
 
 ## Hands
 
@@ -92,8 +92,8 @@ One handle per role on each change.
 - 🚧 **Team map** — `docs/prds/team.yaml` in the store: one entry per handle
   with its e-mail, its Slack member and the roles it takes, and one channel per
   role
-- ❓ **A handle's Slack member** — written into the map, or looked up by e-mail
-  through the Slack app; Operations confirms
+- 🚧 **A handle's Slack member** — written into the map beside the e-mail; a
+  handle with no member is sent nothing
 
 ## Messages
 
@@ -114,8 +114,8 @@ Slack tells one person, once per move, in the change's thread.
   thread is how a hand answers
 - **The channel post per push** — runs today, listing the changes a push
   touched
-- ❓ **Two fewer messages** — a written wait and a freed dependency are digest
-  lines, not messages of their own; the product manager confirms
+- 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
+  lines, not messages of their own
 
 ## Surfaces
 
@@ -136,8 +136,8 @@ Slack tells one person, once per move, in the change's thread.
   change delivering it
 - 🚧 **A page's marked line** — a line a page marks as being built wears the
   pip of its change's stage
-- ❓ **Actions on the hosted manual** — Assign stays on the locally run
-  manual until the hosted site has a sign-in; Operations confirms
+- 🚧 **Actions on the hosted manual** — Assign stays on the locally run
+  manual until the hosted site has a sign-in
 
 :::detail{title="Product decisions" for="pm"}
 A change passes through five hands and nobody is told when it reaches theirs;
@@ -157,6 +157,6 @@ lane as one waiting on a deploy. The owner's brief is
 | Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold. | Product, Engineering |
 | Suite review | Decided | An overlay beside the stage, so planning never waits on QA's verdict. | Product, QA |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
-| Team map | ❓ Open | Where the handle-to-Slack map lives. | Operations |
-| Hosted actions | ❓ Open | Whether the hosted manual can take Assign without a sign-in. | Operations |
+| Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
+| Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
 :::

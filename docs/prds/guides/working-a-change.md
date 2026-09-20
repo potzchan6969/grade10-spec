@@ -197,6 +197,10 @@ artifact gets written from there is [Agent Rounds](/p/shared/planning/agent-roun
 | 7 | Released | nobody | — |
 | 8 | Archived | nobody | — |
 
+- **One sentence drafts the whole plan** — the first message drafts every
+  artifact through the plan on the branch and lands nothing; you read the
+  held questions, answer or say `land`, and `land with recommendations` takes
+  the rest
 - **Proposed's turn moves without moving the stage** — the product manager
   answers first; once the decisions and the journeys land, the turn passes to
   the designer and the tech PIC while the stage is still Proposed
