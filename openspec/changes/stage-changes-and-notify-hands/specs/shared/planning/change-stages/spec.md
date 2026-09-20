@@ -35,7 +35,7 @@ ribbon, My turn and Slack.
   - Channel and digest: the post per push names each change's stage; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
   - Board: eight lanes with the agent mark and the hand's move on five, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
-  - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, delivery and handoff
+  - Change page: the stepper, the Your turn card with the thread and the command, the hands, each artifact fresh or behind with its questions and who landed it, on the pages every line the change marks, delivery and handoff
   - My turn: the reader's open questions, then the changes on them now, then the ones theirs later
   - Ribbon and pip: a section's in-flight row shows the stage and the hand, and each 🚧 line wears its change's stage
   - Assign: the local manual writes a hand; the hosted manual shows it read-only
@@ -789,10 +789,14 @@ The change page SHALL show, in this order down the reading column:
 3. the hands, one row per role with its handle or open
 4. the artifacts, each fresh, behind or not owed, with its open question count
    and the handle that landed it
-5. delivery: where the code is — `main`, staging and the release that carried
+5. on the pages: every 🚧 and ❓ line of each page section the proposal
+   links, under its page's title and section, a ❓ line with its hand
+6. delivery: where the code is — `main`, staging and the release that carried
    the change
-6. the handoff: for each stage the change has left, the days from the stage
+7. the handoff: for each stage the change has left, the days from the stage
    landing to that hand's first word
+8. the thread as `main` records it, which `shared/planning/agent-rounds`
+   states beside the message the hands are being told
 
 #### Scenario: shared-planning-change-stages-SC-57 - The stepper marks the stage
 **Serves:** shared-planning-change-stages-US-02 - the product manager opens one change to see how far it has come
@@ -815,6 +819,14 @@ The change page SHALL show, in this order down the reading column:
 **WHEN** the change page is read
 **THEN** delivery SHALL name `main`, staging and that tag
 **AND** the handoff SHALL show 3 days against Proposed
+
+#### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks
+**Serves:** shared-planning-change-stages-US-02 - the product manager reads the change's effect on the manual on one screen
+
+**GIVEN** a change whose proposal links two page sections, one carrying two 🚧 lines and one ❓ line addressed to Finance
+**WHEN** the change page is read
+**THEN** On the pages SHALL list each section under its page's title
+**AND** SHALL show every 🚧 and ❓ line of those sections as the page writes them, the ❓ line with its hand
 
 ### Requirement: My turn lists what is on the reader
 

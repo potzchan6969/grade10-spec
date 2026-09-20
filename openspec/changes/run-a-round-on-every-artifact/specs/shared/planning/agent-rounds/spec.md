@@ -43,6 +43,7 @@ read again before anything lands after it, with one record row per round.
   - Rounds table: `rounds.md` holds one row per round, the artifact or group, the perspectives run, what stood, the question ids raised and the tests per scenario
   - Refused without a row: a landed artifact or a ticked group with no row is refused on a change opened after the rule
   - A fix pass too: a pass landed off a demonstration or off the reading of the whole change is a round, with its reader and its row
+  - The change page mirrors the thread: the message each hand of the stage is being told, in the words the workflow sends, and one row per event of the change's history on `main`
   - Archived whole: the file archives with the change and is folded nowhere
 - The walk
   - Test first: each task group lands the tests its scenario ids name in their own commit, then the code, then its readers, then the landing summary
@@ -995,6 +996,29 @@ in the landing's own commit.
 - **WHEN** the fix pass lands
 - **THEN** `rounds.md` gains its row, naming the simpler-thing reader among the perspectives it ran
 - **AND** the Perspectives column names the verifier where one ran, and names none where that reader was the only one
+
+### Requirement: The change page mirrors the thread and the messages
+
+Before the Slack app is set up, and beside it after, the change page SHALL
+show what the thread and the messages say, read from `main` and nowhere else.
+
+- **Told now** — under the Your turn card, the message each hand of the stage
+  is being told, in the words the push workflow sends; a stage that names
+  nobody says so
+- **The thread** — one row per event in the change's history on `main`,
+  oldest first, each with its date: opened, each landing and whose word, each
+  read again, each round's row, each held question, each hand named, each
+  tick; a reading with no history says so
+- **One wording** — the message's words come from one module the workflow and
+  the manual both import, so Told now and the Slack message are one text
+
+#### Scenario: shared-planning-agent-rounds-SC-81 - The change page mirrors the thread
+**Serves:** shared-planning-agent-rounds-US-09 - a reader of the change follows what happened without opening Slack
+
+- **GIVEN** a change on `main` that was opened, landed its proposal on its product manager's word, named a designer, and holds one held row
+- **WHEN** a reader opens the change page
+- **THEN** the thread lists the opening, the landing with the handle, the hand named and the held row, oldest first, each dated
+- **AND** Told now shows the Your turn message the designer receives, word for word as the workflow sends it
 
 ### Requirement: A landing or a tick with no row is refused
 
