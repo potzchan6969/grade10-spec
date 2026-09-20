@@ -14,7 +14,7 @@ tested but the relay's own code.
 | Part | What it is | What it holds |
 | --- | --- | --- |
 | **The Slack app** | A custom app in the workspace; its events go to the relay | Nothing: its signing secret and bot token live in the relay |
-| **The relay** | A Cloudflare Worker with one Durable Object per change, `tools/relay`; a thread's room forwards to its change's | The Slack signing secret and bot token, the Routine's fire URL and token, a GitHub token with `contents: write` on this repository, the wake-token secret, the workflow's wake token |
+| **The relay** | A Cloudflare Worker with one Durable Object per change and one for `main`, `tools/relay`; a thread's room forwards to its change's | The Slack signing secret and bot token, the Routine's fire URL and token, a GitHub token with `contents: write` on this repository, the wake-token secret, the workflow's wake token, the webhook secret |
 | **The Routine** | A Claude Code on the web Routine with an API trigger; every firing is a fresh session on this store, drafting on `claude/<id>` | The store's GitHub access through the Claude GitHub App; no Slack token and no GitHub token of its own |
 | **The push workflow** | `.github/workflows/proposal-notify.yml`: the stage messages as before, and a `reread` job that wakes the relay | `SLACK_BOT_TOKEN` in plain steps, `AGENT_WAKE_TOKEN` |
 
@@ -43,6 +43,8 @@ tested but the relay's own code.
 6. A push to `main` runs the stage messages as before; where a landing put
    something behind, the `reread` job wakes the relay for that change, and
    the relay queues it behind whatever is running on the thread.
+7. A push to `main` reaches the relay's webhook, and every open manual page is
+   told over its socket.
 
 ## The Slack App
 
@@ -77,6 +79,7 @@ a file.
 | `GITHUB_TOKEN` | Secret | `contents: write` on this repository, for the compare, the record at a sha and the fast-forward of `main`; a personal token to start, a GitHub App installation token later |
 | `TOKEN_SECRET` | Secret | Signs the wake tokens a run posts and lands with |
 | `WAKE_TOKEN` | Secret | What the push workflow presents to `/wake` |
+| `GITHUB_WEBHOOK_SECRET` | Secret | Verifies every push the code host's webhook sends to `/github/events`; the same value is set on the webhook |
 | `PLANNING_CHANNEL`, `REPO`, `RELAY_URL`, `SLACK_APP_USER` | Variables | The channel the app listens in, `owner/name`, the relay's own URL for the payload, and the app's own member id |
 
 ## The Push Workflow

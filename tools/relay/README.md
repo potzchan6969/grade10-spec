@@ -2,8 +2,8 @@
 
 The relay sits between the Slack app, the hosted runner and the code host: it
 verifies Slack's events, keeps one queue per change, fires one session per wake
-with the thread's messages as data, and takes that session's posts and its
-landing back.
+with the thread's messages as data, takes that session's posts and its landing
+back, and tells every open manual page when `main` moves.
 
 Everything about the runner that is not in this directory — the Slack app's
 [scopes and event subscription](../../docs/references/agent-runner.md#the-slack-app),
@@ -31,6 +31,16 @@ no landing word leaves `main` where it is.
 [`routine-prompt.md`](routine-prompt.md), pasted into the Routine as written.
 The prompt never changes per wake; the payload carries everything that does.
 
+## The Live Line
+
+One Durable Object, named `main`, holds where `main` is and every open page's
+socket. `POST /github/events` is the code host's push webhook, and a push of
+this store's `main` is the only delivery that reaches the object; every other
+one is answered with the reason it told nobody. A page reads the head two ways:
+`GET /live` upgrades a socket, which is sent the head on accept and again on
+every move, and `GET /head` answers the same shape to a page that is polling.
+Both read from any origin and are cached nowhere.
+
 ## Deploying
 
 ```bash
@@ -45,19 +55,26 @@ In this order, because each step needs the one before it:
    app's own member id for `SLACK_APP_USER`
 2. **The secrets**, each with `pnpm dlx wrangler@4.120.0 secret put <name> -c
    wrangler.jsonc`: the app's two, `GITHUB_TOKEN`, `TOKEN_SECRET`,
-   `WAKE_TOKEN`, and `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` as placeholders
-   until step 5 — the router refuses every request while one of the seven is
-   unset, and names it
+   `WAKE_TOKEN`, `GITHUB_WEBHOOK_SECRET` — any long random string, the same
+   one the webhook is given in step 6 — and `ROUTINE_FIRE_URL` and
+   `ROUTINE_TOKEN` as placeholders until step 5: the router refuses every
+   request while one of the eight is unset, and names it
 3. **The first deploy**, with the placeholder vars in `wrangler.jsonc`. The
-   Durable Object migration `v1` runs here and creates the `Room` class, and
-   the deploy prints the Worker's own origin
+   Durable Object migrations `v1` and `v2` run here and create the `Room` and
+   `Live` classes, and the deploy prints the Worker's own origin
 4. **The event subscription**, pointed at `<origin>/slack/events` and saved:
    the relay answers Slack's `url_verification` challenge, and the bot is
    invited to the planning channel
 5. **The Routine**, created against that origin, which gives the real
    `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` — put both again over their
    placeholders
-6. **The second deploy**, with `PLANNING_CHANNEL`, `REPO`, `RELAY_URL` and
+6. **The code host's webhook**, on the store's repository under `Settings →
+   Webhooks`: payload URL `<origin>/github/events`, content type
+   `application/json`, the secret from step 2, and the `push` event alone —
+   not every event. Saving it sends a `ping`, and `{"pong":true}` under Recent
+   Deliveries is this leg's smoke test: the relay answers a delivery the
+   secret signs, and 401 to one it does not
+7. **The second deploy**, with `PLANNING_CHANNEL`, `REPO`, `RELAY_URL` and
    `SLACK_APP_USER` set to the real values in `wrangler.jsonc`
 
 Then one call, which is the smoke test:
@@ -100,7 +117,8 @@ no state at all starts from.
 - **A real Slack, Routine or code host** — every test in this package answers
   its own `fetch`; nothing reaches a network
 - **The Durable Object runtime** — the tests drive `Room` over a storage map
-  and one alarm, so the runtime's own eviction, alarm retries and concurrency
-  are not read here
+  and one alarm, and `Live` over a storage map and a list of sockets, so the
+  runtime's own eviction, alarm retries, concurrency and the hibernation that
+  wakes an object with a socket on it are not read here
 - **The store's scripts** — what a run does with the payload is
   `scripts/openspec/`'s and is tested there
