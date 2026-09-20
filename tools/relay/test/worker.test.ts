@@ -366,8 +366,11 @@ describe("/slack/actions", () => {
   };
 
   /** Slack's two calls and the team map at `main`, answered: what each test
-   * reads is the requests themselves. */
-  function answered(over: { team?: string; update?: unknown } = {}) {
+   * reads is the requests themselves. `teamStatus` is the code host refusing
+   * the map, which is a different fact from a map that names nobody. */
+  function answered(
+    over: { team?: string; teamStatus?: number; update?: unknown } = {},
+  ) {
     const calls: { url: string; body: unknown }[] = [];
     vi.stubGlobal("fetch", async (given: string | URL, init?: RequestInit) => {
       const url = String(given);
@@ -376,12 +379,16 @@ describe("/slack/actions", () => {
         body: init?.body ? JSON.parse(String(init.body)) : undefined,
       });
       if (url.includes("api.github.com"))
-        return new Response(
-          JSON.stringify({
-            content: btoa(over.team ?? TEAM),
-            encoding: "base64",
-          }),
-        );
+        return over.teamStatus
+          ? new Response(JSON.stringify({ message: "rate limited" }), {
+              status: over.teamStatus,
+            })
+          : new Response(
+              JSON.stringify({
+                content: btoa(over.team ?? TEAM),
+                encoding: "base64",
+              }),
+            );
       if (url.includes("chat.update"))
         return new Response(
           JSON.stringify(over.update ?? { ok: true, ts: "1700000005.000100" }),
@@ -394,6 +401,8 @@ describe("/slack/actions", () => {
       posts: () =>
         calls.filter((call) => call.url.includes("chat.postMessage")),
       updates: () => calls.filter((call) => call.url.includes("chat.update")),
+      /** What the press read on the code host, which is the team map alone. */
+      reads: () => calls.filter((call) => call.url.includes("api.github.com")),
     };
   }
 
@@ -497,6 +506,116 @@ describe("/slack/actions", () => {
         },
       ],
     });
+    // One press is one reading of the map: the cache that reads again on a
+    // miss is the room's, and a member the map does not name is not read
+    // twice for the one line.
+    expect(slack.reads()).toHaveLength(1);
+  });
+
+  it("says the team map could not be read, rather than that it names nobody", async () => {
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    const slack = answered({ teamStatus: 403 });
+    const sent: Sent[] = [];
+    await press(testEnv(rooms(sent)));
+
+    // The word is queued and the landing reads the map itself, so a map the
+    // relay could not read says nothing about whom it names: only a map that
+    // answered and named nobody lands nothing.
+    expect(sent).toHaveLength(1);
+    expect(slack.posts()[0].body).toMatchObject({
+      text: "<@U0PM> pressed *Confirm proposal* \u2014 the word is queued; the team map could not be read, so the landing checks it again",
+    });
+    expect(slack.updates()[0].body).toMatchObject({
+      blocks: [
+        expect.anything(),
+        {
+          type: "context",
+          elements: [{ type: "mrkdwn", text: "Confirmed by <@U0PM>" }],
+        },
+      ],
+    });
+    expect(told).toHaveBeenCalledTimes(1);
+    told.mockRestore();
+  });
+
+  it("leaves the button standing where the room refused the word", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    const response = await press(
+      testEnv(
+        rooms(
+          sent,
+          () =>
+            new Response(JSON.stringify({ reason: "host-unavailable" }), {
+              status: 503,
+            }),
+        ),
+      ),
+    );
+
+    expect(response.status).toBe(200);
+    expect(sent).toHaveLength(1);
+    // The word reached no round, so nothing says it did: the thread reads
+    // that line alone, and the button is left to be pressed again.
+    expect(slack.posts().map((call) => call.body)).toEqual([
+      {
+        channel: CHANNEL,
+        text: "This message did not reach a round: the room answered 503.",
+        thread_ts: "1700000000.000100",
+      },
+    ]);
+    expect(slack.updates()).toEqual([]);
+  });
+
+  it("says where a press reached a thread no round is open on", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    await press(
+      testEnv(
+        rooms(
+          sent,
+          () =>
+            new Response(JSON.stringify({ queued: false, why: "no-room" }), {
+              status: 200,
+            }),
+        ),
+      ),
+    );
+
+    // The room answers a 200 for an op it did not queue, so the status alone
+    // is not the word landing: a press on a summary whose room is gone is
+    // said in the thread and keeps its button.
+    expect(slack.posts().map((call) => call.body)).toEqual([
+      {
+        channel: CHANNEL,
+        text: "This message did not reach a round: no round is open on this thread.",
+        thread_ts: "1700000000.000100",
+      },
+    ]);
+    expect(slack.updates()).toEqual([]);
+  });
+
+  it("says nothing at all on the retry of a press it has answered", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    const response = await press(
+      testEnv(
+        rooms(
+          sent,
+          () =>
+            new Response(JSON.stringify({ queued: false, why: "duplicate" }), {
+              status: 200,
+            }),
+        ),
+      ),
+    );
+
+    // Slack retries a delivery it did not see acknowledged. The press before
+    // it echoed the word and took the button off, so its retry is silent.
+    expect(response.status).toBe(200);
+    expect(sent).toHaveLength(1);
+    expect(slack.posts()).toEqual([]);
+    expect(slack.updates()).toEqual([]);
   });
 
   it("refuses a press the signing secret does not sign", async () => {
@@ -530,6 +649,31 @@ describe("/slack/actions", () => {
     expect(sent).toEqual([]);
     expect(slack.posts()).toEqual([]);
     expect(slack.updates()).toEqual([]);
+  });
+
+  it("logs the reason a press is ignored, and answers with nothing", async () => {
+    const said = vi.spyOn(console, "log").mockImplementation(() => {});
+    const slack = answered();
+    const sent: Sent[] = [];
+    const env = testEnv(rooms(sent));
+    await press(env, {
+      ...PAYLOAD,
+      actions: [{ action_id: "somebody-else", value: "land" }],
+    });
+    await press(env, {
+      ...PAYLOAD,
+      container: { ...PAYLOAD.container, channel_id: "C0OTHER" },
+    });
+
+    // Slack draws a 2xx body in the thread, so a press the relay drops is
+    // read in the log rather than in the answer.
+    expect(said.mock.calls.map((call) => String(call[0]))).toEqual([
+      "relay: a press was ignored: not-a-confirm",
+      "relay: a press was ignored: not-addressed",
+    ]);
+    expect(sent).toEqual([]);
+    expect(slack.posts()).toEqual([]);
+    said.mockRestore();
   });
 
   it("answers a body with no press in it, rather than refusing it", async () => {
