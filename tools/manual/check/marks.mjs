@@ -1,8 +1,7 @@
 /*
  * RULE: a 🚧 line is confirmed and being built, so an in-flight change
  * delivers it.
- * RULE: a mark leads its line, its bullet or its cell, after the key term at
- * most; one written further into a sentence is read as words.
+ * RULE: a mark counts where `../src/api/open-marks.ts` counts it.
  */
 import {
   BUILDING,
@@ -54,18 +53,17 @@ export function checkMarks(ctx, changes, pages) {
   }
 }
 
-/** A ❓ or `TBC` the grammar reads as words: the mark sits further into a
- * sentence than its lead term, so the readers that pool a page's open items
- * never see it and nobody is asked to answer it. A warning, never a failure
- * — a page writing about the grammar, "or a ❓ line on the page", means it,
- * and only the author can say which they meant. Every page, not the products
- * alone: a guide is where the grammar is written about. */
+/** A ❓ or `TBC` read as words: the readers that pool a page's open items
+ * never see it, so nobody is asked to answer it. A warning, never a failure —
+ * only the author can say which they meant. Product pages only, because
+ * nothing pools a guide's marks. */
 export function checkMarkInProse(ctx, pages) {
+  const products = productPages(ctx.roots);
   for (const page of pages) {
-    if (!page.ast) continue;
+    if (!page.ast || !page.path.startsWith(products)) continue;
     const counted = new Set(openMarksOfPage(page).map((one) => one.text));
     for (const mark of marksOfPage(page, MARKED)) {
-      if (counted.has(mark.text)) continue;
+      if (counted.has(mark.text) || !MARKED.test(spoken(mark.text))) continue;
       const where = mark.where ? ` under \`${mark.where.title}\`` : "";
       ctx.add(
         "prose",
@@ -75,6 +73,13 @@ export function checkMarkInProse(ctx, pages) {
     }
   }
 }
+
+const CODE_SPAN = /`[^`]*`/g;
+
+/** The line with its backtick spans dropped: a mark written `❓` or `TBC` is
+ * the mark named rather than a mark, so a page of record can state the
+ * grammar. */
+const spoken = (text) => text.replace(CODE_SPAN, "");
 
 const MARK = /^🚧\s*/;
 const INLINE = /[*_`]/g;

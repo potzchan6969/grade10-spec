@@ -16,7 +16,7 @@ Building the change's agent drafts, and a person's word lands.
 
 | # | Stage | Proven by | The agent | You |
 | --- | --- | --- | --- | --- |
-| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with ❓ on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted, answer |
+| 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted, answer |
 | 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Proposes each design from the page and the journeys, challenged and verified | Designer: tweak. Tech PIC: challenge |
 | 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings of the journeys, reconciled | Product manager: read the requirements and the cases together |
 | 4 | Planned | `tasks.md`; `promoted_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary |
@@ -31,7 +31,7 @@ Building the change's agent drafts, and a person's word lands.
   nothing else moves it
 - 🚧 **One stage for what is wanted** — the proposal, the decisions and the
   journeys sit in Proposed together, because the product manager settles the
-  three in one sitting; an item still open stays ❓ on the decisions or the
+  three in one sitting; an item still open stays `❓` on the decisions or the
   page and holds nothing
 - 🚧 **Drafted, then landed on your word** — every stage from Proposed to
   Building is written by the change's agent and reaches `main` only when the
@@ -150,7 +150,7 @@ lane as one waiting on a deploy. The owner's brief is
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Stage | Decided | Derived from the files on `main`, one of eight; never a status key somebody sets. | Product |
-| Proposed and Decided | Decided | One stage: the product manager settles the proposal, the decisions and the journeys in one sitting, and an open item stays ❓ instead of holding a gate. | Product |
+| Proposed and Decided | Decided | One stage: the product manager settles the proposal, the decisions and the journeys in one sitting, and an open item stays `❓` instead of holding a gate. | Product |
 | Who drafts | Decided | The change's agent drafts every stage from Proposed to Building; the hand of the stage answers, tweaks, challenges or reads, and their word lands it. Every surface marks the five. | Product, Engineering |
 | Approval record | Decided | The landing: an artifact reaches `main` on its hand's word, and the change records whose. No approval key beside it. | Engineering |
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |

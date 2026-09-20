@@ -731,7 +731,7 @@ test("shared-planning-agent-rounds-SC-73 - a 403 stops at once, naming the relay
   assert.equal(calls, 1);
   assert.match(result.stderr, /403/);
   // The check that refused, in words rather than as the relay's own token,
-  // naming the artifact the word was for - `relay-refusal.test.mjs` holds
+  // naming the artifact the word was for - `relay-answer.test.mjs` holds
   // the sentence for every check.
   assert.match(result.stderr, /the word was not the hand's/);
   assert.match(result.stderr, /ui-design/);

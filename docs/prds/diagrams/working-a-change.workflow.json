@@ -20,7 +20,7 @@
     },
     {
       "id": "qa",
-      "label": "QA"
+      "label": "Product manager · QA"
     },
     {
       "id": "eng",
@@ -36,8 +36,8 @@
     "pm-the-first-word",
     "pm-the-first-word_journeys",
     "tech-pic-the-mirror-and-the-rule",
-    "qa-the-two-readings",
-    "qa-the-two-readings_spec",
+    "pm-the-two-readings",
+    "pm-the-two-readings_spec",
     "engineer-the-plan-then-the-build",
     "qa-release-hand-staging-the-cut-the-fold"
   ],
@@ -88,7 +88,7 @@
       "width": 132
     },
     {
-      "id": "qa-the-two-readings",
+      "id": "pm-the-two-readings",
       "lane": "qa",
       "col": 3,
       "type": "security",
@@ -97,7 +97,7 @@
       "width": 132
     },
     {
-      "id": "qa-the-two-readings_spec",
+      "id": "pm-the-two-readings_spec",
       "lane": "qa",
       "col": 4,
       "type": "security",
@@ -152,24 +152,24 @@
     },
     {
       "from": "designer-the-rail",
-      "to": "qa-the-two-readings",
+      "to": "pm-the-two-readings",
       "variant": "dashed"
     },
     {
       "from": "tech-pic-the-mirror-and-the-rule",
-      "to": "qa-the-two-readings",
+      "to": "pm-the-two-readings",
       "variant": "emphasis",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
     },
     {
-      "from": "qa-the-two-readings",
-      "to": "qa-the-two-readings_spec",
+      "from": "pm-the-two-readings",
+      "to": "pm-the-two-readings_spec",
       "variant": "emphasis"
     },
     {
-      "from": "qa-the-two-readings_spec",
+      "from": "pm-the-two-readings_spec",
       "to": "engineer-the-plan-then-the-build",
       "variant": "emphasis",
       "fromSide": "bottom",

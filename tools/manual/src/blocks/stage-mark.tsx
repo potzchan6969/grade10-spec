@@ -32,15 +32,11 @@ export function StageMark({
   const drafted = draftedOf(stage);
   if (!drafted) return null;
   const move = moveShown(drafted.moves);
+  const said = `agent drafts ${drafted.mark}`;
 
   if (short) {
     return (
-      <Text
-        as="span"
-        size="xs"
-        title={`agent drafts ${drafted.mark} · ${move}`}
-        tone="secondary"
-      >
+      <Text as="span" size="xs" title={`${said} · ${move}`} tone="secondary">
         {"agent drafts"}
         <span className="sr-only">{` ${drafted.mark}`}</span>
         {` · ${move}`}
@@ -55,7 +51,7 @@ export function StageMark({
       title="The change's agent writes this stage; the hand of the stage answers"
       variant="outline"
     >
-      <span>{`agent drafts ${drafted.mark}`}</span>
+      <span>{said}</span>
       <span aria-hidden>·</span>
       <span>{move}</span>
     </Badge>

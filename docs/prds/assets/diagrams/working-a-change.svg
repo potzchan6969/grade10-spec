@@ -58,7 +58,7 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Designer · Tech PIC</text>
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / QA</text>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Product manager · QA</text>
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Engineer</text>
         <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-4" x="40" y="548" width="768" height="104" rx="10" class="c-lane" stroke-width="1"/>
@@ -66,15 +66,15 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
         
         
         
-        <path data-step="qa-the-two-readings" data-edge-from="designer-the-rail" data-edge-to="qa-the-two-readings" data-edge-key="0" data-composition-points="434,269;434,367;508,367" d="M 434 269 L 434 367 L 508 367" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="pm-the-two-readings" data-edge-from="designer-the-rail" data-edge-to="pm-the-two-readings" data-edge-key="0" data-composition-points="434,269;434,367;508,367" d="M 434 269 L 434 367 L 508 367" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
         <path data-step="qa-release-hand-staging-the-cut-the-fold" data-edge-from="engineer-the-plan-then-the-build" data-edge-to="qa-release-hand-staging-the-cut-the-fold" data-edge-key="1" data-composition-points="734,517;734,589" d="M 734 517 L 734 589" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
         <path data-step="pm-the-first-word" data-edge-from="pm-the-first-word" data-edge-to="pm-the-first-word_journeys" data-edge-key="2" data-composition-points="340,119;368,119" d="M 340 119 L 368 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
         <path data-step="designer-the-rail" data-edge-from="pm-the-first-word_journeys" data-edge-to="designer-the-rail" data-edge-key="3" data-composition-points="434,145;434,217" d="M 434 145 L 434 217" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
         <path data-step="tech-pic-the-mirror-and-the-rule" data-edge-from="pm-the-first-word_journeys" data-edge-to="tech-pic-the-mirror-and-the-rule" data-edge-key="4" data-composition-points="500,119;574,119;574,217" d="M 500 119 L 574 119 L 574 217" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
         <path data-step="pm-the-first-word" data-edge-from="pm-the-sentence" data-edge-to="pm-the-first-word" data-edge-key="5" data-composition-points="180,119;208,119" d="M 180 119 L 208 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="qa-the-two-readings" data-edge-from="qa-the-two-readings" data-edge-to="qa-the-two-readings_spec" data-edge-key="6" data-composition-points="640,367;668,367" d="M 640 367 L 668 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="engineer-the-plan-then-the-build" data-edge-from="qa-the-two-readings_spec" data-edge-to="engineer-the-plan-then-the-build" data-edge-key="7" data-composition-points="734,393;734,465" d="M 734 393 L 734 465" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="qa-the-two-readings" data-edge-from="tech-pic-the-mirror-and-the-rule" data-edge-to="qa-the-two-readings" data-edge-key="8" data-composition-points="574,269;574,341" d="M 574 269 L 574 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="pm-the-two-readings" data-edge-from="pm-the-two-readings" data-edge-to="pm-the-two-readings_spec" data-edge-key="6" data-composition-points="640,367;668,367" d="M 640 367 L 668 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="engineer-the-plan-then-the-build" data-edge-from="pm-the-two-readings_spec" data-edge-to="engineer-the-plan-then-the-build" data-edge-key="7" data-composition-points="734,393;734,465" d="M 734 393 L 734 465" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="pm-the-two-readings" data-edge-from="tech-pic-the-mirror-and-the-rule" data-edge-to="pm-the-two-readings" data-edge-key="8" data-composition-points="574,269;574,341" d="M 574 269 L 574 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
         
         <g data-step="pm-the-sentence" id="working-a-change-node-pm-the-sentence" data-node-id="pm-the-sentence" data-node-label="The chain" aria-label="Focus The chain, drafted, landed nowhere, Product manager" data-node-kind="backend" data-node-sublabel="drafted, landed nowhere" data-node-context="Product manager">
           <title>The chain · drafted, landed nowhere · Product manager</title>
@@ -132,8 +132,8 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
           <text data-node-label="" data-detail-anchor="" x="574" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">tech-design.md</text>
           <text data-detail="context" x="574" y="255" class="t-muted" font-size="8" text-anchor="middle">the mirror and the rule</text>
         </g>
-        <g data-step="qa-the-two-readings" id="working-a-change-node-qa-the-two-readings" data-node-id="qa-the-two-readings" data-node-label="feature-tcs.md" aria-label="Focus feature-tcs.md, blind of the scenarios, QA" data-node-kind="security" data-node-sublabel="blind of the scenarios" data-node-context="QA">
-          <title>feature-tcs.md · blind of the scenarios · QA</title>
+        <g data-step="pm-the-two-readings" id="working-a-change-node-pm-the-two-readings" data-node-id="pm-the-two-readings" data-node-label="feature-tcs.md" aria-label="Focus feature-tcs.md, blind of the scenarios, Product manager · QA" data-node-kind="security" data-node-sublabel="blind of the scenarios" data-node-context="Product manager · QA">
+          <title>feature-tcs.md · blind of the scenarios · Product manager · QA</title>
           <rect x="508" y="341" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="508" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(514 347) scale(0.6875)">
@@ -143,8 +143,8 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
           <text data-node-label="" data-detail-anchor="" x="574" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">feature-tcs.md</text>
           <text data-detail="context" x="574" y="379" class="t-muted" font-size="8" text-anchor="middle">blind of the scenarios</text>
         </g>
-        <g data-step="qa-the-two-readings" id="working-a-change-node-qa-the-two-readings_spec" data-node-id="qa-the-two-readings_spec" data-node-label="spec.md" aria-label="Focus spec.md, requirements, reconciled, QA" data-node-kind="security" data-node-sublabel="requirements, reconciled" data-node-context="QA">
-          <title>spec.md · requirements, reconciled · QA</title>
+        <g data-step="pm-the-two-readings" id="working-a-change-node-pm-the-two-readings_spec" data-node-id="pm-the-two-readings_spec" data-node-label="spec.md" aria-label="Focus spec.md, requirements, reconciled, Product manager · QA" data-node-kind="security" data-node-sublabel="requirements, reconciled" data-node-context="Product manager · QA">
+          <title>spec.md · requirements, reconciled · Product manager · QA</title>
           <rect x="668" y="341" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="668" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(674 347) scale(0.6875)">

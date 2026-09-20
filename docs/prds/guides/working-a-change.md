@@ -115,7 +115,7 @@ a nightly precompute, stale inside the window the mirror already closes. What
 the tech PIC remarks is applied as written, and their word lands
 `tech-design.md`.
 
-## *QA* — **The two readings**
+## *PM* — **The two readings**
 
 The cases are written blind of the scenarios, and the requirements are
 reconciled against them after. The ids start at
@@ -153,12 +153,12 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 | # | Stage | Hand | Say |
 | --- | --- | --- | --- |
 | 1 | Proposed | Product manager, then Designer · Tech PIC | `/plan <id>`, then `/design <id>` · `/tech <id>` |
-| 2 | Designed | nobody | — |
+| 2 | Designed | nobody — both designs land while Proposed is still the stage | — |
 | 3 | Specified | Product manager | `/specify <id>` |
 | 4 | Planned | Engineer | `/tasks <id>` |
 | 5 | Building | Engineer | `/build <id> <group>` |
 | 6 | On staging | QA · Release hand | — |
-| 7 | Released | nobody | — |
+| 7 | Released | nobody — the cut happens outside the agent | — |
 | 8 | Archived | nobody | — |
 
 - **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)

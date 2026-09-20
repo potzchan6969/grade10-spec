@@ -54,8 +54,8 @@ nearest your task and keep it open while you draft.
     confirms it. It marks the page, not the product: nothing is built from
     it. The product page pools these lines as its pending spec, so the mark
     sits where a reader can act on it. The mark leads its line, its bullet
-    or its cell, after the key term at most: one written further into a
-    sentence is read as words and pooled nowhere
+    or its cell, after the key term at most, or opens a sentence of its own:
+    one written further into a sentence is read as words and pooled nowhere
   - 🚧 starts a line that is confirmed and being built: the page says what
     will run, an active change on its spec delivers it, and the mark comes
     off when that change archives. A line still open is never 🚧. One line

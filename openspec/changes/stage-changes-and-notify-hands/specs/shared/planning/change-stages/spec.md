@@ -182,9 +182,11 @@ and the journeys, before anybody writes a requirement.
 Proposed to Building are drafted by the change's agent, and the hand of the
 stage answers.
 
-- **Where the pair is shown** — the board's lane heading and the change page's
-  stepper step SHALL each carry the agent mark and the hand's move for
-  Proposed to Building, and neither for On staging, Released and Archived
+- **Where the pair is shown** — for Proposed to Building the board's lane
+  heading SHALL carry the agent mark and the hand's move, and the change
+  page's stepper step SHALL carry the move with the mark on the element for a
+  pointer and a screen reader; On staging, Released and Archived SHALL carry
+  neither
 - **Read from the stage** — the mark and the move SHALL come from the stage,
   so every change in one stage carries the same pair and no change's record
   SHALL change them
@@ -201,7 +203,8 @@ stage answers.
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads a lane heading and opens the change beneath it
 
 **WHEN** the lane headings and the change page's stepper steps are read
-**THEN** Proposed to Building SHALL each carry the agent mark and the hand's move for that stage
+**THEN** each lane heading from Proposed to Building SHALL carry the agent mark and the hand's move for that stage
+**AND** each stepper step from Proposed to Building SHALL carry that stage's move, with the mark on the element for a pointer and a screen reader
 **AND** On staging, Released and Archived SHALL carry neither
 **AND** two changes in one stage SHALL carry the same pair
 

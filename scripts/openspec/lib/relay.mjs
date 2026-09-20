@@ -142,10 +142,11 @@ export function relayOf(wake) {
  * `tools/relay/src/land.ts` declares the checks the word and the read are
  * refused by. The rest are about the run rather than its landing: `room.ts`
  * issues `stale-wake` and `no-change-bound` and answers `github.ts`'s
- * `HostError` as `host-unavailable`, and `github.ts` names `host-refused`
- * and `not-fast-forward`, which a run retries rather than reports.
+ * `HostError` as `host-unavailable`, and `github.ts` names `not-fast-forward`,
+ * which a run retries rather than reports, and `host-refused`, which it
+ * reports with the host's own words.
  */
-export function refusalOf(reason, { artifact, change, message } = {}) {
+export function answerOf(reason, { artifact, change, message } = {}) {
   const answered = ANSWERED[reason];
   const said = answered ?? SENTENCE[reason];
   const what = said
@@ -190,7 +191,6 @@ const SENTENCE = {
   "compare-truncated": () =>
     "the code host listed only some of what the landing changed",
   "map-unreadable": () => "the team map would not parse",
-  "not-fast-forward": () => "`main` moved under the run",
 };
 
 /** A name the sentence quotes, or the plain word where the call has none. */

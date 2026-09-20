@@ -108,6 +108,11 @@ export function YourTurnCard({
           </div>
         ) : null}
 
+        {/* The first hand the stage waits on, read from this card's own
+         * `handOf`, so Proposed's second half opens on the designer rather
+         * than back on the product manager. A stage that names nobody —
+         * Designed, Released, Archived — opens on the first of the six, which
+         * is a reader naming a hand for a stage still to come. */}
         <Assign change={change} role={roles[0] ?? ROLES[0]} />
       </CardContent>
     </Card>
@@ -186,8 +191,7 @@ function Assign({
   role,
 }: {
   change: ChangeEntry;
-  /** The hand the reader came to name — the first the stage waits on, as the
-   * card read it above. */
+  /** The hand the picker opens on. */
   role: Role;
 }) {
   const { status, store } = useEditorSession();
@@ -228,13 +232,7 @@ function AssignForm({
   store,
 }: {
   change: ChangeEntry;
-  /** The hand the stage waits on, as the card read it: the picker opens
-   * there rather than on the first of the six, because that is the hand a
-   * reader came to the card to name. A stage that names nobody — Designed,
-   * Released, Archived — opens on the first, which is a reader naming a hand
-   * for a stage still to come. Read from the card's own `handOf`, so
-   * Proposed's second half opens on the designer rather than back on the
-   * product manager. */
+  /** The hand the picker opens on. */
   role: Role;
   store: ContentStore;
 }) {

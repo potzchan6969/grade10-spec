@@ -88,7 +88,7 @@
 | Q61 | Does Assign clear the chosen handle when the role changes? | No, the pick stays - decided by the round: the offered list no longer depends on the role, and a handle the map stops naming is dropped by the read that normalises it | Clearing it, which re-disables Assign on a pick the list still offers |
 | Q62 | Does the picker show where the role's own handles end? | No, one flat list with the role's own first - decided by the round | Option groups labelled by role, a cue the owner's word did not ask for |
 | Q63 | What does a 🚧 line's pip look like at rest? | The plain outline badge with the stage number, as built - decided by the round | A frame for it, which the design system already answers |
-| Q64 | What does a question row say when no thread is recorded? | The sentence the States row of `run-a-round-on-every-artifact/ui-design.md` quotes, linking the change page in the thread's place - decided by the round | Quoting it here a third time |
+| Q64 | What does a question row say when no thread is recorded? | The sentence the design's state for `shared-planning-agent-rounds-SC-26` quotes, linking the change page in the thread's place - decided by the round | Quoting it here a third time |
 | Q65 | Which role does Assign open on? | The hand the stage waits on, by the card's own reading; a stage that names nobody opens on the first of the six - decided by the round | The first of the six every time |
 
 ## Raised

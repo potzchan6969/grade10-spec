@@ -103,7 +103,7 @@ import {
   planningSchema,
 } from "./lib/perspectives.mjs";
 import { openRecord, setEntry } from "./lib/record.mjs";
-import { readWake, refusalOf, relayOf } from "./lib/relay.mjs";
+import { answerOf, readWake, relayOf } from "./lib/relay.mjs";
 import { readAgainst } from "./lib/reviewed.mjs";
 import { listCell, roundsPath, withRoundRow } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
@@ -540,7 +540,7 @@ async function attemptLanding(attempt) {
       // the thread. The status stays on its own line, and the host's words
       // ride along where the answer carried them.
       fail(
-        `${refusalOf(answer.body?.reason, {
+        `${answerOf(answer.body?.reason, {
           artifact: landing,
           change,
           message: answer.body?.message,

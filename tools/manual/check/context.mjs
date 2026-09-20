@@ -252,12 +252,8 @@ export const RULES = [
     title: "Pages denser than the style allows",
   },
   {
-    // A mark the reader counts leads its line, its bullet or its cell, after
-    // the key term at most. A page writing about the grammar — "or a ❓ line
-    // on the page" — writes one mid-sentence and means it, so nothing here
-    // can tell the two apart; the reader's verdict is printed and the author
-    // decides. Without it a mark meant as a question is simply never pooled,
-    // and the page looks answered.
+    // A warning, because only the author can say whether the mark was meant
+    // as a question.
     key: "prose",
     level: "warn",
     title: "Marks inside a sentence, read as words",
