@@ -48,8 +48,8 @@ The skill carries the rules — reading the capability, opening the change, the
 interview, what each artifact holds, validating. You carry the feature and what
 only you have: a frame, a value, a handle.
 
-**The product manager says the sentence**, to the app in the planning channel
-`#grade10-planning`, or after `/plan` in a terminal:
+**The product manager says the sentence**, to the app in the planning channel,
+or after `/plan` in a terminal:
 
 ```text
 /plan cross-sell on a card's page: the products we pick per card in Shopify
