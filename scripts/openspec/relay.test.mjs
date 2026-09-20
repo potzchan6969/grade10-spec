@@ -5,6 +5,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { pathToFileURL } from "node:url";
+import { planningSchema } from "./lib/perspectives.mjs";
 import {
   CONFIRM_LABEL,
   confirmOf,
@@ -25,6 +26,7 @@ import { stubRelay, urlOf } from "./test/stub-relay.mjs";
  * way `relay-post.mjs`, `plan-land.mjs` and `reread-guard.mjs` each do.
  */
 
+const ROOT = join(import.meta.dirname, "..", "..");
 const LIB = pathToFileURL(
   join(import.meta.dirname, "lib", "relay.mjs"),
 ).toString();
@@ -225,16 +227,13 @@ test("shared-planning-agent-rounds-SC-74 - a relay nobody can reach is thrown, s
 // ── The button's words ─────────────────────────────────────────────
 
 test("every artifact of the chain has a label, and its word is land", () => {
-  assert.deepEqual(Object.keys(CONFIRM_LABEL), [
-    "proposal",
-    "decisions",
-    "user-journeys",
-    "ui-design",
-    "tech-design",
-    "specs",
-    "test-cases",
-    "tasks",
-  ]);
+  // The chain is the schema's, read the way every other reader of it reads:
+  // a ninth artifact lands with no button and `--confirm` refuses its name,
+  // which is this assertion and not a second list.
+  assert.deepEqual(
+    Object.keys(CONFIRM_LABEL),
+    planningSchema(ROOT).artifacts.map((one) => one.id),
+  );
   for (const [artifact, label] of Object.entries(CONFIRM_LABEL)) {
     assert.deepEqual(confirmOf(artifact), { label, word: "land" });
   }
@@ -256,6 +255,22 @@ test("a task group's button names the group, and a name the chain does not issue
   assert.equal(confirmOf("rounds"), null);
   assert.equal(confirmOf(""), null);
   assert.equal(confirmOf(undefined), null);
+});
+
+test("a group is the same group however the round spells it", () => {
+  // The store issues four spellings of a group and `roundArtifactOf` reads
+  // them all, so a round that writes `group 5` in its row asks for the same
+  // button as one that writes `5`.
+  const group = { label: "Confirm group 5", word: "land" };
+  assert.deepEqual(confirmOf("5"), group);
+  assert.deepEqual(confirmOf("5."), group);
+  assert.deepEqual(confirmOf("group 5"), group);
+  assert.deepEqual(confirmOf("Group 5"), group);
+  assert.deepEqual(confirmOf(" group 5 "), group);
+  // A task and the round's own `apply` are not a group: each is refused by
+  // name rather than posted as a button for the group it sits in.
+  assert.equal(confirmOf("5.13"), null);
+  assert.equal(confirmOf("apply"), null);
 });
 
 test("a held row's button confirms the recommendations", () => {
