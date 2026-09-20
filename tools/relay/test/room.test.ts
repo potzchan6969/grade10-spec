@@ -72,6 +72,8 @@ interface Answers {
   advance: { status?: number; body?: unknown };
   /** `throws` is the runner never answering at all. */
   fire: { status?: number; body?: unknown; throws?: string };
+  /** What Slack answers a post with. */
+  post: { ok?: boolean; error?: string };
   /** What happens while the compare is in flight, for a room that moves under
    * its own landing. */
   during?: () => Promise<void>;
@@ -99,6 +101,7 @@ function answers(over: Partial<Answers> = {}): Answers {
       },
     },
     advance: over.advance ?? { body: { object: { sha: SHA } } },
+    post: over.post ?? { ok: true },
     fire: over.fire ?? {
       body: {
         claude_code_session_id: "s1",
@@ -189,7 +192,11 @@ function harness(over: Partial<Answers> = {}) {
       return answer(table.fire.status, table.fire.body);
     }
     if (url.includes("chat.postMessage"))
-      return answer(200, { ok: true, ts: "1700000009.000100" });
+      return answer(200, {
+        ok: table.post.ok ?? true,
+        error: table.post.error,
+        ts: "1700000009.000100",
+      });
     throw new Error(`no answer for ${url}`);
   });
 
@@ -426,6 +433,25 @@ describe("the fire", () => {
       reason: "message",
       run: null,
     });
+  });
+
+  it("keeps the budget it committed when its own ack does not post", async () => {
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    const relay = harness({ post: { ok: false, error: "channel_not_found" } });
+    await relay.send(THREAD_ROOM, said("land", "1.1"));
+    await relay.alarm(THREAD_ROOM);
+    // The line is the room's own voice going missing, not a reason to leave a
+    // running wake with no alarm to free it.
+    expect(relay.state(THREAD_ROOM)).toMatchObject({
+      reason: "message",
+      run: { url: "https://runs.example/s1" },
+    });
+    expect(relay.storage(THREAD_ROOM).alarm).toBe(
+      relay.state(THREAD_ROOM)?.alarm?.at,
+    );
+    expect(told).toHaveBeenCalledTimes(1);
+    expect(String(told.mock.calls[0][0])).toContain("channel_not_found");
+    told.mockRestore();
   });
 
   it("answers nothing on an alarm the room is not running a wake for", async () => {
