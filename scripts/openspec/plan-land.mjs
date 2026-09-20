@@ -103,7 +103,7 @@ import {
   planningSchema,
 } from "./lib/perspectives.mjs";
 import { openRecord, setEntry } from "./lib/record.mjs";
-import { answerOf, readWake, relayOf } from "./lib/relay.mjs";
+import { answerOf, readWake, relayOf, wakeIdOf } from "./lib/relay.mjs";
 import { readAgainst } from "./lib/reviewed.mjs";
 import { listCell, roundsPath, withRoundRow } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
@@ -464,9 +464,17 @@ async function attemptLanding(attempt) {
   }
   if (lines.length > 0) written.set(recordPath(), recordText(lines));
 
-  const message = reviewedOnly
-    ? `chore(openspec): ${target} of ${change} read again, nothing changed`
-    : `chore(openspec): land ${target} of ${change}${group ? "" : ` on @${handle}`}`;
+  // The `Wake:` trailer marks the commit as this run's, and a landing from a
+  // terminal carries none: the push reads the trailers of what it carries and
+  // tells the thread about the landings nothing already told it, so the run's
+  // own reply is never doubled and nobody's e-mail decides which is which
+  // (Q66).
+  const message = [
+    reviewedOnly
+      ? `chore(openspec): ${target} of ${change} read again, nothing changed`
+      : `chore(openspec): land ${target} of ${change}${group ? "" : ` on @${handle}`}`,
+    ...(wake ? [`Wake: ${wakeIdOf(wake)}`] : []),
+  ].join("\n\n");
   const commit = cutFrom(
     base,
     tip,

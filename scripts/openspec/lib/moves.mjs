@@ -104,7 +104,7 @@ export function landedBetween(base, head) {
   const landings = [];
   for (const [id, at] of head) {
     const was = base.get(id)?.landedBy ?? {};
-    const landed = Object.entries(at.landedBy ?? {})
+    const landed = Object.entries(at.landedBy)
       .filter(([artifact, by]) => was[artifact] !== by)
       .map(([artifact, by]) => ({ artifact, by }));
     if (landed.length > 0) landings.push({ id, landed });
@@ -131,8 +131,9 @@ function linkedTitle(at, { manualUrl, workspaceUrl }) {
  * `<change>:behind:<artifact>` for an artifact and `<change>:landed:<head>`
  * for a landing, so a re-run of one push reads its own keys back and sends
  * nothing twice, while a stage re-entered after a revert is a different push
- * and is told again. Each message also carries the change's own id, so a
- * caller filters a suppressed change by it directly rather than splitting the
+ * and is told again. `options.pushHead` is the push's own head, the one thing
+ * a landing's key needs. Each message also carries the change's own id, so a
+ * caller filters a change it drops by it directly rather than splitting the
  * key back apart.
  */
 export function messagesOf(base, head, map, options) {
@@ -163,14 +164,15 @@ export function messagesOf(base, head, map, options) {
   };
 
   // The thread hears what landed before the hands are told whose turn it is.
-  // `pushedBy` is the caller's reading of who pushed each landing, which takes
-  // a git call and so cannot be read here: a change absent from it was landed
-  // by a run, and a run replies in the thread itself. The key is the push's
-  // own head, so a re-run of one push posts nothing twice.
+  // Every landing the change has a thread for is composed here, and whether
+  // it is owed at all is the caller's: a run's own landing marks its commit
+  // and the caller drops it, which takes a git call and cannot be read from
+  // two `Map`s. The key is the push's own head, so a re-run of one push posts
+  // nothing twice.
   for (const { id, landed } of landedBetween(base, head)) {
     const at = head.get(id);
     const thread = threadPartsOf(at.thread);
-    if (!thread || !options.pushedBy?.get(id)) continue;
+    if (!thread) continue;
     messages.push({
       key: `${id}:landed:${options.pushHead}`,
       id,

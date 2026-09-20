@@ -79,6 +79,25 @@ export function readWake(root = process.cwd()) {
 }
 
 /**
+ * The wake as its own file names it: the change the room is bound to and the
+ * thread the word was said in, `<change>@<channel>/<ts>`.
+ *
+ * What `plan:land` writes into its landing commit as the `Wake:` trailer, so
+ * the push reads a run's landing off the commit rather than out of whoever
+ * pushed it. The token is not it and never will be: it is the run's one
+ * credential, and the wake's own number rides inside it signed. A wake naming
+ * neither a change nor a thread still has an id - the trailer's presence is
+ * the fact the push reads, and a marker with nothing to say is still a marker.
+ */
+export function wakeIdOf(wake) {
+  const thread =
+    wake.thread?.channel && wake.thread?.ts
+      ? `${wake.thread.channel}/${wake.thread.ts}`
+      : undefined;
+  return [wake.change, thread].filter(Boolean).join("@") || "relay";
+}
+
+/**
  * The calls a run may make on its wake, over one `fetch`: `{ status, body }`
  * for each, so a caller judges 200, 403 and 409 itself rather than being
  * thrown at. A relay that cannot be reached at all is a different fact and is

@@ -8,14 +8,9 @@ import { parseArgs, promisify } from "node:util";
 import YAML from "yaml";
 
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
-import {
-  landedBetween,
-  messagesOf,
-  newlyBehind,
-  readingOf,
-} from "./lib/moves.mjs";
+import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
 import { deliver, escapeSlackText, readSentKeys } from "./lib/notify.mjs";
-import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -399,27 +394,41 @@ async function readingAt(root, base) {
 }
 
 /**
- * The handle that pushed each change's landing, where the team map names one.
+ * The changes whose record a run's own landing wrote in this push.
  *
- * The committer of the record's last commit in the push, because the record is
- * the file `landed_by:` is written in and the push's head may be a commit
- * about something else entirely. A committer the map does not name is a run's
- * own landing: the run replies in the change's thread itself, so nothing is
- * read from it here and the change is left out of the map this returns.
+ * `plan:land` writes a `Wake:` trailer on the commit it cuts in wake mode,
+ * and only there, so what says a landing was a run's is the commit the run
+ * made. A committer's e-mail cannot say it: it names the machine the push came
+ * from, which a rebase, a second account and a workflow's own identity each
+ * answer differently, and a person whose e-mail the map does not hold would be
+ * read as a run. One `git log` over the push's own range reads every trailer
+ * beside the paths each commit touched, and a change whose record a marked
+ * commit wrote has had its thread told by the run itself. A git call that
+ * refused is not "nobody landed it": it throws, and the step says so.
  */
-async function pushedByOf(root, head, ids, map) {
-  const pushedBy = new Map();
-  for (const id of ids) {
-    const path = `${CHANGE_ROOT}${id}/${RECORD_FILE}`;
-    const { stdout } = await exec(
-      "git",
-      ["log", "-1", "--format=%ce", head, "--", path],
-      { cwd: root },
-    ).catch(() => ({ stdout: "" }));
-    const handle = handleOfEmail(map, stdout.trim());
-    if (handle) pushedBy.set(id, handle);
+async function runLandedOf(root, base, head) {
+  const { stdout } = await exec(
+    "git",
+    [
+      "log",
+      "--format=%x00%(trailers:key=Wake,valueonly,separator=%x2C)",
+      "--name-only",
+      `${base}..${head}`,
+    ],
+    { cwd: root },
+  );
+  const ids = new Set();
+  for (const commit of stdout.split("\0").slice(1)) {
+    const [marker, ...paths] = commit.split("\n");
+    if (marker.trim() === "") continue;
+    for (const path of paths) {
+      const at = location(path);
+      if (at?.kind !== "active") continue;
+      if (path === `${CHANGE_ROOT}${at.directory}/${RECORD_FILE}`)
+        ids.add(at.id);
+    }
   }
-  return pushedBy;
+  return ids;
 }
 
 /** The files of each touched change, change by change — what says whether a
@@ -545,9 +554,11 @@ async function main() {
       team: { type: "string", default: TEAM_MAP },
       "sent-keys": { type: "string" },
       send: { type: "boolean", default: false },
-      // A repository variable turns this off in production without touching
-      // the channel post; the CLI default keeps a bare run — a test, a local
-      // dry run — showing what it would tell each hand.
+      // A repository variable turns the per-hand messages off in production -
+      // a role's channel among them, which is one hand's message rerouted -
+      // without touching the channel post or the thread's landing reply. The
+      // CLI default keeps a bare run - a test, a local dry run - showing what
+      // it would tell each hand.
       dms: { type: "string", default: "true" },
       channel: { type: "string", default: "" },
       "sheet-url": { type: "string", default: process.env.TCS_SHEET_URL ?? "" },
@@ -607,23 +618,20 @@ async function main() {
       workspaceUrl: values["workspace-url"],
       sheetUrl: values["sheet-url"],
       pushHead: head,
-      // One git call per change this push landed something on, and none for
-      // the rest: the landing reply is owed only where a person pushed it.
-      pushedBy: await pushedByOf(
-        root,
-        head,
-        landedBetween(atBase, atHead).map((one) => one.id),
-        team,
-      ),
     });
     const sent = readSentKeys(values["sent-keys"]);
+    // One git call for the whole push, whatever it landed: the changes whose
+    // landing a run marked, and whose threads it has told itself.
+    const runLanded = await runLandedOf(root, values.base, head);
     // A push whose only word about a change is the round's own record keys
-    // moves nobody, and says so rather than naming the change. Each message
-    // carries the change's own id, so it is read off directly rather than
-    // split back out of the key.
-    messages = told.messages.filter(
-      (one) => !sent.has(one.key) && !suppressed.has(one.id),
-    );
+    // moves nobody, and says so rather than naming the change - but the
+    // thread's landing reply is about those very keys, so it is owed even
+    // then, and is dropped only where the run that landed it replied itself.
+    // Each message carries the change's own id, so it is read off directly
+    // rather than split back out of the key.
+    const held = (one) =>
+      one.kind === "landed" ? runLanded.has(one.id) : suppressed.has(one.id);
+    messages = told.messages.filter((one) => !sent.has(one.key) && !held(one));
     skipped = told.skipped.filter((one) => !suppressed.has(one.id));
     matrix = rereadMatrixOf(touched, atBase, atHead, suppressed);
   }
@@ -649,6 +657,10 @@ async function main() {
   // keyed by the push's own head, so a re-run of one push does not post it
   // twice either, and `--dms` is what a repository variable turns off in
   // production without touching the post.
+  //
+  // What it turns off is the messages a hand reads. The thread's landing reply
+  // is nobody's inbox - it is the change's own record read out in the change's
+  // own thread - so it goes out either way.
   const toDeliver = [];
   if (hasChanges) {
     if (values.send && !values.channel) {
@@ -662,7 +674,9 @@ async function main() {
       blocks: payload.blocks,
     });
   }
-  if (values.dms === "true") toDeliver.push(...messages);
+  toDeliver.push(
+    ...messages.filter((one) => values.dms === "true" || one.kind === "landed"),
+  );
   await deliver(toDeliver, {
     file: values["sent-keys"],
     send: values.send,

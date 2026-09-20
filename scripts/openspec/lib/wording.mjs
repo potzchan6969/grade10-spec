@@ -73,10 +73,11 @@ export function behindText(behind, linked) {
  *
  * The change is not linked and not named — the reply hangs in its own thread,
  * where every reader already has it. A role of the stage the change names no
- * hand for is left out rather than written as its channel: a reply everyone
- * on the change reads is addressed to nobody, and an open hand is read on the
- * card. Nothing here says who pushed the landing; the caller decides whether
- * the reply is owed at all.
+ * hand for is named as open, never left out and never written as its channel:
+ * the reply is read by everybody on the change, so an unnamed hand is the one
+ * thing in it somebody has to act on, and a stage with no role at all is the
+ * only `nobody`. Nothing here says who pushed the landing; the caller decides
+ * whether the reply is owed at all.
  */
 export function landedText(at, landed) {
   const words = new Map();
@@ -86,9 +87,11 @@ export function landedText(at, landed) {
   const what = [...words]
     .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
     .join(", ");
-  const turns = at.roles
-    .filter((role) => at.hands[role])
-    .map((role) => `@${at.hands[role]} (${ROLE_LABEL[role]})`);
+  const turns = at.roles.map((role) =>
+    at.hands[role]
+      ? `@${at.hands[role]} (${ROLE_LABEL[role]})`
+      : `${ROLE_LABEL[role]} (open)`,
+  );
   const turn = turns.length > 0 ? turns.join(", ") : "nobody";
   return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
 }
