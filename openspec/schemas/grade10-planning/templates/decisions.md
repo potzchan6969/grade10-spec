@@ -36,10 +36,11 @@
      rounds asked them. `Q` is the number the round gave it, so a reader can
      follow a decision back to the question that raised it.
 
-     Mark `(recommended)` on a decision the author took as offered rather than
-     chose, so a later reader knows how firm it is, and `(held)` on one the
-     author kept against the interview's challenge - `Instead of` then carries
-     the alternative the interview put up and why it lost.
+     A decision the round took on the best option is written `<option> -
+     decided by the round`, so a later reader knows how firm it is and any
+     hand overturns it with one reply; one the author kept against the
+     interview's challenge carries the interview's alternative and why it
+     lost in `Instead of`.
 
      A question the interview could not close is written `❓ <role> - <what is
      recommended>` in `Decided`: the ` - ` separator is the grammar the store

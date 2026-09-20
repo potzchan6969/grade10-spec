@@ -132,9 +132,10 @@ Everything this run produces is `draft`. Nothing in it claims review.
    A question settles four ways: answered, accepted as recommended, **held**
    against your challenge, or **deferred** - the author saying they are not
    the right person for it. The first three are rows in `decisions.md`: the
-   second marked `(recommended)` so a later reader knows how firm it is, the
-   third marked `(held)` with your alternative and its reason in `Instead of`,
-   so the next reader sees the row was contested rather than re-opening it. A
+   second written `<option> - decided by the round` so a later reader knows
+   how firm it is, the third with your alternative and its reason in `Instead
+   of`, so the next reader sees the row was contested rather than re-opening
+   it. A
    deferred question is not a decision: it goes under the proposal's open
    questions with a note on who should settle it, and as a ❓ row on the PRD,
    and it does not hold the draft. Sizing, export names, and what code a
