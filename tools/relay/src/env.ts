@@ -6,6 +6,9 @@ export interface Env {
   /** One Durable Object per change, and one per Slack thread until a run
    * names the change that thread is about. */
   ROOM: DurableObjectNamespace;
+  /** One Durable Object for `main`: where it is, and every open page's
+   * socket. */
+  LIVE: DurableObjectNamespace;
 
   /** The Slack channel the planning threads live in. A post with no thread
    * falls back to it. */
@@ -26,15 +29,17 @@ export interface Env {
   GITHUB_TOKEN: string;
   TOKEN_SECRET: string;
   WAKE_TOKEN: string;
+  GITHUB_WEBHOOK_SECRET: string;
 }
 
 /**
  * Every secret the design names, refused blank at the router's entry: a relay
- * deployed without one of them would verify every Slack request against the
- * empty string, sign every wake token with it, move `main` with no credential
- * at all, or fire nothing and post nothing while answering as though it had.
+ * deployed without one of them would verify every Slack request, or every push
+ * the code host sends, against the empty string, sign every wake token with it,
+ * move `main` with no credential at all, or fire nothing and post nothing while
+ * answering as though it had.
  *
- * All seven, not the five a check turns on: a deployment missing one is a
+ * All eight, not the five a check turns on: a deployment missing one is a
  * deployment, and the entry naming it is how Operations finds that out in one
  * call rather than from a thread that stays quiet.
  */
@@ -46,6 +51,7 @@ export const REQUIRED_SECRETS = [
   "GITHUB_TOKEN",
   "TOKEN_SECRET",
   "WAKE_TOKEN",
+  "GITHUB_WEBHOOK_SECRET",
 ] as const;
 
 /** The first secret the deployment is missing, or null. */

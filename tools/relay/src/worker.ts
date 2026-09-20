@@ -1,10 +1,13 @@
 /**
- * The router. Three surfaces and nothing else: Slack's events, the workflow's
- * wake, the four calls a running session makes, and 404.
+ * The router. What it serves and nothing else: Slack's events, the code host's
+ * push, the workflow's wake, the four calls a running session makes, where
+ * `main` is and the socket a page listens on, and 404.
  *
  * Slack is answered inside three seconds and the work happens in
  * `ctx.waitUntil`, because a Slack delivery that is not acknowledged is
- * retried. Every rule the relay has lives in the modules this file calls.
+ * retried. A push is answered by the live object itself, which is one hop with
+ * no network behind it. Every rule the relay has lives in the modules this file
+ * calls.
  *
  * It fails closed at the entry: a deployment missing one of the secrets
  * nothing works without answers 500 and names the secret, rather than
@@ -13,9 +16,11 @@
 
 import { equalBytes, utf8 } from "./bytes.ts";
 import { type Env, missingSecret } from "./env.ts";
+import { parseGithubEvent, verifyGithubSignature } from "./github-events.ts";
+import { isUpgrade } from "./live.ts";
 import type { Thread } from "./room-state.ts";
 import { changeRoom } from "./rooms.ts";
-import { callRoom, json, type RoomOp } from "./rpc.ts";
+import { callLive, callRoom, json, type RoomOp } from "./rpc.ts";
 import {
   parseSlackRequest,
   postMessage,
@@ -24,6 +29,7 @@ import {
 } from "./slack.ts";
 import { verifyWakeToken } from "./token.ts";
 
+export { Live } from "./live.ts";
 export { Room } from "./room.ts";
 
 /** A commit, as the code host spells one. A landing names the sha the relay
@@ -36,6 +42,20 @@ const IS_SHA = /^[0-9a-f]{40}$/;
 function roomByName(env: Env, name: string): DurableObjectStub {
   return env.ROOM.get(env.ROOM.idFromName(name));
 }
+
+/** The one live object. `main` is one line, so every page listens to the same
+ * object and a push is one call. */
+function liveObject(env: Env): DurableObjectStub {
+  return env.LIVE.get(env.LIVE.idFromName("main"));
+}
+
+/** What a browser needs to read the head from the manual's own origin, and to
+ * read it again rather than a copy: any origin may read it, and an answer that
+ * is true until the next push is cached nowhere. */
+const HEAD_HEADERS: Record<string, string> = {
+  "access-control-allow-origin": "*",
+  "cache-control": "no-store",
+};
 
 /** The text as JSON, or null. One reading, so every surface answers a body it
  * cannot read the same way. */
@@ -133,6 +153,64 @@ async function tell(env: Env, thread: Thread, text: string): Promise<void> {
   }
 }
 
+/**
+ * The code host's push. The webhook is subscribed to `push` alone, so a
+ * delivery that is not a push, or not this store's `main`, is answered with the
+ * reason and tells nobody: the head a page compares its own snapshot with is
+ * this store's.
+ */
+async function onGithubEvents(request: Request, env: Env): Promise<Response> {
+  const body = await request.text();
+  const signed = await verifyGithubSignature(env.GITHUB_WEBHOOK_SECRET, {
+    signature: request.headers.get("x-hub-signature-256"),
+    body,
+  });
+  if (!signed) return json(401, { reason: "bad-signature" });
+  const parsed = parseJson(body);
+  if (parsed === null) return notJson();
+  const event = parseGithubEvent(
+    request.headers.get("x-github-event"),
+    parsed,
+    env.REPO,
+  );
+  // The delivery the code host sends the moment the webhook is saved, which is
+  // that leg's smoke test.
+  if (event.kind === "ping") return json(200, { pong: true });
+  if (event.kind === "ignored") return json(200, { ignored: event.why });
+  // The object's answer is the delivery's: the code host reads that the move
+  // reached the object, rather than an ack the relay wrote before it knew.
+  return callLive(liveObject(env), { op: "moved", ...event.head });
+}
+
+/** Where `main` is, for a page that is polling and for one whose socket the
+ * relay could not take. */
+async function onHead(env: Env): Promise<Response> {
+  const answer = await callLive(liveObject(env), { op: "head" });
+  return new Response(await answer.text(), {
+    status: answer.status,
+    headers: { "content-type": "application/json", ...HEAD_HEADERS },
+  });
+}
+
+/** A page's socket. The upgrade is the live object's to accept, and a read that
+ * is not one is told so rather than left waiting. */
+async function onLive(request: Request, env: Env): Promise<Response> {
+  if (!isUpgrade(request)) return json(426, { reason: "upgrade-required" });
+  return liveObject(env).fetch(request);
+}
+
+/** The preflight a browser sends before it reads `/head` from another
+ * origin. */
+const preflight = (): Response =>
+  new Response(null, {
+    status: 204,
+    headers: {
+      "access-control-allow-origin": "*",
+      "access-control-allow-methods": "GET, OPTIONS",
+      "access-control-max-age": "86400",
+    },
+  });
+
 async function onWake(request: Request, env: Env): Promise<Response> {
   const given = (request.headers.get("authorization") ?? "").replace(
     /^Bearer\s+/i,
@@ -222,6 +300,14 @@ function opOf(
   }
 }
 
+/** Which method a surface answers: the two a page reads are GET, the one
+ * question a run asks before every push is GET, and everything else is a POST.
+ * A read where a write belongs is refused before anything is verified. */
+function methodOf(path: string, run: RegExpExecArray | null): "GET" | "POST" {
+  if (run) return run[2] === "alive" ? "GET" : "POST";
+  return path === "/head" || path === "/live" ? "GET" : "POST";
+}
+
 export default {
   async fetch(
     request: Request,
@@ -233,10 +319,14 @@ export default {
       return json(500, { reason: "missing-secret", secret: missing });
     const path = new URL(request.url).pathname;
     const run = /^\/runs\/([^/]+)\/([a-z]+)$/.exec(path);
-    const alive = run !== null && run[2] === "alive";
-    if (request.method !== (alive ? "GET" : "POST"))
-      return json(405, { reason: alive ? "get-only" : "post-only" });
+    if (request.method === "OPTIONS" && path === "/head") return preflight();
+    const method = methodOf(path, run);
+    if (request.method !== method)
+      return json(405, { reason: method === "GET" ? "get-only" : "post-only" });
     if (path === "/slack/events") return onSlackEvents(request, env, ctx);
+    if (path === "/github/events") return onGithubEvents(request, env);
+    if (path === "/head") return onHead(env);
+    if (path === "/live") return onLive(request, env);
     if (path === "/wake") return onWake(request, env);
     if (run) return onRun(request, env, run[1], run[2]);
     return json(404, { reason: "no-route" });

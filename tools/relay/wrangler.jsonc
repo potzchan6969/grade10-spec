@@ -11,10 +11,20 @@
   // One room per change, and one per Slack thread until a run names the
   // change that thread is about. The room holds the queue, so two wakes on
   // one change are one at a time however many edges they arrive on.
+  //
+  // One live object, named `main`, holding where `main` is and every open
+  // page's socket: `main` is one line, so a push is one broadcast however
+  // many pages are listening.
   "durable_objects": {
-    "bindings": [{ "name": "ROOM", "class_name": "Room" }]
+    "bindings": [
+      { "name": "ROOM", "class_name": "Room" },
+      { "name": "LIVE", "class_name": "Live" }
+    ]
   },
-  "migrations": [{ "tag": "v1", "new_sqlite_classes": ["Room"] }],
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Room"] },
+    { "tag": "v2", "new_sqlite_classes": ["Live"] }
+  ],
   // The Slack app's request URL and the workflow's wake URL are the
   // workers.dev address; no custom domain is needed for either.
   "workers_dev": true,
@@ -32,6 +42,6 @@
   }
   // Secrets, each set with `pnpm dlx wrangler@4.120.0 secret put <name>`:
   // SLACK_SIGNING_SECRET, SLACK_BOT_TOKEN, ROUTINE_FIRE_URL, ROUTINE_TOKEN,
-  // GITHUB_TOKEN, TOKEN_SECRET, WAKE_TOKEN. No value of any of them belongs in
-  // this file or in any other file here.
+  // GITHUB_TOKEN, TOKEN_SECRET, WAKE_TOKEN, GITHUB_WEBHOOK_SECRET. No value of
+  // any of them belongs in this file or in any other file here.
 }
