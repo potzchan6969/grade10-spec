@@ -158,15 +158,64 @@ describe("a page's socket", () => {
     expect(socket.sent).toEqual([headText(HEAD)]);
   });
 
-  it("is closed at the object's end when the page closes it", async () => {
+  it("is closed at the object's end with the code the page sent", async () => {
     const relay = harness();
     await relay.upgrade();
     const socket = relay.accepted[0];
-    await relay.live.webSocketClose(socket as unknown as WebSocket);
+    const said = vi.spyOn(console, "log").mockImplementation(() => {});
+    await relay.live.webSocketClose(
+      socket as unknown as WebSocket,
+      1001,
+      "the page navigated away",
+      true,
+    );
     expect(socket.closed).toEqual({
-      code: 1000,
-      reason: "the page closed the socket",
+      code: 1001,
+      reason: "the page navigated away",
     });
+    expect(String(said.mock.calls[0][0])).toContain("cleanly");
+
+    // A close the page never asked for reads as one: a reader whose network
+    // went says so in the log, where every close logged the same would not.
+    await relay.live.webSocketClose(
+      socket as unknown as WebSocket,
+      1006,
+      "",
+      false,
+    );
+    expect(socket.closed).toEqual({ code: 1006, reason: "" });
+    expect(String(said.mock.calls[1][0])).toContain("not cleanly");
+    said.mockRestore();
+  });
+
+  it("is closed 1011 when the socket itself fails, with the failure logged", async () => {
+    const relay = harness();
+    await relay.upgrade();
+    const socket = relay.accepted[0];
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    await relay.live.webSocketError(
+      socket as unknown as WebSocket,
+      new Error("the socket broke"),
+    );
+    expect(socket.closed).toEqual({ code: 1011, reason: "the socket failed" });
+    expect(String(told.mock.calls[0][0])).toContain("the socket broke");
+    told.mockRestore();
+  });
+
+  it("is answered nothing where its page went away mid-question", async () => {
+    // Every send the object makes to a socket it holds goes through one guard:
+    // a page gone between the question and the answer is logged, and the
+    // object answers the next ask.
+    const relay = harness();
+    await relay.upgrade();
+    const socket = relay.accepted[0];
+    socket.sent.length = 0;
+    socket.gone = true;
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    await relay.live.webSocketMessage(socket as unknown as WebSocket);
+    expect(socket.sent).toEqual([]);
+    expect(told).toHaveBeenCalledTimes(1);
+    told.mockRestore();
   });
 });
 
