@@ -136,6 +136,59 @@ describe("the delivery", () => {
     });
   });
 
+  it("reads the store's name whatever case either side is written in", () => {
+    // The code host's names are case-insensitive and `REPO` is typed into
+    // `wrangler.jsonc` by hand, so a fold on one side alone drops every push.
+    expect(
+      parseGithubEvent(
+        "push",
+        push({ repository: { full_name: "9GAG/Grade10-Spec" } }),
+        REPO,
+      ).kind,
+    ).toBe("moved");
+    expect(parseGithubEvent("push", push(), "9GAG/Grade10-Spec").kind).toBe(
+      "moved",
+    );
+  });
+
+  it("ignores a push whose commit names no time", () => {
+    // A page says how long ago the commit landed, and a commit with no
+    // timestamp answers that with nothing: it is the same refusal as a push
+    // with no commit at all.
+    for (const timestamp of [undefined, "", "   "]) {
+      expect(
+        parseGithubEvent(
+          "push",
+          push({
+            head_commit: { timestamp, message: "docs(planning): a line" },
+          }),
+          REPO,
+        ),
+      ).toEqual({ kind: "ignored", why: "no-commit" });
+    }
+  });
+
+  it("reads a commit with no message as its short sha", () => {
+    // A commit written with no message still moved `main`, so the page shows
+    // the sha it can read back to the commit rather than an empty line.
+    expect(
+      parseGithubEvent(
+        "push",
+        push({
+          head_commit: { timestamp: "2026-09-20T14:02:11+08:00", message: "" },
+        }),
+        REPO,
+      ),
+    ).toEqual({
+      kind: "moved",
+      head: {
+        main: SHA,
+        at: "2026-09-20T14:02:11+08:00",
+        subject: SHA.slice(0, 7),
+      },
+    });
+  });
+
   it("ignores a push that names no commit", () => {
     // A branch deleted carries no head commit, and a sha that is not one is a
     // head no page could compare its snapshot with.
