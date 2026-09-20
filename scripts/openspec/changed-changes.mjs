@@ -8,9 +8,14 @@ import { parseArgs, promisify } from "node:util";
 import YAML from "yaml";
 
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
-import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
+import {
+  landedBetween,
+  messagesOf,
+  newlyBehind,
+  readingOf,
+} from "./lib/moves.mjs";
 import { deliver, escapeSlackText, readSentKeys } from "./lib/notify.mjs";
-import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -393,6 +398,30 @@ async function readingAt(root, base) {
   }
 }
 
+/**
+ * The handle that pushed each change's landing, where the team map names one.
+ *
+ * The committer of the record's last commit in the push, because the record is
+ * the file `landed_by:` is written in and the push's head may be a commit
+ * about something else entirely. A committer the map does not name is a run's
+ * own landing: the run replies in the change's thread itself, so nothing is
+ * read from it here and the change is left out of the map this returns.
+ */
+async function pushedByOf(root, head, ids, map) {
+  const pushedBy = new Map();
+  for (const id of ids) {
+    const path = `${CHANGE_ROOT}${id}/${RECORD_FILE}`;
+    const { stdout } = await exec(
+      "git",
+      ["log", "-1", "--format=%ce", head, "--", path],
+      { cwd: root },
+    ).catch(() => ({ stdout: "" }));
+    const handle = handleOfEmail(map, stdout.trim());
+    if (handle) pushedBy.set(id, handle);
+  }
+  return pushedBy;
+}
+
 /** The files of each touched change, change by change — what says whether a
  * push wrote anything but the record's own keys. */
 function touchedByChange(changed) {
@@ -565,11 +594,7 @@ async function main() {
   let skipped = [];
   let matrix = [];
   if (values.stages) {
-    const options = {
-      manualUrl: values["manual-url"],
-      workspaceUrl: values["workspace-url"],
-      sheetUrl: values["sheet-url"],
-    };
+    const team = readTeamMap(root, values.team);
     // The head is the checkout, which is what a push's job holds; a head
     // given by hand that is not the checkout is read from its own worktree
     // rather than from whatever the working tree happens to be on.
@@ -577,12 +602,20 @@ async function main() {
     const atHead =
       head === checkout ? await readingOf(root) : await readingAt(root, head);
     stages = Object.fromEntries([...atHead].map(([id, at]) => [id, at.stage]));
-    const told = messagesOf(
-      atBase,
-      atHead,
-      readTeamMap(root, values.team),
-      options,
-    );
+    const told = messagesOf(atBase, atHead, team, {
+      manualUrl: values["manual-url"],
+      workspaceUrl: values["workspace-url"],
+      sheetUrl: values["sheet-url"],
+      pushHead: head,
+      // One git call per change this push landed something on, and none for
+      // the rest: the landing reply is owed only where a person pushed it.
+      pushedBy: await pushedByOf(
+        root,
+        head,
+        landedBetween(atBase, atHead).map((one) => one.id),
+        team,
+      ),
+    });
     const sent = readSentKeys(values["sent-keys"]);
     // A push whose only word about a change is the round's own record keys
     // moves nobody, and says so rather than naming the change. Each message

@@ -1,16 +1,18 @@
 /*
  * What a push moved: one reading of a tree, and the pure comparison of two
- * readings that says whose turn changed, what went newly behind, and the
- * message each of those is.
+ * readings that says whose turn changed, what went newly behind, what landed,
+ * and the message each of those is.
  *
- * Its own module, beside `notify.mjs`, so `movesBetween`, `newlyBehind` and
- * `messagesOf` are tested as what they are — a comparison over two plain
- * `Map`s, no git and no filesystem involved — without a fixture store to
- * drive them. `readingOf` is the one impure piece, kept here because both
- * halves of one push read a tree the same way; the push workflow's own
+ * Its own module, beside `notify.mjs`, so `movesBetween`, `newlyBehind`,
+ * `landedBetween` and `messagesOf` are tested as what they are — a comparison
+ * over two plain `Map`s, no git and no filesystem involved — without a
+ * fixture store to drive them. `readingOf` is the one impure piece, kept here
+ * because both halves of one push read a tree the same way; the push
+ * workflow's own
  * `readingAt`, which stands a worktree up to read the base, stays beside its
  * caller.
  */
+import { ROLE_LABEL } from "../../../tools/manual/src/api/stage-view.ts";
 import {
   behindOf,
   handOf,
@@ -37,6 +39,7 @@ export async function readingOf(root) {
       hands: change.hands ?? {},
       thread: change.thread,
       behind: behindOf(change, artifactsOf(change)),
+      landedBy: change.landedBy ?? {},
     });
   }
   return read;
@@ -81,6 +84,26 @@ export function newlyBehind(base, head) {
   return fresh;
 }
 
+/**
+ * What each change's `landed_by:` gained or changed between the two readings.
+ *
+ * One entry per change, naming the artifacts that landed and the handle whose
+ * word landed each, in the record's own order — which is the order the
+ * landing wrote them in. An entry that changed hands is a landing too: the
+ * artifact reached `main` again on somebody else's word.
+ */
+export function landedBetween(base, head) {
+  const landings = [];
+  for (const [id, at] of head) {
+    const was = base.get(id)?.landedBy ?? {};
+    const landed = Object.entries(at.landedBy ?? {})
+      .filter(([artifact, by]) => was[artifact] !== by)
+      .map(([artifact, by]) => ({ artifact, by }));
+    if (landed.length > 0) landings.push({ id, landed });
+  }
+  return landings;
+}
+
 /** The change, linked: its thread where the record names one, the change page
  * where it does not. */
 function linkedTitle(at, { manualUrl, workspaceUrl }) {
@@ -111,6 +134,32 @@ function yourTurnText(at, role, linked) {
   return lines.join("\n");
 }
 
+/**
+ * One reply in the change's thread: what landed, whose word landed it, where
+ * the change stands now, and whose turn it is.
+ *
+ * The change is not linked and not named — the reply hangs in its own thread,
+ * where every reader already has it. A role of the stage the change names no
+ * hand for is left out rather than written as its channel: a reply everyone on
+ * the change reads is not addressed to a channel, and the card is where an
+ * open hand is read. Nothing here says who pushed the landing; the caller
+ * decides whether the reply is owed at all.
+ */
+export function landedText(at, landed) {
+  const words = new Map();
+  for (const { artifact, by } of landed) {
+    words.set(by, [...(words.get(by) ?? []), `\`${artifact}\``]);
+  }
+  const what = [...words]
+    .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
+    .join(", ");
+  const turns = at.roles
+    .filter((role) => at.hands[role])
+    .map((role) => `@${at.hands[role]} (${ROLE_LABEL[role]})`);
+  const turn = turns.length > 0 ? turns.join(", ") : "nobody";
+  return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
+}
+
 function stagingText(linked, sheetUrl) {
   const sheet = sheetUrl
     ? `<${sheetUrl}|the run sheet>`
@@ -128,9 +177,10 @@ function behindText(behind, linked) {
 /**
  * One message per move, addressed and keyed.
  *
- * The key is the move: `<change>:<stage>:<role>` for a turn and
- * `<change>:behind:<artifact>` for an artifact, so a re-run of one push reads
- * its own keys back and sends nothing twice, while a stage re-entered after a
+ * The key is the move: `<change>:<stage>:<role>` for a turn,
+ * `<change>:behind:<artifact>` for an artifact and `<change>:landed:<head>`
+ * for a landing, so a re-run of one push reads its own keys back and sends
+ * nothing twice, while a stage re-entered after a
  * revert is a different push and is told again. Each message also carries the
  * change's own id, so a caller filters a suppressed change by it directly
  * rather than splitting the key back apart.
@@ -161,6 +211,26 @@ export function messagesOf(base, head, map, options) {
       text,
     });
   };
+
+  // The thread hears what landed before the hands are told whose turn it is.
+  // `pushedBy` is the caller's reading of who pushed each landing, which takes
+  // a git call and so cannot be read here: a change absent from it was landed
+  // by a run, and a run replies in the thread itself (`Q66`). The key is the
+  // push's own head, so a re-run of one push posts nothing twice.
+  for (const { id, landed } of landedBetween(base, head)) {
+    const at = head.get(id);
+    const thread = threadPartsOf(at.thread);
+    if (!thread || !options.pushedBy?.get(id)) continue;
+    messages.push({
+      key: `${id}:landed:${options.pushHead}`,
+      id,
+      kind: "landed",
+      to: "channel",
+      channel: thread.channel,
+      threadTs: thread.ts,
+      text: landedText(at, landed),
+    });
+  }
 
   for (const move of movesBetween(base, head)) {
     const at = head.get(move.id);
