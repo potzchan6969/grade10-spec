@@ -85,6 +85,14 @@ const ROW = ["--perspectives", "design,simpler", "--stood", "nothing stood"];
 
 const TABLE = (decided) =>
   [
+    "## Goals",
+    "",
+    "- One row per round",
+    "",
+    "## Non-Goals",
+    "",
+    "- Nothing else",
+    "",
     "## Decisions",
     "",
     "| Q | Asked | Decided | Instead of |",
@@ -201,13 +209,14 @@ test("shared-planning-agent-rounds-SC-72 - land with recommendations takes every
   assert.match(landed, /\.openspec\.yaml/);
 });
 
-test("a landing with no held row prints nothing about one", async () => {
+test("a landing with no held row lands clean, taking nothing as recommended", async () => {
   const { root } = sandbox();
 
   const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.doesNotMatch(result.stdout, /held/i);
+  assert.match(result.stdout, /nothing is held/);
+  assert.doesNotMatch(result.stdout, /as recommended/);
 });
 
 test("--reviewed asks nobody's word and is never held by an open row", async () => {

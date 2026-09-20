@@ -4,31 +4,42 @@
  *
  *   pnpm run plan:land <change> <artifact|group> --perspectives a,b --stood "…"
  *   pnpm run plan:land <change> <artifact> --reviewed
- *   pnpm run plan:land <change> <artifact|group> [--as @handle] [--dry-run]
+ *   pnpm run plan:land <change> <artifact|group> [--as @handle] [--with-recommendations] [--dry-run]
  *
  * A landing is the hand's word turned into one commit on `main`, and the
  * steps below run in order and stop at the first refusal. Nothing half-lands:
  * the record line and the round's row are written together, the branch is
- * pushed against the state this run read, and `main` is a plain fast-forward.
+ * pushed against the state this run read, and `main` is a plain fast-forward
+ * — or, bound to a wake through `.round/relay.json`, is what the relay makes
+ * of the branch this run pushed (Q54).
  *
  *   1 clean    a rebase in progress or a dirty tracked file refuses the
  *              landing - an untracked file beside the change is nobody's
  *              business here, but a landing that carries somebody's
  *              uncommitted edit is not a landing
- *   2 hand     `git config user.email` through `docs/prds/team.yaml`; an
- *              e-mail the map does not name and a handle that is not the hand
- *              of the artifact are both refused, naming whose word it waits
- *              on. `--as @handle` is taken only where it resolves to the same
- *              e-mail, so nobody types anybody else's handle. `--reviewed`
- *              skips this: a read that changes nothing is the change's agent
- *              to land, not a hand's word
+ *   2 hand     from a terminal, `git config user.email` through
+ *              `docs/prds/team.yaml`; from a run, `.round/relay.json`'s own
+ *              `sender.handle` — the Slack member the relay resolved, never a
+ *              git config lookup. An e-mail the map does not name, a null or
+ *              handle-less `sender` (the push workflow's own wake, no message
+ *              behind it), and a handle that is not the hand of the artifact
+ *              are all refused, naming whose word it waits on. `--as @handle`
+ *              is taken only where it resolves to the same handle, so nobody
+ *              types anybody else's. `--reviewed` skips this entirely: a read
+ *              that changes nothing is the change's agent to land, not a
+ *              hand's word, and a wake with no sender still lands one
  *   3 main     the store's own main, always fetched, the branch rebased on
  *              it; that same rebase is the one reading of the change this run
  *              takes, so the hand's role and the artifact list are never read
  *              from a tree older than what the branch lands on
  *   4 behind   anything before the artifact that is behind refuses the
  *              landing, named with its hand
- *   5 write    `landed_by: <artifact>: <handle>` (never for a task group,
+ *   5 held     skipped for `--reviewed`: any `## Decisions` row whose Decided
+ *              cell opens with ❓ holds the landing, naming every such row,
+ *              until `--with-recommendations` takes each one as its
+ *              recommendation and stages the rewrite into the landing commit
+ *              (Q59, Q60)
+ *   6 write    `landed_by: <artifact>: <handle>` (never for a task group,
  *              whose plan is proven by the tick alone) and the `rounds.md`
  *              row, whose `Tests` cell owes an entry per scenario the
  *              group's own task lines cite, written to the tree before the
@@ -41,23 +52,26 @@
  *              artifact per call, and neither a row nor a `landed_by:` line:
  *              a read that changed nothing ran no perspective and waits on
  *              nobody's word (`Q42`)
- *   6 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
+ *   7 gate     `validate:changes --strict`, `check:manual`, `tcs:validate`,
  *              run in this process against this store rather than spawned
  *              against a nonexistent copy of themselves in it
- *   7 commit   what step 5 wrote, added and committed in one commit, whose
- *              sha is named in `.round/landed`: the commits a run made are
- *              what the re-read's own guard reads, and the rebase in step 3
- *              leaves every commit `main` gained looking like one of them
- *   8 push     the branch's remote sha, read once from the network rather
+ *   8 commit   what steps 5 and 6 wrote, added and committed in one commit,
+ *              whose sha is named in `.round/landed`: the commits a run made
+ *              are what the re-read's own guard reads, and the rebase in step
+ *              3 leaves every commit `main` gained looking like one of them
+ *   9 push     the branch's remote sha, read once from the network rather
  *              than re-fetched before every attempt, leases the branch's own
  *              push; losing that lease means another run is on this same
  *              branch, so it stops rather than overwriting work still in
  *              flight. A push this run made itself moves the lease forward
  *              for the next attempt, since that is this run's own write and
- *              not a second one to guard against. Only `main`'s plain push
- *              retries: it reads `main` again, rebases, and tries once more.
- *              Losing that twice says so and stops, and the winner's work
- *              stands
+ *              not a second one to guard against. From a terminal, `main`'s
+ *              plain push retries on a lost race: it reads `main` again,
+ *              rebases, and tries once more. Bound to a relay, the same retry
+ *              runs against a 409 instead — "main moved under the push" is
+ *              one fact whichever pushed it — and a 403 stops at once, naming
+ *              the relay's own reason (Q55). Losing the race twice says so
+ *              and stops either way, and the winner's work stands
  *
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
@@ -69,7 +83,7 @@
  * nothing about a real landing should ever read it.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, rmSync } from "node:fs";
+import { existsSync, readFileSync, rmSync, writeFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import {
@@ -79,6 +93,7 @@ import {
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { heldRowsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, LANDED } from "./lib/landed.mjs";
 import {
   isGroup,
@@ -97,19 +112,23 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 /** A scenario a task line cites, the way the store writes a citation: in
  * backticks, so prose about a scenario is not read as one. */
 const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+)`/g;
+/** Where a wake's own run writes the relay it was given, before anything
+ * else — `.round/relay.json`'s presence is what makes this a relay landing. */
+const RELAY_FILE = ".round/relay.json";
 const USAGE =
-  'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--dry-run] [--root <dir>]';
+  'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--with-recommendations] [--dry-run] [--root <dir>]';
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["as", "perspectives", "stood", "asked", "tests", "root"],
-  booleans: ["dry-run", "reviewed"],
+  booleans: ["dry-run", "reviewed", "with-recommendations"],
   usage: USAGE,
 });
 const dryRun = Boolean(flags["dry-run"]);
 const reviewedOnly = Boolean(flags.reviewed);
 const root = flags.root ?? join(HERE, "..", "..");
+const relay = relayOf(root);
 const [change, target] = positional;
-// Set once step 5 writes `landed_by:` and the round's row, and cleared once
+// Set once step 6 writes `landed_by:` and the round's row, and cleared once
 // the gate passes: `fail` undoes exactly those two paths on a refusal in
 // between, and leaves a later refusal (the push losing its race) alone.
 let restoreOnFail;
@@ -144,22 +163,39 @@ say("clean", `the tree is clean, on ${branch}`);
 
 // ── 2 hand (skipped for --reviewed: nobody's word is asked for a no-op read) ─
 let handle;
+let email;
 if (!reviewedOnly) {
-  const map = readTeamMap(root);
-  const email = git(["config", "user.email"]);
-  if (!email)
-    fail("`git config user.email` says nothing — a landing is somebody's word");
-  handle = handleOfEmail(map, email);
-  if (!handle) {
-    fail(
-      `${email} is named nowhere in ${TEAM_MAP} — a landing is recorded against a handle, and the map is the fix`,
-    );
+  if (relay) {
+    handle = String(relay.sender?.handle ?? "")
+      .replace(/^@/, "")
+      .trim()
+      .toLowerCase();
+    if (!handle) {
+      fail(
+        "this wake has no word behind it: nobody said land — only --reviewed lands here",
+      );
+    }
+  } else {
+    const map = readTeamMap(root);
+    email = git(["config", "user.email"]);
+    if (!email)
+      fail(
+        "`git config user.email` says nothing — a landing is somebody's word",
+      );
+    handle = handleOfEmail(map, email);
+    if (!handle) {
+      fail(
+        `${email} is named nowhere in ${TEAM_MAP} — a landing is recorded against a handle, and the map is the fix`,
+      );
+    }
   }
   if (flags.as) {
     const asked = flags.as.replace(/^@/, "").trim().toLowerCase();
     if (asked !== handle) {
       fail(
-        `--as @${asked} does not resolve to ${email}, which ${TEAM_MAP} names @${handle} — a landing is the committer's word`,
+        relay
+          ? `--as @${asked} does not match @${handle}, the relay's own sender — a landing is the run's word`
+          : `--as @${asked} does not resolve to ${email}, which ${TEAM_MAP} names @${handle} — a landing is the committer's word`,
       );
     }
   }
@@ -258,7 +294,30 @@ if (behind.length > 0) {
 }
 say("behind", `nothing before ${target} is behind`);
 
-// ── 5 write, before the gate ─────────────────────────────────────────────────
+// ── 5 held (Q59, Q60) ────────────────────────────────────────────────────────
+// Skipped for --reviewed: a read that changes nothing asks nobody's word, so
+// it waits on no one's answer either.
+const decisionsRelPath = `openspec/changes/${change}/decisions.md`;
+const decisionsPath = join(root, decisionsRelPath);
+const held =
+  reviewedOnly || !existsSync(decisionsPath)
+    ? []
+    : heldRowsOf(readFileSync(decisionsPath, "utf8"));
+if (held.length > 0 && !flags["with-recommendations"]) {
+  fail(
+    `held: ${held.map((one) => one.id).join(", ")} — answer them, or land with recommendations`,
+  );
+}
+say(
+  "held",
+  reviewedOnly
+    ? "a read that changes nothing asks nobody's word"
+    : held.length > 0
+      ? `taking ${held.map((one) => one.id).join(", ")} as recommended`
+      : "nothing is held",
+);
+
+// ── 6 write, before the gate ─────────────────────────────────────────────────
 // `landed_by:` and the round's row land in the same commit as the tick or the
 // artifact they prove, so the `round` rule the gate runs reads whatever this
 // step writes — never the other way around. Writing after the gate would
@@ -278,18 +337,32 @@ if (!dryRun) {
     saveRecord(record);
     pending = { record };
   } else {
+    // The rewrite a held row's recommendation takes, staged beside the record
+    // and the row rather than committed on its own.
+    if (held.length > 0) {
+      writeFileSync(
+        decisionsPath,
+        takeRecommendations(readFileSync(decisionsPath, "utf8")),
+      );
+    }
     // Never for a task group: its plan is proven by the tick, not by a hand's
     // line, and the group names no schema artifact to write one against.
     if (artifact !== undefined)
       setEntry(record.doc, "landed_by", artifact, handle);
     saveRecord(record);
     const { row, round, created } = appendRoundRow(root, change, cells);
-    pending = { record, row, round, roundsCreated: created };
+    pending = {
+      record,
+      row,
+      round,
+      roundsCreated: created,
+      heldRewritten: held.length > 0 ? decisionsRelPath : undefined,
+    };
   }
   restoreOnFail = () => restorePending(pending);
 }
 
-// ── 6 gate ──────────────────────────────────────────────────────────────────
+// ── 7 gate ──────────────────────────────────────────────────────────────────
 if (dryRun) {
   say("gate", "would run validate:changes, check:manual, tcs:validate");
 } else {
@@ -298,11 +371,12 @@ if (dryRun) {
   runTcsValidate();
   say("gate", "validate:changes, check:manual, tcs:validate pass");
 }
-// The gate passed: what step 5 wrote stands, and a later failure (the push
-// losing its race) leaves the commit below in place rather than undoing it.
+// The gate passed: what steps 5 and 6 wrote stand, and a later failure (the
+// push losing its race) leaves the commit below in place rather than undoing
+// it.
 restoreOnFail = undefined;
 
-// ── 7 commit ────────────────────────────────────────────────────────────────
+// ── 8 commit ────────────────────────────────────────────────────────────────
 if (dryRun) {
   say(
     "commit",
@@ -314,6 +388,10 @@ if (dryRun) {
   );
   if (reviewedOnly)
     console.log(`           read against ${against.items.join(", ")}`);
+  else if (held.length > 0)
+    console.log(
+      `           would take ${held.map((one) => one.id).join(", ")} as recommended`,
+    );
 } else if (reviewedOnly) {
   const { record } = pending;
   gitOrDie(["add", "--", record.path]);
@@ -328,7 +406,9 @@ if (dryRun) {
   nameCommit();
 } else {
   const { record, row, round } = pending;
-  gitOrDie(["add", "--", record.path, roundsPath(change)]);
+  const paths = [record.path, roundsPath(change)];
+  if (held.length > 0) paths.push(decisionsRelPath);
+  gitOrDie(["add", "--", ...paths]);
   gitOrDie([
     "commit",
     "--quiet",
@@ -342,18 +422,35 @@ if (dryRun) {
       : `landed_by: ${artifact}: ${handle}, and round ${round}`,
   );
   console.log(`           ${row}`);
+  if (held.length > 0)
+    console.log(
+      `           took ${held.map((one) => one.id).join(", ")} as recommended`,
+    );
   nameCommit();
 }
 
-// ── 8 push ──────────────────────────────────────────────────────────────────
+// ── 9 push ──────────────────────────────────────────────────────────────────
 const mainBranch = rebase.ref.replace(/^origin\//, "");
 if (dryRun) {
   say(
     "push",
-    `would push ${branch} with a lease on ${leaseSha ? short(leaseSha) : "nothing"}, then HEAD:${mainBranch}`,
+    relay
+      ? `would push ${branch} with a lease on ${leaseSha ? short(leaseSha) : "nothing"}, then ask the relay to land it`
+      : `would push ${branch} with a lease on ${leaseSha ? short(leaseSha) : "nothing"}, then HEAD:${mainBranch}`,
   );
   console.log("\ndry run — nothing was pushed");
   process.exit(0);
+}
+
+/** What one landing says once it has actually landed — the hand's word for a
+ * terminal or a word wake, held nothing owed for --reviewed, and every held
+ * row this landing took as recommended. */
+function landedLine() {
+  const took =
+    held.length > 0
+      ? ` — took ${held.map((one) => one.id).join(", ")} as recommended`
+      : "";
+  return `\n✓ ${target} of ${change} landed${reviewedOnly ? "" : ` by @${handle}`}${took}`;
 }
 
 for (let attempt = 1; attempt <= 2; attempt += 1) {
@@ -378,12 +475,33 @@ for (let attempt = 1; attempt <= 2; attempt += 1) {
   // this run's own commit, not a concurrent write, so the next attempt's
   // lease is read from here rather than from the network a second time.
   leaseSha = git(["rev-parse", "HEAD"]);
+
+  if (relay) {
+    const answer = await landThroughRelay(relay, {
+      sha: leaseSha,
+      kind: reviewedOnly ? "reviewed" : "word",
+      artifact: artifact ?? roundArtifactOf(target),
+    });
+    if (answer.status === 200) {
+      say("push", `${branch} with a lease, then the relay landed it on main`);
+      console.log(landedLine());
+      process.exit(0);
+    }
+    if (answer.status === 403) {
+      fail(`the relay refused: ${answer.body?.reason ?? "no reason given"}`);
+    }
+    if (attempt === 1) {
+      console.log(
+        "  !        main moved under the push — reading it again and retrying",
+      );
+    }
+    continue;
+  }
+
   const landed = push([`HEAD:refs/heads/${mainBranch}`]);
   if (landed) {
     say("push", `${branch} with a lease, then HEAD:${mainBranch}`);
-    console.log(
-      `\n✓ ${target} of ${change} landed${reviewedOnly ? "" : ` by @${handle}`}`,
-    );
+    console.log(landedLine());
     process.exit(0);
   }
   if (attempt === 1) {
@@ -398,6 +516,53 @@ fail(
 );
 
 // ── The pieces ──────────────────────────────────────────────────────────────
+
+/** The relay this run's wake was given, or nothing for a terminal landing.
+ * `.round/relay.json` is the run's own file, written before anything else —
+ * its presence, not a flag, is what makes this a relay landing. */
+function relayOf(store) {
+  const file = join(store, RELAY_FILE);
+  if (!existsSync(file)) return undefined;
+  let parsed;
+  try {
+    parsed = JSON.parse(readFileSync(file, "utf8"));
+  } catch (cause) {
+    fail(`${RELAY_FILE} is not JSON: ${cause.message}`);
+  }
+  if (!parsed.relay?.url || !parsed.relay?.token) {
+    fail(`${RELAY_FILE} names no relay.url and relay.token`);
+  }
+  return {
+    url: parsed.relay.url,
+    token: parsed.relay.token,
+    sender: parsed.sender,
+  };
+}
+
+/**
+ * `POST {relay.url}/runs/{relay.token}/land { sha, kind, artifact }` — the
+ * relay's own checks before it moves `main` (Q55). A function of its own so
+ * the tests can stub `relay.url` with a local server; nothing else here ever
+ * talks to the code host directly.
+ */
+async function landThroughRelay(relayTarget, payload) {
+  const response = await fetch(
+    `${relayTarget.url}/runs/${relayTarget.token}/land`,
+    {
+      method: "POST",
+      headers: { "content-type": "application/json" },
+      body: JSON.stringify(payload),
+    },
+  );
+  const text = await response.text().catch(() => "");
+  let body;
+  try {
+    body = text ? JSON.parse(text) : {};
+  } catch {
+    body = {};
+  }
+  return { status: response.status, body };
+}
 
 /** The artifact id a target names: the schema's id, or the file it generates.
  * Nothing where the target is a task group. */
@@ -669,17 +834,24 @@ function runTcsValidate() {
   if (ran.status !== 0) fail("the gate refuses: tcs:validate");
 }
 
-/** What step 5 wrote to the tree, undone: the record back to what `main`
- * holds, and the round's row either back to it too or, where the row's own
- * file did not exist yet, removed outright rather than left as an untracked
- * file the next run's own clean check would have to explain. A `--reviewed`
- * landing wrote the record alone, so there is no row to undo. */
-function restorePending({ record, row, roundsCreated }) {
+/** What steps 5 and 6 wrote to the tree, undone: the record back to what
+ * `main` holds, the recommendation a held row took with it, and the round's
+ * row either back to it too or, where the row's own file did not exist yet,
+ * removed outright rather than left as an untracked file the next run's own
+ * clean check would have to explain. A `--reviewed` landing wrote the record
+ * alone, so there is no row and nothing held to undo. */
+function restorePending({ record, row, roundsCreated, heldRewritten }) {
   const path = roundsPath(change);
   const ran = spawnSync("git", ["checkout", "--", record.path], {
     cwd: root,
     stdio: "ignore",
   });
+  if (heldRewritten) {
+    spawnSync("git", ["checkout", "--", heldRewritten], {
+      cwd: root,
+      stdio: "ignore",
+    });
+  }
   if (row === undefined) return;
   if (ran.status === 0 && roundsCreated) {
     rmSync(join(root, path), { force: true });
