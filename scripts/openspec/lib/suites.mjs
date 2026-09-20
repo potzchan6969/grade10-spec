@@ -15,6 +15,7 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
+import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -179,6 +180,41 @@ export function decisionsBeside(filePath) {
     dir = parent;
   }
   return false;
+}
+
+/** The day Q49 (`run-a-round-on-every-artifact`) landed: a case a store unit
+ *  or script test decides flips to `automated` in the commit that lands the
+ *  test, naming that test on the case, from here on. A change opened before
+ *  this day never owed the line, so it never gains an error for lacking one. */
+export const DECIDED_BY_SINCE = "2026-09-20";
+
+/** The day a change under `openspec/changes/<name>/` was opened: its own
+ *  `.openspec.yaml` `created:` line where it names one, else the day git
+ *  first added something under the change's directory. `null` when neither
+ *  reads — an unversioned manifest and a checkout too shallow for its own
+ *  history — so a change is never gated on a date nobody here can prove. */
+export function changeOpenedDate(root, changeName) {
+  const dir = join(root, "openspec", "changes", changeName);
+  const manifest = join(dir, ".openspec.yaml");
+  if (existsSync(manifest)) {
+    const m = readFileSync(manifest, "utf8").match(
+      /^created:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?\s*$/m,
+    );
+    if (m) return m[1];
+  }
+  let out;
+  try {
+    out = execFileSync(
+      "git",
+      ["log", "--diff-filter=A", "--format=%as", "--", relative(root, dir)],
+      { cwd: root, encoding: "utf8" },
+    ).trim();
+  } catch {
+    return null;
+  }
+  if (!out) return null; // a shallow clone prints nothing to compare
+  const dates = out.split("\n").filter(Boolean);
+  return dates[dates.length - 1] ?? null;
 }
 
 // --- the spec beside a suite -----------------------------------------------
@@ -426,6 +462,11 @@ export function parseSuite(text) {
         steps: 0,
         expected: 0,
         perRow: false,
+        // The test file(s) a store unit or script test decides this case
+        // from, one per path, empty when the case carries no such line
+        // (`docs/governance/specs-to-test-cases.md`, the classification
+        // block).
+        decidedBy: [],
       };
       continue;
     }
@@ -453,6 +494,22 @@ export function parseSuite(text) {
       // to know that before they start, so it travels with the case.
       if (/^Runs once per row of \*\*Test data\*\*\.?\s*$/.test(line)) {
         tc.perRow = true;
+        continue;
+      }
+      // Optional, directly after the classification block: the test file(s)
+      // that decided this case (Q49 of `run-a-round-on-every-artifact`) - a
+      // case a store unit or script test decides flips to `automated` in the
+      // commit that lands the test, and the suite names the deciding test so
+      // the run sheet's omission of it can be checked against a file rather
+      // than a memory. One or more repository-relative paths, comma-separated;
+      // backticks are stripped where a path is quoted like the rest of the
+      // store's prose.
+      const decidedBy = line.match(/^\*\*Decided by:\*\*\s*(.+?)\s*$/);
+      if (decidedBy) {
+        tc.decidedBy = decidedBy[1]
+          .split(",")
+          .map((one) => one.trim().replace(/^`+|`+$/g, ""))
+          .filter(Boolean);
         continue;
       }
       if (/^\*\*Description:\*\*/.test(line)) {

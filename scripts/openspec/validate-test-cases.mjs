@@ -32,7 +32,10 @@ import { basename, dirname, join, relative } from "node:path";
 import {
   CASE_STATUSES,
   caseIndex,
+  changeOf,
+  changeOpenedDate,
   currentRulesRev,
+  DECIDED_BY_SINCE,
   decisionsBeside,
   deriveStatus,
   dirsHolding,
@@ -124,6 +127,18 @@ function checkSuite(root, filePath, rulesRev) {
     : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
+
+  // Q49 (`run-a-round-on-every-artifact`): a case a store unit or script test
+  // decides names that test, from the commit that lands it. The obligation
+  // starts on `DECIDED_BY_SINCE` and only for an in-flight change opened on
+  // or after it - a durable suite and a change already open when the rule
+  // landed carry no new error for a line they were never asked to write.
+  const changeName = changeOf(root, filePath);
+  const openedDate = changeName ? changeOpenedDate(root, changeName) : null;
+  const decidedByOwed =
+    changeName !== null &&
+    openedDate !== null &&
+    openedDate >= DECIDED_BY_SINCE;
 
   if (!spec)
     err(
@@ -359,6 +374,32 @@ function checkSuite(root, filePath, rulesRev) {
       );
       if (order.join("|") !== expectedOrder.join("|"))
         warn(at, `case \`${tc.id}\` lists its properties out of order`);
+
+      // --- Decided by ------------------------------------------------------
+      const automationStatus = (tc.props.get("Automation status") ?? "")
+        .trim()
+        .toLowerCase();
+      if (
+        automationStatus === "automated" &&
+        tc.decidedBy.length === 0 &&
+        decidedByOwed
+      )
+        err(
+          at,
+          `case \`${tc.id}\` is \`**Automation status:** automated\` but carries no \`**Decided by:**\` line — name the test that decided it`,
+        );
+      for (const p of tc.decidedBy) {
+        if (!existsSync(join(root, p)))
+          err(
+            at,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${p}\`, which does not exist in this checkout`,
+          );
+      }
+      if (tc.decidedBy.length > 0 && automationStatus !== "automated")
+        warn(
+          at,
+          `case \`${tc.id}\` carries \`**Decided by:**\` but its **Automation status** is not \`automated\` — the line only decides an automated case`,
+        );
 
       const trace = (tc.props.get("Trace") ?? "").trim();
       if (trace && spec) {
