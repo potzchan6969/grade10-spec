@@ -407,6 +407,8 @@ admin(product manager) has one change in each of the eight stages, each with its
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
 
+**Decided by:** `tools/manual/test/change-stages.test.ts`, `tools/manual/test/stage-board.test.tsx`, `tools/manual/test/stage-change-page.test.tsx`
+
 **Pre-conditions:**
 One change sits in each of Proposed, Designed, Specified, Planned, Building, On staging, Released and Archived.
 
@@ -476,6 +478,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-02
+
+**Decided by:** `tools/manual/test/change-stages.test.ts`, `tools/manual/test/stage-board.test.tsx`
 
 **Pre-conditions:**
 <change F> is at Planned with `depends_on:` naming a change not yet released and a `draft` suite. <change G> is at Planned with an approved suite.
@@ -676,6 +680,8 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
 
+**Decided by:** `tools/manual/test/my-turn-page.test.tsx`
+
 **Pre-conditions:**
 admin(designer) <design handle> is addressed by two ❓ rows, is the hand of <change B> at its current stage, and is named as the `design` hand on <change R>, which is at Building.
 
@@ -735,6 +741,8 @@ No handle has been chosen in this browser.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-03
+
+**Decided by:** `tools/manual/test/my-turn-page.test.tsx`
 
 **Pre-conditions:**
 <unknown handle> is in no team map entry and on no change's `hands:`.
@@ -1252,6 +1260,8 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
 
+**Decided by:** `tools/manual/test/section-pip.test.tsx`
+
 **Pre-conditions:**
 <manual page with a marked line> carries one 🚧 line delivered by <change N>, which sits at Building with <dev handle> as its hand.
 
@@ -1309,6 +1319,8 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-change-stages-US-07
+
+**Decided by:** `tools/manual/test/section-pip.test.tsx`
 
 **Pre-conditions:**
 <shared marked line> is linked by <change P> at Specified and by <change Q> at On staging.

@@ -409,6 +409,8 @@
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-02
 
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
 **Pre-conditions:**
 
 * `ui-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
@@ -482,6 +484,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
+
+**Decided by:** `tools/relay/test/land.test.ts`
 
 **Pre-conditions:**
 
@@ -952,6 +956,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-04
 
+**Decided by:** `tools/relay/test/worker.test.ts`
+
 **Pre-conditions:**
 
 * admin(engineer of <change>) is at a terminal in the store.
@@ -983,6 +989,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-04
+
+**Decided by:** `tools/relay/test/room-state.test.ts`
 
 **Pre-conditions:**
 
@@ -1220,6 +1228,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
 
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
 **Pre-conditions:**
 
 * <change>'s `tech-design.md` is behind.
@@ -1250,6 +1260,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `tools/manual/test/behind.test.ts`
 
 **Pre-conditions:**
 
@@ -1375,6 +1387,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
 
 **Pre-conditions:**
 
@@ -1532,6 +1546,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-05
 
+**Decided by:** `tools/relay/test/room-state.test.ts`
+
 **Pre-conditions:**
 
 * admin(hand of <change>) is in <change thread>.
@@ -1569,6 +1585,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `tools/relay/test/land.test.ts`
 
 **Pre-conditions:**
 
@@ -1963,6 +1981,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-08
 
+**Decided by:** `tools/manual/walk/run-sheet-delivery.walk.ts`
+
 **Pre-conditions:**
 
 * <change> is on staging, specifying two capabilities, each with a suite holding <cases the walk automated> and <cases still manual>.
@@ -2161,6 +2181,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
+**Decided by:** `tools/manual/walk/rounds-record.walk.ts`
+
 **Pre-conditions:**
 
 * A round on <change> ran whose readers found nothing.
@@ -2191,6 +2213,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
 
 **Pre-conditions:**
 
@@ -2229,6 +2253,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
 **Pre-conditions:**
 
 * <change opened before the round rule> has a landed artifact and no rows in `rounds.md`.
@@ -2259,6 +2285,8 @@ Runs once per row of **Test data**.
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
 **Pre-conditions:**
 
 * <change> is open with its first round still running and no artifact landed.
@@ -2287,6 +2315,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
 
 **Pre-conditions:**
 
@@ -2318,6 +2348,8 @@ Runs once per row of **Test data**.
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
 
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
 **Pre-conditions:**
 
 * <change> is archived, having run rounds on every artifact.
@@ -2347,6 +2379,8 @@ Runs once per row of **Test data**.
 * **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/walk/rounds-record-roundless.walk.ts`
 
 **Pre-conditions:**
 
@@ -2451,27 +2485,7 @@ Every journey from `shared-planning-agent-rounds-US-01` to `shared-planning-agen
 
 ### Manual
 
-What an automated test decides, per case:
-
-| Automated | Decided by |
-| --- | --- |
-| `US2-TC6-1` | `scripts/openspec/round-scripts.test.mjs` |
-| `US2-TC8-1` | `tools/relay/test/land.test.ts` |
-| `US4-TC10-1` | `tools/relay/test/worker.test.ts` |
-| `US4-TC11-1` | `tools/relay/test/room-state.test.ts` |
-| `US5-TC5-1` | `scripts/openspec/round-scripts.test.mjs` |
-| `US5-TC6-1` | `tools/manual/test/behind.test.ts` |
-| `US5-TC10-1` | `scripts/openspec/round-scripts.test.mjs` |
-| `US5-TC15-1` | `tools/relay/test/room-state.test.ts` |
-| `US5-TC16-1` | `tools/relay/test/land.test.ts` |
-| `US8-TC2-1` | `tools/manual/walk/run-sheet-delivery.walk.ts` |
-| `US9-TC3-1` | `tools/manual/walk/rounds-record.walk.ts` |
-| `US9-TC4-1` | `tools/manual/test/check-round.test.ts` |
-| `US9-TC5-1` | `tools/manual/test/check-round.test.ts` |
-| `US9-TC6-1` | `tools/manual/test/check-round.test.ts` |
-| `US9-TC7-1` | `tools/manual/test/check-round.test.ts` |
-| `US9-TC8-1` | `tools/manual/test/check-round.test.ts` |
-| `US9-TC9-1` | `tools/manual/walk/rounds-record-roundless.walk.ts` |
+An automated case names the test that decides it on its own `**Decided by:**` line, directly under its classification, and the run sheet leaves it out.
 
 Every other case is walked by hand. Most are a hand's move in the change's
 Slack thread - a first sentence, a numbered answer, a remark, the word `land`
