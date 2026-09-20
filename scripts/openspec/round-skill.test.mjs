@@ -27,6 +27,7 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 const claims = (path) => read(path).replace(/\s+/g, " ");
 
 const ROUND = ".claude/skills/round/SKILL.md";
+const PLAN = ".claude/skills/plan/SKILL.md";
 const DESIGN = ".claude/skills/design/SKILL.md";
 const SPECIFY = ".claude/skills/specify/SKILL.md";
 const LINES = {
@@ -403,7 +404,7 @@ test("shared-planning-agent-rounds-SC-71 - a wake drafts the chain and lands not
   );
   // A drafting push the lease refuses is the hand's own Edit move.
   assert.match(skill, /read it as their Edit move/i);
-  const plan = claims(".claude/skills/plan/SKILL.md");
+  const plan = claims(PLAN);
   assert.match(plan, /The Whole Plan in One Wake/i);
   assert.match(plan, /in the order the schema gives them/i);
   assert.match(plan, /landed nowhere/i);
@@ -556,6 +557,36 @@ test("shared-planning-agent-rounds-SC-47 - each answer opens or closes what it n
     /\|\s*supersede\s*\|.*a new change opens from the moved goal/i,
   );
   assert.match(skill, /\|\s*split\s*\|.*a new change takes the moved part/i);
+});
+
+test("shared-planning-agent-rounds-SC-80 - a sentence overlapping a change in flight is answered in its thread", () => {
+  const plan = claims(PLAN);
+  assert.match(plan, /before opening, read every active change/i);
+  assert.match(
+    plan,
+    /answer in that change's thread and let its stage decide/i,
+  );
+  // One row per stage the change in flight can be at, and what each does.
+  assert.match(
+    plan,
+    /\|\s*Proposed or Designed, and the sentence is its product manager's\s*\|[^|]*Extend it/i,
+  );
+  assert.match(
+    plan,
+    /\|\s*Proposed or Designed, another hand's sentence\s*\|[^|]*held row[^|]*extend, recommended/i,
+  );
+  assert.match(
+    plan,
+    /\|\s*Specified or Planned\s*\|[^|]*extend where the moved part is smaller than a task group of work, split otherwise/i,
+  );
+  assert.match(
+    plan,
+    /\|\s*Building\s*\|[^|]*split, recommended; supersede where the sentence contradicts what is built/i,
+  );
+  assert.match(
+    plan,
+    /\|\s*On staging, Released or Archived\s*\|[^|]*new change, with `depends_on:` naming it/i,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-48 - a late answer reaches the requirements", () => {
