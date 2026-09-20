@@ -5,8 +5,9 @@ released feature, as of 2026-09-17, 2026-09-19 and 2026-09-20, and the
 shape drawn from it: five phases, eight stages, a round on every artifact
 with an agent drafting and a person's word landing, the screens, the
 messages and the rails. The illustrated version is the
-[blueprint page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC); this
-document is the text of record. The changes it led to are
+[blueprint page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC), and its
+2026-09-20 pass is [a page of its own](https://claude.ai/artifact/TsVnCpsqeW6P9JnuMiyiev)
+until the shared page is republished; this document is the text of record. The changes it led to are
 `stage-changes-and-notify-hands`, `run-a-round-on-every-artifact` and
 `tell-open-pages-main-moved`; the rest are named under the first change's
 follow-on changes. Read this as the
@@ -336,7 +337,10 @@ From the sentence to `main`, in the order it happens.
 The screens are drawn on two canvases. The blueprint page holds the mock-ups
 of each surface; the [Day-to-Day Flow](https://claude.ai/artifact/3s5HjqvM9izRSQKPvUvJHk)
 canvas holds the flow between them: the loop every hand runs, one hand's day as
-a walkthrough, each hand's six steps, what one push does, and an example week.
+a walkthrough, each hand's six steps, what one push does, and an example week;
+its 2026-09-20 pass, with the button, the thread on the change page and every
+page told `main` moved, is [a canvas of its own](https://claude.ai/artifact/PLaACQNKUBa2bTFyqpTbsr)
+until the shared canvas is republished.
 The onboarding page,
 [Cross-sell, Start to Finish](https://claude.ai/artifact/D1eDUFmtgWwGsdr7nw8Edp),
 walks one store feature through the rounds message by message: what each hand
