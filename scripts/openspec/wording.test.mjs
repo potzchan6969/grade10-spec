@@ -5,7 +5,9 @@ import * as moves from "./lib/moves.mjs";
 import {
   behindText,
   escapeSlackText,
+  linkedOf,
   stagingText,
+  threadPathOf,
   toldBodyOf,
   yourTurnText,
 } from "./lib/wording.mjs";
@@ -109,6 +111,26 @@ test("behindText names what it was drawn from where nothing singles an item out"
   assert.match(
     behindText({ artifact: "tasks", changed: [] }, LINKED),
     /is behind what it was drawn from\.$/,
+  );
+});
+
+test("threadPathOf writes the path Slack resolves, the separator taken out", () => {
+  assert.equal(
+    threadPathOf("C0123ABC/1758170000.001200"),
+    "/archives/C0123ABC/p1758170000001200",
+  );
+});
+
+test("threadPathOf says nothing for a record that names no thread", () => {
+  for (const thread of [undefined, "", "C0123ABC", "/1758170000.001200"]) {
+    assert.equal(threadPathOf(thread), undefined);
+  }
+});
+
+test("linkedOf links a title, escaped, in Slack's own markup", () => {
+  assert.equal(
+    linkedOf("https://spec.test/in-flight/probe", "Gift cards & <vouchers>"),
+    "<https://spec.test/in-flight/probe|Gift cards &amp; &lt;vouchers&gt;>",
   );
 });
 
