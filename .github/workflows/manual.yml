@@ -13,7 +13,6 @@ name: Manual
 # Local equivalent: pnpm manual:build && wrangler deploy -c tools/manual/wrangler.jsonc
 #
 # One-time ops:
-# - Repo variable RELAY_URL: the relay a page listens to for main moving. Absent means the feature is off.
 # - Repo secret CLOUDFLARE_API_TOKEN_QA (same staging token Storybook uses).
 # - Confirm Cloudflare Access covers spec.grade10-stg.com if you gate
 #   the staging zone.
@@ -113,10 +112,6 @@ jobs:
         run: pnpm run check:manual:pages
 
       - name: Build
-        # The relay a page listens to for main moving, written into the build
-        # as /api/relay. An unset variable ships no relay and no page listens.
-        env:
-          RELAY_URL: ${{ vars.RELAY_URL }}
         run: pnpm run manual:build
 
       - name: Deploy
