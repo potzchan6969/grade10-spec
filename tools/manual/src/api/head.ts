@@ -186,16 +186,26 @@ export async function readCheckout(
   return answer?.status === 200 ? answer.read : null;
 }
 
-/** The pull, in the endpoint's own words: what landed, or why it was
- * refused. */
+/** The pull, in the endpoint's own words: what landed, or the line the reader
+ * is shown instead. Every other answer is carried as a line too — a press the
+ * reader is told nothing about is the one failure this banner cannot have. */
 export async function pullMain(
   http: typeof fetch = fetch,
 ): Promise<PullOutcome> {
-  const answer = await ask<PullOutcome>(http, PULL, { method: "POST" });
+  const answer = await ask<Partial<Record<string, unknown>>>(http, PULL, {
+    method: "POST",
+  });
   if (answer === null) {
-    return { reason: "No dev server answered the pull." };
+    return { error: "No dev server answered the pull." };
   }
-  return answer.read;
+  const read = answer.read;
+  if (read.pulled === true && typeof read.head === "string") {
+    return { head: read.head, pulled: true };
+  }
+  if (typeof read.error === "string" && read.error.trim() !== "") {
+    return { error: read.error };
+  }
+  return { error: "The dev server did not say how the pull went." };
 }
 
 export type CheckoutReading = {
@@ -254,7 +264,7 @@ export function useCheckout(active: boolean): CheckoutReading {
       const outcome = await pullMain();
       await read();
       setPulling(false);
-      setRefused("reason" in outcome ? outcome.reason : null);
+      setRefused("error" in outcome ? outcome.error : null);
     })();
   }, [read]);
 

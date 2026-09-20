@@ -877,15 +877,13 @@ export type CheckoutStanding = {
   ahead: number;
   /** Anything uncommitted in the working tree, tracked or not. */
   dirty: boolean;
-  /** Whether `origin` was read for these counts. False where the checkout has
-   * no `origin`, or the read failed — the counts are then whatever refs the
-   * clone already had. */
-  fetched: boolean;
-  /** When `origin` was last read, absent where it never was. */
+  /** When `origin` was last read to any effect, absent where it never was —
+   * a checkout with no `origin`, or a read that failed, leaves the counts
+   * against whatever refs the clone already had. */
   fetchedAt?: string;
 };
 
-/** `POST /api/pull` — the fast-forward onto `main`, or the reason it is
- * refused. The endpoint owns the words: the banner shows the reason it is
- * given. */
-export type PullOutcome = { pulled: true; head: string } | { reason: string };
+/** `POST /api/pull` — the fast-forward onto `main`, or the line the reader is
+ * shown instead. The endpoint owns the words, and a refusal is `{ error }` as
+ * every other refusal the store answers is. */
+export type PullOutcome = { pulled: true; head: string } | { error: string };

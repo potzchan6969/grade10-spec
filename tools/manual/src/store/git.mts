@@ -4,7 +4,7 @@ import type { CommitInfo, HistoryEvent, MainState } from "../api/types.ts";
 import { refsOf } from "./history.mts";
 import { DEFAULT_MANUAL_DIR, type Roots } from "./roots.mts";
 
-const run = promisify(execFile);
+const exec = promisify(execFile);
 
 /** One history walk builds the whole path → last-commit map. Spawning git per
  * file turns a snapshot into thousands of processes. */
@@ -37,14 +37,24 @@ const HISTORY_LIMIT = 100;
 // `<oid> <type> <size>`; anything else is `<ref> missing`, with no body.
 const BLOB_HEADER = /^[0-9a-f]{40,64} (?:blob|tree|commit|tag) (\d+)$/;
 
+/** What a call is given beyond its arguments: a deadline, and the environment
+ * it runs in. A call that reaches the network is given both — nothing else
+ * here needs either. */
+export type GitRun = { timeout?: number; env?: NodeJS.ProcessEnv };
+
 /** `core.quotePath=false` keeps a non-ASCII path readable — quoted, git
  * escapes it into bytes nothing here would match, and the file silently
  * loses its commit info. */
-export async function git(root: string, args: string[]): Promise<string> {
-  const { stdout } = await run("git", ["-c", "core.quotePath=false", ...args], {
-    cwd: root,
-    maxBuffer: 256 * 1024 * 1024,
-  });
+export async function git(
+  root: string,
+  args: string[],
+  run: GitRun = {},
+): Promise<string> {
+  const { stdout } = await exec(
+    "git",
+    ["-c", "core.quotePath=false", ...args],
+    { cwd: root, maxBuffer: 256 * 1024 * 1024, ...run },
+  );
   return stdout;
 }
 
@@ -238,10 +248,15 @@ function catFile(root: string, refs: string[]): Promise<Buffer> {
 }
 
 /** A git call whose empty answer is an answer — a ref that does not exist, a
- * tree with nothing in it — rather than a reason to fail the build. */
-async function tryGit(root: string, args: string[]): Promise<string | null> {
+ * tree with nothing in it, a directory that is not a repository — rather than
+ * a reason to fail the build. */
+export async function tryGit(
+  root: string,
+  args: string[],
+  run: GitRun = {},
+): Promise<string | null> {
   try {
-    return await git(root, args);
+    return await git(root, args, run);
   } catch {
     return null;
   }
