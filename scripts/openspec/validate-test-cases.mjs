@@ -27,31 +27,38 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, relative } from "node:path";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { parseArgs } from "./lib/args.mjs";
 import {
   CASE_STATUSES,
   caseIndex,
   changeOf,
-  changeOpenedDate,
+  commaList,
   currentRulesRev,
-  DECIDED_BY_SINCE,
   decisionsBeside,
   deriveStatus,
   dirsHolding,
   domainPrefix,
   FILE_STATUSES,
   findSuites,
+  isAutomated,
   issuedPrefix,
   LEGACY_TYPES,
   levelOf,
   PROPERTIES,
   parseSuite,
-  ROOT,
   readDomainIds,
   readSpecIds,
   revCmp,
   revText,
+  ROOT as STORE_ROOT,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -64,8 +71,7 @@ const green = (s) => c("32", s);
 const yellow = (s) => c("33", s);
 const cyan = (s) => c("36", s);
 
-function help() {
-  console.log(`Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [flags]
+const USAGE = `Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [flags]
 
   <scope>   Only check suites whose repo-relative path contains this string.
 
@@ -75,41 +81,16 @@ Flags:
                     current tcs-rules rev, for a per-capability update run
   --require-suites  Also report a capability that has journeys but no suite
                     beside it (warning)
-  --capture-baseline=<file>
+  --capture-baseline <file>
                     Write every case id and its traces to <file>, before a
                     sweep, and exit
-  --swept=<file>    Assert the store still holds exactly the case ids and
+  --swept <file>    Assert the store still holds exactly the case ids and
                     traces <file> recorded. A sweep may re-word a draft; it
                     may never change what a case claims
+  --root <dir>      Read a store other than this one, which is how the tests
+                    read a fixture
   --help            Print this help and exit
-`);
-}
-
-function parseArgs(argv) {
-  const args = {
-    strict: false,
-    stale: false,
-    requireSuites: false,
-    scope: null,
-    captureBaseline: null,
-    swept: null,
-  };
-  const rest = [];
-  for (const a of argv) {
-    if (a === "--help" || a === "-h") {
-      help();
-      process.exit(0);
-    } else if (a === "--strict") args.strict = true;
-    else if (a === "--stale-report") args.stale = true;
-    else if (a === "--require-suites") args.requireSuites = true;
-    else if (a.startsWith("--capture-baseline="))
-      args.captureBaseline = a.slice("--capture-baseline=".length);
-    else if (a.startsWith("--swept=")) args.swept = a.slice("--swept=".length);
-    else rest.push(a);
-  }
-  args.scope = rest[0] ?? null;
-  return args;
-}
+`;
 
 const problems = [];
 const record = (severity, file, line, message) =>
@@ -128,17 +109,12 @@ function checkSuite(root, filePath, rulesRev) {
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
-  // Q49 (`run-a-round-on-every-artifact`): a case a store unit or script test
-  // decides names that test, from the commit that lands it. The obligation
-  // starts on `DECIDED_BY_SINCE` and only for an in-flight change opened on
-  // or after it - a durable suite and a change already open when the rule
-  // landed carry no new error for a line they were never asked to write.
-  const changeName = changeOf(root, filePath);
-  const openedDate = changeName ? changeOpenedDate(root, changeName) : null;
-  const decidedByOwed =
-    changeName !== null &&
-    openedDate !== null &&
-    openedDate >= DECIDED_BY_SINCE;
+  // Q49 and Q69 (`run-a-round-on-every-artifact`): every automated case of an
+  // in-flight change names what decides it, whatever day the change opened.
+  // A durable suite under `openspec/specs/` owes nothing yet - back-filling
+  // those is a rules revision of its own (Q70) - and the archive is never
+  // read here at all.
+  const decidedByOwed = changeOf(root, filePath) !== null;
 
   if (!spec)
     err(
@@ -341,10 +317,7 @@ function checkSuite(root, filePath, rulesRev) {
         }
         if (!vocab) continue;
         if (multi) {
-          const parts = value
-            .split(",")
-            .map((v) => v.trim())
-            .filter(Boolean);
+          const { values: parts, empty } = commaList(value);
           if (parts.length === 0) {
             err(
               at,
@@ -352,6 +325,11 @@ function checkSuite(root, filePath, rulesRev) {
             );
             continue;
           }
+          if (empty > 0)
+            err(
+              at,
+              `case \`${tc.id}\` has an empty element in **${name}:** — a doubled or trailing comma`,
+            );
           for (const part of parts)
             if (!vocab.includes(part))
               err(
@@ -376,26 +354,68 @@ function checkSuite(root, filePath, rulesRev) {
         warn(at, `case \`${tc.id}\` lists its properties out of order`);
 
       // --- Decided by ------------------------------------------------------
-      const automationStatus = (tc.props.get("Automation status") ?? "")
-        .trim()
-        .toLowerCase();
-      if (
-        automationStatus === "automated" &&
-        tc.decidedBy.length === 0 &&
-        decidedByOwed
-      )
+      // One rule, three verdicts: an automated case of an in-flight change
+      // names what decides it, in its place, once. Nothing else may.
+      const automated = isAutomated(tc);
+      if (automated && tc.decidedBy.length === 0 && decidedByOwed)
         err(
           at,
           `case \`${tc.id}\` is \`**Automation status:** automated\` but carries no \`**Decided by:**\` line — name the test that decided it`,
         );
-      for (const p of tc.decidedBy) {
-        if (!existsSync(join(root, p)))
+      for (const {
+        line,
+        bullet,
+        misplaced,
+        empty,
+        repeated,
+      } of tc.decidedByLines) {
+        if (repeated)
           err(
-            at,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${p}\`, which does not exist in this checkout`,
+            line,
+            `case \`${tc.id}\` carries a second \`**Decided by:**\` line at line ${line} — one line, every path on it`,
+          );
+        else if (misplaced)
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` line sits at line ${line}, not directly after the classification block — a scanning reader does not look anywhere else`,
+          );
+        if (empty)
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` line at line ${line} has an empty path — a doubled or trailing comma`,
+          );
+        if (bullet)
+          warn(
+            line,
+            `case \`${tc.id}\` writes \`**Decided by:**\` as a classification bullet at line ${line} — the block is the ten properties, and the line is its own, directly after it`,
           );
       }
-      if (tc.decidedBy.length > 0 && automationStatus !== "automated")
+      // Resolved against the store this run reads, so a fixture is checked
+      // against itself. A path that climbs out of the store names a file no
+      // clone of it has, and a directory decides nothing.
+      for (const { path, line } of tc.decidedBy) {
+        const full = resolve(root, path);
+        if (full !== root && !full.startsWith(root + sep)) {
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which resolves outside the store — write it relative to the repository root`,
+          );
+          continue;
+        }
+        if (!existsSync(full)) {
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which does not exist in this checkout`,
+          );
+          continue;
+        }
+        if (!statSync(full).isFile())
+          err(
+            line,
+            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which is not a file — name the test, not the directory holding it`,
+          );
+      }
+      if (tc.decidedBy.length > 0 && !automated)
         warn(
           at,
           `case \`${tc.id}\` carries \`**Decided by:**\` but its **Automation status** is not \`automated\` — the line only decides an automated case`,
@@ -406,13 +426,15 @@ function checkSuite(root, filePath, rulesRev) {
         // Commas first: an anchor can be a feature set group name, which has
         // spaces in it. A comma-free part that names no group is split on
         // whitespace, so the older space-separated composed trace still reads.
-        const ids = trace
-          .split(",")
-          .map((one) => one.trim())
-          .filter(Boolean)
-          .flatMap((one) =>
-            spec.groups?.has(one) || !/\s/.test(one) ? [one] : one.split(/\s+/),
+        const { values, empty } = commaList(trace);
+        if (empty > 0)
+          err(
+            at,
+            `case \`${tc.id}\` has an empty element in **Trace:** — a doubled or trailing comma`,
           );
+        const ids = values.flatMap((one) =>
+          spec.groups?.has(one) || !/\s/.test(one) ? [one] : one.split(/\s+/),
+        );
         for (const id of ids) {
           if (spec.journeys.has(id)) continue;
           if (spec.groups?.has(id)) continue;
@@ -467,7 +489,24 @@ function checkSuite(root, filePath, rulesRev) {
 
 // ---------------------------------------------------------------------------
 
-const args = parseArgs(process.argv.slice(2));
+const { positional, flags } = parseArgs(process.argv.slice(2), {
+  keys: ["capture-baseline", "root", "swept"],
+  booleans: ["require-suites", "stale-report", "strict"],
+  usage: USAGE,
+});
+const args = {
+  scope: positional[0] ?? null,
+  strict: Boolean(flags.strict),
+  stale: Boolean(flags["stale-report"]),
+  requireSuites: Boolean(flags["require-suites"]),
+  captureBaseline: flags["capture-baseline"] ?? null,
+  swept: flags.swept ?? null,
+};
+// The store this run reads. `--root <dir>` names another one - a fixture a
+// test writes - the way `archive-preflight.mjs` and `tcs-automated.mjs` take
+// it, so a suite's checks are proved by this script rather than by a copy of
+// it beside the test.
+const ROOT = flags.root ? resolve(flags.root) : STORE_ROOT;
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;

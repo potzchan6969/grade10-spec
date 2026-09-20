@@ -15,7 +15,6 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { execFileSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -83,6 +82,36 @@ const LEVEL_BY_NAME = {
   "feature-tcs.md": "feature",
 };
 export const levelOf = (p) => LEVEL_BY_NAME[basename(p)] ?? "feature";
+
+// --- one comma-separated list ----------------------------------------------
+
+/** A comma-separated field - `Trace`, `Suites`, `Decided by` - as its
+ *  elements: split on commas, trimmed, one pair of backticks stripped where
+ *  the store quotes a value the way it quotes a path in prose.
+ *
+ *  One function rather than a `split` beside each field, because the three had
+ *  drifted into two different strippers - one taking every backtick off either
+ *  end, one taking a single character - so the same value read two ways
+ *  depending on which field carried it.
+ *
+ *  An empty element is reported rather than filtered away: a doubled or
+ *  trailing comma is a typo the caller refuses by name, and silently dropping
+ *  it is how a field ends up saying less than its author wrote. `empty` counts
+ *  them, `values` carries what is left.
+ */
+export function commaList(value) {
+  const values = [];
+  let empty = 0;
+  for (const part of String(value ?? "").split(",")) {
+    const one = part
+      .trim()
+      .replace(/^`([^`]*)`$/, "$1")
+      .trim();
+    if (one === "") empty += 1;
+    else values.push(one);
+  }
+  return { values, empty };
+}
 
 // --- the rules revision ----------------------------------------------------
 
@@ -182,41 +211,6 @@ export function decisionsBeside(filePath) {
   return false;
 }
 
-/** The day Q49 (`run-a-round-on-every-artifact`) landed: a case a store unit
- *  or script test decides flips to `automated` in the commit that lands the
- *  test, naming that test on the case, from here on. A change opened before
- *  this day never owed the line, so it never gains an error for lacking one. */
-export const DECIDED_BY_SINCE = "2026-09-20";
-
-/** The day a change under `openspec/changes/<name>/` was opened: its own
- *  `.openspec.yaml` `created:` line where it names one, else the day git
- *  first added something under the change's directory. `null` when neither
- *  reads — an unversioned manifest and a checkout too shallow for its own
- *  history — so a change is never gated on a date nobody here can prove. */
-export function changeOpenedDate(root, changeName) {
-  const dir = join(root, "openspec", "changes", changeName);
-  const manifest = join(dir, ".openspec.yaml");
-  if (existsSync(manifest)) {
-    const m = readFileSync(manifest, "utf8").match(
-      /^created:\s*['"]?(\d{4}-\d{2}-\d{2})['"]?\s*$/m,
-    );
-    if (m) return m[1];
-  }
-  let out;
-  try {
-    out = execFileSync(
-      "git",
-      ["log", "--diff-filter=A", "--format=%as", "--", relative(root, dir)],
-      { cwd: root, encoding: "utf8" },
-    ).trim();
-  } catch {
-    return null;
-  }
-  if (!out) return null; // a shallow clone prints nothing to compare
-  const dates = out.split("\n").filter(Boolean);
-  return dates[dates.length - 1] ?? null;
-}
-
 // --- the spec beside a suite -----------------------------------------------
 
 /** Journey and scenario ids the capability issues, plus the journey titles.
@@ -311,6 +305,39 @@ function blockAfter(lines, from) {
     body.push(lines[j]);
   }
   return body;
+}
+
+/** One `**Decided by:**` line onto the case: its paths, and what is wrong with
+ *  the line itself.
+ *
+ *  Nothing is dropped and nothing is fixed. A second line, a line that is not
+ *  the first non-blank line after the last classification bullet, an empty
+ *  element and the older `*` bullet inside the block are each recorded against
+ *  the line they sit on, and the caller refuses them by case id and line
+ *  number - a parse that quietly kept the first line and threw the second away
+ *  would leave a suite saying two things and a reader seeing one.
+ */
+function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
+  const { values, empty } = commaList(value);
+  const first = tc.decidedByLines.length === 0;
+  // Measured only on the first line: a second line is never directly after
+  // the block - the first one is in the way - and reporting it twice would
+  // name one mistake as two.
+  const misplaced =
+    !bullet &&
+    first &&
+    !(
+      tc.propLine !== null &&
+      (lines ?? []).slice(tc.propLine + 1, at).every((one) => one.trim() === "")
+    );
+  tc.decidedByLines.push({
+    line: at + 1,
+    bullet,
+    misplaced,
+    empty: empty > 0,
+    repeated: !first,
+  });
+  for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
 }
 
 /** Split a suite into its header, journey sections and cases. Current format only;
@@ -462,11 +489,21 @@ export function parseSuite(text) {
         steps: 0,
         expected: 0,
         perRow: false,
-        // The test file(s) a store unit or script test decides this case
-        // from, one per path, empty when the case carries no such line
-        // (`docs/governance/specs-to-test-cases.md`, the classification
-        // block).
+        // The test file(s) a store unit or script test - or the walk that
+        // drives it - decides this case from: `{ path, line }` per path, in
+        // the order written, empty when the case carries no such line
+        // (`docs/governance/specs-to-test-cases.md`, Fixed points).
         decidedBy: [],
+        // One entry per `**Decided by:**` line the case carries, whatever
+        // shape it is in, so the caller can refuse what the parse cannot
+        // silently fix: a second line (repeated), a line anywhere but
+        // directly after the classification block (misplaced), an empty
+        // element, and the pre-r3 `*` bullet inside the block. A line read
+        // into `decidedBy` and reported here is a line nobody dropped.
+        decidedByLines: [],
+        // The last classification bullet seen, which is what "directly after
+        // the classification block" is measured from.
+        propLine: null,
       };
       continue;
     }
@@ -485,8 +522,15 @@ export function parseSuite(text) {
         if (PROPERTIES.some(([p]) => p === name)) {
           tc.props.set(name, prop[2]);
           tc.propOrder.push(name);
+          tc.propLine = i;
           if (line.startsWith("-"))
             suite.legacy.add("`-` property bullets (current format uses `*`)");
+        } else if (name === "Decided by") {
+          // The line written as an eleventh classification bullet. It is not
+          // a property - the block is ten, and the line is its own - so it is
+          // read where it stands and reported as the older shape rather than
+          // dropped, which is what a parse that only knew the ten did.
+          readDecidedBy(tc, prop[2], i, { bullet: true });
         }
         continue;
       }
@@ -498,18 +542,15 @@ export function parseSuite(text) {
       }
       // Optional, directly after the classification block: the test file(s)
       // that decided this case (Q49 of `run-a-round-on-every-artifact`) - a
-      // case a store unit or script test decides flips to `automated` in the
-      // commit that lands the test, and the suite names the deciding test so
-      // the run sheet's omission of it can be checked against a file rather
-      // than a memory. One or more repository-relative paths, comma-separated;
-      // backticks are stripped where a path is quoted like the rest of the
-      // store's prose.
+      // case a store unit or script test, or the walk that drives it, decides
+      // flips to `automated` in the commit that lands the test, and the suite
+      // names what decides it so the run sheet's omission of it can be checked
+      // against a file rather than a memory. One or more repository-relative
+      // paths, comma-separated; backticks are stripped where a path is quoted
+      // like the rest of the store's prose.
       const decidedBy = line.match(/^\*\*Decided by:\*\*\s*(.+?)\s*$/);
       if (decidedBy) {
-        tc.decidedBy = decidedBy[1]
-          .split(",")
-          .map((one) => one.trim().replace(/^`+|`+$/g, ""))
-          .filter(Boolean);
+        readDecidedBy(tc, decidedBy[1], i, { lines });
         continue;
       }
       if (/^\*\*Description:\*\*/.test(line)) {
@@ -711,11 +752,7 @@ export function caseIndex(root, paths) {
       }
       const t = line.match(/^\*\s+\*\*Trace:\*\*\s*(.+?)\s*$/);
       if (t && id && index.has(id))
-        index.get(id).traces = t[1]
-          .split(",")
-          .map((v) => v.trim().replace(/^`|`$/g, ""))
-          .filter(Boolean)
-          .sort();
+        index.get(id).traces = commaList(t[1]).values.sort();
     }
   }
   return index;
