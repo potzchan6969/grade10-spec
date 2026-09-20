@@ -1,8 +1,9 @@
 import { execFileSync } from "node:child_process";
 import type { ThreadEvent } from "../api/types.ts";
+import { changeOf } from "./read-landings.mts";
 
 /**
- * A change's own history on `main`, read as its thread tells it.
+ * Every change's own history on `main`, read as its thread tells it.
  *
  * The Slack thread carries the same events as replies — the change opened, a
  * draft landed, an artifact read again, a hand named, a group ticked — and
@@ -10,12 +11,18 @@ import type { ThreadEvent } from "../api/types.ts";
  * what the mirror is read from: nothing is stored, and a store that is not a
  * checkout shows no thread rather than an empty one.
  *
- * One walk per change, and one extra call only for the commits that touch the
- * two files whose own patch says what happened: `hands:` is a line of the
- * record and a tick is a line of `tasks.md`, and neither can be told from a
- * subject. Everything else is classified by the subject `plan:land` writes or
- * kept as the subject it carries — a commit nobody can name is still a thing
- * that happened, and dropping it would leave a gap in the thread.
+ * Two walks for the whole store, not two per change, as `read-landings.mts`
+ * reads its own two facts: one `git log --name-only` for every commit of every
+ * change, and one `git log -p` over the two files whose own patch says what
+ * happened — `hands:` is a line of the record and a tick is a line of
+ * `tasks.md`, and neither can be told from a subject. Both are keyed by the
+ * change in the path, and each document is handed its slice. Fifty-eight
+ * changes read on every composition cost two git processes rather than two
+ * hundred and forty.
+ *
+ * Everything else is classified by the subject `plan:land` writes or kept as
+ * the subject it carries — a commit nobody can name is still a thing that
+ * happened, and dropping it would leave a gap in the thread.
  *
  * Read on `main`, the way every other reader of the store's history is: the
  * checkout the manual runs out of is ahead of `main` while a round drafts, and
@@ -25,6 +32,10 @@ import type { ThreadEvent } from "../api/types.ts";
  * A depth-1 checkout gives one event, which is honest: the history is not
  * there to be read.
  */
+
+/** Where the changes live, as the walks are given it and as git prints the
+ * paths back. */
+const CHANGES = "openspec/changes";
 
 /** `chore(openspec): land <target> of <id> on @<handle>`, as `plan:land`
  * writes it — and the same subject without a handle, which is a task group's
@@ -53,59 +64,145 @@ const TICKED = /^-\s*\[[xX]\]\s*(\d+(?:\.\d+)*)/;
 /** `commit` is the store's `main`, where the thread is read: a checkout
  * drafting a round sits ahead of it, and those commits are not in the thread
  * yet. `null` reads `HEAD`, which is a store whose `main` does not resolve. */
-export function readChangeHistory(
+export function readChangeHistories(
   root: string,
-  dir: string,
   commit: string | null,
-): ThreadEvent[] {
-  const log = walk(root, [
-    "log",
-    "--format=%H%x00%cI%x00%s",
-    "--name-only",
-    "--no-renames",
-    commit ?? "HEAD",
-    "--",
-    dir,
-  ]);
-  if (log === undefined) return [];
+): Map<string, ThreadEvent[]> {
+  const at = commit ?? "HEAD";
+  const patches = patchesOf(root, at);
+  const histories = new Map<string, ThreadEvent[]>();
 
-  const commits: Commit[] = [];
-  for (const line of log.split("\n")) {
-    if (line === "") continue;
-    // A path can never hold a NUL, so the separator alone tells a header from
-    // a file name.
-    if (line.includes("\0")) {
-      const [sha, date, subject] = line.split("\0");
-      commits.push({ sha, date, subject, paths: [] });
-      continue;
-    }
-    commits.at(-1)?.paths.push(line);
+  for (const [id, commits] of commitsOf(root, at)) {
+    const opened = commits.find((one) =>
+      one.paths.some((path) => path.endsWith("/proposal.md")),
+    );
+    histories.set(
+      id,
+      commits.map((one) =>
+        eventOf(one, one === opened, patches.get(keyOf(one.sha, id)) ?? ""),
+      ),
+    );
   }
-  // Oldest first: a thread is read from the message that opened it.
-  commits.reverse();
-
-  const opened = commits.find((commit) =>
-    commit.paths.some((path) => path.endsWith("/proposal.md")),
-  );
-  return commits.map((commit) => eventOf(root, dir, commit, commit === opened));
+  return histories;
 }
 
 type Commit = {
   sha: string;
   date: string;
   subject: string;
+  /** The change's own files this commit touched, and no other change's. */
   paths: string[];
 };
+
+/** One commit's patch on one change: the key both walks meet on. */
+const keyOf = (sha: string, id: string) => `${sha}\0${id}`;
+
+/**
+ * Every commit of every change, oldest first per change.
+ *
+ * A commit that touched two changes is an event in both threads, carrying the
+ * paths of the change whose thread it is read in: a store-wide rename is one
+ * commit and fifty-eight rows, each row naming that change's own files.
+ */
+function commitsOf(root: string, at: string): Map<string, Commit[]> {
+  const log = walk(
+    root,
+    [
+      "log",
+      "--format=%H%x00%cI%x00%s",
+      "--name-only",
+      "--no-renames",
+      at,
+      "--",
+      CHANGES,
+    ],
+    "would not walk the changes' own history — no change will show its thread",
+  );
+  if (log === undefined) return new Map();
+
+  const commits = new Map<string, Commit[]>();
+  let header: Omit<Commit, "paths"> | undefined;
+  /** This commit's record per change, so its second path joins the first. */
+  let ofCommit = new Map<string, Commit>();
+
+  for (const line of log.split("\n")) {
+    if (line === "") continue;
+    // A path can never hold a NUL, so the separator alone tells a header from
+    // a file name.
+    if (line.includes("\0")) {
+      const [sha, date, subject] = line.split("\0");
+      header = { sha, date, subject };
+      ofCommit = new Map();
+      continue;
+    }
+    const id = changeOf(line);
+    if (header === undefined || id === undefined) continue;
+    const held = ofCommit.get(id);
+    if (held) {
+      held.paths.push(line);
+      continue;
+    }
+    const commit: Commit = { ...header, paths: [line] };
+    ofCommit.set(id, commit);
+    commits.set(id, [...(commits.get(id) ?? []), commit]);
+  }
+  // Oldest first: a thread is read from the message that opened it.
+  for (const list of commits.values()) list.reverse();
+  return commits;
+}
+
+/**
+ * The patch each commit made to one change's record and task list, keyed by
+ * the commit and the change.
+ *
+ * One walk over both files for the whole store: the `+++ b/` header names the
+ * path the hunks under it belong to, the way `read-landings.mts` reads its
+ * ticks, so a commit's two files land under one key and read exactly as one
+ * `git show` of both printed them.
+ */
+function patchesOf(root: string, at: string): Map<string, string> {
+  const log = walk(
+    root,
+    [
+      "log",
+      "--format=%H%x00%cI",
+      "-p",
+      "--unified=0",
+      at,
+      "--",
+      `${CHANGES}/*/.openspec.yaml`,
+      `${CHANGES}/*/tasks.md`,
+    ],
+    "would not walk the changes' patches — no thread will show a hand or a tick",
+  );
+  if (log === undefined) return new Map();
+
+  const held = new Map<string, string[]>();
+  let sha = "";
+  let key: string | undefined;
+  for (const line of log.split("\n")) {
+    if (line.includes("\0")) {
+      sha = line.split("\0")[0];
+      key = undefined;
+      continue;
+    }
+    if (line.startsWith("+++")) {
+      const id = changeOf(line.slice(4).trim());
+      key = id === undefined ? undefined : keyOf(sha, id);
+      continue;
+    }
+    if (key === undefined) continue;
+    const lines = held.get(key);
+    if (lines) lines.push(line);
+    else held.set(key, [line]);
+  }
+  return new Map([...held].map(([key, lines]) => [key, lines.join("\n")]));
+}
 
 /** What one commit was. The subject decides first, because a landing says so
  * itself; then the commit that brought the proposal; then the patch, for the
  * two things only a patch can say. */
-function eventOf(
-  root: string,
-  dir: string,
-  commit: Commit,
-  opened: boolean,
-): ThreadEvent {
+function eventOf(commit: Commit, opened: boolean, patch: string): ThreadEvent {
   const { sha, date, subject } = commit;
   const base = { sha, date, subject };
 
@@ -122,14 +219,6 @@ function eventOf(
   if (reread) return { ...base, kind: "read-again", target: reread[1] };
   if (opened) return { ...base, kind: "opened" };
 
-  const record = commit.paths.some((path) => path.endsWith("/.openspec.yaml"));
-  const tasks = commit.paths.some((path) => path.endsWith("/tasks.md"));
-  if (!record && !tasks) return { ...base, kind: "commit" };
-
-  const patch = patchOf(root, sha, [
-    ...(record ? [`${dir}/.openspec.yaml`] : []),
-    ...(tasks ? [`${dir}/tasks.md`] : []),
-  ]);
   const hands = handsIn(patch);
   if (hands.length > 0) return { ...base, kind: "hand", hands };
   const ticked = tickedIn(patch);
@@ -182,18 +271,14 @@ function tickedIn(patch: string): string[] {
   return added.filter((id) => !removed.has(id));
 }
 
-/** One patch, or nothing: the classification loses a hand and a tick, never a
- * row — the commit is in the thread either way. */
-function patchOf(root: string, sha: string, paths: string[]): string {
-  return (
-    walk(root, ["show", "--unified=0", "--no-color", sha, "--", ...paths]) ?? ""
-  );
-}
-
 /** One git call, or nothing where git cannot make it. A store with no
  * repository and a change no commit holds are the same answer: no history
  * tells this change's thread, which is not the same as nothing happening. */
-function walk(root: string, args: string[]): string | undefined {
+function walk(
+  root: string,
+  args: string[],
+  refused: string,
+): string | undefined {
   try {
     return execFileSync("git", ["-c", "core.quotePath=false", ...args], {
       cwd: root,
@@ -202,17 +287,15 @@ function walk(root: string, args: string[]): string | undefined {
       maxBuffer: 256 * 1024 * 1024,
     });
   } catch {
-    warnUnwalked(root);
+    warnUnwalked(root, refused);
     return undefined;
   }
 }
 
 let warned = false;
 
-function warnUnwalked(root: string): void {
+function warnUnwalked(root: string, refused: string): void {
   if (warned) return;
   warned = true;
-  console.warn(
-    `manual: git log in ${root} would not walk a change's own history — no change will show its thread`,
-  );
+  console.warn(`manual: git log in ${root} ${refused}`);
 }

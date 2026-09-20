@@ -156,8 +156,10 @@ function newestArtifacts(
 }
 
 /** The change a path names, or nothing for a path outside a change directory
- * and for the archive, which holds no change still in flight. */
-function changeOf(path: string): string | undefined {
+ * and for the archive, which holds no change still in flight. Exported: the
+ * thread's own walks key their commits by the same pattern, and two readings
+ * of one path shape would drift the day the archive moves. */
+export function changeOf(path: string): string | undefined {
   const id = CHANGE_OF.exec(path)?.[1];
   return id === ARCHIVE ? undefined : id;
 }

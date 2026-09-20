@@ -7,6 +7,7 @@ import type {
   ChangeDeltaDocument,
   ChangeDocument,
   DeltaSection,
+  ThreadEvent,
 } from "../api/types.ts";
 import {
   featureSuitePath,
@@ -18,7 +19,7 @@ import {
 } from "./disk.mts";
 import type { GitIndex, StoreMain } from "./git.mts";
 import { findSection, leadingTitle, outline } from "./markdown.mts";
-import { readChangeHistory } from "./read-change-history.mts";
+import { readChangeHistories } from "./read-change-history.mts";
 import {
   deltaFiles,
   deltaKindOf,
@@ -61,9 +62,26 @@ export function readChangeDocuments(
   main: StoreMain | null,
 ): ChangeDocument[] {
   const dir = join(root, "openspec", "changes");
+  // Two walks for the whole store, handed out per change the way `git` and
+  // `main` are. Only where the index found a repository: the fixture is read
+  // with none, and a reading whose commits nobody can look up would be a
+  // thread the machine that wrote it invented.
+  const histories =
+    git.head === ""
+      ? new Map<string, ThreadEvent[]>()
+      : readChangeHistories(root, main?.commit ?? null);
   return subdirectories(dir)
     .filter((name) => name !== "archive")
-    .map((name) => readChangeDocument(root, join(dir, name), name, git, main));
+    .map((name) =>
+      readChangeDocument(
+        root,
+        join(dir, name),
+        name,
+        git,
+        main,
+        histories.get(name) ?? [],
+      ),
+    );
 }
 
 export function readChangeDocument(
@@ -72,6 +90,8 @@ export function readChangeDocument(
   id: string,
   git: GitIndex,
   main: StoreMain | null,
+  /** The change's own commits, oldest first, from the store-wide walks. */
+  history: ThreadEvent[] = [],
 ): ChangeDocument {
   const rel = storePath(root, dir);
   const schema = schemaOf(dir);
@@ -95,12 +115,7 @@ export function readChangeDocument(
       planOf(dir, id, main).text !== undefined,
     ),
     deltas,
-    // Only where the index found a repository: the fixture is read with none,
-    // and a reading whose commits nobody can look up would be a thread the
-    // machine that wrote it invented. On `main`'s commit, as the task list is
-    // read: the checkout's own branch is where a round drafts.
-    history:
-      git.head === "" ? [] : readChangeHistory(root, rel, main?.commit ?? null),
+    history,
   };
 }
 

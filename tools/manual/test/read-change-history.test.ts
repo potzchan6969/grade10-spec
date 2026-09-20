@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { readChangeHistory } from "../src/store/read-change-history.mts";
+import { readChangeHistories } from "../src/store/read-change-history.mts";
 import { gitStore, MANIFEST, PROPOSAL, tasksMd } from "./git-store";
 import { writeStore } from "./tmp-store";
 
@@ -11,8 +11,9 @@ import { writeStore } from "./tmp-store";
  *
  * Over a repository that really holds the commits, because the classification
  * is a reading of git: a fixture of plain objects would prove the shape and
- * nothing about the walk. The commit the walk is given is `main`'s, the way
- * every other reader of the store's history is given it.
+ * nothing about the walk. The commit the walks are given is `main`'s, the way
+ * every other reader of the store's history is given it, and two walks answer
+ * for every change in the store at once.
  */
 
 const CHANGE = "thread-probe";
@@ -27,13 +28,16 @@ function store() {
   return built;
 }
 
-const kinds = (root: string) =>
-  readChangeHistory(root, DIR, null).map((event) => event.kind);
+/** One change's thread, off the store-wide walks. */
+const thread = (root: string, at: string | null = null, change = CHANGE) =>
+  readChangeHistories(root, at).get(change) ?? [];
+
+const kinds = (root: string) => thread(root).map((event) => event.kind);
 
 describe("what the walk makes of each commit", () => {
   it("opens on the commit that added the proposal", () => {
     const { root } = store();
-    const [opened, ...rest] = readChangeHistory(root, DIR, null);
+    const [opened, ...rest] = thread(root);
 
     expect(opened.kind).toBe("opened");
     expect(opened.subject).toBe(`Open ${CHANGE}`);
@@ -46,7 +50,7 @@ describe("what the walk makes of each commit", () => {
     write(`${DIR}/decisions.md`, "# Decisions\n\n## Goals\n\nOne.\n");
     commit(`chore(openspec): land decisions of ${CHANGE} on @robin`, 14);
 
-    const landed = readChangeHistory(root, DIR, null).at(-1);
+    const landed = thread(root).at(-1);
 
     expect(landed?.kind).toBe("landed");
     expect(landed?.target).toBe("decisions");
@@ -58,7 +62,7 @@ describe("what the walk makes of each commit", () => {
     write(`${DIR}/tasks.md`, tasksMd("", 0));
     commit(`chore(openspec): land 1 of ${CHANGE}`, 10);
 
-    const landed = readChangeHistory(root, DIR, null).at(-1);
+    const landed = thread(root).at(-1);
 
     expect(landed?.kind).toBe("landed");
     expect(landed?.target).toBe("1");
@@ -73,7 +77,7 @@ describe("what the walk makes of each commit", () => {
       9,
     );
 
-    const reread = readChangeHistory(root, DIR, null).at(-1);
+    const reread = thread(root).at(-1);
 
     expect(reread?.kind).toBe("read-again");
     expect(reread?.target).toBe("specs");
@@ -87,7 +91,7 @@ describe("what the walk makes of each commit", () => {
     );
     commit("Name the hands", 8);
 
-    const hand = readChangeHistory(root, DIR, null).at(-1);
+    const hand = thread(root).at(-1);
 
     expect(hand?.kind).toBe("hand");
     expect(hand?.hands).toEqual([{ role: "pm", handle: "robin" }]);
@@ -102,7 +106,7 @@ describe("what the walk makes of each commit", () => {
     write(`${DIR}/tasks.md`, tasksMd("", 2, " - reworded"));
     commit("style: one sentence per line", 3);
 
-    const events = readChangeHistory(root, DIR, null);
+    const events = thread(root);
     const ticked = events.find((event) => event.kind === "tick");
 
     expect(ticked?.ticked).toEqual(["1.1", "1.2"]);
@@ -115,7 +119,7 @@ describe("what the walk makes of each commit", () => {
     write(`${DIR}/proposal.md`, `${PROPOSAL}\nAnd nobody can spend one.\n`);
     commit("docs(planning): say what a gift card cannot do", 2);
 
-    const last = readChangeHistory(root, DIR, null).at(-1);
+    const last = thread(root).at(-1);
 
     expect(last?.kind).toBe("commit");
     expect(last?.subject).toBe(
@@ -133,7 +137,7 @@ describe("the order and the edges", () => {
     commit(`chore(openspec): land tasks of ${CHANGE} on @erin`, 6);
 
     expect(kinds(root)).toEqual(["opened", "landed", "landed"]);
-    expect(readChangeHistory(root, DIR, null).map((one) => one.target)).toEqual([
+    expect(thread(root).map((one) => one.target)).toEqual([
       undefined,
       "decisions",
       "tasks",
@@ -148,10 +152,27 @@ describe("the order and the edges", () => {
 
     // The branch is ahead of main, which is where the manual's own checkout
     // sits while a round drafts: the thread is main's history and nothing else.
-    expect(readChangeHistory(root, DIR, main).map((one) => one.kind)).toEqual([
+    expect(thread(root, main).map((one) => one.kind)).toEqual(["opened"]);
+    expect(kinds(root)).toEqual(["opened", "landed"]);
+  });
+
+  it("reads every change of the store in one pass", () => {
+    const { root, write, commit } = store();
+    const other = "openspec/changes/second-probe";
+    write(`${other}/.openspec.yaml`, MANIFEST);
+    write(`${other}/proposal.md`, PROPOSAL);
+    write(`${other}/tasks.md`, tasksMd("", 1));
+    commit("Open second-probe", 4);
+
+    const histories = readChangeHistories(root, null);
+
+    expect([...histories.keys()].sort()).toEqual(["second-probe", CHANGE]);
+    // The commit that opened the second change touched no file of the first,
+    // so it is no row of its thread.
+    expect(histories.get(CHANGE)).toHaveLength(1);
+    expect(histories.get("second-probe")?.map((one) => one.kind)).toEqual([
       "opened",
     ]);
-    expect(kinds(root)).toEqual(["opened", "landed"]);
   });
 
   it("says nothing for a store git cannot walk", () => {
@@ -160,14 +181,12 @@ describe("the order and the edges", () => {
       [`${DIR}/proposal.md`]: PROPOSAL,
     });
 
-    expect(readChangeHistory(root, DIR, null)).toEqual([]);
+    expect(readChangeHistories(root, null).size).toBe(0);
   });
 
   it("says nothing for a change no commit holds", () => {
     const { root } = store();
 
-    expect(readChangeHistory(root, "openspec/changes/never-opened", null)).toEqual(
-      [],
-    );
+    expect(thread(root, null, "never-opened")).toEqual([]);
   });
 });
