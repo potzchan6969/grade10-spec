@@ -83,9 +83,10 @@ The relay is the one service this change ships; the store's own contracts follow
 | Endpoint | In | Out |
 | --- | --- | --- |
 | `POST /slack/events` | The Slack app's `message.channels` events, signed | 200 within three seconds; the work runs after the answer, and a room that fails posts the failure line |
+| `POST /slack/actions` | A Confirm button pressed, signed: the interaction as a form whose one `payload` field holds the JSON | 200 with an empty body within three seconds; the word queues as the reply the press stands for, the thread reads who pressed, and the button is replaced by who confirmed it. A signed body with no press in it - Slack's own `ssl_check` when the request URL is saved - is answered, not refused |
 | `POST /wake`, bearer `WAKE_TOKEN` | `{ change, reason: "landing", head }`; the head keys the wake | The room's own answer: `{ queued: true }`, or `{ queued: false, why: "duplicate" }` on a head it has already taken; 400 with no `change` or `head` |
 | `POST /runs/<token>/bind`, the wake token in the path | `{ change }` | The change's room takes the thread as its alias and what the thread's room had queued; the wake stays where it started; 409 while the change's room runs a wake of its own, which the run asks again |
-| `POST /runs/<token>/post` | `{ text }` | A reply in the thread, or in the planning channel where the record names no thread |
+| `POST /runs/<token>/post` | `{ text, confirm }`, where `confirm` is `{ label, word }` and the run names both | A reply in the thread, or in the planning channel where the record names no thread; `confirm` draws it with one button under it |
 | `POST /runs/<token>/land` | `{ sha, kind: "word" \| "reviewed", artifact }` | `main` moved to `sha`; 400 on a sha that is not one, no artifact or no change bound; 403 naming the check that refused; 409 when `main` moved; 503 with the host's own message when the host did not answer |
 | `POST /runs/<token>/done` | `{}` | The wake closed; the room fires again when dirty |
 | `GET /runs/<token>/alive`, the wake token in the path | - | 200 while the wake is the room's current one, else 401 |
