@@ -85,6 +85,8 @@ One handle per role on each change.
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
   by the product manager at the interview's end, by Assign on the locally run
   manual, or by `pnpm plan hand` from the application repository
+- 🚧 **Standing in** — a handle may be named for a role the team map does not
+  list it under; Assign offers every handle, the role's own first
 - 🚧 **Unnamed hand** — the role's channel is told instead, and the card says
   the hand is open
 - 🚧 **Who landed it** — each artifact records the hand whose word landed it,

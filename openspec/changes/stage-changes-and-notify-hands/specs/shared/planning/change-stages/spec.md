@@ -901,6 +901,9 @@ has a sign-in.
 
 - **Local** — the locally run manual SHALL write a role's handle into the
   change's record as one atomic write to the working tree
+- **Offered** — the locally run manual SHALL offer every handle the team map
+  names, the chosen role's own first and each group alphabetical, and SHALL
+  accept a handle the map lists under another role
 - **Hosted** — the hosted manual SHALL show the hands and Assign as
   read-only, and SHALL write nothing
 
@@ -910,6 +913,7 @@ has a sign-in.
 **WHEN** a role and a handle are assigned on the locally run manual
 **THEN** `hands:` SHALL carry that handle for that role, written to the working tree in one atomic write
 **AND** the change page SHALL show the handle
+**AND** the picker SHALL have offered every handle the team map names, the chosen role's own first
 
 #### Scenario: shared-planning-change-stages-SC-69 - The hosted manual
 **Serves:** shared-planning-change-stages-US-01 - the hand opens the change from the message on the hosted manual

@@ -85,6 +85,8 @@
 | Q58 | May a handle stand in for a role the team map does not list it under? | Yes; the record rule stays membership-only and the Assign picker lists every known handle with the role's own first, so a stand-in is one write and both surfaces read the map one way | The rule refusing a handle the map does not list for the role, which makes covering for somebody a change to the map first |
 | Q59 | How long is a freed dependency listed in the digest, and is an undated release listed? | The week since the last digest, written on the requirement and tested on both sides; an undated release is not listed | No window, which lists a freed change every week until somebody moves it |
 | Q60 | Do the messages go out on the push to main, or after the manual deploys? | On the push: the run reads the push's base and its head, keyed per run, and a message links the page the next deploy renders. The owner's word on 2026-09-20, when main's post-deploy job met this workflow | A job after the manual's deploy comparing the previous successful deployment, which main carried for the change list alone and which holds every message on a deploy it does not need |
+| Q61 | Does Assign clear the chosen handle when the role changes? | No, the pick stays - decided by the round: the offered list no longer depends on the role, and a handle the map stops naming is dropped by the read that normalises it | Clearing it, which re-disables Assign on a pick the list still offers |
+| Q62 | Does the picker show where the role's own handles end? | No, one flat list with the role's own first - decided by the round | Option groups labelled by role, a cue the owner's word did not ask for |
 
 ## Raised
 

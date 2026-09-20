@@ -990,6 +990,37 @@ Runs once per row of **Test data**.
 * The later push adds no second post.
 * The card shows the engineer hand as open.
 
+### shared-planning-change-stages-US4-TC7-1: A stand-in from another role is offered and accepted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-04
+
+**Pre-conditions:**
+The manual runs locally at <local manual url>. <change J> names no `dev` hand. The team map lists <pm handle> under the `pm` role only, and lists <dev handle> under `dev`.
+
+**Steps:**
+
+1. Open <change J> at <local manual url> and choose the `dev` role in Assign.
+2. Read the handle picker.
+3. Choose <pm handle> and press Assign.
+4. Read <change J>'s record and its change page.
+
+**Expected Results:**
+
+* The picker offers every handle the team map names, <dev handle> first and the rest after it, each group alphabetical.
+* Step 3 writes <pm handle> as <change J>'s `dev` hand.
+* The change page shows <pm handle> as the engineer.
+
 ---
 
 ## shared-planning-change-stages-US5: Designer says a change has no surface
@@ -1729,7 +1760,7 @@ What stays manual after the walk (task 8.3/8.5), and why.
 - **US2-TC7-1, US2-TC8-1, US2-TC9-1** — a reverted proof, a landed-by handle and a record nothing could read: no walk drives them. `US2-TC8-1` needs one change at Specified carrying two ❓ rows, a `landed_by:` handle and a behind UI design, which no fixture is; `change-page-delivery.walk.ts`'s `SC-59` reads the handoff's own rows — the days each rung spent, against the hand that took it — on the released fixture instead
 - **US3-TC2-1** — its third step crosses onto the board's own Mine filter reading the handle My turn just remembered; `my-turn.walk.ts`'s `SC-62` and `SC-63` prove My turn's own half (asking, then reading without asking again) and stop there
 - **US3-TC4-1** — "the per-role Pending page is still reachable" is the manual's persistent nav, not a fact `MyTurnPage` itself renders; `my-turn.walk.ts`'s `SC-61` proves the empty state's own words
-- **US4-TC1-1, US4-TC2-1, US4-TC3-1, US4-TC6-1** — `SC-68`'s local round trip (a role and a handle written to the working tree in one atomic write) needs the dev server `change-page-assign.walk.ts` never runs against; that walk proves `SC-69` alone, the hosted half of `US4-TC2-1`'s own case, so the case stays whole and manual
+- **US4-TC1-1, US4-TC2-1, US4-TC3-1, US4-TC6-1, US4-TC7-1** — `SC-68`'s local round trip (a role and a handle written to the working tree in one atomic write) needs the dev server `change-page-assign.walk.ts` never runs against; that walk proves `SC-69` alone, the hosted half of `US4-TC2-1`'s own case, so the case stays whole and manual
 - **US4-TC4-1, US4-TC5-1** — a handle the team map does not know and a malformed `hands:` record are both refusals the store's own reader raises before a page ever renders one; `check/record.mjs`'s and `read-changes.mts`'s own tests decide them, not a walk of the rendered page
 - **US5-TC1-1** — `change-page-waived.walk.ts`'s and `board.walk.ts`'s `SC-07` walk the first row of its three, `ui_waived:` beside a written `tech-design.md`, on the one fixture that shows it; the second row (a written `ui-design.md` beside `design_waived:`) has no fixture, so the case stays whole and manual
 - **US5-TC2-1, US5-TC3-1** — one reads the direct messages a stage that did not move does not send, the other removes a waiver and pushes; neither is a browser's to drive, and `change-page-half-designed.walk.ts`'s `SC-08` decides the page's own half of `US5-TC2-1`'s first row alone — the design still owed while the other is waived
