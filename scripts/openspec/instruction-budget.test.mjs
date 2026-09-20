@@ -29,12 +29,20 @@ const AGENTS_BUDGET = 2570;
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
-// A role skill is the rules one line command loads, beside `round`, which
-// carries the procedure for all of them. Each number is that skill's size
-// after the pass that gave every rule one home (`Q84`): the next rule earns
-// its words by cutting others, or raises this number in a commit that says
-// why.
+// The skills a line command loads: the seven command skills a hand invokes,
+// and the four role skills each of those loads for its rules, beside `round`,
+// which carries the procedure for all of them. Each number is that skill's
+// size after the pass that gave its rules one home - `Q84` for the role
+// skills, the overlap pass for the command ones: the next rule earns its words
+// by cutting others, or raises this number in a commit that says why.
 const SKILLS_BUDGET = {
+  plan: 717,
+  design: 253,
+  tech: 265,
+  specify: 332,
+  tasks: 229,
+  build: 472,
+  land: 355,
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,
@@ -71,9 +79,9 @@ test("the round skill holds to its word budget", () => {
   );
 });
 
-test("each role skill holds to its word budget", () => {
-  for (const [role, budget] of Object.entries(SKILLS_BUDGET)) {
-    const skill = `.claude/skills/${role}/SKILL.md`;
+test("each skill a line command loads holds to its word budget", () => {
+  for (const [name, budget] of Object.entries(SKILLS_BUDGET)) {
+    const skill = `.claude/skills/${name}/SKILL.md`;
     const count = words(read(skill));
     assert.ok(
       count <= budget,
