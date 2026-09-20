@@ -74,15 +74,8 @@ Three things you say in the thread, and one you can do anywhere.
 ## Perspectives
 
 Who reads a draft before you do. A perspective is a reader, not a checklist.
-
-| Artifact | Perspectives |
-| --- | --- |
-| The page's marks, the proposal, the decisions, the journeys | Product; the reader of the product; design; backend; integration; operations |
-| `ui-design.md` | The journeys, walked; the design system's inventory and Figma parity; the copy, in the reader's words |
-| `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
-| `spec.md`, `feature-tcs.md` | The two blind readings, then the reconciliation |
-| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag; size |
-| A task group | Missing pieces; simplicity; code smell; the repository's conventions |
+The readers each artifact may summon are one row of the planning schema,
+beside the artifact's hand, and the capability's requirements table them.
 
 - 🚧 **The simpler thing, always** — one reader on every round argues for the
   simpler shape, and is the floor when a round has one reader

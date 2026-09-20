@@ -609,7 +609,7 @@ test("shared-planning-agent-rounds-SC-68 - a resumed run continues from what is 
   );
   assert.match(
     skill,
-    /\*\*The thread\*\* — `thread:` in the change's record: the questions open, the answers given, and the last reply you wrote/i,
+    /\*\*The thread's words\*\* — the wake's `messages`, what queued since the\s+previous wake; the record's `thread:` is where your reply goes/i,
   );
   assert.match(
     skill,

@@ -33,8 +33,6 @@ the round that applies these is the manual's
 
 ## Where a Reader Applies It
 
-| Reader | Argues |
-| --- | --- |
-| The tech design's readers | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
-| A task group's readers | Missing pieces; simplicity; code smell; the repository's conventions |
-| The pass over the whole change | The simpler shape for the whole, before it goes to staging |
+Which reader argues which of these on which artifact is a row of the planning
+schema, `openspec/schemas/grade10-planning/schema.yaml`, beside the artifact it
+reads; the round dispatches from there.

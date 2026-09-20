@@ -39,8 +39,8 @@ Before step 1, whether this is the first run on the change or the fourth:
 
 1. **The branch** — `claude/<id>`: what is already drafted and pushed
 2. **`main`** — what has landed, and what the record says is behind
-3. **The thread** — `thread:` in the change's record: the questions open, the
-   answers given, and the last reply you wrote
+3. **The thread's words** — the wake's `messages`, what queued since the
+   previous wake; the record's `thread:` is where your reply goes
 4. **The wake** — `.round/relay.json`, which the session writes from the
    Routine's payload before anything else, in its six keys: `relay`, the url
    and the token; `change`; `reason`; `thread`; `sender`, whose word this run

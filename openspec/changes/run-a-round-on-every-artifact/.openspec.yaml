@@ -3,3 +3,7 @@ promoted_by: "@ecchochan"
 created: 2026-09-19
 depends_on:
   - stage-changes-and-notify-hands
+hands:
+  pm: "@ecchochan"
+  tech: "@ecchochan"
+  dev: "@ecchochan"

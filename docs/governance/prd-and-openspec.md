@@ -133,7 +133,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
 
-A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - <what is recommended>`: the ` - ` separator is the grammar the store reads the role by, and a cell that opens ❓ and names no role that way is addressed to nobody and reaches no list.
+A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - recommended: <option>`: the ` - ` separator and the `recommended:` lead are the grammar the store reads, and a cell that opens ❓ without both is addressed to nobody and refuses the change's landings.
 
 ### The three hatches
 
@@ -193,7 +193,7 @@ Before archiving:
 2. record the deploy: `pnpm plan shipped <change-id>` in the application repository writes `deployed_at` and `deployed_env` into the change's `.openspec.yaml`. `pnpm check:manual` fails an archive dated 2026-09-12 or later that carries neither those nor `deploy_waived: <who, why>`; a change whose task groups are all tagged `(grade10-spec)` deploys nothing and owes no record;
 3. fold accepted requirement deltas into `openspec/specs/`;
 4. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
-5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, `rounds.md` with it - one row per round, written by the landing, whose rule is [Agent Rounds](../prds/products/shared/planning/agent-rounds.md); and
 6. leave links between the spec, the page, and the archive where they aid discovery.
 
 Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe what runs.

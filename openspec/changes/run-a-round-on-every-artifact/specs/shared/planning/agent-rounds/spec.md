@@ -58,7 +58,7 @@ read again before anything lands after it, with one record row per round.
   - Woken on a landing: the push posts one wake to the relay for each change it put behind, and the relay runs one wake per thread
   - Its own budget: thirty minutes on a landing or a reply, two hours on a plan; a wake that does not finish posts the failure line with the run's link and frees the thread
   - Landed through the relay: a run pushes its branch and asks the relay, which moves `main` only as a fast-forward and only on the hand's own word
-  - Resumable: a run reads the branch, `main` and the thread and continues from what is there; every push is force-with-lease, and a run that loses says so in the thread and stops
+  - Resumable: a run reads the change's branch, `main` and the wake's messages and continues from what is there; every push is force-with-lease, and a run that loses says so in the thread and stops
 
 ## ADDED Requirements
 
@@ -1277,7 +1277,7 @@ and SHALL continue from what is there.
 
 - **GIVEN** a run that pushed a draft and then stopped
 - **WHEN** a run starts again for the same change
-- **THEN** it reads the change's branch, `main` and the thread
+- **THEN** it reads the change's branch, `main` and the wake's messages
 - **AND** it continues from the pushed draft rather than drafting it again
 
 #### Scenario: shared-planning-agent-rounds-SC-69 - A run that loses the race says so and stops
