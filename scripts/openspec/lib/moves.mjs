@@ -8,9 +8,8 @@
  * over two plain `Map`s, no git and no filesystem involved — without a
  * fixture store to drive them. `readingOf` is the one impure piece, kept here
  * because both halves of one push read a tree the same way; the push
- * workflow's own
- * `readingAt`, which stands a worktree up to read the base, stays beside its
- * caller.
+ * workflow's own `readingAt`, which stands a worktree up to read the base,
+ * stays beside its caller.
  */
 import { ROLE_LABEL } from "../../../tools/manual/src/api/stage-view.ts";
 import {
@@ -140,10 +139,10 @@ function yourTurnText(at, role, linked) {
  *
  * The change is not linked and not named — the reply hangs in its own thread,
  * where every reader already has it. A role of the stage the change names no
- * hand for is left out rather than written as its channel: a reply everyone on
- * the change reads is not addressed to a channel, and the card is where an
- * open hand is read. Nothing here says who pushed the landing; the caller
- * decides whether the reply is owed at all.
+ * hand for is left out rather than written as its channel: a reply everyone
+ * on the change reads is addressed to nobody, and an open hand is read on the
+ * card. Nothing here says who pushed the landing; the caller decides whether
+ * the reply is owed at all.
  */
 export function landedText(at, landed) {
   const words = new Map();
@@ -180,10 +179,10 @@ function behindText(behind, linked) {
  * The key is the move: `<change>:<stage>:<role>` for a turn,
  * `<change>:behind:<artifact>` for an artifact and `<change>:landed:<head>`
  * for a landing, so a re-run of one push reads its own keys back and sends
- * nothing twice, while a stage re-entered after a
- * revert is a different push and is told again. Each message also carries the
- * change's own id, so a caller filters a suppressed change by it directly
- * rather than splitting the key back apart.
+ * nothing twice, while a stage re-entered after a revert is a different push
+ * and is told again. Each message also carries the change's own id, so a
+ * caller filters a suppressed change by it directly rather than splitting the
+ * key back apart.
  */
 export function messagesOf(base, head, map, options) {
   const messages = [];
@@ -215,8 +214,8 @@ export function messagesOf(base, head, map, options) {
   // The thread hears what landed before the hands are told whose turn it is.
   // `pushedBy` is the caller's reading of who pushed each landing, which takes
   // a git call and so cannot be read here: a change absent from it was landed
-  // by a run, and a run replies in the thread itself (`Q66`). The key is the
-  // push's own head, so a re-run of one push posts nothing twice.
+  // by a run, and a run replies in the thread itself. The key is the push's
+  // own head, so a re-run of one push posts nothing twice.
   for (const { id, landed } of landedBetween(base, head)) {
     const at = head.get(id);
     const thread = threadPartsOf(at.thread);
