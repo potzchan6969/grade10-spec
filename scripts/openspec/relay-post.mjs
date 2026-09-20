@@ -5,7 +5,8 @@
  *
  * `.round/relay.json` is the wake's own file — the run writes the payload's
  * `relay`, `change`, `sender` and `thread` there first, before it does
- * anything else. Its `token` is scoped to this wake, signed by the relay and
+ * anything else. `lib/relay.mjs` reads it and makes every call, here and in
+ * `plan-land.mjs`; its token is scoped to this wake, signed by the relay and
  * expiring with its budget, so this script never holds a chat token and never
  * prints the one it is given. A terminal round has no such file: it prints
  * what it would have posted and stops there, since a push is what tells the
@@ -16,18 +17,24 @@
  *   node scripts/openspec/relay-post.mjs --done [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --bind <change> [--root <dir>]
  *
+ * `--bind` is the plan's own call, made right after `openspec new change`: it
+ * warms the room's mapping with the change the run opened, and never defines
+ * it — the record's `thread:` at `main` is what a landing wake resolves.
+ * Whether a wake is still the room's own is `reread-guard.mjs --alive`, asked
+ * before a push rather than after a post.
+ *
  * `--root` is where `.round/relay.json` is read from, the current directory
  * by default. A missing or empty `--message-file` posts nothing and makes no
- * request: the round found nothing to say.
+ * request: the round found nothing to say. With `ROUND_WAKE=relay` in the
+ * environment and no such file, every mode fails rather than prints.
  */
 import { existsSync, readFileSync } from "node:fs";
-import { join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
+import { readWake, relayOf } from "./lib/relay.mjs";
 
 const USAGE =
   'usage: node relay-post.mjs --message-file <path> | --text "<text>" | --done | --bind <change> [--root <dir>]';
-const RELAY_FILE = join(".round", "relay.json");
 
 /** The one action this call makes, read off which flag was given: `post` for
  * a message (from a file or given directly), `done`, or `bind`. */
@@ -52,24 +59,6 @@ function messageFileText(path) {
   return readFileSync(path, "utf8").trim();
 }
 
-/** The relay this wake was given, or nothing where the round is running from
- * a terminal with no wake behind it. */
-function relayOf(root) {
-  const file = join(root, RELAY_FILE);
-  if (!existsSync(file)) return undefined;
-  let parsed;
-  try {
-    parsed = JSON.parse(readFileSync(file, "utf8"));
-  } catch (cause) {
-    fail(`${RELAY_FILE} is not JSON: ${cause.message}`);
-  }
-  const relay = parsed.relay;
-  if (!relay?.url || !relay?.token) {
-    fail(`${RELAY_FILE} names no relay.url and relay.token`);
-  }
-  return relay;
-}
-
 /** What the action prints when there is no relay to post it through. */
 function printed(action) {
   if (action.kind === "done") return "done";
@@ -77,21 +66,15 @@ function printed(action) {
   return action.text;
 }
 
-/** The relay's own path and body for one action — the token rides the path,
- * never a header, because it is scoped to this wake rather than a chat app. */
-function requestFor(relay, action) {
-  if (action.kind === "done")
-    return { path: `/runs/${relay.token}/done`, body: {} };
-  if (action.kind === "bind")
-    return {
-      path: `/runs/${relay.token}/bind`,
-      body: { change: action.change },
-    };
-  return { path: `/runs/${relay.token}/post`, body: { text: action.text } };
+/** The call one action makes on the wake, through the one client. */
+function callFor(relay, action) {
+  if (action.kind === "done") return relay.done();
+  if (action.kind === "bind") return relay.bind(action.change);
+  return relay.post(action.text);
 }
 
 /** What a successful call prints — nothing that could double as a log of the
- * token, which the path above already carries. */
+ * token, which the client's own path and header carry. */
 function confirmed(action) {
   if (action.kind === "done") return "done";
   if (action.kind === "bind") return `bound ${action.change}`;
@@ -112,27 +95,21 @@ async function main() {
     return;
   }
 
-  const relay = relayOf(root);
-  if (!relay) {
+  const wake = readWake(root);
+  if (!wake) {
     console.log(printed(action));
     return;
   }
 
-  const { path, body } = requestFor(relay, action);
-  let response;
+  let answer;
   try {
-    response = await fetch(`${relay.url}${path}`, {
-      method: "POST",
-      headers: { "content-type": "application/json" },
-      body: JSON.stringify(body),
-    });
+    answer = await callFor(relayOf(wake), action);
   } catch (cause) {
     fail(`the relay could not be reached: ${cause.message}`);
     return;
   }
-  const text = await response.text().catch(() => "");
-  if (response.status < 200 || response.status >= 300) {
-    fail(`the relay refused: ${response.status}\n${text}`);
+  if (answer.status < 200 || answer.status >= 300) {
+    fail(`the relay refused: ${answer.status}\n${answer.text}`);
     return;
   }
   console.log(confirmed(action));

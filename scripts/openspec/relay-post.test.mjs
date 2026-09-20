@@ -163,9 +163,10 @@ test("shared-planning-agent-rounds-SC-74 - a run posts through the relay with it
   assert.equal(seen.method, "POST");
   assert.equal(seen.url, `/runs/${TOKEN}/post`);
   assert.deepEqual(seen.body, { text: "the read again changed nothing" });
-  // The wake token rides the path, not a bearer header: nothing here is a
-  // chat token, and nothing needs to be.
-  assert.equal(seen.headers.authorization, undefined);
+  // The wake's own token, borne on the call and riding its path: the relay
+  // signed it over this room and this wake, it expires with the wake's
+  // budget, and no chat token ever reaches the run.
+  assert.equal(seen.headers.authorization, `Bearer ${TOKEN}`);
   assert.ok(!result.stdout.includes(TOKEN));
   assert.ok(!result.stderr.includes(TOKEN));
 });

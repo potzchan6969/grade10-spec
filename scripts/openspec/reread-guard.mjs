@@ -14,7 +14,13 @@
  * session that skipped this guard is still caught, just later and more
  * broadly.
  *
- *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--root <dir>]
+ *   node scripts/openspec/reread-guard.mjs <change> --before <sha> [--alive] [--root <dir>]
+ *
+ * `--alive` asks the relay, before the paths are read, whether this run's
+ * wake is still the room's own: a run whose lease the relay has closed under
+ * it — its budget spent, or a second wake queued on the change — stops here
+ * rather than pushing work no thread is waiting for. With no wake there is
+ * nothing to ask and nothing to refuse, which is the terminal round.
  *
  * `--before` is the branch tip the session read at the start, before its
  * first push. The commits this run made are the ones `plan:land` named in
@@ -30,6 +36,7 @@ import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
 import { LANDED, landedShas } from "./lib/landed.mjs";
+import { readWake, relayOf } from "./lib/relay.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
 
 const HERE = dirname(fileURLToPath(import.meta.url));
@@ -37,7 +44,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * it, the usage refusal the parser prints included. */
 const ERROR = "::error::";
 const USAGE =
-  "usage: node reread-guard.mjs <change> --before <sha> [--root <dir>]";
+  "usage: node reread-guard.mjs <change> --before <sha> [--alive] [--root <dir>]";
 
 /** Every path a range of commits touched, oldest first. */
 export function pushedPaths(root, before, after) {
@@ -70,15 +77,42 @@ export function outOfBounds(paths, writable) {
   return paths.filter((path) => !isWritable(writable, path));
 }
 
-function main() {
+/** The wake this run was fired with, asked whether it is still the room's
+ * own. Nothing to ask from a terminal round, which holds no wake. */
+async function checkAlive(root) {
+  const wake = readWake(root);
+  if (!wake) {
+    console.log("no wake to ask about: this run pushes on its own word");
+    return;
+  }
+  let answer;
+  try {
+    answer = await relayOf(wake).alive();
+  } catch (cause) {
+    fail(`the relay could not be reached: ${cause.message}`);
+    return;
+  }
+  if (answer.status !== 200) {
+    fail(
+      `this run's wake is not the room's any more (${answer.status}) — it pushes nothing further`,
+    );
+    return;
+  }
+  console.log("the wake is alive");
+}
+
+async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
     keys: ["before", "root"],
+    booleans: ["alive"],
     usage: USAGE,
     prefix: ERROR,
   });
   const [change] = positional;
   if (!change || !flags.before) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
+
+  if (flags.alive) await checkAlive(root);
 
   const writable = writableBy(root, change);
   const shas = landedShas(root);
@@ -108,4 +142,6 @@ function fail(message) {
   process.exit(1);
 }
 
-if (process.argv[1] === fileURLToPath(import.meta.url)) main();
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((cause) => fail(cause.message));
+}
