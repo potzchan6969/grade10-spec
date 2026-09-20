@@ -572,7 +572,7 @@ function JourneysPanel({
   );
 }
 
-/** QA's suites, capability by capability, each traced to the scenarios the
+/** The suites, capability by capability, each traced to the scenarios the
  * delta beside it issues. */
 function CasesPanel({
   change,
