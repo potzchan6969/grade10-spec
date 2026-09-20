@@ -64,6 +64,22 @@ export function stagingText(linked, sheetUrl) {
   return `*On staging* — ${linked} is on staging. Walk ${sheet}.`;
 }
 
+/**
+ * The body one hand of a stage is sent, and which of the two it is.
+ *
+ * The rule is part of the message, so it lives with the words: QA reaches
+ * staging to walk a pass, so QA's own message names the run sheet, and every
+ * other hand of that stage - the release hand - gets the ordinary Your turn
+ * (decisions Q18). The kind rides back because the caller keys the message by
+ * it; written a second time anywhere, the manual and Slack would differ about
+ * which sentence a hand was sent.
+ */
+export function toldBodyOf(at, role, { linked, sheetUrl }) {
+  return at.stage === "on-staging" && role === "qa"
+    ? { kind: "staging", text: stagingText(linked, sheetUrl) }
+    : { kind: "your-turn", text: yourTurnText(at, role, linked) };
+}
+
 /** The artifact that is behind, and what moved before it. */
 export function behindText(behind, linked) {
   const changed = behind.changed.map((one) => `\`${one}\``).join(", ");

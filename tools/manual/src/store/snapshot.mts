@@ -82,6 +82,21 @@ function schemasInUse(
   return schemas;
 }
 
+/**
+ * The run sheet QA is sent to walk, from the environment rather than a file:
+ * the push workflow's notify step reads `TCS_SHEET_URL` for the same
+ * sentence, so the manual reads the same variable rather than a second name
+ * for one sheet. Unset is the honest default — no per-change run tab exists
+ * in the store to link (decisions Q39) — and the message names the sheet in
+ * words instead of carrying a dead link.
+ */
+export function sheetOf(
+  env: NodeJS.ProcessEnv = process.env,
+): string | undefined {
+  const url = env.TCS_SHEET_URL?.trim();
+  return url ? url : undefined;
+}
+
 export type Store = {
   snapshot: Snapshot;
   archive: Archive;
@@ -136,6 +151,7 @@ export function composeStore(
   // browser is sent a handle's roles, never the e-mail or the Slack member the
   // full map carries for the notify script alone.
   const team = snapshotTeam(readTeamMap(roots.store));
+  const sheetUrl = sheetOf();
 
   return {
     snapshot: {
@@ -155,6 +171,7 @@ export function composeStore(
       warnings,
       ...(designSync ? { designSync } : {}),
       team,
+      ...(sheetUrl ? { sheetUrl } : {}),
     },
     archive: {
       generatedAt,

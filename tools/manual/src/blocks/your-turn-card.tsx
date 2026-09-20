@@ -43,12 +43,16 @@ export function YourTurnCard({
   change,
   stage,
   artifacts,
+  sheetUrl,
 }: {
   change: ChangeEntry;
   stage: Stage;
   /** The change's schema artifacts, for whose turn it is in Proposed — a
    * waived design needs no hand. */
   artifacts: SchemaArtifact[];
+  /** The run sheet the store was configured with, for the message QA is sent
+   * on staging. */
+  sheetUrl?: string;
 }) {
   const roles = handOf(change, stage, artifacts);
   // One command per hand whose turn it is, not per hand the stage table
@@ -92,7 +96,12 @@ export function YourTurnCard({
         {/* Under the link, because it is what the thread and the inboxes hold
             right now: the same fact as the hands above, said in the words
             they were sent. */}
-        <ToldNow artifacts={artifacts} change={change} stage={stage} />
+        <ToldNow
+          artifacts={artifacts}
+          change={change}
+          sheetUrl={sheetUrl}
+          stage={stage}
+        />
 
         {moves.map((one) => (
           <div

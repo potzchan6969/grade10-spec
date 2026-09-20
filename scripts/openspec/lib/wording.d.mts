@@ -33,6 +33,11 @@ export declare const yourTurnText: (
   linked: string,
 ) => string;
 export declare const stagingText: (linked: string, sheetUrl?: string) => string;
+export declare const toldBodyOf: (
+  at: WordedChange,
+  role: Role,
+  options: { linked: string; sheetUrl?: string },
+) => { kind: "your-turn" | "staging"; text: string };
 export declare const behindText: (
   behind: WordedBehind,
   linked: string,

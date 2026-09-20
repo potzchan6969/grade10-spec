@@ -853,6 +853,11 @@ export type Snapshot = {
    * store with no file yet knows nobody rather than refusing to boot, which
    * is what an empty `handles` says. */
   team: SnapshotTeam;
+  /** The run sheet QA is sent to walk, from `TCS_SHEET_URL` at build and in
+   * dev — the same variable the push workflow's notify step reads, so Told
+   * now and the Slack message link one sheet. Absent where nobody has
+   * configured one, and the sentence names the sheet in words instead. */
+  sheetUrl?: string;
 };
 
 /** `/api/archive` — fetched only by the In Flight and timeline views. */

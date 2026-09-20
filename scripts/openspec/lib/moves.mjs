@@ -22,6 +22,7 @@ import {
   behindText,
   landedText,
   stagingText,
+  toldBodyOf,
   yourTurnText,
 } from "./wording.mjs";
 
@@ -186,20 +187,17 @@ export function messagesOf(base, head, map, options) {
 
   for (const move of movesBetween(base, head)) {
     const at = head.get(move.id);
-    const linked = linkedTitle(at, options);
-    const key = `${move.id}:${move.stage}:${move.role}`;
-    // QA reaches staging to walk a pass, so QA's message names the sheet; the
-    // release hand's is the ordinary Your turn (decisions Q18).
-    const staging = move.stage === "on-staging" && move.role === "qa";
+    const { kind, text } = toldBodyOf(at, move.role, {
+      linked: linkedTitle(at, options),
+      sheetUrl: options.sheetUrl,
+    });
     take(
       at,
-      key,
-      staging ? "staging" : "your-turn",
+      `${move.id}:${move.stage}:${move.role}`,
+      kind,
       move.role,
       move.hand,
-      staging
-        ? stagingText(linked, options.sheetUrl)
-        : yourTurnText(at, move.role, linked),
+      text,
     );
   }
 

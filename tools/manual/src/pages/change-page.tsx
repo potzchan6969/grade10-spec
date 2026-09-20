@@ -157,7 +157,12 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
   return (
     <>
       <StageStepper heldBy={change.heldBy} stage={stage} />
-      <YourTurnCard artifacts={artifacts} change={change} stage={stage} />
+      <YourTurnCard
+        artifacts={artifacts}
+        change={change}
+        sheetUrl={index.snapshot.sheetUrl}
+        stage={stage}
+      />
 
       <ChangeStatus
         archived={

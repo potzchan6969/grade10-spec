@@ -22,14 +22,18 @@ export function ToldNow({
   change,
   stage,
   artifacts,
+  sheetUrl,
 }: {
   change: ChangeEntry;
   stage: Stage;
   /** The change's schema artifacts: whose turn it is in Proposed, and whose
    * hand a behind artifact's message goes to. */
   artifacts: SchemaArtifact[];
+  /** The run sheet QA is sent to, from the snapshot. Absent where nobody has
+   * configured one, and the sentence names the sheet in words. */
+  sheetUrl?: string;
 }) {
-  const told = toldNowOf(change, stage, artifacts);
+  const told = toldNowOf(change, stage, artifacts, sheetUrl);
 
   return (
     <div className="flex flex-col gap-1.5">

@@ -1,8 +1,7 @@
 import {
   behindText,
   escapeSlackText,
-  stagingText,
-  yourTurnText,
+  toldBodyOf,
 } from "../../../../scripts/openspec/lib/wording.mjs";
 import { behindOf, handOf, handOfArtifact } from "./stages.ts";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types.ts";
@@ -63,6 +62,9 @@ export function toldNowOf(
   change: ChangeEntry,
   stage: Stage,
   artifacts: SchemaArtifact[],
+  /** The run sheet the store was configured with, as the snapshot carries it:
+   * the same `TCS_SHEET_URL` the push workflow's own message links. */
+  sheetUrl?: string,
 ): ToldMessage[] {
   const linked = linkedTitle(change);
   const told: ToldMessage[] = [];
@@ -72,17 +74,10 @@ export function toldNowOf(
   };
 
   for (const role of handOf(change, stage, artifacts)) {
-    // QA reaches staging to walk a pass, so QA's message names the sheet; the
-    // release hand's is the ordinary Your turn. No per-change run tab exists
-    // in the store to link, so the sentence names the sheet in words.
-    const staging = stage === "on-staging" && role === "qa";
     told.push({
       role,
       ...named(role),
-      kind: staging ? "staging" : "your-turn",
-      text: staging
-        ? stagingText(linked)
-        : yourTurnText({ id: change.id, stage }, role, linked),
+      ...toldBodyOf({ id: change.id, stage }, role, { linked, sheetUrl }),
     });
   }
 

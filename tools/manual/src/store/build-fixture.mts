@@ -39,8 +39,11 @@ const FIXTURE_COMMIT = {
 
 export function fixtureSnapshot(): Snapshot {
   const { snapshot } = composeStore(rootsOf(DEMO_STORE), NO_GIT, null);
+  // The run sheet is the environment's, so a machine that has it set would
+  // otherwise write its own url into a committed file.
+  const { sheetUrl: _sheetUrl, ...read } = snapshot;
   return {
-    ...snapshot,
+    ...read,
     changes: snapshot.changes.map(dated),
     generatedAt: GENERATED_AT,
   };
