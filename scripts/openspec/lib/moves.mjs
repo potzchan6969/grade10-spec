@@ -11,16 +11,25 @@
  * workflow's own `readingAt`, which stands a worktree up to read the base,
  * stays beside its caller.
  */
-import { ROLE_LABEL } from "../../../tools/manual/src/api/stage-view.ts";
 import {
   behindOf,
   handOf,
   handOfArtifact,
-  moveOf,
-  STAGE_LABEL,
 } from "../../../tools/manual/src/api/stages.ts";
 import { addressOf, linkOf, threadPartsOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
+import {
+  behindText,
+  landedText,
+  stagingText,
+  yourTurnText,
+} from "./wording.mjs";
+
+/** The three bodies, re-exported: they moved to `wording.mjs` so the manual's
+ * Told now block composes the same sentences without dragging a `node:fs`
+ * import into the browser, and every reader that had them from here still
+ * does. */
+export { behindText, landedText, stagingText, yourTurnText };
 
 /** Every change of one tree: its stage, whose turn it is, the handle each of
  * those roles names, and the artifacts behind what they were drawn from. */
@@ -113,64 +122,6 @@ function linkedTitle(at, { manualUrl, workspaceUrl }) {
     id: at.id,
     title: at.title,
   });
-}
-
-/** A sentence opens with a capital; the table writes the move in the words a
- * lane heading shows it in. */
-const opening = (text) =>
-  text ? text.charAt(0).toUpperCase() + text.slice(1) : text;
-
-/** One body, whoever it reaches: the hand's own inbox, or the role's channel
- * where the change names no hand for it, which is the same message and not a
- * second kind. */
-function yourTurnText(at, role, linked) {
-  const drafted = moveOf(at.stage, role);
-  const lines = [`*Your turn* — ${linked} is at *${STAGE_LABEL[at.stage]}*.`];
-  if (drafted?.command) {
-    const command = drafted.command.replaceAll("<id>", at.id);
-    lines.push(`${opening(drafted.move)}: \`${command}\``);
-  }
-  return lines.join("\n");
-}
-
-/**
- * One reply in the change's thread: what landed, whose word landed it, where
- * the change stands now, and whose turn it is.
- *
- * The change is not linked and not named — the reply hangs in its own thread,
- * where every reader already has it. A role of the stage the change names no
- * hand for is left out rather than written as its channel: a reply everyone
- * on the change reads is addressed to nobody, and an open hand is read on the
- * card. Nothing here says who pushed the landing; the caller decides whether
- * the reply is owed at all.
- */
-export function landedText(at, landed) {
-  const words = new Map();
-  for (const { artifact, by } of landed) {
-    words.set(by, [...(words.get(by) ?? []), `\`${artifact}\``]);
-  }
-  const what = [...words]
-    .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
-    .join(", ");
-  const turns = at.roles
-    .filter((role) => at.hands[role])
-    .map((role) => `@${at.hands[role]} (${ROLE_LABEL[role]})`);
-  const turn = turns.length > 0 ? turns.join(", ") : "nobody";
-  return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
-}
-
-function stagingText(linked, sheetUrl) {
-  const sheet = sheetUrl
-    ? `<${sheetUrl}|the run sheet>`
-    : // No per-change run tab exists in the store to link (decisions Q39), so
-      // an unconfigured sheet is named in words rather than as a dead link.
-      "the run sheet";
-  return `*On staging* — ${linked} is on staging. Walk ${sheet}.`;
-}
-
-function behindText(behind, linked) {
-  const changed = behind.changed.map((one) => `\`${one}\``).join(", ");
-  return `*Behind* — \`${behind.artifact}\` on ${linked} is behind ${changed || "what it was drawn from"}.`;
 }
 
 /**

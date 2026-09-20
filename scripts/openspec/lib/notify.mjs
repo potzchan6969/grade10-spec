@@ -15,19 +15,15 @@
 import { appendFileSync, readFileSync } from "node:fs";
 
 import { channelOf, memberOf } from "./team.mjs";
+import { escapeSlackText } from "./wording.mjs";
 
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
 
-/** A title, safe for Slack's `mrkdwn`: the three characters its own markup
- * reads as syntax, turned into entities before either script builds a link
- * or a line around one. */
-export function escapeSlackText(text) {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
+/** Re-exported: the escape moved to `wording.mjs`, beside the sentences built
+ * around it, so the manual reads one of them without a `node:fs` import
+ * behind it. */
+export { escapeSlackText };
 
 /** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
  * message links to where the record names no thread. */

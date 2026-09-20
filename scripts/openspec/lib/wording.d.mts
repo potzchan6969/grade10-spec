@@ -1,0 +1,43 @@
+/**
+ * Types for `wording.mjs`, read only by the browser project
+ * (`tools/manual/tsconfig.app.json`), which does not allow a plain `.mjs`
+ * import: `wording.mjs` itself stays untyped JavaScript, held to this by
+ * nothing but its own tests, the way every other file under
+ * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
+ * beside it for the same reason.
+ */
+import type { Role, Stage } from "../../../tools/manual/src/api/types.ts";
+
+/** The change as a message reads it: the id a command is written with, and
+ * the stage the sentence names. */
+export type WordedChange = { id: string; stage: Stage };
+
+/** The change as a landing reply reads it: the stage it is at now, the roles
+ * of that stage and the hand each names, where one is named. */
+export type WordedLanding = {
+  stage: Stage;
+  roles: Role[];
+  hands: Partial<Record<Role, string>>;
+};
+
+/** One artifact that landed, and whose word landed it. */
+export type WordedLanded = { artifact: string; by: string };
+
+/** One artifact that is behind, and what moved before it. */
+export type WordedBehind = { artifact: string; changed: string[] };
+
+export declare const escapeSlackText: (text: string) => string;
+export declare const yourTurnText: (
+  at: WordedChange,
+  role: Role,
+  linked: string,
+) => string;
+export declare const stagingText: (linked: string, sheetUrl?: string) => string;
+export declare const behindText: (
+  behind: WordedBehind,
+  linked: string,
+) => string;
+export declare const landedText: (
+  at: WordedLanding,
+  landed: WordedLanded[],
+) => string;
