@@ -1,4 +1,3 @@
-import { EmptyState } from "@grade10/design-system/components/display/empty-state";
 import { Text } from "@grade10/design-system/components/display/text";
 import { askedIdsOf, roundArtifactOf } from "../api/rounds";
 import { roleLabelOf } from "../api/stage-view";
@@ -22,6 +21,10 @@ import { InlineMarkdown } from "./inline-markdown";
  * Nothing here is stored and nothing here is a second status: where the
  * artifact rows say what state the change is in, this says what happened to
  * it, which is the one thing the rows cannot say.
+ *
+ * A reading with no commits says so in one compact secondary line, the way
+ * every other row of `ChangeStatus` says "nothing here": a card inside a grid
+ * cell reads as a section of its own.
  */
 export function ThreadSection({
   change,
@@ -44,11 +47,9 @@ export function ThreadSection({
         <code className="font-mono">main</code>.
       </Text>
       {rows.length === 0 ? (
-        <EmptyState
-          compact
-          description="This reading has no commits."
-          title="No history"
-        />
+        <Text as="p" size="xs" tone="secondary">
+          No history: this reading has no commits.
+        </Text>
       ) : (
         <ol className="flex flex-col gap-1.5">
           {rows.map((row) => (

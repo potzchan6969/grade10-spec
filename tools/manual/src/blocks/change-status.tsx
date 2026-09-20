@@ -22,8 +22,11 @@ import { OnThePages } from "./on-the-pages";
 import { ThreadSection } from "./thread-section";
 
 /**
- * Where the change stands, as the page reads it: one labelled row per fact,
- * and no row for a fact the change does not carry. The board's card says the
+ * Where the change stands, as the page reads it: one labelled row per fact.
+ * A fact the change does not carry is left off, with two exceptions - On the
+ * pages and the Thread stand whatever the change holds, because "this change
+ * marks no page section" and "no history" are facts a reviewer came to read,
+ * and each says so in one compact secondary line. The board's card says the
  * same things in the same components, unlabelled, because a card is read as a
  * whole and a page is read a line at a time.
  *
