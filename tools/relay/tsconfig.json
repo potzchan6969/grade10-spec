@@ -7,6 +7,10 @@
     // modules under vitest, which gives them the same globals.
     "types": ["@cloudflare/workers-types"],
     "skipLibCheck": true,
+    // The store's own pure modules — `handle.mjs`, `team-parse.mjs` — are
+    // plain JavaScript with a `.d.mts` beside them, as the manual's browser
+    // project reads them.
+    "allowJs": false,
 
     "module": "esnext",
     "moduleResolution": "bundler",
