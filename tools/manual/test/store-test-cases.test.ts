@@ -170,6 +170,7 @@ describe("a case that also carries a `**Decided by:**` line", () => {
         title: "It happens",
         traces: ["alpha-US-01"],
         status: "actual",
+        automationStatus: "manual",
       },
     ]);
   });
