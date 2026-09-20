@@ -4,11 +4,18 @@
  * moves `main`.
  *
  * Thin wrappers on purpose — the decision they serve is in `land.ts`, which is
- * pure and reads what these fetched.
+ * pure and reads what these fetched. A host that answers anything else throws
+ * `HostError`, which the room answers as the host being unavailable rather
+ * than as the relay being broken.
  */
 import { fromBase64, fromUtf8 } from "./bytes.ts";
 
 const API = "https://api.github.com";
+
+/** What the compare answer carries at most. A landing wider than this is not
+ * a landing this relay is asked to move: the answer is truncated, so the
+ * paths it lists are not all of them. */
+export const COMPARE_MAX = 300;
 
 export interface GithubRepo {
   /** `owner/name`. */
@@ -16,14 +23,24 @@ export interface GithubRepo {
   token: string;
 }
 
-export interface ComparedFile {
-  path: string;
-  /** The unified diff of that file, as the compare answer carries it. A file
-   * too large to diff carries none. */
-  patch: string;
+/** The host answered something the relay cannot read as either an answer or a
+ * refusal. */
+export class HostError extends Error {
+  readonly status: number;
+
+  constructor(call: string, status: number, body: string) {
+    super(`${call}: ${status} ${body}`);
+    this.name = "HostError";
+    this.status = status;
+  }
 }
 
-export type Advance = { landed: string } | { reason: "not-fast-forward" };
+export type Compare = { paths: string[] } | { truncated: true };
+
+export type Advance =
+  | { landed: string }
+  | { refused: "not-fast-forward" }
+  | { refused: "host-refused"; message: string };
 
 function headers(repo: GithubRepo): HeadersInit {
   return {
@@ -35,30 +52,34 @@ function headers(repo: GithubRepo): HeadersInit {
   };
 }
 
-async function failure(response: Response, call: string): Promise<never> {
-  throw new Error(`${call}: ${response.status} ${await response.text()}`);
+async function refusal(response: Response): Promise<string> {
+  const text = await response.text();
+  try {
+    return String((JSON.parse(text) as { message?: unknown }).message ?? text);
+  } catch {
+    return text;
+  }
 }
 
-/** Every file the landing sha changed against `base`. The compare answer lists
- * up to 300 files; a landing wider than that is not a landing this relay is
- * asked to move. */
+/** Every path the landing sha changed against `base`, or the word that the
+ * host listed only some of them. */
 export async function compareFiles(
   repo: GithubRepo,
   base: string,
   sha: string,
-): Promise<ComparedFile[]> {
+): Promise<Compare> {
   const response = await fetch(
     `${API}/repos/${repo.repo}/compare/${base}...${sha}`,
     { headers: headers(repo) },
   );
-  if (!response.ok) await failure(response, "compare");
+  if (!response.ok)
+    throw new HostError("compare", response.status, await refusal(response));
   const body = (await response.json()) as {
-    files?: { filename?: string; patch?: string }[];
+    files?: { filename?: string }[];
   };
-  return (body.files ?? []).map((file) => ({
-    path: String(file.filename ?? ""),
-    patch: String(file.patch ?? ""),
-  }));
+  const files = body.files ?? [];
+  if (files.length >= COMPARE_MAX) return { truncated: true };
+  return { paths: files.map((file) => String(file.filename ?? "")) };
 }
 
 /** One file as it reads at `sha`. The contents API answers base64 wrapped in
@@ -72,14 +93,20 @@ export async function readFileAt(
     `${API}/repos/${repo.repo}/contents/${path}?ref=${sha}`,
     { headers: headers(repo) },
   );
-  if (!response.ok) await failure(response, `contents ${path}`);
+  if (!response.ok)
+    throw new HostError(
+      `contents ${path}`,
+      response.status,
+      await refusal(response),
+    );
   const body = (await response.json()) as { content?: string };
   return fromUtf8(fromBase64(String(body.content ?? "")));
 }
 
 /** Move `main` to `sha`, and only forwards: `force: false` is what makes the
  * relay unable to lose a commit somebody else landed first. The code host
- * answers 422 when the move is not a fast-forward. */
+ * answers 422 both when the move is not a fast-forward and when it refuses the
+ * move for its own reasons, so the answer is read by its message. */
 export async function advanceMain(
   repo: GithubRepo,
   sha: string,
@@ -92,7 +119,17 @@ export async function advanceMain(
       body: JSON.stringify({ sha, force: false }),
     },
   );
-  if (response.status === 422) return { reason: "not-fast-forward" };
-  if (!response.ok) await failure(response, "advance main");
+  if (response.status === 422) {
+    const message = await refusal(response);
+    return /not a fast forward/i.test(message)
+      ? { refused: "not-fast-forward" }
+      : { refused: "host-refused", message };
+  }
+  if (!response.ok)
+    throw new HostError(
+      "advance main",
+      response.status,
+      await refusal(response),
+    );
   return { landed: sha };
 }

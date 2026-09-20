@@ -68,9 +68,23 @@ export function fromBase64Url(text: string): Uint8Array {
 }
 
 /** Plain base64, as the code host's contents API returns a file: wrapped in
- * newlines, which base64 decoders refuse. */
+ * newlines, which base64 decoders refuse.
+ *
+ * It throws where `fromBase64Url` answers empty. A token that is not base64
+ * is a failed compare and nothing more; a file that is not base64 is the
+ * store read wrong, and reading it as the empty string would send a landing
+ * through its checks against a record nobody wrote. */
 export function fromBase64(text: string): Uint8Array {
-  return fromBase64Url(text.replace(/\s+/g, ""));
+  const clean = text.replace(/\s+/g, "").replace(/-/g, "+").replace(/_/g, "/");
+  let binary: string;
+  try {
+    binary = atob(clean);
+  } catch {
+    throw new Error("not base64");
+  }
+  const bytes = new Uint8Array(binary.length);
+  for (let i = 0; i < binary.length; i += 1) bytes[i] = binary.charCodeAt(i);
+  return bytes;
 }
 
 export async function hmacSha256(

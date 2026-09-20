@@ -1,21 +1,19 @@
 /**
  * The Slack side: the v0 signature, the envelope read down to one message, the
- * events that are ignored, the room a message wakes, and the one call that
- * posts.
+ * events that are ignored, the word a message says, the room it wakes, and the
+ * one call that posts.
  *
  * Nothing here holds state. The signature's clock and the app's own user id
  * arrive as arguments so both rules can be read in a test.
  */
 import { equalBytes, fromHex, hmacSha256, toHex } from "./bytes.ts";
+import type { Thread } from "./room-state.ts";
 
 /** Slack's replay window. A request signed longer ago than this is refused
  * whatever its signature says. */
 export const SIGNATURE_WINDOW_MS = 5 * 60 * 1000;
 
 export interface SlackMessage {
-  /** The envelope's `event_id`, which the room dedupes on: Slack retries a
-   * delivery it did not see acknowledged. */
-  eventId: string;
   channel: string;
   ts: string;
   /** The thread's root, or null for a top-level message. */
@@ -71,10 +69,22 @@ export async function signSlackRequest(
   return `v0=${toHex(await hmacSha256(secret, `v0:${timestamp}:${body}`))}`;
 }
 
+/**
+ * The word a message says: the app's mention off the front, the ends trimmed,
+ * the case folded. `<@U0APP> Land` and `land` are the same word, and a
+ * mention in the middle of a sentence is left where it is — the message is
+ * then a sentence and not a word.
+ */
+export function wordOf(text: string): string {
+  return text
+    .replace(/^\s*<@[^>]+>/, "")
+    .trim()
+    .toLowerCase();
+}
+
 interface SlackEnvelope {
   type?: string;
   challenge?: string;
-  event_id?: string;
   authorizations?: { user_id?: string }[];
   event?: {
     type?: string;
@@ -92,8 +102,13 @@ interface SlackEnvelope {
  * The envelope as one message, or the reason it is ignored. An edit, a join and
  * the app's own reply all arrive on the same subscription as a hand's sentence,
  * and a reply the relay itself posted would otherwise wake the room again.
+ *
+ * `appUser` is the app's own member id from the deployment; the envelope's
+ * `authorizations` carries it too and is read first. An app the relay cannot
+ * name is an app nobody addressed: a message that mentions somebody else
+ * would otherwise open a room.
  */
-export function parseSlackRequest(raw: unknown): SlackRequest {
+export function parseSlackRequest(raw: unknown, appUser: string): SlackRequest {
   const body = (raw ?? {}) as SlackEnvelope;
   if (body.type === "url_verification")
     return {
@@ -107,14 +122,12 @@ export function parseSlackRequest(raw: unknown): SlackRequest {
     return { kind: "ignored", why: "not-a-message" };
   if (event.bot_id) return { kind: "ignored", why: "bot_id" };
   if (event.subtype) return { kind: "ignored", why: "subtype" };
-  const appUser = body.authorizations?.[0]?.user_id;
-  if (appUser && event.user === appUser)
-    return { kind: "ignored", why: "own-message" };
+  const app = appOf(body, appUser);
+  if (app && event.user === app) return { kind: "ignored", why: "own-message" };
   const text = String(event.text ?? "");
   return {
     kind: "message",
     message: {
-      eventId: String(body.event_id ?? ""),
       channel: String(event.channel ?? ""),
       ts: String(event.ts ?? ""),
       threadTs:
@@ -123,16 +136,24 @@ export function parseSlackRequest(raw: unknown): SlackRequest {
           : null,
       user: String(event.user ?? ""),
       text,
-      mentionsApp: appUser
-        ? text.includes(`<@${appUser}>`)
-        : /<@[UW][^>]+>/.test(text),
+      mentionsApp: app ? text.includes(`<@${app}>`) : false,
     },
   };
 }
 
+/** The app's own member id: the envelope's, or the deployment's where the
+ * envelope names none. */
+function appOf(body: SlackEnvelope, appUser: string): string {
+  const named = body.authorizations?.find((one) => one.user_id)?.user_id;
+  return String(named ?? appUser ?? "").trim();
+}
+
 export interface SlackRoute {
-  /** `channel/ts` of the thread's root: the room's name. */
+  /** The room the message wakes, by name: `channel/ts` of the thread's root
+   * until a run names the change the thread is about. */
   room: string;
+  /** The thread the room posts to, beside the name rather than inside it. */
+  thread: Thread;
   reason: "plan" | "message";
   /** A thread reply that mentions nobody wakes a room that already exists and
    * opens none. */
@@ -154,19 +175,21 @@ export function routeMessage(
     // plan wake on a room keyed by the sentence itself.
     return {
       room: `${message.channel}/${message.ts}`,
+      thread: { channel: message.channel, ts: message.ts },
       reason: "plan",
       requireRoom: false,
     };
   }
   return {
     room: `${message.channel}/${message.threadTs}`,
+    thread: { channel: message.channel, ts: message.threadTs },
     reason: "message",
     requireRoom: !message.mentionsApp,
   };
 }
 
 /** Post to a thread, or to the channel when there is no thread. Returns the
- * posted `ts`, which the room keeps as the mark for "since the last post". */
+ * posted `ts`. */
 export async function postMessage(
   token: string,
   channel: string,

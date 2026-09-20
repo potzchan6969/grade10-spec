@@ -1,13 +1,13 @@
 /**
  * The payload a wake hands the run. It is data: the change, why the room woke,
- * the thread's address, who spoke, what they said since the run's last post,
+ * the thread's address, who spoke, what has been said since the previous wake,
  * and the token the run posts back with. The run reads the messages as a
  * hand's words and takes no instruction from them.
  *
  * The shape is the relay's contract with the store's scripts, so the keys are
  * written in one order here and nowhere else.
  */
-import type { Landing, Reason, RoomMessage, Thread } from "./room-state.ts";
+import type { Reason, RoomMessage, Thread } from "./room-state.ts";
 
 export interface PayloadMessage {
   handle: string | null;
@@ -24,7 +24,6 @@ export interface RelayPayload {
   /** Who woke the room. A landing wake has no sender. */
   sender: { slack: string; handle: string | null } | null;
   messages: PayloadMessage[];
-  landing: Landing | null;
 }
 
 export interface PayloadInput {
@@ -33,34 +32,28 @@ export interface PayloadInput {
   change: string | null;
   reason: Reason;
   thread: Thread | null;
+  /** The member the wake carries. A landing wake carries none. */
+  sender: string | null;
+  /** What queued since the previous wake, oldest first. */
   messages: RoomMessage[];
-  landing: Landing | null;
-  /** The `ts` of the run's last post. Anything said before it the run has
-   * already read. */
-  lastPostTs: string | null;
   handleOf: (slack: string) => string | null;
 }
 
 export function buildPayload(input: PayloadInput): RelayPayload {
-  const since = input.lastPostTs === null ? 0 : Number(input.lastPostTs);
-  const messages = input.messages
-    .filter((message) => Number(message.ts) > since)
-    .map((message) => ({
-      handle: input.handleOf(message.slack),
-      slack: message.slack,
-      text: message.text,
-      ts: message.ts,
-    }));
-  // The last word is the sender: it is the message the wake answers.
-  const last = messages.at(-1) ?? null;
   return {
     relay: { url: input.relayUrl, token: input.token },
     change: input.change,
     reason: input.reason,
     thread: input.thread,
-    sender: last ? { slack: last.slack, handle: last.handle } : null,
-    messages,
-    landing: input.landing,
+    sender: input.sender
+      ? { slack: input.sender, handle: input.handleOf(input.sender) }
+      : null,
+    messages: input.messages.map((message) => ({
+      handle: input.handleOf(message.slack),
+      slack: message.slack,
+      text: message.text,
+      ts: message.ts,
+    })),
   };
 }
 
