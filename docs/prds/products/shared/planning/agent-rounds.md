@@ -111,6 +111,10 @@ them all.
 - 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
   non-goal moved asks the product manager whether the change is extended,
   superseded or split, and lands nothing until they answer
+- 🚧 **A sentence that overlaps a change in flight** — the run answers in that
+  change's thread and its stage decides: an unbuilt change of the same product
+  manager is extended, one further along asks its product manager to extend,
+  split or supersede, and a released one gets a new change that depends on it
 - 🚧 **A waived artifact is fresh** — a waiver says nothing is owed, so
   nothing after it waits
 - 🚧 **Extend, supersede, split** — extend reads everything after the proposal
