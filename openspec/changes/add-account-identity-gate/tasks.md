@@ -10,6 +10,20 @@ Design decisions, the data model and the service contracts:
 [`tech-design.md`](tech-design.md). Screens and states:
 [`ui-design.md`](ui-design.md).
 
+## Archive gate
+
+This change remains active while identity gating is deferred or disabled in
+production. Archive only after:
+
+- the threshold and accountable Compliance owner are decided;
+- the required DPIA, DPA, consent, retention, and erasure approvals are
+  recorded;
+- the identity runtime is enabled;
+- the store and identity service are deployed to production;
+- production behavior is verified; and
+- the feature set, user journeys, and approved feature-test cases are carried
+  into durable specs.
+
 ## 1. Words (grade10-spec)
 
 - [x] 1.1 Add the `identity` namespace and the `checkout.identity.*` and `auctionListing.identityRequired` keys to `@grade10/i18n`, in every language the shared layer speaks

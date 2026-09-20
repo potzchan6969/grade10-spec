@@ -1,10 +1,12 @@
 # shared/ui/auction-listing Specification
 
 ## Purpose
-The shared listing product-page blocks every auction storefront composes: the
-media gallery, the bid panel, the bid history, and the details section. The
-bid history carries accepted instants so collector activity can be localized
-without changing the listing's authoritative event data.
+Shared auction listing blocks disclose the buyer's premium on the bid panel
+before a collector commits a maximum. They are the shared listing product-page
+blocks every auction storefront composes: the media gallery, the bid panel,
+the bid history, and the details section. The bid history carries accepted
+instants so collector activity can be localized without changing the listing's
+authoritative event data.
 
 ## Feature set
 
@@ -38,6 +40,16 @@ without changing the listing's authoritative event data.
   - Enrollment signal: the bid card shows standing, or disables what a collector cannot yet do
 - Bid card accessory
   - Optional recentBidsAccessory: trailing edge of the recent-bids header
+- Buyer-fee disclosure
+  - Inline rate: the bid panel names the 20% buyer fee under the bid action
+  - No tooltip: the fee copy does not carry a buyer-fee tooltip slot
+- Quick bids
+  - Increment steps: three chips at 1×, 2×, and 4× the listing increment
+  - Leader base: chips add those steps to the committed maximum
+  - Field base: chips add those steps to the current public bid
+- Raise floor
+  - Leader minimum: a typed raise starts at the maximum plus 100 minor units
+  - Separate from chips: the first chip is not that typed minimum
 - Lost standing
   - Badge only: Did not win remains; no authorization-release banner
 
@@ -145,23 +157,35 @@ It SHALL NOT supply default user-visible copy for those slots.
 ### Requirement: Extension explanation copy reflects the listing policy
 
 `ListingAuctionBidCard` and `ListingAuctionCardSidebar` SHALL receive extension
-explanation copy from the consumer. They SHALL NOT hardcode extension window
-or duration minutes.
+explanation copy from the consumer. They SHALL NOT hardcode extension duration
+minutes.
 
 When extension is armed on a listing, the consumer SHALL supply copy for the
 Time left explanation and any extended-bidding row that names that listing's
-extension window and extension duration. The shared components SHALL render
-the supplied strings as given.
+**extension duration** (and optional extension cap). The copy SHALL NOT name an
+extension window. The shared components SHALL render the supplied strings as
+given.
+
+When the listing is in extended bidding, consumer copy for the Time left label
+SHALL be **Time left (extended)** (or the locale equivalent).
 
 #### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
 **Serves:** Consumer labels - extension copy comes from the consumer
 
-- **GIVEN** a live listing whose extension window is 300 seconds and extension
-  duration is 900 seconds
-- **WHEN** an application renders the bid card with copy naming a 5-minute
-  window and a 15-minute extension
-- **THEN** the Time left explanation shows those values
-- **AND** no hardcoded "30 minutes" appears in that slot
+- **GIVEN** a live listing whose extension duration is 1800 seconds
+- **WHEN** an application renders the bid card with copy naming a 30-minute
+  post-close timer restart and no extension window
+- **THEN** the Time left explanation shows that duration-only wording
+- **AND** no hardcoded "30 minutes" window, and no extension-window minutes,
+  appear in that slot
+
+#### Scenario: shared-ui-auction-listing-SC-14a - Extended label while in extended bidding
+**Serves:** Consumer labels - extended label while in extended bidding
+
+- **GIVEN** a live listing in extended bidding
+- **WHEN** an application renders the bid card with `extended` on and the
+  Time left label copy **Time left (extended)**
+- **THEN** that label is visible beside the countdown
 
 ### Requirement: Bid history rows carry accepted instants
 
@@ -502,3 +526,111 @@ previously proposed under `add-lot-user-bid-history`.
 - **WHEN** the collector scrolls
 - **THEN** only the active table scrolls inside the dialog body
 - **AND** the dialog title, description, and tab list remain visible
+
+### Requirement: Custom maximum entry is whole major units only
+
+`ListingAuctionBidCard` SHALL accept a custom private-maximum draft only as a
+whole count of major units in the listing currency. The field SHALL refuse a
+typed decimal mark so it never appears in the draft. A pasted string that
+holds a decimal mark and fraction SHALL become the integer major-unit digits
+before that mark (no rounding). The presence of a discarded fraction alone
+SHALL NOT be treated as an invalid amount.
+
+Committed amounts remain an integer count of minor units: each whole major
+unit maps by the currency's ISO 4217 exponent.
+
+#### Scenario: shared-ui-auction-listing-SC-24 - A typed decimal mark is refused
+**Serves:** Bid enrollment - a typed decimal mark is refused
+
+- **GIVEN** an HKD listing bid panel whose custom maximum draft is `100`
+- **WHEN** a collector types `.` into the custom maximum field
+- **THEN** the draft remains `100`
+- **AND** the decimal mark does not appear in the field
+
+#### Scenario: shared-ui-auction-listing-SC-25 - A pasted fractional amount falls back to the integer major units
+**Serves:** Bid enrollment - a pasted fractional amount falls back to the integer major units
+
+- **GIVEN** an HKD listing bid panel with the custom maximum field empty
+- **WHEN** a collector pastes `208000.99` into the custom maximum field
+- **THEN** the draft shown is `208000`
+- **AND** no invalid-amount message appears solely because the paste held a
+  fraction
+
+### Requirement: Quick-bid chips step the listing increment
+
+`ListingAuctionBidCard` SHALL offer three quick-bid amounts: 1×, 2×, and 4×
+the listing increment supplied on the view.
+
+When the viewer leads with a committed maximum, those amounts SHALL be that
+maximum plus those multiples. When the viewer does not lead, they SHALL be
+the current bid plus those multiples.
+
+The first chip SHALL NOT be replaced by the typed raise floor.
+
+#### Scenario: shared-ui-auction-listing-SC-35 - A leader's chips step from the committed max
+**Serves:** Quick bids - a leader's chips step from the committed max
+
+- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+  increment is 4000 minor units, and whose viewer leads with a maximum of
+  200000 minor units
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 204000, 208000, and 216000 HKD minor units
+
+#### Scenario: shared-ui-auction-listing-SC-36 - A collector who does not lead steps from the current bid
+**Serves:** Quick bids - a collector who does not lead steps from the current bid
+
+- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+  increment is 4000 minor units, and whose viewer has a maximum of 116000
+  minor units and does not lead
+- **WHEN** the bid card renders quick-bid chips
+- **THEN** the three amounts are 124000, 128000, and 136000 HKD minor units
+
+### Requirement: A leader's typed raise floor is max plus 100 minor units
+
+When the viewer leads with a committed maximum and the current bid is below
+that maximum, `ListingAuctionBidCard` SHALL set the custom-maximum minimum to
+the greater of the listing's minimum next bid and that maximum plus 100
+minor units. That floor SHALL NOT be used as the first quick-bid amount.
+
+#### Scenario: shared-ui-auction-listing-SC-37 - A leader's typed minimum stays max plus $1
+**Serves:** Raise floor - a leader's typed minimum stays max plus $1
+
+- **GIVEN** an HKD listing whose current bid is 120000 minor units, whose
+  increment is 4000 minor units, whose minimum next bid is 124000 minor
+  units, and whose viewer leads with a maximum of 200000 minor units
+- **WHEN** the bid card renders the custom maximum field
+- **THEN** the field's minimum is 200100 HKD minor units
+- **AND** the first quick-bid amount remains 204000 HKD minor units
+
+### Requirement: Bid card discloses the buyer fee inline
+
+The bid card names the buyer fee under the bid action, in plain sight, to a
+signed-in collector.
+
+**Inline rate** - `ListingAuctionBidCard` SHALL render always-on secondary copy
+under the primary bid action that states a 20% buyer fee is added on top of
+the winning bid.
+
+**Consumer copy** - The string SHALL come from consumer copy (`buyerFeeHint`).
+
+**No tooltip** - The copy type SHALL NOT include a `buyerFeeTooltip` field, and
+the card SHALL NOT gate that rate behind an info tooltip.
+
+**Signed out** - When `bidEnrollment` is `signed-out`, the fee line SHALL be
+omitted with the bid action.
+
+#### Scenario: shared-ui-auction-listing-SC-44 - Buyer fee shows inline at 20%
+**Serves:** Buyer-fee disclosure - the buyer fee shows inline at 20%
+
+- **GIVEN** a signed-in collector on an open listing bid card
+- **WHEN** the bid panel footer renders
+- **THEN** secondary copy under the bid action states that a 20% buyer fee is
+  added on top of the winning bid
+- **AND** no buyer-fee info tooltip is present
+
+#### Scenario: shared-ui-auction-listing-SC-45 - Signed-out panel omits the fee line
+**Serves:** Buyer-fee disclosure - a signed-out panel omits the fee line
+
+- **GIVEN** a bid card with `bidEnrollment` `signed-out`
+- **WHEN** it renders
+- **THEN** the buyer-fee line is absent

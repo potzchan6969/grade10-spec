@@ -12,6 +12,10 @@
   "linkExpired": "This sign-in link has expired.",
   "linkInvalid": "This sign-in link no longer works.",
   "linkBanned": "You can’t sign in with this account.",
+  "differentAccount": "You’re signed in with a different account.",
+  "differentAccountDescription": "Switch to {email}.",
+  "switch": "Switch",
+  "stay": "Stay",
   "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>.",
   "linkSentTitle": "Check Your Email"
 }

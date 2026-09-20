@@ -99,7 +99,6 @@ export const ClosedWonPaymentDue: Story = {
     expect(
       canvas.getByRole("button", { name: "Complete Order Setup" }),
     ).toBeVisible();
-    expect(canvas.getByText("Complete Order Setup")).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: /watch/i }),
     ).not.toBeInTheDocument();

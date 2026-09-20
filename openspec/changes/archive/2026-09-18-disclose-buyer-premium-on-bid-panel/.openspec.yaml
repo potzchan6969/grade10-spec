@@ -1,0 +1,8 @@
+schema: grade10-planning
+created: 2026-09-16
+awaiting:
+  tech-design: engineer pick-up for i18n and consumer copy adapters
+  tasks: engineer pick-up after tech-design
+decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+deploy_waived: "User explicitly requested archival without deployment evidence after merged PR #518; CI failures are unrelated app-env and api-docs drift"
+tasks_waived: "Owner waived any remaining verification checkbox: the shared adapter drift was reconciled in merged PR #518 and targeted validation passed"

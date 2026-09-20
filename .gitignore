@@ -41,6 +41,7 @@ scripts/tokens-sync/figma-plugins/build/
 .cursor/agents/impeccable-documenter.md
 .cursor/agents/impeccable-finish-reviewer.md
 .cursor/agents/impeccable-manual-edit-applier.md
+.cursor/agents/designer-precommit.md
 .cursor/hooks.json
 
 # A local agent's scratch design note at the root. Anchored on purpose: this

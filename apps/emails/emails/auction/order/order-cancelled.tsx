@@ -17,31 +17,33 @@ export type OrderCancelledProps = {
 };
 
 /**
- * When an operator cancels the order. Names no reason and no amount; Contact
- * Us is the path to ask about it. Says nothing about payment until paid-order
- * cancellation is confirmed.
+ * When an operator cancels the order. Names when it was cancelled only —
+ * no operator reason and nothing about payment (paid-order cancellation is
+ * still open). Contact Us first, View order second.
+ *
+ * Settled in `email-trigger-revision` and Post-Bidding · Winner Order.
  */
 export default function OrderCancelledEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.cancelledContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   cancelledAt = previewLot.cancelledAt,
 }: OrderCancelledProps) {
   return (
     <AuctionLetter
-      body="We have cancelled your order for this lot. If you have questions, contact customer support."
+      body="Your order for this lot has been cancelled. If you have questions, email support@grade10.com."
       brandName={brandName}
       campaign="order_cancelled"
       canUnsubscribe={false}
       ctaHref={contactUrl}
       ctaLabel="Contact customer support"
-      details={[{ label: "Cancelled", value: cancelledAt }]}
+      details={[{ label: "Cancelled on", value: cancelledAt }]}
       heading="Your order has been cancelled"
       listingUrl={orderUrl}
       lotTitle={lotTitle}
-      preheader={`Order cancelled ${cancelledAt}.`}
+      preheader={`Order cancelled on ${cancelledAt}.`}
       primaryImageUrl={primaryImageUrl}
       secondaryCtaHref={orderUrl}
       secondaryCtaLabel="View order"
@@ -54,7 +56,7 @@ OrderCancelledEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.cancelledContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   cancelledAt: previewLot.cancelledAt,
 } satisfies OrderCancelledProps;

@@ -12,6 +12,10 @@
   "linkExpired": "此登录链接已过期。",
   "linkInvalid": "此登录链接已失效。",
   "linkBanned": "此账户无法登录。",
+  "differentAccount": "你已使用其他账户登录。",
+  "differentAccountDescription": "切换到 {email}。",
+  "switch": "切换",
+  "stay": "保留",
   "legal": "继续即表示你同意我们的<terms>服务条款</terms>与<privacy>隐私政策</privacy>。",
   "linkSentTitle": "请查收邮件"
 }

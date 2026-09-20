@@ -11,6 +11,7 @@ export type AuctionRecordRowState =
   | "bid_not_accepted"
   | "awaiting_payment"
   | "awaiting_address"
+  | "awaiting_address_expired"
   | "preparing_invoice"
   | "payment_problem"
   | "paid"
@@ -20,6 +21,8 @@ export type AuctionRecordRowState =
   | "hold_released"
   | "pending_payment"
   | "expired"
+  | "payment_verifying"
+  | "partially_paid"
   | "processing"
   | "cancelled"
   | "refunded";
@@ -86,11 +89,11 @@ export type AuctionRecordCopy = {
   auctionColumn: string;
   /** Table column: current bid amount. */
   currentBidColumn: string;
-  /** Table column: bidder standing. */
+  /** Table column: bidder / order status. */
   standingColumn: string;
   /** Table column: email alerts switch. */
   emailAlertsColumn: string;
-  /** Your Standing when the collector has not bid. */
+  /** Status when the collector has not bid. */
   noStanding: string;
   /** @deprecated Prefer one-table My Auctions; kept for AuctionRecordTabs. */
   watchingHeading?: string;

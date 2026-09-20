@@ -66,7 +66,8 @@ emails/
     order/                 winner success, setup reminder (first / second),
                            payment reminder (send / day-three / day-six /
                            final), setup overdue, payment overdue, payment
-                           received, shipped (post-sale)
+                           received (+ draft partial), shipped, delivered,
+                           order cancelled (post-sale)
 ```
 
 Production send still goes through the application’s `@grade10/email` lane;

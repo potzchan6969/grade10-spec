@@ -46,6 +46,7 @@ const STATE_VARIANT: Record<
   bid_not_accepted: "error",
   awaiting_payment: "warning",
   awaiting_address: "warning",
+  awaiting_address_expired: "error",
   preparing_invoice: "default",
   payment_problem: "error",
   paid: "outline",
@@ -55,6 +56,8 @@ const STATE_VARIANT: Record<
   hold_released: "outline",
   pending_payment: "warning",
   expired: "error",
+  payment_verifying: "default",
+  partially_paid: "warning",
   processing: "default",
   cancelled: "outline",
   refunded: "outline",
@@ -122,7 +125,7 @@ function useEmailAlertsToast(
 }
 
 /**
- * One My Auctions table row: Auction, Current Bid, Your Standing, Email
+ * One My Auctions table row: Auction, Current Bid, Status, Email
  * alerts, and Unwatch when the application supplies it for a watch-only lot.
  *
  * Figma composition `Auction Watchlist` (`6507:5463`) — Table Row + cells.

@@ -94,7 +94,7 @@
       "id": "refunded",
       "type": "neutral",
       "label": "Refunded",
-      "sublabel": "a paid invoice, refunded",
+      "sublabel": "one refund, recorded by hand",
       "lane": "terminal",
       "col": 1
     },
@@ -177,7 +177,9 @@
       "route": "right-channel",
       "fromSide": "right",
       "toSide": "right",
-      "channelX": 633
+      "channelX": 633,
+      "label": "a refund is recorded",
+      "labelAt": [633, 420]
     },
     {
       "id": "delivery",
@@ -204,6 +206,27 @@
       "fromSide": "right",
       "toSide": "bottom",
       "labelAt": [520, 370]
+    },
+    {
+      "id": "refund-part",
+      "from": "partially-paid",
+      "to": "refunded",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "left",
+      "via": [[402, 431], [483, 431], [483, 479]]
+    },
+    {
+      "id": "refund-late",
+      "from": "delivered",
+      "to": "refunded",
+      "variant": "dashed",
+      "fromSide": "bottom",
+      "toSide": "bottom",
+      "route": "bottom-channel",
+      "channelY": 545,
+      "label": "even after delivery",
+      "labelAt": [637, 545]
     }
   ]
 }

@@ -3,7 +3,11 @@ name: Design sync
 on:
   push:
     branches: [main]
+    paths-ignore:
+      - "**/tasks.md"
   pull_request:
+    paths-ignore:
+      - "**/tasks.md"
   # A Figma edit produces no event in this repository, so the push and
   # pull_request triggers only ever catch drift that a code change happens to
   # walk into. The schedule is what makes a designer-side rename or a changed

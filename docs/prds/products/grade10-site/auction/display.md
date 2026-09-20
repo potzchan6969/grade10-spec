@@ -18,9 +18,9 @@ the lot at its own address without a page load.
 | **Upcoming** | Soonest start first |
 | **Ended** | Most recent close first |
 
-- 🚧 **Resting order** — the order above, and a collector may ask for another
+- **Resting order** — the order above, and a collector may ask for another
   order the catalogue can answer
-- 🚧 **Paging** — a page at a time lists the lots in the same order as reading
+- **Paging** — a page at a time lists the lots in the same order as reading
   the catalogue whole, never twice and never skipping one
 - ❓ **Sort index** — what the operator's sort index does to the resting
   order; Product confirms
@@ -43,7 +43,7 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
-| 🚧 Cert ID | One graded unit of the product, or none | Nothing yet |
+| **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
@@ -63,18 +63,18 @@ lot before any script runs.
   is built — [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
 - **Not found** — an address naming no lot answers an honest 404 with the
   site's not-found surface, never an empty lot page
-- 🚧 **Hidden** — the same 404 meets a lot that is now Draft or Called off,
+- **Hidden** — the same 404 meets a lot that is now Draft or Called off,
   even at the address it once answered from
 - **After scripts load** — nothing on screen is replaced by a placeholder,
   and a value that follows the clock continues from what was served
 - **Watching** — a signed-in collector watches or unwatches the lot from its
   page — [Watchlist](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
-- 🚧 **With a bid** — while their bid stands the control reads Watching,
+- **With a bid** — while their bid stands the control reads Watching,
   disabled: a bid bookmarks the lot
-- 🚧 **After the close** — a closed lot shows no watch control
-- 🚧 **Announced** — watching says email alerts are on, with View My
+- **After the close** — a closed lot shows no watch control
+- **Announced** — watching says email alerts are on, with View My
   Auctions; unwatching says the lot left My Auctions, with Undo
-- 🚧 **A first bid** — announces that email alerts are on, once per lot per
+- **A first bid** — announces that email alerts are on, once per lot per
   collector
 
 ::story{id="auction-listing-listing-product--default" title="A live lot page, gallery and bid panel assembled"}
@@ -103,7 +103,7 @@ lot before any script runs.
 
 ### Lot Status
 
-🚧 Every lot a collector can see shows one status. It describes the lot,
+Every lot a collector can see shows one status. It describes the lot,
 never the collector's bid or order, and every page reads the same value.
 
 | Collectors see | Meaning | Internal lot status |
@@ -113,7 +113,7 @@ never the collector's bid or order, and every page reads the same value.
 | **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Address to Refunded |
 | Hidden | Never published, or withdrawn before a sale | Draft, Called off |
 
-- 🚧 **Hidden lots** — not in the catalogue, search or filters; the lot page
+- **Hidden lots** — not in the catalogue, search or filters; the lot page
   is not found; the lot leaves the watched list; My Auctions shows it only to
   a collector who bid on it, saying the card hold was released when there
   was one
@@ -135,7 +135,7 @@ and publishes it; from the close on, the sale is worked in the post-sale queue
 | Publishes it, now or at Publish at | The lot as **Upcoming**, then **Active** from its start |
 | Calls it off, any time before the close | The lot disappears, and its address is not found |
 | Lets the close pass | **Ended**; the winner's order opens — [Post-Bidding](/p/grade10-site/auction/post-bidding) |
-| 🚧 Reads Watchers on the Listings table | Nothing; a watch is private |
+| Reads Watchers on the Listings table | Nothing; a watch is private |
 
 :::detail{title="Code map" for="engineer"}
 - **Blocks** — `ListingGallery`, `ListingDetails` and the lot page assembly, in `packages/ui` — [Listing Page Blocks](/p/shared/ui/auction-listing)
@@ -171,5 +171,5 @@ Active and Completed filters in bidding history.
 | Draft and Called off | Decided | Hidden on every collector page; the lot's address shows Page not found. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
-| Watching while a bid stands | 🚧 In flight | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
+| Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |
 :::

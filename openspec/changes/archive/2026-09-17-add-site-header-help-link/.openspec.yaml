@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-09-16
+deploy_waived: "sean, staging (auto-deploy/staging) is ~100+ PRs stale and not a reliable signal; production hasn't been promoted past PR #500; owner accepts main-merged (PR #510, e81afee8e) as shipped for this low-risk change"

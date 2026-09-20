@@ -61,14 +61,22 @@ in the same pass when the request covers both.
 
 ## What to tell them
 
-- **`Result`, `Notes`, `Tester` and `Date` are theirs.** Everything left of
-  those is locked: the case is what the markdown says, and an edit there is
-  refused at the cell. A wrong case is fixed in `openspec/`, not in the sheet.
-- **The Summary tab counts the run live.** Marking a row moves it; no second
-  sync is needed.
-- **Do not rename or delete the tab.** The Summary row points at it by name,
-  and Google Sheets cannot prevent either — the row will read `tab deleted`.
-- **Grey rows are draft cases**, which no reviewer has approved. They appear
+- **Four surfaces, `Notes`, `Tester` and `Date` are theirs.** `Web`, `Mobile`,
+  `Auto web` and `Auto mobile` are separate answers: one case can pass in a
+  browser and fail on a phone. The case to their left and the classification to
+  their right are locked, and an edit there is refused at the cell. A wrong case
+  is fixed in `openspec/`, not in the sheet.
+- **Every case starts at `to_do`, so the Summary counts down.** An automation
+  column reading `n/a` is a case no automated test covers; `skipped` is a case
+  somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
+  against the run.
+- **The Summary tab gives each run four rows**, one per surface, counted live.
+  Marking a row moves them; no second sync is needed.
+- **Sort inside the `Walk` filter view, not the sheet.** A sheet-level sort
+  would lift the cases out from under their journey banners.
+- **Do not rename or delete the tab.** The Summary rows point at it by name,
+  and Google Sheets cannot prevent either — they will read `tab deleted`.
+- **Amber rows are draft cases**, which no reviewer has approved. They appear
   only when the run asked for them.
 
 ## What not to do

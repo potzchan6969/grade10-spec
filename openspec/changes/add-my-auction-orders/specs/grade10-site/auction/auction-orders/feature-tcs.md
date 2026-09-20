@@ -101,7 +101,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- |
 | Awaiting Setup | not_issued | Complete Order Setup |
 | Pending Payment | pending | Pay Invoice |
-| Pending Payment | expired | Pay Invoice |
+| Pending Payment | expired | View detail; Contact Us in detail |
 | Preparing Invoice | not_issued | View detail |
 | Processing | paid | View detail |
 | Shipped | paid | View detail |

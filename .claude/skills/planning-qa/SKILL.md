@@ -153,9 +153,9 @@ Everything this run produces is `draft`. Nothing in it claims review;
    `## Reconciliation` block.
 
    **Account for every `ui-design.md` state as you write.** Walk its `## States`
-   bullets and close each one on the bullet itself: the scenario id it became,
-   in backticks, or `**Out of suite:**` naming where the state is stated
-   instead. `check:manual` names a bullet you left open.
+   table and close each row on the row itself: replace the Anchor cell with the
+   scenario id it became, in backticks, or `**Out of suite:**` naming where the
+   state is stated instead. `check:manual` names a row you left open.
 
    That is pass two's work, not the reconciliation's. Both readings see the
    design, so the empty, error and edge states always reached the blind suite;

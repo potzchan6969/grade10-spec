@@ -7,8 +7,8 @@ import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
-  WinnerOrderSetupDialog,
   type WinnerOrderSavedAddress,
+  WinnerOrderSetupDialog,
   type WinnerOrderSetupResult,
 } from "./winner-order-setup-dialog";
 
@@ -39,10 +39,10 @@ function CompleteOrderSetupDemo({
           Complete Order Setup
         </Text>
         <Text size="sm" tone="secondary">
-          Standalone preview of the stepped setup dialog Winner Order opens
-          from Awaiting Setup. Page wiring lives under My Auctions / Winner
-          Order / Setup. Delivery → Payment → Billing; the address book
-          caps at five saved addresses.
+          Standalone preview of the stepped setup dialog Winner Order opens from
+          Awaiting Setup. Page wiring lives under My Auctions / Winner Order /
+          Setup. Delivery → Payment → Billing; the address book caps at five
+          saved addresses.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -116,9 +116,9 @@ export const DeliveryPicker: Story = {
   name: "Delivery picker",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Delivery Address");
     const modal = within(dialog);
-    expect(modal.getByText("Step 1 of 3: Delivery")).toBeVisible();
+    expect(modal.getByText("Step 1 of 3")).toBeVisible();
     await waitFor(() => {
       expect(modal.getAllByText("Alex Chan").length).toBeGreaterThan(0);
     });
@@ -133,17 +133,17 @@ export const DeliveryPicker: Story = {
   },
 };
 
-/** Nested Add Delivery Address form — Country stays closed. */
+/** Nested Add Address form — Country stays closed. */
 export const AddDeliveryAddress: Story = {
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const outer = await findVisibleDialog(page, "Complete Order Setup");
+    const outer = await findVisibleDialog(page, "Delivery Address");
     await userEvent.click(
       within(outer).getByRole("button", { name: "Add New Address" }),
     );
 
-    const nested = await findVisibleDialog(page, "Add Delivery Address");
+    const nested = await findVisibleDialog(page, "Add Address");
     const form = within(nested);
     expect(form.getByLabelText("First name")).toBeVisible();
     expect(form.getByLabelText("Street address")).toBeVisible();
@@ -169,7 +169,7 @@ export const NoSavedAddresses: Story = {
   args: { savedAddresses: [] },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Delivery Address");
     const modal = within(dialog);
     await waitFor(() => {
       expect(modal.getByText("No saved addresses")).toBeVisible();
@@ -181,9 +181,7 @@ export const NoSavedAddresses: Story = {
       modal.getByRole("button", { name: "Add New Address" }),
     ).toBeVisible();
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
-    expect(
-      page.queryByRole("dialog", { name: "Add Delivery Address" }),
-    ).toBeNull();
+    expect(page.queryByRole("dialog", { name: "Add Address" })).toBeNull();
   },
 };
 
@@ -192,7 +190,7 @@ export const RemoveSavedAddress: Story = {
   name: "Remove saved address",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Delivery Address");
     const modal = within(dialog);
     await waitFor(() => {
       expect(modal.getByText(/Harbour Road/)).toBeVisible();
@@ -220,7 +218,7 @@ export const AddressBookFull: Story = {
   },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const outer = await findVisibleDialog(page, "Complete Order Setup");
+    const outer = await findVisibleDialog(page, "Delivery Address");
     const picker = within(outer);
     await waitFor(() => {
       expect(picker.getByText(/Chater House/)).toBeVisible();
@@ -234,7 +232,7 @@ export const AddressBookFull: Story = {
       picker.getByRole("button", { name: "Add New Address" }),
     );
 
-    const nested = await findVisibleDialog(page, "Add Delivery Address");
+    const nested = await findVisibleDialog(page, "Add Address");
     const form = within(nested);
     const saveCheckbox = form.getByRole("checkbox", {
       name: /Save this address for future orders/,
@@ -260,14 +258,9 @@ export const AddressBookFull: Story = {
     );
 
     await waitFor(() => {
-      expect(
-        page.queryByRole("dialog", { name: "Add Delivery Address" }),
-      ).toBeNull();
+      expect(page.queryByRole("dialog", { name: "Add Address" })).toBeNull();
     });
-    const confirmedOuter = await findVisibleDialog(
-      page,
-      "Complete Order Setup",
-    );
+    const confirmedOuter = await findVisibleDialog(page, "Delivery Address");
     const confirmedPicker = within(confirmedOuter);
     expect(confirmedPicker.getByText("Pat Ng")).toBeVisible();
     expect(confirmedPicker.getByText(/Queen's Road Central/)).toBeVisible();
@@ -288,9 +281,9 @@ export const PaymentMethod: Story = {
   args: { initialStep: 2 },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Payment Method");
     const modal = within(dialog);
-    expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+    expect(modal.getByText("Step 2 of 3")).toBeVisible();
     expect(modal.getByRole("radio", { name: /Card/i })).toBeVisible();
     expect(modal.getByRole("radio", { name: /Bank transfer/i })).toBeVisible();
     expect(modal.getByRole("button", { name: "Continue" })).toBeDisabled();
@@ -305,10 +298,10 @@ export const BillingAddress: Story = {
   args: { initialStep: 3 },
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Billing Address");
     const modal = within(dialog);
-    expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
-    expect(modal.getByText("Use same details for billing address")).toBeVisible();
+    expect(modal.getByText("Step 3 of 3")).toBeVisible();
+    expect(modal.getByText("Same as delivery address")).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Complete Order Setup" }),
     ).toBeEnabled();
@@ -322,17 +315,17 @@ export const FinishSetup: Story = {
   play: async ({ canvasElement, args }) => {
     const page = within(canvasElement.ownerDocument.body);
     const canvas = within(canvasElement);
-    const dialog = await findVisibleDialog(page, "Complete Order Setup");
+    const dialog = await findVisibleDialog(page, "Delivery Address");
     const modal = within(dialog);
 
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
-      expect(modal.getByText("Step 2 of 3: Payment")).toBeVisible();
+      expect(modal.getByText("Step 2 of 3")).toBeVisible();
     });
     await userEvent.click(modal.getByRole("radio", { name: /Card/i }));
     await userEvent.click(modal.getByRole("button", { name: "Continue" }));
     await waitFor(() => {
-      expect(modal.getByText("Step 3 of 3: Billing")).toBeVisible();
+      expect(modal.getByText("Step 3 of 3")).toBeVisible();
     });
     await userEvent.click(
       modal.getByRole("button", { name: "Complete Order Setup" }),

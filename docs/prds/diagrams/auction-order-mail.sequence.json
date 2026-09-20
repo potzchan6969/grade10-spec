@@ -1,0 +1,163 @@
+{
+  "schema_version": 1,
+  "diagram_type": "sequence",
+  "meta": {
+    "title": "When a winner hears from Grade10",
+    "animation": "none",
+    "quality_profile": "showcase",
+    "column_fit": "spread",
+    "legend": {
+      "mode": "hidden"
+    },
+    "viewBox": [640, 970]
+  },
+  "participants": [
+    {
+      "id": "winner",
+      "type": "external",
+      "label": "Winner",
+      "sublabel": "the registered address"
+    },
+    {
+      "id": "grade10",
+      "type": "backend",
+      "label": "Grade10",
+      "sublabel": "order mail"
+    },
+    {
+      "id": "operator",
+      "type": "external",
+      "label": "Operator",
+      "sublabel": "the post-sale queue"
+    }
+  ],
+  "segments": [
+    {
+      "from": 162,
+      "to": 380,
+      "label": "Setup window \u2014 48 hours from the close"
+    },
+    {
+      "from": 380,
+      "to": 664,
+      "label": "Payment window \u2014 7 days from invoice send"
+    },
+    {
+      "from": 664,
+      "to": 814,
+      "label": "Once the money is in"
+    }
+  ],
+  "messages": [
+    {
+      "id": "won",
+      "from": "grade10",
+      "to": "winner",
+      "y": 186,
+      "label": "Auction won, set up the order",
+      "variant": "emphasis",
+      "note": "at the close; no amount yet"
+    },
+    {
+      "id": "setup-reminder",
+      "from": "grade10",
+      "to": "winner",
+      "y": 230,
+      "label": "Setup reminder",
+      "note": "close + 24h, setup incomplete"
+    },
+    {
+      "id": "confirms",
+      "from": "winner",
+      "to": "grade10",
+      "y": 274,
+      "label": "confirms address, billing and method",
+      "variant": "emphasis",
+      "note": "setup mail parks here"
+    },
+    {
+      "id": "setup-overdue",
+      "from": "grade10",
+      "to": "winner",
+      "y": 318,
+      "label": "Setup overdue",
+      "variant": "dashed",
+      "note": "close + 48h instead, nothing confirmed"
+    },
+    {
+      "id": "invoice",
+      "from": "operator",
+      "to": "grade10",
+      "y": 422,
+      "label": "sends the invoice",
+      "variant": "emphasis",
+      "note": "the payment clock starts here, not at the close"
+    },
+    {
+      "id": "reminder",
+      "from": "grade10",
+      "to": "winner",
+      "y": 466,
+      "label": "Payment reminder",
+      "note": "at send, then day 3 and day 6"
+    },
+    {
+      "id": "final",
+      "from": "grade10",
+      "to": "winner",
+      "y": 510,
+      "label": "Final notice",
+      "note": "deadline \u2212 24h, while Pay is offered"
+    },
+    {
+      "id": "pays",
+      "from": "winner",
+      "to": "grade10",
+      "y": 554,
+      "label": "pays",
+      "variant": "emphasis",
+      "note": "every outstanding reminder is cancelled"
+    },
+    {
+      "id": "payment-overdue",
+      "from": "grade10",
+      "to": "winner",
+      "y": 598,
+      "label": "Payment overdue",
+      "variant": "dashed",
+      "note": "at the deadline instead, unpaid"
+    },
+    {
+      "id": "received",
+      "from": "grade10",
+      "to": "winner",
+      "y": 706,
+      "label": "Payment received",
+      "note": "carries the receipt PDF"
+    },
+    {
+      "id": "shipped",
+      "from": "grade10",
+      "to": "winner",
+      "y": 750,
+      "label": "Shipped",
+      "note": "the carrier's tracking leads"
+    },
+    {
+      "id": "delivered",
+      "from": "grade10",
+      "to": "winner",
+      "y": 794,
+      "label": "Delivered"
+    },
+    {
+      "id": "cancelled",
+      "from": "grade10",
+      "to": "winner",
+      "y": 856,
+      "label": "Order cancelled",
+      "variant": "dashed",
+      "note": "instead, whenever an operator cancels an unpaid order"
+    }
+  ]
+}

@@ -42,6 +42,7 @@ on:
   workflow_dispatch:
 
 permissions:
+  actions: read
   contents: read
 
 concurrency:
@@ -129,3 +130,28 @@ jobs:
             echo
             echo "Ref: \`${{ github.sha }}\`"
           } >> "$GITHUB_STEP_SUMMARY"
+
+  notify-deploy-failure:
+    name: Report failed manual deployment
+    needs: deploy
+    if: always() && needs.deploy.result == 'failure'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Notify Slack about failed manual deployment
+        uses: slackapi/slack-github-action@v1.26.0
+        with:
+          channel-id: ${{ vars.SLACK_CHANNEL_ID }}
+          payload: |
+            {
+              "attachments": [
+                {
+                  "color": "#dc3545",
+                  "fallback": "Manual deployment failed.",
+                  "pretext": ":x: Manual deployment failed",
+                  "text": "Ref: *`${{ github.sha }}`*\\n<${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}|View logs>",
+                  "footer": "${{ github.repository }} | ${{ github.ref_name }}"
+                }
+              ]
+            }
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}

@@ -1,0 +1,5 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-14
+deploy_waived: "User explicitly requested archival without deployment evidence after merged PR #518; CI failures are unrelated app-env and api-docs drift"
+tasks_waived: "Owner waived remaining verification checkboxes: canonical, sitemap and serving coverage was already present and passed the focused serving suite in merged PR #518"

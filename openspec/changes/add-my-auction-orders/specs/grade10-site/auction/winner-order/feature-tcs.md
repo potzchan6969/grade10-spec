@@ -37,8 +37,8 @@
 
 * Every invoice line and Pay Now are shown.
 * The confirmed delivery address and the lot are shown.
-* An expired invoice still has Pay Now available and the order still reads
-  Pending Payment.
+* An expired invoice still reads Pending Payment and offers Contact Us instead
+  of Pay Now.
 
 ### winner-order-US4-TC2-1: Order Information reads Invoice Status, not Paid Status
 

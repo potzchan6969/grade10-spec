@@ -162,6 +162,31 @@ export type {
   ListingUserBidHistoryRow,
   ListingUserMaximumHistoryRow,
 } from "./blocks/auction-listing/types";
+// shared/ui/auction-order
+export {
+  AuctionAddressForm,
+  type AuctionAddressFormCopy,
+  type AuctionAddressFormProps,
+} from "./blocks/auction-order/auction-address-form";
+export {
+  AuctionOrderDetail,
+  type AuctionOrderDetailCopy,
+  type AuctionOrderDetailProps,
+} from "./blocks/auction-order/auction-order-detail";
+export {
+  AuctionOrderEmpty,
+  type AuctionOrderEmptyProps,
+} from "./blocks/auction-order/auction-order-empty";
+export {
+  AuctionOrderList,
+  type AuctionOrderListProps,
+} from "./blocks/auction-order/auction-order-list";
+export {
+  AuctionOrderRow,
+  type AuctionOrderRowCopy,
+  type AuctionOrderRowProps,
+} from "./blocks/auction-order/auction-order-row";
+export type { AuctionAddressFormValues } from "./blocks/auction-order/types";
 // shared/ui/auction-record
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";

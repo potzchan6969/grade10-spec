@@ -1,13 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
-  BANK_TRANSFER_INVOICE_LINES,
-  WINNER_ORDER_CONTENTS,
-} from "./winner-order-content";
-import {
+  winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
+import {
+  BANK_TRANSFER_INVOICE_LINES,
+  WINNER_ORDER_CONTENTS,
+} from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -19,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -32,7 +33,7 @@ const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
   setupPaymentMethod: "Bank transfer",
-  primaryCta: "Submit Payment Proof",
+  primaryCta: "Pay by Bank Transfer",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
 
@@ -69,7 +70,8 @@ export const PendingPayment: Story = {
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(sidebar.queryByText("Payment method")).not.toBeInTheDocument();
-    expect(canvas.getByText(/Wan Chai/)).toBeVisible();
+    const deliveryAddress = sidebar.getByText("Delivery address").parentElement;
+    expect(deliveryAddress).toHaveTextContent(/Wan Chai/);
     expect(
       canvas.queryByText(/Locked after invoice send/i),
     ).not.toBeInTheDocument();
@@ -84,7 +86,7 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Bank transfer invoice — CTA is upload proof, not card pay. */
+/** Bank transfer invoice — CTA is Pay by Bank Transfer, not card pay. */
 export const PendingPaymentBankTransfer: Story = {
   name: "Pending Payment Bank Transfer",
   args: {
@@ -96,7 +98,7 @@ export const PendingPaymentBankTransfer: Story = {
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.getByRole("button", { name: "Submit Payment Proof" }),
+      sidebar.getByRole("button", { name: "Pay by Bank Transfer" }),
     ).toBeVisible();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -111,7 +113,7 @@ export const PendingPaymentBankTransfer: Story = {
 };
 
 /**
- * Opens Submit Payment Proof, fills required fields, submits → Payment
+ * Opens Pay by Bank Transfer, fills required fields, submits → Payment
  * Verifying + toast.
  */
 export const SubmitBankPaymentProof: Story = {
@@ -126,10 +128,10 @@ export const SubmitBankPaymentProof: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Submit Payment Proof" }),
+      canvas.getByRole("button", { name: "Pay by Bank Transfer" }),
     );
     const modal = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "Submit Payment Proof" });
+      const found = page.getByRole("dialog", { name: "Pay by Bank Transfer" });
       expect(found).toBeVisible();
       return within(found);
     });
@@ -140,7 +142,9 @@ export const SubmitBankPaymentProof: Story = {
       modal.getByRole("button", { name: "Copy transfer reference" }),
     ).toBeVisible();
     expect(
-      modal.getByText("Pay the amount due, then upload your receipt."),
+      modal.getByText(
+        "Copy the bank details, pay the amount due, then upload your receipt.",
+      ),
     ).toBeVisible();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
@@ -188,9 +192,13 @@ export const SubmitBankPaymentProof: Story = {
       ).toBeVisible();
     });
     expect(
-      canvas.queryByRole("button", { name: "Submit Payment Proof" }),
+      canvas.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
-    expect(canvas.getByText(/verifying your bank transfer/i)).toBeVisible();
+    const verificationAlert = canvas.getByRole("alert");
+    expect(verificationAlert).toBeVisible();
+    expect(
+      within(verificationAlert).getByText(/We’re verifying your transfer/),
+    ).toBeVisible();
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
@@ -210,7 +218,9 @@ export const PayWithCardCheckout: Story = {
     const page = within(canvasElement.ownerDocument.body);
     await winnerOrderSettled(canvasElement);
 
-    await userEvent.click(canvas.getByRole("button", { name: "Pay with Card" }));
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Pay with Card" }),
+    );
 
     await waitFor(
       () => {
@@ -224,9 +234,7 @@ export const PayWithCardCheckout: Story = {
     );
     await waitFor(() => {
       expect(page.getByText("Payment received")).toBeVisible();
-      expect(
-        page.getByText("We’re preparing this lot to ship."),
-      ).toBeVisible();
+      expect(page.getByText("We’re preparing this lot to ship.")).toBeVisible();
     });
     expect(
       canvas.queryByRole("button", { name: "Pay with Card" }),
@@ -254,7 +262,7 @@ export const PaymentVerifying: Story = {
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -265,10 +273,77 @@ export const PaymentVerifying: Story = {
     expect(sidebar.getByText("Bank transfer")).toBeVisible();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
+    const infoAlert = canvas.getByRole("alert");
+    expect(infoAlert).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/We’re verifying your transfer/),
+    ).toBeVisible();
+    expect(
+      within(infoAlert).getByText(/We’ll email you when payment is confirmed/),
+    ).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(
       sidebar.queryByRole("link", { name: "Receipt PDF" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+/**
+ * Operator recorded one or more underpayments — locked page, Contact Us, no
+ * running balance, Receipt PDF row lists every payment (P1, P2, …).
+ */
+export const PartiallyPaid: Story = {
+  name: "Partially Paid",
+  args: { status: "partially_paid" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(
+      canvasElement.querySelector(
+        '[data-slot="winner-order-page"][data-status="partially_paid"]',
+      ),
+    ).not.toBeNull();
+    expect(canvas.getByText("Order progress")).toBeVisible();
+    expect(canvas.getByText("Payment")).toBeVisible();
+    expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
+    expect(
+      canvas.getAllByText(/Only part of this invoice is settled/i).length,
+    ).toBeGreaterThanOrEqual(1);
+    const sidebar = within(canvas.getByRole("complementary"));
+    const alert = sidebar.getByRole("alert");
+    expect(alert).toBeVisible();
+    expect(alert).toHaveAttribute("data-status", "warning");
+    expect(
+      within(alert).getByText(/Only part of this invoice is settled/i),
+    ).toBeVisible();
+    expect(within(alert).getByText(/about what remains/i)).toBeVisible();
+    expect(
+      within(alert).queryByText(/HK\$|balance|owed|remaining/i),
+    ).not.toBeInTheDocument();
+    expect(
+      within(alert).getByRole("button", { name: "Contact Us" }),
+    ).toBeVisible();
+    expect(
+      sidebar.queryByRole("button", { name: "Pay with Card" }),
+    ).not.toBeInTheDocument();
+    expect(
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+    ).not.toBeInTheDocument();
+    expect(sidebar.getByText("Payment method")).toBeVisible();
+    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
+    expect(
+      sidebar.getByRole("link", { name: "Receipt · P1 PDF" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("link", { name: "Receipt · P2 PDF" }),
+    ).toBeVisible();
+    expect(sidebar.getByText("Delivery address")).toBeVisible();
+    expect(sidebar.getByText("Billing address")).toBeVisible();
+    await winnerOrderContactSheet(
+      canvasElement,
+      "Auction order INV-202609-LK7P2Q-01: partial payment",
+    );
   },
 };
 
@@ -300,15 +375,16 @@ export const ExpiredInvoice: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
+      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(canvas.queryByText(/how to reach Grade10/i)).not.toBeInTheDocument();
-    expect(canvas.queryByText(/support@grade10.com/)).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
-    expect(
-      canvas.queryByText("Pending Payment (expired invoice)"),
-    ).not.toBeInTheDocument();
+    expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
+    await winnerOrderContactSheet(
+      canvasElement,
+      "Auction order INV-202609-LK7P2Q-01: payment overdue",
+    );
   },
 };

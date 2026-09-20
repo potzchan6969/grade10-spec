@@ -1,4 +1,5 @@
 import { Alert } from "@grade10/design-system/components/display/alert";
+import { Badge } from "@grade10/design-system/components/display/badge";
 import {
   BreadcrumbItem,
   BreadcrumbSeparator,
@@ -22,7 +23,13 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { ArrowUpRight, FilePdf, Info } from "@phosphor-icons/react";
+import {
+  ArrowCounterClockwise,
+  ArrowUpRight,
+  FilePdf,
+  Hourglass,
+  Info,
+} from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
 import {
   REVEAL_HIDDEN_CLASS,
@@ -34,16 +41,23 @@ import {
 } from "../../../../packages/ui/src/blocks/shared/use-first-paint-reveal";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
-import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
-import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
-import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
+import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
+import {
+  contactReasonFor,
+  winnerOrderContactMail,
+} from "./winner-order-contact-mail";
 import {
   LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
   type WinnerOrderContent,
   type WinnerOrderInvoiceLine,
+  type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
+import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
+import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
+import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
+import { WinnerOrderSetupDialog } from "./winner-order-setup-dialog";
 import {
   AUCTION_LOT_DETAILS_HREF,
   MY_AUCTIONS_PAGE_HREF,
@@ -145,8 +159,8 @@ function openPlaceholderInvoicePdf() {
   openPlaceholderPdf(PLACEHOLDER_INVOICE_PDF, "grade10-winner-invoice.pdf");
 }
 
-function openPlaceholderReceiptPdf() {
-  openPlaceholderPdf(PLACEHOLDER_RECEIPT_PDF, "grade10-winner-receipt.pdf");
+function openPlaceholderReceiptPdf(fileName = "grade10-winner-receipt.pdf") {
+  openPlaceholderPdf(PLACEHOLDER_RECEIPT_PDF, fileName);
 }
 
 /** Invoice exists from Pending Payment onward (incl. paid / delivery / refunded). */
@@ -154,14 +168,20 @@ function hasIssuedInvoice(content: WinnerOrderContent): boolean {
   return Boolean(content.invoiceLines?.length);
 }
 
-/** Receipt PDF after payment — Processing onward, plus Refunded. */
-function hasPaymentReceipt(content: WinnerOrderContent): boolean {
-  return (
+/** Receipt PDF row — explicit list, or one default after full payment. */
+function receiptLinksFor(content: WinnerOrderContent): WinnerOrderReceipt[] {
+  if (content.receipts?.length) {
+    return content.receipts;
+  }
+  if (
     content.status === "processing" ||
     content.status === "shipped" ||
     content.status === "delivered" ||
     content.status === "refunded"
-  );
+  ) {
+    return [{ label: "Receipt" }];
+  }
+  return [];
 }
 
 const PRODUCT_IMAGE = new URL("./product.fixture.png", import.meta.url).href;
@@ -190,10 +210,32 @@ function showWinnerProgress(status: WinnerOrderStatus): boolean {
     status === "pending_payment" ||
     status === "pending_payment_expired" ||
     status === "payment_verifying" ||
+    status === "partially_paid" ||
     status === "processing" ||
     status === "shipped" ||
     status === "delivered"
   );
+}
+
+/** Same `Badge` variants as My Auctions `AuctionRecordRow`, not the store order badge. */
+function winnerOrderBadgeVariant(
+  status: WinnerOrderStatus,
+): "default" | "error" | "warning" | "outline" {
+  switch (status) {
+    case "awaiting_address":
+    case "pending_payment":
+    case "partially_paid":
+      return "warning";
+    case "awaiting_address_expired":
+    case "pending_payment_expired":
+      return "error";
+    case "preparing_invoice":
+    case "payment_verifying":
+    case "processing":
+      return "default";
+    default:
+      return "outline";
+  }
 }
 
 /**
@@ -257,6 +299,7 @@ function winnerProgressStepsFor(
     case "pending_payment":
     case "pending_payment_expired":
     case "payment_verifying":
+    case "partially_paid":
       return [
         { ...address, state: "completed" },
         { ...invoice, state: "completed" },
@@ -361,12 +404,14 @@ function SummaryRow({
   emphasize = false,
   muted = false,
   tooltip,
+  valueClassName,
 }: {
   label: ReactNode;
   value: ReactNode;
   emphasize?: boolean;
   muted?: boolean;
   tooltip?: string;
+  valueClassName?: string;
 }) {
   const labelNode = tooltip ? (
     <HStack className="min-w-0" gap="xs" vAlign="center">
@@ -403,6 +448,7 @@ function SummaryRow({
           "shrink-0 text-right text-sm leading-5 whitespace-nowrap tabular-nums text-foreground",
           emphasize && "text-base font-semibold",
           muted && "text-secondary-foreground",
+          valueClassName,
         )}
       >
         {value}
@@ -440,7 +486,11 @@ function LotCard({
         />
       </div>
       <VStack className="min-w-0 flex-1" gap="xs" hAlign="start">
-        <Text className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none" size="sm" weight="medium">
+        <Text
+          className="line-clamp-2 text-pretty sm:truncate sm:line-clamp-none"
+          size="sm"
+          weight="medium"
+        >
           {content.lotTitle}
         </Text>
         <Text className="tabular-nums" size="sm" weight="medium">
@@ -482,10 +532,12 @@ function AddressBlock({
   content,
   confirmCta,
   onConfirmAddress,
+  onContact,
 }: {
   content: WinnerOrderContent;
   confirmCta?: string | null;
   onConfirmAddress?: () => void;
+  onContact?: () => void;
 }) {
   const addressOverdue =
     content.overdue &&
@@ -507,15 +559,7 @@ function AddressBlock({
       {addressOverdue ? (
         <Alert
           actions={
-            <Button
-              onClick={() => {
-                toast.info("Contact Grade10", {
-                  description: "support@grade10.com",
-                });
-              }}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onContact} size="sm" variant="outline">
               Contact Us
             </Button>
           }
@@ -543,18 +587,27 @@ function AddressBlock({
 
 function OrderSummary({
   lines,
+  refund,
   payCta,
   deadline,
   overdue = false,
+  settlementContact = null,
   onPay,
   onViewInvoicePdf,
+  onViewRefundDetails,
+  onContact,
 }: {
   lines: WinnerOrderInvoiceLine[];
+  refund?: WinnerOrderContent["refund"];
   payCta?: string | null;
   deadline?: string | null;
   overdue?: boolean;
+  /** Partially Paid — Contact Us, no balance figure. */
+  settlementContact?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
+  onViewRefundDetails?: () => void;
+  onContact?: () => void;
 }) {
   const total = lines.find((line) => line.label === "Order Total");
   const rest = lines.filter((line) => line.label !== "Order Total");
@@ -609,18 +662,25 @@ function OrderSummary({
         </>
       ) : null}
 
+      {refund ? (
+        <Alert
+          actions={
+            <Button onClick={onViewRefundDetails} size="sm" variant="outline">
+              View
+            </Button>
+          }
+          dismissible={false}
+          icon={<ArrowCounterClockwise aria-hidden size={16} weight="bold" />}
+          layout="inline"
+          status="default"
+          title={`Refund ${refund.amount}`}
+        />
+      ) : null}
+
       {overdue ? (
         <Alert
           actions={
-            <Button
-              onClick={() => {
-                toast.info("Contact Grade10", {
-                  description: "support@grade10.com",
-                });
-              }}
-              size="sm"
-              variant="outline"
-            >
+            <Button onClick={onContact} size="sm" variant="outline">
               Contact Us
             </Button>
           }
@@ -631,7 +691,21 @@ function OrderSummary({
         />
       ) : null}
 
-      {payCta && onPay && !overdue ? (
+      {settlementContact && !overdue ? (
+        <Alert
+          actions={
+            <Button onClick={onContact} size="sm" variant="outline">
+              Contact Us
+            </Button>
+          }
+          dismissible={false}
+          layout="inline"
+          status="warning"
+          title={settlementContact}
+        />
+      ) : null}
+
+      {payCta && onPay && !overdue && !settlementContact ? (
         <VStack className="w-full" gap="sm" hAlign="stretch">
           <Button className="w-full" onClick={onPay} size="md">
             {payCta}
@@ -720,7 +794,7 @@ function OrderSidebar({
   payCta,
   onPay,
   onViewInvoicePdf,
-  onViewReceiptPdf,
+  receipts,
 }: {
   content: WinnerOrderContent;
   confirmAddressCta?: string | null;
@@ -728,7 +802,7 @@ function OrderSidebar({
   payCta?: string | null;
   onPay?: () => void;
   onViewInvoicePdf?: () => void;
-  onViewReceiptPdf?: () => void;
+  receipts?: WinnerOrderReceipt[];
 }) {
   const lines = summaryLinesFor(content);
   const showPayment = Boolean(content.paymentMethod);
@@ -738,11 +812,34 @@ function OrderSidebar({
   const showAddress = content.status !== "cancelled";
   const paymentOverdue =
     Boolean(content.overdue) && content.status === "pending_payment_expired";
+  const settlementContact =
+    content.status === "partially_paid"
+      ? (content.secondaryNote ??
+        "Only part of this invoice is settled. Contact Grade10 about what remains.")
+      : null;
   const showSetupPaymentMethod =
     !showPayment && !isPendingPayment && Boolean(content.setupPaymentMethod);
   const showBilling = Boolean(content.billingValue);
+  const receiptList = receipts ?? [];
   const hasLowerSection =
-    showPayment || showAddress || showSetupPaymentMethod || showBilling;
+    showPayment ||
+    showAddress ||
+    showSetupPaymentMethod ||
+    showBilling ||
+    receiptList.length > 0;
+  const [refundDialogOpen, setRefundDialogOpen] = useState(false);
+  const [contactOpen, setContactOpen] = useState(false);
+  const contactReason = contactReasonFor(content.status);
+  const contactMail = contactReason
+    ? winnerOrderContactMail({
+        reason: contactReason,
+        lotTitle: content.lotTitle,
+        invoiceId: content.invoiceId,
+        receiptIds: (content.receipts ?? [])
+          .map((receipt) => receipt.fileName?.replace(/\.pdf$/i, ""))
+          .filter((id): id is string => Boolean(id)),
+      })
+    : null;
 
   return (
     <aside
@@ -763,8 +860,14 @@ function OrderSidebar({
             lines={lines}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
+            onViewRefundDetails={
+              content.refund ? () => setRefundDialogOpen(true) : undefined
+            }
+            onContact={contactMail ? () => setContactOpen(true) : undefined}
             overdue={paymentOverdue}
             payCta={payCta}
+            refund={content.refund}
+            settlementContact={settlementContact}
           />
         </VStack>
         {hasLowerSection ? (
@@ -792,22 +895,59 @@ function OrderSidebar({
                     ) : null}
                   </HStack>
                 </Card>
-                {onViewReceiptPdf ? (
+                {receiptList.length > 0 ? (
+                  <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
+                    {receiptList.map((receipt) => (
+                      <Link
+                        aria-label={
+                          receipt.label === "Receipt"
+                            ? "Receipt PDF"
+                            : `${receipt.label} PDF`
+                        }
+                        href="#view-receipt-pdf"
+                        key={receipt.label}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          openPlaceholderReceiptPdf(
+                            receipt.fileName ?? "grade10-winner-receipt.pdf",
+                          );
+                        }}
+                        size="sm"
+                        variant="secondary"
+                      >
+                        <FilePdf aria-hidden size={14} weight="regular" />
+                        {receipt.label}
+                      </Link>
+                    ))}
+                  </HStack>
+                ) : null}
+              </VStack>
+            ) : null}
+            {!showPayment && receiptList.length > 0 ? (
+              <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
+                {receiptList.map((receipt) => (
                   <Link
-                    aria-label="Receipt PDF"
+                    aria-label={
+                      receipt.label === "Receipt"
+                        ? "Receipt PDF"
+                        : `${receipt.label} PDF`
+                    }
                     href="#view-receipt-pdf"
+                    key={receipt.label}
                     onClick={(event) => {
                       event.preventDefault();
-                      onViewReceiptPdf();
+                      openPlaceholderReceiptPdf(
+                        receipt.fileName ?? "grade10-winner-receipt.pdf",
+                      );
                     }}
                     size="sm"
                     variant="secondary"
                   >
                     <FilePdf aria-hidden size={14} weight="regular" />
-                    Receipt
+                    {receipt.label}
                   </Link>
-                ) : null}
-              </VStack>
+                ))}
+              </HStack>
             ) : null}
             {showSetupPaymentMethod ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
@@ -824,6 +964,7 @@ function OrderSidebar({
                 confirmCta={confirmAddressCta}
                 content={content}
                 onConfirmAddress={onConfirmAddress}
+                onContact={contactMail ? () => setContactOpen(true) : undefined}
               />
             ) : null}
             {showBilling ? (
@@ -839,6 +980,20 @@ function OrderSidebar({
           </VStack>
         ) : null}
       </Card>
+      {content.refund ? (
+        <WinnerOrderRefundDialog
+          onOpenChange={setRefundDialogOpen}
+          open={refundDialogOpen}
+          refund={content.refund}
+        />
+      ) : null}
+      {contactMail ? (
+        <WinnerOrderContactDialog
+          mail={contactMail}
+          onOpenChange={setContactOpen}
+          open={contactOpen}
+        />
+      ) : null}
     </aside>
   );
 }
@@ -884,7 +1039,7 @@ function WinnerOrderPage({
   const payCta =
     content.status === "pending_payment" && !content.overdue
       ? content.setupPaymentMethod === "Bank transfer"
-        ? "Submit Payment Proof"
+        ? "Pay by Bank Transfer"
         : "Pay with Card"
       : null;
   const progress = showWinnerProgress(content.status)
@@ -893,6 +1048,23 @@ function WinnerOrderPage({
   const mainStaggerIndex = progress ? 1 : 0;
   const lotStaggerIndex = progress ? 2 : 1;
   const sidebarStaggerIndex = progress ? 3 : 2;
+  const statusInfoAlert =
+    content.status === "preparing_invoice" && content.secondaryNote ? (
+      <Alert
+        dismissible={false}
+        layout="inline"
+        status="default"
+        title={content.secondaryNote}
+      />
+    ) : content.status === "payment_verifying" && content.secondaryNote ? (
+      <Alert
+        dismissible={false}
+        icon={<Hourglass aria-hidden size={16} weight="bold" />}
+        layout="inline"
+        status="default"
+        title={content.secondaryNote}
+      />
+    ) : null;
 
   function handlePrimaryAction() {
     onPrimaryAction?.();
@@ -956,15 +1128,28 @@ function WinnerOrderPage({
         </Breadcrumbs>
 
         <RevealGroup revealed={revealed} staggerIndex={0}>
-          <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
-            {content.title}
-          </h1>
+          <HStack className="w-full" gap="sm" vAlign="center">
+            <h1 className="text-2xl leading-8 font-semibold text-balance text-foreground sm:text-3xl sm:leading-9">
+              {content.title}
+            </h1>
+            <Badge size="sm" variant={winnerOrderBadgeVariant(content.status)}>
+              {content.statusLabel}
+            </Badge>
+          </HStack>
         </RevealGroup>
 
         <div className="grid w-full items-start gap-6 grid-cols-1 lg:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] lg:gap-12">
+          {/*
+            On small viewports the status inline alert sits under Order progress
+            (before the lot). From lg up it stays under the lot card.
+          */}
           <VStack className="min-w-0 w-full" gap="lg" hAlign="stretch">
             {progress ? (
-              <RevealGroup revealed={revealed} staggerIndex={mainStaggerIndex}>
+              <RevealGroup
+                className="order-1"
+                revealed={revealed}
+                staggerIndex={mainStaggerIndex}
+              >
                 <WinnerProgressCard
                   onTrack={
                     content.primaryCta === "Track shipment"
@@ -981,7 +1166,24 @@ function WinnerOrderPage({
               </RevealGroup>
             ) : null}
 
-            <RevealGroup revealed={revealed} staggerIndex={lotStaggerIndex}>
+            {statusInfoAlert ? (
+              <RevealGroup
+                className="order-2 w-full lg:order-3"
+                revealed={revealed}
+                staggerIndex={progress ? mainStaggerIndex + 1 : lotStaggerIndex}
+              >
+                {statusInfoAlert}
+              </RevealGroup>
+            ) : null}
+
+            <RevealGroup
+              className={cn(
+                "w-full",
+                progress && statusInfoAlert ? "order-3 lg:order-2" : undefined,
+              )}
+              revealed={revealed}
+              staggerIndex={lotStaggerIndex}
+            >
               <VStack className="w-full" gap="lg" hAlign="stretch">
                 <LotCard
                   content={content}
@@ -998,15 +1200,7 @@ function WinnerOrderPage({
                   />
                 ) : null}
 
-                {content.status === "preparing_invoice" &&
-                content.secondaryNote ? (
-                  <Alert
-                    dismissible={false}
-                    layout="inline"
-                    status="default"
-                    title={content.secondaryNote}
-                  />
-                ) : content.secondaryNote && content.status === "shipped" ? (
+                {content.secondaryNote && content.status === "shipped" ? (
                   <Text size="sm" tone="secondary">
                     {content.secondaryNote}
                   </Text>
@@ -1030,16 +1224,12 @@ function WinnerOrderPage({
                   ? openPlaceholderInvoicePdf
                   : undefined
               }
-              onViewReceiptPdf={
-                hasPaymentReceipt(content)
-                  ? openPlaceholderReceiptPdf
-                  : undefined
-              }
               payCta={
                 cardCheckoutPending && payCta === "Pay with Card"
                   ? "Redirecting…"
                   : payCta
               }
+              receipts={receiptLinksFor(content)}
             />
           </RevealGroup>
         </div>

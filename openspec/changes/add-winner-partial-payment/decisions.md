@@ -45,3 +45,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| `grade10-admin/auction/post-sale` | Whether an operator may record a payment that exceeds the remaining balance | Q17 |

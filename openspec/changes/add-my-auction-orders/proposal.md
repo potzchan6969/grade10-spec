@@ -37,8 +37,8 @@ time from lot close to address confirmed.
   on the field. Phone format is not checked.
 - **Invoice expiry and unfinished card payment.** The foundational
   `revise-auction-winner-invoicing` change records expiry as invoice status
-  `expired`. The order still reads Pending Payment and Pay Now remains
-  available. A timed-out or abandoned payment session says payment was not
+  `expired`. The order still reads Pending Payment and the order detail offers
+  Contact Us instead of Pay Now. A timed-out or abandoned payment session says payment was not
   completed and keeps Pay Now available. A completed session reads Confirming
   payment until Grade10 records the invoice paid; then the order reads
   Processing.

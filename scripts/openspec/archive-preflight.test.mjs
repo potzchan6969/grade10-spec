@@ -337,6 +337,19 @@ test("shared-planning-change-stages-SC-31 - refuses a stale read on a shallow cl
   assert.match(result.stderr, /specs — read again against proposal/);
 });
 
+test("treats a store-only plan with an owner tag as store-only", () => {
+  const result = run(
+    sandbox({
+      ...PROPOSAL,
+      "tasks.md":
+        "## 1. Store work (grade10-spec) (owner: @echo)\n\n- [x] 1.1 Ship it\n",
+    }).root,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /No deploy record is owed/);
+});
+
 // ── The carry gate ──────────────────────────────────────────────────────────
 // A capability that archives cleanly, and the pieces to break one at a time.
 const CAP = "site/store/listing";

@@ -69,7 +69,7 @@
 **Expected Results:**
 
 * A receives exactly one close-outcome letter.
-* It is the did-not-win letter (campaign `lot_closed_didnt_win`), not the watched ended letter.
+* It is the did-not-win letter (campaign `lot_closed_didnt_win`), not a watched sold or watched ended letter.
 
 ### grade10-site-auction-notifications-US6-TC3-1: Winner gets no close-outcome letter
 
@@ -132,7 +132,7 @@
 
 **Expected Results:**
 
-* W receives the watched ended letter (campaign `lot_ended_watched`).
+* W receives the watched sold letter (campaign `lot_watched_sold`).
 * The letter names the winning bid as Sold for.
 
 ### grade10-site-auction-notifications-US7-TC2-1: Muted watcher gets no close letter
@@ -161,7 +161,7 @@
 
 **Expected Results:**
 
-* W receives no watched ended letter.
+* W receives no watched sold letter.
 
 ## grade10-site-auction-notifications-US8: Collector hears a no-bids close as ended only
 
@@ -192,10 +192,11 @@
 **Steps:**
 
 1. Close lot L with no bids.
-2. Inspect watched ended mail for W (campaign `lot_ended_watched`).
+2. Inspect watched ended mail for W (campaign `lot_watched_ended`).
 
 **Expected Results:**
 
+* W receives the watched ended letter (campaign `lot_watched_ended`).
 * Subject, preheader and body say the lot has ended or bidding has closed.
 * Copy does not contain unsold, did not sell, didn't sell, no sale, or no bids.
 * Letter has no Sold for, Winning bid, or Highest bid highlight.
@@ -230,7 +231,7 @@
 * No bidder close-outcome letter is sent.
 * No letter with campaign `lot_ended` is sent.
 * Each enrolled watcher receives the watched ended letter (campaign
-  `lot_ended_watched`) with no winning amount.
+  `lot_watched_ended`) with no winning amount.
 * That letter has no Sold for, Winning bid, or Highest bid highlight.
 * Its subject, preheader and body do not contain unsold, did not sell,
   didn't sell, no sale, or no bids.
@@ -240,3 +241,9 @@
 **Run:** 2026-09-16; scenario and suite readings were reconciled by the author.
 
 - **Uncovered anchors:** none.
+
+## Settled
+
+- Late enrolment after the scheduled-close − 24h point still receives Bidding closes in 24 hours while enrolled — enrolment requirement, same pattern as opens-in-24h
+- Extended bidding has started sends once per listing per collector on first entry into the window
+- One-hour closing reminder stops for watchers and bidders alike

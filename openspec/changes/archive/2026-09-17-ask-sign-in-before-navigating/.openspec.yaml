@@ -1,0 +1,6 @@
+schema: grade10-planning
+promoted_by: "@sean"
+created: 2026-09-15
+decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+deployed_at: "920b4a24c1d57d4c149231a5f6cc39691ac761e1"
+deployed_env: "staging"

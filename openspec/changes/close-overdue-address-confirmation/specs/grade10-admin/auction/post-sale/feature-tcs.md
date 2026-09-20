@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-16, tcs-rules r3.0
 
-## post-sale-US9: Operator reopens the address form
+## post-sale-US18: Operator reopens the address form
 
 **As an** operator,
 **I want** to give a winner who missed the 48-hour address deadline a fresh 48 hours, with my reason on the record,
 **so that** a winner who got in touch can finish the order without me cancelling the lot.
 
-### post-sale-US9-TC1-1: Reopen gives a fresh 48 hours from the moment it reopens
+### post-sale-US18-TC1-1: Reopen gives a fresh 48 hours from the moment it reopens
 
 **Classification:**
 
@@ -22,7 +22,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -48,7 +48,7 @@
 * The address deadline is 2026-09-09T09:00:00Z, 48 hours from `<the reopen>`.
 * It is not measured from the lot close.
 
-### post-sale-US9-TC2-1: Reopen without a reason is refused
+### post-sale-US18-TC2-1: Reopen without a reason is refused
 
 **Classification:**
 
@@ -61,7 +61,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -80,7 +80,7 @@
 * The address deadline is unchanged.
 * The winner still cannot confirm an address.
 
-### post-sale-US9-TC3-1: Reopen is refused without the payment-processing grant
+### post-sale-US18-TC3-1: Reopen is refused without the payment-processing grant
 
 **Classification:**
 
@@ -93,7 +93,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -111,7 +111,7 @@
 * The reopen is refused.
 * The address deadline is unchanged.
 
-### post-sale-US9-TC4-1: Reopen changes no outcome and clears the Overdue mark
+### post-sale-US18-TC4-1: Reopen changes no outcome and clears the Overdue mark
 
 **Classification:**
 
@@ -124,7 +124,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -142,7 +142,7 @@
 * The Overdue mark is gone while the address form is open again.
 * The row's needs-action treatment is unchanged.
 
-### post-sale-US9-TC5-1: A second reopen starts the 48 hours again
+### post-sale-US18-TC5-1: A second reopen starts the 48 hours again
 
 **Classification:**
 
@@ -155,7 +155,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -180,7 +180,7 @@
 * The address deadline is 2026-09-12T15:00:00Z.
 * No cap on the number of reopens is applied.
 
-### post-sale-US9-TC6-1: No reopen is offered once the invoice has been sent
+### post-sale-US18-TC6-1: No reopen is offered once the invoice has been sent
 
 **Classification:**
 
@@ -193,7 +193,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -211,7 +211,7 @@
 * The detail offers a re-quote and reissue instead.
 * The locked address is unchanged.
 
-### post-sale-US9-TC7-1: Reopen is logged with its reason and its new close
+### post-sale-US18-TC7-1: Reopen is logged with its reason and its new close
 
 **Classification:**
 
@@ -247,7 +247,7 @@
 * It names the operator, `<reason>`, and the new address deadline.
 * Earlier entries are unchanged beside it.
 
-### post-sale-US9-TC8-1: The two pre-invoice outcomes filter apart
+### post-sale-US18-TC8-1: The two pre-invoice outcomes filter apart
 
 **Classification:**
 
@@ -278,7 +278,7 @@
 * Step 2 lists `<preparing-invoice order>` and not `<awaiting-address order>`.
 * Each row wears one outcome.
 
-### post-sale-US9-TC9-1: Only the rows waiting on an operator need action
+### post-sale-US18-TC9-1: Only the rows waiting on an operator need action
 
 Runs once per row of **Test data**.
 
@@ -318,7 +318,7 @@ Runs once per row of **Test data**.
 * The needs-action treatment matches the row.
 * `<expired-invoice order>` shows its Expired invoice status beside Pending Payment.
 
-### post-sale-US9-TC10-1: Overdue marks a stalled order in either pre-invoice state
+### post-sale-US18-TC10-1: Overdue marks a stalled order in either pre-invoice state
 
 Runs once per row of **Test data**.
 
@@ -358,7 +358,7 @@ Runs once per row of **Test data**.
 * The outcome is the one the row names, marked or not.
 * The order is not expired or closed by the mark.
 
-### post-sale-US9-TC11-1: Send locks the address and starts the seven days
+### post-sale-US18-TC11-1: Send locks the address and starts the seven days
 
 **Classification:**
 
@@ -398,7 +398,7 @@ Runs once per row of **Test data**.
 * The payment deadline is 2026-09-12T09:00:00Z.
 * The delivery address is locked and the winner can no longer change it.
 
-### post-sale-US9-TC12-1: Send is refused while no address is confirmed
+### post-sale-US18-TC12-1: Send is refused while no address is confirmed
 
 **Classification:**
 
@@ -429,7 +429,7 @@ Runs once per row of **Test data**.
 * No invoice is issued and no payment deadline starts.
 * The order still derives Awaiting Setup.
 
-### post-sale-US9-TC13-1: A closed window does not stop an operator sending
+### post-sale-US18-TC13-1: A closed window does not stop an operator sending
 
 **Classification:**
 
@@ -460,7 +460,7 @@ Runs once per row of **Test data**.
 * The order derives Pending Payment with a seven-day deadline.
 * The closed window gated the winner's write, not the operator's send.
 
-### post-sale-US9-TC14-1: Cancelling before a send returns the lot to available
+### post-sale-US18-TC14-1: Cancelling before a send returns the lot to available
 
 **Classification:**
 
@@ -497,7 +497,7 @@ Runs once per row of **Test data**.
 * The order derives Cancelled and leaves the pre-invoice queue.
 * The lot's inventory status is available and it can be listed again.
 
-### post-sale-US9-TC15-1: A cancelled order refuses a reopen
+### post-sale-US18-TC15-1: A cancelled order refuses a reopen
 
 **Classification:**
 
@@ -510,7 +510,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -528,7 +528,7 @@ Runs once per row of **Test data**.
 * The order still derives as Cancelled.
 * The lot stays in available stock.
 
-### post-sale-US9-TC16-1: An operator records the address without reopening
+### post-sale-US18-TC16-1: An operator records the address without reopening
 
 **Classification:**
 
@@ -541,7 +541,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** post-sale-US-09
+* **Trace:** post-sale-US-18
 
 **Pre-conditions:**
 
@@ -559,7 +559,7 @@ Runs once per row of **Test data**.
 * The address window is still closed.
 * The winner is offered no address form.
 
-### post-sale-US9-TC17-1: Manual settlement pays an expired invoice and ends what is owed
+### post-sale-US18-TC17-1: Manual settlement pays an expired invoice and ends what is owed
 
 **Classification:**
 
@@ -599,7 +599,7 @@ Runs once per row of **Test data**.
 * The Expired invoice status is gone; the invoice reads paid.
 * Winner Order shows no amount owed and no card Pay.
 
-### post-sale-US9-TC18-1: A card payment just before the deadline is accepted
+### post-sale-US18-TC18-1: A card payment just before the deadline is accepted
 
 **Classification:**
 
@@ -637,7 +637,7 @@ Runs once per row of **Test data**.
 * The card payment is accepted.
 * The order derives Processing and never showed Expired invoice.
 
-### post-sale-US9-TC19-1: The winner cannot pay by card after the deadline
+### post-sale-US18-TC19-1: The winner cannot pay by card after the deadline
 
 **Classification:**
 
@@ -676,7 +676,7 @@ Runs once per row of **Test data**.
 * After reload, no card Pay is offered; Contact Us is.
 * The order still reads Pending Payment with Expired invoice.
 
-### post-sale-US9-TC20-1: Reissuing an expired invoice gives card payment a fresh seven days
+### post-sale-US18-TC20-1: Reissuing an expired invoice gives card payment a fresh seven days
 
 **Classification:**
 
@@ -715,7 +715,7 @@ Runs once per row of **Test data**.
 * Winner Order offers card Pay again.
 * The card payment is accepted; the order derives Processing.
 
-### post-sale-US9-TC21-1: Settling or reissuing an expired invoice needs payment-processing
+### post-sale-US18-TC21-1: Settling or reissuing an expired invoice needs payment-processing
 
 Runs once per row of **Test data**.
 
@@ -755,7 +755,7 @@ Runs once per row of **Test data**.
 * The action is refused.
 * The order still reads Pending Payment with Expired invoice, deadline unchanged.
 
-### post-sale-US9-TC22-1: A card payment started in time completes after the deadline
+### post-sale-US18-TC22-1: A card payment started in time completes after the deadline
 
 **Classification:**
 
@@ -787,7 +787,7 @@ Runs once per row of **Test data**.
 * After confirmation the invoice is `paid` and the order is Processing.
 * The invoice log holds no expired entry.
 
-### post-sale-US9-TC23-1: A card payment started in time that fails expires the invoice when it fails
+### post-sale-US18-TC23-1: A card payment started in time that fails expires the invoice when it fails
 
 **Classification:**
 
@@ -819,22 +819,6 @@ Runs once per row of **Test data**.
 * After the decline the invoice is `expired`, with the expired entry timestamped at the decline.
 * The winner's order shows Contact Us and no card Pay.
 
-## Raised
-
-- **Whether the Overdue mark clears on a reopen.** The mark is defined as a closed window and a reopen is said to change no status, but the input never says whether the mark is a live read of the address form or a flag that a window once lapsed. TC4 asserts it clears.
-- **Whether a reopen is offered after the invoice is sent.** The address locks at send and a later change is described as a re-quote and reissue, so TC6 reads the reopen as unavailable. Nothing states the refusal outright, and an operator who reopens instead of re-quoting is not accounted for.
-- **Reopening a cancelled order.** Cancellation is now available before an invoice exists, and nothing says whether a cancelled order's address form can be reopened to revive it, or whether the cancellation is terminal. No case was written for it.
-- **Whether the reopen notifies the winner.** A fresh 48 hours is useless to a winner who does not know it started, and the input names no letter for the reopen among the post-close letters.
-- **What the Overdue mark does after the invoice is sent.** The mark belongs to Awaiting Setup and Preparing Invoice; nothing says whether an order that was marked keeps any trace of it once it reaches Pending Payment.
-- **Whether a closed window blocks the operator's own address correction.** The refusal is stated for the winner. An operator correcting an address on a pre-invoice order is neither permitted nor refused by the input.
-- **Traces on this delta.** The change's `user-journeys.md` for this capability carries only `post-sale-US-09`, so the queue, send and cancellation cases trace `## Feature set` root groups rather than the journeys that walk them, which live in the durable file.
-
-- **Whether the deadline instant itself is expired.** The seven days start at send, but nothing says whether a card payment at exactly send plus seven days is payable or refused. TC18 and TC19 test one minute either side and leave the instant alone.
-- **A card payment in flight across the deadline.** A winner who submits before the deadline and whose payment confirms after it is neither honoured nor refused by the input. TC19 covers only a submit after the deadline.
-- **What a reissue of an expired invoice prices.** The Payment Processing Fee is priced at send from live fees and the premium minimum applies to invoices "sent or reissued" after a change, so a reissue may re-price the Order Total. Nothing says whether it does, or whether a reason is required as it is for a re-quote. TC20 asserts only the fresh deadline.
-- **Bidding after a manual settlement of an expired invoice.** Winner Order says paying after an operator restores a payable invoice does not restore bidding by itself, but says nothing about a manual settlement of the expired invoice. TC17 asserts nothing about suspension.
-- **Whether the winner is told of a reissue.** A fresh seven days only helps a winner who knows it started; the input names no letter for a reissue, and reminders are said to end when the order stops being self-service payable.
-
 ## Reconciliation
 
 Two independent readings of the same anchors: this suite, written without sight
@@ -842,13 +826,13 @@ of any requirement, and a scenario draft written without sight of this suite.
 
 | Raised | Disposition |
 | --- | --- |
-| Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US9-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
-| Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US9-TC16-1` |
-| Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US9-TC4-1` and `post-sale-US9-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
-| Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US9-TC13-1` reads it that way |
-| An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US9-TC17-1`, `TC19-1` and `TC21-1` |
+| Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US18-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
+| Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-1` |
+| Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
+| Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
+| An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US18-TC17-1`, `TC19-1` and `TC21-1` |
 | A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused — `grade10-admin-auction-post-sale-SC-86` |
-| A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US9-TC22-1` and `TC23-1` added |
-| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** Reissue is `revise-auction-winner-invoicing`'s; `post-sale-US9-TC20-1` checks only the new deadline and walks that change's requirement |
+| A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US18-TC22-1` and `TC23-1` added |
+| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** Reissue is `revise-auction-winner-invoicing`'s; `post-sale-US18-TC20-1` checks only the new deadline and walks that change's requirement |
 | Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
 | Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |

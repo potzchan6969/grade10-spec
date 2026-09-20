@@ -2,10 +2,10 @@
 
 ## Why
 
-Grade10 runs its own storefront, so the cart is ours. A line sits in a guest's
-browser or a signed-in collector's member cart holding the availability and
-price recorded when it was added, and nothing in `openspec/specs/` says when the
-Store must look again or what it owes the collector when the answer has moved.
+Grade10 runs its own storefront, so the cart is ours. A line sits in a
+signed-in collector's member cart holding the availability and price recorded
+when it was added, and nothing in `openspec/specs/` says when the Store must
+look again or what it owes the collector when the answer has moved.
 Three surfaces answer availability today and none from a stated rule: the
 listing draws a tile from a supplied sold-out boolean, a card's page says for
 sale or not, and the cart drawer keeps its own `CartItemStatus` vocabulary.
@@ -20,8 +20,8 @@ fine. A stated derivation and stated re-read moments move it toward zero; it is
 unmeasured today, so the first delivery sets the baseline. *(Assumption — the
 source PRD names no metric.)*
 
-**Acceptance signal:** a collector who opens the cart is told about every line
-that moved before they press checkout, not after.
+**Acceptance signal:** a signed-in collector who opens the cart is told about
+every line that moved before they press checkout, not after.
 
 ## What Changes
 
@@ -135,3 +135,7 @@ No backend implementation or Figma change is part of this plan.
 The change directory is named `add-store-product-status` and carries two
 capabilities; the name is left alone so the open pull request keeps its
 history.
+
+No domain impact: the new `cart-validation` capability does not yet join an
+existing Store cross-capability path; its journeys stay at feature level, and
+the existing Store domain suite remains unchanged.

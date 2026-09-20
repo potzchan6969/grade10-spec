@@ -26,6 +26,7 @@ export const COPY = {
   language: "Language",
   accountMenuLabel: "Account",
   profile: "Profile",
+  myOrders: "My Orders",
   myAuctions: "My Auctions",
   signOut: "Sign out",
 };

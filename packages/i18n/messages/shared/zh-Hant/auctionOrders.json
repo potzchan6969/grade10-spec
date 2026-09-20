@@ -1,0 +1,47 @@
+{
+  "title": "我的拍賣訂單",
+  "menu": "我的拍賣訂單",
+  "intro": "你贏得的拍品訂單。",
+  "loading": "正在載入你的拍賣訂單…",
+  "loadFailed": "無法載入你的拍賣訂單。",
+  "retry": "再試一次",
+  "emptyTitle": "尚無拍賣訂單",
+  "emptyDescription": "你贏得拍品後，相關訂單會顯示在這裡。",
+  "myAuctions": "我的拍賣",
+  "viewLot": "查看拍品",
+  "completeOrderSetup": "完成訂單設定",
+  "payInvoice": "支付發票",
+  "viewDetail": "查看詳情",
+  "contactUs": "聯絡我們",
+  "contactDialog": {
+    "title": "寄信給 Grade10",
+    "to": "收件人",
+    "subject": "主旨",
+    "message": "訊息",
+    "copyAddress": "複製地址",
+    "addressCopied": "已複製地址",
+    "copySubject": "複製主旨",
+    "subjectCopied": "已複製主旨",
+    "copyMessage": "複製訊息",
+    "messageCopied": "已複製訊息",
+    "copyAddressManual": "請手動複製地址",
+    "copySubjectManual": "請手動複製主旨",
+    "copyMessageManual": "請手動複製訊息",
+    "openMailApp": "開啟郵件應用程式"
+  },
+  "tabs": {
+    "active": "進行中",
+    "upcoming": "即將開始",
+    "ended": "已結束"
+  },
+  "status": {
+    "awaitingSetup": "等待設定",
+    "preparingInvoice": "準備發票中",
+    "pendingPayment": "待付款",
+    "processing": "處理中",
+    "shipped": "已發貨",
+    "delivered": "已送達",
+    "cancelled": "已取消",
+    "refunded": "已退款"
+  }
+}

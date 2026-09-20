@@ -45,10 +45,10 @@ What the page offers SHALL follow the order status.
 
 An invoice whose status is `expired` SHALL still be presented under the
 derived Pending Payment order status, per `revise-auction-winner-invoicing`,
-with its full invoice and **Pay Now**. The page SHALL not derive a second
-Expired order status.
+with its full invoice and **Contact Us** instead of Pay Now. The page SHALL
+not derive a second Expired order status.
 
-#### Scenario: winner-order-SC-72 - The page shows its four sections
+#### Scenario: winner-order-SC-139 - The page shows its four sections
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order in any status
@@ -56,7 +56,7 @@ Expired order status.
 - **THEN** the page shows Order Information, Collection Method, Order Status
   and Lots, in that order
 
-#### Scenario: winner-order-SC-73 - Invoice Status replaces Paid Status
+#### Scenario: winner-order-SC-140 - Invoice Status replaces Paid Status
 **Serves:** winner-order-US-04 - Winner pays an invoice by card
 
 - **GIVEN** an auction order whose invoice status is `paid`
@@ -64,7 +64,7 @@ Expired order status.
 - **THEN** it shows Invoice Status as Paid
 - **AND** no Paid Status label appears
 
-#### Scenario: winner-order-SC-74 - Each status step carries its time
+#### Scenario: winner-order-SC-141 - Each status step carries its time
 **Serves:** winner-order-US-07 - Winner confirms where a won lot ships
 
 - **GIVEN** an auction order that reached Awaiting Setup, Preparing Invoice,
@@ -103,56 +103,6 @@ session state.
 - **WHEN** the winner opens it
 - **THEN** the page shows the confirmed address
 - **AND** offers no invoice and no Pay Now
-
-### Requirement: The address form refuses empty required fields
-
-In Awaiting Setup the winner SHALL confirm a delivery address with these
-fields.
-
-| Field | Required |
-| --- | --- |
-| First Name | Yes |
-| Last Name | Yes |
-| Phone (country code and number) | Yes |
-| Company Name | No |
-| Country/Region | Yes |
-| Town/City | Yes |
-| Address Line 1 | Yes |
-| Address Line 2 | No |
-| Apt./Suite/Building | No |
-| State/Province/Region | Yes |
-| Postal Code | Yes |
-
-Confirming with any required field empty SHALL be refused, SHALL show an error
-on each empty required field, and SHALL keep the order in Awaiting Setup.
-Grade10 SHALL NOT check the phone number's format. The form SHALL NOT offer a
-billing address. Cancel SHALL leave the order in Awaiting Setup with no
-address confirmed.
-
-#### Scenario: winner-order-SC-46 - An empty required field is refused
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
-
-- **GIVEN** a winner on the address form with Town/City and Postal Code empty
-- **WHEN** they confirm the address
-- **THEN** Grade10 refuses it
-- **AND** an error shows on Town/City and on Postal Code
-- **AND** the order's status is still Awaiting Setup
-
-#### Scenario: winner-order-SC-47 - Optional fields may stay empty
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
-
-- **GIVEN** a winner who fills every required field and leaves Company Name,
-  Address Line 2 and Apt./Suite/Building empty
-- **WHEN** they confirm the address
-- **THEN** Grade10 accepts it
-- **AND** the order's status is Preparing Invoice
-
-#### Scenario: winner-order-SC-48 - Any phone number is accepted
-**Serves:** winner-order-US-07 - Winner confirms where a won lot ships
-
-- **GIVEN** a winner who enters a phone number of any length or format
-- **WHEN** they confirm an otherwise complete address
-- **THEN** Grade10 accepts the phone number
 
 ### Requirement: An unfinished card payment leaves the invoice payable
 

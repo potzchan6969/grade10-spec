@@ -33,7 +33,7 @@ followed.
 - **Resend wait** — Resend stays off for sixty seconds after each
   successful send, and the button counts down as **Resend (45)** (seconds
   left in parentheses). It turns on again at zero.
-- 🚧 **Link lifetime** — a sign-in link lasts five minutes, and the email
+- **Link lifetime** — a sign-in link lasts five minutes, and the email
   carrying it says five minutes; after that it is expired.
 - **Email-step wording** — the send action reads **Sign In with Email**;
   collectors never see the term magic link on the dialog.
@@ -50,10 +50,10 @@ session, and the person lands on the brand home with a toast.
   signed in without being reloaded, and whatever they were stopped from doing
   carries on. It is tried once, and a card that sold out while they were in
   their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
-- 🚧 **Expired** — the toast says the link has expired.
-- 🚧 **No longer works** — a used, replaced, or otherwise invalid link shares
+- **Expired** — the toast says the link has expired.
+- **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.
-- 🚧 **Banned** — a banned account's link follow shows they cannot sign in,
+- **Banned** — a banned account's link follow shows they cannot sign in,
   and does not invite them to ask for another link.
 - 🚧 **Different account** — when the person is already signed in as someone
   else, the link does not switch them. A toast says they are signed in with a
@@ -73,6 +73,12 @@ session, and the person lands on the brand home with a toast.
 ::story{id="auth-sign-in-link-follow-toasts--different-account" title="Different account toast"}
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4666-1488" title="Login Dialog"}
+
+:::detail{title="Code map" for="engineer"}
+- **Link lifetime** — `SIGN_IN_LINK_TTL_SECONDS`, beside `SIGN_IN_SEND_WINDOW_SECONDS`, in [`packages/grade10-auth/contracts`](https://github.com/9gag/grade10/blob/main/packages/grade10-auth/contracts/src/signIn.ts)
+- **Email copy** — `email.login.body`, in `packages/i18n/messages/shared/<locale>/email.json`
+- **E2E seams** — [docs/architecture/e2e.md](https://github.com/9gag/grade10/blob/main/docs/architecture/e2e.md)
+:::
 
 :::detail{title="Product decisions" for="pm"}
 The email step offered two buttons on one field, and both ended in the same

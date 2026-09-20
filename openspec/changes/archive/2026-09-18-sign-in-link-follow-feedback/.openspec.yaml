@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-14
+promoted_by: "@constancetang"
+decisions_waived: "opened before decisions.md existed; the scope is in the proposal, and the requirements and suites are written"
+deployed_at: "4bf1f5893"
+deployed_env: "production"

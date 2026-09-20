@@ -486,11 +486,13 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
-- **`actual` only** — `--include-draft` takes drafts and grey-bands them; a `deprecated` case never crosses
+- **`actual` only** — `--include-draft` takes drafts and amber-bands them; a `deprecated` case never crosses
 - **Automated is left out too** — a case whose Automation status is `automated` never crosses either, unless `--include-automated` says otherwise; the count crosses regardless, said in the run's own printout and on the Summary row's `Automated left out` column
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
-- **The case columns are locked** — a protected range refuses an edit at the cell. `Result`, `Notes`, `Tester` and `Date` are the tester's. A wrong case is fixed in `openspec/`
-- **The Summary tab is the register** — one row per run carrying its id, date, name, selection and commit, and counting results with live formulas
+- **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile`, `Notes`, `Tester` and `Date` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
+- **A journey is a row, not a column** — a banner above the cases that walk it, with a collapsible group beneath. Sorting happens inside the tab's filter view, which leaves the rows where they are
+- **Four surfaces, one vocabulary** — `to_do`, `pass`, `fail`, `blocked`, `skipped`, `n/a`. Every cell starts at `to_do` so the Summary counts down, except an automation column on a case whose **Automation status** is `manual`, which starts at `n/a`. `n/a` is a surface that cannot answer; `skipped` is an answer somebody chose not to take, and only `n/a` is left out of the pass rate
+- **The Summary tab is the register** — four rows per run, one per surface, each carrying the run's id, date, name, selection and commit, and counting results with live formulas
 - **Nothing returns** — no result reaches the store, and no suite carries one
 - **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
 - **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet

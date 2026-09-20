@@ -158,7 +158,9 @@ empty.
    `identity_checks` in both brands' store databases
 2. **Deploy the identity store** with `StoreKycService` before the store,
    which binds it
-3. **Deploy dark** — with no provider secret set nothing is raised and the
-   account page reads `unverified`; the gates still hold, so enable the
-   provider before the bar is reached by a real basket
+3. **Keep dormant** — optional identity code may be deployed behind feature-
+   flag or runtime wiring that is disabled in production. While disabled, the
+   account identity flow is unavailable and checkout and bid requests are not
+   identity-gated. Do not enable the feature until the threshold, accountable
+   Compliance owner, DPIA, DPA, and production rollout are approved.
 4. **Configure the vendor's second webhook** for the store's callback

@@ -27,14 +27,14 @@ export default function PaymentOverdueEmail({
   brandName = previewLot.brandName,
   lotTitle = previewLot.lotTitle,
   orderUrl = previewLot.orderUrl,
-  contactUrl = previewLot.contactUrl,
+  contactUrl = previewLot.paymentOverdueContactUrl,
   primaryImageUrl = previewLot.primaryImageUrl,
   invoiceTotal = previewLot.orderTotal,
   paymentDeadline = previewLot.paymentDeadline,
 }: PaymentOverdueProps) {
   return (
     <AuctionLetter
-      body="The payment deadline has passed. This order has expired. You can no longer pay on Grade10. Contact customer support promptly if you still want to claim this lot."
+      body="The payment deadline has passed. This order has expired. You can no longer pay on Grade10. Email support@grade10.com if you still want to claim this lot."
       brandName={brandName}
       campaign="payment_overdue"
       canUnsubscribe={false}
@@ -63,7 +63,7 @@ PaymentOverdueEmail.PreviewProps = {
   brandName: previewLot.brandName,
   lotTitle: previewLot.lotTitle,
   orderUrl: previewLot.orderUrl,
-  contactUrl: previewLot.contactUrl,
+  contactUrl: previewLot.paymentOverdueContactUrl,
   primaryImageUrl: previewLot.primaryImageUrl,
   invoiceTotal: previewLot.orderTotal,
   paymentDeadline: previewLot.paymentDeadline,

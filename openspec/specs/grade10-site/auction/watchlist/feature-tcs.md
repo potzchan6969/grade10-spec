@@ -386,30 +386,6 @@ to buy.
 * Email alerts for that listing are off.
 * Confirmation says the watch stayed.
 
-## Reconciliation
-
-| Spec scenario | Suite coverage |
-| --- | --- |
-| grade10-site-auction-watchlist-SC-01 | US1-TC1-1 |
-| grade10-site-auction-watchlist-SC-02 | US2-TC1-1 |
-| grade10-site-auction-watchlist-SC-03 | US1-TC2-1 |
-| grade10-site-auction-watchlist-SC-04 | US1-TC3-1 |
-| grade10-site-auction-watchlist-SC-05 | US1-TC1-1 |
-| grade10-site-auction-watchlist-SC-06 | US4-TC1-1 |
-| grade10-site-auction-watchlist-SC-07 | US4-TC1-1 |
-| grade10-site-auction-watchlist-SC-08 | US4-TC1-1 |
-| grade10-site-auction-watchlist-SC-09 | **Out of suite:** proven in auction backend feature tests; no UI assertion |
-| grade10-site-auction-watchlist-SC-10 | US4-TC1-1 |
-| grade10-site-auction-watchlist-SC-11 | US3-TC1-1 |
-| grade10-site-auction-watchlist-SC-12 | US3-TC2-1 |
-| grade10-site-auction-watchlist-SC-13 | US3-TC1-1 |
-| grade10-site-auction-watchlist-SC-14 | US2-TC3-1 |
-| grade10-site-auction-watchlist-SC-15 | US3-TC1-1 |
-| grade10-site-auction-watchlist-SC-16 | US3-TC3-1 |
-| grade10-site-auction-watchlist-SC-17 | US3-TC4-1 |
-| grade10-site-auction-watchlist-SC-18 | US2-TC2-1 |
-| grade10-site-auction-watchlist-SC-19 | US5-TC1-1 |
-
 ## Settled
 
 *None yet — suite pending review.*

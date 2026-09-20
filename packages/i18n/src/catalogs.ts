@@ -63,6 +63,7 @@ import sharedEnAppointment from "../messages/shared/en/appointment.json";
 import sharedEnAuction from "../messages/shared/en/auction.json";
 import sharedEnAuctionBiddingHistory from "../messages/shared/en/auctionBiddingHistory.json";
 import sharedEnAuctionListing from "../messages/shared/en/auctionListing.json";
+import sharedEnAuctionOrders from "../messages/shared/en/auctionOrders.json";
 import sharedEnAuctionRecord from "../messages/shared/en/auctionRecord.json";
 import sharedEnAuctionWatchlist from "../messages/shared/en/auctionWatchlist.json";
 import sharedEnCheckout from "../messages/shared/en/checkout.json";
@@ -87,6 +88,7 @@ import sharedKoAppointment from "../messages/shared/ko/appointment.json";
 import sharedKoAuction from "../messages/shared/ko/auction.json";
 import sharedKoAuctionBiddingHistory from "../messages/shared/ko/auctionBiddingHistory.json";
 import sharedKoAuctionListing from "../messages/shared/ko/auctionListing.json";
+import sharedKoAuctionOrders from "../messages/shared/ko/auctionOrders.json";
 import sharedKoAuctionRecord from "../messages/shared/ko/auctionRecord.json";
 import sharedKoAuctionWatchlist from "../messages/shared/ko/auctionWatchlist.json";
 import sharedKoCheckout from "../messages/shared/ko/checkout.json";
@@ -111,6 +113,7 @@ import sharedZhHansAppointment from "../messages/shared/zh-Hans/appointment.json
 import sharedZhHansAuction from "../messages/shared/zh-Hans/auction.json";
 import sharedZhHansAuctionBiddingHistory from "../messages/shared/zh-Hans/auctionBiddingHistory.json";
 import sharedZhHansAuctionListing from "../messages/shared/zh-Hans/auctionListing.json";
+import sharedZhHansAuctionOrders from "../messages/shared/zh-Hans/auctionOrders.json";
 import sharedZhHansAuctionRecord from "../messages/shared/zh-Hans/auctionRecord.json";
 import sharedZhHansAuctionWatchlist from "../messages/shared/zh-Hans/auctionWatchlist.json";
 import sharedZhHansCheckout from "../messages/shared/zh-Hans/checkout.json";
@@ -135,6 +138,7 @@ import sharedZhHantAppointment from "../messages/shared/zh-Hant/appointment.json
 import sharedZhHantAuction from "../messages/shared/zh-Hant/auction.json";
 import sharedZhHantAuctionBiddingHistory from "../messages/shared/zh-Hant/auctionBiddingHistory.json";
 import sharedZhHantAuctionListing from "../messages/shared/zh-Hant/auctionListing.json";
+import sharedZhHantAuctionOrders from "../messages/shared/zh-Hant/auctionOrders.json";
 import sharedZhHantAuctionRecord from "../messages/shared/zh-Hant/auctionRecord.json";
 import sharedZhHantAuctionWatchlist from "../messages/shared/zh-Hant/auctionWatchlist.json";
 import sharedZhHantCheckout from "../messages/shared/zh-Hant/checkout.json";
@@ -175,6 +179,7 @@ export const sharedCatalogs = {
     auctionBiddingHistory: sharedEnAuctionBiddingHistory,
     auctionRecord: sharedEnAuctionRecord,
     auctionListing: sharedEnAuctionListing,
+    auctionOrders: sharedEnAuctionOrders,
     auctionWatchlist: sharedEnAuctionWatchlist,
     checkout: sharedEnCheckout,
     chrome: sharedEnChrome,
@@ -201,6 +206,7 @@ export const sharedCatalogs = {
     auctionBiddingHistory: sharedZhHantAuctionBiddingHistory,
     auctionRecord: sharedZhHantAuctionRecord,
     auctionListing: sharedZhHantAuctionListing,
+    auctionOrders: sharedZhHantAuctionOrders,
     auctionWatchlist: sharedZhHantAuctionWatchlist,
     checkout: sharedZhHantCheckout,
     chrome: sharedZhHantChrome,
@@ -227,6 +233,7 @@ export const sharedCatalogs = {
     auctionBiddingHistory: sharedZhHansAuctionBiddingHistory,
     auctionRecord: sharedZhHansAuctionRecord,
     auctionListing: sharedZhHansAuctionListing,
+    auctionOrders: sharedZhHansAuctionOrders,
     auctionWatchlist: sharedZhHansAuctionWatchlist,
     checkout: sharedZhHansCheckout,
     chrome: sharedZhHansChrome,
@@ -253,6 +260,7 @@ export const sharedCatalogs = {
     auctionBiddingHistory: sharedKoAuctionBiddingHistory,
     auctionRecord: sharedKoAuctionRecord,
     auctionListing: sharedKoAuctionListing,
+    auctionOrders: sharedKoAuctionOrders,
     auctionWatchlist: sharedKoAuctionWatchlist,
     checkout: sharedKoCheckout,
     chrome: sharedKoChrome,

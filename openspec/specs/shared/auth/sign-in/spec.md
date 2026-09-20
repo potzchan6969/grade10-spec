@@ -15,8 +15,10 @@ contract for leaving a session.
   - Only email method: the email step sends a link and nothing else
   - Sent confirmation: after a send that went out, title the dialog Check Your Email, name the address on its own line, and offer Resend
   - Resend wait: Resend stays off for sixty seconds after each successful send, counting down on the button
-  - Link lifetime: a sign-in link lasts sixty seconds
+  - Link lifetime: a sign-in link lasts five minutes, and the email carrying it says five minutes
   - One-time session: an unused unexpired link signs in once
+  - Failed follow feedback: expired, dead, and banned links land on the brand home with a toast
+  - Followed elsewhere: the surface that asked carries on once the session arrives
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
 - Account identity
@@ -26,7 +28,9 @@ contract for leaving a session.
   - Trusted return: an untrusted redirect is ignored
 - Surface wording
   - Sign in with email: the email-step action and dialog copy never say magic link to the collector
+
 ## Requirements
+
 ### Requirement: A sign-in command in flight cannot be duplicated
 
 WHILE a sign-in command's request is running, activating the same command
@@ -350,18 +354,6 @@ animation — `prefers-reduced-motion` does not remove it.
 - **THEN** Resend is disabled again for sixty seconds
 - **AND** its label is **Resend (n)** with the whole seconds left
 
-### Requirement: A sign-in link lasts sixty seconds
-
-A sign-in link's time to live SHALL be sixty seconds from when it was sent. A
-link whose time to live has ended SHALL NOT create a session.
-
-#### Scenario: shared-auth-sign-in-SC-49 - A link older than sixty seconds does not sign in
-**Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
-
-- **GIVEN** a sign-in link sent more than sixty seconds ago
-- **WHEN** anyone follows that link
-- **THEN** no session is created
-
 ### Requirement: The email-step action is worded as sign-in with email
 
 The email step's send action SHALL be labelled as signing in with email. The
@@ -374,3 +366,214 @@ sign-in surface's user-facing copy SHALL NOT use the term magic link.
 - **THEN** the send action is labelled **Sign In with Email**
 - **AND** no control on the surface uses the words magic link
 
+### Requirement: A sign-in dialog closes when the session arrives
+
+WHEN a session arrives for a surface that is showing the sign-in dialog, that
+surface SHALL close the dialog and SHALL show the person signed in, on the
+terms `shared/auth/session` sets for keeping up. The person SHALL NOT have to
+dismiss the dialog or reload the surface. Nothing SHALL announce the close.
+
+#### Scenario: shared-auth-sign-in-SC-50 - The dialog on the surface that asked closes
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a surface showing the sign-in dialog after a sign-in link was
+  asked for there
+- **WHEN** the collector follows that link elsewhere on this device and
+  returns to the surface that asked
+- **THEN** the sign-in dialog is gone
+- **AND** the surface shows them signed in
+- **AND** no message on it announces that the session arrived
+
+#### Scenario: shared-auth-sign-in-SC-51 - A dialog on a surface that did not ask closes too
+**Serves:** Emailed link - a session arriving leaves no sign-in dialog open on the brand
+
+- **GIVEN** two surfaces of one brand open in a browser, each showing the
+  sign-in dialog, and a sign-in link asked for on only one of them
+- **WHEN** the collector follows that link elsewhere on this device and
+  returns to each surface
+- **THEN** the sign-in dialog is gone from both
+- **AND** both show them signed in
+
+### Requirement: The surface that asked completes the action it refused
+
+WHEN a session arrives for a surface where the person was refused an action
+and sign-in was asked of them, that surface SHALL carry out that action — the
+add, the bid, the navigation they were stopped before — without the person
+activating it again, and SHALL carry it out at most once. The action SHALL be
+attempted against the world as it stands: one that can no longer be done SHALL
+be refused the way that action is ordinarily refused, and SHALL NOT be passed
+over in silence. WHEN nothing was refused on that surface, it SHALL carry out
+nothing beyond closing the dialog.
+
+#### Scenario: shared-auth-sign-in-SC-52 - The refused action is carried out
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a collector who was stopped from adding an item to their cart and
+  asked for a sign-in link on that surface
+- **WHEN** they follow that link elsewhere on this device and return to the
+  surface that asked
+- **THEN** that item is in their cart
+- **AND** they did not activate the add a second time
+
+#### Scenario: shared-auth-sign-in-SC-53 - The refused navigation is carried out
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a collector who was stopped before a page that needs a session and
+  asked for a sign-in link on that surface
+- **WHEN** they follow that link elsewhere on this device and return to the
+  surface that asked
+- **THEN** that surface is on the page they were stopped before
+
+#### Scenario: shared-auth-sign-in-SC-54 - A dialog with nothing behind it only closes
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a collector who opened sign-in from a sign-in control, with no
+  action refused behind it, and asked for a link there
+- **WHEN** they follow that link elsewhere on this device and return to the
+  surface that asked
+- **THEN** the sign-in dialog is gone
+- **AND** the surface shows them signed in
+- **AND** no action is carried out on their behalf
+
+#### Scenario: shared-auth-sign-in-SC-55 - A link that creates no session leaves the asking surface as it was
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a surface showing the sign-in dialog after a sign-in link was
+  asked for there
+- **WHEN** that link is followed elsewhere on this device and creates no
+  session
+- **THEN** the surface that asked still shows the sign-in dialog
+- **AND** the action it refused is not carried out
+- **AND** nothing on it announces that the follow failed
+
+#### Scenario: shared-auth-sign-in-SC-56 - An action that can no longer be done is refused, not skipped
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a collector who was stopped from adding an item to their cart and
+  asked for a sign-in link on that surface
+- **AND** that item can no longer be added by the time they return
+- **WHEN** they follow that link elsewhere on this device and return to the
+  surface that asked
+- **THEN** the surface reports the refusal that action is ordinarily refused
+  with
+- **AND** it does not pass the action over in silence
+
+#### Scenario: shared-auth-sign-in-SC-57 - The refused action is carried out once, not once per return
+**Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
+
+- **GIVEN** a collector who was stopped from adding an item to their cart,
+  asked for a sign-in link on that surface, and had the add carried out when
+  the session arrived
+- **WHEN** they leave that surface and return to it again
+- **THEN** the add is not carried out a second time
+- **AND** their cart holds that item once
+
+### Requirement: A sign-in link lasts five minutes
+
+A sign-in link's time to live SHALL be five minutes from the send. A link
+followed five minutes or more after its send SHALL NOT create a session, and
+the lifetime SHALL be measured on our own clock. The lifetime SHALL be
+independent of the resend wait: the wait running out SHALL NOT end the life of
+the link already sent.
+
+#### Scenario: shared-auth-sign-in-SC-58 - A link followed inside five minutes signs in
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
+
+- **GIVEN** an unused sign-in link sent four minutes ago
+- **AND** no later sign-in-link email has gone to that address
+- **WHEN** the person follows that link
+- **THEN** they are signed in as the account for that address
+
+#### Scenario: shared-auth-sign-in-SC-59 - A link five minutes old does not sign in
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
+
+- **GIVEN** a sign-in link sent five minutes ago
+- **WHEN** anyone follows that link
+- **THEN** no session is created
+
+#### Scenario: shared-auth-sign-in-SC-60 - The resend wait running out leaves the link alive
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
+
+- **GIVEN** an unused sign-in link sent more than sixty seconds ago
+- **AND** the resend wait for that address has run out with no second send
+- **WHEN** the person follows that link
+- **THEN** they are signed in as the account for that address
+
+#### Scenario: shared-auth-sign-in-SC-62 - A device clock does not revive an expired link
+**Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
+
+- **GIVEN** a sign-in link whose five minutes have run out
+- **WHEN** anyone follows it from a device whose clock reads inside those five
+  minutes
+- **THEN** no session is created
+
+### Requirement: The sign-in email states how long the link lasts
+
+The sign-in-link email SHALL state that the link lasts five minutes, in every
+language it is sent in, and SHALL NOT name another lifetime.
+
+#### Scenario: shared-auth-sign-in-SC-61 - The sign-in email says five minutes
+**Serves:** Emailed link - what the email promises about the link it carries
+
+- **WHEN** a sign-in-link email is sent
+- **THEN** its body states that the link lasts five minutes
+- **AND** it names no other lifetime
+- **AND** it says so in the language the email is written in
+
+### Requirement: A failed link follow lands on the brand home with a toast
+
+WHEN anyone follows a sign-in link that does not create a session, the system
+SHALL leave them on this brand's home and SHALL announce the failure in a
+toast. An expired link SHALL use the expired announcement. A used,
+superseded, or otherwise invalid link SHALL use one shared announcement that
+the link no longer works. WHEN the account for that address is banned, the
+follow SHALL create no session, SHALL leave them on this brand's home, and
+SHALL use the cannot-sign-in announcement — not the expired or no-longer-works
+announcement.
+
+#### Scenario: shared-auth-sign-in-SC-37 - An expired link toasts on the brand home
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
+
+- **GIVEN** a sign-in link whose time to live has ended
+- **WHEN** anyone follows that link
+- **THEN** no session is created
+- **AND** they are on this brand's home
+- **AND** a toast states that the link has expired
+
+#### Scenario: shared-auth-sign-in-SC-38 - A used link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
+
+- **GIVEN** a sign-in link that has already created a session
+- **WHEN** anyone follows that link again
+- **THEN** no new session is created
+- **AND** they are on this brand's home
+- **AND** a toast states that the link no longer works
+
+#### Scenario: shared-auth-sign-in-SC-39 - A superseded link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
+
+- **GIVEN** an unused unexpired sign-in link that a later sign-in-link email
+  for the same address replaced
+- **WHEN** anyone follows the earlier link
+- **THEN** no session is created
+- **AND** they are on this brand's home
+- **AND** a toast states that the link no longer works
+
+#### Scenario: shared-auth-sign-in-SC-40 - An invalid link toasts that it no longer works
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
+
+- **GIVEN** a sign-in link token that is malformed or unknown
+- **WHEN** anyone follows that link
+- **THEN** no session is created
+- **AND** they are on this brand's home
+- **AND** a toast states that the link no longer works
+
+#### Scenario: shared-auth-sign-in-SC-41 - A banned account's link follow toasts cannot sign in
+**Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
+
+- **GIVEN** a banned account and a sign-in link for that account's address
+- **WHEN** anyone follows that link
+- **THEN** no session is created
+- **AND** they are on this brand's home
+- **AND** a toast states that they cannot sign in
+- **AND** the toast does not invite them to request another link

@@ -219,15 +219,16 @@ A collector SHALL be able to unwatch such a listing.
 
 Each entry SHALL carry enough to decide whether to act, in the shape
 that listing's own surface uses. A closed listing SHALL be shown as
-closed. A called-off listing SHALL be shown as called off rather than
-as still open. A close SHALL follow `dates-and-times`.
+closed. A called-off listing SHALL NOT appear on the watched list — it
+is hidden with draft lots under `grade10-site/auction/lot-status`. A
+close SHALL follow `dates-and-times`.
 
 | Field | Meaning |
 | --- | --- |
 | Listing | Identity of the watched listing |
 | Current bid | Same shape as that listing's own surface |
 | Closes At | Same shape as that listing's close |
-| Sale state | Open, closed, or called off |
+| Sale state | Open or closed |
 
 #### Scenario: grade10-site-auction-watchlist-SC-15 - An entry carries the facts needed to act
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
@@ -249,4 +250,4 @@ as still open. A close SHALL follow `dates-and-times`.
 
 - **GIVEN** a collector watching a listing an operator then calls off
 - **WHEN** they read the listings they watch
-- **THEN** that listing is shown as called off, not as open
+- **THEN** that listing is not listed

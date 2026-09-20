@@ -1,5 +1,9 @@
 **Author:** @jeffffej0909 - 2026-09-17
 
+**Extended by:** @tangconst - 2026-09-17 — Winner Order Partially Paid surface
+from Storybook: warning Contact Us alert (no balance figure), wrapping
+Receipt · P1 / P2 row, My Auctions Partially Paid Status badge; `ui-design.md`.
+
 ## Why
 
 An auction winner today can only settle an invoice at its full amount — by

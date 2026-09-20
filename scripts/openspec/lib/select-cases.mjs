@@ -10,7 +10,7 @@
  * the steps the validator judged.
  */
 
-import { CASE_COLUMNS } from "./run-sheet-layout.mjs";
+import { COLUMNS } from "./run-sheet-layout.mjs";
 import { isAutomated, prop, readAllSuites } from "./suites.mjs";
 
 /** `grade10-site/store/home` → product, domain, capability. A domain suite
@@ -155,35 +155,81 @@ export function automatedGateOf({ picked, refused, includeAutomated = false }) {
   };
 }
 
-/** A case as its row, in `CASE_COLUMNS` order. The marking columns stay empty:
- *  they are the tester's. */
+/**
+ * A case as its row, in `COLUMNS` order.
+ *
+ * The four surface cells arrive filled in, not empty. `to_do` is what makes the
+ * Summary's progress honest: an empty cell is indistinguishable from a tab
+ * nobody opened, where a column of `to_do` counts down as a tester works. The
+ * automation columns of a case no automated test covers get `n/a` instead -
+ * there is nothing there to do, and the case's `Automation status` is the only
+ * record of that, so the prefill is where it reaches the sheet.
+ *
+ * Nothing carries the automation status as its own column any more. The pair of
+ * `n/a`s says it, and a column saying it again would be a second place for it
+ * to be wrong.
+ */
 export function caseRow({ read, tc }) {
   const { product, domain, capability } = splitCapability(read.capabilityId);
   const steps = tc.stepTexts.map((one, i) => `${i + 1}. ${one}`);
   if (tc.perRow) steps.unshift("Runs once per row of Test data.");
+  const automated = prop(tc, "Automation status").toLowerCase() === "automated";
   const cells = {
     "Case ID": tc.id,
-    Level: read.level,
-    Product: product,
-    Domain: domain,
-    Capability: capability,
-    Journey: tc.journey?.raw ?? "",
-    "Journey title": tc.journey?.title ?? "",
     Title: tc.title,
-    Severity: prop(tc, "Severity"),
-    Priority: prop(tc, "Priority"),
-    Suites: prop(tc, "Suites"),
-    Type: prop(tc, "Type"),
-    Behaviour: prop(tc, "Behaviour"),
-    Layer: prop(tc, "Layer"),
-    "Automation status": prop(tc, "Automation status"),
     "Pre-conditions": tc.preconditions,
     "Test data": tc.testData.map((r) => `${r.field}: ${r.value}`).join("\n"),
     Steps: steps.join("\n"),
     "Expected results": tc.expectedTexts.join("\n"),
-    Source: read.rel,
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": automated ? "to_do" : "n/a",
+    "Auto mobile": automated ? "to_do" : "n/a",
+    Product: product,
+    Domain: domain,
+    Capability: capability,
+    Level: read.level,
+    Layer: prop(tc, "Layer"),
+    Severity: prop(tc, "Severity"),
+    Priority: prop(tc, "Priority"),
   };
-  return CASE_COLUMNS.map((name) => cells[name] ?? "");
+  return COLUMNS.map((name) => cells[name] ?? "");
+}
+
+/** A journey's banner row: its id and title in the first cell, the rest empty
+ *  so the text overflows across them. */
+export function journeyRow(journey) {
+  const label = [journey?.raw, journey?.title].filter(Boolean).join(" — ");
+  return [label, ...Array(COLUMNS.length - 1).fill("")];
+}
+
+/**
+ * The grid a run tab is written from: a banner row per journey, then the cases
+ * that walk it.
+ *
+ * The journey is a row rather than a repeated column because it repeats. A
+ * `Journey title` column spent 200 pixels of the reading path restating the
+ * same sentence on every row of a group, and the group already has a shape.
+ *
+ * `lines` runs parallel to `rows` and is what the formatting reads: a request
+ * that bands a draft case or groups a journey needs to know which row is which,
+ * and recovering that from the strings afterwards would be guesswork.
+ */
+export function buildGrid(picked) {
+  const rows = [];
+  const lines = [];
+  let last = null;
+  for (const one of picked) {
+    const key = one.tc.journey?.raw ?? "";
+    if (key !== last) {
+      rows.push(journeyRow(one.tc.journey));
+      lines.push({ kind: "journey", key });
+      last = key;
+    }
+    rows.push(caseRow(one));
+    lines.push({ kind: "case", one });
+  }
+  return { rows, lines };
 }
 
 /** Picked cases in reading order: by source file, then by journey, then by the

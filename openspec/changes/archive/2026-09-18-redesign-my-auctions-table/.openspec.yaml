@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-10
+page_waived: "predates the page rule"
+promoted_by: "@htonyl"
+deploy_waived: "@htonyl requested archive; no successful deploy run contains the final bid-row Unwatch fix"

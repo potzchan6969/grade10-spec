@@ -1,0 +1,3 @@
+schema: grade10-planning
+created: 2026-09-17
+deploy_waived: "@htonyl explicitly requested archive without deployment evidence after PR #522 merged as 31e67d9"

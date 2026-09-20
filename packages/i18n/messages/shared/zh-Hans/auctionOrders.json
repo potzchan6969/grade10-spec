@@ -1,0 +1,47 @@
+{
+  "title": "我的拍卖订单",
+  "menu": "我的拍卖订单",
+  "intro": "你竞得的拍品订单。",
+  "loading": "正在加载你的拍卖订单…",
+  "loadFailed": "无法加载你的拍卖订单。",
+  "retry": "重试",
+  "emptyTitle": "暂无拍卖订单",
+  "emptyDescription": "你竞得拍品后，相关订单会显示在这里。",
+  "myAuctions": "我的拍卖",
+  "viewLot": "查看拍品",
+  "completeOrderSetup": "完成订单设置",
+  "payInvoice": "支付发票",
+  "viewDetail": "查看详情",
+  "contactUs": "联系我们",
+  "contactDialog": {
+    "title": "给 Grade10 发邮件",
+    "to": "收件人",
+    "subject": "主题",
+    "message": "正文",
+    "copyAddress": "复制地址",
+    "addressCopied": "已复制地址",
+    "copySubject": "复制主题",
+    "subjectCopied": "已复制主题",
+    "copyMessage": "复制正文",
+    "messageCopied": "已复制正文",
+    "copyAddressManual": "请手动复制地址",
+    "copySubjectManual": "请手动复制主题",
+    "copyMessageManual": "请手动复制正文",
+    "openMailApp": "打开邮件应用"
+  },
+  "tabs": {
+    "active": "进行中",
+    "upcoming": "即将开始",
+    "ended": "已结束"
+  },
+  "status": {
+    "awaitingSetup": "等待设置",
+    "preparingInvoice": "准备发票中",
+    "pendingPayment": "待付款",
+    "processing": "处理中",
+    "shipped": "已发货",
+    "delivered": "已送达",
+    "cancelled": "已取消",
+    "refunded": "已退款"
+  }
+}

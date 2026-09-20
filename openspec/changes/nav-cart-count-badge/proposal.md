@@ -28,16 +28,7 @@ count equal to the drawer title badge; with none, the badge is absent.
 
 ## Non-Goals
 
-- Deriving sold-out / unavailable exclusion inside the chrome — the
-  application supplies the same active count `CartDrawerHeader` already uses
-  (`shared/ui/store-cart`).
-- Changing the cart drawer badge, empty state, or cleanup rules.
-- Wiring live cart state in grade10-site (application work once Store chrome
-  is on).
-- Truncating large counts to `99+` or similar — the indicator shows the full
-  number, as the drawer title badge does.
-- Auction-first surfaces that omit the cart control.
-- Teaching design-system `Nav` about cart counts.
+See [Non-Goals](decisions.md#non-goals).
 
 ## Capabilities
 
@@ -57,8 +48,9 @@ count equal to the drawer title badge; with none, the badge is absent.
 ## Open Questions
 
 None — count meaning stays with store-cart (exclude sold-out); `SiteHeader`
-only displays the supplied number; hide when empty or omitted. Ownership on
-`SiteHeader` (not `Nav`) confirmed as the product choice.
+only displays the supplied number; hide when empty, omitted, or unknown;
+signed-out has no guest cart and no badge; ownership on `SiteHeader` (not
+`Nav`) is the product choice.
 
 ## References
 

@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-17
+promoted_by: "@htonyl"
+depends_on:
+  - add-winner-bank-transfer
+  - add-winner-partial-payment
+  - add-winner-refund

@@ -48,3 +48,15 @@ payments that failed,
 **As an** auction operator,
 **I want** the queue to label a lot still taking bids past its scheduled close,
 **so that** I can tell a lot running long from one that closed on time.
+
+### post-sale-US-11: Operator adds a missing billing address before sending
+
+**As an** operator,
+**I want** to add the billing address to an order that has none before I send its invoice,
+**so that** no invoice goes out without a billing address the winner gave.
+
+### post-sale-US-10: Operator checks a winner's payment proof
+
+**As a** payment operator,
+**I want** to see the proof a winner uploaded against the invoice, then confirm the payment or return the invoice with a reason,
+**so that** money I can match settles the order, and a winner whose proof I cannot match knows why and keeps the time they had.

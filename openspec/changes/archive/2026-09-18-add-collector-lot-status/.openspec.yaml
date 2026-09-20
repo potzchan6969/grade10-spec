@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-11
+promoted_by: htonyl
+deploy_waived: "User explicitly requested archival without deployment evidence after merged PR #518; CI failures are unrelated app-env and api-docs drift"
+tasks_waived: "Owner waived remaining verification checkboxes: implementation shipped in PR #518; targeted auction/backend/frontend suites and lint/typecheck passed, while the two full backend failures are unrelated app-env and api-docs drift"

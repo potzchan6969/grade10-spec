@@ -6,7 +6,7 @@ import { previewLot } from "@/emails/auction/_components/preview-lot";
 
 /**
  * Preview — watcher when the lot sold (pass `winningBid` → **Sold for**).
- * Letter: `LotWatchedEmail` in `_components/lot-watched`.
+ * Campaign `lot_watched_sold`. Letter: `LotWatchedEmail` in `_components/lot-watched`.
  */
 export default function LotWatchedSoldEmail(props: LotWatchedProps) {
   return <LotWatchedEmail {...props} />;

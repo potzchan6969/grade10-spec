@@ -24,6 +24,12 @@
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
 
+### shared-auth-sign-in-US-06: Collector follows a link that cannot sign them in
+
+**As a** collector who opened a sign-in link from email,
+**I want** a clear toast on the brand home when that link cannot create a session,
+**so that** I know whether to ask for a new link or that I cannot sign in at all.
+
 ### shared-auth-sign-in-US-07: Collector confirms the send and can resend
 
 **As a** collector,
@@ -31,3 +37,9 @@
 own line, and let me resend after a short wait,
 **so that** I know where to look and can ask again without a Back control into
 the entry step.
+
+### shared-auth-sign-in-US-08: Collector follows the link and the tab that asked carries on
+
+**As a** collector who asked for a sign-in link and followed it in another tab,
+**I want** the tab I asked from to finish what it stopped me doing,
+**so that** I am not sent back to press the same thing a second time.

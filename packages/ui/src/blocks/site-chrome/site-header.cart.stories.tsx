@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
@@ -31,6 +31,7 @@ const meta = {
     onCartClick: fn(),
     onSignIn: fn(),
     onProfile: fn(),
+    onMyOrders: fn(),
     onMyAuctions: fn(),
     onSignOut: fn(),
   },
@@ -172,5 +173,31 @@ export const OnAuctionSurface: Story = {
       canvas.getByRole("button", { name: "Cart (2)" }),
     ).toBeInTheDocument();
     expect(cartBadge(canvasElement)).toHaveTextContent("2");
+  },
+};
+
+/**
+ * Post-store: My Orders joins the menu once its handler is supplied, between
+ * Profile and My Auctions. Activating it invokes exactly its own handler.
+ */
+export const AccountMenu: Story = {
+  name: "Account menu open (post-store)",
+  args: { session: "signed-in", accountMenuDefaultOpen: true },
+  play: async ({ canvasElement, args }) => {
+    const body = within(canvasElement.ownerDocument.body);
+    const items = await body.findAllByRole("menuitem");
+    expect(items.map((item) => item.textContent)).toEqual([
+      "Profile",
+      "My Orders",
+      "My Auctions",
+      "Sign out",
+    ]);
+
+    await userEvent.click(body.getByRole("menuitem", { name: "My Orders" }));
+
+    expect(args.onMyOrders).toHaveBeenCalledTimes(1);
+    expect(args.onProfile).not.toHaveBeenCalled();
+    expect(args.onMyAuctions).not.toHaveBeenCalled();
+    expect(args.onSignOut).not.toHaveBeenCalled();
   },
 };

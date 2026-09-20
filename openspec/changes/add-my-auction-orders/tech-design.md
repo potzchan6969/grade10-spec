@@ -3,7 +3,7 @@
 The `revise-auction-winner-invoicing` change owns auction-order lifecycle,
 invoice status, address confirmation and payment confirmation. Its contract
 adds `not_issued` and `expired` invoice statuses; an expired invoice derives
-the order as Pending Payment and remains payable. This change consumes that
+the order as Pending Payment and routes the winner to Contact Us. This change consumes that
 contract for the collector's list and order route.
 
 The current shared UI evidence has one `AuctionRecord` table body. The
@@ -59,8 +59,8 @@ the correct side of the application/shared-component boundary.
   `order-status` chain. It performs the two-band/newest-close ordering on the
   server so pagination or retries cannot produce a client-only ordering.
 - **Expired invoices:** The read model returns invoice status `expired` and
-  derived order status Pending Payment. The row action is Pay Invoice and the
-  detail read includes the invoice and Pay Now. No client maps expiry to a
+  derived order status Pending Payment. The row opens the order detail, which
+  includes the invoice and Contact Us instead of Pay Now. No client maps expiry to a
   terminal or non-payable order state.
 - **Status timeline:** `reachedAt` values are projected from the authoritative
   lifecycle event timestamps already owned by the order, address, invoice,

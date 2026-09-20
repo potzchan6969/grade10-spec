@@ -1,5 +1,5 @@
 import type { Meta } from "@storybook/react-vite";
-import { expect, waitFor } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   WINNER_ORDER_STATUS_LABELS,
   type WinnerOrderStatus,
@@ -56,4 +56,39 @@ async function winnerOrderSettled(canvasElement: HTMLElement) {
   await waitFor(() => expect(winnerOrderRevealed(canvasElement)).toBe(true));
 }
 
-export { winnerOrderMeta, winnerOrderRevealed, winnerOrderSettled };
+/** Opens Contact Us and checks the copy-first ready email. */
+async function winnerOrderContactSheet(
+  canvasElement: HTMLElement,
+  expectedSubject: string,
+) {
+  const canvas = within(canvasElement);
+  const page = within(canvasElement.ownerDocument.body);
+  expect(canvas.queryByText(/support@grade10.com/)).not.toBeInTheDocument();
+  const sidebar = within(canvas.getByRole("complementary"));
+  await userEvent.click(sidebar.getByRole("button", { name: "Contact Us" }));
+  const dialog = await waitFor(() => {
+    const found = page.getByRole("dialog", { name: "Email Grade10" });
+    expect(found).toBeVisible();
+    return found;
+  });
+  const modal = within(dialog);
+  expect(modal.getByText("support@grade10.com")).toBeVisible();
+  expect(modal.getByText(expectedSubject)).toBeVisible();
+  expect(modal.getByLabelText("Message")).toBeVisible();
+  expect(modal.getByRole("button", { name: "Copy Message" })).toBeVisible();
+  expect(
+    modal.queryByRole("button", { name: "Copy message" }),
+  ).not.toBeInTheDocument();
+  const mailLink = modal.getByRole("button", { name: "Open Mail App" });
+  expect(mailLink).toHaveAttribute(
+    "href",
+    expect.stringMatching(/^mailto:support@grade10\.com\?subject=/),
+  );
+}
+
+export {
+  winnerOrderContactSheet,
+  winnerOrderMeta,
+  winnerOrderRevealed,
+  winnerOrderSettled,
+};

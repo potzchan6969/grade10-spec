@@ -16,7 +16,7 @@ Storybook composition under test once the host lands: Store page assemblies in
 ## Components
 
 - `Nav` / `SiteHeader` — Cart in the header on every surface once the Store
-  cart drawer answers (page-shell on `auction-first-site-header`; layout SoT
+  cart drawer answers (durable `grade10-site/site/page-shell`; layout SoT
   `site-chrome-siteheader-cart--on-auction-surface`).
 - `Toast` from `@grade10/design-system` — one application toast host (review
   failure; unavailable cleanup via the shared drawer).
@@ -45,15 +45,15 @@ States combine this change's Grade10 scenarios with durable
 | State | Spec scenarios |
 | --- | --- |
 | Cart absent until drawer answers; then global (incl. Auction) | `grade10-site-site-page-shell-SC-09`, `grade10-site-site-page-shell-SC-16`; Storybook `site-chrome-siteheader-cart--on-auction-surface` |
-| Opens over surface; close keeps address | `grade10-site-store-cart-drawer-SC-01`, `SC-02` |
-| Guest vs member scoped cart | `SC-03`, `SC-04` |
-| Every open starts a fresh read | `SC-05` |
-| Pending / failed review | `SC-06`–`SC-08`; loading bones `shared-ui-store-cart-SC-08` |
-| Reviewed summary; neutral shipping/total; read-only promo and points context | `SC-09`, `SC-10`, `SC-16`–`SC-19` |
+| Opens over surface; close keeps address | `grade10-site-store-cart-drawer-SC-01`, `grade10-site-store-cart-drawer-SC-02` |
+| Signed-in member cart; signed-out access is gated before the drawer | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`–`SC-24` |
+| Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
+| Pending / failed review | `grade10-site-store-cart-drawer-SC-06`–`grade10-site-store-cart-drawer-SC-08`; loading bones `shared-ui-store-cart-SC-08` |
+| Reviewed summary; neutral shipping/total; read-only promo and points context | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
 | Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
-| Unavailable cleanup | `SC-12`; `shared-ui-store-cart-SC-10`, `SC-11` |
-| Quantity / remove | `SC-11` |
-| Line → product; Checkout → `/checkout` | `SC-13`, `SC-15`; redirecting `shared-ui-store-cart-SC-09` |
+| Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
+| Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
+| Line → product; Checkout → `/checkout` | `grade10-site-store-cart-drawer-SC-13`, `grade10-site-store-cart-drawer-SC-15`; redirecting `shared-ui-store-cart-SC-09` |
 | Close / backdrop / Escape | `shared-ui-store-cart-SC-06` |
 
 Browse More is out of scope for this host: the shared surface no longer exposes

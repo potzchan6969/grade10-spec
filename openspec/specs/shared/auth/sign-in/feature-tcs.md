@@ -4,6 +4,11 @@
 **Drafts styled:** 2026-09-15, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
+## Background
+
+* Every tab a case names is open in one browser on one device, unless the case names another device.
+* A tab is returned to as the person left it, never reloaded.
+
 ## shared-auth-sign-in-US1: Collector asks for and follows a sign-in link
 
 **As a** collector,
@@ -286,6 +291,388 @@ customer is on <grade10 sign-in url>, signed out.
 
 * The surface states that the link was not sent.
 * The person is not signed in.
+
+### shared-auth-sign-in-US1-TC9-1: Link followed inside five minutes signs the collector in
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* A sign-in email for collector@example.com, an address with an account, has gone out and its link is unused.
+
+**Test data:**
+
+Runs once per row of **Test data**.
+
+| `<follow delay>` | Grade10 answers |
+| --- | --- |
+| 4 minutes after the send | signs the collector in |
+| 4 minutes 59 seconds after the send | signs the collector in |
+
+**Steps:**
+
+1. Let `<follow delay>` pass after the send.
+2. Follow the link in the sign-in email.
+
+**Expected Results:**
+
+* Grade10 answers as the row states.
+* The signed-in account is the one for collector@example.com.
+
+### shared-auth-sign-in-US1-TC10-1: Resend countdown reaching zero leaves the sent link alive
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is on <grade10 sign-in url>, signed out, at the confirmation step.
+* A sign-in email for <collector email> has gone out and <sign-in link> is unused.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<sign-in link>` | The unused link from that sign-in email |
+
+**Steps:**
+
+1. Wait for the Resend control to turn on again, without resending.
+2. Follow <sign-in link>, ninety seconds after the send.
+
+**Expected Results:**
+
+* The link signs the collector in.
+* The signed-in account is the one for <collector email>.
+
+### shared-auth-sign-in-US1-TC11-1: A resent link's five minutes run from its own send
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is on <grade10 sign-in url>, signed out, at the confirmation step.
+* A first sign-in email for <collector email> went out sixty seconds ago and its link is unused.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<later link>` | The link from the second sign-in email |
+
+**Steps:**
+
+1. Resend the sign-in email.
+2. Let four minutes pass after the second send.
+3. Follow <later link>.
+
+**Expected Results:**
+
+* The link signs the collector in, five minutes after the first send.
+* The signed-in account is the one for <collector email>.
+
+### shared-auth-sign-in-US1-TC12-1: The session outlives the link that created it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* A sign-in link for <collector email> is unused and four minutes past its send.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<sign-in link>` | The unused link from that sign-in email |
+
+**Steps:**
+
+1. Follow <sign-in link>.
+2. Let a further ten minutes pass.
+3. Reload the account page.
+
+**Expected Results:**
+
+* Step 1 signs the collector in.
+* The collector is still signed in fifteen minutes after the send.
+
+### shared-auth-sign-in-US1-TC13-1: Recorded link expiry is five minutes after the send
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* No unused sign-in link exists for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<send time>` | The instant the sign-in email is sent |
+
+**Steps:**
+
+1. Send a sign-in link to <collector email> at <send time>.
+2. Read the recorded expiry for that link.
+3. Let the sixty-second resend wait end and read the expiry again.
+
+**Expected Results:**
+
+* The recorded expiry is <send time> plus five minutes.
+* The expiry is unchanged at step 3.
+
+### shared-auth-sign-in-US1-TC14-1: The email promises five minutes in every locale
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** compatibility
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is on <grade10 sign-in url>, signed out, with `<locale>` in force.
+
+**Test data:**
+
+Runs once per row of **Test data**.
+
+| `<locale>` | The body promises |
+| --- | --- |
+| The default locale | five minutes |
+| Traditional Chinese | five minutes |
+| Simplified Chinese | five minutes |
+
+**Steps:**
+
+1. Submit collector@example.com at the email step.
+2. Open the sign-in email.
+3. Read the sentence that states how long the link lasts.
+
+**Expected Results:**
+
+* The body promises what the row states.
+* No row's body states fifteen minutes or any other duration.
+
+### shared-auth-sign-in-US1-TC15-1: The promised duration is the enforced duration
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* A sign-in email for <collector email> has gone out and <sign-in link> is unused.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<sign-in link>` | The unused link from that sign-in email |
+| `<promised duration>` | The lifetime the email body states |
+
+**Steps:**
+
+1. Read <promised duration> from the email body.
+2. Follow <sign-in link> thirty seconds before <promised duration> ends.
+
+**Expected Results:**
+
+* <promised duration> reads five minutes.
+* The link signs the collector in.
+
+### shared-auth-sign-in-US1-TC16-1: Link followed past five minutes does not sign in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out.
+* A sign-in email for collector@example.com, an address with an account, has gone out and its link is unused.
+
+**Test data:**
+
+Runs once per row of **Test data**.
+
+| `<follow delay>` | Grade10 answers |
+| --- | --- |
+| exactly 5 minutes after the send | creates no session |
+| 5 minutes 1 second after the send | creates no session |
+| 6 minutes after the send | creates no session |
+
+**Steps:**
+
+1. Let `<follow delay>` pass after the send.
+2. Follow the link in the sign-in email.
+
+**Expected Results:**
+
+* Grade10 answers as the row states.
+* The surface still shows the person as signed out.
+
+### shared-auth-sign-in-US1-TC17-1: Used link stays refused inside its five minutes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out in a fresh browser session.
+* <used link> created a session two minutes after its send, and four minutes have passed since that send.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<used link>` | The sign-in link that already created a session |
+
+**Steps:**
+
+1. Follow <used link>.
+2. Read the signed-in state on the surface.
+
+**Expected Results:**
+
+* No session is created.
+* The surface still shows the person as signed out.
+
+### shared-auth-sign-in-US1-TC18-1: Device clock set back does not revive an expired link
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-01
+
+**Pre-conditions:**
+
+* customer is signed out on a device whose clock is set one hour behind.
+* <expired link> for <collector email> is six minutes past its send.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<expired link>` | A sign-in link whose time to live has ended |
+
+**Steps:**
+
+1. Follow <expired link>.
+2. Read the signed-in state on the surface.
+
+**Expected Results:**
+
+* No session is created.
+* The surface still shows the person as signed out.
 
 ---
 
@@ -827,6 +1214,155 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 ---
 
+## shared-auth-sign-in-US6: Collector follows a link that cannot sign them in
+
+**As a** collector who opened a sign-in link from email,
+**I want** a clear toast on the brand home when that link cannot create a session,
+**so that** I know whether to ask for a new link or that I cannot sign in at all.
+
+### shared-auth-sign-in-US6-TC1-1: Expired link toasts on the brand home
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-06
+
+**Pre-conditions:**
+A sign-in link whose time to live has ended.
+
+**Steps:**
+
+1. Follow that link.
+
+**Expected Results:**
+
+* No session is created.
+* They are on this brand's home.
+* A toast states that the link has expired.
+
+### shared-auth-sign-in-US6-TC2-1: Used link toasts that it no longer works
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-06
+
+**Pre-conditions:**
+A sign-in link that has already created a session.
+
+**Steps:**
+
+1. Follow that link again.
+
+**Expected Results:**
+
+* No new session is created.
+* They are on this brand's home.
+* A toast states that the link no longer works.
+
+### shared-auth-sign-in-US6-TC3-1: Superseded link toasts that it no longer works
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-06
+
+**Pre-conditions:**
+An unused unexpired sign-in link that a later sign-in-link email for the same address replaced.
+
+**Steps:**
+
+1. Follow the earlier link.
+
+**Expected Results:**
+
+* No session is created.
+* They are on this brand's home.
+* A toast states that the link no longer works.
+
+### shared-auth-sign-in-US6-TC4-1: Invalid link toasts that it no longer works
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-06
+
+**Pre-conditions:**
+A sign-in link token that is malformed or unknown.
+
+**Steps:**
+
+1. Follow that link.
+
+**Expected Results:**
+
+* No session is created.
+* They are on this brand's home.
+* A toast states that the link no longer works.
+
+### shared-auth-sign-in-US6-TC5-1: Banned account link follow toasts cannot sign in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-06
+
+**Pre-conditions:**
+A banned account and a sign-in link for that account's address.
+
+**Steps:**
+
+1. Follow that link.
+
+**Expected Results:**
+
+* No session is created.
+* They are on this brand's home.
+* A toast states that they cannot sign in.
+* The toast does not invite them to request another link.
+
+---
+
 ## shared-auth-sign-in-US7: Collector confirms the send and can resend
 
 **As a** collector,
@@ -1064,3 +1600,456 @@ Resend after a short wait,
 **Expected Results:**
 
 * No session is created.
+
+---
+
+## shared-auth-sign-in-US8: Collector follows the link and the tab that asked carries on
+
+**As a** collector who asked for a sign-in link and followed it in another tab,
+**I want** the tab I asked from to finish what it stopped me doing,
+**so that** I am not sent back to press the same thing a second time.
+
+### shared-auth-sign-in-US8-TC1-1: Asking tab closes the dialog and shows the collector signed in
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out, with tab A on <grade10 store url> showing Check Your Email.
+* Tab A is in the background.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab A.
+
+**Expected Results:**
+
+* Tab A shows the collector signed in, unreloaded.
+* The Check Your Email dialog is gone.
+
+### shared-auth-sign-in-US8-TC2-1: Asking tab completes what the collector was refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <refused action>'s surface in tab A.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+| `<lot>` | a live auction lot open to bid on |
+| `<bid amount>` | the lowest bid the lot accepts |
+| `<signed-in-only page>` | the collector's orders list, which only they may read |
+
+| `<refused action>` | What must have happened |
+| --- | --- |
+| add <listing> to the cart | <listing> is in the collector's cart |
+| bid <bid amount> on <lot> | the bid stands on <lot> |
+| open <signed-in-only page> | tab A is on <signed-in-only page> |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab A.
+
+**Expected Results:**
+
+* <refused action> is done in tab A.
+* The collector is not asked to do it again.
+
+### shared-auth-sign-in-US8-TC3-1: Tab that asked for nothing completes no action
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out, with tab A on <grade10 store url> showing Check Your Email.
+* Tab C is open on <listing>, where nothing was asked for and nothing was refused.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab C.
+
+**Expected Results:**
+
+* Tab C shows the collector signed in.
+* Tab C adds nothing to the cart and places no bid.
+
+### shared-auth-sign-in-US8-TC4-1: Failed link follow leaves the asking tab as it was
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <listing> in tab A, refused the add to the cart.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+
+| `<failed link>` | What it is |
+| --- | --- |
+| expired | a link older than sixty seconds |
+| already used | a link followed once already |
+| banned | a link for an account that is banned |
+
+**Steps:**
+
+1. Follow the <failed link> in tab B.
+2. Return to tab A.
+
+**Expected Results:**
+
+* Tab A shows nobody signed in.
+* <listing> is in no cart.
+* Tab A says nothing about the link.
+
+### shared-auth-sign-in-US8-TC5-1: Asking tab moved on before the link was followed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <listing> in tab A, refused the add to the cart.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+
+**Steps:**
+
+1. Dismiss the dialog in tab A and navigate to <grade10 store url>.
+2. Follow the unused, unexpired link from that email in tab B.
+3. Return to tab A.
+
+**Expected Results:**
+
+* Tab A shows the collector signed in.
+* The add is not carried out: dismissing the ask dropped it.
+* The cart holds no line for <listing>.
+
+### shared-auth-sign-in-US8-TC6-1: Refused action is done once, not twice
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <listing> in tab A, refused the add to the cart.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab A, and confirm <listing> is in the cart once.
+3. Leave tab A and return to it again, without touching the add control.
+
+**Expected Results:**
+
+* The cart still holds one line for <listing>, not a doubled line.
+* Returning a second time carries the add out no further times.
+
+### shared-auth-sign-in-US8-TC7-1: Asking tab on another site of the brand carries on
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <lot> in tab A, refused the bid.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+* The link lands on <grade10 store url>, another site of the brand.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<lot>` | a live auction lot open to bid on |
+| `<bid amount>` | the lowest bid the lot accepts |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab A.
+
+**Expected Results:**
+
+* Tab A shows the collector signed in, unreloaded.
+* The bid of <bid amount> stands on <lot>.
+
+### shared-auth-sign-in-US8-TC8-1: Another brand's dialog does not close
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on both brands.
+* Tab A is on <zzz store url> showing Check Your Email for a ZZZ link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired Grade10 link in tab B.
+2. Return to tab A.
+
+**Expected Results:**
+
+* Tab A still shows Check Your Email.
+* Tab A shows nobody signed in.
+
+### shared-auth-sign-in-US8-TC9-1: Two tabs asked for a link before either was followed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out, refused the add to the cart on <listing> in tab A.
+* customer is refused the bid on <lot> in tab C.
+* Both tabs show Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control |
+| `<lot>` | a live auction lot open to bid on |
+
+**Steps:**
+
+1. Follow the newest link from that address in tab B.
+2. Return to tab A, then to tab C.
+
+**Expected Results:**
+
+* Both tabs show the collector signed in.
+* Tab A carries out its add and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
+
+### shared-auth-sign-in-US8-TC10-1: Refused action that can no longer be done is refused, not skipped
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out on <listing> in tab A, refused the add to the cart.
+* Tab A shows Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<listing>` | a card listing with an add-to-cart control, of which one remains |
+
+**Steps:**
+
+1. Sell the last <listing> so it can no longer be added.
+2. Follow the unused, unexpired link from that email in tab B.
+3. Return to tab A.
+
+**Expected Results:**
+
+* Tab A shows the collector signed in.
+* Tab A reports the refusal an add is ordinarily refused with when the listing is gone.
+* Tab A does not pass the add over in silence.
+
+### shared-auth-sign-in-US8-TC11-1: Dialog on a tab that asked for nothing closes too
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-08
+
+**Pre-conditions:**
+
+* customer is signed out, with tabs A and C open on the same brand, each showing the sign-in dialog.
+* A sign-in link was asked for in tab A only.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email in tab B.
+2. Return to tab A, then to tab C.
+
+**Expected Results:**
+
+* Neither tab still shows the sign-in dialog.
+* Both tabs show the collector signed in.
+
+## Settled
+
+* Whether a console tab carries on a refused action after its second factor
+  belongs to the console's own capability, which specifies no second factor
+  at all today.
+* An absolute expiry time alongside the link's duration was rejected; the
+  duration is the only form the promise takes.
+* The confirmation dialog stating the link's lifetime was rejected; the
+  promise lives in the email only.
+* A lifetime settable per environment or brand was rejected; one lifetime
+  applies everywhere.

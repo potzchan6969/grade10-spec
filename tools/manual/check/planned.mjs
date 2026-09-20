@@ -13,7 +13,7 @@
  * drew always reached the blind suite; what they did not reach was the
  * requirements, and they arrived at the reconciliation as findings against
  * scenarios nobody had asked about them. The second requirements pass now
- * walks the list and closes every bullet — the scenario it became, or an
+ * walks the list and closes every state — the scenario it became, or an
  * `**Out of suite:**` naming where the state is stated instead.
  *
  * All three are gated on the change carrying a `decisions.md`, the marker
@@ -111,9 +111,9 @@ function checkRaised(ctx, change, text) {
 
 /** RULE `dressed`: every state the designer drew is answered by the
  * requirements — as a scenario, or as an exemption naming where the state is
- * stated instead. One bullet per state is what makes the list countable: a
- * bullet holding three states can be closed by one scenario and look
- * complete. */
+ * stated instead. One row (or bullet) per state is what makes the list
+ * countable: a cell holding three states can be closed by one scenario and
+ * look complete. */
 function checkDressed(ctx, change) {
   const file = `${change.dir}/ui-design.md`;
   const text = readTextIfExists(join(ctx.roots.store, file));
@@ -122,13 +122,13 @@ function checkDressed(ctx, change) {
   if (!states) return;
   // `raw`, not `body`: the states are usually written under a `###` per
   // screen, and `body` stops at the first of them.
-  for (const state of bulletsOf(states.raw)) {
+  for (const state of statesOf(states.raw)) {
     if (SCENARIO.test(state)) continue;
     if (state.includes(OUT_OF_SUITE)) continue;
     ctx.add(
       "dressed",
       file,
-      `\`${first(state)}\` names no scenario and no \`${OUT_OF_SUITE}\` — the requirements pass closes every state bullet`,
+      `\`${first(state)}\` names no scenario and no \`${OUT_OF_SUITE}\` — the requirements pass closes every state`,
     );
   }
 }
@@ -149,6 +149,44 @@ function sectionsOf(text) {
   };
   visit(outline(text));
   return found;
+}
+
+/** Every state under `## States`: table data rows (preferred) and top-level
+ * bullets (legacy). Each is joined so a disposition written in any cell, or
+ * wrapped over two bullet lines, is still one state. */
+function statesOf(raw) {
+  return [...tableStatesOf(raw), ...bulletsOf(raw)];
+}
+
+/** Data rows of every markdown table in the section. Each table is flushed on
+ * its own — a second `###` screen's header must not be read as a state of the
+ * first. The header row is dropped; separators and commented placeholders are
+ * skipped. */
+function tableStatesOf(raw) {
+  const states = [];
+  let rows = [];
+  const flush = () => {
+    for (const cells of rows.slice(1)) {
+      states.push(cells.join(" | "));
+    }
+    rows = [];
+  };
+  for (const line of raw.split("\n")) {
+    const trimmed = line.trim();
+    if (!trimmed.startsWith("|")) {
+      flush();
+      continue;
+    }
+    const cells = trimmed
+      .slice(1, -1)
+      .split("|")
+      .map((one) => one.trim());
+    if (cells.every((one) => /^-{2,}$/.test(one))) continue;
+    if (cells.some((one) => one.includes("<!--"))) continue;
+    rows.push(cells);
+  }
+  flush();
+  return states;
 }
 
 /** Top-level bullets of a section, each joined with the lines that continue

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
-import { SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
+import { COPY, SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
 
 const meta = {
   title: "Site Chrome/SiteHeader/Auction first",
@@ -15,6 +15,7 @@ const meta = {
     onSignIn: fn(),
     onProfile: fn(),
     onMyAuctions: fn(),
+    onOrders: fn(),
     onSignOut: fn(),
   },
 } satisfies Meta<typeof SiteHeader>;
@@ -76,7 +77,7 @@ export const AccountMenu: Story = {
     expect(
       body.getByRole("menuitem", { name: "Sign out" }),
     ).toBeInTheDocument();
-    expect(body.queryByRole("menuitem", { name: "Orders" })).toBeNull();
+    expect(body.queryByRole("menuitem", { name: "My Orders" })).toBeNull();
     await userEvent.click(body.getByRole("menuitem", { name: "My Auctions" }));
     expect(args.onMyAuctions).toHaveBeenCalled();
     // Leave the menu open — this story is the layout SoT for the open menu.
@@ -84,5 +85,24 @@ export const AccountMenu: Story = {
     expect(
       await body.findByRole("menuitem", { name: "Profile" }),
     ).toBeInTheDocument();
+  },
+};
+
+/** Consumers can add their authenticated auction-orders destination. */
+export const AccountMenuWithOrders: Story = {
+  name: "Account menu with orders",
+  args: {
+    session: "signed-in",
+    accountMenuDefaultOpen: true,
+    copy: { ...COPY, orders: "My Auction Orders" },
+  },
+  play: async ({ canvasElement, args }) => {
+    const body = within(canvasElement.ownerDocument.body);
+    const orders = await body.findByRole("menuitem", {
+      name: "My Auction Orders",
+    });
+    expect(orders).toBeInTheDocument();
+    await userEvent.click(orders);
+    expect(args.onOrders).toHaveBeenCalled();
   },
 };

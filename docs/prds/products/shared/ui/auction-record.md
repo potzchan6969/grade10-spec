@@ -17,7 +17,9 @@ capability is the component contract underneath it.
   Watching sections; a row is Auction (image, title, close), Current Bid,
   Your Standing (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
-- **Tabs** — Active, Upcoming and Ended, filled by the application
+- **Your Standing** — Leading, Outbid, Bid submitted, Bid not accepted, Won,
+  Didn't win, or `--` for a watch-only row; close urgency stays with the
+  listing identity
 - **Empty state** — one, for a collector who bookmarks nothing
 - **Watch control** — marks a lot wherever it is shown; each block renders
   on its own, so a lot page takes the watch control without adopting the

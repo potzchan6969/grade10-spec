@@ -362,3 +362,14 @@ customer(suspended by an operator) has an auction order whose invoice is `pendin
 
 * The account is suspended once.
 * The account record shows both causes.
+
+## Settled
+
+## Reconciliation
+
+| Finding | Disposition |
+| --- | --- |
+| Retracting an existing maximum would change another bidder's live lot | **Raised, folded into spec:** `suspension-SC-13` to `suspension-SC-15` |
+| Operator and deadline suspensions could create separate standing | **Raised, folded into spec:** `suspension-SC-21` and `suspension-SC-22` |
+| A suspension could block settlement as well as bidding | **Raised, rejected:** paying an outstanding invoice remains available under `suspension-SC-03` |
+| Run | Read the bidder-suspension feature set, journeys, decisions, and Post-Bidding PRD; denied requirement deltas and archived changes |
