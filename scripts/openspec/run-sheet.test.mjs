@@ -147,6 +147,8 @@ The user holds \`<a thing>\`.
 * **Testability:** automation
 * **Trace:** demo-thing-widget-US-01
 
+**Decided by:** \`scripts/openspec/run-sheet.test.mjs\`
+
 **Pre-conditions:** None.
 
 **Steps:**
@@ -404,4 +406,35 @@ test("a column index reads as its A1 letter past Z", () => {
   assert.equal(colLetter(0), "A");
   assert.equal(colLetter(25), "Z");
   assert.equal(colLetter(26), "AA");
+});
+
+test("shared-planning-agent-rounds-SC-78 - the left-out cases are named under the count, with what decides each", () => {
+  const { picked, refused } = selectCases(candidates, {});
+  const gate = automatedGateOf({ picked, refused });
+
+  assert.equal(gate.leftOut, 1);
+  assert.deepEqual(gate.leftOutLines, [
+    "  demo-thing-widget-US1-TC4-1 - scripts/openspec/run-sheet.test.mjs",
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a left-out case naming no test says so in the same shape", () => {
+  const gate = automatedGateOf({
+    picked: [],
+    refused: [
+      { id: "demo-thing-widget-US1-TC9-1", reason: "automation" },
+      {
+        id: "demo-thing-widget-US1-TC8-1",
+        reason: "automation",
+        decidedBy: ["scripts/a.test.mjs", "tools/manual/test/b.test.ts"],
+      },
+      { id: "demo-thing-widget-US1-TC7-1", reason: "status" },
+    ],
+  });
+
+  assert.equal(gate.leftOut, 2);
+  assert.deepEqual(gate.leftOutLines, [
+    "  demo-thing-widget-US1-TC9-1 - decided by no named test",
+    "  demo-thing-widget-US1-TC8-1 - scripts/a.test.mjs, tools/manual/test/b.test.ts",
+  ]);
 });

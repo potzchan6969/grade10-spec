@@ -552,6 +552,76 @@ test("refuses a suite carried without its Settled lines, waiver or no waiver", (
   assert.match(forced.stderr, /none of this is waivable/);
 });
 
+/** The same suite with one automated case, naming what decides it or naming
+ * nothing: the `**Decided by:**` line travels with the suite at fold, and the
+ * durable suites are not back-filled, so the fold is the only place a dropped
+ * line is caught (`shared-planning-agent-rounds-SC-78`). */
+const SUITE_CASE = (decidedBy) =>
+  `${SUITE}
+## listing-US1: Collector searches the catalogue
+
+### listing-US1-TC1-1: Search finds a card
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** listing-US-01
+${decidedBy === null ? "" : `\n**Decided by:** \`${decidedBy}\`\n`}
+**Pre-conditions:** None.
+`;
+
+const DECIDER = "tools/manual/test/listing.test.ts";
+const NAMED = {
+  ...CARRIED,
+  [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(DECIDER),
+};
+
+test("shared-planning-agent-rounds-SC-78 - refuses a fold that drops a case's `**Decided by:**` line", () => {
+  const dropped = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE_CASE(null),
+  };
+  const result = run(sandbox(NAMED, dropped).root, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /drops `listing-US1-TC1-1`'s `\*\*Decided by:\*\* tools\/manual\/test\/listing\.test\.ts`/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - refuses a fold that lands a different deciding test", () => {
+  const other = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE_CASE("tools/manual/test/other.test.ts"),
+  };
+  const result = run(sandbox(NAMED, other).root, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /lands `listing-US1-TC1-1`'s `\*\*Decided by:\*\*` as `tools\/manual\/test\/other\.test\.ts`, where the change names `tools\/manual\/test\/listing\.test\.ts`/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - a line that travels across is clear", () => {
+  const carried = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE_CASE(DECIDER),
+  };
+  const result = run(sandbox(NAMED, carried).root, ...SHIPPED);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
 test("a suite with no durable file yet is a promise --journeys-copied can make", () => {
   const { [`${CAP}/feature-tcs.md`]: _suite, ...missing } = DURABLE;
   const refused = run(sandbox(CARRIED, missing).root, ...SHIPPED);
