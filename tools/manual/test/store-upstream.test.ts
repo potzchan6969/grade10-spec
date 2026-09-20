@@ -185,7 +185,7 @@ describe("the pull", () => {
   const pull = (store: ReturnType<typeof checkout>) =>
     store.api({ method: "POST", path: "/api/pull" });
 
-  it("fast-forwards the checkout onto `main`", async () => {
+  it("shared-planning-change-stages-SC-73 - fast-forwards the checkout onto `main`", async () => {
     const store = checkout();
     moveMain(store.remote, "one");
 

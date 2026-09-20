@@ -230,7 +230,7 @@ describe("no relay", () => {
     // A variable nobody can read is a relay nobody can listen to: the page
     // shows no banner rather than failing inside a watch nothing is awaiting.
     ["the url cannot be read", { [RELAY_URL]: { url: "https://[oops" } }],
-  ])("does nothing where %s", async (_what, answers) => {
+  ])("shared-planning-change-stages-SC-75 - does nothing where %s", async (_what, answers) => {
     const { http } = fakeHttp(answers);
     const lines = fakeLines();
     const clock = fakeClock();

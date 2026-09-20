@@ -180,7 +180,7 @@ describe("a page that is caught up", () => {
 });
 
 describe("the checkout the manual is running out of", () => {
-  it("says how far behind it is, and offers the pull", () => {
+  it("shared-planning-change-stages-SC-73 - says how far behind it is, and offers the pull", () => {
     const html = render({ local: true, standing: standing({ behind: 3 }) });
 
     expect(html).toContain("Your checkout is 3 commits behind");
