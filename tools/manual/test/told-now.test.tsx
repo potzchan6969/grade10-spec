@@ -3,6 +3,7 @@ import { renderToStaticMarkup } from "react-dom/server";
 import { MemoryRouter } from "react-router";
 import { describe, expect, it } from "vitest";
 import type { ChangeEntry, Stage } from "../src/api/types";
+import { InlineMarkdown } from "../src/blocks/inline-markdown";
 import { SlackText } from "../src/blocks/slack-text";
 import { ToldNow } from "../src/blocks/told-now";
 import { findStoreRoot } from "../src/store/disk.mts";
@@ -76,7 +77,7 @@ describe("the message each hand of the stage is being sent", () => {
     expect(html).toContain("<strong>Your turn</strong>");
   });
 
-  it("links the change's thread where the record names one", () => {
+  it("links the change's thread where the record names one, in its own tab", () => {
     const html = render(
       gift({ thread: "C0123ABC/1758170000.001200" }),
       "proposed",
@@ -85,10 +86,15 @@ describe("the message each hand of the stage is being sent", () => {
     expect(html).toContain(
       "https://slack.com/archives/C0123ABC/p1758170000001200",
     );
+    expect(html).toContain('rel="noreferrer noopener"');
+    expect(html).toContain('target="_blank"');
   });
 
-  it("links the change page where the record names no thread", () => {
+  it("links the change page where the record names no thread, through the router", () => {
     expect(html).toContain('href="/in-flight/gift-cards"');
+    // The manual's own route: a full page load would throw the reader out of
+    // the app they are already in.
+    expect(html).not.toContain('target="_blank"');
   });
 });
 
@@ -135,9 +141,11 @@ describe("the stages that say something else", () => {
 
 describe("Slack mrkdwn, read", () => {
   const html = renderToStaticMarkup(
-    <SlackText
-      text={"*Bold* and `code` and <https://spec.test/x|a link>\nsecond line"}
-    />,
+    <MemoryRouter>
+      <SlackText
+        text={"*Bold* and `code` and <https://spec.test/x|a link>\nsecond line"}
+      />
+    </MemoryRouter>,
   );
 
   it("reads bold, code and a titled link", () => {
@@ -146,6 +154,20 @@ describe("Slack mrkdwn, read", () => {
     expect(html).toContain("code");
     expect(html).toContain('href="https://spec.test/x"');
     expect(html).toContain(">a link<");
+  });
+
+  it("dresses code and a link exactly as store prose does", () => {
+    const prose = renderToStaticMarkup(
+      <MemoryRouter>
+        <InlineMarkdown text={"`code` and [a link](https://spec.test/x)"} />
+      </MemoryRouter>,
+    );
+    const classOf = (markup: string, tag: string) =>
+      new RegExp(`<${tag} class="([^"]*)"`).exec(markup)?.[1];
+
+    expect(classOf(html, "code")).toBe(classOf(prose, "code"));
+    expect(classOf(html, "a")).toBe(classOf(prose, "a"));
+    expect(html).toContain('rel="noreferrer noopener"');
   });
 
   it("keeps a second line on its own line", () => {
