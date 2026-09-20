@@ -6,45 +6,24 @@ with the thread's messages as data, and takes that session's posts and its
 landing back.
 
 Everything about the runner that is not in this directory — the Slack app's
-scopes, the Routine's settings, every secret and what each one is for, the
-push workflow's variables and the first walk — is in
+[scopes and event subscription](../../docs/references/agent-runner.md#the-slack-app),
+the Routine's settings, every secret and what each one is for, the push
+workflow's variables and the first walk — is in
 [`docs/references/agent-runner.md`](../../docs/references/agent-runner.md).
 Every rule the relay enforces is a requirement of Agent Rounds, in
 [the `run-a-round-on-every-artifact` change](../../openspec/changes/run-a-round-on-every-artifact/specs/shared/planning/agent-rounds/spec.md)
 until that change archives.
 
-## The Manifest
-
-The Slack app is created from this, and the request URL is verified the moment
-the app is saved — so the relay is deployed first.
-
-```yaml
-display_information:
-  name: Grade10 Rounds
-features:
-  bot_user:
-    display_name: Grade10 Rounds
-oauth_config:
-  scopes:
-    bot:
-      - chat:write
-      - channels:history
-      - users:read
-settings:
-  event_subscriptions:
-    request_url: https://grade10-relay.<subdomain>.workers.dev/slack/events
-    bot_events:
-      - app_mention
-      - message.channels
-```
-
 ## The Word
 
 `land` and `land with recommendations` are the two words that land, and
-nothing else is one. The relay reads the last message of the burst that woke
-the run, strips a mention of the app off the front, trims it and folds the
-case, so `<@Grade10 Rounds> Land` is the word and `land the proposal please`
-is a sentence. A reply that says anything else leaves `main` where it is.
+nothing else is one. The relay reads the latest landing word of the burst that
+woke the run — a mention of the app stripped off the front, the ends trimmed,
+the case folded — so `<@Grade10 Rounds> Land` is the word and `land the
+proposal please` is a sentence. The room keeps that word until a landing
+consumes it: `land` and then `thanks!` still lands, and a chain the budget cut
+halfway is finished by the next wake on the same word. A thread that has said
+no landing word leaves `main` where it is.
 
 ## The Prompt
 
@@ -57,14 +36,47 @@ The prompt never changes per wake; the payload carries everything that does.
 pnpm --dir tools/relay deploy
 ```
 
-1. **The first deploy** — with the placeholder vars in `wrangler.jsonc`. The
-   Durable Object migration `v1` runs here and creates the `Room` class
-2. **The Worker's own origin** — printed by that deploy, and the value of
-   `RELAY_URL`
-3. **The Routine and the Slack app** — created against that origin, which
-   gives `ROUTINE_FIRE_URL`, `ROUTINE_TOKEN` and the app's `SLACK_APP_USER`
-4. **The second deploy** — with the four vars set to the real values, and
-   every secret already put
+In this order, because each step needs the one before it:
+
+1. **The Slack app**, created with no request URL — its event subscription is
+   pointed at the relay in step 4, and Slack verifies that URL the moment it
+   is saved. This gives `SLACK_SIGNING_SECRET`, `SLACK_BOT_TOKEN` and the
+   app's own member id for `SLACK_APP_USER`
+2. **The secrets**, each with `pnpm dlx wrangler@4.120.0 secret put <name> -c
+   wrangler.jsonc`: the app's two, `GITHUB_TOKEN`, `TOKEN_SECRET`,
+   `WAKE_TOKEN`, and `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` as placeholders
+   until step 5 — the router refuses every request while one of the seven is
+   unset, and names it
+3. **The first deploy**, with the placeholder vars in `wrangler.jsonc`. The
+   Durable Object migration `v1` runs here and creates the `Room` class, and
+   the deploy prints the Worker's own origin
+4. **The event subscription**, pointed at `<origin>/slack/events` and saved:
+   the relay answers Slack's `url_verification` challenge, and the bot is
+   invited to the planning channel
+5. **The Routine**, created against that origin, which gives the real
+   `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` — put both again over their
+   placeholders
+6. **The second deploy**, with `PLANNING_CHANNEL`, `REPO`, `RELAY_URL` and
+   `SLACK_APP_USER` set to the real values in `wrangler.jsonc`
+
+Then one call, which is the smoke test:
+
+```bash
+curl -s -X POST "$RELAY_URL/wake" \
+  -H "authorization: Bearer $WAKE_TOKEN" \
+  -H 'content-type: application/json' \
+  -d '{"change":"relay-smoke","head":"0000000000000000000000000000000000000000"}'
+```
+
+`{"queued":true}` proves three things at once: the origin is this relay, since
+nothing else serves `/wake`; every secret is set, since the router answers
+`{"reason":"missing-secret","secret":"…"}` with 500 while one is not; and the
+migration ran, since the wake reached a room. Repeat the same call and
+`{"queued":false,"why":"duplicate"}` proves the room kept what it answered.
+
+It costs one firing: the room fires a session on a change the store does not
+hold, which answers in the planning channel and ends. A wrong `WAKE_TOKEN`
+answers 401, and a body with no `head` answers 400 without reaching a room.
 
 ## Rotating a Secret
 

@@ -1,9 +1,9 @@
 {
-  "$schema": "node_modules/wrangler/config-schema.json",
   // The relay at https://grade10-relay.<subdomain>.workers.dev on the staging
   // Cloudflare account, the same account the manual is deployed to. Wrangler
   // is not a dependency here: the `deploy` script runs it through `pnpm dlx`
-  // at a pinned version, as the manual's and the emails app's deploys do.
+  // at a pinned version, as the emails app's deploy does. The manual's runs
+  // bare `wrangler deploy` and takes whatever version answers.
   "name": "grade10-relay",
   "compatibility_date": "2026-08-01",
   "account_id": "de021143aac704ccbda9c3cd00be261d",
