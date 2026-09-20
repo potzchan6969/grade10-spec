@@ -148,6 +148,33 @@ describe("a suite in an older shape", () => {
   });
 });
 
+/** Q49 of `run-a-round-on-every-artifact`: a case a store unit or script test
+ * decides names the test that decides it, directly after the classification
+ * block and before `**Pre-conditions:**`. The reader has no use for the line
+ * yet - it does not export it - so it only has to read past it rather than
+ * choke on it. */
+describe("a case that also carries a `**Decided by:**` line", () => {
+  it("reads the case as it would without the line", () => {
+    const withDecidedBy = testCase(
+      "alpha-US1-TC1-1",
+      "It happens",
+      "actual",
+    ).replace(
+      "**Pre-conditions:**",
+      "**Decided by:** scripts/openspec/round-scripts.test.mjs\n\n**Pre-conditions:**",
+    );
+    const parsed = readTestCases(suite("in-review", withDecidedBy));
+    expect(parsed.cases).toEqual([
+      {
+        id: "alpha-US1-TC1-1",
+        title: "It happens",
+        traces: ["alpha-US-01"],
+        status: "actual",
+      },
+    ]);
+  });
+});
+
 describe("what a suite says about the spec beside it", () => {
   it("reads the ids a suite leaves uncovered on purpose", () => {
     const parsed = readTestCases(
