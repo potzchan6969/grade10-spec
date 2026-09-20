@@ -1617,9 +1617,11 @@ Runs once per row of **Test data**.
 * **Type:** integration
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `scripts/openspec/reread-workflow.test.mjs`, `tools/relay/test/worker.test.ts`, `scripts/openspec/changed-changes.test.mjs`
 
 **Pre-conditions:**
 
@@ -2524,7 +2526,7 @@ Slack thread either.
 | `US4-TC6-1` | Nothing drives it yet: `tools/manual/test/my-turn-page.test.tsx` proves the render, and the case walks the hand arriving from the thread |
 | `US4-TC7-1` | A reply naming a question the change never issued |
 | `US4-TC8-1` | A reply that is none of the moves, typed in the thread |
-| `US4-TC9-1` | The held rows named in the thread, until `scripts/openspec/round-scripts.test.mjs` decides it |
+| `US4-TC9-1` | The hand's three replies, typed in the thread; `scripts/openspec/plan-land-relay.test.mjs` decides what each landing does |
 | `US4-TC12-1` | The row the round decided, read in the thread and the change |
 | `US4-TC13-1` | A reply overturning that row, typed in the thread |
 | `US5-TC1-1` | The re-read a landing wakes, inside the session |
@@ -2538,7 +2540,6 @@ Slack thread either.
 | `US5-TC12-1` | A re-read that redraws several, inside the session |
 | `US5-TC13-1` | The fold at archive, run by a hand |
 | `US5-TC14-1` | A run killed mid-draft and picked up again |
-| `US5-TC17-1` | The push's own wake, until `scripts/openspec/reread-workflow.test.mjs` decides it |
 | `US6-TC1-1` | The group's own commits in the application repository |
 | `US6-TC2-1` | The landing summary the thread carries |
 | `US6-TC3-1` | The last group's walks, in the application repository |
