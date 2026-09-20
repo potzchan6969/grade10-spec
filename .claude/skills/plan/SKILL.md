@@ -29,7 +29,9 @@ change opens one:
 1. **The id** — drawn from the sentence with `slugOf` as
    [`tools/manual/src/editor/propose.ts`](../../../tools/manual/src/editor/propose.ts)
    derives it
-2. **The record** — `pnpm openspec new change <id> --schema grade10-planning`
+2. **The record** — `pnpm openspec new change <id> --schema grade10-planning`,
+   and from a wake `node scripts/openspec/relay-post.mjs --bind <change>`
+   right after it, which warms the relay's room for the id
 3. **The hand** — `hands: pm: @<handle>`, the asker's handle from the team map
    (`docs/prds/team.yaml`). An asker the map does not name opens the change
    with its product manager unnamed, and the reply says so and asks for the
@@ -45,22 +47,19 @@ thread, the reply names that change's id, and nothing is opened.
 
 The interview is the ask step. Everything after it the round handles: a
 preference or a product decision becomes a numbered `Q<n>` row with your
-recommendation, a product detail becomes a ❓ line on the page, and the three
-files land one at a time on the product manager's word.
+recommendation, and a product detail becomes a ❓ line on the page.
 
 ## The Whole Plan in One Wake
 
-The three files are the start of the chain, not the end of the run. Draft
-ahead, as `round` says: `/design` where a surface moves, `/tech`, `/specify`
-and `/tasks` in turn - the tech design before the requirements, as the
-schema orders them - each from the draft before it and each read by its own
-perspectives, pushed after every artifact and landed nowhere. A held
-question does not stop the chain - draft on its recommendation and list it
-first in the summary; a dated `awaiting:` line does, for what depends on it.
-The product manager then reads the held questions, not seven documents, and
-one `land` lands every artifact of their hand in order; the artifacts of the
-designer's and the engineer's hands wait on their own word, and the landing
-tells them.
-
-Hand on with the change's `awaiting: specs:` line only where the chain
-stopped before the requirements, as `planning-pm` says.
+- **The three files start the chain** — they are not the end of the run:
+  draft ahead, as `round` says, in the order the schema gives them, each
+  artifact read by its own perspectives, pushed after every artifact and
+  landed nowhere
+- **The held rows, not seven documents** — what the product manager reads is
+  the held rows and what stood; a held question does not stop the chain, so
+  draft on its recommendation and list it first in the summary
+- **One `land`, their hand's artifacts** — one word lands every artifact of
+  the product manager's hand; the designer's and the engineer's wait on their
+  own word, and the landing tells them
+- **Where the chain stopped** — hand on with the change's `awaiting: specs:`
+  line only where it stopped before the requirements, as `planning-pm` says
