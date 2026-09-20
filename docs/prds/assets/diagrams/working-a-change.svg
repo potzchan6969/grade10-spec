@@ -1,6 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 2 932 662" role="img" data-preset="editorial" aria-labelledby="working-a-change-archify-diagram-title" aria-describedby="working-a-change-archify-diagram-description" data-diagram="working-a-change">
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="28 40 970 748" role="img" data-preset="editorial" aria-labelledby="working-a-change-archify-diagram-title" aria-describedby="working-a-change-archify-diagram-description" data-diagram="working-a-change">
 <style>
-svg[data-diagram="working-a-change"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--cloud-fill:light-dark(rgba(157, 103, 31, 0.1), rgba(170, 119, 49, 0.16));--cloud-stroke:light-dark(#9a671f, #d8ad68);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--security-fill:light-dark(rgba(153, 58, 52, 0.09), rgba(157, 69, 65, 0.17));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
+svg[data-diagram="working-a-change"]{--arrow:var(--muted-foreground, light-dark(#8a806f, #948978));--arrow-emphasis:var(--primary, light-dark(#bb4c23, #dd6b3d));--backend-fill:light-dark(rgba(42, 119, 75, 0.09), rgba(63, 132, 92, 0.16));--backend-stroke:light-dark(#397b53, #8fc29e);--cloud-fill:light-dark(rgba(157, 103, 31, 0.1), rgba(170, 119, 49, 0.16));--cloud-stroke:light-dark(#9a671f, #d8ad68);--database-fill:light-dark(rgba(105, 75, 130, 0.09), rgba(117, 91, 141, 0.17));--database-stroke:light-dark(#765d86, #c0a4d0);--frontend-fill:light-dark(rgba(31, 117, 126, 0.09), rgba(43, 133, 142, 0.16));--frontend-stroke:light-dark(#287e84, #7fc6c7);--grid:var(--border-subtle, light-dark(#d8d0c2, #39342a));--lane-fill:var(--background, light-dark(rgba(229, 221, 207, 0.42), rgba(52, 46, 35, 0.46)));--lane-stroke:var(--border, light-dark(#b8aa94, #726957));--mask:var(--background, light-dark(#fbf8f1, #231f18));--messagebus-fill:light-dark(rgba(182, 70, 27, 0.09), rgba(174, 79, 42, 0.16));--messagebus-stroke:light-dark(#ad4b25, #df946f);--security-fill:light-dark(rgba(153, 58, 52, 0.09), rgba(157, 69, 65, 0.17));--security-stroke:light-dark(#9e463f, #df9085);--text:var(--foreground, light-dark(#242018, #f4eddf));--text-dim:var(--muted-foreground, light-dark(#a09788, #776e60));--text-muted:var(--muted-foreground, light-dark(#6f6658, #b9ae9b))}
 svg[data-diagram="working-a-change"] .c-grid{stroke: var(--grid); fill: none;}
 svg[data-diagram="working-a-change"] .c-mask{fill: var(--mask); stroke: none;}
 svg[data-diagram="working-a-change"] .c-frontend{fill: var(--frontend-fill); stroke: var(--frontend-stroke);}
@@ -8,10 +8,11 @@ svg[data-diagram="working-a-change"] .c-backend{fill: var(--backend-fill); strok
 svg[data-diagram="working-a-change"] .c-database{fill: var(--database-fill); stroke: var(--database-stroke);}
 svg[data-diagram="working-a-change"] .c-cloud{fill: var(--cloud-fill); stroke: var(--cloud-stroke);}
 svg[data-diagram="working-a-change"] .c-security{fill: var(--security-fill); stroke: var(--security-stroke);}
+svg[data-diagram="working-a-change"] .c-messagebus{fill: var(--messagebus-fill); stroke: var(--messagebus-stroke);}
 svg[data-diagram="working-a-change"] .t-primary{fill: var(--text);}
 svg[data-diagram="working-a-change"] .t-muted{fill: var(--text-muted);}
 svg[data-diagram="working-a-change"] .t-dim{fill: var(--text-dim);}
-svg[data-diagram="working-a-change"] .t-backend{fill: var(--backend-stroke);}
+svg[data-diagram="working-a-change"] .t-database{fill: var(--database-stroke);}
 svg[data-diagram="working-a-change"] .semantic-sigil{fill: none; stroke: currentColor; stroke-width: 1.35; stroke-linecap: round; stroke-linejoin: round; opacity: 0.76; pointer-events: none;}
 svg[data-diagram="working-a-change"] .semantic-sigil > *{vector-effect: non-scaling-stroke;}
 svg[data-diagram="working-a-change"] .semantic-sigil .sigil-fill{fill: currentColor; stroke: none;}
@@ -20,6 +21,7 @@ svg[data-diagram="working-a-change"] .s-backend{color: var(--backend-stroke);}
 svg[data-diagram="working-a-change"] .s-database{color: var(--database-stroke);}
 svg[data-diagram="working-a-change"] .s-cloud{color: var(--cloud-stroke);}
 svg[data-diagram="working-a-change"] .s-security{color: var(--security-stroke);}
+svg[data-diagram="working-a-change"] .s-messagebus{color: var(--messagebus-stroke);}
 svg[data-diagram="working-a-change"] .a-emphasis{stroke: var(--arrow-emphasis); fill: none;}
 svg[data-diagram="working-a-change"] .a-dashed{stroke: var(--database-stroke); fill: none; stroke-dasharray: 4,4;}
 svg[data-diagram="working-a-change"] .m-default{fill: var(--arrow);}
@@ -29,7 +31,7 @@ svg[data-diagram="working-a-change"] .m-dashed{fill: var(--database-stroke);}
 svg[data-diagram="working-a-change"] .c-grid{stroke-dasharray: 1 4; opacity: 0.48;}
 svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var(--lane-stroke); stroke-dasharray: 6,6;}
 </style>
-        <title id="working-a-change-archify-diagram-title">add-store-gift-receipt</title>
+        <title id="working-a-change-archify-diagram-title">add-store-cross-sell</title>
         <desc id="working-a-change-archify-diagram-description">A workflow diagram generated by Archify.</desc>
         
         <defs>
@@ -52,61 +54,64 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
         
         <rect width="100%" height="100%" fill="url(#working-a-change-grid)" />
         
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="908" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-0" x="40" y="52" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="74" class="t-dim" font-size="10" font-weight="600">01 / Product manager</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="908" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-1" x="40" y="176" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
         <text x="54" y="198" class="t-dim" font-size="10" font-weight="600">02 / Designer</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="908" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / QA</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="908" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / Engineer</text>
-        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-4" x="40" y="548" width="908" height="104" rx="10" class="c-lane" stroke-width="1"/>
-        <text x="54" y="570" class="t-dim" font-size="10" font-weight="600">05 / The store</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-2" x="40" y="300" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="322" class="t-dim" font-size="10" font-weight="600">03 / Tech PIC</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-3" x="40" y="424" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="446" class="t-dim" font-size="10" font-weight="600">04 / QA</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-4" x="40" y="548" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="570" class="t-dim" font-size="10" font-weight="600">05 / Engineer</text>
+        <rect data-graph-role="structural-frame" data-composition-frame-kind="lane" data-composition-frame-id="lane-5" x="40" y="672" width="946" height="104" rx="10" class="c-lane" stroke-width="1"/>
+        <text x="54" y="694" class="t-dim" font-size="10" font-weight="600">06 / The store</text>
         
         
         
-        <path data-step="leave-three-files-then-hand-over" data-edge-from="leave-three-files-then-hand-over" data-edge-to="leave-three-files-then-hand-over_decisions" data-edge-key="0" data-composition-points="180,119;208,119" d="M 180 119 L 208 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="leave-three-files-then-hand-over" data-edge-from="leave-three-files-then-hand-over_decisions" data-edge-to="leave-three-files-then-hand-over_journeys" data-edge-key="1" data-composition-points="340,119;368,119" d="M 340 119 L 368 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="link-never-describe" data-edge-from="leave-three-files-then-hand-over_journeys" data-edge-to="link-never-describe" data-edge-key="2" data-composition-points="434,145;434,217" d="M 434 145 L 434 217" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
-        <path data-step="review-in-its-own-pull-request" data-edge-from="leave-three-files-then-hand-over_journeys" data-edge-to="review-in-its-own-pull-request" data-edge-label="awaiting: specs" data-edge-key="3" data-composition-points="500,119;516,119;516,36;554,36;554,341" d="M 500 119 L 516 119 L 516 36 L 554 36 L 554 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="review-in-its-own-pull-request" data-edge-from="link-never-describe" data-edge-to="review-in-its-own-pull-request" data-edge-key="4" data-composition-points="500,243;516,243;516,290;472,290;472,367;488,367" d="M 500 243 L 516 243 L 516 290 L 472 290 L 472 367 L 488 367" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
-        <path data-step="review-in-its-own-pull-request" data-edge-from="review-in-its-own-pull-request" data-edge-to="review-in-its-own-pull-request_suite" data-edge-key="5" data-composition-points="620,367;648,367" d="M 620 367 L 648 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="write-the-plan-then-build" data-edge-from="review-in-its-own-pull-request_requirements" data-edge-to="write-the-plan-then-build" data-edge-key="6" data-composition-points="874,393;874,465" d="M 874 393 L 874 465" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="review-in-its-own-pull-request" data-edge-from="review-in-its-own-pull-request_suite" data-edge-to="review-in-its-own-pull-request_requirements" data-edge-key="7" data-composition-points="780,367;808,367" d="M 780 367 L 808 367" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
-        <path data-step="leave-the-archive-copy-out-of-the-tasks" data-edge-from="write-the-plan-then-build" data-edge-to="leave-the-archive-copy-out-of-the-tasks" data-edge-key="8" data-composition-points="874,517;874,589" d="M 874 517 L 874 589" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="the-fold-then-phase-two" data-edge-from="built-and-walked" data-edge-to="the-fold-then-phase-two" data-edge-key="0" data-composition-points="714,641;714,713" d="M 714 641 L 714 713" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="the-first-word" data-edge-from="the-chain-and-the-two-held-rows" data-edge-to="the-first-word" data-edge-key="1" data-composition-points="180,119;208,119" d="M 180 119 L 208 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="the-first-word" data-edge-from="the-first-word" data-edge-to="the-first-word_journeys" data-edge-key="2" data-composition-points="340,119;368,119" d="M 340 119 L 368 119" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="the-mirror-and-the-rule" data-edge-from="the-first-word_journeys" data-edge-to="the-mirror-and-the-rule" data-edge-key="3" data-composition-points="500,119;554,119;554,341" d="M 500 119 L 554 119 L 554 341" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="the-rail-and-its-states" data-edge-from="the-first-word_journeys" data-edge-to="the-rail-and-its-states" data-edge-key="4" data-composition-points="434,145;434,217" d="M 434 145 L 434 217" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="the-fold-then-phase-two" data-edge-from="the-fold-then-phase-two" data-edge-to="the-fold-then-phase-two_next" data-edge-label="depends_on" data-edge-key="5" data-composition-points="780,739;846,739" d="M 780 739 L 846 739" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="the-requirements-and-the-cases" data-edge-from="the-mirror-and-the-rule" data-edge-to="the-requirements-and-the-cases" data-edge-key="6" data-composition-points="554,393;554,465" d="M 554 393 L 554 465" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="the-requirements-and-the-cases" data-edge-from="the-rail-and-its-states" data-edge-to="the-requirements-and-the-cases" data-edge-key="7" data-composition-points="434,269;434,491;488,491" d="M 434 269 L 434 491 L 488 491" class="a-dashed" stroke-width="1.4" marker-end="url(#working-a-change-arrowhead-dashed)"/>
+        <path data-step="the-requirements-and-the-cases" data-edge-from="the-requirements-and-the-cases" data-edge-to="the-requirements-and-the-cases_spec" data-edge-key="8" data-composition-points="620,491;648,491" d="M 620 491 L 648 491" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
+        <path data-step="built-and-walked" data-edge-from="the-requirements-and-the-cases_spec" data-edge-to="built-and-walked" data-edge-key="9" data-composition-points="714,517;714,589" d="M 714 517 L 714 589" class="a-emphasis" stroke-width="1.8" marker-end="url(#working-a-change-arrowhead-emphasis)"/>
         
-        <g data-step="leave-three-files-then-hand-over" id="working-a-change-node-leave-three-files-then-hand-over" data-node-id="leave-three-files-then-hand-over" data-node-label="proposal.md" aria-label="Focus proposal.md, why, and for whom, Product manager" data-node-kind="backend" data-node-sublabel="why, and for whom" data-node-context="Product manager">
-          <title>proposal.md · why, and for whom · Product manager</title>
+        <g data-step="the-chain-and-the-two-held-rows" id="working-a-change-node-the-chain-and-the-two-held-rows" data-node-id="the-chain-and-the-two-held-rows" data-node-label="The chain" aria-label="Focus The chain, drafted, landed nowhere, Product manager" data-node-kind="backend" data-node-sublabel="drafted, landed nowhere" data-node-context="Product manager">
+          <title>The chain · drafted, landed nowhere · Product manager</title>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="48" y="93" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(54 99) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">proposal.md</text>
-          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">why, and for whom</text>
+          <text data-node-label="" data-detail-anchor="" x="114" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The chain</text>
+          <text data-detail="context" x="114" y="131" class="t-muted" font-size="8" text-anchor="middle">drafted, landed nowhere</text>
         </g>
-        <g data-step="leave-three-files-then-hand-over" id="working-a-change-node-leave-three-files-then-hand-over_decisions" data-node-id="leave-three-files-then-hand-over_decisions" data-node-label="decisions.md" aria-label="Focus decisions.md, goals, non-goals, rounds, Product manager" data-node-kind="backend" data-node-sublabel="goals, non-goals, rounds" data-node-context="Product manager">
-          <title>decisions.md · goals, non-goals, rounds · Product manager</title>
+        <g data-step="the-first-word" id="working-a-change-node-the-first-word" data-node-id="the-first-word" data-node-label="proposal · decisions" aria-label="Focus proposal · decisions, on the PM&#39;s word, Product manager" data-node-kind="backend" data-node-sublabel="on the PM&#39;s word" data-node-context="Product manager">
+          <title>proposal · decisions · on the PM&#39;s word · Product manager</title>
           <rect x="208" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="208" y="93" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(214 99) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="274" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">decisions.md</text>
-          <text data-detail="context" x="274" y="131" class="t-muted" font-size="8" text-anchor="middle">goals, non-goals, rounds</text>
+          <text data-node-label="" data-detail-anchor="" x="274" y="114" class="t-primary" font-size="10.3" font-weight="600" text-anchor="middle">proposal · decisions</text>
+          <text data-detail="context" x="274" y="131" class="t-muted" font-size="8" text-anchor="middle">on the PM&#39;s word</text>
         </g>
-        <g data-step="leave-three-files-then-hand-over" id="working-a-change-node-leave-three-files-then-hand-over_journeys" data-node-id="leave-three-files-then-hand-over_journeys" data-node-label="user-journeys.md" aria-label="Focus user-journeys.md, who walks it, Product manager" data-node-kind="backend" data-node-sublabel="who walks it" data-node-context="Product manager">
-          <title>user-journeys.md · who walks it · Product manager</title>
+        <g data-step="the-first-word" id="working-a-change-node-the-first-word_journeys" data-node-id="the-first-word_journeys" data-node-label="user-journeys.md" aria-label="Focus user-journeys.md, US-01 to US-03, Product manager" data-node-kind="backend" data-node-sublabel="US-01 to US-03" data-node-context="Product manager">
+          <title>user-journeys.md · US-01 to US-03 · Product manager</title>
           <rect x="368" y="93" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="368" y="93" width="132" height="52" rx="6" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="backend" class="semantic-sigil s-backend" transform="translate(374 99) scale(0.6875)">
             <path d="M6 3 3 8l3 5M10 3l3 5-3 5"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="434" y="114" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">user-journeys.md</text>
-          <text data-detail="context" x="434" y="131" class="t-muted" font-size="8" text-anchor="middle">who walks it</text>
+          <text data-detail="context" x="434" y="131" class="t-muted" font-size="8" text-anchor="middle">US-01 to US-03</text>
         </g>
-        <g data-step="link-never-describe" id="working-a-change-node-link-never-describe" data-node-id="link-never-describe" data-node-label="ui-design.md" aria-label="Focus ui-design.md, screens and their states, Designer" data-node-kind="frontend" data-node-sublabel="screens and their states" data-node-context="Designer">
-          <title>ui-design.md · screens and their states · Designer</title>
+        <g data-step="the-rail-and-its-states" id="working-a-change-node-the-rail-and-its-states" data-node-id="the-rail-and-its-states" data-node-label="ui-design.md" aria-label="Focus ui-design.md, the rail, and its states, Designer" data-node-kind="frontend" data-node-sublabel="the rail, and its states" data-node-context="Designer">
+          <title>ui-design.md · the rail, and its states · Designer</title>
           <rect x="368" y="217" width="132" height="52" rx="6" class="c-mask"/>
           <rect x="368" y="217" width="132" height="52" rx="6" class="c-frontend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="frontend" class="semantic-sigil s-frontend" transform="translate(374 223) scale(0.6875)">
@@ -116,66 +121,79 @@ svg[data-diagram="working-a-change"] .c-lane{fill: var(--lane-fill); stroke: var
             <circle cx="6.3" cy="4.8" r=".7" class="sigil-fill"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="434" y="238" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">ui-design.md</text>
-          <text data-detail="context" x="434" y="255" class="t-muted" font-size="8" text-anchor="middle">screens and their states</text>
+          <text data-detail="context" x="434" y="255" class="t-muted" font-size="8" text-anchor="middle">the rail, and its states</text>
         </g>
-        <g data-step="review-in-its-own-pull-request" id="working-a-change-node-review-in-its-own-pull-request" data-node-id="review-in-its-own-pull-request" data-node-label="spec.md" aria-label="Focus spec.md, pass one · the outline, QA" data-node-kind="security" data-node-sublabel="pass one · the outline" data-node-context="QA">
-          <title>spec.md · pass one · the outline · QA</title>
+        <g data-step="the-mirror-and-the-rule" id="working-a-change-node-the-mirror-and-the-rule" data-node-id="the-mirror-and-the-rule" data-node-label="tech-design.md" aria-label="Focus tech-design.md, the mirror and the rule, Tech PIC" data-node-kind="messagebus" data-node-sublabel="the mirror and the rule" data-node-context="Tech PIC">
+          <title>tech-design.md · the mirror and the rule · Tech PIC</title>
           <rect x="488" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="488" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(494 347) scale(0.6875)">
-            <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
-            <path d="m5.8 8 1.5 1.5 3-3"/>
+          <rect x="488" y="341" width="132" height="52" rx="6" class="c-messagebus" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="messagebus" class="semantic-sigil s-messagebus" transform="translate(494 347) scale(0.6875)">
+            <path d="M2.5 4.5h11M2.5 8h11M2.5 11.5h11"/>
+            <circle cx="5" cy="4.5" r="1" class="sigil-fill"/>
+            <circle cx="10.5" cy="8" r="1" class="sigil-fill"/>
+            <circle cx="7" cy="11.5" r="1" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="554" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">spec.md</text>
-          <text data-detail="context" x="554" y="379" class="t-muted" font-size="8" text-anchor="middle">pass one · the outline</text>
+          <text data-node-label="" data-detail-anchor="" x="554" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">tech-design.md</text>
+          <text data-detail="context" x="554" y="379" class="t-muted" font-size="8" text-anchor="middle">the mirror and the rule</text>
         </g>
-        <g data-step="review-in-its-own-pull-request" id="working-a-change-node-review-in-its-own-pull-request_suite" data-node-id="review-in-its-own-pull-request_suite" data-node-label="feature-tcs.md" aria-label="Focus feature-tcs.md, blind of the scenarios, QA" data-node-kind="security" data-node-sublabel="blind of the scenarios" data-node-context="QA">
+        <g data-step="the-requirements-and-the-cases" id="working-a-change-node-the-requirements-and-the-cases" data-node-id="the-requirements-and-the-cases" data-node-label="feature-tcs.md" aria-label="Focus feature-tcs.md, blind of the scenarios, QA" data-node-kind="security" data-node-sublabel="blind of the scenarios" data-node-context="QA">
           <title>feature-tcs.md · blind of the scenarios · QA</title>
-          <rect x="648" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="648" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(654 347) scale(0.6875)">
+          <rect x="488" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="488" y="465" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(494 471) scale(0.6875)">
             <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
             <path d="m5.8 8 1.5 1.5 3-3"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="714" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">feature-tcs.md</text>
-          <text data-detail="context" x="714" y="379" class="t-muted" font-size="8" text-anchor="middle">blind of the scenarios</text>
+          <text data-node-label="" data-detail-anchor="" x="554" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">feature-tcs.md</text>
+          <text data-detail="context" x="554" y="503" class="t-muted" font-size="8" text-anchor="middle">blind of the scenarios</text>
         </g>
-        <g data-step="review-in-its-own-pull-request" id="working-a-change-node-review-in-its-own-pull-request_requirements" data-node-id="review-in-its-own-pull-request_requirements" data-node-label="spec.md" aria-label="Focus spec.md, pass two · requirements, QA" data-node-kind="security" data-node-sublabel="pass two · requirements" data-node-context="QA">
-          <title>spec.md · pass two · requirements · QA</title>
-          <rect x="808" y="341" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="808" y="341" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(814 347) scale(0.6875)">
+        <g data-step="the-requirements-and-the-cases" id="working-a-change-node-the-requirements-and-the-cases_spec" data-node-id="the-requirements-and-the-cases_spec" data-node-label="spec.md" aria-label="Focus spec.md, requirements, reconciled, QA" data-node-kind="security" data-node-sublabel="requirements, reconciled" data-node-context="QA">
+          <title>spec.md · requirements, reconciled · QA</title>
+          <rect x="648" y="465" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="648" y="465" width="132" height="52" rx="6" class="c-security" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="security" class="semantic-sigil s-security" transform="translate(654 471) scale(0.6875)">
             <path d="M8 2.2 13 4v3.5c0 3.1-1.8 5.4-5 6.5-3.2-1.1-5-3.4-5-6.5V4Z"/>
             <path d="m5.8 8 1.5 1.5 3-3"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="874" y="362" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">spec.md</text>
-          <text data-detail="context" x="874" y="379" class="t-muted" font-size="8" text-anchor="middle">pass two · requirements</text>
+          <text data-node-label="" data-detail-anchor="" x="714" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">spec.md</text>
+          <text data-detail="context" x="714" y="503" class="t-muted" font-size="8" text-anchor="middle">requirements, reconciled</text>
         </g>
-        <g data-step="write-the-plan-then-build" id="working-a-change-node-write-the-plan-then-build" data-node-id="write-the-plan-then-build" data-node-label="tasks.md" aria-label="Focus tasks.md, a tech design where owed, Engineer" data-node-kind="cloud" data-node-sublabel="a tech design where owed" data-node-context="Engineer">
-          <title>tasks.md · a tech design where owed · Engineer</title>
-          <rect x="808" y="465" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="808" y="465" width="132" height="52" rx="6" class="c-cloud" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(814 471) scale(0.6875)">
+        <g data-step="built-and-walked" id="working-a-change-node-built-and-walked" data-node-id="built-and-walked" data-node-label="tasks.md" aria-label="Focus tasks.md, four groups, tests first, Engineer" data-node-kind="cloud" data-node-sublabel="four groups, tests first" data-node-context="Engineer">
+          <title>tasks.md · four groups, tests first · Engineer</title>
+          <rect x="648" y="589" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="648" y="589" width="132" height="52" rx="6" class="c-cloud" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="cloud" class="semantic-sigil s-cloud" transform="translate(654 595) scale(0.6875)">
             <path d="M4.3 12.5h7.3a2.4 2.4 0 0 0 .2-4.8 4 4 0 0 0-7.5-1.3A3.1 3.1 0 0 0 4.3 12.5Z"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="874" y="486" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">tasks.md</text>
-          <text data-detail="context" x="874" y="503" class="t-muted" font-size="8" text-anchor="middle">a tech design where owed</text>
+          <text data-node-label="" data-detail-anchor="" x="714" y="610" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">tasks.md</text>
+          <text data-detail="context" x="714" y="627" class="t-muted" font-size="8" text-anchor="middle">four groups, tests first</text>
         </g>
-        <g data-step="leave-the-archive-copy-out-of-the-tasks" id="working-a-change-node-leave-the-archive-copy-out-of-the-tasks" data-node-id="leave-the-archive-copy-out-of-the-tasks" data-node-label="The archive" aria-label="Focus The archive, gates, then the fold, The store" data-node-kind="database" data-node-sublabel="gates, then the fold" data-node-context="The store">
-          <title>The archive · gates, then the fold · The store</title>
-          <rect x="808" y="589" width="132" height="52" rx="6" class="c-mask"/>
-          <rect x="808" y="589" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
-          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(814 595) scale(0.6875)">
+        <g data-step="the-fold-then-phase-two" id="working-a-change-node-the-fold-then-phase-two" data-node-id="the-fold-then-phase-two" data-node-label="The archive" aria-label="Focus The archive, the cut, then the fold, The store" data-node-kind="database" data-node-sublabel="the cut, then the fold" data-node-context="The store">
+          <title>The archive · the cut, then the fold · The store</title>
+          <rect x="648" y="713" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="648" y="713" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(654 719) scale(0.6875)">
             <ellipse cx="8" cy="4" rx="5" ry="2"/>
             <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="874" y="610" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The archive</text>
-          <text data-detail="context" x="874" y="627" class="t-muted" font-size="8" text-anchor="middle">gates, then the fold</text>
+          <text data-node-label="" data-detail-anchor="" x="714" y="734" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">The archive</text>
+          <text data-detail="context" x="714" y="751" class="t-muted" font-size="8" text-anchor="middle">the cut, then the fold</text>
+        </g>
+        <g data-step="the-fold-then-phase-two" id="working-a-change-node-the-fold-then-phase-two_next" data-node-id="the-fold-then-phase-two_next" data-node-label="Phase two" aria-label="Focus Phase two, add-store-also-bought, The store" data-node-kind="database" data-node-sublabel="add-store-also-bought" data-node-context="The store">
+          <title>Phase two · add-store-also-bought · The store</title>
+          <rect x="846" y="713" width="132" height="52" rx="6" class="c-mask"/>
+          <rect x="846" y="713" width="132" height="52" rx="6" class="c-database" stroke-width="1.5"/>
+          <g aria-hidden="true" data-semantic-sigil="database" class="semantic-sigil s-database" transform="translate(852 719) scale(0.6875)">
+            <ellipse cx="8" cy="4" rx="5" ry="2"/>
+            <path d="M3 4v8c0 1.1 2.2 2 5 2s5-.9 5-2V4M3 8c0 1.1 2.2 2 5 2s5-.9 5-2"/>
+          </g>
+          <text data-node-label="" data-detail-anchor="" x="912" y="734" class="t-primary" font-size="11" font-weight="600" text-anchor="middle">Phase two</text>
+          <text data-detail="context" x="912" y="751" class="t-muted" font-size="8" text-anchor="middle">add-store-also-bought</text>
         </g>
         
-        <g data-step="review-in-its-own-pull-request" data-detail="context" data-edge-from="leave-three-files-then-hand-over_journeys" data-edge-to="review-in-its-own-pull-request" data-edge-label="awaiting: specs" data-edge-key="3">
-          <rect x="494" y="16" width="82" height="14" rx="3" class="c-mask"/>
-          <text x="535" y="26" class="t-backend" font-size="8" text-anchor="middle">awaiting: specs</text>
+        <g data-step="the-fold-then-phase-two" data-detail="context" data-edge-from="the-fold-then-phase-two" data-edge-to="the-fold-then-phase-two_next" data-edge-label="depends_on" data-edge-key="5">
+          <rect x="784" y="719" width="58" height="14" rx="3" class="c-mask"/>
+          <text x="813" y="729" class="t-database" font-size="8" text-anchor="middle">depends_on</text>
         </g>
         
       </svg>

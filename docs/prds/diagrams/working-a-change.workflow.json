@@ -2,7 +2,7 @@
   "schema_version": 2,
   "diagram_type": "workflow",
   "meta": {
-    "title": "add-store-gift-receipt",
+    "title": "add-store-cross-sell",
     "animation": "none",
     "visual_preset": "editorial",
     "legend": {
@@ -19,6 +19,10 @@
       "label": "Designer"
     },
     {
+      "id": "tech",
+      "label": "Tech PIC"
+    },
+    {
       "id": "qa",
       "label": "QA"
     },
@@ -32,156 +36,172 @@
     }
   ],
   "mainPath": [
-    "leave-three-files-then-hand-over",
-    "leave-three-files-then-hand-over_decisions",
-    "leave-three-files-then-hand-over_journeys",
-    "review-in-its-own-pull-request",
-    "review-in-its-own-pull-request_suite",
-    "review-in-its-own-pull-request_requirements",
-    "write-the-plan-then-build",
-    "leave-the-archive-copy-out-of-the-tasks"
+    "the-chain-and-the-two-held-rows",
+    "the-first-word",
+    "the-first-word_journeys",
+    "the-mirror-and-the-rule",
+    "the-requirements-and-the-cases",
+    "the-requirements-and-the-cases_spec",
+    "built-and-walked",
+    "the-fold-then-phase-two"
   ],
   "nodes": [
     {
-      "id": "leave-three-files-then-hand-over",
+      "id": "the-chain-and-the-two-held-rows",
       "lane": "pm",
       "col": 0,
       "type": "backend",
-      "label": "proposal.md",
-      "sublabel": "why, and for whom",
+      "label": "The chain",
+      "sublabel": "drafted, landed nowhere",
       "width": 132
     },
     {
-      "id": "leave-three-files-then-hand-over_decisions",
+      "id": "the-first-word",
       "lane": "pm",
       "col": 1,
       "type": "backend",
-      "label": "decisions.md",
-      "sublabel": "goals, non-goals, rounds",
+      "label": "proposal · decisions",
+      "sublabel": "on the PM's word",
       "width": 132
     },
     {
-      "id": "leave-three-files-then-hand-over_journeys",
+      "id": "the-first-word_journeys",
       "lane": "pm",
       "col": 2,
       "type": "backend",
       "label": "user-journeys.md",
-      "sublabel": "who walks it",
+      "sublabel": "US-01 to US-03",
       "width": 132
     },
     {
-      "id": "link-never-describe",
+      "id": "the-rail-and-its-states",
       "lane": "design",
       "col": 2,
       "type": "frontend",
       "label": "ui-design.md",
-      "sublabel": "screens and their states",
+      "sublabel": "the rail, and its states",
       "width": 132
     },
     {
-      "id": "review-in-its-own-pull-request",
+      "id": "the-mirror-and-the-rule",
+      "lane": "tech",
+      "col": 3,
+      "type": "messagebus",
+      "label": "tech-design.md",
+      "sublabel": "the mirror and the rule",
+      "width": 132
+    },
+    {
+      "id": "the-requirements-and-the-cases",
       "lane": "qa",
       "col": 3,
-      "type": "security",
-      "label": "spec.md",
-      "sublabel": "pass one · the outline",
-      "width": 132
-    },
-    {
-      "id": "review-in-its-own-pull-request_suite",
-      "lane": "qa",
-      "col": 4,
       "type": "security",
       "label": "feature-tcs.md",
       "sublabel": "blind of the scenarios",
       "width": 132
     },
     {
-      "id": "review-in-its-own-pull-request_requirements",
+      "id": "the-requirements-and-the-cases_spec",
       "lane": "qa",
-      "col": 5,
+      "col": 4,
       "type": "security",
       "label": "spec.md",
-      "sublabel": "pass two · requirements",
+      "sublabel": "requirements, reconciled",
       "width": 132
     },
     {
-      "id": "write-the-plan-then-build",
+      "id": "built-and-walked",
       "lane": "eng",
-      "col": 5,
+      "col": 4,
       "type": "cloud",
       "label": "tasks.md",
-      "sublabel": "a tech design where owed",
+      "sublabel": "four groups, tests first",
       "width": 132
     },
     {
-      "id": "leave-the-archive-copy-out-of-the-tasks",
+      "id": "the-fold-then-phase-two",
+      "lane": "store",
+      "col": 4,
+      "type": "database",
+      "label": "The archive",
+      "sublabel": "the cut, then the fold",
+      "width": 132
+    },
+    {
+      "id": "the-fold-then-phase-two_next",
       "lane": "store",
       "col": 5,
       "type": "database",
-      "label": "The archive",
-      "sublabel": "gates, then the fold",
+      "label": "Phase two",
+      "sublabel": "add-store-also-bought",
       "width": 132
     }
   ],
   "edges": [
     {
-      "from": "leave-three-files-then-hand-over",
-      "to": "leave-three-files-then-hand-over_decisions",
+      "from": "the-chain-and-the-two-held-rows",
+      "to": "the-first-word",
       "variant": "emphasis"
     },
     {
-      "from": "leave-three-files-then-hand-over_decisions",
-      "to": "leave-three-files-then-hand-over_journeys",
+      "from": "the-first-word",
+      "to": "the-first-word_journeys",
       "variant": "emphasis"
     },
     {
-      "from": "leave-three-files-then-hand-over_journeys",
-      "to": "link-never-describe",
+      "from": "the-first-word_journeys",
+      "to": "the-rail-and-its-states",
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
     },
     {
-      "from": "leave-three-files-then-hand-over_journeys",
-      "to": "review-in-its-own-pull-request",
-      "label": "awaiting: specs",
+      "from": "the-first-word_journeys",
+      "to": "the-mirror-and-the-rule",
       "variant": "emphasis",
       "fromSide": "right",
       "toSide": "top"
     },
     {
-      "from": "link-never-describe",
-      "to": "review-in-its-own-pull-request",
-      "variant": "dashed",
-      "fromSide": "right",
-      "toSide": "left"
+      "from": "the-rail-and-its-states",
+      "to": "the-requirements-and-the-cases",
+      "variant": "dashed"
     },
     {
-      "from": "review-in-its-own-pull-request",
-      "to": "review-in-its-own-pull-request_suite",
-      "variant": "emphasis"
-    },
-    {
-      "from": "review-in-its-own-pull-request_suite",
-      "to": "review-in-its-own-pull-request_requirements",
-      "variant": "emphasis"
-    },
-    {
-      "from": "review-in-its-own-pull-request_requirements",
-      "to": "write-the-plan-then-build",
+      "from": "the-mirror-and-the-rule",
+      "to": "the-requirements-and-the-cases",
       "variant": "emphasis",
       "fromSide": "bottom",
-      "toSide": "top"
+      "toSide": "top",
+      "route": "straight"
     },
     {
-      "from": "write-the-plan-then-build",
-      "to": "leave-the-archive-copy-out-of-the-tasks",
+      "from": "the-requirements-and-the-cases",
+      "to": "the-requirements-and-the-cases_spec",
+      "variant": "emphasis"
+    },
+    {
+      "from": "the-requirements-and-the-cases_spec",
+      "to": "built-and-walked",
+      "variant": "emphasis",
+      "fromSide": "bottom",
+      "toSide": "top",
+      "route": "straight"
+    },
+    {
+      "from": "built-and-walked",
+      "to": "the-fold-then-phase-two",
       "variant": "dashed",
       "fromSide": "bottom",
       "toSide": "top",
       "route": "straight"
+    },
+    {
+      "from": "the-fold-then-phase-two",
+      "to": "the-fold-then-phase-two_next",
+      "label": "depends_on",
+      "variant": "dashed"
     }
   ]
 }
