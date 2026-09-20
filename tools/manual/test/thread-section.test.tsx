@@ -15,6 +15,10 @@ import { changeEntry } from "./manual-fixture";
 
 const AT = "2026-09-18T09:00:00+08:00";
 
+/** When the held row was written — the commit that added it, which is what
+ * dates it. */
+const ASKED = "2026-09-12T09:00:00+08:00";
+
 function event(kind: ThreadEvent["kind"], extra: Partial<ThreadEvent> = {}) {
   return {
     sha: "0".repeat(40),
@@ -46,10 +50,14 @@ const change: ChangeEntry = changeEntry("gift-cards", [], {
   hands: { pm: "robin", design: "kim", dev: "erin" },
 });
 
-function render(history: ThreadEvent[], entry: ChangeEntry = change): string {
+function render(
+  history: ThreadEvent[],
+  entry: ChangeEntry = change,
+  askedAt: Record<string, string> = {},
+): string {
   return renderToStaticMarkup(
     <MemoryRouter initialEntries={["/in-flight/gift-cards"]}>
-      <ThreadSection change={entry} history={history} />
+      <ThreadSection askedAt={askedAt} change={entry} history={history} />
     </MemoryRouter>,
   );
 }
@@ -187,7 +195,7 @@ describe("what the files say beside the commits", () => {
     expect(html).toContain("<code");
   });
 
-  it("lists a held question at the end, undated, and never a decided row", () => {
+  it("lists a held question at the end, dated, and never a decided row", () => {
     const withQuestion: ChangeEntry = {
       ...change,
       questions: [
@@ -210,13 +218,33 @@ describe("what the files say beside the commits", () => {
         },
       ],
     };
-    const html = render([event("opened")], withQuestion);
+    const html = render([event("opened")], withQuestion, { Q7: ASKED });
 
     expect(html).toContain("Q7 held for the product manager");
     expect(html).toContain("Which day does the shelf start on?");
-    expect(html).toContain("undated");
+    expect(html).toContain(`title="${formatDate(ASKED)}"`);
+    expect(html).toContain(relativeTime(ASKED));
     expect(html).not.toContain("Whether a gift card earns");
     expect(html.indexOf("Q7")).toBeGreaterThan(html.indexOf("Opened by"));
+  });
+
+  it("leaves a held row no commit dates undated", () => {
+    const withQuestion: ChangeEntry = {
+      ...change,
+      questions: [
+        {
+          id: "Q7",
+          artifact: "decisions",
+          role: "pm",
+          hand: "robin",
+          text: "Which day does the shelf start on?",
+        },
+      ],
+    };
+    const html = render([event("opened")], withQuestion);
+
+    expect(html).toContain("Q7 held for the product manager");
+    expect(html).toContain("undated");
   });
 });
 

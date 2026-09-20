@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import { readChangeHistories } from "../src/store/read-change-history.mts";
-import { gitStore, MANIFEST, PROPOSAL, tasksMd } from "./git-store";
+import {
+  decisionsMd,
+  gitStore,
+  MANIFEST,
+  PROPOSAL,
+  tasksMd,
+} from "./git-store";
 import { writeStore } from "./tmp-store";
 
 /**
@@ -28,9 +34,9 @@ function store() {
   return built;
 }
 
-/** One change's thread, off the store-wide walks. */
+/** One change's events, off the store-wide walks. */
 const thread = (root: string, at: string | null = null, change = CHANGE) =>
-  readChangeHistories(root, at).get(change) ?? [];
+  readChangeHistories(root, at).get(change)?.events ?? [];
 
 const kinds = (root: string) => thread(root).map((event) => event.kind);
 
@@ -128,6 +134,42 @@ describe("what the walk makes of each commit", () => {
   });
 });
 
+describe("what dates a held row", () => {
+  it("dates each `Q<n>` from the commit that added its own row", () => {
+    const { root, write, commit } = store();
+    write(
+      `${DIR}/decisions.md`,
+      decisionsMd([
+        "| Q7 | Which day does the shelf start on? | ❓ pm - the Monday |",
+      ]),
+    );
+    commit(`chore(openspec): land decisions of ${CHANGE} on @robin`, 12);
+    write(
+      `${DIR}/decisions.md`,
+      decisionsMd([
+        "| Q7 | Which day does the shelf start on? | The Monday |",
+        "| Q8 | Who signs the copy off? | ❓ design - the designer |",
+      ]),
+    );
+    commit(`chore(openspec): land decisions of ${CHANGE} on @robin`, 5);
+
+    const read = readChangeHistories(root, null).get(CHANGE);
+    const [, first, second] = read?.events ?? [];
+
+    // The row Q7 was written in the first landing and only rewritten in the
+    // second: a held row is dated by the commit that asked it.
+    expect(read?.askedAt).toEqual({ Q7: first.date, Q8: second.date });
+  });
+
+  it("dates nothing for a change whose decisions table has no row", () => {
+    const { root, write, commit } = store();
+    write(`${DIR}/decisions.md`, decisionsMd([]));
+    commit(`chore(openspec): land decisions of ${CHANGE} on @robin`, 3);
+
+    expect(readChangeHistories(root, null).get(CHANGE)?.askedAt).toEqual({});
+  });
+});
+
 describe("the order and the edges", () => {
   it("reads oldest first, the way a thread is read", () => {
     const { root, write, commit } = store();
@@ -169,10 +211,10 @@ describe("the order and the edges", () => {
     expect([...histories.keys()].sort()).toEqual(["second-probe", CHANGE]);
     // The commit that opened the second change touched no file of the first,
     // so it is no row of its thread.
-    expect(histories.get(CHANGE)).toHaveLength(1);
-    expect(histories.get("second-probe")?.map((one) => one.kind)).toEqual([
-      "opened",
-    ]);
+    expect(histories.get(CHANGE)?.events).toHaveLength(1);
+    expect(
+      histories.get("second-probe")?.events.map((one) => one.kind),
+    ).toEqual(["opened"]);
   });
 
   it("says nothing for a store git cannot walk", () => {

@@ -33,6 +33,20 @@ export const tasksMd = (owner: string, done: number, note = "") =>
     "",
   ].join("\n");
 
+/** A `## Decisions` table holding the rows given, as `readQuestions` reads
+ * them: what dates a held row is the commit that added its own line. */
+export const decisionsMd = (rows: string[]) =>
+  [
+    "# Decisions",
+    "",
+    "## Decisions",
+    "",
+    "| Q | Asked | Decided |",
+    "| --- | --- | --- |",
+    ...rows,
+    "",
+  ].join("\n");
+
 export const MANIFEST = "schema: grade10-planning\ncreated: 2026-09-01\n";
 export const PROPOSAL = "# Gift cards\n\n## Why\n\nNobody can buy one.\n";
 
