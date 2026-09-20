@@ -537,6 +537,9 @@ test("shared-planning-agent-rounds-SC-04, shared-planning-agent-rounds-SC-65 - p
 });
 
 test("plan:land's gate refuses a change the store cannot read", () => {
+  // The gate reads the landing commit's own tree, so the artifact whose file
+  // the branch broke is the one whose landing it refuses: a proposal with no
+  // Why, carried into `L` and refused there.
   const { root, git } = sandbox();
   writeFileSync(
     join(root, DIR, "proposal.md"),
@@ -546,7 +549,16 @@ test("plan:land's gate refuses a change the store cannot read", () => {
   git("commit", "--quiet", "-m", "break the proposal");
   git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
 
-  const result = land(root);
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "proposal",
+    "--root",
+    root,
+    "--perspectives",
+    "verifier",
+    "--stood",
+    "nothing stood",
+  ]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /the gate refuses: check:manual/);

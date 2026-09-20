@@ -553,11 +553,16 @@ function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
  * Any role is read, the six or not: a question naming one outside them is
  * listed under that role and routed to its channel, the way an unnamed hand
  * is, and narrowing the set here would drop the question instead.
+ *
+ * Exported for the landing step, which refuses while a row is open and takes
+ * its recommendation on `--with-recommendations` (`scripts/openspec/lib/held.mjs`):
+ * the held rows are read here or nowhere, never by a second parser of the
+ * same table.
  */
-function readQuestions(
+export function readQuestions(
   text: string,
-  hands: Record<string, string> | undefined,
-  rounds: RoundRow[],
+  hands?: Record<string, string> | undefined,
+  rounds: RoundRow[] = [],
 ): OpenQuestion[] {
   const open: OpenQuestion[] = [];
   const raisedAgainst = artifactRaisedAgainst(rounds);

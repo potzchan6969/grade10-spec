@@ -11,8 +11,8 @@
  * `openspec/specs/shared/planning/agent-rounds/spec.md`: "`rounds.md` holds
  * one row per round".
  */
-import { existsSync, mkdirSync, readFileSync, writeFileSync } from "node:fs";
-import { dirname, join } from "node:path";
+import { existsSync, readFileSync } from "node:fs";
+import { join } from "node:path";
 import {
   ROUND_COLUMNS,
   readRounds,
@@ -34,23 +34,30 @@ export const ROUNDS_HEADER = [
 export const roundsPath = (change) => `openspec/changes/${change}/rounds.md`;
 
 /**
- * One row appended, its number the rows already there plus one.
+ * The file with one row appended, its number the rows already there plus one —
+ * the text alone, written nowhere. The landing hashes it straight into the
+ * object database: the row lands in the commit it proves, and no working tree
+ * carries it in between.
  *
  * `cells` carries the five columns after the number; a column the round has
  * nothing for is written `-` rather than left blank, because a blank column is
- * what the `round` rule refuses. Returns the row as written, the number it
- * took and whether the file was created.
+ * what the `round` rule refuses. Returns the file's new text, the row as
+ * written, the number it took and whether the file is a new one.
  */
-export function appendRoundRow(root, change, cells) {
+export function withRoundRow(root, change, cells) {
   const path = roundsPath(change);
   const file = join(root, path);
   const created = !existsSync(file);
-  const text = created ? ROUNDS_HEADER : readFileSync(file, "utf8");
-  const round = readRounds(text).length + 1;
+  const held = created ? ROUNDS_HEADER : readFileSync(file, "utf8");
+  const round = readRounds(held).length + 1;
   const row = `| ${[round, ...ROW_ORDER.map((key) => cell(cells[key]))].join(" | ")} |`;
-  mkdirSync(dirname(file), { recursive: true });
-  writeFileSync(file, `${text.replace(/\n*$/, "\n")}${row}\n`);
-  return { path, file, row, round, created };
+  return {
+    path,
+    text: `${held.replace(/\n*$/, "\n")}${row}\n`,
+    row,
+    round,
+    created,
+  };
 }
 
 const ROW_ORDER = ["artifact", "perspectives", "stood", "asked", "tests"];

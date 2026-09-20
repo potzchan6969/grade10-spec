@@ -9,8 +9,11 @@ import { heldRowsOf, takeRecommendations } from "./lib/held.mjs";
 import { BRANCH, CHANGE, DIR, sandbox } from "./test/demo-store.mjs";
 
 /**
- * Two things `plan-land.mjs` gained beside the terminal landing:
+ * Three things `plan-land.mjs` gained beside the terminal landing:
  *
+ * - the landing commit cut from `main` — one artifact's own files, the record
+ *   line and the round's row, and none of the drafts the branch holds above
+ *   it
  * - the hold (Q59, Q60) — an open `❓ <role> - recommended: <option>` row in
  *   `decisions.md` holds every landing until it is answered or waved through
  * - the relay (Q54, Q55) — a run bound to `.round/relay.json` asks the relay
@@ -81,6 +84,94 @@ function writeRelayFile(root, url, sender = "@dana", token = "wake-tok-1") {
 
 const ROW = ["--perspectives", "design,simpler", "--stood", "nothing stood"];
 
+/** The branch as a wake leaves it: the artifact about to land redrawn, and
+ * the next one after it drafted ahead and landed nowhere (`Q58`). Returns the
+ * store, so a test reads `main`, `L` and the branch off the same fixture. */
+function draftedAhead(files = {}) {
+  const made = sandbox({ files });
+  const { root, git } = made;
+  writeFileSync(
+    join(root, DIR, "ui-design.md"),
+    "## Screens\n\nTwo screens, and a state each.\n",
+  );
+  writeFileSync(
+    join(root, DIR, "tech-design.md"),
+    "## Decisions\n\nThe drafted decision, waiting on the engineer.\n",
+  );
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "draft the design and the tech design ahead");
+  git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+  return made;
+}
+
+/** One file as a commit holds it. */
+const textAt = (repo, commit, path) =>
+  execFileSync("git", ["-C", repo, "show", `${commit}:${path}`], {
+    encoding: "utf8",
+  });
+
+const shaOf = (repo, ref) =>
+  execFileSync("git", ["-C", repo, "rev-parse", ref], {
+    encoding: "utf8",
+  }).trim();
+
+// ── The landing commit, cut from main ───────────────────────────────────────
+
+test("shared-planning-agent-rounds-SC-04 - the landing commit carries the artifact that landed and not the draft above it", async () => {
+  const { root, remote } = draftedAhead();
+  const before = shaOf(remote, "main");
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
+
+  assert.equal(result.status, 0, result.stderr);
+  // `main` moved as a plain fast-forward onto the landing commit, which was
+  // cut from the `main` this run read.
+  const landing = shaOf(remote, "main");
+  assert.equal(shaOf(remote, `${landing}^`), before);
+  // The tree of `L`: the design as the branch drew it, the tech design as
+  // `main` still holds it.
+  assert.match(
+    textAt(remote, landing, `${DIR}/ui-design.md`),
+    /Two screens, and a state each/,
+  );
+  assert.match(
+    textAt(remote, landing, `${DIR}/tech-design.md`),
+    /^## Decisions\n\nThe one decision\.\n$/,
+  );
+  assert.match(
+    textAt(remote, landing, `${DIR}/.openspec.yaml`),
+    /ui-design: dana/,
+  );
+  assert.match(
+    textAt(remote, landing, `${DIR}/rounds.md`),
+    /\| 1 \| ui-design \|/,
+  );
+  // And the branch still holds the draft, sitting above the landing.
+  assert.match(
+    textAt(remote, `refs/heads/${BRANCH}`, `${DIR}/tech-design.md`),
+    /waiting on the engineer/,
+  );
+  assert.equal(
+    shaOf(remote, `refs/heads/${BRANCH}~0`) === landing,
+    false,
+    "the branch is the landing plus the draft above it",
+  );
+  assert.ok(
+    execFileSync(
+      "git",
+      [
+        "-C",
+        remote,
+        "merge-base",
+        "--is-ancestor",
+        landing,
+        `refs/heads/${BRANCH}`,
+      ],
+      { encoding: "utf8" },
+    ) === "",
+  );
+});
+
 // ── lib/held.mjs, tested without git ────────────────────────────────────────
 
 const TABLE = (decided) =>
@@ -141,9 +232,11 @@ test("takeRecommendations rewrites only the held cell, keeping every other row a
 
   const rewritten = takeRecommendations(markdown);
 
+  // The row reads as answered, and says by whom: nobody's word settled it,
+  // the round took the option it recommended (Q60).
   assert.match(
     rewritten,
-    /\| Q2 \| How big is the round\? \| the simpler thing alone \| Four readers on every draft \|/,
+    /\| Q2 \| How big is the round\? \| the simpler thing alone - decided by the round \| Four readers on every draft \|/,
   );
   assert.match(
     rewritten,
@@ -200,13 +293,59 @@ test("shared-planning-agent-rounds-SC-72 - land with recommendations takes every
   assert.match(taken.stdout, /Q2/);
   assert.match(
     decisionsOf(root),
-    /\| Q2 \| How big is the round\? \| the simpler thing alone \| Four readers on every draft \|/,
+    /\| Q2 \| How big is the round\? \| the simpler thing alone - decided by the round \| Four readers on every draft \|/,
   );
   assert.doesNotMatch(decisionsOf(root), /❓/);
   // Staged into the landing commit itself, not a commit of its own.
   const landed = git("show", "--stat", "--format=", "HEAD");
   assert.match(landed, /decisions\.md/);
   assert.match(landed, /\.openspec\.yaml/);
+});
+
+test("shared-planning-agent-rounds-SC-72 - land with recommendations reads the drafts after the decisions again against the rows it took", async () => {
+  // The drafts above the decisions were drawn from those recommendations, so
+  // the same commit that answers the rows records them as read again against
+  // them and nothing goes behind (Q60).
+  const { root, remote } = draftedAhead({
+    [`${DIR}/decisions.md`]: HELD_DECISIONS,
+  });
+
+  const taken = await run([
+    CHANGE,
+    "decisions",
+    "--root",
+    root,
+    "--with-recommendations",
+    "--perspectives",
+    "verifier",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(taken.status, 0, taken.stderr);
+  const record = textAt(remote, "main", `${DIR}/.openspec.yaml`);
+  assert.match(record, /landed_by:\n\s+decisions: dana/);
+  assert.match(
+    record,
+    /reviewed:\n(?:\s+\S+: [0-9a-f]{8}\n)*\s+ui-design: [0-9a-f]{8}/,
+  );
+  assert.match(record, /\s+tech-design: [0-9a-f]{8}/);
+  // `tasks` is not drafted on this branch: nothing to read again, no line.
+  assert.doesNotMatch(record, /\s+tasks: [0-9a-f]{8}/);
+  assert.match(taken.stdout, /read again against Q2/);
+});
+
+test("a wake was expected and no relay.json is there: the landing fails loudly", async () => {
+  const { root } = sandbox();
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW], {
+    ROUND_WAKE: "relay",
+  });
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /\.round\/relay\.json/);
+  assert.match(result.stderr, /ROUND_WAKE=relay/);
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
 test("a landing with no held row lands clean, taking nothing as recommended", async () => {
@@ -266,6 +405,40 @@ test("shared-planning-agent-rounds-SC-73 - a run lands through the relay, asked 
     encoding: "utf8",
   }).trim();
   assert.equal(mainAfter, beforeMain);
+});
+
+test("shared-planning-agent-rounds-SC-73 - the sha a wake asks the relay to land is cut from main, with no draft above it", async () => {
+  let seen;
+  const server = await stubRelay((_req, res, body) => {
+    seen = JSON.parse(body);
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ landed: seen.sha }));
+  });
+  const { root, remote } = draftedAhead();
+  writeRelayFile(root, urlOf(server));
+  const before = shaOf(remote, "main");
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  // The relay is asked about a commit sitting directly on the `main` this run
+  // read, carrying the design that landed and not the tech design drafted
+  // above it — the relay's own fast-forward is all that is left to do.
+  assert.equal(shaOf(remote, `${seen.sha}^`), before);
+  assert.match(
+    textAt(remote, seen.sha, `${DIR}/ui-design.md`),
+    /Two screens, and a state each/,
+  );
+  assert.match(
+    textAt(remote, seen.sha, `${DIR}/tech-design.md`),
+    /^## Decisions\n\nThe one decision\.\n$/,
+  );
+  // The branch this run pushed carries the draft, above that same commit.
+  assert.match(
+    textAt(remote, `refs/heads/${BRANCH}`, `${DIR}/tech-design.md`),
+    /waiting on the engineer/,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-73 - a 409 re-reads main once and retries, then lands", async () => {
