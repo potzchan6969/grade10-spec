@@ -215,7 +215,7 @@ A draft that fails one line is rewritten.
 | Held by | What |
 | --- | --- |
 | `pnpm check:manual` refuses | canonical form, block attributes, a block id that resolves nothing, an example ledger whose balance does not add up, a flow whose cases cannot be told apart, a 🚧 line no in-flight change delivers |
-| `pnpm check:manual` warns | a spec whose requirements changed meaning after the page embedding it was last committed, cleared by the edit the page needs or by a dated `reviewed:` in its frontmatter when it needs none; a prose reference naming nothing or two things; a ledger written as a table outside an example; and `dense`, below. A warning asks for the rewrite and never blocks a fold |
+| `pnpm check:manual` warns | a spec whose requirements changed meaning after the page embedding it was last committed, cleared by the edit the page needs or by a dated `reviewed:` in its frontmatter when it needs none; a prose reference naming nothing or two things; a ledger written as a table outside an example; a ❓ or `TBC` inside a sentence, read as words (`prose`); and `dense`, below. A warning asks for the rewrite and never blocks a fold |
 | Review | voice and shape, the way code is held to the spec |
 | The `writing-style` skill | loaded before drafting; it points here |
 
