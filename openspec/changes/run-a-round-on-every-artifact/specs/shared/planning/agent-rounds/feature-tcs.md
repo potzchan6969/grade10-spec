@@ -2418,12 +2418,12 @@ What an automated test decides, per case:
 | `US2-TC6-1` | `scripts/openspec/round-scripts.test.mjs` |
 | `US2-TC8-1` | `tools/relay/test/land.test.ts` |
 | `US4-TC9-1` | `scripts/openspec/round-scripts.test.mjs` |
-| `US4-TC10-1` | `tools/relay/test/post.test.ts` |
-| `US4-TC11-1` | `tools/relay/test/room.test.ts` |
+| `US4-TC10-1` | `tools/relay/test/worker.test.ts` |
+| `US4-TC11-1` | `tools/relay/test/room-state.test.ts` |
 | `US5-TC5-1` | `scripts/openspec/round-scripts.test.mjs` |
 | `US5-TC6-1` | `tools/manual/test/behind.test.ts` |
 | `US5-TC10-1` | `scripts/openspec/round-scripts.test.mjs` |
-| `US5-TC15-1` | `tools/relay/test/room.test.ts` |
+| `US5-TC15-1` | `tools/relay/test/room-state.test.ts` |
 | `US5-TC16-1` | `tools/relay/test/land.test.ts` |
 | `US5-TC17-1` | `scripts/openspec/reread-workflow.test.mjs` |
 | `US5-TC18-1` | `scripts/openspec/reread-workflow.test.mjs` |
