@@ -1,10 +1,18 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  actionPayload,
+  confirmBlocks,
+  confirmedBlocks,
+  confirmedLine,
   isLandingWord,
+  parseSlackAction,
   parseSlackRequest,
   postMessage,
+  pressedLine,
+  pressedMessage,
   routeMessage,
   signSlackRequest,
+  updateMessage,
   verifySlackSignature,
   wordOf,
 } from "../src/slack.ts";
@@ -322,6 +330,213 @@ describe("the room a message wakes", () => {
   });
 });
 
+describe("a press", () => {
+  const PAYLOAD = {
+    type: "block_actions",
+    user: { id: "U0PM" },
+    container: {
+      channel_id: CHANNEL,
+      message_ts: "1700000005.000100",
+      thread_ts: "1700000000.000100",
+    },
+    message: {
+      text: "*What is next* — your word on the proposal",
+      ts: "1700000005.000100",
+      thread_ts: "1700000000.000100",
+    },
+    actions: [
+      {
+        action_id: "confirm",
+        value: "land",
+        action_ts: "1700000009.000100",
+        text: { type: "plain_text", text: "Confirm proposal" },
+      },
+    ],
+  };
+
+  const form = (payload: unknown) =>
+    `payload=${encodeURIComponent(JSON.stringify(payload))}`;
+
+  const pressed = (over: Record<string, unknown> = {}) =>
+    parseSlackAction({ ...PAYLOAD, ...over });
+
+  it("reads the form's one field", () => {
+    expect(actionPayload(form(PAYLOAD))).toEqual(PAYLOAD);
+  });
+
+  it("reads no payload from a body that names none, or names one that is not JSON", () => {
+    expect(actionPayload("")).toBe(null);
+    expect(actionPayload("ssl_check=1")).toBe(null);
+    expect(actionPayload("payload=not-json")).toBe(null);
+  });
+
+  it("reads a block_actions payload down to one press", () => {
+    expect(pressed()).toEqual({
+      kind: "confirm",
+      press: {
+        channel: CHANNEL,
+        threadTs: "1700000000.000100",
+        messageTs: "1700000005.000100",
+        actionTs: "1700000009.000100",
+        user: "U0PM",
+        word: "land",
+        label: "Confirm proposal",
+        text: "*What is next* — your word on the proposal",
+      },
+    });
+  });
+
+  it("takes the thread from the message, then from the message the button is on", () => {
+    const fromMessage = pressed({
+      container: { channel_id: CHANNEL, message_ts: "1700000005.000100" },
+    });
+    expect(fromMessage.kind === "confirm" && fromMessage.press.threadTs).toBe(
+      "1700000000.000100",
+    );
+    // A button on a message with no thread of its own: a reply to it opens
+    // the thread, so the message is its own root.
+    const alone = pressed({
+      container: { channel_id: CHANNEL, message_ts: "1700000005.000100" },
+      message: { text: "no thread here", ts: "1700000005.000100" },
+    });
+    expect(alone.kind === "confirm" && alone.press.threadTs).toBe(
+      "1700000005.000100",
+    );
+  });
+
+  it("ignores an interaction that is not a press", () => {
+    expect(pressed({ type: "view_submission" })).toEqual({
+      kind: "ignored",
+      why: "not-block-actions",
+    });
+    expect(parseSlackAction(null)).toEqual({
+      kind: "ignored",
+      why: "not-block-actions",
+    });
+  });
+
+  it("ignores a button the relay did not issue, and one saying no word", () => {
+    expect(
+      pressed({ actions: [{ action_id: "somebody-else", value: "land" }] }),
+    ).toEqual({ kind: "ignored", why: "not-a-confirm" });
+    expect(pressed({ actions: [{ action_id: "confirm", value: " " }] })).toEqual(
+      { kind: "ignored", why: "not-a-confirm" },
+    );
+    expect(pressed({ actions: [] })).toEqual({
+      kind: "ignored",
+      why: "not-a-confirm",
+    });
+  });
+
+  it("ignores a press that names no thread and no message", () => {
+    expect(pressed({ container: {}, message: {} })).toEqual({
+      kind: "ignored",
+      why: "no-thread",
+    });
+  });
+
+  it("is the thread reply that says the word", () => {
+    const press = pressed();
+    if (press.kind !== "confirm") throw new Error("the press was ignored");
+    expect(pressedMessage(press.press)).toEqual({
+      channel: CHANNEL,
+      ts: "1700000009.000100",
+      threadTs: "1700000000.000100",
+      user: "U0PM",
+      text: "land",
+      mentionsApp: false,
+    });
+    // Routed exactly as a reply saying it: the thread's own room, and no room
+    // opened by a press.
+    expect(routeMessage(pressedMessage(press.press), CHANNEL)).toEqual({
+      room: `${CHANNEL}/1700000000.000100`,
+      thread: { channel: CHANNEL, ts: "1700000000.000100" },
+      reason: "message",
+      requireRoom: true,
+    });
+    expect(routeMessage(pressedMessage(press.press), "C0OTHER")).toBe(null);
+  });
+
+  it("refuses a press the signing secret does not sign", async () => {
+    const body = form(PAYLOAD);
+    const signature = await signSlackRequest(SECRET, TIMESTAMP, body);
+    expect(
+      await verifySlackSignature(
+        SECRET,
+        { timestamp: TIMESTAMP, signature, body },
+        NOW,
+      ),
+    ).toBe(true);
+    // The form as it arrived is what is signed: a payload read and written
+    // back has another signature.
+    expect(
+      await verifySlackSignature(
+        SECRET,
+        { timestamp: TIMESTAMP, signature, body: form(PAYLOAD.actions[0]) },
+        NOW,
+      ),
+    ).toBe(false);
+  });
+
+  it("says in the thread who pressed it, and what the map does not name", () => {
+    const press = pressed();
+    if (press.kind !== "confirm") throw new Error("the press was ignored");
+    expect(pressedLine(press.press, "ecchochan")).toBe(
+      "@ecchochan pressed *Confirm proposal*",
+    );
+    expect(pressedLine(press.press, null)).toBe(
+      "<@U0PM> pressed *Confirm proposal* — the team map does not name this member, so nothing lands on it",
+    );
+    expect(confirmedLine(press.press, "ecchochan")).toBe(
+      "Confirmed by @ecchochan",
+    );
+    expect(confirmedLine(press.press, null)).toBe("Confirmed by <@U0PM>");
+  });
+});
+
+describe("the blocks", () => {
+  it("is the line and one button", () => {
+    expect(
+      confirmBlocks("your word on the proposal", {
+        label: "Confirm proposal",
+        word: "land",
+      }),
+    ).toEqual([
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: "your word on the proposal" },
+      },
+      {
+        type: "actions",
+        elements: [
+          {
+            type: "button",
+            text: { type: "plain_text", text: "Confirm proposal" },
+            action_id: "confirm",
+            value: "land",
+            style: "primary",
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("is the line and a context line once the press is in", () => {
+    expect(
+      confirmedBlocks("your word on the proposal", "Confirmed by @ecchochan"),
+    ).toEqual([
+      {
+        type: "section",
+        text: { type: "mrkdwn", text: "your word on the proposal" },
+      },
+      {
+        type: "context",
+        elements: [{ type: "mrkdwn", text: "Confirmed by @ecchochan" }],
+      },
+    ]);
+  });
+});
+
 describe("posting", () => {
   it("shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token", async () => {
     const calls: { url: string; init: RequestInit }[] = [];
@@ -363,6 +578,25 @@ describe("posting", () => {
     });
   });
 
+  it("carries the blocks a button needs, with the text as the fallback", async () => {
+    const bodies: string[] = [];
+    vi.stubGlobal("fetch", async (_url: string, init: RequestInit) => {
+      bodies.push(String(init.body));
+      return new Response(JSON.stringify({ ok: true, ts: "1.1" }));
+    });
+    const blocks = confirmBlocks("your word", {
+      label: "Confirm proposal",
+      word: "land",
+    });
+    await postMessage("xoxb", CHANNEL, "your word", "1.1", blocks);
+    expect(JSON.parse(bodies[0])).toEqual({
+      channel: CHANNEL,
+      text: "your word",
+      thread_ts: "1.1",
+      blocks,
+    });
+  });
+
   it("stops on a post Slack refused", async () => {
     vi.stubGlobal(
       "fetch",
@@ -372,5 +606,35 @@ describe("posting", () => {
     await expect(postMessage("xoxb", CHANNEL, "hello")).rejects.toThrow(
       "channel_not_found",
     );
+  });
+});
+
+describe("updating", () => {
+  it("replaces the message's blocks, keeping its text", async () => {
+    const calls: { url: string; init: RequestInit }[] = [];
+    vi.stubGlobal("fetch", async (url: string, init: RequestInit) => {
+      calls.push({ url, init });
+      return new Response(JSON.stringify({ ok: true, ts: "1.1" }));
+    });
+    const blocks = confirmedBlocks("your word", "Confirmed by @ecchochan");
+    await updateMessage("xoxb", CHANNEL, "1700000005.000100", "your word", blocks);
+    expect(calls[0].url).toBe("https://slack.com/api/chat.update");
+    expect(JSON.parse(String(calls[0].init.body))).toEqual({
+      channel: CHANNEL,
+      ts: "1700000005.000100",
+      text: "your word",
+      blocks,
+    });
+  });
+
+  it("stops on an update Slack refused, for the caller to log", async () => {
+    vi.stubGlobal(
+      "fetch",
+      async () =>
+        new Response(JSON.stringify({ ok: false, error: "message_not_found" })),
+    );
+    await expect(
+      updateMessage("xoxb", CHANNEL, "1.1", "your word", []),
+    ).rejects.toThrow("message_not_found");
   });
 });

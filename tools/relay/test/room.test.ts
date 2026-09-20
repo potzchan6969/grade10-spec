@@ -236,7 +236,12 @@ function harness(over: Partial<Answers> = {}) {
       };
       return JSON.parse(text);
     },
-    posts(): { channel: string; text: string; thread_ts?: string }[] {
+    posts(): {
+      channel: string;
+      text: string;
+      thread_ts?: string;
+      blocks?: unknown[];
+    }[] {
       return calls
         .filter((call) => call.url.includes("chat.postMessage"))
         .map(
@@ -245,6 +250,7 @@ function harness(over: Partial<Answers> = {}) {
               channel: string;
               text: string;
               thread_ts?: string;
+              blocks?: unknown[];
             },
         );
     },
@@ -819,6 +825,52 @@ describe("where a room posts", () => {
     expect(told).toHaveBeenCalledTimes(1);
     expect(String(told.mock.calls[0][0])).toContain(CHANGE);
     told.mockRestore();
+  });
+
+  it("sends the run's button as blocks, with the line as its fallback", async () => {
+    const relay = harness();
+    await landing(relay);
+    const line = "*What is next* \u2014 your word on the proposal";
+    const posted = await relay.send(CHANGE_ROOM, {
+      op: "post",
+      wake: 1,
+      text: line,
+      confirm: { label: "Confirm proposal", word: "land" },
+    });
+    expect(posted.status).toBe(200);
+    // The label and the word are the run's; the text stays the message's own,
+    // which is what a notification and a client with no blocks read.
+    expect(relay.posts().at(-1)).toEqual({
+      channel: CHANNEL,
+      text: line,
+      thread_ts: THREAD.ts,
+      blocks: [
+        { type: "section", text: { type: "mrkdwn", text: line } },
+        {
+          type: "actions",
+          elements: [
+            {
+              type: "button",
+              text: { type: "plain_text", text: "Confirm proposal" },
+              action_id: "confirm",
+              value: "land",
+              style: "primary",
+            },
+          ],
+        },
+      ],
+    });
+  });
+
+  it("sends no blocks for a line that asks for no button", async () => {
+    const relay = harness();
+    await landing(relay);
+    await relay.send(CHANGE_ROOM, { op: "post", wake: 1, text: "drafted" });
+    expect(relay.posts().at(-1)).toEqual({
+      channel: CHANNEL,
+      text: "drafted",
+      thread_ts: THREAD.ts,
+    });
   });
 
   it("reads the record once for the thread it named, and posts there again", async () => {

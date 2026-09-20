@@ -329,6 +329,224 @@ describe("/slack/events", () => {
   });
 });
 
+/** The team map as the store writes it: the member who presses, and one the
+ * map does not name. */
+const TEAM = `handles:
+  ecchochan:
+    email: ecchochan@gmail.com
+    slack: U0PM
+    roles: [pm, tech, dev]
+channels: {}
+`;
+
+describe("/slack/actions", () => {
+  const PAYLOAD = {
+    type: "block_actions",
+    user: { id: "U0PM" },
+    container: {
+      channel_id: CHANNEL,
+      message_ts: "1700000005.000100",
+      thread_ts: "1700000000.000100",
+    },
+    message: {
+      text: "*What is next* \u2014 your word on the proposal",
+      ts: "1700000005.000100",
+      thread_ts: "1700000000.000100",
+    },
+    actions: [
+      {
+        action_id: "confirm",
+        value: "land",
+        action_ts: "1700000009.000100",
+        text: { type: "plain_text", text: "Confirm proposal" },
+      },
+    ],
+  };
+
+  /** Slack's two calls and the team map at `main`, answered: what each test
+   * reads is the requests themselves. */
+  function answered(over: { team?: string; update?: unknown } = {}) {
+    const calls: { url: string; body: unknown }[] = [];
+    vi.stubGlobal("fetch", async (given: string | URL, init?: RequestInit) => {
+      const url = String(given);
+      calls.push({
+        url,
+        body: init?.body ? JSON.parse(String(init.body)) : undefined,
+      });
+      if (url.includes("api.github.com"))
+        return new Response(
+          JSON.stringify({
+            content: btoa(over.team ?? TEAM),
+            encoding: "base64",
+          }),
+        );
+      if (url.includes("chat.update"))
+        return new Response(
+          JSON.stringify(over.update ?? { ok: true, ts: "1700000005.000100" }),
+        );
+      return new Response(
+        JSON.stringify({ ok: true, ts: "1700000009.000200" }),
+      );
+    });
+    return {
+      posts: () =>
+        calls.filter((call) => call.url.includes("chat.postMessage")),
+      updates: () => calls.filter((call) => call.url.includes("chat.update")),
+    };
+  }
+
+  async function press(
+    env: Env,
+    payload: unknown = PAYLOAD,
+    signature?: string,
+  ) {
+    const waits: Promise<unknown>[] = [];
+    const body = `payload=${encodeURIComponent(JSON.stringify(payload))}`;
+    const timestamp = String(Math.floor(Date.now() / 1000));
+    const response = await worker.fetch(
+      new Request("https://relay.example/slack/actions", {
+        method: "POST",
+        headers: {
+          "x-slack-request-timestamp": timestamp,
+          "x-slack-signature":
+            signature ?? (await signSlackRequest(SIGNING, timestamp, body)),
+          "content-type": "application/x-www-form-urlencoded",
+        },
+        body,
+      }),
+      env,
+      context(waits),
+    );
+    await Promise.all(waits);
+    return response;
+  }
+
+  it("queues the word as the thread reply it stands for, and answers Slack with nothing", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    const response = await press(testEnv(rooms(sent)));
+
+    // Slack reads a body here as a message to draw, so the answer is empty.
+    expect(response.status).toBe(200);
+    expect(await response.text()).toBe("");
+    expect(sent).toEqual([
+      {
+        room: `${CHANNEL}/1700000000.000100`,
+        op: {
+          op: "enqueue",
+          reason: "message",
+          requireRoom: true,
+          dedupe: `slack-action:${CHANNEL}/1700000009.000100`,
+          thread: { channel: CHANNEL, ts: "1700000000.000100" },
+          message: {
+            slack: "U0PM",
+            text: "land",
+            ts: "1700000009.000100",
+          },
+        },
+      },
+    ]);
+    // The transcript reads the word, whoever said it and however they said it.
+    expect(slack.posts().map((call) => call.body)).toEqual([
+      {
+        channel: CHANNEL,
+        text: "@ecchochan pressed *Confirm proposal*",
+        thread_ts: "1700000000.000100",
+      },
+    ]);
+    // The button comes off, so nobody presses twice.
+    expect(slack.updates().map((call) => call.body)).toEqual([
+      {
+        channel: CHANNEL,
+        ts: "1700000005.000100",
+        text: "*What is next* \u2014 your word on the proposal",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: "*What is next* \u2014 your word on the proposal",
+            },
+          },
+          {
+            type: "context",
+            elements: [{ type: "mrkdwn", text: "Confirmed by @ecchochan" }],
+          },
+        ],
+      },
+    ]);
+  });
+
+  it("says in the thread where the team map does not name the member", async () => {
+    const slack = answered({ team: "handles: {}\nchannels: {}\n" });
+    const sent: Sent[] = [];
+    await press(testEnv(rooms(sent)));
+
+    expect(sent).toHaveLength(1);
+    expect(slack.posts()[0].body).toMatchObject({
+      text: "<@U0PM> pressed *Confirm proposal* \u2014 the team map does not name this member, so nothing lands on it",
+    });
+    expect(slack.updates()[0].body).toMatchObject({
+      blocks: [
+        expect.anything(),
+        {
+          type: "context",
+          elements: [{ type: "mrkdwn", text: "Confirmed by <@U0PM>" }],
+        },
+      ],
+    });
+  });
+
+  it("refuses a press the signing secret does not sign", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    const response = await press(
+      testEnv(rooms(sent)),
+      PAYLOAD,
+      "v0=0000000000000000000000000000000000000000000000000000000000000000",
+    );
+    expect(response.status).toBe(401);
+    expect(await response.json()).toEqual({ reason: "bad-signature" });
+    expect(sent).toEqual([]);
+    expect(slack.posts()).toEqual([]);
+  });
+
+  it("wakes nothing outside the planning channel, and nothing on a button it did not issue", async () => {
+    const slack = answered();
+    const sent: Sent[] = [];
+    const env = testEnv(rooms(sent));
+    const elsewhere = await press(env, {
+      ...PAYLOAD,
+      container: { ...PAYLOAD.container, channel_id: "C0OTHER" },
+    });
+    expect(elsewhere.status).toBe(200);
+    const somebodyElse = await press(env, {
+      ...PAYLOAD,
+      actions: [{ action_id: "somebody-else", value: "land" }],
+    });
+    expect(somebodyElse.status).toBe(200);
+    expect(sent).toEqual([]);
+    expect(slack.posts()).toEqual([]);
+    expect(slack.updates()).toEqual([]);
+  });
+
+  it("logs an update Slack refused and lets the word stand", async () => {
+    const told = vi.spyOn(console, "error").mockImplementation(() => {});
+    const slack = answered({
+      update: { ok: false, error: "message_not_found" },
+    });
+    const sent: Sent[] = [];
+    const response = await press(testEnv(rooms(sent)));
+
+    expect(response.status).toBe(200);
+    expect(sent).toHaveLength(1);
+    expect(slack.posts()).toHaveLength(1);
+    expect(told).toHaveBeenCalledTimes(1);
+    expect(String(told.mock.calls[0][0])).toContain("message_not_found");
+    told.mockRestore();
+  });
+});
+
 describe("/wake", () => {
   async function wake(env: Env, body: unknown, token = WAKE) {
     return worker.fetch(
@@ -514,6 +732,31 @@ describe("/runs/:token", () => {
       { op: "done", wake: 1 },
     ]);
     expect(new Set(sent.map((one) => one.room))).toEqual(new Set([ROOM_ID]));
+  });
+
+  it("carries the button a run asks for, and none it does not", async () => {
+    const sent: Sent[] = [];
+    const env = testEnv(rooms(sent));
+    const token = await mintWakeToken(TOKEN_SECRET, claims);
+    // The label and the word are the run's own words: the relay composes
+    // neither, and a post naming neither is a line.
+    await call(env, token, "post", {
+      text: "your word on the proposal",
+      confirm: { label: "Confirm proposal", word: "land" },
+    });
+    await call(env, token, "post", {
+      text: "no button here",
+      confirm: { label: " ", word: "land" },
+    });
+    expect(sent.map((one) => one.op)).toEqual([
+      {
+        op: "post",
+        wake: 1,
+        text: "your word on the proposal",
+        confirm: { label: "Confirm proposal", word: "land" },
+      },
+      { op: "post", wake: 1, text: "no button here" },
+    ]);
   });
 
   it("reads a post's text alone, whatever else its body names", async () => {
