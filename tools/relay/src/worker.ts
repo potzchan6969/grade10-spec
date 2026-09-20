@@ -308,7 +308,7 @@ async function onGithubEvents(request: Request, env: Env): Promise<Response> {
   if (event.kind === "ignored") return json(200, { ignored: event.why });
   // The object's answer is the delivery's: the code host reads that the move
   // reached the object, rather than an ack the relay wrote before it knew.
-  return callLive(liveObject(env), { op: "moved", ...event.head });
+  return callLive(liveObject(env), { op: "moved", head: event.head });
 }
 
 /** Where `main` is, for a page that is polling and for one whose socket the

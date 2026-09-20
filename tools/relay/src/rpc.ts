@@ -27,7 +27,7 @@ export type RoomOp =
 /** What the live object is asked: `main` moved, or where is it. A page's socket
  * is not an op — the upgrade is forwarded as it arrived, because the object
  * answers it with the socket itself. */
-export type LiveOp = ({ op: "moved" } & Head) | { op: "head" };
+export type LiveOp = { op: "moved"; head: Head } | { op: "head" };
 
 export function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {

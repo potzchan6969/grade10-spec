@@ -60,14 +60,17 @@ export class Live {
     return new Response(null, { status: 101, webSocket: client });
   }
 
+  /** The move stored, and every open socket told it. The answer names the move
+   * beside the count: a first push with no page open moved `main` as much as
+   * one that reached ten, and a count alone reads the same as a delivery the
+   * host sent twice. */
   private async onMoved(
     op: Extract<LiveOp, { op: "moved" }>,
   ): Promise<Response> {
-    const step = moved(await this.stored(), op);
+    const step = moved(await this.stored(), op.head);
     await this.ctx.storage.put(HEAD, step.head);
-    let told = 0;
-    for (const command of step.commands) told = this.tell(command.text);
-    return json(200, { told });
+    const told = step.broadcast === null ? 0 : this.tell(step.broadcast);
+    return json(200, { moved: step.broadcast !== null, told });
   }
 
   /** Whatever a page says, it is answered with the head: a page that woke from

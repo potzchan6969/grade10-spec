@@ -29,12 +29,11 @@ export const headBody = (head: Head | null): HeadBody => head ?? { main: null };
 export const headText = (head: Head | null): string =>
   JSON.stringify(headBody(head));
 
-/** The head to every socket the object holds. */
-export type LiveCommand = { kind: "broadcast"; text: string };
-
+/** What a move leaves: where `main` is now, and the one text every open page is
+ * sent, or nothing for a move that tells nobody. */
 export interface LiveStep {
   head: Head;
-  commands: LiveCommand[];
+  broadcast: string | null;
 }
 
 /**
@@ -46,14 +45,6 @@ export interface LiveStep {
  * refresh twice for one move.
  */
 export function moved(head: Head | null, push: Head): LiveStep {
-  if (head && head.main === push.main) return { head, commands: [] };
-  const next: Head = {
-    main: push.main,
-    at: push.at,
-    subject: push.subject,
-  };
-  return {
-    head: next,
-    commands: [{ kind: "broadcast", text: headText(next) }],
-  };
+  if (head && head.main === push.main) return { head, broadcast: null };
+  return { head: push, broadcast: headText(push) };
 }
