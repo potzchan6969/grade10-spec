@@ -1,4 +1,4 @@
-import { type OpenMark, openMarksOfPage } from "../api/open-marks.ts";
+import { marksBySection, OPEN, type OpenMark } from "../api/open-marks.ts";
 import { askedText, handOfMark } from "../api/stages.ts";
 import type { ChangeEntry, OpenQuestion, PageEntry } from "../api/types.ts";
 import type { PageAst } from "../content/grammar.ts";
@@ -15,11 +15,8 @@ import type { PageAst } from "../content/grammar.ts";
  * sections is one reading of the page and not six.
  *
  * A mark is the section's when the page's own prose, a callout or a flow is
- * what it sits in — the boundary `sectionTextOf` draws. A `detail` and an
- * `example` stay the page's own: a `Product decisions` table carries what the
- * page keeps against every change that ever touched it, so reading its rows
- * as one change's would hand each change every question anybody has left
- * there.
+ * what it sits in — the boundary `marksBySection` draws, which the change
+ * page's own On the pages row reads the same page through.
  */
 export function markQuestions(
   changes: ChangeEntry[],
@@ -27,17 +24,15 @@ export function markQuestions(
   asts: Map<string, PageAst>,
 ): void {
   const byPath = new Map(pages.map((page) => [page.path, page]));
-  /** The marks of one page that belong to a section, by that section. */
+  /** Each page read once, however many changes link a section of it. */
   const askedUnder = new Map<string, Map<string, OpenMark[]>>();
   const under = (path: string): Map<string, OpenMark[]> => {
     const held = askedUnder.get(path);
     if (held) return held;
-    const bySection = new Map<string, OpenMark[]>();
-    for (const mark of openMarksOfPage({ path, ast: asts.get(path) ?? null })) {
-      const anchor = mark.where?.anchor;
-      if (anchor === undefined || anchor !== mark.section) continue;
-      bySection.set(anchor, [...(bySection.get(anchor) ?? []), mark]);
-    }
+    const bySection = marksBySection(
+      { path, ast: asts.get(path) ?? null },
+      OPEN,
+    );
     askedUnder.set(path, bySection);
     return bySection;
   };

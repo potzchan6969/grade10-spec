@@ -45,13 +45,19 @@ const LEADS = String.raw`(?:^|\||(?<=[.]\s))[\s>]*(?:(?:[-*+]|\d+\.)[\s>]*)?[^�
  * dash, a colon or more than 40 characters of running text — "or a ❓ line on
  * the page" is prose about the grammar, and nobody owes it an answer.
  */
-const OPEN = new RegExp(`${LEADS}(?:❓|\\bTBC\\b)`);
+export const OPEN = new RegExp(`${LEADS}(?:❓|\\bTBC\\b)`);
 
 /** Every ❓ and `TBC` a page writes, wherever on its line it sits. The check
  * reads this against what `openMarksOfPage` counts, so an author learns a
  * mark of theirs is being read as words. */
 export const MARKED = /❓|\bTBC\b/;
 export const BUILDING = /🚧/;
+
+/** Both marks a change delivers, counted: a 🚧 line, which the pips read
+ * unanchored, and a ❓ or `TBC` leading its line the way `openMarksOfPage`
+ * counts one. `MARKED` is not in it — a mark further into a sentence is a
+ * page writing about the grammar, and a change delivers no such line. */
+export const DELIVERED = new RegExp(`${BUILDING.source}|${OPEN.source}`);
 const HEADING = /^##\s+(.+?)\s*$/;
 const FENCE = /^(`{3,}|~{3,})/;
 const LIST_MARKER = /^\s*(?:[-*]|\d+\.)\s+/;
@@ -62,6 +68,33 @@ const INLINE = /[*_]/g;
 /** Every ❓ and `TBC` on a page, in reading order. */
 export const openMarksOfPage = <P extends MarkedPage>(page: P): OpenMark<P>[] =>
   marksOfPage(page, OPEN);
+
+/**
+ * The marks of one page that belong to a `## ` section of it, by that
+ * section's slug.
+ *
+ * The one boundary a change is read on, walked once per page however many
+ * sections a caller asks about: the store writes a change's open questions
+ * from it and the change page lists the lines the change marks from it, so a
+ * hand's message and a reviewer's screen can never read one page two ways.
+ *
+ * A mark under a `detail` or an `example` is the page's own and belongs to no
+ * section — a `Product decisions` table carries what the page keeps against
+ * every change that ever touched it, and reading its rows as one change's
+ * would hand each change every question anybody has left there.
+ */
+export function marksBySection<P extends MarkedPage>(
+  page: P,
+  mark: RegExp,
+): Map<string, OpenMark<P>[]> {
+  const bySection = new Map<string, OpenMark<P>[]>();
+  for (const one of marksOfPage(page, mark)) {
+    const anchor = one.where?.anchor;
+    if (anchor === undefined || anchor !== one.section) continue;
+    bySection.set(anchor, [...(bySection.get(anchor) ?? []), one]);
+  }
+  return bySection;
+}
 
 /** Every line carrying the mark, in reading order. */
 export function marksOfPage<P extends MarkedPage>(

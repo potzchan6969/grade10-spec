@@ -1,7 +1,8 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "react-router";
 import type { ManualIndex, ParsedPage } from "../api/derive";
-import { BUILDING, MARKED, marksOfPage } from "../api/open-marks";
+import type { OpenMark } from "../api/open-marks";
+import { DELIVERED, marksBySection } from "../api/open-marks";
 import { roleLabelOf } from "../api/stage-view";
 import { askedText } from "../api/stages";
 import type { ChangeEntry, OpenQuestion } from "../api/types";
@@ -16,9 +17,12 @@ import { InlineMarkdown } from "./inline-markdown";
  * reviewer reads them on one screen rather than opening each linked page and
  * finding the marked lines among the rest.
  *
- * The marks come from `open-marks.ts`, the one reader of the grammar, and the
- * section is the boundary that reader already draws: a line under another
- * heading of the same page is that section's and not this change's.
+ * The marks come from `open-marks.ts`, the one reader of the grammar, through
+ * the same `marksBySection` the store writes the change's questions with: a
+ * line under another heading of the same page is that section's, a row inside
+ * a `Product decisions` block is the page's own, and a mark further into a
+ * sentence is words about the grammar. Reading any of those here would list a
+ * line no question of the change could ever name a hand for.
  */
 export function OnThePages({
   change,
@@ -84,11 +88,6 @@ export function OnThePages({
   );
 }
 
-/** Every 🚧 and ❓ the grammar reads, in one pass so the lines come back in
- * the order the page writes them. Composed from the two patterns
- * `open-marks.ts` exports rather than written a third time. */
-const MARKS = new RegExp(`${BUILDING.source}|${MARKED.source}`);
-
 type MarkedLine = {
   /** The line as the page writes it, its list marker dropped. */
   text: string;
@@ -111,12 +110,14 @@ type MarkedSection = {
  * than drawing a heading over an empty list. */
 function sectionsOf(change: ChangeEntry, index: ManualIndex): MarkedSection[] {
   const sections: MarkedSection[] = [];
+  /** Each page read once, however many sections of it this change links. */
+  const marksOf = new Map<string, Map<string, OpenMark<ParsedPage>[]>>();
   for (const { page: path, slug } of change.sections ?? []) {
     const page = index.pageByPath.get(path);
     if (!page) continue;
-    const marks = marksOfPage(page, MARKS).filter(
-      (mark) => mark.section === slug,
-    );
+    const held = marksOf.get(path) ?? marksBySection(page, DELIVERED);
+    marksOf.set(path, held);
+    const marks = held.get(slug) ?? [];
     if (marks.length === 0) continue;
     const heading = marks[0].where?.title ?? slug;
     sections.push({
