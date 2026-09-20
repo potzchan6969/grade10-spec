@@ -153,8 +153,8 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — once `/planning-pm` has the proposal, the journeys and the outline through `pnpm run validate:changes <change>`, `/planning-qa` runs `/spec-to-tcs <change>` on that same branch: every case `draft`, as its own `test(<domain>): derive test cases for <capability>` commit, ahead of the scenarios. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
-- **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
+- **Automatic** — once the proposal, the journeys and the outline are written, `/specify` runs `/spec-to-tcs <change>` on the change's branch: every case `draft`, ahead of the scenarios, and both files land together on the product manager's word. A draft carries no authority, so the spec's reviewer approves nothing by it; review is `/tcs-review`, later
+- **Both files on one word** — `/specify` lands `spec.md` and `feature-tcs.md` together, so `main` never carries requirements with no suite beside them; CI's `pnpm run tcs:validate --require-suites` warns on a capability that still has journeys and no suite
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
@@ -175,7 +175,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | Regenerate | rewrites the whole file; destroys review history; explicit confirmation, and only when the guard allows |
 
 - **Regeneration guard** — refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does
-- **A delta that moves the ground under an `actual` case** — resolved in the same change, or `/spec-push` refuses: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
+- **A delta that moves the ground under an `actual` case** — resolved in the same change, before the suite lands: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
 
 ## What the approved suites teach the next one
 

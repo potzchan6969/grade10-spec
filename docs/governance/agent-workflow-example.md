@@ -14,7 +14,7 @@ config-only with `store: grade10-spec`, so every `openspec` command run there â€
 absolute path; the files it creates and the commits against them are the store clone's.
 
 - **Most skills live in the store clone.** `grade10` ships its own (`tdd`,
-  `testing-lanes`, and others); `/openspec-propose` and `/openspec-archive-change`
+  `testing-lanes`, and others); the line commands and `/openspec-archive-change`
   are not there. The substitute is `openspec instructions <artifact> --change <name>`
   â€” the same project context, per-artifact rules (the grilling interview among them) and template
 - **The role skills exist in both, and are not the same file.** The store's
@@ -122,7 +122,7 @@ Then `tech-design.md` and `tasks.md` with `/tech` and `/tasks`, following
 `planning-dev`'s rules, with
 `openspec instructions <artifact> --change account-setting-page` before each; a
 designer adds `ui-design.md` with `/design`, following `planning-design`'s
-rules. Validate, then land it on `main` with `/spec-push`: a group can be claimed only once its `tasks.md` is there.
+rules. Each lands on `main` on its hand's word through `/land`: a group can be claimed only once its `tasks.md` is there.
 
 **8. Claim and build.**
 
