@@ -6,8 +6,9 @@ import type { Handoff } from "../api/handoff";
 import { askedIdsOf, roundArtifactOf, roundlessGroupsOf } from "../api/rounds";
 import {
   behindLabelOf,
+  type HandShown,
+  handShown,
   ROLE_LABEL,
-  roleLabelOf,
   STAGE_LABEL,
 } from "../api/stage-view";
 import { behindOf } from "../api/stages";
@@ -311,21 +312,28 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
           <Text as="span" size="xs">
             <InlineMarkdown text={question.text} />
           </Text>
-          {/* The hand is the handle the change names for that role, and the
-              role itself where it names nobody — said as a role rather than
-              as a handle nobody answers to. */}
-          {question.hand === question.role ? (
-            <Text as="span" size="xs" tone="secondary">
-              {`${roleLabelOf(question.role)} — open`}
-            </Text>
-          ) : (
-            <Text as="span" className="font-mono" size="xs" tone="secondary">
-              {`@${question.hand}`}
-            </Text>
-          )}
+          {/* The hand `handShown` reads: the handle the change names for
+              that role, or the role itself where it names nobody. */}
+          <Hand shown={handShown(question)} />
         </li>
       ))}
     </ul>
+  );
+}
+
+/** One question's hand, the handle in its own type and the open role in the
+ * row's words. Shared by the artifact rows and On the pages, which show the
+ * same fact in the same two ways. */
+export function Hand({ shown }: { shown: HandShown }) {
+  return (
+    <Text
+      as="span"
+      className={shown.open ? undefined : "font-mono"}
+      size="xs"
+      tone="secondary"
+    >
+      {shown.text}
+    </Text>
   );
 }
 

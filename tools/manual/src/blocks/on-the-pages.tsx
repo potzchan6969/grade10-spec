@@ -3,9 +3,10 @@ import { Link } from "react-router";
 import type { ManualIndex, ParsedPage } from "../api/derive";
 import type { OpenMark } from "../api/open-marks";
 import { DELIVERED, marksBySection } from "../api/open-marks";
-import { roleLabelOf } from "../api/stage-view";
+import { type HandShown, handShown } from "../api/stage-view";
 import { askedText } from "../api/stages";
 import type { ChangeEntry, OpenQuestion } from "../api/types";
+import { Hand } from "./artifact-list";
 import { InlineMarkdown } from "./inline-markdown";
 
 /**
@@ -64,21 +65,12 @@ export function OnThePages({
             {section.lines.map((line) => (
               <li
                 className="flex flex-wrap items-baseline gap-x-2"
-                key={line.text}
+                key={line.key}
               >
                 <Text as="span" size="xs">
                   <InlineMarkdown text={line.text} />
                 </Text>
-                {line.hand === undefined ? null : (
-                  <Text
-                    as="span"
-                    className="font-mono"
-                    size="xs"
-                    tone="secondary"
-                  >
-                    {line.hand}
-                  </Text>
-                )}
+                {line.hand === undefined ? null : <Hand shown={line.hand} />}
               </li>
             ))}
           </ul>
@@ -89,10 +81,13 @@ export function OnThePages({
 }
 
 type MarkedLine = {
+  /** Where the line sits in its section, with its text: a section may write
+   * the same marked line twice, and the text alone would collide. */
+  key: string;
   /** The line as the page writes it, its list marker dropped. */
   text: string;
   /** The hand a ❓ line waits on, where the change's questions name one. */
-  hand?: string;
+  hand?: HandShown;
 };
 
 type MarkedSection = {
@@ -125,7 +120,8 @@ function sectionsOf(change: ChangeEntry, index: ManualIndex): MarkedSection[] {
       slug,
       title: `${page.ast?.frontmatter.title ?? path} › ${heading}`,
       route: page.route,
-      lines: marks.map((mark) => ({
+      lines: marks.map((mark, at) => ({
+        key: `${at}:${mark.text}`,
         text: mark.text,
         ...handOfLine(change.questions ?? [], path, slug, mark.text),
       })),
@@ -136,23 +132,17 @@ function sectionsOf(change: ChangeEntry, index: ManualIndex): MarkedSection[] {
 
 /** The hand of one line: the change's own question for it, matched on the
  * text `markQuestions` wrote — the line with its ❓ taken off, read by the
- * same function that wrote it. A handle where the change names one, the role
- * as open where it does not. */
+ * same function that wrote it. What it says is `handShown`'s, the one reading
+ * the artifact rows show the same fact with. */
 function handOfLine(
   questions: OpenQuestion[],
   path: string,
   slug: string,
   text: string,
-): { hand?: string } {
+): { hand?: HandShown } {
   const asked = askedText(text);
   const question = questions.find(
     (one) => one.page === path && one.section === slug && one.text === asked,
   );
-  if (!question) return {};
-  return {
-    hand:
-      question.hand === question.role
-        ? `${roleLabelOf(question.role)} — open`
-        : `@${question.hand}`,
-  };
+  return question ? { hand: handShown(question) } : {};
 }

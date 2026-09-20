@@ -2,6 +2,7 @@ import { DRAFTED, moveOf, ROLE_LABEL, STAGES } from "./stages.ts";
 import type {
   BehindArtifact,
   ChangeEntry,
+  OpenQuestion,
   Role,
   SnapshotTeam,
   Stage,
@@ -56,6 +57,25 @@ export function handlesFor(team: SnapshotTeam, role: Role): string[] {
  * decisions row or a page line named reads it through here. */
 export function roleLabelOf(role: string): string {
   return role in ROLE_LABEL ? ROLE_LABEL[role as Role] : role;
+}
+
+/** The hand a question waits on, as a surface shows it. */
+export type HandShown = {
+  text: string;
+  /** Nobody is named, so the role itself is the answer: said as a role rather
+   * than as a handle nobody answers to, and not set in the handle's own
+   * type. */
+  open: boolean;
+};
+
+/** Who a question is waiting on: the handle the change names for its role, or
+ * the role as open where it names nobody. Every surface that lists a question
+ * — the artifact rows and the change page's marked lines — reads it here. */
+export function handShown(question: OpenQuestion): HandShown {
+  if (question.hand === question.role) {
+    return { text: `${roleLabelOf(question.role)} — open`, open: true };
+  }
+  return { text: `@${question.hand}`, open: false };
 }
 
 /** A role as a row's own label, where it opens a line rather than sitting in

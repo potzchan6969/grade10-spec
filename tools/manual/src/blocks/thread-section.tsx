@@ -128,9 +128,7 @@ function threadRowsOf(
 
   for (const event of history) {
     const target =
-      event.kind === "landed" && event.target
-        ? roundArtifactOf(event.target)
-        : null;
+      event.kind === "landed" ? roundArtifactOf(event.target) : null;
     let round: RoundRow | undefined;
     if (target !== null) {
       const nth = landings.get(target) ?? 0;
@@ -179,17 +177,17 @@ function lineOf(change: ChangeEntry, event: ThreadEvent): string {
       return by ? `Opened by @${by}` : "Opened";
     }
     case "landed": {
-      const what = `Landed \`${event.target ?? "it"}\``;
+      const what = `Landed \`${event.target}\``;
       return event.handle ? `${what} — @${event.handle}` : what;
     }
     case "read-again":
-      return `Read again: \`${event.target ?? "it"}\`, nothing changed`;
+      return `Read again: \`${event.target}\`, nothing changed`;
     case "hand":
-      return (event.hands ?? [])
+      return event.hands
         .map((one) => `Hand: @${one.handle} is the ${roleLabelOf(one.role)}`)
         .join(" · ");
     case "tick":
-      return `Ticked ${(event.ticked ?? []).join(", ")}`;
+      return `Ticked ${event.ticked.join(", ")}`;
     default:
       return event.subject;
   }

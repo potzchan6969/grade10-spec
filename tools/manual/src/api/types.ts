@@ -702,40 +702,49 @@ export type ChangeDeltaDocument = {
 
 /** What one commit of a change was, as its thread would tell it. A commit
  * nothing else names keeps its subject: it happened either way. */
-export type ThreadEventKind =
-  /** The commit that brought `proposal.md`. */
-  | "opened"
-  /** `chore(openspec): land <target> of <id> on @<handle>`. */
-  | "landed"
-  /** `chore(openspec): <target> of <id> read again, nothing changed`. */
-  | "read-again"
-  /** A commit whose record wrote a line under `hands:`. */
-  | "hand"
-  /** A commit whose `tasks.md` patch ticked a box. */
-  | "tick"
-  | "commit";
-
-/** One event of a change's own history on `main` — the file-derived mirror of
- * what its Slack thread shows. Read per commit of the change's directory,
- * never stored. */
-export type ThreadEvent = {
+/** What every event of a thread carries: the commit it is. */
+type ThreadCommit = {
   sha: string;
   /** ISO commit date. */
   date: string;
-  kind: ThreadEventKind;
   /** The commit subject, as written — the line a kind nothing else names
    * shows. */
   subject: string;
-  /** The artifact or the task group a landing and a re-read name. */
-  target?: string;
-  /** The handle whose word landed it, where the subject names one. A task
-   * group's landing names none: the tick is its proof. */
-  handle?: string;
-  /** Each hand the commit's record wrote, role against handle. */
-  hands?: { role: string; handle: string }[];
-  /** The task ids the commit ticked. */
-  ticked?: string[];
 };
+
+/**
+ * One event of a change's own history on `main` — the file-derived mirror of
+ * what its Slack thread shows. Read per commit of the change's directory,
+ * never stored.
+ *
+ * Discriminated on `kind`, so what a row can read is what its kind carries: a
+ * landing always names its target, a hand always names hands, and no surface
+ * has to write a fallback for a state the store cannot produce.
+ */
+export type ThreadEvent =
+  /** The commit that brought `proposal.md`. */
+  | (ThreadCommit & { kind: "opened" })
+  /** `chore(openspec): land <target> of <id> on @<handle>` — the artifact or
+   * the task group it named, and the handle whose word landed it where the
+   * subject names one. A task group's landing names none: the tick is its
+   * proof. */
+  | (ThreadCommit & { kind: "landed"; target: string; handle?: string })
+  /** `chore(openspec): <target> of <id> read again, nothing changed`. */
+  | (ThreadCommit & { kind: "read-again"; target: string })
+  /** A commit whose record wrote a line under `hands:`, role against
+   * handle. */
+  | (ThreadCommit & {
+      kind: "hand";
+      hands: { role: string; handle: string }[];
+    })
+  /** A commit whose `tasks.md` patch ticked boxes, by task id. */
+  | (ThreadCommit & { kind: "tick"; ticked: string[] })
+  /** Anything else that touched the change: its subject is the line. */
+  | (ThreadCommit & { kind: "commit" });
+
+/** The kinds a thread event comes in — the discriminant itself, for a reader
+ * that names one. */
+export type ThreadEventKind = ThreadEvent["kind"];
 
 /** `/api/change/<id>` — one in-flight change's files, fetched only by the
  * change page. The snapshot's `ChangeEntry` stays the board's light row; this
