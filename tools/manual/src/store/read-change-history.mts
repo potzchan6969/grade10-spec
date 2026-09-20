@@ -1,5 +1,5 @@
-import { execFileSync } from "node:child_process";
 import type { ThreadEvent } from "../api/types.ts";
+import { walkGit } from "./git.mts";
 import { changeOf } from "./read-landings.mts";
 
 /**
@@ -119,7 +119,7 @@ const keyOf = (sha: string, id: string) => `${sha}\0${id}`;
  * commit and fifty-eight rows, each row naming that change's own files.
  */
 function commitsOf(root: string, at: string): Map<string, Commit[]> {
-  const log = walk(
+  const log = walkGit(
     root,
     [
       "log",
@@ -130,7 +130,7 @@ function commitsOf(root: string, at: string): Map<string, Commit[]> {
       "--",
       CHANGES,
     ],
-    "would not walk the changes' own history — no change will show its thread",
+    "no change will show its thread",
   );
   if (log === undefined) return new Map();
 
@@ -188,7 +188,7 @@ type Patches = {
  * one that answered it.
  */
 function patchesOf(root: string, at: string): Patches {
-  const log = walk(
+  const log = walkGit(
     root,
     [
       "log",
@@ -201,7 +201,7 @@ function patchesOf(root: string, at: string): Patches {
       `${CHANGES}/*/tasks.md`,
       `${CHANGES}/*/decisions.md`,
     ],
-    "would not walk the changes' patches — no thread will show a hand, a tick or a held row",
+    "no thread will show a hand, a tick or a held row",
   );
   const askedAt = new Map<string, Record<string, string>>();
   if (log === undefined) return { patch: new Map(), askedAt };
@@ -313,33 +313,4 @@ function tickedIn(patch: string): string[] {
     else removed.add(id);
   }
   return added.filter((id) => !removed.has(id));
-}
-
-/** One git call, or nothing where git cannot make it. A store with no
- * repository and a change no commit holds are the same answer: no history
- * tells this change's thread, which is not the same as nothing happening. */
-function walk(
-  root: string,
-  args: string[],
-  refused: string,
-): string | undefined {
-  try {
-    return execFileSync("git", ["-c", "core.quotePath=false", ...args], {
-      cwd: root,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-      maxBuffer: 256 * 1024 * 1024,
-    });
-  } catch {
-    warnUnwalked(root, refused);
-    return undefined;
-  }
-}
-
-let warned = false;
-
-function warnUnwalked(root: string, refused: string): void {
-  if (warned) return;
-  warned = true;
-  console.warn(`manual: git log in ${root} ${refused}`);
 }

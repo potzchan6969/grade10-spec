@@ -1,4 +1,4 @@
-import { execFileSync } from "node:child_process";
+import { walkGit } from "./git.mts";
 
 /**
  * When each change last landed something, which is what says it has stopped
@@ -20,7 +20,7 @@ import { execFileSync } from "node:child_process";
  * A change the walks never name is not in the map, which is an answer and not
  * a failure: a store that is not a git checkout, a change no commit holds yet,
  * and a depth-1 clone all give it, and a caller shows no age rather than
- * reading it as 0.
+ * reading it as 0. `walkGit` is what says so out loud, once per root.
  */
 
 /** A tick and a claim as `docs/governance/task-ownership.md` spells them. */
@@ -81,16 +81,20 @@ function newestTicks(
   at: string,
   date: (id: string, when: string) => void,
 ): void {
-  const log = walk(root, [
-    "log",
-    "--format=%H%x00%cI",
-    "-p",
-    "--unified=0",
-    "-M",
-    at,
-    "--",
-    "openspec/changes/*/tasks.md",
-  ]);
+  const log = walkGit(
+    root,
+    [
+      "log",
+      "--format=%H%x00%cI",
+      "-p",
+      "--unified=0",
+      "-M",
+      at,
+      "--",
+      "openspec/changes/*/tasks.md",
+    ],
+    "no change will show an age",
+  );
   if (log === undefined) return;
   let when: string | undefined;
   let id: string | undefined;
@@ -130,16 +134,20 @@ function newestArtifacts(
   at: string,
   date: (id: string, when: string) => void,
 ): void {
-  const log = walk(root, [
-    "log",
-    "--format=%H%x00%cI",
-    "--name-status",
-    "-M",
-    "--diff-filter=A",
-    at,
-    "--",
-    "openspec/changes",
-  ]);
+  const log = walkGit(
+    root,
+    [
+      "log",
+      "--format=%H%x00%cI",
+      "--name-status",
+      "-M",
+      "--diff-filter=A",
+      at,
+      "--",
+      "openspec/changes",
+    ],
+    "no change will show an age",
+  );
   if (log === undefined) return;
   let when: string | undefined;
   for (const line of log.split("\n")) {
@@ -162,33 +170,4 @@ function newestArtifacts(
 export function changeOf(path: string): string | undefined {
   const id = CHANGE_OF.exec(path)?.[1];
   return id === ARCHIVE ? undefined : id;
-}
-
-/** One walk, or nothing where git cannot make it. A store with no repository
- * and a store no commit holds are the same answer here: no history dates
- * anything, which is not the same as every change landing today. A failure is
- * said out loud once, because a board with no ages on it is a reading nobody
- * would otherwise question. */
-function walk(root: string, args: string[]): string | undefined {
-  try {
-    return execFileSync("git", ["-c", "core.quotePath=false", ...args], {
-      cwd: root,
-      encoding: "utf8",
-      stdio: ["ignore", "pipe", "ignore"],
-      maxBuffer: 256 * 1024 * 1024,
-    });
-  } catch {
-    warnUnwalked(root);
-    return undefined;
-  }
-}
-
-let warned = false;
-
-function warnUnwalked(root: string): void {
-  if (warned) return;
-  warned = true;
-  console.warn(
-    `manual: git log in ${root} would not walk the changes — no change will show an age`,
-  );
 }
