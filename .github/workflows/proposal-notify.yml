@@ -141,8 +141,10 @@ jobs:
   #
   # The relay serialises wakes per change, runs the session, and posts the
   # failure line itself if the wake's budget runs out with no `done` — so
-  # this job holds no session, no write permission and no chat token.
-  # `AGENT_WAKE_TOKEN` is the only credential it reads.
+  # this job holds no session and no write permission. `AGENT_WAKE_TOKEN` is
+  # the only credential the wake step reads; the bot token lives in the plain
+  # step below it, which says in the channel that a wake never arrived, and
+  # reaches no session either way (Q62).
   reread:
     needs: notify
     # Two gates: the variable is how Operations turns the cascade on, and the
@@ -167,3 +169,20 @@ jobs:
             -H "Authorization: Bearer $AGENT_WAKE_TOKEN" \
             -H 'content-type: application/json' \
             -d "{\"change\":\"${{ matrix.id }}\",\"reason\":\"landing\",\"base\":\"$BEFORE\",\"head\":\"$HEAD_SHA\"}"
+
+      # A wake that never arrived is a re-read nobody is waiting for and a
+      # thread nobody told: the relay cannot post its own failure line for a
+      # wake it never took. So this plain step says it in the channel, naming
+      # the change and the head, and it is the only step here that reads the
+      # bot token.
+      - name: Say the wake did not reach the relay
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL: ${{ vars.PLANNING_CHANNEL }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          curl -fsS -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H 'content-type: application/json; charset=utf-8' \
+            -d "{\"channel\":\"$CHANNEL\",\"text\":\"The wake for \`${{ matrix.id }}\` at ${HEAD_SHA:0:8} did not reach the relay: nothing is reading it again.\"}"
