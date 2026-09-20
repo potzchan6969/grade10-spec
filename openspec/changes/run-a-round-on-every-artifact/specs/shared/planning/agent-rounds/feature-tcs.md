@@ -1,8 +1,8 @@
 # shared/planning/agent-rounds Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-19, tcs-rules r3.0
-**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-66, shared-planning-agent-rounds-SC-67
+**Drafts styled:** 2026-09-20, tcs-rules r3.0
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35
 
 ## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
 
@@ -72,7 +72,7 @@
 * The landing reply is in <change thread>.
 * `thread:` is unchanged.
 
-### shared-planning-agent-rounds-US1-TC3-1: Three files land from answers in the thread
+### shared-planning-agent-rounds-US1-TC3-1: One word lands the three files that hand owns
 
 **Classification:**
 
@@ -89,19 +89,21 @@
 
 **Pre-conditions:**
 
-* <change> was opened by a first sentence and its numbered questions are posted in <change thread>.
-* admin(product manager of <change>) opens no terminal.
+* <change> was opened by a first sentence, and its proposal, decisions and journeys are drafted on its branch.
+* `ui-design.md` is drafted for admin(designer of <change>).
+* admin(product manager of <change>) is in <change thread> and opens no terminal.
 
 **Steps:**
 
 1. Answer each numbered question in <change thread>.
-2. Say land for each draft the agent posts there.
-3. Check `main`.
+2. Reply `land`.
+3. Check `main` and read the reply.
 
 **Expected Results:**
 
-* `proposal.md`, `decisions.md` and `user-journeys.md` are on `main`.
-* Each records the hand whose word landed it.
+* `proposal.md`, `decisions.md` and `user-journeys.md` are on `main`, each recording that handle.
+* `ui-design.md` is still drafted, and the designer is told it is their turn.
+* The reply names what landed, the handle and the stage the change reached.
 
 ### shared-planning-agent-rounds-US1-TC4-1: Message naming an open change opens no second change
 
@@ -195,6 +197,37 @@
 * The same six steps run, with the perspectives the draft summons.
 * `decisions.md` is on `main` with `landed_by:` naming the product manager.
 * `rounds.md` gains the round's row.
+
+### shared-planning-agent-rounds-US1-TC7-1: A plan wake drafts the chain and lands nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* admin(product manager) is in <planning channel>, and no change names what they are about to ask for.
+
+**Steps:**
+
+1. Post one sentence in <planning channel> saying what is wanted.
+2. Read the replies in the thread it starts.
+3. Read the change's branch and `main`.
+
+**Expected Results:**
+
+* The proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements, the cases and the plan are drafted on the branch, each drawn from the one before it.
+* Each draft's summary names the perspectives that read it, and the branch carries a push per artifact.
+* Nothing is on `main`.
 
 ---
 
@@ -432,6 +465,46 @@ Runs once per row of **Test data**.
 
 * The page gains what the table names.
 * No requirement is written from the remark before the page carries it.
+
+### shared-planning-agent-rounds-US2-TC8-1: The relay moves `main` only on the hand's own word
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* A run has committed the landing of `ui-design.md` on <change>'s branch.
+* `main` is at the commit that run read.
+
+**Test data:**
+
+| Who replies `land` | What the landing's diff touches | `main` |
+| --- | --- | --- |
+| admin(designer of <change>), the design's hand | <change>'s own directory | moves to the landing commit |
+| admin(engineer of <change>) | <change>'s own directory | does not move |
+| admin(designer of <change>) | a file under neither <change>'s directory nor the pages | does not move |
+
+**Steps:**
+
+1. Reply `land` in <change thread> as the teammate the table names.
+2. Read `main`.
+
+**Expected Results:**
+
+* `main` moves as the table names, and only as a fast-forward onto the landing commit.
+* A landing that does not move `main` leaves it where it was and names the check that refused.
 
 ---
 
@@ -824,6 +897,107 @@ Runs once per row of **Test data**.
 * <question id> stays listed open on its hand.
 * No artifact reaches `main` on that reply.
 
+### shared-planning-agent-rounds-US4-TC9-1: A held row holds the landing until it is answered
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> carries two held rows and a drafted artifact of admin(product manager of <change>).
+
+**Test data:**
+
+| What the hand replies | The landing |
+| --- | --- |
+| `land` | nothing lands, and the reply names both rows |
+| `land`, both rows answered first | the artifact lands |
+| `land with recommendations` | the artifact lands, both rows taken as recommended |
+
+**Steps:**
+
+1. Reply in <change thread> as the table names.
+2. Read the reply and `main`.
+
+**Expected Results:**
+
+* The landing is the one the table names.
+* A landing on `land with recommendations` records both rows as answered in its own commit.
+
+### shared-planning-agent-rounds-US4-TC10-1: A run posts with its wake's token alone
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* A wake is running on <change thread>, and the run holds the token that wake was given.
+
+**Steps:**
+
+1. Read where the run's summary arrives.
+2. Post with that token to another change's thread.
+3. Post with it again once the wake's budget has passed.
+
+**Expected Results:**
+
+* The summary arrives in <change thread>, posted through the relay.
+* Both later posts are refused.
+* The run holds no chat token of its own.
+
+### shared-planning-agent-rounds-US4-TC11-1: Two replies inside a minute wake one run
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change thread> has no wake running.
+
+**Steps:**
+
+1. Reply twice in <change thread> inside one minute.
+2. Reply once more while the wake that follows is running.
+3. Read the replies in <change thread>.
+
+**Expected Results:**
+
+* One wake runs for the first two replies, carrying both.
+* The third reply wakes one more run once that wake finishes.
+* No two wakes run on <change thread> at once.
+
 ---
 
 ## shared-planning-agent-rounds-US5: Hand sees an artifact read again after what it was drawn from moved
@@ -1183,7 +1357,7 @@ Runs once per row of **Test data**.
 * No round opens.
 * No `reviewed:` line changes.
 
-### shared-planning-agent-rounds-US5-TC12-1: A read that edits several artifacts stops at the earliest
+### shared-planning-agent-rounds-US5-TC12-1: A read that edits several redraws each from the one before
 
 **Classification:**
 
@@ -1207,13 +1381,13 @@ Runs once per row of **Test data**.
 
 1. Say land for `proposal.md` in <change thread>.
 2. Read <change thread>.
-3. Open <change page url>.
+3. Read <change>'s branch.
 
 **Expected Results:**
 
 * Each artifact after the proposal is read, oldest first.
-* A round opens for the earliest edited artifact's hand, and the read stops there.
-* The artifacts after that one are read again once that round lands.
+* Each edited artifact is redrawn from the redrawn one before it, and the artifacts after it are drafted from what was redrawn.
+* A round opens for every edited artifact's hand, and nothing but the proposal is on `main`.
 
 ### shared-planning-agent-rounds-US5-TC13-1: The fold at archive refuses a behind delta
 
@@ -1275,6 +1449,145 @@ Runs once per row of **Test data**.
 * The run reads <change>'s branch, `main` and <change thread>.
 * It continues from the pushed draft rather than drafting it again.
 * A question already answered in the thread is not asked again.
+
+### shared-planning-agent-rounds-US5-TC15-1: A wake past its budget posts the failure line
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* A wake is running on <change thread>, acknowledged with <the run's link>.
+
+**Test data:**
+
+| The wake | Its budget |
+| --- | --- |
+| a landing, or a reply in the thread | 30 minutes |
+| one that opens a change, or is asked to plan | 2 hours |
+
+**Steps:**
+
+1. Leave the run to pass the budget the table names without saying it is done.
+2. Read <change thread>.
+3. Reply in <change thread> again.
+
+**Expected Results:**
+
+* The thread carries the failure line with <the run's link>.
+* The later reply wakes a run, so the thread was freed.
+
+### shared-planning-agent-rounds-US5-TC16-1: A read that changed nothing lands with no word
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* An artifact of <change> is behind a landing that did not move what it says.
+* No hand has replied in <change thread> since that landing.
+
+**Steps:**
+
+1. Let the run read that artifact again.
+2. Read `main` and the commit it added.
+
+**Expected Results:**
+
+* The artifact's `reviewed:` line is on `main` with no hand's word.
+* The commit changes nothing but `reviewed:` lines of <change>'s own record.
+* A commit touching anything else is refused.
+
+### shared-planning-agent-rounds-US5-TC17-1: A landing wakes the relay once per change
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* A landing is ready to push to `main` that puts artifacts of two changes behind.
+
+**Test data:**
+
+| The repository variable carrying the wakes | The relay |
+| --- | --- |
+| on | is woken once for each of the two changes |
+| off | is not woken |
+
+**Steps:**
+
+1. Push the landing to `main`.
+2. Read what the push's workflow posted.
+3. Read what the relay queued.
+
+**Expected Results:**
+
+* The relay is woken as the table names.
+* Each wake is queued against its own change's thread.
+
+### shared-planning-agent-rounds-US5-TC18-1: The wake step holds no session and no token
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* admin(engineer) is at a terminal in the store.
+
+**Steps:**
+
+1. Read the wake step of the push workflow.
+2. Read the permissions and the environment that step runs with.
+
+**Expected Results:**
+
+* The step runs no agent session.
+* It holds no write permission on the store and no chat token.
+* The wake is the only thing it posts.
 
 ---
 
@@ -1697,6 +2010,38 @@ Runs once per row of **Test data**.
 * The whole suite runs on the push.
 * The suite's smoke cases run on the deploy and on the cut.
 
+### shared-planning-agent-rounds-US8-TC5-1: A case a store test decides flips with the test
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* A suite of <change> carries cases whose automation status is manual.
+* admin(QA of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Land a test in this store that decides one of those cases.
+2. Read that case in the suite.
+3. Read a case only the end-to-end walk drives.
+
+**Expected Results:**
+
+* The case the test decides reads automated from the same commit, and names that test.
+* The case only the walk drives stays manual until the walk's commit.
+* A case neither decides stays manual, with its reason in the suite.
+
 ---
 
 ## shared-planning-agent-rounds-US9: Reader sees what a round did
@@ -1981,6 +2326,37 @@ Runs once per row of **Test data**.
 * The ticked group with no row is listed as having no round.
 * The group that landed a round is not listed that way.
 
+### shared-planning-agent-rounds-US9-TC10-1: A fix pass carries its row like any other round
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Pre-conditions:**
+
+* <change>'s demonstration, or the reading of the whole change, raised fixes.
+* The fix pass has landed and admin(engineer of <change>) is at <change page url>.
+
+**Steps:**
+
+1. Read the Rounds row on <change page url>.
+2. Read the fix pass's row in `rounds.md`.
+
+**Expected Results:**
+
+* The Rounds row carries one line for the fix pass.
+* Its perspectives name the reader who argues the simpler thing.
+* The row names no verifier where that reader was the only one.
+
 ## Settled
 
 None yet - the first blind pass.
@@ -2005,15 +2381,15 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 
 * **A message naming an open change** → `Q17`. Answered in that change's thread, the reply naming the id; folded into `shared-planning-agent-rounds-SC-18`, and `US1-TC4-1` stands.
 * **An asker with no entry in the team map** → `Q18`. The change opens with its product manager unnamed and the reply asks for the handle; folded as `shared-planning-agent-rounds-SC-19`, and `US1-TC5-1` recast onto the unnamed hand.
-* **Who may say land** → `Q19`, on the product manager, with the hand of the stage alone recommended and a ❓ on the page. Folded as `shared-planning-agent-rounds-SC-05`; `US2-TC6-1` stands as the blind pass wrote it.
+* **Who may say land** → `Q19`, taken as the hand of the stage alone; the relay reads the same word again before `main` moves. Folded as `shared-planning-agent-rounds-SC-05` and `shared-planning-agent-rounds-SC-73`; `US2-TC6-1` stands as the blind pass wrote it, and `US2-TC8-1` reads the relay's own check.
 * **A reply that is none of the moves** → `Q20`. It is a remark, applied as written, and a reply the round cannot apply is answered with what it could not do; folded as `shared-planning-agent-rounds-SC-15`. `US4-TC8-1` stands and `US4-TC7-1` gained that reply.
-* **A re-read that would edit several artifacts** → `Q21`. It reads in order, opens a round for the earliest edited artifact's hand and stops; folded into `shared-planning-agent-rounds-SC-41`, and `US5-TC12-1` recast onto the stop, which is the one place the two readings disagreed.
+* **A re-read that would edit several artifacts** → `Q21`, since narrowed by `Q58`: it reads in order, redraws each edited artifact from the redrawn one before it and drafts ahead, landing nothing. Folded into `shared-planning-agent-rounds-SC-41`, and `US5-TC12-1` recast onto the redraw; the stop the two readings disagreed over is no longer the rule.
 * **Two landings inside one run's life** → `Q22`. A no-op re-read is not a round and writes no row, so a joined run leaves none; folded into `shared-planning-agent-rounds-SC-39` and the record's requirement.
 * **A landing with nothing after it** → `Q23`. Nothing beyond the landing line; folded as `shared-planning-agent-rounds-SC-42`, and `US5-TC11-1` stands.
 * **When `rounds.md` exists** → `Q24`. With the first round, absent until then; folded as `shared-planning-agent-rounds-SC-53`, and `US9-TC6-1` stands.
 * **A row missing a column** → `Q25`. Refused as a missing row is, naming the column; folded as `shared-planning-agent-rounds-SC-56`, and `US9-TC7-1` recast from reported to refused.
 * **The agent's own `reviewed:` landing** → `Q22`, with the row above: the landed artifacts and the ticked groups owe rows, and a read that ran no perspective owes none.
-* **What each answer to a moved goal does** → `Q26`, on the product manager, with extend, supersede and split each doing something recommended and a ❓ on the page. Folded as `shared-planning-agent-rounds-SC-47`, and `US7-TC2-1` recast onto what each answer does.
+* **What each answer to a moved goal does** → `Q26`, taken as extend, supersede and split each doing something to the change. Folded as `shared-planning-agent-rounds-SC-47`, and `US7-TC2-1` recast onto what each answer does.
 * **Where the product manager's read of the requirements is walked** → `Q27`. In `shared/planning/change-stages`, as the hand's move at Specified; here `shared-planning-agent-rounds-SC-06` states the two readings' exemption alone, and no journey and no case of this capability walks the read.
 * **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a ❓ line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
 
@@ -2023,13 +2399,11 @@ Thirteen questions went to the change's `decisions.md`, and the answers landed a
 * `shared-planning-agent-rounds-SC-08` - a words-only draft reaches the reader of the words and the floor: `scripts/openspec/perspectives.test.mjs`, which classifies the diff and asserts the whole reader set a round dispatches.
 * `shared-planning-agent-rounds-SC-09` - the readers an export and a migration summon: `scripts/openspec/perspectives.test.mjs`, as above, with what summoned each.
 * `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: `scripts/openspec/perspectives.test.mjs`, which computes the readers from the diff and reads no key.
-* `shared-planning-agent-rounds-SC-23` - an open row holds no stage: `shared/planning/change-stages`' suite, where the stage's derivation is walked.
+* `shared-planning-agent-rounds-SC-23` - a row the round decided holds nothing: `shared/planning/change-stages`' suite, where the stage's derivation and its open questions are walked; `US4-TC9-1` reads what a held row does hold.
 * `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
 * `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
 * `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
 * `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
-* `shared-planning-agent-rounds-SC-66` - a second push queues behind the first: `scripts/openspec/reread-workflow.test.mjs`, which reads the re-read job's `concurrency` off the workflow - one group per change, nothing cancelled.
-* `shared-planning-agent-rounds-SC-67` - the running read sees the newer landing: `scripts/openspec/reread-workflow.test.mjs`, which pins the job's bounds, and `scripts/openspec/round-scripts.test.mjs`, where the landing's own re-read of `main` is proved.
 
 ### Anchors no case reaches
 
@@ -2042,9 +2416,17 @@ What an automated test decides, per case:
 | Automated | Decided by |
 | --- | --- |
 | `US2-TC6-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US2-TC8-1` | `tools/relay/test/land.test.ts` |
+| `US4-TC9-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US4-TC10-1` | `tools/relay/test/post.test.ts` |
+| `US4-TC11-1` | `tools/relay/test/room.test.ts` |
 | `US5-TC5-1` | `scripts/openspec/round-scripts.test.mjs` |
 | `US5-TC6-1` | `tools/manual/test/behind.test.ts` |
 | `US5-TC10-1` | `scripts/openspec/round-scripts.test.mjs` |
+| `US5-TC15-1` | `tools/relay/test/room.test.ts` |
+| `US5-TC16-1` | `tools/relay/test/land.test.ts` |
+| `US5-TC17-1` | `scripts/openspec/reread-workflow.test.mjs` |
+| `US5-TC18-1` | `scripts/openspec/reread-workflow.test.mjs` |
 | `US8-TC2-1` | `tools/manual/walk/run-sheet-delivery.walk.ts` |
 | `US9-TC3-1` | `tools/manual/walk/rounds-record.walk.ts` |
 | `US9-TC4-1` | `tools/manual/test/check-round.test.ts` |
@@ -2059,16 +2441,20 @@ Slack thread - a first sentence, a numbered answer, a remark, the word `land`
 - or the round itself, dispatched and read inside an agent's own session
 before it posts its summary back: no suite opens a Slack thread or an agent's
 conversation, and a direct message is read in Slack rather than rendered
-anywhere a walk can look.
+anywhere a walk can look. What the relay does with a thread - which wake runs,
+what a wake's budget ends in, whose word moves `main` - is decided by the
+relay's own tests against its room, its landing and its posting, opening no
+Slack thread either.
 
 | Manual | Why |
 | --- | --- |
 | `US1-TC1-1` | The first sentence and the reply, typed and read in Slack |
 | `US1-TC2-1` | A later reply in the same Slack thread |
-| `US1-TC3-1` | Three landings driven by answers typed in the thread |
+| `US1-TC3-1` | One word landing three artifacts, typed in the thread |
 | `US1-TC4-1` | A Slack message naming a change that already exists |
 | `US1-TC5-1` | The reply asking an unmapped teammate for their handle |
 | `US1-TC6-1` | The same round from a terminal, inside the agent's session |
+| `US1-TC7-1` | The whole chain drafted inside one run's session, from one sentence in Slack |
 | `US2-TC1-1` | The word `land`, typed in the thread |
 | `US2-TC2-1` | A remark in the thread, and the readers it re-runs in the session |
 | `US2-TC3-1` | A remark in the thread that settles a question |
@@ -2095,7 +2481,7 @@ anywhere a walk can look.
 | `US5-TC8-1` | A Raised row landed through the round |
 | `US5-TC9-1` | Two landings inside one run's life |
 | `US5-TC11-1` | A landing with nothing after it, read in the thread |
-| `US5-TC12-1` | A re-read that would edit several, stopping inside the session |
+| `US5-TC12-1` | A re-read that redraws several, inside the session |
 | `US5-TC13-1` | The fold at archive, run by a hand |
 | `US5-TC14-1` | A run killed mid-draft and picked up again |
 | `US6-TC1-1` | The group's own commits in the application repository |
@@ -2108,6 +2494,8 @@ anywhere a walk can look.
 | `US7-TC3-1` | A landing refused in the thread while the question is open |
 | `US8-TC1-1` | The run tab, written into the run spreadsheet |
 | `US8-TC3-1` | Both ends of the gate, in the run spreadsheet |
+| `US8-TC5-1` | Proved by the back-fill pass that writes the deciding test onto each case |
 | `US8-TC4-1` | A push, a staging deploy and a release cut |
 | `US9-TC1-1` | The page and `rounds.md` read together after three real rounds |
 | `US9-TC2-1` | A task group's row after a real build |
+| `US9-TC10-1` | A fix pass's row, read on the change page after a real pass |
