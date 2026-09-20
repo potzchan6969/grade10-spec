@@ -7,7 +7,6 @@ import type {
   ChangeDeltaDocument,
   ChangeDocument,
   DeltaSection,
-  ThreadEvent,
 } from "../api/types.ts";
 import {
   featureSuitePath,
@@ -19,7 +18,10 @@ import {
 } from "./disk.mts";
 import type { GitIndex, StoreMain } from "./git.mts";
 import { findSection, leadingTitle, outline } from "./markdown.mts";
-import { readChangeHistories } from "./read-change-history.mts";
+import {
+  type ChangeThread,
+  readChangeHistories,
+} from "./read-change-history.mts";
 import {
   deltaFiles,
   deltaKindOf,
@@ -68,7 +70,7 @@ export function readChangeDocuments(
   // thread the machine that wrote it invented.
   const histories =
     git.head === ""
-      ? new Map<string, ThreadEvent[]>()
+      ? new Map<string, ChangeThread>()
       : readChangeHistories(root, main?.commit ?? null);
   return subdirectories(dir)
     .filter((name) => name !== "archive")
@@ -79,7 +81,7 @@ export function readChangeDocuments(
         name,
         git,
         main,
-        histories.get(name) ?? [],
+        histories.get(name),
       ),
     );
 }
@@ -90,8 +92,8 @@ export function readChangeDocument(
   id: string,
   git: GitIndex,
   main: StoreMain | null,
-  /** The change's own commits, oldest first, from the store-wide walks. */
-  history: ThreadEvent[] = [],
+  /** The change's own thread, from the store-wide walks. */
+  thread?: ChangeThread,
 ): ChangeDocument {
   const rel = storePath(root, dir);
   const schema = schemaOf(dir);
@@ -115,7 +117,10 @@ export function readChangeDocument(
       planOf(dir, id, main).text !== undefined,
     ),
     deltas,
-    history,
+    history: thread?.events ?? [],
+    ...(thread && Object.keys(thread.askedAt).length > 0
+      ? { askedAt: thread.askedAt }
+      : {}),
   };
 }
 

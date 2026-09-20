@@ -26,12 +26,16 @@ import { InlineMarkdown } from "./inline-markdown";
 export function ThreadSection({
   change,
   history,
+  askedAt = {},
 }: {
   change: ChangeEntry;
   /** The change's commits, oldest first, from its own document. */
   history: ThreadEvent[];
+  /** When each held `Q<n>` was asked, from the same walk: the commit that
+   * added its `decisions.md` row. */
+  askedAt?: Record<string, string>;
 }) {
-  const rows = threadRowsOf(change, history);
+  const rows = threadRowsOf(change, history, askedAt);
 
   return (
     <div className="flex flex-col gap-2">
@@ -83,8 +87,8 @@ export function ThreadSection({
  * recorded where there is one. */
 type ThreadRow = {
   key: string;
-  /** Absent for a row no commit dates — a held question, which the record
-   * carries without one. */
+  /** Absent for a row no commit dates — a held question whose own row the
+   * walk never saw arrive, which is a store with no history to read. */
   date?: string;
   line: string;
   round?: string;
@@ -106,6 +110,7 @@ type ThreadRow = {
 function threadRowsOf(
   change: ChangeEntry,
   history: ThreadEvent[],
+  askedAt: Record<string, string>,
 ): ThreadRow[] {
   const ordered = change.rounds ?? [];
   /** Each artifact's rounds, in round order — the queue a landing takes from. */
@@ -149,11 +154,14 @@ function threadRowsOf(
   }
 
   // A decisions row nobody has answered: the page's own ❓ lines are read by
-  // On the pages, where the section that carries them is named.
+  // On the pages, where the section that carries them is named. Dated by the
+  // commit that wrote the row, since the row itself carries no date.
   for (const question of change.questions ?? []) {
     if (question.id === undefined) continue;
+    const asked = askedAt[question.id];
     rows.push({
       key: `question-${question.id}`,
+      ...(asked ? { date: asked } : {}),
       line: heldLine(question),
     });
   }

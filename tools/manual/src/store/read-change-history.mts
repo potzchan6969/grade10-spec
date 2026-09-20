@@ -13,12 +13,12 @@ import { changeOf } from "./read-landings.mts";
  *
  * Two walks for the whole store, not two per change, as `read-landings.mts`
  * reads its own two facts: one `git log --name-only` for every commit of every
- * change, and one `git log -p` over the two files whose own patch says what
- * happened — `hands:` is a line of the record and a tick is a line of
- * `tasks.md`, and neither can be told from a subject. Both are keyed by the
- * change in the path, and each document is handed its slice. Fifty-eight
- * changes read on every composition cost two git processes rather than two
- * hundred and forty.
+ * change, and one `git log -p` over the three files whose own patch says what
+ * happened — `hands:` is a line of the record, a tick is a line of `tasks.md`,
+ * a question is a row of `decisions.md`, and none of them can be told from a
+ * subject. Both are keyed by the change in the path, and each document is
+ * handed its slice. Fifty-eight changes read on every composition cost two git
+ * processes rather than two hundred and forty.
  *
  * Everything else is classified by the subject `plan:land` writes or kept as
  * the subject it carries — a commit nobody can name is still a thing that
@@ -61,27 +61,41 @@ const ENTRY = /^\s+([a-z][a-z0-9._-]*):\s*"?@?([A-Za-z0-9][\w.-]*)"?\s*$/;
  * spells them. */
 const TICKED = /^-\s*\[[xX]\]\s*(\d+(?:\.\d+)*)/;
 
+/** An added `## Decisions` row, by the `Q<n>` its first cell names — the one
+ * thing that dates a held question, since the record carries no date for it. */
+const ASKED_ROW = /^\+\s*\|\s*(Q\d+)\s*\|/;
+
+/** One change's thread as the walks read it. */
+export type ChangeThread = {
+  /** Its commits, oldest first. */
+  events: ThreadEvent[];
+  /** When each `Q<n>` was asked, by its id: the commit that added its
+   * `decisions.md` row. A row rewritten later keeps the date it was asked on,
+   * because the walk reads back to the oldest commit that wrote it. */
+  askedAt: Record<string, string>;
+};
+
 /** `commit` is the store's `main`, where the thread is read: a checkout
  * drafting a round sits ahead of it, and those commits are not in the thread
  * yet. `null` reads `HEAD`, which is a store whose `main` does not resolve. */
 export function readChangeHistories(
   root: string,
   commit: string | null,
-): Map<string, ThreadEvent[]> {
+): Map<string, ChangeThread> {
   const at = commit ?? "HEAD";
-  const patches = patchesOf(root, at);
-  const histories = new Map<string, ThreadEvent[]>();
+  const { patch, askedAt } = patchesOf(root, at);
+  const histories = new Map<string, ChangeThread>();
 
   for (const [id, commits] of commitsOf(root, at)) {
     const opened = commits.find((one) =>
       one.paths.some((path) => path.endsWith("/proposal.md")),
     );
-    histories.set(
-      id,
-      commits.map((one) =>
-        eventOf(one, one === opened, patches.get(keyOf(one.sha, id)) ?? ""),
+    histories.set(id, {
+      events: commits.map((one) =>
+        eventOf(one, one === opened, patch.get(keyOf(one.sha, id)) ?? ""),
       ),
-    );
+      askedAt: askedAt.get(id) ?? {},
+    });
   }
   return histories;
 }
@@ -151,16 +165,29 @@ function commitsOf(root: string, at: string): Map<string, Commit[]> {
   return commits;
 }
 
+/** What one walk of the patches says: the classification's own patch per
+ * commit and change, and when each change's questions were asked. */
+type Patches = {
+  patch: Map<string, string>;
+  askedAt: Map<string, Record<string, string>>;
+};
+
 /**
- * The patch each commit made to one change's record and task list, keyed by
- * the commit and the change.
+ * The patch each commit made to one change's record and task list, and the
+ * commit each of its `Q<n>` rows arrived in.
  *
- * One walk over both files for the whole store: the `+++ b/` header names the
- * path the hunks under it belong to, the way `read-landings.mts` reads its
- * ticks, so a commit's two files land under one key and read exactly as one
- * `git show` of both printed them.
+ * One walk over the three files for the whole store: the `+++ b/` header names
+ * the path the hunks under it belong to, the way `read-landings.mts` reads its
+ * ticks, so a commit's record and task list land under one key and read
+ * exactly as one `git show` of both printed them. The decisions table is read
+ * as it goes rather than kept: nothing classifies a commit by it, and what a
+ * held row needs is one date.
+ *
+ * Newest first, so a row seen again in an older commit overwrites the date
+ * already held: a question is dated by the commit that asked it and not by the
+ * one that answered it.
  */
-function patchesOf(root: string, at: string): Map<string, string> {
+function patchesOf(root: string, at: string): Patches {
   const log = walk(
     root,
     [
@@ -172,31 +199,48 @@ function patchesOf(root: string, at: string): Map<string, string> {
       "--",
       `${CHANGES}/*/.openspec.yaml`,
       `${CHANGES}/*/tasks.md`,
+      `${CHANGES}/*/decisions.md`,
     ],
-    "would not walk the changes' patches — no thread will show a hand or a tick",
+    "would not walk the changes' patches — no thread will show a hand, a tick or a held row",
   );
-  if (log === undefined) return new Map();
+  const askedAt = new Map<string, Record<string, string>>();
+  if (log === undefined) return { patch: new Map(), askedAt };
 
   const held = new Map<string, string[]>();
   let sha = "";
-  let key: string | undefined;
+  let when = "";
+  let id: string | undefined;
+  let decisions = false;
   for (const line of log.split("\n")) {
     if (line.includes("\0")) {
-      sha = line.split("\0")[0];
-      key = undefined;
+      [sha, when] = line.split("\0");
+      id = undefined;
+      decisions = false;
       continue;
     }
     if (line.startsWith("+++")) {
-      const id = changeOf(line.slice(4).trim());
-      key = id === undefined ? undefined : keyOf(sha, id);
+      const path = line.slice(4).trim();
+      id = changeOf(path);
+      decisions = path.endsWith("/decisions.md");
       continue;
     }
-    if (key === undefined) continue;
+    if (id === undefined) continue;
+    if (decisions) {
+      const asked = ASKED_ROW.exec(line)?.[1];
+      if (asked !== undefined) {
+        askedAt.set(id, { ...askedAt.get(id), [asked]: when });
+      }
+      continue;
+    }
+    const key = keyOf(sha, id);
     const lines = held.get(key);
     if (lines) lines.push(line);
     else held.set(key, [line]);
   }
-  return new Map([...held].map(([key, lines]) => [key, lines.join("\n")]));
+  return {
+    patch: new Map([...held].map(([key, lines]) => [key, lines.join("\n")])),
+    askedAt,
+  };
 }
 
 /** What one commit was. The subject decides first, because a landing says so

@@ -754,6 +754,10 @@ export type ChangeDocument = {
    * them — a store that is not a checkout, and the bundled fixture, which is
    * read with none. */
   history: ThreadEvent[];
+  /** When each held `Q<n>` was asked, by its id: the commit that added its
+   * `decisions.md` row, which is the only thing that dates a row the record
+   * carries no date for. Absent where no history dates them. */
+  askedAt?: Record<string, string>;
 };
 
 /** A `check:manual` warning the build ships so the app can show it —

@@ -156,7 +156,11 @@ export function ChangeStatus({
           which is where the commits are read. */}
       {document ? (
         <Row label="Thread">
-          <ThreadSection change={change} history={document.history} />
+          <ThreadSection
+            askedAt={document.askedAt}
+            change={change}
+            history={document.history}
+          />
         </Row>
       ) : null}
     </dl>
