@@ -98,6 +98,29 @@ describe("the message each hand of the stage is being sent", () => {
   });
 });
 
+describe("the stage that names the design pair", () => {
+  /** `shared-planning-agent-rounds-SC-81`'s own GIVEN: the proposal landed,
+   * the decisions and the journeys in, and both designs' hands named - which
+   * is the half of Proposed the product manager has already passed on. */
+  const halfDesigned = gift({
+    written: ["proposal", "decisions", "user-journeys"],
+    hands: { pm: "robin", design: "kim", tech: "erin" },
+  });
+  const html = render(halfDesigned, "proposed");
+
+  it("shows the designer the message their own turn sends", () => {
+    expect(html).toContain("@kim");
+    expect(html).toContain("<strong>Your turn</strong>");
+    expect(html).toContain("/design gift-cards");
+  });
+
+  it("shows the tech PIC theirs beside it, and nothing to the hand that passed it on", () => {
+    expect(html).toContain("@erin");
+    expect(html).toContain("/tech gift-cards");
+    expect(html).not.toContain("@robin");
+  });
+});
+
 describe("the stages that say something else", () => {
   it("sends QA to walk the run sheet on staging", () => {
     const html = render(gift(), "on-staging");
