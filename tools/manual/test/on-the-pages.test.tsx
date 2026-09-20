@@ -18,7 +18,8 @@ import {
  *
  * The marks are read by `open-marks.ts`, the one reader of the grammar, and
  * the section boundary is `sectionTextOf`'s: a line under another heading of
- * the same page is that section's and not this one's.
+ * the same page is that section's and not this one's. The row's own label is
+ * `ChangeStatus`'s, which is why nothing here asserts it.
  */
 
 const SPEC = "demo-product/alpha";
@@ -86,7 +87,6 @@ describe("the lines the change marks", () => {
   const html = render(marking());
 
   it("names the page and the section, linked to where the line sits", () => {
-    expect(html).toContain("On the pages");
     expect(html).toContain("Alpha");
     expect(html).toContain("Points");
     expect(html).toContain('href="/p/demo-product/alpha#points"');

@@ -111,6 +111,9 @@ function documentOf(entry: ChangeEntry): ChangeDocument {
     schemaKnown: true,
     artifacts,
     deltas: [],
+    // The thread is `thread-section.test.tsx`'s own case; these are about the
+    // stage rows, and a reading with no commits is a reading the store gives.
+    history: [],
   };
 }
 
@@ -477,6 +480,29 @@ describe("the Your turn card", () => {
 
     expect(card).not.toContain("/archive-change");
     expect(card).toContain("waits on no hand");
+  });
+});
+
+describe("the page's own order", () => {
+  /** The stepper, the Your turn card with the message it is sending, then the
+   * state rows, and the history last: the facts a reader acts on come before
+   * the record of how the change got here. */
+  it("reads the marked lines after the artifacts and the thread last", () => {
+    const html = render(change());
+
+    for (const [before, after] of [
+      ['data-stepper="steps"', "Your turn"],
+      ["Your turn", "Told now"],
+      ["Told now", ">Hands<"],
+      [">Hands<", ">Artifacts<"],
+      [">Artifacts<", ">On the pages<"],
+      [">On the pages<", ">Delivery<"],
+      [">Delivery<", ">Thread<"],
+    ]) {
+      expect(html.indexOf(before), `${before} before ${after}`).toBeLessThan(
+        html.indexOf(after),
+      );
+    }
   });
 });
 

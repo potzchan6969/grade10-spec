@@ -114,6 +114,14 @@ const document: ChangeDocument = {
       present: true,
     },
   ],
+  history: [
+    {
+      sha: "0".repeat(40),
+      date: "2026-09-01T02:00:00.000Z",
+      kind: "opened",
+      subject: "Open pos",
+    },
+  ],
   deltas: [
     {
       spec: SPEC,

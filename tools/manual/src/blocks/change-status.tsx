@@ -18,6 +18,8 @@ import { MainStateNote, SpecLines } from "./change-facts";
 import { OverlayChips } from "./change-overlays";
 import { Attribution, TaskProgress } from "./change-views";
 import { HandsTable } from "./hands-table";
+import { OnThePages } from "./on-the-pages";
+import { ThreadSection } from "./thread-section";
 
 /**
  * Where the change stands, as the page reads it: one labelled row per fact,
@@ -100,6 +102,13 @@ export function ChangeStatus({
         </Row>
       ) : null}
 
+      {/* After the artifacts and before delivery: the marked lines are what
+          the artifacts are written about, said in the words the pages say
+          them in. */}
+      <Row label="On the pages">
+        <OnThePages change={change} index={index} />
+      </Row>
+
       <Row label="Delivery">
         <DeliveryRow change={change} />
       </Row>
@@ -139,6 +148,15 @@ export function ChangeStatus({
       {showRounds ? (
         <Row label="Rounds">
           <RoundsList rounds={rounds} taskGroups={change.taskGroups} />
+        </Row>
+      ) : null}
+
+      {/* Last, because it is the only row that is not a state: the facts read
+          first and the history after them. It waits on the change's document,
+          which is where the commits are read. */}
+      {document ? (
+        <Row label="Thread">
+          <ThreadSection change={change} history={document.history} />
         </Row>
       ) : null}
     </dl>
