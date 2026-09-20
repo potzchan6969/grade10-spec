@@ -31,42 +31,59 @@
  *              name it and its hand; refuse while a `❓` row is open, naming
  *              the rows, unless `--with-recommendations` takes them; the rows
  *              are read through the manual's own question reader, never a
- *              second parser
+ *              second parser. Bound to a wake, ask it once here whether it is
+ *              still the room's own: a run whose lease the relay has closed
+ *              under it cuts nothing (Q81)
  *   5 cut      Cut the landing commit `L` from `MAIN`: for an artifact, its
  *              own files (the schema's `generates:` glob), the change's
  *              `.openspec.yaml` with `landed_by:` and, with the flag, the
  *              `reviewed:` lines of the drafted artifacts after the
  *              decisions, `rounds.md` with the round's row, `decisions.md`
- *              where the flag rewrote held rows, and the pages under
- *              `docs/prds/` and `docs/references/` the branch changed; for a
- *              task group, the rebased branch tip, since nothing is drafted
- *              ahead at Building
+ *              wherever the branch changed it - the flag's rewrite of the
+ *              held rows, or the hand's own answer - and the pages the
+ *              proposal links, which is the set `reread-guard.mjs` holds
+ *              every push of this run to; for a task group, the rebased
+ *              branch tip, since nothing is drafted ahead at Building
  *   6 gate     Run the gate - `validate:changes`, `check:manual`,
  *              `tcs:validate` - against `L`'s tree with `PLAN_NO_FETCH=1`; a
  *              refusal leaves the branch and the working tree as they were,
  *              `L` never having touched them
- *   7 land     `main`: a plain fast-forward `push L:main` from a terminal, or
- *              `POST /runs/<token>/land` with `L`'s sha, the kind and the
- *              artifact, and the relay moves `main` after its checks
+ *   7 land     `main`: a plain fast-forward `push L:main` from a terminal,
+ *              or, bound to a wake, `L` pushed to the side ref
+ *              `claude/<change>-landing` - never over the branch - so the
+ *              code host holds the commit, `POST /runs/<token>/land` with
+ *              `L`'s sha, the kind and the artifact, and the side ref
+ *              deleted once the relay has answered
  *   8 branch   Rebase the branch onto `L`, so the drafts sit above the
  *              landing, and
  *              `git push --force-with-lease=refs/heads/<branch>:<the sha the run read>`
- *   9 again    On a rejected push or a 409 from the relay, re-read `main`
- *              once and retry from 3; losing again, reply in the thread and
- *              stop; a 403 names the check the relay failed, and the run
- *              replies with it and stops
+ *   9 again    On a 409 from the relay, or a push the remote rejected because
+ *              the ref moved under it, re-read `main` once and retry from 3;
+ *              losing again, reply in the thread and stop. Every other
+ *              status the relay gives and every other way git can refuse a
+ *              push stops the run, naming the status and the relay's reason
+ *              or git's own stderr
  *
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
  *
- * `--dry-run` prints every step and pushes nothing. `--root` lands in a store
- * other than this one, which is how the tests drive a fixture store - a real
- * landing never passes it. `PLAN_LAND_RACE` is the tests' own seam for losing
- * a push on purpose, and is refused outright unless `--root` was also passed:
- * nothing about a real landing should ever read it.
+ * `--dry-run` cuts `L` and runs the gate against it for real, prints the same
+ * lines a landing prints, and stops before step 7: nothing is pushed, and no
+ * ref names the commit it made (Q79). `--root` lands in a store other than
+ * this one, which is how the tests drive a fixture store - a real landing
+ * never passes it. `PLAN_LAND_RACE` is the tests' own seam for losing a push
+ * on purpose, and is refused at the argument parsing unless `--root` was also
+ * passed: nothing about a real landing should ever read it.
  */
 import { spawnSync } from "node:child_process";
-import { existsSync, mkdtempSync, readFileSync, rmSync } from "node:fs";
+import {
+  existsSync,
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -90,6 +107,7 @@ import { readAgainst } from "./lib/reviewed.mjs";
 import { listCell, roundsPath, withRoundRow } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
 import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { isWritable, writableBy } from "./lib/writable.mjs";
 import { git as storeGit, storeMain } from "./store-main.mjs";
 import { main as validateChanges } from "./validate-changes.mjs";
 
@@ -97,9 +115,13 @@ const HERE = dirname(fileURLToPath(import.meta.url));
 /** A scenario a task line cites, the way the store writes a citation: in
  * backticks, so prose about a scenario is not read as one. */
 const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+)`/g;
-/** The trees a landing may carry beside the change's own directory: the pages
- * a change marks and the references it cites, and nothing else. */
-const PAGES = ["docs/prds/", "docs/references/"];
+/** What a push the remote refused because the ref moved under it says, in
+ * git's own words: step 9's one retry. Anything else git says is git refusing
+ * to push at all, which is nobody's race to re-run. */
+const REJECTED = /\[rejected\]|\[remote rejected\]|non-fast-forward|stale info/;
+/** The all-zero object id, which is how `update-index --index-info` is told a
+ * path is gone rather than written. */
+const GONE = "0000000000000000000000000000000000000000";
 const USAGE =
   'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--with-recommendations] [--dry-run] [--root <dir>]';
 
@@ -111,13 +133,21 @@ const { positional, flags } = parseArgs(process.argv.slice(2), {
 const dryRun = Boolean(flags["dry-run"]);
 const reviewedOnly = Boolean(flags.reviewed);
 const root = flags.root ?? join(HERE, "..", "..");
-const wake = readWake(root);
+/** The temporary indexes, worktrees and refs this run made, removed on the
+ * way out whichever way it leaves: nothing of a landing lives outside git's
+ * object database and the two refs it moves. */
+const scratch = [];
+process.on("exit", done);
+if (process.env.PLAN_LAND_RACE && !flags.root)
+  fail("PLAN_LAND_RACE is a test seam and needs --root");
+let wake;
+try {
+  wake = readWake(root);
+} catch (cause) {
+  fail(cause.message);
+}
 const relay = wake ? relayOf(wake) : undefined;
 const [change, target] = positional;
-/** The temporary indexes and worktrees this run made, removed on the way out
- * whichever way it leaves: nothing of a landing lives outside git's object
- * database and the two refs it moves. */
-const scratch = [];
 if (!change || !target) fail(USAGE);
 
 const git = (args) => storeGit(root, args);
@@ -191,8 +221,7 @@ if (!reviewedOnly) {
 
 // ── 3 to 9, twice at most: a `main` that moved under the push is read again
 // once and the whole landing is cut from it afresh (step 9) ─────────────────
-let leaseSha = remoteBranchSha();
-let mainBranch;
+const leaseSha = remoteBranchSha();
 for (let attempt = 1; attempt <= 2; attempt += 1) {
   const landed = await attemptLanding(attempt);
   if (landed) {
@@ -221,7 +250,7 @@ async function attemptLanding(attempt) {
   // ── 3 main — always fetched, the branch rebased on it, and the one reading
   // of the change this attempt takes, drawn from what the rebase leaves ─────
   const rebase = fetchMain();
-  mainBranch = rebase.ref.replace(/^origin\//, "");
+  const mainBranch = rebase.ref.replace(/^origin\//, "");
   const MAIN = rebase.commit;
   say(
     "main",
@@ -310,19 +339,28 @@ async function attemptLanding(attempt) {
   say("behind", `nothing before ${target} is behind`);
 
   // Skipped for --reviewed: a read that changes nothing asks nobody's word,
-  // so it waits on no one's answer either.
+  // so it waits on no one's answer either. Read once, here, and every reader
+  // of the table below takes that one text.
   const decisionsRelPath = `openspec/changes/${change}/decisions.md`;
   const decisionsPath = join(root, decisionsRelPath);
-  const held =
+  const decisions =
     reviewedOnly || !existsSync(decisionsPath)
-      ? []
-      : heldRowsOf(readFileSync(decisionsPath, "utf8"));
+      ? undefined
+      : readFileSync(decisionsPath, "utf8");
+  let held = [];
+  if (decisions !== undefined) {
+    try {
+      held = heldRowsOf(decisions).map((one) => one.id);
+    } catch (cause) {
+      fail(cause.message);
+    }
+  }
   if (held.length > 0 && !flags["with-recommendations"]) {
     fail(
-      `held: ${held.map((one) => one.id).join(", ")} — answer them, or land with recommendations`,
+      `held: ${held.join(", ")} — answer them, or land with recommendations`,
     );
   }
-  const ids = held.map((one) => one.id).join(", ");
+  const ids = held.join(", ");
   say(
     "held",
     reviewedOnly
@@ -332,48 +370,40 @@ async function attemptLanding(attempt) {
         : "nothing is held",
   );
 
-  // ── 5 cut ────────────────────────────────────────────────────────────────
-  const cells = reviewedOnly ? undefined : rowOf(read, artifact, group);
-  if (dryRun) {
-    say(
-      "cut",
-      `would cut the landing commit from ${group ? `the branch tip at ${short(git(["rev-parse", "HEAD"]))}` : short(MAIN)}`,
-    );
-    if (reviewedOnly) {
-      console.log(
-        `           it would write reviewed: ${artifact}: ${against.content}, and no row`,
-      );
-      console.log(`           read against ${against.items.join(", ")}`);
-    } else if (group) {
-      console.log(
-        `           it would write one ${roundsPath(change)} row for group ${target}`,
-      );
-    } else {
-      console.log(
-        `           it would write ${artifact}'s own files, landed_by: ${artifact}: ${handle} and one ${roundsPath(change)} row`,
+  // The wake, asked once before anything is cut: a run whose lease the relay
+  // has closed under it — its budget spent, or a second wake queued on the
+  // change — lands nothing rather than cutting a commit no thread is waiting
+  // for (Q81).
+  if (relay) {
+    const alive = await askTheRelay(() => relay.alive());
+    if (alive.status !== 200) {
+      fail(
+        `this run's wake is not the room's any more (${alive.status}) — it lands nothing`,
       );
     }
-    if (!reviewedOnly && held.length > 0)
-      console.log(`           would take ${ids} as recommended`);
-    say("gate", "would run validate:changes, check:manual, tcs:validate");
-    say(
-      "land",
-      relay
-        ? "would ask the relay to move main to it"
-        : `would push it to ${mainBranch} as a fast-forward`,
-    );
-    say(
-      "branch",
-      `would rebase ${branch} onto it and push with a lease on ${leaseSha ? short(leaseSha) : "nothing"}`,
-    );
-    console.log("\ndry run — nothing was pushed");
-    done();
-    process.exit(0);
+    say("wake", "the wake is alive");
   }
 
+  // ── 5 cut ────────────────────────────────────────────────────────────────
+  const cells = reviewedOnly ? undefined : rowOf(read, artifact, group);
   const tip = git(["rev-parse", "HEAD"]);
   const base = group ? tip : MAIN;
   const changed = changedPaths(MAIN, tip);
+  // The pages the change may write, held to the exact set the guard holds
+  // every push of this run to: the change's own directory is carried by the
+  // legs above this one, artifact by artifact, so the pages are what is left
+  // of that set.
+  const pages = writableBy(root, change).filter(
+    (one) => one !== `openspec/changes/${change}/`,
+  );
+  // The decisions travel with the landing whenever this commit says something
+  // new about them: the flag's rewrite of the held rows, or the answer the
+  // hand typed into the table on the branch. A landing that left either
+  // behind would put `main`'s copy of the question back over the answer.
+  const carriesDecisions =
+    !reviewedOnly &&
+    !group &&
+    (held.length > 0 || changed.includes(decisionsRelPath));
   // A task group lands the rebased branch tip, which carries its code
   // already; a `--reviewed` line lands alone, carrying nothing.
   const carried =
@@ -381,9 +411,8 @@ async function attemptLanding(attempt) {
       ? []
       : [
           ...filesOf(changed, artifacts, artifact),
-          ...changed.filter((path) =>
-            PAGES.some((tree) => path.startsWith(tree)),
-          ),
+          ...(carriesDecisions ? [decisionsRelPath] : []),
+          ...changed.filter((path) => isWritable(pages, path)),
         ];
   // Never a `landed_by:` line for a task group: its plan is proven by the
   // tick, not by a hand's line, and the group names no schema artifact to
@@ -398,46 +427,40 @@ async function attemptLanding(attempt) {
     say("cut", `reviewed: ${artifact}: ${against.content}, and no row`);
     console.log(`           read against ${against.items.join(", ")}`);
   } else {
-    if (held.length > 0) {
-      written.set(
-        decisionsRelPath,
-        takeRecommendations(readFileSync(decisionsPath, "utf8")),
-      );
-    }
+    if (held.length > 0)
+      written.set(decisionsRelPath, takeRecommendations(decisions));
     const rounds = withRoundRow(root, change, cells);
     written.set(roundsPath(change), rounds.text);
     say("cut", `round ${rounds.round}: ${rounds.row}`);
+  }
+  // The drafts after the decisions were drawn from the decisions this landing
+  // carries — the recommendations the flag took, or the hand's own answer —
+  // so the same commit records them as read again against them and nothing
+  // goes behind (Q60).
+  if (carriesDecisions) {
+    const reread = await reviewedAfterDecisions(tip, written, order, changed);
+    if (reread.length > 0) {
+      lines.push(...reread.map(([id, content]) => ["reviewed", id, content]));
+      say(
+        "cut",
+        `read again against ${ids === "" ? "the decisions" : ids}: ${reread
+          .map(([id]) => id)
+          .join(", ")}`,
+      );
+    }
   }
   if (lines.length > 0) written.set(recordPath(), recordText(lines));
 
   const message = reviewedOnly
     ? `chore(openspec): ${target} of ${change} read again, nothing changed`
     : `chore(openspec): land ${target} of ${change}${group ? "" : ` on @${handle}`}`;
-  let commit = cutFrom(base, tip, carried, written, message);
-  const gate = worktreeAt(commit);
-  // The recommendations the flag took are what the drafts after the decisions
-  // were drawn from, so the same commit records them as read again against
-  // them and nothing goes behind (Q60). The ids are the ones `L`'s own tree
-  // computes - `.openspec.yaml` is in no artifact's upstream set, so reading
-  // them off a commit that holds the record without them answers the same.
-  if (held.length > 0) {
-    const reread = await reviewedAfterDecisions(gate, order, changed);
-    if (reread.length > 0) {
-      written.set(
-        recordPath(),
-        recordText([
-          ...lines,
-          ...reread.map(([id, content]) => ["reviewed", id, content]),
-        ]),
-      );
-      commit = cutFrom(base, tip, carried, written, message);
-      gitOrDie(["-C", gate, "checkout", "--quiet", "--detach", commit]);
-      say(
-        "cut",
-        `read again against ${ids}: ${reread.map(([id]) => id).join(", ")}`,
-      );
-    }
-  }
+  const commit = cutFrom(
+    base,
+    tip,
+    carried.filter((path) => !written.has(path)),
+    written,
+    message,
+  );
   say(
     "cut",
     `${short(commit)} from ${short(base)}, carrying ${[...new Set([...carried, ...written.keys()])].length} path(s)`,
@@ -445,55 +468,86 @@ async function attemptLanding(attempt) {
 
   // ── 6 gate, against L's tree ─────────────────────────────────────────────
   process.env.PLAN_NO_FETCH = "1";
+  const gate = worktreeAt(commit);
   runValidateChanges(gate);
   await runCheckManual(gate);
   runTcsValidate(gate);
   say("gate", "validate:changes, check:manual, tcs:validate pass");
-  appendLanded(root, commit);
-  console.log(`           ${short(commit)} named in ${LANDED} for the guard`);
+
+  // A dry run stops here, having cut the commit and judged it: what it
+  // reports is what ran, and no ref names what it made (Q79).
+  if (dryRun) {
+    say(
+      "land",
+      relay
+        ? `would ask the relay to move ${mainBranch} to ${short(commit)}`
+        : `would push ${short(commit)} to ${mainBranch} as a fast-forward`,
+    );
+    say(
+      "branch",
+      `would rebase ${branch} onto it and push with a lease on ${leaseSha ? short(leaseSha) : "nothing"}`,
+    );
+    console.log("\ndry run — nothing was pushed");
+    done();
+    process.exit(0);
+  }
 
   // ── 7 land: main moves, by this run's push or by the relay ───────────────
   if (relay) {
-    // The relay reads the commit from the code host, so the branch carries it
-    // first: this run's own push, under this run's own lease.
+    // The relay reads the commit from the code host, so a ref has to hold it:
+    // this run's own side ref, force-pushed because it is scratch and deleted
+    // as soon as the relay has answered. Never the change's branch — that
+    // moves at step 8, after `main`, so a relay that refuses leaves the
+    // branch exactly as the round left it.
+    const side = `refs/heads/claude/${change}-landing`;
     race(attempt);
-    if (
-      !push([
-        `--force-with-lease=refs/heads/${branch}:${leaseSha}`,
-        `${commit}:refs/heads/${branch}`,
-      ])
-    ) {
+    const pushed = push([`+${commit}:${side}`]);
+    if (!pushed.ok) {
+      if (!pushed.rejected) fail(`git push refused:\n${pushed.stderr}`);
+      return false;
+    }
+    const ref = { kind: "ref", path: side };
+    scratch.push(ref);
+    const answer = await askTheRelay(() =>
+      relay.land({
+        sha: commit,
+        kind: reviewedOnly ? "reviewed" : "word",
+        artifact: artifact ?? roundArtifactOf(target),
+      }),
+    );
+    remove(ref);
+    if (answer.status === 409) return false;
+    if (answer.status !== 200) {
       fail(
-        `${branch} moved on origin under this run — another run is on this change's branch, and this one is not overwriting it. Read it again and land from there.`,
+        `the relay refused (${answer.status}): ${answer.body?.reason ?? "no reason given"}`,
       );
     }
-    leaseSha = commit;
-    const answer = await askTheRelay({
-      sha: commit,
-      kind: reviewedOnly ? "reviewed" : "word",
-      artifact: artifact ?? roundArtifactOf(target),
-    });
-    if (answer.status === 403) {
-      fail(`the relay refused: ${answer.body?.reason ?? "no reason given"}`);
-    }
-    if (answer.status !== 200) return false;
     say("land", `the relay moved ${mainBranch} to ${short(commit)}`);
   } else {
     race(attempt);
-    if (!push([`${commit}:refs/heads/${mainBranch}`])) return false;
+    const pushed = push([`${commit}:refs/heads/${mainBranch}`]);
+    if (!pushed.ok) {
+      if (!pushed.rejected) fail(`git push refused:\n${pushed.stderr}`);
+      return false;
+    }
     say("land", `${short(commit)} pushed to ${mainBranch} as a fast-forward`);
   }
+  // `main` holds it: the guard behind this run's next push reads it here,
+  // and reads nothing this run did not commit.
+  appendLanded(root, commit);
+  console.log(`           ${short(commit)} named in ${LANDED} for the guard`);
 
   // ── 8 branch — the drafts sit above the landing ──────────────────────────
   rebaseOnto(commit, artifact ?? `group ${roundArtifactOf(target)}`);
-  if (
-    !push([
-      `--force-with-lease=refs/heads/${branch}:${leaseSha}`,
-      `HEAD:refs/heads/${branch}`,
-    ])
-  ) {
+  const pushed = push([
+    `--force-with-lease=refs/heads/${branch}:${leaseSha}`,
+    `HEAD:refs/heads/${branch}`,
+  ]);
+  if (!pushed.ok) {
     fail(
-      `${branch} moved on origin under this run — another run is on this change's branch, and this one is not overwriting it. Read it again and land from there.`,
+      pushed.rejected
+        ? `${branch} moved on origin under this run — another run is on this change's branch, and this one is not overwriting it. ${short(commit)} is on ${mainBranch} already; read the branch again and rebase it there.`
+        : `git push refused:\n${pushed.stderr}`,
     );
   }
   say("branch", `${branch} rebased onto ${short(commit)} and pushed`);
@@ -507,14 +561,14 @@ async function attemptLanding(attempt) {
 // ── The pieces ──────────────────────────────────────────────────────────────
 
 /**
- * `POST {relay.url}/runs/{token}/land { sha, kind, artifact }` — the relay's
- * own checks before it moves `main` (Q55), through `lib/relay.mjs`, the one
- * client. A relay nobody can reach is not a `main` that moved, so it stops
- * rather than retrying.
+ * One call on the wake, through `lib/relay.mjs`, the one client: the relay's
+ * own checks before it moves `main` (Q55), and the question of whether this
+ * wake is still the room's. A relay nobody can reach is not a `main` that
+ * moved, so it stops rather than retrying.
  */
-async function askTheRelay(payload) {
+async function askTheRelay(call) {
   try {
-    return await relay.land(payload);
+    return await call();
   } catch (cause) {
     return fail(`the relay could not be reached: ${cause.message}`);
   }
@@ -568,29 +622,37 @@ function changedPaths(base, tip) {
  * a refusal at the gate leaves them as they were and `L` never existed
  * outside git's object database.
  *
- * `carried` are paths taken from `source` as they stand there; `written` are
- * the texts this landing wrote, hashed straight into the object database. A
- * path `source` no longer holds is removed, so an artifact file the branch
- * deleted lands as a deletion.
+ * `carried` are paths taken from `source` as they stand there, read in one
+ * `ls-tree` and written in one `update-index --index-info` (Q80); `written`
+ * are the texts this landing wrote, hashed straight into the object database.
+ * A path `source` no longer holds is written as mode 0, which is how the
+ * index is told a path is gone, so an artifact file the branch deleted lands
+ * as a deletion.
  */
 function cutFrom(base, source, carried, written, message) {
   const dir = mkdtempSync(join(tmpdir(), "plan-land-index-"));
   scratch.push({ kind: "dir", path: dir });
   const index = join(dir, "index");
-  const inIndex = (args) => gitOrDie(args, { GIT_INDEX_FILE: index });
+  const inIndex = (args, options) =>
+    gitOrDie(args, { ...options, env: { GIT_INDEX_FILE: index } });
   inIndex(["read-tree", base]);
-  for (const path of carried) {
-    const listed = inIndex(["ls-tree", source, "--", path]);
-    if (listed === "") {
-      inIndex(["update-index", "--force-remove", "--", path]);
-      continue;
+  const entries = [];
+  if (carried.length > 0) {
+    const listed = inIndex(["ls-tree", "-z", source, "--", ...carried]);
+    const held = new Map();
+    for (const record of listed.split("\0").filter(Boolean)) {
+      const [meta, path] = record.split("\t");
+      held.set(path, `${meta}\t${path}`);
     }
-    const [mode, , sha] = listed.split("\t")[0].split(/\s+/);
-    inIndex(["update-index", "--add", "--cacheinfo", `${mode},${sha},${path}`]);
+    for (const path of carried)
+      entries.push(held.get(path) ?? `0 ${GONE}\t${path}`);
   }
-  for (const [path, text] of written) {
-    const sha = hashObject(text, path);
-    inIndex(["update-index", "--add", "--cacheinfo", `100644,${sha},${path}`]);
+  for (const [path, text] of written)
+    entries.push(`100644 ${hashObject(text, path)}\t${path}`);
+  if (entries.length > 0) {
+    inIndex(["update-index", "-z", "--index-info"], {
+      input: `${entries.join("\0")}\0`,
+    });
   }
   const tree = inIndex(["write-tree"]);
   return inIndex(["commit-tree", tree, "-p", base, "-m", message]);
@@ -599,18 +661,15 @@ function cutFrom(base, source, carried, written, message) {
 /** One text as a blob in the object database, named by the path it will be
  * written at so git's own attributes apply to it. */
 function hashObject(text, path) {
-  const ran = spawnSync(
-    "git",
-    ["hash-object", "-w", "--stdin", "--path", path],
-    { cwd: root, encoding: "utf8", input: text },
-  );
-  if (ran.status !== 0) fail(`git hash-object refused:\n${ran.stderr ?? ""}`);
-  return ran.stdout.trim();
+  return gitOrDie(["hash-object", "-w", "--stdin", "--path", path], {
+    input: text,
+  });
 }
 
-/** A throwaway worktree at one commit: what the gate reads. A linked
- * worktree, never the user's own — the tree the gate judges is the tree that
- * lands, and the tree the round is working in stays where it is. */
+/** A throwaway worktree at one commit: what the gate reads, and what the
+ * `reviewed:` ids are computed over. A linked worktree, never the user's
+ * own — the tree the gate judges is the tree that lands, and the tree the
+ * round is working in stays where it is. */
 function worktreeAt(commit) {
   const dir = join(mkdtempSync(join(tmpdir(), "plan-land-gate-")), "tree");
   gitOrDie(["worktree", "add", "--quiet", "--detach", dir, commit]);
@@ -619,16 +678,26 @@ function worktreeAt(commit) {
 }
 
 /**
- * The `reviewed:` lines a landing with recommendations owes: one per artifact
- * after the decisions that the branch drafted, in the grammar
- * `lib/reviewed.mjs` writes, read off the tree the landing carries. An
- * artifact drawn from nothing, waived or not written has no line to write and
- * is left out.
+ * The `reviewed:` lines a landing that carries the decisions owes: one per
+ * artifact after them that the branch drafted, in the grammar
+ * `lib/reviewed.mjs` writes.
+ *
+ * Read off the branch tip with this landing's own written files laid over
+ * it — never off `L`'s tree, which carries `main`'s draft of everything this
+ * landing does not itself land: an id computed there would say the drafts
+ * were read against texts the run never saw, and every one of them would go
+ * behind on the next reading.
  */
-async function reviewedAfterDecisions(gate, order, changed) {
+async function reviewedAfterDecisions(tip, written, order, changed) {
   const from = order.indexOf("decisions");
   if (from === -1) return [];
-  const read = await readChangeEntry(gate, change).catch((cause) =>
+  const at = worktreeAt(tip);
+  for (const [path, text] of written) {
+    const file = join(at, path);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, text);
+  }
+  const read = await readChangeEntry(at, change).catch((cause) =>
     fail(cause.message),
   );
   const lines = [];
@@ -787,9 +856,8 @@ function fetchMain() {
     stdio: ["ignore", "pipe", "pipe"],
   });
   if (rebased.status !== 0) {
-    spawnSync("git", ["rebase", "--abort"], { cwd: root, stdio: "ignore" });
     fail(
-      `the branch does not rebase on main cleanly:\n${rebased.stderr ?? ""}Resolve it on the branch, then land.`,
+      `the branch does not rebase on main cleanly:\n${rebased.stderr ?? ""}Resolve it on the branch, then land.${abortRebase()}`,
     );
   }
   return { ref: main.ref, commit: main.commit };
@@ -819,42 +887,65 @@ function rebaseOnto(commit, named) {
     },
   );
   if (rebased.status === 0) return;
-  spawnSync("git", ["rebase", "--abort"], { cwd: root, stdio: "ignore" });
   fail(
-    `${named} landed, and ${branch} does not rebase onto it cleanly:\n${rebased.stderr ?? ""}Resolve it on the branch — main holds the landing already.`,
+    `${named} landed, and ${branch} does not rebase onto it cleanly:\n${rebased.stderr ?? ""}Resolve it on the branch — main holds the landing already.${abortRebase()}`,
   );
+}
+
+/**
+ * The rebase this run started, wound back — and what is left behind where it
+ * will not wind back, since a refusal that leaves a rebase in progress in
+ * somebody's checkout and says nothing about it is the worse of the two.
+ */
+function abortRebase() {
+  const aborted = spawnSync("git", ["rebase", "--abort"], {
+    cwd: root,
+    encoding: "utf8",
+    stdio: ["ignore", "pipe", "pipe"],
+  });
+  if (aborted.status === 0) return "";
+  return `\nThe rebase would not abort either (${(aborted.stderr ?? "").trim()}): ${root} is left mid-rebase, and \`git rebase --abort\` there is the fix.`;
 }
 
 /** What the remote holds for this branch right now, read once, before this
  * run's own rebase touches anything local — the lease every push of the
- * branch is made against. A push this run makes itself moves `leaseSha`
- * forward for the attempt after it, so this is never called again: reading it
- * fresh before every push would make the lease trust whatever is there
- * instead of protecting against it. Empty for a branch the remote does not
- * hold yet. */
+ * branch is made against. Nothing this run does moves the branch before step
+ * 8, so this is read once and never again: reading it fresh before the push
+ * would make the lease trust whatever is there instead of protecting against
+ * it. Empty for a branch the remote does not hold yet. */
 function remoteBranchSha() {
   const listed = git(["ls-remote", "origin", `refs/heads/${branch}`]);
   return listed ? listed.split(/\s+/)[0] : "";
 }
 
+/**
+ * `git push origin …`: `{ ok, rejected, stderr }`. A rejection is a ref that
+ * moved under this run, which is step 9's one retry; every other way a push
+ * can fail is git refusing to push at all — no remote, no network, a hook —
+ * and nobody's race to run again.
+ */
 function push(args) {
   const ran = spawnSync("git", ["push", "origin", ...args], {
     cwd: root,
     encoding: "utf8",
     stdio: ["ignore", "pipe", "pipe"],
   });
-  if (ran.status !== 0 && ran.stderr) process.stderr.write(ran.stderr);
-  return ran.status === 0;
+  const stderr = ran.stderr ?? "";
+  if (ran.status !== 0 && stderr) process.stderr.write(stderr);
+  return {
+    ok: ran.status === 0,
+    rejected: REJECTED.test(stderr),
+    stderr,
+  };
 }
 
 /** The tests' own hook: a command run just before each push, so a run can be
- * made to lose its race. Refused unless `--root` was also passed, so nothing
- * about a real landing can ever read it. Set by nothing but
- * `scripts/openspec/round-scripts.test.mjs`. */
+ * made to lose its race. Refused at the argument parsing unless `--root` was
+ * also passed, so nothing about a real landing can ever read it. Set by
+ * nothing but this store's own tests. */
 function race(attempt) {
   const hook = process.env.PLAN_LAND_RACE;
   if (!hook) return;
-  if (!flags.root) fail("PLAN_LAND_RACE is a test seam and needs --root");
   spawnSync("bash", ["-c", hook], {
     cwd: root,
     stdio: "ignore",
@@ -866,11 +957,17 @@ function short(sha) {
   return sha ? sha.slice(0, 8) : sha;
 }
 
-function gitOrDie(args, env) {
+/**
+ * One git command that must work, or the run stops naming what git said.
+ * `input` is what it reads on stdin — the one index write and the one hash
+ * this landing makes; `env` is added to this process's own.
+ */
+function gitOrDie(args, { env, input } = {}) {
   const ran = spawnSync("git", args, {
     cwd: root,
     encoding: "utf8",
-    stdio: ["ignore", "pipe", "pipe"],
+    stdio: ["pipe", "pipe", "pipe"],
+    ...(input === undefined ? {} : { input }),
     ...(env ? { env: { ...process.env, ...env } } : {}),
   });
   if (ran.status !== 0) fail(`git ${args[0]} refused:\n${ran.stderr ?? ""}`);
@@ -927,20 +1024,65 @@ function runTcsValidate(gate) {
   if (ran.status !== 0) fail("the gate refuses: tcs:validate");
 }
 
-/** The temporary indexes and worktrees this run made, removed. A worktree is
- * removed through git, so the admin file beside it goes too. */
-function done() {
-  for (const { kind, path } of scratch.reverse()) {
-    if (kind === "worktree") {
-      spawnSync("git", ["worktree", "remove", "--force", path], {
-        cwd: root,
-        stdio: "ignore",
-      });
-      rmSync(dirname(path), { force: true, recursive: true });
-      continue;
+/** One temporary thing this run made, gone: a worktree through git, so the
+ * admin file beside it goes too; a side ref off the remote; a directory as it
+ * stands. What will not go is said rather than left silently behind. */
+function clean({ kind, path }) {
+  if (kind === "ref") {
+    const deleted = spawnSync("git", ["push", "origin", "--delete", path], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    if (deleted.status !== 0) {
+      console.error(
+        `the landing's side ref ${path} is still on origin: ${(deleted.stderr ?? "").trim()}`,
+      );
     }
-    rmSync(path, { force: true, recursive: true });
+    return;
   }
+  if (kind === "worktree") {
+    const removed = spawnSync("git", ["worktree", "remove", "--force", path], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+    });
+    if (removed.status !== 0) {
+      // The tree itself is a temporary directory and goes below; what would
+      // be left is git's own record of a worktree that is not there, which is
+      // what `prune` is for.
+      const pruned = spawnSync("git", ["worktree", "prune"], {
+        cwd: root,
+        encoding: "utf8",
+        stdio: ["ignore", "pipe", "pipe"],
+      });
+      console.error(
+        `the gate's worktree at ${path} would not be removed (${(removed.stderr ?? "").trim()})${
+          pruned.status === 0
+            ? " — pruned from git's own record instead"
+            : `, and \`git worktree prune\` in ${root} refused too: it is left behind`
+        }`,
+      );
+    }
+    rmSync(dirname(path), { force: true, recursive: true });
+    return;
+  }
+  rmSync(path, { force: true, recursive: true });
+}
+
+/** One scratch entry gone before the run ends: the side ref, once the relay
+ * has answered about it. */
+function remove(entry) {
+  const at = scratch.indexOf(entry);
+  if (at !== -1) scratch.splice(at, 1);
+  clean(entry);
+}
+
+/** Everything this run made, removed. Registered on `exit` as well as called
+ * on the way out, so a refusal, a throw and a clean landing all leave the
+ * same nothing behind. */
+function done() {
+  for (const entry of scratch.reverse()) clean(entry);
   scratch.length = 0;
 }
 
