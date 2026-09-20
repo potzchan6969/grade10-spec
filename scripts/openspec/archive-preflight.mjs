@@ -86,6 +86,7 @@ import { fileURLToPath } from "node:url";
 import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
 import { readChangeEntry } from "./lib/store-read.mjs";
+import { parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -248,6 +249,21 @@ function bullets(body) {
     }
   }
   return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
+}
+
+/** Every case in a suite that names what decides it: id -> the paths as the
+ *  line writes them. Read through the store's own suite parser, so the fold
+ *  compares what `tcs:validate` reads rather than a second reading of the
+ *  same line. */
+function decidedByOf(text) {
+  const named = new Map();
+  for (const journey of parseSuite(text).journeys) {
+    for (const tc of journey.cases) {
+      if (tc.decidedBy.length > 0)
+        named.set(tc.id, tc.decidedBy.map((one) => one.path).join(", "));
+    }
+  }
+  return named;
 }
 
 /** Whether every task group of a task list lands in this store. Such a change
@@ -689,18 +705,40 @@ for (const { file, capability } of deltaFiles(changeId)) {
       });
     }
 
+    const delta = readFileSync(source, "utf8");
+
     // `## Settled` is a legal part of the next blind pass's isolated input:
     // what earlier readings asked and had answered. Left behind, the same
     // refused reading is raised by every future run.
     const kept = new Set(bullets(sectionBody(arrived, "Settled")));
-    const owed = bullets(
-      sectionBody(readFileSync(source, "utf8"), "Settled"),
-    ).filter((line) => !kept.has(line));
+    const owed = bullets(sectionBody(delta, "Settled")).filter(
+      (line) => !kept.has(line),
+    );
     if (owed.length > 0) {
       wrong.push({
         capability: dir,
         what: `${name} drops ${owed.length} \`## Settled\` line(s) — the next blind pass raises them again: "${owed[0].slice(0, 60)}"`,
       });
+    }
+
+    // The `**Decided by:**` line travels with the suite too (Q49). A case
+    // whose deciding test the change named, landing durable with no line or
+    // with another one, leaves the store keeping that case off every run
+    // sheet for a test nothing names any more - and the durable suites are
+    // not back-filled, so the fold is the only place this is caught.
+    const durable = decidedByOf(arrived);
+    for (const [id, paths] of decidedByOf(delta)) {
+      const landedPaths = durable.get(id);
+      if (landedPaths === undefined)
+        wrong.push({
+          capability: dir,
+          what: `${name} drops \`${id}\`'s \`**Decided by:** ${paths}\` — the run sheet leaves the case out for a test nothing names`,
+        });
+      else if (landedPaths !== paths)
+        wrong.push({
+          capability: dir,
+          what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
+        });
     }
   }
 }
