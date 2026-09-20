@@ -5,7 +5,7 @@ import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import type { CheckoutStanding } from "../src/api/types";
 import { git as runGit, type GitRun } from "../src/store/git.mts";
-import { originMain, relayOf } from "../src/store/main-moved.mts";
+import { liveBodies, originMain, relayOf } from "../src/store/main-moved.mts";
 import { rootsOf } from "../src/store/roots.mts";
 import type { Store } from "../src/store/snapshot.mts";
 import {
@@ -296,6 +296,19 @@ describe("what the browser is told about the relay", () => {
     ["the variable is empty", { RELAY_URL: "" }],
   ])("names none where %s", (_what, env) => {
     expect(relayOf(env)).toEqual({});
+  });
+
+  it("writes the relay and the deployed head from one reading", () => {
+    // The build writes these two as files and the dev server answers them per
+    // request. One reading, so a page reads the same keys on either.
+    expect(liveBodies(HEAD, { RELAY_URL: "https://relay.test" })).toEqual({
+      head: { storeHead: HEAD },
+      relay: { url: "https://relay.test" },
+    });
+    expect(liveBodies(HEAD, {})).toEqual({
+      head: { storeHead: HEAD },
+      relay: {},
+    });
   });
 
   it("answers the relay and the deployed head over the endpoints", async () => {
