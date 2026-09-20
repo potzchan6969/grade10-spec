@@ -318,7 +318,6 @@ describe("/wake", () => {
     const response = await wake(testEnv(rooms(sent)), {
       change: "nav-cart-count-badge",
       reason: "landing",
-      base: "aaaaaaa",
       head: "bbbbbbb",
     });
     expect(response.status).toBe(200);
@@ -350,7 +349,7 @@ describe("/wake", () => {
   it("refuses a wake that names no change, and a body that is not JSON", async () => {
     const sent: Sent[] = [];
     const env = testEnv(rooms(sent));
-    const noChange = await wake(env, { base: "aaa", head: "bbb" });
+    const noChange = await wake(env, { head: "bbb" });
     expect(noChange.status).toBe(400);
     expect(await noChange.json()).toEqual({ reason: "no-change" });
     const notJson = await wake(env, "{");
@@ -365,7 +364,6 @@ describe("/wake", () => {
     // as many times as its step runs.
     const response = await wake(testEnv(rooms(sent)), {
       change: "nav-cart-count-badge",
-      base: "aaaaaaa",
     });
     expect(response.status).toBe(400);
     expect(await response.json()).toEqual({ reason: "no-head" });

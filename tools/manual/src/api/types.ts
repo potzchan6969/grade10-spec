@@ -406,28 +406,15 @@ export type RoundRow = {
   tests: string;
 };
 
-/** One person the store knows, from `docs/prds/team.yaml`, as
- * `scripts/openspec/lib/team.mjs` reads it. The reader is a Node module with
- * no types of its own, so this is the shape a surface names a hand from and
- * `team-map.test.ts` holds the reader to it. */
-export type TeamMember = {
-  /** The address `git config user.email` gives. */
-  email?: string;
-  /** The Slack member id a message is addressed to. A handle with none is
-   * sent no message. */
-  slack?: string;
-  /** The roles this handle may take. */
-  roles: string[];
-};
-
-/** Who the store knows and where a role is posted to — the one map every
- * surface that names a person and every message that addresses one reads.
- * `scripts/openspec/lib/team.mjs` is its only reader. */
-export type TeamMap = {
-  handles: Record<string, TeamMember>;
-  /** One channel id per role, for a stage whose hand is unnamed. */
-  channels: Record<string, string>;
-};
+/** One person the store knows, and who the store knows — the one map every
+ * surface that names a person and every message that addresses one reads,
+ * from `docs/prds/team.yaml`. The shape is declared beside the parser that
+ * reads the file, and named here so a surface imports it with the rest of
+ * this module; `team-map.test.ts` holds the reader to it. */
+export type {
+  TeamMap,
+  TeamMember,
+} from "../../../../scripts/openspec/lib/team-parse.mjs";
 
 /** The team map, projected for the browser: a handle against the roles it
  * may take, with no e-mail, Slack member or channel in it — those address a

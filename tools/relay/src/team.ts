@@ -35,10 +35,12 @@ export function slackHandles(text: string): Map<string, string> {
 }
 
 /**
- * The map with its cache. The loader and the clock are injected, so a test
- * reads the ten minutes without waiting them out and without a fetch.
+ * The map with its cache. The map itself is `TeamMap`, the shape
+ * `team-parse.mjs` parses; this is what holds one reading of it for ten
+ * minutes. The loader and the clock are injected, so a test reads those ten
+ * minutes without waiting them out and without a fetch.
  */
-export class TeamMap {
+export class TeamCache {
   private cached: Map<string, string> | null = null;
   private loadedAt = 0;
   private readonly load: () => Promise<string>;

@@ -1,7 +1,7 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import { TEAM_MAP } from "../../../scripts/openspec/lib/team-parse.mjs";
-import { slackHandles, TEAM_TTL_MS, TeamMap } from "../src/team.ts";
+import { slackHandles, TEAM_TTL_MS, TeamCache } from "../src/team.ts";
 
 /** The team map: a Slack member id to the handle the store knows, cached ten
  * minutes because a landing and a payload both ask for it.
@@ -75,7 +75,7 @@ describe("the cache", () => {
   it("reads the file once inside ten minutes and again after", async () => {
     let reads = 0;
     let now = 1_700_000_000_000;
-    const map = new TeamMap(
+    const map = new TeamCache(
       async () => {
         reads += 1;
         return FIXTURE;
@@ -100,7 +100,7 @@ describe("the cache", () => {
     // the cache, so a miss reads the file rather than refusing the landing.
     let text = "handles: {}\n";
     let reads = 0;
-    const map = new TeamMap(
+    const map = new TeamCache(
       async () => {
         reads += 1;
         return text;
@@ -116,7 +116,7 @@ describe("the cache", () => {
 
   it("reads the file once for a member the cache already names", async () => {
     let reads = 0;
-    const map = new TeamMap(async () => {
+    const map = new TeamCache(async () => {
       reads += 1;
       return FIXTURE;
     });

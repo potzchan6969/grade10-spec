@@ -28,7 +28,13 @@ export type LandCheck =
   | "landed-by-mismatch"
   | "file-outside-change"
   | "not-only-reviewed"
-  | "reviewed-line-removed";
+  | "reviewed-line-removed"
+  // The two the relay finds for itself, reading what it fetched rather than
+  // what it fetched it for: a compare the host listed only some of, and a
+  // team map its own parser refuses. A landing is refused the one way,
+  // naming the check, whichever of them it was.
+  | "compare-truncated"
+  | "map-unreadable";
 
 export type Verdict = { ok: true } | { ok: false; check: LandCheck };
 

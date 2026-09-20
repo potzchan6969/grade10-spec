@@ -17,7 +17,12 @@
  */
 import type { Env } from "./env.ts";
 import { advanceMain, compareFiles, HostError, readFileAt } from "./github.ts";
-import { checkReviewed, checkWord, type Verdict } from "./land.ts";
+import {
+  checkReviewed,
+  checkWord,
+  type LandCheck,
+  type Verdict,
+} from "./land.ts";
 import { recordPath, SCHEMA_PATH } from "./paths.ts";
 import { payloadText } from "./payload.ts";
 import {
@@ -42,7 +47,7 @@ import { changeRoom } from "./rooms.ts";
 import { type Fired, fireRoutine } from "./routine.ts";
 import { callRoom, json, type RoomOp } from "./rpc.ts";
 import { postMessage } from "./slack.ts";
-import { TEAM_MAP, TeamMap } from "./team.ts";
+import { TEAM_MAP, TeamCache } from "./team.ts";
 import { mintWakeToken } from "./token.ts";
 
 /** Where the change's room is kept, once a run has named the change this
@@ -56,11 +61,16 @@ const THREAD_LINE = /^\s*thread:\s*"?([^\s"/]+)\/([^\s"]+)"?\s*$/m;
 const reasonOf = (error: unknown): string =>
   error instanceof Error ? error.message : String(error);
 
+/** A landing refused, naming the check that refused it: one answer for every
+ * check, so a run reads the same shape whether the check was one of
+ * `land.ts`'s readings or one the relay found while it fetched. */
+const refused = (check: LandCheck): Response => json(403, { reason: check });
+
 export class Room {
   private readonly ctx: DurableObjectState;
   private readonly env: Env;
   /** One cache per live room, which is one cache per change being answered. */
-  private readonly team: TeamMap;
+  private readonly team: TeamCache;
   /** The thread the change's record named, once one was read: a thread moves
    * nowhere, so it is read once per live room. */
   private recorded: Thread | null = null;
@@ -70,7 +80,7 @@ export class Room {
   constructor(ctx: DurableObjectState, env: Env) {
     this.ctx = ctx;
     this.env = env;
-    this.team = new TeamMap(() => readFileAt(this.repo(), TEAM_MAP, "main"));
+    this.team = new TeamCache(() => readFileAt(this.repo(), TEAM_MAP, "main"));
   }
 
   async fetch(request: Request): Promise<Response> {
@@ -282,8 +292,7 @@ export class Room {
     if (!change) return json(400, { reason: "no-change-bound" });
     const repo = this.repo();
     const compare = await compareFiles(repo, "main", op.sha);
-    if ("truncated" in compare)
-      return json(403, { reason: "compare-truncated" });
+    if ("truncated" in compare) return refused("compare-truncated");
     const record = recordPath(change);
     let verdict: Verdict;
     if (op.kind === "reviewed") {
@@ -302,7 +311,7 @@ export class Room {
           if (error instanceof HostError) throw error;
           // A map the relay cannot parse fails closed, and names itself: it
           // is a check like every other, not the relay being broken.
-          return json(403, { reason: "map-unreadable" });
+          return refused("map-unreadable");
         }
       }
       verdict = checkWord({
@@ -315,7 +324,7 @@ export class Room {
         paths: compare.paths,
       });
     }
-    if (!verdict.ok) return json(403, { reason: verdict.check });
+    if (!verdict.ok) return refused(verdict.check);
     // The wake is asked for again here, against the state as it now reads:
     // the checks took several calls on the host, and a room its budget freed
     // in the meantime must not move `main` for a session it stopped waiting

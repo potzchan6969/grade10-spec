@@ -142,7 +142,6 @@ async function onWake(request: Request, env: Env): Promise<Response> {
     return json(401, { reason: "bad-token" });
   const body = (await readJson(request)) as {
     change?: string;
-    base?: string;
     head?: string;
   } | null;
   if (body === null) return notJson();
@@ -151,8 +150,7 @@ async function onWake(request: Request, env: Env): Promise<Response> {
   if (change === "") return json(400, { reason: "no-change" });
   // The head is what keys the wake: the same push wakes the relay once,
   // however many times the workflow's step runs, and a wake with no head
-  // would wake it again on every run. The base is the acknowledgment's own
-  // line and nothing the room keeps.
+  // would wake it again on every run.
   if (head === "") return json(400, { reason: "no-head" });
   // The room's answer is the wake's answer: the workflow reads whether it
   // queued anything, and a duplicate says so rather than reading as a wake.

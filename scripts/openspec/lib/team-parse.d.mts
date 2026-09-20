@@ -1,14 +1,14 @@
 /**
- * Types for `team-parse.mjs`, which has two readers: `team.mjs`, the store's
- * own reader of the map, which re-exports it; and `tools/relay`, which
- * imports it under `allowJs: false` and so reads the map through these
- * declarations alone. `team-parse.mjs` itself stays untyped JavaScript, held
- * to this by nothing but its own tests, the way every other file under
- * `scripts/openspec/lib/` is. `handle.d.mts` is beside it for the same
- * reason.
+ * Types for `team-parse.mjs`. Three readers: `team.mjs`, the store's own
+ * reader of the map, which re-exports it; `tools/relay` and `tools/manual`,
+ * both of which import it under `allowJs: false` and so read the map through
+ * these declarations alone — the manual re-exports `TeamMember` and `TeamMap`
+ * from its own `api/types.ts` rather than declaring the shape a second time.
+ * `team-parse.mjs` itself stays untyped JavaScript, held to this by nothing
+ * but its own tests, the way every other file under `scripts/openspec/lib/`
+ * is. `handle.d.mts` is beside it for the same reason.
  *
- * The names are the manual's — `TeamMember` and `TeamMap` — so one shape is
- * spoken of one way wherever it is read.
+ * One shape, named here, spoken of one way wherever it is read.
  */
 export declare const TEAM_MAP: string;
 
