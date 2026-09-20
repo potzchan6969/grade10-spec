@@ -1,7 +1,8 @@
 /**
- * The router. What it serves and nothing else: Slack's events, the code host's
- * push, the workflow's wake, the four calls a running session makes, where
- * `main` is and the socket a page listens on, and 404.
+ * The router. What it serves and nothing else: Slack's events, a Confirm
+ * button pressed, the code host's push, the workflow's wake, the four calls a
+ * running session makes, where `main` is and the socket a page listens on,
+ * and 404.
  *
  * Slack is answered inside three seconds and the work happens in
  * `ctx.waitUntil`, because a Slack delivery that is not acknowledged is
@@ -18,15 +19,27 @@ import { equalBytes, utf8 } from "./bytes.ts";
 import { type Env, missingSecret } from "./env.ts";
 import { parseGithubEvent, verifyGithubSignature } from "./github-events.ts";
 import { isUpgrade } from "./live.ts";
+import { readFileAt } from "./github.ts";
 import type { Thread } from "./room-state.ts";
 import { changeRoom } from "./rooms.ts";
 import { callLive, callRoom, json, type RoomOp } from "./rpc.ts";
 import {
+  actionPayload,
+  type Confirm,
+  confirmedBlocks,
+  confirmedLine,
+  parseSlackAction,
   parseSlackRequest,
   postMessage,
+  pressedLine,
+  pressedMessage,
   routeMessage,
+  type SlackPress,
+  type SlackRoute,
+  updateMessage,
   verifySlackSignature,
 } from "./slack.ts";
+import { TEAM_MAP, TeamCache } from "./team.ts";
 import { verifyWakeToken } from "./token.ts";
 
 export { Live } from "./live.ts";
@@ -73,13 +86,18 @@ async function readJson(request: Request): Promise<unknown | null> {
 
 const notJson = () => json(400, { reason: "not-json" });
 
-async function onSlackEvents(
+/** What went wrong, in the words a log can read. */
+const reasonOf = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);
+
+/** Whether Slack signed this body. An event and a press are verified the same
+ * way, over the bytes as they arrived. */
+function slackSigned(
   request: Request,
   env: Env,
-  ctx: ExecutionContext,
-): Promise<Response> {
-  const body = await request.text();
-  const signed = await verifySlackSignature(
+  body: string,
+): Promise<boolean> {
+  return verifySlackSignature(
     env.SLACK_SIGNING_SECRET,
     {
       timestamp: request.headers.get("x-slack-request-timestamp"),
@@ -88,7 +106,16 @@ async function onSlackEvents(
     },
     Date.now(),
   );
-  if (!signed) return json(401, { reason: "bad-signature" });
+}
+
+async function onSlackEvents(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+): Promise<Response> {
+  const body = await request.text();
+  if (!(await slackSigned(request, env, body)))
+    return json(401, { reason: "bad-signature" });
   const parsed = parseJson(body);
   if (parsed === null) return notJson();
   const event = parseSlackRequest(parsed, env.SLACK_APP_USER);
@@ -134,7 +161,7 @@ async function queue(
     why = `the room answered ${answer.status}`;
   } catch (error) {
     console.error(
-      `relay: the room for ${thread.channel}/${thread.ts} could not be reached: ${error instanceof Error ? error.message : String(error)}`,
+      `relay: the room for ${thread.channel}/${thread.ts} could not be reached: ${reasonOf(error)}`,
     );
     why = "the room could not be reached";
   }
@@ -147,8 +174,107 @@ async function tell(env: Env, thread: Thread, text: string): Promise<void> {
   try {
     await postMessage(env.SLACK_BOT_TOKEN, thread.channel, text, thread.ts);
   } catch (error) {
+    console.error(`relay: "${text}" did not post: ${reasonOf(error)}`);
+  }
+}
+
+/** Slack reads a 2xx body on an interaction as a message to draw in the
+ * thread, so a press is answered with nothing at all. */
+const empty = () => new Response(null, { status: 200 });
+
+/**
+ * A Confirm button pressed. The press is the word: it is routed exactly as a
+ * thread reply saying it, so a button and a typed word reach the same room
+ * through the same rules, and a press outside the planning channel wakes as
+ * much as a message there — nothing.
+ *
+ * Slack is answered inside three seconds and the work happens in
+ * `ctx.waitUntil`, as an event is.
+ */
+async function onSlackActions(
+  request: Request,
+  env: Env,
+  ctx: ExecutionContext,
+): Promise<Response> {
+  const body = await request.text();
+  if (!(await slackSigned(request, env, body)))
+    return json(401, { reason: "bad-signature" });
+  const payload = actionPayload(body);
+  if (payload === null) return notJson();
+  const action = parseSlackAction(payload);
+  if (action.kind === "ignored") return empty();
+  const route = routeMessage(
+    pressedMessage(action.press),
+    env.PLANNING_CHANNEL,
+  );
+  if (!route) return empty();
+  ctx.waitUntil(pressed(env, route, action.press));
+  return empty();
+}
+
+/**
+ * The work behind the answer Slack already read: the word queued as the
+ * thread reply it stands for, the echo that puts it in the transcript, and
+ * the button taken off the message.
+ */
+async function pressed(
+  env: Env,
+  route: SlackRoute,
+  press: SlackPress,
+): Promise<void> {
+  await queue(env, route.thread, roomByName(env, route.room), {
+    op: "enqueue",
+    reason: route.reason,
+    requireRoom: route.requireRoom,
+    // One press is one channel and one `action_ts`, however many times Slack
+    // delivers it.
+    dedupe: `slack-action:${press.channel}/${press.actionTs}`,
+    thread: route.thread,
+    message: { slack: press.user, text: press.word, ts: press.actionTs },
+  });
+  const handle = await pressedBy(env, press);
+  await tell(env, route.thread, pressedLine(press, handle));
+  await taken(env, press, handle);
+}
+
+/** Who pressed, through the team map at `main`. Null is the map not naming
+ * them, which the thread says rather than the relay guessing — the landing
+ * check reads the same map and refuses the word. One press is a person's own
+ * act, so the map is read for it rather than held between presses; the
+ * landing's own reading is the room's. */
+async function pressedBy(env: Env, press: SlackPress): Promise<string | null> {
+  const team = new TeamCache(() =>
+    readFileAt({ repo: env.REPO, token: env.GITHUB_TOKEN }, TEAM_MAP, "main"),
+  );
+  try {
+    return await team.handleOf(press.user);
+  } catch (error) {
     console.error(
-      `relay: "${text}" did not post: ${error instanceof Error ? error.message : String(error)}`,
+      `relay: the team map could not be read for ${press.user}: ${reasonOf(error)}`,
+    );
+    return null;
+  }
+}
+
+/** The button off the message, a context line in its place, so nobody presses
+ * twice. An update that fails is logged and nothing more: the word is already
+ * queued and the thread already says who pressed it. */
+async function taken(
+  env: Env,
+  press: SlackPress,
+  handle: string | null,
+): Promise<void> {
+  try {
+    await updateMessage(
+      env.SLACK_BOT_TOKEN,
+      press.channel,
+      press.messageTs,
+      press.text,
+      confirmedBlocks(press.text, confirmedLine(press, handle)),
+    );
+  } catch (error) {
+    console.error(
+      `relay: the button on ${press.channel}/${press.messageTs} did not come off: ${reasonOf(error)}`,
     );
   }
 }
@@ -274,10 +400,17 @@ function opOf(
       if (change === "") return { bad: "no-change" };
       return { op: { op: "bind", wake, change } };
     }
-    case "post":
+    case "post": {
       // A line the run has nothing to say in is still a line it may post;
       // the room is the token's, and the thread is the room's.
-      return { op: { op: "post", wake, text: String(body.text ?? "") } };
+      const text = String(body.text ?? "");
+      const confirm = confirmOf(body.confirm);
+      return {
+        op: confirm
+          ? { op: "post", wake, text, confirm }
+          : { op: "post", wake, text },
+      };
+    }
     case "land": {
       const sha = field("sha");
       if (!IS_SHA.test(sha)) return { bad: "bad-sha" };
@@ -308,6 +441,16 @@ function methodOf(path: string, run: RegExpExecArray | null): "GET" | "POST" {
   return path === "/head" || path === "/live" ? "GET" : "POST";
 }
 
+/** The button a post asks for, or nothing. Both words are the run's own — the
+ * relay composes no label — so a post that names neither is a line. */
+function confirmOf(given: unknown): Confirm | null {
+  const asked = (given ?? {}) as { label?: unknown; word?: unknown };
+  const label = String(asked.label ?? "").trim();
+  const word = String(asked.word ?? "").trim();
+  if (label === "" || word === "") return null;
+  return { label, word };
+}
+
 export default {
   async fetch(
     request: Request,
@@ -327,6 +470,7 @@ export default {
     if (path === "/github/events") return onGithubEvents(request, env);
     if (path === "/head") return onHead(env);
     if (path === "/live") return onLive(request, env);
+    if (path === "/slack/actions") return onSlackActions(request, env, ctx);
     if (path === "/wake") return onWake(request, env);
     if (run) return onRun(request, env, run[1], run[2]);
     return json(404, { reason: "no-route" });

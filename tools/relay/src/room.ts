@@ -46,7 +46,7 @@ import {
 import { changeRoom } from "./rooms.ts";
 import { type Fired, fireRoutine } from "./routine.ts";
 import { callRoom, json, type RoomOp } from "./rpc.ts";
-import { postMessage } from "./slack.ts";
+import { type Confirm, confirmBlocks, postMessage } from "./slack.ts";
 import { TEAM_MAP, TeamCache } from "./team.ts";
 import { mintWakeToken } from "./token.ts";
 
@@ -257,7 +257,7 @@ export class Room {
     const state = await this.load();
     if (!isRunningWake(state, op.wake))
       return json(401, { reason: "stale-wake" });
-    return json(200, { ts: await this.post(state, op.text) });
+    return json(200, { ts: await this.post(state, op.text, op.confirm) });
   }
 
   /** Whether the token's wake is still the one this room is running: the
@@ -343,14 +343,20 @@ export class Room {
 
   /** A post goes to the thread the room holds, then to the thread the record
    * names, then to the planning channel. A room addressed by a landing wake
-   * has no thread of its own until a run binds one. */
-  private async post(state: RoomState, text: string): Promise<string> {
+   * has no thread of its own until a run binds one. A line the run asked a
+   * button for is drawn as blocks, with its own text as the fallback. */
+  private async post(
+    state: RoomState,
+    text: string,
+    confirm?: Confirm,
+  ): Promise<string> {
     const thread = state.thread ?? (await this.threadOf(state));
     return postMessage(
       this.env.SLACK_BOT_TOKEN,
       thread?.channel ?? this.env.PLANNING_CHANNEL,
       text,
       thread?.ts,
+      confirm ? confirmBlocks(text, confirm) : undefined,
     );
   }
 

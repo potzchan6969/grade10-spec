@@ -9,6 +9,7 @@
  */
 import type { Head } from "./live-state.ts";
 import type { EnqueueInput, Thread } from "./room-state.ts";
+import type { Confirm } from "./slack.ts";
 
 export type LandKind = "word" | "reviewed";
 
@@ -16,7 +17,9 @@ export type RoomOp =
   | ({ op: "enqueue"; dedupe?: string; requireRoom?: boolean } & EnqueueInput)
   | { op: "alias"; change: string; thread: Thread }
   | { op: "bind"; wake: number; change: string }
-  | { op: "post"; wake: number; text: string }
+  /** `confirm` is the button under the line: the run's own label and word,
+   * which a press says back as a thread reply. */
+  | { op: "post"; wake: number; text: string; confirm?: Confirm }
   | { op: "land"; wake: number; sha: string; kind: LandKind; artifact: string }
   | { op: "done"; wake: number }
   | { op: "alive"; wake: number };

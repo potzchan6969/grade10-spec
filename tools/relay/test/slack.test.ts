@@ -419,9 +419,9 @@ describe("a press", () => {
     expect(
       pressed({ actions: [{ action_id: "somebody-else", value: "land" }] }),
     ).toEqual({ kind: "ignored", why: "not-a-confirm" });
-    expect(pressed({ actions: [{ action_id: "confirm", value: " " }] })).toEqual(
-      { kind: "ignored", why: "not-a-confirm" },
-    );
+    expect(
+      pressed({ actions: [{ action_id: "confirm", value: " " }] }),
+    ).toEqual({ kind: "ignored", why: "not-a-confirm" });
     expect(pressed({ actions: [] })).toEqual({
       kind: "ignored",
       why: "not-a-confirm",
@@ -617,7 +617,13 @@ describe("updating", () => {
       return new Response(JSON.stringify({ ok: true, ts: "1.1" }));
     });
     const blocks = confirmedBlocks("your word", "Confirmed by @ecchochan");
-    await updateMessage("xoxb", CHANNEL, "1700000005.000100", "your word", blocks);
+    await updateMessage(
+      "xoxb",
+      CHANNEL,
+      "1700000005.000100",
+      "your word",
+      blocks,
+    );
     expect(calls[0].url).toBe("https://slack.com/api/chat.update");
     expect(JSON.parse(String(calls[0].init.body))).toEqual({
       channel: CHANNEL,

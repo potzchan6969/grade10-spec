@@ -1,7 +1,7 @@
 /**
  * The Slack side: the v0 signature, the envelope read down to one message, the
- * events that are ignored, the word a message says, the room it wakes, and the
- * one call that posts.
+ * events that are ignored, the word a message says, the room it wakes, the
+ * Confirm button and the press it sends back, and the two calls that post.
  *
  * Nothing here holds state. The signature's clock and the app's own user id
  * arrive as arguments so both rules can be read in a test.
@@ -200,31 +200,237 @@ export function routeMessage(
   };
 }
 
-/** Post to a thread, or to the channel when there is no thread. Returns the
+/** The one `action_id` the relay issues, and the only one it answers: a
+ * button somebody else's app drew is not this relay's word. */
+export const CONFIRM_ACTION = "confirm";
+
+/** The button a run asks for. Both words are the run's own — the relay
+ * composes no label and invents no word. */
+export interface Confirm {
+  /** What the button reads, such as `Confirm proposal`. */
+  label: string;
+  /** The word a press says, as a thread reply would say it. */
+  word: string;
+}
+
+/** One Block Kit block. The relay draws three shapes and nothing else, so
+ * this is what the two calls take rather than a model of Block Kit. */
+export type SlackBlock = Record<string, unknown>;
+
+/** A line and one button under it. The text stays the message's own `text`
+ * too, which is what a notification and a client with no blocks read. */
+export function confirmBlocks(text: string, confirm: Confirm): SlackBlock[] {
+  return [
+    { type: "section", text: { type: "mrkdwn", text } },
+    {
+      type: "actions",
+      elements: [
+        {
+          type: "button",
+          text: { type: "plain_text", text: confirm.label },
+          action_id: CONFIRM_ACTION,
+          value: confirm.word,
+          style: "primary",
+        },
+      ],
+    },
+  ];
+}
+
+/** The same line with the button gone and a context line in its place: the
+ * press is in, and nobody presses twice. */
+export function confirmedBlocks(text: string, note: string): SlackBlock[] {
+  return [
+    { type: "section", text: { type: "mrkdwn", text } },
+    { type: "context", elements: [{ type: "mrkdwn", text: note }] },
+  ];
+}
+
+/** One press, read down to what the relay does with it. */
+export interface SlackPress {
+  channel: string;
+  /** The thread the press belongs to: the root of the message the button is
+   * on. */
+  threadTs: string;
+  /** The message the button is on, which the relay updates. */
+  messageTs: string;
+  /** The press's own timestamp, which keys it. */
+  actionTs: string;
+  user: string;
+  /** The word this press says. */
+  word: string;
+  /** What the pressed button reads, which the thread quotes. */
+  label: string;
+  /** The message's own text, which the update keeps. */
+  text: string;
+}
+
+export type SlackPressIgnored =
+  | "not-block-actions"
+  | "not-a-confirm"
+  | "no-thread";
+
+export type SlackAction =
+  | { kind: "confirm"; press: SlackPress }
+  | { kind: "ignored"; why: SlackPressIgnored };
+
+interface ActionEnvelope {
+  type?: string;
+  user?: { id?: string };
+  container?: {
+    channel_id?: string;
+    message_ts?: string;
+    thread_ts?: string;
+  };
+  message?: { text?: string; ts?: string; thread_ts?: string };
+  actions?: {
+    action_id?: string;
+    value?: string;
+    action_ts?: string;
+    text?: { text?: string };
+  }[];
+}
+
+/**
+ * An interaction arrives as a form with one field, `payload`, holding the
+ * JSON. The field is read off the body as it arrived, because that body is
+ * what the signature covers.
+ */
+export function actionPayload(body: string): unknown | null {
+  const payload = new URLSearchParams(body).get("payload");
+  if (payload === null) return null;
+  try {
+    return JSON.parse(payload) as unknown;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * The payload as one press, or the reason it is ignored. Slack sends every
+ * interaction of the app to the one request URL, so a view, a shortcut and
+ * another app's button all arrive here and none of them is a word.
+ *
+ * The thread is the container's, then the message's, then the message the
+ * button is on — a button on a message with no thread of its own is its own
+ * root, which is where a reply to it would go.
+ */
+export function parseSlackAction(raw: unknown): SlackAction {
+  const body = (raw ?? {}) as ActionEnvelope;
+  if (body.type !== "block_actions")
+    return { kind: "ignored", why: "not-block-actions" };
+  const action = body.actions?.[0];
+  const word = String(action?.value ?? "").trim();
+  if (!action || action.action_id !== CONFIRM_ACTION || word === "")
+    return { kind: "ignored", why: "not-a-confirm" };
+  const channel = String(body.container?.channel_id ?? "");
+  const messageTs = String(
+    body.container?.message_ts ?? body.message?.ts ?? "",
+  );
+  const threadTs = String(
+    body.container?.thread_ts ?? body.message?.thread_ts ?? messageTs,
+  );
+  if (channel === "" || threadTs === "")
+    return { kind: "ignored", why: "no-thread" };
+  return {
+    kind: "confirm",
+    press: {
+      channel,
+      threadTs,
+      messageTs,
+      actionTs: String(action.action_ts ?? messageTs),
+      user: String(body.user?.id ?? ""),
+      word,
+      label: String(action.text?.text ?? word),
+      text: String(body.message?.text ?? ""),
+    },
+  };
+}
+
+/** The press as the thread reply it stands for: the same word, said by the
+ * member who pressed it, in the thread the button is in. A press is routed
+ * and queued exactly as that reply, so a button and a typed word are one
+ * word. */
+export function pressedMessage(press: SlackPress): SlackMessage {
+  return {
+    channel: press.channel,
+    ts: press.actionTs,
+    threadTs: press.threadTs,
+    user: press.user,
+    text: press.word,
+    mentionsApp: false,
+  };
+}
+
+/** What the thread reads when a button is pressed, so the transcript carries
+ * the word whichever way it was said. A member the team map does not name
+ * says so: the relay lands nothing on a word it cannot attribute. */
+export function pressedLine(press: SlackPress, handle: string | null): string {
+  return handle
+    ? `@${handle} pressed *${press.label}*`
+    : `<@${press.user}> pressed *${press.label}* — the team map does not name this member, so nothing lands on it`;
+}
+
+/** The context line that takes the button's place. */
+export function confirmedLine(
+  press: SlackPress,
+  handle: string | null,
+): string {
+  return `Confirmed by ${handle ? `@${handle}` : `<@${press.user}>`}`;
+}
+
+/** Post to a thread, or to the channel when there is no thread. `blocks`
+ * draws the line as Block Kit, with `text` left as the fallback. Returns the
  * posted `ts`. */
 export async function postMessage(
   token: string,
   channel: string,
   text: string,
   threadTs?: string,
+  blocks?: SlackBlock[],
 ): Promise<string> {
-  const response = await fetch("https://slack.com/api/chat.postMessage", {
+  const posted = (await slackCall(token, "chat.postMessage", {
+    channel,
+    text,
+    ...(threadTs ? { thread_ts: threadTs } : {}),
+    ...(blocks ? { blocks } : {}),
+  })) as { ts?: string };
+  return String(posted.ts ?? "");
+}
+
+/** One message's blocks replaced, its text kept. What a press leaves behind:
+ * the caller logs a refusal rather than failing on it, since the word is
+ * already queued. */
+export async function updateMessage(
+  token: string,
+  channel: string,
+  ts: string,
+  text: string,
+  blocks: SlackBlock[],
+): Promise<void> {
+  await slackCall(token, "chat.update", { channel, ts, text, blocks });
+}
+
+/** One call on Slack's web API, answered or thrown. A call that does not land
+ * is the run's only voice going missing, so it stops the step rather than
+ * being swallowed. */
+async function slackCall(
+  token: string,
+  method: string,
+  body: Record<string, unknown>,
+): Promise<Record<string, unknown>> {
+  const response = await fetch(`https://slack.com/api/${method}`, {
     method: "POST",
     headers: {
       authorization: `Bearer ${token}`,
       "content-type": "application/json; charset=utf-8",
     },
-    body: JSON.stringify(
-      threadTs ? { channel, text, thread_ts: threadTs } : { channel, text },
-    ),
+    body: JSON.stringify(body),
   });
-  const posted = (await response.json()) as {
+  const answered = (await response.json()) as {
     ok?: boolean;
-    ts?: string;
     error?: string;
   };
-  // A post that does not land is the run's only voice going missing, so it
-  // stops the step rather than being swallowed.
-  if (!posted.ok) throw new Error(`slack chat.postMessage: ${posted.error}`);
-  return String(posted.ts ?? "");
+  if (!answered.ok) throw new Error(`slack ${method}: ${answered.error}`);
+  return answered as Record<string, unknown>;
 }
