@@ -17,12 +17,16 @@
 
 import { equalBytes, utf8 } from "./bytes.ts";
 import { type Env, missingSecret } from "./env.ts";
-import { parseGithubEvent, verifyGithubSignature } from "./github-events.ts";
-import { isUpgrade } from "./live.ts";
 import { readFileAt } from "./github.ts";
+import {
+  IS_SHA,
+  parseGithubEvent,
+  verifyGithubSignature,
+} from "./github-events.ts";
+import { isUpgrade } from "./live-state.ts";
 import type { Thread } from "./room-state.ts";
 import { changeRoom } from "./rooms.ts";
-import { callLive, callRoom, json, type RoomOp } from "./rpc.ts";
+import { callLive, callRoom, json, type RoomOp, reasonOf } from "./rpc.ts";
 import {
   actionPayload,
   type Confirm,
@@ -44,11 +48,6 @@ import { verifyWakeToken } from "./token.ts";
 
 export { Live } from "./live.ts";
 export { Room } from "./room.ts";
-
-/** A commit, as the code host spells one. A landing names the sha the relay
- * is to move `main` to, and a sha that is not one is a call the relay refuses
- * before it reads anything. */
-const IS_SHA = /^[0-9a-f]{40}$/;
 
 /** One room, addressed by name: `change/<id>`, and `channel/ts` for a thread
  * whose change no run has named yet. */
@@ -85,11 +84,6 @@ async function readJson(request: Request): Promise<unknown | null> {
 }
 
 const notJson = () => json(400, { reason: "not-json" });
-
-/** What went wrong, in the words a log can read. */
-const reasonOf = (error: unknown): string =>
-  error instanceof Error ? error.message : String(error);
-
 /** Whether Slack signed this body. An event and a press are verified the same
  * way, over the bytes as they arrived. */
 function slackSigned(

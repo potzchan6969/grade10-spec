@@ -11,20 +11,17 @@
  * told, and this class does what the step says: store the head, send it to
  * every socket it holds, and send it to a socket the moment it is accepted.
  */
-import { type Head, headBody, headText, moved } from "./live-state.ts";
-import { json, type LiveOp } from "./rpc.ts";
+import {
+  type Head,
+  headBody,
+  headText,
+  isUpgrade,
+  moved,
+} from "./live-state.ts";
+import { json, type LiveOp, reasonOf } from "./rpc.ts";
 
 /** Where the head is kept. */
 const HEAD = "head";
-
-/** What went wrong, in the words a log can read. */
-const reasonOf = (error: unknown): string =>
-  error instanceof Error ? error.message : String(error);
-
-/** A read of `/live` is a page opening a socket. The header is the whole of the
- * ask, and a read without it is a browser that cannot. */
-export const isUpgrade = (request: Request): boolean =>
-  (request.headers.get("upgrade") ?? "").toLowerCase() === "websocket";
 
 export class Live {
   private readonly ctx: DurableObjectState;

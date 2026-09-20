@@ -6,9 +6,12 @@
  * Nothing here holds state. The signature's clock and the app's own user id
  * arrive as arguments so both rules can be read in a test.
  */
-import { equalBytes, fromHex, hmacSha256, toHex } from "./bytes.ts";
+import { signedHmac, verifiedHmac } from "./bytes.ts";
 import type { Thread } from "./room-state.ts";
 import { threadRoom } from "./rooms.ts";
+
+/** How Slack prefixes its signature. */
+const PREFIX = "v0=";
 
 /** Slack's replay window. A request signed longer ago than this is refused
  * whatever its signature says. */
@@ -55,19 +58,17 @@ export async function verifySlackSignature(
   const seconds = Number(timestamp);
   if (!Number.isFinite(seconds)) return false;
   if (Math.abs(nowMs - seconds * 1000) > SIGNATURE_WINDOW_MS) return false;
-  if (!signature.startsWith("v0=")) return false;
-  const expected = await hmacSha256(secret, `v0:${timestamp}:${body}`);
-  return equalBytes(fromHex(signature.slice(3)), expected);
+  return verifiedHmac(secret, PREFIX, signature, `v0:${timestamp}:${body}`);
 }
 
 /** The hex signature of a body, for the workflow's own smoke test and for a
  * test's fixtures. */
-export async function signSlackRequest(
+export function signSlackRequest(
   secret: string,
   timestamp: string,
   body: string,
 ): Promise<string> {
-  return `v0=${toHex(await hmacSha256(secret, `v0:${timestamp}:${body}`))}`;
+  return signedHmac(secret, PREFIX, `v0:${timestamp}:${body}`);
 }
 
 /**

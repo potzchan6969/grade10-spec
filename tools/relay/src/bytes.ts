@@ -87,6 +87,33 @@ export function fromBase64(text: string): Uint8Array {
   return bytes;
 }
 
+/**
+ * A hex HMAC as both ends send one: `<prefix><hex>` over the message, under the
+ * shared secret. Slack signs `v0=<hex>` and the code host `sha256=<hex>`, and a
+ * signature of another kind, or none at all, is a failed compare rather than an
+ * error — a caller that refuses it names the refusal itself.
+ */
+export async function verifiedHmac(
+  secret: string,
+  prefix: string,
+  signature: string | null,
+  message: string,
+): Promise<boolean> {
+  if (!signature?.startsWith(prefix)) return false;
+  const expected = await hmacSha256(secret, message);
+  return equalBytes(fromHex(signature.slice(prefix.length)), expected);
+}
+
+/** The same signature, written: what a test's fixtures and a delivery replayed
+ * by hand are signed with. */
+export async function signedHmac(
+  secret: string,
+  prefix: string,
+  message: string,
+): Promise<string> {
+  return `${prefix}${toHex(await hmacSha256(secret, message))}`;
+}
+
 export async function hmacSha256(
   secret: string,
   message: string,

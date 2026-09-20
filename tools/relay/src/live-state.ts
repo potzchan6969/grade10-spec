@@ -1,6 +1,6 @@
 /**
- * Where `main` is, pure. One transition — a push arrived — and the next state
- * with the one command the object carries out.
+ * Where `main` is, pure: the shape a page reads, the one transition — a push
+ * arrived — and the reading that says a request is a page opening a socket.
  *
  * The object that holds the sockets decides nothing, so the whole of "one
  * broadcast per move, and a delivery that arrives twice is one move" is read in
@@ -48,3 +48,8 @@ export function moved(head: Head | null, push: Head): LiveStep {
   if (head && head.main === push.main) return { head, broadcast: null };
   return { head: push, broadcast: headText(push) };
 }
+
+/** A read of `/live` is a page opening a socket. The header is the whole of the
+ * ask, and a read without it is a browser that cannot. */
+export const isUpgrade = (request: Request): boolean =>
+  (request.headers.get("upgrade") ?? "").toLowerCase() === "websocket";

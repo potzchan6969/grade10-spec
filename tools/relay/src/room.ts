@@ -45,7 +45,7 @@ import {
 } from "./room-state.ts";
 import { changeRoom } from "./rooms.ts";
 import { type Fired, fireRoutine } from "./routine.ts";
-import { callRoom, json, type RoomOp } from "./rpc.ts";
+import { callRoom, json, type RoomOp, reasonOf } from "./rpc.ts";
 import { type Confirm, confirmBlocks, postMessage } from "./slack.ts";
 import { TEAM_MAP, TeamCache } from "./team.ts";
 import { mintWakeToken } from "./token.ts";
@@ -56,10 +56,6 @@ const CHANGE_ROOM = "change-room";
 
 /** The record's `thread:` line, as the round writes it. */
 const THREAD_LINE = /^\s*thread:\s*"?([^\s"/]+)\/([^\s"]+)"?\s*$/m;
-
-/** What went wrong, in the words the thread can read. */
-const reasonOf = (error: unknown): string =>
-  error instanceof Error ? error.message : String(error);
 
 /** A landing refused, naming the check that refused it: one answer for every
  * check, so a run reads the same shape whether the check was one of

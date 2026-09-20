@@ -29,6 +29,12 @@ export type RoomOp =
  * answers it with the socket itself. */
 export type LiveOp = { op: "moved"; head: Head } | { op: "head" };
 
+/** What went wrong, in the words a log can read. Every surface here says a
+ * failure the same way, so one reading answers the router, the room and the
+ * live object alike. */
+export const reasonOf = (error: unknown): string =>
+  error instanceof Error ? error.message : String(error);
+
 export function json(status: number, body: unknown): Response {
   return new Response(JSON.stringify(body), {
     status,
