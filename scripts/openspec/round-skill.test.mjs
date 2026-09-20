@@ -17,6 +17,7 @@ import { existsSync, readFileSync } from "node:fs";
 import { dirname, join, normalize, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import { planningSchema, TRIGGERS } from "./lib/perspectives.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -559,33 +560,75 @@ test("shared-planning-agent-rounds-SC-47 - each answer opens or closes what it n
   assert.match(skill, /\|\s*split\s*\|.*a new change takes the moved part/i);
 });
 
+/** The overlap table's rows, found by the head the requirement gives it so a
+ * second table in the same skill is never read for it. */
+const overlapRows = (path) => {
+  const HEAD = "| The change in flight is | The run does |";
+  const text = read(path);
+  const head = text.indexOf(HEAD);
+  assert.notEqual(
+    head,
+    -1,
+    `${path} carries the overlap table under the requirement's own head, \`${HEAD}\``,
+  );
+  const rows = [];
+  for (const line of text.slice(head).split("\n").slice(2)) {
+    if (!line.startsWith("|")) break;
+    rows.push(
+      line
+        .split("|")
+        .slice(1, -1)
+        .map((cell) => cell.trim()),
+    );
+  }
+  return rows;
+};
+
 test("shared-planning-agent-rounds-SC-80 - a sentence overlapping a change in flight is answered in its thread", () => {
   const plan = claims(PLAN);
-  assert.match(plan, /before opening, read every active change/i);
+  // Both legs of the predicate the skill keeps: the capability the sentence is
+  // about, and the page sections it would mark. What answers each is a command
+  // the store already has, so the skill derives neither.
   assert.match(
     plan,
-    /answer in that change's thread and let its stage decide/i,
-  );
-  // One row per stage the change in flight can be at, and what each does.
-  assert.match(
-    plan,
-    /\|\s*Proposed or Designed, and the sentence is its product manager's\s*\|[^|]*Extend it/i,
+    /`pnpm run spec:id <capability>`/,
+    "the skill names the command that prints which change carries a delta on the capability",
   );
   assert.match(
     plan,
-    /\|\s*Proposed or Designed, another hand's sentence\s*\|[^|]*held row[^|]*extend, recommended/i,
+    /proposal links the page sections the sentence would mark/i,
+    "the second leg: a change whose proposal links the sections the sentence would mark overlaps it too",
   );
+  assert.match(plan, /answer in that change's thread/i);
+  // One row per answer the stage and the asker give. Every stage the ladder
+  // knows is answered by one of them, read off `STAGE_LABEL` rather than
+  // listed here again, so a ninth stage arrives as a failing row rather than
+  // as a run guessing.
+  const rows = overlapRows(PLAN);
+  const left = rows.map(([stage]) => stage);
+  for (const label of Object.values(STAGE_LABEL)) {
+    assert.ok(
+      left.some((stage) => stage.includes(label)),
+      `stage ${label} is answered by a row of the overlap table; its rows answer ${left.join(" / ")}`,
+    );
+  }
+  const decides = (n) => rows[n - 1]?.[1] ?? "";
   assert.match(
-    plan,
-    /\|\s*Specified or Planned\s*\|[^|]*extend where the moved part is smaller than a task group of work, split otherwise/i,
+    decides(1),
+    /decided by the round/i,
+    "row 1: the round decides an extension of its own product manager's change",
   );
+  for (const n of [2, 3, 4]) {
+    assert.match(
+      decides(n),
+      /held row on its product manager/i,
+      `row ${n}: a held row on the overlapped change's product manager, which no round takes for them`,
+    );
+  }
   assert.match(
-    plan,
-    /\|\s*Building\s*\|[^|]*split, recommended; supersede where the sentence contradicts what is built/i,
-  );
-  assert.match(
-    plan,
-    /\|\s*On staging, Released or Archived\s*\|[^|]*new change, with `depends_on:` naming it/i,
+    decides(5),
+    /`depends_on:` naming it/,
+    "row 5: a new change, naming the change it depends on",
   );
 });
 
