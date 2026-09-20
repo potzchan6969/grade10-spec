@@ -70,6 +70,10 @@ Three things you say in the thread, and one you can do anywhere.
   a draft that needs a frame nobody has drawn writes a dated wait on the
   designer, never a screen in prose
 - 🚧 **Told once** — a draft ready for you is one reply, a landing one reply
+- 🚧 **The button says it for you** — a summary waiting on your word carries
+  `Confirm <artifact>`; a press is that word, said by whoever pressed, and the
+  thread reads who pressed while the button is replaced by who confirmed it; a
+  member the team map does not name lands nothing
 - 🚧 **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on, and the relay checks the same word a second time
   before `main` moves
