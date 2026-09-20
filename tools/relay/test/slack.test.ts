@@ -1,5 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import {
+  isLandingWord,
   parseSlackRequest,
   postMessage,
   routeMessage,
@@ -117,6 +118,24 @@ describe("the word a message says", () => {
 
   it("leaves a mention inside a sentence where it is", () => {
     expect(wordOf(`please <@${APP}> land`)).toBe("please <@u0app> land");
+  });
+
+  it("takes land and land with recommendations, trimmed and in any case", () => {
+    expect(isLandingWord("land")).toBe(true);
+    expect(isLandingWord("  Land With Recommendations ")).toBe(true);
+    expect(isLandingWord("LAND")).toBe(true);
+  });
+
+  it("takes a landing word behind a mention of the app", () => {
+    expect(isLandingWord(`<@${APP}> land`)).toBe(true);
+    expect(isLandingWord(`  <@${APP}>  land with recommendations`)).toBe(true);
+  });
+
+  it("is no landing word at all inside a sentence", () => {
+    expect(isLandingWord("land the proposal please")).toBe(false);
+    expect(isLandingWord("ship it")).toBe(false);
+    expect(isLandingWord(`please <@${APP}> land`)).toBe(false);
+    expect(isLandingWord(null)).toBe(false);
   });
 });
 

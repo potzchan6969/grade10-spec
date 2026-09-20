@@ -41,19 +41,49 @@ describe("the fire", () => {
     });
   });
 
-  it("answers what the runner said when it refuses the fire", async () => {
+  it("answers the status the runner refused with, and never its body", async () => {
+    // The body is the runner's, and a thread is no place for it: the status
+    // says which failure this was.
     vi.stubGlobal(
       "fetch",
-      async () => new Response("no such routine", { status: 404 }),
+      async () =>
+        new Response("no such routine: the-routine-token", { status: 404 }),
+    );
+    const refused = await fireRoutine(
+      { url: "https://runner.example/fire", token: "t" },
+      "{}",
+    );
+    expect(refused).toEqual({
+      ok: false,
+      why: "the runner answered 404",
+    });
+  });
+
+  it("answers no run where the runner named no session", async () => {
+    vi.stubGlobal(
+      "fetch",
+      async () =>
+        new Response(JSON.stringify({ claude_code_session_id: "s1" })),
     );
     expect(
       await fireRoutine(
         { url: "https://runner.example/fire", token: "t" },
         "{}",
       ),
-    ).toEqual({
-      ok: false,
-      why: "the runner answered 404 no such routine",
-    });
+    ).toEqual({ ok: true, run: null });
+  });
+
+  it("answers no run where the session's url is blank", async () => {
+    vi.stubGlobal(
+      "fetch",
+      async () =>
+        new Response(JSON.stringify({ claude_code_session_url: "  " })),
+    );
+    expect(
+      await fireRoutine(
+        { url: "https://runner.example/fire", token: "t" },
+        "{}",
+      ),
+    ).toEqual({ ok: true, run: null });
   });
 });

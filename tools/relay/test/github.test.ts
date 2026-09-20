@@ -30,8 +30,9 @@ interface Call {
 }
 
 function answer(calls: Call[], status: number, body: unknown) {
-  vi.stubGlobal("fetch", async (url: string, init?: RequestInit) => {
-    calls.push({ url, init });
+  // Every call is built with `new URL`, so what reaches `fetch` is a URL.
+  vi.stubGlobal("fetch", async (url: string | URL, init?: RequestInit) => {
+    calls.push({ url: String(url), init });
     return new Response(
       typeof body === "string" ? body : JSON.stringify(body),
       { status },
@@ -90,11 +91,25 @@ describe("the compare", () => {
     );
   });
 
-  it("carries the host's status on the error it throws", async () => {
+  it("carries the host's status and its own words on the error it throws", async () => {
     answer([], 502, { message: "Bad gateway" });
     await expect(compareFiles(REPO, "main", "abc123")).rejects.toMatchObject({
       status: 502,
+      detail: "Bad gateway",
     });
+  });
+
+  it("escapes what a caller gave it, and nothing it wrote itself", async () => {
+    const calls: Call[] = [];
+    answer(calls, 200, { files: [] });
+    await compareFiles(
+      { repo: "9gag/grade10 spec", token: REPO.token },
+      "main",
+      "a b",
+    );
+    expect(calls[0].url).toBe(
+      "https://api.github.com/repos/9gag/grade10%20spec/compare/main...a%20b",
+    );
   });
 });
 
@@ -127,6 +142,30 @@ describe("one file at a sha", () => {
     await expect(
       readFileAt(REPO, "docs/prds/team.yaml", "abc123"),
     ).rejects.toThrow("contents docs/prds/team.yaml: 404 Not Found");
+  });
+
+  it("stops on an answer carrying no content at all", async () => {
+    // Reading it as the empty string would send a landing through its checks
+    // against a record nobody wrote.
+    answer([], 200, { encoding: "base64" });
+    await expect(
+      readFileAt(REPO, "docs/prds/team.yaml", "abc123"),
+    ).rejects.toThrow("contents docs/prds/team.yaml: 200 no content");
+    answer([], 200, { content: "   " });
+    await expect(
+      readFileAt(REPO, "docs/prds/team.yaml", "abc123"),
+    ).rejects.toThrow("no content");
+  });
+
+  it("escapes a path segment by segment, keeping the file's own slashes", async () => {
+    const calls: Call[] = [];
+    answer(calls, 200, { content: btoa("") || "" });
+    await expect(
+      readFileAt(REPO, "docs/prds/a page.md", "a b"),
+    ).rejects.toThrow("no content");
+    expect(calls[0].url).toBe(
+      "https://api.github.com/repos/9gag/grade10-spec/contents/docs/prds/a%20page.md?ref=a%20b",
+    );
   });
 });
 

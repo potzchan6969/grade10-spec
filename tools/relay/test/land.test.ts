@@ -1,8 +1,9 @@
+import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
 import {
   checkReviewed,
   checkWord,
-  isLandingWord,
+  LANDING_PATHS,
   type ReviewedLanding,
   roleFor,
   type WordLanding,
@@ -81,26 +82,6 @@ function reviewed(over: Partial<ReviewedLanding> = {}): ReviewedLanding {
     ...over,
   };
 }
-
-describe("the word", () => {
-  it("takes land and land with recommendations, trimmed and in any case", () => {
-    expect(isLandingWord("land")).toBe(true);
-    expect(isLandingWord("  Land With Recommendations ")).toBe(true);
-    expect(isLandingWord("LAND")).toBe(true);
-  });
-
-  it("takes the word behind a mention of the app", () => {
-    expect(isLandingWord("<@U0APP> land")).toBe(true);
-    expect(isLandingWord("  <@U0APP>  land with recommendations")).toBe(true);
-  });
-
-  it("is no word at all in a sentence", () => {
-    expect(isLandingWord("land the proposal please")).toBe(false);
-    expect(isLandingWord("ship it")).toBe(false);
-    expect(isLandingWord("please <@U0APP> land")).toBe(false);
-    expect(isLandingWord(null)).toBe(false);
-  });
-});
 
 describe("whose word lands which artifact", () => {
   it("reads the role off the artifact's hand, not its teammate", () => {
@@ -261,6 +242,74 @@ describe("a landing on a word", () => {
       check: "word-not-said",
     });
     expect(checkWord(word({ ...group, artifact: "4" }))).toEqual({ ok: true });
+  });
+});
+
+describe("what the relay's path check is the coarse superset of", () => {
+  /** One proposal in the store's shape: two pages marked, one of them by a
+   * section, and two links that are neither. */
+  const PROPOSAL = `## Why
+
+The badge is marked on
+[Agent Rounds](../../../docs/prds/products/shared/planning/agent-rounds.md#product-decisions)
+and on [change stages](../../../docs/prds/products/shared/planning/change-stages.md),
+against [the runner](../../../docs/references/agent-runner.md) and
+[the schema](../../../openspec/schemas/grade10-planning/schema.yaml).
+
+A page the store does not hold, [the cart](../../../docs/prds/products/grade10-site/store/nothing-here.md),
+is no page.
+`;
+
+  /**
+   * The store's own reading of what a re-read of one change may write,
+   * replicated: `scripts/openspec/lib/writable.mjs` reads the proposal
+   * through `perspectives.mjs`, which imports `node:fs` and the manual's
+   * schema reader, so the rule is written here rather than the module
+   * imported — the change's own directory, then every `docs/prds/` page the
+   * proposal links that the store holds.
+   */
+  function writableBy(change: string, proposal: string): string[] {
+    const root = new URL("../../../", import.meta.url);
+    const dir = `openspec/changes/${change}`;
+    const pages = new Set<string>();
+    for (const link of proposal.matchAll(/\]\(([^)\s]+)\)/g)) {
+      const [target] = link[1].split("#");
+      if (!target.endsWith(".md")) continue;
+      const page = String(new URL(target, new URL(`${dir}/`, root))).slice(
+        String(root).length,
+      );
+      if (!page.startsWith("docs/prds/")) continue;
+      try {
+        readFileSync(new URL(page, root), "utf8");
+      } catch {
+        continue;
+      }
+      pages.add(page);
+    }
+    return [`${dir}/`, ...pages];
+  }
+
+  it("takes every path a re-read of one change may write", () => {
+    const writable = writableBy(CHANGE, PROPOSAL);
+    expect(writable).toEqual([
+      `openspec/changes/${CHANGE}/`,
+      "docs/prds/products/shared/planning/agent-rounds.md",
+      "docs/prds/products/shared/planning/change-stages.md",
+    ]);
+    const coarse = [`openspec/changes/${CHANGE}/`, ...LANDING_PATHS];
+    for (const path of writable)
+      expect(coarse.some((one) => path.startsWith(one))).toBe(true);
+    // And the check itself takes a landing that wrote them.
+    expect(
+      checkWord(
+        word({
+          paths: [
+            `openspec/changes/${CHANGE}/proposal.md`,
+            ...writable.slice(1),
+          ],
+        }),
+      ),
+    ).toEqual({ ok: true });
   });
 });
 

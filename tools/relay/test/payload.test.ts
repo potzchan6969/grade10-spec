@@ -50,7 +50,7 @@ describe("the payload", () => {
     });
   });
 
-  it("names the wake token and no other credential", () => {
+  it("shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token: the payload names the wake token and no other credential", () => {
     expect(payloadText(input)).toContain(
       '"token":"eyJ0b2tlbiI6MX0.c2lnbmF0dXJl"',
     );

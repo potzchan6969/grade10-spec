@@ -1,19 +1,15 @@
 import { readFileSync } from "node:fs";
 import { describe, expect, it } from "vitest";
-import { handleOf } from "../../../scripts/openspec/lib/handle.mjs";
-import {
-  parseTeamMap,
-  TEAM_MAP,
-} from "../../../scripts/openspec/lib/team-parse.mjs";
+import { TEAM_MAP } from "../../../scripts/openspec/lib/team-parse.mjs";
 import { slackHandles, TEAM_TTL_MS, TeamMap } from "../src/team.ts";
 
 /** The team map: a Slack member id to the handle the store knows, cached ten
  * minutes because a landing and a payload both ask for it.
  *
- * The relay parses nothing itself. `team-parse.mjs` is `team.mjs`'s own
- * reading of the file, re-exported by it, so these tests hold the relay's map
- * to what the store reads — from the store's real map and from one fixture in
- * its shape. */
+ * The relay parses nothing itself — `team-parse.mjs` is `team.mjs`'s own
+ * reading of the file — so what these tests hold is the map the relay ends up
+ * with, written out by hand: a projection asserted against a second
+ * projection is two readings agreeing about nothing. */
 
 /** The store's own map, read from the file the store reads. */
 const STORE_MAP = readFileSync(
@@ -37,33 +33,32 @@ const FIXTURE = `handles:
 channels: {}
 `;
 
-/** The map the store reads, projected the way the relay needs it: a member id
- * to the handle `hands:` is keyed by. */
-function asStoreReads(text: string): Map<string, string> {
-  const handles = new Map<string, string>();
-  for (const [handle, member] of Object.entries(parseTeamMap(text).handles)) {
-    if (member.slack) handles.set(member.slack, handleOf(handle));
-  }
-  return handles;
-}
-
 describe("the map", () => {
-  it("reads the store's own map as the store reads it", () => {
-    expect(slackHandles(STORE_MAP)).toEqual(asStoreReads(STORE_MAP));
+  it("reads a fixture in the store's shape as the map the relay holds", () => {
+    expect(slackHandles(FIXTURE)).toEqual(
+      new Map([
+        // The `@` and the case are folded; a handle with no member is left
+        // out altogether.
+        ["U0PM", "ecchochan"],
+        ["U0DESIGN", "dee"],
+      ]),
+    );
   });
 
-  it("reads a fixture in the store's shape as the store reads it", () => {
-    expect(slackHandles(FIXTURE)).toEqual(asStoreReads(FIXTURE));
-  });
-
-  it("names a member id against the handle, with no @ and no case", () => {
-    const handles = slackHandles(FIXTURE);
-    expect(handles.get("U0PM")).toBe("ecchochan");
-    expect(handles.get("U0DESIGN")).toBe("dee");
-  });
-
-  it("names no member for a handle with no slack line", () => {
-    expect([...slackHandles(FIXTURE).values()]).not.toContain("kinisworking");
+  it("reads the store's own map, which names the members it names", () => {
+    // The store's map is the file, so this says what it says today: every
+    // member it carries resolves to a handle it carries, and a handle with no
+    // member is in neither.
+    const handles = slackHandles(STORE_MAP);
+    for (const [member, handle] of handles) {
+      expect(member).toMatch(/^U[A-Z0-9]+$/);
+      expect(handle).toMatch(/^[a-z0-9._-]+$/);
+      expect(STORE_MAP).toContain(`slack: ${member}`);
+    }
+    expect(handles.size).toBe(
+      STORE_MAP.split("\n").filter((line) => line.trim().startsWith("slack:"))
+        .length,
+    );
   });
 
   it("answers an empty file with an empty map", () => {

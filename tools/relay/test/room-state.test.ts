@@ -3,6 +3,7 @@ import {
   BUDGET_MS,
   bind,
   type Command,
+  consumeWord,
   DEBOUNCE_MS,
   done,
   enqueue,
@@ -11,6 +12,7 @@ import {
   freshRoom,
   isRunningWake,
   onAlarm,
+  PENDING_MAX,
   type RoomState,
   remember,
   SEEN_MAX,
@@ -25,8 +27,8 @@ import {
 const NOW = 1_700_000_000_000;
 const THREAD = { channel: "C0PLAN", ts: "1700000000.000100" };
 
-function saidAt(ts: string, text: string) {
-  return { slack: "U0PM", text, ts };
+function saidAt(ts: string, text: string, slack = "U0PM") {
+  return { slack, text, ts };
 }
 
 function fireOf(commands: Command[]): Wake {
@@ -35,10 +37,15 @@ function fireOf(commands: Command[]): Wake {
   return fire.wake;
 }
 
+function postsOf(commands: Command[]): string[] {
+  return commands
+    .filter((command) => command.kind === "post")
+    .map((command) => (command.kind === "post" ? command.text : ""));
+}
+
 function running(state: Partial<RoomState> = {}): RoomState {
   return {
     ...freshRoom(),
-    status: "running",
     wake: 1,
     reason: "message",
     thread: THREAD,
@@ -76,7 +83,7 @@ describe("the debounce", () => {
     expect(DEBOUNCE_MS.plan).toBe(0);
   });
 
-  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change", () => {
+  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change, with no debounce before it", () => {
     const step = enqueue(
       freshRoom(),
       { reason: "landing", change: "nav-cart-count-badge" },
@@ -126,7 +133,7 @@ describe("the debounce", () => {
       NOW,
     );
     expect(step.commands).toEqual([{ kind: "clearAlarm" }]);
-    expect(step.state.status).toBe("idle");
+    expect(step.state.reason).toBe(null);
   });
 });
 
@@ -137,17 +144,68 @@ describe("what a room remembers", () => {
     expect(seenBefore(state, "slack:C0PLAN/1.2")).toBe(false);
   });
 
-  it("holds the newest 200 and drops the oldest", () => {
+  it("holds the newest 200 arrivals and drops the oldest", () => {
     let state = freshRoom();
     for (let i = 0; i < SEEN_MAX + 5; i += 1) state = remember(state, `k${i}`);
     expect(state.seen).toHaveLength(SEEN_MAX);
     expect(seenBefore(state, "k0")).toBe(false);
     expect(seenBefore(state, `k${SEEN_MAX + 4}`)).toBe(true);
   });
+
+  it("holds the newest 200 lines of a burst and counts what it dropped", () => {
+    let state = freshRoom();
+    for (let i = 0; i < PENDING_MAX + 2; i += 1)
+      state = enqueue(
+        state,
+        {
+          reason: "message",
+          thread: THREAD,
+          message: saidAt(`1.${i}`, `#${i}`),
+        },
+        NOW,
+      ).state;
+    expect(state.pending).toHaveLength(PENDING_MAX);
+    expect(state.pending[0].text).toBe("#2");
+    expect(state.dropped).toBe(2);
+  });
+
+  it("says in the thread which lines a wake did not carry", () => {
+    const step = onAlarm(
+      {
+        ...freshRoom(),
+        dropped: 2,
+        queued: "message",
+        pending: [saidAt("1.1", "and this")],
+        thread: THREAD,
+        alarm: { kind: "debounce", at: NOW },
+      },
+      NOW,
+    );
+    expect(postsOf(step.commands)).toEqual([
+      "2 earlier lines are not in this wake: the room keeps the latest 200.",
+    ]);
+    expect(step.state.dropped).toBe(0);
+  });
+
+  it("says one line in the singular", () => {
+    const step = onAlarm(
+      {
+        ...freshRoom(),
+        dropped: 1,
+        queued: "message",
+        thread: THREAD,
+        alarm: { kind: "debounce", at: NOW },
+      },
+      NOW,
+    );
+    expect(postsOf(step.commands)).toEqual([
+      "1 earlier line is not in this wake: the room keeps the latest 200.",
+    ]);
+  });
 });
 
 describe("the fire", () => {
-  it("carries the wake, its messages, its word and its expiry", () => {
+  it("carries the wake, its messages, its sender and its expiry", () => {
     const queued = enqueue(
       { ...freshRoom(), change: "nav-cart-count-badge" },
       { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
@@ -160,11 +218,10 @@ describe("the fire", () => {
       change: "nav-cart-count-badge",
       thread: THREAD,
       messages: [saidAt("1.1", "land")],
-      word: "land",
       sender: "U0PM",
       expiresAt: NOW + 60_000 + 30 * 60_000,
     });
-    expect(step.state.status).toBe("running");
+    expect(step.state.reason).toBe("message");
     expect(step.state.pending).toEqual([]);
   });
 
@@ -187,7 +244,7 @@ describe("the fire", () => {
     });
   });
 
-  it("keeps the word and who said it for the landing check", () => {
+  it("keeps the landing word and who said it for the landing check", () => {
     const queued = enqueue(
       freshRoom(),
       { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
@@ -198,7 +255,7 @@ describe("the fire", () => {
     expect(step.state.senderSlack).toBe("U0PM");
   });
 
-  it("takes the last word of a burst, never an earlier one", () => {
+  it("takes the latest landing word of a burst, not the latest line", () => {
     const first = enqueue(
       freshRoom(),
       { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
@@ -206,19 +263,67 @@ describe("the fire", () => {
     );
     const second = enqueue(
       first.state,
-      {
-        reason: "message",
-        message: { slack: "U0DEV", text: "hold on", ts: "1.2" },
-      },
+      { reason: "message", message: saidAt("1.2", "thanks!", "U0DEV") },
       NOW + 10_000,
     );
     const step = onAlarm(second.state, NOW + 60_000);
-    expect(step.state.word).toBe("hold on");
-    expect(step.state.senderSlack).toBe("U0DEV");
+    // `land` then `thanks!` lands: the word is the word, whatever was said
+    // after it.
+    expect(step.state.word).toBe("land");
+    expect(step.state.senderSlack).toBe("U0PM");
     expect(fireOf(step.commands).messages.map((one) => one.text)).toEqual([
       "land",
-      "hold on",
+      "thanks!",
     ]);
+    // The wake's sender is who woke it, which is the latest line's member.
+    expect(fireOf(step.commands).sender).toBe("U0DEV");
+  });
+
+  it("strips a mention off the word and folds its case", () => {
+    const queued = enqueue(
+      freshRoom(),
+      {
+        reason: "message",
+        thread: THREAD,
+        message: saidAt("1.1", "<@U0APP> Land With Recommendations"),
+      },
+      NOW,
+    );
+    expect(onAlarm(queued.state, NOW + 60_000).state.word).toBe(
+      "land with recommendations",
+    );
+  });
+
+  it("keeps the word a wake did not consume for the wake after it", () => {
+    const first = onAlarm(
+      enqueue(
+        freshRoom(),
+        { reason: "message", thread: THREAD, message: saidAt("1.1", "land") },
+        NOW,
+      ).state,
+      NOW + 60_000,
+    );
+    const arrived = enqueue(
+      first.state,
+      { reason: "message", message: saidAt("1.9", "any news?") },
+      NOW + 120_000,
+    );
+    // The budget cut the chain halfway; the next wake finishes it on the same
+    // word.
+    const next = done(arrived.state, NOW + 180_000);
+    expect(next.state.word).toBe("land");
+    expect(next.state.senderSlack).toBe("U0PM");
+  });
+
+  it("starts the next wake with no word once a landing has spent it", () => {
+    const spent = consumeWord(running({ word: "land", senderSlack: "U0PM" }));
+    expect(spent.word).toBe(null);
+    expect(spent.senderSlack).toBe(null);
+    const next = done(
+      { ...spent, queued: "message", pending: [saidAt("2.1", "and now?")] },
+      NOW + 60_000,
+    );
+    expect(next.state.word).toBe(null);
   });
 
   it("takes 30 minutes for a message, 30 for a landing and 120 for a plan", () => {
@@ -232,30 +337,64 @@ describe("the fire", () => {
     expect(fireOf(plan.commands).expiresAt).toBe(NOW + 120 * 60_000);
   });
 
-  it("the ack carries the run url", () => {
+  it("the ack carries the wake's subject and the run url", () => {
     const step = fired(running({ run: null }), {
       url: "https://runs.example/s2",
     });
     expect(step.commands).toEqual([
-      { kind: "post", text: "Reading… https://runs.example/s2" },
+      {
+        kind: "post",
+        text: "Reading nav-cart-count-badge… https://runs.example/s2",
+      },
     ]);
     expect(step.state.run).toEqual({ url: "https://runs.example/s2" });
+  });
+
+  it("the ack names the thread's first words where no change is bound", () => {
+    const opened = enqueue(
+      freshRoom(),
+      {
+        reason: "plan",
+        thread: THREAD,
+        message: saidAt("1.1", "<@U0APP> plan the cart badge"),
+      },
+      NOW,
+    ).state;
+    const step = fired(onAlarm(opened, NOW).state, {
+      url: "https://runs.example/s2",
+    });
+    expect(step.commands).toEqual([
+      {
+        kind: "post",
+        text: "Reading plan the cart badge… https://runs.example/s2",
+      },
+    ]);
+  });
+
+  it("the ack says the run did not start where the runner named no session", () => {
+    const step = fired(running({ run: null }), null);
+    expect(step.commands).toEqual([
+      {
+        kind: "post",
+        text: "The reply of nav-cart-count-badge did not start.",
+      },
+    ]);
+    expect(step.state.run).toBe(null);
   });
 
   it("says in the thread what the runner answered, and frees the room", () => {
     const step = fireFailed(
       running({ run: null, reason: "plan" }),
-      "the runner answered 429 rate limited",
+      "the runner answered 429",
     );
     expect(step.commands).toEqual([
       {
         kind: "post",
-        text: "The plan of nav-cart-count-badge did not start: the runner answered 429 rate limited",
+        text: "The plan of nav-cart-count-badge did not start: the runner answered 429",
       },
       { kind: "clearAlarm" },
     ]);
     expect(step.state).toMatchObject({
-      status: "idle",
       reason: null,
       queued: null,
       alarm: null,
@@ -271,7 +410,7 @@ describe("one running wake per room", () => {
       NOW + 60_000,
     );
     expect(arrived.commands).toEqual([]);
-    expect(arrived.state.status).toBe("running");
+    expect(arrived.state.reason).toBe("message");
     expect(arrived.state.queued).toBe("message");
     expect(arrived.state.wake).toBe(1);
 
@@ -285,7 +424,7 @@ describe("one running wake per room", () => {
     expect(after.state.queued).toBe(null);
   });
 
-  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change", () => {
+  it("shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change, behind the wake already running", () => {
     const arrived = enqueue(running(), { reason: "landing" }, NOW + 60_000);
     expect(arrived.commands).toEqual([]);
     expect(arrived.state.queued).toBe("landing");
@@ -299,7 +438,6 @@ describe("one running wake per room", () => {
     const after = done(running(), NOW + 120_000);
     expect(after.commands).toEqual([{ kind: "clearAlarm" }]);
     expect(after.state).toMatchObject({
-      status: "idle",
       reason: null,
       queued: null,
       run: null,
@@ -311,7 +449,7 @@ describe("one running wake per room", () => {
     const state = running({ wake: 3 });
     expect(isRunningWake(state, 3)).toBe(true);
     expect(isRunningWake(state, 2)).toBe(false);
-    expect(isRunningWake({ ...state, status: "idle" }, 3)).toBe(false);
+    expect(isRunningWake({ ...state, reason: null }, 3)).toBe(false);
   });
 });
 
@@ -322,7 +460,7 @@ describe("the budget", () => {
       kind: "post",
       text: "The reply of nav-cart-count-badge did not finish: https://runs.example/s1",
     });
-    expect(step.state.status).toBe("idle");
+    expect(step.state.reason).toBe(null);
     expect(step.commands).toContainEqual({ kind: "clearAlarm" });
   });
 
@@ -359,6 +497,17 @@ describe("the budget", () => {
       kind: "post",
       text: "The reply of nav-cart-count-badge did not start.",
     });
+  });
+
+  it("answers nothing before the budget it was set for", () => {
+    const state = running();
+    expect(onAlarm(state, NOW + BUDGET_MS.message - 1)).toEqual({
+      state,
+      commands: [],
+    });
+    expect(onAlarm(state, NOW + BUDGET_MS.message).commands[0].kind).toBe(
+      "post",
+    );
   });
 
   it("answers nothing at all on a room that is not running", () => {
