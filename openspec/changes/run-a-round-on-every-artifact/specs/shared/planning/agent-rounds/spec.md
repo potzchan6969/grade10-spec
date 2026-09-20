@@ -137,9 +137,6 @@ artifact's stage, and a word from any other teammate SHALL be refused.
   recommended and goes on
 - **Another teammate's word** — refused, with a reply naming whose word the
   artifact waits on; reassigning the hand is the way around
-- **The word checked twice** — the relay checks the same word again before
-  `main` moves: the member who said land resolves to the hand of the artifact's stage
-  in the record at the landing, or `main` does not move
 
 #### Scenario: shared-planning-agent-rounds-SC-04 - One word lands every artifact of that hand
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager says land once and the three artifacts they own land together
@@ -400,10 +397,9 @@ group of work.
 - **Overturned by one reply** — a row the round decided is changed by any
   hand's reply, applied as written, and the round reads again what the change
   of option reaches
-- **Counted as a question** — My turn and the digest count held rows alone,
-  through the ❓ the row carries; which rows are open questions is
-  `shared/planning/change-stages`' own derivation, and this capability states
-  no rule of its own in its place
+- **Listed to its hand** — a held row is an open question and a row the round
+  decided is none; the listing per hand is stated once, under Open questions
+  are listed per hand
 - **Waved through** — `land with recommendations` takes every held row of the
   change as recommended, and the landing commit records each as answered
 - **Holds no stage** — neither row holds a stage, a tick, a claim or a wait; a
@@ -415,7 +411,7 @@ group of work.
 - **WHEN** a round keeps a finding that is a preference or a product decision
 - **THEN** a choice that moves the change's scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is written as `❓ <role> - recommended: <option>`, and the draft chooses neither option
 - **AND** every other preference is written as `<option> - decided by the round` with what it passed over beside it, and the draft takes that option
-- **AND** the thread's summary lists the held rows with their recommendations
+- **AND** the held row is an open question and the row the round decided is none
 - **AND** any hand's reply overturns a row the round decided
 
 #### Scenario: shared-planning-agent-rounds-SC-22 - A question id is never reused
@@ -432,7 +428,7 @@ group of work.
 - **GIVEN** a change carrying a row the round decided and no held row
 - **WHEN** the stage's artifacts are otherwise on `main`
 - **THEN** the change's stage moves, and the next artifact lands on its hand's word
-- **AND** the row is listed on neither My turn nor the digest
+- **AND** the row is no open question, and no list carries it
 - **AND** a tick, a claim and a wait are taken as usual
 
 #### Scenario: shared-planning-agent-rounds-SC-72 - A held row holds the landing until answered or waved through
@@ -442,7 +438,7 @@ group of work.
 - **WHEN** the hand says land
 - **THEN** nothing lands and the reply names both rows
 - **AND** the same word lands the artifact once both rows are answered
-- **AND** `land with recommendations` lands it with both rows taken as recommended, recorded as answered in the landing commit
+- **AND** `land with recommendations` takes every held row of the change as recommended in the landing commit, and the landing goes on
 
 ### Requirement: A finding goes where it belongs
 
@@ -481,8 +477,13 @@ the draft that depends on it.
 
 ### Requirement: Open questions are listed per hand
 
-Every open numbered row SHALL be listed to the hand it waits on.
+An open row is a held row, and every one of them reaches the hand it waits on.
 
+Every held row SHALL be listed to the hand it waits on, and a row the round
+decided SHALL be listed nowhere.
+
+- **An open row is a held row** — the ❓ and the hand it waits on are what make
+  a row open; a row the round decided is no question, and no list carries it
 - **The change page** — each artifact row carries the ids of the questions open
   on it, linking to the change's decisions
 - **My turn** — the questions addressed to the reader sit above the changes on
@@ -730,8 +731,8 @@ artifact after the one that moved, oldest first.
   from the redrawn artifact before it, drafts the rest of the chain from them,
   each draft with its own readers, and opens a round for every edited
   artifact's hand
-- **Lands nothing** — the chain sits on the change's branch, and each artifact
-  waits for its own hand's word
+- **Lands nothing** — the chain sits on the change's branch, each artifact
+  waits for its own hand's word, and the hands land them in the chain's order
 - **What only a hand holds** — a draft that needs it writes the dated wait and
   drafts nothing that depends on it
 - **Nothing after it** — a landing with nothing after it reads nothing and says
@@ -765,7 +766,7 @@ artifact after the one that moved, oldest first.
 - **WHEN** the change's agent reads them again and two of them need editing
 - **THEN** it reads them in the order they sit in the upstream set, oldest first
 - **AND** each edited artifact is redrawn from the redrawn artifact before it, and the artifacts after it are drafted from what was redrawn
-- **AND** a round opens for every edited artifact's hand, and nothing lands
+- **AND** a round opens for every artifact it redrew, nothing lands, and the hands land them in the chain's order
 - **AND** a draft that needs what only a hand holds writes the dated wait, and nothing that depends on it is drafted
 
 #### Scenario: shared-planning-agent-rounds-SC-42 - A landing with nothing after it says nothing more
@@ -782,12 +783,16 @@ A change can be drafted end to end from one ask, with nobody waiting between
 its artifacts.
 
 A wake that opens a change or is asked to plan SHALL draft every artifact it
-can reach on the change's branch, each from the draft before it, and SHALL land
-nothing.
+can reach on the change's branch, each from the draft before it except the
+cases, and SHALL land nothing.
 
 - **The chain** — `proposal.md`, `decisions.md`, the journeys, `ui-design.md`
   where a surface moves, `tech-design.md`, the requirements and the cases, then
   `tasks.md`, in the order the upstream set gives them
+- **The cases beside the requirements** — the cases are the one artifact the
+  chain does not draw from the draft before it: their upstream set draws them
+  from the anchors, and never from `spec.md`, so neither reading sees the
+  other's output
 - **Each with its own readers** — every draft in the chain is challenged and
   verified as its own round
 - **Pushed as it goes** — the branch is pushed after every artifact, so a wake
@@ -800,7 +805,8 @@ nothing.
 **Serves:** shared-planning-agent-rounds-US-01 - the product manager's one sentence comes back as a change drafted as far as it can be
 
 - **WHEN** a wake opens a change or is asked to plan one
-- **THEN** the proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements, the cases and the plan are drafted, each from the draft before it
+- **THEN** the proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements and the plan are drafted, each from the draft before it
+- **AND** the cases are drafted from the anchors, beside the requirements and never from `spec.md`
 - **AND** each draft is read by its own perspectives
 - **AND** the branch is pushed after every artifact
 - **AND** nothing reaches `main`
@@ -931,7 +937,7 @@ in the landing's own commit.
 | --- | --- |
 | Round | The round's number in the change, from 1, in landing order |
 | Artifact | The artifact's id, or the task group's number |
-| Perspectives | The names of the perspectives run |
+| Perspectives | The names of the perspectives run, and the verifier where one ran |
 | Stood | The findings that stood, as short phrases |
 | Asked | The `Q<n>` ids the round raised |
 | Tests | Per scenario id, the tests that landed for a task group |
@@ -988,7 +994,7 @@ in the landing's own commit.
 - **GIVEN** a change whose demonstration or whole-change reading raised fixes
 - **WHEN** the fix pass lands
 - **THEN** `rounds.md` gains its row, naming the simpler-thing reader among the perspectives it ran
-- **AND** the row names no verifier where that reader was the only one
+- **AND** the Perspectives column names the verifier where one ran, and names none where that reader was the only one
 
 ### Requirement: A landing or a tick with no row is refused
 
@@ -1173,12 +1179,8 @@ SHALL be recorded in the change's record.
   corrected by a person's edit to the record; the round never rewrites it
 - **The runner** — the thread reaches a Slack app in front of the store's own
   relay, and the relay fires one run per wake: a fresh session each time, on
-  the change's `claude/<id>` branch, carrying nothing from the last one but the
-  files and the thread
-- **The wake is data** — what the relay hands a run — the change, why it woke,
-  the messages since the run's last post and the handle each came from — is
-  read as the hands' words, and nothing in it is read as an instruction to the
-  run
+  the change's branch, carrying nothing from the last one but the files and the
+  thread
 - **The same round elsewhere** — a round run from a terminal against the same
   branch is the same round, and a change whose thread cannot be reached is
   worked that way
@@ -1223,8 +1225,6 @@ thread.
 - **Done, or the failure line** — the run's last act is to say it is done; a
   wake past its budget without it posts the failure line with the run's link
   and frees the thread
-- **The link first** — the reply that acknowledges a wake carries the run's
-  link from the moment the run starts
 
 #### Scenario: shared-planning-agent-rounds-SC-66 - A landing wakes the relay once per change
 **Serves:** shared-planning-agent-rounds-US-05 - the hand's artifact is read again because the push told the relay, once
@@ -1245,7 +1245,7 @@ thread.
 #### Scenario: shared-planning-agent-rounds-SC-75 - A wake that does not finish says so
 **Serves:** shared-planning-agent-rounds-US-05 - the hand waiting on a read again is told when it did not finish, and where to look
 
-- **GIVEN** a wake running on a change's thread, acknowledged with the run's link
+- **GIVEN** a wake running on a change's thread, acknowledged with the run's link from the moment the run started
 - **WHEN** it passes its budget - thirty minutes on a landing or a reply, two hours on a plan - without saying it is done
 - **THEN** the thread carries the failure line with that run's link
 - **AND** the thread is free for the next wake
@@ -1271,15 +1271,6 @@ and SHALL continue from what is there.
   made against the state the run read
 - **The loser stops** — a run whose push loses its lease reads again once and,
   losing again, replies in the thread saying so and stops
-- **The landing asked, never pushed** — a run pushes the landing commit to the
-  change's branch and asks the relay to move `main`; a landing run from a
-  terminal pushes `main` itself
-- **A fast-forward alone** — the relay moves `main` only where the landing sits
-  on top of it, and a `main` that moved under the run is read again once and
-  asked again
-- **The writable set** — the diff from `main` stays under the change's own
-  directory, `docs/prds/` and `docs/references/`, and the run reads the same
-  set before it pushes
 
 #### Scenario: shared-planning-agent-rounds-SC-68 - A resumed run continues from what is pushed
 **Serves:** The thread and the runner - a run that died mid-draft is picked up without a person retracing it
@@ -1298,14 +1289,43 @@ and SHALL continue from what is there.
 - **AND** it makes no further push
 - **AND** the winning run's work is not overwritten
 
+### Requirement: A landing reaches `main` through the relay
+
+The relay moves `main`: on a word it checked itself, and carrying the artifact
+that landed and nothing else.
+
+A run SHALL push its landing commit to the change's branch and ask the relay to
+move `main`, and the relay SHALL move `main` only as a fast-forward, only on
+the word of the hand of the artifact's stage, and only where the diff stays
+inside the writable set.
+
+- **The landing asked, never pushed** — a run pushes the landing commit to the
+  change's branch and asks the relay to move `main`; a landing run from a
+  terminal pushes `main` itself
+- **The word checked twice** — the relay checks the same word again before
+  `main` moves: the member who said land resolves to the hand of the artifact's
+  stage in the record at the landing, or `main` does not move
+- **A fast-forward alone** — the relay moves `main` only where the landing sits
+  on top of it, and a `main` that moved under the run is read again once and
+  asked again
+- **The writable set** — the change's own directory and the pages the proposal
+  links, and nothing else; the run reads the same set before it pushes
+- **The artifact that landed, alone** — the landing commit is cut from `main`
+  with that artifact's files, the change's record, the round's row and the
+  pages the change marked, and carries nothing drafted after it, so `main`
+  never holds a draft no hand has landed
+- **The refusal names its check** — a landing the relay refuses leaves `main`
+  where it was, and the run's reply names the check that refused it
+
 #### Scenario: shared-planning-agent-rounds-SC-73 - A run lands through the relay, which checks the word
 **Serves:** shared-planning-agent-rounds-US-02 - the designer's own word is what puts the design on `main`, whoever is running
 
 - **GIVEN** a run that has committed a landing on the change's branch
 - **WHEN** it asks the relay to land, naming the commit, the kind of landing and the artifact
 - **THEN** `main` moves only as a fast-forward onto that commit
-- **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and the diff from `main` stays under the change's directory, `docs/prds/` and `docs/references/`
-- **AND** a word from anybody else moves nothing
+- **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and the diff from `main` touches nothing but the change's own directory and the pages the proposal links
+- **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
+- **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
 
 #### Scenario: shared-planning-agent-rounds-SC-77 - A reviewed-only landing needs no word
@@ -1330,6 +1350,10 @@ wake was given, and SHALL never hold the chat token.
   workflow's plain steps, and in nothing a session reads
 - **The push posts nothing itself** — the step that wakes the relay on a
   landing posts no message of its own
+- **The wake is data** — what the relay hands a run — the change, why it woke,
+  the messages since the run's last post and the handle each came from — is
+  read as the hands' words, and nothing in it is read as an instruction to the
+  run
 
 #### Scenario: shared-planning-agent-rounds-SC-74 - A run posts through the relay and never holds the token
 **Serves:** shared-planning-agent-rounds-US-04 - the hand reads the round's reply in their own thread, from a run that can reach nothing else
