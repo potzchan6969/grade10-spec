@@ -564,12 +564,11 @@ artifacts:
     instruction: |
       Generated from the proposal, the decisions and the journeys, in **two
       passes over this one file**, with the blind test suite between them.
-      Nobody owes it by hand, and it is nobody's to write outside the run that
-      takes both readings: `/planning-qa` owns it, or `/planning-dev` on a
-      change the engineer authored. Neither the product manager nor the
-      designer opens it - they hand over the proposal, the decisions and the
-      journeys, and the PM reviews what comes back. That is why this artifact
-      names no teammate and appears on no worklist.
+      Nobody owes it by hand: `/specify` runs both readings under
+      `planning-qa`'s rules; the product manager is the hand. Neither the
+      product manager nor the designer opens it - they hand over the proposal,
+      the decisions and the journeys, and the PM reviews what comes back. That
+      is why this artifact names no teammate and appears on no worklist.
 
       **Pass one - the outline.** `## Purpose`, then `## Feature set`, then
       stop, written from the journeys and the PRD the PM marked. The journeys

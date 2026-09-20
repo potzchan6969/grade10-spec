@@ -42,10 +42,9 @@ them, so the outline is written against the inventory rather than an imagined
 one. `planning-design` routes here for that, and holds what the reference is.
 
 **You do not open `spec.md`.** Both of its passes belong to the run that takes
-the two readings - `/specify`, under `planning-qa`'s rules or `planning-dev`'s
-on a change an engineer authored. Neither `spec.md` nor `feature-tcs.md` names a
-teammate in the schema: they sit on nobody's worklist, and you read them rather
-than write them.
+the two readings - `/specify`, under `planning-qa`'s rules. Neither `spec.md`
+nor `feature-tcs.md` names a teammate in the schema: they sit on nobody's
+worklist, and you read them rather than write them.
 
 | Generated | File | Whose run |
 | --- | --- | --- |
@@ -115,15 +114,14 @@ Everything this run produces is `draft`. Nothing in it claims review.
    challenge, which carries your alternative and its reason in `Instead of`
    so the next reader sees the row was contested rather than re-opening it.
    Every question they have not answered is one of the store's two classes,
-   under `round`'s **Questions: Held, or Decided by the Round**: held on a
-   person as `❓ <role> - recommended: <option>`, or `<option> - decided by
-   the round`. The ❓ opening the `Decided` cell is the one marker the tooling
-   reads, and a cell that opens it and names no role that way reaches no
-   list. A deferred question - the author saying they are not the right
-   person for it - is no decision: it goes under the proposal's open
-   questions with a note on who should settle it, and as a ❓ row on the PRD,
-   and it does not hold the draft. Sizing, export names, and what code a
-   change touches are never the author's to answer.
+   under `round`'s **Questions: Held, or Decided by the Round**. The ❓
+   opening the `Decided` cell is the one marker the tooling reads, and a cell
+   that opens it and names no role that way reaches no list. A deferred
+   question - the author saying they are not the right person for it - is no
+   decision: it goes under the proposal's open questions with a note on who
+   should settle it, and as a ❓ row on the PRD, and it does not hold the
+   draft. Sizing, export names, and what code a change touches are never the
+   author's to answer.
 
    **Challenge an answer before you record it.** What the author arrives with
    is a claim, not a row. An interview that only maps what the author already
@@ -169,15 +167,9 @@ Everything this run produces is `draft`. Nothing in it claims review.
    `page_waived: <why>`. `pnpm check:manual` refuses a change carrying deltas
    with neither a 🚧 line under a linked section nor the waiver.
 
-4. **What the gates make of a half-written change.** A change with no
-   `spec.md` yet, or one whose delta names no requirement, is refused unless it
-   declares the wait - which is why step 7 writes that line - and the wait is
-   asked back the moment the requirements land. `openspec status` calls `specs`
-   done as soon as a file is there, so it cannot tell an outline from the
-   requirements; `check:manual`'s `outline` rule is what fails a folded
-   capability whose suite sits beside a `spec.md` carrying none.
-   (`pnpm plan:preflight` is unrelated: it guards `tasks.md` against being
-   overwritten while engineering is implementing.)
+4. **A chain that stops before the requirements declares the wait.** A change
+   with no `spec.md` yet, or one whose delta names no requirement, is refused
+   unless its record says why - which is the line step 7 writes.
 
 5. **Write the proposal, the decisions and the journeys**, in that order -
    the three files that are yours. Under the proposal's `## References`, link

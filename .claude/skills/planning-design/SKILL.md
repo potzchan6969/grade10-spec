@@ -15,15 +15,15 @@ One of the eight artifacts in `grade10-planning` is yours on every change:
 
 | You are | Then | Yours to write |
 | --- | --- | --- |
-| Specifying a new change | The PM's lane is yours — run `/planning-pm` | The proposal, `decisions.md`, the journeys, **and** the design reference you hand over with them |
+| Specifying a new change | The PM's lane is yours — run `/plan` | The proposal, `decisions.md`, the journeys, **and** the design reference you hand over with them |
 | Picking up a change somebody specified | Supplement it | `ui-design.md`, and the design reference it stands on |
 
-**A new change is the same job the PM does**, and `/planning-pm` is the skill
-for it — the interview, the PRD marks, the proposal, the decisions, the
-journeys. Its description says "a PM or designer" for this reason. Run it
+**A new change is the same job the PM does**, and `/plan` is the run that opens
+it — the interview, the PRD marks, the proposal, the decisions, the journeys.
+Its description says "a product manager or a designer" for this reason. Run it
 rather than working from memory, and stop where it stops: `spec.md` is not that
-lane's to write, in your hands any more than the PM's. `/planning-qa` writes
-its outline from your journeys and your marks, and the design reference is what
+lane's to write, in your hands any more than the PM's. `/specify` writes its
+outline from your journeys and your marks, and the design reference is what
 makes those groups name what exists.
 
 What a designer brings that a PM does not is **the design reference**: what
@@ -80,14 +80,8 @@ A section that would only repeat one of them points at it instead.
    treatment — is a row in this file's States table and a `::story` card on
    the page. A 🚧 line that names a control, a drawer or a pill is a
    description: rewrite it as the outcome, or drop it.
-2. **Read the enriched instructions.**
-
-   ```bash
-   openspec instructions ui-design --change <change-name>
-   ```
-
-   It carries this store's own rules from `openspec/config.yaml` on top of the
-   schema's.
+2. **Read the enriched instructions `/design` renders.** They carry this
+   store's own rules from `openspec/config.yaml` on top of the schema's.
 3. **Take the inventory before you name anything new** — `## The design
    reference` below is where it comes from. A page is composition, not
    invention; see `/page-from-figma` for the inventory gate when you are
@@ -173,7 +167,7 @@ requirements. Leave them alone; they are not yours to fill in ahead of the pass,
 and a state you argue with is a conversation with that hand rather than an edit.
 
 **Never a scenario id.** The whole of `spec.md` is written after this file, by
-`/planning-qa`, and `pnpm check:manual` refuses an id the store issues nowhere.
+`/specify`, and `pnpm check:manual` refuses an id the store issues nowhere.
 The tie still does its work: a scenario serves the anchor your state named, so
 your edge case reaches the requirements rather than restating them.
 
@@ -188,11 +182,6 @@ Do not flatten a screen into a semicolon-joined bullet list. One named state,
 what shows, one anchor — dense prose in a single cell is the failure mode.
 
 ## Finish
-
-```bash
-pnpm run validate:changes <change-name>
-openspec status --change <change-name>
-```
 
 A change that needs an artifact nobody has written yet says so: `awaiting:`
 with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is

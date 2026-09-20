@@ -296,7 +296,7 @@ author. Never write them into the suite instead.
 
 ## What happens to this suite next
 
-On a feature run inside `/planning-qa`, the scenarios are being drafted in
+On a feature run inside `/specify`, the scenarios are being drafted in
 parallel by a sub-agent that cannot see this file. When both land, the caller
 joins them on anchors and writes a `## Reconciliation` section at the bottom of
 this suite: what was raised and folded into the spec, what was raised and

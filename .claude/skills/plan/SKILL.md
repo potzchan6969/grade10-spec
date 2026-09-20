@@ -52,15 +52,7 @@ recommendation, and a product detail becomes a ❓ line on the page.
 
 ## The Whole Plan in One Wake
 
-- **The three files start the chain** — they are not the end of the run:
-  draft ahead, as `round` says, in the order the schema gives them, each
-  artifact read by its own perspectives, pushed after every artifact and
-  landed nowhere
-- **The held rows, not seven documents** — what the product manager reads is
-  the held rows and what stood; a held question does not stop the chain, so
-  draft on its recommendation and list it first in the summary
-- **One `land`, their hand's artifacts** — one word lands every artifact of
-  the product manager's hand; the designer's and the engineer's wait on their
-  own word, and the landing tells them
+- **The three files start the chain** — draft ahead, as `round` says, in the
+  order the schema gives them, and landed nowhere
 - **Where the chain stopped** — hand on with the change's `awaiting: specs:`
   line only where it stopped before the requirements, as `planning-pm` says

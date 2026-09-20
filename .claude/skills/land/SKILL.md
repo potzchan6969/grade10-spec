@@ -27,6 +27,10 @@ what you do with each refusal.
   re-read and one retry
 - **Behind** — say which artifact is behind and whose hand it is, and run
   `/round reread <change>`
+- **A branch that will not rebase on `main`** — resolve it on the branch: a
+  conflicted delta is rewritten against the durable spec as it now stands, and
+  a `tasks.md` checkmark is never resolved toward your own side, because a
+  checked box is a fact about landed work and nothing catches a dropped one
 - **A branch that will not rebase onto the landing** — `main` holds the
   landing already: say which artifact it names and stop, and the branch is
   resolved by hand

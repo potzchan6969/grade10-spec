@@ -46,7 +46,7 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 | 3 | `specs/<capability>/user-journeys.md` | Product manager | `/plan`, `planning-pm` | Always — a capability nobody walks says so in it |
 | 4 | `ui-design.md` | Designer, or the PM with the design | `/design`, `planning-design` | Optional — from the journeys |
 | 5 | `tech-design.md` | Engineer | `/tech`, `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | Generated, the PM reviews | `/specify`, `planning-qa` or `planning-dev` | Always — two passes, with 7 between them |
+| 6 | `specs/<capability>/spec.md` | Generated, the PM reviews | `/specify`, `planning-qa` | Always — two passes, with 7 between them |
 | 7 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/specify`, `planning-qa` | Always — a blind pass, before the scenarios |
 | 8 | `tasks.md` | Engineer | `/tasks`, `planning-dev` | Before the change can be applied |
 

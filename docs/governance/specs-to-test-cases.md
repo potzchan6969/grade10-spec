@@ -122,7 +122,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 2. Intersect their journeys with the `**Trace:**` lines in that domain's `domain-tcs.md` and in `platform-tcs.md`
 3. A hit, or a capability new to a domain that has a `domain-tcs.md`, is an impact at that level
 
-On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>` — and `/spec-push` refuses without one. `## Impact` is not the signal: it records code, not paths.
+On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>`. No check parses it; the round's readers read for it. `## Impact` is not the signal: it records code, not paths.
 
 ## Who the Actor Is
 
@@ -153,7 +153,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — once the proposal, the journeys and the outline are written, `/specify` runs `/spec-to-tcs <change>` on the change's branch: every case `draft`, ahead of the scenarios, and both files land together on the product manager's word. A draft carries no authority, so the spec's reviewer approves nothing by it; review is `/tcs-review`, later
+- **Automatic** — once the proposal, the journeys and the outline are written, `/specify` runs `/spec-to-tcs <change>` on the change's branch: every case `draft`, ahead of the scenarios. A draft carries no authority, so the product manager approves nothing by it; review is `/tcs-review`, later
 - **Both files on one word** — `/specify` lands `spec.md` and `feature-tcs.md` together, so `main` never carries requirements with no suite beside them; CI's `pnpm run tcs:validate --require-suites` warns on a capability that still has journeys and no suite
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
@@ -188,6 +188,8 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 
 ## The Review Lane
 
+**The one lane still on a pull request**, merged by its reviewer: a verdict is a reviewer's own over a durable file, with no artifact row and no hand for the landing to land it as.
+
 | | |
 | --- | --- |
 | Branch | `tcs-review/<level>-<target>`, off `main`, before the first verdict; a second reviewer on the same suite appends `-US<n>-<m>` |
@@ -212,7 +214,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 **None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
 
 - **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
-- **The suites are written when a change touches the capability.** `/planning-qa` runs the blind pass on the anchor set `/planning-pm` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **The suites are written when a change touches the capability.** `/specify` runs the blind pass on the anchor set `/plan` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
 - **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
 - **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
 

@@ -115,14 +115,8 @@ Everything this run produces is `draft`. Nothing in it claims review;
    it gets `feature-tcs.md` with `## Reconciliation` stripped: those lines carry
    scenario ids, and on a re-run they would be the leak.
 
-   **The scenario pass also reads `tech-design.md`.** It is drawn before the
-   requirements and the requirements are drawn from it, so it is read beside
-   `ui-design.md`, and a requirement contradicting either is not written. A
-   requirement that needs the proposed mechanism changed writes a dated wait on
-   the tech PIC rather than writing over them -
-   `awaiting: tech-design: "<date>, <requirement> re-read - @<tech>"` in the
-   change's record, cleared by their edit or by that artifact's `reviewed:`
-   line. The suite pass does not read it: a mechanism is not an anchor.
+   **The suite pass does not read `tech-design.md`:** a mechanism is not an
+   anchor.
 
 4. **Reconcile, then take the second pass.** Join on anchors, apply the
    dispositions below, and the scenarios that survive are written with the
@@ -144,11 +138,6 @@ Everything this run produces is `draft`. Nothing in it claims review;
    **Put the blind pass's raised questions in `decisions.md`**, under its
    `## Raised` table, one row per question with the capability that asked. Leave
    `Landed` for the author. They go nowhere near the suite.
-
-   Delete the change's `awaiting: specs:` line as the requirements land: it
-   named the pass you have just taken. `check:manual` reports a wait its own
-   artifact has answered, so one left behind is a finding rather than a note.
-   A wait on a requirement nobody can decide yet is a different line and stays.
 
 5. **Lay the requirements out for one pass.** After the reconciliation and
    before the PM reads the root groups, read each requirement as a new hire
@@ -177,23 +166,11 @@ Everything this run produces is `draft`. Nothing in it claims review;
    engineer reading for one rule should find it without reading the nine
    around it.
 
-6. **Validate.**
+6. **Validate.** The landing's gate runs the checks;
+   `pnpm run plan:land <change> <artifact> --dry-run` cuts and gates without
+   landing, for whoever wants to see what the gate will say before the word.
 
-   ```bash
-   pnpm run validate:changes <change-name>
-   pnpm check:manual
-   pnpm run tcs:validate
-   ```
-
-   `openspec status` calls `specs` done as soon as your outline exists, because
-   a file is there. **Two gates read further.** While the change is open, a
-   delta naming no requirement is refused unless it declares the wait
-   `/plan` left - so the line stands until the requirements land and comes off
-   with them, never after them. Once folded, `check:manual`'s `outline` rule
-   fails a capability whose suite sits beside a `spec.md` carrying no
-   requirements; it is never downgraded to a warning.
-
-   Both anchor rules read the delta too: a scenario of yours standing under no
+   Both anchor rules read the delta: a scenario of yours standing under no
    `**Serves:**` line, or naming an anchor the capability offers nowhere, fails
    here rather than a release later.
 
@@ -436,18 +413,7 @@ or an `approved` file, and shows an existing suite before touching it.
 
 **The blind pass runs before the scenarios**: as soon as the journeys and the
 outline are written, so the second reading is taken from a suite that never saw
-them. `/specify` lands `spec.md` and `feature-tcs.md` together on the product
-manager's one word, so `main` never carries requirements with no suite beside
-them; CI's `tcs:validate --require-suites` warns on a capability that still has
-journeys and no suite.
-
-That asks nothing of whoever reads the requirements beside the suite: a `draft`
-case carries no authority, and nobody is being asked to stand behind one there.
-
-**Review is later, at its own pace.** `/tcs-review` walks the drafts with a
-human one journey at a time, quoting the spec's scenarios on request, and
-records each verdict as `actual`, `deprecated`, or still `draft`. Every case
-marked `actual` becomes evidence the next `/spec-to-tcs` run learns from.
+them.
 
 ## What a suite owes its capability
 
@@ -503,12 +469,8 @@ pnpm run tcs:validate        # errors fail CI; an older shape is one of them
 pnpm run tcs:stale           # which suites' drafts sit below the current rules rev
 ```
 
-`tcs_rules_rev` is `<major>.<minor>`. A **minor** moves wording only, and
-`tcs:stale` reports the suites whose drafts sit below it — bring those up one
-at a time. A **major** changes what a file must carry, so it is swept across
-every suite as the bump lands, and the sweep rewrites the drafts: moving a
-`**Drafts styled:**` stamp without rewriting the cases beneath it is a lie the
-next reader cannot catch.
+What a **minor** and a **major** each reach, and how, is
+`docs/governance/specs-to-test-cases.md`'s **Rules Revisions**.
 
 ## Related
 

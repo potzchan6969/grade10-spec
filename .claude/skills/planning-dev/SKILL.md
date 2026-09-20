@@ -5,8 +5,8 @@ description: Write the engineer's artifacts on an OpenSpec change - tech-design.
 
 # The engineer's artifacts
 
-Two of the eight artifacts in `grade10-planning` are yours, and they are the
-last two:
+Two of the eight artifacts in `grade10-planning` are yours - `tech-design.md`
+is the fifth, `tasks.md` the eighth:
 
 | Artifact | What it holds |
 | --- | --- |
@@ -18,7 +18,7 @@ exists, both boards read the change as still being planned.
 
 ## Pick up the change in hand; never open a second one
 
-Most changes arrive already carrying a proposal, spec deltas and journeys
+Most changes arrive already carrying a proposal, the decisions and the journeys
 somebody else wrote. **Add your artifacts to that change.** The implementing
 repository has no planning shape of its own — its `openspec/` is config-only
 and resolves to this store — so delivery is planned here, by you.
@@ -27,21 +27,17 @@ and resolves to this store — so delivery is planned here, by you.
    `schema:`. The board names the promoter from that key — without it the card
    still reads "proposed by" alone, and the author never learns their change
    was picked up.
-2. **Read what the deltas carry, not whether the file is there.**
-   `openspec status` calls `specs` done as soon as a `spec.md` exists, so it
-   cannot tell an outline from the requirements. Look for the `## ADDED` and
-   `## MODIFIED Requirements` headings, and for `awaiting: specs:` in
-   `.openspec.yaml` — the line the PM leaves with the outline. A delta that
-   names no requirement and declares no wait fails `pnpm check:manual`, so the
-   state you cannot plan against is usually red before you reach it.
+2. **Read what the deltas carry, not whether the file is there.** Look for the
+   `## ADDED` and `## MODIFIED Requirements` headings before you plan.
 
-   **No requirements means the change is not yours to plan yet.** A task names
-   the scenarios it makes pass, and an outline issues none. Where you own the
-   change, take it through `/specify` — the suite and the scenarios — and
-   continue here. Where somebody else authored it, say it needs QA's two
-   readings and stop: that run stops on *its* author for a case nobody ever
-   decided, and answering one of those yourself is the agent deciding the
-   product.
+   **No requirements means `tasks.md` is not yours to plan yet.** A task names
+   the scenarios it makes pass, and an outline issues none, so the plan waits
+   on the requirements; `tech-design.md` is drawn before them, from the page,
+   the decisions and the journeys. Where you own the change, take it through
+   `/specify` — the suite and the scenarios — and continue here. Where
+   somebody else authored it, say it needs QA's two readings and stop: that run
+   stops on *its* author for a case nobody ever decided, and answering one of
+   those yourself is the agent deciding the product.
 
 The proposal, the deltas and the journeys carry over untouched. **Do not send
 the proposal back to its author for a task list** — their part is finished. A

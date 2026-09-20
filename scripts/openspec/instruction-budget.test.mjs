@@ -6,7 +6,7 @@
  * a budget is a commit that says why.
  */
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -29,6 +29,17 @@ const AGENTS_BUDGET = 2570;
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
+// A role skill is the rules one line command loads, beside `round`, which
+// carries the procedure for all of them. Each number is that skill's size
+// after the pass that gave every rule one home (`Q84`): the next rule earns
+// its words by cutting others, or raises this number in a commit that says
+// why.
+const SKILLS_BUDGET = {
+  "planning-pm": 2740,
+  "planning-qa": 4446,
+  "planning-design": 1868,
+  "planning-dev": 998,
+};
 const RULES_BUDGET = {
   proposal: 110,
   // Back to one block after the artifact split was undone: two passes over one
@@ -58,6 +69,17 @@ test("the round skill holds to its word budget", () => {
     count <= ROUND_BUDGET,
     `${skill} is ${count} words; the budget is ${ROUND_BUDGET}. Point at the document or the script header that owns the rule, or raise the budget here and say why in the commit.`,
   );
+});
+
+test("each role skill holds to its word budget", () => {
+  for (const [role, budget] of Object.entries(SKILLS_BUDGET)) {
+    const skill = `.claude/skills/${role}/SKILL.md`;
+    const count = words(read(skill));
+    assert.ok(
+      count <= budget,
+      `${skill} is ${count} words; the budget is ${budget}. Point at the command skill or the document that owns the rule, or raise the budget here and say why in the commit.`,
+    );
+  }
 });
 
 test("each config.yaml rules block holds to its word budget", () => {
@@ -144,5 +166,56 @@ test("every bold pointer in the QA skills names a rulebook section", () => {
     dangling,
     [],
     `bold mid-sentence in a QA skill is a pointer into ${RULEBOOK}; each one names a heading or a bold bullet lead there, in the rulebook's own casing`,
+  );
+});
+
+// Slash names. A `/<slug>` in backticks reads as a command to run, so a name a
+// skill or a governance page writes is one a reader can load. Two other kinds
+// wear the same shape: the manual's own routes, and the harness's built-in
+// commands. `docs/references/` is explanatory and exempt.
+const ROUTES = new Set([
+  "in-flight",
+  "my-turn",
+  "pending",
+  "qa",
+  "recent",
+  "references",
+  "p",
+  "guides",
+  "platform",
+  "vocabulary",
+]);
+const HARNESS = new Set(["add-dir", "compact", "tc", "sc"]);
+const SLASH_TREES = [".claude/skills", "docs/governance"];
+
+const markdownUnder = (dir) => {
+  const found = [];
+  for (const entry of readdirSync(join(ROOT, dir), { withFileTypes: true })) {
+    const path = `${dir}/${entry.name}`;
+    if (entry.isDirectory()) found.push(...markdownUnder(path));
+    else if (entry.name.endsWith(".md")) found.push(path);
+  }
+  return found.sort();
+};
+
+test("every slash name a skill or a governance page writes resolves to a skill", () => {
+  const dangling = [];
+  for (const tree of SLASH_TREES) {
+    for (const path of markdownUnder(tree)) {
+      const text = read(path);
+      for (const m of text.matchAll(/`\/([a-z][a-z0-9-]*)`/g)) {
+        const slug = m[1];
+        if (ROUTES.has(slug) || HARNESS.has(slug)) continue;
+        const skill = join(ROOT, ".claude/skills", slug, "SKILL.md");
+        if (existsSync(skill)) continue;
+        const line = text.slice(0, m.index).split("\n").length;
+        dangling.push(`${path}:${line} \`/${slug}\``);
+      }
+    }
+  }
+  assert.deepEqual(
+    dangling,
+    [],
+    "a `/<slug>` in backticks resolves to .claude/skills/<slug>/SKILL.md, or it is a manual route or a harness command on the lists above; a retired skill is swept from every page that named it",
   );
 });
