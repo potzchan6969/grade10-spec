@@ -643,6 +643,38 @@ test("shared-planning-agent-rounds-SC-73 - the relay reads the landing off a sid
   assert.notEqual(shaOf(remote, `refs/heads/${BRANCH}`), branchBefore);
 });
 
+test("shared-planning-agent-rounds-SC-73 - a side ref that will not push stops the landing, and nothing is cut again", async () => {
+  let asked = 0;
+  const { root, remote } = draftedAhead();
+  const branchBefore = shaOf(remote, `refs/heads/${BRANCH}`);
+  const server = await landingRelay((_req, res, body) => {
+    asked += 1;
+    answer(res, 200, { landed: JSON.parse(body).sha });
+  });
+  writeRelayFile(root, urlOf(server));
+  // A ref of its own under the side ref's name: git cannot create
+  // `…-landing` while `…-landing/held` exists. The push it refuses is this
+  // run's own scratch ref, which no other run races it for — so there is
+  // nothing to read again and nothing to retry.
+  execFileSync("git", [
+    "-C",
+    remote,
+    "update-ref",
+    `${SIDE_REF}/held`,
+    shaOf(remote, "main"),
+  ]);
+
+  const result = await run([CHANGE, "ui-design", "--root", root, ...ROW]);
+  server.close();
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /the landing's side ref/);
+  assert.match(result.stderr, new RegExp(SIDE_REF));
+  assert.equal(asked, 0, "the relay was never asked to move main");
+  assert.doesNotMatch(result.stdout, /retrying/);
+  assert.equal(shaOf(remote, `refs/heads/${BRANCH}`), branchBefore);
+});
+
 test("shared-planning-agent-rounds-SC-73 - a 409 re-reads main once and cuts the second landing from the main that moved", async () => {
   const asked = [];
   const server = await landingRelay((_req, res, body) => {

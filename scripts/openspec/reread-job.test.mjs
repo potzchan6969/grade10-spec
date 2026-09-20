@@ -34,6 +34,13 @@ const DIR = `openspec/changes/${CHANGE}`;
 /** The page this change's proposal links, and one it does not. */
 const PAGE = "docs/prds/products/shared/planning/agent-rounds.md";
 const UNLINKED = "docs/prds/products/shared/planning/change-stages.md";
+/** The reference page it links, and one it does not: a proposal cites its
+ * evidence as it marks its pages, so a re-read may correct either. */
+const REFERENCE = "docs/references/round-notes.md";
+const UNLINKED_REFERENCE = "docs/references/other-notes.md";
+/** A sha no checkout holds: what a `.round/landed` line reads as when the
+ * landing that wrote it is gone. */
+const NO_SUCH_SHA = "deadbeefdeadbeefdeadbeefdeadbeefdeadbeef";
 
 /** A throwaway store with a bare remote: `main` carries two changes, and the
  * checkout is on `main`, as the session's own checkout is. */
@@ -59,6 +66,8 @@ function sandbox() {
       "",
       `The page it marks: [Agent Rounds](../../../${PAGE}#the-walk).`,
       "",
+      `The evidence it cites: [Round Notes](../../../${REFERENCE}).`,
+      "",
     ].join("\n"),
     [`openspec/changes/${OTHER}/.openspec.yaml`]:
       "schema: demo-planning\ncreated: 2026-10-01\n",
@@ -68,6 +77,8 @@ function sandbox() {
     // path, the rest holding none.
     [PAGE]: "# Agent Rounds\n\n## The Walk\n\nThe round reads the draft.\n",
     [UNLINKED]: "# Change Stages\n\nAnother change's page.\n",
+    [REFERENCE]: "# Round Notes\n\nThe owner's draft.\n",
+    [UNLINKED_REFERENCE]: "# Other Notes\n\nAnother change's evidence.\n",
     "docs/governance/writing.md": "# Writing\n",
     "openspec/specs/shared/planning/agent-rounds/spec.md": "# Spec\n",
     "openspec/schemas/demo-planning/schema.yaml": "name: demo-planning\n",
@@ -140,33 +151,21 @@ function writeRelayFile(root, url) {
 
 // ── The guard's own argv parser ─────────────────────────────────────────────
 
-// `lib/args.mjs` refuses a valued option given no value, naming the flag
-// beside the usage.
+// `lib/args.mjs` refuses an option outside the guard's own set, naming it
+// beside the usage — and `--before` is outside it: the guard reads the
+// checkout it was given, so a range selects nothing and is not taken.
 
 const refusal = (script, args) =>
   spawnSync(process.execPath, [join(SCRIPTS, script), ...args], {
     encoding: "utf8",
   });
 
-test("the guard's usage refusal names the flag it was given no value for, for the log to read", () => {
-  const result = refusal("reread-guard.mjs", [CHANGE, "--before"]);
+test("the guard takes no range: an option outside its set is refused, for the log to read", () => {
+  const result = refusal("reread-guard.mjs", [CHANGE, "--before", "HEAD"]);
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /::error::--before needs a value/);
+  assert.match(result.stderr, /::error::unknown option --before/);
   assert.match(result.stderr, /usage: node reread-guard\.mjs/);
-});
-
-test("the guard knows no --after: it reads the checkout it was given", () => {
-  const result = refusal("reread-guard.mjs", [
-    CHANGE,
-    "--before",
-    "HEAD",
-    "--after",
-    "HEAD",
-  ]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /unknown option --after/);
 });
 
 // ── What a re-read may write ────────────────────────────────────────────────
@@ -174,7 +173,7 @@ test("the guard knows no --after: it reads the checkout it was given", () => {
 test("writableBy names the change's own directory and the pages its proposal links", () => {
   const { root } = sandbox();
 
-  assert.deepEqual(writableBy(root, CHANGE), [`${DIR}/`, PAGE]);
+  assert.deepEqual(writableBy(root, CHANGE), [`${DIR}/`, PAGE, REFERENCE]);
 });
 
 // ── The guard ────────────────────────────────────────────────────────────
@@ -207,18 +206,42 @@ test("landedShas reads one sha per line and nothing from a file that is not ther
 });
 
 test("the guard passes a page the change's proposal links", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   write({ [PAGE]: "# Agent Rounds\n\n## The Walk\n\n❓ Who reads it?\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "mark the page the proposal links");
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 0, result.stderr);
 });
 
+test("the guard passes a reference page the change's proposal links", () => {
+  const { root, write, git } = sandbox();
+  write({ [REFERENCE]: "# Round Notes\n\nThe owner's draft, corrected.\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "correct the evidence the proposal cites");
+
+  const result = guard(root);
+
+  assert.equal(result.status, 0, result.stderr);
+});
+
+test("the guard fails on a reference page the proposal never linked", () => {
+  const { root, write, git } = sandbox();
+  write({ [UNLINKED_REFERENCE]: "# Other Notes\n\nThe wrong round's.\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "reached past the evidence it cites");
+
+  const result = guard(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, /other-notes\.md/);
+});
+
 test("the guard fails on a page the proposal never linked, and on a script", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   write({
     [UNLINKED]: "# Change Stages\n\nRewritten by the wrong round.\n",
     "scripts/openspec/plan-land.mjs": "// rewritten\n",
@@ -226,7 +249,7 @@ test("the guard fails on a page the proposal never linked, and on a script", () 
   git("add", "-A");
   git("commit", "--quiet", "-m", "reached past the pages it links");
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
@@ -235,14 +258,14 @@ test("the guard fails on a page the proposal never linked, and on a script", () 
 });
 
 test("the guard passes a commit that stays inside the change's directory", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git, before } = sandbox();
   write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "the round's own commit");
 
   assert.deepEqual(changedPaths(root, before, "HEAD"), [`${DIR}/decisions.md`]);
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /1 path\(s\)/);
@@ -250,7 +273,7 @@ test("the guard passes a commit that stays inside the change's directory", () =>
 });
 
 test("the guard fails on a path the round pushed outside its own directory", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   write({
     [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
     "packages/design-system/README.md": "rewritten\n",
@@ -258,7 +281,7 @@ test("the guard fails on a path the round pushed outside its own directory", () 
   git("add", "-A");
   git("commit", "--quiet", "-m", "reached outside the change");
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
@@ -267,7 +290,7 @@ test("the guard fails on a path the round pushed outside its own directory", () 
 });
 
 test("shared-planning-agent-rounds-SC-73 - the guard reads the commits this run made, though main moved under it", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   // Somebody else's landing, which the run's own checkout gains when
   // `plan:land` rebases the change's branch on a moved `origin/main`: inside
   // the range the run started from, and none of this run's business.
@@ -282,7 +305,7 @@ test("shared-planning-agent-rounds-SC-73 - the guard reads the commits this run 
   git("push", "--quiet", "origin", "HEAD:refs/heads/main");
   write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /1 path\(s\)/);
@@ -290,7 +313,7 @@ test("shared-planning-agent-rounds-SC-73 - the guard reads the commits this run 
 });
 
 test("the guard reads a landing main holds and a draft it has not pushed, together", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   // The landing: pushed, and named in `.round/landed`.
   write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
   git("add", "-A");
@@ -303,14 +326,14 @@ test("the guard reads a landing main holds and a draft it has not pushed, togeth
   git("add", "-A");
   git("commit", "--quiet", "-m", "the draft above it");
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /change-stages\.md/);
 });
 
 test("the guard fails on a path the run's own commit reached outside, bound or not", () => {
-  const { root, before, write, git } = sandbox();
+  const { root, write, git } = sandbox();
   write({
     [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
     [UNLINKED]: "# Change Stages\n\nRewritten by the wrong round.\n",
@@ -320,7 +343,7 @@ test("the guard fails on a path the run's own commit reached outside, bound or n
   git("push", "--quiet", "origin", "HEAD:refs/heads/main");
   write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
@@ -328,20 +351,47 @@ test("the guard fails on a path the run's own commit reached outside, bound or n
 });
 
 test("the guard needs no fetch: it reads the checkout it was given", () => {
-  const { root, before } = sandbox();
+  const { root } = sandbox();
 
-  const result = guard(root, ["--before", before]);
+  const result = guard(root);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /^reread-probe: 0 path\(s\)/);
 });
 
+// ── A git that refuses: loudly, never as nothing to read ────────────────────
+
+test("a sha in .round/landed the checkout does not hold stops the guard, naming it", () => {
+  const { root, write } = sandbox();
+  write({ ".round/landed": `${NO_SUCH_SHA}\n` });
+
+  const result = guard(root);
+
+  // Not a run that pushed nothing: a sha nobody can read is the guard's own
+  // reading broken, and it says so rather than passing.
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, new RegExp(NO_SUCH_SHA));
+  assert.doesNotMatch(result.stdout, /all inside/);
+});
+
+test("a checkout with no origin/main stops the guard: it cannot say what the run pushed", () => {
+  const { root, git } = sandbox();
+  git("update-ref", "-d", "refs/remotes/origin/main");
+
+  const result = guard(root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::no origin\/main in this checkout/);
+  assert.match(result.stderr, /cannot say what this run pushed/);
+});
+
 // ── --alive: the wake asked before the push ─────────────────────────────────
 
 test("shared-planning-agent-rounds-SC-74 - --alive with no wake asks nothing: the terminal round pushes on its own word", async () => {
-  const { root, before } = sandbox();
+  const { root } = sandbox();
 
-  const result = await guardAsync(root, ["--before", before, "--alive"]);
+  const result = await guardAsync(root, ["--alive"]);
 
   assert.equal(result.status, 0, result.stderr);
   assert.match(result.stdout, /no wake to ask about/);
@@ -353,10 +403,10 @@ test("shared-planning-agent-rounds-SC-74 - --alive passes while the wake is the 
     seen = { method: req.method, url: req.url };
     answer(res, 200, { alive: true });
   });
-  const { root, before } = sandbox();
+  const { root } = sandbox();
   writeRelayFile(root, urlOf(server));
 
-  const result = await guardAsync(root, ["--before", before, "--alive"]);
+  const result = await guardAsync(root, ["--alive"]);
   server.close();
 
   assert.equal(result.status, 0, result.stderr);
@@ -369,10 +419,10 @@ test("shared-planning-agent-rounds-SC-74 - --alive stops the run where the relay
   const server = await stubRelay((_req, res) => {
     answer(res, 401, { reason: "this wake is closed" });
   });
-  const { root, before } = sandbox();
+  const { root } = sandbox();
   writeRelayFile(root, urlOf(server));
 
-  const result = await guardAsync(root, ["--before", before, "--alive"]);
+  const result = await guardAsync(root, ["--alive"]);
   server.close();
 
   assert.equal(result.status, 1);

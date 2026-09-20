@@ -5,13 +5,17 @@
  * one wake per change, the session, the thread's own failure line — lives in
  * the relay now (`scripts/openspec/relay-post.mjs`,
  * `scripts/openspec/plan-land.mjs` relay mode), and this file holds only what
- * the workflow itself still owns: the gate that starts the job, the preflight
- * that names what Operations has not set, the one step that wakes the relay,
- * and the plain step that says in the channel when the wake never arrived —
- * the only step here that reads the bot token, since the relay cannot post
- * about a wake it never took. Read as YAML rather than grepped: a key moved
- * one level up is the difference between `contents: write` on one job and on
- * the whole workflow, and a token one step holds from one the whole job does.
+ * the workflow itself still owns: the gate that starts the job, the one step
+ * that wakes the relay, and the plain step that says in the channel when the
+ * wake never arrived — the only step here that reads the bot token, since the
+ * relay cannot post about a wake it never took. Read as YAML rather than
+ * grepped: a key moved one level up is the difference between
+ * `contents: write` on one job and on the whole workflow, and a token one step
+ * holds from one the whole job does.
+ *
+ * The preflight that names what Operations has not set is `notify`'s, not
+ * this job's: a matrix says the same thing once per change, and it says it
+ * after the matrix was computed. One step above the matrix says it once.
  */
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
@@ -24,7 +28,10 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const FILE = ".github/workflows/proposal-notify.yml";
 const workflow = YAML.parse(readFileSync(join(ROOT, FILE), "utf8"));
 const reread = workflow.jobs.reread;
+const notify = workflow.jobs.notify;
 const stepsOf = (job) => job.steps ?? [];
+const stepNamed = (job, pattern) =>
+  stepsOf(job).findIndex((step) => pattern.test(step.name ?? ""));
 const usesIn = (job, action) =>
   stepsOf(job).filter((step) => (step.uses ?? "").startsWith(action));
 /** The channel every step of this workflow reads, the notify job's own
@@ -46,11 +53,11 @@ test("shared-planning-agent-rounds-SC-66 - a landing wakes the relay once per ch
   assert.equal(reread.strategy["fail-fast"], false);
   assert.equal(reread["timeout-minutes"], 10);
 
-  // Three steps: the preflight, one wake — the matrix runs it once per entry,
-  // and the relay is what serialises them per change from there — and the
-  // step that runs on a failure alone.
-  assert.equal(stepsOf(reread).length, 3);
-  const [, wake] = stepsOf(reread);
+  // Two steps: one wake — the matrix runs it once per entry, and the relay is
+  // what serialises them per change from there — and the step that runs on a
+  // failure alone. The preflight is `notify`'s.
+  assert.equal(stepsOf(reread).length, 2);
+  const [wake] = stepsOf(reread);
   assert.equal(wake.if, undefined);
   assert.match(wake.name, /Wake the relay/);
   assert.match(wake.run, /-X POST "\$AGENT_WAKE_URL\/wake"/);
@@ -65,7 +72,7 @@ test("shared-planning-agent-rounds-SC-66 - a landing wakes the relay once per ch
 });
 
 test("shared-planning-agent-rounds-SC-66 - the matrix entry reaches the wake's body through the environment, never the shell", () => {
-  const [, wake] = stepsOf(reread);
+  const [wake] = stepsOf(reread);
 
   // The id a push computed arrives as an environment variable, and the body
   // is built from a quoted heredoc by `jq --arg`: nothing a change is named
@@ -79,10 +86,21 @@ test("shared-planning-agent-rounds-SC-66 - the matrix entry reaches the wake's b
   assert.match(wake.run, /--arg head "\$HEAD_SHA"/);
 });
 
-test("shared-planning-agent-rounds-SC-66 - the job says which piece of setup is missing before it curls", () => {
-  const [preflight] = stepsOf(reread);
+test("shared-planning-agent-rounds-SC-66 - the notify job says which piece of setup is missing once, before the matrix", () => {
+  const at = stepNamed(notify, /Check the wake is configured/);
+  const preflight = stepsOf(notify)[at];
 
-  assert.equal(preflight.if, undefined);
+  // In `notify`, above the step that computes the matrix: said once per push
+  // rather than once per change, and said before anything is dispatched.
+  assert.ok(at >= 0, "the wake's preflight is not in the notify job");
+  assert.ok(
+    at < stepsOf(notify).findIndex((step) => step.id === "changes"),
+    "the preflight runs after the matrix was computed",
+  );
+  assert.equal(stepNamed(reread, /configured/), -1);
+  // Behind the same variable the job is: a store that never turned the
+  // cascade on is not told what it did not set for it.
+  assert.equal(preflight.if, "vars.AGENT_REREAD == 'true'");
   assert.match(preflight.run, /::error::Not configured/);
   // Whichever of the two is unset is named, rather than one message for both.
   assert.match(preflight.run, /AGENT_WAKE_URL/);
@@ -95,8 +113,11 @@ test("shared-planning-agent-rounds-SC-66 - the job says which piece of setup is 
 });
 
 test("shared-planning-agent-rounds-SC-66 - a wake that does not reach the relay is said in the channel", () => {
-  const [, , failed] = stepsOf(reread);
+  const [wake, failed] = stepsOf(reread);
 
+  // The only step that can fail above it is the wake, so the line fires for
+  // a wake that did not reach the relay and for nothing else.
+  assert.match(wake.name, /Wake the relay/);
   assert.equal(failed.if, "failure()");
   assert.match(failed.run, /chat\.postMessage/);
   assert.match(failed.run, /-H "Authorization: Bearer \$SLACK_BOT_TOKEN"/);
@@ -155,13 +176,11 @@ test("shared-planning-agent-rounds-SC-67 - the workflow holds no session, no wri
   // job itself holds none, so the wake — and anything a matrix entry runs
   // beside it — cannot read it.
   assert.equal(reread.env, undefined);
-  const [preflight, wake, failed] = stepsOf(reread);
-  for (const step of [preflight, wake]) {
-    assert.ok(
-      !JSON.stringify(step).includes("SLACK_BOT_TOKEN"),
-      `${step.name} never holds the chat token`,
-    );
-  }
+  const [wake, failed] = stepsOf(reread);
+  assert.ok(
+    !JSON.stringify(wake).includes("SLACK_BOT_TOKEN"),
+    `${wake.name} never holds the chat token`,
+  );
   assert.deepEqual(Object.keys(failed.env).sort(), [
     "CHANGE",
     "CHANNEL",

@@ -37,6 +37,9 @@ const ROOT = join(HERE, "..", "..");
 const CLI = join(HERE, "perspectives.mjs");
 const SCHEMA = "openspec/schemas/grade10-planning/schema.yaml";
 const PAGE = "docs/prds/products/shared/planning/agent-rounds.md";
+/** The evidence a proposal cites beside the page it marks: explanatory, and
+ * reached the same way — a round reads it and may correct it. */
+const REFERENCE = "docs/references/round-notes.md";
 
 const names = (readers) => readers.map(({ name }) => name).sort();
 // The real schema, for the tests that only need a valid `artifactOf` lookup
@@ -59,6 +62,7 @@ const fixture = ({ record } = {}) => {
   });
   copyFileSync(join(ROOT, SCHEMA), join(root, SCHEMA));
   write(PAGE, "# Agent Rounds\n\n## The Walk\n\nThe round reads the draft.\n");
+  write(REFERENCE, "# Round Notes\n\nThe owner's draft.\n");
   const change = "openspec/changes/demo";
   write(
     `${change}/proposal.md`,
@@ -326,6 +330,30 @@ test("shared-planning-agent-rounds-SC-30 - a bundle is the draft and what is bef
       !bundle.upstream.some((one) => one.endsWith(later)),
       `${later} is not upstream of the tech design`,
     );
+});
+
+test("shared-planning-agent-rounds-SC-30 - a reference page the proposal cites is before the draft, as a page it marks is", () => {
+  const root = fixture();
+  writeFileSync(
+    join(root, "openspec", "changes", "demo", "proposal.md"),
+    [
+      "# Demo",
+      "",
+      "## Why",
+      "",
+      `The page it marks: [Agent Rounds](../../../${PAGE}#the-walk).`,
+      "",
+      `The evidence it cites: [Round Notes](../../../${REFERENCE}).`,
+      "",
+    ].join("\n"),
+  );
+
+  // Both, in the order the proposal names them: the reference reaches the
+  // reader, `writableBy` yields it, and a round may correct it.
+  assert.deepEqual(bundleFor(root, "demo", "tech-design").upstream.slice(-2), [
+    `${PAGE}#the-walk`,
+    REFERENCE,
+  ]);
 });
 
 test("shared-planning-agent-rounds-SC-30 - the round hands every reader one bundle and no other reader's output", () => {
