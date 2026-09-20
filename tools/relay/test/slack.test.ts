@@ -11,6 +11,8 @@ import {
   pressedLine,
   pressedMessage,
   routeMessage,
+  SECTION_MAX,
+  type SlackBlock,
   signSlackRequest,
   updateMessage,
   verifySlackSignature,
@@ -505,6 +507,18 @@ describe("a press", () => {
 });
 
 describe("the blocks", () => {
+  /** One section's own text. */
+  const textOf = (block: SlackBlock): string =>
+    String((block.text as { text?: unknown } | undefined)?.text ?? "");
+
+  /** A summary longer than one section takes, written as the round writes
+   * one: whole lines. */
+  const longSummary = (): string =>
+    Array.from(
+      { length: 300 },
+      (_, line) => `${line}. what the round read and what it asks`,
+    ).join("\n");
+
   it("is the line and one button", () => {
     expect(
       confirmBlocks("your word on the proposal", {
@@ -543,6 +557,56 @@ describe("the blocks", () => {
         type: "context",
         elements: [{ type: "mrkdwn", text: "Confirmed by @ecchochan" }],
       },
+    ]);
+  });
+
+  it("carries a summary past Slack's cap in sections, with the button last", () => {
+    // Slack refuses a section past 3,000 characters, and a summary is as long
+    // as the round wrote it: the whole of it posts, or the hand waits on a
+    // line that never comes.
+    const summary = longSummary();
+    expect(summary.length).toBeGreaterThan(SECTION_MAX);
+    const blocks = confirmBlocks(summary, {
+      label: "Confirm proposal",
+      word: "land",
+    });
+
+    const sections = blocks.slice(0, -1);
+    expect(sections.length).toBeGreaterThan(1);
+    for (const block of sections) {
+      expect(block.type).toBe("section");
+      expect(textOf(block).length).toBeLessThanOrEqual(SECTION_MAX);
+    }
+    // Nothing of the summary is dropped, and a section ends where a line
+    // does.
+    expect(sections.map(textOf).join("")).toBe(summary);
+    for (const block of sections)
+      expect(textOf(block).startsWith("\n")).toBe(false);
+    expect(blocks.at(-1)).toMatchObject({ type: "actions" });
+  });
+
+  it("splits the same summary the same way once the press is in", () => {
+    const summary = longSummary();
+    const confirmed = confirmedBlocks(summary, "Confirmed by @ecchochan");
+    const sections = confirmed.slice(0, -1);
+    expect(sections).toEqual(
+      confirmBlocks(summary, { label: "Confirm proposal", word: "land" }).slice(
+        0,
+        -1,
+      ),
+    );
+    expect(confirmed.at(-1)).toMatchObject({ type: "context" });
+  });
+
+  it("cuts at the cap where the text has no line to end on", () => {
+    const solid = "x".repeat(SECTION_MAX + 40);
+    const sections = confirmedBlocks(solid, "Confirmed by @ecchochan").slice(
+      0,
+      -1,
+    );
+    expect(sections.map(textOf)).toEqual([
+      "x".repeat(SECTION_MAX),
+      "x".repeat(40),
     ]);
   });
 });
