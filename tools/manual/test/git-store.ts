@@ -62,8 +62,15 @@ export function gitStore(prefix = "manual-store-") {
     git(["add", "-A"]);
     git(["commit", "--quiet", "-m", message], daysAgo);
   };
+  /** The commit the store's own branch is on — what a reader handed `main`'s
+   * commit is handed, so a case can commit past it and read both answers. */
+  const head = () =>
+    execFileSync("git", ["rev-parse", "HEAD"], {
+      cwd: root,
+      encoding: "utf8",
+    }).trim();
   git(["init", "--quiet", "."]);
-  return { root, git, write, commit };
+  return { root, git, write, commit, head };
 }
 
 /** A store whose change has a `tasks.md` history: one commit per state, each
