@@ -19,7 +19,7 @@ Success is a product manager who writes one sentence in Slack and answers number
 - **Read again, in order.** A landing wakes the change's agent, which reads every artifact after the one that moved: an edit opens a round for that artifact's hand; a read that changes nothing writes `reviewed:` with the content id of what is before the artifact. An artifact lands only when everything before it is fresh; the fold at archive refuses a behind delta, which `stage-changes-and-notify-hands` owns; a tick, a claim and a wait are never held. A goal or a non-goal that moved is a question to the product manager: extend, supersede or split. [Agent Rounds · Read Again](../../../docs/prds/products/shared/planning/agent-rounds.md#read-again).
 - **The record.** `rounds.md` in the change: one row per round with the artifact or group, the perspectives run, what stood, the question ids raised and the tests each scenario landed with; `check:manual` refuses a landed artifact or a ticked group with no row on a change opened after the rule.
 - **The walk.** Each task group lands test first, read by its perspectives and verified before the engineer reads the landing summary; the last group walks the journeys end to end through the interface each actor uses and leaves the end-to-end suite, marks the cases it automates, and the run sheet on staging leaves those out; one reader argues the simpler shape for the whole change before staging. [Agent Rounds · The Walk](../../../docs/prds/products/shared/planning/agent-rounds.md#the-walk).
-- **The thread and the runner.** One thread per change in the planning channel, its address recorded as `thread:`; the direct messages point at it; the agent that answers in it and the one that wakes on a landing are named in the tech design and confirmed by Operations. [Agent Rounds · Surfaces](../../../docs/prds/products/shared/planning/agent-rounds.md#surfaces).
+- **The thread and the runner.** One thread per change in the planning channel, its address recorded as `thread:`; the direct messages point at it; a custom Slack app in front of a relay of our own wakes a hosted run for a reply and for a landing alike, the run posts and lands through the relay, and the relay moves `main` only on a word it checked itself. [Agent Rounds · Surfaces](../../../docs/prds/products/shared/planning/agent-rounds.md#surfaces).
 - **Keys the record gains.** `reviewed:` (artifact id to content id, written by the re-read), `thread:` (the channel and message the thread hangs off, written once when the thread opens). `rounds.md` becomes the ninth file of a change, copied across at archive like the journeys.
 
 ## Non-Goals
@@ -45,8 +45,8 @@ None.
 
 ## Open Questions
 
-- ❓ **The runner** - which agent holds a change's thread and which wakes on a landing, what the Slack workspace needs for them, and where the secret lives. Operations and the tech PIC decide.
-- ❓ **The thread's home** - a thread in the planning channel, because a second app cannot answer inside another app's direct message. Operations confirms.
+- **The runner** - a custom Slack app, the relay in `tools/relay` and a hosted Routine whose every firing is a fresh session; the secrets live in the relay and the workflow, never in a session. Decided by the owner on 2026-09-20.
+- **The thread's home** - a thread in the planning channel, where the relay's app and every hand can reply.
 
 ## References
 
