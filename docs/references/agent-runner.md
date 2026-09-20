@@ -32,8 +32,8 @@ tested but the relay's own code.
    and posts its summary through the relay.
 4. On `land`, the run cuts the landing commit from `main` with that
    artifact's files alone, pushes it to its branch and asks the relay. The
-   relay checks that the Slack member who said land is the hand of the
-   artifact's stage in the record at that sha, that the record's `landed_by:`
+   relay checks that the Slack member who said land is, through the team map
+   at `main`, the hand of the artifact's stage in the record at that sha, that the record's `landed_by:`
    names the same handle, and, for an artifact, that the diff stays inside
    the change and the pages; then it moves `main` as a fast-forward. A task
    group's code lands on the word, the hand and the fast-forward alone.
@@ -48,8 +48,8 @@ tested but the relay's own code.
 
 | Item | Value |
 | --- | --- |
-| **Event subscriptions** | `app_mention`, `message.channels`; request URL `<relay>/slack/events` |
-| **Bot scopes** | `chat:write`, `channels:history`, `users:read` |
+| **Event subscriptions** | `message.channels`; request URL `<relay>/slack/events`, pointed at the relay after its secrets are set |
+| **Bot scopes** | `chat:write`, `channels:history` |
 | **Installed** | To the workspace, and the bot invited to the planning channel |
 | **Members** | Each teammate's Slack member id written in [`docs/prds/team.yaml`](../prds/team.yaml) as `slack:` beside the e-mail; a handle with no member is sent nothing and can land nothing from Slack |
 
@@ -77,7 +77,7 @@ a file.
 | `GITHUB_TOKEN` | Secret | `contents: write` on this repository, for the compare, the record at a sha and the fast-forward of `main`; a personal token to start, a GitHub App installation token later |
 | `TOKEN_SECRET` | Secret | Signs the wake tokens a run posts and lands with |
 | `WAKE_TOKEN` | Secret | What the push workflow presents to `/wake` |
-| `PLANNING_CHANNEL`, `REPO`, `RELAY_URL` | Variables | The channel the app listens in, `owner/name`, and the relay's own URL for the payload |
+| `PLANNING_CHANNEL`, `REPO`, `RELAY_URL`, `SLACK_APP_USER` | Variables | The channel the app listens in, `owner/name`, the relay's own URL for the payload, and the app's own member id |
 
 ## The Push Workflow
 

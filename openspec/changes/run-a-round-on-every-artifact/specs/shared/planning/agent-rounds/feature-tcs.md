@@ -485,7 +485,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
 
-**Decided by:** `tools/relay/test/land.test.ts`
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`
 
 **Pre-conditions:**
 
@@ -498,7 +498,7 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- |
 | admin(designer of <change>), the design's hand | <change>'s own directory and a page <change>'s proposal links | at the commit the run read | moves to the landing commit |
 | admin(engineer of <change>) | <change>'s own directory | at the commit the run read | stays where it was |
-| admin(designer of <change>), the design's hand | a file under `docs/references/` | at the commit the run read | stays where it was |
+| admin(designer of <change>), the design's hand | a file under `packages/` | at the commit the run read | stays where it was |
 | admin(designer of <change>), the design's hand | <change>'s own directory | moved under the run | moves once the run has read `main` again and asked again |
 
 **Steps:**
@@ -1586,7 +1586,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-05
 
-**Decided by:** `tools/relay/test/land.test.ts`
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`
 
 **Pre-conditions:**
 

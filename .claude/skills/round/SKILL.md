@@ -44,8 +44,8 @@ Before step 1, whether this is the first run on the change or the fourth:
 4. **The wake** — `.round/relay.json`, which the session writes from the
    Routine's payload before anything else, in its six keys: `relay`, the url
    and the token; `change`; `reason`; `thread`; `sender`, whose word this run
-   may land and which is null on a landing wake; and `messages`, the messages
-   since your last reply with their senders' handles. A terminal run has no
+   may land and which is null on a landing wake; and `messages`, what queued
+   since the previous wake with their senders' handles. A terminal run has no
    such file, and nothing below needs one
 
 Then continue from what is there. A run that died mid-draft is picked up, never

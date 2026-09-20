@@ -1308,8 +1308,11 @@ inside the writable set.
 - **A fast-forward alone** — the relay moves `main` only where the landing sits
   on top of it, and a `main` that moved under the run is read again once and
   asked again
-- **The writable set** — the change's own directory and the pages the proposal
-  links, and nothing else; the run reads the same set before it pushes
+- **The writable set** — the run's guard holds an artifact's landing to the
+  change's own directory and the pages the proposal links before it pushes;
+  the relay holds it to the change's directory, `docs/prds/` and
+  `docs/references/`, and holds a task group's code to no path at all, since
+  the record names no code set for a group
 - **The artifact that landed, alone** — the landing commit is cut from `main`
   with that artifact's files, the change's record, the round's row and the
   pages the change marked, and carries nothing drafted after it, so `main`
@@ -1323,7 +1326,7 @@ inside the writable set.
 - **GIVEN** a run that has committed a landing on the change's branch
 - **WHEN** it asks the relay to land, naming the commit, the kind of landing and the artifact
 - **THEN** `main` moves only as a fast-forward onto that commit
-- **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and the diff from `main` touches nothing but the change's own directory and the pages the proposal links
+- **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and, for an artifact, the diff from `main` touches nothing outside the change's own directory, `docs/prds/` and `docs/references/`, the run's guard having held it to the pages the proposal links before the push
 - **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
 - **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
