@@ -354,6 +354,47 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * No post reaches the engineer role's channel: the hand is named, so the role is not asked for one.
 * The run log names <change T> and <memberless handle> as told nothing, and the run does not fail.
 
+### shared-planning-change-stages-US1-TC12-1: A landing pushed from a terminal is one reply in the thread
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-change-stages-US-01
+
+**Decided by:** `scripts/openspec/changed-changes.test.mjs`
+
+**Pre-conditions:**
+<change L> sits at Proposed with its designer and its tech PIC named. The team map knows the handle whose e-mail a terminal's commits carry, and not the one a hosted run's carry.
+
+**Test data:**
+
+| What the push carries | What the change's thread holds |
+| --- | --- |
+| A landing of <change L>, whose record names a thread, pushed by a committer the team map names | one reply naming what landed, whose word landed it, the stage now and the two hands whose turn it is |
+| The same landing pushed by a committer the team map does not name | nothing: the run that landed it tells the thread itself |
+| A landing of a change whose record names no thread | nothing, and no message is addressed anywhere else |
+
+**Steps:**
+
+1. Push the landing from the row to `main`.
+2. Read the thread of the change the push landed.
+3. Read the keys the push workflow wrote.
+
+**Expected Results:**
+
+* The thread holds what the row names.
+* A reply that went out is keyed, so a re-run of the same push posts nothing twice.
+
 ---
 
 ## shared-planning-change-stages-US2: Product manager reads where every change stands

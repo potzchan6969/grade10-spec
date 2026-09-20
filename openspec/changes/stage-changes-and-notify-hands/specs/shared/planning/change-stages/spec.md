@@ -32,6 +32,7 @@ ribbon, My turn and Slack.
 - Messages, once per move
   - Your turn: one direct message to the hand a change reaches, keyed by change, stage and role, never sent twice for one move
   - Behind and staging: one message to the hand of an artifact newly behind, and one to QA when a change reaches staging
+  - Landed from a terminal: a landing pushed from a terminal posts one reply in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
   - Channel and digest: the post per push names each change's stage; a weekly digest per person lists open questions, idle, behind and waiting
 - Surfaces that show the stage
   - Board: eight lanes with the agent mark and the hand's move on five, filters for Mine, Waiting, Idle, Behind and Blocked, and the shelf
@@ -664,6 +665,12 @@ Two moves that are not a stage landing still reach a person.
 - **Staging** — a change reaching On staging SHALL send one message to its QA
   hand, naming the change and the run sheet to walk, and one Your turn message
   to its release hand
+- **A landing from a terminal** — a push whose `landed_by:` gained or changed
+  an entry SHALL post one reply in the change's thread, naming what landed,
+  whose word landed it, the stage the change is at now and whose turn it is;
+  it SHALL post nothing where the record names no thread, and nothing where
+  the committer of the record's last commit in the push is a handle the team
+  map does not name, which is a run's own landing and already told
 
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
@@ -678,6 +685,15 @@ Two moves that are not a stage landing still reach a person.
 **WHEN** a push moves a change to On staging
 **THEN** one direct message SHALL be sent to its QA hand, naming the change and the run sheet
 **AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
+
+#### Scenario: shared-planning-change-stages-SC-70 - A terminal landing is told in the thread
+**Serves:** shared-planning-change-stages-US-01 - the next hand reads in the thread what a teammate landed from a terminal
+
+**GIVEN** a change whose record names a thread
+**WHEN** a push from a terminal lands artifacts of it and writes `landed_by:` for each
+**THEN** one reply SHALL be posted in the change's thread, naming what landed, whose word landed it, the stage now and whose turn it is
+**AND** a landing whose committer the team map does not name SHALL post nothing
+**AND** a change whose record names no thread SHALL post nothing
 
 ### Requirement: The channel post per push and the weekly digest
 
