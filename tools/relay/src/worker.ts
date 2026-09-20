@@ -13,15 +13,23 @@
 
 import { equalBytes, utf8 } from "./bytes.ts";
 import { type Env, missingSecret } from "./env.ts";
+import type { Thread } from "./room-state.ts";
+import { changeRoom } from "./rooms.ts";
 import { callRoom, json, type RoomOp } from "./rpc.ts";
 import {
   parseSlackRequest,
+  postMessage,
   routeMessage,
   verifySlackSignature,
 } from "./slack.ts";
 import { verifyWakeToken } from "./token.ts";
 
 export { Room } from "./room.ts";
+
+/** A commit, as the code host spells one. A landing names the sha the relay
+ * is to move `main` to, and a sha that is not one is a call the relay refuses
+ * before it reads anything. */
+const IS_SHA = /^[0-9a-f]{40}$/;
 
 /** One room, addressed by name: `change/<id>`, and `channel/ts` for a thread
  * whose change no run has named yet. */
@@ -70,7 +78,7 @@ async function onSlackEvents(
   const route = routeMessage(event.message, env.PLANNING_CHANNEL);
   if (!route) return json(200, { ignored: "not-addressed" });
   ctx.waitUntil(
-    callRoom(roomByName(env, route.room), {
+    queue(env, route.thread, roomByName(env, route.room), {
       op: "enqueue",
       reason: route.reason,
       requireRoom: route.requireRoom,
@@ -88,6 +96,43 @@ async function onSlackEvents(
   return json(200, { queued: true });
 }
 
+/**
+ * The work behind the answer Slack already read. The room's answer is read
+ * rather than dropped: a message that reached no room is a hand waiting for a
+ * reply that is never coming, so the thread is told.
+ */
+async function queue(
+  env: Env,
+  thread: Thread,
+  room: DurableObjectStub,
+  op: RoomOp,
+): Promise<void> {
+  let why: string;
+  try {
+    const answer = await callRoom(room, op);
+    if (answer.ok) return;
+    why = `the room answered ${answer.status}`;
+  } catch (error) {
+    console.error(
+      `relay: the room for ${thread.channel}/${thread.ts} could not be reached: ${error instanceof Error ? error.message : String(error)}`,
+    );
+    why = "the room could not be reached";
+  }
+  await tell(env, thread, `This message did not reach a round: ${why}.`);
+}
+
+/** One line in the thread, from the relay's own token. A post that fails
+ * itself is logged: there is nowhere else to say it. */
+async function tell(env: Env, thread: Thread, text: string): Promise<void> {
+  try {
+    await postMessage(env.SLACK_BOT_TOKEN, thread.channel, text, thread.ts);
+  } catch (error) {
+    console.error(
+      `relay: "${text}" did not post: ${error instanceof Error ? error.message : String(error)}`,
+    );
+  }
+}
+
 async function onWake(request: Request, env: Env): Promise<Response> {
   const given = (request.headers.get("authorization") ?? "").replace(
     /^Bearer\s+/i,
@@ -101,17 +146,22 @@ async function onWake(request: Request, env: Env): Promise<Response> {
     head?: string;
   } | null;
   if (body === null) return notJson();
-  if (!body.change) return json(400, { reason: "no-change" });
-  await callRoom(roomByName(env, `change/${body.change}`), {
+  const change = String(body.change ?? "").trim();
+  const head = String(body.head ?? "").trim();
+  if (change === "") return json(400, { reason: "no-change" });
+  // The head is what keys the wake: the same push wakes the relay once,
+  // however many times the workflow's step runs, and a wake with no head
+  // would wake it again on every run. The base is the acknowledgment's own
+  // line and nothing the room keeps.
+  if (head === "") return json(400, { reason: "no-head" });
+  // The room's answer is the wake's answer: the workflow reads whether it
+  // queued anything, and a duplicate says so rather than reading as a wake.
+  return callRoom(roomByName(env, changeRoom(change)), {
     op: "enqueue",
     reason: "landing",
-    change: body.change,
-    // The head is the landing: the same push wakes the relay once, however
-    // many times the workflow's step runs. The base is the acknowledgment's
-    // own line and nothing the room keeps.
-    ...(body.head ? { dedupe: `wake:${body.change}/${body.head}` } : {}),
+    change,
+    dedupe: `wake:${change}/${head}`,
   });
-  return json(200, { queued: true });
 }
 
 async function onRun(
@@ -128,32 +178,47 @@ async function onRun(
     return callRoom(room, { op: "alive", wake: claims.wake });
   const body = (await readJson(request)) as Record<string, unknown> | null;
   if (body === null) return notJson();
-  const op = opOf(call, claims.wake, body);
-  if (!op) return json(404, { reason: "unknown-call" });
-  return callRoom(room, op);
+  const chosen = opOf(call, claims.wake, body);
+  if (!chosen) return json(404, { reason: "unknown-call" });
+  if ("bad" in chosen) return json(400, { reason: chosen.bad });
+  return callRoom(room, chosen.op);
 }
 
-/** The op one call makes, or nothing for a call the relay does not serve. */
+/** The op one call makes, the field it refused, or nothing for a call the
+ * relay does not serve. */
 function opOf(
   call: string,
   wake: number,
   body: Record<string, unknown>,
-): RoomOp | null {
+): { op: RoomOp } | { bad: string } | null {
+  const field = (name: string): string => String(body[name] ?? "").trim();
   switch (call) {
-    case "bind":
-      return { op: "bind", wake, change: String(body.change ?? "") };
+    case "bind": {
+      const change = field("change");
+      if (change === "") return { bad: "no-change" };
+      return { op: { op: "bind", wake, change } };
+    }
     case "post":
-      return { op: "post", wake, text: String(body.text ?? "") };
-    case "land":
+      // A line the run has nothing to say in is still a line it may post;
+      // the room is the token's, and the thread is the room's.
+      return { op: { op: "post", wake, text: String(body.text ?? "") } };
+    case "land": {
+      const sha = field("sha");
+      if (!IS_SHA.test(sha)) return { bad: "bad-sha" };
+      const artifact = field("artifact");
+      if (artifact === "") return { bad: "no-artifact" };
       return {
-        op: "land",
-        wake,
-        sha: String(body.sha ?? ""),
-        kind: body.kind === "reviewed" ? "reviewed" : "word",
-        artifact: String(body.artifact ?? ""),
+        op: {
+          op: "land",
+          wake,
+          sha,
+          kind: body.kind === "reviewed" ? "reviewed" : "word",
+          artifact,
+        },
       };
+    }
     case "done":
-      return { op: "done", wake };
+      return { op: { op: "done", wake } };
     default:
       return null;
   }

@@ -27,11 +27,15 @@ export interface GithubRepo {
  * refusal. */
 export class HostError extends Error {
   readonly status: number;
+  /** What the host itself said, which travels into the answer a run reads:
+   * "unavailable" alone gives the thread nothing to say. */
+  readonly detail: string;
 
   constructor(call: string, status: number, body: string) {
     super(`${call}: ${status} ${body}`);
     this.name = "HostError";
     this.status = status;
+    this.detail = body;
   }
 }
 
@@ -52,6 +56,17 @@ function headers(repo: GithubRepo): HeadersInit {
   };
 }
 
+/** One call's url. Every piece a caller gave is escaped — a repository and a
+ * file path carry slashes of their own, so each is escaped segment by segment
+ * — and the url is built rather than spelled, so nothing a caller passes can
+ * reach the host as a path of its own. */
+function apiUrl(path: string): URL {
+  return new URL(path, API);
+}
+
+const segments = (value: string): string =>
+  value.split("/").map(encodeURIComponent).join("/");
+
 async function refusal(response: Response): Promise<string> {
   const text = await response.text();
   try {
@@ -69,7 +84,9 @@ export async function compareFiles(
   sha: string,
 ): Promise<Compare> {
   const response = await fetch(
-    `${API}/repos/${repo.repo}/compare/${base}...${sha}`,
+    apiUrl(
+      `repos/${segments(repo.repo)}/compare/${encodeURIComponent(base)}...${encodeURIComponent(sha)}`,
+    ),
     { headers: headers(repo) },
   );
   if (!response.ok)
@@ -83,14 +100,18 @@ export async function compareFiles(
 }
 
 /** One file as it reads at `sha`. The contents API answers base64 wrapped in
- * newlines. */
+ * newlines, and an answer carrying no content at all is the read having gone
+ * wrong: reading it as the empty string would send a landing through its
+ * checks against a record nobody wrote. */
 export async function readFileAt(
   repo: GithubRepo,
   path: string,
   sha: string,
 ): Promise<string> {
   const response = await fetch(
-    `${API}/repos/${repo.repo}/contents/${path}?ref=${sha}`,
+    apiUrl(
+      `repos/${segments(repo.repo)}/contents/${segments(path)}?ref=${encodeURIComponent(sha)}`,
+    ),
     { headers: headers(repo) },
   );
   if (!response.ok)
@@ -99,8 +120,11 @@ export async function readFileAt(
       response.status,
       await refusal(response),
     );
-  const body = (await response.json()) as { content?: string };
-  return fromUtf8(fromBase64(String(body.content ?? "")));
+  const body = (await response.json()) as { content?: unknown };
+  const content = typeof body.content === "string" ? body.content.trim() : "";
+  if (content === "")
+    throw new HostError(`contents ${path}`, response.status, "no content");
+  return fromUtf8(fromBase64(content));
 }
 
 /** Move `main` to `sha`, and only forwards: `force: false` is what makes the
@@ -112,7 +136,7 @@ export async function advanceMain(
   sha: string,
 ): Promise<Advance> {
   const response = await fetch(
-    `${API}/repos/${repo.repo}/git/refs/heads/main`,
+    apiUrl(`repos/${segments(repo.repo)}/git/refs/heads/main`),
     {
       method: "PATCH",
       headers: { ...headers(repo), "content-type": "application/json" },

@@ -16,10 +16,11 @@
  */
 import type { Env } from "./env.ts";
 import { advanceMain, compareFiles, HostError, readFileAt } from "./github.ts";
-import { checkReviewed, checkWord } from "./land.ts";
+import { checkReviewed, checkWord, type Verdict } from "./land.ts";
 import { payloadText } from "./payload.ts";
 import {
   bind,
+  consumeWord,
   done,
   type EnqueueInput,
   enqueue,
@@ -61,6 +62,8 @@ export class Room {
   private readonly env: Env;
   /** One cache per live room, which is one cache per change being answered. */
   private readonly team: TeamMap;
+  /** Whether this instance has already said it could not read the record. */
+  private toldOfRecord = false;
 
   constructor(ctx: DurableObjectState, env: Env) {
     this.ctx = ctx;
@@ -96,6 +99,7 @@ export class Room {
         return json(503, {
           reason: "host-unavailable",
           status: error.status,
+          message: error.detail,
         });
       throw error;
     }
@@ -240,28 +244,49 @@ export class Room {
     if ("truncated" in compare)
       return json(403, { reason: "compare-truncated" });
     const record = `openspec/changes/${change}/.openspec.yaml`;
-    const verdict =
-      op.kind === "reviewed"
-        ? checkReviewed({
-            change,
-            paths: compare.paths,
-            atMain: await readFileAt(repo, record, "main"),
-            atSha: await readFileAt(repo, record, op.sha),
-          })
-        : checkWord({
-            change,
-            artifact: op.artifact,
-            word: state.word,
-            senderHandle: state.senderSlack
-              ? await this.team.handleOf(state.senderSlack)
-              : null,
-            record: await readFileAt(repo, record, op.sha),
-            schema: await readFileAt(repo, SCHEMA_PATH, op.sha),
-            paths: compare.paths,
-          });
+    let verdict: Verdict;
+    if (op.kind === "reviewed") {
+      verdict = checkReviewed({
+        change,
+        paths: compare.paths,
+        atMain: await readFileAt(repo, record, "main"),
+        atSha: await readFileAt(repo, record, op.sha),
+      });
+    } else {
+      let senderHandle: string | null = null;
+      if (state.senderSlack) {
+        try {
+          senderHandle = await this.team.handleOf(state.senderSlack);
+        } catch (error) {
+          if (error instanceof HostError) throw error;
+          // A map the relay cannot parse fails closed, and names itself: it
+          // is a check like every other, not the relay being broken.
+          return json(403, { reason: "map-unreadable" });
+        }
+      }
+      verdict = checkWord({
+        change,
+        artifact: op.artifact,
+        word: state.word,
+        senderHandle,
+        record: await readFileAt(repo, record, op.sha),
+        schema: await readFileAt(repo, SCHEMA_PATH, op.sha),
+        paths: compare.paths,
+      });
+    }
     if (!verdict.ok) return json(403, { reason: verdict.check });
+    // The wake is asked for again here, against the state as it now reads:
+    // the checks took several calls on the host, and a room its budget freed
+    // in the meantime must not move `main` for a session it stopped waiting
+    // for.
+    const now = await this.load();
+    if (!isRunningWake(now, op.wake))
+      return json(401, { reason: "stale-wake" });
     const advance = await advanceMain(repo, op.sha);
-    if ("landed" in advance) return json(200, { landed: advance.landed });
+    if ("landed" in advance) {
+      await this.put(consumeWord(await this.load()));
+      return json(200, { landed: advance.landed });
+    }
     return advance.refused === "not-fast-forward"
       ? json(409, { reason: "not-fast-forward" })
       : json(502, { reason: "host-refused", message: advance.message });
@@ -293,9 +318,12 @@ export class Room {
     }
   }
 
-  /** The thread the change's record names on `main`. A record that names
-   * none, and a change the relay cannot read, both answer nothing — the post
-   * falls back to the planning channel. */
+  /** The thread the change's record names on `main`, read for every post: a
+   * record whose `thread:` the round has just written is read by the next
+   * line, which a cache for the life of the instance would not be. A record
+   * that names none, and a change the relay cannot read, both answer nothing
+   * — the post falls back to the planning channel, and the dropped read is
+   * reported once rather than on every line. */
   private async threadOf(state: RoomState): Promise<Thread | null> {
     if (!state.change) return null;
     let text: string;
@@ -305,7 +333,13 @@ export class Room {
         `openspec/changes/${state.change}/.openspec.yaml`,
         "main",
       );
-    } catch {
+    } catch (error) {
+      if (!this.toldOfRecord) {
+        this.toldOfRecord = true;
+        console.error(
+          `relay room ${this.ctx.id.toString()}: the record of ${state.change} could not be read: ${reasonOf(error)}`,
+        );
+      }
       return null;
     }
     const line = THREAD_LINE.exec(text);
