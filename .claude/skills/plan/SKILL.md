@@ -25,7 +25,22 @@ landing and the re-read. One round per artifact.
 
 A sentence addressed to the app in the planning channel that names no existing
 change opens one. From a wake the sentence is the first of `.round/relay.json`'s
-`messages`; from a terminal it is the argument. What it opens:
+`messages`; from a terminal it is the argument.
+
+**A sentence that overlaps a change in flight** — before opening, read every
+active change whose deltas name the capability the sentence is about or whose
+proposal links the page sections the sentence would mark. Where one exists,
+answer in that change's thread and let its stage decide:
+
+| The change in flight is | You do |
+| --- | --- |
+| Proposed or Designed, and the sentence is its product manager's | Extend it: the sentence is a remark on its proposal, the chain is redrawn, and the reply names the change — decided by the round |
+| Proposed or Designed, another hand's sentence | A held row on its product manager: extend, recommended |
+| Specified or Planned | A held row on its product manager: extend where the moved part is smaller than a task group of work, split otherwise, recommended so |
+| Building | A held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | A new change, with `depends_on:` naming it |
+
+What a sentence with no change in flight behind it opens:
 
 1. **The id** — drawn from the sentence with `slugOf` as
    [`tools/manual/src/editor/propose.ts`](../../../tools/manual/src/editor/propose.ts)
