@@ -101,6 +101,9 @@
 | Q76 | Does `AGENTS.md`'s artifact table number the chain in the schema's order? | Yes: the tech design is 5, the requirements 6, the cases 7, as the schema orders them and the chain drafts them - decided by the round | Keeping the numbers and saying the schema orders the chain, two always-loaded surfaces disagreeing on what a wake drafts next |
 | Q77 | Does the round skill have a word budget? | Yes, in the instruction budget test, set at its size after this pass rounded up to the hundred, so the next rule earns its words or raises the number in a commit that says why - decided by the round | No budget, the style's prose rules alone |
 | Q78 | Is the writable set guarded on every drafting push, or once before the landing? | On every push: a stray path is found at the push that made it, and the run rewinds one commit - decided by the round | Once before the landing, which finds it after several drafts |
+| Q79 | What does a dry run of the landing do? | It cuts the landing commit and runs the gate on it, prints the same lines as a landing, and stops before the push - decided by the round | A second narration of the steps in the future tense, which reports a gate it never ran |
+| Q80 | How is the landing commit built? | From a temporary index by git's plumbing, the carried paths read in one `ls-tree` and written in one `update-index`, with the gate's throwaway worktree left as it is - decided by the round | Building the commit in the gate's worktree by checkout and commit, which materialises the files and trades plumbing for a second checkout |
+| Q81 | Where does the run ask whether its wake is alive? | In `reread-guard.mjs --alive`, the one command the skill runs before every push - decided by the round | A fifth mode on `relay-post.mjs`, which keeps every relay call in one file at the cost of a second command in the push step |
 
 ## Raised
 

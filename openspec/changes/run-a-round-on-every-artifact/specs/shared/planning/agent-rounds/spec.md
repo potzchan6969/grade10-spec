@@ -389,7 +389,7 @@ group of work.
 
 | The row | Written as | What it holds |
 | --- | --- | --- |
-| Held: it moves the change's scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work | `❓ <role> - recommended: <option>`, the options it was chosen over beside it | Every landing of the change, until it is answered or waved through |
+| Held: it moves the change's scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work | `❓ <role> - recommended: <option>`, the options it was chosen over beside it | Every landing of the change that asks a word, until it is answered or waved through |
 | Decided by the round: every other preference | `<option> - decided by the round`, what it passed over beside it | Nothing |
 
 - **The id** — the next number the change has not used, issued per change and
