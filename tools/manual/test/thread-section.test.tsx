@@ -69,6 +69,19 @@ describe("one line per event kind", () => {
     expect(html).toContain("Opened by @robin");
   });
 
+  it("says who the proposal names, whoever holds the hand now", () => {
+    const written = changeEntry("gift-cards", [], {
+      title: "Gift cards",
+      author: "robin",
+      // The hand moved on; the opening did not.
+      hands: { pm: "kim" },
+    });
+    const html = render([event("opened")], written);
+
+    expect(html).toContain("Opened by @robin");
+    expect(html).not.toContain("@kim");
+  });
+
   it("falls back to the handle that promoted a change naming no product manager", () => {
     const promoted = changeEntry("gift-cards", [], {
       title: "Gift cards",
