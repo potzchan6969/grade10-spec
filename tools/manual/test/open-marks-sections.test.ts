@@ -2,7 +2,12 @@ import { readFileSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import type { ParsedPage } from "../src/api/derive";
-import { openMarksOfPage } from "../src/api/open-marks.ts";
+import {
+  DELIVERED,
+  marksBySection,
+  OPEN,
+  openMarksOfPage,
+} from "../src/api/open-marks.ts";
 import { parsePage } from "../src/content/grammar";
 import { sectionTextOf } from "../src/content/sections";
 
@@ -128,6 +133,55 @@ describe("the boundary both readers draw", () => {
 
     expect(rows).toHaveLength(1);
     expect(rows[0].where?.anchor).toBe("detail-product-decisions");
+  });
+});
+
+/**
+ * One reader buckets a page's marks by the section each belongs to: the store
+ * writes a change's questions from it and the change page lists the lines it
+ * marks from it, so a reviewer and a message can never read one page two ways.
+ */
+
+describe("the marks of one section, bucketed", () => {
+  it("keys every mark by the section it belongs to", () => {
+    const asked = marksBySection(boundaries, OPEN);
+
+    expect(asked.get("alpha")?.map((one) => one.text)).toEqual([
+      "❓ Whether the callout's line is Alpha's",
+      "❓ Whether the flow's line is Alpha's",
+    ]);
+    expect(asked.get("gamma")).toBeUndefined();
+  });
+
+  it("leaves a titled block's row to the page, under no section at all", () => {
+    for (const marks of marksBySection(boundaries, OPEN).values()) {
+      expect(marks.map((one) => one.text)).not.toContain(
+        "What the block holds · ❓ Open · Nobody has said. · Product",
+      );
+    }
+  });
+
+  it("takes both marks of a change where it is asked for both", () => {
+    const page = {
+      path: "docs/prds/products/demo-product/rules.md",
+      ast: parsePage(
+        [
+          "---",
+          "title: Rules",
+          "---",
+          "",
+          "## Points",
+          "",
+          "- 🚧 **Points expire** — a year after the last order",
+          "- ❓ **Birthday month** — whether it doubles",
+          "- A line nobody marked, and a ❓ read as words",
+          "",
+        ].join("\n"),
+      ),
+    };
+
+    expect(marksBySection(page, DELIVERED).get("points")).toHaveLength(2);
+    expect(marksBySection(page, OPEN).get("points")).toHaveLength(1);
   });
 });
 

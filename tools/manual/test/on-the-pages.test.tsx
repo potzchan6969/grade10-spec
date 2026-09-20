@@ -32,6 +32,13 @@ const BODY = `Prose.
 - 🚧 **Points expire** — a year after the last order
 - ❓ **Birthday month** — whether it doubles the month's points
 - A line nobody marked
+- **A question, not a guess** — a row, or a ❓ line on the page
+
+:::detail{title="Product decisions" for="pm"}
+| Item | Status | Decision | Owner |
+| --- | --- | --- | --- |
+| Tier window | ❓ Open | Nobody has said. | Product |
+:::
 
 ## Tiers
 
@@ -121,6 +128,20 @@ describe("the lines the change marks", () => {
 
   it("leaves a line nobody marked to the page", () => {
     expect(html).not.toContain("A line nobody marked");
+  });
+
+  it("leaves a mark the store reads as words to the page", () => {
+    // `openMarksOfPage` counts a mark leading its line, so prose about the
+    // grammar is not a line this change delivers - and no question of the
+    // change could ever name its hand.
+    expect(html).not.toContain("A question, not a guess");
+  });
+
+  it("leaves a titled block's row to the page", () => {
+    // A `Product decisions` table carries what the page keeps against every
+    // change that ever touched it, which is the boundary the store's own
+    // questions are written on.
+    expect(html).not.toContain("Tier window");
   });
 });
 
