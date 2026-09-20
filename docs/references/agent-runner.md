@@ -1,10 +1,11 @@
 # Agent Runner
 
-What Operations sets up so a change's thread wakes a run, a run posts back,
-and a landing reaches `main`, as of 2026-09-20. Three parts: a custom Slack
-app, the relay in [`tools/relay`](../../tools/relay/README.md), and a Claude
-Code Routine with an API trigger. The rounds change decided the shape (its
-decisions `Q52` to `Q68`); [Agent Rounds](../prds/products/shared/planning/agent-rounds.md)
+What Operations sets up so a change's thread wakes a run, a run posts back, a
+landing reaches `main` and an open page is told, as of 2026-09-20. Five parts:
+a custom Slack app, the relay in [`tools/relay`](../../tools/relay/README.md),
+a Claude Code Routine with an API trigger, the push workflow, and the code
+host's push webhook. The rounds change decided the shape (its decisions `Q52`
+to `Q68`); [Agent Rounds](../prds/products/shared/planning/agent-rounds.md)
 names this page as the runner and links back. Read it as what the workspace,
 the repository and the runner need, not as a requirement — nothing here is
 tested but the relay's own code.
@@ -17,6 +18,7 @@ tested but the relay's own code.
 | **The relay** | A Cloudflare Worker with one Durable Object per change and one for `main`, `tools/relay`; a thread's room forwards to its change's | The Slack signing secret and bot token, the Routine's fire URL and token, a GitHub token with `contents: write` on this repository, the wake-token secret, the workflow's wake token, the webhook secret |
 | **The Routine** | A Claude Code on the web Routine with an API trigger; every firing is a fresh session on this store, drafting on `claude/<id>` | The store's GitHub access through the Claude GitHub App; no Slack token and no GitHub token of its own |
 | **The push workflow** | `.github/workflows/proposal-notify.yml`: the stage messages as before, and a `reread` job that wakes the relay | `SLACK_BOT_TOKEN` in plain steps, `AGENT_WAKE_TOKEN` |
+| **The code host's webhook** | A `push` webhook on the store's repository, pointed at the relay | Nothing: the value it signs with is the relay's `GITHUB_WEBHOOK_SECRET` |
 
 ## What Happens
 
@@ -48,9 +50,9 @@ tested but the relay's own code.
    reported in the thread with the run's link, and the thread is freed.
 6. A push to `main` runs the stage messages as before; where a landing put
    something behind, the `reread` job wakes the relay for that change, and
-   the relay queues it behind whatever is running on the thread.
-7. A push to `main` reaches the relay's webhook, and every open manual page is
-   told over its socket.
+   the relay queues it behind whatever is running on the thread. The same push
+   reaches the relay's webhook, and every open manual page is told over its
+   socket.
 
 ## The Slack App
 
@@ -88,6 +90,20 @@ a file.
 | `WAKE_TOKEN` | Secret | What the push workflow presents to `/wake` |
 | `GITHUB_WEBHOOK_SECRET` | Secret | Verifies every push the code host's webhook sends to `/github/events`; the same value is set on the webhook |
 | `PLANNING_CHANNEL`, `REPO`, `RELAY_URL`, `SLACK_APP_USER` | Variables | The channel the app listens in, `owner/name`, the relay's own URL for the payload, and the app's own member id |
+
+## The Code Host's Webhook
+
+On the store's repository under `Settings → Webhooks`, saved after the deploy
+that set the real `REPO`. It is the one writer of where `main` is: nothing
+re-reads `main` from the host, so a delivery the relay could not take is
+caught up with Redeliver under Recent Deliveries.
+
+| Item | Value |
+| --- | --- |
+| **Payload URL** | `<relay>/github/events` |
+| **Content type** | `application/json`; the relay verifies the signature over the body as it arrived |
+| **Events** | `push` alone, not every event |
+| **Secret** | The relay's `GITHUB_WEBHOOK_SECRET`, the same value on both ends; rotated in the relay first, then here |
 
 ## The Push Workflow
 
