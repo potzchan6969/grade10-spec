@@ -171,8 +171,11 @@ function threadRowsOf(
 function lineOf(change: ChangeEntry, event: ThreadEvent): string {
   switch (event.kind) {
     case "opened": {
-      const pm = change.hands?.pm ?? change.promotedBy ?? change.author;
-      return pm ? `Opened by @${pm}` : "Opened";
+      // The recorded fact first: the proposal's own `**Author:**` line, then
+      // the handle that promoted it. `hands.pm` is present state and moves,
+      // and a row of the history that rewrites itself is not history.
+      const by = change.author ?? change.promotedBy ?? change.hands?.pm;
+      return by ? `Opened by @${by}` : "Opened";
     }
     case "landed": {
       const what = `Landed \`${event.target ?? "it"}\``;
