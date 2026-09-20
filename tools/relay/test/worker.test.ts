@@ -20,9 +20,11 @@ import {
 } from "./fixtures.ts";
 
 /** The router: the entry that refuses a deployment missing a secret, Slack
- * answered inside three seconds with the work behind it, the workflow's wake,
- * and the four calls a running session makes. Every room is a stub here — the
- * room itself is read in `room.test.ts`. */
+ * answered inside three seconds with the work behind it — an event, and a
+ * Confirm button pressed — the code host's push, where `main` is, the socket a
+ * page listens on, the workflow's wake, and the four calls a running session
+ * makes. Every room and the live object are stubs here — the room itself is
+ * read in `room.test.ts` and the live object in `live.test.ts`. */
 
 const ROOM_ID = "7f9c0a1b2c3d4e5f60718293a4b5c6d7";
 const OTHER_ROOM_ID = "0123456789abcdef0123456789abcdef";

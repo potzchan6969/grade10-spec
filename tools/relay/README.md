@@ -62,11 +62,11 @@ In this order, because each step needs the one before it:
    is saved. This gives `SLACK_SIGNING_SECRET`, `SLACK_BOT_TOKEN` and the
    app's own member id for `SLACK_APP_USER`
 2. **The secrets**, each with `pnpm dlx wrangler@4.120.0 secret put <name> -c
-   wrangler.jsonc`: the app's two, `GITHUB_TOKEN`, `TOKEN_SECRET`,
-   `WAKE_TOKEN`, `GITHUB_WEBHOOK_SECRET` — any long random string, the same
-   one the webhook is given in step 6 — and `ROUTINE_FIRE_URL` and
-   `ROUTINE_TOKEN` as placeholders until step 5: the router refuses every
-   request while one of the eight is unset, and names it
+   wrangler.jsonc`: `SLACK_SIGNING_SECRET` and `SLACK_BOT_TOKEN` from step 1,
+   `GITHUB_TOKEN`, `TOKEN_SECRET`, `WAKE_TOKEN`, `GITHUB_WEBHOOK_SECRET` — any
+   long random string, the same one the webhook is given — and
+   `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN` as placeholders until step 5: the
+   router refuses every request while one of the eight is unset, and names it
 3. **The first deploy**, with the placeholder vars in `wrangler.jsonc`. The
    Durable Object migrations `v1` and `v2` run here and create the `Room` and
    `Live` classes, and the deploy prints the Worker's own origin
