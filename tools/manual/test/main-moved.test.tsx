@@ -44,8 +44,34 @@ vi.mock("../src/api/head", async (importOriginal) => ({
 }));
 
 const { pullMain } = await import("../src/api/head");
-const { DEPLOYED_POLL_MS, isTyping, MainMoved, watchDeployedHead } =
-  await import("../src/shell/main-moved");
+const {
+  DEPLOYED_POLL_MS,
+  isTyping,
+  LATE_MS,
+  LATE_POLL_MS,
+  MainMoved,
+  watchDeployedHead,
+} = await import("../src/shell/main-moved");
+
+/** The caret, in the test's hand: who is listening for it to leave a field,
+ * and it leaving one. */
+function fakeFocus() {
+  const listening = new Set<() => void>();
+  return {
+    leave: () => {
+      for (const run of [...listening]) run();
+    },
+    listening: () => listening.size,
+    seam: {
+      addEventListener: (_type: "focusout", run: () => void) => {
+        listening.add(run);
+      },
+      removeEventListener: (_type: "focusout", run: () => void) => {
+        listening.delete(run);
+      },
+    },
+  };
+}
 
 /** A head `main` reached `minutes` ago, which is what the sentence dates
  * itself by. */
@@ -104,6 +130,16 @@ describe("a hosted page while `main` is ahead of it", () => {
   });
 });
 
+describe("a hosted page the site has not caught up with", () => {
+  const html = render({ head: movedHead(11) });
+
+  it("stops promising the rebuild, and still offers the refresh", () => {
+    expect(html).toContain("This site has not caught up yet.");
+    expect(html).not.toContain("rebuilds in a few minutes");
+    expect(html).toContain("Refresh now");
+  });
+});
+
 describe("a page that is caught up", () => {
   it.each([
     ["no relay answers", { head: null }],
@@ -135,14 +171,25 @@ describe("the checkout the manual is running out of", () => {
     expect(html).not.toContain(">Pull<");
   });
 
-  it("says a refused pull where the press left it", () => {
+  it("shared-planning-change-stages-SC-74 - offers no pull on a dirty tree, and says why", () => {
     const html = render({
       local: true,
-      refused: "Your checkout has uncommitted changes.",
       standing: standing({ behind: 2, dirty: true }),
     });
 
-    expect(html).toContain("Your checkout has uncommitted changes.");
+    expect(html).toContain("Your checkout has uncommitted work.");
+    expect(html).not.toContain(">Pull<");
+  });
+
+  it("says a refused pull where the button was", () => {
+    const html = render({
+      local: true,
+      refused: "fatal: couldn't find remote ref main",
+      standing: standing({ behind: 2 }),
+    });
+
+    expect(html).toContain("fatal: couldn&#x27;t find remote ref main");
+    expect(html).not.toContain(">Pull<");
   });
 
   it("reads nothing about a checkout on the hosted site", () => {
@@ -158,17 +205,37 @@ describe("the poll while the page is behind", () => {
       "/api/head": { storeHead: parts.storeHead ?? MOVED },
     });
     const clock = fakeClock();
+    const focus = fakeFocus();
+    let at = Date.now();
+    let late = 0;
     let reloads = 0;
     const stop = watchDeployedHead({
+      focus: focus.seam,
       head: HEAD,
       http,
+      now: () => at,
+      onLate: () => {
+        late += 1;
+      },
       reload: () => {
         reloads += 1;
       },
+      since: new Date(at).toISOString(),
       typing: parts.typing,
       wait: clock.wait,
     });
-    return { asked, clock, reloads: () => reloads, stop };
+    return {
+      asked,
+      clock,
+      focus,
+      late: () => late,
+      /** Let the page sit behind that much longer. */
+      pass: (ms: number) => {
+        at += ms;
+      },
+      reloads: () => reloads,
+      stop,
+    };
   };
 
   it("re-reads the store once the site's own head has moved", async () => {
@@ -193,16 +260,65 @@ describe("the poll while the page is behind", () => {
     expect(poll.clock.next()).toBe(DEPLOYED_POLL_MS);
   });
 
-  it("waits for the next poll while a reader is typing", async () => {
+  it("holds the re-read while a reader is typing, and takes it when the caret leaves", async () => {
     let typing = true;
     const poll = watch({ typing: () => typing });
 
     await poll.clock.fire();
     expect(poll.reloads()).toBe(0);
+    expect(poll.focus.listening()).toBe(1);
+
+    typing = false;
+    poll.focus.leave();
+
+    expect(poll.reloads()).toBe(1);
+    expect(poll.focus.listening()).toBe(0);
+  });
+
+  it("keeps holding it while the caret moves between fields", async () => {
+    const poll = watch({ typing: () => true });
+
+    await poll.clock.fire();
+    poll.focus.leave();
+
+    expect(poll.reloads()).toBe(0);
+    expect(poll.focus.listening()).toBe(1);
+  });
+
+  it("takes the held re-read on the next poll where the caret never left", async () => {
+    let typing = true;
+    const poll = watch({ typing: () => typing });
+    await poll.clock.fire();
 
     typing = false;
     await poll.clock.fire();
+
     expect(poll.reloads()).toBe(1);
+  });
+
+  it("listens for the caret no longer once it is stopped", async () => {
+    const poll = watch({ typing: () => true });
+    await poll.clock.fire();
+
+    poll.stop();
+
+    expect(poll.focus.listening()).toBe(0);
+  });
+
+  it("says the site has not caught up after ten minutes, and slows the poll", async () => {
+    const poll = watch({ storeHead: HEAD });
+
+    await poll.clock.fire();
+    expect(poll.late()).toBe(0);
+    expect(poll.clock.next()).toBe(DEPLOYED_POLL_MS);
+
+    poll.pass(LATE_MS);
+    await poll.clock.fire();
+    expect(poll.late()).toBe(1);
+    expect(poll.clock.next()).toBe(LATE_POLL_MS);
+
+    await poll.clock.fire();
+    expect(poll.late()).toBe(1);
   });
 
   it("polls nothing more once it is stopped", async () => {
