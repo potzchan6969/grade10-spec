@@ -93,7 +93,7 @@ then the change's earlier artifacts in the schema's order - and from the ask.
 - **Push after every artifact** — `git push --force-with-lease` to
   `claude/<id>` as each draft settles, so a wake that dies loses one
   artifact. The step before every push is the guard,
-  `node scripts/openspec/reread-guard.mjs <change> --before <sha> --alive`,
+  `node scripts/openspec/reread-guard.mjs <change> <artifact|group> --alive`,
   which stops a push carrying a path outside the change's writable set, and
   one the relay no longer holds a wake open for; what it reads is its own
   header's

@@ -14,7 +14,13 @@
  * session that skipped this guard is still caught, just later and more
  * broadly.
  *
- *   node scripts/openspec/reread-guard.mjs <change> [--before <sha>] [--alive] [--root <dir>]
+ *   node scripts/openspec/reread-guard.mjs <change> <artifact|group> [--alive] [--root <dir>]
+ *
+ * The target is the round's own: an artifact is held to the set above, and a
+ * task group is held to nothing here. A group pushes code — a package, a
+ * script, a workflow — which no writable set of an artifact round can hold,
+ * so the paths are not read for one at all; what it may write is what its
+ * own tasks name, and `plan:preflight` is what holds it to them.
  *
  * The commits it reads are what this run made, which is two facts about a
  * checkout and not one range: the landings, which `.round/landed` names and
@@ -32,14 +38,15 @@
  * rather than pushing work no thread is waiting for. With no wake there is
  * nothing to ask and nothing to refuse, which is the terminal round.
  *
- * `--before` is the branch tip the session read at the start. It selects
- * nothing any more — the union above is read from the checkout itself — and
- * is taken for the push step that passes it.
+ * There is no range to pass: the union above is read from the checkout
+ * itself, so a start sha would select nothing and is refused as any other
+ * unknown option is.
  */
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs } from "./lib/args.mjs";
 import { commitPaths, LANDED, landedShas } from "./lib/landed.mjs";
+import { isGroup } from "./lib/perspectives.mjs";
 import { readWake, relayOf } from "./lib/relay.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
 import { git, storeMain } from "./store-main.mjs";
@@ -49,7 +56,7 @@ const HERE = dirname(fileURLToPath(import.meta.url));
  * it, the usage refusal the parser prints included. */
 const ERROR = "::error::";
 const USAGE =
-  "usage: node reread-guard.mjs <change> [--before <sha>] [--alive] [--root <dir>]";
+  "usage: node reread-guard.mjs <change> <artifact|group> [--alive] [--root <dir>]";
 
 /** The paths of those the writable set does not hold. */
 export function outOfBounds(paths, writable) {
@@ -111,16 +118,23 @@ async function checkAlive(root) {
 
 async function main() {
   const { positional, flags } = parseArgs(process.argv.slice(2), {
-    keys: ["before", "root"],
+    keys: ["root"],
     booleans: ["alive"],
     usage: USAGE,
     prefix: ERROR,
   });
-  const [change] = positional;
-  if (!change) fail(USAGE);
+  const [change, target] = positional;
+  if (!change || !target) fail(USAGE);
   const root = flags.root ?? join(HERE, "..", "..");
 
   if (flags.alive) await checkAlive(root);
+
+  // A task group's own work is code, which no writable set holds: the wake is
+  // still asked, and the paths are not read.
+  if (isGroup(target)) {
+    console.log("a task group writes what its tasks name - no path check here");
+    return;
+  }
 
   const writable = writableBy(root, change);
   const { ref, shas } = runCommits(root);
