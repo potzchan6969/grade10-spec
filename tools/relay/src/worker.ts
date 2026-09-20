@@ -39,18 +39,20 @@ import {
   type Confirm,
   confirmedBlocks,
   confirmedLine,
+  type Presser,
   parseSlackAction,
   parseSlackRequest,
   postMessage,
   pressedLine,
   pressedMessage,
   routeMessage,
+  type SlackMessage,
   type SlackPress,
   type SlackRoute,
   updateMessage,
   verifySlackSignature,
 } from "./slack.ts";
-import { TEAM_MAP, TeamCache } from "./team.ts";
+import { slackHandles, TEAM_MAP } from "./team.ts";
 import { verifyWakeToken } from "./token.ts";
 
 export { Live } from "./live.ts";
@@ -138,39 +140,78 @@ async function onSlackEvents(
   const route = routeMessage(event.message, env.PLANNING_CHANNEL);
   if (!route) return json(200, { ignored: "not-addressed" });
   ctx.waitUntil(
-    queue(env, route.thread, roomByName(env, route.room), {
-      op: "enqueue",
-      reason: route.reason,
-      requireRoom: route.requireRoom,
+    queueMessage(
+      env,
+      route,
+      event.message,
       // Slack retries a delivery it did not see acknowledged, and one message
       // is one channel and one `ts` however many times it arrives.
-      dedupe: `slack:${event.message.channel}/${event.message.ts}`,
-      thread: route.thread,
-      message: {
-        slack: event.message.user,
-        text: event.message.text,
-        ts: event.message.ts,
-      },
-    }),
+      `slack:${event.message.channel}/${event.message.ts}`,
+    ),
   );
   return json(200, { queued: true });
 }
 
+/** One line queued on the room a route names. A press is queued by this same
+ * call, because a press is the word: the two differ in the key that dedupes
+ * them and in nothing else. */
+function queueMessage(
+  env: Env,
+  route: SlackRoute,
+  message: SlackMessage,
+  dedupe: string,
+): Promise<Queued> {
+  return queue(env, route.thread, roomByName(env, route.room), {
+    op: "enqueue",
+    reason: route.reason,
+    requireRoom: route.requireRoom,
+    dedupe,
+    thread: route.thread,
+    message: {
+      slack: message.user,
+      text: message.text,
+      ts: message.ts,
+    },
+  });
+}
+
+/** What a room answered an op with: the line queued, or the reason nothing
+ * was and whether the thread has been told of it already. A 200 is not a word
+ * queued — the room answers one for a reply that opens no room and for a
+ * delivery it has already taken — so the caller reads the answer rather than
+ * the status. */
+type Queued = { queued: true } | { queued: false; why: string; told: boolean };
+
 /**
  * The work behind the answer Slack already read. The room's answer is read
  * rather than dropped: a message that reached no room is a hand waiting for a
- * reply that is never coming, so the thread is told.
+ * reply that is never coming, so the thread is told what the room could not
+ * be asked or what it answered. A refusal of the room's own rules is answered
+ * to the caller, which knows whether that is a thread's line or nothing at
+ * all — a reply that opens no room says nothing, a press on a summary whose
+ * room is gone does.
  */
 async function queue(
   env: Env,
   thread: Thread,
   room: DurableObjectStub,
   op: RoomOp,
-): Promise<void> {
+): Promise<Queued> {
   let why: string;
   try {
     const answer = await callRoom(room, op);
-    if (answer.ok) return;
+    if (answer.ok) {
+      const read = (parseJson(await answer.text()) ?? {}) as {
+        queued?: unknown;
+        why?: unknown;
+      };
+      if (read.queued === true) return { queued: true };
+      return {
+        queued: false,
+        why: String(read.why ?? "the room queued nothing"),
+        told: false,
+      };
+    }
     why = `the room answered ${answer.status}`;
   } catch (error) {
     console.error(
@@ -178,8 +219,21 @@ async function queue(
     );
     why = "the room could not be reached";
   }
-  await tell(env, thread, `This message did not reach a round: ${why}.`);
+  await tell(env, thread, didNotReach(why));
+  return { queued: false, why, told: true };
 }
+
+/** The one sentence for a word that reached no round. The room refuses by its
+ * own rules in one token, which says nothing to a hand reading the thread, so
+ * each is spelled here. */
+function didNotReach(why: string): string {
+  return `This message did not reach a round: ${ROOM_REFUSED[why] ?? why}.`;
+}
+
+/** The room's own refusals, in the thread's words. */
+const ROOM_REFUSED: Record<string, string> = {
+  "no-room": "no round is open on this thread",
+};
 
 /** One line in the thread, from the relay's own token. A post that fails
  * itself is logged: there is nowhere else to say it. */
@@ -218,13 +272,20 @@ async function onSlackActions(
   // fail that save.
   if (payload === null) return empty();
   const action = parseSlackAction(payload);
-  if (action.kind === "ignored") return empty();
+  if (action.kind === "ignored") return ignored(action.why);
   const route = routeMessage(
     pressedMessage(action.press),
     env.PLANNING_CHANNEL,
   );
-  if (!route) return empty();
+  if (!route) return ignored("not-addressed");
   ctx.waitUntil(pressed(env, route, action.press));
+  return empty();
+}
+
+/** A press the relay does nothing with. Slack draws a 2xx body in the thread,
+ * so the reason is said in the log: an answer carrying it would post it. */
+function ignored(why: string): Response {
+  console.log(`relay: a press was ignored: ${why}`);
   return empty();
 }
 
@@ -232,43 +293,57 @@ async function onSlackActions(
  * The work behind the answer Slack already read: the word queued as the
  * thread reply it stands for, the echo that puts it in the transcript, and
  * the button taken off the message.
+ *
+ * The echo and the button follow the word rather than the press: a press the
+ * room did not take is a word that lands nothing, so nothing says it did and
+ * the button stands to be pressed again.
  */
 async function pressed(
   env: Env,
   route: SlackRoute,
   press: SlackPress,
 ): Promise<void> {
-  await queue(env, route.thread, roomByName(env, route.room), {
-    op: "enqueue",
-    reason: route.reason,
-    requireRoom: route.requireRoom,
+  const answer = await queueMessage(
+    env,
+    route,
+    pressedMessage(press),
     // One press is one channel and one `action_ts`, however many times Slack
     // delivers it.
-    dedupe: `slack-action:${press.channel}/${press.actionTs}`,
-    thread: route.thread,
-    message: { slack: press.user, text: press.word, ts: press.actionTs },
-  });
-  const handle = await pressedBy(env, press);
-  await tell(env, route.thread, pressedLine(press, handle));
-  await taken(env, press, handle);
+    `slack-action:${press.channel}/${press.actionTs}`,
+  );
+  if (!answer.queued) {
+    // A duplicate is Slack delivering one press twice: the press before it
+    // echoed the word and took the button off, so its retry says nothing.
+    if (!answer.told && answer.why !== "duplicate")
+      await tell(env, route.thread, didNotReach(answer.why));
+    return;
+  }
+  const presser = await pressedBy(env, press);
+  await tell(env, route.thread, pressedLine(press, presser));
+  await taken(env, press, presser);
 }
 
-/** Who pressed, through the team map at `main`. Null is the map not naming
- * them, which the thread says rather than the relay guessing — the landing
- * check reads the same map and refuses the word. One press is a person's own
- * act, so the map is read for it rather than held between presses; the
- * landing's own reading is the room's. */
-async function pressedBy(env: Env, press: SlackPress): Promise<string | null> {
-  const team = new TeamCache(() =>
-    readFileAt({ repo: env.REPO, token: env.GITHUB_TOKEN }, TEAM_MAP, "main"),
-  );
+/** Who pressed, through the team map at `main`: the handle, the map naming
+ * nobody, or the map not being readable at all. The three are apart because
+ * only the second lands nothing — the landing check reads the same map and
+ * refuses that word, where a map the relay could not read says nothing about
+ * whom it names. One press is a person's own act, so the map is read once for
+ * it and held nowhere; the landing's own reading is the room's. */
+async function pressedBy(env: Env, press: SlackPress): Promise<Presser> {
   try {
-    return await team.handleOf(press.user);
+    const handle = slackHandles(
+      await readFileAt(
+        { repo: env.REPO, token: env.GITHUB_TOKEN },
+        TEAM_MAP,
+        "main",
+      ),
+    ).get(press.user);
+    return handle ? { handle } : { map: "unknown" };
   } catch (error) {
     console.error(
       `relay: the team map could not be read for ${press.user}: ${reasonOf(error)}`,
     );
-    return null;
+    return { map: "unreadable" };
   }
 }
 
@@ -278,7 +353,7 @@ async function pressedBy(env: Env, press: SlackPress): Promise<string | null> {
 async function taken(
   env: Env,
   press: SlackPress,
-  handle: string | null,
+  presser: Presser,
 ): Promise<void> {
   try {
     await updateMessage(
@@ -286,7 +361,7 @@ async function taken(
       press.channel,
       press.messageTs,
       press.text,
-      confirmedBlocks(press.text, confirmedLine(press, handle)),
+      confirmedBlocks(press.text, confirmedLine(press, presser)),
     );
   } catch (error) {
     console.error(

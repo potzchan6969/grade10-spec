@@ -363,21 +363,28 @@ export function pressedMessage(press: SlackPress): SlackMessage {
   };
 }
 
+/** Who pressed, as the team map answered for them: the handle it names, the
+ * map naming nobody, or a map that could not be read. The last two are apart
+ * because only a map that answered says a press lands nothing. */
+export type Presser = { handle: string } | { map: "unknown" | "unreadable" };
+
 /** What the thread reads when a button is pressed, so the transcript carries
  * the word whichever way it was said. A member the team map does not name
- * says so: the relay lands nothing on a word it cannot attribute. */
-export function pressedLine(press: SlackPress, handle: string | null): string {
-  return handle
-    ? `@${handle} pressed *${press.label}*`
-    : `<@${press.user}> pressed *${press.label}* — the team map does not name this member, so nothing lands on it`;
+ * says so: the relay lands nothing on a word it cannot attribute. A map the
+ * relay could not read names nobody either way, and says that instead: the
+ * word is queued, and the landing reads the map itself. */
+export function pressedLine(press: SlackPress, presser: Presser): string {
+  if ("handle" in presser) return `@${presser.handle} pressed *${press.label}*`;
+  const why =
+    presser.map === "unknown"
+      ? "the team map does not name this member, so nothing lands on it"
+      : "the word is queued; the team map could not be read, so the landing checks it again";
+  return `<@${press.user}> pressed *${press.label}* — ${why}`;
 }
 
 /** The context line that takes the button's place. */
-export function confirmedLine(
-  press: SlackPress,
-  handle: string | null,
-): string {
-  return `Confirmed by ${handle ? `@${handle}` : `<@${press.user}>`}`;
+export function confirmedLine(press: SlackPress, presser: Presser): string {
+  return `Confirmed by ${"handle" in presser ? `@${presser.handle}` : `<@${press.user}>`}`;
 }
 
 /** Post to a thread, or to the channel when there is no thread. `blocks`
