@@ -30,6 +30,30 @@ export function escapeSlackText(text) {
     .replaceAll(">", "&gt;");
 }
 
+/**
+ * A thread's own path on Slack: the channel and the timestamp with its
+ * separator taken out, which is the form Slack resolves. Nothing for a record
+ * that names no thread, which is what the change page is the link for.
+ *
+ * The host is the caller's, which is the whole reason this is a path: the push
+ * workflow has the workspace's own and the manual has only Slack's, whose
+ * redirect lands a signed-in reader in theirs. `chat.getPermalink` would
+ * answer the same thing and spends a call per hand on a value the record
+ * already holds.
+ */
+export function threadPathOf(thread) {
+  const [channel, ts] = String(thread ?? "").split("/");
+  if (!channel || !ts) return undefined;
+  return `/archives/${channel}/p${ts.replace(".", "")}`;
+}
+
+/** A title, linked, in Slack's own `mrkdwn`: every message that names a
+ * change names it this way, so the escape and the brackets are written once —
+ * a change titled with an `&` or a `<` reads as text and not as more markup. */
+export function linkedOf(url, title) {
+  return `<${url}|${escapeSlackText(title)}>`;
+}
+
 /** A sentence opens with a capital; the table writes the move in the words a
  * lane heading shows it in. */
 const opening = (text) =>

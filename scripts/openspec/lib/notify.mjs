@@ -15,7 +15,7 @@
 import { appendFileSync, readFileSync } from "node:fs";
 
 import { channelOf, memberOf } from "./team.mjs";
-import { escapeSlackText } from "./wording.mjs";
+import { escapeSlackText, linkedOf, threadPathOf } from "./wording.mjs";
 
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
@@ -43,7 +43,7 @@ export function changePageOf(manualUrl, id) {
  */
 export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
   const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
-  return `<${url}|${escapeSlackText(title)}>`;
+  return linkedOf(url, title);
 }
 
 /**
@@ -79,18 +79,13 @@ export function threadPartsOf(thread) {
   return channel && ts ? { channel, ts } : undefined;
 }
 
-/**
- * A thread's permalink: the workspace host, the channel, and the timestamp
- * with its separator taken out, which is the form Slack resolves.
- *
- * `chat.getPermalink` would answer the same thing and spends a call per hand
- * on a value the record already holds.
- */
+/** A thread's permalink: this workspace's host in front of the path
+ * `wording.mjs` writes, which the manual puts Slack's own host in front of. */
 export function permalinkOf(workspaceUrl, thread) {
-  const parts = threadPartsOf(thread);
-  if (!parts || !workspaceUrl) return undefined;
+  const path = threadPathOf(thread);
+  if (!path || !workspaceUrl) return undefined;
   const host = workspaceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  return `https://${host}/archives/${parts.channel}/p${parts.ts.replace(".", "")}`;
+  return `https://${host}${path}`;
 }
 
 /**

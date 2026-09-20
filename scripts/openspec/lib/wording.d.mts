@@ -27,6 +27,10 @@ export type WordedLanded = { artifact: string; by: string };
 export type WordedBehind = { artifact: string; changed: string[] };
 
 export declare const escapeSlackText: (text: string) => string;
+export declare const threadPathOf: (
+  thread: string | undefined,
+) => string | undefined;
+export declare const linkedOf: (url: string, title: string) => string;
 export declare const yourTurnText: (
   at: WordedChange,
   role: Role,

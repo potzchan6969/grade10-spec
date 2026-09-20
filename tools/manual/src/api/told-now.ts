@@ -1,6 +1,7 @@
 import {
   behindText,
-  escapeSlackText,
+  linkedOf,
+  threadPathOf,
   toldBodyOf,
 } from "../../../../scripts/openspec/lib/wording.mjs";
 import { behindOf, handOf, handOfArtifact } from "./stages.ts";
@@ -34,18 +35,16 @@ export type ToldMessage = {
 };
 
 /**
- * A thread's permalink: the channel and the timestamp with its separator
- * taken out, which is the form Slack resolves.
+ * A thread's permalink, against Slack's own host: the manual has no workspace
+ * name to build one with, and the redirect lands a signed-in reader in their
+ * own. The path is `wording.mjs`'s, the one the workflow's own permalink is
+ * built on, so the link a message carries and the link the card offers can
+ * never be two links.
  *
- * Built against Slack's own host, because the manual has no workspace name to
- * build one with and the redirect lands a signed-in reader in their own.
- * Exported: the Your turn card's thread link is the same permalink, and one
- * definition is what keeps the link a message carries and the link the card
- * offers the same link.
+ * Exported for the Your turn card's thread link.
  */
 export function slackThreadUrl(thread: string): string {
-  const [channel, ts = ""] = thread.split("/");
-  return `https://slack.com/archives/${channel}/p${ts.replace(".", "")}`;
+  return `https://slack.com${threadPathOf(thread) ?? ""}`;
 }
 
 /** The change as a message links it: its thread where the record names one,
@@ -55,7 +54,7 @@ function linkedTitle(change: ChangeEntry): string {
   const url = change.thread
     ? slackThreadUrl(change.thread)
     : `/in-flight/${encodeURIComponent(change.id)}`;
-  return `<${url}|${escapeSlackText(change.title)}>`;
+  return linkedOf(url, change.title);
 }
 
 export function toldNowOf(
