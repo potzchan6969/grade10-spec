@@ -244,7 +244,7 @@
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-01
 
-**Decided by:** `tools/relay/test/worker.test.ts`, `tools/relay/test/slack.test.ts`
+**Decided by:** `tools/relay/test/worker.test.ts`, `tools/relay/test/slack.test.ts`, `tools/relay/test/room.test.ts`
 
 **Pre-conditions:**
 

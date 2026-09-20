@@ -288,6 +288,33 @@ async function landing(
   await relay.alarm(CHANGE_ROOM);
 }
 
+/** A change room woken by a press of the summary's Confirm button: the op the
+ * router sends for a press, on a room the run that posted that summary
+ * already opened - a press opens none, as a reply that mentions nobody opens
+ * none. */
+async function pressedLanding(
+  relay: ReturnType<typeof harness>,
+  slack = "U0PM",
+): Promise<void> {
+  await relay.send(CHANGE_ROOM, {
+    op: "enqueue",
+    reason: "message",
+    change: CHANGE,
+    thread: THREAD,
+    dedupe: `slack:${CHANNEL}/1.4`,
+    message: { slack, text: "reads well", ts: "1.4" },
+  });
+  await relay.send(CHANGE_ROOM, {
+    op: "enqueue",
+    reason: "message",
+    requireRoom: true,
+    dedupe: `slack-action:${CHANNEL}/1700000009.000100`,
+    thread: THREAD,
+    message: { slack, text: "land", ts: "1700000009.000100" },
+  });
+  await relay.alarm(CHANGE_ROOM);
+}
+
 afterEach(() => {
   vi.unstubAllGlobals();
 });
@@ -919,6 +946,40 @@ describe("a landing on a word", () => {
       sha: SHA,
       force: false,
     });
+  });
+
+  it("shared-planning-agent-rounds-SC-82 - A press's word is checked as a typed one is", async () => {
+    const relay = harness();
+    await pressedLanding(relay);
+    // The press arrived as the reply it stands for, so the word the wake
+    // carries is the press's and its sayer is whoever pressed.
+    expect(relay.state(CHANGE_ROOM)?.word).toBe("land");
+    expect(relay.state(CHANGE_ROOM)?.senderSlack).toBe("U0PM");
+    expect(
+      await (
+        await relay.send(CHANGE_ROOM, {
+          op: "land",
+          wake: 1,
+          sha: SHA,
+          kind: "word",
+          artifact: "proposal",
+        })
+      ).json(),
+    ).toEqual({ landed: SHA });
+
+    // A member the team map does not name moves nothing: the gate reads the
+    // map at `main` for a press as it does for a typed word.
+    const stranger = harness();
+    await pressedLanding(stranger, "U0GUEST");
+    const refused = await stranger.send(CHANGE_ROOM, {
+      op: "land",
+      wake: 1,
+      sha: SHA,
+      kind: "word",
+      artifact: "proposal",
+    });
+    expect(refused.status).toBe(403);
+    expect(await refused.json()).toEqual({ reason: "sender-unknown" });
   });
 
   it("keeps the word through a landing and spends it when the run is done", async () => {
