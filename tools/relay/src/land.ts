@@ -6,6 +6,12 @@
  *
  * The verdict names the check that failed, because the reply a hand reads is
  * only useful when it says which one.
+ *
+ * An artifact in the schema carries both names: `teammate:` is the title of
+ * whoever writes it — product manager, designer, engineer — and `hand:` is its
+ * role key, in the six roles a change's record keys `hands:` by. The role key
+ * is the one a landing reads, the same key `handOfArtifact` reads in the
+ * manual.
  */
 import { parse } from "yaml";
 import type { ComparedFile } from "./github.ts";
@@ -49,17 +55,17 @@ export interface LandInputs {
   files: ComparedFile[];
 }
 
-/** Whose word lands this artifact: the stage's teammate in the schema, the
- * `apply:` block's for a task group, and `dev` for anything the schema names no
- * teammate for — the specs and the suites, which no hand holds alone. */
+/** Whose word lands this artifact: the artifact's `hand:` in the schema, the
+ * `apply:` block's for a task group, and `dev` where the schema names neither —
+ * a task group's hand, which the schema leaves to the engineer. */
 export function roleFor(schemaText: string, artifact: string): string {
   const schema = readYaml(schemaText) as {
-    artifacts?: { id?: string; teammate?: string }[];
-    apply?: { teammate?: string };
+    artifacts?: { id?: string; hand?: string }[];
+    apply?: { hand?: string };
   };
-  if (/^\d+$/.test(artifact.trim())) return schema.apply?.teammate ?? "dev";
+  if (/^\d+$/.test(artifact.trim())) return schema.apply?.hand ?? "dev";
   const found = schema.artifacts?.find((entry) => entry.id === artifact.trim());
-  return found?.teammate ?? "dev";
+  return found?.hand ?? "dev";
 }
 
 /** The handle the change's record names for a role. */

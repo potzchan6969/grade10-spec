@@ -3,22 +3,29 @@ import { checkLanding, type LandInputs, roleFor } from "../src/land.ts";
 
 /** The checks behind a moved `main`, over inputs already fetched.
  *
- * The record's `hands:` is read by the role the schema names as the artifact's
- * `teammate:`, so these fixtures key one against the other. The store's own
- * schema says `teammate: product-manager` where its records say `hands.pm`: the
- * two vocabularies have to be one before a word landing passes on the real
- * files, and the last case here is what a relay reads when they are not. */
+ * The record's `hands:` is read by the artifact's `hand:` in the schema — its
+ * role key, beside the `teammate:` that titles whoever writes it. These
+ * fixtures carry both names, as the store's schema does, and a task group's
+ * hand is the `apply:` block's where the schema names one. */
 
 const SCHEMA = `name: grade10-planning
 artifacts:
   - id: proposal
-    teammate: pm
+    teammate: product-manager
+    hand: pm
   - id: ui-design
-    teammate: design
+    teammate: designer
+    hand: design
+  - id: test-cases
+    hand: qa
   - id: specs
     required: true
-apply:
-  teammate: dev
+`;
+
+/** The same schema with a hand on its `apply:` block, which the store's own
+ * schema does not carry yet. */
+const SCHEMA_WITH_APPLY_HAND = `${SCHEMA}apply:
+  hand: qa
 `;
 
 const RECORD = `schema: grade10-planning
@@ -26,6 +33,7 @@ promoted_by: "@ecchochan"
 hands:
   pm: "@ecchochan"
   design: "@dee"
+  qa: "@quinn"
   dev: "@kinisworking"
 `;
 
@@ -56,16 +64,18 @@ function inputs(over: Partial<LandInputs> = {}): LandInputs {
 }
 
 describe("whose word lands which artifact", () => {
-  it("reads the role off the artifact's teammate", () => {
+  it("reads the role off the artifact's hand, not its teammate", () => {
     expect(roleFor(SCHEMA, "proposal")).toBe("pm");
     expect(roleFor(SCHEMA, "ui-design")).toBe("design");
+    expect(roleFor(SCHEMA, "test-cases")).toBe("qa");
   });
 
-  it("reads a task group's role off the apply block", () => {
+  it("reads a task group's role off the apply block, or dev without one", () => {
+    expect(roleFor(SCHEMA_WITH_APPLY_HAND, "2")).toBe("qa");
     expect(roleFor(SCHEMA, "2")).toBe("dev");
   });
 
-  it("falls back to dev where the schema names no teammate", () => {
+  it("falls back to dev where the schema names no hand", () => {
     expect(roleFor(SCHEMA, "specs")).toBe("dev");
     expect(roleFor(SCHEMA, "not-an-artifact")).toBe("dev");
   });
@@ -101,7 +111,10 @@ describe("a landing on a word", () => {
     });
   });
 
-  it("refuses anybody but the hand of the stage", () => {
+  it("matches the artifact's hand against the record's hands", () => {
+    // The proposal's hand is `pm`, whom the record names @ecchochan; the
+    // design's is `design`, whom it names @dee.
+    expect(checkLanding(inputs())).toEqual({ ok: true });
     expect(checkLanding(inputs({ senderHandle: "@dee" }))).toEqual({
       ok: false,
       check: "not-the-hand",
@@ -109,9 +122,25 @@ describe("a landing on a word", () => {
     expect(
       checkLanding(inputs({ artifact: "ui-design", senderHandle: "@dee" })),
     ).toEqual({ ok: true });
+    expect(checkLanding(inputs({ artifact: "ui-design" }))).toEqual({
+      ok: false,
+      check: "not-the-hand",
+    });
   });
 
-  it("reads a task group's hand from the apply block", () => {
+  it("lands a task group on the apply block's hand, or on dev without one", () => {
+    expect(
+      checkLanding(
+        inputs({
+          artifact: "3",
+          schema: SCHEMA_WITH_APPLY_HAND,
+          senderHandle: "@quinn",
+        }),
+      ),
+    ).toEqual({ ok: true });
+    expect(
+      checkLanding(inputs({ artifact: "3", schema: SCHEMA_WITH_APPLY_HAND })),
+    ).toEqual({ ok: false, check: "not-the-hand" });
     expect(
       checkLanding(inputs({ artifact: "3", senderHandle: "@kinisworking" })),
     ).toEqual({ ok: true });
@@ -163,13 +192,9 @@ describe("a landing on a word", () => {
     ).toEqual({ ok: false, check: "file-outside-change" });
   });
 
-  it("refuses a record whose hands are keyed differently from the schema's teammate", () => {
+  it("refuses a record that names no hand for the role", () => {
     expect(
-      checkLanding(
-        inputs({
-          record: `hands:\n  product-manager: "@ecchochan"\n`,
-        }),
-      ),
+      checkLanding(inputs({ record: `hands:\n  design: "@dee"\n` })),
     ).toEqual({ ok: false, check: "not-the-hand" });
   });
 });
