@@ -20,7 +20,9 @@ until that change archives.
 nothing else is one. The relay reads the latest landing word of the burst that
 woke the run — a mention of the app stripped off the front, the ends trimmed,
 the case folded — so `<@Grade10 Rounds> Land` is the word and `land the
-proposal please` is a sentence. The room keeps that word until the run it
+proposal please` is a sentence. A landing word wakes the run at once; every
+other reply waits a minute for the rest of the burst, because nothing more is
+coming after `land`. The room keeps that word until the run it
 woke says it is done: `land` and then `thanks!` still lands, one word lands
 every artifact of the chain, and a chain the budget cut halfway is finished by
 the next wake on the same word. A thread that has said
