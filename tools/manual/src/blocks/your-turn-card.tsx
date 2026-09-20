@@ -17,6 +17,7 @@ import {
   roleTitle,
 } from "../api/stage-view";
 import { DRAFTED, handOf } from "../api/stages";
+import { slackThreadUrl } from "../api/told-now";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
 import { SelectField } from "../editor/fields";
@@ -26,6 +27,7 @@ import type { ContentStore } from "../editor/store";
 import { describeCause } from "../editor/store";
 import { Hand } from "./change-hand";
 import { CopyableCommand } from "./copyable-command";
+import { ToldNow } from "./told-now";
 
 /**
  * Whose turn it is on this change, where the conversation about it is, and
@@ -87,6 +89,11 @@ export function YourTurnCard({
 
         <ThreadLink change={change} />
 
+        {/* Under the link, because it is what the thread and the inboxes hold
+            right now: the same fact as the hands above, said in the words
+            they were sent. */}
+        <ToldNow artifacts={artifacts} change={change} stage={stage} />
+
         {moves.map((one) => (
           <div
             className="flex flex-wrap items-center gap-x-2 gap-y-1"
@@ -134,9 +141,9 @@ function Turn({ change, role }: { change: ChangeEntry; role: Role }) {
 
 /**
  * Where the change is talked about. `thread:` is `<channel>/<timestamp>`, and
- * a permalink is the channel with the timestamp's separator dropped — built
- * here against Slack's own host, because the manual has no workspace name to
- * build one with and the redirect lands a signed-in reader in their own.
+ * the permalink is `slackThreadUrl`'s — the one place the manual builds one,
+ * so the link this card offers and the link a message carries are the same
+ * link.
  *
  * Exported: My turn's own cards carry the same link, and a change reads one
  * thread wherever it is shown rather than a second copy of this reasoning.
@@ -157,12 +164,12 @@ export function ThreadLink({ change }: { change: ChangeEntry }) {
     );
   }
 
-  const [channel, ts = ""] = thread.split("/");
+  const [channel] = thread.split("/");
   return (
     <Text as="p" size="xs">
       <a
         className="inline-flex items-center gap-1 underline underline-offset-2"
-        href={`https://slack.com/archives/${channel}/p${ts.replace(".", "")}`}
+        href={slackThreadUrl(thread)}
         rel="noreferrer noopener"
         target="_blank"
       >
