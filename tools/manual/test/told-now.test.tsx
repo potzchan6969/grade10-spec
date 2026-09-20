@@ -25,10 +25,15 @@ const ARTIFACTS =
     "grade10-planning",
   ) ?? [];
 
-function render(change: ChangeEntry, stage: Stage): string {
+function render(change: ChangeEntry, stage: Stage, sheetUrl?: string): string {
   return renderToStaticMarkup(
     <MemoryRouter initialEntries={[`/in-flight/${change.id}`]}>
-      <ToldNow artifacts={ARTIFACTS} change={change} stage={stage} />
+      <ToldNow
+        artifacts={ARTIFACTS}
+        change={change}
+        sheetUrl={sheetUrl}
+        stage={stage}
+      />
     </MemoryRouter>,
   );
 }
@@ -94,6 +99,13 @@ describe("the stages that say something else", () => {
     expect(html).toContain("<strong>On staging</strong>");
     expect(html).toContain("Walk the run sheet");
     expect(html).toContain("@sam");
+  });
+
+  it("links the run sheet the store was configured with", () => {
+    const html = render(gift(), "on-staging", "https://sheets.test/run");
+
+    expect(html).toContain('href="https://sheets.test/run"');
+    expect(html).toContain(">the run sheet<");
   });
 
   it("tells the hand of a behind artifact what changed before it", () => {

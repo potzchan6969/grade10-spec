@@ -6,6 +6,7 @@ import {
   behindText,
   escapeSlackText,
   stagingText,
+  toldBodyOf,
   yourTurnText,
 } from "./lib/wording.mjs";
 
@@ -57,6 +58,43 @@ test("stagingText names the run sheet in words where none is configured", () => 
   assert.equal(
     stagingText(LINKED, undefined),
     `*On staging* — ${LINKED} is on staging. Walk the run sheet.`,
+  );
+});
+
+test("toldBodyOf sends QA to the run sheet on staging, with the sheet linked", () => {
+  assert.deepEqual(
+    toldBodyOf({ id: "probe", stage: "on-staging" }, "qa", {
+      linked: LINKED,
+      sheetUrl: "https://sheets.test/run",
+    }),
+    { kind: "staging", text: stagingText(LINKED, "https://sheets.test/run") },
+  );
+});
+
+test("toldBodyOf gives every other hand of staging the ordinary Your turn", () => {
+  assert.deepEqual(
+    toldBodyOf({ id: "probe", stage: "on-staging" }, "release", {
+      linked: LINKED,
+      sheetUrl: "https://sheets.test/run",
+    }),
+    {
+      kind: "your-turn",
+      text: yourTurnText(
+        { id: "probe", stage: "on-staging" },
+        "release",
+        LINKED,
+      ),
+    },
+  );
+});
+
+test("toldBodyOf gives QA at another stage the ordinary Your turn", () => {
+  assert.deepEqual(
+    toldBodyOf({ id: "probe", stage: "specified" }, "qa", { linked: LINKED }),
+    {
+      kind: "your-turn",
+      text: yourTurnText({ id: "probe", stage: "specified" }, "qa", LINKED),
+    },
   );
 });
 
