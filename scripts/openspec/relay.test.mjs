@@ -1,23 +1,22 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
-import { createServer } from "node:http";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { pathToFileURL } from "node:url";
 import { RELAY_FILE, readWake, relayOf } from "./lib/relay.mjs";
+import { stubRelay, urlOf } from "./test/stub-relay.mjs";
 
 /**
  * The one client of the relay: the wake's own file, and the five calls a run
  * makes on it. A `node:http` stub stands in for the relay, so what each test
- * reads is the request itself — its method, its path, its bearer and its
+ * reads is the request itself — its method, its path, its headers and its
  * body — rather than a mock of `fetch`.
  *
- * The loud failures run in a child: `readWake` exits the process rather than
- * throwing, because a run that lost the payload it was given has nothing to
- * carry on with, and a test that called it in this one would take the runner
- * down with it.
+ * The loud failures run in a child, as an entry point reads them: `readWake`
+ * throws rather than exiting, and the child prints the message and exits 1 the
+ * way `relay-post.mjs`, `plan-land.mjs` and `reread-guard.mjs` each do.
  */
 
 const LIB = pathToFileURL(
@@ -47,22 +46,8 @@ function wakeRoot(url, text) {
   return root;
 }
 
-function stubRelay(handler) {
-  return new Promise((resolve) => {
-    const server = createServer((req, res) => {
-      let body = "";
-      req.on("data", (chunk) => {
-        body += chunk;
-      });
-      req.on("end", () => handler(req, res, body));
-    });
-    server.listen(0, "127.0.0.1", () => resolve(server));
-  });
-}
-
-const urlOf = (server) => `http://127.0.0.1:${server.address().port}`;
-
-/** `readWake` in a child, so its exit is its own. */
+/** `readWake` in a child that reports a thrown refusal the way every entry
+ * point of it does: the message alone, and exit 1. */
 const readWakeIn = (root, env = {}) =>
   spawnSync(
     process.execPath,
@@ -70,18 +55,23 @@ const readWakeIn = (root, env = {}) =>
       "--input-type=module",
       "-e",
       `import { readWake } from ${JSON.stringify(LIB)};
-       console.log(JSON.stringify(readWake(${JSON.stringify(root)})));`,
+       try {
+         console.log(JSON.stringify(readWake(${JSON.stringify(root)})));
+       } catch (cause) {
+         console.error(cause.message);
+         process.exit(1);
+       }`,
     ],
     { encoding: "utf8", env: { ...process.env, ...env } },
   );
 
 // ── The wake's file ─────────────────────────────────────────────────────────
 
-test("readWake answers nothing where there is no wake: a terminal round", () => {
+test("shared-planning-agent-rounds-SC-74 - readWake answers nothing where there is no wake: a terminal round", () => {
   assert.equal(readWake(bareRoot()), null);
 });
 
-test("readWake reads the url, the token, the change, the sender and the thread", () => {
+test("shared-planning-agent-rounds-SC-74 - readWake reads the url, the token, the change, the sender and the thread", () => {
   const wake = readWake(wakeRoot("https://relay.test/"));
 
   // The trailing slash goes: every path the client builds opens with one.
@@ -93,7 +83,7 @@ test("readWake reads the url, the token, the change, the sender and the thread",
   assert.equal(wake.messages.length, 1);
 });
 
-test("ROUND_WAKE=relay with no file fails loudly, naming the file", () => {
+test("shared-planning-agent-rounds-SC-74 - ROUND_WAKE=relay with no file fails loudly, naming the file", () => {
   const result = readWakeIn(bareRoot(), { ROUND_WAKE: "relay" });
 
   assert.equal(result.status, 1);
@@ -102,14 +92,15 @@ test("ROUND_WAKE=relay with no file fails loudly, naming the file", () => {
   assert.equal(result.stderr.trim().split("\n").length, 1);
 });
 
-test("a wake's file that is not JSON fails loudly, naming the file", () => {
+test("shared-planning-agent-rounds-SC-74 - a wake's file that is not JSON fails loudly, naming the file", () => {
   const result = readWakeIn(wakeRoot("https://relay.test", "{ not json"));
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /\.round\/relay\.json is not JSON/);
+  assert.equal(result.stderr.trim().split("\n").length, 1);
 });
 
-test("a wake's file naming no url and token fails loudly", () => {
+test("shared-planning-agent-rounds-SC-74 - a wake's file naming no url and token fails loudly", () => {
   const result = readWakeIn(
     wakeRoot("https://relay.test", JSON.stringify({ change: "demo-change" })),
   );
@@ -120,7 +111,7 @@ test("a wake's file naming no url and token fails loudly", () => {
 
 // ── The calls ───────────────────────────────────────────────────────────────
 
-/** Every call's request, read off the stub: the method, the path, the bearer
+/** Every call's request, read off the stub: the method, the path, the headers
  * and the body. */
 async function seenFor(call, answer = { status: 200, body: {} }) {
   let seen;
@@ -140,36 +131,40 @@ async function seenFor(call, answer = { status: 200, body: {} }) {
   return { seen, result };
 }
 
-test("post asks /post with the text, bearing the wake's token", async () => {
+test("shared-planning-agent-rounds-SC-74 - post asks /post with the text, the wake's token riding the path", async () => {
   const { seen, result } = await seenFor((relay) => relay.post("one line"));
 
   assert.equal(seen.method, "POST");
   assert.equal(seen.url, `/runs/${TOKEN}/post`);
-  assert.equal(seen.authorization, `Bearer ${TOKEN}`);
+  // The path carries the token and the relay verifies it there, so no call
+  // bears it twice: a header nothing reads is a token in one more log.
+  assert.equal(seen.authorization, undefined);
   assert.deepEqual(seen.body, { text: "one line" });
   assert.equal(result.status, 200);
 });
 
-test("done asks /done with an empty body", async () => {
+test("shared-planning-agent-rounds-SC-74 - done asks /done with an empty body", async () => {
   const { seen } = await seenFor((relay) => relay.done());
 
   assert.equal(seen.url, `/runs/${TOKEN}/done`);
   assert.deepEqual(seen.body, {});
+  assert.equal(seen.authorization, undefined);
 });
 
-test("bind asks /bind with the change the run opened", async () => {
+test("shared-planning-agent-rounds-SC-74 - bind asks /bind with the change the run opened", async () => {
   const { seen } = await seenFor((relay) => relay.bind("nav-cart-count"));
 
   assert.equal(seen.url, `/runs/${TOKEN}/bind`);
   assert.deepEqual(seen.body, { change: "nav-cart-count" });
 });
 
-test("land asks /land with the sha, the kind and the artifact", async () => {
+test("shared-planning-agent-rounds-SC-73 - land asks /land with the sha, the kind and the artifact", async () => {
   const { seen } = await seenFor((relay) =>
     relay.land({ sha: "abc123", kind: "word", artifact: "ui-design" }),
   );
 
   assert.equal(seen.url, `/runs/${TOKEN}/land`);
+  assert.equal(seen.authorization, undefined);
   assert.deepEqual(seen.body, {
     sha: "abc123",
     kind: "word",
@@ -177,7 +172,7 @@ test("land asks /land with the sha, the kind and the artifact", async () => {
   });
 });
 
-test("alive is a GET, and its status is the answer", async () => {
+test("shared-planning-agent-rounds-SC-74 - alive is a GET, and its status is the answer", async () => {
   const { seen, result } = await seenFor((relay) => relay.alive(), {
     status: 401,
     body: { reason: "this wake is closed" },
@@ -185,12 +180,12 @@ test("alive is a GET, and its status is the answer", async () => {
 
   assert.equal(seen.method, "GET");
   assert.equal(seen.url, `/runs/${TOKEN}/alive`);
-  assert.equal(seen.authorization, `Bearer ${TOKEN}`);
+  assert.equal(seen.authorization, undefined);
   assert.equal(result.status, 401);
   assert.equal(result.body.reason, "this wake is closed");
 });
 
-test("a refusal is answered, never thrown: the caller judges the status", async () => {
+test("shared-planning-agent-rounds-SC-73 - a refusal is answered, never thrown: the caller judges the status", async () => {
   const { result } = await seenFor(
     (relay) => relay.land({ sha: "abc", kind: "word", artifact: "specs" }),
     { status: 403, body: { reason: "not this hand's word" } },
@@ -200,7 +195,7 @@ test("a refusal is answered, never thrown: the caller judges the status", async 
   assert.equal(result.body.reason, "not this hand's word");
 });
 
-test("a relay nobody can reach is thrown, since no status says so", async () => {
+test("shared-planning-agent-rounds-SC-74 - a relay nobody can reach is thrown, since no status says so", async () => {
   const wake = readWake(wakeRoot("http://127.0.0.1:1"));
 
   await assert.rejects(() => relayOf(wake).done());

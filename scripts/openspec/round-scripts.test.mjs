@@ -482,7 +482,10 @@ test("shared-planning-agent-rounds-SC-37 - a landing with changed content puts e
   assert.ok(rows[0].changed.includes("ui-design"), rows[0].changed.join(", "));
 });
 
-test("plan:land's dry run prints every step and pushes nothing", () => {
+test("shared-planning-agent-rounds-SC-65 - plan:land's dry run cuts the commit, runs the gate and pushes nothing", () => {
+  // A dry run that narrated the steps in the future tense would report a gate
+  // it never ran (Q79): it cuts `L`, judges it, prints the same lines as a
+  // landing, and stops before `main` moves.
   const { root, remote } = sandbox();
   const before = execFileSync("git", ["-C", remote, "rev-parse", "main"], {
     encoding: "utf8",
@@ -490,18 +493,17 @@ test("plan:land's dry run prints every step and pushes nothing", () => {
   const result = land(root, ["--dry-run"]);
 
   assert.equal(result.status, 0, result.stderr);
-  for (const step of [
-    "clean",
-    "hand",
-    "main",
-    "behind",
-    "gate",
-    "commit",
-    "push",
-  ]) {
+  for (const step of ["clean", "hand", "main", "behind", "held", "cut"]) {
     assert.match(result.stdout, new RegExp(step), `${step} is not printed`);
   }
+  assert.match(
+    result.stdout,
+    /validate:changes, check:manual, tcs:validate pass/,
+  );
   assert.match(result.stdout, /nothing was pushed/);
+  // The branch is where it was: the commit lives in the object database and
+  // no ref names it.
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
   assert.equal(
     execFileSync("git", ["-C", remote, "rev-parse", "main"], {
       encoding: "utf8",
@@ -813,8 +815,9 @@ test("plan:land --reviewed's dry run writes the line nowhere and pushes nothing"
   assert.equal(result.status, 0, result.stderr);
   assert.match(
     result.stdout,
-    new RegExp(`would write reviewed: decisions: ${BEFORE_DECISIONS}`),
+    new RegExp(`reviewed: decisions: ${BEFORE_DECISIONS}`),
   );
+  assert.match(result.stdout, /nothing was pushed/);
   assert.doesNotMatch(recordOf(root), /reviewed:/);
   assert.equal(
     execFileSync("git", ["-C", remote, "rev-parse", "main"], {
@@ -942,9 +945,11 @@ test("plan:land's second attempt wins once main has settled", () => {
   assert.match(log, /land ui-design of round-probe/);
 });
 
-test("PLAN_LAND_RACE is refused unless --root was passed", () => {
+test("PLAN_LAND_RACE is refused unless --root was passed, before anything is read", () => {
   // A landing with no `--root` reads this real store; the seam must never
-  // fire against it even if the variable happens to be set in the shell.
+  // fire against it even if the variable happens to be set in the shell. The
+  // refusal is the argument parsing's own, so it lands before the run reads
+  // a store at all and cannot be reached past by a store that refuses first.
   const result = spawnSync(
     process.execPath,
     [join(SCRIPTS, "plan-land.mjs"), CHANGE, "ui-design", "--dry-run", ...ROW],
@@ -954,8 +959,6 @@ test("PLAN_LAND_RACE is refused unless --root was passed", () => {
     },
   );
 
-  // It fails for an unrelated reason first in the real store (no such
-  // change), which is fine — the point is that it never reaches the race
-  // hook silently. The refusal below is asserted directly against the seam.
-  assert.notEqual(result.status, 0);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /PLAN_LAND_RACE is a test seam and needs --root/);
 });

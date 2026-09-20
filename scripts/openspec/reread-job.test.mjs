@@ -1,13 +1,14 @@
 import assert from "node:assert/strict";
-import { execFileSync, spawnSync } from "node:child_process";
+import { execFileSync, spawn, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { landedShas } from "./lib/landed.mjs";
+import { changedPaths, landedShas } from "./lib/landed.mjs";
 import { writableBy } from "./lib/writable.mjs";
-import { outOfBounds, pushedPaths } from "./reread-guard.mjs";
+import { outOfBounds } from "./reread-guard.mjs";
+import { answer, stubRelay, urlOf } from "./test/stub-relay.mjs";
 
 /**
  * What a re-read may write (`lib/writable.mjs`), and the guard that fails on
@@ -18,6 +19,12 @@ import { outOfBounds, pushedPaths } from "./reread-guard.mjs";
  * session's checkout and the push it makes to it, so the guard is proved
  * against what a real run pushes rather than against two commits in one
  * working tree.
+ *
+ * The commits the guard reads are the union of the two facts about a run: the
+ * landings it made, which `.round/landed` names and which `main` already
+ * holds, and everything on `HEAD` that is not on `origin/main` yet, which is
+ * every draft it has not pushed. So a test that wants a commit read either
+ * leaves it unpushed or names it in `.round/landed`.
  */
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
@@ -86,6 +93,49 @@ function sandbox() {
   git("push", "--quiet", "origin", "HEAD:refs/heads/main");
   const before = git("rev-parse", "HEAD").trim();
   return { root, remote, git, write, before };
+}
+
+/** The guard, run over a store. */
+const guard = (root, args = []) =>
+  spawnSync(
+    process.execPath,
+    [join(SCRIPTS, "reread-guard.mjs"), CHANGE, "--root", root, ...args],
+    { encoding: "utf8" },
+  );
+
+/** The guard in a child that does not block this process's event loop: what
+ * the `--alive` cases need, since the stub relay answers from here. */
+const guardAsync = (root, args = []) =>
+  new Promise((resolve) => {
+    const child = spawn(process.execPath, [
+      join(SCRIPTS, "reread-guard.mjs"),
+      CHANGE,
+      "--root",
+      root,
+      ...args,
+    ]);
+    let stdout = "";
+    let stderr = "";
+    child.stdout.on("data", (chunk) => {
+      stdout += chunk;
+    });
+    child.stderr.on("data", (chunk) => {
+      stderr += chunk;
+    });
+    child.on("close", (status) => resolve({ status, stdout, stderr }));
+  });
+
+/** `.round/relay.json` as a wake writes it. */
+function writeRelayFile(root, url) {
+  mkdirSync(join(root, ".round"), { recursive: true });
+  writeFileSync(
+    join(root, ".round", "relay.json"),
+    JSON.stringify({
+      relay: { url, token: "wake-tok-9" },
+      change: CHANGE,
+      sender: { handle: "@dana" },
+    }),
+  );
 }
 
 // ── The guard's own argv parser ─────────────────────────────────────────────
@@ -161,20 +211,8 @@ test("the guard passes a page the change's proposal links", () => {
   write({ [PAGE]: "# Agent Rounds\n\n## The Walk\n\n❓ Who reads it?\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "mark the page the proposal links");
-  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 0, result.stderr);
 });
@@ -187,20 +225,8 @@ test("the guard fails on a page the proposal never linked, and on a script", () 
   });
   git("add", "-A");
   git("commit", "--quiet", "-m", "reached past the pages it links");
-  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
@@ -208,34 +234,19 @@ test("the guard fails on a page the proposal never linked, and on a script", () 
   assert.match(result.stderr, /scripts\/openspec\/plan-land\.mjs/);
 });
 
-test("the guard passes a push that stays inside the change's directory", () => {
+test("the guard passes a commit that stays inside the change's directory", () => {
   const { root, before, write, git } = sandbox();
   write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "the round's own commit");
-  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
 
-  assert.deepEqual(pushedPaths(root, before, "HEAD"), [`${DIR}/decisions.md`]);
+  assert.deepEqual(changedPaths(root, before, "HEAD"), [`${DIR}/decisions.md`]);
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /1 path\(s\) pushed/);
+  assert.match(result.stdout, /1 path\(s\)/);
   assert.match(result.stdout, /all inside/);
-  // No `.round/landed` in this checkout: the guard falls back to the range
-  // the job started from, and says which it read.
-  assert.match(result.stdout, /no \.round\/landed/);
 });
 
 test("the guard fails on a path the round pushed outside its own directory", () => {
@@ -246,20 +257,8 @@ test("the guard fails on a path the round pushed outside its own directory", () 
   });
   git("add", "-A");
   git("commit", "--quiet", "-m", "reached outside the change");
-  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
@@ -267,7 +266,7 @@ test("the guard fails on a path the round pushed outside its own directory", () 
   assert.match(result.stderr, /packages\/design-system\/README\.md/);
 });
 
-test("shared-planning-agent-rounds-SC-67 - the guard reads the commits this run made, though main moved under it", () => {
+test("shared-planning-agent-rounds-SC-73 - the guard reads the commits this run made, though main moved under it", () => {
   const { root, before, write, git } = sandbox();
   // Somebody else's landing, which the run's own checkout gains when
   // `plan:land` rebases the change's branch on a moved `origin/main`: inside
@@ -275,29 +274,39 @@ test("shared-planning-agent-rounds-SC-67 - the guard reads the commits this run 
   write({ "scripts/openspec/plan-land.mjs": "// somebody else's fix\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "a fix that landed under the run");
-  // This run's own commit, the one `.round/landed` names.
+  // This run's own commit, the one `.round/landed` names — and on `main`
+  // already, since the landing is what pushed it.
   write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
   git("add", "-A");
   git("commit", "--quiet", "-m", "the round's own commit");
   git("push", "--quiet", "origin", "HEAD:refs/heads/main");
   write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /1 path\(s\) pushed/);
+  assert.match(result.stdout, /1 path\(s\)/);
   assert.match(result.stdout, /\.round\/landed/);
+});
+
+test("the guard reads a landing main holds and a draft it has not pushed, together", () => {
+  const { root, before, write, git } = sandbox();
+  // The landing: pushed, and named in `.round/landed`.
+  write({ [`${DIR}/decisions.md`]: "## Goals\n\n- One\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the landing");
+  git("push", "--quiet", "origin", "HEAD:refs/heads/main");
+  write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
+  // The draft above it, pushed nowhere yet — and outside what this change
+  // may write, so the guard is what catches it.
+  write({ [UNLINKED]: "# Change Stages\n\nThe wrong page.\n" });
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "the draft above it");
+
+  const result = guard(root, ["--before", before]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /change-stages\.md/);
 });
 
 test("the guard fails on a path the run's own commit reached outside, bound or not", () => {
@@ -311,40 +320,64 @@ test("the guard fails on a path the run's own commit reached outside, bound or n
   git("push", "--quiet", "origin", "HEAD:refs/heads/main");
   write({ ".round/landed": `${git("rev-parse", "HEAD").trim()}\n` });
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 1);
   assert.match(result.stderr, /::error::/);
   assert.match(result.stderr, /change-stages\.md/);
 });
 
-test("the guard needs no fetch: it reads the checkout it was given --before", () => {
+test("the guard needs no fetch: it reads the checkout it was given", () => {
   const { root, before } = sandbox();
 
-  const result = spawnSync(
-    process.execPath,
-    [
-      join(SCRIPTS, "reread-guard.mjs"),
-      CHANGE,
-      "--before",
-      before,
-      "--root",
-      root,
-    ],
-    { encoding: "utf8" },
-  );
+  const result = guard(root, ["--before", before]);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /^reread-probe: 0 path\(s\) pushed/);
+  assert.match(result.stdout, /^reread-probe: 0 path\(s\)/);
+});
+
+// ── --alive: the wake asked before the push ─────────────────────────────────
+
+test("shared-planning-agent-rounds-SC-74 - --alive with no wake asks nothing: the terminal round pushes on its own word", async () => {
+  const { root, before } = sandbox();
+
+  const result = await guardAsync(root, ["--before", before, "--alive"]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /no wake to ask about/);
+});
+
+test("shared-planning-agent-rounds-SC-74 - --alive passes while the wake is the room's own", async () => {
+  let seen;
+  const server = await stubRelay((req, res) => {
+    seen = { method: req.method, url: req.url };
+    answer(res, 200, { alive: true });
+  });
+  const { root, before } = sandbox();
+  writeRelayFile(root, urlOf(server));
+
+  const result = await guardAsync(root, ["--before", before, "--alive"]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(seen.method, "GET");
+  assert.equal(seen.url, "/runs/wake-tok-9/alive");
+  assert.match(result.stdout, /the wake is alive/);
+});
+
+test("shared-planning-agent-rounds-SC-74 - --alive stops the run where the relay has closed its wake", async () => {
+  const server = await stubRelay((_req, res) => {
+    answer(res, 401, { reason: "this wake is closed" });
+  });
+  const { root, before } = sandbox();
+  writeRelayFile(root, urlOf(server));
+
+  const result = await guardAsync(root, ["--before", before, "--alive"]);
+  server.close();
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /::error::/);
+  assert.match(result.stderr, /401/);
+  // It stops there: nothing about the paths, which it never read.
+  assert.doesNotMatch(result.stdout, /path\(s\)/);
 });
