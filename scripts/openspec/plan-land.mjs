@@ -103,7 +103,7 @@ import {
   planningSchema,
 } from "./lib/perspectives.mjs";
 import { openRecord, setEntry } from "./lib/record.mjs";
-import { readWake, relayOf } from "./lib/relay.mjs";
+import { readWake, refusalOf, relayOf } from "./lib/relay.mjs";
 import { readAgainst } from "./lib/reviewed.mjs";
 import { listCell, roundsPath, withRoundRow } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
@@ -523,18 +523,22 @@ async function attemptLanding(attempt) {
       fail(`the landing's side ref ${side} would not push:\n${pushed.stderr}`);
     const ref = { kind: "ref", path: side };
     scratch.push(ref);
+    const landing = artifact ?? roundArtifactOf(target);
     const answer = await askTheRelay(() =>
       relay.land({
         sha: commit,
         kind: reviewedOnly ? "reviewed" : "word",
-        artifact: artifact ?? roundArtifactOf(target),
+        artifact: landing,
       }),
     );
     remove(ref);
     if (answer.status === 409) return false;
     if (answer.status !== 200) {
+      // The check that refused, as a sentence: a hand reading the thread is
+      // owed what went wrong, not the relay's own token. The status stays on
+      // its own line, for whoever is reading the run rather than the thread.
       fail(
-        `the relay refused (${answer.status}): ${answer.body?.reason ?? "no reason given"}`,
+        `${refusalOf(answer.body?.reason, { artifact: landing, change })}\nthe relay answered ${answer.status}`,
       );
     }
     say("land", `the relay moved ${mainBranch} to ${short(commit)}`);

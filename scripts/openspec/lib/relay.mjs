@@ -120,3 +120,57 @@ export function relayOf(wake) {
     alive: () => call("GET", "/alive"),
   };
 }
+
+/**
+ * The relay's refusal as a sentence, for the thread and the run's log.
+ *
+ * The relay answers a refused landing with the check that refused it, which
+ * is a token: `not-the-hand` says nothing to the hand reading the reply. One
+ * pure function, so the words are written once and every entry point that
+ * reports a refusal says the same thing. A token nothing here names is
+ * printed as it came, because a check the relay grows is better read raw
+ * than reported as something else.
+ *
+ * `tools/relay/src/land.ts` issues every check but two: `room.ts` adds
+ * `not-fast-forward`, which a run retries rather than reports, and
+ * `host-refused`.
+ */
+export function refusalOf(reason, { artifact, change } = {}) {
+  const said = SENTENCE[reason];
+  const what = said
+    ? said({
+        artifact: named(artifact, "the artifact"),
+        change: named(change, "the change"),
+      })
+    : (reason ?? "no reason given");
+  return `the relay refused the landing: ${what}`;
+}
+
+/** One sentence per check, in the order `land.ts` runs them. */
+const SENTENCE = {
+  "word-not-said": () => "nobody said land in the thread",
+  "sender-unknown": () => "the team map names no handle for whoever said it",
+  "unknown-artifact": ({ artifact }) =>
+    `the schema issues no artifact called ${artifact}`,
+  "unknown-role": ({ artifact }) => `the schema names no hand for ${artifact}`,
+  "not-the-hand": ({ artifact }) =>
+    `the word was not the hand's — ${artifact} waits on its hand's word`,
+  "landed-by-mismatch": ({ artifact }) =>
+    `the landing's own \`landed_by:\` for ${artifact} names another handle`,
+  "file-outside-change": ({ change }) =>
+    `the landing writes outside ${change}'s own directory and the pages`,
+  "not-only-reviewed": () =>
+    "a read again writes the record's `reviewed:` block and nothing else",
+  "reviewed-line-removed": () =>
+    "the landing drops a `reviewed:` line another artifact's read again wrote",
+  "compare-truncated": () =>
+    "the code host listed only some of what the landing changed",
+  "map-unreadable": () => "the team map would not parse",
+  "not-fast-forward": () => "`main` moved under the run",
+  "host-refused": () => "the code host would not move `main`",
+};
+
+/** A name the sentence quotes, or the plain word where the call has none. */
+function named(value, plain) {
+  return value ? `\`${value}\`` : plain;
+}

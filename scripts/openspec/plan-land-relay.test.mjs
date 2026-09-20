@@ -720,7 +720,7 @@ test("shared-planning-agent-rounds-SC-73 - a 403 stops at once, naming the relay
   const branchBefore = shaOf(remote, `refs/heads/${BRANCH}`);
   const server = await landingRelay((_req, res) => {
     calls += 1;
-    answer(res, 403, { reason: "not this hand's word" });
+    answer(res, 403, { reason: "not-the-hand" });
   });
   writeRelayFile(root, urlOf(server));
 
@@ -730,7 +730,12 @@ test("shared-planning-agent-rounds-SC-73 - a 403 stops at once, naming the relay
   assert.equal(result.status, 1);
   assert.equal(calls, 1);
   assert.match(result.stderr, /403/);
-  assert.match(result.stderr, /not this hand's word/);
+  // The check that refused, in words rather than as the relay's own token,
+  // naming the artifact the word was for - `relay-refusal.test.mjs` holds
+  // the sentence for every check.
+  assert.match(result.stderr, /the word was not the hand's/);
+  assert.match(result.stderr, /ui-design/);
+  assert.doesNotMatch(result.stderr, /^not-the-hand$/m);
   // Nothing of the branch moved, and the side ref is gone.
   assert.equal(shaOf(remote, `refs/heads/${BRANCH}`), branchBefore);
   assert.equal(holds(remote, SIDE_REF), false);
