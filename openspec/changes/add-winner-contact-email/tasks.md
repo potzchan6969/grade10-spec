@@ -29,7 +29,7 @@ Can proceed from contracts and fixtures; does not need a running mail backend.
 - [ ] 4.2 Render the production partial-payment letter through the ready-email table, and prove all five letter reasons use the required subject, body, mailto and no remaining balance (`order-mail-SC-57`–`order-mail-SC-61`)
 - [ ] 4.3 Verify: `pnpm run db:drizzle:generate && pnpm run check:migrations && pnpm db:status && pnpm run test:backend`
 
-## 5. Winner Order Contact Repair (grade10)
+## 5. Winner Order Contact Repair (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Restore Copy Message before Open Mail App in the dialog footer and prove the edited Message supplies the generated mailto (`winner-order-SC-160`, `winner-order-SC-163`, `winner-order-SC-167`)
 - [ ] 5.2 Add fixture-parity tests for storefront and renderer ready-email builders across all required reasons (`winner-order-SC-164`–`winner-order-SC-166`, `order-mail-SC-57`–`order-mail-SC-61`)
