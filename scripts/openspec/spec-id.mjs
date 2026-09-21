@@ -25,7 +25,7 @@
 
 import { readdirSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
 import { readTextIfThere } from "./lib/read-text.mjs";
 
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
@@ -105,8 +105,9 @@ function walk(dir, out = []) {
 
 /** Every id the store issues in a heading, and every place any id is named.
  * One pass: the walk is the expensive part, and a second query in the same
- * run is not worth a cache file. */
-function scan(files) {
+ * run is not worth a cache file. Exported for its own test, which hands it
+ * a file the run cannot read. */
+export function scan(files) {
   const definitions = new Map(); // id -> [site]
   const mentions = new Map(); // id -> [site]
   for (const file of files) {
@@ -403,4 +404,5 @@ function listCapability(query, definitions) {
   console.log("");
 }
 
-main();
+// Run as a script; imported, it lends `scan` to its test and runs nothing.
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) main();
