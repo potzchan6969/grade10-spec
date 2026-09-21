@@ -1,3 +1,9 @@
+import {
+  Card,
+  CardContent,
+} from "@grade10/design-system/components/display/card";
+import { Button } from "@grade10/design-system/components/forms/button";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionOrderDetail } from "./auction-order-detail";
@@ -99,5 +105,47 @@ export const ExpiredInvoice: Story = {
     expect(
       canvas.queryByRole("button", { name: "Pay Now" }),
     ).not.toBeInTheDocument();
+  },
+};
+
+export const SuspendedWinnerCanStillPay: Story = {
+  name: "Suspended winner can still pay (TBC)",
+  args: {
+    invoice: {
+      lines: [
+        { label: "Winning Bid", value: "HK$12,800" },
+        { label: "Order Total", value: "HK$15,660" },
+      ],
+      onPayNow: fn(),
+    },
+    notice: (
+      <Card>
+        <CardContent>
+          <VStack gap="sm" hAlign="stretch">
+            <h2 className="text-lg font-semibold">Auction bidding suspended</h2>
+            <span>
+              Your account remains suspended from auction bidding. Contact
+              Grade10 support if you need help. You can still pay what you owe
+              here; payment does not lift the suspension.
+            </span>
+            <Button>Pay what is owed</Button>
+          </VStack>
+        </CardContent>
+      </Card>
+    ),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Auction bidding suspended" }),
+    ).toBeVisible();
+    expect(
+      canvas.getByText(/Contact Grade10 support if you need help/),
+    ).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: "Pay what is owed" }),
+    ).toBeVisible();
+    expect(canvas.getByRole("button", { name: "Pay Now" })).toBeVisible();
+    expect(canvas.queryByText(/operator/i)).not.toBeInTheDocument();
   },
 };

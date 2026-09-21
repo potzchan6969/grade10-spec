@@ -61,6 +61,8 @@ type AuctionOrderDetailProps = {
     status: ReactNode;
     reachedAt: ReactNode;
   }[];
+  /** Optional consumer-owned status or guidance card shown beside the order. */
+  notice?: ReactNode;
   lot: {
     title: ReactNode;
     winningBid: ReactNode;

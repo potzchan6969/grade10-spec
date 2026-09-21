@@ -33,6 +33,7 @@ function AuctionOrderDetail({
   invoiceStatus,
   collectionMethod,
   statusTimeline,
+  notice,
   lot,
   invoice,
   className,
@@ -131,6 +132,8 @@ function AuctionOrderDetail({
           </VStack>
         ) : null}
       </Card>
+
+      {notice ?? null}
 
       <Card data-slot="auction-order-detail-collection">
         <Text as="h2" size="lg" weight="medium">
