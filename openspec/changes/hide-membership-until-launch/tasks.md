@@ -28,7 +28,7 @@ Needs group 1 landed to compile against the sixth `Gates` member.
       (`grade10-site-site-carried-surfaces-SC-39`)
 - [x] 2.3 Verify: `pnpm run typecheck && pnpm run test`
 
-## 3. Manual (grade10-spec)
+## 3. Manual (grade10-spec) (owner: @sean)
 
 - [ ] 3.1 Take the 🚧 marks off
       `docs/prds/products/grade10-site/site/carried-surfaces.md` once
