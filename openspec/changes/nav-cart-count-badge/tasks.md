@@ -21,11 +21,11 @@ This group can be claimed independently of Group 1 because both shared APIs are 
 - [ ] 3.1 Update `docs/prds/products/grade10-site/site/page-shell.md` for the member header count, its closed-drawer updates, and unknown/signed-out outcome. Keep the delivery mark until application acceptance is confirmed.
 - [ ] 3.2 Verify: `pnpm run validate:changes nav-cart-count-badge`, `pnpm run tcs:validate`, and `pnpm check:manual`. Record unrelated generated-index failures separately.
 
-## 4. Member Cart Count State (grade10)
+## 4. Member Cart Count State (grade10) (owner: @kinisworking)
 
 Depends on Group 3's merged application contract; uses the existing shared badge API. Review the merged store pin before implementation and run `pnpm run check:submodules` if it moves.
 
-- [ ] 4.1 Make `grade10-site-site-page-shell-SC-42` and `grade10-site-site-page-shell-SC-43` pass with a cart-feature projection of distinct reviewed active lines, retaining adjusted lines and excluding sold-out/unavailable lines. Do not change the existing quantity-total API.
+- [x] 4.1 Make `grade10-site-site-page-shell-SC-42` and `grade10-site-site-page-shell-SC-43` pass with a cart-feature projection of distinct reviewed active lines, retaining adjusted lines and excluding sold-out/unavailable lines. Do not change the existing quantity-total API.
 - [ ] 4.2 Make `grade10-site-site-page-shell-SC-46`, `grade10-site-site-page-shell-SC-47`, `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49`, and `grade10-site-site-page-shell-SC-53` pass with one member-scoped cart/review observer active while the drawer is closed; retain the last verified same-member count while checking and clear it on failure; reuse mutation invalidation and review retry without adding polling or automatic unavailable-line removal.
 - [ ] 4.3 Make `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-51`, and `grade10-site-site-page-shell-SC-52` pass for unresolved sessions, sign-out, member switching, and late responses.
 - [ ] 4.4 Verify: run the cart feature's focused domain/hook tests, `node scripts/test.mjs grade10-store-frontend`, `pnpm run typecheck`, and `pnpm run lint`. Include delayed review and mutation races in the named scenario tests.
