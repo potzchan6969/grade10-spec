@@ -38,6 +38,7 @@ export default defineConfig({
             "src/blocks/auth-sign-in/public-exports.test.ts",
             "src/blocks/auction-order/public-exports.test.ts",
             "src/blocks/store-order-detail/public-exports.test.ts",
+            "src/blocks/store-product/public-exports.test.ts",
           ],
         },
       },

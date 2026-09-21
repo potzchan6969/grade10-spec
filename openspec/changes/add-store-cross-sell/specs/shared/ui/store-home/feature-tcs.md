@@ -21,9 +21,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Section header
+
+**Decided by:** `packages/ui/src/blocks/store-home/store-section-header.stories.tsx`
 
 **Pre-conditions:**
 

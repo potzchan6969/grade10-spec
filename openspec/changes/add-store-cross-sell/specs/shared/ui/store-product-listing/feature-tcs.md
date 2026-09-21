@@ -21,9 +21,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Tile contract
+
+**Decided by:** `packages/ui/src/blocks/store-product-listing/product-card.stories.tsx`
 
 **Pre-conditions:**
 
@@ -50,9 +52,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Selling is opt-in
+
+**Decided by:** `packages/ui/src/blocks/store-product-listing/product-card.stories.tsx`
 
 **Pre-conditions:**
 

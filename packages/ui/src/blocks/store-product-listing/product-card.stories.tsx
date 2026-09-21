@@ -279,3 +279,35 @@ export const SoldOutWithRemainingCount: Story = {
     expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
   },
 };
+
+/** shared-ui-store-product-listing-SC-91: a sold-out tile still opens where
+ * an activation handler is supplied and no cart handler is — a surface that
+ * carries the shopper on rather than selling. */
+export const SoldOutOpensWhereNothingSells: Story = {
+  args: {
+    soldOut: true,
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: copy.cart })).toBeNull();
+    await userEvent.click(canvas.getByRole("button", { name: defaults.name }));
+    expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};
+
+/** shared-ui-store-product-listing-SC-92: a tile drawn without a cart control
+ * needs no cart words. */
+export const NoCartWords: Story = {
+  args: { copy: {}, onCartQuantityChange: undefined },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(defaults.name)).toBeInTheDocument();
+    expect(canvas.getByText(defaults.price)).toBeInTheDocument();
+    expect(canvas.queryByRole("button", { name: /cart/i })).toBeNull();
+  },
+};
