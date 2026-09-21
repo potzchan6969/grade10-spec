@@ -817,7 +817,7 @@ describe("the Rounds row", () => {
 });
 
 describe("delivery and the handoff", () => {
-  it("names main, staging and the release that carried the change", () => {
+  it("shared-planning-change-stages-SC-76 - names main, staging with no build beside it, and the release that carried the change", () => {
     const html = render(
       change({ deployedEnv: "staging", releasedIn: "v2026.09.1" }),
     );
