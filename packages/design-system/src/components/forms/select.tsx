@@ -96,7 +96,9 @@ function scrollElementIntoScrollport(element: HTMLElement) {
   }
 
   // Fallback when overflow styles are unresolved (e.g. some test hosts).
-  element.scrollIntoView({ block: "nearest", inline: "nearest" });
+  if (typeof element.scrollIntoView === "function") {
+    element.scrollIntoView({ block: "nearest", inline: "nearest" });
+  }
 }
 
 function SelectContent({
