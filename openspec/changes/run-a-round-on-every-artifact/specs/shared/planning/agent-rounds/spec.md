@@ -1153,7 +1153,12 @@ leave those walks as the change's end-to-end suite.
 - **Marked by neither** — a case no test and no walk decides stays manual,
   with its reason in the suite
 - **One pass over the whole** — after the last group, one reader argues the
-  simpler shape for the whole change before it goes to staging
+  simpler shape for the whole change before it goes to staging; its landing
+  writes a row whose Artifact cell reads `whole change`
+- **Held at the archive** — a change on the round is archived only once its
+  last task group's row names the walks it left, a `*.walk.ts` the suite runs
+  or a walk by hand, and one row reads `whole change`; a change nobody walks
+  owes no walk row, and a change on the old flow owes neither
 
 #### Scenario: shared-planning-agent-rounds-SC-59 - The walk leaves the suite and marks its cases
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases the walk now covers
@@ -1169,6 +1174,15 @@ leave those walks as the change's end-to-end suite.
 - **WHEN** the last task group has landed
 - **THEN** one reader argues the simpler shape for the whole change
 - **AND** the change does not go to staging before that reading
+
+#### Scenario: shared-planning-agent-rounds-SC-85 - The archive holds the walk and the whole-change reading
+**Serves:** shared-planning-agent-rounds-US-08 - the QA teammate archives nothing whose journeys were never walked
+
+- **GIVEN** a change on the round whose capabilities carry journeys
+- **WHEN** `pnpm run archive:preflight` runs
+- **THEN** it refuses while the last task group's row names no walk — a `*.walk.ts` the suite runs, or a walk by hand — and names the group
+- **AND** it refuses while no row's Artifact cell reads `whole change`, the row `plan:land --whole` writes for the one reader over the whole change, and names the command
+- **AND** a change whose journeys say nobody walks it owes no walk row, and a change on the old flow is asked for neither
 
 #### Scenario: shared-planning-agent-rounds-SC-78 - A case a store test decides flips with the test
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test already decides and which are still theirs to walk
