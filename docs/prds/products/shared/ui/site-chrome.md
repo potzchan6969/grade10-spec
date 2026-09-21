@@ -36,6 +36,11 @@ order history surface, and omitted until then
 **Membership** — ❓ after My Auctions once Store answers; the destination is
 unconfirmed
 
+**Avatar without an email** — ❓ when `accountEmail` is not supplied and the
+menu falls back to `copy.accountMenuLabel`, whether the small initial avatar
+still renders (and from what) or is omitted along with the email is
+unconfirmed
+
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the

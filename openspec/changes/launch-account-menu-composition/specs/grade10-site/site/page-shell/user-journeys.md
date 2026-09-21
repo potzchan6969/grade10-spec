@@ -62,6 +62,6 @@ Auctions and Sign Out on auction launch, and My Orders, My Auctions,
 Membership, and Sign Out once Store answers, with Cart in the bar only once
 Store answers,
 **so that** one place in the header takes me where I can go for this launch,
-without Profile or a second auction-orders link.
+without a second auction-orders link.
 
 ## REMOVED User journeys
