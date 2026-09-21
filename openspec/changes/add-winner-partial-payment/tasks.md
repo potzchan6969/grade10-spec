@@ -19,4 +19,4 @@
 
 ## 5. Verification (owner: @htonyl)
 
-- [ ] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
+- [x] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
