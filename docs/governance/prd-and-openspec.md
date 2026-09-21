@@ -96,7 +96,7 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `proposal.md` — scope, why now, consumer impact, and under `## References` a link to every page section the change marked;
 - `decisions.md` — the interview's record: the change's goals, its non-goals, and one row per question the rounds settled with the option it dropped. The proposal points here for the edges rather than restating them, and the journeys, the design and the requirements are all drawn from this scope;
 - `specs/<capability>/user-journeys.md` — who walks the capability, written before the requirements, or the one line `**Walked by:** nobody on their own - <why>` when no end user reaches it;
-- `specs/<capability>/spec.md` — the capability's `## Purpose` and `## Feature set`, then the requirement deltas against `openspec/specs/`; two passes over one file with the blind suite between them, both written by whoever takes the readings — `/planning-qa`, or `/planning-dev` on a change an engineer authored. Neither the product manager nor the designer opens this file; they hand over the journeys and the marks, and the PM reads the root groups at the reconciliation, beside the scenarios built on them;
+- `specs/<capability>/spec.md` — the capability's `## Purpose` and `## Feature set`, then the requirement deltas against `openspec/specs/`; two passes over one file with the blind suite between them, both written by `/workflow-specify`, following `planning-qa`'s rules, or `planning-dev`'s on a change an engineer authored. Neither the product manager nor the designer opens this file; they hand over the journeys and the marks, and the PM reads the root groups at the reconciliation, beside the scenarios built on them;
 - `specs/<capability>/feature-tcs.md` — a blind reading of those journeys and the feature set, written without sight of the scenarios, beside every capability;
 - `ui-design.md` — screens, exports and states, when the change alters something a user sees; drawn from the journeys and the PRD, before the requirements exist;
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
@@ -122,10 +122,19 @@ That is how the work reaches an engineer. The application repository has no plan
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | `pnpm check:manual`, rule `decided`; the Pending page |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
+| `ui_waived: "<why>"` | The designer, or the author | A change nothing a reader sees moves on, so it draws no `ui-design.md` | The stage ladder, which reads it as the UI design; the change page, which shows it as not owed |
+| `hands:` with `<role>: @handle` | The product manager at the interview's end, Assign on the locally run manual, or `pnpm plan hand` | From the interview's end; one handle for each of `pm`, `design`, `tech`, `qa`, `dev`, `release` | The board and the change page, for whose turn it is; the notify workflow, for who is told; `pnpm check:manual`, rule `hands` |
+| `landed_by:` with `<artifact>: @handle` | The landing — `pnpm run plan:land`, or the person's own push through it | In the same commit as the artifact it names | The change page, beside each artifact; `pnpm check:manual`, rule `landed_by` |
+| `reviewed:` with `<artifact>: <content id>` | The round's re-read | When an artifact is read again against what is before it | The freshness read, which shows an artifact behind until the id matches; `archive:preflight`'s behind gate, which refuses the fold while one still does not |
+| `thread: <channel>/<ts>` | The round, from the first planning-channel message about the change | Once, and never rewritten | Every message, which links the thread rather than the change page |
+| `released_in: "<release>"` | The release hand | At the release | The stage ladder, which reads it as Released |
 | `deployed_at`, `deployed_env` | `pnpm plan shipped` in the application repository | At archive | `pnpm check:manual`, rule `archived` |
+| `deployed_build: "<tag>"` | `pnpm plan shipped --build <tag>` in the application repository | With the deploy record, when the deploy carried a tagged build | The change page's delivery row and QA's staging message, which name the build |
 | `deploy_waived: "<who, why>"` | The owner, through `archive:preflight --deploy-waived` | At archive, in place of the deploy record | `pnpm check:manual`, rule `archived` |
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
+
+A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - recommended: <option>`: the ` - ` separator and the `recommended:` lead are the grammar the store reads, and a cell that opens ❓ without both is addressed to nobody and refuses the change's landings.
 
 ### The three hatches
 
@@ -141,7 +150,7 @@ That is how the work reaches an engineer. The application repository has no plan
 
 `blind_pass_skipped` is granted by the checker, never declared, and granting it is `pnpm check:manual`'s `blind` rule staying quiet: the spec diff adds no scenario id and modifies no `**GIVEN**` / `**WHEN**` / `**THEN**` line. It is nothing the manifest records - a key would go stale the moment behaviour moved under it, and the verdict is cheap to recompute. Behaviour lives entirely in those lines, so the only way to take the shortcut is to genuinely not change behaviour. Where the checker refuses and the author disagrees, that is a question for the interview, not a self-service waiver.
 
-The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/planning-pm` and `/planning-qa` are two commands the cost of not skipping falls from writing four documents to waiting for two runs. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
+The strongest control is not a check. People take an escape hatch to avoid work, not responsibility, so once `/workflow-plan` and `/workflow-specify` — the line commands that answer with `planning-pm`'s and `planning-qa`'s rules — are two commands the cost of not skipping falls from writing four documents to waiting for two runs. The corollary holds too: if a run is slow or noisy, `skip_specs` use will rise, which makes the orchestrator's ergonomics part of this control rather than a separate concern.
 
 
 A waiver is a line of text naming the decision, never `true`. A key read as absent would waive the rule it answers to, so `pnpm check:manual` refuses a record key holding anything but text. `skip_specs` is the one exception, and not a waiver of the rule but the switch beneath it: the OpenSpec CLI owns that key and reads it as a boolean, so a reason written there invalidates the manifest and the marker stops being honoured at all. The switch stays `true`, and `skip_specs_why` carries the line.
@@ -182,10 +191,10 @@ Component source lives in the application. This repository carries the contract 
 Before archiving:
 
 1. ensure required tasks are complete and validation is recorded — `pnpm run archive:preflight` refuses while a task is unchecked, unless `tasks_waived: <who, why>` names the decision;
-2. record the deploy: `pnpm plan shipped <change-id>` in the application repository writes `deployed_at` and `deployed_env` into the change's `.openspec.yaml`. `pnpm check:manual` fails an archive dated 2026-09-12 or later that carries neither those nor `deploy_waived: <who, why>`; a change whose task groups are all tagged `(grade10-spec)` deploys nothing and owes no record;
+2. record the deploy: `pnpm plan shipped <change-id>` in the application repository writes `deployed_at` and `deployed_env` into the change's `.openspec.yaml`, and `pnpm plan shipped <change-id> --build <tag>` names the build QA walked, `deployed_build`, beside them. `pnpm check:manual` fails an archive dated 2026-09-12 or later that carries neither those nor `deploy_waived: <who, why>`; a change whose task groups are all tagged `(grade10-spec)` deploys nothing and owes no record;
 3. fold accepted requirement deltas into `openspec/specs/`;
 4. take the 🚧 marks off every line this change delivered — the line stays, flat — in the same commit as the fold, then run `pnpm check:manual`: a 🚧 line left on a page no in-flight change touches fails it, and a durable spec whose requirements changed meaning after its page was last committed warns on that page until the page catches up — by the edit it needs, or by `reviewed: <date>` in its frontmatter when it already reads right;
-5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`; and
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, `rounds.md` with it - one row per round, written by the landing, whose rule is [Agent Rounds](../prds/products/shared/planning/agent-rounds.md); and
 6. leave links between the spec, the page, and the archive where they aid discovery.
 
 Do not archive a change as a substitute for updating `openspec/specs/`. Archives preserve history; the spec must describe what runs.

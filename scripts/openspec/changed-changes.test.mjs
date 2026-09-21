@@ -1,5 +1,16 @@
 import assert from "node:assert/strict";
+import { execFileSync, spawnSync } from "node:child_process";
+import {
+  mkdirSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
+import { tmpdir } from "node:os";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 
 import {
   classifyCapabilities,
@@ -7,6 +18,7 @@ import {
   parseChangedFiles,
   slackPayload,
 } from "./changed-changes.mjs";
+import { deliver, sendAll } from "./lib/notify.mjs";
 
 test("parses regular and renamed OpenSpec files from git's NUL format", () => {
   assert.deepEqual(
@@ -180,17 +192,9 @@ test("builds one Slack section for each changed status", () => {
     payload.blocks[0].text.text,
     ":new: OpenSpec *New*\n- <https://spec.grade10-stg.com/openspec/#/change/new-change|Add a cart> (`new-change`) — `proposal`, `spec`",
   );
-  assert.match(
-    payload.blocks[0].text.text,
-    /<https:\/\/spec\.grade10-stg\.com\/openspec\/#\/change\/new-change\|Add a cart> \(`new-change`\) — `proposal`, `spec`/,
-  );
   assert.equal(
     payload.blocks[1].text.text,
     ":pencil2: OpenSpec *Updated*\n- <https://spec.grade10-stg.com/openspec/#/change/active-change|Update &lt;copy&gt;> (`active-change`) — `tech-design`",
-  );
-  assert.match(
-    payload.blocks[1].text.text,
-    /Update &lt;copy&gt;.*`tech-design`/,
   );
   assert.match(
     payload.blocks[2].text.text,
@@ -201,6 +205,22 @@ test("builds one Slack section for each changed status", () => {
     /^:wastebasket: OpenSpec \*Removed\*\n/,
   );
   assert.match(payload.blocks.at(-1).elements[0].text, /1234567/);
+});
+
+test("names the commit sha in plain text when no --commit-url was given", () => {
+  const payload = slackPayload({
+    changes: { new: [], updated: [], archived: [], removed: [] },
+    commitSha: "1234567890",
+    commitUrl: "",
+    manualUrl: "https://spec.grade10-stg.com/planning",
+  });
+
+  const text = payload.blocks.at(-1).elements[0].text;
+  assert.equal(
+    text,
+    "<https://spec.grade10-stg.com/planning|Planning> | 1234567",
+  );
+  assert.doesNotMatch(text, /<\|/);
 });
 
 test("includes durable capability links in the Slack payload", () => {
@@ -228,4 +248,1059 @@ test("includes durable capability links in the Slack payload", () => {
     payload.blocks[0].text.text,
     ":new: OpenSpec *New capabilities*\n- <https://spec.grade10-stg.com/openspec/#/spec/grade10-site/auction/winner-journey|grade10-site/auction/winner-journey> — `spec`",
   );
+});
+
+// ── The stages, the hands and the messages ──────────────────────────────────
+
+/**
+ * One repository at two revisions, which is what a push is.
+ *
+ * The script reads the base through a worktree and the head through the
+ * checkout, so a fixture for it is one store committed twice — built the way
+ * `tools/manual/test/store-main.test.ts`'s `checkout()` builds one, with each
+ * commit carrying the day it is given so a freshness reading is exact rather
+ * than approximately today. The script stays where it is and takes `--root`:
+ * a copy in a temporary directory could not import `tools/manual/src/store`.
+ */
+
+const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
+const CHANGE = "probe";
+const DIR = `openspec/changes/${CHANGE}`;
+const DAY = 86_400_000;
+
+const SCHEMA = [
+  "name: demo-planning",
+  "version: 1",
+  "artifacts:",
+  "  - id: proposal",
+  "    hand: pm",
+  "    required: true",
+  "    generates: proposal.md",
+  "    requires: []",
+  "    upstream: []",
+  "  - id: decisions",
+  "    hand: pm",
+  "    required: true",
+  "    generates: decisions.md",
+  "    requires: [proposal]",
+  "    upstream: [proposal]",
+  "  - id: user-journeys",
+  "    hand: pm",
+  "    required: true",
+  "    generates: user-journeys.md",
+  "    requires: [decisions]",
+  "    upstream: [proposal, decisions]",
+  "  - id: ui-design",
+  "    hand: design",
+  "    required: false",
+  "    generates: ui-design.md",
+  "    requires: [decisions]",
+  "    upstream: [proposal, decisions]",
+  "  - id: tech-design",
+  "    hand: tech",
+  "    required: false",
+  "    generates: tech-design.md",
+  "    requires: [decisions]",
+  "    upstream: [proposal, decisions]",
+  "  - id: specs",
+  "    hand: pm",
+  "    required: true",
+  "    generates: spec.md",
+  "    requires: [tech-design]",
+  "    upstream: [proposal, decisions, user-journeys]",
+  "  - id: test-cases",
+  "    hand: qa",
+  "    required: true",
+  "    generates: feature-tcs.md",
+  "    requires: [specs]",
+  "    upstream: [proposal, decisions, user-journeys]",
+  "  - id: tasks",
+  "    hand: dev",
+  "    required: true",
+  "    generates: tasks.md",
+  "    requires: [specs]",
+  "    upstream: [tech-design]",
+  "",
+].join("\n");
+
+/** Five people: four with a Slack member, one QA hand the map gives none,
+ * and one channel per role for a stage whose hand a change does not name.
+ * QA and the release hand are two people here, as a change reaching staging
+ * tells two, so a message is read against the hand it reached. */
+const TEAM = [
+  "handles:",
+  "  dana:",
+  "    email: dana@test",
+  "    slack: U-DANA",
+  "    roles: [pm, design]",
+  "  erin:",
+  "    email: erin@test",
+  "    slack: U-ERIN",
+  "    roles: [tech, dev]",
+  "  fred:",
+  "    email: fred@test",
+  "    slack: U-FRED",
+  "    roles: [release]",
+  "  hana:",
+  "    email: hana@test",
+  "    slack: U-HANA",
+  "    roles: [qa]",
+  "  gina:",
+  "    email: gina@test",
+  "    roles: [qa]",
+  "channels:",
+  "  pm: C-PM",
+  "  design: C-DESIGN",
+  "  tech: C-TECH",
+  "  dev: C-DEV",
+  "  qa: C-QA",
+  "  release: C-RELEASE",
+  "",
+].join("\n");
+
+const HANDS = [
+  "hands:",
+  "  pm: dana",
+  "  design: dana",
+  "  tech: erin",
+  "  dev: erin",
+  "  qa: hana",
+  "  release: fred",
+];
+
+const record = (...lines) =>
+  ["schema: demo-planning", "created: 2026-10-01", ...lines, ""].join("\n");
+
+const proposalOf = (note = "") =>
+  ["# Probe", "", "## Why", "", `Nobody has.${note}`, ""].join("\n");
+
+const tasksMd = (done = 0) =>
+  [
+    "## 1. Build it (grade10-spec)",
+    "",
+    `- [${done >= 1 ? "x" : " "}] 1.1 Write it`,
+    `- [${done >= 2 ? "x" : " "}] 1.2 Ship it`,
+    "",
+  ].join("\n");
+
+/** Every artifact below `tasks`, so a fixture walks the ladder by writing
+ * files rather than by restating the schema. */
+const throughSpecs = (change = CHANGE) => ({
+  [`openspec/changes/${change}/decisions.md`]: "## Goals\n\n- One\n",
+  [`openspec/changes/${change}/user-journeys.md`]: "**Walked by:** nobody\n",
+  [`openspec/changes/${change}/ui-design.md`]: "## Screens\n\nOne.\n",
+  [`openspec/changes/${change}/tech-design.md`]: "## Decisions\n\nOne.\n",
+  [`openspec/changes/${change}/spec.md`]: "## Requirement\n\nOne.\n",
+  [`openspec/changes/${change}/feature-tcs.md`]: "## Cases\n\nOne.\n",
+});
+
+function sandbox() {
+  const root = mkdtempSync(join(tmpdir(), "notify-store-"));
+  /** `dana@test` unless a case says otherwise: the committer is what the team
+   * map resolves to a handle, so a landing pushed by a run is one argument. */
+  const git = (args, daysAgo = 0, email = "dana@test") => {
+    const at = new Date(Date.now() - daysAgo * DAY).toISOString();
+    return execFileSync(
+      "git",
+      [
+        "-c",
+        `user.email=${email}`,
+        "-c",
+        `user.name=${email.split("@")[0]}`,
+        ...args,
+      ],
+      {
+        cwd: root,
+        encoding: "utf8",
+        env: { ...process.env, GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at },
+      },
+    ).trim();
+  };
+  const write = (files) => {
+    for (const [path, text] of Object.entries(files)) {
+      const file = join(root, path);
+      mkdirSync(dirname(file), { recursive: true });
+      writeFileSync(file, text);
+    }
+  };
+  const drop = (path) => rmSync(join(root, path), { force: true });
+  const commit = (message, daysAgo = 0, email) => {
+    git(["add", "-A"], 0, email);
+    git(["commit", "--quiet", "-m", message], daysAgo, email);
+    return git(["rev-parse", "HEAD"]);
+  };
+  git(["init", "--quiet", "--initial-branch=main", "."]);
+  write({
+    "docs/prds/team.yaml": TEAM,
+    "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
+  });
+  return { root, git, write, drop, commit };
+}
+
+/** The script over a fixture store, its payloads printed and nothing sent. */
+function stages(root, args = []) {
+  const done = spawnSync(
+    process.execPath,
+    [
+      join(SCRIPTS, "changed-changes.mjs"),
+      "--stages",
+      "--root",
+      root,
+      "--workspace-url",
+      "grade10.slack.com",
+      "--manual-url",
+      "https://spec.test/planning",
+      ...args,
+    ],
+    { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } },
+  );
+  return { ...done, read: () => JSON.parse(done.stdout) };
+}
+
+const textOf = (messages, key) =>
+  messages.find((one) => one.key === key)?.text ?? "";
+
+test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-43 - --stages tells both hands the proposal's landing put on the change, linking the change page with no thread yet", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+  });
+  const head = commit("decide probe", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages, stages: reached } = read();
+
+  assert.equal(reached[CHANGE], "proposed");
+  assert.deepEqual(messages.map((one) => one.key).sort(), [
+    "probe:proposed:design",
+    "probe:proposed:tech",
+  ]);
+  assert.deepEqual(messages.map((one) => one.channel).sort(), [
+    "U-DANA",
+    "U-ERIN",
+  ]);
+  for (const message of messages) {
+    assert.equal(message.kind, "your-turn");
+    assert.equal(message.to, "member");
+    assert.match(message.text, /Probe/);
+    assert.match(message.text, /Proposed/);
+    // The change page, because the record names no thread.
+    assert.match(
+      message.text,
+      /https:\/\/spec\.test\/planning\/in-flight\/probe/,
+    );
+    assert.match(message.text, /`\/[a-z-]+ probe/);
+  }
+});
+
+test("shared-planning-change-stages-SC-40 - --stages links the change's thread where the record names one", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+    [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+  });
+  const head = commit("decide probe", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.equal(messages.length, 2);
+  for (const message of messages) {
+    // The thread's permalink, in place of the change page's link: the
+    // workspace host, the channel, and the timestamp with its dot taken out.
+    assert.match(
+      message.text,
+      /https:\/\/grade10\.slack\.com\/archives\/C0AB\/p1700000000000100/,
+    );
+    assert.doesNotMatch(message.text, /spec\.test\/planning\/in-flight/);
+  }
+});
+
+test("--stages names the stage a push moved a change into and tells its hand", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const head = commit("plan probe", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages, stages: reached, payload } = read();
+
+  assert.equal(reached[CHANGE], "planned");
+  assert.equal(messages.length, 1);
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.channel]),
+    [["probe:planned:dev", "U-ERIN"]],
+  );
+  assert.match(payload.blocks[0].text.text, /Planned/);
+});
+
+test("shared-planning-change-stages-SC-47 - --stages tells each hand of its own change when one push moves two", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    "openspec/changes/other/.openspec.yaml": record(...HANDS),
+    "openspec/changes/other/proposal.md": proposalOf(" Twice."),
+  });
+  const base = commit("propose both", 3);
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+    "openspec/changes/other/decisions.md": "## Goals\n\n- One\n",
+    "openspec/changes/other/user-journeys.md": "**Walked by:** nobody\n",
+  });
+  const head = commit("move both", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages, stages: reached, payload } = read();
+
+  assert.equal(reached.probe, "planned");
+  assert.equal(reached.other, "proposed");
+  const post = payload.blocks.map((block) => block.text?.text ?? "").join("\n");
+  assert.match(post, /probe.*Planned/s);
+  assert.match(post, /other.*Proposed/s);
+  assert.deepEqual(messages.map((one) => one.key).sort(), [
+    "other:proposed:design",
+    "other:proposed:tech",
+    "probe:planned:dev",
+  ]);
+});
+
+test("shared-planning-change-stages-SC-37 - --stages tells the engineer again when a reverted landing lands again", () => {
+  const { root, write, drop, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const planned = commit("plan probe", 5);
+  drop(`${DIR}/tasks.md`);
+  const reverted = commit("revert the plan", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(0) });
+  const again = commit("plan probe again", 1);
+
+  const first = stages(root, ["--base", reverted, "--head", planned]).read();
+  const second = stages(root, ["--base", reverted, "--head", again]).read();
+
+  // The revert took the stage back down, so the re-landing is a real move —
+  // and a second push is a second run, with its own sent keys.
+  assert.deepEqual(
+    first.messages.map((one) => one.key),
+    ["probe:planned:dev"],
+  );
+  assert.deepEqual(
+    second.messages.map((one) => one.key),
+    ["probe:planned:dev"],
+  );
+});
+
+test("shared-planning-change-stages-SC-38 - --stages tells nobody when a push only ticks a task", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(1) });
+  const head = commit("build probe 1.1", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages, stages: reached, payload } = read();
+
+  assert.equal(reached[CHANGE], "building");
+  assert.deepEqual(messages, []);
+  assert.match(payload.blocks[0].text.text, /probe.*Building/s);
+});
+
+test("shared-planning-change-stages-SC-70 - --stages names no change for a push that only writes the record's keys, and the thread still hears what landed", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      'promoted_by: "@dana"',
+      "thread: C0AB/1700000000.000100",
+      "reviewed:",
+      "  decisions: abcd1234",
+      "landed_by:",
+      "  tasks: erin",
+    ),
+  });
+  const head = commit("record the round", 1);
+  const output = join(root, "output.txt");
+
+  const { read } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+    "--github-output",
+    output,
+  ]);
+  const { messages, changes, matrix } = read();
+
+  // Nobody's turn moved, the change is named nowhere and the re-read matrix is
+  // empty. The one message owed is the thread's: `landed_by:` gained an entry,
+  // and the reply is about that very line, so a landing whose only file is the
+  // record is told all the same.
+  assert.deepEqual(
+    messages.map((one) => one.kind),
+    ["landed"],
+  );
+  assert.equal(messages[0].key, `probe:landed:${head}`);
+  assert.deepEqual(changes.updated, []);
+  assert.deepEqual(matrix, []);
+  assert.match(readFileSync(output, "utf8"), /^matrix=\[\]$/m);
+});
+
+test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand what changed before it", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose probe", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  const head = commit("reword the proposal", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages } = read();
+
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.kind, one.channel]),
+    [["probe:behind:decisions", "behind", "U-DANA"]],
+  );
+  assert.match(textOf(messages, "probe:behind:decisions"), /decisions/);
+  assert.match(textOf(messages, "probe:behind:decisions"), /proposal/);
+});
+
+test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one push", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose probe", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  const head = commit("reword the proposal", 1);
+  const keys = join(root, "sent-keys.txt");
+  const args = ["--base", base, "--head", head, "--sent-keys", keys];
+
+  const first = stages(root, args).read();
+  const second = stages(root, args).read();
+
+  assert.deepEqual(
+    first.messages.map((one) => one.key),
+    ["probe:behind:decisions"],
+  );
+  assert.deepEqual(second.messages, []);
+  // The channel post is keyed by the push's own head, so it is written
+  // alongside the behind message and neither is written again on a re-run.
+  assert.deepEqual(
+    readFileSync(keys, "utf8").trim().split("\n").sort(),
+    [`channel:${head}`, "probe:behind:decisions"].sort(),
+  );
+});
+
+test("shared-planning-change-stages-SC-18 - --stages says it told a handle with no Slack member nothing", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(
+      "hands:",
+      "  qa: gina",
+      "  release: fred",
+      'promoted_by: "@dana"',
+      "deployed_env: staging",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(2) });
+  const head = commit("finish probe", 1);
+
+  const { read, stderr } = stages(root, ["--base", base, "--head", head]);
+  const { messages, skipped, stages: reached } = read();
+
+  assert.equal(reached[CHANGE], "on-staging");
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.channel]),
+    [["probe:on-staging:release", "U-FRED"]],
+  );
+  assert.deepEqual(
+    skipped.map((one) => one.key),
+    ["probe:on-staging:qa"],
+  );
+  assert.match(skipped[0].why, /gina/);
+  assert.match(stderr, /gina/);
+});
+
+test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel when the hand is unnamed", () => {
+  // Planned, not Proposed: Proposed holds the product manager until both
+  // second hands are named (decisions Q49), so an unnamed hand there is no
+  // turn of its own.
+  const { root, write, commit } = sandbox();
+  const named = ["hands:", "  pm: dana", "  design: dana", "  tech: erin"];
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...named),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...named, 'promoted_by: "@dana"'),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const head = commit("plan probe", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages } = read();
+
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.to, one.channel]),
+    [["probe:planned:dev", "channel", "C-DEV"]],
+  );
+  assert.match(messages[0].text, /`\/workflow-tasks probe`/);
+});
+
+test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel when the hand is taken off", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      "hands:",
+      "  pm: dana",
+      "  design: dana",
+      "  tech: erin",
+      'promoted_by: "@dana"',
+    ),
+  });
+  const head = commit("take the engineer off", 1);
+
+  const { read } = stages(root, ["--base", base, "--head", head]);
+  const { messages, stages: reached } = read();
+
+  assert.equal(reached[CHANGE], "planned");
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.to, one.channel]),
+    [["probe:planned:dev", "channel", "C-DEV"]],
+  );
+});
+
+test("--stages refuses a base the checkout cannot reach, naming the range", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const head = commit("propose probe", 1);
+  const missing = "0".repeat(40);
+
+  const done = stages(root, ["--base", missing, "--head", head]);
+
+  assert.equal(done.status, 1);
+  assert.match(done.stderr, new RegExp(`${missing}\\.\\.${head}`));
+});
+
+test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA and the release hand's own turn", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      'promoted_by: "@dana"',
+      "thread: C0AB/1700000000.000100",
+      "deployed_env: staging",
+      'deployed_build: "1.4.0-rc2"',
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(2) });
+  const head = commit("finish probe", 1);
+
+  const { read } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+    "--sheet-url",
+    "https://sheets.test/run",
+  ]);
+  const { messages } = read();
+
+  assert.deepEqual(
+    messages.map((one) => [one.key, one.kind, one.channel]),
+    [
+      ["probe:on-staging:qa", "staging", "U-HANA"],
+      ["probe:on-staging:release", "your-turn", "U-FRED"],
+    ],
+  );
+  assert.match(
+    textOf(messages, "probe:on-staging:qa"),
+    /https:\/\/sheets\.test\/run/,
+  );
+  assert.match(textOf(messages, "probe:on-staging:qa"), /1\.4\.0-rc2/);
+  assert.match(textOf(messages, "probe:on-staging:release"), /On staging/);
+  // The thread's permalink: the workspace host, the channel, and the
+  // timestamp with its dot taken out. A direct message is not a reply.
+  for (const message of messages) {
+    assert.match(
+      message.text,
+      /https:\/\/grade10\.slack\.com\/archives\/C0AB\/p1700000000000100/,
+    );
+    assert.equal(message.threadTs, undefined);
+  }
+});
+
+test("--stages says the words when no run sheet is configured", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      'promoted_by: "@dana"',
+      "deployed_env: staging",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(2) });
+  const head = commit("finish probe", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.match(textOf(messages, "probe:on-staging:qa"), /the run sheet/);
+});
+
+/** A landing as `plan:land` writes it: the artifacts, and the record naming
+ * whose word landed each. */
+const landedRecord = (...lines) =>
+  record(
+    ...HANDS,
+    ...lines,
+    "landed_by:",
+    "  proposal: dana",
+    "  decisions: dana",
+    "  user-journeys: dana",
+  );
+
+/** What the landing of Proposed's second half carries beside the record. */
+const PROPOSED = {
+  [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  [`${DIR}/user-journeys.md`]: "**Walked by:** nobody\n",
+};
+
+/** The trailer `plan:land` writes in wake mode, and only there: the landing
+ * commit says it was a run's, so the push leaves the reply to the run. */
+const WAKE_TRAILER = "\n\nWake: probe@C0AB/1700000000.000100";
+
+test("shared-planning-change-stages-SC-70 - --stages replies in the thread when a landing commit carries no `Wake:` trailer", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  const landed = messages.find((one) => one.kind === "landed");
+  assert.equal(landed.key, `probe:landed:${head}`);
+  assert.equal(landed.id, CHANGE);
+  assert.equal(landed.to, "channel");
+  assert.equal(landed.channel, "C0AB");
+  assert.equal(landed.threadTs, "1700000000.000100");
+  assert.match(
+    landed.text,
+    /\*Landed\* — `proposal`, `decisions`, `user-journeys` by @dana/,
+  );
+  assert.match(landed.text, /now at \*Proposed\*/);
+  assert.match(
+    landed.text,
+    /your turn: @dana \(designer\), @erin \(tech PIC\)/,
+  );
+});
+
+test("shared-planning-change-stages-SC-70 - --stages says nothing in the thread for a landing a run marked with the `Wake:` trailer", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  // A hosted run's landing, pushed by the same e-mail a person's would be:
+  // what says it is the run's is the trailer the run wrote, and the run has
+  // replied in the thread itself.
+  const head = commit(`land the three of probe on @dana${WAKE_TRAILER}`, 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  // Nothing in the thread, and the change's own Your turn messages still go
+  // out: the marker says who told the thread, not whether the push moved
+  // anybody.
+  assert.deepEqual(messages.map((one) => one.key).sort(), [
+    "probe:proposed:design",
+    "probe:proposed:tech",
+  ]);
+});
+
+test("shared-planning-change-stages-SC-70 - the thread's reply goes out whatever --dms says", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      ...HANDS,
+      "thread: C0AB/1700000000.000100",
+    ),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({
+    [`${DIR}/.openspec.yaml`]: landedRecord("thread: C0AB/1700000000.000100"),
+    ...PROPOSED,
+  });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const done = stages(root, ["--base", base, "--head", head, "--dms", "false"]);
+
+  // `--dms false` is the per-hand messages turned off; the reply in the
+  // thread is nobody's inbox and is delivered either way.
+  assert.match(done.stderr, new RegExp(`\\[probe:landed:${head}\\]`));
+  assert.doesNotMatch(done.stderr, /probe:proposed:design/);
+});
+
+test("shared-planning-change-stages-SC-70 - --stages posts no landing reply for a change whose record names no thread", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("propose probe", 3);
+  write({ [`${DIR}/.openspec.yaml`]: landedRecord(), ...PROPOSED });
+  const head = commit("land the three of probe on @dana", 1);
+
+  const { messages } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(messages.map((one) => one.kind).sort(), [
+    "your-turn",
+    "your-turn",
+  ]);
+});
+
+test("--stages matrix names the change the push touched, as its id alone", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose probe", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  const head = commit("reword the proposal", 1);
+  const output = join(root, "output.txt");
+
+  const { read } = stages(root, [
+    "--base",
+    base,
+    "--head",
+    head,
+    "--github-output",
+    output,
+  ]);
+  const { matrix } = read();
+
+  // The id alone: the job's own steps name `matrix.id`, and the change's
+  // thread is read from its record by the step that posts.
+  assert.deepEqual(matrix, [{ id: "probe" }]);
+  assert.match(readFileSync(output, "utf8"), /^matrix=\[\{"id":"probe"\}\]$/m);
+});
+
+test("--stages matrix names every change of one push whose behind set at head is not empty, in id order", () => {
+  const { root, write, commit } = sandbox();
+  for (const id of ["alpha", "zebra"]) {
+    write({
+      [`openspec/changes/${id}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+      [`openspec/changes/${id}/proposal.md`]: proposalOf(),
+      [`openspec/changes/${id}/decisions.md`]: "## Goals\n\n- One\n",
+    });
+  }
+  const base = commit("propose both", 10);
+  for (const id of ["alpha", "zebra"]) {
+    write({
+      [`openspec/changes/${id}/proposal.md`]: proposalOf(" Again."),
+    });
+  }
+  const head = commit("reword both proposals", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  // One entry per change, in id order: the job runs them as a matrix, and
+  // the order is the store's own rather than the diff's.
+  assert.deepEqual(matrix, [{ id: "alpha" }, { id: "zebra" }]);
+});
+
+test("--stages matrix names a change the push touched that was behind already", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana", "  design: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  commit("propose and decide", 10);
+  write({ [`${DIR}/proposal.md`]: proposalOf(" Again.") });
+  // The decisions are behind before this push, and stay behind after it: the
+  // designer's own landing arrives with nothing newly behind, and the read
+  // again is still owed on what is.
+  const base = commit("reword the proposal", 5);
+  write({ [`${DIR}/ui-design.md`]: "## Screens\n\nOne.\n" });
+  const head = commit("draw the screens", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, [{ id: CHANGE }]);
+});
+
+test("--stages matrix names nothing when nothing at head is behind", () => {
+  const { root, write, commit } = sandbox();
+  write({
+    ...throughSpecs(),
+    [`${DIR}/.openspec.yaml`]: record(...HANDS, 'promoted_by: "@dana"'),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/tasks.md`]: tasksMd(0),
+  });
+  const base = commit("plan probe", 3);
+  write({ [`${DIR}/tasks.md`]: tasksMd(1) });
+  const head = commit("build probe 1.1", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, []);
+});
+
+test("--stages matrix excludes a push that only writes the record's keys", () => {
+  const { root, write, commit } = sandbox();
+  // Proposal and decisions committed together read fresh by the commit-date
+  // fallback (no `reviewed:` line yet, and neither is later than the other).
+  write({
+    [`${DIR}/.openspec.yaml`]: record("hands:", "  pm: dana"),
+    [`${DIR}/proposal.md`]: proposalOf(),
+    [`${DIR}/decisions.md`]: "## Goals\n\n- One\n",
+  });
+  const base = commit("propose and decide", 5);
+  // A re-read's own commit: only the record's keys change, and the wrong
+  // content id it writes would otherwise read `decisions` as newly behind —
+  // exactly the case the exclusion exists for, since nothing about the push
+  // itself moved anything.
+  write({
+    [`${DIR}/.openspec.yaml`]: record(
+      "hands:",
+      "  pm: dana",
+      "reviewed:",
+      "  decisions: deadbeef",
+    ),
+  });
+  const head = commit("record the round", 1);
+
+  const { matrix } = stages(root, ["--base", base, "--head", head]).read();
+
+  assert.deepEqual(matrix, []);
+});
+
+test("the sender posts each message once and retries a 429 once", async () => {
+  const calls = [];
+  let first = true;
+  const fetched = async (url, init) => {
+    calls.push({
+      url,
+      ...JSON.parse(init.body),
+      auth: init.headers.Authorization,
+    });
+    if (first) {
+      first = false;
+      return {
+        status: 429,
+        headers: new Map([["retry-after", "0"]]),
+        json: async () => ({ ok: false, error: "ratelimited" }),
+      };
+    }
+    return {
+      status: 200,
+      headers: new Map(),
+      json: async () => ({ ok: true }),
+    };
+  };
+
+  const sent = await sendAll(
+    [
+      {
+        key: "probe:planned:dev",
+        to: "member",
+        channel: "U-ERIN",
+        text: "One",
+      },
+      {
+        key: "probe:behind:decisions",
+        to: "channel",
+        channel: "C-DESIGN",
+        text: "Two",
+        threadTs: "1700000000.000100",
+      },
+    ],
+    { token: "xoxb-test", fetch: fetched, sleep: async () => {} },
+  );
+
+  assert.deepEqual(sent, ["probe:planned:dev", "probe:behind:decisions"]);
+  assert.equal(calls.length, 3);
+  assert.equal(calls[0].url, "https://slack.com/api/chat.postMessage");
+  assert.equal(calls[0].auth, "Bearer xoxb-test");
+  assert.equal(calls[1].channel, "U-ERIN");
+  assert.equal(calls[2].thread_ts, "1700000000.000100");
+});
+
+test("the sender's refusal carries what it did send before the channel it was refused", async () => {
+  const fetched = async (_url, init) => {
+    const body = JSON.parse(init.body);
+    if (body.channel === "C-BAD") {
+      return {
+        status: 200,
+        headers: new Map(),
+        json: async () => ({ ok: false, error: "not_in_channel" }),
+      };
+    }
+    return {
+      status: 200,
+      headers: new Map(),
+      json: async () => ({ ok: true }),
+    };
+  };
+
+  await assert.rejects(
+    () =>
+      sendAll(
+        [
+          {
+            key: "probe:planned:dev",
+            to: "member",
+            channel: "U-ERIN",
+            text: "One",
+          },
+          {
+            key: "probe:behind:decisions",
+            to: "channel",
+            channel: "C-BAD",
+            text: "Two",
+          },
+        ],
+        { token: "xoxb-test", fetch: fetched, sleep: async () => {} },
+      ),
+    (error) => {
+      assert.match(error.message, /C-BAD/);
+      assert.deepEqual(error.sent, ["probe:planned:dev"]);
+      return true;
+    },
+  );
+});
+
+test("deliver keys what went out even when the rest is refused", async () => {
+  const keys = join(mkdtempSync(join(tmpdir(), "deliver-keys-")), "sent.txt");
+  const fetched = async (_url, init) => {
+    const body = JSON.parse(init.body);
+    if (body.channel === "C-BAD") {
+      return {
+        status: 200,
+        headers: new Map(),
+        json: async () => ({ ok: false, error: "not_in_channel" }),
+      };
+    }
+    return {
+      status: 200,
+      headers: new Map(),
+      json: async () => ({ ok: true }),
+    };
+  };
+
+  await assert.rejects(() =>
+    deliver(
+      [
+        {
+          key: "probe:planned:dev",
+          to: "member",
+          channel: "U-ERIN",
+          text: "One",
+        },
+        {
+          key: "probe:behind:decisions",
+          to: "channel",
+          channel: "C-BAD",
+          text: "Two",
+        },
+      ],
+      {
+        file: keys,
+        send: true,
+        token: "xoxb-test",
+        fetch: fetched,
+        sleep: async () => {},
+      },
+    ),
+  );
+
+  assert.equal(readFileSync(keys, "utf8").trim(), "probe:planned:dev");
 });

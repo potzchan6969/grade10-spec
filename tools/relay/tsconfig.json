@@ -1,0 +1,11 @@
+{
+  // Two projects, as the manual's are: `src` runs in a Worker, where there is
+  // no `node:*` at all, and `test` runs under vitest, which is Node. One
+  // project over both would give the Worker's modules Node's types and hide
+  // the import that does not deploy.
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.src.json" },
+    { "path": "./tsconfig.test.json" }
+  ]
+}

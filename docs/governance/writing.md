@@ -53,7 +53,9 @@ nearest your task and keep it open while you draft.
     a decision, a value, a name, whether a way exists — and names who
     confirms it. It marks the page, not the product: nothing is built from
     it. The product page pools these lines as its pending spec, so the mark
-    sits where a reader can act on it
+    sits where a reader can act on it. The mark leads its line, its bullet
+    or its cell, after the key term at most, or opens a sentence of its own:
+    one written further into a sentence is read as words and pooled nowhere
   - 🚧 starts a line that is confirmed and being built: the page says what
     will run, an active change on its spec delivers it, and the mark comes
     off when that change archives. A line still open is never 🚧. One line
@@ -110,7 +112,7 @@ nearest your task and keep it open while you draft.
   is the suite's; how a surface arranges, labels or sizes an outcome is
   the design record's; how the code does it is the architecture doc's.
   The page is the essence a reader expands from, never the expansion: the
-  manual renders the suite under its `::cases` block, the change's artifacts on its In Flight
+  manual renders the suite under its `::cases` block, the change's artifacts on its Board
   entry, and the architecture doc from the engineer block's links
 - **The spec holds the contract** — a testable statement lives in
   `openspec/specs/` and nowhere else. A page states the rule in its own
@@ -213,7 +215,7 @@ A draft that fails one line is rewritten.
 | Held by | What |
 | --- | --- |
 | `pnpm check:manual` refuses | canonical form, block attributes, a block id that resolves nothing, an example ledger whose balance does not add up, a flow whose cases cannot be told apart, a 🚧 line no in-flight change delivers |
-| `pnpm check:manual` warns | a spec whose requirements changed meaning after the page embedding it was last committed, cleared by the edit the page needs or by a dated `reviewed:` in its frontmatter when it needs none; a prose reference naming nothing or two things; a ledger written as a table outside an example; and `dense`, below. A warning asks for the rewrite and never blocks a fold |
+| `pnpm check:manual` warns | a spec whose requirements changed meaning after the page embedding it was last committed, cleared by the edit the page needs or by a dated `reviewed:` in its frontmatter when it needs none; a prose reference naming nothing or two things; a ledger written as a table outside an example; a ❓ or `TBC` inside a sentence, read as words (`prose`); and `dense`, below. A warning asks for the rewrite and never blocks a fold |
 | Review | voice and shape, the way code is held to the spec |
 | The `writing-style` skill | loaded before drafting; it points here |
 

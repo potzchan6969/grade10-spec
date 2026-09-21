@@ -83,4 +83,4 @@ Three parts are load-bearing. Trim them and the prompt stops guarding the failur
 
 ## Keeping it current
 
-This prompt restates rules that live in [`design-code-sync.md`](../design-code-sync.md) and in the [`design-system-primitives` skill](../../../.cursor/skills/design-system-primitives/SKILL.md). Those two are authoritative; this file is a convenience. When a rule changes there, either update the paste block or delete the restated line and let the skill carry it — do not let the two drift and leave an agent following the stale copy.
+This prompt restates rules that live in [`design-code-sync.md`](../design-code-sync.md) and in the [`design-system-primitives` skill](../../../.claude/skills/design-system-primitives/SKILL.md). Those two are authoritative; this file is a convenience. When a rule changes there, either update the paste block or delete the restated line and let the skill carry it — do not let the two drift and leave an agent following the stale copy.

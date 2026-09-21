@@ -1,6 +1,9 @@
 import { existsSync } from "node:fs";
 import { join, posix } from "node:path";
 import YAML from "yaml";
+import { handleOf, isHandle } from "../../../../scripts/openspec/lib/team.mjs";
+import { askedIdsOf } from "../api/rounds.ts";
+import { ASKED_OF, ladderOf } from "../api/stages.ts";
 import type {
   ChangeEntry,
   ChangeStatus,
@@ -9,11 +12,14 @@ import type {
   DeltaKind,
   DeltaRequirement,
   IdleClaim,
+  OpenQuestion,
   PageSectionRef,
+  RoundRow,
   SchemaArtifact,
   TaskGroup,
   TaskLine,
 } from "../api/types.ts";
+import { type ChangeCapability, capabilitiesOf } from "./capabilities.mts";
 import {
   featureSuitePath,
   readText,
@@ -22,11 +28,12 @@ import {
   storePath,
   subdirectories,
   toItemError,
-  walkFiles,
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { leadingTitle, outline, type Section } from "./markdown.mts";
+import { leadingTitle, outline, type Section, tableRows } from "./markdown.mts";
+import { readLandings } from "./read-landings.mts";
+import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
 import { readTestCases } from "./read-specs.mts";
 
@@ -35,7 +42,6 @@ import { readTestCases } from "./read-specs.mts";
 // `(owner: unassigned)` and no tag are the same thing.
 const OWNER = /\(owner:\s*@?([A-Za-z0-9][A-Za-z0-9._-]*)\)/gi;
 const OWNER_TAG = new RegExp(OWNER.source, "i");
-const HANDLE = /^[A-Za-z0-9][A-Za-z0-9._-]*$/;
 const UNASSIGNED = "unassigned";
 
 /** The handle an owner tag names, lower-cased; nobody for `unassigned`. */
@@ -70,10 +76,23 @@ export function readChanges(
 ): ChangeEntry[] {
   const dir = join(root, "openspec", "changes");
   const schemas: SchemaCache = new Map();
+  // Two walks for the whole store rather than two per change, at the revision
+  // the task lists themselves are read from. An archived change is finished
+  // and is dated by nothing, so only these ask for a landing.
+  const landed = readLandings(root, main?.commit ?? null);
   return subdirectories(dir)
     .filter((name) => name !== "archive")
     .map((name) =>
-      readChange(root, join(dir, name), name, "in-flight", git, schemas, main),
+      readChange(
+        root,
+        join(dir, name),
+        name,
+        "in-flight",
+        git,
+        schemas,
+        main,
+        landed.get(name),
+      ),
     );
 }
 
@@ -117,6 +136,7 @@ function readChange(
   git: GitIndex,
   schemas: SchemaCache,
   main: StoreMain | null,
+  landed?: string,
 ): ChangeEntry {
   const rel = storePath(root, dir);
   const entry: ChangeEntry = {
@@ -124,6 +144,10 @@ function readChange(
     dir: rel,
     schema: "",
     status,
+    // The lowest rung, until the ladder is walked at the end of this read:
+    // every reader above it writes what the walk reads, and a record nothing
+    // could read stays here.
+    stage: "proposed",
     owners: [],
     created: "",
     title: humanize(id),
@@ -165,6 +189,12 @@ function readChange(
         const written = line(key, fields[key]);
         if (written) entry[field] = written;
       }
+      const hands = readIdMap("hands", fields.hands, handleOf);
+      if (hands) entry.hands = hands;
+      const landedBy = readIdMap("landed_by", fields.landed_by, handleOf);
+      if (landedBy) entry.landedBy = landedBy;
+      const reviewed = readIdMap("reviewed", fields.reviewed);
+      if (reviewed) entry.reviewed = reviewed;
       const skipped = skipSpecsOf(fields.skip_specs, fields.skip_specs_why);
       if (skipped !== undefined) entry.skipSpecs = skipped;
       const awaiting = readAwaiting(fields.awaiting);
@@ -232,12 +262,58 @@ function readChange(
     const suites = readSuites(root, dir);
     if (suites.length > 0) entry.suites = suites;
   }
+  // A schema that names an artifact it does not issue is reported against the
+  // change, the way a record nothing could read is: the ladder and the
+  // worklists then read an empty set, which claims nothing about what is owed.
+  let artifacts: SchemaArtifact[] = [];
+  try {
+    artifacts = artifactsOf(root, entry.schema, schemas);
+  } catch (cause) {
+    fail(`openspec/schemas/${entry.schema}/schema.yaml`, cause);
+  }
   entry.written = writtenArtifacts(
     dir,
     entry,
-    artifactsOf(root, entry.schema, schemas),
+    artifacts,
     tasks !== undefined,
+    capabilitiesOf(root, dir),
   );
+
+  // The round's record, written by the first landing and absent until then —
+  // read ahead of the decisions so an open question can be marked against the
+  // draft a round was actually reading rather than the file its row lives in.
+  const rounds: RoundRow[] = [];
+  if (detailed) {
+    const roundsText = readTextIfExists(join(dir, "rounds.md"));
+    if (roundsText !== undefined) {
+      entry.rounds = readRounds(roundsText);
+      rounds.push(...entry.rounds);
+    }
+  }
+
+  // In flight only: an archived change's interview is over, and both readers
+  // are pure over the text - a row nothing matches is a row nobody asked, so
+  // there is nothing here to catch and nothing to report.
+  const decisions = detailed
+    ? readTextIfExists(join(dir, "decisions.md"))
+    : undefined;
+  if (decisions !== undefined) {
+    const open = readQuestions(decisions, entry.hands, rounds);
+    if (open.length > 0) entry.questions = open;
+    const raised = openRaised(decisions);
+    if (raised > 0) entry.raisedOpen = raised;
+  }
+
+  // Only the landings: the last commit touching the directory is not one —
+  // a single repository-wide commit moves every change at once.
+  if (landed !== undefined) entry.lastLanded = landed;
+  // Last, and here rather than in the snapshot: the ladder reads what every
+  // reader above it has just written, and this is where the schema is at hand.
+  // Carried on the entry because six callers of `laneOf` would each otherwise
+  // have to fetch the schema to ask.
+  const ladder = ladderOf(entry, artifacts);
+  entry.stage = ladder.stage;
+  if (ladder.heldBy) entry.heldBy = ladder.heldBy;
   return entry;
 }
 
@@ -281,16 +357,16 @@ function artifactsOf(
  * The schema artifact ids this change has written, read against the schema's
  * own `generates` rather than a second list of ids here. An artifact that
  * generates a file inside a capability directory is written only when every
- * delta capability carries it — one capability's suite does not answer for
- * the others, which is how `blind` and `walked` already read them.
+ * capability the change touches carries it — one capability's suite does not
+ * answer for the others, which is how `blind` and `walked` already read them.
  */
 function writtenArtifacts(
   dir: string,
   entry: ChangeEntry,
   artifacts: SchemaArtifact[],
   planned: boolean,
+  capabilities: ChangeCapability[],
 ): string[] {
-  const capabilities = entry.deltas.map(({ spec }) => join(dir, "specs", spec));
   const present = ({ generates }: SchemaArtifact) => {
     if (generates === "tasks.md") return planned;
     if (!generates.startsWith("specs/"))
@@ -309,7 +385,7 @@ function writtenArtifacts(
       );
     return (
       capabilities.length > 0 &&
-      capabilities.every((one) => existsSync(join(one, name)))
+      capabilities.every((one) => one.files.has(name))
     );
   };
   return artifacts.filter(present).map(({ id }) => id);
@@ -358,12 +434,15 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
           deprecated: suite.cases.filter((one) => one.status === "deprecated")
             .length,
           total: suite.cases.length,
+          automated: suite.cases.filter(
+            (one) => one.automationStatus === "automated",
+          ).length,
         },
       });
     } catch (cause) {
       suites.push({
         spec,
-        cases: { draft: 0, actual: 0, deprecated: 0, total: 0 },
+        cases: { draft: 0, actual: 0, deprecated: 0, total: 0, automated: 0 },
         error: toItemError(casesFile, cause),
       });
     }
@@ -378,10 +457,14 @@ const RECORDED = [
   ["page_waived", "pageWaived"],
   ["decisions_waived", "decisionsWaived"],
   ["design_waived", "designWaived"],
+  ["ui_waived", "uiWaived"],
   ["deployed_at", "deployedAt"],
   ["deployed_env", "deployedEnv"],
+  ["deployed_build", "deployedBuild"],
   ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
+  ["thread", "thread"],
+  ["released_in", "releasedIn"],
 ] as const;
 
 /** `skip_specs` turns the whole cross-check off, so it is read on its own. The
@@ -403,17 +486,162 @@ export function skipSpecsOf(value: unknown, why: unknown): string | undefined {
   return line("skip_specs_why", why) ?? "";
 }
 
+/**
+ * A record key that maps an id to one line — `hands:` against a role,
+ * `landed_by:` and `reviewed:` against a schema artifact id.
+ *
+ * The line is read as written, normalized only by `normalize`, and an entry
+ * with no line is refused by `line` itself rather than read as absent: a blank
+ * entry claims the id is answered and answers it with nobody, which is the one
+ * reading no rule downstream could tell from a typo. What the line says is not
+ * judged here — an unknown role, an artifact id the schema does not issue and a
+ * value that is not one handle all survive the read, because the rules in
+ * `check/record.mjs` are what name them, and a reader that dropped them would
+ * leave those rules nothing to refuse.
+ */
+function readIdMap(
+  key: string,
+  value: unknown,
+  normalize: (one: string) => string = (one) => one,
+): Record<string, string> | undefined {
+  if (value === undefined || value === null) return undefined;
+  if (typeof value !== "object" || Array.isArray(value)) {
+    throw new StoreFileError(1, `\`${key}\` must be a mapping`);
+  }
+  const read: Record<string, string> = {};
+  for (const [id, written] of Object.entries(value)) {
+    const only = line(`${key}.${id}`, written);
+    if (only === undefined)
+      throw new StoreFileError(1, mustBeLine(`${key}.${id}`));
+    read[id] = normalize(only);
+  }
+  return Object.keys(read).length > 0 ? read : undefined;
+}
+
+/** The `Q` column of a `## Decisions` row: the number the round gave the
+ * question. */
+const DECISION_ROW = /^Q\d+$/;
+
+/**
+ * Which artifact or task group each open `Q<n>` was raised against, from
+ * every round's own Asked column — never `decisions.md`'s own row, which
+ * always names the file it lives in rather than the draft under challenge.
+ * A later round's line wins where an id somehow appears more than once,
+ * since it is the more recent reading; a round whose own Artifact cell names
+ * nothing (a malformed row `pnpm check:manual`'s `round` rule already
+ * refuses) raises against nobody rather than against an empty string.
+ */
+function artifactRaisedAgainst(rounds: RoundRow[]): Map<string, string> {
+  const found = new Map<string, string>();
+  for (const round of rounds) {
+    const resolved = roundArtifactOf(round.artifact);
+    if (resolved === null) continue;
+    for (const id of askedIdsOf(round.asked)) found.set(id, resolved);
+  }
+  return found;
+}
+
+/**
+ * The decisions rows nobody has settled, addressed to the hand each names.
+ *
+ * A row is open when its `Decided` cell is written `❓ <role> - <what is
+ * recommended>`, which is how the interview records what it could not close.
+ * The separator is the grammar: without it the cell is a sentence, and reading
+ * its first word as a role addresses the question to whatever the author began
+ * with. A cell that opens ❓ and names nobody by that grammar is left to its
+ * author rather than routed at a guess.
+ *
+ * Any role is read, the six or not: a question naming one outside them is
+ * listed under that role and routed to its channel, the way an unnamed hand
+ * is, and narrowing the set here would drop the question instead.
+ *
+ * Exported for the landing step, which refuses while a row is open and takes
+ * its recommendation on `--with-recommendations` (`scripts/openspec/lib/held.mjs`):
+ * the held rows are read here or nowhere, never by a second parser of the
+ * same table.
+ */
+export function readQuestions(
+  text: string,
+  hands?: Record<string, string> | undefined,
+  rounds: RoundRow[] = [],
+): OpenQuestion[] {
+  const open: OpenQuestion[] = [];
+  const raisedAgainst = artifactRaisedAgainst(rounds);
+  const decisions = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Decisions\b/.test(one.heading));
+  if (!decisions) return open;
+  for (const cells of tableRows(decisions.raw) ?? []) {
+    if (!DECISION_ROW.test(cells[0])) continue;
+    const asked = ASKED_OF.exec(cells[2] ?? "");
+    if (!asked) continue;
+    const [, role, recommended] = asked;
+    open.push({
+      id: cells[0],
+      artifact: raisedAgainst.get(cells[0]) ?? "decisions",
+      role,
+      hand: hands?.[role] ?? role,
+      text: cells[1] ?? "",
+      recommended,
+    });
+  }
+  return open;
+}
+
+/**
+ * The `Q<n>` ids one change's `## Decisions` table issues — answered, open or
+ * withdrawn alike. What the `cited` rule's `Q<n>` citation resolves against,
+ * read through the same table reader as `readQuestions` rather than a second
+ * regex over the file: two readers of one table drift the day a column moves.
+ */
+export function questionIdsOf(text: string): Set<string> {
+  const decisions = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Decisions\b/.test(one.heading));
+  if (!decisions) return new Set();
+  return new Set(
+    (tableRows(decisions.raw) ?? [])
+      .map((cells) => cells[0])
+      .filter((cell) => DECISION_ROW.test(cell ?? "")),
+  );
+}
+
+/**
+ * How many rows of `decisions.md`'s `## Raised` table have landed nowhere.
+ *
+ * The blind reading's questions live there — `Capability | Raised | Landed` —
+ * and the requirements are not settled while one of them is unanswered, which
+ * is why the ladder reads the count and not only the two files. A row's
+ * `Landed` cell is a `Q<n>` of this file or a ❓ on a page; what it says is the
+ * `raised` rule's to judge, and an empty cell is what is read here. A file
+ * with no table has nothing open, which is the same answer as a table whose
+ * every row landed.
+ */
+function openRaised(text: string): number {
+  const raised = outline(text)
+    .flatMap((one) => (one.level === 1 ? one.children : [one]))
+    .find((one) => /^Raised\b/.test(one.heading));
+  if (!raised) return 0;
+  // A row whose `Landed` cell is empty, which is the same judgement the
+  // `raised` rule makes of the same cell, over the same rows.
+  return (tableRows(raised.raw) ?? []).filter(
+    (cells) => (cells[2] ?? "") === "",
+  ).length;
+}
+
 /** A written line, or nothing where the key is absent or blank. Anything but
  * text is a malformed manifest: a record read as absent would waive the rule
  * the key answers to. */
 function line(key: string, value: unknown): string | undefined {
   if (value === undefined || value === null) return undefined;
-  if (typeof value !== "string") {
-    throw new StoreFileError(1, `\`${key}\` must be a line of text`);
-  }
+  if (typeof value !== "string") throw new StoreFileError(1, mustBeLine(key));
   const written = value.trim();
   return written === "" ? undefined : written;
 }
+
+/** One sentence for every key that owes a line, whether what was written is
+ * not text or is nothing at all. */
+const mustBeLine = (key: string) => `\`${key}\` must be a line of text`;
 
 /** `YYYY-MM-DD`, however the yaml spelled it — a bare date is a `Date` by the
  * time the parser is done with it. */
@@ -435,11 +663,13 @@ function strings(value: unknown): string[] {
 }
 
 /** `owner: echo`, `owner: "@echo"` and `owners: [echo, other]` all name the
- * same people; anything that is not a handle is not one. */
+ * same people; anything that is not a handle is not one. A key that maps an id
+ * to a handle keeps what was written where it is not one, for the rule that
+ * refuses it to name it. */
 function handles(values: unknown[]): string[] {
   const named = strings(values.flat())
-    .map((one) => one.replace(/^@/, "").trim().toLowerCase())
-    .filter((one) => HANDLE.test(one) && one !== UNASSIGNED);
+    .map(handleOf)
+    .filter((one) => isHandle(one) && one !== UNASSIGNED);
   return [...new Set(named)];
 }
 
@@ -582,18 +812,15 @@ function readTaskLines(text: string): TaskLine[] {
 }
 
 /** The `specs/**\/spec.md` files one change directory holds, each against the
- * spec id it is about. */
+ * spec id it is about — the capabilities of that directory that have reached
+ * their outline. */
 export function deltaFiles(
   root: string,
   dir: string,
 ): { spec: string; file: string }[] {
-  const specsDir = join(dir, "specs");
-  if (!existsSync(specsDir)) return [];
-  const prefix = `${storePath(root, specsDir)}/`;
-  return walkFiles(root, specsDir, "spec.md").map((file) => ({
-    spec: file.slice(prefix.length, -"/spec.md".length),
-    file,
-  }));
+  return capabilitiesOf(root, dir)
+    .filter((one) => one.files.has("spec.md"))
+    .map((one) => ({ spec: one.spec, file: `${one.dir}/spec.md` }));
 }
 
 /** Every delta file the archive holds, by the change id it belongs to.

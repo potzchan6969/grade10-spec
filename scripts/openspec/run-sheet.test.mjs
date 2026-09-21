@@ -23,16 +23,18 @@ import {
   quoteTab,
   READING_COLUMNS,
   RESULTS,
+  SUMMARY_COLUMNS,
   SURFACE_END,
   SURFACES,
 } from "./lib/run-sheet-layout.mjs";
 import {
+  automatedGateOf,
   buildGrid,
   caseRow,
   inReadingOrder,
   selectCases,
 } from "./lib/select-cases.mjs";
-import { parseSuite } from "./lib/suites.mjs";
+import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
 const SUITE = `# demo/thing/widget Test Cases
 
@@ -129,6 +131,33 @@ The user holds \`<a thing>\`.
 **Expected Results:**
 
 * Nothing happens.
+
+### demo-thing-widget-US1-TC4-1: A case an automated test already covers
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** demo-thing-widget-US-01
+
+**Decided by:** \`scripts/openspec/run-sheet.test.mjs\`
+
+**Pre-conditions:** None.
+
+**Steps:**
+
+1. Do the thing again.
+
+**Expected Results:**
+
+* It still happens.
 `;
 
 const parsed = parseSuite(SUITE);
@@ -170,11 +199,95 @@ test("only `actual` cases leave the store by default", () => {
   );
 });
 
+test("shared-planning-agent-rounds-SC-61 - an automated case is left out by default, and reported", () => {
+  const { picked, refused } = selectCases(candidates, {});
+  assert.equal(
+    picked.some((one) => one.tc.id === "demo-thing-widget-US1-TC4-1"),
+    false,
+  );
+  const left = refused.find((one) => one.id === "demo-thing-widget-US1-TC4-1");
+  assert.equal(left?.reason, "automation");
+});
+
+test("isAutomated reads the same case the automation gate does", () => {
+  const [thing, , , automated] = journey.cases;
+  assert.equal(isAutomated(thing), false);
+  assert.equal(isAutomated(automated), true);
+});
+
+test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
+  assert.equal(SUMMARY_COLUMNS.at(-1), "Automated left out");
+});
+
+test("shared-planning-agent-rounds-SC-61 - the count and its line, at none, one and many", () => {
+  // Said as zero rather than left unsaid: the printed line is what proves the
+  // gate ran at all, so a run that left nothing out still says so.
+  const automation = (many) =>
+    Array.from({ length: many }, (_, at) => ({
+      id: `demo-thing-widget-US1-TC${at + 5}-1`,
+      reason: "automation",
+    }));
+
+  for (const [many, line] of [
+    [0, "0 automated cases left out"],
+    [1, "1 automated case left out"],
+    [3, "3 automated cases left out"],
+  ]) {
+    const gate = automatedGateOf({ picked: [], refused: automation(many) });
+    assert.equal(gate.leftOut, many);
+    assert.equal(gate.included, 0);
+    assert.equal(gate.line, line);
+  }
+
+  // With the flag the run says what it took instead: nothing is left out, so
+  // the left-out count would read as a gate that did not run.
+  const taken = (many) =>
+    Array.from({ length: many }, () => ({ tc: journey.cases[3] }));
+  for (const [many, line] of [
+    [0, "0 automated cases included"],
+    [1, "1 automated case included"],
+    [4, "4 automated cases included"],
+  ]) {
+    const gate = automatedGateOf({
+      picked: taken(many),
+      refused: automation(2),
+      includeAutomated: true,
+    });
+    assert.equal(gate.included, many);
+    assert.equal(gate.line, line);
+  }
+});
+
+test("`--include-automated` takes an automated case too", () => {
+  const { picked } = selectCases(candidates, { includeAutomated: true });
+  assert.deepEqual(
+    picked.map((one) => one.tc.id).sort(),
+    ["demo-thing-widget-US1-TC1-1", "demo-thing-widget-US1-TC4-1"].sort(),
+  );
+});
+
+test("an explicit id is still held to the automation gate", () => {
+  const { picked, refused } = selectCases(candidates, {
+    ids: ["demo-thing-widget-US1-TC4-1"],
+  });
+  assert.equal(picked.length, 0);
+  assert.equal(refused[0]?.reason, "automation");
+});
+
 test("`--include-draft` takes drafts and still refuses a deprecated case", () => {
-  const { picked, refused } = selectCases(candidates, { includeDraft: true });
+  // The draft is also automated, so the automation gate is opened too: each
+  // gate is its own flag, and this case is about the status gate alone.
+  const { picked, refused } = selectCases(candidates, {
+    includeDraft: true,
+    includeAutomated: true,
+  });
   assert.deepEqual(
     picked.map((one) => one.tc.id),
-    ["demo-thing-widget-US1-TC1-1", "demo-thing-widget-US1-TC2-1"],
+    [
+      "demo-thing-widget-US1-TC1-1",
+      "demo-thing-widget-US1-TC2-1",
+      "demo-thing-widget-US1-TC4-1",
+    ],
   );
   assert.deepEqual(
     refused.map((one) => one.id),
@@ -293,4 +406,35 @@ test("a column index reads as its A1 letter past Z", () => {
   assert.equal(colLetter(0), "A");
   assert.equal(colLetter(25), "Z");
   assert.equal(colLetter(26), "AA");
+});
+
+test("shared-planning-agent-rounds-SC-78 - the left-out cases are named under the count, with what decides each", () => {
+  const { picked, refused } = selectCases(candidates, {});
+  const gate = automatedGateOf({ picked, refused });
+
+  assert.equal(gate.leftOut, 1);
+  assert.deepEqual(gate.leftOutLines, [
+    "  demo-thing-widget-US1-TC4-1 - scripts/openspec/run-sheet.test.mjs",
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a left-out case naming no test says so in the same shape", () => {
+  const gate = automatedGateOf({
+    picked: [],
+    refused: [
+      { id: "demo-thing-widget-US1-TC9-1", reason: "automation" },
+      {
+        id: "demo-thing-widget-US1-TC8-1",
+        reason: "automation",
+        decidedBy: ["scripts/a.test.mjs", "tools/manual/test/b.test.ts"],
+      },
+      { id: "demo-thing-widget-US1-TC7-1", reason: "status" },
+    ],
+  });
+
+  assert.equal(gate.leftOut, 2);
+  assert.deepEqual(gate.leftOutLines, [
+    "  demo-thing-widget-US1-TC9-1 - decided by no named test",
+    "  demo-thing-widget-US1-TC8-1 - scripts/a.test.mjs, tools/manual/test/b.test.ts",
+  ]);
 });

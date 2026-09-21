@@ -50,6 +50,7 @@ import {
   SURFACES,
 } from "./lib/run-sheet-layout.mjs";
 import {
+  automatedGateOf,
   buildGrid,
   inReadingOrder,
   readCandidates,
@@ -84,6 +85,7 @@ Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
   --include-draft     Also take \`draft\` cases (grey-banded in the tab)
+  --include-automated Also take cases an automated test already covers
   --sha <sha>         Commit to record; defaults to the current HEAD
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID
   --dry-run           Print what would be written and touch no network
@@ -101,6 +103,7 @@ function parseArgs(argv) {
     scope: null,
     cases: null,
     includeDraft: false,
+    includeAutomated: false,
     sha: null,
     sheet: process.env.TCS_SHEET_ID ?? null,
     dryRun: false,
@@ -122,6 +125,7 @@ function parseArgs(argv) {
       process.exit(0);
     } else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--include-draft") args.includeDraft = true;
+    else if (a === "--include-automated") args.includeAutomated = true;
     else if (a === "--cases") args.cases = (argv[++i] ?? "").split(",");
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
@@ -591,8 +595,20 @@ function dressing(sheetId, lines) {
  *
  * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
  * over cases automation has not reached is not reported as half failing.
+ *
+ * `Automated left out` repeats down the four rows like the provenance does:
+ * it is the run's count, not a surface's.
  */
-function summaryRows({ runId, tab, date, name, selection, sha, drafts }) {
+function summaryRows({
+  runId,
+  tab,
+  date,
+  name,
+  selection,
+  sha,
+  drafts,
+  automatedLeftOut,
+}) {
   const t = quoteTab(tab);
   return SURFACES.map((surface, i) => {
     const col = colLetter(MARKING_START + i);
@@ -616,6 +632,7 @@ function summaryRows({ runId, tab, date, name, selection, sha, drafts }) {
       count("skipped"),
       count("n/a"),
       `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
+      automatedLeftOut,
     ];
   });
 }
@@ -674,6 +691,7 @@ const {
   priority: args.priority,
   level: args.level,
   includeDraft: args.includeDraft,
+  includeAutomated: args.includeAutomated,
 });
 const picked = inReadingOrder(unordered);
 
@@ -689,18 +707,45 @@ if (missing.length > 0)
 const drafts = picked.filter(
   (one) => prop(one.tc, "Status") === "draft",
 ).length;
+// Left out by default, taken with the flag - said either way, and said as
+// zero rather than left unsaid, so a run's own printout is what proves the
+// gate ran (`shared-planning-agent-rounds-SC-61`). The count and the line are
+// `automatedGateOf`'s, beside the gate whose refusals they read.
+const {
+  leftOut: automatedLeftOut,
+  leftOutLines: automatedLeftOutLines,
+  line: automatedLine,
+} = automatedGateOf({
+  picked,
+  refused,
+  includeAutomated: args.includeAutomated,
+});
 
 console.log(
   `${bold("Run sheet")}  ${dim(`${picked.length} case${picked.length === 1 ? "" : "s"}${drafts ? `, ${drafts} draft` : ""}`)}\n`,
 );
+console.log(dim(automatedLine));
+// Each one by name, with what decides it: the count says the gate ran, and
+// these say where to read what it ran on (Q72).
+for (const line of automatedLeftOutLines) console.log(dim(line));
 if (picked.length === 0) {
+  // Split by reason, so a selection refused for its status alone never hints
+  // at the wrong flag: the two gates are read one at a time, and each names
+  // its own way past it.
+  const byStatus = refused.filter((one) => one.reason === "status").length;
+  const parts = [];
+  if (byStatus > 0) parts.push(`${byStatus} refused by the status gate`);
+  if (automatedLeftOut > 0) parts.push(`${automatedLeftOut} already automated`);
   console.log(
     yellow("Nothing selected."),
     dim(
-      `\n  ${candidates.length} cases read${args.scope ? ` under "${args.scope}"` : ""}; ` +
-        `${refused.length} refused by the status gate.` +
-        (refused.length > 0 && !args.includeDraft
+      `\n  ${candidates.length} cases read${args.scope ? ` under "${args.scope}"` : ""}` +
+        (parts.length > 0 ? `; ${parts.join(", ")}.` : ".") +
+        (byStatus > 0 && !args.includeDraft
           ? "\n  Most of the store is still `draft`; pass --include-draft to walk drafts."
+          : "") +
+        (automatedLeftOut > 0 && !args.includeAutomated
+          ? "\n  Every match is already automated; pass --include-automated to walk them anyway."
           : ""),
     ),
   );
@@ -784,6 +829,7 @@ const appended = await appendValues(
     selection: args.selection ?? "",
     sha,
     drafts,
+    automatedLeftOut,
   }),
 );
 const blockStart = startRowOf(appended.updates?.updatedRange);

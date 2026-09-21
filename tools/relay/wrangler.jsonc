@@ -1,0 +1,49 @@
+{
+  // The relay at https://grade10-relay.<subdomain>.workers.dev on the staging
+  // Cloudflare account, the same account the manual is deployed to. Wrangler
+  // is not a dependency here: the `deploy` script runs it through `pnpm dlx`
+  // at a pinned version, as the emails app's deploy does. The manual's runs
+  // bare `wrangler deploy` and takes whatever version answers.
+  "name": "grade10-relay",
+  "compatibility_date": "2026-08-01",
+  "account_id": "de021143aac704ccbda9c3cd00be261d",
+  "main": "src/worker.ts",
+  // One room per change, and one per Slack thread until a run names the
+  // change that thread is about. The room holds the queue, so two wakes on
+  // one change are one at a time however many edges they arrive on.
+  //
+  // One live object, named `main`, holding where `main` is and every open
+  // page's socket: `main` is one line, so a push is one broadcast however
+  // many pages are listening.
+  "durable_objects": {
+    "bindings": [
+      { "name": "ROOM", "class_name": "Room" },
+      { "name": "LIVE", "class_name": "Live" }
+    ]
+  },
+  // Append-only: a tag that has run on this Worker stays in the list as it
+  // stands, and a new class is a new tag after it.
+  "migrations": [
+    { "tag": "v1", "new_sqlite_classes": ["Room"] },
+    { "tag": "v2", "new_sqlite_classes": ["Live"] }
+  ],
+  // The Slack app's request URL and the workflow's wake URL are the
+  // workers.dev address; no custom domain is needed for either.
+  "workers_dev": true,
+  // Placeholders. Set the real values here before the second deploy:
+  // PLANNING_CHANNEL is the Slack channel id the planning threads live in,
+  // REPO is the store as `owner/name`, RELAY_URL is this Worker's own origin,
+  // which the payload hands the run to post back to, and SLACK_APP_USER is
+  // the app's own Slack member id, which an event that names none is read
+  // against.
+  "vars": {
+    "PLANNING_CHANNEL": "C00000000",
+    "REPO": "owner/name",
+    "RELAY_URL": "https://grade10-relay.workers.dev",
+    "SLACK_APP_USER": "U00000000"
+  }
+  // Secrets, each set with `pnpm dlx wrangler@4.120.0 secret put <name>`:
+  // SLACK_SIGNING_SECRET, SLACK_BOT_TOKEN, ROUTINE_FIRE_URL, ROUTINE_TOKEN,
+  // GITHUB_TOKEN, TOKEN_SECRET, WAKE_TOKEN, GITHUB_WEBHOOK_SECRET. No value of
+  // any of them belongs in this file or in any other file here.
+}

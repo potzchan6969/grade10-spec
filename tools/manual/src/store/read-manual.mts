@@ -1,7 +1,7 @@
 import { join } from "node:path";
 import YAML from "yaml";
 import type { ManualConfig, PageEntry, Taxonomy } from "../api/types.ts";
-import { GrammarError, parsePage } from "../content/grammar.ts";
+import { GrammarError, type PageAst, parsePage } from "../content/grammar.ts";
 import { readText, readTextIfExists, walkAll, walkFiles } from "./disk.mts";
 import type { GitIndex } from "./git.mts";
 import type { SpecShape } from "./read-specs.mts";
@@ -9,13 +9,23 @@ import { MANUAL_CONFIG, manualConfigPath, type Roots } from "./roots.mts";
 
 /** The manual is this app's own content, so a malformed page fails the build
  * rather than becoming a contained error entry. Paths are content-relative:
- * `docs/prds/products/<product>/<capability>.md`. */
-export function readManualPages(roots: Roots, git: GitIndex): PageEntry[] {
+ * `docs/prds/products/<product>/<capability>.md`.
+ *
+ * The parse is kept beside the entries. Every page is parsed here to prove it
+ * is one, and the freshness read needs the same tree to say what a linked
+ * section holds — so it is handed over rather than thrown away and read again
+ * from the source it was just parsed from. The snapshot ships the entries; the
+ * trees stay in the build. */
+export function readManualPages(
+  roots: Roots,
+  git: GitIndex,
+): { pages: PageEntry[]; asts: Map<string, PageAst> } {
   const root = roots.content;
-  return walkFiles(root, join(root, roots.manual), ".md").map((path) => {
+  const asts = new Map<string, PageAst>();
+  const pages = walkFiles(root, join(root, roots.manual), ".md").map((path) => {
     const source = readText(join(root, path));
     try {
-      parsePage(source);
+      asts.set(path, parsePage(source));
     } catch (cause) {
       const where = cause instanceof GrammarError ? `:${cause.line}` : "";
       const message = cause instanceof Error ? cause.message : String(cause);
@@ -26,6 +36,7 @@ export function readManualPages(roots: Roots, git: GitIndex): PageEntry[] {
     if (lastCommit) entry.lastCommit = lastCommit;
     return entry;
   });
+  return { pages, asts };
 }
 
 /** `assets/<name>` — the path an `::image` block writes, not the store path,

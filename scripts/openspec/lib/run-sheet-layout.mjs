@@ -152,6 +152,7 @@ export const SUMMARY_COLUMNS = [
   "Skipped",
   "N/A",
   "Pass rate",
+  "Automated left out",
 ];
 
 /** Alternating bands on the Summary, one per run rather than one per row, so a

@@ -1,3 +1,9 @@
+/** The clock a day count is counted on: a landing at 23:00 in Hong Kong is
+ * that day's, not the next UTC day's. One zone, the store's, because a day is
+ * a day here and a caller that could pass another would be two readers
+ * disagreeing about which day something landed on. */
+export const TIME_ZONE = "Asia/Hong_Kong";
+
 const MINUTE = 60_000;
 const HOUR = 60 * MINUTE;
 const DAY = 24 * HOUR;
@@ -22,6 +28,45 @@ export function relativeTime(iso: string, now: number = Date.now()): string {
 
 function plural(count: number, unit: string): string {
   return `${count} ${unit}${count === 1 ? "" : "s"} ago`;
+}
+
+/**
+ * Which day an instant falls on in one zone, as a count of days — the only
+ * arithmetic a calendar-day difference can be done with.
+ *
+ * Nothing where the instant cannot be read, which a caller shows as no answer
+ * rather than as 0: a landing at 23:00 in Hong Kong is that day's, and a date
+ * nobody can parse is not today.
+ */
+export function dayIn(
+  at: string | number | Date,
+  timeZone: string,
+): number | undefined {
+  const instant = at instanceof Date ? at : new Date(at);
+  if (Number.isNaN(instant.getTime())) return undefined;
+  const parts = new Intl.DateTimeFormat("en-US", {
+    timeZone,
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).formatToParts(instant);
+  const of = (type: string) =>
+    Number(parts.find((one) => one.type === type)?.value);
+  const day = Date.UTC(of("year"), of("month") - 1, of("day"));
+  return Number.isNaN(day) ? undefined : day / 86_400_000;
+}
+
+/** Whole calendar days from one instant to the next, on one zone's calendar.
+ * Never negative, and nothing where either side cannot be read. */
+export function daysBetween(
+  from: string | number | Date,
+  to: string | number | Date,
+  timeZone: string,
+): number | undefined {
+  const start = dayIn(from, timeZone);
+  const end = dayIn(to, timeZone);
+  if (start === undefined || end === undefined) return undefined;
+  return Math.max(0, end - start);
 }
 
 /**

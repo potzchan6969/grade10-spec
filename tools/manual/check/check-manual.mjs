@@ -72,7 +72,7 @@ import {
 } from "./context.mjs";
 import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
-import { checkMarks } from "./marks.mjs";
+import { checkMarkInProse, checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
 import { checkPlanned } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
@@ -81,9 +81,12 @@ import {
   checkAwaiting,
   checkDecided,
   checkDesign,
+  checkHands,
+  checkLandedBy,
   checkUnmarked,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
+import { checkRounds } from "./rounds.mjs";
 import { checkSections } from "./sections.mjs";
 import {
   checkCoverage,
@@ -125,7 +128,9 @@ const EMPTY_CONFIG = {
 export async function runChecks(
   target,
   git,
-  { pages: pagesOnly = false } = {},
+  // `roundsSince`: the day the `round` rule holds every change from, in place
+  // of `ROUND_RECORD_SINCE`; a test sets it, the CLI never does.
+  { pages: pagesOnly = false, roundsSince } = {},
 ) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
@@ -170,6 +175,7 @@ export async function runChecks(
     );
   }
   checkMarks(ctx, changes, pages);
+  checkMarkInProse(ctx, pages);
   checkDense(ctx, pages);
 
   if (!ctx.stories && ctx.storyIds.size > 0) {
@@ -202,8 +208,11 @@ export async function runChecks(
     checkDesign(ctx, changes);
     checkDecided(ctx, changes);
     checkPlanned(ctx, changes);
+    checkRounds(ctx, changes, roundsSince);
     checkAwaiting(ctx, changes);
-    checkArchived(ctx, readArchivedChanges(roots.store, index));
+    checkHands(ctx, changes);
+    checkLandedBy(ctx, changes);
+    checkArchived(ctx, readArchivedChanges(roots.store, index), roundsSince);
   } else {
     notes.push(
       `store rules not run — the store's own repository answers for ${roots.store}`,

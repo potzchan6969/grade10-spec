@@ -19,6 +19,10 @@ import {
 import type { GitIndex, StoreMain } from "./git.mts";
 import { findSection, leadingTitle, outline } from "./markdown.mts";
 import {
+  type ChangeThread,
+  readChangeHistories,
+} from "./read-change-history.mts";
+import {
   deltaFiles,
   deltaKindOf,
   deltaRequirementSections,
@@ -60,9 +64,26 @@ export function readChangeDocuments(
   main: StoreMain | null,
 ): ChangeDocument[] {
   const dir = join(root, "openspec", "changes");
+  // Two walks for the whole store, handed out per change the way `git` and
+  // `main` are. Only where the index found a repository: the fixture is read
+  // with none, and a reading whose commits nobody can look up would be a
+  // thread the machine that wrote it invented.
+  const histories =
+    git.head === ""
+      ? new Map<string, ChangeThread>()
+      : readChangeHistories(root, main?.commit ?? null);
   return subdirectories(dir)
     .filter((name) => name !== "archive")
-    .map((name) => readChangeDocument(root, join(dir, name), name, git, main));
+    .map((name) =>
+      readChangeDocument(
+        root,
+        join(dir, name),
+        name,
+        git,
+        main,
+        histories.get(name),
+      ),
+    );
 }
 
 export function readChangeDocument(
@@ -71,6 +92,8 @@ export function readChangeDocument(
   id: string,
   git: GitIndex,
   main: StoreMain | null,
+  /** The change's own thread, from the store-wide walks. */
+  thread?: ChangeThread,
 ): ChangeDocument {
   const rel = storePath(root, dir);
   const schema = schemaOf(dir);
@@ -94,6 +117,10 @@ export function readChangeDocument(
       planOf(dir, id, main).text !== undefined,
     ),
     deltas,
+    history: thread?.events ?? [],
+    ...(thread && Object.keys(thread.askedAt).length > 0
+      ? { askedAt: thread.askedAt }
+      : {}),
   };
 }
 
@@ -152,7 +179,9 @@ function inDeltas(
  * Every artifact the change could have, in schema order, then the markdown
  * files the schema never named — a change carrying a README carries it for a
  * reason, and a document that lists only what it expected hides half the
- * change. Those come last, since nothing says where they belong.
+ * change. Those come last, since nothing says where they belong. `rounds.md`
+ * is one of them: the round writes it and the schema issues no id for it, so
+ * it reads as a `doc` named `rounds`, whose text is the record's table.
  */
 function readArtifacts(
   dir: string,

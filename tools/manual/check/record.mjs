@@ -6,9 +6,16 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
+import {
+  isHandle,
+  memberOf,
+  ROLES,
+  TEAM_MAP,
+} from "../../../scripts/openspec/lib/team.mjs";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
-import { schemaArtifacts } from "../src/store/read-schema.mts";
+import { waiverLineOf } from "../src/api/waivers.ts";
 import { productPages } from "./context.mjs";
+import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
 /** The day the deploy record became a rule: every archive before it shipped
  * without one. */
@@ -167,70 +174,79 @@ export function checkDecided(ctx, changes) {
 /** An archive says which deploy carried it. The store cannot see the
  * application repository's runs, so it checks the record `pnpm plan shipped`
  * leaves — unless nothing in the change deploys, which the repository tags
- * already say. */
-export function checkArchived(ctx, archived) {
+ * already say.
+ *
+ * The same pass checks the other thing archive can lose: `rounds.md` is
+ * folded into no durable capability, so it archives with the change like
+ * `decisions.md` does, and the one way to lose it is an archived copy that
+ * does not carry it across. Held the way `round`'s own rule holds a change
+ * in flight — by the record's `landed_by:` line, or from the day after the
+ * kept skills go — because the store reads rows for a change in flight alone;
+ * an archive from the old flow owes nothing (`Q96`). */
+export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
   for (const change of archived) {
-    if (!change.shippedOn || change.shippedOn < DEPLOY_RECORD_SINCE) continue;
-    if (change.deployedAt || change.deployWaived) continue;
-    if (
-      change.taskGroups.length > 0 &&
-      change.taskGroups.every((one) => one.repo === STORE_GROUP)
-    ) {
-      continue;
+    if (change.shippedOn && change.shippedOn >= DEPLOY_RECORD_SINCE) {
+      if (!change.deployedAt && !change.deployWaived) {
+        const isStoreOnly =
+          change.taskGroups.length > 0 &&
+          change.taskGroups.every((one) => one.repo === STORE_GROUP);
+        if (!isStoreOnly) {
+          const file = fileOf(change, ".openspec.yaml");
+          const missing = existsSync(join(ctx.roots.store, file))
+            ? "records no deploy"
+            : "carries no `.openspec.yaml`, so it records no deploy";
+          ctx.add(
+            "archived",
+            file,
+            `${missing} — \`pnpm plan shipped ${change.id}\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
+          );
+        }
+      }
     }
-    const file = fileOf(change, ".openspec.yaml");
-    const missing = existsSync(join(ctx.roots.store, file))
-      ? "records no deploy"
-      : "carries no `.openspec.yaml`, so it records no deploy";
-    ctx.add(
-      "archived",
-      file,
-      `${missing} — \`pnpm plan shipped ${change.id}\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
-    );
+
+    if (heldToRounds(change, since)) {
+      const roundsFile = fileOf(change, "rounds.md");
+      if (!existsSync(join(ctx.roots.store, roundsFile))) {
+        ctx.add(
+          "round",
+          roundsFile,
+          "`rounds.md` is not in the archived copy — the rounds archive with the change and are folded nowhere, so a copy without it loses them",
+        );
+      }
+    }
   }
 }
 
 /**
  * A wait names an artifact of the change's own schema, and stops being a wait
- * once that artifact exists. Neither of these is a judgement about whether
- * the wait is over — only its author ends that — but about whether the line
- * says anything: an artifact the schema does not declare reaches no worklist
- * at all, and one already written is a record that contradicts the tree.
- * Both are one line to delete, in a file the author has just edited.
+ * once that artifact exists or the record waives it. None of these is a
+ * judgement about whether the wait is over — only its author ends that — but
+ * about whether the line says anything: an artifact the schema does not
+ * declare reaches no worklist at all, one already written is a record that
+ * contradicts the tree, and one the same record waives is the change saying
+ * both that nobody owes it and that it is waiting for it. Each is one line to
+ * delete, in a file the author has just edited.
  */
 const waitsOnSpecs = (change) =>
   (change.awaiting ?? []).some((one) => one.artifact === "specs");
 
 export function checkAwaiting(ctx, changes) {
-  const declared = new Map();
   for (const change of changes) {
     if (change.status !== "in-flight" || !change.awaiting) continue;
-    if (!declared.has(change.schema)) {
-      declared.set(
-        change.schema,
-        schemaArtifacts(ctx.roots.store, change.schema),
-      );
-    }
-    const artifacts = declared.get(change.schema);
+    const artifacts = ctx.schemaArtifacts(change.schema);
     // A schema this store does not define lives inside the CLI; nothing here
     // can say which artifacts it declares, so nothing is claimed about it.
     if (artifacts === undefined) continue;
     const known = new Set(artifacts.map((one) => one.id));
     const written = new Set(change.written);
-    if (change.skipSpecs !== undefined && waitsOnSpecs(change)) {
-      ctx.add(
-        "awaiting",
-        fileOf(change, ".openspec.yaml"),
-        "waits on `specs` and claims `skip_specs` — one says requirements are coming, the other that none are owed; drop whichever is untrue",
-      );
-    }
+    const waived = waiverLineOf(artifacts, change);
     for (const { artifact } of change.awaiting) {
       const file = fileOf(change, ".openspec.yaml");
       if (!known.has(artifact)) {
         ctx.add(
           "awaiting",
           file,
-          `waits on \`${artifact}\`, which the \`${change.schema}\` schema does not declare — name one of ${[...known].map((one) => `\`${one}\``).join(", ")}`,
+          `waits on \`${artifact}\`, which the \`${change.schema}\` schema does not issue — name one of ${[...known].map((one) => `\`${one}\``).join(", ")}`,
         );
       } else if (written.has(artifact)) {
         ctx.add(
@@ -238,7 +254,115 @@ export function checkAwaiting(ctx, changes) {
           file,
           `waits on \`${artifact}\`, which this change has written — the wait is over, so delete the line`,
         );
+      } else if (waived.has(artifact)) {
+        ctx.add(
+          "awaiting",
+          file,
+          `waives \`${artifact}\` with \`${waived.get(artifact)}\` and waits on it — one line says nobody owes it, the other that somebody does; drop whichever is untrue`,
+        );
       }
+    }
+  }
+}
+
+const KNOWN_ROLES = ROLES.map((one) => `\`${one}\``).join(", ");
+
+/**
+ * RULE `hands`: `hands:` maps one of the six roles to one handle each,
+ * written by the product manager at the interview's end, by Assign, or by
+ * `pnpm plan hand`. `readIdMap` in `read-changes.mts` already refuses a
+ * `hands:` that is not a mapping and an entry that is not a line of text —
+ * what survives that read is what this names: a role outside the six, a
+ * value shaped like more than one handle, and a handle `docs/prds/team.yaml`
+ * does not carry.
+ */
+export function checkHands(ctx, changes) {
+  // The team map failed to read: `store` already named it, and nothing here
+  // can say whether a handle is one it knows.
+  if (!ctx.team) return;
+  for (const change of changes) {
+    if (change.status !== "in-flight" || !change.hands) continue;
+    const file = fileOf(change, ".openspec.yaml");
+    for (const [role, handle] of Object.entries(change.hands)) {
+      if (!ROLES.includes(role)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}\` names no role this store knows — name one of ${KNOWN_ROLES}`,
+        );
+      } else if (!isHandle(handle)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}: ${handle}\` is not one handle`,
+        );
+      } else if (!memberOf(ctx.team, handle)) {
+        ctx.add(
+          "hands",
+          file,
+          `\`hands.${role}\` names \`${handle}\`, which \`${TEAM_MAP}\` does not know`,
+        );
+      }
+    }
+  }
+}
+
+/**
+ * RULE `landed_by`: `landed_by:` maps a schema artifact id to the handle
+ * whose word landed it, and `reviewed:` maps one to the content id it was
+ * last read against — both key a line by an artifact id, so an id the
+ * schema issues nowhere is refused the same way in either, and this is the
+ * one place that refusal is reported for both. `readIdMap` already refuses a
+ * mapping that is not one and an entry that is not a line of text; what
+ * survives that read is an id the schema does not issue, a value that is not
+ * one handle, and a handle the team map does not know — the same two steps
+ * over a handle that `checkHands` runs, so one mistyped handle reads the
+ * same way whichever key carries it.
+ */
+export function checkLandedBy(ctx, changes) {
+  // The team map failed to read: `store` already named it, and nothing here
+  // can say whether a handle is one it knows.
+  if (!ctx.team) return;
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    if (!change.landedBy && !change.reviewed) continue;
+    const artifacts = ctx.schemaArtifacts(change.schema);
+    // A schema this store does not define declares no artifacts here; nothing
+    // can be said about what it issues.
+    if (artifacts === undefined) continue;
+    const known = new Set(artifacts.map((one) => one.id));
+    const namedIds = [...known].map((one) => `\`${one}\``).join(", ");
+    const file = fileOf(change, ".openspec.yaml");
+
+    for (const [artifact, handle] of Object.entries(change.landedBy ?? {})) {
+      if (!known.has(artifact)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
+        );
+      } else if (!isHandle(handle)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}: ${handle}\` is not one handle`,
+        );
+      } else if (!memberOf(ctx.team, handle)) {
+        ctx.add(
+          "landed_by",
+          file,
+          `\`landed_by.${artifact}\` names \`${handle}\`, which \`${TEAM_MAP}\` does not know`,
+        );
+      }
+    }
+
+    for (const artifact of Object.keys(change.reviewed ?? {})) {
+      if (known.has(artifact)) continue;
+      ctx.add(
+        "landed_by",
+        file,
+        `\`reviewed.${artifact}\` names an artifact the \`${change.schema}\` schema does not issue — name one of ${namedIds}`,
+      );
     }
   }
 }

@@ -1,16 +1,13 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import {
-  citeTarget,
-  type Dependency,
-  dependenciesOf,
-  laneOf,
-  type ManualIndex,
-  taskTotals,
-} from "../api/derive";
-import type { ChangeEntry, ChangeSuite } from "../api/types";
+import { citeTarget, type ManualIndex } from "../api/derive";
+import type { Overlay } from "../api/overlays";
+import { draftedOf, roleTitle, stageShown } from "../api/stage-view";
+import { handOf, taskTotals } from "../api/stages";
+import type { ChangeEntry, SchemaArtifact } from "../api/types";
+import { Hands } from "./change-hand";
+import { OverlayChips } from "./change-overlays";
 import {
   Attribution,
   DeltaKinds,
@@ -21,33 +18,44 @@ import { CopyableCommand } from "./copyable-command";
 
 /**
  * What a review reads off a change at a glance, wherever the change is shown:
- * what it is waiting on, where it stands against main, who owns it and which
- * specs it touches, the suites riding it, how far the tasks are, and the next
+ * whose turn it is, what sits beside its stage, where it stands against main,
+ * who owns it and which specs it touches, how far the tasks are, and the next
  * action. The board's card composes them in one column; the change page lays
  * the same components out as a labelled grid, so the two never disagree about
  * a fact.
+ *
+ * The overlays are the card's one list of chips: exactly the five, read from
+ * the derivation the change page and every message read, so a dependency and
+ * a suite are each named once rather than twice under two names. What one of
+ * them carries beyond its chip — every dependency, a suite's counts — is the
+ * change page's, a labelled line at a time.
  */
 export function ChangeFacts({
-  index,
   change,
-  archived = [],
+  artifacts = [],
+  overlays = [],
   progress = false,
 }: {
-  index: ManualIndex;
   change: ChangeEntry;
-  archived?: ChangeEntry[];
+  /** The change's schema artifacts, for whose turn it is and whose each
+   * artifact is. */
+  artifacts?: SchemaArtifact[];
+  /** What sits beside the stage, as the board derived it. */
+  overlays?: Overlay[];
   /** Show the task bar here — where the task groups are not laid out below. */
   progress?: boolean;
 }) {
   const { done, total } = taskTotals(change);
-  const dependencies = dependenciesOf(change, index, archived);
 
   return (
     <>
-      <BlockedBy dependencies={dependencies} />
       <MainStateNote change={change} />
 
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
+        <Hands
+          change={change}
+          roles={handOf(change, stageShown(change), artifacts)}
+        />
         <Attribution change={change} claim />
         <ul className="flex flex-wrap items-center gap-2">
           {change.deltas.map((delta) => (
@@ -59,7 +67,7 @@ export function ChangeFacts({
         </ul>
       </div>
 
-      <SuiteLines change={change} />
+      <OverlayChips overlays={overlays} />
 
       {total > 0 && progress ? (
         <div className="mt-3">
@@ -77,46 +85,54 @@ export function ChangeFacts({
 }
 
 /**
- * The next action for the change's own state, as text to paste at an agent —
+ * The next action for the change's own stage, as text to paste at an agent —
  * the loop's continuation used to live nowhere, and its first casualty guessed
- * a skill name off a badge. In progress has none: the open task rows are the
- * work, and claiming them is the application repo's `pnpm plan claim`.
+ * a skill name off a badge.
+ *
+ * Read from the stage and never from a lane: what a change is waiting on is
+ * the command the hand of its stage pastes, and the five stages an agent
+ * drafts each name their own. The three it drafts nothing for — the deploy,
+ * the cut and the fold — leave the archive, which is the work still to do.
  */
 export function nextAction(
   change: ChangeEntry,
-): { command: string; note: string } | null {
-  const lane = laneOf(change);
-  if (lane === "in-progress") return null;
-  if (lane === "proposed")
-    return {
-      command: `/planning-pm ${change.id}`,
-      note: "point an agent at the proposal — it interviews the author, then writes the deltas",
-    };
-  if (lane === "specified")
-    return {
-      command: `/planning-dev ${change.id}`,
-      note: "the engineer picking this up writes the delivery plan",
-    };
-  return {
-    command: `/archive-change ${change.id}`,
-    note: "confirm it deployed, then fold it into the durable specs",
-  };
+): { command: string; note: string }[] {
+  const stage = stageShown(change);
+  const drafted = draftedOf(stage, change.id);
+  // One per hand the stage names: Designed is taken by two, and a card that
+  // offered one of their commands left the other hand nothing to paste.
+  if (drafted)
+    return drafted.moves.map((one) => ({
+      command: one.command,
+      note: `${roleTitle(one.role)}: ${one.move}`,
+    }));
+  if (stage === "archived") return [];
+  return [
+    {
+      command: `/archive-change ${change.id}`,
+      note: "confirm it deployed, then fold it into the durable specs",
+    },
+  ];
 }
 
 export function NextAction({ change }: { change: ChangeEntry }) {
-  const action = nextAction(change);
-  if (!action) return null;
-
   return (
-    <div className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1">
-      <Text as="span" size="xs" tone="secondary">
-        Next
-      </Text>
-      <CopyableCommand command={action.command} />
-      <Text as="span" size="xs" tone="secondary">
-        {action.note}
-      </Text>
-    </div>
+    <>
+      {nextAction(change).map((action) => (
+        <div
+          className="mt-3 flex flex-wrap items-center gap-x-2 gap-y-1"
+          key={action.command}
+        >
+          <Text as="span" size="xs" tone="secondary">
+            Next
+          </Text>
+          <CopyableCommand command={action.command} />
+          <Text as="span" size="xs" tone="secondary">
+            {action.note}
+          </Text>
+        </div>
+      ))}
+    </>
   );
 }
 
@@ -128,8 +144,11 @@ export function NextAction({ change }: { change: ChangeEntry }) {
 export function MainStateNote({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
   if (!state) return null;
+  const stage = stageShown(change);
   const blocked =
-    laneOf(change) === "complete" ? "archived" : "claimed or implemented";
+    stage === "on-staging" || stage === "released" || stage === "archived"
+      ? "archived"
+      : "claimed or implemented";
 
   return (
     <div className="mt-2.5 flex items-baseline gap-1.5 text-warning">
@@ -142,129 +161,6 @@ export function MainStateNote({ change }: { change: ChangeEntry }) {
           : `${state.files} artifact(s) in this checkout differ from ${state.ref} — merge these edits, or update this checkout to ${state.ref}, before building against this`}
       </Text>
     </div>
-  );
-}
-
-/**
- * The suites riding this change's deltas, with their review counts — the
- * QA work in flight that no durable surface can show, and the one line that
- * tells a PM their review request landed.
- */
-export function SuiteLines({ change }: { change: ChangeEntry }) {
-  const suites = change.suites ?? [];
-  if (suites.length === 0) return null;
-
-  return (
-    <ul className="mt-2.5 space-y-1">
-      {suites.map((suite) => (
-        <li
-          className="flex flex-wrap items-center gap-x-2 gap-y-1"
-          key={suite.spec}
-        >
-          <Text as="span" size="xs" tone="secondary">
-            Test cases · <span className="font-mono">{suite.spec}</span>
-          </Text>
-          {suite.error ? (
-            <Text as="span" className="text-destructive" size="xs">
-              {suite.error.message}
-            </Text>
-          ) : (
-            <>
-              <Badge
-                size="sm"
-                variant={suite.status === "approved" ? "success" : "warning"}
-              >
-                {suite.status}
-              </Badge>
-              <SuiteCounts suite={suite} />
-              {suite.cases.draft > 0 ? (
-                <CopyableCommand command={`/tcs-review ${change.id}`} />
-              ) : null}
-            </>
-          )}
-        </li>
-      ))}
-    </ul>
-  );
-}
-
-function SuiteCounts({ suite }: { suite: ChangeSuite }) {
-  const { cases } = suite;
-  const parts = [
-    cases.draft > 0 ? `${cases.draft} draft` : null,
-    cases.actual > 0 ? `${cases.actual} reviewed` : null,
-    cases.deprecated > 0 ? `${cases.deprecated} retired` : null,
-  ].filter((part): part is string => part !== null);
-
-  return (
-    <Text as="span" size="xs" tone="secondary">
-      {cases.total} {cases.total === 1 ? "case" : "cases"}
-      {parts.length > 0 ? ` · ${parts.join(" · ")}` : ""}
-    </Text>
-  );
-}
-
-/**
- * What a change is waiting on. A dependency still in flight is the loud one —
- * it is the reason this change cannot ship — a shipped one is said quietly so
- * the edge stays visible, and an id naming no change at all is a lie the board
- * says out loud rather than dropping.
- */
-export function BlockedBy({ dependencies }: { dependencies: Dependency[] }) {
-  if (dependencies.length === 0) return null;
-
-  return (
-    <ul className="mt-2.5 flex flex-wrap items-center gap-1.5">
-      <li>
-        <Text as="span" size="xs" tone="secondary">
-          Blocked by
-        </Text>
-      </li>
-      <DependencyPills dependencies={dependencies} />
-    </ul>
-  );
-}
-
-/** The pills alone, for a surface that labels the row itself. */
-export function DependencyPills({
-  dependencies,
-}: {
-  dependencies: Dependency[];
-}) {
-  return (
-    <>
-      {dependencies.map((dependency) => (
-        <li key={dependency.id}>
-          <DependencyPill dependency={dependency} />
-        </li>
-      ))}
-    </>
-  );
-}
-
-function DependencyPill({ dependency }: { dependency: Dependency }) {
-  const label = dependency.change?.title ?? dependency.id;
-
-  if (dependency.state === "missing") {
-    return (
-      <Badge
-        size="sm"
-        title={`\`depends_on: ${dependency.id}\` names no change, in flight or archived`}
-        variant="error"
-      >
-        {dependency.id} — names no change
-      </Badge>
-    );
-  }
-
-  const blocking = dependency.state === "blocking";
-  return (
-    <Link title={label} to={`/in-flight#${dependency.id}`}>
-      <Badge size="sm" variant={blocking ? "warning" : "outline"}>
-        <span className="max-w-56 truncate">{dependency.id}</span>
-        <span className="opacity-70">{blocking ? "in flight" : "shipped"}</span>
-      </Badge>
-    </Link>
   );
 }
 

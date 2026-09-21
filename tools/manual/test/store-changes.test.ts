@@ -14,7 +14,22 @@ const change = changes[0];
 
 describe("in-flight changes", () => {
   it("reads one entry per change directory, archive aside", () => {
-    expect(changes.map((one) => one.id)).toEqual(["add-thing"]);
+    expect(changes.map((one) => one.id)).toEqual([
+      "add-thing",
+      "demo-approved",
+      "demo-building",
+      "demo-designed",
+      "demo-half-designed",
+      "demo-on-staging",
+      "demo-overlays",
+      "demo-planned",
+      "demo-refund-window",
+      "demo-released",
+      "demo-specified",
+      "demo-unreadable",
+      "demo-waiting",
+      "demo-waived",
+    ]);
     expect(change.status).toBe("in-flight");
   });
 
@@ -312,11 +327,13 @@ describe("a promoted change carrying its suites", () => {
           "### alpha-TC-01: It happens",
           "",
           "- **Status:** actual",
+          "- **Automation status:** manual",
           "- **Trace:** alpha-SC-01",
           "",
           "### alpha-TC-02: It happens again",
           "",
           "- **Status:** draft",
+          "- **Automation status:** manual",
           "- **Trace:** alpha-SC-01",
           "",
         ].join("\n"),
@@ -334,7 +351,7 @@ describe("a promoted change carrying its suites", () => {
       {
         spec: "demo-product/alpha",
         status: "pending-review",
-        cases: { draft: 1, actual: 1, deprecated: 0, total: 2 },
+        cases: { draft: 1, actual: 1, deprecated: 0, total: 2, automated: 0 },
       },
     ]);
   });

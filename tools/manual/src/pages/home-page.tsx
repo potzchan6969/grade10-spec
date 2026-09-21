@@ -3,8 +3,9 @@ import { IconButton } from "@grade10/design-system/components/forms/icon-button"
 import { X } from "@phosphor-icons/react";
 import { useState } from "react";
 import { Link } from "react-router";
-import { byLastMoved, isProposal, taskTotals } from "../api/derive";
+import { byLastMoved, isProposal } from "../api/derive";
 import { pagePath } from "../api/paths";
+import { taskTotals } from "../api/stages";
 import { relativeTime } from "../api/time";
 import { useManualIndex } from "../api/use-manual-index";
 import { BlockList } from "../blocks/block-list";
@@ -150,7 +151,7 @@ function WelcomeCard() {
 }
 
 /** What is moving is what someone is delivering; a proposal has moved nowhere
- * yet, and it lives on the In Flight board's own lane. */
+ * yet, and it lives on the Board's own lane. */
 function WhatsMoving() {
   const index = useManualIndex();
   const moving = index.snapshot.changes

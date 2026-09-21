@@ -6,6 +6,11 @@ disable-model-invocation: true
 
 # Dev help
 
+Kept until the team has adopted the line commands (`Q84` of
+`run-a-round-on-every-artifact`). The tables below are the pre-workflow
+line, printed as they stood; the line today is `/workflow-plan` to
+`/workflow-land`, tabled in `AGENTS.md`.
+
 Print both tables below as-is, then suggest the next skill from this session.
 Do **not** run, attach, or start the suggested skill. The contributor
 invokes it.

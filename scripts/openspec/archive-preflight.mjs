@@ -2,14 +2,14 @@
 /**
  * Run this before `openspec archive <change-id>`:
  *
- *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env>
+ *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>]
  *   pnpm run archive:preflight <change-id> --deploy-waived "<who waived it, why>"
  *
  * The application repository runs this through `pnpm plan shipped <change-id>`,
  * which finds the deployed sha and commits the record. Run it by hand only to
  * write a waiver.
  *
- * The archive has four gates, and they used to be prose in a skill file —
+ * The archive has five gates, and they used to be prose in a skill file —
  * which made the honest path and the fast path differ by forty minutes with
  * only one leaving a record. This makes them mechanical:
  *
@@ -23,11 +23,25 @@
  *          nobody wrote. Either way the record says so: check them off, or
  *          name the decision with `--tasks-waived`.
  *
+ * BEHIND   Nothing is built on an artifact that is behind what it was drawn
+ *          from, and the fold is no exception: this reads the change through
+ *          the store's own reader — pages included, so a `reviewed:` id
+ *          hashes what it always hashes — and compares it with `behindOf`,
+ *          the same way `check:manual` and the manual do, refusing while
+ *          anything is and naming what changed before it. Not waivable — the
+ *          round's re-read is what clears it, and it runs on every clone:
+ *          a `reviewed:` id needs no history to compare.
+ *
  * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
  *          and its suites — and every `-US-` id in them — die with the change
  *          unless someone copies them into the durable capability. This checks
  *          whether they were carried, and refuses while they are not.
+ *          `rounds.md` is carried too, but sideways: it is folded into no
+ *          capability and archives with the change, so nothing here can check
+ *          it before the archive exists — `pnpm check:manual`'s `round` rule
+ *          reads the archived copy afterwards and refuses one that left it
+ *          behind.
  *          `--journeys-copied` acknowledges a delta whose capability has no
  *          durable spec yet: the fold creates it, so the copy can only happen
  *          right after — the flag is a promise, and the sections stay on
@@ -59,14 +73,20 @@
  * A clear run writes what it was told into the change's `.openspec.yaml`, so
  * the record archives with the change and `pnpm check:manual` can read it back.
  *
- * Zero dependencies, no `openspec` call — the checks read the change's own
- * files, and its checkmarks on the store's main, where `plan-preflight.mjs`
- * reads claims too.
+ * No `openspec` call — every other gate reads the change's own files, and its
+ * checkmarks on the store's main, where `plan-preflight.mjs` reads claims
+ * too. BEHIND is the one gate that reads the store's own change reader,
+ * because a second reading of what is behind would drift from the one
+ * `check:manual` and the manual already carry.
  */
 
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
+import { behindOf } from "../../tools/manual/src/api/stages.ts";
+import { readChangeEntry } from "./lib/store-read.mjs";
+import { parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -77,7 +97,18 @@ const green = (s) => c("32", s);
 const yellow = (s) => c("33", s);
 const cyan = (s) => c("36", s);
 
-const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+const HERE = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
+
+// `--root <dir>` is read here, ahead of everything else below, and dropped
+// from `argv` — as `plan-land.mjs` reads its own — so the change id and
+// every other flag are read at their usual position whichever side of the
+// store it names the flag sits on. This store's own tests run the checkout's
+// script against a throwaway store this way, rather than a copy of the tree
+// it imports from.
+const argv = process.argv.slice(2);
+const rootIndex = argv.indexOf("--root");
+const ROOT = rootIndex === -1 ? HERE : (argv[rootIndex + 1] ?? HERE);
+if (rootIndex !== -1) argv.splice(rootIndex, 2);
 const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
@@ -100,8 +131,11 @@ const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 const RECORD_KEYS = new Set([
   "deployed_at",
   "deployed_env",
+  "deployed_build",
   "deploy_waived",
   "tasks_waived",
+  "decisions_carried",
+  "journeys_copied",
 ]);
 const SHOWN = 10;
 
@@ -218,6 +252,21 @@ function bullets(body) {
   return found.map((line) => line.replace(/\s+/g, " ").trim()).filter(Boolean);
 }
 
+/** Every case in a suite that names what decides it: id -> the paths as the
+ *  line writes them. Read through the store's own suite parser, so the fold
+ *  compares what `tcs:validate` reads rather than a second reading of the
+ *  same line. */
+function decidedByOf(text) {
+  const named = new Map();
+  for (const journey of parseSuite(text).journeys) {
+    for (const tc of journey.cases) {
+      if (tc.decidedBy.length > 0)
+        named.set(tc.id, tc.decidedBy.map((one) => one.path).join(", "));
+    }
+  }
+  return named;
+}
+
 /** Whether every task group of a task list lands in this store. Such a change
  * deploys nothing, so there is no run to point at and no waiver owed — the same
  * exemption `check:manual`'s `archived` rule already grants, which this script
@@ -271,21 +320,26 @@ function writeRecord(changeId, entries) {
 
 function help() {
   console.log(
-    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> | --deploy-waived "<why>"`,
+    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>] | --deploy-waived "<why>"`,
   );
   console.log(
     dim(
       '                             [--tasks-waived "<who, why>"] [--journeys-copied]',
-      '                             [--decisions-carried "<what went where, or none>"]',
+      '                             [--decisions-carried "<what went where, or none>"] [--root <dir>]',
     ),
   );
   console.log(
-    dim("  The archive's four gates, mechanical: proof of deploy, every task"),
+    dim("  The archive's five gates, mechanical: proof of deploy, every task"),
   );
   console.log(
-    dim("  checked off, the decisions that outlive the change put on the PRD,"),
+    dim("  checked off, nothing behind what it was drawn from, the decisions"),
   );
-  console.log(dim("  and the purpose / feature set / journeys / suites copy"));
+  console.log(
+    dim(
+      "  that outlive the change put on the PRD, and the purpose / feature set /",
+    ),
+  );
+  console.log(dim("  journeys / suites copy"));
   console.log(
     dim(
       "  the fold would discard, done and done right. A clear run writes the",
@@ -310,7 +364,6 @@ function fail(...lines) {
   process.exitCode = 1;
 }
 
-const argv = process.argv.slice(2);
 const changeId = argv[0];
 if (!changeId || changeId === "--help" || changeId === "-h") {
   help();
@@ -319,6 +372,7 @@ if (!changeId || changeId === "--help" || changeId === "-h") {
 
 let deployedAt = null;
 let deployedEnv = null;
+let deployedBuild = null;
 let deployWaived = null;
 let tasksWaived = null;
 let journeysCopied = false;
@@ -326,6 +380,7 @@ let decisionsCarried = null;
 for (let i = 1; i < argv.length; i += 1) {
   if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
   else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
+  else if (argv[i] === "--deployed-build") deployedBuild = argv[++i] ?? null;
   else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
   else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else if (argv[i] === "--journeys-copied") journeysCopied = true;
@@ -377,6 +432,10 @@ if (deployedAt !== null && deployWaived !== null) {
     yellow("Pass --deployed-at or --deploy-waived, not both."),
     "One says the change shipped; the other says who decided to archive without proof.",
   );
+  process.exit();
+}
+if (deployedAt === null && deployedBuild !== null) {
+  fail(yellow("--deployed-build names a build for no sha."));
   process.exit();
 }
 if (deployedAt === null && deployWaived === null && !storeOnly(tasks ?? "")) {
@@ -448,6 +507,37 @@ if (open.length > 0 && tasksWaived === null) {
     "out loud, on the same command:",
     "",
     `  ${cyan('--tasks-waived "<who waived it, why>"')}`,
+  );
+  process.exit();
+}
+
+// ── Behind gate ─────────────────────────────────────────────────────────────
+// Nothing is built on a behind artifact, and the fold is no exception: an
+// artifact drawn from something that has since changed is read from a
+// requirement nobody has read again. `readChangeEntry` is the store's own
+// change reader — pages included, so a linked section's `reviewed:` id
+// hashes the same text it always hashes — and `behindOf` is the same pure
+// comparison over its reading that `check:manual`, the manual and the round
+// all read. It runs on every clone: a `reviewed:` id is a hash of the text
+// before the artifact, so the comparison that reads it needs no history at
+// all, and the dated fallback beside it marks only what a commit dates
+// strictly later — which a clone holding one commit never does. A shallow
+// clone therefore reads every stale id and invents no behind artifact of its
+// own.
+const { entry, artifacts } = await readChangeEntry(ROOT, changeId);
+const behind = behindOf(entry, artifacts);
+if (behind.length > 0) {
+  fail(
+    yellow(`${changeId} archives with ${behind.length} artifact(s) behind:`),
+  );
+  for (const one of behind) {
+    console.error(`  ${one.artifact} — ${behindLabelOf(one)}`);
+  }
+  fail(
+    "",
+    "Nothing is built on a behind artifact, and the fold is no exception.",
+    "Read it again — the round's re-read writes the record line that clears",
+    "this — then re-run this.",
   );
   process.exit();
 }
@@ -622,18 +712,40 @@ for (const { file, capability } of deltaFiles(changeId)) {
       });
     }
 
+    const delta = readFileSync(source, "utf8");
+
     // `## Settled` is a legal part of the next blind pass's isolated input:
     // what earlier readings asked and had answered. Left behind, the same
     // refused reading is raised by every future run.
     const kept = new Set(bullets(sectionBody(arrived, "Settled")));
-    const owed = bullets(
-      sectionBody(readFileSync(source, "utf8"), "Settled"),
-    ).filter((line) => !kept.has(line));
+    const owed = bullets(sectionBody(delta, "Settled")).filter(
+      (line) => !kept.has(line),
+    );
     if (owed.length > 0) {
       wrong.push({
         capability: dir,
         what: `${name} drops ${owed.length} \`## Settled\` line(s) — the next blind pass raises them again: "${owed[0].slice(0, 60)}"`,
       });
+    }
+
+    // The `**Decided by:**` line travels with the suite too (Q49). A case
+    // whose deciding test the change named, landing durable with no line or
+    // with another one, leaves the store keeping that case off every run
+    // sheet for a test nothing names any more - and the durable suites are
+    // not back-filled, so the fold is the only place this is caught.
+    const durable = decidedByOf(arrived);
+    for (const [id, paths] of decidedByOf(delta)) {
+      const landedPaths = durable.get(id);
+      if (landedPaths === undefined)
+        wrong.push({
+          capability: dir,
+          what: `${name} drops \`${id}\`'s \`**Decided by:** ${paths}\` — the run sheet leaves the case out for a test nothing names`,
+        });
+      else if (landedPaths !== paths)
+        wrong.push({
+          capability: dir,
+          what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
+        });
     }
   }
 }
@@ -722,15 +834,26 @@ if (uncarried.length > 0) {
 // written where none is owed is how the waiver becomes the default.
 const record = {
   ...(deployedAt !== null
-    ? { deployed_at: deployedAt, deployed_env: deployedEnv }
+    ? {
+        deployed_at: deployedAt,
+        deployed_env: deployedEnv,
+        ...(deployedBuild !== null ? { deployed_build: deployedBuild } : {}),
+      }
     : deployWaived !== null
       ? { deploy_waived: deployWaived }
       : {}),
   ...(tasksWaived !== null ? { tasks_waived: tasksWaived } : {}),
+  // What the clear run was told about the fold's own two DECIDE gates,
+  // archived with the change so `pnpm check:manual` can read it back rather
+  // than being asked for again next run.
+  ...(decisionsCarried !== null ? { decisions_carried: decisionsCarried } : {}),
+  ...(journeysCopied ? { journeys_copied: "true" } : {}),
 };
 const subject =
   deployedAt !== null
-    ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
+    ? deployedBuild !== null
+      ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv}, build ${deployedBuild})`
+      : `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
     : deployWaived !== null
       ? `Record ${changeId} archived with the deploy waived`
       : `Archive ${changeId}, which deploys nothing`;

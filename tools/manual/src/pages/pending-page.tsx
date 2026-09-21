@@ -15,7 +15,7 @@ import { useDocumentTitle } from "./use-document-title";
 /**
  * What each teammate owes, across every change in flight.
  *
- * The In Flight board answers how far a change has come; this answers whose
+ * The Board answers how far a change has come; this answers whose
  * turn it is, which is the question somebody arriving with an afternoon free
  * actually has. Both read the same artifacts — nothing here is assigned, and
  * a row leaves the moment its file is written.

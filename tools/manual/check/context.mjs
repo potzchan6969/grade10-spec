@@ -7,7 +7,10 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readText, walkFiles } from "../src/store/disk.mts";
+import { readTeamMap, TEAM_MAP } from "../../../scripts/openspec/lib/team.mjs";
+import { capabilitiesOf } from "../src/store/capabilities.mts";
+import { readText } from "../src/store/disk.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
 
 /** Report order, and which findings end the build. */
 export const RULES = [
@@ -146,6 +149,16 @@ export const RULES = [
     title: "Waits naming no artifact, or one already written",
   },
   {
+    key: "hands",
+    level: "fail",
+    title: "Hands naming an unknown role or handle",
+  },
+  {
+    key: "landed_by",
+    level: "fail",
+    title: "Landings naming an unknown handle or artifact",
+  },
+  {
     key: "grouping",
     level: "fail",
     title: "Durable specs holding a heading the archive would fold",
@@ -202,6 +215,15 @@ export const RULES = [
     title: "Changes with no record of what they settled",
   },
   {
+    // A round is the only thing in this workflow that leaves no file of its
+    // own, so the row is its whole record. Without this a group could be
+    // ticked and an artifact landed with nobody able to tell a round that
+    // found nothing from one that never ran.
+    key: "round",
+    level: "fail",
+    title: "Landings and ticks with no round's row",
+  },
+  {
     key: "archived",
     level: "fail",
     title: "Archives recording no deploy",
@@ -228,6 +250,13 @@ export const RULES = [
     key: "dense",
     level: "warn",
     title: "Pages denser than the style allows",
+  },
+  {
+    // A warning, because only the author can say whether the mark was meant
+    // as a question.
+    key: "prose",
+    level: "warn",
+    title: "Marks inside a sentence, read as words",
   },
   {
     key: "ref",
@@ -284,6 +313,19 @@ export function createReport() {
 }
 
 export function createContext(roots, report, { specs, changes, stories }) {
+  // Read once for the whole pass: `hands` and `landed_by` both resolve a
+  // handle against it, and a map that is there and cannot be read says
+  // something wrong about who is told rather than nothing about anyone —
+  // reported here, once, under the family a store file that will not parse
+  // already owns, so neither rule reports the same broken file again.
+  let team;
+  try {
+    team = readTeamMap(roots.store);
+  } catch (cause) {
+    report.add("store", TEAM_MAP, message(cause));
+  }
+
+  const schemaCache = new Map();
   return {
     roots,
     specs,
@@ -295,6 +337,18 @@ export function createContext(roots, report, { specs, changes, stories }) {
     cased: new Set(),
     storyIds: new Set(),
     add: report.add,
+    team,
+    /** The artifacts one schema declares, read once per schema and shared by
+     * every rule that asks for the same one — `checkAwaiting`'s wait and
+     * `checkLandedBy`'s landing both key off the same set, so one reading
+     * answers both instead of each rule caching its own. `undefined` for a
+     * schema this store does not define. */
+    schemaArtifacts: (schema) => {
+      if (!schemaCache.has(schema)) {
+        schemaCache.set(schema, schemaArtifacts(roots.store, schema));
+      }
+      return schemaCache.get(schema);
+    },
   };
 }
 
@@ -363,19 +417,19 @@ export const message = (cause) =>
 export function journeysOf(root, changes) {
   const found = [];
   for (const change of changes) {
-    const dir = `openspec/changes/${change.id}/specs`;
-    if (!existsSync(join(root, dir))) continue;
-    for (const file of walkFiles(root, join(root, dir), ".md")) {
-      if (!file.endsWith("/user-journeys.md")) continue;
+    for (const one of capabilitiesOf(root, join(root, change.dir))) {
+      if (!one.files.has(JOURNEYS)) continue;
       found.push({
         change: change.id,
-        spec: file.slice(`${dir}/`.length, -"/user-journeys.md".length),
-        file,
+        spec: one.spec,
+        file: `${one.dir}/${JOURNEYS}`,
       });
     }
   }
   return found;
 }
+
+const JOURNEYS = "user-journeys.md";
 
 export const plural = (count, word) =>
   `${count} ${word}${count === 1 ? "" : "s"}`;

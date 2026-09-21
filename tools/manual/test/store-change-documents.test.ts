@@ -18,28 +18,20 @@ const [document] = readChangeDocuments(FIXTURE, NO_GIT, null);
 
 describe("the artifacts a change has", () => {
   it("reads the schema's artifacts in the order it declares them", () => {
-    const artifact = (
-      id: string,
-      generates: string,
-      teammate: string,
-      requires: string[],
-      required = true,
-    ) => ({ id, generates, teammate, requires, required });
-    expect(schemaArtifacts(FIXTURE, "grade10-planning")).toEqual([
-      artifact("proposal", "proposal.md", "product-manager", []),
-      artifact("specs", "specs/**/spec.md", "product-manager", ["proposal"]),
-      artifact(
-        "user-journeys",
-        "specs/**/user-journeys.md",
-        "product-manager",
-        ["specs"],
-      ),
-      artifact("test-cases", "specs/**/feature-tcs.md", "product-manager", [
-        "user-journeys",
-      ]),
-      artifact("ui-design", "ui-design.md", "designer", ["specs"], false),
-      artifact("tech-design", "tech-design.md", "engineer", ["specs"], false),
-      artifact("tasks", "tasks.md", "engineer", ["specs"]),
+    // The demo store carries the store's own planning schema, so the fixture
+    // and the real thing cannot disagree about the order, the upstream sets or
+    // the readers - `test/read-schema.test.ts` holds the schema itself.
+    const artifacts = schemaArtifacts(FIXTURE, "grade10-planning") ?? [];
+
+    expect(artifacts.map((one) => one.id)).toEqual([
+      "proposal",
+      "decisions",
+      "user-journeys",
+      "ui-design",
+      "tech-design",
+      "specs",
+      "test-cases",
+      "tasks",
     ]);
     expect(schemaArtifacts(FIXTURE, "spec-driven")).toBeUndefined();
   });
@@ -57,11 +49,12 @@ describe("the artifacts a change has", () => {
       })),
     ).toEqual([
       { name: "proposal", kind: "doc", present: true },
-      { name: "specs", kind: "specs", present: true },
+      { name: "decisions", kind: "doc", present: false },
       { name: "user-journeys", kind: "journeys", present: false },
-      { name: "test-cases", kind: "cases", present: false },
       { name: "ui-design", kind: "doc", present: false },
       { name: "tech-design", kind: "doc", present: false },
+      { name: "specs", kind: "specs", present: true },
+      { name: "test-cases", kind: "cases", present: false },
       { name: "tasks", kind: "tasks", present: true },
     ]);
   });
@@ -76,6 +69,19 @@ describe("the artifacts a change has", () => {
     const design = document.artifacts.find((one) => one.name === "tech-design");
     expect(design?.path).toBe("openspec/changes/add-thing/tech-design.md");
     expect(design?.text).toBeUndefined();
+  });
+});
+
+describe("the thread a reading with no git shows", () => {
+  it("borrows nothing from the repository the store sits inside", () => {
+    // `demo-store` is a directory of this checkout, so a walk of it resolves
+    // against the enclosing repository: the read is handed `NO_GIT`, and a
+    // document that carried those commits would put this machine's own
+    // history into the fixture and onto every walked page.
+    for (const one of readChangeDocuments(FIXTURE, NO_GIT, null)) {
+      expect(one.history).toEqual([]);
+      expect(one.askedAt).toBeUndefined();
+    }
   });
 });
 
@@ -223,6 +229,7 @@ describe("a delta with a title, journeys, and a suite beside it", () => {
       "### beta-TC-01: Watching records",
       "",
       "- **Status:** draft",
+      "- **Automation status:** manual",
       "- **Trace:** beta-SC-01",
       "",
     ].join("\n"),

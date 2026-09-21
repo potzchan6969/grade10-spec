@@ -54,7 +54,8 @@ in the same pass when the request covers both.
 
    Pass `suites=`, `priority=`, `level=` or `scope=` instead of `cases=` when a
    filter resolved it. Add `include_draft=true` only when the person asked for
-   drafts.
+   drafts, and `include_automated=true` only when they asked for cases an
+   automated test already covers.
 5. **Report the tab.** Give them the run id, the tab name and the link the job
    prints.
 

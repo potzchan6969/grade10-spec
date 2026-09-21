@@ -5,10 +5,12 @@ import {
   capabilityTitle,
   followOnsForProduct,
   type ManualIndex,
+  openMarksForProduct,
+  type ParsedPage,
   type ProductFollowOn,
   routeForSpec,
 } from "../api/derive";
-import { type OpenMark, openMarksForProduct } from "../api/open-marks";
+import type { OpenMark } from "../api/open-marks";
 import { useArchive } from "../api/use-archive";
 import { FollowOnGroup } from "../blocks/follow-on-group";
 import { InlineMarkdown } from "../blocks/inline-markdown";
@@ -90,8 +92,8 @@ export function ProductPendingSpec({
 
 /** The pages' own open lines, page by page, each a way into the section that
  * carries it. */
-function OpenMarks({ marks }: { marks: OpenMark[] }) {
-  const byPage = new Map<string, OpenMark[]>();
+function OpenMarks({ marks }: { marks: OpenMark<ParsedPage>[] }) {
+  const byPage = new Map<string, OpenMark<ParsedPage>[]>();
   for (const mark of marks) {
     const list = byPage.get(mark.page.path) ?? [];
     list.push(mark);

@@ -1,4 +1,5 @@
 import { useCallback, useSyncExternalStore } from "react";
+import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { useSnapshotIfAny } from "../api/snapshot-provider";
 import { browserKeyStore, STORAGE } from "./config";
 import { LocalStore, probeLocalStore } from "./local-store";
@@ -74,5 +75,6 @@ export function rememberedHandle(): string {
 }
 
 export function rememberHandle(handle: string): void {
-  if (handle !== "") browserKeyStore.set(STORAGE.handle, handle);
+  const written = handleOf(handle);
+  if (written !== "") browserKeyStore.set(STORAGE.handle, written);
 }

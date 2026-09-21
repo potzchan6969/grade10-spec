@@ -33,12 +33,10 @@ the durable specs, the change filed under the archive. Merging a pull request
 deploys nothing, so archiving asks the application repository whether the code
 is live, not whether the branch is closed.
 
-One change passes through four teammates. A PM writes the proposal, the specs,
-the journeys and the feature test cases derived from them, and stops; QA
-reviews those suites and owns the wider ones; a designer maps the screens;
-the engineer who picks the work up adds the tech design and the tasks — to the
-same change, never a second one. [Working a change](/guides/working-a-change)
-walks one feature through all four.
+A change passes through the hands
+[Change Stages](/p/shared/planning/change-stages) names, each landing their own
+artifacts on their word — [Working a change](/guides/working-a-change) walks one
+feature through them all.
 
 ## The rules themselves
 
@@ -53,4 +51,4 @@ walks one feature through all four.
 - [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   — the whole loop worked through once.
 
-[In Flight](/in-flight) is the live view of all of it.
+[Board](/in-flight) is the live view of all of it.
