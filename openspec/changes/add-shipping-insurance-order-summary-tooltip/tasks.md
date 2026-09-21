@@ -16,7 +16,7 @@
 - [ ] 3.2 Render optional Insurance tooltip metadata through the existing design-system Tooltip/Info pattern and add Insurance as TBD only to the no-invoice summary (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
 - [ ] 3.3 Verify: `pnpm --dir apps/frontend/grade10 run test -- src/pages/auctions/AuctionWinnerOrderPage.test.tsx` and `pnpm --dir apps/frontend/grade10 run typecheck`
 
-## 4. The walk (grade10)
+## 4. The walk (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Walk `grade10-site-auction-winner-order-US-01` through the isolated Winner Order browser flow, covering sent Insurance with its tooltip, pre-invoice Insurance as TBD, and sent invoices without Insurance; keep the cases in the change's E2E suite
 - [ ] 4.2 Capture asserted sent-with-Insurance and pre-invoice states as temporary PR evidence; leave the no-Insurance assertion without a misleading tooltip
