@@ -71,6 +71,9 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on, and the relay checks the word again before `main`
   moves
+- 🚧 **A group lands the branch whole** — so it lands only once `main` holds
+  every other artifact's text the branch does, the plan and the answered
+  decisions apart; the refusal names each file and the hand it waits on
 
 ## Perspectives
 
