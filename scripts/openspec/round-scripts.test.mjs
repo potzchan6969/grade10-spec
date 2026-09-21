@@ -12,7 +12,8 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { CHANGE, DIR, record, sandbox } from "./test/demo-store.mjs";
+import { ROUNDS_HEADER } from "./lib/rounds.mjs";
+import { CHANGE, DIR, record, SCHEMA, sandbox } from "./test/demo-store.mjs";
 
 /**
  * The round's record and its landing step, over a throwaway store with a bare
@@ -206,7 +207,12 @@ test("round:thread refuses an address that is not a channel and a message", () =
 
 // ── The landing step ────────────────────────────────────────────────────────
 
-const ROW = ["--perspectives", "design,simpler", "--stood", "nothing stood"];
+const ROW = [
+  "--perspectives",
+  "design,simpler,verifier",
+  "--stood",
+  "nothing stood",
+];
 
 const land = (root, args = [], env = {}) =>
   run(
@@ -270,6 +276,93 @@ test("shared-planning-agent-rounds-SC-51 - plan:land takes the readers the schem
   // `verifier` is no perspective of any artifact: it records that a verifier
   // read the round's findings.
   assert.match(roundsOf(root), /\| design, simpler, verifier \|/);
+});
+
+test("shared-planning-agent-rounds-SC-79 - plan:land refuses a row naming two readers and no verifier", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    root,
+    "--dry-run",
+    "--perspectives",
+    "design,simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /design, simpler/);
+  assert.match(result.stderr, /verifier/);
+});
+
+/** The fixture's schema with two readers that always run on a task group, the
+ * way the real `apply:` block carries six: the floor a group's row is held to,
+ * and what a fix pass drops to the one reader every round shares. */
+const WIDER_APPLY = SCHEMA.replace(
+  /apply:[\s\S]*$/,
+  [
+    "apply:",
+    "  requires: [tasks]",
+    "  tracks: tasks.md",
+    "  perspectives:",
+    "    - name: qa",
+    "      when: [always]",
+    "      agent: .claude/agents/qa.md",
+    "    - name: simpler",
+    "      when: [always]",
+    "      agent: .claude/agents/simpler.md",
+    "",
+  ].join("\n"),
+);
+
+test("shared-planning-agent-rounds-SC-79 - plan:land --fix-pass lands a group's row of the simpler thing alone", () => {
+  const { root, git } = sandbox({
+    files: { "openspec/schemas/demo-planning/schema.yaml": WIDER_APPLY },
+  });
+  git("config", "user.email", "erin@test");
+  const fix = ["--perspectives", "simpler", "--stood", "the simpler shape"];
+
+  const floor = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--dry-run",
+    ...fix,
+  ]);
+  const wider = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--dry-run",
+    "--fix-pass",
+    "--perspectives",
+    "simpler,qa",
+    "--stood",
+    "the simpler shape",
+  ]);
+  const passed = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--fix-pass",
+    ...fix,
+  ]);
+
+  // Without the flag, the floor is every `always` reader of the apply block.
+  assert.equal(floor.status, 1);
+  assert.match(floor.stderr, /qa/);
+  assert.match(floor.stderr, /always/);
+  // The flag drops the floor and nothing else: two readers still owe their
+  // verifier.
+  assert.equal(wider.status, 1);
+  assert.match(wider.stderr, /verifier/);
+  assert.equal(passed.status, 0, passed.stderr);
+  assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| the simpler shape \|/);
 });
 
 test("plan:land refuses a working tree with uncommitted edits", () => {
@@ -526,7 +619,10 @@ test("shared-planning-agent-rounds-SC-04, shared-planning-agent-rounds-SC-65 - p
     /validate:changes, check:manual, tcs:validate pass/,
   );
   assert.match(recordOf(root), /landed_by:\n\s+ui-design: dana/);
-  assert.match(roundsOf(root), /\| 1 \| ui-design \| design, simpler \|/);
+  assert.match(
+    roundsOf(root),
+    /\| 1 \| ui-design \| design, simpler, verifier \|/,
+  );
   const landed = git("show", "--stat", "--format=", "HEAD");
   assert.match(landed, /\.openspec\.yaml/);
   assert.match(landed, /rounds\.md/);
@@ -587,8 +683,24 @@ test("plan:land lands a task group with the dev's word, its row and no landed_by
   assert.doesNotMatch(recordOf(root), /landed_by:/);
 });
 
+/** `rounds.md` as the landings left it: one row per artifact the record names
+ * as landed, in that order. What a store stands at once a group is being
+ * built — every artifact landed on its hand's word, with the round that read
+ * it. */
+const roundsFor = (...artifacts) =>
+  artifacts.reduce(
+    (text, artifact, at) =>
+      `${text}| ${at + 1} | ${artifact} | simpler | nothing stood | - | - |\n`,
+    ROUNDS_HEADER,
+  );
+
 test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row through the gate that would otherwise refuse it", () => {
-  const { root, git } = sandbox();
+  const { root, git } = sandbox({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record("landed_by:\n  tasks: erin\n"),
+      [`${DIR}/rounds.md`]: roundsFor("tasks"),
+    },
+  });
   git("config", "user.email", "erin@test");
   // The tick lands on its own, with no row for it yet — the deadlock the
   // `round` rule exists to name: the gate the row's own landing must pass is
@@ -613,7 +725,70 @@ test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row 
   ]);
 
   assert.equal(result.status, 0, result.stderr);
-  assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| nothing stood \|/);
+  assert.match(roundsOf(root), /\| 2 \| 1 \| simpler \| nothing stood \|/);
+});
+
+test("shared-planning-agent-rounds-SC-73 - plan:land refuses a group's landing carrying an artifact draft no hand has landed", () => {
+  // A group carries the branch whole: the tick its build wrote, and beside it
+  // a design redrawn on the branch that nobody landed.
+  const built = (files) => {
+    const made = sandbox({ files });
+    writeFileSync(
+      join(made.root, DIR, "tasks.md"),
+      "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n",
+    );
+    writeFileSync(
+      join(made.root, DIR, "ui-design.md"),
+      "## Screens\n\nTwo screens, and a state each.\n",
+    );
+    made.git("config", "user.email", "erin@test");
+    made.git("add", "-A");
+    made.git("commit", "--quiet", "-m", "tick 1.1, and redraw the design");
+    made.git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+    return made;
+  };
+  const row = ["--perspectives", "simpler", "--stood", "nothing stood"];
+
+  const unlanded = built({
+    [`${DIR}/.openspec.yaml`]: record("landed_by:\n  tasks: erin\n"),
+    [`${DIR}/rounds.md`]: roundsFor("tasks"),
+  });
+  const refused = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    unlanded.root,
+    ...row,
+  ]);
+
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /ui-design\.md/);
+  // The tick is the group's own work: the plan landed, so its file is no
+  // draft of nobody's.
+  assert.doesNotMatch(refused.stderr, /tasks\.md/);
+  assert.doesNotMatch(roundsOf(unlanded.root), /^\| 2 \|/m);
+
+  // The same branch, with the design's own landing in the record and its row
+  // beside it: nothing the group carries is unlanded.
+  const landed = built({
+    [`${DIR}/.openspec.yaml`]: record(
+      "landed_by:\n  ui-design: dana\n  tasks: erin\n",
+    ),
+    [`${DIR}/rounds.md`]: roundsFor("ui-design", "tasks"),
+  });
+  const taken = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    landed.root,
+    ...row,
+  ]);
+
+  assert.equal(taken.status, 0, taken.stderr);
+  assert.match(
+    roundsOf(landed.root),
+    /\| 3 \| 1 \| simpler \| nothing stood \|/,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-51 - plan:land writes a group's bare digits, and the rule reads the row as it stands", () => {

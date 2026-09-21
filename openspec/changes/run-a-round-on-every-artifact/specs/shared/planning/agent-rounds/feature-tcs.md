@@ -597,7 +597,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
 
-**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`, `scripts/openspec/round-scripts.test.mjs`
 
 **Pre-conditions:**
 

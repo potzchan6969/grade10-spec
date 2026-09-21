@@ -99,7 +99,12 @@ const granted = (seen) => (_req, res, body) => {
   answer(res, 200, { landed: seen.sha });
 };
 
-const ROW = ["--perspectives", "design,simpler", "--stood", "nothing stood"];
+const ROW = [
+  "--perspectives",
+  "design,simpler,verifier",
+  "--stood",
+  "nothing stood",
+];
 
 /** The branch as a wake leaves it: the artifact about to land redrawn, and
  * the next one after it drafted ahead and landed nowhere (`Q58`). Returns the
