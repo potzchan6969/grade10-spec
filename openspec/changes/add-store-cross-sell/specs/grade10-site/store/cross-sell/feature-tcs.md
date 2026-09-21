@@ -446,6 +446,44 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-store-cross-sell-US1-TC14-1: A card the store has just taken in shows its picks alone
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cross-sell-US-01
+
+**Pre-conditions:**
+
+* customer is on `<card_26>`'s page within a minute of the stock keeper publishing it.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card_26>` | A card the stock keeper has just published, with two picks chosen |
+| `<card_27>`, `<card_28>` | Its two picks, for sale and long in the catalogue |
+
+**Steps:**
+
+1. Scroll to the section under the card.
+2. Read the tiles.
+
+**Expected Results:**
+
+* The rail holds `<card_27>` and `<card_28>` in the stock keeper's order and no other card.
+* The rest of the page reads as any card's page.
+
+---
+
 ## grade10-site-store-cross-sell-US2: Collector opens a card like the one they are reading
 
 **As a** collector reading a card,
@@ -748,6 +786,44 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-store-cross-sell-US2-TC9-1: Closer comes before newer
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cross-sell-US-02
+
+**Pre-conditions:**
+
+* customer is on `<card_29>`'s page.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card_29>` | A card for sale with a world and a language, no picks |
+| `<card_30>` | A card for sale sharing its world and its language, gained in March |
+| `<card_31>` | A card for sale sharing only its world, gained in April |
+
+**Steps:**
+
+1. Scroll to the section under the card.
+2. Read the tiles in order.
+
+**Expected Results:**
+
+* `<card_30>` is before `<card_31>`.
+
+---
+
 ## grade10-site-store-cross-sell-US3: Stock keeper chooses the cards shown with a card
 
 **As a** stock keeper on the shop's staff,
@@ -965,6 +1041,7 @@ the rows the walk did not reach once it has run.
 | `grade10-site-store-cross-sell-US1-TC10-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US1-TC12-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US1-TC13-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC14-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US2-TC1-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US2-TC2-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US2-TC3-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
@@ -973,6 +1050,7 @@ the rows the walk did not reach once it has run.
 | `grade10-site-store-cross-sell-US2-TC6-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US2-TC7-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US2-TC8-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC9-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
 | `grade10-site-store-cross-sell-US3-TC1-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
 | `grade10-site-store-cross-sell-US3-TC2-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
 | `grade10-site-store-cross-sell-US3-TC3-1` | to be proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |

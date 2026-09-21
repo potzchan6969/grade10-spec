@@ -43,6 +43,9 @@ holds is left out
 its collectible type, weighed in that order, newest first among equals; a card
 sharing none of them draws no similar cards
 
+🚧 **Just taken in** — a card the store has just taken in shows its picks until
+the similar cards follow, within minutes
+
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to
 open. The catalogue already holds the cards beside it, and the stock keeper

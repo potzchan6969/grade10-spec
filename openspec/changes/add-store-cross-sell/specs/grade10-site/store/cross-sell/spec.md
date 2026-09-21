@@ -227,6 +227,12 @@ sharing this card's world, its language or its collectible type.
   rail alone, as for a card nobody chose for.
 - **A fact missing** — a card with no world draws similar cards by its language
   and its type; the order is unchanged.
+- **Closer before newer** — a card sharing more of the facts, in that order,
+  comes before a newer card sharing fewer; newest first decides only among
+  cards equal on all three.
+- **A card the copy does not hold** — a card the store's copy of the catalogue
+  does not hold yet shows its picks alone; the similar cards follow when the
+  copy does.
 
 #### Scenario: grade10-site-store-cross-sell-SC-15 - A card nobody chose picks for shows cards like it
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector on an unchosen card is still led somewhere
@@ -294,6 +300,21 @@ sharing this card's world, its language or its collectible type.
 - **GIVEN** a card whose page shows the stock keeper's picks, and cards sharing its world
 - **WHEN** the stock keeper removes every pick in Shopify
 - **THEN** reading the card's page afresh within a minute shows the cards sharing its world and no pick
+
+#### Scenario: grade10-site-store-cross-sell-SC-31 - Closer comes before newer
+**Serves:** grade10-site-store-cross-sell-US-02 - the collector sees the card most like the one they are reading before a newer card less like it
+
+- **GIVEN** a card with no picks, one card sharing its world and its language gained by the catalogue in March, and one card sharing only its world gained in April
+- **WHEN** a collector opens its page
+- **THEN** the March card is before the April card
+
+#### Scenario: grade10-site-store-cross-sell-SC-32 - A card the store's copy does not hold yet shows its picks alone
+**Serves:** grade10-site-store-cross-sell-US-01 - the collector on a card the store has just taken in still meets the stock keeper's picks
+
+- **GIVEN** a card the store's copy of the catalogue does not hold yet, and two picks the copy does hold
+- **WHEN** a collector opens its page
+- **THEN** the rail holds the two picks and no similar card
+- **AND** the card's page is otherwise unchanged
 
 ### Requirement: Cards kept out of the similar cards
 
