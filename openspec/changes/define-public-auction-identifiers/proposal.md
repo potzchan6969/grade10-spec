@@ -68,3 +68,8 @@ None.
 
 - PM and Finance confirmation can unlock the requirements delta, API projection
   work and shared UI adoption for the approved formats.
+
+## References
+
+- [Auction Listing · Public listing ID](../../../docs/prds/products/grade10-site/auction/display.md#auction-listing)
+- [Post-Bidding](../../../docs/prds/products/grade10-site/auction/post-bidding.md)

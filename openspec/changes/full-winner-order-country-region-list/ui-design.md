@@ -39,7 +39,7 @@ region. Preview holds English stand-ins; `grade10-site` answers keys in
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Closed | Trigger shows selected or default country/region (Hong Kong in fixtures); options not in the tree | `winner-order-US-01` |
-| Open, long list | Every country/region A–Z in the popup; list scrolls inside a capped height | `winner-order-US-01` |
-| Typeahead | Typed letter highlights the next matching name; that option is inside the popup's visible scrollport | `winner-order-US-01` |
-| Empty refused | Confirm/Use This Address with country empty shows field refusal beside Country/Region | `winner-order-US-01` |
+| Closed | Trigger shows selected or default country/region (Hong Kong in fixtures); options not in the tree | **Out of suite:** design-system Select closed state / stories |
+| Open, long list | Every country/region A–Z in the popup; list scrolls inside a capped height | `winner-order-SC-174` |
+| Typeahead | Typed letter highlights the next matching name; that option is inside the popup's visible scrollport | `winner-order-SC-175`, `winner-order-SC-178` |
+| Empty refused | Confirm/Use This Address with country empty shows field refusal beside Country/Region | `winner-order-SC-177` |

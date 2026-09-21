@@ -32,3 +32,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/auction/winner-order | In which locale or script are catalogue display names shown on delivery Add Address (browser locale, account language, or fixed English)? | ❓ Post-Bidding · Order Setup · Catalogue display locale |

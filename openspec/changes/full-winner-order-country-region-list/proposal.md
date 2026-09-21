@@ -54,6 +54,14 @@ None.
 - **Shippable destinations only** — whether the picker later limits to
   destinations Grade10 ships to; until settled the catalogue stays complete;
   Product (@tangconst).
+- **Catalogue display locale** — whether delivery Add Address Country/Region
+  names follow browser locale, account language, or fixed English; Product
+  (@tangconst). Blind suite escalate 2026-09-21.
+
+No domain impact: Country/Region picker behaviour stays inside Winner Order
+delivery Add Address; no cross-capability auction path changes.
+
+**Archive:** @tangconst after deploy.
 
 ## References
 
