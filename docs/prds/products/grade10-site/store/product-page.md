@@ -41,9 +41,8 @@ Store and opens Store Locator
 
 ## You May Also Like
 
-🚧 **Related cards below the card** — up to six cards the collector may also
-like, chosen by the stock keeper or similar to this one, in the page when it
-arrives — [You May Also Like](cross-sell.md)
+🚧 **You may also like** — related cards under the card —
+[You May Also Like](cross-sell.md)
 
 ## Designs
 
