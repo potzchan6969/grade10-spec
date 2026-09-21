@@ -364,6 +364,12 @@ function summaryLinesFor(
       tooltip: LINE_TOOLTIPS.shippingHandling,
     },
     {
+      label: "Insurance",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.shippingInsurance,
+    },
+    {
       label: "Payment Processing Fee",
       value: "TBD",
       muted: true,

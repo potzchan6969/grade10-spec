@@ -94,7 +94,7 @@ export const ClosingRefund: Story = {
     const dialog = await findVisibleDialog(page, "Refund Details");
     const modal = within(dialog);
     expect(modal.getByText("Amount")).toBeVisible();
-    expect(modal.getByText("HK$15,660")).toBeVisible();
+    expect(modal.getByText("HK$16,140")).toBeVisible();
     expect(modal.getByText("Reason")).toBeVisible();
     expect(modal.getByText("Not as described")).toBeVisible();
     expect(modal.getByText("Note")).toBeVisible();

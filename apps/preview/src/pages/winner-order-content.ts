@@ -149,6 +149,7 @@ export const LINE_TOOLTIPS = {
     "20% of your winning bid, or the currency minimum if that is higher.",
   shippingHandling:
     "Packing, carrier, and handling for your confirmed delivery address.",
+  shippingInsurance: "0.9% of the order value during transit.",
   processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
@@ -165,15 +166,20 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$15,660" },
+  { label: "Order Total", value: "HK$16,140" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$15,660",
+  amount: "HK$16,140",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   method: "Card",
@@ -203,11 +209,16 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
     label: "Payment Processing Fee",
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$15,540" },
+  { label: "Order Total", value: "HK$16,020" },
 ];
 
 /** Shared progress dates once each milestone has happened. */
