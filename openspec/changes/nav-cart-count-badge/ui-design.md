@@ -2,11 +2,11 @@
 
 ### Site header with cart count
 
-Layout SoT: Storybook `site-chrome-siteheader-cart--empty-cart`,
-`site-chrome-siteheader-cart--one-item`,
-`site-chrome-siteheader-cart--multi-item`,
-`site-chrome-siteheader-cart--large-count`, and
-`site-chrome-siteheader-cart--count-omitted`.
+Layout SoT: Storybook `site-chrome-siteheader-auction-store-cart-count--empty-no-badge`,
+`site-chrome-siteheader-auction-store-cart-count--count-1`,
+`site-chrome-siteheader-auction-store-cart-count--count-3`,
+`site-chrome-siteheader-auction-store-cart-count--count-123`, and
+`site-chrome-siteheader-auction-store-cart-count--compact-count-3`.
 
 Figma `Nav` (`4171:9937`) remains an early chrome reference only — Storybook
 is the layout source of truth for the cart count overlay (same rule as
@@ -50,3 +50,18 @@ inline label beside the title. The header overlay uses `StatusIndicator`
 | Cart handler absent | No cart control | **Out of suite:** existing handler-gated cart (`shared-ui-site-chrome-SC-04`) / auction-first pre-Store omission |
 | Signed-out (no guest cart) | Cart control may be present; no badge | **Out of suite:** same treatment as empty/omitted (`shared-ui-site-chrome-SC-23`); no guest count |
 | Count unknown (hydrating) | No badge until the host supplies `cartItemCount > 0` | **Out of suite:** host omits the prop or passes `0`; no loading API on `SiteHeader` |
+
+### Application Cart Count
+
+The application reuses the existing Auction & Store cart-count stories and shared components. No new token, variant, translation, or layout is introduced.
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Settled member basket | Same active-line count as the drawer, including adjusted lines | `grade10-site-site-page-shell-SC-30` |
+| Empty or all excluded | Cart control without badge | `grade10-site-site-page-shell-SC-31` |
+| Wide and 375px | Full digits and reachable controls | `grade10-site-site-page-shell-SC-32` |
+| Cart unavailable | Neither control nor badge | `grade10-site-site-page-shell-SC-33` |
+| Closed drawer after a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-35` |
+| Initial loading or failed review | No badge or badge skeleton; cart control remains | `grade10-site-site-page-shell-SC-36`, `grade10-site-site-page-shell-SC-37` |
+| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-38`, `grade10-site-site-page-shell-SC-40` |
+| Same-member refresh | Last verified count stays until success; failure hides it | `grade10-site-site-page-shell-SC-41` |
