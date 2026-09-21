@@ -1,3 +1,17 @@
+## Feature set
+
+- Surface exports
+  - Named components: hero, section header, collection grid, and tile from the package entry
+  - Reusable parts: hero, header, and tile render without the grid
+- Hero
+  - Supplied marketing: eyebrow, title, description, image, and two callbacks
+- Section header
+  - Title and browse: a browse link only when an href is supplied
+- Collection grid
+  - Catalogue tiles: one tile per supplied collection, featured in the large cell
+- No defaulted content
+  - Application-owned copy: nothing visible is invented by the blocks
+
 ## ADDED Requirements
 
 ### Requirement: A heading with nothing to browse needs no browse label
