@@ -1,4 +1,4 @@
-## 1. The gate (grade10)
+## 1. The gate (grade10) (owner: @sean)
 
 - [ ] 1.1 Add `"membership"` to `Gate` and a `membership:` row to `gatesFor`
       in `apps/frontend/grade10/src/surfaces.ts`, and set
