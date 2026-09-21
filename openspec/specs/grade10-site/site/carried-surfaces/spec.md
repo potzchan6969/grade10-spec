@@ -22,10 +22,12 @@ rather than hidden.
     mail, and a collector's own visits
   - Profile surface: the account page on its own. Order history and order
     detail keep the store's gate rather than the profile's
+  - Membership surfaces: the membership page and the join page, one set that
+    is carried or withheld whole
   - Labs: the demonstration surfaces and the unapproved refund and shipping
     drafts, carried in development and staging
   - Everything else: the auction, the front door, the terms and the privacy
-    page, membership, join and sign-in, carried on every lane
+    page, and sign-in, carried on every lane
 - An address nothing carries
   - Not found: it answers with the not-found surface and a 404
   - Every address beneath it: the addresses under an uncarried surface answer
@@ -259,11 +261,11 @@ surface that answers it.
 
 ### Requirement: Each waiting product waits for its own launch
 
-Four products wait for the public — the store, the vault, booking a visit
-and the profile — and each moves as one set on the lanes stated for it. The
-auction is not one of them: it is carried on every lane already.
+Five products wait for the public — the store, the vault, booking a visit,
+the profile and membership — and each moves as one set on the lanes stated
+for it. The auction is not one of them: it is carried on every lane already.
 
-**The four sets** - The surfaces of each waiting product are:
+**The five sets** - The surfaces of each waiting product are:
 
 | Product | Surface | What it answers |
 | --- | --- | --- |
@@ -283,6 +285,8 @@ auction is not one of them: it is carried on every lane already.
 | Booking | Booking link | The private link a booking's mail carries |
 | Booking | Visits | A collector's own visits |
 | Profile | Profile | The account page on its own |
+| Membership | Membership | The member's own page |
+| Membership | Join | Joining the programme |
 
 **Order history and order detail keep the store's gate** - Order history and
 order detail belong to the store's set alone; whether a build carries the
@@ -298,19 +302,18 @@ carrying one SHALL NOT carry another.
 **Which lanes** - Which lanes carry each set SHALL be decided by the deploy
 environment the build is made for, never by the stage the site is served at:
 
-| Lane | Store | Vault | Booking | Profile | Labs | Every other surface |
-| --- | --- | --- | --- | --- | --- | --- |
-| Development | carried | carried | carried | carried | carried | carried |
-| Staging | carried | carried | carried | carried | carried | carried |
-| Preview | not carried | not carried | not carried | not carried | not carried | carried |
-| Production | not carried | not carried | not carried | not carried | not carried | carried |
+| Lane | Store | Vault | Booking | Profile | Membership | Labs | Every other surface |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| Development | carried | carried | carried | carried | carried | carried | carried |
+| Staging | carried | carried | carried | carried | carried | carried | carried |
+| Preview | not carried | not carried | not carried | not carried | not carried | not carried | carried |
+| Production | not carried | not carried | not carried | not carried | not carried | not carried | carried |
 
 **Labs** - The labs are the demonstration surfaces and the refund and shipping
 drafts nobody has approved.
 
 **Every other surface** - Every other surface — the auction, the front door,
-the terms and the privacy page, the membership and join pages, and sign-in —
-SHALL be carried on every lane.
+the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-20 - A public build carries none of the three waiting products
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before any of the three has opened
@@ -344,11 +347,11 @@ SHALL be carried on every lane.
 - **AND** a development or a staging build answers each of them
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-24 - The holding site is carried on every lane
-**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the four products are shut
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the five products are shut
 
 - **GIVEN** a build made for production
 - **WHEN** a collector opens the auction, the front door, the terms, the
-  privacy page, the membership or join pages, or sign-in
+  privacy page, or sign-in
 - **THEN** each answers as it does on every other lane
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-35 - The profile waits on the same lanes the store, the vault and booking wait on
@@ -367,6 +370,22 @@ SHALL be carried on every lane.
 - **THEN** the order history and the order detail answer
 - **AND** the profile's own address is not found
 
+#### Scenario: grade10-site-site-carried-surfaces-SC-38 - Membership waits on the same lanes the other waiting products wait on
+**Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before membership has opened
+
+- **GIVEN** a build made for production or preview
+- **WHEN** a collector opens the membership page or the join page
+- **THEN** neither surface answers
+- **AND** a build made for development or staging answers both
+
+#### Scenario: grade10-site-site-carried-surfaces-SC-39 - Membership and join carry or withhold together
+**Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who follows the membership page's link to join, or the join page's link back, and finds the other side of that link exactly as carried as the page they left
+
+- **GIVEN** any build this table describes
+- **WHEN** either the membership page or the join page is carried
+- **THEN** the other is carried too
+- **AND** where one is withheld the other is withheld with it
+
 ### Requirement: Where a product is carried it behaves as it is specified to
 
 Carrying decides whether a product is there, never how it behaves.
@@ -379,7 +398,7 @@ carries it.
 **One line per product** - Opening a product SHALL be a change to the lanes
 carrying that product's set and to nothing else: every surface in the set
 SHALL start answering together, no surface outside it SHALL change the lanes
-it is carried on, and the other three waiting products SHALL stay on the
+it is carried on, and the other four waiting products SHALL stay on the
 lanes already stated for them.
 
 #### Scenario: grade10-site-site-carried-surfaces-SC-25 - Staging works as it did before
@@ -402,8 +421,8 @@ lanes already stated for them.
 #### Scenario: grade10-site-site-carried-surfaces-SC-27 - The other waiting products stay shut while one opens
 **Serves:** Where a product is open - the launches still to come, each waiting on its own line rather than on the first one
 
-- **GIVEN** a build made for production, carrying none of the four waiting
+- **GIVEN** a build made for production, carrying none of the five waiting
   sets
 - **WHEN** production is stated to carry the vault's set alone
 - **THEN** every vault surface answers on it
-- **AND** no store, booking or profile surface answers
+- **AND** no store, booking, profile or membership surface answers
