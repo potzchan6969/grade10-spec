@@ -24,6 +24,13 @@ beforeEach(freezeClock);
 
 afterEach(unfreezeClock);
 
+// SC-10 narrows the viewport to prove a lane badge's own wrap does not clip;
+// every other case in this file reads at the suite's own default (414×896),
+// so it is undone here rather than left to bleed into the next test's mount.
+afterEach(async () => {
+  await page.viewport(414, 896);
+});
+
 /** This walk proves the harness carries the manual: the shell mounts, the
  * fixture snapshot arrives, and the board renders under its own heading. The
  * cases below follow it. */
@@ -76,12 +83,25 @@ test("shared-planning-change-stages-SC-10 - the mark and the move on a lane head
 
   for (const { stage, draft, move } of drafted) {
     const lane = laneSection(stage);
-    await expect
-      .element(page.elementLocator(lane).getByText(`agent drafts ${draft}`))
-      .toBeVisible();
-    await expect
-      .element(page.elementLocator(lane).getByText(move, { exact: true }))
-      .toBeVisible();
+    const badgeEl = markBadge(lane);
+    if (!badgeEl) throw new Error(`no mark badge on the ${stage} lane heading`);
+    await expect.element(page.elementLocator(badgeEl)).toBeVisible();
+
+    // Not `getByText`: the move now sits in the same text run as the dot
+    // rather than a span of its own, so it wraps the badge instead of
+    // clipping it — and a card in the same lane can carry the same word
+    // (`movedBy`'s "Product manager: answer"), so a lane-wide text query
+    // meets more than one match.
+    if (!badgeEl.textContent?.includes(`agent drafts ${draft}`)) {
+      throw new Error(
+        `${stage} lane badge "${badgeEl.textContent}" does not read "agent drafts ${draft}"`,
+      );
+    }
+    if (!badgeEl.textContent?.includes(move)) {
+      throw new Error(
+        `${stage} lane badge "${badgeEl.textContent}" does not name the move "${move}"`,
+      );
+    }
   }
 
   for (const stage of ["on-staging", "released", "archived"]) {
@@ -89,6 +109,23 @@ test("shared-planning-change-stages-SC-10 - the mark and the move on a lane head
     await expect
       .element(page.elementLocator(lane).getByText("agent drafts"))
       .not.toBeInTheDocument();
+  }
+
+  // The Proposed lane's own heading badge, at a phone's width: a wrap grows
+  // it instead of clipping it, the same proof `change-page.walk.ts`'s SC-57
+  // makes for the one-line stepper's badge.
+  await page.viewport(375, 800);
+  const proposedBadge = markBadge(laneSection("proposed"));
+  if (!proposedBadge) throw new Error("no badge on the Proposed lane heading");
+  if (!proposedBadge.textContent?.includes("agent drafts")) {
+    throw new Error(
+      `badge text "${proposedBadge.textContent}" does not read "agent drafts"`,
+    );
+  }
+  if (proposedBadge.scrollHeight > proposedBadge.clientHeight) {
+    throw new Error(
+      `badge clips its own wrap: scrollHeight ${proposedBadge.scrollHeight} > clientHeight ${proposedBadge.clientHeight}`,
+    );
   }
 });
 
@@ -367,6 +404,16 @@ function laneSection(stage: string): Element {
   const section = heading?.closest("section");
   if (!section) throw new Error(`no lane section for stage "${stage}"`);
   return section;
+}
+
+/** The mark badge on a lane's own heading, told apart from the count badge
+ * the same heading carries first (`<Badge>{lane.rows.length}</Badge>`,
+ * `stage-lane.tsx`) — both share `[data-slot="badge"]`, so the mark badge is
+ * the one whose own text names the agent. */
+function markBadge(lane: Element): Element | undefined {
+  return Array.from(lane.querySelectorAll('[data-slot="badge"]')).find((one) =>
+    one.textContent?.includes("agent drafts"),
+  );
 }
 
 /** One change's card, found from the `id={change.id}` its `<article>`

@@ -267,8 +267,14 @@ describe("the stepper", () => {
 
     expect(line).toContain("Step 5 of 8");
     expect(line).toContain("Building");
-    // The one line has the width, so it reads the sentence itself.
-    expect(line).toContain("agent drafts each group, test first");
+    // The badge reads short, same as the eight-step stepper's own per-step
+    // caption: the words visible, the mark in an `sr-only` span, the whole
+    // sentence on the badge's title so a wrap grows it instead of clipping.
+    expect(line).toContain("agent drafts");
+    expect(line).toContain("each group, test first");
+    expect(line).toContain(
+      'title="agent drafts each group, test first · read each landing"',
+    );
     // Both readings render; which one shows at a given width is the walk's
     // own case (8.3), not a unit test's — this only asserts both exist.
     expect(html).toContain('data-stepper="one-line"');

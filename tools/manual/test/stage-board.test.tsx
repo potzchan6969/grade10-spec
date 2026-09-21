@@ -276,12 +276,14 @@ describe("the lanes", () => {
   it("A lane heading with the agent mark and the hand's move, the whole sentence", () => {
     const html = render([at("proposed"), at("building")]);
 
+    // The mark stays in the DOM in an `sr-only` span, and the whole sentence
+    // — the mark and the move both — sits on the badge's own title.
     expect(html).toContain(
-      "agent drafts the marks and the three files, from what the hand asks",
+      'title="agent drafts the marks and the three files, from what the hand asks · answer"',
     );
-    expect(html).toContain(">answer<");
-    expect(html).toContain("agent drafts each group, test first");
-    expect(html).toContain(">read each landing<");
+    expect(html).toContain(
+      'title="agent drafts each group, test first · read each landing"',
+    );
     expect(lane(html, "on-staging", "released")).not.toContain("agent drafts");
     expect(lane(html, "released", "archived")).not.toContain("agent drafts");
   });
@@ -294,8 +296,9 @@ describe("the lanes", () => {
 
     expect(html).toContain("First planned");
     expect(html).toContain("Second planned");
-    // One pair per drafted lane, and five lanes carry one.
-    expect(html.match(/agent drafts/g)).toHaveLength(5);
+    // One pair per drafted lane, and five lanes carry one — twice each, the
+    // visible run and the badge's own title.
+    expect(html.match(/agent drafts/g)).toHaveLength(10);
   });
 });
 

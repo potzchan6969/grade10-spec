@@ -12,15 +12,17 @@ import type { Stage } from "../api/types";
  * to add. Nothing where the stage is drafted by nobody — On staging, Released
  * and Archived are a deploy, a cut and a fold.
  *
- * `short` is the eight-step stepper's reading: one step of eight is a tenth of
- * the reading column, and the whole sentence in it came out as a truncated
- * pill. So the caption there is the design system's own `Text` rather than a
- * badge wearing overrides: the words `agent drafts · <move>`, the agent's mark
- * between them in an `sr-only` span so a screen reader still hears the whole
- * sentence, and that sentence on the element's `title` for a pointer. The dot
- * sits in the same text run as the move, so a caption that wraps never leaves
- * it hanging. The lane heading and the one-line stepper have the width, and
- * read the sentence itself.
+ * Both branches show the same words, `agent drafts · <move>`, with the
+ * agent's mark in an `sr-only` span between them so a screen reader still
+ * hears the whole sentence, and that sentence on the element's `title` for a
+ * pointer. The dot sits in the same text run as the move, so a caption that
+ * wraps never leaves it hanging.
+ *
+ * `short` is the eight-step stepper's own per-step caption: one step of eight
+ * is a tenth of the reading column, with no room for a pill, so it takes the
+ * design system's own `Text`. The lane heading and the one-line stepper take
+ * `Badge` instead, its height freed to grow rather than clip where the
+ * sentence wraps.
  */
 export function StageMark({
   stage,
@@ -46,14 +48,14 @@ export function StageMark({
 
   return (
     <Badge
-      className="max-w-full whitespace-normal text-left"
+      className="h-auto max-w-full whitespace-normal py-0.5 text-left"
       size="sm"
-      title="The change's agent writes this stage; the hand of the stage answers"
+      title={`${said} · ${move}`}
       variant="outline"
     >
-      <span>{said}</span>
-      <span aria-hidden>·</span>
-      <span>{move}</span>
+      {"agent drafts"}
+      <span className="sr-only">{` ${drafted.mark}`}</span>
+      {` · ${move}`}
     </Badge>
   );
 }

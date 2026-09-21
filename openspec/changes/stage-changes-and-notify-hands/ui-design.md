@@ -40,7 +40,7 @@ Design-system primitives, from `@grade10/design-system/components/`:
 | --- | --- |
 | `Stepper`, `Step`, `StepIndicator` | The change page's stepper, one `Step` per stage |
 | `Badge` (`sm`, `outline`) with the stage number | The pip on a page's 🚧 line and in the section's in-flight row; the hover names the change and the hand |
-| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | A lane heading, from Proposed to Building; the text carries the meaning, and no mark beside it - the design system draws no hollow dashed dot, and a variant Figma does not define is not ours to add |
+| `Badge` (`sm`, `outline`) with the agent mark and the hand's move | A lane heading, from Proposed to Building; the text carries the meaning, and no mark beside it - the design system draws no hollow dashed dot, and a variant Figma does not define is not ours to add, the mark in an `sr-only` span and the sentence on hover, as the stepper's caption reads, and a badge that wraps grows |
 | `Text` (`xs`, `secondary`) with the agent and the hand's move | A stepper step, from Proposed to Building; one step of eight is a tenth of the reading column, so the caption reads `agent drafts · <move>`, the mark stays in an `sr-only` span between them, and the whole sentence sits on the element's `title` |
 | `Badge` | Every overlay chip, the suite's verdict, and who landed an artifact |
 | `Avatar`, `AvatarFallback` | The hand on a card and in the hands table |

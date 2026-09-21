@@ -74,12 +74,22 @@ test("shared-planning-change-stages-SC-57 - the stepper marks the stage", async 
   await expect
     .element(stepper.getByText("Step 4 of 8 · Planned", { exact: true }))
     .toBeVisible();
-  await expect
-    .element(stepper.getByText("agent drafts the plan"))
-    .toBeVisible();
-  await expect
-    .element(stepper.getByText("read", { exact: true }))
-    .toBeVisible();
+
+  // Not `getByText`: the mark sits in an `sr-only` span and the move shares
+  // the dot's own text run rather than a span of its own, so a wrap grows
+  // the badge instead of clipping it (proven at a phone's width on
+  // `change-page-behind-design.walk.ts`'s own `demo-designed`, whose mark is
+  // the one long enough to wrap).
+  const badge = oneLine.querySelector('[data-slot="badge"]');
+  if (!badge) throw new Error("no badge in the one-line stepper");
+  if (!badge.textContent?.includes("agent drafts the plan")) {
+    throw new Error(
+      `badge text "${badge.textContent}" does not read "agent drafts the plan"`,
+    );
+  }
+  if (!badge.textContent?.includes("read")) {
+    throw new Error(`badge text "${badge.textContent}" does not name "read"`);
+  }
 });
 
 test("shared-planning-change-stages-SC-58 - the Your turn card", async () => {
