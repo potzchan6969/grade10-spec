@@ -82,7 +82,7 @@ None.
 | `apps/frontend/grade10` | Winner Order reads Partially Paid as a locked state with Contact Us and no balance figure; the Receipt PDF row lists one entry per payment; My Auctions shows Partially Paid. |
 | `apps/admin/grade10` | The manual-settlement form accepts an amount smaller than the balance owed, repeatable; the queue's Partially Paid outcome and filter; Reissue and Cancel disabled once a payment exists. |
 | Auction service | A payment ledger per invoice (amount, method, reference, proof, operator, timestamp); the 10% closing-tolerance check; the Partially Paid state and its refusal of Reissue and Cancel; a receipt generated per payment, numbered `-P1`, `-P2`, … |
-| Notification service | No new letter kind. Payment reminders already stop once the invoice leaves `pending`, so Partially Paid needs no reminder change. |
+| Notification service | The later `add-winner-contact-email` change adds one append-only `payment_received_partial` letter at the partial-payment transition. Payment reminders still stop once the invoice leaves `pending`; the later change owns the ready-email subject, body and Contact Us mailto. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 
 ## Ordering and dependencies

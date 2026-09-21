@@ -14,7 +14,6 @@
 - A shortfall write-off or overpayment line item recorded separately from the
   payment ledger itself
 - Automatic matching of a bank statement to an invoice
-- A new letter kind for a partial payment or its receipt
 - Reissuing or cancelling an invoice once any payment has been recorded
   against it
 - A live running balance shown to the winner, on Winner Order or in
@@ -40,6 +39,7 @@
 | Q15 | Which invoice states can take the first partial payment? | Same as manual settlement today — `pending` or `expired`, not `payment_verifying` | A stricter rule requiring reissue back to `pending` first |
 | Q16 | Does every payment recorded once cumulative is at or above 90% re-trigger the prompt, or only the first one to cross the threshold? | Every one — each payment the operator records while cumulative is ≥ 90% and the invoice is not yet closed asks again, so a `keep open` answer never quietly waives later checks | Prompting only once, then recording silently until the operator closes it themselves |
 | Q17 | Does the 90% cumulative rule get a matching upper bound (overpayment)? | A payment may exceed the original invoice total. Before it is recorded and the invoice is marked Paid, the operator confirms the overpayment in a dialog. The full payment remains in the payment ledger; the excess is not a separate adjustment line and can be returned through the refund flow | Refusing the payment and requiring the operator to re-enter a smaller amount; or treating the excess as a symmetric ±10% tolerance band without an explicit confirmation |
+| Q18 | Does a partial payment produce a winner notification letter? | Yes — `add-winner-contact-email` extends this change with an append-only `payment_received_partial` letter, carrying the current invoice and receipt ids and using the same ready Contact Us mailto rules | The earlier non-goal that left partial-payment receipts without a new letter kind |
 
 ## Raised
 
