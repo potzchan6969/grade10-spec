@@ -33,10 +33,7 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
-import {
-  COUNTRY_OPTIONS,
-  COUNTRY_SELECT_ITEMS,
-} from "./country-regions";
+import { COUNTRY_OPTIONS, COUNTRY_SELECT_ITEMS } from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
