@@ -1,6 +1,5 @@
 ---
 title: You May Also Like
-spec: grade10-site/store/cross-sell
 order: 4
 ---
 
