@@ -3,22 +3,23 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
 
-## shared-auth-test-sign-in-US1: How the staging Actions job walks sign-in without the disposable /dev door
+## shared-auth-test-sign-in-US1: The locked staging door for sign-in tests
 
 **Walked by:** nobody on their own - a makers door for the staging Actions job; collectors walk sign-in, operators walk ban and role on the Users desk
-**As a** admin,
-**I want** this repository's Actions job to walk staging sign-in through a locked door,
-**so that** collectors still walk sign-in and the disposable door stays closed.
 
-### shared-auth-test-sign-in-US1-TC1-1: Proven staging job may use the door
+**As an** admin,
+**I want** the staging door to answer one approved workflow, act on tester addresses only, and do only the five moves,
+**so that** staging auth cases finish a sign-in without a mailbox and nothing else mints a session.
+
+### shared-auth-test-sign-in-US1-TC1-1: An approved dispatch from main is answered
 
 **Classification:**
 
-* **Severity:** blocker
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** security
+* **Type:** functional
 * **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
@@ -27,20 +28,22 @@
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
+2. Ask the door to age that link.
 
 **Expected Results:**
 
-* The door accepts the call.
-* The call is not refused as an unknown caller.
+* Step 1 returns the link from that address's last sign-in mail.
+* Step 2 is answered, and the link no longer signs the address in.
 
-### shared-auth-test-sign-in-US1-TC2-1: Laptop caller is refused the staging door
+### shared-auth-test-sign-in-US1-TC2-1: Callers that are not the door's own workflow are refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -57,20 +60,28 @@
 
 **Pre-conditions:**
 
-* admin(a laptop) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+
+**Test data:**
+
+| Caller | Outcome |
+| --- | --- |
+| A laptop sending the same request with no run identity | refused |
+| A run of `<another workflow of this repository>` | refused |
+| A run in a fork of this repository | refused |
+| A run in another repository | refused |
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>` as the caller in the row.
+2. Ask the door for the same mail from an approved dispatch of `<the door's workflow>` on the main branch.
 
 **Expected Results:**
 
-* The door refuses the call.
-* No last sign-in mail is returned.
+* The caller in the row is refused and gets no link.
+* Step 2 returns the link, unchanged by the refused call.
 
-### shared-auth-test-sign-in-US1-TC3-1: A fork's Actions job is refused
+### shared-auth-test-sign-in-US1-TC3-1: The door's workflow off the main branch is refused
 
 **Classification:**
 
@@ -87,20 +98,20 @@
 
 **Pre-conditions:**
 
-* admin(a fork's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
+* An approved dispatch of `<the door's workflow>` is running from a branch other than main.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
+2. Ask the door for the same mail from an approved dispatch of the same workflow on the main branch.
 
 **Expected Results:**
 
-* The door refuses the call.
-* No last sign-in mail is returned.
+* Step 1 is refused and gets no link.
+* Step 2 returns the link.
 
-### shared-auth-test-sign-in-US1-TC4-1: Any other caller is refused the door
+### shared-auth-test-sign-in-US1-TC4-1: A run a pull request started is refused
 
 **Classification:**
 
@@ -117,20 +128,50 @@
 
 **Pre-conditions:**
 
-* admin(another repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
+* A run of `<the door's workflow>` is started by a pull request against this repository.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>`.
+2. Ask the door to prepare `<tester address>` so it holds `admin`.
 
 **Expected Results:**
 
-* The door refuses the call.
-* No last sign-in mail is returned.
+* Both moves are refused.
+* The address holds no `admin` afterwards.
 
-### shared-auth-test-sign-in-US1-TC5-1: Named list accepts the three testers
+### shared-auth-test-sign-in-US1-TC5-1: A dispatch no reviewer approved is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Who may call
+
+**Pre-conditions:**
+
+* A dispatch of `<the door's workflow>` on the main branch is waiting for a reviewer and has not been approved.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+
+**Steps:**
+
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for `<tester address>` from that dispatch.
+2. Have a reviewer approve the dispatch, then ask for the same mail.
+
+**Expected Results:**
+
+* Step 1 is refused and gets no link.
+* Step 2 returns the link.
+
+### shared-auth-test-sign-in-US1-TC6-1: A move on an address that never signed in creates the account
 
 Runs once per row of **Test data**.
 
@@ -149,28 +190,32 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for that row's address.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and has never signed in.
 
 **Test data:**
 
-| Address | Role |
+| Move | State after |
 | --- | --- |
-| <collector tester> | collector |
-| <ban-only tester> | ban-only |
-| <admin-only tester> | admin-only |
+| Ban the address | the account exists and is banned |
+| Prepare the address | the account exists and holds `admin` |
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for that address.
+1. Ask the door for the move in the row on `<tester address>`.
+2. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
+3. Ask the door for the last sign-in mail for that address.
+4. Open the link the door returns.
 
 **Expected Results:**
 
-* The door accepts that address as a tester.
-* The call is not refused as an unknown address.
+* An account exists for `<tester address>` after step 1.
+* It is in the state the row names.
+* Step 4 is refused for the banned row and signs in holding `admin` for the prepared row.
 
-### shared-auth-test-sign-in-US1-TC6-1: Unnamed list refuses every address
+### shared-auth-test-sign-in-US1-TC7-1: An address outside the tester domain is refused
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -187,651 +232,161 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has not named the tester list.
-* The door has no subjects.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* No account exists for the address in the row.
+
+**Test data:**
+
+| Address | Outcome |
+| --- | --- |
+| A collector's own address on another domain | refused |
+| An address whose domain ends with `<tester domain>` | refused |
+| An address with `<tester domain>` in its local part | refused |
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <an address>.
-2. Call the staging door to capture the last sign-in mail for <another address>.
+1. Ask the door on `<grade10 staging site url>` for the last sign-in mail for the address in the row.
+2. Ask the door to ban the address in the row.
+
+**Expected Results:**
+
+* Both moves are refused and no link is returned.
+* No account exists for that address afterwards.
+
+### shared-auth-test-sign-in-US1-TC8-1: A move naming no address is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Testers
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, holds an unused sign-in mail, is not banned and holds no `admin`.
+
+**Test data:**
+
+| Move | Outcome |
+| --- | --- |
+| Capture the last sign-in mail | refused |
+| Age the unused link | refused |
+| Ban the address | refused |
+| Prepare the address | refused |
+
+**Steps:**
+
+1. Ask the door for the move in the row without naming an address.
+2. Ask the door for the last sign-in mail for `<tester address>`.
 
 **Expected Results:**
 
 * Step 1 is refused.
-* Step 2 is refused.
-* No last sign-in mail is returned for either address.
+* No address is read as a default: step 2 returns the same link, and the address is neither banned nor holding `admin`.
 
-### shared-auth-test-sign-in-US1-TC7-1: Capture with no address named is refused
+### shared-auth-test-sign-in-US1-TC9-1: Two tester addresses differing by a plus tag stay apart
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
+* **Behaviour:** positive
+* **Type:** functional
 * **Suites:** regression
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** Testers
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` and `<plus-tagged tester address>` are minted under `<tester domain>`, and both hold an unused sign-in mail, the plus-tagged one sent last.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail with no address named.
+1. Ask the door for the last sign-in mail for `<tester address>`.
+2. Open the link the door returns on `<grade10 staging site url>`.
 
 **Expected Results:**
 
-* The door refuses the call.
-* No last sign-in mail is returned.
+* The link differs from the one sent to `<plus-tagged tester address>`.
+* The signed-in account is `<tester address>`.
 
-### shared-auth-test-sign-in-US1-TC8-1: Capture for one tester does not return another's mail
+### shared-auth-test-sign-in-US1-TC10-1: A sign-in mail to a tester address is still delivered
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Testers
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, and the catch-all inbox for that domain is reachable.
+
+**Steps:**
+
+1. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
+2. Open the catch-all inbox for `<tester domain>`.
+3. Ask the door for the last sign-in mail for `<tester address>`.
+
+**Expected Results:**
+
+* The mail for `<tester address>` is in the inbox and nothing bounces.
+* The door's link matches the one in the mail.
+
+### shared-auth-test-sign-in-US1-TC11-1: The job captures the link and follows it into a session
 
 **Classification:**
 
 * **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Testers
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-* A last sign-in mail exists for <admin-only tester>.
-
-**Steps:**
-
-1. Call the staging door to capture the last sign-in mail for <admin-only tester>.
-
-**Expected Results:**
-
-* The last sign-in mail for <admin-only tester> is returned.
-* The last sign-in mail for <collector tester> is not returned.
-
-### shared-auth-test-sign-in-US1-TC9-1: Proven job captures last mail for collector tester
-
-**Classification:**
-
-* **Severity:** blocker
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke
-* **Layer:** api
+* **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation
+* **Testability:** automation, manual
 * **Trace:** What the job may do
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and has never signed in.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
+2. Ask the door for the last sign-in mail for that address.
+3. Open the link the door returns.
 
 **Expected Results:**
 
-* The last sign-in link for <collector tester> is returned.
+* Step 2 returns the link with no mailbox opened.
+* Step 3 signs `<tester address>` in on `<grade10 staging site url>`.
 
-### shared-auth-test-sign-in-US1-TC10-1: Capture returns the last of several mails
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* An earlier sign-in mail exists for <collector tester>.
-* A later last sign-in mail exists for <collector tester>.
-
-**Steps:**
-
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
-
-**Expected Results:**
-
-* The later last sign-in mail is returned.
-* The earlier sign-in mail is not returned.
-
-### shared-auth-test-sign-in-US1-TC11-1: Capture with no last mail returns none
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* No last sign-in mail exists for <collector tester>.
-
-**Steps:**
-
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
-
-**Expected Results:**
-
-* No sign-in link is returned.
-
-### shared-auth-test-sign-in-US1-TC12-1: Unused link is aged without waiting
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* An unused last sign-in link exists for <collector tester>.
-* That unused link is still inside its five-minute life.
-
-**Steps:**
-
-1. Call the staging door to age the unused link for <collector tester>.
-
-**Expected Results:**
-
-* The unused link is past its five-minute life.
-
-### shared-auth-test-sign-in-US1-TC13-1: Used link is not aged
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A used last sign-in link exists for <collector tester>.
-
-**Steps:**
-
-1. Call the staging door to age the unused link for <collector tester>.
-
-**Expected Results:**
-
-* The door does not age that used link.
-* The used link is unchanged.
-
-### shared-auth-test-sign-in-US1-TC14-1: Missing link is not aged
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* No last sign-in mail exists for <collector tester>.
-
-**Steps:**
-
-1. Call the staging door to age the unused link for <collector tester>.
-
-**Expected Results:**
-
-* No unused link is aged.
-
-### shared-auth-test-sign-in-US1-TC15-1: Ban-only tester is banned and stays banned
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <ban-only tester> is not banned.
-
-**Steps:**
-
-1. Call the staging door to ban <ban-only tester>.
-2. Read whether that address is banned.
-3. Read whether that address is banned again.
-
-**Expected Results:**
-
-* Step 2 shows <ban-only tester> is banned.
-* Step 3 still shows <ban-only tester> is banned.
-
-### shared-auth-test-sign-in-US1-TC16-1: Ban of a non-ban-only tester is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* That row's address is not banned.
-
-**Test data:**
-
-| Address |
-| --- |
-| <collector tester> |
-| <admin-only tester> |
-
-**Steps:**
-
-1. Call the staging door to ban that address.
-
-**Expected Results:**
-
-* The door refuses the call.
-* That address is not banned.
-
-### shared-auth-test-sign-in-US1-TC17-1: Admin-only tester is prepared to hold admin
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <admin-only tester> does not hold admin.
-
-**Steps:**
-
-1. Call the staging door to prepare <admin-only tester>.
-2. Read whether that address holds admin.
-
-**Expected Results:**
-
-* <admin-only tester> holds admin.
-
-### shared-auth-test-sign-in-US1-TC18-1: Prepare of a non-admin-only tester is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* That row's address does not hold admin.
-
-**Test data:**
-
-| Address |
-| --- |
-| <collector tester> |
-| <ban-only tester> |
-
-**Steps:**
-
-1. Call the staging door to prepare that address.
-
-**Expected Results:**
-
-* The door refuses the call.
-* That address does not hold admin.
-
-### shared-auth-test-sign-in-US1-TC19-1: Address not on the list is refused
-
-Runs once per row of **Test data**.
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-
-**Test data:**
-
-| Move |
-| --- |
-| capture the last sign-in mail |
-| age the unused link |
-| ban |
-| prepare to hold admin |
-
-**Steps:**
-
-1. Call the staging door to perform that move for <address not on the list>.
-
-**Expected Results:**
-
-* The door refuses the call.
-* The named testers are unchanged.
-
-### shared-auth-test-sign-in-US1-TC20-1: The preview door stays closed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the preview door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-
-**Steps:**
-
-1. Call the preview door to capture the last sign-in mail for <collector tester>.
-
-**Expected Results:**
-
-* The door refuses the call.
-* No last sign-in mail is returned.
-
-### shared-auth-test-sign-in-US1-TC21-1: The production door stays closed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the production door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-
-**Steps:**
-
-1. Call the production door to capture the last sign-in mail for <collector tester>.
-
-**Expected Results:**
-
-* The door refuses the call.
-* No last sign-in mail is returned.
-
-### shared-auth-test-sign-in-US1-TC22-1: Disposable door on staging stays closed
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is on staging.
-
-**Steps:**
-
-1. Call the disposable `/dev` door on staging.
-
-**Expected Results:**
-
-* The disposable `/dev` door stays closed.
-
-### shared-auth-test-sign-in-US1-TC23-1: Session mint without following mail is refused
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <collector tester> has no session.
-
-**Steps:**
-
-1. Call the staging door to mint a session for <collector tester> without following mail.
-
-**Expected Results:**
-
-* The door refuses the call.
-* <collector tester> has no session.
-
-### shared-auth-test-sign-in-US1-TC24-1: Capture does not mint a session
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** security
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-* <collector tester> has no session.
-
-**Steps:**
-
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
-2. Read whether <collector tester> has a session.
-
-**Expected Results:**
-
-* The last sign-in link is returned.
-* <collector tester> has no session.
-
-### shared-auth-test-sign-in-US1-TC25-1: Store and auction seeds are not offered
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** Closed
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-
-**Steps:**
-
-1. Call the staging door to seed store data.
-2. Call the staging door to seed auction data.
-
-**Expected Results:**
-
-* Store seed is refused or not offered.
-* Auction seed is refused or not offered.
-
-### shared-auth-test-sign-in-US1-TC26-1: Second capture returns the same last mail
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** api
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** What the job may do
-
-**Pre-conditions:**
-
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-* No later send has gone out for that tester.
-
-**Steps:**
-
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
-2. Call the staging door to capture the last sign-in mail for <collector tester> again.
-
-**Expected Results:**
-
-* Step 1 returns that last mail.
-* Step 2 returns the same last mail.
-
-### shared-auth-test-sign-in-US1-TC27-1: Prepare when already admin leaves admin
+### shared-auth-test-sign-in-US1-TC12-1: Capture for an address with no last mail returns no link
 
 **Classification:**
 
@@ -848,20 +403,51 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <admin-only tester> already holds admin.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
 
 **Steps:**
 
-1. Call the staging door to prepare <admin-only tester>.
-2. Read whether that address holds admin.
+1. Ask the door for the last sign-in mail for `<tester address>`.
+2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
+3. Ask the door for the last sign-in mail again.
 
 **Expected Results:**
 
-* <admin-only tester> holds admin.
+* Step 1 returns no link.
+* Step 3 returns the link from the mail step 2 sent.
 
-### shared-auth-test-sign-in-US1-TC28-1: Ban when already banned leaves banned
+### shared-auth-test-sign-in-US1-TC13-1: Capture returns only the named address's last mail
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` and `<second tester address>` are minted under `<tester domain>`, and both hold an unused sign-in mail, `<second tester address>`'s sent last.
+
+**Steps:**
+
+1. Ask the door for the last sign-in mail for `<tester address>`.
+2. Open the link the door returns on `<grade10 staging site url>`.
+
+**Expected Results:**
+
+* The link is `<tester address>`'s, not the newer one sent to `<second tester address>`.
+* The signed-in account is `<tester address>`.
+
+### shared-auth-test-sign-in-US1-TC14-1: A second capture returns the same link until another send
 
 **Classification:**
 
@@ -878,20 +464,179 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <ban-only tester> is already banned.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
 
 **Steps:**
 
-1. Call the staging door to ban <ban-only tester>.
-2. Read whether that address is banned.
+1. Ask the door for the last sign-in mail for `<tester address>` and open the link.
+2. Ask the door for the last sign-in mail for that address again.
+3. Ask `<grade10 staging site url>` for a second sign-in mail for that address.
+4. Ask the door for the last sign-in mail a third time.
 
 **Expected Results:**
 
-* <ban-only tester> is banned.
+* Step 2 returns the link step 1 used.
+* Step 4 returns the link from the mail step 3 sent.
 
-### shared-auth-test-sign-in-US1-TC29-1: Capture of a used last mail still returns it
+### shared-auth-test-sign-in-US1-TC15-1: An aged unused link is refused before its lifetime passes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail sent less than `<link lifetime>` ago.
+
+**Steps:**
+
+1. Ask the door for the last sign-in mail for `<tester address>`.
+2. Ask the door to age that link.
+3. Open the link on `<grade10 staging site url>`.
+
+**Expected Results:**
+
+* Step 3 is refused as expired.
+* No session starts, and less than `<link lifetime>` has passed since the mail was sent.
+
+### shared-auth-test-sign-in-US1-TC16-1: Aging a used link changes nothing
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and holds an unused sign-in mail.
+
+**Steps:**
+
+1. Ask the door for the last sign-in mail for `<tester address>` and open the link.
+2. Open the same link a second time and note the answer.
+3. Ask the door to age that link.
+4. Open the link again.
+
+**Expected Results:**
+
+* Step 4 answers exactly as step 2 did.
+* No new session starts.
+
+### shared-auth-test-sign-in-US1-TC17-1: Aging an address with no link ages nothing
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
+
+**Steps:**
+
+1. Ask the door to age the link for `<tester address>`.
+2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
+3. Ask the door for the last sign-in mail and open the link it returns.
+
+**Expected Results:**
+
+* No link exists to open after step 1.
+* Step 3 signs `<tester address>` in, inside `<link lifetime>`.
+
+### shared-auth-test-sign-in-US1-TC18-1: A banned tester address cannot follow its captured link
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, is not banned, and holds an unused sign-in mail.
+
+**Steps:**
+
+1. Ask the door for the last sign-in mail for `<tester address>`.
+2. Ask the door to ban `<tester address>`.
+3. Open the captured link on `<grade10 staging site url>`.
+
+**Expected Results:**
+
+* Step 3 is refused for a banned address.
+* No session starts.
+
+### shared-auth-test-sign-in-US1-TC19-1: A prepared tester address holds admin once the link is followed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, holds no `admin`, and holds an unused sign-in mail.
+
+**Steps:**
+
+1. Ask the door to prepare `<tester address>` so it holds `admin`.
+2. Ask the door for the last sign-in mail for that address.
+3. Open the link the door returns.
+4. Open `<grade10 admin console url>`.
+
+**Expected Results:**
+
+* Step 3 signs the address in.
+* Step 4 admits the session, which holds `admin`.
+
+### shared-auth-test-sign-in-US1-TC20-1: Clearing the limits sends a second mail without the wait
 
 **Classification:**
 
@@ -908,20 +653,58 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* A last sign-in mail exists for <collector tester>.
-* That last mail has already been followed.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and was sent a sign-in mail less than `<the send wait>` ago.
 
 **Steps:**
 
-1. Call the staging door to capture the last sign-in mail for <collector tester>.
+1. Ask `<grade10 staging site url>` for a second sign-in mail for `<tester address>`.
+2. Ask the door to clear the sign-in limits for `<tester address>`.
+3. Ask for a second sign-in mail again.
+4. Ask the door for the last sign-in mail for that address.
 
 **Expected Results:**
 
-* The last sign-in mail is returned.
+* Step 1 is held by the wait between two mails.
+* Step 3 sends the mail at once.
+* Step 4 returns the newer link.
 
-### shared-auth-test-sign-in-US1-TC30-1: Unban through this door is refused
+### shared-auth-test-sign-in-US1-TC21-1: Clearing the limits lets the caller ask past the count
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, and the run has already asked for `<the mail count>` sign-in mails, the limit on how many a caller may ask for.
+
+**Steps:**
+
+1. Ask `<grade10 staging site url>` for one more sign-in mail for `<tester address>`.
+2. Ask the door to clear the sign-in limits for the caller and `<tester address>`.
+3. Ask for one more sign-in mail.
+4. Ask the door for the last sign-in mail for that address.
+
+**Expected Results:**
+
+* Step 1 is held by the count a caller may ask for.
+* Step 3 sends the mail.
+* Step 4 returns its link.
+
+### shared-auth-test-sign-in-US1-TC22-1: The door is closed on preview and production
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -934,39 +717,270 @@ Runs once per row of **Test data**.
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
+* **Trace:** Closed
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, is not banned, and holds an unused sign-in mail on staging.
+
+**Test data:**
+
+| Where | Outcome |
+| --- | --- |
+| `<grade10 preview site url>` | refused |
+| `<grade10 production site url>` | refused |
+
+**Steps:**
+
+1. Ask the door at the place in the row for the last sign-in mail for `<tester address>`.
+2. Ask the door at the same place to ban `<tester address>`.
+
+**Expected Results:**
+
+* Both moves are refused and no link is returned.
+* `<tester address>` is not banned afterwards.
+
+### shared-auth-test-sign-in-US1-TC23-1: The disposable dev door on staging stays 403
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Closed
+
+**Pre-conditions:**
+
+* `<tester address>` is minted under `<tester domain>`.
+
+**Test data:**
+
+| Caller | Outcome |
+| --- | --- |
+| An approved dispatch of `<the door's workflow>` on the main branch | 403 |
+| A signed-out visitor in a browser | 403 |
+
+**Steps:**
+
+1. Open `<the disposable dev door on staging>` as the caller in the row.
+2. Ask it for a session for `<tester address>`.
+
+**Expected Results:**
+
+* Both steps answer 403.
+* No session starts on `<grade10 staging site url>`.
+
+### shared-auth-test-sign-in-US1-TC24-1: The door mints no session without the mail
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Closed
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and has been sent no sign-in mail.
+
+**Steps:**
+
+1. Ask the door for a session for `<tester address>` without a mail.
+2. Open `<grade10 staging site url>`.
+
+**Expected Results:**
+
+* Step 1 is refused and returns no session.
+* Step 2 shows nobody signed in.
+
+### shared-auth-test-sign-in-US1-TC25-1: The door does not unban
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Closed
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and was banned through the door.
+
+**Steps:**
+
+1. Ask the door to unban `<tester address>`.
+2. Ask `<grade10 staging site url>` for a sign-in mail for that address.
+3. Ask the door for the last sign-in mail for that address.
+4. Open the link the door returns.
+
+**Expected Results:**
+
+* Step 1 is refused.
+* Step 4 is refused for a banned address.
+
+### shared-auth-test-sign-in-US1-TC26-1: The door seeds no store or auction data
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Closed
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`.
+
+**Steps:**
+
+1. Ask the door to seed a store product for `<tester address>`.
+2. Ask the door to seed an auction listing for `<tester address>`.
+3. Open `<grade10 staging store url>`.
+4. Open `<grade10 staging auction url>`.
+
+**Expected Results:**
+
+* Both seed moves are refused.
+* No new product shows in step 3 and no new listing in step 4.
+
+### shared-auth-test-sign-in-US1-TC27-1: Clearing one address leaves another address's wait standing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
 * **Trace:** What the job may do
 
 **Pre-conditions:**
 
-* admin(this repository's Actions job) is calling the staging door.
-* Ops has named the tester list.
-* <ban-only tester> is banned.
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<first tester address>` and `<second tester address>` are minted under `<tester domain>`, and each was sent a sign-in mail less than `<the send wait>` ago.
 
 **Steps:**
 
-1. Call the staging door to unban <ban-only tester>.
+1. Ask the door to clear the sign-in limits for `<first tester address>`.
+2. Ask `<grade10 staging site url>` for a second sign-in mail for `<second tester address>`.
 
 **Expected Results:**
 
-* The door refuses the call.
-* <ban-only tester> stays banned.
+* Step 2 is held by the wait between two mails.
+* No second mail is sent to `<second tester address>`.
+
+### shared-auth-test-sign-in-US1-TC28-1: A mail older than the capture window is no longer readable
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>` and was sent a sign-in mail more than `<the capture window>` ago.
+
+**Steps:**
+
+1. Ask the door for the last sign-in mail for `<tester address>`.
+
+**Expected Results:**
+
+* The call is not refused.
+* No link is returned, as for an address no mail was sent to.
+
+### shared-auth-test-sign-in-US1-TC29-1: A tester address in mixed case is acted on
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Testers
+
+**Pre-conditions:**
+
+* An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
+* `<tester address>` is minted under `<tester domain>`, written with its domain in mixed case.
+
+**Steps:**
+
+1. Ask the door to ban `<tester address>`.
+
+**Expected Results:**
+
+* The move is carried out.
+* That address is banned.
 
 ## Reconciliation
 
-**Run:** add-staging-auth-test-door, 2026-09-21. Scenario pass read this change's Purpose, Feature set, journeys, proposal, decisions, Sign-In Tests PRD, and the durable `shared/auth/sign-in` and `shared/auth/users` requirements so it would not restate collector or operator contracts. Blind suite pass read only the isolated input (Purpose, Feature set, journeys, proposal, decisions.md with an empty Raised table, Sign-In Tests PRD, store context) — no `## Requirements`, no `openspec/specs/` beyond house-style `*-tcs.md`, no archive.
+The blind suite pass never read the scenarios; the scenario pass never read the suite. This block is what changed when they were put side by side, and who moved.
 
-- **Raised, folded into spec:** Capture with no last mail returns none — `shared-auth-test-sign-in-US1-TC11-1` → `shared-auth-test-sign-in-SC-17`.
-- **Raised, folded into spec:** Capture naming no address is refused — `shared-auth-test-sign-in-US1-TC7-1` → `shared-auth-test-sign-in-SC-23`.
-- **Raised, folded into spec:** Capture for one tester does not return another's mail — `shared-auth-test-sign-in-US1-TC8-1` → `shared-auth-test-sign-in-SC-18`.
-- **Raised, folded into spec:** Last of several mails is the later send — `shared-auth-test-sign-in-US1-TC10-1` → `shared-auth-test-sign-in-SC-19`.
-- **Raised, folded into spec:** A used link is not aged — `shared-auth-test-sign-in-US1-TC13-1` → `shared-auth-test-sign-in-SC-20`.
-- **Raised, folded into spec:** A missing link is not aged — `shared-auth-test-sign-in-US1-TC14-1` → `shared-auth-test-sign-in-SC-21`.
-- **Raised, folded into spec:** Capture does not mint a session — `shared-auth-test-sign-in-US1-TC24-1` → `shared-auth-test-sign-in-SC-22`.
-- **Raised, folded into spec:** Last mail is the last send, including a used one — `shared-auth-test-sign-in-US1-TC29-1` → `shared-auth-test-sign-in-SC-27`.
-- **Raised, folded into spec:** A second capture returns the same last mail until another send — `shared-auth-test-sign-in-US1-TC26-1` → `shared-auth-test-sign-in-SC-24`.
-- **Raised, folded into spec:** Preparing an admin-only tester that already holds admin leaves it holding admin — `shared-auth-test-sign-in-US1-TC27-1` → `shared-auth-test-sign-in-SC-25`.
-- **Raised, folded into spec:** Banning an already-banned ban-only tester leaves it banned — `shared-auth-test-sign-in-US1-TC28-1` → `shared-auth-test-sign-in-SC-26`.
-- **Raised, folded into spec:** Unban through this door is refused — `shared-auth-test-sign-in-US1-TC30-1` → `shared-auth-test-sign-in-SC-09` (scenario reading; the suite's first pass skipped unban as a non-goal feature, then added the refusal case so the SHALL NOT is walked).
-- **Raised, rejected:** Ban-only starts unbanned — setup for the happy-path ban (`shared-auth-test-sign-in-SC-07`), not a product rule. The already-banned partition is `shared-auth-test-sign-in-SC-26`.
-- **Raised, rejected:** Age is only for the collector tester — the PRD already limits every move to an address on the list; `shared-auth-test-sign-in-SC-06` GIVEN is any allowlisted tester.
-- **Uncovered anchors:** none. Every Feature set root group has a scenario and a case.
+**Uncovered anchors:** none.
+
+**Raised by the blind pass, answered as a decision:** twenty questions, every one landed in `decisions.md` under `## Raised`. Ten needed a new decision — Q23 to Q32 — and the rest were already answered by a scenario the blind pass could not see.
+
+**Raised by the blind pass, folded into the spec:** three, each a case the blind pass wrote that no scenario proved.
+
+- A subdomain of the tester domain — `shared-auth-test-sign-in-US1-TC7-1` → `shared-auth-test-sign-in-SC-30`.
+- A mixed-case domain, which the blind pass raised beside the subdomain and its refusal table could not hold, because the answer is acceptance — `shared-auth-test-sign-in-SC-34`, with `TC29` added for it.
+- Two addresses differing only by a plus tag — `shared-auth-test-sign-in-US1-TC9-1` → `shared-auth-test-sign-in-SC-31`.
+- The door's own workflow off the main branch — `shared-auth-test-sign-in-US1-TC3-1` → `shared-auth-test-sign-in-SC-32`. The requirement had the bullet; only the pull-request half had a scenario.
+
+**Found in the scenario pass, patched into the suite:** two, where a scenario had no case.
+
+- Clearing one address leaves another's wait standing — `shared-auth-test-sign-in-SC-22` → `TC27`.
+- The caller's own count, cleared — `shared-auth-test-sign-in-SC-33`, written after `TC21` was found to prove a bound no scenario stated.
+
+**Found in review, patched into both:** one, and it came from neither pass. A governance review of the earlier draft found the fifteen-minute capture window living only in `tech-design.md`, which made the second-capture requirement stronger than what ships. It is now `Q22`, a 🚧 row on the page, `shared-auth-test-sign-in-SC-29`, and `TC28`.
+
+**Out of suite:** none.
