@@ -595,6 +595,42 @@ test("shared-planning-agent-rounds-SC-73 - a run lands through the relay, asked 
   assert.equal(mainAfter, beforeMain);
 });
 
+test("shared-planning-agent-rounds-SC-73 - a task group lands through the relay off the branch tip, asked as its bare digits", async () => {
+  const seen = {};
+  const server = await landingRelay(granted(seen));
+  const { root, remote } = sandbox();
+  writeRelayFile(root, urlOf(server), "@erin");
+  const tip = shaOf(root, "HEAD");
+
+  const result = await run([
+    CHANGE,
+    "group 1",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(seen.kind, "word");
+  assert.equal(seen.artifact, "1");
+  // A group carries the branch whole: the landing commit sits on the tip the
+  // build pushed, not on `main`, and adds the row alone — no `landed_by:`.
+  assert.equal(shaOf(root, `${seen.sha}^`), tip);
+  assert.match(
+    textAt(root, seen.sha, `${DIR}/rounds.md`),
+    /\| 1 \| 1 \| simpler \| nothing stood \| - \| - \|/,
+  );
+  assert.doesNotMatch(
+    textAt(root, seen.sha, `${DIR}/.openspec.yaml`),
+    /landed_by:/,
+  );
+  assert.equal(holds(remote, SIDE_REF), false);
+});
+
 test("shared-planning-agent-rounds-SC-73 - the sha a wake asks the relay to land is cut from main, with no draft above it", async () => {
   const seen = {};
   const server = await landingRelay(granted(seen));
