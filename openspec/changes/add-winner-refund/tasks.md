@@ -17,6 +17,6 @@
 - [x] 4.1 Add the operator refund form, stock choice, queue filter and detail record.
 - [x] 4.2 Render Refunded Winner Order with retained invoice and receipts and no self-service actions (`winner-order-SC-157`).
 
-## 5. Verification
+## 5. Verification (owner: @htonyl)
 
 - [ ] 5.1 Run role-matrix, domain, migration and focused admin/site E2E checks.
