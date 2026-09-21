@@ -240,7 +240,7 @@ Runs once per row of **Test data**.
 | Address | Outcome |
 | --- | --- |
 | A collector's own address on another domain | refused |
-| An address whose domain ends with `<tester domain>` | refused |
+| An address whose domain is a subdomain of `<tester domain>` | refused |
 | An address with `<tester domain>` in its local part | refused |
 
 **Steps:**
@@ -283,6 +283,7 @@ Runs once per row of **Test data**.
 | Age the unused link | refused |
 | Ban the address | refused |
 | Prepare the address | refused |
+| Clear the sign-in limits | refused |
 
 **Steps:**
 
@@ -292,7 +293,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Step 1 is refused.
-* No address is read as a default: step 2 returns the same link, and the address is neither banned nor holding `admin`.
+* No address is read as a default: step 2 returns the same link, the address is neither banned nor holding `admin`, and the sign-in wait on that address still holds.
 
 ### shared-auth-test-sign-in-US1-TC9-1: Two tester addresses differing by a plus tag stay apart
 
@@ -324,7 +325,7 @@ Runs once per row of **Test data**.
 * The link differs from the one sent to `<plus-tagged tester address>`.
 * The signed-in account is `<tester address>`.
 
-### shared-auth-test-sign-in-US1-TC10-1: A sign-in mail to a tester address is still delivered
+### shared-auth-test-sign-in-US1-TC10-1: A sign-in mail to a tester address is sent the ordinary way
 
 **Classification:**
 
@@ -332,28 +333,28 @@ Runs once per row of **Test data**.
 * **Priority:** medium
 * **Status:** draft
 * **Behaviour:** positive
-* **Type:** integration
+* **Type:** functional
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** manual
+* **Testability:** automation
 * **Trace:** Testers
 
 **Pre-conditions:**
 
 * An approved dispatch of `<the door's workflow>` is running on the main branch of this repository.
-* `<tester address>` is minted under `<tester domain>`, and the catch-all inbox for that domain is reachable.
+* `<tester address>` is minted under `<tester domain>`.
 
 **Steps:**
 
 1. Ask `<grade10 staging site url>` for a sign-in mail for `<tester address>`.
-2. Open the catch-all inbox for `<tester domain>`.
-3. Ask the door for the last sign-in mail for `<tester address>`.
+2. Ask the door for the last sign-in mail for `<tester address>`.
 
 **Expected Results:**
 
-* The mail for `<tester address>` is in the inbox and nothing bounces.
-* The door's link matches the one in the mail.
+* The mail is sent the ordinary way.
+* The door returns that link.
+* The door neither skipped nor replaced the send.
 
 ### shared-auth-test-sign-in-US1-TC11-1: The job captures the link and follows it into a session
 
@@ -969,7 +970,7 @@ The blind suite pass never read the scenarios; the scenario pass never read the 
 
 **Raised by the blind pass, answered as a decision:** twenty questions, every one landed in `decisions.md` under `## Raised`. Ten needed a new decision — Q23 to Q32 — and the rest were already answered by a scenario the blind pass could not see.
 
-**Raised by the blind pass, folded into the spec:** three, each a case the blind pass wrote that no scenario proved.
+**Raised by the blind pass, folded into the spec:** four, each a case the blind pass wrote that no scenario proved.
 
 - A subdomain of the tester domain — `shared-auth-test-sign-in-US1-TC7-1` → `shared-auth-test-sign-in-SC-30`.
 - A mixed-case domain, which the blind pass raised beside the subdomain and its refusal table could not hold, because the answer is acceptance — `shared-auth-test-sign-in-SC-34`, with `TC29` added for it.
@@ -981,6 +982,9 @@ The blind suite pass never read the scenarios; the scenario pass never read the 
 - Clearing one address leaves another's wait standing — `shared-auth-test-sign-in-SC-22` → `TC27`.
 - The caller's own count, cleared — `shared-auth-test-sign-in-SC-33`, written after `TC21` was found to prove a bound no scenario stated.
 
-**Found in review, patched into both:** one, and it came from neither pass. A governance review of the earlier draft found the fifteen-minute capture window living only in `tech-design.md`, which made the second-capture requirement stronger than what ships. It is now `Q22`, a 🚧 row on the page, `shared-auth-test-sign-in-SC-29`, and `TC28`.
+**Found in review, patched into both:** two, and they came from neither pass.
+
+- A governance review of the earlier draft found the fifteen-minute capture window living only in `tech-design.md`, which made the second-capture requirement stronger than what ships. It is now `Q22`, a 🚧 row on the page, `shared-auth-test-sign-in-SC-29`, and `TC28`.
+- The merge review found age taking a `seconds` knob the spec did not grant, clear able to name no address in `SC-33`, and a catch-all SHALL the page marked ❓. Age takes `{ email }` only; `SC-33` names an address; `SC-11` is the ordinary send, not the inbox.
 
 **Out of suite:** none.

@@ -235,7 +235,7 @@ read on one table, so no processor owns a transaction and none needs a lock.
 | Move | Input | Success | Refusal |
 | --- | --- | --- | --- |
 | `POST /test/outbox` | `{ email }` | `{ url, body }`, or `{ url: null }` when there is no row | 400 unparseable, 403 not the caller or off-domain |
-| `POST /test/age-sign-in-link` | `{ email, seconds }` | `{ aged: <count> }`, zero when there is nothing unused | as above |
+| `POST /test/age-sign-in-link` | `{ email }` | `{ aged: <count> }`, zero when there is nothing unused | as above |
 | `POST /test/ban-user` | `{ email }` | `{ banned: true }`, the account created when absent | as above |
 | `POST /test/prepare-admin` | `{ email }` | `{ role: "admin" }`, the account created when absent | as above |
 | `POST /test/clear-limits` | `{ email }` | `{ cleared: { sendCap: <count>, rateLimit: <count> } }` | as above |
@@ -254,6 +254,11 @@ All five are idempotent, and with a per-run address the question barely
 arises: capture returns the same row until another send, age applied twice
 leaves an expired link expired, ban and prepare write a fixed value, and
 clearing an already-clear counter deletes nothing and answers zero.
+
+Age takes `{ email }` only. The handler applies a fixed offset past
+`SIGN_IN_LINK_TTL_SECONDS`. *Rejected:* a caller-supplied `seconds`, which
+would let a caller age by one second or by a day, and which the spec does
+not grant.
 
 Identity end to end: the job holds an OIDC token minted for this audience by
 the door's own workflow on a reviewed dispatch; the gateway forwards

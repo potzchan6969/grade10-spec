@@ -114,9 +114,9 @@ Which addresses the door acts on, and what it creates to act on one.
 - **An account the move needs** — WHEN a move needs an account for a tester
   address that has never signed in, the door SHALL create the account, then
   put it in the state the move names
-- **Delivery** — the tester domain SHALL take mail at any address under it, so
-  a sign-in mail to a tester address is delivered like any other and nothing
-  bounces; the door SHALL NOT skip or replace the send
+- **The send** — the door SHALL NOT skip or replace a sign-in send to a tester
+  address; the mail goes the ordinary way. Whether a catch-all inbox takes it
+  is Ops, not this door
 
 #### Scenario: shared-auth-test-sign-in-SC-06 - An address a run minted is acted on
 **Serves:** Testers - any address under the tester domain
@@ -181,14 +181,13 @@ Which addresses the door acts on, and what it creates to act on one.
 - **THEN** an account exists for that address
 - **AND** that account holds `admin`
 
-#### Scenario: shared-auth-test-sign-in-SC-11 - A sign-in mail to a tester address is delivered
+#### Scenario: shared-auth-test-sign-in-SC-11 - A sign-in mail to a tester address is sent the ordinary way
 **Serves:** Testers - any address under the tester domain
 
-- **GIVEN** an address under the tester domain with no mailbox of its own
+- **GIVEN** an address under the tester domain
 - **WHEN** that address asks for a sign-in link
 - **THEN** the mail is sent the ordinary way
-- **AND** the domain's catch-all inbox takes it
-- **AND** the send does not bounce
+- **AND** the door neither skips nor replaces that send
 
 ### Requirement: Capture returns the last sign-in mail for the address named
 
@@ -360,9 +359,10 @@ How a suite asks for mail after mail without being held as an attacker.
 **Serves:** What the job may do - clear the sign-in limits so a suite is not throttled
 
 - **GIVEN** a caller that has asked for as many sign-in mails as the cap
-  `shared/auth/sign-in` sets allows
-- **WHEN** the door's own workflow clears the sign-in limits for itself
-- **AND** it asks for another sign-in link for a tester address
+  `shared/auth/sign-in` sets allows, naming a tester address
+- **WHEN** the door's own workflow clears the sign-in limits for that address
+  and for itself
+- **AND** it asks for another sign-in link for that address
 - **THEN** that mail is sent
 
 #### Scenario: shared-auth-test-sign-in-SC-22 - Clearing leaves another address's wait standing

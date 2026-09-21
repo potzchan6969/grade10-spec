@@ -18,13 +18,11 @@ QA walks sign-in on staging through a locked door. Collectors never see it.
 
 ## Who May Call
 
-- 🚧 **The door's own workflow** — one workflow opens the door, and nobody else can.
-
-Proving the repository is not enough on its own: every job in it proves the same thing, including one running code a pull request wrote.
+- 🚧 **The door's own workflow** — one workflow opens the door, and nobody else can. Proving the repository is not enough: every job in it proves the same thing, including one running code a pull request wrote.
 
 ## Testers
 
-Any address under one tester domain, minted per run. A test names its own address and puts it in whatever state it needs.
+- 🚧 **Any address under the tester domain**, minted per run. A test names its own address and puts it in whatever state it needs.
 
 - ❓ **The domain** — Ops names it. Until then the door has no subjects.
 - ❓ **Delivery** — Ops gives the domain a catch-all inbox, so a sign-in mail to a tester address is delivered like any other and nothing bounces.
