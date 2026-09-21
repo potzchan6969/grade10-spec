@@ -259,8 +259,8 @@ and a round that found nothing stood says so. What the other flags take, and
 every refusal the command runs through before `main` moves, are its header's.
 
 - **A fix pass is a round** — the fixes off a demonstration or a whole-change
-  reading land with their own row, naming the simpler-thing reader among its
-  perspectives and `verifier` only where one ran
+  reading land with their own row, `--fix-pass` dropping the floor to the
+  simpler-thing reader alone, and `verifier` only where one ran
 - **From a wake** — with `.round/relay.json` present the command takes the
   speaker's handle from the wake's sender and checks it against the
   artifact's `hand:`, pushes the branch, and asks the relay to move `main`;

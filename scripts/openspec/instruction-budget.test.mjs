@@ -43,7 +43,7 @@ const SKILLS_BUDGET = {
   "workflow-specify": 332,
   "workflow-tasks": 229,
   "workflow-build": 472,
-  "workflow-land": 355,
+  "workflow-land": 356,
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,

@@ -348,7 +348,7 @@ test("shared-planning-agent-rounds-SC-79 - a fix pass is a round with a row", ()
   );
   assert.match(
     skill,
-    /naming the simpler-thing reader among its\s+perspectives/i,
+    /`--fix-pass` dropping the floor to the\s+simpler-thing reader alone/i,
   );
   assert.match(skill, /`verifier` only where one ran/i);
 });
