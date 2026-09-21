@@ -45,7 +45,8 @@ const SKILLS_BUDGET = {
   // at the instruction that holds them.
   "workflow-tasks": 178,
   "workflow-build": 472,
-  "workflow-land": 356,
+  // 366 once the whole-change landing's command took its own line.
+  "workflow-land": 366,
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,
