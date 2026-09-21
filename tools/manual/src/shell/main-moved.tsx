@@ -310,7 +310,7 @@ function checkoutLine(
   }
   return {
     pull: false,
-    text: `Your checkout is ${commits(ahead)} ahead of \`main\`.`,
+    text: `Your checkout holds ${commits(ahead)} \`main\` does not.`,
   };
 }
 

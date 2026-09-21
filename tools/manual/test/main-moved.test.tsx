@@ -196,7 +196,8 @@ describe("the checkout the manual is running out of", () => {
   it("offers no pull while the checkout is ahead", () => {
     const html = render({ local: true, standing: standing({ ahead: 2 }) });
 
-    expect(html).toContain("2 commits ahead");
+    expect(html).toContain("Your checkout holds 2 commits");
+    expect(html).toContain(">main</code> does not.");
     expect(html).not.toContain(">Pull<");
   });
 
