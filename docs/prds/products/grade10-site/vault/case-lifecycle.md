@@ -65,9 +65,8 @@ offer; either lane may end at `declined` by staff here.
 Who the collector is, what they sign, where the item goes.
 
 ## Bind the identity check
-A verification id is bound to the case and nothing else is stored on it. The
-check may have been walked days earlier, reused from one already passed, or
-recorded by staff at the counter.
+A verification id is bound to the case and nothing else is stored on it,
+whether the check was walked days earlier, reused, or recorded at the counter.
 
 ## Staff — Explain the key terms
 Financed lane: staff record that the terms were explained, with a recording
@@ -92,8 +91,7 @@ Financed lane only.
 `vaulted → active`. The transfer already happened; the amount equals the
 principal, the bank reference is required, and the value date is no earlier
 than the day the paper was sealed. The term starts here: the due date is
-computed from that value date and written on the payout row. The person who
-made the offer may not pay it out.
+computed from that value date. The person who made the offer may not pay it out.
 
 ## Treasurer — Record repayments
 Each carries the date the money reached the bank, the recorder's key and the
@@ -131,25 +129,22 @@ released`, guarded on nothing outstanding and no packet open.
 
 - 🚧 **A lapsed offer reads as one** — the collector's page and the queue
   read the offer's own expiry and say it ran out, derived at the read, while
-  the case stays `offer_made` and the request stays open for another; the
-  same read says a declined offer, a superseding one, a missed visit and an
-  ask for the item back
+  the case stays `offer_made` and open for another; the same read says a
+  declined or superseding offer, a missed visit and an ask for the item back
 
 ## Exits
 
 - **Declined** — from `under_valuation`, by staff, with a reason the
   collector reads verbatim
 - **Cancelled before custody** — from any status before the item is in the
-  vault, by the collector on their own case, by staff, or by the abandonment
-  sweep; the live offer closes and the visit is cancelled in the same
-  transaction, and the collector is told
+  vault, by the collector, by staff, or by the abandonment sweep; the live
+  offer closes and the visit is cancelled with it, and the collector is told
 - **The unwind** — `vaulted → cancelled`, only while no payout is live; it
   runs the release machinery but signs no release document
 - **Forfeited** — `active → forfeited`, by staff, past the due date and never
   before the cure date of a written notice has passed; the item settles the
-  debt, the figure it settled reaches the audit chain, and the collector is
-  told. A visit still ahead is cancelled and one already past is marked a
-  no-show, because completed would say the borrower came in
+  debt, the figure reaches the audit chain, and the collector is told; a
+  visit ahead is cancelled and one past is a no-show, never completed
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - 🚧 **Every ending reads on the case** — in the collector's words: the

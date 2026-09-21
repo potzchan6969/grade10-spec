@@ -7,8 +7,7 @@ order: 3
 A loan is an accepted offer paid out against an item in the locker; every
 amount on it is whole cents written down by a person after the bank moved it.
 
-- **Currency** — the brand's (HKD for Grade10), checked at intake, one per
-  case, never changed
+- **Currency** — the brand's (HKD for Grade10), checked at intake, one per case
 - **An offer** — principal, interest for the whole term in basis points, a
   term in days, an expiry; no due date, because nothing has been lent yet.
   Principal at most the latest valuation and inside the brand's lending
@@ -31,8 +30,7 @@ amount on it is whole cents written down by a person after the bank moved it.
 - **Forfeiture** — a person's decision, past the due date and never before
   the cure date of a written notice has passed; the item settles the debt,
   and the figure it settled is on the audit chain
-- **Release** — refused while anything is outstanding; storage is free, so a
-  storage case owes nothing
+- **Release** — refused while anything is outstanding; a storage case owes nothing
 
 ## Arithmetic
 

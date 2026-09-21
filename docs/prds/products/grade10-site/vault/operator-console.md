@@ -28,19 +28,17 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - **Rows** — case id, the item's name, status, lane, amount asked,
   appointment, last updated, and a badge naming why the case waits on a
   person: a release request unanswered, a submission nobody started, a
-  valuation untouched for **7 days**, an offer that ran out, a message that
-  ran out of attempts, a document seen under another account, a visit today
+  valuation untouched for **7 days**, an offer that ran out, a parked
+  message, a document seen under another account, a visit today
 - **Paging** — **50** rows a page, newest-touched first, a backlog count and
   a load-more control on a keyset cursor
 - **Search** — exact on phone or email, prefix on case id; a number is
-  matched in E.164 however it was typed, and the term travels in the request
-  body. Each search writes its own row on the audit chain — who, when, what
-  kind of term, how many matched — and never the term itself
+  matched in E.164 however typed; each search writes who, when, what kind of
+  term and how many matched on the audit chain, never the term itself
 - **Money tab** (`vault:payout` only) — the position at an instant, now or
   the end of a day the operator names, and the ledger over payouts,
   repayments and corrections for a date range on the shop's calendar,
-  filtered by method, paged, with totals per method and currency; a
-  correction names the row it took back
+  filtered by method, paged, with totals per method and currency
 - **Held items tab** — everything in a locker, with the shop it is in, oldest
   first, paged
 - 🚧 **Counts and today** — every view carries its count; a Today block
@@ -136,8 +134,7 @@ One line per tab, as `Surface: verb, verb, verb`.
   shops, a condition report, damage or loss, a stock-take against the shelf;
   a forfeited item is written `out` because it has become the shop's stock
 - **No intake** — every case is the collector's own, opened from their
-  account, in the shop on their phone if need be; staff cannot open a case,
-  add a sibling, edit an item or attach a counter photograph
+  account, in the shop on their phone if need be; staff open none
 
 ## Specs and journeys
 

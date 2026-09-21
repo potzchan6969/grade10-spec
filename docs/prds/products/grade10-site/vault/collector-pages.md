@@ -76,8 +76,7 @@ What a collector reads on one case, top to bottom.
   balance holds until the deadline
 - 🚧 **How to pay** — under a live loan, the block
   [Loan and Money](/p/grade10-site/vault/loan-and-money#reading-the-book)
-  states, what the balance grows by a day after the deadline, and the dates
-  the reminders go
+  states, the daily figure after the deadline, and the dates the reminders go
 - 🚧 **Repayments** — each with the day it reached the bank, the method and
   the balance after it; a part payment clears interest first and never
   restarts the clock
