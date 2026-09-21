@@ -31,7 +31,7 @@ test("shared-planning-change-stages-SC-77 - a sent-keys path that cannot be read
   );
 });
 
-test("shared-planning-change-stages-SC-77 - a sent-keys file that is not there yet is nothing sent", () => {
+test("a sent-keys file that is not there yet is nothing sent", () => {
   const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
 
   assert.deepEqual(readSentKeys(join(dir, "notify-sent.txt")), new Set());
