@@ -10,33 +10,25 @@ returned ungraded are still one submission, ready to collect.
 
 ## Statuses
 
-🚧 **Ten statuses** — the badge is the word the collector reads and the
-internal id never reaches them; the exits are `cancelled`, by the collector
-any time before the cards are handed in, and `expired`:
+🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,
+and the internal id never reaches the collector; `cancelled` is theirs before hand-in:
 
-| Status | Badge | Waits on | Clock |
-| --- | --- | --- | --- |
-| `planned` | Not handed in yet | the collector: book the drop-off | nudged at 21 days; expired at 30 with no drop-off ahead |
-| `booked` | Drop-off booked | the drop-off visit | a missed visit closes the visit, not the plan |
-| `checked_in` | Checked in | staff: the next batch | the batch closes Thursday 19:00 and leaves Friday; a card can be withdrawn until then |
-| `sent` | With the grader | the grader | the estimate, from the ship day; past it the page reads Running late |
-| `graded` | Grades are in | the courier back to the shop | — |
-| `returned` | Back at the shop, being checked | staff: the slabs against the manifest | — |
-| `ready` | Ready to collect | the collector's pickup | reminders at 30 and 60 days, a storage fee from 90, written notice at 180 |
-| `collected` | Back with you | nothing; the cards went home | retention runs from this day |
-| `cancelled` | Cancelled | nothing; the cards never left the collector | — |
-| `expired` | Expired | nothing; the plan lapsed unbooked | — |
-
-- 🚧 **The ownership chip** — one chip beside the status says whose move it
-  is: Waiting on you · With us · With PSA · Running late, with PSA · Drop-off
-  on its day · Collected; the grader gets its own so waiting on it never reads
-  as waiting on the shop
-- 🚧 **The progress rail** — Planned · Booked · Handed in · Sent · Graded ·
-  Back · Home, on every submission page
+| Status | Word | Whose move | Rail | Clock |
+| --- | --- | --- | --- | --- |
+| `planned` | Not handed in yet | Waiting on you | Planned | nudged at 21 days; expired at 30 with no drop-off ahead |
+| `booked` | Drop-off booked | Drop-off on its day | Booked | a missed visit closes the visit, not the plan |
+| `checked_in` | Handed in | With us | Handed in | the batch closes Thursday 19:00 and leaves the next day; a card can be withdrawn until then |
+| `sent` | With the grader | With PSA · Running late, with PSA past the estimate | Sent | the estimate, from the ship day |
+| `graded` | Grades are in | On their way back | Graded | — |
+| `returned` | Back at the shop, being checked | With us | Back | — |
+| `ready` | Ready to collect | Waiting on you | Back | reminders at 30 and 60 days, storage from 90, the notice from 180 |
+| `collected` | Back with you | Collected | Home | retention runs from this day |
+| `cancelled` | Cancelled | — | — | retention runs from this day |
+| `expired` | Expired | — | — | retention runs from this day |
 
 ## A Card's Outcome
 
-🚧 **The set** — Listed · Checked in · Refused at the counter · the grade in
+🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in
 the grader's words, `PSA 10 GEM MT` · Ungraded, with the grader's code such as
 N1 · Minimum grade not met · Moved up a level · Withdrawn · Held by the grader
 · Not returned · Damaged · Collected · Vaulted; a grade, an upcharge and an
@@ -44,23 +36,37 @@ ungraded return are facts on the card, never a status of the submission.
 
 ## Exceptions
 
-🚧 **Twelve exceptions** — each a fact on one card, told in the collector's
-words with the money it changes; the rest of the cards carry on:
+🚧 **Each a fact on one card** — told in the collector's words with the money
+it changes; the rest of the cards carry on:
 
 | Exception | What the collector sees | Who records it |
 | --- | --- | --- |
 | Refused at the counter | a card the grader would not take stays in their hands with the reason, never charged; the list and the estimate drop to the cards that go on | staff at hand-in |
-| Missed drop-off | the visit closes, the list and the estimate stay; another drop-off is booked from the page | the diary |
+| Missed drop-off | the visit closes, the list and the estimate stay; another drop-off is booked from the page | the diary's console; the submission reads it within the hour |
 | Withdrawn before the batch | until the batch closes on Thursday 19:00 the card is pulled from the intake bag and collected at the counter against a receipt; its fee comes back at the till | staff, on the collector's message |
 | Returned ungraded | the card comes back raw with the grader's note and code; the fee stands, as the grader's terms say | staff at receiving, from the manifest |
 | Minimum grade not met | a card asked for at PSA 9 or above that graded 8 comes back raw; the fee stands | the collector, per card when listed |
-| Moved up a level | the card came back worth more than the level allows, so the grader charged the next level; the difference is due at the counter before collection, told the day the grades post | staff at receiving, from the invoice |
+| Moved up a level | the card came back worth more than the level allows, so the grader charged the next level; the difference is the fee sheet's, between the two levels, quoted before booking and due at the counter before collection, told the day the grades post | staff at receiving; the invoice reconciled against the sheet |
 | A grade not accepted | the grade is the grader's decision; a review is a new submission at the grader's review fee, asked for at the counter | nobody |
 | Running late | the grader is past the estimate; the page shows its stage, and the new date is emailed the day it is set | staff, on the batch with a reason |
 | Held by the grader | one card kept for a further look; the others are ready now, the receipt names the card still out, and a second hand-back closes the submission | staff at receiving, with the grader's date |
-| Not returned, or damaged | settled at its declared value with its fee refunded, inside the settlement window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
-| Refunds | back the way it was paid, at the till: a refused line, a withdrawn card, a card not returned; nothing on an ungraded card, and never the grader's fee once the batch has left | staff, one POS line each |
-| Not collected | reminders, then a storage fee, then written notice, then disposal under Cap. 456 with the proceeds less fees held for the collector; vault instead is their choice at the counter | the clock; staff at the counter |
+| Not returned, or damaged | paid out at its declared value with its fee refunded, inside the payout window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
+
+## The Fee by Outcome
+
+🚧 **One rule per outcome** — the fee a card, and its cover line with it:
+
+| Outcome | The fee |
+| --- | --- |
+| Refused at the counter | never charged; a line already paid comes back at the till |
+| Withdrawn before the batch closes | refunded at the till when the card is collected against a receipt |
+| Returned ungraded, or minimum grade not met | stands, as the grader's terms say |
+| Moved up a level | stands, and the sheet's difference between the two levels is due before collection |
+| Held by the grader | stands; the card comes back on a second hand-back |
+| Not returned, or damaged | refunded with the payout at declared value |
+
+- 🚧 **Back the way it was paid** — every refund is a line at the till, the
+  way the fee was paid, and the page says what came back and why
 
 ## Not Collected
 
@@ -68,16 +74,23 @@ words with the money it changes; the rest of the cards carry on:
 | --- | --- | --- |
 | 30 and 60 | ❓ a reminder each, costing nothing | Operations |
 | 90 | ❓ a storage fee of HKD 30 a card a month accrues, due before collection | Commercial the amount, Operations the day |
-| 180 | ❓ written notice by registered post to the address taken at signing and by email, giving 30 days to collect | Legal: the form, whether email alone serves, the 30 days |
-| after the 30 days | ❓ the cards may be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for the collector | Legal |
+| 180 | ❓ the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving 30 days to collect from the posting date | Legal: the form, whether email alone serves, the 30 days |
+| after the 30 days | ❓ clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for the collector; nothing is built for it yet | Legal |
 
-- 🚧 **The cards stay the collector's** — until the notice's day has passed;
-  the storage fee is a nudge, and a slab kept on purpose goes into a vault
-  case free
-- ❓ **Settlement window** — a card not returned, or returned damaged, is
-  settled at its declared value with its fee refunded within 14 days of the
-  batch being received, at the counter or by bank transfer to the card paid
-  with — Operations
+- 🚧 **Storage accrues per card still at the shop** — a month started since
+  day 90 counts, a card withdrawn, paid out or vaulted does not; derived when
+  read from the ready date and the cards held, one line at the till at collection
+- ❓ **A part month** — counts as a whole month — Commercial
+- 🚧 **The notice is a counter act** — from day 180 the submission asks staff
+  for it; the posting date and tracking are recorded, and the 30 days run from it
+- 🚧 **After the notice** — the first release stops here: the cards stay at
+  the shop and stay the collector's, storage accrues, and a slab kept on
+  purpose goes into a vault case free
+- 🚧 **The payout** — a card not returned, or returned damaged, is paid out at
+  its declared value on a record of its own, approved by a second person, at
+  the till or by bank transfer; a card that turns up reverses it on that record
+- ❓ **The payout window** — 14 days from the day the batch is received at
+  the shop — Operations
 
 ## Ready to Collect
 
@@ -85,9 +98,8 @@ words with the money it changes; the rest of the cards carry on:
   shown at the counter; with it the shop's hours, no booking needed, and what
   is due
 - 🚧 **The ID glance** — above the threshold the counter glances at an ID
-  matching the name, the collector's or the named person's, and keeps
-  nothing; below it the code and the name release the cards. Not an identity
-  check, so the vault's identity duties do not apply
+  matching the name, the collector's or the named person's, and keeps nothing;
+  below it the code and the name release the cards; not an identity check
 - ❓ **The threshold** — HKD 10,000 declared in total — Operations
 - 🚧 **Name a collector** — one person at a time, named on the page before
   anyone comes in, by their full name as on their ID; changed or removed from
@@ -98,28 +110,29 @@ words with the money it changes; the rest of the cards carry on:
   page in the same minute
 - ❓ **No counter override** — staff cannot release to anyone else — Operations
 - 🚧 **Vault it** — a slab goes straight into a vault case at the counter:
-  the identity check and the custody agreement happen there, no second visit,
-  storage free, and a loan is an offer the vault makes after valuing it; the
-  card goes to the vault rather than home, and the receipt says so —
-  [Vault](/p/grade10-site/vault)
-- ❓ **Grade and cert into the case** — a follow-on: the vault's valuation
-  reads them from the submission rather than carrying them as fields — Product
+  the identity check and the custody agreement happen there, storage is free,
+  a loan is an offer the vault makes after valuing it, and the receipt says
+  the card went to the vault — [Vault](/p/grade10-site/vault)
 - 🚧 **No slabs shipped** — the collector, or the person they name, collects
   in person
 
 ## The Record After Collection
 
 - 🚧 **The graded record** — grade, grader and cert per slab with a look-up
-  link, slab photographs taken at hand-back, and three documents, the
-  submission agreement, the intake receipt and the hand-back receipt, each
-  with its fingerprint and a download; kept on the page, and under the account
+  link, the slab photographs from hand-back, and the three documents, each
+  with its fingerprint and a download; on the page, and under the account
   when the collector keeps one
 - 🚧 **Never stock** — a collector's slab never enters the catalogue; a vault
   valuation or an auction consignment reads the record from here
-- ❓ **Retention** — seven years, 2,555 days, joining the vault's retention
-  table so one erasure path serves both products; grading keeps no identity
-  class — Legal —
-  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
+- ❓ **Retention** — 2,555 days on the vault's table: the sealed documents
+  and the photographs in the vault's classes, and the submission record —
+  name, email, phone, postal address, the list, the code, the messages — as a
+  class of its own; each window runs from the day the submission ends,
+  collected, cancelled, expired or its last card paid out; no identity class —
+  Legal — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
+- 🚧 **Erasure waits for a live submission** — the ask to be forgotten is
+  refused by name while a submission is between booked and ready, an upcharge
+  is unsettled or ready cards are uncollected, as a live vault case refuses it
 
 ## What a Collector Can Do
 
@@ -140,17 +153,16 @@ words with the money it changes; the rest of the cards carry on:
 | --- | --- | --- | --- |
 | 2026/10/27 | The fee for 4 cards at PSA Regular, 4 × $600, due at the counter | +2400 | 2400 |
 | | Paid by card at the till, POS 48213 | −2400 | 0 |
-| 2026/11/20 | Umbreon VMAX moved up to Express on the grader's invoice; the difference is due before collection | +600 | 600 |
+| 2026/11/20 | Umbreon VMAX moved up to Express on the grader's invoice; the sheet's difference is due before collection | +600 | 600 |
 | 2026/11/26 | Ready to collect; the code is emailed, and nothing else is due for 90 days | | 600 |
 | 2026/12/26 | A reminder, costing nothing | | 600 |
 | 2027/01/25 | The second reminder | | 600 |
 | 2027/02/24 | Storage from day 90: 4 cards × $30 | +120 | 720 |
 | 2027/03/24 | Storage, the second month | +120 | 840 |
 | 2027/04/24 | Storage, the third month | +120 | 960 |
-| 2027/05/25 | Written notice: $600 upcharge and $360 storage to date, due before collection, 30 days to collect | | 960 |
+| 2027/05/25 | Written notice posted: $600 upcharge and $360 storage to date, due before collection, 30 days from today to collect | | 960 |
 
-The balance is what the collector owes on that day. Collected on 28 Nov as
-planned, the balance was $600, settled at the till.
+The balance is what the collector owes on that day.
 :::
 
 :::detail{title="Code map" for="engineer"}
@@ -158,8 +170,8 @@ planned, the balance was $600, settled at the till.
   `packages/grading/contracts`
 - **The machine** — `packages/grading/backend/src/submissions/transitions.ts`
   is the only writer of the status
-- **Sweeps** — the plan's nudge and expiry, the uncollected ladder, the
-  grader's morning read, in `packages/grading/backend/src/sweeps/`
+- **Sweeps** — the plan's nudge and expiry, the missed visit, the uncollected
+  ladder, the grader's morning read, in `packages/grading/backend/src/sweeps/`
 - **Retention** — the grading classes on `packages/app-env/src/retention.ts`,
   beside the vault's
 - **Architecture** —
@@ -170,12 +182,14 @@ planned, the balance was $600, settled at the till.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | No exception is a status | Decided | Refused, withdrawn, ungraded, moved up, held, not returned and damaged are recorded on the card; the submission has one status and the rest of the cards carry on | Product |
+| One table for the status | Decided | The word, whose move it is and the rail step are one row per status, so the badge, the chip and the rail can never disagree; the grader's own chip keeps waiting on it from reading as waiting on the shop | Product |
 | Running late is not a status | Decided | It is the estimate against the clock, read on the page and by the queue the same way | Engineering |
 | Held by the grader keeps the submission ready | Decided | The rest are handed back against a receipt that names the card still out; a second hand-back closes it | Product |
-| Storage fee | ❓ Open | HKD 30 a card a month from day 90, due before collection, a nudge rather than revenue; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
-| Notice and disposal | ❓ Open | Reminders at 30 and 60, the fee at 90, written notice at 180 by registered post and email giving 30 days, then disposal under Cap. 456 with the proceeds less fees held; the notice's form and wording | Legal |
-| Settlement for a lost or damaged card | ❓ Open | Declared value plus the fee within 14 days of the batch being received, at the counter or by bank transfer; where the refund goes | Operations |
+| The fee's fate is one table | Decided | Refused never charged, withdrawn refunded at the till, ungraded and minimum not met stand, held stands, not returned or damaged refunded with the payout; every refund goes back the way it was paid | Product |
+| Storage fee | ❓ Open | HKD 30 a card a month from day 90, per card still held and per month started, derived at the read, one line at collection, a nudge rather than revenue; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
+| The notice | ❓ Open | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, 30 days from posting; the first release stops there and clause 6 keeps the disposal basis; the notice's form and wording | Legal |
+| Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
 | ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
 | Grade and cert into a vault case | ❓ Open | A follow-on; the vault reads the record from the submission page meanwhile | Product |
-| Retention | ❓ Open | 2,555 days for the agreement, the photographs and the receipts, on the vault's table; no identity class | Legal |
+| Retention | ❓ Open | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the submission's end event; no identity class; a live submission blocks an erasure as a live case does | Legal |
 :::

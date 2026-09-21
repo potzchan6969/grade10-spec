@@ -10,8 +10,8 @@ page, which needs no account.
 
 ## Messages
 
-🚧 **Fourteen kinds** — one decision per event, written down once so a new
-event cannot ship silent:
+🚧 **One decision per event** — the table is the map, written down once so a
+new event cannot ship silent:
 
 | Event | Subject | When | Carries | Link |
 | --- | --- | --- | --- | --- |
@@ -19,16 +19,16 @@ event cannot ship silent:
 | The plan expires | Your submission list has expired | day 30 with no drop-off booked | nothing paid, nothing owed; start again from the price sheet | Start a submission |
 | Drop-off booked | Drop-off booked: Tue 27 Oct 2026, 15:00 | on booking | where, what to bring, the visit's length, the fee, the day the cards leave and the estimate, a calendar file | Open your submission |
 | Drop-off moved, cancelled, missed, or the day before | one each, sent by grading | on each event; the reminder the day before | the visit, and on a missed one the line to book again from the page | Open your submission |
-| Checked in | Checked in: 4 cards for PSA Regular | at check-in | the intake receipt: what was paid and the POS reference, the intake ids, the batch's cut-off and ship day, the estimate; the receipt and the signed agreement attached | Open your submission |
+| Handed in | Handed in: 4 cards for PSA Regular | at hand-in | the intake receipt: what was paid and the POS reference, the intake ids, the batch's cut-off and ship day, the estimate; the receipt and the signed agreement attached | Open your submission |
 | A card withdrawn, or the cards collected | the hand-back receipt | at the counter | the signed receipt attached | Open your submission |
 | Batch shipped | Your cards are on their way to PSA | the ship day | the courier and tracking, the grader's order number, the estimate | Open your submission |
 | Running late | PSA is running late with your cards | the day the batch is re-estimated, to every collector in it | the grader's stage, the old and the new estimate | Open your submission |
 | Grades posted | Grades are in: a PSA 10, two 9s, and one returned ungraded | the morning the grades are read | each card's grade and cert, any upcharge and that it is settled at the counter, any ungraded card with the grader's note, the review line | See the grades |
-| A card not returned, or damaged | One card did not come back: Lugia V (Alternate Art) | the day the batch is received | the settlement at declared value and the fee refunded, within 14 days; the other cards ready now | Open your submission |
+| A card not returned, or damaged | One card did not come back: Lugia V (Alternate Art) | the day the batch is received | the payout at declared value and the fee refunded, inside the payout window from that day; the other cards ready now | Open your submission |
 | Ready to collect | Ready to collect: 3 slabs and 1 card | when receiving finishes | the pickup code, the shop's hours, what is due, the vault offer, the uncollected ladder, naming someone to collect and the ID line | Open your submission |
 | Still here | Your graded cards are still with us | 30 and 60 days after the ready email | the code, what is due, the storage day and the notice day | Open your submission |
 | Storage fee | Your graded cards: a storage fee from today | day 90 | the fee a card a month, what is due, the notice day, the vault offer | Open your submission |
-| Written notice | Written notice: collect your graded cards | day 180, by email and by registered post | what is due today, the code, the 30 days, and the disposal after them | Open your submission |
+| Written notice | Written notice: collect your graded cards | the day staff post it, from day 180; by email and by registered post | what is due today, the code, the 30 days from the posting date, and clause 6 | Open your submission |
 
 - 🚧 **Silence on purpose** — a card refused at the counter is told at the
   counter and shows on the receipt; naming a collector sends no email, History
@@ -63,5 +63,5 @@ event cannot ship silent:
 | Every event tells the collector or is decided silent | Decided | One map from event to message; a refused card and a named collector are the two silences, because both are told at the counter or on the page | Product |
 | Email only, English | Decided | No SMS and no WhatsApp automation; the console's click-to-chat templates are staff-pressed | Product |
 | The link needs no account | Decided | Every message links to the submission page, which the emailed link opens on any device | Product |
-| The notice's channels | ❓ Open | By email and by registered post to the address taken at signing; whether email alone serves | Legal |
+| The notice's channels | ❓ Open | By email and by registered post to the address taken at signing, the day staff post it; whether email alone serves | Legal |
 :::

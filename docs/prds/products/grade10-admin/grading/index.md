@@ -15,9 +15,8 @@ held to separate specs because they are held by separate people.
 
 | Capability | What it governs | Where it is written up |
 | --- | --- | --- |
-| `grade10-admin/grading/counter` | The queue's views and badges, the hand-in runbook, refusing a card, the hand-back runbook, the settings, the grants | [Grading Console](/p/grade10-admin/grading/console) |
+| `grade10-admin/grading/counter` | The queue's views and badges, the hand-in and hand-back runbooks, refusing a card, one submission's tabs, a waiver, a payout, withdrawing a card, the written notice, the settings, the grants | [Grading Console](/p/grade10-admin/grading/console) |
 | `grade10-admin/grading/batches` | Batches out, one grader and one level each: shipping, re-estimating, receiving against the manifest and its exceptions, the safe's cap | [Grading Console](/p/grade10-admin/grading/console#batches) |
-| `grade10-admin/grading/submission-record` | One submission's tabs — the cards after the grades, money, documents, timeline — a settlement, a waiver, withdrawing a card | [Grading Console](/p/grade10-admin/grading/console#one-submission) |
 
 :::callout{kind="note"}
 The console page is read beside the product's own pages, because a shop

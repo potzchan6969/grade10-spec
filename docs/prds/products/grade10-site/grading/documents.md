@@ -15,8 +15,8 @@ intake receipt between them is issued, not signed.
 
 | Document | When | Signed by | Emailed |
 | --- | --- | --- | --- |
-| Submission agreement | at hand-in, once every card is checked; the fee follows the signature | the collector | with the intake receipt, at check-in |
-| Intake receipt | at check-in; issued, not signed | nobody | the checked-in email is the receipt |
+| Submission agreement | at hand-in, once every card is checked; the fee follows the signature | the collector | with the intake receipt, at hand-in |
+| Intake receipt | at hand-in; issued, not signed | nobody | the handed-in email is the receipt |
 | Hand-back receipt | at collection, once the balance is settled and every item is ticked | whoever collects | with the signed document attached |
 
 - 🚧 **The link** — `grade10.com/grading/sign#<token>`, shown on the iPad or
@@ -26,6 +26,10 @@ intake receipt between them is issued, not signed.
   opened on the same visit does
 - 🚧 **Postal address** — one line at signing, prefilled from the account,
   kept with the agreement and used only for the written notice under clause 6
+- 🚧 **Pinned at signing** — every figure the agreement prints is the value
+  at signing: the level's fee and cover from the sheet the plan was booked
+  on, the storage fee, the payout window and the notice days; a setting
+  changed later reaches only submissions not yet booked
 - 🚧 **Declining** — withdraws the document and is on the record; nothing is
   paid on a declined agreement, and nothing is handed back on a declined
   receipt
@@ -35,10 +39,11 @@ intake receipt between them is issued, not signed.
 ## The Submission Agreement
 
 - 🚧 **Printed** — the submission id, the customer, the postal address, the
-  grader and level, the cards as a schedule with each declared value, the
-  declared value in total, the fee paid at the counter once signed, the
-  estimated return as about N weeks from the day the batch leaves and an
-  estimate not a promise, the date on the shop's day, complaints
+  grader and level, the cards as a schedule with each declared value and its
+  cover line where the level carries one, the declared value in total, the
+  fee paid at the counter once signed, the estimated return as about N weeks
+  from the day the batch leaves and an estimate not a promise, the date on
+  the shop's day, complaints
 - 🚧 **Seven clauses** — in the reader's words:
   1. Grade10 submits the cards to the grader on the customer's behalf under
      the grader's own terms, and hands them back in person to the customer or
@@ -48,18 +53,19 @@ intake receipt between them is issued, not signed.
      affect the grade
   3. The fee is charged whether or not the grader encapsulates a card; a card
      refused at hand-in, or withdrawn before its batch closes, is not charged
-  4. Where the grader moves a card to a higher level the difference is payable
-     at the counter before collection; the grade is the grader's decision
+  4. Where the grader moves a card to a higher level the difference between
+     the two levels on the fee sheet is payable at the counter before
+     collection; the grade is the grader's decision
   5. In transit the cards are covered to their declared value under the
      courier's declared-value cover and the grader's terms; at the shop they
      are kept in the safe and Grade10 holds no separate policy; a card not
-     returned, or returned damaged, is settled at its declared value with its
-     fee refunded, within 14 days
+     returned, or returned damaged, is paid out at its declared value with its
+     fee refunded, within 14 days of the day the batch is received at the shop
   6. Cards not collected incur a storage fee of HKD 30 a card a month from
-     day 90, payable before collection; after written notice at 180 days
-     Grade10 may dispose of them under the Disposal of Uncollected Goods
-     Ordinance (Cap. 456) and holds the proceeds less its fees for the
-     customer
+     day 90 after the ready email, payable before collection; after written
+     notice at 180 days, and 30 days from its posting, Grade10 may dispose of
+     them under the Disposal of Uncollected Goods Ordinance (Cap. 456) and
+     holds the proceeds less its fees for the customer
   7. Governing law Hong Kong SAR; the complaints contact
 - ❓ **Custodian registered name** — printed as the party trading as Grade10
   on both documents and every email — Legal
@@ -68,21 +74,22 @@ intake receipt between them is issued, not signed.
 - ❓ **Clause 5** — changes the day a policy is bought; until then the
   courier's cover and the safe's cap stand — Commercial, Legal
 - ❓ **Clause 6's wording** — the draft reads "within 90 days of notice"
-  where the pages count 90 days from the ready date; the clause and the
-  notice are worded together — Legal
+  where the pages count 90 days from the ready email and 30 from the
+  posting; the clause and the notice are worded together — Legal
 
 ## The Intake Receipt
 
 - 🚧 **Carries** — every intake id, the POS reference of the paid order, the
-  cards as checked, and the estimated day back; issued at check-in as a
-  document and as the checked-in email, with the signed agreement attached
+  cards as checked, and the estimated day back; issued at hand-in as a
+  document and as the handed-in email, with the signed agreement attached
 
 ## The Hand-back Receipt
 
 - 🚧 **Printed** — the customer; what was handed back, the encapsulated cards
   with their certs and any card returned ungraded with its code; what was
-  settled and how; who collected, the customer in person or the named person,
-  and whether an ID was matched to the name with nothing kept; where and when
+  paid, what was paid out and how; who collected, the customer in person or
+  the named person, and whether an ID was matched to the name with nothing
+  kept; where and when
 - 🚧 **Three clauses** — the customer inspected each item and accepted it in
   the condition handed back; nothing is outstanding; the submission is closed
   and the graded record stays on the submission page
@@ -101,7 +108,8 @@ intake receipt between them is issued, not signed.
 :::detail{title="Code map" for="engineer"}
 - **Templates** —
   `packages/grading/backend/src/documents/templates/{submissionAgreement,intakeReceipt,handBackReceipt}.ts`;
-  the entity from `packages/app-env/src/legalIdentity.ts`
+  the entity from `packages/app-env/src/legalIdentity.ts`; the figures from
+  the values pinned on the submission
 - **Ceremony** — `packages/doc-sign`, its table factories instantiated into
   the grading database
 - **Architecture** —
@@ -113,8 +121,10 @@ intake receipt between them is issued, not signed.
 | --- | --- | --- | --- |
 | Two documents, one ceremony | Decided | The agreement and the receipt ride the vault's doc-sign seal; the intake receipt is issued, because a receipt for money already taken needs no signature | Product |
 | Signed before any money moves | Decided | The till opens on the sealed agreement, so the collector never pays for cards nobody has checked | Product |
+| The figures are pinned at signing | Decided | What the agreement prints is what the submission carries from then on; a setting changed later changes no signed paper, and reaches only submissions not yet booked | Product |
 | The postal address is one line | Decided | Taken at signing, prefilled, kept only for the clause 6 notice; no other use | Legal |
 | English governs | Decided | The documents and every email are English; the screen's chrome speaks the collector's language, as the vault's does | Legal |
-| The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's window | Legal |
+| Clause 6 keeps the disposal basis | Decided | The clause names the Ordinance although the first release stops at the notice, so the paper a collector signs already carries the ground a later change acts on | Legal |
+| The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's windows | Legal |
 | Clause 5 | ❓ Open | Stands as drawn until a policy is bought; the day it is, the clause changes | Commercial, Legal |
 :::

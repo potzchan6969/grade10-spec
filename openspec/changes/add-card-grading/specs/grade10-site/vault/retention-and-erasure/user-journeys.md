@@ -20,7 +20,7 @@ happens on a clock.
 ### grade10-site-vault-retention-and-erasure-US-04: Collector who graded cards is forgotten by the same request
 
 **As a** collector who has closed their account after grading cards,
-**I want** the one erasure request to reach my submissions as it reaches my vault cases, keeping only the agreement, the receipts and the intake and hand-back photographs for the window the table names, and no identity record at all,
+**I want** the one erasure request to reach my submissions as it reaches my vault cases, refused by name while a submission is between booked and ready, an upcharge is unsettled or ready cards are uncollected, and otherwise keeping only the sealed documents and the photographs in the vault's classes and the submission record in a class of its own, each for the window the table names from the day the submission ended, and no identity record at all,
 **so that** grading keeps nothing of mine the vault would not keep, and I ask once.
 
 ## MODIFIED User journeys
