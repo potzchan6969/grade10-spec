@@ -15,8 +15,9 @@ follows `OrderDetailsHeader`. Order Summary stays the invoice. An inline
 `Alert` below Order Total shows the refund amount with a View control;
 `My Auctions/Winner Order/Refund Details` is the standalone dialog story
 (Closing Refund / Overpaid), linked from the Refunded page. The Refund
-Method row is a working channel label (Card / Bank transfer) until Product
-settles what transaction clues the winner needs (❓ Q20).
+Method row shows the channel plus a masked destination clue: the card brand
+and last four digits for a card refund, or a masked bank/account clue for a
+bank transfer. Full provider reference and proof remain operator only.
 
 ### My Auctions
 

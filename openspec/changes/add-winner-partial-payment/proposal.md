@@ -34,9 +34,9 @@ zero — no invoice can record a partial payment at all.
   separate write-off entry is recorded — or leave it Partially Paid at the
   real remaining balance; the prompt returns on the next payment too. An
   exact match to the full amount closes on its own, no prompt needed. A
-  payment that would push the total over the original invoice amount is
-  refused outright — the overpayment side of this rule is unconfirmed and
-  flagged ❓ on the PRD, not yet a firm decision.
+  payment that exceeds the original invoice total is accepted only after a
+  confirmation dialog before the invoice is marked Paid; the full payment
+  remains recorded and the excess is identifiable for a later refund.
 - **Reissue and Cancel are refused once any payment is recorded.** The
   invoice's address, method and total stay fixed once real money has moved
   against them; an operator resolves anything that will not be paid off by

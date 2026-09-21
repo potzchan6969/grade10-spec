@@ -75,19 +75,10 @@ None.
   already says.
 - **Auth** — the new permission in the closed vocabulary and the `staff` and
   `admin` grants.
-- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens the reason, note and refund method (❓ what transaction clues that method line carries for the winner is open); no stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
+- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens the reason, note and Refund Method with its channel plus a masked card or bank clue so the winner can recognise the refund; no stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
 - **Depends on** `add-winner-partial-payment`, which brings Partially Paid.
   This change's deltas on `post-sale` and `order-status` apply after that
   change archives.
-
-## Open Questions
-
-- **Q20 — Refund transaction clues for the winner.** What the Refund Method
-  line shows so the winner can recognise the refund on their statement —
-  channel only (Card / Bank transfer), a masked card or bank clue, or
-  something else. Full proof, provider reference and audit number stay with
-  the operator. Product (@tangconst) confirms. Preview fixtures use Card /
-  Bank transfer as a working stand-in.
 
 ## References
 
