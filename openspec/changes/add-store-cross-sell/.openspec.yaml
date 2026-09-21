@@ -2,6 +2,10 @@ schema: grade10-planning
 created: 2026-09-21
 hands:
   pm: "@jeffffej0909"
+  design: "@tangconst"
+  tech: "@htonyl"
+  qa: "@chloe9gag"
+  dev: "@htonyl"
 depends_on:
   - redesign-store-product-detail-page
 awaiting:

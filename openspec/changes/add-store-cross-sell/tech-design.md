@@ -58,7 +58,11 @@ metafield's `value`, a JSON list of product ids in the order stored.
 - **Rejected: carrying the list in the mirror** — one source and one failure
   mode, at the cost of the picks following the mirror's read-back and
   re-read on top of the page's minute, and a list in every row of the body the
-  1 MB alert watches; the live field costs nothing the page does not pay today
+  1 MB alert watches; the live field costs nothing the page does not pay today.
+  Whether a metafield edit fires `products/update` is unverified — the index
+  carries two open items of that shape — so picks in the mirror would wait on
+  the 5-minute walk whenever it does not, and the stock keeper's own edit is
+  the one thing in this rail that must not
 
 ### The rail is one pure function over the card, its picks and the mirror's entries
 
@@ -96,25 +100,34 @@ beside `browse.ts`, returning the rail's cards in final order:
 
 ### The card's read composes the rail from the copy it holds, and never waits on the mirror
 
-`catalog.product` gains `related: ProductSummary[]` — the listing's own
-product summary, the shape the listing tile already takes (handle, name, first
-image with its alt, price, compare-at, availability) — in final order; nothing
-on the wire says which half a card came from, and nothing of the mirror's
-internal cut reaches the wire.
+`catalog.product` gains `related`: the per-tile shape `catalog.products`
+already answers (its contract sits in `packages/grade10-store/contracts`, as
+the redesign's Impact names it; cited from that proposal, not read here), in
+final order; nothing on the wire says which half a card came from, and nothing
+of the mirror's internal cut reaches the wire. The page maps each entry to the
+block's prop type, `ProductSummary` in `@grade10/ui`, with the formatter the
+listing already uses — `ProductSummary` is display-ready React props, never a
+wire shape.
 
-- **Memory only** — the read takes the projection the isolate already holds
-  through `storeKeeper(env)`'s held copy, the one path the store reads the
-  mirror by; it never calls `sync` inside the
-  request and never reaches `catalog_unavailable`, which the listing's path
-  raises for a reader holding nothing. Holding nothing, the read composes the
-  picks it can (none, since resolution needs entries) and answers the card
-  with no rail, counted `no_mirror`, and asks for the fill behind the response
-  through `waitUntil` as the listing does
-- **Same response, same cache** — a rail composed over a held copy is cached
-  with the card under the 60 s tier, so a pick edit reaches the page within
-  the page's own minute and the page never moves on arrival; a `no_mirror`
-  answer is served with no cache header, so the next request tries again
-  rather than pinning an empty rail for a minute
+- **A held-copy read, new to this procedure** — the rail reads the copy the
+  isolate holds through `storeKeeper(env)` and nothing else: no `sync` inside
+  the request, nothing thrown. The listing's read path — wait on `sync` under
+  the 5 s budget, `catalog_unavailable` when nothing is held, `waitUntil` on
+  the ≤ 500 ms check — is not called from this procedure. Holding nothing,
+  the read answers the card with no rail, counted `no_mirror`, and schedules
+  the fill so the next request holds a copy
+- **The card's own facts come from the copy** — its world, language and type
+  handles are read from its own entry in the held projection, found by id;
+  never from the live product node, whose badges read tag prefixes alone. A
+  card the copy does not hold yet gets its picks and no similar cards, counted
+  `card_unresolved`
+- **Same response, same cache** — the rail is cached with the card under the
+  60 s tier (`middlewares.cache(60)` from `@grade10/worker`, per route), so a
+  pick edit reaches the page within the page's own minute and the page never
+  moves on arrival. A `no_mirror` answer is cached with it: the cold isolate
+  is the request that creates the colo's entry, and a per-response opt-out is
+  work in the worker package; an empty rail for a minute at one colo is
+  accepted and counted
 - **Rejected: a second procedure the page calls after load** — a rail that
   arrives after the card moves the page and is not in the response
 - **Rejected: `source` on each card** — a field no tile may draw and no case
@@ -129,36 +142,55 @@ internal cut reaches the wire.
   page's minute on top; a pick the mirror has not heard of yet is left out
   until it has
 
+## Service Interfaces
+
+| Function | Input | Output |
+| --- | --- | --- |
+| `relatedRail(card, pickIds, entries, limit)` — `services/catalog/related.ts` | the card's projection entry; the pick ids as the metafield stores them, normalised to the entry id's form (GIDs both sides); the held projection's entries; `6` | the rail's entries in final order: resolved picks in stored order, then similar cards on the triple, the date, the id; never the card, never a pick twice, never sold out among similar; at most `limit`; with the unresolved pick ids and whether the card itself resolved, for the counter |
+| `catalog.product` — `trpc/routers/catalog.ts` | `{ handle }` | the product as today, plus `related` in the wire shape above |
+
+- **The boundary** — entrypoint (`catalog.product`) → service (the rail's
+  compose, which reads `storeKeeper(env)`'s held copy and calls `relatedRail`)
+  → keeper (the held copy alone; no `sync` in the request). No table, no
+  write, no transaction: every value is derived on the read
+
 ## API Contracts
 
 | Procedure | Change | Consumer |
 | --- | --- | --- |
-| `catalog.product` | Additive: `related: ProductSummary[]`, the listing's product summary, in rail order; empty where there is nothing to show | The card's page in `grade10`, which hands it to the rail block as tiles |
+| `catalog.product` | Additive: `related`, the per-tile shape `catalog.products` answers today, in rail order; empty where there is nothing to show | The card's page in `grade10` |
+| `ProductSummary` (`@grade10/ui`) | Unchanged: the block's prop type; the page builds one per `related` entry with the listing's formatter | The rail block |
 
 | Half | Where it lands |
 | --- | --- |
 | The rule and the read | `packages/grade10-store/backend`: `services/catalog/related.ts`, `trpc/routers/catalog.ts` |
 | The block | This store, `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, and the heading in `packages/i18n/messages/shared/<locale>/product.json` |
-| The page | `apps/frontend/grade10/src/pages/store`, composing the block from `@grade10/ui` with the heading from `@grade10/i18n` |
+| The page | `apps/frontend/grade10/src/pages/store`, composing the block from `@grade10/ui` with the heading from `@grade10/i18n`, and owning the map from the wire shape to `ProductSummary` |
 
 ## Metrics
 
 | Metric | Labels | Meaning |
 | --- | --- | --- |
-| `store.catalog.related` | `outcome`: `ok`, `empty`, `no_mirror`, `picks_absent`, `pick_unresolved` | One per card read that composes a rail; `picks_absent` is a product with no complementary field at all, told apart from an empty list, and alerts when it rises on a shop that has the app |
+| `store.catalog.related` | `outcome`: `ok`, `empty`, `no_mirror`, `card_unresolved`, `picks_absent`, `pick_unresolved` | One per card read that composes a rail; `picks_absent` is a product with no complementary field at all, told apart from an empty list, and alerts when it rises on a shop that has the app |
 | `store.catalog.related_ms` | — | The compose, memory to cards |
 
 ## Failure
 
 | Case | The rail | The record |
 | --- | --- | --- |
-| The isolate holds no projection | No rail; the card answers; the fill is asked for behind the response; not cached | `outcome:no_mirror` |
+| The isolate holds no projection | No rail; the card answers; the fill is scheduled; cached with the card for the minute | `outcome:no_mirror` |
+| The copy does not hold the card yet | Its picks, no similar cards | `outcome:card_unresolved` |
 | The product carries no complementary field | Similar cards alone | `outcome:picks_absent`, alerted |
 | A pick the mirror has no entry for | Left out; the rest of the rail stands | `outcome:pick_unresolved` |
 | Nothing shared, no picks | No rail — the ordinary answer | `outcome:empty` |
 
 ## Risks / Trade-offs
 
+- [The complementary list's namespace and key on the Storefront API, and
+  whether the shop's private token exposes it] → confirmed against the dev
+  shop's private token before `tasks.md` lands; where the standard field does
+  not read, the fallback is the rejected custom metafield of handles, built in
+  its place
 - [A shop that never installed Search & Discovery] → every product reads
   `picks_absent`; the similar rule fills the rail; the run sheet checks the
   field on the staging shop, and the alert catches a production shop losing it
@@ -176,15 +208,12 @@ internal cut reaches the wire.
   the table of related cards this design refuses
 - [The projection cut to cards past 1 MB] → the facets and the created date
   the rule reads stay in the cut, as the listing's facets do
+- [A transient miss cached for a minute] → one cold isolate answers an empty
+  rail to every collector on that card at that colo for 60 s, counted
+  `no_mirror`; accepted over a cache opt-out that is work in the worker
 
 ## Migration Plan
 
 - **Nothing to migrate** — no schema, no flag; the rail shows where the read
   answers cards and stays absent where it answers none
 - **Rollback** — revert the read; the page renders without `related`
-
-## Open Questions
-
-- The complementary list's metafield namespace and key on the Storefront API,
-  confirmed against the API reference before group 1 is built; it changes no
-  requirement
