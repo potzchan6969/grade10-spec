@@ -25,13 +25,33 @@ without manual identifier clarification.
   support contact and operator reconciliation.
 - Propose an invoice identifier that remains unique across reissues while
   retaining a human-readable relationship to the billed listing.
-- Propose a short bank reference that is safe to type into FPS, local bank
-  transfer and SWIFT notes, and that can be copied from the payment surface.
+- Propose a short payment reference code that is safe to type into FPS, local
+  bank transfer and SWIFT notes, and that can be copied from the payment
+  surface.
+- Carry the payment reference code into Stripe transaction metadata so
+  provider records can be matched during reconciliation without exposing a
+  provider transaction ID to the collector.
+- Propose receipt identifiers that distinguish each payment against one
+  invoice, including partial-payment and final-settlement receipts.
 - Keep internal database IDs, gapless audit numbers and provider references
   separate from every collector-facing identifier.
 - Record the format recommendations as provisional PM/Finance decisions; the
-  requirements remain waiting until PM and Finance confirm the formats and the
-  rules for allocation, reissue and retention.
+  requirements remain waiting until PM and Finance confirm the open listing
+  code rules and the rules for allocation, reissue, receipt sequencing and
+  retention.
+
+## Examples
+
+| Record | Example | Use |
+| --- | --- | --- |
+| Public invoice ID | `INV-202609-L9482-01` | Names the invoice month, listing code and revision |
+| Payment reference code | `L948201` | Hyphen-free value for FPS, local wire and SWIFT; also written to Stripe transaction metadata |
+| First partial receipt | `REC-202609-L9482-01-P1` | Identifies the first payment receipt against the invoice |
+| Final settlement receipt | `REC-202609-L9482-01-P2` | Identifies the payment that settles the invoice |
+
+The `L9482` listing-code example is illustrative while PM and Finance confirm
+the code's length and character alphabet. The Stripe metadata value is the
+payment reference code, under the key `payment_reference_code`.
 
 ## Non-Goals
 
@@ -57,9 +77,12 @@ None.
   explicit public identifier fields rather than exposing database IDs.
 - Shared order and listing blocks will consume application-supplied display
   identifiers; they will not generate or infer them.
-- Operator reconciliation, invoice PDFs, payment instructions, support
-  messages and bank-transfer proof matching will use the approved public
-  values.
+- Operator reconciliation, invoice and receipt PDFs, payment instructions,
+  support messages and bank-transfer proof matching will use the approved
+  public values.
+- Stripe transaction metadata will carry the approved payment reference code
+  for reconciliation; the provider's transaction ID remains an operator-side
+  reference.
 - Existing internal IDs, audit numbering and provider references remain
   available to operators and integrations where authorized, but are outside
   the collector-facing format.

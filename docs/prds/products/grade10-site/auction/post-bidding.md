@@ -177,15 +177,17 @@ by card, reads:
   when none
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
-- 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent, the listing's
-  code and the count; a reissue gets a new ID and bank reference, and the old
-  ones still find the order
+- ❓ **Invoice ID** — `INV-202609-L9482-01`: the Hong Kong month sent, the
+  listing's code and the revision; a reissue starts at `01`, increments the
+  revision and keeps the old ID finding the order; PM and Finance confirm the
+  listing-code alphabet and length
 - 🚧 **Public order ID** — a stable order reference shown on the winner's
   order and in operator support surfaces; its format is pending PM and
   Finance confirmation and it is never the internal order key
-- 🚧 **Bank reference** — a short separator-free value the winner can copy into
-  FPS, local bank transfer or SWIFT notes; its final format is pending PM and
-  Finance confirmation
+- ❓ **Payment reference code** — `L948201`: a short separator-free value the
+  winner can copy into FPS, local bank transfer or SWIFT notes; Grade10 writes
+  it to Stripe transaction metadata under `payment_reference_code`; PM and
+  Finance confirm the listing-code alphabet and length
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Same as delivery address
@@ -416,7 +418,7 @@ a second payment provider, and changes to the bid-time rules.
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
-| Identifiers | 🚧 In flight | Each ID names its listing by a code hashed from the listing's internal id, not a running count, so the IDs do not reveal how much Grade10 sells; operators keep a separate gapless audit number the winner never sees — [Grade10 Invoicing Identifiers](/references/grade10-invoicing-identifiers). | Product (@jeffffej0909) |
+| Identifiers | ❓ Open | Public listing, order, invoice, receipt and payment-reference IDs are opaque and stable, while internal IDs, audit numbers and Stripe transaction IDs stay operator-only. The invoice revision starts at `01`, increments on reissue, and uses the Hong Kong timezone for `YYYYMM`; PM and Finance still confirm the listing-code alphabet and length. | Product and Finance |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
