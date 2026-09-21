@@ -25,7 +25,8 @@ it.
   - Session-aware entry: a primary Sign In button when signed out, the
     account icon when signed in
   - Account menu: signed in, the icon opens Profile, My Auctions, and Sign
-    out; the profile also offers Sign out
+    out; My Orders joins between Profile and My Auctions once Store answers;
+    the profile also offers Sign out
 - Members-only cart
   - Sign-in before the cart: the Cart control opens sign-in while no session
     is signed in, and the drawer stays closed
@@ -48,7 +49,6 @@ it.
     control still reachable
 
 ## Requirements
-
 ### Requirement: Every surface renders inside the shell
 
 The site SHALL render the header above and the footer below every surface it
@@ -285,28 +285,29 @@ behaviour so the new tab is isolated from the opener.
 
 ### Requirement: Signed-in collectors open account destinations from the header menu
 
-The account control of a signed-in collector opens a menu of three
-destinations.
+The account control of a signed-in collector opens a menu of destinations.
 
-**The menu** - When the collector is signed in, activating the account control
-SHALL open a menu of Profile, My Auctions, and Sign out.
+**The menu** - When the collector is signed in, activating the account
+control SHALL open a menu of Profile, My Auctions, and Sign out. Once Store
+answers, the menu SHALL also offer My Orders, between Profile and My
+Auctions. Until Store answers, the menu SHALL NOT offer My Orders.
 
 **Each item** - Activating Profile SHALL take them to the profile. Activating
-My Auctions SHALL take them to My Auctions. Activating Sign out SHALL start
-sign-out.
+My Orders SHALL take them to My Orders. Activating My Auctions SHALL take them
+to My Auctions. Activating Sign out SHALL start sign-out.
 
-**Not offered** - The menu SHALL NOT offer Orders or KYC until those surfaces
-are in scope for the header.
+**Not offered** - The menu SHALL NOT offer KYC until it is in scope for the
+header.
 
 **Profile sign-out** - The profile SHALL continue to offer sign-out as well.
 
 #### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
-- **GIVEN** a signed-in collector
+- **GIVEN** a signed-in collector and Store answers
 - **WHEN** they activate the account control
-- **THEN** the menu offers Profile, My Auctions, and Sign out
-- **AND** the menu does not offer Orders or KYC
+- **THEN** the menu offers Profile, My Orders, My Auctions, and Sign out
+- **AND** the menu does not offer KYC
 
 #### Scenario: grade10-site-site-page-shell-SC-18 - Sign out from the menu
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
@@ -315,6 +316,14 @@ are in scope for the header.
 - **WHEN** they activate Sign out
 - **THEN** sign-out starts
 - **AND** the profile still offers sign-out when they are signed in
+
+#### Scenario: grade10-site-site-page-shell-SC-27 - Account menu omits My Orders before Store answers
+**Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
+
+- **GIVEN** a signed-in collector and Store does not yet answer
+- **WHEN** they activate the account control
+- **THEN** the menu offers Profile, My Auctions, and Sign out
+- **AND** the menu does not offer My Orders
 
 ### Requirement: Compact viewports reach navigation through the menu drawer
 
@@ -390,3 +399,4 @@ drawer.
 - **WHEN** they activate the Cart control
 - **THEN** the cart drawer opens
 - **AND** no sign-in dialog opens
+

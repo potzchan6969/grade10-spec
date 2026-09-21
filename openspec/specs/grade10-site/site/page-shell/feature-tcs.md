@@ -190,7 +190,7 @@ shifting under me.
 
 **As a** collector,
 **I want** Sign In when I am signed out, and an account menu of Profile, My
-Auctions, and Sign out when I am signed in,
+Orders, My Auctions, and Sign out when I am signed in,
 **so that** one place in the header takes me where I can go for this launch.
 
 ### grade10-site-site-page-shell-US3-TC1-1: A signed-out collector gets Sign In
@@ -239,7 +239,7 @@ Auctions, and Sign out when I am signed in,
 
 **Pre-conditions:**
 
-* A collector is signed in on an answered site surface.
+* A collector is signed in on an answered site surface, and Store answers.
 
 **Steps:**
 
@@ -248,8 +248,8 @@ Auctions, and Sign out when I am signed in,
 
 **Expected Results:**
 
-* The menu offers Profile, My Auctions, and Sign out.
-* The menu does not offer Orders or KYC.
+* The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
+* The menu does not offer KYC.
 
 ### grade10-site-site-page-shell-US3-TC3-1: Sign out remains available from the account path
 
@@ -281,6 +281,63 @@ Auctions, and Sign out when I am signed in,
 * The account menu offers Sign out.
 * Sign-out starts.
 * The profile also offers Sign out while the collector is signed in.
+
+### grade10-site-site-page-shell-US3-TC4-1: Activating My Orders opens the collector's orders
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in on an answered site surface, and Store answers.
+
+**Steps:**
+
+1. Activate the account control.
+2. Activate My Orders.
+
+**Expected Results:**
+
+* The collector is taken to `/profile/orders`.
+
+### grade10-site-site-page-shell-US3-TC5-1: Account menu omits My Orders before Store answers
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* A collector is signed in, and Store does not yet answer.
+
+**Steps:**
+
+1. Activate the account control.
+2. Inspect the menu.
+
+**Expected Results:**
+
+* The menu offers Profile, My Auctions, and Sign out.
+* The menu does not offer My Orders.
 
 ---
 

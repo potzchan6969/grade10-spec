@@ -24,10 +24,10 @@ currency.
 
 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
-account icon and a menu of Profile, My Auctions, and Sign out when signed in.
-KYC stays out of the menu.
+account icon and a menu of Profile, My Orders, My Auctions, and Sign out when
+signed in. KYC stays out of the menu.
 
-🚧 **My Orders** joins the menu between Profile and My Auctions once Store
+**My Orders** joins the menu between Profile and My Auctions once Store
 answers, opening the Store order history surface. Until Store answers, the
 menu omits it.
 

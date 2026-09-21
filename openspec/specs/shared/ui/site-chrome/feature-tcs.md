@@ -245,7 +245,7 @@ reimplementing its behavior.
 * A primary Sign In button appears.
 * No account icon control appears.
 
-### shared-ui-site-chrome-US1-TC9-1: Signed-in chrome presents the auction account menu
+### shared-ui-site-chrome-US1-TC9-1: Signed-in chrome presents the account menu
 
 **Classification:**
 
@@ -262,7 +262,8 @@ reimplementing its behavior.
 
 **Pre-conditions:**
 
-* `SiteHeader` receives a signed-in session and account destinations.
+* `SiteHeader` receives a signed-in session, account destinations, and a My
+  Orders handler.
 
 **Steps:**
 
@@ -273,8 +274,69 @@ reimplementing its behavior.
 **Expected Results:**
 
 * The account icon appears.
+* The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
+* The menu does not offer KYC.
+
+### shared-ui-site-chrome-US1-TC12-1: Activating My Orders invokes its handler
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, account destinations, and a My
+  Orders handler.
+
+**Steps:**
+
+1. Render the header.
+2. Activate the account control.
+3. Activate My Orders in the menu.
+
+**Expected Results:**
+
+* The supplied My Orders handler is invoked exactly once.
+* No other account-menu handler is invoked.
+
+### shared-ui-site-chrome-US1-TC13-1: Account menu omits My Orders when its handler is not supplied
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and no My Orders handler.
+
+**Steps:**
+
+1. Render the header.
+2. Activate the account control.
+3. Inspect the menu.
+
+**Expected Results:**
+
 * The menu offers Profile, My Auctions, and Sign out.
-* The menu does not offer Orders or KYC.
+* The menu does not offer My Orders.
 
 ### shared-ui-site-chrome-US1-TC10-1: Compact chrome keeps account and reaches language
 
