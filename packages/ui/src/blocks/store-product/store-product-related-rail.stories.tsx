@@ -29,16 +29,18 @@ export const PicksAndSimilar: Story = {
     ).toBeVisible();
     const tiles = canvas.getAllByTestId("store-product-related-rail-tile");
     expect(tiles).toHaveLength(RELATED_RAIL_STORY.length);
-    expect(tiles.map((tile) => within(tile).getByText(/.+/).textContent)).toEqual(
-      expect.arrayContaining([RELATED_RAIL_STORY[0].name]),
-    );
+    expect(
+      tiles.map((tile) => within(tile).getByText(/.+/).textContent),
+    ).toEqual(expect.arrayContaining([RELATED_RAIL_STORY[0].name]));
     expect(canvas.queryByRole("link")).toBeNull();
     expect(canvas.queryByRole("button", { name: /cart/i })).toBeNull();
     expect(canvas.queryByRole("spinbutton")).toBeNull();
     const soldOut = tiles.at(-1);
     expect(soldOut).toHaveAttribute("data-sold-out", "true");
     await userEvent.click(
-      within(tiles[0]).getByRole("button", { name: RELATED_RAIL_STORY[0].name }),
+      within(tiles[0]).getByRole("button", {
+        name: RELATED_RAIL_STORY[0].name,
+      }),
     );
     expect(args.onCardClick).toHaveBeenCalledWith(RELATED_RAIL_STORY[0].id);
   },
@@ -52,7 +54,9 @@ export const OneCard: Story = {
     expect(
       canvas.getByRole("heading", { name: RELATED_RAIL_COPY.heading }),
     ).toBeVisible();
-    expect(canvas.getAllByTestId("store-product-related-rail-tile")).toHaveLength(1);
+    expect(
+      canvas.getAllByTestId("store-product-related-rail-tile"),
+    ).toHaveLength(1);
   },
 };
 
@@ -64,9 +68,11 @@ export const SoldOutPickOpens: Story = {
     const canvas = within(canvasElement);
     const tile = canvas.getByTestId("store-product-related-rail-tile");
     expect(tile).toHaveAttribute("data-sold-out", "true");
-    expect(within(tile).getByText(RELATED_RAIL_COPY.card.soldOut)).toBeVisible();
+    expect(within(tile).getByText("SOLD OUT")).toBeVisible();
     const card = RELATED_RAIL_STORY.at(-1) as ProductSummary;
-    await userEvent.click(within(tile).getByRole("button", { name: card.name }));
+    await userEvent.click(
+      within(tile).getByRole("button", { name: card.name }),
+    );
     expect(args.onCardClick).toHaveBeenCalledWith(card.id);
   },
 };

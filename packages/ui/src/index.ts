@@ -443,6 +443,11 @@ export {
   type StoreProductPurchasePanelCopy,
   type StoreProductPurchasePanelProps,
 } from "./blocks/store-product/store-product-purchase-panel";
+export {
+  StoreProductRelatedRail,
+  type StoreProductRelatedRailCopy,
+  type StoreProductRelatedRailProps,
+} from "./blocks/store-product/store-product-related-rail";
 export type {
   StoreProductImage,
   StoreProductPurchaseItem,

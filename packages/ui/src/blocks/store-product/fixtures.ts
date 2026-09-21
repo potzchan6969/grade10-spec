@@ -1,3 +1,5 @@
+import type { ProductSummary } from "../store-product-listing/types";
+import type { StoreProductRelatedRailCopy } from "./store-product-related-rail";
 import type { StoreProductImage, StoreProductSaleItem } from "./types";
 
 const IMAGE = new URL(
@@ -73,11 +75,32 @@ const SOLD_OUT_PRODUCT_STORY = {
   },
 };
 
+const RELATED_RAIL_COPY: StoreProductRelatedRailCopy = {
+  heading: "You may also like",
+  card: { soldOut: "SOLD OUT", sale: "SALE" },
+};
+
+/** Seven cards: more than the rail's page ever hands over, to show the block
+ * draws what it is given; the last one sold out. */
+const RELATED_RAIL_STORY: ProductSummary[] = Array.from(
+  { length: 7 },
+  (_, index) => ({
+    id: `related-${index + 1}`,
+    name: `Pokémon TCG Booster Box – Set ${index + 1}`,
+    imageSrc: IMAGE,
+    imageAlt: `Booster box ${index + 1}`,
+    price: `HK$${105 + index * 10}`,
+    soldOut: index === 6,
+  }),
+);
+
 export {
   DESCRIPTION_COPY,
   HEADER_COPY,
   METADATA_COPY,
   PRODUCT_DETAIL_STORY,
   PURCHASE_COPY,
+  RELATED_RAIL_COPY,
+  RELATED_RAIL_STORY,
   SOLD_OUT_PRODUCT_STORY,
 };
