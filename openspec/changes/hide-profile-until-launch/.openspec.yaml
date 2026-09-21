@@ -1,3 +1,4 @@
 schema: grade10-planning
 created: 2026-09-21
 promoted_by: "@sean"
+deploy_waived: "seankcw: profile-gate code (PRs #538, #541) is merged to grade10 main; Deploy workflow has been failing on an unrelated Neon migration-catchup step since 2026-09-18, blocking all deploys including this one. Archiving now to unblock hide-membership-until-launch, which needs this capability's fold to avoid a MODIFIED/MODIFIED overlap on the same two requirements."
