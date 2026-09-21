@@ -16,7 +16,7 @@ picks or no picks,
 
 ### grade10-site-store-cross-sell-US-03: Stock keeper chooses the cards shown with a card
 
-**As a** stock keeper,
+**As a** stock keeper on the shop's staff,
 **I want** to choose the cards shown with a card in the Shopify dashboard, on
 the card itself, and see them on its page,
 **so that** what I know belongs together is what the collector sees.

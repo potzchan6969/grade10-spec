@@ -45,8 +45,25 @@
 | Q18 | Is "nothing to show" a journey of its own? | No — it is a state of the collector's walk; the journeys are the collector's two and the stock keeper's - decided by the round | A third collector journey whose want is the absence of the rail |
 | Q19 | How fresh are the similar cards? | The page states one clock, the product page's minute, and the rail makes no new promise; that the similar list rides the store's copy of the catalogue is the tech design's, and the spec says a card that sells out leaves the similar cards as that copy catches up | A second 🚧 line on the page naming the catalogue's minutes — two speeds for one rail, in the store's words rather than the collector's |
 | Q20 | What shape does a rail card cross the wire in? | The listing's product summary, the shape the listing tile already takes - decided by the round | A new cut for the rail — a third card shape; the mirror's internal card — a mirror-internal shape leaking into a public contract; `ProductSummary` on the wire — a display-ready React prop type, corrected by the tech PIC: the wire carries the per-tile shape `catalog.products` answers and the page maps it |
+| Q21 | When the picks cannot be read, does the rail still show similar cards? | Yes — similar cards fill the rail alone; only a product with no picks field at all reads as "no picks" - decided by the round | The whole rail absent — hides the similar cards for a failure that is not theirs |
+| Q22 | When the store's copy of the catalogue is not held, do the picks show alone? | No — a pick's tile is drawn from that copy, so nothing can be shown; the card answers with no rail for that minute at that location - decided by the round | Reading the picks' tiles live from the shop — a second read on every cold request |
+| Q23 | A card that is both a pick and a similar card? | Once, in its pick position - decided by the round | Twice — the rail would repeat a card |
+| Q24 | More than six picks? | The picks past the sixth are not shown, and the stock keeper is told nothing; six is the rail's size, not the list's - decided by the round | Telling the stock keeper in Shopify — a surface this store does not own |
+| Q25 | A pick the shop holds but no longer publishes? | Left out, as a pick the catalogue lost — the store's copy holds only what the shop publishes to it - decided by the round | Kept like a sold-out pick — its page would answer 404 |
+| Q26 | Newest first — by what? | By when the card entered the store's catalogue, the order the listing already calls latest - decided by the round | The card's own release date — a fact the catalogue does not carry |
+| Q27 | Does a card sharing two facts outrank one sharing only the first? | No — the order is strict: any card sharing the world ranks above every card that does not, whatever else it shares; two facts tie-break only among cards equal on the first - decided by the round | A score — two weak facts beating one strong one, which Q2 rules out |
+| Q28 | Where do the two component widenings live? | As deltas on `shared/ui/store-home` and `shared/ui/store-product-listing`, the capabilities whose export contracts they change; cross-sell's export requirement names its own block and points at them - decided by the round | Stating the widened behaviour in cross-sell's own export requirement — a contract change recorded away from the contract |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| grade10-site/store/cross-sell | When the picks cannot be read, does the rail still show the similar cards, or is the whole rail absent? | Q21 |
+| grade10-site/store/cross-sell | When the store's copy of the catalogue cannot be read for the similar cards, does the rail still show the picks alone? | Q22 |
+| grade10-site/store/cross-sell | A card that is both a pick and a similar card: once, in its pick position, or twice? | Q23 |
+| grade10-site/store/cross-sell | More than six picks: are the picks past the sixth dropped, and is the stock keeper told? | Q24 |
+| grade10-site/store/cross-sell | A pick the catalogue still holds but no longer publishes: left out like a lost pick, or kept like a sold-out one? | Q25 |
+| grade10-site/store/cross-sell | Newest first among equals: by when the card entered the store's catalogue, or by its release date? | Q26 |
+| grade10-site/store/cross-sell | Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
+| grade10-site/store/cross-sell | Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | ❓ on the frame — `ui-design.md` Screens, awaited from @tangconst by 2026-09-24 |
+| grade10-site/store/cross-sell | The rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none (the scenario pass). | Q28 |

@@ -28,12 +28,12 @@ speaks (`en`, `ko`, `zh-Hans`, `zh-Hant`): `product.youMayAlsoLike` —
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Picks and similar | The heading; up to 6 tiles, the picks first in their order, then similar cards; each tile opens its card | `grade10-site-store-cross-sell-US-01` |
-| Similar only | The heading; similar tiles alone where nobody chose picks, newest first among equals | `grade10-site-store-cross-sell-US-02` |
-| One card | The heading and one tile; as the frame draws it | `grade10-site-store-cross-sell-US-01` |
-| Nothing to show | No heading, no rail, no space left for it | `grade10-site-store-cross-sell-US-02` |
-| A chosen pick sold out | The sold-out tile with its price, still opening its card, still taking hover and focus | `grade10-site-store-cross-sell-US-01` |
-| Changed picks | The rail shows the stock keeper's changed picks when the card's page does | `grade10-site-store-cross-sell-US-03` |
-| Rail loading | The rail is there when the page is; no skeleton | `grade10-site-store-cross-sell-US-01` |
-| Picks could not be read | The rail as if there were nothing to show; the card's page is unaffected | `grade10-site-store-cross-sell-US-01` |
-| Narrow viewport | Awaited — the tile width, the gap, and whether the row wraps or scrolls | `grade10-site-store-cross-sell-US-01` |
+| Picks and similar | The heading; up to 6 tiles, the picks first in their order, then similar cards; each tile opens its card | `grade10-site-store-cross-sell-SC-03` |
+| Similar only | The heading; similar tiles alone where nobody chose picks, newest first among equals | `grade10-site-store-cross-sell-SC-15` |
+| One card | The heading and one tile; as the frame draws it | `grade10-site-store-cross-sell-SC-05` |
+| Nothing to show | No heading, no rail, no space left for it | `grade10-site-store-cross-sell-SC-09` |
+| A chosen pick sold out | The sold-out tile with its price, still opening its card, still taking hover and focus | `grade10-site-store-cross-sell-SC-14` |
+| Changed picks | The rail shows the stock keeper's changed picks when the card's page does | `grade10-site-store-cross-sell-SC-12` |
+| Rail loading | The rail is there when the page is; no skeleton | `grade10-site-store-cross-sell-SC-01` |
+| Picks could not be read | Similar cards alone, as if nobody had chosen; the card's page is unaffected | `grade10-site-store-cross-sell-SC-28` |
+| Narrow viewport | Awaited — the tile width, the gap, and whether the row wraps or scrolls | **Out of suite:** no frame is drawn yet (`ui-design.md` § Screens, awaited by 2026-09-24); the row's behaviour at narrow widths is the block's own layout, read in its Storybook story and in the design review when the frame lands |

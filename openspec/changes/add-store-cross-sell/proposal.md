@@ -43,7 +43,11 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-None.
+- `shared/ui/store-home` — `StoreSectionHeader` accepts copy with no browse
+  label where no link is drawn.
+- `shared/ui/store-product-listing` — a sold-out `ProductCard` still reports
+  its activation where the consumer handles it, and a tile drawn without a cart
+  control needs no cart words.
 
 ## Impact
 
@@ -51,7 +55,10 @@ None.
   facts the similar rule weighs; how is the tech design's.
 - A rail block in `packages/ui` composing the listing's product card without
   its cart control, and the heading in `packages/i18n` in every language of
-  the shared layer; the export set is the requirements'.
+  the shared layer; the export set is the requirements'. The two blocks it
+  composes widen: the section header's browse label and the card's cart words
+  become optional, and a sold-out card can open — each on the capability that
+  owns the export.
 - `redesign-store-product-detail-page` is Building on the same page; this
   change lands the rail on the redesigned page and carries no delta on
   `grade10-site/store/product-page`.

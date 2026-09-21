@@ -8,5 +8,3 @@ hands:
   dev: "@htonyl"
 depends_on:
   - redesign-store-product-detail-page
-awaiting:
-  specs: 2026-09-21, the outline and the two readings follow the journeys
