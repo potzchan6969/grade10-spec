@@ -133,6 +133,32 @@ project selects `tests/auth/**` against `grade10-stg.com`. The specs
 themselves do not change. *Rejected:* a parallel copy of the auth specs
 pointed at staging, which doubles every future edit.
 
+**The door adapter refuses a target that is not staging.** The `/test`
+implementation asserts its base URL is the staging gateway before its first
+call. The project configuration is what selects a target, and a configuration
+is editable; a spec that signs in must not be pointable at production by a
+one-line mistake. The adapter failing loudly is the control, not the project
+file being correct.
+
+**The lane runs on a label or a dispatch, never on push.** It mirrors
+`e2e.yml`'s existing shape — an `e2e-staging` label on a pull request, removed
+after the run so the label is reusable, plus `workflow_dispatch` — and takes a
+concurrency group so two runs cannot hold the three testers at once. That last
+part is the real constraint: the testers are shared state, so this lane is
+serial by construction where the local stack is not. *Rejected:* a schedule,
+which would hold the testers at an unpredictable moment and report to nobody.
+
+**The browser presents a Cloudflare Access service token; the door does not
+need one.** `grade10-stg.com` sits behind Access — `docs/temp/ops.md` records
+the staging apex as gated, and carries an open carve-out for
+`storybook.grade10-stg.com` for the same reason — so a browser driving the
+staging site is answered by Access's login page rather than the site. The
+project sends `CF-Access-Client-Id` and `CF-Access-Client-Secret` as headers
+from a service-token policy scoped to that host. `api.grade10-stg.com` is
+already confirmed ungated, which is why the door's own calls carry only the
+OIDC token. *Rejected:* a bypass policy on the staging apex, which un-gates
+the site for everyone to serve one job.
+
 **This change qualifies two architecture documents, and says so in them.**
 `docs/architecture/security.md` states that dev endpoints stop at the laptop
 and that staging answers 403; `docs/architecture/e2e.md` states that the lane
@@ -213,6 +239,14 @@ shape. `/dev/*` on staging keeps answering 403.
 - **`jose` becomes a direct dependency of the auth backend** → it is already
   in the lockfile and maintained for Workers; the trade is against writing
   our own verifier, which is worse.
+- **Two concurrent runs fight over the three testers** → the workflow's
+  concurrency group makes the lane serial, and the label trigger means it runs
+  when somebody asks rather than whenever a branch moves. The local stack stays
+  the parallel lane; this one is deliberately narrow.
+- **The Access service token is a second credential the lane carries** → it is
+  scoped to the staging apex and grants what a QA engineer's own Access login
+  already grants. It is not the door's lock and gets the job nothing on
+  `api.grade10-stg.com`, which is ungated.
 
 ## Migration Plan
 
@@ -221,8 +255,9 @@ No data migration. Deploy order on staging:
 1. Deploy the auth worker with the door mounted and `TEST_DOOR_TESTERS` unset.
    Every move refuses; `/dev` is unchanged. This is a safe resting state.
 2. Ops creates the three addresses and sets the secret with
-   `pnpm run secrets --env=staging`.
-3. Run the `staging-auth` project from the workflow.
+   `pnpm run secrets --env=staging`, and issues the Access service token for
+   the staging apex.
+3. Run the `staging-auth` project from the workflow, by label or dispatch.
 
 Rollback is removing the secret: the list goes empty, every move refuses, and
 nothing else on the worker is affected. Removing the routes is the second
@@ -230,5 +265,7 @@ step, not the urgent one.
 
 ## Open Questions
 
-- Whether the staging lane runs on a schedule or on dispatch only. It changes
-  the workflow trigger and nothing else in this design.
+- Which Access service-token policy the lane uses, and whether one already
+  exists for the staging apex. It changes where the credential comes from, not
+  the design; `docs/temp/ops.md` is where the zone's Access carve-outs are
+  tracked.

@@ -58,6 +58,14 @@ No platform impact: no path crosses a product.
 
 - A dedicated disposable stack, branched from staging, for the full suite
   that still mints a new address per test.
+- An anonymous smoke lane against `preview.grade10.com`, on the same label and
+  dispatch as this one. Preview is the production backend, so that lane never
+  signs in and never gains this door; what it covers is what a signed-out
+  visitor sees on the production candidate.
+- PR previews under the staging base domain, so an unmerged frontend can hold
+  a staging session. Nothing publishes a PR preview today, and the
+  `workers.dev` host in `packages/app-env/src/origins.ts` is cross-site, so no
+  session reaches it.
 
 ## Open questions
 

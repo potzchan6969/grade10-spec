@@ -29,9 +29,10 @@ Needs group 2 landed: every task here sits behind that gate and cannot be verifi
 Needs groups 2 and 3 landed for a green staging run; the adapter and the local lane can be built and verified before them.
 
 - [ ] 4.1 Put capture, age, ban and prepare behind one door seam in `e2e/helpers/auth.ts`, with the `/dev` implementation behind it and the auth specs unedited
-- [ ] 4.2 Add the `/test` implementation and a `staging-auth` Playwright project running `tests/auth/**` against the staging hosts
-- [ ] 4.3 Add the staging auth workflow requesting an OIDC token for the door's audience with `id-token: write`
-- [ ] 4.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:e2e`
+- [ ] 4.2 Add the `/test` implementation, refusing to run against any base URL that is not the staging gateway
+- [ ] 4.3 Add a `staging-auth` Playwright project running `tests/auth/**` against the staging hosts, carrying the Cloudflare Access service token the gated apex needs
+- [ ] 4.4 Add the staging auth workflow on an `e2e-staging` label and `workflow_dispatch`, requesting an OIDC token for the door's audience with `id-token: write`, under a concurrency group that keeps the three testers to one run
+- [ ] 4.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test:e2e`
 
 ## 5. The architecture record (grade10)
 
