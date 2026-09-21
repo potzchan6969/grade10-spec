@@ -29,18 +29,17 @@
 
 **Pre-conditions:**
 
-* customer is on <a card's page rendering the You may also like rail>.
-* The rail supplies the section header a title and no browse address, and no browse-all copy.
+* A section header is drawn on its own with a title, a browse destination, and copy carrying no browse-all label.
 
 **Steps:**
 
-1. Read the You may also like heading.
+1. Read the heading.
 2. Look for a browse-all link beside it.
 
 **Expected Results:**
 
 * The heading renders alone, title only.
-* No browse link or browse label is drawn anywhere in the header.
+* No browse link or browse label is drawn anywhere in the header, the destination notwithstanding.
 
 ## Settled
 

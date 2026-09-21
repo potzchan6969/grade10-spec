@@ -38,9 +38,10 @@ export const NoBrowseLink: Story = {
 };
 
 /** shared-ui-store-home-SC-10: a heading over a set with nothing to browse
- * names no word for a link it never draws. */
+ * names no word for a link it never draws — even handed a destination, the
+ * absent word alone keeps the link off. */
 export const NoBrowseLabel: Story = {
-  args: { browseAllHref: undefined, copy: {} },
+  args: { copy: {} },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(

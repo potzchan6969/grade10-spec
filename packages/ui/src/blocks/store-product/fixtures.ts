@@ -75,14 +75,14 @@ const SOLD_OUT_PRODUCT_STORY = {
   },
 };
 
-const RELATED_RAIL_COPY: StoreProductRelatedRailCopy = {
+const RELATED_RAIL_COPY = {
   heading: "You may also like",
   card: { soldOut: "SOLD OUT", sale: "SALE" },
-};
+} satisfies StoreProductRelatedRailCopy;
 
 /** Seven cards: more than the rail's page ever hands over, to show the block
- * draws what it is given; the last one sold out. */
-const RELATED_RAIL_STORY: ProductSummary[] = Array.from(
+ * draws what it is given; the second discounted, the last one sold out. */
+const RELATED_RAIL_STORY: readonly ProductSummary[] = Array.from(
   { length: 7 },
   (_, index) => ({
     id: `related-${index + 1}`,
@@ -90,9 +90,13 @@ const RELATED_RAIL_STORY: ProductSummary[] = Array.from(
     imageSrc: IMAGE,
     imageAlt: `Booster box ${index + 1}`,
     price: `HK$${105 + index * 10}`,
+    originalPrice: index === 1 ? "HK$135" : undefined,
     soldOut: index === 6,
   }),
 );
+
+/** The rail's sold-out card: the last of the seven. */
+const RELATED_RAIL_SOLD_OUT: ProductSummary = RELATED_RAIL_STORY[6];
 
 export {
   DESCRIPTION_COPY,
@@ -101,6 +105,7 @@ export {
   PRODUCT_DETAIL_STORY,
   PURCHASE_COPY,
   RELATED_RAIL_COPY,
+  RELATED_RAIL_SOLD_OUT,
   RELATED_RAIL_STORY,
   SOLD_OUT_PRODUCT_STORY,
 };

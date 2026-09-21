@@ -293,10 +293,14 @@ export const SoldOutOpensWhereNothingSells: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: copy.cart })).toBeNull();
-    const [well, name] = canvas.getAllByRole("button", { name: defaults.name });
-    await userEvent.click(well);
-    await userEvent.click(name);
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
+    ).toBeNull();
+    const controls = canvas.getAllByRole("button", { name: defaults.name });
+    expect(controls).toHaveLength(2);
+    const [photoWell, nameControl] = controls;
+    await userEvent.click(photoWell);
+    await userEvent.click(nameControl);
     expect(args.onClick).toHaveBeenCalledTimes(2);
   },
 };
@@ -308,8 +312,14 @@ export const NoCartWords: Story = {
   decorators: well,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-image-well"] img'),
+    ).toHaveAttribute("src", defaults.imageSrc);
     expect(canvas.getByText(defaults.name)).toBeInTheDocument();
     expect(canvas.getByText(defaults.price)).toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: /cart/i })).toBeNull();
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
+    ).toBeNull();
+    expect(canvas.queryByText(/cart/i)).toBeNull();
   },
 };
