@@ -14,7 +14,8 @@ and load more as the shopper scrolls.
 ## Product Tile
 
 🚧 **Name opens the product** — when the tile can open a product, the name
-does too, the same way the photo does; a sold-out tile’s name stays inert.
+does too, the same way the photo does; a sold-out tile’s name stays inert
+where the tile sells.
 
 🚧 **Opens where it does not sell** — on a surface that draws no cart control,
 a sold-out tile still opens its product, sold-out treatment and all —
