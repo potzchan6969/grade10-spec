@@ -74,3 +74,4 @@ See [Non-Goals](decisions.md#non-goals).
 - [You May Also Like · Picks](../../../docs/prds/products/grade10-site/store/cross-sell.md#picks)
 - [You May Also Like · Similar Cards](../../../docs/prds/products/grade10-site/store/cross-sell.md#similar-cards)
 - [Product Details · You May Also Like](../../../docs/prds/products/grade10-site/store/product-page.md#you-may-also-like)
+- [Product Listing Surface · Product Tile](../../../docs/prds/products/shared/ui/store-product-listing.md#product-tile)

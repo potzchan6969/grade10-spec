@@ -944,6 +944,41 @@ the card itself, and see them on its page,
 
 * The first three tiles are `<pick_5>`, `<pick_6>`, `<pick_7>`, in that order.
 
+### Manual
+
+What stays manual after the walk (task 6.2), and why. The walks live in the
+application repository, and a `**Decided by:**` path resolves inside this
+store alone, so no case here is flipped; each row names the walk that proves
+it.
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-store-cross-sell-US1-TC1-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC2-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC3-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC4-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC5-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC6-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC7-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC8-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC9-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC10-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC12-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US1-TC13-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC1-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC2-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC3-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC4-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC5-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC6-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC7-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US2-TC8-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play |
+| `grade10-site-store-cross-sell-US3-TC1-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
+| `grade10-site-store-cross-sell-US3-TC2-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
+| `grade10-site-store-cross-sell-US3-TC3-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
+| `grade10-site-store-cross-sell-US3-TC4-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
+| `grade10-site-store-cross-sell-US3-TC5-1` | proved by the walk `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` in the application repository, which a Decided-by line cannot name; a person walks it on the run sheet where the dev shop's picks or its clock are in play — the stock keeper's dashboard steps by hand |
+
 ## Settled
 
 None yet.

@@ -16,6 +16,10 @@ and load more as the shopper scrolls.
 🚧 **Name opens the product** — when the tile can open a product, the name
 does too, the same way the photo does; a sold-out tile’s name stays inert.
 
+🚧 **Opens where it does not sell** — on a surface that draws no cart control,
+a sold-out tile still opens its product, sold-out treatment and all —
+[You May Also Like](../../grade10-site/store/cross-sell.md)
+
 🚧 **Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
 viewport with a fine pointer it still appears on hover or keyboard focus.

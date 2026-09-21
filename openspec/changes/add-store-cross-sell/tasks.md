@@ -1,37 +1,64 @@
 ## 1. The rail block and the two widenings (grade10-spec)
 
-- [ ] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and unit tests under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`
+The sold-out tile's hover and focus state and the row's narrow layout are the
+frame's, awaited from @tangconst by 2026-09-24; 1.4's stories draw the block
+as the tile exists today and the frame's follow-up rides task 5.2.
+
+- [ ] 1.1 The tests this group's scenarios name, in their own commit before its code, ticked last: stories and a public-exports test under `packages/ui/src/blocks/` for `grade10-site-store-cross-sell-SC-25`, `grade10-site-store-cross-sell-SC-26`, `shared-ui-store-home-SC-10`, `shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`; the same commit flips `shared-ui-store-home-US1-TC1-1`, `shared-ui-store-product-listing-US1-TC1-1` and `shared-ui-store-product-listing-US1-TC2-1` with `pnpm run tcs:automated <case> --decided-by <the story or test path in this store>`
 - [ ] 1.2 Make `shared-ui-store-home-SC-10` pass: `StoreSectionHeaderCopy.browseAll` becomes optional, drawn only where a browse destination is supplied
-- [ ] 1.3 Make `shared-ui-store-product-listing-SC-91` and `shared-ui-store-product-listing-SC-92` pass: a `ProductCard` supplied as sold out reports its activation where a handler is supplied, keeping the sold-out treatment and no cart control; the card's cart words become optional where no cart control is drawn
-- [ ] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: export `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` from `packages/ui/src/blocks/store-product/`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
+- [ ] 1.3 Make `shared-ui-store-product-listing-SC-91` and `shared-ui-store-product-listing-SC-92` pass: a `ProductCard` supplied as sold out reports its activation where an activation handler is supplied and no cart handler is — the listing supplies one and stays inert, as `activate-listing-tile-by-name` requires — keeping the sold-out treatment and no cart control; the card's cart words are optional where no cart control is drawn
+- [ ] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` in `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, re-exported from the public entry `packages/ui/src/index.ts`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
 - [ ] 1.5 Answer `product.youMayAlsoLike` in the shared layer — `en`, `ko`, `zh-Hans`, `zh-Hant`
-- [ ] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm --dir packages/ui test`, `pnpm --dir packages/i18n test`, `pnpm run storybook:ui` builds
+- [ ] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm --dir packages/i18n test`, `pnpm run tcs:validate`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
 
-## 2. The rail's read (grade10)
+## 2. The rail's rule (grade10)
 
-Needs group 1 landed and the submodule bumped, for the shape the page maps to.
+Nothing here imports this store: the group is claimable the day the plan
+lands, verified with fixtures alone in the node lane.
 
-- [ ] 2.1 The tests this group's scenarios name, in their own commit before its code, ticked last: the node lane for the rule (`grade10-site-store-cross-sell-SC-03`, `grade10-site-store-cross-sell-SC-04`, `grade10-site-store-cross-sell-SC-06`, `grade10-site-store-cross-sell-SC-11`, `grade10-site-store-cross-sell-SC-13`, `grade10-site-store-cross-sell-SC-16`, `grade10-site-store-cross-sell-SC-17`, `grade10-site-store-cross-sell-SC-18`, `grade10-site-store-cross-sell-SC-19`, `grade10-site-store-cross-sell-SC-20`, `grade10-site-store-cross-sell-SC-21`, `grade10-site-store-cross-sell-SC-22`, `grade10-site-store-cross-sell-SC-27`, `grade10-site-store-cross-sell-SC-29`) and the worker lane for the read (`grade10-site-store-cross-sell-SC-09`, `grade10-site-store-cross-sell-SC-10`, `grade10-site-store-cross-sell-SC-12`, `grade10-site-store-cross-sell-SC-15`, `grade10-site-store-cross-sell-SC-23`, `grade10-site-store-cross-sell-SC-24`, `grade10-site-store-cross-sell-SC-28`, `grade10-site-store-cross-sell-SC-30`)
-- [ ] 2.2 Make `grade10-site-store-cross-sell-SC-16`, `grade10-site-store-cross-sell-SC-17`, `grade10-site-store-cross-sell-SC-18`, `grade10-site-store-cross-sell-SC-19`, `grade10-site-store-cross-sell-SC-20`, `grade10-site-store-cross-sell-SC-21`, `grade10-site-store-cross-sell-SC-27` and `grade10-site-store-cross-sell-SC-29` pass: `relatedRail` in `services/catalog/related.ts` — the similar cards sorted on the ordered triple (world, language, type; a fact shared by any handle counting once), then the entry's created date, then the product id; never the card, never sold out
-- [ ] 2.3 Make `grade10-site-store-cross-sell-SC-03`, `grade10-site-store-cross-sell-SC-04`, `grade10-site-store-cross-sell-SC-06`, `grade10-site-store-cross-sell-SC-11`, `grade10-site-store-cross-sell-SC-13` and `grade10-site-store-cross-sell-SC-22` pass: the complementary list read as one field (`value`) on the product's Storefront query, its ids resolved against the held copy in stored order, composed before the similar cards and cut to six
-- [ ] 2.4 Make `grade10-site-store-cross-sell-SC-09`, `grade10-site-store-cross-sell-SC-10`, `grade10-site-store-cross-sell-SC-12`, `grade10-site-store-cross-sell-SC-15`, `grade10-site-store-cross-sell-SC-23`, `grade10-site-store-cross-sell-SC-24`, `grade10-site-store-cross-sell-SC-28` and `grade10-site-store-cross-sell-SC-30` pass: `catalog.product` gains `related` from the held copy through `storeKeeper(env)` — no `sync` in the request, nothing thrown, the fill scheduled when nothing is held — cached with the card under the 60 s tier, and one counter `store.catalog.related` by `outcome` with `store.catalog.related_ms`
-- [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, the store backend package's node and worker lanes
+- [ ] 2.1 The tests this group's scenarios name, in their own commit before its code, ticked last: the node lane for `relatedRail` — `grade10-site-store-cross-sell-SC-03`, `grade10-site-store-cross-sell-SC-04`, `grade10-site-store-cross-sell-SC-06`, `grade10-site-store-cross-sell-SC-11`, `grade10-site-store-cross-sell-SC-13`, `grade10-site-store-cross-sell-SC-15`, `grade10-site-store-cross-sell-SC-16`, `grade10-site-store-cross-sell-SC-17`, `grade10-site-store-cross-sell-SC-18`, `grade10-site-store-cross-sell-SC-19`, `grade10-site-store-cross-sell-SC-20`, `grade10-site-store-cross-sell-SC-21`, `grade10-site-store-cross-sell-SC-22`, `grade10-site-store-cross-sell-SC-27`, `grade10-site-store-cross-sell-SC-29`
+- [ ] 2.2 Make `grade10-site-store-cross-sell-SC-15`, `grade10-site-store-cross-sell-SC-16`, `grade10-site-store-cross-sell-SC-17`, `grade10-site-store-cross-sell-SC-18`, `grade10-site-store-cross-sell-SC-19`, `grade10-site-store-cross-sell-SC-20`, `grade10-site-store-cross-sell-SC-21`, `grade10-site-store-cross-sell-SC-27` and `grade10-site-store-cross-sell-SC-29` pass: the similar half of `relatedRail` in `services/catalog/related.ts` — every other entry sharing a world, a language or a type, sorted on the ordered triple (a fact shared by any handle counting once), then the entry's created date, then the product id; never the card itself, never a card among the picks, never a card with nothing for sale — sold out excludes the similar cards alone, never a pick
+- [ ] 2.3 Make `grade10-site-store-cross-sell-SC-03`, `grade10-site-store-cross-sell-SC-04`, `grade10-site-store-cross-sell-SC-06`, `grade10-site-store-cross-sell-SC-11`, `grade10-site-store-cross-sell-SC-13` and `grade10-site-store-cross-sell-SC-22` pass: the picks half — the ids as the metafield stores them, normalised to the entry id's form, resolved against the held entries in stored order, an id no entry answers reported as unresolved, the card itself left out of its own picks, then the picks before the similar cards and the cut to six
+- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the store backend package's node lane
 
-## 3. The rail on the card's page (grade10)
+## 3. The rail's read (grade10)
 
-Needs group 2's `related` field, or its fixture, for the page to map.
+Needs group 2's `relatedRail`; nothing here imports this store.
 
-- [ ] 3.1 The tests this group's scenarios name, in their own commit before its code, ticked last: page serving and hydration tests for `grade10-site-store-cross-sell-SC-01`, `grade10-site-store-cross-sell-SC-02`, `grade10-site-store-cross-sell-SC-05`, `grade10-site-store-cross-sell-SC-07`, `grade10-site-store-cross-sell-SC-08` and `grade10-site-store-cross-sell-SC-14`
-- [ ] 3.2 Make `grade10-site-store-cross-sell-SC-01` and `grade10-site-store-cross-sell-SC-02` pass: compose `StoreProductRelatedRail` under the card in the page's response, mapping each `related` entry to `ProductSummary` with the listing's formatter, headed with `product.youMayAlsoLike`, drawn only where `related` holds a card
-- [ ] 3.3 Make `grade10-site-store-cross-sell-SC-05`, `grade10-site-store-cross-sell-SC-07`, `grade10-site-store-cross-sell-SC-08` and `grade10-site-store-cross-sell-SC-14` pass: each tile opens its card's address, no tile sells, and a sold-out pick still opens
-- [ ] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, the product serving and hydration tests
+- [ ] 3.1 Confirm the complementary list's metafield namespace and key against the dev shop's private Storefront token, and record the answer as a `decisions.md` row; where the standard field does not read, 3.3 builds the custom metafield of handles in its place and `ui-design.md` and the stock keeper's journey say so
+- [ ] 3.2 The tests this group's scenarios name, in their own commit before its code, ticked last: the worker lane for `catalog.product` — `grade10-site-store-cross-sell-SC-12`, `grade10-site-store-cross-sell-SC-23`, `grade10-site-store-cross-sell-SC-24`, `grade10-site-store-cross-sell-SC-28`, `grade10-site-store-cross-sell-SC-30`, and the read's `empty`, `no_mirror` and `card_unresolved` outcomes
+- [ ] 3.3 Make `grade10-site-store-cross-sell-SC-12`, `grade10-site-store-cross-sell-SC-23`, `grade10-site-store-cross-sell-SC-24`, `grade10-site-store-cross-sell-SC-28` and `grade10-site-store-cross-sell-SC-30` pass: the complementary list read as one field (`value`) on the product's Storefront query; `catalog.product` gains `related` from the held copy through `storeKeeper(env)` — no `sync` in the request, nothing thrown, the fill scheduled when nothing is held, the card's own facets from its held entry — with `store.catalog.related` by `outcome` and `store.catalog.related_ms`, the projection version logged with the compose, and the alert on `picks_absent` rising on a shop that has the app
+- [ ] 3.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the store backend package's worker lane
 
-## 4. The manual (grade10-spec)
+## 4. The rail on the card's page (grade10)
 
-- [ ] 4.1 Update `docs/prds/products/grade10-site/store/cross-sell.md` and the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` to the shipped rail — a `::story` card for the block, and the frame's `::figma` card once it lands — without restating a requirement; verify with `pnpm check:manual`
+Needs group 1 landed and `external/grade10-spec` bumped, for
+`StoreProductRelatedRail`; group 3's `related` is met by the fixture 4.2
+writes. The rail composes onto the page `redesign-store-product-detail-page`
+is rebuilding, so this group follows that change's page work.
 
-## 5. The walk (grade10)
+- [ ] 4.1 Bump `external/grade10-spec` to the commit carrying group 1
+- [ ] 4.2 The tests this group's scenarios name, in their own commit before its code, ticked last: page serving and hydration tests over a fixture of `related` (full, one card, empty, and the read answering nothing) for `grade10-site-store-cross-sell-SC-01`, `grade10-site-store-cross-sell-SC-02`, `grade10-site-store-cross-sell-SC-05`, `grade10-site-store-cross-sell-SC-07`, `grade10-site-store-cross-sell-SC-08`, `grade10-site-store-cross-sell-SC-09`, `grade10-site-store-cross-sell-SC-10`, `grade10-site-store-cross-sell-SC-14`
+- [ ] 4.3 Make `grade10-site-store-cross-sell-SC-01`, `grade10-site-store-cross-sell-SC-02`, `grade10-site-store-cross-sell-SC-05`, `grade10-site-store-cross-sell-SC-07`, `grade10-site-store-cross-sell-SC-08`, `grade10-site-store-cross-sell-SC-09`, `grade10-site-store-cross-sell-SC-10` and `grade10-site-store-cross-sell-SC-14` pass: compose `StoreProductRelatedRail` under the card in the page's response, mapping each `related` entry to `ProductSummary` with the listing's formatter and each tile's activation to its card's address, headed with `product.youMayAlsoLike`, drawn with no heading and no space where `related` holds no card
+- [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, the product serving and hydration tests
 
-- [ ] 5.1 One walk per journey, end to end through the collector's browser and the stock keeper's Shopify dashboard on the dev shop, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
-- [ ] 5.2 Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and in the walk's `rounds.md` row
-- [ ] 5.3 Verify: the end-to-end suite passes on every push to `main`
+## 5. The manual (grade10-spec)
+
+- [ ] 5.1 Update `docs/prds/products/grade10-site/store/cross-sell.md`, the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` and the sold-out line of `docs/prds/products/shared/ui/store-product-listing.md` to the shipped rail, with a `::story` card for the block, restating no requirement; `docs/prds/products/shared/ui/store-home.md` already reads that a header with no browse address renders a title alone and needs no line
+- [ ] 5.2 Add the frame's `::figma` card to `docs/prds/products/grade10-site/store/cross-sell.md` once @tangconst's frame lands, and the sold-out tile's hover and focus state to `ProductCard`'s stories where the frame draws it
+- [ ] 5.3 Verify: `pnpm check:manual`
+
+## 6. The walk (grade10)
+
+Needs groups 1 to 4 landed and deployed to the dev shop's environment, whose
+catalogue is seeded with the cards the suite's test data names. The walks
+live in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`; a
+Decided-by path cannot leave this store, so cross-sell's cases stay `manual`
+on the run sheet and the suite's `### Manual` table names the walk that proves
+each. The stock keeper's steps in the Shopify dashboard are walked by hand;
+the walk reads the page after them and restores the dev shop's picks it moved.
+The waits are met by sleeping the page's minute and the catalogue's window.
+
+- [ ] 6.1 One walk per journey, end to end through the collector's browser on the dev shop, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
+- [ ] 6.2 Name each case the walks prove in the suite's `### Manual` table, with the walk's path and what a person still drives; no case is flipped, and the ones the walk cannot reach are named in the walk's `rounds.md` row
+- [ ] 6.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`, then in this store `pnpm run tcs:validate` and `pnpm check:manual`

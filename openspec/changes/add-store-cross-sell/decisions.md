@@ -53,6 +53,7 @@
 | Q26 | Newest first — by what? | By when the card entered the store's catalogue, the order the listing already calls latest - decided by the round | The card's own release date — a fact the catalogue does not carry |
 | Q27 | Does a card sharing two facts outrank one sharing only the first? | No — the order is strict: any card sharing the world ranks above every card that does not, whatever else it shares; two facts tie-break only among cards equal on the first - decided by the round | A score — two weak facts beating one strong one, which Q2 rules out |
 | Q28 | Where do the two component widenings live? | As deltas on `shared/ui/store-home` and `shared/ui/store-product-listing`, the capabilities whose export contracts they change; cross-sell's export requirement names its own block and points at them - decided by the round | Stating the widened behaviour in cross-sell's own export requirement — a contract change recorded away from the contract |
+| Q29 | Does a sold-out tile that opens contradict `activate-listing-tile-by-name`'s rule that a sold-out name stays inert? | ❓ tech - recommended: no, once discriminated on the cart handler — a sold-out tile opens only where no cart handler is supplied (the rail), and stays inert where one is (the listing); `shared-ui-store-product-listing-SC-88`'s GIVEN in that change gains "and a cart handler", a remark this round may not write on another change | Two rules on one prop pair that no component can satisfy |
 
 ## Raised
 
@@ -67,3 +68,4 @@
 | grade10-site/store/cross-sell | Blind pass: Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
 | grade10-site/store/cross-sell | Blind pass: Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | ❓ on the frame — `ui-design.md` Screens, awaited from @tangconst by 2026-09-24 |
 | grade10-site/store/cross-sell | Scenario pass: the rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none. | Q28 |
+| shared/ui/store-product-listing | Plan reader: `activate-listing-tile-by-name` adds `shared-ui-store-product-listing-SC-88` (sold out and an activation callback → the name stays inert), against this change's `shared-ui-store-product-listing-SC-91`. | Q29 |
