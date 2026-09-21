@@ -49,10 +49,16 @@ export const LANDING_PATHS = ["docs/prds/", "docs/references/"];
 const GROUP_ARTIFACT = "tasks";
 
 const IS_GROUP = /^\d+$/;
+/** The reading of the whole change, after the last group: landed as a group
+ * is — the plan's hand, the branch tip, no record line — under the cell its
+ * row reads. */
+const WHOLE = "whole change";
 
 /** Whether the landing names a task group rather than an artifact: a group is
- * one row of the plan, and lands code. */
-const isGroup = (artifact: string): boolean => IS_GROUP.test(artifact.trim());
+ * one row of the plan, and lands code. The whole-change reading lands the
+ * same way. */
+const isGroup = (artifact: string): boolean =>
+  IS_GROUP.test(artifact.trim()) || artifact.trim() === WHOLE;
 
 export interface WordLanding {
   change: string;

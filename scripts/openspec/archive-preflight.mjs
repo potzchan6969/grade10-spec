@@ -32,6 +32,16 @@
  *          round's re-read is what clears it, and it runs on every clone:
  *          a `reviewed:` id needs no history to compare.
  *
+ * WALK     A change on the round — one with a row or a `landed_by:` line, or
+ *          created from the day every change is — ends with its journeys
+ *          walked and the whole read as one shape, and `rounds.md` is the
+ *          record of both: its last task group's row names the walks it left,
+ *          a `*.walk.ts` the suite runs or a walk by hand with its cases
+ *          manual, and one row reads `whole change`, which
+ *          `plan:land --whole` writes for the one reader over the whole. A
+ *          change whose journeys say nobody walks it owes no walk row, and
+ *          a change on the old flow owes neither.
+ *
  * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
  *          and its suites — and every `-US-` id in them — die with the change
@@ -83,8 +93,10 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import { heldToRounds } from "../../tools/manual/check/rounds.mjs";
 import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
+import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { readChangeEntry } from "./lib/store-read.mjs";
 import { parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
@@ -128,6 +140,10 @@ const STORE_GROUP = "grade10-spec";
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
  * was told, so a waiver never outlives the record that replaces it. */
+/** What the walk's row names: the suite file it left, or the walk by hand. */
+const WALK = /\.walk\.ts\b|\bby hand\b/;
+/** The Artifact cell of the row `plan:land --whole` writes. */
+const WHOLE_ROW = "whole change";
 const RECORD_KEYS = new Set([
   "deployed_at",
   "deployed_env",
@@ -540,6 +556,59 @@ if (behind.length > 0) {
     "this — then re-run this.",
   );
   process.exit();
+}
+
+// ── Walk gate ───────────────────────────────────────────────────────────────
+// The change's own record of its rounds says whether the journeys were walked
+// and the whole was read: the last group's row and the `whole change` row.
+// Held only where the change is on the round, through the same reading the
+// `round` rule uses, so a change worked on the old flow is asked for neither.
+if (heldToRounds(entry)) {
+  const rows = entry.rounds ?? [];
+  const last = (entry.taskGroups ?? []).reduce(
+    (top, one) => (!top || Number(one.num) > Number(top.num) ? one : top),
+    undefined,
+  );
+  const walked = deltaFiles(changeId).some(({ file }) => {
+    const journeys = file.replace(/spec\.md$/, "user-journeys.md");
+    if (!existsSync(journeys)) return false;
+    const text = readFileSync(journeys, "utf8");
+    return (
+      (text.match(US_ID) ?? []).length > 0 &&
+      !/\*\*Walked by:\*\*\s*nobody/i.test(text)
+    );
+  });
+  if (walked && last) {
+    const row = rows.find(
+      (one) =>
+        roundArtifactOf(one.artifact) === roundArtifactOf(last.num) &&
+        WALK.test(`${one.tests} ${one.stood}`),
+    );
+    if (!row) {
+      fail(
+        yellow(
+          `${changeId} archives with its journeys unwalked: group ${last.num}'s row names no walk.`,
+        ),
+        "The last group walks every journey the change specifies and leaves the",
+        "walks as its suite: its row names the `*.walk.ts` files it left, or says",
+        "the journeys were walked by hand with their cases manual. Land that row,",
+        "then re-run this.",
+      );
+      process.exit();
+    }
+  }
+  if (!rows.some((one) => one.artifact.trim() === WHOLE_ROW)) {
+    fail(
+      yellow(
+        `${changeId} archives with no reading of the whole: no row reads \`${WHOLE_ROW}\`.`,
+      ),
+      "After the last group, one reader argues the simpler shape for the whole",
+      "change before it goes to staging, and its landing writes the row:",
+      "",
+      `  ${cyan(`pnpm run plan:land ${changeId} --whole --perspectives simpler --stood "<what stood>"`)}`,
+    );
+    process.exit();
+  }
 }
 
 // ── Decide gate ─────────────────────────────────────────────────────────────
