@@ -431,6 +431,53 @@ test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass where th
   assert.match(result.stderr, /share no `always` reader/);
 });
 
+test("shared-planning-agent-rounds-SC-60 - plan:land --whole lands the reading of the whole change as its own row, on the fix pass's floor", () => {
+  // The one reader over the whole change, after the last group: a landing of
+  // the branch tip like a group's, its row reading `whole change` with the
+  // floor a fix pass has, so the apply block's other readers are not owed.
+  const { root, git } = sandbox({
+    files: { "openspec/schemas/demo-planning/schema.yaml": WIDER_APPLY },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "--whole",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "the whole change read as one shape",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /@erin is the dev and the hand of whole change/);
+  assert.match(
+    roundsOf(root),
+    /\| 1 \| whole change \| simpler \| the whole change read as one shape \|/,
+  );
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
+test("plan:land --whole names no artifact and no group beside it", () => {
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--whole",
+    "--root",
+    root,
+    ...GROUP_ROW,
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /--whole reads the whole change, and names no artifact or group/,
+  );
+});
+
 test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass with --reviewed, and every other flag only a row can use", () => {
   const { root } = sandbox();
   const result = run("plan-land.mjs", [
@@ -990,6 +1037,9 @@ test("plan:land refuses a group number tasks.md does not hold, naming the ones i
  * fixture's own, so the `cited` rule the gate runs resolves them — the
  * fixture itself carries no delta. */
 const CITING = {
+  // The file the rows below name: a `--tests` path the store does not hold is
+  // refused, so the fixture holds the one its cases write.
+  "scripts/openspec/round-scripts.test.mjs": "// the test the row names\n",
   "openspec/changes/archive/2026-01-01-demo/specs/shared/planning/demo/spec.md":
     [
       "## ADDED Requirements",
@@ -1053,6 +1103,23 @@ test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --t
   assert.equal(result.status, 1);
   assert.match(result.stderr, /shared-planning-agent-rounds-SC-58/);
   assert.doesNotMatch(result.stderr, /SC-57/);
+});
+
+test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the store does not hold, naming it", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/nowhere.test.mjs",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /the store holds no file at/);
+  assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
+  assert.doesNotMatch(result.stderr, /round-scripts\.test\.mjs/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
 test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose --tests names a test per cited scenario", () => {

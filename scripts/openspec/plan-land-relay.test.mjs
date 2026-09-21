@@ -631,6 +631,35 @@ test("shared-planning-agent-rounds-SC-73 - a task group lands through the relay 
   assert.equal(holds(remote, SIDE_REF), false);
 });
 
+test("shared-planning-agent-rounds-SC-60 - the reading of the whole change lands through the relay as `whole change`", async () => {
+  const seen = {};
+  const server = await landingRelay(granted(seen));
+  const { root } = sandbox();
+  writeRelayFile(root, urlOf(server), "@erin");
+  const tip = shaOf(root, "HEAD");
+
+  const result = await run([
+    CHANGE,
+    "--whole",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "nothing stood",
+  ]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(seen.kind, "word");
+  assert.equal(seen.artifact, "whole change");
+  assert.equal(shaOf(root, `${seen.sha}^`), tip);
+  assert.match(
+    textAt(root, seen.sha, `${DIR}/rounds.md`),
+    /\| 1 \| whole change \| simpler \| nothing stood \| - \| - \|/,
+  );
+});
+
 test("shared-planning-agent-rounds-SC-73 - the sha a wake asks the relay to land is cut from main, with no draft above it", async () => {
   const seen = {};
   const server = await landingRelay(granted(seen));
