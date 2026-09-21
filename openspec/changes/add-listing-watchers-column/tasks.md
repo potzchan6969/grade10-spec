@@ -8,7 +8,7 @@
 - [ ] 2.1 Add the non-negative list-item watcher-count contract and one batched explicit cross-brand watch aggregate to `listings.list`, defaulting a listing without a matching row to `0` (`grade10-admin-auction-listing-SC-81`, `grade10-admin-auction-listing-SC-82`, `grade10-admin-auction-listing-SC-83`)
 - [ ] 2.2 Verify: `pnpm run typecheck && pnpm run test:backend`
 
-## 3. Admin Listings Table (grade10)
+## 3. Admin Listings Table (grade10) (owner: @htonyl)
 
 Depends on group 2's additive list-item contract.
 
