@@ -39,6 +39,12 @@ add completes when practical.
 🚧 **Opens Store Locator** — the free pick-up claim names Hong Kong Grade10
 Store and opens Store Locator
 
+## You May Also Like
+
+🚧 **Related cards below the card** — up to six cards the collector may also
+like, chosen by the stock keeper or similar to this one, in the page when it
+arrives — [You May Also Like](cross-sell.md)
+
 ## Designs
 
 ::story{id="pages-product-detail-page--docs" title="Product details"}
