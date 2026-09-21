@@ -1,11 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { LINE_TOOLTIPS } from "./winner-order-content";
 import {
   winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
+import { LINE_TOOLTIPS } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -28,13 +28,14 @@ type Story = StoryObj<typeof meta>;
 
 async function expectInsuranceTooltip(canvasElement: HTMLElement) {
   const canvas = within(canvasElement);
-  const page = within(canvasElement.ownerDocument.body);
-  await userEvent.hover(
-    canvas.getByRole("button", { name: LINE_TOOLTIPS.shippingInsurance }),
-  );
-  expect(page.getByRole("tooltip")).toHaveTextContent(
-    LINE_TOOLTIPS.shippingInsurance,
-  );
+  await userEvent.hover(canvas.getByLabelText(LINE_TOOLTIPS.shippingInsurance));
+  await waitFor(() => {
+    const tooltip = canvasElement.ownerDocument.querySelector(
+      '[data-slot="tooltip-content"]',
+    );
+    expect(tooltip).toBeTruthy();
+    expect(tooltip).toHaveTextContent(LINE_TOOLTIPS.shippingInsurance);
+  });
 }
 
 function deliveryAddressBlock(canvasElement: HTMLElement) {

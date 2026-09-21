@@ -6,8 +6,8 @@ import {
   winnerOrderSettled,
 } from "./winner-order.story-shared";
 import {
-  INSURED_INVOICE_LINES,
   BANK_TRANSFER_INVOICE_LINES,
+  INSURED_INVOICE_LINES,
   LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
 } from "./winner-order-content";
@@ -38,13 +38,14 @@ const INSURED_PENDING_CONTENT = {
 
 async function expectInsuranceTooltip(canvasElement: HTMLElement) {
   const canvas = within(canvasElement);
-  const page = within(canvasElement.ownerDocument.body);
-  await userEvent.hover(
-    canvas.getByRole("button", { name: LINE_TOOLTIPS.shippingInsurance }),
-  );
-  expect(page.getByRole("tooltip")).toHaveTextContent(
-    LINE_TOOLTIPS.shippingInsurance,
-  );
+  await userEvent.hover(canvas.getByLabelText(LINE_TOOLTIPS.shippingInsurance));
+  await waitFor(() => {
+    const tooltip = canvasElement.ownerDocument.querySelector(
+      '[data-slot="tooltip-content"]',
+    );
+    expect(tooltip).toBeTruthy();
+    expect(tooltip).toHaveTextContent(LINE_TOOLTIPS.shippingInsurance);
+  });
 }
 
 /** Scenario: grade10-site-auction-winner-order-SC-169. */
