@@ -96,14 +96,25 @@ test("reads a store with no map as a map that knows nobody", () => {
   assert.equal(channelOf(map, "design"), undefined);
 });
 
-test("refuses a map that is there and cannot be read", () => {
+test("refuses a map that is there and cannot be read, naming the file", () => {
   // A store with no map knows nobody; a map the reader cannot open says
   // nothing about who is told, and reading it as nobody would send a change's
-  // messages to no-one and land nothing.
+  // messages to no-one and land nothing. The refusal names the file, because
+  // the operator reading the run's log has only the message to go on.
   const root = mkdtempSync(join(tmpdir(), "team-map-"));
   mkdirSync(join(root, TEAM_MAP), { recursive: true });
 
-  assert.throws(() => readTeamMap(root), { code: "EISDIR" });
+  assert.throws(
+    () => readTeamMap(root),
+    (error) => {
+      assert.match(error.message, /cannot be read/);
+      assert.ok(
+        error.message.includes(join(root, TEAM_MAP)),
+        `the refusal names the map it could not read: ${error.message}`,
+      );
+      return true;
+    },
+  );
 });
 
 test("refuses two entries that are one handle", () => {
