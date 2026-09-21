@@ -411,18 +411,19 @@ Runs once per row of **Test data**.
 **Decided by:** `scripts/openspec/notify.test.mjs`
 
 **Pre-conditions:**
-<change A> sits at Specified with <dev handle> as its `dev` hand. The path the push workflow reads its sent keys from is there and cannot be opened.
+
+* The path the sender reads its sent keys from is there and cannot be opened.
+* One Your turn message is due for the push.
 
 **Steps:**
 
-1. Land <change A>'s `tasks.md` on `main`.
-2. Read the push workflow's run log.
-3. Read <dev handle>'s Slack direct messages.
+1. Read the sent keys from that path, as the sender does before it sends.
+2. Read what the read answered.
 
 **Expected Results:**
 
-* The run stops and names the sent-keys path it could not read.
-* No message goes out for that push.
+* The read stops with a refusal naming the path it could not open.
+* The sender composes nothing and sends nothing for that push.
 
 ---
 
