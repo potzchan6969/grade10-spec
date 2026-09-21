@@ -16,7 +16,6 @@ import { appendFileSync } from "node:fs";
 
 import { readTextIfThere } from "./read-text.mjs";
 import { channelOf, memberOf } from "./team.mjs";
-import { linkedOf, threadPathOf } from "./wording.mjs";
 
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
