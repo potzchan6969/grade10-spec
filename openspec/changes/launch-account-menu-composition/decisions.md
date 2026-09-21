@@ -40,4 +40,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| | | |
+| shared/ui/site-chrome | When `accountEmail` is not supplied and the menu falls back to `copy.accountMenuLabel`, does the small initial avatar still render (and from what), or is it omitted along with the email? | ❓ on `docs/prds/products/shared/ui/site-chrome.md` § Account Entry |

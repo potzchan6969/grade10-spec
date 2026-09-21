@@ -56,17 +56,17 @@ token.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Auction launch, menu open | Avatar `xs` + sign-in email; menuitems My Auctions, Sign Out; no Profile, My Orders, Membership, Cart, My Auction Orders | `grade10-site-site-page-shell-US-03` |
-| Auction launch, signed in, menu closed | Account icon in the bar; no Cart | `grade10-site-site-page-shell-US-03` |
-| Auction launch, signed out | Sign In primary; no account menu | `grade10-site-site-page-shell-US-03` |
-| No `accountEmail` supplied | Menu label falls back to `copy.accountMenuLabel` | `grade10-site-site-page-shell-US-03` |
+| Auction launch, menu open | Avatar `xs` + sign-in email; menuitems My Auctions, Sign Out; no Profile, My Orders, Membership, Cart, My Auction Orders | `grade10-site-site-page-shell-SC-27` |
+| Auction launch, signed in, menu closed | Account icon in the bar; no Cart | `grade10-site-site-page-shell-SC-09` |
+| Auction launch, signed out | Sign In primary; no account menu | `grade10-site-site-page-shell-SC-07` |
+| No `accountEmail` supplied | Menu label falls back to `copy.accountMenuLabel` | `grade10-site-site-page-shell-SC-31` |
 
 ### Auction & Store account menu
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Store launch, menu open | Avatar + email; My Orders, My Auctions, Membership, Sign Out; Cart in the bar; no Profile | `grade10-site-site-page-shell-US-03` |
-| Membership activated | `onMembership` invoked; destination still ❓ | `grade10-site-site-page-shell-US-03` |
-| Membership handler omitted | Membership item absent; My Orders / My Auctions / Sign Out remain | `grade10-site-site-page-shell-US-03` |
-| Profile handler omitted (Grade10 launch) | No Profile menuitem on auction or store launch | `grade10-site-site-page-shell-US-03` |
-| My Auction Orders omitted (Grade10 launch) | No My Auction Orders menuitem; winners reach orders from My Auctions | `grade10-site-site-page-shell-US-03` |
+| Store launch, menu open | Avatar + email; My Orders, My Auctions, Membership, Sign Out; Cart in the bar; no Profile | `grade10-site-site-page-shell-SC-17` |
+| Membership activated | `onMembership` invoked; destination still ❓ | `grade10-site-site-page-shell-SC-34` |
+| Membership handler omitted | Membership item absent; My Orders / My Auctions / Sign Out remain | `shared-ui-site-chrome-SC-40` |
+| Profile handler omitted (Grade10 launch) | No Profile menuitem on auction or store launch | `grade10-site-site-page-shell-SC-28` |
+| My Auction Orders omitted (Grade10 launch) | No My Auction Orders menuitem; winners reach orders from My Auctions | **Out of suite:** the durable `shared/ui/site-chrome` and `grade10-site/site/page-shell` specs have never defined a My Auction Orders menu item; `add-my-auction-orders`'s own suite verifies its entry point is My Auctions |
