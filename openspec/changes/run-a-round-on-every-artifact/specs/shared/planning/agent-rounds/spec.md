@@ -1030,6 +1030,9 @@ in the landing's own commit.
 - **WHEN** the fix pass lands
 - **THEN** `rounds.md` gains its row, naming the simpler-thing reader among the perspectives it ran
 - **AND** the Perspectives column names the verifier where one ran, and names none where that reader was the only one
+- **AND** a row naming more than one reader and no verifier is refused, naming the readers
+- **AND** the landing's fix-pass flag drops the row's floor to the reader every perspectives list of the schema shares, computed from the schema, refuses a row that leaves that reader out, and refuses a schema whose lists share none
+- **AND** the fix-pass flag beside a read that changed nothing is refused: that landing writes no row
 
 ### Requirement: The change page mirrors the thread and the messages
 
@@ -1408,7 +1411,7 @@ inside the writable set.
 - **THEN** `main` moves only as a fast-forward onto that commit
 - **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and, for an artifact, the diff from `main` touches nothing outside the change's own directory, `docs/prds/` and `docs/references/`, the run's guard having held it to the pages the proposal links before the push
 - **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
-- **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds an artifact of the schema with no `landed_by:` line, naming the files it would have carried
+- **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds text of a schema artifact that `main` does not — the plan and the decisions apart — naming each file it would have carried and the hand it waits on
 - **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
 

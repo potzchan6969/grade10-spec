@@ -597,7 +597,7 @@ Runs once per row of **Test data**.
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-02
 
-**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`, `scripts/openspec/round-scripts.test.mjs`
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`
 
 **Pre-conditions:**
 
@@ -622,6 +622,42 @@ Runs once per row of **Test data**.
 
 * `main` ends as the table names, and moves only as a fast-forward onto the landing commit.
 * A landing that leaves `main` where it was is answered with the check the relay refused.
+
+---
+
+### shared-planning-agent-rounds-US2-TC9-1: A group's landing carrying a design nobody landed is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* <change>'s branch ticks a task of group 1 and holds a text of `ui-design.md` that `main` does not.
+* admin(engineer of <change>), the group's hand, is at a terminal in the store.
+
+**Steps:**
+
+1. Land group 1 from the terminal.
+2. Read the refusal.
+3. Read `main` and <change>'s `rounds.md`.
+
+**Expected Results:**
+
+* The landing is refused, naming `ui-design.md` and the designer whose word it waits on.
+* `main` does not move, and `rounds.md` gains no row.
+* The same landing with `ui-design.md` as `main` holds it lands the group and its row, whatever the record's `landed_by:` says.
 
 ---
 
@@ -2582,6 +2618,8 @@ None yet - the first blind pass.
 ---
 
 ## Reconciliation
+
+Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1` and `US2-TC9-1`.
 
 Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
 
