@@ -37,7 +37,7 @@ emails, which sit behind the directory grant everywhere else.
 
 ## Tests
 
-QA walks sign-in on staging through a locked door —
+🚧 QA walks sign-in on staging through a locked door —
 [Sign-In Tests](/p/shared/auth/test-sign-in). Collectors never see it.
 
 :::callout{kind="note"}

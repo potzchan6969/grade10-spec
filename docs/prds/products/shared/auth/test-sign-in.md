@@ -10,41 +10,43 @@ QA walks sign-in on staging through a locked door. Collectors never see it.
 
 | Rule | Value |
 | --- | --- |
-| Who may call | This repository's GitHub Actions job |
-| Which addresses | A finite allowlist Ops names |
-| Where it is open | Staging only |
-| Link lifetime | Five minutes, same as any sign-in mail |
+| Who may call | 🚧 The door's own workflow, on a dispatch a reviewer approved |
+| Which addresses | 🚧 Any address under the tester domain |
+| Where it is open | 🚧 Staging only |
+| How long a captured mail stays readable | 🚧 **Fifteen minutes**, so it outlives the link |
+| Link lifetime | Five minutes — [Sign-In](/p/shared/auth/sign-in) sets it |
 
 ## Who May Call
 
-- 🚧 **Staging job** — a run that proves it is this repository's Actions may use the door. A laptop, a fork, and any other caller are refused.
+- 🚧 **The door's own workflow** — one workflow opens the door, and nobody else can.
+
+Proving the repository is not enough on its own: every job in it proves the same thing, including one running code a pull request wrote.
 
 ## Testers
 
-A closed set of addresses, not a new one per run.
+Any address under one tester domain, minted per run. A test names its own address and puts it in whatever state it needs.
 
-| Tester | Use |
-| --- | --- |
-| Collector | Ordinary sign-in |
-| Ban-only | The banned-follow case; that address stays banned |
-| Admin-only | Console cases that need `admin` |
+- ❓ **The domain** — Ops names it. Until then the door has no subjects.
+- ❓ **Delivery** — Ops gives the domain a catch-all inbox, so a sign-in mail to a tester address is delivered like any other and nothing bounces.
+- ❓ **Sweeping** — tester accounts accumulate on staging. Nobody has settled how old one gets before it is removed.
 
-- ❓ **Exact addresses** — Ops names the list. Until then the door has no subjects.
+## What the Job May Do
 
-## What The Job May Do
+Only for an address under that domain:
 
-Only for an address on that list:
-
-- 🚧 **Capture the link** — the last sign-in mail for that tester, without opening the mailbox, so the job can follow it
+- 🚧 **Capture the link** — the last sign-in mail for that address, without opening the mailbox, so the job can follow it
 - 🚧 **Age the unused link** — so an expired follow can be walked without waiting five minutes
-- 🚧 **Ban the ban-only tester** — so a banned follow can be walked without the Users desk
-- 🚧 **Prepare the admin-only tester** — so that address holds `admin` before the link is followed
+- 🚧 **Ban the address** — so a banned follow can be walked without the Users desk
+- 🚧 **Prepare the address** — so it holds `admin` before the link is followed
+- 🚧 **Clear the sign-in limits** — the wait between two sign-in mails, and the limit on how many a caller may ask for, so a suite is not throttled as an attacker would be
 
-The collector still asks for the link the ordinary way. The job only captures, ages, bans, or prepares.
+Ban and prepare answer for an address that has never signed in: the account is created, then put in the state the move names.
+
+The collector still asks for the link the ordinary way. The job only captures, ages, bans, prepares, or clears.
 
 ## Closed
 
-- 🚧 **Everywhere else** — preview, production, and the disposable `/dev` door on staging stay closed. An address not on the list is refused. The job does not mint a session without following the mail, and it does not seed store or auction data.
+- 🚧 **Everywhere else** — preview, production, and the disposable `/dev` door on staging stay closed. An address outside the tester domain is refused. The job does not mint a session without following the mail, it does not unban, and it does not seed store or auction data.
 
 :::detail{title="Code map" for="engineer"}
 - **Disposable `/dev` door** — [docs/architecture/e2e.md](https://github.com/9gag/grade10/blob/main/docs/architecture/e2e.md) and [docs/architecture/security.md](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md)
@@ -52,19 +54,21 @@ The collector still asks for the link the ordinary way. The job only captures, a
 :::
 
 :::detail{title="Product decisions" for="pm"}
-Staging auth tests need the sign-in link without opening `/dev` on a public worker. The door is the Actions job plus a finite tester list, not a new environment.
+Staging auth tests need the sign-in link without opening `/dev` on a public worker. The door is one Actions workflow plus one tester domain, not a new environment.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Where the door is open | Decided | Staging only. | Product |
-| Who may call | Decided | This repository's GitHub Actions job. | Product |
-| Which addresses | Decided | A finite allowlist; one collector, one ban-only, one admin-only. | Product |
-| Exact addresses | ❓ Open | Ops names them. | Ops |
-| Capture, age, ban, prepare | Decided | Those four, for the matching tester only. | Product |
+| Who may call | Decided | One workflow, from main, on a reviewed dispatch. Proving the repository alone is not enough. | Product |
+| Which addresses | Decided | Any address under one tester domain, minted per run. | Product |
+| The domain | ❓ Open | Ops names it. | Ops |
+| Delivery | ❓ Open | A catch-all inbox on that domain, so nothing bounces. | Ops |
+| Sweeping tester accounts | ❓ Open | How old before one is removed. | Ops |
+| Capture, age, ban, prepare, clear | Decided | Those five, for a tester address only. | Product |
 | Session mint without mail | Decided | No. Follow the captured link. | Product |
+| Unban | Decided | No. A run that needs an unbanned address mints one. | Product |
 | Store and auction seeds | Decided | Not this change. | Product |
 | Preview and production | Decided | Closed. Preview is production backends. | Product |
-| Unique email per test | Decided | Not on this door. Local disposable stacks keep minting new addresses. | Product |
 
 Measured on the share of staging auth cases that finish a sign-in without a mailbox.
 :::
