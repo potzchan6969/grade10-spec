@@ -10,7 +10,7 @@ A build of the site carries a surface or it does not, and there is no third
 answer. What a build carries is fixed when it is made, so a lane cannot be
 told to show a surface the build it runs has no page for.
 
-🚧 **Each waiting product waits for its own launch** — the store, the vault,
+**Each waiting product waits for its own launch** — the store, the vault,
 booking a visit, the account profile and membership are carried in
 development and staging, and nowhere the public can reach. The auction has
 already opened and is carried everywhere.
@@ -33,13 +33,13 @@ already opened and is carried everywhere.
   detail keep the store's own gate rather than the profile's, so a mailed
   order link still answers wherever the store is carried, whether or not the
   profile itself is
-- 🚧 **Membership** — the membership and join pages. The two link to each
+- **Membership** — the membership and join pages. The two link to each
   other and share this one gate, so neither is ever reached from a build that
   withholds the other
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
-🚧 The auction, the front door, the terms, the privacy page, and sign-in are
+The auction, the front door, the terms, the privacy page, and sign-in are
 carried in every lane.
 
 ## An Address Nothing Carries
@@ -107,7 +107,7 @@ production.
 | Each waiting product opens on its own date | Decided | Three lines, opened one at a time by their own reviewed change, so a ready one is never held shut behind a slower one. | Product |
 | Sign-in stays | Decided | Sign-in is carried everywhere; joining or reading membership is not needed to sign in. | Product |
 | The profile now waits too | Decided | `add-account-profile` leaves the account page mid-build — no avatar, a placeholder display name — so it waits like the store, the vault and booking did before their own launch, behind its own gate. It reopens the same way: one reviewed line, once that change ships. | Product |
-| 🚧 Membership now waits too | Decided | The loyalty programme is mid-build — the wallet card's issuer credentials are pending for both platforms, and the member card admits a brand with no minter gateway configured — so it waits like the store, the vault and booking did before their own launch, behind its own gate. It reopens the same way: one reviewed line, once the programme is ready. | Product |
+| Membership now waits too | Decided | The loyalty programme is mid-build — the wallet card's issuer credentials are pending for both platforms, and the member card admits a brand with no minter gateway configured — so it waits like the store, the vault and booking did before their own launch, behind its own gate. It reopens the same way: one reviewed line, once the programme is ready. | Product |
 | Order history keeps its own gate | Decided | `/profile/orders` and `/profile/orders/:orderId` stay behind the store's gate alone, unchanged by the profile's. A build that carries Store but not Profile still answers a mailed order link; whether the account page itself is finished is a different question from whether the shop is open. | Product |
 | The labs gain staging | Decided | The labs — the demonstration surfaces and the unapproved refund and shipping drafts — widen from development alone to development and staging. Preview and production still carry none of them. | Product |
 | The deploy environment turns it off | Decided | Production and preview carry no store; staging and development do. Keying on the site stage was dropped: the stage reads `preview` for production today by one registry row, so a site moved to a preview stage for an unrelated reason would lose its store. | Engineering |
