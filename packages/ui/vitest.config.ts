@@ -12,6 +12,14 @@ const dirname = path.dirname(fileURLToPath(import.meta.url));
 // Tailwind v4 plugin registered in .storybook/main.ts viteFinal) is applied by
 // storybookTest, so the components render with their generated utility classes.
 export default defineConfig({
+  // pnpm resolves this package's dependencies through the parent checkout's
+  // store. Browser mode serves injected Storybook setup files over Vite's
+  // dev server, so that real path must be in the server allow-list.
+  server: {
+    fs: {
+      allow: [path.resolve(dirname, "../../../..")],
+    },
+  },
   test: {
     projects: [
       {
@@ -40,6 +48,9 @@ export default defineConfig({
         ],
         test: {
           name: "storybook",
+          // Storybook's generated project-annotations module is shared by all
+          // browser files and is not safe to transform concurrently.
+          fileParallelism: false,
           // The package scaffolding lands before its first component, so an
           // empty story set must not fail the run.
           passWithNoTests: true,
