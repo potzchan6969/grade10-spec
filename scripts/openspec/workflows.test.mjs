@@ -7,15 +7,18 @@
  * switch the schedule can be stopped with, the node this store runs, the
  * paths a page landing arrives on, and the channel the post goes to. Read as
  * text and as YAML — `openspec-version.test.mjs` reads a workflow the same
- * way for the CLI's pin.
+ * way for the CLI's pin. The reader the two restore that file for is held
+ * here as well, because the cache key and the reading are one rule.
  */
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: a workflow's `${{ … }}` is GitHub's own expression, quoted here exactly as the file writes it.
 import assert from "node:assert/strict";
-import { readFileSync } from "node:fs";
+import { mkdtempSync, readFileSync } from "node:fs";
+import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import YAML from "yaml";
+import { readSentKeys } from "./lib/notify.mjs";
 
 const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -69,6 +72,21 @@ test("shared-planning-change-stages-SC-36 - the digest restores its sent keys by
   }
   assert.equal(digest.env.SENT_KEYS, "digest-sent.txt");
   assert.deepEqual(prefixFallbacks(digestText), []);
+});
+
+// The other half of the same requirement: the file the two restore is read
+// once, by `readSentKeys`. A path it cannot open says nothing about what was
+// sent, so an empty answer there would post every message a second time.
+test("shared-planning-change-stages-SC-36 - a sent-keys path that cannot be read stops the run", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
+
+  assert.throws(() => readSentKeys(dir), { code: "EISDIR" });
+});
+
+test("shared-planning-change-stages-SC-36 - a sent-keys file that is not there yet is nothing sent", () => {
+  const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
+
+  assert.deepEqual(readSentKeys(join(dir, "notify-sent.txt")), new Set());
 });
 
 test("the digest's schedule is behind DIGEST_ENABLED", () => {
