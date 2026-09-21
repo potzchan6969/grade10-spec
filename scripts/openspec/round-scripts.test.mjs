@@ -1130,7 +1130,9 @@ test("shared-planning-agent-rounds-SC-58 - a group of the application repository
   // written as given and never looked for in this store.
   const { root, git } = sandbox({
     files: {
-      [`${DIR}/tasks.md`]: "## 1. Build it (grade10)\n\n- [ ] 1.1 Ship it\n",
+      ...CITING,
+      [`${DIR}/tasks.md`]:
+        "## 1. Build it (grade10)\n\n- [ ] 1.1 Ship it (`shared-planning-agent-rounds-SC-57`)\n",
     },
   });
   git("config", "user.email", "erin@test");

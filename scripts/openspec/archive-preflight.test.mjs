@@ -502,8 +502,10 @@ test("shared-planning-agent-rounds-SC-85 - the reading of the whole comes after 
   );
 
   assert.equal(before.status, 1);
-  assert.match(before.stderr, /whole change/);
-  assert.match(before.stderr, /before group 2/);
+  assert.match(
+    before.stderr,
+    /reading of the whole is round 1, before group 2's row 3/,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-85 - reads the rows on main, never a row the checkout alone holds", () => {
