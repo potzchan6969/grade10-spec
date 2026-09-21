@@ -8,9 +8,14 @@
  */
 import type { Role, Stage } from "../../../tools/manual/src/api/types.ts";
 
-/** The change as a message reads it: the id a command is written with, and
- * the stage the sentence names. */
-export type WordedChange = { id: string; stage: Stage };
+/** The change as a message reads it: the id a command is written with, the
+ * stage the sentence names, and the build the deploy recorded where the
+ * record carries one. */
+export type WordedChange = {
+  id: string;
+  stage: Stage;
+  deployedBuild?: string;
+};
 
 /** The change as a landing reply reads it: the stage it is at now, the roles
  * of that stage and the hand each names, where one is named. */
@@ -38,8 +43,7 @@ export declare const yourTurnText: (
 ) => string;
 export declare const stagingText: (
   linked: string,
-  sheetUrl?: string,
-  build?: string,
+  options?: { sheetUrl?: string; build?: string },
 ) => string;
 export declare const toldBodyOf: (
   at: WordedChange,

@@ -3,6 +3,7 @@ created: 2026-08-01
 promoted_by: "@tester"
 design_waived: "the fixture is about the Released stage, not the tech design"
 deployed_env: staging
+deployed_build: "1.4.0-rc2"
 released_in: "v2026.09.0"
 hands:
   pm: tester

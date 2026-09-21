@@ -80,7 +80,7 @@ export function yourTurnText(at, role, linked) {
 /** QA reaches staging to walk a pass, so QA's message names the sheet, and
  * the build the deploy recorded where the record carries one (`Q68`): QA
  * walks one tagged build, and a message that names none leaves them asking. */
-export function stagingText(linked, sheetUrl, build) {
+export function stagingText(linked, { sheetUrl, build } = {}) {
   const sheet = sheetUrl
     ? `<${sheetUrl}|the run sheet>`
     : // No per-change run tab exists in the store to link (decisions Q39), so
@@ -102,7 +102,10 @@ export function stagingText(linked, sheetUrl, build) {
  */
 export function toldBodyOf(at, role, { linked, sheetUrl }) {
   return at.stage === "on-staging" && role === "qa"
-    ? { kind: "staging", text: stagingText(linked, sheetUrl, at.deployedBuild) }
+    ? {
+        kind: "staging",
+        text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
+      }
     : { kind: "your-turn", text: yourTurnText(at, role, linked) };
 }
 

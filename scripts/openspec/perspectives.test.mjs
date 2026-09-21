@@ -163,8 +163,10 @@ const RECORD_KEYS = [
   "released_in",
   "deployed_at",
   "deployed_env",
+  "deployed_build",
   "deploy_waived",
   "round_waived",
+  "tasks_waived",
 ];
 
 test("shared-planning-agent-rounds-SC-08 - a proposal's words reach the reader of the words and the floor", () => {

@@ -981,6 +981,7 @@
       "promotedBy": "tester",
       "designWaived": "the fixture is about the Released stage, not the tech design",
       "deployedEnv": "staging",
+      "deployedBuild": "1.4.0-rc2",
       "releasedIn": "v2026.09.0",
       "hands": {
         "pm": "tester",

@@ -51,21 +51,24 @@ test("yourTurnText says the stage alone where the hand has no move at it", () =>
 
 test("stagingText names the run sheet it was given", () => {
   assert.equal(
-    stagingText(LINKED, "https://sheets.test/run"),
+    stagingText(LINKED, { sheetUrl: "https://sheets.test/run" }),
     `*On staging* — ${LINKED} is on staging. Walk <https://sheets.test/run|the run sheet>.`,
   );
 });
 
 test("stagingText names the run sheet in words where none is configured", () => {
   assert.equal(
-    stagingText(LINKED, undefined),
+    stagingText(LINKED),
     `*On staging* — ${LINKED} is on staging. Walk the run sheet.`,
   );
 });
 
 test("shared-planning-change-stages-SC-45 - stagingText names the build the deploy recorded", () => {
   assert.equal(
-    stagingText(LINKED, "https://sheets.test/run", "1.4.0-rc2"),
+    stagingText(LINKED, {
+      sheetUrl: "https://sheets.test/run",
+      build: "1.4.0-rc2",
+    }),
     `*On staging* — ${LINKED} is on staging, build \`1.4.0-rc2\`. Walk <https://sheets.test/run|the run sheet>.`,
   );
 });
@@ -80,7 +83,7 @@ test("shared-planning-change-stages-SC-45 - toldBodyOf carries the record's buil
         sheetUrl: undefined,
       },
     ),
-    { kind: "staging", text: stagingText(LINKED, undefined, "1.4.0-rc2") },
+    { kind: "staging", text: stagingText(LINKED, { build: "1.4.0-rc2" }) },
   );
 });
 
@@ -90,7 +93,10 @@ test("toldBodyOf sends QA to the run sheet on staging, with the sheet linked", (
       linked: LINKED,
       sheetUrl: "https://sheets.test/run",
     }),
-    { kind: "staging", text: stagingText(LINKED, "https://sheets.test/run") },
+    {
+      kind: "staging",
+      text: stagingText(LINKED, { sheetUrl: "https://sheets.test/run" }),
+    },
   );
 });
 

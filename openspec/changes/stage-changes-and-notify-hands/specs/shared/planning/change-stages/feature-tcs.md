@@ -254,14 +254,14 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 
 **Steps:**
 
-1. Land `deployed_env: staging` for <change R> on `main`.
+1. Land `deployed_env: staging` and `deployed_build: 1.4.0-rc2` for <change R> on `main`.
 2. Read <release handle>'s direct messages.
 3. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
 * <release handle> holds one Your turn message naming <change R>, the stage On staging and the thread.
-* <qa handle> holds one staging message naming <change R>, the run sheet and, where the record carries `deployed_build:`, the build.
+* <qa handle> holds one staging message naming <change R>, the run sheet and build `1.4.0-rc2`.
 * Each of the two holds one message for that move, not two.
 
 ### shared-planning-change-stages-US1-TC9-1: A build push tells nobody and the channel still reads it
@@ -664,7 +664,7 @@ No change is in flight and the archive holds none the board reads.
 
 * The stepper shows Specified as the current stage, and the Your turn card carries the thread link and the command.
 * Each artifact row reads fresh or behind, with its open question count and the handle that landed it.
-* The hands, the delivery and the handoff rows read one fact per label; the delivery row names `main`, staging with the build where the record carries `deployed_build:`, and the release.
+* The hands, the delivery and the handoff rows read one fact per label; the delivery row names `main`, and no staging or release, since <change B> deploys nothing.
 
 ### shared-planning-change-stages-US2-TC9-1: A change whose record cannot be read
 
@@ -1494,13 +1494,13 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Steps:**
 
-1. Land `deployed_env: staging` for <change R> on `main`.
+1. Land `deployed_env: staging` and `deployed_build: 1.4.0-rc2` for <change R> on `main`.
 2. Read <qa handle>'s direct messages.
 3. Read <change R>'s card at <manual board url>.
 
 **Expected Results:**
 
-* One direct message names <change R>, the stage On staging, the build where the record carries `deployed_build:`, and links the run sheet and its thread.
+* One direct message names <change R>, the stage On staging, build `1.4.0-rc2`, and links the run sheet and its thread.
 * The card sits in the On staging lane.
 
 ### shared-planning-change-stages-US8-TC2-1: Staging names the run sheet with no tab written for the change
@@ -1587,6 +1587,34 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 * <qa handle> holds one staging message for <change R>, not two.
 * The card stays in the On staging lane.
+
+### shared-planning-change-stages-US8-TC5-1: A deploy recording no build reads as before
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-08
+
+**Pre-conditions:**
+<change R> is at Building with every task box ticked, <qa handle> as its QA hand.
+
+**Steps:**
+
+1. Land `deployed_env: staging` for <change R> on `main`, with no `deployed_build:`.
+2. Read <qa handle>'s direct messages.
+
+**Expected Results:**
+
+* The message names <change R>, the stage On staging and the run sheet.
+* The message names no build.
 
 ---
 

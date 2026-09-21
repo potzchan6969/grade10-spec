@@ -36,10 +36,13 @@ test("shared-planning-change-stages-SC-59 - where the code is", async () => {
   await expect
     .element(delivery.getByText("main", { exact: true }))
     .toBeVisible();
-  // The environment's term and its value both read "staging": the first is
-  // the term, and one of the two visible is what the row shows.
+  // The term reads "staging" on its own; the value beside it joins the
+  // environment and the build the deploy recorded.
   await expect
-    .element(delivery.getByText("staging", { exact: true }).first())
+    .element(delivery.getByText("staging", { exact: true }))
+    .toBeVisible();
+  await expect
+    .element(delivery.getByText("staging · 1.4.0-rc2", { exact: true }))
     .toBeVisible();
   await expect
     .element(delivery.getByText("v2026.09.0", { exact: true }))

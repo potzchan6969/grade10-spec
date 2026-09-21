@@ -678,9 +678,9 @@ Two moves that are not a stage landing still reach a person.
 #### Scenario: shared-planning-change-stages-SC-45 - A change reaches staging
 **Serves:** shared-planning-change-stages-US-08 - QA starts the manual pass the day the change deploys
 
-**WHEN** a push moves a change to On staging
-**THEN** one direct message SHALL be sent to its QA hand, naming the change and the run sheet
-**AND** it SHALL name the build where the record carries `deployed_build:`
+**GIVEN** a change carrying a staging deploy recording build `1.4.0-rc2`
+**WHEN** a push moves the change to On staging
+**THEN** one direct message SHALL be sent to its QA hand, naming the change, the run sheet, and build `1.4.0-rc2`
 **AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
 
 ### Requirement: A landing from a terminal is told in the thread

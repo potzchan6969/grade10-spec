@@ -2,7 +2,7 @@
 /**
  * Run this before `openspec archive <change-id>`:
  *
- *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env>
+ *   pnpm run archive:preflight <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>]
  *   pnpm run archive:preflight <change-id> --deploy-waived "<who waived it, why>"
  *
  * The application repository runs this through `pnpm plan shipped <change-id>`,
@@ -131,6 +131,7 @@ const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 const RECORD_KEYS = new Set([
   "deployed_at",
   "deployed_env",
+  "deployed_build",
   "deploy_waived",
   "tasks_waived",
   "decisions_carried",
@@ -319,7 +320,7 @@ function writeRecord(changeId, entries) {
 
 function help() {
   console.log(
-    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> | --deploy-waived "<why>"`,
+    `${bold("pnpm run archive:preflight")} <change-id> --deployed-at <sha> --deployed-env <env> [--deployed-build <tag>] | --deploy-waived "<why>"`,
   );
   console.log(
     dim(
@@ -371,6 +372,7 @@ if (!changeId || changeId === "--help" || changeId === "-h") {
 
 let deployedAt = null;
 let deployedEnv = null;
+let deployedBuild = null;
 let deployWaived = null;
 let tasksWaived = null;
 let journeysCopied = false;
@@ -378,6 +380,7 @@ let decisionsCarried = null;
 for (let i = 1; i < argv.length; i += 1) {
   if (argv[i] === "--deployed-at") deployedAt = argv[++i] ?? null;
   else if (argv[i] === "--deployed-env") deployedEnv = argv[++i] ?? null;
+  else if (argv[i] === "--deployed-build") deployedBuild = argv[++i] ?? null;
   else if (argv[i] === "--deploy-waived") deployWaived = argv[++i] ?? null;
   else if (argv[i] === "--tasks-waived") tasksWaived = argv[++i] ?? null;
   else if (argv[i] === "--journeys-copied") journeysCopied = true;
@@ -429,6 +432,10 @@ if (deployedAt !== null && deployWaived !== null) {
     yellow("Pass --deployed-at or --deploy-waived, not both."),
     "One says the change shipped; the other says who decided to archive without proof.",
   );
+  process.exit();
+}
+if (deployedAt === null && deployedBuild !== null) {
+  fail(yellow("--deployed-build names a build for no sha."));
   process.exit();
 }
 if (deployedAt === null && deployWaived === null && !storeOnly(tasks ?? "")) {
@@ -827,7 +834,11 @@ if (uncarried.length > 0) {
 // written where none is owed is how the waiver becomes the default.
 const record = {
   ...(deployedAt !== null
-    ? { deployed_at: deployedAt, deployed_env: deployedEnv }
+    ? {
+        deployed_at: deployedAt,
+        deployed_env: deployedEnv,
+        ...(deployedBuild !== null ? { deployed_build: deployedBuild } : {}),
+      }
     : deployWaived !== null
       ? { deploy_waived: deployWaived }
       : {}),
@@ -840,7 +851,9 @@ const record = {
 };
 const subject =
   deployedAt !== null
-    ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
+    ? deployedBuild !== null
+      ? `Record ${changeId} deployed at ${deployedAt} (${deployedEnv}, build ${deployedBuild})`
+      : `Record ${changeId} deployed at ${deployedAt} (${deployedEnv})`
     : deployWaived !== null
       ? `Record ${changeId} archived with the deploy waived`
       : `Archive ${changeId}, which deploys nothing`;

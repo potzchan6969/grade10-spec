@@ -172,6 +172,46 @@ test("a clear run writes the record quoted, over the waiver it replaces", () => 
   );
 });
 
+// shared-planning-change-stages-SC-45/Q68: the build QA walked, named beside
+// the deploy it rode - refused on its own, and dropped by the next write the
+// way every other record key is.
+test("refuses --deployed-build naming a build for no sha", () => {
+  const result = run(sandbox(PROPOSAL).root, "--deployed-build", "1.4.0-rc2");
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--deployed-build names a build for no sha/);
+});
+
+test("a clear run writes the build the deploy carried, quoted beside it", () => {
+  const { root, manifest } = sandbox({
+    ...PROPOSAL,
+    ".openspec.yaml": "schema: grade10-planning\n",
+  });
+  const result = run(root, ...SHIPPED, "--deployed-build", "1.4.0-rc2");
+
+  assert.equal(result.status, 0);
+  assert.equal(
+    readFileSync(manifest, "utf8"),
+    'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\ndeployed_build: "1.4.0-rc2"\n',
+  );
+});
+
+test("a second write drops a stale build the first one recorded", () => {
+  const { root, manifest } = sandbox({
+    ...PROPOSAL,
+    ".openspec.yaml":
+      'schema: grade10-planning\ndeployed_at: "aaaaaaa"\ndeployed_env: "staging"\ndeployed_build: "1.3.0"\n',
+  });
+  const result = run(root, ...SHIPPED);
+
+  assert.equal(result.status, 0);
+  assert.equal(
+    readFileSync(manifest, "utf8"),
+    'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\n',
+  );
+  assert.doesNotMatch(readFileSync(manifest, "utf8"), /1\.3\.0/);
+});
+
 // ── The behind gate ──────────────────────────────────────────────────────────
 // shared-planning-change-stages-SC-31: the archive refuses a behind delta and
 // names what changed before it, the same `behindOf` comparison `check:manual`

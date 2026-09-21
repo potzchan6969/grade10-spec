@@ -851,6 +851,7 @@ test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA a
       'promoted_by: "@dana"',
       "thread: C0AB/1700000000.000100",
       "deployed_env: staging",
+      'deployed_build: "1.4.0-rc2"',
     ),
     [`${DIR}/proposal.md`]: proposalOf(),
     [`${DIR}/tasks.md`]: tasksMd(0),
@@ -880,6 +881,7 @@ test("shared-planning-change-stages-SC-45 - --stages names the run sheet to QA a
     textOf(messages, "probe:on-staging:qa"),
     /https:\/\/sheets\.test\/run/,
   );
+  assert.match(textOf(messages, "probe:on-staging:qa"), /1\.4\.0-rc2/);
   assert.match(textOf(messages, "probe:on-staging:release"), /On staging/);
   // The thread's permalink: the workspace host, the channel, and the
   // timestamp with its dot taken out. A direct message is not a reply.

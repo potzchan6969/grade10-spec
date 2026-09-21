@@ -130,6 +130,13 @@ describe("the stages that say something else", () => {
     expect(html).toContain("@sam");
   });
 
+  it("names the build the deploy recorded", () => {
+    const html = render(gift({ deployedBuild: "1.4.0-rc2" }), "on-staging");
+
+    expect(html).toContain("build");
+    expect(html).toContain("1.4.0-rc2");
+  });
+
   it("links the run sheet the store was configured with", () => {
     const html = render(gift(), "on-staging", "https://sheets.test/run");
 

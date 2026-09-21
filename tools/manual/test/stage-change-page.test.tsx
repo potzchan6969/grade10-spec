@@ -815,11 +815,13 @@ describe("delivery and the handoff", () => {
     const html = render(
       change({ deployedEnv: "staging", releasedIn: "v2026.09.1" }),
     );
-    const delivery = html.slice(html.indexOf(">Delivery<"));
+    const start = html.indexOf(">Delivery<");
+    const delivery = html.slice(start, html.indexOf("</dd>", start));
 
     expect(delivery).toContain("main");
     expect(delivery).toContain("staging");
     expect(delivery).toContain("v2026.09.1");
+    expect(delivery).not.toContain("·");
   });
 
   it("shared-planning-change-stages-SC-59 - names the build the staging deploy recorded", () => {

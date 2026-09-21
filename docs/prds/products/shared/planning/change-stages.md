@@ -114,8 +114,8 @@ Slack tells one person, once per move, in the change's thread.
 - **The channel post per push** — runs today, listing the changes a push touched
 - 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
-- 🚧 **Which build** — the staging message and the change page name the
-  tagged build the deploy recorded
+- 🚧 **The build QA walks** — the staging message and the change page name
+  the tagged build the deploy recorded
 
 ## Surfaces
 
