@@ -3,7 +3,7 @@
 - [ ] 1.1 Mark the delivered Watchers outcome on `docs/prds/products/grade10-admin/auction/management.md` as running (`grade10-admin-auction-listing-SC-81`, `grade10-admin-auction-listing-SC-82`, `grade10-admin-auction-listing-SC-83`)
 - [ ] 1.2 Verify: `pnpm check:manual`
 
-## 2. Listing Read Contract and Backend (grade10)
+## 2. Listing Read Contract and Backend (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add the non-negative list-item watcher-count contract and one batched explicit cross-brand watch aggregate to `listings.list`, defaulting a listing without a matching row to `0` (`grade10-admin-auction-listing-SC-81`, `grade10-admin-auction-listing-SC-82`, `grade10-admin-auction-listing-SC-83`)
 - [ ] 2.2 Verify: `pnpm run typecheck && pnpm run test:backend`
