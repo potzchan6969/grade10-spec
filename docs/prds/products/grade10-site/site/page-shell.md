@@ -60,6 +60,12 @@ drawer (not in the compact bar); Account / Sign In and Cart stay in the bar.
 
 ## Cart
 
+🚧 **Cart count** — members see the same active-line count on the header and
+cart drawer, including while the drawer is closed. Empty or unknown carts and
+signed-out sessions show no count; the cart control stays available.
+The last verified count stays during a same-member refresh and disappears if
+that check fails.
+
 **Members-only cart** — for a collector with no session, the Cart control
 opens sign-in instead of the drawer; the drawer opens by itself on that
 surface once they sign in, and dismissing the dialog leaves them signed out
