@@ -31,10 +31,10 @@ admin(tech PIC) has <change A> open at <manual change page url> on the hosted ma
 
 **Test data:**
 
-| The commit landed | Pushed with |
-| --- | --- |
-| <a commit whose subject names the change> | a person's own token |
-| Lint's own `chore(ci): apply Biome lint fixes` commit | the default token |
+| The commit landed |
+| --- |
+| <a commit whose subject names the change>, pushed with a person's own token |
+| Lint's own `chore(ci): apply Biome lint fixes` commit, pushed with the default token |
 
 **Steps:**
 
@@ -181,7 +181,7 @@ The hosted manual is built with no relay origin set, and admin(engineer) has <ma
 * **Trace:** shared-planning-change-stages-US-10
 
 **Pre-conditions:**
-admin(tech PIC) has <change A> open at <manual change page url>, the banner is up, and the hosted site has not rebuilt.
+admin(tech PIC) has <change A> open at <manual change page url>, the banner is up, and the hosted site has not yet rebuilt.
 
 **Steps:**
 
@@ -193,6 +193,33 @@ admin(tech PIC) has <change A> open at <manual change page url>, the banner is u
 * The banner says the site has not caught up.
 * It no longer says the site refreshes on its own.
 * Refresh now is still offered.
+
+### shared-planning-change-stages-US10-TC7-1: Refresh now re-reads the page before the site has caught up
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-10
+
+**Pre-conditions:**
+admin(tech PIC) has <change A> open at <manual change page url>, the banner is up, and the hosted site has not yet rebuilt.
+
+**Steps:**
+
+1. Click Refresh now.
+
+**Expected Results:**
+
+* The page re-reads at once rather than waiting for the site to catch up.
+* The banner stays up, since the store the page reads has not changed.
 
 ---
 
@@ -308,38 +335,6 @@ admin(designer) is on <locally run manual url>, run from <the checkout>.
 * No Pull control is offered.
 * Nothing on the page reports an error.
 
-### shared-planning-change-stages-US11-TC4-1: A Pull press git refuses names git's own words
-
-**Classification:**
-
-* **Severity:** critical
-* **Priority:** high
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** shared-planning-change-stages-US-11
-
-**Pre-conditions:**
-
-* admin(designer) is on <locally run manual url>, run from a checkout 3 commits behind `main` with a clean tree, and Pull is offered.
-* The next fast-forward is manipulated so git itself refuses it, with <git's own fast-forward refusal>.
-
-**Steps:**
-
-1. Click Pull.
-2. Read the banner without reloading.
-3. Click Pull again once the refusal is cleared.
-
-**Expected Results:**
-
-* Step 1 leaves the banner naming <git's own fast-forward refusal>, not a generic message.
-* The refusal stays through the next standing poll, until step 3.
-* Step 3 leaves the page showing what those commits landed.
-
 ### shared-planning-change-stages-US11-TC5-1: A fetch that fails keeps the last count and its time
 
 **Classification:**
@@ -379,14 +374,20 @@ None yet - the first blind pass on these two journeys.
 
 Run: 2026-09-20, blind pass over the isolated input: `user-journeys.md`, `proposal.md`, `decisions.md` with its goals and non-goals, `ui-design.md`, the Change Stages page and the Planning index, the store's context. No `## Purpose` or `## Feature set` was written for this delta, and no requirement existed when the cases were drawn; `openspec/specs/` and `openspec/changes/archive/` were not read. The same hand wrote `tech-design.md` before this pass, which the bundle does not include, so the cases were drawn from the outcomes rather than from the design's endpoints.
 
+Run: 2026-09-21, a second pass, not blind: `spec.md`'s requirements and its four scenarios, `decisions.md`, `ui-design.md` and `tech-design.md` were all read directly, to reconcile the three cases drafted after the blind pass with no Reconciliation entry of their own.
+
 ### Folded
 
 - `shared-planning-change-stages-US10-TC4-1`, two landings before the page catches up leaving one notice on the later commit and one refresh -> `shared-planning-change-stages-SC-72`
 - `shared-planning-change-stages-US11-TC3-1`, a checkout with no remote saying nothing rather than reporting a failed fetch -> `shared-planning-change-stages-SC-73`
+- `shared-planning-change-stages-US10-TC6-1`, the notice dropping its promise to refresh itself after ten minutes behind -> `shared-planning-change-stages-SC-72`
+- `shared-planning-change-stages-US10-TC7-1`, Refresh now re-reading the page before the site has caught up -> `shared-planning-change-stages-SC-72`
+- `shared-planning-change-stages-US11-TC5-1`, a failed fetch keeping the last counts and when they were read -> `shared-planning-change-stages-SC-73`
 
 ### Rejected
 
-- No case was dropped. Every reading of the input turned out to be behaviour the requirements state or a question the rounds answered.
+- No case was dropped from the blind pass. Every reading of that input turned out to be behaviour the requirements state or a question the rounds answered.
+- `shared-planning-change-stages-US11-TC4-1`, a Pull press git itself refuses: dropped. Drawn from `tech-design.md`, which a feature pass's bundle never includes; the third refusal it named goes to `### Escalated` for the next pass rather than standing as a case for a rule the delta states nowhere.
 
 ### Escalated
 
@@ -394,8 +395,11 @@ Run: 2026-09-20, blind pass over the isolated input: `user-journeys.md`, `propos
 - What does the locally run manual show with no remote, or after a fetch that fails? -> `Q6`
 - A push to `main` that touches nothing the hosted site rebuilds on -> `Q7`
 - Which text fields hold the refresh? -> `Q8`
+- A fast-forward git itself refuses, past a dirty tree or a checkout ahead: is it a third refusal reason the requirement should name, and does it hold the banner's refusal until the next press rather than clearing on the next standing poll? The delta states neither.
 
 `Q7` changed a case: `shared-planning-change-stages-US10-TC1-1` reads the banner's promise that the site rebuilds on its own, which the deploy's path filter made false on a push touching none of the paths it watched.
+
+`Q9` grounds this pass's rewrite of Still behind and `SC-72`'s ten-minute `AND`: the banner SHALL NOT say the site refreshes itself, rather than merely stopping a promise no earlier bullet states.
 
 ### Anchors no case reaches
 
@@ -403,7 +407,7 @@ Every journey is walked. The delta carries no `## Feature set` of its own, so no
 
 ### Manual
 
-Nothing is built yet, so every case is manual. What a person drives, per case:
+Group 4's walks have not landed, so every case here is manual. What a person drives, per case:
 
 | Manual | Why |
 | --- | --- |
@@ -413,8 +417,8 @@ Nothing is built yet, so every case is manual. What a person drives, per case:
 | `shared-planning-change-stages-US10-TC4-1` | Two pushes to `main` inside one deploy's window |
 | `shared-planning-change-stages-US10-TC5-1` | A build of the hosted site with no relay origin set, deployed |
 | `shared-planning-change-stages-US10-TC6-1` | Ten minutes passing with the site still not rebuilt, which the walk does not wait out |
+| `shared-planning-change-stages-US10-TC7-1` | Refresh now pressed before the hosted deploy finishes; the walk's one fixture tree reads the same before and after a press, so it cannot show what an early press gets that a late one does not |
 | `shared-planning-change-stages-US11-TC1-1` | A checkout with a remote ahead of it, and the pull that moves it; group 2's endpoint tests decide the counts and the fast-forward over a bare remote, not the page's own click |
 | `shared-planning-change-stages-US11-TC2-1` | The two refusals over a dirty and an ahead checkout, read on the rendered page; group 2's tests decide the refusals themselves |
 | `shared-planning-change-stages-US11-TC3-1` | A checkout with no remote at all, read on the rendered page |
-| `shared-planning-change-stages-US11-TC4-1` | A press git itself refuses, and the refusal held past the next poll; group 2's tests decide the refusal's own words, not the banner holding them |
 | `shared-planning-change-stages-US11-TC5-1` | A fetch of `origin` that fails, read on the rendered page |

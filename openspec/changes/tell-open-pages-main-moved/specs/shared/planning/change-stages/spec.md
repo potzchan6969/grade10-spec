@@ -11,11 +11,11 @@ and catches up without being reloaded by hand.
   naming the landed commit's subject and how long ago it landed, and SHALL keep
   one notice, naming the latest commit, however many land before it catches up
 - **Refreshed on demand** — the notice SHALL offer one action that re-reads the
-  page at once, caught up or not
+  page at once
 - **Caught up on its own** — the page SHALL show what landed once the snapshot
   it is served is built from `main`, and SHALL drop the notice then
 - **Still behind** — ten minutes after it was told, the notice SHALL say the
-  site has not caught up and SHALL stop promising it refreshes itself
+  site has not caught up and SHALL NOT say the site refreshes itself
 - **Never under a reader who is typing** — the page SHALL NOT replace what it
   shows while a text field has focus, and SHALL do it once focus leaves
 - **Nothing to tell it** — a page with no source for what `main` is on SHALL
@@ -23,8 +23,9 @@ and catches up without being reloaded by hand.
   report no error
 - **Behind, in a checkout** — the locally run manual SHALL say how many commits
   behind `main` the checkout is, and SHALL say nothing where the checkout is
-  level with `main` or has nothing to compare against, and where `origin`
-  cannot be read SHALL keep the last counts and say when it was last read
+  level with `main` or has nothing to compare against
+- **Origin cannot be read** — the locally run manual SHALL keep the last
+  counts and SHALL say when it was last read
 - **Pulled on one action** — it SHALL fast-forward the checkout on one action
   and show what those commits landed
 - **Refused, never decided** — it SHALL refuse the pull, naming what is in the
@@ -37,11 +38,11 @@ and catches up without being reloaded by hand.
 **GIVEN** a page open on the hosted manual, served the snapshot built from the commit `main` is on
 **WHEN** a commit lands on `main`
 **THEN** the page SHALL show one notice naming that commit's subject and how long ago it landed
-**AND** the notice SHALL offer one action that re-reads the page at once, caught up or not
 **AND** a second commit landing before the page catches up SHALL leave one notice, naming that later commit
+**AND** the notice SHALL offer one action that re-reads the page at once
 **AND** the page SHALL show what landed once the snapshot it is served is built from the latest commit, and SHALL drop the notice
+**AND** ten minutes after the page was told, the notice SHALL say the site has not caught up and SHALL NOT say the site refreshes itself
 **AND** the page SHALL NOT replace what it shows while a text field has focus, and SHALL do it once focus leaves
-**AND** ten minutes after the page was told, the notice SHALL say the site has not caught up and SHALL stop promising it refreshes itself
 
 #### Scenario: shared-planning-change-stages-SC-73 - The locally run manual says how far behind and pulls
 **Serves:** shared-planning-change-stages-US-11 - the teammate reads what landed without leaving the page for a command
@@ -51,6 +52,7 @@ and catches up without being reloaded by hand.
 **THEN** it SHALL say how many commits behind `main` the checkout is
 **AND** one action SHALL fast-forward the checkout and leave the page showing what those commits landed
 **AND** a checkout level with `main`, or one with nothing to compare against, SHALL show no count and no notice
+**AND** a checkout whose fetch of `origin` fails SHALL keep the last counts it read and say when they were last read
 
 #### Scenario: shared-planning-change-stages-SC-74 - Pull is refused on a dirty or ahead checkout
 **Serves:** shared-planning-change-stages-US-11 - the teammate's own work is never decided for them

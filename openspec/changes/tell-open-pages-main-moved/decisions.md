@@ -32,10 +32,11 @@
 | Q7 | What happens on a push to `main` that the hosted site does not rebuild on? | Two things, because there are two such pushes: `manual.yml` loses its `paths:` filter, so every push to `main` rebuilds the site; and it also runs on `workflow_run` of Lint, because Lint's own `chore(ci): apply Biome lint fixes` push is made with the default token, which fires the push webhook and starts no workflow at all. What neither reaches is bounded by `Q9` - decided by the round | Keeping the filter, which teaches readers to ignore the banner; or filtering the webhook by the paths the manual renders, which puts the manual's path list inside the relay |
 | Q8 | Which text fields hold the refresh? | Any focused text field, text area or editable region, wherever it is on the page, and the refresh is taken the moment focus leaves - decided by the round | Only the locally run manual's editor, which drops a reader's search query mid-word and asks the shell to know which fields are the editor's |
 | Q9 | What does the banner say when the site does not catch up? | After ten minutes behind it drops the promise that the site refreshes itself, says the site has not caught up, and the poll of `GET /api/head` backs off - decided by the round | Keeping the promise up, which reads as a page about to refresh while nothing is coming; or taking the banner down, which leaves the reader on a page that is behind with nothing said |
+| Q10 | `Q6` says a failed fetch keeps the last counts and the time; does the code show that time? | Yes, closed by task 2.9: `checkoutLine` reads `fetchedAt` too, and a `store-upstream.test.ts` case proves it survives a fetch that fails after one that worked | Leaving `fetchedAt` unread, which answers `Q6`'s counts without the last-read time beside them |
 
 ## Raised
 
-The blind suite pass raised four questions, every one settled above.
+The blind suite pass raised four questions, every one settled above; a second pass raised one more, settled the same way.
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
@@ -43,3 +44,4 @@ The blind suite pass raised four questions, every one settled above.
 | shared/planning/change-stages | A checkout with no remote, or one whose fetch fails: does the locally run manual show no banner, or the counts it last read? | Q6 |
 | shared/planning/change-stages | A push to `main` that touches nothing the hosted site rebuilds on: the banner promises the site catches up, and on that push nothing would rebuild it | Q7 |
 | shared/planning/change-stages | Which text fields hold the refresh: any focused field, or only the ones the locally run manual's editor owns? | Q8 |
+| shared/planning/change-stages | The rule that a failed fetch keeps the last counts and says when they were read has no code and no test: `checkoutLine` reads `ahead`, `behind` and `dirty` alone, and no test proves the last-read time survives a fetch that fails after one that worked | Q10 |
