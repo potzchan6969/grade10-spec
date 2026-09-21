@@ -38,27 +38,28 @@ without manual identifier clarification.
 - Keep internal database IDs, gapless audit numbers and provider references
   separate from every collector-facing identifier.
 - Record the format recommendations as provisional PM/Finance decisions; the
-  requirements remain waiting until PM and Finance confirm the open listing
-  code rules and the rules for allocation, reissue, receipt sequencing and
-  retention.
+  requirements remain waiting until PM and Finance confirm the final
+  reconciliation rule. Listing allocation, reissue, receipt sequencing,
+  collision handling and temporary indefinite receipt retention are decided.
 
 ## Examples
 
 | Record | Example | Use |
 | --- | --- | --- |
-| Public invoice ID | `INV-202609-L9482-01` | Names the invoice month, listing code and revision |
-| Payment reference code | `L948201` | Hyphen-free value for FPS, local wire and SWIFT; also written to Stripe transaction metadata |
-| First partial receipt | `REC-202609-ORD-L9482-P1-R1` | Identifies the first payment receipt against the stable order |
-| Final settlement receipt | `REC-202609-ORD-L9482-P2-R1` | Identifies the payment that settles the stable order |
-| Reversal or refund revision | `REC-202609-ORD-L9482-P1-R2` | Revises the receipt for payment sequence `P1` without changing the order or invoice reference |
+| Public listing code | `L9482A7` | Fixed `L` prefix plus a 6-character Crockford Base32 payload |
+| Public invoice ID | `INV-202609-L9482A7-01` | Names the invoice month, listing code and revision |
+| Payment reference code | `L9482A701` | Hyphen-free value for FPS, local wire and SWIFT; also written to Stripe transaction metadata |
+| First partial receipt | `REC-202609-ORD-L9482A7-P1-R1` | Identifies the first payment receipt against the stable order |
+| Final settlement receipt | `REC-202609-ORD-L9482A7-P2-R1` | Identifies the payment that settles the stable order |
+| Reversal or refund revision | `REC-202609-ORD-L9482A7-P1-R2` | Revises the receipt for payment sequence `P1` without changing the order or invoice reference |
 
-The listing code uses the Crockford Base32 payload charset
+The listing code uses a 6-character Crockford Base32 payload from
 `0123456789ABCDEFGHJKMNPQRSTVWXYZ` with a fixed `L` prefix. The listing code
-as a whole contains both letters and digits; `L9482` is the format example
-supplied for this proposal. The exact payload length remains a format detail
-for PM and Finance to confirm. The Grade10 payment reference is written to
-Stripe metadata under `payment_reference_code`. Stripe supplies a separate
-provider reference, such as the returned PaymentIntent ID; Grade10 stores that
+as a whole contains both letters and digits; `L9482A7` is the format example
+supplied for this proposal, and the production payload is always 6 characters.
+The Grade10 payment reference is written to Stripe metadata under
+`payment_reference_code`. Stripe supplies a separate provider reference, such
+as the returned PaymentIntent ID; Grade10 stores a normalized form of that
 reference and uses it in internal document filenames created after the payment
 is obtained.
 
