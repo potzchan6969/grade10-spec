@@ -6,8 +6,7 @@ order: 1
 ---
 
 The Grading section of the admin panel is a queue of submissions cut by what each one waits for, a batches page, and
-one submission in tabs whose buttons follow its status; cards are counted here, money is taken at the till and written
-back.
+one submission in tabs whose buttons follow its status; cards are counted here, money is taken at the till.
 
 - 🚧 **URL** — `admin.grade10.com/grading` for the queue, `admin.grade10.com/grading/batches`, and
   `admin.grade10.com/grading/submissions/<id>` for one submission; the diary stays its own section
@@ -32,8 +31,7 @@ back.
   Unchecked return · Uncollected 30 d · Storage fee from day 90; derived at the read, never stored
 - 🚧 **Tiles** — the batch closing Thursday 19:00 and its cards; with graders, and how many past their estimate; ready
   and uncollected, and how many past 30 days; to settle before collection, the sum and count of upcharges
-- 🚧 **Paging** — 50 rows a page, newest touched first, a load-more control, and the day's drop-offs in a strip above,
-  each opening its submission
+- 🚧 **Paging** — 50 rows a page, newest touched first, a load-more control, and the day's drop-offs in a strip above
 
 ## Hand-in
 
@@ -73,34 +71,32 @@ One intake label per card, the cards sealed into the intake bag with the printed
   the future, and estimated back from the level's estimate counted from the ship day
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
   and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
-- 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's declared value against its
-  cap
-- ❓ **The safe's cap** — HKD 300,000 of declared value held in the safe, an operational cap until cover is bought —
+- 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
+- ❓ **The safe's cap** — HKD 300,000 of declared value in the safe, an operational cap until cover is bought —
   Commercial, Legal
 
 ## Receiving
 
 - 🚧 **Scan and match** — each scan matches a cert to a card by the intake id on the grader's manifest; a cert already
-  held by another submission is refused by name; the counters read scanned of total, matched, ungraded, and upcharges
-  with their sum
+  held by another submission is refused by name; counters: scanned, matched, ungraded, upcharges and their sum
 - 🚧 **Exceptions on the card** — ungraded, with the grader's code and note, the fee standing; an upcharge from the
   invoice, due before collection; a slab on the manifest not scanned, finished as held by the grader with its expected
   date or as not returned; damaged, photographed before it leaves the box
 - 🚧 **Finish receiving** — `graded → returned → ready` for every submission in the batch; each collector is emailed
-  the pickup code and what is due, a card not returned or damaged the same day; saved half scanned, a batch keeps its
+  the pickup code and what is due, a card not returned or damaged the same day; a batch saved half scanned keeps its
   scans
 
 ## One Submission
 
 - 🚧 **Header** — the summary, the status badge and the chips: declared in total, upcharge to settle, ungraded card,
-  the batch; the drop-off or the pickup block; the collector's email, phone and WhatsApp click-to-chat link with seven
-  templates
+  the batch; the drop-off or the pickup block; the collector's email, phone and WhatsApp click-to-chat link and its
+  seven templates
 - 🚧 **Cards tab** — per card the intake id, declared value, level and the one it was moved to, grade and cert in the
   grader's words, the outcome; refuse or add a card at hand-in; withdraw a card at Handed in until the batch closes,
   refunding its POS line against a receipt
 - 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge from the invoice, to settle before
-  collection, refunds; record a settlement, or waive the upcharge with a reason and a second person, once the cards
-  are back
+  collection, refunds; once the cards are back, record a settlement or waive the upcharge with a reason and a second
+  person
 - 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again
 - 🚧 **Timeline tab** — every event with the figures it carried and the grader's stages in its words; staff-only
   entries stay here and never reach the collector
@@ -132,8 +128,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 
 ## Settings
 
-🚧 **Every default is a setting the console reads** — never a constant; each row is adopted until its owner confirms
-it:
+🚧 **Every default is a setting the console reads** — never a constant; each row stands until its owner confirms it:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |
