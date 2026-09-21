@@ -1,4 +1,4 @@
-## 1. Shared copy and preview (grade10-spec)
+## 1. Shared copy and preview (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Add shared `auctionOrders` Insurance tooltip catalog coverage and preview interaction tests for the insured, omitted, and pre-invoice states (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
 - [ ] 1.2 Add the localized Insurance tooltip key to every shared catalog and wire it through the existing Winner Order preview line metadata; update the Post-Bidding PRD's in-flight decision if its exact copy is not aligned (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
