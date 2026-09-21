@@ -1408,6 +1408,7 @@ inside the writable set.
 - **THEN** `main` moves only as a fast-forward onto that commit
 - **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and, for an artifact, the diff from `main` touches nothing outside the change's own directory, `docs/prds/` and `docs/references/`, the run's guard having held it to the pages the proposal links before the push
 - **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
+- **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds an artifact of the schema with no `landed_by:` line, naming the files it would have carried
 - **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
 
