@@ -30,8 +30,8 @@ export const PicksAndSimilar: Story = {
     const tiles = canvas.getAllByTestId("store-product-related-rail-tile");
     expect(tiles).toHaveLength(RELATED_RAIL_STORY.length);
     expect(
-      tiles.map((tile) => within(tile).getByText(/.+/).textContent),
-    ).toEqual(expect.arrayContaining([RELATED_RAIL_STORY[0].name]));
+      within(tiles[0]).getByText(RELATED_RAIL_STORY[0].name),
+    ).toBeVisible();
     expect(canvas.queryByRole("link")).toBeNull();
     expect(canvas.queryByRole("button", { name: /cart/i })).toBeNull();
     expect(canvas.queryByRole("spinbutton")).toBeNull();
