@@ -34,18 +34,18 @@ chrome, including on auction-first launch.
 
 ## Account Menu
 
-**Account menu** — signed in, the account icon opens Profile, My Orders, My
-Auctions, and Sign out. Sign-out is always offered there, and also on the
-profile wherever the profile itself is carried. KYC stays out of the menu.
+**Account menu** — signed in, the account icon opens My Auctions and Sign
+out. Sign-out is always offered there, and also on the profile wherever the
+profile itself is carried. KYC stays out of the menu.
+
+**Profile** joins the menu first, and only where the profile surface is
+carried — the same gate `/profile` itself carries. Where it is not, the
+account icon opens directly on My Orders (once Store has answered), My
+Auctions, and Sign out.
 
 **My Orders** joins the menu between Profile and My Auctions once Store
 answers, opening `/profile/orders`; until Store answers, the menu omits it,
 the same gate `/profile/orders` and Cart already carry.
-
-🚧 **Profile** joins the menu first, and only where the profile surface is
-carried — the same gate `/profile` itself carries. Where it is not, the
-account icon opens directly on My Orders (once Store has answered), My
-Auctions, and Sign out.
 
 ## Help
 
@@ -90,5 +90,5 @@ no cart to show someone signed out.
 | Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
 | My Orders label and place | Decided | "My Orders", between Profile and My Auctions; rejected "Your Orders" (parallels the page title instead of Profile/My Auctions naming) and appending after My Auctions, before Sign out (the ask was for it directly under Profile). | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
-| 🚧 Profile gating | Decided | Handler-gated the same way, supplied only once the profile itself is carried. Rejected keeping it required and always-present: `add-account-profile` leaves today's account page mid-build, and until it ships the menu item would lead a signed-in collector to a withheld surface on the public lanes. | Product |
+| Profile gating | Decided | Handler-gated the same way, supplied only once the profile itself is carried. Rejected keeping it required and always-present: `add-account-profile` leaves today's account page mid-build, and until it ships the menu item would lead a signed-in collector to a withheld surface on the public lanes. | Product |
 :::
