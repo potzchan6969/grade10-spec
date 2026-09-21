@@ -1,6 +1,7 @@
 ---
 name: openspec-propose
 description: Start a new OpenSpec change - what to read first, and which role skill writes each artifact. Use when implementation planning is requested and the artifact's owner is not already obvious.
+disable-model-invocation: true
 ---
 
 # Propose an OpenSpec change
@@ -16,16 +17,7 @@ This skill covers what to settle before drafting and routes to the right one.
 
 ## Who writes what
 
-| # | Artifact | Skill | Required |
-| --- | --- | --- | --- |
-| 1 | `proposal.md` | `planning-pm` | Always |
-| 2 | `decisions.md` | `planning-pm` | Always — goals, non-goals, and what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `ui-design.md` | `planning-design` | Optional — the designer's, or the PM's when they have the design |
-| 5 | `specs/<capability>/spec.md` | `planning-qa`, or `planning-dev` on a change they authored | Always — generated, two passes with 6 between them |
-| 6 | `specs/<capability>/feature-tcs.md` | `planning-qa` | Always — generated blind, before the scenarios |
-| 7 | `tech-design.md` | `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 8 | `tasks.md` | `planning-dev` | Before the change can be applied |
+The artifact map is `AGENTS.md`'s table.
 
 **The product manager writes 1 to 3 and stops**; a designer specifying a change
 writes the same three, through the same skill. 2 is the interview's record, and

@@ -14,21 +14,23 @@ config-only with `store: grade10-spec`, so every `openspec` command run there �
 absolute path; the files it creates and the commits against them are the store clone's.
 
 - **The line commands live in the store clone.** A terminal run from `grade10`
-  reads `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`, `/workflow-build` and `/workflow-land`,
-  the `workflow-round` skill, the schema's perspectives and the reader definitions under
-  `.claude/agents/` from the clone you add with `/add-dir` — never from the
-  submodule directory pinned to an older sha, because a round read from a pin is
-  held to last month's rules. `grade10` ships its own skills (`tdd`,
-  `testing-lanes`, and others), and those stay its own
+  reads `/workflow-plan`, `/workflow-design`, `/workflow-tech`,
+  `/workflow-specify`, `/workflow-tasks`, `/workflow-build` and
+  `/workflow-land`, the `workflow-round` skill, the schema's perspectives and
+  the reader definitions under `.claude/agents/` from the clone you add with
+  `/add-dir` — never from the submodule directory pinned to an older sha,
+  because a round read from a pin is held to last month's rules. `grade10`
+  ships its own skills (`tdd`, `testing-lanes`, and others), and those stay
+  its own
 - **`openspec instructions <artifact> --change <name>` substitutes for the
   per-artifact rules, and for nothing else** — the same project context, that
   artifact's rules and its template. The round, its readers and the landing are
   the store clone's, so a session without it can draft an artifact and cannot
   land one
 - **The rules are not commands.** `planning-pm` and `planning-dev`, which
-  `/workflow-plan`, `/workflow-tech` and `/workflow-tasks` load, carry every artifact's rules;
-  `planning-design` and `planning-qa` are `/workflow-design`'s and `/workflow-specify`'s. Nobody
-  types them
+  `/workflow-plan`, `/workflow-tech` and `/workflow-tasks` load, carry every
+  artifact's rules; `planning-design` and `planning-qa` are
+  `/workflow-design`'s and `/workflow-specify`'s. Nobody types them
 - **An agent in `grade10` reads that repository's `AGENTS.md`**, not this
   store's — what this store expects arrives with the skills and the
   instructions read from the clone

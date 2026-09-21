@@ -64,9 +64,9 @@ over one document, and a change in another repository to fix the second.
 
 ## The run
 
-`/workflow-specify` runs this as a round. `workflow-round` holds the steps, the readers and the
-landing; what follows is what the two files must hold, and the order they are
-written in.
+`/workflow-specify` runs this as a round. `workflow-round` holds the steps,
+the readers and the landing; what follows is what the two files must hold,
+and the order they are written in.
 
 Everything this run produces is `draft`. Nothing in it claims review;
 `/tcs-review` comes later, at its own pace.

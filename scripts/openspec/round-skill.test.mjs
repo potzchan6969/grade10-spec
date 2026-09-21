@@ -699,6 +699,10 @@ test("every path the round skill names resolves", () => {
   assertAnchorsResolve(ROUND);
 });
 
+test("the round skill's own frontmatter name is workflow-round", () => {
+  assert.equal(frontMatter(read(ROUND)).name, "workflow-round");
+});
+
 test("each line skill names its artifact and follows the round", () => {
   for (const [name, artifact] of Object.entries(LINES)) {
     const path = `.claude/skills/${name}/SKILL.md`;

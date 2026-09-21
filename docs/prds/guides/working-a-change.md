@@ -56,9 +56,9 @@ Customers-also-bought from orders is phase two, once this ships.
 
 **Every later hand is told in that change's thread**, and answers there —
 [Agent Rounds](/p/shared/planning/agent-rounds). From a terminal it is your
-artifact's line command instead — `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
-each with the change id, then `/workflow-build add-store-cross-sell <group>`, once per
-group.
+artifact's line command instead — `/workflow-design`, `/workflow-tech`,
+`/workflow-specify`, `/workflow-tasks`, each with the change id, then
+`/workflow-build add-store-cross-sell <group>`, once per group.
 
 Four things the round cannot know, so say them when they are true:
 

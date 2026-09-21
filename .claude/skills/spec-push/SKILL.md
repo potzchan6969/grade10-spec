@@ -8,7 +8,7 @@ disable-model-invocation: true
 
 Kept until the team has adopted the line commands (`Q84` of
 `run-a-round-on-every-artifact`). `/workflow-land` lands one artifact on
-`main` as a fast- forward on the hand's word, with no pull request.
+`main` as a fast-forward on the hand's word, with no pull request.
 
 Rebase this branch onto `main`, settle what conflicts by reading the change
 rather than the hunk, and merge the PR once nothing is outstanding.

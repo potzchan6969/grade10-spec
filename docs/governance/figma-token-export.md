@@ -105,4 +105,4 @@ Note that the manifest sets `documentAccess: "dynamic-page"`, so pages load lazi
 - [`packages/design-system/DESIGN.md`](../../packages/design-system/DESIGN.md) — the whole token pipeline: `tokens:import`, `tokens:build`, `tokens:push`, the ownership boundary, and round-trip guarantees.
 - [`figma-component-to-code.md`](figma-component-to-code.md) — where this step sits in the component handover.
 - [`design-code-sync.md`](design-code-sync.md) — what `design-sync:check` enforces once the tokens have landed.
-- `.cursor/skills/design-tokens/SKILL.md` — the working checklist for this leg and the other two, for an agent or anyone who would rather be told which leg they are on than read the pipeline.
+- `.claude/skills/design-tokens/SKILL.md` — the working checklist for this leg and the other two, for an agent or anyone who would rather be told which leg they are on than read the pipeline.

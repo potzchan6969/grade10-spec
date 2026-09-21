@@ -205,6 +205,17 @@ const ROUTES = new Set([
   "vocabulary",
 ]);
 const HARNESS = new Set(["add-dir", "compact", "tc", "sc"]);
+// The application repository's own commands - `dev-help`'s restored router
+// names them in its `Invoke` column, its `Here` column names this store's
+// equivalent where one exists. They resolve to nothing under
+// `.claude/skills/` here because they never lived here.
+const APP_SKILLS = new Set([
+  "implement",
+  "implement-then-review",
+  "tdd",
+  "review-changes",
+  "archive-change",
+]);
 const SLASH_TREES = [".claude/skills", "docs/governance"];
 
 const markdownUnder = (dir) => {
@@ -224,7 +235,8 @@ test("every slash name a skill or a governance page writes resolves to a skill",
       const text = read(path);
       for (const m of text.matchAll(/`\/([a-z][a-z0-9-]*)`/g)) {
         const slug = m[1];
-        if (ROUTES.has(slug) || HARNESS.has(slug)) continue;
+        if (ROUTES.has(slug) || HARNESS.has(slug) || APP_SKILLS.has(slug))
+          continue;
         const skill = join(ROOT, ".claude/skills", slug, "SKILL.md");
         if (existsSync(skill)) continue;
         const line = text.slice(0, m.index).split("\n").length;
@@ -237,4 +249,25 @@ test("every slash name a skill or a governance page writes resolves to a skill",
     [],
     "a `/<slug>` in backticks resolves to .claude/skills/<slug>/SKILL.md, or it is a manual route or a harness command on the lists above; a retired skill is swept from every page that named it",
   );
+});
+
+// The three skills task 3.10 kept until the line is adopted (`Q84`). Each
+// exists and opens naming the `/workflow-<artifact>` skill that replaced it.
+// This list empties at this change's archive.
+const KEPT_SKILLS = ["dev-help", "openspec-propose", "spec-push"];
+
+test("each kept skill exists and opens naming its workflow replacement", () => {
+  for (const name of KEPT_SKILLS) {
+    const skill = skillPath(name);
+    assert.ok(
+      existsSync(join(ROOT, skill)),
+      `${skill} is kept by \`Q84\` until the line is adopted; it should not be gone`,
+    );
+    const opening = read(skill).split("\n").slice(0, 12).join("\n");
+    assert.match(
+      opening,
+      /`\/workflow-[a-z-]+`/,
+      `${skill} should open naming the \`/workflow-<artifact>\` skill that replaced it`,
+    );
+  }
 });

@@ -49,8 +49,9 @@ The owner's points of 2026-09-19, on the first draft of this shape.
   `proposal.md` and `user-journeys.md`, then `ui-design.md` and
   `tech-design.md`, then `spec.md` and the suite, then `tasks.md`; when one
   changes, every group after it is read again in full, so nothing stale is
-  built on; `/workflow-plan`, `/workflow-design`, `/workflow-tech` and `/workflow-specify` grill one another,
-  because things change after deeper thought
+  built on; `/workflow-plan`, `/workflow-design`, `/workflow-tech` and
+  `/workflow-specify` grill one another, because things change after deeper
+  thought
 - **The PM starts with what is wanted** — agents refine the rest with what
   makes the most sense, and raise what is a preference or a product decision
   as a question the PM answers

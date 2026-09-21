@@ -55,7 +55,7 @@ Two things routinely surprise people, and both are recorded in that file's own n
 
 The pull is `pnpm tokens:plugin dump` → import the manifest in the Figma desktop app → run **DS Token Dump** → download `figma-dump.json` → `FIGMA_DUMP=/absolute/path pnpm run tokens:pull`. Use an absolute path: `pull.mjs` resolves it against the repository root, not your shell's working directory.
 
-Skill: `.cursor/skills/design-tokens/SKILL.md`. Procedure and failure table: [`figma-token-export.md`](figma-token-export.md).
+Skill: `.claude/skills/design-tokens/SKILL.md`. Procedure and failure table: [`figma-token-export.md`](figma-token-export.md).
 
 - **There is no REST path in.** `GET /v1/files/:key/variables/local` needs `file_variables:read`, which Figma gates to Enterprise; the request is rejected `403 Invalid scope(s)`. Every export needs a human with the file open, by constraint rather than by choice.
 - **Never hand-edit `src/theme.css` or `src/themes/grade10.css`.** They are generated; an edit there survives until the next `tokens:build` and then vanishes.
@@ -89,7 +89,7 @@ The assignment test is the three-layer table in [`ui-component-contracts.md`, "W
 6. `pnpm run design-sync:check` to zero errors and zero unexplained warnings.
 7. `FIGMA_ACCESS_TOKEN=figd_… pnpm run code-connect:publish:design-system`.
 
-Skill: `.cursor/skills/design-system-primitives/SKILL.md`. Ready-to-paste agent prompt for steps 3–7: [`prompts/implement-primitive-from-figma.md`](prompts/implement-primitive-from-figma.md). Rules: [`design-code-sync.md`](design-code-sync.md). Preview: `pnpm run storybook:design-system`.
+Skill: `.claude/skills/design-system-primitives/SKILL.md`. Ready-to-paste agent prompt for steps 3–7: [`prompts/implement-primitive-from-figma.md`](prompts/implement-primitive-from-figma.md). Rules: [`design-code-sync.md`](design-code-sync.md). Preview: `pnpm run storybook:design-system`.
 
 `code-connect:publish:design-system` and `code-connect:publish:ui` are two commands and there is deliberately no combined one — each writes to a shared Figma file and cannot be undone, so which templates you are publishing is a thing to state rather than to inherit from a script name.
 
@@ -113,7 +113,7 @@ The filing conventions — the `<product-context>-<capability>` slug, the capabi
 
 ## A page from Figma
 
-Skill: `.cursor/skills/page-from-figma/SKILL.md`, loaded **before** any `get_design_context` call on a page-level frame. It gates on `figma:figma-design-to-code`, which ships with the official Figma plugin rather than with this repository. Prompt: [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md). Layout translation tables: [`figma-component-to-code.md`, "What an auto-layout frame becomes"](figma-component-to-code.md#what-an-auto-layout-frame-becomes).
+Skill: `.claude/skills/page-from-figma/SKILL.md`, loaded **before** any `get_design_context` call on a page-level frame. It gates on `figma:figma-design-to-code`, which ships with the official Figma plugin rather than with this repository. Prompt: [`prompts/implement-page-from-figma.md`](prompts/implement-page-from-figma.md). Layout translation tables: [`figma-component-to-code.md`, "What an auto-layout frame becomes"](figma-component-to-code.md#what-an-auto-layout-frame-becomes).
 
 The premise is that **a page is composition, not invention**, and the mechanism is an inventory gate before any code: classify every section as **Block**, **Primitive**, **Layout**, or **Unmatched**, report the table, and wait for a go-ahead. An unmatched row is a product decision — a new block behind an OpenSpec change, a new primitive, or a `tokens.json` conversation — never something a page conversion absorbs into bespoke markup.
 
@@ -140,7 +140,7 @@ FIGMA_TOKEN=figd_… pnpm run design-sync:audit --node <figma-url> # dump one no
 
 CI: **Actions → Design sync**, nightly at 01:00 UTC. That is the run that matters, because a Figma edit raises no event here; push and pull-request runs only catch drift a code change happens to walk into. Re-check on demand with **Run workflow**.
 
-Skill, including a symptom-to-cause triage table for every message either script emits: `.cursor/skills/design-sync-check/SKILL.md`.
+Skill, including a symptom-to-cause triage table for every message either script emits: `.claude/skills/design-sync-check/SKILL.md`.
 
 ### What a clean run does not say
 
@@ -172,7 +172,7 @@ Recorded so they are not mistaken for coverage. The full lists are in [`design-c
 
 Each artifact is the sole authority over exactly one thing and no artifact owns two — the table in [`design-code-sync.md`, "Ownership"](design-code-sync.md#ownership), with the designer's pre-flight checklist at ["For designers: before you create or change a component"](design-code-sync.md#for-designers-before-you-create-or-change-a-component).
 
-On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, the journeys and the spec outline and stops there** — `/workflow-plan`, following `.cursor/skills/planning-pm/SKILL.md`'s rules. The requirements and the blind suite are QA's two readings of that outline, `/workflow-specify` following `.cursor/skills/planning-qa/SKILL.md`. `ui-design.md` belongs to the designer, `/workflow-design` following `.cursor/skills/planning-design/SKILL.md`, and `tech-design.md` and `tasks.md` to whoever plans the delivery, `/workflow-tech` and `/workflow-tasks` following `.cursor/skills/planning-dev/SKILL.md` (after `pnpm run plan:preflight <change-id>`). Each adds their artifacts to that same change, because engineering never opens a change in the application repository.
+On the specification side the split is a handoff, not a hierarchy. **A PM writes the proposal, the journeys and the spec outline and stops there** — `/workflow-plan`, following `.claude/skills/planning-pm/SKILL.md`'s rules. The requirements and the blind suite are QA's two readings of that outline, `/workflow-specify` following `.claude/skills/planning-qa/SKILL.md`. `ui-design.md` belongs to the designer, `/workflow-design` following `.claude/skills/planning-design/SKILL.md`, and `tech-design.md` and `tasks.md` to whoever plans the delivery, `/workflow-tech` and `/workflow-tasks` following `.claude/skills/planning-dev/SKILL.md` (after `pnpm run plan:preflight <change-id>`). Each adds their artifacts to that same change, because engineering never opens a change in the application repository.
 
 Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim` / `unclaim` / `done` / `undone` run from the application repository and each push one commit to this store's `main`. A checkmark goes in after the code is pushed, not when it is written. Format, the who-writes-what table, and the silent parser failures: [`task-ownership.md`](task-ownership.md).
 
@@ -190,7 +190,7 @@ Owners are claimed at pickup, never assigned at planning time: `pnpm plan claim`
 
 Never resolve a mismatch by editing the `.figma.ts` template to agree with the code. The template maps names; papering over a disagreement there deletes the only evidence of it. A warning you intend to keep belongs in a change with a reason, not in the run log.
 
-Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<domain>/<capability>/spec.md`, reached through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in the capability page's `Product decisions` block ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement group by group with `/workflow-build`, following `.cursor/skills/openspec-apply-change/SKILL.md`'s rules, keep the checkboxes honest, derive QA coverage with `/spec-to-tcs` and `/tcs-review` ([`specs-to-test-cases.md`](specs-to-test-cases.md)), and close out with `.cursor/skills/openspec-archive-change/SKILL.md` into `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
+Then the normal loop: if the statement is testable it belongs in `openspec/specs/<product>/<domain>/<capability>/spec.md`, reached through an `openspec/changes/` delta; if it explains a product judgment that outlives the change, it belongs in the capability page's `Product decisions` block ([`prd-and-openspec.md`, "Fast decision guide"](prd-and-openspec.md#fast-decision-guide)). Implement group by group with `/workflow-build`, following `.claude/skills/openspec-apply-change/SKILL.md`'s rules, keep the checkboxes honest, derive QA coverage with `/spec-to-tcs` and `/tcs-review` ([`specs-to-test-cases.md`](specs-to-test-cases.md)), and close out with `.claude/skills/openspec-archive-change/SKILL.md` into `openspec/changes/archive/YYYY-MM-DD-<change-name>/`.
 
 Before handing off:
 

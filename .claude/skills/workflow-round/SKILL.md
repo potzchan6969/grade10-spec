@@ -8,8 +8,9 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash, Task
 
 Every artifact of a change, from the proposal to a task group's code, is
 written by one round of six steps, and nothing reaches `main` by another
-route. The line commands - `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
-`/workflow-build`, `/workflow-land` - each name their artifact and follow this skill; the rules
+route. The line commands - `/workflow-plan`, `/workflow-design`,
+`/workflow-tech`, `/workflow-specify`, `/workflow-tasks`, `/workflow-build`,
+`/workflow-land` - each name their artifact and follow this skill; the rules
 the artifact must meet are theirs, the procedure is here.
 
 The product's own words for all of it:
