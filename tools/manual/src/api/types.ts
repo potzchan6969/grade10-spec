@@ -279,6 +279,13 @@ export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
 /** A hand a change passes through. */
 export type Role = (typeof ROLES)[number];
 
+/** What a round row's Artifact cell reads for the one reader's pass over the
+ * whole change, after its last task group: no artifact of the schema and no
+ * group of the plan, so every reader that tells a group from an artifact
+ * reads it as a group — the landing, the archive gate, the relay and the
+ * button — and the word is written once, here. */
+export const WHOLE_CHANGE = "whole change";
+
 /** How far a change has got, derived from the files on the store's main and
  * never stored: the eight stages `shared/planning/change-stages` names, of
  * which `ChangeLane`'s four are a projection. */

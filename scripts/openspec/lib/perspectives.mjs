@@ -18,7 +18,7 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { TRIGGERS } from "../../../tools/manual/src/api/types.ts";
+import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import {
   applyPerspectives,
   schemaArtifacts,
@@ -277,10 +277,12 @@ export function perspectivesOf(schema, target) {
 }
 
 /** A task group is named by its number - `3`, `3.`, `group 3` - or by the
- * block its readers sit on. */
+ * block its readers sit on; the reading of the whole change, which lands as a
+ * group does, is read as one too. */
 export const isGroup = (target) =>
   /^(?:apply|group)$/i.test(String(target ?? "").trim()) ||
-  /^(?:group\s*)?\d+(?:\.\d+)*\.?$/.test(String(target ?? "").trim());
+  /^(?:group\s*)?\d+(?:\.\d+)*\.?$/.test(String(target ?? "").trim()) ||
+  String(target ?? "").trim() === WHOLE_CHANGE;
 
 const artifactOf = (schema, target) => {
   const named = String(target ?? "").trim();

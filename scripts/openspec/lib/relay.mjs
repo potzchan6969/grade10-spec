@@ -25,6 +25,7 @@
  */
 import { existsSync, readFileSync } from "node:fs";
 import { join } from "node:path";
+import { WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../../tools/manual/src/store/read-rounds.mts";
 
 /** The wake's own file, root-relative — what a refusal names. */
@@ -187,6 +188,8 @@ export function confirmOf(name, held = false) {
   if (target === null) return null;
   if (/^\d+$/.test(target))
     return { label: `Confirm group ${target}`, word: "land" };
+  if (target === WHOLE_CHANGE)
+    return { label: "Confirm the whole change", word: "land" };
   const label = CONFIRM_LABEL[target];
   return label ? { label, word: "land" } : null;
 }

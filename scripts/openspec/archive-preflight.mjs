@@ -35,12 +35,17 @@
  * WALK     A change on the round — one with a row or a `landed_by:` line, or
  *          created from the day every change is — ends with its journeys
  *          walked and the whole read as one shape, and `rounds.md` is the
- *          record of both: its last task group's row names the walks it left,
- *          a `*.walk.ts` the suite runs or a walk by hand with its cases
- *          manual, and one row reads `whole change`, which
- *          `plan:land --whole` writes for the one reader over the whole. A
- *          change whose journeys say nobody walks it owes no walk row, and
- *          a change on the old flow owes neither.
+ *          record of both: its last task group's row names, in its Tests
+ *          cell, the walks it left — a `*.walk.ts` the suite runs or a walk
+ *          by hand with its cases manual — and a row after it reads `whole
+ *          change`, which `plan:land --whole` writes for the one reader over
+ *          the whole. The rows and the groups are read on the store's main,
+ *          where a landing writes them, never in this checkout. The journeys
+ *          are the capability's: the delta's file where it carries one, the
+ *          durable one where it leans on it. A change whose journeys say
+ *          nobody walks it owes no walk row, and a change on the old flow
+ *          owes neither. Not waivable — the row is the record, and landing
+ *          it is what clears this.
  *
  * CARRY    `openspec archive` folds `## Requirements` and nothing else, so a
  *          delta's `## Purpose`, its `## Feature set`, its `user-journeys.md`
@@ -96,7 +101,13 @@ import { fileURLToPath } from "node:url";
 import { heldToRounds } from "../../tools/manual/check/rounds.mjs";
 import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
-import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
+import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
+import {
+  readRounds,
+  roundArtifactOf,
+} from "../../tools/manual/src/store/read-rounds.mts";
+import { walkedByNobody } from "../../tools/manual/src/store/read-specs.mts";
+import { roundsPath } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
 import { parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
@@ -140,10 +151,6 @@ const STORE_GROUP = "grade10-spec";
 const MANIFEST_KEY = /^([A-Za-z0-9_]+):/;
 /** Every key a record owns. A write drops all of them and appends only what it
  * was told, so a waiver never outlives the record that replaces it. */
-/** What the walk's row names: the suite file it left, or the walk by hand. */
-const WALK = /\.walk\.ts\b|\bby hand\b/;
-/** The Artifact cell of the row `plan:land --whole` writes. */
-const WHOLE_ROW = "whole change";
 const RECORD_KEYS = new Set([
   "deployed_at",
   "deployed_env",
@@ -154,6 +161,11 @@ const RECORD_KEYS = new Set([
   "journeys_copied",
 ]);
 const SHOWN = 10;
+/** What the walk's row names in its Tests cell: the suite file it left, or
+ * the walk by hand. */
+const WALK = /\.walk\.ts\b|\bby hand\b/i;
+/** A task group's number off its heading, as `tasks.md` writes it. */
+const GROUP_NUM = /^##\s+(\d+)\./;
 
 function changeIds() {
   if (!existsSync(CHANGES)) return [];
@@ -560,52 +572,86 @@ if (behind.length > 0) {
 
 // ── Walk gate ───────────────────────────────────────────────────────────────
 // The change's own record of its rounds says whether the journeys were walked
-// and the whole was read: the last group's row and the `whole change` row.
-// Held only where the change is on the round, through the same reading the
-// `round` rule uses, so a change worked on the old flow is asked for neither.
+// and the whole was read: the last group's row and the `whole change` row
+// after it, both read on `main`, where a landing writes them — a row the
+// checkout alone holds is nobody's landing. Held only where the change is on
+// the round, through the same reading the `round` rule uses, so a change
+// worked on the old flow is asked for neither.
 if (heldToRounds(entry)) {
-  const rows = entry.rounds ?? [];
-  const last = (entry.taskGroups ?? []).reduce(
-    (top, one) => (!top || Number(one.num) > Number(top.num) ? one : top),
-    undefined,
+  const rows = readRounds(
+    textAt(ROOT, main.commit, roundsPath(changeId)) ?? "",
   );
-  const walked = deltaFiles(changeId).some(({ file }) => {
-    const journeys = file.replace(/spec\.md$/, "user-journeys.md");
+  const last = (tasks ?? "")
+    .split("\n")
+    .map((line) => GROUP_NUM.exec(line)?.[1])
+    .filter((num) => num !== undefined)
+    .reduce(
+      (top, num) =>
+        top === undefined || Number(num) > Number(top) ? num : top,
+      undefined,
+    );
+  // The capability's journeys: the delta's file where it carries one, the
+  // durable one where it leans on it. A nobody line is what excuses the walk,
+  // whatever journeys it routes.
+  const journeysCarried = deltaFiles(changeId).some(({ file, capability }) => {
+    const own = file.replace(/spec\.md$/, "user-journeys.md");
+    const durable = join(
+      ROOT,
+      "openspec",
+      "specs",
+      capability,
+      "user-journeys.md",
+    );
+    const journeys = existsSync(own) ? own : durable;
     if (!existsSync(journeys)) return false;
     const text = readFileSync(journeys, "utf8");
-    return (
-      (text.match(US_ID) ?? []).length > 0 &&
-      !/\*\*Walked by:\*\*\s*nobody/i.test(text)
-    );
+    return (text.match(US_ID) ?? []).length > 0 && !walkedByNobody(text);
   });
-  if (walked && last) {
-    const row = rows.find(
-      (one) =>
-        roundArtifactOf(one.artifact) === roundArtifactOf(last.num) &&
-        WALK.test(`${one.tests} ${one.stood}`),
-    );
-    if (!row) {
+  const lastRows =
+    last === undefined
+      ? []
+      : rows.filter((one) => roundArtifactOf(one.artifact) === last);
+  if (journeysCarried && last !== undefined) {
+    if (!lastRows.some((one) => WALK.test(one.tests))) {
       fail(
         yellow(
-          `${changeId} archives with its journeys unwalked: group ${last.num}'s row names no walk.`,
+          `${changeId} archives with its journeys unwalked: group ${last}'s row names no walk.`,
         ),
         "The last group walks every journey the change specifies and leaves the",
-        "walks as its suite: its row names the `*.walk.ts` files it left, or says",
-        "the journeys were walked by hand with their cases manual. Land that row,",
-        "then re-run this.",
+        "walks as its suite: its row's Tests cell names the `*.walk.ts` files it",
+        "left, or says the journeys were walked by hand with their cases manual.",
+        "Land that row, then re-run this.",
       );
       process.exit();
     }
   }
-  if (!rows.some((one) => one.artifact.trim() === WHOLE_ROW)) {
+  const wholes = rows.filter(
+    (one) => roundArtifactOf(one.artifact) === WHOLE_CHANGE,
+  );
+  const wholeLanding = `pnpm run plan:land ${changeId} --whole --perspectives simpler --stood "<what stood>"`;
+  if (wholes.length === 0) {
     fail(
       yellow(
-        `${changeId} archives with no reading of the whole: no row reads \`${WHOLE_ROW}\`.`,
+        `${changeId} archives with no reading of the whole: no row reads \`${WHOLE_CHANGE}\`.`,
       ),
       "After the last group, one reader argues the simpler shape for the whole",
       "change before it goes to staging, and its landing writes the row:",
       "",
-      `  ${cyan(`pnpm run plan:land ${changeId} --whole --perspectives simpler --stood "<what stood>"`)}`,
+      `  ${cyan(wholeLanding)}`,
+    );
+    process.exit();
+  }
+  const lastRound = Math.max(0, ...lastRows.map((one) => one.round));
+  const whole = wholes.at(-1);
+  if (whole.round < lastRound) {
+    fail(
+      yellow(
+        `${changeId}'s reading of the whole is round ${whole.round}, before group ${last}'s row ${lastRound}.`,
+      ),
+      "The whole is read after the last group lands, so the shape it argues is",
+      "the one that ships. Read it again and land it:",
+      "",
+      `  ${cyan(wholeLanding)}`,
     );
     process.exit();
   }
