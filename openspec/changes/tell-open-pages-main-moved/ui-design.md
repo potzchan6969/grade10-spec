@@ -4,7 +4,7 @@ Drawn from [Change Stages · Surfaces](../../../docs/prds/products/shared/planni
 
 ### Banner on the hosted manual
 
-[Delivery workflow blueprint · Screens](../../../docs/references/delivery-workflow-blueprint.md#screens). One notice between the header and the reading column, above the page heading, in the shell rather than on a page: every page of the manual is read from one snapshot, so one banner answers all of them. It reads “`main` moved 2 minutes ago — <subject>. This site rebuilds in a few minutes and refreshes on its own.” and carries Refresh now beside the words, which re-reads the store for a reader who does not want to wait.
+[Delivery workflow blueprint · Screens](../../../docs/references/delivery-workflow-blueprint.md#screens). One notice between the header and the reading column, above the page heading, in the shell rather than on a page: every page of the manual is read from one snapshot, so one banner answers all of them. It reads “`main` moved 2 minutes ago — <subject>. This site rebuilds in a few minutes and refreshes on its own.” and carries Refresh now beside the words, which re-reads the store for a reader who does not want to wait. Ten minutes after the page was told, the last sentence becomes “This site has not caught up yet.”
 
 The banner takes the full width of the reading column and pushes the page down; it never floats over the reading line, and it never covers the header's search. It goes when the page has the new snapshot, and no second notice says so.
 
@@ -37,6 +37,7 @@ New in `tools/manual`, work in grade10-spec: `MainMoved` in `src/shell/main-move
 | --- | --- | --- |
 | Behind | The banner naming the commit's subject and how long ago it landed, with Refresh now | `shared-planning-change-stages-SC-72` |
 | Caught up | No banner: the page has taken the new snapshot and shows what landed | `shared-planning-change-stages-SC-72` |
+| Still behind | Ten minutes after the page was told, the banner’s last sentence replaced and its promise to refresh gone with it, Refresh now unchanged | `shared-planning-change-stages-SC-72` |
 | A reader typing | The banner stays and nothing reloads while a text field has focus, and the page takes the refresh the moment focus leaves | `shared-planning-change-stages-SC-72` |
 | No relay | No banner, and nothing is polled | `shared-planning-change-stages-SC-75` |
 
