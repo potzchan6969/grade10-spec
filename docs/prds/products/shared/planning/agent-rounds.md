@@ -59,8 +59,7 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **A sentence that overlaps a change in flight** — the run answers in that
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
-- 🚧 **Every later hand answers in the thread** — the message that says it is
-  your turn points at it; you reply there
+- 🚧 **Every later hand answers in the thread** — the turn message points at it
 - 🚧 **The frames come from you** — a designer's ask carries the frame links; a
   draft that needs a frame nobody drew writes a dated wait on the designer,
   never a screen in prose
@@ -70,10 +69,8 @@ One round per artifact, and one per task group while the change is building.
   thread reads who pressed; a member the team map does not name lands nothing
 - 🚧 **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on, and the relay checks the word again before `main`
-  moves
-- 🚧 **A group lands the branch whole** — so it lands only once `main` holds
-  every other artifact's text the branch does, the plan and the answered
-  decisions apart; the refusal names each file and the hand it waits on
+  moves; a task group lands the branch whole, so only once `main` holds every
+  other artifact's text the branch does, the plan and the decisions apart
 
 ## Perspectives
 
