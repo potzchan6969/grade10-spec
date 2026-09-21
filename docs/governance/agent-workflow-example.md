@@ -36,6 +36,13 @@ absolute path; the files it creates and the commits against them are the store c
   instructions read from the clone
 - **There is never a second change to open in `grade10`** — it has no
   planning shape of its own to hold one
+- **Without Slack, the terminal is the whole line.** Every command below runs
+  the same round and lands the same way whether or not the Slack app, the
+  relay and the Routine are up: `/workflow-land` pushes `main` from your
+  terminal on the handle the team map gives your git e-mail, and the push
+  workflow posts the landing in the channel as it does for every push. What
+  Slack adds is the thread to answer in and the message that says it is your
+  turn — [Each Way In](../prds/guides/working-a-change.md#each-way-in)
 
 ### Give the Agent the Store Clone, and Only the Store Clone
 

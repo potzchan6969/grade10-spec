@@ -6,6 +6,9 @@ order: 2
 
 Everything here is readable by everyone — that is the point of one manual. But
 the first hour is different depending on what you came to do, so pick a path.
+Whatever the path, a change is worked from the thread, from a terminal alone,
+from the locally run manual or from the application repository —
+[Each Way In](/guides/working-a-change#each-way-in).
 
 ## If you are a product manager
 
