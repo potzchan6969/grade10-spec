@@ -245,14 +245,18 @@ export function verifierNeeded(readers) {
  * than dropped to nothing.
  */
 export function fixPassFloor(schema) {
-  const lists = [
+  const names = [
     ...schema.artifacts.map((one) => one.perspectives),
     schema.apply,
-  ].filter((list) => Array.isArray(list) && list.length > 0);
-  const always = (list) =>
-    list.filter(({ when }) => when.includes("always")).map(({ name }) => name);
-  const shared = (lists[0] ? always(lists[0]) : []).filter((name) =>
-    lists.every((list) => always(list).includes(name)),
+  ]
+    .filter((list) => Array.isArray(list) && list.length > 0)
+    .map((list) =>
+      list
+        .filter(({ when }) => when.includes("always"))
+        .map(({ name }) => name),
+    );
+  const shared = (names[0] ?? []).filter((name) =>
+    names.every((list) => list.includes(name)),
   );
   if (shared.length === 0) {
     throw new Error(

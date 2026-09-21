@@ -168,9 +168,14 @@ for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => process.exit(130));
 if (process.env.PLAN_LAND_RACE && !flags.root)
   fail("PLAN_LAND_RACE is a test seam and needs --root");
-if (fixPass && reviewedOnly) {
+// A read that changed nothing lands no row, so every flag only a row can use
+// is refused beside it rather than dropped without a word.
+const rowFlags = ["perspectives", "stood", "asked", "tests", "fix-pass"].filter(
+  (flag) => flags[flag] !== undefined,
+);
+if (reviewedOnly && rowFlags.length > 0) {
   fail(
-    "--fix-pass names a round's row, and --reviewed lands none — a read that changed nothing is no fix pass",
+    `${rowFlags.map((flag) => `--${flag}`).join(", ")} ${rowFlags.length > 1 ? "name" : "names"} a round's row, and --reviewed lands none — a read that changed nothing is no round`,
   );
 }
 let wake;
@@ -377,7 +382,10 @@ async function attemptLanding(attempt) {
   // Skipped for --reviewed: a read that changes nothing asks nobody's word,
   // so it waits on no one's answer either. Read once, here, and every reader
   // of the table below takes that one text.
-  const decisionsRelPath = `openspec/changes/${change}/decisions.md`;
+  // The decisions' own path, off the schema's `generates:` as every other
+  // artifact's is read, with the name the store writes where a schema this
+  // store does not define names none.
+  const decisionsRelPath = `openspec/changes/${change}/${artifacts.find((one) => one.id === "decisions")?.generates ?? "decisions.md"}`;
   const decisionsPath = join(root, decisionsRelPath);
   const decisions =
     reviewedOnly || !existsSync(decisionsPath)
@@ -436,19 +444,28 @@ async function attemptLanding(attempt) {
   // `main` does not hold would reach `main` with no hand's word behind it.
   // Read off the text, never off a `landed_by:` line: a landed artifact
   // redrawn on the branch is a draft again, and one whose text `main` holds
-  // already is nobody's draft whatever the record says.
+  // already is nobody's draft whatever the record says. A file the branch
+  // took off `main` is the same reach with no draft to drop, and is named
+  // as what it is.
   if (group) {
-    const drafts = artifacts
-      .filter(({ id }) => !GROUP_CARRIES.has(id))
-      .flatMap(({ id }) =>
-        filesOf(changed, artifacts, id).map((path) => {
-          const hand = whose(id);
-          return hand ? `${path} — waits on @${hand}` : path;
-        }),
-      );
+    const drafts = [];
+    const removals = [];
+    for (const { id } of artifacts) {
+      if (GROUP_CARRIES.has(id)) continue;
+      const hand = whose(id);
+      for (const path of filesOf(changed, artifacts, id)) {
+        const line = hand ? `${path} — waits on @${hand}` : path;
+        (existsSync(join(root, path)) ? drafts : removals).push(line);
+      }
+    }
     if (drafts.length > 0) {
       fail(
         `${target}'s landing carries a draft no hand has landed:\n${listed(drafts)}\nLand each on its hand's word, or drop the draft from the branch.`,
+      );
+    }
+    if (removals.length > 0) {
+      fail(
+        `${target}'s landing takes a schema artifact off main with no hand's word:\n${listed(removals)}\nLand the removal on its hand's word, or restore the file on the branch.`,
       );
     }
   }
@@ -870,11 +887,9 @@ function testsCell(read, group, value) {
  * than one reader ran — two readings are reconciled, and only a round of one
  * argues its own findings.
  *
- * `--fix-pass` drops the floor to the readers every list of the schema shares
- * — `fixPassFloor`, `simpler` alone in this store: a pass off a demonstration
- * or off the reading of the whole change is a round of the simpler thing
- * (Q50, Q99), and the apply block's six `always` readers read the plan rather
- * than the fix.
+ * Under `--fix-pass` the floor is `fixPassFloor`'s, since the apply block's
+ * six `always` readers read the plan rather than the fix; a wider row still
+ * owes its verifier (Q99).
  */
 function perspectivesCell(read, value) {
   const cell = listCell(value);
