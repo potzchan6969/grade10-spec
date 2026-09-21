@@ -37,9 +37,10 @@ chrome, including on auction-first launch.
 
 🚧 **Account menu** — signed in, an initial avatar sits above the email, above
 the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
-and Membership once Store answers, with Sign Out always last. The menu does
-not list Profile, and KYC stays out. Sign-out stays on the profile page
-wherever that page is carried
+and Membership once Store answers, with Sign Out always last. Profile joins
+first, ahead of My Orders, wherever it is carried — unchanged from today, and
+absent while the `profile` build gate is off. KYC stays out. Sign-out stays
+on the profile page wherever that page is carried
 
 🚧 **My Orders** — ahead of My Auctions once Store answers, opening
 `/profile/orders`, and omitted until then on the same gate as Cart
@@ -92,7 +93,7 @@ no cart to show someone signed out.
 | Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
 | My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
-| Profile in the menu | Decided | The account menu does not list Profile on auction launch or once Store answers. Sign-out on the profile page itself is unchanged wherever that page is carried. | Product |
+| Profile in the menu | Decided | Stays handler-gated exactly as today: Profile joins first, ahead of My Orders, wherever it is carried, on auction launch and once Store answers alike. Grade10 does not carry it while the `profile` build gate is off. Sign-out on the profile page itself is unchanged wherever that page is carried. | Product |
 | Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
 | Membership | ❓ Open | Once Store answers, the menu lists Membership after My Auctions. The destination is unconfirmed. | Product |
 :::

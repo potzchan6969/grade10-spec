@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { AUCTION_STORE_BASE_ARGS } from "./site-header.auction-store.story-shared";
 import { ACCOUNT_EMAIL } from "./site-header.story-shared";
@@ -55,5 +55,35 @@ export const Open: Story = {
       body.getByRole("menuitem", { name: "Membership" }),
     ).toBeInTheDocument();
     expect(canvas.getByRole("button", { name: "Cart" })).toBeInTheDocument();
+  },
+};
+
+/**
+ * Profile joins first, ahead of My Orders, whenever `onProfile` is
+ * supplied — the durable ordering, unchanged by this change. Grade10 does
+ * not currently supply `onProfile` (the `profile` build gate is off), but
+ * the component still honors it correctly when a caller does.
+ */
+export const WithProfile: Story = {
+  name: "Open, with Profile",
+  args: { onProfile: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    await canvas.findByRole("button", { name: "Account" });
+    const body = within(canvasElement.ownerDocument.body);
+    const items = await body.findAllByRole("menuitem");
+    expect(items.map((item) => item.textContent)).toEqual([
+      "Profile",
+      "My Orders",
+      "My Auctions",
+      "Membership",
+      "Sign Out",
+    ]);
+    await userEvent.click(body.getByRole("menuitem", { name: "Profile" }));
+    expect(args.onProfile).toHaveBeenCalledTimes(1);
+    expect(args.onMyOrders).not.toHaveBeenCalled();
+    expect(args.onMyAuctions).not.toHaveBeenCalled();
+    expect(args.onMembership).not.toHaveBeenCalled();
+    expect(args.onSignOut).not.toHaveBeenCalled();
   },
 };

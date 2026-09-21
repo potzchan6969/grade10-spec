@@ -27,8 +27,9 @@ currency.
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
-joins ahead of My Auctions and Membership joins after it. The menu does not
-list Profile. KYC stays out of the menu
+joins ahead of My Auctions and Membership joins after it. Profile joins
+first, ahead of My Orders, wherever it is carried — unchanged from today, and
+absent while the `profile` build gate is off. KYC stays out of the menu
 
 🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
 order history surface, and omitted until then
