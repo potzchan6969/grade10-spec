@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { laneOf } from "../src/api/derive";
+import { landingDatesOf } from "../src/api/handoff.ts";
 import { OVERLAYS, type Overlay, overlaysOf } from "../src/api/overlays.ts";
 import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
@@ -15,7 +16,6 @@ import {
   STAGES,
   stageOf,
 } from "../src/api/stages.ts";
-import { landingDatesOf } from "../src/api/handoff.ts";
 import type {
   ChangeEntry,
   ChangeSuite,
