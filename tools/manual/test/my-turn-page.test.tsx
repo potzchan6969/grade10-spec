@@ -89,7 +89,7 @@ describe("My turn before a handle is chosen", () => {
     expect(html).toContain("Choose a handle");
     expect(html).toContain("Your handle");
     expect(html).not.toContain("On you now");
-    expect(html).not.toContain("Coming to you");
+    expect(html).not.toContain("Yours later");
   });
 });
 
@@ -169,7 +169,7 @@ describe("the page's own order", () => {
     const questionChangeAt = html.indexOf("A change asking robin something");
     const nowHeadingAt = html.indexOf("On you now");
     const nowChangeAt = html.indexOf("On robin right now");
-    const laterHeadingAt = html.indexOf("Coming to you");
+    const laterHeadingAt = html.indexOf("Yours later");
     const laterChangeAt = html.indexOf("Coming to robin");
 
     for (const at of [

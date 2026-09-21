@@ -42,7 +42,7 @@ test("shared-planning-change-stages-SC-62 - before a handle is chosen", async ()
     .element(page.getByRole("heading", { level: 2, name: "On you now" }))
     .not.toBeInTheDocument();
   await expect
-    .element(page.getByRole("heading", { level: 2, name: "Coming to you" }))
+    .element(page.getByRole("heading", { level: 2, name: "Yours later" }))
     .not.toBeInTheDocument();
   await expect
     .element(page.getByRole("heading", { level: 2, name: "Open questions" }))
@@ -61,15 +61,15 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
     .toBeVisible();
 
   // The page's own order: the open questions' section, then "On you now",
-  // then "Coming to you" - read off the DOM order itself rather than off
+  // then "Yours later" - read off the DOM order itself rather than off
   // text offsets, which two changes sharing a title would leave ambiguous.
   await expect
-    .element(page.getByRole("heading", { level: 2, name: "Coming to you" }))
+    .element(page.getByRole("heading", { level: 2, name: "Yours later" }))
     .toBeVisible();
   const headings = Array.from(document.querySelectorAll("h2")).map((heading) =>
     heading.textContent?.trim(),
   );
-  expect(headings).toEqual(["Open questions", "On you now", "Coming to you"]);
+  expect(headings).toEqual(["Open questions", "On you now", "Yours later"]);
 
   const questions = page.elementLocator(sectionFor("Open questions"));
   await expect
@@ -93,7 +93,7 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
     .element(now.getByRole("link", { name: "The Building stage" }))
     .toBeVisible();
 
-  const later = page.elementLocator(sectionFor("Coming to you"));
+  const later = page.elementLocator(sectionFor("Yours later"));
   await expect
     .element(later.getByRole("link", { name: "The Specified stage" }))
     .toBeVisible();

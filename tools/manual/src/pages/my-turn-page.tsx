@@ -125,7 +125,7 @@ function MyTurnBody({ handle }: { handle: string }) {
       ) : null}
 
       {later.length > 0 ? (
-        <ChangeSection changes={later} title="Coming to you" />
+        <ChangeSection changes={later} title="Yours later" />
       ) : null}
     </>
   );
