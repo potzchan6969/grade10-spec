@@ -57,11 +57,11 @@ The application reuses the existing Auction & Store cart-count stories and share
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Settled member basket | Same active-line count as the drawer, including adjusted lines | `grade10-site-site-page-shell-SC-30` |
-| Empty or all excluded | Cart control without badge | `grade10-site-site-page-shell-SC-31` |
-| Wide and 375px | Full digits and reachable controls | `grade10-site-site-page-shell-SC-32` |
-| Cart unavailable | Neither control nor badge | `grade10-site-site-page-shell-SC-33` |
-| Closed drawer after a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-35` |
-| Initial loading or failed review | No badge or badge skeleton; cart control remains | `grade10-site-site-page-shell-SC-36`, `grade10-site-site-page-shell-SC-37` |
-| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-38`, `grade10-site-site-page-shell-SC-40` |
-| Same-member refresh | Last verified count stays until success; failure hides it | `grade10-site-site-page-shell-SC-41` |
+| Settled member basket | Same active-line count as the drawer, including adjusted lines | `grade10-site-site-page-shell-SC-42` |
+| Empty or all excluded | Cart control without badge | `grade10-site-site-page-shell-SC-43` |
+| Wide and 375px | Full digits and reachable controls | `grade10-site-site-page-shell-SC-44` |
+| Cart unavailable | Neither control nor badge | `grade10-site-site-page-shell-SC-45` |
+| Closed drawer after a cart update | Current reviewed count without opening | `grade10-site-site-page-shell-SC-47` |
+| Initial loading or failed review | No badge or badge skeleton; cart control remains | `grade10-site-site-page-shell-SC-48`, `grade10-site-site-page-shell-SC-49` |
+| Signed out or switching members | No previous-member count | `grade10-site-site-page-shell-SC-50`, `grade10-site-site-page-shell-SC-52` |
+| Same-member refresh | Last verified count stays until success; failure hides it | `grade10-site-site-page-shell-SC-53` |

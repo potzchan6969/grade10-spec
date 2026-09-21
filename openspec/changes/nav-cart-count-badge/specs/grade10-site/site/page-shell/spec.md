@@ -84,7 +84,7 @@ The header SHALL show the full positive count in wide and compact layouts.
 It SHALL show no count badge when the reviewed basket has no active lines.
 The count SHALL NOT introduce a Cart control on a surface that omits it.
 
-#### Scenario: grade10-site-site-page-shell-SC-30 - Active lines count once
+#### Scenario: grade10-site-site-page-shell-SC-42 - Active lines count once
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector on a surface whose header offers Cart
@@ -94,7 +94,7 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 - **THEN** the header badge displays `2`
 - **AND** the drawer title displays `2` when showing that same reviewed basket
 
-#### Scenario: grade10-site-site-page-shell-SC-31 - No active lines means no badge
+#### Scenario: grade10-site-site-page-shell-SC-43 - No active lines means no badge
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector on a surface whose header offers Cart
@@ -103,7 +103,7 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 - **THEN** the header has no count badge
 - **AND** the Cart control remains available
 
-#### Scenario: grade10-site-site-page-shell-SC-32 - The full count survives a compact header
+#### Scenario: grade10-site-site-page-shell-SC-44 - The full count survives a compact header
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector whose reviewed basket has `123` active lines
@@ -112,7 +112,7 @@ The count SHALL NOT introduce a Cart control on a surface that omits it.
 - **THEN** its Cart badge displays `123`, without truncation
 - **AND** the Cart control remains reachable without horizontal overflow
 
-#### Scenario: grade10-site-site-page-shell-SC-33 - A count does not add an unanswered Cart control
+#### Scenario: grade10-site-site-page-shell-SC-45 - A count does not add an unanswered Cart control
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a surface whose header does not offer Cart
@@ -134,7 +134,7 @@ badge; a successful review SHALL replace it with the newly verified count.
 The header SHALL NOT show a badge skeleton or invent a count from unreviewed lines.
 The existing fresh review on drawer open SHALL remain in effect.
 
-#### Scenario: grade10-site-site-page-shell-SC-34 - Hydration supplies the count with the drawer closed
+#### Scenario: grade10-site-site-page-shell-SC-46 - Hydration supplies the count with the drawer closed
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector whose cart has not finished hydration
@@ -142,7 +142,7 @@ The existing fresh review on drawer open SHALL remain in effect.
 - **WHEN** hydration and basket review complete with `2` active lines
 - **THEN** the header badge displays `2` without opening the drawer
 
-#### Scenario: grade10-site-site-page-shell-SC-35 - Settled mutations refresh the closed drawer's count
+#### Scenario: grade10-site-site-page-shell-SC-47 - Settled mutations refresh the closed drawer's count
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector with `2` reviewed active lines
@@ -153,7 +153,7 @@ The existing fresh review on drawer open SHALL remain in effect.
 - **AND** changing only an active line's quantity instead keeps it at `2`
 - **AND** none of these outcomes requires opening the drawer
 
-#### Scenario: grade10-site-site-page-shell-SC-36 - An unknown count has no badge
+#### Scenario: grade10-site-site-page-shell-SC-48 - An unknown count has no badge
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a surface whose header offers Cart
@@ -162,7 +162,7 @@ The existing fresh review on drawer open SHALL remain in effect.
 - **THEN** the header displays no count badge or badge skeleton
 - **AND** the Cart control remains available in the same position
 
-#### Scenario: grade10-site-site-page-shell-SC-37 - Failed review clears the count until review succeeds
+#### Scenario: grade10-site-site-page-shell-SC-49 - Failed review clears the count until review succeeds
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in collector whose header showed `2` active lines
@@ -172,7 +172,7 @@ The existing fresh review on drawer open SHALL remain in effect.
   restores a badge displaying `1`
 - **AND** the Cart control stays available throughout
 
-#### Scenario: grade10-site-site-page-shell-SC-41 - Same-member refresh retains the verified count
+#### Scenario: grade10-site-site-page-shell-SC-53 - Same-member refresh retains the verified count
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** the current member's header shows a verified count of `2`
@@ -189,7 +189,7 @@ When session ownership changes, it SHALL clear the previous member's count
 immediately and await the current member's reviewed basket. A late response
 for a previous session SHALL NOT restore or replace the current count.
 
-#### Scenario: grade10-site-site-page-shell-SC-38 - Signed-out and unresolved sessions have no count
+#### Scenario: grade10-site-site-page-shell-SC-50 - Signed-out and unresolved sessions have no count
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a surface whose header offers Cart
@@ -197,7 +197,7 @@ for a previous session SHALL NOT restore or replace the current count.
 - **THEN** the header displays no count badge
 - **AND** the Cart control remains available under its existing sign-in rule
 
-#### Scenario: grade10-site-site-page-shell-SC-39 - Signing out clears the previous member's count
+#### Scenario: grade10-site-site-page-shell-SC-51 - Signing out clears the previous member's count
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** a signed-in member whose header displays `2` active lines
@@ -205,7 +205,7 @@ for a previous session SHALL NOT restore or replace the current count.
 - **THEN** the badge disappears immediately
 - **AND** a late basket response from that signed-in session cannot restore it
 
-#### Scenario: grade10-site-site-page-shell-SC-40 - Another member never inherits a count
+#### Scenario: grade10-site-site-page-shell-SC-52 - Another member never inherits a count
 **Serves:** grade10-site-site-page-shell-US-08 - Collector sees the cart count without opening the drawer
 
 - **GIVEN** member A's header showed `2` active lines and their review is pending

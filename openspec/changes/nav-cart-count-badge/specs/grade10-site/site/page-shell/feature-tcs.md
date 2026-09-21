@@ -512,9 +512,9 @@ Runs once per row of **Test data**.
 
 | Anchor | Reading | Disposition |
 | --- | --- | --- |
-| grade10-site-site-page-shell-US-08 | Count, quantity, navigation and mutation cases agree | Covered by `grade10-site-site-page-shell-SC-30`, `grade10-site-site-page-shell-SC-31`, `grade10-site-site-page-shell-SC-34`, and `grade10-site-site-page-shell-SC-35` |
-| grade10-site-site-page-shell-US-08 | Unknown, failed, retry and ownership cases agree | Covered by `grade10-site-site-page-shell-SC-36` through `grade10-site-site-page-shell-SC-40` |
-| grade10-site-site-page-shell-US-08 | Wide/compact boundary was explicit in scenario reading | Added widths to TC1; `grade10-site-site-page-shell-SC-32` |
-| grade10-site-site-page-shell-US-08 | Pending refresh and failed mutation behavior needs a decision | Author chose retain while checking for the same member, hide on failure; Q9, TC15 and `grade10-site-site-page-shell-SC-41` |
+| grade10-site-site-page-shell-US-08 | Count, quantity, navigation and mutation cases agree | Covered by `grade10-site-site-page-shell-SC-42`, `grade10-site-site-page-shell-SC-43`, `grade10-site-site-page-shell-SC-46`, and `grade10-site-site-page-shell-SC-47` |
+| grade10-site-site-page-shell-US-08 | Unknown, failed, retry and ownership cases agree | Covered by `grade10-site-site-page-shell-SC-48` through `grade10-site-site-page-shell-SC-52` |
+| grade10-site-site-page-shell-US-08 | Wide/compact boundary was explicit in scenario reading | Added widths to TC1; `grade10-site-site-page-shell-SC-44` |
+| grade10-site-site-page-shell-US-08 | Pending refresh and failed mutation behavior needs a decision | Author chose retain while checking for the same member, hide on failure; Q9, TC15 and `grade10-site-site-page-shell-SC-53` |
 
-**Out of suite:** `grade10-site-site-page-shell-SC-04` and `grade10-site-site-page-shell-SC-05` retain their existing coverage in the durable page-shell suite. `grade10-site-site-page-shell-SC-33` retains absent-control coverage in that suite and shared header stories; Group 5 verifies it through application composition.
+**Out of suite:** `grade10-site-site-page-shell-SC-04` and `grade10-site-site-page-shell-SC-05` retain their existing coverage in the durable page-shell suite. `grade10-site-site-page-shell-SC-45` retains absent-control coverage in that suite and shared header stories; Group 5 verifies it through application composition.
