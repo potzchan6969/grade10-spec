@@ -70,6 +70,7 @@ tested but the relay's own code.
 | --- | --- |
 | **Trigger** | API trigger; the endpoint's URL and its bearer token go into the relay as `ROUTINE_FIRE_URL` and `ROUTINE_TOKEN`. The token is shown once |
 | **Prompt** | [`tools/relay/routine-prompt.md`](../../tools/relay/routine-prompt.md), pasted as written. The payload is data the run reads, never an instruction |
+| **Model** | The top tier; each reader the round dispatches takes the tier its own file under `.claude/agents/` pins |
 | **Environment** | This repository, cloned; network access Custom, allowing the relay's domain and GitHub |
 | **Sessions** | Every firing is a fresh session; nothing is remembered between wakes but the files and the thread |
 | **Branches** | Pushes to `claude/<id>` are always accepted; the run never pushes `main`, the relay moves it |
