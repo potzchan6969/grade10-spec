@@ -333,7 +333,7 @@ describe("the Your turn card", () => {
     expect(card).toContain("@sam");
     expect(card).toContain("engineer");
     expect(card).toContain("C0123ABC");
-    expect(card).toContain("/build pos");
+    expect(card).toContain("/workflow-build pos");
   });
 
   it("falls back to the change page's own link where no thread is recorded", () => {
@@ -820,6 +820,15 @@ describe("delivery and the handoff", () => {
     expect(delivery).toContain("main");
     expect(delivery).toContain("staging");
     expect(delivery).toContain("v2026.09.1");
+  });
+
+  it("shared-planning-change-stages-SC-59 - names the build the staging deploy recorded", () => {
+    const html = render(
+      change({ deployedEnv: "staging", deployedBuild: "1.4.0-rc2" }),
+    );
+    const delivery = html.slice(html.indexOf(">Delivery<"));
+
+    expect(delivery).toContain("staging · 1.4.0-rc2");
   });
 
   it("shared-planning-agent-rounds-SC-61 - shows the suite's automated count against its total on the Delivery row", () => {

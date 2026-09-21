@@ -261,7 +261,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 **Expected Results:**
 
 * <release handle> holds one Your turn message naming <change R>, the stage On staging and the thread.
-* <qa handle> holds one staging message naming <change R> and the run sheet.
+* <qa handle> holds one staging message naming <change R>, the run sheet and, where the record carries `deployed_build:`, the build.
 * Each of the two holds one message for that move, not two.
 
 ### shared-planning-change-stages-US1-TC9-1: A build push tells nobody and the channel still reads it
@@ -664,7 +664,7 @@ No change is in flight and the archive holds none the board reads.
 
 * The stepper shows Specified as the current stage, and the Your turn card carries the thread link and the command.
 * Each artifact row reads fresh or behind, with its open question count and the handle that landed it.
-* The hands, the delivery and the handoff rows read one fact per label.
+* The hands, the delivery and the handoff rows read one fact per label; the delivery row names `main`, staging with the build where the record carries `deployed_build:`, and the release.
 
 ### shared-planning-change-stages-US2-TC9-1: A change whose record cannot be read
 
@@ -1500,7 +1500,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* One direct message names <change R>, the stage On staging, and links the run sheet and its thread.
+* One direct message names <change R>, the stage On staging, the build where the record carries `deployed_build:`, and links the run sheet and its thread.
 * The card sits in the On staging lane.
 
 ### shared-planning-change-stages-US8-TC2-1: Staging names the run sheet with no tab written for the change

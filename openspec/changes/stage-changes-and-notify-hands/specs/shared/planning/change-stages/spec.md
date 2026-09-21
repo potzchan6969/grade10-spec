@@ -664,8 +664,9 @@ Two moves that are not a stage landing still reach a person.
 - **Behind** — an artifact newly behind SHALL send one message to its hand,
   naming the artifact and what changed before it
 - **Staging** — a change reaching On staging SHALL send one message to its QA
-  hand, naming the change and the run sheet to walk, and one Your turn message
-  to its release hand
+  hand, naming the change, the run sheet to walk and the build the deploy
+  recorded where the record carries one, and one Your turn message to its
+  release hand
 
 #### Scenario: shared-planning-change-stages-SC-44 - An artifact goes behind
 **Serves:** shared-planning-change-stages-US-09 - the hand is told before anything is built on the artifact
@@ -679,6 +680,7 @@ Two moves that are not a stage landing still reach a person.
 
 **WHEN** a push moves a change to On staging
 **THEN** one direct message SHALL be sent to its QA hand, naming the change and the run sheet
+**AND** it SHALL name the build where the record carries `deployed_build:`
 **AND** one Your turn message SHALL be sent to its release hand, naming the change and On staging
 
 ### Requirement: A landing from a terminal is told in the thread
@@ -820,8 +822,8 @@ The change page SHALL show, in this order down the reading column:
    and the handle that landed it
 5. on the pages: every 🚧 and ❓ line of each page section the proposal
    links, under its page's title and section, a ❓ line with its hand
-6. delivery: where the code is — `main`, staging and the release that carried
-   the change
+6. delivery: where the code is — `main`, staging with the build the deploy
+   recorded, and the release that carried the change
 7. the handoff: for each stage the change has left, the days from the stage
    landing to that hand's first word
 8. the thread as `main` records it, which `shared/planning/agent-rounds`
@@ -844,9 +846,9 @@ The change page SHALL show, in this order down the reading column:
 #### Scenario: shared-planning-change-stages-SC-59 - Where the code is and where the days went
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads whether a finished change shipped and where its days went
 
-**GIVEN** a change carrying a staging deploy, a release tag, and a Proposed landing 3 days before its designer's first word
+**GIVEN** a change carrying a staging deploy recording build `1.4.0-rc2`, a release tag, and a Proposed landing 3 days before its designer's first word
 **WHEN** the change page is read
-**THEN** delivery SHALL name `main`, staging and that tag
+**THEN** delivery SHALL name `main`, staging with `1.4.0-rc2`, and that tag
 **AND** the handoff SHALL show 3 days against Proposed
 
 #### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks

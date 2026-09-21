@@ -36,7 +36,11 @@ export declare const yourTurnText: (
   role: Role,
   linked: string,
 ) => string;
-export declare const stagingText: (linked: string, sheetUrl?: string) => string;
+export declare const stagingText: (
+  linked: string,
+  sheetUrl?: string,
+  build?: string,
+) => string;
 export declare const toldBodyOf: (
   at: WordedChange,
   role: Role,

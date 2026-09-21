@@ -460,6 +460,7 @@ const RECORDED = [
   ["ui_waived", "uiWaived"],
   ["deployed_at", "deployedAt"],
   ["deployed_env", "deployedEnv"],
+  ["deployed_build", "deployedBuild"],
   ["deploy_waived", "deployWaived"],
   ["tasks_waived", "tasksWaived"],
   ["thread", "thread"],

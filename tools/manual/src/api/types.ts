@@ -483,6 +483,9 @@ export type ChangeEntry = {
    * environment it ran in. */
   deployedAt?: string;
   deployedEnv?: string;
+  /** The tagged build that deploy carried, from `.openspec.yaml`
+   * `deployed_build:` — what QA walks, named beside the environment. */
+  deployedBuild?: string;
   /** Who archived the change without deploy evidence, and why, from
    * `.openspec.yaml` `deploy_waived:`. */
   deployWaived?: string;

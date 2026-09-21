@@ -35,6 +35,7 @@ export async function readingOf(root) {
       artifacts: artifactsOf(change),
       hands: change.hands ?? {},
       thread: change.thread,
+      deployedBuild: change.deployedBuild,
       behind: behindOf(change, artifactsOf(change)),
       landedBy: change.landedBy ?? {},
     });

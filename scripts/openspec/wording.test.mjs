@@ -27,7 +27,7 @@ const LINKED = "<https://spec.test/in-flight/probe|Probe>";
 test("yourTurnText names the stage and pastes the hand's command", () => {
   assert.equal(
     yourTurnText({ id: "probe", stage: "planned" }, "dev", LINKED),
-    `*Your turn* — ${LINKED} is at *Planned*.\nRead: \`/tasks probe\``,
+    `*Your turn* — ${LINKED} is at *Planned*.\nRead: \`/workflow-tasks probe\``,
   );
 });
 
@@ -38,7 +38,7 @@ test("yourTurnText writes the change's own id into the command", () => {
     LINKED,
   );
 
-  assert.match(text, /`\/build add-gift-cards <group>`/);
+  assert.match(text, /`\/workflow-build add-gift-cards <group>`/);
   assert.doesNotMatch(text, /<id>/);
 });
 
@@ -60,6 +60,27 @@ test("stagingText names the run sheet in words where none is configured", () => 
   assert.equal(
     stagingText(LINKED, undefined),
     `*On staging* — ${LINKED} is on staging. Walk the run sheet.`,
+  );
+});
+
+test("shared-planning-change-stages-SC-45 - stagingText names the build the deploy recorded", () => {
+  assert.equal(
+    stagingText(LINKED, "https://sheets.test/run", "1.4.0-rc2"),
+    `*On staging* — ${LINKED} is on staging, build \`1.4.0-rc2\`. Walk <https://sheets.test/run|the run sheet>.`,
+  );
+});
+
+test("shared-planning-change-stages-SC-45 - toldBodyOf carries the record's build into QA's message", () => {
+  assert.deepEqual(
+    toldBodyOf(
+      { id: "probe", stage: "on-staging", deployedBuild: "1.4.0-rc2" },
+      "qa",
+      {
+        linked: LINKED,
+        sheetUrl: undefined,
+      },
+    ),
+    { kind: "staging", text: stagingText(LINKED, undefined, "1.4.0-rc2") },
   );
 });
 

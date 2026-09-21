@@ -187,7 +187,9 @@ export function DeliveryRow({ change }: { change: ChangeEntry }) {
           </Badge>
         ) : (
           <Badge size="sm" variant="success">
-            {change.deployedEnv}
+            {change.deployedBuild === undefined
+              ? change.deployedEnv
+              : `${change.deployedEnv} · ${change.deployedBuild}`}
           </Badge>
         )}
       </li>

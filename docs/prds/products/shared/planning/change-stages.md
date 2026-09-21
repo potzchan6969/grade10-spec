@@ -114,6 +114,8 @@ Slack tells one person, once per move, in the change's thread.
 - **The channel post per push** — runs today, listing the changes a push touched
 - 🚧 **Two fewer messages** — a written wait and a freed dependency are digest
   lines, not messages of their own
+- 🚧 **Which build** — the staging message and the change page name the
+  tagged build the deploy recorded
 
 ## Surfaces
 
@@ -164,4 +166,5 @@ lane as one waiting on a deploy. The owner's brief is
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |
 | Hosted actions | Decided | Assign stays on the locally run manual until the hosted site has a sign-in. | Operations |
 | Open pages | Decided | A page open while `main` moves is told and refreshes once the site has caught up; the locally run manual pulls. | Operations, Engineering |
+| Pre-release build | Decided | The deploy record names the tagged build, so the change page and QA's staging message say which build the change is on. | Product, Operations |
 :::

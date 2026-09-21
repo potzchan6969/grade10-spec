@@ -34,6 +34,7 @@ Every group lands its tests in their own commit before its code, and its readers
 - [x] 3.6 The next action per stage in place of the four-lane one, read from `DRAFTED`'s command, and the page eyebrow naming the stage - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-58`
 - [x] 3.7 Component tests for every state `ui-design.md` lists for the board and the change page, the stepper below `sm` among them
 - [x] 3.8 On the pages on the change page, between the artifacts and the delivery: every section the change links under its page's title, each 🚧 and ❓ line as written and the ❓ with its hand, read through `marksOfPage` and `askedText` in `tools/manual/src/blocks/on-the-pages.tsx`, and the empty state where the change marks no section - `shared-planning-change-stages-SC-71`
+- [x] 3.9 The delivery row names the build the deploy recorded, `deployed_build:` read beside `deployed_env:` and shown as `staging · <tag>`; a record with no build reads as before - `shared-planning-change-stages-SC-59` (`Q68`)
 
 ## 4. The record's rules and the gate at the fold (grade10-spec)
 
@@ -61,11 +62,13 @@ Every group lands its tests in their own commit before its code, and its readers
 - [x] 6.6 The digest: `digest.yml` on `cron: "0 1 * * 1"` behind `vars.DIGEST_ENABLED`, one direct message per person with a line to say, listing the six - what is on them now, their open questions, idle, behind after seven days, waiting and freed changes; nothing sent to a person with nothing to say - `shared-planning-change-stages-SC-48`, `shared-planning-change-stages-SC-49`, `shared-planning-change-stages-SC-50`
 - [x] 6.7 Script tests over one repository at two revisions through `store-main.test.ts`'s `checkout()` for every message kind, the sent-key file, and a base the checkout cannot reach
 - [x] 6.8 `landedText` beside `yourTurnText` and the reply it composes: one message in the change's thread per change whose `landed_by:` gained or changed an entry in the push, naming what landed, whose word landed it, the stage now and whose turn it is with a role the change has no hand for named as open, keyed `<change>:landed:<head>`, owed wherever the record names a thread - the record's own keys alone do not silence it, and neither does `NOTIFY_DMS` - and dropped for a landing whose commit carries the `Wake:` trailer `plan:land` writes in wake mode, read once over the push's own range - `shared-planning-change-stages-SC-70`
+- [x] 6.9 `stagingText` names the build the record carries, so QA's message says which build to walk; a record with no build reads as before - `shared-planning-change-stages-SC-45` (`Q68`)
 
 ## 7. The application repository (grade10)
 
 - [ ] 7.1 `pnpm plan hand <change> <role> @handle` writes `hands:` on the store's `main` as `claim` writes an owner, validating nothing: the store's rule refuses an unknown role or handle on the push
 - [ ] 7.2 Tests for `hand` in `grade10`: the commit it pushes, an unknown role passed through, and the board's link to the change's page
+- [ ] 7.3 `pnpm plan shipped <change> --build <tag>` writes `deployed_build:` beside `deployed_env:` and `deployed_at:` on the store's `main`, and its test (`Q68`)
 
 ## 8. The walk (grade10-spec)
 
