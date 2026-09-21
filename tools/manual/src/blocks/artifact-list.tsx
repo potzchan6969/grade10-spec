@@ -316,7 +316,7 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
           </Text>
           {/* The hand `handShown` reads: the handle the change names for
               that role, or the role itself where it names nobody. */}
-          <Hand shown={handShown(question)} />
+          <HandText shown={handShown(question)} />
         </li>
       ))}
     </ul>
@@ -326,7 +326,7 @@ export function QuestionList({ questions }: { questions: OpenQuestion[] }) {
 /** One question's hand, the handle in its own type and the open role in the
  * row's words. Shared by the artifact rows and On the pages, which show the
  * same fact in the same two ways. */
-export function Hand({ shown }: { shown: HandShown }) {
+export function HandText({ shown }: { shown: HandShown }) {
   return (
     <Text
       as="span"

@@ -6,7 +6,7 @@ import { DELIVERED, marksBySection } from "../api/open-marks";
 import { type HandShown, handShown } from "../api/stage-view";
 import { askedText } from "../api/stages";
 import type { ChangeEntry, OpenQuestion } from "../api/types";
-import { Hand } from "./artifact-list";
+import { HandText } from "./artifact-list";
 import { InlineMarkdown } from "./inline-markdown";
 
 /**
@@ -70,7 +70,9 @@ export function OnThePages({
                 <Text as="span" size="xs">
                   <InlineMarkdown text={line.text} />
                 </Text>
-                {line.hand === undefined ? null : <Hand shown={line.hand} />}
+                {line.hand === undefined ? null : (
+                  <HandText shown={line.hand} />
+                )}
               </li>
             ))}
           </ul>
