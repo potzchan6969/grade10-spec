@@ -60,7 +60,7 @@ type SiteHeaderProps = {
    */
   cartItemCount?: number;
   onSignIn: () => void;
-  onProfile: () => void;
+  onProfile?: () => void;
   onMyOrders?: () => void;
   onMyAuctions: () => void;
   /** Opens the consumer-owned authenticated orders destination. */
@@ -78,11 +78,11 @@ type SiteHeaderProps = {
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
- * and a menu of Profile, My Auctions, then Sign out (destructive, separated).
- * Cart, search, My Orders, and Orders stay optional via handlers —
- * auction-first launches omit them, My Orders joins between Profile and My
- * Auctions once its handler is supplied, and Orders joins after My Auctions
- * once both its copy and handler are supplied. When cart is present,
+ * and a menu of My Auctions, then Sign out (destructive, separated).
+ * Cart, search, Profile, My Orders, and Orders stay optional via handlers —
+ * Profile joins first once its handler is supplied, My Orders joins between
+ * Profile and My Auctions once its own handler is supplied, and Orders joins
+ * after My Auctions once both its copy and handler are supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
  * `Nav` moves primary nav, utilities, search, and language into the left menu
@@ -143,7 +143,9 @@ function SiteHeader({
         <DropdownMenuContent align="end" className="min-w-48 w-auto">
           <DropdownMenuGroup>
             <DropdownMenuLabel>{accountMenuLabel}</DropdownMenuLabel>
-            <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
+            {onProfile != null ? (
+              <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
+            ) : null}
             {onMyOrders != null ? (
               <DropdownMenuItem onClick={onMyOrders}>
                 {myOrders}
