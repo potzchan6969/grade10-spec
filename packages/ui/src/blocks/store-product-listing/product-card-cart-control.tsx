@@ -106,6 +106,7 @@ function ProductCardCartControl({
   return (
     <fieldset
       ref={containerRef}
+      data-slot="product-card-cart-control"
       className={cn(
         "cart-control absolute right-2 bottom-2 z-10 m-0 size-11 min-w-0 border-0 p-0 opacity-0 transition-opacity duration-150 ease-out motion-reduce:transition-none",
         !cartAlwaysVisible && "pointer-events-none",

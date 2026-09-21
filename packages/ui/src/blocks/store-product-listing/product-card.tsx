@@ -33,7 +33,8 @@ type ProductCardProps = {
   originalPrice?: ReactNode;
   /**
    * Figma's `soldOut` axis. Swaps the sale badge for the sold-out treatment
-   * and hides the cart action. The tile is inert.
+   * and hides the cart action. The tile is inert where the surface sells —
+   * where a cart handler is supplied — and still opens where none is.
    */
   soldOut?: boolean;
   /**
@@ -109,7 +110,6 @@ function ProductCardContent({
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
   const opens = onClick != null && (!soldOut || onCartQuantityChange == null);
-  const nameActivates = opens;
 
   return (
     <VStack
@@ -138,7 +138,7 @@ function ProductCardContent({
         data-slot="product-card-content"
         gap="none"
       >
-        {nameActivates ? (
+        {opens ? (
           <button
             className="line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             onClick={onClick}

@@ -47,30 +47,25 @@ function StoreProductRelatedRail({
     >
       <StoreSectionHeader copy={{}} title={copy.heading} />
       <HStack
-        className="w-full snap-x snap-mandatory overflow-x-auto pb-2"
+        className="w-full overflow-x-auto pb-2"
         data-slot="store-product-related-rail-row"
         gap="md"
         vAlign="stretch"
       >
         {cards.map((card) => (
-          <div
-            className="w-[240px] shrink-0 snap-start"
-            data-sold-out={card.soldOut ? "true" : undefined}
-            data-testid="store-product-related-rail-tile"
+          <ProductCard
+            badges={card.badges}
+            className="w-[240px] shrink-0"
+            copy={copy.card}
+            imageAlt={card.imageAlt}
+            imageSrc={card.imageSrc}
             key={card.id}
-          >
-            <ProductCard
-              badges={card.badges}
-              copy={copy.card}
-              imageAlt={card.imageAlt}
-              imageSrc={card.imageSrc}
-              name={card.name}
-              onClick={onCardClick ? () => onCardClick(card.id) : undefined}
-              originalPrice={card.originalPrice}
-              price={card.price}
-              soldOut={card.soldOut}
-            />
-          </div>
+            name={card.name}
+            onClick={onCardClick ? () => onCardClick(card.id) : undefined}
+            originalPrice={card.originalPrice}
+            price={card.price}
+            soldOut={card.soldOut}
+          />
         ))}
       </HStack>
     </VStack>

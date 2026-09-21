@@ -98,8 +98,8 @@ function ProductCardImage({
       >
         {imageSrc ? (
           <img
-            alt={soldOut ? imageAlt : ""}
-            aria-hidden={soldOut ? undefined : true}
+            alt={onClick ? "" : imageAlt}
+            aria-hidden={onClick ? true : undefined}
             className={photoClassName}
             src={imageSrc}
           />
