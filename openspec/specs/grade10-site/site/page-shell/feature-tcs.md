@@ -783,9 +783,14 @@ auction-only or full primary nav.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.
-* Signed-in account entry opens a menu (Profile, My Auctions, Sign out), not
-  the profile directly; the header offers Sign out from that menu as well as
-  the profile.
+* Signed-in account entry opens a menu (My Auctions, Sign out, plus Profile
+  once the profile is carried and My Orders once Store answers), not the
+  profile directly; the header offers Sign out from that menu as well as the
+  profile wherever it is carried.
 * Cart is absent until the site answers the Store cart drawer, then appears on
   every surface it answers, including Auction; visibility does not depend on
   session state.
+* The account menu's item order under every combination of {Profile carried,
+  Store answers} is fully specified: Profile (when carried), My Orders (when
+  Store answers), My Auctions, Sign out — in that fixed order, each omitted
+  independently when its own condition is not met.

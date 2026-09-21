@@ -2,6 +2,7 @@
 title: Site Header and Footer
 spec: shared/ui/site-chrome
 order: 2
+reviewed: 2026-09-21
 ---
 
 Two components make the chrome: a site header and a site footer. Each is usable
