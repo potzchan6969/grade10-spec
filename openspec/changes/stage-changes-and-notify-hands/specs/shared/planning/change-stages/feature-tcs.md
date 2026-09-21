@@ -403,7 +403,7 @@ Runs once per row of **Test data**.
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** unit
+* **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-change-stages-US-01
@@ -412,18 +412,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
+* <change A> sits at Specified with <dev handle> as its `dev` hand, and one Your turn message is due for the push.
 * The path the sender reads its sent keys from is there and cannot be opened.
-* One Your turn message is due for the push.
 
 **Steps:**
 
 1. Read the sent keys from that path, as the sender does before it sends.
-2. Read what the read answered.
 
 **Expected Results:**
 
 * The read stops with a refusal naming the path it could not open.
-* The sender composes nothing and sends nothing for that push.
+* No message goes out for that push.
 
 ---
 
@@ -1156,6 +1155,39 @@ The manual runs locally at <local manual url>. <change J> names no `dev` hand. T
 
 ---
 
+### shared-planning-change-stages-US4-TC8-1: A team map that cannot be read messages nobody
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-change-stages-US-04
+
+**Decided by:** `scripts/openspec/team.test.mjs`
+
+**Pre-conditions:**
+
+* <change A> names <dev handle> as its `dev` hand, and one Your turn message is due for the push.
+* The team map is there and cannot be opened.
+
+**Steps:**
+
+1. Read the team map, as the sender does to address the message.
+
+**Expected Results:**
+
+* The read stops with a refusal naming the map.
+* No message goes out for that push.
+
+---
+
 ## shared-planning-change-stages-US5: Designer says a change has no surface
 
 **As a** designer,
@@ -1845,6 +1877,8 @@ Runs once per row of **Test data**.
 None yet - the first blind pass.
 
 ## Reconciliation
+
+Run: 2026-09-21, fix pass on the senders: `US1-TC13-1` recast to the read the sender makes, at the layer of a stored fact, with the hand whose message is due placed; wrote `US4-TC8-1` for the team map nothing can read, from the audit's verdict rather than the blind pass.
 
 Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Change Stages and Agent Rounds pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
 

@@ -345,7 +345,14 @@ One map turns a handle into a person and a role into somewhere to post.
 **THEN** the map SHALL give the Slack member the message is addressed to and the roles that handle may take
 **AND** it SHALL give one channel for that role
 **AND** a handle with no Slack member SHALL be sent no message
-**AND** a map that is there and cannot be opened SHALL stop the run naming the file, where an absent map reads as nobody known
+
+#### Scenario: shared-planning-change-stages-SC-78 - A team map nothing can read
+**Serves:** shared-planning-change-stages-US-04 - the hand the product manager wrote is messaged as a person, or nobody is until the map can be read
+
+**GIVEN** a team map that is there and cannot be opened
+**WHEN** a sender or a surface reads it
+**THEN** the run SHALL stop and SHALL name the file
+**AND** a map that is not there SHALL read as nobody known
 
 ### Requirement: Five overlays sit beside the stage
 
@@ -573,9 +580,9 @@ push sends nothing again.
 - **Never per commit** — no message SHALL be sent per commit or per tick
 - **Per entry** — a stage re-entered after a revert SHALL send again, and one
   entry SHALL never send twice
-- **A file it cannot read** — a sent-keys file the sender cannot open SHALL
-  stop the run and SHALL name the file; only an absent file SHALL read as
-  nothing sent
+- **A file it cannot read** — a sent-keys file that is there and cannot be
+  opened SHALL stop the run and SHALL name the file; only an absent file
+  SHALL read as nothing sent
 
 | Kind | Sent when | Who is told | Key |
 | --- | --- | --- | --- |
