@@ -1154,11 +1154,14 @@ leave those walks as the change's end-to-end suite.
   with its reason in the suite
 - **One pass over the whole** — after the last group, one reader argues the
   simpler shape for the whole change before it goes to staging; its landing
-  writes a row whose Artifact cell reads `whole change`
+  carries what a group's carries and writes a row whose Artifact cell reads
+  `whole change`, after the last group's row
 - **Held at the archive** — a change on the round is archived only once its
-  last task group's row names the walks it left, a `*.walk.ts` the suite runs
-  or a walk by hand, and one row reads `whole change`; a change nobody walks
-  owes no walk row, and a change on the old flow owes neither
+  last task group's row names, in its Tests cell, the walks it left, a
+  `*.walk.ts` the suite runs or a walk by hand, and a row after it reads
+  `whole change`; the journeys are the capability's, the delta's or the
+  durable ones; a change nobody walks owes no walk row, and a change on the
+  old flow owes neither
 
 #### Scenario: shared-planning-agent-rounds-SC-59 - The walk leaves the suite and marks its cases
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases the walk now covers
@@ -1180,8 +1183,10 @@ leave those walks as the change's end-to-end suite.
 
 - **GIVEN** a change on the round whose capabilities carry journeys
 - **WHEN** `pnpm run archive:preflight` runs
-- **THEN** it refuses while the last task group's row names no walk — a `*.walk.ts` the suite runs, or a walk by hand — and names the group
+- **THEN** it refuses while the last task group's row names no walk in its Tests cell — a `*.walk.ts` the suite runs, or a walk by hand — and names the group; a walk on an earlier group's row answers nothing for the last
 - **AND** it refuses while no row's Artifact cell reads `whole change`, the row `plan:land --whole` writes for the one reader over the whole change, and names the command
+- **AND** it refuses a `whole change` row landed before the last group's row, naming both rounds
+- **AND** it reads the rows and the groups on `main`, where a landing writes them, and the journeys of each capability the change specifies — the delta's file where it carries one, the durable one where it leans on it
 - **AND** a change whose journeys say nobody walks it owes no walk row, and a change on the old flow is asked for neither
 
 #### Scenario: shared-planning-agent-rounds-SC-78 - A case a store test decides flips with the test

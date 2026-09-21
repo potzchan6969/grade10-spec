@@ -2286,12 +2286,16 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| What `rounds.md` holds | The preflight |
+| What `rounds.md` holds on `main` | The preflight |
 | --- | --- |
 | a row for the last group naming no walk, and a `whole change` row | refused, naming the group |
+| a walk named on an earlier group's row, the last group's row naming none | refused, naming the last group |
 | a row for the last group naming a `*.walk.ts`, and a `whole change` row | clear |
-| a row for the last group saying the journeys were walked by hand, and a `whole change` row | clear |
+| a row for the last group saying the journeys were walked by hand in its Tests cell, and a `whole change` row | clear |
 | a row for the last group naming a walk, and no `whole change` row | refused, naming the landing that writes it |
+| a `whole change` row landed before the last group's row | refused, naming both rounds |
+| the walk row and the `whole change` row in the checkout alone, landed nowhere | refused: the rows `main` holds are the record |
+| the capability's journeys durable, the delta restating none, the last group's row naming no walk | refused, naming the group |
 | the journeys say nobody walks the capability, and a `whole change` row | clear |
 | no rows at all, the change opened on the old flow | clear |
 
@@ -2720,7 +2724,7 @@ None yet - the first blind pass.
 
 ## Reconciliation
 
-Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row.
+Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
 
 Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
 
