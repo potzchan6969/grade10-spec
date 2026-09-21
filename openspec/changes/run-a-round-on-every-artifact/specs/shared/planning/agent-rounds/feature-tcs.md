@@ -2332,7 +2332,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change> was opened after the round rule.
+* <change> is on the round: its record carries a `landed_by:` line, or its `rounds.md` holds a row.
 * admin(engineer of <change>) is at a terminal in the store.
 
 **Test data:**
@@ -2371,7 +2371,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change on the old flow> carries no `landed_by:` line, no `thread:` line and no `rounds.md`, and has a ticked task group; no day is set for the kept skills to go.
+* <change on the old flow> carries no `landed_by:` line and no `rounds.md`, and has a ticked task group; no day is set for the kept skills to go.
 * admin(engineer of <change>) is at a terminal in the store.
 
 **Steps:**
@@ -2434,7 +2434,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change> was opened after the round rule, and its `rounds.md` holds a row naming no perspective.
+* <change> is on the round, and its `rounds.md` holds a row naming no perspective.
 * admin(engineer of <change>) is at a terminal in the store.
 
 **Steps:**
@@ -2590,6 +2590,40 @@ Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is aut
 Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`'s `Q52` to `Q63`, the questions the runner and the held rows settled. Wrote `US4-TC12-1` and `US4-TC13-1` for the row the round decides and the reply that overturns it; recast `US4-TC1-1` onto the held row, `US1-TC7-1` onto the cases drawn from the anchors, `US2-TC8-1` onto the writable set and a `main` that moved under the run, and `US9-TC10-1` onto the Perspectives column; named the actor and the arrival on `US4-TC10-1`, `US4-TC11-1`, `US5-TC15-1`, `US5-TC16-1` and `US5-TC17-1`, and the layer each is checked on; moved `US4-TC9-1` and `US5-TC17-1` back to manual until the tests that decide them land; dropped `US5-TC18-1`, whose scenario is out of suite above.
 
 Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
+
+### shared-planning-agent-rounds-US9-TC12-1: From the day the kept skills go, a change worked outside the round is refused
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* The day after the kept skills went is set in `ROUND_RECORD_SINCE`.
+* <change created on that day> carries no `landed_by:` line and no `rounds.md`, and has a ticked task group.
+* <change created the day before> is shaped the same.
+* admin(engineer of <change created on that day>) is at a terminal in the store.
+
+**Steps:**
+
+1. Run the manual check.
+2. Read its output.
+
+**Expected Results:**
+
+* The check refuses <change created on that day>, naming the ticked group.
+* It does not refuse <change created the day before>.
 
 ### Folded
 

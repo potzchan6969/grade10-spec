@@ -18,41 +18,44 @@
  * ticked groups and never the rest of the record's keys.
  *
  * Fenced by adoption. A change on the round — one whose record carries a
- * `landed_by:` line or a `thread:` line, or whose `rounds.md` holds a row,
- * all three written by a landing and by nothing else — is held whatever its
- * date. A change on the old flow, opened while the three kept skills stand
- * (`Q95`), was planned when nobody could have written the row, and a register
- * of changes that could not have complied is a check people learn to read
- * past; so a date holds every change only from the day those skills go
- * (`Q96`).
+ * `landed_by:` line or whose `rounds.md` holds a row, both written by a
+ * landing and by nothing else — is held whatever its date. A change on the
+ * old flow, opened while the three kept skills stand (`Q95`), was planned
+ * when nobody could have written the row, and a register of changes that
+ * could not have complied is a check people learn to read past; so a date
+ * holds every change only from the day after those skills go (`Q96`, `Q97`).
  */
 
 import { ROUND_COLUMNS, roundArtifactOf } from "../src/store/read-rounds.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 
-/** The day from which every change is on the round: the day after the three
- * kept skills go (`Q95`), set beside `DECISIONS_SINCE` in `record.mjs`, which
- * fences the same way. Unset while they stand, so until then only a change on
- * the round is held. */
+/** The day after the three kept skills go (`Q95`): from it every change is
+ * on the round, whatever its record says. Unset while they stand, so until
+ * then only a change on the round is held. Lives here, the way
+ * `DECISIONS_SINCE` lives in `record.mjs`; the archive that retires the
+ * skills sets it (task 3.15, `Q97`). */
 export const ROUND_RECORD_SINCE = null;
 
 /** Whether the rule reads a change: one on the round, or one created on or
- * after `since` where a day is set. */
+ * after `since` where a day is set. `landedBy` is absent, never empty — the
+ * store's reader drops an empty map. An archived copy carries no rows, since
+ * the store reads them for a change in flight alone, so an archive is held by
+ * its `landed_by:` line or by the day. */
 export function heldToRounds(change, since = ROUND_RECORD_SINCE) {
-  if ((change.rounds ?? []).length > 0) return true;
-  if (Object.keys(change.landedBy ?? {}).length > 0) return true;
-  if (change.thread) return true;
-  return Boolean(since && change.created && change.created >= since);
+  if (change.rounds?.length) return true;
+  if (change.landedBy) return true;
+  if (!since || !change.created) return false;
+  return change.created >= since;
 }
 
 /** Each column against the field the reader holds it in, in the order the
  * requirement tables them. */
 const COLUMNS = ROUND_COLUMNS.map((name) => [name, name.toLowerCase()]);
 
-export function checkRounds(ctx, changes) {
+export function checkRounds(ctx, changes, since = ROUND_RECORD_SINCE) {
   for (const change of changes) {
     if (change.status !== "in-flight") continue;
-    if (!heldToRounds(change)) continue;
+    if (!heldToRounds(change, since)) continue;
     const file = `${change.dir}/rounds.md`;
     const rows = change.rounds ?? [];
 

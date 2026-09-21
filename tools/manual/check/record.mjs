@@ -15,7 +15,7 @@ import {
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
 import { productPages } from "./context.mjs";
-import { heldToRounds } from "./rounds.mjs";
+import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
 /** The day the deploy record became a rule: every archive before it shipped
  * without one. */
@@ -179,9 +179,11 @@ export function checkDecided(ctx, changes) {
  * The same pass checks the other thing archive can lose: `rounds.md` is
  * folded into no durable capability, so it archives with the change like
  * `decisions.md` does, and the one way to lose it is an archived copy that
- * does not carry it across. Fenced the way `round`'s own rule is — a change
- * created before the fence could have landed work with no row to carry. */
-export function checkArchived(ctx, archived) {
+ * does not carry it across. Held the way `round`'s own rule holds a change
+ * in flight — by the record's `landed_by:` line, or from the day after the
+ * kept skills go — because the store reads rows for a change in flight alone;
+ * an archive from the old flow owes nothing (`Q96`). */
+export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
   for (const change of archived) {
     if (change.shippedOn && change.shippedOn >= DEPLOY_RECORD_SINCE) {
       if (!change.deployedAt && !change.deployWaived) {
@@ -202,7 +204,7 @@ export function checkArchived(ctx, archived) {
       }
     }
 
-    if (heldToRounds(change)) {
+    if (heldToRounds(change, since)) {
       const roundsFile = fileOf(change, "rounds.md");
       if (!existsSync(join(ctx.roots.store, roundsFile))) {
         ctx.add(

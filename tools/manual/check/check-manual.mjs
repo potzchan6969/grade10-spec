@@ -128,7 +128,9 @@ const EMPTY_CONFIG = {
 export async function runChecks(
   target,
   git,
-  { pages: pagesOnly = false } = {},
+  // `roundsSince`: the day the `round` rule holds every change from, in place
+  // of `ROUND_RECORD_SINCE`; a test sets it, the CLI never does.
+  { pages: pagesOnly = false, roundsSince } = {},
 ) {
   const roots = typeof target === "string" ? rootsOf(target) : target;
   const index = git ?? (await gitIndex(roots));
@@ -206,11 +208,11 @@ export async function runChecks(
     checkDesign(ctx, changes);
     checkDecided(ctx, changes);
     checkPlanned(ctx, changes);
-    checkRounds(ctx, changes);
+    checkRounds(ctx, changes, roundsSince);
     checkAwaiting(ctx, changes);
     checkHands(ctx, changes);
     checkLandedBy(ctx, changes);
-    checkArchived(ctx, readArchivedChanges(roots.store, index));
+    checkArchived(ctx, readArchivedChanges(roots.store, index), roundsSince);
   } else {
     notes.push(
       `store rules not run — the store's own repository answers for ${roots.store}`,

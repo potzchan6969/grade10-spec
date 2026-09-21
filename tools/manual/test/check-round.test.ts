@@ -1,6 +1,5 @@
 import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
-import { heldToRounds, ROUND_RECORD_SINCE } from "../check/rounds.mjs";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { readRounds } from "../src/store/read-rounds.mts";
@@ -15,7 +14,7 @@ import { writeStore } from "./tmp-store";
  * requirement tables them, absent until the first round writes the file. And
  * the rule: a landed artifact (`landed_by:`, never a file's mere presence) or
  * a ticked group with no row, and a row that leaves a column empty, on a
- * change opened after the day the rule landed — every change already in
+ * change on the round — every change already in
  * flight that day passes the same check, and one whose first round has not
  * landed carries no record at all.
  */
@@ -107,19 +106,22 @@ const store = (
     ...files,
   });
 
-/** The day the fixture changes were opened. No day is set for the fence while
- * the kept skills stand, so what holds a change is being on the round. */
-const AFTER = "2026-10-01";
+/** The day the fixture changes were opened, and the archived copy's prefix.
+ * No day is set for the fence while the kept skills stand, so what holds a
+ * change is being on the round; `roundsSince` sets one where a case needs it. */
+const OPENED = "2026-10-01";
 
 const findings = async (
   files: Record<string, string>,
-  created = AFTER,
+  created = OPENED,
   rule = "round",
   landedBy = LANDED_BY_ALL,
+  roundsSince?: string,
 ): Promise<Finding[]> => {
   const result: { findings: Finding[] } = await runChecks(
     store(files, created, landedBy),
     NO_GIT,
+    roundsSince ? { roundsSince } : {},
   );
   return result.findings.filter((one) => one.rule === rule);
 };
@@ -162,11 +164,11 @@ describe("the rounds record, read off the change", () => {
 
   it("shared-planning-agent-rounds-SC-51 - carries the rows onto the change entry, absent until the file is", () => {
     const withFile = readChanges(
-      store({ [`${CHANGE}/rounds.md`]: WHOLE }, AFTER),
+      store({ [`${CHANGE}/rounds.md`]: WHOLE }, OPENED),
       NO_GIT,
       null,
     ).find((one) => one.id === ID);
-    const without = readChanges(store({}, AFTER), NO_GIT, null).find(
+    const without = readChanges(store({}, OPENED), NO_GIT, null).find(
       (one) => one.id === ID,
     );
 
@@ -197,13 +199,17 @@ describe("the `round` rule", () => {
   });
 
   it("says nothing about an artifact that is written but not yet landed", async () => {
-    // `landed_by:` names nothing, so nothing owes a row — a draft artifact on
-    // the branch, not yet landed by a hand's word, is not a round the rule
-    // has anything to check.
+    // The proposal's row puts the change on the round; `landed_by:` names
+    // nothing else, so nothing else owes a row — a draft artifact on the
+    // branch, not yet landed by a hand's word, is not a round the rule has
+    // anything to check.
     expect(
       await findings(
-        { [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n" },
-        AFTER,
+        {
+          [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n",
+          [`${CHANGE}/rounds.md`]: ROUNDS(row(1, "proposal")),
+        },
+        OPENED,
         "round",
         "",
       ),
@@ -246,9 +252,14 @@ describe("the `round` rule", () => {
   });
 
   it("shared-planning-agent-rounds-SC-53 - a change whose first round has not landed carries no rounds.md and is not refused", async () => {
+    // Held by its one row, with nothing landed and nothing ticked: the rule
+    // reads it and finds nothing owed.
     const found = await findings(
-      { [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n" },
-      AFTER,
+      {
+        [`${CHANGE}/tasks.md`]: "## 1. Build it\n\n- [ ] 1.1 Ship it\n",
+        [`${CHANGE}/rounds.md`]: ROUNDS(row(1, "proposal")),
+      },
+      OPENED,
       "round",
       "",
     );
@@ -257,33 +268,26 @@ describe("the `round` rule", () => {
   });
 
   it("shared-planning-agent-rounds-SC-55 - does not refuse a change on the old flow, whatever its date", async () => {
-    // No `landed_by:` line, no `thread:` line, no row: the change was opened
-    // and its group ticked with the old skills, which stand until the team
-    // adopts the line commands (`Q95`), so no day is set for the fence yet.
-    expect(ROUND_RECORD_SINCE).toBeNull();
-    expect(await findings({}, AFTER, "round", "")).toEqual([]);
+    // No `landed_by:` line and no row: the change was opened and its group
+    // ticked with the old skills, which stand until the team adopts the line
+    // commands (`Q95`), so no day is set for the fence yet.
+    expect(await findings({}, OPENED, "round", "")).toEqual([]);
     expect(await findings({}, "2026-09-01", "round", "")).toEqual([]);
   });
 
-  it("shared-planning-agent-rounds-SC-55 - holds every change from the day the kept skills go, once it is set", () => {
-    const oldFlow = { created: "2026-09-21", landedBy: {}, rounds: [] };
-    expect(heldToRounds(oldFlow, "2026-10-01")).toBe(false);
-    expect(
-      heldToRounds({ ...oldFlow, created: "2026-10-01" }, "2026-10-01"),
-    ).toBe(true);
-    // On the round, a change is held whatever its date and whether a day is set.
-    expect(
-      heldToRounds({ ...oldFlow, landedBy: { proposal: "pm" } }, null),
-    ).toBe(true);
-    expect(heldToRounds({ ...oldFlow, thread: "C0PLANNING/1.2" }, null)).toBe(
-      true,
-    );
+  it("shared-planning-agent-rounds-SC-84 - holds every change from the day the kept skills go, once it is set", async () => {
+    // The same old-flow shape, read with the day set: created on the day, its
+    // ticked group is refused; created the day before, it still owes nothing.
+    const onTheDay = await findings({}, OPENED, "round", "", OPENED);
+    expect(onTheDay).toHaveLength(1);
+    expect(onTheDay[0].reason).toContain("group 1");
+    expect(await findings({}, "2026-09-30", "round", "", OPENED)).toEqual([]);
   });
 });
 
 describe("the archived copy of the round record", () => {
-  const ARCHIVE_DIR = `openspec/changes/archive/${AFTER}-${ID}`;
-  const archivedStore = (withRounds: boolean) =>
+  const ARCHIVE_DIR = `openspec/changes/archive/${OPENED}-${ID}`;
+  const archivedStore = (withRounds: boolean, onTheRound = true) =>
     writeStore({
       "docs/prds/manual.yaml":
         "storybookBase: https://storybook.example\n\ngroups:\n  Products:\n    - demo-product\n",
@@ -291,8 +295,9 @@ describe("the archived copy of the round record", () => {
       "docs/prds/products/demo-product/index.md":
         "---\ntitle: Demo product\n---\n\nThe landing.\n",
       "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
-      // On the round: its landings wrote `landed_by:`, so the copy owes the rows.
-      [`${ARCHIVE_DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${AFTER}\nlanded_by:\n  proposal: pm\n`,
+      // On the round, its landings wrote `landed_by:`, so the copy owes the
+      // rows; an old-flow archive carries no such line and owes none.
+      [`${ARCHIVE_DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${OPENED}\n${onTheRound ? "landed_by:\n  proposal: pm\n" : ""}`,
       [`${ARCHIVE_DIR}/proposal.md`]: PROPOSAL,
       ...(withRounds ? { [`${ARCHIVE_DIR}/rounds.md`]: WHOLE } : {}),
     });
@@ -304,6 +309,14 @@ describe("the archived copy of the round record", () => {
     expect(found).toHaveLength(1);
     expect(found[0].path).toBe(`${ARCHIVE_DIR}/rounds.md`);
     expect(found[0].reason).toContain("is not in the archived copy");
+  });
+
+  it("shared-planning-agent-rounds-SC-52 - says nothing where an archived old-flow copy carries no rounds.md", async () => {
+    // No `landed_by:` line and no day set: archived from the old flow, whose
+    // changes owed no row (`Q96`).
+    const result = await runChecks(archivedStore(false, false), NO_GIT);
+
+    expect(result.findings.filter((one) => one.rule === "round")).toEqual([]);
   });
 
   it("shared-planning-agent-rounds-SC-52 - says nothing where the archived copy carries rounds.md", async () => {

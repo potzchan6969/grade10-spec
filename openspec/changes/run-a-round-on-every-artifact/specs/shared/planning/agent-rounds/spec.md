@@ -1006,6 +1006,7 @@ in the landing's own commit.
 - **WHEN** a change is archived
 - **THEN** `rounds.md` is copied into the archived change
 - **AND** nothing from it is folded into the durable capability
+- **AND** an archived copy whose record carries a `landed_by:` line and no `rounds.md` is refused, where one archived from the old flow is not
 
 #### Scenario: shared-planning-agent-rounds-SC-53 - A change with no round yet carries no record
 **Serves:** The record - a change opened this morning is read by the same check as one mid-build
@@ -1067,12 +1068,14 @@ already done.
 - **Those two alone** — nothing else owes a row: a read that changed nothing
   ran no round
 - **Fenced by adoption** — the rule reads a change on the round, one whose
-  record carries a `landed_by:` or `thread:` line or whose `rounds.md` holds a
-  row, and, from the day the three kept skills go, every change created on or
-  after it; a change opened on the old flow while they stand is not refused
+  record carries a `landed_by:` line or whose `rounds.md` holds a row, and,
+  from the day after the three kept skills go, every change created on or
+  after it; a change opened on the old flow while they stand is not refused,
+  and an archived copy is held by its record's `landed_by:` line or by that
+  day alone, so an old-flow archive with no `rounds.md` is not refused either
 
 #### Scenario: shared-planning-agent-rounds-SC-54 - A landed artifact with no row is refused
-**Serves:** The record - a change opened under this rule reaches its next check without a row for what it landed
+**Serves:** The record - a change on the round reaches its next check without a row for what it landed
 
 - **GIVEN** a change whose record carries a `landed_by:` line for `tasks.md`
 - **WHEN** `pnpm check:manual` runs and `rounds.md` carries no row naming `tasks.md`
@@ -1081,10 +1084,9 @@ already done.
 #### Scenario: shared-planning-agent-rounds-SC-55 - A change on the old flow is not refused
 **Serves:** The record - the changes opened on the old flow while the kept skills stand pass the same check
 
-- **GIVEN** a change whose record carries no `landed_by:` or `thread:` line, carrying no `rounds.md`, with a ticked task group, opened while no day is set for the kept skills to go
+- **GIVEN** a change whose record carries no `landed_by:` line, carrying no `rounds.md`, with a ticked task group, opened while no day is set for the kept skills to go
 - **WHEN** `pnpm check:manual` runs
 - **THEN** it does not refuse the change for a missing row
-- **AND** once that day is set, a change created before it is not refused either
 
 #### Scenario: shared-planning-agent-rounds-SC-56 - A row missing a column is refused
 **Serves:** The record - a row half written says as little as no row at all
@@ -1092,6 +1094,14 @@ already done.
 - **GIVEN** a change whose `rounds.md` holds a row naming no perspective
 - **WHEN** `pnpm check:manual` runs
 - **THEN** the check refuses and names the column the row leaves empty
+
+#### Scenario: shared-planning-agent-rounds-SC-84 - From the day the kept skills go, every change is held
+**Serves:** The record - once the line commands are the only way to work a change, one worked outside them is refused
+
+- **GIVEN** the day after the kept skills went is set
+- **WHEN** `pnpm check:manual` runs on a change created on that day, carrying no `landed_by:` line and no `rounds.md`, with a ticked task group
+- **THEN** the check refuses and names the group
+- **AND** a change shaped the same and created the day before is not refused
 
 ### Requirement: A task group lands test first
 
