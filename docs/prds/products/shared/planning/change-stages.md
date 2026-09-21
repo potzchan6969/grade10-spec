@@ -140,7 +140,9 @@ Slack tells one person, once per move, in the change's thread.
   manual until the hosted site has a sign-in
 - 🚧 **A page open while `main` moves** — the hosted manual says `main` moved,
   with the commit's subject and how long ago, offers Refresh now, and refreshes
-  itself once the site has caught up, never under a reader who is typing
+  itself once the site has caught up, never under a reader who is typing; after
+  ten minutes behind it says the site has not caught up and stops promising to
+  refresh itself
 - 🚧 **The locally run manual** — says how many commits behind `main` the
   checkout is, pulls on one click, and names what is in the way of a pull it
   cannot make

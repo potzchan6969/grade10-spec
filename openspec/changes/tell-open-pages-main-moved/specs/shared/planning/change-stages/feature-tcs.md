@@ -1,7 +1,7 @@
 # shared/planning/change-stages Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-20, tcs-rules r3.0
+**Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## shared-planning-change-stages-US10: Teammate with a page open learns that `main` moved
 
@@ -10,6 +10,8 @@
 **so that** I read and answer on what the store holds rather than on what the page held when I opened it.
 
 ### shared-planning-change-stages-US10-TC1-1: An open page names what landed on `main`
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
@@ -27,9 +29,16 @@
 **Pre-conditions:**
 admin(tech PIC) has <change A> open at <manual change page url> on the hosted manual, which was built from the commit `main` is on.
 
+**Test data:**
+
+| The commit landed | Pushed with |
+| --- | --- |
+| <a commit whose subject names the change> | a person's own token |
+| Lint's own `chore(ci): apply Biome lint fixes` commit | the default token |
+
 **Steps:**
 
-1. Land <a commit whose subject names the change> on `main`.
+1. Land the row's commit on `main`.
 2. Read the top of <manual change page url> without reloading it.
 
 **Expected Results:**
@@ -156,6 +165,35 @@ The hosted manual is built with no relay origin set, and admin(engineer) has <ma
 * The page reads exactly as it did before the landing.
 * Nothing on the page reports an error.
 
+### shared-planning-change-stages-US10-TC6-1: The notice drops its promise after ten minutes behind
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-10
+
+**Pre-conditions:**
+admin(tech PIC) has <change A> open at <manual change page url>, the banner is up, and the hosted site has not rebuilt.
+
+**Steps:**
+
+1. Wait ten minutes with the hosted site still not rebuilt.
+2. Read <manual change page url> without reloading it.
+
+**Expected Results:**
+
+* The banner says the site has not caught up.
+* It no longer says the site refreshes on its own.
+* Refresh now is still offered.
+
 ---
 
 ## shared-planning-change-stages-US11: Teammate on the locally run manual pulls what landed
@@ -270,6 +308,69 @@ admin(designer) is on <locally run manual url>, run from <the checkout>.
 * No Pull control is offered.
 * Nothing on the page reports an error.
 
+### shared-planning-change-stages-US11-TC4-1: A Pull press git refuses names git's own words
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-11
+
+**Pre-conditions:**
+
+* admin(designer) is on <locally run manual url>, run from a checkout 3 commits behind `main` with a clean tree, and Pull is offered.
+* The next fast-forward is manipulated so git itself refuses it, with <git's own fast-forward refusal>.
+
+**Steps:**
+
+1. Click Pull.
+2. Read the banner without reloading.
+3. Click Pull again once the refusal is cleared.
+
+**Expected Results:**
+
+* Step 1 leaves the banner naming <git's own fast-forward refusal>, not a generic message.
+* The refusal stays through the next standing poll, until step 3.
+* Step 3 leaves the page showing what those commits landed.
+
+### shared-planning-change-stages-US11-TC5-1: A fetch that fails keeps the last count and its time
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-11
+
+**Pre-conditions:**
+
+* admin(designer) is on <locally run manual url>, run from a checkout 3 commits behind `main`, whose last fetch of `origin` succeeded.
+* Network access to `origin` is blocked before the next scheduled fetch.
+
+**Steps:**
+
+1. Wait for the next scheduled fetch of `origin` to run and fail.
+2. Read the top of <locally run manual url>.
+
+**Expected Results:**
+
+* The banner still says the checkout is 3 commits behind `main`.
+* It names the time `origin` was last read rather than the failed attempt.
+* Pull reads exactly as that last successful reading left it.
+
 ## Settled
 
 None yet - the first blind pass on these two journeys.
@@ -308,9 +409,12 @@ Nothing is built yet, so every case is manual. What a person drives, per case:
 | --- | --- |
 | `shared-planning-change-stages-US10-TC1-1` | A commit landing on `main` and a page left open across it; no test in this store pushes to `main` |
 | `shared-planning-change-stages-US10-TC2-1` | The hosted deploy finishing, which is a workflow run rather than anything a test drives |
-| `shared-planning-change-stages-US10-TC3-1` | A reader's focus in a text field while the snapshot changes under it; group 5's walk drives the banner off stubbed endpoints and not the focus, so the case stays whole and manual |
+| `shared-planning-change-stages-US10-TC3-1` | A reader's focus in a text field while the snapshot changes under it; group 4's walk drives the banner off stubbed endpoints and not the focus, so the case stays whole and manual |
 | `shared-planning-change-stages-US10-TC4-1` | Two pushes to `main` inside one deploy's window |
 | `shared-planning-change-stages-US10-TC5-1` | A build of the hosted site with no relay origin set, deployed |
-| `shared-planning-change-stages-US11-TC1-1` | A checkout with a remote ahead of it, and the pull that moves it; group 3's endpoint tests decide the counts and the fast-forward over a bare remote, not the page's own click |
-| `shared-planning-change-stages-US11-TC2-1` | The two refusals over a dirty and an ahead checkout, read on the rendered page; group 3's tests decide the refusals themselves |
+| `shared-planning-change-stages-US10-TC6-1` | Ten minutes passing with the site still not rebuilt, which the walk does not wait out |
+| `shared-planning-change-stages-US11-TC1-1` | A checkout with a remote ahead of it, and the pull that moves it; group 2's endpoint tests decide the counts and the fast-forward over a bare remote, not the page's own click |
+| `shared-planning-change-stages-US11-TC2-1` | The two refusals over a dirty and an ahead checkout, read on the rendered page; group 2's tests decide the refusals themselves |
 | `shared-planning-change-stages-US11-TC3-1` | A checkout with no remote at all, read on the rendered page |
+| `shared-planning-change-stages-US11-TC4-1` | A press git itself refuses, and the refusal held past the next poll; group 2's tests decide the refusal's own words, not the banner holding them |
+| `shared-planning-change-stages-US11-TC5-1` | A fetch of `origin` that fails, read on the rendered page |
