@@ -38,9 +38,9 @@ export const PicksAndSimilar: Story = {
     const soldOut = tiles.at(-1);
     expect(soldOut).toHaveAttribute("data-sold-out", "true");
     await userEvent.click(
-      within(tiles[0]).getByRole("button", {
+      within(tiles[0]).getAllByRole("button", {
         name: RELATED_RAIL_STORY[0].name,
-      }),
+      })[0],
     );
     expect(args.onCardClick).toHaveBeenCalledWith(RELATED_RAIL_STORY[0].id);
   },
@@ -71,7 +71,7 @@ export const SoldOutPickOpens: Story = {
     expect(within(tile).getByText("SOLD OUT")).toBeVisible();
     const card = RELATED_RAIL_STORY.at(-1) as ProductSummary;
     await userEvent.click(
-      within(tile).getByRole("button", { name: card.name }),
+      within(tile).getAllByRole("button", { name: card.name })[0],
     );
     expect(args.onCardClick).toHaveBeenCalledWith(card.id);
   },

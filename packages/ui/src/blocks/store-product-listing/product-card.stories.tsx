@@ -294,8 +294,10 @@ export const SoldOutOpensWhereNothingSells: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: copy.cart })).toBeNull();
-    await userEvent.click(canvas.getByRole("button", { name: defaults.name }));
-    expect(args.onClick).toHaveBeenCalledTimes(1);
+    const [well, name] = canvas.getAllByRole("button", { name: defaults.name });
+    await userEvent.click(well);
+    await userEvent.click(name);
+    expect(args.onClick).toHaveBeenCalledTimes(2);
   },
 };
 
