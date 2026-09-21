@@ -1,4 +1,4 @@
-## 1. Auction Management Manual (grade10-spec)
+## 1. Auction Management Manual (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Mark the delivered Watchers outcome on `docs/prds/products/grade10-admin/auction/management.md` as running (`grade10-admin-auction-listing-SC-81`, `grade10-admin-auction-listing-SC-82`, `grade10-admin-auction-listing-SC-83`)
 - [ ] 1.2 Verify: `pnpm check:manual`
