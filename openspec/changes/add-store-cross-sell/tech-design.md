@@ -146,12 +146,16 @@ wire shape.
 
 | Function | Input | Output |
 | --- | --- | --- |
-| `relatedRail(card, pickIds, entries, limit)` — `services/catalog/related.ts` | the card's projection entry; the pick ids as the metafield stores them, normalised to the entry id's form (GIDs both sides); the held projection's entries; `6` | the rail's entries in final order: resolved picks in stored order, then similar cards on the triple, the date, the id; never the card, never a pick twice, never sold out among similar; at most `limit`; with the unresolved pick ids and whether the card itself resolved, for the counter |
+| `relatedRail({ cardId, pickIds, entries, forSale, limit? })` — `services/catalog/related.ts` | the card's id; the pick ids in the entry id's form, in the stock keeper's order, empty where absent or unreadable; the held projection's entries; whether an id has a variant for sale; the limit, six by default | the rail's entries in final order: resolved picks in stored order, then similar cards on the triple, the date, the id; never the card, never a pick twice, never sold out among similar; at most the limit; with the unresolved pick ids and whether the copy holds the card, for the counter |
+| `composeRelated({ product, projection })` — `services/catalog/related.ts` | the product as the shop answered it, carrying its complementary list; the copy the isolate holds now, or null | whole cards in rail order, the outcome and the picks let go; counted, timed and logged with the copy's version; never a throw |
 | `catalog.product` — `trpc/routers/catalog.ts` | `{ handle }` | the product as today, plus `related` in the wire shape above |
 
-- **The boundary** — entrypoint (`catalog.product`) → service (the rail's
-  compose, which reads `storeKeeper(env)`'s held copy and calls `relatedRail`)
-  → keeper (the held copy alone; no `sync` in the request). No table, no
+- **The boundary** — entrypoint (`catalog.product`, which reads the copy the
+  isolate holds through `ctx.projection.held()`, as the listing's procedures
+  read `projectionOf(ctx)`) → service (the rail's compose, pure over the
+  product and the held copy, calling `relatedRail`) → keeper (the held copy
+  alone; no `sync` in the request; past the interval a check behind the
+  response). No table, no
   write, no transaction: every value is derived on the read
 
 ## API Contracts
@@ -171,7 +175,7 @@ wire shape.
 
 | Metric | Labels | Meaning |
 | --- | --- | --- |
-| `store.catalog.related` | `outcome`: `ok`, `empty`, `no_mirror`, `card_unresolved`, `picks_absent`, `pick_unresolved` | One per card read that composes a rail; `picks_absent` is a product with no complementary field at all, told apart from an empty list, and alerts when it rises on a shop that has the app |
+| `store.catalog.related` | `outcome`: `ok`, `empty`, `no_mirror`, `card_unresolved`, `pick_unresolved`, `picks_absent`, `picks_unreadable` | One per card read that composes a rail, told apart most-specific first in that order; `picks_absent` is a product with no complementary field at all — or one the token cannot read — told apart from an empty list, and alerts when it rises on a shop that has the app |
 | `store.catalog.related_ms` | — | The compose, memory to cards |
 
 ## Failure
@@ -181,7 +185,8 @@ wire shape.
 | The isolate holds no projection | No rail; the card answers; the fill is scheduled; cached with the card for the minute | `outcome:no_mirror` |
 | The copy does not hold the card yet | Its picks, no similar cards | `outcome:card_unresolved` |
 | The product carries no complementary field | Similar cards alone | `outcome:picks_absent`, alerted |
-| A pick the mirror has no entry for | Left out; the rest of the rail stands | `outcome:pick_unresolved` |
+| A pick the mirror has no entry for | Left out; the rest of the rail stands; the ids on the log line | `outcome:pick_unresolved` |
+| The complementary list cannot be read | Similar cards alone, as for a card nobody chose for | `outcome:picks_unreadable`, the reason logged |
 | Nothing shared, no picks | No rail — the ordinary answer | `outcome:empty` |
 
 ## Risks / Trade-offs
