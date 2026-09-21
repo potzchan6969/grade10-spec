@@ -4,7 +4,6 @@ import {
   handleOf,
   handleOfEmail,
   memberOf,
-  ROLES,
   readTeamMap,
   TEAM_MAP,
 } from "../../../scripts/openspec/lib/team.mjs";
