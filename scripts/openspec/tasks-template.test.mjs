@@ -93,7 +93,7 @@ test("every group heading of the tasks template carries its repository tag", () 
 test("shared-planning-agent-rounds-SC-59 - the tasks template's last group is the walk, and flips the cases it decides", () => {
   assert.match(
     walk.heading,
-    /^The walk\b/,
+    /^\d+\. The walk\b/,
     "the template's last group heading does not name the walk",
   );
   assert.match(walk.tasks[0], /journey/i, "the walk group names no journey");

@@ -1019,8 +1019,15 @@ artifacts:
 
       - Phrase an implementation task as the spec scenario(s) it makes pass,
       naming them, so the scenario's test is the evidence behind the
-      checkmark. Never split "write the tests" into its own task or group -
-      the engineer works test-first inside each task.
+      checkmark. Open every group with its test task, naming those same ids:
+      its tests land in their own commit before the group's code, and its box
+      is ticked last.
+
+      - The last group is the walk: it walks every journey of every capability
+      the change specifies, end to end through the interface each actor uses,
+      leaves the walks as the change's end-to-end suite, and its commit flips
+      each case the walks decide to automated with `pnpm run tcs:automated`,
+      naming in the suite the cases that stay manual.
 
       - End every group with its verification step - the checks that group
       runs - so an engineer ships and verifies one group at a time. Keep each
@@ -1034,28 +1041,6 @@ artifacts:
 
       - Write groups without owner tags - engineers claim them at pickup - and
       never renumber a group or task that is claimed or has checkmarks.
-
-
-      Example:
-
-      ```
-
-      ## 1. Shared interfaces (grade10-spec)
-
-
-      - [ ] 1.1 Export `ListingTile` from packages/ui (`grade10-site-store-product-listing-SC-01`)
-
-      - [ ] 1.2 Verify: `pnpm run typecheck && pnpm run test`
-
-
-      ## 2. Frontend (grade10)
-
-
-      - [ ] 2.1 Render the tile from the catalogue row (`grade10-site-store-product-listing-SC-03`)
-
-      - [ ] 2.2 Verify: `pnpm run check`
-
-      ```
     requires:
       - specs
     upstream:
