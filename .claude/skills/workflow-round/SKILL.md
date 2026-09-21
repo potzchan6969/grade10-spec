@@ -239,7 +239,7 @@ reads it next.
 On the hand's word, one command:
 
 ```bash
-pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"] [--with-recommendations]
+pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"] [--fix-pass] [--with-recommendations]
 ```
 
 Once per drafted artifact of the speaker's hand, in the chain's order,
