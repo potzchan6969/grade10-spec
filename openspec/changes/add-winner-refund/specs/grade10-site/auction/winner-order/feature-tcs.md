@@ -38,7 +38,7 @@
 * Pay, address editing and shipment actions are absent.
 * The invoice and every existing receipt remain downloadable.
 * No refund letter is required by this surface.
-* Refund details show the refund channel and a masked card or bank clue, not the full provider reference or proof.
+* Refund details show Transfer to on `PaymentMethodCard`: a card brand logo and only the last four digits, or a bank icon with the bank name and only the last four digits of the account (`Bank name, ···· ####`). Not the full number, provider reference or proof.
 
 ## winner-order-US15: Winner sees an overpayment returned
 

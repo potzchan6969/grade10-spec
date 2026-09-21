@@ -14,9 +14,10 @@ choice in one transaction.
 - `packages/grade10-auction/backend/src/services/orderStatus.ts` derives
   terminal `Refunded`.
 - Auction contracts, the admin post-sale client and Winner Order expose only
-  refund facts needed by their surfaces; Winner Order receives a channel and
-  masked destination clue, while payment credentials and the full provider
-  reference never cross the boundary.
+  refund facts needed by their surfaces. Winner Order receives Transfer to as
+  a card brand plus the last four digits, or a bank name plus the last four
+  digits of the account. The full number, proof and provider reference never
+  cross the boundary. The site renders both through `PaymentMethodCard`.
 
 The mutation requires `auction:refund`, is idempotent on its request key and
 uses the existing audit sequence. It does not call Stripe, create a pending
