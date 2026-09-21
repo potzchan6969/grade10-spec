@@ -13,7 +13,7 @@ import { mkdtempSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
-import { readSentKeys } from "./lib/notify.mjs";
+import { deliver, readSentKeys } from "./lib/notify.mjs";
 
 test("shared-planning-change-stages-SC-77 - a sent-keys path that cannot be read stops the run", () => {
   const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
@@ -35,4 +35,32 @@ test("a sent-keys file that is not there yet is nothing sent", () => {
   const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
 
   assert.deepEqual(readSentKeys(join(dir, "notify-sent.txt")), new Set());
+});
+
+test("shared-planning-change-stages-SC-77 - a sender that cannot read its sent keys sends nothing", async () => {
+  // The refusal reaches the sender before anything goes out: a message due
+  // for the push, the keys unreadable, and the send is never made.
+  const dir = mkdtempSync(join(tmpdir(), "sent-keys-"));
+  let posted = 0;
+  const due = [
+    { to: "member", channel: "U1", key: "probe:planned:dev", text: "Yours" },
+  ];
+
+  await assert.rejects(
+    deliver(due, {
+      file: dir,
+      send: true,
+      token: "xoxb-test",
+      fetch: async () => {
+        posted += 1;
+        throw new Error("the send was made");
+      },
+    }),
+    (error) => {
+      assert.match(error.message, /cannot be read/);
+      assert.ok(error.message.includes(dir));
+      return true;
+    },
+  );
+  assert.equal(posted, 0);
 });

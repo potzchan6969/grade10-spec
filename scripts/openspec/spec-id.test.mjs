@@ -1,16 +1,19 @@
 /*
- * `spec:id` reads every file the store may cite an id in, and the two things
- * a read can say that are not text are asserted here: a file gone since the
- * walk listed it issues no id, and a file that is there and cannot be read
- * stops the run and names the file — the ids it holds are what the query is
- * asking for, so answering "nowhere" would be wrong rather than empty.
+ * `spec:id`'s reader, asserted on the two things a read can say that are not
+ * text — `scan`'s own comment in `spec-id.mjs` says why each is what it is —
+ * and the script run as a script, so the guard that lets its test import it
+ * is held to still running it.
  */
 import assert from "node:assert/strict";
+import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import { scan } from "./spec-id.mjs";
+
+const SCRIPT = fileURLToPath(new URL("./spec-id.mjs", import.meta.url));
 
 test("a file that is there and cannot be read stops the run, naming the file", () => {
   const dir = mkdtempSync(join(tmpdir(), "spec-id-"));
@@ -44,4 +47,18 @@ test("a file gone since the walk listed it issues no id, and the rest are read",
 
   assert.deepEqual([...definitions.keys()], ["demo-thing-SC-01"]);
   assert.deepEqual([...mentions.keys()], ["demo-thing-SC-02"]);
+});
+
+test("run as a script, spec:id still answers an id the store issues", () => {
+  // The guard that lets this file import `scan` compares the module's url to
+  // the script's path; a comparison that stopped matching would print
+  // nothing and exit 0, which no import-side case would see.
+  const ran = spawnSync(
+    process.execPath,
+    [SCRIPT, "shared-planning-change-stages-SC-77", "--path"],
+    { encoding: "utf8", env: { ...process.env, NO_COLOR: "1" } },
+  );
+
+  assert.equal(ran.status, 0, ran.stderr);
+  assert.match(ran.stdout, /change-stages\/spec\.md:\d+/);
 });

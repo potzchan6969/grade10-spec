@@ -96,7 +96,7 @@ test("reads a store with no map as a map that knows nobody", () => {
   assert.equal(channelOf(map, "design"), undefined);
 });
 
-test("refuses a map that is there and cannot be read, naming the file", () => {
+test("shared-planning-change-stages-SC-78 - refuses a map that is there and cannot be read, naming the file", () => {
   // A store with no map knows nobody; a map the reader cannot open says
   // nothing about who is told, and reading it as nobody would send a change's
   // messages to no-one and land nothing. `lib/read-text.mjs` says why the

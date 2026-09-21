@@ -34,6 +34,23 @@ test("a change waiting on an input is excused, in its author's words", () => {
   assert.equal(waitingOnSpecs(dir), "the window nobody decided");
 });
 
+test("a manifest that is there and cannot be read stops the run, naming the file", () => {
+  // A record the run cannot open says nothing about whether the change waits;
+  // reading it as no wait would run the delta gate over a change its author
+  // excused, so the read refuses rather than answers.
+  const dir = change({});
+  mkdirSync(join(dir, ".openspec.yaml"), { recursive: true });
+
+  assert.throws(
+    () => waitingOnSpecs(dir),
+    (error) => {
+      assert.match(error.message, /cannot be read/);
+      assert.ok(error.message.includes(join(dir, ".openspec.yaml")));
+      return true;
+    },
+  );
+});
+
 test("a change that has started its deltas is past the wait", () => {
   const dir = change({
     ".openspec.yaml": manifest(
