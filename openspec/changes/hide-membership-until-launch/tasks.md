@@ -30,9 +30,9 @@ Needs group 1 landed to compile against the sixth `Gates` member.
 
 ## 3. Manual (grade10-spec) (owner: @sean)
 
-- [ ] 3.1 Take the 🚧 marks off
+- [x] 3.1 Take the 🚧 marks off
       `docs/prds/products/grade10-site/site/carried-surfaces.md` once
       shipped, confirming the lane table, the Membership bullet and the
       "Membership now waits too" decision row all state the shipped
       behaviour as fact
-- [ ] 3.2 Verify: `pnpm check:manual`
+- [x] 3.2 Verify: `pnpm check:manual`
