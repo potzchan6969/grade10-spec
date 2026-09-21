@@ -110,16 +110,17 @@ meaning.
   invoice status, however much was paid and wherever the card is; no Pay, no
   address form and no letter; the invoice and every receipt already issued
   stay downloadable; Order Summary stays the invoice; an inline alert below
-  Order Total shows the amount returned, and opens the reason, note, channel
-  and masked card or bank clue the winner can match to their statement
+  Order Total shows the amount returned, and opens the reason, note and
+  Transfer to destination the winner can match to their statement
 - 🚧 **An overpaid difference** — the order keeps its status on Winner Order
   and on My Auctions; Winning Bid, Shipping & Handling and Order Total stay
   the amount that should have been paid; an inline alert below Order Total
   shows only the difference, with the same detail dialog
-- 🚧 **Refund transaction clues** — the dialog shows the channel plus a masked
-  destination clue: the card brand and last four digits for a card refund, or
-  a masked bank/account clue for a bank transfer; full proof and provider
-  reference stay with the operator
+- 🚧 **Refund transaction clues** — Transfer to uses the shared payment card.
+  A card shows the brand logo and the last four digits. A bank transfer shows
+  a bank icon with the bank name and the last four digits of the account.
+  A paid order's payment method uses that same last-four mask. Full proof and
+  provider reference stay with the operator
 
 ## Order Setup
 
@@ -401,9 +402,9 @@ a second payment provider, and changes to the bid-time rules.
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
 | A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
-| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens the reason, note, channel and masked card or bank clue. Proof and provider reference stay with the operator. | Product (@jeffffej0909, @tangconst) |
+| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens the reason, note and Transfer to. Proof and provider reference stay with the operator. | Product (@jeffffej0909, @tangconst) |
 | An overpaid difference | 🚧 In flight | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
-| Refund transaction clues | 🚧 In flight | Refund Method shows the channel plus a masked destination clue: the card brand and last four digits for a card refund, or a masked bank/account clue for a bank transfer. Full proof, provider reference and audit number stay with the operator. | Product (@tangconst) |
+| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the bank name and the last four digits of the account. A paid order's payment method uses that same last-four mask. Full proof, provider reference and audit number stay with the operator. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
