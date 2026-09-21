@@ -6,12 +6,10 @@ order: 5
 ---
 
 The Vault section of the admin panel is a queue of cases cut by what each one
-waits for, and one case opens into tabs whose buttons follow the case's
-status.
+waits for, and one case opens into tabs whose buttons follow the case's status.
 
 - **URL** — `admin.grade10.com/vault` for the queue, `admin.grade10.com/vault/cases/<id>`
-  for a case; the diary is its own section at `admin.grade10.com/appointments`,
-  and each booking on its Day tab links to its case
+  for a case; the diary is its own section at `admin.grade10.com/appointments`
 - **Who** — staff run the flow, treasurers record money, admins hold every
   grant; the queue shows who is waiting on a person, and nobody is emailed
 
@@ -30,56 +28,77 @@ status.
 - **Rows** — case id, the item's name, status, lane, amount asked,
   appointment, last updated, and a badge naming why the case waits on a
   person: a release request unanswered, a submission nobody started, a
-  valuation nobody has touched for **7 days**, an offer that ran out, a
-  message that ran out of attempts, a document already on file under another
-  account, a visit today
+  valuation untouched for **7 days**, an offer that ran out, a message that
+  ran out of attempts, a document seen under another account, a visit today
 - **Paging** — **50** rows a page, newest-touched first, a backlog count and
-  a load-more control on a keyset cursor; a page with no rows over a backlog
-  says so and offers the control anyway
+  a load-more control on a keyset cursor
 - **Search** — exact on phone or email, prefix on case id; a number is
-  matched in its E.164 form however it was typed, and the term travels in the
-  request body rather than in an address. Each search writes its own row on
-  the audit chain — who searched, when, what kind of term it was and how many
-  cases matched — and never the term itself. The answer is one page and says
-  when more matched than were handed back
+  matched in E.164 however it was typed, and the term travels in the request
+  body. Each search writes its own row on the audit chain — who, when, what
+  kind of term, how many matched — and never the term itself
 - **Money tab** (`vault:payout` only) — the position at an instant, now or
-  the end of a day the operator names (principal and interest owed across
-  the loans then on the book, repaid to date, in the currency the position
-  itself names) and the ledger over payouts,
-  repayments and corrections for a date range on the shop's own calendar,
+  the end of a day the operator names, and the ledger over payouts,
+  repayments and corrections for a date range on the shop's calendar,
   filtered by method, paged, with totals per method and currency; a
   correction names the row it took back
 - **Held items tab** — everything in a locker, with the shop it is in, oldest
   first, paged
+- 🚧 **Counts and today** — every view carries its count; a Today block
+  lists the day's visits in order on the shop's clock; rows show the lane
+  and read the collector's word for the status
+- 🚧 **Search by reference** — prefix on the six-character case reference,
+  so the characters a customer reads out at the counter find the case
+- 🚧 **Overdue, at a glance** — four tiles: loans in arrears, outstanding in
+  arrears, the oldest with its notice state, how many carry no notice; rows
+  name the borrower, their contact, the notice and the last reminder sent
+- 🚧 **Money tab, more** — a filter by kind, the net out of the business over
+  the range, a takes-back column naming the row a correction reversed, and a
+  CSV of the range as filtered
+- 🚧 **Held items, at a glance** — tiles: in the vault, per shop, with a loan
+  running, waiting for a pickup; rows carry held since, days held, status,
+  outstanding and whether a pickup is booked
+- ❓ Product — a stock-take sheet printed from the held-items list, and Send
+  notice from an arrears row; recommended: neither in this change, the
+  notice stays an act on the case
 
 ## One case
 
 One line per tab, as `Surface: verb, verb, verb`.
 
 - **Header**: back, the customer's email and phone with the WhatsApp
-  click-to-chat link and six templates, set or change the contact, book,
-  move or cancel the visit at every live status but a draft, the badges
-  saying what this case is waiting on, and **Send again** beside a message
-  that ran out of attempts
+  click-to-chat link and six templates, set or change the contact, book, move
+  or cancel the visit at every live status but a draft, the badges saying
+  what this case is waiting on, and **Send again** beside a parked message
 - **Case tab**: start valuation, record valuation, make or counter an offer,
   withdraw the offer, record the customer's acceptance at the counter, agree
-  custody terms, decline, cancel; the timeline with the figures each money
-  event carried
+  custody terms, decline, cancel; the timeline with each money event's figures
 - **Documents tab**: record the identity check or reuse the customer's last
-  one, record that the terms were explained with an optional recording
-  reference, prepare documents (choosing the shop when the case has no
-  booking), prepare the release, hand over as QR code and link, re-check,
-  download the identity photograph (`kyc:read`)
+  one, record that the terms were explained, prepare documents (choosing the
+  shop when the case has no booking), prepare the release, hand over as QR
+  code and link, re-check, download the identity photograph (`kyc:read`)
 - **Custody tab**: confirm vaulted with the shop and a locker, move the item
   to another locker, release with notes, unwind with a reason, send the
   forfeiture notice, forfeit with a reason once its cure date has passed
 - **Payouts tab** (`vault:payout` only): record the payout with its bank
-  reference and the date it left, record a repayment by bank transfer, cash or
-  card against the quote for the date it reached us — which has to answer
-  before the repayment can be sent — and take a wrong row back with a reason,
-  offered only on a row this operator did not record
+  reference and the date it left, record a repayment against the quote for
+  the date it reached us, and take a wrong row back with a reason, offered
+  only on a row this operator did not record
 - **Appointments section**: add or retire a shop, weekly rules, exceptions,
   the day's offered slots and bookings, each booking opening its case
+- 🚧 **Today's visit, in order** — the Case tab opens on the counter's steps
+  for this visit as an ordered checklist, each ticked as its act lands, and
+  says why an act is not offered yet
+- 🚧 **Key terms as a checklist** — the Documents tab ticks the five terms
+  before the loan packet opens —
+  [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
+- 🚧 **The identity panel** — six states, Verified, Out, Stalled, Refused,
+  Lapsed and None — [Identity Check](/p/grade10-site/vault/identity-check#identity-states)
+- 🚧 **Forfeiture stepper** — the Custody tab shows past due, notice sent,
+  cure running with the earliest date, and a person forfeits, beside what
+  the collector was told
+- 🚧 **Before the act** — the make-offer, vault and payout dialogs state
+  their bounds, their preconditions and what the recording fixes before the
+  operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
 
 ## Permissions
 
@@ -92,54 +111,35 @@ One line per tab, as `Surface: verb, verb, verb`.
 | `kyc:read` | staff, admin | the identity photograph, each download on the audit chain |
 
 - **Two people move money** — staff and treasurer share no money grant, a
-  correction takes a second `vault:payout` holder because nobody may reverse
-  their own row, and the payout is refused to whoever made the offer. `admin`
-  holds both sides, so a shop of three stays operable, and the per-case guard
-  is what keeps one person from pricing a loan and sending its money
+  correction takes a second `vault:payout` holder, and the payout is refused
+  to whoever made the offer; `admin` holds both sides so a shop of three
+  stays operable
+- **Cash at the counter** — a borrower with cash on the due date still waits
+  for a treasurer, because recording money needs `vault:payout`
 - **One grant prices and forfeits** — `vault:approve` covers the valuer, the
   offer-maker and the person who forfeits
 - **Second factor** — required in production and staging, optional in
-  development; one verification stamps the session for **12 hours**, and no
-  action asks for a fresh one
-- **Every case action is filed under its case** on the audit chain, so an
-  auditor pulls one case's trail by its id
+  development; one verification stamps the session for **12 hours**
+- **Every case action is filed under its case** on the audit chain
 - **Staff hear nothing** — no email or push to staff; the queue's badges and
   the Today and Overdue views are the signal
 
 ## Physical vault
 
 - **Locker** — the shop is required at vaulting and the locker is optional
-  free text; a move between lockers writes a movement, and everything held is
-  listable with the shop it is in
+  free text; a move between lockers writes a movement
 - **Movements** — `in` at vaulting, `moved` on a move, `out` at release,
   unwind and forfeiture
 - **Valuation** — an amount and a note; no grading company, certificate
-  number, grade, condition, market reference or second valuer, and no link to
-  the inventory catalogue
+  number, grade, condition, market reference or second valuer
 - **Not modelled** — a locker registry per shop, capacity, transfer between
-  shops, a condition report or photograph at intake or release, damage or
-  loss, a stock-take against the shelf; a forfeited item is written `out`
-  because it has left custody and become the shop's own stock
-
-:::callout{kind="note"}
-Every case is the collector's own, opened from their account — in the shop on
-their phone if they walked in without one. The console has no intake of its
-own, so staff cannot open a case, add a sibling for a second item, edit an
-item or attach a counter photograph, and every identity is keyed to a person
-rather than to a case.
-:::
-
-:::callout{kind="warning"}
-A borrower who arrives with cash on the due date still waits for a treasurer:
-recording money needs `vault:payout`, which staff do not hold. The visit
-itself is bookable on a live loan.
-:::
+  shops, a condition report, damage or loss, a stock-take against the shelf;
+  a forfeited item is written `out` because it has become the shop's stock
+- **No intake** — every case is the collector's own, opened from their
+  account, in the shop on their phone if need be; staff cannot open a case,
+  add a sibling, edit an item or attach a counter photograph
 
 ## Specs and journeys
-
-**Specs** — this page documents `grade10-admin/vault/operator-queue` and
-`grade10-admin/vault/money-book`. The requirements are theirs; this page holds
-the decision behind them.
 
 ::spec{id="grade10-admin/vault/operator-queue"}
 
@@ -177,18 +177,22 @@ the decision behind them.
 | --- | --- | --- | --- |
 | Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
 | Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
+| The rule is shown before the refusal | Decided | The make-offer, vault and payout dialogs state the bound, the precondition and what the recording fixes before the operator sends; the worker's refusal stands unchanged behind them | Product |
+| The counter works a checklist | Decided | The Case tab opens on the visit's steps in order and the Custody tab shows forfeiture as four states, because a shop of three learns the flow from the screen rather than from a manual | Product |
 | Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
 | A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
 | The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
+| The book exports | Decided | A CSV of the ledger as filtered, a net-out figure and a takes-back column, so the controller ties the range to the statement in a spreadsheet; double entry stays the firm's accounting system's | Finance |
 | "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
 | Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |
+| The identity panel reads the record's six states | Decided | Verified, Out, Stalled, Refused, Lapsed and None, as [Identity Check](/p/grade10-site/vault/identity-check#identity-states) defines them; the provider's finer states fold into them, because an operator arranging a visit needs the difference between out and none, not the provider's stage | Product |
 | Counter intake | Decided | Every case is the collector's own account, opened in the shop if need be; the console has no intake, and no identity is keyed to a case | Product |
 | The shop is on the custody row | Decided | Vaulting names the shop the item is kept at, so the held-items list answers which vault holds what | Owner |
 | Valuation record | Deferred | Grading company, certificate number and grade ride the note until the inventory catalogue links; a second valuer, a condition report and counter photographs with it | Product |
 | Locker registry and stock-take | Deferred | Lockers per shop with capacity, a stock-take against the shelf, damage and loss. Reopens when a shop outgrows free-text lockers | Owner |
 | Forfeited stock | Decided | A forfeited item leaves custody and becomes the shop's stock; the chain keeps the figure it settled and the rest is inventory's | Owner |
-| Staff notifications | Decided | The queue is the inbox: badges, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
+| Staff notifications | Decided | The queue is the inbox: badges, counts, Today and Overdue, and nothing emailed to staff. Revisited when a shop asks | Product |
 | A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
 | Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
 | Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |

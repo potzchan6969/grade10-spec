@@ -47,6 +47,14 @@ vendor is involved.
 - **Terms explained first** — the counter records that the key terms were
   explained, with a recording reference where there is one, before a loan
   packet may be prepared; the borrower signs a line saying it happened
+- 🚧 **Key terms as a checklist** — five items the counter ticks before the
+  loan packet opens: the amount, interest and total; the term runs from the
+  payout; early repayment with the whole term's interest; a late day costs
+  the same rate and no fee; the **14-day** notice before anything is taken.
+  The recording reference stays optional
+- 🚧 **Every document, in one download** — the collector takes every signed
+  document from every case, each with its fingerprint, from
+  [Your data](/p/grade10-site/vault/compliance-and-readiness#retention-and-erasure)
 - **Signature** — the customer's alone; no staff countersignature or witness
   line, and the loan agreement states that the lender executes it on the
   advance
