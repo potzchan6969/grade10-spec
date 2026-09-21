@@ -45,7 +45,7 @@
 ### shared-planning-change-stages-US-08: QA learns a change has reached staging
 
 **As a** QA teammate,
-**I want** to be told when a change reaches staging, with its run tab,
+**I want** to be told when a change reaches staging, with the run sheet to walk,
 **so that** the manual pass starts the day it deploys.
 
 ### shared-planning-change-stages-US-09: Hand learns an artifact of theirs is behind
