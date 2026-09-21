@@ -7,8 +7,7 @@ order: 2
 How every artifact of a change is written: you say what is wanted, the
 change's agent drafts it and has the draft challenged, you answer what only
 you can, and your word lands it. Where a change stands is
-[Change Stages](change-stages); the artifacts themselves are
-[How we plan](/guides/how-we-plan).
+[Change Stages](change-stages); the artifacts are [How we plan](/guides/how-we-plan).
 
 ## The Round
 
@@ -124,7 +123,8 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **The run sheet keeps what only staging proves** — a case the walk
   automates is marked so, and the run sheet leaves it out
 - 🚧 **One pass over the whole** — after the last group, one reader argues the
-  simpler shape for the whole change before it goes to staging
+  simpler shape for the whole change before it goes to staging; the archive
+  holds a change on the round to that row and to the last group's walk row
 
 ## Surfaces
 
