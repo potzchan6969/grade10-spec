@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   winnerOrderMeta,
   winnerOrderSettled,
@@ -78,10 +78,13 @@ export const Refunded: Story = {
     expect(canvas.getByText("HK$16,140")).toBeVisible();
     expect(canvas.getByText("Refund HK$16,140")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "View" }));
-    const dialog = within(canvasElement.ownerDocument.body);
-    expect(
-      dialog.getByRole("heading", { name: "Refund Details" }),
-    ).toBeVisible();
+    const page = within(canvasElement.ownerDocument.body);
+    const dialogElement = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Refund Details" });
+      expect(found).toBeVisible();
+      return found;
+    });
+    const dialog = within(dialogElement);
     expect(dialog.getByText("Not as described")).toBeVisible();
     expect(
       dialog.getByText(
