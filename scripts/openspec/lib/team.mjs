@@ -46,7 +46,8 @@ export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"];
  * people in it, both read that way, and every caller already has a path for a
  * handle the map does not name. A map that is there and cannot be read is the
  * other thing entirely: it says something wrong about who is told, so it stops
- * the run and says which line.
+ * the run and names the file. A map that is there and says something the
+ * parser refuses stops the run too, and says which line.
  */
 export function readTeamMap(root, path = TEAM_MAP) {
   const text = readTextIfThere(join(root, path));
