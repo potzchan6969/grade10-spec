@@ -43,7 +43,9 @@
  *              held rows, or the hand's own answer - and the pages the
  *              proposal links, which is the set `reread-guard.mjs` holds
  *              every push of this run to; for a task group, the rebased
- *              branch tip, since nothing is drafted ahead at Building
+ *              branch tip, refused while that tip holds a schema artifact
+ *              with no `landed_by:` line, because a group carries the branch
+ *              whole and `main` never holds a draft no hand has landed
  *   6 gate     Run the gate - `validate:changes`, `check:manual`,
  *              `tcs:validate` - against `L`'s tree with `PLAN_NO_FETCH=1`; a
  *              refusal leaves the branch and the working tree as they were,
@@ -67,6 +69,11 @@
  *
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
+ *
+ * `--fix-pass` drops the row's `always` floor to `simpler`, the one reader
+ * every round shares: a pass landed off a demonstration or off the reading of
+ * the whole change is that round (Q50, Q99). A row naming more readers under
+ * the flag owes its verifier like any other.
  *
  * `--dry-run` cuts `L` and runs the gate against it for real, prints the same
  * lines a landing prints, and stops before step 7: nothing is pushed, and no
@@ -101,6 +108,7 @@ import {
   isGroup,
   perspectivesOf,
   planningSchema,
+  verifierNeeded,
 } from "./lib/perspectives.mjs";
 import { openRecord, setEntry } from "./lib/record.mjs";
 import { answerOf, readWake, relayOf, wakeIdOf } from "./lib/relay.mjs";
@@ -123,15 +131,20 @@ const REJECTED = /\[rejected\]|\[remote rejected\]|non-fast-forward|stale info/;
 /** The all-zero object id, which is how `update-index --index-info` is told a
  * path is gone rather than written. */
 const GONE = "0000000000000000000000000000000000000000";
+/** The reader that argues the simpler thing, which every round runs and a
+ * round of one stands on (`docs/governance/system-design.md`): the floor
+ * `--fix-pass` holds a row to. */
+const FLOOR = "simpler";
 const USAGE =
-  'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--with-recommendations] [--dry-run] [--root <dir>]';
+  'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["as", "perspectives", "stood", "asked", "tests", "root"],
-  booleans: ["dry-run", "reviewed", "with-recommendations"],
+  booleans: ["dry-run", "fix-pass", "reviewed", "with-recommendations"],
   usage: USAGE,
 });
 const dryRun = Boolean(flags["dry-run"]);
+const fixPass = Boolean(flags["fix-pass"]);
 const reviewedOnly = Boolean(flags.reviewed);
 const root = flags.root ?? join(HERE, "..", "..");
 /** The temporary indexes, worktrees and refs this run made, removed on the
@@ -401,6 +414,23 @@ async function attemptLanding(attempt) {
     changed = changedPaths(root, MAIN, tip);
   } catch (cause) {
     fail(cause.message);
+  }
+  // A group carries the branch whole, so an artifact drafted on it and landed
+  // by nobody would reach `main` with no hand's word behind it.
+  if (group) {
+    const landed = read.entry.landedBy ?? {};
+    const drafts = artifacts
+      .filter(({ id }) => !(id in landed))
+      .flatMap(({ id }) => filesOf(changed, artifacts, id));
+    if (drafts.length > 0) {
+      fail(
+        `${target}'s landing carries a draft no hand has landed:\n${drafts
+          .map((path) => `  ${path}`)
+          .join(
+            "\n",
+          )}\nLand each on its hand's word, or drop the draft from the branch.`,
+      );
+    }
   }
   // The pages the change may write, held to the exact set the guard holds
   // every push of this run to: the change's own directory is carried by the
@@ -820,7 +850,14 @@ function testsCell(read, group, value) {
  * `always` set.
  *
  * `verifier` is no perspective of any artifact: it records that a verifier
- * read the round's findings, so the cell is allowed to name it.
+ * read the round's findings, so the cell names it, and owes it wherever more
+ * than one reader ran — two readings are reconciled, and only a round of one
+ * argues its own findings.
+ *
+ * `--fix-pass` drops the floor to `simpler` alone: a pass off a demonstration
+ * or off the reading of the whole change is a round of the simpler thing
+ * (Q50, Q99), and the apply block's six `always` readers read the plan rather
+ * than the fix.
  */
 function perspectivesCell(read, value) {
   const cell = listCell(value);
@@ -847,8 +884,15 @@ function perspectivesCell(read, value) {
   }
   for (const { name, when } of issued) {
     if (!when.includes("always") || named.has(name)) continue;
+    if (fixPass && name !== FLOOR) continue;
     fail(
       `${target}'s \`${name}\` reads every round — a narrow re-run may name fewer readers, never an \`always\` one`,
+    );
+  }
+  const readers = [...named].filter((one) => one !== "verifier");
+  if (verifierNeeded(readers) && !named.has("verifier")) {
+    fail(
+      `${readers.join(", ")} read ${target} and the cell names no \`verifier\` — a round of more than one reader is reconciled by one`,
     );
   }
   return cell;
