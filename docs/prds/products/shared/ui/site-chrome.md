@@ -23,15 +23,18 @@ currency.
 
 ## Account Entry
 
-**`SiteHeader`** — a compound header wraps the design-system `Nav` with
+🚧 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
-account icon and a menu of My Orders, My Auctions, and Sign out when signed
-in, with Profile leading it once its own handler is supplied — gated the
-same way as My Orders, Cart and search. KYC stays out of the menu.
+account icon and a menu when signed in, with an initial avatar above the
+sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
+joins ahead of My Auctions and Membership joins after it. The menu does not
+list Profile. KYC stays out of the menu
 
-**My Orders** joins the menu between Profile and My Auctions once Store
-answers, opening the Store order history surface. Until Store answers, the
-menu omits it.
+🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
+order history surface, and omitted until then
+
+**Membership** — ❓ after My Auctions once Store answers; the destination is
+unconfirmed
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
@@ -59,15 +62,17 @@ count-agnostic.
 
 ::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="site-chrome-siteheader-cart--empty-cart" title="SiteHeader — empty cart, no badge"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
 
-::story{id="site-chrome-siteheader-cart--one-item" title="SiteHeader — cart count 1"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
 
-::story{id="site-chrome-siteheader-cart--multi-item" title="SiteHeader — cart count 3"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
 
-::story{id="site-chrome-siteheader-cart--large-count" title="SiteHeader — large cart count"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
 
-::story{id="site-chrome-siteheader-cart--on-auction-surface" title="SiteHeader — cart on auction surface (post-store)"}
+::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+
+::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
 ::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
 
@@ -80,6 +85,8 @@ count-agnostic.
 ::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
 ::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+
+::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
 ::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
 

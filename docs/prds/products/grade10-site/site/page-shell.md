@@ -35,18 +35,17 @@ chrome, including on auction-first launch.
 
 ## Account Menu
 
-**Account menu** — signed in, the account icon opens My Auctions and Sign
-out. Sign-out is always offered there, and also on the profile wherever the
-profile itself is carried. KYC stays out of the menu.
+🚧 **Account menu** — signed in, an initial avatar sits above the email, above
+the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
+and Membership once Store answers, with Sign Out always last. The menu does
+not list Profile, and KYC stays out. Sign-out stays on the profile page
+wherever that page is carried
 
-**Profile** joins the menu first, and only where the profile surface is
-carried — the same gate `/profile` itself carries. Where it is not, the
-account icon opens directly on My Orders (once Store has answered), My
-Auctions, and Sign out.
+🚧 **My Orders** — ahead of My Auctions once Store answers, opening
+`/profile/orders`, and omitted until then on the same gate as Cart
 
-**My Orders** joins the menu between Profile and My Auctions once Store
-answers, opening `/profile/orders`; until Store answers, the menu omits it,
-the same gate `/profile/orders` and Cart already carry.
+**Membership** — ❓ after My Auctions once Store answers; the destination is
+unconfirmed
 
 ## Help
 
@@ -72,7 +71,9 @@ no cart to show someone signed out.
 
 ::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
 
-::story{id="site-chrome-siteheader-auction-first--account-menu" title="Account menu open"}
+::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
+
+::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
 ::story{id="components-nav-layout--narrow" title="Nav — narrow (375px)"}
 
@@ -82,14 +83,16 @@ no cart to show someone signed out.
 
 ::story{id="site-chrome-siteheader-layout--narrow-signed-out" title="SiteHeader — narrow signed out"}
 
-::story{id="site-chrome-siteheader-cart--on-auction-surface" title="Cart on auction surface (post-store)"}
+::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
 
 :::detail{title="Product decisions" for="pm"}
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Collector help | ❓ Open | Help sits in the primary nav (wide and compact), after Store Locator when that item is present and after Auction on auction-first. Opens in a new tab. Provisional host is Mintlify at `https://grade10.mintlify.io/`; confirm the host. | Product |
 | Global cart | Decided | Once Store launches, Cart stays in the header on every surface (including Auction) to cut checkout friction. Absent only while the Store cart drawer does not answer (auction-first). Cart visibility does not depend on session state — the control follows the answered Store capability, and its activation follows `require-sign-in-from-nav-cart`; rejected hiding Cart from signed-out collectors or making the shared header own the session rule. | Product |
-| My Orders label and place | Decided | "My Orders", between Profile and My Auctions; rejected "Your Orders" (parallels the page title instead of Profile/My Auctions naming) and appending after My Auctions, before Sign out (the ask was for it directly under Profile). | Product |
+| My Orders label and place | Decided | "My Orders", ahead of My Auctions once Store answers; rejected "Your Orders" (parallels the page title instead of My Auctions naming) and appending after My Auctions, before Sign Out. | Product |
 | My Orders gating | Decided | Handler-gated like Cart and search, supplied only once Store answers — the same gate `/profile/orders` and Cart already carry. Rejected keeping it required and always-present regardless of Store: that leaves a menu item pointing at a page gated shut on any build where Store has not answered. | Product |
-| Profile gating | Decided | Handler-gated the same way, supplied only once the profile itself is carried. Rejected keeping it required and always-present: `add-account-profile` leaves today's account page mid-build, and until it ships the menu item would lead a signed-in collector to a withheld surface on the public lanes. | Product |
+| Profile in the menu | Decided | The account menu does not list Profile on auction launch or once Store answers. Sign-out on the profile page itself is unchanged wherever that page is carried. | Product |
+| Signed-in email | Decided | The menu shows the sign-in email above the items, in place of an "Account" heading, with the same small initial avatar the bidding panel uses for that address. | Product |
+| Membership | ❓ Open | Once Store answers, the menu lists Membership after My Auctions. The destination is unconfirmed. | Product |
 :::
