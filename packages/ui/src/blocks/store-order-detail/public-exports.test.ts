@@ -15,6 +15,7 @@ import type {
   OrderDetailsProps,
   OrderDetailsSidebarProps,
   OrderDetailsSummary,
+  PaymentMethodCardProps,
 } from "../../index";
 import {
   OrderDetails,
@@ -24,6 +25,7 @@ import {
   OrderDetailsOrderTable,
   OrderDetailsPaymentLogo,
   OrderDetailsSidebar,
+  PaymentMethodCard,
 } from "../../index";
 
 type PublicOrderDetailsTypes = [
@@ -42,6 +44,7 @@ type PublicOrderDetailsTypes = [
   OrderDetailsPaymentLogoProps,
   OrderDetailsProps,
   OrderDetailsSidebarProps,
+  PaymentMethodCardProps,
 ];
 
 const publicOrderDetailsTypes: PublicOrderDetailsTypes | undefined = undefined;
@@ -57,7 +60,9 @@ describe("Order Details public entry", () => {
       OrderDetailsOrderItem,
       OrderDetailsSidebar,
       OrderDetailsPaymentLogo,
+      PaymentMethodCard,
     ]).toEqual([
+      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),
