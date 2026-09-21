@@ -1,7 +1,10 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
-import { COPY, SITE_HEADER_BASE_ARGS } from "./site-header.story-shared";
+import {
+  ACCOUNT_EMAIL,
+  SITE_HEADER_BASE_ARGS,
+} from "./site-header.story-shared";
 
 const meta = {
   title: "Site Chrome/SiteHeader/Auction first",
@@ -13,9 +16,7 @@ const meta = {
     session: "signed-out",
     onLocaleChange: fn(),
     onSignIn: fn(),
-    onProfile: fn(),
     onMyAuctions: fn(),
-    onOrders: fn(),
     onSignOut: fn(),
   },
 } satisfies Meta<typeof SiteHeader>;
@@ -47,7 +48,7 @@ export const SignedOut: Story = {
   },
 };
 
-/** Account icon; menu holds Profile, My Auctions, Sign out. */
+/** Account icon in the bar; no Cart, Store, or Store Locator yet. */
 export const SignedIn: Story = {
   name: "Signed in",
   args: { session: "signed-in" },
@@ -61,48 +62,44 @@ export const SignedIn: Story = {
   },
 };
 
-/** Opens the account menu and asserts auction-first items. */
+/**
+ * Auction-launch account menu: email initial, sign-in email, My Auctions,
+ * Sign Out. No Profile, My Orders, Membership, Cart, or My Auction Orders —
+ * winners reach orders from My Auctions.
+ */
 export const AccountMenu: Story = {
   name: "Account menu open",
   args: { session: "signed-in", accountMenuDefaultOpen: true },
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
+    await canvas.findByRole("button", { name: "Account" });
+    expect(canvas.queryByRole("button", { name: /Cart/ })).toBeNull();
     const body = within(canvasElement.ownerDocument.body);
+    expect(body.getByText(ACCOUNT_EMAIL)).toBeInTheDocument();
     expect(
-      await body.findByRole("menuitem", { name: "Profile" }),
-    ).toBeInTheDocument();
+      canvasElement.ownerDocument.body.querySelector(
+        '[data-slot="avatar-fallback"]',
+      ),
+    ).toHaveTextContent("C");
+    const items = await body.findAllByRole("menuitem");
+    expect(items.map((item) => item.textContent)).toEqual([
+      "My Auctions",
+      "Sign Out",
+    ]);
+    expect(body.queryByRole("menuitem", { name: "Profile" })).toBeNull();
+    expect(body.queryByRole("menuitem", { name: "My Orders" })).toBeNull();
+    expect(body.queryByRole("menuitem", { name: "Membership" })).toBeNull();
+    expect(
+      body.queryByRole("menuitem", { name: "My Auction Orders" }),
+    ).toBeNull();
+    await userEvent.click(body.getByRole("menuitem", { name: "My Auctions" }));
+    expect(args.onMyAuctions).toHaveBeenCalledTimes(1);
+    expect(args.onSignOut).not.toHaveBeenCalled();
+    // Leave the menu open — layout SoT for the auction-launch account menu.
+    await userEvent.click(canvas.getByRole("button", { name: "Account" }));
+    expect(await body.findByText(ACCOUNT_EMAIL)).toBeInTheDocument();
     expect(
       body.getByRole("menuitem", { name: "My Auctions" }),
     ).toBeInTheDocument();
-    expect(
-      body.getByRole("menuitem", { name: "Sign out" }),
-    ).toBeInTheDocument();
-    expect(body.queryByRole("menuitem", { name: "My Orders" })).toBeNull();
-    await userEvent.click(body.getByRole("menuitem", { name: "My Auctions" }));
-    expect(args.onMyAuctions).toHaveBeenCalled();
-    // Leave the menu open — this story is the layout SoT for the open menu.
-    await userEvent.click(canvas.getByRole("button", { name: "Account" }));
-    expect(
-      await body.findByRole("menuitem", { name: "Profile" }),
-    ).toBeInTheDocument();
-  },
-};
-
-/** Consumers can add their authenticated auction-orders destination. */
-export const AccountMenuWithOrders: Story = {
-  name: "Account menu with orders",
-  args: {
-    session: "signed-in",
-    accountMenuDefaultOpen: true,
-    copy: { ...COPY, orders: "My Auction Orders" },
-  },
-  play: async ({ canvasElement, args }) => {
-    const body = within(canvasElement.ownerDocument.body);
-    const orders = await body.findByRole("menuitem", {
-      name: "My Auction Orders",
-    });
-    expect(orders).toBeInTheDocument();
-    await userEvent.click(orders);
-    expect(args.onOrders).toHaveBeenCalled();
   },
 };
