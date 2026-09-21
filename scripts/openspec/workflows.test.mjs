@@ -9,10 +9,13 @@
  * text and as YAML — `openspec-version.test.mjs` reads a workflow the same
  * way for the CLI's pin. The reader the two restore that file for is held
  * here as well, because the cache key and the reading are one rule.
+ *
+ * One case reaches wider: every workflow whose steps read a change's plan,
+ * held to running on the push that ticks a task group.
  */
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: a workflow's `${{ … }}` is GitHub's own expression, quoted here exactly as the file writes it.
 import assert from "node:assert/strict";
-import { mkdtempSync, readFileSync } from "node:fs";
+import { mkdtempSync, readdirSync, readFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -23,6 +26,7 @@ import { readSentKeys } from "./lib/notify.mjs";
 const ROOT = join(dirname(dirname(fileURLToPath(import.meta.url))), "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
 
+const WORKFLOWS = ".github/workflows";
 const NOTIFY = ".github/workflows/proposal-notify.yml";
 const DIGEST = ".github/workflows/digest.yml";
 
@@ -36,6 +40,31 @@ const cacheSteps = (job) =>
   (job.steps ?? []).filter((step) =>
     (step.uses ?? "").startsWith("actions/cache/"),
   );
+
+/** Every workflow of this store, path and parsed pair. */
+const workflows = () =>
+  readdirSync(join(ROOT, WORKFLOWS))
+    .filter((name) => name.endsWith(".yml"))
+    .map((name) => [
+      `${WORKFLOWS}/${name}`,
+      YAML.parse(read(`${WORKFLOWS}/${name}`)),
+    ]);
+
+/** A workflow one of whose steps reads a change's plan. */
+const readsThePlan = (workflow) =>
+  Object.values(workflow.jobs ?? {}).some((job) =>
+    (job.steps ?? []).some((step) =>
+      /check:manual|validate-changes/.test(step.run ?? ""),
+    ),
+  );
+
+/** Every path a workflow's triggers filter on, `paths` and `paths-ignore`
+ * alike. */
+const triggerPaths = (workflow) =>
+  Object.values(workflow.on ?? {}).flatMap((trigger) => [
+    ...(trigger?.paths ?? []),
+    ...(trigger?.["paths-ignore"] ?? []),
+  ]);
 
 /** Any line of a workflow that sets a prefix fallback, comments — which say
  * why there is none — left out. */
@@ -141,4 +170,22 @@ test("the channel post falls back to the store's own channel", () => {
 
   assert.ok(mentions.length > 0, "the notifier names no channel");
   for (const one of mentions) assert.equal(one, channel);
+});
+
+// shared-planning-agent-rounds-SC-84: the `round` rule refuses a ticked task
+// group with no row, and `validate-changes --strict` reads the same plan. The
+// push that ticks a group carries `tasks.md` and nothing else, so a trigger
+// that filters that file out leaves both gates unrun on the one head where
+// the group is called done.
+test("shared-planning-agent-rounds-SC-84 - a workflow that reads a plan runs on the push that ticks a group", () => {
+  const gates = workflows().filter(([, workflow]) => readsThePlan(workflow));
+
+  assert.ok(gates.length > 0, "no workflow reads a change's plan");
+  for (const [path, workflow] of gates) {
+    assert.deepEqual(
+      triggerPaths(workflow).filter((one) => one.includes("tasks.md")),
+      [],
+      `${path} filters a plan's own file out of the events it runs on`,
+    );
+  }
 });
