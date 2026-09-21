@@ -569,6 +569,9 @@ push sends nothing again.
 - **Never per commit** — no message SHALL be sent per commit or per tick
 - **Per entry** — a stage re-entered after a revert SHALL send again, and one
   entry SHALL never send twice
+- **A file it cannot read** — a sent-keys file or team map the sender cannot
+  open SHALL stop the run and SHALL name the file; only an absent file SHALL
+  read as nothing sent and nobody known
 
 | Kind | Sent when | Who is told | Key |
 | --- | --- | --- | --- |
@@ -608,6 +611,14 @@ push sends nothing again.
 **GIVEN** an artifact behind, whose hand was told
 **WHEN** something before it changes again and it has not been read again
 **THEN** no second Behind message SHALL be sent
+
+#### Scenario: shared-planning-change-stages-SC-77 - A sent-keys file nothing can read
+**Serves:** shared-planning-change-stages-US-01 - the hand is told once, so a run that cannot read what it already sent tells them nothing rather than again
+
+**GIVEN** a sent-keys path the run cannot read
+**WHEN** the push workflow runs
+**THEN** the run SHALL stop and name the file
+**AND** no message SHALL be sent
 
 ### Requirement: Your turn reaches the hand of the stage
 
