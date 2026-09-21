@@ -31,6 +31,9 @@ signed in. KYC stays out of the menu.
 answers, opening the Store order history surface. Until Store answers, the
 menu omits it.
 
+🚧 **Profile** is handler-gated the same way, offered only when the
+application supplies an `onProfile` handler.
+
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
 style, then language through a nested drawer (the language label is not in the

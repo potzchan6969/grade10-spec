@@ -10,16 +10,17 @@ A build of the site carries a surface or it does not, and there is no third
 answer. What a build carries is fixed when it is made, so a lane cannot be
 told to show a surface the build it runs has no page for.
 
-**Each waiting product waits for its own launch** — the store, the vault
-and booking a visit are carried in development and staging, and nowhere the
-public can reach. The auction has already opened and is carried everywhere.
+🚧 **Each waiting product waits for its own launch** — the store, the vault,
+booking a visit and the account profile are carried in development and
+staging, and nowhere the public can reach. The auction has already opened and
+is carried everywhere.
 
-| Lane | Store | Vault | Booking | Labs |
-| --- | --- | --- | --- | --- |
-| Development | carried | carried | carried | carried |
-| Staging | carried | carried | carried | carried |
-| Preview | not carried | not carried | not carried | not carried |
-| Production | not carried | not carried | not carried | not carried |
+| Lane | Store | Vault | Booking | Profile | Labs |
+| --- | --- | --- | --- | --- | --- |
+| Development | carried | carried | carried | carried | carried |
+| Staging | carried | carried | carried | carried | carried |
+| Preview | not carried | not carried | not carried | not carried | not carried |
+| Production | not carried | not carried | not carried | not carried | not carried |
 
 - **Store** — the store, the collections under it, a card's own page, the two
   addresses the shop hands out for a product and a collection, the cart, the
@@ -28,11 +29,15 @@ public can reach. The auction has already opened and is carried everywhere.
   identity check
 - **Booking** — booking a visit, the private link from a booking's mail, and a
   collector's own visits
+- 🚧 **Profile** — the account page on its own. Its order history and order
+  detail keep the store's own gate rather than the profile's, so a mailed
+  order link still answers wherever the store is carried, whether or not the
+  profile itself is
 - **Labs** — the demonstration surfaces, and the refund and shipping drafts
   nobody has approved
 
-The auction, the front door, the terms, the privacy page, the membership and
-join pages, the profile and sign-in are carried in every lane.
+🚧 The auction, the front door, the terms, the privacy page, the membership and
+join pages, and sign-in are carried in every lane.
 
 ## An Address Nothing Carries
 
@@ -97,7 +102,9 @@ production.
 | The front door drops what is shut | Decided | The button and the card that lead to a withheld product are absent rather than shown without a link. A teaser promises a product with no date behind it and needs words nobody has written. | Product |
 | The store, the vault and booking wait; the auction does not | Decided | The auction has already opened and answers on every lane. The store, the vault and booking each wait for their own launch, and a collector meets the same unhonoured promise whichever of the three they reach. | Product |
 | Each waiting product opens on its own date | Decided | Three lines, opened one at a time by their own reviewed change, so a ready one is never held shut behind a slower one. | Product |
-| The loyalty pages and the profile stay | Decided | Membership, join, the profile and sign-in are carried everywhere. A member already holds a card, and the account pages are not one of the three waiting products. | Product |
+| The loyalty pages stay | Decided | Membership, join and sign-in are carried everywhere. A member already holds a card. | Product |
+| 🚧 The profile now waits too | Decided | `add-account-profile` leaves the account page mid-build — no avatar, a placeholder display name — so it waits like the store, the vault and booking did before their own launch, behind its own gate. It reopens the same way: one reviewed line, once that change ships. | Product |
+| 🚧 Order history keeps its own gate | Decided | `/profile/orders` and `/profile/orders/:orderId` stay behind the store's gate alone, unchanged by the profile's. A build that carries Store but not Profile still answers a mailed order link; whether the account page itself is finished is a different question from whether the shop is open. | Product |
 | The labs gain staging | Decided | The labs — the demonstration surfaces and the unapproved refund and shipping drafts — widen from development alone to development and staging. Preview and production still carry none of them. | Product |
 | The deploy environment turns it off | Decided | Production and preview carry no store; staging and development do. Keying on the site stage was dropped: the stage reads `preview` for production today by one registry row, so a site moved to a preview stage for an unrelated reason would lose its store. | Engineering |
 | Preview follows production | Decided | The preview host is the production build at another address, so it carries what production carries. A preview that sold would be a public shop under a quieter name. | Engineering |
