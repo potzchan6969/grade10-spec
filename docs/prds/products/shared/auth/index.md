@@ -35,6 +35,11 @@ alike. An action whose record cannot be written does not run.
 An auditor holds exactly one grant and reads that trail without seeing names or
 emails, which sit behind the directory grant everywhere else.
 
+## Tests
+
+QA walks sign-in on staging through a locked door —
+[Sign-In Tests](/p/shared/auth/test-sign-in). Collectors never see it.
+
 :::callout{kind="note"}
 `session` and `sessions` are two different capabilities, not a typo. The
 singular one is who the caller is; the plural one is an operator listing and
