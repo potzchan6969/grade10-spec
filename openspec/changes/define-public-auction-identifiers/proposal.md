@@ -20,7 +20,9 @@ without manual identifier clarification.
 
 - Propose a stable, opaque listing code that operators and winner records can
   quote without exposing the internal listing key or global listing volume; it
-  does not replace the public lot slug or appear on the public listing page.
+  is allocated when the listing is created, is stored in a unique-constrained
+  column, and is never reused unless the listing record is deleted entirely.
+  It does not replace the public lot slug or appear on the public listing page.
 - Propose a stable public winner-order identifier for order lists, order detail,
   support contact and operator reconciliation.
 - Propose an invoice identifier that remains unique across reissues while
@@ -46,12 +48,19 @@ without manual identifier clarification.
 | --- | --- | --- |
 | Public invoice ID | `INV-202609-L9482-01` | Names the invoice month, listing code and revision |
 | Payment reference code | `L948201` | Hyphen-free value for FPS, local wire and SWIFT; also written to Stripe transaction metadata |
-| First partial receipt | `REC-202609-L9482-01-P1` | Identifies the first payment receipt against the invoice |
-| Final settlement receipt | `REC-202609-L9482-01-P2` | Identifies the payment that settles the invoice |
+| First partial receipt | `REC-202609-ORD-L9482-P1-R1` | Identifies the first payment receipt against the stable order |
+| Final settlement receipt | `REC-202609-ORD-L9482-P2-R1` | Identifies the payment that settles the stable order |
+| Reversal or refund revision | `REC-202609-ORD-L9482-P1-R2` | Revises the receipt for payment sequence `P1` without changing the order or invoice reference |
 
-The `L9482` listing-code example is illustrative while PM and Finance confirm
-the code's length and character alphabet. The Stripe metadata value is the
-payment reference code, under the key `payment_reference_code`.
+The listing code uses the Crockford Base32 payload charset
+`0123456789ABCDEFGHJKMNPQRSTVWXYZ` with a fixed `L` prefix. The listing code
+as a whole contains both letters and digits; `L9482` is the format example
+supplied for this proposal. The exact payload length remains a format detail
+for PM and Finance to confirm. The Grade10 payment reference is written to
+Stripe metadata under `payment_reference_code`. Stripe supplies a separate
+provider reference, such as the returned PaymentIntent ID; Grade10 stores that
+reference and uses it in internal document filenames created after the payment
+is obtained.
 
 ## Non-Goals
 
@@ -67,9 +76,9 @@ None.
 
 - `grade10-site/auction/listing-page`: define the stable listing code associated
   with a published auction listing without changing its public slug.
-- `grade10-site/auction/winner-order`: define public winner-order, invoice and
-  bank-reference identifiers and their relationship to reissues and payment
-  records.
+- `grade10-site/auction/winner-order`: define public winner-order, invoice,
+  payment-reference and receipt identifiers and their relationship to reissues
+  and payment records.
 
 ## Impact
 
@@ -80,9 +89,11 @@ None.
 - Operator reconciliation, invoice and receipt PDFs, payment instructions,
   support messages and bank-transfer proof matching will use the approved
   public values.
-- Stripe transaction metadata will carry the approved payment reference code
-  for reconciliation; the provider's transaction ID remains an operator-side
-  reference.
+- Stripe transaction metadata will carry the approved Grade10 payment
+  reference code for reconciliation.
+- The Stripe-supplied provider reference is stored after payment creation or
+  confirmation and passed into internal invoice, receipt and refund document
+  filenames; it is not a collector-facing identifier.
 - Existing internal IDs, audit numbering and provider references remain
   available to operators and integrations where authorized, but are outside
   the collector-facing format.
