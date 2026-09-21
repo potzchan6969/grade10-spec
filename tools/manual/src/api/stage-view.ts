@@ -1,7 +1,6 @@
 import { DRAFTED, moveOf, ROLE_LABEL, STAGES } from "./stages.ts";
 import type {
   BehindArtifact,
-  ChangeEntry,
   OpenQuestion,
   Role,
   SnapshotTeam,
@@ -83,13 +82,6 @@ export function handShown(question: OpenQuestion): HandShown {
 export function roleTitle(role: Role): string {
   const label = ROLE_LABEL[role];
   return label.charAt(0).toUpperCase() + label.slice(1);
-}
-
-/** Which of the eight a change is in, as a surface reads it. Every entry
- * carries its stage, computed where the schema is, so no surface derives a
- * second answer from a schema it does not have. */
-export function stageShown(change: ChangeEntry): Stage {
-  return change.stage;
 }
 
 /** Which step of the eight this stage is — the number the one-line stepper

@@ -239,7 +239,7 @@ reads it next.
 On the hand's word, one command:
 
 ```bash
-pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"] [--with-recommendations]
+pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"] [--fix-pass] [--with-recommendations]
 ```
 
 Once per drafted artifact of the speaker's hand, in the chain's order,
@@ -255,12 +255,13 @@ drafts sit above the landing.
 
 `--perspectives` and `--stood` are owed on every landing: the perspectives
 named are ones the artifact's list issues, every `always` reader among them,
-and a round that found nothing stood says so. What the other flags take, and
-every refusal the command runs through before `main` moves, are its header's.
+and a round that found nothing stood says so. The other flags and refusals
+are the command's header's.
 
 - **A fix pass is a round** — the fixes off a demonstration or a whole-change
   reading land with their own row, `--fix-pass` dropping the floor to the
-  simpler-thing reader alone, and `verifier` only where one ran
+  simpler-thing reader alone, and `verifier` only where one ran; `--whole`
+  lands the whole-change reading, its row reading `whole change`
 - **From a wake** — with `.round/relay.json` present the command takes the
   speaker's handle from the wake's sender and checks it against the
   artifact's `hand:`, pushes the branch, and asks the relay to move `main`;
@@ -271,8 +272,8 @@ every refusal the command runs through before `main` moves, are its header's.
   after the last reply; a wake that ends without it is said to be unfinished
   in the thread once its budget runs out
 
-- **A lost race** — losing the lease twice, reply in the thread saying you
-  lost and stopping. Make no further push
+- **A lost race** — losing the lease twice, reply in the thread that you lost,
+  and push nothing more
 - **The reply** — one reply naming every artifact the word landed, the handle
   whose word landed it, and the stage the change reached
 - **The thread's address** — `pnpm run round:thread <change> <channel>/<ts>`

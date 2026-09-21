@@ -16,31 +16,9 @@ import { appendFileSync } from "node:fs";
 
 import { readTextIfThere } from "./read-text.mjs";
 import { channelOf, memberOf } from "./team.mjs";
-import { linkedOf, threadPathOf } from "./wording.mjs";
 
 /** The one call that posts a message. */
 export const POST_MESSAGE = "https://slack.com/api/chat.postMessage";
-
-/** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
- * message links to where the record names no thread. */
-export function changePageOf(manualUrl, id) {
-  return `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
-}
-
-/**
- * The change, linked: its thread's permalink where the record names one, the
- * change page otherwise — title escaped, so a change named with `<` or `&`
- * reads as text and not as more `mrkdwn`.
- *
- * One function, because both scripts build this link the same way: the push
- * workflow's Your turn and Behind messages carry the thread where the record
- * names one, and the digest — which never reads a thread — always gets the
- * change page.
- */
-export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
-  const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
-  return linkedOf(url, title);
-}
 
 /**
  * Who a message is addressed to: the hand's Slack member, or the role's
@@ -67,21 +45,6 @@ export function addressOf(map, { role, hand }) {
     return { skipped: `\`${hand}\` has no Slack member in the team map` };
   }
   return { to: "member", channel: member.slack };
-}
-
-/** `<channel>/<ts>` as the record writes a thread, split for the API. */
-export function threadPartsOf(thread) {
-  const [channel, ts] = String(thread ?? "").split("/");
-  return channel && ts ? { channel, ts } : undefined;
-}
-
-/** A thread's permalink: this workspace's host in front of the path
- * `wording.mjs` writes, which the manual puts Slack's own host in front of. */
-export function permalinkOf(workspaceUrl, thread) {
-  const path = threadPathOf(thread);
-  if (!path || !workspaceUrl) return undefined;
-  const host = workspaceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
-  return `https://${host}${path}`;
 }
 
 /**

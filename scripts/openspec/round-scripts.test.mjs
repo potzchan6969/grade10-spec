@@ -6,14 +6,25 @@ import {
   mkdirSync,
   mkdtempSync,
   readFileSync,
+  rmSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
-import { join } from "node:path";
+import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { ROUNDS_HEADER } from "./lib/rounds.mjs";
-import { CHANGE, DIR, record, SCHEMA, sandbox } from "./test/demo-store.mjs";
+import {
+  CHANGE,
+  DECISIONS,
+  DIR,
+  record,
+  SCHEMA,
+  SPEC,
+  SPEC_FILE,
+  sandbox,
+  TICKED,
+} from "./test/demo-store.mjs";
 
 /**
  * The round's record and its landing step, over a throwaway store with a bare
@@ -293,8 +304,8 @@ test("shared-planning-agent-rounds-SC-79 - plan:land refuses a row naming two re
   ]);
 
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /design, simpler/);
-  assert.match(result.stderr, /verifier/);
+  assert.match(result.stderr, /design, simpler read ui-design/);
+  assert.match(result.stderr, /names no `verifier`/);
 });
 
 /** The fixture's schema with two readers that always run on a task group, the
@@ -355,14 +366,138 @@ test("shared-planning-agent-rounds-SC-79 - plan:land --fix-pass lands a group's 
 
   // Without the flag, the floor is every `always` reader of the apply block.
   assert.equal(floor.status, 1);
-  assert.match(floor.stderr, /qa/);
-  assert.match(floor.stderr, /always/);
+  assert.match(floor.stderr, /1's `qa` reads every round/);
+  assert.match(floor.stderr, /never an `always` one/);
   // The flag drops the floor and nothing else: two readers still owe their
   // verifier.
   assert.equal(wider.status, 1);
-  assert.match(wider.stderr, /verifier/);
+  assert.match(wider.stderr, /names no `verifier`/);
   assert.equal(passed.status, 0, passed.stderr);
   assert.match(roundsOf(root), /\| 1 \| 1 \| simpler \| the simpler shape \|/);
+});
+
+test("shared-planning-agent-rounds-SC-79 - plan:land --fix-pass refuses a row that leaves the floor reader out", () => {
+  // The flag drops the floor to the reader every list shares and to nothing
+  // less: a fix-pass row naming the apply block's other reader alone is
+  // refused for the floor it left out, and `main` gains no row.
+  const { root, git } = sandbox({
+    files: { "openspec/schemas/demo-planning/schema.yaml": WIDER_APPLY },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--fix-pass",
+    "--perspectives",
+    "qa",
+    "--stood",
+    "the simpler shape",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /1's `simpler` reads every round/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass where the schema's perspectives lists share no `always` reader", () => {
+  // The apply block's `simpler` is taken out, so the artifacts' lists and
+  // the apply block share no `always` reader: the flag has no floor to drop
+  // to and is refused rather than dropping it to nothing.
+  const { root, git } = sandbox({
+    files: {
+      "openspec/schemas/demo-planning/schema.yaml": WIDER_APPLY.replace(
+        / {4}- name: simpler\n {6}when: \[always\]\n {6}agent: .claude\/agents\/simpler.md\n/,
+        "",
+      ),
+    },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--root",
+    root,
+    "--dry-run",
+    "--fix-pass",
+    "--perspectives",
+    "qa",
+    "--stood",
+    "the simpler shape",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /share no `always` reader/);
+});
+
+test("shared-planning-agent-rounds-SC-60 - plan:land --whole lands the reading of the whole change as its own row, on the fix pass's floor", () => {
+  // The one reader over the whole change, after the last group: a landing of
+  // the branch tip like a group's, its row reading `whole change` with the
+  // floor a fix pass has, so the apply block's other readers are not owed.
+  const { root, git } = sandbox({
+    files: { "openspec/schemas/demo-planning/schema.yaml": WIDER_APPLY },
+  });
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "--whole",
+    "--root",
+    root,
+    "--perspectives",
+    "simpler",
+    "--stood",
+    "the whole change read as one shape",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /@erin is the dev and the hand of whole change/);
+  assert.match(
+    roundsOf(root),
+    /\| 1 \| whole change \| simpler \| the whole change read as one shape \|/,
+  );
+  assert.doesNotMatch(recordOf(root), /landed_by:/);
+});
+
+test("plan:land --whole names no artifact and no group beside it", () => {
+  const { root, git } = sandbox();
+  git("config", "user.email", "erin@test");
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "1",
+    "--whole",
+    "--root",
+    root,
+    ...GROUP_ROW,
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /--whole reads the whole change, and names no artifact or group/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass with --reviewed, and every other flag only a row can use", () => {
+  const { root } = sandbox();
+  const result = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    root,
+    "--reviewed",
+    "--fix-pass",
+    "--whole",
+    "--stood",
+    "nothing stood",
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /--stood, --fix-pass, --whole name a round's row, and --reviewed lands none/,
+  );
+  assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
 
 test("plan:land refuses a working tree with uncommitted edits", () => {
@@ -705,10 +840,7 @@ test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row 
   // The tick lands on its own, with no row for it yet — the deadlock the
   // `round` rule exists to name: the gate the row's own landing must pass is
   // the same gate that refuses a tick with no row.
-  writeFileSync(
-    join(root, DIR, "tasks.md"),
-    "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n",
-  );
+  writeFileSync(join(root, DIR, "tasks.md"), TICKED);
   git("add", "-A");
   git("commit", "--quiet", "-m", "tick 1.1 with no round yet");
   git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
@@ -728,67 +860,130 @@ test("shared-planning-agent-rounds-SC-57 - plan:land lands a ticked group's row 
   assert.match(roundsOf(root), /\| 2 \| 1 \| simpler \| nothing stood \|/);
 });
 
-test("shared-planning-agent-rounds-SC-73 - plan:land refuses a group's landing carrying an artifact draft no hand has landed", () => {
-  // A group carries the branch whole: the tick its build wrote, and beside it
-  // a design redrawn on the branch that nobody landed.
-  const built = (files) => {
-    const made = sandbox({ files });
-    writeFileSync(
-      join(made.root, DIR, "tasks.md"),
-      "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n",
-    );
-    writeFileSync(
-      join(made.root, DIR, "ui-design.md"),
-      "## Screens\n\nTwo screens, and a state each.\n",
-    );
-    made.git("config", "user.email", "erin@test");
-    made.git("add", "-A");
-    made.git("commit", "--quiet", "-m", "tick 1.1, and redraw the design");
-    made.git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
-    return made;
-  };
-  const row = ["--perspectives", "simpler", "--stood", "nothing stood"];
+/** The store a group is built in: the plan landed on its hand's word, with
+ * its row, and nothing else of the change landed or drafted. */
+const LANDED_PLAN = {
+  [`${DIR}/.openspec.yaml`]: record("landed_by:\n  tasks: erin\n"),
+  [`${DIR}/rounds.md`]: roundsFor("tasks"),
+};
 
+/**
+ * A branch a group's build leaves: the tick its build wrote, and beside it
+ * whatever else `drafts` writes on the branch and nowhere on `main` — or, for
+ * a path in `deleted`, takes off it. What the record and `rounds.md` say
+ * about the change is `files`'.
+ */
+const built = ({ files = LANDED_PLAN, drafts = {}, deleted = [] } = {}) => {
+  const made = sandbox({ files });
+  writeFileSync(join(made.root, DIR, "tasks.md"), TICKED);
+  for (const [path, text] of Object.entries(drafts)) {
+    mkdirSync(join(made.root, dirname(path)), { recursive: true });
+    writeFileSync(join(made.root, path), text);
+  }
+  for (const path of deleted) rmSync(join(made.root, path));
+  made.git("config", "user.email", "erin@test");
+  made.git("add", "-A");
+  made.git(
+    "commit",
+    "--quiet",
+    "-m",
+    "tick 1.1, and whatever else the build left",
+  );
+  made.git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
+  return made;
+};
+const GROUP_ROW = ["--perspectives", "simpler", "--stood", "nothing stood"];
+const REDRAWN = "## Screens\n\nTwo screens, and a state each.\n";
+/** The refusal's own words: a group carries the branch whole, and a text on
+ * it that `main` does not hold reached no hand's word. */
+const UNLANDED = /a draft no hand has landed/;
+/** A group landing, refused or taken, over a store `built` made. */
+const landBuilt = ({ root }) =>
+  run("plan-land.mjs", [CHANGE, "1", "--root", root, ...GROUP_ROW]);
+
+test("shared-planning-agent-rounds-SC-73 - plan:land refuses a group's landing carrying artifact drafts main does not hold, naming each and its hand", () => {
+  // A design redrawn on the branch that nobody landed, and a capability's
+  // delta drafted beside it: `main` holds the old text of one and none of the
+  // other, and the record names no landing of either. `specs/**/spec.md` is
+  // one artifact with one file per capability, so the refusal reads the glob
+  // the way the landing's own cut does.
   const unlanded = built({
-    [`${DIR}/.openspec.yaml`]: record("landed_by:\n  tasks: erin\n"),
-    [`${DIR}/rounds.md`]: roundsFor("tasks"),
+    drafts: { [`${DIR}/ui-design.md`]: REDRAWN, [SPEC_FILE]: SPEC },
   });
-  const refused = run("plan-land.mjs", [
-    CHANGE,
-    "1",
-    "--root",
-    unlanded.root,
-    ...row,
-  ]);
+  const refused = landBuilt(unlanded);
 
   assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /ui-design\.md/);
-  // The tick is the group's own work: the plan landed, so its file is no
-  // draft of nobody's.
+  assert.match(refused.stderr, UNLANDED);
+  assert.match(refused.stderr, /ui-design\.md — waits on @dana/);
+  assert.match(refused.stderr, /probe\/spec\.md — waits on @dana/);
+  // The tick is the group's own work: the plan is what the group lands.
   assert.doesNotMatch(refused.stderr, /tasks\.md/);
   assert.doesNotMatch(roundsOf(unlanded.root), /^\| 2 \|/m);
+});
 
-  // The same branch, with the design's own landing in the record and its row
-  // beside it: nothing the group carries is unlanded.
-  const landed = built({
-    [`${DIR}/.openspec.yaml`]: record(
-      "landed_by:\n  ui-design: dana\n  tasks: erin\n",
-    ),
-    [`${DIR}/rounds.md`]: roundsFor("ui-design", "tasks"),
+test("shared-planning-agent-rounds-SC-73 - the draft refusal reads what main holds, not the record's landed_by: line", () => {
+  // The design's landing is in the record and its row beside it, and the
+  // branch redrew the file after that landing: `main` holds the landed text,
+  // the branch holds a draft nobody landed, and the key alone says nothing.
+  const redrawn = built({
+    files: {
+      [`${DIR}/.openspec.yaml`]: record(
+        "landed_by:\n  ui-design: dana\n  tasks: erin\n",
+      ),
+      [`${DIR}/rounds.md`]: roundsFor("ui-design", "tasks"),
+    },
+    drafts: { [`${DIR}/ui-design.md`]: REDRAWN },
   });
-  const taken = run("plan-land.mjs", [
-    CHANGE,
-    "1",
-    "--root",
-    landed.root,
-    ...row,
-  ]);
+  const refused = landBuilt(redrawn);
+
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, UNLANDED);
+  assert.match(refused.stderr, /ui-design\.md/);
+
+  // The same branch with the design as `main` holds it: nothing the group
+  // carries is a draft. The record names no landing of the design, and needs
+  // none — the text is `main`'s own.
+  const landed = built();
+  const taken = landBuilt(landed);
+
+  assert.equal(taken.status, 0, taken.stderr);
+  assert.doesNotMatch(taken.stderr, UNLANDED);
+  assert.match(
+    roundsOf(landed.root),
+    /\| 2 \| 1 \| simpler \| nothing stood \|/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-73 - a hand's answer in decisions.md travels with the group's landing", () => {
+  // The plan and the decisions apart: a row a hand answered on the branch is
+  // the group's own to carry, not a draft the landing refuses.
+  const answered = built({
+    drafts: {
+      [`${DIR}/decisions.md`]: `${DECISIONS}| Q2 | Which screen first? | The one screen | Two |\n`,
+    },
+  });
+  const taken = landBuilt(answered);
 
   assert.equal(taken.status, 0, taken.stderr);
   assert.match(
-    roundsOf(landed.root),
-    /\| 3 \| 1 \| simpler \| nothing stood \|/,
+    roundsOf(answered.root),
+    /\| 2 \| 1 \| simpler \| nothing stood \|/,
   );
+});
+
+test("shared-planning-agent-rounds-SC-73 - a schema artifact the branch took off main is refused as a removal, not as a draft", () => {
+  // A deletion would reach `main` on the group's landing with no hand's word
+  // too, and the refusal says what it is: the branch holds no draft to drop.
+  const removed = built({ deleted: [`${DIR}/ui-design.md`] });
+  const refused = landBuilt(removed);
+
+  assert.equal(refused.status, 1);
+  assert.match(
+    refused.stderr,
+    /takes a schema artifact off main with no hand's word/,
+  );
+  assert.match(refused.stderr, /ui-design\.md — waits on @dana/);
+  assert.doesNotMatch(refused.stderr, UNLANDED);
 });
 
 test("shared-planning-agent-rounds-SC-51 - plan:land writes a group's bare digits, and the rule reads the row as it stands", () => {
@@ -843,6 +1038,9 @@ test("plan:land refuses a group number tasks.md does not hold, naming the ones i
  * fixture's own, so the `cited` rule the gate runs resolves them — the
  * fixture itself carries no delta. */
 const CITING = {
+  // The file the rows below name: a `--tests` path the store does not hold is
+  // refused, so the fixture holds the one its cases write.
+  "scripts/openspec/round-scripts.test.mjs": "// the test the row names\n",
   "openspec/changes/archive/2026-01-01-demo/specs/shared/planning/demo/spec.md":
     [
       "## ADDED Requirements",
@@ -906,6 +1104,46 @@ test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --t
   assert.equal(result.status, 1);
   assert.match(result.stderr, /shared-planning-agent-rounds-SC-58/);
   assert.doesNotMatch(result.stderr, /SC-57/);
+});
+
+test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the store does not hold, naming it", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  // The absent file is the second of its id, after a comma: every path the
+  // cell names is held, not the first of each.
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs, scripts/openspec/nowhere.test.mjs",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /the store holds no file at/);
+  assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
+  assert.doesNotMatch(result.stderr, /round-scripts\.test\.mjs/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-58 - a group of the application repository names its tests in that clone, held to nothing here", () => {
+  // The tag says which tree proves the group; a path in the other clone is
+  // written as given and never looked for in this store.
+  const { root, git } = sandbox({
+    files: {
+      ...CITING,
+      [`${DIR}/tasks.md`]:
+        "## 1. Build it (grade10)\n\n- [ ] 1.1 Ship it (`shared-planning-agent-rounds-SC-57`)\n",
+    },
+  });
+  git("config", "user.email", "erin@test");
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
 });
 
 test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose --tests names a test per cited scenario", () => {

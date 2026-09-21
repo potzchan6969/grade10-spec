@@ -1,7 +1,7 @@
 import {
   behindText,
-  linkedOf,
-  threadPathOf,
+  linkOf,
+  permalinkOf,
   toldBodyOf,
 } from "../../../../scripts/openspec/lib/wording.mjs";
 import { behindOf, handOf, handOfArtifact } from "./stages.ts";
@@ -44,17 +44,25 @@ export type ToldMessage = {
  * Exported for the Your turn card's thread link.
  */
 export function slackThreadUrl(thread: string): string {
-  return `https://slack.com${threadPathOf(thread) ?? ""}`;
+  return permalinkOf(SLACK, thread) ?? SLACK;
 }
 
-/** The change as a message links it: its thread where the record names one,
- * its own page where it does not — the manual's route, since a reader of the
- * manual is already on it. */
+/** Slack's own host: the manual has no workspace of its own, and Slack's
+ * redirect lands a signed-in reader in theirs. */
+const SLACK = "https://slack.com";
+
+/** The change as a message links it, through the one builder the messages
+ * use: its thread where the record names one, its own page where it does
+ * not — with no manual url, the page is the manual's own route, since a
+ * reader of the manual is already on it. */
 function linkedTitle(change: ChangeEntry): string {
-  const url = change.thread
-    ? slackThreadUrl(change.thread)
-    : `/in-flight/${encodeURIComponent(change.id)}`;
-  return linkedOf(url, change.title);
+  return linkOf({
+    manualUrl: "",
+    workspaceUrl: SLACK,
+    thread: change.thread,
+    id: change.id,
+    title: change.title,
+  });
 }
 
 export function toldNowOf(

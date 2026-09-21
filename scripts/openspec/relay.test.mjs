@@ -279,6 +279,12 @@ test("a task group's button names the group, and a name the chain does not issue
     label: "Confirm group 10",
     word: "land",
   });
+  // The reading of the whole change lands on the same word a group does, and
+  // its summary carries a button like any other landing's.
+  assert.deepEqual(confirmOf("whole change"), {
+    label: "Confirm the whole change",
+    word: "land",
+  });
   assert.equal(confirmOf("rounds"), null);
   assert.equal(confirmOf(""), null);
   assert.equal(confirmOf(undefined), null);

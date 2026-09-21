@@ -10,6 +10,7 @@ else's.
 
 ```bash
 pnpm run plan:land <change> <artifact|group> --perspectives <a,b> --stood "<what stood>" [--asked Q1,Q2] [--tests "<scenario: files>"] [--fix-pass] [--with-recommendations]
+pnpm run plan:land <change> --whole --perspectives <a,b> --stood "<what stood>"
 ```
 
 Then follow `workflow-round`: its Step 6 is this step's one home - the chain's order,

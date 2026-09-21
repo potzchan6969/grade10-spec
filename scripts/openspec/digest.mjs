@@ -22,15 +22,20 @@ import { fileURLToPath } from "node:url";
 import { parseArgs } from "node:util";
 
 import { IDLE_FROM, overlaysOf } from "../../tools/manual/src/api/overlays.ts";
-import { handOf, STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import {
+  handOf,
+  releasedOf,
+  STAGE_LABEL,
+} from "../../tools/manual/src/api/stages.ts";
 import {
   dayIn,
   daysBetween,
   TIME_ZONE,
 } from "../../tools/manual/src/api/time.ts";
-import { addressOf, deliver, linkOf, readSentKeys } from "./lib/notify.mjs";
+import { addressOf, deliver, readSentKeys } from "./lib/notify.mjs";
 import { readChangesAt } from "./lib/store-read.mjs";
 import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { linkOf } from "./lib/wording.mjs";
 
 /** A behind artifact is listed from the seventh day it has been behind, and a
  * dependency freed a change within the last seven days is still news — one
@@ -55,29 +60,6 @@ export function weekOf(now) {
   const week =
     Math.floor((thursday.getTime() - firstDay) / (7 * 86_400_000)) + 1;
   return `${thursday.getUTCFullYear()}-W${String(week).padStart(2, "0")}`;
-}
-
-/**
- * The changes a release has carried: the key `released_in:` on a change in
- * flight, and every change in the archive.
- *
- * `depends_on:` naming one of these blocks nothing, which is what the Blocked
- * overlay reads and what makes a change freed.
- */
-function releasedOf({ changes, archived }) {
-  const released = new Map();
-  for (const change of changes) {
-    if (change.releasedIn === undefined) continue;
-    // The commit that wrote the key is the day it was released, as near as
-    // the store can date it: nothing else here says when a cut happened.
-    released.set(change.id, { id: change.id, on: change.lastMoved });
-  }
-  // An archived change is dated by its directory's own prefix, which a rebase
-  // cannot move.
-  for (const change of archived) {
-    released.set(change.id, { id: change.id, on: change.shippedOn });
-  }
-  return released;
 }
 
 /** The roles one handle holds on one change, from the change's own `hands:` —
@@ -257,10 +239,7 @@ async function main() {
   const now = values.now ? Date.parse(values.now) : Date.now();
   // The archive is walked only when a change in flight depends on something:
   // most digests read nobody's `depends_on:`, so the walk stays a call.
-  const releases = releasedOf({
-    changes: read.changes,
-    archived: read.archivedOf(),
-  });
+  const releases = releasedOf(read.changes, read.archivedOf());
   const told = digestOf(read, readTeamMap(root, values.team), {
     now,
     released: new Set(releases.keys()),

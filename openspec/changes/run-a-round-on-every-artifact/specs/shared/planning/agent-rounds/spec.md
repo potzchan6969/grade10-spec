@@ -1030,6 +1030,9 @@ in the landing's own commit.
 - **WHEN** the fix pass lands
 - **THEN** `rounds.md` gains its row, naming the simpler-thing reader among the perspectives it ran
 - **AND** the Perspectives column names the verifier where one ran, and names none where that reader was the only one
+- **AND** a row naming more than one reader and no verifier is refused, naming the readers
+- **AND** the landing's fix-pass flag drops the row's floor to the reader every perspectives list of the schema shares, refusing a row that leaves that reader out and a schema whose lists share none
+- **AND** the fix-pass flag beside a read that changed nothing is refused: that landing writes no row
 
 ### Requirement: The change page mirrors the thread and the messages
 
@@ -1150,7 +1153,15 @@ leave those walks as the change's end-to-end suite.
 - **Marked by neither** — a case no test and no walk decides stays manual,
   with its reason in the suite
 - **One pass over the whole** — after the last group, one reader argues the
-  simpler shape for the whole change before it goes to staging
+  simpler shape for the whole change before it goes to staging; its landing
+  carries what a group's carries and writes a row whose Artifact cell reads
+  `whole change`, after the last group's row
+- **Held at the archive** — a change on the round is archived only once its
+  last task group's row names, in its Tests cell, the walks it left, a
+  `*.walk.ts` the suite runs or a walk by hand, and a row after it reads
+  `whole change`; the journeys are the capability's, the delta's or the
+  durable ones; a change nobody walks owes no walk row, and a change on the
+  old flow owes neither
 
 #### Scenario: shared-planning-agent-rounds-SC-59 - The walk leaves the suite and marks its cases
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases the walk now covers
@@ -1166,6 +1177,17 @@ leave those walks as the change's end-to-end suite.
 - **WHEN** the last task group has landed
 - **THEN** one reader argues the simpler shape for the whole change
 - **AND** the change does not go to staging before that reading
+
+#### Scenario: shared-planning-agent-rounds-SC-85 - The archive holds the walk and the whole-change reading
+**Serves:** shared-planning-agent-rounds-US-08 - the QA teammate archives nothing whose journeys were never walked
+
+- **GIVEN** a change on the round whose capabilities carry journeys
+- **WHEN** `pnpm run archive:preflight` runs
+- **THEN** it refuses while the last task group's row names no walk in its Tests cell — a `*.walk.ts` the suite runs, or a walk by hand — and names the group; a walk on an earlier group's row answers nothing for the last
+- **AND** it refuses while no row's Artifact cell reads `whole change`, the row `plan:land --whole` writes for the one reader over the whole change, and names the command
+- **AND** it refuses a `whole change` row landed before the last group's row, naming both rounds
+- **AND** it reads the rows and the groups on `main`, where a landing writes them, and the journeys of each capability the change specifies — the delta's file where it carries one, the durable one where it leans on it
+- **AND** a change whose journeys say nobody walks it owes no walk row, and a change on the old flow is asked for neither
 
 #### Scenario: shared-planning-agent-rounds-SC-78 - A case a store test decides flips with the test
 **Serves:** shared-planning-agent-rounds-US-08 - the QA teammate reads which cases a test already decides and which are still theirs to walk
@@ -1392,7 +1414,9 @@ inside the writable set.
   change's own directory and the pages the proposal links before it pushes;
   the relay holds it to the change's directory, `docs/prds/` and
   `docs/references/`, and holds a task group's code to no path at all, since
-  the record names no code set for a group
+  the record names no code set for a group; the group's draft check — the
+  branch holding text of a schema artifact `main` does not — is the run's
+  own too, as the path check is
 - **The artifact that landed, alone** — the landing commit is cut from `main`
   with that artifact's files, the change's record, the round's row and the
   pages the change marked, and carries nothing drafted after it, so `main`
@@ -1408,7 +1432,7 @@ inside the writable set.
 - **THEN** `main` moves only as a fast-forward onto that commit
 - **AND** it moves only where the member who said land is the hand of the artifact's stage in the change's record at that commit, and, for an artifact, the diff from `main` touches nothing outside the change's own directory, `docs/prds/` and `docs/references/`, the run's guard having held it to the pages the proposal links before the push
 - **AND** the landing commit carries that artifact's files, the change's record, the round's row and the pages the change marked, and nothing drafted after it
-- **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds an artifact of the schema with no `landed_by:` line, naming the files it would have carried
+- **AND** a task group's landing, which carries the branch as it stands, is refused while the branch holds text of a schema artifact that `main` does not — the plan and the decisions apart — naming each file it would have carried and the hand it waits on, and a file the branch took off `main` is refused as a removal
 - **AND** a word from anybody else moves nothing, and the run's reply names the check the relay refused
 - **AND** a `main` that moved under the run is read again once and asked again
 

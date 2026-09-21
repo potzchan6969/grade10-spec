@@ -18,7 +18,7 @@
  */
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join, relative, resolve, sep } from "node:path";
-import { TRIGGERS } from "../../../tools/manual/src/api/types.ts";
+import { TRIGGERS, WHOLE_CHANGE } from "../../../tools/manual/src/api/types.ts";
 import {
   applyPerspectives,
   schemaArtifacts,
@@ -235,6 +235,37 @@ export function verifierNeeded(readers) {
   return readers.length > 1;
 }
 
+/**
+ * The floor `plan:land --fix-pass` drops a row to: the `always` readers every
+ * perspectives list of the schema shares — each artifact that carries one,
+ * and the `apply:` block. Computed from the schema rather than declared in
+ * the landing, so the day a second reader joins every list the fix pass owes
+ * it too, and no constant has to be kept in step. A schema whose lists share
+ * no such reader has no floor a fix pass could stand on, and is refused rather
+ * than dropped to nothing.
+ */
+export function fixPassFloor(schema) {
+  const names = [
+    ...schema.artifacts.map((one) => one.perspectives),
+    schema.apply,
+  ]
+    .filter((list) => Array.isArray(list) && list.length > 0)
+    .map((list) =>
+      list
+        .filter(({ when }) => when.includes("always"))
+        .map(({ name }) => name),
+    );
+  const shared = (names[0] ?? []).filter((name) =>
+    names.every((list) => list.includes(name)),
+  );
+  if (shared.length === 0) {
+    throw new Error(
+      "the schema's perspectives share no `always` reader — a fix pass has no floor to drop to",
+    );
+  }
+  return shared;
+}
+
 /** The perspectives recorded for one artifact, or for a task group. */
 export function perspectivesOf(schema, target) {
   const artifact = artifactOf(schema, target);
@@ -246,10 +277,12 @@ export function perspectivesOf(schema, target) {
 }
 
 /** A task group is named by its number - `3`, `3.`, `group 3` - or by the
- * block its readers sit on. */
+ * block its readers sit on; the reading of the whole change, which lands as a
+ * group does, is read as one too. */
 export const isGroup = (target) =>
   /^(?:apply|group)$/i.test(String(target ?? "").trim()) ||
-  /^(?:group\s*)?\d+(?:\.\d+)*\.?$/.test(String(target ?? "").trim());
+  /^(?:group\s*)?\d+(?:\.\d+)*\.?$/.test(String(target ?? "").trim()) ||
+  String(target ?? "").trim() === WHOLE_CHANGE;
 
 const artifactOf = (schema, target) => {
   const named = String(target ?? "").trim();

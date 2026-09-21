@@ -3,13 +3,16 @@
  * The round's landing step, as one transaction:
  *
  *   pnpm run plan:land <change> <artifact|group> --perspectives a,b --stood "…"
+ *   pnpm run plan:land <change> --whole --perspectives a,b --stood "…"
  *   pnpm run plan:land <change> <artifact> --reviewed
  *   pnpm run plan:land <change> <artifact|group> [--as @handle] [--with-recommendations] [--dry-run]
  *
- * A landing is the hand's word turned into one commit on `main`, cut from
- * `main` itself and carrying that one artifact and nothing else — the drafts
- * above it on the branch stay on the branch. The steps below run in order and
- * stop at the first refusal. Nothing half-lands: the record line and the
+ * A landing is the hand's word turned into one commit on `main`, of one of
+ * two kinds: an artifact's, cut from `main` itself and carrying that one
+ * artifact and nothing else — the drafts above it on the branch stay on the
+ * branch; and a task group's, the rebased branch tip, which carries the
+ * group's code and the plan whole. The steps below run in order and stop at
+ * the first refusal. Nothing half-lands: the record line and the
  * round's row are written into the same commit, `main` is a plain
  * fast-forward — or, bound to a wake through `.round/relay.json`, is what the
  * relay makes of the commit this run asked it to land (Q54) — and the branch
@@ -43,9 +46,12 @@
  *              held rows, or the hand's own answer - and the pages the
  *              proposal links, which is the set `reread-guard.mjs` holds
  *              every push of this run to; for a task group, the rebased
- *              branch tip, refused while that tip holds a schema artifact
- *              with no `landed_by:` line, because a group carries the branch
- *              whole and `main` never holds a draft no hand has landed
+ *              branch tip, refused while that tip holds text of a schema
+ *              artifact that `MAIN` does not — the plan and the decisions
+ *              apart, since the tick and a hand's answer are the group's own
+ *              to carry — naming each file and the hand it waits on, because
+ *              a group carries the branch whole and `main` never holds a
+ *              draft no hand has landed
  *   6 gate     Run the gate - `validate:changes`, `check:manual`,
  *              `tcs:validate` - against `L`'s tree with `PLAN_NO_FETCH=1`; a
  *              refusal leaves the branch and the working tree as they were,
@@ -70,10 +76,18 @@
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
  *
- * `--fix-pass` drops the row's `always` floor to `simpler`, the one reader
- * every round shares: a pass landed off a demonstration or off the reading of
- * the whole change is that round (Q50, Q99). A row naming more readers under
- * the flag owes its verifier like any other.
+ * `--whole` lands the one reader's pass over the whole change, after the last
+ * group (SC-60): a landing of the branch tip as a group's is, on the plan's
+ * hand's word, its row reading `whole change` in the Artifact cell with the
+ * fix pass's floor — the row `archive:preflight` holds a change on the round
+ * to. It names no artifact or group beside the flag.
+ *
+ * `--fix-pass` drops the row's `always` floor to the readers every list of
+ * the schema shares — `fixPassFloor`, which is `simpler` in this store: a
+ * pass landed off a demonstration or off the reading of the whole change is
+ * that round (Q50, Q99). A row naming more readers under the flag owes its
+ * verifier like any other, and the flag is refused beside `--reviewed`, which
+ * lands no row at all.
  *
  * `--dry-run` cuts `L` and runs the gate against it for real, prints the same
  * lines a landing prints, and stops before step 7: nothing is pushed, and no
@@ -100,11 +114,13 @@ import {
   runChecks,
 } from "../../tools/manual/check/check-manual.mjs";
 import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
+import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import {
+  fixPassFloor,
   isGroup,
   perspectivesOf,
   planningSchema,
@@ -131,20 +147,30 @@ const REJECTED = /\[rejected\]|\[remote rejected\]|non-fast-forward|stale info/;
 /** The all-zero object id, which is how `update-index --index-info` is told a
  * path is gone rather than written. */
 const GONE = "0000000000000000000000000000000000000000";
-/** The reader that argues the simpler thing, which every round runs and a
- * round of one stands on (`docs/governance/system-design.md`): the floor
- * `--fix-pass` holds a row to. */
-const FLOOR = "simpler";
+/** The artifacts a group's landing carries as its own rather than as a
+ * draft: the plan, which the tick is the group's work on, and the decisions,
+ * which a hand's answer writes on the branch. Every other schema artifact the
+ * branch holds a text of that `main` does not is a draft nobody landed. */
+const GROUP_CARRIES = new Set(["tasks", "decisions"]);
 const USAGE =
-  'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
+  'usage: pnpm run plan:land <change> <artifact|group|--whole> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["as", "perspectives", "stood", "asked", "tests", "root"],
-  booleans: ["dry-run", "fix-pass", "reviewed", "with-recommendations"],
+  booleans: [
+    "dry-run",
+    "fix-pass",
+    "reviewed",
+    "whole",
+    "with-recommendations",
+  ],
   usage: USAGE,
 });
 const dryRun = Boolean(flags["dry-run"]);
-const fixPass = Boolean(flags["fix-pass"]);
+const whole = Boolean(flags.whole);
+/** Whether the row's `always` floor drops to the reader every list shares:
+ * a fix pass, or the reading of the whole change, which is one. */
+const floorDrops = Boolean(flags["fix-pass"]) || whole;
 const reviewedOnly = Boolean(flags.reviewed);
 const root = flags.root ?? join(HERE, "..", "..");
 /** The temporary indexes, worktrees and refs this run made, removed on the
@@ -159,6 +185,21 @@ for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => process.exit(130));
 if (process.env.PLAN_LAND_RACE && !flags.root)
   fail("PLAN_LAND_RACE is a test seam and needs --root");
+// A read that changed nothing lands no row, so every flag only a row can use
+// is refused beside it rather than dropped without a word.
+const rowFlags = [
+  "perspectives",
+  "stood",
+  "asked",
+  "tests",
+  "fix-pass",
+  "whole",
+].filter((flag) => flags[flag] !== undefined);
+if (reviewedOnly && rowFlags.length > 0) {
+  fail(
+    `${rowFlags.map((flag) => `--${flag}`).join(", ")} ${rowFlags.length > 1 ? "name" : "names"} a round's row, and --reviewed lands none — a read that changed nothing is no round`,
+  );
+}
 let wake;
 try {
   wake = readWake(root);
@@ -166,8 +207,16 @@ try {
   fail(cause.message);
 }
 const relay = wake ? relayOf(wake) : undefined;
-const [change, target] = positional;
-if (!change || !target) fail(USAGE);
+const [change, given] = positional;
+if (!change || (!given && !whole)) fail(USAGE);
+if (whole && given) {
+  fail(
+    `--whole reads the whole change, and names no artifact or group beside it — drop \`${given}\``,
+  );
+}
+/** What the landing is of: the artifact or group named, or the whole change,
+ * which every reader of a round's Artifact cell reads as a group. */
+const target = whole ? WHOLE_CHANGE : given;
 
 const git = (args) => storeGit(root, args);
 const say = (step, line) => console.log(`  ${step.padEnd(9)}${line}`);
@@ -281,13 +330,17 @@ async function attemptLanding(attempt) {
   );
   const artifacts = read.artifacts;
   const artifact = artifactIdOf(artifacts, target);
+  // The reading of the whole change lands as a group does — the branch tip,
+  // the plan's hand, no record line — since the cell is no artifact of the
+  // schema and the plan is the one thing a hand's word can land whole. It
+  // names no group of the plan, so the plan's groups are not read for it.
   const group = artifact === undefined;
   if (group && !isGroup(target)) {
     fail(
       `\`${target}\` is neither an artifact of the \`${read.entry.schema}\` schema nor a task group`,
     );
   }
-  if (group) {
+  if (group && !whole) {
     const wanted = roundArtifactOf(target);
     const known = read.entry.taskGroups.map((one) => one.num);
     if (!known.includes(wanted)) {
@@ -336,6 +389,10 @@ async function attemptLanding(attempt) {
     say("hand", `@${handle} is the ${role} and the hand of ${target}`);
   }
 
+  /** The handle whose word one artifact of the change waits on, or nothing
+   * where the change names no hand for its stage. */
+  const whose = (id) => read.entry.hands?.[handOfArtifact(id, artifacts) ?? ""];
+
   // ── 4 behind, and the held rows (Q59, Q60) ────────────────────────────────
   // A task group is after every artifact: the plan it implements is the last
   // of them, so anything behind refuses it.
@@ -346,13 +403,12 @@ async function attemptLanding(attempt) {
   );
   if (behind.length > 0) {
     const [first] = behind;
-    const whose =
-      read.entry.hands?.[handOfArtifact(first.artifact, artifacts) ?? ""];
+    const hand = whose(first.artifact);
     // What the artifact is read again against: the items the commit dates
     // single out, or the whole of what is before it where the recorded id is
     // what says it moved.
     fail(
-      `${first.artifact} is behind ${first.changed.join(", ")}${whose ? ` and waits on @${whose}` : ""} — it is read again before ${target} lands`,
+      `${first.artifact} is behind ${first.changed.join(", ")}${hand ? ` and waits on @${hand}` : ""} — it is read again before ${target} lands`,
     );
   }
   say("behind", `nothing before ${target} is behind`);
@@ -360,7 +416,10 @@ async function attemptLanding(attempt) {
   // Skipped for --reviewed: a read that changes nothing asks nobody's word,
   // so it waits on no one's answer either. Read once, here, and every reader
   // of the table below takes that one text.
-  const decisionsRelPath = `openspec/changes/${change}/decisions.md`;
+  // The decisions' own path, off the schema's `generates:` as every other
+  // artifact's is read, with the name the store writes where a schema this
+  // store does not define names none.
+  const decisionsRelPath = `openspec/changes/${change}/${artifacts.find((one) => one.id === "decisions")?.generates ?? "decisions.md"}`;
   const decisionsPath = join(root, decisionsRelPath);
   const decisions =
     reviewedOnly || !existsSync(decisionsPath)
@@ -415,20 +474,32 @@ async function attemptLanding(attempt) {
   } catch (cause) {
     fail(cause.message);
   }
-  // A group carries the branch whole, so an artifact drafted on it and landed
-  // by nobody would reach `main` with no hand's word behind it.
+  // A group carries the branch whole, so an artifact whose text on the branch
+  // `main` does not hold would reach `main` with no hand's word behind it.
+  // Read off the text, never off a `landed_by:` line: a landed artifact
+  // redrawn on the branch is a draft again, and one whose text `main` holds
+  // already is nobody's draft whatever the record says. A file the branch
+  // took off `main` is the same reach with no draft to drop, and is named
+  // as what it is.
   if (group) {
-    const landed = read.entry.landedBy ?? {};
-    const drafts = artifacts
-      .filter(({ id }) => !(id in landed))
-      .flatMap(({ id }) => filesOf(changed, artifacts, id));
+    const drafts = [];
+    const removals = [];
+    for (const { id } of artifacts) {
+      if (GROUP_CARRIES.has(id)) continue;
+      const hand = whose(id);
+      for (const path of filesOf(changed, artifacts, id)) {
+        const line = hand ? `${path} — waits on @${hand}` : path;
+        (existsSync(join(root, path)) ? drafts : removals).push(line);
+      }
+    }
     if (drafts.length > 0) {
       fail(
-        `${target}'s landing carries a draft no hand has landed:\n${drafts
-          .map((path) => `  ${path}`)
-          .join(
-            "\n",
-          )}\nLand each on its hand's word, or drop the draft from the branch.`,
+        `${target}'s landing carries a draft no hand has landed:\n${listed(drafts)}\nLand each on its hand's word, or drop the draft from the branch.`,
+      );
+    }
+    if (removals.length > 0) {
+      fail(
+        `${target}'s landing takes a schema artifact off main with no hand's word:\n${listed(removals)}\nLand the removal on its hand's word, or restore the file on the branch.`,
       );
     }
   }
@@ -601,7 +672,10 @@ async function attemptLanding(attempt) {
   console.log(`           ${short(commit)} named in ${LANDED} for the guard`);
 
   // ── 8 branch — the drafts sit above the landing ──────────────────────────
-  rebaseOnto(commit, artifact ?? `group ${roundArtifactOf(target)}`);
+  rebaseOnto(
+    commit,
+    artifact ?? (whole ? target : `group ${roundArtifactOf(target)}`),
+  );
   const pushed = push([
     `--force-with-lease=refs/heads/${branch}:${leaseSha}`,
     `HEAD:refs/heads/${branch}`,
@@ -822,6 +896,13 @@ function citedByGroup(read) {
  * ones left out. A group whose tasks cite none owes nothing, and the row's
  * cell reads `-` like every other column a round has nothing for.
  *
+ * A path the cell names is held to the store where the group lands in it: a
+ * test the row says decided a scenario is a file a reader can open, so a path
+ * the store holds no file at is refused naming it. A group of the application
+ * repository names its tests in that clone, which this store cannot see, and
+ * its paths are written as given. A word that is no path — a walk by hand, a
+ * test owed to Operations — is left as written.
+ *
  * An artifact's landing is not held to anything here: no artifact of the
  * schema carries scenario ids of its own to answer for.
  */
@@ -831,14 +912,40 @@ function testsCell(read, group, value) {
   const missing = citedByGroup(read).filter((id) => !cell.includes(id));
   if (missing.length > 0) {
     fail(
-      `${target}'s tasks cite a scenario --tests names no test for:\n${missing
-        .map((id) => `  ${id}`)
-        .join(
-          "\n",
-        )}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
+      `${target}'s tasks cite a scenario --tests names no test for:\n${listed(missing)}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
+    );
+  }
+  const absent = landsHere(read)
+    ? pathsIn(cell).filter((path) => !existsSync(join(root, path)))
+    : [];
+  if (absent.length > 0) {
+    fail(
+      `${target}'s --tests names a path the store holds no file at:\n${listed(absent)}\nName each test as its path from the store's root.`,
     );
   }
   return cell;
+}
+
+/** The store paths a `--tests` cell names: every token between the separators
+ * the cell writes — `;` between ids, `,` between files, `:` after an id —
+ * kept where it reads as a path, a slash and no space, backticks aside. */
+function pathsIn(cell) {
+  return cell
+    .split(/[;,:]/)
+    .map((one) => one.trim().replace(/^`|`$/g, ""))
+    .filter((one) => /^[\w.@-]+(?:\/[\w.@-]+)+$/.test(one));
+}
+
+/** Whether the group's tests live in this store: its heading's repository tag
+ * names this clone, or names none. The reading of the whole change is the
+ * store's own. A group tagged for the application repository proves its tests
+ * there, and its paths are that clone's. */
+function landsHere(read) {
+  if (whole) return true;
+  const one = read.entry.taskGroups.find(
+    (group) => group.num === roundArtifactOf(target),
+  );
+  return !one?.repo || one.repo === "grade10-spec";
 }
 
 /**
@@ -854,18 +961,23 @@ function testsCell(read, group, value) {
  * than one reader ran — two readings are reconciled, and only a round of one
  * argues its own findings.
  *
- * `--fix-pass` drops the floor to `simpler` alone: a pass off a demonstration
- * or off the reading of the whole change is a round of the simpler thing
- * (Q50, Q99), and the apply block's six `always` readers read the plan rather
- * than the fix.
+ * Under `--fix-pass` the floor is `fixPassFloor`'s, since the apply block's
+ * six `always` readers read the plan rather than the fix; a wider row still
+ * owes its verifier (Q99).
  */
 function perspectivesCell(read, value) {
   const cell = listCell(value);
-  const issued = perspectivesOf(
-    planningSchema(root, read.entry.schema),
-    target,
-  );
-  const named = new Set(
+  const schema = planningSchema(root, read.entry.schema);
+  const issued = perspectivesOf(schema, target);
+  let floor = [];
+  if (floorDrops) {
+    try {
+      floor = fixPassFloor(schema);
+    } catch (cause) {
+      fail(cause.message);
+    }
+  }
+  const given = new Set(
     cell
       .split(/[,;]/)
       .map((one) =>
@@ -876,21 +988,21 @@ function perspectivesCell(read, value) {
       )
       .filter((one) => one !== ""),
   );
-  for (const one of named) {
+  for (const one of given) {
     if (one === "verifier" || issued.some(({ name }) => name === one)) continue;
     fail(
       `\`${one}\` is no perspective of ${target} — the \`${read.entry.schema}\` schema issues ${issued.map(({ name }) => `\`${name}\``).join(", ")}, and \`verifier\` records that a verifier ran`,
     );
   }
   for (const { name, when } of issued) {
-    if (!when.includes("always") || named.has(name)) continue;
-    if (fixPass && name !== FLOOR) continue;
+    if (!when.includes("always") || given.has(name)) continue;
+    if (floorDrops && !floor.includes(name)) continue;
     fail(
       `${target}'s \`${name}\` reads every round — a narrow re-run may name fewer readers, never an \`always\` one`,
     );
   }
-  const readers = [...named].filter((one) => one !== "verifier");
-  if (verifierNeeded(readers) && !named.has("verifier")) {
+  const readers = [...given].filter((one) => one !== "verifier");
+  if (verifierNeeded(readers) && !given.has("verifier")) {
     fail(
       `${readers.join(", ")} read ${target} and the cell names no \`verifier\` — a round of more than one reader is reconciled by one`,
     );
@@ -1026,6 +1138,11 @@ function race(attempt) {
 
 function short(sha) {
   return sha ? sha.slice(0, 8) : sha;
+}
+
+/** Items as a refusal lists them, one per line and indented under it. */
+function listed(items) {
+  return items.map((one) => `  ${one}`).join("\n");
 }
 
 /**

@@ -41,9 +41,12 @@ const SKILLS_BUDGET = {
   "workflow-design": 253,
   "workflow-tech": 265,
   "workflow-specify": 332,
-  "workflow-tasks": 229,
+  // 178 after the enforcement audit's pass cut its three rules to a pointer
+  // at the instruction that holds them.
+  "workflow-tasks": 178,
   "workflow-build": 472,
-  "workflow-land": 356,
+  // 366 once the whole-change landing's command took its own line.
+  "workflow-land": 366,
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,

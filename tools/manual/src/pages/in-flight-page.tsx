@@ -15,6 +15,7 @@ import {
 } from "../api/board";
 import { useHandle } from "../api/handle";
 import { STAGE_LABEL } from "../api/stage-view";
+import { releasedOf } from "../api/stages";
 import { useArchive } from "../api/use-archive";
 import { useManualIndex } from "../api/use-manual-index";
 import { HandleAsk } from "../blocks/handle-ask";
@@ -48,7 +49,9 @@ export function InFlightPage() {
 
   const rows = boardRows(index.snapshot.changes, {
     now: Date.now(),
-    released: new Set((archived ?? []).map((one) => one.id)),
+    released: new Set(
+      releasedOf(index.snapshot.changes, archived ?? []).keys(),
+    ),
     schemas: index.snapshot.schemas,
   });
   const kept = rows.filter((row) => narrowedBy(row, filter, handle));

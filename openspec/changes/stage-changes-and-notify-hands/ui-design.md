@@ -51,7 +51,7 @@ Design-system primitives, from `@grade10/design-system/components/`:
 
 The manual's own blocks, in `tools/manual/src/blocks/`, kept: `ChangeCard`, `ChangeStatus`, `TaskProgress`, `CopyableCommand`, `Attribution`, `IdleBadge`, `DependencyPills`, `NextAction`, `ChangeRibbon`, `CapabilityPip`.
 
-New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/lib/moves.mjs` (Your turn, On staging, Behind) and `scripts/openspec/digest.mjs` (the digest), with only the channel post in `scripts/openspec/changed-changes.mjs`.
+New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourTurnCard`, `HandsTable`, `ArtifactList` with its freshness chip, the question count and the landed-by handle, `QuestionList`, `DeliveryRow`, `MyTurnPage`, `StagePip`. The manual carries its own English strings and imports no catalog, so no `packages/i18n` key is owed; the Slack message bodies live in `scripts/openspec/lib/wording.mjs`, which the manual reads too, the addressing in `scripts/openspec/lib/moves.mjs`, with only the channel post in `scripts/openspec/changed-changes.mjs`; `OnThePages` is this change's too, the marked lines of the pages the proposal links on one screen.
 
 ## States
 

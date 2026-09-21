@@ -26,6 +26,9 @@ import { fileURLToPath } from "node:url";
 import {
   bundleFor,
   classifyDiff,
+  fixPassFloor,
+  isGroup,
+  perspectivesOf,
   planningSchema,
   readersFor,
   TRIGGERS,
@@ -750,5 +753,49 @@ test("planningSchema refuses a schema the store holds no file for", () => {
   assert.throws(
     () => planningSchema(root, "no-such-schema"),
     /openspec\/schemas\/no-such-schema\/schema\.yaml/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-79 - the fix pass's floor is every `always` reader the schema's lists share, whatever it is named", () => {
+  // Nothing in the module is keyed on the word `simpler`: two readers shared
+  // by every list are both the floor, a reader one list lacks is not, and a
+  // list with no perspectives at all is skipped rather than emptying it.
+  const shared = [
+    { name: "editor", when: ["always"], agent: "a.md" },
+    { name: "simpler", when: ["always"], agent: "b.md" },
+  ];
+  const schema = {
+    artifacts: [
+      { id: "proposal", perspectives: [] },
+      {
+        id: "ui-design",
+        perspectives: [
+          ...shared,
+          { name: "design", when: ["always"], agent: "c.md" },
+        ],
+      },
+      { id: "specs", perspectives: [...shared] },
+    ],
+    apply: [...shared, { name: "qa", when: ["always"], agent: "d.md" }],
+  };
+
+  assert.deepEqual(fixPassFloor(schema), ["editor", "simpler"]);
+  // An apply block sharing neither reader empties the floor, which is refused
+  // rather than answered with nothing.
+  assert.throws(
+    () =>
+      fixPassFloor({ artifacts: schema.artifacts, apply: [schema.apply[2]] }),
+    /share no `always` reader/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-60 - the reading of the whole change is read as a task group's is", () => {
+  // The cell `plan:land --whole` writes is no artifact of the schema: every
+  // reader that tells a group from an artifact reads it as a group, so the
+  // guard, the readers and the button need no case of their own.
+  assert.equal(isGroup("whole change"), true);
+  assert.deepEqual(
+    perspectivesOf(REAL_SCHEMA, "whole change"),
+    REAL_SCHEMA.apply,
   );
 });

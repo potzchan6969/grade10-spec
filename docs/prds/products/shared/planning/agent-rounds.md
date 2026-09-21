@@ -7,8 +7,7 @@ order: 2
 How every artifact of a change is written: you say what is wanted, the
 change's agent drafts it and has the draft challenged, you answer what only
 you can, and your word lands it. Where a change stands is
-[Change Stages](change-stages); the artifacts themselves are
-[How we plan](/guides/how-we-plan).
+[Change Stages](change-stages); the artifacts are [How we plan](/guides/how-we-plan).
 
 ## The Round
 
@@ -59,8 +58,7 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **A sentence that overlaps a change in flight** — the run answers in that
   change's thread, and the change's stage decides whether it is extended, held
   for its product manager, or depended on by a new change
-- 🚧 **Every later hand answers in the thread** — the message that says it is
-  your turn points at it; you reply there
+- 🚧 **Every later hand answers in the thread** — the turn message points at it
 - 🚧 **The frames come from you** — a designer's ask carries the frame links; a
   draft that needs a frame nobody drew writes a dated wait on the designer,
   never a screen in prose
@@ -70,7 +68,8 @@ One round per artifact, and one per task group while the change is building.
   thread reads who pressed; a member the team map does not name lands nothing
 - 🚧 **Only the hand lands** — another teammate's land is refused and names
   whose word it waits on, and the relay checks the word again before `main`
-  moves
+  moves; a task group lands the branch whole, so only once `main` holds every
+  other artifact's text the branch does, the plan and the decisions apart
 
 ## Perspectives
 
@@ -124,7 +123,8 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **The run sheet keeps what only staging proves** — a case the walk
   automates is marked so, and the run sheet leaves it out
 - 🚧 **One pass over the whole** — after the last group, one reader argues the
-  simpler shape for the whole change before it goes to staging
+  simpler shape for the whole change before it goes to staging; the archive
+  holds a change on the round to that row and to the last group's walk row
 
 ## Surfaces
 

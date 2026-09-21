@@ -251,16 +251,28 @@ async function titleAt(root, ref, directory, fallback) {
   return humanize(fallback);
 }
 
-/** One file as a revision holds it, or nothing where that revision has none. */
-async function showAt(root, ref, path) {
+/**
+ * One file as a revision holds it, or nothing where that revision has none —
+ * and nothing for that one reason alone. Every other way `git show` can
+ * refuse, a revision the checkout does not hold among them, stops the run
+ * naming the ref and the path: a record read as absent because git refused
+ * something else would compute a move that never happened.
+ */
+export async function showAt(root, ref, path) {
   try {
     const { stdout } = await exec("git", ["show", `${ref}:${path}`], {
       cwd: root,
       maxBuffer: 16 * 1024 * 1024,
     });
     return stdout;
-  } catch {
-    return undefined;
+  } catch (error) {
+    const said = String(error?.stderr ?? "");
+    if (/does not exist in|exists on disk, but not in/.test(said))
+      return undefined;
+    throw new Error(
+      `git show ${ref}:${path} refused in ${root}: ${(said || error.message).trim()}`,
+      { cause: error },
+    );
   }
 }
 

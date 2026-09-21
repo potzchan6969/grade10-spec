@@ -2,6 +2,7 @@ import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { describe, expect, it } from "vitest";
 import { laneOf } from "../src/api/derive";
+import { landingDatesOf } from "../src/api/handoff.ts";
 import { OVERLAYS, type Overlay, overlaysOf } from "../src/api/overlays.ts";
 import { draftedOf, movedBy, moveShown } from "../src/api/stage-view.ts";
 import {
@@ -11,6 +12,7 @@ import {
   laneOfStage,
   laterRolesOf,
   openHands,
+  releasedOf,
   STAGES,
   stageOf,
 } from "../src/api/stages.ts";
@@ -788,5 +790,78 @@ describe("the ladder's own surface", () => {
     expect(archive.changes.every((one) => one.stage === "archived")).toBe(true);
     // Nothing on an archived change is owed: the fold is the last rung.
     expect(archive.changes.every((one) => one.heldBy === undefined)).toBe(true);
+  });
+});
+
+describe("what a release has carried", () => {
+  // One reading behind the board, the change page and the digest: a change
+  // in flight whose record carries `released_in:`, and every archived change.
+  it("counts a change in flight that carries released_in, dated by its last move, and the archive by its prefix", () => {
+    const shipped = at("released", {
+      id: "shipped",
+      releasedIn: "v2026.09.1",
+      lastMoved: "2026-09-10T08:00:00.000Z",
+    });
+    const building = at("building", { id: "building" });
+    const released = releasedOf(
+      [shipped, building],
+      [{ id: "archived-one", shippedOn: "2026-08-01" }],
+    );
+
+    expect(released.get("shipped")).toEqual({
+      id: "shipped",
+      on: "2026-09-10T08:00:00.000Z",
+    });
+    expect(released.get("archived-one")).toEqual({
+      id: "archived-one",
+      on: "2026-08-01",
+    });
+    expect(released.has("building")).toBe(false);
+  });
+
+  it("frees a dependent of a change released in flight, not only of an archived one", () => {
+    const shipped = at("released", { id: "shipped", releasedIn: "v1" });
+    const dependent = at("specified", { dependsOn: ["shipped", "elsewhere"] });
+    const released = new Set(releasedOf([shipped], []).keys());
+
+    expect(
+      overlaysOf(dependent, { now: NOW, released, artifacts: artifacts() }),
+    ).toEqual([{ kind: "blocked", change: "elsewhere" }]);
+  });
+});
+
+describe("when a stage landed", () => {
+  // The handoff measures from the commit that landed an artifact, which the
+  // change's history names; the last commit touching the file is the fallback
+  // for a change whose history names no landing.
+  const artifact = (name: string, date: string) => ({
+    name,
+    kind: "doc" as const,
+    path: `openspec/changes/pos/${name}.md`,
+    present: true,
+    lastCommit: { sha: "0".repeat(40), date, subject: `touch ${name}` },
+  });
+  const landed = (target: string, date: string) => ({
+    sha: "1".repeat(40),
+    date,
+    subject: `chore(openspec): land ${target} of pos on @dana`,
+    kind: "landed" as const,
+    target,
+  });
+
+  it("dates an artifact by its first landing, not by the last commit that touched it", () => {
+    const dates = landingDatesOf({
+      artifacts: [
+        artifact("proposal", "2026-09-20T00:00:00.000Z"),
+        artifact("decisions", "2026-09-21T00:00:00.000Z"),
+      ],
+      history: [
+        landed("proposal", "2026-09-01T00:00:00.000Z"),
+        landed("proposal", "2026-09-15T00:00:00.000Z"),
+      ],
+    });
+
+    expect(dates.proposal).toBe("2026-09-01T00:00:00.000Z");
+    expect(dates.decisions).toBe("2026-09-21T00:00:00.000Z");
   });
 });

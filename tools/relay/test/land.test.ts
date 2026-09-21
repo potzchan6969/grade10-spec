@@ -242,6 +242,16 @@ describe("a landing on a word", () => {
       check: "word-not-said",
     });
     expect(checkWord(word({ ...group, artifact: "4" }))).toEqual({ ok: true });
+    // The reading of the whole change lands as a group does: the plan's hand,
+    // the branch tip, no record line (`shared-planning-agent-rounds-SC-60`).
+    expect(checkWord(word({ ...group, artifact: "whole change" }))).toEqual({
+      ok: true,
+    });
+    expect(
+      checkWord(
+        word({ ...group, artifact: "whole change", senderHandle: "dee" }),
+      ),
+    ).toEqual({ ok: false, check: "not-the-hand" });
   });
 });
 

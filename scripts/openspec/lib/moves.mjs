@@ -16,9 +16,15 @@ import {
   handOf,
   handOfArtifact,
 } from "../../../tools/manual/src/api/stages.ts";
-import { addressOf, linkOf, threadPartsOf } from "./notify.mjs";
+import { addressOf } from "./notify.mjs";
 import { readChangesAt } from "./store-read.mjs";
-import { behindText, landedText, toldBodyOf } from "./wording.mjs";
+import {
+  behindText,
+  landedText,
+  linkOf,
+  threadPartsOf,
+  toldBodyOf,
+} from "./wording.mjs";
 
 /** Every change of one tree: its stage, whose turn it is, the handle each of
  * those roles names, and the artifacts behind what they were drawn from. */

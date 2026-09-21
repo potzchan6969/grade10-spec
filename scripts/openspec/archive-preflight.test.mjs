@@ -8,6 +8,7 @@ import { fileURLToPath } from "node:url";
 import { parsePage } from "../../tools/manual/src/content/grammar.ts";
 import { sectionTextOf } from "../../tools/manual/src/content/sections.ts";
 import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
+import { ROUNDS_HEADER } from "./lib/rounds.mjs";
 
 const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
 const SCRIPT = join(SCRIPTS, "archive-preflight.mjs");
@@ -422,6 +423,144 @@ test("a change whose sections all landed is clear", () => {
 // `rounds.md`'s own carry is checked after the archive exists, by
 // `pnpm check:manual`'s `round` rule (`tools/manual/test/check-round.test.ts`)
 // rather than by this preflight, which runs before it.
+
+// ── The walk gate ───────────────────────────────────────────────────────────
+// shared-planning-agent-rounds-SC-85 and -SC-60: a change on the round is
+// archived only once its last task group's row names the walks it left — a
+// `*.walk.ts` the suite runs, or a walk by hand — and one row reads `whole
+// change`, the one reader's pass over the whole. Neither is asked of a change
+// on the old flow, and no walk is asked of a change nobody walks.
+const WALKED_TASKS =
+  "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n\n## 2. The walk (grade10-spec)\n\n- [x] 2.1 Walk `listing-US-01`\n";
+/** `rounds.md` as the landings wrote it: one row per `[artifact, tests,
+ * stood]`, numbered in the order given. */
+const rounds = (...rows) =>
+  `${ROUNDS_HEADER}${rows
+    .map(
+      ([artifact, tests = "-", stood = "nothing stood"], at) =>
+        `| ${at + 1} | ${artifact} | simpler | ${stood} | - | ${tests} |`,
+    )
+    .join("\n")}\n`;
+const WALK_FILE = "`listing-SC-01`: tools/manual/walk/listing.walk.ts";
+const BY_HAND = "`listing-SC-01`: walked by hand, its cases manual";
+const onTheRound = (rows, files = {}) =>
+  sandbox(
+    { ...CARRIED, "tasks.md": WALKED_TASKS, "rounds.md": rows, ...files },
+    DURABLE,
+  );
+
+test("shared-planning-agent-rounds-SC-85 - refuses a change on the round whose last group's row names no walk, naming the group", () => {
+  const result = run(onTheRound(rounds(["1"], ["2"], ["whole change"])).root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /group 2/);
+  assert.match(result.stderr, /names no walk/);
+});
+
+test("shared-planning-agent-rounds-SC-85 - is clear where the last group's row names a walk file, or a walk by hand", () => {
+  for (const walk of [WALK_FILE, BY_HAND]) {
+    const result = run(
+      onTheRound(rounds(["1"], ["2", walk], ["whole change"])).root,
+    );
+    assert.equal(result.status, 0, result.stderr);
+  }
+});
+
+test("shared-planning-agent-rounds-SC-85 - refuses a change on the round with no row for the reading of the whole", () => {
+  const result = run(onTheRound(rounds(["1"], ["2", WALK_FILE])).root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /whole change/);
+  assert.match(result.stderr, /plan:land .* --whole/);
+});
+
+test("shared-planning-agent-rounds-SC-85 - the walk row is the last group's, named in its Tests cell", () => {
+  // A walk on an earlier group's row answers nothing for the last; and the
+  // Stood cell is prose, so "by hand" there names no walk.
+  const earlier = run(
+    onTheRound(rounds(["1", WALK_FILE], ["2"], ["whole change"])).root,
+  );
+  assert.equal(earlier.status, 1);
+  assert.match(earlier.stderr, /group 2/);
+
+  const inStood = run(
+    onTheRound(
+      rounds(
+        ["1"],
+        ["2", "-", "the journeys walked by hand"],
+        ["whole change"],
+      ),
+    ).root,
+  );
+  assert.equal(inStood.status, 1);
+  assert.match(inStood.stderr, /group 2/);
+});
+
+test("shared-planning-agent-rounds-SC-85 - the reading of the whole comes after the last group's row", () => {
+  const before = run(
+    onTheRound(rounds(["whole change"], ["1"], ["2", WALK_FILE])).root,
+  );
+
+  assert.equal(before.status, 1);
+  assert.match(
+    before.stderr,
+    /reading of the whole is round 1, before group 2's row 3/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-85 - reads the rows on main, never a row the checkout alone holds", () => {
+  const store = onTheRound(rounds(["1"], ["2", WALK_FILE]));
+  // The whole-change row written on disk and committed nowhere: a landing
+  // writes the row on `main`, and a gate that read the checkout would take a
+  // row nobody landed.
+  writeFileSync(
+    join(store.root, "openspec", "changes", CHANGE, "rounds.md"),
+    rounds(["1"], ["2", WALK_FILE], ["whole change"]),
+  );
+  const result = run(store.root);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /whole change/);
+});
+
+test("shared-planning-agent-rounds-SC-85 - reads the capability's journeys where the delta restates none", () => {
+  // A change against a capability whose journeys are durable carries no
+  // journeys file of its own, and owes the walk all the same.
+  const { [`specs/${CAP}/user-journeys.md`]: _delta, ...leaning } = CARRIED;
+  const result = run(
+    sandbox(
+      {
+        ...leaning,
+        "tasks.md": WALKED_TASKS,
+        "rounds.md": rounds(["1"], ["2"], ["whole change"]),
+      },
+      DURABLE,
+    ).root,
+  );
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /group 2/);
+});
+
+test("shared-planning-agent-rounds-SC-85 - asks no walk of a change nobody walks, and nothing of one on the old flow", () => {
+  // The nobody line carries the journey it routes, so the id count alone
+  // would owe a walk: the line is what excuses it.
+  const nobody =
+    "# User journeys\n\n**Walked by:** nobody on their own - a policy, covered under `listing-US-01`\n";
+  const unwalked = run(
+    onTheRound(rounds(["1"], ["2"], ["whole change"]), {
+      [`specs/${CAP}/user-journeys.md`]: nobody,
+    }).root,
+  );
+  assert.equal(unwalked.status, 0, unwalked.stderr);
+
+  // No `rounds.md`, no `landed_by:` line: the change was worked on the old
+  // flow and owes no row of any kind.
+  const oldFlow = run(
+    sandbox({ ...CARRIED, "tasks.md": WALKED_TASKS }, DURABLE).root,
+  );
+  assert.equal(oldFlow.status, 0, oldFlow.stderr);
+});
 
 /** `decisions.md` is folded nowhere and the blind pass may not read archive,
  * so a rejected option recorded only there is lost to the one pass most likely

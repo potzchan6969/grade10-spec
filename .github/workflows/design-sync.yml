@@ -1,13 +1,17 @@
 name: Design sync
 
+# The push that ticks a task group carries a change's plan alone, and nothing
+# here reads one; the template of the same name is code the tests read, so
+# the filter names the changes' tree. `scripts/openspec/workflows.test.mjs`
+# holds it there.
 on:
   push:
     branches: [main]
     paths-ignore:
-      - "**/tasks.md"
+      - "openspec/changes/**/tasks.md"
   pull_request:
     paths-ignore:
-      - "**/tasks.md"
+      - "openspec/changes/**/tasks.md"
   # A Figma edit produces no event in this repository, so the push and
   # pull_request triggers only ever catch drift that a code change happens to
   # walk into. The schedule is what makes a designer-side rename or a changed

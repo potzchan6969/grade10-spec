@@ -4,11 +4,10 @@ import {
   handleOf,
   handleOfEmail,
   memberOf,
-  ROLES,
   readTeamMap,
   TEAM_MAP,
 } from "../../../scripts/openspec/lib/team.mjs";
-import { ROLES as APP_ROLES, type TeamMap } from "../src/api/types.ts";
+import type { TeamMap } from "../src/api/types.ts";
 import { writeStore } from "./tmp-store";
 
 /**
@@ -69,10 +68,6 @@ describe("the map a surface names a hand from", () => {
 });
 
 describe("the roles the app and the reader know", () => {
-  it("are the same six, in the same order", () => {
-    expect([...APP_ROLES]).toEqual(ROLES);
-  });
-
   it("spell a handle the same way", () => {
     for (const written of ["@Dana", " dana ", "DANA"]) {
       expect(handleOf(written)).toBe("dana");

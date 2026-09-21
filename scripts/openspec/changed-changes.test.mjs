@@ -16,6 +16,7 @@ import {
   classifyCapabilities,
   classifyChanges,
   parseChangedFiles,
+  showAt,
   slackPayload,
 } from "./changed-changes.mjs";
 import { deliver, sendAll } from "./lib/notify.mjs";
@@ -436,6 +437,28 @@ function sandbox() {
   });
   return { root, git, write, drop, commit };
 }
+
+test("a file a revision does not hold reads as nothing, and a revision git refuses stops the run naming it", async () => {
+  // `showAt` gives `undefined` for one reason alone — the path is not in that
+  // revision — so a record read at the push's base is never taken for absent
+  // because git refused something else.
+  const { root, write, commit } = sandbox();
+  write({ "openspec/changes/probe/.openspec.yaml": "schema: demo-planning\n" });
+  const head = commit("the record");
+
+  assert.equal(
+    await showAt(root, head, "openspec/changes/probe/.openspec.yaml"),
+    "schema: demo-planning\n",
+  );
+  assert.equal(
+    await showAt(root, head, "openspec/changes/probe/proposal.md"),
+    undefined,
+  );
+  await assert.rejects(
+    showAt(root, "no-such-ref", "openspec/changes/probe/.openspec.yaml"),
+    /no-such-ref.*openspec\/changes\/probe\/\.openspec\.yaml|openspec\/changes\/probe\/\.openspec\.yaml.*no-such-ref/s,
+  );
+});
 
 /** The script over a fixture store, its payloads printed and nothing sent. */
 function stages(root, args = []) {

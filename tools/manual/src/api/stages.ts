@@ -264,12 +264,36 @@ const HANDS_AT: Record<Stage, Role[]> = {
 };
 
 /** The roles a stage names, with no change in hand: what an empty lane says
- * about who would take a change that arrived in it, and the non-Proposed
- * answer `handOf` itself reads. Proposed names nobody's decisions are read
- * yet, so it is always the product manager's — the same answer `handOf`
- * gives a change with no `decisions` or `user-journeys` on `main`. */
+ * about who would take a change that arrived in it, and the answer `handOf`
+ * itself reads. `HANDS_AT.proposed` is the product manager's alone; `handOf`
+ * is what splits Proposed once the decisions and the journeys are on `main`. */
 export function rolesAtStage(stage: Stage): Role[] {
-  return stage === "proposed" ? ["pm"] : HANDS_AT[stage];
+  return HANDS_AT[stage];
+}
+
+/**
+ * The changes a release has carried, and when: a change in flight whose
+ * record carries `released_in:`, dated by the commit that wrote it —
+ * `lastMoved`, as near as the store dates a cut — and every archived change,
+ * dated by its directory's own prefix, which a rebase cannot move.
+ *
+ * One reading behind the board, the change page and the digest: `depends_on:`
+ * naming one of these blocks nothing, which is what the Blocked overlay reads
+ * and what makes a dependent freed.
+ */
+export function releasedOf(
+  changes: Pick<ChangeEntry, "id" | "releasedIn" | "lastMoved">[],
+  archived: { id: string; shippedOn?: string }[],
+): Map<string, { id: string; on?: string }> {
+  const released = new Map<string, { id: string; on?: string }>();
+  for (const change of changes) {
+    if (change.releasedIn === undefined) continue;
+    released.set(change.id, { id: change.id, on: change.lastMoved });
+  }
+  for (const change of archived) {
+    released.set(change.id, { id: change.id, on: change.shippedOn });
+  }
+  return released;
 }
 
 /** The roles of these the change names nobody for — the hands a card shows as
@@ -456,15 +480,16 @@ export function askedText(text: string): string {
 const LEADING_OPEN = /^❓\s*/;
 
 /** What a page calls each role, as `shared/planning/change-stages` names them
- * in its Hands table. A name outside it is nobody's role, so the line stays
- * the product manager's. */
+ * in its Hands table: the role's own label with its article, derived from
+ * `ROLE_LABEL` so a renamed label cannot leave this map behind, and the two
+ * spellings the pages write outside that shape — QA with no article, and
+ * Operations, a confirmer with no role of the six. A name outside all of
+ * these is nobody's role, so the line stays the product manager's. */
 const ROLE_OF_CONFIRMER: Record<string, string> = {
-  "the product manager": "pm",
-  "the designer": "design",
-  "the tech pic": "tech",
+  ...Object.fromEntries(
+    ROLES.map((role) => [`the ${ROLE_LABEL[role].toLowerCase()}`, role]),
+  ),
   qa: "qa",
-  "the engineer": "dev",
-  "the release hand": "release",
   operations: "ops",
 };
 

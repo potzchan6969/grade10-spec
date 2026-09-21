@@ -53,6 +53,42 @@ export function linkedOf(url, title) {
   return `<${url}|${escapeSlackText(title)}>`;
 }
 
+/** A change's own page on the manual: `<manualUrl>/in-flight/<id>`, what a
+ * message links to where the record names no thread. */
+export function changePageOf(manualUrl, id) {
+  return `${manualUrl.replace(/\/$/, "")}/in-flight/${encodeURIComponent(id)}`;
+}
+
+/**
+ * The change, linked: its thread's permalink where the record names one, the
+ * change page otherwise — title escaped, so a change named with `<` or `&`
+ * reads as text and not as more `mrkdwn`.
+ *
+ * One function, because both scripts build this link the same way: the push
+ * workflow's Your turn and Behind messages carry the thread where the record
+ * names one, and the digest — which never reads a thread — always gets the
+ * change page.
+ */
+export function linkOf({ manualUrl, workspaceUrl, thread, id, title }) {
+  const url = permalinkOf(workspaceUrl, thread) ?? changePageOf(manualUrl, id);
+  return linkedOf(url, title);
+}
+
+/** `<channel>/<ts>` as the record writes a thread, split for the API. */
+export function threadPartsOf(thread) {
+  const [channel, ts] = String(thread ?? "").split("/");
+  return channel && ts ? { channel, ts } : undefined;
+}
+
+/** A thread's permalink: this workspace's host in front of the path
+ * `wording.mjs` writes, which the manual puts Slack's own host in front of. */
+export function permalinkOf(workspaceUrl, thread) {
+  const path = threadPathOf(thread);
+  if (!path || !workspaceUrl) return undefined;
+  const host = workspaceUrl.replace(/^https?:\/\//, "").replace(/\/$/, "");
+  return `https://${host}${path}`;
+}
+
 /** A sentence opens with a capital; the table writes the move in the words a
  * lane heading shows it in. */
 const opening = (text) =>

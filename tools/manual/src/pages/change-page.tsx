@@ -5,7 +5,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { ArrowSquareOut, CalendarBlank, Kanban } from "@phosphor-icons/react";
 import { Link, useParams } from "react-router";
 import { changeSourceUrl } from "../api/paths";
-import { STAGE_LABEL, stageShown } from "../api/stage-view";
+import { STAGE_LABEL } from "../api/stage-view";
 import { formatDate, relativeTime } from "../api/time";
 import type { ChangeEntry } from "../api/types";
 import { useArchive } from "../api/use-archive";
@@ -89,7 +89,7 @@ export function ChangePage() {
 }
 
 function ChangeHeader({ change }: { change: ChangeEntry }) {
-  const stage = stageShown(change);
+  const stage = change.stage;
 
   return (
     <PageHeading
@@ -151,7 +151,7 @@ function ChangeBody({ change }: { change: ChangeEntry }) {
   const index = useManualIndex();
   const archive = useArchive();
   const document = useChangeDocument(change.id);
-  const stage = stageShown(change);
+  const stage = change.stage;
   const artifacts = index.snapshot.schemas[change.schema] ?? [];
 
   return (

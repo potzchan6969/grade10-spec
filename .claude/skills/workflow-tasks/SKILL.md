@@ -22,13 +22,9 @@ landing and the re-read.
 
 ## What the Round Adds Here
 
-- **Test first, in the group** — each group's test task is written first and
-  ticked last: its tests land in their own commit, naming the scenario ids the
-  group's tasks name
-- **The last group is the walk** — it walks every journey of every capability
-  the change specifies, end to end through the interface each actor uses, and
-  leaves the walks as the change's end-to-end suite
-- **Every task names its tree** — a group carries its repository tag, so
-  `pnpm plan done` reads a tick against the tree that tag names
+- **The plan's rules have one home** — the group's test task, the walk that
+  closes the plan and the repository tag on every group are the instruction's
+  rules, printed by the command above and held by
+  `scripts/openspec/tasks-template.test.mjs`; the template is the example
 - **`pnpm run plan:preflight <change>`** — run it before editing a plan
   engineering is already implementing

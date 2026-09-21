@@ -118,6 +118,30 @@ export const SCHEMA = [
   "",
 ].join("\n");
 
+/**
+ * One capability's delta, for the tests that draft `specs/**` on the branch:
+ * `specs` is one artifact with one file per capability, and a reader of the
+ * glob is proven against a file under it. Not in `FILES` — the fixture waits
+ * on `specs` — so a test writes it on the branch itself, where a refusal
+ * reads it before the gate would have to validate it.
+ */
+export const SPEC_FILE = `${DIR}/specs/demo-product/planning/probe/spec.md`;
+export const SPEC = [
+  "# demo-product/planning/probe Specification",
+  "",
+  "## ADDED Requirements",
+  "",
+  "### Requirement: The probe lands",
+  "",
+  "The probe SHALL land once.",
+  "",
+].join("\n");
+
+/** The change's plan, one group of one task, and the same plan ticked: what a
+ * group's build leaves on the branch. */
+export const PLAN = "## 1. Build it (grade10-spec)\n\n- [ ] 1.1 Ship it\n";
+export const TICKED = PLAN.replace("[ ]", "[x]");
+
 export const TEAM = [
   "handles:",
   "  dana:",
@@ -182,7 +206,7 @@ const FILES = {
   [`${DIR}/decisions.md`]: DECISIONS,
   [`${DIR}/ui-design.md`]: "## Screens\n\nThe one screen.\n",
   [`${DIR}/tech-design.md`]: "## Decisions\n\nThe one decision.\n",
-  [`${DIR}/tasks.md`]: "## 1. Build it (grade10-spec)\n\n- [ ] 1.1 Ship it\n",
+  [`${DIR}/tasks.md`]: PLAN,
 };
 
 /**
