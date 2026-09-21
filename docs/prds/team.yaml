@@ -10,9 +10,48 @@
 # and a role with no channel is posted nowhere - both are the map's way of
 # saying it does not know yet, and the fix is a line here.
 #
+# `slack:` takes the member id - `U…`, copied from the person's Slack profile
+# under More - never the name Slack shows: a message is addressed to the id,
+# and a Confirm press is matched by it. The comment beside each handle names
+# the person as Slack shows them, so an id can be checked against it. The
+# e-mail is the one the handle's own commits on `main` carry.
+#
 # `docs/prds/products/shared/planning/change-stages.md` says what reads it.
 handles:
-  ecchochan:
+  jeffffej0909: # @Jeff on Slack
+    email: jeffffej0909@gmail.com
+    roles: [pm]
+  tangconst: # @constance on Slack
+    email: tangconstance@gmail.com
+    roles: [design]
+  htonyl: # @tony on Slack
+    email: tony@9gag.com
+    roles: [tech, dev]
+  ecchochan: # @echo on Slack
     email: ecchochan@gmail.com
-    roles: [pm, tech, dev]
+    roles: [tech, dev]
+  seankcw: # @sean on Slack
+    email: seankcw@gmail.com
+    roles: [tech, dev]
+  kinisworking: # @kin on Slack
+    email: kin@9gag.com
+    roles: [tech, dev]
+  mason5991: # @mason on Slack
+    email: mason@9gag.com
+    roles: [tech, dev]
+  gareth0712: # @gareth on Slack
+    email: gareth_0712@hotmail.com
+    roles: [tech, dev]
+  rita-liu: # @rita.liu on Slack
+    email: runjing.liu@gmail.com
+    roles: [tech, dev]
+  caspertsang99: # @casper on Slack
+    email: casper@9gag.com
+    roles: [tech, dev]
+  cheunglok97: # @william on Slack
+    email: wowcheunglok@gmail.com
+    roles: [tech, dev]
+  chloe9gag: # @chloe on Slack
+    email: chloe@9gag.com
+    roles: [qa]
 channels: {}
