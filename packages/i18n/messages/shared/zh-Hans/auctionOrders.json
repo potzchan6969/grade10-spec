@@ -13,6 +13,7 @@
   "payInvoice": "支付发票",
   "viewDetail": "查看详情",
   "contactUs": "联系我们",
+  "insuranceTooltip": "运输途中按订单金额的 0.9% 计算。",
   "contactDialog": {
     "title": "给 Grade10 发邮件",
     "to": "收件人",

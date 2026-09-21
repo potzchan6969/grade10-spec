@@ -178,6 +178,32 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
   { label: "Order Total", value: "HK$16,140" },
 ];
 
+/** Sent invoice with Insurance for the tooltip coverage state. */
+export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
+  { label: "Winning Bid", value: "HK$12,800" },
+  {
+    label: "Buyer’s Premium",
+    value: "HK$2,560",
+    tooltip: LINE_TOOLTIPS.buyersPremium,
+  },
+  {
+    label: "Shipping & Handling",
+    value: "HK$180",
+    tooltip: LINE_TOOLTIPS.shippingHandling,
+  },
+  {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
+    label: "Payment Processing Fee",
+    value: "HK$120",
+    tooltip: LINE_TOOLTIPS.processingFee,
+  },
+  { label: "Order Total", value: "HK$16,140" },
+];
+
 export const WINNER_ORDER_REFUND_CLOSING = {
   amount: "HK$16,140",
   reason: "Not as described",
