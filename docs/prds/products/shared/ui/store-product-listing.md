@@ -93,6 +93,8 @@ The tile reports the quantity change and the application updates the cart.
 
 ::story{id="store-product-listing-productcardimage--sold-out" title="A sold-out product tile"}
 
+::story{id="store-product-listing-productcard--sold-out-opens-where-nothing-sells" title="A sold-out tile that opens where nothing sells"}
+
 :::detail{title="Product decisions" for="pm"}
 The surface displays what a consuming application supplies and decides none of
 it. Two things it has always done were missing from the map above it, and are

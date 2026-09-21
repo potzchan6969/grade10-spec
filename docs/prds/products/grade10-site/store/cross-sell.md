@@ -46,6 +46,12 @@ sharing none of them draws no similar cards
 🚧 **Just taken in** — a card the store has just taken in shows its picks until
 the similar cards follow, within minutes
 
+## Designs
+
+::story{id="store-product-related-rail--picks-and-similar" title="The rail under a card"}
+
+::story{id="store-product-related-rail--sold-out-pick-opens" title="A sold-out pick, still open"}
+
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to
 open. The catalogue already holds the cards beside it, and the stock keeper
