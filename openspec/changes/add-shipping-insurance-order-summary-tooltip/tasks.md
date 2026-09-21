@@ -10,7 +10,7 @@
 - [ ] 2.2 Thread optional `insuranceAmountMinor` through the development winner seed route, seed helper and Playwright helper so a sent invoice can contain Insurance without changing production contracts (`grade10-site-auction-winner-order-SC-169`)
 - [ ] 2.3 Verify: `pnpm --dir packages/grade10-auction/backend run test -- test/routes/dev.test.ts test/devFixtures/seedDevWinnerFixture.test.ts`
 
-## 3. Winner Order summary (grade10)
+## 3. Winner Order summary (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add page tests for the Insurance amount and tooltip, the omitted post-send row, and the pre-invoice TBD row with tooltip (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
 - [ ] 3.2 Render optional Insurance tooltip metadata through the existing design-system Tooltip/Info pattern and add Insurance as TBD only to the no-invoice summary (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
