@@ -9,8 +9,11 @@
  * text and as YAML — `openspec-version.test.mjs` reads a workflow the same
  * way for the CLI's pin.
  *
- * One case reaches wider: every workflow whose steps read a change's plan,
- * held to running on the push that ticks a task group.
+ * Two cases reach wider: every workflow whose steps read a change's plan,
+ * held to running on the push that ticks a task group, and every workflow
+ * that skips that push, held to skipping the plan alone. Each trigger's
+ * filter is read the way the code host reads it, through a glob matcher
+ * small enough to hold here.
  */
 // biome-ignore-all lint/suspicious/noTemplateCurlyInString: a workflow's `${{ … }}` is GitHub's own expression, quoted here exactly as the file writes it.
 import assert from "node:assert/strict";
@@ -47,21 +50,54 @@ const workflows = () =>
       YAML.parse(read(`${WORKFLOWS}/${name}`)),
     ]);
 
-/** A workflow one of whose steps reads a change's plan. */
+/** A workflow one of whose steps runs a gate that reads a change's plan:
+ * `check:manual` — never `check:manual:pages`, which reads the pages alone —
+ * or `validate-changes`, by its script or its `validate:changes` alias. */
 const readsThePlan = (workflow) =>
   Object.values(workflow.jobs ?? {}).some((job) =>
     (job.steps ?? []).some((step) =>
-      /check:manual|validate-changes/.test(step.run ?? ""),
+      /\bcheck:manual(?![:\w-])|validate[-:]changes/.test(step.run ?? ""),
     ),
   );
 
-/** Every path a workflow's triggers filter on, `paths` and `paths-ignore`
- * alike. */
-const triggerPaths = (workflow) =>
-  Object.values(workflow.on ?? {}).flatMap((trigger) => [
-    ...(trigger?.paths ?? []),
-    ...(trigger?.["paths-ignore"] ?? []),
-  ]);
+/** The triggers a workflow runs on, name and filter alike, for the ones a
+ * path can filter: a `push` or a `pull_request` with `paths` or
+ * `paths-ignore`. A schedule and a dispatch filter nothing and are left out. */
+const pathTriggers = (workflow) =>
+  Object.entries(workflow.on ?? {}).filter(
+    ([, trigger]) => trigger?.paths || trigger?.["paths-ignore"],
+  );
+
+/**
+ * GitHub's own path filter, small enough to hold here: `**` matches any run
+ * of segments, none included, `*` matches within one, and the pattern
+ * matches the whole path. Enough for the patterns this store's workflows
+ * write; a negated pattern (`!…`) is none of them, and would fail loudly here
+ * rather than match.
+ */
+const globMatches = (pattern, path) => {
+  assert.ok(!pattern.startsWith("!"), `${pattern}: a negated pattern`);
+  const source = pattern
+    .split(/(\*\*\/|\*\*|\*)/)
+    .map((piece) => {
+      if (piece === "**/") return "(?:.*/)?";
+      if (piece === "**") return ".*";
+      if (piece === "*") return "[^/]*";
+      return piece.replace(/[.+?^${}()|[\]\\]/g, "\\$&");
+    })
+    .join("");
+  return new RegExp(`^${source}$`).test(path);
+};
+
+/** Whether one trigger runs on a push that carries `path` alone: no
+ * `paths-ignore` pattern matches it, and where `paths` is set one does. */
+const runsOn = (trigger, path) =>
+  !(trigger["paths-ignore"] ?? []).some((one) => globMatches(one, path)) &&
+  (!trigger.paths || trigger.paths.some((one) => globMatches(one, path)));
+
+/** A change's plan, and the plan template the store's own tests read. */
+const PLAN = "openspec/changes/some-change/tasks.md";
+const TEMPLATE = "openspec/schemas/grade10-planning/templates/tasks.md";
 
 /** Any line of a workflow that sets a prefix fallback, comments — which say
  * why there is none — left out. */
@@ -163,11 +199,54 @@ test("shared-planning-agent-rounds-SC-84 - a workflow that reads a plan runs on 
   const gates = workflows().filter(([, workflow]) => readsThePlan(workflow));
 
   assert.ok(gates.length > 0, "no workflow reads a change's plan");
+  assert.ok(
+    gates.some(([path]) => path.endsWith("/lint.yml")),
+    "the Lint workflow no longer runs a gate that reads the plan",
+  );
   for (const [path, workflow] of gates) {
-    assert.deepEqual(
-      triggerPaths(workflow).filter((one) => one.includes("tasks.md")),
-      [],
-      `${path} filters a plan's own file out of the events it runs on`,
-    );
+    for (const [name, trigger] of pathTriggers(workflow)) {
+      assert.ok(
+        runsOn(trigger, PLAN),
+        `${path}'s ${name} filters a plan's own file out of the events it runs on`,
+      );
+    }
   }
+});
+
+test("a workflow that skips the tick skips a change's plan alone, never the template", () => {
+  // The tick's push carries a change's `tasks.md` and nothing else, which the
+  // test, typecheck and design-sync workflows have no reason to run on. The
+  // template of the same name is code the store's tests read, so a filter
+  // written for the tick may not catch it.
+  const skipping = workflows().filter(([, workflow]) =>
+    pathTriggers(workflow).some(([, trigger]) =>
+      (trigger["paths-ignore"] ?? []).some((one) => one.endsWith("tasks.md")),
+    ),
+  );
+
+  assert.ok(skipping.length > 0, "no workflow skips the tick's push");
+  for (const [path, workflow] of skipping) {
+    for (const [name, trigger] of pathTriggers(workflow)) {
+      assert.ok(
+        runsOn(trigger, TEMPLATE),
+        `${path}'s ${name} filters the plan template out of the events it runs on`,
+      );
+      assert.equal(
+        runsOn(trigger, PLAN),
+        false,
+        `${path}'s ${name} runs on the tick's push, which the filter exists to skip`,
+      );
+    }
+  }
+});
+
+test("the glob matcher reads the patterns the workflows write", () => {
+  assert.equal(globMatches("**/tasks.md", PLAN), true);
+  assert.equal(globMatches("**/tasks.md", "tasks.md"), true);
+  assert.equal(globMatches("openspec/changes/**/tasks.md", PLAN), true);
+  assert.equal(globMatches("openspec/changes/**/tasks.md", TEMPLATE), false);
+  assert.equal(globMatches("docs/prds/**", "docs/prds/a/b.md"), true);
+  assert.equal(globMatches("docs/prds/**", "docs/prd/a.md"), false);
+  assert.equal(globMatches("*.md", "README.md"), true);
+  assert.equal(globMatches("*.md", "docs/README.md"), false);
 });
