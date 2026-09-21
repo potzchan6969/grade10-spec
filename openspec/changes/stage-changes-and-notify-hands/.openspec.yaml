@@ -1,3 +1,7 @@
 schema: grade10-planning
 promoted_by: "@ecchochan"
 created: 2026-09-17
+hands:
+  pm: "@ecchochan"
+  tech: "@ecchochan"
+  dev: "@ecchochan"
