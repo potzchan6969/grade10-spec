@@ -88,7 +88,9 @@ export const Refunded: Story = {
         "Card condition did not match the listing photos. Full amount returned.",
       ),
     ).toBeVisible();
-    expect(dialog.getByText("Refund Method")).toBeVisible();
+    expect(dialog.getByText("Transfer to")).toBeVisible();
+    expect(dialog.getByLabelText("Visa")).toBeVisible();
+    expect(dialog.getByText("···· 4242")).toBeVisible();
     expect(
       canvas.queryByText("Order refunded. Payment on this order was returned."),
     ).not.toBeInTheDocument();

@@ -24,8 +24,14 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
 import {
+  OrderDetailsPaymentLogo,
+  PaymentMethodCard,
+  type OrderDetailsPaymentBrand,
+} from "@grade10/ui";
+import {
   ArrowCounterClockwise,
   ArrowUpRight,
+  Bank,
   FilePdf,
   Hourglass,
   Info,
@@ -463,6 +469,44 @@ function SummaryRow({
   );
 }
 
+const PAYMENT_BRAND_BY_LABEL: Record<string, OrderDetailsPaymentBrand> = {
+  Visa: "visa",
+  Mastercard: "mastercard",
+  "American Express": "amex",
+  "Apple Pay": "apple-pay",
+  "Google Pay": "google-pay",
+};
+
+function WinnerOrderPaymentMethod({
+  method,
+  masked,
+}: {
+  method: string;
+  masked?: string;
+}) {
+  const brand = PAYMENT_BRAND_BY_LABEL[method];
+  if (brand != null) {
+    return (
+      <PaymentMethodCard
+        label={masked}
+        leading={<OrderDetailsPaymentLogo brand={brand} />}
+      />
+    );
+  }
+
+  const bankLabel =
+    method !== "Bank transfer" && masked
+      ? `${method}, ${masked}`
+      : (masked ?? method);
+
+  return (
+    <PaymentMethodCard
+      label={bankLabel}
+      leading={<Bank aria-label="Bank" size={20} weight="regular" />}
+    />
+  );
+}
+
 function LotCard({
   content,
   href,
@@ -883,24 +927,10 @@ function OrderSidebar({
                 <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   Payment method
                 </h3>
-                <Card className="gap-0 p-3" padding={false}>
-                  <HStack className="w-full" gap="sm" vAlign="center">
-                    <span className="text-sm leading-5 font-medium text-foreground">
-                      {content.paymentMethod}
-                    </span>
-                    {content.paymentMasked ? (
-                      <>
-                        <span
-                          aria-hidden
-                          className="h-5 w-px shrink-0 bg-border"
-                        />
-                        <span className="text-sm leading-5 font-medium text-foreground">
-                          {content.paymentMasked}
-                        </span>
-                      </>
-                    ) : null}
-                  </HStack>
-                </Card>
+                <WinnerOrderPaymentMethod
+                  masked={content.paymentMasked}
+                  method={content.paymentMethod!}
+                />
                 {receiptList.length > 0 ? (
                   <HStack className="w-full flex-wrap" gap="sm" vAlign="center">
                     {receiptList.map((receipt) => (
