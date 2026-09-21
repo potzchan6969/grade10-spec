@@ -1,7 +1,7 @@
 name: Lint
 
-# No `paths-ignore` for `**/tasks.md`: the jobs below read a change's plan, and
-# the push that ticks a task group carries that file alone.
+# Nothing here is filtered out: the jobs below read a change's plan, and the
+# push that ticks a task group carries that file alone.
 # `scripts/openspec/workflows.test.mjs` holds every gate to it.
 on:
   push:

@@ -13,5 +13,5 @@
 ## 3. The walk (<!-- grade10-spec or grade10 -->)
 
 - [ ] 3.1 <!-- One walk per journey of every capability this change specifies, end to end through the interface its actor uses, kept as the change's end-to-end suite (`<capability>-US-01`) -->
-- [ ] 3.2 <!-- Flip the cases the walks decide with `pnpm run tcs:automated`, in the walks' own commit, and name in the suite the ones that stay manual -->
+- [ ] 3.2 <!-- Flip the cases the walks decide with `pnpm run tcs:automated <case…> --decided-by <walk path>`, in the walks' own commit; the ones that stay manual are named in the suite and named in the walk's `rounds.md` row -->
 - [ ] 3.3 Verify: <!-- the checks this group runs -->
