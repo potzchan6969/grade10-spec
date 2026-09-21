@@ -7,6 +7,7 @@ import { CaretDown } from "@phosphor-icons/react";
 import { cva } from "class-variance-authority";
 import { CheckIcon, ChevronDownIcon, ChevronUpIcon } from "lucide-react";
 import type * as React from "react";
+import { useLayoutEffect, useRef } from "react";
 
 const selectTriggerVariants = cva(
   "flex w-full min-w-0 items-center justify-between gap-2 rounded-(--radius-full) border border-border bg-input px-4 text-sm whitespace-nowrap outline-none select-none transition-[color,box-shadow,border-color,background-color,opacity] hover:border-border-strong focus-visible:border-border-strong focus-visible:ring-1 focus-visible:ring-inset focus-visible:ring-ring disabled:pointer-events-none disabled:bg-background-subtle disabled:opacity-50 data-placeholder:text-muted-foreground aria-invalid:border-destructive-border aria-invalid:ring-3 aria-invalid:ring-destructive-ring *:data-[slot=select-value]:line-clamp-1 *:data-[slot=select-value]:flex *:data-[slot=select-value]:items-center *:data-[slot=select-value]:gap-2 [&_svg]:pointer-events-none [&_svg]:shrink-0 [&_svg]:text-muted-foreground [&_svg:not([class*='size-'])]:size-4",
@@ -66,6 +67,38 @@ function SelectTrigger({
   );
 }
 
+/**
+ * Scroll `element` into its nearest overflow scrollport (the select popup).
+ * Base UI skips this after a pointer open; typeahead can land off-screen.
+ */
+function scrollElementIntoScrollport(element: HTMLElement) {
+  let ancestor: HTMLElement | null = element.parentElement;
+  while (ancestor) {
+    const style = getComputedStyle(ancestor);
+    const overflowY = style.overflowY;
+    const canScroll = ancestor.scrollHeight > ancestor.clientHeight + 1;
+    const isScrollport =
+      canScroll &&
+      (overflowY === "auto" ||
+        overflowY === "scroll" ||
+        overflowY === "overlay");
+    if (isScrollport) {
+      const itemRect = element.getBoundingClientRect();
+      const portRect = ancestor.getBoundingClientRect();
+      if (itemRect.top < portRect.top) {
+        ancestor.scrollTop -= portRect.top - itemRect.top;
+      } else if (itemRect.bottom > portRect.bottom) {
+        ancestor.scrollTop += itemRect.bottom - portRect.bottom;
+      }
+      return;
+    }
+    ancestor = ancestor.parentElement;
+  }
+
+  // Fallback when overflow styles are unresolved (e.g. some test hosts).
+  element.scrollIntoView({ block: "nearest", inline: "nearest" });
+}
+
 function SelectContent({
   className,
   children,
@@ -95,7 +128,8 @@ function SelectContent({
           data-align-trigger={alignItemWithTrigger}
           className={cn(
             // Match DropdownMenuContent chrome so Select rows read like menu items.
-            "relative isolate z-[100] flex max-h-(--available-height) w-(--anchor-width) min-w-36 origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
+            // Cap height even when --available-height is unset so long lists scroll.
+            "relative isolate z-[100] flex max-h-[min(24rem,var(--available-height,24rem))] w-(--anchor-width) min-w-36 origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[align-trigger=true]:animate-none data-[side=bottom]:slide-in-from-top-2 data-[side=inline-end]:slide-in-from-left-2 data-[side=inline-start]:slide-in-from-right-2 data-[side=left]:slide-in-from-right-2 data-[side=right]:slide-in-from-left-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
@@ -127,6 +161,28 @@ function SelectItem({
   children,
   ...props
 }: SelectPrimitive.Item.Props) {
+  const itemRef = useRef<HTMLDivElement | null>(null);
+
+  useLayoutEffect(() => {
+    const node = itemRef.current;
+    if (!node) return;
+
+    const scrollIfHighlighted = () => {
+      if (node.hasAttribute("data-highlighted")) {
+        scrollElementIntoScrollport(node);
+      }
+    };
+
+    scrollIfHighlighted();
+
+    const observer = new MutationObserver(scrollIfHighlighted);
+    observer.observe(node, {
+      attributes: true,
+      attributeFilter: ["data-highlighted"],
+    });
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <SelectPrimitive.Item
       data-slot="select-item"
@@ -138,6 +194,7 @@ function SelectItem({
         className,
       )}
       {...props}
+      ref={itemRef}
     >
       <SelectPrimitive.ItemText className="min-w-0 flex-1 whitespace-nowrap font-normal">
         {children}

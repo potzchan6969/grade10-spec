@@ -9,8 +9,12 @@
 
 When an order is Refunded, Winner Order SHALL show Refunded as the order and
 invoice status, the invoice and receipts already issued, and no stepper, Pay,
-address form or other self-service action. The page SHALL not show the
-operator's refund reason or expose a payment credential.
+address form or other self-service action. The page SHALL show the refund
+reason, note and Refund Method in the details dialog. Refund Method SHALL
+show the channel and a masked destination clue: the card brand and last four
+digits for a card refund, or a masked bank/account clue for a bank transfer.
+The page SHALL not show operator proof, the full provider reference, or a
+payment credential.
 
 #### Scenario: winner-order-SC-157 - A refunded order keeps its documents
 **Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
@@ -20,6 +24,7 @@ operator's refund reason or expose a payment credential.
 - **THEN** the order and invoice read Refunded
 - **AND** the invoice and payment receipt remain downloadable
 - **AND** no Pay, address form or stepper appears
+- **AND** the refund details show the channel and masked destination clue
 
 ### Requirement: Winner Order shows an overpayment without closing the order
 
@@ -37,3 +42,11 @@ showing the operator's proof or full provider reference.
 - **THEN** the order status and invoice lines are unchanged
 - **AND** the returned difference appears below Order Total
 - **AND** the winner can open the refund details
+
+#### Scenario: winner-order-SC-172 - Refund details show statement-recognition clues
+**Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
+
+- **GIVEN** a refunded order with a card refund and a refund detail record
+- **WHEN** the winner opens the refund details
+- **THEN** Refund Method shows the card channel, brand and last four digits
+- **AND** the full provider reference and proof are not shown

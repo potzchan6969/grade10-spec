@@ -179,14 +179,17 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   than the balance owed, on a pending, expired or Partially Paid invoice; the
   order reads Partially Paid, its deadline stops for good, and its numbers
   are fixed: no reissue and no cancel, and what will not be paid off is
-  settled by hand outside the system
+  settled by hand outside the system. A payment above the original invoice
+  total is accepted after an overpayment confirmation dialog before the
+  invoice is marked Paid; the full payment remains recorded and the excess
+  can be returned through the refund flow
 
 | Payments so far | The next payment | What happens |
 | --- | --- | --- |
 | 🚧 Under 90% of the invoice | Less than the balance | Recorded; the order reads Partially Paid |
 | 🚧 90% or more | Less than the balance | Asked to close as Paid, or keep it Partially Paid at the real balance; asked again on every later payment |
 | 🚧 Any | Exactly the balance | Closes on its own; the order reads Processing |
-| ❓ Any | More than the balance | Refused outright, the working assumption; Product and Finance confirm |
+| 🚧 Any | More than the balance | Accepted after an overpayment confirmation dialog; the full payment is recorded, the invoice is marked Paid, and the excess can be returned through the refund flow |
 
 - 🚧 **Reopening the address form** — after the 48-hour deadline and before
   send, on request and with a reason, giving a fresh 48 hours; repeatable,
@@ -221,10 +224,10 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 - 🚧 **The winner** — a closing refund reads Refunded, an overpayment keeps
   the order's status, neither gets a letter, and bidder standing does not
   change
-- ❓ **Refund transaction clues for the winner** — enough for them to
-  recognise the refund on their statement; whether that is the channel only,
-  a masked card or bank clue, or something else; Product confirms. Full proof
-  and provider reference stay with the operator
+- 🚧 **Refund transaction clues for the winner** — Refund Method shows the
+  channel plus a masked destination clue: the card brand and last four digits
+  for a card refund, or a masked bank/account clue for a bank transfer. Full
+  proof, provider reference and audit number stay with the operator
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -330,7 +333,7 @@ settings.
 | Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | 🚧 In flight | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
 | Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
-| Refund transaction clues | ❓ Open | What the winner sees so they can recognise the refund — channel only, a masked card or bank clue, or something else. Full proof and provider reference stay with the operator. | Product |
+| Refund transaction clues | 🚧 In flight | Refund Method shows the channel plus a masked destination clue: the card brand and last four digits for a card refund, or a masked bank/account clue for a bank transfer. Full proof and provider reference stay with the operator. | Product |
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |

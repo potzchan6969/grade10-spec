@@ -4,6 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { COUNTRY_OPTIONS } from "./country-regions";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
@@ -133,7 +134,7 @@ export const DeliveryPicker: Story = {
   },
 };
 
-/** Nested Add Address form — Country stays closed. */
+/** Nested Add Address form — Country/Region stays closed until opened. */
 export const AddDeliveryAddress: Story = {
   name: "Add delivery address",
   play: async ({ canvasElement }) => {
@@ -148,7 +149,7 @@ export const AddDeliveryAddress: Story = {
     expect(form.getByLabelText("First name")).toBeVisible();
     expect(form.getByLabelText("Street address")).toBeVisible();
     expect(form.getByLabelText("Postal code")).toBeVisible();
-    expect(form.getByLabelText("Country")).toBeVisible();
+    expect(form.getByLabelText("Country/Region")).toBeVisible();
     expect(form.getByText("Hong Kong")).toBeVisible();
     expect(form.getByText("Save this address for future orders")).toBeVisible();
     expect(
@@ -160,6 +161,41 @@ export const AddDeliveryAddress: Story = {
       form.getByRole("button", { name: "Use This Address" }),
     ).toBeVisible();
     expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
+
+    // Typeahead: pick a late-alphabet letter so the match sits below the fold.
+    const currentInitial = "Hong Kong".charAt(0).toLowerCase();
+    const letter =
+      [
+        ...new Set(
+          COUNTRY_OPTIONS.map((name) => name.charAt(0).toLowerCase()).filter(
+            (ch) => /^[a-z]$/.test(ch),
+          ),
+        ),
+      ]
+        .filter((ch) => ch !== currentInitial)
+        .at(-1) ?? "z";
+
+    await userEvent.click(form.getByLabelText("Country/Region"));
+    await waitFor(() => {
+      expect(page.getAllByRole("option").length).toBeGreaterThan(1);
+    });
+    await userEvent.keyboard(letter);
+    await waitFor(() => {
+      const highlighted = nested.ownerDocument.querySelector(
+        '[data-slot="select-item"][data-highlighted]',
+      );
+      expect(highlighted).not.toBeNull();
+      expect(
+        highlighted!.textContent?.trim().toLowerCase().startsWith(letter),
+      ).toBe(true);
+
+      const popup = nested.ownerDocument.querySelector(
+        '[data-slot="select-content"]',
+      ) as HTMLElement | null;
+      expect(popup).not.toBeNull();
+      expect(popup!.scrollHeight).toBeGreaterThan(popup!.clientHeight);
+      expect(popup!.scrollTop).toBeGreaterThan(0);
+    });
   },
 };
 

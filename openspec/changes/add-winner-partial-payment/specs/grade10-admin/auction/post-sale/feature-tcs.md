@@ -102,6 +102,37 @@
 * Step 2 leaves the order Partially Paid with the real balance.
 * Step 3 closes the invoice as Paid without a second prompt.
 
+### post-sale-US12-TC4-1: An overpayment needs confirmation before Paid
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-12
+
+**Pre-conditions:**
+
+* `<partially-paid invoice>` has cumulative payments of 90000 minor units against an original total of 100000 minor units.
+* admin(holds payment-processing) is recording another payment.
+
+**Steps:**
+
+1. Enter a payment of 15000 minor units.
+2. Confirm the overpayment dialog.
+
+**Expected Results:**
+
+* The dialog appears before the payment is recorded and the invoice is marked Paid.
+* The full 15000-minor-unit payment is recorded.
+* The invoice is Paid and the excess is not a separate adjustment line.
+
 ## post-sale-US03: Operator collects payment
 
 **As a** payment operator,

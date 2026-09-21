@@ -2,6 +2,7 @@
 title: Site Header and Footer
 spec: shared/ui/site-chrome
 order: 2
+reviewed: 2026-09-21
 ---
 
 Two components make the chrome: a site header and a site footer. Each is usable
@@ -22,14 +23,18 @@ currency.
 
 ## Account Entry
 
-**`SiteHeader`** — a compound header wraps the design-system `Nav` with
+🚧 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
-account icon and a menu of Profile, My Auctions, and Sign out when signed in.
-KYC stays out of the menu.
+account icon and a menu when signed in, with an initial avatar above the
+sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders
+joins ahead of My Auctions and Membership joins after it. The menu does not
+list Profile. KYC stays out of the menu
 
-🚧 **My Orders** joins the menu between Profile and My Auctions once Store
-answers, opening the Store order history surface. Until Store answers, the
-menu omits it.
+🚧 **My Orders** — ahead of My Auctions once Store answers, opening the Store
+order history surface, and omitted until then
+
+**Membership** — ❓ after My Auctions once Store answers; the destination is
+unconfirmed
 
 **Compact menu** — below a 896px-wide container, a leading menu control opens a
 left inset drawer with primary navigation, then utility links in the same
@@ -47,7 +52,9 @@ utility strip / compact utility list.
 
 🚧 When the cart control is present and the cart holds active lines, `SiteHeader`
 shows a round count on the cart icon — the same number as the cart drawer title
-badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
+badge. An empty, omitted, or unknown count hides it. Signed-out visitors have
+no guest cart, so they receive no count. Design-system `Nav` stays
+count-agnostic.
 
 ::figma{url="https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9937" title="Nav — the site header (reference; Storybook is SoT)"}
 
@@ -55,15 +62,17 @@ badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
 
 ::story{id="components-nav-overview--all-controls" title="Nav — all controls"}
 
-::story{id="site-chrome-siteheader-cart--empty-cart" title="SiteHeader — empty cart, no badge"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--empty-no-badge" title="Cart count — empty, no badge"}
 
-::story{id="site-chrome-siteheader-cart--one-item" title="SiteHeader — cart count 1"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-1" title="Cart count — 1 item"}
 
-::story{id="site-chrome-siteheader-cart--multi-item" title="SiteHeader — cart count 3"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-3" title="Cart count — 3 items"}
 
-::story{id="site-chrome-siteheader-cart--large-count" title="SiteHeader — large cart count"}
+::story{id="site-chrome-siteheader-auction-store-cart-count--count-123" title="Cart count — 123 items"}
 
-::story{id="site-chrome-siteheader-cart--on-auction-surface" title="SiteHeader — cart on auction surface (post-store)"}
+::story{id="site-chrome-siteheader-auction-store-surfaces--cart-on-auction" title="Cart on Auction"}
+
+::story{id="site-chrome-siteheader-auction-store-account-menu--open" title="Account menu — Auction & Store"}
 
 ::story{id="components-nav-account--sign-in" title="Nav — Sign In button"}
 
@@ -76,6 +85,8 @@ badge. An empty cart hides it. Design-system `Nav` stays count-agnostic.
 ::story{id="site-chrome-siteheader-auction-first--signed-out" title="Auction first — signed out"}
 
 ::story{id="site-chrome-siteheader-auction-first--signed-in" title="Auction first — signed in"}
+
+::story{id="site-chrome-siteheader-auction-first--account-menu" title="Auction first — account menu open"}
 
 ::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
 

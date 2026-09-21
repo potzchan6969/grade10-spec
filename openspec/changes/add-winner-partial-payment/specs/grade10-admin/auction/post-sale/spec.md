@@ -17,6 +17,10 @@ operator-entered payment against one invoice. Each payment SHALL include
 amount, method, reference and proof, receive its own receipt number, and be
 ordered oldest first. The cumulative amount SHALL determine the remaining
 balance. While money remains due, the order outcome SHALL be Partially Paid.
+When a payment would exceed the original invoice total, Grade10 SHALL require
+the operator to confirm the overpayment before recording it and marking the
+invoice Paid. The payment record SHALL keep the full amount; the excess SHALL
+not become a separate adjustment line.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-140 - A partial payment starts collection
 **Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
@@ -33,6 +37,15 @@ balance. While money remains due, the order outcome SHALL be Partially Paid.
 - **WHEN** the operator records another payment smaller than the current balance
 - **THEN** both payments remain in oldest-first order
 - **AND** the order remains Partially Paid
+
+#### Scenario: grade10-admin-auction-post-sale-SC-143 - An overpayment needs confirmation before Paid
+**Serves:** post-sale-US-12 - Operator collects a lot's price across more than one payment
+
+- **GIVEN** cumulative payments of 90000 minor units against a 100000 minor-unit invoice
+- **WHEN** the operator records a 15000 minor-unit payment
+- **THEN** Grade10 asks the operator to confirm the overpayment before recording it
+- **AND** after confirmation the full 15000-minor-unit payment is recorded and the invoice is Paid
+- **AND** the excess is not recorded as a separate adjustment line
 
 ### Requirement: Closing tolerance is explicit and preserves payments
 

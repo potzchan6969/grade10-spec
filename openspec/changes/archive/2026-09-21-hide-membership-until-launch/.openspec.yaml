@@ -1,0 +1,5 @@
+schema: grade10-planning
+created: 2026-09-21
+promoted_by: "@seankcw"
+page_waived: "seankcw: grade10#543 merged and treated as shipped; the 🚧 marks this proposal linked come off in this same commit, ahead of archiving, matching hide-profile-until-launch's own precedent"
+deploy_waived: "seankcw: grade10#543 (merge commit f07b3bded) is merged and treated as shipped per explicit user instruction; the Deploy workflow has been failing on an unrelated Neon migration-catchup step since 2026-09-18 and has not run against this commit, mirroring hide-profile-until-launch's own archive."

@@ -1,4 +1,5 @@
 schema: grade10-planning
+promoted_by: "@htonyl"
 created: 2026-09-14
 depends_on:
   - add-auction-watchlist

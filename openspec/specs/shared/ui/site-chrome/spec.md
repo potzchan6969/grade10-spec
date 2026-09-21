@@ -13,10 +13,14 @@ destination, and every control that does something.
   - `SiteHeader`: shared header composition with application-supplied content and session
   - Public types: `SiteHeaderProps`, `SiteHeaderCopy`, and `SiteHeaderSession`
 - Header controls
-  - Handler-gated: search, account, and cart render only when a handler is supplied
+  - Handler-gated: search, account, cart, and My Orders render only when a
+    handler is supplied
   - No wishlist: the header does not offer a wishlist control
-  - Auction-first account: Sign In when signed out; Profile, My Auctions, and Sign out when signed in
-  - Compact menu: left drawer for navigation and utilities, with language in a nested drawer
+  - Account menu: Sign In when signed out; signed in, Profile, My Auctions,
+    and Sign out, plus My Orders between Profile and My Auctions when its
+    handler is supplied
+  - Compact menu: left drawer for navigation and utilities, with language in
+    a nested drawer
   - Wide layout: primary navigation and language stay in the bar
 - External links
   - New-tab destinations: a `NavLink` marked `external` opens in a new tab with
@@ -252,12 +256,16 @@ primary Sign In button (not the account icon) and SHALL invoke the supplied
 sign-in handler when that button is activated.
 
 **Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
-account icon and SHALL open a menu of Profile, My Auctions, and Sign out. The
-menu SHALL NOT include Orders or KYC. Activating each item SHALL invoke the
-matching supplied handler.
+account icon and SHALL open a menu of My Auctions and Sign out. The menu
+SHALL NOT include KYC. Activating each item SHALL invoke the matching
+supplied handler.
 
-**Cart and search** - Cart and search SHALL remain absent unless the
-application supplies their handlers.
+**Cart, search, Profile, and My Orders** - Cart, search, Profile, and My
+Orders SHALL remain absent unless the application supplies their handlers.
+The account menu's items SHALL follow the fixed order Profile, My Orders,
+My Auctions, Sign out, omitting Profile or My Orders wherever no matching
+handler is supplied and opening directly on whichever item is next.
+Activating Profile or My Orders SHALL invoke its matching handler.
 
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
 **Serves:** Chrome exports - an application imports SiteHeader
@@ -278,10 +286,12 @@ application supplies their handlers.
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
 **Serves:** Chrome exports - signed in shows the account menu
 
-- **GIVEN** `session` is `"signed-in"`
+- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied, and
+  a My Orders handler is supplied
 - **WHEN** the collector activates the account control
-- **THEN** a menu offers Profile, My Auctions, and Sign out
-- **AND** the menu does not offer Orders or KYC
+- **THEN** a menu offers Profile, My Orders, My Auctions, and Sign out, with
+  Profile first and ahead of My Orders
+- **AND** the menu does not offer KYC
 
 #### Scenario: shared-ui-site-chrome-SC-18 - Auction-first chrome omits cart
 **Serves:** Chrome exports - auction-first chrome omits cart
@@ -289,6 +299,51 @@ application supplies their handlers.
 - **GIVEN** `SiteHeader` with no cart handler
 - **WHEN** it renders
 - **THEN** no cart control appears, and no space is reserved for one
+
+#### Scenario: shared-ui-site-chrome-SC-29 - Signed in with no My Orders handler
+**Serves:** Chrome exports - signed in shows the account menu
+
+- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied, and
+  no My Orders handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers Profile, My Auctions, and Sign out
+- **AND** the menu does not offer My Orders
+
+#### Scenario: shared-ui-site-chrome-SC-30 - Signed in with no Profile handler
+**Serves:** Header controls - the account menu opens directly on My Orders when Profile has no handler
+
+- **GIVEN** `session` is `"signed-in"`, no `onProfile` handler is supplied, and
+  a My Orders handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers My Orders, My Auctions, and Sign out, opening
+  directly on My Orders
+- **AND** the menu does not offer Profile
+
+#### Scenario: shared-ui-site-chrome-SC-31 - Signed in with neither Profile nor My Orders handler
+**Serves:** Header controls - the account menu opens directly on My Auctions when neither Profile nor My Orders has a handler
+
+- **GIVEN** `session` is `"signed-in"`, no `onProfile` handler is supplied, and
+  no My Orders handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers only My Auctions and Sign out, opening directly on
+  My Auctions
+- **AND** the menu does not offer Profile or My Orders
+
+#### Scenario: shared-ui-site-chrome-SC-32 - Activating Profile invokes its handler
+**Serves:** Header controls - the account menu's Profile item takes the collector to the supplied destination
+
+- **GIVEN** `session` is `"signed-in"` and an `onProfile` handler is supplied
+- **WHEN** the collector activates Profile in the account menu
+- **THEN** the supplied `onProfile` handler is invoked
+- **AND** no other account-menu handler is invoked
+
+#### Scenario: shared-ui-site-chrome-SC-33 - Signed out ignores the Profile and My Orders handlers
+**Serves:** Chrome exports - signed out shows Sign In
+
+- **GIVEN** `session` is `"signed-out"`, an `onProfile` handler is supplied, and a My Orders handler is supplied
+- **WHEN** `SiteHeader` renders
+- **THEN** a primary Sign In button appears
+- **AND** no account icon, Profile item, or My Orders item appears
 
 ### Requirement: Compact viewports open navigation from a left menu drawer
 

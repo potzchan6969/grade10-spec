@@ -32,7 +32,7 @@ export const WINNER_ORDER_BANK_DETAILS = {
   accountNumber: "XXXX-XXXX-XXXX-1234",
   swiftCode: "X12345678",
   /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
-  totalAmountDue: "HK$15,540",
+  totalAmountDue: "HK$16,020",
   transferReference: "TCG-INV-202609-LK7P2Q-01-W42",
 } as const;
 

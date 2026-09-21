@@ -1,5 +1,10 @@
 "use client";
 
+import {
+  Avatar,
+  AvatarFallback,
+  avatarInitial,
+} from "@grade10/design-system/components/display/avatar";
 import { StatusIndicator } from "@grade10/design-system/components/display/status-indicator";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import {
@@ -10,6 +15,7 @@ import {
   type NavLocale,
   type NavProps,
 } from "@grade10/design-system/components/layout/nav";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -28,11 +34,13 @@ import type { ReactNode } from "react";
  * forking the shell.
  */
 type SiteHeaderCopy = NavCopy & {
-  /** Heading above the signed-in account menu items. */
+  /** Heading above the signed-in account menu items, used when no email is supplied. */
   accountMenuLabel: string;
   profile: string;
   myOrders: string;
   myAuctions: string;
+  /** Store-launch membership destination. TBC — shown only with `onMembership`. */
+  membership?: string;
   /** Optional authenticated orders destination label. */
   orders?: string;
   signOut: string;
@@ -60,9 +68,16 @@ type SiteHeaderProps = {
    */
   cartItemCount?: number;
   onSignIn: () => void;
-  onProfile: () => void;
+  /**
+   * Sign-in email shown above the account menu items. Omitted, the menu
+   * falls back to `copy.accountMenuLabel`.
+   */
+  accountEmail?: string;
+  onProfile?: () => void;
   onMyOrders?: () => void;
   onMyAuctions: () => void;
+  /** Store-launch membership item. TBC — omitted unless this handler is supplied. */
+  onMembership?: () => void;
   /** Opens the consumer-owned authenticated orders destination. */
   onOrders?: () => void;
   onSignOut: () => void;
@@ -78,11 +93,13 @@ type SiteHeaderProps = {
  * Grade10 site header: design-system `Nav` plus session-aware account entry.
  *
  * Signed out shows a primary Sign In button. Signed in shows the account icon
- * and a menu of Profile, My Auctions, then Sign out (destructive, separated).
- * Cart, search, My Orders, and Orders stay optional via handlers —
- * auction-first launches omit them, My Orders joins between Profile and My
- * Auctions once its handler is supplied, and Orders joins after My Auctions
- * once both its copy and handler are supplied. When cart is present,
+ * and a menu with the email's initial avatar above the sign-in email, then
+ * My Auctions, then Sign Out (destructive, separated). Cart, search, Profile, My Orders,
+ * Membership, and Orders stay optional via handlers — Profile joins first
+ * once its handler is supplied, My Orders joins ahead of My Auctions once
+ * Store answers, Membership joins after My Auctions once its copy and
+ * handler are supplied, and Orders joins after that once both its copy and
+ * handler are supplied. When cart is present,
  * `SiteHeader` owns the active-line count badge on the cart icon
  * (`cartItemCount`), matching the cart drawer title. On compact viewports,
  * `Nav` moves primary nav, utilities, search, and language into the left menu
@@ -107,9 +124,11 @@ function SiteHeader({
   onCartClick,
   cartItemCount,
   onSignIn,
+  accountEmail,
   onProfile,
   onMyOrders,
   onMyAuctions,
+  onMembership,
   onOrders,
   onSignOut,
   accountMenuDefaultOpen,
@@ -120,6 +139,7 @@ function SiteHeader({
     profile,
     myOrders,
     myAuctions,
+    membership,
     orders,
     signOut,
     ...navCopy
@@ -142,8 +162,23 @@ function SiteHeader({
         </DropdownMenuTrigger>
         <DropdownMenuContent align="end" className="min-w-48 w-auto">
           <DropdownMenuGroup>
-            <DropdownMenuLabel>{accountMenuLabel}</DropdownMenuLabel>
-            <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
+            <DropdownMenuLabel className="whitespace-nowrap">
+              {accountEmail ? (
+                <VStack gap="xs" hAlign="start">
+                  <Avatar size="xs">
+                    <AvatarFallback aria-hidden>
+                      {avatarInitial(accountEmail)}
+                    </AvatarFallback>
+                  </Avatar>
+                  {accountEmail}
+                </VStack>
+              ) : (
+                accountMenuLabel
+              )}
+            </DropdownMenuLabel>
+            {onProfile != null ? (
+              <DropdownMenuItem onClick={onProfile}>{profile}</DropdownMenuItem>
+            ) : null}
             {onMyOrders != null ? (
               <DropdownMenuItem onClick={onMyOrders}>
                 {myOrders}
@@ -152,6 +187,11 @@ function SiteHeader({
             <DropdownMenuItem onClick={onMyAuctions}>
               {myAuctions}
             </DropdownMenuItem>
+            {membership && onMembership ? (
+              <DropdownMenuItem onClick={onMembership}>
+                {membership}
+              </DropdownMenuItem>
+            ) : null}
             {orders && onOrders ? (
               <DropdownMenuItem onClick={onOrders}>{orders}</DropdownMenuItem>
             ) : null}

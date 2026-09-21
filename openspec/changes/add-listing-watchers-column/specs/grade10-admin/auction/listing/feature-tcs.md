@@ -3,13 +3,13 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-14, tcs-rules r1
 
-## grade10-admin-auction-listing-US8: Operator compares interest across listings
+## grade10-admin-auction-listing-US-08: Operator compares interest across listings
 
 **As an** auction operator,
 **I want** to see how many collectors watch each listing from the Listings table,
 **so that** I can tell which lots draw interest without opening each one.
 
-### grade10-admin-auction-listing-US8-TC1-1: Listings table counts watches across both brands
+### grade10-admin-auction-listing-US-08-TC1-1: Listings table counts watches across both brands
 
 **Classification:**
 
@@ -37,7 +37,7 @@ A published listing watched by two collectors on Grade10 and one collector on ZZ
 * The row shows 3.
 * No watcher is named.
 
-### grade10-admin-auction-listing-US8-TC2-1: A draft nobody watches shows zero
+### grade10-admin-auction-listing-US-08-TC2-1: A draft nobody watches shows zero
 
 **Classification:**
 
@@ -63,7 +63,7 @@ A draft listing with no watches. An authorized operator is on <grade10 auction a
 
 * The row shows 0, not a blank or "-".
 
-### grade10-admin-auction-listing-US8-TC3-1: A closed listing keeps its watchers
+### grade10-admin-auction-listing-US-08-TC3-1: A closed listing keeps its watchers
 
 **Classification:**
 

@@ -38,6 +38,7 @@
 * Pay, address editing and shipment actions are absent.
 * The invoice and every existing receipt remain downloadable.
 * No refund letter is required by this surface.
+* Refund details show the refund channel and a masked card or bank clue, not the full provider reference or proof.
 
 ## winner-order-US15: Winner sees an overpayment returned
 
@@ -83,3 +84,4 @@
 | --- | --- |
 | Refunded retains issued documents and removes self-service | **Folded in:** `winner-order-SC-157` |
 | An overpayment returns only the difference and keeps the sale open | **Folded in:** `winner-order-SC-155` |
+| Refund details provide a statement-recognition clue | **Folded in:** `winner-order-SC-172` |
