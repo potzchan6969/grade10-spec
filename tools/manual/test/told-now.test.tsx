@@ -63,7 +63,7 @@ describe("the message each hand of the stage is being sent", () => {
 
   it("carries the move and the command the hand pastes", () => {
     expect(html).toContain("Answer:");
-    expect(html).toContain("/plan gift-cards");
+    expect(html).toContain("/workflow-plan gift-cards");
   });
 
   it("names the hand the message reaches", () => {
@@ -111,12 +111,12 @@ describe("the stage that names the design pair", () => {
   it("shows the designer the message their own turn sends", () => {
     expect(html).toContain("@kim");
     expect(html).toContain("<strong>Your turn</strong>");
-    expect(html).toContain("/design gift-cards");
+    expect(html).toContain("/workflow-design gift-cards");
   });
 
   it("shows the tech PIC theirs beside it, and nothing to the hand that passed it on", () => {
     expect(html).toContain("@erin");
-    expect(html).toContain("/tech gift-cards");
+    expect(html).toContain("/workflow-tech gift-cards");
     expect(html).not.toContain("@robin");
   });
 });

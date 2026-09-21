@@ -182,7 +182,7 @@ land both files, together.
 #### Scenario: shared-planning-agent-rounds-SC-06 - The requirements' round takes two readings
 **Serves:** The round - the requirements of every change are drawn twice before anybody reads them
 
-- **WHEN** `/specify` runs on a change whose decisions and journeys are on `main`
+- **WHEN** `/workflow-specify` runs on a change whose decisions and journeys are on `main`
 - **THEN** the requirements and the cases are written by two readers, neither reading the other's output
 - **AND** the two are joined by the run that took them
 - **AND** no agent is dispatched to decide between them
@@ -561,8 +561,8 @@ them from there.
   block, read through the same reader
 - **No reader without a trigger** — a perspective no draft can summon is not an
   entry
-- **One procedure** — `/plan`, `/design`, `/tech`, `/specify`, `/tasks`,
-  `/build` and `/land` each name their artifact and call `/round`, which reads
+- **One procedure** — `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+  `/workflow-build` and `/workflow-land` each name their artifact and call `/workflow-round`, which reads
   this table; none of them carries its own copy of it
 
 #### Scenario: shared-planning-agent-rounds-SC-28 - Every round reads one table

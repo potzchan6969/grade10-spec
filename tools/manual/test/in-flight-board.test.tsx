@@ -212,16 +212,16 @@ describe("what a card tells a review", () => {
  * skill name off a badge. Every stage an agent drafts names its own command,
  * and the three it drafts nothing for leave the archive. */
 describe("the loop's continuation on the card", () => {
-  it("hands a proposed change to /plan for its three files", () => {
+  it("hands a proposed change to /workflow-plan for its three files", () => {
     const html = render([changeEntry("an-idea", [], {})]);
-    expect(html).toContain("/plan an-idea");
+    expect(html).toContain("/workflow-plan an-idea");
   });
 
-  it("hands a specified change to /specify for the reading", () => {
+  it("hands a specified change to /workflow-specify for the reading", () => {
     const html = render([
       changeEntry("written-up", [delta()], { stage: "specified" }),
     ]);
-    expect(html).toContain("/specify written-up");
+    expect(html).toContain("/workflow-specify written-up");
     expect(html).toContain("Product manager: read");
   });
 

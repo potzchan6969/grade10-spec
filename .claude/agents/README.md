@@ -14,7 +14,7 @@ resolves to one of them.
   the dispatch carries the perspective's name, and the definition says which
   reading is which
 - **The table is the schema's** — a perspective is a row there, with its
-  `name`, its `when` and its `agent`. The `round` skill reads them through
+  `name`, its `when` and its `agent`. The `workflow-round` skill reads them through
   `node scripts/openspec/perspectives.mjs`; nothing carries a second copy
 - **`always` is per artifact** — a reader whose `when` is `always` runs on
   every round of the artifacts whose list names it. Only the simpler thing

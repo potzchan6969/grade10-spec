@@ -49,7 +49,7 @@ The owner's points of 2026-09-19, on the first draft of this shape.
   `proposal.md` and `user-journeys.md`, then `ui-design.md` and
   `tech-design.md`, then `spec.md` and the suite, then `tasks.md`; when one
   changes, every group after it is read again in full, so nothing stale is
-  built on; `/plan`, `/design`, `/tech` and `/specify` grill one another,
+  built on; `/workflow-plan`, `/workflow-design`, `/workflow-tech` and `/workflow-specify` grill one another,
   because things change after deeper thought
 - **The PM starts with what is wanted** — agents refine the rest with what
   makes the most sense, and raise what is a preference or a product decision
@@ -168,9 +168,9 @@ set by hand.
 | # | Stage | Evidence on `main` | The agent | You | Then |
 | --- | --- | --- | --- | --- | --- |
 | 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one 🚧 line per outcome on the PRD and `hands:`, ❓ on what is open | Drafts the marks and the three files; asks | PM: say what is wanted, answer | The designer and the tech PIC, told once the three are in |
-| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Proposes both designs, challenged and verified | Designer: tweak. Tech PIC: challenge | The re-read runs `/specify` |
-| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings, reconciled | PM: read the requirements and the cases together | Engineer, `/tasks <change>` |
-| 4 | Planned | `tasks.md`; `promoted_by`; `landed_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary | Engineers, `/build <change> <group>` |
+| 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Proposes both designs, challenged and verified | Designer: tweak. Tech PIC: challenge | The re-read runs `/workflow-specify` |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings, reconciled | PM: read the requirements and the cases together | Engineer, `/workflow-tasks <change>` |
+| 4 | Planned | `tasks.md`; `promoted_by`; `landed_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary | Engineers, `/workflow-build <change> <group>` |
 | 5 | Building | Boxes ticking through `pnpm plan done`; a `rounds.md` row per group | Builds each group test first, audited and verified; the walk last | Engineer: read each landing | The deploy, on every green push |
 | 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; the run sheet, automated cases left out | QA: walk it | Release hand, `/release` |
 | 7 | Released | `released_in: <tag>` | The cut | Release hand: cut | Whoever archives, `/archive <change>` |
@@ -405,7 +405,7 @@ round the thread runs.
 
 | Step | In a terminal |
 | --- | --- |
-| Ask | `/design <id>` or `/tech <id>`; the frames and the challenge as you would say them |
+| Ask | `/workflow-design <id>` or `/workflow-tech <id>`; the frames and the challenge as you would say them |
 | Draft | On `claude/<id>`, pushed with a lease; the hosted run reads the branch and `main` before every wake and continues from what is there |
 | Read | The summary printed, with the button's line as text |
 | Land | `land` to the local agent: `plan:land` resolves you from `git config user.email` through the team map, refuses a hand that is not the stage's, cuts the landing commit, runs the gate and pushes `main` |
@@ -451,7 +451,7 @@ thread, and the change's stage says what happens:
 | Down | Still works | Catches up |
 | --- | --- | --- |
 | Slack | Terminal rounds and landings; My turn, Told now and the thread on the manual, read from files | The push's messages go out when Slack answers; the digest on Monday |
-| The relay, on Cloudflare | Terminal rounds and landings, which push `main` themselves; the local manual | A wake that did not reach the relay is said in the channel; `/round reread <id>` from a terminal reads again |
+| The relay, on Cloudflare | Terminal rounds and landings, which push `main` themselves; the local manual | A wake that did not reach the relay is said in the channel; `/workflow-round reread <id>` from a terminal reads again |
 | The hosted manual, on Cloudflare | The local manual, `pnpm manual`, on the same files | The next push redeploys it |
 | GitHub Actions | The relay's landings and the thread's replies | The messages, the re-read and the site on the next push |
 | The Routine | The same round from a terminal | The next wake |
@@ -514,21 +514,21 @@ archived, 8 waiting.
 ### Fewer Skills
 
 Thirteen on the line, named by what the person does, each calling one
-`round` skill; challenger and verifier agents under `.claude/agents/`;
+`workflow-round` skill; challenger and verifier agents under `.claude/agents/`;
 design-to-code skills unchanged; craft skills moved off the line.
 
 | Skill | Replaces |
 | --- | --- |
-| `round` | new: the six steps every line skill calls; the perspectives are schema data |
-| `/plan` | `planning-pm`, `openspec-propose`, `prd-authoring`, `grilling` |
-| `/design` | `planning-design` |
-| `/tech` | `planning-dev`, the design half |
-| `/specify` | `planning-qa`, `spec-to-tcs` |
+| `workflow-round` | new: the six steps every line skill calls; the perspectives are schema data |
+| `/workflow-plan` | `planning-pm`, `openspec-propose`, `prd-authoring`, `grilling` |
+| `/workflow-design` | `planning-design` |
+| `/workflow-tech` | `planning-dev`, the design half |
+| `/workflow-specify` | `planning-qa`, `spec-to-tcs` |
 | `/review-cases` | `tcs-review` |
-| `/tasks` | `planning-dev`, the tasks half |
-| `/build` | `openspec-apply-change`; `grade10`'s `implement` and `tdd` |
-| `/land` | `commit`, `gen-commit-msg-staged`, `pr-push`, `spec-push`, `git-operations` |
-| `/reconcile` | the re-read, inside `round` |
+| `/workflow-tasks` | `planning-dev`, the tasks half |
+| `/workflow-build` | `openspec-apply-change`; `grade10`'s `implement` and `tdd` |
+| `/workflow-land` | `commit`, `gen-commit-msg-staged`, `pr-push`, `spec-push`, `git-operations` |
+| `/reconcile` | the re-read, inside `workflow-round` |
 | `/run-sheet` | `tcs-run-sheet` |
 | `/release` | new, in `grade10` |
 | `/archive` | `openspec-archive-change` |

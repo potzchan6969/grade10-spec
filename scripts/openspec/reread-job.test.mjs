@@ -88,7 +88,7 @@ function sandbox() {
     "openspec/specs/shared/planning/agent-rounds/spec.md": "# Spec\n",
     "openspec/schemas/demo-planning/schema.yaml": "name: demo-planning\n",
     "scripts/openspec/plan-land.mjs": "// the landing step\n",
-    ".claude/skills/round/SKILL.md": "# Round\n",
+    ".claude/skills/workflow-round/SKILL.md": "# Round\n",
     ".github/workflows/proposal-notify.yml": "name: notify\n",
     "packages/design-system/README.md": "the design system\n",
     "tools/manual/check/rounds.mjs": "// the round rule\n",

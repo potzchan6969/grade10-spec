@@ -4,7 +4,7 @@
  * change it opened.
  *
  * `.round/relay.json` is the wake's own file — the session writes the
- * Routine's payload there whole, before it does anything else; the `round`
+ * Routine's payload there whole, before it does anything else; the `workflow-round`
  * skill names its six keys. `lib/relay.mjs` reads it and makes every call,
  * here and in `plan-land.mjs`; its token is scoped to this wake, signed by
  * the relay and expiring with its budget, so this script never holds a chat

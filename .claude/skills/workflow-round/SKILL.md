@@ -1,6 +1,6 @@
 ---
-name: round
-description: Run one round on one artifact of a change - ask, draft, challenge, verify, read, land - drafting ahead through the chain, and the re-read a landing wakes. Use when writing, changing or landing any artifact of an OpenSpec change, when answering a hand in the change's thread, and when a landing puts something behind. Invoke as /round <change> <artifact|group>, /round <change> for the thread's ask, or /round reread <change>.
+name: workflow-round
+description: Run one round on one artifact of a change - ask, draft, challenge, verify, read, land - drafting ahead through the chain, and the re-read a landing wakes. Use when writing, changing or landing any artifact of an OpenSpec change, when answering a hand in the change's thread, and when a landing puts something behind. Invoke as /workflow-round <change> <artifact|group>, /workflow-round <change> for the thread's ask, or /workflow-round reread <change>.
 allowed-tools: Read, Grep, Glob, Write, Edit, Bash, Task
 ---
 
@@ -8,8 +8,8 @@ allowed-tools: Read, Grep, Glob, Write, Edit, Bash, Task
 
 Every artifact of a change, from the proposal to a task group's code, is
 written by one round of six steps, and nothing reaches `main` by another
-route. The line commands - `/plan`, `/design`, `/tech`, `/specify`, `/tasks`,
-`/build`, `/land` - each name their artifact and follow this skill; the rules
+route. The line commands - `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+`/workflow-build`, `/workflow-land` - each name their artifact and follow this skill; the rules
 the artifact must meet are theirs, the procedure is here.
 
 The product's own words for all of it:
@@ -54,8 +54,8 @@ every wake is a fresh session that remembers nothing else.
 
 ## The Thread's Ask
 
-`/round <change>` with no artifact named routes off the payload's `reason`:
-`landing` is the re-read, `plan` is `/plan`, and `message` is the wake's
+`/workflow-round <change>` with no artifact named routes off the payload's `reason`:
+`landing` is the re-read, `plan` is `/workflow-plan`, and `message` is the wake's
 messages read as the hand's moves - a `land` or a `land with
 recommendations` is a landing, a `Q<n>` line is an answer, and anything else
 is a remark on the artifact the thread is on. What each one writes is the
@@ -281,7 +281,7 @@ every refusal the command runs through before `main` moves, are its header's.
 
 ## The Re-Read
 
-`/round reread <change>`, after a landing:
+`/workflow-round reread <change>`, after a landing:
 
 1. **Oldest first** — read every artifact after the one that moved, in the
    order of the upstream set

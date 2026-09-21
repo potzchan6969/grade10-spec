@@ -495,7 +495,7 @@ test("shared-planning-change-stages-SC-40 and shared-planning-change-stages-SC-4
       message.text,
       /https:\/\/spec\.test\/planning\/in-flight\/probe/,
     );
-    assert.match(message.text, /`\/[a-z]+ probe/);
+    assert.match(message.text, /`\/[a-z-]+ probe/);
   }
 });
 
@@ -794,7 +794,7 @@ test("shared-planning-change-stages-SC-41 - --stages posts to the role's channel
     messages.map((one) => [one.key, one.to, one.channel]),
     [["probe:planned:dev", "channel", "C-DEV"]],
   );
-  assert.match(messages[0].text, /`\/tasks probe`/);
+  assert.match(messages[0].text, /`\/workflow-tasks probe`/);
 });
 
 test("shared-planning-change-stages-SC-42 - --stages posts to the role's channel when the hand is taken off", () => {

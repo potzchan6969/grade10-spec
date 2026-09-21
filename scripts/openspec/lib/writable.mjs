@@ -1,7 +1,7 @@
 /**
  * What a re-read of one change may write, in one place.
  *
- * `.claude/skills/round/SKILL.md`: "`openspec/changes/<change>/` and the
+ * `.claude/skills/workflow-round/SKILL.md`: "`openspec/changes/<change>/` and the
  * pages the proposal links, and nothing else". `reread-guard.mjs` is what
  * holds a session to that — it fails on a path a run pushed anyway — so the
  * boundary is written once here rather than beside each thing that reads it.

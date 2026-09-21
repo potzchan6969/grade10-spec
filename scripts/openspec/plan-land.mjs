@@ -750,7 +750,7 @@ function artifactIdOf(artifacts, named) {
 }
 
 /** The row the landing commits: the flags a round gave it. A landing owes a
- * row, so a run with neither is refused rather than landing work the `round`
+ * row, so a run with neither is refused rather than landing work the `workflow-round`
  * rule will refuse on the next push. */
 function rowOf(read, artifact, group) {
   if (!flags.perspectives || !flags.stood) {

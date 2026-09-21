@@ -1,6 +1,6 @@
 ---
-name: build
-description: Run a round on one task group - its tests in their own commit, then its code, then its readers, then the landing summary - and land the group's row before the tick. Use when implementing a group of a change whose tasks.md is on main. Invoke as /build <change> <group>.
+name: workflow-build
+description: Run a round on one task group - its tests in their own commit, then its code, then its readers, then the landing summary - and land the group's row before the tick. Use when implementing a group of a change whose tasks.md is on main. Invoke as /workflow-build <change> <group>.
 ---
 
 # A Task Group's Round
@@ -13,7 +13,7 @@ product detail goes, and the checks each kind of work owes - plus
 [`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
 which the group's readers hold the code to.
 
-Then follow `round`: it holds the six steps, the readers, the questions, the
+Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
 landing and the re-read. The group's readers come from the schema's `apply`
 block rather than an artifact's.
 
@@ -37,7 +37,7 @@ block rather than an artifact's.
 ## In the Application Repository
 
 Code lands in `grade10`, and the round is still this one. That session reaches
-this store through `/add-dir` on a clone of it and reads the `round` skill, the
+this store through `/add-dir` on a clone of it and reads the `workflow-round` skill, the
 schema's perspectives and the reader definitions under `.claude/agents/` from
 there - never from the submodule directory pinned to an older sha, because a
 round read from a pin is a round held to last month's rules. The group's row

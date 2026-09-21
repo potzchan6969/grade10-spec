@@ -1,6 +1,6 @@
 ---
 name: planning-pm
-description: Write the product manager's half of an OpenSpec change - the proposal, the decisions the interview settled, and the user journeys - then hand the change on to /specify, which writes spec.md, and answer what its two readings escalate. Use when a PM or designer is specifying a change, and stop before spec.md.
+description: Write the product manager's half of an OpenSpec change - the proposal, the decisions the interview settled, and the user journeys - then hand the change on to /workflow-specify, which writes spec.md, and answer what its two readings escalate. Use when a PM or designer is specifying a change, and stop before spec.md.
 ---
 
 # The product manager's artifacts
@@ -42,24 +42,24 @@ them, so the outline is written against the inventory rather than an imagined
 one. `planning-design` routes here for that, and holds what the reference is.
 
 **You do not open `spec.md`.** Both of its passes belong to the run that takes
-the two readings - `/specify`, under `planning-qa`'s rules. Neither `spec.md`
+the two readings - `/workflow-specify`, under `planning-qa`'s rules. Neither `spec.md`
 nor `feature-tcs.md` names a teammate in the schema: they sit on nobody's
 worklist, and you read them rather than write them.
 
 | Generated | File | Whose run |
 | --- | --- | --- |
-| `specs` — pass one | `specs/<capability>/spec.md` | `/specify`: `## Purpose` and `## Feature set`, from your journeys and your 🚧 lines |
-| `test-cases` | `specs/<capability>/feature-tcs.md` | `/specify`: a blind suite, drafted without sight of the scenarios |
-| `specs` — pass two | `specs/<capability>/spec.md` | `/specify`: the requirement deltas and their scenarios, reconciled against that suite |
+| `specs` — pass one | `specs/<capability>/spec.md` | `/workflow-specify`: `## Purpose` and `## Feature set`, from your journeys and your 🚧 lines |
+| `test-cases` | `specs/<capability>/feature-tcs.md` | `/workflow-specify`: a blind suite, drafted without sight of the scenarios |
+| `specs` — pass two | `specs/<capability>/spec.md` | `/workflow-specify`: the requirement deltas and their scenarios, reconciled against that suite |
 
 Generated is not unreviewed. **You are the reader of record** for all three,
 and all three come back together. The root groups trace to your own 🚧 lines
 and every anchor downstream hangs off them, so you read them beside the
 scenarios and the suite built on them rather than on their own - the run does
-not stop to have the outline read. `/specify` stops at every contradiction
+not stop to have the outline read. `/workflow-specify` stops at every contradiction
 it cannot settle, and those stops are yours to answer.
 
-**Stop at the journeys.** `/specify` writes the outline, then runs the two
+**Stop at the journeys.** `/workflow-specify` writes the outline, then runs the two
 readings from it. A designer writes `ui-design.md` unless you already had the
 design, and the engineer who picks the change up writes `tech-design.md` and
 `tasks.md` - on this same change, never a second one. A change with no
@@ -81,7 +81,7 @@ goals moved may owe a journey it does not have, and that journey is yours.
 
 ## The run
 
-`/plan` runs this as a round. `round` holds the steps, the readers and the
+`/workflow-plan` runs this as a round. `workflow-round` holds the steps, the readers and the
 landing; what follows is what the three artifacts must hold, and the order they
 are written in.
 
@@ -114,7 +114,7 @@ Everything this run produces is `draft`. Nothing in it claims review.
    challenge, which carries your alternative and its reason in `Instead of`
    so the next reader sees the row was contested rather than re-opening it.
    Every question they have not answered is one of the store's two classes,
-   under `round`'s **Questions: Held, or Decided by the Round**. The ❓
+   under `workflow-round`'s **Questions: Held, or Decided by the Round**. The ❓
    opening the `Decided` cell is the one marker the tooling reads, and a cell
    that opens it and names no role that way reaches no list. A deferred
    question - the author saying they are not the right person for it - is no
@@ -189,7 +189,7 @@ Everything this run produces is `draft`. Nothing in it claims review.
    and those two are the whole of what it has to go on - which is the reason
    step 3 comes before step 5 rather than after it. Half the **anchor set** is
    already fixed by the time you stop: the capability's full journey set once
-   this change folds, which `/specify` unions with the root groups it
+   this change folds, which `/workflow-specify` unions with the root groups it
    derives. Those groups come back with the scenarios, not ahead of them: the
    run goes straight from the outline to the readings. Read them there, against
    your own 🚧 lines.
@@ -200,12 +200,12 @@ Everything this run produces is `draft`. Nothing in it claims review.
    `specs: <what is still to come>` in the change's `.openspec.yaml`.
    `validate:changes` then reports the change as waiting rather than failing
    it, and the wait is not read as over until the requirements land.
-   `/specify` deletes the line as the requirements land.
+   `/workflow-specify` deletes the line as the requirements land.
 
    A requirement nobody can decide yet is the same line for a different
-   reason - a wait, not a guess - and it stays after `/specify` has run.
+   reason - a wait, not a guess - and it stays after `/workflow-specify` has run.
 
-8. **Answer what the readings escalate.** `/specify` pauses on a case
+8. **Answer what the readings escalate.** `/workflow-specify` pauses on a case
    nobody ever decided, and on two readings that state opposite things. Those
    pauses are grilling rounds, and they are yours: the run does not settle a
    product question, and a ❓ on the PRD is how one that nobody present can
@@ -255,7 +255,7 @@ grilling round, not a self-service waiver.
 | A question the interview settled, and what it dropped | `decisions.md`'s `Decisions` table |
 | A question the blind pass could not settle | `decisions.md`'s `## Raised` table, landed before the requirements do |
 | A question nobody present could settle | The proposal's open questions, and a ❓ on the PRD |
-| Anything testable | The delta spec, and nowhere else - `/specify` writes it, you check it |
+| Anything testable | The delta spec, and nowhere else - `/workflow-specify` writes it, you check it |
 | Who walks it | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
 | How it will be built | `tech-design.md` - not yours |

@@ -1,6 +1,6 @@
 ---
-name: tech
-description: Run a round on a change's tech-design.md - the decisions, the data model, the contracts and the risks - before the requirements are drawn from it. Use when an engineer picks a change up. Invoke as /tech <change>.
+name: workflow-tech
+description: Run a round on a change's tech-design.md - the decisions, the data model, the contracts and the risks - before the requirements are drawn from it. Use when an engineer picks a change up. Invoke as /workflow-tech <change>.
 ---
 
 # The Engineer's Design Round
@@ -16,7 +16,7 @@ plus:
 openspec instructions tech-design --change <change>
 ```
 
-Then follow `round`: it holds the six steps, the readers, the questions, the
+Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
 landing and the re-read.
 
 ## What the Round Adds Here

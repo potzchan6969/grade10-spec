@@ -1,6 +1,6 @@
 ---
-name: tasks
-description: Run a round on a change's tasks.md - the delivery plan, grouped by layer, test task first and claimed group by group. Use when a change's requirements and cases are on main and delivery needs planning. Invoke as /tasks <change>.
+name: workflow-tasks
+description: Run a round on a change's tasks.md - the delivery plan, grouped by layer, test task first and claimed group by group. Use when a change's requirements and cases are on main and delivery needs planning. Invoke as /workflow-tasks <change>.
 ---
 
 # The Plan's Round
@@ -17,7 +17,7 @@ the group and owner format two repositories parse - plus:
 openspec instructions tasks --change <change>
 ```
 
-Then follow `round`: it holds the six steps, the readers, the questions, the
+Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
 landing and the re-read.
 
 ## What the Round Adds Here

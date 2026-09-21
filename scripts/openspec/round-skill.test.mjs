@@ -1,5 +1,5 @@
 /*
- * The round is a procedure with one home. These tests hold the `round` skill
+ * The round is a procedure with one home. These tests hold the `workflow-round` skill
  * and the seven line skills to what the capability says they are: six steps,
  * four moves, the perspectives read from the schema through one CLI rather
  * than copied into prose, a question in the `Q<n>` grammar, a re-read that
@@ -18,6 +18,7 @@ import { dirname, join, normalize, resolve } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
 import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import { LINE_SKILLS } from "./lib/line-skills.mjs";
 import { planningSchema, TRIGGERS } from "./lib/perspectives.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
@@ -27,19 +28,11 @@ const read = (path) => readFileSync(join(ROOT, path), "utf8");
 // or a bold lead never fails a claim the file still makes.
 const claims = (path) => read(path).replace(/\s+/g, " ");
 
-const ROUND = ".claude/skills/round/SKILL.md";
-const PLAN = ".claude/skills/plan/SKILL.md";
-const DESIGN = ".claude/skills/design/SKILL.md";
-const SPECIFY = ".claude/skills/specify/SKILL.md";
-const LINES = {
-  plan: "proposal.md",
-  design: "ui-design.md",
-  tech: "tech-design.md",
-  specify: "spec.md",
-  tasks: "tasks.md",
-  build: "task group",
-  land: "plan:land",
-};
+const ROUND = ".claude/skills/workflow-round/SKILL.md";
+const PLAN = ".claude/skills/workflow-plan/SKILL.md";
+const DESIGN = ".claude/skills/workflow-design/SKILL.md";
+const SPECIFY = ".claude/skills/workflow-specify/SKILL.md";
+const LINES = LINE_SKILLS;
 
 const frontMatter = (text) => {
   const block = /^---\n([\s\S]*?)\n---\n/.exec(text);
@@ -371,7 +364,7 @@ test("shared-planning-agent-rounds-SC-72 - a held row holds the landing until an
     skill,
     /writes each held row's recommendation in the landing commit/i,
   );
-  const land = claims(".claude/skills/land/SKILL.md");
+  const land = claims(".claude/skills/workflow-land/SKILL.md");
   assert.match(land, /land with recommendations/i);
 });
 
@@ -717,7 +710,7 @@ test("each line skill names its artifact and follows the round", () => {
     );
     assert.match(
       skill,
-      /follow `round`|\/round/,
+      /follow `workflow-round`|\/workflow-round/,
       `/${name} calls the round rather than restating it`,
     );
     assert.doesNotMatch(skill, /external\/grade10-spec/);

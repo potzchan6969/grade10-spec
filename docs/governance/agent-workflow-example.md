@@ -14,8 +14,8 @@ config-only with `store: grade10-spec`, so every `openspec` command run there �
 absolute path; the files it creates and the commits against them are the store clone's.
 
 - **The line commands live in the store clone.** A terminal run from `grade10`
-  reads `/plan`, `/design`, `/tech`, `/specify`, `/tasks`, `/build` and `/land`,
-  the `round` skill, the schema's perspectives and the reader definitions under
+  reads `/workflow-plan`, `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`, `/workflow-build` and `/workflow-land`,
+  the `workflow-round` skill, the schema's perspectives and the reader definitions under
   `.claude/agents/` from the clone you add with `/add-dir` — never from the
   submodule directory pinned to an older sha, because a round read from a pin is
   held to last month's rules. `grade10` ships its own skills (`tdd`,
@@ -26,8 +26,8 @@ absolute path; the files it creates and the commits against them are the store c
   the store clone's, so a session without it can draft an artifact and cannot
   land one
 - **The rules are not commands.** `planning-pm` and `planning-dev`, which
-  `/plan`, `/tech` and `/tasks` load, carry every artifact's rules;
-  `planning-design` and `planning-qa` are `/design`'s and `/specify`'s. Nobody
+  `/workflow-plan`, `/workflow-tech` and `/workflow-tasks` load, carry every artifact's rules;
+  `planning-design` and `planning-qa` are `/workflow-design`'s and `/workflow-specify`'s. Nobody
   types them
 - **An agent in `grade10` reads that repository's `AGENTS.md`**, not this
   store's — what this store expects arrives with the skills and the
@@ -66,10 +66,10 @@ to `pnpm plan`, and to everyone else. If your agent cannot reach the store clone
 ## The PM Lane
 
 **1. Say what is wanted.** One message to the app in the planning channel, or
-the same sentence after `/plan` in a terminal:
+the same sentence after `/workflow-plan` in a terminal:
 
 ```text
-/plan cross-sell on a card's page: the products we pick per card in Shopify
+/workflow-plan cross-sell on a card's page: the products we pick per card in Shopify
 first, then similar cards by the tags and the facets they share, up to six.
 Customers-also-bought from orders is phase two, once this ships.
 ```
@@ -92,7 +92,7 @@ the three files on `main` in order and tells the designer and the tech PIC —
 ## The Engineer Lane
 
 **4. Pick it up, and plan the delivery.** The board in `grade10` shows it
-waiting, and `/tasks add-store-cross-sell` picks it up as @your-handle so
+waiting, and `/workflow-tasks add-store-cross-sell` picks it up as @your-handle so
 `promoted_by` lands in the change's `.openspec.yaml` —
 [the plan, then the build](../prds/guides/working-a-change.md#engineer--the-plan-then-the-build).
 
@@ -103,7 +103,7 @@ pnpm plan
 
 **5. Claim and build.** A group can be claimed only once its `tasks.md` is on
 `main`, and `sync` refuses a store clone on any branch but `main`; then
-`/build add-store-cross-sell 1`, once per group —
+`/workflow-build add-store-cross-sell 1`, once per group —
 [the plan, then the build](../prds/guides/working-a-change.md#engineer--the-plan-then-the-build).
 
 ```bash
@@ -133,7 +133,7 @@ names `openspec archive add-store-cross-sell` as the step after it —
 - **A testable statement in the proposal or the PRD.** It belongs in the spec;
   see [`prd-and-openspec.md`](prd-and-openspec.md)
 - **Asking the PM for a task list.** Their part finished at the journeys; pick
-  the change up and let `/tasks` draft the plan for your word
+  the change up and let `/workflow-tasks` draft the plan for your word
 
 ## See Also
 

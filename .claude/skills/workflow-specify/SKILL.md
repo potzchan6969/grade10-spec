@@ -1,6 +1,6 @@
 ---
-name: specify
-description: Run a round on a change's requirements and cases - spec.md's outline, the two blind readings, the reconciliation and the requirements - and land both files on the product manager's word. Use when a change's proposal, decisions and journeys are on main. Invoke as /specify <change>.
+name: workflow-specify
+description: Run a round on a change's requirements and cases - spec.md's outline, the two blind readings, the reconciliation and the requirements - and land both files on the product manager's word. Use when a change's proposal, decisions and journeys are on main. Invoke as /workflow-specify <change>.
 ---
 
 # The Requirements' Round
@@ -19,7 +19,7 @@ openspec instructions specs --change <change>
 openspec instructions test-cases --change <change>
 ```
 
-Then follow `round`. Its challenge and verify steps are different here, and
+Then follow `workflow-round`. Its challenge and verify steps are different here, and
 nothing else is.
 
 ## The Blind Readings Are the Challenge

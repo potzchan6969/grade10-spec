@@ -559,13 +559,16 @@ describe("what the agent drafts and the hand moves", () => {
     const commands = (rung: Stage) =>
       (draftedOf(rung, "pos")?.moves ?? []).map((one) => one.command);
 
-    expect(commands("proposed")).toEqual(["/plan pos"]);
+    expect(commands("proposed")).toEqual(["/workflow-plan pos"]);
     // Two hands take the change while it is still Proposed, and each drafts
     // one design, so Designed offers one command per hand.
-    expect(commands("designed")).toEqual(["/design pos", "/tech pos"]);
-    expect(commands("specified")).toEqual(["/specify pos"]);
-    expect(commands("planned")).toEqual(["/tasks pos"]);
-    expect(commands("building")).toEqual(["/build pos <group>"]);
+    expect(commands("designed")).toEqual([
+      "/workflow-design pos",
+      "/workflow-tech pos",
+    ]);
+    expect(commands("specified")).toEqual(["/workflow-specify pos"]);
+    expect(commands("planned")).toEqual(["/workflow-tasks pos"]);
+    expect(commands("building")).toEqual(["/workflow-build pos <group>"]);
   });
 
   it("says what the agent drafts and names every hand that moves it", () => {

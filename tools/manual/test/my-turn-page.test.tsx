@@ -247,7 +247,7 @@ describe("the page's own order", () => {
     const html = render([now], "robin");
 
     expect(html).toContain("C0123ABC");
-    expect(html).toContain("/tasks now-change");
+    expect(html).toContain("/workflow-tasks now-change");
   });
 
   it("names Pending at its foot, for a hand nobody has named", () => {

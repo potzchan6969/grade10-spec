@@ -19,14 +19,14 @@ artifact, and no second change is opened for the same work.
 
 | # | File | Hand | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `/plan` | Always |
-| 2 | `decisions.md` | Product manager | `/plan` | Always — goals, non-goals, and what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/plan` | Always — one nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM who already has the design | `/design` | Optional — from the journeys |
-| 5 | `tech-design.md` | Tech PIC | `/tech` | When a task group lands outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | Product manager | `/specify` | Always — the outline, then the requirements, with 7 between them |
-| 7 | `specs/<capability>/feature-tcs.md` | Product manager | `/specify` | Always — blind, before the scenarios |
-| 8 | `tasks.md` | Engineer | `/tasks` | Before anyone can build it |
+| 1 | `proposal.md` | Product manager | `/workflow-plan` | Always |
+| 2 | `decisions.md` | Product manager | `/workflow-plan` | Always — goals, non-goals, and what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan` | Always — one nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM who already has the design | `/workflow-design` | Optional — from the journeys |
+| 5 | `tech-design.md` | Tech PIC | `/workflow-tech` | When a task group lands outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | Product manager | `/workflow-specify` | Always — the outline, then the requirements, with 7 between them |
+| 7 | `specs/<capability>/feature-tcs.md` | Product manager | `/workflow-specify` | Always — blind, before the scenarios |
+| 8 | `tasks.md` | Engineer | `/workflow-tasks` | Before anyone can build it |
 
 The round drafts ahead: the first sentence puts every file above on the
 change's branch, each read by its own perspectives, and lands nothing. A hand
@@ -46,7 +46,7 @@ interview, what each artifact holds, validating. You carry the feature and what
 only you have: a frame, a value, a handle.
 
 **The product manager says the sentence**, to the app in the planning channel;
-in a terminal `/plan` comes before it:
+in a terminal `/workflow-plan` comes before it:
 
 ```text
 cross-sell on a card's page: the products we pick per card in Shopify first,
@@ -56,8 +56,8 @@ Customers-also-bought from orders is phase two, once this ships.
 
 **Every later hand is told in that change's thread**, and answers there —
 [Agent Rounds](/p/shared/planning/agent-rounds). From a terminal it is your
-artifact's line command instead — `/design`, `/tech`, `/specify`, `/tasks`,
-each with the change id, then `/build add-store-cross-sell <group>`, once per
+artifact's line command instead — `/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+each with the change id, then `/workflow-build add-store-cross-sell <group>`, once per
 group.
 
 Four things the round cannot know, so say them when they are true:
@@ -128,7 +128,7 @@ product manager reads the two side by side, and one word lands both.
 
 Four groups, each with its test task first: the mirror in `grade10`, the rule
 and the page response in `grade10`, the rail block in `packages/ui` here, and
-the walk; their word lands `tasks.md`. Then `/build add-store-cross-sell 1`,
+the walk; their word lands `tasks.md`. Then `/workflow-build add-store-cross-sell 1`,
 one round per group: the tests in their own commit, the code, the group's
 readers, and the row in `rounds.md` before the tick. The last group walks
 US-01 to US-03 end to end and leaves the end-to-end suite that runs on every
@@ -152,11 +152,11 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 
 | # | Stage | Hand | Say |
 | --- | --- | --- | --- |
-| 1 | Proposed | Product manager, then Designer · Tech PIC | `/plan <id>`, then `/design <id>` · `/tech <id>` |
+| 1 | Proposed | Product manager, then Designer · Tech PIC | `/workflow-plan <id>`, then `/workflow-design <id>` · `/workflow-tech <id>` |
 | 2 | Designed | nobody — both designs land while Proposed is still the stage | — |
-| 3 | Specified | Product manager | `/specify <id>` |
-| 4 | Planned | Engineer | `/tasks <id>` |
-| 5 | Building | Engineer | `/build <id> <group>` |
+| 3 | Specified | Product manager | `/workflow-specify <id>` |
+| 4 | Planned | Engineer | `/workflow-tasks <id>` |
+| 5 | Building | Engineer | `/workflow-build <id> <group>` |
 | 6 | On staging | QA · Release hand | — |
 | 7 | Released | nobody — the cut happens outside the agent | — |
 | 8 | Archived | nobody | — |

@@ -34,7 +34,7 @@ and resolves to this store — so delivery is planned here, by you.
    the scenarios it makes pass, and an outline issues none, so the plan waits
    on the requirements; `tech-design.md` is drawn before them, from the page,
    the decisions and the journeys. Where you own the change, take it through
-   `/specify` — the suite and the scenarios — and continue here. Where
+   `/workflow-specify` — the suite and the scenarios — and continue here. Where
    somebody else authored it, say it needs QA's two readings and stop: that run
    stops on *its* author for a case nobody ever decided, and answering one of
    those yourself is the agent deciding the product.
@@ -45,16 +45,16 @@ change whose scenarios never landed is the exception above, and what goes back
 is the anchor set, not the proposal.
 
 Authoring a change from scratch is the same lane: take artifacts 1 to 3
-through `/plan` - the proposal, the decisions, the journeys - then the spec
+through `/workflow-plan` - the proposal, the decisions, the journeys - then the spec
 passes. **`spec.md` is yours on a change you authored**: its outline, the blind
-suite, then the requirements, exactly as `/specify` runs them. Read
+suite, then the requirements, exactly as `/workflow-specify` runs them. Read
 `planning-qa` and follow it rather than writing the file directly; the PM and
 the designer never open it, and neither do you on somebody else's change.
 
 ## tech-design.md
 
 Owed by every change carrying a task group outside this store — the
-instruction `/tech` renders holds the sections, what each carries, and the
+instruction `/workflow-tech` renders holds the sections, what each carries, and the
 waiver that stands in for the file, and it carries this store's own rules, from
 `openspec/config.yaml`, on top of the schema's. Beyond them: under
 **Decisions**, keep the
@@ -65,7 +65,7 @@ than untried.
 ## tasks.md
 
 This is the artifact the implementing repository reads, checks off, and claims
-groups in. The instruction `/tasks` renders holds the shape — layers, clone
+groups in. The instruction `/workflow-tasks` renders holds the shape — layers, clone
 names, parallel groups, tasks phrased as scenarios, a verification step per
 group, no owner tags — and `docs/governance/task-ownership.md` the format
 tooling on both sides parses. Beyond them:
@@ -100,7 +100,7 @@ with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
 what puts it on [Pending](/pending) under the teammate who owes it.
 
 Then hand off: an engineer claims one group at a time from the application
-repository with `/build`. Archive belongs to whoever owns the change, **after
+repository with `/workflow-build`. Archive belongs to whoever owns the change, **after
 it is deployed** — not when the code lands.
 
 ## Related

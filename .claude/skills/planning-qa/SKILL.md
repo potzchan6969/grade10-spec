@@ -5,7 +5,7 @@ description: Write a change's spec.md - the outline that fixes its anchors, then
 
 # QA's part
 
-`/plan` stops before `spec.md`: it hands over the proposal, the decisions the
+`/workflow-plan` stops before `spec.md`: it hands over the proposal, the decisions the
 interview settled, the journeys, and the 🚧 lines it marked on the PRD.
 **`spec.md` is yours** - the outline that fixes the anchors, then the
 requirements - and so are the two readings between them and the reconciliation
@@ -64,7 +64,7 @@ over one document, and a change in another repository to fix the second.
 
 ## The run
 
-`/specify` runs this as a round. `round` holds the steps, the readers and the
+`/workflow-specify` runs this as a round. `workflow-round` holds the steps, the readers and the
 landing; what follows is what the two files must hold, and the order they are
 written in.
 
@@ -77,7 +77,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
    its `decisions.md`, every capability's `user-journeys.md`, and the PRD
    sections the proposal links. Those four are the whole of what the outline has
    to go on. A change with no journeys file has nothing to anchor on and there
-   is nothing here to run: it goes back to `/plan`.
+   is nothing here to run: it goes back to `/workflow-plan`.
 
    A change whose scope reads as unsettled - a `decisions.md` with an empty
    frontier and open questions on the proposal - is one to raise before you
@@ -179,7 +179,7 @@ Everything this run produces is `draft`. Nothing in it claims review;
 Neither file points at the other. Both point up.
 
 > **Anchor set** = the capability's full journey set once this change folds,
-> **union** the root groups of its `## Feature set`. `/plan` fixes the
+> **union** the root groups of its `## Feature set`. `/workflow-plan` fixes the
 > journeys; you fix the groups, and the PM reads both at the reconciliation.
 
 - A scenario carries `**Serves:** <anchor> - <prose>`, under its heading and

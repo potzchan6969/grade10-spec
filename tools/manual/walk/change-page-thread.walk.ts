@@ -111,7 +111,9 @@ test("shared-planning-agent-rounds-SC-81 - the message the hand is being told no
     .element(told.getByText("Building", { exact: true }))
     .toBeVisible();
   await expect
-    .element(told.getByText("/build demo-building <group>", { exact: true }))
+    .element(
+      told.getByText("/workflow-build demo-building <group>", { exact: true }),
+    )
     .toBeVisible();
   expect(quote.textContent ?? "").not.toContain("*Your turn*");
 });

@@ -59,7 +59,7 @@ over, or hand the change id to a PM or engineer.
   its author wrote saying what is missing. A change asks by writing
   `awaiting:` with `ui-design: <what nobody has drawn>` in its
   `.openspec.yaml`; nothing else puts it on your section.
-- [Working a change](/guides/working-a-change) — `/design`, the screen the
+- [Working a change](/guides/working-a-change) — `/workflow-design`, the screen the
   journeys ask for, and the word that lands it.
 
 ## If you are in QA
@@ -104,7 +104,7 @@ classified cases, is
   services with the most decisions per line of code.
 - [Pending](/pending) — the specified changes with no plan yet, oldest first.
   Taking one is writing its `tasks.md`.
-- [Working a change](/guides/working-a-change) — `/tech` and `/tasks`, the
+- [Working a change](/guides/working-a-change) — `/workflow-tech` and `/workflow-tasks`, the
   groups each with its test task first, and the walk the last group leaves.
 - [Writing the manual](/guides/writing-the-manual) — the page grammar, for when
   you document what you built.

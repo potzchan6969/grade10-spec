@@ -1,13 +1,13 @@
 ---
-name: plan
-description: Run a round on the product manager's three artifacts of a change - proposal.md, decisions.md and the journeys - and open the change where there is none. Use when a product manager or a designer says what is wanted, in the planning channel or a terminal. Invoke as /plan <what is wanted>, or /plan <change>.
+name: workflow-plan
+description: Run a round on the product manager's three artifacts of a change - proposal.md, decisions.md and the journeys - and open the change where there is none. Use when a product manager or a designer says what is wanted, in the planning channel or a terminal. Invoke as /workflow-plan <what is wanted>, or /workflow-plan <change>.
 ---
 
 # The Product Manager's Round
 
 **The artifacts:** `proposal.md`, `decisions.md` and
 `specs/<capability>/user-journeys.md`, in that order. They stop there: the
-requirements are `/specify`'s.
+requirements are `/workflow-specify`'s.
 
 **The rules:** `planning-pm` - the interview, the PRD marks, what each file
 holds and where a statement belongs - plus, as you reach each artifact:
@@ -18,7 +18,7 @@ openspec instructions decisions --change <change>
 openspec instructions user-journeys --change <change>
 ```
 
-Then follow `round`: it holds the six steps, the readers, the questions, the
+Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
 landing and the re-read. One round per artifact.
 
 ## Opening a Change From One Sentence
@@ -77,7 +77,7 @@ recommendation, and a product detail becomes a ❓ line on the page.
 
 ## The Whole Plan in One Wake
 
-- **The three files start the chain** — draft ahead, as `round` says, in the
+- **The three files start the chain** — draft ahead, as `workflow-round` says, in the
   order the schema gives them, and landed nowhere
 - **Where the chain stopped** — hand on with the change's `awaiting: specs:`
   line only where it stopped before the requirements, as `planning-pm` says

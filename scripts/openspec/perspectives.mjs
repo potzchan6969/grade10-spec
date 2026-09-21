@@ -5,7 +5,7 @@
  *   node scripts/openspec/perspectives.mjs <change> <artifact|group> --diff <file>
  *   node scripts/openspec/perspectives.mjs <artifact|group> --diff <file>
  *
- * The `round` skill calls this at its Challenge step. It prints
+ * The `workflow-round` skill calls this at its Challenge step. It prints
  *
  *   { "readers": [{ "name", "agent", "when", "summonedBy" }], "verifier": <bool>, "bundle": { "draft", "upstream" } }
  *

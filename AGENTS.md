@@ -41,16 +41,16 @@ One workflow schema exists under `openspec/schemas/`: `grade10-planning`, the wh
 
 | # | Artifact | Written by | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `/plan`, `planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `/plan`, `planning-pm` | Always — goals, non-goals, what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/plan`, `planning-pm` | Always — a capability nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM with the design | `/design`, `planning-design` | Optional — from the journeys |
-| 5 | `tech-design.md` | Engineer | `/tech`, `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 6 | `specs/<capability>/spec.md` | Generated, the PM reviews | `/specify`, `planning-qa` | Always — two passes, with 7 between them |
-| 7 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/specify`, `planning-qa` | Always — a blind pass, before the scenarios |
-| 8 | `tasks.md` | Engineer | `/tasks`, `planning-dev` | Before the change can be applied |
+| 1 | `proposal.md` | Product manager | `/workflow-plan`, `planning-pm` | Always |
+| 2 | `decisions.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — goals, non-goals, what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan`, `planning-pm` | Always — a capability nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM with the design | `/workflow-design`, `planning-design` | Optional — from the journeys |
+| 5 | `tech-design.md` | Engineer | `/workflow-tech`, `planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | Generated, the PM reviews | `/workflow-specify`, `planning-qa` | Always — two passes, with 7 between them |
+| 7 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/workflow-specify`, `planning-qa` | Always — a blind pass, before the scenarios |
+| 8 | `tasks.md` | Engineer | `/workflow-tasks`, `planning-dev` | Before the change can be applied |
 
-Each command names its artifact and follows the `round` skill, which reads its readers from the schema and dispatches them from `.claude/agents/`; `/build` takes a task group, `/land` one artifact.
+Each command names its artifact and follows the `workflow-round` skill, which reads its readers from the schema and dispatches them from `.claude/agents/`; `/workflow-build` takes a task group, `/workflow-land` one artifact.
 
 The PM writes 1 to 3 and stops, and so does a designer specifying a change. 2 records what the interview settled, and everything after is drawn from that scope: an artifact outside its goals, or inside a non-goal, disagrees with the change. A designer hangs 4 off the journeys unless the PM has the design. **Neither hand opens 6** — whoever takes the readings writes it: the outline first, from the journeys and the marks, then both readings on one branch — 7 blind to the scenarios, then 6's requirements reconciled against it. The engineer adds `tech-design.md` and `tasks.md` to that change, never a second one, and never opens a change in the application repository: its `openspec/` is config-only and resolves to this store. Until a change has a `tasks.md` it shows on the engineer's board as still being planned. Every key the change's `.openspec.yaml` can carry is tabled in [`docs/governance/prd-and-openspec.md`](docs/governance/prd-and-openspec.md#the-changes-record).
 

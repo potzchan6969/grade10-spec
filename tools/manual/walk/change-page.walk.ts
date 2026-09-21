@@ -119,7 +119,9 @@ test("shared-planning-change-stages-SC-58 - the Your turn card", async () => {
   // offered to paste, named by its own copy control, because Told now quotes
   // the same line inside the message below it.
   await expect
-    .element(card.getByRole("button", { name: "Copy /tasks demo-planned" }))
+    .element(
+      card.getByRole("button", { name: "Copy /workflow-tasks demo-planned" }),
+    )
     .toBeVisible();
   await expect
     .element(card.getByText("Engineer: read", { exact: true }))

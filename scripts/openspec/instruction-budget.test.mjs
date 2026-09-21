@@ -10,6 +10,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
+import { LINE_SKILLS, skillPath } from "./lib/line-skills.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 const read = (path) => readFileSync(join(ROOT, path), "utf8");
@@ -23,26 +24,26 @@ const words = (text) => text.split(/\s+/).filter(Boolean).length;
 // reads it — so a row costs what a row costs, and the raise buys a little
 // headroom rather than a blank cheque.
 const AGENTS_BUDGET = 2570;
-// The `round` skill loads on every artifact of every change, and the seven
+// The `workflow-round` skill loads on every artifact of every change, and the seven
 // line skills load it rather than restating it, so it carries the procedure
 // for all of them. 3200 is its size after the pass that gave the landing,
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
 // The skills a line command loads: the seven command skills a hand invokes,
-// and the four role skills each of those loads for its rules, beside `round`,
+// and the four role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
 // size after the pass that gave its rules one home - `Q84` for the role
 // skills, the overlap pass for the command ones: the next rule earns its words
 // by cutting others, or raises this number in a commit that says why.
 const SKILLS_BUDGET = {
-  plan: 717,
-  design: 253,
-  tech: 265,
-  specify: 332,
-  tasks: 229,
-  build: 472,
-  land: 355,
+  "workflow-plan": 717,
+  "workflow-design": 253,
+  "workflow-tech": 265,
+  "workflow-specify": 332,
+  "workflow-tasks": 229,
+  "workflow-build": 472,
+  "workflow-land": 355,
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,
@@ -71,7 +72,7 @@ test("AGENTS.md holds to its word budget", () => {
 });
 
 test("the round skill holds to its word budget", () => {
-  const skill = ".claude/skills/round/SKILL.md";
+  const skill = ".claude/skills/workflow-round/SKILL.md";
   const count = words(read(skill));
   assert.ok(
     count <= ROUND_BUDGET,
@@ -80,8 +81,18 @@ test("the round skill holds to its word budget", () => {
 });
 
 test("each skill a line command loads holds to its word budget", () => {
+  for (const name of Object.keys(LINE_SKILLS)) {
+    assert.ok(
+      name in SKILLS_BUDGET,
+      `${name} is a line skill with no budget here; add its row`,
+    );
+  }
   for (const [name, budget] of Object.entries(SKILLS_BUDGET)) {
-    const skill = `.claude/skills/${name}/SKILL.md`;
+    const skill = skillPath(name);
+    assert.ok(
+      existsSync(skill),
+      `${skill} is not a skill; the budget names a directory that is not there`,
+    );
     const count = words(read(skill));
     assert.ok(
       count <= budget,

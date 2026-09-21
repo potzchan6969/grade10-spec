@@ -339,27 +339,30 @@ export type Drafted = {
 export const DRAFTED: Partial<Record<Stage, Drafted>> = {
   proposed: {
     draft: "the marks and the three files, from what the hand asks",
-    moves: { pm: { move: "answer", command: "/plan <id>" } },
+    moves: { pm: { move: "answer", command: "/workflow-plan <id>" } },
   },
   designed: {
     draft: "both designs, from the page and the journeys",
     moves: {
-      design: { move: "tweak", command: "/design <id>" },
-      tech: { move: "challenge", command: "/tech <id>" },
+      design: { move: "tweak", command: "/workflow-design <id>" },
+      tech: { move: "challenge", command: "/workflow-tech <id>" },
     },
   },
   specified: {
     draft: "two blind readings, reconciled",
-    moves: { pm: { move: "read", command: "/specify <id>" } },
+    moves: { pm: { move: "read", command: "/workflow-specify <id>" } },
   },
   planned: {
     draft: "the plan",
-    moves: { dev: { move: "read", command: "/tasks <id>" } },
+    moves: { dev: { move: "read", command: "/workflow-tasks <id>" } },
   },
   building: {
     draft: "each group, test first",
     moves: {
-      dev: { move: "read each landing", command: "/build <id> <group>" },
+      dev: {
+        move: "read each landing",
+        command: "/workflow-build <id> <group>",
+      },
     },
   },
 };
