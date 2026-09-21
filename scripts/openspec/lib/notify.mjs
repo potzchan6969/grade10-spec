@@ -12,8 +12,9 @@
  * Nothing here decides whether to send. The caller holds `--send`; without
  * it every payload is printed and the Slack API is never called.
  */
-import { appendFileSync, readFileSync } from "node:fs";
+import { appendFileSync } from "node:fs";
 
+import { readTextIfThere } from "./read-text.mjs";
 import { channelOf, memberOf } from "./team.mjs";
 import { linkedOf, threadPathOf } from "./wording.mjs";
 
@@ -94,16 +95,14 @@ export function permalinkOf(workspaceUrl, thread) {
  */
 export function readSentKeys(file) {
   if (!file) return new Set();
-  try {
-    return new Set(
-      readFileSync(file, "utf8")
-        .split("\n")
-        .map((line) => line.trim())
-        .filter(Boolean),
-    );
-  } catch {
-    return new Set();
-  }
+  const text = readTextIfThere(file);
+  if (text === undefined) return new Set();
+  return new Set(
+    text
+      .split("\n")
+      .map((line) => line.trim())
+      .filter(Boolean),
+  );
 }
 
 /** The keys this run sent, appended rather than rewritten: a run that fails

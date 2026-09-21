@@ -16,15 +16,15 @@
  * node's: the relay reads the same map from the code host at a sha, where
  * there is no file to open.
  */
-import { readFileSync } from "node:fs";
 import { join } from "node:path";
 import { handleOf, isHandle } from "./handle.mjs";
+import { readTextIfThere } from "./read-text.mjs";
 import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";
 
 /** All four pure, and read by a browser and by the relay as well as by this
  * reader — `handle.mjs`'s and `team-parse.mjs`'s own reason for existing
- * beside this file, which imports `node:fs`. They are re-exported here so the
- * store's callers still have one module. */
+ * beside this file, which reads the map off disk. They are re-exported here
+ * so the store's callers still have one module. */
 export { handleOf, isHandle, parseTeamMap, TEAM_MAP };
 
 /**
@@ -49,13 +49,8 @@ export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"];
  * the run and says which line.
  */
 export function readTeamMap(root, path = TEAM_MAP) {
-  const file = join(root, path);
-  let text;
-  try {
-    text = readFileSync(file, "utf8");
-  } catch {
-    return { handles: {}, channels: {} };
-  }
+  const text = readTextIfThere(join(root, path));
+  if (text === undefined) return { handles: {}, channels: {} };
   return parseTeamMap(text);
 }
 

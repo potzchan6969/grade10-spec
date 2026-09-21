@@ -2,12 +2,12 @@
  * The team map's text, read to a map: the half of `team.mjs` that touches no
  * file.
  *
- * Its own module, for `handle.mjs`'s reason. `team.mjs` imports `node:fs` to
- * find the file, and the relay — a Worker, which has no file system and no
- * `node:*` at all — reads the same map from the code host at a sha. So the
- * reading of the text lives here, `team.mjs` reads the file and calls it, and
- * one parser answers both: a rename the store refuses is a rename the relay
- * refuses, and neither has its own idea of what the file says.
+ * Its own module, for `handle.mjs`'s reason. `team.mjs` reads the file off
+ * disk, and the relay — a Worker, which has no file system and no `node:*` at
+ * all — reads the same map from the code host at a sha. So the reading of the
+ * text lives here, `team.mjs` reads the file and calls it, and one parser
+ * answers both: a rename the store refuses is a rename the relay refuses, and
+ * neither has its own idea of what the file says.
  */
 import YAML from "yaml";
 import { handleOf } from "./handle.mjs";
