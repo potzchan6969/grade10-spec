@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
-import { ROUND_RECORD_SINCE } from "../check/rounds.mjs";
+import { heldToRounds, ROUND_RECORD_SINCE } from "../check/rounds.mjs";
 import { NO_GIT } from "../src/store/git.mts";
 import { readChanges } from "../src/store/read-changes.mts";
 import { readRounds } from "../src/store/read-rounds.mts";
@@ -107,11 +107,9 @@ const store = (
     ...files,
   });
 
-/** A change opened after the fence, and one opened the day the rule landed —
- * the day before the fence, which is what the fence being the morning after
- * means. */
+/** The day the fixture changes were opened. No day is set for the fence while
+ * the kept skills stand, so what holds a change is being on the round. */
 const AFTER = "2026-10-01";
-const LANDED = "2026-09-19";
 
 const findings = async (
   files: Record<string, string>,
@@ -258,13 +256,28 @@ describe("the `round` rule", () => {
     expect(found).toEqual([]);
   });
 
-  it("shared-planning-agent-rounds-SC-55 - does not refuse a change opened the day the rule landed", async () => {
-    expect(ROUND_RECORD_SINCE > LANDED).toBe(true);
-    expect(await findings({}, LANDED)).toEqual([]);
+  it("shared-planning-agent-rounds-SC-55 - does not refuse a change on the old flow, whatever its date", async () => {
+    // No `landed_by:` line, no `thread:` line, no row: the change was opened
+    // and its group ticked with the old skills, which stand until the team
+    // adopts the line commands (`Q95`), so no day is set for the fence yet.
+    expect(ROUND_RECORD_SINCE).toBeNull();
+    expect(await findings({}, AFTER, "round", "")).toEqual([]);
+    expect(await findings({}, "2026-09-01", "round", "")).toEqual([]);
   });
 
-  it("shared-planning-agent-rounds-SC-55 - does not refuse a change opened before that day", async () => {
-    expect(await findings({}, "2026-09-01")).toEqual([]);
+  it("shared-planning-agent-rounds-SC-55 - holds every change from the day the kept skills go, once it is set", () => {
+    const oldFlow = { created: "2026-09-21", landedBy: {}, rounds: [] };
+    expect(heldToRounds(oldFlow, "2026-10-01")).toBe(false);
+    expect(
+      heldToRounds({ ...oldFlow, created: "2026-10-01" }, "2026-10-01"),
+    ).toBe(true);
+    // On the round, a change is held whatever its date and whether a day is set.
+    expect(
+      heldToRounds({ ...oldFlow, landedBy: { proposal: "pm" } }, null),
+    ).toBe(true);
+    expect(heldToRounds({ ...oldFlow, thread: "C0PLANNING/1.2" }, null)).toBe(
+      true,
+    );
   });
 });
 
@@ -278,7 +291,8 @@ describe("the archived copy of the round record", () => {
       "docs/prds/products/demo-product/index.md":
         "---\ntitle: Demo product\n---\n\nThe landing.\n",
       "openspec/schemas/demo-planning/schema.yaml": SCHEMA,
-      [`${ARCHIVE_DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${AFTER}\n`,
+      // On the round: its landings wrote `landed_by:`, so the copy owes the rows.
+      [`${ARCHIVE_DIR}/.openspec.yaml`]: `schema: demo-planning\ncreated: ${AFTER}\nlanded_by:\n  proposal: pm\n`,
       [`${ARCHIVE_DIR}/proposal.md`]: PROPOSAL,
       ...(withRounds ? { [`${ARCHIVE_DIR}/rounds.md`]: WHOLE } : {}),
     });

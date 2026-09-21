@@ -2352,7 +2352,7 @@ Runs once per row of **Test data**.
 * The check refuses as the table names.
 * `rounds.md` is unchanged by the check.
 
-### shared-planning-agent-rounds-US9-TC5-1: A change opened before the rule is not refused
+### shared-planning-agent-rounds-US9-TC5-1: A change on the old flow is not refused
 
 **Classification:**
 
@@ -2371,7 +2371,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* <change opened before the round rule> has a landed artifact and no rows in `rounds.md`.
+* <change on the old flow> carries no `landed_by:` line, no `thread:` line and no `rounds.md`, and has a ticked task group; no day is set for the kept skills to go.
 * admin(engineer of <change>) is at a terminal in the store.
 
 **Steps:**
@@ -2381,7 +2381,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The check does not refuse <change opened before the round rule>.
+* The check does not refuse <change on the old flow>.
 * It names no missing row for it.
 
 ### shared-planning-agent-rounds-US9-TC6-1: A change with no round yet shows none and passes

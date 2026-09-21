@@ -234,7 +234,8 @@ the thread is where a person works it. The page is
   refuses a behind delta; a moved goal is a question to the PM: extend,
   supersede or split
 - **The record** — `rounds.md`, one row per round; a landing or a tick
-  without its row is refused on a change opened after the rule
+  without its row is refused on a change on the round, and on every change
+  once the kept skills go
 - **The walk** — the last group demonstrates the journeys in a browser,
   flips the cases it automates, leaves the E2E suite that runs on every push
   to `main` and its smoke cases on every staging deploy and cut; the run

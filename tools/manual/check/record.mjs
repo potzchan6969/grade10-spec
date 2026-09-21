@@ -15,7 +15,7 @@ import {
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
 import { productPages } from "./context.mjs";
-import { ROUND_RECORD_SINCE } from "./rounds.mjs";
+import { heldToRounds } from "./rounds.mjs";
 
 /** The day the deploy record became a rule: every archive before it shipped
  * without one. */
@@ -202,7 +202,7 @@ export function checkArchived(ctx, archived) {
       }
     }
 
-    if (change.created && change.created >= ROUND_RECORD_SINCE) {
+    if (heldToRounds(change)) {
       const roundsFile = fileOf(change, "rounds.md");
       if (!existsSync(join(ctx.roots.store, roundsFile))) {
         ctx.add(

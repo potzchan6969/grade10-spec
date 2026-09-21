@@ -42,7 +42,7 @@ read again before anything lands after it, with one record row per round.
   - Tech design first: a requirement that reaches the tech design writes a dated wait on the tech PIC, cleared by their edit or a read
 - The record
   - Rounds table: `rounds.md` holds one row per round, the artifact or group, the perspectives run, what stood, the question ids raised and the tests per scenario
-  - Refused without a row: a landed artifact or a ticked group with no row is refused on a change opened after the rule
+  - Refused without a row: a landed artifact or a ticked group with no row is refused on a change on the round, and on every change from the day the kept skills go
   - A fix pass too: a pass landed off a demonstration or off the reading of the whole change is a round, with its reader and its row
   - The change page mirrors the thread: the message each hand of the stage is being told, in the words the workflow sends, and one row per event of the change's history on `main`
   - Archived whole: the file archives with the change and is folded nowhere
@@ -1066,28 +1066,30 @@ already done.
   missing row is, naming the column
 - **Those two alone** — nothing else owes a row: a read that changed nothing
   ran no round
-- **Date-fenced** — the rule reads only changes whose `created:` date is after
-  the day it lands, so a change opened that day is not refused by it
+- **Fenced by adoption** — the rule reads a change on the round, one whose
+  record carries a `landed_by:` or `thread:` line or whose `rounds.md` holds a
+  row, and, from the day the three kept skills go, every change created on or
+  after it; a change opened on the old flow while they stand is not refused
 
 #### Scenario: shared-planning-agent-rounds-SC-54 - A landed artifact with no row is refused
 **Serves:** The record - a change opened under this rule reaches its next check without a row for what it landed
 
-- **GIVEN** a change created after the day the rule landed, whose record carries a `landed_by:` line for `tasks.md`
+- **GIVEN** a change whose record carries a `landed_by:` line for `tasks.md`
 - **WHEN** `pnpm check:manual` runs and `rounds.md` carries no row naming `tasks.md`
 - **THEN** the check refuses and names the artifact
 
-#### Scenario: shared-planning-agent-rounds-SC-55 - A change opened on or before the rule's day is not refused
-**Serves:** The record - the changes already in flight the day the rule lands pass the same check
+#### Scenario: shared-planning-agent-rounds-SC-55 - A change on the old flow is not refused
+**Serves:** The record - the changes opened on the old flow while the kept skills stand pass the same check
 
-- **GIVEN** a change whose `created:` date is the day the rule landed, carrying no `rounds.md`
+- **GIVEN** a change whose record carries no `landed_by:` or `thread:` line, carrying no `rounds.md`, with a ticked task group, opened while no day is set for the kept skills to go
 - **WHEN** `pnpm check:manual` runs
 - **THEN** it does not refuse the change for a missing row
-- **AND** a change created before that day is not refused either
+- **AND** once that day is set, a change created before it is not refused either
 
 #### Scenario: shared-planning-agent-rounds-SC-56 - A row missing a column is refused
 **Serves:** The record - a row half written says as little as no row at all
 
-- **GIVEN** a change created after the day the rule landed, whose `rounds.md` holds a row naming no perspective
+- **GIVEN** a change whose `rounds.md` holds a row naming no perspective
 - **WHEN** `pnpm check:manual` runs
 - **THEN** the check refuses and names the column the row leaves empty
 

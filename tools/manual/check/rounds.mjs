@@ -17,19 +17,33 @@
  * writes its `reviewed:` line alone, which is why this reads `landed_by:` and
  * ticked groups and never the rest of the record's keys.
  *
- * Date-fenced, for the reason `decided` is: a change opened before the rule
- * landed was planned when nobody could have written the row, and a register of
- * changes that could not have complied is a check people learn to read past.
+ * Fenced by adoption. A change on the round — one whose record carries a
+ * `landed_by:` line or a `thread:` line, or whose `rounds.md` holds a row,
+ * all three written by a landing and by nothing else — is held whatever its
+ * date. A change on the old flow, opened while the three kept skills stand
+ * (`Q95`), was planned when nobody could have written the row, and a register
+ * of changes that could not have complied is a check people learn to read
+ * past; so a date holds every change only from the day those skills go
+ * (`Q96`).
  */
 
 import { ROUND_COLUMNS, roundArtifactOf } from "../src/store/read-rounds.mts";
 import { schemaArtifacts } from "../src/store/read-schema.mts";
 
-/** The day after the `round` rule landed. A change opened on the day itself
- * was opened before the rule was, so the fence starts the morning after —
- * held here beside `DECISIONS_SINCE` in `record.mjs`, which fences the same
- * way. */
-export const ROUND_RECORD_SINCE = "2026-09-20";
+/** The day from which every change is on the round: the day after the three
+ * kept skills go (`Q95`), set beside `DECISIONS_SINCE` in `record.mjs`, which
+ * fences the same way. Unset while they stand, so until then only a change on
+ * the round is held. */
+export const ROUND_RECORD_SINCE = null;
+
+/** Whether the rule reads a change: one on the round, or one created on or
+ * after `since` where a day is set. */
+export function heldToRounds(change, since = ROUND_RECORD_SINCE) {
+  if ((change.rounds ?? []).length > 0) return true;
+  if (Object.keys(change.landedBy ?? {}).length > 0) return true;
+  if (change.thread) return true;
+  return Boolean(since && change.created && change.created >= since);
+}
 
 /** Each column against the field the reader holds it in, in the order the
  * requirement tables them. */
@@ -38,7 +52,7 @@ const COLUMNS = ROUND_COLUMNS.map((name) => [name, name.toLowerCase()]);
 export function checkRounds(ctx, changes) {
   for (const change of changes) {
     if (change.status !== "in-flight") continue;
-    if (!change.created || change.created < ROUND_RECORD_SINCE) continue;
+    if (!heldToRounds(change)) continue;
     const file = `${change.dir}/rounds.md`;
     const rows = change.rounds ?? [];
 
