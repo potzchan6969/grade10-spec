@@ -404,5 +404,11 @@ reimplementing its behavior.
 
 ## Settled
 
-* `external` is optional on `NavLink`; the application supplies it.
-* Behaviour applies in primary nav (wide and compact) and utility regions.
+* `external` is optional on `NavLink`; the application supplies it. Behaviour
+  applies in primary nav (wide and compact) and utility regions.
+* The account menu's fixed item order is Profile, My Orders, My Auctions,
+  Sign out; each of Profile and My Orders is independently omitted without a
+  matching handler, and the menu opens directly on whichever item is next.
+* Session-gating (signed out shows Sign In) always overrides handler-gating:
+  supplying `onProfile` and `onMyOrders` handlers while signed out renders
+  neither.
