@@ -4,7 +4,7 @@ Drawn from [Agent Rounds · Surfaces](../../docs/prds/products/shared/planning/a
 
 ### The thread
 
-[Blueprint · 3.4 The thread](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#thread). One Slack thread per change in the planning channel, hanging off the message that opened it. Nothing interactive: no buttons, no forms.
+[Blueprint · 3.4 The thread](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#thread). One Slack thread per change in the planning channel, hanging off the message that opened it. One button per summary, `Confirm <artifact>` or `Confirm with recommendations`; no form, no picker (`Q90`).
 
 ### Change page
 
@@ -44,6 +44,8 @@ New in `tools/manual`, work in grade10-spec: `RoundsList`, `MyTurnPage`'s questi
 | Change opened | The product manager's sentence, with the agent's first reply naming the change's id | `shared-planning-agent-rounds-SC-17` |
 | Draft summary, rows held | The held rows first, each with its recommendation, then the ids the round decided, each with the option it took, on one line | `shared-planning-agent-rounds-SC-21` |
 | Draft summary, nothing held | No held row and nothing asked: the ids the round decided, each with the option it took, on one line | `shared-planning-agent-rounds-SC-21` |
+| Summary waiting on the word | one Confirm button under it | `shared-planning-agent-rounds-SC-82` |
+| Button pressed | `@<handle> pressed *Confirm <artifact>*`, the button replaced by who confirmed | `shared-planning-agent-rounds-SC-82` |
 | Question answered by its id | The row written with the recommended option, and the question closed | `shared-planning-agent-rounds-SC-11` |
 | Remark applied | The remark applied as written, and the perspectives that read again named | `shared-planning-agent-rounds-SC-12` |
 | Challenge recorded | The tech PIC's challenge as a decisions row, with the agent's answer | `shared-planning-agent-rounds-SC-13` |
