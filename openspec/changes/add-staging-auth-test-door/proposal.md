@@ -50,6 +50,10 @@ None.
   calls the door. Local disposable stacks keep `/dev`.
 - **The manual** — Sign-In Tests; Accounts · Tests.
 
+No domain impact: nobody walks this door on their own, and `shared/auth/domain-tcs.md` traces collector and operator journeys that compose no capability this change adds.
+
+No platform impact: no path crosses a product.
+
 ## Follow-on changes
 
 - A dedicated disposable stack, branched from staging, for the full suite

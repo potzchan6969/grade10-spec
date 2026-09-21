@@ -798,3 +798,175 @@ Runs once per row of **Test data**.
 
 * Store seed is refused or not offered.
 * Auction seed is refused or not offered.
+
+### shared-auth-test-sign-in-US1-TC26-1: Second capture returns the same last mail
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* admin(this repository's Actions job) is calling the staging door.
+* Ops has named the tester list.
+* A last sign-in mail exists for <collector tester>.
+* No later send has gone out for that tester.
+
+**Steps:**
+
+1. Call the staging door to capture the last sign-in mail for <collector tester>.
+2. Call the staging door to capture the last sign-in mail for <collector tester> again.
+
+**Expected Results:**
+
+* Step 1 returns that last mail.
+* Step 2 returns the same last mail.
+
+### shared-auth-test-sign-in-US1-TC27-1: Prepare when already admin leaves admin
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* admin(this repository's Actions job) is calling the staging door.
+* Ops has named the tester list.
+* <admin-only tester> already holds admin.
+
+**Steps:**
+
+1. Call the staging door to prepare <admin-only tester>.
+2. Read whether that address holds admin.
+
+**Expected Results:**
+
+* <admin-only tester> holds admin.
+
+### shared-auth-test-sign-in-US1-TC28-1: Ban when already banned leaves banned
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* admin(this repository's Actions job) is calling the staging door.
+* Ops has named the tester list.
+* <ban-only tester> is already banned.
+
+**Steps:**
+
+1. Call the staging door to ban <ban-only tester>.
+2. Read whether that address is banned.
+
+**Expected Results:**
+
+* <ban-only tester> is banned.
+
+### shared-auth-test-sign-in-US1-TC29-1: Capture of a used last mail still returns it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* admin(this repository's Actions job) is calling the staging door.
+* Ops has named the tester list.
+* A last sign-in mail exists for <collector tester>.
+* That last mail has already been followed.
+
+**Steps:**
+
+1. Call the staging door to capture the last sign-in mail for <collector tester>.
+
+**Expected Results:**
+
+* The last sign-in mail is returned.
+
+### shared-auth-test-sign-in-US1-TC30-1: Unban through this door is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What the job may do
+
+**Pre-conditions:**
+
+* admin(this repository's Actions job) is calling the staging door.
+* Ops has named the tester list.
+* <ban-only tester> is banned.
+
+**Steps:**
+
+1. Call the staging door to unban <ban-only tester>.
+
+**Expected Results:**
+
+* The door refuses the call.
+* <ban-only tester> stays banned.
+
+## Reconciliation
+
+**Run:** add-staging-auth-test-door, 2026-09-21. Scenario pass read this change's Purpose, Feature set, journeys, proposal, decisions, Sign-In Tests PRD, and the durable `shared/auth/sign-in` and `shared/auth/users` requirements so it would not restate collector or operator contracts. Blind suite pass read only the isolated input (Purpose, Feature set, journeys, proposal, decisions.md with an empty Raised table, Sign-In Tests PRD, store context) — no `## Requirements`, no `openspec/specs/` beyond house-style `*-tcs.md`, no archive.
+
+- **Raised, folded into spec:** Capture with no last mail returns none — `shared-auth-test-sign-in-US1-TC11-1` → `shared-auth-test-sign-in-SC-17`.
+- **Raised, folded into spec:** Capture naming no address is refused — `shared-auth-test-sign-in-US1-TC7-1` → `shared-auth-test-sign-in-SC-23`.
+- **Raised, folded into spec:** Capture for one tester does not return another's mail — `shared-auth-test-sign-in-US1-TC8-1` → `shared-auth-test-sign-in-SC-18`.
+- **Raised, folded into spec:** Last of several mails is the later send — `shared-auth-test-sign-in-US1-TC10-1` → `shared-auth-test-sign-in-SC-19`.
+- **Raised, folded into spec:** A used link is not aged — `shared-auth-test-sign-in-US1-TC13-1` → `shared-auth-test-sign-in-SC-20`.
+- **Raised, folded into spec:** A missing link is not aged — `shared-auth-test-sign-in-US1-TC14-1` → `shared-auth-test-sign-in-SC-21`.
+- **Raised, folded into spec:** Capture does not mint a session — `shared-auth-test-sign-in-US1-TC24-1` → `shared-auth-test-sign-in-SC-22`.
+- **Raised, folded into spec:** Last mail is the last send, including a used one — `shared-auth-test-sign-in-US1-TC29-1` → `shared-auth-test-sign-in-SC-27`.
+- **Raised, folded into spec:** A second capture returns the same last mail until another send — `shared-auth-test-sign-in-US1-TC26-1` → `shared-auth-test-sign-in-SC-24`.
+- **Raised, folded into spec:** Preparing an admin-only tester that already holds admin leaves it holding admin — `shared-auth-test-sign-in-US1-TC27-1` → `shared-auth-test-sign-in-SC-25`.
+- **Raised, folded into spec:** Banning an already-banned ban-only tester leaves it banned — `shared-auth-test-sign-in-US1-TC28-1` → `shared-auth-test-sign-in-SC-26`.
+- **Raised, folded into spec:** Unban through this door is refused — `shared-auth-test-sign-in-US1-TC30-1` → `shared-auth-test-sign-in-SC-09` (scenario reading; the suite's first pass skipped unban as a non-goal feature, then added the refusal case so the SHALL NOT is walked).
+- **Raised, rejected:** Ban-only starts unbanned — setup for the happy-path ban (`shared-auth-test-sign-in-SC-07`), not a product rule. The already-banned partition is `shared-auth-test-sign-in-SC-26`.
+- **Raised, rejected:** Age is only for the collector tester — the PRD already limits every move to an address on the list; `shared-auth-test-sign-in-SC-06` GIVEN is any allowlisted tester.
+- **Uncovered anchors:** none. Every Feature set root group has a scenario and a case.
