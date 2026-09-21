@@ -27,6 +27,8 @@ import {
   bundleFor,
   classifyDiff,
   fixPassFloor,
+  isGroup,
+  perspectivesOf,
   planningSchema,
   readersFor,
   TRIGGERS,
@@ -784,5 +786,16 @@ test("shared-planning-agent-rounds-SC-79 - the fix pass's floor is every `always
     () =>
       fixPassFloor({ artifacts: schema.artifacts, apply: [schema.apply[2]] }),
     /share no `always` reader/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-60 - the reading of the whole change is read as a task group's is", () => {
+  // The cell `plan:land --whole` writes is no artifact of the schema: every
+  // reader that tells a group from an artifact reads it as a group, so the
+  // guard, the readers and the button need no case of their own.
+  assert.equal(isGroup("whole change"), true);
+  assert.deepEqual(
+    perspectivesOf(REAL_SCHEMA, "whole change"),
+    REAL_SCHEMA.apply,
   );
 });

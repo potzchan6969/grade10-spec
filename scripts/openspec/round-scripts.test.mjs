@@ -487,6 +487,7 @@ test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass with --r
     root,
     "--reviewed",
     "--fix-pass",
+    "--whole",
     "--stood",
     "nothing stood",
   ]);
@@ -494,7 +495,7 @@ test("shared-planning-agent-rounds-SC-79 - plan:land refuses --fix-pass with --r
   assert.equal(result.status, 1);
   assert.match(
     result.stderr,
-    /--stood, --fix-pass name a round's row, and --reviewed lands none/,
+    /--stood, --fix-pass, --whole name a round's row, and --reviewed lands none/,
   );
   assert.doesNotMatch(recordOf(root), /reviewed:/);
 });
@@ -1108,8 +1109,10 @@ test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --t
 test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the store does not hold, naming it", () => {
   const { root, git } = sandbox({ files: CITING });
   git("config", "user.email", "erin@test");
+  // The absent file is the second of its id, after a comma: every path the
+  // cell names is held, not the first of each.
   const tests = [
-    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/nowhere.test.mjs",
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs, scripts/openspec/nowhere.test.mjs",
     "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
   ].join("; ");
 
@@ -1120,6 +1123,25 @@ test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the 
   assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
   assert.doesNotMatch(result.stderr, /round-scripts\.test\.mjs/);
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-58 - a group of the application repository names its tests in that clone, held to nothing here", () => {
+  // The tag says which tree proves the group; a path in the other clone is
+  // written as given and never looked for in this store.
+  const { root, git } = sandbox({
+    files: {
+      [`${DIR}/tasks.md`]: "## 1. Build it (grade10)\n\n- [ ] 1.1 Ship it\n",
+    },
+  });
+  git("config", "user.email", "erin@test");
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
 });
 
 test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose --tests names a test per cited scenario", () => {
