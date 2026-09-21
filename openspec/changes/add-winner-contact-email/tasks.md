@@ -23,7 +23,7 @@ Can proceed from contracts and fixtures; does not need a running mail backend.
 - [x] 3.3 Prefill Subject and Message from the order's current invoice id, lot title, reason and receipt ids; omit the remaining balance; keep `support@grade10.com` off the page until open (`winner-order-SC-161`, `SC-164`–`SC-166`, `SC-168`)
 - [x] 3.4 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
 
-## 4. Partial-Payment Order Letter (grade10)
+## 4. Partial-Payment Order Letter (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Add the append-only partial-payment notification kind and migration, then enqueue it exactly once at the partial-payment transition with the current invoice and receipt ids (`order-mail-SC-61`)
 - [ ] 4.2 Render the production partial-payment letter through the ready-email table, and prove all five letter reasons use the required subject, body, mailto and no remaining balance (`order-mail-SC-57`–`order-mail-SC-61`)
