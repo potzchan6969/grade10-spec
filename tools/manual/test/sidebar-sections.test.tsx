@@ -59,9 +59,9 @@ function render(at: string, sections: PageSection[], active?: string): string {
 describe("the rail's fixed entries", () => {
   const html = render("/guides/start-here", []);
 
-  it("opens on In flight and My turn, above the products", () => {
+  it("opens on Board and My turn, above the products", () => {
     expect(html).toContain('href="/in-flight"');
-    expect(html).toContain("In flight");
+    expect(html).toContain("Board");
     expect(html).toContain('href="/my-turn"');
     expect(html).toContain("My turn");
     expect(html.indexOf('href="/in-flight"')).toBeLessThan(

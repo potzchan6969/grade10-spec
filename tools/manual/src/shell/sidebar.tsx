@@ -29,7 +29,7 @@ import {
  * groups because neither belongs to one, and fixed because a rail built from
  * the store's pages cannot reach either. */
 const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
-  { to: "/in-flight", label: "In flight", icon: Kanban },
+  { to: "/in-flight", label: "Board", icon: Kanban },
   { to: "/my-turn", label: "My turn", icon: ListChecks },
 ];
 
@@ -40,8 +40,8 @@ const ROW =
 
 /**
  * What this reader holds open. The rail used to follow the route alone, so
- * leaving a product — or following an incubating entry onto the In Flight
- * board — snapped the branch shut under the reader. Now a branch opens when
+ * leaving a product — or following an incubating entry onto the Board —
+ * snapped the branch shut under the reader. Now a branch opens when
  * its own page is visited and stays as the reader last left it, across
  * navigations and reloads.
  */

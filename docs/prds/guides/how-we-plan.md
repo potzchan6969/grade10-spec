@@ -51,4 +51,4 @@ feature through them all.
 - [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
   — the whole loop worked through once.
 
-[In Flight](/in-flight) is the live view of all of it.
+[Board](/in-flight) is the live view of all of it.

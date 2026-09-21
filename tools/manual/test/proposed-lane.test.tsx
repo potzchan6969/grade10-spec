@@ -16,7 +16,7 @@ import {
   specEntry,
 } from "./manual-fixture";
 
-/** The In Flight board's own lane. A proposal has no deltas and no tasks, so
+/** The Board's own lane. A proposal has no deltas and no tasks, so
  * everything derived from either has to keep ignoring it — the counts below
  * are the pin on that. */
 

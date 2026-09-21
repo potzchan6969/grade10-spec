@@ -355,7 +355,7 @@ phase two opened as a change of its own.
 | --- | --- |
 | What is on you, across every change | My turn, in the manual's rail; the handle is chosen once per browser |
 | Where one change stands, who is on it, what landed, what the thread says | The change page: the stepper, Your turn with Told now, the thread, On the pages, the artifacts, the rounds |
-| Every change, by stage | In flight: eight lanes, the filters, the shelf |
+| Every change, by stage | Board: eight lanes, the filters, the shelf |
 | The draft, the questions, the button | The change's thread in Slack, which every message links |
 | What a page promises and what is being built | The page: 🚧 lines wearing the pip of their change's stage |
 | A hand nobody has named | Pending, per role |

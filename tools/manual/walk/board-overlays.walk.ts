@@ -27,7 +27,7 @@ afterEach(unfreezeClock);
 test("shared-planning-change-stages-SC-19 - the overlays a change wears", async () => {
   await openManual("/in-flight");
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 
   const overlays = page.elementLocator(cardFor("demo-overlays"));
@@ -79,7 +79,7 @@ test("shared-planning-change-stages-SC-19 - the overlays a change wears", async 
 test("shared-planning-change-stages-SC-20 - nothing outside the set", async () => {
   await openManual("/in-flight");
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 
   // Exactly the five, in the table's order: read off the `data-overlay` every
@@ -103,7 +103,7 @@ test("shared-planning-change-stages-SC-20 - nothing outside the set", async () =
 test("shared-planning-change-stages-SC-26 - the card names the earliest behind artifact", async () => {
   await openManual("/in-flight");
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 
   // `demo-overlays` has two artifacts behind at once — its `reviewed:` line
@@ -140,7 +140,7 @@ test("shared-planning-change-stages-SC-26 - the card names the earliest behind a
 test("shared-planning-change-stages-SC-21 - a wait, dated or not, on the card", async () => {
   await openManual("/in-flight");
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 
   const card = page.elementLocator(cardFor("demo-waiting"));

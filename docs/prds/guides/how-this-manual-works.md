@@ -54,7 +54,7 @@ hand.
 On the locally-run manual, any requirement row or page header has a propose
 action — the hosted site is read-only, here as everywhere. Say why in your
 own words — the ids travel along on their own. The proposal lands in
-[In Flight](/in-flight)'s Proposed lane.
+[Board](/in-flight)'s Proposed lane.
 ## An agent drafts the change
 Someone points an agent at the proposal — the card names the command to
 paste, `/planning-pm <change>`. The agent writes

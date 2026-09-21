@@ -163,7 +163,7 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 
 - **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)
 
-[My turn](/my-turn) shows what is on you; [In Flight](/in-flight) shows every change; ask the agent where a change stands to read this for one.
+[My turn](/my-turn) shows what is on you; [Board](/in-flight) shows every change; ask the agent where a change stands to read this for one.
 
 ## Each Way In
 

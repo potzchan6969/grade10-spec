@@ -872,7 +872,7 @@ export type Snapshot = {
   sheetUrl?: string;
 };
 
-/** `/api/archive` — fetched only by the In Flight and timeline views. */
+/** `/api/archive` — fetched only by the Board and timeline views. */
 export type Archive = {
   generatedAt: string;
   storeHead: string;

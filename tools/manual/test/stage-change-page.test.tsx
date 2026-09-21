@@ -306,7 +306,7 @@ describe("the stepper", () => {
   });
 
   it("names the stage in the page's eyebrow", () => {
-    expect(html).toContain("In Flight");
+    expect(html).toContain("Board");
     expect(html).toContain(">Building<");
     expect(html).not.toContain(">in progress<");
   });

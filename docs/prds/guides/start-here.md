@@ -21,7 +21,7 @@ where you say what you say.
   actually meets.
 - [The vault](/p/grade10-site/vault) — the most involved product, where custody, identity
   and signing all meet.
-- [In Flight](/in-flight) — every change moving across the platform, with tasks
+- [Board](/in-flight) — every change moving across the platform, with tasks
   done over total, straight out of git.
 - [Pending](/pending) — the changes waiting on a product manager: requirements
   nobody has written, journeys and suites nobody has derived.
@@ -41,7 +41,7 @@ exists. Token values live in `packages/design-system/tokens.json` — the CSS
 themes and Figma are both projections of it. And every requirement row has a
 propose action on the locally-run manual (the hosted site is read-only):
 proposing takes thirty seconds in the browser, and everything after it is an
-agent's job — the card on [In Flight](/in-flight) names the command to hand
+agent's job — the card on [Board](/in-flight) names the command to hand
 over, or hand the change id to a PM or engineer.
 
 - [My turn](/my-turn) — what is on you, across every change in flight: the
@@ -87,7 +87,7 @@ classified cases, is
   a bug report should quote.
 - [Audit trail](/p/grade10-admin/audit) — how to prove an operator action was recorded, and
   what a passing verification does not claim.
-- [In Flight](/in-flight) — what is moving, so a test plan is written against the
+- [Board](/in-flight) — what is moving, so a test plan is written against the
   right version.
 - [Working a change](/guides/working-a-change) — the two blind readings of a
   change, and the one word that lands the requirements and the cases together.

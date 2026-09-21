@@ -622,7 +622,7 @@ export function laneOf(change: ChangeEntry): ChangeLane {
 /**
  * A change that is still only a reason: no delta, so it flips no capability
  * status, badges no row and bumps no product's count — it collects on the
- * In Flight board's own lane instead of standing among the work in flight.
+ * Board's own lane instead of standing among the work in flight.
  *
  * The deltas, not the lane: the ladder reads a change whose plan was written
  * before its designs as Proposed, and a change carrying requirements is not

@@ -38,7 +38,7 @@ Building the change's agent drafts, and a person's word lands.
   requirements read both, and a requirement that reaches the design is a
   dated wait on the tech PIC, never a hold on the stage
 - **Four lanes today** — proposed, specified, in progress and complete, read
-  the same way — [In Flight](/in-flight)
+  the same way — [Board](/in-flight)
 
 ## Overlays
 

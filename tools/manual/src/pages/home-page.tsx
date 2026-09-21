@@ -151,7 +151,7 @@ function WelcomeCard() {
 }
 
 /** What is moving is what someone is delivering; a proposal has moved nowhere
- * yet, and it lives on the In Flight board's own lane. */
+ * yet, and it lives on the Board's own lane. */
 function WhatsMoving() {
   const index = useManualIndex();
   const moving = index.snapshot.changes

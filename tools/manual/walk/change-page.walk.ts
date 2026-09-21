@@ -26,7 +26,7 @@ test("shared-planning-change-stages-SC-57 - the stepper marks the stage", async 
     .element(page.getByRole("heading", { level: 1, name: "The Planned stage" }))
     .toBeVisible();
 
-  // The eyebrow: the stage badge beside "In Flight", above the title.
+  // The eyebrow: the stage badge beside "Board", above the title.
   const eyebrow = document.querySelector("h1")?.previousElementSibling;
   if (!eyebrow) throw new Error("no eyebrow above the change title");
   await expect

@@ -42,7 +42,7 @@ export function ChangePage() {
     return (
       <>
         <PageHeading
-          eyebrow="In Flight"
+          eyebrow="Board"
           summary={
             shipped
               ? "This change has shipped and been archived — its deltas are folded into the durable specs."
@@ -56,15 +56,15 @@ export function ChangePage() {
         <EmptyState
           description={
             shipped
-              ? "The archive timeline on the In Flight board keeps its record."
-              : "The In Flight board lists what's still moving."
+              ? "The archive timeline on the Board keeps its record."
+              : "The Board lists what's still moving."
           }
           icon={<Kanban aria-hidden />}
           title={shipped ? "In the archive" : "Not on the board"}
         />
         <Text as="p" className="mt-4" size="sm">
           <Link className="underline underline-offset-2" to="/in-flight">
-            Open the In Flight board
+            Open the Board
           </Link>
         </Text>
       </>
@@ -75,7 +75,7 @@ export function ChangePage() {
     <>
       <Text as="p" className="mb-4" size="sm" tone="secondary">
         <Link className="hover:underline" to="/in-flight">
-          ← In Flight
+          ← Board
         </Link>
       </Text>
       <ChangeHeader change={change} />
@@ -95,7 +95,7 @@ function ChangeHeader({ change }: { change: ChangeEntry }) {
     <PageHeading
       eyebrow={
         <span className="flex flex-wrap items-center gap-2">
-          <span>In Flight</span>
+          <span>Board</span>
           <Badge
             size="sm"
             variant={

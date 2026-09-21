@@ -112,7 +112,7 @@ nearest your task and keep it open while you draft.
   is the suite's; how a surface arranges, labels or sizes an outcome is
   the design record's; how the code does it is the architecture doc's.
   The page is the essence a reader expands from, never the expansion: the
-  manual renders the suite under its `::cases` block, the change's artifacts on its In Flight
+  manual renders the suite under its `::cases` block, the change's artifacts on its Board
   entry, and the architecture doc from the engineer block's links
 - **The spec holds the contract** — a testable statement lives in
   `openspec/specs/` and nowhere else. A page states the rule in its own

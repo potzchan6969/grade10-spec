@@ -4,7 +4,7 @@ Drawn from [Change Stages · Surfaces](../../docs/prds/products/shared/planning/
 
 ### Board
 
-[Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked down the reading column as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. Replaces the four lanes of `/in-flight`.
+[Blueprint · 4.1 Board](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#board). Eight lanes in stage order, stacked down the reading column as In Flight stacks four today, each collapsible to its heading with its count and its open hands; the headings of Proposed to Building carry the agent mark and the hand's move; Mine, Waiting, Idle, Behind and Blocked as a filter row under the page heading; the shelf as a link. Replaces the four lanes of `/in-flight`, titled Board at the same route.
 
 A lane opens when its stage names a hand - Proposed, Specified, Planned, Building and On staging - and starts collapsed when it names nobody: Designed, Released and Archived. A lane with nothing in it collapses whichever it is, and a reader may open or shut any lane.
 
@@ -14,7 +14,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### My turn
 
-[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named. My turn is reached from the rail's fixed entries, beside In flight; Pending from the foot of My turn.
+[Blueprint · 4.3 My turn](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#my-turn). A handle picker in the page heading; the open questions addressed to the reader, one row each with the change and the question id; then the changes on the reader now, then the ones that are theirs later, in the Pending page's card grammar with the thread link and the command on the card. Replaces `/pending` for a person; the per-role Pending page stays for a hand nobody has named. My turn is reached from the rail's fixed entries, beside Board; Pending from the foot of My turn.
 
 ### Page ribbon and pip
 

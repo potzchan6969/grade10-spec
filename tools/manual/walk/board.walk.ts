@@ -34,11 +34,11 @@ afterEach(async () => {
 /** This walk proves the harness carries the manual: the shell mounts, the
  * fixture snapshot arrives, and the board renders under its own heading. The
  * cases below follow it. */
-test("the In Flight board opens", async () => {
+test("the Board opens", async () => {
   await openManual("/in-flight");
 
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 });
 
@@ -54,7 +54,7 @@ test("the In Flight board opens", async () => {
 test("shared-planning-change-stages-SC-10 - the mark and the move on a lane heading", async () => {
   await openManual("/in-flight");
   await expect
-    .element(page.getByRole("heading", { level: 1, name: "In Flight" }))
+    .element(page.getByRole("heading", { level: 1, name: "Board" }))
     .toBeVisible();
 
   const drafted: { stage: string; draft: string; move: string }[] = [

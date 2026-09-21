@@ -36,7 +36,7 @@ import { useDocumentTitle } from "./use-document-title";
  */
 export function InFlightPage() {
   const index = useManualIndex();
-  useDocumentTitle("In Flight");
+  useDocumentTitle("Board");
   // The archive answers whether a dependency shipped — without it a shipped
   // one would read as blocking — and it is what the Archived lane holds.
   const archive = useArchive();
@@ -59,7 +59,7 @@ export function InFlightPage() {
       <ReadOnlyNotice className="mb-3 text-right" />
       <PageHeading
         summary="Every change in flight, in the lane its own artifacts put it in — one lane per stage, with the hand each waits on."
-        title="In Flight"
+        title="Board"
       />
 
       <FilterRow filter={filter} params={params} shelved={shelved.length} />
@@ -130,7 +130,11 @@ function FilterRow({
         </Link>
       ))}
       <Link className="ml-auto" to="#shelf">
-        <Badge size="sm" variant="outline">
+        <Badge
+          size="sm"
+          title={`Shelf: ${shelved} change${shelved === 1 ? "" : "s"} idle over 30 days`}
+          variant="outline"
+        >
           <span>Shelf</span>
           <span className="opacity-70">{shelved}</span>
         </Badge>

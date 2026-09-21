@@ -78,7 +78,7 @@ export function WarningRow({ warning }: { warning: CheckWarning }) {
  * The warnings that are about this page, on this page. The stale rule names
  * which requirements moved, and the person who can act on that is the one
  * reading the page it is about — not whoever thinks to expand a collapsed
- * chore list on the In Flight board.
+ * chore list on the Board.
  */
 export function PageWarnings({ warnings }: { warnings: CheckWarning[] }) {
   if (warnings.length === 0) return null;
