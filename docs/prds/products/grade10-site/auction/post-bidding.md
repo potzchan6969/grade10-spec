@@ -129,7 +129,14 @@ hours of the close.
 
 - 🚧 **Form** — name, phone, country or region, town or city, address line 1,
   state or province and postal code are required; an empty one is refused
-  beside the field, and the phone's format is not checked
+  beside the field, and the phone's format is not checked; on delivery Add
+  Address, country or region lists every country and region A–Z, and any typed
+  letter moves the highlight to the next name that starts with it and scrolls
+  that name into view
+- ❓ **Billing country or region list** — whether billing Add Address uses the
+  same full list and typeahead as delivery; Product confirms
+- ❓ **Shippable destinations only** — whether the picker later limits to
+  destinations Grade10 ships to; until settled the catalogue is complete
 - **Deadline** — `Confirm by …` sits under Confirm; a miss closes the whole
   form and only Grade10 reopens it, under Edge Cases
 - 🚧 **Locked on confirming** — the winner changes none of the three
@@ -405,6 +412,9 @@ a second payment provider, and changes to the bid-time rules.
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
+| Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z; any typed letter moves the highlight to the next matching name and scrolls it into view. Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set. | Product (@tangconst) |
+| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and typeahead as delivery. | Product (@tangconst) |
+| Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
 | Awaiting Setup | 🚧 In flight | Awaiting Address is renamed Awaiting Setup, because setup confirms a payment method and a billing address as well as an address; until it lands the winner and the operator both read Awaiting Address. | Product (@jeffffej0909) |
