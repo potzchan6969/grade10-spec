@@ -22,9 +22,9 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { CreditCard, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
+import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
-import { PaymentMethodCard } from "../payment-method/payment-method-card";
 
 type OverlayPresentation = "modal" | "inline";
 

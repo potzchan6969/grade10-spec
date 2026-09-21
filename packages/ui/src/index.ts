@@ -284,6 +284,10 @@ export {
   type WalletPassState,
   type WalletPassWallet,
 } from "./blocks/loyalty-membership/wallet-pass-links";
+export {
+  PaymentMethodCard,
+  type PaymentMethodCardProps,
+} from "./blocks/payment-method/payment-method-card";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
 // shared/ui/site-chrome
@@ -371,10 +375,6 @@ export {
   OrderDetailsPaymentLogo,
   type OrderDetailsPaymentLogoProps,
 } from "./blocks/store-order-detail/order-details-payment-logo";
-export {
-  PaymentMethodCard,
-  type PaymentMethodCardProps,
-} from "./blocks/payment-method/payment-method-card";
 export {
   OrderDetailsSidebar,
   type OrderDetailsSidebarProps,

@@ -22,11 +22,11 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
-import { SiteHeader } from "@grade10/ui";
 import {
+  type OrderDetailsPaymentBrand,
   OrderDetailsPaymentLogo,
   PaymentMethodCard,
-  type OrderDetailsPaymentBrand,
+  SiteHeader,
 } from "@grade10/ui";
 import {
   ArrowCounterClockwise,
