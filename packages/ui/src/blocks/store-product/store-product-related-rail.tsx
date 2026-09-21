@@ -18,7 +18,9 @@ type StoreProductRelatedRailCopy = {
 type StoreProductRelatedRailProps = {
   copy: StoreProductRelatedRailCopy;
   /** The cards to draw, in the order given. The rail cuts no list: the page
-   * decides how many, and which, before it hands them over. */
+   * decides how many, and which, before it hands them over. It sells
+   * nothing, so a card's `inCart`, `cartCount`, `maxCartQuantity` and
+   * `remainingLabel` are never drawn. */
   cards: readonly ProductSummary[];
   /** Fires when a tile is activated, identifying the card. Omit it and the
    * tiles are inert. */
