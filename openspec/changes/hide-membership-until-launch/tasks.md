@@ -12,7 +12,7 @@
       `src/chrome/siteContent.test.ts`, `scripts/check-public-pages.mjs`
 - [ ] 1.3 Verify: `pnpm run typecheck && pnpm run test`
 
-## 2. Membership's own gate (grade10)
+## 2. Membership's own gate (grade10) (owner: @sean)
 
 Needs group 1 landed to compile against the sixth `Gates` member.
 
