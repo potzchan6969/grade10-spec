@@ -6,10 +6,12 @@
  *   pnpm run plan:land <change> <artifact> --reviewed
  *   pnpm run plan:land <change> <artifact|group> [--as @handle] [--with-recommendations] [--dry-run]
  *
- * A landing is the hand's word turned into one commit on `main`, cut from
- * `main` itself and carrying that one artifact and nothing else — the drafts
- * above it on the branch stay on the branch. The steps below run in order and
- * stop at the first refusal. Nothing half-lands: the record line and the
+ * A landing is the hand's word turned into one commit on `main`, of one of
+ * two kinds: an artifact's, cut from `main` itself and carrying that one
+ * artifact and nothing else — the drafts above it on the branch stay on the
+ * branch; and a task group's, the rebased branch tip, which carries the
+ * group's code and the plan whole. The steps below run in order and stop at
+ * the first refusal. Nothing half-lands: the record line and the
  * round's row are written into the same commit, `main` is a plain
  * fast-forward — or, bound to a wake through `.round/relay.json`, is what the
  * relay makes of the commit this run asked it to land (Q54) — and the branch
@@ -43,9 +45,12 @@
  *              held rows, or the hand's own answer - and the pages the
  *              proposal links, which is the set `reread-guard.mjs` holds
  *              every push of this run to; for a task group, the rebased
- *              branch tip, refused while that tip holds a schema artifact
- *              with no `landed_by:` line, because a group carries the branch
- *              whole and `main` never holds a draft no hand has landed
+ *              branch tip, refused while that tip holds text of a schema
+ *              artifact that `MAIN` does not — the plan and the decisions
+ *              apart, since the tick and a hand's answer are the group's own
+ *              to carry — naming each file and the hand it waits on, because
+ *              a group carries the branch whole and `main` never holds a
+ *              draft no hand has landed
  *   6 gate     Run the gate - `validate:changes`, `check:manual`,
  *              `tcs:validate` - against `L`'s tree with `PLAN_NO_FETCH=1`; a
  *              refusal leaves the branch and the working tree as they were,
@@ -70,10 +75,12 @@
  * `pnpm land` becomes this step when `land-on-main-through-the-gate` makes one
  * gate for both repositories (`Q36`).
  *
- * `--fix-pass` drops the row's `always` floor to `simpler`, the one reader
- * every round shares: a pass landed off a demonstration or off the reading of
- * the whole change is that round (Q50, Q99). A row naming more readers under
- * the flag owes its verifier like any other.
+ * `--fix-pass` drops the row's `always` floor to the readers every list of
+ * the schema shares — `fixPassFloor`, which is `simpler` in this store: a
+ * pass landed off a demonstration or off the reading of the whole change is
+ * that round (Q50, Q99). A row naming more readers under the flag owes its
+ * verifier like any other, and the flag is refused beside `--reviewed`, which
+ * lands no row at all.
  *
  * `--dry-run` cuts `L` and runs the gate against it for real, prints the same
  * lines a landing prints, and stops before step 7: nothing is pushed, and no
@@ -105,6 +112,7 @@ import { parseArgs } from "./lib/args.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import {
+  fixPassFloor,
   isGroup,
   perspectivesOf,
   planningSchema,
@@ -131,10 +139,11 @@ const REJECTED = /\[rejected\]|\[remote rejected\]|non-fast-forward|stale info/;
 /** The all-zero object id, which is how `update-index --index-info` is told a
  * path is gone rather than written. */
 const GONE = "0000000000000000000000000000000000000000";
-/** The reader that argues the simpler thing, which every round runs and a
- * round of one stands on (`docs/governance/system-design.md`): the floor
- * `--fix-pass` holds a row to. */
-const FLOOR = "simpler";
+/** The artifacts a group's landing carries as its own rather than as a
+ * draft: the plan, which the tick is the group's work on, and the decisions,
+ * which a hand's answer writes on the branch. Every other schema artifact the
+ * branch holds a text of that `main` does not is a draft nobody landed. */
+const GROUP_CARRIES = new Set(["tasks", "decisions"]);
 const USAGE =
   'usage: pnpm run plan:land <change> <artifact|group> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
 
@@ -159,6 +168,11 @@ for (const signal of ["SIGINT", "SIGTERM"])
   process.on(signal, () => process.exit(130));
 if (process.env.PLAN_LAND_RACE && !flags.root)
   fail("PLAN_LAND_RACE is a test seam and needs --root");
+if (fixPass && reviewedOnly) {
+  fail(
+    "--fix-pass names a round's row, and --reviewed lands none — a read that changed nothing is no fix pass",
+  );
+}
 let wake;
 try {
   wake = readWake(root);
@@ -336,6 +350,10 @@ async function attemptLanding(attempt) {
     say("hand", `@${handle} is the ${role} and the hand of ${target}`);
   }
 
+  /** The handle whose word one artifact of the change waits on, or nothing
+   * where the change names no hand for its stage. */
+  const whose = (id) => read.entry.hands?.[handOfArtifact(id, artifacts) ?? ""];
+
   // ── 4 behind, and the held rows (Q59, Q60) ────────────────────────────────
   // A task group is after every artifact: the plan it implements is the last
   // of them, so anything behind refuses it.
@@ -346,13 +364,12 @@ async function attemptLanding(attempt) {
   );
   if (behind.length > 0) {
     const [first] = behind;
-    const whose =
-      read.entry.hands?.[handOfArtifact(first.artifact, artifacts) ?? ""];
+    const hand = whose(first.artifact);
     // What the artifact is read again against: the items the commit dates
     // single out, or the whole of what is before it where the recorded id is
     // what says it moved.
     fail(
-      `${first.artifact} is behind ${first.changed.join(", ")}${whose ? ` and waits on @${whose}` : ""} — it is read again before ${target} lands`,
+      `${first.artifact} is behind ${first.changed.join(", ")}${hand ? ` and waits on @${hand}` : ""} — it is read again before ${target} lands`,
     );
   }
   say("behind", `nothing before ${target} is behind`);
@@ -415,20 +432,23 @@ async function attemptLanding(attempt) {
   } catch (cause) {
     fail(cause.message);
   }
-  // A group carries the branch whole, so an artifact drafted on it and landed
-  // by nobody would reach `main` with no hand's word behind it.
+  // A group carries the branch whole, so an artifact whose text on the branch
+  // `main` does not hold would reach `main` with no hand's word behind it.
+  // Read off the text, never off a `landed_by:` line: a landed artifact
+  // redrawn on the branch is a draft again, and one whose text `main` holds
+  // already is nobody's draft whatever the record says.
   if (group) {
-    const landed = read.entry.landedBy ?? {};
     const drafts = artifacts
-      .filter(({ id }) => !(id in landed))
-      .flatMap(({ id }) => filesOf(changed, artifacts, id));
+      .filter(({ id }) => !GROUP_CARRIES.has(id))
+      .flatMap(({ id }) =>
+        filesOf(changed, artifacts, id).map((path) => {
+          const hand = whose(id);
+          return hand ? `${path} — waits on @${hand}` : path;
+        }),
+      );
     if (drafts.length > 0) {
       fail(
-        `${target}'s landing carries a draft no hand has landed:\n${drafts
-          .map((path) => `  ${path}`)
-          .join(
-            "\n",
-          )}\nLand each on its hand's word, or drop the draft from the branch.`,
+        `${target}'s landing carries a draft no hand has landed:\n${listed(drafts)}\nLand each on its hand's word, or drop the draft from the branch.`,
       );
     }
   }
@@ -831,11 +851,7 @@ function testsCell(read, group, value) {
   const missing = citedByGroup(read).filter((id) => !cell.includes(id));
   if (missing.length > 0) {
     fail(
-      `${target}'s tasks cite a scenario --tests names no test for:\n${missing
-        .map((id) => `  ${id}`)
-        .join(
-          "\n",
-        )}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
+      `${target}'s tasks cite a scenario --tests names no test for:\n${listed(missing)}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
     );
   }
   return cell;
@@ -854,17 +870,24 @@ function testsCell(read, group, value) {
  * than one reader ran — two readings are reconciled, and only a round of one
  * argues its own findings.
  *
- * `--fix-pass` drops the floor to `simpler` alone: a pass off a demonstration
+ * `--fix-pass` drops the floor to the readers every list of the schema shares
+ * — `fixPassFloor`, `simpler` alone in this store: a pass off a demonstration
  * or off the reading of the whole change is a round of the simpler thing
  * (Q50, Q99), and the apply block's six `always` readers read the plan rather
  * than the fix.
  */
 function perspectivesCell(read, value) {
   const cell = listCell(value);
-  const issued = perspectivesOf(
-    planningSchema(root, read.entry.schema),
-    target,
-  );
+  const schema = planningSchema(root, read.entry.schema);
+  const issued = perspectivesOf(schema, target);
+  let floor = [];
+  if (fixPass) {
+    try {
+      floor = fixPassFloor(schema);
+    } catch (cause) {
+      fail(cause.message);
+    }
+  }
   const named = new Set(
     cell
       .split(/[,;]/)
@@ -884,7 +907,7 @@ function perspectivesCell(read, value) {
   }
   for (const { name, when } of issued) {
     if (!when.includes("always") || named.has(name)) continue;
-    if (fixPass && name !== FLOOR) continue;
+    if (fixPass && !floor.includes(name)) continue;
     fail(
       `${target}'s \`${name}\` reads every round — a narrow re-run may name fewer readers, never an \`always\` one`,
     );
@@ -1026,6 +1049,11 @@ function race(attempt) {
 
 function short(sha) {
   return sha ? sha.slice(0, 8) : sha;
+}
+
+/** Items as a refusal lists them, one per line and indented under it. */
+function listed(items) {
+  return items.map((one) => `  ${one}`).join("\n");
 }
 
 /**

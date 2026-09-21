@@ -235,6 +235,33 @@ export function verifierNeeded(readers) {
   return readers.length > 1;
 }
 
+/**
+ * The floor `plan:land --fix-pass` drops a row to: the `always` readers every
+ * perspectives list of the schema shares — each artifact that carries one,
+ * and the `apply:` block. Computed from the schema rather than declared in
+ * the landing, so the day a second reader joins every list the fix pass owes
+ * it too, and no constant has to be kept in step. A schema whose lists share
+ * no such reader has no floor a fix pass could stand on, and is refused rather
+ * than dropped to nothing.
+ */
+export function fixPassFloor(schema) {
+  const lists = [
+    ...schema.artifacts.map((one) => one.perspectives),
+    schema.apply,
+  ].filter((list) => Array.isArray(list) && list.length > 0);
+  const always = (list) =>
+    list.filter(({ when }) => when.includes("always")).map(({ name }) => name);
+  const shared = (lists[0] ? always(lists[0]) : []).filter((name) =>
+    lists.every((list) => always(list).includes(name)),
+  );
+  if (shared.length === 0) {
+    throw new Error(
+      "the schema's perspectives share no `always` reader — a fix pass has no floor to drop to",
+    );
+  }
+  return shared;
+}
+
 /** The perspectives recorded for one artifact, or for a task group. */
 export function perspectivesOf(schema, target) {
   const artifact = artifactOf(schema, target);
