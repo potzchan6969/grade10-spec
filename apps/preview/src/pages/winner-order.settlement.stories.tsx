@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
+import { LINE_TOOLTIPS } from "./winner-order-content";
 import {
   winnerOrderContactSheet,
   winnerOrderMeta,
@@ -25,6 +26,17 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
+async function expectInsuranceTooltip(canvasElement: HTMLElement) {
+  const canvas = within(canvasElement);
+  const page = within(canvasElement.ownerDocument.body);
+  await userEvent.hover(
+    canvas.getByRole("button", { name: LINE_TOOLTIPS.shippingInsurance }),
+  );
+  expect(page.getByRole("tooltip")).toHaveTextContent(
+    LINE_TOOLTIPS.shippingInsurance,
+  );
+}
+
 function deliveryAddressBlock(canvasElement: HTMLElement) {
   const sidebar = within(canvasElement).getByRole("complementary");
   const heading = within(sidebar).getByRole("heading", {
@@ -37,7 +49,10 @@ function deliveryAddressBlock(canvasElement: HTMLElement) {
   return within(block);
 }
 
-/** Pre-invoice — complete order setup within 48 hours of lot close. */
+/**
+ * Pre-invoice — complete order setup within 48 hours of lot close
+ * (winner-order-SC-171).
+ */
 export const AwaitingSetup: Story = {
   name: "Awaiting Setup",
   args: { status: "awaiting_address" },
@@ -64,6 +79,8 @@ export const AwaitingSetup: Story = {
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
+    expect(canvas.getByText("Insurance")).toBeVisible();
+    await expectInsuranceTooltip(canvasElement);
     expect(canvas.getByText(/^Winning bid:/)).toBeVisible();
     expect(
       canvas.getByRole("link", {
@@ -130,7 +147,10 @@ export const ExpiredSetup: Story = {
   },
 };
 
-/** Setup complete — invoice from this destination, email when ready. */
+/**
+ * Setup complete — invoice from this destination, email when ready
+ * (winner-order-SC-171).
+ */
 export const PreparingInvoice: Story = {
   name: "Preparing Invoice",
   args: { status: "preparing_invoice" },
@@ -150,6 +170,8 @@ export const PreparingInvoice: Story = {
     ).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
+    expect(canvas.getByText("Insurance")).toBeVisible();
+    await expectInsuranceTooltip(canvasElement);
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Card")).toBeVisible();

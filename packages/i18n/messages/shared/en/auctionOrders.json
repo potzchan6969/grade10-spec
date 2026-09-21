@@ -13,6 +13,7 @@
   "payInvoice": "Pay invoice",
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
+  "insuranceTooltip": "0.9% of the order value during transit.",
   "contactDialog": {
     "title": "Email Grade10",
     "to": "To",

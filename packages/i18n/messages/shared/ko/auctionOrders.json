@@ -13,6 +13,7 @@
   "payInvoice": "청구서 결제",
   "viewDetail": "상세 보기",
   "contactUs": "문의하기",
+  "insuranceTooltip": "운송 중 주문 금액의 0.9%입니다.",
   "contactDialog": {
     "title": "Grade10에 이메일 보내기",
     "to": "받는 사람",

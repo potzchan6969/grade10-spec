@@ -6,7 +6,9 @@ import {
   winnerOrderSettled,
 } from "./winner-order.story-shared";
 import {
+  INSURED_INVOICE_LINES,
   BANK_TRANSFER_INVOICE_LINES,
+  LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
@@ -28,6 +30,40 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
+
+const INSURED_PENDING_CONTENT = {
+  ...WINNER_ORDER_CONTENTS.pending_payment,
+  invoiceLines: INSURED_INVOICE_LINES,
+} as const;
+
+async function expectInsuranceTooltip(canvasElement: HTMLElement) {
+  const canvas = within(canvasElement);
+  const page = within(canvasElement.ownerDocument.body);
+  await userEvent.hover(
+    canvas.getByRole("button", { name: LINE_TOOLTIPS.shippingInsurance }),
+  );
+  expect(page.getByRole("tooltip")).toHaveTextContent(
+    LINE_TOOLTIPS.shippingInsurance,
+  );
+}
+
+/** Scenario: grade10-site-auction-winner-order-SC-169. */
+export const PendingPaymentWithInsurance: Story = {
+  name: "Pending Payment — With Insurance",
+  args: {
+    status: "pending_payment",
+    content: INSURED_PENDING_CONTENT,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    await winnerOrderSettled(canvasElement);
+    expect(canvas.getByText("Order summary")).toBeVisible();
+    expect(canvas.getByText("Insurance")).toBeVisible();
+    expect(canvas.getByText("HK$480")).toBeVisible();
+    expect(canvas.queryByText("TBD")).not.toBeInTheDocument();
+    await expectInsuranceTooltip(canvasElement);
+  },
+};
 
 const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
