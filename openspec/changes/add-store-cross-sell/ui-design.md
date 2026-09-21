@@ -29,7 +29,7 @@ speaks (`en`, `ko`, `zh-Hans`, `zh-Hant`): `product.youMayAlsoLike` —
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Picks and similar | The heading; up to 6 tiles, the picks first in their order, then similar cards; each tile opens its card | `grade10-site-store-cross-sell-US-01` |
-| Similar only | The heading; similar tiles alone, newest first among equals | `grade10-site-store-cross-sell-US-02` |
+| Similar only | The heading; similar tiles alone where nobody chose picks, newest first among equals | `grade10-site-store-cross-sell-US-02` |
 | One card | The heading and one tile; as the frame draws it | `grade10-site-store-cross-sell-US-01` |
 | Nothing to show | No heading, no rail, no space left for it | `grade10-site-store-cross-sell-US-02` |
 | A chosen pick sold out | The sold-out tile with its price, still opening its card, still taking hover and focus | `grade10-site-store-cross-sell-US-01` |

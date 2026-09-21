@@ -7,11 +7,12 @@
 **so that** I can open the next card worth having without going back to the
 listing.
 
-### grade10-site-store-cross-sell-US-02: Collector opens a similar card where the stock keeper chose no picks
+### grade10-site-store-cross-sell-US-02: Collector opens a card like the one they are reading
 
-**As a** collector reading a card nobody chose picks for,
+**As a** collector reading a card,
 **I want** cards like it under it, by its world, its language and its type,
-**so that** a card with no picks still leads me somewhere.
+picks or no picks,
+**so that** the rail leads me somewhere whether or not anyone chose for it.
 
 ### grade10-site-store-cross-sell-US-03: Stock keeper chooses the cards shown with a card
 

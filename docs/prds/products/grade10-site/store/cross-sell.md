@@ -37,10 +37,6 @@ holds is left out
 its collectible type, weighed in that order, newest first among equals; a card
 sharing none of them draws no similar cards
 
-🚧 **Moves with the catalogue** — a similar card appears or leaves as the
-store's copy of the catalogue moves, within minutes —
-[Product Listing · Product Data](product-listing.md#product-data)
-
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to
 open. The catalogue already holds the cards beside it, and the stock keeper
