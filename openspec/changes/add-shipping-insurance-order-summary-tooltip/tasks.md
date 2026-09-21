@@ -4,7 +4,7 @@
 - [ ] 1.2 Add the localized Insurance tooltip key to every shared catalog and wire it through the existing Winner Order preview line metadata; update the Post-Bidding PRD's in-flight decision if its exact copy is not aligned (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`, `grade10-site-auction-winner-order-SC-171`)
 - [ ] 1.3 Verify: `pnpm --dir packages/i18n run typecheck`, `pnpm --dir packages/i18n run test`, `pnpm --dir apps/preview run build-storybook`, `pnpm check:manual`, and `openspec validate add-shipping-insurance-order-summary-tooltip --strict`
 
-## 2. Winner fixture support (grade10)
+## 2. Winner fixture support (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add fixture-route and seed tests for an optional Insurance amount, preserving the omitted default (`grade10-site-auction-winner-order-SC-169`, `grade10-site-auction-winner-order-SC-170`)
 - [ ] 2.2 Thread optional `insuranceAmountMinor` through the development winner seed route, seed helper and Playwright helper so a sent invoice can contain Insurance without changing production contracts (`grade10-site-auction-winner-order-SC-169`)
