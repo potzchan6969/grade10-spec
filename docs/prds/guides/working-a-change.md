@@ -174,23 +174,20 @@ say what you say, and what has to be running.
 | Door | You say it | It lands through | It needs |
 | --- | --- | --- | --- |
 | The thread | A sentence to the app in the planning channel, then your answers in the change's thread | The relay, on your word or the Confirm button | The Slack app, the relay and the Routine, which Operations sets up — [Agent Runner](/references/agent-runner) |
-| A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
-| The locally run manual | Assign on a change page, Propose on a product page, Pull when the checkout is behind | A commit the manual makes on your checkout | `pnpm manual` on the clone; the hosted manual is read-only |
-| The application repository | `pnpm plan claim`, `done`, `hand`, `shipped --build <tag>`, `released` | A commit straight to the store's `main`, as today | `grade10`, with the store clone beside it |
+| A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
+| The locally run manual | Assign on a change page, Propose on a product page, Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
+| The application repository | `pnpm plan claim`, `done` and `released` today; `hand` and `shipped --build <tag>` once the stages change's group 7 lands there | A commit straight to the store's `main`, as today | `grade10`, with the store clone beside it |
+| A push of your own | A push to the change's branch, from a terminal or the code host | The round, which reads it as your word for the lines it touched | Nothing more |
 
 - **A terminal alone, end to end** — `/workflow-plan` opens the change and
-  drafts its first three files; the readers run in your session; you answer
-  the numbered questions there — `Q3`, then `Q4: per order` — and say land.
-  The landing rebases, runs the gate and pushes `main`, and the push workflow
-  posts it in the channel as it posts every push today; the change's thread
-  and a direct message to the next hand need the relay and `NOTIFY_DMS`. The
-  designer then runs `/workflow-design <id>`, the tech PIC `/workflow-tech <id>`,
-  and so on down the table above. From `grade10`, add the store clone first —
-  [the engineer's command sheet](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
+  drafts ahead, as above; the readers run in your session; you answer the
+  numbered questions there and say land. The landing rebases, runs the gate
+  and pushes `main`, and the push workflow tells the channel and the change's
+  thread by itself. Slack adds two things: the message that says it is your
+  turn, which `NOTIFY_DMS` gates, and a reply in the thread that wakes a run,
+  which the relay makes
 - **The doors mix** — a change opened in the thread carries on from a
   terminal and back: the files are the state, and each door reads them
-- **A push of your own** — to the change's branch, from a terminal or the code
-  host: the round reads it as your word for the lines it touched
 - **The old flow, meanwhile** — `openspec-propose`, `spec-push` and `dev-help`
   stay until the team has adopted the line commands. A change opened with
   them shows on the board like any other, owes no round row, and gets the
