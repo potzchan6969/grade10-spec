@@ -54,14 +54,13 @@ it; no statute here is asserted.
 - **Erasure, never signed** — everything is purged and the identity released
 - **Messages never sent** — a case's queued and parked mail is deleted
   whichever class the case falls in
-- **Process** — the account holder asks on the auth side, a **7-day** window
-  runs, then an admin runs each product from the console
-- 🚧 **Your data** — a page under the collector's account: what the vault
-  keeps and for how long, per class; the identity standing — verified until
-  when, checked how, never the name or document; every signed document from
-  every case in one download, each with its fingerprint; and the ask to be
-  forgotten with its **7-day** window, refused in words while an item is in
-  the vault or a loan is running
+- 🚧 **Process** — the collector files the ask from Your data and can cancel
+  it inside the **7-day** window; then an admin runs each product from the
+  console — [Account Data](/platform/account-data#erasure)
+- 🚧 **Your data** — a page under the collector's account: what the vault keeps
+  and for how long, per class; the identity standing — verified until when,
+  checked how, never the name or document; every signed document in one download;
+  and the ask to be forgotten, refused in words while a case is in flight
 
 ## Evidence
 
@@ -89,30 +88,29 @@ it; no statute here is asserted.
 - **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
   in the US carrying no personal data, Resend; no processor register
 - **Disputes** — beyond the complaints contact the paper prints, no path to
-  dispute a valuation, an interest figure or a forfeiture; the only refusal
-  in the flow is declining the packet before the seal
+  dispute a valuation, an interest figure or a forfeiture
 - **Insurance** — no policy, no insurer and no cover limit; the paper claims
   none and states the custodian's duty of reasonable care instead
 
 ## Before the first production case
 
-Every item here is a value or an act outside the code, with who closes it.
-`pnpm run check:libs` in the application repository prints the first until it
-is done; the rest live outside any check.
+Every item is a value or an act outside the code, with who closes it;
+`check:libs` in the application repository prints items 1 and 11 until they are done.
 
-1. *Legal* — **Name the two entities and their licence** — the custodian's
-   registered name, the lender's, the licence number and the exact wording
-   beside it, the complaints contact, and the FPS id and bank account the
-   how-to-pay block prints, in `packages/app-env/src/legalIdentity.ts`. Until
-   then a production deploy of the brand is refused, no offer is written in
-   production, and a live loan's balance prints nowhere to pay
+1. *Legal* — **Name the two entities and their licence** — in
+   `packages/app-env/src/legalIdentity.ts`, each refusing its own act while
+   unset: the custodian's name a production deploy; the lender's an offer in
+   production; the licence number and wording the loan agreement and every money
+   email in production; the complaints contact prints where set
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
    method, whether an AML duty applies, the retention windows, and whether
    the hash chain with a witnessed head is evidence enough
 3. *Legal* — **Counsel's wording** — the e-sign disclosure, the per-document
-   consent text, the personal information collection statement, the
-   forfeiture notice's operative text, and the Chinese versions of each
+   consent text, the collection statement, the forfeiture notice's operative
+   text, and the Chinese versions of each; production refuses the act that
+   would print an unset one — the notice's send, the collection-statement tick
+   — and brackets print outside production only
 4. *Operations* — **Backups** — two age public keys into
    `neondb/backup-recipients.txt`, one green nightly, a restore drill with
    the chain verifying on the restored copy
@@ -126,12 +124,14 @@ is done; the rest live outside any check.
 8. *Owner* — **Two people who can move money** — a reversal refuses the row's
    own recorder and a payout refuses the offer's own maker, so with a single
    money holder a bounced transfer strands the case in `active`
-9. *Engineering* — **Bump the catalogue** — the collector's own words live in
-   this store and reach the application with the submodule pointer, so the
-   page shows a new word only once the pointer moves after the upstream merge
+9. *Engineering* — **Bump the catalogue** — the collector's words live in this
+   store and reach the application only when the submodule pointer moves
 10. *Engineering* — **Write the vault's specs** — the capabilities behind
     these pages, so the timers, the arithmetic, the grants and the mail kinds
     are validated rather than described
+11. *Finance* — **Where a borrower pays** — the lender's FPS id and bank account
+    beside its legal identity; unset, they refuse the how-to-pay block and every
+    money email in production, and print a marked placeholder outside it
 
 ## Specs and journeys
 
@@ -175,7 +175,7 @@ the code holds until they do.
 | --- | --- | --- | --- |
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
 | The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
-| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built and its operative wording stays bracketed until counsel supplies it | Legal |
+| The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
@@ -183,7 +183,7 @@ the code holds until they do.
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
 | The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; the privacy page reads "Being prepared" until it exists, and the tick ships against that page | Legal |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
-| Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and asks to be forgotten from there; the vault answers for its own classes and its own refusal | Product |
+| Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |
 | Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
 | A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
 | Residency | Decided | Every Neon project in `ap-southeast-1`, the nearest region to Hong Kong and one stated home; Datadog stays in the US on the standing rule that logs carry no personal data | Legal |

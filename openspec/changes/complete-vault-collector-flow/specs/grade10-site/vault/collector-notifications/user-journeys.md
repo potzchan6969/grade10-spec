@@ -28,9 +28,8 @@ and that a person decides,
 ### grade10-site-vault-collector-notifications-US-06: Collector is invited to verify before the visit
 
 **As a** collector with a visit booked and no identity on file,
-**I want** the invitation to name the visit, what to bring, and that the link
-works for a fortnight and only for me,
-**so that** I can verify at home and skip the passport at the counter.
+**I want** the invitation to name the visit, the slot and what to bring,
+**so that** I can verify at home and turn up prepared.
 
 ## MODIFIED User journeys
 

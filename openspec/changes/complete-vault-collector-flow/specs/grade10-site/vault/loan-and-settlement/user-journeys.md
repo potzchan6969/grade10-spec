@@ -29,7 +29,7 @@ gave them,
 
 **As a** borrower with a loan running,
 **I want** the page and every money email to name the FPS id, the bank
-account and the reference to type,
+account, whose name it is under and the reference to type,
 **so that** I can pay at my own bank without asking the shop where.
 
 ### grade10-site-vault-loan-and-settlement-US-06: Borrower follows each repayment and the notice on the page
@@ -39,12 +39,15 @@ account and the reference to type,
 it, and the final notice with its date to pay by,
 **so that** I know what I still owe and how long I have.
 
-### grade10-site-vault-loan-and-settlement-US-07: Treasurer sees what the payout fixes before recording it
+### grade10-site-vault-loan-and-settlement-US-07: Operator reads the rule before the act
 
-**As a** treasurer recording an advance,
-**I want** the dialog to name both people, the due date the recording will
-fix and the days the reminders go,
-**so that** I record the advance knowing the term it starts.
+**As an** operator about to write an offer, confirm an item into the vault or
+record a payout,
+**I want** the dialog to state the bounds, the preconditions and what the
+recording fixes — the cap, the presets and the figures the offer derives; the
+three things a vaulting needs; the two people, the due date and the reminder
+days a payout sets — before I send,
+**so that** I act knowing the rule rather than learning it from a refusal.
 
 ## MODIFIED User journeys
 

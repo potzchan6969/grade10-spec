@@ -23,12 +23,6 @@ naming the shop and the person we checked,
 its fingerprint,
 **so that** I hold my own record without opening each case in turn.
 
-### grade10-site-vault-documents-and-signing-US-06: Operator covers the key terms one by one
-
-**As a** member of shop staff about to prepare a loan packet,
-**I want** the five key terms as a checklist I tick before the packet opens,
-**so that** nothing the borrower signs a line about goes unexplained.
-
 ## MODIFIED User journeys
 
 ## REMOVED User journeys

@@ -20,9 +20,17 @@ the end,
 ### grade10-admin-vault-money-book-US-04: Controller takes the range to a spreadsheet
 
 **As a** controller closing a month,
-**I want** the ledger filtered by kind, its net out of the business, each
-correction naming the row it took back, and the range as a CSV,
+**I want** the ledger filtered by kind, its net out of the business, and the
+range as a CSV,
 **so that** I tie the period to the statement outside the console.
+
+### grade10-admin-vault-money-book-US-05: Operator reads the arrears summed before working them
+
+**As a** member of shop staff,
+**I want** the loans in arrears summed above the list — what is outstanding
+across them and how many carry no notice — with each row naming the borrower,
+their contact, the notice and the last reminder sent,
+**so that** I know who to chase first without adding the list up myself.
 
 ## MODIFIED User journeys
 

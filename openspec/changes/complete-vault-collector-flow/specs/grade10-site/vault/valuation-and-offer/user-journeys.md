@@ -17,26 +17,13 @@ something else.
 
 ## ADDED User journeys
 
-### grade10-site-vault-valuation-and-offer-US-05: Collector reads that the offer ran out
+### grade10-site-vault-valuation-and-offer-US-05: Collector reads and answers an offer that replaced the last
 
-**As a** collector whose offer expired before they answered it,
-**I want** my case page to say the offer ran out, that the request is still
-open, and what to do next,
-**so that** I am not left waiting on an offer nobody can accept.
-
-### grade10-site-vault-valuation-and-offer-US-06: Collector accepts knowing what the loan costs
-
-**As a** collector answering an offer on my phone,
-**I want** the confirmation to state the total to repay, what a late day costs
-and what I will sign,
-**so that** saying yes is saying yes to a figure I have read.
-
-### grade10-site-vault-valuation-and-offer-US-07: Operator sees the bounds before writing an offer
-
-**As a** member of shop staff writing an offer,
-**I want** the dialog to show the cap, the term presets, the total, the
-late-day figure and the rate it derives, and the gates the offer must pass,
-**so that** I write terms that pass rather than learn the rule from a refusal.
+**As a** collector whose offer was replaced by a new one,
+**I want** the page to say the old offer is gone and show the new one's terms
+with Accept and Decline on it,
+**so that** I answer the offer that stands and never the one that was
+withdrawn.
 
 ## MODIFIED User journeys
 

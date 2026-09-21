@@ -41,23 +41,24 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
   filtered by method, paged, with totals per method and currency
 - **Held items tab** — everything in a locker, with the shop it is in, oldest
   first, paged
-- 🚧 **Counts and today** — every view carries its count; a Today block
-  lists the day's visits in order on the shop's clock; rows show the lane
-  and read the collector's word for the status
+- 🚧 **Counts and today** — every view carries its count; the landing view
+  opens on a Today block that is the Today cut itself, in slot order with its
+  count; rows show the lane and read the collector's word for the status
 - 🚧 **Search by reference** — prefix on the six-character case reference,
   so the characters a customer reads out at the counter find the case
-- 🚧 **Overdue, at a glance** — four tiles: loans in arrears, outstanding in
-  arrears, the oldest with its notice state, how many carry no notice; rows
-  name the borrower, their contact, the notice and the last reminder sent
-- 🚧 **Money tab, more** — a filter by kind, the net out of the business over
-  the range, a takes-back column naming the row a correction reversed, and a
-  CSV of the range as filtered
+- 🚧 **Overdue, at a glance** — three tiles: the view's count, outstanding
+  in arrears, how many carry no notice; rows name the borrower, their
+  contact, the notice and the last reminder sent
+- 🚧 **Money tab, more** — a filter by kind; the net out of the business —
+  payouts less repayments, per currency, a correction netting the row it took
+  back once, positive when money is out; a takes-back column naming that row;
+  a CSV of the range as filtered, bounded to what the ledger pages and on the
+  audit chain like a search — who, when, the filter, how many rows
 - 🚧 **Held items, at a glance** — tiles: in the vault, per shop, with a loan
   running, waiting for a pickup; rows carry held since, days held, status,
   outstanding and whether a pickup is booked
-- ❓ Product — a stock-take sheet printed from the held-items list, and Send
-  notice from an arrears row; recommended: neither in this change, the
-  notice stays an act on the case
+- ❓ Product — a stock-take sheet from the held-items list, and Send notice
+  from an arrears row; recommended: neither, the notice stays an act on the case
 
 ## One case
 
@@ -86,17 +87,15 @@ One line per tab, as `Surface: verb, verb, verb`.
 - 🚧 **Today's visit, in order** — the Case tab opens on the counter's steps
   for this visit as an ordered checklist, each ticked as its act lands, and
   says why an act is not offered yet
-- 🚧 **Key terms as a checklist** — the Documents tab ticks the five terms
-  before the loan packet opens —
+- 🚧 **Key terms** — the Documents tab ticks the loan agreement's own terms —
   [Documents and Signing](/p/grade10-site/vault/documents-and-signing#document-terms)
 - 🚧 **The identity panel** — six states, Verified, Out, Stalled, Refused,
   Lapsed and None — [Identity Check](/p/grade10-site/vault/identity-check#identity-states)
-- 🚧 **Forfeiture stepper** — the Custody tab shows past due, notice sent,
-  cure running with the earliest date, and a person forfeits, beside what
-  the collector was told
-- 🚧 **Before the act** — the make-offer, vault and payout dialogs state
-  their bounds, their preconditions and what the recording fixes before the
-  operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
+- 🚧 **Forfeit, withheld in words** — the Custody tab says why Forfeit is
+  not offered yet — not before the cure date, the notice sent on which day —
+  beside what the collector was told
+- 🚧 **Before the act** — the make-offer, vault and payout dialogs state the
+  rule before the operator sends — [Loan and Money](/p/grade10-site/vault/loan-and-money#records)
 
 ## Permissions
 
@@ -175,11 +174,11 @@ One line per tab, as `Surface: verb, verb, verb`.
 | Queue by wait, not by status | Decided | A shop asks what a case is waiting for; every status belongs to exactly one status view, and Today and Overdue are queries | Product |
 | Buttons follow the machine | Decided | Each move shows only at the statuses the contract publishes, and the worker refuses independently | Engineering |
 | The rule is shown before the refusal | Decided | The make-offer, vault and payout dialogs state the bound, the precondition and what the recording fixes before the operator sends; the worker's refusal stands unchanged behind them | Product |
-| The counter works a checklist | Decided | The Case tab opens on the visit's steps in order and the Custody tab shows forfeiture as four states, because a shop of three learns the flow from the screen rather than from a manual | Product |
+| The counter works a checklist | Decided | The Case tab opens on the visit's steps in order, and Forfeit is withheld with its reason in words rather than drawn as a stepper, because a shop of three learns the flow from the screen rather than from a manual | Product |
 | Treasurer split | Decided | Nothing a single staff member can do moves money out of the business | Product |
 | A correction takes a second money holder | Decided | `vault:payout` and never the row's own recorder; asking for the approve grant as well would have made corrections admin-only, because staff and treasurer are disjoint on money | Product |
 | The book sits behind the money grant | Decided | A ledger and a position across every case are the firm's accounts; `vault:read` still sees what one case owes | Product |
-| The book exports | Decided | A CSV of the ledger as filtered, a net-out figure and a takes-back column, so the controller ties the range to the statement in a spreadsheet; double entry stays the firm's accounting system's | Finance |
+| The book exports | Decided | A CSV of the ledger as filtered, bounded to what the ledger pages and on the audit chain like a search, with a net-out figure and a takes-back column, so the controller ties the range to the statement in a spreadsheet; double entry stays the firm's accounting system's | Finance |
 | "Today" is cut where the rows are read | Decided | The shop's own day decides it, in the query rather than in the browser, so the queue and the badges beside it cannot disagree across a midnight | Engineering |
 | The console never moves a visit from the diary | Decided | A case's visit is moved on the case, so the cached booking and the diary have one writer | Engineering |
 | Staff see the contact; the verified name stays in the KYC service | Decided | The console shows what staff set and never the legal name | Product |

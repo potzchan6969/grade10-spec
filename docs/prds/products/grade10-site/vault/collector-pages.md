@@ -58,11 +58,12 @@ What a collector reads on one case, top to bottom.
   reference; the address keeps the id
 - 🚧 **The fact it meets** — the badge and the line under it read the case as
   it stands, derived at the read and never a status of its own: the offer ran
-  out, you declined it, a new offer replaced the last, we closed the visit
-  you missed, you asked for it back — each with the one thing to do next
-- 🚧 **Endings** — declined with the reason, cancelled, expired naming the
-  clock that ended it, forfeited naming the figure the item settled, the
-  notice date and the date to pay by; the signed agreements stay on the page
+  out, the offer was declined, a new offer replaced the last, the visit was
+  closed as missed, the item was asked back — each with the one thing to do next
+- 🚧 **The stepper and the chip** — eight stages from request to release, and
+  a chip saying whether the item is still the collector's, read from the status
+- 🚧 **Endings** — every ending reads in the collector's words; the signed
+  agreements stay — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#exits)
 - **Photos** — thumbnails, served only to the owner and to staff
 - **The offer** — amount, term in days, rate for the term, the total to
   repay, what a late day costs, and the expiry; **Accept** and **Decline**
@@ -70,19 +71,13 @@ What a collector reads on one case, top to bottom.
 - 🚧 **Answering from the page** — Accept opens a confirmation naming the
   total, what a late day costs and what will be signed; Decline and Cancel
   confirm the same way; the card names the valuation and promises that
-  accepting starts nothing, declining keeps the request open, the visit stands
+  accepting books nothing, declining keeps the request open, the visit stands
 - **What is owed** — outstanding of total, repaid so far, due date, days
   overdue, and the instant it was computed at, with the line saying the
   balance holds until the deadline
-- 🚧 **How to pay** — under a live loan, the block
-  [Loan and Money](/p/grade10-site/vault/loan-and-money#reading-the-book)
-  states, the daily figure after the deadline, and the dates the reminders go
-- 🚧 **Repayments** — each with the day it reached the bank, the method and
-  the balance after it; a part payment clears interest first and never
-  restarts the clock
-- 🚧 **Final notice** — on a loan past due once the notice is sent: the date
-  to pay by, the reminders already sent, and that nothing can be taken
-  before that date
+- 🚧 **Money on a live loan** — the how-to-pay block, the daily figure after the
+  deadline, the dates the reminders go, each repayment and the final notice, as
+  [Loan and Money](/p/grade10-site/vault/loan-and-money#reading-the-book) states them
 - **Custody** — held since when, settled or what is outstanding, and **Ask
   for it back**, which records one ask while the item is held
 - **Documents** — each packet with its fingerprint, each sealed document with
@@ -94,13 +89,16 @@ What a collector reads on one case, top to bottom.
 - **Visit** — the booking picker at every live status but a draft, so a
   visit can be booked before the valuation, after the offer, or to repay and
   collect on
-- 🚧 **Before the visit** — a case with a visit ahead names the slot, adds it
-  to the collector's calendar, and lists what to do first: verify identity on
-  this phone, bring the item, sign at the counter
+- 🚧 **Before the visit** — a case with a visit ahead names the slot, offers
+  add to calendar, and lists what to do first: verify identity on this phone,
+  bring the item, sign at the counter
 - **Cancel this request** — ends the case at any status before the item is in
   the vault; any visit is cancelled with it and the item stays with the collector
 - **History** — every event the collector may see, actor kind only, never a
   staff id; the counter's own records stay staff-only
+- **Clocks** — a day and a deadline, on this page and in every email, are
+  the shop's own — Hong Kong time — and a deadline names the zone it is
+  stated in; a timeline stamp places an instant and stays UTC
 
 ## Booking a visit
 
@@ -109,7 +107,8 @@ What a collector reads on one case, top to bottom.
 - **Move or cancel** — any time up to the slot, an email each, whether the
   collector or staff moved it
 - 🚧 **Booked** — a confirmation screen names the shop, the slot and what to
-  bring, with add to calendar, move and cancel
+  bring, with add to calendar, move and cancel; the calendar file names this
+  visit, replaces the one before it on a move, and is withdrawn on a cancel
 - **A missed visit** — closes the visit and keeps the case; a submitted case
   ends **24 hours** after the slot instead, and the email says the visit was
   missed — [Case Lifecycle](/p/grade10-site/vault/case-lifecycle#timers)
@@ -129,9 +128,8 @@ What a collector reads on one case, top to bottom.
   condition on which the item lapses, that taking it is a person's decision,
   and that no further reminder follows
 - **Reminders** — **7 days** and **1 day** before the due date, then every
-  **7 days** overdue; each names the balance and the date, the overdue one
-  that interest runs at the same daily rate with no fee; the ladder stops at
-  a forfeiture notice
+  **7 days** overdue; each names the balance and the date, the overdue one that
+  interest runs at the same daily rate with no fee; stopping at the notice
 - **A failed send is kept** — every message, the signed set included, is
   retried on one ladder for up to **5** attempts, then parked with its
   reason; the case badges for staff, who can hand it back to the queue
@@ -187,13 +185,14 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | A case has a reference | Decided | Six characters from an alphabet that cannot be misread, issued beside the id when the request is sent in: spoken at the counter, typed as the transfer reference, prefix-searched in the console. The id stays the key and the address, so the reference is additive | Product |
 | The page reads the fact, not the machine | Decided | A lapsed, declined or superseded offer, a missed visit and an ask for the item back are derived at the read from the case, its offer and its visit; no status is added for any of them | Product |
 | Every event tells the collector or is decided silent | Decided | One map from event to message; a failed send is retried, never dropped | Engineering |
-| Every message is a table and blocks | Decided | The figures a message is about print as a table, how to pay and the lender's licence footer with the complaints contact as blocks, built as React Email templates in this store's `apps/emails`; the worker's one-paragraph copy goes | Product |
+| Every message is a table and blocks | Decided | The figures a message is about print as a table, how to pay and the lender's licence footer with the complaints contact as blocks; the worker renders its own React Email letters, aligned with the preview source in this store's `apps/emails`, and the one-paragraph copy goes | Product |
 | A live loan can book its visit | Decided | `active` is bookable; a missed pickup closes the visit and keeps the case | Product |
 | The collector answers for themselves | Decided | Accept, decline and cancel are the collector's own acts on their own case, each behind a confirmation naming what it does; the counter keeps its own path for the customer standing at it, and the signature is what binds either way | Product |
-| How to pay | Decided | A structured block — the lender's FPS id, its bank account, the case reference as the transfer reference, or card or cash at the counter — printed under a live loan's balance and in every money message, with the line saying the balance holds until the deadline; no payoff quote with a validity, because the balance at a date is the quote | Product |
+| How to pay | Decided | A structured block — the lender's FPS id, its bank account under the lender's registered name, the case reference as the transfer reference, or card or cash at the counter — printed under a live loan's balance and in every money message, with the line saying the balance holds until the deadline; no payoff quote with a validity, because the balance at a date is the quote | Product |
 | Reminders | Decided | **7** and **1** days before the due date, then every **7** days overdue, by email, stopping at the forfeiture notice; the schedule is an operating constant, named on the live loan, and a borrower is never charged for one | Owner |
 | Review before sending | Decided | The wizard reads the request back and takes the collection-statement tick before it sends; the statement's own text is Legal's | Product |
-| Add to calendar | Decided | A calendar file the phone's own calendar opens, from the booked screen and the case; no calendar provider is linked | Product |
+| Add to calendar | Decided | A calendar file the phone's own calendar opens, from the booked screen and the case; a later file for the same visit replaces the first and a cancellation withdraws it; no calendar provider is linked | Product |
+| The stepper and the chip | Decided | Eight stages and a chip saying whose the item is, both derived from the status at the read, on every collector screen the canvas draws; deferring them would ship the page without the one line that says where the case is | Design |
 | Cancel a case | Decided | The owner of a case cancels it in every status before custody, which closes the open offer and the visit with it | Product |
 | Several items | Decided | The lead case books the visit and the siblings need none, because a case has never needed one to be vaulted | Product |
 | Total and lateness on the offer card | Decided | The card states the total to repay and what a late day costs, so a collector answers knowing both | Design |

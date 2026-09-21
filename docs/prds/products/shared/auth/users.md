@@ -65,3 +65,9 @@ fails, the ban does not happen.
 Every session it holds ends, new sign-ins are refused, money stops. The account
 stays in the directory, marked banned, so it can be found and unbanned later.
 :::
+
+## Erasure
+
+- 🚧 **The account holder files their own request** — from a product's Your
+  data page, and cancels it there inside the seven days; a self-filed request
+  bans nothing — [Account Data](/platform/account-data#erasure)

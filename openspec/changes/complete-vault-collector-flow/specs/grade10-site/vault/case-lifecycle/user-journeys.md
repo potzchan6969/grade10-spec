@@ -20,17 +20,17 @@ expected at a counter.
 ### grade10-site-vault-case-lifecycle-US-04: Collector reads how their case ended
 
 **As a** collector whose case ended without a release,
-**I want** the page to say why in my own words — the reason staff gave, the
-clock that ran out, or the figure the item settled with the dates of the
-notice,
+**I want** the page to say why in my own words — the reason staff gave, that
+the request was called off and by whom, the clock that ran out, or the figure
+the item settled with the dates of the notice,
 **so that** I know what happened and what, if anything, is still mine.
 
-### grade10-site-vault-case-lifecycle-US-05: Collector reads that the case is still open after a setback
+### grade10-site-vault-case-lifecycle-US-05: Collector reads the fact their case meets
 
-**As a** collector who declined an offer, missed a visit or asked for the
-item back,
-**I want** the page to say the case is still where it was and what to do
-next,
+**As a** collector whose offer ran out, was declined or was replaced, whose
+visit was closed as missed, or who asked for the item back,
+**I want** the page to say so in my own words, that the case is still where it
+was, and what to do next,
 **so that** I do not take a closed offer or a closed visit for a closed case.
 
 ## MODIFIED User journeys

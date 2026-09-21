@@ -9,19 +9,12 @@ signed.
 
 ## ADDED User journeys
 
-### grade10-site-vault-retention-and-erasure-US-04: Collector reads what the vault keeps about them
+### grade10-site-vault-retention-and-erasure-US-05: Collector reads what the vault keeps about them
 
 **As a** collector,
-**I want** one page that says what is kept, for how long, and where my
-identity stands,
-**so that** I know what I am asking for before I ask to be forgotten.
-
-### grade10-site-vault-retention-and-erasure-US-05: Collector is refused in words while something is still theirs
-
-**As a** collector with an item in the vault or a loan running,
-**I want** the ask to be forgotten refused with the reason and what to do
-first,
-**so that** I know it is my case holding it, not a fault.
+**I want** one page that says what is kept, for how long, where my identity
+stands, and where I ask to be forgotten,
+**so that** I know what I am asking for before I ask.
 
 ## MODIFIED User journeys
 

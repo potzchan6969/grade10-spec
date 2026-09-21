@@ -127,10 +127,9 @@ released`, guarded on nothing outstanding and no packet open.
 | Signing link | **30 minutes**, one device | the link |
 | Sweeps | every **15 minutes** and hourly | liveness only; every deadline is also enforced where it is read |
 
-- 🚧 **A lapsed offer reads as one** — the collector's page and the queue
-  read the offer's own expiry and say it ran out, derived at the read, while
-  the case stays `offer_made` and open for another; the same read says a
-  declined or superseding offer, a missed visit and an ask for the item back
+- 🚧 **A lapsed offer reads as one** — the offer's own expiry is read at the
+  read, and the case stays `offer_made`, open for another —
+  [Collector Pages](/p/grade10-site/vault/collector-pages#case-page)
 
 ## Exits
 
@@ -148,8 +147,9 @@ released`, guarded on nothing outstanding and no packet open.
 - **Nothing unwinds past a live payout** — from `active` the way out is
   repayment, forfeiture, or a recorded reversal of the payout itself
 - 🚧 **Every ending reads on the case** — in the collector's words: the
-  reason, the clock that ended it, or the figure the item settled with the
-  notice date and the date to pay by; nothing left to do but start again
+  reason staff gave, that the request was called off and by whom, the clock
+  that ended it, or the figure the item settled with the notice date and the
+  date to pay by; nothing left to do but start again
 
 ## Specs and journeys
 

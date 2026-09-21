@@ -21,9 +21,8 @@ amount on it is whole cents written down by a person after the bank moved it.
   key and the balance quoted at that date; partial allowed, and refused when
   it would put the loan over what it owed on any day in value-date order
 - **A correction** — an append-only row that takes one payout or repayment
-  back in full, with a reason, recorded by a second `vault:payout` holder who
-  is not the row's own recorder, only while the case is `active` or `repaid`;
-  the borrower is emailed
+  back in full, with a reason, by a second `vault:payout` holder, never the
+  row's recorder, while the case is `active` or `repaid`; the borrower is emailed
 - **What is owed** — computed at every read by one function from the offer,
   the money valued by the instant asked about, and the brand's accrual; never
   stored, never a status, never below zero
@@ -103,11 +102,10 @@ every bound unset and writes no offer in production.
 - **The split** — staff set terms and forfeit; treasurers record money,
   correct it and read the book; the two roles share no grant, `admin` holds
   both, and per case the person who priced the loan may not pay it out
-- 🚧 **Said before the act** — the offer dialog shows the cap, the presets,
-  the interest, total, late-day figure and annualised rate it derives, and
-  the five gates, before the operator sends; the vault dialog its three
-  preconditions; the payout dialog the two people, the due date and the
-  reminder days the recording fixes
+- 🚧 **Said before the act** — the offer dialog shows the cap, the presets, the
+  interest, total, late-day figure and annualised rate it derives, and the five
+  gates; the vault dialog its three preconditions; the payout dialog the two
+  people, the due date and the reminder days the recording fixes
 
 ## Reading the book
 
@@ -119,23 +117,23 @@ every bound unset and writes no offer in production.
 - **The position** — at any instant, principal, interest owed and repaid
   across active and repaid loans, in the brand's own currency; a book holding
   a second currency is refused by name rather than summed
-- **The arrears** — every live loan past its due date, longest overdue
-  first, judged on the payout's own due date and paged on a keyset cursor
-  over it
+- **The arrears** — every live loan past its due date, longest overdue first,
+  judged on the payout's own due date and paged on a keyset cursor over it
 - **What the collector sees** — the offer's amount, term, rate, total to
   repay and what a late day costs; on a live loan the outstanding of the
   total, repaid, due date, days overdue and the instant computed. No
   annualised rate and no payoff quote with a validity: the balance is the quote
-- 🚧 **How to pay** — the lender's FPS id, its bank account and the case
-  reference as the transfer reference, or card or cash at the counter,
-  printed under the balance and in every money message; a transfer arriving
+- 🚧 **How to pay** — one block: the lender's FPS id, its bank account under the
+  lender's registered name, the case reference as the transfer reference, or
+  card or cash at the counter; under the balance with the daily figure after
+  the deadline and the reminder dates, and in every money message; a transfer
   under the reference is matched to its case by the treasurer who records it
-- 🚧 **Each repayment, to the borrower** — listed on the case with its value
-  date, method and the balance after it, from the same fold as the balance;
-  the final notice reads there too, with its date to pay by
-- ❓ Finance — the FPS id and the account the block prints; recommended: the
-  lender's own, one set per brand beside its legal identity, which
-  `check:libs` names until they are set
+- 🚧 **Each repayment, to the borrower** — on the case with its value date,
+  method and the balance after it; once a notice is sent, the date to pay by,
+  the reminders already sent, and that nothing can be taken before that date
+- ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
+  one set per brand beside its legal identity, refused in production while
+  unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 
 ## Specs and journeys

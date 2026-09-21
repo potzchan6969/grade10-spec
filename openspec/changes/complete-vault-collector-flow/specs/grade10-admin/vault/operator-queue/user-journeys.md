@@ -38,8 +38,7 @@ everything we hold,
 ### grade10-admin-vault-operator-queue-US-06: Operator reads the shop's day at a glance
 
 **As a** member of shop staff starting a shift,
-**I want** a count on every view, today's visits in order, and the arrears
-and the held items summed in tiles,
+**I want** a count on every view and today's visits in slot order,
 **so that** I know the day's load before I open a case.
 
 ### grade10-admin-vault-operator-queue-US-07: Operator walks the visit in order
@@ -50,11 +49,11 @@ lands, and say why an act is not offered yet,
 **so that** a shop of three runs the flow from the screen rather than from
 memory.
 
-### grade10-admin-vault-operator-queue-US-08: Operator sees where a late loan stands before forfeiting
+### grade10-admin-vault-operator-queue-US-08: Operator reads why a late loan cannot be forfeited yet
 
 **As a** member of shop staff,
-**I want** the custody tab to show past due, notice sent, cure running with
-its earliest date, and the forfeit as the last step,
+**I want** the custody tab to say in words why Forfeit is not offered — not
+before the cure date, the notice sent on which day,
 **so that** I never take an item a day early.
 
 ### grade10-admin-vault-operator-queue-US-09: Operator reads the identity state the record names
