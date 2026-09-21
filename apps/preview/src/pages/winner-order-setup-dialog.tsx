@@ -33,6 +33,10 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
+import {
+  COUNTRY_OPTIONS,
+  COUNTRY_SELECT_ITEMS,
+} from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
@@ -95,28 +99,6 @@ export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress
         "Block A, Festival Walk Residences\nKowloon Tong, Hong Kong\nHong Kong",
     },
   ] as const;
-
-/** Storybook-only country list — owned options, not a geo package. A–Z via localeCompare. */
-const COUNTRY_OPTIONS: readonly string[] = [
-  "Australia",
-  "Canada",
-  "China",
-  "Hong Kong",
-  "Japan",
-  "Macau",
-  "Malaysia",
-  "Singapore",
-  "South Korea",
-  "Taiwan",
-  "United Kingdom",
-  "United States",
-].toSorted((a, b) => a.localeCompare(b));
-
-/** Array form for Base UI `items` — do not use a Record (key order is not a contract). */
-const COUNTRY_SELECT_ITEMS = COUNTRY_OPTIONS.map((country) => ({
-  value: country,
-  label: country,
-}));
 
 const DRAFT_VALUE = "use_this_address";
 /** Occasional list feedback — same budget as cart row exit. */
@@ -971,7 +953,7 @@ function WinnerOrderSetupDialog({
                     className="text-sm font-medium text-secondary-foreground"
                     htmlFor={countryId}
                   >
-                    Country
+                    Country/Region
                   </label>
                   <Select
                     items={COUNTRY_SELECT_ITEMS}
@@ -989,7 +971,7 @@ function WinnerOrderSetupDialog({
                       className="w-full"
                       id={countryId}
                     >
-                      <SelectValue placeholder="Select a country" />
+                      <SelectValue placeholder="Select a country or region" />
                     </SelectTrigger>
                     <SelectContent alignItemWithTrigger={false}>
                       {COUNTRY_OPTIONS.map((country) => (
@@ -1005,7 +987,7 @@ function WinnerOrderSetupDialog({
                   </Select>
                   {attempted && !draft.country.trim() ? (
                     <span className="text-xs text-secondary-foreground">
-                      Choose a country.
+                      Choose a country or region.
                     </span>
                   ) : null}
                 </div>
