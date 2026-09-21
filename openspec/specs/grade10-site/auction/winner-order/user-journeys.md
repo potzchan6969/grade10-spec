@@ -67,3 +67,9 @@ current currency minimum,
 **As a** winner whose payment proof Grade10 could not match,
 **I want** to read why and how long I have left,
 **so that** I can send the right proof or pay again before the deadline.
+
+### winner-order-US-16: Winner emails Grade10 from a locked order
+
+**As a** winner whose payment access has closed,
+**I want** a ready email with this order's details that I can copy into any mail app,
+**so that** I can reach Grade10 without a system mail client, and support can find the order.

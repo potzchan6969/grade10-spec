@@ -57,7 +57,7 @@ the card is in the winner's hands. The collector's half is
   shown at card size with a zoom preview on hover; an item joins, is
   replaced, removed or re-captioned until the close — [Auction Display ·
   Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Watchers** — opening Stats on a listing shows how many collectors watch
+- **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count
 - **Refused** — a currency outside the three, or a starting price that is not

@@ -1,0 +1,9 @@
+schema: grade10-planning
+created: 2026-09-18
+promoted_by: "@mason5991"
+reviewed:
+  ui-design: d0d65ef7
+  specs: 5ec09c15
+  test-cases: 5ec09c15
+deploy_waived: "Owner waived: archive requested; change already in deploy f07b3bde but waive used for both archives in this batch"
+decisions_carried: "Q1–Q9 Contact Us destination (copy-first ready email, letter mailto, no balance on partial payment, current invoice after reissue, Textarea Message) → Post-Bidding Product decisions Contact Us destination (Decided); Raised Copy Message confirmation stays open on Post-Bidding"

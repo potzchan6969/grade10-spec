@@ -51,3 +51,10 @@ blocking unnumbered stock.
 **I want** create to verify the inventory unit I saved and the listing to show
 its configured identity,
 **so that** a created lot cannot drift from the unit I intended to sell.
+
+### grade10-admin-auction-listing-US-08: Operator checks a listing's watchers
+
+**As an** auction operator,
+**I want** to see how many collectors watch a listing from its Stats dialog,
+**so that** I can judge interest beside the bidder count without a second
+surface for the same figure.
