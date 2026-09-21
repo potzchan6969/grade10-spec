@@ -84,4 +84,4 @@
 | --- | --- |
 | Refunded retains issued documents and removes self-service | **Folded in:** `winner-order-SC-157` |
 | An overpayment returns only the difference and keeps the sale open | **Folded in:** `winner-order-SC-155` |
-| Refund details provide a statement-recognition clue | **Folded in:** `winner-order-SC-169` |
+| Refund details provide a statement-recognition clue | **Folded in:** `winner-order-SC-172` |

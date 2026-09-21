@@ -43,7 +43,7 @@ showing the operator's proof or full provider reference.
 - **AND** the returned difference appears below Order Total
 - **AND** the winner can open the refund details
 
-#### Scenario: winner-order-SC-169 - Refund details show statement-recognition clues
+#### Scenario: winner-order-SC-172 - Refund details show statement-recognition clues
 **Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
 
 - **GIVEN** a refunded order with a card refund and a refund detail record
