@@ -43,6 +43,7 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
+| 🚧 Public listing ID | A stable opaque display identifier, pending PM confirmation | A collector-quotable reference; never the internal listing key |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,

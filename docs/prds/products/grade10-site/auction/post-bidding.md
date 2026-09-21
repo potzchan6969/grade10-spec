@@ -178,6 +178,12 @@ by card, reads:
 - 🚧 **Invoice ID** — `INV-202609-LK7P2Q-01`: the month sent, the listing's
   code and the count; a reissue gets a new ID and bank reference, and the old
   ones still find the order
+- 🚧 **Public order ID** — a stable order reference shown on the winner's
+  order and in operator support surfaces; its format is pending PM and
+  Finance confirmation and it is never the internal order key
+- 🚧 **Bank reference** — a short separator-free value the winner can copy into
+  FPS, local bank transfer or SWIFT notes; its final format is pending PM and
+  Finance confirmation
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Same as delivery address
