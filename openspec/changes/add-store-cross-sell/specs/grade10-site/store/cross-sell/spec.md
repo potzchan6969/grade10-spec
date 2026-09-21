@@ -228,36 +228,6 @@ sharing this card's world, its language or its collectible type.
 - **A fact missing** — a card with no world draws similar cards by its language
   and its type; the order is unchanged.
 
-#### Scenario: grade10-site-store-cross-sell-SC-27 - Similar cards stop at six
-**Serves:** grade10-site-store-cross-sell-US-02 - the collector is given a set they can read
-
-- **GIVEN** a card with no picks and ten cards sharing its world
-- **WHEN** a collector opens its page
-- **THEN** the rail holds six of them, newest first
-- **AND** no seventh tile is drawn
-
-#### Scenario: grade10-site-store-cross-sell-SC-28 - Picks unreadable, similar cards fill
-**Serves:** grade10-site-store-cross-sell-US-02 - the collector is still led somewhere when the picks are not to be had
-
-- **GIVEN** a card whose picks cannot be read, and cards sharing its world
-- **WHEN** a collector opens its page
-- **THEN** the rail holds the cards sharing its world, as for a card nobody chose for
-- **AND** the card's page is otherwise unchanged
-
-#### Scenario: grade10-site-store-cross-sell-SC-29 - A card with no world falls to its language and type
-**Serves:** grade10-site-store-cross-sell-US-02 - the collector on a card the catalogue names no world for still sees cards like it
-
-- **GIVEN** a card the catalogue names no world for, with no picks, one card sharing its language and one sharing only its collectible type
-- **WHEN** a collector opens its page
-- **THEN** the rail holds both, the card sharing the language first
-
-#### Scenario: grade10-site-store-cross-sell-SC-30 - Clearing every pick leaves similar cards
-**Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper takes their picks back and the page still leads somewhere
-
-- **GIVEN** a card whose page shows the stock keeper's picks, and cards sharing its world
-- **WHEN** the stock keeper removes every pick in Shopify
-- **THEN** reading the card's page afresh within a minute shows the cards sharing its world and no pick
-
 #### Scenario: grade10-site-store-cross-sell-SC-15 - A card nobody chose picks for shows cards like it
 **Serves:** grade10-site-store-cross-sell-US-02 - the collector on an unchosen card is still led somewhere
 
@@ -294,6 +264,36 @@ sharing this card's world, its language or its collectible type.
 - **AND** a third card in one of them, gained by the catalogue in April
 - **WHEN** a collector opens the first card's page
 - **THEN** the April card is before the March card
+
+#### Scenario: grade10-site-store-cross-sell-SC-27 - Similar cards stop at six
+**Serves:** grade10-site-store-cross-sell-US-02 - the collector is given a set they can read
+
+- **GIVEN** a card with no picks and ten cards sharing its world
+- **WHEN** a collector opens its page
+- **THEN** the rail holds six of them, newest first
+- **AND** no seventh tile is drawn
+
+#### Scenario: grade10-site-store-cross-sell-SC-28 - Picks unreadable, similar cards fill
+**Serves:** grade10-site-store-cross-sell-US-02 - the collector is still led somewhere when the picks are not to be had
+
+- **GIVEN** a card whose picks cannot be read, and cards sharing its world
+- **WHEN** a collector opens its page
+- **THEN** the rail holds the cards sharing its world, as for a card nobody chose for
+- **AND** the card's page is otherwise unchanged
+
+#### Scenario: grade10-site-store-cross-sell-SC-29 - A card with no world falls to its language and type
+**Serves:** grade10-site-store-cross-sell-US-02 - the collector on a card the catalogue names no world for still sees cards like it
+
+- **GIVEN** a card the catalogue names no world for, with no picks, one card sharing its language and one sharing only its collectible type
+- **WHEN** a collector opens its page
+- **THEN** the rail holds both, the card sharing the language first
+
+#### Scenario: grade10-site-store-cross-sell-SC-30 - Clearing every pick leaves similar cards
+**Serves:** grade10-site-store-cross-sell-US-03 - the stock keeper takes their picks back and the page still leads somewhere
+
+- **GIVEN** a card whose page shows the stock keeper's picks, and cards sharing its world
+- **WHEN** the stock keeper removes every pick in Shopify
+- **THEN** reading the card's page afresh within a minute shows the cards sharing its world and no pick
 
 ### Requirement: Cards kept out of the similar cards
 

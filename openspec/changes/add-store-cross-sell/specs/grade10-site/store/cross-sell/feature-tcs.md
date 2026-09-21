@@ -391,13 +391,13 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<card_7>`'s page.
+* customer is on `<card_20>`'s page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<card_7>` | A card for sale with one pick, sharing no world, language or type with any other card for sale |
+| `<card_20>` | A card for sale with one pick, sharing no world, language or type with any other card for sale |
 
 **Steps:**
 
@@ -425,14 +425,14 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<card_8>`'s page.
+* customer is on `<card_21>`'s page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<card_8>` | A card for sale with one pick, `<pick_3>`, and three other cards for sale sharing its world |
-| `<pick_3>` | A card for sale sharing `<card_8>`'s world |
+| `<card_21>` | A card for sale with one pick, `<pick_3>`, and three other cards for sale sharing its world |
+| `<pick_3>` | A card for sale sharing `<card_21>`'s world |
 
 **Steps:**
 
@@ -727,15 +727,15 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is on `<card_15>`'s page.
+* customer is on `<card_22>`'s page.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<card_15>` | A card for sale in two worlds, with no picks |
-| `<card_16>` | A card for sale in both of those worlds, older |
-| `<card_17>` | A card for sale in one of those worlds, newer |
+| `<card_22>` | A card for sale in two worlds, with no picks |
+| `<card_23>` | A card for sale in both of those worlds, older |
+| `<card_24>` | A card for sale in one of those worlds, newer |
 
 **Steps:**
 
@@ -744,7 +744,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* `<card_17>` is before `<card_16>`.
+* `<card_24>` is before `<card_23>`.
 
 ---
 
@@ -907,6 +907,43 @@ the card itself, and see them on its page,
 
 ---
 
+### grade10-site-store-cross-sell-US3-TC5-1: A pick added to a card that already has picks reaches the page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cross-sell-US-03
+
+**Pre-conditions:**
+
+* admin(stock keeper) is on `<card_25>` in the Shopify dashboard.
+* `<card_25>`'s page shows `<pick_5>` and `<pick_6>` as its picks.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<card_25>` | A card for sale with two picks, `<pick_5>` then `<pick_6>` |
+| `<pick_7>` | A card for sale not yet among `<card_25>`'s picks |
+
+**Steps:**
+
+1. Add `<pick_7>` to `<card_25>`'s picks, after `<pick_6>`.
+2. Wait one minute.
+3. Open `<card_25>`'s page as a customer and scroll to the section under the card.
+
+**Expected Results:**
+
+* The first three tiles are `<pick_5>`, `<pick_6>`, `<pick_7>`, in that order.
+
 ## Settled
 
 None yet.
@@ -919,6 +956,6 @@ None yet.
 - **Raised, rejected** — the heading read in the page's served language (the suite's US1-TC11, dropped): a platform rule `shared/localization` states, restated by no capability
 - **Raised, settled elsewhere** — the catalogue's copy not held: no rail for that minute at that location (Q22, `grade10-site-store-cross-sell-SC-10`); the narrow viewport: ❓ on the frame, `ui-design.md` § Screens, awaited from @tangconst by 2026-09-24
 - **Freshness** — the suite's US2-TC7 waited a fixed 5 minutes and the scenarios a fixed 6; the product manager's word (Q19) is that the page states one clock, so `grade10-site-store-cross-sell-SC-23` and `grade10-site-store-cross-sell-SC-24` are written against the store's copy holding the change, past the page's own minute, and the case was rewritten to match
-- **Contradicted** — none: the two readings stated no opposite outcomes; the one apparent one (US1-TC9 against the tech design) was a state row the design had not yet aligned, corrected on the row
+- **Contradicted** — none: the two readings stated no opposite outcomes. The one apparent one was the suite's US1-TC9 (no rail when the picks cannot be read) against the tech design (similar cards alone): the `ui-design.md` row "Picks could not be read" had said "as if there were nothing to show" and was corrected to "similar cards alone" (Q21) before the case was rewritten
 - **Uncovered anchors** — `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` (the rail's exports): **Out of suite:** the shared UI package's own tests and stories in this store, `packages/ui/src/blocks/store-product/`; the two widenings the rail leans on are `shared/ui/store-home` (`shared-ui-store-home-SC-10`) and `shared/ui/store-product-listing` (`shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`), verified in those packages' own tests
-- **Cases added after the reconciliation** — US1-TC12 (`grade10-site-store-cross-sell-SC-05`), US1-TC13 (`grade10-site-store-cross-sell-SC-22`), US2-TC8 (`grade10-site-store-cross-sell-SC-19`): written by the run from the scenarios the blind pass left unreached, so they are not blind
+- **Cases added after the reconciliation** — US1-TC12 (`grade10-site-store-cross-sell-SC-05`), US1-TC13 (`grade10-site-store-cross-sell-SC-22`), US2-TC8 (`grade10-site-store-cross-sell-SC-19`), US3-TC5 (`grade10-site-store-cross-sell-SC-12`, on the product manager's remark): written by the run from the scenarios the blind pass left unreached, so they are not blind

@@ -25,6 +25,11 @@ Below a card, the store shows other cards the collector may also like.
   nobody can buy still shows its own rail
 - 🚧 **Never itself** — the card the collector is reading is never in its own
   rail
+- 🚧 **Arrives with the card** — the rail is in the page's response; nothing
+  stands in its place and the card does not move once it has
+- 🚧 **A rail the store cannot compose** — where the store's copy of the
+  catalogue is not to hand, the card's page answers whole with no rail for that
+  minute
 
 ## Picks
 

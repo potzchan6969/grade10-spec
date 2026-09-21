@@ -58,12 +58,12 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| grade10-site/store/cross-sell | When the picks cannot be read, does the rail still show the similar cards, or is the whole rail absent? | Q21 |
-| grade10-site/store/cross-sell | When the store's copy of the catalogue cannot be read for the similar cards, does the rail still show the picks alone? | Q22 |
-| grade10-site/store/cross-sell | A card that is both a pick and a similar card: once, in its pick position, or twice? | Q23 |
-| grade10-site/store/cross-sell | More than six picks: are the picks past the sixth dropped, and is the stock keeper told? | Q24 |
-| grade10-site/store/cross-sell | A pick the catalogue still holds but no longer publishes: left out like a lost pick, or kept like a sold-out one? | Q25 |
-| grade10-site/store/cross-sell | Newest first among equals: by when the card entered the store's catalogue, or by its release date? | Q26 |
-| grade10-site/store/cross-sell | Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
-| grade10-site/store/cross-sell | Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | ❓ on the frame — `ui-design.md` Screens, awaited from @tangconst by 2026-09-24 |
-| grade10-site/store/cross-sell | The rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none (the scenario pass). | Q28 |
+| grade10-site/store/cross-sell | Blind pass: When the picks cannot be read, does the rail still show the similar cards, or is the whole rail absent? | Q21 |
+| grade10-site/store/cross-sell | Blind pass: When the store's copy of the catalogue cannot be read for the similar cards, does the rail still show the picks alone? | Q22 |
+| grade10-site/store/cross-sell | Blind pass: A card that is both a pick and a similar card: once, in its pick position, or twice? | Q23 |
+| grade10-site/store/cross-sell | Blind pass: More than six picks: are the picks past the sixth dropped, and is the stock keeper told? | Q24 |
+| grade10-site/store/cross-sell | Blind pass: A pick the catalogue still holds but no longer publishes: left out like a lost pick, or kept like a sold-out one? | Q25 |
+| grade10-site/store/cross-sell | Blind pass: Newest first among equals: by when the card entered the store's catalogue, or by its release date? | Q26 |
+| grade10-site/store/cross-sell | Blind pass: Is a card sharing two of the three facts ranked above a card sharing only the first? | Q27 |
+| grade10-site/store/cross-sell | Blind pass: Narrow viewport: scroll, wrap, or fewer tiles, and does the cap hold there? | ❓ on the frame — `ui-design.md` Screens, awaited from @tangconst by 2026-09-24 |
+| grade10-site/store/cross-sell | Scenario pass: the rail's export requirement states behaviour for `StoreSectionHeader` and `ProductCard`, whose contracts other capabilities own, while the proposal modified none. | Q28 |
