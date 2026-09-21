@@ -34,7 +34,7 @@ Every group lands its tests in their own commit before its code, and its readers
 - [x] 3.6 The next action per stage in place of the four-lane one, read from `DRAFTED`'s command, and the page eyebrow naming the stage - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-58`
 - [x] 3.7 Component tests for every state `ui-design.md` lists for the board and the change page, the stepper below `sm` among them
 - [x] 3.8 On the pages on the change page, between the artifacts and the delivery: every section the change links under its page's title, each 🚧 and ❓ line as written and the ❓ with its hand, read through `marksOfPage` and `askedText` in `tools/manual/src/blocks/on-the-pages.tsx`, and the empty state where the change marks no section - `shared-planning-change-stages-SC-71`
-- [x] 3.9 The delivery row names the build the deploy recorded, `deployed_build:` read beside `deployed_env:` and shown as `staging · <tag>`; a record with no build reads as before - `shared-planning-change-stages-SC-59` (`Q68`)
+- [x] 3.9 The delivery row names the build the deploy recorded, `deployed_build:` read beside `deployed_env:` and shown as `staging · <tag>`; a record with no build reads as before - `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-76` (`Q68`)
 
 ## 4. The record's rules and the gate at the fold (grade10-spec)
 

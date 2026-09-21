@@ -823,7 +823,8 @@ The change page SHALL show, in this order down the reading column:
 5. on the pages: every 🚧 and ❓ line of each page section the proposal
    links, under its page's title and section, a ❓ line with its hand
 6. delivery: where the code is — `main`, staging with the build the deploy
-   recorded, and the release that carried the change
+   recorded where the record carries one, and the release that carried the
+   change
 7. the handoff: for each stage the change has left, the days from the stage
    landing to that hand's first word
 8. the thread as `main` records it, which `shared/planning/agent-rounds`
@@ -858,6 +859,13 @@ The change page SHALL show, in this order down the reading column:
 **WHEN** the change page is read
 **THEN** On the pages SHALL list each section under its page's title
 **AND** SHALL show every 🚧 and ❓ line of those sections as the page writes them, the ❓ line with its hand
+
+#### Scenario: shared-planning-change-stages-SC-76 - A staging deploy recording no build
+**Serves:** shared-planning-change-stages-US-02 - the product manager reads delivery for a change staged before a build was tagged
+
+**GIVEN** a change carrying a staging deploy that records no build
+**WHEN** the change page renders
+**THEN** the delivery row SHALL read staging with no build beside it
 
 ### Requirement: My turn lists what is on the reader
 

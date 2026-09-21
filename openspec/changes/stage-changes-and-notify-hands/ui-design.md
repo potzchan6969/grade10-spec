@@ -10,7 +10,7 @@ A lane opens when its stage names a hand - Proposed, Specified, Planned, Buildin
 
 ### Change page
 
-[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move as a short caption under each drafted step, the whole sentence on hover; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery naming `main`, staging with the build the deploy recorded, and the release, and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
+[Blueprint · 4.2 Change page](https://claude.ai/artifact/FgryWCqw2EFSvoyaSb5BRC#change-page). The stepper under the page heading, the agent mark and the hand's move as a short caption under each drafted step, the whole sentence on hover; below `sm` the stepper reads as one line - the stage's position of eight, its name, and the mark and the move beneath it - because eight steps do not fit a phone's width; the Your turn card with the thread link and the command; then the `ChangeStatus` rows gain Hands, Artifacts with fresh or behind, the open questions and who landed each, Delivery naming - `main`, staging with the build the deploy recorded, and the release - and Handoff, one labelled row per fact as the page reads today; the documents tabs and the tasks by group below, unchanged. Nothing sits beside the reading column.
 
 ### My turn
 
@@ -74,7 +74,7 @@ New in `tools/manual`, work in grade10-spec: `StageStepper`, `StageLane`, `YourT
 - The change page's stepper below `sm`, on one line - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-57`
 - The change page for a change waiting on a stage whose hand is unnamed - `shared-planning-change-stages-US-04` - `shared-planning-change-stages-SC-17`
 - The change page for a change with `ui_waived`, showing the design as not owed and fresh - `shared-planning-change-stages-US-05` - `shared-planning-change-stages-SC-07`
-- The delivery row for a deploy recording no build, reading as before - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-59`
+- The delivery row for a deploy recording no build, reading as before - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-76`
 - An artifact behind, with the chip naming what changed before it - `shared-planning-change-stages-US-09` - `shared-planning-change-stages-SC-25`
 - An artifact with open questions, counted, and one landed, with the handle - `shared-planning-change-stages-US-02` - `shared-planning-change-stages-SC-34`
 - My turn with nothing on the reader - `shared-planning-change-stages-US-03` - `shared-planning-change-stages-SC-61`

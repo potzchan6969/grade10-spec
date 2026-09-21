@@ -728,6 +728,36 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 * The ❓ line names Finance as the hand it waits on.
 * A change that marks no section shows one line saying so, and no empty list.
 
+### shared-planning-change-stages-US2-TC11-1: Delivery row reads staging with no build beside it
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-change-stages-US-02
+
+**Decided by:** `tools/manual/test/stage-change-page.test.tsx`
+
+**Pre-conditions:**
+<change H> is at On staging, carrying `deployed_env: staging` with no `deployed_build:`.
+
+**Steps:**
+
+1. Navigate to <manual change page url> for <change H>.
+2. Read the delivery row.
+
+**Expected Results:**
+
+* The change page loads for <change H>.
+* The delivery row reads staging with no build beside it.
+
 ---
 
 ## shared-planning-change-stages-US3: Teammate lists what is on them
@@ -1798,10 +1828,11 @@ Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Fe
 - `shared-planning-change-stages-US7-TC4-1`, the pip carrying the stage number so no colour carries the meaning alone → `shared-planning-change-stages-SC-65`
 - `shared-planning-change-stages-US4-TC3-1`, a hand taken off a change showing the hand as open → `shared-planning-change-stages-SC-42`
 
-Four cases went the other way: the rulings settled behaviour no case walked, so the suite gained one case each.
+Five cases went the other way: the rulings settled behaviour no case walked, so the suite gained one case each.
 
 - `shared-planning-change-stages-US1-TC8-1`, the release hand told its turn at staging, `Q18` → `shared-planning-change-stages-SC-45`
 - `shared-planning-change-stages-US2-TC9-1`, a record nothing can read shown in Proposed with its hands open, `Q23` → `shared-planning-change-stages-SC-03`
+- `shared-planning-change-stages-US2-TC11-1`, the delivery row naming no build when the deploy records none, `Q68` → `shared-planning-change-stages-SC-76`
 - `shared-planning-change-stages-US4-TC6-1`, a hand taken off a change telling the role's channel once, `Q25` → `shared-planning-change-stages-SC-42`
 - `shared-planning-change-stages-US6-TC4-1`, a wait written with no date shown undated, `Q20` → `shared-planning-change-stages-SC-21`
 
