@@ -1,14 +1,14 @@
 ## Feature set
 
 - Header controls
-  - Handler-gated: search, account, cart, My Orders, and Membership render
-    only when a handler is supplied
+  - Handler-gated: search, account, cart, Profile, My Orders, and Membership
+    render only when a handler is supplied
   - No wishlist: the header does not offer a wishlist control
   - Account menu: signed in, the sign-in email with its small initial avatar
-    above the items; My Orders joins ahead of My Auctions when its handler is
-    supplied, Membership joins after My Auctions when its handler is
-    supplied, Sign Out is always last and reads "Sign Out"; Profile stays out
-    of Grade10's launch compositions though `onProfile` remains on the export
+    above the items; Profile joins first, ahead of My Orders, when its
+    handler is supplied; My Orders joins ahead of My Auctions when its
+    handler is supplied, Membership joins after My Auctions when its handler
+    is supplied, Sign Out is always last and reads "Sign Out"
   - Compact menu: left drawer for navigation and utilities, with language in
     a nested drawer
   - Wide layout: primary navigation and language stay in the bar
@@ -44,20 +44,17 @@ the matching supplied handler.
 
 **Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
-**Cart, search, My Orders, and Membership** - Cart, search, My Orders, and
-Membership SHALL remain absent unless the application supplies their
-handlers; Membership additionally requires `copy.membership`. The account
-menu's items SHALL follow the fixed order My Orders, My Auctions, Membership,
-Sign Out, each of My Orders and Membership omitted independently wherever its
-own handler (and, for Membership, its copy) is not supplied, opening directly
-on whichever item is next. Activating My Orders SHALL invoke its matching
-handler. Activating Membership SHALL invoke the supplied `onMembership`
-handler and SHALL NOT navigate to a membership address the site withholds.
-
-**Profile stays exported, not offered** - `onProfile` SHALL remain an
-accepted prop on `SiteHeaderProps` and SHALL remain importable from the
-public entry. The account menu SHALL NOT offer Profile, whether or not
-`onProfile` is supplied.
+**Profile, Cart, search, My Orders, and Membership** - Profile, Cart, search,
+My Orders, and Membership SHALL remain absent unless the application
+supplies their handlers; Membership additionally requires `copy.membership`.
+The account menu's items SHALL follow the fixed order Profile, My Orders, My
+Auctions, Membership, Sign Out, each of Profile, My Orders, and Membership
+omitted independently wherever its own handler (and, for Membership, its
+copy) is not supplied, opening directly on whichever item is next. Activating
+Profile SHALL invoke its matching handler. Activating My Orders SHALL invoke
+its matching handler. Activating Membership SHALL invoke the supplied
+`onMembership` handler and SHALL NOT navigate to a membership address the
+site withholds.
 
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
 **Serves:** Chrome exports - an application imports SiteHeader
@@ -78,12 +75,13 @@ public entry. The account menu SHALL NOT offer Profile, whether or not
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
 **Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu once the application's Store answers
 
-- **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, a My Orders
-  handler is supplied, and `onMembership` with `copy.membership` are supplied
+- **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, an
+  `onProfile` handler is supplied, a My Orders handler is supplied, and
+  `onMembership` with `copy.membership` are supplied
 - **WHEN** the collector activates the account control
 - **THEN** the menu shows `accountEmail` with its `xs` avatar above the items
-- **AND** the menu offers My Orders, My Auctions, Membership, and Sign Out, in
-  that order
+- **AND** the menu offers Profile, My Orders, My Auctions, Membership, and
+  Sign Out, in that order, with Profile first
 - **AND** the menu does not offer KYC
 
 #### Scenario: shared-ui-site-chrome-SC-18 - Auction-first chrome omits cart
@@ -96,14 +94,14 @@ public entry. The account menu SHALL NOT offer Profile, whether or not
 #### Scenario: shared-ui-site-chrome-SC-29 - Signed in with no My Orders handler
 **Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu before the application's Store answers
 
-- **GIVEN** `session` is `"signed-in"` and no My Orders handler is supplied
+- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied,
+  and no My Orders handler is supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu offers only My Auctions and Sign Out, opening directly on
-  My Auctions
-- **AND** the menu does not offer My Orders or Profile
+- **THEN** the menu offers Profile, My Auctions, and Sign Out
+- **AND** the menu does not offer My Orders
 
 #### Scenario: shared-ui-site-chrome-SC-30 - Signed in with no Profile handler
-**Serves:** Header controls - `onProfile` stays on the export without reopening Profile in the menu
+**Serves:** Header controls - the account menu opens directly on My Orders when Profile has no handler
 
 - **GIVEN** `session` is `"signed-in"`, no `onProfile` handler is supplied, and
   a My Orders handler is supplied
@@ -123,12 +121,12 @@ public entry. The account menu SHALL NOT offer Profile, whether or not
 - **AND** the menu does not offer Profile or My Orders
 
 #### Scenario: shared-ui-site-chrome-SC-32 - Activating Profile invokes its handler
-**Serves:** Header controls - `onProfile` no longer reopens Profile in the menu
+**Serves:** Header controls - the account menu's Profile item takes the collector to the supplied destination
 
 - **GIVEN** `session` is `"signed-in"` and an `onProfile` handler is supplied
-- **WHEN** the collector opens the account menu
-- **THEN** no Profile item appears to activate
-- **AND** the supplied `onProfile` handler is never invoked from the menu
+- **WHEN** the collector activates Profile in the account menu
+- **THEN** the supplied `onProfile` handler is invoked
+- **AND** no other account-menu handler is invoked
 
 #### Scenario: shared-ui-site-chrome-SC-33 - Signed out ignores the Profile and My Orders handlers
 **Serves:** Chrome exports - signed out shows Sign In

@@ -12,7 +12,7 @@ Auctions and Sign Out on auction launch, and My Orders, My Auctions,
 Membership, and Sign Out once Store answers, with Cart in the bar only once
 Store answers,
 **so that** one place in the header takes me where I can go for this launch,
-without Profile or a second auction-orders link.
+without a second auction-orders link.
 
 ### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
 
@@ -31,7 +31,7 @@ without Profile or a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in, on an auction-launch surface, Store not yet answered) is on the site.
+* customer(signed in, profile not carried, on an auction-launch surface, Store not yet answered) is on the site.
 
 **Test data:**
 
@@ -66,7 +66,7 @@ without Profile or a second auction-orders link.
 
 **Pre-conditions:**
 
-* customer(signed in, on a surface once Store answers) is on the site.
+* customer(signed in, profile not carried, on a surface once Store answers) is on the site.
 
 **Test data:**
 
@@ -83,6 +83,33 @@ without Profile or a second auction-orders link.
 * The menu label shows `<collector email>` with its small (xs) initial avatar above the items.
 * The menu lists My Orders, My Auctions, Membership, then Sign Out, in that order.
 * Cart is present in the header bar and the menu does not include Profile.
+
+### grade10-site-site-page-shell-US3-TC11-1: Profile joins first, ahead of My Orders and Membership, once carried
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, profile carried, on a surface once Store answers) is on the site.
+
+**Steps:**
+
+1. Open the account menu from the header.
+
+**Expected Results:**
+
+* The menu lists, in order, Profile, My Orders, My Auctions, Membership, then Sign Out.
 
 ### grade10-site-site-page-shell-US3-TC8-1: Sign Out item reads in Title Case
 
@@ -173,7 +200,8 @@ without Profile or a second auction-orders link.
 
 - **Raised, folded into spec** — the blind pass's case asserting that activating Membership invokes its handler and does not navigate to a withheld route named behaviour `decisions.md` Q3 states ("Do not wire the item to a withheld membership address") but no drafted scenario had asserted at this capability. Folded as `grade10-site-site-page-shell-SC-34`.
 - **Raised, folded elsewhere** — the blind pass's case asserting Membership still joins after My Auctions when My Orders is not supplied is independent-handler-gating behaviour this capability's own requirement does not model at that granularity (its own "Each item" clause treats My Orders and Membership as joining together once Store answers). The rule belongs to the component contract that actually enforces it. Folded into `shared/ui/site-chrome` as `shared-ui-site-chrome-SC-38`, not duplicated here.
-- **Raised, rejected as out of suite** — the blind pass's case asserting Membership is omitted post-Store-answer without its handler tests the same component-level handler-gating granularity this capability's requirement does not itself state; `shared/ui/site-chrome`'s suite already covers it (`shared-ui-site-chrome-US1-TC19-1`, tracing `shared-ui-site-chrome-SC-31`).
+- **Raised, rejected as out of suite** — the blind pass's case asserting Membership is omitted post-Store-answer without its handler tests the same component-level handler-gating granularity this capability's requirement does not itself state; `shared/ui/site-chrome`'s suite already covers it (`shared-ui-site-chrome-US1-TC19-1`, tracing `shared-ui-site-chrome-SC-40`).
 - **Raised, rejected** — whether "KYC stays out" is gated by a handler or unconditional: the durable requirement's "Not offered" clause is untouched by this change and was already unconditional before it; not a finding of this run.
-- **Uncovered anchors** — none; the new scenarios (`grade10-site-site-page-shell-SC-17`, `-27`, `-28`, `-29`, `-30`, `-31`, `-32`, `-33`, `-34`) are each reached by at least one case above, or by an existing durable case unaffected by this change.
+- **Note (post-reconciliation correction):** Profile's handling was briefly drafted as an unconditional removal, then reverted — Profile stays handler-gated exactly as the durable spec states (joins first, ahead of My Orders, wherever the profile is carried); Grade10 simply does not carry it while the `profile` build gate is off. `TC6-1`/`TC7-1` preconditions and `SC-17`/`SC-27`/`SC-28`/`SC-29` were corrected to name the profile-carried state explicitly, and `TC11-1` was added to cover the profile-carried composition.
+- **Uncovered anchors** — none; the scenarios this change touches (`grade10-site-site-page-shell-SC-17`, `-27`, `-28`, `-29`, `-30`, `-31`, `-32`, `-33`, `-34`) are each reached by at least one case above, or by an existing durable case unaffected by this change.
 - **Contradicted** — none; both readings agreed on every point they both stated.

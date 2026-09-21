@@ -4,9 +4,9 @@
   - Session-aware entry: a primary Sign In button when signed out, the
     account icon when signed in
   - Account menu: signed in, the sign-in email with its small initial avatar
-    above the items — My Auctions and Sign Out on auction launch; My Orders,
-    My Auctions, Membership, and Sign Out once Store answers; Profile stays
-    out of both
+    above the items — Profile first wherever it is carried, then My Auctions
+    and Sign Out on auction launch, or My Orders, My Auctions, Membership,
+    and Sign Out once Store answers
 
 ## MODIFIED Requirements
 
@@ -17,21 +17,23 @@ The account control of a signed-in collector opens a menu of destinations.
 **The menu** - When the collector is signed in, activating the account
 control SHALL open a menu that shows their sign-in email with its small
 initial avatar above the items, falling back to the account label when no
-email is available, followed by My Auctions and Sign Out. Once Store
-answers, the menu SHALL also offer My Orders before My Auctions, and
-Membership after My Auctions. Until Store answers, the menu SHALL NOT offer
-My Orders or Membership.
+email is available. The menu SHALL offer My Auctions and Sign Out. Where the
+profile is carried, Profile SHALL join first. Once Store answers, the menu
+SHALL also offer My Orders, between Profile and My Auctions where Profile is
+offered, or otherwise before My Auctions, and Membership after My Auctions.
+Until Store answers, the menu SHALL NOT offer My Orders or Membership.
 
-**Each item** - Activating My Orders, where it is offered, SHALL take them
-to My Orders. Activating My Auctions SHALL take them to My Auctions.
-Activating Membership, where it is offered, SHALL invoke Membership's
-handler and SHALL NOT navigate to a membership address the site withholds.
-Activating Sign Out SHALL start sign-out.
+**Each item** - Activating Profile, where it is offered, SHALL take them to
+the profile. Activating My Orders, where it is offered, SHALL take them to
+My Orders. Activating My Auctions SHALL take them to My Auctions. Activating
+Membership, where it is offered, SHALL invoke Membership's handler and SHALL
+NOT navigate to a membership address the site withholds. Activating Sign Out
+SHALL start sign-out.
 
 **Sign Out label** - The menu's sign-out item SHALL read "Sign Out".
 
-**Not offered** - The menu SHALL NOT offer Profile. The menu SHALL NOT offer
-KYC until it is in scope for the header.
+**Not offered** - The menu SHALL NOT offer KYC until it is in scope for the
+header.
 
 **Profile sign-out** - Wherever the profile is carried, it SHALL continue to
 offer sign-out as well.
@@ -39,11 +41,11 @@ offer sign-out as well.
 #### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
-- **GIVEN** a signed-in collector and Store answers
+- **GIVEN** a signed-in collector, the profile is carried, and Store answers
 - **WHEN** they activate the account control
 - **THEN** the menu shows their sign-in email with its small initial avatar above the items
-- **AND** the menu offers My Orders, My Auctions, Membership, and Sign Out, in that order
-- **AND** the menu does not offer Profile or KYC
+- **AND** the menu offers Profile, My Orders, My Auctions, Membership, and Sign Out, in that order
+- **AND** the menu does not offer KYC
 
 #### Scenario: grade10-site-site-page-shell-SC-18 - Sign out from the menu
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
@@ -56,24 +58,24 @@ offer sign-out as well.
 #### Scenario: grade10-site-site-page-shell-SC-27 - Account menu omits My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
 
-- **GIVEN** a signed-in collector and Store does not yet answer
+- **GIVEN** a signed-in collector, the profile is carried, and Store does not yet answer
 - **WHEN** they activate the account control
 - **THEN** the menu shows their sign-in email with its small initial avatar above the items
-- **AND** the menu offers My Auctions and Sign Out
-- **AND** the menu does not offer Profile, My Orders, or Membership
+- **AND** the menu offers Profile, My Auctions, and Sign Out, in that order
+- **AND** the menu does not offer My Orders or Membership
 
 #### Scenario: grade10-site-site-page-shell-SC-28 - Account menu omits Profile once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
-- **GIVEN** a signed-in collector and Store answers
+- **GIVEN** a signed-in collector, the profile is not carried, and Store answers
 - **WHEN** they activate the account control
-- **THEN** the menu offers My Orders, My Auctions, and Sign Out
+- **THEN** the menu offers My Orders, My Auctions, Membership, and Sign Out
 - **AND** the menu does not offer Profile
 
 #### Scenario: grade10-site-site-page-shell-SC-29 - Account menu omits Profile and My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
-- **GIVEN** a signed-in collector and Store does not yet answer
+- **GIVEN** a signed-in collector, the profile is not carried, and Store does not yet answer
 - **WHEN** they activate the account control
 - **THEN** the menu offers My Auctions and Sign Out
 - **AND** the menu does not offer Profile, My Orders, or Membership

@@ -8,7 +8,8 @@ Layout SoT: Storybook
 
 Figma `Nav` (`4171:9937`) remains an early chrome reference only — Storybook
 locks auction-launch composition: email + `xs` avatar above My Auctions and
-Sign Out; no Profile, My Orders, Membership, Cart, or My Auction Orders.
+Sign Out; no My Orders, Membership, Cart, or My Auction Orders, and no
+Profile since the story supplies no `onProfile` handler.
 
 ### Auction & Store account menu
 
@@ -17,8 +18,9 @@ Layout SoT: Storybook
 `Site Chrome/SiteHeader/Auction & Store/Account menu`).
 
 Cart in the bar; menu items My Orders, My Auctions, Membership, Sign Out; no
-Profile. Membership destination remains ❓ on the PRD — the story asserts the
-handler fires, not a route.
+Profile since the story supplies no `onProfile` handler. Membership
+destination remains ❓ on the PRD — the story asserts the handler fires, not
+a route.
 
 ### Auction & Store cart count and surfaces
 
@@ -42,9 +44,11 @@ change.
 **Missing work already landed in this repository for Storybook SoT:**
 `accountEmail`, Membership handler + copy, Title Case `Sign Out` in story
 copy, Auction first / Auction & Store story folders. Application wiring —
-omit `onProfile` for these launches, supply `accountEmail`, supply Membership
-only once Store answers and a destination is chosen — remains delivery work
-in `apps/frontend/grade10`.
+supply `accountEmail`, supply Membership only once Store answers and a
+destination is chosen — remains delivery work in `apps/frontend/grade10`.
+`onProfile` wiring is untouched: it already follows the `profile` build gate,
+and neither story below supplies it, which is why both stories show the menu
+with Profile absent.
 
 **i18n:** Grade10 chrome catalogs need Title Case `signOut` and a Membership
 label when the store composition ships. No new design-system primitive or
@@ -56,7 +60,7 @@ token.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Auction launch, menu open | Avatar `xs` + sign-in email; menuitems My Auctions, Sign Out; no Profile, My Orders, Membership, Cart, My Auction Orders | `grade10-site-site-page-shell-SC-27` |
+| Auction launch, menu open | Avatar `xs` + sign-in email; menuitems My Auctions, Sign Out; no Profile (no `onProfile` supplied), My Orders, Membership, Cart, My Auction Orders | `grade10-site-site-page-shell-SC-29` |
 | Auction launch, signed in, menu closed | Account icon in the bar; no Cart | `grade10-site-site-page-shell-SC-09` |
 | Auction launch, signed out | Sign In primary; no account menu | `grade10-site-site-page-shell-SC-07` |
 | No `accountEmail` supplied | Menu label falls back to `copy.accountMenuLabel` | `grade10-site-site-page-shell-SC-31` |
@@ -65,8 +69,8 @@ token.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Store launch, menu open | Avatar + email; My Orders, My Auctions, Membership, Sign Out; Cart in the bar; no Profile | `grade10-site-site-page-shell-SC-17` |
+| Store launch, menu open | Avatar + email; My Orders, My Auctions, Membership, Sign Out; Cart in the bar; no Profile (no `onProfile` supplied) | `grade10-site-site-page-shell-SC-28` |
 | Membership activated | `onMembership` invoked; destination still ❓ | `grade10-site-site-page-shell-SC-34` |
 | Membership handler omitted | Membership item absent; My Orders / My Auctions / Sign Out remain | `shared-ui-site-chrome-SC-40` |
-| Profile handler omitted (Grade10 launch) | No Profile menuitem on auction or store launch | `grade10-site-site-page-shell-SC-28` |
+| Profile handler omitted (Grade10 launch) | No Profile menuitem while `onProfile` is not supplied, on auction or store launch | `grade10-site-site-page-shell-SC-28` |
 | My Auction Orders omitted (Grade10 launch) | No My Auction Orders menuitem; winners reach orders from My Auctions | **Out of suite:** the durable `shared/ui/site-chrome` and `grade10-site/site/page-shell` specs have never defined a My Auction Orders menu item; `add-my-auction-orders`'s own suite verifies its entry point is My Auctions |
