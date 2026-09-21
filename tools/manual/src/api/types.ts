@@ -270,15 +270,9 @@ export type MainState = {
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
 
 /**
- * The hands a change passes through, as `hands:` keys them, in the order it
- * passes through them.
- *
- * A list and not a union alone, because the record's rules have to refuse a
- * role outside it at run time. It mirrors `ROLES` in
- * `scripts/openspec/lib/team.mjs`, which the checks and the scripts read under
- * plain node: the app is bundled for a browser and that module reads a file,
- * so the list is written twice and `team-map.test.ts` holds the two to each
- * other rather than letting them drift.
+ * The six roles, in the order a change passes through them. Declared here,
+ * where `Role` is drawn from it; `scripts/openspec/lib/team.mjs` re-exports it
+ * for the checks and the scripts, which read this module under plain node.
  */
 export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
 

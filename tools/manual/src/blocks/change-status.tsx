@@ -1,11 +1,10 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 import { dependenciesOf, type ManualIndex } from "../api/derive";
-import { handoffsOf, type LandingDates } from "../api/handoff";
+import { handoffsOf, landingDatesOf } from "../api/handoff";
 import { overlaysOf } from "../api/overlays";
 import { roundlessGroupsOf } from "../api/rounds";
-import { stageShown } from "../api/stage-view";
-import { taskTotals } from "../api/stages";
+import { releasedOf, taskTotals } from "../api/stages";
 import type { ChangeDocument, ChangeEntry } from "../api/types";
 import {
   ArtifactList,
@@ -57,16 +56,16 @@ export function ChangeStatus({
   const dependencies = dependenciesOf(change, index, archived);
   const { done, total } = taskTotals(change);
   const groups = change.taskGroups.length;
-  const stage = stageShown(change);
+  const stage = change.stage;
   const artifacts = index.snapshot.schemas[change.schema] ?? [];
   const questions = change.questions ?? [];
   const overlays = overlaysOf(change, {
     now: Date.now(),
-    released: new Set(archived.map((one) => one.id)),
+    released: new Set(releasedOf(index.snapshot.changes, archived).keys()),
     artifacts,
   });
   const handoffs = document
-    ? handoffsOf(change, stage, artifacts, datesOf(document))
+    ? handoffsOf(change, stage, artifacts, landingDatesOf(document))
     : [];
   const rounds = change.rounds ?? [];
   const showRounds =
@@ -168,19 +167,6 @@ export function ChangeStatus({
       ) : null}
     </dl>
   );
-}
-
-/** When each artifact of the change landed, keyed by the schema's artifact
- * id — the commit dates the document already carries, read as the one thing
- * that can date a stage landing. */
-function datesOf(document: ChangeDocument): LandingDates {
-  const dates: LandingDates = {};
-  for (const artifact of document.artifacts) {
-    if (artifact.present && artifact.lastCommit) {
-      dates[artifact.name] = artifact.lastCommit.date;
-    }
-  }
-  return dates;
 }
 
 /** A label-less row still needs its `dt`: the grid's first column is what

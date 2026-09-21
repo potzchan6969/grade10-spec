@@ -1,7 +1,7 @@
 import { handleOf } from "../../../../scripts/openspec/lib/handle.mjs";
 import { byLastMoved } from "./derive";
 import { type Overlay, overlaysOf } from "./overlays";
-import { ROLES, stageShown } from "./stage-view";
+import { ROLES } from "./stage-view";
 import { handOf, openHands, rolesAtStage, STAGES } from "./stages";
 import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
 
@@ -65,7 +65,7 @@ export function boardRows(
   ctx: BoardContext,
 ): BoardRow[] {
   return [...changes].sort(byLastMoved).map((change) => {
-    const stage = stageShown(change);
+    const stage = change.stage;
     const artifacts = ctx.schemas[change.schema] ?? [];
     const overlays =
       change.status === "archived"

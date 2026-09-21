@@ -3,7 +3,7 @@ import { Warning } from "@phosphor-icons/react";
 import { Link } from "react-router";
 import { citeTarget, type ManualIndex } from "../api/derive";
 import type { Overlay } from "../api/overlays";
-import { draftedOf, roleTitle, stageShown } from "../api/stage-view";
+import { draftedOf, roleTitle } from "../api/stage-view";
 import { handOf, taskTotals } from "../api/stages";
 import type { ChangeEntry, SchemaArtifact } from "../api/types";
 import { Hands } from "./change-hand";
@@ -54,7 +54,7 @@ export function ChangeFacts({
       <div className="mt-3 flex flex-wrap items-center gap-x-3 gap-y-1.5">
         <Hands
           change={change}
-          roles={handOf(change, stageShown(change), artifacts)}
+          roles={handOf(change, change.stage, artifacts)}
         />
         <Attribution change={change} claim />
         <ul className="flex flex-wrap items-center gap-2">
@@ -97,7 +97,7 @@ export function ChangeFacts({
 export function nextAction(
   change: ChangeEntry,
 ): { command: string; note: string }[] {
-  const stage = stageShown(change);
+  const stage = change.stage;
   const drafted = draftedOf(stage, change.id);
   // One per hand the stage names: Designed is taken by two, and a card that
   // offered one of their commands left the other hand nothing to paste.
@@ -144,7 +144,7 @@ export function NextAction({ change }: { change: ChangeEntry }) {
 export function MainStateNote({ change }: { change: ChangeEntry }) {
   const state = change.mainState;
   if (!state) return null;
-  const stage = stageShown(change);
+  const stage = change.stage;
   const blocked =
     stage === "on-staging" || stage === "released" || stage === "archived"
       ? "archived"

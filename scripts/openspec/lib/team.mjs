@@ -17,6 +17,7 @@
  * there is no file to open.
  */
 import { join } from "node:path";
+import { ROLES } from "../../../tools/manual/src/api/types.ts";
 import { handleOf, isHandle } from "./handle.mjs";
 import { readTextIfThere } from "./read-text.mjs";
 import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";
@@ -25,18 +26,14 @@ import { parseTeamMap, TEAM_MAP } from "./team-parse.mjs";
  * reader — `handle.mjs`'s and `team-parse.mjs`'s own reason for existing
  * beside this file, which reads the map off disk. They are re-exported here
  * so the store's callers still have one module. */
-export { handleOf, isHandle, parseTeamMap, TEAM_MAP };
-
 /**
- * The hands a change passes through, in the order it passes through them.
- *
- * Here because both halves read it: the record's rules refuse a `hands:` key
- * that is not one of these, and the manual's `Role` is these six. The manual
- * mirrors the list in `src/api/types.ts` rather than importing it, because the
- * app is bundled for a browser and this module reads a file; `team-map.test.ts`
- * holds the two to each other.
+ * The hands a change passes through, in the order it passes through them:
+ * the manual's own list, which its `Role` type is drawn from, re-exported so
+ * the record's rules and the scripts read the one declaration. This module
+ * reads a file, so the browser imports the list from `types.ts` and never
+ * from here.
  */
-export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"];
+export { handleOf, isHandle, parseTeamMap, ROLES, TEAM_MAP };
 
 /**
  * The store's team map: one entry per handle, one channel per role.

@@ -1,6 +1,12 @@
 import { handOfArtifact, PROOF_OF_STAGE, STAGES } from "./stages";
 import { daysBetween, TIME_ZONE } from "./time";
-import type { ChangeEntry, Role, SchemaArtifact, Stage } from "./types";
+import type {
+  ChangeDocument,
+  ChangeEntry,
+  Role,
+  SchemaArtifact,
+  Stage,
+} from "./types";
 
 /**
  * Where the days went: for each stage a change has left, the days from that
@@ -37,6 +43,33 @@ export type Handoff = {
 /** When each artifact of the change landed, keyed by the schema's artifact id
  * — the dates the change document carries. */
 export type LandingDates = Record<string, string | undefined>;
+
+/**
+ * When each artifact of the change landed, keyed by the schema's artifact id:
+ * the commit that landed it, which the change's history names — its first
+ * landing, since that is the one that moved the stage — and, for an artifact
+ * the history names no landing of, the last commit that touched the file. A
+ * change worked on the old flow has only the second, and a redraft after a
+ * landing moves only the second.
+ */
+export function landingDatesOf(
+  document: Pick<ChangeDocument, "artifacts" | "history">,
+): LandingDates {
+  const dates: LandingDates = {};
+  for (const event of document.history) {
+    if (event.kind !== "landed") continue;
+    const held = dates[event.target];
+    if (held === undefined || event.date < held)
+      dates[event.target] = event.date;
+  }
+  for (const artifact of document.artifacts) {
+    if (dates[artifact.name] !== undefined) continue;
+    if (artifact.present && artifact.lastCommit) {
+      dates[artifact.name] = artifact.lastCommit.date;
+    }
+  }
+  return dates;
+}
 
 export function handoffsOf(
   change: ChangeEntry,

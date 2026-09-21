@@ -36,6 +36,21 @@ export declare const threadPathOf: (
   thread: string | undefined,
 ) => string | undefined;
 export declare const linkedOf: (url: string, title: string) => string;
+export declare const changePageOf: (manualUrl: string, id: string) => string;
+export declare const permalinkOf: (
+  workspaceUrl: string,
+  thread: string | undefined,
+) => string | undefined;
+export declare const linkOf: (link: {
+  manualUrl: string;
+  workspaceUrl: string;
+  thread?: string;
+  id: string;
+  title: string;
+}) => string;
+export declare const threadPartsOf: (
+  thread: string | undefined,
+) => { channel: string; ts: string } | undefined;
 export declare const yourTurnText: (
   at: WordedChange,
   role: Role,
