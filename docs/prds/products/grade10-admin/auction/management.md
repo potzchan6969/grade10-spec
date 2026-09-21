@@ -57,8 +57,9 @@ the card is in the winner's hands. The collector's half is
   shown at card size with a zoom preview on hover; an item joins, is
   replaced, removed or re-captioned until the close — [Auction Display ·
   Media Gallery](/p/grade10-site/auction/display#auction-details)
-- 🚧 **Watchers** — the Listings table shows how many collectors watch each
-  lot, across both brands; interest, not a count of expected bidders
+- 🚧 **Watchers** — opening Stats on a listing shows how many collectors watch
+  that lot, across both brands; interest, not a count of expected bidders; the
+  Listings table does not show the count
 - **Refused** — a currency outside the three, or a starting price that is not
   a positive whole amount; a slug of the wrong shape, or one another listing
   holds; two categories from one taxonomy, or a published or canceled
@@ -320,7 +321,7 @@ settings.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
-| Watch count placement | Decided | A Watchers column on the Listings table, not the listing's own page. | Design |
+| Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Payment source | Decided | The queue distinguishes a fresh Stripe charge from manual settlement, and both release the bid-time hold rather than capturing it. | Product and Finance |
 | Shipment authority | Decided | Payment and shipment use separate grants; staff may ship, finance may collect, and publishing remains catalogue work. | Operations |
 | Shipping model | Decided | Grade10 records the confirmed dispatch snapshot, carrier tracking, fulfilment milestones and delivery proof. | Operations |

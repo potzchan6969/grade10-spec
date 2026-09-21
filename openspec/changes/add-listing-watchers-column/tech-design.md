@@ -1,78 +1,79 @@
 ## Context
 
-The authenticated admin `listings.list` read already supplies the Listings
-table. It reads a page of listings, while `readAdminListingStats` counts one
-listing's watchers and bidders on demand. The shared watch record already
-defines an explicit watch in `bidder_watches`; it is the authority for this
-count.
+The authenticated admin `listings.stats` read already returns one listing's
+watcher and bidder counts on demand. The Listings Stats dialog opens from the
+table and renders both. A later list-row enrichment added `watcherCount` to
+`listings.list` and a Watchers column, duplicating the same figure.
 
-See [proposal.md](./proposal.md) for why the table needs the column.
+The shared watch record already defines an explicit watch in `bidder_watches`;
+it is the authority for this count.
+
+See [proposal.md](./proposal.md) for why Stats owns the count.
 
 ## Goals / Non-Goals
 
 **Goals:**
 
-- Add one page-load watcher-count snapshot to every admin list item
-- Read explicit watches across both brands in one bounded query per page
-- Keep the count typed from the contract through the admin table
+- Keep the watch count on the existing on-demand Stats read and dialog
+- Remove the list-row watcher count and the Listings-table Watchers column
+- Keep the count typed from the Stats contract through the dialog
 
 **Non-Goals:**
 
 - Store or cache another watcher count
 - Add a watcher sort, filter, live refresh, identity, or bidder meaning
-- Change the existing listing detail or on-demand statistics reads
+- Change when a row offers Stats, or the bidder-count / bidder-summary reads
+- Add watcher count to listing detail or mutation shapes
 
 ## Decisions
 
-The listing spec governs who sees the count, which states show it, its
-cross-brand meaning, and its unsortable table position. Implementation choices:
+The listing spec governs who sees the count, which listings offer Stats, its
+cross-brand meaning, and that the table does not show it. Implementation
+choices:
 
 | Topic | Choice | Rejected |
 | --- | --- | --- |
-| List contract | Add `watcherCount` as a non-negative integer to the additive `listings.list` item contract only | Adding it to detail or mutation shapes; a new endpoint or grant |
-| Count read | After loading the current page, group explicit `bidder_watches` by its listing ids and merge missing groups as `0` | Calling the one-listing stats read for every row; correlated count queries; a stored counter |
-| Watch definition | Count only rows whose explicit-watch timestamp is set, across storefronts | Counting implicit bid rows as watches |
-| Admin table | Carry the list projection through the feature and fixture, then render a plain `Watchers` cell with no sort key | Treating the count as a detail default; a sortable heading |
+| Surface | Stats dialog via existing `listings.stats` | A Watchers column fed by `listings.list` |
+| List contract | Drop `watcherCount` from the list-item shape; stop the batched list enrichment | Keeping both surfaces in sync |
+| Watch definition | Count only rows whose explicit-watch timestamp is set, across storefronts (unchanged in `readAdminListingStats`) | Counting implicit bid rows as watches |
+| Admin table | No Watchers heading or cell | An unsortable column beside Stats |
 
-The existing `auction:read` authorization on `listings.list` remains the
-boundary. Its response is a snapshot when the list query and grouped count
-complete; no transaction or refresh protocol is added.
+The existing `auction:read` authorization on `listings.stats` remains the
+boundary. The response is a snapshot when that read completes; no transaction
+or refresh protocol is added for the watcher line.
 
 ## Service Interfaces
 
-`listAdminListings` owns the enrichment after its existing listing-page read.
-It passes the returned listing ids to a repository read with this shape:
+`readAdminListingStats` remains the sole admin watch-count read for this
+surface. It already:
 
 | Input | Success output | Refusal / fault |
 | --- | --- | --- |
-| `{ listingIds: ListingId[] }` | `Map<ListingId, number>` of explicit cross-brand watch counts | Empty ids returns an empty map; database fault propagates through the list read |
+| `{ listingId }` for an existing listing | `{ listingId, watcherCount, bidderCount }` with explicit cross-brand watches | Missing listing refuses; database fault propagates |
 
-The repository runs one `IN` / `GROUP BY listing_id` query against
-`bidder_watches` and filters on the explicit-watch timestamp. The service
-merges its rows into the page projection, defaulting an absent map entry to
-`0`. It does not write or lock data.
-
-Example: listing ids `[a, b]` with three qualifying rows for `a` and none for
-`b` returns `{ a: 3 }`; the list response carries `a.watcherCount = 3` and
-`b.watcherCount = 0`.
+`listAdminListings` no longer calls a page-scoped watch aggregate or merges
+`watcherCount` into each row.
 
 ## API Contracts
 
-`listings.list` gains `items[*].watcherCount: integer >= 0` for an operator
-already authorized to read listings. Inputs and every other endpoint remain
-unchanged.
+`listings.stats` keeps `watcherCount: integer >= 0` for an operator already
+authorized to read listings. `listings.list` items lose `watcherCount`. Inputs
+and every other endpoint remain unchanged.
 
 ## Risks / Trade-offs
 
-- **[Risk]** A page read can fan out by row → **Mitigation:** one grouped
-  aggregate limited to that page's ids
+- **[Risk]** Operators lose at-a-glance comparison across the whole page →
+  **Mitigation:** accepted; Stats is opened per listing when interest is judged,
+  beside the bidder count
 - **[Risk]** Implicit bid rows can overstate interest → **Mitigation:** filter
-  on the explicit-watch stamp
-- **[Risk]** Contract, fixture, and table drift → **Mitigation:** decode at
-  the shared contract boundary and cover both the list mapping and table cell
+  on the explicit-watch stamp (unchanged)
+- **[Risk]** Contract, fixture, and dialog drift → **Mitigation:** decode at
+  the shared Stats contract boundary; cover the dialog watcher line, not a
+  table cell
 
 ## Migration Plan
 
-Deploy the additive list contract, enrichment, and table together. No data or
-schema migration is needed. Rollback removes the response field and column;
-the existing watch rows remain unchanged.
+Deploy the list-contract removal, drop the list enrichment, and remove the
+Watchers column together. No data or schema migration is needed. Rollback
+restores the list field and column; watch rows and `listings.stats` remain
+unchanged.

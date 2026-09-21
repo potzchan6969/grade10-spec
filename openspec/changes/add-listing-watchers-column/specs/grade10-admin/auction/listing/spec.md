@@ -1,50 +1,57 @@
 ## Feature set
 
-- Listings table
-  - Watchers column: each row shows how many collectors watch the lot, so an operator compares interest at a glance
+- Listings Stats
+  - Watchers in Stats: opening Stats shows how many collectors watch the lot, so an operator judges interest beside the bidder count
+  - No table column: the Listings table does not show the watch count
 
 ## ADDED Requirements
 
-### Requirement: The Listings table shows each listing's watchers
+### Requirement: The Listings Stats dialog shows the listing's watchers
 
-Every row shows how many collectors watch the listing, to every operator who
-reads the table.
+Opening Stats on a listing that offers it shows how many collectors watch the
+listing, to every operator who may open Stats.
 
-**Watchers column** - The Listings table SHALL show a **Watchers** column on
-every row, whatever the listing's state: draft, created, published, closed, or
-called off.
-
-**The count** - Each row SHALL show the watch count
+**Watchers in Stats** - The Listings Stats dialog SHALL show the watch count
 `grade10-site/auction/watchlist` defines for that listing: every watch across
-both brands, as of when the table loaded.
+both brands, as of when Stats loaded.
 
 **Nobody watching** - A listing nobody watches SHALL show 0.
 
-**Not sortable** - The column SHALL NOT be sortable.
-
-**What it does not say** - The column SHALL name no watcher and SHALL NOT
+**What it does not say** - The dialog SHALL name no watcher and SHALL NOT
 present the count as expected bidders.
 
-**Who sees it** - Every operator who may read the Listings table SHALL see it;
-it needs no further grant.
+**Who sees it** - Every operator who may open Stats SHALL see the count; it
+needs no further grant.
 
-#### Scenario: grade10-admin-auction-listing-SC-81 - The table shows a listing's watchers
-**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
+#### Scenario: grade10-admin-auction-listing-SC-81 - Stats shows a listing's watchers
+**Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
-- **GIVEN** a listing watched by two collectors on one brand and one collector on the other
-- **WHEN** an authorized operator opens the Listings table
-- **THEN** that listing's row shows 3 under Watchers
+- **GIVEN** a listing that offers Stats, watched by two collectors on one brand and one collector on the other
+- **WHEN** an authorized operator opens Stats for that listing
+- **THEN** Stats shows 3 watchers
 
-#### Scenario: grade10-admin-auction-listing-SC-82 - An unwatched listing shows zero
-**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
+#### Scenario: grade10-admin-auction-listing-SC-82 - An unwatched listing shows zero in Stats
+**Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
-- **GIVEN** a draft listing nobody watches
-- **WHEN** an authorized operator opens the Listings table
-- **THEN** that listing's row shows 0 under Watchers
+- **GIVEN** a listing that offers Stats and nobody watches
+- **WHEN** an authorized operator opens Stats for that listing
+- **THEN** Stats shows 0 watchers
 
-#### Scenario: grade10-admin-auction-listing-SC-83 - A closed listing keeps its watchers
-**Serves:** grade10-admin-auction-listing-US-08 - Operator compares interest across listings
+#### Scenario: grade10-admin-auction-listing-SC-83 - A closed listing keeps its watchers in Stats
+**Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
-- **GIVEN** a closed listing still watched by two collectors
-- **WHEN** an authorized operator opens the Listings table
-- **THEN** that listing's row shows 2 under Watchers
+- **GIVEN** a closed listing that offers Stats and is still watched by two collectors
+- **WHEN** an authorized operator opens Stats for that listing
+- **THEN** Stats shows 2 watchers
+
+### Requirement: The Listings table does not show a Watchers column
+
+The Listings table SHALL NOT show a Watchers column. The watch count SHALL
+reach the operator only through Stats.
+
+#### Scenario: grade10-admin-auction-listing-SC-86 - The Listings table has no Watchers column
+**Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
+
+- **GIVEN** an authorized operator on the Listings table
+- **WHEN** the table renders
+- **THEN** there is no Watchers column
