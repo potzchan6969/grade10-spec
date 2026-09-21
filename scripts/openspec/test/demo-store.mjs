@@ -137,6 +137,11 @@ export const SPEC = [
   "",
 ].join("\n");
 
+/** The change's plan, one group of one task, and the same plan ticked: what a
+ * group's build leaves on the branch. */
+export const PLAN = "## 1. Build it (grade10-spec)\n\n- [ ] 1.1 Ship it\n";
+export const TICKED = PLAN.replace("[ ]", "[x]");
+
 export const TEAM = [
   "handles:",
   "  dana:",
@@ -201,7 +206,7 @@ const FILES = {
   [`${DIR}/decisions.md`]: DECISIONS,
   [`${DIR}/ui-design.md`]: "## Screens\n\nThe one screen.\n",
   [`${DIR}/tech-design.md`]: "## Decisions\n\nThe one decision.\n",
-  [`${DIR}/tasks.md`]: "## 1. Build it (grade10-spec)\n\n- [ ] 1.1 Ship it\n",
+  [`${DIR}/tasks.md`]: PLAN,
 };
 
 /**
