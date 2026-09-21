@@ -105,8 +105,7 @@ function walk(dir, out = []) {
 
 /** Every id the store issues in a heading, and every place any id is named.
  * One pass: the walk is the expensive part, and a second query in the same
- * run is not worth a cache file. Exported for its own test, which hands it
- * a file the run cannot read. */
+ * run is not worth a cache file. */
 export function scan(files) {
   const definitions = new Map(); // id -> [site]
   const mentions = new Map(); // id -> [site]
@@ -404,5 +403,4 @@ function listCapability(query, definitions) {
   console.log("");
 }
 
-// Run as a script; imported, it lends `scan` to its test and runs nothing.
 if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) main();
