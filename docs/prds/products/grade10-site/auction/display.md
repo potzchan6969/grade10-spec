@@ -24,8 +24,9 @@ the lot at its own address without a page load.
   the catalogue whole, never twice and never skipping one
 - ❓ **Sort index** — what the operator's sort index does to the resting
   order; Product confirms
-- **The card** — the first gallery item, the title, the current price and the
-  watch control; no Buy Now listing ever appears
+- **The card** — the first gallery item, the title, the status, the close,
+  the current price and the watch control; a closed lot shows no watch
+  control; no Buy Now listing ever appears
 - **Hidden lots** — a draft or called-off lot is never listed —
   [Lot Status](#auction-details)
 
@@ -48,6 +49,41 @@ What a listing carries, from the operator's form to the card.
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
   [Auction Management](/p/grade10-admin/auction/management#listings)
+
+## Catalogue
+
+The Auction nav item opens `/auction`. A category is a query on that address,
+and the address without the query is the one a search engine keeps.
+
+| Rule | Value |
+| --- | --- |
+| Featured | At most **4** live lots, Active before Upcoming. Absent when none are live |
+| Busy | **12** or more live lots, and at least **2** categories with a live lot |
+| Live | Active and Upcoming. Ended lots stay in the list and fill neither Featured nor a category |
+
+- **Featured** — a row that scrolls sideways, inside itself. Every card is the same size as the list
+- **Categories** — only when the page is busy. Up to **3** live categories: one large tile and the others stacked. **4** or more: a row per category
+- **Filter** — only when the page is busy. A sidebar on a wide screen, pills on a narrow one. One group, the auction category. No search and no sort. A category with no live lot stays hidden
+- **Quiet and empty** — no Categories section and no filter. Two to four live categories put image tiles in the first cell of the list. With nothing to list, the list says there are no auctions
+- **The list** — every lot a collector can see, including those in Featured, in the resting order. Each card follows the store product card: the image well, the title, the current bid, then the close. Watch sits at the bottom right of the image, and a closed lot shows none
+- **Headings** — one `h1`, Auctions, which stays that word when a category is selected. `h2` for Featured auctions, Categories, Filter and All auctions, and only for a section that is on the page. A category name is an `h3`. A lot title is an `h3` in the list and a link in Featured, so each title is a heading once. The quiet tiles are links, not headings
+- **The document** — title and description belong to this page. Canonical and the share address are `/auction` with no query. Filtering does not change the title. An ItemList names the lots, their addresses, images and current bids, and only while the page is unfiltered. A closed lot's offer stays on the lot page
+
+::story{id="auction-list-featured--scrolling" title="Scrolling row"}
+
+::story{id="auction-list-lot-card--active" title="An active lot"}
+
+::story{id="auction-list-lot-card--upcoming" title="An upcoming lot"}
+
+::story{id="auction-list-lot-card--ended" title="A closed lot"}
+
+::story{id="pages-auction-list--one-featured" title="One featured lot"}
+
+::story{id="pages-auction-list--busy-many" title="Many categories"}
+
+::story{id="pages-auction-list--quiet-tiles" title="Category tiles"}
+
+::story{id="pages-auction-list--empty" title="No auctions"}
 
 ## Auction Details
 
@@ -166,7 +202,7 @@ Active and Completed filters in bidding history.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The catalogue's own capability | ❓ Open | Its order is a requirement of Bidding's spec and its card ships as a shared block; no capability states the rest of the browse surface. Product confirms whether it is specified on its own or under [Listing Page Blocks](/p/shared/ui/auction-listing). | Product |
+| The catalogue page | Decided | `/auction` is this page: Featured, then Categories and a filter only when 12 or more live lots span at least two categories, then the full list. The card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Draft and Called off | Decided | Hidden on every collector page; the lot's address shows Page not found. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
