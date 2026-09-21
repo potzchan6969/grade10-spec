@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, within } from "storybook/test";
 import {
   winnerOrderMeta,
   winnerOrderSettled,
@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses card (Visa + masked number); Processing Bank Transfer shows the bank-transfer method strip with no card mask.",
+          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses a card mark and masked last four; Processing Bank Transfer shows the bank icon with the bank name and masked last four.",
       },
     },
   },
@@ -46,7 +46,7 @@ export const Processing: Story = {
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("20 Sep 2026")).toBeVisible();
-    expect(canvas.getByText("Visa")).toBeVisible();
+    expect(canvas.getByLabelText("Visa")).toBeVisible();
     expect(canvas.getByText("···· 4242")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
@@ -80,12 +80,20 @@ export const ProcessingOverpaid: Story = {
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    const dialog = within(canvasElement.ownerDocument.body);
+    expect(
+      dialog.getByRole("heading", { name: "Refund Details" }),
+    ).toBeVisible();
+    expect(dialog.getByText("Transfer to")).toBeVisible();
+    expect(dialog.getByLabelText("Bank")).toBeVisible();
+    expect(dialog.getByText("HSBC, ···· 8891")).toBeVisible();
   },
 };
 
 /**
  * Paid by bank transfer after operator confirmation — same Processing shell,
- * payment method strip shows Bank transfer with no masked card number.
+ * payment method shows the bank and a masked last-four account.
  * Processing fee may be Free when the operator set none.
  */
 export const ProcessingBankTransfer: Story = {
@@ -94,8 +102,8 @@ export const ProcessingBankTransfer: Story = {
     status: "processing",
     content: {
       ...WINNER_ORDER_CONTENTS.processing,
-      paymentMethod: "Bank transfer",
-      paymentMasked: undefined,
+      paymentMethod: "HSBC",
+      paymentMasked: "···· 8891",
       invoiceLines: BANK_TRANSFER_INVOICE_LINES,
     },
   },
@@ -109,7 +117,8 @@ export const ProcessingBankTransfer: Story = {
     ).not.toBeNull();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
-    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getByLabelText("Bank")).toBeVisible();
+    expect(sidebar.getByText("HSBC, ···· 8891")).toBeVisible();
     expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
     expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();

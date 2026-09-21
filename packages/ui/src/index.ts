@@ -372,6 +372,10 @@ export {
   type OrderDetailsPaymentLogoProps,
 } from "./blocks/store-order-detail/order-details-payment-logo";
 export {
+  PaymentMethodCard,
+  type PaymentMethodCardProps,
+} from "./blocks/payment-method/payment-method-card";
+export {
   OrderDetailsSidebar,
   type OrderDetailsSidebarProps,
 } from "./blocks/store-order-detail/order-details-sidebar";

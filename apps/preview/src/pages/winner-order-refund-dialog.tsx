@@ -10,16 +10,38 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import type { OrderDetailsPaymentBrand } from "@grade10/ui";
+import { OrderDetailsPaymentLogo, PaymentMethodCard } from "@grade10/ui";
+import { Bank } from "@phosphor-icons/react";
+
+/** Card refund destination — same marks as Store Order Details payment row. */
+export type WinnerOrderRefundCardTransfer = {
+  kind: "card";
+  brand: OrderDetailsPaymentBrand;
+  maskedNumber: string;
+};
+
+/** Bank refund destination — bank name and masked account. */
+export type WinnerOrderRefundBankTransfer = {
+  kind: "bank_transfer";
+  bankName: string;
+  /** Masked account — e.g. `···· 8891`. */
+  maskedAccount: string;
+};
+
+export type WinnerOrderRefundTransfer =
+  | WinnerOrderRefundCardTransfer
+  | WinnerOrderRefundBankTransfer;
 
 export type WinnerOrderRefundDetails = {
-  /** Positive amount returned — e.g. `HK$15,660`. */
+  /** Positive amount returned — e.g. `HK$16,140`. */
   amount: string;
   /** Reason category the operator recorded. */
   reason: string;
   /** Operator note the winner may read. */
   note: string;
-  /** How the money went back — ❓ working channel label until Product settles winner-facing transaction clues (Q20). */
-  method: string;
+  /** Where the money went — card marks or bank name + masked account. */
+  transfer: WinnerOrderRefundTransfer;
 };
 
 type WinnerOrderRefundDialogProps = {
@@ -29,7 +51,7 @@ type WinnerOrderRefundDialogProps = {
 };
 
 /**
- * Winner-facing refund detail — reason, note and method only.
+ * Winner-facing refund detail — reason, note and Transfer to destination.
  * Proof, provider reference and audit number stay with the operator.
  */
 function WinnerOrderRefundDialog({
@@ -48,7 +70,7 @@ function WinnerOrderRefundDialog({
             <DetailRow label="Amount" value={refund.amount} />
             <DetailRow label="Reason" value={refund.reason} />
             <DetailRow label="Note" value={refund.note} />
-            <DetailRow label="Refund Method" value={refund.method} />
+            <TransferTo transfer={refund.transfer} />
           </VStack>
         </DialogBody>
         <DialogFooter>
@@ -73,6 +95,27 @@ function DetailRow({ label, value }: { label: string; value: string }) {
       <Text className="whitespace-pre-line text-foreground" size="sm">
         {value}
       </Text>
+    </VStack>
+  );
+}
+
+function TransferTo({ transfer }: { transfer: WinnerOrderRefundTransfer }) {
+  return (
+    <VStack className="w-full" gap="xs" hAlign="stretch">
+      <Text className="text-secondary-foreground" size="sm">
+        Transfer to
+      </Text>
+      {transfer.kind === "card" ? (
+        <PaymentMethodCard
+          label={transfer.maskedNumber}
+          leading={<OrderDetailsPaymentLogo brand={transfer.brand} />}
+        />
+      ) : (
+        <PaymentMethodCard
+          label={`${transfer.bankName}, ${transfer.maskedAccount}`}
+          leading={<Bank aria-label="Bank" size={20} weight="regular" />}
+        />
+      )}
     </VStack>
   );
 }

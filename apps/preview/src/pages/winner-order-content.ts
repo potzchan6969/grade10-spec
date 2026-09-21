@@ -1,3 +1,5 @@
+import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
+
 export type WinnerOrderStatus =
   | "awaiting_address"
   | "awaiting_address_expired"
@@ -85,16 +87,14 @@ export type WinnerOrderContent = {
    * Refund below Order Total — inline alert amount, details in a dialog.
    * Amount is positive; the word Refund carries the direction.
    * Proof, provider reference and audit number stay with the operator.
-   * ❓ `method` is a working channel label until Product settles winner-facing
-   * transaction clues (add-winner-refund Q20).
+   * Transfer to shows card payment marks or bank name + masked account (Q20).
    */
   refund?: {
-    /** Positive amount — e.g. `HK$15,660`. */
+    /** Positive amount — e.g. `HK$16,140`. */
     amount: string;
     reason: string;
     note: string;
-    /** ❓ Working: Card / Bank transfer — see Q20. */
-    method: string;
+    transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
   paymentMethod?: string;
@@ -182,14 +182,22 @@ export const WINNER_ORDER_REFUND_CLOSING = {
   amount: "HK$16,140",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
-  method: "Card",
+  transfer: {
+    kind: "card",
+    brand: "visa",
+    maskedNumber: "···· 4242",
+  },
 } as const;
 
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
   note: "Bank transfer exceeded the invoice. Difference returned.",
-  method: "Bank transfer",
+  transfer: {
+    kind: "bank_transfer",
+    bankName: "HSBC",
+    maskedAccount: "···· 8891",
+  },
 } as const;
 
 /**
