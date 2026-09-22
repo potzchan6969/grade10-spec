@@ -11,7 +11,7 @@
 - Refunding money from Grade10 itself, through the Stripe refund API or a bank connection
 - A refund request, approval step or pending state in Grade10; the winner's request stays with Customer Service
 - More than one refund on an order, or undoing a refund once recorded
-- A refund letter. The page shows the amount; proof, Stripe or bank reference, and the audit number stay with the operator
+- A refund letter. The page shows the amount and, for a bank transfer, its reference; proof, the Stripe reference and the audit number stay with the operator
 - Any effect on the winner's bidder standing or suspension
 - A refund export or report beyond the queue filter and the order detail
 - A separate return step recorded after the refund
@@ -39,7 +39,8 @@
 | Q17 | Which roles hold `auction:refund`? | `staff` and `admin`; `finance` reads refunds but cannot record one (recommended) | `finance` as well; nobody by default |
 | Q18 | What does Winner Order show for a refunded order? | A Refunded badge beside the title, however much was paid and wherever the card is; no stepper, Pay or address form; the invoice and receipts already issued stay downloadable; Order Summary stays the invoice total alone (revised by Q19) | Hiding the invoice and receipt as Cancelled does, which leaves the winner no record of what they paid |
 | Q19 | Where does the refund amount sit on Winner Order? | An inline alert below Order Total with a positive amount, ArrowCounterClockwise icon and View. Order Summary stays the invoice lines alone. View opens a dialog with the reason, note and Transfer to. Proof, full provider reference and audit number stay with the operator. An overpayment shows only the difference the same way. Transfer to follows Q20 | A minus amount in Order Summary or under Payment method, with no detail dialog |
-| Q20 | What refund transaction clues does the winner see? | Transfer to uses `PaymentMethodCard`. A card refund shows the brand logo and the last four digits. A bank refund shows a bank icon with the bank name and the last four digits of the account (`Bank name, ···· ####`). The same last-four mask is what a paid order shows on its payment method. Full proof, the provider reference and the audit number stay with the operator. Details stay a label above each value | A channel word alone, or a longer account or card number |
+| Q20 | What refund transaction clues does the winner see? | Transfer to uses `PaymentMethodCard`. A card refund shows the brand logo and the last four digits. A bank refund shows a bank icon with the bank name and the last four digits of the account (`Bank name, ···· ####`). The same last-four mask is what a paid order shows on its payment method. Proof and the audit number stay with the operator; the provider reference is shown for a bank transfer alone, as revised in Q21. Details stay a label above each value | A channel word alone, or a longer account or card number |
+| Q21 | How does a winner find the refund on their own statement? (revises Q20, 2026-09-22) | A bank transfer refund shows its reference in the refund details, the same one the operator already enters under Q11, so the winner can match the credit. A card refund shows no reference: a statement lists a card refund against the charge it reverses, and the Stripe refund id appears nowhere on it. Transfer to is unchanged, and the operator enters nothing new | Showing the reference for every method, including the Stripe refund id, which matches nothing on a card statement and invites a Customer Service contact; a second winner-facing reference the operator types beside the internal one; leaving every reference with the operator, which leaves a bank winner nothing to match |
 
 ## Raised
 

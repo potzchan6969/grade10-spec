@@ -112,6 +112,10 @@ meaning.
   stay downloadable; Order Summary stays the invoice; an inline alert below
   Order Total shows the amount returned, and opens the reason, note and
   Transfer to destination the winner can match to their statement
+- 🚧 **The bank reference** — a refund sent by bank transfer shows the
+  operator's reference in the same details, so the winner can find the credit
+  on their statement; a card refund shows none, because a statement lists a
+  card refund against the charge it reverses
 - 🚧 **An overpaid difference** — the order keeps its status on Winner Order
   and on My Auctions; Winning Bid, Shipping & Handling and Order Total stay
   the amount that should have been paid; an inline alert below Order Total
