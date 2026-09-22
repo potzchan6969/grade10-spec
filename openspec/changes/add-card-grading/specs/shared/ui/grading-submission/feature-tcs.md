@@ -1430,3 +1430,517 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Every state names a story, and the story renders the state from props alone, with no application behind it.
+
+### shared-ui-grading-submission-US1-TC51-1: Every level closed sends the collector to the counter
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* `GradingLevelPicker`'s `levels` are every one closed, and the counter line is supplied.
+
+**Steps:**
+
+1. Open the `GradingLevelPicker` story with every level closed.
+
+**Expected Results:**
+
+* The counter line renders as it was given.
+* No estimate renders, and no level reports a pick.
+
+### shared-ui-grading-submission-US1-TC52-1: The upcharge notice reads on the picker
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* `GradingLevelPicker`'s upcharge notice carries the consumer's words.
+
+**Steps:**
+
+1. Open the `GradingLevelPicker` story with that notice.
+
+**Expected Results:**
+
+* The notice reads that a card moved up a level is charged the difference before collection.
+
+### shared-ui-grading-submission-US1-TC53-1: A grader priced with example figures still lists its levels
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* `GradingLevelPicker` carries a grader whose levels hold example figures, with the line saying so.
+
+**Steps:**
+
+1. Open the `GradingLevelPicker` story with that grader selected.
+
+**Expected Results:**
+
+* Every level of that grader is listed.
+* The line about the figures renders.
+
+### shared-ui-grading-submission-US1-TC54-1: The picker names the graders and the highest declared value
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reading what it costs
+
+**Pre-conditions:**
+
+* `GradingLevelPicker` carries three graders with the second selected, and the highest declared value of the list.
+
+**Steps:**
+
+1. Open the `GradingLevelPicker` story with those three graders.
+2. Select the third grader.
+
+**Expected Results:**
+
+* All three graders render, the second marked, and its levels below.
+* The highest declared value renders as it was given.
+* `onSelectGrader` fires with the third grader's id.
+
+### shared-ui-grading-submission-US1-TC55-1: The cap refuses the card past it and names the level the count closes
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* `GradingCardList` carries 100 cards, its `cap` at 100, and the level the count closes.
+
+**Steps:**
+
+1. Open the `GradingCardList` story at the cap.
+2. Add one more card.
+
+**Expected Results:**
+
+* `onAdd` does not fire.
+* The second-submission-another-day line renders.
+* The cap and the level the count closes read as they were given.
+
+### shared-ui-grading-submission-US1-TC56-1: The reference out of reach keeps the list working
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* `GradingCardList`'s matches read as an error, with the catalogue-unavailable line supplied.
+
+**Steps:**
+
+1. Open the `GradingCardList` story with the matches in error.
+
+**Expected Results:**
+
+* Every card carries the catalogue-unavailable line, not the kept-as-typed one.
+* The declared value is still asked for on each card.
+
+### shared-ui-grading-submission-US1-TC57-1: A pasted line above the ceiling names the card and its value
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* `GradingPasteSheet`'s `result` carries one line above the level's ceiling, with the second-submission line supplied.
+
+**Steps:**
+
+1. Open the `GradingPasteSheet` story with that result.
+
+**Expected Results:**
+
+* The above-the-ceiling row names the card and its declared value.
+* The second-submission line renders.
+
+### shared-ui-grading-submission-US1-TC58-1: The paste reports its cards through onApply
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* `GradingPasteSheet`'s `result` carries matched, kept-as-typed and valueless cards, with `onApply` supplied.
+
+**Steps:**
+
+1. Open the `GradingPasteSheet` story with that result.
+2. Activate Add n cards.
+
+**Expected Results:**
+
+* `onApply` fires with every card the paste made, in the outcomes it made them.
+* The sheet writes to no list of its own.
+
+### shared-ui-grading-submission-US1-TC59-1: A paste error reads as an error, not an empty list
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Content through props
+
+**Pre-conditions:**
+
+* `GradingPasteSheet`'s `result` reads as an error, with the consumer's message.
+
+**Steps:**
+
+1. Open the `GradingPasteSheet` story with the result in error.
+
+**Expected Results:**
+
+* The consumer's message renders in the error tone.
+* Nothing reads as a list that matched nothing.
+
+### shared-ui-grading-submission-US1-TC60-1: A running-late chip reads the words and the tone it was given
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Where the submission stands
+
+**Pre-conditions:**
+
+* `GradingOwnershipChip`'s `chip` carries the running-late words and their tone, and `status` its word.
+
+**Steps:**
+
+1. Open the `GradingOwnershipChip` story with that pair.
+
+**Expected Results:**
+
+* The chip reads those words in that tone.
+* The block reads no date and derives no lateness of its own.
+
+### shared-ui-grading-submission-US1-TC61-1: A certificate reads against the lookup address it was given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The cards after hand-in
+
+**Pre-conditions:**
+
+* `GradingCardRecord` carries one graded card with a certificate and the grader's lookup address.
+
+**Steps:**
+
+1. Open the `GradingCardRecord` story with that card.
+
+**Expected Results:**
+
+* The certificate renders against the address supplied.
+* No address is built inside the block.
+
+### shared-ui-grading-submission-US1-TC62-1: A card with no grade shows its badge and no grade
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The cards after hand-in
+
+**Pre-conditions:**
+
+* `GradingGradeCards` carries one card for the row's outcome, with its badge and no grade.
+
+**Test data:**
+
+| Outcome |
+| --- |
+| Moved up a level |
+| Held by the grader |
+| Minimum grade not met |
+| Not returned |
+| Damaged |
+
+**Steps:**
+
+1. Open the `GradingGradeCards` story with that card.
+
+**Expected Results:**
+
+* The card renders the badge it was given.
+* No grade renders on a card the grader issued none for.
+
+### shared-ui-grading-submission-US1-TC63-1: The pickup card says nothing is due
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Collecting the cards
+
+**Pre-conditions:**
+
+* `GradingPickupCard` is given nothing to settle.
+
+**Steps:**
+
+1. Open the `GradingPickupCard` story with nothing to settle.
+
+**Expected Results:**
+
+* The card says nothing is due.
+* No figure to settle renders.
+
+### shared-ui-grading-submission-US1-TC64-1: A refused naming reads the refusal under the field
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Collecting the cards
+
+**Pre-conditions:**
+
+* `GradingNamedCollector` carries the refusal that the cards were already collected.
+
+**Steps:**
+
+1. Open the `GradingNamedCollector` story with that refusal.
+2. Activate Save.
+
+**Expected Results:**
+
+* The refusal renders under the name field.
+* `onSave` does not fire.
+
+### shared-ui-grading-submission-US1-TC65-1: The money block reads an estimate as unpaid
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What is paid and due
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Fee line | 4 cards × 25000 HKD minor units, total 100000 |
+| Cover line | 12000 HKD minor units |
+
+**Pre-conditions:**
+
+* `GradingMoneyBlock` carries the fee line, the cover line and the paid-at-the-counter line, with no paid line.
+
+**Steps:**
+
+1. Open the `GradingMoneyBlock` story with those lines.
+
+**Expected Results:**
+
+* The fee line and the paid-at-the-counter line render.
+* The cover line renders under the fee.
+* No paid line renders.
+
+### shared-ui-grading-submission-US1-TC66-1: A payout names its route beside the refunded fee
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What is paid and due
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Payout | 600000 HKD minor units, by bank transfer |
+| Refunded fee | 25000 HKD minor units |
+
+**Pre-conditions:**
+
+* `GradingMoneyBlock` carries the payout line with its route and the refunded fee line.
+
+**Steps:**
+
+1. Open the `GradingMoneyBlock` story with those two lines.
+
+**Expected Results:**
+
+* Both lines render, the payout naming its route.
+
+### shared-ui-grading-submission-US1-TC67-1: The paid line names its method, instant and till reference
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** What is paid and due
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Paid | 100000 HKD minor units |
+| Method | card |
+| Till reference | the POS reference supplied |
+
+**Pre-conditions:**
+
+* `GradingMoneyBlock` carries a paid line with its amount, method, instant and till reference.
+
+**Steps:**
+
+1. Open the `GradingMoneyBlock` story with that paid line.
+
+**Expected Results:**
+
+* The amount, the method, the instant and the till reference all read as they were given.

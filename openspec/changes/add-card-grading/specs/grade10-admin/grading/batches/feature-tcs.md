@@ -315,6 +315,201 @@
 
 ---
 
+### grade10-admin-grading-batches-US1-TC10-1: The first submission handed in for a grader and level opens the batch
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is checking in <a submission at a grader and level> at the counter.
+* No un-shipped batch stands for that shop, grader and level.
+
+**Steps:**
+
+1. Check in the submission.
+
+**Expected Results:**
+
+* A batch opens for that shop, grader and level, carrying its cut-off.
+* The submission is listed in it.
+
+---
+
+### grade10-admin-grading-batches-US1-TC11-1: A second submission at the same grader and level joins the standing batch
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is checking in <a second submission at the same grader and level>.
+* <an un-shipped batch> already stands for that shop, grader and level.
+
+**Steps:**
+
+1. Check in the second submission.
+
+**Expected Results:**
+
+* The submission joins the standing batch.
+* No second batch is listed for that shop, grader and level.
+
+---
+
+### grade10-admin-grading-batches-US1-TC12-1: A batch reads Closed once its cut-off passes, with no act
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin batches url>.
+* <a batch open, before its cut-off> holds checked-in submissions and Thursday 19:00 on the shop's day passes with no ship date recorded.
+
+**Steps:**
+
+1. Read the batches panel after the cut-off has passed.
+
+**Expected Results:**
+
+* The batch's row reads Closed, with nobody having acted on it.
+* The row says it ships that day, the day after the cut-off.
+* Its estimate back is counted from that ship day at the level's weeks.
+
+---
+
+### grade10-admin-grading-batches-US1-TC13-1: A submission handed in after the cut-off joins the next batch
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is checking in <a submission at a grader and level> after Thursday 19:00 on the shop's day.
+* <a batch closed at Thursday 19:00> stands for that shop, grader and level.
+
+**Steps:**
+
+1. Check in the submission.
+
+**Expected Results:**
+
+* The submission joins that trio's next batch, not the closed one.
+* The closed batch's cards are unchanged.
+
+---
+
+### grade10-admin-grading-batches-US1-TC14-1: A cover figure in another currency is refused, never converted
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Insured total | 45000000 (HKD, minor units) |
+| Cover figure | 1000000 (USD, minor units), as the courier wrote it |
+
+**Steps:**
+
+1. Record the cover figure in USD.
+2. Attempt Mark as shipped.
+
+**Expected Results:**
+
+* The batch is refused because the two figures carry different currencies.
+* No rate is applied to either figure, and no submission moves.
+
+---
+
+### grade10-admin-grading-batches-US1-TC15-1: The ship form reads the insured total off the batch's cards and will not take a typed figure
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-01
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the ship form of <a batch closed at Thursday 19:00> holding three cards declared at 500000, 300000 and 200000 (HKD, minor units).
+
+**Steps:**
+
+1. Read the insured line.
+2. Attempt to type over the insured total.
+
+**Expected Results:**
+
+* The insured total reads 1000000 (HKD, minor units), the sum of the batch's declared values.
+* The figure cannot be typed over.
+* Once the batch ships, that figure stands on it as the one declared to the courier.
+
+---
+
 ## grade10-admin-grading-batches-US2: Operator receives a batch against the grader's manifest
 
 **As a** member of shop staff opening a returned box,
@@ -722,6 +917,68 @@
 
 ---
 
+### grade10-admin-grading-batches-US2-TC14-1: A batch recorded arrived back reads back, unchecked and is badged after a day
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin batches url>, with <a batch shipped to the grader>.
+
+**Steps:**
+
+1. Record the batch as arrived back at the shop.
+2. Read the batches panel again a day later.
+
+**Expected Results:**
+
+* The batch's row reads back, unchecked, offering Receive.
+* After it has stood unchecked for more than a day, the row carries the unchecked-return badge.
+
+---
+
+### grade10-admin-grading-batches-US2-TC15-1: A cert that grader returned in an earlier batch is refused by name
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* <a cert> is already carried by a card in <a submission of an earlier batch at the same grader>, that batch already received.
+
+**Steps:**
+
+1. Scan that cert against a card in this batch.
+
+**Expected Results:**
+
+* The scan is refused, naming the submission that holds the cert.
+* Nothing is recorded on either card, the earlier batch's card included.
+
+---
+
 ## grade10-admin-grading-batches-US3: Operator records what did not come back as drawn
 
 **As a** member of shop staff finishing a batch,
@@ -1059,6 +1316,109 @@
 **Expected Results:**
 
 * No Re-estimate action is offered.
+
+---
+
+### grade10-admin-grading-batches-US4-TC6-1: The stage that is the move puts every submission in the batch at grades are in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-04
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the row of <a batch with the grader> holding several submissions, each at Sent.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Stage | the grader's stage that is the move to the grades being in |
+
+**Steps:**
+
+1. Record that stage from the grader's own stages.
+
+**Expected Results:**
+
+* Every submission in the batch reads grades are in.
+* Each collector in the batch is emailed once.
+
+---
+
+### grade10-admin-grading-batches-US4-TC7-1: The same stage recorded a second morning emails nobody again
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-04
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the row of <a batch with the grader> whose last recorded stage is <a stage>.
+
+**Steps:**
+
+1. Record the same stage again.
+
+**Expected Results:**
+
+* Nothing further is written to the batch or its submissions.
+* No collector is emailed a second time.
+
+---
+
+### grade10-admin-grading-batches-US4-TC8-1: A re-estimate to the date already set emails nobody again
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-04
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on the Re-estimate dialog of <a batch with the grader> whose due date is <a date>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| New estimate | the date already set |
+| Reason | <a reason, as typed> |
+
+**Steps:**
+
+1. Set the estimate to the date already carried and confirm.
+
+**Expected Results:**
+
+* Nothing further is written to the batch.
+* No collector is emailed a second time.
 
 ---
 

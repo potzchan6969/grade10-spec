@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Out of suite:** grade10-site-grading-submission-lifecycle-SC-01 - the moves are made from the counter, and `grade10-admin/grading/counter`'s suite walks a move asked of a submission that has already moved
 
 ## grade10-site-grading-submission-lifecycle-US1: Collector follows the submission from planned to home on one page
 
@@ -38,9 +39,9 @@ Runs once per row of **Test data**.
 | Booked | Drop-off booked | Drop-off on its day | Booked, progress |
 | Handed in | Handed in | With us | Handed in, progress |
 | Sent | With the grader | With PSA | Sent, progress |
-| Graded | Grades are in | On their way back | Sent, progress |
-| Back | Back at the shop, being checked | With us | Sent, progress |
-| Ready | Ready to collect | Waiting on you | Sent, progress |
+| Graded | Grades are in | On their way back | Graded, progress |
+| Back | Back at the shop, being checked | With us | Back, progress |
+| Ready | Ready to collect | Waiting on you | Back, progress |
 | Collected | Back with you | Collected | Home, progress |
 
 **Steps:**
@@ -191,6 +192,35 @@ Runs once per row of **Test data**.
 * The failure shows in the error tone, with no status, chip or rail rendered.
 * The page reads again once the request is retried.
 
+### grade10-site-grading-submission-lifecycle-US1-TC7-1: A reader who is neither the collector nor the link reads not found
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-01
+
+**Pre-conditions:**
+
+* A submission exists at Handed in, booked under another collector's email.
+
+**Steps:**
+
+1. Open <grade10 grading submission page url> for that submission, signed out and without the emailed link's token.
+2. Open the same address signed in as a different collector.
+
+**Expected Results:**
+
+* Both steps show the site's not-found page.
+* Nothing on the page says whether that submission exists, and no card, name or pickup code shows.
+
 ---
 
 ## grade10-site-grading-submission-lifecycle-US2: Collector asks for a card back before the batch closes
@@ -281,6 +311,35 @@ Runs once per row of **Test data**.
 
 * The withdrawn card shows the Withdrawn badge with its refund line.
 * The other three cards still show Handed in, with no change to their lines.
+
+### grade10-site-grading-submission-lifecycle-US2-TC4-1: Withdrawing the last card cancels the submission
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-02
+
+**Pre-conditions:**
+
+* The collector is on <grade10 grading submission page url> for a submission of two cards at Handed in, before Thursday 19:00, with one card already withdrawn.
+
+**Steps:**
+
+1. Load the submission page after the second card is withdrawn and collected at the counter.
+
+**Expected Results:**
+
+* Both cards show the Withdrawn badge with their refund lines.
+* The submission reads Cancelled, with the rail ended where it stood.
+* The collector is told the submission is cancelled.
 
 ---
 
@@ -600,6 +659,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The pickup card names bringing an ID matching the collector's name.
+
+**Blocked:** Operations - whether a submission declared at exactly HKD 10,000 asks for the ID glance. `decisions.md` Q12 names the figure and not the side it falls on; this case puts the threshold figure on the ID side and the requirement puts it on the no-ID side.
 
 ### grade10-site-grading-submission-lifecycle-US6-TC3-1: Below the ID-glance threshold, the page asks the collector to bring nothing
 
@@ -979,6 +1040,35 @@ Runs once per row of **Test data**.
 * The uncollected ladder's cards-held count reads 3, excluding the vaulted card.
 * The storage figure is 3 cards times 3000 (HKD, minor units), not 4.
 
+### grade10-site-grading-submission-lifecycle-US8-TC6-1: Booking a visit or naming a collector does not pause the ladder
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-08
+
+**Pre-conditions:**
+
+* The collector is on <grade10 grading submission page url> for a submission of four cards at Ready, 95 days since the ready date, with a person named and a visit booked at the shop.
+
+**Steps:**
+
+1. Load the submission page.
+
+**Expected Results:**
+
+* The uncollected ladder still counts its rungs from the ready date, with the storage rung passed.
+* The storage figure still accrues at 4 cards times 3000 (HKD, minor units) a month started.
+* Nothing on the ladder reads as paused, held or waiting on the booked visit.
+
 ---
 
 ## grade10-site-grading-submission-lifecycle-US9: Collector keeps the graded record after collection
@@ -1113,7 +1203,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The submission reads Cancelled, with the rail ended at Planned.
+* The submission reads Cancelled, with the rail ended at the row's stage.
 * Where a drop-off was booked, it closes with the submission.
 * The page states nothing was paid and nothing is owed.
 
@@ -1172,6 +1262,36 @@ Runs once per row of **Test data**.
 
 * The dialog closes, and the submission still reads Drop-off booked with its visit intact.
 
+### grade10-site-grading-submission-lifecycle-US10-TC4-1: The last card refused at the counter cancels the submission
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-10
+
+**Pre-conditions:**
+
+* The collector is on <grade10 grading submission page url> for a submission of one card at Booked, whose only card the counter refused at hand-in.
+
+**Steps:**
+
+1. Load the submission page.
+
+**Expected Results:**
+
+* The card shows the Refused at the counter badge with the reason as staff typed it, never charged.
+* The submission reads Cancelled, with the rail ended at Booked.
+* The page states nothing was paid and nothing is owed.
+* No message about the cancellation is in the submission's messages: the collector was told at the counter.
+
 ---
 
 ## grade10-site-grading-submission-lifecycle-US11: Collector is offered only what the status allows
@@ -1212,7 +1332,7 @@ Runs once per row of **Test data**.
 | Graded | None |
 | Back | None |
 | Ready | Name, change or remove a collector; collect; vault a slab |
-| Collected | Vault it; ask for erasure |
+| Collected | Read the record; vault a slab; consign it to an auction; ask for erasure |
 
 **Steps:**
 

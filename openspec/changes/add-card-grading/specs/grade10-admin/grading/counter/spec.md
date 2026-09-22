@@ -98,7 +98,8 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
   - Filed under its own subject: a settings write is audited as a setting, not
     as a submission
 - The grants
-  - Three grants: read, operate, and approve, which also opens the settings
+  - Three grants: read, which opens the settings read-only, operate, and
+    approve, which edits them
   - A verified session: as the vault's, in production and staging
   - Filed under its submission: every act is on the audit chain
   - Staff hear nothing: the badges, the tiles and the day's strip are the
@@ -182,6 +183,14 @@ every cut.
 - **WHEN** it is read
 - **THEN** it says there is nothing in it, and every other cut is still offered
 
+#### Scenario: grade10-admin-grading-counter-SC-85 - The day's strip carries the drop-offs in slot order
+**Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
+
+- **GIVEN** two drop-offs booked for today, one earlier than the other
+- **WHEN** the queue is read
+- **THEN** the strip above the rows carries both in slot order, each naming the time, the collector, the submission, the cards and the grader and level
+- **AND** one line says that pickups walk in
+
 ### Requirement: A row says why its submission is waiting on somebody
 
 A row carries enough to work the counter from without opening the submission.
@@ -255,6 +264,12 @@ compiled in.
 - **WHEN** the queue is read
 - **THEN** the submission's row badges the message as not sent
 
+#### Scenario: grade10-admin-grading-counter-SC-86 - A row is worked from without opening the submission
+**Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
+
+- **WHEN** the queue is read
+- **THEN** each row carries the submission id, the collector, the number of cards, the grader and level, the status word the collector reads, the visit, when it was last touched, and every reason the submission is waiting on somebody
+
 ### Requirement: Four tiles stand over the counter
 
 The tiles are the counter's own figures, derived at the read like the badges.
@@ -281,6 +296,14 @@ The queue SHALL carry these four:
 - **GIVEN** two submissions with unpaid upcharges of 20000 and 35000 HKD minor units
 - **WHEN** the queue is read
 - **THEN** the settle tile reads 55000 HKD minor units over two submissions
+
+#### Scenario: grade10-admin-grading-counter-SC-87 - The closing and with-graders tiles read the batches
+**Serves:** grade10-admin-grading-counter-US-01 - the operator opens the shop and reads what is waiting
+
+- **GIVEN** a batch closing next at one grader and level, and three submissions with a grader of which one is past its estimate
+- **WHEN** the queue is read
+- **THEN** the batch closing tile names that grader and level, its cards, its submissions, how many more may still join today, and the day it ships
+- **AND** the with-graders tile counts three, of which one is past its estimate
 
 ### Requirement: Hand-in at the counter runs as one flow
 
@@ -369,6 +392,13 @@ and the other SHALL be named under the visit.
 - **WHEN** the operator opens either runbook
 - **THEN** it names the other under the visit, and each is checked, signed, paid and checked in on its own
 
+#### Scenario: grade10-admin-grading-counter-SC-88 - A card declared at the level's ceiling is checked in at that level
+**Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
+
+- **GIVEN** a submission at a level whose pinned ceiling is 390000 HKD minor units
+- **WHEN** the operator checks a card declared at 390000 HKD minor units
+- **THEN** the card is checked in at that level, the ceiling being the highest declared value the level carries
+
 ### Requirement: A hand-in is refused whole rather than done in part
 
 A hand-in that cannot be completed leaves the cards with the collector and
@@ -429,6 +459,10 @@ already paid for it SHALL be refunded at the till against the submission.
 **The rest carry on** - the other cards SHALL be checked, signed for, paid for
 and handed in unchanged, and the refused card stays with the collector.
 
+**The last card** - where the refusal leaves the submission with no card to
+hand in, the counter SHALL cancel the submission from `booked` at the desk and
+tell the collector there; no message SHALL be sent.
+
 #### Scenario: grade10-admin-grading-counter-SC-25 - A card the grader would not take is refused in the collector's words
 **Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
 
@@ -456,6 +490,14 @@ and handed in unchanged, and the refused card stays with the collector.
 - **WHEN** the hand-in runs on
 - **THEN** three cards are labelled, sealed in and checked in, and the fee stands for those three alone
 
+#### Scenario: grade10-admin-grading-counter-SC-89 - Refusing the last card cancels the submission at the desk
+**Serves:** grade10-admin-grading-counter-US-03 - the operator refuses one card at the desk and the rest go on
+
+- **GIVEN** a `booked` submission whose only card that is not already refused is being refused
+- **WHEN** the operator refuses it with a reason and the collector's words
+- **THEN** the counter says there is nothing left to hand in and cancels the submission from `booked`
+- **AND** the collector is told at the desk, and no message is sent
+
 ### Requirement: Hand-back at the counter runs as one flow
 
 The hand-back runbook SHALL run these steps in order, and the submission SHALL
@@ -480,7 +522,9 @@ close only on the sealed receipt:
 
 **A card the grader held** - a submission whose card is still held SHALL stay
 `ready` after the first hand-back, its receipt naming the card still out, and a
-second hand-back SHALL close it when that card comes back.
+second hand-back SHALL close it when that card comes back. That second
+hand-back SHALL run step 1 again, and step 2 where the threshold asks for it,
+as every hand-back does.
 
 #### Scenario: grade10-admin-grading-counter-SC-29 - The code and the name open the hand-back
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
@@ -539,6 +583,13 @@ second hand-back SHALL close it when that card comes back.
 - **WHEN** the operator works the hand-back over that one item and seals its receipt
 - **THEN** the submission moves to `collected`
 
+#### Scenario: grade10-admin-grading-counter-SC-90 - A second hand-back reads who is collecting again
+**Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
+
+- **GIVEN** a submission left `ready` after a first hand-back, with the held card now back
+- **WHEN** the operator opens the second hand-back
+- **THEN** it opens at who is collecting, taking the pickup code and the name again, and the ID glance above the threshold, as the first hand-back did
+
 ### Requirement: Only the collector or the person they named leaves with the cards
 
 The counter releases to two people and refuses everybody else.
@@ -554,6 +605,12 @@ receipt SHALL record that they collected.
 SHALL be turned away, with a code or without one, and the counter SHALL offer
 staff no override. The counter SHALL say that the collector can name a person
 from their own page.
+
+**As often as it is typed** - a wrong code SHALL be refused every time it is
+entered, no attempt count SHALL close the field, and each refusal SHALL be
+recorded on the submission's timeline. Where the collector cannot produce the
+code, the counter MAY read the ID glance against the collector's own name
+instead.
 
 #### Scenario: grade10-admin-grading-counter-SC-37 - A wrong code is refused on the field
 **Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
@@ -574,6 +631,22 @@ from their own page.
 - **GIVEN** a submission naming nobody but the collector
 - **WHEN** somebody else comes in holding the pickup code
 - **THEN** the counter turns them away, offers no override, and says the collector may name a person from their own page
+
+#### Scenario: grade10-admin-grading-counter-SC-91 - A wrong code is refused as often as it is typed
+**Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
+
+- **GIVEN** a person at the desk who has already been refused two wrong pickup codes
+- **WHEN** they enter a third wrong code
+- **THEN** it is refused on the field as the first two were, with nothing closing the field
+- **AND** each of the three refusals is on the submission's timeline
+- **AND** the counter offers the ID glance against the collector's own name instead
+
+#### Scenario: grade10-admin-grading-counter-SC-92 - The collector collects although another person is named
+**Serves:** grade10-admin-grading-counter-US-05 - the operator releases the cards to the right person or to nobody
+
+- **GIVEN** a submission naming a person other than the collector
+- **WHEN** the collector comes in with the code and their own name
+- **THEN** the hand-back runs for them, the person named not having displaced them
 
 ### Requirement: A slab goes into a vault case from the hand-back step
 
@@ -671,6 +744,9 @@ collector again from the console.
 **What is sent** - sending again SHALL send the copy already sealed, changing
 no fingerprint and sealing nothing new.
 
+**Nothing sealed yet** - a submission carrying no sealed document SHALL say so
+rather than list an empty set of documents.
+
 #### Scenario: grade10-admin-grading-counter-SC-48 - A sealed document is shown or copied at the counter
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
 
@@ -683,6 +759,13 @@ no fingerprint and sealing nothing new.
 
 - **WHEN** the operator sends a sealed document to the collector again
 - **THEN** the collector is sent the copy already sealed, with the same fingerprint
+
+#### Scenario: grade10-admin-grading-counter-SC-93 - A submission with nothing sealed says so
+**Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
+
+- **GIVEN** a `booked` submission with no card yet checked
+- **WHEN** the operator opens its documents
+- **THEN** it says nothing has been sealed yet
 
 ### Requirement: One submission opens into a header and four tabs
 
@@ -699,6 +782,9 @@ the jobs.
 
 **One figure** - what the money tab shows as paid SHALL be what the till
 recorded, line for line.
+
+**Nothing to open** - a submission id no submission holds SHALL be answered by
+the console's not-found line rather than an empty screen.
 
 #### Scenario: grade10-admin-grading-counter-SC-50 - The header answers the phone
 **Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
@@ -726,6 +812,13 @@ recorded, line for line.
 
 - **WHEN** the operator opens a submission
 - **THEN** the header carries the collector's email and phone and the click-to-chat templates staff press
+
+#### Scenario: grade10-admin-grading-counter-SC-94 - A submission id that resolves to nothing says so
+**Serves:** grade10-admin-grading-counter-US-10 - the operator answers a collector from one screen
+
+- **GIVEN** an address carrying a submission id no submission holds
+- **WHEN** the operator opens it
+- **THEN** the console's not-found line is answered, and no empty screen is drawn
 
 ### Requirement: A card is withdrawn until its batch closes
 
@@ -824,6 +917,13 @@ what the till took, never as an edit of it, and SHALL name the card it waives.
 - **WHEN** an approve holder reads the money tab
 - **THEN** waiving the upcharge is not offered
 
+#### Scenario: grade10-admin-grading-counter-SC-95 - A second approver without the grant is refused
+**Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
+
+- **GIVEN** a member of staff holding `grading:operate` and not `grading:approve`
+- **WHEN** an approve holder names them as the second approve holder on a waiver
+- **THEN** it is refused by name, saying they do not hold `grading:approve`, and nothing is written
+
 ### Requirement: A payout is its own record, with its route and its reversal
 
 A card that did not come back is paid for without the collector waiting on the
@@ -867,6 +967,20 @@ go back on the submission; nothing already recorded SHALL be edited.
 - **GIVEN** a card paid out and since found
 - **WHEN** an approve holder reverses the payout with a reason and a second approve holder
 - **THEN** the reversal is written on that record, the payout itself is left as it was, and the card is back on the submission
+
+#### Scenario: grade10-admin-grading-counter-SC-96 - A payout by transfer carries its reference
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** a card declared at 300000 HKD minor units recorded as not returned
+- **WHEN** an approve holder records the payout by bank transfer with a second approve holder who is not them
+- **THEN** the record carries the transfer as its route with the transfer's reference, and the card's fee refunded beside it
+
+#### Scenario: grade10-admin-grading-counter-SC-97 - A payout recorded late says it is late
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** `grading.settlement_days` of 14 and a card whose batch was received at the shop 15 days ago
+- **WHEN** an approve holder opens the payout
+- **THEN** it says the window has passed, and the payout can still be recorded
 
 ### Requirement: The written notice is a counter act with a posting date
 
@@ -942,6 +1056,9 @@ money setting SHALL take a second approve holder who is not the writer.
 **Its own subject** - a settings write SHALL be filed on the audit chain under
 its own subject, `settings`, rather than under a submission.
 
+**Unset on the page** - the settings page SHALL mark every setting no owner has
+written, naming the owner who owes it.
+
 #### Scenario: grade10-admin-grading-counter-SC-69 - A setting nobody has written stops the read
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
@@ -960,6 +1077,13 @@ its own subject, `settings`, rather than under a submission.
 
 - **WHEN** an approve holder changes the notice day
 - **THEN** the audit chain carries the write under the settings subject, naming the key, the old value, the new value, the writer and the approver
+
+#### Scenario: grade10-admin-grading-counter-SC-98 - A setting nobody has written is marked on the settings page
+**Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
+
+- **GIVEN** a fee-sheet row no owner has written
+- **WHEN** the settings are read
+- **THEN** that row is marked as unset, naming the owner who owes it
 
 ### Requirement: A setting pinned to a submission never moves under it
 
@@ -1005,9 +1129,15 @@ so a section an operator cannot use is not offered.
 
 | Grant | Held by | What it opens |
 | --- | --- | --- |
-| `grading:read` | staff, admin | the queue with its badges, tiles and day strip; one submission with its cards, money, documents and timeline |
+| `grading:read` | staff, admin | the queue with its badges, tiles and day strip; one submission with its cards, money, documents and timeline; the settings, read-only |
 | `grading:operate` | staff, admin | starting the visit, checking, adding and refusing a card, minting a document, recording the fee paid, handing in, withdrawing a card, handing back, opening a vault case for a slab, posting the written notice, sending a document or the grades message again |
 | `grading:approve` | staff, admin | waiving an upcharge, recording and reversing a payout, and writing a setting or a fee-sheet row |
+
+**The settings** - `grading:read` SHALL open the settings read-only, and only
+`grading:approve` SHALL edit them.
+
+**Several grants** - an operator holding more than one grant SHALL be offered
+the acts of each.
 
 **Nothing is sent to staff** - no email or push SHALL go to staff: the queue's
 badges, its tiles and the day's strip are the whole signal.
@@ -1019,7 +1149,7 @@ badges, its tiles and the day's strip are the whole signal.
 - **WHEN** they open a submission
 - **THEN** no act requiring another grant is offered, and sending one is refused by name
 
-#### Scenario: grade10-admin-grading-counter-SC-76 - Only an approve holder opens the settings
+#### Scenario: grade10-admin-grading-counter-SC-76 - Only an approve holder edits the settings
 **Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
 
 - **GIVEN** an operator holding `grading:read` and `grading:operate`
@@ -1031,6 +1161,20 @@ badges, its tiles and the day's strip are the whole signal.
 
 - **WHEN** a submission becomes ready, runs late or falls due for the notice
 - **THEN** no email or push goes to any member of staff, and the queue's badges, tiles and day strip carry it instead
+
+#### Scenario: grade10-admin-grading-counter-SC-99 - A read holder opens the settings and changes nothing
+**Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
+
+- **GIVEN** an operator holding `grading:read` alone
+- **WHEN** they open the settings
+- **THEN** every setting is listed with its value and the owner who confirms it, no field opens, and sending a write is refused by name
+
+#### Scenario: grade10-admin-grading-counter-SC-100 - An operator is offered every grant they hold
+**Serves:** grade10-admin-grading-counter-US-14 - the operator is never shown a button that will only be refused
+
+- **GIVEN** an operator holding `grading:operate` and `grading:approve`
+- **WHEN** they open a `returned` submission
+- **THEN** the acts of both grants are offered together
 
 ### Requirement: An operator's session is verified, and stays verified for twelve hours
 
