@@ -111,7 +111,7 @@ never the collector's bid or order, and every page reads the same value.
 | --- | --- | --- |
 | **Upcoming** | Published; bidding has not started | Scheduled |
 | **Active** | Bidding is open, extended bidding included | Live |
-| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Address to Refunded |
+| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Setup to Refunded |
 | Hidden | Never published, or withdrawn before a sale | Draft, Called off |
 
 - **Hidden lots** — not in the catalogue, search or filters; the lot page

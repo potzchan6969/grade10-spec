@@ -36,10 +36,10 @@ winner of three lots has three orders, each with its own deadlines.
 
 | Rule | Value |
 | --- | --- |
-| Order setup | **48 hours** from the lot's actual close to confirm a delivery address and a payment method |
+| Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Payment proof | 🚧 **1 to 5** PDF, JPEG or PNG files of up to **10 MB** each, uploaded once |
+| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
 - **Sections** — Order Information with Invoice Status and Collection Method,
@@ -73,11 +73,11 @@ fulfilment and delivery facts, that the winner, the operator and My Auctions
 all read. It shares label names with the store's order status, and no
 meaning.
 
-::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Address through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Processing, Partially Paid or Delivered"}
+::image{src="assets/diagrams/auction-order-status.svg" alt="An auction order from Awaiting Setup through Preparing Invoice, Pending Payment and Processing to Shipped and Delivered, with Payment Verifying and Partially Paid in an operator's hands beneath Pending Payment, Cancelled for an unpaid order, and Refunded reached by a recorded refund from Processing, Partially Paid or Delivered"}
 
 | Status | Invoice reads | Reached when |
 | --- | --- | --- |
-| **Awaiting Address** | Not issued | The lot closes with a winner and no address is confirmed |
+| **Awaiting Setup** | Not issued | The lot closes with a winner and setup is incomplete — delivery address, payment method or billing address |
 | 🚧 **Setup Overdue** | Not issued | The setup deadline passes with setup incomplete; self-service Confirm is closed |
 | **Preparing Invoice** | Not issued | The winner confirms setup, or an operator records an address after the deadline |
 | **Pending Payment** | Pending or expired | An operator sends or reissues the invoice |
@@ -93,8 +93,6 @@ meaning.
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
   order and delivery before dispatch are refused
-- 🚧 **Awaiting Setup** — Awaiting Address is renamed, because setup confirms
-  a payment method and a billing address as well as an address
 - 🚧 **A reissued invoice** — replaces the old one, which keeps no status of
   its own; a proof under check never expires
 - **Shipment** — the carrier, the tracking number and a link to the carrier,
@@ -211,7 +209,7 @@ doing, under Edge Cases.
   on a stored card or another; Grade10 confirms it on its own, and a declined
   attempt leaves the invoice payable until the deadline
 - 🚧 **Unfinished payment** — a payment that times out or is abandoned says
-  so and leaves Pay Now ready; a completed one reads Confirming payment until
+  so and leaves Pay with Card ready; a completed one reads Confirming payment until
   Grade10 records it
 - 🚧 **Started in time** — a payment received before the deadline completes
   even if it confirms after; one received at or after it is refused, and the
@@ -219,12 +217,23 @@ doing, under Edge Cases.
 
 ### By Bank Transfer
 
-- 🚧 **Bank details** — the invoice shows SWIFT, FPS and Hong Kong local
-  transfer details instead of card Pay, and the reference to quote,
-  `LK7P2Q01`, with Copy Reference Code
-- 🚧 **Payment proof** — uploaded once after paying, behind a confirm step
-  saying nothing can be added later; the order reads Payment Verifying, the
-  deadline stops, and Pay and further uploads are hidden
+- 🚧 **Two entry points** — while the invoice is pending, Order summary keeps
+  **Submit Payment Proof** as the primary control and places **View Bank
+  Details** under it; View Bank Details opens bank rails, Submit Payment
+  Proof opens the proof dialog
+- 🚧 **View Bank Details** — amount due and rail fields as detail rows (no
+  Copy); each rail tab ends with payment reference and a warning to enter it
+  in the bank memo, after the rail fields: FPS ID, account name and QR; HK
+  local bank name, bank code, branch code and account number; SWIFT
+  beneficiary name, business address, SWIFT/BIC, account or IBAN, then
+  payment reference, then a note to choose OUR for transfer fees so Grade10
+  receives the full order total
+- 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
+  or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
+  each and **15 MB** total, uploaded once after paying, behind a confirm
+  step saying nothing can be added later; the order reads Payment Verifying,
+  the deadline stops, and Submit Payment Proof, View Bank Details and further
+  uploads are hidden
 - 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
   the transfer and will email when payment is confirmed, placed where the
   Preparing Invoice alert sits
@@ -437,7 +446,7 @@ a second payment provider, and changes to the bid-time rules.
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
-| Awaiting Setup | 🚧 In flight | Awaiting Address is renamed Awaiting Setup, because setup confirms a payment method and a billing address as well as an address; until it lands the winner and the operator both read Awaiting Address. | Product (@jeffffej0909) |
+| Awaiting Setup | Decided | Incomplete setup — delivery address, payment method and billing address — reads Awaiting Setup for the winner and the operator alike. | Product (@jeffffej0909) |
 | Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: inside the window the order reads Awaiting Setup or Pending Payment; once the deadline passes it reads Setup Overdue or Payment Overdue on Winner Order, My Auctions and the operator queue alike. | Product and design (@tangconst) |
 | My Auctions Status column | 🚧 In flight | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |

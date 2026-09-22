@@ -95,7 +95,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- |
 | Payment window | **7 calendar days** from send |
 | Address window | **48 hours** from close; a reopen gives a fresh **48 hours** |
-| Overdue | **72 hours** or more idle in Awaiting Address or Preparing Invoice |
+| Overdue | **72 hours** or more idle in Awaiting Setup or Preparing Invoice |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -103,7 +103,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- | --- |
 | Draft · Scheduled · Live | Before a sale; time left is read from the close | No |
 | Unsold · Called off | Ended without a payable order | No |
-| Awaiting Address | The lot closed without a confirmed delivery address | No |
+| Awaiting Setup | The lot closed with setup incomplete | No |
 | Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
 | Pending Payment | The invoice is unpaid; an expired one shows Expired beside it | When expired |
 | 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
@@ -135,8 +135,8 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 Confirm or return proof | Payment Verifying, where these are the only actions | Payment processing |
 | Settle manually | A bank transfer invoice, pending or expired | Payment processing |
 | 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
-| 🚧 Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
-| 🚧 Reopen the address form, or record an address | Awaiting Address after the deadline, before send | Payment processing |
+| 🚧 Cancel order | Awaiting Setup, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
+| 🚧 Reopen the address form, or record an address | Awaiting Setup after the deadline, before send | Payment processing |
 | 🚧 Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
 | Dispatch | A paid order | Shipment processing |
 | Confirm delivery | A dispatched order | Shipment processing |
