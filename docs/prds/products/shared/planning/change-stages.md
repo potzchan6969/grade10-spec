@@ -74,9 +74,13 @@ One handle per role on each change.
 | Product manager | `pm` | Proposed, and Specified |
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
-| QA | `qa` | On staging; the suite's review, any time, as an overlay |
+| QA | `qa` | Specified, for the suite's review; On staging; the suite's verdict, any time, as an overlay |
 | Engineer | `dev` | Planned and Building |
 | Release hand | `release` | On staging |
+
+- 🚧 **QA at Specified** — the landing that puts the suite up for review is a
+  move to QA: one message naming the suite, its cases and the review command,
+  and the walk names that review as its input
 
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
   by the product manager at the interview's end, by Assign on the locally run
