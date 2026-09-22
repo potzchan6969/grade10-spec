@@ -1,3 +1,38 @@
+## Current Points Delivery
+
+The user-approved points integration below supersedes the read-only points and
+neutral estimated-total choices in the original delivery notes that follow.
+Those notes describe completed Groups 1–4; Group 5 owns this increment.
+
+- **State** — `CartDrawerHost` consumes `useCartTender`; replace
+  `NO_TENDER_CHOICE` with the persisted member choice when calling
+  `useBasketQuote`. Keep promo callbacks absent and preserve the coupon field.
+- **Acceptance** — parse finite positive whole numbers (Remove alone writes zero), ask `useBasketQuote.read` for
+  the proposed choice, persist the server-accepted points, then render the
+  accepted quote. Use the returned amounts rather than local arithmetic.
+- **Persistence** — extend `useCartTender` with observable completion, pending
+  and error state while keeping existing checkout callers compatible. A failed
+  mutation retains the accepted cached choice. Serialize writes so an older
+  completion cannot overwrite a newer choice.
+- **Races** — capture member scope, reviewed basket identity and open generation
+  for an operation. Check them before publishing a quote or starting persistence.
+  Closing cannot cancel a write already sent; scope its cache result to its
+  member and re-read on reopen. Invalidate quotes after cart edits and suppress
+  Checkout until the current basket is revalidated.
+- **UI** — reuse existing shared points callbacks, disclosure, input and applied
+  state. Pending tender state disables tender actions and Checkout. Preserve
+  last accepted same-basket totals on failures; once no operation is pending, Checkout can use
+  that still-current accepted quote. Use localized existing error
+  copy where it answers the failure. Any missing shared prop or copy belongs to
+  the spec store and needs the smallest compatible addition before integration.
+- **Checkout** — keep its route and creation owner; verify it re-quotes persisted
+  choice and sends accepted spendPoints. No new endpoint, schema or dependency.
+- **Alternatives** — local-only intent would lose reload/handoff; optimistic
+  applied totals would display an unaccepted saving; new backend pricing would
+  duplicate the existing combined quote. All are rejected.
+
+## Original Delivery Notes
+
 ## Context
 
 The proposal's motivation is in `proposal.md`. The

@@ -23,3 +23,9 @@
 **As a** signed-in collector,
 **I want** to see which promo codes and how many points the reviewed basket can take,
 **so that** I can understand my available benefits before continuing to checkout.
+
+### grade10-site-store-cart-drawer-US-05: Signed-in collector chooses points before checkout
+
+**As a** signed-in collector,
+**I want** to apply, maximise or remove points against the reviewed cart and keep that choice at checkout,
+**so that** I can see the accepted saving before leaving the page.

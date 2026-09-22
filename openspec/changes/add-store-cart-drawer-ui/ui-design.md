@@ -29,10 +29,8 @@ Storybook composition under test once the host lands: Store page assemblies in
 - Grade10 `store.cartDrawer` catalog overlay — localized copy.
 - Shared `chrome.cartLabel` — navigation label.
 
-No new primitive, variant, or token. This host wires the existing read-only
-held-promo and points states for signed-in members after cart review, but does
-not wire promo selection, promo application, points application, or an applied
-total until a later applied-quote capability.
+No new primitive, variant, or token. This host retains read-only promo editing and wires existing points actions
+to the accepted basket quote.
 
 **Depends on:** `cart-drawer-empty-state` for the shared empty-state export
 contract.
@@ -49,7 +47,7 @@ States combine this change's Grade10 scenarios with durable
 | Signed-in member cart; signed-out access is gated before the drawer | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`–`SC-24` |
 | Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
 | Pending / failed review | `grade10-site-store-cart-drawer-SC-06`–`grade10-site-store-cart-drawer-SC-08`; loading bones `shared-ui-store-cart-SC-08` |
-| Reviewed summary; neutral shipping/total; read-only promo and points context | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
+| Reviewed summary; quoted total; read-only promo and interactive points | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
 | Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
 | Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
 | Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
@@ -58,3 +56,21 @@ States combine this change's Grade10 scenarios with durable
 
 Browse More is out of scope for this host: the shared surface no longer exposes
 slot or empty-state browse actions (`cart-drawer-empty-state`).
+
+## Points Reference
+
+[Storybook Default](https://storybook.grade10-stg.com/?path=/story/store-cart-cartdrawer--default)
+is the requested layout reference. Reuse `CartDrawer` and its existing rounded
+amount input, `pt` suffix, Apply, rate/balance text, Use max and applied Remove
+action. Supply localized live data; do not copy the story's sample balance.
+No new token, primitive or layout override is required.
+
+### Points
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Ready | Existing expandable points controls and live balance/rate | `grade10-site-store-cart-drawer-SC-17` |
+| Applied | Accepted points credit and Remove | `grade10-site-store-cart-drawer-SC-20` |
+| Pending | Disabled tender actions and Checkout | `grade10-site-store-cart-drawer-SC-23` |
+| Failed | Localized error and last accepted same-basket summary | `grade10-site-store-cart-drawer-SC-24` |
+| Unavailable | No enabled points action until a usable quote answers | `grade10-site-store-cart-drawer-SC-26` |

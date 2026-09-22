@@ -28,8 +28,9 @@ the existing checkout without first leaving that surface.
   shipping, images, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
 - For a signed-in collector, read held promo-code eligibility and the basket's
-  points ceiling against the reviewed lines, and show those facts without
-  selecting a code, applying points, or changing the drawer total.
+  points ceiling against the reviewed lines. Keep promo editing read-only;
+  apply, maximise or remove points through the existing persisted tender and
+  combined basket quote, preserving any code already chosen at checkout.
 - Keep edits on the current cart, and send product and checkout actions
   through the site's existing addresses.
 - Add the drawer copy to the Grade10 `store` catalog overlay for English,
@@ -43,12 +44,10 @@ the existing checkout without first leaving that surface.
 - Changing `shared/ui/store-cart` behavior or rebuilding its components —
   that is `cart-drawer-empty-state`.
 - Any backend implementation or contract change: no Worker, API procedure,
-  provider read, database/schema, webhook, persistence, or checkout-creation
+  provider read, database/schema, webhook, or checkout-creation
   work.
-- Applying promotion codes or loyalty points, or calculating shipping, tax, or
-  discounts in the drawer. Checkout now accepts coupon and points inputs and
-  exposes member-only reads, but the drawer has no single applied-quote
-  contract for these choices and its total.
+- Editing promotion codes or calculating shipping, tax, or discounts locally.
+  The existing combined basket quote owns tender amounts and totals.
 - Changing Figma annotations, components, or tokens.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
 - A Browse More or catalogue handoff from the drawer (removed with
@@ -76,7 +75,7 @@ the existing checkout without first leaving that surface.
 ## Impact
 
 - `apps/frontend/grade10`: global Cart trigger once the drawer answers, one
-  drawer host, reviewed-line mapping, read-only member tender context,
+  drawer host, reviewed-line mapping, member tender context and interactive points,
   existing cart actions, and focused tests.
 - `packages/grade10-store/frontend`: backwards-compatible review controls that
   let the drawer own unavailable-line cleanup while checkout keeps its current
@@ -92,3 +91,19 @@ dependency is part of this change.
 
 No domain impact: the drawer reuses existing product and checkout addresses
 without changing the journeys those destination capabilities own.
+
+## Points Delivery
+
+The user-approved Storybook plan supersedes the read-only points scope in
+completed Group 4; Group 5 delivers only the new points integration. The
+shared `CartDrawer` export already supports these actions; no new primitive
+or public export is planned. Existing read-only callback guards stay intact.
+The application owner archives after deployment acceptance.
+
+## References
+
+- [Cart Points](../../../docs/prds/products/grade10-site/store/cart.md#points)
+- [Cart Checkout](../../../docs/prds/products/grade10-site/store/cart.md#checkout)
+- [Storybook](https://storybook.grade10-stg.com/?path=/story/store-cart-cartdrawer--default)
+
+No platform impact: this changes the existing Grade10 cart-to-checkout path only.

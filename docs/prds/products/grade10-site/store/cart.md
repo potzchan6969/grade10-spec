@@ -62,8 +62,10 @@ The refusals are the coupon's own —
 
 - 🚧 **Offered** — to a member the programme knows, with the balance, the
   rate and the most this cart can take after the code
-- 🚧 **Applied** — the amount typed shows as a Points row and lowers the
-  total; an ask past the ceiling is trimmed to it
+- 🚧 **Applied** — Apply or Use max carries the accepted points choice to
+  checkout and shows the store-quoted saving. Remove clears points and keeps
+  the existing code; a failed change keeps the last accepted choice. An ask
+  past the ceiling is trimmed to it
 - 🚧 **Nothing left** — a code that took the whole of the goods leaves
   points nothing to pay, and the field says so
 - 🚧 **Not offered** — to a guest, a member outside the programme, or

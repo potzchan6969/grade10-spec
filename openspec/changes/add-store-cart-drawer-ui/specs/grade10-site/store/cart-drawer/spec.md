@@ -15,11 +15,12 @@ address.
   - Unresolved read: never presents held price or availability as current
 - Honest cart summary
   - Reviewed lines: shows only facts returned or confirmed by the live read
-  - Neutral totals: adds no shipping, promotion, points, tax, or discount claim
-- Read-only member tender context
+  - Quoted totals: the accepted basket quote owns tender credit and estimated total
+- Member tender context
   - Held promo codes: shows the member's current codes answered against the reviewed lines
   - Points ceiling: shows the member's balance and the maximum points the reviewed goods can take
-  - No applied tender: keeps codes and points unselected and leaves the subtotal and estimated total unchanged
+  - Interactive points: applies, maximises and removes points while preserving the existing code
+  - Accepted choice: persists points for checkout and rejects stale or failed updates
 - Cart changes
   - Scoped edits: quantity and removal change the same cart the drawer opened
   - Delisted cleanup: lets the shared drawer remove unavailable lines once
@@ -116,13 +117,13 @@ summary from these facts:
 | Previous price | The prior unit price and currency, only when the read reports a reprice |
 | Subtotal | Current unit price multiplied by confirmed quantity for every line except sold-out and unavailable lines |
 | Shipping | Localized `Calculated at checkout`, with no calculated amount |
-| Estimated total | The same amount and currency as the subtotal |
+| Estimated total | The accepted current basket quote; subtotal only when no tender is selected and no applied quote exists |
 | Image | Absent while the reviewed cart supplies no authoritative image |
 | Promo code | Visible in its closed display-only state; accepts and applies nothing |
-| Points | Absent |
+| Points | Existing shared controls supplied from current member quote; accepted credit after applying points |
 
 The drawer SHALL NOT claim a promotion, points credit, shipping amount, tax, or
-other discount unless a later capability supplies an applied quote.
+other discount unless the existing combined basket quote supplies the accepted current amounts.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-09 - A successful read fills the reviewed summary
 **Serves:** grade10-site-store-cart-drawer-US-01 - Signed-in collector opens the current cart over the page
@@ -187,14 +188,15 @@ checkout creation.
 - **AND** the existing `/checkout` surface opens
 - **AND** no checkout is created by the drawer
 
-### Requirement: A signed-in collector sees current tender facts without applying them
+### Requirement: A signed-in collector sees current tender facts and chooses points
 
-After the drawer has a successful review for a signed-in collector, it SHALL
-show the held promo codes and their answers for the reviewed lines. A code that
-cannot be used SHALL remain visible with its refusal, and a code that can be
-used SHALL remain unselected. The drawer SHALL NOT apply a promo code or points
-from these reads, and its subtotal and estimated total SHALL remain the
-reviewed subtotal.
+After a successful review for a signed-in collector, the drawer SHALL show held
+promo-code answers for the reviewed lines without enabling promo editing.
+It SHALL preserve any code already selected at checkout when changing points.
+Points controls SHALL use the current member balance, conversion rate and
+server ceiling. Applying points SHALL use the combined basket quote and
+persist the accepted choice before presenting it as applied. The drawer SHALL
+NOT debit points or create checkout.
 
 #### Scenario: grade10-site-store-cart-drawer-SC-16 - Held promo codes answer the reviewed basket
 **Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
@@ -205,17 +207,16 @@ reviewed subtotal.
 - **THEN** both current codes are shown
 - **AND** the applicable code is shown as usable without being selected
 - **AND** the inapplicable code shows the answer explaining why it cannot be used
-- **AND** no promo discount is shown in the drawer summary
+- **AND** no new code is applied from the held-code list
+- **AND** an existing selected code is preserved in the combined quote
 
-#### Scenario: grade10-site-store-cart-drawer-SC-17 - Points show the basket ceiling without changing the total
-**Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
+#### Scenario: grade10-site-store-cart-drawer-SC-17 - Points offer the existing interactive design
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
 
-- **GIVEN** a signed-in collector whose cart review succeeds
-- **AND** the points read quotes a balance and a maximum for the reviewed goods
-- **WHEN** the collector opens the points view in the cart drawer
-- **THEN** the balance, conversion rate, and maximum points and amount are shown
-- **AND** no points amount is applied
-- **AND** the subtotal and estimated total remain the reviewed subtotal
+- **GIVEN** a successful current member cart review and usable points quote
+- **WHEN** the collector opens Use points
+- **THEN** the shared input, pt suffix, Apply, balance, rate and Use max match the referenced Default story
+- **AND** balance and ceiling come from the live quote rather than story fixtures
 
 #### Scenario: grade10-site-store-cart-drawer-SC-18 - Unresolved reviews receive no stale tender facts
 **Serves:** grade10-site-store-cart-drawer-US-04 - Signed-in collector reads tender choices for the reviewed basket
@@ -232,3 +233,92 @@ reviewed subtotal.
 - **WHEN** the cart changes or the drawer closes and opens again
 - **THEN** the previous tender facts are not presented as current
 - **AND** the drawer shows only the next successful reads for the latest reviewed basket
+
+### Requirement: Points changes retain an accepted quote and choice
+
+The drawer SHALL accept only finite positive whole-number Apply input.
+An amount above the ceiling SHALL resolve to the server-accepted amount.
+Use max SHALL apply the current quoted maximum; Remove SHALL clear only points.
+The selected code SHALL remain unchanged by these actions. The accepted quote
+SHALL own points credit and estimated total, and the accepted choice SHALL
+persist with the member cart for reload and checkout. Selecting points SHALL
+NOT mutate the loyalty ledger.
+
+While a points quote or persistence operation is unresolved, the drawer SHALL
+prevent duplicate tender submissions and Checkout navigation. A quote,
+refusal or persistence failure SHALL show a localized error and keep the last
+accepted choice and total for the same reviewed basket. Once the failed
+operation resolves, Checkout MAY use that still-current accepted quote.
+A changed basket SHALL
+invalidate the previous displayed quote until revalidated. Results from an
+older member, basket or closed drawer SHALL NOT update the current view or
+initiate a stale choice write. A write already sent before closing remains a
+member-scoped operation; reopening SHALL read the current persisted choice.
+Checkout SHALL re-quote the persisted choice before submitting spendPoints.
+A successful persistence followed by a failed refresh SHALL NOT be presented
+as a rollback; stale totals and Checkout SHALL remain unavailable until an
+authoritative reread resolves the accepted choice.
+
+#### Scenario: grade10-site-store-cart-drawer-SC-20 - Apply persists the accepted points choice
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** a reviewed member basket with an existing selected code
+- **WHEN** the collector applies a valid whole-number amount and quote and persistence succeed
+- **THEN** the accepted points choice is stored with the cart without replacing the code
+- **AND** the Points credit and estimated total use the accepted server quote and no loyalty debit occurs
+
+#### Scenario: grade10-site-store-cart-drawer-SC-21 - Use max and Remove preserve the code
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** a current quote with a usable points ceiling and selected code
+- **WHEN** the collector uses Use max, then Remove, with both operations succeeding
+- **THEN** Use max applies the current quoted maximum and Remove persists zero points
+- **AND** the selected code remains unchanged and each summary uses its accepted quote
+
+#### Scenario: grade10-site-store-cart-drawer-SC-22 - Invalid input and excessive input have distinct outcomes
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** current member points controls
+- **WHEN** the collector submits blank, zero, negative, fractional, non-numeric or non-finite input, or an amount above the ceiling
+- **THEN** invalid input does not persist or change the accepted total
+- **AND** a valid whole-number request above the ceiling uses the server-accepted capped amount
+
+#### Scenario: grade10-site-store-cart-drawer-SC-23 - Pending changes prevent duplicate actions and checkout
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** a points change awaiting quote or persistence completion
+- **WHEN** the collector tries another tender action or Checkout
+- **THEN** no duplicate tender operation or checkout navigation occurs
+- **AND** the last accepted same-basket summary remains until the operation resolves
+
+#### Scenario: grade10-site-store-cart-drawer-SC-24 - Failures retain the accepted choice
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** a same-basket accepted choice and total
+- **WHEN** the next points quote is refused or fails, or persistence fails
+- **THEN** a localized error is shown and the prior accepted choice and total remain
+- **AND** no rejected choice is presented as saved or applied
+
+#### Scenario: grade10-site-store-cart-drawer-SC-25 - Changed context rejects stale results
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** an unresolved points read or change
+- **WHEN** the member or basket changes, or the drawer closes before the response arrives
+- **THEN** the old response does not change the current view or initiate a stale persistence write
+- **AND** reopening or a cart quantity/removal change reads the current choice and revalidates the new basket before enabling Checkout
+
+#### Scenario: grade10-site-store-cart-drawer-SC-26 - Unavailable points remain unavailable
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** zero available points, a zero ceiling, a non-programme member, or an unanswered points quote
+- **WHEN** the drawer renders
+- **THEN** no positive points action is enabled without a usable quote
+- **AND** no invented balance or saving is shown
+
+#### Scenario: grade10-site-store-cart-drawer-SC-27 - Checkout receives the accepted choice
+**Serves:** grade10-site-store-cart-drawer-US-05 - Collector chooses points before leaving the cart
+
+- **GIVEN** a successfully persisted points choice with its existing code
+- **WHEN** the collector reloads or continues to checkout
+- **THEN** the choice is read from the member cart and checkout re-quotes both points and code
+- **AND** only accepted spendPoints reach checkout creation and the drawer creates no checkout
