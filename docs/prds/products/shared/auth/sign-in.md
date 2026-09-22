@@ -50,6 +50,11 @@ session, and the person lands on the brand home with a toast.
   signed in without being reloaded, and whatever they were stopped from doing
   carries on. It is tried once, and a card that sold out while they were in
   their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
+- 🚧 **Settled on another device** — a surface still showing Check Your Email
+  learns when that address signs in anywhere else, by any offered method, and
+  ends its own wait with a message instead of counting toward a resend nobody
+  needs. It gains no session of its own; only the device that actually signed
+  in has one.
 - **Expired** — the toast says the link has expired.
 - **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.
@@ -99,6 +104,7 @@ path, the link, beside Google.
 | A second mismatched link while the toast is showing | Decided | Replaces it. Every follow is a full-page redirect to the brand home, so the earlier toast’s state cannot survive to conflict with the new one. | Product |
 | Link lifetime | Decided | Five minutes, and the email says five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
 | How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
+| A device still waiting when the address signs in on another | Decided | The waiting surface ends its own wait with a message; it gains no session of its own — only the device that actually signed in has one. Checked without exposing whether an arbitrary address has a session: gated behind the waiting device's own flow, never a bare email. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
