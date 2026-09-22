@@ -184,18 +184,16 @@ by card, reads:
   when none
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
-- ❓ **Invoice ID** — `INV-202609-L9482-01`: the Hong Kong month sent, the
-  listing's code and the revision; a reissue starts at `01`, increments the
-  revision and keeps the old ID finding the order; PM and Finance confirm the
-  listing-code alphabet and length
-- ❓ **Public order ID** — `ORD-L9482`: a stable order reference shown on the
-  winner's order and in operator support surfaces; it is never the internal
-  order key
-- ❓ **Payment reference code** — `L948201`: a short separator-free value the
-  winner can copy into FPS, local bank transfer or SWIFT notes; Grade10 writes
-  it to Stripe transaction metadata under `payment_reference_code`, then uses
-  Stripe's returned provider reference in internal document filenames; PM and
-  Finance confirm the listing-code payload length
+- 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
+  forward as the order's one public reference once a winner exists; shown on
+  the winner's order, in operator support surfaces, and safe to copy into
+  FPS, local bank transfer or SWIFT notes. Grade10 writes it to Stripe
+  transaction metadata under `payment_reference_code`, then uses Stripe's
+  returned provider reference in internal document filenames. There is no
+  separate order ID — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+- 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus a 2-digit
+  issuance sequence; a reissue increments the sequence and keeps the old ID
+  finding the order
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Same as delivery address
@@ -267,8 +265,8 @@ doing, under Edge Cases.
   pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
-- 🚧 **Receipt ID** — `REC-202609-LK7P2Q-01-P1`: the month paid, the paid
-  invoice's code and count, and the payment's number
+- 🚧 **Receipt ID** — `RC-LK42301P1`: the paid invoice's ID plus the
+  payment's sequence number within it
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first; what each one shows is under Edge Cases
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company

@@ -48,6 +48,13 @@ the card is in the winner's hands. The collector's half is
 - **Cert ID** — creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for an unnumbered unit; each Cert
   ID can have its own live listing, and only one
+- 🚧 **Listing code** — a stable opaque 5-character code, always leading with
+  2 letters, allocated at create and shown on the listing's admin screen for
+  support, finance and reconciliation; never shown to collectors on the
+  public listing page, where the lot reads by title only. Once a winner
+  exists it doubles as the order's payment reference — [Auction Display ·
+  Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
+  Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the

@@ -43,7 +43,7 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
-| 🚧 Public listing ID | A stable opaque display identifier, pending PM confirmation | A collector-quotable reference; never the internal listing key |
+| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Nothing; lots are identified by their title. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
