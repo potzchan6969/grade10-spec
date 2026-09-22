@@ -332,6 +332,12 @@ async function dropPriorRuns(token, id, sheets, nameSlug) {
     const sheetId = summary.properties.sheetId;
     const rows = summary.properties.gridProperties?.rowCount ?? 2;
     requests.push({
+      updateSheetProperties: {
+        properties: { sheetId, gridProperties: { frozenRowCount: 0 } },
+        fields: "gridProperties.frozenRowCount",
+      },
+    });
+    requests.push({
       unmergeCells: { range: { sheetId, startRowIndex: 1 } },
     });
     if (rows > 1) {
@@ -346,6 +352,12 @@ async function dropPriorRuns(token, id, sheets, nameSlug) {
         },
       });
     }
+    requests.push({
+      updateSheetProperties: {
+        properties: { sheetId, gridProperties: { frozenRowCount: 1 } },
+        fields: "gridProperties.frozenRowCount",
+      },
+    });
   }
   for (const one of sheets) {
     if (isRunTabTitle(one.properties.title, nameSlug))

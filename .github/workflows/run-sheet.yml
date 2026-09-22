@@ -142,6 +142,7 @@ jobs:
           REPLACE: ${{ inputs.replace }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
+          set -o pipefail
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
           set -- --name "$RUN_NAME" --sha "$GITHUB_SHA"
