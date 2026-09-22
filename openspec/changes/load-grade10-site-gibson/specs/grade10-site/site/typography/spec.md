@@ -58,3 +58,24 @@ heading type.
 - **WHEN** a collector opens any grade10-site surface
 - **THEN** the page does not load a second brand-sans stylesheet or declare
   a second brand-sans family for body or heading type
+
+### Requirement: A blocked or delayed kit never shows a loading or error state
+
+The kit load never blocks rendering or introduces UI of its own.
+
+**No blocking** - The site SHALL NOT delay or block rendering of body or
+heading content while the Adobe Fonts kit request is in flight, and SHALL NOT
+show a loading, empty, or error state tied to that request.
+
+**Fallback** - Where the kit request is blocked or delayed, the site SHALL
+render body and heading text in the browser's default fallback sans until the
+kit resolves, with no retry or timeout logic of its own.
+
+#### Scenario: grade10-site-site-typography-SC-04 - A blocked kit falls back without an error surface
+**Serves:** One brand sans - no forced wait or error state on a blocked kit
+
+- **GIVEN** the Adobe Fonts kit request is blocked or fails
+- **WHEN** a collector opens any address the grade10 site answers
+- **THEN** the page renders its full content immediately in the browser's
+  fallback sans, with no loading, empty, or error state shown for the
+  missing font
