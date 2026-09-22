@@ -217,14 +217,23 @@ doing, under Edge Cases.
 
 ### By Bank Transfer
 
-- 🚧 **Bank details** — the invoice shows SWIFT, FPS and Hong Kong local
-  transfer details instead of card Pay, and the reference to quote,
-  `LK7P2Q01`; copy controls for the account number, the amount due and the
-  transfer reference
-- 🚧 **Payment proof** — **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
+- 🚧 **Two entry points** — while the invoice is pending, Order summary keeps
+  **Submit Payment Proof** as the primary control and places **View Bank
+  Details** under it; View Bank Details opens bank rails, Submit Payment
+  Proof opens the proof dialog
+- 🚧 **View Bank Details** — amount due and rail fields as detail rows (no
+  Copy); each rail tab ends with payment reference and a warning to enter it
+  in the bank memo, after the rail fields: FPS ID, account name and QR; HK
+  local bank name, bank code, branch code and account number; SWIFT
+  beneficiary name, business address, SWIFT/BIC, account or IBAN, then
+  payment reference, then a note to choose OUR for transfer fees so Grade10
+  receives the full order total
+- 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
+  or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
   each and **15 MB** total, uploaded once after paying, behind a confirm
   step saying nothing can be added later; the order reads Payment Verifying,
-  the deadline stops, and Pay and further uploads are hidden
+  the deadline stops, and Submit Payment Proof, View Bank Details and further
+  uploads are hidden
 - 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
   the transfer and will email when payment is confirmed, placed where the
   Preparing Invoice alert sits
