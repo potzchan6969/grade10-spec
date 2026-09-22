@@ -507,6 +507,80 @@ Runs once per row of **Test data**.
 
 ---
 
+## grade10-site-vault-collector-notifications-US3: Signer leaves with the documents they signed
+
+**As** somebody who has just signed at the counter,
+**I want** the sealed set mailed to me once, with the documents attached,
+**so that** I hold my own copy without asking for one.
+
+### grade10-site-vault-collector-notifications-US3-TC1-1: A retried delivery reads the documents from the packet again
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-03
+
+**Pre-conditions:**
+
+* A sealed packet's first delivery to its signer has failed and is owed.
+
+**Steps:**
+
+1. The retry runs hours later.
+
+**Expected Results:**
+
+* The documents attached are read again from the packet rather than from the queue.
+* The signer receives the set with the packet's current sealed documents attached.
+
+---
+
+## grade10-site-vault-collector-notifications-US4: Operator picks up a message that never went
+
+**As a** member of shop staff,
+**I want** a case to be flagged when a message to its collector ran out of
+attempts, and to be able to send it again,
+**so that** a provider outage costs a delay rather than a customer who was
+never told.
+
+### grade10-site-vault-collector-notifications-US4-TC1-1: The vaulting act stands even though the message failed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-04
+
+**Pre-conditions:**
+
+* A mail provider refuses every send attempted against the case.
+
+**Steps:**
+
+1. An item is taken into the vault on the case.
+
+**Expected Results:**
+
+* The case's custody record shows the item as vaulted.
+* The notification for the event is owed rather than lost.
+
+---
+
 ## grade10-site-vault-collector-notifications-US5: Borrower reads the figures in the message itself
 
 **As a** borrower,
@@ -916,11 +990,19 @@ reconciliation folded one more,
 | `US6-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-31` |
 | `US6-TC3-1` | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-39` states the panel's Send again on a check still out, and the durable `grade10-site-vault-identity-verification-SC-03` states that a case in custody takes no new check; nothing about the invitation is unstated, so no scenario is folded here |
 | `US6-TC4-1` | Covered elsewhere | The invitation's condition is `grade10-site-vault-collector-notifications-SC-20`'s GIVEN — a visit booked and no identity to reuse — and what makes it unmet is `grade10-site-vault-identity-verification-SC-09` (the last check is reused) and `grade10-site-vault-identity-verification-SC-03` (a case in custody takes no new check). The negative restates another capability's rule, so it stays a case and no scenario is written |
+| `US3-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-14` — no case traced `US-03` on its own until this pass; the requirement was denied to the blind reading, so this case answers the Raised row below rather than being re-derived blind |
+| `US4-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-09` — no case traced `US-04` on its own; `US2-TC8-1` traces `US-02` and asserts the retry cadence on a message already failed once, never that the act itself stands despite the failed send |
+| `grade10-site-vault-collector-notifications-SC-10` | Covered elsewhere | `US2-TC8-1` and `US2-TC9-1` trace `US-02` and walk the ladder and the park; `US-04`'s own journey is carried by `US4-TC1-1`, which does not restate the ladder |
+| `grade10-site-vault-collector-notifications-SC-11` | Covered elsewhere | `US2-TC3-1` traces `US-02` and walks the operator handing a parked message back |
+| `grade10-site-vault-collector-notifications-SC-12` | Covered elsewhere | `US2-TC10-1` traces `US-02` and walks the ten-second give-up; its `**Serves:**` names no journey |
+| `grade10-site-vault-collector-notifications-SC-13` | Covered elsewhere | `US2-TC4-1` traces `US-02` and walks one send per packet |
+| `grade10-site-vault-collector-notifications-SC-15` | Covered elsewhere | `US2-TC5-1` traces `US-02` and walks the message sending without its attachments |
+| `grade10-site-vault-collector-notifications-SC-16` | Covered elsewhere | `US2-TC6-1` traces `US-02` and walks a message reading the case as it stands at the retry, address included |
 | `grade10-site-vault-collector-notifications-SC-04` | Case added | `US2-TC12-1` — no blind case took a money record back, and nothing reached "never with who recorded it" |
 | `grade10-site-vault-collector-notifications-SC-22` | Case added | `US2-TC13-1` — `US5-TC5-1` reads the footer without deciding which party it names, which is the rule this change adds |
 | `grade10-site-vault-collector-notifications-SC-23` | Case added | `US5-TC8-1` — `US5-TC1-1` reads a money message with a due date, which the offer does not have; its six rows were reached by nothing |
 | `grade10-site-vault-collector-notifications-SC-27` | Out of suite | Its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that suite's `grade10-site-vault-loan-and-settlement-US5-TC2-1` walks every money email on the case, `repayment_recorded` among them; listed under the header |
-| Raised — what a tester observes when a retried send reads the documents from the packet rather than the queue | Raised, settled | Landed in the change's `decisions.md` `## Raised`. The rule stands as the durable *The signed set is delivered once, and its documents are read at the attempt* requirement states it, and `grade10-site-vault-collector-notifications-SC-14` is the scenario: what differs between attempts is a packet re-sealed or an attachment regenerated, so the assertion is that the attachment equals the packet's sealed copy at send time. The blind pass was denied that requirement |
+| Raised — what a tester observes when a retried send reads the documents from the packet rather than the queue | Raised, settled | Landed in the change's `decisions.md` `## Raised`. The rule stands as the durable *The signed set is delivered once, and its documents are read at the attempt* requirement states it, and `grade10-site-vault-collector-notifications-SC-14` is the scenario: what differs between attempts is a packet re-sealed or an attachment regenerated, so the assertion is that the attachment equals the packet's sealed copy at send time. The blind pass was denied that requirement; `US3-TC1-1`, written once the two readings were reconciled, is the case |
 
 ### Manual
 
