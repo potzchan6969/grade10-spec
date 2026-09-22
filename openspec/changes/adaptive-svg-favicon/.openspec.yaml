@@ -6,3 +6,4 @@ skip_specs_why: "the favicon is an asset swap the platform page already
 reviewed:
   ui-design: d64617d6
   tech-design: d64617d6
+  tasks: 4a06bcf1
