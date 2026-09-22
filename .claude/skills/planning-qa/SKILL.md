@@ -58,15 +58,15 @@ copies the first.
 
 The schema cannot express that order — `requires` is advisory and has never
 stopped anyone writing the scenarios first. The split that used to try was
-undone because it bought nothing and cost three things: a status line that
-called the second pass done as soon as the first wrote the file, two viewer tabs
-over one document, and a change in another repository to fix the second.
+undone: it bought nothing and cost a false status line, two viewer tabs over
+one document, and a fix in another repository.
 
 ## The run
 
 `/workflow-specify` runs this as a round. `workflow-round` holds the steps,
-the readers and the landing; what follows is what the two files must hold,
-and the order they are written in.
+the readers and the landing, and [Round Summary and
+Landing](../../../docs/governance/round-summary.md) the conduct; what follows
+is what the two files must hold, and the order they are written in.
 
 Everything here is `draft`: `/tcs-review` is QA's turn once the requirements
 land, told by the landing.

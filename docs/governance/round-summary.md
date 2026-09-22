@@ -3,14 +3,12 @@
 What a round owes the hand who reads it, and what a landing proves before it
 writes its row. The `workflow-round` and `workflow-build` skills carry the
 procedure and point here for the conduct; a rule below is read by the run,
-never by a hand. Each section links the page that says its outcome in the
-reader's words, and the page names the requirement. The rules were drawn from
-one walkthrough (`add-store-cross-sell`, 2026-09-21) and moved by the second
-change through the workflow, `address-each-hand-in-the-round`.
+never by a hand. A section whose outcome a hand meets links the page that
+says it in the reader's words, and the page names the requirement; the summary
+and the build round are the run's own, and each of their rules names the
+command that holds it.
 
 ## Summary
-
-[Agent Rounds · The Round](../prds/products/shared/planning/agent-rounds.md#the-round)
 
 - **What has not run, first** — a lane the environment cannot start, a helper
   no executed test calls, a tests commit pushed unrun. Before any count, alone
@@ -68,18 +66,16 @@ change through the workflow, `address-each-hand-in-the-round`.
   before it is pushed
 - **Pinned to a commit** — every reader brief names the landing's commit,
   never the tree, and a reader writes nothing to the run's checkout
-- **The cited file carries the id** — `plan:land` refuses a `--tests` path
-  that does not cite the scenario id its entry credits, and `pnpm run
-  tcs:validate` a Manual row whose named test in this store does not cite the
-  row's case; a citation is the id followed by no digit
-- **Written, not run** — `plan:land --unrun "<why>"` writes `written, not run
-  — <why>` as the row's first clause; the tasks stay unticked, and a Manual
-  row naming the walk reads `to be walked in <the walk>` until the run that
-  ran the lane lands a row without the clause
-- **The clone per group** — a `--tests` path is bare, and the group's tag
-  names the repository it is resolved in: an application group's paths
-  resolve against `--app-root <dir>`, or the superproject the store clone sits
-  in, and a path neither holds is refused by name
+- **The cited file carries the id** — `plan:land` and `pnpm run tcs:validate`
+  refuse a credited test that does not cite the id; the match is
+  `scripts/openspec/lib/cites.mjs`'s
+- **Written, not run** — `plan:land --unrun "<why>"` writes the clause first
+  in the row; the tasks stay unticked until a row without it lands
+- **The clone per group** — a `--tests` path is bare; `plan:land` resolves an
+  application group's paths against `--app-root <dir>` when given, else the
+  superproject the store clone sits in, refusing a path that clone lacks by
+  the path and the root, and a landing that reaches no clone by the group's
+  tag
 
 ## Interview
 

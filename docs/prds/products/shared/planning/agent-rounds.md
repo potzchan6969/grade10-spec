@@ -42,7 +42,7 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **The blind readings are their own challenge** — the requirements and the
   cases are two readings of the same journeys, reconciled after both are
   written; what they cannot settle stops on the product manager
-- **Two or three questions** — the first round asks what changes what is
+- **At most three questions** — the first round asks what changes what is
   built, one question whether to do it now, and lists the defaults it applied
   as decided by the round
 - **QA is asked when the requirements land** — the landing that puts the
@@ -203,7 +203,7 @@ propose, and that every step passes through layers of checks. The brief is
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards every deploy and cut. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
 | Who is asked, and when | Decided | Each hand reads a message that is theirs; QA on the landing that puts the suite up for review; the product manager on any line a build round puts on their page. | Product, QA |
-| The interview's size | Decided | Two or three questions that change what is built, one whether to do it now; the defaults listed as decided. | Product |
+| The interview's size | Decided | At most three questions that change what is built, one whether to do it now; the defaults listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |
 | A run-sheet failure | ❓ Open | Whether a failed row on the run sheet reaches the change's thread on its own, or QA writes the sentence there; today it is QA's sentence, read as a remark. Recommended: QA's sentence in the thread, naming the case id, and the sheet left as the record of the walk. | QA, Product |

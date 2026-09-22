@@ -55,7 +55,7 @@ Customers-also-bought from orders is phase two, once this ships.
 ```
 
 **Every later hand is told in that change's thread**, and answers there —
-[Agent Rounds](/p/shared/planning/agent-rounds). The message is yours alone:
+[Agent Rounds](/p/shared/planning/agent-rounds). You answer only what is yours:
 the summary lists the moves that are yours, a question held for you arrives
 as its own reply mentioning you with the row and the page's sentence quoted,
 a line a build round puts on your page comes back to you as ❓ with the line
@@ -130,7 +130,7 @@ reconciled against them after. The ids start at
 on `grade10-site/store/product-page` for the rail's place on the page. The
 product manager reads the two side by side, and one word lands both. The
 landing tells QA in the thread: the suite's path, its case count and
-`/tcs-review add-store-cross-sell`, the walk's input.
+`/tcs-review add-store-cross-sell`, which the walk group takes as its input.
 
 ## *Engineer* — **The plan, then the build**
 
@@ -142,7 +142,9 @@ readers, and the row in `rounds.md` before the tick. A group in `grade10`
 lands its row from that clone, its test paths bare and the group's tag naming
 the repository; a lane the environment could not start says `written, not
 run` first and leaves its tasks unticked; a reader that ran on a fallback
-model is named so. The last group walks US-01 to US-03 end to end and leaves
+model is named so, and a reader the fallback could not run stops the round
+and tells the thread which one is missing. The last group walks US-01 to
+US-03 end to end and leaves
 the end-to-end suite that runs on every push to `main`.
 
 ## *QA · Release hand* — **Staging, the cut, the fold**

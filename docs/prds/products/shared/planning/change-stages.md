@@ -18,7 +18,7 @@ Building the change's agent drafts, and a person's word lands.
 | --- | --- | --- | --- | --- |
 | 1 | Proposed | `proposal.md`; then `decisions.md`, `user-journeys.md`, one marked line per outcome on the page and `hands:`, with `❓` on what is still open | Drafts the marks and the three files from what you ask; asks what is a preference or a product decision | Product manager: say what is wanted, answer |
 | 2 | Designed | `ui-design.md` or `ui_waived`; `tech-design.md` or `design_waived` | Proposes each design from the page and the journeys, challenged and verified | Designer: tweak. Tech PIC: challenge |
-| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings of the journeys, reconciled | Product manager: read the requirements and the cases together |
+| 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings of the journeys, reconciled | Product manager: read the requirements and the cases together. QA: `/tcs-review` |
 | 4 | Planned | `tasks.md`; `promoted_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary |
 | 5 | Building | Boxes ticking | Builds each group test first, audited and verified | Engineer: read each landing |
 | 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; the run sheet | QA: walk it |
