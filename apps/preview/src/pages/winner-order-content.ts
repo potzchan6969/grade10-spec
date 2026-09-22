@@ -94,7 +94,8 @@ export type WinnerOrderContent = {
     /** Positive amount — e.g. `HK$16,140`. */
     amount: string;
     reason: string;
-    note: string;
+    /** Optional — omitted from Refund Details when empty (Q28). */
+    note?: string;
     transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
@@ -219,7 +220,6 @@ export const WINNER_ORDER_REFUND_CLOSING = {
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
-  note: "Bank transfer exceeded the invoice. Difference returned.",
   transfer: {
     kind: "bank_transfer",
     bankName: "HSBC",

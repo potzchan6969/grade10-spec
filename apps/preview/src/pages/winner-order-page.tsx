@@ -495,14 +495,12 @@ function WinnerOrderPaymentMethod({
     );
   }
 
-  const bankLabel =
-    method !== "Bank transfer" && masked
-      ? `${method}, ${masked}`
-      : (masked ?? method);
+  const bankName = method !== "Bank transfer" ? method : undefined;
 
   return (
     <PaymentMethodCard
-      label={bankLabel}
+      description={bankName}
+      label={masked ?? method}
       leading={<Bank aria-label="Bank" size={20} weight="regular" />}
     />
   );
