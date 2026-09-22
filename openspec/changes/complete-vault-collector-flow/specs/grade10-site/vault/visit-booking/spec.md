@@ -26,6 +26,9 @@ answer. Which statuses exist is `grade10-site/vault/case-lifecycle`.
     coming to
   - Replay, not a second seat: asking again for the slot the case already
     holds changes nothing
+  - One picker for both: a move picks from the shops and slots a first booking
+    picks from, so another shop is as open to it as another time
+  - Nothing free, already taken: the picker says which and reads again
 - The diary and the copy
   - The diary is the authority: where the two disagree the case's copy is
     repaired and never acted on
@@ -186,3 +189,57 @@ or called off SHALL carry that visit's file with it.
 
 - **WHEN** the collector is told their visit was booked, moved or called off
 - **THEN** that message carries the visit's calendar file
+
+### Requirement: The picker offers the same shops and slots to a first booking and to a move
+
+What the collector picks from, and what the picker says when the slot they
+chose cannot be taken.
+
+**The same picker** - moving a visit SHALL offer the shops and slots a first
+booking offers, so a move MAY take another shop as readily as another day and
+time.
+
+**Nothing free** - a window the diary holds no free slot in SHALL read the
+no-slot line where the times sit, and SHALL offer the next window.
+
+**A slot already taken** - a slot taken between the read and the take SHALL be
+refused by name, and the picker SHALL read the slots again without it.
+
+#### Scenario: grade10-site-vault-visit-booking-SC-27 - A move picks another shop
+**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
+
+- **GIVEN** a case holding a booked visit
+- **WHEN** its owner moves the visit
+- **THEN** the shops and slots are offered as they were for the booking, and a
+  slot at another shop may be taken
+
+#### Scenario: grade10-site-vault-visit-booking-SC-28 - A window with nothing free says so and offers the next
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+
+- **GIVEN** a shop whose window holds no free slot
+- **WHEN** its days and times are read
+- **THEN** no time is offered, the no-slot line is read where the times sit,
+  and the next window is offered
+
+#### Scenario: grade10-site-vault-visit-booking-SC-29 - A slot taken while the collector chose is refused
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+
+- **GIVEN** a collector who has chosen a free slot
+- **WHEN** somebody else takes that slot before they confirm
+- **THEN** the take is refused by name and the slots are read again without it
+
+### Requirement: A sibling case reads the visit its lead holds and offers no picker of its own
+
+Where a collector's other case already holds the visit both items come in on.
+
+**The sibling's page** - a case whose collector holds a live booking on another
+of their cases SHALL read that visit, its shop and its slot, and SHALL NOT
+offer a picker of its own.
+
+#### Scenario: grade10-site-vault-visit-booking-SC-30 - A sibling case shows the lead's visit
+**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+
+- **GIVEN** a collector holding a live booking on one of their cases
+- **WHEN** they open another of their cases
+- **THEN** the visit their other case holds is read, with its shop and slot,
+  and no picker is offered

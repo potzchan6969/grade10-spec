@@ -41,6 +41,7 @@ Runs once per row of **Test data**.
 | signing | Picker offered |
 | vaulted | Picker offered |
 | active | Picker offered |
+| repaid | Picker offered |
 
 **Steps:**
 
@@ -281,6 +282,34 @@ Runs once per row of **Test data**.
 * The case stays at its current status.
 * The booking picker reopens on the page.
 
+### grade10-site-vault-visit-booking-US1-TC10-1: A sibling case shows the lead case's visit and no picker
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-01
+
+**Pre-conditions:**
+
+* The collector has two live cases, one of which holds a live booking for <a shop> at <a free slot>.
+
+**Steps:**
+
+1. Open <grade10 vault case url> for the case that holds no booking.
+
+**Expected Results:**
+
+* The visit the other case holds is read, with its shop and its slot.
+* No booking picker is offered on this case.
+
 ---
 
 ## grade10-site-vault-visit-booking-US4: Collector puts the visit in their calendar
@@ -317,6 +346,7 @@ the visit added to my phone's calendar,
 
 * The screen names the shop, its address and the picked slot.
 * The before-you-come list shows verify identity, bring the item and sign at the counter.
+* On this financed-lane case the list adds that the money follows the signing.
 
 ### grade10-site-vault-visit-booking-US4-TC2-1: Add to calendar serves a file naming the visit
 
@@ -458,6 +488,7 @@ the visit added to my phone's calendar,
 
 **Expected Results:**
 
+* Move offers the same shops and slots the first booking was picked from, another shop among them.
 * The booked-visit screen shows the new slot.
 * The new file replaces the earlier one, leaving one entry on the phone.
 

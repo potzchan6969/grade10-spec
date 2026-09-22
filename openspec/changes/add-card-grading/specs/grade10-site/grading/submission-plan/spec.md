@@ -37,7 +37,7 @@ fee sheet it is booked on. The visit it is handed in on is
   - What the paste made of each line: matched, kept as typed, without a value,
     above the ceiling, or skipped as a card already listed
   - Nothing silently dropped: every line is accounted for before it is added
-- The caps
+- Caps and a second submission
   - Cards a submission: a column of the fee sheet, not a rule of its own
   - Bulk's floor and ceiling: the level a long list takes, and the count that
     closes every other one
