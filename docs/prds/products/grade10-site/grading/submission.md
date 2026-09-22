@@ -4,13 +4,12 @@ spec: grade10-site/grading/submission-lifecycle
 order: 3
 ---
 
-A submission is one collector's cards to one grader at one level, with one
-status; each card carries its own outcome beside it, so four cards with one
-returned ungraded are still one submission, ready to collect.
+A submission is one collector's cards, one grader, one level, one status; each
+card carries its own outcome, so an ungraded card leaves the rest ready.
 
 🚧 **The collector, or the link** — the page opens to the collector signed in
-under the email it was booked under and to whoever holds the emailed link;
-anybody else, and an id nobody was issued, reads not found.
+under the booking email and to whoever holds the emailed link; anybody else
+reads not found.
 
 ## Statuses
 
@@ -32,11 +31,11 @@ and the internal id never reaches the collector; `cancelled` is theirs before ha
 
 ## A Card's Outcome
 
-🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in
-the grader's words, `PSA 10 GEM MT` · Ungraded, with the grader's code such as
-N1 · Minimum grade not met · Moved up a level · Withdrawn · Held by the grader
-· Not returned · Damaged · Collected · Vaulted; a grade, an upcharge and an
-ungraded return are facts on the card, never a status of the submission.
+🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in the
+grader's words, `PSA 10 GEM MT` · Ungraded, with the grader's code such as N1
+· Minimum grade not met · Moved up a level · Withdrawn · Held by the grader ·
+Not returned · Damaged · Collected · Vaulted; each is a fact on the card,
+never a status of the submission.
 
 ## Exceptions
 
@@ -57,8 +56,8 @@ it changes; the rest of the cards carry on:
 | Not returned, or damaged | paid out at its declared value with its fee refunded, inside the payout window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
 
 - 🚧 **Nothing left to hand in** — a submission whose last card the counter
-  refuses is cancelled there, told in person; no message goes, and nothing
-  was paid or is owed
+  refuses is cancelled there, told in person; no message goes and nothing is
+  owed
 
 ## The Fee by Outcome
 
@@ -85,18 +84,17 @@ it changes; the rest of the cards carry on:
 | 180 | ❓ the written notice is due: staff post it by registered post to the address taken at signing and email it the same day, giving 30 days to collect from the posting date | Legal: the form, whether email alone serves, the 30 days |
 | after the 30 days | ❓ clause 6 lets the cards be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456), the proceeds less fees held for the collector; nothing is built for it yet | Legal |
 
-- 🚧 **Storage accrues per card still at the shop** — a month started since
-  day 90 counts, a card withdrawn, paid out or vaulted does not; derived when
-  read from the ready date and the cards held, one line at the till at collection
+- 🚧 **Storage per card still at the shop** — a month started since day 90
+  counts; a card withdrawn, paid out or vaulted does not, and it is one line
+  at the till
 - 🚧 **The rungs never pause** — they count from the ready day whatever the
-  collector books or names; only a card collected, vaulted or paid out leaves
-  the ladder
+  collector books or names; only collecting, vaulting or a payout leaves it
 - ❓ **A part month** — counts as a whole month — Commercial
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the 30 days run from it
-- 🚧 **After the notice** — the first release stops here: the cards stay at
-  the shop and stay the collector's, storage accrues, and a slab kept on
-  purpose goes into a vault case free
+- 🚧 **After the notice** — the release stops here: the cards stay the
+  collector's, storage accrues, and a slab kept on purpose moves into a vault
+  case
 - 🚧 **The payout** — a card not returned, or returned damaged, is paid out at
   its declared value on a record of its own, approved by a second person, at
   the till or by bank transfer; a card that turns up reverses it on that record
@@ -106,24 +104,20 @@ it changes; the rest of the cards carry on:
 ## Ready to Collect
 
 - 🚧 **The pickup code** — four digits on the page and in the ready email,
-  shown at the counter; with it the shop's hours, no booking needed, and what
-  is due
-- 🚧 **The ID glance** — above the threshold the counter glances at an ID
-  matching the name, the collector's or the named person's, and keeps nothing;
-  below it the code and the name release the cards; not an identity check
+  shown at the counter; with it the shop's hours, walk in, and what is due
+- 🚧 **The ID glance** — above the threshold an ID matching the name, nothing
+  kept and no identity check; at or below it the code and the name release
 - ❓ **The threshold** — HKD 10,000 declared in total — Operations
-- 🚧 **Name a collector** — one person at a time, named on the page before
-  anyone comes in, by their full name as on their ID; changed or removed from
-  the page any time before collection; no email goes, History logs it, and
-  the receipt names who collected
-- 🚧 **Nobody else** — a person who is neither the collector nor the named
-  person is turned away, code or no code; the collector names them from the
-  page in the same minute
+- 🚧 **Name a collector** — one person at a time, by their full name as on
+  their ID, named, changed or removed on the page before collection; no email
+  goes, History logs it, and the receipt names who collected
+- 🚧 **Nobody else** — anybody but the collector and the named person is turned
+  away, code or no code; the collector names them in the minute
 - ❓ **No counter override** — staff cannot release to anyone else — Operations
-- 🚧 **Vault it** — a slab goes straight into a vault case at the counter:
-  the identity check and the custody agreement happen there, storage is free,
-  a loan is an offer the vault makes after valuing it, and the receipt says
-  the card went to the vault — [Vault](/p/grade10-site/vault)
+- 🚧 **Vault it** — a slab goes straight into a vault case at the counter: the
+  identity check and the custody agreement happen there, storage is free, a
+  loan is the vault's offer after valuing it, and the receipt says so —
+  [Vault](/p/grade10-site/vault)
 - 🚧 **No slabs shipped** — the collector, or the person they name, collects
   in person
 
@@ -131,19 +125,16 @@ it changes; the rest of the cards carry on:
 
 - 🚧 **The graded record** — grade, grader and cert per slab with a look-up
   link, the slab photographs from hand-back, and the three documents, each
-  with its fingerprint and a download; on the page, and under the account
-  when the collector keeps one
+  with its fingerprint and a download; on the page and in the account
 - 🚧 **Never stock** — a collector's slab never enters the catalogue; a vault
   valuation or an auction consignment reads the record from here
-- ❓ **Retention** — 2,555 days on the vault's table: the sealed documents
-  and the photographs in the vault's classes, and the submission record —
-  name, email, phone, postal address, the list, the code, the messages — as a
-  class of its own; each window runs from the day the submission ends,
-  collected, cancelled, expired or its last card paid out; no identity class —
-  Legal — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
-- 🚧 **Erasure waits for a live submission** — the ask to be forgotten is
-  refused by name while a submission is between booked and ready, an upcharge
-  is unsettled or ready cards are uncollected, as a live vault case refuses it
+- ❓ **Retention** — 2,555 days on the vault's table: the sealed documents and
+  the photographs in the vault's classes, and the submission record as a class
+  of its own; each window runs from the day the submission ends, collected,
+  cancelled, expired or its last card paid out; no identity class — Legal —
+  [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness)
+- 🚧 **Erasure waits** — the ask to be forgotten is refused while a submission
+  is between booked and ready, an upcharge is unsettled or ready cards wait
 
 ## What a Collector Can Do
 
@@ -201,7 +192,7 @@ The balance is what the collector owes on that day.
 | The notice | ❓ Open | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, 30 days from posting; the first release stops there and clause 6 keeps the disposal basis; the notice's form and wording | Legal |
 | Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
 | ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
-| The threshold's own figure | ❓ Open | Which side HKD 10,000 declared in total falls on: the requirement releases it on the code and the name, and a test case reading the same figure asked for the ID | Operations |
+| The threshold's own figure | Decided | Above the threshold is more than HKD 10,000 declared in total, so the figure itself is released on the code and the name | Operations |
 | Grade and cert into a vault case | ❓ Open | A follow-on; the vault reads the record from the submission page meanwhile | Product |
 | Retention | ❓ Open | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the submission's end event; no identity class; a live submission blocks an erasure as a live case does | Legal |
 :::

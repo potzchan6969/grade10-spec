@@ -633,7 +633,7 @@ Runs once per row of **Test data**.
 
 * The pickup card shows a four-digit code, the shop's hours, and that no booking is needed.
 
-### grade10-site-grading-submission-lifecycle-US6-TC2-1: Above the ID-glance threshold, the page asks the collector to bring an ID
+### grade10-site-grading-submission-lifecycle-US6-TC2-1: At the ID-glance threshold the page asks for no ID, above it it asks for one
 
 **Classification:**
 
@@ -651,16 +651,17 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * The collector is on <grade10 grading submission page url> for a submission at Ready with a total declared value of 1000000 (HKD, minor units).
+* The same collector holds a second submission at Ready with a total declared value of 1000100 (HKD, minor units).
 
 **Steps:**
 
-1. Load the submission page.
+1. Load the submission page of the submission declared at 1000000.
+2. Load the submission page of the submission declared at 1000100.
 
 **Expected Results:**
 
-* The pickup card names bringing an ID matching the collector's name.
-
-**Blocked:** Operations - whether a submission declared at exactly HKD 10,000 asks for the ID glance. `decisions.md` Q12 names the figure and not the side it falls on; this case puts the threshold figure on the ID side and the requirement puts it on the no-ID side.
+* At exactly 1000000 the pickup card's Bring line shows nothing: above the threshold is more than the figure, never the figure itself.
+* At 1000100 the pickup card names bringing an ID matching the collector's name.
 
 ### grade10-site-grading-submission-lifecycle-US6-TC3-1: Below the ID-glance threshold, the page asks the collector to bring nothing
 
@@ -1358,7 +1359,7 @@ Runs once per row of **Test data**.
 | `US1-TC6-1` a failed load shows an error to retry | No scenario: presentation | Loading and error are the view's states; the `ui-design.md` rows close as `**Out of suite:** the view's colocated test`, and the case stays as their guard |
 | Raised: what does the status do once every card is withdrawn before the batch closes? | Folded in | `grade10-site-grading-submission-lifecycle-SC-54` - the last withdrawal cancels the submission and the collector is told; landed as `decisions.md` Q81. Case `US2-TC4-1` added |
 | `US4-TC2-1` no card moved up shows no upcharge line | Reached | The empty case of `grade10-site-grading-submission-lifecycle-SC-23`; `grade10-site-grading-submission-lifecycle-SC-27` states what the page shows when nothing is due. No new rule |
-| `US6-TC2-1` the ID glance at exactly HKD 10,000 declared | Contradiction, raised | The case puts the threshold figure on the ID side, the requirement puts it on the no-ID side, and `decisions.md` Q12 names the figure without naming the side. Not resolved here: the case stays `draft` with `**Blocked:** Operations`, and the raised row lands as ❓ Operations on `docs/prds/products/grade10-site/grading/submission.md` |
+| `US6-TC2-1` the ID glance at exactly HKD 10,000 declared | **Covered by `grade10-site-grading-submission-lifecycle-SC-28` and `grade10-site-grading-submission-lifecycle-SC-29`, corrected** | Above the threshold is more than the figure, so a submission declared at exactly 1000000 HKD minor units is released on the code and the name. The case now reads the figure on the no-ID side and the sum above it on the ID side, and `decisions.md` carries the rule as Q85 |
 | `US7-TC2-1` an empty name cannot be saved | Folded in | `grade10-site-grading-submission-lifecycle-SC-55` |
 | `US7-TC4-1` removing the named person | Folded in | `grade10-site-grading-submission-lifecycle-SC-56` - the requirement allowed the removal and no scenario walked it |
 | Raised: does the uncollected ladder pause once a visit is booked or a collector named? | Folded in | `grade10-site-grading-submission-lifecycle-SC-57` - it keeps counting, and only collection, vaulting or a payout takes a card off it; landed as `decisions.md` Q83. Case `US8-TC6-1` added |
