@@ -54,6 +54,12 @@ See [Non-Goals](decisions.md#non-goals).
 - No change to the signed-in-mismatch toast (SC-63–69), the resend cap, or
   the link's five-minute lifetime.
 
+No domain impact: `shared-auth-sign-in-US-10` composes with no other
+`shared/auth` capability the way `US-08`'s same-device carry-on does (session,
+sign-out, users, audit) — it ends in the waiting surface showing a toast and
+gaining no session, so there is no new cross-capability path for
+`domain-tcs.md` to trace.
+
 ## References
 
 - [Sign-In · Following the Link](../../../docs/prds/products/shared/auth/sign-in.md#following-the-link)
