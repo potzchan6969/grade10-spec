@@ -612,29 +612,29 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Views (`GA1`) | seven `Choice`s with counts; newest touched first, 50 a page; `CursorPager` | `grade10-admin-grading-counter-US-01` |
-| Today strip | the day's drop-offs in slot order: time, collector, id, cards, grader; the pickups-walk-in line | `grade10-admin-grading-counter-US-01` |
-| Rows | id, collector, cards, grader · level, the status word, visit, last touched, waiting on | `grade10-admin-grading-counter-US-01` |
-| Badge: Visit today | the submission's drop-off falls today | `grade10-admin-grading-counter-US-01` |
-| Badge: Batch closes today | the submission is handed in and its batch's cut-off is today | `grade10-admin-grading-counter-US-01` |
-| Badge: Due back | the batch's estimated day back has come | `grade10-admin-grading-batches-US-04` |
-| Badge: Running late | the batch is past its estimated day back | `grade10-admin-grading-batches-US-04` |
-| Badge: Upcharge to settle | a card moved up a level and the difference is unpaid | `grade10-admin-grading-counter-US-10` |
-| Badge: Ungraded card | a card came back with no grade | `grade10-admin-grading-counter-US-10` |
-| Badge: Unchecked return | the batch has been back a day and is not received | `grade10-admin-grading-batches-US-02` |
-| Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-US-12` |
-| Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-US-12` |
-| Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-US-12` |
-| Badge: Payout past its window | a payout owed and unmade past the settlement window from the day the batch was received — ❓ Operations the window | `grade10-admin-grading-counter-US-09` |
-| Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-site-grading-collector-notifications-SC-17` |
-| Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-batches-US-05` |
-| Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-batches-US-05` |
-| Tile: Ready, uncollected | the count and how many past 30 days | `grade10-admin-grading-counter-US-12` |
-| Tile: To settle | the sum and the count of upcharges | `grade10-admin-grading-counter-US-10` |
-| Empty view | `EmptyState` in the view | `grade10-admin-grading-counter-US-01` |
-| Loading | the console's async status line | `grade10-admin-grading-counter-US-01` |
-| Error | the console's async status line, retry | `grade10-admin-grading-counter-US-01` |
-| Read grant | no row action past Open | `grade10-admin-grading-counter-US-14` |
+| Views (`GA1`) | seven `Choice`s with counts; newest touched first, 50 a page; `CursorPager` | `grade10-admin-grading-counter-SC-02`, `grade10-admin-grading-counter-SC-04` |
+| Today strip | the day's drop-offs in slot order: time, collector, id, cards, grader; the pickups-walk-in line | `grade10-admin-grading-counter-SC-85` |
+| Rows | id, collector, cards, grader · level, the status word, visit, last touched, waiting on | `grade10-admin-grading-counter-SC-86` |
+| Badge: Visit today | the submission's drop-off falls today | `grade10-admin-grading-counter-SC-06` |
+| Badge: Batch closes today | the submission is handed in and its batch's cut-off is today | `grade10-admin-grading-counter-SC-10` |
+| Badge: Due back | the batch's estimated day back has come | `grade10-admin-grading-counter-SC-10` |
+| Badge: Running late | the batch is past its estimated day back | `grade10-admin-grading-counter-SC-10` |
+| Badge: Upcharge to settle | a card moved up a level and the difference is unpaid | `grade10-admin-grading-counter-SC-10` |
+| Badge: Ungraded card | a card came back with no grade | `grade10-admin-grading-counter-SC-10` |
+| Badge: Unchecked return | the batch has been back a day and is not received | `grade10-admin-grading-counter-SC-10` |
+| Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-SC-07` |
+| Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-SC-10` |
+| Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-SC-08` |
+| Badge: Payout past its window | a payout owed and unmade past the settlement window from the day the batch was received — ❓ Operations the window | `grade10-admin-grading-counter-SC-09` |
+| Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-admin-grading-counter-SC-11` |
+| Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-counter-SC-87` |
+| Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-counter-SC-87` |
+| Tile: Ready, uncollected | the count and how many past 30 days | `grade10-admin-grading-counter-SC-12` |
+| Tile: To settle | the sum and the count of upcharges | `grade10-admin-grading-counter-SC-13` |
+| Empty view | `EmptyState` in the view | `grade10-admin-grading-counter-SC-05` |
+| Loading | the console's async status line | **Out of suite:** the panel's colocated test |
+| Error | the console's async status line, retry | **Out of suite:** the panel's colocated test |
+| Read grant | no row action past Open | `grade10-admin-grading-counter-SC-75` |
 
 ### Hand-in runbook
 
@@ -642,35 +642,35 @@ Stories `grading-admin-intake-intake-runbook--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Header (`GA2`) | the summary, the id, the status word, declared in total, the visit in progress at the desk; the drop-off card with Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-US-02` |
-| Visit not started | step 1 offers Start at the desk; the rest wait | `grade10-admin-grading-counter-US-02` |
-| Walk-in | no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-US-02` |
-| Second submission on the visit | the other submission named under the visit; each runs its own runbook | `grade10-site-grading-dropoff-booking-US-04` |
-| Cards table | per row: the card, declared with its reference, Present, Condition, the level check, Refuse; the photograph pair | `grade10-admin-grading-counter-US-02` |
-| Card present | Present ticked; the photograph pair taken | `grade10-admin-grading-counter-US-02` |
-| Card, condition noted | the note as typed in place of Nothing noted | `grade10-admin-grading-counter-US-02` |
-| Level check | every declared value inside the ceiling: the banner | `grade10-admin-grading-counter-US-02` |
-| Level check failed | a card above the ceiling: the row marked; move to a second submission or refuse | `grade10-admin-grading-counter-US-03` |
-| Card added | a card not on the list added with the collector, one at a time | `grade10-admin-grading-counter-US-02` |
-| Card refused | the row struck with the reason; the fee and the receipt drop | `grade10-admin-grading-counter-US-03` |
-| Fee (`GA2`) | cards × fee, the fee, declared in total, insured to | `grade10-admin-grading-counter-US-02` |
-| Fee with cover | the cover line per card and in total | `grade10-admin-grading-counter-US-02` |
-| Sign, not mintable | a card unchecked: the reason on the step | `grade10-admin-grading-counter-US-11` |
-| Sign, mintable | Show on iPad and Copy link; the 30-minute line | `grade10-admin-grading-counter-US-11` |
-| Sign, link shown | the link and its timer | `grade10-admin-grading-counter-US-11` |
-| Sign, declined | the decline on the step; mint again | `grade10-site-grading-counter-documents-US-02` |
-| Sign, sealed | the seal's instant and fingerprint | `grade10-admin-grading-counter-US-02` |
-| Mint refused in production | a fact unset: the refusal naming it | `grade10-admin-grading-counter-US-11` |
-| Take payment, waiting | disabled until the agreement is sealed | `grade10-admin-grading-counter-US-02` |
-| Take payment | the till opens with one line per card and the cover lines | `grade10-admin-grading-counter-US-02` |
-| Paid | the order written back by line with its reference | `grade10-admin-grading-counter-US-02` |
-| Refused after payment | the line refunded at the till | `grade10-admin-grading-counter-US-03` |
-| No paid line | check in refused: the submission stays booked, the seal stands, the cards go home; run the till again or rebook | `grade10-admin-grading-counter-US-02` |
-| Safe full | check in refused past the cap: the line and Book the next drop-off | `grade10-admin-grading-batches-US-05` |
-| Labels and check in | Print n labels and check in; the receipt email goes | `grade10-admin-grading-counter-US-02` |
-| Checked in | the runbook closed; the submission at Handed in | `grade10-admin-grading-counter-US-02` |
-| Read grant | the runbook with no button | `grade10-admin-grading-counter-US-14` |
-| Stale | an act refused because the submission moved; the page reads again | `grade10-admin-grading-counter-US-14` |
+| Header (`GA2`) | the summary, the id, the status word, declared in total, the visit in progress at the desk; the drop-off card with Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-SC-14` |
+| Visit not started | step 1 offers Start at the desk; the rest wait | `grade10-admin-grading-counter-SC-14` |
+| Walk-in | no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-SC-15` |
+| Second submission on the visit | the other submission named under the visit; each runs its own runbook | `grade10-admin-grading-counter-SC-21` |
+| Cards table | per row: the card, declared with its reference, Present, Condition, the level check, Refuse; the photograph pair | `grade10-admin-grading-counter-SC-16` |
+| Card present | Present ticked; the photograph pair taken | `grade10-admin-grading-counter-SC-16` |
+| Card, condition noted | the note as typed in place of Nothing noted | `grade10-admin-grading-counter-SC-16` |
+| Level check | every declared value inside the ceiling: the banner | `grade10-admin-grading-counter-SC-88` |
+| Level check failed | a card above the ceiling: the row marked; move to a second submission or refuse | `grade10-admin-grading-counter-SC-17` |
+| Card added | a card not on the list added with the collector, one at a time | `grade10-admin-grading-counter-SC-15` |
+| Card refused | the row struck with the reason; the fee and the receipt drop | `grade10-admin-grading-counter-SC-25` |
+| Fee (`GA2`) | cards × fee, the fee, declared in total, insured to | `grade10-admin-grading-counter-SC-19` |
+| Fee with cover | the cover line per card and in total | `grade10-admin-grading-counter-SC-19` |
+| Sign, not mintable | a card unchecked: the reason on the step | `grade10-admin-grading-counter-SC-42` |
+| Sign, mintable | Show on iPad and Copy link; the 30-minute line | `grade10-admin-grading-counter-SC-45` |
+| Sign, link shown | the link and its timer | `grade10-admin-grading-counter-SC-45` |
+| Sign, declined | the decline on the step; mint again | `grade10-admin-grading-counter-SC-47` |
+| Sign, sealed | the seal's instant and fingerprint | `grade10-admin-grading-counter-SC-48` |
+| Mint refused in production | a fact unset: the refusal naming it | `grade10-admin-grading-counter-SC-46` |
+| Take payment, waiting | disabled until the agreement is sealed | `grade10-admin-grading-counter-SC-18` |
+| Take payment | the till opens with one line per card and the cover lines | `grade10-admin-grading-counter-SC-19` |
+| Paid | the order written back by line with its reference | `grade10-admin-grading-counter-SC-19` |
+| Refused after payment | the line refunded at the till | `grade10-admin-grading-counter-SC-27` |
+| No paid line | check in refused: the submission stays booked, the seal stands, the cards go home; run the till again or rebook | `grade10-admin-grading-counter-SC-23` |
+| Safe full | check in refused past the cap: the line and Book the next drop-off | `grade10-admin-grading-counter-SC-24` |
+| Labels and check in | Print n labels and check in; the receipt email goes | `grade10-admin-grading-counter-SC-20` |
+| Checked in | the runbook closed; the submission at Handed in | `grade10-admin-grading-counter-SC-20` |
+| Read grant | the runbook with no button | `grade10-admin-grading-counter-SC-75` |
+| Stale | an act refused because the submission moved; the page reads again | `grade10-admin-grading-counter-SC-84` |
 
 ### Refuse a card
 
@@ -678,12 +678,12 @@ Stories `grading-admin-intake-refuse-card-dialog--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Open (`GA7`) | the card and the submission; three reasons; the collector's-words field with its hint; the consequence `Notice`; Keep it on the list, Refuse this card | `grade10-admin-grading-counter-US-03` |
-| Nothing picked | Refuse disabled until a reason and the words | `grade10-admin-grading-counter-US-03` |
-| After payment | the `Notice` adds the refund line | `grade10-admin-grading-counter-US-03` |
-| Last card | refusing the last card: the `Notice` says the submission has no card left — ❓ what the submission becomes, flagged below | `grade10-admin-grading-counter-US-03` |
-| Refusing | pending | `grade10-admin-grading-counter-US-03` |
-| Refused by the worker | the refusal by name in the dialog | `grade10-admin-grading-counter-US-14` |
+| Open (`GA7`) | the card and the submission; three reasons; the collector's-words field with its hint; the consequence `Notice`; Keep it on the list, Refuse this card | `grade10-admin-grading-counter-SC-25` |
+| Nothing picked | Refuse disabled until a reason and the words | `grade10-admin-grading-counter-SC-26` |
+| After payment | the `Notice` adds the refund line | `grade10-admin-grading-counter-SC-27` |
+| Last card | refusing the last card: the `Notice` says the submission has no card left, and the counter cancels the submission at the desk | `grade10-admin-grading-counter-SC-89` |
+| Refusing | pending | **Out of suite:** the panel's colocated test |
+| Refused by the worker | the refusal by name in the dialog | `grade10-admin-grading-counter-SC-84` |
 
 ### Batches
 
@@ -746,28 +746,28 @@ Stories `grading-admin-handback-handback-runbook--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Header (`GA6`) | the summary, the id, Ready to collect, declared, ready since, to settle; the pickup block: walk-in, nothing in the diary | `grade10-admin-grading-counter-US-04` |
-| Who is collecting | the code field and the name; the declared total against the threshold | `grade10-admin-grading-counter-US-04` |
-| Code matched | the collector in person; the ID line above the threshold, nothing kept | `grade10-admin-grading-counter-US-04` |
-| Below the threshold | no ID line; the code and the name release | `grade10-admin-grading-counter-US-04` |
-| Wrong code | refused on the field | `grade10-admin-grading-counter-US-05` |
-| Named person (`G18`) | the named person read from the page; the receipt names them | `grade10-admin-grading-counter-US-05` |
-| Somebody else | turned away, code or no code; no override; the name-from-the-page line | `grade10-admin-grading-counter-US-05` |
-| Settle | the upcharge and the storage lines; Take payment | `grade10-admin-grading-counter-US-04` |
-| Nothing due | the step ticked with nothing to take | `grade10-admin-grading-counter-US-04` |
-| Settled | the paid line with its reference | `grade10-admin-grading-counter-US-04` |
-| Items (`GA6`) | per row: the item, cert, outcome, Handed over; Vault instead on a slab | `grade10-admin-grading-counter-US-04` |
-| Item ticked | handed over and inspected; the slab photographed | `grade10-admin-grading-counter-US-04` |
-| Item held by the grader | the row reads still out; not tickable | `grade10-admin-grading-counter-US-04` |
-| Sign, refused | something due or an item unticked: the reason on the step, before the iPad; what is due is fixed as the receipt is minted | `grade10-admin-grading-counter-US-11` |
-| Sign, mintable | Show on iPad, Copy link; the 30-minute line | `grade10-admin-grading-counter-US-11` |
-| Sign, declined | the decline; nothing handed back | `grade10-site-grading-counter-documents-US-02` |
-| Hand over | the receipt sealed on the iPad, then Hand over on the step: the packet goes over the counter and the submission reads Back with you; the record stays | `grade10-admin-grading-counter-US-04` |
-| Second hand-back | the held card back: the rest already collected; one item; Close | `grade10-admin-grading-counter-US-04` |
-| Money (`GA6`) | paid at hand-in, due now, storage from the day | `grade10-admin-grading-counter-US-04` |
-| Vault, waiting | Open a vault case disabled until the balance is settled | `grade10-admin-grading-counter-US-06` |
-| Vault | the slab handed to the vault; the case opened; the receipt says so | `grade10-admin-grading-counter-US-06` |
-| Read grant | the runbook with no button | `grade10-admin-grading-counter-US-14` |
+| Header (`GA6`) | the summary, the id, Ready to collect, declared, ready since, to settle; the pickup block: walk-in, nothing in the diary | `grade10-admin-grading-counter-SC-29` |
+| Who is collecting | the code field and the name; the declared total against the threshold | `grade10-admin-grading-counter-SC-29` |
+| Code matched | the collector in person; the ID line above the threshold, nothing kept | `grade10-admin-grading-counter-SC-30` |
+| Below the threshold | no ID line; the code and the name release | `grade10-admin-grading-counter-SC-31` |
+| Wrong code | refused on the field | `grade10-admin-grading-counter-SC-37`, `grade10-admin-grading-counter-SC-91` |
+| Named person (`G18`) | the named person read from the page; the receipt names them | `grade10-admin-grading-counter-SC-38` |
+| Somebody else | turned away, code or no code; no override; the name-from-the-page line | `grade10-admin-grading-counter-SC-39` |
+| Settle | the upcharge and the storage lines; Take payment | `grade10-admin-grading-counter-SC-32` |
+| Nothing due | the step ticked with nothing to take | `grade10-admin-grading-counter-SC-33` |
+| Settled | the paid line with its reference | `grade10-admin-grading-counter-SC-32` |
+| Items (`GA6`) | per row: the item, cert, outcome, Handed over; Vault instead on a slab | `grade10-admin-grading-counter-SC-33` |
+| Item ticked | handed over and inspected; the slab photographed | `grade10-admin-grading-counter-SC-33` |
+| Item held by the grader | the row reads still out; not tickable | `grade10-admin-grading-counter-SC-34` |
+| Sign, refused | something due or an item unticked: the reason on the step, before the iPad; what is due is fixed as the receipt is minted | `grade10-admin-grading-counter-SC-43`, `grade10-admin-grading-counter-SC-44` |
+| Sign, mintable | Show on iPad, Copy link; the 30-minute line | `grade10-admin-grading-counter-SC-45` |
+| Sign, declined | the decline; nothing handed back | `grade10-admin-grading-counter-SC-47` |
+| Hand over | the receipt sealed on the iPad, then Hand over on the step: the packet goes over the counter and the submission reads Back with you; the record stays | `grade10-admin-grading-counter-SC-35` |
+| Second hand-back | the held card back: the rest already collected; one item; Close | `grade10-admin-grading-counter-SC-36`, `grade10-admin-grading-counter-SC-90` |
+| Money (`GA6`) | paid at hand-in, due now, storage from the day | `grade10-admin-grading-counter-SC-52` |
+| Vault, waiting | Open a vault case disabled until the balance is settled | `grade10-admin-grading-counter-SC-41` |
+| Vault | the slab handed to the vault; the case opened; the receipt says so | `grade10-admin-grading-counter-SC-40` |
+| Read grant | the runbook with no button | `grade10-admin-grading-counter-SC-75` |
 
 ### One submission
 
@@ -775,29 +775,29 @@ Stories `grading-admin-submission-submission-panel--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Header (`GA3`) | the summary, the id, the status word, declared, upcharge to settle, ungraded card, the batch; the collector block with email, phone, WhatsApp and the templates | `grade10-admin-grading-counter-US-10` |
-| Pickup block | no visit needed, ready once checked in, walk-in with the code, a named person may collect | `grade10-admin-grading-counter-US-10` |
-| Drop-off block | the visit, the desk, Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-US-02` |
-| Cards tab (`GA3`) | per card intake id, declared, level and the one moved to, grade · cert, outcome | `grade10-admin-grading-counter-US-10` |
-| Withdraw a card | offered per card at Handed in until the batch closes; `WithdrawCardDialog`: the refund and the receipt | `grade10-admin-grading-counter-US-07` |
-| Withdraw gone | the batch closed: the act absent | `grade10-admin-grading-counter-US-07` |
-| Money tab | paid at hand-in with the POS reference, the upcharge, storage, to settle, refunds, payouts | `grade10-admin-grading-counter-US-10` |
-| Record a settlement | `SettlementDialog`: the line and the till's reference | `grade10-admin-grading-counter-US-10` |
-| Waive the upcharge | `WaiveUpchargeDialog`: the reason, the second approve holder | `grade10-admin-grading-counter-US-08` |
-| Waive, cards not back | the act absent until the cards are back | `grade10-admin-grading-counter-US-08` |
-| Second person is the recorder | refused by name in the dialog | `grade10-admin-grading-counter-US-08` |
-| Payout | `PayoutDialog`: declared value, the fee refunded, the route, the window, the second person | `grade10-admin-grading-counter-US-09` |
-| Payout reversed | the reversal on the record; the card back | `grade10-admin-grading-counter-US-09` |
-| Payout past the window | the window passed marked on the dialog | `grade10-admin-grading-counter-US-09` |
-| Documents tab | the three with fingerprints; Show on iPad, Copy link, Send again | `grade10-admin-grading-counter-US-11` |
-| Documents, none yet | before hand-in: nothing sealed | `grade10-admin-grading-counter-US-11` |
-| Send again | the letter re-sent; the grades email the same | `grade10-admin-grading-counter-US-11` |
-| Message not sent | the failed letter flagged with its reason; Send again | `grade10-site-grading-collector-notifications-SC-17`, `grade10-site-grading-collector-notifications-SC-18` |
-| Timeline tab | every event with its figures, the grader's stages in its words, staff-only entries marked | `grade10-admin-grading-counter-US-13` |
-| Actions by status (`GA3`) | only the status's acts; Cancel absent once the cards have left | `grade10-admin-grading-counter-US-14` |
-| Stale | an act refused because the submission moved; the panel reads again | `grade10-admin-grading-counter-US-14` |
-| Read grant | the tabs with no act | `grade10-admin-grading-counter-US-14` |
-| Not found | the console's not-found line | `grade10-admin-grading-counter-US-10` |
+| Header (`GA3`) | the summary, the id, the status word, declared, upcharge to settle, ungraded card, the batch; the collector block with email, phone, WhatsApp and the templates | `grade10-admin-grading-counter-SC-50` |
+| Pickup block | no visit needed, ready once checked in, walk-in with the code, a named person may collect | `grade10-admin-grading-counter-SC-38` |
+| Drop-off block | the visit, the desk, Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-SC-14` |
+| Cards tab (`GA3`) | per card intake id, declared, level and the one moved to, grade · cert, outcome | `grade10-admin-grading-counter-SC-51` |
+| Withdraw a card | offered per card at Handed in until the batch closes; `WithdrawCardDialog`: the refund and the receipt | `grade10-admin-grading-counter-SC-54` |
+| Withdraw gone | the batch closed: the act absent | `grade10-admin-grading-counter-SC-55` |
+| Money tab | paid at hand-in with the POS reference, the upcharge, storage, to settle, refunds, payouts | `grade10-admin-grading-counter-SC-52` |
+| Record a settlement | `SettlementDialog`: the line and the till's reference | `grade10-admin-grading-counter-SC-32` |
+| Waive the upcharge | `WaiveUpchargeDialog`: the reason, the second approve holder | `grade10-admin-grading-counter-SC-59` |
+| Waive, cards not back | the act absent until the cards are back | `grade10-admin-grading-counter-SC-61` |
+| Second person is the recorder | refused by name in the dialog | `grade10-admin-grading-counter-SC-60` |
+| Payout | `PayoutDialog`: declared value, the fee refunded, the route, the window, the second person | `grade10-admin-grading-counter-SC-62` |
+| Payout reversed | the reversal on the record; the card back | `grade10-admin-grading-counter-SC-64` |
+| Payout past the window | the window passed marked on the dialog | `grade10-admin-grading-counter-SC-97` |
+| Documents tab | the three with fingerprints; Show on iPad, Copy link, Send again | `grade10-admin-grading-counter-SC-48` |
+| Documents, none yet | before hand-in: nothing sealed | `grade10-admin-grading-counter-SC-93` |
+| Send again | the letter re-sent; the grades email the same | `grade10-admin-grading-counter-SC-49` |
+| Message not sent | the failed letter flagged with its reason; Send again | `grade10-admin-grading-counter-SC-11` |
+| Timeline tab | every event with its figures, the grader's stages in its words, staff-only entries marked | `grade10-admin-grading-counter-SC-56` |
+| Actions by status (`GA3`) | only the status's acts; Cancel absent once the cards have left | `grade10-admin-grading-counter-SC-82`, `grade10-admin-grading-counter-SC-83` |
+| Stale | an act refused because the submission moved; the panel reads again | `grade10-admin-grading-counter-SC-84` |
+| Read grant | the tabs with no act | `grade10-admin-grading-counter-SC-75` |
+| Not found | the console's not-found line | `grade10-admin-grading-counter-SC-94` |
 
 ### Written notice
 
@@ -805,11 +805,11 @@ Stories `grading-admin-notice-post-notice-dialog--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Notice due | the badge on the Ready view and the submission; Post the notice | `grade10-admin-grading-counter-US-12` |
-| Post the notice | `PostNoticeDialog`: the address from the agreement, posting date, tracking; the email goes the same day | `grade10-admin-grading-counter-US-12` |
-| Incomplete | Record disabled naming the field | `grade10-admin-grading-counter-US-12` |
-| Posted | the posting date and tracking on the timeline; the 30 days counted from it | `grade10-admin-grading-counter-US-12` |
-| After the 30 days | nothing more offered; storage accrues | `grade10-admin-grading-counter-US-12` |
+| Notice due | the badge on the Ready view and the submission; Post the notice | `grade10-admin-grading-counter-SC-65` |
+| Post the notice | `PostNoticeDialog`: the address from the agreement, posting date, tracking; the email goes the same day | `grade10-admin-grading-counter-SC-66` |
+| Incomplete | Record disabled naming the field | `grade10-admin-grading-counter-SC-66` |
+| Posted | the posting date and tracking on the timeline; the 30 days counted from it | `grade10-admin-grading-counter-SC-67` |
+| After the 30 days | nothing more offered; storage accrues | `grade10-admin-grading-counter-SC-68` |
 
 ### Settings
 
@@ -817,14 +817,14 @@ Stories `grading-admin-settings-settings-panel--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Table | every setting with its default, its owner and the pinned line | `grade10-admin-grading-counter-US-15` |
-| Fee sheet | one row per grader and level: ceiling, fee, cover rate, weeks, cards a submission | `grade10-admin-grading-counter-US-15` |
-| Diary services | the three entries with their durations | `grade10-admin-grading-counter-US-15` |
-| Edit a clock | `SaveableField`; saved under the settings subject | `grade10-admin-grading-counter-US-15` |
-| Edit a money setting | the second-person dialog with the reason | `grade10-admin-grading-counter-US-15` |
-| Refused | the refusal by name on the field | `grade10-admin-grading-counter-US-15` |
-| Operate grant | the table read-only; no field opens | `grade10-admin-grading-counter-US-14` |
-| Fact unset | a bracketed value marked; the readiness line naming its owner | `grade10-admin-grading-counter-US-15` |
+| Table | every setting with its default, its owner and the pinned line | `grade10-admin-grading-counter-SC-99` |
+| Fee sheet | one row per grader and level: ceiling, fee, cover rate, weeks, cards a submission | `grade10-admin-grading-counter-SC-99` |
+| Diary services | the three entries with their durations | `grade10-admin-grading-counter-SC-99` |
+| Edit a clock | `SaveableField`; saved under the settings subject | `grade10-admin-grading-counter-SC-71` |
+| Edit a money setting | the second-person dialog with the reason | `grade10-admin-grading-counter-SC-70` |
+| Refused | the refusal by name on the field | `grade10-admin-grading-counter-SC-60` |
+| Operate grant | the table read-only; no field opens | `grade10-admin-grading-counter-SC-76` |
+| Fact unset | a bracketed value marked; the readiness line naming its owner | `grade10-admin-grading-counter-SC-98` |
 
 ## Flags
 
@@ -870,7 +870,7 @@ Stories `grading-admin-settings-settings-panel--`.
   journey for each, or the requirements pass states them out of suite
 - **The last card refused** — the counter cancels the submission and tells
   the collector there; no message sends, nothing was paid and nothing is
-  owed (`decisions.md`, the last card refused at the counter;
+  owed (`decisions.md` Q75;
   `grade10-site-grading-submission-lifecycle-SC-58` and
   `grade10-admin-grading-counter-SC-89`)
 - **❓ Tech design** — the wizard's and the booking's addresses under
