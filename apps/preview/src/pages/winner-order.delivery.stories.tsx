@@ -91,6 +91,8 @@ export const ProcessingOverpaid: Story = {
     expect(dialog.getByText("Transfer to")).toBeVisible();
     expect(dialog.getByLabelText("Bank")).toBeVisible();
     expect(dialog.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(dialog.getByText("Reference")).toBeVisible();
+    expect(dialog.getByText("G10-RF-LK7P2Q")).toBeVisible();
   },
 };
 

@@ -21,12 +21,17 @@ export type WinnerOrderRefundCardTransfer = {
   maskedNumber: string;
 };
 
-/** Bank refund destination — bank name and masked account. */
+/** Bank refund destination — bank name, masked account and statement reference. */
 export type WinnerOrderRefundBankTransfer = {
   kind: "bank_transfer";
   bankName: string;
   /** Masked account — e.g. `···· 8891`. */
   maskedAccount: string;
+  /**
+   * Provider reference the operator entered — shown so the winner can match
+   * the credit on their statement (Q21). Card refunds omit this.
+   */
+  reference: string;
 };
 
 export type WinnerOrderRefundTransfer =
@@ -51,14 +56,20 @@ type WinnerOrderRefundDialogProps = {
 };
 
 /**
- * Winner-facing refund detail — reason, note and Transfer to destination.
- * Proof, provider reference and audit number stay with the operator.
+ * Winner-facing refund detail — amount, Transfer to, reason and note.
+ * A bank refund also shows its provider reference. Proof, Stripe reference
+ * and audit number stay with the operator.
  */
 function WinnerOrderRefundDialog({
   open,
   onOpenChange,
   refund,
 }: WinnerOrderRefundDialogProps) {
+  const bankReference =
+    refund.transfer.kind === "bank_transfer"
+      ? refund.transfer.reference
+      : null;
+
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="sm:max-w-md">
@@ -68,9 +79,12 @@ function WinnerOrderRefundDialog({
         <DialogBody>
           <VStack className="w-full" gap="md" hAlign="stretch">
             <DetailRow label="Amount" value={refund.amount} />
+            <TransferTo transfer={refund.transfer} />
+            {bankReference ? (
+              <DetailRow label="Reference" value={bankReference} />
+            ) : null}
             <DetailRow label="Reason" value={refund.reason} />
             <DetailRow label="Note" value={refund.note} />
-            <TransferTo transfer={refund.transfer} />
           </VStack>
         </DialogBody>
         <DialogFooter>

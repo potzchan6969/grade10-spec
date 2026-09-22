@@ -94,6 +94,7 @@ export const Refunded: Story = {
     expect(dialog.getByText("Transfer to")).toBeVisible();
     expect(dialog.getByLabelText("Visa")).toBeVisible();
     expect(dialog.getByText("···· 4242")).toBeVisible();
+    expect(dialog.queryByText("Reference")).not.toBeInTheDocument();
     expect(
       canvas.queryByText("Order refunded. Payment on this order was returned."),
     ).not.toBeInTheDocument();

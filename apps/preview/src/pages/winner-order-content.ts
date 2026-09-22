@@ -86,8 +86,9 @@ export type WinnerOrderContent = {
   /**
    * Refund below Order Total — inline alert amount, details in a dialog.
    * Amount is positive; the word Refund carries the direction.
-   * Proof, provider reference and audit number stay with the operator.
    * Transfer to shows card payment marks or bank name + masked account (Q20).
+   * A bank refund also carries its provider reference (Q21). Proof, Stripe
+   * reference and audit number stay with the operator.
    */
   refund?: {
     /** Positive amount — e.g. `HK$16,140`. */
@@ -223,6 +224,7 @@ export const WINNER_ORDER_REFUND_OVERPAID = {
     kind: "bank_transfer",
     bankName: "HSBC",
     maskedAccount: "···· 8891",
+    reference: "G10-RF-LK7P2Q",
   },
 } as const;
 
