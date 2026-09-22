@@ -967,6 +967,21 @@ export const AmountRolling: Story = {
   },
 };
 
+export const ConfirmingCartUpdate: Story = {
+  args: { checkoutDisabled: true, onCheckout: fn() },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const checkout = canvas.getByRole("button", {
+      name: "Proceed to Checkout",
+    });
+    expect(checkout).toBeDisabled();
+    expect(canvas.getByText("Subtotal")).toBeVisible();
+    expect(canvas.getAllByText("HK$42,700.00")).toHaveLength(2);
+    checkout.click();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
 /** Boneyard skeleton loading state for summary amounts during fetching */
 export const Loading: Story = {
   args: {

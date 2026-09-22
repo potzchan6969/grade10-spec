@@ -574,6 +574,7 @@ type CartDrawerFooterProps = {
   estimatedTotal: ReactNode;
   shippingEstimate?: ReactNode;
   loading?: boolean;
+  checkoutDisabled?: boolean;
   promoState?: PromoState;
   /**
    * When set, shown once as a toast (e.g. promo cleared after the cart
@@ -624,6 +625,7 @@ function CartDrawerFooter({
   estimatedTotal,
   shippingEstimate,
   loading = false,
+  checkoutDisabled = false,
   promoState = { status: "collapsed" },
   promoNotice,
   pointsState = null,
@@ -766,7 +768,7 @@ function CartDrawerFooter({
   };
 
   const handleCheckout = async () => {
-    if (loading || isRedirecting) return;
+    if (loading || checkoutDisabled || isRedirecting) return;
     setIsRedirecting(true);
     try {
       await onCheckout?.();
@@ -1003,7 +1005,7 @@ function CartDrawerFooter({
       <Button
         size="lg"
         variant="default"
-        disabled={loading || isRedirecting}
+        disabled={loading || checkoutDisabled || isRedirecting}
         loading={isRedirecting}
         onClick={handleCheckout}
         className="w-full"
@@ -1228,6 +1230,8 @@ type CartDrawerProps = {
   shippingEstimate?: ReactNode;
   copy: CartDrawerCopy;
   loading?: boolean;
+  /** Keep the cart visible while the consumer confirms an update. */
+  checkoutDisabled?: boolean;
   onFetchStatusAndPrice?: () => Promise<void> | void;
   promoState?: PromoState;
   /** Live held codes only — omit expired/void; filtering is consumer-owned. */
@@ -1293,6 +1297,7 @@ function CartDrawer({
   copy,
   loading,
   onFetchStatusAndPrice,
+  checkoutDisabled,
   promoState,
   heldPromoCodes,
   selectedHeldPromoId,
@@ -1444,6 +1449,7 @@ function CartDrawer({
               estimatedTotal={estimatedTotal}
               shippingEstimate={shippingEstimate}
               loading={isLoading}
+              checkoutDisabled={checkoutDisabled}
               promoState={promoState}
               promoNotice={promoNotice}
               pointsState={pointsState}
