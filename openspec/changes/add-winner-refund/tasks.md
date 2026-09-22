@@ -16,7 +16,7 @@
 
 - [x] 4.1 Add the operator refund form, stock choice, queue filter and detail record.
 - [x] 4.2 Render Refunded Winner Order with retained invoice and receipts and no self-service actions (`winner-order-SC-157`).
-- [x] 4.3 Render Transfer to with `PaymentMethodCard`: card brand and last four digits, or bank name and last four digits (`winner-order-SC-172`, `winner-order-SC-173`).
+- [x] 4.3 Render Transfer to with `PaymentMethodCard`: card brand and last four digits, or bank name and last four digits; stack Amount, Transfer to, Reference (bank only), Reason, Note; bank refunds show Reference with the provider reference (`winner-order-SC-172`, `winner-order-SC-173`).
 
 ## 5. Verification (owner: @htonyl)
 
