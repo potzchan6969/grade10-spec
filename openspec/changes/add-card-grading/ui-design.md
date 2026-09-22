@@ -578,9 +578,9 @@ One row per letter, its kind, and the blocks it carries after the lead.
 
 | Letter | Kind | Board | Blocks after the lead | Preview | Anchor |
 | --- | --- | --- | --- | --- | --- |
-| The plan's link | `plan_saved` | `M13` | facts cards · estimate · kept until; the not-sent-when-booked line; `PrimaryCta` Book the drop-off | `apps/emails/emails/grading/plan-saved.tsx` | `grade10-site-grading-submission-plan-US-06` |
-| The nudge | `plan_nudged` | `M13` | the same letter on the nudge day | `plan-nudged.tsx` | `grade10-site-grading-submission-plan-US-08` |
-| Expired | `plan_expired` | `M16` | the nothing-paid line; the prices-move line; `PrimaryCta` Start a submission | `plan-expired.tsx` | `grade10-site-grading-submission-plan-US-08` |
+| The plan's link | `plan_saved` | `M13` | facts cards · estimate · kept until; the not-sent-when-booked line; `PrimaryCta` Book the drop-off | `apps/emails/emails/grading/plan-saved.tsx` | `grade10-site-grading-submission-plan-SC-38` |
+| The nudge | `plan_nudged` | `M13` | the same letter on the nudge day | `plan-nudged.tsx` | `grade10-site-grading-submission-plan-SC-43` |
+| Expired | `plan_expired` | `M16` | the nothing-paid line; the prices-move line; `PrimaryCta` Start a submission | `plan-expired.tsx` | `grade10-site-grading-submission-plan-SC-44` |
 | Drop-off booked | `dropoff_booked` | `M12` | facts where · bring · your cards leave · estimated back; the move-or-cancel line; the missed line; `PrimaryCta`; the calendar file attached | `dropoff-booked.tsx` | `grade10-site-grading-collector-notifications-SC-08` |
 | Drop-off moved | `dropoff_moved` | none drawn | facts the new visit; `PrimaryCta`; the calendar file | `dropoff-moved.tsx` | `grade10-site-grading-dropoff-booking-US-02` |
 | Drop-off cancelled | `dropoff_cancelled` | none drawn | facts the visit closed; the list kept; `PrimaryCta` | `dropoff-cancelled.tsx` | `grade10-site-grading-dropoff-booking-US-02` |
@@ -870,8 +870,9 @@ Stories `grading-admin-settings-settings-panel--`.
   journey for each, or the requirements pass states them out of suite
 - **The last card refused** — the counter cancels the submission and tells
   the collector there; no message sends, nothing was paid and nothing is
-  owed (`decisions.md` Q57,
-  `grade10-site-grading-submission-lifecycle-SC-58`)
+  owed (`decisions.md`, the last card refused at the counter;
+  `grade10-site-grading-submission-lifecycle-SC-58` and
+  `grade10-admin-grading-counter-SC-89`)
 - **❓ Tech design** — the wizard's and the booking's addresses under
   `/grading`, the settings page's address, the console feature that holds
   the submission's tabs (`admin-frontend`'s code map names

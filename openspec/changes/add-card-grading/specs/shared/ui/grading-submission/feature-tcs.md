@@ -1944,3 +1944,43 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The amount, the method, the instant and the till reference all read as they were given.
+
+## Reconciliation
+
+**Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `shared-ui-grading-submission-US1-TC30-1` — a badge tone per outcome | Raised, settled | The block reads the tone from the outcome through one map of its own and takes none from the consumer. Decisions `Q69`; folded as `shared-ui-grading-submission-SC-64`, and the record requirement's outcome rule rewritten to say so |
+| `shared-ui-grading-submission-US1-TC30-1` — the outcome set | Raised, settled | "Minimum grade not met" is the thirteenth outcome of the record's table, which already carries it. Decisions `Q70`; the word added to the `GradingCardRecord` bullet on `docs/prds/products/shared/ui/grading-submission.md`, and the row added to the case's test data, dressed as Ungraded is — the card comes back raw and the fee stands. Reached by `shared-ui-grading-submission-SC-35` |
+| `shared-ui-grading-submission-US1-TC8-1` — the estimate matching the fee sheet | Raised, settled | Neither block checks the other: each renders the `feeSheet` it is given. Decisions `Q71`; folded as `shared-ui-grading-submission-SC-59`, and the case's cross-sheet clause dropped from its pre-condition and its expected result |
+| The two blocks agreeing on one record | **Out of suite:** the page's colocated test in `packages/grading/frontend` | Passing one record to both is the composing page's, so no block-level case can reach it |
+| `shared-ui-grading-submission-US1-TC58-1` — the paste result reaching the list | Raised, settled | `onApply(cards)` carries the cards the paste made, and the page feeds them to `GradingCardList`'s `cards`. Decisions `Q72`; the paste sheet's `Acts` rule names the callback, folded as `shared-ui-grading-submission-SC-63`, and the case added |
+| `shared-ui-grading-submission-US1-TC15-1` | Folded | Editing, removing, declaring a value and setting a minimum grade each report through a callback of their own, which no scenario stated: `shared-ui-grading-submission-SC-61` |
+| `shared-ui-grading-submission-US1-TC55-1` — the cap notice | Folded | The cap and the level the count closes read on the list, which no scenario stated: `shared-ui-grading-submission-SC-62`. The case covers it with `shared-ui-grading-submission-SC-16` |
+| `shared-ui-grading-submission-US1-TC54-1` — the picker's graders | Folded | The picker renders the graders, reports a pick and shows the highest declared value, which no scenario stated: `shared-ui-grading-submission-SC-60` |
+| `shared-ui-grading-submission-SC-09` | Case added | `shared-ui-grading-submission-US1-TC51-1` — every level closed shows the counter line |
+| `shared-ui-grading-submission-SC-11` | Case added | `shared-ui-grading-submission-US1-TC52-1` — the upcharge notice on the picker |
+| `shared-ui-grading-submission-SC-12` | Case added | `shared-ui-grading-submission-US1-TC53-1` — a grader priced with example figures |
+| `shared-ui-grading-submission-SC-16` | Case added | `shared-ui-grading-submission-US1-TC55-1` — the card past the cap refused |
+| `shared-ui-grading-submission-SC-17` | Case added | `shared-ui-grading-submission-US1-TC56-1` — the reference out of reach |
+| `shared-ui-grading-submission-SC-23` | Case added | `shared-ui-grading-submission-US1-TC57-1` — a pasted line above the ceiling |
+| `shared-ui-grading-submission-SC-31` | Case added | `shared-ui-grading-submission-US1-TC60-1` — the running-late chip |
+| `shared-ui-grading-submission-SC-36` | Case added | `shared-ui-grading-submission-US1-TC61-1` — the certificate against its lookup address |
+| `shared-ui-grading-submission-SC-39` | Case added | `shared-ui-grading-submission-US1-TC62-1` — a card the grader issued no grade for, one run per outcome |
+| `shared-ui-grading-submission-SC-42` | Case added | `shared-ui-grading-submission-US1-TC63-1` — nothing due on the pickup card; the figure itself stays on `shared-ui-grading-submission-US1-TC34-1` |
+| `shared-ui-grading-submission-SC-45` | Case added | `shared-ui-grading-submission-US1-TC64-1` — a refused naming |
+| `shared-ui-grading-submission-SC-46` | Case added | `shared-ui-grading-submission-US1-TC65-1` — the estimate reading as unpaid |
+| `shared-ui-grading-submission-SC-48` | Case added | `shared-ui-grading-submission-US1-TC66-1` — the payout and the refunded fee |
+| `shared-ui-grading-submission-SC-50` | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
+| `shared-ui-grading-submission-SC-57` | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
+| The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
+| The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `shared-ui-grading-submission-US1-TC2-1` | A person reads the package's exports and judges whether any grading block duplicates a booking block's role; a name check alone would pass a redrawn slot picker under another name |
+| `shared-ui-grading-submission-US1-TC3-1` | A person judges whether an export draws an operator's surface; no check reads a component's audience |
+| `shared-ui-grading-submission-US1-TC50-1` | A person reads the design record's state tables against the stories; nothing joins a row of `ui-design.md` to a story id |

@@ -8,6 +8,13 @@ A submission is one collector's cards to one grader at one level, with one
 status; each card carries its own outcome beside it, so four cards with one
 returned ungraded are still one submission, ready to collect.
 
+## Who Reads It
+
+- 🚧 **The collector, or the link** — the page opens to the collector signed
+  in under the email the submission was booked under, and to whoever holds the
+  link the shop emailed; anybody else, and an id nobody was issued, reads not
+  found, which never says whether the submission exists
+
 ## Statuses
 
 🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,
@@ -52,6 +59,12 @@ it changes; the rest of the cards carry on:
 | Held by the grader | one card kept for a further look; the others are ready now, the receipt names the card still out, and a second hand-back closes the submission | staff at receiving, with the grader's date |
 | Not returned, or damaged | paid out at its declared value with its fee refunded, inside the payout window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
 
+- 🚧 **Nothing left to hand in** — a submission whose last card the counter
+  refuses is cancelled there and the collector is told in person; no message
+  goes, nothing was paid and nothing is owed
+- 🚧 **Nothing left to send** — a withdrawal that takes the last card cancels
+  the submission, and the collector is told
+
 ## The Fee by Outcome
 
 🚧 **One rule per outcome** — the fee a card, and its cover line with it:
@@ -81,6 +94,9 @@ it changes; the rest of the cards carry on:
   day 90 counts, a card withdrawn, paid out or vaulted does not; derived when
   read from the ready date and the cards held, one line at the till at collection
 - ❓ **A part month** — counts as a whole month — Commercial
+- 🚧 **The ladder does not pause** — its rungs count from the ready day
+  whatever the collector books or names; only a card collected, vaulted or
+  paid out leaves it
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the 30 days run from it
 - 🚧 **After the notice** — the first release stops here: the cards stay at
@@ -190,6 +206,7 @@ The balance is what the collector owes on that day.
 | The notice | ❓ Open | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, 30 days from posting; the first release stops there and clause 6 keeps the disposal basis; the notice's form and wording | Legal |
 | Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
 | ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
+| The threshold's own figure | ❓ Open | Which side HKD 10,000 declared in total falls on: the requirement releases it on the code and the name, and a test case reading the same figure asked for the ID | Operations |
 | Grade and cert into a vault case | ❓ Open | A follow-on; the vault reads the record from the submission page meanwhile | Product |
 | Retention | ❓ Open | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the submission's end event; no identity class; a live submission blocks an erasure as a live case does | Legal |
 :::

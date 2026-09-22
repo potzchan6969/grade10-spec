@@ -3064,3 +3064,128 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 
 * The read is refused by name, naming that setting and its owner.
 * No value compiled into the code is used in its place.
+
+## Reconciliation
+
+**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and two cases against a hundred scenarios.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-admin-grading-counter-US1-TC1-1` | Covered | `grade10-admin-grading-counter-SC-02`; one expected result added so the case also reaches `grade10-admin-grading-counter-SC-86`, the fields a row is worked from |
+| `grade10-admin-grading-counter-US1-TC2-1` | Folded, one reading dropped | The strip in slot order reached no scenario and is folded as `grade10-admin-grading-counter-SC-85`. The claim that a submission ready for pickup shows on the strip's pickups line is a misreading: the strip carries the day's booked drop-offs and one line saying that pickups walk in, so that expected result and its pre-condition are dropped |
+| `grade10-admin-grading-counter-US1-TC3-1` | Covered | `grade10-admin-grading-counter-SC-06`, `grade10-admin-grading-counter-SC-10` |
+| `grade10-admin-grading-counter-US1-TC4-1` | Folded | The ready and settle tiles are `grade10-admin-grading-counter-SC-12`, `grade10-admin-grading-counter-SC-13`; the batch closing and with-graders tiles reached no scenario and are folded as `grade10-admin-grading-counter-SC-87` |
+| `grade10-admin-grading-counter-US1-TC5-1` | Covered | `grade10-admin-grading-counter-SC-05` |
+| `grade10-admin-grading-counter-US1-TC6-1` | Covered | `grade10-admin-grading-counter-SC-04` |
+| `grade10-admin-grading-counter-US1-TC7-1` | Covered | `grade10-admin-grading-counter-SC-75` |
+| `grade10-admin-grading-counter-US2-TC1-1` | Covered | `grade10-admin-grading-counter-SC-14` |
+| `grade10-admin-grading-counter-US2-TC2-1` | Covered | `grade10-admin-grading-counter-SC-15` |
+| `grade10-admin-grading-counter-US2-TC3-1` | Covered | `grade10-admin-grading-counter-SC-16` |
+| `grade10-admin-grading-counter-US2-TC5-1` | Covered | `grade10-admin-grading-counter-SC-17` |
+| `grade10-admin-grading-counter-US2-TC6-1` | Covered | `grade10-admin-grading-counter-SC-42` |
+| `grade10-admin-grading-counter-US2-TC7-1` | Covered | `grade10-admin-grading-counter-SC-42`, `grade10-admin-grading-counter-SC-45` |
+| `grade10-admin-grading-counter-US2-TC8-1` | Covered | `grade10-admin-grading-counter-SC-18`, `grade10-admin-grading-counter-SC-19` |
+| `grade10-admin-grading-counter-US2-TC9-1` | Covered | `grade10-admin-grading-counter-SC-23` |
+| `grade10-admin-grading-counter-US2-TC10-1` | Covered | `grade10-admin-grading-counter-SC-24` |
+| `grade10-admin-grading-counter-US2-TC11-1` | Covered | `grade10-admin-grading-counter-SC-20` |
+| `grade10-admin-grading-counter-US2-TC12-1` | Covered | `grade10-admin-grading-counter-SC-21` |
+| `grade10-admin-grading-counter-US2-TC4-1` | Folded | A card declared exactly at the level's ceiling is the boundary of step 3's refusal and reached no scenario; folded as `grade10-admin-grading-counter-SC-88` |
+| `grade10-admin-grading-counter-US3-TC1-1` | Covered | `grade10-admin-grading-counter-SC-25` |
+| `grade10-admin-grading-counter-US3-TC2-1` | Covered | `grade10-admin-grading-counter-SC-26` |
+| `grade10-admin-grading-counter-US3-TC3-1` | Covered | `grade10-admin-grading-counter-SC-28` |
+| `grade10-admin-grading-counter-US3-TC4-1` | Covered | `grade10-admin-grading-counter-SC-27` |
+| `grade10-admin-grading-counter-US3-TC5-1` | Raised, answered, folded | The blind pass could not tell what the submission becomes when its last card is refused. Answered: the counter cancels it from `booked` at the desk and tells the collector there, and no message is sent. Folded as `grade10-admin-grading-counter-SC-89`, added to the case, and landed as `Q75` |
+| `grade10-admin-grading-counter-US4-TC1-1` | Covered | `grade10-admin-grading-counter-SC-29` |
+| `grade10-admin-grading-counter-US4-TC2-1` | Covered | `grade10-admin-grading-counter-SC-30` |
+| `grade10-admin-grading-counter-US4-TC3-1` | Covered | `grade10-admin-grading-counter-SC-31` |
+| `grade10-admin-grading-counter-US4-TC5-1` | Covered | `grade10-admin-grading-counter-SC-32` |
+| `grade10-admin-grading-counter-US4-TC6-1` | Covered | `grade10-admin-grading-counter-SC-33` |
+| `grade10-admin-grading-counter-US4-TC7-1` | Covered | `grade10-admin-grading-counter-SC-33` |
+| `grade10-admin-grading-counter-US4-TC8-1` | Covered | `grade10-admin-grading-counter-SC-43`, `grade10-admin-grading-counter-SC-44` |
+| `grade10-admin-grading-counter-US4-TC9-1` | Covered | `grade10-admin-grading-counter-SC-35` |
+| `grade10-admin-grading-counter-US4-TC4-1` | Raised, answered, folded | The blind pass could not tell whether repeated wrong codes do anything beyond the field's own refusal. Answered: a wrong code is refused as often as it is typed, nothing closes the field, each refusal is on the timeline, and the ID glance against the collector's own name is the fallback. Folded as `grade10-admin-grading-counter-SC-91` and landed as `Q76` |
+| `grade10-admin-grading-counter-US4-TC10-1` | Raised, answered, folded | The blind pass could not tell whether a second hand-back re-runs who is collecting. Answered: it does, as every hand-back does. Folded as `grade10-admin-grading-counter-SC-90`, added to the case, and landed as `Q78`. The case's own close is `grade10-admin-grading-counter-SC-36` |
+| `grade10-admin-grading-counter-US5-TC1-1` | Covered | `grade10-admin-grading-counter-SC-38` |
+| `grade10-admin-grading-counter-US5-TC2-1` | Covered | `grade10-admin-grading-counter-SC-39` |
+| `grade10-admin-grading-counter-US5-TC3-1` | Covered | `grade10-admin-grading-counter-SC-39` |
+| `grade10-admin-grading-counter-US5-TC4-1` | Covered | `grade10-admin-grading-counter-SC-38` — the counter reads the person named on the page as it stands at the hand-back; naming them is the collector's own act in `grade10-site/grading/submission-lifecycle` |
+| `grade10-admin-grading-counter-US5-TC5-1` | Folded | The collector collecting while somebody else is also named reached no scenario; the requirement releases to two people and the second is folded as `grade10-admin-grading-counter-SC-92` |
+| `grade10-admin-grading-counter-US6-TC1-1` | Covered | `grade10-admin-grading-counter-SC-41` |
+| `grade10-admin-grading-counter-US6-TC2-1` | Covered | `grade10-admin-grading-counter-SC-40` |
+| `grade10-admin-grading-counter-US6-TC3-1` | Covered | `grade10-admin-grading-counter-SC-40` |
+| `grade10-admin-grading-counter-US6-TC4-1` | Covered | `grade10-admin-grading-counter-SC-33`, `grade10-admin-grading-counter-SC-40` |
+| `grade10-admin-grading-counter-US7-TC1-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US7-TC2-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US7-TC3-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US7-TC4-1` | Covered | `grade10-admin-grading-counter-SC-55` |
+| `grade10-admin-grading-counter-US7-TC5-1` | Covered | `grade10-admin-grading-counter-SC-54` |
+| `grade10-admin-grading-counter-US8-TC1-1` | Covered | `grade10-admin-grading-counter-SC-59` |
+| `grade10-admin-grading-counter-US8-TC2-1` | Covered | `grade10-admin-grading-counter-SC-61` |
+| `grade10-admin-grading-counter-US8-TC3-1` | Covered | `grade10-admin-grading-counter-SC-60` |
+| `grade10-admin-grading-counter-US8-TC4-1` | Folded | A second approver who does not hold `grading:approve` is the permission matrix's other cell and reached no scenario; folded as `grade10-admin-grading-counter-SC-95` |
+| `grade10-admin-grading-counter-US8-TC5-1` | Covered | `grade10-admin-grading-counter-SC-80` |
+| `grade10-admin-grading-counter-US9-TC1-1` | Folded | Row A is `grade10-admin-grading-counter-SC-62`; row B, the bank transfer and its reference, reached no scenario and is folded as `grade10-admin-grading-counter-SC-96` |
+| `grade10-admin-grading-counter-US9-TC2-1` | Folded | A payout recorded past its window saying so reached no scenario; folded as `grade10-admin-grading-counter-SC-97` |
+| `grade10-admin-grading-counter-US9-TC3-1` | Covered | `grade10-admin-grading-counter-SC-64` |
+| `grade10-admin-grading-counter-US9-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` — one rule over a waiver, a payout and a money setting alike |
+| `grade10-admin-grading-counter-US9-TC5-1` | Covered | `grade10-admin-grading-counter-SC-80` |
+| `grade10-admin-grading-counter-US10-TC1-1` | Covered | `grade10-admin-grading-counter-SC-51` |
+| `grade10-admin-grading-counter-US10-TC2-1` | Covered | `grade10-admin-grading-counter-SC-52` |
+| `grade10-admin-grading-counter-US10-TC3-1` | Covered | `grade10-admin-grading-counter-SC-52` |
+| `grade10-admin-grading-counter-US10-TC4-1` | Covered | `grade10-admin-grading-counter-SC-50` |
+| `grade10-admin-grading-counter-US10-TC5-1` | Covered | `grade10-admin-grading-counter-SC-53` |
+| `grade10-admin-grading-counter-US10-TC6-1` | Folded | A submission id that resolves to nothing reached no scenario; folded as `grade10-admin-grading-counter-SC-94` |
+| `grade10-admin-grading-counter-US11-TC1-1` | Covered | `grade10-admin-grading-counter-SC-45` |
+| `grade10-admin-grading-counter-US11-TC2-1` | Covered | `grade10-admin-grading-counter-SC-46` |
+| `grade10-admin-grading-counter-US11-TC3-1` | Covered | `grade10-admin-grading-counter-SC-48` |
+| `grade10-admin-grading-counter-US11-TC4-1` | Covered | `grade10-admin-grading-counter-SC-45`, `grade10-admin-grading-counter-SC-48` |
+| `grade10-admin-grading-counter-US11-TC5-1` | Covered | `grade10-admin-grading-counter-SC-49` |
+| `grade10-admin-grading-counter-US11-TC6-1` | Folded | A submission with nothing sealed reached no scenario; folded as `grade10-admin-grading-counter-SC-93` |
+| `grade10-admin-grading-counter-US11-TC7-1` | Covered | `grade10-admin-grading-counter-SC-11`, `grade10-admin-grading-counter-SC-49` — the letter's own failure and the reason it carries are `grade10-site/grading/collector-notifications`'s, and this capability offers the send again |
+| `grade10-admin-grading-counter-US12-TC1-1` | Covered | `grade10-admin-grading-counter-SC-08`, `grade10-admin-grading-counter-SC-65` |
+| `grade10-admin-grading-counter-US12-TC2-1` | Covered | `grade10-admin-grading-counter-SC-66`, `grade10-admin-grading-counter-SC-67` |
+| `grade10-admin-grading-counter-US12-TC3-1` | Covered | `grade10-admin-grading-counter-SC-66` |
+| `grade10-admin-grading-counter-US12-TC4-1` | Covered | `grade10-admin-grading-counter-SC-67` |
+| `grade10-admin-grading-counter-US12-TC5-1` | Covered | `grade10-admin-grading-counter-SC-68` |
+| `grade10-admin-grading-counter-US13-TC1-1` | Covered | `grade10-admin-grading-counter-SC-56` |
+| `grade10-admin-grading-counter-US13-TC2-1` | Covered | `grade10-admin-grading-counter-SC-58` |
+| `grade10-admin-grading-counter-US13-TC3-1` | Covered | `grade10-admin-grading-counter-SC-57` |
+| `grade10-admin-grading-counter-US13-TC4-1` | Covered | `grade10-admin-grading-counter-SC-80` |
+| `grade10-admin-grading-counter-US14-TC1-1` | Covered | `grade10-admin-grading-counter-SC-75`, `grade10-admin-grading-counter-SC-82` |
+| `grade10-admin-grading-counter-US14-TC2-1` | Covered | `grade10-admin-grading-counter-SC-83` |
+| `grade10-admin-grading-counter-US14-TC3-1` | Covered | `grade10-admin-grading-counter-SC-84` |
+| `grade10-admin-grading-counter-US14-TC4-1` | Covered | `grade10-admin-grading-counter-SC-75` |
+| `grade10-admin-grading-counter-US14-TC5-1` | Folded | An operator holding more than one grant being offered the acts of each reached no scenario; the grants requirement gains the rule and it is folded as `grade10-admin-grading-counter-SC-100` |
+| `grade10-admin-grading-counter-US15-TC1-1` | Raised, answered, folded | The blind pass could not tell whether a bare `grading:read` opens the settings at all. Answered: it opens them read-only, with every value and the owner who confirms it, and only `grading:approve` edits them. The feature set's grants line and the grants table are amended, folded as `grade10-admin-grading-counter-SC-99`, and landed as `Q77` |
+| `grade10-admin-grading-counter-US15-TC2-1` | Covered | `grade10-admin-grading-counter-SC-71` |
+| `grade10-admin-grading-counter-US15-TC3-1` | Covered | `grade10-admin-grading-counter-SC-70` |
+| `grade10-admin-grading-counter-US15-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` |
+| `grade10-admin-grading-counter-US15-TC5-1` | Covered | `grade10-admin-grading-counter-SC-72`, `grade10-admin-grading-counter-SC-73`, `grade10-admin-grading-counter-SC-74` |
+| `grade10-admin-grading-counter-US15-TC6-1` | Covered | `grade10-admin-grading-counter-SC-76` |
+| `grade10-admin-grading-counter-US15-TC7-1` | Folded | A setting nobody has written being marked on the settings page with its owner reached no scenario; folded as `grade10-admin-grading-counter-SC-98` |
+| `grade10-admin-grading-counter-SC-01` | Case added | `grade10-admin-grading-counter-US1-TC8-1` — the Today cut made on the shop's own day while the date in Coordinated Universal Time is still yesterday's |
+| `grade10-admin-grading-counter-SC-03` | Case added | `grade10-admin-grading-counter-US1-TC9-1` — a `planned` submission in none of the views |
+| `grade10-admin-grading-counter-SC-77` | Case added | `grade10-admin-grading-counter-US1-TC10-1` — no email and no push to staff over a shift |
+| `grade10-admin-grading-counter-SC-22` | Case added | `grade10-admin-grading-counter-US2-TC13-1` — check in refused while the agreement is unsealed |
+| `grade10-admin-grading-counter-SC-34` | Case added | `grade10-admin-grading-counter-US4-TC11-1` — the held card untickable and named on the receipt |
+| `grade10-admin-grading-counter-SC-09` | Case added | `grade10-admin-grading-counter-US9-TC6-1` — the queue badging a payout past its window |
+| `grade10-admin-grading-counter-SC-63` | Case added | `grade10-admin-grading-counter-US9-TC7-1` — a second payout on a card already carrying one refused |
+| `grade10-admin-grading-counter-SC-78` | Case added | `grade10-admin-grading-counter-US14-TC6-1` — the second factor asked for in staging |
+| `grade10-admin-grading-counter-SC-79` | Case added | `grade10-admin-grading-counter-US14-TC7-1` — one verification covering the next act for twelve hours |
+| `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
+| `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
+| `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-grading-counter-US1-TC10-1` | Nothing is asserted: a person works a shift with the mailbox and the push notifications open and reads that neither carried any of the three submissions |
+| `grade10-admin-grading-counter-US2-TC8-1` | The till is the shop's own point of sale; a person runs the order there and reads the lines written back against it |
+| `grade10-admin-grading-counter-US2-TC11-1` | One label per card leaves a printer at the desk, and the bag is sealed by hand |
+| `grade10-admin-grading-counter-US4-TC2-1` | An identity document is glanced at across the counter; the test is that nothing about it reaches a screen or a record |
+| `grade10-admin-grading-counter-US9-TC1-1` | Row B leaves the till: a person makes the bank transfer and reads its reference onto the record |
+| `grade10-admin-grading-counter-US11-TC1-1` | The link runs on the clock; a person holds it past 30 minutes and reads the expiry, then mints again |
+| `grade10-admin-grading-counter-US12-TC2-1` | The notice goes by registered post; a person posts it and enters the date and tracking the counter clerk gave them |
+| `grade10-admin-grading-counter-US14-TC6-1` | The second factor is the console's own, driven on staging by a person with the device |
+| `grade10-admin-grading-counter-US10-TC5-1` | The click-to-chat template opens WhatsApp outside the console, and the test is that nothing sends until staff press it |
