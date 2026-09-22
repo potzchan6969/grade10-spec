@@ -1858,3 +1858,55 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 * The status still reads Drop-off booked, not Expired.
 * No nudge or expiry line shows.
+
+---
+
+## Reconciliation
+
+**Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 44 cases over US1 to US8 and four raised questions; the scenario pass wrote `grade10-site-grading-submission-plan-SC-01` to `SC-45` over fourteen ADDED requirements. Nothing verifies the bundle; this line is the run's own word for it.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| 33 of the 44 blind cases | **Joined** | each reached a scenario that states it; the rows below are the differences |
+| `US1-TC3-1` a tab per grader | **Folded in:** `grade10-site-grading-submission-plan-SC-47` | the home shows every active grader's sheet; no scenario read past the first grader |
+| `US1-TC4-1` Start a submission opens an empty wizard | **Folded in:** `grade10-site-grading-submission-plan-SC-49` | the step the home opens on was stated nowhere |
+| `US1-TC5-1` booking without a list | **Joined** to `grade10-site-grading-submission-plan-SC-01` | the walk-in visit itself is `grade10-site/grading/dropoff-booking`'s, US-05 |
+| `US2-TC3-1` an empty list holds Continue | **Folded in:** `grade10-site-grading-submission-plan-SC-52` | the requirement refused a card with no value and said nothing about a list with no card |
+| `US2-TC4-1` removing a card | **Folded in:** `grade10-site-grading-submission-plan-SC-50` | the list is editable on the design and was stated in no requirement |
+| `US3-TC4-1` a line above the ceiling named for a second submission | **Corrected against `grade10-site-grading-submission-plan-SC-07`** | at 4200000 HKD minor units the card is above every level's ceiling, so it goes to the counter; the second-submission line is the chosen level's, `grade10-site-grading-submission-plan-SC-22`. Landed as Q65 |
+| `US3-TC6-1` an empty paste | **Folded in:** `grade10-site-grading-submission-plan-SC-53` | the paste's own guard |
+| `US4-TC2-1` exactly twenty cards leave every level open | **Folded in:** `grade10-site-grading-submission-plan-SC-55`, and the requirement's boundary corrected | "Twenty or more" closed every level at 20, against its own `grade10-site-grading-submission-plan-SC-20`, against the paste's more-than-20 rule and against the sheet's cards-a-submission column of 20. Rewritten as "More than twenty"; the blind pass found it |
+| `US4-TC6-1` the hundredth card at Bulk's cap | **Folded in:** `grade10-site-grading-submission-plan-SC-56` | the accepted edge beside `grade10-site-grading-submission-plan-SC-21`'s refused one |
+| `US5-TC1-1` what an open level reads | **Folded in:** `grade10-site-grading-submission-plan-SC-57` | the sheet's figures were stated on the home and never on the level picker |
+| `US5-TC6-1` a grader with only the example figures is selectable | **Raised, blocked:** the product manager | `grade10-site-grading-submission-plan-SC-06` holds that a grader whose figures nobody supplied cannot be picked; the case reads the same levels as pickable, and nothing in the material says whether example figures count as figures. The case stays `draft` with `**Blocked:**`; the row is in `decisions.md` and the ❓ on `docs/prds/products/grade10-site/grading/planning.md` |
+| `US6-TC5-1` the empty state | **Folded in:** `grade10-site-grading-submission-plan-SC-46` | the requirement said the home says there is none, and no scenario read it |
+| `US7-TC6-1` booking pending, both buttons disabled | **Kept, no scenario** | the button's in-flight state, decided by the view's colocated test rather than by a requirement |
+| Raised 1, the home's above-the-top-ceiling note | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-48` | Q63: the note is part of the sheet wherever it renders. Case added, `US1-TC6-1` |
+| Raised 2, a hand-added card's outcomes | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-51` | Q64: one set of states however the card arrived. Case added, `US2-TC7-1` |
+| Raised 3, which ceiling the Cards step measures | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-54` | Q65: the grader's top ceiling, or Bulk's where the count has closed the rest. `US3-TC4-1` corrected |
+| Raised 4, the consent and Save and book later | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-58` | Q66: the statement gates booking the drop-off alone. Case added, `US7-TC7-1` |
+| `grade10-site-grading-submission-plan-SC-02` the home still reading | **Out of suite:** the home view's colocated test | presentation only; named under the header, and the design row closes on it |
+| `grade10-site-grading-submission-plan-SC-08` the wizard rail | **Case added:** `US2-TC5-1` | |
+| `grade10-site-grading-submission-plan-SC-09` contact details | **Case added:** `US2-TC6-1` | |
+| `grade10-site-grading-submission-plan-SC-12` the reference out of reach while adding by hand | **Case added:** `US2-TC8-1` | the blind pass walked the outage on the paste alone |
+| `grade10-site-grading-submission-plan-SC-17` every line counted back | **Case added:** `US3-TC8-1` | |
+| `grade10-site-grading-submission-plan-SC-23` one grader and one level | **Case added:** `US5-TC7-1` | |
+| `grade10-site-grading-submission-plan-SC-28`, `grade10-site-grading-submission-plan-SC-30` the estimate | **Case added:** `US5-TC8-1` | the blind pass read the totals on the review and never the estimate on the service step |
+| `grade10-site-grading-submission-plan-SC-29` the cover line on the estimate | **Case added:** `US5-TC9-1` | |
+| `grade10-site-grading-submission-plan-SC-36` the sheet pinned at booking | **Case added:** `US6-TC7-1` | |
+| `grade10-site-grading-submission-plan-SC-37` a sheet changed before booking | **Case added:** `US6-TC8-1` | |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US6-TC1-1` the link mailed on leaving | the mail is read in an inbox; a script drives the plan being kept and no further |
+| `US8-TC1-1` the nudge at day 21 | the day is moved and the nudge is read in an inbox |
+| `US8-TC2-1` the expiry at day 30 | the same clock, and the words on the expired page |
+| `US6-TC7-1`, `US6-TC8-1` a changed fee sheet | a console settings write sits between the two reads |
+| `US2-TC1-1` the reference sales read as a reference | a judgement of the words beside the card, not an assertion |
+| `US5-TC6-1` a grader with only the example figures | blocked; the verdict is the product manager's before the case can be run |
+
+## Settled
+
+Nothing yet; the fold carries what this run refused into the durable suite.

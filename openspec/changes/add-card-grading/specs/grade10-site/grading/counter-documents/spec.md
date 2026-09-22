@@ -304,7 +304,7 @@ closed and the graded record stays on the submission page.
 
 **The named person** - where the collector named somebody to collect, the name
 line SHALL be prefilled with that person's name as the submission page holds
-it and SHALL NOT be editable; the counter's ID glance is what checks it.
+it and SHALL NOT be editable. The counter's ID glance checks it.
 
 **A card the grader held** - the receipt SHALL name the card still out, the
 submission SHALL stay ready for it, and a second receipt SHALL close the
@@ -316,10 +316,10 @@ vault case rather than to the customer.
 **A card withdrawn before its batch closed** - it SHALL be handed back against
 a receipt of its own, naming that card and the fee refunded for it.
 
-**Several outcomes at once** - one hand-back SHALL print one receipt however
-many exceptions it carries, with a line per card stating that card's outcome -
-handed back, held by the grader, gone into a vault case, withdrawn, or paid
-out - rather than a receipt per exception.
+**Several outcomes at once** - one hand-back SHALL print one receipt, never one
+per exception, however many exceptions it carries. Every card on it SHALL carry
+a line stating that card's outcome: handed back, held by the grader, gone into
+a vault case, withdrawn, or paid out.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-16 - The receipt names who collected and the ID that was glanced at
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector collecting cards worth more than the glance threshold
@@ -415,14 +415,14 @@ registered name and the complaints contact are among those facts.
 one, so the page can be read before its values are decided.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-23 - Production refuses paper that names no company
-**Serves:** Pinned figures and placeholders, grade10-site-grading-counter-documents-US-01 - a collector who would otherwise be asked to sign against a bracket
+**Serves:** `Pinned figures and placeholders`, `grade10-site-grading-counter-documents-US-01` - a collector who would otherwise be asked to sign against a bracket
 
 - **GIVEN** a production brand whose custodian has no registered name
 - **WHEN** an agreement is prepared
 - **THEN** it is refused by name and nothing is rendered
 
 #### Scenario: grade10-site-grading-counter-documents-SC-24 - Outside production the bracket prints and is marked
-**Serves:** Pinned figures and placeholders, grade10-site-grading-counter-documents-US-01 - the shop reading the paper before Legal has settled its values
+**Serves:** `Pinned figures and placeholders`, `grade10-site-grading-counter-documents-US-01` - the shop reading the paper before Legal has settled its values
 
 - **GIVEN** a staging brand whose complaints contact is unset
 - **WHEN** an agreement is rendered
@@ -465,7 +465,7 @@ be listed and SHALL offer no download.
 - **THEN** that document is not listed and no download is offered for it
 
 #### Scenario: grade10-site-grading-counter-documents-SC-27 - A digest grading never issued answers as unknown
-**Serves:** Copies and fingerprints, grade10-site-grading-counter-documents-US-05 - somebody checking a PDF they were handed against the shop's record
+**Serves:** `Copies and fingerprints`, `grade10-site-grading-counter-documents-US-05` - somebody checking a PDF they were handed against the shop's record
 
 - **WHEN** a digest grading never issued or sealed is checked
 - **THEN** the answer says it is not one of grading's

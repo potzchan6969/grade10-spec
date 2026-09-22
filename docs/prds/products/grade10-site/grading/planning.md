@@ -151,4 +151,5 @@ Express for the card now would be $1,200; Regular is $600, plus $600 only on a
 | Cards a submission | ❓ Open | 100 at Bulk from a pasted list, 20 at every other level, a column of the fee sheet; above it a second submission on another day. Revisited once dealer volume is known | Operations |
 | Fee sheet | ❓ Open | Example figures modelled on PSA's; Commercial supplies one sheet per grader and level, ceiling, fee, cover rate, estimate and cards a submission | Commercial |
 | Fee policies | ❓ Open | The fee stands on an ungraded card, a refused card is never charged, a withdrawn card is refunded at the till; told on the review step and in clause 3 | Commercial |
+| A grader with only example figures | ❓ Open | CGC's and BGS's levels stand as data until Commercial supplies their sheets; whether a collector may pick such a level, or only read it, is open | Product |
 :::

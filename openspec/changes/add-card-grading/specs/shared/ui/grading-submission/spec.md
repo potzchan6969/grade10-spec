@@ -174,6 +174,15 @@ cannot disagree.
 - **WHEN** the collector activates the second
 - **THEN** the sheet reports that grader's id and marks it selected
 
+#### Scenario: shared-ui-grading-submission-SC-59 - The sheet and the picker each render the sheet they were given
+**Serves:** Reading what it costs - a collector reads one set of figures wherever the page draws them
+
+- **GIVEN** one fee sheet record passed to both `GradingFeeSheet` and
+  `GradingLevelPicker`
+- **WHEN** each renders
+- **THEN** each shows that record's figures and no figure of its own
+- **AND** neither block reads, checks or reports on the other's figures
+
 ### Requirement: The level picker opens a level or names what closed it
 
 The grader and the level for the whole list, and the estimate that follows.
