@@ -47,22 +47,22 @@ keys in `@grade10/i18n` when it wires setup.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| No country | Globe only (no divider); placeholder Enter phone number with a small gap after the globe | `winner-order-US-01` |
-| Country selected, empty number | Flag + calling code, divider, placeholder | `winner-order-US-01` |
-| Calling code already in value | Flag only (no duplicate calling code beside the flag), divider, national / international digits in the input | `winner-order-US-01` |
-| Country popup | Search e.g. United States; flag, name, calling code | `winner-order-US-01` |
-| Empty refused | Field refusal beside Phone | `winner-order-US-01` |
+| No country | Globe only (no divider); placeholder Enter phone number with a small gap after the globe | `winner-order-SC-187` |
+| Country selected, empty number | Flag + calling code, divider, placeholder | `winner-order-SC-186` |
+| Calling code already in value | Flag only (no duplicate calling code beside the flag), divider, national / international digits in the input | **Out of suite:** Storybook `Auction Order/AuctionAddressForm` phone comps |
+| Country popup | Search e.g. United States; flag, name, calling code | **Out of suite:** Storybook `Auction Order/AuctionAddressForm` phone comps |
+| Empty refused | Field refusal beside Phone | `winner-order-SC-185` |
 
 ### Add Address · Kind
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Personal (default) | SegmentedControl Personal selected with sliding pill; Company Name hidden | `winner-order-US-01` |
-| Company | Company selected; Company Name required | `winner-order-US-01` |
+| Personal (default) | SegmentedControl Personal selected with sliding pill; Company Name hidden | `winner-order-SC-190` |
+| Company | Company selected; Company Name required | `winner-order-SC-191` |
 
 ### Delivery picker · Cards
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Personal saved | RadioCard title is recipient name | `winner-order-US-01` |
-| Company saved | RadioCard title is company name | `winner-order-US-01` |
+| Personal saved | RadioCard title is recipient name | `winner-order-SC-192` |
+| Company saved | RadioCard title is company name | `winner-order-SC-193` |

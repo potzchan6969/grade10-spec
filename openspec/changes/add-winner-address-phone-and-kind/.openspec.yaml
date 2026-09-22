@@ -1,9 +1,7 @@
 schema: grade10-planning
 created: 2026-09-22
-promoted_by: "@tangconst"
-awaiting:
-  specs: "/workflow-specify — outline and requirement deltas for phone soft rule and Personal/Company kind"
-design_waived: "Preview and @grade10/ui composition; Phone field stays block-local until a Figma PhoneInput set exists"
+promoted_by: "@mason5991"
 hands:
   pm: "@tangconst"
   design: "@tangconst"
+  tech: "@mason5991"
