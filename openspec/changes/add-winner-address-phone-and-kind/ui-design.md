@@ -29,6 +29,16 @@ display name — company name when the address is company, recipient name when
 personal. Card body lines are street, city or region, and country — no
 postal code and no phone.
 
+### Winner Order — Order summary · Delivery and Billing
+
+Layout SoT: Storybook —
+
+- `my-auctions-winner-order-setup--preparing-invoice`
+- Setup confirm flow: `my-auctions-winner-order-setup--complete-setup-flow`
+
+No new Figma frame. Order summary reuses the sidebar text stack already on
+Winner Order; content is the confirmed snapshot, not the lean picker card body.
+
 ## Components
 
 | Export | Package | Role |
@@ -37,7 +47,8 @@ postal code and no phone.
 | `InputShell`, `Input`, `Autocomplete` (setup country) | `@grade10/design-system` | Phone field shell; Country/Region on setup — invalid uses inset ring like Text Input |
 | `AuctionAddressForm` | `@grade10/ui` | Shared address form; owns kind + phone |
 | Block-local `AuctionPhoneField` | `@grade10/ui` `auction-order` | Wraps `react-phone-number-input`; not a design-system primitive |
-| Page-local setup dialog | `apps/preview` `winner-order-setup-dialog` | Nested Add Address uses the shared form contract |
+| Page-local setup dialog | `apps/preview` `winner-order-setup-dialog` | Nested Add Address; picker lean `lines` vs order `summary` |
+| Page-local Winner Order page | `apps/preview` `winner-order-page` | Order summary Delivery / Billing show `summary` |
 
 **Missing / deferred:** Figma PhoneInput set and Code Connect — promote the
 block field when design publishes one.
@@ -73,3 +84,12 @@ keys in `@grade10/i18n` when it wires setup.
 | Personal saved | RadioCard title is recipient name; body is street, city/region, country | `winner-order-SC-192`, `winner-order-SC-202` |
 | Company saved | RadioCard title is company name; body is street, city/region, country | `winner-order-SC-193`, `winner-order-SC-202` |
 | Body omits | No postal code and no phone on the card body | `winner-order-SC-202` |
+
+### Winner Order · Order summary
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Personal delivery | Recipient name, phone, full address including postal | `winner-order-SC-203` |
+| Company delivery | Company name, recipient name, phone, full address including postal | `winner-order-SC-203` |
+| Billing same as delivery | Billing block matches Delivery | `winner-order-SC-203` |
+| Distinct from picker | Summary includes phone and postal; picker card body still omits them | `winner-order-SC-202`, `winner-order-SC-203` |

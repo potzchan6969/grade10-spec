@@ -45,6 +45,11 @@ export type WinnerOrderSavedAddress = {
   label: string;
   /** Street + locality + country — no name, postal code, or phone. */
   lines: string;
+  /**
+   * Order summary / invoice snapshot — company (when company), recipient
+   * name, phone, street, locality with postal, country.
+   */
+  summary: string;
   addressKind?: "personal" | "company";
 };
 
@@ -61,6 +66,8 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
       addressKind: "personal",
       label: "Alex Chan",
       lines: "12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "tst",
@@ -68,6 +75,8 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
       label: "Harbour View Ltd",
       lines:
         "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+      summary:
+        "Harbour View Ltd\nAlex Chan\n+852 9123 4568\nFlat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong, 000000\nHong Kong",
     },
   ] as const;
 
@@ -76,31 +85,46 @@ export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress
   [
     {
       id: "wan-chai",
+      addressKind: "personal",
       label: "Alex Chan",
       lines: "12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "tst",
+      addressKind: "personal",
       label: "Alex Chan",
       lines:
         "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4568\nFlat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "central",
+      addressKind: "personal",
       label: "Alex Chan",
       lines:
         "Unit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4569\nUnit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "causeway",
+      addressKind: "personal",
       label: "Jordan Lee",
       lines: "15/F, 88 Percival Street\nCauseway Bay, Hong Kong\nHong Kong",
+      summary:
+        "Jordan Lee\n+852 9123 4570\n15/F, 88 Percival Street\nCauseway Bay, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "kowloon-tong",
+      addressKind: "personal",
       label: "Sam Wong",
       lines:
         "Block A, Festival Walk Residences\nKowloon Tong, Hong Kong\nHong Kong",
+      summary:
+        "Sam Wong\n+852 9123 4571\nBlock A, Festival Walk Residences\nKowloon Tong, Hong Kong, 000000\nHong Kong",
     },
   ] as const;
 
@@ -162,6 +186,7 @@ type AddressSnapshot = {
   sourceId: string;
   label: string;
   lines: string;
+  summary: string;
 };
 
 const COUNTRY_ITEMS = [...COUNTRY_OPTIONS];
@@ -248,11 +273,12 @@ function snapshotFromAddress(
     sourceId: address.id,
     label: address.label,
     lines: address.lines,
+    summary: address.summary,
   };
 }
 
 function snapshotPayload(snapshot: AddressSnapshot): string {
-  return [snapshot.label, snapshot.lines].filter(Boolean).join("\n");
+  return snapshot.summary;
 }
 
 function prefersReducedMotion() {
@@ -262,7 +288,7 @@ function prefersReducedMotion() {
   );
 }
 
-/** Street + locality + country — no name, postal code, or phone. */
+/** Street + locality + country — no name, postal code, or phone (picker body). */
 function formatAddressLines(values: AuctionAddressFormValues): string {
   const street = [
     values.addressLine1.trim(),
@@ -277,6 +303,43 @@ function formatAddressLines(values: AuctionAddressFormValues): string {
   return [street, locality, values.country.trim()].filter(Boolean).join("\n");
 }
 
+/**
+ * Full order summary / invoice snapshot — company when company, recipient
+ * name, phone, street, locality with postal, country.
+ */
+function formatOrderAddressSummary(values: AuctionAddressFormValues): string {
+  const name = [values.firstName.trim(), values.lastName.trim()]
+    .filter(Boolean)
+    .join(" ");
+  const company =
+    values.addressKind === "company" ? values.company.trim() : "";
+  const phone = values.phone.trim();
+  const street = [
+    values.addressLine1.trim(),
+    values.addressLine2.trim(),
+    values.apartment.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const locality = [
+    values.city.trim(),
+    values.state.trim(),
+    values.postalCode.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+  return [
+    company,
+    name,
+    phone,
+    street,
+    locality,
+    values.country.trim(),
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 function addressLabelFromValues(values: AuctionAddressFormValues): string {
   if (values.addressKind === "company" && values.company.trim()) {
     return values.company.trim();
@@ -289,7 +352,7 @@ function addressLabelFromValues(values: AuctionAddressFormValues): string {
 }
 
 function confirmPayload(address: WinnerOrderSavedAddress): string {
-  return [address.label, address.lines].filter(Boolean).join("\n");
+  return address.summary;
 }
 
 /**
@@ -407,6 +470,7 @@ function WinnerOrderSetupDialog({
       id: DRAFT_VALUE,
       label: snapshot.label,
       lines: snapshot.lines,
+      summary: snapshot.summary,
     });
     setSelection(DRAFT_VALUE);
   }
@@ -544,6 +608,7 @@ function WinnerOrderSetupDialog({
   function saveNewAddress(values: AuctionAddressFormValues) {
     const lines = formatAddressLines(values);
     const label = addressLabelFromValues(values);
+    const summary = formatOrderAddressSummary(values);
     const saveToBook =
       saveForFuture && addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
 
@@ -553,6 +618,7 @@ function WinnerOrderSetupDialog({
         id,
         label,
         lines,
+        summary,
         addressKind: values.addressKind,
       };
       setAddresses((held) => [saved, ...held]);
@@ -568,6 +634,7 @@ function WinnerOrderSetupDialog({
         id: DRAFT_VALUE,
         label,
         lines,
+        summary,
         addressKind: values.addressKind,
       });
       if (step === 3 && !sameAsDelivery) {
