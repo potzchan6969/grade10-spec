@@ -1,4 +1,4 @@
-## 1. Cover the brand-sans contract with tests (grade10)
+## 1. Cover the brand-sans contract with tests (grade10) (owner: @sean)
 
 `root.tsx`'s Typekit link (`use.typekit.net/lnk7gwq.css`) and the design
 system's `canada-type-gibson` mapping for grade10-site already ship on
