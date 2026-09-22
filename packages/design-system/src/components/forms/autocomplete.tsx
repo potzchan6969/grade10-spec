@@ -37,6 +37,8 @@ type AutocompleteInputProps = AutocompletePrimitive.Input.Props & {
   label?: ReactNode;
   /** Accessible name when no visible label is shown. */
   "aria-label"?: string;
+  /** Tones the field border. Error copy stays on the consumer's message. */
+  status?: "default" | "error" | "success";
   /**
    * Extra work when the trailing X clears the field. Base UI already clears
    * the autocomplete value; this runs after that click.
@@ -56,6 +58,7 @@ function AutocompleteInput({
   label,
   disabled,
   onClear,
+  status = "default",
   ...props
 }: AutocompleteInputProps) {
   const generatedId = useId();
@@ -88,7 +91,7 @@ function AutocompleteInput({
       ) : null}
       <AutocompletePrimitive.InputGroup
         className={cn(
-          inputBoxVariants({ status: "default" }),
+          inputBoxVariants({ status: disabled ? "default" : status }),
           disabled && "bg-background-subtle",
         )}
         data-slot="input-box"
@@ -136,7 +139,7 @@ function AutocompleteContent({
   return (
     <AutocompletePrimitive.Portal>
       <AutocompletePrimitive.Positioner
-        className="isolate z-50 outline-none"
+        className="isolate z-[100] outline-none"
         align={align}
         side={side}
         sideOffset={sideOffset}
@@ -147,7 +150,7 @@ function AutocompleteContent({
             // Same surface as DropdownMenuContent. At least as wide as the
             // Search Input pill; grow with content up to the viewport, then
             // item labels ellipsize.
-            "z-50 flex max-h-(--available-height) w-max min-w-(--anchor-width) max-w-[calc(100vw-1.5rem)] origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
+            "z-[100] flex max-h-(--available-height) w-max min-w-(--anchor-width) max-w-[calc(100vw-1.5rem)] origin-(--transform-origin) flex-col gap-1 overflow-x-hidden overflow-y-auto rounded-(--radius-3xl) border border-[color:var(--border-subtle,var(--border))] bg-popover p-2 text-popover-foreground shadow-[0_4px_24px_var(--shadow-color,rgb(118_118_118_/_20%))] backdrop-blur-xl duration-100 outline-none data-[side=bottom]:slide-in-from-top-2 data-[side=top]:slide-in-from-bottom-2 data-open:animate-in data-open:fade-in-0 data-open:zoom-in-95 data-closed:animate-out data-closed:overflow-hidden data-closed:fade-out-0 data-closed:zoom-out-95",
             className,
           )}
           {...props}
