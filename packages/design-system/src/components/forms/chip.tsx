@@ -13,7 +13,7 @@ import type { ReactNode } from "react";
 //
 // `default` is `Base/muted` fill with `Base/foreground` label and
 // `Base/secondary-foreground` dismiss; hover swaps to `Base/background-subtle`.
-// `primary` is `Base/primary` / `Base/primary-foreground` with the same inner
+// `primary` is `Base/primary` / `Base/primary-on` with the same inner
 // glow on hover as Button (`#FFFFFF4D`, radius 20). There is no size,
 // selected, or disabled axis.
 const chipVariants = cva(
@@ -24,7 +24,7 @@ const chipVariants = cva(
         default:
           "bg-muted text-foreground hover:bg-background-subtle [&_svg]:text-secondary-foreground",
         primary:
-          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
+          "bg-primary text-primary-on hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
       },
     },
     defaultVariants: {

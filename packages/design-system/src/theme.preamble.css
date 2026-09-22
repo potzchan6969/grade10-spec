@@ -48,6 +48,14 @@
   --color-success-foreground: var(--success-foreground);
   --color-success: var(--success);
   --color-destructive: var(--destructive);
+  /* `*-on` is the text a solid fill carries; `*-foreground` is the tone the
+     same status reads as on the page. One token per contract, so an AA pass on
+     a fill cannot silence a tone — see themes/default.css. */
+  --color-primary-on: var(--primary-on);
+  --color-success-on: var(--success-on);
+  --color-info-on: var(--info-on);
+  --color-warning-on: var(--warning-on);
+  --color-destructive-on: var(--destructive-on);
   --color-accent-foreground: var(--accent-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);

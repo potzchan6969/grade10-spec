@@ -19,11 +19,11 @@ const badgeVariants = cva(
       variant: {
         default:
           "bg-muted text-foreground [a]:hover:bg-[color-mix(in_oklab,var(--muted),black_5%)]",
-        success: "bg-success text-success-foreground backdrop-blur-md",
-        error: "bg-destructive text-destructive-foreground backdrop-blur-md",
-        warning: "bg-warning text-warning-foreground backdrop-blur-md",
-        info: "bg-info text-info-foreground backdrop-blur-md",
-        brand: "bg-accent-foreground text-primary-foreground",
+        success: "bg-success text-success-on backdrop-blur-md",
+        error: "bg-destructive text-destructive-on backdrop-blur-md",
+        warning: "bg-warning text-warning-on backdrop-blur-md",
+        info: "bg-info text-info-on backdrop-blur-md",
+        brand: "bg-accent-foreground text-primary-on",
         outline: "border-border bg-background text-foreground",
       },
       size: {

@@ -8,7 +8,7 @@ const iconButtonVariants = cva(
     variants: {
       variant: {
         primary:
-          "bg-primary text-primary-foreground hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
+          "bg-primary text-primary-on hover:shadow-[inset_0_0_20px_rgb(255_255_255_/_30%)]",
         secondary:
           "bg-muted text-foreground hover:bg-background-subtle aria-expanded:bg-background-subtle",
         outline:

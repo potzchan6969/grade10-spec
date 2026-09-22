@@ -2,7 +2,11 @@
  * This theme is NOT part of the Figma token sync (that only drives grade10.css);
  * it tracks shadcn's default palette. Applies at :root, so it's the baseline theme.
  * The four status tokens (success/info/warning/error) are a design-system extension
- * the contract expects but stock shadcn does not ship — restrained defaults below. */
+ * the contract expects but stock shadcn does not ship — restrained defaults below.
+ * Two contracts, two token families: `--<tone>-foreground` is the TEXT tone, read
+ * on `--background` and `--muted`; `--<tone>-on` is the text a solid `--<tone>`
+ * fill carries. They coincide here on every rung but destructive, whose fill is
+ * saturated rather than tinted; grade10 splits them further. */
 
 :root {
   --background: oklch(1 0 0);
@@ -21,6 +25,7 @@
   --popover-foreground: oklch(0.145 0 0);
   --primary: oklch(0.205 0 0);
   --primary-foreground: oklch(0.985 0 0);
+  --primary-on: var(--primary-foreground);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -37,14 +42,20 @@
   /* status extension (not stock shadcn) */
   --success: oklch(0.95 0.03 150);
   --success-foreground: oklch(0.45 0.13 150);
-  /* Derived baseline for a token that exists only in .theme-grade10. Read as
-     the destructive TEXT tone, which is how every component binds it, not as
-     "text on a destructive fill" — grade10 pairs red-950 behind red-400. */
+  --success-on: var(--success-foreground);
+  /* Derived baseline for a token that exists only in .theme-grade10: the
+     destructive TEXT tone, which `Text tone="error"` and every refusal line
+     bind. Text on a destructive fill is `--destructive-on`, below. */
   --destructive-foreground: oklch(0.45 0.18 27.325);
+  /* The one rung where the two contracts part in this theme: `--destructive`
+     is a saturated fill, not a tint, so its text tone is unreadable on it. */
+  --destructive-on: oklch(0.985 0 0);
   --info: oklch(0.95 0.03 255);
   --info-foreground: oklch(0.45 0.15 265);
+  --info-on: var(--info-foreground);
   --warning: oklch(0.96 0.04 90);
   --warning-foreground: oklch(0.48 0.1 70);
+  --warning-on: var(--warning-foreground);
   --error: oklch(0.95 0.03 25);
   --error-foreground: oklch(0.505 0.2 27);
   --chart-1: oklch(0.646 0.222 41.116);
@@ -109,6 +120,7 @@
   --popover-foreground: oklch(0.985 0 0);
   --primary: oklch(0.922 0 0);
   --primary-foreground: oklch(0.205 0 0);
+  --primary-on: var(--primary-foreground);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -125,11 +137,15 @@
   /* status extension (not stock shadcn) */
   --success: oklch(0.27 0.04 150);
   --success-foreground: oklch(0.85 0.15 150);
+  --success-on: var(--success-foreground);
   --destructive-foreground: oklch(0.85 0.15 27.325);
+  --destructive-on: oklch(0.205 0 0);
   --info: oklch(0.27 0.04 265);
   --info-foreground: oklch(0.85 0.12 265);
+  --info-on: var(--info-foreground);
   --warning: oklch(0.27 0.04 75);
   --warning-foreground: oklch(0.85 0.14 90);
+  --warning-on: var(--warning-foreground);
   --error: oklch(0.27 0.05 27);
   --error-foreground: oklch(0.8 0.16 25);
   --chart-1: oklch(0.488 0.243 264.376);

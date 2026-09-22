@@ -51,7 +51,7 @@ function ProductCardCartStepperRow({
   };
 
   const capClassName =
-    "bg-primary-foreground/15 text-primary-foreground hover:bg-primary-foreground/20";
+    "bg-primary-on/15 text-primary-on hover:bg-primary-on/20";
 
   return (
     <div className={cn("flex h-10 w-full items-center px-[3px]", className)}>
@@ -78,7 +78,7 @@ function ProductCardCartStepperRow({
         aria-live="polite"
         aria-valuenow={qty}
         className={cn(
-          "min-w-[1.25rem] flex-1 text-center text-sm font-normal tabular-nums text-primary-foreground",
+          "min-w-[1.25rem] flex-1 text-center text-sm font-normal tabular-nums text-primary-on",
           roll === "up" &&
             "animate-in fade-in slide-in-from-bottom-2 duration-150 motion-reduce:animate-none",
           roll === "down" &&

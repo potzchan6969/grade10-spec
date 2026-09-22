@@ -31,7 +31,8 @@ function Pagination({ className, children, ...props }: PaginationProps) {
 // token still reads. Disabled is the resting colours at `Opacity/opacity-50`
 // — the glyph stays `Base/foreground`, not a `disabled-foreground` swap
 // (`4181:1968`, `4181:1993`). Active page fills `Base/primary` with
-// `Base/primary-foreground` (`4181:1970`). Press keeps the 1px translate
+// `Base/primary-on` (`4181:1970`, `Base/primary-foreground` before the
+// on-fill split). Press keeps the 1px translate
 // shared with Button.
 const paginationControlClassName =
   "inline-flex size-10 shrink-0 items-center justify-center rounded-(--radius-full) text-sm font-normal outline-none transition-[background-color,border-color,color,transform,opacity] duration-150 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 disabled:pointer-events-none disabled:opacity-50 aria-disabled:pointer-events-none";
@@ -54,7 +55,7 @@ function PaginationLink({
 }: PaginationLinkProps) {
   const classes = cn(
     paginationControlClassName,
-    isActive ? "bg-primary text-primary-foreground" : paginationIdleClassName,
+    isActive ? "bg-primary text-primary-on" : paginationIdleClassName,
     className,
   );
 
