@@ -50,18 +50,13 @@
     act that would print one refuses before it commits, so nothing is written
     that cannot be sent
 
-## RENAMED Requirements
-
-- FROM: `### Requirement: The vault sends twenty-three messages, each about the case it names`
-- TO: `### Requirement: The vault sends twenty-four messages, each about the case it names`
-
 ## MODIFIED Requirements
 
-### Requirement: The vault sends twenty-four messages, each about the case it names
+### Requirement: The vault sends twenty-three messages, each about the case it names
 
-The messages SHALL be exactly these, in English, addressed to the case's own
-address, each carrying an action link to the case — except the invitation to
-verify, whose link opens the identity check:
+The messages SHALL be exactly these twenty-four, in English, addressed to the
+case's own address, each carrying an action link to the case — except the
+invitation to verify, whose link opens the identity check:
 
 | Group | Messages |
 | --- | --- |

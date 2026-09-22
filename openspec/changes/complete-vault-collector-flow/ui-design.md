@@ -300,7 +300,7 @@ beside them.
 | Past due, no notice | the past-due hero and the reminders card; no notice card | `grade10-site-vault-loan-and-settlement-US-06` |
 | Final notice (`C16`) | `Alert` error: pay by the date, wrote to you on, until then nothing can be taken, the reminders sent, no further reminders | `grade10-site-vault-loan-and-settlement-US-06` |
 | Repaid (`C17`) | hero repaid in full; Book a pickup visit, Ask for it back; the repayments; the loan settled table; custody outstanding Nothing; the no-clock line | `grade10-site-vault-loan-and-settlement-US-02` |
-| Back with you (`C18`) | hero released at the shop on the date; Start another request; documents with the release receipt, fingerprints and the public verify address; the loan settled | `grade10-site-vault-documents-and-signing-US-01` |
+| Back with you (`C18`) | hero released at the shop on the date; Start another request; documents with the release receipt, fingerprints and the public verify address; the loan settled | `grade10-site-vault-documents-and-signing-SC-17` |
 | What we keep (`C18`) | the retention table per class with its window; the ask-to-be-forgotten line linking Your data | `grade10-site-vault-retention-and-erasure-US-05` |
 | Declined (`C19`) | badge and closed date; the staff reason verbatim; the item stayed, the visit was cancelled; Start another request | `grade10-site-vault-case-lifecycle-US-04` |
 | Cancelled (`C19`) | by whom and when; the offer closed and the visit cancelled with it | `grade10-site-vault-case-lifecycle-US-04` |
@@ -343,10 +343,10 @@ beside them.
 | Standing: check out | a check is out since the date | `grade10-site-vault-retention-and-erasure-US-05` |
 | Standing: lapsed | the last check expired on the date | `grade10-site-vault-retention-and-erasure-US-05` |
 | What the vault keeps | the table per class with its window after a case ends; the reviewed-not-deleted line | `grade10-site-vault-retention-and-erasure-US-05` |
-| Download, n documents | Download all with the count; one file, bounded to the cases the page lists | `grade10-site-vault-documents-and-signing-US-05` |
-| Download, none | the button absent; nothing signed yet | `grade10-site-vault-documents-and-signing-US-05` |
-| Download in flight | the button pending | `grade10-site-vault-documents-and-signing-US-05` |
-| Download failed | the error line under the button | `grade10-site-vault-documents-and-signing-US-05` |
+| Download, n documents | Download all with the count; one file, bounded to the cases the page lists | `grade10-site-vault-documents-and-signing-SC-26` |
+| Download, none | the button absent; nothing signed yet | `grade10-site-vault-documents-and-signing-SC-27` |
+| Download in flight | the button pending | **Out of suite:** the view's colocated test |
+| Download failed | the error line under the button | `grade10-site-vault-documents-and-signing-SC-28` |
 | Ask available | the window, what goes and what stays; Ask to be forgotten | `shared-auth-users-US-05` |
 | Ask refused | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-US-01` |
 | Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `shared-auth-users-US-05` |
@@ -432,10 +432,10 @@ beside them.
 | Identity: Verified | who performed it and when; the details under the identity read grant; View photograph, Record at the counter instead | `grade10-admin-vault-operator-queue-US-09` |
 | Identity: Refused | declined on the date; Record at the counter with the reason field naming who records over it | `grade10-admin-vault-operator-queue-US-09` |
 | Identity: Lapsed | expired or withdrawn on the date; Send hosted check, Record at the counter | `grade10-admin-vault-operator-queue-US-09` |
-| Key terms dialog | the loan agreement's own terms as `Check`s; the reference field optional; Record | `grade10-site-vault-documents-and-signing-US-03` |
-| Key terms, unticked | Record refused until every term is ticked | `grade10-site-vault-documents-and-signing-US-03` |
-| Key terms recorded | recorded when · by; Prepare documents offered | `grade10-site-vault-documents-and-signing-US-03` |
-| Key terms, storage lane | no dialog; the custody packet prepares without it | `grade10-site-vault-documents-and-signing-US-03` |
+| Key terms dialog | the loan agreement's own terms as `Check`s; the reference field optional; Record | `grade10-site-vault-documents-and-signing-SC-22` |
+| Key terms, unticked | Record refused until every term is ticked | `grade10-site-vault-documents-and-signing-SC-23` |
+| Key terms recorded | recorded when · by; Prepare documents offered | `grade10-site-vault-documents-and-signing-SC-24` |
+| Key terms, storage lane | no dialog; the custody packet prepares without it | `grade10-site-vault-documents-and-signing-SC-25` |
 
 ### Case — Custody tab
 

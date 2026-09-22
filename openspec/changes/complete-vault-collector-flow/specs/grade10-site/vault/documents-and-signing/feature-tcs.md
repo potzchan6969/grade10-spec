@@ -742,3 +742,88 @@ its fingerprint,
 **Expected Results:**
 
 * The audit chain gains an entry naming who downloaded, when, and how many documents.
+
+### grade10-site-vault-documents-and-signing-US5-TC7-1: A download past the service's size ceiling is refused before anything is read
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-documents-and-signing-US-05
+
+**Pre-conditions:**
+
+* A collector whose sealed documents together are past the service's size ceiling is on <the collector's Your data page>.
+
+**Steps:**
+
+1. Click Download all.
+
+**Expected Results:**
+
+* The download is refused by name, before any document is read.
+* No file is sent, and no document is recorded as read.
+
+---
+
+## Reconciliation
+
+**Run:** the blind pass read the bundle — `spec.md`'s `## Purpose` and
+`## Feature set`, this capability's `user-journeys.md`, the change's
+`proposal.md` and `decisions.md` (`## Raised` included), `ui-design.md` with its
+state dispositions stripped, and the linked sections of
+`docs/prds/products/grade10-site/vault/documents-and-signing.md`. It was denied
+every `## Requirements` section, `openspec/specs/` beyond the two included
+sections, `openspec/changes/archive/` and `tech-design.md`. It wrote 25 cases
+over US1, US3 and US5 and raised three questions. The scenario pass issued
+`grade10-site-vault-documents-and-signing-SC-22` to `grade10-site-vault-documents-and-signing-SC-29`.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-02`, `grade10-site-vault-documents-and-signing-SC-12`, `grade10-site-vault-documents-and-signing-SC-17` — the storage packet, the pages turned, the copies |
+| `US1-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-01`, `grade10-site-vault-documents-and-signing-SC-04` — both agreements, the term printed as a term |
+| `US1-TC3-1` | Covered | `grade10-site-vault-documents-and-signing-SC-12` |
+| `US1-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-13` |
+| `US1-TC5-1` | Kept, no scenario | The durable requirement *The signing link is single-use, short-lived and bound to one device* states it — the link "SHALL be usable once" — and no scenario reaches it. This change carries no MODIFIED block on that requirement, so no scenario is folded here; the case is what tests the rule, and the next change on the ceremony owes the scenario |
+| `US1-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-11` |
+| `US1-TC7-1` | Covered | `grade10-site-vault-documents-and-signing-SC-10` |
+| `US1-TC8-1` | Covered | `grade10-site-vault-documents-and-signing-SC-14` |
+| `US1-TC9-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17` |
+| `US1-TC10-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17`; the public verify address beside the documents is the design's Case page row, not a requirement |
+| `US1-TC11-1` | Kept, no scenario | The durable requirement *A document can be verified by anyone holding its digest* states the positive answer; `grade10-site-vault-documents-and-signing-SC-18` states only the unknown digest and `grade10-site-vault-documents-and-signing-SC-19` the operator's re-check. Same reason as `US1-TC5-1`: no MODIFIED block here, so the case carries the rule until that requirement is next opened |
+| `US1-TC12-1` | Covered | `grade10-site-vault-documents-and-signing-SC-18` |
+| `US3-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-25`, `grade10-site-vault-documents-and-signing-SC-02` |
+| `US3-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-22`, `grade10-site-vault-documents-and-signing-SC-24`, `grade10-site-vault-documents-and-signing-SC-01` |
+| `US3-TC3-1` | Covered | `grade10-site-vault-documents-and-signing-SC-23` |
+| `US3-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-06` |
+| `US3-TC5-1` | Covered | `grade10-site-vault-documents-and-signing-SC-05` |
+| `US3-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-24` for when and by whom; the optional recording reference is the durable *A packet is prepared as one set* requirement's, which this change does not open |
+| `US3-TC7-1` | Covered | `grade10-site-vault-documents-and-signing-SC-08`, `grade10-site-vault-documents-and-signing-SC-09`; which bound applies was raised and is landed in `decisions.md` |
+| `US5-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-26` |
+| `US5-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-27` |
+| `US5-TC3-1` | Kept, no scenario | Presentation only: the pending button is the design's `Your data` · Download in flight row, closed there as `**Out of suite:**` the view's colocated test. No requirement states a pending state and none was invented |
+| `US5-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-28` for the refusal; the error line and the retry affordance are the design's `Your data` · Download failed row |
+| `US5-TC5-1` | Covered | `grade10-site-vault-documents-and-signing-SC-26` |
+| `US5-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-29` |
+| `grade10-site-vault-documents-and-signing-SC-28` | Case added | `US5-TC7-1` — no blind case drove the size ceiling; `US5-TC4-1` stubs a generic failure and never reaches the bound |
+| Raised — the seal's short download grant has no stated duration or surface | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *Every signer keeps a copy, three ways* requirement, which the blind pass was denied |
+| Raised — which bound of the packet's preparation window applies when | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A packet is prepared as one set* requirement, which the blind pass was denied |
+| Raised — must the asker be signed in to verify a digest | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A document can be verified by anyone holding its digest* requirement, which the blind pass was denied |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US1-TC1-1` | The end-to-end walk drives the ceremony, but a person turns the pages on the counter iPad and reads the printed custody agreement's facts off the sealed PDF |
+| `US1-TC2-1` | As above, and the loan agreement's printed figures — interest for the term, the same rate per annum, `Fees: None`, the repayable amount — are read off the PDF a person opens |
+| `US3-TC1-1` | A person confirms no key-terms dialog opens on the storage lane; the automated walk proves the packet's contents, not what the console withheld |
+| `US3-TC2-1` | A person reads the dialog's terms against the loan agreement itself, which is the one thing no assertion can restate without keeping a second list |
+| `US5-TC1-1` | The automated walk proves the response; a person opens the downloaded file and checks every document and its fingerprint are in it |
+| `US5-TC3-1` | The pending state is a frame between the press and the file; no automated test decides it, and the view's colocated test is what holds the button's states |

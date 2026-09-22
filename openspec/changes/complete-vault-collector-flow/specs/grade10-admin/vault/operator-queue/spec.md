@@ -52,3 +52,381 @@
 - No intake of its own
   - Every case is the collector's: the console opens none, and no identity is
     keyed to a case
+
+## MODIFIED Requirements
+
+### Requirement: The queue cuts cases by what they are waiting for
+
+The queue SHALL offer these views, and every status SHALL belong to exactly
+one of the first five:
+
+| View | What it lists |
+| --- | --- |
+| Needs staff | `submitted`, `under_valuation`, `offer_made` |
+| Agreeing | `accepted`, `signing` |
+| In custody | `vaulted`, `active`, `repaid` |
+| Closed | `released`, `declined`, `cancelled`, `expired`, `forfeited` |
+| Drafts | `draft` |
+| Today | every case that has not ended whose visit falls on the shop's own calendar day |
+| Overdue | every live loan past its due date, longest overdue first |
+
+The Today cut SHALL be made where the rows are read, on the brand's own zone,
+so that the view and the badge beside it cannot disagree across a midnight.
+
+Every view SHALL say how many cases it holds before it is opened, counted
+behind that view's own filter rather than over the page in hand, at the
+instant and on the zone the rows are read. A view holding nothing SHALL say
+so rather than leaving its count unwritten, and the page SHALL say how many of
+that number it is showing.
+
+The queue SHALL open on the Today cut, read from that cut's own query rather
+than from a second one, ordered by the visit's slot time earliest first. Where
+the cut holds nothing, the landing view SHALL say no visit is booked for
+today.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-01 - Today is the shop's day
+**Serves:** grade10-admin-vault-operator-queue-US-01 - Operator opens the shop and sees what is waiting
+
+- **GIVEN** a visit booked for later today at the shop, read early in the morning there while the date in Coordinated Universal Time is still yesterday's
+- **WHEN** the Today view is read
+- **THEN** the visit's case is in it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-02 - Every status has exactly one home
+**Serves:** grade10-admin-vault-operator-queue-US-01 - Operator opens the shop and sees what is waiting
+
+- **WHEN** the five status views are read together
+- **THEN** every status appears in exactly one of them
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-21 - Every cut says how many it holds
+**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator sizes the day's load before opening a case
+
+- **GIVEN** 60 cases waiting on staff and none agreeing
+- **WHEN** the queue is read
+- **THEN** the cut for cases waiting on staff says it holds 60, and the one for cases agreeing says it holds none
+- **AND** the page in hand says how many of the 60 it is showing
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-22 - The console opens on today's visits in slot order
+**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator starts the shift on the day's visits
+
+- **GIVEN** visits booked at the shop today for 10:00, 11:30 and 15:00
+- **WHEN** an operator opens the vault section
+- **THEN** the view it opens on is the Today cut, holding those three cases in that order, with its count beside it
+- **AND** reading the Today cut straight after answers those same three cases
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-23 - A day with no visit says so
+**Serves:** grade10-admin-vault-operator-queue-US-06 - the operator learns there is nothing booked before working the rest of the queue
+
+- **GIVEN** no visit booked at the shop for today
+- **WHEN** an operator opens the vault section
+- **THEN** the view it opens on says no visit is booked for today, and its count reads none
+
+### Requirement: Search is exact on a contact, prefix on a case id, and leaves a trail
+
+Search SHALL match a phone number or an email address exactly, and a case id
+or a case reference by prefix. It SHALL NOT match a substring of a contact
+column.
+
+A number SHALL be canonicalised against the brand's numbering plan before it
+is compared, so the spacing an operator typed does not decide whether the case
+is found. The term SHALL travel in the request body, never in an address.
+
+A term of two to six characters drawn from the reference's own alphabet SHALL
+be searched as a reference, whatever case the operator typed it in.
+
+Every search SHALL write one entry on the audit trail naming who searched,
+when, what kind of term it was, and how many cases matched. The term itself
+SHALL appear in no column of it.
+
+The answer SHALL be one page and SHALL say when more matched than were handed
+back. A search that matches no case SHALL say so, rather than reading as a
+queue with nothing in it.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-07 - A number is found however it was typed
+**Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
+
+- **GIVEN** a case stored under a canonical number
+- **WHEN** an operator searches for the same number with spaces in it
+- **THEN** the case is found
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-08 - A search records itself without the term
+**Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
+
+- **WHEN** an operator searches for a customer's email address
+- **THEN** the audit trail carries one entry naming the operator, the instant, that the term was an address, and the number of matches
+- **AND** the address appears in no column of it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-09 - Listing the queue records nothing
+**Serves:** grade10-admin-vault-operator-queue-US-02 - Operator finds the case of the person at the counter
+
+- **WHEN** an operator reads the queue
+- **THEN** no audit entry is written for it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-24 - The characters read out at the counter find the case
+**Serves:** grade10-admin-vault-operator-queue-US-05 - the operator serves the person at the counter from what they read out
+
+- **GIVEN** a case carrying a six-character reference
+- **WHEN** an operator searches for those characters in lower case
+- **THEN** that case is found
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-25 - A reference search is filed like any other
+**Serves:** grade10-admin-vault-operator-queue-US-05 - the operator's lookup at the counter leaves the same trail as every other
+
+- **WHEN** an operator searches for a case reference
+- **THEN** the audit trail carries one entry naming the operator, the instant, that the term was a reference, and the number of matches
+- **AND** the reference appears in no column of it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-26 - A reference nobody holds says so
+**Serves:** grade10-admin-vault-operator-queue-US-05 - the operator learns the characters were misheard rather than reading an empty queue
+
+- **WHEN** an operator searches for a reference no case carries
+- **THEN** the answer says no case answers to it
+
+## ADDED Requirements
+
+### Requirement: A case reads on the console in the words the collector reads
+
+Every console surface that names a case shows the handle the collector can
+read out and the word the collector reads for where the case stands.
+
+- **The reference** - a queue row, a row of the Today cut, a held-item row and
+  a case's own header SHALL each show that case's six-character reference.
+- **The word** - a status SHALL be shown as the word the collector reads for
+  it, and no console surface SHALL print the stored status name.
+- **One vocabulary** - the word the console shows for a status SHALL be the
+  word the collector's own case page shows for it.
+- **Who is waited on** - a queue row SHALL say when the case is waiting on the
+  collector rather than on a member of staff.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-27 - A row reads the collector's word, never the stored one
+**Serves:** grade10-admin-vault-operator-queue-US-01 - the operator reads a row in the words the person at the counter will use
+
+- **GIVEN** a case whose stored status is `under_valuation`
+- **WHEN** the queue is read
+- **THEN** the row shows the word the collector's own case page shows for that status
+- **AND** no stored status name is printed on it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-28 - Every case surface carries the reference
+**Serves:** grade10-admin-vault-operator-queue-US-05 - the operator reads the reference back to the person at the counter
+
+- **GIVEN** a case holding an item in the vault
+- **WHEN** an operator reads its queue row, its row in the held list and its own header
+- **THEN** each shows that case's reference
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-29 - A row says when the collector is the one being waited on
+**Serves:** grade10-admin-vault-operator-queue-US-01 - the operator sees at a glance which cases are not theirs to move
+
+- **GIVEN** a case whose offer is out and unanswered
+- **WHEN** the queue is read
+- **THEN** its row says the case is waiting on the collector
+
+### Requirement: The case opens on today's visit, step by step
+
+A case with a visit at the shop today opens on the steps the counter works for
+that visit, in the order they are worked.
+
+- **The steps** - the checklist SHALL hold these steps, in this order:
+
+| # | Step | Ticked when | Lane |
+| --- | --- | --- | --- |
+| 1 | Identity | an identity check is recorded or reused for the collector | both |
+| 2 | Terms | the loan agreement's key terms are recorded as explained, or on a case that borrows nothing the custody terms are agreed | both |
+| 3 | Papers | the packet is prepared | both |
+| 4 | Handed over | the packet's link is handed to the collector | both |
+| 5 | Signed | every document in the packet is executed | both |
+| 6 | In the vault | the item is confirmed into the vault with its shop | both |
+| 7 | Paid out | the advance is recorded | financed only |
+
+- **Ticked as they land** - a step SHALL be ticked when the act that lands it
+  is recorded, and never before.
+- **The step in hand** - the earliest step not yet ticked SHALL carry the act
+  that lands it.
+- **A step not yet offered** - a step whose act the case does not yet allow
+  SHALL say what it is waiting for, in words, rather than offering an act the
+  worker will refuse.
+- **No visit today** - a case with no visit at the shop today SHALL show no
+  checklist.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-30 - The counter reads the visit's steps in order
+**Serves:** grade10-admin-vault-operator-queue-US-07 - a shop of three runs the counter from the screen
+
+- **GIVEN** a financed case with a visit at the shop today and its identity check recorded
+- **WHEN** staff open the case
+- **THEN** it opens on the visit's seven steps in order, with the identity step ticked
+- **AND** the terms step carries the act that lands it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-31 - A step the case does not allow yet says what it is waiting for
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter learns what is missing without sending an act that will be refused
+
+- **GIVEN** a financed case with a visit today whose packet is not signed
+- **WHEN** staff read the step that puts the item in the vault
+- **THEN** the step offers no act and says it is waiting for the packet to be signed
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-32 - A case that borrows nothing walks the custody terms
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works a storage visit from the same screen
+
+- **GIVEN** a case that borrows nothing, with a visit at the shop today
+- **WHEN** staff open the case
+- **THEN** its terms step reads the custody terms, and no step asks for the loan agreement's key terms
+- **AND** no step asks for an advance to be recorded
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-33 - A case with no visit today shows no checklist
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter is not walked through a visit nobody is coming to
+
+- **GIVEN** a case whose visit is booked for tomorrow
+- **WHEN** staff open it
+- **THEN** no visit checklist is shown
+
+### Requirement: An act the case withholds says what it is waiting for
+
+Where a case's status withholds an act, the tab says what the act is waiting
+for instead of leaving the operator to send it and be refused.
+
+- **Named, not silent** - a tab SHALL name the acts this case's status
+  withholds, and what each is waiting for, in words.
+- **Forfeit** - the custody tab SHALL withhold forfeiture with one of these
+  reasons, and SHALL offer it once none holds:
+
+| Reason | Held while |
+| --- | --- |
+| The due date has not passed | the loan is not yet past its due date |
+| No written notice has been sent | no forfeiture notice has been sent on the case |
+| The borrower has until the date they were given | the date the notice gave the borrower has not passed; the reason names that date and the day the notice was sent |
+
+- **The notice from there** - where forfeiture is held for want of a notice,
+  sending the notice SHALL be offered beside the reason.
+- **What the collector was told** - the custody tab SHALL list the messages
+  sent to the collector about the late loan, each with the day it went and the
+  channel it went by.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-34 - A loan not yet past its due date cannot be forfeited
+**Serves:** grade10-admin-vault-operator-queue-US-08 - the operator never takes an item a day early
+
+- **GIVEN** a live loan whose due date has not passed
+- **WHEN** an operator reads the custody tab
+- **THEN** forfeiture is not offered, and the reason reads that the due date has not passed
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-35 - A late loan with no notice offers the notice
+**Serves:** grade10-admin-vault-operator-queue-US-08 - the operator sees the one act that moves a late case on
+
+- **GIVEN** a live loan past its due date on which no forfeiture notice has been sent
+- **WHEN** an operator reads the custody tab
+- **THEN** forfeiture is not offered, and the reason reads that no written notice has been sent
+- **AND** sending the notice is offered beside it
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-36 - A running cure names the date and the day the notice went
+**Serves:** grade10-admin-vault-operator-queue-US-08 - the operator reads the exact day the item may be taken
+
+- **GIVEN** a forfeiture notice sent on a day whose date to pay by has not passed
+- **WHEN** an operator reads the custody tab
+- **THEN** forfeiture is not offered, and the reason names the date the borrower was given and the day the notice was sent
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-37 - A tab says what this status withholds
+**Serves:** grade10-admin-vault-operator-queue-US-03 - the operator learns why a case offers less than the one before it
+
+- **GIVEN** a case whose item is in the vault
+- **WHEN** its tabs are read
+- **THEN** the acts this status withholds are named, each with what it is waiting for
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-38 - The custody tab lists what the collector was told
+**Serves:** grade10-admin-vault-operator-queue-US-08 - the operator sees what the borrower has already been sent before taking the item
+
+- **GIVEN** a late loan on which two reminders and a forfeiture notice have been sent
+- **WHEN** an operator reads the custody tab
+- **THEN** each of the three is listed with the day it went and the channel it went by
+
+### Requirement: The identity panel reads the six states the record holds
+
+The console says where a collector's identity stands in six words, so an
+operator arranging a visit knows whether to send the check again, wait, or
+take it at the counter.
+
+- **The six** - the panel SHALL show exactly one of these states, and the
+  case's header SHALL carry the same state:
+
+| State | What the record holds | What the panel offers |
+| --- | --- | --- |
+| Verified | an identity bound: who checked it, and when | viewing the photograph under the identity read grant, and recording one at the counter instead |
+| Out | a hosted check invited, started or submitted, with the day it went | sending it again, and recording one at the counter |
+| Stalled | a hosted check submitted and not yet decided, with the day it was submitted | recording one at the counter, and sending it again |
+| Refused | the last hosted check declined, with the day and the reason | recording one at the counter, naming who is recording over the refusal |
+| Lapsed | the last hosted check expired or withdrawn, with the day | sending a hosted check, and recording one at the counter |
+| None | nothing asked for | sending a hosted check, and recording one at the counter |
+
+- **Never the provider's own** - a finer state the identity provider reports
+  SHALL fold into one of the six, and no word of the provider's SHALL be
+  shown.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-39 - A check still out reads as out, not as nothing asked for
+**Serves:** grade10-admin-vault-operator-queue-US-09 - the operator knows whether to send the check again or wait
+
+- **GIVEN** a case whose hosted check was invited two days ago and not answered
+- **WHEN** an operator reads the identity panel
+- **THEN** it reads Out, with the day the check went
+- **AND** it offers sending it again and recording one at the counter
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-40 - A refused check names who records over it
+**Serves:** grade10-admin-vault-operator-queue-US-09 - the operator takes the identity at the counter with the refusal in sight
+
+- **GIVEN** a case whose last hosted check was declined
+- **WHEN** an operator reads the identity panel
+- **THEN** it reads Refused, with the day and the reason
+- **AND** recording one at the counter names who is recording over the refusal
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-41 - Each of the six states reads its own panel
+**Serves:** grade10-admin-vault-operator-queue-US-09 - the operator reads one word for where the identity stands
+
+- **WHEN** a case standing at each of the six states is read in turn
+- **THEN** the panel shows that state, with what the record holds for it and the acts it offers
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-42 - A provider's finer state folds into one of the six
+**Serves:** grade10-admin-vault-operator-queue-US-09 - the operator is never shown a word the shop does not use
+
+- **GIVEN** a hosted check the provider reports in a stage of its own outside the six
+- **WHEN** an operator reads the identity panel
+- **THEN** it shows one of the six states, and no word of the provider's
+
+### Requirement: The held list counts what is held and says what each item carries
+
+The held list answers how much the shops are holding before an operator reads
+a single row.
+
+- **The figures** - the list SHALL say how many items are held, how many are
+  held at each shop it covers, how many carry a live loan and how many are
+  waiting on a booked pickup.
+- **Counted behind the filter** - each figure SHALL count everything the
+  filter in force holds, never the page in hand.
+- **The row** - a row SHALL carry the case reference, the item's name, the
+  shop, the locker, the day it was taken in, how many days it has been held,
+  the status in the collector's word, what is outstanding on it, and whether a
+  pickup is booked.
+- **One shop or all** - the list SHALL be narrowable to one shop.
+- **Nothing held** - a list holding nothing SHALL say so, with its figures at
+  none.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-43 - The figures count what is held, not the page
+**Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says how much the shops are holding without paging the list
+
+- **GIVEN** 60 items held across two shops, more than one page of them
+- **WHEN** the held list is read
+- **THEN** its figures count all 60, and name how many are held at each of the two shops
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-44 - One shop narrows the rows and the figures with them
+**Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for the shop they are standing in
+
+- **GIVEN** items held at two shops
+- **WHEN** the list is narrowed to one of them
+- **THEN** only that shop's items are listed, and the figures count that shop's items alone
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-45 - A row says what the item is carrying
+**Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for one item without opening its case
+
+- **GIVEN** an item held under a live loan and another whose pickup is booked
+- **WHEN** the held list is read
+- **THEN** each row names the case reference, the item, the shop, the locker, the day it was taken in, the days it has been held, the status in the collector's word, what is outstanding, and whether a pickup is booked
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-46 - A shop holding nothing says so
+**Serves:** grade10-admin-vault-operator-queue-US-04 - the operator reads an empty shelf as an empty shelf
+
+- **GIVEN** a shop holding no item
+- **WHEN** the list is narrowed to it
+- **THEN** it says nothing is held, and its figures read none

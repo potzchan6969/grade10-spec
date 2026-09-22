@@ -11,7 +11,7 @@ reversible, and a compromised admin cannot lock peer admins out by ban.
 
 ### shared-auth-users-US-05: Account holder files their own request to be forgotten
 
-**As an** account holder,
+**As a** person with an account,
 **I want** to file the request to be forgotten from my own account's Your data
 page, and to cancel it there inside the seven days,
 **so that** I need not ask an operator to file it, and can change my mind
