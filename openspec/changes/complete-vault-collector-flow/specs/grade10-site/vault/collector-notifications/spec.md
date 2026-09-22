@@ -137,7 +137,7 @@ says where the money goes.
 | Overdue | what is owed at that reading, the date it was due, how much of that is late interest, and what each further day adds |
 | A repayment recorded, a record taken back, a loan repaid, an item forfeited | the figures that event names, and what the case owes after it |
 
-- **How to pay** — every money message SHALL carry the same how-to-pay block the live loan shows, which `grade10-site/vault/loan-and-settlement` defines, so a borrower can pay without opening the case.
+- **How to pay** — a money message sent while a balance is still owed SHALL carry the same how-to-pay block the live loan shows, which `grade10-site/vault/loan-and-settlement` defines, so a borrower can pay without opening the case. A money message naming no balance owed SHALL carry none: the offer, because nothing has been advanced yet, and a loan repaid or an item forfeited, because the case owes nothing after it.
 - **The currency** — every amount SHALL be stated in the case's own currency.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-23 - The offer's message tables its terms

@@ -1,6 +1,7 @@
 import { hkDate, money } from "@/emails/_components/format";
 import {
   FactsGroup,
+  Note,
   VaultLetter,
 } from "@/emails/vault/_components/vault-letter";
 import {
@@ -40,6 +41,7 @@ export default function ForfeitedEmail({
           { label: "You now owe", value: money(0) },
         ]}
       />
+      <Note>No further reminders follow.</Note>
     </VaultLetter>
   );
 }

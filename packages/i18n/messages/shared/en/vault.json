@@ -265,8 +265,10 @@
       "open": "Open until {when}. Our staff record your answer in the shop.",
       "accept": "Accept this offer",
       "acceptConfirm": "You accept {amount} over {days} days at {rate}% for the term. We prepare the papers for your visit.",
+      "accepted": "Offer accepted. Book a visit to sign.",
       "decline": "Decline this offer",
       "declineConfirm": "Decline this offer? We keep the item's request open and can make you another one.",
+      "declined": "Offer declined.",
       "cancelRequest": "Cancel this request",
       "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
       "howItWorks": {
@@ -279,10 +281,6 @@
       "valuationNote": "This is what our staff valued the item at — not an offer to buy it.",
       "back": "Go back"
     },
-    "offerExpired": "This offer ran out on {when}. Ask us for a new one.",
-    "offerAccepted": "Offer accepted. Book a visit to sign.",
-    "offerDeclined": "Offer declined.",
-    "offerGone": "This offer has run out. Ask our staff for a new one.",
     "agreedTerms": "Agreed terms: {amount} over {days} days, due {when}.",
     "agreedTermsFromAdvance": "Agreed terms: {amount} over {days} days, counted from the day the money reaches you.",
     "holding": "We are holding your item.",

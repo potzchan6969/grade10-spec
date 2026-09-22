@@ -64,9 +64,9 @@ export const Upcoming: Story = {
     await expect(ring).toBeInstanceOf(HTMLElement);
     await expect(ring).not.toBeDisabled();
     await expect(ring).not.toHaveAttribute("data-checked");
-    await expect(within(canvasElement).getByRole("listitem")).not.toHaveAttribute(
-      "aria-current",
-    );
+    await expect(
+      within(canvasElement).getByRole("listitem"),
+    ).not.toHaveAttribute("aria-current");
   },
 };
 

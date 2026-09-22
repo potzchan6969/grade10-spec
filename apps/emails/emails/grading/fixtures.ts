@@ -1,24 +1,24 @@
-import type { PlanSavedProps } from "@/emails/grading/plan-saved";
-import type { PlanNudgedProps } from "@/emails/grading/plan-nudged";
-import type { PlanExpiredProps } from "@/emails/grading/plan-expired";
-import type { DropoffBookedProps } from "@/emails/grading/dropoff-booked";
-import type { DropoffMovedProps } from "@/emails/grading/dropoff-moved";
-import type { DropoffCancelledProps } from "@/emails/grading/dropoff-cancelled";
-import type { DropoffMissedProps } from "@/emails/grading/dropoff-missed";
-import type { DropoffReminderProps } from "@/emails/grading/dropoff-reminder";
-import type { DropoffDetachedProps } from "@/emails/grading/dropoff-detached";
-import type { CheckedInProps } from "@/emails/grading/checked-in";
-import type { BatchShippedProps } from "@/emails/grading/batch-shipped";
 import type { BatchReestimatedProps } from "@/emails/grading/batch-reestimated";
-import type { GradesPostedProps } from "@/emails/grading/grades-posted";
-import type { CardNotReturnedProps } from "@/emails/grading/card-not-returned";
+import type { BatchShippedProps } from "@/emails/grading/batch-shipped";
 import type { CardDamagedProps } from "@/emails/grading/card-damaged";
-import type { ReadyProps } from "@/emails/grading/ready";
-import type { UncollectedReminderProps } from "@/emails/grading/uncollected-reminder";
-import type { StorageStartedProps } from "@/emails/grading/storage-started";
-import type { NoticePostedProps } from "@/emails/grading/notice-posted";
-import type { CollectedProps } from "@/emails/grading/collected";
+import type { CardNotReturnedProps } from "@/emails/grading/card-not-returned";
 import type { CardWithdrawnProps } from "@/emails/grading/card-withdrawn";
+import type { CheckedInProps } from "@/emails/grading/checked-in";
+import type { CollectedProps } from "@/emails/grading/collected";
+import type { DropoffBookedProps } from "@/emails/grading/dropoff-booked";
+import type { DropoffCancelledProps } from "@/emails/grading/dropoff-cancelled";
+import type { DropoffDetachedProps } from "@/emails/grading/dropoff-detached";
+import type { DropoffMissedProps } from "@/emails/grading/dropoff-missed";
+import type { DropoffMovedProps } from "@/emails/grading/dropoff-moved";
+import type { DropoffReminderProps } from "@/emails/grading/dropoff-reminder";
+import type { GradesPostedProps } from "@/emails/grading/grades-posted";
+import type { NoticePostedProps } from "@/emails/grading/notice-posted";
+import type { PlanExpiredProps } from "@/emails/grading/plan-expired";
+import type { PlanNudgedProps } from "@/emails/grading/plan-nudged";
+import type { PlanSavedProps } from "@/emails/grading/plan-saved";
+import type { ReadyProps } from "@/emails/grading/ready";
+import type { StorageStartedProps } from "@/emails/grading/storage-started";
+import type { UncollectedReminderProps } from "@/emails/grading/uncollected-reminder";
 
 /**
  * The fixture every grading preview is written over: submission `5TW8HN`,

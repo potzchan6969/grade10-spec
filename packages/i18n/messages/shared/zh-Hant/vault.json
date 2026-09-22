@@ -265,8 +265,10 @@
       "open": "有效至 {when}。請在門市由職員為你記錄回覆。",
       "accept": "接受這份報價",
       "acceptConfirm": "你接受 {amount}，為期 {days} 天，全期利率 {rate}%。我們會為你的到店預約準備文件。",
+      "accepted": "已接受報價。請預約到店簽署。",
       "decline": "婉拒這份報價",
       "declineConfirm": "婉拒這份報價？物品的申請仍然保留，我們可以再為你提出另一份。",
+      "declined": "已婉拒報價。",
       "cancelRequest": "取消這宗申請",
       "cancelConfirm": "取消這宗申請？已預約的到店會一併取消，物品仍然由你保管。",
       "howItWorks": {
@@ -279,10 +281,6 @@
       "valuationNote": "這是我們職員為物品估算的價值 — 並非購買物品的報價。",
       "back": "返回"
     },
-    "offerExpired": "這份報價已於 {when} 到期。請向我們索取新報價。",
-    "offerAccepted": "已接受報價。請預約到店簽署。",
-    "offerDeclined": "已婉拒報價。",
-    "offerGone": "這份報價已過期。請向職員索取新報價。",
     "agreedTerms": "已議定條款：{amount}，為期 {days} 天，{when} 到期。",
     "agreedTermsFromAdvance": "已議定條款：{amount}，為期 {days} 天，由款項到手當日起計。",
     "holding": "我們正為你保管物品。",

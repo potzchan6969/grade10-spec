@@ -1,27 +1,27 @@
-import type { IdentityCheckInvitedProps } from "@/emails/vault/identity-check-invited";
-import type { VisitBookedProps } from "@/emails/vault/visit-booked";
-import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
-import type { VisitCancelledProps } from "@/emails/vault/visit-cancelled";
-import type { VisitMissedProps } from "@/emails/vault/visit-missed";
-import type { OfferMadeProps } from "@/emails/vault/offer-made";
-import type { OfferExpiredProps } from "@/emails/vault/offer-expired";
-import type { CaseVaultedProps } from "@/emails/vault/case-vaulted";
-import type { PayoutRecordedProps } from "@/emails/vault/payout-recorded";
-import type { RepaymentRecordedProps } from "@/emails/vault/repayment-recorded";
-import type { PayoutReversedProps } from "@/emails/vault/payout-reversed";
-import type { RepaymentReversedProps } from "@/emails/vault/repayment-reversed";
-import type { RepaymentDueSoonProps } from "@/emails/vault/repayment-due-soon";
-import type { RepaymentOverdueProps } from "@/emails/vault/repayment-overdue";
-import type { ForfeitureNoticeProps } from "@/emails/vault/forfeiture-notice";
-import type { LoanRepaidProps } from "@/emails/vault/loan-repaid";
-import type { CaseReleasedProps } from "@/emails/vault/case-released";
-import type { ForfeitedProps } from "@/emails/vault/forfeited";
-import type { CaseDeclinedProps } from "@/emails/vault/case-declined";
 import type { CaseCancelledProps } from "@/emails/vault/case-cancelled";
+import type { CaseDeclinedProps } from "@/emails/vault/case-declined";
 import type { CaseExpiredDraftProps } from "@/emails/vault/case-expired-draft";
 import type { CaseExpiredUnbookedProps } from "@/emails/vault/case-expired-unbooked";
 import type { CaseNoShowProps } from "@/emails/vault/case-no-show";
+import type { CaseReleasedProps } from "@/emails/vault/case-released";
+import type { CaseVaultedProps } from "@/emails/vault/case-vaulted";
 import type { DocumentsSealedProps } from "@/emails/vault/documents-sealed";
+import type { ForfeitedProps } from "@/emails/vault/forfeited";
+import type { ForfeitureNoticeProps } from "@/emails/vault/forfeiture-notice";
+import type { IdentityCheckInvitedProps } from "@/emails/vault/identity-check-invited";
+import type { LoanRepaidProps } from "@/emails/vault/loan-repaid";
+import type { OfferExpiredProps } from "@/emails/vault/offer-expired";
+import type { OfferMadeProps } from "@/emails/vault/offer-made";
+import type { PayoutRecordedProps } from "@/emails/vault/payout-recorded";
+import type { PayoutReversedProps } from "@/emails/vault/payout-reversed";
+import type { RepaymentDueSoonProps } from "@/emails/vault/repayment-due-soon";
+import type { RepaymentOverdueProps } from "@/emails/vault/repayment-overdue";
+import type { RepaymentRecordedProps } from "@/emails/vault/repayment-recorded";
+import type { RepaymentReversedProps } from "@/emails/vault/repayment-reversed";
+import type { VisitBookedProps } from "@/emails/vault/visit-booked";
+import type { VisitCancelledProps } from "@/emails/vault/visit-cancelled";
+import type { VisitMissedProps } from "@/emails/vault/visit-missed";
+import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
 
 /**
  * The fixture every vault letter preview is written over: case `H7K4PQ`, a

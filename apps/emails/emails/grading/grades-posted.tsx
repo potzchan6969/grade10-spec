@@ -1,8 +1,8 @@
-import {
-  CardLines,
-  type CardLine,
-} from "@/emails/grading/_components/card-lines";
 import { hkDate, money, moneyRate } from "@/emails/_components/format";
+import {
+  type CardLine,
+  CardLines,
+} from "@/emails/grading/_components/card-lines";
 import {
   FactsGroup,
   GradingLetter,

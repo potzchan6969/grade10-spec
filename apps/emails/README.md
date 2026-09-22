@@ -34,6 +34,8 @@ Restart the preview server after pulling so discovery refreshes.
 | Auction activity | `/preview/auction/activity/outbid` |
 | Auction close | `/preview/auction/close/lot-closed-didnt-win` |
 | Auction order | `/preview/auction/order/auction-won` |
+| Grading | `/preview/grading/checked-in` |
+| Vault | `/preview/vault/offer-made` |
 
 This same preview app — sidebar, linter, spam/compatibility checks — is
 published as a static site on every push to `main` (and on demand) to
@@ -51,7 +53,8 @@ pnpm run email:deploy:staging   # needs CLOUDFLARE_API_TOKEN
 components.json
 components/email/          emailcn registry output + theme-grade10.ts
 emails/
-  _components/             Grade10EmailShell, PrimaryCta, EmailFooter
+  _components/             Grade10EmailShell, LetterShell, PrimaryCta,
+                           EmailFooter, format.ts (money and shop dates)
   static/                  preview assets
   auth/
     magic-link.tsx         site-wide sign-in letter
@@ -68,7 +71,29 @@ emails/
                            final), setup overdue, payment overdue, payment
                            received (+ draft partial), shipped, delivered,
                            order cancelled (post-sale)
+  grading/                 the collector's letters about a submission
+    _components/           GradingLetter, SubmissionLine, CardLines,
+                           PickupBlock, preview fixture
+                           the plan's three, the drop-off's six, checked in
+                           (with and without cover), the batch's two, the
+                           grades' two, a card not returned / damaged /
+                           withdrawn, ready (above and below the threshold),
+                           the uncollected rungs, collected
+  vault/                   the collector's letters about a case
+    _components/           VaultLetter, CaseLine, HowToPay, NoticeClause,
+                           ReminderSchedule, preview fixture
+                           the visit's four, the offer's two, custody's
+                           three, the loan's five, falling due's three, the
+                           end of a case's five, the paper, the identity
+                           check
 ```
+
+`LetterShell` is the one shell both products write in: heading, greeting,
+lead, the letter's own blocks, its CTA, its attachments, then the line
+naming what it is about and `EmailFooter`. `GradingLetter` and `VaultLetter`
+are that shell with the submission's line or the case's line as the trailer.
+A footer line carrying a value Legal has not set writes it in brackets —
+`[Shop address]` — and `EmailFooter` marks it.
 
 Production send still goes through the application’s `@grade10/email` lane;
 these templates are the design/preview source for the letter markup.

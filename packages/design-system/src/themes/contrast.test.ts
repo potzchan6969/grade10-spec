@@ -1,5 +1,4 @@
-import { readFileSync } from "node:fs";
-import { readdirSync } from "node:fs";
+import { readdirSync, readFileSync } from "node:fs";
 import path from "node:path";
 import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
@@ -27,7 +26,10 @@ function toLinear(channel: number) {
 }
 
 function toSrgb(channel: number) {
-  const v = channel <= 0.0031308 ? 12.92 * channel : 1.055 * channel ** (1 / 2.4) - 0.055;
+  const v =
+    channel <= 0.0031308
+      ? 12.92 * channel
+      : 1.055 * channel ** (1 / 2.4) - 0.055;
   return Math.min(1, Math.max(0, v));
 }
 
@@ -50,9 +52,15 @@ function chroma([r, g, b]: Rgb) {
   const lr = toLinear(r);
   const lg = toLinear(g);
   const lb = toLinear(b);
-  const l = Math.cbrt(0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb);
-  const m = Math.cbrt(0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb);
-  const s = Math.cbrt(0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb);
+  const l = Math.cbrt(
+    0.4122214708 * lr + 0.5363325363 * lg + 0.0514459929 * lb,
+  );
+  const m = Math.cbrt(
+    0.2119034982 * lr + 0.6806995451 * lg + 0.1073969566 * lb,
+  );
+  const s = Math.cbrt(
+    0.0883024619 * lr + 0.2817188376 * lg + 0.6299787005 * lb,
+  );
   const a = 1.9779984951 * l - 2.428592205 * m + 0.4505937099 * s;
   const bb = 0.0259040371 * l + 0.7827717662 * m - 0.808675766 * s;
   return Math.hypot(a, bb);
@@ -61,7 +69,9 @@ function chroma([r, g, b]: Rgb) {
 function fromHex(hex: string): Rgb {
   const h = hex.replace("#", "");
   const full = h.length === 3 ? [...h].map((c) => c + c).join("") : h;
-  return [0, 2, 4].map((i) => Number.parseInt(full.slice(i, i + 2), 16) / 255) as Rgb;
+  return [0, 2, 4].map(
+    (i) => Number.parseInt(full.slice(i, i + 2), 16) / 255,
+  ) as Rgb;
 }
 
 function luminance([r, g, b]: Rgb) {
@@ -92,13 +102,19 @@ function block(file: string, selector: string) {
     }
   }
   const declarations = new Map<string, string>();
-  for (const m of css.slice(head, end).matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
+  for (const m of css
+    .slice(head, end)
+    .matchAll(/(--[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
     declarations.set(m[1], m[2].replace(/\/\*[\s\S]*?\*\//g, "").trim());
   }
   return declarations;
 }
 
-function resolve(name: string, table: Map<string, string>, seen: string[] = []): Rgb {
+function resolve(
+  name: string,
+  table: Map<string, string>,
+  seen: string[] = [],
+): Rgb {
   if (seen.includes(name)) throw new Error(`cycle at ${name}`);
   const value = table.get(name);
   if (value == null) throw new Error(`${name} is not defined`);
@@ -107,12 +123,15 @@ function resolve(name: string, table: Map<string, string>, seen: string[] = []):
   if (value.startsWith("#")) return fromHex(value);
   const fn = /^oklch\(([\d.]+)\s+([\d.]+)\s+([\d.]+)\)$/.exec(value);
   if (fn) return oklch(Number(fn[1]), Number(fn[2]), Number(fn[3]));
-  const mix = /^color-mix\(in oklab,\s*(.+?)\s+([\d.]+)%,\s*transparent\)$/s.exec(value);
+  const mix =
+    /^color-mix\(in oklab,\s*(.+?)\s+([\d.]+)%,\s*transparent\)$/s.exec(value);
   if (mix) {
     // A transparent tint reads against the page it sits on, never on its own.
     const base = resolve("--background", table, [...seen, name]);
     const over = /^var\((--[a-z0-9-]+)\)$/.exec(mix[1].trim());
-    const top = over ? resolve(over[1], table, [...seen, name]) : fromHex(mix[1].trim());
+    const top = over
+      ? resolve(over[1], table, [...seen, name])
+      : fromHex(mix[1].trim());
     const ratio = Number(mix[2]) / 100;
     return top.map((c, i) => c * ratio + base[i] * (1 - ratio)) as Rgb;
   }
@@ -148,13 +167,17 @@ function pairs(): [string, string][] {
 describe.each(THEMES)("%s", (_label, theme) => {
   const table = new Map([...BASE, ...theme]);
   it.each(pairs())("%s on %s clears AA", (text, base) => {
-    expect(contrast(resolve(text, table), resolve(base, table))).toBeGreaterThanOrEqual(AA);
+    expect(
+      contrast(resolve(text, table), resolve(base, table)),
+    ).toBeGreaterThanOrEqual(AA);
   });
 
   // Clearing AA on the page is not enough: a neutral passes it and then reads
   // as body text, which is how the four tones lost their meaning.
   it.each(STATUS)("--%s-foreground carries its own hue", (tone) => {
-    expect(chroma(resolve(`--${tone}-foreground`, table))).toBeGreaterThan(0.02);
+    expect(chroma(resolve(`--${tone}-foreground`, table))).toBeGreaterThan(
+      0.02,
+    );
   });
 });
 
