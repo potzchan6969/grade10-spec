@@ -77,12 +77,10 @@ parts, `CheckboxListInput`, `Dialog` and its parts, `Divider`, `EmptyState`,
 
 `BookingLocationPicker`, `BookingSlotPicker`, `BookingConfirmation`
 (`calendarHref` already serves the calendar file) and `BookingManageCard`
-from `shared/ui/appointment-booking`. The vault has no manage page, so
-`manageHref` is the case address.
-
-- **Book a visit composes the two pickers the diary already publishes** —
-  the shops as the location picker's cards, then the slot picker's month
-  grid and the picked day's times. `C06`'s 14-day chip strip is superseded
+from `shared/ui/appointment-booking`. Book a visit composes the two
+pickers the diary already publishes — the shops as cards, then a month
+grid and the picked day's times — rather than a third picker of its own.
+The vault has no manage page, so `manageHref` is the case address.
 
 ### Console blocks — existing, `@grade10/frontend-console`
 
@@ -108,10 +106,9 @@ CSV export is a `Button` and a download. Nothing the console package lacks.
 - **`OfferCard`** — the terms table with the valuation, How the loan works,
   Accept and Decline
 - **`AcceptOfferDialog`** — the terms table sits in it, so the case page
-  mounts it as `docs/conventions/dialogs.md` says. Decline, Cancel this
-  request, Cancel the visit, Ask for it back and the erasure ask are words
-  and one effect: `useConfirm` from `@grade10/frontend-dialog/confirm` with
-  their copy keys, and no dialog component of their own
+  mounts it (`docs/conventions/dialogs.md`). Decline, Cancel this request,
+  Cancel the visit, Ask for it back and the erasure ask are words and one
+  effect: `useConfirm` with their copy keys, no component of their own
 - **`HowToPayBlock`** — the structured block
 - **`WhatIsOwedCard`** — the as-at figures, the progress line and the term
   breakdown; `RepaymentsList` under it, empty, one or many
@@ -151,12 +148,11 @@ CSV export is a `Button` and a download. Nothing the console package lacks.
 
 ### Letters — work in grade10 and in this store
 
-One shell, `VaultLetter` in `packages/vault/backend/src/email` — over
-`Grade10EmailShell` in this store's previews and over
-`@grade10/email/render`'s `BaseLayout` in the worker, as the tech design
-fixes — then the heading, the greeting, the lead paragraph, the blocks, the
-case line and the footer. One letter per kind, and twenty-four preview
-letters under `apps/emails/emails/vault/` over a fixture case.
+One shell, `VaultLetter` — `Grade10EmailShell` in this store's previews,
+`@grade10/email/render`'s `BaseLayout` in the worker — carrying the
+heading, the greeting, the lead paragraph, the blocks, the case line and
+the footer. One letter per kind, and twenty-four preview letters under
+`apps/emails/emails/vault/` over a fixture case.
 
 - **The facts** — the label · value rows are `ProductEmail`'s facts group;
   no table component of its own
