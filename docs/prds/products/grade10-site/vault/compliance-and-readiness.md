@@ -47,10 +47,12 @@ it; no statute here is asserted.
   whether sealed evidence exists, read under the row lock
 - **Erasure, in flight** — a signed case that is not yet `released` or
   `forfeited` refuses; nothing is erased until the loan settles
+- 🚧 **Erasure, a live submission** — refused by name while a grading
+  submission is between booked and ready, an upcharge is unsettled or ready
+  cards are uncollected — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **Erasure, closed and signed** — contact, decline reason, staff notes and
   the customer's actor ids go; the sealed PDFs, the identity record and
-  photograph, the item photos and the item text stay under the hold, with no
-  clock
+  photograph, the item photos and the item text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
 - **Messages never sent** — a case's queued and parked mail is deleted
   whichever class the case falls in

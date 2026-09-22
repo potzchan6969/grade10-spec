@@ -303,4 +303,5 @@ changes it, and is a `❓` row in `decisions.md` with the value recommended.
 - [Grading Console · Settings](../../../docs/prds/products/grade10-admin/grading/console.md#settings)
 - [Grading Console · Grants](../../../docs/prds/products/grade10-admin/grading/console.md#grants)
 - [Grading operations](../../../docs/prds/products/grade10-admin/grading/index.md)
+- [Grading Blocks · The Blocks](../../../docs/prds/products/shared/ui/grading-submission.md#the-blocks)
 - [Compliance and Readiness · Retention and erasure](../../../docs/prds/products/grade10-site/vault/compliance-and-readiness.md#retention-and-erasure)
