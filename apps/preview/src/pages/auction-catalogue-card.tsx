@@ -130,7 +130,6 @@ function CatalogueWatch({
   if (lot.status === "Ended") return null;
   return (
     <WatchButton
-      className="min-h-11"
       copy={{
         ...WATCH_COPY,
         watchAriaLabel: `Watch ${lot.title}`,
@@ -161,6 +160,7 @@ function AuctionLotCard({
   eager,
   lift,
 }: AuctionLotCardProps) {
+  const imageRadius = lift ? "rounded-(--radius-xl)" : "rounded-(--radius-3xl)";
   const title = (
     <a
       className={cn(
@@ -185,14 +185,23 @@ function AuctionLotCard({
         <a
           className={cn(
             pressable,
-            "absolute inset-0 overflow-hidden rounded-(--radius-3xl)",
+            "absolute inset-0 overflow-hidden",
+            imageRadius,
           )}
           href={lotAddress(lot)}
         >
-          <span className="lot-image-well absolute inset-0 isolate overflow-hidden rounded-(--radius-3xl) border border-border bg-muted">
+          <span
+            className={cn(
+              "lot-image-well absolute inset-0 isolate overflow-hidden border border-border bg-muted",
+              imageRadius,
+            )}
+          >
             <img
               alt={lot.imageAlt}
-              className="size-full rounded-(--radius-3xl) object-contain transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/lot-card:scale-105"
+              className={cn(
+                "size-full object-contain transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/lot-card:scale-105",
+                imageRadius,
+              )}
               height={640}
               loading={eager ? "eager" : "lazy"}
               src={CATALOGUE_IMAGE}
