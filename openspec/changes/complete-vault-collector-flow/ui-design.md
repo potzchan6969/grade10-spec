@@ -179,7 +179,11 @@ the copy can still move to `@grade10/i18n`.
 ### Words — work in `packages/i18n`
 
 Every key below is answered in `shared/` for every language it speaks; the
-words are not written here.
+words are not written here. `vault.json` already answers the offer terms,
+the accept, decline and cancel confirmations, the owed figures and the sent
+step, under flat `case.*` and `request.*` keys: those keys are renamed into
+the nested shape in one move, and nothing below opens a second family
+beside them.
 
 - **`vault.case.reference`**, **`vault.case.stage.*`** (eight),
   **`vault.case.chip.*`** (waitingOnYou, withUs, visit, due, pastDue,
@@ -189,22 +193,29 @@ words are not written here.
   step
 - **`vault.case.ending.*`** — declined, cancelled, expired, forfeited, each
   with its title and body; `vault.case.startAnother`
-- **`vault.case.offer.*`** — the terms table labels, howItWorks (four
-  items), the valuation note; the accept, decline and cancel dialogs' titles,
-  bodies, confirm and back labels
-- **`vault.money.howToPay.*`** — fpsId, account, reference, counter,
-  recordedAgainst, holdsUntil, growsBy, receiptLine, placeholder
-- **`vault.money.owed.*`** — asAt, outstandingOf, progress (sent, dayOf,
-  due), loan, termInterest, lateInterest, repaid, settledTable
+- **`vault.case.offer.*`** — renamed from `case.offerTitle`,
+  `case.offerTerms`, `case.offerRepayAfter`, `case.offerRepayBy`,
+  `case.offerTotal`, `case.offerLate`, `case.offerOpen`, `case.acceptOffer`,
+  `case.acceptConfirm`, `case.declineOffer`, `case.declineConfirm`,
+  `case.cancelRequest` and `case.cancelConfirm`; adds howItWorks (four
+  items), the valuation note and the confirmations' back labels
+- **`vault.money.howToPay.*`** — renamed from `case.payTitle` and
+  `case.payHolds`; adds fpsId, account, reference, counter,
+  recordedAgainst, growsBy, receiptLine, placeholder
+- **`vault.money.owed.*`** — renamed from `case.dueTitle`,
+  `case.dueOutstanding`, `case.dueRepaid`, `case.dueRepaidLate`,
+  `case.dueAsOf` and `case.owed.*`; adds progress (sent, dayOf, due),
+  loan, termInterest, lateInterest, settledTable
 - **`vault.money.repayments.*`** — title, empty, row, allocation,
   neverRestarts, receipt
 - **`vault.money.notice.*`** — title, wroteOn, untilThen, remindersSent,
   noFurther; **`vault.money.reminders.*`** — title, schedule, free
 - **`vault.request.step.*`** (three), the field hints, the photo tips,
   **`vault.request.review.*`** — title, edit, whatHappensNext (three),
-  statementTick, statementRequired, statementUnset;
-  **`vault.request.sent.*`** — reference, openCase, several, startAnother,
-  closesAfter
+  statementTick, statementRequired, statementUnset
+- **`vault.request.sent.*`** — renamed from `request.sentTitle`,
+  `request.sentMessage` and `request.severalItems`; adds reference,
+  openCase, startAnother, closesAfter
 - **`vault.visit.booked.*`** — title, emailLine, calendar, move, cancel,
   before (verify, verified, bring, sign, signStorage, moneyFollows,
   inPerson); **`vault.visit.shop.*`** — duration, moreShops;
@@ -266,9 +277,9 @@ words are not written here.
 | Request sent (`C10`) | the lead on valuing from photographs; the verify prompt; the visit card; the item block; Cancel this request; history | `grade10-site-vault-case-intake-US-01` |
 | Offer waiting (`C11`) | hero amount, term, total, open until; Accept this offer, Decline this offer; the terms table with the valuation; How the loan works; the identity chip; the visit card with the accepting-books-nothing line | `grade10-site-vault-valuation-and-offer-US-02` |
 | Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-US-02` |
-| Decline confirmation | `Dialog`: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-US-02` |
-| Answer in flight | both buttons disabled; the dialog's confirm pending | `grade10-site-vault-valuation-and-offer-US-02` |
-| Answer refused | the refusal in the dialog by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-US-02` |
+| Decline confirmation | the confirm's words: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-US-02` |
+| Answer in flight | the confirm's button pending while the effect runs; Accept's mounted dialog holds its own | `grade10-site-vault-valuation-and-offer-US-02` |
+| Answer refused | the confirm stays open with the refusal by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-US-02` |
 | Offer replaced (`C22`) | the new offer's hero naming the closed one and its date; Accept and Decline on the new offer only | `grade10-site-vault-valuation-and-offer-US-05` |
 | Offer ran out (`C22`) | badge Offer ran out, chip With us; the closed offer's amount and expiry; no Accept or Decline; the visit stands | `grade10-site-vault-case-lifecycle-US-05` |
 | You declined (`C22`) | badge Being valued; the declined figure and when; the visit stands; Cancel this request lower on the page | `grade10-site-vault-case-lifecycle-US-05` |
@@ -278,15 +289,14 @@ words are not written here.
 | Terms agreed, no visit | the Book a visit prompt and the 30-day line | `grade10-site-vault-case-lifecycle-US-02` |
 | Identity not verified | the Before you come item reads Verify now, linking `/vault/verify`, with the in-person line | `grade10-site-vault-visit-booking-US-04` |
 | Visit card | slot, shop, address; Add to calendar, Move, Cancel visit; the bring line | `grade10-site-vault-visit-booking-US-04` |
-| Cancel visit confirmation | `Dialog`: the visit closes, the case stays; the picker opens after | `grade10-site-vault-visit-booking-US-01` |
+| Cancel visit confirmation | the confirm's words: the visit closes, the case stays; the picker opens after | `grade10-site-vault-visit-booking-US-01` |
 | No visit | Book a visit; the picker opens on the page | `grade10-site-vault-visit-booking-US-01` |
-| Cancel this request | the button with its consequence line; `Dialog` naming the offer and the visit it closes; Yes, cancel and Go back | `grade10-site-vault-case-lifecycle-US-01` |
+| Cancel this request | the button with its consequence line; the confirm names the offer and the visit it closes; Yes, cancel and Go back | `grade10-site-vault-case-lifecycle-US-01` |
 | Cancelled | `case.cancelled`; the page reads again as the ending | `grade10-site-vault-case-lifecycle-US-01` |
 | In the vault, storage (`C14`) | hero the shop; Book a pickup visit, Ask for it back; the custody card with outstanding Nothing; documents with fingerprints | `grade10-site-vault-case-lifecycle-US-05` |
 | Loan running (`C15`) | hero total by the due date with the holds line; Book a visit to collect; What is owed as at: outstanding of total · repaid, the progress line, the breakdown | `grade10-site-vault-loan-and-settlement-US-02` |
-| How to pay, values set | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-US-05` |
-| How to pay, values unset outside production | the same block with bracketed placeholders, marked | `grade10-site-vault-loan-and-settlement-US-05` |
-| How to pay, values unset in production | the block refused — ❓ what stands in its place, flagged below | `grade10-site-vault-loan-and-settlement-US-05` |
+| How to pay | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-US-05` |
+| How to pay, values unset | the bracketed placeholder outside production; in production the block is refused — ❓ what stands in its place, flagged below | `grade10-site-vault-loan-and-settlement-US-05` |
 | Reminders | the two dates before the due date and the 7-day rung after; a reminder costs nothing | `grade10-site-vault-collector-notifications-US-01` |
 | Repayments, none | the empty line: each appears here with its day and the balance after | `grade10-site-vault-loan-and-settlement-US-06` |
 | Repayments, one (`C23`) | amount by method · reached us · recorded · balance after; the allocation sentence; the never-restarts line; the receipt line; the hero reads the remainder and the reduced daily figure | `grade10-site-vault-loan-and-settlement-US-06` |
@@ -301,18 +311,18 @@ words are not written here.
 | Cancelled (`C19`) | by whom and when; the offer closed and the visit cancelled with it | `grade10-site-vault-case-lifecycle-US-04` |
 | Expired (`C19`) | which clock ran out; nothing signed, the item never left | `grade10-site-vault-case-lifecycle-US-04` |
 | Forfeited (`C19`) | the figure the item settled, the notice date, the date to pay by; the agreements stay | `grade10-site-vault-case-lifecycle-US-04` |
-| Release refused | `Ask for it back` answered with the refusal by name under the button | `grade10-site-vault-case-lifecycle-US-05` |
+| Release refused | the ask's confirm stays open with the refusal by name | `grade10-site-vault-case-lifecycle-US-05` |
 
 ### Book a visit
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Shop | one shop `Card` with its address and the 30-minute line; the more-shops line while there is one | `grade10-site-vault-visit-booking-US-01` |
-| Days | fourteen `FilterChip`s from today; a day with nothing free disabled | `grade10-site-vault-visit-booking-US-01` |
-| Times | the day's slots on the shop's clock; the move, cancel and missed-visit line; Book the slot | `grade10-site-vault-visit-booking-US-01` |
-| Nothing free | `visit.nothingFree`; no times | `grade10-site-vault-visit-booking-US-01` |
+| Shop | the location picker: one card per shop with its address, and the 30-minute line; the more-shops line while there is one | `grade10-site-vault-visit-booking-US-01` |
+| Days | the slot picker's month grid from today, a day with nothing free unpickable; the month steps inside the booking window | `grade10-site-vault-visit-booking-US-01` |
+| Times | the picked day's slots on the shop's clock; the move, cancel and missed-visit line; Book the slot | `grade10-site-vault-visit-booking-US-01` |
+| Nothing free | `visit.nothingFree` where the times sit; no times | `grade10-site-vault-visit-booking-US-01` |
 | Time taken | `visit.unavailable`; the times read again | `grade10-site-vault-visit-booking-US-01` |
-| Loading | the shops, services and times lines | `grade10-site-vault-visit-booking-US-01` |
+| Loading | the pickers' own loading lines, shops then times | `grade10-site-vault-visit-booking-US-01` |
 | Booked | the Visit booked screen replaces the picker | `grade10-site-vault-visit-booking-US-04` |
 
 ### Visit booked
@@ -343,8 +353,8 @@ words are not written here.
 | Download in flight | the button pending | `grade10-site-vault-documents-and-signing-US-05` |
 | Download failed | the error line under the button | `grade10-site-vault-documents-and-signing-US-05` |
 | Ask available | the window, what goes and what stays; Ask to be forgotten | `shared-auth-users-US-05` |
-| Ask refused in flight | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-US-01` |
-| Ask confirmation | `Dialog` naming the 7-day window and that it can be cancelled inside it | `shared-auth-users-US-05` |
+| Ask refused | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-US-01` |
+| Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `shared-auth-users-US-05` |
 | Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `shared-auth-users-US-05` |
 | Ask cancelled | back to Ask available | `shared-auth-users-US-05` |
 | Window passed | filed on the date, the window passed; no cancel; each product erases | `shared-auth-users-US-05` |
@@ -448,8 +458,7 @@ words are not written here.
 | --- | --- | --- |
 | Before the act | the latest valuation, the cap, asked for; principal, rate, the term presets; interest, total, a late day, per annum derived live; open until; the five gates as `Check`s | `grade10-site-vault-loan-and-settlement-US-07` |
 | A gate fails | the failing gate unticked with its bound; Make the offer stays, the worker refuses | `grade10-site-vault-loan-and-settlement-US-07` |
-| Bounds unset outside production | the gates read not set; the offer goes through | `grade10-site-vault-loan-and-settlement-US-07` |
-| Bounds unset in production | the dialog names the refusal before the act | `grade10-site-vault-loan-and-settlement-US-07` |
+| Bounds unset | the gates read not set and the offer goes through outside production; in production the dialog names the refusal before the act | `grade10-site-vault-loan-and-settlement-US-07` |
 | Refused | the worker's refusal by name under the form | `grade10-site-vault-valuation-and-offer-US-01` |
 
 ### Put the item in the vault
@@ -469,37 +478,45 @@ words are not written here.
 
 ### Letters
 
-| State | Shows | Anchor |
+One row per kind, and the blocks each carries after the lead.
+
+| State | Blocks | Anchor |
 | --- | --- | --- |
-| The offer (`M01`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-05` |
-| The advance (`M02`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-05` |
-| Due soon (`M03`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-01` |
-| Overdue (`M04`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-01` |
-| Final notice (`M05`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-05` |
-| Verify before the visit (`M06`) | the blocks tabled above | `grade10-site-vault-collector-notifications-US-06` |
-| The other eighteen | the shell, the CTA, the case line, the footer | `grade10-site-vault-collector-notifications-US-02` |
-| How to pay in every money letter | `HowToPay` under the figures | `grade10-site-vault-loan-and-settlement-US-05` |
-| Reference on every letter | `CaseLine` above the footer | `grade10-site-vault-case-intake-US-05` |
-| Values set | `VaultFooter` prints the registered name, the licence line, the complaints contact; `HowToPay` the id and the account | `grade10-site-vault-collector-notifications-US-05` |
-| Values unset outside production | brackets, marked | `grade10-site-vault-collector-notifications-US-05` |
-| Values unset in production | a money letter's send and the notice's send refused | `grade10-site-vault-collector-notifications-US-05` |
+| The offer (`M01`), `offer_made` | facts: loan · term · interest for the term · total to repay · if you are late · open until; the accepting-starts-nothing paragraph; `PrimaryCta` to the case; the runs-out line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
+| The advance (`M02`), `payout_recorded` | facts: sent · due · total to repay · after the due date; the repay-early line; how to pay; `PrimaryCta`; the reminder schedule's two dates and the 7-day rung; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
+| Due soon (`M03`), `repayment_due_soon` | facts: owed today · due · from the day after; how to pay; `PrimaryCta`; the next-reminder line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-01` |
+| Overdue (`M04`), `repayment_overdue` | facts: owed today · was due · of which late interest · each further day; the part-payment and notice-ahead paragraph; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-01` |
+| Final notice (`M05`), `forfeiture_notice` | the clause lead; facts: pay in full by · owed as at today · each further day · the lapse condition · what follows a balance; the a-person-decides paragraph; the no-further-reminders line; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
+| Verify before the visit (`M06`), `identity_check_invited` | facts: your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; the case line; `EmailFooter` naming the custodian | `grade10-site-vault-collector-notifications-US-06` |
+| The other eighteen, no board | `PrimaryCta` to the case; the case line; `EmailFooter` naming the custodian; every other kind in `notify/vocabulary.ts` | `grade10-site-vault-collector-notifications-US-02` |
+| A money kind among them | `repayment_recorded`, `payout_reversed`, `repayment_reversed`, `loan_repaid` and `forfeited` add the facts their event names, how to pay under them, and name the lender | `grade10-site-vault-loan-and-settlement-US-05` |
+| Reference on every letter | the case line above the footer | `grade10-site-vault-case-intake-US-05` |
 | Custodian footer | a letter with no money names the custodian, not the lender | `grade10-site-vault-collector-notifications-US-02` |
+| Values unset | the bracketed placeholder outside production, marked; in production a money letter's send and the notice's send are refused | `grade10-site-vault-collector-notifications-US-05` |
 
 ## Flags
 
-- **Frames nobody drew** — the decline, cancel-visit and cancel-request
-  confirmations, terms agreed with no visit, the case with a lapsed offer
-  on the list, the stepper on an ended case, the chip beyond the five on
-  `Statuses` (visit, collected, closed), Your data's standing card in its
-  none, out and lapsed forms and the ask filed, cancelled and past-window
-  forms, the download states, the queue's search results, the export
-  states, the vault dialog with a precondition unmet, the key-terms dialog
-  unticked, Forfeit withheld before the due date and with no notice, and
-  the eighteen letters with no board. Each is a row above, drawn from its
-  drawn sibling; the stories are their frame
+- **Frames nobody drew** — terms agreed with no visit, the case with a
+  lapsed offer on the list, the stepper on an ended case, the chip beyond
+  the five on `Statuses` (visit, collected, closed), Your data's standing
+  card in its none, out and lapsed forms and the ask filed, cancelled and
+  past-window forms, the download states, the queue's search results, the
+  export states, the vault dialog with a precondition unmet, the key-terms
+  dialog unticked, Forfeit withheld before the due date and with no notice,
+  and the eighteen letters with no board. Each is a row above, drawn from
+  its drawn sibling; the stories are their frame. The five confirmations
+  need none: they wear `ConfirmDialog`'s own frame
+- **Boards a row supersedes** — `C01`, which draws no reference on a list
+  card: the reference is on every card, spoken and typed. `A02`'s fourth
+  tile, the oldest arrears: the tiles are three. `C20`, which draws the ask
+  available and the ask refused as one row with an active button under a
+  refusal reason: they are two states, and the refused one withholds the
+  button. `C06`'s 14-day chip strip: the slot picker draws a month grid
 - **No missing primitive, block or token** — every screen composes what
-  `packages/design-system` and `@grade10/frontend-console` publish; the
-  progress line is a local composition, the chip a `Badge`
+  `packages/design-system`, `@grade10/ui` and `@grade10/frontend-console`
+  publish; the progress line is a local composition, the chip a `Badge`,
+  the reference a `Text` in the mono face. The one component change this
+  store carries is `EmailFooter`'s optional `lines` prop
 - **Journeys the states reach past** — the stepper and the chip, the
   list card's held-since line and the storage-lane custody card (`C14`)
   hang off `grade10-site-vault-case-lifecycle-US-05`, which walks the
