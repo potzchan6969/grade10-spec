@@ -92,16 +92,12 @@ parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
   `Card`; **the grade** is `Text` at display size with the label word under
   it, the ungraded card the same card in the `error` tone
 - **Three rungs on `Text`, work in `packages/design-system`** — a `display`
-  size above `xl`, a `mono` face axis reading the existing `--font-mono`
-  token, and a `warning` tone reading the existing `--warning-foreground`
-  token, for the money block's due row. `Badge` already carries `warning`,
-  so the badge tones above ask for nothing. `Text` has no `text.figma.ts`
-  and `RadioCard` no published component set, so each rung and the level
-  card are code ahead of design, recorded here as
-  [`design-code-sync.md`](../../../docs/governance/design-code-sync.md)
-  requires, and the sets are published before either grows another axis
-- **The day picker** is `BookingSlotPicker`'s month grid; `G05` draws a
-  week strip, and the block stands as the vault's booking does
+  size above `xl`, a `mono` face axis on the existing `--font-mono` token,
+  and a `warning` tone on the existing `--warning-foreground` token for the
+  due row; `Badge` already carries `warning`. `Text` has no `text.figma.ts`
+  and `RadioCard` no published set, so the rungs and the level card are code
+  ahead of design, recorded here as
+  [`design-code-sync.md`](../../../docs/governance/design-code-sync.md) asks
 
 ### `@grade10/ui` — new, work in this repository
 
@@ -116,10 +112,8 @@ instant through `formatLocalTime` in the zone given.
   name, ceiling, cards a submission, fee, cover rate or none, weeks),
   `selectedGraderId`, `aboveTopLine`, `onSelectGrader`; a `Table` per
   grader under a `SegmentedControl` when there is more than one. It and
-  `GradingLevelPicker` are two drawings of one fee sheet — the price table a
-  collector reads before starting and the level cards they pick from — and
-  both read the one settings record, so a sheet change cannot make them
-  disagree
+  `GradingLevelPicker` stay two drawings of one fee sheet, both reading the
+  one settings record, so a sheet change cannot make them disagree
 - **`GradingCardList`** — the editable planning list: `cards` (id, name,
   set line, matched or kept as typed, declared value or none, reference
   sales or none, minimum grade or none), `cap` (the count and the level it
@@ -157,9 +151,8 @@ instant through `formatLocalTime` in the zone given.
 - **`GradingPickupCard`** — `code`, `items` (slabs, raw cards), `where`
   (shop, address), `open`, `due` (the total and the clause that dresses it,
   or nothing), `bring` (an ID line naming the collector, the collector or
-  the named person, or nothing). The card prints one figure; the lines
-  behind it are `GradingMoneyBlock`'s, so a storage day or a waived
-  upcharge moves in one place
+  the named person, or nothing). One figure here; the lines behind it are
+  `GradingMoneyBlock`'s
 - **`GradingNamedCollector`** — `named` (name, named at) or none, `pending`,
   `error`, `onSave`, `onChange`, `onRemove`; the field, Save, or the Named
   card with Change and Remove
@@ -259,11 +252,10 @@ letters under `apps/emails/emails/grading/`, over a fixture submission
 
 - **The facts** — the label · value rows are `ProductEmail`'s facts group,
   as the vault's letters use it; no table component of its own
-- **`CardLines`** — one line per card: grade, name, cert or the ungraded
-  code
-- **`PickupBlock`** — code · where · open · to settle · bring
+- **`CardLines`** — grade, name, cert or the ungraded code, one line a card;
+  **`PickupBlock`** — code · where · open · to settle · bring;
+  **`SubmissionLine`** — id · n cards to grader level, above the footer
 - **`PrimaryCta`** — existing, `apps/emails/emails/_components`
-- **`SubmissionLine`** — id · n cards to grader level, above the footer
 - **`GradingFooter`** — the custodian's registered name trading as Grade10,
   the shop and its address, the complaints contact, the Hong Kong time line
 
@@ -317,8 +309,7 @@ the new `grading` namespace; the words are not written here.
 
 ### Grading home
 
-Stories `grading-plan-grading-home--`, and the Fee sheet rows
-`grading-submission-gradingfeesheet--`.
+Stories `grading-plan-grading-home--`, the Fee sheet rows `grading-submission-gradingfeesheet--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -334,8 +325,7 @@ Stories `grading-plan-grading-home--`, and the Fee sheet rows
 
 ### Plan wizard — the cards
 
-Stories `grading-plan-plan-wizard--`, and Empty list through Over the cap
-`grading-submission-gradingcardlist--`.
+Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-submission-gradingcardlist--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -376,8 +366,7 @@ Stories `grading-submission-gradingpastesheet--`.
 
 ### Plan wizard — the service
 
-Stories `grading-submission-gradinglevelpicker--`, and the Rail and Finish
-later rows `grading-plan-plan-wizard--`.
+Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish later rows `grading-plan-plan-wizard--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -398,8 +387,7 @@ later rows `grading-plan-plan-wizard--`.
 
 ### Plan wizard — book
 
-Stories `grading-submission-gradingreview--`, and the Saved for later and
-Rail rows `grading-plan-plan-wizard--`.
+Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows `grading-plan-plan-wizard--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -454,9 +442,7 @@ Stories `grading-dropoff-dropoff-booked--`.
 
 ### Submission page
 
-Stories `grading-submission-submission-page--`, the Rail rows
-`grading-submission-gradingstatusrail--` and the Chip rows
-`grading-submission-gradingownershipchip--`.
+Stories `grading-submission-submission-page--`, the Rail rows `grading-submission-gradingstatusrail--`, the Chip rows `grading-submission-gradingownershipchip--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -494,7 +480,6 @@ Stories `grading-submission-submission-page--`, the Rail rows
 | Back, being checked | Back at the shop, being checked · With us; the arrived line; nothing to do | `grade10-site-grading-submission-lifecycle-US-01` |
 | Ready (`G11`) | Ready to collect · Waiting on you; `GradingPickupCard`; `GradingNamedCollector`; `VaultItCard`; the cards; `GradingMoneyBlock`; `GradingUncollectedLadder`; History | `grade10-site-grading-submission-lifecycle-US-06` |
 | Ready, one card held | the held card's badge with the grader's date; the receipt-names-it line | `grade10-site-grading-submission-lifecycle-US-01` |
-| Not returned | the card's badge with the payout at declared value, the fee refunded, the window | `grade10-site-grading-submission-lifecycle-US-05` |
 | Payout reversed | the card back with the reversal line | `grade10-site-grading-submission-lifecycle-US-05` |
 | Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up per slab; the slab photographs; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-US-09` |
 | Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-US-09` |
@@ -504,8 +489,7 @@ Stories `grading-submission-submission-page--`, the Rail rows
 
 ### Cards on the submission page
 
-Stories `grading-submission-gradingcardrecord--`, and the Grade card rows
-`grading-submission-gradinggradecards--`.
+Stories `grading-submission-gradingcardrecord--`, the Grade card rows `grading-submission-gradinggradecards--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -533,9 +517,7 @@ Stories `grading-submission-gradingcardrecord--`, and the Grade card rows
 
 ### Pickup, the named person and the ladder
 
-Stories `grading-submission-gradingpickupcard--`,
-`grading-submission-gradingnamedcollector--` on the naming rows, and
-`grading-submission-gradinguncollectedladder--` on the ladder's.
+Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submission-gradingnamedcollector--`, the ladder's `grading-submission-gradinguncollectedladder--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -631,25 +613,24 @@ One row per letter, its kind, and the blocks it carries after the lead.
 
 ### Queue
 
-Stories `grading-admin-queue-queue-panel--`; every Badge row shares
-`--badges` and every Tile row `--tiles`. A badge is derived at the read
-from the submission's own dates, never stored.
+Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` and every Tile row `--tiles`. A badge is derived at the read from the submission's own dates, never stored.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Views (`GA1`) | seven `Choice`s with counts; newest touched first, 50 a page; `CursorPager` | `grade10-admin-grading-counter-US-01` |
 | Today strip | the day's drop-offs in slot order: time, collector, id, cards, grader; the pickups-walk-in line | `grade10-admin-grading-counter-US-01` |
 | Rows | id, collector, cards, grader · level, the status word, visit, last touched, waiting on | `grade10-admin-grading-counter-US-01` |
-| Badge: Visit today | · `grading-admin-queue-queue-panel--badge-visit-today` | `grade10-admin-grading-counter-US-01` |
-| Badge: Batch closes today | · `grading-admin-queue-queue-panel--badge-batch-closes` | `grade10-admin-grading-counter-US-01` |
-| Badge: Due back | · `grading-admin-queue-queue-panel--badge-due-back` | `grade10-admin-grading-batches-US-04` |
-| Badge: Running late | · `grading-admin-queue-queue-panel--badge-running-late` | `grade10-admin-grading-batches-US-04` |
-| Badge: Upcharge to settle | · `grading-admin-queue-queue-panel--badge-upcharge` | `grade10-admin-grading-counter-US-10` |
-| Badge: Ungraded card | · `grading-admin-queue-queue-panel--badge-ungraded` | `grade10-admin-grading-counter-US-10` |
-| Badge: Unchecked return | after a day | `grade10-admin-grading-batches-US-02` |
-| Badge: Uncollected 30 d | · `grading-admin-queue-queue-panel--badge-uncollected` | `grade10-admin-grading-counter-US-12` |
-| Badge: Storage fee from day 90 | · `grading-admin-queue-queue-panel--badge-storage` | `grade10-admin-grading-counter-US-12` |
-| Badge: Notice due | the rung | `grade10-admin-grading-counter-US-12` |
+| Badge: Visit today | the submission's drop-off falls today | `grade10-admin-grading-counter-US-01` |
+| Badge: Batch closes today | the submission is handed in and its batch's cut-off is today | `grade10-admin-grading-counter-US-01` |
+| Badge: Due back | the batch's estimated day back has come | `grade10-admin-grading-batches-US-04` |
+| Badge: Running late | the batch is past its estimated day back | `grade10-admin-grading-batches-US-04` |
+| Badge: Upcharge to settle | a card moved up a level and the difference is unpaid | `grade10-admin-grading-counter-US-10` |
+| Badge: Ungraded card | a card came back with no grade | `grade10-admin-grading-counter-US-10` |
+| Badge: Unchecked return | the batch has been back a day and is not received | `grade10-admin-grading-batches-US-02` |
+| Badge: Uncollected 30 d | ready 30 days and not collected | `grade10-admin-grading-counter-US-12` |
+| Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-US-12` |
+| Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-US-12` |
+| Badge: Payout past its window | a payout owed and unmade past the settlement window from the day the batch was received — ❓ Operations the window | `grade10-admin-grading-counter-US-09` |
 | Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-site-grading-collector-notifications-US-03` |
 | Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-batches-US-05` |
 | Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-batches-US-05` |
@@ -668,14 +649,14 @@ Stories `grading-admin-intake-intake-runbook--`.
 | --- | --- | --- |
 | Header (`GA2`) | the summary, the id, the status word, declared in total, the visit in progress at the desk; the drop-off card with Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-US-02` |
 | Visit not started | step 1 offers Start at the desk; the rest wait | `grade10-admin-grading-counter-US-02` |
-| Walk-in | no list: the cards table empty with Add a card and Paste a list | `grade10-admin-grading-counter-US-02` |
+| Walk-in | no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-US-02` |
 | Second submission on the visit | the other submission named under the visit; each runs its own runbook | `grade10-site-grading-dropoff-booking-US-04` |
 | Cards table | per row: the card, declared with its reference, Present, Condition, the level check, Refuse; the photograph pair | `grade10-admin-grading-counter-US-02` |
 | Card present | Present ticked; the photograph pair taken | `grade10-admin-grading-counter-US-02` |
 | Card, condition noted | the note as typed in place of Nothing noted | `grade10-admin-grading-counter-US-02` |
 | Level check | every declared value inside the ceiling: the banner | `grade10-admin-grading-counter-US-02` |
 | Level check failed | a card above the ceiling: the row marked; move to a second submission or refuse | `grade10-admin-grading-counter-US-03` |
-| Card added | a card not on the list added with the collector | `grade10-admin-grading-counter-US-02` |
+| Card added | a card not on the list added with the collector, one at a time | `grade10-admin-grading-counter-US-02` |
 | Card refused | the row struck with the reason; the fee and the receipt drop | `grade10-admin-grading-counter-US-03` |
 | Fee (`GA2`) | cards × fee, the fee, declared in total, insured to | `grade10-admin-grading-counter-US-02` |
 | Fee with cover | the cover line per card and in total | `grade10-admin-grading-counter-US-02` |
@@ -711,8 +692,7 @@ Stories `grading-admin-intake-refuse-card-dialog--`.
 
 ### Batches
 
-Stories `grading-admin-batches-batches-panel--`, and the Ship form rows
-`grading-admin-batches-ship-batch-form--`.
+Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-admin-batches-ship-batch-form--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -732,8 +712,8 @@ Stories `grading-admin-batches-batches-panel--`, and the Ship form rows
 | Incomplete | Mark as shipped disabled naming the field | `grade10-admin-grading-batches-US-01` |
 | Shipping | pending | `grade10-admin-grading-batches-US-01` |
 | Shipped | every submission at Sent; the letters sent | `grade10-admin-grading-batches-US-01` |
-| Re-estimate | `ReestimateDialog`: the stage typed, the new date, the reason; emails every collector | `grade10-admin-grading-batches-US-04` |
-| Stage typed | the morning read: the stage on the batch and every submission's timeline | `grade10-admin-grading-batches-US-04` |
+| Re-estimate | `ReestimateDialog`: the stage picked from the grader's stages, the new date, the reason; emails every collector | `grade10-admin-grading-batches-US-04` |
+| Stage recorded | the morning read: the stage picked from the grader's stages, one of them the move to graded, the grader's words in the note beside it; the stage on the batch and every submission's timeline | `grade10-admin-grading-batches-US-04` |
 | Read grant | no Ship, Re-estimate or Receive | `grade10-admin-grading-counter-US-14` |
 
 ### Receive a batch
@@ -784,10 +764,10 @@ Stories `grading-admin-handback-handback-runbook--`.
 | Items (`GA6`) | per row: the item, cert, outcome, Handed over; Vault instead on a slab | `grade10-admin-grading-counter-US-04` |
 | Item ticked | handed over and inspected; the slab photographed | `grade10-admin-grading-counter-US-04` |
 | Item held by the grader | the row reads still out; not tickable | `grade10-admin-grading-counter-US-04` |
-| Sign, refused | something due or an item unticked: the reason on the step | `grade10-admin-grading-counter-US-11` |
+| Sign, refused | something due or an item unticked: the reason on the step, before the iPad; what is due is fixed as the receipt is minted | `grade10-admin-grading-counter-US-11` |
 | Sign, mintable | Show on iPad, Copy link; the 30-minute line | `grade10-admin-grading-counter-US-11` |
 | Sign, declined | the decline; nothing handed back | `grade10-site-grading-counter-documents-US-02` |
-| Closed | `ready → collected` on the seal; the record stays | `grade10-admin-grading-counter-US-04` |
+| Hand over | the receipt sealed on the iPad, then Hand over on the step: the packet goes over the counter and the submission reads Back with you; the record stays | `grade10-admin-grading-counter-US-04` |
 | Second hand-back | the held card back: the rest already collected; one item; Close | `grade10-admin-grading-counter-US-04` |
 | Money (`GA6`) | paid at hand-in, due now, storage from the day | `grade10-admin-grading-counter-US-04` |
 | Vault, waiting | Open a vault case disabled until the balance is settled | `grade10-admin-grading-counter-US-06` |
@@ -854,24 +834,24 @@ Stories `grading-admin-settings-settings-panel--`.
 ## Flags
 
 - **Frames nobody drew** — the home's empty list and its sign-in-sent line,
-  the wizard at Bulk only, every level closed and the reference out of reach,
-  the review's pending and expired forms, the booking's joined and resized
-  forms, the booked page moved, the submission page at Planned, Expired,
-  Cancelled, Back and with a missed visit, a refused, withdrawn, held, not
-  returned, damaged or vaulted card, storage accruing and the notice posted,
-  the chip beyond the boards' five, the ceremony's refusals, the letters for
-  a moved, cancelled or missed drop-off, the day before, damage and the
-  hand-back receipt, the queue's empty and read-only forms, the hand-in
+  the wizard at Bulk only, every level closed and the reference unavailable,
+  the review's pending and expired forms, the booking's joined, resized and
+  detached forms and the diary's refusals, the booked page moved, the
+  submission page at Planned, Expired, Cancelled, Back and with a missed
+  visit, a refused, withdrawn, held or damaged card, the chip beyond the
+  boards' five, the ceremony's refusals, the letters for a moved, cancelled,
+  missed or detached drop-off, the day before, damage and the hand-back
+  receipt, the queue's badges, empty and read-only forms, the hand-in
   runbook before the visit starts, on a walk-in, with no paid line and with
   the safe full, the refuse dialog's last card, the batches' empty and
   new-batch forms, receiving's manifest and invoice entry, the hand-back's
   wrong code, second hand-back and turned-away forms, the written notice,
   the settings and every grant-shaped state. Each is a row above, drawn
   from its drawn sibling; the stories are their frame
-- **No missing primitive, block or token** — every screen composes what
-  `packages/design-system` and `@grade10/frontend-console` publish; the
-  code and the grade are `Text` at display size, the chip a `Badge`, the
-  paste sheet a `Drawer`
+- **What the design system still owes** — three rungs on `Text` and
+  nothing else: every other screen composes what `packages/design-system`
+  and `@grade10/frontend-console` already publish, the chip a `Badge` and
+  the paste sheet a `Drawer`
 - **The export set** — the proposal's thirteen, kept: no merge and no
   split. `GradingOwnershipChip` draws the status word and the chip as the
   one pair every board shows; `GradingLevelPicker` keeps the estimate card
@@ -881,12 +861,8 @@ Stories `grading-admin-settings-settings-panel--`.
   submissions list — and are composed in `packages/grading/frontend`; the
   proposal may add `GradingHistory`, `GradingDocuments` and
   `GradingSubmissionList` to the set if a second brand is to draw them once
-- **Story ids** — the block stories take `Blocks/Grading Submission/<Component>`
-  as titled, which departs from the package's `<Capability>/<Component>`
-  form (`Appointment Booking/BookingManageCard`); the ids above follow the
-  title, and the pages' `::story` cards will too. The console's ids carry
-  `admin` after `grading` so a collector view and a console view can never
-  share one
+- **Story ids** — the console's ids carry `admin` after `grading`, so a
+  collector view and a console view can never share one
 - **The day picker** — `G05` draws a week strip; `BookingSlotPicker` draws
   a month grid, and the reuse stands (`decisions.md` Q37)
 - **Journeys the states reach past** — a card refused at the counter has no
@@ -905,9 +881,8 @@ Stories `grading-admin-settings-settings-panel--`.
   `/grading`, the settings page's address, the console feature that holds
   the submission's tabs (`admin-frontend`'s code map names
   `queue,intake,batches,receiving,handback,notice` and no `submission` or
-  `settings`), whether the vault's `FiguresTable` and `PrimaryCta` move to
-  `apps/emails/emails/_components`, and the grading `RefusalWords` for the
-  doc-sign codes grading can meet
+  `settings`), and the grading `RefusalWords` for the doc-sign codes grading
+  can meet
 - **❓ Operations** — the manifest and the invoice's entry (`GA5` draws
   Import and the read types the rest), and a batch above the courier's
   cover; the rows above draw both forms
