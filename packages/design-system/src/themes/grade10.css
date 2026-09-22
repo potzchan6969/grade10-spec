@@ -13,11 +13,11 @@
   --popover: var(--background); /* Background for dropdown menus and popovers */
   --popover-foreground: var(--foreground); /* Text and icons within popovers */
   --primary: var(--orange-400); /* Brand color for primary actions (buttons, highlights) */
-  --primary-foreground: #FFFFFF; /* Text and icons on primary-colored elements */
+  --primary-foreground: var(--gray-950); /* Text and icons on primary-colored elements */
   --secondary: var(--gray-200); /* Less prominent action color */
-  --secondary-foreground: var(--gray-500); /* Secondary text, descriptions */
+  --secondary-foreground: var(--gray-600); /* Secondary text, descriptions */
   --muted: var(--gray-100); /* Subdued background for less important elements */
-  --muted-foreground: var(--gray-400); /* Placeholders, disabled labels, markers */
+  --muted-foreground: var(--gray-500); /* Placeholders, disabled labels, markers */
   --accent: color-mix(in oklab, var(--gray-950) 4%, transparent); /* Highlight color for active or focused elements */
   --accent-foreground: var(--orange-400); /* Text and icons on accent-colored elements */
   --border: var(--gray-200); /* Default border color */
@@ -27,13 +27,13 @@
   --ring: var(--gray-300); /* Focus indicator color */
   --overlay: color-mix(in oklab, var(--gray-950) 30%, transparent);
   --success: var(--green-500);
-  --success-foreground: #FFFFFF;
+  --success-foreground: var(--gray-950);
   --info: var(--blue-500);
-  --info-foreground: #FFFFFF;
+  --info-foreground: var(--gray-950);
   --warning: var(--yellow-400);
-  --warning-foreground: #FFFFFF;
+  --warning-foreground: var(--gray-950);
   --destructive: var(--red-500);
-  --destructive-foreground: #FFFFFF;
+  --destructive-foreground: var(--gray-950);
   --chart-1: var(--green-400);
   --chart-2: var(--blue-400);
   --chart-3: var(--purple-500);
