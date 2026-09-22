@@ -1,6 +1,6 @@
 # grade10-site/grading/dropoff-booking Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-grading-dropoff-booking-US1: Collector books the drop-off from the plan
@@ -39,6 +39,7 @@
 * The batch line beside the picked day names hand-in by that Thursday's cut-off and the cards leaving the next day.
 * The submission's booked page shows the day, the time, the shop and its address, with an add-to-calendar file, Move and Cancel.
 * The booked page lists the four Before you come items, and a confirmation email is sent.
+* The email is grading's own; the diary sends no message of its own about the visit.
 
 ### grade10-site-grading-dropoff-booking-US1-TC2-1: Booking after the cut-off shows the next batch's dates
 
@@ -250,6 +251,63 @@ Runs once per row of **Test data**.
 * The failure reads in the page's error tone.
 * No day reads as free.
 
+### grade10-site-grading-dropoff-booking-US1-TC9-1: The estimated day back counts from the day the batch leaves
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-01
+
+**Pre-conditions:**
+
+* customer(with a saved plan at a level quoted at a number of weeks back) is on the Book the drop-off step.
+
+**Steps:**
+
+1. Select a day inside the horizon and read the estimated day back beside it.
+2. Book that day and read the estimated day back on the booked page.
+
+**Expected Results:**
+
+* The estimated day back is the level's weeks counted from the day the batch leaves the shop.
+* It is not counted from the day of the visit, nor from the day the booking was made.
+
+### grade10-site-grading-dropoff-booking-US1-TC10-1: The booked page offers a vault case on the same visit
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-dropoff-booking-US-01
+
+**Pre-conditions:**
+
+* customer(with a drop-off booked) is on the submission's booked page.
+
+**Steps:**
+
+1. Read the vault line on the booked page.
+
+**Expected Results:**
+
+* The page says a card that is not being graded can open a vault case at the same counter.
+* It says that case takes the identity check grading itself does not ask for.
+
 ---
 
 ## grade10-site-grading-dropoff-booking-US2: Collector moves or cancels the drop-off
@@ -316,6 +374,33 @@ Runs once per row of **Test data**.
 * The visit closes and the submission reads Not handed in yet.
 * The list and the estimate stay as they were, and a cancelled email is sent.
 
+### grade10-site-grading-dropoff-booking-US2-TC3-1: Neither Move nor Cancel is offered once the visit has started
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-02
+
+**Pre-conditions:**
+
+* customer(with a booked drop-off whose start time has passed and which the shop has not closed) is on <the submission page>.
+
+**Steps:**
+
+1. Read the booked visit card.
+
+**Expected Results:**
+
+* Neither Move nor Cancel visit is offered.
+
 ---
 
 ## grade10-site-grading-dropoff-booking-US3: Collector who missed the drop-off books another
@@ -381,6 +466,34 @@ Runs once per row of **Test data**.
 
 * The new visit books against the same list and estimate the missed visit carried.
 * The submission reads Drop-off booked with the new day.
+
+### grade10-site-grading-dropoff-booking-US3-TC3-1: The page reads the visit as booked until the diary closes it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-dropoff-booking-US-03
+
+**Pre-conditions:**
+
+* customer(whose booked visit's start time has passed with nobody at the desk, and which the shop's diary console has not yet closed) is on <the submission page>.
+
+**Steps:**
+
+1. Read the page's chip, the visit card and the mailbox.
+
+**Expected Results:**
+
+* The page still reads Drop-off booked and holds the visit.
+* No missed email has been sent.
 
 ---
 
@@ -527,7 +640,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -555,6 +668,63 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The booking is refused until the <Blank field> is filled in.
+
+### grade10-site-grading-dropoff-booking-US5-TC3-1: The booking page lists the Grading visit and neither drop-off
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-05
+
+**Pre-conditions:**
+
+* customer(with no card list) is on <grade10.com/book>.
+
+**Steps:**
+
+1. Read the services the page offers.
+
+**Expected Results:**
+
+* The Grading visit is listed.
+* Neither the Grading drop-off nor its Bulk variant is offered there.
+
+### grade10-site-grading-dropoff-booking-US5-TC4-1: The walk-in's cards are listed at the desk and grading says nothing about the visit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-dropoff-booking-US-05
+
+**Pre-conditions:**
+
+* customer(with no card list) has a booked Grading visit and is at the counter.
+
+**Steps:**
+
+1. Staff write the cards with the collector at the desk.
+2. Read the submission the counter created, and the messages sent about the visit.
+
+**Expected Results:**
+
+* The submission is created at the desk and handed in from there.
+* Grading sent no booked, moved, cancelled or missed message about that visit.
 
 ---
 
@@ -628,3 +798,44 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The slot offered matches <Slot offered>.
+
+---
+
+## Reconciliation
+
+**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Nineteen cases over six journeys came back against twenty-four scenarios; the two readings are joined below on the journey anchors.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-04`, `grade10-site-grading-dropoff-booking-SC-09`, `grade10-site-grading-dropoff-booking-SC-12`; one expected result added so the case also reaches `grade10-site-grading-dropoff-booking-SC-02`'s other half, that the diary sends nothing of its own |
+| `US1-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-10` |
+| `US1-TC3-1` | Raised, answered, folded | The blind pass could not tell whether a visit at the cut-off instant falls in that week's batch. Answered inclusive and folded as `grade10-site-grading-dropoff-booking-SC-25`; landed as `Q53` |
+| `US1-TC4-1` | Covered | The requirement's outstanding-read clause, stated with `grade10-site-grading-dropoff-booking-SC-08`; the skeleton itself is presentation and is read against the view's story |
+| `US1-TC5-1` | Covered | `grade10-site-grading-dropoff-booking-SC-07`, applied to every day in the horizon |
+| `US1-TC6-1` | Covered | `grade10-site-grading-dropoff-booking-SC-03` |
+| `US1-TC7-1` | Covered | `grade10-site-grading-dropoff-booking-SC-06`; the other three refusals are the requirement's named set |
+| `US1-TC8-1` | Covered | `grade10-site-grading-dropoff-booking-SC-08` |
+| `US2-TC1-1` | Folded | The batch reading again after a move reached no scenario; `grade10-site-grading-dropoff-booking-SC-15` gains it as an `AND` |
+| `US2-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-16` |
+| `US3-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-18`, `grade10-site-grading-dropoff-booking-SC-19` |
+| `US3-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-19` |
+| `US4-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-20` |
+| `US4-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-21` |
+| `US4-TC3-1` | Folded | The Cancels row is `grade10-site-grading-dropoff-booking-SC-22`; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as `grade10-site-grading-dropoff-booking-SC-27` |
+| `US5-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-23` |
+| `US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as `Q56` |
+| `US6-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`, `grade10-site-grading-dropoff-booking-SC-13` |
+| `US6-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`; the below-twenty partition is the booking requirement's step 2 |
+| `grade10-site-grading-dropoff-booking-SC-01` | Case added | `US5-TC3-1` — the booking page lists the Grading visit and neither drop-off |
+| `grade10-site-grading-dropoff-booking-SC-11` | Case added | `US1-TC9-1` — the estimated day back counts from the day the batch leaves |
+| `grade10-site-grading-dropoff-booking-SC-14` | Case added | `US1-TC10-1` — the vault line on the booked page |
+| `grade10-site-grading-dropoff-booking-SC-17` | Case added | `US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as `Q55` |
+| `grade10-site-grading-dropoff-booking-SC-24` | Case added | `US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
+| `grade10-site-grading-dropoff-booking-SC-26` | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as `grade10-site-grading-dropoff-booking-SC-26` and walked by `US3-TC3-1`; landed as `Q54` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US1-TC4-1` | The skeleton is a rendering state between two reads; nothing asserts it, and a person reads the shop and day picker against its story while the diary's answer is outstanding |
+| `US3-TC1-1` | The hour runs from a close made in the shop's diary console, outside grading; a person closes the visit there and reads the submission page and the mailbox after it |

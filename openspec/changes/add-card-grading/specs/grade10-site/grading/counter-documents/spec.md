@@ -122,7 +122,10 @@ SHALL be read, asked for or kept, and the certificate SHALL say the document
 was signed without one.
 
 **The name** - the signer SHALL type the name the submission was booked under,
-and a name that does not match it SHALL be refused by name.
+and a name that does not match it SHALL be refused by name. The hand-back
+receipt's signing block SHALL refuse a mismatch the same way, against the
+booking's name or, where the collector named somebody to collect, that
+person's name.
 
 **The link** - one document SHALL be reached at a time, on the link rules
 `grade10-site/vault/documents-and-signing` states - single-use, 30 minutes,
@@ -152,6 +155,14 @@ its sealed copy SHALL be offered instead.
 - **WHEN** the signer types another name
 - **THEN** the signature is refused by name
 - **AND** nothing is sealed
+
+#### Scenario: grade10-site-grading-counter-documents-SC-28 - The hand-back receipt refuses a name the submission does not hold
+**Serves:** grade10-site-grading-counter-documents-US-03 - somebody at the collection counter typing a name that is neither the collector's nor the named person's
+
+- **GIVEN** a hand-back receipt prepared for a submission booked under one name, with nobody named to collect
+- **WHEN** the signer types another name
+- **THEN** the signature is refused by name, against the booking's name
+- **AND** nothing is sealed and nothing is handed back
 
 #### Scenario: grade10-site-grading-counter-documents-SC-05 - A grading document is signed with no identity record
 **Serves:** grade10-site-grading-counter-documents-US-01 - a collector who has shown the shop no document signing for their cards
@@ -291,6 +302,10 @@ to the name with nothing kept; and where and when.
 condition it was handed back in; nothing is outstanding; the submission is
 closed and the graded record stays on the submission page.
 
+**The named person** - where the collector named somebody to collect, the name
+line SHALL be prefilled with that person's name as the submission page holds
+it and SHALL NOT be editable; the counter's ID glance is what checks it.
+
 **A card the grader held** - the receipt SHALL name the card still out, the
 submission SHALL stay ready for it, and a second receipt SHALL close the
 submission when that card is handed back.
@@ -300,6 +315,11 @@ vault case rather than to the customer.
 
 **A card withdrawn before its batch closed** - it SHALL be handed back against
 a receipt of its own, naming that card and the fee refunded for it.
+
+**Several outcomes at once** - one hand-back SHALL print one receipt however
+many exceptions it carries, with a line per card stating that card's outcome -
+handed back, held by the grader, gone into a vault case, withdrawn, or paid
+out - rather than a receipt per exception.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-16 - The receipt names who collected and the ID that was glanced at
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector collecting cards worth more than the glance threshold
@@ -316,6 +336,14 @@ a receipt of its own, naming that card and the fee refunded for it.
 - **WHEN** that person opens the hand-back receipt
 - **THEN** the name is prefilled as the submission page names them
 - **AND** the sealed receipt records that they collected in the customer's place
+
+#### Scenario: grade10-site-grading-counter-documents-SC-29 - The named person's prefilled name does not take an edit
+**Serves:** grade10-site-grading-counter-documents-US-04 - somebody the collector named reading their own name on the iPad
+
+- **GIVEN** a hand-back receipt opened by the person the collector named to collect
+- **WHEN** they try to retype the prefilled name
+- **THEN** the line does not take the edit
+- **AND** the receipt seals under the name the submission page holds
 
 #### Scenario: grade10-site-grading-counter-documents-SC-18 - A card the grader held is named, and a second receipt closes the submission
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector taking three slabs home while one card is still with the grader
@@ -345,6 +373,14 @@ a receipt of its own, naming that card and the fee refunded for it.
 - **GIVEN** a collection settling an upcharge, refunding an ungraded card's fee and paying out a card that did not come back
 - **WHEN** the hand-back receipt is rendered
 - **THEN** it prints what was paid, what was refunded and what was paid out, each with how it moved
+
+#### Scenario: grade10-site-grading-counter-documents-SC-30 - Two exceptions on one hand-back print one receipt with a line per card
+**Serves:** grade10-site-grading-counter-documents-US-03 - a collector collecting with one card still at the grader and another going into a vault case
+
+- **GIVEN** a submission of four cards, one still held by the grader and one placed into a vault case at the counter
+- **WHEN** the hand-back receipt is rendered
+- **THEN** one receipt is prepared for that hand-back rather than one per exception
+- **AND** it carries a line per card stating that card's outcome, the two handed back, the one held and the one vaulted
 
 ### Requirement: Every figure a document prints is pinned at signing
 

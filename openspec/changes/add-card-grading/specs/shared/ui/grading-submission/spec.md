@@ -210,9 +210,12 @@ render its levels, with the line it is given about them.
 #### Scenario: shared-ui-grading-submission-SC-06 - An open level is picked by id
 **Serves:** Reading what it costs - a collector picks the level their cards leave on
 
-- **GIVEN** an open level rendered in `GradingLevelPicker`
+- **GIVEN** an open level carrying a cover rate, rendered in
+  `GradingLevelPicker` with no level picked and no estimate
 - **WHEN** the collector activates it
 - **THEN** the picker reports that level's id and marks it selected
+- **AND** before the pick the level showed its cover line and the picker showed
+  no estimate
 
 #### Scenario: shared-ui-grading-submission-SC-07 - A level closed by a declared value names the card
 **Serves:** Reading what it costs - a collector reads why the level they wanted is shut
@@ -249,6 +252,21 @@ render its levels, with the line it is given about them.
 - **THEN** all four read as given, in the locale the picker was given
 - **AND** the picker computes none of them
 
+#### Scenario: shared-ui-grading-submission-SC-11 - The picker names what a card moved up would cost
+**Serves:** Reading what it costs - a collector told before booking that a card graded higher costs more
+
+- **WHEN** `GradingLevelPicker` renders the upcharge notice it was given
+- **THEN** the notice reads that a card moved up a level is charged the
+  difference before collection
+
+#### Scenario: shared-ui-grading-submission-SC-12 - A grader whose figures are examples still lists its levels
+**Serves:** Reading what it costs - a collector comparing a grader nobody has priced yet
+
+- **GIVEN** a grader whose levels carry example figures and the line saying so
+- **WHEN** `GradingLevelPicker` renders that grader
+- **THEN** its levels are listed
+- **AND** the line about the figures is shown
+
 ### Requirement: The editable card list carries a card and what is missing on it
 
 The list a collector edits before hand-in, one card a row.
@@ -282,16 +300,18 @@ kept-as-typed one, and the declared value SHALL still be asked for.
 grade and opening the paste sheet SHALL each report through a callback of its
 own.
 
-#### Scenario: shared-ui-grading-submission-SC-11 - A matched card reads its reference sales
+#### Scenario: shared-ui-grading-submission-SC-13 - A matched card reads its reference sales
 **Serves:** Listing the cards - a collector lists a card the shop's reference knows
 
-- **GIVEN** a card matched in the reference with three reference sales and a
-  declared value
+- **GIVEN** a card matched in the reference with three reference sales, a
+  declared value and a minimum grade
 - **WHEN** `GradingCardList` renders it
 - **THEN** the card reads as matched, with its set line, its declared value
   and the three sales
+- **AND** the minimum grade reads on the card, with the line that the fee
+  applies either way
 
-#### Scenario: shared-ui-grading-submission-SC-12 - A name that matches nothing is kept as typed
+#### Scenario: shared-ui-grading-submission-SC-14 - A name that matches nothing is kept as typed
 **Serves:** Listing the cards - a collector lists a card in their own words
 
 - **GIVEN** a search whose matches read as empty
@@ -299,14 +319,14 @@ own.
 - **THEN** the card is reported with that name
 - **AND** it reads as kept as typed, with no reference row
 
-#### Scenario: shared-ui-grading-submission-SC-13 - A card with no declared value is named
+#### Scenario: shared-ui-grading-submission-SC-15 - A card with no declared value is named
 **Serves:** Listing the cards - a collector who has not said what a card is worth
 
 - **GIVEN** a list of three cards, one with no declared value
 - **WHEN** `GradingCardList` renders it
 - **THEN** that card is named as still needing a value
 
-#### Scenario: shared-ui-grading-submission-SC-14 - The cap refuses the card past it
+#### Scenario: shared-ui-grading-submission-SC-16 - The cap refuses the card past it
 **Serves:** Listing the cards - a dealer listing more cards than one submission takes
 
 - **GIVEN** a list at its cap of 100 cards
@@ -314,13 +334,28 @@ own.
 - **THEN** nothing is reported
 - **AND** the line about a second submission on another day is shown
 
-#### Scenario: shared-ui-grading-submission-SC-15 - The reference out of reach keeps the list working
+#### Scenario: shared-ui-grading-submission-SC-17 - The reference out of reach keeps the list working
 **Serves:** Listing the cards - a collector listing cards while the shop's catalogue cannot be asked
 
 - **WHEN** `GradingCardList` renders with its matches in error
 - **THEN** every card reads with the catalogue-unavailable line rather than the
   kept-as-typed one
 - **AND** the declared value is still asked for on each card
+
+#### Scenario: shared-ui-grading-submission-SC-18 - An empty list offers the two ways to start
+**Serves:** Listing the cards - a collector opening the wizard with nothing listed yet
+
+- **WHEN** `GradingCardList` renders with no card
+- **THEN** adding a card and pasting a list are both offered
+- **AND** no card row is drawn
+
+#### Scenario: shared-ui-grading-submission-SC-19 - A card above the ceiling is named on the list
+**Serves:** Listing the cards - a collector listing one card worth more than the level takes
+
+- **GIVEN** a list of 22 cards, one declared above the level's ceiling
+- **WHEN** `GradingCardList` renders it
+- **THEN** that card is named as above the ceiling
+- **AND** the line about a second submission on the same drop-off is shown
 
 ### Requirement: The paste sheet accounts for every line
 
@@ -349,14 +384,15 @@ and the add SHALL stay offered.
 **Acts** - changing the text, adding the cards and closing the sheet SHALL
 each report through a callback of its own.
 
-#### Scenario: shared-ui-grading-submission-SC-16 - Nothing read, nothing added
+#### Scenario: shared-ui-grading-submission-SC-20 - Nothing read, nothing added
 **Serves:** Listing the cards - a collector who opens the paste sheet and pastes nothing
 
 - **WHEN** `GradingPasteSheet` renders with an empty text and no result
 - **THEN** the lines-read count reads none
 - **AND** activating the add reports nothing
+- **AND** a sheet whose result reads as loading reports nothing either
 
-#### Scenario: shared-ui-grading-submission-SC-17 - Every pasted line is accounted for
+#### Scenario: shared-ui-grading-submission-SC-21 - Every pasted line is accounted for
 **Serves:** Listing the cards - a dealer pasting a list and reading what became of it
 
 - **GIVEN** a result of 12 matched, 3 kept as typed, 2 without a value, 1 above
@@ -365,7 +401,7 @@ each report through a callback of its own.
 - **THEN** each of the five rows shows its count and names the lines behind it
 - **AND** the counts read against the 20 lines
 
-#### Scenario: shared-ui-grading-submission-SC-18 - A long list reads the Bulk line
+#### Scenario: shared-ui-grading-submission-SC-22 - A long list reads the Bulk line
 **Serves:** Listing the cards - a dealer pasting more cards than the shorter visit takes
 
 - **GIVEN** a sheet given a Bulk line and a result of 34 lines
@@ -373,7 +409,7 @@ each report through a callback of its own.
 - **THEN** the Bulk line is shown with its level, fee, ceiling, weeks and the
   longer drop-off
 
-#### Scenario: shared-ui-grading-submission-SC-19 - A line above the ceiling is named
+#### Scenario: shared-ui-grading-submission-SC-23 - A line above the ceiling is named
 **Serves:** Listing the cards - a collector pasting a card worth more than the level takes
 
 - **GIVEN** a result with one line above the ceiling
@@ -411,7 +447,7 @@ it reads as pending.
 **Acts** - editing the list, saving for later and booking SHALL each report
 through a callback of its own.
 
-#### Scenario: shared-ui-grading-submission-SC-20 - The review reads the schedule and the totals
+#### Scenario: shared-ui-grading-submission-SC-24 - The review reads the schedule and the totals
 **Serves:** Reviewing before booking - a collector reads every card as it will be handed in
 
 - **GIVEN** a review of 4 cards, one carrying a minimum grade, with a declared
@@ -420,8 +456,9 @@ through a callback of its own.
 - **WHEN** `GradingReview` renders it
 - **THEN** one row per card is shown, the minimum grade beside its card
 - **AND** the three totals read as given
+- **AND** the good-to-know lines read in the order they were given
 
-#### Scenario: shared-ui-grading-submission-SC-21 - A card that could move up is named with both prices
+#### Scenario: shared-ui-grading-submission-SC-25 - A card that could move up is named with both prices
 **Serves:** Reviewing before booking - a collector reads what a card graded higher would cost
 
 - **GIVEN** one card carrying a warning: the level it would move to, a
@@ -431,19 +468,28 @@ through a callback of its own.
 - **THEN** that card names the level, the difference due before collection and
   the higher level's fee now
 
-#### Scenario: shared-ui-grading-submission-SC-22 - No card above a ceiling, no warning
+#### Scenario: shared-ui-grading-submission-SC-26 - No card above a ceiling, no warning
 **Serves:** Reviewing before booking - a collector whose cards all sit inside the level
 
 - **WHEN** `GradingReview` renders with no upcharge warning
 - **THEN** no warning is shown anywhere on the review
 
-#### Scenario: shared-ui-grading-submission-SC-23 - Nothing is booked before the statement is ticked
+#### Scenario: shared-ui-grading-submission-SC-27 - Nothing is booked before the statement is ticked
 **Serves:** Reviewing before booking - a collector agreeing to how the cards are collected
 
 - **GIVEN** a review whose consent is unticked
 - **WHEN** the collector activates the booking
 - **THEN** nothing is reported
 - **AND** once the statement is ticked the booking reports through its callback
+- **AND** while the review reads as pending neither booking nor saving for
+  later is offered
+
+#### Scenario: shared-ui-grading-submission-SC-28 - A refused booking reads the refusal it was given
+**Serves:** Reviewing before booking - a collector booking a plan the shop has since let go
+
+- **WHEN** `GradingReview` renders with a refusal saying the plan expired
+- **THEN** that refusal is shown
+- **AND** no booking is reported
 
 ### Requirement: The status word and whose move it is are one pair
 
@@ -462,21 +508,25 @@ alone.
 **Derived nowhere** - the block SHALL derive neither the word nor the chip
 from the other, and SHALL carry no status vocabulary of its own.
 
-#### Scenario: shared-ui-grading-submission-SC-24 - Waiting on the grader reads as the grader's
+#### Scenario: shared-ui-grading-submission-SC-29 - Each pair reads as it was given
 **Serves:** Where the submission stands - a collector reading who holds their cards today
 
-- **WHEN** `GradingOwnershipChip` renders the status word for cards with the
-  grader and a chip naming that grader
-- **THEN** both are shown as one pair, the chip naming the grader
+- **GIVEN** the pairs for a submission waiting on the collector, one booked for
+  a drop-off, one with the shop, one with the grader, one on its way back and
+  one collected
+- **WHEN** `GradingOwnershipChip` renders each
+- **THEN** each status word and its chip are shown as one pair, in the words
+  and tones they were given
+- **AND** the pair for cards with the grader names the grader
 
-#### Scenario: shared-ui-grading-submission-SC-25 - A closed submission shows the word alone
+#### Scenario: shared-ui-grading-submission-SC-30 - A closed submission shows the word alone
 **Serves:** Where the submission stands - a collector opening a submission that ended
 
 - **WHEN** `GradingOwnershipChip` renders a cancelled submission with no chip
 - **THEN** the status word is shown
 - **AND** no chip is drawn
 
-#### Scenario: shared-ui-grading-submission-SC-26 - Running late is the words it is given
+#### Scenario: shared-ui-grading-submission-SC-31 - Running late is the words it is given
 **Serves:** Where the submission stands - a collector reading a submission past its estimate
 
 - **WHEN** `GradingOwnershipChip` renders a running-late chip with its tone
@@ -496,7 +546,7 @@ every earlier stage as done and every later stage as still to come.
 **Ended** - where the submission ended the rail SHALL leave it at the stage it
 ended on, and no later stage SHALL read as reached.
 
-#### Scenario: shared-ui-grading-submission-SC-27 - The reached stage is marked and the rest read against it
+#### Scenario: shared-ui-grading-submission-SC-32 - The reached stage is marked and the rest read against it
 **Serves:** Where the submission stands - a collector reading how far a submission has gone
 
 - **WHEN** `GradingStatusRail` renders with the stage Sent
@@ -504,7 +554,7 @@ ended on, and no later stage SHALL read as reached.
 - **AND** Sent reads as the one reached
 - **AND** Graded, Back and Home read as still to come
 
-#### Scenario: shared-ui-grading-submission-SC-28 - An ended submission stays where it ended
+#### Scenario: shared-ui-grading-submission-SC-33 - An ended submission stays where it ended
 **Serves:** Where the submission stands - a collector reading a submission that was cancelled before hand-in
 
 - **WHEN** `GradingStatusRail` renders as ended at Planned
@@ -544,15 +594,16 @@ line it is given rather than deriving either:
 | Collected | the grade, the grader, the certificate and the slab photograph |
 | Vaulted | the vault case it opened |
 
-#### Scenario: shared-ui-grading-submission-SC-29 - A handed-in card reads its intake id and photographs
+#### Scenario: shared-ui-grading-submission-SC-34 - A handed-in card reads its intake id and photographs
 **Serves:** The cards after hand-in - a collector checking the shop holds what they brought
 
 - **GIVEN** a card with an intake id and a front and back photograph
 - **WHEN** `GradingCardRecord` renders it
 - **THEN** the intake id and both photographs are shown
+- **AND** a card carrying a minimum grade shows it on its set line
 - **AND** no control that changes the card is drawn
 
-#### Scenario: shared-ui-grading-submission-SC-30 - Every outcome reads its badge and its line
+#### Scenario: shared-ui-grading-submission-SC-35 - Every outcome reads its badge and its line
 **Serves:** The cards after hand-in - a collector reading what became of each card
 
 - **GIVEN** one card in each outcome of the table above, each with the badge
@@ -561,7 +612,7 @@ line it is given rather than deriving either:
 - **THEN** each card shows that badge and that line
 - **AND** a card still listed shows no intake id
 
-#### Scenario: shared-ui-grading-submission-SC-31 - A certificate reads against the address it was given
+#### Scenario: shared-ui-grading-submission-SC-36 - A certificate reads against the address it was given
 **Serves:** The cards after hand-in - a collector looking a slab up with the grader
 
 - **GIVEN** a graded card with a certificate and a lookup address
@@ -586,20 +637,29 @@ show no grade where none was issued.
 **Given, not derived** - the block SHALL show the words the grader's reading
 gave it, and SHALL translate or re-word none of them.
 
-#### Scenario: shared-ui-grading-submission-SC-32 - A graded card reads grade, grader and certificate
+#### Scenario: shared-ui-grading-submission-SC-37 - A graded card reads grade, grader and certificate
 **Serves:** The cards after hand-in - a collector reading the grades the day they post
 
 - **WHEN** `GradingGradeCards` renders a card with a grade, its label word, the
   grader and a certificate
 - **THEN** all four are shown, in the grader's words
 
-#### Scenario: shared-ui-grading-submission-SC-33 - An ungraded card reads the code and the note
+#### Scenario: shared-ui-grading-submission-SC-38 - An ungraded card reads the code and the note
 **Serves:** The cards after hand-in - a collector reading why one card came back raw
 
 - **WHEN** `GradingGradeCards` renders a card returned ungraded with the
   grader's code and note
 - **THEN** no grade is shown
 - **AND** the code and the note are shown, drawn apart from the graded cards
+
+#### Scenario: shared-ui-grading-submission-SC-39 - A card with no grade shows its badge and no grade
+**Serves:** The cards after hand-in - a collector reading a card the grader did not grade
+
+- **GIVEN** cards moved up a level, held by the grader, below their minimum
+  grade, not returned and damaged, each with the badge it was given
+- **WHEN** `GradingGradeCards` renders them
+- **THEN** each shows its badge
+- **AND** no grade is shown on a card the grader issued none for
 
 ### Requirement: The pickup card says what to bring
 
@@ -620,21 +680,23 @@ nothing: the lines behind the figure are `GradingMoneyBlock`'s.
 naming the collector or the person they named; where it is given none it SHALL
 say nothing beyond the code is needed.
 
-#### Scenario: shared-ui-grading-submission-SC-34 - A pickup above the threshold asks for an identity document
+#### Scenario: shared-ui-grading-submission-SC-40 - A pickup above the threshold asks for an identity document
 **Serves:** Collecting the cards - a collector coming in for cards worth more than the shop releases on a code alone
 
 - **GIVEN** a pickup card given the identity line for the collector
 - **WHEN** it renders
 - **THEN** the code, the items, the shop and its hours are shown
 - **AND** the identity line names the collector
+- **AND** a card given the line for the person they named names that person
+  instead
 
-#### Scenario: shared-ui-grading-submission-SC-35 - A pickup below the threshold asks for nothing more
+#### Scenario: shared-ui-grading-submission-SC-41 - A pickup below the threshold asks for nothing more
 **Serves:** Collecting the cards - a collector coming in for a short submission
 
 - **WHEN** `GradingPickupCard` renders with no identity line
 - **THEN** it says nothing beyond the code is needed
 
-#### Scenario: shared-ui-grading-submission-SC-36 - One figure to settle, or none
+#### Scenario: shared-ui-grading-submission-SC-42 - One figure to settle, or none
 **Serves:** Collecting the cards - a collector reading what they must pay at the counter
 
 - **GIVEN** a pickup card given 33000 HKD minor units to settle and the line
@@ -661,13 +723,14 @@ its own.
 **Refused** - it SHALL show the refusal it is given, and report nothing
 further.
 
-#### Scenario: shared-ui-grading-submission-SC-37 - An empty name reports nothing
+#### Scenario: shared-ui-grading-submission-SC-43 - An empty name reports nothing
 **Serves:** Collecting the cards - a collector who opens the card and types nothing
 
 - **WHEN** the collector activates the save with an empty name
 - **THEN** nothing is reported
+- **AND** a card that reads as pending offers no save at all
 
-#### Scenario: shared-ui-grading-submission-SC-38 - A named person reads with the day they were named
+#### Scenario: shared-ui-grading-submission-SC-44 - A named person reads with the day they were named
 **Serves:** Collecting the cards - a collector sending somebody else to the counter
 
 - **GIVEN** one named person with the day they were named
@@ -675,7 +738,7 @@ further.
 - **THEN** the name and that day are shown, with a change and a remove
 - **AND** activating each reports through its own callback
 
-#### Scenario: shared-ui-grading-submission-SC-39 - A refused naming reads the refusal it was given
+#### Scenario: shared-ui-grading-submission-SC-45 - A refused naming reads the refusal it was given
 **Serves:** Collecting the cards - a collector naming somebody after the cards have gone home
 
 - **WHEN** `GradingNamedCollector` renders with a refusal saying the cards were
@@ -702,7 +765,7 @@ it is given.
 **Given, never worked out** - every figure and every word SHALL be the one it
 was given; the block SHALL total, price and convert nothing.
 
-#### Scenario: shared-ui-grading-submission-SC-40 - An estimate reads as unpaid
+#### Scenario: shared-ui-grading-submission-SC-46 - An estimate reads as unpaid
 **Serves:** What is paid and due - a collector reading what the counter will charge before they hand the cards in
 
 - **GIVEN** a fee line of 4 cards at 25000 HKD minor units a card with a total
@@ -710,18 +773,20 @@ was given; the block SHALL total, price and convert nothing.
   every card is checked
 - **WHEN** `GradingMoneyBlock` renders it
 - **THEN** the fee line and that line are shown
+- **AND** a block given a cover of 12000 HKD minor units shows it under the fee
 - **AND** no paid line is shown
 
-#### Scenario: shared-ui-grading-submission-SC-41 - A block with something due leads with it
+#### Scenario: shared-ui-grading-submission-SC-47 - A block with something due leads with it
 **Serves:** What is paid and due - a collector reading what stands between them and their slabs
 
-- **GIVEN** a block given a settle lead, a moved-up-a-level line and 30000 HKD
-  minor units due at the counter
+- **GIVEN** a block given a settle lead, a moved-up-a-level line, a storage
+  line of 3000 HKD minor units a card a month and 30000 HKD minor units due at
+  the counter
 - **WHEN** it renders
 - **THEN** the settle lead reads first
-- **AND** the moved-up line and the due figure are both shown
+- **AND** the moved-up line, the storage line and the due figure are all shown
 
-#### Scenario: shared-ui-grading-submission-SC-42 - A card paid out reads its route beside the refunded fee
+#### Scenario: shared-ui-grading-submission-SC-48 - A card paid out reads its route beside the refunded fee
 **Serves:** What is paid and due - a collector whose card did not come back
 
 - **GIVEN** a payout of 600000 HKD minor units with its route and a refunded
@@ -729,13 +794,20 @@ was given; the block SHALL total, price and convert nothing.
 - **WHEN** `GradingMoneyBlock` renders them
 - **THEN** both lines are shown, the payout naming its route
 
-#### Scenario: shared-ui-grading-submission-SC-43 - A settled block leads with nothing
+#### Scenario: shared-ui-grading-submission-SC-49 - A settled block leads with nothing
 **Serves:** What is paid and due - a collector reading a submission they have already collected
 
-- **WHEN** `GradingMoneyBlock` renders a settled line with its till reference
-  and no due line
-- **THEN** the settled line is shown
+- **WHEN** `GradingMoneyBlock` renders a waived upcharge and a settled line
+  with its till reference, and no due line
+- **THEN** both lines are shown
 - **AND** no settle lead is shown
+
+#### Scenario: shared-ui-grading-submission-SC-50 - What was paid reads how it was paid
+**Serves:** What is paid and due - a collector checking the counter took what it said it would
+
+- **WHEN** `GradingMoneyBlock` renders a paid line of 100000 HKD minor units
+  with its method, its instant and its till reference
+- **THEN** all four read as given
 
 ### Requirement: The uncollected ladder dates every rung
 
@@ -758,16 +830,17 @@ out or vaulted is out of the count before it arrives.
 **The vault line** - it SHALL show the line it is given about moving a slab
 into a vault case instead.
 
-#### Scenario: shared-ui-grading-submission-SC-44 - Three rungs, each with its day
+#### Scenario: shared-ui-grading-submission-SC-51 - Three rungs, each with its day
 **Serves:** If nobody collects - a collector reading what happens if the cards stay at the shop
 
 - **GIVEN** reminder rungs at 30 and 60 days, storage from day 90 at 3000 HKD
   minor units a card a month, and the notice at day 180, none of them reached
 - **WHEN** `GradingUncollectedLadder` renders
 - **THEN** each rung is shown with its day
+- **AND** the ready day and the count of cards held read as they were given
 - **AND** no rung reads as passed
 
-#### Scenario: shared-ui-grading-submission-SC-45 - A reached rung reads as passed
+#### Scenario: shared-ui-grading-submission-SC-52 - A reached rung reads as passed
 **Serves:** If nobody collects - a collector reading how far the shop has gone
 
 - **GIVEN** a ladder whose reminder and storage rungs are reached
@@ -775,7 +848,7 @@ into a vault case instead.
 - **THEN** those two rungs read as passed
 - **AND** the notice rung does not
 
-#### Scenario: shared-ui-grading-submission-SC-46 - The posted notice reads its posting day
+#### Scenario: shared-ui-grading-submission-SC-53 - The posted notice reads its posting day
 **Serves:** If nobody collects - a collector whose cards have been written to about
 
 - **GIVEN** a notice rung posted on a given day, giving 30 days from it
@@ -810,27 +883,27 @@ and an error SHALL never read as empty.
 **Every state from props** - each block SHALL reach every state named in this
 capability from props alone, and SHALL carry a story for each.
 
-#### Scenario: shared-ui-grading-submission-SC-47 - The consumer's words are the only words
+#### Scenario: shared-ui-grading-submission-SC-54 - The consumer's words are the only words
 **Serves:** Content through props - a second brand draws the grading pages in its own language
 
 - **WHEN** a consumer renders `GradingReview` with a `copy` in Traditional
   Chinese
 - **THEN** every label, line and control reads that copy and nothing else
 
-#### Scenario: shared-ui-grading-submission-SC-48 - An amount reads as it was given
+#### Scenario: shared-ui-grading-submission-SC-55 - An amount reads as it was given
 **Serves:** Content through props - a collector reading a figure their brand formatted
 
 - **WHEN** a block renders 100000 HKD minor units in the locale it was given
 - **THEN** that amount reads in that locale with its currency
 - **AND** the block derives no other amount from it
 
-#### Scenario: shared-ui-grading-submission-SC-49 - An instant reads in the zone it was given
+#### Scenario: shared-ui-grading-submission-SC-56 - An instant reads in the zone it was given
 **Serves:** Content through props - a collector reading a drop-off time in the shop's day
 
 - **WHEN** a block renders an instant with the zone `Asia/Hong_Kong`
 - **THEN** the time reads in that zone
 
-#### Scenario: shared-ui-grading-submission-SC-50 - An error is not an empty
+#### Scenario: shared-ui-grading-submission-SC-57 - An error is not an empty
 **Serves:** Content through props - a collector meeting a page whose catalogue could not be asked
 
 - **WHEN** `GradingPasteSheet` renders its result in error with the consumer's
@@ -838,7 +911,7 @@ capability from props alone, and SHALL carry a story for each.
 - **THEN** that message is shown
 - **AND** nothing reads as a list that matched nothing
 
-#### Scenario: shared-ui-grading-submission-SC-51 - Every state renders with no application behind it
+#### Scenario: shared-ui-grading-submission-SC-58 - Every state renders with no application behind it
 **Serves:** Content through props - a designer and an engineer reading a state in the workbench
 
 - **WHEN** each block is rendered from its story with props alone

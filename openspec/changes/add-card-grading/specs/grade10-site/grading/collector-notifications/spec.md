@@ -115,6 +115,19 @@ submission was planned under, each carrying an action link to the submission:
 - **THEN** the collector is sent a message stating what was paid and the cards taken in, with the intake receipt and the signed agreement attached
 - **AND** where the level carries cover, what was paid names the cover beside the fee
 
+#### Scenario: grade10-site-grading-collector-notifications-SC-23 - One channel, one language
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading every message in one inbox, in one language
+
+- **GIVEN** a collector reading the pages in Traditional Chinese
+- **WHEN** the cards are handed in
+- **THEN** the handed-in message is sent by email, in English, and nothing is sent on any other channel
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-24 - A message with no document attaches nothing
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector told what happened without a file they were never handed
+
+- **WHEN** a message other than the handed-in message, the hand-back receipt and the drop-off booked message is sent
+- **THEN** it carries no attachment
+
 ### Requirement: A card refused at the counter and a collector named on the page send no message
 
 Two events are decided silent, because the collector has already been told.
@@ -245,6 +258,13 @@ takes the act it was about down with it.
 - **GIVEN** a submission carrying a parked message
 - **WHEN** an operator holding the grading operate grant sends it again
 - **THEN** the message is back on the queue and the submission's flag clears when it goes
+
+#### Scenario: grade10-site-grading-collector-notifications-SC-25 - The flag clears when the channel accepts the send
+**Serves:** grade10-site-grading-collector-notifications-US-03 - the operator watching the flag come off the submission they just sent again
+
+- **GIVEN** a parked message an operator has sent again
+- **WHEN** the channel accepts the send
+- **THEN** the parked message closes and the submission's flag clears, with nothing waiting on a later delivery check
 
 ### Requirement: Every message ends with the submission's line and the shop's footer
 

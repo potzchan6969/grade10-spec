@@ -212,6 +212,14 @@ visit is booked and never from the day of the visit.
 - **THEN** the batch named closes the following Thursday
 - **AND** the cards are said to leave the day after that
 
+#### Scenario: grade10-site-grading-dropoff-booking-SC-25 - A visit at the cut-off instant is in that week's batch
+**Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector picking the last slot before the cards leave
+
+- **GIVEN** a cut-off of Thursday 19:00 on the shop's clock
+- **WHEN** the collector picks that Thursday at 19:00 exactly
+- **THEN** the batch named is the one closing at that same instant
+- **AND** the cards are said to leave the Friday after it
+
 #### Scenario: grade10-site-grading-dropoff-booking-SC-11 - The day back is counted from the day the cards leave
 **Serves:** grade10-site-grading-dropoff-booking-US-01 - a collector who wants to know when the cards come home
 
@@ -300,6 +308,7 @@ drop-off.
 - **GIVEN** a submission holding a booked visit that has not started
 - **WHEN** the collector moves it to another free slot
 - **THEN** the submission holds the new day and time
+- **AND** the batch beside the new day is read again
 - **AND** the collector is sent the moved message
 - **AND** the submission held a visit throughout
 
@@ -346,6 +355,15 @@ submission and no plan.
 - **WHEN** the shop's diary console closes it as missed
 - **THEN** within the hour the submission holds no visit
 - **AND** the collector is sent the missed message
+
+#### Scenario: grade10-site-grading-dropoff-booking-SC-26 - The page reads the visit as booked until the diary answers
+**Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector opening the page in the hour after the slot they missed
+
+- **GIVEN** a booked visit whose start time has passed and which the shop's
+  diary console has not yet closed
+- **WHEN** the collector opens the submission page
+- **THEN** the submission still holds that visit
+- **AND** no missed message has been sent
 
 #### Scenario: grade10-site-grading-dropoff-booking-SC-19 - A missed visit leaves the list and the estimate as they were
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector booking again after a missed day
@@ -398,6 +416,15 @@ drop-off, with its cards and its estimate as they were.
 
 - **GIVEN** a visit owned by one submission and joined by another
 - **WHEN** the owner cancels the visit
+- **THEN** the joining submission holds no visit
+- **AND** its collector is told and offered another drop-off
+- **AND** its cards and its estimate are unchanged
+
+#### Scenario: grade10-site-grading-dropoff-booking-SC-27 - The owner misses the visit and every joining submission is detached
+**Serves:** grade10-site-grading-dropoff-booking-US-04 - a collector whose trip ended with the submission that owned the visit
+
+- **GIVEN** a visit owned by one submission and joined by another
+- **WHEN** the owner's visit is closed as missed
 - **THEN** the joining submission holds no visit
 - **AND** its collector is told and offered another drop-off
 - **AND** its cards and its estimate are unchanged

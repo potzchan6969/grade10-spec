@@ -243,7 +243,7 @@ refused by name and SHALL send nothing further.
 #### Scenario: grade10-admin-grading-batches-SC-10 - The packing list names every intake id in the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator packs the parcel against a list the grader can check the cards off
 
-- **GIVEN** a closed batch holding three submissions of two, one and four cards
+- **GIVEN** a closed batch holding three submissions of two, one and five cards
 - **WHEN** the packing list is printed
 - **THEN** it carries one line per intake id, eight lines in all
 
@@ -680,10 +680,11 @@ with the grader.
 **Serves:** grade10-admin-grading-batches-US-02 - the operator reconciles the grader's bill without the collector's figure moving
 
 - **GIVEN** a batch whose sheet differences sum to 50000 HKD minor units and
-  whose invoice charges 6000 USD minor units for the same cards
+  whose invoice charges 8000 USD minor units for the same cards
 - **WHEN** the invoice is read against the sheet at receiving
-- **THEN** the gap is recorded as the shop's to settle with the grader, and
-  every collector still owes the sheet's difference on their own card
+- **THEN** the two figures are recorded against each other, each with its own
+  currency, as the shop's to settle with the grader, and every collector still
+  owes the sheet's difference on their own card
 
 ### Requirement: The safe holds no more declared value than its cap
 

@@ -2563,7 +2563,7 @@ Admin(holds `grading:approve`) opens a `checked_in` submission with a card to ch
 
 ## grade10-admin-grading-counter-US15: Operations changes a default without a deploy
 
-**As** the person answerable for how the counter runs,
+**As a** person answerable for how the counter runs,
 **I want** every clock, cap, fee sheet and threshold the pages run on to be a setting I read and change in the console under `grading:approve`, a money setting taking a second person, filed under its own audit subject, and reaching only submissions not yet booked,
 **so that** confirming a default is a decision I record and not a release I wait for, and no signed paper changes under a collector.
 
