@@ -13,33 +13,27 @@ product detail goes, and the checks each kind of work owes - plus
 [`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
 which the group's readers hold the code to.
 
-Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
-landing and the re-read. The group's readers come from the schema's `apply`
-block rather than an artifact's.
+Then follow `workflow-round` for the six steps, the readers, the questions,
+the landing and the re-read, and [Round Summary and
+Landing](../../../docs/governance/round-summary.md) for what a round owes its
+hand. The group's readers are the schema's `apply` block's.
 
 ## The Order Inside a Group
 
 1. **The tests** — the tests the group's scenario ids name, in their own
-   commit, carrying no code for the group. They fail, and they have run
-   before they are pushed
+   commit, carrying no code for the group. They fail
 2. **The code** — one task at a time, with the checks each one owes
 3. **The readers** — the group's perspectives read the landing, and their
-   findings are verified. Every brief pins the landing to a commit, never the
-   tree, and a reader writes nothing to the run's checkout
+   findings are verified
 4. **The summary** — one reply in the thread naming the perspectives that read
-   the group and, per scenario id, the tests that landed. It leads with what
-   has not run, quotes the asserted list rather than a count, names the files
-   the fix pass touched outside the group, and its verify line matches the
-   group's verify task word for word
+   the group and, per scenario id, the tests that landed
 5. **The row, then the tick** — the group's `rounds.md` row lands with the
    landing, `pnpm run plan:land <change> <group> --perspectives <a,b> --stood
    "<what stood>" --tests "<sc>: <files>"`, one `--tests` entry per scenario
    id the group's tasks cite (the landing refuses a group that leaves one out,
    and names it), before its tasks are ticked through `pnpm plan done`. `pnpm plan done` refuses a tick whose task names a
    scenario id no test in the group's tree cites, and takes a tick whose task
-   names none. Before the row, grep every `--tests` path for the ids it
-   carries; a lane that did not run says `written, not run` first in the row,
-   and its tasks stay unticked
+   names none
 
 ## In the Application Repository
 
@@ -49,9 +43,7 @@ schema's perspectives and the reader definitions under `.claude/agents/` from
 there - never from the submodule directory pinned to an older sha, because a
 round read from a pin is a round held to last month's rules. The group's row
 lands on this store's `main` through `plan:land`, run against the store clone;
-the ticks that follow go through `pnpm plan done`. `--tests` names the
-repository with each path; `plan:land` refuses a path outside this store, so
-❓ an application group's row shape is open.
+the ticks that follow go through `pnpm plan done`.
 
 ## Never
 

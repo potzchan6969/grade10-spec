@@ -150,7 +150,8 @@ Apply what stands. Then write the summary.
 
 ## Step 5: The Thread Summary
 
-One reply, one screen, in this order:
+One reply, one screen, in this order, owing the hand what [Round Summary and
+Landing](../../../docs/governance/round-summary.md) says:
 
 1. **The draft** — what the artifact now says, in three or four lines
 2. **Who read it** — the perspectives dispatched, by name
@@ -170,13 +171,6 @@ Never call the chat platform yourself, and never hold or read a token.
   <artifact|group>`, and `--held` while a held row is open: the thread shows
   one button, `Confirm <artifact>` or `Confirm with recommendations`, and a
   press is the same word as typing it
-- **One hand, their own moves** — the summary shows a hand the moves that are
-  theirs. A held row addressed to another hand is its own message to that
-  hand: the row, the sentence it would put on the page, and the decision rows
-  it touches quoted, never a build round's thread to read
-- **What stood, checkable** — one finding per line with its reason, the two or
-  three that changed the shape first and the shape quoted, the rest under
-  them; a fix pass names every file it touched outside the artifact
 
 ## The Hand's Four Moves
 
@@ -191,11 +185,7 @@ reply that is none of the other three is a remark.
 | Edit | A push to the change's branch, from a terminal or the code host | Nothing: the push is the hand's word for the lines it touched |
 
 - **Applied as written** — a remark is applied as the hand wrote it; do not
-  argue it. One reply may carry one answer and remarks; a remark on a suite
-  case's wording routes to `/tcs-review`, never to the draft
-- **Proved as a finding is** — a remark's application is written into the row
-  from `git show`, never from the intent: a row that says `corrected` names a
-  commit that holds the correction
+  argue it
 - **Re-read by what it touched** — a remark re-runs only the perspectives the
   edited lines summon, and the reply names them
 - **No question on an edited line** — a line a hand pushed is never asked back
@@ -265,8 +255,8 @@ tree, `main` fast-forwards onto it, and the branch is rebased on top so the
 drafts sit above the landing.
 
 `--perspectives` and `--stood` are owed on every landing: the perspectives
-named are ones the artifact's list issues, every `always` reader among them
-and `verifier` where one ran, and a round that found nothing stood says so. The other flags and refusals
+named are ones the artifact's list issues, every `always` reader among them,
+and a round that found nothing stood says so. The other flags and refusals
 are the command's header's.
 
 - **A fix pass is a round** — the fixes off a demonstration or a whole-change

@@ -29,7 +29,7 @@ const AGENTS_BUDGET = 2570;
 // for all of them. 3200 is its size after the pass that gave the landing,
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
-const ROUND_BUDGET = 3400;
+const ROUND_BUDGET = 3200;
 // The skills a line command loads: the seven command skills a hand invokes,
 // and the four role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
@@ -44,7 +44,7 @@ const SKILLS_BUDGET = {
   // 178 after the enforcement audit's pass cut its three rules to a pointer
   // at the instruction that holds them.
   "workflow-tasks": 178,
-  "workflow-build": 600,
+  "workflow-build": 472,
   // 366 once the whole-change landing's command took its own line.
   "workflow-land": 366,
   "planning-pm": 2740,
