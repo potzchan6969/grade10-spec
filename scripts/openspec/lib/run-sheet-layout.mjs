@@ -110,32 +110,52 @@ export const RESULT_COLORS = {
   "n/a": { red: 0.99, green: 0.99, blue: 0.99 },
 };
 
+/** Frozen column-header fill and the text that sits on it. `#1E332C` / `#F4F1EA`. */
+export const HEADER_BACKGROUND = { red: 30 / 255, green: 51 / 255, blue: 44 / 255 };
+export const HEADER_FOREGROUND = {
+  red: 244 / 255,
+  green: 241 / 255,
+  blue: 234 / 255,
+};
+export const BODY_FOREGROUND = { red: 28 / 255, green: 28 / 255, blue: 28 / 255 };
+
 /**
  * Capability and journey banners take the side they belong to.
  *
- * Product (`grade10-site`, `shared`) is a muted noble green. Admin
- * (`grade10-admin`) is a fall orange. The capability row is the darker of the
- * pair so the file fold reads first.
+ * Product (`grade10-site`, `shared`) is noble green. Admin (`grade10-admin`) is
+ * fall orange. A third product, when one arrives, takes the reserved umber
+ * pair - not wired until a capability uses it.
  */
 export const PRODUCT_CAPABILITY_BACKGROUND = {
-  red: 0.62,
-  green: 0.74,
-  blue: 0.64,
+  red: 58 / 255,
+  green: 95 / 255,
+  blue: 74 / 255,
 };
 export const PRODUCT_JOURNEY_BACKGROUND = {
-  red: 0.86,
-  green: 0.92,
-  blue: 0.86,
+  red: 201 / 255,
+  green: 220 / 255,
+  blue: 206 / 255,
 };
 export const ADMIN_CAPABILITY_BACKGROUND = {
-  red: 0.82,
-  green: 0.58,
-  blue: 0.36,
+  red: 138 / 255,
+  green: 74 / 255,
+  blue: 34 / 255,
 };
 export const ADMIN_JOURNEY_BACKGROUND = {
-  red: 0.95,
-  green: 0.86,
-  blue: 0.72,
+  red: 237 / 255,
+  green: 208 / 255,
+  blue: 176 / 255,
+};
+/** Reserved: a later product, umber / sand. `#5C4A3A` / `#E4D5C4`. */
+export const FUTURE_CAPABILITY_BACKGROUND = {
+  red: 92 / 255,
+  green: 74 / 255,
+  blue: 58 / 255,
+};
+export const FUTURE_JOURNEY_BACKGROUND = {
+  red: 228 / 255,
+  green: 213 / 255,
+  blue: 196 / 255,
 };
 
 export function isAdminCapability(capabilityId) {
@@ -154,10 +174,13 @@ export function journeyBackground(capabilityId) {
     : PRODUCT_JOURNEY_BACKGROUND;
 }
 
-/** A light band on a draft case, so a tester can see they are walking a case no
- *  reviewer has approved. Static, not a rule: a run tab is a snapshot, and a
- *  row's status cannot change inside it. */
-export const DRAFT_BACKGROUND = { red: 1, green: 0.96, blue: 0.87 };
+/** A draft case, warm stone grey. Cooler than this is `to_do` on a result
+ *  cell (`#F2F2F2`); this is `#DDD8CE`. Static: a run tab is a snapshot. */
+export const DRAFT_BACKGROUND = {
+  red: 221 / 255,
+  green: 216 / 255,
+  blue: 206 / 255,
+};
 
 export const SUMMARY_TAB = "Summary";
 
@@ -177,7 +200,19 @@ export const SUMMARY_LEAD_COLUMNS = [
   "Date created",
   "Run name",
   "Selection",
+  "Env",
 ];
+
+export const ENVIRONMENTS = ["staging", "production"];
+export const DEFAULT_ENV = "staging";
+
+export function envOf(value) {
+  const v = String(value ?? "")
+    .trim()
+    .toLowerCase();
+  if (v === "") return DEFAULT_ENV;
+  return ENVIRONMENTS.includes(v) ? v : null;
+}
 
 export const SUMMARY_COLUMNS = [
   ...SUMMARY_LEAD_COLUMNS,
@@ -197,11 +232,11 @@ export const SUMMARY_COLUMNS = [
 
 export const SUMMARY_SHA_COL = SUMMARY_COLUMNS.indexOf("Commit SHA");
 
-/** Alternating bands on the Summary, one per run rather than one per row, so a
- *  run's four surfaces read as one block. */
+/** Run 1, 3, 5… light green `#E4EFE6`; run 2, 4, 6… white. Index with
+ *  `runId % 2` so 1 lands on green. */
 export const SUMMARY_BANDS = [
   { red: 1, green: 1, blue: 1 },
-  { red: 0.95, green: 0.96, blue: 0.98 },
+  { red: 228 / 255, green: 239 / 255, blue: 230 / 255 },
 ];
 
 /** `test cases` needs quoting in A1 notation and `it's` needs its apostrophe
@@ -287,7 +322,7 @@ export function locateRun(summaryValues, titles, runId) {
  * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
  * over cases automation has not reached is not reported as half failing.
  *
- * Identity (`Run ID` through `Selection`) and `Commit SHA` sit on the first
+ * Identity (`Run ID` through `Env`) and `Commit SHA` sit on the first
  * row only. The three surfaces below it are empty in those columns so a merge
  * can span them, and so the register is read as runs rather than as a table
  * somebody would filter.
@@ -298,6 +333,7 @@ export function summaryRows({
   date,
   name,
   selection,
+  env,
   sha,
   drafts,
   automatedLeftOut,
@@ -315,6 +351,7 @@ export function summaryRows({
       first ? date : "",
       first ? name : "",
       first ? selection : "",
+      first ? env : "",
       surface,
       `=IFERROR(COUNTA(${range}),"tab deleted")`,
       drafts,

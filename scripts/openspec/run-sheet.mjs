@@ -31,14 +31,18 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
+  BODY_FOREGROUND,
   COLUMN_WIDTHS,
   COLUMNS,
   capabilityBackground,
   colLetter,
   DRAFT_BACKGROUND,
+  envOf,
   FILTER_START,
   FONT,
   FONT_SIZE,
+  HEADER_BACKGROUND,
+  HEADER_FOREGROUND,
   journeyBackground,
   locateRun,
   MARKING_START,
@@ -90,7 +94,8 @@ Selection - one of these, and the first two resolve to the third:
 Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
-  --include-draft     Also take \`draft\` cases (grey-banded in the tab)
+  --env <name>        staging or production; defaults to staging
+  --include-draft     Also take \`draft\` cases (stone-grey in the tab)
   --exclude-automated Leave out cases an automated test already covers
   --sandbox           Write to TCS_SHEET_SANDBOX_ID instead of TCS_SHEET_ID
   --overwrite <id>    Rewrite that run's tab and its Summary block (same id)
@@ -105,6 +110,7 @@ function parseArgs(argv) {
   const args = {
     name: null,
     selection: null,
+    env: null,
     suites: null,
     priority: null,
     level: null,
@@ -121,6 +127,7 @@ function parseArgs(argv) {
   const takes = {
     "--name": "name",
     "--selection": "selection",
+    "--env": "env",
     "--suites": "suites",
     "--priority": "priority",
     "--level": "level",
@@ -299,9 +306,14 @@ async function ensureSummary(token, id, sheets) {
         ])
       ).replies[0].addSheet.properties.sheetId;
 
-  const head = await values(token, id, `${quoteTab(SUMMARY_TAB)}!A1:A1`);
-  if ((head.values?.[0]?.[0] ?? "") !== SUMMARY_COLUMNS[0]) {
-    if (found)
+  const head = await values(
+    token,
+    id,
+    `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}1`,
+  );
+  const current = head.values?.[0] ?? [];
+  if (current.join("\t") !== SUMMARY_COLUMNS.join("\t")) {
+    if (found && (current[0] ?? "") !== SUMMARY_COLUMNS[0])
       await batchUpdate(token, id, [
         {
           insertDimension: {
@@ -324,14 +336,17 @@ async function ensureSummary(token, id, sheets) {
         },
         cell: {
           userEnteredFormat: {
+            backgroundColor: HEADER_BACKGROUND,
             textFormat: {
               fontFamily: FONT,
               fontSize: FONT_SIZE,
               bold: true,
+              foregroundColor: HEADER_FOREGROUND,
             },
           },
         },
-        fields: "userEnteredFormat.textFormat(fontFamily,fontSize,bold)",
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat(fontFamily,fontSize,bold,foregroundColor))",
       },
     },
     {
@@ -435,25 +450,14 @@ function dressing(sheetId, lines) {
         range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
         cell: {
           userEnteredFormat: {
-            textFormat: { bold: true },
-            backgroundColor: { red: 0.2, green: 0.25, blue: 0.3 },
+            textFormat: { bold: true, foregroundColor: HEADER_FOREGROUND },
+            backgroundColor: HEADER_BACKGROUND,
             verticalAlignment: "MIDDLE",
             wrapStrategy: "WRAP",
           },
         },
         fields:
           "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
-        cell: {
-          userEnteredFormat: {
-            textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 } },
-          },
-        },
-        fields: "userEnteredFormat.textFormat.foregroundColor",
       },
     },
     // Two frozen columns, so the case a tester is marking stays named however
@@ -539,8 +543,8 @@ function dressing(sheetId, lines) {
     });
   }
 
-  // A draft case, banded amber. Contiguous runs only, so a tab of drafts costs
-  // one request rather than one per row.
+  // A draft case, banded stone grey. Contiguous runs only, so a tab of drafts
+  // costs one request rather than one per row.
   for (const run of runsOf(lines, (line) =>
     line.kind === "case" && prop(line.one.tc, "Status") === "draft"
       ? "draft"
@@ -581,7 +585,7 @@ function dressing(sheetId, lines) {
         cell: {
           userEnteredFormat: {
             backgroundColor: journeyBackground(line.capabilityId),
-            textFormat: { bold: true },
+            textFormat: { bold: true, foregroundColor: BODY_FOREGROUND },
             wrapStrategy: "OVERFLOW_CELL",
             verticalAlignment: "MIDDLE",
           },
@@ -622,7 +626,7 @@ function dressing(sheetId, lines) {
         cell: {
           userEnteredFormat: {
             backgroundColor: capabilityBackground(line.capabilityId),
-            textFormat: { bold: true },
+            textFormat: { bold: true, foregroundColor: HEADER_FOREGROUND },
             wrapStrategy: "OVERFLOW_CELL",
             verticalAlignment: "MIDDLE",
           },
@@ -776,6 +780,9 @@ function summaryDressing(sheetId, startRow, rows, runId) {
 // ---------------------------------------------------------------------------
 
 const args = parseArgs(process.argv.slice(2));
+args.env = envOf(args.env);
+if (!args.env)
+  die("--env is staging or production", "Omit it to default to staging.");
 if (!args.name) {
   help();
   die("--name is required: it names the run and the tab.");
@@ -878,7 +885,7 @@ const journeys = lines.filter((line) => line.kind === "journey").length;
 
 if (args.dryRun) {
   console.log(
-    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, would record commit ${sha.slice(0, 12)}${args.overwrite ? `, would overwrite run ${args.overwrite}` : ""}${args.sandbox ? ", sandbox" : ""}`)}`,
+    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, ${args.env}, would record commit ${sha.slice(0, 12)}${args.overwrite ? `, would overwrite run ${args.overwrite}` : ""}${args.sandbox ? ", sandbox" : ""}`)}`,
   );
   process.exit(0);
 }
@@ -931,6 +938,7 @@ const payload = summaryRows({
   date,
   name: args.name,
   selection: args.selection ?? "",
+  env: args.env,
   sha,
   drafts,
   automatedLeftOut,
@@ -982,7 +990,7 @@ if (overwriteAt !== null) {
 
 const cases = lines.filter((line) => line.kind === "case").length;
 console.log(
-  `\n${green("✓")} ${overwriteAt !== null ? "rewrote" : "wrote"} ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, commit ${sha.slice(0, 12)}`)}`,
+  `\n${green("✓")} ${overwriteAt !== null ? "rewrote" : "wrote"} ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, ${args.env}, commit ${sha.slice(0, 12)}`)}`,
 );
 console.log(
   `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,

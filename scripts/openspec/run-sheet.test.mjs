@@ -18,8 +18,12 @@ import {
   COLUMNS,
   capabilityBackground,
   colLetter,
+  DEFAULT_ENV,
+  DRAFT_BACKGROUND,
+  envOf,
   FILTER_COLUMNS,
   FILTER_START,
+  FUTURE_CAPABILITY_BACKGROUND,
   isAdminCapability,
   locateRun,
   MARKING_COLUMNS,
@@ -27,7 +31,9 @@ import {
   PRODUCT_CAPABILITY_BACKGROUND,
   quoteTab,
   READING_COLUMNS,
+  RESULT_COLORS,
   RESULTS,
+  SUMMARY_BANDS,
   SUMMARY_COLUMNS,
   SUMMARY_LEAD_COLUMNS,
   SURFACE_END,
@@ -434,6 +440,27 @@ test("admin banners use the fall orange, product banners the noble green", () =>
     capabilityBackground("grade10-site/auction/listing-page"),
     PRODUCT_CAPABILITY_BACKGROUND,
   );
+  assert.notDeepEqual(
+    FUTURE_CAPABILITY_BACKGROUND,
+    PRODUCT_CAPABILITY_BACKGROUND,
+  );
+  assert.notDeepEqual(FUTURE_CAPABILITY_BACKGROUND, ADMIN_CAPABILITY_BACKGROUND);
+});
+
+test("draft stone grey is not the result to_do grey", () => {
+  assert.notDeepEqual(DRAFT_BACKGROUND, RESULT_COLORS.to_do);
+});
+
+test("env defaults to staging and refuses anything else", () => {
+  assert.equal(envOf(undefined), DEFAULT_ENV);
+  assert.equal(envOf(""), "staging");
+  assert.equal(envOf("Production"), "production");
+  assert.equal(envOf("lab"), null);
+});
+
+test("Summary odd runs are the light green band", () => {
+  assert.deepEqual(SUMMARY_BANDS[1 % SUMMARY_BANDS.length], SUMMARY_BANDS[1]);
+  assert.notDeepEqual(SUMMARY_BANDS[0], SUMMARY_BANDS[1]);
 });
 
 test("rows read in journey order, so the tab's grouping is its order", () => {
@@ -497,6 +524,7 @@ test("a Summary run writes identity and SHA on the first row only", () => {
     date: "2026-09-22",
     name: "auction-signin",
     selection: "Sign-in that is auction related",
+    env: "staging",
     sha: "abc123",
     drafts: 2,
     automatedLeftOut: 1,
@@ -505,15 +533,18 @@ test("a Summary run writes identity and SHA on the first row only", () => {
   assert.equal(rows.length, SURFACES.length);
   assert.equal(rows[0].length, SUMMARY_COLUMNS.length);
   assert.equal(SUMMARY_COLUMNS.at(-1), "Commit SHA");
-  assert.deepEqual(SUMMARY_COLUMNS.slice(0, 5), SUMMARY_LEAD_COLUMNS);
+  assert.deepEqual(SUMMARY_COLUMNS.slice(0, 6), SUMMARY_LEAD_COLUMNS);
+  assert.equal(SUMMARY_LEAD_COLUMNS.at(-1), "Env");
 
   const at = (row, name) => row[SUMMARY_COLUMNS.indexOf(name)];
   assert.equal(at(rows[0], "Run ID"), 3);
   assert.equal(at(rows[0], "Tab"), "3-auction-signin");
+  assert.equal(at(rows[0], "Env"), "staging");
   assert.equal(at(rows[0], "Commit SHA"), "abc123");
   assert.equal(at(rows[0], "Surface"), "Web");
   assert.equal(at(rows[1], "Run ID"), "");
   assert.equal(at(rows[1], "Selection"), "");
+  assert.equal(at(rows[1], "Env"), "");
   assert.equal(at(rows[1], "Commit SHA"), "");
   assert.equal(at(rows[1], "Surface"), "Mobile");
   assert.equal(at(rows[3], "Surface"), "Auto mobile");

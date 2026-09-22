@@ -482,7 +482,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
 | `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
 | `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
-| `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--sandbox` uses `TCS_SHEET_SANDBOX_ID`; `--overwrite <id>` rewrites that run; `--dry-run` prints the selection and touches no network |
+| `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--sandbox` uses `TCS_SHEET_SANDBOX_ID`; `--overwrite <id>` rewrites that run; `--env` is `staging` or `production` and defaults to staging; `--dry-run` prints the selection and touches no network |
 | `pnpm run tcs:automated <case-id…> --decided-by <path>` | flips one or more cases' Automation status to `automated`, in place, in whichever suite file holds them, writing the Decided-by line in the same edit; refuses a flip of an in-flight change's case that names no path; pushes nothing — the walk's own commit carries the flip |
 
 ## The Run Sheet
@@ -490,7 +490,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
-- **`actual` only** — `--include-draft` takes drafts and amber-bands them; a `deprecated` case never crosses
+- **`actual` only** — `--include-draft` takes drafts and stone-grey-bands them; a `deprecated` case never crosses
 - **A run includes automated cases** unless the person asked to leave them out. `--exclude-automated` leaves them out and still says how many, named, with what decides each
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated. The person confirms that list before a tab is written
 - **Production unless they asked for the sandbox** — `--sandbox` writes to `TCS_SHEET_SANDBOX_ID`. That id is a repository variable, never in the code
@@ -498,7 +498,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 - **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile` and `Notes` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
 - **A capability is a row, then a journey** — the file path (`shared/auth/sign-in`) above the journeys in that file, each journey above its cases, each with a collapsible group. Sorting happens inside the tab's filter view, which leaves the rows where they are
 - **Four surfaces, one vocabulary** — `to_do`, `pass`, `fail`, `blocked`, `skipped`, `n/a`. Every cell starts at `to_do` so the Summary counts down, except an automation column on a case whose **Automation status** is `manual`, which starts at `n/a`. `n/a` is a surface that cannot answer; `skipped` is an answer somebody chose not to take, and only `n/a` is left out of the pass rate
-- **The Summary tab is the register** — four rows per run, one per surface, grouped under the first. Identity and the commit sit once, on that first row, with the SHA at the far right. No filter view: a register is read, not sorted
+- **The Summary tab is the register** — four rows per run, one per surface, grouped under the first. Identity, env and the commit sit once, on that first row, with the SHA at the far right. No filter view: a register is read, not sorted
 - **Nothing returns** — no result reaches the store, and no suite carries one
 - **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
 - **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet

@@ -45,8 +45,9 @@ in the same pass when the request covers both.
    belong is cheaper to drop now than to explain in the tab.
 3. **Show the list and stop.** Group by capability (or by file). Name the
    count, how many are draft, how many are already automated, and what you
-   left out on purpose. Ask whether the coverage is correct. Do not dispatch
-   until they say it is, or name what to add or drop.
+   left out on purpose. Ask whether the coverage is correct. Ask Env
+   (`staging` or `production`); if they do not name one, use staging. Do not
+   dispatch until they say the coverage is, or name what to add or drop.
 4. **Dispatch**, only after that yes. The run tab is written by CI, which
    holds the only credentials:
 
@@ -55,6 +56,7 @@ in the same pass when the request covers both.
      -f name=<run name> \
      -f selection="<the request, in their words>" \
      -f cases="<id,id,id>" \
+     -f env=staging \
      -f include_automated=true
    ```
 
@@ -62,6 +64,10 @@ in the same pass when the request covers both.
    filter resolved it. Add `include_draft=true` only when the person asked for
    drafts. Omit `include_automated` (or pass `false`) only when they asked to
    leave automated cases out.
+
+   **Env.** Ask which environment the pass is walked against (`staging` or
+   `production`). If they do not name one, use `staging`. Pass `-f env=<name>`
+   on either sheet — sandbox and production both record it on the Summary row.
 
    **Sandbox.** Production is the default. Add `-f sandbox=true` only when they
    asked to write to the sandbox sheet, a test spreadsheet, or not production.
@@ -94,7 +100,7 @@ in the same pass when the request covers both.
   somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
   against the run.
 - **The Summary tab gives each run four rows**, one per surface, grouped under
-  the first. Identity and the commit sit once, on that first row. Marking a
+  the first. Identity, env and the commit sit once, on that first row. Marking a
   cell moves the counts; no second sync is needed.
 - **Sort inside the `Walk` filter view, not the sheet.** A sheet-level sort
   would lift the cases out from under their journey banners. The journeys of

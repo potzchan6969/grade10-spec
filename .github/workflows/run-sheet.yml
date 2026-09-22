@@ -42,8 +42,13 @@ on:
         description: "Only read suites whose path contains this"
         required: false
         type: string
+      env:
+        description: "Where the pass is walked — staging or production. Defaults to staging"
+        required: false
+        default: "staging"
+        type: string
       include_draft:
-        description: "Also take draft cases (grey-banded in the tab)"
+        description: "Also take draft cases (stone-grey in the tab)"
         required: false
         default: false
         type: boolean
@@ -144,6 +149,7 @@ jobs:
           TCS_SHEET_SANDBOX_ID: ${{ vars.TCS_SHEET_SANDBOX_ID }}
           RUN_NAME: ${{ inputs.name }}
           SELECTION: ${{ inputs.selection }}
+          RUN_ENV: ${{ inputs.env }}
           SUITES: ${{ inputs.suites }}
           PRIORITY: ${{ inputs.priority }}
           LEVEL: ${{ inputs.level }}
@@ -156,7 +162,7 @@ jobs:
         run: |
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
-          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA"
+          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA" --env "${RUN_ENV:-staging}"
           if [ -n "$SELECTION" ]; then set -- "$@" --selection "$SELECTION"; fi
           if [ -s /tmp/cases.txt ]; then set -- "$@" --cases-file /tmp/cases.txt; fi
           if [ -n "$SUITES" ]; then set -- "$@" --suites "$SUITES"; fi
