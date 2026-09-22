@@ -19,8 +19,9 @@ choice in one transaction.
   digits of the account. A bank refund also receives the operator's bank
   provider reference. The full number, proof and Stripe provider reference
   never cross the boundary. The site renders Transfer to through
-  `PaymentMethodCard`, and stacks details as Amount, Transfer to, Reference
-  (bank only), Reason, Note.
+  `PaymentMethodCard` with the mask as the label and the bank name as
+  description, and stacks details as Amount, Transfer to, Reference
+  (bank only), Reason, and Note when present.
 The mutation requires `auction:refund`, is idempotent on its request key and
 uses the existing audit sequence. It does not call Stripe, create a pending
 refund state or add a second refund workflow.

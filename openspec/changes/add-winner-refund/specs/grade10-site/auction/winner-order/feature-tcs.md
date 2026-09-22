@@ -6,7 +6,7 @@
 ## winner-order-US14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded because they were not happy with the item,
-**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or bank name and last four for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
+**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
 **so that** I know the order is closed and still hold the record of what I paid.
 
 ### winner-order-US14-TC1-1: Refunded keeps the invoice and receipts
@@ -39,9 +39,10 @@
 * Pay, address editing and shipment actions are absent.
 * The invoice and every existing receipt remain downloadable.
 * No refund letter is required by this surface.
-* Refund details show Amount, then Transfer to, then Reason, then Note.
-* Transfer to uses `PaymentMethodCard` with the card brand logo and only the last four digits, or a bank icon with the bank name and only the last four digits of the account (`Bank name, ···· ####`). Not the full number or proof.
+* Refund details show Amount, then Transfer to, then Reason, then Note when the operator recorded one.
+* Transfer to uses `PaymentMethodCard` with the card brand logo and only the last four digits, or a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. Not the full number or proof.
 * A card refund shows no Reference.
+* Note is omitted when the operator left none.
 
 ## winner-order-US15: Winner sees an overpayment returned
 
@@ -103,7 +104,7 @@
 **Pre-conditions:**
 
 * customer(winner of `<bank-refunded order>`) is on Winner Order after a bank
-  transfer refund was recorded.
+  transfer refund was recorded with no operator note.
 
 **Steps:**
 
@@ -111,9 +112,10 @@
 
 **Expected Results:**
 
-* The details show Amount, then Transfer to, then Reference, then Reason, then Note.
-* Transfer to shows a bank icon, the bank name and only the last four digits of the account.
+* The details show Amount, then Transfer to, then Reference, then Reason.
+* Transfer to shows a bank icon, the masked destination on the primary line, and the free-text bank name as secondary text under it.
 * Reference shows the operator's bank provider reference.
+* Note is not shown.
 * Proof and the full account number are not shown.
 
 ## Settled

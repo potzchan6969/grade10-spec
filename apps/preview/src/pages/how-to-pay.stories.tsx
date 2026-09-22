@@ -120,6 +120,11 @@ export const HkLocalTab: Story = {
     expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankCode)).toBeVisible();
     expect(modal.getByText("Branch code")).toBeVisible();
     expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.branchCode)).toBeVisible();
+    expect(modal.getByText("Account number")).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.accountNumber),
+    ).toBeVisible();
+    expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankName)).toBeVisible();
   },
 };
 
@@ -135,7 +140,17 @@ export const SwiftTab: Story = {
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
     ).toBeVisible();
-    expect(modal.getByText("Business address")).toBeVisible();
+    expect(modal.getByText("Beneficiary address")).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.beneficiaryAddress),
+    ).toBeVisible();
+    expect(modal.getByText("Bank name")).toBeVisible();
+    expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankName)).toBeVisible();
+    expect(modal.getByText("Bank address")).toBeVisible();
+    expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankAddress)).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.accountNumber),
+    ).toBeVisible();
     expect(modal.getByRole("alert")).toHaveTextContent(OUR_NOTE);
   },
 };

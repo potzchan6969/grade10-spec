@@ -25,15 +25,16 @@ preview, then grade10-site).
   tabs defaulting to FPS. Each tab includes that rail’s fields, then payment
   reference as a detail row (`LK7P2Q01`, no Copy) with a memo warning —
   FPS (ID, account name, QR), HK Local (bank name, bank code, branch code,
-  account number), International / SWIFT (beneficiary, business address,
-  SWIFT/BIC, account or IBAN, then payment reference, then OUR charges note).
+  full account number including bank and branch code), International / SWIFT
+  (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC,
+  full account or IBAN, then payment reference, then OUR charges note).
   No Copy on amount or rail fields.
 - **Submit Payment Proof dialog** is proof-only (title **Submit Payment
   Proof**): proof fields and FileDropzone only — no amount due, transfer
   reference, or Proof of Payment heading. Existing 1–3 / 5 MB / 15 MB / HEIC
   upload rules and irreversible confirm stay. Flat Bank Details card removed.
-- **Durable view-bank-details fields expand** for QR, branch code, business
-  address, OUR note, tab default FPS, and the two entry points.
+- **Durable view-bank-details fields expand** for QR, branch code, beneficiary
+  address, bank name, bank address, OUR note, tab default FPS, and the two entry points.
 
 ## Non-Goals
 

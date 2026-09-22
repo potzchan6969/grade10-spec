@@ -1,7 +1,7 @@
 ## Feature set
 
 - Bank transfer
-  - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and three pill tabs defaulting to FPS; each tab shows that rail’s fields then payment reference as a detail row (no Copy) with memo warning — FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, account number), SWIFT (beneficiary, business address, SWIFT/BIC, account or IBAN, then payment reference, then OUR charges note)
+  - View Bank Details: Order summary secondary control opens a dialog with amount due (no Copy) and three pill tabs defaulting to FPS; each tab shows that rail’s fields then payment reference as a detail row (no Copy) with memo warning — FPS (ID, account name, QR), HK Local (bank name, bank code, branch code, full account number including bank and branch code), SWIFT (beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number or IBAN, then payment reference, then OUR charges note)
   - Two entry points: Submit Payment Proof opens the proof dialog; View Bank Details opens the rails dialog; both hide when Pay is hidden
   - Payment proof: one upload of 1 to 3 files (1 required) in Submit Payment Proof, behind a confirm step; proof fields and upload only (no amount or reference chrome)
   - Payment Verifying: the deadline stops, Submit Payment Proof, View Bank Details and further uploads are hidden
@@ -26,13 +26,14 @@ and three tabs with FPS selected by default. Each tab SHALL show that rail’s
 fields as labelled detail rows without copy controls, then the invoice's bank
 reference as a labelled detail row without a copy control, and a warning that
 the winner must enter the reference in the bank app's memo or remarks field.
-The account details are TBC.
+Live account details remain Finance TBC; the preview uses Grade10 Finance
+Limited and HSBC Hong Kong samples.
 
 | Way to pay | Details shown |
 | --- | --- |
 | FPS (default) | FPS ID, account name, scannable FPS QR |
-| Hong Kong local bank transfer | Bank name, bank code, branch code, account number |
-| SWIFT (International) | Beneficiary name, business address, SWIFT/BIC, account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
+| Hong Kong local bank transfer | Bank name, bank code, branch code, full account number including bank and branch code |
+| SWIFT (International) | Beneficiary name, beneficiary address, bank name, bank address (main branch address, city, country), SWIFT/BIC, full account number or IBAN; after the payment reference, a note to choose OUR for transfer fees so Grade10 receives the full order total |
 
 **Submit Payment Proof** - Submit Payment Proof SHALL be a separate dialog
 titled Submit Payment Proof. It SHALL NOT show amount due, transfer reference,
@@ -83,14 +84,14 @@ wants to pay by card asks Grade10, and an operator reissues the invoice.
 
 - **GIVEN** the View Bank Details dialog is open
 - **WHEN** the winner selects HK Local
-- **THEN** bank name, bank code, branch code and account number are shown
+- **THEN** bank name, bank code, branch code and the full account number including bank and branch code are shown
 
 #### Scenario: winner-order-SC-183 - SWIFT tab shows OUR note after payment reference
 **Serves:** winner-order-US-09 - Winner pays an invoice by bank transfer
 
 - **GIVEN** the View Bank Details dialog is open
 - **WHEN** the winner selects International (SWIFT)
-- **THEN** beneficiary name, business address, SWIFT/BIC and account number or IBAN are shown
+- **THEN** beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC and the full account number or IBAN are shown
 - **AND** the payment reference and memo warning are shown
 - **AND** a note after the payment reference tells the winner to choose OUR for transfer fees so Grade10 receives the full order total
 
