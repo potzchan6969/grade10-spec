@@ -1,4 +1,4 @@
 schema: grade10-planning
 created: 2026-09-21
 awaiting:
-  specs: Spec.md awaiting PM and Finance confirmation of the listing-code payload length, receipt retention, and the final reconciliation rules
+  specs: Spec.md not yet written — every PM/Finance decision is confirmed (Q1-Q12); ready for /planning-qa to draft the outline, run the blind suite and write the requirements
