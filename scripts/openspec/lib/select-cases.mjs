@@ -215,6 +215,12 @@ export function caseRow({ read, tc }) {
   return COLUMNS.map((name) => cells[name] ?? "");
 }
 
+/** A capability's banner row: the store path of the file, the rest empty so
+ *  the text overflows across them. */
+export function capabilityRow(capabilityId) {
+  return [capabilityId, ...Array(COLUMNS.length - 1).fill("")];
+}
+
 /** A journey's banner row: its id and title in the first cell, the rest empty
  *  so the text overflows across them. */
 export function journeyRow(journey) {
@@ -223,12 +229,14 @@ export function journeyRow(journey) {
 }
 
 /**
- * The grid a run tab is written from: a banner row per journey, then the cases
- * that walk it.
+ * The grid a run tab is written from: a banner row per capability file, a
+ * banner per journey, then the cases that walk it.
  *
  * The journey is a row rather than a repeated column because it repeats. A
  * `Journey title` column spent 200 pixels of the reading path restating the
  * same sentence on every row of a group, and the group already has a shape.
+ * The capability row is the file the tester would open - `shared/auth/sign-in`
+ * - and the journeys fold under it.
  *
  * `lines` runs parallel to `rows` and is what the formatting reads: a request
  * that bands a draft case or groups a journey needs to know which row is which,
@@ -237,8 +245,16 @@ export function journeyRow(journey) {
 export function buildGrid(picked) {
   const rows = [];
   const lines = [];
+  let lastFile = null;
   let last = null;
   for (const one of picked) {
+    const file = one.read.capabilityId ?? "";
+    if (file !== lastFile) {
+      rows.push(capabilityRow(file));
+      lines.push({ kind: "capability", key: file });
+      lastFile = file;
+      last = null;
+    }
     const key = one.tc.journey?.raw ?? "";
     if (key !== last) {
       rows.push(journeyRow(one.tc.journey));

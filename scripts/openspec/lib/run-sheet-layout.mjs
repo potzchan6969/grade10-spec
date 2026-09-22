@@ -110,6 +110,10 @@ export const RESULT_COLORS = {
   "n/a": { red: 0.99, green: 0.99, blue: 0.99 },
 };
 
+/** A capability's banner row, spanning the table above the journeys in that
+ *  file. Darker than a journey, so the file is the outer fold. */
+export const CAPABILITY_BACKGROUND = { red: 0.75, green: 0.8, blue: 0.86 };
+
 /** A journey's banner row, spanning the table above the cases that walk it. */
 export const JOURNEY_BACKGROUND = { red: 0.85, green: 0.88, blue: 0.92 };
 

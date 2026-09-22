@@ -31,6 +31,7 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
+  CAPABILITY_BACKGROUND,
   COLUMN_WIDTHS,
   COLUMNS,
   colLetter,
@@ -313,42 +314,24 @@ async function ensureSummary(token, id, sheets) {
     ]);
   }
 
-  const rate = SUMMARY_COLUMNS.indexOf("Pass rate");
   await batchUpdate(token, id, [
     {
       repeatCell: {
-        range: { sheetId },
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          endRowIndex: 1,
+        },
         cell: {
           userEnteredFormat: {
-            textFormat: { fontFamily: FONT, fontSize: FONT_SIZE },
+            textFormat: {
+              fontFamily: FONT,
+              fontSize: FONT_SIZE,
+              bold: true,
+            },
           },
         },
-        fields: "userEnteredFormat.textFormat(fontFamily,fontSize)",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 1 },
-        cell: { userEnteredFormat: { textFormat: { bold: false } } },
-        fields: "userEnteredFormat.textFormat.bold",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
-        cell: { userEnteredFormat: { textFormat: { bold: true } } },
-        fields: "userEnteredFormat.textFormat.bold",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 1, startColumnIndex: rate },
-        cell: {
-          userEnteredFormat: {
-            numberFormat: { type: "PERCENT", pattern: "0.0%" },
-          },
-        },
-        fields: "userEnteredFormat.numberFormat",
+        fields: "userEnteredFormat.textFormat(fontFamily,fontSize,bold)",
       },
     },
     {
@@ -622,6 +605,47 @@ function dressing(sheetId, lines) {
       });
   }
 
+  // Outer fold: every journey and case under the capability file they came
+  // from. Inner groups have to exist first or Sheets refuses the nest.
+  for (const [i, line] of lines.entries()) {
+    if (line.kind !== "capability") continue;
+    const row = i + 1;
+    requests.push({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: row,
+          endRowIndex: row + 1,
+          startColumnIndex: 0,
+          endColumnIndex: COLUMNS.length,
+        },
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: CAPABILITY_BACKGROUND,
+            textFormat: { bold: true },
+            wrapStrategy: "OVERFLOW_CELL",
+            verticalAlignment: "MIDDLE",
+          },
+        },
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat,wrapStrategy,verticalAlignment)",
+      },
+    });
+    let end = i + 1;
+    while (end < lines.length && lines[end].kind !== "capability") end += 1;
+    if (end > i + 1)
+      requests.push({
+        addDimensionGroup: {
+          range: {
+            sheetId,
+            dimension: "ROWS",
+            startIndex: row + 1,
+            endIndex: end + 1,
+          },
+        },
+      });
+  }
+
   // A filter view, not the basic filter. Sorting a basic filter rewrites the
   // rows underneath it, which would lift every case out from under its journey
   // banner and leave the tab unreadable with no undo the next tester can see.
@@ -679,6 +703,7 @@ function summaryDressing(sheetId, startRow, rows, runId) {
     startColumnIndex: 0,
     endColumnIndex: SUMMARY_COLUMNS.length,
   };
+  const rate = SUMMARY_COLUMNS.indexOf("Pass rate");
   return [
     {
       repeatCell: {
@@ -686,12 +711,29 @@ function summaryDressing(sheetId, startRow, rows, runId) {
         cell: {
           userEnteredFormat: {
             backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
-            textFormat: { bold: false },
+            textFormat: { bold: false, fontFamily: FONT, fontSize: FONT_SIZE },
             verticalAlignment: "MIDDLE",
           },
         },
         fields:
-          "userEnteredFormat(backgroundColor,textFormat.bold,verticalAlignment)",
+          "userEnteredFormat(backgroundColor,textFormat,verticalAlignment)",
+      },
+    },
+    {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: rate,
+          endColumnIndex: rate + 1,
+        },
+        cell: {
+          userEnteredFormat: {
+            numberFormat: { type: "PERCENT", pattern: "0.0%" },
+          },
+        },
+        fields: "userEnteredFormat.numberFormat",
       },
     },
     {
@@ -921,7 +963,15 @@ if (overwriteAt !== null) {
     `${quoteTab(SUMMARY_TAB)}!A1`,
     payload,
   );
-  const blockStart = startRowOf(appended.updates?.updatedRange);
+  const after = await values(
+    token,
+    args.sheet,
+    `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
+  );
+  const placed = locateRun(after.values ?? [], [...titles, tab], runId);
+  const blockStart = placed.ok
+    ? placed.startRow
+    : startRowOf(appended.updates?.updatedRange);
   if (blockStart !== null)
     await batchUpdate(
       token,

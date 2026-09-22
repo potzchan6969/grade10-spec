@@ -386,13 +386,37 @@ test("a journey reaches the grid as a banner row above the cases that walk it", 
   const { rows, lines } = buildGrid([candidates[0], candidates[1]]);
   assert.deepEqual(
     lines.map((line) => line.kind),
-    ["journey", "case", "case"],
+    ["capability", "journey", "case", "case"],
   );
-  assert.equal(rows[0][0], "demo-thing-widget-US1 — Somebody does a thing");
-  // The banner has no result cells, which is what lets `COUNTA` over a result
-  // column count cases and skip banners.
+  assert.equal(rows[0][0], "demo/thing/widget");
+  assert.equal(rows[1][0], "demo-thing-widget-US1 — Somebody does a thing");
+  // Banners have no result cells, which is what lets `COUNTA` over a result
+  // column count cases and skip them.
   assert.equal(at(rows[0], "Web"), "");
+  assert.equal(at(rows[1], "Web"), "");
   assert.equal(rows[0].length, COLUMNS.length);
+});
+
+test("journeys of two files fold under their capability paths", () => {
+  const other = {
+    ...candidates[0],
+    read: {
+      rel: "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+      level: "feature",
+      capabilityId: "shared/auth/sign-out",
+    },
+    tc: {
+      ...candidates[0].tc,
+      id: "shared-auth-sign-out-US1-TC1-1",
+      journeyNum: 1,
+      journey: { raw: "shared-auth-sign-out-US1", title: "Sign out" },
+    },
+  };
+  const { rows, lines } = buildGrid(inReadingOrder([other, candidates[0]]));
+  const caps = lines
+    .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
+    .filter(Boolean);
+  assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
 });
 
 test("rows read in journey order, so the tab's grouping is its order", () => {
