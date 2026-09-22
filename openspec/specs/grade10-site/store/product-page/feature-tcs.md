@@ -1,7 +1,7 @@
 # grade10-site/store/product-page Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-store-product-page-US1: Collector reads a card at its own address
 
@@ -644,3 +644,275 @@ to say how many that is,
 **Expected Results:**
 
 * The dialog title is **Sign In to Add to Cart**.
+
+---
+
+## grade10-site-store-product-page-US13: Collector shares a card and the preview shows it
+
+**As a** collector,
+**I want** a product link I pass on to unfurl with the card's own picture, whole,
+**so that** whoever receives it sees the card rather than a text-only preview
+or one with its edges cut off.
+
+### grade10-site-store-product-page-US13-TC1-1: Product address unfurls with the card's first catalogue image
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with two or more images in the shop's own order.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Check the response for `og:image`.
+
+**Expected Results:**
+
+* `og:image` names the card's first catalogue image, not a later one.
+* That image is the same photograph the card's own page shows first.
+
+### grade10-site-store-product-page-US13-TC2-1: Declared size matches what is actually delivered
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card with at least one image exists.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `og:image:width` and `og:image:height`.
+3. Fetch the `og:image` URL and measure the delivered image.
+
+**Expected Results:**
+
+* `og:image:width` is `1200` and `og:image:height` is `630`.
+* The image actually delivered at that URL is 1200 by 630 pixels.
+
+### grade10-site-store-product-page-US13-TC3-1: Card sits whole inside the box, padded white and never cropped
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists whose first image's own aspect ratio differs from
+1200 by 630.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Fetch the `og:image` and inspect the full frame.
+
+**Expected Results:**
+
+* The whole card is visible in the frame — no edge, corner, or label is cut off.
+* The leftover space is filled solid white, not a blurred or extended copy of
+  the photograph.
+
+### grade10-site-store-product-page-US13-TC4-1: Card with no catalogue image carries no og:image at all
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with no image attached.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Check the response for `og:image`.
+
+**Expected Results:**
+
+* No `og:image` tag is present — not an empty value, not a placeholder URL.
+* Title, description and `og:url` are unaffected.
+
+### grade10-site-store-product-page-US13-TC5-1: Card shape reads wide when a picture is present
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card with at least one image exists.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `twitter:card`.
+
+**Expected Results:**
+
+* `twitter:card` is `summary_large_image`.
+
+### grade10-site-store-product-page-US13-TC6-1: Card shape reads small when no picture is present
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with no image attached.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `twitter:card`.
+
+**Expected Results:**
+
+* `twitter:card` is `summary`.
+
+### grade10-site-store-product-page-US13-TC7-1: Alt text names the card, and is absent when the picture is
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+Two catalogued cards exist: one whose image carries its own alt text, one
+whose image carries none.
+
+**Steps:**
+
+1. Navigate to each card's own address with JavaScript disabled.
+2. Read `og:image:alt` on each.
+
+**Expected Results:**
+
+* Where the image has its own alt text, `og:image:alt` is that text.
+* Where it has none, `og:image:alt` is the card's name.
+
+### grade10-site-store-product-page-US13-TC8-1: Two cards each unfurl with their own picture, never the other's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+Two catalogued cards exist, each with its own distinct first image.
+
+**Steps:**
+
+1. Navigate to card A's address with JavaScript disabled and note `og:image`.
+2. Navigate to card B's address with JavaScript disabled and note `og:image`.
+
+**Expected Results:**
+
+* Card A's `og:image` is card A's own first image; card B's is card B's own.
+* Neither response's picture, size, or shape declaration leaks into the
+  other's.
+
+### grade10-site-store-product-page-US13-TC9-1: A small original is enlarged to fill the box
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists whose first image's native resolution is smaller
+than 1200 by 630 in at least one dimension.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Fetch the `og:image` and measure the delivered pixel dimensions.
+
+**Expected Results:**
+
+* The delivered image is exactly 1200 by 630, enlarged from its native size
+  rather than left smaller inside more padding.
+
+## Settled
+
+* The share picture resolves through the same CDN address as the catalogue
+  image rather than a separately generated asset — an implementation
+  contract, not an externally observable product behaviour; the unit test's
+  job, not this suite's.
