@@ -267,10 +267,10 @@ doing, under Edge Cases.
   pays; a later edit or reissue never changes a receipt already issued
 - 🚧 **A confirmed transfer** — its receipt reads Bank Transfer, not manually
   settled
-- 🚧 **Receipt ID** — `RC-LK7P2Q-01-P1`: the paid invoice's listing code and
-  revision, then the payment's number within that invoice. No month, and the
-  parts stay separated so the bank reference is not spelled out on a card
-  order's receipt. Receipts issued before this keep the ids they were given
+- 🚧 **Receipt ID** — `RC-LK42301P1`: the paid invoice's ID plus the
+  payment's sequence number within it
+- ❓ **Which receipt ID is real** — this page's form and the one Grade10
+  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
 - 🚧 **What every receipt shows** — Original Invoice Total, Previous Payments,
@@ -481,7 +481,7 @@ a second payment provider, and changes to the bid-time rules.
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
-| Receipt ID reads from the invoice | 🚧 In flight | `RC-LK7P2Q-01-P1` — the paid invoice's listing code and revision, then the payment's number. It replaces the `REC-202609-LK7P2Q-01-P1` form already issuing, which carried the payment month; the month is on the receipt itself and in the internal audit number, so the id does not need it. The parts stay separated rather than run together, so a card order's receipt does not spell out the bank reference operators keep to themselves. Receipts already issued keep their ids. | Product (@jeffffej0909) |
+| Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
 | A balance belongs on a receipt, not on a page | 🚧 In flight | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | 🚧 In flight | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |

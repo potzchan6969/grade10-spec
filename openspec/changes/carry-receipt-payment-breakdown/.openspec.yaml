@@ -4,6 +4,6 @@ promoted_by: "@jeffffej0909"
 depends_on:
   - add-winner-partial-payment
 awaiting:
-  specs: "/workflow-specify — outline and requirement deltas for the receipt breakdown on every receipt and the RC- receipt id"
+  specs: "/workflow-specify — outline and requirement deltas for the payment breakdown on every receipt"
 hands:
   pm: "@jeffffej0909"
