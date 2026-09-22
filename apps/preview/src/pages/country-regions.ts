@@ -275,6 +275,10 @@ const LABEL_OVERRIDES: Readonly<
   MO: "Macau",
 };
 
+/** ISO codes omitted from the Country/Region select. */
+const DISABLED_REGION_CODES: ReadonlySet<(typeof REGION_CODES)[number]> =
+  new Set(["BY", "CU", "IR", "KP", "RU", "SY"]);
+
 const displayNames = new Intl.DisplayNames(["en"], { type: "region" });
 
 function regionLabel(code: string): string {
@@ -283,13 +287,21 @@ function regionLabel(code: string): string {
   return displayNames.of(code) ?? code;
 }
 
-/** Display names, A–Z (en). */
-export const COUNTRY_OPTIONS: readonly string[] = REGION_CODES.map(
-  regionLabel,
-).toSorted((a, b) => a.localeCompare(b, "en"));
+export type CountrySelectItem = {
+  value: string;
+  label: string;
+};
 
 /** Array form for Base UI `items` — do not use a Record (key order is not a contract). */
-export const COUNTRY_SELECT_ITEMS = COUNTRY_OPTIONS.map((country) => ({
-  value: country,
-  label: country,
-}));
+export const COUNTRY_SELECT_ITEMS: readonly CountrySelectItem[] =
+  REGION_CODES.filter((code) => !DISABLED_REGION_CODES.has(code))
+    .map((code) => ({
+      value: regionLabel(code),
+      label: regionLabel(code),
+    }))
+    .toSorted((a, b) => a.label.localeCompare(b.label, "en"));
+
+/** Display names, A–Z (en). */
+export const COUNTRY_OPTIONS: readonly string[] = COUNTRY_SELECT_ITEMS.map(
+  (item) => item.label,
+);
