@@ -535,7 +535,9 @@ function checkOverlap(files, add) {
   const claims = new Map();
   for (const one of files) {
     for (const requirement of one.requirements) {
-      if (requirement.kind === "added") continue;
+      // An ADDED block claims the name as a MODIFIED one does: two changes
+      // that fold one requirement are named to each other whatever their
+      // headings (`shared-planning-agent-rounds-SC-102`).
       const key = `${one.spec}\n${requirement.name}`;
       const held = claims.get(key) ?? [];
       held.push({ ...requirement, change: one.change, file: one.file });

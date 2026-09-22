@@ -331,7 +331,18 @@ export function createContext(roots, report, { specs, changes, stories }) {
     specs,
     // The slice of a snapshot `resolveRef` reads, built once for all pages.
     snapshot: { specs: [...specs.values()] },
-    changing: new Set(changes.flatMap((one) => one.deltas.map((d) => d.spec))),
+    // What a page's `spec:` may name before the durable spec exists: every
+    // capability an in-flight change declares as a `specs/<capability>/`
+    // directory — its journeys, its outline or its delta — so a page written
+    // first resolves (`shared-planning-agent-rounds-SC-100`).
+    changing: new Set(
+      changes.flatMap((one) => [
+        ...one.deltas.map((d) => d.spec),
+        ...capabilitiesOf(roots.store, join(roots.store, one.dir)).map(
+          (d) => d.spec,
+        ),
+      ]),
+    ),
     stories,
     referenced: new Set(),
     cased: new Set(),

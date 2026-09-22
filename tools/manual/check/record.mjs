@@ -222,10 +222,12 @@ export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
  * once that artifact exists or the record waives it. None of these is a
  * judgement about whether the wait is over — only its author ends that — but
  * about whether the line says anything: an artifact the schema does not
- * declare reaches no worklist at all, one already written is a record that
- * contradicts the tree, and one the same record waives is the change saying
- * both that nobody owes it and that it is waiting for it. Each is one line to
- * delete, in a file the author has just edited.
+ * declare reaches no worklist at all, and one the same record waives is the
+ * change saying both that nobody owes it and that it is waiting for it. Each
+ * is one line to delete, in a file the author has just edited. A wait on an
+ * artifact the change has written stands: a written design may wait on its
+ * frame, and the wait names what is missing or the record's reader refuses
+ * it (`shared-planning-agent-rounds-SC-101`).
  */
 const waitsOnSpecs = (change) =>
   (change.awaiting ?? []).some((one) => one.artifact === "specs");
@@ -238,7 +240,6 @@ export function checkAwaiting(ctx, changes) {
     // can say which artifacts it declares, so nothing is claimed about it.
     if (artifacts === undefined) continue;
     const known = new Set(artifacts.map((one) => one.id));
-    const written = new Set(change.written);
     const waived = waiverLineOf(artifacts, change);
     for (const { artifact } of change.awaiting) {
       const file = fileOf(change, ".openspec.yaml");
@@ -247,12 +248,6 @@ export function checkAwaiting(ctx, changes) {
           "awaiting",
           file,
           `waits on \`${artifact}\`, which the \`${change.schema}\` schema does not issue — name one of ${[...known].map((one) => `\`${one}\``).join(", ")}`,
-        );
-      } else if (written.has(artifact)) {
-        ctx.add(
-          "awaiting",
-          file,
-          `waits on \`${artifact}\`, which this change has written — the wait is over, so delete the line`,
         );
       } else if (waived.has(artifact)) {
         ctx.add(

@@ -114,6 +114,17 @@ function checkManualRows(root, text, cases, err) {
     /^##\s+Reconciliation\s*$/.test(line),
   );
   if (start < 0) return;
+  // The table belongs under the reconciliation, where the archive's strip
+  // reads it; one anywhere else is refused where it is written
+  // (`shared-planning-agent-rounds-SC-103`).
+  const astray = lines.findIndex(
+    (line, i) => i < start && /^###\s+Manual\s*$/.test(line),
+  );
+  if (astray >= 0)
+    err(
+      astray + 1,
+      "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
+    );
   const manual = lines.findIndex(
     (line, i) => i > start && /^###\s+Manual\s*$/.test(line),
   );
