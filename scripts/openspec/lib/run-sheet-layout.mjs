@@ -110,12 +110,49 @@ export const RESULT_COLORS = {
   "n/a": { red: 0.99, green: 0.99, blue: 0.99 },
 };
 
-/** A capability's banner row, spanning the table above the journeys in that
- *  file. Darker than a journey, so the file is the outer fold. */
-export const CAPABILITY_BACKGROUND = { red: 0.75, green: 0.8, blue: 0.86 };
+/**
+ * Capability and journey banners take the side they belong to.
+ *
+ * Product (`grade10-site`, `shared`) is a muted noble green. Admin
+ * (`grade10-admin`) is a fall orange. The capability row is the darker of the
+ * pair so the file fold reads first.
+ */
+export const PRODUCT_CAPABILITY_BACKGROUND = {
+  red: 0.62,
+  green: 0.74,
+  blue: 0.64,
+};
+export const PRODUCT_JOURNEY_BACKGROUND = {
+  red: 0.86,
+  green: 0.92,
+  blue: 0.86,
+};
+export const ADMIN_CAPABILITY_BACKGROUND = {
+  red: 0.82,
+  green: 0.58,
+  blue: 0.36,
+};
+export const ADMIN_JOURNEY_BACKGROUND = {
+  red: 0.95,
+  green: 0.86,
+  blue: 0.72,
+};
 
-/** A journey's banner row, spanning the table above the cases that walk it. */
-export const JOURNEY_BACKGROUND = { red: 0.85, green: 0.88, blue: 0.92 };
+export function isAdminCapability(capabilityId) {
+  return String(capabilityId ?? "").startsWith("grade10-admin");
+}
+
+export function capabilityBackground(capabilityId) {
+  return isAdminCapability(capabilityId)
+    ? ADMIN_CAPABILITY_BACKGROUND
+    : PRODUCT_CAPABILITY_BACKGROUND;
+}
+
+export function journeyBackground(capabilityId) {
+  return isAdminCapability(capabilityId)
+    ? ADMIN_JOURNEY_BACKGROUND
+    : PRODUCT_JOURNEY_BACKGROUND;
+}
 
 /** A light band on a draft case, so a tester can see they are walking a case no
  *  reviewer has approved. Static, not a rule: a run tab is a snapshot, and a

@@ -14,13 +14,17 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  ADMIN_CAPABILITY_BACKGROUND,
   COLUMNS,
+  capabilityBackground,
   colLetter,
   FILTER_COLUMNS,
   FILTER_START,
+  isAdminCapability,
   locateRun,
   MARKING_COLUMNS,
   MARKING_START,
+  PRODUCT_CAPABILITY_BACKGROUND,
   quoteTab,
   READING_COLUMNS,
   RESULTS,
@@ -417,6 +421,19 @@ test("journeys of two files fold under their capability paths", () => {
     .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
     .filter(Boolean);
   assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
+});
+
+test("admin banners use the fall orange, product banners the noble green", () => {
+  assert.equal(isAdminCapability("grade10-admin/auction/listing"), true);
+  assert.equal(isAdminCapability("grade10-site/auction/listing-page"), false);
+  assert.deepEqual(
+    capabilityBackground("grade10-admin/auction/listing"),
+    ADMIN_CAPABILITY_BACKGROUND,
+  );
+  assert.deepEqual(
+    capabilityBackground("grade10-site/auction/listing-page"),
+    PRODUCT_CAPABILITY_BACKGROUND,
+  );
 });
 
 test("rows read in journey order, so the tab's grouping is its order", () => {

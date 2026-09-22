@@ -251,14 +251,14 @@ export function buildGrid(picked) {
     const file = one.read.capabilityId ?? "";
     if (file !== lastFile) {
       rows.push(capabilityRow(file));
-      lines.push({ kind: "capability", key: file });
+      lines.push({ kind: "capability", key: file, capabilityId: file });
       lastFile = file;
       last = null;
     }
     const key = one.tc.journey?.raw ?? "";
     if (key !== last) {
       rows.push(journeyRow(one.tc.journey));
-      lines.push({ kind: "journey", key });
+      lines.push({ kind: "journey", key, capabilityId: file });
       last = key;
     }
     rows.push(caseRow(one));

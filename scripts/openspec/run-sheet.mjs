@@ -31,15 +31,15 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
-  CAPABILITY_BACKGROUND,
   COLUMN_WIDTHS,
   COLUMNS,
+  capabilityBackground,
   colLetter,
   DRAFT_BACKGROUND,
   FILTER_START,
   FONT,
   FONT_SIZE,
-  JOURNEY_BACKGROUND,
+  journeyBackground,
   locateRun,
   MARKING_START,
   quoteTab,
@@ -580,7 +580,7 @@ function dressing(sheetId, lines) {
         },
         cell: {
           userEnteredFormat: {
-            backgroundColor: JOURNEY_BACKGROUND,
+            backgroundColor: journeyBackground(line.capabilityId),
             textFormat: { bold: true },
             wrapStrategy: "OVERFLOW_CELL",
             verticalAlignment: "MIDDLE",
@@ -621,7 +621,7 @@ function dressing(sheetId, lines) {
         },
         cell: {
           userEnteredFormat: {
-            backgroundColor: CAPABILITY_BACKGROUND,
+            backgroundColor: capabilityBackground(line.capabilityId),
             textFormat: { bold: true },
             wrapStrategy: "OVERFLOW_CELL",
             verticalAlignment: "MIDDLE",
