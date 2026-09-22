@@ -47,10 +47,10 @@ export function readCandidates(root, scope = null) {
  * `actual` only unless `includeDraft`, and never `deprecated` - a deprecated
  * case is one the spec stopped stating, and walking it proves nothing.
  *
- * A case whose Automation status is `automated` is left out too, unless
- * `includeAutomated` says otherwise: a run sheet is where a case a script
- * cannot cover leaves the store, and an automated case is proved on every
- * push instead (`docs/governance/specs-to-test-cases.md`, "The Run Sheet").
+ * A case whose Automation status is `automated` is left out of this function
+ * unless `includeAutomated` is set. The writer turns that flag on by default
+ * (`--exclude-automated` turns it off): Auto web and Auto mobile are columns
+ * a tester marks, and an automated case is the one those columns can answer.
  */
 export function selectCases(candidates, options = {}) {
   const {

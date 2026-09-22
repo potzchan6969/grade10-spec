@@ -37,6 +37,7 @@ import {
   FILTER_START,
   FONT,
   FONT_SIZE,
+  isRunTabTitle,
   JOURNEY_BACKGROUND,
   MARKING_START,
   quoteTab,
@@ -87,7 +88,8 @@ Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
   --include-draft     Also take \`draft\` cases (grey-banded in the tab)
-  --include-automated Also take cases an automated test already covers
+  --exclude-automated Leave out cases an automated test already covers
+  --replace           Delete this run's existing tab and the Summary, then write from id 1
   --sha <sha>         Commit to record; defaults to the current HEAD
   --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID
   --dry-run           Print what would be written and touch no network
@@ -105,7 +107,8 @@ function parseArgs(argv) {
     scope: null,
     cases: null,
     includeDraft: false,
-    includeAutomated: false,
+    includeAutomated: true,
+    replace: false,
     sha: null,
     sheet: process.env.TCS_SHEET_ID ?? null,
     dryRun: false,
@@ -128,6 +131,8 @@ function parseArgs(argv) {
     } else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--include-draft") args.includeDraft = true;
     else if (a === "--include-automated") args.includeAutomated = true;
+    else if (a === "--exclude-automated") args.includeAutomated = false;
+    else if (a === "--replace") args.replace = true;
     else if (a === "--cases") args.cases = (argv[++i] ?? "").split(",");
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
@@ -317,7 +322,38 @@ async function ensureSummary(token, id, sheets) {
   return sheetId;
 }
 
-/** The next run id: one past the highest the Summary tab already records. */
+/** Delete this run's existing tabs and empty the Summary, so the next write is
+ *  run id 1 against a clean register. The Summary tab itself stays: a
+ *  spreadsheet cannot lose every sheet. */
+async function dropPriorRuns(token, id, sheets, nameSlug) {
+  const requests = [];
+  const summary = sheets.find((s) => s.properties.title === SUMMARY_TAB);
+  if (summary) {
+    const sheetId = summary.properties.sheetId;
+    const rows = summary.properties.gridProperties?.rowCount ?? 2;
+    requests.push({
+      unmergeCells: { range: { sheetId, startRowIndex: 1 } },
+    });
+    if (rows > 1) {
+      requests.push({
+        deleteDimension: {
+          range: {
+            sheetId,
+            dimension: "ROWS",
+            startIndex: 1,
+            endIndex: rows,
+          },
+        },
+      });
+    }
+  }
+  for (const one of sheets) {
+    if (isRunTabTitle(one.properties.title, nameSlug))
+      requests.push({ deleteSheet: { sheetId: one.properties.sheetId } });
+  }
+  if (requests.length === 0) return;
+  await batchUpdate(token, id, requests);
+}
 async function nextRunId(token, id) {
   const read = await values(token, id, `${quoteTab(SUMMARY_TAB)}!A2:A`);
   const ids = (read.values ?? [])
@@ -744,7 +780,7 @@ if (picked.length === 0) {
           ? "\n  Most of the store is still `draft`; pass --include-draft to walk drafts."
           : "") +
         (automatedLeftOut > 0 && !args.includeAutomated
-          ? "\n  Every match is already automated; pass --include-automated to walk them anyway."
+          ? "\n  Every match is already automated; omit --exclude-automated to walk them."
           : ""),
     ),
   );
@@ -790,7 +826,12 @@ if (!token)
   );
 
 const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
-const sheets = meta.sheets ?? [];
+let sheets = meta.sheets ?? [];
+if (args.replace) {
+  await dropPriorRuns(token, args.sheet, sheets, slug(args.name));
+  const again = await call(token, `/${args.sheet}?fields=sheets.properties`);
+  sheets = again.sheets ?? [];
+}
 const summarySheetId = await ensureSummary(token, args.sheet, sheets);
 const runId = await nextRunId(token, args.sheet);
 const taken = new Set(sheets.map((s) => s.properties.title));
