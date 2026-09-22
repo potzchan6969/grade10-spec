@@ -20,13 +20,13 @@
 
 ### grade10-site-grading-counter-documents-US-04: Named person signs the receipt in the collector's place
 
-**As** somebody the collector named to collect,
+**As a** person the collector named to collect,
 **I want** the iPad to prefill my name as named on the submission page and the receipt to record that I collected,
 **so that** the collector's record says who took the cards.
 
 ### grade10-site-grading-counter-documents-US-05: Signer keeps a copy of every document
 
-**As** somebody who has just signed at the counter,
+**As a** person who has just signed at the counter,
 **I want** a download after the seal, an email with the signed PDF attached, and each document on the submission page with its fingerprint,
 **so that** I hold my own copy without asking for one.
 

@@ -20,7 +20,7 @@
 
 ### grade10-site-grading-submission-plan-US-04: Dealer submits a box of cards at Bulk
 
-**As a** dealer with more than twenty cards,
+**As a** collector dealing in cards, more than twenty at a time,
 **I want** the paste to tell me Bulk is the only level open, what it costs a card and that it takes the longer drop-off, and a card above Bulk's ceiling to be named for a second submission on the same drop-off,
 **so that** the whole box goes in on one visit at the right level.
 

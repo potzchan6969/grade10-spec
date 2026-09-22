@@ -32,7 +32,7 @@
 
 ### grade10-site-grading-dropoff-booking-US-06: Dealer books the longer Bulk drop-off
 
-**As a** dealer with twenty cards or more,
+**As a** collector dealing in cards, twenty or more at a time,
 **I want** the booking to take the longer Bulk drop-off with its slots, and the booked page to say how long the visit takes,
 **so that** the desk has the time to check every card and I am not sent away with half a box.
 
