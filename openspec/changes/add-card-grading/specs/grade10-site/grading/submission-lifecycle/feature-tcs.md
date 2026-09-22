@@ -1344,3 +1344,40 @@ Runs once per row of **Test data**.
 * No other act, control or button shows.
 
 ---
+
+## Reconciliation
+
+**Run:** the blind pass read the bundle built for `grade10-site/grading/submission-lifecycle` under `add-card-grading` - this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the linked pages under `docs/prds/products/grade10-site/grading/`. Denied: every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 38 cases over US1-US11 and four raised questions; the scenario pass wrote SC-01 to SC-51 over eighteen requirements. The two are joined here on anchors.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1`'s rail step for Graded, Back and Ready | Corrected | The case read Sent at all three; the status table the page and the PRD both carry reads Graded, Back and Back. The material settles it, so the case moved rather than the requirement |
+| `US1-TC1-1`'s walk of the whole status table | Folded in | `grade10-site-grading-submission-lifecycle-SC-53` - the scenarios took one status each, and none said the word, the chip and the rail are one row read three ways |
+| `US1-TC5-1` an id that does not exist reads not found | Folded in | `grade10-site-grading-submission-lifecycle-SC-52`, with the rule the raised question settled: an unissued id and a reader who holds neither the session nor the link are answered the same way |
+| Raised: is the page restricted to the owning collector, or does anyone with the URL read it? | Folded in | `grade10-site-grading-submission-lifecycle-SC-52` and the requirement "The submission page opens to the collector and to the emailed link"; landed as `decisions.md` Q53. Case `US1-TC7-1` added |
+| `US1-TC6-1` a failed load shows an error to retry | No scenario: presentation | Loading and error are the view's states; the `ui-design.md` rows close as `**Out of suite:** the view's colocated test`, and the case stays as their guard |
+| Raised: what does the status do once every card is withdrawn before the batch closes? | Folded in | `grade10-site-grading-submission-lifecycle-SC-54` - the last withdrawal cancels the submission and the collector is told; landed as `decisions.md` Q54. Case `US2-TC4-1` added |
+| `US4-TC2-1` no card moved up shows no upcharge line | Reached | The empty case of `grade10-site-grading-submission-lifecycle-SC-23`; `grade10-site-grading-submission-lifecycle-SC-27` states what the page shows when nothing is due. No new rule |
+| `US6-TC2-1` the ID glance at exactly HKD 10,000 declared | Contradiction, raised | The case puts the threshold figure on the ID side, the requirement puts it on the no-ID side, and `decisions.md` Q12 names the figure without naming the side. Not resolved here: the case stays `draft` with `**Blocked:** Operations`, and the raised row lands as ❓ Operations on `docs/prds/products/grade10-site/grading/submission.md` |
+| `US7-TC2-1` an empty name cannot be saved | Folded in | `grade10-site-grading-submission-lifecycle-SC-55` |
+| `US7-TC4-1` removing the named person | Folded in | `grade10-site-grading-submission-lifecycle-SC-56` - the requirement allowed the removal and no scenario walked it |
+| Raised: does the uncollected ladder pause once a visit is booked or a collector named? | Folded in | `grade10-site-grading-submission-lifecycle-SC-57` - it keeps counting, and only collection, vaulting or a payout takes a card off it; landed as `decisions.md` Q56. Case `US8-TC6-1` added |
+| `US9-TC2-1` the collected record under the signed-in account | Reached | Stated by the record requirement's **Where it is read**; the signed-in list itself is `grade10-site/grading/submission-plan`'s surface, walked by its US-06 |
+| Raised: where is "a collector's slab never enters the catalogue" observable? | **Out of suite:** the store's catalogue suite | The absence is verified where the catalogue is, not on a grading screen; landed as `decisions.md` Q55. `grade10-site-grading-submission-lifecycle-SC-45` keeps the submission's record as the one place a valuation or a consignment reads |
+| `US10-TC1-1`'s rail after a cancel from Booked | Corrected | The case ended the rail at Planned for both rows; `grade10-site-grading-submission-lifecycle-SC-06` leaves it at the stage the submission ended on |
+| `US10-TC3-1` backing out of the cancel confirmation | No scenario: the dialog's own | `grade10-site-grading-submission-lifecycle-SC-47` states the cancel; Go back is the view's branch, and the case stays as its guard |
+| The last card refused at the counter | Folded in | `grade10-site-grading-submission-lifecycle-SC-58` - the counter cancels the submission and tells the collector there, and no message sends; landed as `decisions.md` Q57, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md`, and the `ui-design.md` Flags ❓ closed. Case `US10-TC4-1` added |
+| `US11-TC1-1`'s acts for a Collected submission | Corrected | The case offered Vault it and erasure alone; the acts table also offers reading the record and consigning to an auction |
+| `grade10-site-grading-submission-lifecycle-SC-01` a move the status does not name is refused | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its anchor is the feature set group The statuses: no journey of this capability walks a move, and every move is made at the counter |
+
+**Uncovered anchors:** none. Every journey US-01 to US-11 carries cases, and the one feature-set anchor, The statuses, is listed out of suite above.
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US2-TC1-1`, `US2-TC4-1` | The card is pulled from the intake bag and its fee comes back at the till; a person runs the counter and the POS, and only the page's lines are scriptable |
+| `US5-TC1-1`, `US5-TC2-1` | The payout is made at the till or by bank transfer by a person; the case walks the money as well as the lines the page draws |
+| `US6-TC2-1` | The ID glance happens at the counter and keeps nothing, so nothing but the page's Bring line is scriptable |
+| `US8-TC3-1` | The written notice is posted by registered post, and its posting date and tracking are typed in from the receipt |
+| `US10-TC4-1` | The refusal and the telling both happen at the counter, and the case asserts no message was sent for them |

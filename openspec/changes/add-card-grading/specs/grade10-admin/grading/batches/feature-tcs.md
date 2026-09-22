@@ -3,6 +3,12 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
+**Out of suite:**
+
+- `grade10-admin-grading-batches-SC-14` - two operators marking one parcel sent: the backend's concurrency test over the ship act, where the second act meets the batch's shipped stamp under `lockBatch` and is refused by name.
+- `grade10-admin-grading-batches-SC-33` - finishing a box already finished: the backend's idempotency test over finishing, which the panel offers no second time.
+- `grade10-admin-grading-batches-SC-42` - two desks handing in against one shelf: the backend's concurrency test over the hand-in, which takes the safe's cap row for update before it counts.
+
 ## grade10-admin-grading-batches-US1: Operator ships the batch that closed
 
 **As a** member of shop staff on the day after the cut-off,
@@ -1576,3 +1582,68 @@
 **Expected Results:**
 
 * Check-in proceeds; no cap refusal is shown.
+
+## Reconciliation
+
+**Run:** 2026-09-22, in the change `add-card-grading`. The blind pass read the isolated bundle its caller built - this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD pages the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Nothing here verifies that; it is the run's own word. The scenario pass issued `grade10-admin-grading-batches-SC-01` to `grade10-admin-grading-batches-SC-42` over sixteen ADDED requirements, and the blind suite wrote 37 cases over US1 to US5.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-admin-grading-batches-US1-TC1-1` | Reached | `grade10-admin-grading-batches-SC-11`, and the packing list of `grade10-admin-grading-batches-SC-10` |
+| `grade10-admin-grading-batches-US1-TC2-1` | Folded | No scenario said a batch still taking cards offers no way to ship it; folded as `grade10-admin-grading-batches-SC-45`, with the rule on the shipping requirement |
+| `grade10-admin-grading-batches-US1-TC3-1` | Reached | `grade10-admin-grading-batches-SC-12` |
+| `grade10-admin-grading-batches-US1-TC4-1` | Reached | `grade10-admin-grading-batches-SC-13` |
+| `grade10-admin-grading-batches-US1-TC5-1` | Reached | `grade10-admin-grading-batches-SC-15`. The case reads the warning tone, the scenario the refusal: the same rule at two altitudes. Whether a batch over the cover is split or held is Q29's open ❓ and is not in either |
+| `grade10-admin-grading-batches-US1-TC6-1` | Reached | `grade10-admin-grading-batches-SC-11` |
+| `grade10-admin-grading-batches-US1-TC7-1` | Folded | The console opens a batch for a trio before its first card, which no scenario said; folded as `grade10-admin-grading-batches-SC-44`, with the rule beside `Opened on first use`. Its second reading is `grade10-admin-grading-batches-SC-03` |
+| `grade10-admin-grading-batches-US1-TC8-1` | Kept, stated elsewhere | The read grant is `grade10-admin/grading/counter`'s `Every act sits behind one of three grants`, walked by its US-14; no scenario folded here |
+| `grade10-admin-grading-batches-US1-TC9-1` | Kept, out of the requirements | The in-flight form is presentation; the panel's colocated test decides it, and the ui-design row closes the same way |
+| `grade10-admin-grading-batches-US2-TC1-1` | Reached | `grade10-admin-grading-batches-SC-23` |
+| `grade10-admin-grading-batches-US2-TC2-1` | Reached | `grade10-admin-grading-batches-SC-23` |
+| `grade10-admin-grading-batches-US2-TC3-1` | Reached | `grade10-admin-grading-batches-SC-25`, and the counters of `grade10-admin-grading-batches-SC-29` |
+| `grade10-admin-grading-batches-US2-TC4-1` | Reached, and raised | `grade10-admin-grading-batches-SC-26`. The case asked how far `held elsewhere` reaches; Q54 settles it as one cert per grader across every batch and submission, the scan requirement now says so, and `grade10-admin-grading-batches-SC-46` states the reach |
+| `grade10-admin-grading-batches-US2-TC5-1` | Reached | `grade10-admin-grading-batches-SC-27` |
+| `grade10-admin-grading-batches-US2-TC6-1` | Reached | `grade10-admin-grading-batches-SC-24` |
+| `grade10-admin-grading-batches-US2-TC7-1` | Reached | `grade10-admin-grading-batches-SC-28`. The case's `the card's fee stands` is the fee's fate per outcome, `grade10-site/grading/submission-lifecycle`'s and Q5's open ❓, not this capability's |
+| `grade10-admin-grading-batches-US2-TC8-1` | Reached | `grade10-admin-grading-batches-SC-38`, and the reconciliation of `grade10-admin-grading-batches-SC-39` |
+| `grade10-admin-grading-batches-US2-TC9-1` | Reached | `grade10-admin-grading-batches-SC-39` |
+| `grade10-admin-grading-batches-US2-TC10-1` | Reached | `grade10-admin-grading-batches-SC-30` |
+| `grade10-admin-grading-batches-US2-TC11-1` | Reached | `grade10-admin-grading-batches-SC-31` |
+| `grade10-admin-grading-batches-US2-TC12-1` | Reached | `grade10-admin-grading-batches-SC-32`, and the batch's close in `grade10-admin-grading-batches-SC-06` |
+| `grade10-admin-grading-batches-US2-TC13-1` | Kept, stated elsewhere | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
+| `grade10-admin-grading-batches-US3-TC1-1` | Reached | `grade10-admin-grading-batches-SC-34`, and the same-day letter of `grade10-admin-grading-batches-SC-37` |
+| `grade10-admin-grading-batches-US3-TC2-1` | Reached | `grade10-admin-grading-batches-SC-35`, and `grade10-admin-grading-batches-SC-37` |
+| `grade10-admin-grading-batches-US3-TC3-1` | Reached | `grade10-admin-grading-batches-SC-36`, and `grade10-admin-grading-batches-SC-37` |
+| `grade10-admin-grading-batches-US3-TC4-1` | Reached | `grade10-admin-grading-batches-SC-34` |
+| `grade10-admin-grading-batches-US3-TC5-1` | Folded | No scenario refused a held card with no date the grader expects it; folded as `grade10-admin-grading-batches-SC-47`, with the rule on the exceptions requirement |
+| `grade10-admin-grading-batches-US4-TC1-1` | Reached | `grade10-admin-grading-batches-SC-17` |
+| `grade10-admin-grading-batches-US4-TC2-1` | Reached | `grade10-admin-grading-batches-SC-20` |
+| `grade10-admin-grading-batches-US4-TC3-1` | Reached | `grade10-admin-grading-batches-SC-21` |
+| `grade10-admin-grading-batches-US4-TC4-1` | Folded | The requirement refused a re-estimate with no reason and no scenario stated it; folded as `grade10-admin-grading-batches-SC-48` |
+| `grade10-admin-grading-batches-US4-TC5-1` | Kept, stated elsewhere | The read grant is the counter capability's, as `grade10-admin-grading-batches-US1-TC8-1` |
+| `grade10-admin-grading-batches-US5-TC1-1` | Reached | `grade10-admin-grading-batches-SC-09` |
+| `grade10-admin-grading-batches-US5-TC2-1` | Reached | `grade10-admin-grading-batches-SC-40` |
+| `grade10-admin-grading-batches-US5-TC3-1` | Folded | The tile at the cap was a rule with no scenario; folded as `grade10-admin-grading-batches-SC-49` |
+| `grade10-admin-grading-batches-US5-TC4-1` | Reached | `grade10-admin-grading-batches-SC-41` |
+| `grade10-admin-grading-batches-US5-TC5-1` | Folded | A hand-in that leaves the safe exactly at its cap is taken, which no scenario stated; folded as `grade10-admin-grading-batches-SC-49` with `grade10-admin-grading-batches-US5-TC3-1` |
+| Raised: the ship form's insured total | Landed as Q53, and folded | Read-only, the sum of the batch's cards' declared values at ship, recorded as the figure declared to the courier. The shipping act no longer lists it among the fields that can be unset, the insured-total requirement carries `Derived, never typed`, and `grade10-admin-grading-batches-SC-43` states it; `grade10-admin-grading-batches-US1-TC15-1` walks it |
+| Raised: how far `a cert already held elsewhere` reaches | Landed as Q54, and folded | Any card at the same grader carrying that cert, in any submission and any batch, batches already received included. The scan requirement now says so and `grade10-admin-grading-batches-SC-46` states it; `grade10-admin-grading-batches-US2-TC15-1` walks it |
+| `grade10-admin-grading-batches-SC-01` | Case added | `grade10-admin-grading-batches-US1-TC10-1` - the first hand-in for a trio opens the batch |
+| `grade10-admin-grading-batches-SC-02` | Case added | `grade10-admin-grading-batches-US1-TC11-1` - the second hand-in joins the standing batch |
+| `grade10-admin-grading-batches-SC-04`, `grade10-admin-grading-batches-SC-08` | Case added | `grade10-admin-grading-batches-US1-TC12-1` - the cut-off passes, the row reads Closed with nothing written, and it ships the next day |
+| `grade10-admin-grading-batches-SC-05` | Case added | `grade10-admin-grading-batches-US2-TC14-1` - the box arrives, the row reads back unchecked, and the badge turns after a day |
+| `grade10-admin-grading-batches-SC-07` | Case added | `grade10-admin-grading-batches-US1-TC13-1` - a hand-in after the cut-off joins the next batch |
+| `grade10-admin-grading-batches-SC-16` | Case added | `grade10-admin-grading-batches-US1-TC14-1` - a cover figure in another currency, refused and never converted |
+| `grade10-admin-grading-batches-SC-18` | Case added | `grade10-admin-grading-batches-US4-TC6-1` - the stage that is the move carries the whole batch |
+| `grade10-admin-grading-batches-SC-19` | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
+| `grade10-admin-grading-batches-SC-22` | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
+| `grade10-admin-grading-batches-SC-14`, `grade10-admin-grading-batches-SC-33`, `grade10-admin-grading-batches-SC-42` | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-admin-grading-batches-US1-TC9-1` | A person watches the form while the act is in flight; the panel's colocated test proves the disabled actions, not how long they stay that way |
+| `grade10-admin-grading-batches-US1-TC12-1` | The cut-off passing is a day, not an act: a person walks the row on the Friday morning, or the clock is moved for them |
+| `grade10-admin-grading-batches-US2-TC14-1` | The unchecked-return badge turns after a day standing; a person reads the panel the next morning |
+| `grade10-admin-grading-batches-US3-TC3-1` | A person photographs a physical slab inside the box it arrived in; a test can prove the photograph is attached, never that the slab had not been moved |

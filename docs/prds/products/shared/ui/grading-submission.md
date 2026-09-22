@@ -24,7 +24,7 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
 - 🚧 **`GradingCardRecord`** — the list after hand-in, read only: intake
   id, the photograph pair, and the card's outcome as a badge with its line
   in the collector's words — refused, withdrawn, graded, moved up, ungraded,
-  held, not returned, damaged, collected, vaulted
+  minimum grade not met, held, not returned, damaged, collected, vaulted
 - 🚧 **`GradingPasteSheet`** — one card a line, and what the paste made of
   it: matched, kept as typed, without a value, above the ceiling, skipped;
   the Bulk line past 20 cards

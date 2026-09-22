@@ -39,6 +39,7 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The queue h
 * Step 2 lists only `booked` submissions, with its own count on the view.
 * Step 3 lists only `ready` submissions.
 * Step 4 lists `collected`, `cancelled` and `expired` submissions together, and none of them appears in another view.
+* Every row carries the submission id, the collector, the cards, the grader and level, the status word, the visit, when it was last touched and what it is waiting on.
 
 ### grade10-admin-grading-counter-US1-TC2-1: The Today strip lists the day's drop-offs in slot order
 
@@ -56,7 +57,7 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. The queue h
 * **Trace:** grade10-admin-grading-counter-US-01
 
 **Pre-conditions:**
-Admin(holds `grading:read`) is on <grade10 admin grading queue url>. Two drop-offs fall on the shop's own day, one earlier than the other, and a submission is `ready` for pickup today with no visit booked.
+Admin(holds `grading:read`) is on <grade10 admin grading queue url>. Two drop-offs fall on the shop's own day, one earlier than the other.
 
 **Steps:**
 
@@ -66,7 +67,7 @@ Admin(holds `grading:read`) is on <grade10 admin grading queue url>. Two drop-of
 **Expected Results:**
 
 * The strip lists the two drop-offs in slot order, each with its time, collector, id, cards and grader.
-* The ready-for-pickup submission shows on the strip's pickups line rather than among the timed drop-offs.
+* One line under them says that pickups walk in.
 
 ### grade10-admin-grading-counter-US1-TC3-1: A row's badge names the wait and clears once it no longer applies
 
@@ -209,6 +210,90 @@ Admin(holds `grading:read`, not `grading:operate` or `grading:approve`) is on <g
 **Expected Results:**
 
 * Open is the only action offered; no hand-in, hand-back or settings act shows on the row.
+
+### grade10-admin-grading-counter-US1-TC8-1: The Today cut is made on the shop's own day, not the server's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-01
+
+**Pre-conditions:**
+Admin(holds `grading:read`) reads the queue early in the shop's morning, while the date in Coordinated Universal Time is still the day before.
+
+**Steps:**
+
+1. Navigate to <grade10 admin grading queue url>.
+2. Open Today.
+
+**Expected Results:**
+
+* Today lists the drop-off booked for later that day on the shop's own calendar day, `Asia/Hong_Kong`.
+* The row's Visit today badge and the Today cut agree.
+
+### grade10-admin-grading-counter-US1-TC9-1: A planned submission with no drop-off booked is in no view
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-01
+
+**Pre-conditions:**
+Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A submission is `planned` with no drop-off booked.
+
+**Steps:**
+
+1. Open each of the six status views in turn.
+2. Open Today.
+
+**Expected Results:**
+
+* The planned submission is in none of them; the collector's own list holds it.
+
+### grade10-admin-grading-counter-US1-TC10-1: Nothing about a submission is emailed or pushed to staff
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-01
+
+**Pre-conditions:**
+Admin(holds `grading:read`) works a shift with a mailbox and push notifications open. A submission becomes `ready`, another runs past its estimate, and a third falls due for the written notice.
+
+**Steps:**
+
+1. Let the three submissions move.
+2. Read the mailbox and the push notifications.
+3. Read the queue.
+
+**Expected Results:**
+
+* No email and no push reaches any member of staff.
+* The queue's badges, its tiles and the day's strip carry all three instead.
 
 ---
 
@@ -586,6 +671,33 @@ Admin(holds `grading:operate`) opens the drop-off's first submission at the desk
 
 * The second submission runs its own hand-in runbook, its own level check and its own till line, without depending on the first submission's state.
 
+### grade10-admin-grading-counter-US2-TC13-1: Check in is refused while the agreement is unsealed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-02
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) has every card checked on a `booked` submission and has not sealed the agreement.
+
+**Steps:**
+
+1. Attempt to print labels and check in.
+
+**Expected Results:**
+
+* The check-in is refused by name, naming the unsealed agreement.
+* The submission stays `booked` and the cards stay with the collector.
+
 ---
 
 ## grade10-admin-grading-counter-US3: Operator refuses one card and the rest go on
@@ -748,6 +860,7 @@ Admin(holds `grading:operate`) is refusing the last unrefused card on a submissi
 **Expected Results:**
 
 * The Notice states the submission has no card left to hand in.
+* The submission is cancelled from `booked` at the desk and the collector is told there; no message is sent.
 * The refused card is never charged.
 
 ---
@@ -1052,7 +1165,37 @@ Admin(holds `grading:operate`) already closed a first hand-back on a submission 
 **Expected Results:**
 
 * Only the one held item is offered.
+* The runbook opens at who is collecting, taking the code and the name again, and the ID glance where the declared total is above the threshold.
 * Closing it moves the submission to `collected` on its own receipt, separate from the first.
+
+### grade10-admin-grading-counter-US4-TC11-1: A card the grader still holds cannot be ticked and is named on the receipt
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-04
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) settled the balance on a `ready` submission of three cards, one of which the grader is still holding.
+
+**Steps:**
+
+1. Read the items step.
+2. Attempt to tick the held card.
+3. Seal the receipt over the other two.
+
+**Expected Results:**
+
+* The held card's row reads as still out and cannot be ticked.
+* The sealed receipt names that card as still with the grader, and the submission stays `ready`.
 
 ---
 
@@ -1770,6 +1913,61 @@ Admin A and admin B both hold `grading:approve`; a payout is recorded and approv
 **Expected Results:**
 
 * The payout, its route, its amount and both admins' names appear as an event filed under the submission.
+
+### grade10-admin-grading-counter-US9-TC6-1: A payout still owed past its window badges its row on the queue
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+Admin(holds `grading:read`) is on <grade10 admin grading queue url>. A payout is owed on a card whose batch was received at the shop 15 days ago, with `grading.settlement_days` at 14 and nothing paid out.
+
+**Steps:**
+
+1. Navigate to <grade10 admin grading queue url>.
+2. Read the submission's row.
+
+**Expected Results:**
+
+* The row badges the payout as past its window, derived at the read from the batch's received day.
+
+### grade10-admin-grading-counter-US9-TC7-1: A card already carrying a live payout refuses a second
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+Admin(holds `grading:approve`) opens Payout on a card that already carries a payout nobody has reversed.
+
+**Steps:**
+
+1. Open Payout on that card.
+2. Record a second payout with a second approve holder.
+
+**Expected Results:**
+
+* The second payout is refused by name, naming the payout the card already carries.
+* Nothing is written and the first record is untouched.
 
 ---
 
@@ -2557,13 +2755,68 @@ Admin(holds `grading:approve`) opens a `checked_in` submission with a card to ch
 **Expected Results:**
 
 * Step 1 succeeds as it would for `grading:operate`.
-* Step 2 also offers Waive and Payout.
+* Step 2 also offers Waive and Payout, the acts of both grants offered together.
+
+### grade10-admin-grading-counter-US14-TC6-1: Staging asks for the second factor before any grading surface opens
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-14
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) signs in to staging without a verified session.
+
+**Steps:**
+
+1. Sign in to the staging console.
+2. Open a grading surface.
+
+**Expected Results:**
+
+* The second factor is required before the surface opens.
+* The same is required in production, and is optional in development.
+
+### grade10-admin-grading-counter-US14-TC7-1: One verification covers the next act for twelve hours
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-14
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) verified their session an hour ago in production.
+
+**Steps:**
+
+1. Record a payment at the counter.
+2. Work another act on the same submission.
+
+**Expected Results:**
+
+* Neither act asks for the second factor again; the session stays verified for 12 hours from the verification.
 
 ---
 
 ## grade10-admin-grading-counter-US15: Operations changes a default without a deploy
 
-**As a** person answerable for how the counter runs,
+**As an** admin answerable for how the counter runs,
 **I want** every clock, cap, fee sheet and threshold the pages run on to be a setting I read and change in the console under `grading:approve`, a money setting taking a second person, filed under its own audit subject, and reaching only submissions not yet booked,
 **so that** confirming a default is a decision I record and not a release I wait for, and no signed paper changes under a collector.
 
@@ -2784,3 +3037,30 @@ Admin(holds `grading:approve`) opens Settings before Commercial has supplied a f
 **Expected Results:**
 
 * The unset row is marked as a bracketed value, naming its owner on the readiness line.
+
+### grade10-admin-grading-counter-US15-TC8-1: A read that needs a setting nobody has written is refused by name
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-15
+
+**Pre-conditions:**
+Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_card_month`, which no owner has written.
+
+**Steps:**
+
+1. Open the submission's Money tab.
+
+**Expected Results:**
+
+* The read is refused by name, naming that setting and its owner.
+* No value compiled into the code is used in its place.
