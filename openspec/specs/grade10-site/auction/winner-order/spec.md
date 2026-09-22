@@ -27,6 +27,13 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Same as delivery address is selected by default
   - A separate saved or one-time address uses the existing address fields
   - Billing is confirmed with delivery and payment method
+- Address phone and kind
+  - Phone with country: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty; placeholder shows an example with calling code
+  - Personal or company: Company Name required only for company and hidden on personal; first and last name stay required on both
+  - Optional locality: address line 1 and postal code required; address line 2 and state or province optional; no Apt./Suite/Building on this form
+  - Picker card title: company name for a company address; recipient first and last name for a personal address
+  - Picker card body: street, city or region, and country only — no postal code and no phone
+  - Order summary addresses: Delivery and Billing show company when company, recipient name, phone, and full address including postal
 - Address snapshots
   - The confirmed billing address is locked on the order
   - Later account-address changes do not rewrite the order

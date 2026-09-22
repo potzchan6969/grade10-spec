@@ -1,18 +1,23 @@
 # shared/ui/auction-order Specification
 
 ## Purpose
-The shared auction-order address form lets an application collect the billing
-address alongside delivery without owning the address-book or order rules.
+
+The shared auction-order address form lets an application collect delivery and
+billing addresses — including personal or company kind and a country-aware
+phone — without owning the address-book or order rules.
 
 ## Feature set
 
-- **Billing address form**
+- Address form fields
+  - Personal or Company: Company Name required only for company and hidden on personal
+  - Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty
+  - Optional locality: address line 2 and state optional; line 1 and postal code required; no Apt./Suite/Building
+- Billing address form
   - Same as delivery address is checked by default
   - Unchecking it reveals a second saved or one-time address
   - The application owns copy, validation and submitted values
-- **Address form export**
-  - The existing `AuctionAddressForm` surface carries the billing choice and
-    the second address values
+- Address form export
+  - `AuctionAddressForm` carries kind and phone with the billing choice
   - The component remains controlled and renderable on its own
 
 ## Requirements
