@@ -509,10 +509,13 @@ otherwise falls back to `DEFAULT_LIMIT`.
 ### Letters are one exhaustive catalogue on the shared shell
 
 - `email/letters/index.ts` is `LETTERS: Record<NotifyKind, Letter>` over
-  nineteen kinds (`plan_saved`, `plan_nudge`, `plan_expired`, the five visit
-  kinds and `visit_detached`, `handed_in`, `handback_receipt`,
-  `batch_shipped`, `batch_reestimated`, `grades_posted`, `card_not_returned`,
-  `ready`, `still_here`, `storage_fee`, `written_notice`); `NOTIFY_FOR_EVENT`
+  the twenty-one kinds `ui-design.md`'s letters table names (`plan_saved`,
+  `plan_nudged`, `plan_expired`, the five `dropoff_*` kinds and
+  `dropoff_detached`, `checked_in`, `batch_shipped`, `batch_reestimated`,
+  `grades_posted`, `card_not_returned`, `card_damaged`, `ready`,
+  `uncollected_reminder`, `storage_started`, `notice_posted`, `collected`,
+  `card_withdrawn`), the store's `apps/emails/emails/grading/fixtures.ts`
+  exporting the same `NotifyKind`; `NOTIFY_FOR_EVENT`
   exhaustive over every `SubmissionEventKind`, `null` written for the
   silences. A booked submission that expires sends `plan_expired`
 - The shell is `BaseLayout` from `@grade10/email/render` with the generic
