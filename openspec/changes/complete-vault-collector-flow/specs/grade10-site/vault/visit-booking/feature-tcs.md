@@ -625,3 +625,122 @@ Runs once per row of **Test data**.
 * The visit reads as the row's outcome.
 * The case keeps the visit's record; nothing is cleared.
 
+
+### grade10-site-vault-visit-booking-US4-TC11-1: A standing visit reads the same when the case is opened
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Pre-conditions:**
+
+* The collector has a live booking for <a shop> at <a free slot>, its slot still ahead.
+
+**Steps:**
+
+1. Leave the booked-visit screen and open <grade10 vault case url> again.
+
+**Expected Results:**
+
+* The shop, its address and the slot are named, the same as on the booked-visit screen.
+* Add to calendar, Move and Cancel visit are offered.
+
+### grade10-site-vault-visit-booking-US4-TC12-1: The visit's messages carry its calendar file
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-04
+
+**Pre-conditions:**
+
+* The collector is on <grade10 vault case url>, with their case at a live status.
+
+**Test data:**
+
+| Act | Message |
+| --- | --- |
+| Book a slot | Visit booked |
+| Move the visit | Visit moved |
+| Cancel the visit | Visit cancelled |
+
+**Steps:**
+
+1. Carry out <act> on the case.
+2. Open the <message> the collector is sent.
+
+**Expected Results:**
+
+* The message carries the visit's calendar file.
+* The file names the same visit the case reads.
+
+## Reconciliation
+
+Run: 2026-09-22, blind pass over the isolated input — the outline (`## Purpose`
+and `## Feature set`), `user-journeys.md`, `proposal.md`, `decisions.md` with
+its `## Raised` table, `ui-design.md` with its state dispositions stripped, and
+the PRD pages the proposal links; denied every `## Requirements` section,
+`openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Nothing
+verifies that list; it is the run's word.
+
+Nineteen cases were read against `grade10-site-vault-visit-booking-SC-15`
+through `grade10-site-vault-visit-booking-SC-26` and the durable scenarios
+`grade10-site-vault-visit-booking-SC-01` through
+`grade10-site-vault-visit-booking-SC-14`. No case was dropped as a misreading,
+the two readings contradicted each other nowhere, and the pass raised no
+question the rulings left open.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-site-vault-visit-booking-US1-TC1-1` | Covered | `grade10-site-vault-visit-booking-SC-01`, `grade10-site-vault-visit-booking-SC-03`; the table gained `repaid`, which the durable requirement names and the blind pass could not see |
+| `grade10-site-vault-visit-booking-US1-TC2-1` | Covered | `grade10-site-vault-visit-booking-SC-01` |
+| `grade10-site-vault-visit-booking-US1-TC3-1` | Covered | the durable requirement's counter clause, nearest scenario `grade10-site-vault-visit-booking-SC-06`; this change does not touch it |
+| `grade10-site-vault-visit-booking-US1-TC4-1` | Covered | `grade10-site-vault-visit-booking-SC-05` |
+| `grade10-site-vault-visit-booking-US1-TC5-1` | Covered | `grade10-site-vault-visit-booking-SC-03` |
+| `grade10-site-vault-visit-booking-US1-TC6-1` | Covered | `grade10-site-vault-visit-booking-SC-07` |
+| `grade10-site-vault-visit-booking-US1-TC7-1` | Folded | `grade10-site-vault-visit-booking-SC-28` — a window with no free slot reads the no-slot line and offers the next; the design's Nothing free row closes on it |
+| `grade10-site-vault-visit-booking-US1-TC8-1` | Folded | `grade10-site-vault-visit-booking-SC-29` — a slot taken between the read and the take is refused by name and the picker reads again; the design's Time taken row closes on it |
+| `grade10-site-vault-visit-booking-US1-TC9-1` | Covered | `grade10-site-vault-visit-booking-SC-21` |
+| `grade10-site-vault-visit-booking-US1-TC10-1` | Case added | walks `grade10-site-vault-visit-booking-SC-30`, the sibling case's page, which the first raised row settled |
+| `grade10-site-vault-visit-booking-US4-TC1-1` | Covered | `grade10-site-vault-visit-booking-SC-15`, `grade10-site-vault-visit-booking-SC-16`; the money-follows line was added to its results, which nothing asserted |
+| `grade10-site-vault-visit-booking-US4-TC2-1` | Covered | `grade10-site-vault-visit-booking-SC-22` |
+| `grade10-site-vault-visit-booking-US4-TC3-1` | Covered | `grade10-site-vault-visit-booking-SC-19` |
+| `grade10-site-vault-visit-booking-US4-TC4-1` | Covered | `grade10-site-vault-visit-booking-SC-18` |
+| `grade10-site-vault-visit-booking-US4-TC5-1` | Covered | `grade10-site-vault-visit-booking-SC-17` |
+| `grade10-site-vault-visit-booking-US4-TC6-1` | Covered | `grade10-site-vault-visit-booking-SC-24`, and `grade10-site-vault-visit-booking-SC-27` once its results asserted the move's own picker |
+| `grade10-site-vault-visit-booking-US4-TC7-1` | Covered | `grade10-site-vault-visit-booking-SC-21`, `grade10-site-vault-visit-booking-SC-25` |
+| `grade10-site-vault-visit-booking-US4-TC8-1` | Covered | `grade10-site-vault-visit-booking-SC-08` |
+| `grade10-site-vault-visit-booking-US4-TC9-1` | Covered | `grade10-site-vault-visit-booking-SC-12`, `grade10-site-vault-visit-booking-SC-13`; the row at the slot's own start is the durable requirement's after its slot has started |
+| `grade10-site-vault-visit-booking-US4-TC10-1` | Covered | `grade10-site-vault-visit-booking-SC-14` and the durable requirement's ended-case clause |
+| `grade10-site-vault-visit-booking-US4-TC11-1` | Case added | walks `grade10-site-vault-visit-booking-SC-20`, the standing visit read on the case, which no case reached |
+| `grade10-site-vault-visit-booking-US4-TC12-1` | Case added | walks `grade10-site-vault-visit-booking-SC-26`; `grade10-site/vault/collector-notifications`' suite carries no case for the file the visit's messages attach |
+| `grade10-site-vault-visit-booking-SC-23` | Out of suite | the `caseOwner` guard on `GET /api/cases/:caseId/visit.ics`, in the vault backend's route test; a case here traces a journey, and nobody walks a stranger's fetch |
+| Raised: does a sibling case offer a picker of its own? | Folded | `grade10-site-vault-visit-booking-SC-30`, landed as `Q29` in `decisions.md` |
+| Raised: may a move pick a different shop? | Folded | `grade10-site-vault-visit-booking-SC-27`, landed as `Q30` in `decisions.md` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-vault-visit-booking-US4-TC2-1` | A test reads the served file's own bytes; that the collector's calendar opens it is the device's answer, not the site's |
+| `grade10-site-vault-visit-booking-US4-TC6-1` | One entry after a move is the calendar app's own merge on the file's id and revision, which only a device shows |
+| `grade10-site-vault-visit-booking-US4-TC7-1` | The same device read: the cancellation taking the day off the phone |

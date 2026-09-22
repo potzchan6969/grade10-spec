@@ -336,3 +336,27 @@ worklist SHALL never let one hide the other.
 - **THEN** its row names the case reference, the item, the borrower, their phone
   number and email address, the day the notice was sent with the day it gives to
   pay by, and the day the last reminder was sent
+
+#### Scenario: grade10-admin-vault-money-book-SC-29 - The loan behind longest is read first
+**Serves:** grade10-admin-vault-money-book-US-03 - shop staff open the list and chase the borrower who has run latest
+
+- **GIVEN** live loans past their due date by different numbers of days
+- **WHEN** the arrears are read
+- **THEN** they are ordered longest overdue first, judged on the due date the
+  advance fixed
+
+#### Scenario: grade10-admin-vault-money-book-SC-30 - Two loans due the same day both survive the page boundary
+**Serves:** grade10-admin-vault-money-book-US-03 - shop staff page to the end of the list without losing a borrower
+
+- **GIVEN** more live loans past their due date than one page holds, two of them
+  sharing a due date
+- **WHEN** every page is read in turn
+- **THEN** each loan is listed exactly once, and neither of the two sharing a due
+  date is skipped or repeated
+
+#### Scenario: grade10-admin-vault-money-book-SC-31 - Without a vault grant the arrears are refused
+**Serves:** grade10-admin-vault-money-book-US-03 - shop staff reach the list on the grant the counter already holds
+
+- **GIVEN** an operator holding no vault grant
+- **WHEN** they ask for the arrears
+- **THEN** it is refused by name, and no row and no figure is given

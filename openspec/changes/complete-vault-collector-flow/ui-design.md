@@ -232,7 +232,7 @@ beside them.
 | Loading | `list.loading`; no cards | `grade10-site-vault-case-intake-US-01` |
 | Empty (`C21`) | the hero, Start a request, the four-step How it works, Nothing here yet with the three-draft cap; no cards | `grade10-site-vault-case-intake-US-01` |
 | Cards (`C01`) | one `Card` per case: item title, the status word, the ownership chip, opened · lane · asked for, the reference; Open | `grade10-site-vault-case-intake-US-05` |
-| Offer deadline | on an `offer_made` card with a live offer: answer by the expiry; absent once it lapsed | `grade10-site-vault-valuation-and-offer-US-02` |
+| Offer deadline | on an `offer_made` card with a live offer: answer by the expiry; absent once it lapsed | `grade10-site-vault-valuation-and-offer-SC-25` |
 | Held since | on a `vaulted`, `active` or `repaid` card: in the vault since | `grade10-site-vault-case-lifecycle-US-05` |
 | Draft card | photographs attached count and the next-step line; Open resumes the wizard | `grade10-site-vault-case-intake-US-01` |
 | Error | the message in the error tone; no cards | `grade10-site-vault-case-intake-US-01` |
@@ -270,12 +270,12 @@ beside them.
 | Chip: Collected | released: collected and the date | `grade10-site-vault-case-lifecycle-US-04` |
 | Chip: Closed | declined, cancelled, expired, forfeited: closed and the date | `grade10-site-vault-case-lifecycle-US-04` |
 | Request sent (`C10`) | the lead on valuing from photographs; the verify prompt; the visit card; the item block; Cancel this request; history | `grade10-site-vault-case-intake-US-01` |
-| Offer waiting (`C11`) | hero amount, term, total, open until; Accept this offer, Decline this offer; the terms table with the valuation; How the loan works; the identity chip; the visit card with the accepting-books-nothing line | `grade10-site-vault-valuation-and-offer-US-02` |
-| Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-US-02` |
-| Decline confirmation | the confirm's words: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-US-02` |
-| Answer in flight | the confirm's button pending while the effect runs; Accept's mounted dialog holds its own | `grade10-site-vault-valuation-and-offer-US-02` |
-| Answer refused | the confirm stays open with the refusal by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-US-02` |
-| Offer replaced (`C22`) | the new offer's hero naming the closed one and its date; Accept and Decline on the new offer only | `grade10-site-vault-valuation-and-offer-US-05` |
+| Offer waiting (`C11`) | hero amount, term, total, open until; Accept this offer, Decline this offer; the terms table with the valuation; How the loan works; the identity chip; the visit card with the accepting-books-nothing line | `grade10-site-vault-valuation-and-offer-SC-21` |
+| Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-SC-22` |
+| Decline confirmation | the confirm's words: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-SC-23` |
+| Answer in flight | the confirm's button pending while the effect runs; Accept's mounted dialog holds its own | `grade10-site-vault-valuation-and-offer-SC-24` |
+| Answer refused | the confirm stays open with the refusal by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-SC-28`, `grade10-site-vault-valuation-and-offer-SC-29` |
+| Offer replaced (`C22`) | the new offer's hero naming the closed one and its date; Accept and Decline on the new offer only | `grade10-site-vault-valuation-and-offer-SC-26` |
 | Offer ran out (`C22`) | badge Offer ran out, chip With us; the closed offer's amount and expiry; no Accept or Decline; the visit stands | `grade10-site-vault-case-lifecycle-US-05` |
 | You declined (`C22`) | badge Being valued; the declined figure and when; the visit stands; Cancel this request lower on the page | `grade10-site-vault-case-lifecycle-US-05` |
 | Visit missed (`C22`) | badge the status word, chip Waiting on you; the missed slot; Book another visit | `grade10-site-vault-case-lifecycle-US-05` |
@@ -455,7 +455,7 @@ beside them.
 | Before the act | the latest valuation, the cap, asked for; principal, rate, the term presets; interest, total, a late day, per annum derived live; open until; the five gates as `Check`s | `grade10-site-vault-loan-and-settlement-US-07` |
 | A gate fails | the failing gate unticked with its bound; Make the offer stays, the worker refuses | `grade10-site-vault-loan-and-settlement-US-07` |
 | Bounds unset | the gates read not set and the offer goes through outside production; in production the dialog names the refusal before the act | `grade10-site-vault-loan-and-settlement-US-07` |
-| Refused | the worker's refusal by name under the form | `grade10-site-vault-valuation-and-offer-US-01` |
+| Refused | the worker's refusal by name under the form | `grade10-site-vault-valuation-and-offer-SC-03`, `grade10-site-vault-valuation-and-offer-SC-04`, `grade10-site-vault-valuation-and-offer-SC-05`, `grade10-site-vault-valuation-and-offer-SC-06`, `grade10-site-vault-valuation-and-offer-SC-08`, `grade10-site-vault-valuation-and-offer-SC-09`, `grade10-site-vault-valuation-and-offer-SC-10`, `grade10-site-vault-valuation-and-offer-SC-11` |
 
 ### Put the item in the vault
 

@@ -8,6 +8,14 @@ period, in one order, with totals for the whole range,
 **so that** I can tie what we recorded to what the bank says without the
 figures moving as I page.
 
+### grade10-admin-vault-money-book-US-02: Treasurer reads what the loan book stands at
+
+**As a** treasurer,
+**I want** the principal and interest outstanding across every loan on the
+book at an instant — now, or a month-end I name — in one unit,
+**so that** what the business is owed is one figure I can quote and check
+against the cases behind it, and tie to the month it belongs to.
+
 ### grade10-admin-vault-money-book-US-03: Operator works the loans that are running late
 
 **As a** member of shop staff,
