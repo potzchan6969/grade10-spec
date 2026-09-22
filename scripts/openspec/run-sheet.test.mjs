@@ -18,7 +18,6 @@ import {
   colLetter,
   FILTER_COLUMNS,
   FILTER_START,
-  isRunTabTitle,
   MARKING_COLUMNS,
   MARKING_START,
   quoteTab,
@@ -405,13 +404,6 @@ test("rows read in journey order, so the tab's grouping is its order", () => {
 test("a tab name reaches A1 notation quoted, apostrophes and all", () => {
   assert.equal(quoteTab("1-regression"), "'1-regression'");
   assert.equal(quoteTab("chloe's run"), "'chloe''s run'");
-});
-
-test("a run tab title is the run id, the slug, and an optional clash suffix", () => {
-  assert.equal(isRunTabTitle("1-auction-auth", "auction-auth"), true);
-  assert.equal(isRunTabTitle("1-auction-auth-2", "auction-auth"), true);
-  assert.equal(isRunTabTitle("Summary", "auction-auth"), false);
-  assert.equal(isRunTabTitle("2-smoke-trial", "auction-auth"), false);
 });
 
 test("a column index reads as its A1 letter past Z", () => {

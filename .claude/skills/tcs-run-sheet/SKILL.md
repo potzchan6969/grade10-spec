@@ -91,6 +91,8 @@ in the same pass when the request covers both.
 
 - **Do not write a tab nobody confirmed.** The coverage list is the
   conversation. A yes to "write a run" is not a yes to this list.
+- **Do not delete a tab or empty the Summary.** A new run is a new tab. Run
+  ids count up. Clearing the spreadsheet is not this skill.
 - **Do not take `deprecated` cases.** The spec stopped stating them; walking one
   proves nothing. The script refuses them outright.
 - **Do not put results back in the store.** A suite carries no execution record

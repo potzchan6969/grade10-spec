@@ -169,11 +169,6 @@ export function quoteTab(tab) {
   return `'${String(tab).replace(/'/g, "''")}'`;
 }
 
-/** A run tab is `<id>-<slug>` or `<id>-<slug>-<n>` when the slug was taken. */
-export function isRunTabTitle(title, nameSlug) {
-  return new RegExp(`^\\d+-${nameSlug}(?:-\\d+)?$`).test(String(title));
-}
-
 /** 0-based column index to an A1 letter: 0 → A, 26 → AA. */
 export function colLetter(index) {
   let n = index;
