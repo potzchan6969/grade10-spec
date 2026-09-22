@@ -38,11 +38,9 @@ it; no statute here is asserted.
 
 - **Retention windows** — days after a case ends, per class: agreements
   **2,555**, photos **2,555**, identity **1,825**; seven years is the
-  business-record window recalled for Hong Kong, five the AML window. Legal
-  confirms them
-- 🚧 **The submission record** — a class of its own, case records, at
-  **2,555** days from the day a grading submission ended —
-  [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
+  business-record window recalled for Hong Kong, five the AML window
+- 🚧 **The submission record** — its own class, case records, **2,555** days
+  from the day it ended — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **The review is a review** — the sweep flags a case past its window and
   deletes nothing; deletion on expiry is a second decision, and a class with
   no window is flagged as unset rather than treated as zero
@@ -54,11 +52,10 @@ it; no statute here is asserted.
   submission is between booked and ready, an upcharge is unsettled or ready
   cards are uncollected — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **Erasure, closed and signed** — contact, decline reason, staff notes and
-  the customer's actor ids go; the sealed PDFs, the identity record and
-  photograph, the item photos and the item text stay under the hold, no clock
+  actor ids go; the sealed PDFs, the identity record and photograph, the item
+  photos and text stay under the hold, no clock
 - **Erasure, never signed** — everything is purged and the identity released
-- **Messages never sent** — a case's queued and parked mail is deleted
-  whichever class the case falls in
+- **Messages never sent** — queued and parked mail goes whichever class the case falls in
 - 🚧 **Process** — the collector files the ask from Your data and can cancel
   it inside the **7-day** window; then an admin runs each product from the
   console — [Account Data](/platform/account-data#erasure)
