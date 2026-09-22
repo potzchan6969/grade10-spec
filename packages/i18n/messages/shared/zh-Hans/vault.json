@@ -593,6 +593,11 @@
       "title": "要求被遗忘",
       "body": "在没有任何事项需要保留资料的情况下，我们会尽可能删除。",
       "refused": "暂时未能处理：{reason}。",
+      "holds": {
+        "requestInFlight": "你有一项申请仍未完成",
+        "itemInVault": "你有物品仍在金库",
+        "loanRunning": "你有贷款仍未还清"
+      },
       "confirmTitle": "要求被遗忘？",
       "confirmBody": "这会开启一个 7 天的期限，期内可以取消。",
       "confirm": "要求被遗忘",

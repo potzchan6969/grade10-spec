@@ -593,6 +593,11 @@
       "title": "Ask to be forgotten",
       "body": "We erase what we can, once nothing is holding it.",
       "refused": "We cannot do this yet: {reason}.",
+      "holds": {
+        "requestInFlight": "a request of yours is still open",
+        "itemInVault": "an item of yours is in the vault",
+        "loanRunning": "a loan of yours is still running"
+      },
       "confirmTitle": "Ask to be forgotten?",
       "confirmBody": "This opens a 7-day window, which you can cancel inside.",
       "confirm": "Ask to be forgotten",

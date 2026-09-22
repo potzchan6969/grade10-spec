@@ -593,6 +593,11 @@
       "title": "要求被遺忘",
       "body": "在沒有任何事項需要保留資料的情況下，我們會盡可能刪除。",
       "refused": "暫時未能處理：{reason}。",
+      "holds": {
+        "requestInFlight": "你有一項申請仍未完成",
+        "itemInVault": "你有物品仍在金庫",
+        "loanRunning": "你有貸款仍未還清"
+      },
       "confirmTitle": "要求被遺忘？",
       "confirmBody": "這會開啟一個 7 天的期限，期內可以取消。",
       "confirm": "要求被遺忘",
