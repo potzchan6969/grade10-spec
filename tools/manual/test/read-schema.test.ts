@@ -135,7 +135,12 @@ describe("the readers each artifact may summon", () => {
         one.when,
       ]),
     );
-    for (const name of ["missing-pieces", "simplicity", "code-smell", "conventions"])
+    for (const name of [
+      "missing-pieces",
+      "simplicity",
+      "code-smell",
+      "conventions",
+    ])
       expect(when.get(name), `${name} reads code`).toEqual(["code"]);
     expect(when.get("reader")).toEqual(["copy"]);
     expect(when.get("qa")).toEqual(["always"]);

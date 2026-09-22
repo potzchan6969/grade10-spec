@@ -320,7 +320,10 @@ test("shared-planning-agent-rounds-SC-95 - plan:land accepts ` (fallback)` after
     "nothing stood",
   ]);
   assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /`design \(banana\)` is no perspective of ui-design/);
+  assert.match(
+    refused.stderr,
+    /`design \(banana\)` is no perspective of ui-design/,
+  );
   assert.match(refused.stderr, /\(fallback\)/);
 });
 

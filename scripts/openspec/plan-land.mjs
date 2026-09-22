@@ -952,6 +952,8 @@ function landsHere(read) {
  * The readers the round says it dispatched, held to the target's own list in
  * the schema: a name the list does not issue is a typo or a reader nobody
  * dispatched, and an `always` one left out is a round that skipped the floor.
+ * ` (fallback)` after a name records that the reader ran on the fallback
+ * model, and is the one thing the cell carries in parentheses.
  * A narrow re-run may name fewer readers than the last round did — a trigger
  * the draft no longer raises summons nobody — but never fewer than the
  * `always` set.
@@ -962,7 +964,7 @@ function landsHere(read) {
  * argues its own findings.
  *
  * Under `--fix-pass` the floor is `fixPassFloor`'s, since the apply block's
- * six `always` readers read the plan rather than the fix; a wider row still
+ * `always` readers read the plan rather than the fix; a wider row still
  * owes its verifier (Q99).
  */
 function perspectivesCell(read, value) {
@@ -982,7 +984,7 @@ function perspectivesCell(read, value) {
       .split(/[,;]/)
       .map((one) =>
         one
-          .replace(/\(.*\)/, "")
+          .replace(/\s*\(fallback\)\s*$/, "")
           .trim()
           .toLowerCase(),
       )
@@ -991,7 +993,7 @@ function perspectivesCell(read, value) {
   for (const one of given) {
     if (one === "verifier" || issued.some(({ name }) => name === one)) continue;
     fail(
-      `\`${one}\` is no perspective of ${target} — the \`${read.entry.schema}\` schema issues ${issued.map(({ name }) => `\`${name}\``).join(", ")}, and \`verifier\` records that a verifier ran`,
+      `\`${one}\` is no perspective of ${target} — the \`${read.entry.schema}\` schema issues ${issued.map(({ name }) => `\`${name}\``).join(", ")}, \`verifier\` records that a verifier ran, and \` (fallback)\` after a name is the one suffix a reader carries`,
     );
   }
   for (const { name, when } of issued) {

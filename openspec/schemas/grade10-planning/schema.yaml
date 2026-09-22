@@ -1045,24 +1045,30 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
-  # `agent-rounds/spec.md`'s "A task group" row names seven readings: missing
-  # pieces, simplicity, code smell and the repository's conventions, all
-  # `.claude/agents/build.md`'s; QA; operations on a migration or a flag; the
-  # simpler thing. A task group is squarely build's and qa's subject, so both
-  # run every round; operations stays conditional on a migration or a flag.
+  # `agent-rounds/spec.md`'s "A task group" row sizes a group by what it
+  # lands: missing pieces, simplicity, code smell and the repository's
+  # conventions, all `.claude/agents/build.md`'s, where the group lands code
+  # (a changed line in any file that is not markdown); the reader of words
+  # where it lands a page's words; QA every round, since a group's tests are
+  # its subject; operations on a migration or a flag; the simpler thing
+  # always. A group that lands prose alone is read by the reader of words, QA
+  # and the simpler thing.
   perspectives:
     - name: missing-pieces
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
     - name: simplicity
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
     - name: code-smell
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
     - name: conventions
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
+    - name: reader
+      when: [copy]
+      agent: .claude/agents/reader.md
     - name: qa
       when: [always]
       agent: .claude/agents/qa.md

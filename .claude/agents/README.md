@@ -8,8 +8,8 @@ is canonical and mirrored nowhere: every platform reads these files, and
 resolves to one of them.
 
 - **One perspective, one dispatch** — the round dispatches one challenger per
-  perspective summoned and one verifier per group of findings, each given the
-  draft and what is before it and never another reader's output. Several
+  perspective summoned, each given the draft and what is before it and never
+  another reader's output, and one verifier over every reader's findings. Several
   perspectives share one definition where they are one reader with one stance:
   the dispatch carries the perspective's name, and the definition says which
   reading is which
@@ -22,7 +22,10 @@ resolves to one of them.
 - **The model** — `opus` where the tech design's or a task group's round can
   dispatch the reader, because those two readings are held to the eight
   principles and read code; `sonnet` everywhere else. A file has one model, so
-  a reader that sits on both kinds of list takes `opus`
+  a reader that sits on both kinds of list takes `opus`. The fallback is
+  `sonnet` for a definition on `opus`, and none for one already on it: a
+  dispatch the vendor kills is retried once on it, and the round names the
+  reader `<name> (fallback)`
 - **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash` and
   writes nothing. The round applies what the verifier says stands
 

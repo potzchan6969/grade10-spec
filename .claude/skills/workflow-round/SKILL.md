@@ -23,7 +23,7 @@ The product's own words for all of it:
 | 1 | Ask | The hand | What is wanted, said in the thread, in a terminal, or as a push the hand makes |
 | 2 | Draft | You | The artifact on the change's branch, drawn from what is before it and from the ask |
 | 3 | Challenge | One agent per perspective summoned | One reader's findings: what is wrong, what is missing, what is simpler |
-| 4 | Verify | One agent per group of findings | A verdict per finding; what stands changes the draft |
+| 4 | Verify | One agent, over every reader's findings | A verdict per finding; what stands changes the draft |
 | 5 | Read | The hand | The draft's summary and its numbered questions in the thread |
 | 6 | Land | You | The artifact on `main`, the round's row, the next hand told, and every artifact after it read again |
 
@@ -116,35 +116,36 @@ the readers the draft's own diff summons, whether a verifier reads their
 findings, and the bundle each one is given. It reads no record key.
 
 - **The artifact's own diff** — the paths are the files the schema's
-  `generates:` names for it and the pages the proposal links, and `<sha>` is
-  what it was last drawn from: its `reviewed:` line's sha, or the merge base
-  with `origin/main` on a first draft. Never the branch's whole diff, which
-  summons the design's readers onto the plan
+  `generates:` names for it and the pages the proposal links; `<sha>` is its
+  `reviewed:` line's sha, or the merge base with `origin/main` on a first
+  draft. Never the branch's whole diff
 - **No diff, the floor alone** — a round with nothing yet on the branch reads
   `.round/diff` empty; only the `always` reader is summoned
 - **The simpler thing, always** — the reader whose `when` is `always` runs on
   every round and is the floor when a round has one reader
 - **One challenger per perspective** — dispatch one reader per entry the
   command returns, with that entry's `name`, the draft and its bundle; one
-  `agent` file is dispatched as many times as the entries naming it, each a
-  reading of its own. Never pass one reader another reader's findings, and never a
-  verifier's verdict
+  `agent` file is dispatched once per entry naming it. Never pass one reader
+  another reader's findings, nor a verifier's verdict
 - **A verifier when `verifier` is true** — dispatch `.claude/agents/verifier.md`
-  with that group and the draft
+  once, with every reader's findings and the draft; its table carries one row
+  per kind of finding naming each reader that filed it, quoting each reader's
+  fix where they differ
 - **One reader verifies itself** — where `verifier` is false because the round
   dispatched one reader in all, no verifier runs: that reader argues its own
   findings
+- **A fallback, and a killed dispatch** — a killed dispatch is retried once
+  on the fallback and named `<name> (fallback)` in the summary and the row; a
+  reader still missing stops the round, as [Round Summary and
+  Landing](../../../docs/governance/round-summary.md#readers) says
 - **The requirements are exempt** — for `spec.md` and `feature-tcs.md` the
-  challenge is the two independent readings and the verify is their
-  reconciliation, taken by the run that wrote them. No verifier reads both,
-  and what they cannot settle stops on the product manager
+  challenge is the two blind readings and the verify their reconciliation, by
+  the run that wrote them; what they cannot settle stops on the product manager
 - **The principles** — a reader of `tech-design.md` or of a task group names
-  one of the eight in
-  [`docs/governance/system-design.md`](../../../docs/governance/system-design.md)
-  per finding; a finding that names none is not carried into the summary
-- **No size is declared** — the round's size is computed from the draft. A
-  record key neither adds a reader nor removes one, and a size somebody
-  believes is wrong is a question for the interview
+  one of [the eight](../../../docs/governance/system-design.md) per finding;
+  one naming none is not carried
+- **No size is declared** — the round's size is computed from the draft; a
+  record key neither adds a reader nor removes one
 
 Apply what stands. Then write the summary.
 
@@ -155,17 +156,17 @@ Landing](../../../docs/governance/round-summary.md)):
 
 1. **The draft** — what the artifact now says, in three or four lines
 2. **Who read it** — the perspectives dispatched, by name
-3. **What stood** — each finding that stood, as a short phrase, and one line
-   saying nothing stood where nothing did
+3. **What stood** — each finding that stood, as a short phrase, or one line
+   saying nothing did
 4. **The questions** — the held rows first, each numbered `Q<n>` with its
    first line and its recommendation, under "held rows"; then the ids the
-   round decided, on one line, so a hand who wants to can look
+   round decided, on one line
 5. **What is next** — the one word or answer you are waiting for, from whom
 
 Write it to `.round/thread.txt` and post it with
-`node scripts/openspec/relay-post.mjs --message-file .round/thread.txt`: it
-goes through the relay when a wake is on, and is printed when there is none.
-Never call the chat platform yourself, and never hold or read a token.
+`node scripts/openspec/relay-post.mjs --message-file .round/thread.txt`: the
+relay when a wake is on, printed when there is none. Never call the chat
+platform yourself, and never hold or read a token.
 
 - **The button** — when the summary waits on the hand's word, add `--confirm
   <artifact|group>`, and `--held` while a held row is open: the thread shows
