@@ -1124,7 +1124,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * **Severity:** normal
 * **Priority:** medium
 * **Status:** draft
-* **Behaviour:** positive
+* **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
@@ -1143,10 +1143,8 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Expected Results:**
 
-* CGC's levels show with the example-figures line.
-* CGC's levels are selectable the same way PSA's are.
-
-**Blocked:** Product - is a grader carrying only the example figures selectable for a submission? The requirement holds that a grader whose figures nobody has supplied shows its levels and cannot be picked.
+* CGC's levels show, marked as carrying no figures.
+* None of CGC's levels can be picked, so the step does not continue on one.
 
 ### grade10-site-grading-submission-plan-US5-TC7-1: The level picked covers every card on the list
 
@@ -1878,7 +1876,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 | `US4-TC2-1` exactly twenty cards leave every level open | **Folded in:** `grade10-site-grading-submission-plan-SC-55`, and the requirement's boundary corrected | "Twenty or more" closed every level at 20, against its own `grade10-site-grading-submission-plan-SC-20`, against the paste's more-than-20 rule and against the sheet's cards-a-submission column of 20. Rewritten as "More than twenty"; the blind pass found it |
 | `US4-TC6-1` the hundredth card at Bulk's cap | **Folded in:** `grade10-site-grading-submission-plan-SC-56` | the accepted edge beside `grade10-site-grading-submission-plan-SC-21`'s refused one |
 | `US5-TC1-1` what an open level reads | **Folded in:** `grade10-site-grading-submission-plan-SC-57` | the sheet's figures were stated on the home and never on the level picker |
-| `US5-TC6-1` a grader with only the example figures is selectable | **Raised, blocked:** the product manager | `grade10-site-grading-submission-plan-SC-06` holds that a grader whose figures nobody supplied cannot be picked; the case reads the same levels as pickable, and nothing in the material says whether example figures count as figures. The case stays `draft` with `**Blocked:**`; the row is in `decisions.md` and the ❓ on `docs/prds/products/grade10-site/grading/planning.md` |
+| `US5-TC6-1` a grader with only the example figures is selectable | **Covered by `grade10-site-grading-submission-plan-SC-06`, corrected** | Example figures are not figures supplied, so such a grader shows its levels and none of them can be picked. The case now reads that, and `decisions.md` carries the rule |
 | `US6-TC5-1` the empty state | **Folded in:** `grade10-site-grading-submission-plan-SC-46` | the requirement said the home says there is none, and no scenario read it |
 | `US7-TC6-1` booking pending, both buttons disabled | **Kept, no scenario** | the button's in-flight state, decided by the view's colocated test rather than by a requirement |
 | Raised 1, the home's above-the-top-ceiling note | **Answered, folded in:** `grade10-site-grading-submission-plan-SC-48` | Q63: the note is part of the sheet wherever it renders. Case added, `US1-TC6-1` |
@@ -1905,7 +1903,6 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 | `US8-TC2-1` the expiry at day 30 | the same clock, and the words on the expired page |
 | `US6-TC7-1`, `US6-TC8-1` a changed fee sheet | a console settings write sits between the two reads |
 | `US2-TC1-1` the reference sales read as a reference | a judgement of the words beside the card, not an assertion |
-| `US5-TC6-1` a grader with only the example figures | blocked; the verdict is the product manager's before the case can be run |
 
 ## Settled
 

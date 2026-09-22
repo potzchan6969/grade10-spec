@@ -427,6 +427,16 @@ further and SHALL tell nobody again.
 - **THEN** the batch reads late and is counted in the tile of batches past
   their estimate, and nothing was written to say so
 
+#### Scenario: grade10-admin-grading-batches-SC-50 - The due-back badge stands from the estimated day until the batch is received
+**Serves:** grade10-admin-grading-batches-US-04 - the operator watches for the batches whose day back has come before a collector asks
+
+- **GIVEN** a batch reading Shipped whose estimated day back is the shop's own
+  day
+- **WHEN** the queue is read
+- **THEN** every submission in that batch is badged as due back
+- **AND** on a day after that estimate the badge is running late instead
+- **AND** neither badge stands once the batch reads Received
+
 #### Scenario: grade10-admin-grading-batches-SC-21 - A re-estimate takes a reason and tells every collector that day
 **Serves:** grade10-admin-grading-batches-US-04 - the operator passes the grader's new date on to everybody whose cards are in the parcel
 

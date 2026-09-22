@@ -1428,6 +1428,40 @@
 
 ---
 
+### grade10-admin-grading-batches-US4-TC9-1: The due-back badge stands from the estimated day and gives way to running late
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-04
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) is on <grade10 admin queue url>.
+* <a batch with the grader> carries an estimated day back of the shop's own day and holds <a submission>.
+
+**Steps:**
+
+1. Read the queue on the estimated day back.
+2. Read it again on the day after the estimate.
+3. Finish receiving the batch and read it again.
+
+**Expected Results:**
+
+* On the estimated day the submission's row is badged as due back.
+* On the day after the estimate the row is badged as running late in place of due back.
+* Once the batch reads Received the row carries neither badge.
+
+---
+
 ## grade10-admin-grading-batches-US5: Operator keeps the safe under its cap
 
 **As a** member of shop staff building a batch,
@@ -1637,6 +1671,7 @@
 | `grade10-admin-grading-batches-SC-18` | Case added | `grade10-admin-grading-batches-US4-TC6-1` - the stage that is the move carries the whole batch |
 | `grade10-admin-grading-batches-SC-19` | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
 | `grade10-admin-grading-batches-SC-22` | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
+| `grade10-admin-grading-batches-SC-50` | Case added | `grade10-admin-grading-batches-US4-TC9-1` - the due-back badge stands from the estimated day, gives way to running late the day after, and stands no longer once the batch is received |
 | `grade10-admin-grading-batches-SC-14`, `grade10-admin-grading-batches-SC-33`, `grade10-admin-grading-batches-SC-42` | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
 
 ### Manual
@@ -1646,4 +1681,5 @@
 | `grade10-admin-grading-batches-US1-TC9-1` | A person watches the form while the act is in flight; the panel's colocated test proves the disabled actions, not how long they stay that way |
 | `grade10-admin-grading-batches-US1-TC12-1` | The cut-off passing is a day, not an act: a person walks the row on the Friday morning, or the clock is moved for them |
 | `grade10-admin-grading-batches-US2-TC14-1` | The unchecked-return badge turns after a day standing; a person reads the panel the next morning |
+| `grade10-admin-grading-batches-US4-TC9-1` | The badge turns over a day boundary; a person reads the queue on the estimated day and again the morning after, or the clock is moved for them |
 | `grade10-admin-grading-batches-US3-TC3-1` | A person photographs a physical slab inside the box it arrived in; a test can prove the photograph is attached, never that the slab had not been moved |
