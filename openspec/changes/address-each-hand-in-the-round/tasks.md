@@ -44,9 +44,9 @@ Needs group 1 for the summary's perspectives line. The turn's body for `qa` and 
 
 Prose alone: read by the reader of words, QA and the simpler thing.
 
-- [ ] 5.1 `docs/governance/round-summary.md` cut to the procedure - the summary's order, the held row's reply, the hand's reply, the build round's checks, the interview - each rule stated once with a link to the requirement, and its answered ❓ struck; `.claude/skills/workflow-round`, `workflow-build`, `workflow-plan`, `planning-pm`, `planning-qa`, `planning-dev`, `planning-design` and `.claude/agents/verifier.md` point at it and restate nothing, within `scripts/openspec/instruction-budget.test.mjs`'s budgets
-- [ ] 5.2 `docs/prds/guides/working-a-change.md` and `docs/prds/guides/how-we-plan.md` carry what each hand now reads: one message that is theirs, the held row's reply, the page question, QA's turn at Specified, the short interview, the fallback and the killed dispatch, the record's paths, written not run; `docs/prds/products/shared/planning/agent-rounds.md` and `change-stages.md` take the 🚧 off the lines groups 1 to 4 delivered
-- [ ] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run test:openspec`, `pnpm check:manual`, `pnpm run lint`
+- [x] 5.1 `docs/governance/round-summary.md` cut to the procedure - the summary's order, the held row's reply, the hand's reply, the build round's checks, the interview - each rule stated once with a link to the requirement, and its answered ❓ struck; `.claude/skills/workflow-round`, `workflow-build`, `workflow-plan`, `planning-pm`, `planning-qa`, `planning-dev`, `planning-design` and `.claude/agents/verifier.md` point at it and restate nothing, within `scripts/openspec/instruction-budget.test.mjs`'s budgets
+- [x] 5.2 `docs/prds/guides/working-a-change.md` and `docs/prds/guides/how-we-plan.md` carry what each hand now reads: one message that is theirs, the held row's reply, the page question, QA's turn at Specified, the short interview, the fallback and the killed dispatch, the record's paths, written not run; `docs/prds/products/shared/planning/agent-rounds.md` and `change-stages.md` take the 🚧 off the lines groups 1 to 4 delivered
+- [x] 5.3 Verify: `pnpm run agent:check-parity`, `pnpm run test:openspec`, `pnpm check:manual`, `pnpm run lint`
 
 ## 6. The tick reads the case ids (grade10)
 
