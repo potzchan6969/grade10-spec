@@ -94,6 +94,9 @@ path, the link, beside Google.
 | Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
 | Failed link follow copy | Decided | Expired is its own toast; used, replaced, and invalid share one; banned is its own and does not nudge a resend. | Product |
 | Link while signed in as someone else | Decided | No automatic switch. Warning toast: title names the mismatch; description names the link’s email. Switch enters that account; Stay or dismiss keeps the current session. | Product |
+| Mismatch toast against an invalid link | Decided | The failed-follow toast wins. The invalid-link check (expired, used, banned) runs first and unchanged, so the mismatch check never reaches an invalid link. | Product |
+| Mismatch toast and the link’s token | Decided | Stay or dismiss leaves the link exactly as unused as before the follow — not invalidated. It expires on its own five minutes after the send. | Product |
+| A second mismatched link while the toast is showing | Decided | Replaces it. Every follow is a full-page redirect to the brand home, so the earlier toast’s state cannot survive to conflict with the new one. | Product |
 | Link lifetime | Decided | Five minutes, and the email says five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
 | How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
 
