@@ -246,8 +246,7 @@ beside them.
 | Photo refused | the existing refusals under the dropzone: type, size, empty, limit | `grade10-site-vault-case-intake-US-01` |
 | Review (`C04`) | step 3; the request read back with Edit per block, What happens next (three items), the statement tick linking the statement page, Send it in, Finish later | `grade10-site-vault-case-intake-US-04` |
 | Tick missing | Send it in refused on the page with the line under the tick; nothing sent | `grade10-site-vault-case-intake-US-04` |
-| Statement being prepared | the tick's link opens the privacy page reading Being prepared; the tick still sends, outside production | `grade10-site-vault-case-intake-US-04` |
-| Statement unset in production | Send it in refused by name; the line says the statement is not yet available | `grade10-site-vault-case-intake-US-04` |
+| Statement being prepared | the tick's link opens the privacy page reading Being prepared; the tick records the version shown and still sends, in every environment | `grade10-site-vault-case-intake-US-04` |
 | Sent (`C05`) | the reference in mono, Book a visit, Not now — open the case, the several-items block, Start another request, the 30-day line | `grade10-site-vault-case-intake-US-05` |
 | Draft limit | `request.draftLimitReached` on Start a request | `grade10-site-vault-case-intake-US-01` |
 | Moved on | `request.caseConflict` on Send it in | `grade10-site-vault-case-intake-US-01` |

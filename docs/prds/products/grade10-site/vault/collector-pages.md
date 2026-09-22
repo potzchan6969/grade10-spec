@@ -53,7 +53,7 @@ What a collector reads on one case, top to bottom.
 - **Header** — item, status badge, lane badge, and staff's decline reason
   verbatim when declined
 - 🚧 **Case reference** — six characters from an alphabet that cannot be
-  misread, issued beside the id when the request is sent in; in the header,
+  misread, issued beside the id when the request is opened; in the header,
   the list and every email, spoken at the counter, typed as the transfer
   reference; the address keeps the id
 - 🚧 **The fact it meets** — the badge and the line under it read the case as
@@ -182,7 +182,7 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | A case has an address | Decided | `/vault/cases/<id>`, pinned to the path the emails are built from | Engineering |
-| A case has a reference | Decided | Six characters from an alphabet that cannot be misread, issued beside the id when the request is sent in: spoken at the counter, typed as the transfer reference, prefix-searched in the console. The id stays the key and the address, so the reference is additive | Product |
+| A case has a reference | Decided | Six characters from an alphabet that cannot be misread, issued beside the id when the request is opened: spoken at the counter, typed as the transfer reference, prefix-searched in the console. The id stays the key and the address, so the reference is additive | Product |
 | The page reads the fact, not the machine | Decided | A lapsed, declined or superseded offer, a missed visit and an ask for the item back are derived at the read from the case, its offer and its visit; no status is added for any of them | Product |
 | Every event tells the collector or is decided silent | Decided | One map from event to message; a failed send is retried, never dropped | Engineering |
 | Every message is a table and blocks | Decided | The figures a message is about print as a table, how to pay and the lender's licence footer with the complaints contact as blocks; the worker renders its own React Email letters, aligned with the preview source in this store's `apps/emails`, and the one-paragraph copy goes | Product |
