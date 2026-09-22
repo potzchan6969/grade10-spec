@@ -1078,7 +1078,12 @@ test("plan:land refuses a group number tasks.md does not hold, naming the ones i
 const CITING = {
   // The file the rows below name: a `--tests` path the store does not hold is
   // refused, so the fixture holds the one its cases write.
-  "scripts/openspec/round-scripts.test.mjs": "// the test the row names\n",
+  "scripts/openspec/round-scripts.test.mjs":
+    "// the test the row names: shared-planning-agent-rounds-SC-57 and shared-planning-agent-rounds-SC-58\n",
+  // A file the store holds that cites the fifty-eighth alone, for a row that
+  // credits it with the fifty-seventh.
+  "scripts/openspec/fifty-eight.test.mjs":
+    "// shared-planning-agent-rounds-SC-58 is proved here\n",
   "openspec/changes/archive/2026-01-01-demo/specs/shared/planning/demo/spec.md":
     [
       "## ADDED Requirements",
@@ -1163,25 +1168,108 @@ test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the 
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
-test("shared-planning-agent-rounds-SC-58 - a group of the application repository names its tests in that clone, held to nothing here", () => {
-  // The tag says which tree proves the group; a path in the other clone is
-  // written as given and never looked for in this store.
-  const { root, git } = sandbox({
+/** A sandbox whose group is the application repository's, and a clone of
+ * that repository beside it holding the one test the row names. */
+const applicationGroup = () => {
+  const box = sandbox({
     files: {
       ...CITING,
       [`${DIR}/tasks.md`]:
         "## 1. Build it (grade10)\n\n- [ ] 1.1 Ship it (`shared-planning-agent-rounds-SC-57`)\n",
     },
   });
-  git("config", "user.email", "erin@test");
+  box.git("config", "user.email", "erin@test");
+  const app = mkdtempSync(join(tmpdir(), "grade10-"));
+  mkdirSync(join(app, "apps/site/src"), { recursive: true });
+  writeFileSync(
+    join(app, "apps/site/src/listing.test.ts"),
+    "// shared-planning-agent-rounds-SC-57 is proved here\n",
+  );
+  return { ...box, app };
+};
+
+test("shared-planning-agent-rounds-SC-96 - an application group's row lands with its bare path resolved in the clone --app-root names", () => {
+  const { root, app } = applicationGroup();
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
+    "--app-root",
+    app,
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
+});
+
+test("shared-planning-agent-rounds-SC-97 - an application group's path the clone holds no file at is refused, naming the path and the root", () => {
+  const { root, app } = applicationGroup();
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/nowhere.test.ts",
+    "--app-root",
+    app,
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /apps\/site\/src\/nowhere\.test\.ts/);
+  assert.match(result.stderr, new RegExp(app.replace(/[./\\]/g, "\\$&")));
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-97 - an application group's landing that reaches no clone is refused, naming the group's tag", () => {
+  // No --app-root, and the sandbox is nobody's submodule: nowhere to look.
+  const { root } = applicationGroup();
 
   const result = landGroup(root, [
     "--tests",
     "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
   ]);
 
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /grade10/);
+  assert.match(result.stderr, /--app-root/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-98 - a --tests path that carries no such scenario id is refused, naming the path and the id", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/fifty-eight.test.mjs",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/fifty-eight.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /fifty-eight\.test\.mjs/);
+  assert.match(result.stderr, /shared-planning-agent-rounds-SC-57/);
+  assert.doesNotMatch(result.stderr, /round-scripts\.test\.mjs/);
+  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
+});
+
+test("shared-planning-agent-rounds-SC-99 - --unrun writes written, not run as the stood cell's first clause and nothing else", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, [
+    "--tests",
+    tests,
+    "--unrun",
+    "no Docker daemon",
+  ]);
+
   assert.equal(result.status, 0, result.stderr);
-  assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
+  assert.match(
+    roundsOf(root),
+    /\| written, not run — no Docker daemon; nothing stood \|/,
+  );
 });
 
 test("shared-planning-agent-rounds-SC-58 - plan:land lands a group whose --tests names a test per cited scenario", () => {
