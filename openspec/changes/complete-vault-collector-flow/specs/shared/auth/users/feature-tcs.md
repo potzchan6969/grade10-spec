@@ -49,6 +49,7 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -75,6 +76,7 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -101,6 +103,7 @@ Signed in as an operator who does not hold `user:ban`. <a subject user id> is un
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -127,6 +130,7 @@ Signed in as an operator who holds `user:ban`.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -153,6 +157,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
@@ -270,6 +275,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> has a
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -296,6 +302,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -322,6 +329,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** none
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation

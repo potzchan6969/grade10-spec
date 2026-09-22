@@ -1107,17 +1107,3 @@ reference at my bank.
 **Expected Results:**
 
 * The case opens at its own address instead of starting a visit booking.
-
----
-
-## Raised
-
-| Capability | Raised | Landed |
-| --- | --- | --- |
-| grade10-site/vault/case-intake | What triggers the Photograph step's "empty" refusal — a zero-byte file, an unreadable image, or something else — since the feature set names the four dropzone refusals but not this one's cause? | |
-| grade10-site/vault/case-intake | What produces `request.caseConflict` on Send it in — the same draft already sent from another session, a draft cancelled elsewhere, or something else — since the wizard states carry the flag with no trigger described? | |
-| grade10-site/vault/case-intake | Is the amount field on the Describe step labelled with the brand's currency for the collector to see, or is the brand-only currency enforced silently with no label? | |
-| grade10-site/vault/case-intake | Which typed forms of a WhatsApp number does the canonical-number rule treat as the same person — spacing and dashes, a leading `+852`, a bare eight-digit local number — since the feature set states the outcome and not the input variants it covers? | |
-| grade10-site/vault/case-intake | Does the 20 MB photograph cap also bound the ten photographs together, or only each one on its own? | |
-
-## Settled

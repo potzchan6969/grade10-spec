@@ -518,11 +518,4 @@ stands, and where I ask to be forgotten,
 * The error message shows.
 * Any cards that already rendered stay in place.
 
-## Raised
-
-| Capability | Raised | Landed |
-| --- | --- | --- |
-| grade10-site/vault/retention-and-erasure | Does Your data show a distinct "undecided" window for a retention class whose days-after-case-end figure is unset, or does an unset window simply not render until Legal confirms it? |  |
-| grade10-site/vault/retention-and-erasure | Your data's identity standing names four states — verified, none, check out, lapsed — while the identity-check capability's console panel names six (also Stalled and Refused). Does the collector's own page fold Stalled and Refused into one of the four shown, or omit them until the check resolves to one of the four? |  |
-
 ## Settled
