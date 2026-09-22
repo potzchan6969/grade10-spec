@@ -71,8 +71,8 @@ thread, the reply names that change's id, and nothing is opened.
 
 ## What Is Yours to Ask
 
-The interview is the ask step, shaped by [Round Summary and Landing ·
-Interview](../../../docs/governance/round-summary.md#interview). After it, a
+The interview is the ask step, per [Round Summary and Landing ·
+Interview](../../../docs/governance/round-summary.md#interview). After it a
 preference or a product decision is a `Q<n>` row with your recommendation, a
 product detail a ❓ line on the page.
 
