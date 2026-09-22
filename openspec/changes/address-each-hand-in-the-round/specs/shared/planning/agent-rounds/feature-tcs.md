@@ -1351,9 +1351,9 @@ Runs once per row of **Test data**.
 ### Manual
 
 What stays manual after the build, and why. The round's own conduct - the
-question it asks, the reply it writes, the summary a hand reads - is held by
-the skill's tests over the skill's words and by a person running a round; no
-test drives the round whole. Each row names the test that proves part of the
+question it asks, the reply it writes, the summary a hand reads - is proven
+two ways: the skill's tests check the skill's written words, and a person
+running a round checks the round itself; no test drives the round whole. Each row names the test that proves part of the
 case, in these words, and what a person walks beyond it:
 
 - the skill's tests - `scripts/openspec/round-skill.test.mjs`, in this store
@@ -1368,31 +1368,31 @@ case, in these words, and what a person walks beyond it:
 
 | Manual | Why |
 | --- | --- |
-| `shared-planning-agent-rounds-US10-TC1-1` | the skill's tests hold the rule that a product line a build round lands is the product manager's question, quoted before and after; a person runs a build round that touches a page and reads the reply |
-| `shared-planning-agent-rounds-US10-TC2-1` | the skill's tests hold the rule that the answer is what the page says; a person answers the question and reads the page's line |
-| `shared-planning-agent-rounds-US10-TC3-1` | a person runs a round touching several lines of one page and counts one reply |
-| `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line and reads the product manager's thread |
-| `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question and reads the refusal, as `run-a-round-on-every-artifact`'s Told once has it |
-| `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group and reads the line's mark |
-| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing tells QA once, naming the suite's path, its case count and the review, and the words' tests the message; the manual's walk proves QA's turn on My turn and the message on the change page; a person says `land` and reads the thread |
-| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group names the review, in the template and in a plan; a person reads the plan's other groups, which name it nowhere |
+| `shared-planning-agent-rounds-US10-TC1-1` | the skill's tests hold the rule that a product line a build round lands is the product manager's question, quoted before and after; a person runs a build round that touches a page, reads the reply and opens the page for the line's ❓ mark |
+| `shared-planning-agent-rounds-US10-TC2-1` | the skill's tests hold the rule that the answer is what the page says; a person answers the question, reads the page's line and reads `decisions.md` for the answer and the product manager's handle |
+| `shared-planning-agent-rounds-US10-TC3-1` | a person runs a round touching several lines of one page, counts one reply, reads each line quoted before and after, and reads each line on the page for its ❓ mark |
+| `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line, reads the product manager's thread for silence, and reads the engineer's summary for no page question |
+| `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question, opens the page to confirm the line is unchanged and still ❓, and reads the refusal keeping the question open on the product manager, as `run-a-round-on-every-artifact`'s Told once has it |
+| `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group, reads the line's mark and reads `decisions.md` for no record of the round deciding it |
+| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing tells QA once, naming the suite's path, its case count and the review. The words' tests prove the message itself, and the manual's walk proves QA's turn on My turn and on the change page. A person says `land`, reads the thread and checks `main` for `spec.md` and `feature-tcs.md` landed together |
+| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group names the review, in the template and in a plan; a person reads the plan's other groups and confirms none of them names the review |
 | `shared-planning-agent-rounds-US11-TC3-1` | the tick's tests decide the refusal of a draft id over a fixture store; a person runs `pnpm plan done` on a walk group whose spec cites one |
 | `shared-planning-agent-rounds-US11-TC4-1` | the tick's tests decide the pass once the case is `actual`; a person signs the case with `/tcs-review` and runs the tick again |
 | `shared-planning-agent-rounds-US11-TC5-1` | the tick's tests decide one draft id among signed ones; a person reads the refusal naming that id alone |
 | `shared-planning-agent-rounds-US12-TC6-1` | the row's tests prove `written, not run — <why>` as the stood cell's first clause; a person reads the unticked tasks and the Manual rows saying `to be walked in` |
-| `shared-planning-agent-rounds-US12-TC7-1` | a person runs the lane, lands the row without the clause, ticks the tasks and rewrites the rows |
+| `shared-planning-agent-rounds-US12-TC7-1` | a person runs the lane, lands the row without the clause, ticks the tasks, rewrites the rows and reads the earlier row unchanged |
 | `shared-planning-agent-rounds-US12-TC8-1` | the row's tests prove the cell keeps ` (fallback)` after a reader's name and nothing else; the skill's tests hold the rule that the summary says it; a person reads the model the run reports |
-| `shared-planning-agent-rounds-US12-TC10-1` | the skill's tests hold the rule that a reader still missing after one retry stops the round; a person kills a dispatch and reads the thread |
+| `shared-planning-agent-rounds-US12-TC10-1` | the skill's tests hold the rule that a reader still missing after one retry stops the round; a person kills a dispatch, reads the thread naming the reader the round lacks, and reads `rounds.md` and `main` for no row landed |
 | `shared-planning-agent-rounds-US13-TC1-1` | the skill's tests hold the rule that the summary's footer lists the moves of the hand it addresses alone; a person reads the summary as each hand |
 | `shared-planning-agent-rounds-US13-TC2-1` | the reply's tests prove the held row as the round's reply with the row, the page sentence and the rows it touches quoted, mentioning its hand; a person reads the reply in the thread |
-| `shared-planning-agent-rounds-US13-TC3-1` | the reply's tests prove a re-run with the row unchanged posts nothing again; a person runs the round twice and counts one message |
-| `shared-planning-agent-rounds-US13-TC4-1` | the skill's tests hold the rule that one reply carries several moves; a person answers and remarks in one reply and reads what comes back first |
+| `shared-planning-agent-rounds-US13-TC3-1` | the reply's tests prove a re-run with the row unchanged posts nothing again; a person runs the round twice, counts one message and reads it still quoting the row, the page sentence and the decision rows |
+| `shared-planning-agent-rounds-US13-TC4-1` | the skill's tests hold the rule that one reply carries several moves; a person answers and remarks in one reply, reads that the remark's result comes back first, reads `decisions.md` for the recorded answer and checks `main` for nothing landed |
 | `shared-planning-agent-rounds-US13-TC5-1` | the skill's tests hold the rule that one verifier reads every reader's findings; a person reads the verifier's row naming each reader that filed the finding |
 | `shared-planning-agent-rounds-US13-TC6-1` | a person runs a round summoning the simpler thing alone and reads its row |
 | `shared-planning-agent-rounds-US13-TC7-1` | a person runs a round leaving one hand no move and reads that hand's thread, as `run-a-round-on-every-artifact`'s Told once has it |
 | `shared-planning-agent-rounds-US13-TC8-1` | a person reads the summary's tests line against the test it names |
-| `shared-planning-agent-rounds-US14-TC1-1` | the skill's tests hold the interview's shape once, on the governance page the skills link; a person opens a change and counts the questions |
+| `shared-planning-agent-rounds-US14-TC1-1` | the skill's tests hold the interview's shape once, on the governance page the skills link; a person opens a change, reads the reply for the do-it-now question and that each other question changes what is built, and counts at most three |
 | `shared-planning-agent-rounds-US14-TC2-1` | a person reads the first round's summary under decided by the round |
-| `shared-planning-agent-rounds-US14-TC3-1` | a person overturns one listed default in a reply and reads the next round's draft |
+| `shared-planning-agent-rounds-US14-TC3-1` | a person overturns one listed default in a reply, reads `decisions.md` for the row recording the product manager's value and handle, and reads the reply for which artifacts are read again |
 | `shared-planning-agent-rounds-US14-TC4-1` | a person opens a change with a sentence that settles everything and reads the one question |
-| `shared-planning-agent-rounds-US14-TC5-1` | a person opens a change with a sentence stating a fact and reads that it is not asked back |
+| `shared-planning-agent-rounds-US14-TC5-1` | a person opens a change with a sentence stating a fact, reads the reply for no question confirming it, and reads `decisions.md` for the fact recorded as the product manager's |
