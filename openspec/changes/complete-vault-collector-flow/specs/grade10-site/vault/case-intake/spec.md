@@ -150,9 +150,9 @@ counter and type into a bank form.
 - **The id stays the key** - the case's address, every link to it and every
   lookup SHALL keep the id, and a reference SHALL NOT stand in an address.
 - **Where it is read** - a reference SHALL be shown on the case's own header,
-  on its card in the collector's list, on the step that sent the request, and
-  on every letter about the case. The counter's search over it is
-  `grade10-admin/vault/operator-queue`'s.
+  on its card in the collector's list, and on the step that sent the request.
+  The letter that carries it is `grade10-site/vault/collector-notifications`'s,
+  and the counter's search over it is `grade10-admin/vault/operator-queue`'s.
 
 #### Scenario: grade10-site-vault-case-intake-SC-19 - A case is opened with its reference
 **Serves:** grade10-site-vault-case-intake-US-05 - the collector has something to say at the counter from the day they ask
@@ -184,5 +184,5 @@ counter and type into a bank form.
 **Serves:** grade10-site-vault-case-intake-US-05 - the collector reads it out at the counter and types it at the bank
 
 - **GIVEN** a case carrying a reference
-- **WHEN** the collector opens their case list, the case itself, the step that sent the request, or a letter about the case
+- **WHEN** the collector opens their case list, the case itself, or the step that sent the request
 - **THEN** each names that same reference

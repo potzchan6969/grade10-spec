@@ -42,8 +42,8 @@ account and an operator runs.
     for, and that a review deletes nothing by itself
   - The identity standing: verified until when and checked how — never the name
     and never the document
-  - Every signed document: the one download, offered from here and bounded to
-    what the page lists
+  - Every signed document: offered from here as the one download
+    `grade10-site/vault/documents-and-signing` defines
   - The ask and its refusal: filed here and cancelled here inside the window,
     and withheld in words while an item is held or a loan is running
 
@@ -63,9 +63,8 @@ the identity stands, the documents the collector has signed, and the ask to be
 forgotten.
 
 **The documents** - the page SHALL list every sealed document the collector
-holds, each under the case it belongs to, and SHALL offer one download over
-exactly the documents it lists. Listing none, it SHALL offer no download and
-SHALL say nothing has been signed yet.
+holds, each under the case it belongs to, and SHALL offer the one download
+`grade10-site/vault/documents-and-signing` defines.
 
 **A block that fails** - the page SHALL name what failed and SHALL leave every
 block it already answered on screen.
@@ -83,15 +82,6 @@ block it already answered on screen.
 - **GIVEN** a collector holding sealed documents on two closed cases
 - **WHEN** they open Your data
 - **THEN** every one of those documents is listed under the case it belongs to
-- **AND** the download offered covers exactly the documents listed and no others
-
-#### Scenario: grade10-site-vault-retention-and-erasure-SC-14 - A collector who has signed nothing is offered no download
-**Serves:** `grade10-site-vault-retention-and-erasure-US-05`, `grade10-site/vault/documents-and-signing#grade10-site-vault-documents-and-signing-US-05` - a collector reading the page before their first signing
-
-- **GIVEN** a collector whose cases hold no sealed document
-- **WHEN** they open Your data
-- **THEN** no download is offered
-- **AND** the page says nothing has been signed yet
 
 #### Scenario: grade10-site-vault-retention-and-erasure-SC-15 - A block that cannot be answered leaves the rest of the page standing
 **Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector reading the page when part of it cannot be answered
@@ -177,16 +167,25 @@ NOT name why a check was refused.
 - **WHEN** they open Your data
 - **THEN** the standing reads that a check is out, with the day it was started
 - **AND** it does not read as no identity on file
-- **GIVEN** the same check left undecided long enough to read as stalled
-- **WHEN** they open Your data
-- **THEN** the standing still reads that a check is out, with the day it was started
 
-#### Scenario: grade10-site-vault-retention-and-erasure-SC-21 - An expired check and an identity nobody asked for read apart
-**Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector finding out whether anything of theirs was ever checked
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-39 - A stalled check reads as a check that is out
+**Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector coming back to a check the shop is still waiting on
+
+- **GIVEN** a collector whose started check has been left undecided long enough to stand as stalled
+- **WHEN** they open Your data
+- **THEN** the standing reads that a check is out, with the day it was started
+- **AND** it does not read as no identity on file
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-21 - An expired check reads as expired
+**Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector finding out that what was checked no longer stands
 
 - **GIVEN** a collector whose last check expired
 - **WHEN** they open Your data
 - **THEN** the standing reads that the last check expired, with the day it expired
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-40 - An identity nobody asked for reads as none on file
+**Serves:** grade10-site-vault-retention-and-erasure-US-05 - a collector finding out whether anything of theirs was ever checked
+
 - **GIVEN** a collector nobody has asked for a check
 - **WHEN** they open Your data
 - **THEN** the standing reads no identity on file, and that one is taken at the next visit

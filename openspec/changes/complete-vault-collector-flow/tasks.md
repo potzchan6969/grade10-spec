@@ -94,7 +94,7 @@ Every other application group reads this one's exports.
       eight, the alphabet, the unique index, the backfill over seeded rows,
       and the case-folded prefix search's query shape
       (`grade10-site-vault-case-intake-SC-19`, `SC-20`, `SC-21`, `SC-22`,
-      `grade10-admin-vault-operator-queue-SC-24`, `SC-25`, `SC-26`, `SC-47`,
+      `grade10-admin-vault-operator-queue-SC-24`, `SC-26`, `SC-47`,
       `SC-48`)
 - [ ] 4.2 Write `0031_case_reference.sql`: the column nullable, the unique
       index, one deterministic per-row backfill, then the check and
@@ -106,9 +106,9 @@ Every other application group reads this one's exports.
       `openCase`'s transaction (`grade10-site-vault-case-intake-SC-19`,
       `SC-20`, `SC-21`)
 - [ ] 4.4 Read a case-folded term of two to six characters of the alphabet as
-      `termKind: "reference"` in `repositories/cases.ts` `searchCases`, leave
-      the id prefix answering as it does, and keep the id in every route, link
-      and `CASE_PATH` (`grade10-admin-vault-operator-queue-SC-24`, `SC-25`,
+      `termKind: "reference"` in `repositories/cases.ts` `searchCases` and one
+      of seven or more as an id prefix, and keep the id in every route, link
+      and `CASE_PATH` (`grade10-admin-vault-operator-queue-SC-24`,
       `SC-26`, `SC-47`, `SC-48`, `grade10-site-vault-case-intake-SC-22`)
 - [ ] 4.5 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
@@ -300,18 +300,17 @@ fixtures through `external/grade10-spec`.
 ## 11. The money book's reads and the file (grade10)
 
 - [ ] 11.1 Cover the folds and the file: the net out per currency, the arrears
-      count and figures with the ceiling that refuses, the kind filter's query
+      count and figures over the filter in force, the kind filter's query
       shape, the arrears rows' contact and notice fields, and the CSV route's
       grant, page and chain row (`grade10-admin-vault-money-book-SC-07`,
-      `SC-08`, `SC-13`, `SC-14`, `SC-15`, `SC-16`, `SC-17`, `SC-19`, `SC-20`,
+      `SC-08`, `SC-13`, `SC-14`, `SC-15`, `SC-16`, `SC-17`, `SC-20`,
       `SC-21`, `SC-23`, `SC-25`, `SC-26`, `SC-29`, `SC-30`, `SC-31`)
 - [ ] 11.2 Add `netOut` to `money/position.ts` — payouts less repayments per
       currency, a correction netting its row once, positive when money is out
       (`grade10-admin-vault-money-book-SC-13`, `SC-14`, `SC-15`)
 - [ ] 11.3 Add `admin.arrearsSummary`: the count and the two figures, folding
-      `computeDue` at one instant, bounded by the ledger's page size and
-      refusing past it (`grade10-admin-vault-money-book-SC-16`, `SC-17`,
-      `SC-19`)
+      `computeDue` at one instant over every loan the filter in force holds
+      (`grade10-admin-vault-money-book-SC-16`, `SC-17`)
 - [ ] 11.4 Add `kind: payout | repayment | adjustment` to `admin.moneyLedger`'s
       input, narrowing with the method filter already there
       (`grade10-admin-vault-money-book-SC-25`, `SC-26`)

@@ -24,7 +24,7 @@ Auction bidder bans belong to auction, not here.
 - Erasure requests
   - One open request: a person holds one at a time, and it closes once
   - Filed by the account holder: from a product's own data page, and cancelled
-    there inside the window before it matures
+    there until the day an erasure may run opens
   - A self-filed request bans nothing: the person can still sign in, because
     cancelling is what they would sign in for
   - An operator's filing bans: filed from the directory, and a filing over a
@@ -101,9 +101,10 @@ sessions they hold, so that they can reach the page they would cancel from.
 cancel their own request. The cancel SHALL close it as cancelled and SHALL leave
 them free to ask again.
 
-**After the window** - once the day an erasure may run has passed, the request
-SHALL NOT be cancelled, and it stands until every product has erased what it
-holds.
+**After the window** - a cancel SHALL be refused from the first instant of the
+day an erasure may run, read on the brand's own zone, which
+`shared/dates-and-times` states, and the request stands until every product has
+erased what it holds.
 
 #### Scenario: shared-auth-users-SC-30 - The account holder files their own request
 **Serves:** shared-auth-users-US-05 - somebody asking to be forgotten from their own account rather than at an operator's desk
@@ -125,15 +126,17 @@ holds.
 #### Scenario: shared-auth-users-SC-32 - The account holder cancels inside the window
 **Serves:** shared-auth-users-US-05 - somebody changing their mind before anything of theirs is erased
 
-- **GIVEN** a person whose own request is open and whose window has not passed
+- **GIVEN** a person whose own request is open, on the sixth day after the day
+  it was filed
 - **WHEN** they cancel it
 - **THEN** the request closes as cancelled
 - **AND** no request is open for them
 
-#### Scenario: shared-auth-users-SC-33 - A request past its window is not cancelled
-**Serves:** shared-auth-users-US-05 - somebody coming back to the ask after the days they could have taken it back in
+#### Scenario: shared-auth-users-SC-33 - A cancel on the day an erasure may run is refused
+**Serves:** shared-auth-users-US-05 - somebody coming back to the ask on the day the days they could have taken it back in run out
 
-- **GIVEN** a person whose own request was filed more than seven days ago
+- **GIVEN** a person whose own request was filed seven days ago, so that today
+  is the day an erasure may run
 - **WHEN** they try to cancel it
 - **THEN** the system refuses the cancel
 - **AND** the request is still open

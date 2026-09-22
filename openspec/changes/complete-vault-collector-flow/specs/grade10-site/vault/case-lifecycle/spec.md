@@ -57,7 +57,8 @@ run is stated by the capability that owns the move — the visit
     read, and the case stays where it was, open for another offer
   - Where the case stands: the stage on the lane the case walks, read from the
     status and never stored
-  - Whose the item is: one word from the status, the offer and the due date
+  - Whose the item is: one word from the fact the case reads, its status and
+    the due date
   - No status for any of it: nothing derived is written down, so a fact can
     never disagree with the case it was read from
 
@@ -289,8 +290,10 @@ worked out from the status at the read.
 
 | Whose the item is | Read when | What it carries |
 | --- | --- | --- |
-| Waiting on you | a live offer stands, a visit was closed as missed, or an ask for the item back stands | nothing |
-| With us | `submitted`, `under_valuation`, an offer that ran out or was declined, `signing`, or `vaulted` on either lane | the day the item has been held since, once it is in the vault |
+| With you | `draft` | nothing |
+| Waiting on you | the fact read is a missed visit or an ask for the item back, or the case stands at `offer_made` reading no fact | nothing |
+| Waiting on you | terms agreed with no visit ahead of it | the 30-day clock that would call the case off |
+| With us | the fact read is an offer that ran out, was declined or was replaced, or the case stands at `submitted`, `under_valuation`, `signing` or `vaulted` on either lane reading no fact | the day the item has been held since, once it is in the vault |
 | Visit | terms agreed with a visit ahead of it | the day of the visit |
 | Due | a loan running before its due date | the due date |
 | Past due | a loan running after its due date | how many days past due |
@@ -307,8 +310,13 @@ progress, every earlier stage as done and every later one as still to come.
 **An ended case stops where it ended** — the stage it ended at SHALL stay the
 one in progress, with the ending named beside it.
 
+**The fact decides, else the status** — where the case reads a fact, that
+fact's row SHALL decide whose the item is; where it reads none, the status
+SHALL.
+
 **One clock** — a day, a deadline and a count of days SHALL be read on the
-shop's clock from one instant per read.
+brand's own zone, which `shared/dates-and-times` states, from one instant per
+read.
 
 **The list reads the same** — the case list SHALL read each case's stage and
 whose the item is by these same rules.

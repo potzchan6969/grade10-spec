@@ -96,25 +96,22 @@ register narrowed to one case answers that case alone.
 
 ### Requirement: The arrears are summed above the list
 
-The three numbers the list cannot answer without being added up by hand, read
-above the rows the operator is about to work.
+The numbers the list cannot answer without being added up by hand, read above
+the rows the operator is about to work.
 
-**The figures** - the arrears SHALL be read with how many loans are in arrears,
-what is outstanding across them, and how many of them carry no forfeiture
-notice.
+**The figures** - the arrears SHALL be read with what is outstanding across the
+loans in arrears and how many of them carry no forfeiture notice, beside the
+count of the Overdue cut, which `grade10-admin/vault/operator-queue` states.
 
-**One instant** - the three SHALL be folded at one instant over the same loans
-the list holds, so a figure and the rows below it cannot disagree.
+**One instant** - the two sums and the Overdue cut's count SHALL be answered
+from one read over the same loans the list holds, so a figure and the rows
+below it cannot disagree.
 
 **One unit each** - what is outstanding SHALL be given per currency, each in its
 own unit, and SHALL never be summed across currencies.
 
-**Bounded** - the fold SHALL cover no more loans than the arrears themselves
-page, and SHALL be refused by name where more loans are in arrears than that
-rather than answering over part of them.
-
-**Nothing late** - where no live loan is past its due date, all three SHALL read
-zero and the list SHALL hold no row.
+**Nothing late** - where no live loan is past its due date, the two sums and the
+count SHALL read zero and the list SHALL hold no row.
 
 **Who reads them** - the figures SHALL sit on the vault read grant, with the
 list they sum.
@@ -143,14 +140,6 @@ list they sum.
 - **WHEN** the arrears are read
 - **THEN** the loans in arrears, what is outstanding and how many carry no
   notice all read zero, and no row is listed
-
-#### Scenario: grade10-admin-vault-money-book-SC-19 - More in arrears than the list pages is refused rather than half-summed
-**Serves:** grade10-admin-vault-money-book-US-05 - shop staff pick who to chase first before working the list
-
-- **GIVEN** more live loans past their due date than the arrears page in one
-  read
-- **WHEN** the arrears are read
-- **THEN** the three figures are refused by name and no partial figure is given
 
 ### Requirement: The register is taken out of the console as a file
 

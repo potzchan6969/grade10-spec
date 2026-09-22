@@ -570,6 +570,12 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 
 ---
 
+## Settled
+
+- Once an operator's filing takes a self-filed request over, the account holder's own data page reads it as one the shop filed and offers no cancel; lifting the ban does not return that cancel.
+- There is neither a limit nor a cool-down on filing and cancelling: a person may ask and change their mind as often as they like, one open request at a time.
+- The cancel is refused from the first instant of the day an erasure may run, and the request stands until every product has erased what it holds. The guard that holds it to that day is the tech design's, raised there for engineering.
+
 ## Reconciliation
 
 **Run:** the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` and `openspec/changes/archive/` entirely, and `tech-design.md`. Fourteen cases came back over two journeys; the scenario pass issued `shared-auth-users-SC-28` to `shared-auth-users-SC-39`.

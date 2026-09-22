@@ -27,6 +27,8 @@ is `grade10-site/vault/collector-notifications`.
   - Overdue accrual: the term's own daily rate on the principal still
     outstanding — no fee, no compounding, no higher rate
   - One rounding: the total is principal plus interest exactly
+  - The annualised rate: the term's interest read as a simple yearly rate, the
+    figure the loan agreement prints
   - Each repayment, on the case: its value date, its method and what the
     balance was after it, so a borrower reads the month without adding it up
   - What is coming: the dates the reminders go, until a notice stops them
@@ -95,7 +97,8 @@ adding a month of messages up.
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-27 - A repayment reads with the day it arrived and what was left
 **Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower opens the case to see what a payment did
 
-- **GIVEN** the worked loan above, with 9,000,000 HKD minor units repaid by
+- **GIVEN** a live loan of 10,000,000 HKD minor units of principal at 300
+  basis points over a 30-day term, with 9,000,000 HKD minor units repaid by
   bank transfer on day 10
 - **WHEN** the borrower reads the case
 - **THEN** the repayment is listed as 9,000,000 HKD minor units by bank
@@ -223,10 +226,10 @@ in every message about money.
 - **A value nobody has set** — outside production the block SHALL print a
   marked placeholder in place of the unset value. In production an unset FPS
   id or bank account SHALL NOT be printed: the block SHALL NOT be shown, and
-  any act that would send a message carrying it SHALL be refused by name,
-  naming the unset value, before anything is written. In its place the live
-  loan SHALL show the counter line alone — pay at the counter, transfer
-  details to follow by email.
+  in its place the live loan SHALL show the counter line alone — pay at the
+  counter, transfer details to follow by email. The act that would send a
+  message carrying an unset value is refused by
+  `grade10-site/vault/collector-notifications`, which states that rule.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-35 - The block names the account and the case reference
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays at their own bank without asking the shop where
@@ -260,22 +263,15 @@ in every message about money.
 - **WHEN** the block is printed
 - **THEN** it shows a marked placeholder in place of the FPS id
 
-#### Scenario: grade10-site-vault-loan-and-settlement-SC-39 - Production refuses the act rather than sending it blank
-**Serves:** How to pay - no borrower is ever sent an account that is not there
-
-- **GIVEN** a production brand whose bank account is unset
-- **WHEN** a treasurer records a repayment on a live loan
-- **THEN** it is refused by name, the refusal names the unset value, and no
-  repayment is written
-
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-47 - Production shows the counter line in place of the block
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower on a brand whose account is not set yet is still told where to pay
 
-- **GIVEN** a production brand whose FPS id and bank account are unset
-- **WHEN** the borrower reads a live loan
+- **GIVEN** a production brand whose live loan was advanced while its FPS id
+  and bank account were set, both since cleared
+- **WHEN** the borrower reads that live loan
 - **THEN** no payee, no FPS id, no bank account and no transfer reference is
-  shown, the case shows the counter line alone — pay at the counter, transfer
-  details to follow by email — and no message naming an amount is sent
+  shown, and the case shows the counter line alone — pay at the counter,
+  transfer details to follow by email
 
 ### Requirement: The console states the rule before the operator acts
 
@@ -284,7 +280,7 @@ the dialog, before they send it.
 
 | Dialog | States before the send |
 | --- | --- |
-| Make an offer | the latest valuation, the brand's loan-to-value cap and the amount asked for; the term presets; the interest, the total to repay, what a late day costs and the annualised simple rate the loan agreement prints, all from the terms entered; the date the offer runs out; each bound the offer must meet, met or unmet |
+| Make an offer | the latest valuation, the brand's loan-to-value cap and the amount asked for; the term presets; the interest, the total to repay, what a late day costs and the annualised rate the arithmetic derives, all from the terms entered; the date the offer runs out; each bound the offer must meet, met or unmet |
 | Put the item in the vault | the three preconditions it needs: the signed packet executed, the identity bound, the visit slot started |
 | Record the payout | the two people it needs; the amount equal to the accepted principal; the value-date bounds; the due date and the reminder dates the value date fixes |
 
@@ -305,8 +301,8 @@ the dialog, before they send it.
 - **WHEN** an operator enters a principal of 10,000,000 HKD minor units at
   300 basis points for a 30-day term
 - **THEN** the dialog states 300,000 HKD minor units of interest, 10,300,000
-  HKD minor units to repay, 10,000 HKD minor units for a late day, and the
-  annualised simple rate, alongside the valuation, the cap and the presets
+  HKD minor units to repay, 10,000 HKD minor units for a late day, and an
+  annualised rate of 36.5%, alongside the valuation, the cap and the presets
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-41 - A bound the offer fails is named before the send
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator sees the cap before the worker teaches it
@@ -359,3 +355,60 @@ the dialog, before they send it.
 - **WHEN** the state it was drawn from has since moved and the recording is
   sent
 - **THEN** the recording is refused by name
+
+## MODIFIED Requirements
+
+### Requirement: What a loan owes is computed at every read
+
+What a loan owes SHALL be derived, at the instant asked about, from the
+accepted offer, the money valued at or before that instant, and the brand's
+accrual bounds. It SHALL never be stored, never be a status, and never be
+below zero. Every surface, guard and report that names an amount owed SHALL
+answer from the same derivation, so no two can disagree.
+
+| Rule | Value |
+| --- | --- |
+| Term interest | principal × the term's rate, owed in full from the first day; early repayment earns no rebate |
+| Due instant | the last moment of the calendar day the brand's zone puts `term days` after the advance's value date |
+| Overdue interest | one `term days`th of the term's interest for each started day of the brand's calendar after the due date plus the brand's grace days, charged on the principal still outstanding, simple |
+| No other charge | no late fee, no stepped rate and no compounding is ever added |
+| Ceiling | term and overdue interest together never pass the brand's accrual ceiling |
+| Rounding | one half-up rounding of the exact figure; the total is principal plus interest exactly |
+| Annualised rate | the term's interest ÷ the principal × 365 ÷ the term's days, as a percentage rounded to one decimal place; the rate the loan agreement prints simple per annum, and the one figure every surface naming an annualised rate answers from |
+| Settlement | the recording that leaves nothing owed at its own value date; interest stops there and never restarts |
+
+Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
+30-day term, no grace, advanced on 1 September and so due on 1 October:
+
+- repaid on day 10 — 10,300,000 owed, the whole term's interest included
+- repaid 10 days late — 10,400,000 owed, at 10,000 for each started day
+- 9,000,000 repaid on day 10 and the rest 10 days late — 1,313,000 still owed
+- annualised — 36.5%
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-05 - Early repayment owes the whole term's interest
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
+
+- **GIVEN** the worked loan above
+- **WHEN** it is quoted for day 10
+- **THEN** it owes 10,300,000 HKD minor units
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-06 - Overdue days charge the term's own daily rate
+**Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
+
+- **GIVEN** the worked loan above
+- **WHEN** it is quoted for 10 days past the due date
+- **THEN** it owes 10,400,000 HKD minor units, and no fee has been added
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-07 - Interest stops at settlement
+**Serves:** What is owed - interest stops at settlement
+
+- **GIVEN** a loan settled in full on its due date
+- **WHEN** it is quoted a month later
+- **THEN** it owes nothing, and nothing accrued after the settlement
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-08 - Interest never passes the ceiling
+**Serves:** What is owed - interest never passes the ceiling
+
+- **GIVEN** a brand whose accrual ceiling is 10,000 basis points
+- **WHEN** a loan nobody repaid is quoted far past its due date
+- **THEN** the interest is at most the principal

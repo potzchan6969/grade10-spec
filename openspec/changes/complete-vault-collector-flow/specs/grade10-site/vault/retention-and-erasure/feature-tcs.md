@@ -720,7 +720,7 @@ stands, and where I ask to be forgotten,
 * Any cards that already rendered stay in place.
 
 
-### grade10-site-vault-retention-and-erasure-US5-TC10-1: Every signed document is listed under its case and the download covers exactly those
+### grade10-site-vault-retention-and-erasure-US5-TC10-1: Every signed document is listed under its case and the page offers the download
 
 **Classification:**
 
@@ -733,7 +733,7 @@ stands, and where I ask to be forgotten,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
+* **Trace:** `grade10-site/vault/documents-and-signing#grade10-site-vault-documents-and-signing-US-05`
 
 **Pre-conditions:**
 
@@ -747,36 +747,8 @@ stands, and where I ask to be forgotten,
 **Expected Results:**
 
 * Every one of those documents is listed under the case it belongs to.
-* The download covers exactly the documents listed and no others.
-
-### grade10-site-vault-retention-and-erasure-US5-TC11-1: A collector who has signed nothing is offered no download
-
-**Classification:**
-
-* **Severity:** normal
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-site-vault-retention-and-erasure-US-05
-
-**Pre-conditions:**
-
-* The collector is signed in, and none of their cases holds a sealed
-  document.
-
-**Steps:**
-
-1. Navigate to <vault your data url>.
-
-**Expected Results:**
-
-* No download is offered.
-* The page says nothing has been signed yet.
+* The page offers the one download `grade10-site/vault/documents-and-signing`
+  defines, over the documents it lists.
 
 ### grade10-site-vault-retention-and-erasure-US5-TC12-1: A class whose window nobody has decided still shows, reading undecided
 
@@ -992,6 +964,10 @@ stands, and where I ask to be forgotten,
 
 ## Settled
 
+- A retention class whose window nobody has set shows in the same table as every other, its window reading that it is being decided — never hidden, never zero days, never kept forever.
+- The page names all six standings the identity record holds, in the collector's words: a stalled check reads that a check is out, a refused one that the last check was not accepted, and neither names a reason.
+- The download is the one `grade10-site/vault/documents-and-signing` defines. This page lists what the collector has signed and offers that download; the bound it covers, and the page a collector who has signed nothing reads, are that capability's and are walked in its suite.
+
 ## Reconciliation
 
 Run: 2026-09-22, blind pass over the isolated input — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages the proposal links; denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. Reconciled the same day against the scenario pass's `grade10-site-vault-retention-and-erasure-SC-12` to `grade10-site-vault-retention-and-erasure-SC-27` and the durable scenarios the change does not touch. The blind pass read US1 and US5 only; this is the capability's first suite, so US2 and US3 — the journeys the durable spec already serves — were walked here and given cases.
@@ -1008,7 +984,7 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-US5-TC1-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-16` |
 | `grade10-site-vault-retention-and-erasure-US5-TC2-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-16` — the reviewed-not-deleted line is that scenario's second outcome |
 | `grade10-site-vault-retention-and-erasure-US5-TC3-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-19` and `grade10-site-vault-retention-and-erasure-SC-22` |
-| `grade10-site-vault-retention-and-erasure-US5-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-21` |
+| `grade10-site-vault-retention-and-erasure-US5-TC4-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-40` |
 | `grade10-site-vault-retention-and-erasure-US5-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-20` |
 | `grade10-site-vault-retention-and-erasure-US5-TC6-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-21` |
 | `grade10-site-vault-retention-and-erasure-US5-TC7-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-15` — the page stands while a block has not been answered. The design's Loading row closes on the same scenario; the skeleton itself is a drawing and no requirement states it |
@@ -1016,11 +992,10 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-US5-TC9-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-15` |
 | Raised: does an unset window show as undecided, or not show at all? | Answered by the scenario pass | `grade10-site-vault-retention-and-erasure-SC-17` already reads an unset window as undecided, and the class shows either way. Landed as `Q34` in the change's `decisions.md`; `grade10-site-vault-retention-and-erasure-US5-TC12-1` walks it |
 | Raised: four standings on the page against six on the console's panel | Answered by the scenario pass | The requirement tables all six in the collector's words — stalled reads that a check is out, refused that it was not accepted, neither naming a reason. Landed as `Q18`; `grade10-site-vault-retention-and-erasure-SC-20` and `grade10-site-vault-retention-and-erasure-SC-22` state them, and `grade10-site-vault-retention-and-erasure-US5-TC14-1` and `grade10-site-vault-retention-and-erasure-US5-TC15-1` walk them |
-| `grade10-site-vault-retention-and-erasure-SC-13` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC10-1`. The blind pass read the download as the documents capability's and wrote none |
-| `grade10-site-vault-retention-and-erasure-SC-14` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC11-1` |
+| `grade10-site-vault-retention-and-erasure-SC-13` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC10-1`, tracing `grade10-site/vault/documents-and-signing`'s US-05. The blind pass read the download as that capability's, which is where the bound and the page a collector who has signed nothing reads now stand; this page lists what was signed and offers the download |
 | `grade10-site-vault-retention-and-erasure-SC-17` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC12-1` — the blind pass raised the question instead of writing the case |
 | `grade10-site-vault-retention-and-erasure-SC-18` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC13-1` |
-| `grade10-site-vault-retention-and-erasure-SC-20`, the stalled standing | Half reached | Case added: `grade10-site-vault-retention-and-erasure-US5-TC14-1`; `grade10-site-vault-retention-and-erasure-US5-TC5-1` walks the check that is out and stops there |
+| `grade10-site-vault-retention-and-erasure-SC-39` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC14-1`. The stalled standing was the second triple under `grade10-site-vault-retention-and-erasure-SC-20` before the split and now carries its own id; `grade10-site-vault-retention-and-erasure-US5-TC5-1` walks the check that is out |
 | `grade10-site-vault-retention-and-erasure-SC-22`, the refused standing | Half reached | Case added: `grade10-site-vault-retention-and-erasure-US5-TC15-1`; `grade10-site-vault-retention-and-erasure-US5-TC3-1` walks a verified standing naming no document |
 | `grade10-site-vault-retention-and-erasure-SC-24` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC16-1`. Every ask case the blind pass wrote is a refusal or a hold; none files one |
 | `grade10-site-vault-retention-and-erasure-SC-25` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US5-TC17-1` |

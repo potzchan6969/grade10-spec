@@ -5,8 +5,8 @@
 - The queue
   - Cut by what waits: every status belongs to exactly one status view, and
     the rest are queries
-  - Today, cut where the rows are: the shop's own day decides it, in the read
-    rather than in the browser
+  - Today, cut where the rows are: the brand's own zone decides it, in the
+    read rather than in the browser
   - Rows that explain themselves: the badge names why a case is waiting on a
     person
   - Keyset paging: a page, a backlog count and a control that says whether
@@ -67,11 +67,12 @@ one of the first five:
 | In custody | `vaulted`, `active`, `repaid` |
 | Closed | `released`, `declined`, `cancelled`, `expired`, `forfeited` |
 | Drafts | `draft` |
-| Today | every case that has not ended whose visit falls on the shop's own calendar day |
+| Today | every case that has not ended whose visit falls on the calendar day the brand's own zone puts it in |
 | Overdue | every live loan past its due date, longest overdue first |
 
-The Today cut SHALL be made where the rows are read, on the brand's own zone,
-so that the view and the badge beside it cannot disagree across a midnight.
+The Today cut SHALL be made where the rows are read, on the brand's own zone
+as `shared/dates-and-times` states it, so that the view and the badge beside it
+cannot disagree across a midnight.
 
 Every view SHALL say how many cases it holds before it is opened, counted
 behind that view's own filter rather than over the page in hand, at the
@@ -130,8 +131,10 @@ A number SHALL be canonicalised against the brand's numbering plan before it
 is compared, so the spacing an operator typed does not decide whether the case
 is found. The term SHALL travel in the request body, never in an address.
 
-A term of two to six characters drawn from the reference's own alphabet SHALL
-be searched as a reference, whatever case the operator typed it in.
+One kind per term SHALL be decided before the match is made: a term of two to
+six characters drawn from the reference's own alphabet SHALL be searched as a
+reference, whatever case the operator typed it in, and a term of seven or more
+SHALL be searched as a case-id prefix.
 
 Every search SHALL write one entry on the audit trail naming who searched,
 when, what kind of term it was, and how many cases matched. The term itself
@@ -168,13 +171,6 @@ queue with nothing in it.
 - **WHEN** an operator searches for those characters in lower case
 - **THEN** that case is found
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-25 - A reference search is filed like any other
-**Serves:** grade10-admin-vault-operator-queue-US-05 - the operator's lookup at the counter leaves the same trail as every other
-
-- **WHEN** an operator searches for a case reference
-- **THEN** the audit trail carries one entry naming the operator, the instant, that the term was a reference, and the number of matches
-- **AND** the reference appears in no column of it
-
 #### Scenario: grade10-admin-vault-operator-queue-SC-26 - A reference nobody holds says so
 **Serves:** grade10-admin-vault-operator-queue-US-05 - the operator learns the characters were misheard rather than reading an empty queue
 
@@ -185,7 +181,7 @@ queue with nothing in it.
 **Serves:** grade10-admin-vault-operator-queue-US-02 - the operator opens the case from the id in front of them
 
 - **GIVEN** a case whose id an operator is reading off another screen
-- **WHEN** they search the first characters of that id
+- **WHEN** they search the first eight characters of that id
 - **THEN** that case is found
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-48 - Part of a number finds nothing
@@ -371,24 +367,27 @@ The console says where a collector's identity stands in six words, so an
 operator arranging a visit knows whether to send the check again, wait, or
 take it at the counter.
 
-- **The six** - the panel SHALL show exactly one of these states, and the
-  case's header SHALL carry the same state:
+- **The six** - the panel SHALL show exactly one of the six states
+  `grade10-site/e-kyc/hosted-verification` defines, which is where each one's
+  meaning is stated, and the case's header SHALL carry the same state. Beside
+  the state the panel SHALL add:
 
-| State | What the record holds | What the panel offers |
+| State | What the panel adds | What the panel offers |
 | --- | --- | --- |
-| Verified | an identity bound: who checked it, and when | viewing the photograph under the identity read grant, and recording one at the counter instead |
-| Out | a hosted check invited, started, or submitted and not yet read as stalled, with the day it went | sending it again, and recording one at the counter |
-| Stalled | a submitted check the identity check reads as stalled, with the day it was submitted | recording one at the counter, and sending it again |
-| Refused | the last hosted check declined, with the day and the reason | recording one at the counter, naming who is recording over the refusal |
-| Lapsed | the last hosted check expired or withdrawn, with the day | sending a hosted check, and recording one at the counter |
-| None | nothing asked for | sending a hosted check, and recording one at the counter |
+| Verified | who checked the identity, and when | viewing the photograph under the identity read grant, and recording one at the counter instead |
+| Out | the day the check went | sending it again, and recording one at the counter |
+| Stalled | the day the check was submitted | recording one at the counter, and sending it again |
+| Refused | the day and the reason | recording one at the counter, naming who is recording over the refusal |
+| Lapsed | the day | sending a hosted check, and recording one at the counter |
+| None | nothing | sending a hosted check, and recording one at the counter |
 
 - **Never the provider's own** - a finer state the identity provider reports
   SHALL fold into one of the six, and no word of the provider's SHALL be
   shown.
 - **Out or Stalled** - the console SHALL NOT decide when a submitted check
-  stops reading as Out; it SHALL read the state the identity check holds, which
-  is where the boundary between the two is stated.
+  stops reading as Out; it SHALL read the state
+  `grade10-site/e-kyc/hosted-verification` holds, which is where the boundary
+  between the two is stated.
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-39 - A check still out reads as out, not as nothing asked for
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator knows whether to send the check again or wait
@@ -410,7 +409,7 @@ take it at the counter.
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator reads one word for where the identity stands
 
 - **WHEN** a case standing at each of the six states is read in turn
-- **THEN** the panel shows that state, with what the record holds for it and the acts it offers
+- **THEN** the panel shows that state, with what it adds beside it and the acts it offers
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-42 - A provider's finer state folds into one of the six
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator is never shown a word the shop does not use
@@ -423,8 +422,8 @@ take it at the counter.
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator waits on the provider only while there is something to wait for
 
 - **GIVEN** a hosted check the collector has submitted and the provider has not decided
-- **WHEN** an operator reads the identity panel before the identity check reads that check as stalled, and again after
-- **THEN** the panel reads Out first and Stalled second, on the state the identity check holds rather than on a reading of its own
+- **WHEN** an operator reads the identity panel before `grade10-site/e-kyc/hosted-verification` reads that check as stalled, and again after
+- **THEN** the panel reads Out first and Stalled second, on the state `grade10-site/e-kyc/hosted-verification` holds rather than on a reading of its own
 
 
 ### Requirement: The held list counts what is held and says what each item carries
@@ -448,9 +447,9 @@ a single row.
 #### Scenario: grade10-admin-vault-operator-queue-SC-43 - The figures count what is held, not the page
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says how much the shops are holding without paging the list
 
-- **GIVEN** 60 items held across two shops, more than one page of them
+- **GIVEN** 60 items held across two shops, more than one page of them, 25 of them carrying a live loan and 4 waiting on a booked pickup
 - **WHEN** the held list is read
-- **THEN** its figures count all 60, and name how many are held at each of the two shops
+- **THEN** its figures read 60 held, 25 carrying a live loan and 4 waiting on a pickup, and name how many of the 60 are held at each of the two shops
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-44 - One shop narrows the rows and the figures with them
 **Serves:** grade10-admin-vault-operator-queue-US-04 - the operator answers for the shop they are standing in

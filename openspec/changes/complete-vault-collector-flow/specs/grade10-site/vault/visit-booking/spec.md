@@ -80,7 +80,7 @@ where it is verified the item SHALL read verified and SHALL ask for nothing but
 the item.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-15 - The confirmation takes the picker's place
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who has just booked reads the shop and the slot where the picker stood
 
 - **WHEN** a collector takes a free slot for their case
 - **THEN** the shops and slots are replaced by a confirmation naming the shop,
@@ -88,7 +88,7 @@ the item.
   has been sent by email
 
 #### Scenario: grade10-site-vault-visit-booking-SC-16 - A financed case is told the money follows
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector on the financed lane reads that the money follows the signing
 
 - **GIVEN** a case on the financed lane holding a booked visit
 - **WHEN** its owner reads the confirmation
@@ -96,7 +96,7 @@ the item.
   the counter, and that the money follows the signing
 
 #### Scenario: grade10-site-vault-visit-booking-SC-17 - A storage case is told about the custody agreement alone
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector on the storage lane is promised no money their case never carries
 
 - **GIVEN** a case on the storage lane holding a booked visit
 - **WHEN** its owner reads the confirmation
@@ -104,7 +104,7 @@ the item.
   listed
 
 #### Scenario: grade10-site-vault-visit-booking-SC-18 - An unverified collector is offered the check
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who is not verified is offered the check before the day
 
 - **GIVEN** a collector whose identity is not verified holding a booked visit
 - **WHEN** they read the confirmation
@@ -112,7 +112,7 @@ the item.
   counter instead
 
 #### Scenario: grade10-site-vault-visit-booking-SC-19 - A verified collector is asked for the item alone
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who is verified already is asked for nothing but the item
 
 - **GIVEN** a collector whose identity is verified holding a booked visit
 - **WHEN** they read the confirmation
@@ -120,7 +120,7 @@ the item.
   for
 
 #### Scenario: grade10-site-vault-visit-booking-SC-20 - A standing visit reads the same on the case
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector coming back to the case reads the visit they booked
 
 - **GIVEN** a case whose booked slot is still ahead of it
 - **WHEN** its owner opens the case
@@ -128,7 +128,7 @@ the item.
   moving the visit and calling it off are offered
 
 #### Scenario: grade10-site-vault-visit-booking-SC-21 - Calling the visit off leaves the case standing
-**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
+**Serves:** grade10-site-vault-visit-booking-US-03 - the collector who calls a visit off keeps the case they booked it for
 
 - **GIVEN** a case holding a booked visit
 - **WHEN** its owner calls the visit off from the confirmation and confirms
@@ -155,7 +155,7 @@ off the calendar.
 or called off SHALL carry that visit's file with it.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-22 - Add to calendar serves the visit
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector takes the visit into the calendar they keep their days in
 
 - **GIVEN** a case holding a booked visit
 - **WHEN** its owner asks for the visit's calendar file
@@ -169,7 +169,7 @@ or called off SHALL carry that visit's file with it.
 - **THEN** it is refused and no file is served
 
 #### Scenario: grade10-site-vault-visit-booking-SC-24 - A moved visit changes the day already on the calendar
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who moved a visit is left one day on their phone
 
 - **GIVEN** a collector who has added their booked visit to their calendar
 - **WHEN** the visit is moved to another slot and the file is opened again
@@ -177,7 +177,7 @@ or called off SHALL carry that visit's file with it.
   is added
 
 #### Scenario: grade10-site-vault-visit-booking-SC-25 - A called-off visit is taken off the calendar
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector who called a visit off is left none
 
 - **GIVEN** a collector who has added their booked visit to their calendar
 - **WHEN** the visit is called off and the file is opened again
@@ -185,7 +185,7 @@ or called off SHALL carry that visit's file with it.
   off the calendar
 
 #### Scenario: grade10-site-vault-visit-booking-SC-26 - The visit's messages carry the file
-**Serves:** grade10-site-vault-visit-booking-US-04 - Collector puts the visit in their calendar
+**Serves:** grade10-site-vault-visit-booking-US-04 - the collector reads the day off the message without opening the case
 
 - **WHEN** the collector is told their visit was booked, moved or called off
 - **THEN** that message carries the visit's calendar file
@@ -206,7 +206,7 @@ no-slot line where the times sit, and SHALL offer the next window.
 refused by name, and the picker SHALL read the slots again without it.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-27 - A move picks another shop
-**Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
+**Serves:** grade10-site-vault-visit-booking-US-03 - the collector who cannot reach the shop they picked moves the visit to another
 
 - **GIVEN** a case holding a booked visit
 - **WHEN** its owner moves the visit
@@ -214,7 +214,7 @@ refused by name, and the picker SHALL read the slots again without it.
   slot at another shop may be taken
 
 #### Scenario: grade10-site-vault-visit-booking-SC-28 - A window with nothing free says so and offers the next
-**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+**Serves:** grade10-site-vault-visit-booking-US-01 - the collector reading a window with nothing free is told so and offered the next
 
 - **GIVEN** a shop whose window holds no free slot
 - **WHEN** its days and times are read
@@ -222,7 +222,7 @@ refused by name, and the picker SHALL read the slots again without it.
   and the next window is offered
 
 #### Scenario: grade10-site-vault-visit-booking-SC-29 - A slot taken while the collector chose is refused
-**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+**Serves:** grade10-site-vault-visit-booking-US-01 - the collector who lost the slot while choosing is told and reads the rest
 
 - **GIVEN** a collector who has chosen a free slot
 - **WHEN** somebody else takes that slot before they confirm
@@ -237,7 +237,7 @@ of their cases SHALL read that visit, its shop and its slot, and SHALL NOT
 offer a picker of its own.
 
 #### Scenario: grade10-site-vault-visit-booking-SC-30 - A sibling case shows the lead's visit
-**Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
+**Serves:** grade10-site-vault-visit-booking-US-01 - the collector bringing two items in books the visit once
 
 - **GIVEN** a collector holding a live booking on one of their cases
 - **WHEN** they open another of their cases

@@ -693,6 +693,11 @@ Runs once per row of **Test data**.
 * The message carries the visit's calendar file.
 * The file names the same visit the case reads.
 
+## Settled
+
+- A case whose collector holds a live booking on another of their cases reads that visit, its shop and its slot, and offers no picker of its own.
+- A move opens the picker a first booking is taken from, so another shop is as open to it as another day and time.
+
 ## Reconciliation
 
 Run: 2026-09-22, blind pass over the isolated input — the outline (`## Purpose`

@@ -1171,6 +1171,15 @@ reference at my bank.
 
 ---
 
+## Settled
+
+- The Photograph step's empty refusal catches a zero-byte file, refused the way anything that is not a JPEG, PNG or WebP is refused.
+- The 20 MB cap bounds each photograph; nothing bounds the ten together but the count of ten.
+- The conflict on Send it in is the case-lifecycle guard — the draft moved between the session reading it and the send landing — so the send is refused by name and no second case opens.
+- Whether the Describe step's amount field names the brand's currency is the product manager's to confirm; the recommendation is that it does, and the refusal of any other currency stands either way.
+- Which typed forms of a number count as one person is ❓ Product on `docs/prds/products/grade10-site/vault/collector-pages.md`; until it is named no case fixes a variant.
+- Refused reading: that a send is refused in production while no collection statement wording is set. The tick is not one of the acts production refuses, and the send goes through in every environment.
+
 ## Reconciliation
 
 **Run:** 2026-09-22, change `complete-vault-collector-flow`, capability

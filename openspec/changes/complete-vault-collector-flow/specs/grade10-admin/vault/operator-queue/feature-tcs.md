@@ -1481,6 +1481,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The identity panel reads the state named in **Test data**, and offers the acts named.
+* Beside the state the panel names the day the record holds for it.
 * No state beyond the six the record defines is shown.
 
 ### grade10-admin-vault-operator-queue-US9-TC2-1: The Verified state names who performed the check and when
@@ -1624,67 +1625,77 @@ Runs once per row of **Test data**.
 
 ---
 
+## Settled
+
+- The boundary between Out and Stalled is `grade10-site/e-kyc/hosted-verification`'s, not the console's: the panel reads the state that capability holds and decides none of its own.
+- The held list carries three figures, the first broken down by shop, each counting everything the filter in force holds; there is no fourth figure counting shops.
+- The visit checklist walks the seven steps the counter works, six of them on a case that borrows nothing.
+- A pending or failed read is the panel's own status rather than a rule, so no scenario is owed for it.
+- A reference search leaves the same trail as any other search: the trail rule already names what kind of term it was, and no scenario of its own is owed for the reference.
+- A term of two to six characters of the reference's alphabet is searched as a reference and one of seven or more as a case-id prefix, so one term is never both kinds.
+
 ## Reconciliation
 
-**Run:** the blind pass read the bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages under `docs/prds/` the proposal links. It was denied every `## Requirements` section, `openspec/specs/` beyond the two included sections, `openspec/changes/archive/` and `tech-design.md`. It wrote 48 cases over nine journeys and raised two questions; the scenario pass issued `SC-21` to `SC-46` and carried `SC-01`, `SC-02`, `SC-07`, `SC-08` and `SC-09` in its MODIFIED blocks. Four cases and six scenarios were added here.
+**Run:** the blind pass read the bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages under `docs/prds/` the proposal links. It was denied every `## Requirements` section, `openspec/specs/` beyond the two included sections, `openspec/changes/archive/` and `tech-design.md`. It wrote 48 cases over nine journeys and raised two questions; the scenario pass issued `grade10-admin-vault-operator-queue-SC-21` to `grade10-admin-vault-operator-queue-SC-46` and carried `grade10-admin-vault-operator-queue-SC-01`, `grade10-admin-vault-operator-queue-SC-02`, `grade10-admin-vault-operator-queue-SC-07`, `grade10-admin-vault-operator-queue-SC-08` and `grade10-admin-vault-operator-queue-SC-09` in its MODIFIED blocks. Four cases and six scenarios were added here.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `US1-TC1-1` | Reconciled | `SC-27` and `SC-28`: the row reads the collector's word and carries the reference |
-| `US1-TC2-1` | Reconciled | `SC-02` |
-| `US1-TC3-1` | Reconciled | `SC-03` for the stalled valuation and `SC-29` for the collector badge; the rest of the badge table is the durable requirement's |
-| `US1-TC4-1` | Corrected | the durable rule badges a valuation untouched for *more* than 7 days, which `SC-03` walks at 8; the row expecting the badge at exactly 7 days moved past it |
-| `US1-TC5-1`, `US1-TC6-1`, `US4-TC7-1` | Kept, no scenario | presentation only: a pending or failed read is decided by the panel's colocated test, and the ui-design Loading and Error rows carry that same disposition |
-| `US2-TC1-1`, `US2-TC2-1` | Reconciled | `SC-07` |
-| `US2-TC3-1` | Folded | `SC-47`: the case-id prefix was required and proved by no scenario |
-| `US2-TC4-1` | Folded | `SC-48`: the refusal to match part of a contact column, likewise |
-| `US2-TC5-1` | Reconciled | `SC-26` |
-| `US2-TC6-1` | Reconciled | `SC-08` |
-| `SC-09` | Case added | `US2-TC7-1`: reading the queue writes no audit entry |
-| `US3-TC1-1` | Reconciled | `SC-12` |
-| `US3-TC2-1` | Reconciled | `SC-10` |
-| `US3-TC3-1` | Reconciled | `SC-37` |
-| `US3-TC4-1` | Reconciled | `SC-11` |
-| `US4-TC1-1` | Reconciled | `SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |
-| `US4-TC2-1` | Reconciled | `SC-19` |
-| `US4-TC3-1` | Reconciled | `SC-43`, with the tiles at three and the first broken down per shop — Q54 |
-| `US4-TC4-1` | Reconciled | `SC-44` |
-| `US4-TC5-1` | Reconciled | `SC-46` |
-| `US4-TC6-1` | Folded | `SC-49`, under the new requirement *The custody tab reads back where the item has been*: the movement log is drawn on the design, required by the durable movement rule, and was proved by no scenario |
-| `SC-45` | Case added | `US4-TC8-1`: the held row's nine fields |
-| `US5-TC1-1`, `US5-TC2-1` | Reconciled | `SC-24` |
-| `US5-TC3-1` | Reconciled | `SC-26` |
-| `US5-TC4-1` | Reconciled | `SC-25` |
-| `US6-TC1-1` | Reconciled | `SC-22` |
-| `US6-TC2-1` | Reconciled | `SC-21` |
-| `US6-TC3-1` | Reconciled | `SC-22` for the cut and its order, `SC-27` and `SC-28` for the row's word and reference |
-| `US6-TC4-1` | Reconciled | `SC-23` |
-| `US6-TC5-1` | Reconciled | `SC-21`, and the durable paging requirement's `SC-05` |
-| `US6-TC6-1` | Reconciled | `SC-06` |
-| `SC-01` | Case added | `US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's |
-| `US7-TC1-1` | Reconciled | `SC-30`; the seven steps are the ones board A03 names — Q55 |
-| `US7-TC2-1` | Reconciled | `SC-31` |
-| `US7-TC3-1` | Reconciled | `SC-32`; the storage lane walks six of the seven |
-| `US7-TC4-1` | Reconciled | `SC-33` |
-| `US7-TC5-1` | Folded | `SC-50`: a step ticking on its act and handing the next one on was in the requirement's bullets and proved by no scenario |
-| `US8-TC1-1` | Reconciled | `SC-34` |
-| `US8-TC2-1` | Reconciled | `SC-35` |
-| `US8-TC3-1` | Reconciled | `SC-36` |
-| `US8-TC4-1` | Folded | `SC-51`: forfeiture offered once no reason holds it — the requirement said so and no scenario walked it |
-| `US8-TC5-1` | Reconciled | `SC-38` |
-| `US9-TC1-1` | Reconciled, corrected | `SC-41` and `SC-42`; its Out and Stalled rows both read a submitted check, and now read the identity check's own boundary — Q53 |
-| `US9-TC2-1` | Reconciled | `SC-41` |
-| `US9-TC3-1` | Reconciled | `SC-12`; the photograph's own read is `grade10-site/vault/identity-verification`'s `SC-14` |
-| `US9-TC4-1` | Reconciled | `SC-40` |
-| `US9-TC5-1` | Reconciled | `SC-40`: the recording names the reason and who records over the refusal, so one carrying neither is not that act |
-| `SC-52` | Case added | `US9-TC6-1`: Out until the identity check reads the submitted check as stalled |
-| Raised: the Out → Stalled boundary | Answered | Q53: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `SC-22`; the panel's table, its new bullet and `SC-52` read that state rather than deciding one |
-| Raised: three tiles or four | Answered | Q54: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `SC-43` now agree |
-| The visit checklist's steps | Answered | Q55: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `SC-30` and `SC-32` take them |
+| `grade10-admin-vault-operator-queue-US1-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28`: the row reads the collector's word and carries the reference |
+| `grade10-admin-vault-operator-queue-US1-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-02` |
+| `grade10-admin-vault-operator-queue-US1-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-03` for the stalled valuation and `grade10-admin-vault-operator-queue-SC-29` for the collector badge; the rest of the badge table is the durable requirement's |
+| `grade10-admin-vault-operator-queue-US1-TC4-1` | Corrected | the durable rule badges a valuation untouched for *more* than 7 days, which `grade10-admin-vault-operator-queue-SC-03` walks at 8; the row expecting the badge at exactly 7 days moved past it |
+| `grade10-admin-vault-operator-queue-US1-TC5-1`, `grade10-admin-vault-operator-queue-US1-TC6-1`, `grade10-admin-vault-operator-queue-US4-TC7-1` | Kept, no scenario | presentation only: a pending or failed read is decided by the panel's colocated test, and the ui-design Loading and Error rows carry that same disposition |
+| `grade10-admin-vault-operator-queue-US2-TC1-1`, `grade10-admin-vault-operator-queue-US2-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-07` |
+| `grade10-admin-vault-operator-queue-US2-TC3-1` | Folded | `grade10-admin-vault-operator-queue-SC-47`: the case-id prefix was required and proved by no scenario |
+| `grade10-admin-vault-operator-queue-US2-TC4-1` | Folded | `grade10-admin-vault-operator-queue-SC-48`: the refusal to match part of a contact column, likewise |
+| `grade10-admin-vault-operator-queue-US2-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-26` |
+| `grade10-admin-vault-operator-queue-US2-TC6-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-08` |
+| `grade10-admin-vault-operator-queue-SC-09` | Case added | `grade10-admin-vault-operator-queue-US2-TC7-1`: reading the queue writes no audit entry |
+| `grade10-admin-vault-operator-queue-US3-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-12` |
+| `grade10-admin-vault-operator-queue-US3-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-10` |
+| `grade10-admin-vault-operator-queue-US3-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-37` |
+| `grade10-admin-vault-operator-queue-US3-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-11` |
+| `grade10-admin-vault-operator-queue-US4-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |
+| `grade10-admin-vault-operator-queue-US4-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-19` |
+| `grade10-admin-vault-operator-queue-US4-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-43`, with the tiles at three and the first broken down per shop — Q54 |
+| `grade10-admin-vault-operator-queue-US4-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-44` |
+| `grade10-admin-vault-operator-queue-US4-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-46` |
+| `grade10-admin-vault-operator-queue-US4-TC6-1` | Folded | `grade10-admin-vault-operator-queue-SC-49`, under the new requirement *The custody tab reads back where the item has been*: the movement log is drawn on the design, required by the durable movement rule, and was proved by no scenario |
+| `grade10-admin-vault-operator-queue-SC-45` | Case added | `grade10-admin-vault-operator-queue-US4-TC8-1`: the held row's nine fields |
+| `grade10-admin-vault-operator-queue-SC-39` | Reconciled | `grade10-admin-vault-operator-queue-US9-TC1-1`'s Out row: a check invited and not yet read as stalled reads Out, with the day it went and the two acts beside it |
+| `grade10-admin-vault-operator-queue-US5-TC1-1`, `grade10-admin-vault-operator-queue-US5-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-24` |
+| `grade10-admin-vault-operator-queue-US5-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-26` |
+| `grade10-admin-vault-operator-queue-US5-TC4-1` | Covered | the requirement's own trail sentence names what kind of term it was, and the durable `grade10-admin-vault-operator-queue-SC-08` walks the entry a search writes |
+| `grade10-admin-vault-operator-queue-US6-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-22` |
+| `grade10-admin-vault-operator-queue-US6-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-21` |
+| `grade10-admin-vault-operator-queue-US6-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-22` for the cut and its order, `grade10-admin-vault-operator-queue-SC-27` and `grade10-admin-vault-operator-queue-SC-28` for the row's word and reference |
+| `grade10-admin-vault-operator-queue-US6-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-23` |
+| `grade10-admin-vault-operator-queue-US6-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-21`, and the durable paging requirement's `grade10-admin-vault-operator-queue-SC-05` |
+| `grade10-admin-vault-operator-queue-US6-TC6-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-06` |
+| `grade10-admin-vault-operator-queue-SC-01` | Case added | `grade10-admin-vault-operator-queue-US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's |
+| `grade10-admin-vault-operator-queue-US7-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-30`; the seven steps are the ones board A03 names — Q55 |
+| `grade10-admin-vault-operator-queue-US7-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-31` |
+| `grade10-admin-vault-operator-queue-US7-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-32`; the storage lane walks six of the seven |
+| `grade10-admin-vault-operator-queue-US7-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-33` |
+| `grade10-admin-vault-operator-queue-US7-TC5-1` | Folded | `grade10-admin-vault-operator-queue-SC-50`: a step ticking on its act and handing the next one on was in the requirement's bullets and proved by no scenario |
+| `grade10-admin-vault-operator-queue-US8-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-34` |
+| `grade10-admin-vault-operator-queue-US8-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-35` |
+| `grade10-admin-vault-operator-queue-US8-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-36` |
+| `grade10-admin-vault-operator-queue-US8-TC4-1` | Folded | `grade10-admin-vault-operator-queue-SC-51`: forfeiture offered once no reason holds it — the requirement said so and no scenario walked it |
+| `grade10-admin-vault-operator-queue-US8-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-38` |
+| `grade10-admin-vault-operator-queue-US9-TC1-1` | Reconciled, corrected | `grade10-admin-vault-operator-queue-SC-41` and `grade10-admin-vault-operator-queue-SC-42`; its Out and Stalled rows both read a submitted check, and now read the identity check's own boundary — Q53 |
+| `grade10-admin-vault-operator-queue-US9-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-41` |
+| `grade10-admin-vault-operator-queue-US9-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-12`; the photograph's own read is `grade10-site/vault/identity-verification`'s `grade10-site-vault-identity-verification-SC-14` |
+| `grade10-admin-vault-operator-queue-US9-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-40` |
+| `grade10-admin-vault-operator-queue-US9-TC5-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-40`: the recording names the reason and who records over the refusal, so one carrying neither is not that act |
+| `grade10-admin-vault-operator-queue-SC-52` | Case added | `grade10-admin-vault-operator-queue-US9-TC6-1`: Out until the identity check reads the submitted check as stalled |
+| Raised: the Out → Stalled boundary | Answered | Q53: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `grade10-site-e-kyc-hosted-verification-SC-22`; the panel's table, its new bullet and `grade10-admin-vault-operator-queue-SC-52` read that state rather than deciding one |
+| Raised: three tiles or four | Answered | Q54: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `grade10-admin-vault-operator-queue-SC-43` now agree |
+| The visit checklist's steps | Answered | Q55: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `grade10-admin-vault-operator-queue-SC-30` and `grade10-admin-vault-operator-queue-SC-32` take them |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `US9-TC1-1` | Only the provider puts a check into its own stages, so a person drives a sandbox check to stand a case at each of the six states and reads the panel against them |
-| `US9-TC6-1` | The boundary moves when the identity check reads the submitted check as stalled; a person waits that period out in the sandbox, or moves the clock, and reads the panel on both sides of it |
+| `grade10-admin-vault-operator-queue-US9-TC1-1` | Only the provider puts a check into its own stages, so a person drives a sandbox check to stand a case at each of the six states and reads the panel against them |
+| `grade10-admin-vault-operator-queue-US9-TC6-1` | The boundary moves when the identity check reads the submitted check as stalled; a person waits that period out in the sandbox, or moves the clock, and reads the panel on both sides of it |

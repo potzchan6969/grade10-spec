@@ -504,7 +504,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-03
+* **Trace:** `The arrears`
 
 **Pre-conditions:**
 
@@ -723,7 +723,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-04
+* **Trace:** `The export`
 
 **Pre-conditions:**
 
@@ -1035,40 +1035,12 @@ Runs once per row of **Test data**.
 
 * The reminder ladder reads in words under the list.
 
-### grade10-admin-vault-money-book-US5-TC7-1: More loans in arrears than one page refuses the tiles
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** negative
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation
-* **Trace:** grade10-admin-vault-money-book-US-05
-
-**Pre-conditions:**
-
-* admin(holds vault:read) is on <grade10 admin vault overdue tab url>.
-* More live loans are past their due date than the arrears page in one read.
-
-**Steps:**
-
-1. Read the tiles above the arrears list.
-
-**Expected Results:**
-
-* The three figures are refused by name.
-* No tile reads a figure over part of the loans.
-
 ## Settled
 
 - The arrears sit behind the vault read grant, with the list the figures sum; the money grant guards the register and the position alone.
 - The position is untouched by this change: its journey and its scenarios are the durable ones, and this suite is the first to walk them.
 - What page the register and the arrears list page on is Product's to name; until it is named, no case fixes a number.
+- The arrears fold answers every loan the filter in force holds, as the register's totals answer the range; it is not bounded to a page and refuses nothing.
 
 ## Reconciliation
 
@@ -1107,10 +1079,9 @@ and `tech-design.md`. Nothing verifies that account; it is the run's word.
 | Raised — what page the register and the arrears list page on | Raised, escalated | Neither the console's blocks spec nor this capability states a number. ❓ Product on the [Operator Console](/p/grade10-site/vault/operator-console) page, recommended 50; the landing is in the change's `decisions.md` |
 | `grade10-admin-vault-money-book-SC-08` | Case added | `US3-TC7-1` |
 | `grade10-admin-vault-money-book-SC-12` | Case added | `US3-TC6-1` |
-| `grade10-admin-vault-money-book-SC-19` | Case added | `US5-TC7-1` |
 | `grade10-admin-vault-money-book-SC-24` | Case added | `US4-TC9-1` |
 | The net out over the range as narrowed | Case added | The rule stands and no scenario reads it; `Q37` records the reading and `US4-TC10-1` walks it |
-| Uncovered anchors | None | Every journey carries cases, and the group anchor "The export" is walked by `US4-TC6-1` and "The arrears" by `US3-TC6-1` |
+| Uncovered anchors | None | Every journey carries cases, and every group anchor a scenario serves is traced by a case |
 
 ### Manual
 

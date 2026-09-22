@@ -1022,6 +1022,15 @@ Runs once per row of **Test data**.
 
 ---
 
+## Settled
+
+- Cancel this request names only what stands open — the live offer, the booked visit, or both; a request holding neither names the request alone.
+- Release refused answers Ask for it back, the collector's own release request, and the refusal stays on that confirmation.
+- The guarded-move refusal fires on any status change under the caller, not on custody alone; the durable guarded-move rule already states it.
+- An expired case reads one wording whichever clock ran out, with the clock that ran out named on the case's timeline.
+- An unissued id and another collector's case read the same not-found page, and nothing on it tells the two apart.
+- The book-within-30-days line shows from terms agreed onward, in every state with no live booking, and never before.
+
 ## Reconciliation
 
 **Run** — the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 23 cases over four journeys and six raised questions; the scenario pass issued `grade10-site-vault-case-lifecycle-SC-16` to `grade10-site-vault-case-lifecycle-SC-36`.

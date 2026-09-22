@@ -970,6 +970,11 @@ withdrawn.
   superseded by, and that second offer as closed in turn.
 * Accept and Decline sit on the third offer, the only one that stands.
 
+## Settled
+
+- An offer cannot be made before a valuation is recorded: a case nobody has valued refuses the offer by name, as it refuses custody terms, and the durable capability already states it.
+- An acceptance is final whichever side gave it. An answer sent on a case the counter has accepted is refused, naming that the case moved; what is left before signing is the case's own call-off, which `grade10-site/vault/case-lifecycle` holds.
+
 ## Reconciliation
 
 **Run:** 2026-09-22 · the blind pass read this capability's `## Purpose` and

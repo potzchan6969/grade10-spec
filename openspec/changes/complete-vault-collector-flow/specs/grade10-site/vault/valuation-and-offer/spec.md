@@ -66,7 +66,7 @@ longer live.
 visit.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-21 - The offer reads with its terms and its valuation
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector reads every figure they are being asked to agree to before they answer
 
 - **GIVEN** a case valued at 10,000,000 HKD minor units holding a live offer of 4,000,000 HKD minor units over 60 days, with 160,000 HKD minor units of interest for the term
 - **WHEN** its owner opens the case
@@ -74,7 +74,7 @@ visit.
 - **AND** Accept and Decline sit on the offer, which says that accepting it books no visit
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-22 - Accept is confirmed before it is sent
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector is shown what accepting costs before the answer goes
 
 - **GIVEN** a case holding a live offer
 - **WHEN** its owner presses Accept
@@ -82,7 +82,7 @@ visit.
 - **AND** going back leaves the offer live
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-23 - Decline is confirmed before it is sent
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector who says no is told what they keep — the request and the visit
 
 - **GIVEN** a case holding a live offer and a visit booked on it
 - **WHEN** its owner presses Decline
@@ -90,14 +90,14 @@ visit.
 - **AND** going back leaves the offer live
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-24 - An answer is sent once and the case is read again
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector who presses twice sends one answer and reads where the case stands
 
 - **GIVEN** a collector reading the Accept confirmation on a live offer
 - **WHEN** they confirm and press the confirmation again before the answer lands
 - **THEN** one answer is sent, the confirmation stays until it lands, and the case is read again afterwards
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-25 - The day to answer by leaves with the offer
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector reads the day to answer by while it still means something
 
 - **GIVEN** a collector whose case holds a live offer expiring on a stated day
 - **WHEN** they read their cases before that day and again after the offer has lapsed
@@ -119,7 +119,7 @@ SHALL offer no answer.
 the live offer open and unanswered.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-26 - A replaced offer reads as closed beside the new one
-**Serves:** grade10-site-vault-valuation-and-offer-US-05 - Collector reads and answers an offer that replaced the last
+**Serves:** grade10-site-vault-valuation-and-offer-US-05 - the collector sees which offer is gone and which one is theirs to answer
 
 - **GIVEN** a case whose offer of 3,000,000 HKD minor units was superseded yesterday by a live offer of 4,000,000 HKD minor units
 - **WHEN** its owner opens the case
@@ -127,7 +127,7 @@ the live offer open and unanswered.
 - **AND** Accept and Decline sit on the 4,000,000 HKD minor units offer alone
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-27 - An answer naming the replaced offer is refused
-**Serves:** grade10-site-vault-valuation-and-offer-US-05 - Collector reads and answers an offer that replaced the last
+**Serves:** grade10-site-vault-valuation-and-offer-US-05 - the collector’s answer never lands on the offer that was withdrawn
 
 - **GIVEN** the same case
 - **WHEN** an answer names the superseded offer
@@ -147,7 +147,7 @@ or the case moved under the answer.
 page shows where the case now stands rather than the offer that was answered.
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-28 - An offer that ran out under the reader
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose offer lapsed under them is told where they answered
 
 - **GIVEN** a collector reading a case whose offer expired while the page was open
 - **WHEN** they confirm Accept
@@ -155,7 +155,7 @@ page shows where the case now stands rather than the offer that was answered.
 - **AND** the case is read again and the page shows an offer that ran out
 
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-29 - A case that moved under the answer
-**Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
+**Serves:** grade10-site-vault-valuation-and-offer-US-02 - the collector whose case moved under them reads why the answer did not land
 
 - **GIVEN** a collector reading the Accept confirmation on a live offer that the counter accepted a moment earlier
 - **WHEN** they confirm
