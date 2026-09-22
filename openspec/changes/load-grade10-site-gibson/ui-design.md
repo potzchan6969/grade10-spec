@@ -32,12 +32,12 @@ repository loads the same kit the design system already documents. Flag for
 
 ## States
 
-| State | Spec scenario |
-| --- | --- |
-| Kit in the document head on every surface | `grade10-site-site-typography-SC-01` |
-| Body and headings render as Gibson | `grade10-site-site-typography-SC-02` |
-| No second brand sans | `grade10-site-site-typography-SC-03` |
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Kit in the document head on every surface | The Typekit stylesheet link, on every page | `grade10-site-site-typography-SC-01` |
+| Body and headings render as Gibson | Body and heading text in the theme sans stack | `grade10-site-site-typography-SC-02` |
+| No second brand sans | No other brand-sans stylesheet or family declared | `grade10-site-site-typography-SC-03` |
+| Blocked or delayed kit | Full content and layout, immediately, in the browser's fallback sans — no loading, empty, or error surface | `grade10-site-site-typography-SC-04` |
 
-No loading, empty, or error UI is introduced — a blocked or delayed kit falls
-back to the browser's sans stack without a product-owned empty or error
-surface. That fallback is not a designed state in this change.
+No loading, empty, or error UI is introduced for the blocked-kit state — it
+is a passive fallback, not a screen this change draws.

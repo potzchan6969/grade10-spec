@@ -25,19 +25,7 @@ zero on staging today, every surface once this lands.
 
 ## Non-Goals
 
-- **A new type scale, weight set, or type role in Figma.** The Typography
-  tokens already carry the sizes and leadings; this change does not reopen
-  them.
-- **Changing the design-system token or preamble.** `family-sans` is already
-  `Gibson`; `--font-sans` / `--font-heading` already map to
-  `canada-type-gibson`. No further work in grade10-spec packages.
-- **Mono.** JetBrains Mono stays the mono stack; this change does not touch
-  it.
-- **ZZZ.** `zzz-site` is out of scope; it is not held to Gibson.
-- **Admin surfaces.** Operator consoles follow `shared/console/visual-standard`,
-  not this capability.
-- **A PRD.** Brand sans is already a product commitment in `PRODUCT.md`; this
-  change only binds the application that was missing the load.
+See `decisions.md`.
 
 ## Capabilities
 
