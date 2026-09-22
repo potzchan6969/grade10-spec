@@ -1,16 +1,17 @@
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
+import {
+  Autocomplete,
+  AutocompleteContent,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+} from "@grade10/design-system/components/forms/autocomplete";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@grade10/design-system/components/forms/select";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -30,13 +31,10 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
-import {
-  AuctionAddressForm,
-  type AuctionAddressFormValues,
-} from "@grade10/ui";
+import { AuctionAddressForm, type AuctionAddressFormValues } from "@grade10/ui";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
-import { useEffect, useId, useRef, useState } from "react";
-import { COUNTRY_OPTIONS, COUNTRY_SELECT_ITEMS } from "./country-regions";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { COUNTRY_OPTIONS } from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
@@ -45,7 +43,7 @@ export type WinnerOrderSavedAddress = {
    * addresses use the company name.
    */
   label: string;
-  /** Street + locality + country — no name; one street line. */
+  /** Street + locality + country — no name, postal code, or phone. */
   lines: string;
   addressKind?: "personal" | "company";
 };
@@ -128,7 +126,7 @@ const ADD_ADDRESS_COPY = {
   optional: "Optional",
   confirm: "Use This Address",
   cancel: "Cancel",
-  phonePlaceholder: "Enter phone number",
+  phonePlaceholder: "+852 12345678",
   countrySearchPlaceholder: "e.g. United States",
 } as const;
 
@@ -166,6 +164,73 @@ type AddressSnapshot = {
   lines: string;
 };
 
+const COUNTRY_ITEMS = [...COUNTRY_OPTIONS];
+const COUNTRY_NAMES = new Set<string>(COUNTRY_OPTIONS);
+
+/**
+ * Searchable country/region field. A full catalogue is too long to scroll on
+ * a phone; typing filters the list. Only a catalogue name is committed.
+ */
+function CountryRegionField({
+  value,
+  onChange,
+  error,
+  label,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  error?: ReactNode;
+  label: ReactNode;
+}) {
+  const errorId = useId();
+  const [query, setQuery] = useState(value);
+
+  function commit(next: string) {
+    setQuery(next);
+    onChange(COUNTRY_NAMES.has(next) ? next : "");
+  }
+
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Autocomplete
+        items={COUNTRY_ITEMS}
+        onValueChange={(next) => commit(next ?? "")}
+        openOnInputClick
+        value={query}
+      >
+        <AutocompleteInput
+          aria-describedby={error ? errorId : undefined}
+          aria-invalid={error ? true : undefined}
+          autoComplete="country-name"
+          label={label}
+          onClear={() => commit("")}
+          placeholder="Search country or region"
+          status={error ? "error" : "default"}
+        />
+        <AutocompleteContent>
+          <AutocompleteEmpty>No countries or regions found.</AutocompleteEmpty>
+          <AutocompleteList>
+            {(country: string) => (
+              <AutocompleteItem
+                className="min-h-11"
+                key={country}
+                value={country}
+              >
+                {country}
+              </AutocompleteItem>
+            )}
+          </AutocompleteList>
+        </AutocompleteContent>
+      </Autocomplete>
+      {error ? (
+        <span className="text-xs text-secondary-foreground" id={errorId}>
+          {error}
+        </span>
+      ) : null}
+    </div>
+  );
+}
+
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 const FEE_RANGE_BANK =
   "The transfer fee is on your invoice. Zero shows as Free.";
@@ -197,7 +262,7 @@ function prefersReducedMotion() {
   );
 }
 
-/** Street + locality + country — no recipient name. */
+/** Street + locality + country — no name, postal code, or phone. */
 function formatAddressLines(values: AuctionAddressFormValues): string {
   const street = [
     values.addressLine1.trim(),
@@ -206,17 +271,10 @@ function formatAddressLines(values: AuctionAddressFormValues): string {
   ]
     .filter(Boolean)
     .join(", ");
-  const locality = [
-    values.city.trim(),
-    values.state.trim(),
-    values.postalCode.trim(),
-  ]
+  const locality = [values.city.trim(), values.state.trim()]
     .filter(Boolean)
     .join(", ");
-  const phone = values.phone.trim();
-  return [street, locality, values.country.trim(), phone]
-    .filter(Boolean)
-    .join("\n");
+  return [street, locality, values.country.trim()].filter(Boolean).join("\n");
 }
 
 function addressLabelFromValues(values: AuctionAddressFormValues): string {
@@ -247,7 +305,6 @@ function WinnerOrderSetupDialog({
   initialNewAddressOpen = false,
   initialStep = 1,
 }: WinnerOrderSetupDialogProps) {
-  const countryId = useId();
   const [step, setStep] = useState<SetupStep>(initialStep);
   const [addresses, setAddresses] = useState<WinnerOrderSavedAddress[]>(() => [
     ...savedAddressesProp,
@@ -877,45 +934,12 @@ function WinnerOrderSetupDialog({
                 onCancel={() => setNewAddressOpen(false)}
                 onConfirm={saveNewAddress}
                 renderCountry={({ value, onChange, error, label }) => (
-                  <div className="flex w-full flex-col gap-2">
-                    <label
-                      className="text-sm font-medium text-secondary-foreground"
-                      htmlFor={countryId}
-                    >
-                      {label}
-                    </label>
-                    <Select
-                      items={COUNTRY_SELECT_ITEMS}
-                      onValueChange={(next) => {
-                        if (typeof next === "string") onChange(next);
-                      }}
-                      value={value}
-                    >
-                      <SelectTrigger
-                        aria-invalid={error ? true : undefined}
-                        className="w-full"
-                        id={countryId}
-                      >
-                        <SelectValue placeholder="Select a country or region" />
-                      </SelectTrigger>
-                      <SelectContent alignItemWithTrigger={false}>
-                        {COUNTRY_OPTIONS.map((country) => (
-                          <SelectItem
-                            key={country}
-                            label={country}
-                            value={country}
-                          >
-                            {country}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-                    {error ? (
-                      <span className="text-xs text-secondary-foreground">
-                        {error}
-                      </span>
-                    ) : null}
-                  </div>
+                  <CountryRegionField
+                    error={error}
+                    label={label}
+                    onChange={onChange}
+                    value={value}
+                  />
                 )}
                 showActions={false}
               />
