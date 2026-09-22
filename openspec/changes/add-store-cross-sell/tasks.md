@@ -65,7 +65,7 @@ skip per case, walked by hand on the dev shop with the page read after them
 within its minute. The walk waits on the card's own read, past the card's
 minute, never on a sleep.
 
-- [ ] 6.1 One walk per journey, end to end through the collector's browser on the dev shop, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
+- [ ] 6.1 One walk per journey, end to end through the collector's browser on the isolated stack, whose fixture seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
 - [ ] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
 
 ## 7. The frame's follow-up (grade10-spec)
