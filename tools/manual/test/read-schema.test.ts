@@ -120,10 +120,26 @@ describe("the readers each artifact may summon", () => {
       "simplicity",
       "code-smell",
       "conventions",
+      "reader",
       "qa",
       "operations",
       "simpler",
     ]);
+  });
+
+  it("shared-planning-agent-rounds-SC-92 - sizes a task group by what it lands: the build's four on `code`, the reader of words on `copy`, QA and the simpler thing always", () => {
+    expect(TRIGGERS).toContain("code");
+    const when = new Map(
+      applyPerspectives(storeRoot, "grade10-planning").map((one) => [
+        one.name,
+        one.when,
+      ]),
+    );
+    for (const name of ["missing-pieces", "simplicity", "code-smell", "conventions"])
+      expect(when.get(name), `${name} reads code`).toEqual(["code"]);
+    expect(when.get("reader")).toEqual(["copy"]);
+    expect(when.get("qa")).toEqual(["always"]);
+    expect(when.get("simpler")).toEqual(["always"]);
   });
 
   it("gives every artifact but those two the reader of the simpler thing", () => {

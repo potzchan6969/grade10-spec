@@ -1,6 +1,6 @@
 /*
  * A round's size is read from the draft. These tests hold
- * `lib/perspectives.mjs` and its CLI to that: the ten triggers classified off
+ * `lib/perspectives.mjs` and its CLI to that: the eleven triggers classified off
  * a diff, the readers whose `when` the diff summons plus every `always`, a
  * bundle that is the draft and what is before it and nothing else, and a
  * record key that changes none of it.
@@ -132,6 +132,37 @@ const WORDS = [
 
 // A public export and a migration group: two triggers, two readers, and a
 // diff with no prose line in it, so nothing else is summoned.
+/** A task group's diff that lands code beside a migration group: what
+ * summons the build's four readings and operations. */
+const CODE_AND_MIGRATION = [
+  "diff --git a/packages/ui/src/blocks/points/points.tsx b/packages/ui/src/blocks/points/points.tsx",
+  "--- a/packages/ui/src/blocks/points/points.tsx",
+  "+++ b/packages/ui/src/blocks/points/points.tsx",
+  "@@ -1,2 +1,3 @@",
+  "+export const points = 1;",
+  "diff --git a/openspec/changes/demo/tasks.md b/openspec/changes/demo/tasks.md",
+  "--- a/openspec/changes/demo/tasks.md",
+  "+++ b/openspec/changes/demo/tasks.md",
+  "@@ -20,0 +21,3 @@",
+  "+## 4. The migration (grade10)",
+  "+",
+  "+- [ ] 4.1 Backfill the rows",
+].join("\n");
+
+/** A task group's diff that lands prose alone: a manual page and a suite. */
+const PROSE_GROUP = [
+  `diff --git a/${PAGE} b/${PAGE}`,
+  `--- a/${PAGE}`,
+  `+++ b/${PAGE}`,
+  "@@ -8,3 +8,4 @@",
+  "+The hand reads one message that is theirs and answers it in a sentence.",
+  "diff --git a/openspec/specs/shared/planning/agent-rounds/feature-tcs.md b/openspec/specs/shared/planning/agent-rounds/feature-tcs.md",
+  "--- a/openspec/specs/shared/planning/agent-rounds/feature-tcs.md",
+  "+++ b/openspec/specs/shared/planning/agent-rounds/feature-tcs.md",
+  "@@ -8,3 +8,4 @@",
+  "+* The reply quotes the row and the sentence it would put on the page.",
+].join("\n");
+
 const EXPORT_AND_MIGRATION = [
   "diff --git a/openspec/changes/demo/tech-design.md b/openspec/changes/demo/tech-design.md",
   "--- a/openspec/changes/demo/tech-design.md",
@@ -392,11 +423,11 @@ test("a task group is read against the schema's apply block", () => {
     "demo",
     "3",
     "--diff",
-    diffOf(root, EXPORT_AND_MIGRATION),
+    diffOf(root, CODE_AND_MIGRATION),
   ]);
 
-  // build's four readings and qa and simpler always run; operations joins
-  // because the diff names a migration group.
+  // build's four readings join because the group lands code; qa and simpler
+  // always run; operations joins because the diff names a migration group.
   assert.deepEqual(names(printed.readers), [
     "code-smell",
     "conventions",
@@ -407,6 +438,42 @@ test("a task group is read against the schema's apply block", () => {
     "simplicity",
   ]);
   assert.equal(printed.bundle.draft, "openspec/changes/demo/tasks.md");
+});
+
+test("shared-planning-agent-rounds-SC-92 - a prose group summons the page's readers, not the build's", () => {
+  const root = fixture();
+  const printed = cli(root, ["demo", "3", "--diff", diffOf(root, PROSE_GROUP)]);
+  assert.deepEqual(names(printed.readers), ["qa", "reader", "simpler"]);
+  assert.equal(printed.verifier, true);
+});
+
+test("shared-planning-agent-rounds-SC-93 - a code group summons the build, QA and the simpler thing, not the reader of words", () => {
+  const root = fixture();
+  const code = CODE_AND_MIGRATION.split("\n").slice(0, 5).join("\n");
+  const printed = cli(root, ["demo", "3", "--diff", diffOf(root, code)]);
+  assert.deepEqual(names(printed.readers), [
+    "code-smell",
+    "conventions",
+    "missing-pieces",
+    "qa",
+    "simpler",
+    "simplicity",
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file that is not markdown, and no markdown line", () => {
+  const code = classifyDiff(CODE_AND_MIGRATION, REAL_SCHEMA, "tasks");
+  assert.ok(code.has("code"));
+  const prose = classifyDiff(PROSE_GROUP, REAL_SCHEMA, "tasks");
+  assert.ok(!prose.has("code"));
+  assert.ok(prose.has("copy"));
+  const yaml = classifyDiff(
+    "diff --git a/openspec/schemas/grade10-planning/schema.yaml b/openspec/schemas/grade10-planning/schema.yaml\n@@ -1,2 +1,3 @@\n+    - name: reader",
+    REAL_SCHEMA,
+    "tasks",
+  );
+  assert.ok(yaml.has("code"));
+  assert.ok(!yaml.has("copy"));
 });
 
 test("the change may be named by the flag rather than the first argument", () => {
@@ -555,9 +622,10 @@ test("a trigger is keyed on structure, never on a bare word in prose", () => {
   }
 });
 
-test("a trigger is one of the ten the requirement tables", () => {
+test("a trigger is one of the eleven the requirement tables", () => {
   assert.deepEqual([...TRIGGERS].sort(), [
     "always",
+    "code",
     "copy",
     "deploy",
     "export",
@@ -568,7 +636,7 @@ test("a trigger is one of the ten the requirement tables", () => {
     "surface",
     "system",
   ]);
-  const diff = [WORDS, EXPORT_AND_MIGRATION].join("\n");
+  const diff = [WORDS, EXPORT_AND_MIGRATION, CODE_AND_MIGRATION].join("\n");
   for (const trigger of triggersOf(diff, "tasks"))
     assert.ok(
       TRIGGERS.includes(trigger),

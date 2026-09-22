@@ -289,6 +289,41 @@ test("shared-planning-agent-rounds-SC-51 - plan:land takes the readers the schem
   assert.match(roundsOf(root), /\| design, simpler, verifier \|/);
 });
 
+test("shared-planning-agent-rounds-SC-95 - plan:land accepts ` (fallback)` after a reader's name and nothing else in parentheses", () => {
+  const fell = sandbox();
+  const accepted = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    fell.root,
+    "--perspectives",
+    "design (fallback),simpler,verifier (fallback)",
+    "--stood",
+    "nothing stood",
+  ]);
+  assert.equal(accepted.status, 0, accepted.stderr);
+  assert.match(
+    roundsOf(fell.root),
+    /\| design \(fallback\), simpler, verifier \(fallback\) \|/,
+  );
+
+  const banana = sandbox();
+  const refused = run("plan-land.mjs", [
+    CHANGE,
+    "ui-design",
+    "--root",
+    banana.root,
+    "--dry-run",
+    "--perspectives",
+    "design (banana),simpler,verifier",
+    "--stood",
+    "nothing stood",
+  ]);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /`design \(banana\)` is no perspective of ui-design/);
+  assert.match(refused.stderr, /\(fallback\)/);
+});
+
 test("shared-planning-agent-rounds-SC-79 - plan:land refuses a row naming two readers and no verifier", () => {
   const { root } = sandbox();
   const result = run("plan-land.mjs", [

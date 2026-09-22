@@ -241,6 +241,25 @@ test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settl
   );
 });
 
+test("shared-planning-agent-rounds-SC-95 - one verifier reads every reader's findings, and a fallback or a killed dispatch is said", () => {
+  const skill = claims(ROUND);
+  // One verifier over the round, one row per kind of finding naming each
+  // reader that filed it; never one verifier per group of findings.
+  assert.match(skill, /every reader's findings/i);
+  assert.match(skill, /one row per kind of finding naming each reader/i);
+  assert.doesNotMatch(skill, /per group of findings/i);
+  // The fallback is named in the summary and the row, and a reader the
+  // fallback could not run stops the round.
+  assert.match(skill, /\(fallback\)/);
+  assert.match(skill, /retried once on the fallback/i);
+  assert.match(skill, /stops the round/i);
+  const verifier = claims(".claude/agents/verifier.md");
+  assert.match(verifier, /every reader's findings/i);
+  assert.doesNotMatch(verifier, /per group of findings/i);
+  const readme = claims(".claude/agents/README.md");
+  assert.doesNotMatch(readme, /per group of findings/i);
+});
+
 test("the round skill reads its perspectives through the CLI", () => {
   const skill = claims(ROUND);
   assert.match(
