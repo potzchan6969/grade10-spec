@@ -84,9 +84,7 @@ export const Notice: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("Notice posted 20 Sep 2026"),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Notice posted 20 Sep 2026")).toBeInTheDocument();
     expect(
       canvas.getByText("30 days from the posting day."),
     ).toBeInTheDocument();

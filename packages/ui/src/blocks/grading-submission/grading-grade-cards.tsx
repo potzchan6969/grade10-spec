@@ -49,11 +49,7 @@ type GradingGradeCardsProps = GradingLocaleProps & {
  * the grader and the certificate. A card returned ungraded shows no grade and
  * is drawn apart, with the grader's code and note.
  */
-function GradingGradeCards({
-  copy,
-  cards,
-  className,
-}: GradingGradeCardsProps) {
+function GradingGradeCards({ copy, cards, className }: GradingGradeCardsProps) {
   const graded = cards.filter((card) => card.ungraded == null);
   const ungraded = cards.filter((card) => card.ungraded != null);
 
@@ -111,7 +107,11 @@ function GradingGradeCards({
         </Card>
       ))}
       {ungraded.length > 0 ? (
-        <VStack data-slot="grading-grade-cards-ungraded" gap="sm" hAlign="stretch">
+        <VStack
+          data-slot="grading-grade-cards-ungraded"
+          gap="sm"
+          hAlign="stretch"
+        >
           <Text as="h3" tone="error" weight="medium">
             {copy.ungradedTitle}
           </Text>
@@ -146,9 +146,5 @@ function GradingGradeCards({
   );
 }
 
-export type {
-  GradingGradeCard,
-  GradingGradeCardsCopy,
-  GradingGradeCardsProps,
-};
+export type { GradingGradeCard, GradingGradeCardsCopy, GradingGradeCardsProps };
 export { GradingGradeCards };

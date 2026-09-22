@@ -13,7 +13,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import { type GradingLocaleProps, formatGradingMoney } from "./grading-copy";
+import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type { GradingCardMatch, GradingListedCard } from "./types";
 
 /** What the collector added: the reference's card, or the name as typed. */

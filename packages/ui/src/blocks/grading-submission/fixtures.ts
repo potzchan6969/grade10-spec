@@ -1,16 +1,25 @@
 /* Story data for the grading blocks. Every figure is HKD minor units and
  * every day an instant, because that is what a consumer passes. */
 import type { GradingCardListCopy } from "./grading-card-list";
-import type { GradingCardRecordCopy, GradingRecordCard } from "./grading-card-record";
+import type {
+  GradingCardRecordCopy,
+  GradingRecordCard,
+} from "./grading-card-record";
 import type { GradingFeeSheetCopy } from "./grading-fee-sheet";
-import type { GradingGradeCard, GradingGradeCardsCopy } from "./grading-grade-cards";
+import type {
+  GradingGradeCard,
+  GradingGradeCardsCopy,
+} from "./grading-grade-cards";
 import type {
   GradingLevelPickerCopy,
   GradingPickerLevel,
 } from "./grading-level-picker";
 import type { GradingMoneyBlockCopy } from "./grading-money-block";
 import type { GradingNamedCollectorCopy } from "./grading-named-collector";
-import type { GradingPasteResult, GradingPasteSheetCopy } from "./grading-paste-sheet";
+import type {
+  GradingPasteResult,
+  GradingPasteSheetCopy,
+} from "./grading-paste-sheet";
 import type { GradingPickupCardCopy } from "./grading-pickup-card";
 import type { GradingReviewCard, GradingReviewCopy } from "./grading-review";
 import type { GradingStatusRailCopy } from "./grading-status-rail";

@@ -136,7 +136,9 @@ export const EveryLevelClosed: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText(COUNTER_LINE)).toBeInTheDocument();
     expect(
-      canvasElement.querySelector('[data-slot="grading-level-picker-estimate"]'),
+      canvasElement.querySelector(
+        '[data-slot="grading-level-picker-estimate"]',
+      ),
     ).toBeNull();
   },
 };
@@ -145,7 +147,9 @@ export const EveryLevelClosed: Story = {
 export const NoLevelPicked: Story = {
   play: async ({ canvasElement }) => {
     expect(
-      canvasElement.querySelector('[data-slot="grading-level-picker-estimate"]'),
+      canvasElement.querySelector(
+        '[data-slot="grading-level-picker-estimate"]',
+      ),
     ).toBeNull();
   },
 };

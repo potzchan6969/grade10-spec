@@ -83,7 +83,9 @@ export const StorageDue: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("HK$630")).toBeInTheDocument();
     expect(
-      canvas.getByText("The upcharge and storage to today, paid at the counter."),
+      canvas.getByText(
+        "The upcharge and storage to today, paid at the counter.",
+      ),
     ).toBeInTheDocument();
   },
 };

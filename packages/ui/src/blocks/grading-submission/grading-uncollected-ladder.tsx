@@ -10,9 +10,9 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
-  type GradingLocaleProps,
   formatGradingDay,
   formatGradingMoney,
+  type GradingLocaleProps,
 } from "./grading-copy";
 import type { GradingMoney } from "./types";
 
@@ -77,10 +77,18 @@ function GradingUncollectedLadder({
       </CardHeader>
       <CardContent>
         <VStack gap="sm" hAlign="stretch">
-          <Text data-slot="grading-uncollected-ladder-ready" size="sm" tone="secondary">
+          <Text
+            data-slot="grading-uncollected-ladder-ready"
+            size="sm"
+            tone="secondary"
+          >
             {`${copy.readyLabel} ${formatGradingDay(readyOn, when)}`}
           </Text>
-          <Text data-slot="grading-uncollected-ladder-held" size="sm" tone="secondary">
+          <Text
+            data-slot="grading-uncollected-ladder-held"
+            size="sm"
+            tone="secondary"
+          >
             {`${copy.cardsHeldLabel} ${cardsHeld}`}
           </Text>
           <List>
@@ -139,7 +147,11 @@ function GradingUncollectedLadder({
             ))}
           </List>
           {vaultLine ? (
-            <Text data-slot="grading-uncollected-ladder-vault" size="sm" tone="secondary">
+            <Text
+              data-slot="grading-uncollected-ladder-vault"
+              size="sm"
+              tone="secondary"
+            >
               {vaultLine}
             </Text>
           ) : null}

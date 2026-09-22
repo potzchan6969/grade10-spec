@@ -131,14 +131,22 @@ function GradingPasteSheet({
             rows={6}
             value={text}
           />
-          <Text data-slot="grading-paste-sheet-lines" size="sm" tone="secondary">
+          <Text
+            data-slot="grading-paste-sheet-lines"
+            size="sm"
+            tone="secondary"
+          >
             {`${copy.linesReadLabel} ${linesRead}`}
           </Text>
           {result?.status === "loading" ? (
             <Skeleton className="h-24 w-full" />
           ) : null}
           {result?.status === "empty" ? (
-            <Text data-slot="grading-paste-sheet-empty" size="sm" tone="secondary">
+            <Text
+              data-slot="grading-paste-sheet-empty"
+              size="sm"
+              tone="secondary"
+            >
               {result.message}
             </Text>
           ) : null}

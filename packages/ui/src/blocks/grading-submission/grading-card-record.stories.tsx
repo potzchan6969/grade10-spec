@@ -50,9 +50,7 @@ export const HandedIn: Story = {
   args: { cards: [HANDED_IN] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("Intake id: GR-2026-0619-004"),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Intake id: GR-2026-0619-004")).toBeInTheDocument();
     expect(canvas.getByAltText("Charizard, front")).toBeInTheDocument();
     expect(canvas.getByAltText("Charizard, back")).toBeInTheDocument();
     expect(canvas.queryByRole("button")).toBeNull();

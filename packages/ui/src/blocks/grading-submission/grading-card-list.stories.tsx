@@ -111,9 +111,7 @@ export const NoValue: Story = {
 export const MinimumGrade: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("The fee applies either way."),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("The fee applies either way.")).toBeInTheDocument();
     expect(
       canvas.getByText("Only encapsulate at PSA 9 or above: PSA 9"),
     ).toBeInTheDocument();
@@ -142,9 +140,9 @@ export const ReferenceUnavailable: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getAllByText(CARD_LIST_COPY.catalogueUnavailable)).toHaveLength(
-      2,
-    );
+    expect(
+      canvas.getAllByText(CARD_LIST_COPY.catalogueUnavailable),
+    ).toHaveLength(2);
     expect(canvas.queryByText("Kept as you typed it")).toBeNull();
     expect(canvas.getAllByLabelText("Declared value")).toHaveLength(2);
   },

@@ -6,7 +6,7 @@ import {
 } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { type GradingLocaleProps, formatGradingMoney } from "./grading-copy";
+import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type { GradingMoney } from "./types";
 
 type GradingPickupCardCopy = {
@@ -83,7 +83,11 @@ function GradingPickupCard({
             value={`${where.shop}, ${where.address}`}
           />
           <Fact label={copy.openLabel} slot="open" value={open} />
-          <VStack data-slot="grading-pickup-card-due" gap="none" hAlign="stretch">
+          <VStack
+            data-slot="grading-pickup-card-due"
+            gap="none"
+            hAlign="stretch"
+          >
             <Text size="xs" tone="secondary">
               {copy.dueLabel}
             </Text>
@@ -121,7 +125,11 @@ function Fact({
   value: string;
 }) {
   return (
-    <VStack data-slot={`grading-pickup-card-${slot}`} gap="none" hAlign="stretch">
+    <VStack
+      data-slot={`grading-pickup-card-${slot}`}
+      gap="none"
+      hAlign="stretch"
+    >
       <Text size="xs" tone="secondary">
         {label}
       </Text>

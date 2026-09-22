@@ -21,9 +21,7 @@ export const Graded: Story = {
     expect(canvas.getByText("9")).toBeInTheDocument();
     expect(canvas.getByText("Mint")).toBeInTheDocument();
     expect(canvas.getByText("Graded by: PSA")).toBeInTheDocument();
-    expect(
-      canvas.getByText("Certificate: PSA 84213377"),
-    ).toBeInTheDocument();
+    expect(canvas.getByText("Certificate: PSA 84213377")).toBeInTheDocument();
   },
 };
 

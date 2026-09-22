@@ -1,11 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, fn, userEvent, within } from "storybook/test";
-import {
-  GOOD_TO_KNOW,
-  hkd,
-  REVIEW_COPY,
-  REVIEW_SCHEDULE,
-} from "./fixtures";
+import { GOOD_TO_KNOW, hkd, REVIEW_COPY, REVIEW_SCHEDULE } from "./fixtures";
 import { GradingReview, type GradingUpchargeWarning } from "./grading-review";
 
 const WARNING: GradingUpchargeWarning = {
@@ -147,7 +142,9 @@ export const PlanExpiredMeanwhile: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByText("This plan expired on 1 June. Start a submission again."),
+      canvas.getByText(
+        "This plan expired on 1 June. Start a submission again.",
+      ),
     ).toBeInTheDocument();
     expect(args.onBook).not.toHaveBeenCalled();
   },

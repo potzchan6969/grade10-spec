@@ -9,7 +9,7 @@ import { SegmentedControlItem } from "@grade10/design-system/components/forms/se
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import { type GradingLocaleProps, formatGradingMoney } from "./grading-copy";
+import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type { GradingGrader, GradingMoney } from "./types";
 
 /** One level the collector can leave the list on, or cannot. A closed level
@@ -125,7 +125,11 @@ function GradingLevelPicker({
         {`${copy.highestDeclaredLabel} ${formatGradingMoney(highestDeclared, locale)}`}
       </Text>
       {figuresLine ? (
-        <Text data-slot="grading-level-picker-figures" size="sm" tone="secondary">
+        <Text
+          data-slot="grading-level-picker-figures"
+          size="sm"
+          tone="secondary"
+        >
           {figuresLine}
         </Text>
       ) : null}

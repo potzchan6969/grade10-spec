@@ -7,7 +7,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { type GradingLocaleProps, formatGradingMoney } from "./grading-copy";
+import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type {
   GradingCardOutcome,
   GradingMoney,

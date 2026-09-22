@@ -10,7 +10,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { type GradingLocaleProps, formatGradingMoney } from "./grading-copy";
+import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type { GradingMoney } from "./types";
 
 /** One card as it will be handed in. */

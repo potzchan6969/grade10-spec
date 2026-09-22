@@ -65,7 +65,8 @@ export const Named: Story = {
 /** A refused naming reads the refusal under the field. */
 export const Refused: Story = {
   args: {
-    error: "These cards were collected on 20 September, so nobody can be named.",
+    error:
+      "These cards were collected on 20 September, so nobody can be named.",
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);

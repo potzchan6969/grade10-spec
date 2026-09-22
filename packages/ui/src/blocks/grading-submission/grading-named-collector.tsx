@@ -15,7 +15,7 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { useState } from "react";
-import { type GradingLocaleProps, formatGradingDay } from "./grading-copy";
+import { formatGradingDay, type GradingLocaleProps } from "./grading-copy";
 
 type GradingNamedCollectorCopy = {
   title: string;
@@ -72,7 +72,11 @@ function GradingNamedCollector({
       </CardHeader>
       <CardContent>
         {named ? (
-          <VStack data-slot="grading-named-collector-named" gap="sm" hAlign="stretch">
+          <VStack
+            data-slot="grading-named-collector-named"
+            gap="sm"
+            hAlign="stretch"
+          >
             <HStack gap="sm" vAlign="center">
               <Avatar aria-hidden size="sm">
                 <AvatarFallback>{named.name.slice(0, 1)}</AvatarFallback>
