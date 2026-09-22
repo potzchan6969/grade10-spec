@@ -35,3 +35,10 @@ change moves through, the round on every artifact, the screens, the messages
 and the rails — and the shape the `stage-changes-and-notify-hands` and
 `run-a-round-on-every-artifact` changes and their follow-on changes build
 from.
+
+[`auction-invoice-and-receipt-contents.md`](auction-invoice-and-receipt-contents.md)
+is what a winner reads on the invoice and receipt PDFs, grouped into the lines
+that make up the order value and the information around them — a shareable
+summary of `grade10-site/auction/winner-order` and
+[Post-Bidding](../prds/products/grade10-site/auction/post-bidding.md), carrying
+the receipt breakdown as `carry-receipt-payment-breakdown` writes it.
