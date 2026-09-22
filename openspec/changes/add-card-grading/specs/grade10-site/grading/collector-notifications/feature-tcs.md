@@ -3,6 +3,16 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
+**Out of suite:**
+
+- `grade10-site-grading-collector-notifications-SC-08` — the booked message's anchor is `grade10-site/grading/dropoff-booking`'s journey; that suite walks it, and `grade10-site-grading-collector-notifications-US1-TC1-1` reaches the same send here
+- `grade10-site-grading-collector-notifications-SC-10` — `grade10-site/grading/dropoff-booking`'s suite: the collector who missed the visit walks it there
+- `grade10-site-grading-collector-notifications-SC-11` — `grade10-site/grading/submission-lifecycle`'s suite: the uncollected ladder is walked there
+- `grade10-site-grading-collector-notifications-SC-12` — `grade10-site/grading/submission-lifecycle`'s suite
+- `grade10-site-grading-collector-notifications-SC-13` — `grade10-site/grading/submission-lifecycle`'s suite
+- `grade10-site-grading-collector-notifications-SC-15` — `grade10-site/grading/submission-lifecycle`'s suite
+- `grade10-site-grading-collector-notifications-SC-22` — `grade10-admin/grading/counter`'s suite: the operator handing a list in meets the refusal there
+
 ## grade10-site-grading-collector-notifications-US1: Collector hears about everything that happens to the submission
 
 **As a** collector,
@@ -195,7 +205,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01
+* **Trace:** grade10-site-grading-collector-notifications-US-01, `The footer`
 
 **Pre-conditions:**
 
@@ -210,6 +220,126 @@
 
 * The unset fact prints inside brackets, marked.
 * Every other footer fact prints unmarked.
+
+### grade10-site-grading-collector-notifications-US1-TC8-1: A cancelled visit reads the same whoever cancelled it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01, `What is sent`
+
+**Pre-conditions:**
+
+* Two collectors each hold a submission with a drop-off booked, on <grade10 grading submission url>.
+* admin(shop staff) is on <grade10 admin grading submission url> for the second submission.
+
+**Steps:**
+
+1. Cancel the first visit from the collector's submission page.
+2. Cancel the second visit from the console.
+3. Open both collectors' inboxes.
+
+**Expected Results:**
+
+* Both collectors receive the drop-off cancelled email.
+* The two emails carry the same wording.
+* Neither names who cancelled the visit.
+
+### grade10-site-grading-collector-notifications-US1-TC9-1: The grades email leaves out what this submission does not owe
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A collector's submission has its grades posted, nothing to settle and no ungraded card.
+
+**Steps:**
+
+1. Open the collector's inbox.
+2. Open the grades email.
+
+**Expected Results:**
+
+* Each card's grade is named.
+* No paragraph about settling appears.
+* No paragraph about an ungraded card appears.
+
+### grade10-site-grading-collector-notifications-US1-TC10-1: The reminder arrives the day before the visit
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01
+
+**Pre-conditions:**
+
+* A collector's submission has a drop-off booked for tomorrow.
+
+**Steps:**
+
+1. Let the shop's clock reach the day before the visit.
+2. Open the collector's inbox.
+
+**Expected Results:**
+
+* One reminder email arrives.
+* It names the visit's day, time and shop, and what to bring.
+
+### grade10-site-grading-collector-notifications-US1-TC11-1: A rung already told is not told again
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-01, `Reminders and the notice`
+
+**Pre-conditions:**
+
+* A submission ready and uncollected for 30 days has had its reminder sent.
+
+**Steps:**
+
+1. Run the uncollected sweep again the same day.
+2. Open the collector's inbox.
+
+**Expected Results:**
+
+* No second reminder arrives.
+* The inbox holds the one reminder sent earlier.
 
 ---
 
@@ -437,3 +567,34 @@ Runs once per row of **Test data**.
 
 * The failed letter and its reason still show.
 * No Send again action is offered.
+
+### grade10-site-grading-collector-notifications-US3-TC6-1: The flag clears when the channel accepts the resend
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-collector-notifications-US-03
+
+**Pre-conditions:**
+
+* admin(shop staff) is on <grade10 admin grading submission url>, on a submission flagged with a message not sent.
+* The mail provider accepts sends again.
+
+**Steps:**
+
+1. Click Send again on the flagged message.
+2. Open the queue at <grade10 admin grading queue url>.
+
+**Expected Results:**
+
+* The message leaves the parked list once the channel accepts it.
+* The submission's row carries no Message not sent badge.
+* The submission's page shows no failed letter.

@@ -554,23 +554,23 @@ Stories `grading-documents-sign-page--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Agreement, signable (`G14`) | the ceremony chrome: the shop, the link timer, one document · the submission; the document: the parties, the schedule, seven clauses; Your name as on the booking; Postal address prefilled; draw or type; Sign; Decline | `grade10-site-grading-counter-documents-US-01` |
-| Agreement, cover schedule | the cover column per card and the cover in total | `grade10-site-grading-counter-documents-US-01` |
-| Postal address empty | Sign disabled naming the line | `grade10-site-grading-counter-documents-US-01` |
-| Pages not viewed | the refusal by name; the document scrolled to the end first | `grade10-site-grading-counter-documents-US-01` |
-| Name mismatch | the refusal by name against the booking | `grade10-site-grading-counter-documents-US-01` |
-| Declined | the declined outcome; nothing paid, nothing signed | `grade10-site-grading-counter-documents-US-02` |
-| Sealed | the sealed outcome; the download; then the fee at the till | `grade10-site-grading-counter-documents-US-05` |
-| Link expired | the refusal by name: ask staff for a new link | `grade10-site-grading-counter-documents-US-01` |
-| Already signed | the refusal by name; the sealed copy on the page | `grade10-site-grading-counter-documents-US-05` |
-| Receipt, signable (`G15`) | handed back, settled, collected by, where and when; three clauses; the same signing block; the slabs-are-yours footer | `grade10-site-grading-counter-documents-US-03` |
-| Receipt, named person (`G18`) | Your name prefilled as named; the hint; the first clause names them — ❓ Legal words it | `grade10-site-grading-counter-documents-US-04` |
-| Receipt, ID matched | Collected by names the glance and that nothing was kept | `grade10-site-grading-counter-documents-US-03` |
-| Receipt, card held | Handed back names the card still out | `grade10-site-grading-counter-documents-US-03` |
-| Receipt, vaulted slab | Handed back says the card went to the vault | `grade10-site-grading-counter-documents-US-03` |
-| Receipt, withdrawn card | one card, its fee refunded | `grade10-site-grading-submission-lifecycle-US-02` |
-| Receipt, paid out | what was paid out and how | `grade10-site-grading-counter-documents-US-03` |
-| Placeholders outside production | the brackets, marked | `grade10-site-grading-counter-documents-US-01` |
+| Agreement, signable (`G14`) | the ceremony chrome: the shop, the link timer, one document · the submission; the document: the parties, the schedule, seven clauses; Your name as on the booking; Postal address prefilled; draw or type; Sign; Decline | `grade10-site-grading-counter-documents-SC-12`, `grade10-site-grading-counter-documents-SC-14` |
+| Agreement, cover schedule | the cover column per card and the cover in total | `grade10-site-grading-counter-documents-SC-12` |
+| Postal address empty | Sign disabled naming the line | `grade10-site-grading-counter-documents-SC-06` |
+| Pages not viewed | the refusal by name; the document scrolled to the end first | `grade10-site-grading-counter-documents-SC-07` |
+| Name mismatch | the refusal by name against the booking | `grade10-site-grading-counter-documents-SC-04`, `grade10-site-grading-counter-documents-SC-28` |
+| Declined | the declined outcome; nothing paid, nothing signed | `grade10-site-grading-counter-documents-SC-09`, `grade10-site-grading-counter-documents-SC-10` |
+| Sealed | the sealed outcome; the download; then the fee at the till | `grade10-site-grading-counter-documents-SC-25` |
+| Link expired | the refusal by name: ask staff for a new link | `grade10-site-grading-counter-documents-SC-08` |
+| Already signed | the refusal by name; the sealed copy on the page | `grade10-site-grading-counter-documents-SC-11` |
+| Receipt, signable (`G15`) | handed back, settled, collected by, where and when; three clauses; the same signing block; the slabs-are-yours footer | `grade10-site-grading-counter-documents-SC-16`, `grade10-site-grading-counter-documents-SC-21` |
+| Receipt, named person (`G18`) | Your name prefilled as named; the hint; the first clause names them — ❓ Legal words it | `grade10-site-grading-counter-documents-SC-17`, `grade10-site-grading-counter-documents-SC-29` |
+| Receipt, ID matched | Collected by names the glance and that nothing was kept | `grade10-site-grading-counter-documents-SC-16` |
+| Receipt, card held | Handed back names the card still out | `grade10-site-grading-counter-documents-SC-18`, `grade10-site-grading-counter-documents-SC-30` |
+| Receipt, vaulted slab | Handed back says the card went to the vault | `grade10-site-grading-counter-documents-SC-19`, `grade10-site-grading-counter-documents-SC-30` |
+| Receipt, withdrawn card | one card, its fee refunded | `grade10-site-grading-counter-documents-SC-20` |
+| Receipt, paid out | what was paid out and how | `grade10-site-grading-counter-documents-SC-21` |
+| Placeholders outside production | the brackets, marked | `grade10-site-grading-counter-documents-SC-24` |
 
 ### Letters
 

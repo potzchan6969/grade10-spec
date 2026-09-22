@@ -509,7 +509,7 @@ Runs once per row of **Test data**.
 
 ## grade10-site-vault-collector-notifications-US3: Signer leaves with the documents they signed
 
-**As** somebody who has just signed at the counter,
+**As a** person who has just signed at the counter,
 **I want** the sealed set mailed to me once, with the documents attached,
 **so that** I hold my own copy without asking for one.
 

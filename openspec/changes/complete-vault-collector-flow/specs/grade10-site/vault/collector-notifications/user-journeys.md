@@ -15,12 +15,6 @@ taken.
 straight to it,
 **so that** I never have to ask the shop what stage my item is at.
 
-### grade10-site-vault-collector-notifications-US-03: Signer leaves with the documents they signed
-
-**As** somebody who has just signed at the counter,
-**I want** the sealed set mailed to me once, with the documents attached,
-**so that** I hold my own copy without asking for one.
-
 ### grade10-site-vault-collector-notifications-US-04: Operator picks up a message that never went
 
 **As a** member of shop staff,
@@ -46,5 +40,11 @@ and that a person decides,
 **so that** I can verify at home and turn up prepared.
 
 ## MODIFIED User journeys
+
+### grade10-site-vault-collector-notifications-US-03: Signer leaves with the documents they signed
+
+**As a** person who has just signed at the counter,
+**I want** the sealed set mailed to me once, with the documents attached,
+**so that** I hold my own copy without asking for one.
 
 ## REMOVED User journeys
