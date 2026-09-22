@@ -39,7 +39,7 @@ winner of three lots has three orders, each with its own deadlines.
 | Order setup | **48 hours** from the lot's actual close to confirm a delivery address and a payment method |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
-| Payment proof | 🚧 **1 to 5** PDF, JPEG or PNG files of up to **10 MB** each, uploaded once |
+| Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
 | Records | 🚧 Invoice and receipt PDFs kept at least **7 years**, or for the life of the account if longer |
 
 - **Sections** — Order Information with Invoice Status and Collection Method,
@@ -221,10 +221,12 @@ doing, under Edge Cases.
 
 - 🚧 **Bank details** — the invoice shows SWIFT, FPS and Hong Kong local
   transfer details instead of card Pay, and the reference to quote,
-  `LK7P2Q01`, with Copy Reference Code
-- 🚧 **Payment proof** — uploaded once after paying, behind a confirm step
-  saying nothing can be added later; the order reads Payment Verifying, the
-  deadline stops, and Pay and further uploads are hidden
+  `LK7P2Q01`; copy controls for the account number, the amount due and the
+  transfer reference
+- 🚧 **Payment proof** — **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
+  each and **15 MB** total, uploaded once after paying, behind a confirm
+  step saying nothing can be added later; the order reads Payment Verifying,
+  the deadline stops, and Pay and further uploads are hidden
 - 🚧 **Payment Verifying alert** — an inline Alert says Grade10 is verifying
   the transfer and will email when payment is confirmed, placed where the
   Preparing Invoice alert sits
