@@ -61,6 +61,8 @@
 
 ## 5. The walk (grade10)
 
+Needs `feature-tcs.md` reviewed (`/tcs-review sync-sign-in-link-across-devices`) as its input.
+
 - [ ] 5.1 Walk `shared-auth-sign-in-US-10` end to end through the sign-in
       dialog on two browser contexts for one address, kept as the change's
       end-to-end suite
