@@ -201,4 +201,5 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 | Every default a setting | ❓ Open | Each row of the settings table, adopted from the canvas until its owner confirms or changes it; pinned to a submission at booking and at signing | Operations, Commercial, Legal, Product |
 | Buttons follow the machine | Decided | Each act shows only at the statuses the contract publishes, cancel never once the cards have left, and the worker refuses independently | Engineering |
 | Counter intake | Decided | A walk-in books the customer-bookable visit and the cards are listed at the counter; the runbook is the same | Product |
+| When the section opens to the shop | ❓ Open | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
 :::

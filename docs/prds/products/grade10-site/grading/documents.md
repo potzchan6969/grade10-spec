@@ -126,5 +126,6 @@ intake receipt between them is issued, not signed.
 | English governs | Decided | The documents and every email are English; the screen's chrome speaks the collector's language, as the vault's does | Legal |
 | Clause 6 keeps the disposal basis | Decided | The clause names the Ordinance although the first release stops at the notice, so the paper a collector signs already carries the ground a later change acts on | Legal |
 | The bracketed facts | ❓ Open | The custodian's registered name and the complaints contact print on both documents and every email; the receipt's first clause for a named person; clause 6's windows | Legal |
+| Which entity is the custodian | ❓ Open | The agreement names the brand's one registered legal name, the same custodian the vault's papers print, unless a second company is registered for grading | Legal |
 | Clause 5 | ❓ Open | Stands as drawn until a policy is bought; the day it is, the clause changes | Commercial, Legal |
 :::

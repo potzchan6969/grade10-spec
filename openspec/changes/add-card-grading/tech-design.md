@@ -7,8 +7,8 @@ for what the interview settled; the journeys are beside each capability under
 file for file where it has the concern.
 
 - **Nothing exists** — no package, no worker, no route, no `grading` service
-  id. A new product is four packages, one worker app and the registry edits
-  § Migration Plan lists; the packages are the easy part
+  id; a new product is four packages, one worker app and the registry edits
+  § Migration Plan lists, and the packages are the easy part
 - **The vault is the model** — `packages/vault/backend` on `createServiceApp`,
   `cases/transitions.ts` the only writer of a status, `lock.ts` the per-case
   `SELECT … FOR UPDATE`, `sweeps/pass.ts` over `@grade10/postgres/sweeps` on
@@ -107,7 +107,7 @@ file for file where it has the concern.
 - Alternatives rejected: sharing the vault's database — two products' holds
   and retention clocks in one schema, a vault migration lock over grading's
   counter; a `KYC_SERVICE` binding for the ID glance — it keeps nothing, so
-  there is no record to bind, and an unused binding still needs a stub
+  there is no record to bind
 
 ### The reference, the intake ids and the pickup code, drawn outside the transaction
 
@@ -118,14 +118,13 @@ file for file where it has the concern.
   issued on the insert in `submissions/plan.ts` beside the `gs_` id; the
   canvas's `5TW8HN`
 - **A unique violation never runs inside an open transaction.** The first
-  `23505` aborts it and every later statement answers `25P02`, so the
-  repository's own shape holds here, once, for every draw: `mintPosHandle`'s
-  independent insert per attempt guarded by `isUniqueViolation`, thrown by
-  name after eight. The reference row is inserted before `savePlan`'s
-  transaction opens; the pickup code redrawn inside `finishReceiving` runs
-  each attempt in a nested `tx.transaction()` (a SAVEPOINT); `scanCard`'s
-  `CERT_HELD_ELSEWHERE` is a read under the submission lock before the insert,
-  not a caught violation; the open batch is created
+  `23505` aborts it and every later statement answers `25P02`, so
+  `mintPosHandle`'s shape holds for every draw — an independent insert per
+  attempt guarded by `isUniqueViolation`, thrown by name after eight. The
+  reference row is inserted before `savePlan`'s transaction opens; the pickup
+  code redrawn inside `finishReceiving` takes a nested `tx.transaction()` per
+  attempt; `scanCard`'s `CERT_HELD_ELSEWHERE` is a read under the submission
+  lock before the insert; the open batch is created
   `ON CONFLICT DO NOTHING … RETURNING` and re-read
 - **Intake ids** `<reference>-<n>`, `n` the card's position, written to
   `submission_cards.intake_id` at hand-in, unique across the table: the
@@ -161,16 +160,15 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   order, so two operators finishing one batch serialise
 - **The walk-in has no booking to bind.** Every diary method keys on
   `(product, caseRef)` and a walk-in's customer-bookable visit carries
-  `product: null`, so grading can never read it. The counter creates the
-  submission at the desk through `admin.savePlan` — the same service as the
-  collector's — and hands in from `planned`; `pinned_fee_sheet` pins at
+  `product: null`, so grading can never read it: the counter creates the
+  submission at the desk through `admin.savePlan`, the same service as the
+  collector's, and hands in from `planned`, `pinned_fee_sheet` pinning at
   `handIn` when it is still null
 - **Grades in** — `admin.recordBatchStage({ batchId, stage })` over a closed
-  `GraderStage` set, one member flagged as the move. Under `lockBatch`:
+  `GraderStage` set, one member flagged as the move: under `lockBatch`,
   `grader_stage` set, `recordGrades` per submission in id order, one event
-  each, the letters after commit. The same stage twice is a no-op, because its
-  event already names it; a re-estimate to the same date is a no-op the same
-  way
+  each, the letters after commit. The same stage twice is a no-op because its
+  event already names it, and a re-estimate to the same date the same way
 - **Running late**, the queue badges, the chip and the rail are
   `submissionStanding(input, asOf, timeZone)` in
   `packages/grading/contracts/src/standing.ts` over a declared
@@ -185,13 +183,12 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
 
 ### The diary: three catalogue entries, the vault's bind, one shared visit
 
-- `grading` joins `APPOINTMENT_PRODUCTS`, and that is the whole contract
-  delta beside `createAppointmentServiceEntrypoint("grading")`. **No
-  appointment migration**: the two product-bound drop-off services
-  (about 20 minutes, and the Bulk variant at about 45) and the
-  customer-bookable Grading visit are created by a readiness-list console act,
-  `services.create`, their ids read back and never asserted; the e2e specs
-  book against a named fixture service
+- `grading` joins `APPOINTMENT_PRODUCTS`, which with
+  `createAppointmentServiceEntrypoint("grading")` is the whole diary delta.
+  **No appointment migration**: the two product-bound drop-off services (about
+  20 minutes, and the Bulk variant at about 45) and the customer-bookable
+  Grading visit are created by a readiness-list console act, `services.create`,
+  their ids read back and never asserted; the e2e specs book a named fixture
 - **Order and fallback** — the spec word lands first: `grading` joins the
   `Product` row of `shared/appointment/scheduling` in
   `add-multi-store-appointments`'s delta (Q19), and the code ships after it
@@ -228,10 +225,9 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
 - The five drop-off letters attach `buildCalendarFile`'s file, served at
   `GET /api/submissions/:id/visit.ics` — as `complete-vault-collector-flow`
   decides
-- Alternatives rejected: a delta on `shared/appointment/scheduling` now — in
-  flight, whichever archived second would revert the first; a second booking
-  for the joiner — a case holds one live booking; the four cache columns
-  copied onto the joiner — four facts nothing can keep true
+- Alternatives rejected: a second booking for the joiner — a case holds one
+  live booking; the four cache columns copied onto the joiner — four facts
+  nothing can keep true; a `visits` table — one column already names the owner
 
 ### The till: one line to one card, read back by the order's name
 
@@ -266,11 +262,10 @@ this is how the paid order reaches the submission.
   names the card and the line it refunds. `handIn` is guarded on every card
   carrying a paid fee line
 - Alternatives rejected: grading as an `OrderEventConsumer` of the store's
-  queue — the queue carries no submission reference because the till sets
-  none, so grading could only park unmatched lines for staff to match, a
-  second table for a fact the receipt prints by number; a POS extension
-  panel stamping the reference — store and extension work outside this
-  change; recognising lines by SKU prefix — the store hands a variant id
+  queue — the queue carries no submission reference, so grading could only
+  park unmatched lines for staff to match; a POS extension panel stamping the
+  reference — store and extension work outside this change; recognising lines
+  by SKU prefix — the store hands a variant id
 
 ### Documents: two templates, the no-identity option, the routed client
 
@@ -292,9 +287,9 @@ this is how the paid order reaches the submission.
   for grading. Recommended as stated; a per-product field is owed only if the
   answer names a different company
 - The ceremony mounts at `${config.services.grading}/api/sign` through
-  `registerSigningRoutes` with the vault's `SIGN_TRANSPORT`; `routes/signing.ts`,
-  `documents/deps.ts`, `storage/areas.ts` and the two guard migrations are
-  the vault's files in the grading schema
+  `registerSigningRoutes`; `routes/signing.ts`, `documents/deps.ts`,
+  `storage/areas.ts` and the two guard migrations are the vault's files in
+  the grading schema
 - **The SPA's client routes by host** — `createDocSignCoreModule` takes
   `ceremonyClients: Record<Host, CeremonyClient>` and binds `CeremonyClient`
   to a `RoutedCeremonyClient`. The key is the service id the container already
@@ -309,12 +304,11 @@ this is how the paid order reaches the submission.
   document before its transaction opens, and the sibling change's
   `printedValue` throws by name, so no map of what each letter prints is kept
   in step by hand
-- Alternatives rejected: the vault worker hosting grading's ceremony — two
-  products' packets in one database and the seal on the wrong chain;
-  `kyc: null` as the option — a null port and a missing binding look the
-  same; the option on `DocSignDeps` — a host-wide flag cannot express a
-  no-identity packet beside identity-bearing ones in the same host; a client
-  whose base URL is read off `window.location` — not deterministic
+- Alternatives rejected: the vault worker hosting grading's ceremony — the
+  seal on the wrong chain; `kyc: null` as the option — a null port and a
+  missing binding look the same; the option on `DocSignDeps` — a host-wide
+  flag cannot express a no-identity packet beside identity-bearing ones; a
+  client whose base URL is read off `window.location` — not deterministic
 
 ### The card price reference is a read over the inventory binding
 
@@ -331,8 +325,7 @@ this is how the paid order reaches the submission.
   `submission_cards.reference_product_id`; sales are re-read, never stored
 - Alternatives rejected: grading caching prices — the inventory's one cache
   row per reference is the authority; splitting the sales out of the match —
-  the paste step advises a level from them, so the split is a second remote
-  call on a step kept to one
+  a second remote call on a step kept to one
 
 ### Money: pinned at booking and signing, derived at the read, two people on a record
 
@@ -345,36 +338,35 @@ this is how the paid order reaches the submission.
   half-up to the cent, `upchargeOf(sheet, from, to)`,
   `storageDue(readyAt, cardsHeld, asOf, terms)` counting months started since
   `storage_from_day` on `Asia/Hong_Kong` days, and `dueNow(input, asOf)` over
-  a declared `DueNowInput`. **One settlement rule for every kind**: an accrued
-  amount less the settled `money_lines` rows of that kind less the waivers,
-  for upcharge and storage alike, so a storage fee rung at the till clears and
-  `collect` can pass. The expected upcharge is `upchargeOf(pinned_fee_sheet,
-  level, submission_cards.moved_to_level)` per card and is stored nowhere
+  a declared `DueNowInput`. **One settlement rule for every kind**: accrued
+  less the settled `money_lines` rows of that kind less the waivers, upcharge
+  and storage alike, so a storage fee rung at the till clears and `collect`
+  can pass. The expected upcharge is `upchargeOf(pinned_fee_sheet, level,
+  submission_cards.moved_to_level)` per card, stored nowhere
 - **Currency is named beside every amount that is not HKD.**
   `invoice_total_minor` carries `invoice_currency` and `cover_figure_minor`
   carries `cover_currency`; `shipBatch` compares the declared total to the
-  cover figure only inside one currency, refuses `OVER_COVER` above it and
-  `CURRENCY_MISMATCH` otherwise. No rate is stored and no rounding rule is
-  written; the conversion stays Operations'
+  cover figure only inside one currency, refusing `OVER_COVER` above it and
+  `CURRENCY_MISMATCH` otherwise. No rate is stored; the conversion stays
+  Operations'
 - **A payout** is `payouts` — declared value, the fee refund line beside it,
-  `route` till or transfer, `recorded_by`, `approved_by`. A reversal is one
+  `route` till or transfer, `recorded_by`, `approved_by`; a reversal is one
   `payout_reversals` row keyed `payout_id PK`, the vault's `money_adjustments`
-  guard with one fewer nullable column. **A waiver** is `upcharge_waivers`
-  with the same two approver columns. Both carry a plain index on `card_id`,
-  never a unique: whether a row is live is decided by another table, which no
-  constraint here can see, so `PAYOUT_EXISTS` guards on the netted read under
-  the submission lock. All append-only; the ladder's `auditDetails` files each
-  under the submission
-- **The four-eyes rule is rendered once** — a small inline drizzle helper in
+  guard with one fewer nullable column; **a waiver** is `upcharge_waivers`
+  with the same two approver columns. Both carry a plain index on `card_id`
+  and never a unique, because whether a row is live is decided by another
+  table no constraint here can see, so `PAYOUT_EXISTS` guards on the netted
+  read under the submission lock. All append-only
+- **The four-eyes rule is rendered once** — an inline drizzle helper in
   grading's schema module, naming each table's recorder column, armed on
   `payouts`, `payout_reversals`, `upcharge_waivers`, `settings` and
   `fee_sheet`, so no table carrying the two columns is left unguarded
 - **The safe's total** is one query at the read: declared values of cards in
   `checked_in`, `returned` and `ready` submissions whose outcome is not an
-  exception taking them out of the safe. The cap is one row. Every `handIn`
-  takes the `safe_declared_cap` settings row `FOR UPDATE` before it counts,
-  because the batch lock is not the cap's scope and advisory locks are out
-  over Hyperdrive; the row is the serializer
+  exception taking them out of the safe. The cap is one row, and every
+  `handIn` takes `safe_declared_cap` `FOR UPDATE` before it counts: the batch
+  lock is not the cap's scope, advisory locks are out over Hyperdrive, so the
+  row is the serializer
 - Alternatives rejected: storage accrued by a sweep as a line per month — a
   row per month per card for a figure one fold answers; live settings on a
   booked submission — Q43's rejection; freezing `dueNow` at the till — it
@@ -388,12 +380,11 @@ this is how the paid order reaches the submission.
   every key through its schema and throws `SETTING_UNSET` naming the key —
   never a default in code
 - **The seed writes no money.** `0003_seed_settings.sql` seeds the clocks and
-  the non-money defaults only. Every money key —
-  `storage_fee_per_card_month`, `safe_declared_cap`, `id_glance_threshold` —
-  and every fee-sheet figure stays unset in every environment, so
-  `SETTING_UNSET` holds until its owner writes it through `updateSetting` with
-  a second approver, which is the record of who confirmed it (Q48). The
-  isolated stack's example figures are seeded once at start by `POST /dev/settings`
+  the non-money defaults only; every money key and every fee-sheet figure
+  stays unset in every environment, so `SETTING_UNSET` holds until its owner
+  writes it through `updateSetting` with a second approver, which is the
+  record of who confirmed it (Q48). The isolated stack's example figures are
+  seeded once at start by `POST /dev/settings`
 - `admin.updateSetting` under `grading:approve`; a money key takes
   `approvedBy` who is not the caller; the audit subject is `settings`
 - Alternative rejected: a `decisionTable` in `packages/app-env` — a deploy
@@ -420,14 +411,12 @@ otherwise falls back to `DEFAULT_LIMIT`.
 - **Every per-row list runs through `claimRow`**, the claim re-reading its
   predicate under the submission's lock in the transaction that writes the
   event and the retry row, with a partial unique index behind the
-  once-per-submission kinds. Event absence read in the page phase is a
-  read-then-write race, and two overlapping passes both pass it
+  once-per-submission kinds: event absence read in the page phase is a
+  read-then-write race two overlapping passes both pass
 - **Notice due** and **running late** are no lists: the badge derives from
   `notice_day` and the send is the counter act `recordNoticePosted`; the
-  late letter goes on `reestimateBatch`, and the page reads the estimate
-  against the clock
-- `retentionReviews` dates a submission from its last terminal event over the
-  classes it answers
+  late letter goes on `reestimateBatch`. `retentionReviews` dates a
+  submission from its last terminal event over the classes it answers
 - Alternative rejected: a `nudged_at` column per clock — the event row is
   the stamp; five day-count lists — they differ only in their settings
 
@@ -447,16 +436,16 @@ otherwise falls back to `DEFAULT_LIMIT`.
   `eraseCeremonyPersonalData` included. `erasure.erase` and `erasure.holds`
   are the vault's router shape; `appointment:grading` joins the appointment
   row's `ids` in `check-erasure-consumers.mjs`, the console's checklist and
-  the console's `ERASURE_PRODUCTS`, and the pin in
+  its `ERASURE_PRODUCTS`, and the pin in
   `packages/appointment/contracts/test/schemas.test.ts` moves with them
 - **The append-only guards name what erasure may touch.** `appendOnlySql`
   refuses every UPDATE unless the columns are listed, so
   `0001_append_only.sql` carries `redactable` and `erasable` per table —
   `submission_events` `redactable: ["actor"]`, `sign_events`
-  `erasable: ["ip","user_agent"]`, the notes columns likewise — and a schema
-  spec pins the rendered text. `src/testing/suites/erasure.ts` joins the
-  portable suite: the three holds by name, the `collected` packet-keeping arm
-  and the never-signed whole purge, against the committed migrations
+  `erasable: ["ip","user_agent"]`, the notes columns likewise — pinned by a
+  schema spec. `src/testing/suites/erasure.ts` joins the portable suite: the
+  three holds by name, the `collected` packet-keeping arm and the
+  never-signed whole purge, against the committed migrations
 - The self-filed ask stays the vault's `cases.requestErasure`; Your data
   (`complete-vault-collector-flow`) also reads `grading.erasure.holds` and
   shows them in words; the request that reaches the console runs per
@@ -475,36 +464,32 @@ otherwise falls back to `DEFAULT_LIMIT`.
 - **The emailed link is doc-sign's token, one size down.** `newBearerSecret(32)`
   from `@grade10/utils/crypto` is minted at `savePlan`, `sha256Hex(token)`
   stored in `submissions.access_hash`, and the raw value travels only in the
-  link's fragment (`/grading/submissions/:id#t=…`). `GradingApi` lifts it out
-  and sends it as a header on every `gradingSubmission` call; one
-  `submissionAccess` resolver on the grading worker verifies it by digest
-  beside the session arm, where a signed-in caller's email must equal
-  `submissions.email`. No TTL — the grant lives from `plan_saved` to
-  `collected` — and revocation is a re-mint the `handed_in` and `ready`
-  letters carry. A test per arm: right token, stale token after a re-mint, no
-  token, session owner, session non-owner
+  link's fragment (`/grading/submissions/:id#t=…`); `GradingApi` lifts it out
+  and sends it as a header, and one `submissionAccess` resolver on the worker
+  verifies it by digest beside the session arm, where a signed-in caller's
+  email must equal `submissions.email`. No TTL — the grant lives from
+  `plan_saved` to `collected` — and revocation is a re-mint the `handed_in`
+  and `ready` letters carry
 - Site surfaces: `grading` (`/grading`, session, `ask`), `gradingSubmission`
   (`/grading/submissions/:submissionId`, `open`), `gradingSign`
   (`/grading/sign`, `open`), each on a new `grading` gate at
   `deployEnv !== "production"`, as the vault's
-- **What the gate does, and what it does not.** `gatesFor` is read by
-  `src/routes.ts`, `react-router.config.ts` and the serving worker at build
-  time, so the site carries no grading address off production; the console
-  declares no environment gate at all and its grading section is grant-gated
-  only, on `ADMIN_PERMISSIONS["admin.queue"]`; and the gateway routes
-  `/grading/*` and `/api/sign` to the worker whatever the gate says, which is
-  correct — the pages are unreachable and the API refuses nothing it should
-  not. Flipping the gate is an edit, a build and a redeploy, not a rollback.
-  **The removal is named**: the launch change opens the gate and deletes its
-  row from `Gate` and `gatesFor` in the same commit, once Q48's readiness list
-  is complete
+- **What the gate does, and what it does not.** `gatesFor` is read at build
+  time by `src/routes.ts`, `react-router.config.ts` and the serving worker, so
+  the site carries no grading address off production; the console declares no
+  environment gate and its grading section is grant-gated only, on
+  `ADMIN_PERMISSIONS["admin.queue"]`; the gateway routes `/grading/*` and
+  `/api/sign` whatever the gate says, which is correct — the pages are
+  unreachable and the API refuses nothing it should not. Flipping the gate is
+  an edit, a build and a redeploy, never a rollback. **The removal is named**:
+  the launch change opens the gate and deletes its row from `Gate` and
+  `gatesFor`, once Q48's readiness list is complete
 - `packages/grading/admin-frontend/src/features/{queue,handin,batches,receiving,handback,submission,settings,notice}`
   composing `@grade10/frontend-console`; admin surfaces `grading`,
   `gradingSubmission`, `gradingBatches`, `gradingBatch`, `gradingSettings`
 - **Which events a collector sees** is derived at the read, never stored:
   `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent` in
-  `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them, so
-  both ends read one list
+  `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them
 - Stories: the blocks' in the store's `packages/ui` workbench; the console
   views' in `packages/storybook`, whose glob over
   `packages/*/admin-frontend/src/**` the sibling change already writes
@@ -537,17 +522,15 @@ otherwise falls back to `DEFAULT_LIMIT`.
 
 - **Backend** (`packages/grading/backend/test/`): service tests
   `submissions/transitions.test.ts` (every move and conflict),
-  `batches/acts.test.ts` (one transaction, lock order, `recordBatchStage` and
-  the repeated stage),
+  `batches/acts.test.ts` (one transaction, lock order, the repeated stage),
   `money/{cover,storage,dueNow}.test.ts` as tables, `settings/read.test.ts`
   (unset throws by key), `pos/match.test.ts` (the count, the multiple, the
-  null subtotal, the retry as a no-op), `documents/identity.test.ts`
-  (the no-identity packet seals, the certificate line),
-  `routes/access.test.ts` (the five token and session arms),
-  `email/letters/render.test.tsx`; query-shape tests
-  `repositories/{queue,safeTotal,sweeps}.drizzle.test.ts`; repository tests
-  `repositories/{reference,pickupCode,payouts,cert}.repo.test.ts` on a forced
-  collision. The portable suite `src/testing/` — scenarios and
+  null subtotal, the retry as a no-op), `documents/identity.test.ts`,
+  `routes/access.test.ts` (right token, stale token after a re-mint, no
+  token, session owner, session non-owner), `email/letters/render.test.tsx`;
+  query-shape tests `repositories/{queue,safeTotal,sweeps}.drizzle.test.ts`;
+  repository tests `repositories/{reference,pickupCode,payouts,cert}.repo.test.ts`
+  on a forced collision. The portable suite `src/testing/` — scenarios and
   `suites/erasure.ts` — runs in the app's `test/db/scenarios.spec.ts` against
   the committed migrations; `test/worker/` proves the three bindings resolve
   their named entrypoints through stub workers
@@ -562,16 +545,15 @@ otherwise falls back to `DEFAULT_LIMIT`.
   unavailable` — the level picker's closed reasons, the page per status, the
   pickup card, naming a collector; the queue's cuts and badges, both
   runbooks' refusals, the receive table's counters, the settings table's
-  second person. A render snapshot per drawn letter state, not per kind, over
-  the states `ui-design.md` draws
+  second person. A render snapshot per drawn letter state, not per kind
 - **E2E** — `apps/frontend/grade10/e2e/tests/grading/{plan,dropoff,handin,batch,handback,uncollected}.spec.ts`
-  over `packages/grading/backend/src/routes/dev.ts` under `devOnly()`:
+  over `packages/grading/backend/src/routes/dev.ts` under `devOnly()`.
   `POST /dev/submissions/seed` replays `submissions/transitions.ts` to the
   named status — no second writer of a status — and injects beside it what no
   transition writes: the booking cache, the fee and cover lines, a dev-sealed
   agreement packet, the batch row and its manifest lines, and the anchors
-  (`created_at`, `appointment_at`, `ready_at`) in the past, so a clock is
-  never moved under another spec; a repeat answers the same submission.
+  (`created_at`, `appointment_at`, `ready_at`) in the past, so no spec moves a
+  clock under another; a repeat answers the same submission.
   `POST /dev/settings` seeds the unset money keys and the fee sheet once at
   stack start, called by the global setup and never by a spec.
   `POST /dev/sweep { lane }` runs a pass now. `GET /dev/outbox` is the shared
@@ -609,8 +591,8 @@ with a prefix; every `_by` an operator id.
 
 Indexes `(status, updated_at)`, `(user_id, status)`, `(email)`,
 `(booking_ref)`, `(appointment_at)`, `(batch_id)`, `(status, ready_at)`,
-`(visit_owner_id)`. Booked since and in the safe since read the events index,
-not a stamp column.
+`(visit_owner_id)`. Booked since and in the safe since read the events
+index, not a stamp column.
 
 ### `submission_cards`
 
@@ -737,13 +719,12 @@ Example — a hand-in of four PSA Regular cards at a pinned fee of 15 000.
 `STORE_SERVICE.orderByName("#48213")` → `{ orderRef: "gid://…/9001",
 orderName: "#48213", paidAt, lines: [{ ref: "l1", variantId: "v_reg",
 subtotalMinor: 15000, productType: "Grading Service" }, … "l4"] }` → four
-fee-variant lines against four cards owing a fee, each at the pinned figure →
+fee-variant lines for four cards owing a fee, each at the pinned figure →
 four `money_lines` rows, one per card in `position` order,
 `{ kind: fee, amount_minor: 15000, pos_order_ref: "gid://…/9001",
-pos_order_name: "#48213", pos_line_ref: "l1" … "l4" }`. The same call again
-writes nothing and answers the same four rows.
-
-`handIn("gs_1")` → `safe_declared_cap` `FOR UPDATE` → the open batch for
+pos_order_name: "#48213", pos_line_ref: "l1" … "l4" }`; the same call again
+writes nothing and answers those four rows. Then `handIn("gs_1")` →
+`safe_declared_cap` `FOR UPDATE` → the open batch for
 `(loc_hkcwb, psa, regular)` → `gs_1`'s lock → safe total 18 400 000 +
 3 400 000 < 30 000 000 → cards get `5TW8HN-1 … -4` and `grader: psa`,
 `batch_id` set, `booked → checked_in`, event `handed_in { intakeIds,
@@ -784,30 +765,28 @@ change creates are imported from their shared home by both products.
   read under it, then each submission's lock in id order; the loser reads
   `BATCH_CONFLICT`
 - **[Two hand-ins break the safe cap together]** → the `safe_declared_cap`
-  settings row is taken `FOR UPDATE` before either counts, so the second waits
-  and reads the first's total
+  row is taken `FOR UPDATE` before either counts, so the second reads the
+  first's total
 - **[The second shop opens]** → `location_id` is already in the batch key, so
   no live key migrates; a per-shop `safe_counters` row replacing the one cap
-  row is the next change's seam, not this one's
+  row is the next change's seam
 - **[The till took the money and the store's row is not yet paid]** →
   `ORDER_NOT_PAID` is a value; the counter retries after the reconcile pass
   lands it, and nothing is written until it does
-- **[`recordFeePaid` is run twice]** → the unique key is the run's own
+- **[`recordFeePaid` is run twice]** → the key is the run's own
   `(submission_id, card_id, kind, pos_order_ref)` and the insert is
-  `ON CONFLICT DO NOTHING`; a nullable provider handle is recorded, never
+  `ON CONFLICT DO NOTHING`; the provider's nullable handle is recorded, never
   relied on
 - **[A cert scans onto the wrong submission]** → the partial unique on
   `(grader, cert)`, read under the lock before the insert, and the intake-id
   match to this batch's manifest line
-- **[A joiner's upsize fails]** → it is one `reschedule`, so the owner either
-  keeps the slot it had or holds the Bulk one; nothing local is written and
-  the page offers a move on the diary's own refusal
+- **[A joiner's upsize fails]** → it is one `reschedule`, so the owner keeps
+  the slot it had or holds the Bulk one; nothing local is written
 - **[A pickup code repeats among ready submissions]** → the partial unique
   index and a savepoint per attempt; a collected submission frees its code
 - **[A sweep sends a reminder twice]** → `claimRow` re-reads the predicate
   under the submission lock in the transaction that writes the event and the
-  retry row, and a partial unique index sits behind the once-per-submission
-  kinds
+  retry row, with a partial unique index behind the once-per-submission kinds
 - **[An inventory outage is read as a catalogue miss]** → `unavailable` is its
   own answer, counted, logged and written as a `reference_unavailable` event
 - **[A staging letter's brackets reach a real inbox]** → the act renders the
@@ -819,8 +798,7 @@ change creates are imported from their shared home by both products.
   is what every figure prints from; the live row is read at `book` and at
   the mint only
 - **[A payout is approved and never paid]** → a queue cut and a badge on an
-  approved payout with `received_at` null past the pinned `settlement_days`,
-  derived at the read
+  approved payout with `received_at` null past the pinned `settlement_days`
 
 ## Migration Plan
 
@@ -835,8 +813,8 @@ change creates are imported from their shared home by both products.
    `complete-vault-collector-flow` lands first with
    `packages/utils/src/reference.ts`, `packages/app-env/src/printed.ts`,
    `ProductLetter`, the dev outbox and `packages/storybook`. This change adds
-   only what is its own: doc-sign's `identity` option and routed client, the
-   RBAC row with `generate:rbac-docs`, and `docSignProtectionSql` gaining
+   its own: doc-sign's `identity` option and routed client, the RBAC row with
+   `generate:rbac-docs`, and `docSignProtectionSql` gaining
    `alwaysOnSql("sign_signatures", ["sign_signatures_column_guard",
    "sign_signatures_no_truncate"], { schema })` in the generator, so every
    host inherits an armed guard; the vault's committed files do not move
@@ -845,18 +823,17 @@ change creates are imported from their shared home by both products.
    one-word `Product` delta in `add-multi-store-appointments`; then
    `pnpm run submodules:update external/grade10-spec`
 4. **The three providers** — `APPOINTMENT_PRODUCTS`, the optional
-   `serviceId` and `GradingAppointmentService` (no appointment migration);
-   `GradingInventoryService`; `GradingStoreService` with its
+   `serviceId` and `GradingAppointmentService`, with no appointment
+   migration; `GradingInventoryService`; `GradingStoreService` with its
    `orders.order_name` index
 5. **The grading worker** — the four packages and the app; migrations in
    `apps/backend/grade10/grading/src/db/migrations/`: `0000_grading_schema.sql`
    (generated, every table above), `0001_append_only.sql` (`sign_events`,
    `submission_events`, `money_lines`, `payouts`, `payout_reversals`,
-   `upcharge_waivers`, `audit_logs`, with each table's `redactable` and
-   `erasable` lists, armed always), `0002_sign_lifecycle_guards.sql`
-   (`docSignProtectionSql`), `0003_seed_settings.sql` (the clocks and the
-   non-money defaults; no money key, no fee-sheet figure). They create tables
-   in their own file and touch no `DESTRUCTIVE` or `LOCKING` pattern, so none
+   `upcharge_waivers`, `audit_logs`, each with its `redactable` and `erasable`
+   lists, armed always), `0002_sign_lifecycle_guards.sql`
+   (`docSignProtectionSql`), `0003_seed_settings.sql`. They create tables in
+   their own file and touch no `DESTRUCTIVE` or `LOCKING` pattern, so none
    owes an annotation. The registries: `packages/app-env/src/services.ts`;
    the gateway's `wrangler.jsonc` and `routing.spec.ts`;
    `scripts/dev/services.mjs`; `scripts/deploy/components.mjs` (`grading`
@@ -865,27 +842,26 @@ change creates are imported from their shared home by both products.
    twin naming both cron expressions; `packages/api-docs`;
    `check-erasure-consumers.mjs`; the site's and the console's surfaces,
    routes, pages, DI and clients; the i18n bump;
-   `docs/architecture/handbook.html` (four cards, the topology nodes) and
-   `docs/conventions/packages.md`; `docs/architecture/grading.md` written.
-   What refuses while one is missing, and what the step is verified by:
-   `check:handbook`, `check:libs`, `check:migrations`,
-   `scripts/checks/check-config.mjs`, `scripts/checks/check-crons.mjs`,
-   `scripts/checks/check-erasure-consumers.mjs`,
-   `scripts/checks/check-lanes.mjs`, and the api-docs regeneration
-6. **Three landable stages, one migration set, one gate.** `0000`–`0003` land
-   whole with stage (a); nothing is live and the gate hides production, so no
-   stage needs a migration window of its own. (a) the shared lifts consumed,
-   the three provider entrypoints, and the registered worker answering its
-   health probe; (b) plan → book → hand-in → ship, the money and the safe;
-   (c) receiving → ready → hand-back, the uncollected ladder, payouts and
-   waivers. Each e2e spec lands with the stage that reaches it, so
-   `receiving`, `handback` and `uncollected` land with (c)
-7. **Deploy** — migrations are applied deliberately, staging then production,
-   before the PR that needs them deploys; that PR carries `force-deploy`.
-   The worker, both SPAs and the three providers ship from one commit
-8. **E2E** — `start-isolated.sh` and `STACK_READY_URLS` gain
-   `appointment-service` and `grading-service`, then the six specs
-9. **Launch** — the change that opens the `grading` gate deletes its row from
+   `docs/architecture/handbook.html` and `docs/conventions/packages.md`;
+   `docs/architecture/grading.md` written. What refuses while one is missing,
+   and the step's own verification: `check:handbook`, `check:libs`,
+   `check:migrations`, `scripts/checks/check-config.mjs`,
+   `check-crons.mjs`, `check-erasure-consumers.mjs`, `check-lanes.mjs`, and
+   the api-docs regeneration
+6. **Three landable stages, one migration set, one gate** — `0000`–`0003`
+   land whole with (a), because nothing is live and the gate hides
+   production. (a) the shared modules consumed, the three provider
+   entrypoints, and the registered worker answering its health probe;
+   (b) plan → book → hand-in → ship, the money and the safe; (c) receiving →
+   ready → hand-back, the uncollected ladder, payouts and waivers. Each e2e
+   spec lands with the stage that reaches it, so `receiving`, `handback` and
+   `uncollected` land with (c)
+7. **Deploy** — migrations applied deliberately, staging then production,
+   before the PR that needs them deploys; that PR carries `force-deploy`. The
+   worker, both SPAs and the three providers ship from one commit.
+   `start-isolated.sh` and `STACK_READY_URLS` gain `appointment-service` and
+   `grading-service`
+8. **Launch** — the change that opens the `grading` gate deletes its row from
    `Gate` and `gatesFor`, once Q48's readiness list is complete
 
 ## Open Questions
