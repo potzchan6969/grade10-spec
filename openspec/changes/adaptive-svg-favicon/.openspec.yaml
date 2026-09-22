@@ -7,3 +7,4 @@ reviewed:
   ui-design: d64617d6
   tech-design: d64617d6
   tasks: 4a06bcf1
+deploy_waived: "seankcw, staging deploy 35678969234 (2026-09-22) confirms 81d788d37 (icon.svg) resolves end-to-end through grade10-site's public/icon.svg symlink; production hasn't had a successful Deploy run since 2026-09-03, blocked on the same unrelated migration gate as the other two archives this session"
