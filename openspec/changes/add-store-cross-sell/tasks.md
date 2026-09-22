@@ -48,9 +48,9 @@ is rebuilding, so this group follows that change's page work.
 
 ## 5. The manual (grade10-spec)
 
-- [ ] 5.1 Update `docs/prds/products/grade10-site/store/cross-sell.md`, the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` and the `Product Tile` section of `docs/prds/products/shared/ui/store-product-listing.md` — whose "a sold-out tile's name stays inert" gains "where the tile sells" — to the shipped rail, with a `::story` card for the block, restating no requirement; `docs/prds/products/shared/ui/store-home.md` already reads that a header with no browse address renders a title alone and needs no line
+- [x] 5.1 Update `docs/prds/products/grade10-site/store/cross-sell.md`, the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` and the `Product Tile` section of `docs/prds/products/shared/ui/store-product-listing.md` — whose "a sold-out tile's name stays inert" gains "where the tile sells" — to the shipped rail, with a `::story` card for the block, restating no requirement; `docs/prds/products/shared/ui/store-home.md` already reads that a header with no browse address renders a title alone and needs no line
 - [ ] 5.2 After the walk (group 6) has run, correct the suite's `### Manual` table in `openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md` to what the walk reached — the rows the walk did not reach say so, and are named in the walk's `rounds.md` row
-- [ ] 5.3 Verify: `pnpm run tcs:validate`, `pnpm check:manual`
+- [x] 5.3 Verify: `pnpm run tcs:validate`, `pnpm check:manual`
 
 ## 6. The walk (grade10)
 
