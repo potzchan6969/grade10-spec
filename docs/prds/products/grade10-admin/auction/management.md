@@ -220,9 +220,13 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 
 | The refund records | Value |
 | --- | --- |
-| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; the operator decides it, never fixed |
+| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; offered at what was paid, and the operator decides it |
 | 🚧 Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other, with a note carrying what the winner asked |
+| 🚧 Date | When the money left, typed by the operator and never in the future |
 | 🚧 Method and reference | How the money went back, with its Stripe or bank reference |
+| 🚧 Bank channel | A bank refund names it: FPS, HK local bank transfer, or SWIFT international wire; a card refund has none |
+| 🚧 Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing. A SWIFT wire also carries the BIC and the bank's country, all three typed |
+| 🚧 What the winner sees of it | The bank name and a masked destination, read from what was typed: the last four digits of an account or a phone, or the first letter and domain of an email |
 | 🚧 Proof | 1 to 5 files, operators only |
 | 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
 | 🚧 Its number | The next one in the internal audit series |
