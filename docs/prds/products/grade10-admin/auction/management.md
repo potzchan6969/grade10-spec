@@ -225,7 +225,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 Date | When the money left, typed by the operator and never in the future |
 | 🚧 Method and reference | How the money went back, with its Stripe or bank reference |
 | 🚧 Bank channel | A bank refund names it: FPS, HK local bank transfer, or SWIFT international wire; a card refund has none |
-| 🚧 Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing. A SWIFT wire also carries the BIC and the bank's country, all three typed |
+| 🚧 Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing, and the same three fields whichever channel sent it |
 | 🚧 What the winner sees of it | The bank name and a masked destination, read from what was typed: the last four digits of an account or a phone, or the first letter and domain of an email |
 | 🚧 Proof | 1 to 5 files, operators only |
 | 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
