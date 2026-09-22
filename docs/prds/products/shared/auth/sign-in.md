@@ -55,7 +55,7 @@ session, and the person lands on the brand home with a toast.
   one toast that the link no longer works.
 - **Banned** — a banned account's link follow shows they cannot sign in,
   and does not invite them to ask for another link.
-- 🚧 **Different account** — when the person is already signed in as someone
+- **Different account** — when the person is already signed in as someone
   else, the link does not switch them. A toast says they are signed in with a
   different account, names the link’s email in the description, and offers
   **Switch** or **Stay**; dismissing keeps the current session.
