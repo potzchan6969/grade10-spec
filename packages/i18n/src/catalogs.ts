@@ -71,6 +71,7 @@ import sharedEnChrome from "../messages/shared/en/chrome.json";
 import sharedEnCommon from "../messages/shared/en/common.json";
 import sharedEnDates from "../messages/shared/en/dates.json";
 import sharedEnEmail from "../messages/shared/en/email.json";
+import sharedEnGrading from "../messages/shared/en/grading.json";
 import sharedEnIdentity from "../messages/shared/en/identity.json";
 import sharedEnLegal from "../messages/shared/en/legal.json";
 import sharedEnLocale from "../messages/shared/en/locale.json";
@@ -96,6 +97,7 @@ import sharedKoChrome from "../messages/shared/ko/chrome.json";
 import sharedKoCommon from "../messages/shared/ko/common.json";
 import sharedKoDates from "../messages/shared/ko/dates.json";
 import sharedKoEmail from "../messages/shared/ko/email.json";
+import sharedKoGrading from "../messages/shared/ko/grading.json";
 import sharedKoIdentity from "../messages/shared/ko/identity.json";
 import sharedKoLegal from "../messages/shared/ko/legal.json";
 import sharedKoLocale from "../messages/shared/ko/locale.json";
@@ -121,6 +123,7 @@ import sharedZhHansChrome from "../messages/shared/zh-Hans/chrome.json";
 import sharedZhHansCommon from "../messages/shared/zh-Hans/common.json";
 import sharedZhHansDates from "../messages/shared/zh-Hans/dates.json";
 import sharedZhHansEmail from "../messages/shared/zh-Hans/email.json";
+import sharedZhHansGrading from "../messages/shared/zh-Hans/grading.json";
 import sharedZhHansIdentity from "../messages/shared/zh-Hans/identity.json";
 import sharedZhHansLegal from "../messages/shared/zh-Hans/legal.json";
 import sharedZhHansLocale from "../messages/shared/zh-Hans/locale.json";
@@ -146,6 +149,7 @@ import sharedZhHantChrome from "../messages/shared/zh-Hant/chrome.json";
 import sharedZhHantCommon from "../messages/shared/zh-Hant/common.json";
 import sharedZhHantDates from "../messages/shared/zh-Hant/dates.json";
 import sharedZhHantEmail from "../messages/shared/zh-Hant/email.json";
+import sharedZhHantGrading from "../messages/shared/zh-Hant/grading.json";
 import sharedZhHantIdentity from "../messages/shared/zh-Hant/identity.json";
 import sharedZhHantLegal from "../messages/shared/zh-Hant/legal.json";
 import sharedZhHantLocale from "../messages/shared/zh-Hant/locale.json";
@@ -186,6 +190,7 @@ export const sharedCatalogs = {
     common: sharedEnCommon,
     dates: sharedEnDates,
     email: sharedEnEmail,
+    grading: sharedEnGrading,
     identity: sharedEnIdentity,
     legal: sharedEnLegal,
     locale: sharedEnLocale,
@@ -213,6 +218,7 @@ export const sharedCatalogs = {
     common: sharedZhHantCommon,
     dates: sharedZhHantDates,
     email: sharedZhHantEmail,
+    grading: sharedZhHantGrading,
     identity: sharedZhHantIdentity,
     legal: sharedZhHantLegal,
     locale: sharedZhHantLocale,
@@ -240,6 +246,7 @@ export const sharedCatalogs = {
     common: sharedZhHansCommon,
     dates: sharedZhHansDates,
     email: sharedZhHansEmail,
+    grading: sharedZhHansGrading,
     identity: sharedZhHansIdentity,
     legal: sharedZhHansLegal,
     locale: sharedZhHansLocale,
@@ -267,6 +274,7 @@ export const sharedCatalogs = {
     common: sharedKoCommon,
     dates: sharedKoDates,
     email: sharedKoEmail,
+    grading: sharedKoGrading,
     identity: sharedKoIdentity,
     legal: sharedKoLegal,
     locale: sharedKoLocale,

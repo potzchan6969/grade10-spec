@@ -107,9 +107,11 @@ function GradingCardList({
         <Text as="h2" size="lg" weight="medium">
           {copy.title}
         </Text>
-        <Button onClick={onPaste} size="sm" variant="secondary">
-          {copy.paste}
-        </Button>
+        {cards.length > 0 ? (
+          <Button onClick={onPaste} size="sm" variant="secondary">
+            {copy.paste}
+          </Button>
+        ) : null}
       </HStack>
       <VStack data-slot="grading-card-list-cap" gap="xs" hAlign="stretch">
         <Text size="sm" tone="secondary">
