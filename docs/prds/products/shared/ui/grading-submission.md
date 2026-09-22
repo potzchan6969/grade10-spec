@@ -57,25 +57,25 @@ Every state is reachable from a story with props alone; the surface each
 block lands on is [Grading](/p/grade10-site/grading), and every word reaches
 a block through props.
 
-<!-- story: blocks-grading-submission-gradingfeesheet--default "The fee sheet" -->
+<!-- story: grading-submission-gradingfeesheet--one-grader "The fee sheet" -->
 
-<!-- story: blocks-grading-submission-gradingcardlist--no-value "A card without a value" -->
+<!-- story: grading-submission-gradingcardlist--no-value "A card without a value" -->
 
-<!-- story: blocks-grading-submission-gradingpastesheet--above-ceiling "A pasted line above the ceiling" -->
+<!-- story: grading-submission-gradingpastesheet--above-the-ceiling "A pasted line above the ceiling" -->
 
-<!-- story: blocks-grading-submission-gradinglevelpicker--closed-by-value "A level closed by a declared value" -->
+<!-- story: grading-submission-gradinglevelpicker--level-closed-by-a-value "A level closed by a declared value" -->
 
-<!-- story: blocks-grading-submission-gradingreview--upcharge-warning "The upcharge warning" -->
+<!-- story: grading-submission-gradingreview--upcharge-warning "The upcharge warning" -->
 
-<!-- story: blocks-grading-submission-gradingownershipchip--running-late "Running late, with the grader" -->
+<!-- story: grading-submission-gradingownershipchip--running-late "Running late, with the grader" -->
 
-<!-- story: blocks-grading-submission-gradingpickupcard--named "The pickup card with someone named" -->
+<!-- story: grading-submission-gradingpickupcard--someone-named "The pickup card with someone named" -->
 
-<!-- story: blocks-grading-submission-gradinggradecards--ungraded "A card returned ungraded" -->
+<!-- story: grading-submission-gradinggradecards--ungraded "A card returned ungraded" -->
 
-<!-- story: blocks-grading-submission-gradingmoneyblock--due "An upcharge due before collection" -->
+<!-- story: grading-submission-gradingmoneyblock--due "An upcharge due before collection" -->
 
-<!-- story: blocks-grading-submission-gradinguncollectedladder--notice "The written notice rung" -->
+<!-- story: grading-submission-gradinguncollectedladder--notice "The written notice rung" -->
 
 :::detail{title="Product decisions" for="pm"}
 The grading pages are one collector's submission read on a phone, and the
@@ -88,5 +88,5 @@ blocks are what draws them. The design record is the change's
 | Two card lists | Decided | An editable planning list and a read-only record are two blocks, because one carries fields and callbacks the other never renders; a third for the visit is not needed, the booking set already ships it | Design |
 | The drop-off is the diary's | Decided | The shop, the day, the time, the confirmation and the visit card are the appointment-booking exports unchanged; grading adds the batch line and its own three-step rail in the application | Design |
 | The status word and the chip are one block | Decided | Every board draws them as one pair, and the status table pairs them, so one block keeps the two from disagreeing | Design |
-| Story ids | Decided | `blocks-grading-submission-<component>--<state>`, the state being the design record's row in kebab-case | Design |
+| Story ids | Decided | `grading-submission-<component>--<state>`, the package's own `<Capability>/<Component>` title, the state being the design record's row in kebab-case | Design |
 :::

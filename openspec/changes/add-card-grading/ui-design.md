@@ -33,9 +33,6 @@ the pages carry is the product; this file carries the surface.
 - **The iPad** — the two documents ride `packages/doc-sign`'s `CeremonyFlow`
   unchanged, with grading's `RefusalWords` and templates; the board is the
   document, the ceremony's chrome is the vault's
-- **Letters** — every collector email is a React Email letter the worker
-  renders from `packages/grading/backend/src/email`; `apps/emails/emails/grading/`
-  in this store carries the preview copy of each, one file per kind
 - **Copy** — the collector's words are keys in
   `packages/i18n/messages/shared/<locale>/grading.json`, a new namespace, in
   the families named under Components and never their words; the console's
@@ -101,12 +98,11 @@ parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
 
 ### `@grade10/ui` — new, work in this repository
 
-Every export below lands in `packages/ui/src/blocks/grading-submission/`
-with a story per state, `packages/ui/src/index.ts` re-exporting them under a
-`shared/ui/grading-submission` comment. Every one takes `copy` (its words as
-one typed group), `locale`, and `className`; money is minor units and an
-ISO 4217 code formatted through the package's `formatMoney`, a day or an
-instant through `formatLocalTime` in the zone given.
+Every export below has a story per state, with `packages/ui/src/index.ts`
+re-exporting it under a `shared/ui/grading-submission` comment, and takes
+`copy` (its words as one typed group), `locale` and `className`; money is
+minor units and an ISO 4217 code through the package's `formatMoney`, a day
+or an instant through `formatLocalTime` in the zone given.
 
 - **`GradingFeeSheet`** — `graders` (each with its name and its levels:
   name, ceiling, cards a submission, fee, cover rate or none, weeks),
@@ -241,14 +237,13 @@ photograph pair is two `MediaFrame`s. Nothing the console package lacks.
 
 ### Letters — work in grade10 and in this store
 
-One shell, `GradingLetter`, on `Grade10EmailShell`: the heading, the
-greeting, the lead paragraph, then the blocks the table under States gives
-each letter, then `SubmissionLine` and `GradingFooter`. `GradingLetter`,
-`CardLines`, `PickupBlock`, `SubmissionLine` and `GradingFooter` land in
-`packages/grading/backend/src/email`, one letter per kind in
-`notify/vocabulary.ts`; the same five components and twenty-five preview
-letters under `apps/emails/emails/grading/`, over a fixture submission
-(`5TW8HN`).
+Every collector email is a React Email letter the worker renders from
+`packages/grading/backend/src/email`, one kind per letter in
+`notify/vocabulary.ts`. One shell, `GradingLetter`, on `Grade10EmailShell`:
+the heading, the greeting, the lead paragraph, then the blocks the table
+under States gives that letter, then `SubmissionLine` and `GradingFooter`.
+The same five components and twenty-five preview letters land under
+`apps/emails/emails/grading/`, over a fixture submission (`5TW8HN`).
 
 - **The facts** — the label · value rows are `ProductEmail`'s facts group,
   as the vault's letters use it; no table component of its own
@@ -329,7 +324,7 @@ Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-s
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Rail | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-US-02` |
+| Rail, the cards | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-US-02` |
 | About you, signed in (`G02`) | name, email, phone prefilled; the change-for-this-submission line | `grade10-site-grading-submission-plan-US-02` |
 | About you, signed out | empty fields; the emailed-link line under the email | `grade10-site-grading-submission-plan-US-06` |
 | Empty list | no card; Add a card and Paste a list; Continue disabled | `grade10-site-grading-submission-plan-US-02` |
@@ -366,7 +361,7 @@ Stories `grading-submission-gradingpastesheet--`.
 
 ### Plan wizard — the service
 
-Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish later rows `grading-plan-plan-wizard--`.
+Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish-later rows `grading-plan-plan-wizard--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
@@ -382,8 +377,8 @@ Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish later row
 | Estimate with cover | the cover line per card under the fee and the total with it | `grade10-site-grading-submission-plan-US-05` |
 | Upcharge notice (`G03`) | the `Alert`: moved up a level, the difference passed on, told before collection | `grade10-site-grading-submission-plan-US-07` |
 | Grader with example figures | CGC or BGS: the levels as data with the example-fees line | `grade10-site-grading-submission-plan-US-05` |
-| Finish later | the plan kept with the grader and the level picked; the emailed-link line | `grade10-site-grading-submission-plan-US-06` |
-| Rail | The cards `completed`, The service `progress` | `grade10-site-grading-submission-plan-US-05` |
+| Finish later at the service | the plan kept with the grader and the level picked; the emailed-link line | `grade10-site-grading-submission-plan-US-06` |
+| Rail, the service | The cards `completed`, The service `progress` | `grade10-site-grading-submission-plan-US-05` |
 
 ### Plan wizard — book
 
@@ -401,7 +396,7 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | Booking | Book pending; both buttons disabled | `grade10-site-grading-submission-plan-US-07` |
 | Saved for later | the plan kept; the page opens at Planned | `grade10-site-grading-submission-plan-US-06` |
 | Plan expired meanwhile | the refusal by name; Start again | `grade10-site-grading-submission-plan-US-08` |
-| Rail | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-US-07` |
+| Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-US-07` |
 
 ### Book the drop-off
 
@@ -449,7 +444,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Loading | `submission.loading`; nothing else | `grade10-site-grading-submission-lifecycle-US-01` |
 | Not found | the site's not-found copy; a link naming nothing the same | `grade10-site-grading-submission-lifecycle-US-01` |
 | Header | n cards to grader · level, Submission id, planned on; `GradingOwnershipChip`; `GradingStatusRail` | `grade10-site-grading-submission-lifecycle-US-01` |
-| Rail, one per stage | seven `Step`s Planned → Home; the status's stage `progress`, earlier `completed`, later `upcoming` | `grade10-site-grading-submission-lifecycle-US-01` |
+| Rail, one per stage | seven `Step`s Planned → Home; the status's stage `progress`, earlier `completed`, later `upcoming` · `grading-submission-gradingstatusrail--planned` through `--home` | `grade10-site-grading-submission-lifecycle-US-01` |
 | Rail, ended | the stage the submission ended at stays `progress`; the word says the ending | `grade10-site-grading-submission-lifecycle-US-10` |
 | Chip: Waiting on you | Not handed in yet, Ready to collect | `grade10-site-grading-submission-lifecycle-US-01` |
 | Chip: Drop-off | Drop-off booked with the visit's day | `grade10-site-grading-dropoff-booking-US-01` |
@@ -471,7 +466,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-US-10` |
 | Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-US-10` |
 | Handed in (`G08`) | Checked in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-US-01` |
-| Refused card | the card's Refused badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-US-02` |
+| Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-US-02` |
 | Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-US-02` |
 | Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-US-02` |
 | With the grader (`G09`) | With the grader · With PSA; the lead; `GraderStagesCard`; Nothing to do; the cards with intake ids; History | `grade10-site-grading-submission-lifecycle-US-01` |
@@ -507,7 +502,7 @@ Stories `grading-submission-gradingcardrecord--`, the Grade card rows `grading-s
 | Damaged | the badge with the payout line | `grade10-site-grading-submission-lifecycle-US-05` |
 | Collected (`G12`) | the record: grade, grader, cert, Look up; the slab photograph | `grade10-site-grading-submission-lifecycle-US-09` |
 | Vaulted | the badge linking the case | `grade10-site-grading-submission-lifecycle-US-06` |
-| Grade card (`G10`) | the number, the label word, the grader, the name, the cert | `grade10-site-grading-submission-lifecycle-US-01` |
+| Grade card, graded (`G10`) | the number, the label word, the grader, the name, the cert | `grade10-site-grading-submission-lifecycle-US-01` |
 | Grade card, moved up | the Moved up a level badge | `grade10-site-grading-submission-lifecycle-US-04` |
 | Grade card, ungraded | the `error` card: the code, Returned ungraded, the note | `grade10-site-grading-submission-lifecycle-US-03` |
 | Grade card, minimum not met | the grade and the badge; raw | `grade10-site-grading-submission-lifecycle-US-03` |
@@ -531,7 +526,7 @@ Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submi
 | Saving | Save pending | `grade10-site-grading-submission-lifecycle-US-07` |
 | Named (`G18`) | the Named badge, `Avatar`, the name, named when, the one-person line; Change, Remove | `grade10-site-grading-submission-lifecycle-US-07` |
 | Refused | the refusal by name under the field: already collected | `grade10-site-grading-submission-lifecycle-US-07` |
-| Ladder (`G11`) | the three rungs with their dates, none reached; the vault line | `grade10-site-grading-submission-lifecycle-US-08` |
+| Ladder, none reached (`G11`) | the three rungs with their dates, none reached; the vault line | `grade10-site-grading-submission-lifecycle-US-08` |
 | Ladder, reminded | the reminder rung passed | `grade10-site-grading-submission-lifecycle-US-08` |
 | Ladder, storage | the storage rung reached; the fee accruing per card | `grade10-site-grading-submission-lifecycle-US-08` |
 | Ladder, notice | the notice rung with the posting date and the 30 days; after it | `grade10-site-grading-submission-lifecycle-US-08` |
@@ -692,7 +687,7 @@ Stories `grading-admin-intake-refuse-card-dialog--`.
 
 ### Batches
 
-Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-admin-batches-ship-batch-form--`.
+Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-admin-batches-ship-batch-form--`. A batch's word — open, closed, shipped, returned, received — is read from its own stamps; no act on this panel sets it.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
