@@ -19,6 +19,7 @@ contract for leaving a session.
   - One-time session: an unused unexpired link signs in once
   - Failed follow feedback: expired, dead, and banned links land on the brand home with a toast
   - Followed elsewhere: the surface that asked carries on once the session arrives
+  - Signed-in mismatch: a link follow while signed in as a different account offers Switch or Stay instead of replacing the session
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
 - Account identity
