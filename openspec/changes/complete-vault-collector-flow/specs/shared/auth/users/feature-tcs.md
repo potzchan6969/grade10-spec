@@ -584,16 +584,16 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-US5-TC4-1` | Joined | `shared-auth-users-SC-29` |
 | `shared-auth-users-US5-TC5-1` | Joined | `shared-auth-users-SC-37` |
 | `shared-auth-users-US5-TC6-1` | Joined | `shared-auth-users-SC-38` |
-| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused and the request stays open, which the author confirmed as Q45 |
-| `shared-auth-users-US5-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as Q48 |
-| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded | settled as Q45: the page reads the request as one the shop filed and offers no cancel, and a later unban does not return it. Folded as `shared-auth-users-SC-40`, walked by `shared-auth-users-US5-TC9-1` |
-| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q46: there is neither. No scenario beyond `shared-auth-users-SC-29`, which already lets a new request be filed once none is open |
+| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused and the request stays open, which the author confirmed as QQ3 |
+| `shared-auth-users-US5-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as QQ4 |
+| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded | settled as QQ1: the page reads the request as one the shop filed and offers no cancel, and a later unban does not return it. Folded as `shared-auth-users-SC-40`, walked by `shared-auth-users-US5-TC9-1` |
+| Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as QQ2: there is neither. No scenario beyond `shared-auth-users-SC-29`, which already lets a new request be filed once none is open |
 | Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-33`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
 | `shared-auth-users-SC-28` | Case added | `shared-auth-users-US5-TC10-1` |
 | `shared-auth-users-SC-34` | Case added | `shared-auth-users-US2-TC7-1` |
 | `shared-auth-users-SC-35` | Case added | `shared-auth-users-US2-TC8-1` |
 | `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC9-1` |
-| `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q49; walked by `shared-auth-users-US2-TC10-1` |
+| `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as QQ5; walked by `shared-auth-users-US2-TC10-1` |
 | Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-30`, `shared-auth-users-SC-31`, `shared-auth-users-SC-32`, `shared-auth-users-SC-29` and `shared-auth-users-SC-33` |
 
 ### Manual

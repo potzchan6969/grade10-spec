@@ -434,7 +434,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The ending names the clock from the row.
+* The ending reads the same wording for both rows.
+* The timeline names the clock from the row.
 * Nothing was signed and the item never left the collector.
 * The stepper stays at the stage the case reached, in progress; the
   badge names the ending.
@@ -631,6 +632,7 @@ Runs once per row of **Test data**.
 | <case_17> | The collector declined an offer, being valued again |
 | <case_18> | The last offer ran out unanswered |
 | <case_4> | In the vault on the storage lane |
+| <case_19> | In the vault on the financed lane, the advance not yet paid out |
 
 **Steps:**
 
@@ -870,7 +872,8 @@ Runs once per row of **Test data**.
 | Condition | Shows |
 | --- | --- |
 | The case is still loading | `case.loading`, nothing else |
-| The id answers to no case of the signed-in collector | the site's not-found copy |
+| The id answers to no case anybody was issued | the site's not-found copy |
+| The id answers to another collector's case | the same not-found copy |
 
 **Steps:**
 
@@ -879,3 +882,183 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The page shows only what the row names.
+* The two not-found rows read the same page, with nothing on it telling
+  them apart.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC11-1: Asking for the item back is recorded once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* The collector is signed in and on <grade10 vault case page> for
+  <case_4>: the item is in the vault, storage lane, no loan, no ask
+  standing.
+
+**Steps:**
+
+1. Click Ask for it back.
+2. Read the confirmation.
+3. Click the confirming action.
+
+**Expected Results:**
+
+* The confirmation reads that the item leaves on a pickup visit against
+  a signed release.
+* The ask reads on the case with the day it was recorded.
+* Ask for it back is no longer offered; Book a pickup visit is.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC12-1: The list and the case read one answer for a held item
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* <case_4>: the item is in the vault, storage lane, held since a known
+  day.
+
+**Steps:**
+
+1. Open the vault home and read the case's card.
+2. Open the case.
+
+**Expected Results:**
+
+* Both read the ownership chip With us.
+* Both name the same day the item has been held since.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC13-1: Reading a derived fact writes nothing on the case
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* <case_18>: the offer's own expiry has passed, unanswered, and no
+  sweep has closed it.
+
+**Steps:**
+
+1. Open the case page.
+2. Reload it.
+3. Read the case's history.
+
+**Expected Results:**
+
+* Both reads say the offer ran out and leave the case open for another
+  offer.
+* The status word is the same on both reads.
+* The history carries no entry for either read.
+
+---
+
+### grade10-site-vault-case-lifecycle-US5-TC14-1: A case meeting two facts reads the later one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-case-lifecycle-US-05
+
+**Pre-conditions:**
+
+* <case_20>: the offer ran out on Monday and the booked visit was
+  closed as missed on Wednesday.
+
+**Steps:**
+
+1. Open the case page.
+
+**Expected Results:**
+
+* The page reads the missed visit, the later of the two, and offers
+  another visit.
+* The offer that ran out reads on the timeline and not as the fact.
+
+---
+
+## Reconciliation
+
+**Run** — the blind pass read this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 23 cases over four journeys and six raised questions; the scenario pass issued `grade10-site-vault-case-lifecycle-SC-16` to `grade10-site-vault-case-lifecycle-SC-36`.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` row 1 — a request with no offer and no visit | Folded | The confirmation names only what stands open; `grade10-site-vault-case-lifecycle-SC-37`, and the move table's cell. Raised row 1, landed as `Q37` |
+| `US1-TC2-1` — Cancel withheld once the item is in the vault | Covered | Durable `grade10-site-vault-case-lifecycle-SC-10`, and the move table's Offered while |
+| `US1-TC3-1` — Cancel refused once the case moved | Covered | `grade10-site-vault-case-lifecycle-SC-19`, guarded by durable `grade10-site-vault-case-lifecycle-SC-04`, which refuses any status change under the caller. Raised row 3, landed as `Q39` |
+| `US2-TC1-1` — the deadline while a visit is unbooked | Covered | `grade10-site-vault-case-lifecycle-SC-28`; the rule reads from terms agreed onward, never before. Raised row 6, landed as `Q42` |
+| `US2-TC2-1`, `US2-TC3-1`, `US2-TC4-1` — the clock boundaries | Covered | The durable clock table and durable `grade10-site-vault-case-lifecycle-SC-06`; this change adds no clock |
+| `US2-TC5-1` — a missed visit on a vaulted case | Covered | The durable clock table and `grade10-site-vault-case-lifecycle-SC-26` |
+| `US4-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-20`, `grade10-site-vault-case-lifecycle-SC-32`, `grade10-site-vault-case-lifecycle-SC-36` |
+| `US4-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-21`, `grade10-site-vault-case-lifecycle-SC-17` for the collector's own row |
+| `US4-TC3-1` — a wording per clock | Amended | One wording whichever clock ran out, the clock named on the timeline: `grade10-site-vault-case-lifecycle-SC-22` and the case's expected results. Raised row 4, landed as `Q40` |
+| `US4-TC4-1` | Covered | `grade10-site-vault-case-lifecycle-SC-23`; the money's rendering is `grade10-site/vault/loan-and-settlement`'s |
+| `US4-TC5-1` | Covered | `grade10-site-vault-case-lifecycle-SC-35` |
+| `US5-TC1-1` | Covered | `grade10-site-vault-case-lifecycle-SC-30`, `grade10-site-vault-case-lifecycle-SC-31` |
+| `US5-TC2-1` | Covered | `grade10-site-vault-case-lifecycle-SC-33` |
+| `US5-TC3-1` — the With us rows | Amended | A fourth row for a vaulted financed case; `grade10-site-vault-case-lifecycle-SC-38` and the chip table now read either lane. Landed as `Q44` |
+| `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | Covered | `grade10-site-vault-case-lifecycle-SC-24`, `grade10-site-vault-case-lifecycle-SC-25`, `grade10-site-vault-case-lifecycle-SC-26`, `grade10-site-vault-case-lifecycle-SC-27` and `grade10-site-vault-case-lifecycle-SC-18` |
+| `US5-TC8-1` — the vaulted storage page | Covered | The move table's Offered while and `grade10-site-vault-case-lifecycle-SC-18`; the documents and their fingerprints are `grade10-site/vault/documents-and-signing`'s |
+| `US5-TC9-1` | Covered | `grade10-site-vault-case-lifecycle-SC-19` |
+| `US5-TC10-1` — one not-found page | Amended | Two not-found rows, an unissued id and another collector's case, reading one page: `grade10-site-vault-case-lifecycle-SC-39`. Raised row 5, landed as `Q41` |
+| `grade10-site-vault-case-lifecycle-SC-18` — the act of asking | Case added | `US5-TC11-1`: no case confirmed the ask; the suite only read the state after it |
+| `grade10-site-vault-case-lifecycle-SC-34` — the list and the case | Case added | `US5-TC12-1`: the suite read the chip on the case and never against the list |
+| `grade10-site-vault-case-lifecycle-SC-29` — nothing derived is written | Case added | `US5-TC13-1`: two reads, the same fact, no history entry |
+| `grade10-site-vault-case-lifecycle-SC-40` — two facts at once | Case added | `US5-TC14-1`, from the ruling that the later event's fact is the one read |
+| `grade10-site-vault-case-lifecycle-SC-19` — Release refused | Covered | The design's Release refused state is the ask's own refusal. Raised row 2, landed as `Q38` |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US4-TC1-1` | A person reads the staff reason against what staff typed; only the reason's presence automates |
+| `US4-TC2-1` | A person reads that the ending names the party who closed it in the collector's words |
+| `US4-TC3-1` | A person reads that both clocks give one wording and the timeline names the clock |
+| `US4-TC4-1` | A person reads the figure, the notice date and the date to pay by against the notice that was sent |
+| `US5-TC4-1`, `US5-TC5-1`, `US5-TC6-1`, `US5-TC7-1` | A person reads that the fact and the one thing to do next are the collector's words, not the status word |
+| `US5-TC14-1` | A person reads which of the two facts the page leads with |

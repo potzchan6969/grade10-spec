@@ -233,7 +233,7 @@ beside them.
 | Empty (`C21`) | the hero, Start a request, the four-step How it works, Nothing here yet with the three-draft cap; no cards | `grade10-site-vault-case-intake-US-01` |
 | Cards (`C01`) | one `Card` per case: item title, the status word, the ownership chip, opened · lane · asked for, the reference; Open | `grade10-site-vault-case-intake-US-05` |
 | Offer deadline | on an `offer_made` card with a live offer: answer by the expiry; absent once it lapsed | `grade10-site-vault-valuation-and-offer-SC-25` |
-| Held since | on a `vaulted`, `active` or `repaid` card: in the vault since | `grade10-site-vault-case-lifecycle-US-05` |
+| Held since | on a `vaulted`, `active` or `repaid` card: in the vault since | `grade10-site-vault-case-lifecycle-SC-34` |
 | Draft card | photographs attached count and the next-step line; Open resumes the wizard | `grade10-site-vault-case-intake-US-01` |
 | Error | the message in the error tone; no cards | `grade10-site-vault-case-intake-US-01` |
 
@@ -255,20 +255,20 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading | `case.loading`; nothing else | `grade10-site-vault-case-lifecycle-US-05` |
-| Not found | the site's not-found copy | `grade10-site-vault-case-lifecycle-US-05` |
+| Loading | `case.loading`; nothing else | **Out of suite:** the site shell |
+| Not found | the site's not-found copy | **Out of suite:** the site shell |
 | Header | item title, category · reference · opened; photographs | `grade10-site-vault-case-intake-US-05` |
-| Stepper, financed | eight `Step`s Request → Home; the status's stage `progress`, earlier `completed`, later `upcoming` | `grade10-site-vault-case-lifecycle-US-05` |
-| Stepper, storage | six `Step`s Request, Valued, Agreed, Signed, Vault, Home | `grade10-site-vault-case-lifecycle-US-05` |
-| Stepper, ended | the stage the case ended at stays `progress`; the badge says the ending | `grade10-site-vault-case-lifecycle-US-04` |
-| Chip: Waiting on you | a live offer, a missed visit, an ask for the item back | `grade10-site-vault-case-lifecycle-US-05` |
-| Chip: With us | submitted, being valued, a lapsed or declined offer, ready to sign, in the vault on the storage lane | `grade10-site-vault-case-lifecycle-US-05` |
+| Stepper, financed | eight `Step`s Request → Home; the status's stage `progress`, earlier `completed`, later `upcoming` | `grade10-site-vault-case-lifecycle-SC-30` |
+| Stepper, storage | six `Step`s Request, Valued, Agreed, Signed, Vault, Home | `grade10-site-vault-case-lifecycle-SC-31` |
+| Stepper, ended | the stage the case ended at stays `progress`; the badge says the ending | `grade10-site-vault-case-lifecycle-SC-32` |
+| Chip: Waiting on you | a live offer, a missed visit, an ask for the item back | `grade10-site-vault-case-lifecycle-SC-33` |
+| Chip: With us | submitted, being valued, a lapsed or declined offer, ready to sign, in the vault on either lane | `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-lifecycle-SC-38` |
 | Chip: Visit | terms agreed with a visit ahead: the visit's day | `grade10-site-vault-visit-booking-US-04` |
 | Chip: Due | a live loan before the due date: due and the date | `grade10-site-vault-loan-and-settlement-SC-05` |
 | Chip: Past due | a live loan after it: n days past due | `grade10-site-vault-loan-and-settlement-SC-06` |
 | Chip: Settled | repaid: settled and the date | `grade10-site-vault-loan-and-settlement-SC-15` |
-| Chip: Collected | released: collected and the date | `grade10-site-vault-case-lifecycle-US-04` |
-| Chip: Closed | declined, cancelled, expired, forfeited: closed and the date | `grade10-site-vault-case-lifecycle-US-04` |
+| Chip: Collected | released: collected and the date | `grade10-site-vault-case-lifecycle-SC-35` |
+| Chip: Closed | declined, cancelled, expired, forfeited: closed and the date | `grade10-site-vault-case-lifecycle-SC-36` |
 | Request sent (`C10`) | the lead on valuing from photographs; the verify prompt; the visit card; the item block; Cancel this request; history | `grade10-site-vault-case-intake-US-01` |
 | Offer waiting (`C11`) | hero amount, term, total, open until; Accept this offer, Decline this offer; the terms table with the valuation; How the loan works; the identity chip; the visit card with the accepting-books-nothing line | `grade10-site-vault-valuation-and-offer-SC-21` |
 | Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-SC-22` |
@@ -276,19 +276,19 @@ beside them.
 | Answer in flight | the confirm's button pending while the effect runs; Accept's mounted dialog holds its own | `grade10-site-vault-valuation-and-offer-SC-24` |
 | Answer refused | the confirm stays open with the refusal by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-SC-28`, `grade10-site-vault-valuation-and-offer-SC-29` |
 | Offer replaced (`C22`) | the new offer's hero naming the closed one and its date; Accept and Decline on the new offer only | `grade10-site-vault-valuation-and-offer-SC-26` |
-| Offer ran out (`C22`) | badge Offer ran out, chip With us; the closed offer's amount and expiry; no Accept or Decline; the visit stands | `grade10-site-vault-case-lifecycle-US-05` |
-| You declined (`C22`) | badge Being valued; the declined figure and when; the visit stands; Cancel this request lower on the page | `grade10-site-vault-case-lifecycle-US-05` |
-| Visit missed (`C22`) | badge the status word, chip Waiting on you; the missed slot; Book another visit | `grade10-site-vault-case-lifecycle-US-05` |
-| Asked for it back (`C22`) | badge In the vault, chip Waiting on you; recorded when; Book a pickup visit; Ask for it back hidden | `grade10-site-vault-case-lifecycle-US-05` |
+| Offer ran out (`C22`) | badge Offer ran out, chip With us; the closed offer's amount and expiry; no Accept or Decline; the visit stands | `grade10-site-vault-case-lifecycle-SC-24` |
+| You declined (`C22`) | badge Being valued; the declined figure and when; the visit stands; Cancel this request lower on the page | `grade10-site-vault-case-lifecycle-SC-25` |
+| Visit missed (`C22`) | badge the status word, chip Waiting on you; the missed slot; Book another visit | `grade10-site-vault-case-lifecycle-SC-26` |
+| Asked for it back (`C22`) | badge In the vault, chip Waiting on you; recorded when; Book a pickup visit; Ask for it back hidden | `grade10-site-vault-case-lifecycle-SC-27`, `grade10-site-vault-case-lifecycle-SC-18` |
 | Terms agreed, visit ahead (`C13`) | hero see you on the day; Add the visit to your calendar; Before you come — visit, identity, bring, sign, the money follows; the agreed terms table | `grade10-site-vault-visit-booking-SC-20`, `grade10-site-vault-visit-booking-SC-16` |
-| Terms agreed, no visit | the Book a visit prompt and the 30-day line | `grade10-site-vault-case-lifecycle-US-02` |
+| Terms agreed, no visit | the Book a visit prompt and the 30-day line | `grade10-site-vault-case-lifecycle-SC-28` |
 | Identity not verified | the Before you come item reads Verify now, linking `/vault/verify`, with the in-person line | `grade10-site-vault-visit-booking-SC-18` |
 | Visit card | slot, shop, address; Add to calendar, Move, Cancel visit; the bring line | `grade10-site-vault-visit-booking-SC-20` |
 | Cancel visit confirmation | the confirm's words: the visit closes, the case stays; the picker opens after | `grade10-site-vault-visit-booking-SC-21` |
 | No visit | Book a visit; the picker opens on the page | `grade10-site-vault-visit-booking-SC-01` |
-| Cancel this request | the button with its consequence line; the confirm names the offer and the visit it closes; Yes, cancel and Go back | `grade10-site-vault-case-lifecycle-US-01` |
-| Cancelled | `case.cancelled`; the page reads again as the ending | `grade10-site-vault-case-lifecycle-US-01` |
-| In the vault, storage (`C14`) | hero the shop; Book a pickup visit, Ask for it back; the custody card with outstanding Nothing; documents with fingerprints | `grade10-site-vault-case-lifecycle-US-05` |
+| Cancel this request | the button with its consequence line; the confirm names the offer and the visit it closes; Yes, cancel and Go back | `grade10-site-vault-case-lifecycle-SC-16`, `grade10-site-vault-case-lifecycle-SC-37` |
+| Cancelled | `case.cancelled`; the page reads again as the ending | `grade10-site-vault-case-lifecycle-SC-17` |
+| In the vault, storage (`C14`) | hero the shop; Book a pickup visit, Ask for it back; the custody card with outstanding Nothing; documents with fingerprints | `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-lifecycle-SC-18` |
 | Loan running (`C15`) | hero total by the due date with the holds line; Book a visit to collect; What is owed as at: outstanding of total · repaid, the progress line, the breakdown | `grade10-site-vault-loan-and-settlement-SC-05` |
 | How to pay | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-SC-35` |
 | How to pay, values unset | the bracketed placeholder outside production; in production the block is refused — ❓ what stands in its place, flagged below | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
@@ -302,11 +302,11 @@ beside them.
 | Repaid (`C17`) | hero repaid in full; Book a pickup visit, Ask for it back; the repayments; the loan settled table; custody outstanding Nothing; the no-clock line | `grade10-site-vault-loan-and-settlement-SC-15` |
 | Back with you (`C18`) | hero released at the shop on the date; Start another request; documents with the release receipt, fingerprints and the public verify address; the loan settled | `grade10-site-vault-documents-and-signing-SC-17` |
 | What we keep (`C18`) | the retention table per class with its window; the ask-to-be-forgotten line linking Your data | `grade10-site-vault-retention-and-erasure-SC-18` |
-| Declined (`C19`) | badge and closed date; the staff reason verbatim; the item stayed, the visit was cancelled; Start another request | `grade10-site-vault-case-lifecycle-US-04` |
-| Cancelled (`C19`) | by whom and when; the offer closed and the visit cancelled with it | `grade10-site-vault-case-lifecycle-US-04` |
-| Expired (`C19`) | which clock ran out; nothing signed, the item never left | `grade10-site-vault-case-lifecycle-US-04` |
-| Forfeited (`C19`) | the figure the item settled, the notice date, the date to pay by; the agreements stay | `grade10-site-vault-case-lifecycle-US-04` |
-| Release refused | the ask's confirm stays open with the refusal by name | `grade10-site-vault-case-lifecycle-US-05` |
+| Declined (`C19`) | badge and closed date; the staff reason verbatim; the item stayed, the visit was cancelled; Start another request | `grade10-site-vault-case-lifecycle-SC-20` |
+| Cancelled (`C19`) | by whom and when; the offer closed and the visit cancelled with it | `grade10-site-vault-case-lifecycle-SC-21` |
+| Expired (`C19`) | which clock ran out; nothing signed, the item never left | `grade10-site-vault-case-lifecycle-SC-22` |
+| Forfeited (`C19`) | the figure the item settled, the notice date, the date to pay by; the agreements stay | `grade10-site-vault-case-lifecycle-SC-23` |
+| Release refused | the ask's confirm stays open with the refusal by name | `grade10-site-vault-case-lifecycle-SC-19` |
 
 ### Book a visit
 
@@ -349,13 +349,13 @@ beside them.
 | Download, none | the button absent; nothing signed yet | `grade10-site-vault-documents-and-signing-SC-27` |
 | Download in flight | the button pending | **Out of suite:** the view's colocated test |
 | Download failed | the error line under the button | `grade10-site-vault-documents-and-signing-SC-28` |
-| Ask available | the window, what goes and what stays; Ask to be forgotten | `grade10-site-vault-retention-and-erasure-SC-24` |
+| Ask available | the window, what goes and what stays; Ask to be forgotten | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30` |
 | Ask refused | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-SC-23` |
-| Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `grade10-site-vault-retention-and-erasure-SC-24` |
-| Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `grade10-site-vault-retention-and-erasure-SC-24` |
+| Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30` |
+| Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `grade10-site-vault-retention-and-erasure-SC-24`, `shared-auth-users-SC-30`, `shared-auth-users-SC-31` |
 | Ask filed, held | filed on the date; the hold in words beside it — an item in the vault or a loan running — and that erasure waits until it lifts; Cancel the request | `grade10-site-vault-retention-and-erasure-SC-26` |
-| Ask cancelled | back to Ask available | `grade10-site-vault-retention-and-erasure-SC-25` |
-| Window passed | filed on the date, the window passed; no cancel; each product erases | `grade10-site-vault-retention-and-erasure-SC-27` |
+| Ask cancelled | back to Ask available | `grade10-site-vault-retention-and-erasure-SC-25`, `shared-auth-users-SC-32`, `shared-auth-users-SC-29` |
+| Window passed | filed on the date, the window passed; no cancel; each product erases | `grade10-site-vault-retention-and-erasure-SC-27`, `shared-auth-users-SC-33` |
 | Error | the message; the cards stay | `grade10-site-vault-retention-and-erasure-SC-15` |
 
 ### Queue

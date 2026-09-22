@@ -229,12 +229,12 @@ that visit, in the order they are worked.
 | # | Step | Ticked when | Lane |
 | --- | --- | --- | --- |
 | 1 | Identity | an identity check is recorded or reused for the collector | both |
-| 2 | Terms | the loan agreement's key terms are recorded as explained, or on a case that borrows nothing the custody terms are agreed | both |
-| 3 | Papers | the packet is prepared | both |
-| 4 | Handed over | the packet's link is handed to the collector | both |
-| 5 | Signed | every document in the packet is executed | both |
-| 6 | In the vault | the item is confirmed into the vault with its shop | both |
-| 7 | Paid out | the advance is recorded | financed only |
+| 2 | Inspect and value | a valuation is recorded, or the one on file is confirmed | both |
+| 3 | Terms | the collector's acceptance is recorded, or on a case that borrows nothing the custody terms are agreed | both |
+| 4 | Explain key terms | the loan agreement's key terms are recorded as explained | financed only |
+| 5 | Prepare documents | the packet is prepared | both |
+| 6 | Hand over the link | the packet's link is handed to the collector | both |
+| 7 | Vault the item | the item is confirmed into the vault with its shop | both |
 
 - **Ticked as they land** - a step SHALL be ticked when the act that lands it
   is recorded, and never before.
@@ -249,10 +249,10 @@ that visit, in the order they are worked.
 #### Scenario: grade10-admin-vault-operator-queue-SC-30 - The counter reads the visit's steps in order
 **Serves:** grade10-admin-vault-operator-queue-US-07 - a shop of three runs the counter from the screen
 
-- **GIVEN** a financed case with a visit at the shop today and its identity check recorded
+- **GIVEN** a financed case with a visit at the shop today, its identity check recorded and nothing valued yet
 - **WHEN** staff open the case
 - **THEN** it opens on the visit's seven steps in order, with the identity step ticked
-- **AND** the terms step carries the act that lands it
+- **AND** the step that inspects and values carries the act that lands it
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-31 - A step the case does not allow yet says what it is waiting for
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter learns what is missing without sending an act that will be refused
@@ -267,7 +267,7 @@ that visit, in the order they are worked.
 - **GIVEN** a case that borrows nothing, with a visit at the shop today
 - **WHEN** staff open the case
 - **THEN** its terms step reads the custody terms, and no step asks for the loan agreement's key terms
-- **AND** no step asks for an advance to be recorded
+- **AND** its checklist walks six steps rather than seven
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-33 - A case with no visit today shows no checklist
 **Serves:** grade10-admin-vault-operator-queue-US-07 - the counter is not walked through a visit nobody is coming to
