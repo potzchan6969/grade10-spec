@@ -1,0 +1,533 @@
+{
+  "home": {
+    "title": "卡牌评级",
+    "lead": "把卡牌交给我们，送往 PSA、CGC 或 BGS 评级。你在门店交卡，我们投保寄出、全程跟进评级进度，再把入壳的卡牌亲手交回给你。",
+    "start": "开始一张清单",
+    "bookWithoutList": "未有清单也可预约交卡",
+    "bookWithoutListNote": "先列好清单，柜台会快很多；没有清单，我们会在现场同你逐张写下。",
+    "signIn": "登录",
+    "linkSent": "请查看邮箱：链接已寄到 {email}。同一个电邮，不用密码。",
+    "loading": "载入你的清单⋯",
+    "error": "暂时载入不到你的清单，请稍后再试。",
+    "howItWorks": {
+      "title": "流程",
+      "list": {
+        "title": "列出卡牌，并填上每张想保多少",
+        "body": "用手机几分钟就完成，不用开账户。申报价值决定服务级别与保额，不会影响评级结果。"
+      },
+      "handIn": {
+        "title": "预约交卡，亲身送到门店",
+        "body": "柜台大约 {minutes} 分钟：我们对着清单逐张核对，你在 iPad 上签署，然后在收银处付费。"
+      },
+      "leave": {
+        "title": "随当周的批次寄出",
+        "body": "来回都有保险。我们大部分日子都会查看评级公司的进度，成绩一出即电邮通知你。"
+      },
+      "collect": {
+        "title": "凭取件码亲身领回",
+        "body": "营业时间内随时，不用预约。你也可以指定一位代领人。入壳卡牌一律不寄出。"
+      }
+    },
+    "priceSheet": {
+      "title": "收费",
+      "lead": "以下为每张卡的参考费用，已包括评级公司费用及来回投保运费。Express 与 Super Express 另加申报价值 {rate} 的保额。交卡当日付款。",
+      "columns": {
+        "level": "{grader} 级别",
+        "fee": "每张收费"
+      },
+      "row": "卡值上限 {ceiling} · 约 {weeks} 星期回到门店",
+      "perCard": "每张",
+      "coverLine": "另加 {rate} 保额",
+      "graders": "每间评级公司各有收费表；选服务时可在其分页查看其余几间。",
+      "aboveTop": "有卡值超过 {ceiling}？请先到柜台或 WhatsApp 我们，好让我们预备合适级别。",
+      "bulkLine": "二十张或以上走 Bulk 级别，交卡时间较长，同样在此预约。"
+    },
+    "submissions": {
+      "title": "你的清单",
+      "signedInAs": "已登录 · {email}",
+      "signedOut": "未登录",
+      "empty": "这里暂时空空如也。开始一张清单，之后就会在此显示。",
+      "emptySignedOut": "登录即可在此看到你的清单",
+      "open": "{day} 建立 · 柜台付 {amount}",
+      "closed": "{grades} · 证书编号在页内"
+    },
+    "lostLink": "每张清单都可以用电邮里的链接打开，不用账户。链接不见了？用同一个电邮登录即可，没有密码。"
+  },
+  "plan": {
+    "title": "列出你会带来的卡牌",
+    "lead": "填上卡名与系列，以及每张你想保多少。申报价值决定服务级别与保额，不会影响评级结果。",
+    "stepOf": "第 {step} 步，共 {total} 步",
+    "step": {
+      "cards": "卡牌",
+      "service": "服务",
+      "book": "预约"
+    },
+    "aboutYou": {
+      "title": "你的资料",
+      "name": "姓名",
+      "email": "电邮",
+      "phone": "电话",
+      "signedInLine": "登录后会自动带入账户资料；如只想改这张清单，可在此更改。",
+      "emailLine": "你一离开，我们就会把这张清单的链接寄到这个电邮，让你在任何设备继续 — 不用开账户。"
+    },
+    "card": {
+      "matched": "{set} · {number} · 已在目录中对上",
+      "keptAsTyped": "保留你输入的名称 · 没有参考成交",
+      "edit": "修改",
+      "remove": "移除",
+      "declaredValue": "申报价值",
+      "referenceSales": "近期成交：",
+      "referenceNote": "{grader} 要求填写你预期评级下的价值。只作参考，并非估值。",
+      "minimumGrade": "只在 {grade} 或以上才入壳 · 无论如何都要收费",
+      "noValue": "请先填上申报价值才继续。",
+      "aboveCeiling": "{name} 的价值高于这个级别的上限，须另立一张清单走更高级别，同一次交卡一并带来。",
+      "referenceUnavailable": "暂时连不上目录，所以这张卡保留你输入的名称。申报价值仍然要填。"
+    },
+    "add": "新增一张卡",
+    "paste": "贴上清单",
+    "pasteNote": "一行一张卡，填卡名、系列、编号与价值，可一次过加入多张。目录对不上的卡会保留你输入的名称，也不会显示参考成交。",
+    "capNotice": "同一张清单只走一间评级公司、一个级别。Value 至 Super Express 最多 {standard} 张；Bulk 最多 {bulk} 张。需要其他级别的卡另立一张清单，两张清单可同一次交卡。",
+    "overTwenty": "超过 {standard} 张，所以下一步只开放 Bulk 级别。",
+    "overCap": "一张清单最多 {bulk} 张。其余的请另立一张清单，另约一日。",
+    "continueWithCount": "继续 · {count} 张卡",
+    "finishLater": "稍后再做",
+    "finishLaterEmail": "留下电邮地址，我们会把链接寄给你，并保留这张清单。",
+    "pasteSheet": {
+      "title": "贴上清单",
+      "lead": "一行一张卡：卡名、系列与编号，然后是你想保多少。我们会逐行对目录；对不上的行会保留你输入的名称，也不会显示参考成交。已在清单上的卡会略过。",
+      "yourList": "你的清单",
+      "linesRead": "读到 {count} 行",
+      "matching": "对目录中⋯",
+      "matched": "{count} 张在目录中对上 — 清单上会显示未评级、{lower} 与 {upper} 的参考成交。",
+      "keptAsTyped": "{count} 张保留你输入的名称 — {names}：旁边没有参考成交，以你输入的名称为准。",
+      "withoutValue": "{count} 张未填价值 — {names}：清单会先要你填好才继续。",
+      "aboveCeiling": "{count} 张高于 Bulk 上限 — {names} 须另立一张清单走更高级别，同一次交卡一并带来；下一步会点名，这张清单仍然保留它。",
+      "skipped": "略过 {count} 张 — 已经在你的清单上。",
+      "bulkNotice": "{count} 张：超过 {standard} 张，所以下一步只开放 Bulk 级别。{grader} 的 Bulk 是每张 {fee}、卡值上限 {ceiling}、约 {weeks} 星期，交卡时间较长；每张清单最多 {bulk} 张。",
+      "add": "把 {count} 张卡加入清单",
+      "goBack": "返回"
+    },
+    "service": {
+      "title": "选评级公司与级别",
+      "lead": "级别看的是最贵那一张卡值多少，以及多快回来。",
+      "highestDeclared": "你申报的最高价值是 {amount}。",
+      "grader": "评级公司",
+      "level": {
+        "open": "每张卡值上限 {ceiling} · 每张 {fee}",
+        "closedByValue": "未能选用：{card} 的申报价值高于 {ceiling}",
+        "closedByCount": "未能选用：Bulk 由 {minimum} 张起，你现时有 {count} 张。",
+        "bulkOnly": "超过 {standard} 张，所以只开放 Bulk 级别。",
+        "allClosed": "有一张卡高于最高级别的上限。请先到柜台或 WhatsApp 我们，好让我们预备合适级别。",
+        "coverLine": "另加 {rate} 保额",
+        "backIn": "约 {weeks} 星期回来"
+      },
+      "estimate": {
+        "title": "你的预算",
+        "perCard": "{count} 张 × {fee} · {grader} {level}",
+        "coverPerCard": "保额为申报价值的 {rate} · 每张 {amount}",
+        "paidAtCounter": "核对好所有卡牌后，在柜台付款。",
+        "includes": "已包括评级公司费用及来回投保运费。"
+      },
+      "upchargeNotice": "若卡牌回来时价值高于级别上限，评级公司会把它升上一级，差额会由你支付。金额会在你领回之前告知，不会在柜台才讲。"
+    },
+    "review": {
+      "title": "核对后预约交卡",
+      "header": "{count} 张卡 · {grader} {level}",
+      "backIn": "由卡牌寄出当日起计，约 {weeks} 星期回来",
+      "edit": "修改",
+      "schedule": "你列出的卡牌",
+      "totals": {
+        "declared": "申报价值总额",
+        "fee": "柜台应付费用",
+        "cover": "保额，已包含在费用内"
+      },
+      "warning": {
+        "line": "{card}：若评到 {grade}，价值约 {value}，高于 {level} 的 {ceiling}，评级公司会升至 {nextLevel}，领回前须在柜台补付 {difference}。",
+        "nowLine": "这张卡现在直接走 {nextLevel} 要 {higherFee}；走 {level} 是 {fee}，只有评到 {grade} 才另加 {difference}。"
+      },
+      "goodToKnow": {
+        "title": "预约前请留意",
+        "fee": {
+          "title": "即使卡牌未获评级，费用一样要收",
+          "body": "评级公司无论如何都做了工序。评级公司不会受理的卡，我们会在柜台先行拒收，那张卡不会收费。"
+        },
+        "upcharge": {
+          "title": "卡牌可能被升上一级",
+          "body": "若回来时价值高于级别上限。差额会在你领回之前告知。"
+        },
+        "estimate": {
+          "title": "回来日期只是预计",
+          "body": "评级公司按自己的进度做。我们会即时显示它的阶段，成绩一出即电邮通知你。"
+        },
+        "keep": {
+          "title": "交卡之前，卡牌一直在你手上",
+          "body": "未经我们同事同你逐张核对，不会付款，也不用签署。"
+        },
+        "collect": {
+          "title": "入壳卡牌一律不寄出",
+          "body": "请亲身领回，或在清单页指定一位代领人。"
+        }
+      },
+      "consent": "我已阅读个人资料收集声明。",
+      "book": "预约交卡",
+      "saveForLater": "保存，稍后再约",
+      "expired": "这张清单已经过期。价格与参考成交会变，请由收费表重新开始。"
+    }
+  },
+  "dropoff": {
+    "title": "预约交卡",
+    "lead": "请带同 {count} 张卡。整个过程约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
+    "bulkLead": "请带同 {count} 张卡。二十张或以上走较长的 Bulk 交卡，约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
+    "where": "地点",
+    "day": "日期",
+    "time": "{day} 的时间",
+    "nothingFree": "这一日已经没有剩余时段。",
+    "error": "暂时读不到预约系统，请稍后再试。",
+    "shop": {
+      "durations": "{standard} 张以内约 {minutes} 分钟；{standard} 张或以上走较长的 Bulk 交卡，约 {bulkMinutes} 分钟",
+      "moreShops": "日后有新门店，会在这里出现。",
+      "joinsExisting": "已经预约了交卡？第二张清单可以并入同一次：一次到店，两张清单。"
+    },
+    "batchLine": {
+      "before": "在 {cutOff} 之前交卡，你的卡牌就会随 {shipDay} 的批次寄出。",
+      "after": "其后的一批于 {cutOff} 截，{shipDay} 寄出。",
+      "estimateFrom": "预计时间由批次寄出当日起计。"
+    },
+    "moveOrCancel": "开始之前，随时可以改期或取消。错过了，我们只会结束该次到店，不会取消你的清单：可在清单页再约一次交卡。",
+    "book": "预约 {day} {time}",
+    "joined": "这张清单并入你已预约的 {day} {time} 交卡。一次到店，两张清单。",
+    "resized": "两张清单合共超过 {standard} 张，所以改为较长的 Bulk 交卡。我们已在预约系统调整一次，日期与时间不变。",
+    "booked": {
+      "title": "交卡已预约",
+      "emailLine": "确认电邮正在寄出，内附日历档案与这张清单的链接。前一日我们会再提醒你。",
+      "calendar": "加入日历",
+      "move": "改期",
+      "cancel": "取消",
+      "beforeYouCome": {
+        "title": "来之前",
+        "cards": {
+          "title": "带同 {count} 张卡，每张放在卡套内",
+          "body": "普通卡套即可。不要用胶纸封死的硬卡夹，也不要放你想取回的东西：卡套会留在评级公司。"
+        },
+        "list": {
+          "title": "备好这张清单",
+          "body": "同事会对着清单逐张核对。卡牌交收之前，清单都可以改。"
+        },
+        "pay": {
+          "title": "在 iPad 上签署，然后在柜台付 {amount}",
+          "body": "每张卡同你核对并拍照之后才付款。可用信用卡、现金或转数快。"
+        },
+        "leave": {
+          "title": "你的卡牌于 {shipDay} 寄出",
+          "body": "在 {cutOff} 之前交卡，就会随当周批次寄出。预计 {estimate} 前回到门店。"
+        }
+      },
+      "openTheList": "打开清单",
+      "vaultLine": "想同一次到店开立金库寄存 — 无论是不去评级的卡，还是稍后回来的卡？请先用手机完成身份验证；评级本身不需要身份证明。",
+      "bulkDuration": "整个过程约 {minutes} 分钟。"
+    }
+  },
+  "submission": {
+    "header": "{count} 张卡 · {grader} {level}",
+    "id": "清单编号",
+    "plannedOn": "{day} 建立",
+    "loading": "载入这张清单⋯",
+    "error": "暂时载入不到这张清单，请稍后再试。",
+    "notFound": "找不到这张清单，请核对我们寄给你的链接。",
+    "edit": "修改清单",
+    "paid": "已在柜台付款",
+    "cancelled": "已取消。卡牌一直在你手上，也没有付过款。",
+    "expired": "已过期。没有付过款，也没有欠款。",
+    "status": {
+      "planned": "尚未交卡",
+      "booked": "交卡已预约",
+      "checked_in": "已交收",
+      "sent": "在评级公司",
+      "graded": "成绩已出",
+      "returned": "已回门店，核对中",
+      "ready": "可以领回",
+      "collected": "已交回给你",
+      "cancelled": "已取消",
+      "expired": "已过期"
+    },
+    "chip": {
+      "waitingOnYou": "等你行动",
+      "withUs": "在我们这边",
+      "withGrader": "在 {grader}",
+      "runningLate": "比预期慢 · 在 {grader}",
+      "dropoff": "{day} 交卡",
+      "collected": "{day} 领回",
+      "onTheirWayBack": "回程中"
+    },
+    "stage": {
+      "planned": "已建立",
+      "booked": "已预约",
+      "handedIn": "已交收",
+      "sent": "已寄出",
+      "graded": "已评级",
+      "back": "已回门店",
+      "home": "已交回"
+    },
+    "lead": {
+      "planned": "尚未交卡。预约一次交卡并把卡牌带来；卡牌交收之前都不用付款。",
+      "booked": "请于 {when} 带同 {count} 张卡前来。同事会对着清单同你逐张核对，你签署评级委托协议，并在柜台付 {amount}。在此之前，清单仍可随时修改。",
+      "checked_in": "你的卡牌已封入我们的收件袋，会随 {cutOff} 截、{shipDay} 寄出的批次送往 {grader}。卡牌上路时我们会电邮你，成绩一出也会即时通知。",
+      "sent": "自 {when} 起在 {grader} 评级中。不用做什么：我们大部分日子都会查看进度，成绩一出即电邮通知你。",
+      "graded": "{grader} 已于 {when} 公布成绩，并于 {shippedOn} 把卡牌寄回。卡牌回到门店核对好之后我们会再电邮你，预计 {estimate} 前。",
+      "returned": "卡牌已回到门店，我们正对着 {grader} 的清单逐件核对。不用做什么；可以领回时我们会即时电邮你。",
+      "ready": "{items}，已于 {when} 对着 {grader} 的清单核对。营业时间内随时前来，出示下面的取件码即可。",
+      "collected": "你已于 {when} 领回 {items}，并结清 {amount}。这一页保留全部记录：成绩、证书编号、卡壳相片与所有单据。",
+      "cancelled": "这张清单已取消。卡牌一直在你手上，也没有付过款。",
+      "expired": "这张清单未预约交卡而过期。没有付过款，也没有欠款。"
+    },
+    "outcome": {
+      "listed": "已列出",
+      "checked_in": "已交收",
+      "refused": "柜台拒收",
+      "graded": "已评级",
+      "ungraded": "退回未评级",
+      "minimum_not_met": "未达指定最低评分",
+      "moved_up": "已升一级",
+      "withdrawn": "已取回",
+      "held": "评级公司暂留",
+      "not_returned": "未有寄回",
+      "damaged": "有损毁",
+      "collected": "已领回",
+      "vaulted": "已存入金库",
+      "payout_reversed": "赔偿已撤回"
+    },
+    "exception": {
+      "refused": "评级公司不会受理的卡：经过改动、裁切、翻印，或申报价值高于级别上限。卡会连同原因留在你手上，那张卡不会收费。清单与预算会扣减至继续送出的卡牌。",
+      "missedDropoff": "该次到店会结束；你的清单与预算完全不变。可在清单页再约一次交卡。",
+      "withdrawn": "交卡之后改变主意？批次截止之前，我们可以从收件袋取回那张卡。先联络我们，然后到柜台凭单据领回：费用会在收银处退回。",
+      "ungraded": "评级公司把卡连同说明退回，未有入壳。按评级公司的条款，费用照收；这一点在你预约之前已经说明。",
+      "minimumNotMet": "你指定了最低评分，而它评到的分数低于此数，所以退回时不入壳，以免收到你不想要的卡壳。费用照收。",
+      "movedUp": "卡牌回来时价值高于级别上限，评级公司按上一级收费。差额须于领回前在柜台付清 — 成绩公布当日就会告知，不会突然冒出。",
+      "gradeNotAccepted": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；可在柜台查询。",
+      "runningLate": "评级公司超出了预计时间。页面会显示它的阶段，我们也会在订出新日期当日电邮你。柜台这边不受影响。",
+      "held": "评级公司留下其中一张再看，其余先行寄回。其他卡现在就可以领回；单据会注明仍未回来的那张，第二次交收会结束整张清单。",
+      "notReturned": "卡牌未有寄回，或回来时有损毁，我们会按申报价值赔偿并退回该张的费用，{days} 日内办妥。我们会自行向评级公司或速递公司追讨，你不用等。",
+      "refunds": "退款会按原本付款方式在收银处退回：拒收的一行、取回的卡、未有寄回的卡。未获评级的卡不设退款，批次寄出后评级费用也不再退回。",
+      "notCollected": "卡牌等候期间会有提示，之后开始计保管费，再之后发出书面通知。通知之后，卡牌可能按《无人认领货品处置条例》（第 456 章）出售，所得款项扣除费用后为你保留。"
+    },
+    "visit": {
+      "booked": "你的交卡预约",
+      "missed": "该次到店已结束。你的清单与预算完全不变。",
+      "bookAgain": "再约一次交卡"
+    },
+    "cancel": {
+      "title": "取消这张清单",
+      "line": "交卡预约会一并取消。卡牌一直在你手上，也没有付过款。",
+      "dialogTitle": "取消这张清单？",
+      "dialogBody": "{when} 的交卡预约会一并取消。卡牌一直在你手上，也没有付过款。",
+      "confirm": "确定取消",
+      "back": "返回"
+    },
+    "withdraw": {
+      "title": "改变主意？",
+      "body": "批次于 {cutOff} 截止之前，我们可以取回其中一张卡。先联络我们，然后到柜台领回：费用会在收银处退回，预算也会扣减至继续送出的卡牌。",
+      "whatsapp": "WhatsApp 门店",
+      "closed": "批次已截止，卡牌正在路上，现在不能取回。"
+    },
+    "grader": {
+      "order": "在 {grader} · 单号 {order}",
+      "readMostDays": "大部分日子都会查看 · {when}",
+      "stages": "以下是 {grader} 自己用的阶段说法。一个阶段可能要好几日；预计时间是我们的承诺，阶段是评级公司的汇报。",
+      "nextStage": "成绩一出，我们即电邮通知你。",
+      "runningLate": "超过 {estimate} 之后，这里会显示“比预期慢”，并列出新日期与评级公司的阶段，我们也会在订出新日期当日电邮你。柜台这边不受影响。"
+    },
+    "grades": {
+      "headline": "成绩已出：{summary}",
+      "settle": {
+        "title": "领回之前有一项要结清",
+        "body": "{card} 回来时价值约 {value}，高于 {level} 级别的 {ceiling}，所以 {grader} 把它升至 {nextLevel}。差额为 {amount}。",
+        "payAtCounter": "在柜台付款",
+        "nothingToDo": "领回时在收银处以信用卡、现金或转数快支付。现在不用做什么。",
+        "reference": "参考编号"
+      },
+      "ungraded": {
+        "title": "关于未获评级的卡",
+        "body": "{card} 会连同评级公司的说明退回，放在卡套内未入壳：{code}，{note}。无论是否入壳，评级公司都会收费，所以这张卡不设退款。",
+        "codesLink": "{grader} 的代码是什么意思"
+      },
+      "aboutGrades": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；领回时可在柜台查询。"
+    },
+    "cards": {
+      "title": "卡牌 · {count} 张",
+      "declaredValues": "申报价值 · 卡牌交收之前都可以更改",
+      "intakeIds": "收件编号与相片",
+      "intakeIdsOnly": "收件编号，已印在卡套上",
+      "grades": "成绩以评级公司的说法显示",
+      "photographPair": "正反两面，于柜台同你一起拍摄",
+      "cert": "证书编号",
+      "refusedReason": "柜台拒收 · {reason}",
+      "withdrawnRefund": "已取回 · 已退回 {amount}",
+      "heldUntil": "评级公司暂留 · 预计 {day}",
+      "payoutLine": "已按 {amount} 赔偿，该张费用也已退回",
+      "reversalLine": "卡牌其后寻回，赔偿已撤回，该张卡回到这张清单。"
+    },
+    "pickup": {
+      "title": "取件码 · 在柜台出示",
+      "items": "{count} 件 · {slabs} 个卡壳、{raw} 张裸卡",
+      "where": "地点",
+      "open": "营业时间",
+      "toSettle": "尚需结清",
+      "nothingDue": "没有",
+      "bring": {
+        "label": "请带",
+        "aboveThreshold": "与姓名相符的身份证明：你的申报总值高于 {threshold}。我们不会留存任何副本",
+        "named": "与姓名相符的身份证明，你的或 {name} 的：你的申报总值高于 {threshold}。我们不会留存任何副本",
+        "none": "不用带什么 — 凭取件码与你的姓名即可领回"
+      }
+    },
+    "named": {
+      "title": "由其他人代领？",
+      "optional": "选填",
+      "lead": "在此填上代领人姓名，他凭取件码领回；上面的取件卡会注明是否需要带身份证明。未有指定代领人，就只有你本人可以领回。",
+      "field": "代领人姓名",
+      "placeholder": "与其身份证明相同的全名",
+      "save": "保存",
+      "badge": "已指定",
+      "namedAt": "{when} 指定",
+      "line": "他凭取件码及取件卡所要求的身份证明领回；交收单据会列明他的姓名。同一时间只可指定一人。",
+      "change": "更改",
+      "remove": "移除",
+      "refused": "卡牌已经领回，不能再指定代领人。"
+    },
+    "vaultIt": {
+      "title": "不如留在我们这里？",
+      "body": "{card} 可以在柜台直接存入金库：不用多走一次，寄存免费。金库估值后或会提出借贷方案，是否接受由你决定。其余卡牌照样带回家。在柜台讲一声即可：身份验证与保管协议在店内约 {minutes} 分钟完成。",
+      "howItWorks": "金库怎样运作"
+    },
+    "money": {
+      "title": "款项",
+      "fee": "费用",
+      "feeLine": "{count} × {fee} = {total}",
+      "cover": "保额",
+      "coverLine": "申报价值的 {rate} · {total}",
+      "paid": "已付",
+      "paidAtCounter": "卡牌核对好后，在柜台付款",
+      "paidWith": "{method} · {when} · POS {reference}",
+      "movedUp": "已升一级",
+      "movedUpLine": "{amount} · {card} → {level}",
+      "due": "领回前须在柜台付清",
+      "waived": "升级差额已豁免，无须付款。",
+      "storage": "保管费",
+      "storageLine": "自 {day} 起每张每月 {rate} · 累计中",
+      "refunded": "已退款",
+      "refundedLine": "{amount} · {method}",
+      "paidOut": "已赔偿",
+      "paidOutLine": "按申报价值 {amount} · {route}",
+      "settled": "领回时已结清 · POS {reference}",
+      "nothingDue": "没有欠款",
+      "includes": "已包括",
+      "includesLine": "评级公司费用及来回投保运费",
+      "footnote": "即使卡牌未获评级，费用一样要收。在我们柜台拒收的卡则不会收费。"
+    },
+    "ladder": {
+      "title": "若未有领回",
+      "reminders": "我们会在 {first} 与 {second} 提醒你。提醒本身不收任何费用。",
+      "storage": "自 {day} 起，每张每月 {rate} 保管费。费用在此累计，须于领回前付清。",
+      "notice": "{day} 发出书面通知。",
+      "afterNotice": "通知之后，卡牌可能按《无人认领货品处置条例》（第 456 章）出售，所得款项扣除我们的费用后为你保留。在此之前，卡牌一直属于你。",
+      "closing": "入壳卡牌一律不寄出。想干脆留在这里？可用上面的金库寄存。"
+    },
+    "collected": {
+      "lead": "这一页保留全部记录：成绩、证书编号、卡壳相片与所有单据。",
+      "record": "评级记录",
+      "lookUp": "查证",
+      "photographs": "卡壳相片，于交收时拍摄",
+      "documents": "文件",
+      "whatNext": {
+        "title": "接下来",
+        "vault": "存入金库 — 在门店免费寄存，估值后也可借贷。",
+        "auction": "放上拍卖 — 评分与证书编号会直接带入拍品资料。",
+        "yourData": "你的资料 — 这份记录与相片会按我们的保留表保存七年。用这个电邮登录即可要求删除。"
+      }
+    },
+    "documents": {
+      "title": "文件",
+      "agreement": "评级委托协议",
+      "intakeReceipt": "收件单据",
+      "handbackReceipt": "交收单据",
+      "signedAt": "{when} 签署",
+      "issuedAt": "{when} 发出"
+    },
+    "history": {
+      "title": "记录",
+      "events": {
+        "planned": "建立清单：{count} 张卡，{grader} {level}",
+        "dropoff_booked": "已预约交卡",
+        "dropoff_moved": "交卡已改期",
+        "dropoff_cancelled": "交卡已取消",
+        "dropoff_missed": "未有前来交卡",
+        "dropoff_detached": "原本拥有该次到店的清单已结束预约",
+        "dropoff_started": "交卡开始",
+        "agreement_signed": "已签署评级委托协议",
+        "paid": "以 {method} 付款 {amount}",
+        "checked_in": "已交收：{count} 张卡",
+        "card_refused": "柜台拒收一张卡",
+        "card_withdrawn": "批次截止前取回一张卡",
+        "batch_shipped": "随批次 {batch} 寄出",
+        "batch_arrived": "已送达 {grader}",
+        "grader_stage": "{grader} 阶段：{stage}",
+        "batch_reestimated": "重新预计：{estimate} 前回来",
+        "grades_posted": "成绩已公布",
+        "moved_up": "升一级：{amount}",
+        "shipped_back": "已寄回给我们",
+        "back_at_shop": "已回到门店",
+        "ready": "可以领回",
+        "collector_named": "指定 {name} 代领",
+        "collector_removed": "已移除代领人",
+        "reminder_sent": "已发出提示",
+        "storage_started": "开始计保管费",
+        "notice_posted": "已寄出书面通知",
+        "collected": "已领回",
+        "cancelled": "清单已取消",
+        "expired": "清单已过期"
+      }
+    }
+  },
+  "ceremony": {
+    "refusal": {
+      "expired": "这条签署链接已经过期。为安全起见，签署链接只在短时间内有效；请向同事索取新的链接。",
+      "anotherDevice": "这条链接已在另一部设备开启。签署链接只留在最先开启它的设备上；请向同事索取这部设备的新链接。",
+      "withdrawn": "这批文件已经作废，由新一批取代。请向同事索取现行文件的链接。",
+      "alreadySigned": "这批文件已经签妥，可以关闭这一页。",
+      "notFound": "这条签署链接打不开任何文件。请同事重新准备。",
+      "notReady": "柜台这边还未准备好这份文件。在场的同事可以说明尚欠什么。",
+      "pagesNotViewed": "签署前请看完整份文件：每一页都要卷到最后。",
+      "nameMismatch": "这不是这张清单预约时所用的姓名。请按预约时填写的姓名输入。",
+      "postalAddress": "签署前请填上通讯地址。地址只会用于寄发书面通知。"
+    },
+    "yourName": {
+      "label": "你的姓名",
+      "hint": "与预约时相同",
+      "hintNamed": "与清单页指定的代领人相同"
+    },
+    "postalAddress": {
+      "label": "通讯地址",
+      "hint": "只会在卡牌久未领回时，用于寄发书面通知。"
+    },
+    "sign": "签署",
+    "decline": "拒绝签署",
+    "afterAgreement": "已签妥。请在收银处付费，同事会收下卡牌。",
+    "afterReceipt": "已签妥。卡牌是你的了；单据会放在清单页，也会寄到你的邮箱。",
+    "sealed": {
+      "download": "下载副本",
+      "emailed": "副本正在寄往你的邮箱，也会一直保留在清单页。"
+    },
+    "declined": "没有签署任何文件，也没有付款。在场的同事可以协助你下一步怎样做。"
+  },
+  "console": {
+    "whatsapp": {
+      "confirmDropoff": "{name} 你好，确认你于 {when} 在 {shop} 的评级交卡预约。请带同 {count} 张卡，每张放在卡套内。清单：{link}",
+      "onTheirWay": "{name} 你好，你的 {count} 张卡今日已投保寄往 {grader}，预计 {estimate} 前回到门店。清单：{link}",
+      "runningLate": "{name} 你好，清单 {id} 的卡牌在 {grader} 超出了原本预计时间。新日期为 {estimate}，柜台这边不受影响。清单：{link}",
+      "gradesIn": "{name} 你好，清单 {id} 的成绩已出：{summary}。卡牌可以领回时我们会再通知你：{link}",
+      "readyToCollect": "{name} 你好，你的卡牌已可在 {shop} 领回。取件码 {code}，柜台尚需结清 {toSettle}。营业时间 {hours}。清单：{link}",
+      "notReturned": "{name} 你好，清单 {id} 其中一张卡未能从 {grader} 寄回。我们会按申报价值赔偿并退回该张费用。清单：{link}",
+      "stillHere": "{name} 你好，你的评级卡牌自 {since} 起一直在 {shop} 等你领回。取件码 {code}。这则提示本身不收任何费用。清单：{link}"
+    }
+  }
+}

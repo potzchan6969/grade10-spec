@@ -103,7 +103,7 @@
       "withoutValue": "{count} without a value — {names}: the list asks for it before you continue.",
       "aboveCeiling": "{count} above the Bulk ceiling — {names} goes in a second submission at a higher level, on the same drop-off; the next step names it while it stays on this list.",
       "skipped": "{count} skipped — already on your list.",
-      "bulkNotice": "{count} cards: more than {standard}, so Bulk is the only level open at the next step. That is {fee} a card, cards up to {ceiling}, about {weeks} weeks and the longer drop-off; up to {bulk} cards a submission.",
+      "bulkNotice": "{count} cards: more than {standard}, so Bulk is the only level open at the next step. At {grader} that is {fee} a card, cards up to {ceiling}, about {weeks} weeks and the longer drop-off; up to {bulk} cards a submission.",
       "add": "Add {count} cards to the list",
       "goBack": "Go back"
     },
