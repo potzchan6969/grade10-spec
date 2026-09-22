@@ -53,14 +53,17 @@ is rebuilding, so this group follows that change's page work.
 
 ## 6. The walk (grade10)
 
-Needs groups 1 to 4 landed and deployed to the dev shop's environment, whose
-catalogue is seeded with the cards the suite's test data names. The walks
-live in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`; a
-Decided-by path cannot leave this store, so cross-sell's cases stay `manual`
-on the run sheet and the suite's `### Manual` table names the walk that proves
-each. The stock keeper's steps in the Shopify dashboard are walked by hand;
-the walk reads the page after them and restores the dev shop's picks it moved.
-The waits are met by sleeping the page's minute and the catalogue's window.
+Needs groups 1 to 4 landed. The walks live in
+`apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the
+isolated stack, whose fixture catalogue seeds the stock keeper's picks as the
+app stores them (`packages/shopify/backend/src/testing/fixture.ts`); the lane
+refuses any other shop. A Decided-by path cannot leave this store, so
+cross-sell's cases stay `manual` on the run sheet and the suite's `### Manual`
+table names the walk that proves each and what it walks beyond it. The stock
+keeper's steps in the Shopify dashboard are out of the lane: one occupancy
+skip per case, walked by hand on the dev shop with the page read after them
+within its minute. The walk waits on the card's own read, past the card's
+minute, never on a sleep.
 
 - [ ] 6.1 One walk per journey, end to end through the collector's browser on the dev shop, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
 - [ ] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
