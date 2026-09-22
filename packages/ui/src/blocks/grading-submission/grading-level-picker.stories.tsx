@@ -97,7 +97,7 @@ export const LevelClosedByAValue: Story = {
     const closed = canvas.getByRole("radio", { name: /Not available/ });
     await userEvent.click(closed);
     expect(args.onSelectLevel).not.toHaveBeenCalled();
-    expect(closed).toBeDisabled();
+    expect(closed).toHaveAttribute("aria-disabled", "true");
   },
 };
 

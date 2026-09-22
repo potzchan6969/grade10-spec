@@ -39,7 +39,7 @@ export const Open: Story = {
   play: async ({ args }) => {
     const sheet = within(document.body);
     expect(sheet.getByText("Lines read: 20")).toBeInTheDocument();
-    await userEvent.click(sheet.getByRole("button", { name: "Go Back" }));
+    await userEvent.click(sheet.getByRole("button", { name: "Go back" }));
     expect(args.onClose).toHaveBeenCalled();
   },
 };
@@ -51,7 +51,7 @@ export const NothingRead: Story = {
     const sheet = within(document.body);
     expect(sheet.getByText("Lines read: 0")).toBeInTheDocument();
     expect(
-      sheet.getByRole("button", { name: "Add These Cards" }),
+      sheet.getByRole("button", { name: "Add these cards to the list" }),
     ).toBeDisabled();
     expect(args.onApply).not.toHaveBeenCalled();
   },
@@ -63,7 +63,7 @@ export const Matching: Story = {
   play: async ({ args }) => {
     const sheet = within(document.body);
     expect(
-      sheet.getByRole("button", { name: "Add These Cards" }),
+      sheet.getByRole("button", { name: "Add these cards to the list" }),
     ).toBeDisabled();
     expect(args.onApply).not.toHaveBeenCalled();
   },
@@ -75,7 +75,7 @@ export const Matched: Story = {
     const sheet = within(document.body);
     expect(sheet.getByText("Matched: 12")).toBeInTheDocument();
     await userEvent.click(
-      sheet.getByRole("button", { name: "Add These Cards" }),
+      sheet.getByRole("button", { name: "Add these cards to the list" }),
     );
     expect(args.onApply).toHaveBeenCalledWith([
       ...(PASTE_RESULT.matched.cards ?? []),
@@ -150,7 +150,7 @@ export const ReferenceUnavailable: Story = {
       sheet.getByText(PASTE_SHEET_COPY.catalogueUnavailable),
     ).toBeInTheDocument();
     expect(
-      sheet.getByRole("button", { name: "Add These Cards" }),
+      sheet.getByRole("button", { name: "Add these cards to the list" }),
     ).toBeEnabled();
   },
 };

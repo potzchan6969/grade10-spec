@@ -112,7 +112,7 @@ export const Graded: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByRole("link", { name: "Look Up" })).toHaveAttribute(
+    expect(canvas.getByRole("link", { name: "Look it up" })).toHaveAttribute(
       "href",
       "https://www.psacard.com/cert/84213377",
     );

@@ -42,7 +42,7 @@ export const Review: Story = {
     expect(canvas.getByText("Declared in total: HK$8,000")).toBeInTheDocument();
     expect(canvas.getByText("Fee: HK$1,000")).toBeInTheDocument();
     await userEvent.click(
-      canvas.getByRole("button", { name: "Book the Drop-off" }),
+      canvas.getByRole("button", { name: "Book the drop-off" }),
     );
     expect(args.onBook).toHaveBeenCalled();
   },
@@ -111,7 +111,7 @@ export const ConsentUnticked: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Book the Drop-off" }),
+      canvas.getByRole("button", { name: "Book the drop-off" }),
     ).toBeDisabled();
     expect(args.onBook).not.toHaveBeenCalled();
     await userEvent.click(canvas.getByRole("checkbox"));
@@ -125,10 +125,10 @@ export const Booking: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
-      canvas.getByRole("button", { name: "Book the Drop-off" }),
+      canvas.getByRole("button", { name: "Book the drop-off" }),
     ).toBeDisabled();
     expect(
-      canvas.getByRole("button", { name: "Save and Book Later" }),
+      canvas.getByRole("button", { name: "Save and book later" }),
     ).toBeDisabled();
   },
 };
