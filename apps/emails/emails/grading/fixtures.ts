@@ -9,10 +9,10 @@
  * `GRADING_FIXTURES` below answers one facts member per `NotifyKind` — the
  * application repository's `email/letters/render.test.tsx` reads it back
  * through `external/grade10-spec` to render every kind and compare it
- * against this store's preview. The nineteen kinds are
- * `tech-design.md`'s: the plan's three, the drop-off's six, the counter's
- * two, the batch's two, the grades' two, and the four rungs of waiting to be
- * collected.
+ * against this store's preview. The kinds are `ui-design.md`'s Letters
+ * table: the plan's three, the drop-off's six, checked in, the batch's two,
+ * the grades' three, ready, the two rungs of waiting to be collected, and
+ * the counter's two hand-back receipts.
  */
 
 const submissionUrl = "https://grade10.com/grading/submissions/5TW8HN";
@@ -167,29 +167,32 @@ export const previewHandedBackCards = [
 ];
 
 /**
- * The nineteen kinds `email/letters/index.ts`'s `LETTERS` answers, named as
- * `tech-design.md` names them.
+ * The kinds `ui-design.md`'s Letters table names, one per row of that table
+ * (a kind sent twice — `checked_in`, `grades_posted`, `ready` — keeps one
+ * entry here; its second preview is a state variant, not a second kind).
  */
 export type NotifyKind =
   | "plan_saved"
-  | "plan_nudge"
+  | "plan_nudged"
   | "plan_expired"
   | "dropoff_booked"
   | "dropoff_moved"
   | "dropoff_cancelled"
   | "dropoff_missed"
   | "dropoff_reminder"
-  | "visit_detached"
-  | "handed_in"
-  | "handback_receipt"
+  | "dropoff_detached"
+  | "checked_in"
   | "batch_shipped"
   | "batch_reestimated"
   | "grades_posted"
   | "card_not_returned"
+  | "card_damaged"
   | "ready"
-  | "still_here"
-  | "storage_fee"
-  | "written_notice";
+  | "uncollected_reminder"
+  | "storage_started"
+  | "notice_posted"
+  | "collected"
+  | "card_withdrawn";
 
 /**
  * One facts member per `NotifyKind`, each the props its preview passes
@@ -202,7 +205,7 @@ export const GRADING_FIXTURES: Record<NotifyKind, Record<string, unknown>> = {
     keptUntil: previewSubmission.keptUntil,
     nudgeDay: previewSubmission.nudgeDay,
   },
-  plan_nudge: {
+  plan_nudged: {
     plannedAt: previewSubmission.plannedAt,
     keptUntil: previewSubmission.keptUntil,
   },
@@ -226,15 +229,11 @@ export const GRADING_FIXTURES: Record<NotifyKind, Record<string, unknown>> = {
   dropoff_reminder: {
     visitAt: previewSubmission.visitAt,
   },
-  visit_detached: {
+  dropoff_detached: {
     visitAt: previewSubmission.visitAt,
   },
-  handed_in: {
+  checked_in: {
     paidAt: previewSubmission.paidAt,
-  },
-  handback_receipt: {
-    collectedAt: previewSubmission.collectedAt,
-    cards: previewHandedBackCards,
   },
   batch_shipped: {
     shippedOn: previewSubmission.batchShipDay,
@@ -252,18 +251,31 @@ export const GRADING_FIXTURES: Record<NotifyKind, Record<string, unknown>> = {
     card: previewSubmission.notReturnedCard,
     intakeId: previewSubmission.notReturnedIntakeId,
   },
+  card_damaged: {
+    card: previewSubmission.notReturnedCard,
+    intakeId: previewSubmission.notReturnedIntakeId,
+  },
   ready: {
     readyAt: previewSubmission.readyAt,
   },
-  still_here: {
+  uncollected_reminder: {
     rungDays: 30,
     nextRungDays: 60,
   },
-  storage_fee: {
+  storage_started: {
     storageStartsAt: previewSubmission.storageStartsAt,
   },
-  written_notice: {
+  notice_posted: {
     noticeDay: previewSubmission.noticeDay,
     noticeDays: 30,
+  },
+  collected: {
+    collectedAt: previewSubmission.collectedAt,
+    cards: previewHandedBackCards,
+  },
+  card_withdrawn: {
+    card: previewSubmission.withdrawnCard,
+    intakeId: previewSubmission.withdrawnIntakeId,
+    withdrawnAt: previewSubmission.batchCutOff,
   },
 };
