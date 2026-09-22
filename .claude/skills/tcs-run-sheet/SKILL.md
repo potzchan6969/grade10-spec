@@ -10,9 +10,7 @@ is where a tester marks results, and the store never reads it back.
 
 Your job is the selection. Whatever the request, it ends as an explicit list of
 case ids that a human confirms before anything is written — a run whose
-contents cannot be restated is a run nobody can repeat. Confirming means they
-have seen the list and said the coverage is correct, not that they asked for a
-run.
+contents cannot be restated is a run nobody can repeat.
 
 ## The two kinds of request
 
@@ -40,31 +38,30 @@ in the same pass when the request covers both.
 ## The steps
 
 1. **Resolve the request** to a selection, by either route above. Automated
-   cases are in unless the person asked to leave them out. Drafts are in only
-   when they asked for drafts.
-2. **Dry run it.** `--dry-run` prints every case it would write and touches no
-   network. Read the list yourself first: a case that does not belong is
-   cheaper to drop now than to explain in the tab.
-3. **Show the list and stop.** Name the count, the suites and capabilities it
-   spans, how many are draft, how many are already automated, and what you
+   cases are in by default. Drafts stay out unless the person asked for them.
+2. **Dry run it.** Pass `--include-automated` unless they asked to leave
+   automated cases out. `--dry-run` prints every case it would write and
+   touches no network. Read the list yourself first: a case that does not
+   belong is cheaper to drop now than to explain in the tab.
+3. **Show the list and stop.** Group by capability (or by file). Name the
+   count, how many are draft, how many are already automated, and what you
    left out on purpose. Ask whether the coverage is correct. Do not dispatch
-   until they say the list is right.
-4. **Dispatch** only after that yes. The run tab is written by CI, which holds
-   the only credentials:
+   until they say it is, or name what to add or drop.
+4. **Dispatch**, only after that yes. The run tab is written by CI, which
+   holds the only credentials:
 
    ```bash
    gh workflow run run-sheet.yml \
      -f name=<run name> \
      -f selection="<the request, in their words>" \
-     -f cases="<id,id,id>"
+     -f cases="<id,id,id>" \
+     -f include_automated=true
    ```
 
    Pass `suites=`, `priority=`, `level=` or `scope=` instead of `cases=` when a
    filter resolved it. Add `include_draft=true` only when the person asked for
-   drafts. Automated cases are already on by default; pass
-   `include_automated=false` only when they asked to leave them out. Pass
-   `replace=true` only when they asked to overwrite an existing tab and the
-   Summary.
+   drafts. Omit `include_automated` (or pass `false`) only when they asked to
+   leave automated cases out.
 5. **Report the tab.** Give them the run id, the tab name and the link the job
    prints.
 
@@ -76,10 +73,9 @@ in the same pass when the request covers both.
   locked, and an edit there is refused at the cell. A wrong case is fixed in
   `openspec/`, not in the sheet.
 - **Every case starts at `to_do`, so the Summary counts down.** An automation
-  column reading `n/a` is a case no automated test covers. Automated cases are
-  on the tab by default so Auto web and Auto mobile can be marked; `skipped` is
-  a case somebody chose not to walk. The pass rate ignores `n/a` and counts
-  `skipped` against the run.
+  column reading `n/a` is a case no automated test covers; `skipped` is a case
+  somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
+  against the run.
 - **The Summary tab gives each run four rows**, one per surface, grouped under
   the first. Identity and the commit sit once, on that first row. Marking a
   cell moves the counts; no second sync is needed.
@@ -88,13 +84,13 @@ in the same pass when the request covers both.
   has no filter view: it is a register.
 - **Do not rename or delete the tab.** The Summary rows point at it by name,
   and Google Sheets cannot prevent either — they will read `tab deleted`.
-- **Amber rows are draft cases**, which no reviewer has approved. They appear
-  only when the run asked for them.
+- **Automated cases land on the tab.** Their Auto columns start at `to_do`.
+  They are left out only when the person asked to leave them out.
 
 ## What not to do
 
-- **Do not write a tab nobody confirmed.** Show the list. Ask if the coverage
-  is correct. Wait. The dry run is the conversation.
+- **Do not write a tab nobody confirmed.** The coverage list is the
+  conversation. A yes to "write a run" is not a yes to this list.
 - **Do not take `deprecated` cases.** The spec stopped stating them; walking one
   proves nothing. The script refuses them outright.
 - **Do not put results back in the store.** A suite carries no execution record

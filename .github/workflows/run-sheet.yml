@@ -48,14 +48,9 @@ on:
         default: false
         type: boolean
       include_automated:
-        description: "Take cases an automated test already covers (default true)"
+        description: "Take cases an automated test already covers (default yes)"
         required: false
         default: true
-        type: boolean
-      replace:
-        description: "Delete this run's existing tab and empty the Summary, then write from id 1"
-        required: false
-        default: false
         type: boolean
       dry_run:
         description: "Print the selection and write nothing"
@@ -139,10 +134,8 @@ jobs:
           SCOPE: ${{ inputs.scope }}
           INCLUDE_DRAFT: ${{ inputs.include_draft }}
           INCLUDE_AUTOMATED: ${{ inputs.include_automated }}
-          REPLACE: ${{ inputs.replace }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
-          set -o pipefail
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
           set -- --name "$RUN_NAME" --sha "$GITHUB_SHA"
@@ -153,8 +146,7 @@ jobs:
           if [ -n "$LEVEL" ]; then set -- "$@" --level "$LEVEL"; fi
           if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
           if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
-          if [ "$INCLUDE_AUTOMATED" = "false" ]; then set -- "$@" --exclude-automated; fi
-          if [ "$REPLACE" = "true" ]; then set -- "$@" --replace; fi
+          if [ "$INCLUDE_AUTOMATED" = "true" ]; then set -- "$@" --include-automated; fi
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
 
