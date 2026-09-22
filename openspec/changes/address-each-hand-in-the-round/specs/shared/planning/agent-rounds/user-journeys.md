@@ -9,7 +9,7 @@
 ### shared-planning-agent-rounds-US-11: QA is asked when the suite lands
 
 **As a** QA engineer,
-**I want** to be asked to review the suite on the landing that puts it up for review, and to know the walk waits on my review,
+**I want** to be asked to review the suite on the landing that puts it up for review, and to know the walk names my review as its input,
 **so that** the review is on time and no walk carries an id I have not signed.
 
 ### shared-planning-agent-rounds-US-12: Engineer lands an application group's row
@@ -29,3 +29,15 @@
 **As a** product manager,
 **I want** the first round to ask me the two or three questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
 **so that** I spend the round on decisions, not confirmations.
+
+### shared-planning-agent-rounds-US-15: Designer's written design waits on its frame
+
+**As a** designer,
+**I want** a design I have written to land with a dated wait on the frame I have not drawn yet,
+**so that** the requirements are drawn from what is written and the wait is read, not refused.
+
+### shared-planning-agent-rounds-US-16: Engineer is told of two deltas on one requirement
+
+**As an** engineer,
+**I want** the check to name two in-flight changes that fold one requirement, however each has headed its block,
+**so that** I read both before I build on either, instead of finding the second at the archive.

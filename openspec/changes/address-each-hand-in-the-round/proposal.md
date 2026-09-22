@@ -2,7 +2,7 @@
 
 **Author:** @ecchochan - 2026-09-22
 
-Product context: [Agent Rounds · Your Moves](../../../docs/prds/products/shared/planning/agent-rounds.md#your-moves), [Perspectives](../../../docs/prds/products/shared/planning/agent-rounds.md#perspectives), [The Walk](../../../docs/prds/products/shared/planning/agent-rounds.md#the-walk) and [Checks](../../../docs/prds/products/shared/planning/agent-rounds.md#checks), under [Planning](../../../docs/prds/products/shared/planning/index.md). Source: [Cross-Sell Walkthrough](https://claude.ai/artifact/RRrhtNCREemYurRHHmcmjv), one feature walked through every role on 2026-09-21 with an agent standing in for each hand. Depends on `run-a-round-on-every-artifact`, whose round this change corrects, and `stage-changes-and-notify-hands`, whose messages it addresses.
+Product context: [Agent Rounds · Your Moves](../../../docs/prds/products/shared/planning/agent-rounds.md#your-moves), [Perspectives](../../../docs/prds/products/shared/planning/agent-rounds.md#perspectives), [The Walk](../../../docs/prds/products/shared/planning/agent-rounds.md#the-walk) and [Checks](../../../docs/prds/products/shared/planning/agent-rounds.md#checks), and [Change Stages · Hands](../../../docs/prds/products/shared/planning/change-stages.md#hands), under [Planning](../../../docs/prds/products/shared/planning/index.md). Source: [Cross-Sell Walkthrough](../../../docs/references/cross-sell-walkthrough.md), one feature walked through every role on 2026-09-21 with an agent standing in for each hand. Depends on `run-a-round-on-every-artifact`, whose round this change corrects, and `stage-changes-and-notify-hands`, whose hands it extends.
 
 ## Why
 
@@ -30,32 +30,35 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
 ## What Changes
 
 - **Each hand is addressed alone** — a summary shows a hand the moves that
-  are theirs; a held row addressed to another hand is its own message, with
-  the row, the page sentence and the decision rows it touches quoted; a
-  product detail a round lands on a page reaches the product manager as ❓ with
-  the line quoted before and after, never as decided by the round.
-- **QA is asked when the requirements land** — the landing that puts the suite
-  up for review addresses QA, and the walk group names the review as its
-  input.
+  are theirs; a held row addressed to another hand is the round's own reply
+  in the change's thread, mentioning that hand, keyed so it is posted once,
+  with the row, the page sentence and the decision rows it touches quoted; a
+  product detail a build round lands on a page reaches the product manager as
+  ❓ with the line quoted before and after, never as decided by the round.
+- **QA is a hand of Specified** — the landing that puts the suite up for
+  review is a move to QA, told by the message every hand gets, and the walk
+  group names the review as its input.
 - **The interview asks two or three questions** — the defaults the round
   applies are listed as such, the questions asked are the ones that change
   what is built, and one asks whether to do it now.
 - **A round is sized by what it lands** — a task group that lands prose is
-  read by the reader of words and QA, not the build's four readings; the
-  readings of one round are verified together; a reader or verifier that ran
-  on a fallback model is named in the row.
-- **The record takes the application repository** — a row names the
-  repository with each test path and the landing resolves it through the
-  submodule; a walk's case flips the same way; a row or a suite's Manual row
-  that credits a test is refused when the file cites no such id; a group whose
-  lane did not run says so first.
+  read by the reader of words and QA, not the build's four readings; one
+  verifier reads a round's readings together; a reader or verifier that ran
+  on a fallback model is named in the row, and a dispatch the vendor killed
+  stops the round rather than thinning it.
+- **The record takes the application repository** — a group's repository tag
+  says where its paths live, and the landing resolves them in the application
+  clone it runs beside; a row or a suite's Manual row that credits a test is
+  refused when the file cites no such id; a group whose lane did not run says
+  so first and keeps its tasks unticked.
 - **Four gates stop refusing what is right** — a page naming a capability an
-  in-flight proposal names resolves; a written design may still wait on its
-  frame; two in-flight deltas whose scenarios on one requirement state
-  opposite outcomes are refused however each is headed; a suite's Manual table
-  is refused where it is written when the fold would not read it.
-- **The walk's ids are checked** — in the application repository, a walk's
-  bracketed case id whose case is still draft is refused by the plan command.
+  in-flight change declares resolves; a written design may still wait on its
+  frame; two in-flight deltas that fold one requirement are named to each
+  other however each is headed; a suite's Manual table is refused where it is
+  written when it sits outside the reconciliation.
+- **The walk's ids are checked at the tick** — in the application repository,
+  a walk's bracketed case id whose case is not yet actual is refused by the
+  tick, in the pass that already looks for a task's scenario ids.
 
 ## Non-Goals
 
@@ -66,28 +69,41 @@ See [Non-Goals](decisions.md#non-goals).
 ### Modified Capabilities
 
 - `shared/planning/agent-rounds` — ADDED requirements: whom a summary
-  addresses, when QA is asked, the interview's size, a round sized by what it
-  lands, the record's application paths and refusals, the gates corrected.
-  Added beside `run-a-round-on-every-artifact`'s delta, which this change
-  extends and never modifies.
+  addresses, when QA is asked, the interview's size, a task group sized by
+  what it lands, the record's application paths and refusals, the gates
+  corrected. The three statements of `run-a-round-on-every-artifact`'s delta
+  that said otherwise — one verifier per group of findings, a task group's
+  readers, the `when` table — are moved in that delta by this change's round,
+  recorded as its round 43, since a MODIFIED block can name only a durable
+  requirement.
+- `shared/planning/change-stages` — the Hands table of
+  `stage-changes-and-notify-hands`'s delta gains QA at Specified, moved in that
+  delta by this change's round, recorded as its round 27; no new message kind.
 
 ## Impact
 
 - `openspec/schemas/grade10-planning/schema.yaml` — the `apply` block's
-  perspectives gain `when:` triggers, and the planning artifacts' instruction
-  names the review step.
-- `scripts/openspec/` — `perspectives.mjs` classifies a page and a suite;
-  `plan-land.mjs` resolves an application path through the submodule and greps
-  a cited test for its ids; `validate-test-cases.mjs` refuses the Manual
-  table's three shapes.
-- `tools/manual/check/` — the references rule counts a proposal's named
-  capability; a wait may stand inside a written design; scenarios are read
-  across in-flight deltas on one requirement.
-- `.claude/skills/` and `.claude/agents/` — the round's summary and the
-  verifier point at the conduct; the interview's shape; one verifier per round.
-- `docs/governance/` and the planning pages — each role's page and guide
-  carry the new rules.
-- `grade10` — `pnpm plan` gains the walk-id check.
+  perspectives carry `when:` triggers; `tools/manual/src/api/types.ts` names
+  the `code` trigger in the same landing.
+- `scripts/openspec/` — `lib/perspectives.mjs` raises `code`; `plan-land.mjs`
+  resolves an application group's paths in the clone it runs beside, takes
+  `--unrun`, holds a `(fallback)` suffix, and refuses a cited test that
+  carries no such id through one helper in `lib/`; `validate-test-cases.mjs`
+  refuses a Manual table outside the reconciliation and a Manual row whose
+  test in this store carries no such case id.
+- `tools/manual/check/` — `context.mjs` counts a change's declared
+  capabilities among the changing; `record.mjs` no longer refuses a wait on a
+  written artifact; `deltas.mjs` names two in-flight deltas on one requirement
+  however each is headed.
+- `tools/manual/src/` — the hands of Specified include QA, so the existing
+  turn message reaches them.
+- `.claude/skills/` and `.claude/agents/` — the round's summary, the held
+  row's reply, the interview's shape, one verifier per round, the fallback and
+  the killed dispatch.
+- `docs/governance/round-summary.md` and the planning pages and guides — each
+  role's page carries the new rules once; the governance page keeps the
+  procedure and points at the requirements.
+- `grade10` — `pnpm plan done` reads a walk's bracketed case ids.
 
 ## References
 
@@ -96,4 +112,5 @@ See [Non-Goals](decisions.md#non-goals).
 - [Agent Rounds · Perspectives](../../../docs/prds/products/shared/planning/agent-rounds.md#perspectives)
 - [Agent Rounds · The Walk](../../../docs/prds/products/shared/planning/agent-rounds.md#the-walk)
 - [Agent Rounds · Checks](../../../docs/prds/products/shared/planning/agent-rounds.md#checks)
+- [Change Stages · Hands](../../../docs/prds/products/shared/planning/change-stages.md#hands)
 - [Cross-Sell Walkthrough](../../../docs/references/cross-sell-walkthrough.md)
