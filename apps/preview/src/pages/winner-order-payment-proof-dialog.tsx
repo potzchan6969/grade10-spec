@@ -24,16 +24,22 @@ import { toast } from "@grade10/design-system/components/overlays/toast";
 import { Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 
-/** Preview-only bank details — Finance TBC for live account values. */
+/** Preview-only bank details — Grade10 / HSBC Hong Kong sample until Finance confirms live values. */
 export const WINNER_ORDER_BANK_DETAILS = {
-  beneficiaryName: "{tbc}",
-  bankName: "{tbc}",
+  beneficiaryName: "Grade10 Finance Limited",
+  beneficiaryAddress: "Unit 2602, 28 Stanley Street, Central, Hong Kong",
+  bankName: "HSBC Hong Kong",
+  /** Main branch address, city and country. */
+  bankAddress: "1 Queen's Road Central, Central, Hong Kong",
   bankCode: "004",
-  branchCode: "123",
-  accountNumber: "XXXX-XXXX-XXXX-1234",
-  swiftCode: "X12345678",
-  businessAddress: "{tbc}",
-  fpsId: "{tbc}",
+  branchCode: "001",
+  /**
+   * Full account number including bank and branch code
+   * (`bank-branch-account`).
+   */
+  accountNumber: "004-001-583291-001",
+  swiftCode: "HSBCHKHHXXX",
+  fpsId: "12345678",
   /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
   totalAmountDue: "HK$16,020",
   /** Durable bank reference shape from winner-order identifiers. */
