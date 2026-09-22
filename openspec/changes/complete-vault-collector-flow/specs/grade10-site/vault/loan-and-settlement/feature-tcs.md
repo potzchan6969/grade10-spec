@@ -1387,12 +1387,4 @@ Runs once per row of **Test data**.
 
 ---
 
-## Raised
-
-| Capability | Raised | Landed |
-| --- | --- | --- |
-| grade10-site/vault/loan-and-settlement | The feature set's "Corrections" bullet (a whole record taken back, once, by a second money holder who is not its recorder) has no journey in `user-journeys.md` for this capability. No case in this suite traces it. Is a journey missing, or does its behaviour belong wholly to another capability's suite (for example the console's money-book)? | |
-| grade10-site/vault/loan-and-settlement | US-01's advance and US-02's repayment both need "the person who priced the loan" and "who paid it out/recorded a repayment" to differ, but neither the feature set nor the pages name the actor class that records a repayment beyond `admin`/treasurer. I assumed `admin(holds vault:payout)` throughout, with no split enforced between a repayment's recorder and the case's offer-maker (only the payout itself names that split). Is a repayment ever guarded the same way? | |
-| grade10-site/vault/loan-and-settlement | US-06 promises "the dates the reminders go, until a notice stops them" on the page before a notice is sent, and the notice card once one is sent. Neither page names what shows between the last reminder and a notice being sent — does the reminders card simply keep repeating the 7-day rung with no further "next" date, or does it read differently once the ladder has no more rungs left before a notice would be due? | |
-
 ## Settled
