@@ -2,4 +2,9 @@ schema: grade10-planning
 created: 2026-09-09
 promoted_by: "@sean"
 page_waived: "predates the page rule"
-design_waived: "the Typekit link and the theme's canada-type-gibson mapping already ship on main (167d9c4c7d, landed the day after the proposal, before this change was ever planned); nothing left to decide, tasks.md only backfills the test coverage"
+design_waived: "the Typekit link and the theme's canada-type-gibson mapping
+  already ship on main (167d9c4c7d, landed the day after the proposal, before
+  this change was ever planned); nothing left to decide, tasks.md only backfills
+  the test coverage"
+reviewed:
+  user-journeys: 06c5afe3
