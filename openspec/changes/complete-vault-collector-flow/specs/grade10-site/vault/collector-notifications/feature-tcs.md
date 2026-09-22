@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Out of suite:** `grade10-site-vault-collector-notifications-SC-27` — its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that capability's suite walks the money email it names.
 
 ## grade10-site-vault-collector-notifications-US1: Borrower is warned before the due date and while it runs late
 
@@ -447,6 +448,63 @@ Runs once per row of **Test data**.
 * No email is attempted.
 * The event is counted as one the vault could not tell the collector, rather than as a send.
 
+### grade10-site-vault-collector-notifications-US2-TC12-1: A money record taken back reaches the borrower without naming who took it back
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-02
+
+**Pre-conditions:**
+
+* customer(borrower with a live loan) has a case carrying a recorded repayment.
+* admin(holds vault:operate) is on <grade10 vault admin case url>.
+
+**Steps:**
+
+1. Take the recorded repayment back.
+
+**Expected Results:**
+
+* The borrower receives a message naming the amount taken back and what the case owes after it.
+* The message names nobody who recorded or took back the money.
+
+### grade10-site-vault-collector-notifications-US2-TC13-1: A message with no money in it names the custodian, not the lender
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-02
+
+**Pre-conditions:**
+
+* customer(collector) has a case whose item has just been put in the vault.
+
+**Steps:**
+
+1. Open the item-vaulted message the collector receives.
+
+**Expected Results:**
+
+* The footer names the custodian under its registered name, with the licence line and the complaints contact.
+* The footer names no lender.
+
 ---
 
 ## grade10-site-vault-collector-notifications-US5: Borrower reads the figures in the message itself
@@ -656,6 +714,34 @@ and that a person decides,
 * The act is refused before anything is written or sent.
 * No message carrying the unset value reaches the borrower.
 
+### grade10-site-vault-collector-notifications-US5-TC8-1: The offer's message tables the term, the interest and the day it is open until
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Pre-conditions:**
+
+* customer(collector) has a case carrying an offer of 4,000,000 HKD minor units over 90 days.
+
+**Steps:**
+
+1. Open the offer message the collector receives.
+
+**Expected Results:**
+
+* The message tables the loan, the term, the interest for the term, the total to repay, what a late day costs and the day the offer is open until.
+* None of those six figures is readable only inside a sentence.
+
 ---
 
 ## grade10-site-vault-collector-notifications-US6: Collector is invited to verify before the visit
@@ -783,3 +869,65 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * No identity-check invitation is sent.
+
+---
+
+## Reconciliation
+
+**Run:** the blind pass read the bundle — `spec.md`'s `## Purpose` and
+`## Feature set`, this capability's `user-journeys.md`, the change's
+`proposal.md` and `decisions.md` (`## Raised` included), `ui-design.md` with its
+state dispositions stripped, and the linked sections of
+`docs/prds/products/grade10-site/vault/collector-pages.md`. It was denied every
+`## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and
+`tech-design.md`. It wrote 25 cases over US1, US2, US5 and US6 and raised one
+question. The scenario pass issued
+`grade10-site-vault-collector-notifications-SC-20` to
+`grade10-site-vault-collector-notifications-SC-33`, carrying the durable
+`grade10-site-vault-collector-notifications-SC-03` and
+`grade10-site-vault-collector-notifications-SC-04` in its MODIFIED block; this
+reconciliation folded one more,
+`grade10-site-vault-collector-notifications-SC-34`.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-05` for the two offsets, `grade10-site-vault-collector-notifications-SC-25` for what the due-soon message tables |
+| `US1-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-07` for one message however many offsets have passed, `grade10-site-vault-collector-notifications-SC-26` for the overdue figures |
+| `US1-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-08` |
+| `US2-TC1-1` | Folded | `grade10-site-vault-collector-notifications-SC-34` — the requirement states the action link and no scenario reached it; the change opens that requirement, so the scenario lands in its MODIFIED block |
+| `US2-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-01` |
+| `US2-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-11` |
+| `US2-TC4-1` | Covered | `grade10-site-vault-collector-notifications-SC-13` |
+| `US2-TC5-1` | Covered | `grade10-site-vault-collector-notifications-SC-15` |
+| `US2-TC6-1` | Covered | `grade10-site-vault-collector-notifications-SC-16` for the address; the item's title and the currency are the durable *The reader is read at the attempt* requirement's own sentence, which this change does not open |
+| `US2-TC7-1` | Covered | `grade10-site-vault-collector-notifications-SC-18` |
+| `US2-TC8-1` | Covered | `grade10-site-vault-collector-notifications-SC-09`, `grade10-site-vault-collector-notifications-SC-10` |
+| `US2-TC9-1` | Covered | `grade10-site-vault-collector-notifications-SC-10` |
+| `US2-TC10-1` | Covered | `grade10-site-vault-collector-notifications-SC-12` |
+| `US2-TC11-1` | Covered | `grade10-site-vault-collector-notifications-SC-17` |
+| `US5-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-23`, `grade10-site-vault-collector-notifications-SC-24`, `grade10-site-vault-collector-notifications-SC-25`, `grade10-site-vault-collector-notifications-SC-26` — the case reads one money message, the four scenarios read one kind each |
+| `US5-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-24` for the block on the advance, `grade10-site-vault-collector-notifications-SC-25` for it under the due-soon figures |
+| `US5-TC3-1` | Covered | `grade10-site-vault-collector-notifications-SC-28` |
+| `US5-TC4-1` | Covered | `grade10-site-vault-collector-notifications-SC-29`, `grade10-site-vault-collector-notifications-SC-30` |
+| `US5-TC5-1` | Covered | `grade10-site-vault-collector-notifications-SC-21` for the case line; the case reads the footer without saying which party it names, which `US2-TC13-1` now does |
+| `US5-TC6-1` | Covered | `grade10-site-vault-collector-notifications-SC-32` |
+| `US5-TC7-1` | Covered | `grade10-site-vault-collector-notifications-SC-33` |
+| `US6-TC1-1` | Covered | `grade10-site-vault-collector-notifications-SC-31`, `grade10-site-vault-collector-notifications-SC-20` |
+| `US6-TC2-1` | Covered | `grade10-site-vault-collector-notifications-SC-31` |
+| `US6-TC3-1` | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-39` states the panel's Send again on a check still out, and the durable `grade10-site-vault-identity-verification-SC-03` states that a case in custody takes no new check; nothing about the invitation is unstated, so no scenario is folded here |
+| `US6-TC4-1` | Covered elsewhere | The invitation's condition is `grade10-site-vault-collector-notifications-SC-20`'s GIVEN — a visit booked and no identity to reuse — and what makes it unmet is `grade10-site-vault-identity-verification-SC-09` (the last check is reused) and `grade10-site-vault-identity-verification-SC-03` (a case in custody takes no new check). The negative restates another capability's rule, so it stays a case and no scenario is written |
+| `grade10-site-vault-collector-notifications-SC-04` | Case added | `US2-TC12-1` — no blind case took a money record back, and nothing reached "never with who recorded it" |
+| `grade10-site-vault-collector-notifications-SC-22` | Case added | `US2-TC13-1` — `US5-TC5-1` reads the footer without deciding which party it names, which is the rule this change adds |
+| `grade10-site-vault-collector-notifications-SC-23` | Case added | `US5-TC8-1` — `US5-TC1-1` reads a money message with a due date, which the offer does not have; its six rows were reached by nothing |
+| `grade10-site-vault-collector-notifications-SC-27` | Out of suite | Its only anchor is `grade10-site/vault/loan-and-settlement`'s US-05, and that suite's `grade10-site-vault-loan-and-settlement-US5-TC2-1` walks every money email on the case, `repayment_recorded` among them; listed under the header |
+| Raised — what a tester observes when a retried send reads the documents from the packet rather than the queue | Raised, settled | Landed in the change's `decisions.md` `## Raised`. The rule stands as the durable *The signed set is delivered once, and its documents are read at the attempt* requirement states it, and `grade10-site-vault-collector-notifications-SC-14` is the scenario: what differs between attempts is a packet re-sealed or an attachment regenerated, so the assertion is that the attachment equals the packet's sealed copy at send time. The blind pass was denied that requirement |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US2-TC7-1` | The chat app opens outside the product; a person reads the pre-filled template and confirms the vault queued nothing of its own |
+| `US5-TC1-1` | The automated walk proves the table's rows; a person reads the whole message to confirm no figure is also written into a sentence |
+| `US5-TC5-1` | A person reads the footer against the party's registered name, its licence line and the complaints contact, which no assertion restates without keeping a second copy of them |
+| `US5-TC8-1` | As above for the offer's six rows: the walk proves the rows, a person confirms the prose around them repeats none of them |
+| `US2-TC13-1` | A person reads the custodian's registered name and licence line off the message, for the same reason |

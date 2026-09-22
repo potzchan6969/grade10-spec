@@ -1083,7 +1083,7 @@ and `tech-design.md`. Nothing verifies that account; it is the run's word.
 | --- | --- | --- |
 | `US3-TC1-1` | Folded into `spec.md` | The requirement orders the list longest overdue first and no scenario read it — `grade10-admin-vault-money-book-SC-29` |
 | `US3-TC2-1` | Folded into `spec.md` | `grade10-admin-vault-money-book-SC-07` pages, but nothing stated two loans sharing one due date — `grade10-admin-vault-money-book-SC-30` |
-| `US3-TC5-1` | Folded into `spec.md` | The grant is the requirement's, the refusal nobody's — `grade10-admin-vault-money-book-SC-31`, and the question behind it is `Q29` |
+| `US3-TC5-1` | Folded into `spec.md` | The grant is the requirement's, the refusal nobody's — `grade10-admin-vault-money-book-SC-31`, and the question behind it is `Q35` |
 | `US1-TC1-1`, `US1-TC3-1` | Covered | `grade10-admin-vault-money-book-SC-01` |
 | `US1-TC2-1` | Covered | The durable `grade10-admin-vault-money-book-SC-03`, which this change leaves as it is |
 | `US1-TC4-1` | Covered | `grade10-admin-vault-money-book-SC-27`; a range holding nothing folds to zero by the totals requirement it already reads under |
@@ -1102,14 +1102,14 @@ and `tech-design.md`. Nothing verifies that account; it is the run's word.
 | `US1-TC5-1`, `US3-TC4-1`, `US4-TC8-1` | Kept, no scenario owed | A failed read and a failed export are the panel's own status, not a rule; the design's Loading, Error, Export in flight and Export failed rows close on the panel's colocated test |
 | `US5-TC5-1` | Kept, routed | The notice's date and the day it gives to pay by are `grade10-admin-vault-money-book-SC-28`; that no further reminder follows a notice is `grade10-site/vault/collector-notifications`' rule, walked by its own suite |
 | `US5-TC6-1` | Kept, routed | The reminder ladder's words are `grade10-site/vault/collector-notifications`', as the design's Ladder row anchors them |
-| Raised — which grant opens the arrears view | Raised, answered | The vault read grant, with the list the figures sum: the durable requirement "The book sits behind the money grant, and one case's balance does not" and the Permissions table of the [Operator Console](/p/grade10-site/vault/operator-console#permissions) page. Landed as `Q29`, and `grade10-admin-vault-money-book-SC-31` now states the refusal |
-| Raised — whether any journey reads the position | Raised, answered | No screen in this change reads it, and the blind pass wrote no case for it, rightly. Landed as `Q30`: the position is out of this change's scope, the durable journey US-02 keeps its durable scenarios, and this first suite owes them cases — `US2-TC1-1` to `US2-TC5-1` |
+| Raised — which grant opens the arrears view | Raised, answered | The vault read grant, with the list the figures sum: the durable requirement "The book sits behind the money grant, and one case's balance does not" and the Permissions table of the [Operator Console](/p/grade10-site/vault/operator-console#permissions) page. Landed as `Q35`, and `grade10-admin-vault-money-book-SC-31` now states the refusal |
+| Raised — whether any journey reads the position | Raised, answered | No screen in this change reads it, and the blind pass wrote no case for it, rightly. Landed as `Q36`: the position is out of this change's scope, the durable journey US-02 keeps its durable scenarios, and this first suite owes them cases — `US2-TC1-1` to `US2-TC5-1` |
 | Raised — what page the register and the arrears list page on | Raised, escalated | Neither the console's blocks spec nor this capability states a number. ❓ Product on the [Operator Console](/p/grade10-site/vault/operator-console) page, recommended 50; the landing is in the change's `decisions.md` |
 | `grade10-admin-vault-money-book-SC-08` | Case added | `US3-TC7-1` |
 | `grade10-admin-vault-money-book-SC-12` | Case added | `US3-TC6-1` |
 | `grade10-admin-vault-money-book-SC-19` | Case added | `US5-TC7-1` |
 | `grade10-admin-vault-money-book-SC-24` | Case added | `US4-TC9-1` |
-| The net out over the range as narrowed | Case added | The rule stands and no scenario reads it; `Q31` records the reading and `US4-TC10-1` walks it |
+| The net out over the range as narrowed | Case added | The rule stands and no scenario reads it; `Q37` records the reading and `US4-TC10-1` walks it |
 | Uncovered anchors | None | Every journey carries cases, and the group anchor "The export" is walked by `US4-TC6-1` and "The arrears" by `US3-TC6-1` |
 
 ### Manual

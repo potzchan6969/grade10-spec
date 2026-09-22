@@ -181,6 +181,21 @@ queue with nothing in it.
 - **WHEN** an operator searches for a reference no case carries
 - **THEN** the answer says no case answers to it
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-47 - The first characters of a case id find the case
+**Serves:** grade10-admin-vault-operator-queue-US-02 - the operator opens the case from the id in front of them
+
+- **GIVEN** a case whose id an operator is reading off another screen
+- **WHEN** they search the first characters of that id
+- **THEN** that case is found
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-48 - Part of a number finds nothing
+**Serves:** grade10-admin-vault-operator-queue-US-02 - the operator cannot walk the customer list a piece of a number at a time
+
+- **GIVEN** a case stored under a known phone number
+- **WHEN** an operator searches part of that number rather than the whole of it
+- **THEN** the case is not found
+
+
 ## ADDED Requirements
 
 ### Requirement: A case reads on the console in the words the collector reads
@@ -276,6 +291,14 @@ that visit, in the order they are worked.
 - **WHEN** staff open it
 - **THEN** no visit checklist is shown
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-50 - An act lands its step and hands the next one on
+**Serves:** grade10-admin-vault-operator-queue-US-07 - the counter works down the list without looking up what comes next
+
+- **GIVEN** a case with a visit at the shop today, read at the step in hand
+- **WHEN** an operator sends that step's act
+- **THEN** the step is ticked, and the step after it carries the act that lands it
+
+
 ### Requirement: An act the case withholds says what it is waiting for
 
 Where a case's status withholds an act, the tab says what the act is waiting
@@ -334,6 +357,14 @@ for instead of leaving the operator to send it and be refused.
 - **WHEN** an operator reads the custody tab
 - **THEN** each of the three is listed with the day it went and the channel it went by
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-51 - Forfeiture is offered once nothing holds it
+**Serves:** grade10-admin-vault-operator-queue-US-08 - the operator takes the item on the first day they may
+
+- **GIVEN** a live loan past its due date whose forfeiture notice gave the borrower a date that has passed
+- **WHEN** an operator reads the custody tab
+- **THEN** forfeiture is offered, with no reason withholding it
+
+
 ### Requirement: The identity panel reads the six states the record holds
 
 The console says where a collector's identity stands in six words, so an
@@ -346,8 +377,8 @@ take it at the counter.
 | State | What the record holds | What the panel offers |
 | --- | --- | --- |
 | Verified | an identity bound: who checked it, and when | viewing the photograph under the identity read grant, and recording one at the counter instead |
-| Out | a hosted check invited, started or submitted, with the day it went | sending it again, and recording one at the counter |
-| Stalled | a hosted check submitted and not yet decided, with the day it was submitted | recording one at the counter, and sending it again |
+| Out | a hosted check invited, started, or submitted and not yet read as stalled, with the day it went | sending it again, and recording one at the counter |
+| Stalled | a submitted check the identity check reads as stalled, with the day it was submitted | recording one at the counter, and sending it again |
 | Refused | the last hosted check declined, with the day and the reason | recording one at the counter, naming who is recording over the refusal |
 | Lapsed | the last hosted check expired or withdrawn, with the day | sending a hosted check, and recording one at the counter |
 | None | nothing asked for | sending a hosted check, and recording one at the counter |
@@ -355,6 +386,9 @@ take it at the counter.
 - **Never the provider's own** - a finer state the identity provider reports
   SHALL fold into one of the six, and no word of the provider's SHALL be
   shown.
+- **Out or Stalled** - the console SHALL NOT decide when a submitted check
+  stops reading as Out; it SHALL read the state the identity check holds, which
+  is where the boundary between the two is stated.
 
 #### Scenario: grade10-admin-vault-operator-queue-SC-39 - A check still out reads as out, not as nothing asked for
 **Serves:** grade10-admin-vault-operator-queue-US-09 - the operator knows whether to send the check again or wait
@@ -385,14 +419,22 @@ take it at the counter.
 - **WHEN** an operator reads the identity panel
 - **THEN** it shows one of the six states, and no word of the provider's
 
+#### Scenario: grade10-admin-vault-operator-queue-SC-52 - A check just submitted reads Out, and Stalled when the identity check says so
+**Serves:** grade10-admin-vault-operator-queue-US-09 - the operator waits on the provider only while there is something to wait for
+
+- **GIVEN** a hosted check the collector has submitted and the provider has not decided
+- **WHEN** an operator reads the identity panel before the identity check reads that check as stalled, and again after
+- **THEN** the panel reads Out first and Stalled second, on the state the identity check holds rather than on a reading of its own
+
+
 ### Requirement: The held list counts what is held and says what each item carries
 
 The held list answers how much the shops are holding before an operator reads
 a single row.
 
-- **The figures** - the list SHALL say how many items are held, how many are
-  held at each shop it covers, how many carry a live loan and how many are
-  waiting on a booked pickup.
+- **The figures** - the list SHALL carry three figures: how much is held, how
+  much carries a live loan, and how much waits on a booked pickup. The first
+  SHALL break down by shop; there is no fourth figure counting shops.
 - **Counted behind the filter** - each figure SHALL count everything the
   filter in force holds, never the page in hand.
 - **The row** - a row SHALL carry the case reference, the item's name, the
@@ -430,3 +472,21 @@ a single row.
 - **GIVEN** a shop holding no item
 - **WHEN** the list is narrowed to it
 - **THEN** it says nothing is held, and its figures read none
+
+### Requirement: The custody tab reads back where the item has been
+
+An operator answers for an item's whereabouts from the case, without asking
+anyone to look the movements up elsewhere.
+
+- **The log** - the custody tab SHALL list the item's movements newest first,
+  each naming the movement, the locker it names, when it was written and the
+  operator who made it.
+- **Written by the act** - a movement SHALL reach the log because the act that
+  moved the item wrote it, and SHALL NOT be entered by hand.
+
+#### Scenario: grade10-admin-vault-operator-queue-SC-49 - A move between lockers reads back on the log
+**Serves:** grade10-admin-vault-operator-queue-US-04 - the operator says where an item has been without leaving the case
+
+- **GIVEN** an item held in a locker
+- **WHEN** an operator moves it to another locker and reads the custody tab
+- **THEN** the log's newest row names the move, the new locker, when it happened and who moved it

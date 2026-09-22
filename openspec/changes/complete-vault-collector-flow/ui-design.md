@@ -229,27 +229,27 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading | `list.loading`; no cards | `grade10-site-vault-case-intake-US-01` |
-| Empty (`C21`) | the hero, Start a request, the four-step How it works, Nothing here yet with the three-draft cap; no cards | `grade10-site-vault-case-intake-US-01` |
-| Cards (`C01`) | one `Card` per case: item title, the status word, the ownership chip, opened · lane · asked for, the reference; Open | `grade10-site-vault-case-intake-US-05` |
+| Loading | `list.loading`; no cards | **Out of suite:** the view's colocated test |
+| Empty (`C21`) | the hero, Start a request, the four-step How it works, Nothing here yet with the three-draft cap; no cards | **Out of suite:** the view's colocated test — the cap it names is `grade10-site-vault-case-intake-SC-07` |
+| Cards (`C01`) | one `Card` per case: item title, the status word, the ownership chip, opened · lane · asked for, the reference; Open | `grade10-site-vault-case-intake-SC-23` |
 | Offer deadline | on an `offer_made` card with a live offer: answer by the expiry; absent once it lapsed | `grade10-site-vault-valuation-and-offer-SC-25` |
 | Held since | on a `vaulted`, `active` or `repaid` card: in the vault since | `grade10-site-vault-case-lifecycle-SC-34` |
-| Draft card | photographs attached count and the next-step line; Open resumes the wizard | `grade10-site-vault-case-intake-US-01` |
-| Error | the message in the error tone; no cards | `grade10-site-vault-case-intake-US-01` |
+| Draft card | photographs attached count and the next-step line; Open resumes the wizard | `grade10-site-vault-case-intake-SC-01` |
+| Error | the message in the error tone; no cards | **Out of suite:** the view's colocated test |
 
 ### Request wizard
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Describe (`C02`) | step 1 of 3 on the `Stepper`; category, name with the 200 hint, description with the 2,000 hint, WhatsApp, lane, amount with the policy hint; Continue, Finish later | `grade10-site-vault-case-intake-US-01` |
-| Photograph (`C03`) | step 2; `FileDropzone`, n of 10 attached, the format and 20 MB line, the location-removed line, three tips; Continue, Finish later | `grade10-site-vault-case-intake-US-01` |
-| Photo refused | the existing refusals under the dropzone: type, size, empty, limit | `grade10-site-vault-case-intake-US-01` |
-| Review (`C04`) | step 3; the request read back with Edit per block, What happens next (three items), the statement tick linking the statement page, Send it in, Finish later | `grade10-site-vault-case-intake-US-04` |
-| Tick missing | Send it in refused on the page with the line under the tick; nothing sent | `grade10-site-vault-case-intake-US-04` |
-| Statement being prepared | the tick's link opens the privacy page reading Being prepared; the tick records the version shown and still sends, in every environment | `grade10-site-vault-case-intake-US-04` |
-| Sent (`C05`) | the reference in mono, Book a visit, Not now — open the case, the several-items block, Start another request, the 30-day line | `grade10-site-vault-case-intake-US-05` |
-| Draft limit | `request.draftLimitReached` on Start a request | `grade10-site-vault-case-intake-US-01` |
-| Moved on | `request.caseConflict` on Send it in | `grade10-site-vault-case-intake-US-01` |
+| Describe (`C02`) | step 1 of 3 on the `Stepper`; category, name with the 200 hint, description with the 2,000 hint, WhatsApp, lane, amount with the policy hint; Continue, Finish later | `grade10-site-vault-case-intake-SC-05`, `grade10-site-vault-case-intake-SC-06` — the field rules are the durable requirement's table |
+| Photograph (`C03`) | step 2; `FileDropzone`, n of 10 attached, the format and 20 MB line, the location-removed line, three tips; Continue, Finish later | `grade10-site-vault-case-intake-SC-08`, `grade10-site-vault-case-intake-SC-11` |
+| Photo refused | the existing refusals under the dropzone: type, size, empty, limit | `grade10-site-vault-case-intake-SC-09` — type, size and the zero-byte empty; `grade10-site-vault-case-intake-SC-08` — the limit |
+| Review (`C04`) | step 3; the request read back with Edit per block, What happens next (three items), the statement tick linking the statement page, Send it in, Finish later | `grade10-site-vault-case-intake-SC-15` |
+| Tick missing | Send it in refused on the page with the line under the tick; nothing sent | `grade10-site-vault-case-intake-SC-16` |
+| Statement being prepared | the tick's link opens the privacy page reading Being prepared; the tick records the version shown and still sends, in every environment | `grade10-site-vault-case-intake-SC-18`, `grade10-site-vault-case-intake-SC-17` |
+| Sent (`C05`) | the reference in mono, Book a visit, Not now — open the case, the several-items block, Start another request, the 30-day line | `grade10-site-vault-case-intake-SC-23`, `grade10-site-vault-case-intake-SC-14` |
+| Draft limit | `request.draftLimitReached` on Start a request | `grade10-site-vault-case-intake-SC-07` |
+| Moved on | `request.caseConflict` on Send it in | `grade10-site-vault-case-lifecycle-SC-04` |
 
 ### Case page
 
@@ -257,7 +257,7 @@ beside them.
 | --- | --- | --- |
 | Loading | `case.loading`; nothing else | **Out of suite:** the site shell |
 | Not found | the site's not-found copy | **Out of suite:** the site shell |
-| Header | item title, category · reference · opened; photographs | `grade10-site-vault-case-intake-US-05` |
+| Header | item title, category · reference · opened; photographs | `grade10-site-vault-case-intake-SC-23` |
 | Stepper, financed | eight `Step`s Request → Home; the status's stage `progress`, earlier `completed`, later `upcoming` | `grade10-site-vault-case-lifecycle-SC-30` |
 | Stepper, storage | six `Step`s Request, Valued, Agreed, Signed, Vault, Home | `grade10-site-vault-case-lifecycle-SC-31` |
 | Stepper, ended | the stage the case ended at stays `progress`; the badge says the ending | `grade10-site-vault-case-lifecycle-SC-32` |
@@ -269,7 +269,7 @@ beside them.
 | Chip: Settled | repaid: settled and the date | `grade10-site-vault-loan-and-settlement-SC-15` |
 | Chip: Collected | released: collected and the date | `grade10-site-vault-case-lifecycle-SC-35` |
 | Chip: Closed | declined, cancelled, expired, forfeited: closed and the date | `grade10-site-vault-case-lifecycle-SC-36` |
-| Request sent (`C10`) | the lead on valuing from photographs; the verify prompt; the visit card; the item block; Cancel this request; history | `grade10-site-vault-case-intake-US-01` |
+| Request sent (`C10`) | the lead on valuing from photographs; the verify prompt; the visit card; the item block; Cancel this request; history | `grade10-site-vault-case-intake-SC-14` |
 | Offer waiting (`C11`) | hero amount, term, total, open until; Accept this offer, Decline this offer; the terms table with the valuation; How the loan works; the identity chip; the visit card with the accepting-books-nothing line | `grade10-site-vault-valuation-and-offer-SC-21` |
 | Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-SC-22` |
 | Decline confirmation | the confirm's words: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-SC-23` |
@@ -488,7 +488,7 @@ One row per kind, and the blocks each carries after the lead.
 | Verify before the visit (`M06`), `identity_check_invited` | facts: your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; the case line; `EmailFooter` naming the custodian | `grade10-site-vault-collector-notifications-US-06` |
 | The other eighteen, no board | `PrimaryCta` to the case; the case line; `EmailFooter` naming the custodian; every other kind in `notify/vocabulary.ts` | `grade10-site-vault-collector-notifications-US-02` |
 | A money kind among them | `repayment_recorded`, `payout_reversed`, `repayment_reversed`, `loan_repaid` and `forfeited` add the facts their event names, how to pay under them, and name the lender | `grade10-site-vault-loan-and-settlement-SC-36` |
-| Reference on every letter | the case line above the footer | `grade10-site-vault-case-intake-US-05` |
+| Reference on every letter | the case line above the footer | `grade10-site-vault-case-intake-SC-23` |
 | Custodian footer | a letter with no money names the custodian, not the lender | `grade10-site-vault-collector-notifications-US-02` |
 | Values unset | the bracketed placeholder outside production, marked; in production a money letter's send and the notice's send are refused | `grade10-site-vault-collector-notifications-US-05` |
 

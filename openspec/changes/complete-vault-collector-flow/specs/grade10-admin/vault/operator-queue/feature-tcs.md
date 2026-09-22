@@ -119,7 +119,7 @@ Runs once per row of **Test data**.
 
 * The row's badge reads the value named in **Test data**.
 
-### grade10-admin-vault-operator-queue-US1-TC4-1: Valuation-stalled badge appears at the 7-day boundary, not before
+### grade10-admin-vault-operator-queue-US1-TC4-1: Valuation-stalled badge appears past 7 days, not at them
 
 Runs once per row of **Test data**.
 
@@ -144,8 +144,8 @@ Runs once per row of **Test data**.
 
 | Case | Untouched for | Valuation stalled badge |
 | --- | --- | --- |
-| Just under the limit | 6 days 23 hours | absent |
-| At the limit | 7 days | present |
+| At the limit | 7 days | absent |
+| Past the limit | 7 days and 1 hour | present |
 
 **Steps:**
 
@@ -398,6 +398,35 @@ Runs once per row of **Test data**.
 
 * The audit trail records who searched, when, that the term was a phone number, and how many cases matched.
 * The audit trail entry does not record the term itself.
+
+### grade10-admin-vault-operator-queue-US2-TC7-1: Reading the queue leaves no audit entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-02
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on <grade10 admin vault queue url>, and no search has been run this session.
+
+**Steps:**
+
+1. Open a queue view and read its rows.
+2. Read the case audit trail for the entries written since step 1.
+
+**Expected Results:**
+
+* No audit entry is written for the read.
+* Only a search, never a listing, leaves a trail.
 
 ---
 
@@ -757,6 +786,33 @@ Runs once per row of **Test data**.
 
 * The view shows what **Test data** names.
 
+### grade10-admin-vault-operator-queue-US4-TC8-1: A held row names what the item is carrying
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-04
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on the Held items view, with one item held under a live loan and another whose pickup is booked.
+
+**Steps:**
+
+1. Read each of the two rows.
+
+**Expected Results:**
+
+* Each row names the case reference, the item, the shop, the locker, the day it was taken in, how many days it has been held, the status in the collector's word, what is outstanding on it, and whether a pickup is booked.
+
 ---
 
 ## grade10-admin-vault-operator-queue-US5: Operator finds the case by the reference read out
@@ -1056,6 +1112,34 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The control matches **Test data**.
+
+### grade10-admin-vault-operator-queue-US6-TC7-1: Today is the shop's own day, not the day in Coordinated Universal Time
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-06
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on <grade10 admin vault queue url> early in the shop's morning, while the date in Coordinated Universal Time is still yesterday's, and a visit is booked at the shop for later today.
+
+**Steps:**
+
+1. Open the Today cut.
+
+**Expected Results:**
+
+* The visit's case is in the cut.
+* The cut's count and the row's Visit today badge agree.
 
 ---
 
@@ -1385,8 +1469,8 @@ Runs once per row of **Test data**.
 | Identity stands | Panel reads | Acts offered |
 | --- | --- | --- |
 | nothing asked for | None | Send hosted check, Record at the counter |
-| a hosted check invited, started or submitted | Out | Send again, Record at the counter |
-| a hosted check submitted and undecided | Stalled | Record at the counter, Send again |
+| a hosted check invited, started, or submitted and not yet read as stalled | Out | Send again, Record at the counter |
+| a submitted check the identity check reads as stalled | Stalled | Record at the counter, Send again |
 | the last hosted check declined | Refused | Record at the counter |
 | the last hosted check expired or withdrawn | Lapsed | Send hosted check, Record at the counter |
 
@@ -1507,3 +1591,100 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The recording is refused.
+
+### grade10-admin-vault-operator-queue-US9-TC6-1: A submitted check reads Out until the identity check reads it stalled
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-09
+
+**Pre-conditions:**
+
+* admin(holds vault:operate) is on the Documents tab of a case whose hosted check the collector has submitted and the provider has not decided.
+
+**Steps:**
+
+1. Read the identity panel before the identity check reads that check as stalled.
+2. Read it again once the identity check reads it as stalled.
+
+**Expected Results:**
+
+* Step 1 reads Out, with the day the check went.
+* Step 2 reads Stalled, with the day it was submitted.
+* The panel never decides the boundary itself: it reads the state the identity check holds.
+
+---
+
+## Reconciliation
+
+**Run:** the blind pass read the bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, and the pages under `docs/prds/` the proposal links. It was denied every `## Requirements` section, `openspec/specs/` beyond the two included sections, `openspec/changes/archive/` and `tech-design.md`. It wrote 48 cases over nine journeys and raised two questions; the scenario pass issued `SC-21` to `SC-46` and carried `SC-01`, `SC-02`, `SC-07`, `SC-08` and `SC-09` in its MODIFIED blocks. Four cases and six scenarios were added here.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` | Reconciled | `SC-27` and `SC-28`: the row reads the collector's word and carries the reference |
+| `US1-TC2-1` | Reconciled | `SC-02` |
+| `US1-TC3-1` | Reconciled | `SC-03` for the stalled valuation and `SC-29` for the collector badge; the rest of the badge table is the durable requirement's |
+| `US1-TC4-1` | Corrected | the durable rule badges a valuation untouched for *more* than 7 days, which `SC-03` walks at 8; the row expecting the badge at exactly 7 days moved past it |
+| `US1-TC5-1`, `US1-TC6-1`, `US4-TC7-1` | Kept, no scenario | presentation only: a pending or failed read is decided by the panel's colocated test, and the ui-design Loading and Error rows carry that same disposition |
+| `US2-TC1-1`, `US2-TC2-1` | Reconciled | `SC-07` |
+| `US2-TC3-1` | Folded | `SC-47`: the case-id prefix was required and proved by no scenario |
+| `US2-TC4-1` | Folded | `SC-48`: the refusal to match part of a contact column, likewise |
+| `US2-TC5-1` | Reconciled | `SC-26` |
+| `US2-TC6-1` | Reconciled | `SC-08` |
+| `SC-09` | Case added | `US2-TC7-1`: reading the queue writes no audit entry |
+| `US3-TC1-1` | Reconciled | `SC-12` |
+| `US3-TC2-1` | Reconciled | `SC-10` |
+| `US3-TC3-1` | Reconciled | `SC-37` |
+| `US3-TC4-1` | Reconciled | `SC-11` |
+| `US4-TC1-1` | Reconciled | `SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |
+| `US4-TC2-1` | Reconciled | `SC-19` |
+| `US4-TC3-1` | Reconciled | `SC-43`, with the tiles at three and the first broken down per shop — Q33 |
+| `US4-TC4-1` | Reconciled | `SC-44` |
+| `US4-TC5-1` | Reconciled | `SC-46` |
+| `US4-TC6-1` | Folded | `SC-49`, under the new requirement *The custody tab reads back where the item has been*: the movement log is drawn on the design, required by the durable movement rule, and was proved by no scenario |
+| `SC-45` | Case added | `US4-TC8-1`: the held row's nine fields |
+| `US5-TC1-1`, `US5-TC2-1` | Reconciled | `SC-24` |
+| `US5-TC3-1` | Reconciled | `SC-26` |
+| `US5-TC4-1` | Reconciled | `SC-25` |
+| `US6-TC1-1` | Reconciled | `SC-22` |
+| `US6-TC2-1` | Reconciled | `SC-21` |
+| `US6-TC3-1` | Reconciled | `SC-22` for the cut and its order, `SC-27` and `SC-28` for the row's word and reference |
+| `US6-TC4-1` | Reconciled | `SC-23` |
+| `US6-TC5-1` | Reconciled | `SC-21`, and the durable paging requirement's `SC-05` |
+| `US6-TC6-1` | Reconciled | `SC-06` |
+| `SC-01` | Case added | `US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's |
+| `US7-TC1-1` | Reconciled | `SC-30`; the seven steps are the ones board A03 names — Q34 |
+| `US7-TC2-1` | Reconciled | `SC-31` |
+| `US7-TC3-1` | Reconciled | `SC-32`; the storage lane walks six of the seven |
+| `US7-TC4-1` | Reconciled | `SC-33` |
+| `US7-TC5-1` | Folded | `SC-50`: a step ticking on its act and handing the next one on was in the requirement's bullets and proved by no scenario |
+| `US8-TC1-1` | Reconciled | `SC-34` |
+| `US8-TC2-1` | Reconciled | `SC-35` |
+| `US8-TC3-1` | Reconciled | `SC-36` |
+| `US8-TC4-1` | Folded | `SC-51`: forfeiture offered once no reason holds it — the requirement said so and no scenario walked it |
+| `US8-TC5-1` | Reconciled | `SC-38` |
+| `US9-TC1-1` | Reconciled, corrected | `SC-41` and `SC-42`; its Out and Stalled rows both read a submitted check, and now read the identity check's own boundary — Q32 |
+| `US9-TC2-1` | Reconciled | `SC-41` |
+| `US9-TC3-1` | Reconciled | `SC-12`; the photograph's own read is `grade10-site/vault/identity-verification`'s `SC-14` |
+| `US9-TC4-1` | Reconciled | `SC-40` |
+| `US9-TC5-1` | Reconciled | `SC-40`: the recording names the reason and who records over the refusal, so one carrying neither is not that act |
+| `SC-52` | Case added | `US9-TC6-1`: Out until the identity check reads the submitted check as stalled |
+| Raised: the Out → Stalled boundary | Answered | Q32: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `SC-22`; the panel's table, its new bullet and `SC-52` read that state rather than deciding one |
+| Raised: three tiles or four | Answered | Q33: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `SC-43` now agree |
+| The visit checklist's steps | Answered | Q34: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `SC-30` and `SC-32` take them |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US9-TC1-1` | Only the provider puts a check into its own stages, so a person drives a sandbox check to stand a case at each of the six states and reads the panel against them |
+| `US9-TC6-1` | The boundary moves when the identity check reads the submitted check as stalled; a person waits that period out in the sandbox, or moves the clock, and reads the panel on both sides of it |

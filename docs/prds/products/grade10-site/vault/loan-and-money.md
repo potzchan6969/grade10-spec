@@ -134,6 +134,8 @@ every bound unset and writes no offer in production.
 - ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
   one set per brand beside its legal identity, refused in production while
   unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
+- ❓ Product — what a borrower reads in production while those two are unset;
+  recommended: the counter line alone, no account fields, no money message
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 
 ## Specs and journeys

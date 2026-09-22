@@ -1001,7 +1001,7 @@ the anchors after both landed.
 | US2-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-23` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-14` for the request staying open |
 | US2-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-16` and `grade10-site-vault-valuation-and-offer-SC-17` — the expiry is judged when the acceptance lands; the shop's clock is how the page reads that instant, not a second rule |
 | US2-TC4-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-17`, with the closed offer taking no answer under `Only the offer that stands takes an answer` |
-| US2-TC5-1 | Raised, answered | Q33 — acceptance is final whichever side gave it: `grade10-site-vault-valuation-and-offer-SC-16` stands and `grade10-site-vault-valuation-and-offer-SC-29` refuses the collector's answer by name. What is left before signing is the case's own call-off, in `grade10-site/vault/case-lifecycle` |
+| US2-TC5-1 | Raised, answered | Q47 — acceptance is final whichever side gave it: `grade10-site-vault-valuation-and-offer-SC-16` stands and `grade10-site-vault-valuation-and-offer-SC-29` refuses the collector's answer by name. What is left before signing is the case's own call-off, in `grade10-site/vault/case-lifecycle` |
 | US2-TC6-1 | Covered | the owner-only acceptance in `The collector or the counter accepts, and an expired offer cannot be accepted`, walked by `grade10-site-vault-valuation-and-offer-SC-16`; a case that is not the reader's is refused as its photographs are, `grade10-site-vault-case-intake-SC-12` |
 | US2-TC7-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-21` was reached by no case: the offer's terms, its valuation and the books-no-visit line |
 | US2-TC8-1 | Case added | the Go back branch of `grade10-site-vault-valuation-and-offer-SC-22` and `grade10-site-vault-valuation-and-offer-SC-23` was reached by no case |
@@ -1012,8 +1012,8 @@ the anchors after both landed.
 | US5-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-26` and `grade10-site-vault-valuation-and-offer-SC-22` |
 | US5-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-27` |
 | US5-TC4-1 | Covered | the closed-offer rule in `Only the offer that stands takes an answer`, walked by `grade10-site-vault-valuation-and-offer-SC-26` |
-| An offer made before any valuation is recorded | Raised, answered | Q32 — the durable spec already refuses it by name, `grade10-site-vault-valuation-and-offer-SC-03`; no scenario was written |
-| An acceptance given at the counter, re-answered before signing | Raised, answered | Q33 — it is not re-answered; see US2-TC5-1 |
+| An offer made before any valuation is recorded | Raised, answered | Q46 — the durable spec already refuses it by name, `grade10-site-vault-valuation-and-offer-SC-03`; no scenario was written |
+| An acceptance given at the counter, re-answered before signing | Raised, answered | Q47 — it is not re-answered; see US2-TC5-1 |
 | Folded into `spec.md` | none | the blind pass carried no behaviour the scenarios and the durable spec leave unstated |
 | Dropped as a misreading | none | — |
 | Uncovered anchors | none | every scenario from `grade10-site-vault-valuation-and-offer-SC-21` to `grade10-site-vault-valuation-and-offer-SC-29` is walked by a case |

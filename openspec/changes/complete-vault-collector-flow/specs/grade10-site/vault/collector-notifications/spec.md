@@ -50,9 +50,14 @@
     act that would print one refuses before it commits, so nothing is written
     that cannot be sent
 
+## RENAMED Requirements
+
+- FROM: `### Requirement: The vault sends twenty-three messages, each about the case it names`
+- TO: `### Requirement: The vault sends twenty-four messages, each about the case it names`
+
 ## MODIFIED Requirements
 
-### Requirement: The vault sends twenty-three messages, each about the case it names
+### Requirement: The vault sends twenty-four messages, each about the case it names
 
 The messages SHALL be exactly these twenty-four, in English, addressed to the
 case's own address, each carrying an action link to the case — except the
@@ -87,6 +92,12 @@ invitation to verify, whose link opens the identity check:
 - **GIVEN** a case with a visit booked and no identity to reuse
 - **WHEN** its collector is invited to verify
 - **THEN** the invitation is one of the twenty-four messages this table names, sent to the case's own address like any other
+
+#### Scenario: grade10-site-vault-collector-notifications-SC-34 - The link opens the case the message is about
+**Serves:** grade10-site-vault-collector-notifications-US-02 - the collector going straight from the message to the case rather than asking the shop
+
+- **WHEN** a collector opens the action link on any message but the invitation to verify
+- **THEN** the case the message is about opens at its own address
 
 ## ADDED Requirements
 
