@@ -17,13 +17,14 @@ file for file where it has the concern.
   tables from `createDocSignTables(vaultSchema)`, the booking cache and
   `booking/bind.ts` calling the diary outside every transaction,
   `erasure/eraseUser.ts` with named holds, a portable suite
-- **The sibling change** — `complete-vault-collector-flow` creates the shared
-  modules this change consumes: `shortReference` in
-  `packages/utils/src/reference.ts`, `printedValue` in
-  `packages/app-env/src/printed.ts`, `ProductLetter` beside `BaseLayout` in
-  `@grade10/email/render`, the dev outbox in `@grade10/worker` beside
-  `devOnly`, and `packages/storybook` (`@grade10/storybook`). Grading depends
-  on that change and creates none of them
+- **The sibling change** — `complete-vault-collector-flow` lands first and
+  creates what this change consumes as it wrote them: `BaseLayout` and
+  `renderProductEmail` in `@grade10/email/render`, the dev outbox in
+  `@grade10/worker` beside `devOnly`, and `packages/storybook`
+  (`@grade10/storybook`). Two helpers it keeps in the vault's own files —
+  `caseReference(random)` in `cases/reference.ts` and `printedValue` in
+  `legal/printed.ts` — this change lifts into shared homes in one commit
+  with the vault's call sites, no re-export left behind
 - **The diary** — `APPOINTMENT_PRODUCTS = ["vault"]` in
   `packages/appointment/contracts/src/schemas.ts`. `0009_cloudy_killraven.sql`
   dropped `ck_bookings_product` and `ck_services_product`, so the entrypoint is
@@ -111,8 +112,10 @@ file for file where it has the concern.
 
 ### The reference, the intake ids and the pickup code, drawn outside the transaction
 
-`complete-vault-collector-flow` creates `packages/utils/src/reference.ts`
-(`SHORT_REFERENCE_ALPHABET`, `shortReference(random)`); grading calls it.
+This change lifts the vault's `caseReference(random)` to
+`packages/utils/src/reference.ts` as `SHORT_REFERENCE_ALPHABET` and
+`shortReference(random)`, moving the vault's call sites in the same commit;
+both products call it.
 
 - `submissions.reference text NOT NULL UNIQUE`, CHECK `^[2-9A-HJKMNP-Z]{6}$`,
   issued on the insert in `submissions/plan.ts` beside the `gs_` id; the
@@ -301,9 +304,10 @@ this is how the paid order reaches the submission.
   `pages/grading/SignPage.tsx` is the vault's file with grading's
   `RefusalWords` over `grading.ceremony`
 - **Nothing is printed unrendered** — an act renders its letter and its
-  document before its transaction opens, and the sibling change's
-  `printedValue` throws by name, so no map of what each letter prints is kept
-  in step by hand
+  document before its transaction opens, and `printedValue` — the vault's
+  `legal/printed.ts` lifted to `packages/app-env/src/printed.ts` by this
+  change — throws by name, so no map of what each letter prints is kept in
+  step by hand
 - Alternatives rejected: the vault worker hosting grading's ceremony — the
   seal on the wrong chain; `kyc: null` as the option — a null port and a
   missing binding look the same; the option on `DocSignDeps` — a host-wide
@@ -511,10 +515,12 @@ otherwise falls back to `DEFAULT_LIMIT`.
   `ready`, `still_here`, `storage_fee`, `written_notice`); `NOTIFY_FOR_EVENT`
   exhaustive over every `SubmissionEventKind`, `null` written for the
   silences. A booked submission that expires sends `plan_expired`
-- The shell is `ProductLetter` in `@grade10/email/render`, which
-  `complete-vault-collector-flow` publishes beside `BaseLayout`; grading adds
-  `CardSchedule`, `PickupCard` and `UncollectedLadder`. Previews in the
-  store's `apps/emails/emails/grading/<kind>.tsx` from `letters/fixtures.ts`
+- The shell is `BaseLayout` from `@grade10/email/render` with the generic
+  blocks `complete-vault-collector-flow` hoists beside it; grading's
+  `email/letters/GradingLetter.tsx` composes them as the vault's
+  `VaultLetter.tsx` does and adds `CardSchedule`, `PickupCard` and
+  `UncollectedLadder`. Previews in the store's
+  `apps/emails/emails/grading/<kind>.tsx` from `letters/fixtures.ts`
 - Alternative rejected: copying the shell — two shells drift on the first
   footer change
 
@@ -809,11 +815,12 @@ change creates are imported from their shared home by both products.
    into each environment's grading `DOCUMENTS` bucket, so `createFontPort`
    finds it and no placeholder ever owes `check-config.mjs`'s `AWAITING` map
    an entry
-2. **The shared modules are consumed, not created** —
-   `complete-vault-collector-flow` lands first with
-   `packages/utils/src/reference.ts`, `packages/app-env/src/printed.ts`,
-   `ProductLetter`, the dev outbox and `packages/storybook`. This change adds
-   its own: doc-sign's `identity` option and routed client, the RBAC row with
+2. **The shared modules** — `complete-vault-collector-flow` lands first with
+   `BaseLayout` and its hoisted blocks, the dev outbox and
+   `packages/storybook`. This change lifts `caseReference` to
+   `packages/utils/src/reference.ts` and `printedValue` to
+   `packages/app-env/src/printed.ts`, moving the vault's call sites in the
+   same commit, and adds its own: doc-sign's `identity` option and routed client, the RBAC row with
    `generate:rbac-docs`, and `docSignProtectionSql` gaining
    `alwaysOnSql("sign_signatures", ["sign_signatures_column_guard",
    "sign_signatures_no_truncate"], { schema })` in the generator, so every
