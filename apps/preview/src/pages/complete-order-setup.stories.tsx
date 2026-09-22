@@ -4,6 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { fillWinnerOrderAddAddress } from "./winner-order.story-shared";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
@@ -269,14 +270,13 @@ export const AddressBookFull: Story = {
       }),
     ).toBeVisible();
 
-    await userEvent.type(form.getByLabelText("First name"), "Pat");
-    await userEvent.type(form.getByLabelText("Last name"), "Ng");
-    await userEvent.type(
-      form.getByLabelText("Street address"),
-      "9 Queen's Road Central",
-    );
-    await userEvent.type(form.getByLabelText("City"), "Central");
-    await userEvent.type(form.getByLabelText("Postal code"), "000000");
+    await fillWinnerOrderAddAddress(page, form, {
+      firstName: "Pat",
+      lastName: "Ng",
+      street: "9 Queen's Road Central",
+      city: "Central",
+      postalCode: "000000",
+    });
     await userEvent.click(
       form.getByRole("button", { name: "Use This Address" }),
     );

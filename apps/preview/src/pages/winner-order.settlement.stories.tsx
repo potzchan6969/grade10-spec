@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
+  fillWinnerOrderAddAddress,
   winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderSettled,
@@ -249,7 +250,7 @@ export const CompleteSetupFlow: Story = {
       deliveryAddressBlock(canvasElement).getByText(/\+852/),
     ).toBeVisible();
     expect(
-      deliveryAddressBlock(canvasElement).getByText("Alex Chan"),
+      deliveryAddressBlock(canvasElement).getByText(/Alex Chan/),
     ).toBeVisible();
     expect(
       canvas.queryByRole("button", { name: "Complete Order Setup" }),
@@ -296,14 +297,13 @@ export const AddNewAddressSetupFlow: Story = {
     });
     const nested = within(nestedDialog);
 
-    await userEvent.type(nested.getByLabelText("First name"), "Jordan");
-    await userEvent.type(nested.getByLabelText("Last name"), "Lee");
-    await userEvent.type(
-      nested.getByLabelText("Street address"),
-      "88 Queen's Road Central",
-    );
-    await userEvent.type(nested.getByLabelText("City"), "Central");
-    await userEvent.type(nested.getByLabelText("Postal code"), "000000");
+    await fillWinnerOrderAddAddress(page, nested, {
+      firstName: "Jordan",
+      lastName: "Lee",
+      street: "88 Queen's Road Central",
+      city: "Central",
+      postalCode: "000000",
+    });
 
     await userEvent.click(
       nested.getByRole("button", { name: "Use This Address" }),

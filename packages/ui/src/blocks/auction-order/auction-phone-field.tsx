@@ -6,6 +6,7 @@ import {
 } from "@grade10/design-system/components/forms/input";
 import { cn } from "@grade10/design-system/lib/utils";
 import { Globe } from "@phosphor-icons/react";
+import getUnicodeFlagIcon from "country-flag-icons/unicode";
 import type { ReactNode } from "react";
 import { useEffect, useId, useMemo, useRef, useState } from "react";
 import PhoneInput, {
@@ -14,7 +15,6 @@ import PhoneInput, {
   parsePhoneNumber,
 } from "react-phone-number-input";
 import en from "react-phone-number-input/locale/en.json";
-import getUnicodeFlagIcon from "country-flag-icons/unicode";
 
 type AuctionPhoneFieldProps = {
   label?: ReactNode;
@@ -49,13 +49,31 @@ function auctionPhoneSoftReady(
   const digits = value.replace(/\D/g, "");
   if (!digits) return false;
   try {
-    const parsed = parsePhoneNumber(value);
+    const parsed = parsePhoneNumber(value, country);
     if (parsed?.nationalNumber) return parsed.nationalNumber.length > 0;
   } catch {
     // Fall through — unusual formats still need digits beyond the calling code.
   }
   const callingLen = String(getCountryCallingCode(country)).length;
   return digits.length > callingLen;
+}
+
+/** Confirm export: E.164 when validly parseable; otherwise the entered value. */
+function auctionPhoneConfirmValue(
+  value: string,
+  country: Country | undefined,
+): string {
+  const trimmed = value.trim();
+  if (!trimmed) return "";
+  try {
+    const parsed = country
+      ? parsePhoneNumber(trimmed, country)
+      : parsePhoneNumber(trimmed);
+    if (parsed?.isValid() && parsed.number) return parsed.number;
+  } catch {
+    // Keep the unusual string.
+  }
+  return trimmed;
 }
 
 function FlagIcon({ country }: { country?: Country }) {
@@ -106,6 +124,7 @@ function CountrySelect({
   const [open, setOpen] = useState(false);
   const [query, setQuery] = useState("");
   const rootRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
   const listId = useId();
 
   useEffect(() => {
@@ -118,6 +137,11 @@ function CountrySelect({
     }
     document.addEventListener("pointerdown", onPointerDown);
     return () => document.removeEventListener("pointerdown", onPointerDown);
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+    searchRef.current?.focus();
   }, [open]);
 
   const filtered = useMemo(() => {
@@ -196,10 +220,10 @@ function CountrySelect({
         >
           <div className="border-b border-border p-2">
             <input
-              autoFocus
               className="h-9 w-full rounded-lg border border-border bg-input px-3 text-sm text-foreground outline-none placeholder:text-muted-foreground focus:border-ring focus:ring-1 focus:ring-ring"
               onChange={(event) => setQuery(event.currentTarget.value)}
               placeholder={searchPlaceholder}
+              ref={searchRef}
               type="search"
               value={query}
             />
@@ -334,7 +358,7 @@ function AuctionPhoneField({
     }
     try {
       const parsed = parsePhoneNumber(next);
-      if (parsed?.number) {
+      if (parsed?.isValid() && parsed.number) {
         onChange(parsed.number);
         return;
       }
@@ -385,4 +409,4 @@ function AuctionPhoneField({
 }
 
 export type { AuctionPhoneFieldProps };
-export { AuctionPhoneField, auctionPhoneSoftReady };
+export { AuctionPhoneField, auctionPhoneConfirmValue, auctionPhoneSoftReady };

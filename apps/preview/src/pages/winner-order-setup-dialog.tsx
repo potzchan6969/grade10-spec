@@ -311,8 +311,7 @@ function formatOrderAddressSummary(values: AuctionAddressFormValues): string {
   const name = [values.firstName.trim(), values.lastName.trim()]
     .filter(Boolean)
     .join(" ");
-  const company =
-    values.addressKind === "company" ? values.company.trim() : "";
+  const company = values.addressKind === "company" ? values.company.trim() : "";
   const phone = values.phone.trim();
   const street = [
     values.addressLine1.trim(),
@@ -328,14 +327,7 @@ function formatOrderAddressSummary(values: AuctionAddressFormValues): string {
   ]
     .filter(Boolean)
     .join(", ");
-  return [
-    company,
-    name,
-    phone,
-    street,
-    locality,
-    values.country.trim(),
-  ]
+  return [company, name, phone, street, locality, values.country.trim()]
     .filter(Boolean)
     .join("\n");
 }
