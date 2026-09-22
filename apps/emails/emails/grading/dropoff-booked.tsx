@@ -14,7 +14,7 @@ import {
   previewFooter,
   previewSubmission,
   previewSubmissionLine,
-} from "@/emails/grading/_components/preview-submission";
+} from "@/emails/grading/fixtures";
 
 export type DropoffBookedProps = {
   visitAt?: string;

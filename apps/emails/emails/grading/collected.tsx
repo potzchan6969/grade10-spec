@@ -10,7 +10,7 @@ import {
   previewHandedBackCards,
   previewSubmission,
   previewSubmissionLine,
-} from "@/emails/grading/_components/preview-submission";
+} from "@/emails/grading/fixtures";
 
 export type CollectedProps = {
   collectedAt?: string;

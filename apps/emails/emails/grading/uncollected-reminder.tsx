@@ -9,7 +9,7 @@ import {
   previewFooter,
   previewSubmission,
   previewSubmissionLine,
-} from "@/emails/grading/_components/preview-submission";
+} from "@/emails/grading/fixtures";
 
 export type UncollectedReminderProps = {
   /** Which rung this reminder is — the same letter goes out at each. */
