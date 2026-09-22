@@ -743,7 +743,7 @@ its fingerprint,
 
 * The audit chain gains an entry naming who downloaded, when, and how many documents.
 
-### grade10-site-vault-documents-and-signing-US5-TC7-1: A download past the service's size ceiling is refused before anything is read
+### grade10-site-vault-documents-and-signing-US5-TC7-1: A download past 52,428,800 bytes is refused before anything is read
 
 **Classification:**
 
@@ -760,7 +760,7 @@ its fingerprint,
 
 **Pre-conditions:**
 
-* A collector whose sealed documents together are past the service's size ceiling is on <the collector's Your data page>.
+* A collector whose sealed documents come to more than 52,428,800 bytes together is on <the collector's Your data page>.
 
 **Steps:**
 
@@ -772,6 +772,14 @@ its fingerprint,
 * No file is sent, and no document is recorded as read.
 
 ---
+
+## Settled
+
+- The seal's short download grant is the durable *Every signer keeps a copy, three ways* requirement's; the blind pass was denied it, and nothing here re-decides it.
+- Which bound of the packet's preparation window applies when is the durable *A packet is prepared as one set* requirement's — a day, or a day past the visit the packet belongs to.
+- Verifying a digest asks for no sign-in: anyone holding a document's digest may ask whether it is one of ours.
+- The download refuses past 52,428,800 bytes, and the refusal comes before any document is read.
+- A pending or failed download is the view's own status rather than a rule, so no scenario is owed for it.
 
 ## Reconciliation
 
@@ -816,6 +824,7 @@ over US1, US3 and US5 and raised three questions. The scenario pass issued
 | Raised — the seal's short download grant has no stated duration or surface | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *Every signer keeps a copy, three ways* requirement, which the blind pass was denied |
 | Raised — which bound of the packet's preparation window applies when | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A packet is prepared as one set* requirement, which the blind pass was denied |
 | Raised — must the asker be signed in to verify a digest | Raised, settled | Landed in the change's `decisions.md` `## Raised`; the answer is the durable *A document can be verified by anyone holding its digest* requirement, which the blind pass was denied |
+| Raised — what byte ceiling the download refuses past | Raised, answered | The tech design names none, so the requirement states 52,428,800 bytes and `grade10-site-vault-documents-and-signing-SC-28`'s GIVEN reads it; landed as a Decisions row in the change's `decisions.md` |
 
 ### Manual
 

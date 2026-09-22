@@ -941,7 +941,7 @@ Runs once per row of **Test data**.
 * The block names card or cash at the counter as an alternative to the
   bank transfer
 
-### grade10-site-vault-loan-and-settlement-US5-TC4-1: The how-to-pay block is refused in production while unset, and bracketed outside it
+### grade10-site-vault-loan-and-settlement-US5-TC4-1: The how-to-pay block is withheld in production while unset, and bracketed outside it
 
 Runs once per row of **Test data**.
 
@@ -956,7 +956,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+* **Trace:** `How to pay`
 
 **Pre-conditions:**
 
@@ -966,18 +966,17 @@ Runs once per row of **Test data**.
 
 | Environment | Outcome |
 | --- | --- |
-| Production | The case page shows the counter line alone, naming no payee, FPS id, account or reference; the money email's send is refused by name |
+| Production | The case page shows the counter line alone, naming no payee, FPS id, account or reference |
 | Outside production | The block shows a marked bracketed placeholder |
 
 **Steps:**
 
 1. Open the case page in the row's environment.
-2. Trigger a money email on the case in the row's environment.
 
 **Expected Results:**
 
-* The case page and the money email both meet the row's outcome
-* No money email is ever sent blank of the how-to-pay block
+* The case page meets the row's outcome
+* No account, FPS id or transfer reference is printed while either is unset
 
 ### grade10-site-vault-loan-and-settlement-US5-TC5-1: A case with no live loan names no account and no reference
 
@@ -1491,7 +1490,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-vault-loan-and-settlement-US-07
+* **Trace:** `The rule before the act`
 
 **Pre-conditions:**
 
@@ -1562,7 +1561,7 @@ the proposal links, and this file for id continuity. It was denied every
 | `US4-TC1-1` to `US4-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-19` to `grade10-site-vault-loan-and-settlement-SC-22` and the forfeiture requirement's refusals |
 | `grade10-site-vault-loan-and-settlement-SC-33` | Scenario no case reached | Case added: `US4-TC7-1`, the borrower's page holding the date the notice named after the brand shortens its period |
 | `US5-TC1-1`, `US5-TC2-1`, `US5-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-35` and `grade10-site-vault-loan-and-settlement-SC-36` |
-| `US5-TC4-1`, the production row | Answered, case amended | What a production borrower reads while Finance's values are unset was undecided — the design carried it as ❓. Answered as the counter line alone, with no account fields and no money message sent, and folded as `grade10-site-vault-loan-and-settlement-SC-47`; the row now reads that way. Raised in `decisions.md`, landed as a ❓ Product line on the loan and money page |
+| `US5-TC4-1`, the production row | Answered, case amended | What a production borrower reads while Finance's values are unset was undecided — the design carried it as ❓. Answered as the counter line alone, with no account fields, and folded as `grade10-site-vault-loan-and-settlement-SC-47`; its bracketed row is `grade10-site-vault-loan-and-settlement-SC-38`. The send's own refusal is `grade10-site/vault/collector-notifications`' rule and its suite walks it, so the case keeps its page rows alone. Raised in `decisions.md`, landed as a ❓ Product line on the loan and money page |
 | `grade10-site-vault-loan-and-settlement-SC-37` | Scenario no case reached | Case added: `US5-TC5-1`, a storage case naming no account |
 | `US6-TC1-1`, `US6-TC2-1`, `US6-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-27` and `grade10-site-vault-loan-and-settlement-SC-28`; the value-date order `US6-TC3-1` walks is the requirement's own **Order** rule, and the allocation and never-restarts lines beside a repayment are the design's copy, carrying no rule of their own |
 | `US6-TC4-1` to `US6-TC7-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-30`, `grade10-site-vault-loan-and-settlement-SC-31`, `grade10-site-vault-loan-and-settlement-SC-32`, `grade10-site-vault-loan-and-settlement-SC-34`; the rungs of the ladder `US6-TC7-1` names are `grade10-site/vault/collector-notifications`'s to set |
@@ -1586,3 +1585,10 @@ Nothing was dropped as a misreading, and no case is blocked.
 | `US7-TC4-1` | The two people, the amount and the dates are read before the send; the walk decides what the recording fixes |
 
 ## Settled
+
+- A repayment's recorder is unconstrained: the two-person split guards the payout alone, so no case asserts who may record a repayment.
+- Taking a money record back is the console's act, walked by `grade10-admin/vault/money-book`; this suite keeps only what the borrower reads afterwards.
+- What stands between the last reminder and a notice is named on the card: the last reminder sent with its day, and the day a notice falls due.
+- What a production borrower reads while the FPS id or the bank account is unset is the counter line alone, with no account fields.
+- The refusal of an act that would send a message carrying an unset value belongs to `grade10-site/vault/collector-notifications`, and this suite walks the page alone.
+- The annualised rate is one derivation in the owed arithmetic — the term's interest over the principal, read over a year, to one decimal place — and the dialog names it rather than deriving one of its own.

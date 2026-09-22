@@ -968,7 +968,7 @@ Runs once per row of **Test data**.
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-vault-case-lifecycle-US-05
+* **Trace:** `Derived at the read`
 
 **Pre-conditions:**
 
@@ -1057,7 +1057,7 @@ Runs once per row of **Test data**.
 | `US5-TC10-1` — one not-found page | Amended | Two not-found rows, an unissued id and another collector's case, reading one page: `grade10-site-vault-case-lifecycle-SC-39`. Raised row 5, landed as `Q42` |
 | `grade10-site-vault-case-lifecycle-SC-18` — the act of asking | Case added | `US5-TC11-1`: no case confirmed the ask; the suite only read the state after it |
 | `grade10-site-vault-case-lifecycle-SC-34` — the list and the case | Case added | `US5-TC12-1`: the suite read the chip on the case and never against the list |
-| `grade10-site-vault-case-lifecycle-SC-29` — nothing derived is written | Case added | `US5-TC13-1`: two reads, the same fact, no history entry |
+| `grade10-site-vault-case-lifecycle-SC-29` — nothing derived is written | Case added | `US5-TC13-1`: two reads, the same fact, no history entry. It traces `Derived at the read`, the group the scenario serves, so the group anchor is walked |
 | `grade10-site-vault-case-lifecycle-SC-40` — two facts at once | Case added | `US5-TC14-1`, from the ruling that the later event's fact is the one read, landed as `Q44` |
 | `grade10-site-vault-case-lifecycle-SC-19` — Release refused | Covered | The design's Release refused state is the ask's own refusal. Raised row 2, landed as `Q39` |
 

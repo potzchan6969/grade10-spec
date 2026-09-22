@@ -110,7 +110,7 @@ Every message ends the same way, whatever it is about.
 - **Which party** — a message naming an amount of money SHALL name the lender, and every other message SHALL name the custodian.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-21 - The case line carries the reference
-**Serves:** grade10-site/vault/case-intake#grade10-site-vault-case-intake-US-05 - the collector reading their own reference off a message to type at the bank
+**Serves:** `grade10-site/vault/case-intake#grade10-site-vault-case-intake-US-05`, `grade10-site-vault-collector-notifications-US-05` - the collector reading their own reference off a message to type at the bank
 
 - **WHEN** any message is sent about a case
 - **THEN** it carries that case's reference and the item's title directly above the footer
@@ -246,7 +246,7 @@ FPS id and the bank account; no message goes out with a blank where one belongs.
 - **THEN** it goes, printing a marked placeholder naming the unset value where the bank account belongs
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-33 - In production the act refuses rather than post a blank
-**Serves:** grade10-site/vault/loan-and-settlement#grade10-site-vault-loan-and-settlement-US-01 - the treasurer recording the advance whose letter would have nowhere to pay on it
+**Serves:** `grade10-site/vault/loan-and-settlement#grade10-site-vault-loan-and-settlement-US-01`, `grade10-site-vault-collector-notifications-US-05` - the treasurer recording the advance whose letter would have nowhere to pay on it
 
 - **GIVEN** production and no FPS id set for the lender
 - **WHEN** an advance is recorded

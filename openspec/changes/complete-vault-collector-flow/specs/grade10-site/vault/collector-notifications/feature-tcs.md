@@ -743,7 +743,7 @@ and that a person decides,
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** grade10-site-vault-collector-notifications-US-05
+* **Trace:** `What a message carries`
 
 **Pre-conditions:**
 
@@ -945,6 +945,14 @@ Runs once per row of **Test data**.
 * No identity-check invitation is sent.
 
 ---
+
+## Settled
+
+- What a tester observes on a retried send is that the attachment equals the packet's sealed copy at send time: the documents are read from the packet at each attempt, never from the queue.
+- The invitation's own condition is a visit booked with no identity to reuse; that a reused check or a case in custody takes no new one is `grade10-site/vault/identity-verification`'s rule, so this suite keeps the case and writes no scenario against it.
+- The panel's Send again on a check still out is `grade10-admin/vault/operator-queue`'s, read from this suite rather than restated in it.
+- The repayment message this capability carries is walked by `grade10-site/vault/loan-and-settlement`'s suite, which reads every money email on the case; it is listed out of suite here.
+- The unset-value rule is whole here — bracketed outside production, the act refused in production, and the message rendered before the record commits — and `grade10-site/vault/loan-and-settlement` names it rather than restating it.
 
 ## Reconciliation
 

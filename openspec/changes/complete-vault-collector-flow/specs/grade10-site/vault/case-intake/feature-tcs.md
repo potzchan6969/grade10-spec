@@ -960,7 +960,6 @@ reference at my bank.
 **Expected Results:**
 
 * A six-character reference is shown in mono on the Sent step, drawn only from digits and capitals excluding 0, O, 1, I and L.
-* The same reference is named in the confirmation email.
 * The case's own list card shows the reference beside the item.
 
 ---
@@ -1215,7 +1214,7 @@ requirements, and neither pass saw the other's file before this join.
 | `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18` |
 | `US4-TC6-1` | Dropped as a misreading; `deprecated`, id kept | It refuses the send in production while the statement is unset. `decisions.md` Q8 and Q17 settle the opposite — the tick is not one of the acts production refuses — and `grade10-site-vault-case-intake-SC-18` states the send goes through in every environment |
 | `US4-TC7-1` | Covered, no scenario | Finish later leaves the request unsent, which the requirement `A collector opens a request for one item` states; nothing states whether the tick survives the save, and `grade10-site-vault-case-intake-SC-17` records the version at the send rather than at the tick |
-| `US5-TC1-1` | Covered | `grade10-site-vault-case-intake-SC-19`, `grade10-site-vault-case-intake-SC-23`; the reference is drawn when the request is opened, so what the case reads at the send is the reference the draft already carried |
+| `US5-TC1-1` | Covered | `grade10-site-vault-case-intake-SC-19`, `grade10-site-vault-case-intake-SC-23`; the reference is drawn when the request is opened, so what the case reads at the send is the reference the draft already carried. The letter that carries it is `grade10-site/vault/collector-notifications`', and its suite walks it |
 | `US5-TC2-1`, `US5-TC4-1`, `US5-TC5-1` | Covered, retraced | `grade10-site-vault-case-intake-SC-20`, `grade10-site-vault-case-intake-SC-21`, `grade10-site-vault-case-intake-SC-22`; each case now traces `The case reference`, the group those scenarios serve, in place of the journey — one anchor per case, and US-05 keeps its own cases |
 | `US5-TC3-1` | Covered, no scenario | Uniqueness is per brand by the requirement — across every case the brand has ever opened; no scenario walks two brands |
 | `US5-TC6-1` | Covered, no scenario | One request per item is the durable requirement's last line; the Sent step's several-items block is the design's |
@@ -1234,5 +1233,5 @@ requirements, and neither pass saw the other's file before this join.
 | `US4-TC2-1` | Edit per block and the way back is walked, so the rest of the request is seen to survive it |
 | `US4-TC3-1` | The What happens next wording is read for what it promises the shop will do |
 | `US4-TC5-1` | The statement page is opened outside production to read the being-prepared wording |
-| `US5-TC1-1` | The reference is read aloud from the Sent step, the letter and the card — legibility is the point of the alphabet |
+| `US5-TC1-1` | The reference is read aloud from the Sent step and the card — legibility is the point of the alphabet |
 | `US5-TC6-1` | Start another request is walked to see the case just sent left where it was |

@@ -123,7 +123,7 @@ fixtures through `external/grade10-spec`.
       (`grade10-site-vault-collector-notifications-SC-03`, `SC-04`, `SC-20`,
       `SC-21`, `SC-22`, `SC-23`, `SC-24`, `SC-25`, `SC-26`, `SC-27`, `SC-28`,
       `SC-29`, `SC-30`, `SC-31`, `SC-32`, `SC-33`, `SC-34`,
-      `grade10-site-vault-loan-and-settlement-SC-36`, `SC-38`, `SC-39`)
+      `grade10-site-vault-loan-and-settlement-SC-36`, `SC-38`)
 - [ ] 5.2 Bump the `external/grade10-spec` submodule pointer to the commit
       carrying groups 1 and 2
 - [ ] 5.3 Add `printedValue(ports, field)` in
@@ -131,7 +131,7 @@ fixtures through `external/grade10-spec`.
       throws `LEGAL_IDENTITY_UNSET` by field, any other environment answers
       the marked placeholder — and compose `printedEntity` over it with every
       fallback it has today (`grade10-site-vault-collector-notifications-SC-32`,
-      `SC-33`, `grade10-site-vault-loan-and-settlement-SC-38`, `SC-39`)
+      `SC-33`, `grade10-site-vault-loan-and-settlement-SC-38`)
 - [ ] 5.4 Compose `email/letters/VaultLetter.tsx` over `@grade10/email/render`'s
       `BaseLayout`, hoisting the facts table and the action button beside it,
       and keep `TermsTable`, `HowToPay`, `ReminderSchedule`, `NoticeClause` and
@@ -154,7 +154,7 @@ fixtures through `external/grade10-spec`.
       `sendForfeitureNotice` and the reminder pass, before each transaction
       opens, and classify `PermanentEmailSendError` in `notifyQuietly` as the
       auction's `parkNotifyFailure` does
-      (`grade10-site-vault-loan-and-settlement-SC-39`)
+      (`grade10-site-vault-collector-notifications-SC-33`)
 - [ ] 5.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
@@ -237,7 +237,8 @@ fixtures through `external/grade10-spec`.
       Handbook card row, and leave `wallet-pass` reading it
 - [ ] 8.3 Serve `GET /api/cases/documents.zip` (`VAULT_PATHS.documentsZip`)
       under the session tier over the cursor `cases.yourData` takes, summing
-      the recorded object sizes first and refusing `TOO_LARGE` by name
+      the recorded object sizes first and refusing `TOO_LARGE` by name past
+      52,428,800 bytes
       (`grade10-site-vault-documents-and-signing-SC-26`, `SC-28`)
 - [ ] 8.4 Append `recordDocumentRead` per document through `documents/serve.ts`
       before its bytes go, and one `vault.documents.setDownloaded` row — who,
@@ -439,9 +440,9 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       classes, the identity standing in its four words, the documents listed
       under their case, a block that cannot be answered, and the ask filed,
       refused, cancelled and past its window
-      (`grade10-site-vault-retention-and-erasure-SC-12`, `SC-13`, `SC-14`,
-      `SC-15`, `SC-16`, `SC-17`, `SC-18`, `SC-19`, `SC-20`, `SC-21`, `SC-22`,
-      `SC-24`, `SC-25`, `SC-26`, `SC-27`,
+      (`grade10-site-vault-retention-and-erasure-SC-12`, `SC-13`, `SC-15`,
+      `SC-16`, `SC-17`, `SC-18`, `SC-19`, `SC-20`, `SC-21`, `SC-22`, `SC-24`,
+      `SC-25`, `SC-26`, `SC-27`, `SC-39`, `SC-40`,
       `grade10-site-vault-documents-and-signing-SC-27`)
 - [ ] 16.2 Build `YourDataView` over `cases.yourData`, each block standing on
       its own so one that cannot be answered leaves the rest
@@ -453,10 +454,11 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 - [ ] 16.4 Render the identity standing through `identityStanding`, naming
       neither the person nor their document
       (`grade10-site-vault-retention-and-erasure-SC-19`, `SC-20`, `SC-21`,
-      `SC-22`)
-- [ ] 16.5 List every sealed document under its case, offer the one download,
-      and offer none where nothing is signed
-      (`grade10-site-vault-retention-and-erasure-SC-13`, `SC-14`,
+      `SC-22`, `SC-39`, `SC-40`)
+- [ ] 16.5 List every sealed document under its case and offer the one download
+      `grade10-site/vault/documents-and-signing` defines, which offers none
+      where nothing is signed
+      (`grade10-site-vault-retention-and-erasure-SC-13`,
       `grade10-site-vault-documents-and-signing-SC-27`)
 - [ ] 16.6 Ask for the erasure through `useConfirm`, read when it may run,
       cancel inside the window, name the holds beside an open request, and

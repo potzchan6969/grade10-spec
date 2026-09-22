@@ -37,7 +37,8 @@
   - Durability: sealed bytes are copied to an archive that cannot delete, and
     re-hashed on a schedule
   - Every document at once: every sealed document its owner holds, in one
-    download, bounded to what the page lists and recorded like a search
+    download, bounded to what the page lists and to 52,428,800 bytes, and
+    recorded like a search
 
 ## ADDED Requirements
 
@@ -104,8 +105,8 @@ page that lists them.
   before it is taken, and SHALL offer no download to a collector holding
   none.
 - **Past the ceiling** - the download SHALL be refused by name, before any
-  document is read, where what it would hold is past the service's size
-  ceiling, and nothing SHALL be sent.
+  document is read, where what it would hold is past 52,428,800 bytes, and
+  nothing SHALL be sent.
 - **On the record** - every document the download reads SHALL be recorded as
   a read of that document, and the download SHALL write one entry on the
   service's audit trail naming who took it, when, and how many documents it
@@ -130,8 +131,8 @@ page that lists them.
 #### Scenario: grade10-site-vault-documents-and-signing-SC-28 - A download past the ceiling is refused before anything is read
 **Serves:** grade10-site-vault-documents-and-signing-US-05 - the collector asks for more signed papers than one file can carry
 
-- **GIVEN** a collector whose sealed documents are past the service's size
-  ceiling
+- **GIVEN** a collector whose sealed documents come to more than 52,428,800
+  bytes together
 - **WHEN** they take the download
 - **THEN** it is refused by name, no document is read and nothing is sent
 

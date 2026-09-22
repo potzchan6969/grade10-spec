@@ -367,7 +367,7 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. <a subject user id> has an open self-filed erasure request, filed within the last seven days.
+Signed in as <a subject user id>, on <Your data page>. <a subject user id> has an open self-filed erasure request, filed six days ago on the brand's own zone, so the day an erasure may run has not opened.
 
 **Steps:**
 
@@ -475,7 +475,7 @@ Signed in as <a subject user id>. <a subject user id> holds no open erasure requ
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed their own erasure request more than seven days ago; the window has matured.
+Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed their own erasure request seven days ago on the brand's own zone, so today is the day an erasure may run.
 
 **Steps:**
 
@@ -554,7 +554,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** shared-auth-users-US-05
+* **Trace:** `Erasure requests`
 
 **Pre-conditions:**
 <a subject user id> filed their own erasure request and cancelled it inside the window.
@@ -589,12 +589,12 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-US5-TC4-1` | Joined | `shared-auth-users-SC-29` |
 | `shared-auth-users-US5-TC5-1` | Joined | `shared-auth-users-SC-37` |
 | `shared-auth-users-US5-TC6-1` | Joined | `shared-auth-users-SC-38` |
-| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused and the request stays open, which the author confirmed as Q50 |
+| `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
 | `shared-auth-users-US5-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as Q51 |
 | Raised: what the account holder sees once a filing takes their request over | Escalated, then folded | settled as Q48: the page reads the request as one the shop filed and offers no cancel, and a later unban does not return it. Folded as `shared-auth-users-SC-40`, walked by `shared-auth-users-US5-TC9-1` |
 | Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-29`, which already lets a new request be filed once none is open |
 | Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-33`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
-| `shared-auth-users-SC-28` | Case added | `shared-auth-users-US5-TC10-1` |
+| `shared-auth-users-SC-28` | Case added | `shared-auth-users-US5-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
 | `shared-auth-users-SC-34` | Case added | `shared-auth-users-US2-TC7-1` |
 | `shared-auth-users-SC-35` | Case added | `shared-auth-users-US2-TC8-1` |
 | `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC9-1` |

@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Out of suite:** `grade10-site-vault-visit-booking-SC-23` — the owner guard on the visit's calendar file, walked in the vault backend's own route test; a case here traces a journey, and nobody walks a stranger's fetch.
 
 ## grade10-site-vault-visit-booking-US1: Collector books the visit they hand the item over at
 

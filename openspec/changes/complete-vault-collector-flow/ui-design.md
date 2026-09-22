@@ -339,9 +339,9 @@ beside them.
 | Signed out | the site's sign-in dialog | `grade10-site-vault-retention-and-erasure-SC-12` |
 | Loading | `Skeleton` cards | **Out of suite:** the view's colocated test |
 | Standing: verified | verified until the date · checked how, on which day; never the name or the document | `grade10-site-vault-retention-and-erasure-SC-19` |
-| Standing: none | no identity on file; verified at the next visit | `grade10-site-vault-retention-and-erasure-SC-21` |
+| Standing: none | no identity on file; verified at the next visit | `grade10-site-vault-retention-and-erasure-SC-40` |
 | Standing: check out | a check is out since the date | `grade10-site-vault-retention-and-erasure-SC-20` |
-| Standing: stalled | a check is out since the date; never the stage it stalled at | `grade10-site-vault-retention-and-erasure-SC-20` |
+| Standing: stalled | a check is out since the date; never the stage it stalled at | `grade10-site-vault-retention-and-erasure-SC-39` |
 | Standing: refused | the last check was not accepted, on the date it was decided; never the reason | `grade10-site-vault-retention-and-erasure-SC-22` |
 | Standing: lapsed | the last check expired on the date | `grade10-site-vault-retention-and-erasure-SC-21` |
 | What the vault keeps | the table per class with its window after a case ends, a window nobody has decided reading as being decided; the reviewed-not-deleted line | `grade10-site-vault-retention-and-erasure-SC-16`, `grade10-site-vault-retention-and-erasure-SC-17` |
@@ -488,7 +488,7 @@ One row per kind, and the blocks each carries after the lead.
 | Verify before the visit (`M06`), `identity_check_invited` | facts: your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; the case line; `EmailFooter` naming the custodian | `grade10-site-vault-collector-notifications-SC-31` |
 | The other eighteen, no board | `PrimaryCta` to the case; the case line; `EmailFooter` naming the custodian; every other kind in `notify/vocabulary.ts` | `grade10-site-vault-collector-notifications-SC-21`, `grade10-site-vault-collector-notifications-SC-22`, `grade10-site-vault-collector-notifications-SC-34` |
 | A money kind among them | `repayment_recorded`, `payout_reversed`, `repayment_reversed`, `loan_repaid` and `forfeited` add the facts their event names, how to pay under them, and name the lender | `grade10-site-vault-loan-and-settlement-SC-36` |
-| Reference on every letter | the case line above the footer | `grade10-site-vault-case-intake-SC-23` |
+| Reference on every letter | the case line above the footer | `grade10-site-vault-collector-notifications-SC-21` |
 | Custodian footer | a letter with no money names the custodian, not the lender | `grade10-site-vault-collector-notifications-SC-22` |
 | Values unset | the bracketed placeholder outside production, marked; in production a money letter's send and the notice's send are refused | `grade10-site-vault-collector-notifications-SC-32`, `grade10-site-vault-collector-notifications-SC-33` |
 
