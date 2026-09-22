@@ -169,6 +169,7 @@ jobs:
           if [ "$SANDBOX" = "true" ]; then set -- "$@" --sandbox; fi
           if [ -n "$OVERWRITE" ]; then set -- "$@" --overwrite "$OVERWRITE"; fi
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          set -o pipefail
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
 
       - name: Summarise

@@ -33,6 +33,7 @@ import { readFileSync } from "node:fs";
 import {
   COLUMN_WIDTHS,
   COLUMNS,
+  colLetter,
   DRAFT_BACKGROUND,
   FILTER_START,
   FONT,
