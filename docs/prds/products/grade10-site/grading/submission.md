@@ -8,12 +8,9 @@ A submission is one collector's cards to one grader at one level, with one
 status; each card carries its own outcome beside it, so four cards with one
 returned ungraded are still one submission, ready to collect.
 
-## Who Reads It
-
-- 🚧 **The collector, or the link** — the page opens to the collector signed
-  in under the email the submission was booked under, and to whoever holds the
-  link the shop emailed; anybody else, and an id nobody was issued, reads not
-  found, which never says whether the submission exists
+🚧 **The collector, or the link** — the page opens to the collector signed in
+under the email it was booked under and to whoever holds the emailed link;
+anybody else, and an id nobody was issued, reads not found.
 
 ## Statuses
 
@@ -50,7 +47,7 @@ it changes; the rest of the cards carry on:
 | --- | --- | --- |
 | Refused at the counter | a card the grader would not take stays in their hands with the reason, never charged; the list and the estimate drop to the cards that go on | staff at hand-in |
 | Missed drop-off | the visit closes, the list and the estimate stay; another drop-off is booked from the page | the diary's console; the submission reads it within the hour |
-| Withdrawn before the batch | until the batch closes on Thursday 19:00 the card is pulled from the intake bag and collected at the counter against a receipt; its fee comes back at the till | staff, on the collector's message |
+| Withdrawn before the batch | until the batch closes on Thursday 19:00 the card is pulled from the intake bag and collected at the counter against a receipt; its fee comes back at the till, and a withdrawal that takes the last card cancels the submission | staff, on the collector's message |
 | Returned ungraded | the card comes back raw with the grader's note and code; the fee stands, as the grader's terms say | staff at receiving, from the manifest |
 | Minimum grade not met | a card asked for at PSA 9 or above that graded 8 comes back raw; the fee stands | the collector, per card when listed |
 | Moved up a level | the card came back worth more than the level allows, so the grader charged the next level; the difference is the fee sheet's, between the two levels, quoted before booking and due at the counter before collection, told the day the grades post | staff at receiving; the invoice reconciled against the sheet |
@@ -60,10 +57,8 @@ it changes; the rest of the cards carry on:
 | Not returned, or damaged | paid out at its declared value with its fee refunded, inside the payout window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
 
 - 🚧 **Nothing left to hand in** — a submission whose last card the counter
-  refuses is cancelled there and the collector is told in person; no message
-  goes, nothing was paid and nothing is owed
-- 🚧 **Nothing left to send** — a withdrawal that takes the last card cancels
-  the submission, and the collector is told
+  refuses is cancelled there, told in person; no message goes, and nothing
+  was paid or is owed
 
 ## The Fee by Outcome
 
@@ -93,10 +88,10 @@ it changes; the rest of the cards carry on:
 - 🚧 **Storage accrues per card still at the shop** — a month started since
   day 90 counts, a card withdrawn, paid out or vaulted does not; derived when
   read from the ready date and the cards held, one line at the till at collection
+- 🚧 **The rungs never pause** — they count from the ready day whatever the
+  collector books or names; only a card collected, vaulted or paid out leaves
+  the ladder
 - ❓ **A part month** — counts as a whole month — Commercial
-- 🚧 **The ladder does not pause** — its rungs count from the ready day
-  whatever the collector books or names; only a card collected, vaulted or
-  paid out leaves it
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the 30 days run from it
 - 🚧 **After the notice** — the first release stops here: the cards stay at
