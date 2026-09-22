@@ -6,7 +6,6 @@
  */
 import { existsSync, readdirSync } from "node:fs";
 import { join } from "node:path";
-import { readTextIfExists } from "../src/store/disk.mts";
 import {
   isHandle,
   memberOf,
@@ -15,6 +14,7 @@ import {
 } from "../../../scripts/openspec/lib/team.mjs";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
+import { readTextIfExists } from "../src/store/disk.mts";
 import { productPages } from "./context.mjs";
 import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
