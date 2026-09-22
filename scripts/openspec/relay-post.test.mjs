@@ -423,6 +423,7 @@ function rowRoot(url) {
   return root;
 }
 
+// Proves part of shared-planning-agent-rounds-US13-TC2-1.
 test("shared-planning-agent-rounds-SC-86 - --row posts the held row as a reply mentioning its hand, with the row, the page sentence and the rows it touches quoted", async () => {
   const root = rowRoot();
   const result = await run([
@@ -449,6 +450,7 @@ test("shared-planning-agent-rounds-SC-86 - --row posts the held row as a reply m
   assert.doesNotMatch(result.stdout, /@ecchochan/);
 });
 
+// Proves part of shared-planning-agent-rounds-US13-TC3-1.
 test("shared-planning-agent-rounds-SC-86 - --row posts a row once: a re-run with the row unchanged posts nothing again", async () => {
   const root = rowRoot();
   const first = await run([

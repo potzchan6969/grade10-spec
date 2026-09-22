@@ -205,9 +205,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-10
+
+**Decided by:** `tools/manual/test/check-refs.test.ts`
 
 **Pre-conditions:**
 
@@ -244,9 +246,11 @@
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-11
+
+**Decided by:** `tools/manual/walk/qa-turn.walk.ts`, `tools/manual/walk/qa-told.walk.ts`
 
 **Pre-conditions:**
 
@@ -276,9 +280,11 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
+
+**Decided by:** `scripts/openspec/tasks-template.test.mjs`, `tools/manual/test/check-walk.test.ts`
 
 **Pre-conditions:**
 
@@ -399,9 +405,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-11
+
+**Decided by:** `scripts/openspec/validate-test-cases.test.mjs`
 
 **Pre-conditions:**
 
@@ -445,9 +453,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
 
 **Pre-conditions:**
 
@@ -477,9 +487,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/validate-test-cases.test.mjs`
 
 **Pre-conditions:**
 
@@ -507,9 +519,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
 
 **Pre-conditions:**
 
@@ -540,9 +554,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
 
 **Pre-conditions:**
 
@@ -578,9 +594,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/cites.test.mjs`
 
 **Pre-conditions:**
 
@@ -742,9 +760,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-12
+
+**Decided by:** `scripts/openspec/perspectives.test.mjs`
 
 **Pre-conditions:**
 
@@ -953,8 +973,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The finding was verified, and the row says what stood.
-* The row names one verifier over the round.
+* The finding was argued and the row says what stood.
+* The row names no verifier: the one reader argued its own findings.
 
 ### shared-planning-agent-rounds-US13-TC7-1: A hand with no move in a round is sent no summary
 
@@ -1195,9 +1215,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-15
+
+**Decided by:** `tools/manual/test/check-awaiting.test.ts`
 
 **Pre-conditions:**
 
@@ -1225,9 +1247,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-15
+
+**Decided by:** `tools/manual/test/check-awaiting.test.ts`
 
 **Pre-conditions:**
 
@@ -1262,9 +1286,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-16
+
+**Decided by:** `tools/manual/test/check-manual.test.ts`
 
 **Pre-conditions:**
 
@@ -1293,9 +1319,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-planning-agent-rounds-US-16
+
+**Decided by:** `tools/manual/test/check-manual.test.ts`
 
 **Pre-conditions:**
 
@@ -1317,7 +1345,49 @@ Runs once per row of **Test data**.
 
 - **Raised, folded into spec** — the before-and-after quoting of a line added or removed (`shared-planning-agent-rounds-SC-88`, Q2); whose page a round edits (Q18); a page question holds no landing and an answered line carries 🚧 until its group lands (`shared-planning-agent-rounds-SC-88`, Q19, Q20); an unnamed QA is told on the role's channel (`shared-planning-agent-rounds-SC-89`, Q21); the tick refuses any case not `actual` (`shared-planning-agent-rounds-SC-104`, Q22); the conditional Manual row's words and who rewrites it (`shared-planning-agent-rounds-SC-99`, Q23); the do-it-now question alone and `not now` as a wait on the product manager (`shared-planning-agent-rounds-SC-91`, Q26, Q28); a fallback named in the summary too (`shared-planning-agent-rounds-SC-95`, Q29)
 - **Raised, settled elsewhere** — a hand with no move is told nothing, as `run-a-round-on-every-artifact`'s Told once already says (Q24); a teammate's answer to another hand's question is refused as a land is (Q25); four or more choices and which are asked (Q27); a dissenting reader's fix quoted in the verifier's row (Q30); the row's paths bare and one group one repository (Q7)
-- **Contradicted** — the suite's US12-TC6 and US12-TC7 read the unrun lane as a tick the landing refuses; the requirements (`shared-planning-agent-rounds-SC-99`, Q9) keep the tasks unticked by the engineer's hand and refuse nothing, and both cases were rewritten. The suite's US12-TC1 to US12-TC3 read the record as naming the repository before each path and resolving through the submodule's pin; the requirements (`shared-planning-agent-rounds-SC-96`, `shared-planning-agent-rounds-SC-97`, Q7) keep the paths bare, the group's tag deciding the clone, and the three were rewritten, US12-TC2 now the Manual row the validator skips (`shared-planning-agent-rounds-SC-106`). The suite's US11-TC6 read three Manual shapes refused; the requirement (`shared-planning-agent-rounds-SC-103`, Q13) refuses one, and the case was rewritten. The suite's US13-TC2 and US13-TC3 read the held row as a direct message; the requirement (`shared-planning-agent-rounds-SC-86`, Q1) posts it as the round's reply in the thread mentioning the hand, and both were rewritten
+- **Contradicted** — the suite's US12-TC6 and US12-TC7 read the unrun lane as a tick the landing refuses; the requirements (`shared-planning-agent-rounds-SC-99`, Q9) keep the tasks unticked by the engineer's hand and refuse nothing, and both cases were rewritten. The suite's US12-TC1 to US12-TC3 read the record as naming the repository before each path and resolving through the submodule's pin; the requirements (`shared-planning-agent-rounds-SC-96`, `shared-planning-agent-rounds-SC-97`, Q7) keep the paths bare, the group's tag deciding the clone, and the three were rewritten, US12-TC2 now the Manual row the validator skips (`shared-planning-agent-rounds-SC-106`). The suite's US11-TC6 read three Manual shapes refused; the requirement (`shared-planning-agent-rounds-SC-103`, Q13) refuses one, and the case was rewritten. The suite's US13-TC2 and US13-TC3 read the held row as a direct message; the requirement (`shared-planning-agent-rounds-SC-86`, Q1) posts it as the round's reply in the thread mentioning the hand, and both were rewritten. The suite's US13-TC6 read a round of one reader as naming a verifier; `run-a-round-on-every-artifact`'s One reader verifies itself has that reader argue its own findings and no verifier run, and the case was rewritten
 - **Uncovered anchors** — none: `shared-planning-agent-rounds-SC-101` and `shared-planning-agent-rounds-SC-102` were reached by no journey of the blind pass, so the journeys US-15 and US-16 were added and their cases written by the run
 - **Cases added after the reconciliation** — US12-TC10 (`shared-planning-agent-rounds-SC-105`), US15-TC1 and US15-TC2 (`shared-planning-agent-rounds-SC-101`), US16-TC1 and US16-TC2 (`shared-planning-agent-rounds-SC-102`): written by the run from the requirements the blind pass left unreached, so they are not blind
 - **Traced on confirmation** — US10-TC7's trace to US-10 stands: the page written first is the product manager's page (`shared-planning-agent-rounds-SC-100`)
+
+### Manual
+
+What stays manual after the build, and why. The round's own conduct - the
+question it asks, the reply it writes, the summary a hand reads - is held by
+the skill's tests over the skill's words and by a person running a round; no
+test drives the round whole. Each row names the test that proves part of the
+case, in these words, and what a person walks beyond it:
+
+- the skill's tests - `scripts/openspec/round-skill.test.mjs`, in this store
+- the row's tests - `scripts/openspec/round-scripts.test.mjs`, in this store
+- the reply's tests - `scripts/openspec/relay-post.test.mjs`, in this store
+- the tick's tests - `scripts/openspec/plan.test.mjs`, in the application repository
+
+| Manual | Why |
+| --- | --- |
+| `shared-planning-agent-rounds-US10-TC1-1` | the skill's tests hold the rule that a product line a build round lands is the product manager's question, quoted before and after; a person runs a build round that touches a page and reads the reply |
+| `shared-planning-agent-rounds-US10-TC2-1` | the skill's tests hold the rule that the answer is what the page says; a person answers the question and reads the page's line |
+| `shared-planning-agent-rounds-US10-TC3-1` | a person runs a round touching several lines of one page and counts one reply |
+| `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line and reads the product manager's thread |
+| `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question and reads the refusal, as `run-a-round-on-every-artifact`'s Told once has it |
+| `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group and reads the line's mark |
+| `shared-planning-agent-rounds-US11-TC3-1` | the tick's tests decide the refusal of a draft id over a fixture store; a person runs `pnpm plan done` on a walk group whose spec cites one |
+| `shared-planning-agent-rounds-US11-TC4-1` | the tick's tests decide the pass once the case is `actual`; a person signs the case with `/tcs-review` and runs the tick again |
+| `shared-planning-agent-rounds-US11-TC5-1` | the tick's tests decide one draft id among signed ones; a person reads the refusal naming that id alone |
+| `shared-planning-agent-rounds-US12-TC6-1` | the row's tests prove `written, not run — <why>` as the stood cell's first clause; a person reads the unticked tasks and the Manual rows saying `to be walked in` |
+| `shared-planning-agent-rounds-US12-TC7-1` | a person runs the lane, lands the row without the clause, ticks the tasks and rewrites the rows |
+| `shared-planning-agent-rounds-US12-TC8-1` | the row's tests prove the cell keeps ` (fallback)` after a reader's name and nothing else; the skill's tests hold the rule that the summary says it; a person reads the model the run reports |
+| `shared-planning-agent-rounds-US12-TC10-1` | the skill's tests hold the rule that a reader still missing after one retry stops the round; a person kills a dispatch and reads the thread |
+| `shared-planning-agent-rounds-US13-TC1-1` | the skill's tests hold the rule that the summary's footer lists the moves of the hand it addresses alone; a person reads the summary as each hand |
+| `shared-planning-agent-rounds-US13-TC2-1` | the reply's tests prove the held row as the round's reply with the row, the page sentence and the rows it touches quoted, mentioning its hand; a person reads the reply in the thread |
+| `shared-planning-agent-rounds-US13-TC3-1` | the reply's tests prove a re-run with the row unchanged posts nothing again; a person runs the round twice and counts one message |
+| `shared-planning-agent-rounds-US13-TC4-1` | the skill's tests hold the rule that one reply carries several moves; a person answers and remarks in one reply and reads what comes back first |
+| `shared-planning-agent-rounds-US13-TC5-1` | the skill's tests hold the rule that one verifier reads every reader's findings; a person reads the verifier's row naming each reader that filed the finding |
+| `shared-planning-agent-rounds-US13-TC6-1` | a person runs a round summoning the simpler thing alone and reads its row |
+| `shared-planning-agent-rounds-US13-TC7-1` | a person runs a round leaving one hand no move and reads that hand's thread, as `run-a-round-on-every-artifact`'s Told once has it |
+| `shared-planning-agent-rounds-US13-TC8-1` | a person reads the summary's tests line against the test it names |
+| `shared-planning-agent-rounds-US14-TC1-1` | the skill's tests hold the interview's shape once, on the governance page the skills link; a person opens a change and counts the questions |
+| `shared-planning-agent-rounds-US14-TC2-1` | a person reads the first round's summary under decided by the round |
+| `shared-planning-agent-rounds-US14-TC3-1` | a person overturns one listed default in a reply and reads the next round's draft |
+| `shared-planning-agent-rounds-US14-TC4-1` | a person opens a change with a sentence that settles everything and reads the one question |
+| `shared-planning-agent-rounds-US14-TC5-1` | a person opens a change with a sentence stating a fact and reads that it is not asked back |

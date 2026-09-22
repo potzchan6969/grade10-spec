@@ -446,6 +446,7 @@ test("a task group is read against the schema's apply block", () => {
   assert.equal(printed.bundle.draft, "openspec/changes/demo/tasks.md");
 });
 
+// Decides shared-planning-agent-rounds-US12-TC9-1.
 test("shared-planning-agent-rounds-SC-92 - a prose group summons the page's readers, not the build's", () => {
   const root = fixture();
   const printed = cli(root, ["demo", "3", "--diff", diffOf(root, PROSE_GROUP)]);

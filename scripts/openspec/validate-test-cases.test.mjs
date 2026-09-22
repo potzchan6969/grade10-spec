@@ -110,6 +110,7 @@ function store(story, manual = MANUAL) {
 
 const run = runValidator;
 
+// Decides shared-planning-agent-rounds-US12-TC2-1.
 test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carries no such case id is refused, and a row naming the application repository's walk is skipped", () => {
   const result = run(
     store("// the story: demo-alpha-US1-TC3-1 is drawn here\n"),
@@ -125,6 +126,7 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carrie
   assert.doesNotMatch(out, /demo-alpha-US1-TC3-1.*cites no/);
 });
 
+// Decides shared-planning-agent-rounds-US11-TC6-1.
 test("shared-planning-agent-rounds-SC-103 - a Manual table under a journey, on a suite carrying a reconciliation, is refused naming where it belongs", () => {
   const root = mkdtempSync(join(tmpdir(), "manual-place-"));
   const suite = [

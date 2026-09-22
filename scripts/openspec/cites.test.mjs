@@ -21,6 +21,7 @@ test("shared-planning-agent-rounds-SC-98 - an id is cited with a boundary after 
   assert.equal(citesId("", "demo-alpha-SC-1"), false);
 });
 
+// Decides shared-planning-agent-rounds-US12-TC5-1.
 test("shared-planning-agent-rounds-SC-98 - an id in backticks, brackets or a title is a citation; a longer id that starts with it is not", () => {
   assert.equal(citesId("`demo-alpha-SC-7`", "demo-alpha-SC-7"), true);
   assert.equal(citesId("[demo-alpha-US1-TC7-1]", "demo-alpha-US1-TC7-1"), true);

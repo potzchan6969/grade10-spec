@@ -289,6 +289,7 @@ test("shared-planning-agent-rounds-SC-51 - plan:land takes the readers the schem
   assert.match(roundsOf(root), /\| design, simpler, verifier \|/);
 });
 
+// Proves part of shared-planning-agent-rounds-US12-TC8-1.
 test("shared-planning-agent-rounds-SC-95 - plan:land accepts ` (fallback)` after a reader's name and nothing else in parentheses", () => {
   const fell = sandbox();
   const accepted = run("plan-land.mjs", [
@@ -1202,6 +1203,7 @@ test("shared-planning-agent-rounds-SC-96 - an application group's row lands with
   assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
 });
 
+// Decides shared-planning-agent-rounds-US12-TC1-1.
 test("shared-planning-agent-rounds-SC-96 - an application group's row lands from inside the application repository, the store its submodule, with no --app-root", () => {
   const { remote } = applicationGroup();
   // The application repository: a fresh clone holding the store as its
@@ -1257,6 +1259,7 @@ test("shared-planning-agent-rounds-SC-97 - an --app-root that is not a directory
   assert.doesNotMatch(result.stderr, /or pass --app-root/);
 });
 
+// Decides shared-planning-agent-rounds-US12-TC3-1.
 test("shared-planning-agent-rounds-SC-97 - an application group's path the clone holds no file at is refused, naming the path and the root", () => {
   const { root, app } = applicationGroup();
 
@@ -1288,6 +1291,7 @@ test("shared-planning-agent-rounds-SC-97 - an application group's landing that r
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
+// Decides shared-planning-agent-rounds-US12-TC4-1.
 test("shared-planning-agent-rounds-SC-98 - a --tests path that carries no such scenario id is refused, naming the path and the id", () => {
   const { root, git } = sandbox({ files: CITING });
   git("config", "user.email", "erin@test");
@@ -1305,6 +1309,7 @@ test("shared-planning-agent-rounds-SC-98 - a --tests path that carries no such s
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
+// Proves part of shared-planning-agent-rounds-US12-TC6-1.
 test("shared-planning-agent-rounds-SC-99 - --unrun writes written, not run as the stood cell's first clause and nothing else", () => {
   const { root, git } = sandbox({ files: CITING });
   git("config", "user.email", "erin@test");

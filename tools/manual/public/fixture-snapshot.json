@@ -1093,7 +1093,8 @@
       "designWaived": "the fixture is about the Specified stage, not the designs",
       "uiWaived": "the fixture is about the Specified stage, not the designs",
       "hands": {
-        "dev": "tester"
+        "dev": "tester",
+        "qa": "tester"
       },
       "author": "tester",
       "suites": [

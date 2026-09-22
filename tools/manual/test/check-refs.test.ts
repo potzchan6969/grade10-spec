@@ -169,6 +169,7 @@ describe("a page written first for a capability an in-flight change declares", (
       },
     });
 
+  // Decides shared-planning-agent-rounds-US10-TC7-1.
   it("shared-planning-agent-rounds-SC-100 - resolves the page's spec to the journeys the change holds, with no delta yet", async () => {
     const found = await findingsOf(
       files({

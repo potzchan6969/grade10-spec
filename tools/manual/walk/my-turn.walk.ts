@@ -92,10 +92,16 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
   await expect
     .element(now.getByRole("link", { name: "The Building stage" }))
     .toBeVisible();
+  // QA is a hand of Specified, and `tester` is `demo-specified`'s QA hand:
+  // the suite's review is on them now, not later
+  // (`shared-planning-agent-rounds-SC-89`).
+  await expect
+    .element(now.getByRole("link", { name: "The Specified stage" }))
+    .toBeVisible();
 
   const later = page.elementLocator(sectionFor("Yours later"));
   await expect
-    .element(later.getByRole("link", { name: "The Specified stage" }))
+    .element(later.getByRole("link", { name: /Waiting/ }))
     .toBeVisible();
 });
 

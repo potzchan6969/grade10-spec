@@ -34,6 +34,7 @@ const plan = (walk: string) =>
   });
 
 describe("the walk group names the suite's review", () => {
+  // Decides shared-planning-agent-rounds-US11-TC2-1.
   it("shared-planning-agent-rounds-SC-90 - refuses a plan whose walk group names no review", async () => {
     const found = await findingsOf(plan("Needs group 1 landed."), "walk");
     expect(found).toHaveLength(1);

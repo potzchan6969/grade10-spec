@@ -214,6 +214,8 @@ test("shared-planning-agent-rounds-SC-15 - a reply the round cannot apply is ans
   );
 });
 
+// Proves part of shared-planning-agent-rounds-US13-TC1-1.
+// Proves part of shared-planning-agent-rounds-US13-TC4-1.
 test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - the summary shows one hand's moves, a held row for another hand is its own reply, and one reply carries several moves", () => {
   const skill = claims(ROUND);
   assert.match(skill, /the moves of the hand it addresses alone/i);
@@ -237,6 +239,9 @@ test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - t
   assert.match(conduct, /the moves of the hand it\s+addresses alone/i);
 });
 
+// Proves part of shared-planning-agent-rounds-US10-TC1-1.
+// Proves part of shared-planning-agent-rounds-US10-TC2-1.
+// Proves part of shared-planning-agent-rounds-US10-TC6-1.
 test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is the product manager's question, quoted before and after", () => {
   const skill = claims(ROUND);
   assert.match(skill, /a build round lands on a page\W.*❓/i);
@@ -251,6 +256,7 @@ test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is
   assert.match(conduct, /carries 🚧 until its group lands/);
 });
 
+// Proves part of shared-planning-agent-rounds-US14-TC1-1.
 test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
   const conduct = claims("docs/governance/round-summary.md");
   assert.match(conduct, /## Interview/);
@@ -305,6 +311,9 @@ test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settl
   );
 });
 
+// Proves part of shared-planning-agent-rounds-US12-TC8-1.
+// Proves part of shared-planning-agent-rounds-US12-TC10-1.
+// Proves part of shared-planning-agent-rounds-US13-TC5-1.
 test("shared-planning-agent-rounds-SC-95, shared-planning-agent-rounds-SC-105 - one verifier reads every reader's findings, and a fallback or a killed dispatch is said", () => {
   const skill = claims(ROUND);
   // One verifier over the round, one row per kind of finding naming each

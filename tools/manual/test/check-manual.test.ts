@@ -651,6 +651,7 @@ describe("one requirement two changes both fold", () => {
     ]);
   });
 
+  // Decides shared-planning-agent-rounds-US16-TC1-1.
   it("shared-planning-agent-rounds-SC-102 - names an ADDED block to the MODIFIED one of the same name in another change, however each is headed", async () => {
     const root = changing(
       "first",
@@ -676,6 +677,7 @@ describe("one requirement two changes both fold", () => {
     ]);
   });
 
+  // Decides shared-planning-agent-rounds-US16-TC2-1.
   it("shared-planning-agent-rounds-SC-102 - says nothing when two changes ADD requirements of different names to one spec", async () => {
     const root = changing(
       "first",

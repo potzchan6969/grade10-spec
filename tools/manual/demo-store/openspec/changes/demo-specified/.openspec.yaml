@@ -4,3 +4,4 @@ ui_waived: "the fixture is about the Specified stage, not the designs"
 design_waived: "the fixture is about the Specified stage, not the designs"
 hands:
   dev: tester
+  qa: tester

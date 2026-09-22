@@ -32,6 +32,7 @@ describe("a wait on the change's record", () => {
     expect(found.reason).toContain("`ui-design`");
   });
 
+  // Decides shared-planning-agent-rounds-US15-TC1-1.
   it("shared-planning-agent-rounds-SC-101 - lets a wait stand on an artifact the change has written, since the wait names what is still missing", async () => {
     expect(
       await waits(
@@ -41,6 +42,7 @@ describe("a wait on the change's record", () => {
     ).toEqual([]);
   });
 
+  // Decides shared-planning-agent-rounds-US15-TC2-1.
   it("refuses a wait that says nothing rather than dropping it", async () => {
     const found = await waits("awaiting:\n  proposal:\n", "store");
 
