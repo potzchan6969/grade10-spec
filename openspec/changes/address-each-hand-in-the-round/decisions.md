@@ -58,6 +58,7 @@
 | Q28 | When the sentence leaves nothing else open, is one question asked alone? | Yes: whether to do it now, alone; the round pads nothing - the round's word | Two questions always |
 | Q29 | Does a fallback reach the hand? | In the row and in the summary's perspectives line - the round's word | The row alone |
 | Q30 | Is a dissenting reader's verdict kept where one finding is verified once? | The verifier's row quotes each reader's fix where they differ; one verdict - the round's word | One verdict, the dissent dropped |
+| Q31 | Where does the walk group's rule live in the manual's checks? | Beside the plan's other content-shape rules, in `planned.mjs`, read through the outline - decided by the round | `record.mjs`, whose rules each stand in for a key of the record |
 
 ## Raised
 
