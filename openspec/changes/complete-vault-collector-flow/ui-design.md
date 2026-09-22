@@ -263,7 +263,7 @@ beside them.
 | Stepper, ended | the stage the case ended at stays `progress`; the badge says the ending | `grade10-site-vault-case-lifecycle-SC-32` |
 | Chip: Waiting on you | a live offer, a missed visit, an ask for the item back | `grade10-site-vault-case-lifecycle-SC-33` |
 | Chip: With us | submitted, being valued, a lapsed or declined offer, ready to sign, in the vault on either lane | `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-lifecycle-SC-38` |
-| Chip: Visit | terms agreed with a visit ahead: the visit's day | `grade10-site-vault-visit-booking-US-04` |
+| Chip: Visit | terms agreed with a visit ahead: the visit's day | `grade10-site-vault-visit-booking-SC-20` |
 | Chip: Due | a live loan before the due date: due and the date | `grade10-site-vault-loan-and-settlement-SC-05` |
 | Chip: Past due | a live loan after it: n days past due | `grade10-site-vault-loan-and-settlement-SC-06` |
 | Chip: Settled | repaid: settled and the date | `grade10-site-vault-loan-and-settlement-SC-15` |
@@ -337,7 +337,7 @@ beside them.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Signed out | the site's sign-in dialog | `grade10-site-vault-retention-and-erasure-SC-12` |
-| Loading | `Skeleton` cards | `grade10-site-vault-retention-and-erasure-SC-15` |
+| Loading | `Skeleton` cards | **Out of suite:** the view's colocated test |
 | Standing: verified | verified until the date · checked how, on which day; never the name or the document | `grade10-site-vault-retention-and-erasure-SC-19` |
 | Standing: none | no identity on file; verified at the next visit | `grade10-site-vault-retention-and-erasure-SC-21` |
 | Standing: check out | a check is out since the date | `grade10-site-vault-retention-and-erasure-SC-20` |
@@ -420,7 +420,7 @@ beside them.
 | Visit checklist | Today's visit, in order: seven `Check`s, ticked as each lands; the current step's button; a step not offered says why | `grade10-admin-vault-operator-queue-SC-30` |
 | Checklist, no visit today | the panel absent | `grade10-admin-vault-operator-queue-SC-33` |
 | Checklist, storage lane | the terms step reads custody terms; no key-terms or loan agreement step | `grade10-admin-vault-operator-queue-SC-32` |
-| Policy gates | the five ticks beside the offer | `grade10-site-vault-valuation-and-offer-US-01` |
+| Policy gates | the five ticks beside the offer | `grade10-site-vault-loan-and-settlement-SC-40` |
 | Actions not offered | the line naming the acts this status withholds | `grade10-admin-vault-operator-queue-SC-37` |
 | Status word | the collector's word, never the raw id | `grade10-admin-vault-operator-queue-SC-27` |
 
