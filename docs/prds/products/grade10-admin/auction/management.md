@@ -55,6 +55,12 @@ the card is in the winner's hands. The collector's half is
   exists it doubles as the order's payment reference — [Auction Display ·
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
+- ❓ **Listing code view permission** — whether reading the code needs a
+  grant of its own, or inherits whatever already gates the listing's admin
+  screen; Product confirms
+- ❓ **Listing code on the Listings table** — whether the code shows only on
+  a listing's own admin screen or also as a column on the Listings table;
+  Product and Design confirm
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the

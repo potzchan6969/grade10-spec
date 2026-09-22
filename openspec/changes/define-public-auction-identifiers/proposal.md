@@ -127,6 +127,16 @@ None.
 - PM and Finance confirmation can unlock the requirements delta, API projection
   work and shared UI adoption for the approved formats.
 
+## Open Questions
+
+- ❓ `grade10-admin/auction/listing`: does the listing code need a view
+  permission separate from whatever already gates a listing's admin screen?
+  Raised by the blind test-design pass; nothing in this capability states a
+  read-side gate today, only write grants. PM decides.
+- ❓ `grade10-admin/auction/listing`: does the listing code show only on the
+  listing's own admin detail screen, or also as a column in the Listings
+  table? PM/Design decide.
+
 ## References
 
 - [Auction Listing · Public listing ID](../../../docs/prds/products/grade10-site/auction/display.md#auction-listing)
