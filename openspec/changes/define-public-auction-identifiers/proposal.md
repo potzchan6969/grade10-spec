@@ -24,20 +24,22 @@ without manual identifier clarification.
   column, and is never reused unless the listing record is deleted entirely.
   The listing code is a support, finance and operator reference only; it does
   not appear on public listing pages where lots are identified by their titles.
-- Propose a stable public winner-order identifier (e.g., `ORD-L9482`) for order
-  lists, order detail, support contact and operator reconciliation. This order
-  ID is derived from the listing code and becomes the primary reference for a
-  winner's purchase after a lot closes.
-- Propose an invoice identifier that remains unique across reissues while
-  retaining a human-readable relationship to the billed listing and order.
-- Propose a short payment reference code that is safe to type into FPS, local
-  bank transfer and SWIFT notes, and that can be copied from the payment
-  surface.
+- Propose a payment reference code derived from the internal order ID: a
+  5-character Crockford Base32 value with no fixed prefix, for example `L9482`
+  or `UY294`. It is allocated when a lot closes with a winner and is safe to
+  type into FPS, local bank transfer and SWIFT notes. There is no separate
+  public order identifier — the payment reference is the one stable reference
+  a winner quotes for their order, on order lists, order detail, support
+  contact, operator reconciliation and payment instructions.
 - Carry the payment reference code into Stripe transaction metadata so
   provider records can be matched during reconciliation without exposing a
   provider transaction ID to the collector.
-- Propose receipt identifiers that distinguish each payment against one
-  order, including partial-payment and final-settlement receipts.
+- Propose an invoice identifier built from the payment reference plus a
+  2-digit issuance sequence, so it stays short while remaining unique across
+  reissues.
+- Propose receipt identifiers built from the invoice identifier plus a
+  receipt sequence, distinguishing each payment returned against one invoice,
+  including partial-payment and final-settlement receipts.
 - Keep internal database IDs, gapless audit numbers and provider references
   separate from every collector-facing identifier.
 - Record the format recommendations as provisional PM/Finance decisions; the
@@ -50,22 +52,33 @@ without manual identifier clarification.
 | Record | Example | Use |
 | --- | --- | --- |
 | Listing code | `L9482` | Internal reference for support, finance and operator reconciliation; never displayed on public listing page |
-| Public order ID | `ORD-L9482` | Stable identifier for the winner's order, used on order pages, emails and receipts |
-| Public invoice ID | `INV-202609-L9482-01` | Names the invoice month, listing code and revision |
-| Payment reference code | `L948201` | Hyphen-free value for FPS, local wire and SWIFT; also written to Stripe transaction metadata |
-| First partial receipt | `REC-202609-ORD-L9482-P1-R1` | Identifies the first payment receipt against the stable order |
-| Final settlement receipt | `REC-202609-ORD-L9482-P2-R1` | Identifies the payment that settles the stable order |
-| Reversal or refund revision | `REC-202609-ORD-L9482-P1-R2` | Revises the receipt for payment sequence `P1` without changing the order or invoice reference |
+| Payment reference code | `LK423` | The winner's one stable public reference: order lists, order detail, support, FPS/wire/SWIFT notes, and Stripe transaction metadata. There is no separate public order ID. |
+| Public invoice ID | `IN-LK42301` | First invoice issued against payment reference `LK423` |
+| Reissued invoice | `IN-LK42302` | Reissue of the invoice above; the issuance sequence increments |
+| First payment receipt | `RC-LK42301P1` | First receipt returned against invoice `IN-LK42301` |
+| Second payment receipt | `RC-LK42301P2` | Second receipt against the same invoice — for example, the first payment was partial and this completes it |
 
 The listing code uses the Crockford Base32 payload charset
 `0123456789ABCDEFGHJKMNPQRSTVWXYZ` with a fixed `L` prefix. The listing code
 as a whole contains both letters and digits; `L9482` is the format example
 supplied for this proposal. The exact payload length remains a format detail
-for PM and Finance to confirm. The Grade10 payment reference is written to
-Stripe metadata under `payment_reference_code`. Stripe supplies a separate
-provider reference, such as the returned PaymentIntent ID; Grade10 stores that
-reference and uses it in internal document filenames created after the payment
-is obtained.
+for PM and Finance to confirm.
+
+The payment reference code is a 5-character Crockford Base32 value derived
+from the internal order ID, with no fixed prefix — `L9482` and `UY294` are
+both valid examples. It is the one collector-facing identifier for the order;
+it is written to Stripe metadata under `payment_reference_code`, and it is
+the payload both the invoice and receipt identifiers are built from:
+
+- Invoice ID: `IN-[PAYMENT_REF][SEQ]`, where `SEQ` is a 2-digit issuance
+  sequence starting at `01` and incrementing on each reissue.
+- Receipt ID: `RC-[INVOICE_PAYLOAD][P][n]`, where `INVOICE_PAYLOAD` is the
+  invoice ID's payment-reference-plus-sequence part (for example `LK42301`)
+  and `P[n]` is the receipt sequence within that invoice.
+
+Stripe supplies a separate provider reference, such as the returned
+PaymentIntent ID; Grade10 stores that reference and uses it in internal
+document filenames created after the payment is obtained.
 
 ## Non-Goals
 
@@ -81,9 +94,10 @@ None.
 
 - `grade10-site/auction/listing-page`: define the stable listing code associated
   with a published auction listing without changing its public slug.
-- `grade10-site/auction/winner-order`: define public winner-order, invoice,
-  payment-reference and receipt identifiers and their relationship to reissues
-  and payment records.
+- `grade10-site/auction/winner-order`: define the payment-reference identifier
+  that stands in for a public order ID, plus the invoice and receipt
+  identifiers built from it, and their relationship to reissues and payment
+  records.
 
 ## Impact
 
