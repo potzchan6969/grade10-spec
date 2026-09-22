@@ -104,10 +104,9 @@ Everything this run produces is `draft`. Nothing in it claims review.
    rule already running to them as a challenge naming the rule and where it
    is written; one the author holds is **BREAKING** in the proposal.
 
-2. **Interview the author.** Run the `grilling` skill's round-based frontier
-   interview before drafting. Do not write until the frontier is empty and the
-   author confirms shared understanding. The interview scales with the open
-   questions, not the change's size.
+2. **Interview the author.** Ask what changes what is built, as [Round
+   Summary and Landing · Interview](../../../docs/governance/round-summary.md#interview)
+   shapes it, listing the defaults you applied as decided by the round.
 
    A question the author answers is a row in their own words, whichever way
    the answer arrived - given, taken as offered, or kept against your

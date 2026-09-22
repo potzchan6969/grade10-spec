@@ -552,7 +552,9 @@ describe("what the agent drafts and the hand moves", () => {
 
     expect(shown("proposed")).toBe("answer");
     expect(shown("designed")).toBe("tweak · challenge");
-    expect(shown("specified")).toBe("read");
+    // QA reviews the suite beside the product manager's read
+    // (`shared-planning-agent-rounds-SC-89`).
+    expect(shown("specified")).toBe("read · review");
     expect(shown("planned")).toBe("read");
     expect(shown("building")).toBe("read each landing");
   });
@@ -568,7 +570,10 @@ describe("what the agent drafts and the hand moves", () => {
       "/workflow-design pos",
       "/workflow-tech pos",
     ]);
-    expect(commands("specified")).toEqual(["/workflow-specify pos"]);
+    expect(commands("specified")).toEqual([
+      "/workflow-specify pos",
+      "/tcs-review pos",
+    ]);
     expect(commands("planned")).toEqual(["/workflow-tasks pos"]);
     expect(commands("building")).toEqual(["/workflow-build pos <group>"]);
   });

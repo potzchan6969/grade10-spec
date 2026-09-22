@@ -137,12 +137,24 @@ export function stagingText(linked, { sheetUrl, build } = {}) {
  * which sentence a hand was sent.
  */
 export function toldBodyOf(at, role, { linked, sheetUrl }) {
-  return at.stage === "on-staging" && role === "qa"
-    ? {
-        kind: "staging",
-        text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
-      }
-    : { kind: "your-turn", text: yourTurnText(at, role, linked) };
+  if (at.stage === "on-staging" && role === "qa") {
+    return {
+      kind: "staging",
+      text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
+    };
+  }
+  const lines = [yourTurnText(at, role, linked)];
+  // QA at Specified is asked to review the suite: the message names each
+  // suite's path and case count, and says the walk waits on the review
+  // (`shared-planning-agent-rounds-SC-89`).
+  if (at.stage === "specified" && role === "qa") {
+    for (const suite of at.suites ?? []) {
+      lines.push(
+        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} cases; the walk names this review as its input`,
+      );
+    }
+  }
+  return { kind: "your-turn", text: lines.join("\n") };
 }
 
 /** The artifact that is behind, and what moved before it. */

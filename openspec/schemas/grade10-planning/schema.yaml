@@ -1012,9 +1012,10 @@ artifacts:
       those same ids: its tests land in their own commit before the group's
       code, and its box is ticked last. The walk is its own test task.
 
-      - The last group is the walk: it walks every journey of every capability
-      the change specifies, end to end through the interface each actor uses,
-      leaves the walks as the change's end-to-end suite, and its commit flips
+      - The last group is the walk: it names the suite's review
+      (`/tcs-review <change>`) as its input, walks every journey of every
+      capability the change specifies, end to end through the interface each
+      actor uses, leaves the walks as the change's end-to-end suite, and its commit flips
       each case the walks decide to automated with `pnpm run tcs:automated
       <case…> --decided-by <walk path>`; the cases that stay manual are named
       in the suite and named in the walk's `rounds.md` row.

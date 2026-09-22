@@ -146,7 +146,13 @@ export const RULES = [
   {
     key: "awaiting",
     level: "fail",
-    title: "Waits naming no artifact, or one already written",
+    title:
+      "Waits naming no artifact the schema issues, or one the record waives",
+  },
+  {
+    key: "walk",
+    level: "fail",
+    title: "Walk groups naming no review of the suite",
   },
   {
     key: "hands",

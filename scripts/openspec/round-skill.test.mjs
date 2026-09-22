@@ -229,7 +229,7 @@ test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - t
 
 test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is the product manager's question, quoted before and after", () => {
   const skill = claims(ROUND);
-  assert.match(skill, /a build round .*(lands|puts) on a page .*❓/i);
+  assert.match(skill, /a build round .*(lands|puts) on a page\W.*❓/i);
   assert.match(skill, /quot\w+ (the line )?before and after/i);
   assert.match(skill, /\(none\)/);
   assert.match(skill, /holds no landing|nothing holds the landing/i);

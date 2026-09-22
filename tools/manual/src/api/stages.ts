@@ -255,7 +255,10 @@ const SECOND_HANDS: { role: Role; artifact: string }[] = [
 const HANDS_AT: Record<Stage, Role[]> = {
   proposed: ["pm"],
   designed: [],
-  specified: ["pm"],
+  // QA takes Specified beside the product manager, for the suite's review:
+  // the landing that puts it up for review is a move to them
+  // (`shared-planning-agent-rounds-SC-89`).
+  specified: ["pm", "qa"],
   planned: ["dev"],
   building: ["dev"],
   "on-staging": ["qa", "release"],
@@ -374,7 +377,10 @@ export const DRAFTED: Partial<Record<Stage, Drafted>> = {
   },
   specified: {
     draft: "two blind readings, reconciled",
-    moves: { pm: { move: "read", command: "/workflow-specify <id>" } },
+    moves: {
+      pm: { move: "read", command: "/workflow-specify <id>" },
+      qa: { move: "review", command: "/tcs-review <id>" },
+    },
   },
   planned: {
     draft: "the plan",

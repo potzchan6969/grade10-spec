@@ -60,6 +60,19 @@ never by a hand.
 - **The repository per path** — a `--tests` cell names the repository with
   each path, since both repositories have a `packages/` root
 
+## Interview
+
+- **What is asked** — at most three questions that change what is built, one
+  of them whether to do it now; alone, when the sentence leaves nothing else
+  open
+- **What is decided** — every other choice is applied as a default and listed
+  under "decided by the round" in the same message, each with the option it
+  took; one reply overturns any of them
+- **`not now`** — the change stays Proposed with `awaiting: proposal` on the
+  product manager, and nothing is drafted ahead until they lift it
+- **A fact the sentence states** — is recorded as the product manager's, never
+  asked back
+
 ## Readers
 
 - **One verifier over the round** — every reader's findings go to one

@@ -44,8 +44,12 @@
  * request: the round found nothing to say. With `ROUND_WAKE=relay` in the
  * environment and no such file, every mode fails rather than prints.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { createHash } from "node:crypto";
+import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
+import { tableRows } from "../../tools/manual/src/store/markdown.mts";
+import { readQuestions } from "../../tools/manual/src/store/read-changes.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { confirmOf, readWake, relayOf } from "./lib/relay.mjs";
 
@@ -78,11 +82,23 @@ const KINDS = {
     printed: (change) => `bind ${change}`,
     confirmed: (change) => `bound ${change}`,
   },
+  // A held row addressed to another hand: the round's own reply in the
+  // change's thread, mentioning that hand, with the row, the sentence it would
+  // put on the page and the decision rows it touches quoted — posted once per
+  // change, row and text (`shared-planning-agent-rounds-SC-86`).
+  row: {
+    read: (flags, root) => heldRowText(root, flags),
+    call: (relay, text) => relay.post(text),
+    printed: (text) => text,
+    confirmed: () => "posted row",
+    nothing: (text) => text === "",
+    after: (root, flags, text) => rememberRow(root, flags, text),
+  },
 };
 
 const MODES = Object.keys(KINDS);
 const USAGE =
-  "usage: node relay-post.mjs --message-file <path> [--confirm <artifact|group>] [--held] | --done | --bind <change> [--root <dir>]";
+  "usage: node relay-post.mjs --message-file <path> [--confirm <artifact|group>] [--held] | --row <Q> --change <id> | --done | --bind <change> [--root <dir>]";
 
 /** The file's trimmed text, or the empty string where it is missing or
  * blank — a round posts only when it has something to say. */
@@ -93,7 +109,7 @@ function messageFileText(path) {
 
 async function main() {
   const { flags } = parseArgs(process.argv.slice(2), {
-    keys: ["message-file", "bind", "confirm", "root"],
+    keys: ["message-file", "bind", "confirm", "root", "row", "change"],
     booleans: ["done", "held"],
     usage: USAGE,
   });
@@ -103,11 +119,11 @@ async function main() {
     fail(`one of ${MODES.map((one) => `--${one}`).join(", ")}\n${USAGE}`);
   }
   const kind = KINDS[given[0]];
-  const value = kind.read(flags);
+  const value = await kind.read(flags, root);
   const confirm = buttonOf(flags, kind);
 
   if (kind.nothing?.(value)) {
-    console.log("nothing to post");
+    console.log(given[0] === "row" ? "already posted" : "nothing to post");
     return;
   }
 
@@ -119,6 +135,7 @@ async function main() {
   }
   if (!wake) {
     console.log(kind.printed(value, confirm));
+    kind.after?.(root, flags, value);
     return;
   }
 
@@ -134,6 +151,108 @@ async function main() {
     return;
   }
   console.log(kind.confirmed(value));
+  kind.after?.(root, flags, value);
+}
+
+/**
+ * The reply a held row makes to the hand it waits on. The row is read
+ * through the manual's own question reader, so the hand and the
+ * recommendation are the ones the change page shows; the sentence it would
+ * put on the page is every line of a page the proposal links that cites the
+ * row; the rows it touches are every other decision row that names it. A row
+ * that is not held is refused: a decided row asks nobody anything. An empty
+ * text means the same reply was posted already.
+ */
+async function heldRowText(root, flags) {
+  const change = flags.change;
+  if (!change) fail(`--row rides --change <id>\n${USAGE}`);
+  const id = flags.row;
+  const dir = join(root, "openspec", "changes", change);
+  const decisions = readTextOr(join(dir, "decisions.md"));
+  const held = readQuestions(
+    decisions,
+    handsOf(readTextOr(join(dir, ".openspec.yaml"))),
+  ).find((one) => one.id === id);
+  if (!held) {
+    fail(
+      `${id} is not held: a row asks a hand only while its Decision cell opens ❓ — a decided row is nobody's question`,
+    );
+  }
+  const rows = tableRows(decisions) ?? [];
+  const own = rows.find((cells) => cells[0] === id) ?? [];
+  // The rows it touches: those the row names, and those that name it.
+  const ownText = own.join(" | ");
+  const touched = rows.filter(
+    (cells) =>
+      /^Q\d+$/.test(cells[0] ?? "") &&
+      cells[0] !== id &&
+      (ownText.includes(cells[0]) || cells.join(" | ").includes(id)),
+  );
+  const pages = pagesLinkedBy(root, dir);
+  const onPage = pages.flatMap(({ file, text }) =>
+    text
+      .split("\n")
+      .filter((line) => line.includes(`\`${id}\``))
+      .map((line) => `${file}: ${line.trim()}`),
+  );
+  const hand = held.hand.startsWith("@") ? held.hand : `@${held.hand}`;
+  const text = [
+    `${hand} — ${id} waits on you (${held.role}).`,
+    `> ${own.join(" | ")}`,
+    onPage.length > 0
+      ? `The sentence it would put on the page:\n${onPage.map((one) => `> ${one}`).join("\n")}`
+      : "It puts no sentence on a page.",
+    touched.length > 0
+      ? `The rows it touches:\n${touched.map((cells) => `> ${cells.join(" | ")}`).join("\n")}`
+      : "It touches no other row.",
+    `Answer with \`${id}: <your answer>\`, or \`${id}\` to take the recommendation.`,
+  ].join("\n");
+  return rowsSent(root).has(rowKey(change, id, text)) ? "" : text;
+}
+
+const readTextOr = (path) =>
+  existsSync(path) ? readFileSync(path, "utf8") : "";
+
+/** The `hands:` block of the record, role to handle, read without git: the
+ * record is the one file this reply needs, and a terminal round has no wake. */
+function handsOf(record) {
+  const hands = {};
+  const block = /^hands:\n((?:[ \t]+\S.*\n?)+)/m.exec(record);
+  for (const line of block?.[1].split("\n") ?? []) {
+    const pair = /^\s+([a-z]+):\s*"?(@?[\w.-]+)"?\s*$/.exec(line);
+    if (pair) hands[pair[1]] = pair[2];
+  }
+  return hands;
+}
+
+/** The pages the proposal links, as `[…](../../../docs/prds/….md#…)`. */
+function pagesLinkedBy(root, dir) {
+  const proposal = readTextOr(join(dir, "proposal.md"));
+  const seen = new Set();
+  const pages = [];
+  for (const match of proposal.matchAll(
+    /\]\(([^)\s]*docs\/prds\/[^)\s#]+\.md)(?:#[^)]*)?\)/g,
+  )) {
+    const file = resolve(dir, match[1]);
+    if (seen.has(file) || !existsSync(file)) continue;
+    seen.add(file);
+    pages.push({
+      file: file.slice(root.length + 1),
+      text: readFileSync(file, "utf8"),
+    });
+  }
+  return pages;
+}
+
+const ROWS_SENT = ".round/rows.txt";
+const rowKey = (change, id, text) =>
+  `${change}/${id}/${createHash("sha1").update(text).digest("hex").slice(0, 12)}`;
+const rowsSent = (root) =>
+  new Set(readTextOr(join(root, ROWS_SENT)).split("\n").filter(Boolean));
+function rememberRow(root, flags, text) {
+  const file = join(root, ROWS_SENT);
+  mkdirSync(dirname(file), { recursive: true });
+  appendFileSync(file, `${rowKey(flags.change, flags.row, text)}\n`);
 }
 
 /**

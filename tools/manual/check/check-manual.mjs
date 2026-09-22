@@ -84,6 +84,7 @@ import {
   checkHands,
   checkLandedBy,
   checkUnmarked,
+  checkWalkGroup,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkRounds } from "./rounds.mjs";
@@ -210,6 +211,7 @@ export async function runChecks(
     checkPlanned(ctx, changes);
     checkRounds(ctx, changes, roundsSince);
     checkAwaiting(ctx, changes);
+    checkWalkGroup(ctx, changes);
     checkHands(ctx, changes);
     checkLandedBy(ctx, changes);
     checkArchived(ctx, readArchivedChanges(roots.store, index), roundsSince);
