@@ -1,10 +1,11 @@
 ## Feature set
 
 - Address phone and kind
-  - Phone with country: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty
+  - Phone with country: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty; placeholder shows an example with calling code
   - Personal or company: Company Name required only for company and hidden on personal; first and last name stay required on both
   - Optional locality: address line 1 and postal code required; address line 2 and state or province optional; no Apt./Suite/Building on this form
   - Picker card title: company name for a company address; recipient first and last name for a personal address
+  - Picker card body: street, city or region, and country only — no postal code and no phone
 
 ## MODIFIED Requirements
 
@@ -69,6 +70,9 @@ selector.
 **Country selector** — The phone field SHALL include a country selector. Phone
 country SHALL start empty on Add Address — nothing preselected.
 
+**Placeholder** — When phone country is empty, the phone field SHALL show an
+example placeholder with a calling code (`+852 12345678`).
+
 **Required parts** — Phone country and digits SHALL be required.
 
 **Storage** — Grade10 SHALL store the phone as E.164 when parseable. When the
@@ -84,6 +88,13 @@ is unusual or fails hard validity checks.
 - **GIVEN** a winner opening Add Address on Winner Order setup
 - **WHEN** Add Address is shown
 - **THEN** phone country is empty with nothing preselected
+
+#### Scenario: winner-order-SC-201 - Phone shows an example placeholder with calling code
+**Serves:** winner-order-US-01 - entering a phone on Add Address
+
+- **GIVEN** a winner on Add Address with phone country empty
+- **WHEN** the phone field is shown
+- **THEN** the placeholder shows an example with a calling code (`+852 12345678`)
 
 #### Scenario: winner-order-SC-188 - A parseable phone is stored as E.164
 **Serves:** winner-order-US-01 - saving a phone on Add Address
@@ -129,6 +140,9 @@ Personal and Company.
 picker card title. A personal address SHALL show the recipient's first and last
 name as the picker card title.
 
+**Picker card body** — The picker card body SHALL show street, city or region,
+and country only. It SHALL NOT show postal code or phone.
+
 #### Scenario: winner-order-SC-190 - Personal is selected by default and Company Name is hidden
 **Serves:** winner-order-US-01 - choosing a personal address on Add Address
 
@@ -167,6 +181,14 @@ name as the picker card title.
 - **GIVEN** a winner on the delivery picker with a saved company address
 - **WHEN** the picker lists saved addresses
 - **THEN** that address card title is the company name
+
+#### Scenario: winner-order-SC-202 - Picker card body omits postal code and phone
+**Serves:** winner-order-US-01 - reading a saved address on the delivery picker
+
+- **GIVEN** a winner on the delivery picker with a saved address that has street, city or region, country, postal code, and phone
+- **WHEN** the picker lists that address
+- **THEN** the card body shows street, city or region, and country
+- **AND** the card body does not show postal code or phone
 
 #### Scenario: winner-order-SC-194 - A one-time address applies without saving a sixth
 **Serves:** winner-order-US-12 - confirming delivery when five addresses are already saved

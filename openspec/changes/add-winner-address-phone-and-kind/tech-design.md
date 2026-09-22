@@ -32,10 +32,11 @@ locality. Implementation choices:
 
 | Topic | Choice | Rejected |
 | --- | --- | --- |
-| Phone UI | Block-local `AuctionPhoneField` wrapping `react-phone-number-input` in `packages/ui` | Design-system PhoneInput without Figma; free-text phone |
+| Phone UI | Block-local `AuctionPhoneField` wrapping `react-phone-number-input` in `packages/ui`; default placeholder `+852 12345678` | Design-system PhoneInput without Figma; free-text phone; generic "Enter phone number" placeholder |
 | Soft refuse | Form soft-refuses empty phone / company / required locality on submit when the application has not supplied `errors`; application errors still win | Application-only validation with no local refuse; hard libphonenumber refuse |
 | Non-E.164 storage | Confirm reports / snapshot keeps the entered phone string; E.164 when `parsePhoneNumber` succeeds | Drop digits; refuse confirm |
 | Personal confirm | `onConfirm` clears `company` when kind is personal | Persist hidden company name into the snapshot |
+| Picker card body | Preview formats lines as street, city/region, country — omits postal and phone | Full formatted address including postal and phone on the card |
 | Apt. field | Do not render Apt./Suite/Building; values may keep an empty `apartment` key for type stability until a later cleanup | Collect Apt. on this form |
 | Catalogue | Country/Region list stays owned by the country-region change; this change does not retarget it | Coupling phone work to billing catalogue parity |
 | i18n | Preview keeps English stand-ins; `grade10-site` answers keys in `@grade10/i18n` when wiring setup | Hard-coding production copy only in the SPA |

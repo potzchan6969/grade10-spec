@@ -18,11 +18,13 @@ with digits and, when the address is a company address, a company name
   (flag or globe, calling code when it is not already in the typed value,
   national number). Country and digits are required; the value is stored as
   E.164 when parseable. Unusual formats are not refused. Phone country starts
-  empty — nothing preselected.
+  empty — nothing preselected. Placeholder shows an example with calling code
+  (`+852 12345678`).
 - **Personal or company** — the winner chooses Personal or Company. Company
   shows Company Name as required; Personal hides it. A company address shows
   the company name as the picker card title; a personal address shows the
-  recipient name.
+  recipient name. The card body shows street, city or region, and country
+  only — no postal code and no phone.
 - **Locality** — address line 2 and state are optional; Apt./Suite/Building
   is not collected on this form.
 - **Shared form and setup** — `AuctionAddressForm` carries both; Winner Order
@@ -55,7 +57,8 @@ None.
 ## Open Questions
 
 None for this change. Hard phone-format refusal and a Figma-backed design-system
-PhoneInput stay out of scope.
+PhoneInput stay out of scope. Country/Region catalogue and searchable field
+belong to `full-winner-order-country-region-list`.
 
 **Archive:** @tangconst after deploy.
 
