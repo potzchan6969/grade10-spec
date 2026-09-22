@@ -568,7 +568,6 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * The system refuses the second close.
 * The request stays cancelled, closed on the day it was first cancelled.
 
-
 ---
 
 ## Reconciliation
