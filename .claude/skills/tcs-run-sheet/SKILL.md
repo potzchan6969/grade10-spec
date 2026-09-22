@@ -10,7 +10,9 @@ is where a tester marks results, and the store never reads it back.
 
 Your job is the selection. Whatever the request, it ends as an explicit list of
 case ids that a human confirms before anything is written — a run whose
-contents cannot be restated is a run nobody can repeat.
+contents cannot be restated is a run nobody can repeat. Confirming means they
+have seen the list and said the coverage is correct, not that they asked for a
+run.
 
 ## The two kinds of request
 
@@ -37,13 +39,18 @@ in the same pass when the request covers both.
 
 ## The steps
 
-1. **Resolve the request** to a selection, by either route above.
+1. **Resolve the request** to a selection, by either route above. Automated
+   cases are in unless the person asked to leave them out. Drafts are in only
+   when they asked for drafts.
 2. **Dry run it.** `--dry-run` prints every case it would write and touches no
    network. Read the list yourself first: a case that does not belong is
    cheaper to drop now than to explain in the tab.
-3. **Show the list and wait.** Name the count, the suites and capabilities it
-   spans, and any draft cases. Do not dispatch before the person confirms.
-4. **Dispatch.** The run tab is written by CI, which holds the only credentials:
+3. **Show the list and stop.** Name the count, the suites and capabilities it
+   spans, how many are draft, how many are already automated, and what you
+   left out on purpose. Ask whether the coverage is correct. Do not dispatch
+   until they say the list is right.
+4. **Dispatch** only after that yes. The run tab is written by CI, which holds
+   the only credentials:
 
    ```bash
    gh workflow run run-sheet.yml \
@@ -54,8 +61,10 @@ in the same pass when the request covers both.
 
    Pass `suites=`, `priority=`, `level=` or `scope=` instead of `cases=` when a
    filter resolved it. Add `include_draft=true` only when the person asked for
-   drafts, and `include_automated=true` only when they asked for cases an
-   automated test already covers.
+   drafts. Automated cases are already on by default; pass
+   `include_automated=false` only when they asked to leave them out. Pass
+   `replace=true` only when they asked to overwrite an existing tab and the
+   Summary.
 5. **Report the tab.** Give them the run id, the tab name and the link the job
    prints.
 
@@ -67,9 +76,10 @@ in the same pass when the request covers both.
   locked, and an edit there is refused at the cell. A wrong case is fixed in
   `openspec/`, not in the sheet.
 - **Every case starts at `to_do`, so the Summary counts down.** An automation
-  column reading `n/a` is a case no automated test covers; `skipped` is a case
-  somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
-  against the run.
+  column reading `n/a` is a case no automated test covers. Automated cases are
+  on the tab by default so Auto web and Auto mobile can be marked; `skipped` is
+  a case somebody chose not to walk. The pass rate ignores `n/a` and counts
+  `skipped` against the run.
 - **The Summary tab gives each run four rows**, one per surface, grouped under
   the first. Identity and the commit sit once, on that first row. Marking a
   cell moves the counts; no second sync is needed.
@@ -83,7 +93,8 @@ in the same pass when the request covers both.
 
 ## What not to do
 
-- **Do not write a tab nobody confirmed.** The dry run is the conversation.
+- **Do not write a tab nobody confirmed.** Show the list. Ask if the coverage
+  is correct. Wait. The dry run is the conversation.
 - **Do not take `deprecated` cases.** The spec stopped stating them; walking one
   proves nothing. The script refuses them outright.
 - **Do not put results back in the store.** A suite carries no execution record

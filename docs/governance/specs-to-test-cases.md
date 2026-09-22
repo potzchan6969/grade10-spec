@@ -491,7 +491,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
 - **`actual` only** — `--include-draft` takes drafts and amber-bands them; a `deprecated` case never crosses
-- **Automated is left out too** — a case whose Automation status is `automated` never crosses either, unless `--include-automated` says otherwise; the count crosses regardless, said in the run's own printout and on the Summary row's `Automated left out` column, and the printout names each case it left out with what decides it
+- **Automated is in** — a case whose Automation status is `automated` is on the tab so Auto web and Auto mobile can be marked; `--exclude-automated` leaves them out. The printout still says how many it included or left out, and names each one it left out with what decides it
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
 - **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile` and `Notes` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
 - **A journey is a row, not a column** — a banner above the cases that walk it, with a collapsible group beneath. Sorting happens inside the tab's filter view, which leaves the rows where they are
