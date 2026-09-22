@@ -159,7 +159,7 @@ export function buildDocs(index: ManualIndex): SearchDoc[] {
           kind: "change",
           title: requirement.name,
           subtitle: `${title} · ${requirement.kind} ${delta.spec}`,
-          body: plainText(requirement.text ?? ""),
+          body: plainText(requirement.text ?? requirement.to ?? ""),
           to: `/in-flight/${change.id}`,
         });
       }

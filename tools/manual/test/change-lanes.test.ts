@@ -190,7 +190,11 @@ describe("the real store's board", () => {
     );
 
     expect(requirements.length).toBeGreaterThan(0);
-    expect(requirements.every((one) => one.text)).toBe(true);
+    expect(
+      requirements.every((one) =>
+        one.kind === "renamed" ? Boolean(one.to) : Boolean(one.text),
+      ),
+    ).toBe(true);
     const lines = snapshot.changes.flatMap((one) =>
       one.taskGroups.flatMap((held) => held.tasks ?? []),
     );
