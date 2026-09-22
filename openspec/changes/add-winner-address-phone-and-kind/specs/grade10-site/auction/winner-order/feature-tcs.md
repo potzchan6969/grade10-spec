@@ -502,8 +502,54 @@
 **Expected Results:**
 
 * Step 3 succeeds.
-* The delivery address on the order carries Northwind Collectibles, Alex Chen, and a phone with country and digits.
+* The delivery address on the order carries Northwind Collectibles, Alex Chen, a phone with country and digits, and postal code 94105.
 * Step 4 shows the address card title as Northwind Collectibles.
+* Step 4 card body does not show the phone or postal code.
+
+### winner-order-US1-TC25-1: Order summary shows the full address snapshot after setup
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on Winner Order Awaiting Setup inside the address setup deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Kind | Company |
+| Company name | Northwind Collectibles |
+| First name | Alex |
+| Last name | Chen |
+| Phone | +14155550100 |
+| Address line 1 | 100 Market St |
+| Town or city | San Francisco |
+| Postal code | 94105 |
+| Country or region | United States |
+| Billing | Same as delivery |
+
+**Steps:**
+
+1. Complete Order Setup with the company delivery address from **Test data** and Same as delivery checked.
+2. Read Delivery address and Billing address on the Order summary.
+
+**Expected Results:**
+
+* Delivery shows Northwind Collectibles, Alex Chen, the phone, 100 Market St, San Francisco with 94105, and United States.
+* Billing matches Delivery.
+* The values are the full snapshot, not the lean picker card body alone.
 
 ---
 
@@ -824,7 +870,7 @@
 
 ## Reconciliation
 
-**Run:** Blind suite reading 2026-09-22 for change `add-winner-address-phone-and-kind` capability `grade10-site/auction/winner-order`. Read isolated bundle under `/tmp/phone-kind-blind/` (`proposal.md`, `decisions.md`, `ui-design.md`, `prd-post-bidding-order-setup.md`, `winner-order/outline.md`, `winner-order/user-journeys.md`, `winner-order/feature-tcs-existing.md`) and store shape docs `docs/governance/specs-to-test-cases.md`, `.claude/skills/spec-to-tcs/SKILL.md`. Denied: every `## Requirements` section; durable `openspec/specs/**` beyond the isolated Purpose/Feature set excerpts; `openspec/changes/archive/`; `/tmp/phone-kind-scenarios/` and any scenario draft.
+**Run:** Blind suite re-read 2026-09-22 for change `add-winner-address-phone-and-kind` capability `grade10-site/auction/winner-order` after Q15 Order summary full-snapshot decision. Prior same-day letter dispositions kept; Order summary finding added.
 
 | Finding | Disposition |
 | --- | --- |
@@ -836,6 +882,7 @@
 | Company → Personal switch-back | **Raised, folded into spec** as `winner-order-SC-198` |
 | Picker card titles personal vs company | Folded as `winner-order-SC-192`, `winner-order-SC-193` |
 | Picker card body omits postal code and phone | Folded as `winner-order-SC-202` |
+| Order summary shows full snapshot (company, name, phone, postal) | Folded as `winner-order-SC-203`; case `winner-order-US1-TC25-1` |
 | Optional line 2 / state; no Apt field | Folded as `winner-order-SC-195`, `winner-order-SC-196` |
 | Billing Add Address same phone/kind rules | Folded as `winner-order-SC-199`, `winner-order-SC-200` |
 | One-time address at the five-address cap still collects phone/kind | Folded as `winner-order-SC-194`; cases `winner-order-US12-TC1-1`–`TC3-1` |

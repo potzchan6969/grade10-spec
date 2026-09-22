@@ -17,6 +17,7 @@ See [proposal.md](./proposal.md) for why.
   validity refuse
 - Company Name required only for company; cleared on personal confirm
 - No Apt./Suite/Building on the form surface
+- Picker cards stay lean; Order summary uses a full address `summary` snapshot
 
 **Non-Goals:**
 
@@ -24,6 +25,7 @@ See [proposal.md](./proposal.md) for why.
 - Hard libphonenumber validity refuse
 - Billing Country/Region catalogue parity (PRD ❓)
 - Account address book or other site-wide address forms
+- Putting phone or postal on the setup picker RadioCard body
 
 ## Decisions
 
@@ -36,7 +38,8 @@ locality. Implementation choices:
 | Soft refuse | Form soft-refuses empty phone / company / required locality on submit when the application has not supplied `errors`; application errors still win | Application-only validation with no local refuse; hard libphonenumber refuse |
 | Non-E.164 storage | Confirm reports / snapshot keeps the entered phone string; E.164 when `parsePhoneNumber` succeeds | Drop digits; refuse confirm |
 | Personal confirm | `onConfirm` clears `company` when kind is personal | Persist hidden company name into the snapshot |
-| Picker card body | Preview formats lines as street, city/region, country — omits postal and phone | Full formatted address including postal and phone on the card |
+| Picker card body | Preview formats picker `lines` as street, city/region, country — omits postal and phone | Full formatted address including postal and phone on the picker card |
+| Order summary snapshot | Preview `summary` / confirm payload includes company when company, recipient name, phone, street, locality with postal, country | Reusing lean picker `lines` on Order summary |
 | Apt. field | Do not render Apt./Suite/Building; values may keep an empty `apartment` key for type stability until a later cleanup | Collect Apt. on this form |
 | Catalogue | Country/Region list stays owned by the country-region change; this change does not retarget it | Coupling phone work to billing catalogue parity |
 | i18n | Preview keeps English stand-ins; `grade10-site` answers keys in `@grade10/i18n` when wiring setup | Hard-coding production copy only in the SPA |
