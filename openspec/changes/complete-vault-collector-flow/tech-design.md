@@ -10,13 +10,15 @@ for what the interview settled; the journeys are beside each capability under
   `cases/transitions.ts` the only writer of a status; a collector SPA in
   `packages/vault/frontend`, a console in `packages/vault/admin-frontend`;
   `cases.accept`, `cases.decline`, `cases.cancel` and `cases.requestRelease`
-  already served and unreached by any screen
-- **The two reads** — `cases.mine` answers `vaultCaseSchema` rows, which carry
-  the status and the appointment and no offer, no due date and no events;
+  served and unreached by any screen. The vault holds no production case, so a
+  contract half ships with its expand half and a wire field is renamed rather
+  than aliased
+- **The two reads** — `cases.mine` answers `vaultCaseSchema` rows, carrying the
+  status and the appointment and no offer, no due date and no events;
   `caseDetailSchema` answers `asOf`, the case, offers, events, packets,
   custody, payout, `repayments`, `due` and `paymentInstructions: string | null`,
-  the last read off `packages/app-env/src/legalIdentity.ts`, whose seven fields
-  are null but the two names and refuse production minting through
+  the last off `packages/app-env/src/legalIdentity.ts`, whose seven fields are
+  null but the two names and refuse production minting through
   `documents/legalEntity.ts` (`LEGAL_IDENTITY_UNSET`). `caseEventSchema.details`
   is `Unknown` on the wire
 - **Mail** — twenty-four `NOTIFY_KINDS` (`notify/vocabulary.ts`), copy as a
@@ -26,16 +28,15 @@ for what the interview settled; the journeys are beside each capability under
   `notification_retries`, whose facts are `amountMinor`, `notifyAt` and
   `packetId`. `@grade10/email/render` publishes `BaseLayout` and
   `renderProductEmail`, `@grade10/email` publishes `PermanentEmailSendError`,
-  which the auction's `sweeps/claim.ts` parks on and the vault does not read,
-  and the auction renders its letter in the worker (`AuctionLetter.tsx`,
-  inline styles). The store's `apps/emails` is a preview site with no vault
-  letters and no test script
+  which the auction parks on and the vault does not read, and the auction
+  renders its letter in the worker (`AuctionLetter.tsx`, inline styles). The
+  store's `apps/emails` is a preview site with no vault letters and no tests
 - **The calendar file exists** — `buildCalendarFile` in
   `packages/appointment/contracts/src/calendar.ts` writes a `VEVENT` with a
-  `UID`, a `SEQUENCE` and `METHOD:CANCEL` on a cancelled status, and the
-  diary's `calendarAttachment` mints `<bookingId>@grade10-appointments` with
-  the booking's own revision. `escapeCalendarText` escapes three of the four
-  marks it names: `;` is replaced by itself. The vault's booking mail attaches
+  `UID`, a `SEQUENCE` and `METHOD:CANCEL`, and the diary's
+  `calendarAttachment` mints `<bookingId>@grade10-appointments` with the
+  booking's own revision. `escapeCalendarText` escapes three of the four marks
+  it names: `;` is replaced by itself. The vault's booking mail attaches
   nothing
 - **Erasure** — `requestErasure(db, userId, actor)` in
   `packages/grade10-auth/backend/src/erasureRequests.ts` writes
@@ -46,24 +47,21 @@ for what the interview settled; the journeys are beside each capability under
   `AUTH_SERVICE`, whose entrypoint resolves the caller from the request headers
   (`lookupUsers`, `erasureCleared`); the vault's `erasureStatus(db, userId)`
   answers `holds` and `remaining`
-- **Audit** — the elevated ladder writes a chain row for any call carrying
-  `auditDetails`, and `elevatedRoute` serves grant-gated bytes through the same
-  sink; a collector reading their own document writes `recordDocumentRead`
-  (`documents/serve.ts`) and no chain row
+- **Audit and bytes** — the elevated ladder writes a chain row for any call
+  carrying `auditDetails` and `elevatedRoute` serves grant-gated bytes through
+  the same sink, while a collector reading their own document writes
+  `recordDocumentRead` (`documents/serve.ts`) and no chain row
 - **Storybook** — none here. The store's `apps/preview` is the plain-Vite host
   shape: Storybook 10.5.4 with `addon-a11y`, `addon-docs`, `addon-vitest` and
   `@vitest/browser-playwright`. Both application Vite configs carry
-  `reactRouter` and the serving worker's plugins, which a Storybook builder
-  cannot load
+  `reactRouter` and the serving worker's plugins, which no Storybook builder
+  loads
 - **Tests** — `docs/conventions/backend.md` § Tests prove the service and
   repository seams. Both vault and auth backend suites include
   `test/**/*.test.ts` only, and auth's runs on node. No `/vault/dev/*` route
   exists; auth's `magicLinkOutbox` is a keyed `auth_kv` row with a TTL.
   `scripts/e2e/start-isolated.sh` starts neither the vault nor the diary, and
   e-kyc has no gateway prefix and no health address to probe
-- **Pre-launch** — the vault holds no production case, so a contract half ships
-  with its expand half and a wire field is renamed rather than aliased, as
-  `add-multi-store-appointments` did
 
 ## Goals / Non-Goals
 
@@ -111,8 +109,7 @@ fact lives.
   guarded by `isUniqueViolation` from `@grade10/postgres`, eight attempts, then
   a throw by name. A unique violation aborts the transaction it lands in, so
   the case row is inserted before `openCase`'s transaction and the item joins
-  it inside
-- **Never reused** is what the unique index says; a reference spent on an
+  it inside. Never reused is what the index says, and a reference spent on an
   abandoned draft costs nothing out of 31⁶
 - **Shown** in the case header, the list card, the sent screen, the signing
   header, the console's case header and every letter's subject line, and
@@ -121,10 +118,9 @@ fact lives.
   `termKind: "reference"`. **Never in a URL**: routes, links and `CASE_PATH`
   keep the id
 - Alternatives rejected: retrying inside one transaction, which a unique
-  violation leaves aborted, so the retry cannot run and `openCase` rolls back;
-  a reference derived from the id, which cannot be reissued on a clash; one
-  issued at submit, leaving the column nullable on a draft; a sequence, which
-  leaks volume at the counter
+  violation leaves aborted, so `openCase` rolls back; a reference derived from
+  the id, which cannot be reissued on a clash; one issued at submit, leaving
+  the column nullable on a draft; a sequence, which leaks volume
 
 ### Every collector-facing fact is one pure function over the scalars every surface has
 
@@ -159,8 +155,6 @@ The spec governs what each fact says; this is where it is computed.
   Stalled; approved and bound → Verified; declined → Refused; expired,
   withdrawn → Lapsed. The console's `IdentityPanel` and the Your data card call
   it
-- **Tested as a table** — one row per chip, stage, lane and fact, with `asOf`
-  on both sides of every deadline
 - Alternatives rejected: the detail bundle as the input, which the home card's
   `cases.mine` cannot fill; a `standing` field on the wire, which two detail
   procedures compute twice; a status per fact, the decision's own rejection
@@ -172,11 +166,11 @@ what refuses them.
 
 - **The fields** — `LEGAL_IDENTITY_FIELDS` drops `paymentInstructions` and
   gains `fpsId` and `bankAccount`, both `string | null`, neither blocking; the
-  payee is `lenderLegalName`, already on file, and the currency is the case's.
-  `check:libs` names both unset on every run through `unset()`
+  payee is `lenderLegalName`, already on file. `check:libs` names both unset on
+  every run through `unset()`
 - **The wire** — `caseDetailSchema.paymentInstructions` becomes
-  `howToPay: NullOr({ payee, fpsId, bankAccount })`, null on every case but a
-  live loan; the transfer reference is `case.reference`, already on the payload
+  `howToPay: NullOr({ payee, fpsId, bankAccount, reference })`, null on every
+  case but a live loan; `reference` is the case reference
 - **`printedValue(ports, field)`** in
   `packages/vault/backend/src/legal/printed.ts` is the primitive: production
   and null throws `LEGAL_IDENTITY_UNSET` naming the field, any other
@@ -204,9 +198,8 @@ what refuses them.
 The spec governs the confirmations; this is what changes.
 
 - **The client** — `packages/vault/frontend/src/core/api/VaultApi.ts` gains
-  `accept`, `decline` and `cancel` over the three procedures;
-  `requestRelease` is already there, and the fixture transport answers all four
-  from the same fixture cases
+  `accept`, `decline` and `cancel`; `requestRelease` is already there, and the
+  fixture transport answers all four from the same fixture cases
 - **Accept is a mounted dialog** held on a boolean, per
   `docs/conventions/dialogs.md`: it carries the terms, which `Confirmation` has
   no slot for. Decline, Cancel and Ask for it back are words and one effect, so
@@ -271,20 +264,18 @@ The spec governs what the page names and refuses; this is who answers.
 
 - **`cases.yourData`** (authed) answers the retention classes off
   `packages/app-env/src/retention.ts`, `identityStanding` over
-  `kyc.latestForUser`, the collector's sealed documents paged by case, the
-  vault's own `holds` from `erasure/eraseUser.ts` `erasureStatus`, and the open
-  request from `AUTH_SERVICE.ownErasureStatus(headers)`. The holds sit beside
-  the request, so a person whose ask is refused reads why on the same card
+  `kyc.latestForUser`, the sealed documents paged by case, the vault's own
+  `holds` from `erasure/eraseUser.ts` `erasureStatus`, and the open request
+  from `AUTH_SERVICE.ownErasureStatus(headers)` — the holds beside the request,
+  so a refused ask reads its reason on the same card
 - **`cases.requestErasure`** (authed, mutation) refuses `ERASURE_HELD` with the
   holds in words while any stand, then calls
   `AUTH_SERVICE.requestOwnErasure(headers)`; `cases.cancelErasure` calls
   `cancelOwnErasure(headers)`. All three binding methods are new on
-  `packages/grade10-auth/backend/src/entrypoint.ts` and resolve the person from
-  the session the headers carry, as `lookupUsers` does, so the caller cannot
-  name another user
-- **All three are idempotent** — a second request answers the open row's
-  `executeAfter` rather than `ERASURE_ALREADY_REQUESTED`, and a cancel with no
-  open row is a no-op rather than `ERASURE_NO_REQUEST`
+  `packages/grade10-auth/backend/src/entrypoint.ts`, resolve the person from
+  the session the headers carry as `lookupUsers` does, and are idempotent: a
+  second request answers the open row's `executeAfter` rather than
+  `ERASURE_ALREADY_REQUESTED`, and a cancel with no open row is a no-op
 - **A self-filed row sets no ban**, and self-ness is `actor.id === userId`, so
   `requestErasure` takes no new parameter. `cancelErasure` lifts the ban only
   where `open.requestedBy !== userId`, so a self-cancel cannot hand back an
@@ -303,27 +294,25 @@ The spec governs what the page names and refuses; this is who answers.
 - **Bounded in bytes** — the route sums the objects' recorded sizes before the
   first read and refuses `TOO_LARGE` by name past the ceiling, because the
   writer lifted from `packages/wallet-pass/src/apple/zip.ts` into
-  `packages/utils/src/zip.ts` buffers whole and speaks no ZIP64. The lift
-  rewrites the comment off its pkpass reasons, carries the pkpass fixture, and
-  adds the `@grade10/utils/zip` export and its Handbook card row
+  `packages/utils/src/zip.ts` buffers whole and speaks no ZIP64. The lift adds
+  the `@grade10/utils/zip` export and its Handbook card row
 - **The chain rows are the single route's** — each document appends
   `recordDocumentRead` through `documents/serve.ts` before its bytes go, and
   the download appends one `vault.documents.setDownloaded` row — who, when, how
   many — through the context's audit sink, as Q24 asks
-- Alternatives rejected: a `?caseIds=` parameter, which re-establishes every
-  bound the page already had over a list the server already knows; a session
-  tier on auth's tRPC, a second ladder for one procedure; auth judging the
-  vault's holds, which `docs/architecture/account-data.md` refuses; a
-  `filed_by_self` column, where `requested_by = user_id` is the fact
+- Alternatives rejected: a `?caseIds=` parameter, re-establishing a bound over
+  a list the server already knows; a session tier on auth's tRPC, a second
+  ladder for one procedure; auth judging the vault's holds, which
+  `docs/architecture/account-data.md` refuses; a `filed_by_self` column, where
+  `requested_by = user_id` is the fact
 
 ### The console reads counts and sums from the queries it already runs
 
 - **`admin.queueCounts`** — one `GROUP BY status` folded onto the seven cuts
   and nothing else, under `vault:read`, with one instant and the brand's zone
-  passed in rather than read inside
-- **The Today block is the Today cut** — `admin.list` with `filter: "today"`
-  orders by `appointment_at` ascending, and the landing view mounts that query
-  with its count. No second query and no second instant
+  passed in rather than read inside. **The Today block is the Today cut**:
+  `admin.list` with `filter: "today"` ordered by `appointment_at`, mounted by
+  the landing view with its count — no second query and no second instant
 - **`admin.arrearsSummary` owns the arrears numbers** — the count and the two
   figures, folding `computeDue` over the arrears rows at one instant, bounded
   by the page size the ledger takes and refusing past it; `overdueLoans` rows
@@ -336,13 +325,12 @@ The spec governs what the page names and refuses; this is who answers.
   correction netting its row once, positive when money is out
 - **`GET /api/admin/money-ledger.csv`** (`VAULT_PATHS.moneyLedgerCsv`) on
   `elevatedRoute` under `vault:payout`, the one mechanism the vault already
-  uses for grant-gated bytes. The console passes the ledger's filter, cursor,
-  limit and `asOf` as query scalars and gets the page it shows; the chain row
-  carries all four and the row count
+  uses for grant-gated bytes. The console passes the ledger's own filter,
+  cursor and limit as query scalars and gets the page it shows; the chain row
+  writes the filter and the row count, the search's mechanism
 - **`admin.policy`** (`vault:read`) answers `lendingPolicy(brand)`,
   `accrualOf`, the reminder ladder's days and `REQUIRED_FOR_OFFER`'s unset
-  fields, so the three dialogs state the rule from the worker's own table. Each
-  is a `FormDialog` with the rule lines above the fields
+  fields, so the three dialogs state the rule from the worker's own table
 - **`admin.keyTerms`** answers the loan agreement's clause ids and headings
   from `documents/templates/loanAgreement.ts`, and `recordTermsExplained` takes
   `terms: string[]`, refusing any set short of the plan's
@@ -367,15 +355,14 @@ The spec governs what each message names; this is the shape.
   `NoticeClause` and `LicenceFooter` stay vault-side, because the licence and
   the notice are this product's legal furniture, and every money value renders
   through `amounts.ts`'s `formatMinorAmount`
-- **One file per family** under `letters/`: `offer.tsx`, `money.tsx`,
+- **One file per family** under `letters/` — `offer.tsx`, `money.tsx`,
   `notice.tsx`, `visit.tsx`, `case.tsx` and `identity.tsx`, the last for
   `identity_check_invited`, whose facts carry the collector's own secret link
 - **The catalogue** — `letters/index.ts` is
   `LETTERS: Record<NotifyKind, Letter>`, typed exhaustive over `NOTIFY_KINDS`,
-  where `Letter<F>` is
-  `(facts: F, copy: LetterCopy) => { subject, element, attachments? }` and
-  `LetterFacts` is derived from the map, so an arm is written once; `render.tsx`
-  becomes `renderVaultLetter(kind, facts)` over `renderProductEmail`
+  where `Letter<F>` is `(facts: F, copy: LetterCopy) => { subject, element,
+  attachments? }` and `LetterFacts` is derived from the map, so an arm is
+  written once; `render.tsx` becomes `renderVaultLetter(kind, facts)`
 - **The words stay injected** — `messages.ts` keeps one typed `LetterCopy` per
   kind, widened from the four flat fields to the blocks its letter carries, and
   `createEmailTranslator` still reads it, so the recorded path to
@@ -442,7 +429,8 @@ The spec governs what each message names; this is the shape.
   with a PGlite half for the case-folded prefix; `queueCounts`,
   `moneyLedger.kind` and `custodyList.totals` each with both halves;
   `repositories/reference.repo.test.ts` (the unique index, the backfill over
-  seeded rows) and `repositories/yourData.repo.test.ts`
+  seeded rows) and `repositories/yourData.repo.test.ts`; the portable suite
+  gains `suites/account.ts`
 - **Routes** (`test/routes/`) — `visit.ics` for the `UID`, the `SEQUENCE` and
   `METHOD:CANCEL` after a cancel; `documents.zip` for `caseOwner` on a
   stranger, the byte ceiling's refusal, the filter, the per-document reads and
@@ -452,21 +440,21 @@ The spec governs what each message names; this is the shape.
   self-filed row, `enforceOpenErasure` leaves a self-filed session alone. The
   entrypoint's three methods run in `apps/backend/grade10/auth/test/worker/`
   under `vitest-pool-workers`, where a `WorkerEntrypoint` runs
-- **Contracts** — `standing.test.ts` and `identityStanding.test.ts` as tables;
-  `calendar.test.ts` gains the four escapes
+- **Contracts** — `standing.test.ts` as one row per chip, stage, lane and
+  fact, with `asOf` on both sides of every deadline; `identityStanding.test.ts`
+  as a table; `calendar.test.ts` gains the four escapes
 - **SPA and console** (colocated `*.test.tsx`, `getByRole` throughout) — the
   case page per chip and per ending, each confirmation's words, the review
   step's tick, the Booked screen, Your data held and unheld; the console's
-  counts, tiles, the three dialogs' rule lines, the key-terms dialog, the
-  identity panel's six words
+  counts, tiles, the dialogs' rule lines and the identity panel's six words
 - **E2E** — one walk each in
   `apps/frontend/grade10/e2e/tests/vault/{request,offer,loan,visit,your-data}.spec.ts`,
   over new routes in `packages/vault/backend/src/routes/dev.ts` under
   `app.use("/dev/*", devOnly())` as auth's are: `POST /dev/cases/seed` drives
   `cases/transitions.ts` to the named status — no second writer and no second
-  table of what a status implies — and answers `{ caseId, reference }`;
+  table of what a status implies — and answers `{ caseId, reference }`,
   `POST /dev/sweep` takes `{ lane: "fast" | "slow" }` and runs `runSweepPass`
-  now; `GET /dev/outbox` reads the letters sent, with their attachments' names
+  now, and `GET /dev/outbox` reads the letters sent with their attachments
 - **One outbox shape for both workers** — auth's `magicLinkOutbox`, a keyed row
   with a TTL, lifts into `@grade10/worker` beside `devOnly`, and the vault's
   email channel records into it outside production
@@ -547,7 +535,7 @@ counts, the sums, the net out.
 | `AUTH_SERVICE.cancelOwnErasure(headers)` | the session's headers | void | auth's transaction; unban only where an operator filed; no open row is a no-op |
 | `admin.queueCounts` | one instant, one zone | seven integers | one read, no lock |
 | `admin.arrearsSummary` | one instant, one page | the count and two figures, or a refusal past the ceiling | one bounded fold |
-| `GET /api/admin/money-ledger.csv` | the ledger's filter, cursor, limit, `asOf` | `text/csv` of one page | `elevatedRoute`, `vault:payout`, one chain row |
+| `GET /api/admin/money-ledger.csv` | the ledger's own filter, cursor and limit | `text/csv` of one page | `elevatedRoute`, `vault:payout`, one chain row |
 
 Example — a self-filed ask on a held case. `cases.requestErasure` reads
 `erasureStatus` → `holds: ["a case is in custody"]` → answers `ERASURE_HELD`
@@ -565,7 +553,7 @@ applies the ban.
 
 | Surface | Change | Consumers that adapt |
 | --- | --- | --- |
-| `caseDetailSchema` | **BREAKING** `paymentInstructions: string \| null` → `howToPay: { payee, fpsId, bankAccount } \| null`; additive `repayments[].balanceAfterMinor`, `notice`, `forfeiture`, `ended`, `reminders` | `packages/vault/frontend/src/features/custody/cases/{domain,data}` — the model, the mapper, the fixture transport |
+| `caseDetailSchema` | **BREAKING** `paymentInstructions: string \| null` → `howToPay: { payee, fpsId, bankAccount, reference } \| null`; additive `repayments[].balanceAfterMinor`, `notice`, `forfeiture`, `ended`, `reminders` | `packages/vault/frontend/src/features/custody/cases/{domain,data}` — the model, the mapper, the fixture transport |
 | `vaultCaseSchema` | additive `reference`, `offerExpiresAt`, `dueAt`, `endedAs` | the `cases.mine` and `admin.list` readers in both SPAs |
 | `cases.submit` | input gains `collectionStatement` | the wizard's third step |
 | `cases.yourData`, `cases.requestErasure`, `cases.cancelErasure` | new, authed | the Your data page |
@@ -589,9 +577,8 @@ applies the ban.
   each attempt is its own insert, so the loser redraws, and the ninth failure
   throws by name
 - **[A staging letter's placeholders reach a real inbox]** → staging sends only
-  to the seeded addresses the e2e stack owns; production refuses at the render,
-  before the act's transaction opens, so no row is committed that an unsendable
-  letter describes
+  to the seeded addresses the e2e stack owns, and production refuses at the
+  render, before the act's transaction opens
 - **[The reminder pass raises on every due row every quarter hour]** → the pass
   renders its letter once at its head, and a `LEGAL_IDENTITY_UNSET` there
   refuses the whole pass by name and counts once
@@ -604,15 +591,13 @@ applies the ban.
   `enforceOpenErasure` skips a request the person filed themselves, tested on
   the next session read
 - **[A phone opens a stale visit]** → the `UID` and the sequence are the
-  diary's own, so one visit has one event and a client keeps the newest; a
-  cancel sends `METHOD:CANCEL` from the same address
+  diary's own, so one visit has one event and a cancel sends `METHOD:CANCEL`
+  from the same address
 - **[A zip buffers more than the worker can hold]** → the route sums the
   recorded object sizes before the first read and refuses `TOO_LARGE` by name
 - **[A CSV becomes an unbounded export]** → the route takes the ledger's cursor
-  and limit, so it can answer no more than one page; the chain row says the
-  filter, the instant and how many
-- **[The Storybook build slows the test lane]** → its own job, sharded nowhere,
-  and `check:admin-bundle` already pays a comparable build once
+  and limit, so it can answer no more than one page, and the chain row says the
+  filter and how many
 
 ## Migration Plan
 
@@ -629,8 +614,7 @@ applies the ban.
 4. One pull request per Legal-owed value, each redeploying every `app-env`
    reader: Finance owns `fpsId` and `bankAccount` in `legalIdentity.ts`, Legal
    owns `licenceWording`, `licenceNumber` and the complaints contact there and
-   `COLLECTION_STATEMENT_VERSION` in `documents/plan.ts`. Until Finance
-   answers, the how-to-pay block prints its placeholders outside production and
-   the money acts refuse in it; intake is not held, because the review step
-   shows "Being prepared" and records the version it showed
+   `COLLECTION_STATEMENT_VERSION` in `documents/plan.ts`. Until they answer the
+   block prints its placeholders outside production and the money acts refuse
+   in it; intake is not held, because the review step shows "Being prepared"
 5. Enable the three new services in `start-isolated.sh` with the same commit
