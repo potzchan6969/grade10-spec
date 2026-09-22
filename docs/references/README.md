@@ -35,3 +35,8 @@ change moves through, the round on every artifact, the screens, the messages
 and the rails — and the shape the `stage-changes-and-notify-hands` and
 `run-a-round-on-every-artifact` changes and their follow-on changes build
 from.
+
+[`cross-sell-walkthrough.md`](cross-sell-walkthrough.md) is one feature walked
+through every role of that workflow with an agent standing in for each hand —
+what each step cost, what the readers caught and what refused — and the source
+the `address-each-hand-in-the-round` change builds from.
