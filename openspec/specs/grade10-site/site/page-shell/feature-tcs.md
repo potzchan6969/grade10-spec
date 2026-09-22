@@ -1,7 +1,7 @@
 # grade10-site/site/page-shell Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-rules r3.0
+**Drafts styled:** 2026-09-21, tcs-rules r3.0
 
 ## grade10-site-site-page-shell-US1: Collector opens any surface inside the site shell
 
@@ -189,9 +189,13 @@ shifting under me.
 ## grade10-site-site-page-shell-US3: Collector reaches account destinations from the header
 
 **As a** collector,
-**I want** Sign In when I am signed out, and an account menu of Profile, My
-Orders, My Auctions, and Sign out when I am signed in,
-**so that** one place in the header takes me where I can go for this launch.
+**I want** Sign In when I am signed out, and when I am signed in an account
+menu that shows my sign-in email with its small initial avatar above My
+Auctions and Sign Out on auction launch, and My Orders, My Auctions,
+Membership, and Sign Out once Store answers, with Cart in the bar only once
+Store answers,
+**so that** one place in the header takes me where I can go for this launch,
+without a second auction-orders link.
 
 ### grade10-site-site-page-shell-US3-TC1-1: A signed-out collector gets Sign In
 
@@ -338,6 +342,186 @@ Orders, My Auctions, and Sign out when I am signed in,
 
 * The menu offers Profile, My Auctions, and Sign out.
 * The menu does not offer My Orders.
+
+### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, profile not carried, on an auction-launch surface, Store not yet answered) is on the site.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | The signed-in collector's email address |
+
+**Steps:**
+
+1. Open the account menu from the header.
+
+**Expected Results:**
+
+* The menu label shows `<collector email>` with a small (xs) initial avatar above the items.
+* The menu lists only My Auctions and Sign Out, in that order.
+* The menu does not include Profile, My Orders, Membership, or Cart.
+
+### grade10-site-site-page-shell-US3-TC7-1: Store-launch account menu adds My Orders and Membership ahead of Sign Out
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, profile not carried, on a surface once Store answers) is on the site.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | The signed-in collector's email address |
+
+**Steps:**
+
+1. Open the account menu from the header.
+
+**Expected Results:**
+
+* The menu label shows `<collector email>` with its small (xs) initial avatar above the items.
+* The menu lists My Orders, My Auctions, Membership, then Sign Out, in that order.
+* Cart is present in the header bar and the menu does not include Profile.
+
+### grade10-site-site-page-shell-US3-TC8-1: Sign Out item reads in Title Case
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in) is on the site with the account menu open.
+
+**Steps:**
+
+1. Read the label of the last item in the account menu.
+
+**Expected Results:**
+
+* The item reads "Sign Out" in Title Case, not "Sign out" or "SIGN OUT".
+
+### grade10-site-site-page-shell-US3-TC9-1: Account menu label falls back when no sign-in email is supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, no sign-in email available to the header) is on the site.
+
+**Steps:**
+
+1. Open the account menu from the header.
+
+**Expected Results:**
+
+* The menu label shows the configured account-menu fallback label instead of an email, still above My Auctions and Sign Out.
+
+### grade10-site-site-page-shell-US3-TC10-1: Activating Membership invokes its handler without opening a withheld route
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, on a surface once Store answers, Membership handler and copy supplied) is on the site.
+
+**Steps:**
+
+1. Open the account menu.
+2. Activate Membership.
+
+**Expected Results:**
+
+* The supplied Membership handler is invoked.
+* The browser does not navigate to `/membership`, `/join`, or any other membership address.
+
+### grade10-site-site-page-shell-US3-TC11-1: Profile joins first, ahead of My Orders and Membership, once carried
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-site-page-shell-US-03
+
+**Pre-conditions:**
+
+* customer(signed in, profile carried, on a surface once Store answers) is on the site.
+
+**Steps:**
+
+1. Open the account menu from the header.
+
+**Expected Results:**
+
+* The menu lists, in order, Profile, My Orders, My Auctions, Membership, then Sign Out.
 
 ---
 
@@ -783,14 +967,22 @@ auction-only or full primary nav.
 * Auction-first primary nav omits Store Locator until the shop is open.
 * Help opens the documentation site in a new tab.
 * The durable host address stays open until Product confirms it.
-* Signed-in account entry opens a menu (My Auctions, Sign out, plus Profile
-  once the profile is carried and My Orders once Store answers), not the
-  profile directly; the header offers Sign out from that menu as well as the
-  profile wherever it is carried.
+* Signed-in account entry opens a menu, the sign-in email with its small
+  initial avatar above the items, offering My Auctions and Sign Out on
+  auction launch, plus Profile once carried, My Orders and Membership once
+  Store answers — not the profile directly; the header offers Sign Out from
+  that menu as well as the profile wherever it is carried.
 * Cart is absent until the site answers the Store cart drawer, then appears on
   every surface it answers, including Auction; visibility does not depend on
   session state.
 * The account menu's item order under every combination of {Profile carried,
   Store answers} is fully specified: Profile (when carried), My Orders (when
-  Store answers), My Auctions, Sign out — in that fixed order, each omitted
-  independently when its own condition is not met.
+  Store answers), My Auctions, Membership (when Store answers), Sign Out — in
+  that fixed order, each omitted independently when its own condition is not
+  met.
+* Whether "KYC stays out" is gated by a handler or unconditional: unconditional,
+  unaffected by the account-menu launch composition.
+* Membership requires both its handler and its destination copy before it
+  joins the menu; the handler-gating granularity for individual items (My
+  Orders vs. Membership joining independently) is `shared/ui/site-chrome`'s to
+  state, not this capability's.

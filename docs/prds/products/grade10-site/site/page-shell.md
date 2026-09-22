@@ -35,7 +35,7 @@ chrome, including on auction-first launch.
 
 ## Account Menu
 
-🚧 **Account menu** — signed in, an initial avatar sits above the email, above
+**Account menu** — signed in, an initial avatar sits above the email, above
 the items: My Auctions and Sign Out on auction launch; My Orders, My Auctions,
 and Membership once Store answers, with Sign Out always last. Profile joins
 first, ahead of My Orders, wherever it is carried — unchanged from today, and
