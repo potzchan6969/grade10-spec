@@ -493,18 +493,16 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 - **`actual` only** — `--include-draft` takes drafts and amber-bands them; a `deprecated` case never crosses
 - **Automated is left out too** — a case whose Automation status is `automated` never crosses either, unless `--include-automated` says otherwise; the count crosses regardless, said in the run's own printout and on the Summary row's `Automated left out` column, and the printout names each case it left out with what decides it
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
-- **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile`, `Notes`, `Tester` and `Date` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
+- **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile` and `Notes` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
 - **A journey is a row, not a column** — a banner above the cases that walk it, with a collapsible group beneath. Sorting happens inside the tab's filter view, which leaves the rows where they are
 - **Four surfaces, one vocabulary** — `to_do`, `pass`, `fail`, `blocked`, `skipped`, `n/a`. Every cell starts at `to_do` so the Summary counts down, except an automation column on a case whose **Automation status** is `manual`, which starts at `n/a`. `n/a` is a surface that cannot answer; `skipped` is an answer somebody chose not to take, and only `n/a` is left out of the pass rate
-- **The Summary tab is the register** — four rows per run, one per surface, each carrying the run's id, date, name, selection and commit, and counting results with live formulas
+- **The Summary tab is the register** — four rows per run, one per surface, grouped under the first. Identity and the commit sit once, on that first row, with the SHA at the far right. No filter view: a register is read, not sorted
 - **Nothing returns** — no result reaches the store, and no suite carries one
 - **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
 - **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet
 - **Renaming or deleting a tab cannot be prevented** — Sheets protects cells, not tabs. The Summary row then reads `tab deleted`, and its provenance survives
 
-`Tester` and `Date` are filled in by whoever marks the row.
-
-❓ Open: stamping the date and the tester automatically, which needs every marker inside one Google Workspace domain; recording a tab somebody deleted.
+❓ Open: recording a tab somebody deleted.
 
 ## See Also
 
