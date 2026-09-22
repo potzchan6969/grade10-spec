@@ -54,10 +54,10 @@ describe("a wait on the change's record", () => {
 });
 
 /** `spec.md` is two passes over one file: the outline fixes the anchors, and
- * the requirements come back after the blind suite. Read by presence, the file
- * ended the wait the moment the outline was written — and the reader refused
- * the outline as a delta naming no requirement. Between them, the one state
- * every change passes through failed two gates at once. */
+ * the requirements come back after the blind suite. The wait on `specs` now
+ * survives both — the outline and the written requirements — until its author
+ * lifts it (`shared-planning-agent-rounds-SC-101`); the one gate that still
+ * fires here is the store rule refusing an outline that declared no wait. */
 describe("a change stopped at the outline", () => {
   const OUTLINE = [
     "## Purpose",

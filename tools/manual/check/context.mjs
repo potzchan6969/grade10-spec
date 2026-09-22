@@ -326,7 +326,18 @@ export function createContext(roots, report, { specs, changes, stories }) {
   }
 
   const schemaCache = new Map();
+  // Every capability directory a change carries, walked once per change and
+  // read by the changing set and by `journeysOf`'s two callers alike.
+  const capabilityCache = new Map();
+  const capabilitiesIn = (change) => {
+    const held = capabilityCache.get(change.dir);
+    if (held) return held;
+    const read = capabilitiesOf(roots.store, join(roots.store, change.dir));
+    capabilityCache.set(change.dir, read);
+    return read;
+  };
   return {
+    capabilitiesIn,
     roots,
     specs,
     // The slice of a snapshot `resolveRef` reads, built once for all pages.
@@ -336,12 +347,9 @@ export function createContext(roots, report, { specs, changes, stories }) {
     // directory — its journeys, its outline or its delta — so a page written
     // first resolves (`shared-planning-agent-rounds-SC-100`).
     changing: new Set(
-      changes.flatMap((one) => [
-        ...one.deltas.map((d) => d.spec),
-        ...capabilitiesOf(roots.store, join(roots.store, one.dir)).map(
-          (d) => d.spec,
-        ),
-      ]),
+      changes.flatMap((one) =>
+        capabilitiesIn(one).map((capability) => capability.spec),
+      ),
     ),
     stories,
     referenced: new Set(),
@@ -425,10 +433,10 @@ export const message = (cause) =>
  * in exactly that state: the file that says who walks a capability went
  * unchecked until somebody else added a delta beside it.
  */
-export function journeysOf(root, changes) {
+export function journeysOf(ctx, changes) {
   const found = [];
   for (const change of changes) {
-    for (const one of capabilitiesOf(root, join(root, change.dir))) {
+    for (const one of ctx.capabilitiesIn(change)) {
       if (!one.files.has(JOURNEYS)) continue;
       found.push({
         change: change.id,

@@ -169,7 +169,7 @@ It is written by whoever is held up, and read two ways. The [Pending](/pending) 
 
 Every wait:
 
-- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. `pnpm check:manual` refuses a wait on an artifact the change has already written, so the line does not outlive the wait, and one naming an artifact the schema does not declare, which would reach no worklist at all.
+- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. A wait may stand on an artifact the change has written - a design that waits on its frame - and ends only when its author deletes the line; `pnpm check:manual` refuses a wait that says nothing, and one naming an artifact the schema does not declare, which would reach no worklist at all.
 - **Carries the date it started.** Pending dates the change, not the wait, so a wait that has run for months is only visible in its own line. A proposal that has waited that long is one to drop or to answer.
 - **Lowers no bar.** The page the change marks still needs its 🚧 line, the proposal still needs its `## Why`, and the moment a delta exists the requirements are validated in full.
 

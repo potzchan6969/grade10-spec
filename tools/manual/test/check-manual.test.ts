@@ -672,7 +672,7 @@ describe("one requirement two changes both fold", () => {
     );
     expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([
       "openspec/changes/first/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` is also folded by `second` (ADDED) — whichever archives second reverts the first",
-      "openspec/changes/second/specs/demo-product/alpha/spec.md — ADDED `Alpha does things` is also folded by `first` (MODIFIED) — whichever archives second reverts the first",
+      "openspec/changes/second/specs/demo-product/alpha/spec.md — ADDED `Alpha does things` is also folded by `first` (MODIFIED) — archiving this one second fails outright, since the fold refuses to add a name that exists",
     ]);
   });
 

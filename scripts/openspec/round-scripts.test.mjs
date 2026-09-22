@@ -1202,6 +1202,61 @@ test("shared-planning-agent-rounds-SC-96 - an application group's row lands with
   assert.match(roundsOf(root), /apps\/site\/src\/listing\.test\.ts/);
 });
 
+test("shared-planning-agent-rounds-SC-96 - an application group's row lands from inside the application repository, the store its submodule, with no --app-root", () => {
+  const { remote } = applicationGroup();
+  // The application repository: a fresh clone holding the store as its
+  // submodule, and the test the row names.
+  const app = mkdtempSync(join(tmpdir(), "grade10-super-"));
+  const outer = (...args) =>
+    execFileSync(
+      "git",
+      [
+        "-c",
+        "user.email=erin@test",
+        "-c",
+        "user.name=erin",
+        "-c",
+        "protocol.file.allow=always",
+        ...args,
+      ],
+      { cwd: app, encoding: "utf8", stdio: ["ignore", "pipe", "pipe"] },
+    );
+  outer("init", "--quiet", "--initial-branch=main", ".");
+  outer("submodule", "add", "--quiet", remote, "external/grade10-spec");
+  mkdirSync(join(app, "apps/site/src"), { recursive: true });
+  writeFileSync(
+    join(app, "apps/site/src/listing.test.ts"),
+    "// shared-planning-agent-rounds-SC-57 is proved here\n",
+  );
+  const store = join(app, "external/grade10-spec");
+  execFileSync("git", ["-C", store, "config", "user.email", "erin@test"]);
+  execFileSync("git", ["-C", store, "config", "user.name", "erin"]);
+
+  const result = landGroup(store, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(roundsOf(store), /apps\/site\/src\/listing\.test\.ts/);
+});
+
+test("shared-planning-agent-rounds-SC-97 - an --app-root that is not a directory is refused, saying what is wrong with it", () => {
+  const { root } = applicationGroup();
+  const missing = join(tmpdir(), "nowhere-such-clone");
+
+  const result = landGroup(root, [
+    "--tests",
+    "`shared-planning-agent-rounds-SC-57`: apps/site/src/listing.test.ts",
+    "--app-root",
+    missing,
+  ]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /--app-root .*not there/);
+  assert.doesNotMatch(result.stderr, /or pass --app-root/);
+});
+
 test("shared-planning-agent-rounds-SC-97 - an application group's path the clone holds no file at is refused, naming the path and the root", () => {
   const { root, app } = applicationGroup();
 

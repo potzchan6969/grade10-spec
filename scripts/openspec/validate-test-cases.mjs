@@ -60,6 +60,7 @@ import {
   revCmp,
   revText,
   ROOT as STORE_ROOT,
+  sectionRange,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -98,36 +99,43 @@ const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
 
 /**
- * The Manual table's rows, held to the tests they credit. The table sits under
- * `## Reconciliation`, with a legend above it binding each name a row uses to
- * a path — `- <name> - \`<path>\`, in this store` — and a row's Why names the
- * tests that prove part of its case in the legend's words. A legend path this
- * store holds is read for the row's case id, and a row whose test cites no
- * such id is refused naming the path and the id
- * (`shared-planning-agent-rounds-SC-106`); a path this store does not hold —
- * the application repository's walk — is skipped, since its ids are checked
- * where that repository ticks the group.
+ * Where the Manual table sits. It belongs under `## Reconciliation`, where the
+ * archive's strip reads it; a `### Manual` anywhere else is refused where it
+ * is written (`shared-planning-agent-rounds-SC-103`). Returns the heading's
+ * line inside the reconciliation, or -1 where there is none.
+ */
+function checkManualPlacement(lines, err) {
+  const reconciliation = sectionRange(lines, 2, "Reconciliation");
+  if (!reconciliation) return -1;
+  let inside = -1;
+  for (let i = 0; i < lines.length; i++) {
+    if (!/^###\s+Manual\s*$/.test(lines[i])) continue;
+    if (i > reconciliation.start && i < reconciliation.end) {
+      inside = i;
+      continue;
+    }
+    err(
+      i + 1,
+      "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
+    );
+  }
+  return inside;
+}
+
+/**
+ * The Manual table's rows, held to the tests they credit. A legend above the
+ * table binds each name a row uses to a path — `- <name> - \`<path>\`, in
+ * this store` — and a row's Why names the tests that prove part of its case
+ * in the legend's words. A legend path this store holds is read for the row's
+ * case id, and a row whose test cites no such id is refused naming the path
+ * and the id (`shared-planning-agent-rounds-SC-106`); a legend line that says
+ * `in this store` and names no file there is refused too, since a credit
+ * nobody can check is no credit. A path in the application repository is
+ * skipped: its ids are checked where that repository ticks the group.
  */
 function checkManualRows(root, text, cases, err) {
   const lines = text.split("\n");
-  const start = lines.findIndex((line) =>
-    /^##\s+Reconciliation\s*$/.test(line),
-  );
-  if (start < 0) return;
-  // The table belongs under the reconciliation, where the archive's strip
-  // reads it; one anywhere else is refused where it is written
-  // (`shared-planning-agent-rounds-SC-103`).
-  const astray = lines.findIndex(
-    (line, i) => i < start && /^###\s+Manual\s*$/.test(line),
-  );
-  if (astray >= 0)
-    err(
-      astray + 1,
-      "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
-    );
-  const manual = lines.findIndex(
-    (line, i) => i > start && /^###\s+Manual\s*$/.test(line),
-  );
+  const manual = checkManualPlacement(lines, err);
   if (manual < 0) return;
   const legend = new Map();
   const ids = new Set(cases.map((tc) => tc.id));
@@ -137,18 +145,29 @@ function checkManualRows(root, text, cases, err) {
     const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
     if (named) {
       const full = resolve(root, named[2]);
-      if (existsSync(full) && statSync(full).isFile())
-        legend.set(named[1].trim().toLowerCase(), {
-          path: named[2],
-          text: readFileSync(full, "utf8"),
-        });
+      if (!existsSync(full) || !statSync(full).isFile()) {
+        err(
+          i + 1,
+          `the Manual legend names \`${named[2]}\` in this store, and the store holds no file there — name the test's path, or say it is in the application repository`,
+        );
+        continue;
+      }
+      legend.set(named[1].trim(), {
+        path: named[2],
+        text: readFileSync(full, "utf8"),
+        // The name as a whole word in a row's Why, so `the test` is not
+        // found inside `the rule's test`.
+        pattern: new RegExp(
+          `(^|[^\\w'])${named[1].trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w'])`,
+          "i",
+        ),
+      });
       continue;
     }
     const row = /^\|\s*`?([\w-]+-US\d+-TC\d+-\d+)`?\s*\|(.*)\|\s*$/.exec(line);
     if (!row || !ids.has(row[1])) continue;
-    const why = row[2].toLowerCase();
     for (const [name, test] of legend) {
-      if (!why.includes(name)) continue;
+      if (!test.pattern.test(row[2])) continue;
       if (citesId(test.text, row[1])) continue;
       err(
         i + 1,

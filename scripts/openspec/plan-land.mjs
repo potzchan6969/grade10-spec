@@ -104,6 +104,7 @@ import {
   mkdtempSync,
   readFileSync,
   rmSync,
+  statSync,
   writeFileSync,
 } from "node:fs";
 import { tmpdir } from "node:os";
@@ -117,7 +118,7 @@ import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
-import { citesId } from "./lib/cites.mjs";
+import { citesId, SCENARIO_ID } from "./lib/cites.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import {
@@ -934,13 +935,18 @@ function testsCell(read, group, value) {
     );
   }
   const tree = landsHere(read) ? root : applicationRoot(read);
-  const absent = pathsIn(cell).filter((path) => !existsSync(join(tree, path)));
+  // One read of the cell: each scenario id with the paths it credits, and
+  // the paths themselves for the file check.
+  const credits = creditsIn(cell);
+  const absent = [...new Set(credits.map(({ path }) => path))].filter(
+    (path) => !existsSync(join(tree, path)),
+  );
   if (absent.length > 0) {
     fail(
       `${target}'s --tests names a path ${tree === root ? "the store" : tree} holds no file at:\n${listed(absent)}\nName each test as its path from the repository's root.`,
     );
   }
-  const uncited = creditsIn(cell).filter(
+  const uncited = credits.filter(
     ({ id, path }) => !citesId(readFileSync(join(tree, path), "utf8"), id),
   );
   if (uncited.length > 0) {
@@ -960,12 +966,14 @@ function applicationRoot(read) {
   const tree = given
     ? resolve(given)
     : git(["rev-parse", "--show-superproject-working-tree"]);
-  if (tree && existsSync(tree)) return tree;
+  if (tree && existsSync(tree) && statSync(tree).isDirectory()) return tree;
   const tag = read.entry.taskGroups.find(
     (one) => one.num === roundArtifactOf(target),
   )?.repo;
   fail(
-    `${target} is tagged \`${tag}\`, and the landing reaches no clone of it${given ? ` at ${given}` : ""} — run it from the application repository, or pass --app-root <dir>.`,
+    given
+      ? `${target} is tagged \`${tag}\`, and --app-root ${given} is ${existsSync(tree) ? "not a directory" : "not there"} — pass the directory that holds the application repository.`
+      : `${target} is tagged \`${tag}\`, and the landing reaches no clone of it — run the landing from the application repository, or pass --app-root <dir>.`,
   );
 }
 
@@ -974,7 +982,9 @@ function applicationRoot(read) {
 function creditsIn(cell) {
   const credits = [];
   for (const entry of cell.split(";")) {
-    const match = /^\s*`?([\w-]+-SC-\d+)`?\s*:\s*(.*)$/.exec(entry);
+    const match = new RegExp(
+      `^\\s*\`?(${SCENARIO_ID.source})\`?\\s*:\\s*(.*)$`,
+    ).exec(entry);
     if (!match) continue;
     for (const path of pathsIn(match[2])) credits.push({ id: match[1], path });
   }

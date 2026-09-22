@@ -346,6 +346,33 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
  *  A case carries both a count and the text of its steps and expected results:
  *  the validator judges that there is something to verify, and the run sheet
  *  carries what a tester reads. */
+/**
+ * Where a heading sits among lines: the index of the first `#`-level `level`
+ * heading reading `name` at or after `from`, or -1. A section runs from its
+ * heading to the next heading of the same or a higher level, which
+ * `sectionRange` returns as `[start, end)`; both are what the suite's
+ * validation and the archive's strip read a `## Reconciliation` by, so one
+ * finder answers both.
+ */
+export function headingAt(lines, level, name, from = 0) {
+  const re = new RegExp(`^#{${level}}\\s+${name}\\s*$`);
+  for (let i = from; i < lines.length; i++) if (re.test(lines[i])) return i;
+  return -1;
+}
+
+export function sectionRange(lines, level, name, from = 0) {
+  const start = headingAt(lines, level, name, from);
+  if (start < 0) return null;
+  const closes = new RegExp(`^#{1,${level}}\\s+\\S`);
+  let end = lines.length;
+  for (let i = start + 1; i < lines.length; i++)
+    if (closes.test(lines[i])) {
+      end = i;
+      break;
+    }
+  return { start, end };
+}
+
 export function parseSuite(text) {
   const lines = text.split("\n");
   const suite = {

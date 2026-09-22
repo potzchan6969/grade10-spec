@@ -109,7 +109,7 @@ import {
 import { walkedByNobody } from "../../tools/manual/src/store/read-specs.mts";
 import { roundsPath } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
-import { parseSuite } from "./lib/suites.mjs";
+import { parseSuite, sectionRange } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -252,18 +252,13 @@ function anchorlessScenarios(text) {
  * such heading. Sections end at the next `## ` heading, so an empty string
  * means the heading is there and says nothing — which is not the same answer. */
 function sectionBody(text, name) {
-  const out = [];
-  let inside = false;
-  for (const line of text.split("\n")) {
-    const heading = line.match(/^##\s+(.+?)\s*$/);
-    if (heading) {
-      if (inside) break;
-      inside = heading[1] === name;
-      continue;
-    }
-    if (inside) out.push(line);
-  }
-  return inside ? out.join("\n").trim() : null;
+  const lines = text.split("\n");
+  const range = sectionRange(lines, 2, name);
+  if (!range) return null;
+  return lines
+    .slice(range.start + 1, range.end)
+    .join("\n")
+    .trim();
 }
 
 /** The bullet lines of a section body, continuations folded in and whitespace

@@ -54,7 +54,7 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   // Before the guard: a change can carry journeys and no delta at all — the
   // state the product manager hands over in — and the restated copies in it
   // are checkable without a `spec.md` anywhere near them.
-  checkContext(ctx, journeysOf(ctx.roots.store, changes));
+  checkContext(ctx, journeysOf(ctx, changes));
 
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
@@ -529,8 +529,12 @@ function checkFolded(ctx, files, shape) {
   }
 }
 
-/** RULE `overlap`: two changes folding one requirement is a silent revert —
- * both archive cleanly, and the second writes the first's text away. */
+/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
+ * REMOVED block archived second writes the first's text away, silently; an
+ * ADDED block archived second fails outright, since the fold refuses to add
+ * a name that exists. Either way each change is named to the other, with the
+ * other's heading, so a person reads both before building on either
+ * (`shared-planning-agent-rounds-SC-102`). */
 function checkOverlap(files, add) {
   const claims = new Map();
   for (const one of files) {
@@ -554,7 +558,11 @@ function checkOverlap(files, add) {
       add(
         "overlap",
         claim.file,
-        `${label(claim)} is also folded by ${others.join(", ")} — whichever archives second reverts the first`,
+        `${label(claim)} is also folded by ${others.join(", ")} — ${
+          claim.kind === "added"
+            ? "archiving this one second fails outright, since the fold refuses to add a name that exists"
+            : "whichever archives second reverts the first"
+        }`,
       );
     }
   }

@@ -9,15 +9,12 @@
  * (`shared-planning-agent-rounds-SC-106`).
  */
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
+import { runValidator, specFiles } from "./test/suite-store.mjs";
 
-const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const SCRIPT = join(SCRIPTS, "validate-test-cases.mjs");
 const CHANGE = "openspec/changes/demo/specs/demo/alpha";
 const STORY = "packages/ui/src/blocks/alpha/alpha.stories.tsx";
 
@@ -91,38 +88,7 @@ const MANUAL = [
 ];
 
 const SPEC = {
-  [`${CHANGE}/spec.md`]: [
-    "# demo/alpha",
-    "",
-    "## Purpose",
-    "",
-    "Doing the thing.",
-    "",
-    "## Feature set",
-    "",
-    "- Doing the thing",
-    "",
-    "## Requirements",
-    "",
-    "### Requirement: The thing happens",
-    "",
-    "#### Scenario: demo-alpha-SC-01 - The thing happens",
-    "**Serves:** demo-alpha-US-01 - collector does the thing",
-    "",
-    "**WHEN** the thing is asked for",
-    "**THEN** it happens",
-    "",
-  ].join("\n"),
-  [`${CHANGE}/user-journeys.md`]: [
-    "## User journeys",
-    "",
-    "### demo-alpha-US-01: Collector does the thing",
-    "",
-    "**As a** collector,",
-    "**I want** the thing,",
-    "**so that** it is done.",
-    "",
-  ].join("\n"),
+  ...specFiles(CHANGE),
   "openspec/changes/demo/decisions.md":
     "## Decisions\n\n| Id | Question | Decision | Instead of |\n| --- | --- | --- | --- |\n",
 };
@@ -142,11 +108,7 @@ function store(story, manual = MANUAL) {
   return root;
 }
 
-const run = (root) =>
-  spawnSync(process.execPath, [SCRIPT, "--root", root], {
-    encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1" },
-  });
+const run = runValidator;
 
 test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carries no such case id is refused, and a row naming the application repository's walk is skipped", () => {
   const result = run(

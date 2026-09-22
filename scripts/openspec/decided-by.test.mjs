@@ -12,17 +12,14 @@
  * rather than a copy of the script beside the fixture.
  */
 import assert from "node:assert/strict";
-import { spawnSync } from "node:child_process";
 import { existsSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
-import { fileURLToPath } from "node:url";
 
 import { isAutomated, parseSuite, ROOT, readSuite } from "./lib/suites.mjs";
+import { runValidator, specFiles } from "./test/suite-store.mjs";
 
-const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const SCRIPT = join(SCRIPTS, "validate-test-cases.mjs");
 /** A file every fixture holds, for a line to name. */
 const DECIDER = "scripts/openspec/demo.test.mjs";
 
@@ -94,46 +91,6 @@ function caseSuite({
   ].join("\n");
 }
 
-/** `spec.md` and `user-journeys.md`, the two files a suite is a reading of -
- *  one journey, one scenario, nothing this suite's other checks would
- *  complain about. */
-function specFiles(base) {
-  return {
-    [`${base}/spec.md`]: [
-      "# demo/alpha",
-      "",
-      "## Purpose",
-      "",
-      "Doing the thing.",
-      "",
-      "## Feature set",
-      "",
-      "- Doing the thing",
-      "",
-      "## Requirements",
-      "",
-      "### Requirement: The thing happens",
-      "",
-      "#### Scenario: demo-alpha-SC-01 - The thing happens",
-      "**Serves:** demo-alpha-US-01 - collector does the thing",
-      "",
-      "**WHEN** the thing is asked for",
-      "**THEN** it happens",
-      "",
-    ].join("\n"),
-    [`${base}/user-journeys.md`]: [
-      "## User journeys",
-      "",
-      "### demo-alpha-US-01: Collector does the thing",
-      "",
-      "**As a** collector,",
-      "**I want** the thing,",
-      "**so that** it is done.",
-      "",
-    ].join("\n"),
-  };
-}
-
 /** A throwaway store the real validator reads through `--root`: a fixture
  *  checked by the script this repository ships rather than by a restatement
  *  of it. `at` is where the suite sits - under a change, or durable. */
@@ -155,11 +112,7 @@ function store(at, options) {
 const CHANGE = "openspec/changes/demo-change/specs/demo/alpha";
 const DURABLE = "openspec/specs/demo/alpha";
 
-const run = (root) =>
-  spawnSync(process.execPath, [SCRIPT, "--root", root], {
-    encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1" },
-  });
+const run = runValidator;
 
 const inChange = (options) => run(store(CHANGE, options));
 
