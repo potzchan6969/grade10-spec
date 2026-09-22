@@ -1647,7 +1647,7 @@ Runs once per row of **Test data**.
 | `US3-TC4-1` | Reconciled | `SC-11` |
 | `US4-TC1-1` | Reconciled | `SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |
 | `US4-TC2-1` | Reconciled | `SC-19` |
-| `US4-TC3-1` | Reconciled | `SC-43`, with the tiles at three and the first broken down per shop — Q33 |
+| `US4-TC3-1` | Reconciled | `SC-43`, with the tiles at three and the first broken down per shop — Q54 |
 | `US4-TC4-1` | Reconciled | `SC-44` |
 | `US4-TC5-1` | Reconciled | `SC-46` |
 | `US4-TC6-1` | Folded | `SC-49`, under the new requirement *The custody tab reads back where the item has been*: the movement log is drawn on the design, required by the durable movement rule, and was proved by no scenario |
@@ -1662,7 +1662,7 @@ Runs once per row of **Test data**.
 | `US6-TC5-1` | Reconciled | `SC-21`, and the durable paging requirement's `SC-05` |
 | `US6-TC6-1` | Reconciled | `SC-06` |
 | `SC-01` | Case added | `US6-TC7-1`: the Today cut on the shop's day while the date in Coordinated Universal Time is still yesterday's |
-| `US7-TC1-1` | Reconciled | `SC-30`; the seven steps are the ones board A03 names — Q34 |
+| `US7-TC1-1` | Reconciled | `SC-30`; the seven steps are the ones board A03 names — Q55 |
 | `US7-TC2-1` | Reconciled | `SC-31` |
 | `US7-TC3-1` | Reconciled | `SC-32`; the storage lane walks six of the seven |
 | `US7-TC4-1` | Reconciled | `SC-33` |
@@ -1672,15 +1672,15 @@ Runs once per row of **Test data**.
 | `US8-TC3-1` | Reconciled | `SC-36` |
 | `US8-TC4-1` | Folded | `SC-51`: forfeiture offered once no reason holds it — the requirement said so and no scenario walked it |
 | `US8-TC5-1` | Reconciled | `SC-38` |
-| `US9-TC1-1` | Reconciled, corrected | `SC-41` and `SC-42`; its Out and Stalled rows both read a submitted check, and now read the identity check's own boundary — Q32 |
+| `US9-TC1-1` | Reconciled, corrected | `SC-41` and `SC-42`; its Out and Stalled rows both read a submitted check, and now read the identity check's own boundary — Q53 |
 | `US9-TC2-1` | Reconciled | `SC-41` |
 | `US9-TC3-1` | Reconciled | `SC-12`; the photograph's own read is `grade10-site/vault/identity-verification`'s `SC-14` |
 | `US9-TC4-1` | Reconciled | `SC-40` |
 | `US9-TC5-1` | Reconciled | `SC-40`: the recording names the reason and who records over the refusal, so one carrying neither is not that act |
 | `SC-52` | Case added | `US9-TC6-1`: Out until the identity check reads the submitted check as stalled |
-| Raised: the Out → Stalled boundary | Answered | Q32: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `SC-22`; the panel's table, its new bullet and `SC-52` read that state rather than deciding one |
-| Raised: three tiles or four | Answered | Q33: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `SC-43` now agree |
-| The visit checklist's steps | Answered | Q34: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `SC-30` and `SC-32` take them |
+| Raised: the Out → Stalled boundary | Answered | Q53: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `SC-22`; the panel's table, its new bullet and `SC-52` read that state rather than deciding one |
+| Raised: three tiles or four | Answered | Q54: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `SC-43` now agree |
+| The visit checklist's steps | Answered | Q55: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `SC-30` and `SC-32` take them |
 
 ### Manual
 

@@ -292,7 +292,7 @@ beside them.
 | Loan running (`C15`) | hero total by the due date with the holds line; Book a visit to collect; What is owed as at: outstanding of total · repaid, the progress line, the breakdown | `grade10-site-vault-loan-and-settlement-SC-05` |
 | How to pay | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-SC-35` |
 | How to pay, values unset | the bracketed placeholder outside production; in production the block is refused — ❓ what stands in its place, flagged below | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
-| Reminders | the two dates before the due date and the 7-day rung after; a reminder costs nothing | `grade10-site-vault-collector-notifications-US-01` |
+| Reminders | the two dates before the due date and the 7-day rung after; a reminder costs nothing | `grade10-site-vault-loan-and-settlement-SC-30` |
 | Repayments, none | the empty line: each appears here with its day and the balance after | `grade10-site-vault-loan-and-settlement-SC-28` |
 | Repayments, one (`C23`) | amount by method · reached us · recorded · balance after; the allocation sentence; the never-restarts line; the receipt line; the hero reads the remainder and the reduced daily figure | `grade10-site-vault-loan-and-settlement-SC-27` |
 | Repayments, many (`C17`) | the list in value-date order, each with its balance after | `grade10-site-vault-loan-and-settlement-SC-27` |
@@ -381,7 +381,7 @@ beside them.
 | Second currency | outstanding per currency, never summed | `grade10-admin-vault-money-book-SC-17` |
 | Rows | reference, item, borrower and contact, due date, days overdue, outstanding, notice (sent · pay by, or none yet), last reminder (date · stopped by the notice) | `grade10-admin-vault-money-book-SC-28` |
 | Empty | the tiles at zero; no loan is late | `grade10-admin-vault-money-book-SC-18` |
-| Ladder | the reminder ladder in words under the list | `grade10-site-vault-collector-notifications-US-01` |
+| Ladder | the reminder ladder in words under the list | **Out of suite:** the panel's colocated test — the words restate the reminder schedule, and no requirement states the panel prints them |
 | Loading | `Status` pending | **Out of suite:** the panel's colocated test |
 | Error | `Status` with the message | **Out of suite:** the panel's colocated test |
 
@@ -480,17 +480,17 @@ One row per kind, and the blocks each carries after the lead.
 
 | State | Blocks | Anchor |
 | --- | --- | --- |
-| The offer (`M01`), `offer_made` | facts: loan · term · interest for the term · total to repay · if you are late · open until; the accepting-starts-nothing paragraph; `PrimaryCta` to the case; the runs-out line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
-| The advance (`M02`), `payout_recorded` | facts: sent · due · total to repay · after the due date; the repay-early line; how to pay; `PrimaryCta`; the reminder schedule's two dates and the 7-day rung; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
-| Due soon (`M03`), `repayment_due_soon` | facts: owed today · due · from the day after; how to pay; `PrimaryCta`; the next-reminder line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-01` |
-| Overdue (`M04`), `repayment_overdue` | facts: owed today · was due · of which late interest · each further day; the part-payment and notice-ahead paragraph; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-01` |
-| Final notice (`M05`), `forfeiture_notice` | the clause lead; facts: pay in full by · owed as at today · each further day · the lapse condition · what follows a balance; the a-person-decides paragraph; the no-further-reminders line; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-US-05` |
-| Verify before the visit (`M06`), `identity_check_invited` | facts: your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; the case line; `EmailFooter` naming the custodian | `grade10-site-vault-collector-notifications-US-06` |
-| The other eighteen, no board | `PrimaryCta` to the case; the case line; `EmailFooter` naming the custodian; every other kind in `notify/vocabulary.ts` | `grade10-site-vault-collector-notifications-US-02` |
+| The offer (`M01`), `offer_made` | facts: loan · term · interest for the term · total to repay · if you are late · open until; the accepting-starts-nothing paragraph; `PrimaryCta` to the case; the runs-out line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-SC-23` |
+| The advance (`M02`), `payout_recorded` | facts: sent · due · total to repay · after the due date; the repay-early line; how to pay; `PrimaryCta`; the reminder schedule's two dates and the 7-day rung; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-SC-24`, `grade10-site-vault-collector-notifications-SC-28` |
+| Due soon (`M03`), `repayment_due_soon` | facts: owed today · due · from the day after; how to pay; `PrimaryCta`; the next-reminder line; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-SC-25` |
+| Overdue (`M04`), `repayment_overdue` | facts: owed today · was due · of which late interest · each further day; the part-payment and notice-ahead paragraph; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-SC-26` |
+| Final notice (`M05`), `forfeiture_notice` | the clause lead; facts: pay in full by · owed as at today · each further day · the lapse condition · what follows a balance; the a-person-decides paragraph; the no-further-reminders line; how to pay; `PrimaryCta`; the case line; `EmailFooter` naming the lender | `grade10-site-vault-collector-notifications-SC-29`, `grade10-site-vault-collector-notifications-SC-30` |
+| Verify before the visit (`M06`), `identity_check_invited` | facts: your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; the case line; `EmailFooter` naming the custodian | `grade10-site-vault-collector-notifications-SC-31` |
+| The other eighteen, no board | `PrimaryCta` to the case; the case line; `EmailFooter` naming the custodian; every other kind in `notify/vocabulary.ts` | `grade10-site-vault-collector-notifications-SC-21`, `grade10-site-vault-collector-notifications-SC-22`, `grade10-site-vault-collector-notifications-SC-34` |
 | A money kind among them | `repayment_recorded`, `payout_reversed`, `repayment_reversed`, `loan_repaid` and `forfeited` add the facts their event names, how to pay under them, and name the lender | `grade10-site-vault-loan-and-settlement-SC-36` |
 | Reference on every letter | the case line above the footer | `grade10-site-vault-case-intake-SC-23` |
-| Custodian footer | a letter with no money names the custodian, not the lender | `grade10-site-vault-collector-notifications-US-02` |
-| Values unset | the bracketed placeholder outside production, marked; in production a money letter's send and the notice's send are refused | `grade10-site-vault-collector-notifications-US-05` |
+| Custodian footer | a letter with no money names the custodian, not the lender | `grade10-site-vault-collector-notifications-SC-22` |
+| Values unset | the bracketed placeholder outside production, marked; in production a money letter's send and the notice's send are refused | `grade10-site-vault-collector-notifications-SC-32`, `grade10-site-vault-collector-notifications-SC-33` |
 
 ## Flags
 
