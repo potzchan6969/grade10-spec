@@ -713,6 +713,22 @@ test("refuses a carried Reconciliation that keeps its scenario ids", () => {
   );
 });
 
+test("shared-planning-agent-rounds-SC-103 - the strip covers a Manual row under the Reconciliation that keeps a scenario id", () => {
+  const withIds = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]:
+      SUITE +
+      "\n## Reconciliation\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `listing-US1-TC1-1` | `listing-SC-04` is proved by the story; a person reads the rest |\n",
+  };
+  const result = run(sandbox(CARRIED, withIds).root, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /scenario id\(s\) not stripped \(listing-SC-04\)/,
+  );
+});
+
 test("refuses a suite carried without its Settled lines, waiver or no waiver", () => {
   const dropped = {
     ...DURABLE,

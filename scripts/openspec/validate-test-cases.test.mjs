@@ -163,6 +163,49 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carrie
   assert.doesNotMatch(out, /demo-alpha-US1-TC3-1.*cites no/);
 });
 
+test("shared-planning-agent-rounds-SC-103 - a Manual table under a journey, on a suite carrying a reconciliation, is refused naming where it belongs", () => {
+  const root = mkdtempSync(join(tmpdir(), "manual-place-"));
+  const suite = [
+    "# demo/alpha Test Cases",
+    "",
+    "**Status:** pending-review",
+    "**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+    "",
+    "## demo-alpha-US1: Collector does the thing",
+    "",
+    "**As a** collector,",
+    "**I want** the thing,",
+    "**so that** it is done.",
+    "",
+    CASE(1),
+    "### Manual",
+    "",
+    "| Manual | Why |",
+    "| --- | --- |",
+    "| `demo-alpha-US1-TC1-1` | a person reads it |",
+    "",
+    "## Reconciliation",
+    "",
+    "**Run:** 2026-09-01, blind feature pass.",
+    "",
+  ].join("\n");
+  const files = {
+    ...SPEC,
+    [STORY]: "// demo-alpha-US1-TC1-1\n",
+    [`${CHANGE}/feature-tcs.md`]: suite,
+  };
+  for (const [name, content] of Object.entries(files)) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
+  const result = run(root);
+  const out = result.stdout + result.stderr;
+  assert.notEqual(result.status, 0, out);
+  assert.match(out, /### Manual/);
+  assert.match(out, /## Reconciliation/);
+});
+
 test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test cites its case passes", () => {
   const result = run(
     store("// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n"),

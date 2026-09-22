@@ -32,13 +32,13 @@ describe("a wait on the change's record", () => {
     expect(found.reason).toContain("`ui-design`");
   });
 
-  it("names a wait the change has already answered", async () => {
-    const [found] = await waits(
-      "awaiting:\n  proposal: written already\n",
-      "awaiting",
-    );
-
-    expect(found.reason).toContain("the wait is over");
+  it("shared-planning-agent-rounds-SC-101 - lets a wait stand on an artifact the change has written, since the wait names what is still missing", async () => {
+    expect(
+      await waits(
+        "awaiting:\n  proposal: 2026-09-24, the frame for the rail - @tangconst\n",
+        "awaiting",
+      ),
+    ).toEqual([]);
   });
 
   it("refuses a wait that says nothing rather than dropping it", async () => {
@@ -120,9 +120,7 @@ describe("a change stopped at the outline", () => {
     );
   });
 
-  it("asks for the line back once the requirements land", async () => {
-    const [found] = await read(REQUIREMENTS, WAIT, "awaiting");
-
-    expect(found.reason).toContain("the wait is over");
+  it("shared-planning-agent-rounds-SC-101 - lets the wait stand once the requirements land, until its author lifts it", async () => {
+    expect(await read(REQUIREMENTS, WAIT, "awaiting")).toEqual([]);
   });
 });
