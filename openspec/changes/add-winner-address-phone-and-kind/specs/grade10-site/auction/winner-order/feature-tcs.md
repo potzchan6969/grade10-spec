@@ -37,7 +37,7 @@
 **Expected Results:**
 
 * Phone shows a globe only, with no flag and no calling-code divider.
-* Enter phone number placeholder appears with a small gap after the globe.
+* `+852 12345678` placeholder appears with a small gap after the globe.
 * No calling country is preselected.
 
 ### winner-order-US1-TC13-1: Personal is selected and Company Name stays hidden
@@ -423,6 +423,8 @@
 
 * The card title reads Alex Chen.
 * It does not read a company name.
+* The card body shows street, city or region, and country.
+* The card body does not show postal code or phone.
 
 ### winner-order-US1-TC23-1: Company saved address card title is company name
 
@@ -453,6 +455,8 @@
 
 * The card title reads Northwind Collectibles.
 * It does not read Alex Chen.
+* The card body shows street, city or region, and country.
+* The card body does not show postal code or phone.
 
 ### winner-order-US1-TC24-1: Company delivery address with phone confirms successfully
 
@@ -826,10 +830,12 @@
 | --- | --- |
 | Empty phone country / digits refused beside Phone | Folded as `winner-order-SC-185`, `winner-order-SC-186` |
 | Phone country starts empty; E.164 when parseable; unusual formats accepted | Folded as `winner-order-SC-187`, `winner-order-SC-188`, `winner-order-SC-189` |
+| Phone placeholder with calling-code example | Folded as `winner-order-SC-201` |
 | Non-parseable phone storage shape | **Raised, folded into spec** as `winner-order-SC-197` — entered value applied, not refused for format |
 | Personal default / Company Name hidden and required | Folded as `winner-order-SC-190`, `winner-order-SC-191` |
 | Company → Personal switch-back | **Raised, folded into spec** as `winner-order-SC-198` |
 | Picker card titles personal vs company | Folded as `winner-order-SC-192`, `winner-order-SC-193` |
+| Picker card body omits postal code and phone | Folded as `winner-order-SC-202` |
 | Optional line 2 / state; no Apt field | Folded as `winner-order-SC-195`, `winner-order-SC-196` |
 | Billing Add Address same phone/kind rules | Folded as `winner-order-SC-199`, `winner-order-SC-200` |
 | One-time address at the five-address cap still collects phone/kind | Folded as `winner-order-SC-194`; cases `winner-order-US12-TC1-1`–`TC3-1` |

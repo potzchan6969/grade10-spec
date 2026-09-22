@@ -6,6 +6,9 @@
 - Let the winner mark the address Personal or Company, and require Company
   Name only for company.
 - Show the company name as the picker card title for company addresses.
+- Show street, city or region, and country on the picker card body — not
+  postal code or phone.
+- Show a phone placeholder with an example calling code.
 
 ## Non-Goals
 
@@ -16,6 +19,8 @@
 - Account address book, store checkout, or other site-wide address forms
   beyond Winner Order setup and `AuctionAddressForm`.
 - Default-address pre-fill, edit-saved-address, or leave-draft persistence.
+- Country/Region catalogue completeness or searchable Autocomplete — owned by
+  `full-winner-order-country-region-list`.
 
 ## Decisions
 
@@ -33,13 +38,15 @@
 | Q10 | Who refuses empty required fields on the shared form? | Soft local refuse when the application has not supplied an error; application-supplied errors still win | Application-only validation with no local refuse; component-only with no application errors |
 | Q11 | Does billing reuse one `AuctionAddressForm` contract? | Yes — durable billing SC-05/SC-06; this change does not split a second surface | A separate billing-only form export in this change |
 | Q12 | When Same as delivery is checked, how are kind and phone reported for billing? | Confirm reports the same kind and phone for billing as delivery | Omit billing kind and phone from the payload |
+| Q13 | What does the phone placeholder show? | Example with calling code `+852 12345678` (recommended) | Generic "Phone number"; or empty placeholder |
+| Q14 | What does the picker card body show? | Street, city or region, and country only — no postal code and no phone (recommended) | Street + postal + phone; or full formatted address including phone |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
 | grade10-site/auction/winner-order | When a phone value cannot be parsed to E.164, what exact value is stored on the address snapshot? | Q7 |
-| grade10-site/auction/winner-order | Does billing Add Address use the same full A–Z country or region list and letter typeahead as delivery? | ❓ Post-Bidding · Order Setup · Billing country or region list |
+| grade10-site/auction/winner-order | Does billing Add Address use the same full A–Z country or region list and searchable field as delivery? | ❓ Post-Bidding · Order Setup · Billing country or region list |
 | grade10-site/auction/winner-order | Are missing phone country and missing phone digits refused as one combined Phone refusal, or as separate refusals? | Q8 |
 | grade10-site/auction/winner-order | After entering Company Name on Company and switching back to Personal before confirm, is the company name discarded, ignored, or still validated? | Q9 |
 | shared/ui/auction-order | When phone country and digits are present but the value is not parseable to E.164, what exact shape does Confirm export? | Q7 |

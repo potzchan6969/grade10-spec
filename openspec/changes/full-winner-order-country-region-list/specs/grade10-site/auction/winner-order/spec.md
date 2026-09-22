@@ -2,7 +2,7 @@
 
 - Country or region picker
   - Complete A–Z catalogue: delivery Add Address lists every country and region, not a short designated set
-  - Letter typeahead scroll: any typed letter moves the highlight to the next matching name and scrolls it into the popup
+  - Searchable filter: typing in Country/Region narrows the list to matching names
   - Field label Country/Region: the picker reads Country/Region
 
 ## ADDED Requirements
@@ -14,12 +14,15 @@ region through a Country/Region picker.
 
 **Label** — The field SHALL read Country/Region.
 
-**Catalogue** — The Country/Region Select popup SHALL list every country and
+**Catalogue** — The Country/Region popup SHALL list every country and
 region in A–Z order, not a short designated set.
 
-**Typeahead** — While the Select popup is open, any typed letter SHALL move
-the highlight to the next name that starts with that letter and SHALL scroll
-that name into view in the popup.
+**Search** — While the Country/Region picker is open, typing SHALL filter the
+list to names that match the typed query.
+
+**No match** — A typed query that matches no catalogue name SHALL leave the
+list empty; confirming without a selected catalogue country or region SHALL
+be refused as an empty Country/Region.
 
 **Empty country or region** — Confirming with Country/Region empty SHALL be
 refused with a field refusal beside Country/Region, as for other empty
@@ -29,24 +32,23 @@ required address fields.
 **Serves:** winner-order-US-01 - choosing where the lot ships on delivery Add Address
 
 - **GIVEN** a winner on Winner Order setup delivery Add Address
-- **WHEN** the winner opens the Country/Region Select popup
+- **WHEN** the winner opens the Country/Region picker
 - **THEN** the popup lists every country and region in A–Z order
 
-#### Scenario: winner-order-SC-175 - A typed letter highlights and scrolls the next match
-**Serves:** winner-order-US-01 - finding a country or region by letter on delivery Add Address
+#### Scenario: winner-order-SC-175 - Typing filters the list to matching names
+**Serves:** winner-order-US-01 - finding a country or region by search on delivery Add Address
 
-- **GIVEN** a winner with the Country/Region Select popup open on delivery Add Address
-- **WHEN** the winner types a letter
-- **THEN** the highlight moves to the next name that starts with that letter
-- **AND** that name is scrolled into view in the popup
+- **GIVEN** a winner with the Country/Region picker open on delivery Add Address
+- **WHEN** the winner types a query that matches one or more catalogue names
+- **THEN** the list shows only names that match that query
+- **AND** names that do not match are not shown
 
-#### Scenario: winner-order-SC-178 - Typing the same letter again advances to the next match
-**Serves:** winner-order-US-01 - stepping through same-letter countries on delivery Add Address
+#### Scenario: winner-order-SC-178 - A query with no match leaves the list empty
+**Serves:** winner-order-US-01 - searching for a country or region that is not in the catalogue
 
-- **GIVEN** a winner with the Country/Region Select popup open and at least two catalogue names that start with the same letter
-- **WHEN** the winner types that letter twice
-- **THEN** the first press highlights the first matching name and scrolls it into view
-- **AND** the second press moves the highlight to the next matching name and scrolls that name into view
+- **GIVEN** a winner with the Country/Region picker open on delivery Add Address
+- **WHEN** the winner types a query that matches no catalogue name
+- **THEN** the list shows no country or region options
 
 #### Scenario: winner-order-SC-176 - The field reads Country/Region
 **Serves:** winner-order-US-01 - naming the destination on delivery Add Address

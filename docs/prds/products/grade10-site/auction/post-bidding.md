@@ -143,13 +143,15 @@ hours of the close.
   required only for Company and hidden for Personal; an empty required field is
   refused beside the field; phone stores E.164 when parseable and does not
   refuse unusual formats; phone country and Country/Region start empty — nothing
-  preselected; on delivery Add Address, country or region lists every country
-  and region A–Z, and any typed letter moves the highlight to the next name
-  that starts with it and scrolls that name into view
+  preselected; phone placeholder shows an example with calling code
+  (`+852 12345678`); on delivery Add Address, country or region lists every
+  country and region A–Z in a searchable field — typing filters the list to
+  matching names
 - 🚧 **Company on the picker** — a company address shows the company name as
-  the card title; a personal address shows the recipient name
+  the card title; a personal address shows the recipient name; the card body
+  shows street, city or region, and country only — no postal code and no phone
 - ❓ **Billing country or region list** — whether billing Add Address uses the
-  same full list and typeahead as delivery; Product confirms
+  same full list and searchable field as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
   destinations Grade10 ships to; until settled the catalogue is complete
 - ❓ **Catalogue display locale** — whether Country/Region names follow
@@ -464,11 +466,11 @@ a second payment provider, and changes to the bid-time rules.
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
-| Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z; any typed letter moves the highlight to the next matching name and scrolls it into view. Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set. | Product (@tangconst) |
-| Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
-| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. First and last name stay required on both. | Product (@tangconst) |
+| Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
+| Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
+| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. First and last name stay required on both. | Product (@tangconst) |
 | Add Address optional locality | 🚧 In flight | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
-| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and typeahead as delivery. | Product (@tangconst) |
+| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and searchable field as delivery. | Product (@tangconst) |
 | Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |

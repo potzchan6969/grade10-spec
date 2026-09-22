@@ -307,7 +307,7 @@ function AuctionPhoneField({
   country: countryProp,
   onCountryChange,
   defaultCountry,
-  placeholder = "Enter phone number",
+  placeholder = "+852 12345678",
   className,
   id,
   name,

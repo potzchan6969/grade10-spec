@@ -19,7 +19,7 @@ const COPY = {
   optional: "Optional",
   confirm: "Confirm",
   cancel: "Cancel",
-  phonePlaceholder: "Enter phone number",
+  phonePlaceholder: "+852 12345678",
   countrySearchPlaceholder: "e.g. United States",
 };
 
@@ -86,7 +86,7 @@ export const Personal: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByLabelText(/Company Name/i)).toBeNull();
-    expect(canvas.getByPlaceholderText("Enter phone number")).toBeVisible();
+    expect(canvas.getByPlaceholderText("+852 12345678")).toBeVisible();
   },
 };
 
@@ -141,7 +141,7 @@ export const PhoneSoftRule: Story = {
     expect(args.onConfirm).not.toHaveBeenCalled();
     expect(canvas.getByText("Enter a phone number.")).toBeVisible();
 
-    const phone = canvas.getByPlaceholderText("Enter phone number");
+    const phone = canvas.getByPlaceholderText("+852 12345678");
     await userEvent.type(phone, "612345678901234");
     await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
     expect(args.onConfirm).toHaveBeenCalled();
