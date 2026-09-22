@@ -246,11 +246,10 @@
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** manual
 * **Trace:** shared-planning-agent-rounds-US-11
 
-**Decided by:** `tools/manual/walk/qa-turn.walk.ts`, `tools/manual/walk/qa-told.walk.ts`
 
 **Pre-conditions:**
 
@@ -280,11 +279,10 @@
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** automated
+* **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-planning-agent-rounds-US-11
 
-**Decided by:** `scripts/openspec/tasks-template.test.mjs`, `tools/manual/test/check-walk.test.ts`
 
 **Pre-conditions:**
 
@@ -1359,6 +1357,11 @@ test drives the round whole. Each row names the test that proves part of the
 case, in these words, and what a person walks beyond it:
 
 - the skill's tests - `scripts/openspec/round-skill.test.mjs`, in this store
+- the push's tests - `scripts/openspec/changed-changes.test.mjs`, in this store
+- the words' tests - `scripts/openspec/wording.test.mjs`, in this store
+- the manual's walk - `tools/manual/walk/my-turn.walk.ts`, in this store
+- the template's tests - `scripts/openspec/tasks-template.test.mjs`, in this store
+- the walk rule's tests - `tools/manual/test/check-walk.test.ts`, in this store
 - the row's tests - `scripts/openspec/round-scripts.test.mjs`, in this store
 - the reply's tests - `scripts/openspec/relay-post.test.mjs`, in this store
 - the tick's tests - `scripts/openspec/plan.test.mjs`, in the application repository
@@ -1371,6 +1374,8 @@ case, in these words, and what a person walks beyond it:
 | `shared-planning-agent-rounds-US10-TC4-1` | a person runs a round touching no product line and reads the product manager's thread |
 | `shared-planning-agent-rounds-US10-TC5-1` | a person answers another hand's page question and reads the refusal, as `run-a-round-on-every-artifact`'s Told once has it |
 | `shared-planning-agent-rounds-US10-TC6-1` | the skill's tests hold the rule that a landing holds nothing on a page question; a person lands the group and reads the line's mark |
+| `shared-planning-agent-rounds-US11-TC1-1` | the push's tests prove the landing tells QA once, naming the suite's path, its case count and the review, and the words' tests the message; the manual's walk proves QA's turn on My turn and the message on the change page; a person says `land` and reads the thread |
+| `shared-planning-agent-rounds-US11-TC2-1` | the template's tests and the walk rule's tests prove the walk group names the review, in the template and in a plan; a person reads the plan's other groups, which name it nowhere |
 | `shared-planning-agent-rounds-US11-TC3-1` | the tick's tests decide the refusal of a draft id over a fixture store; a person runs `pnpm plan done` on a walk group whose spec cites one |
 | `shared-planning-agent-rounds-US11-TC4-1` | the tick's tests decide the pass once the case is `actual`; a person signs the case with `/tcs-review` and runs the tick again |
 | `shared-planning-agent-rounds-US11-TC5-1` | the tick's tests decide one draft id among signed ones; a person reads the refusal naming that id alone |

@@ -755,6 +755,7 @@ const SUITE = [
   "",
 ].join("\n");
 
+// Proves part of shared-planning-agent-rounds-US11-TC1-1.
 test("shared-planning-agent-rounds-SC-89 - --stages tells QA at Specified the suite's path, its case count and the review command, once per push", () => {
   const { root, write, commit } = sandbox();
   const designed = throughSpecs();

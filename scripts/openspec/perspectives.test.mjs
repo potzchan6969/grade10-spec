@@ -467,6 +467,7 @@ test("shared-planning-agent-rounds-SC-93 - a code group summons the build, QA an
   ]);
 });
 
+// Decides shared-planning-agent-rounds-US12-TC9-1.
 test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a group that lands code and a page's words is read by all seven", () => {
   const root = fixture();
   const mixed = [CODE_ONLY, PROSE_GROUP].join("\n");

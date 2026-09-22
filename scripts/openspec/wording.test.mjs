@@ -127,6 +127,7 @@ test("toldBodyOf gives QA at another stage the ordinary Your turn", () => {
   );
 });
 
+// Proves part of shared-planning-agent-rounds-US11-TC1-1.
 test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suite, its case count and the review command", () => {
   const at = {
     id: "probe",
