@@ -6,3 +6,4 @@ decisions_waived: "opened before decisions.md existed; the scope is in the
 reviewed:
   tech-design: d9d52ca2
   test-cases: 53919d3b
+  tasks: 781fa5b3
