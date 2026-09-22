@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-03, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-auction-bid-increments-US1: Collector places a bid across a price tier
 
@@ -84,7 +84,7 @@ The collector is enrolled and can bid.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -117,7 +117,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -153,7 +153,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -198,7 +198,7 @@ An open listing is available in <listing currency>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -231,7 +231,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -265,7 +265,7 @@ The collector is enrolled on an open HKD listing whose minimum bid is <minimum>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -299,7 +299,7 @@ The collector is enrolled on an open JPY listing whose minimum bid is <minimum>.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
