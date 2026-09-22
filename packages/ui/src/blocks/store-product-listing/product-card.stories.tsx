@@ -282,7 +282,10 @@ export const SoldOutWithRemainingCount: Story = {
 
 /** shared-ui-store-product-listing-SC-91: a sold-out tile still opens where
  * an activation handler is supplied and no cart handler is — a surface that
- * carries the shopper on rather than selling. */
+ * carries the shopper on rather than selling. The suite's
+ * grade10-site-store-cross-sell-US1-TC6-1 credits this story with a sold-out
+ * pick's place, its words and its activation; a person sells a pick out on the
+ * dev shop. */
 export const SoldOutOpensWhereNothingSells: Story = {
   args: {
     soldOut: true,

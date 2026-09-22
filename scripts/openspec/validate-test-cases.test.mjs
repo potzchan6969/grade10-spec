@@ -123,12 +123,17 @@ const SPEC = {
     "**so that** it is done.",
     "",
   ].join("\n"),
-  "openspec/changes/demo/decisions.md": "## Decisions\n\n| Id | Question | Decision | Instead of |\n| --- | --- | --- | --- |\n",
+  "openspec/changes/demo/decisions.md":
+    "## Decisions\n\n| Id | Question | Decision | Instead of |\n| --- | --- | --- | --- |\n",
 };
 
 function store(story, manual = MANUAL) {
   const root = mkdtempSync(join(tmpdir(), "manual-rows-"));
-  const files = { ...SPEC, [STORY]: story, [`${CHANGE}/feature-tcs.md`]: SUITE(manual) };
+  const files = {
+    ...SPEC,
+    [STORY]: story,
+    [`${CHANGE}/feature-tcs.md`]: SUITE(manual),
+  };
   for (const [name, content] of Object.entries(files)) {
     const file = join(root, name);
     mkdirSync(dirname(file), { recursive: true });
@@ -160,9 +165,7 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carrie
 
 test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test cites its case passes", () => {
   const result = run(
-    store(
-      "// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n",
-    ),
+    store("// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n"),
   );
   assert.equal(result.status, 0, result.stdout + result.stderr);
 });

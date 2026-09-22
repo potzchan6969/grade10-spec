@@ -36,6 +36,7 @@ import {
 } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
 import {
   CASE_STATUSES,
   caseIndex,
@@ -95,6 +96,56 @@ Flags:
 const problems = [];
 const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
+
+/**
+ * The Manual table's rows, held to the tests they credit. The table sits under
+ * `## Reconciliation`, with a legend above it binding each name a row uses to
+ * a path — `- <name> - \`<path>\`, in this store` — and a row's Why names the
+ * tests that prove part of its case in the legend's words. A legend path this
+ * store holds is read for the row's case id, and a row whose test cites no
+ * such id is refused naming the path and the id
+ * (`shared-planning-agent-rounds-SC-106`); a path this store does not hold —
+ * the application repository's walk — is skipped, since its ids are checked
+ * where that repository ticks the group.
+ */
+function checkManualRows(root, text, cases, err) {
+  const lines = text.split("\n");
+  const start = lines.findIndex((line) =>
+    /^##\s+Reconciliation\s*$/.test(line),
+  );
+  if (start < 0) return;
+  const manual = lines.findIndex(
+    (line, i) => i > start && /^###\s+Manual\s*$/.test(line),
+  );
+  if (manual < 0) return;
+  const legend = new Map();
+  const ids = new Set(cases.map((tc) => tc.id));
+  for (let i = manual + 1; i < lines.length; i++) {
+    const line = lines[i];
+    if (/^##\s/.test(line)) break;
+    const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
+    if (named) {
+      const full = resolve(root, named[2]);
+      if (existsSync(full) && statSync(full).isFile())
+        legend.set(named[1].trim().toLowerCase(), {
+          path: named[2],
+          text: readFileSync(full, "utf8"),
+        });
+      continue;
+    }
+    const row = /^\|\s*`?([\w-]+-US\d+-TC\d+-\d+)`?\s*\|(.*)\|\s*$/.exec(line);
+    if (!row || !ids.has(row[1])) continue;
+    const why = row[2].toLowerCase();
+    for (const [name, test] of legend) {
+      if (!why.includes(name)) continue;
+      if (citesId(test.text, row[1])) continue;
+      err(
+        i + 1,
+        `Manual row for \`${row[1]}\` credits ${name} (\`${test.path}\`), which cites no such case id — name the test that cites it, or say what a person walks instead`,
+      );
+    }
+  }
+}
 
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
@@ -483,6 +534,8 @@ function checkSuite(root, filePath, rulesRev) {
         warn(1, `spec journey \`${id}\` has no section in this suite`);
     }
   }
+
+  checkManualRows(root, text, cases, err);
 
   return { rel, suite, counts, derived, cases: cases.length };
 }

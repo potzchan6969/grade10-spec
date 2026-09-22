@@ -117,6 +117,7 @@ import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
 import {
@@ -153,10 +154,19 @@ const GONE = "0000000000000000000000000000000000000000";
  * branch holds a text of that `main` does not is a draft nobody landed. */
 const GROUP_CARRIES = new Set(["tasks", "decisions"]);
 const USAGE =
-  'usage: pnpm run plan:land <change> <artifact|group|--whole> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
+  'usage: pnpm run plan:land <change> <artifact|group|--whole> [--as @handle] [--perspectives a,b] [--stood "…"] [--asked Q1] [--tests "<sc>: <file>"] [--app-root <dir>] [--unrun "<why>"] [--reviewed] [--fix-pass] [--with-recommendations] [--dry-run] [--root <dir>]';
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
-  keys: ["as", "perspectives", "stood", "asked", "tests", "root"],
+  keys: [
+    "as",
+    "perspectives",
+    "stood",
+    "asked",
+    "tests",
+    "root",
+    "app-root",
+    "unrun",
+  ],
   booleans: [
     "dry-run",
     "fix-pass",
@@ -192,6 +202,8 @@ const rowFlags = [
   "stood",
   "asked",
   "tests",
+  "app-root",
+  "unrun",
   "fix-pass",
   "whole",
 ].filter((flag) => flags[flag] !== undefined);
@@ -868,7 +880,7 @@ function rowOf(read, artifact, group) {
     // expects rather than the spelling the target happened to use.
     artifact: group ? roundArtifactOf(target) : artifact,
     perspectives: perspectivesCell(read, flags.perspectives),
-    stood: flags.stood,
+    stood: stoodCell(flags.stood, flags.unrun),
     asked: askedCell(flags.asked),
     tests: testsCell(read, group, flags.tests),
   };
@@ -896,12 +908,18 @@ function citedByGroup(read) {
  * ones left out. A group whose tasks cite none owes nothing, and the row's
  * cell reads `-` like every other column a round has nothing for.
  *
- * A path the cell names is held to the store where the group lands in it: a
- * test the row says decided a scenario is a file a reader can open, so a path
- * the store holds no file at is refused naming it. A group of the application
- * repository names its tests in that clone, which this store cannot see, and
- * its paths are written as given. A word that is no path — a walk by hand, a
- * test owed to Operations — is left as written.
+ * A path the cell names is held to the clone the group's tag names: a test
+ * the row says decided a scenario is a file a reader can open, so a path that
+ * clone holds no file at is refused naming it and the root it was looked for
+ * in. A store group's paths are this store's; an application group's resolve
+ * in the application clone the landing runs beside — `--app-root`, or the
+ * clone this store is a submodule of — and a landing that reaches no clone is
+ * refused naming the tag. A word that is no path — a walk by hand, a test
+ * owed to Operations — is left as written.
+ *
+ * Every path that resolves is read for the scenario id the entry credits it
+ * with, and one that carries no such id is refused naming the path and the id:
+ * the row never credits a file for what it does not prove.
  *
  * An artifact's landing is not held to anything here: no artifact of the
  * schema carries scenario ids of its own to answer for.
@@ -915,15 +933,64 @@ function testsCell(read, group, value) {
       `${target}'s tasks cite a scenario --tests names no test for:\n${listed(missing)}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
     );
   }
-  const absent = landsHere(read)
-    ? pathsIn(cell).filter((path) => !existsSync(join(root, path)))
-    : [];
+  const tree = landsHere(read) ? root : applicationRoot(read);
+  const absent = pathsIn(cell).filter((path) => !existsSync(join(tree, path)));
   if (absent.length > 0) {
     fail(
-      `${target}'s --tests names a path the store holds no file at:\n${listed(absent)}\nName each test as its path from the store's root.`,
+      `${target}'s --tests names a path ${tree === root ? "the store" : tree} holds no file at:\n${listed(absent)}\nName each test as its path from the repository's root.`,
+    );
+  }
+  const uncited = creditsIn(cell).filter(
+    ({ id, path }) => !citesId(readFileSync(join(tree, path), "utf8"), id),
+  );
+  if (uncited.length > 0) {
+    fail(
+      `${target}'s --tests credits a test for a scenario it does not cite:\n${listed(uncited.map(({ id, path }) => `${path} for ${id}`))}\nA row never credits a file for what it does not prove: name the test that cites the id.`,
     );
   }
   return cell;
+}
+
+/** The clone an application group's paths resolve in: `--app-root` when
+ * given, else the working tree this store is a submodule of. A landing that
+ * reaches neither is refused, naming the group's tag: the engineer lands from
+ * the application repository, where the tests are. */
+function applicationRoot(read) {
+  const given = flags["app-root"];
+  const tree = given
+    ? resolve(given)
+    : git(["rev-parse", "--show-superproject-working-tree"]);
+  if (tree && existsSync(tree)) return tree;
+  const tag = read.entry.taskGroups.find(
+    (one) => one.num === roundArtifactOf(target),
+  )?.repo;
+  fail(
+    `${target} is tagged \`${tag}\`, and the landing reaches no clone of it${given ? ` at ${given}` : ""} — run it from the application repository, or pass --app-root <dir>.`,
+  );
+}
+
+/** Each scenario id the cell credits, with each path it credits it to:
+ * `\`<id>\`: <path>[, <path>]` between semicolons, backticks aside. */
+function creditsIn(cell) {
+  const credits = [];
+  for (const entry of cell.split(";")) {
+    const match = /^\s*`?([\w-]+-SC-\d+)`?\s*:\s*(.*)$/.exec(entry);
+    if (!match) continue;
+    for (const path of pathsIn(match[2])) credits.push({ id: match[1], path });
+  }
+  return credits;
+}
+
+/** The stood cell, opened by `written, not run — <why>` where the group's
+ * verify lane could not run: said first, before any count, and read by nobody
+ * but the hand — the tasks stay unticked by the engineer's hand, and the
+ * suite's Manual rows naming the walk stay conditional until the run that ran
+ * the lane lands a row without the clause. */
+function stoodCell(stood, unrun) {
+  if (unrun === undefined) return stood;
+  const why = String(unrun).trim();
+  if (why === "") fail("--unrun says why the lane did not run: pass a reason");
+  return `written, not run — ${why}; ${stood}`;
 }
 
 /** The store paths a `--tests` cell names: every token between the separators

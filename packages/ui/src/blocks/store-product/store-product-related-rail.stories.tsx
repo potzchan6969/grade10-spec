@@ -30,7 +30,9 @@ function tiles(canvasElement: HTMLElement) {
 }
 
 /** grade10-site-store-cross-sell-SC-26: the rail draws what it is given, in
- * order, sells nothing and draws no browse-all link under its heading. */
+ * order, sells nothing and draws no browse-all link under its heading. The
+ * suite's grade10-site-store-cross-sell-US1-TC4-1 credits this story with the
+ * cart control's absence; a person reads the tiles on the dev shop. */
 export const PicksAndSimilar: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
