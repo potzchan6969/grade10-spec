@@ -21,12 +21,18 @@ surface, whatever specs that owns it.
   - Not-found fallback: an address under no surface renders a not-found
     surface naming it, never home
 - Session-decided addresses
-  - Session correction: home, sign-in, and the profile each answer with what
-    the session allows
+  - Session correction: home and sign-in each answer with what the session
+    allows
   - History replacement: a correction replaces the entry it corrects, so back
     never returns to it
-  - Everything else does not wait: only the session-decided addresses wait for
-    the session to resolve
+  - Everything else does not wait: only the session-decided addresses and the
+    profile wait for the session to resolve
+- The profile without a session
+  - Answered on its own address: arriving signed out asks there, uncorrected
+  - Carried on: a session arriving renders the profile there, with no
+    navigation in between
+  - Leaving goes home: dismissing takes the collector to home, replacing the
+    entry the profile holds
 - In-app navigation
   - No document load: moving between the site's surfaces stays in the page,
     and history steps back through it
