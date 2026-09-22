@@ -31,8 +31,6 @@ export const MARKING_COLUMNS = [
   "Auto web",
   "Auto mobile",
   "Notes",
-  "Tester",
-  "Date",
 ];
 
 /** Filter axes. Locked, and out of the reading path: nobody reads these, they
@@ -72,8 +70,6 @@ export const MARKING_START = READING_COLUMNS.length;
 export const FILTER_START = MARKING_START + MARKING_COLUMNS.length;
 export const SURFACE_END = MARKING_START + SURFACES.length;
 export const NOTES_COL = SURFACE_END;
-export const TESTER_COL = SURFACE_END + 1;
-export const DATE_COL = SURFACE_END + 2;
 
 /** Pixels. Explicit, because `autoResizeDimensions` sizes a column to its
  *  longest cell, and a `Steps` cell is a paragraph: the tab came out wider than
@@ -90,8 +86,6 @@ export const COLUMN_WIDTHS = {
   "Auto web": 90,
   "Auto mobile": 100,
   Notes: 240,
-  Tester: 150,
-  Date: 110,
   Product: 110,
   Domain: 110,
   Capability: 150,
@@ -131,17 +125,21 @@ export const SUMMARY_TAB = "Summary";
  *
  * One row per run would need `Pass` to mean something across four columns that
  * answer different questions, and the aggregate hides the case the run is
- * about: web green, mobile red reads as half a pass either way. Each surface
- * gets its own row, and the run's provenance repeats down all four so a filter
- * on `Run name` or `Commit SHA` returns whole rows.
+ * about: web green, mobile red reads as half a pass either way. The Summary is
+ * a register, not a filterable table: the run's identity sits once on the
+ * first row, the three surfaces below it are grouped under that row, and
+ * `Commit SHA` lives at the far right of the same first row.
  */
-export const SUMMARY_COLUMNS = [
+export const SUMMARY_LEAD_COLUMNS = [
   "Run ID",
   "Tab",
   "Date created",
   "Run name",
   "Selection",
-  "Commit SHA",
+];
+
+export const SUMMARY_COLUMNS = [
+  ...SUMMARY_LEAD_COLUMNS,
   "Surface",
   "Cases",
   "Draft",
@@ -153,7 +151,10 @@ export const SUMMARY_COLUMNS = [
   "N/A",
   "Pass rate",
   "Automated left out",
+  "Commit SHA",
 ];
+
+export const SUMMARY_SHA_COL = SUMMARY_COLUMNS.indexOf("Commit SHA");
 
 /** Alternating bands on the Summary, one per run rather than one per row, so a
  *  run's four surfaces read as one block. */
@@ -177,4 +178,62 @@ export function colLetter(index) {
     n = Math.floor(n / 26) - 1;
   } while (n >= 0);
   return out;
+}
+
+/**
+ * A run's four Summary rows, one per surface.
+ *
+ * Counts are formulas, so a tester marking the tab moves them without a second
+ * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
+ * the row points at.
+ *
+ * `Cases` counts the surface's own column rather than `Case ID`, because a
+ * journey banner has a `Case ID` cell and no result cell: counting the results
+ * counts cases and skips the banners for free.
+ *
+ * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
+ * over cases automation has not reached is not reported as half failing.
+ *
+ * Identity (`Run ID` through `Selection`) and `Commit SHA` sit on the first
+ * row only. The three surfaces below it are empty in those columns so a merge
+ * can span them, and so the register is read as runs rather than as a table
+ * somebody would filter.
+ */
+export function summaryRows({
+  runId,
+  tab,
+  date,
+  name,
+  selection,
+  sha,
+  drafts,
+  automatedLeftOut,
+}) {
+  const t = quoteTab(tab);
+  return SURFACES.map((surface, i) => {
+    const col = colLetter(MARKING_START + i);
+    const range = `${t}!${col}2:${col}`;
+    const count = (what) =>
+      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
+    const first = i === 0;
+    return [
+      first ? runId : "",
+      first ? tab : "",
+      first ? date : "",
+      first ? name : "",
+      first ? selection : "",
+      surface,
+      `=IFERROR(COUNTA(${range}),"tab deleted")`,
+      drafts,
+      count("to_do"),
+      count("pass"),
+      count("fail"),
+      count("blocked"),
+      count("skipped"),
+      count("n/a"),
+      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
+      automatedLeftOut,
+      first ? sha : "",
+    ];
+  });
 }

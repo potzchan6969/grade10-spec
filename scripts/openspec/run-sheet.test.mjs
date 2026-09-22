@@ -24,8 +24,10 @@ import {
   READING_COLUMNS,
   RESULTS,
   SUMMARY_COLUMNS,
+  SUMMARY_LEAD_COLUMNS,
   SURFACE_END,
   SURFACES,
+  summaryRows,
 } from "./lib/run-sheet-layout.mjs";
 import {
   automatedGateOf,
@@ -216,7 +218,7 @@ test("isAutomated reads the same case the automation gate does", () => {
 });
 
 test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
-  assert.equal(SUMMARY_COLUMNS.at(-1), "Automated left out");
+  assert.equal(SUMMARY_COLUMNS.includes("Automated left out"), true);
 });
 
 test("shared-planning-agent-rounds-SC-61 - the count and its line, at none, one and many", () => {
@@ -344,6 +346,8 @@ test("the three bands sit in reading order and account for every column", () => 
   assert.equal(MARKING_START, READING_COLUMNS.length);
   assert.equal(FILTER_START, MARKING_START + MARKING_COLUMNS.length);
   assert.deepEqual(COLUMNS.slice(MARKING_START, SURFACE_END), SURFACES);
+  assert.equal(MARKING_COLUMNS.includes("Tester"), false);
+  assert.equal(MARKING_COLUMNS.includes("Date"), false);
 
   // The reading band ends where the tester's band begins: a tester who never
   // scrolls right can read a case and mark it.
@@ -406,6 +410,36 @@ test("a column index reads as its A1 letter past Z", () => {
   assert.equal(colLetter(0), "A");
   assert.equal(colLetter(25), "Z");
   assert.equal(colLetter(26), "AA");
+});
+
+test("a Summary run writes identity and SHA on the first row only", () => {
+  const rows = summaryRows({
+    runId: 3,
+    tab: "3-auction-signin",
+    date: "2026-09-22",
+    name: "auction-signin",
+    selection: "Sign-in that is auction related",
+    sha: "abc123",
+    drafts: 2,
+    automatedLeftOut: 1,
+  });
+
+  assert.equal(rows.length, SURFACES.length);
+  assert.equal(rows[0].length, SUMMARY_COLUMNS.length);
+  assert.equal(SUMMARY_COLUMNS.at(-1), "Commit SHA");
+  assert.deepEqual(SUMMARY_COLUMNS.slice(0, 5), SUMMARY_LEAD_COLUMNS);
+
+  const at = (row, name) => row[SUMMARY_COLUMNS.indexOf(name)];
+  assert.equal(at(rows[0], "Run ID"), 3);
+  assert.equal(at(rows[0], "Tab"), "3-auction-signin");
+  assert.equal(at(rows[0], "Commit SHA"), "abc123");
+  assert.equal(at(rows[0], "Surface"), "Web");
+  assert.equal(at(rows[1], "Run ID"), "");
+  assert.equal(at(rows[1], "Selection"), "");
+  assert.equal(at(rows[1], "Commit SHA"), "");
+  assert.equal(at(rows[1], "Surface"), "Mobile");
+  assert.equal(at(rows[3], "Surface"), "Auto mobile");
+  assert.equal(at(rows[3], "Commit SHA"), "");
 });
 
 test("shared-planning-agent-rounds-SC-78 - the left-out cases are named under the count, with what decides each", () => {

@@ -33,7 +33,6 @@ import { readFileSync } from "node:fs";
 import {
   COLUMN_WIDTHS,
   COLUMNS,
-  colLetter,
   DRAFT_BACKGROUND,
   FILTER_START,
   FONT,
@@ -45,9 +44,12 @@ import {
   RESULTS,
   SUMMARY_BANDS,
   SUMMARY_COLUMNS,
+  SUMMARY_LEAD_COLUMNS,
+  SUMMARY_SHA_COL,
   SUMMARY_TAB,
   SURFACE_END,
   SURFACES,
+  summaryRows,
 } from "./lib/run-sheet-layout.mjs";
 import {
   automatedGateOf,
@@ -278,6 +280,13 @@ async function ensureSummary(token, id, sheets) {
           },
         },
         fields: "userEnteredFormat.textFormat(fontFamily,fontSize)",
+      },
+    },
+    {
+      repeatCell: {
+        range: { sheetId, startRowIndex: 1 },
+        cell: { userEnteredFormat: { textFormat: { bold: false } } },
+        fields: "userEnteredFormat.textFormat.bold",
       },
     },
     {
@@ -582,87 +591,77 @@ function dressing(sheetId, lines) {
   return requests;
 }
 
-/**
- * A run's four Summary rows, one per surface.
- *
- * Counts are formulas, so a tester marking the tab moves them without a second
- * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
- * the row points at.
- *
- * `Cases` counts the surface's own column rather than `Case ID`, because a
- * journey banner has a `Case ID` cell and no result cell: counting the results
- * counts cases and skips the banners for free.
- *
- * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
- * over cases automation has not reached is not reported as half failing.
- *
- * `Automated left out` repeats down the four rows like the provenance does:
- * it is the run's count, not a surface's.
- */
-function summaryRows({
-  runId,
-  tab,
-  date,
-  name,
-  selection,
-  sha,
-  drafts,
-  automatedLeftOut,
-}) {
-  const t = quoteTab(tab);
-  return SURFACES.map((surface, i) => {
-    const col = colLetter(MARKING_START + i);
-    const range = `${t}!${col}2:${col}`;
-    const count = (what) =>
-      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
-    return [
-      runId,
-      tab,
-      date,
-      name,
-      selection,
-      sha,
-      surface,
-      `=IFERROR(COUNTA(${range}),"tab deleted")`,
-      drafts,
-      count("to_do"),
-      count("pass"),
-      count("fail"),
-      count("blocked"),
-      count("skipped"),
-      count("n/a"),
-      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
-      automatedLeftOut,
-    ];
-  });
-}
-
 /** `'Summary'!A6:P9` → the 0-based row the block starts at. */
 function startRowOf(updatedRange) {
   const match = /![A-Z]+(\d+)/.exec(String(updatedRange ?? ""));
   return match ? Number(match[1]) - 1 : null;
 }
 
-/** A band over a run's four rows, alternating by run id, so the Summary reads
- *  as a list of runs rather than a wall of near-identical rows. */
-function summaryBand(sheetId, startRow, rows, runId) {
-  return {
-    repeatCell: {
-      range: {
-        sheetId,
-        startRowIndex: startRow,
-        endRowIndex: startRow + rows,
-        startColumnIndex: 0,
-        endColumnIndex: SUMMARY_COLUMNS.length,
+/**
+ * A run's four Summary rows as one block: one band, identity merged down the
+ * first five columns and SHA down the last, and the three surfaces grouped
+ * under the first row. Collapsed they still name the run; expanded they show
+ * each surface's counts. There is no filter view - this tab is a register.
+ */
+function summaryDressing(sheetId, startRow, rows, runId) {
+  const end = startRow + rows;
+  const block = {
+    sheetId,
+    startRowIndex: startRow,
+    endRowIndex: end,
+    startColumnIndex: 0,
+    endColumnIndex: SUMMARY_COLUMNS.length,
+  };
+  return [
+    {
+      repeatCell: {
+        range: block,
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
+            textFormat: { bold: false },
+            verticalAlignment: "MIDDLE",
+          },
+        },
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat.bold,verticalAlignment)",
       },
-      cell: {
-        userEnteredFormat: {
-          backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
+    },
+    {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: 0,
+          endColumnIndex: SUMMARY_LEAD_COLUMNS.length,
+        },
+        mergeType: "MERGE_COLUMNS",
+      },
+    },
+    {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: SUMMARY_SHA_COL,
+          endColumnIndex: SUMMARY_SHA_COL + 1,
+        },
+        mergeType: "MERGE_COLUMNS",
+      },
+    },
+    {
+      addDimensionGroup: {
+        range: {
+          sheetId,
+          dimension: "ROWS",
+          startIndex: startRow + 1,
+          endIndex: end,
         },
       },
-      fields: "userEnteredFormat.backgroundColor",
     },
-  };
+  ];
 }
 
 // ---------------------------------------------------------------------------
@@ -834,9 +833,11 @@ const appended = await appendValues(
 );
 const blockStart = startRowOf(appended.updates?.updatedRange);
 if (blockStart !== null)
-  await batchUpdate(token, args.sheet, [
-    summaryBand(summarySheetId, blockStart, SURFACES.length, runId),
-  ]);
+  await batchUpdate(
+    token,
+    args.sheet,
+    summaryDressing(summarySheetId, blockStart, SURFACES.length, runId),
+  );
 
 const cases = lines.filter((line) => line.kind === "case").length;
 console.log(
@@ -846,7 +847,7 @@ console.log(
   `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,
 );
 console.log(
-  `\n${dim(`Mark ${SURFACES.join(", ")}, Notes and Tester. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
+  `\n${dim(`Mark ${SURFACES.join(", ")} and Notes. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
 );
 console.log(
   `${dim("The case and its classification are locked. Sort inside the Walk filter view, not the sheet.")}`,
