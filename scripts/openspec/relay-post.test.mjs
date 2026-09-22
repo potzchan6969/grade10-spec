@@ -384,3 +384,130 @@ test("refuses --text: what a round says is the file it wrote", async () => {
   assert.equal(result.status, 1);
   assert.match(result.stderr, /unknown option --text/);
 });
+
+// ── A held row for another hand: the round's own reply, mentioning them ─────
+
+/** A change whose decisions hold one row held on QA, a page carrying the
+ * sentence the row would put on it, and a record naming QA's handle. */
+function rowRoot(url) {
+  const root = url ? relayRoot(url) : bareRoot();
+  const change = join(root, "openspec", "changes", "demo-change");
+  mkdirSync(change, { recursive: true });
+  writeFileSync(
+    join(change, ".openspec.yaml"),
+    'schema: grade10-planning\ncreated: 2026-09-22\nhands:\n  pm: "@ecchochan"\n  qa: "@chloe"\n',
+  );
+  writeFileSync(
+    join(change, "proposal.md"),
+    "# Demo\n\nProduct context: [Rail](../../../docs/prds/products/demo/rail.md#rail)\n",
+  );
+  writeFileSync(
+    join(change, "decisions.md"),
+    [
+      "## Decisions",
+      "",
+      "| Id | Question | Decision | Instead of |",
+      "| --- | --- | --- | --- |",
+      "| Q1 | How many tiles? | Six - the owner's word | Eight |",
+      "| Q3 | Does a sold-out pick stay in the rail? | ❓ qa - recommended: yes, with its badge, as Q1 counts it | Dropped |",
+      "",
+    ].join("\n"),
+  );
+  mkdirSync(join(root, "docs", "prds", "products", "demo"), {
+    recursive: true,
+  });
+  writeFileSync(
+    join(root, "docs", "prds", "products", "demo", "rail.md"),
+    "---\ntitle: Rail\nspec: demo/rail\n---\n\n## Rail\n\n- ❓ **Sold-out picks** — a sold-out pick stays in the rail with its badge (`Q3`)\n",
+  );
+  return root;
+}
+
+test("shared-planning-agent-rounds-SC-86 - --row posts the held row as a reply mentioning its hand, with the row, the page sentence and the rows it touches quoted", async () => {
+  const root = rowRoot();
+  const result = await run([
+    "--row",
+    "Q3",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /@chloe/);
+  assert.match(result.stdout, /Q3/);
+  assert.match(result.stdout, /Does a sold-out pick stay in the rail\?/);
+  assert.match(result.stdout, /recommended: yes, with its badge/);
+  // The sentence the row would put on the page, quoted from the page.
+  assert.match(
+    result.stdout,
+    /a sold-out pick stays in the rail with its badge/,
+  );
+  // The decision rows the held row touches, quoted.
+  assert.match(result.stdout, /Q1 \| How many tiles\?/);
+  assert.doesNotMatch(result.stdout, /@ecchochan/);
+});
+
+test("shared-planning-agent-rounds-SC-86 - --row posts a row once: a re-run with the row unchanged posts nothing again", async () => {
+  const root = rowRoot();
+  const first = await run([
+    "--row",
+    "Q3",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+  assert.equal(first.status, 0, first.stderr);
+  const again = await run([
+    "--row",
+    "Q3",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+  assert.equal(again.status, 0, again.stderr);
+  assert.match(again.stdout, /already posted/);
+  assert.doesNotMatch(again.stdout, /@chloe/);
+});
+
+test("shared-planning-agent-rounds-SC-86 - --row refuses a row that is not held", async () => {
+  const root = rowRoot();
+  const result = await run([
+    "--row",
+    "Q1",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Q1/);
+  assert.match(result.stderr, /not held|decided/i);
+});
+
+test("shared-planning-agent-rounds-SC-86 - --row goes through the relay when a wake is on", async () => {
+  let seen;
+  const server = await stubRelay((req, res, body) => {
+    seen = { url: req.url, body: JSON.parse(body) };
+    res.writeHead(200, { "content-type": "application/json" });
+    res.end(JSON.stringify({ ok: true }));
+  });
+  const root = rowRoot(urlOf(server));
+  const result = await run([
+    "--row",
+    "Q3",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+  server.close();
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.equal(seen.url, `/runs/${TOKEN}/post`);
+  assert.match(seen.body.text, /@chloe/);
+  assert.match(seen.body.text, /Q3/);
+});

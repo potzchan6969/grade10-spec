@@ -119,12 +119,33 @@ test("toldBodyOf gives every other hand of staging the ordinary Your turn", () =
 
 test("toldBodyOf gives QA at another stage the ordinary Your turn", () => {
   assert.deepEqual(
-    toldBodyOf({ id: "probe", stage: "specified" }, "qa", { linked: LINKED }),
+    toldBodyOf({ id: "probe", stage: "planned" }, "qa", { linked: LINKED }),
     {
       kind: "your-turn",
-      text: yourTurnText({ id: "probe", stage: "specified" }, "qa", LINKED),
+      text: yourTurnText({ id: "probe", stage: "planned" }, "qa", LINKED),
     },
   );
+});
+
+test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suite, its case count and the review command", () => {
+  const at = {
+    id: "probe",
+    stage: "specified",
+    suites: [
+      {
+        spec: "shared/planning/agent-rounds",
+        cases: { draft: 35, actual: 0, deprecated: 0, total: 35, automated: 0 },
+      },
+    ],
+  };
+  assert.deepEqual(toldBodyOf(at, "qa", { linked: LINKED }), {
+    kind: "your-turn",
+    text: [
+      `*Your turn* — ${LINKED} is at *Specified*.`,
+      "Review: `/tcs-review probe`",
+      "Suite: `openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md`, 35 cases; the walk names this review as its input",
+    ].join("\n"),
+  });
 });
 
 test("behindText names the artifact and what changed before it", () => {

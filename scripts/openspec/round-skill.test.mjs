@@ -214,6 +214,52 @@ test("shared-planning-agent-rounds-SC-15 - a reply the round cannot apply is ans
   );
 });
 
+test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - the summary shows one hand's moves, a held row for another hand is its own reply, and one reply carries several moves", () => {
+  const skill = claims(ROUND);
+  assert.match(skill, /the moves of the hand it addresses alone/i);
+  assert.match(
+    skill,
+    /`land with recommendations` only while a held row is open/i,
+  );
+  assert.match(skill, /relay-post\.mjs --row <Q>/);
+  assert.match(skill, /mentioning (that|the row's) hand/i);
+  assert.match(skill, /one answer and any number of remarks/i);
+  assert.match(skill, /comes back to the hand before anything lands/i);
+});
+
+test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is the product manager's question, quoted before and after", () => {
+  const skill = claims(ROUND);
+  assert.match(skill, /a build round .*(lands|puts) on a page .*❓/i);
+  assert.match(skill, /quot\w+ (the line )?before and after/i);
+  assert.match(skill, /\(none\)/);
+  assert.match(skill, /holds no landing|nothing holds the landing/i);
+});
+
+test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /## Interview/);
+  assert.match(conduct, /at most three questions/i);
+  assert.match(conduct, /whether to do it now/i);
+  assert.match(conduct, /decided by the round/i);
+  assert.match(conduct, /`not now`/);
+  for (const path of [
+    ".claude/skills/workflow-plan/SKILL.md",
+    ".claude/skills/planning-pm/SKILL.md",
+  ]) {
+    const text = claims(path);
+    assert.match(
+      text,
+      /round-summary\.md#interview/,
+      `${path} links the interview`,
+    );
+    assert.doesNotMatch(
+      text,
+      /at most three questions/i,
+      `${path} restates the count`,
+    );
+  }
+});
+
 test("shared-planning-agent-rounds-SC-16 - a remark on a page's marked lines", () => {
   const skill = claims(ROUND);
   assert.match(
