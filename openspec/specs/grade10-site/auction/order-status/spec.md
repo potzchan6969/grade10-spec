@@ -177,7 +177,7 @@ Refunded.
 - **THEN** Grade10 refuses the write
 - **AND** the order status is still Pending Payment
 
-#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Address
+#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Setup
 **Serves:** Derived order status - an order with no address is Awaiting Setup
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has

@@ -26,9 +26,9 @@
   ],
   "states": [
     {
-      "id": "awaiting-address",
+      "id": "awaiting-setup",
       "type": "start",
-      "label": "Awaiting Address",
+      "label": "Awaiting Setup",
       "sublabel": "the lot closed",
       "lane": "main",
       "col": 0
@@ -37,7 +37,7 @@
       "id": "preparing-invoice",
       "type": "active",
       "label": "Preparing Invoice",
-      "sublabel": "address and method confirmed",
+      "sublabel": "setup confirmed",
       "lane": "main",
       "col": 1
     },
@@ -110,7 +110,7 @@
   "transitions": [
     {
       "id": "confirmed",
-      "from": "awaiting-address",
+      "from": "awaiting-setup",
       "to": "preparing-invoice",
       "variant": "emphasis"
     },

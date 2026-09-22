@@ -21,7 +21,7 @@ component contract underneath them.
 - 🚧 **Order detail** — Order Information, Collection Method, Order Status
   and Lots, in that order; Collection Method shows whichever of an address
   form, a read-only address, or nothing the application supplies, and an
-  invoice with Pay Now only when one is supplied
+  invoice with Pay with Card only when one is supplied
 - 🚧 **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, the required ones
   marked, an application-supplied error beside each field it names, and

@@ -2,9 +2,9 @@
 
 ## Purpose
 What a winner is sent after a lot closes and what they do with it: one order
-per lot, a delivery address and a payment method they choose, an operator's
-invoice priced for both, payment by card or by a bank transfer they prove,
-and the receipt, tracker and delivery proof the order keeps afterwards.
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 
 ## Feature set
 
@@ -47,7 +47,7 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and copy controls for account number, amount due, and transfer reference
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
-  - Payment Verifying: the deadline stops, card Pay and further uploads are hidden
+  - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
@@ -485,9 +485,9 @@ no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
 A refused or failed card payment SHALL NOT void the invoice. While a card
 invoice's status is `pending`, it SHALL remain payable by card and the winner
-SHALL be able to retry with the same or a different card. When the invoice
-status is `expired` or `payment_verifying`, Grade10 SHALL NOT offer or accept
-winner card payment.
+SHALL be able to retry with the same or a different card. The primary pay
+control SHALL read **Pay with Card**. When the invoice status is `expired` or
+`payment_verifying`, Grade10 SHALL NOT offer or accept winner card payment.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -528,7 +528,7 @@ winner card payment.
 
 - **GIVEN** an auction order whose invoice was sent for card and is `pending`
 - **WHEN** the winner opens the order to pay
-- **THEN** Grade10 offers card payment
+- **THEN** Grade10 offers Pay with Card
 - **AND** shows no bank transfer details, no proof upload, and no cash or other method
 
 ### Requirement: Records the winner keeps
@@ -857,7 +857,7 @@ without time).
 When the window passes without a confirmed address, Winner Order SHALL hide
 Confirm delivery address and SHALL show Contact Us in an overdue alert that
 reads `Missed address deadline: {date}` (day-only, no middle-dot separator).
-Derived order status SHALL remain **Awaiting Address**. Invoice status SHALL
+Derived order status SHALL remain **Awaiting Setup**. Invoice status SHALL
 remain `not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel
 the order or suspend bidding solely because the address window passed; an
 operator follows up per `grade10-admin/auction/post-sale`.
@@ -868,14 +868,14 @@ operator follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
 - **WHEN** its derived status is read
-- **THEN** it is Awaiting Address
+- **THEN** it is Awaiting Setup
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-70 - Address confirm is due 48 hours after lot close
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot that closed at 2026-09-17T13:30:00Z
-- **AND** its auction order is Awaiting Address inside the confirm window
+- **AND** its auction order is Awaiting Setup inside the confirm window
 - **WHEN** the winner opens Winner Order
 - **THEN** Confirm delivery address is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
@@ -885,13 +885,13 @@ operator follows up per `grade10-admin/auction/post-sale`.
 #### Scenario: winner-order-SC-71 - A missed address deadline hides Confirm
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
-- **GIVEN** an auction order still Awaiting Address whose address confirm
+- **GIVEN** an auction order still Awaiting Setup whose address confirm
   window has passed
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no Confirm delivery address control
 - **AND** the overdue alert reads Missed address deadline with the day-only
   date and carries Contact Us
-- **AND** derived status remains Awaiting Address
+- **AND** derived status remains Awaiting Setup
 - **AND** invoice status remains `not_issued`
 
 ### Requirement: Winner Order shows five progress steps
