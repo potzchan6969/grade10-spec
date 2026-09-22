@@ -231,7 +231,7 @@
 
 **Pre-conditions:**
 
-* `GradingLevelPicker`'s `estimate` carries the cards, the fee, a cover line and the weeks, matching the level `GradingFeeSheet` names for the same grader.
+* `GradingLevelPicker`'s `estimate` carries the cards, the fee, a cover line and the weeks for the picked level.
 
 **Steps:**
 
@@ -240,7 +240,7 @@
 
 **Expected Results:**
 
-* The estimate shows cards × fee, the cover line and the total, matching the fee sheet's own figures for that level.
+* The estimate shows cards × fee, the cover line and the total, each as `estimate` supplies it.
 
 ### shared-ui-grading-submission-US1-TC9-1: No level picked shows no estimate
 
@@ -855,6 +855,7 @@ Runs once per row of **Test data**.
 | Graded | success |
 | Moved up a level | warning |
 | Ungraded | error |
+| Minimum grade not met | error |
 | Held by the grader | warning |
 | Not returned | error |
 | Damaged | error |

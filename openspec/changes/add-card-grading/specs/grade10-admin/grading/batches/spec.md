@@ -82,6 +82,10 @@ opened with its cut-off when the first card for it is handed in.
 **A card that fits neither** - a card at another grader or another level SHALL
 wait for that trio's own batch and SHALL never join this one.
 
+**Opened ahead of the first card** - a batch MAY also be opened from the
+console for a trio that has no un-shipped batch, and the first card handed in
+for that trio SHALL join it rather than opening a second.
+
 **Its name** - a batch SHALL be named by its shop, its grader and level, and
 its cut-off date.
 
@@ -107,6 +111,15 @@ its cut-off date.
 - **WHEN** a submission at the same grader and a different level is handed in
 - **THEN** it joins that grader and level's own batch instead, and the first
   batch is unchanged
+
+#### Scenario: grade10-admin-grading-batches-SC-44 - A batch opened from the console takes the trio's first card
+**Serves:** grade10-admin-grading-batches-US-01 - the operator opens the week's parcel before the first collector walks in
+
+- **GIVEN** no un-shipped batch stands for the shop, the grader and the level
+- **WHEN** the operator opens one for that grader and level, and a submission
+  at that grader and level is then handed in
+- **THEN** the submission joins that batch, and no second batch is opened for
+  the trio
 
 ### Requirement: A batch's word is read from its own stamps
 
@@ -219,17 +232,20 @@ moves and every collector hears on the same act.
 2. The packing list is printed: one line per intake id in the batch.
 3. The grader's order number is recorded.
 4. The courier and its tracking are recorded.
-5. The insured total - the declared values of the cards in the batch - is
-   recorded, with the courier's written cover figure and that figure's
-   currency.
+5. The insured total - the sum of the declared values of the cards in the
+   batch - is read on the form rather than entered, and the courier's written
+   cover figure and that figure's currency are recorded.
 6. The ship date is recorded, never later than today.
 7. The batch is marked shipped: every submission in it moves from Handed in to
    With the grader, the estimate back is set from the ship day, and every
    collector in the batch is told the tracking and that date.
 
 **Held until it is complete** - the act SHALL be refused while the order
-number, the courier, the tracking, the insured total, the cover figure or the
-ship date is unset, naming what is unset.
+number, the courier, the tracking, the cover figure or the ship date is unset,
+naming what is unset.
+
+**Not before it closes** - the ship form SHALL open only on a batch that has
+closed, and a batch still open SHALL offer no way to ship it.
 
 **A date ahead of today** - a ship date later than the shop's today SHALL be
 refused on the field.
@@ -239,6 +255,14 @@ together or none of them, and SHALL tell each collector once.
 
 **A batch already shipped** - a second attempt to ship the same batch SHALL be
 refused by name and SHALL send nothing further.
+
+#### Scenario: grade10-admin-grading-batches-SC-45 - A batch still open offers no way to ship it
+**Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel that is still taking cards
+
+- **GIVEN** a batch whose cut-off is still ahead
+- **WHEN** it is read
+- **THEN** it reads Open, no way to ship it is offered, and the ship form
+  cannot be opened on it
 
 #### Scenario: grade10-admin-grading-batches-SC-10 - The packing list names every intake id in the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator packs the parcel against a list the grader can check the cards off
@@ -284,6 +308,11 @@ refused by name and SHALL send nothing further.
 The parcel is insured to what it carries, and the courier's own written figure
 is what that is read against.
 
+**Derived, never typed** - the insured total SHALL be the sum of the declared
+values of the cards in the batch, read on the ship form as a figure staff
+cannot enter or change, and SHALL be recorded on the batch as the figure
+declared to the courier.
+
 **The comparison** - the insured total SHALL be compared to the courier's
 written cover figure before the batch is shipped.
 
@@ -297,6 +326,16 @@ applied.
 **Named beside the figure** - the cover figure SHALL carry its currency
 wherever it is read, and any amount that is not HKD SHALL name its currency
 beside it.
+
+#### Scenario: grade10-admin-grading-batches-SC-43 - The ship form reads the insured total off the cards in the batch
+**Serves:** grade10-admin-grading-batches-US-01 - the operator declares to the courier what the parcel is worth without adding it up
+
+- **GIVEN** a closed batch of three cards declared at 500000, 300000 and
+  200000 HKD minor units
+- **WHEN** the ship form is opened
+- **THEN** the insured total reads 1000000 HKD minor units, it cannot be
+  typed over, and it is recorded on the batch as the figure declared to the
+  courier
 
 #### Scenario: grade10-admin-grading-batches-SC-15 - A declared total above the courier's cover is refused
 **Serves:** grade10-admin-grading-batches-US-01 - the operator cannot send a parcel worth more than the courier has agreed to cover
@@ -396,6 +435,14 @@ further and SHALL tell nobody again.
 - **THEN** the batch carries the new date and the reason, and all four
   collectors are told that day
 
+#### Scenario: grade10-admin-grading-batches-SC-48 - A re-estimate with no reason is refused
+**Serves:** grade10-admin-grading-batches-US-04 - the operator gives the collector the reason the date moved, not just a new day
+
+- **GIVEN** a batch reading Shipped
+- **WHEN** a new due date is set with no reason
+- **THEN** the re-estimate is refused naming the reason, the due date does not
+  move, and no collector is told
+
 #### Scenario: grade10-admin-grading-batches-SC-22 - A re-estimate to the date already set writes nothing further
 **Serves:** The grader's stages - a date typed again on one order tells no collector the same news twice
 
@@ -458,9 +505,10 @@ be handed to the wrong collector.
    the grader's words are recorded on that card.
 4. The row reads matched and scanned, naming the card and its submission.
 
-**One submission holds a cert** - a cert already held by a card in another
-submission SHALL be refused, naming the submission that holds it, and nothing
-SHALL be recorded.
+**One card at one grader holds a cert** - a cert already carried by a card at
+the same grader SHALL be refused, in any submission and any batch of that
+grader, batches already received included, naming the submission that holds
+it, and nothing SHALL be recorded.
 
 **Returned raw** - a card the grader graded nothing SHALL be recorded ungraded
 with the grader's code and its note.
@@ -478,6 +526,15 @@ with the grader's code and its note.
 **Serves:** grade10-admin-grading-batches-US-02 - the operator is stopped before a slab is put with the wrong collector's cards
 
 - **GIVEN** a cert already held by a card in another submission
+- **WHEN** it is scanned into this batch
+- **THEN** the scan is refused naming the submission that holds that cert, and
+  nothing is recorded on either card
+
+#### Scenario: grade10-admin-grading-batches-SC-46 - A cert that grader returned in an earlier batch is refused
+**Serves:** grade10-admin-grading-batches-US-02 - the operator is stopped from putting one grader's cert on two cards, months apart
+
+- **GIVEN** a cert carried by a card in a submission of an earlier batch at
+  the same grader, that batch already received
 - **WHEN** it is scanned into this batch
 - **THEN** the scan is refused naming the submission that holds that cert, and
   nothing is recorded on either card
@@ -606,6 +663,9 @@ recorded as one of these:
 | Not returned | the card did not come back, and it owes a payout at its declared value |
 | Damaged | the slab came back damaged, photographed in the box before it leaves it, and it owes a payout at its declared value |
 
+**The date is part of the record** - recording a card held by the grader
+without the date it is expected SHALL be refused, naming the date.
+
 **Photographed first** - a damaged slab SHALL be photographed while it is
 still in the box it arrived in, before the record is made.
 
@@ -624,6 +684,14 @@ recorded.
 - **WHEN** it is recorded held with the date the grader expects to return it
 - **THEN** that card carries held with that date, the other three carry their
   own outcomes, and the batch can be finished
+
+#### Scenario: grade10-admin-grading-batches-SC-47 - A card recorded held with no date it is expected is refused
+**Serves:** grade10-admin-grading-batches-US-03 - the operator cannot leave a card with the grader and no day to chase it on
+
+- **GIVEN** a card on the manifest that is not in the box
+- **WHEN** it is recorded held by the grader with no expected date
+- **THEN** the record is refused naming the date, and nothing is recorded on
+  the card
 
 #### Scenario: grade10-admin-grading-batches-SC-35 - A card that did not come back owes its declared value
 **Serves:** grade10-admin-grading-batches-US-03 - the operator records the slab that is missing from the box against the money it costs
@@ -736,3 +804,12 @@ bought, and SHALL be changeable as a setting rather than by a release.
   in at the same moment
 - **THEN** one is taken and the other is refused, and the total never passes
   30000000 HKD minor units
+
+#### Scenario: grade10-admin-grading-batches-SC-49 - A hand-in that fills the safe to its cap is taken
+**Serves:** grade10-admin-grading-batches-US-05 - the collector at the desk is taken in while there is still room on the shelf
+
+- **GIVEN** a declared value in the safe of 29000000 HKD minor units against a
+  cap of 30000000 HKD minor units
+- **WHEN** a submission declared at 1000000 HKD minor units is handed in
+- **THEN** the hand-in is taken, the declared value in the safe reads
+  30000000 HKD minor units, and the safe's tile says it is at its cap

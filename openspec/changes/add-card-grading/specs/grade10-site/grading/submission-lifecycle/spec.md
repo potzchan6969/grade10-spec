@@ -161,6 +161,28 @@ statuses it names:
 - **THEN** the submission is still ready to collect
 - **AND** the ungraded return is a fact on that card alone
 
+### Requirement: The submission page opens to the collector and to the emailed link
+
+One page is read by the collector whose submission it is, by whoever holds the
+link the shop emailed, and by nobody else.
+
+- **Signed in** - a collector signed in under the email the submission was
+  booked under SHALL read the submission page.
+- **The emailed link** - the access token that link carries SHALL open the same
+  page on any device, with no account.
+- **Anybody else** - a reader holding neither SHALL be given the site's
+  not-found page, and the page SHALL NOT say whether the submission exists.
+- **An id nobody was issued** - a submission id the shop never issued SHALL be
+  answered the same way.
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-52 - A reader who is neither the collector nor the link reads not found
+**Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector follows their own submission, and a stranger with the address reads nothing
+
+- **GIVEN** a submission booked under a collector's email
+- **WHEN** somebody who is neither signed in as that collector nor holding the emailed link opens its address
+- **THEN** the site's not-found page is shown
+- **AND** nothing on it says whether that submission exists
+
 ### Requirement: The page reads one word, one chip and one rail
 
 Three things say where a submission is, and all three are read from its one
@@ -198,6 +220,14 @@ status.
 - **WHEN** the collector opens the submission page
 - **THEN** the rail stands at Booked and goes no further
 - **AND** no chip is shown
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-53 - The word, the chip and the rail are one status's row
+**Serves:** grade10-site-grading-submission-lifecycle-US-01 - the collector reads where the cards are in three places that never disagree
+
+- **GIVEN** a submission at any of the ten statuses
+- **WHEN** the collector opens the submission page
+- **THEN** the word, the chip and the rail's current stage are that status's row of the status table
+- **AND** no two of them say a different thing
 
 ### Requirement: While the cards are with the grader the page reads its stages and the estimate
 
@@ -323,6 +353,8 @@ the window is the batch's.
   till when the card is collected.
 - **The page** - the card SHALL read Withdrawn with its refund, and the
   submission's estimate SHALL drop to the cards that go on.
+- **Nothing left to send** - a withdrawal that takes the submission's last card
+  SHALL cancel the submission, and the collector SHALL be told.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-15 - A card is pulled from the bag before the batch closes
 **Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector who changed their mind gets one card back at the counter
@@ -338,6 +370,14 @@ the window is the batch's.
 - **GIVEN** a handed-in submission whose batch has closed
 - **WHEN** the collector opens the submission page
 - **THEN** no card offers to be withdrawn
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-54 - The last withdrawal cancels the submission
+**Serves:** grade10-site-grading-submission-lifecycle-US-02 - the collector who asks for every card back is left with nothing open in their name
+
+- **GIVEN** a handed-in submission of two cards whose batch has not closed, one of them already withdrawn
+- **WHEN** the collector asks for the second card back and collects it at the counter
+- **THEN** the submission is cancelled
+- **AND** the collector is told, and the page says what came back and why
 
 ### Requirement: The grade is the grader's decision
 
@@ -531,6 +571,8 @@ person arrives.
 - **Quietly** - naming, changing or removing SHALL send no message, and SHALL be
   written to the submission's history.
 - **On the receipt** - the hand-back receipt SHALL name who collected.
+- **A full name or nobody** - a naming with no name SHALL be refused, and the
+  submission SHALL stay with nobody named.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-31 - Naming somebody is logged and sends nothing
 **Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector sends somebody else in their place
@@ -553,6 +595,22 @@ person arrives.
 - **GIVEN** a submission whose cards have been collected
 - **WHEN** the collector tries to name somebody
 - **THEN** it is refused by name as already collected
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-55 - An empty name names nobody
+**Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector never sends somebody in on a name the page never took
+
+- **GIVEN** a ready submission with nobody named
+- **WHEN** the collector asks to name somebody and gives no name
+- **THEN** the naming is refused
+- **AND** the submission still has nobody named
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-56 - Removing the named person leaves nobody named
+**Serves:** grade10-site-grading-submission-lifecycle-US-07 - the collector takes back the name they gave and comes in themselves
+
+- **GIVEN** a ready submission with one person named
+- **WHEN** the collector removes them
+- **THEN** the submission has nobody named, and only the collector is released to
+- **AND** the removal is in the submission's history, and no message is sent
 
 ### Requirement: A slab goes into a vault case at the same counter
 
@@ -602,6 +660,9 @@ became ready to collect.
 - **The ladder stops** - nothing SHALL follow the notice's 30 days in this
   release, and the page SHALL say that a slab kept on purpose goes into a vault
   case instead.
+- **Nothing pauses it** - the rungs SHALL be counted from the ready day
+  whatever the collector books or names, and a card SHALL leave the ladder only
+  by being collected, vaulted or paid out.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-35 - The rungs are counted from the ready day
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who has not come in is nudged before being charged
@@ -625,6 +686,14 @@ became ready to collect.
 - **GIVEN** a submission whose notice was posted more than 30 days ago
 - **WHEN** the collector opens the submission page
 - **THEN** the cards are still theirs to collect, storage is still accruing, and the page offers the vault instead
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-57 - Naming a collector does not pause the ladder
+**Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector who says somebody is coming is still nudged and still charged for the wait
+
+- **GIVEN** a ready submission uncollected 95 days, with a person named and a visit booked at the shop
+- **WHEN** the collector reads the ladder and what is due
+- **THEN** the rungs still count from the ready day and the storage is still accruing
+- **AND** only a card collected, vaulted or paid out has left the ladder
 
 ### Requirement: Storage accrues per card held and per month started
 
@@ -761,6 +830,9 @@ nothing.
 - **Nothing paid, nothing owed** - a cancelled or expired submission SHALL carry
   no money paid and nothing owed, and its cards SHALL never have left the
   collector.
+- **Nothing left to hand in** - a hand-in that refuses the submission's last
+  card SHALL cancel the submission at the counter, the collector SHALL be told
+  there, and no message SHALL be sent.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-47 - Cancelling takes the drop-off with it
 **Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector calls the whole thing off from one page
@@ -784,6 +856,14 @@ nothing.
 - **WHEN** its expiry clock runs out
 - **THEN** the submission is expired, the rail stands at Planned
 - **AND** nothing was paid, nothing is owed, and the cards were never handed in
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-58 - The last card refused at the counter cancels the submission
+**Serves:** grade10-site-grading-submission-lifecycle-US-10 - the collector leaves the counter with their cards and nothing open in their name
+
+- **GIVEN** a booked submission of one card being handed in at the counter
+- **WHEN** the counter refuses that card
+- **THEN** the submission is cancelled and the collector is told at the counter
+- **AND** no message is sent, and nothing was paid and nothing is owed
 
 ### Requirement: The page offers only the acts the status allows
 
