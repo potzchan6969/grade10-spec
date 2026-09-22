@@ -709,7 +709,7 @@ Stories `grading-admin-batches-batches-panel--`, the Ship form rows `grading-adm
 | Shipped | every submission at Sent; the letters sent | `grade10-admin-grading-batches-SC-11` |
 | Re-estimate | `ReestimateDialog`: the stage picked from the grader's stages, the new date, the reason; emails every collector | `grade10-admin-grading-batches-SC-21` |
 | Stage recorded | the morning read: the stage picked from the grader's stages, one of them the move to graded, the grader's words in the note beside it; the stage on the batch and every submission's timeline | `grade10-admin-grading-batches-SC-17` |
-| Read grant | no Ship, Re-estimate or Receive | `grade10-admin-grading-counter-US-14` |
+| Read grant | no Ship, Re-estimate or Receive | `grade10-admin-grading-counter-SC-75` |
 
 ### Receive a batch
 
@@ -738,7 +738,7 @@ Stories `grading-admin-receiving-receive-panel--`.
 | Finish held | an unmatched line or an unscanned slab unresolved: Finish disabled naming it | `grade10-admin-grading-batches-SC-31` |
 | Finish | Finish receiving · notify n collectors; every submission ready, the codes emailed | `grade10-admin-grading-batches-SC-32` |
 | Finished | the batch closed with its received date | `grade10-admin-grading-batches-SC-06` |
-| Read grant | no Scan, Import or Finish | `grade10-admin-grading-counter-US-14` |
+| Read grant | no Scan, Import or Finish | `grade10-admin-grading-counter-SC-75` |
 
 ### Hand-back runbook
 

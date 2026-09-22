@@ -1178,11 +1178,13 @@ badges, its tiles and the day's strip are the whole signal.
 
 ### Requirement: An operator's session is verified, and stays verified for twelve hours
 
-A second factor SHALL be required in production and in staging, and SHALL be
-optional in development.
+Working a grading surface takes a verified session, and takes it once a shift.
 
-One verification SHALL stamp the session for 12 hours, and no act inside that
-window SHALL ask for another.
+**Where it is asked for** - A second factor SHALL be required in production and
+in staging, and SHALL be optional in development.
+
+**How long it holds** - One verification SHALL stamp the session for 12 hours,
+and no act inside that window SHALL ask for another.
 
 #### Scenario: grade10-admin-grading-counter-SC-78 - Staging asks for the second factor
 **Serves:** The grants - an operator opening a grading surface off development meets the second factor before any act
