@@ -234,8 +234,10 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   change
 - 🚧 **Refund transaction clues for the winner** — Transfer to uses the
   shared payment card: brand logo and the last four digits for a card, or a
-  bank icon with the bank name and the last four digits of the account. Full
-  proof, provider reference and audit number stay with the operator
+  bank icon with the bank name and the last four digits of the account. A
+  bank refund also shows its provider reference in the winner details; a card
+  refund shows none. Full proof, Stripe reference and audit number stay with
+  the operator
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -341,7 +343,7 @@ settings.
 | Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | 🚧 In flight | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
 | Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
-| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the bank name and the last four digits of the account. Full proof and provider reference stay with the operator. | Product |
+| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the bank name and the last four digits of the account. A bank refund also shows its provider reference to the winner; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product |
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |
