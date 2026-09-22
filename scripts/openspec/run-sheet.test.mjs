@@ -18,6 +18,7 @@ import {
   colLetter,
   FILTER_COLUMNS,
   FILTER_START,
+  locateRun,
   MARKING_COLUMNS,
   MARKING_START,
   quoteTab,
@@ -28,6 +29,7 @@ import {
   SURFACE_END,
   SURFACES,
   summaryRows,
+  tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
   automatedGateOf,
@@ -410,6 +412,41 @@ test("a column index reads as its A1 letter past Z", () => {
   assert.equal(colLetter(0), "A");
   assert.equal(colLetter(25), "Z");
   assert.equal(colLetter(26), "AA");
+});
+
+test("a tab title is the run id, a hyphen, and the name slug", () => {
+  assert.equal(tabTitle(1, "auction-auth"), "1-auction-auth");
+});
+
+test("locateRun finds the identity row and the tab it names", () => {
+  const summary = [
+    ["Run ID", "Tab"],
+    ["1", "1-auction-auth"],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["2", "2-smoke"],
+  ];
+  const found = locateRun(summary, ["Summary", "1-auction-auth", "2-smoke"], 1);
+  assert.equal(found.ok, true);
+  assert.equal(found.startRow, 1);
+  assert.equal(found.tab, "1-auction-auth");
+});
+
+test("locateRun refuses a Summary row whose tab is missing", () => {
+  const summary = [
+    ["Run ID", "Tab"],
+    ["3", "3-gone"],
+  ];
+  const found = locateRun(summary, ["Summary", "1-auction-auth"], 3);
+  assert.equal(found.ok, false);
+  assert.match(found.why, /no tab has that title/);
+});
+
+test("locateRun refuses a run id Summary does not hold", () => {
+  const found = locateRun([["Run ID", "Tab"]], ["Summary"], 4);
+  assert.equal(found.ok, false);
+  assert.match(found.why, /no run 4/);
 });
 
 test("a Summary run writes identity and SHA on the first row only", () => {

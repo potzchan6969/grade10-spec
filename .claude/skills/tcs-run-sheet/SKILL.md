@@ -62,6 +62,23 @@ in the same pass when the request covers both.
    filter resolved it. Add `include_draft=true` only when the person asked for
    drafts. Omit `include_automated` (or pass `false`) only when they asked to
    leave automated cases out.
+
+   **Sandbox.** Production is the default. Add `-f sandbox=true` only when they
+   asked to write to the sandbox sheet, a test spreadsheet, or not production.
+   Asking for a test run of a feature is not that. The sandbox spreadsheet id
+   lives in the repository variable `TCS_SHEET_SANDBOX_ID`; do not put it in a
+   command, a skill, or the code.
+
+   **Overwrite.** A run already written is left alone. Rewrite it only when
+   they ask to redo a run **this conversation created**, and name that run id.
+   Then add `-f overwrite=<id>` (and `-f sandbox=true` if that write was a
+   sandbox write). The writer recreates the same tab title and overwrites that
+   run's four Summary rows. It does not delete anything else.
+
+   If the writer prints that Summary and the tabs disagree, or that a new
+   write's title is already taken, show them the printed register. Do not
+   invent a suffix, pick another id, or delete a tab.
+
 5. **Report the tab.** Give them the run id, the tab name and the link the job
    prints.
 
@@ -91,8 +108,12 @@ in the same pass when the request covers both.
 
 - **Do not write a tab nobody confirmed.** The coverage list is the
   conversation. A yes to "write a run" is not a yes to this list.
+- **Do not overwrite a run this conversation did not create.** A redo is
+  `--overwrite` of that id, after they ask; it is not a second tab and not
+  a new run id.
 - **Do not delete a tab or empty the Summary.** A new run is a new tab. Run
-  ids count up. Clearing the spreadsheet is not this skill.
+  ids count up. Clearing the spreadsheet is not this skill. An occupied
+  title is a refusal the person resolves in the sheet UI.
 - **Do not take `deprecated` cases.** The spec stopped stating them; walking one
   proves nothing. The script refuses them outright.
 - **Do not put results back in the store.** A suite carries no execution record

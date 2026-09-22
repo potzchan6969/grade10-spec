@@ -180,6 +180,58 @@ export function colLetter(index) {
   return out;
 }
 
+export function tabTitle(runId, nameSlug) {
+  return `${runId}-${nameSlug}`;
+}
+
+/**
+ * Find run `runId` in the Summary grid (row 0 is the header) and check the
+ * tab it names is among `titles`.
+ *
+ * Disagreement is returned, not repaired: a missing tab, a duplicate Run ID,
+ * or an empty Tab cell means a human moved something, and guessing is how a
+ * marked tab dies.
+ */
+export function locateRun(summaryValues, titles, runId) {
+  const wanted = Number(runId);
+  if (!Number.isFinite(wanted) || wanted < 1)
+    return {
+      ok: false,
+      why: `Run ID must be a positive number, got \`${runId}\``,
+      titles,
+    };
+
+  const hits = [];
+  for (let i = 1; i < summaryValues.length; i += 1) {
+    if (Number(summaryValues[i]?.[0]) === wanted) hits.push(i);
+  }
+  if (hits.length === 0)
+    return { ok: false, why: `Summary has no run ${wanted}`, titles };
+  if (hits.length > 1)
+    return {
+      ok: false,
+      why: `Summary has ${hits.length} identity rows with Run ID ${wanted}`,
+      titles,
+    };
+
+  const startRow = hits[0];
+  const tab = String(summaryValues[startRow]?.[1] ?? "").trim();
+  if (!tab)
+    return {
+      ok: false,
+      why: `run ${wanted} has no Tab in Summary`,
+      titles,
+    };
+  if (!titles.includes(tab))
+    return {
+      ok: false,
+      why: `Summary names \`${tab}\` for run ${wanted}; no tab has that title`,
+      tab,
+      titles,
+    };
+  return { ok: true, startRow, tab };
+}
+
 /**
  * A run's four Summary rows, one per surface.
  *
