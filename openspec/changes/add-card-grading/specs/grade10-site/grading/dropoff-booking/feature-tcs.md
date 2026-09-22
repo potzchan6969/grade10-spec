@@ -807,35 +807,35 @@ Runs once per row of **Test data**.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `US1-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-04`, `grade10-site-grading-dropoff-booking-SC-09`, `grade10-site-grading-dropoff-booking-SC-12`; one expected result added so the case also reaches `grade10-site-grading-dropoff-booking-SC-02`'s other half, that the diary sends nothing of its own |
-| `US1-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-10` |
-| `US1-TC3-1` | Raised, answered, folded | The blind pass could not tell whether a visit at the cut-off instant falls in that week's batch. Answered inclusive and folded as `grade10-site-grading-dropoff-booking-SC-25`; landed as `Q53` |
-| `US1-TC4-1` | Covered | The requirement's outstanding-read clause, stated with `grade10-site-grading-dropoff-booking-SC-08`; the skeleton itself is presentation and is read against the view's story |
-| `US1-TC5-1` | Covered | `grade10-site-grading-dropoff-booking-SC-07`, applied to every day in the horizon |
-| `US1-TC6-1` | Covered | `grade10-site-grading-dropoff-booking-SC-03` |
-| `US1-TC7-1` | Covered | `grade10-site-grading-dropoff-booking-SC-06`; the other three refusals are the requirement's named set |
-| `US1-TC8-1` | Covered | `grade10-site-grading-dropoff-booking-SC-08` |
-| `US2-TC1-1` | Folded | The batch reading again after a move reached no scenario; `grade10-site-grading-dropoff-booking-SC-15` gains it as an `AND` |
-| `US2-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-16` |
-| `US3-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-18`, `grade10-site-grading-dropoff-booking-SC-19` |
-| `US3-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-19` |
-| `US4-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-20` |
-| `US4-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-21` |
-| `US4-TC3-1` | Folded | The Cancels row is `grade10-site-grading-dropoff-booking-SC-22`; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as `grade10-site-grading-dropoff-booking-SC-27` |
-| `US5-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-23` |
-| `US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as `Q56` |
-| `US6-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`, `grade10-site-grading-dropoff-booking-SC-13` |
-| `US6-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`; the below-twenty partition is the booking requirement's step 2 |
-| `grade10-site-grading-dropoff-booking-SC-01` | Case added | `US5-TC3-1` — the booking page lists the Grading visit and neither drop-off |
-| `grade10-site-grading-dropoff-booking-SC-11` | Case added | `US1-TC9-1` — the estimated day back counts from the day the batch leaves |
-| `grade10-site-grading-dropoff-booking-SC-14` | Case added | `US1-TC10-1` — the vault line on the booked page |
-| `grade10-site-grading-dropoff-booking-SC-17` | Case added | `US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as `Q55` |
-| `grade10-site-grading-dropoff-booking-SC-24` | Case added | `US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
-| `grade10-site-grading-dropoff-booking-SC-26` | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as `grade10-site-grading-dropoff-booking-SC-26` and walked by `US3-TC3-1`; landed as `Q54` |
+| `grade10-site-grading-dropoff-booking-US1-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-04`, `grade10-site-grading-dropoff-booking-SC-09`, `grade10-site-grading-dropoff-booking-SC-12`; one expected result added so the case also reaches `grade10-site-grading-dropoff-booking-SC-02`'s other half, that the diary sends nothing of its own |
+| `grade10-site-grading-dropoff-booking-US1-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-10` |
+| `grade10-site-grading-dropoff-booking-US1-TC3-1` | Raised, answered, folded | The blind pass could not tell whether a visit at the cut-off instant falls in that week's batch. Answered inclusive and folded as `grade10-site-grading-dropoff-booking-SC-25`; landed as `Q53` |
+| `grade10-site-grading-dropoff-booking-US1-TC4-1` | Covered | The requirement's outstanding-read clause, stated with `grade10-site-grading-dropoff-booking-SC-08`; the skeleton itself is presentation and is read against the view's story |
+| `grade10-site-grading-dropoff-booking-US1-TC5-1` | Covered | `grade10-site-grading-dropoff-booking-SC-07`, applied to every day in the horizon |
+| `grade10-site-grading-dropoff-booking-US1-TC6-1` | Covered | `grade10-site-grading-dropoff-booking-SC-03` |
+| `grade10-site-grading-dropoff-booking-US1-TC7-1` | Covered | `grade10-site-grading-dropoff-booking-SC-06`; the other three refusals are the requirement's named set |
+| `grade10-site-grading-dropoff-booking-US1-TC8-1` | Covered | `grade10-site-grading-dropoff-booking-SC-08` |
+| `grade10-site-grading-dropoff-booking-US2-TC1-1` | Folded | The batch reading again after a move reached no scenario; `grade10-site-grading-dropoff-booking-SC-15` gains it as an `AND` |
+| `grade10-site-grading-dropoff-booking-US2-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-16` |
+| `grade10-site-grading-dropoff-booking-US3-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-18`, `grade10-site-grading-dropoff-booking-SC-19` |
+| `grade10-site-grading-dropoff-booking-US3-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-19` |
+| `grade10-site-grading-dropoff-booking-US4-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-20` |
+| `grade10-site-grading-dropoff-booking-US4-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-21` |
+| `grade10-site-grading-dropoff-booking-US4-TC3-1` | Folded | The Cancels row is `grade10-site-grading-dropoff-booking-SC-22`; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as `grade10-site-grading-dropoff-booking-SC-27` |
+| `grade10-site-grading-dropoff-booking-US5-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-23` |
+| `grade10-site-grading-dropoff-booking-US5-TC2-1` | Dropped, `deprecated` | The walk-in books on the diary's own booking-details form, which asks the fields the diary asks for; grading adds no field and no validation of its own, so a refusal on a blank field tests `grade10-site/appointment/booking`, not this capability. Landed as `Q56` |
+| `grade10-site-grading-dropoff-booking-US6-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`, `grade10-site-grading-dropoff-booking-SC-13` |
+| `grade10-site-grading-dropoff-booking-US6-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-05`; the below-twenty partition is the booking requirement's step 2 |
+| `grade10-site-grading-dropoff-booking-SC-01` | Case added | `grade10-site-grading-dropoff-booking-US5-TC3-1` — the booking page lists the Grading visit and neither drop-off |
+| `grade10-site-grading-dropoff-booking-SC-11` | Case added | `grade10-site-grading-dropoff-booking-US1-TC9-1` — the estimated day back counts from the day the batch leaves |
+| `grade10-site-grading-dropoff-booking-SC-14` | Case added | `grade10-site-grading-dropoff-booking-US1-TC10-1` — the vault line on the booked page |
+| `grade10-site-grading-dropoff-booking-SC-17` | Case added | `grade10-site-grading-dropoff-booking-US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as `Q55` |
+| `grade10-site-grading-dropoff-booking-SC-24` | Case added | `grade10-site-grading-dropoff-booking-US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
+| `grade10-site-grading-dropoff-booking-SC-26` | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as `grade10-site-grading-dropoff-booking-SC-26` and walked by `grade10-site-grading-dropoff-booking-US3-TC3-1`; landed as `Q54` |
 
 ### Manual
 
 | Manual | Why |
 | --- | --- |
-| `US1-TC4-1` | The skeleton is a rendering state between two reads; nothing asserts it, and a person reads the shop and day picker against its story while the diary's answer is outstanding |
-| `US3-TC1-1` | The hour runs from a close made in the shop's diary console, outside grading; a person closes the visit there and reads the submission page and the mailbox after it |
+| `grade10-site-grading-dropoff-booking-US1-TC4-1` | The skeleton is a rendering state between two reads; nothing asserts it, and a person reads the shop and day picker against its story while the diary's answer is outstanding |
+| `grade10-site-grading-dropoff-booking-US3-TC1-1` | The hour runs from a close made in the shop's diary console, outside grading; a person closes the visit there and reads the submission page and the mailbox after it |

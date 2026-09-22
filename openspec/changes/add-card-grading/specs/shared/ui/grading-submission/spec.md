@@ -705,7 +705,7 @@ say nothing beyond the code is needed.
 - **THEN** that one figure and that line are shown
 - **AND** a card given nothing to settle says nothing is due
 
-### Requirement: One person may be named to collect
+### Requirement: One person can be named to collect
 
 Nobody named, or one person with the day they were named.
 

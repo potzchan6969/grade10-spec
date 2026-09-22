@@ -404,21 +404,21 @@ Stories `grading-dropoff-dropoff-booking--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Lead (`G05`) | bring the n cards; about 20 minutes; nothing paid until each card is checked and signed | `grade10-site-grading-dropoff-booking-US-01` |
-| Bulk lead | 20 or more: the longer visit, about 45 minutes | `grade10-site-grading-dropoff-booking-US-06` |
-| Shop | `BookingLocationPicker`: one shop with the address and the two durations; the more-shops line; the already-booked line | `grade10-site-grading-dropoff-booking-US-01` |
-| Days | `BookingSlotPicker` within the service's horizon; a day with nothing free disabled; a day past the horizon disabled | `grade10-site-grading-dropoff-booking-US-01` |
-| Batch line | `BatchLine` beside the picked day: hand in by the cut-off and the cards leave the next day; the estimate runs from the ship day | `grade10-site-grading-dropoff-booking-US-01` |
-| Batch line, past the cut-off | a day after the week's cut-off: the next batch's close and ship days | `grade10-site-grading-dropoff-booking-US-01` |
-| Times | the day's times in the shop's zone; Book <day, time> | `grade10-site-grading-dropoff-booking-US-01` |
-| Nothing free | `dropoff.nothingFree`; no times | `grade10-site-grading-dropoff-booking-US-01` |
-| The diary refuses | the refusal in the diary's words — the slot is not offered, the slot is full, the resource is not available, the day is already booked — and a move offered; the times read again | `grade10-site-grading-dropoff-booking-US-01` |
-| Loading | the shop and the days as `Skeleton` | `grade10-site-grading-dropoff-booking-US-01` |
-| Error | the diary's failure in the error tone; no day reads as free | `grade10-site-grading-dropoff-booking-US-01` |
-| Move or cancel line (`G05`) | the notice: any time before it starts; a missed visit closes the visit, not the list | `grade10-site-grading-dropoff-booking-US-02` |
-| Joins a visit | a drop-off already booked under the email: the second submission listed under its day and time; no picker | `grade10-site-grading-dropoff-booking-US-04` |
-| Slot resized | two lists passing 20 together: the longer service named, and the visit moved once in the diary | `grade10-site-grading-dropoff-booking-US-04` |
-| Walk-in | `/book`: the Grading visit listed; `BookingDetailsForm` with name and email; no list, and the diary's own visit, which the submission never reads | `grade10-site-grading-dropoff-booking-US-05` |
+| Lead (`G05`) | bring the n cards; about 20 minutes; nothing paid until each card is checked and signed | `grade10-site-grading-dropoff-booking-SC-04` |
+| Bulk lead | 20 or more: the longer visit, about 45 minutes | `grade10-site-grading-dropoff-booking-SC-05` |
+| Shop | `BookingLocationPicker`: one shop with the address and the two durations; the more-shops line; the already-booked line | `grade10-site-grading-dropoff-booking-SC-04` |
+| Days | `BookingSlotPicker` within the service's horizon; a day with nothing free disabled; a day past the horizon disabled | `grade10-site-grading-dropoff-booking-SC-03` |
+| Batch line | `BatchLine` beside the picked day: hand in by the cut-off and the cards leave the next day; the estimate runs from the ship day | `grade10-site-grading-dropoff-booking-SC-09` |
+| Batch line, past the cut-off | a day after the week's cut-off: the next batch's close and ship days | `grade10-site-grading-dropoff-booking-SC-10` |
+| Times | the day's times in the shop's zone; Book <day, time> | `grade10-site-grading-dropoff-booking-SC-04` |
+| Nothing free | `dropoff.nothingFree`; no times | `grade10-site-grading-dropoff-booking-SC-07` |
+| The diary refuses | the refusal in the diary's words — the slot is not offered, the slot is full, the resource is not available, the day is already booked — and a move offered; the times read again | `grade10-site-grading-dropoff-booking-SC-06` |
+| Loading | the shop and the days as `Skeleton` | `grade10-site-grading-dropoff-booking-SC-08` |
+| Error | the diary's failure in the error tone; no day reads as free | `grade10-site-grading-dropoff-booking-SC-08` |
+| Move or cancel line (`G05`) | the notice: any time before it starts; a missed visit closes the visit, not the list | `grade10-site-grading-dropoff-booking-SC-15`, `grade10-site-grading-dropoff-booking-SC-17` |
+| Joins a visit | a drop-off already booked under the email: the second submission listed under its day and time; no picker | `grade10-site-grading-dropoff-booking-SC-20` |
+| Slot resized | two lists passing 20 together: the longer service named, and the visit moved once in the diary | `grade10-site-grading-dropoff-booking-SC-21` |
+| Walk-in | `/book`: the Grading visit listed; `BookingDetailsForm` with name and email; no list, and the diary's own visit, which the submission never reads | `grade10-site-grading-dropoff-booking-SC-23` |
 
 ### Drop-off booked
 
@@ -426,14 +426,14 @@ Stories `grading-dropoff-dropoff-booked--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Booked (`G06`) | `BookingConfirmation` day, time, shop, address, Add to calendar; Move, Cancel; the email line; Before you come, four items; Open the list | `grade10-site-grading-dropoff-booking-US-01` |
-| Bulk | the visit takes about 45 minutes | `grade10-site-grading-dropoff-booking-US-06` |
-| Fee with cover | item 3 names the fee and the cover line | `grade10-site-grading-dropoff-booking-US-01` |
-| The day the cards leave | item 4: the ship day when handed in by the cut-off, the estimated day back | `grade10-site-grading-dropoff-booking-US-01` |
-| Vault line | the vault-on-the-same-visit `Alert` | `grade10-site-grading-dropoff-booking-US-01` |
-| Joined | the second submission: the visit the first one owns, named, and read through it | `grade10-site-grading-dropoff-booking-US-04` |
-| Visit detached | the owner cancelled or missed the visit: every joiner loses it, is told by letter, and is asked to book again | `grade10-site-grading-dropoff-booking-US-04` |
-| Moved | the new day and time; the moved email line | `grade10-site-grading-dropoff-booking-US-02` |
+| Booked (`G06`) | `BookingConfirmation` day, time, shop, address, Add to calendar; Move, Cancel; the email line; Before you come, four items; Open the list | `grade10-site-grading-dropoff-booking-SC-12` |
+| Bulk | the visit takes about 45 minutes | `grade10-site-grading-dropoff-booking-SC-13` |
+| Fee with cover | item 3 names the fee and the cover line | `grade10-site-grading-dropoff-booking-SC-12` |
+| The day the cards leave | item 4: the ship day when handed in by the cut-off, the estimated day back | `grade10-site-grading-dropoff-booking-SC-12` |
+| Vault line | the vault-on-the-same-visit `Alert` | `grade10-site-grading-dropoff-booking-SC-14` |
+| Joined | the second submission: the visit the first one owns, named, and read through it | `grade10-site-grading-dropoff-booking-SC-20` |
+| Visit detached | the owner cancelled or missed the visit: every joiner loses it, is told by letter, and is asked to book again | `grade10-site-grading-dropoff-booking-SC-22` |
+| Moved | the new day and time; the moved email line | `grade10-site-grading-dropoff-booking-SC-15` |
 
 ### Submission page
 
@@ -447,7 +447,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Rail, one per stage | seven `Step`s Planned → Home; the status's stage `progress`, earlier `completed`, later `upcoming` · `grading-submission-gradingstatusrail--planned` through `--home` | `grade10-site-grading-submission-lifecycle-US-01` |
 | Rail, ended | the stage the submission ended at stays `progress`; the word says the ending | `grade10-site-grading-submission-lifecycle-US-10` |
 | Chip: Waiting on you | Not handed in yet, Ready to collect | `grade10-site-grading-submission-lifecycle-US-01` |
-| Chip: Drop-off | Drop-off booked with the visit's day | `grade10-site-grading-dropoff-booking-US-01` |
+| Chip: Drop-off | Drop-off booked with the visit's day | **Out of suite:** `grade10-site/grading/submission-lifecycle` - the word and the chip per status |
 | Chip: With us | Handed in, Back at the shop | `grade10-site-grading-submission-lifecycle-US-01` |
 | Chip: With the grader | With the grader, the grader named | `grade10-site-grading-submission-lifecycle-US-01` |
 | Chip: Running late | past the estimate, the grader named | `grade10-site-grading-submission-lifecycle-US-01` |
@@ -457,12 +457,12 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Planned | Not handed in yet · Waiting on you; the estimate; Book the drop-off; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-US-06` |
 | Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-US-08` |
 | Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-US-08` |
-| Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-US-01` |
-| Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-US-04` |
-| Visit detached | the owner cancelled or missed the visit: the joiner back to Not handed in yet, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-US-04` |
-| Move | the picker on the page; the batch line reads again | `grade10-site-grading-dropoff-booking-US-02` |
-| Cancel visit | `BookingManageCard`'s confirm: the visit closes, the list stays | `grade10-site-grading-dropoff-booking-US-02` |
-| Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-US-03` |
+| Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
+| Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-SC-20` |
+| Visit detached | the owner cancelled or missed the visit: the joiner back to Not handed in yet, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22` |
+| Move | the picker on the page; the batch line reads again | `grade10-site-grading-dropoff-booking-SC-15` |
+| Cancel visit | `BookingManageCard`'s confirm: the visit closes, the list stays | `grade10-site-grading-dropoff-booking-SC-16` |
+| Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |
 | Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-US-10` |
 | Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-US-10` |
 | Handed in (`G08`) | Checked in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-US-01` |

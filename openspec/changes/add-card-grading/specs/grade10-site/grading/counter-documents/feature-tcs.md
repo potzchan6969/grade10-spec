@@ -239,17 +239,17 @@
 **Pre-conditions:**
 
 * The environment is production.
-* A fact the agreement prints (such as the complaints contact) is unset on the submission.
-* The collector is on the agreement's active sign link, scrolled to its end, name and postal address entered.
+* A fact the agreement prints (such as the complaints contact) is unset for the brand.
+* The submission is `booked` and every card on the list has been checked.
 
 **Steps:**
 
-1. Attempt to sign.
+1. Ask staff to prepare the submission agreement.
 
 **Expected Results:**
 
-* Signing is refused, naming the unset fact.
-* Nothing is sealed.
+* Preparing is refused, naming the unset fact.
+* Nothing is rendered, no sign link is minted, and nothing is sealed.
 
 ### grade10-site-grading-counter-documents-US1-TC8-1: An unset fact prints as a placeholder outside production
 
@@ -280,6 +280,81 @@
 
 * The agreement prints the unset fact as a marked bracket placeholder.
 * The document seals.
+
+### grade10-site-grading-counter-documents-US1-TC9-1: Agreement seals with no identity record asked for or kept
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* Grading holds no identity check for the collector, and none is asked for at the counter.
+* The collector is on the agreement's active sign link, with every card checked.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Name typed | <the name on the booking> |
+| Postal address | <a one-line postal address> |
+
+**Steps:**
+
+1. Scroll the agreement through to its last page.
+2. Type <the name on the booking>, enter <a one-line postal address>, and sign.
+
+**Expected Results:**
+
+* The seal is not refused for want of an identity check.
+* No identity check is read, asked for or kept against the submission.
+* The signing certificate says the document was signed without an identity check.
+
+### grade10-site-grading-counter-documents-US1-TC10-1: A storage fee raised after the seal leaves the signed agreement as it was
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* The agreement sealed with the storage fee at 3000 HKD minor units a card a month.
+* The storage fee setting is then changed to 5000 HKD minor units a card a month.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Storage fee at signing | 3000 HKD minor units |
+| Storage fee after the change | 5000 HKD minor units |
+
+**Steps:**
+
+1. Open the sealed agreement from the submission page.
+2. Ask staff to prepare the hand-back receipt for the same submission.
+
+**Expected Results:**
+
+* The sealed agreement still prints 3000 HKD minor units a card a month.
+* What is due on that submission is worked out at the pinned 3000, not the new 5000.
 
 ---
 
@@ -528,11 +603,12 @@
 
 **Steps:**
 
-1. Attempt to open the hand-back receipt's sign link.
+1. Ask staff to prepare the hand-back receipt.
 
 **Expected Results:**
 
-* The receipt cannot be prepared; signing is refused, naming the balance still due.
+* Preparing is refused by name, naming the balance still due.
+* No sign link is minted and nothing is handed back.
 
 ### grade10-site-grading-counter-documents-US3-TC7-1: Receipt cannot be prepared while an item is unticked
 
@@ -555,11 +631,78 @@
 
 **Steps:**
 
-1. Attempt to open the hand-back receipt's sign link.
+1. Ask staff to prepare the hand-back receipt.
 
 **Expected Results:**
 
-* The receipt cannot be prepared; signing is refused, naming the item still unticked.
+* Preparing is refused by name, naming the item still unticked.
+* No sign link is minted and nothing is handed back.
+
+### grade10-site-grading-counter-documents-US3-TC8-1: Receipt refuses a name the submission does not hold
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-03
+
+**Pre-conditions:**
+
+* The submission is `ready`, the balance is settled and every item is ticked, and nobody is named to collect.
+* The signer is on the hand-back receipt's active sign link, scrolled to its end.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Name typed | <a name that is neither the booking's nor a named person's> |
+
+**Steps:**
+
+1. Type <a name that is neither the booking's nor a named person's>.
+2. Attempt to sign.
+
+**Expected Results:**
+
+* Signing is refused by name, against the booking's name.
+* Nothing is sealed and nothing is handed back.
+
+### grade10-site-grading-counter-documents-US3-TC9-1: Two exceptions on one hand-back print one receipt with a line per card
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-03
+
+**Pre-conditions:**
+
+* A submission of four cards: one is still held by the grader, one went into a vault case at the counter, and the other two are handed back.
+* The balance is settled and every item that can be ticked is ticked.
+
+**Steps:**
+
+1. Ask staff to prepare the hand-back receipt.
+2. Scroll the receipt through to its last page, type the collector's name and sign.
+
+**Expected Results:**
+
+* One receipt is prepared for the hand-back, not one per exception.
+* It carries a line per card stating that card's outcome: the two handed back, the one still held by the grader, and the one that went to the vault.
 
 ---
 
@@ -599,6 +742,44 @@
 
 * The signer's name is prefilled as the person named on the submission page, with a hint that it was prefilled.
 * The receipt records the named person, not the collector, as who collected.
+
+### grade10-site-grading-counter-documents-US4-TC2-1: The named person's prefilled name does not take an edit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-04
+
+**Pre-conditions:**
+
+* The collector has named a person to collect on the submission page.
+* The submission is `ready`, the balance is settled, and every item is ticked.
+* The named person is on the hand-back receipt's active sign link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Name prefilled | <the person named on the submission page> |
+| Name retyped | <any other name> |
+
+**Steps:**
+
+1. Attempt to retype the prefilled name as <any other name>.
+2. Scroll the receipt through to its last page and sign.
+
+**Expected Results:**
+
+* The name line does not take the edit.
+* The receipt seals under the name the submission page holds, and records that person as who collected.
 
 ---
 
@@ -744,3 +925,68 @@
 
 * Signing is refused by name, naming that the document is already signed.
 * The sealed copy is shown on the page.
+
+### grade10-site-grading-counter-documents-US5-TC6-1: A declined document reaches none of the three ways to a copy
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-05
+
+**Pre-conditions:**
+
+* The collector declined the submission agreement at the counter, and it was withdrawn.
+
+**Steps:**
+
+1. Open `grade10.com/grading/submissions/<id>`.
+2. Look for the declined agreement in the documents list.
+
+**Expected Results:**
+
+* The declined document is not listed and no download is offered for it.
+* No email carries it as an attachment.
+
+### grade10-site-grading-counter-documents-US5-TC7-1: A fingerprint grading never issued answers as none of its own
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-05
+
+**Pre-conditions:**
+
+* At least one document has sealed on the submission, so the page lists fingerprints.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Digest checked | <the SHA-256 of a PDF grading never issued or sealed> |
+
+**Steps:**
+
+1. Check <the SHA-256 of a PDF grading never issued or sealed> against grading's record.
+2. Check the fingerprint the submission page lists for a sealed document.
+
+**Expected Results:**
+
+* The unknown digest answers that it is not one grading issued or sealed, and names nobody.
+* The listed fingerprint answers as one grading sealed.
+
