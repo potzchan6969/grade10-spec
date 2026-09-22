@@ -44,7 +44,7 @@ function FeaturedRow() {
   );
 }
 
-/** The four soonest lots, in one scrolling row. The next card peeks past the edge. */
+/** The four soonest lots, in one scrolling row. Each view shows whole cards. */
 export const Scrolling: Story = {
   name: "Scrolling row",
   args: {

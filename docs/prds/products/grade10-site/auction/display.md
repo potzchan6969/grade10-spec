@@ -62,12 +62,12 @@ and the address without the query is the one a search engine keeps.
 | Busy | **12** or more live lots, and at least **2** categories with a live lot |
 | Live | Active and Upcoming. Ended lots stay in the list and fill neither Featured nor a category |
 
-- **Featured** — a row that scrolls sideways, inside itself. Every card is the same size as the list
+- **Featured** — a row that scrolls sideways, inside itself, on a full-width light gradient. A card grows while the pointer is on it. Watch keeps its colour. The picture stays flat. The row shows whole cards, and scrolls when they do not fit. Every card is the same size as the others in the row
 - **Categories** — only when the page is busy. Up to **3** live categories: one large tile and the others stacked. **4** or more: a row per category
 - **Filter** — only when the page is busy. A sidebar on a wide screen, pills on a narrow one. One group, the auction category. No search and no sort. A category with no live lot stays hidden
 - **Quiet and empty** — no Categories section and no filter. Two to four live categories put image tiles in the first cell of the list. With nothing to list, the list says there are no auctions
-- **The list** — every lot a collector can see, including those in Featured, in the resting order. Each card follows the store product card: the image well, the title, the current bid, then the close. Watch sits at the bottom right of the image, and a closed lot shows none
-- **Headings** — one `h1`, Auctions, which stays that word when a category is selected. `h2` for Featured auctions, Categories, Filter and All auctions, and only for a section that is on the page. A category name is an `h3`. A lot title is an `h3` in the list and a link in Featured, so each title is a heading once. The quiet tiles are links, not headings
+- **The list** — every lot a collector can see, including those in Featured, in the resting order, on the page surface below the featured field. Each card follows the store product card: the image well, the title, the current bid, then a countdown. An active lot counts down to its close. An upcoming lot counts down to its open. A closed lot names when it ended. Watch sits at the bottom right of the image, and a closed lot shows none
+- **Headings** — one `h1`, Auctions, which is not shown, and which stays that word when a category is selected. `h2` for Featured auctions, Categories, Filter and All auctions, and only for a section that is on the page. A category name is an `h3`. A lot title is an `h3` in the list and a link in Featured, so each title is a heading once. The quiet tiles are links, not headings
 - **The document** — title and description belong to this page. Canonical and the share address are `/auction` with no query. Filtering does not change the title. An ItemList names the lots, their addresses, images and current bids, and only while the page is unfiltered. A closed lot's offer stays on the lot page
 
 ::story{id="auction-list-featured--scrolling" title="Scrolling row"}

@@ -327,20 +327,23 @@ function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
         />
       ) : null}
       <SiteHeader {...AUCTION_SITE_HEADER} />
-      <main className="mx-auto w-full max-w-7xl flex-1 px-4 py-8 sm:px-8">
-        <h1 className="text-3xl font-semibold leading-9 text-foreground sm:text-4xl">
-          Auctions
-        </h1>
+      <main className="w-full flex-1">
+        <h1 className="sr-only">Auctions</h1>
 
         {featured.length > 0 ? (
-          <div className="mt-8">
-            <FeaturedAuctions
-              lots={featured}
-              onToggle={toggleWatch}
-              watched={watched}
-            />
-          </div>
+          <FeaturedAuctions
+            lots={featured}
+            onToggle={toggleWatch}
+            watched={watched}
+          />
         ) : null}
+
+        <div
+          className={cn(
+            "mx-auto w-full max-w-7xl px-4 pb-8 sm:px-8",
+            featured.length === 0 && "pt-8",
+          )}
+        >
 
         {busy ? (
           <section
@@ -434,6 +437,7 @@ function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
               </ul>
             )}
           </section>
+        </div>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />

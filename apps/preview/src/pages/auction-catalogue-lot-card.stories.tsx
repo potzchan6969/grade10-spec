@@ -60,6 +60,7 @@ export const Active: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Active")).toBeInTheDocument();
+    expect(canvas.getByText(/Ends in \d+d \d+h/)).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", {
         level: 3,
@@ -84,6 +85,7 @@ export const Upcoming: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Upcoming")).toBeInTheDocument();
+    expect(canvas.getByText(/Opens in \d+d \d+h/)).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: `Watch ${upcomingLot.title}` }),
     ).toBeInTheDocument();
@@ -97,7 +99,8 @@ export const Ended: Story = {
   render: () => <WatchedCard lot={endedLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Ended")).toBeInTheDocument();
+    expect(canvas.getByText(endedLot.closeLabel)).toBeInTheDocument();
+    expect(canvas.queryByText(/Ends in/)).toBeNull();
     expect(
       canvas.getByRole("heading", { level: 3, name: endedLot.title }),
     ).toBeInTheDocument();
