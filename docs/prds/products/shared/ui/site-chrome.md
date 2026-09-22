@@ -23,7 +23,7 @@ currency.
 
 ## Account Entry
 
-🚧 **`SiteHeader`** — a compound header wraps the design-system `Nav` with
+**`SiteHeader`** — a compound header wraps the design-system `Nav` with
 session-aware account entry: Sign In as a primary button when signed out; the
 account icon and a menu when signed in, with an initial avatar above the
 sign-in email, then My Auctions and Sign Out. Once Store answers, My Orders

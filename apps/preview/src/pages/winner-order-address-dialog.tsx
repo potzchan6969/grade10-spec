@@ -39,7 +39,7 @@ export type WinnerOrderSavedAddress = {
   id: string;
   /** Recipient name — RadioCard title. */
   label: string;
-  /** Street + locality + country — no name; one street line. */
+  /** Street + locality + country — no name, postal code, or phone. */
   lines: string;
 };
 
@@ -146,13 +146,9 @@ function prefersReducedMotion() {
   );
 }
 
-/** Street + locality + country — no recipient name. */
+/** Street + locality + country — no name, postal code, or phone. */
 function formatAddressLines(draft: NewAddressDraft): string {
-  const locality = [
-    draft.city.trim(),
-    draft.state.trim(),
-    draft.postalCode.trim(),
-  ]
+  const locality = [draft.city.trim(), draft.state.trim()]
     .filter(Boolean)
     .join(", ");
   return [draft.street.trim(), locality, draft.country.trim()]

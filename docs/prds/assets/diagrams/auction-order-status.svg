@@ -66,7 +66,7 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
         
         <path d="M 154 157 L 748 157" class="a-emphasis" stroke-width="2.2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         
-        <path data-step="preparing-invoice" data-edge-from="awaiting-address" data-edge-to="preparing-invoice" data-edge-key="0" data-edge-id="confirmed" data-composition-points="153,157;189,157" d="M 153 157 L 189 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
+        <path data-step="preparing-invoice" data-edge-from="awaiting-setup" data-edge-to="preparing-invoice" data-edge-key="0" data-edge-id="confirmed" data-composition-points="153,157;189,157" d="M 153 157 L 189 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         <path data-step="pending-payment" data-edge-from="preparing-invoice" data-edge-to="pending-payment" data-edge-key="1" data-edge-id="sent" data-composition-points="307,157;343,157" d="M 307 157 L 343 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         <path data-step="processing" data-edge-from="pending-payment" data-edge-to="processing" data-edge-key="2" data-edge-id="paid" data-composition-points="461,157;497,157" d="M 461 157 L 497 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
         <path data-step="shipped" data-edge-from="processing" data-edge-to="shipped" data-edge-key="3" data-edge-id="dispatched" data-composition-points="615,157;651,157" d="M 615 157 L 651 157" class="a-emphasis" stroke-width="2" marker-end="url(#auction-order-status-arrowhead-emphasis)"/>
@@ -81,26 +81,26 @@ svg[data-diagram="auction-order-status"] .c-grid{stroke-dasharray: 1 4; opacity:
         <path data-step="refunded" data-edge-from="partially-paid" data-edge-to="refunded" data-edge-key="12" data-edge-id="refund-part" data-composition-points="402,412;402,431;483,431;483,479;497,479" d="M 402 412 L 402 421.5 Q 402 431 411.5 431 L 473 431 Q 483 431 483 441 L 483 472 Q 483 479 490 479 L 497 479" class="a-dashed" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-dashed)"/>
         <path data-step="refunded" data-edge-from="delivered" data-edge-to="refunded" data-edge-label="even after delivery" data-edge-key="13" data-edge-id="refund-late" data-composition-points="710,508;710,545;556,545;556,508" d="M 710 508 L 710 535 Q 710 545 700 545 L 566 545 Q 556 545 556 535 L 556 508" class="a-dashed" stroke-width="1.1" marker-end="url(#auction-order-status-arrowhead-dashed)"/>
         
-        <g data-step="awaiting-address" id="auction-order-status-node-awaiting-address" data-node-id="awaiting-address" data-node-label="Awaiting Address" aria-label="Focus Awaiting Address, the lot closed, Order" data-node-kind="start" data-node-sublabel="the lot closed" data-node-context="Order">
-          <title>Awaiting Address · the lot closed · Order</title>
+        <g data-step="awaiting-setup" id="auction-order-status-node-awaiting-setup" data-node-id="awaiting-setup" data-node-label="Awaiting Setup" aria-label="Focus Awaiting Setup, the lot closed, Order" data-node-kind="start" data-node-sublabel="the lot closed" data-node-context="Order">
+          <title>Awaiting Setup · the lot closed · Order</title>
           <rect x="35" y="126" width="118" height="62" rx="7" class="c-mask"/>
           <rect x="35" y="126" width="118" height="62" rx="7" class="c-frontend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="start" class="semantic-sigil s-frontend" transform="translate(136 132) scale(0.6875)">
             <circle cx="8" cy="8" r="5"/>
             <path d="m7 5.4 3.6 2.6L7 10.6Z" class="sigil-fill"/>
           </g>
-          <text data-node-label="" data-detail-anchor="" x="94" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Awaiting Address</text>
+          <text data-node-label="" data-detail-anchor="" x="94" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Awaiting Setup</text>
           <text data-detail="context" x="94" y="163" class="t-muted" font-size="7" text-anchor="middle">the lot closed</text>
         </g>
-        <g data-step="preparing-invoice" id="auction-order-status-node-preparing-invoice" data-node-id="preparing-invoice" data-node-label="Preparing Invoice" aria-label="Focus Preparing Invoice, address and method confirmed, Order" data-node-kind="active" data-node-sublabel="address and method confirmed" data-node-context="Order">
-          <title>Preparing Invoice · address and method confirmed · Order</title>
+        <g data-step="preparing-invoice" id="auction-order-status-node-preparing-invoice" data-node-id="preparing-invoice" data-node-label="Preparing Invoice" aria-label="Focus Preparing Invoice, setup confirmed, Order" data-node-kind="active" data-node-sublabel="setup confirmed" data-node-context="Order">
+          <title>Preparing Invoice · setup confirmed · Order</title>
           <rect x="189" y="126" width="118" height="62" rx="7" class="c-mask"/>
           <rect x="189" y="126" width="118" height="62" rx="7" class="c-backend" stroke-width="1.5"/>
           <g aria-hidden="true" data-semantic-sigil="active" class="semantic-sigil s-backend" transform="translate(290 132) scale(0.6875)">
             <path d="M2 8h3l1.5-3.5L9 12l1.6-4H14"/>
           </g>
           <text data-node-label="" data-detail-anchor="" x="248" y="147" class="t-primary" font-size="10" font-weight="600" text-anchor="middle">Preparing Invoice</text>
-          <text data-detail="context" x="248" y="163" class="t-muted" font-size="6.5" text-anchor="middle">address and method confirmed</text>
+          <text data-detail="context" x="248" y="163" class="t-muted" font-size="7" text-anchor="middle">setup confirmed</text>
         </g>
         <g data-step="pending-payment" id="auction-order-status-node-pending-payment" data-node-id="pending-payment" data-node-label="Pending Payment" aria-label="Focus Pending Payment, invoice sent, expired included, Order" data-node-kind="waiting" data-node-sublabel="invoice sent, expired included" data-node-context="Order">
           <title>Pending Payment · invoice sent, expired included · Order</title>

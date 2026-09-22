@@ -16,6 +16,7 @@
   "differentAccountDescription": "{email}(으)로 전환합니다.",
   "switch": "전환",
   "stay": "유지",
+  "settledElsewhere": "다른 기기에서 로그인되었습니다.",
   "legal": "계속하면 <terms>이용약관</terms> 및 <privacy>개인정보 처리방침</privacy>에 동의하는 것으로 봅니다.",
   "linkSentTitle": "이메일을 확인하세요"
 }

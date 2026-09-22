@@ -5,13 +5,16 @@ import { useCallback, useEffect } from "react";
 import { expect, waitFor, within } from "storybook/test";
 
 /**
- * Toasts after a magic-link follow on the brand home. Failure toasts cover a
- * verify that creates no session. The different-account toast covers a
- * signed-in mismatch with Switch / Stay (no automatic session swap).
+ * Toasts a sign-in surface shows for an event that happened somewhere else.
+ * Failure toasts cover a verify that creates no session, on the brand home.
+ * The different-account toast covers a signed-in mismatch with Switch / Stay
+ * (no automatic session swap). The settled-elsewhere toast covers a surface
+ * still waiting on Check Your Email whose address signs in on another
+ * device — it ends the wait with this toast and gains no session of its own.
  *
- * Failure copy matches shared `signIn` catalog keys `linkExpired`,
- * `linkInvalid`, and `linkBanned`. Mismatch copy is story-local until the
- * catalog keys land with engineering.
+ * Failure and settled-elsewhere copy match shared `signIn` catalog keys
+ * (`linkExpired`, `linkInvalid`, `linkBanned`, `settledElsewhere`). Mismatch
+ * copy is story-local until the catalog keys land with engineering.
  */
 const meta = {
   title: "Auth Sign In/Link Follow Toasts",
@@ -38,6 +41,7 @@ const COPY = {
   differentAccountDescription: "Switch to alex@example.com.",
   switch: "Switch",
   stay: "Stay",
+  settledElsewhere: "Signed in on another device.",
 } as const;
 
 function FireErrorToast({ message }: { message: string }) {
@@ -47,6 +51,18 @@ function FireErrorToast({ message }: { message: string }) {
 
   return (
     <Button type="button" onClick={() => toast.error(message)}>
+      Show toast again
+    </Button>
+  );
+}
+
+function FireInfoToast({ message }: { message: string }) {
+  useEffect(() => {
+    toast.info(message);
+  }, [message]);
+
+  return (
+    <Button type="button" onClick={() => toast.info(message)}>
       Show toast again
     </Button>
   );
@@ -120,5 +136,18 @@ export const DifferentAccount: Story = {
     await expectToastText(COPY.differentAccountDescription);
     await expectToastText(COPY.switch);
     await expectToastText(COPY.stay);
+  },
+};
+
+/**
+ * A surface still waiting on Check Your Email ends its wait once that
+ * address signs in on another device, by any method — no session of its own
+ * (shared-auth-sign-in-SC-70 through SC-77).
+ */
+export const SettledElsewhere: Story = {
+  name: "Settled elsewhere",
+  render: () => <FireInfoToast message={COPY.settledElsewhere} />,
+  play: async () => {
+    await expectToastText(COPY.settledElsewhere);
   },
 };

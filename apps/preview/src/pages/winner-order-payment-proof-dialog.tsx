@@ -7,7 +7,6 @@ import {
   type FileDropzoneRejectReason,
   FileDropzoneTarget,
 } from "@grade10/design-system/components/forms/file-dropzone";
-import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -22,18 +21,29 @@ import {
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
 import { toast } from "@grade10/design-system/components/overlays/toast";
-import { Check, Copy, Warning } from "@phosphor-icons/react";
+import { Warning } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
 
-/** Preview-only bank details — Finance TBC for live account values. */
+/** Preview-only bank details — Grade10 / HSBC Hong Kong sample until Finance confirms live values. */
 export const WINNER_ORDER_BANK_DETAILS = {
-  beneficiaryName: "{tbc}",
-  bankName: "{tbc}",
-  accountNumber: "XXXX-XXXX-XXXX-1234",
-  swiftCode: "X12345678",
+  beneficiaryName: "Grade10 Finance Limited",
+  beneficiaryAddress: "Unit 2602, 28 Stanley Street, Central, Hong Kong",
+  bankName: "HSBC Hong Kong",
+  /** Main branch address, city and country. */
+  bankAddress: "1 Queen's Road Central, Central, Hong Kong",
+  bankCode: "004",
+  branchCode: "001",
+  /**
+   * Full account number including bank and branch code
+   * (`bank-branch-account`).
+   */
+  accountNumber: "004-001-583291-001",
+  swiftCode: "HSBCHKHHXXX",
+  fpsId: "12345678",
   /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
   totalAmountDue: "HK$16,020",
-  transferReference: "TCG-INV-202609-LK7P2Q-01-W42",
+  /** Durable bank reference shape from winner-order identifiers. */
+  transferReference: "LK7P2Q01",
 } as const;
 
 /**
@@ -49,13 +59,16 @@ export const WINNER_ORDER_PROOF_MAX_BYTES_TOTAL = 15 * FILE_DROPZONE_MIB;
 export const WINNER_ORDER_PROOF_FILE_HINT =
   "PDF, PNG, JPG, or HEIC. Up to 3 files, 5 MB each, 15 MB total." as const;
 
+/** Dialog description — one-shot rule stays on the confirm microcopy. */
+export const PROOF_DIALOG_SUBTEXT =
+  "After you transfer, upload your receipt here." as const;
+
 const PROOF_CONFIRM_MICROCOPY =
   "You can’t add or change files after you submit." as const;
 
 const LEAVE_PROOF_CONFIRM =
   "Leave without submitting? Your payment proof will not be saved." as const;
 
-const COPY_FEEDBACK_MS = 1600;
 const SUBMIT_SIMULATE_MS = 400;
 
 type ProofDraft = {
@@ -74,49 +87,31 @@ const EMPTY_PROOF: ProofDraft = {
   files: [],
 };
 
-type CopiedField = "account" | "amount" | "reference" | null;
-
 type WinnerOrderPaymentProofDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   /** Called after a successful submit (dialog already closing). */
   onSubmit: () => void;
-  amountDue?: string;
-  transferReference?: string;
-  accountNumber?: string;
 };
 
 /**
- * Preview-only: bank details + proof form after Pay by Bank Transfer.
- * Not a published `@grade10/ui` export. Field list explores product UX;
- * OpenSpec stores files after confirm only.
+ * Preview-only: Submit Payment Proof from Order summary primary control.
+ * Not a published `@grade10/ui` export. Rails live in View Bank Details.
+ * Field list explores product UX; OpenSpec stores files after confirm only.
  */
 function WinnerOrderPaymentProofDialog({
   open,
   onOpenChange,
   onSubmit,
-  amountDue = WINNER_ORDER_BANK_DETAILS.totalAmountDue,
-  transferReference = WINNER_ORDER_BANK_DETAILS.transferReference,
-  accountNumber = WINNER_ORDER_BANK_DETAILS.accountNumber,
 }: WinnerOrderPaymentProofDialogProps) {
   const formId = useId();
   const [draft, setDraft] = useState<ProofDraft>(EMPTY_PROOF);
   const [attempted, setAttempted] = useState(false);
   const [submitting, setSubmitting] = useState(false);
   const [converting, setConverting] = useState(false);
-  const [copiedField, setCopiedField] = useState<CopiedField>(null);
   const submitTimerRef = useRef<number | null>(null);
   /** Bumps on abandon so a late timer cannot complete submit. */
   const submitGenerationRef = useRef(0);
-
-  useEffect(() => {
-    if (!copiedField) return;
-    const timer = window.setTimeout(
-      () => setCopiedField(null),
-      COPY_FEEDBACK_MS,
-    );
-    return () => window.clearTimeout(timer);
-  }, [copiedField]);
 
   useEffect(() => {
     return () => {
@@ -158,7 +153,6 @@ function WinnerOrderPaymentProofDialog({
     setAttempted(false);
     setSubmitting(false);
     setConverting(false);
-    setCopiedField(null);
   }
 
   function abandonInFlightSubmit() {
@@ -175,21 +169,6 @@ function WinnerOrderPaymentProofDialog({
     }
     if (!next) resetDraft();
     onOpenChange(next);
-  }
-
-  async function copyValue(
-    field: Exclude<CopiedField, null>,
-    value: string,
-    successToast: string,
-    manualToast: string,
-  ) {
-    try {
-      await navigator.clipboard.writeText(value);
-      setCopiedField(field);
-      toast.success(successToast);
-    } catch {
-      toast.info(manualToast, { description: value });
-    }
   }
 
   function handleFileReject(reason: FileDropzoneRejectReason, detail?: string) {
@@ -243,199 +222,124 @@ function WinnerOrderPaymentProofDialog({
     <Dialog onOpenChange={handleOpenChange} open={open}>
       <DialogContent className="max-w-lg" showCloseButton={false}>
         <DialogHeader showCloseButton={false}>
-          <DialogTitle>Pay by Bank Transfer</DialogTitle>
-          <DialogSubtext>
-            Copy the bank details, pay the amount due, then upload your receipt.
-          </DialogSubtext>
+          <DialogTitle>Submit Payment Proof</DialogTitle>
+          <DialogSubtext>{PROOF_DIALOG_SUBTEXT}</DialogSubtext>
         </DialogHeader>
         <DialogBody>
-          <VStack className="w-full" gap="md" hAlign="stretch">
+          <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
+            <TextInput
+              autoComplete="name"
+              disabled={submitting}
+              label="Sender Name"
+              message={
+                attempted && !draft.senderName.trim()
+                  ? "Enter the sender name."
+                  : undefined
+              }
+              onChange={(event) =>
+                patch("senderName", event.currentTarget.value)
+              }
+              status={
+                attempted && !draft.senderName.trim() ? "error" : "default"
+              }
+              value={draft.senderName}
+            />
+            <TextInput
+              disabled={submitting}
+              label="Transfer Date"
+              message={
+                attempted && !draft.transferDate.trim()
+                  ? "Enter the transfer date."
+                  : undefined
+              }
+              onChange={(event) =>
+                patch("transferDate", event.currentTarget.value)
+              }
+              status={
+                attempted && !draft.transferDate.trim() ? "error" : "default"
+              }
+              type="date"
+              value={draft.transferDate}
+            />
+            <TextInput
+              disabled={submitting}
+              label="Transaction Reference / ID"
+              message={
+                attempted && !draft.transactionReference.trim()
+                  ? "Enter the transaction reference."
+                  : undefined
+              }
+              onChange={(event) =>
+                patch("transactionReference", event.currentTarget.value)
+              }
+              status={
+                attempted && !draft.transactionReference.trim()
+                  ? "error"
+                  : "default"
+              }
+              value={draft.transactionReference}
+            />
             <VStack className="w-full" gap="sm" hAlign="stretch">
-              <h3 className="text-sm leading-5 font-medium text-foreground">
-                Bank Details
-              </h3>
-              <div className="flex w-full flex-col gap-2 rounded-xl border border-border bg-card px-3 pt-3 pb-4">
-                <DetailRow
-                  label="Beneficiary Name"
-                  value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
+              <VStack
+                className="w-full"
+                data-slot="file-dropzone"
+                gap="sm"
+                hAlign="stretch"
+              >
+                <FileDropzoneTarget
+                  accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
+                  converting={converting}
+                  copy={{
+                    idleTitle: "Drop files here or choose files",
+                    idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
+                    chooseFiles: "Choose Files",
+                    converting: "Converting HEIC…",
+                  }}
+                  disabled={submitting}
+                  files={draft.files}
+                  limits={{
+                    minFiles: WINNER_ORDER_PROOF_MIN_FILES,
+                    maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
+                    maxBytesPerFile: WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
+                    maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
+                  }}
+                  onChange={(files) => patch("files", files)}
+                  onConvertingChange={setConverting}
+                  onReject={handleFileReject}
                 />
-                <DetailRow
-                  label="Bank Name"
-                  value={WINNER_ORDER_BANK_DETAILS.bankName}
-                />
-                <CopyableDetailRow
-                  copied={copiedField === "account"}
-                  copyAriaLabel="Copy account number"
-                  copiedAriaLabel="Account number copied"
-                  label="Account Number / IBAN"
-                  onCopy={() =>
-                    void copyValue(
-                      "account",
-                      accountNumber,
-                      "Account number copied",
-                      "Copy the account number manually",
+                <FileDropzoneFileList
+                  copy={{ removeFile: "Remove file" }}
+                  disabled={formLocked}
+                  files={draft.files}
+                  onRemove={(id) =>
+                    patch(
+                      "files",
+                      draft.files.filter((item) => item.id !== id),
                     )
                   }
-                  value={accountNumber}
                 />
-                <DetailRow
-                  label="Routing / SWIFT Code"
-                  value={WINNER_ORDER_BANK_DETAILS.swiftCode}
-                />
-                <CopyableDetailRow
-                  copied={copiedField === "amount"}
-                  copyAriaLabel="Copy amount due"
-                  copiedAriaLabel="Amount due copied"
-                  label="Total Amount Due"
-                  onCopy={() =>
-                    void copyValue(
-                      "amount",
-                      amountDue,
-                      "Amount due copied",
-                      "Copy the amount due manually",
-                    )
-                  }
-                  value={amountDue}
-                />
-                <CopyableDetailRow
-                  copied={copiedField === "reference"}
-                  copyAriaLabel="Copy transfer reference"
-                  copiedAriaLabel="Reference copied"
-                  label="Required Transfer Reference"
-                  onCopy={() =>
-                    void copyValue(
-                      "reference",
-                      transferReference,
-                      "Reference copied",
-                      "Copy the reference manually",
-                    )
-                  }
-                  value={transferReference}
-                />
-              </div>
-            </VStack>
-
-            <VStack className="w-full" gap="md" hAlign="stretch" id={formId}>
-              <h3 className="text-sm leading-5 font-medium text-foreground">
-                Proof of Payment
-              </h3>
-              <TextInput
-                autoComplete="name"
-                disabled={submitting}
-                label="Sender Name"
-                message={
-                  attempted && !draft.senderName.trim()
-                    ? "Enter the sender name."
-                    : undefined
-                }
-                onChange={(event) =>
-                  patch("senderName", event.currentTarget.value)
-                }
-                status={
-                  attempted && !draft.senderName.trim() ? "error" : "default"
-                }
-                value={draft.senderName}
-              />
-              <TextInput
-                disabled={submitting}
-                label="Transfer Date"
-                message={
-                  attempted && !draft.transferDate.trim()
-                    ? "Enter the transfer date."
-                    : undefined
-                }
-                onChange={(event) =>
-                  patch("transferDate", event.currentTarget.value)
-                }
-                status={
-                  attempted && !draft.transferDate.trim() ? "error" : "default"
-                }
-                type="date"
-                value={draft.transferDate}
-              />
-              <TextInput
-                disabled={submitting}
-                label="Transaction Reference / ID"
-                message={
-                  attempted && !draft.transactionReference.trim()
-                    ? "Enter the transaction reference."
-                    : undefined
-                }
-                onChange={(event) =>
-                  patch("transactionReference", event.currentTarget.value)
-                }
-                status={
-                  attempted && !draft.transactionReference.trim()
-                    ? "error"
-                    : "default"
-                }
-                value={draft.transactionReference}
-              />
-              <VStack className="w-full" gap="sm" hAlign="stretch">
-                <span className="text-sm font-medium text-secondary-foreground">
-                  Proof of Payment File
-                </span>
-                <VStack
-                  className="w-full"
-                  data-slot="file-dropzone"
-                  gap="sm"
-                  hAlign="stretch"
-                >
-                  <FileDropzoneTarget
-                    accept={WINNER_ORDER_PROOF_FILE_ACCEPT}
-                    converting={converting}
-                    copy={{
-                      idleTitle: "Drop files here or choose files",
-                      idleDescription: WINNER_ORDER_PROOF_FILE_HINT,
-                      chooseFiles: "Choose Files",
-                      converting: "Converting HEIC…",
-                    }}
-                    disabled={submitting}
-                    files={draft.files}
-                    limits={{
-                      minFiles: WINNER_ORDER_PROOF_MIN_FILES,
-                      maxFiles: WINNER_ORDER_PROOF_MAX_FILES,
-                      maxBytesPerFile: WINNER_ORDER_PROOF_MAX_BYTES_PER_FILE,
-                      maxBytesTotal: WINNER_ORDER_PROOF_MAX_BYTES_TOTAL,
-                    }}
-                    onChange={(files) => patch("files", files)}
-                    onConvertingChange={setConverting}
-                    onReject={handleFileReject}
-                  />
-                  <FileDropzoneFileList
-                    copy={{ removeFile: "Remove file" }}
-                    disabled={formLocked}
-                    files={draft.files}
-                    onRemove={(id) =>
-                      patch(
-                        "files",
-                        draft.files.filter((item) => item.id !== id),
-                      )
-                    }
-                  />
-                  {attempted &&
-                  draft.files.length < WINNER_ORDER_PROOF_MIN_FILES ? (
-                    <Text size="sm" tone="error">
-                      Attach at least one proof file.
-                    </Text>
-                  ) : null}
-                </VStack>
+                {attempted &&
+                draft.files.length < WINNER_ORDER_PROOF_MIN_FILES ? (
+                  <Text size="sm" tone="error">
+                    Attach at least one proof file.
+                  </Text>
+                ) : null}
               </VStack>
-              <TextInput
-                disabled={submitting}
-                label="Additional Notes (optional)"
-                onChange={(event) => patch("notes", event.currentTarget.value)}
-                value={draft.notes}
-              />
-              <HStack className="w-full" gap="xs" vAlign="start">
-                <span className="mt-0.5 shrink-0 text-warning">
-                  <Warning aria-hidden size={16} weight="fill" />
-                </span>
-                <Text className="text-secondary-foreground" size="sm">
-                  {PROOF_CONFIRM_MICROCOPY}
-                </Text>
-              </HStack>
             </VStack>
+            <TextInput
+              disabled={submitting}
+              label="Additional Notes (optional)"
+              onChange={(event) => patch("notes", event.currentTarget.value)}
+              value={draft.notes}
+            />
+            <HStack className="w-full" gap="xs" vAlign="start">
+              <span className="mt-0.5 shrink-0 text-warning">
+                <Warning aria-hidden size={16} weight="fill" />
+              </span>
+              <Text className="text-secondary-foreground" size="sm">
+                {PROOF_CONFIRM_MICROCOPY}
+              </Text>
+            </HStack>
           </VStack>
         </DialogBody>
         <DialogFooter>
@@ -463,77 +367,6 @@ function WinnerOrderPaymentProofDialog({
         </DialogFooter>
       </DialogContent>
     </Dialog>
-  );
-}
-
-function DetailRow({ label, value }: { label: string; value: string }) {
-  return (
-    <div className="flex w-full min-w-0 flex-col gap-0.5">
-      <span className="text-sm leading-5 text-secondary-foreground">
-        {label}
-      </span>
-      <span className="text-sm leading-5 font-medium break-all text-foreground">
-        {value}
-      </span>
-    </div>
-  );
-}
-
-function CopyableDetailRow({
-  label,
-  value,
-  copied,
-  copyAriaLabel,
-  copiedAriaLabel,
-  onCopy,
-}: {
-  label: string;
-  value: string;
-  copied: boolean;
-  copyAriaLabel: string;
-  copiedAriaLabel: string;
-  onCopy: () => void;
-}) {
-  return (
-    <div className="flex w-full min-w-0 flex-col gap-0.5">
-      <span className="text-sm leading-5 text-secondary-foreground">
-        {label}
-      </span>
-      <div className="flex min-w-0 items-center gap-1">
-        <span className="min-w-0 text-sm leading-5 font-medium break-all text-foreground">
-          {value}
-        </span>
-        <IconButton
-          aria-label={copied ? copiedAriaLabel : copyAriaLabel}
-          className="shrink-0"
-          onClick={onCopy}
-          size="xs"
-          type="button"
-          variant="ghost"
-        >
-          <span className="relative inline-flex size-3 items-center justify-center">
-            <span
-              className={
-                copied
-                  ? "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
-                  : "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
-              }
-            >
-              <Copy aria-hidden size={12} />
-            </span>
-            <span
-              className={
-                copied
-                  ? "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
-                  : "absolute size-3 scale-75 opacity-0 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
-              }
-            >
-              <Check aria-hidden size={12} />
-            </span>
-          </span>
-        </IconButton>
-      </div>
-    </div>
   );
 }
 

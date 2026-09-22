@@ -1,7 +1,7 @@
 # shared/auth/sign-in Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-15, tcs-rules r3.0
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
@@ -1226,7 +1226,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1236,16 +1236,25 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link whose time to live has ended.
+
+* customer is signed out.
+* <expired link> for <collector email> is past its time to live.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<expired link>` | A sign-in link whose time to live has ended |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <expired link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link has expired.
 
 ### shared-auth-sign-in-US6-TC2-1: Used link toasts that it no longer works
@@ -1254,7 +1263,7 @@ A sign-in link whose time to live has ended.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1264,16 +1273,25 @@ A sign-in link whose time to live has ended.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link that has already created a session.
+
+* A sign-in link for <collector email> has already created a session.
+* customer is signed out in a fresh browser session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<used link>` | The sign-in link that already created a session |
 
 **Steps:**
 
-1. Follow that link again.
+1. Follow <used link>.
 
 **Expected Results:**
 
 * No new session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC3-1: Superseded link toasts that it no longer works
@@ -1292,16 +1310,27 @@ A sign-in link that has already created a session.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-An unused unexpired sign-in link that a later sign-in-link email for the same address replaced.
+
+* customer is signed out.
+* <earlier link> is unused and unexpired for <collector email>.
+* The sixty-second window since <earlier link> was sent has passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<earlier link>` | The unused unexpired link from the first sign-in email |
 
 **Steps:**
 
-1. Follow the earlier link.
+1. Submit <collector email> at the email step to send a later sign-in email.
+2. Follow <earlier link>.
 
 **Expected Results:**
 
-* No session is created.
-* They are on this brand's home.
+* No session is created from <earlier link>.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC4-1: Invalid link toasts that it no longer works
@@ -1320,16 +1349,24 @@ An unused unexpired sign-in link that a later sign-in-link email for the same ad
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link token that is malformed or unknown.
+
+* customer is signed out.
+* <invalid link> is a sign-in link whose token is malformed or unknown.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<invalid link>` | A sign-in link token that is malformed or unknown |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <invalid link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC5-1: Banned account link follow toasts cannot sign in
@@ -1348,16 +1385,26 @@ A sign-in link token that is malformed or unknown.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A banned account and a sign-in link for that account's address.
+
+* customer is signed out.
+* The account for <banned email> is banned.
+* <banned link> is a sign-in link for <banned email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<banned email>` | banned@example.com, an address whose account is banned |
+| `<banned link>` | A sign-in link for <banned email> |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <banned link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that they cannot sign in.
 * The toast does not invite them to request another link.
 
@@ -2041,6 +2088,264 @@ Runs once per row of **Test data**.
 
 * Neither tab still shows the sign-in dialog.
 * Both tabs show the collector signed in.
+
+## shared-auth-sign-in-US9: Collector follows a link meant for a different account
+
+**As a** collector already signed in,
+**I want** a clear choice when a sign-in link is meant for another account,
+**so that** I am not switched without asking, and can Switch or Stay.
+
+### shared-auth-sign-in-US9-TC1-1: Mismatch toast names the link's account and leaves the session untouched
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* A sign-in link for `<link account email>`, a different address with its own account, is unused and unexpired.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Follow the link for `<link account email>`.
+
+**Expected Results:**
+
+* The toast states the collector is signed in with a different account.
+* The description names `<link account email>`.
+* The description does not name `<current account email>`.
+* The current session is unaffected: still signed in as `<current account email>`.
+
+### shared-auth-sign-in-US9-TC2-1: Switch ends the current session and enters the link's account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate Switch.
+
+**Expected Results:**
+
+* The session for `<current account email>` ends.
+* The collector is signed in as the account for `<link account email>`.
+
+### shared-auth-sign-in-US9-TC3-1: Stay keeps the current session and does not enter the link's account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate Stay.
+
+**Expected Results:**
+
+* The collector remains signed in as `<current account email>`.
+* The account for `<link account email>` is not entered.
+
+### shared-auth-sign-in-US9-TC4-1: Dismissing the toast has the same outcome as Stay
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate the toast's close control.
+
+**Expected Results:**
+
+* The collector remains signed in as `<current account email>`.
+* The account for `<link account email>` is not entered.
+
+### shared-auth-sign-in-US9-TC5-1: Mismatch toast stays until an explicit choice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Leave the toast untouched for a period that would clear an ordinary toast.
+
+**Expected Results:**
+
+* The toast is still shown.
+* Switch and Stay are still offered.
+
+### shared-auth-sign-in-US9-TC6-1: Mismatch toast is styled as a warning, not an error
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Read the toast's visual type.
+
+**Expected Results:**
+
+* The toast uses the warning style, distinct from the error style of the failed-follow toasts.
+
+### shared-auth-sign-in-US9-TC7-1: A link for the signed-in account itself shows no mismatch toast
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* A sign-in link for `<current account email>` itself is unused and unexpired.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+
+**Steps:**
+
+1. Follow that link.
+
+**Expected Results:**
+
+* No mismatch toast is shown.
+* The collector remains signed in as `<current account email>`.
 
 ## Settled
 

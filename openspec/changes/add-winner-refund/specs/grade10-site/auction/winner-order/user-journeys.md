@@ -3,8 +3,14 @@
 ### winner-order-US-14: Winner sees a refunded order as Refunded
 
 **As a** winner whose order Grade10 refunded because they were not happy with the item,
-**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see the reason, note and where it was sent, down to the last four digits, whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
+**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
 **so that** I know the order is closed and still hold the record of what I paid.
+
+### winner-order-US-16: Winner matches a bank refund against their own statement
+
+**As a** winner whose refund was sent by bank transfer,
+**I want** the reference the operator sent it under, beside the amount and where it went,
+**so that** I can find the credit on my statement without asking Customer Service.
 
 ### winner-order-US-15: Winner sees an overpayment returned
 

@@ -3,6 +3,8 @@ import { expect, fn, userEvent, within } from "storybook/test";
 import { AuctionAddressForm } from "./auction-address-form";
 
 const COPY = {
+  personal: "Personal",
+  companyKind: "Company",
   firstName: "First Name",
   lastName: "Last Name",
   phone: "Phone",
@@ -17,6 +19,8 @@ const COPY = {
   optional: "Optional",
   confirm: "Confirm",
   cancel: "Cancel",
+  phonePlaceholder: "+852 12345678",
+  countrySearchPlaceholder: "e.g. United States",
 };
 
 const meta = {
@@ -28,13 +32,16 @@ const meta = {
     copy: COPY,
     errors: { city: "Enter a town or city." },
     initialValues: {
+      addressKind: "personal",
       firstName: "Alex",
       lastName: "Chen",
-      phone: "not-a-standard-phone",
+      phone: "+85261234567",
+      phoneCountry: "HK",
       country: "Hong Kong",
       addressLine1: "12/F, Tower 1",
       state: "Hong Kong",
       postalCode: "000000",
+      city: "",
     },
     onConfirm: fn(),
     onCancel: fn(),
@@ -48,13 +55,95 @@ export const ShowsSuppliedFieldError: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Enter a town or city.")).toBeVisible();
+    expect(canvas.getByRole("button", { name: /Personal/i })).toBeVisible();
+    expect(canvas.queryByLabelText(/Company Name/i)).toBeNull();
     await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
-    expect(args.onConfirm).toHaveBeenCalledWith(
-      expect.objectContaining({ phone: "not-a-standard-phone" }),
-    );
+    expect(args.onConfirm).not.toHaveBeenCalled();
     await userEvent.click(canvas.getByRole("button", { name: "Cancel" }));
     expect(args.onCancel).toHaveBeenCalledTimes(1);
   },
 };
 
 export const Default: Story = { args: { errors: undefined } };
+
+/** Personal default — Company Name hidden. */
+export const Personal: Story = {
+  args: {
+    errors: undefined,
+    initialValues: {
+      addressKind: "personal",
+      firstName: "Alex",
+      lastName: "Chen",
+      phone: "+85261239999",
+      phoneCountry: "HK",
+      country: "Hong Kong",
+      city: "Wan Chai",
+      addressLine1: "12/F, Tower 1",
+      state: "Hong Kong",
+      postalCode: "000000",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByLabelText(/Company Name/i)).toBeNull();
+    expect(canvas.getByPlaceholderText("+852 12345678")).toBeVisible();
+  },
+};
+
+/** Company — Company Name required. */
+export const Company: Story = {
+  args: {
+    errors: undefined,
+    initialValues: {
+      addressKind: "company",
+      firstName: "Alex",
+      lastName: "Chen",
+      phone: "+85261238888",
+      phoneCountry: "HK",
+      company: "Harbour Cards Ltd",
+      country: "Hong Kong",
+      city: "Wan Chai",
+      addressLine1: "12/F, Tower 1",
+      state: "Hong Kong",
+      postalCode: "000000",
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByLabelText(/Company Name/i)).toBeVisible();
+    await userEvent.clear(canvas.getByLabelText(/Company Name/i));
+    await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
+    expect(args.onConfirm).not.toHaveBeenCalled();
+    expect(canvas.getByText("Enter a company name.")).toBeVisible();
+  },
+};
+
+/** Phone empty refused; unusual digit string with country still confirms. */
+export const PhoneSoftRule: Story = {
+  args: {
+    errors: undefined,
+    initialValues: {
+      addressKind: "personal",
+      firstName: "Alex",
+      lastName: "Chen",
+      phone: "",
+      phoneCountry: "HK",
+      country: "Hong Kong",
+      city: "Wan Chai",
+      addressLine1: "12/F, Tower 1",
+      state: "Hong Kong",
+      postalCode: "000000",
+    },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
+    expect(args.onConfirm).not.toHaveBeenCalled();
+    expect(canvas.getByText("Enter a phone number.")).toBeVisible();
+
+    const phone = canvas.getByPlaceholderText("+852 12345678");
+    await userEvent.type(phone, "612345678901234");
+    await userEvent.click(canvas.getByRole("button", { name: "Confirm" }));
+    expect(args.onConfirm).toHaveBeenCalled();
+  },
+};

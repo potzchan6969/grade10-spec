@@ -845,12 +845,12 @@ A system-initiated log entry SHALL record the event that triggered it.
 
 ### Requirement: The order detail shows how long an order has waited
 
-An auction order in Awaiting Address or Preparing Invoice SHALL show, on its
+An auction order in Awaiting Setup or Preparing Invoice SHALL show, on its
 detail, how long it has waited in that stage.
 
 | Stage | Waiting since |
 | --- | --- |
-| Awaiting Address | The lot's close |
+| Awaiting Setup | The lot's close |
 | Preparing Invoice | The winner's latest address confirmation |
 
 An order that has waited 72 hours or more in its current stage SHALL carry an
@@ -865,7 +865,7 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-45 - An order waiting on an address shows time since close
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an auction order in Awaiting Address whose lot closed 30 hours ago
+- **GIVEN** an auction order in Awaiting Setup whose lot closed 30 hours ago
 - **WHEN** an operator opens it
 - **THEN** the detail shows that it has waited 30 hours since the lot's close
 - **AND** it carries no Overdue mark
@@ -873,7 +873,7 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-46 - An order idle 72 hours is marked Overdue
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** one auction order in Awaiting Address whose lot closed 72 hours ago
+- **GIVEN** one auction order in Awaiting Setup whose lot closed 72 hours ago
 - **AND** one in Preparing Invoice whose winner confirmed an address 80 hours ago
 - **WHEN** an operator reads the queue
 - **THEN** both rows carry the Overdue mark
@@ -882,9 +882,9 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-47 - Overdue changes no status
 **Serves:** Queue - overdue changes no status
 
-- **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
+- **GIVEN** an auction order in Awaiting Setup carrying the Overdue mark
 - **WHEN** another 30 days pass with no operator action
-- **THEN** its derived status is still Awaiting Address
+- **THEN** its derived status is still Awaiting Setup
 - **AND** the winner's account is not suspended
 
 ### Requirement: An operator quotes and sends the invoice

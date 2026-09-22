@@ -47,7 +47,10 @@ The collector still asks for the link the ordinary way. The job only captures, a
 - 🚧 **Everywhere else** — preview, production, and the disposable `/dev` door on staging stay closed. An address outside the tester domain is refused. The job does not mint a session without following the mail, it does not unban, and it does not seed store or auction data.
 
 :::detail{title="Code map" for="engineer"}
-- **Disposable `/dev` door** — [docs/architecture/e2e.md](https://github.com/9gag/grade10/blob/main/docs/architecture/e2e.md) and [docs/architecture/security.md](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md)
+- **Door** — [`packages/grade10-auth/backend/src/routes/testDoor.ts`](https://github.com/9gag/grade10/blob/main/packages/grade10-auth/backend/src/routes/testDoor.ts)
+- **Predicate** — `allowsStagingTestDoor` in [`packages/utils/src/env.ts`](https://github.com/9gag/grade10/blob/main/packages/utils/src/env.ts)
+- **Tester domain** — `TEST_DOOR_TESTER_DOMAIN` in [`apps/backend/grade10/auth/src/secrets.ts`](https://github.com/9gag/grade10/blob/main/apps/backend/grade10/auth/src/secrets.ts)
+- **Design record** — [security](https://github.com/9gag/grade10/blob/main/docs/architecture/security.md) and [e2e](https://github.com/9gag/grade10/blob/main/docs/architecture/e2e.md)
 - **Staging host** — `grade10-stg.com`
 :::
 
