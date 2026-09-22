@@ -66,6 +66,21 @@ export const Tones: Story = {
   ),
 };
 
+/** `mono` binds `--font-mono`, so digits a collector reads back to a counter
+ * line up: a pickup code, a certificate number. */
+export const Mono: Story = {
+  args: { face: "mono", size: "display", children: "GR-4821-7730" },
+};
+
+/** `warning` binds `--warning-foreground`: a line that is due, not failed. */
+export const Warning: Story = {
+  args: {
+    tone: "warning",
+    weight: "medium",
+    children: "HK$300.00 due at the counter",
+  },
+};
+
 /** `mono` is for a figure read back aloud: a pickup code, a certificate. */
 export const Faces: Story = {
   render: (args) => (

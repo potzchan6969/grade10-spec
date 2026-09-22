@@ -8,6 +8,12 @@ export type EmailFooterProps = {
   muteUrl?: string;
   /** @deprecated Prefer `muteUrl`. */
   unwatchUrl?: string;
+  /**
+   * Extra lines under the standard footer, rendered one per line in order —
+   * a registered name and licence line, a shop address, a complaints
+   * contact, a time-zone line. A letter with none of these passes nothing.
+   */
+  lines?: string[];
 };
 
 export function EmailFooter({
@@ -16,6 +22,7 @@ export function EmailFooter({
   canUnsubscribe = false,
   muteUrl,
   unwatchUrl,
+  lines = [],
 }: EmailFooterProps) {
   const alertsUrl = muteUrl ?? unwatchUrl;
 
@@ -36,6 +43,14 @@ export function EmailFooter({
       <Text className="m-0 text-sm leading-base text-fg-3">
         © {new Date().getFullYear()} {brandName}.
       </Text>
+      {lines.map((line, index) => (
+        <Text
+          className="m-0 mt-2 text-sm leading-base text-fg-3"
+          key={`${index}:${line}`}
+        >
+          {line}
+        </Text>
+      ))}
     </>
   );
 }

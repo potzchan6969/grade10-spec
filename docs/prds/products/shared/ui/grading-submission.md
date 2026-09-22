@@ -57,25 +57,31 @@ Every state is reachable from a story with props alone; the surface each
 block lands on is [Grading](/p/grade10-site/grading), and every word reaches
 a block through props.
 
-<!-- story: grading-submission-gradingfeesheet--one-grader "The fee sheet" -->
+::story{id="grading-submission-gradingfeesheet--one-grader" title="The fee sheet"}
 
-<!-- story: grading-submission-gradingcardlist--no-value "A card without a value" -->
+::story{id="grading-submission-gradingcardlist--no-value" title="A card without a value"}
 
-<!-- story: grading-submission-gradingpastesheet--above-the-ceiling "A pasted line above the ceiling" -->
+::story{id="grading-submission-gradingcardrecord--handed-in" title="A handed-in card, with its intake id"}
 
-<!-- story: grading-submission-gradinglevelpicker--level-closed-by-a-value "A level closed by a declared value" -->
+::story{id="grading-submission-gradingpastesheet--above-the-ceiling" title="A pasted line above the ceiling"}
 
-<!-- story: grading-submission-gradingreview--upcharge-warning "The upcharge warning" -->
+::story{id="grading-submission-gradinglevelpicker--level-closed-by-a-value" title="A level closed by a declared value"}
 
-<!-- story: grading-submission-gradingownershipchip--running-late "Running late, with the grader" -->
+::story{id="grading-submission-gradingreview--upcharge-warning" title="The upcharge warning"}
 
-<!-- story: grading-submission-gradingpickupcard--someone-named "The pickup card with someone named" -->
+::story{id="grading-submission-gradingstatusrail--sent" title="The rail at Sent"}
 
-<!-- story: grading-submission-gradinggradecards--ungraded "A card returned ungraded" -->
+::story{id="grading-submission-gradingownershipchip--running-late" title="Running late, with the grader"}
 
-<!-- story: grading-submission-gradingmoneyblock--due "An upcharge due before collection" -->
+::story{id="grading-submission-gradingpickupcard--someone-named" title="The pickup card with someone named"}
 
-<!-- story: grading-submission-gradinguncollectedladder--notice "The written notice rung" -->
+::story{id="grading-submission-gradingnamedcollector--named" title="Somebody named to collect"}
+
+::story{id="grading-submission-gradinggradecards--ungraded" title="A card returned ungraded"}
+
+::story{id="grading-submission-gradingmoneyblock--due" title="An upcharge due before collection"}
+
+::story{id="grading-submission-gradinguncollectedladder--notice" title="The written notice rung"}
 
 :::detail{title="Product decisions" for="pm"}
 The grading pages are one collector's submission read on a phone, and the
