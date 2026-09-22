@@ -61,7 +61,7 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 Needs groups 1 and 2 merged to this store's `main`. Every other application
 group reads this one's exports.
 
-- [ ] 3.1 Table-test the pure answers in `packages/vault/contracts`, `asOf` on
+- [x] 3.1 Table-test the pure answers in `packages/vault/contracts`, `asOf` on
       both sides of every deadline: the chip, the stage, the lane and the fact
       (`grade10-site-vault-case-lifecycle-SC-24`,
       `grade10-site-vault-case-lifecycle-SC-25`,
@@ -77,7 +77,7 @@ group reads this one's exports.
       `grade10-site-vault-case-lifecycle-SC-40`), the identity's six words
       (`grade10-admin-vault-operator-queue-SC-42`), the annualised rate on the
       worked loan at one decimal place, and the four calendar escapes
-- [ ] 3.2 Add `caseStanding(input, asOf, timeZone)` and
+- [x] 3.2 Add `caseStanding(input, asOf, timeZone)` and
       `offerLapsed(expiresAt, status, asOf)` in
       `packages/vault/contracts/src/standing.ts`, over the six scalars both
       reads carry, answering `{ chip, stage, lane, fact }` — the storage lane
@@ -94,35 +94,35 @@ group reads this one's exports.
       `grade10-site-vault-case-lifecycle-SC-36`,
       `grade10-site-vault-case-lifecycle-SC-38`,
       `grade10-site-vault-case-lifecycle-SC-40`)
-- [ ] 3.3 Add `caseEnding(detail)` over the detail's typed `ended`, `notice`
+- [x] 3.3 Add `caseEnding(detail)` over the detail's typed `ended`, `notice`
       and `forfeiture` fields, `identityStanding(state)` over `checkState` and
       `verified`, the status-to-collector-word map both SPAs import, and
       `CASE_REFERENCE_ALPHABET` (`grade10-admin-vault-operator-queue-SC-42`)
-- [ ] 3.4 Replace `caseDetailSchema.paymentInstructions` with
+- [x] 3.4 Replace `caseDetailSchema.paymentInstructions` with
       `howToPay: NullOr({ payee, fpsId, bankAccount, reference })` and add
       `repayments[].balanceAfterMinor`, `notice`, `forfeiture`, `ended` and
       `reminders`; add `reference`, `offerExpiresAt`, `dueAt` and `endedAs` to
       `vaultCaseSchema`
-- [ ] 3.5 Drop `paymentInstructions` from `LEGAL_IDENTITY_FIELDS` in
+- [x] 3.5 Drop `paymentInstructions` from `LEGAL_IDENTITY_FIELDS` in
       `packages/app-env/src/legalIdentity.ts` for `fpsId` and `bankAccount`,
       neither blocking, and keep `check:libs` naming both unset
-- [ ] 3.6 Fix `escapeCalendarText` in
+- [x] 3.6 Fix `escapeCalendarText` in
       `packages/appointment/contracts/src/calendar.ts`, where `;` is replaced
       by itself
-- [ ] 3.7 Add `annualisedRate(principalMinor, rateBasisPoints, termDays)` to
+- [x] 3.7 Add `annualisedRate(principalMinor, rateBasisPoints, termDays)` to
       `packages/vault/contracts` — the term's interest over the principal read
       over a year, a percentage rounded to one decimal place — and point
       `packages/vault/backend/src/documents/annualRate.ts` at it, which prints
       two decimals of its own today
 - [ ] 3.8 Bump the `external/grade10-spec` submodule pointer to the commit
       carrying groups 1 and 2
-- [ ] 3.9 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 3.9 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`, `pnpm run check:libs`,
       `pnpm run check:submodules`
 
 ## 4. The case reference (grade10)
 
-- [ ] 4.1 Cover the reference: an insert per draw and the throw by name after
+- [x] 4.1 Cover the reference: an insert per draw and the throw by name after
       eight, the alphabet, the unique index, the backfill over seeded rows,
       and the case-folded prefix search's query shape
       (`grade10-site-vault-case-intake-SC-19`,
@@ -133,17 +133,17 @@ group reads this one's exports.
       `grade10-admin-vault-operator-queue-SC-26`,
       `grade10-admin-vault-operator-queue-SC-47`,
       `grade10-admin-vault-operator-queue-SC-48`)
-- [ ] 4.2 Write `0031_case_reference.sql`: the column nullable, the unique
+- [x] 4.2 Write `0031_case_reference.sql`: the column nullable, the unique
       index, one deterministic per-row backfill, then the check and
       `SET NOT NULL`, with the `-- contract:` and `-- lock:` lines
       `check:migrations` asks for
-- [ ] 4.3 Add `caseReference(random)` in `cases/reference.ts` and issue it in
+- [x] 4.3 Add `caseReference(random)` in `cases/reference.ts` and issue it in
       `cases/intake.ts` beside the `vc_` id — an independent insert guarded by
       `isUniqueViolation`, eight attempts, then a throw by name, before
       `openCase`'s transaction (`grade10-site-vault-case-intake-SC-19`,
       `grade10-site-vault-case-intake-SC-20`,
       `grade10-site-vault-case-intake-SC-21`)
-- [ ] 4.4 Read a case-folded term of two to six characters of the alphabet as
+- [x] 4.4 Read a case-folded term of two to six characters of the alphabet as
       `termKind: "reference"` in `repositories/cases.ts` `searchCases` and one
       of seven or more as an id prefix, and keep the id in every route, link
       and `CASE_PATH` (`grade10-admin-vault-operator-queue-SC-24`,
@@ -151,7 +151,7 @@ group reads this one's exports.
       `grade10-admin-vault-operator-queue-SC-47`,
       `grade10-admin-vault-operator-queue-SC-48`,
       `grade10-site-vault-case-intake-SC-22`)
-- [ ] 4.5 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
+- [x] 4.5 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 5. The letters (grade10)
@@ -227,7 +227,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
 ## 6. The case read and the collector's acts (grade10)
 
-- [ ] 6.1 Cover the detail read's new fields and the acts' refusals: the
+- [x] 6.1 Cover the detail read's new fields and the acts' refusals: the
       balance after each repayment, the reminder ladder, the notice, the
       statement version on the `intake_submitted` event, a stale quote and a
       stranger's case (`grade10-site-vault-case-intake-SC-17`,
@@ -237,11 +237,11 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-loan-and-settlement-SC-31`,
       `grade10-site-vault-loan-and-settlement-SC-33`,
       `grade10-site-vault-loan-and-settlement-SC-48`)
-- [ ] 6.2 Answer `repayments[].balanceAfterMinor` as the fold at that value
+- [x] 6.2 Answer `repayments[].balanceAfterMinor` as the fold at that value
       date through `money/computeDue.ts`, the one authority, so a repayment
       taken back leaves the list
       (`grade10-site-vault-loan-and-settlement-SC-29`)
-- [ ] 6.3 Answer `notice` from `custody/forfeit.ts`'s
+- [x] 6.3 Answer `notice` from `custody/forfeit.ts`'s
       `latestForfeitureNotice`, `forfeiture`, `ended`, and
       `reminders: CaseReminder[]` folded from the due date, the offsets in
       `sweeps/remind.ts` and the notice — the rungs sent with their days and
@@ -249,24 +249,24 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       (`grade10-site-vault-loan-and-settlement-SC-31`,
       `grade10-site-vault-loan-and-settlement-SC-33`,
       `grade10-site-vault-loan-and-settlement-SC-48`)
-- [ ] 6.4 Answer `howToPay` from `legalIdentity(brand)` and the case
+- [x] 6.4 Answer `howToPay` from `legalIdentity(brand)` and the case
       reference, null on every case but a live loan
-- [ ] 6.5 Refuse an answer naming the superseded offer, and refuse
+- [x] 6.5 Refuse an answer naming the superseded offer, and refuse
       `QUOTE_STALE` where the balance moved under an act carrying the detail's
       `asOf` (`grade10-site-vault-valuation-and-offer-SC-27`)
-- [ ] 6.6 Take `collectionStatement: { acknowledged: true }` on
+- [x] 6.6 Take `collectionStatement: { acknowledged: true }` on
       `cases.submit`, refuse without it, and write
       `COLLECTION_STATEMENT_VERSION` from `documents/plan.ts` into the
       `intake_submitted` event's details
       (`grade10-site-vault-case-intake-SC-17`)
-- [ ] 6.7 Answer a case the caller does not own as not found
+- [x] 6.7 Answer a case the caller does not own as not found
       (`grade10-site-vault-case-lifecycle-SC-39`)
-- [ ] 6.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 6.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 7. Erasure, filed by the account holder (grade10)
 
-- [ ] 7.1 Cover both workers: self files with no ban, self cancels without
+- [x] 7.1 Cover both workers: self files with no ban, self cancels without
       lifting a conduct ban, an operator filing converts an open self-filed
       row, `enforceOpenErasure` leaves a self-filed session alone, and a held
       case refuses the ask in words (`shared-auth-users-SC-28`,
@@ -278,7 +278,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `shared-auth-users-SC-39`, `shared-auth-users-SC-40`,
       `shared-auth-users-SC-41`,
       `grade10-site-vault-retention-and-erasure-SC-23`)
-- [ ] 7.2 Condition the ban in `erasureRequests.ts` on `actor.id === userId` —
+- [x] 7.2 Condition the ban in `erasureRequests.ts` on `actor.id === userId` —
       a self-filed row bans nothing, a cancel lifts the ban only where
       `open.requestedBy !== userId`, an operator filing over a self-filed row
       takes it over — and give `readSession.ts`'s `enforceOpenErasure` the
@@ -286,49 +286,49 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `shared-auth-users-SC-32`, `shared-auth-users-SC-34`,
       `shared-auth-users-SC-35`, `shared-auth-users-SC-36`,
       `shared-auth-users-SC-40`, `shared-auth-users-SC-41`)
-- [ ] 7.3 Make a second filing answer the open row's `executeAfter` and a
+- [x] 7.3 Make a second filing answer the open row's `executeAfter` and a
       cancel with no open row a no-op, in place of `ERASURE_ALREADY_REQUESTED`
       and `ERASURE_NO_REQUEST` (`shared-auth-users-SC-28`,
       `shared-auth-users-SC-29`, `shared-auth-users-SC-33`,
       `shared-auth-users-SC-37`, `shared-auth-users-SC-38`,
       `shared-auth-users-SC-39`)
-- [ ] 7.4 Add `ownErasureStatus`, `requestOwnErasure` and `cancelOwnErasure`
+- [x] 7.4 Add `ownErasureStatus`, `requestOwnErasure` and `cancelOwnErasure`
       to `packages/grade10-auth/backend/src/entrypoint.ts` and to
       `AuthServiceBinding`, each resolving the person from the session the
       headers carry as `lookupUsers` does
-- [ ] 7.5 Add `cases.yourData` answering the retention classes off
+- [x] 7.5 Add `cases.yourData` answering the retention classes off
       `packages/app-env/src/retention.ts`, the identity standing over
       `kyc.latestForUser`, the sealed documents paged by case, the vault's own
       `holds` and the open request
-- [ ] 7.6 Add `cases.requestErasure`, refusing `ERASURE_HELD` with the holds
+- [x] 7.6 Add `cases.requestErasure`, refusing `ERASURE_HELD` with the holds
       in words while any stand, and `cases.cancelErasure`
       (`grade10-site-vault-retention-and-erasure-SC-23`)
-- [ ] 7.7 Move `docs/architecture/account-data.md` to what an operator's
+- [x] 7.7 Move `docs/architecture/account-data.md` to what an operator's
       filing over a self-filed row now does
-- [ ] 7.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 7.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 8. The one download of every signed document (grade10)
 
-- [ ] 8.1 Cover the route: a stranger refused by `caseOwner`, the byte ceiling
+- [x] 8.1 Cover the route: a stranger refused by `caseOwner`, the byte ceiling
       refused before the first read, the documents of two of the caller's own
       cases, a read row per document and one chain row
       (`grade10-site-vault-documents-and-signing-SC-26`,
       `grade10-site-vault-documents-and-signing-SC-28`,
       `grade10-site-vault-documents-and-signing-SC-29`)
-- [ ] 8.2 Lift the ZIP writer from `packages/wallet-pass/src/apple/zip.ts`
+- [x] 8.2 Lift the ZIP writer from `packages/wallet-pass/src/apple/zip.ts`
       into `packages/utils/src/zip.ts`, add the `@grade10/utils/zip` export
       and its Handbook card row, and leave `wallet-pass` reading it
-- [ ] 8.3 Serve `GET /api/cases/documents.zip` (`VAULT_PATHS.documentsZip`)
+- [x] 8.3 Serve `GET /api/cases/documents.zip` (`VAULT_PATHS.documentsZip`)
       under the session tier over the cursor `cases.yourData` takes, summing
       the recorded object sizes first and refusing `TOO_LARGE` by name past
       52,428,800 bytes (`grade10-site-vault-documents-and-signing-SC-26`,
       `grade10-site-vault-documents-and-signing-SC-28`)
-- [ ] 8.4 Append `recordDocumentRead` per document through
+- [x] 8.4 Append `recordDocumentRead` per document through
       `documents/serve.ts` before its bytes go, and one
       `vault.documents.setDownloaded` row — who, when, how many
       (`grade10-site-vault-documents-and-signing-SC-29`)
-- [ ] 8.5 Verify: `pnpm run check:handbook`, `pnpm run typecheck`,
+- [x] 8.5 Verify: `pnpm run check:handbook`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
 ## 9. The visit's calendar file (grade10)
@@ -358,7 +358,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
 ## 10. The console's queue and custody reads (grade10)
 
-- [ ] 10.1 Cover the reads and the offer recording's own guard with both
+- [x] 10.1 Cover the reads and the offer recording's own guard with both
       halves — the query shape and the rows: one `GROUP BY status` folded onto
       the seven cuts, the Today cut ordered by `appointment_at`, the search
       trail, the custody totals, the key terms the plan names, and the two
@@ -374,34 +374,34 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-documents-and-signing-SC-23`,
       `grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
-- [ ] 10.2 Add `admin.queueCounts` under `vault:read` — one `GROUP BY status`
+- [x] 10.2 Add `admin.queueCounts` under `vault:read` — one `GROUP BY status`
       folded onto the seven cuts, one instant and the brand's zone passed in —
       and leave the Today block reading `admin.list` with `filter: "today"`
       ordered by `appointment_at` (`grade10-admin-vault-operator-queue-SC-01`,
       `grade10-admin-vault-operator-queue-SC-02`)
-- [ ] 10.3 Add `totals: { inVault, perShop, withLoan, pickupBooked }` to
+- [x] 10.3 Add `totals: { inVault, perShop, withLoan, pickupBooked }` to
       `admin.custodyList` from the same predicate the rows use
       (`grade10-admin-vault-operator-queue-SC-43`,
       `grade10-admin-vault-operator-queue-SC-44`)
-- [ ] 10.4 Add `admin.policy` answering `lendingPolicy(brand)`, `accrualOf`,
+- [x] 10.4 Add `admin.policy` answering `lendingPolicy(brand)`, `accrualOf`,
       the reminder ladder's days and `REQUIRED_FOR_OFFER`'s unset fields, and
       `admin.keyTerms` answering the loan agreement's clause ids and headings
       from `documents/templates/loanAgreement.ts`, in the document's own order
       (`grade10-site-vault-documents-and-signing-SC-22`)
-- [ ] 10.5 Take `terms: string[]` on `recordTermsExplained` and refuse any set
+- [x] 10.5 Take `terms: string[]` on `recordTermsExplained` and refuse any set
       short of the plan's, holding a storage case to no list
       (`grade10-site-vault-documents-and-signing-SC-23`)
-- [ ] 10.6 Raise the offer recording's own guard in `valuation/offers.ts`:
+- [x] 10.6 Raise the offer recording's own guard in `valuation/offers.ts`:
       refuse a bound the brand has not set when production sends past the
       dialog, and refuse a recording whose state moved under the dialog it was
       drawn from (`grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
-- [ ] 10.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 10.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 11. The money book's reads and the file (grade10)
 
-- [ ] 11.1 Cover the folds and the file: the net out per currency, the arrears
+- [x] 11.1 Cover the folds and the file: the net out per currency, the arrears
       count and figures over the filter in force, the kind filter's query
       shape, the arrears rows' contact and notice fields, and the CSV route's
       grant, page and chain row (`grade10-admin-vault-money-book-SC-07`,
@@ -419,30 +419,30 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-admin-vault-money-book-SC-29`,
       `grade10-admin-vault-money-book-SC-30`,
       `grade10-admin-vault-money-book-SC-31`)
-- [ ] 11.2 Add `netOut` to `money/position.ts` — payouts less repayments per
+- [x] 11.2 Add `netOut` to `money/position.ts` — payouts less repayments per
       currency, a correction netting its row once, positive when money is out
       (`grade10-admin-vault-money-book-SC-13`,
       `grade10-admin-vault-money-book-SC-14`,
       `grade10-admin-vault-money-book-SC-15`)
-- [ ] 11.3 Add `admin.arrearsSummary`: the count and the two figures, folding
+- [x] 11.3 Add `admin.arrearsSummary`: the count and the two figures, folding
       `computeDue` at one instant over every loan the filter in force holds
       (`grade10-admin-vault-money-book-SC-16`,
       `grade10-admin-vault-money-book-SC-17`)
-- [ ] 11.4 Add `kind: payout | repayment | adjustment` to
+- [x] 11.4 Add `kind: payout | repayment | adjustment` to
       `admin.moneyLedger`'s input, narrowing with the method filter already
       there (`grade10-admin-vault-money-book-SC-25`,
       `grade10-admin-vault-money-book-SC-26`)
-- [ ] 11.5 Carry the borrower's contact, the notice date and the last
+- [x] 11.5 Carry the borrower's contact, the notice date and the last
       `reminder_sent` on `overdueLoans` rows
       (`grade10-admin-vault-money-book-SC-07`,
       `grade10-admin-vault-money-book-SC-08`)
-- [ ] 11.6 Serve `GET /api/admin/money-ledger.csv`
+- [x] 11.6 Serve `GET /api/admin/money-ledger.csv`
       (`VAULT_PATHS.moneyLedgerCsv`) on `elevatedRoute` under `vault:payout`,
       taking the ledger's own filter, cursor and limit and writing the filter
       and the row count to the chain (`grade10-admin-vault-money-book-SC-20`,
       `grade10-admin-vault-money-book-SC-21`,
       `grade10-admin-vault-money-book-SC-23`)
-- [ ] 11.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 11.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 12. The case page (grade10)
@@ -934,17 +934,17 @@ Lands beside group 18, on group 3's exports and the fixture transport.
 Lands beside groups 4 to 11; group 21's walks drive what it stands, and it
 makes nothing a scenario names.
 
-- [ ] 23.1 Add the development-only routes the walks drive in
+- [x] 23.1 Add the development-only routes the walks drive in
       `packages/vault/backend/src/routes/dev.ts` under
       `app.use("/dev/*", devOnly())`, to the shape tech-design's "Tests per
       seam, and the e2e stack the vault lacks" holds
-- [ ] 23.2 Lift auth's `magicLinkOutbox` into `@grade10/worker` beside
+- [x] 23.2 Lift auth's `magicLinkOutbox` into `@grade10/worker` beside
       `devOnly` and record the vault's email channel into it outside
       production
-- [ ] 23.3 Add `vault-service,appointment-service,e-kyc-service` to
+- [x] 23.3 Add `vault-service,appointment-service,e-kyc-service` to
       `scripts/e2e/start-isolated.sh`'s default service list and
       `/vault/health` and `/appointment/health` to `STACK_READY_URLS` in
       `e2e/helpers/env.ts` — e-kyc is reached over a binding and has no
       address to probe
-- [ ] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
+- [x] 23.4 Verify: `pnpm run typecheck`, `pnpm run lint`, the isolated stack
       coming up and `GET /dev/outbox` answering
