@@ -134,9 +134,10 @@ them.
 - **A notice ends them** — once a forfeiture notice stands on the case, no
   reminder date SHALL be named and the case SHALL say no further reminder
   will be sent.
-- **The last rung** — once no reminder is left ahead of the borrower and no
-  notice stands, the case SHALL name the last reminder sent with its day and
-  the day a notice falls due.
+- **Past due** — while a loan is past due and no notice stands, the case
+  SHALL name the reminders already sent with their days and the next weekly
+  one by its date, and SHALL say a written notice naming a date to pay by may
+  follow, promising no day for it.
 - **A reminder costs nothing** — the case SHALL say a reminder adds nothing
   to what is owed.
 
@@ -157,14 +158,15 @@ them.
 - **THEN** no reminder date is named and the case says no further reminder
   will be sent
 
-#### Scenario: grade10-site-vault-loan-and-settlement-SC-48 - The last reminder names the day the notice falls due
-**Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower past the last reminder reads what comes next
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-48 - Past due, the case names what comes next
+**Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower past due reads what comes next
 
-- **GIVEN** a past-due loan whose last reminder has been sent, with no notice
+- **GIVEN** a past-due loan with two weekly reminders sent and no notice
   standing
 - **WHEN** the borrower reads the case
-- **THEN** no further reminder date is named, the last reminder sent is named
-  with its day, and the case names the day a notice falls due
+- **THEN** both reminders sent are named with their days, the next weekly
+  reminder is named by its date, and the case says a written notice naming a
+  date to pay by may follow, naming no day for it
 
 ### Requirement: The forfeiture notice reads on the borrower's case
 

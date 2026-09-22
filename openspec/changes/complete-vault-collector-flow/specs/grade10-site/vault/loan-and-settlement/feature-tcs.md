@@ -1262,7 +1262,7 @@ after it, and the final notice with its date to pay by,
   repayment never been recorded
 * No row names the correction itself
 
-### grade10-site-vault-loan-and-settlement-US6-TC9-1: Past the last reminder with no notice sent, the card names the last reminder and the day the notice falls due
+### grade10-site-vault-loan-and-settlement-US6-TC9-1: Past due with no notice sent, the card names the reminders gone, the next one and that a notice may follow
 
 **Classification:**
 
@@ -1279,8 +1279,8 @@ after it, and the final notice with its date to pay by,
 
 **Pre-conditions:**
 
-* The case is `active`, past its due date, with every reminder of the
-  schedule already sent and no forfeiture notice standing
+* The case is `active`, two weeks past its due date, with two weekly
+  reminders sent and no forfeiture notice standing
 * customer(the case's own collector) is on the case page
 
 **Steps:**
@@ -1289,9 +1289,10 @@ after it, and the final notice with its date to pay by,
 
 **Expected Results:**
 
-* The card names no further reminder date
-* The card names the last reminder sent with the day it went
-* The card names the day a notice falls due
+* The card names both reminders sent with the days they went
+* The card names the next weekly reminder by its date
+* The card says a written notice naming a date to pay by may follow, and
+  names no day for it
 
 ---
 
@@ -1566,7 +1567,7 @@ the proposal links, and this file for id continuity. It was denied every
 | `US6-TC1-1`, `US6-TC2-1`, `US6-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-27` and `grade10-site-vault-loan-and-settlement-SC-28`; the value-date order `US6-TC3-1` walks is the requirement's own **Order** rule, and the allocation and never-restarts lines beside a repayment are the design's copy, carrying no rule of their own |
 | `US6-TC4-1` to `US6-TC7-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-30`, `grade10-site-vault-loan-and-settlement-SC-31`, `grade10-site-vault-loan-and-settlement-SC-32`, `grade10-site-vault-loan-and-settlement-SC-34`; the rungs of the ladder `US6-TC7-1` names are `grade10-site/vault/collector-notifications`'s to set |
 | `grade10-site-vault-loan-and-settlement-SC-29` | Scenario no case reached | Case added: `US6-TC8-1`, the list and the balances after a repayment is taken back |
-| Raised: what stands between the last reminder and a notice | Answered, folded | The card names the last reminder sent and the day a notice falls due — the requirement's **The last rung** rule and `grade10-site-vault-loan-and-settlement-SC-48`; case added: `US6-TC9-1`. Raised in `decisions.md`, landed on `Q6` |
+| Raised: what stands between the last reminder and a notice | Answered, folded | The weekly ladder has no last rung and the notice no day before it: the card names the reminders gone, the next one and that a notice may follow — the requirement's **Past due** rule and `grade10-site-vault-loan-and-settlement-SC-48`; case added: `US6-TC9-1`. Raised in `decisions.md`, landed on `Q6` and `Q64` |
 | Raised: the Corrections bullet no journey here walks | Traced, nothing moved | Taking a record back is the console's act and is walked by `grade10-admin/vault/money-book` US-04; this suite keeps only what the borrower reads afterwards, `US6-TC8-1`. Raised in `decisions.md`, landed on `Q26` |
 | `US7-TC1-1` to `US7-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-40`, `grade10-site-vault-loan-and-settlement-SC-42` to `grade10-site-vault-loan-and-settlement-SC-46`; the shop and locker fields `US7-TC3-1` names are `grade10-admin/vault/operator-queue`'s |
 | `grade10-site-vault-loan-and-settlement-SC-41` | Scenario no case reached | Case added: `US7-TC7-1`, a set bound the offer fails |
