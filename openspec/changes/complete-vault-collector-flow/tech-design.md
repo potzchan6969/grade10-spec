@@ -212,9 +212,10 @@ The spec governs the confirmations; this is what changes.
   `notice: NullOr({ sentAt, cureBy })` from `custody/forfeit.ts`'s
   `latestForfeitureNotice`, `forfeiture: NullOr({ at, settledMinor })`,
   `ended: NullOr({ kind, at, actorKind, reason })`, and
-  `reminders: { next, ladder }` folded beside `money/computeDue.ts` from the
-  due date, the offsets in `sweeps/remind.ts` and the notice — what went read
-  off the `reminder_sent` events, and only what is ahead shown
+  `reminders: CaseReminder[]` folded beside `money/computeDue.ts` from the due
+  date, the offsets in `sweeps/remind.ts` and the notice — one flat list of the
+  rungs sent, each with its day, and the ones still ahead. A rung the sweep
+  never sent and whose day has passed is neither
 - Alternative rejected: a second `cases.repayments` procedure — the bundle
   already carries the rows, and a second read is a second `asOf`
 
@@ -428,8 +429,9 @@ The spec governs what each message names; this is the shape.
 - **Query shape and repository** — `repositories/cases.search.drizzle.test.ts`
   with a PGlite half for the case-folded prefix; `queueCounts`,
   `moneyLedger.kind` and `custodyList.totals` each with both halves;
-  `repositories/reference.repo.test.ts` (the unique index, the backfill over
-  seeded rows) and `repositories/yourData.repo.test.ts`; the portable suite
+  `cases/reference.repo.test.ts` (the unique index, the backfill over seeded
+  rows, beside the case module it serves) and
+  `repositories/yourData.repo.test.ts`; the portable suite
   gains `suites/account.ts`
 - **Routes** (`test/routes/`) — `visit.ics` for the `UID`, the `SEQUENCE` and
   `METHOD:CANCEL` after a cancel; `documents.zip` for `caseOwner` on a

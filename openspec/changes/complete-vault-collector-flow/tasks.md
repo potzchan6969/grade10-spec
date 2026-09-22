@@ -243,8 +243,9 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       (`grade10-site-vault-loan-and-settlement-SC-29`)
 - [ ] 6.3 Answer `notice` from `custody/forfeit.ts`'s
       `latestForfeitureNotice`, `forfeiture`, `ended`, and
-      `reminders: { next, ladder }` folded from the due date, the offsets in
-      `sweeps/remind.ts` and the notice — only what is ahead
+      `reminders: CaseReminder[]` folded from the due date, the offsets in
+      `sweeps/remind.ts` and the notice — the rungs sent with their days and
+      the ones still ahead
       (`grade10-site-vault-loan-and-settlement-SC-31`,
       `grade10-site-vault-loan-and-settlement-SC-33`,
       `grade10-site-vault-loan-and-settlement-SC-48`)
