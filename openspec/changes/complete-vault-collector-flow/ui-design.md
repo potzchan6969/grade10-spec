@@ -10,13 +10,16 @@ data and the mechanism.
 - **Where the views live** — `packages/vault/frontend` for the collector and
   `packages/vault/admin-frontend` for the console, as today; nothing moves
   to `packages/ui`
-- **Stories** — every screen and every state below gets a colocated
+- **Stories** — one story per view per distinct layout, colocated as
   `<View>.stories.tsx` beside its view, wrapped in the feature's root
   element, with inline stand-in data and a Theme toolbar, in the monorepo
   Storybook the tech design stands up (`frontend-structure` § Storybook).
-  An id reads `vault-<feature>-<view>--<state>`, the state being the
-  `## States` row's name in kebab-case; the Stories column below gives each
-  screen's prefix
+  Every story file sets `title` by hand to its prefix, `Vault/<Feature>/<View>`,
+  so an id reads `vault-<feature>-<view>--<state>`, the state being the
+  `## States` row's name in kebab-case. A value that varies inside one
+  layout is an args control, never a story of its own, and a `::story`
+  card deep-links the default args and names the control; the Stories
+  column below gives each screen's prefix
 - **Letters** — every collector email is a React Email letter the worker
   renders from `packages/vault/backend/src/email`; `apps/emails/emails/vault/`
   in this store carries the preview copy of each, one file per kind
@@ -24,7 +27,11 @@ data and the mechanism.
   `packages/i18n/messages/shared/<locale>/vault.json`; the keys this design
   adds are named under Components, never their words. The console's words
   stay the console's own English, as its panels already carry them; a
-  letter's words live in the letter
+  letter's words stay in the letter catalogue
+- **Values Legal owes** (Q17) — one rule over every surface that prints
+  one: outside production the bracketed placeholder, marked; in production
+  the act that would print an unset value is refused. Only the surface
+  whose refusal differs carries a row below
 
 ## Screens
 
@@ -33,7 +40,7 @@ data and the mechanism.
 | Vault home | `C01`, `C21` | `grade10.com/vault` | `CaseList` → `Card`, `Badge`, `Button`, `EmptyState`, `List`, `Text` | `vault-cases-case-list--*` |
 | Request wizard | `C02`–`C05` | `/vault`, mounted by the home | `RequestWizard` → `Stepper`, `Step`, `RadioList`, `RadioListItem`, `TextInput`, `Textarea`, `NumberInput`, `FileDropzone`, `CheckboxListInput`, `Button`, `Text` | `vault-request-request-wizard--*` |
 | Case page | `C10`–`C19`, `C22`, `C23` | `/vault/cases/:caseId` | `CaseDetailView` → `Stepper`, `Step`, `Badge`, `Card`, `Alert`, `Dialog`, `Table`, `List`, `Link`, `Button`, `Text` | `vault-cases-case-detail-view--*` |
-| Book a visit | `C06` | on the case page | `VisitBooking` → `Card`, `FilterChip`, `RadioList`, `Button`, `Text` | `vault-booking-visit-booking--*` |
+| Book a visit | `C06`, superseded | on the case page | `VisitBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Button`, `Text` | `vault-booking-visit-booking--*` |
 | Visit booked | `C07` | on the case page, after a booking | new `VisitBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Link`, `Button` | `vault-booking-visit-booked--*` |
 | Your data | `C20` | `/profile/data` — ❓ the tech design fixes the address | new `YourDataView` → `Card`, `Badge`, `Table`, `Button`, `Alert`, `Dialog`, `Text` | `vault-retention-your-data-view--*` |
 | Queue | `A01` | `admin.grade10.com/vault`, the cut in the address | `VaultPage`, `CaseQueuePanel` → `SectionHeader`, `Search`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Badge`, `Status`, `Button` | `vault-admin-cases-case-queue-panel--*` |
@@ -47,27 +54,6 @@ data and the mechanism.
 | Put the item in the vault | `A12` | dialog from the Custody tab | `CustodyPanel`'s vault dialog, `ShopPicker` → `FormDialog`, `CheckList`, `Check`, `Select`, `TextField`, `Notice` | `vault-admin-cases-vault-dialog--*` |
 | Record the payout | `A13` | dialog from the Payouts tab | `MoneyDialog` → `FormDialog`, `CheckList`, `Check`, `MoneyField`, `TextField`, `DateField`, `Figure`, `Notice` | `vault-admin-settlement-money-dialog--*` |
 
-### Letters
-
-One shell, `VaultLetter`, on `Grade10EmailShell`: the heading, the greeting,
-the lead paragraph, then the blocks in the order below, then the case line
-and `VaultFooter`. The blocks: `FiguresTable` (label · value rows),
-`HowToPay` (FPS id, account under the lender's registered name, the case
-reference as the transfer reference, card or cash at the counter, the
-recorded-against-the-day line), `PrimaryCta`, `ReminderSchedule`,
-`CaseLine` (reference · item), `VaultFooter` (the registered name and licence
-line, the shop address, the complaints contact, the time-zone line).
-
-| Letter | Kind | Board | Blocks after the lead |
-| --- | --- | --- | --- |
-| The offer | `offer_made` | `M01` | `FiguresTable` loan · term · interest for the term · total to repay · if you are late · open until; the accepting-starts-nothing paragraph; `PrimaryCta` to the case; the runs-out line; `CaseLine`; `VaultFooter` naming the lender |
-| The advance | `payout_recorded` | `M02` | `FiguresTable` sent · due · total to repay · after the due date; the repay-early line; `HowToPay`; `PrimaryCta`; `ReminderSchedule` with the two dates and the 7-day rung; `CaseLine`; `VaultFooter` naming the lender |
-| Due soon | `repayment_due_soon` | `M03` | `FiguresTable` owed today · due · from the day after; `HowToPay`; `PrimaryCta`; the next-reminder line; `CaseLine`; `VaultFooter` naming the lender |
-| Overdue | `repayment_overdue` | `M04` | `FiguresTable` owed today · was due · of which late interest · each further day; the part-payment and notice-ahead paragraph; `HowToPay`; `PrimaryCta`; `CaseLine`; `VaultFooter` naming the lender |
-| Final notice | `forfeiture_notice` | `M05` | the clause lead; `FiguresTable` pay in full by · owed as at today · each further day · the lapse condition · what follows a balance; the a-person-decides paragraph; the no-further-reminders line; `HowToPay`; `PrimaryCta`; `CaseLine`; `VaultFooter` naming the lender |
-| Verify before the visit | `identity_check_invited` | `M06` | `FiguresTable` your visit · where · bring; the link-rules paragraph; `PrimaryCta` to the check; the in-person and already-verified lines; `CaseLine`; `VaultFooter` naming the custodian |
-| The other eighteen | every other kind in `notify/vocabulary.ts` | none drawn | `PrimaryCta` to the case; `CaseLine`; `VaultFooter` naming the custodian; a money kind — `repayment_recorded`, `payout_reversed`, `repayment_reversed`, `loan_repaid`, `forfeited` — adds a `FiguresTable` of the figures its event names and names the lender |
-
 ## Components
 
 ### `@grade10/design-system` — existing, no new variant or token
@@ -75,7 +61,7 @@ line, the shop address, the complaints contact, the time-zone line).
 `Alert` (`status`, `layout=inline`), `Badge` (`default`, `success`,
 `error`, `warning`, `info`, `brand`, `outline`), `Button`, `Card` and its
 parts, `CheckboxListInput`, `Dialog` and its parts, `Divider`, `EmptyState`,
-`FileDropzone`, `FilterChip`, `Link`, `List`, `NumberInput`, `RadioList`,
+`FileDropzone`, `Link`, `List`, `NumberInput`, `RadioList`,
 `RadioListItem`, `Skeleton`, `Step` (`completed`, `progress`, `upcoming`),
 `Stepper`, `Table` and its parts, `Text`, `TextInput`, `Textarea`, `HStack`,
 `VStack`.
@@ -83,17 +69,20 @@ parts, `CheckboxListInput`, `Dialog` and its parts, `Divider`, `EmptyState`,
 - **The ownership chip** is a `Badge` — `outline` while the item is the
   collector's, `info` while it is with us, `warning` past due, `success`
   settled. `Chip` is a dismissible control and does not fit
-- **The day row** on Book a visit is `FilterChip`, one per day, a day with
-  nothing free disabled
 - **The progress line** on a live loan (sent · day n of the term · due) is a
   local composition of `HStack` and `Text`; no primitive draws a bar, and
   none is asked for
 
 ### `@grade10/ui` — existing
 
-`BookingConfirmation` (`calendarHref` already serves the calendar file) and
-`BookingManageCard` from `shared/ui/appointment-booking`. The vault has no
-manage page, so `manageHref` is the case address.
+`BookingLocationPicker`, `BookingSlotPicker`, `BookingConfirmation`
+(`calendarHref` already serves the calendar file) and `BookingManageCard`
+from `shared/ui/appointment-booking`. The vault has no manage page, so
+`manageHref` is the case address.
+
+- **Book a visit composes the two pickers the diary already publishes** —
+  the shops as the location picker's cards, then the slot picker's month
+  grid and the picked day's times. `C06`'s 14-day chip strip is superseded
 
 ### Console blocks — existing, `@grade10/frontend-console`
 
@@ -111,55 +100,81 @@ CSV export is a `Button` and a download. Nothing the console package lacks.
   `Step`'s state read from the status
 - **`OwnershipChip`** — the `Badge` and its word, read from the status, the
   offer and the due date
-- **`CaseFactCard`** — the hero card: the fact the case meets (`C22`), the
-  ending (`C19`), or the status's own lead
+- **`CaseFactCard`** — one titled card of label · value rows, the only card
+  shape these views add. Its call sites: the fact the case meets (`C22`),
+  the ending (`C19`), the reminders, the final notice (`C16`), custody
+  (`C14`), the identity standing, the documents download and the erasure
+  ask (`C20`)
 - **`OfferCard`** — the terms table with the valuation, How the loan works,
   Accept and Decline
-- **`AcceptOfferDialog`, `DeclineOfferDialog`, `CancelRequestDialog`** —
-  each states what it does before the act; the vault's first dialogs, held
-  as `docs/conventions/dialogs.md` says
-- **`HowToPayBlock`** — the structured block, with the bracketed placeholder
-  outside production
+- **`AcceptOfferDialog`** — the terms table sits in it, so the case page
+  mounts it as `docs/conventions/dialogs.md` says. Decline, Cancel this
+  request, Cancel the visit, Ask for it back and the erasure ask are words
+  and one effect: `useConfirm` from `@grade10/frontend-dialog/confirm` with
+  their copy keys, and no dialog component of their own
+- **`HowToPayBlock`** — the structured block
 - **`WhatIsOwedCard`** — the as-at figures, the progress line and the term
   breakdown; `RepaymentsList` under it, empty, one or many
-- **`FinalNoticeCard`**, **`RemindersCard`**
-- **`CustodyCard`** — held since, where, valued at, outstanding
 - **`RetentionTable`** — what is kept and for how long, on the released case
   and on Your data
 - **`RequestReview`** — the wizard's third step: the read-back with Edit per
   block, what happens next, the statement tick
-- **`CaseReference`** — the six characters in mono, on the header, the list
-  card and the sent step
 - **`VisitBooked`** — the screen after a booking, composing the two
   `@grade10/ui` cards and the Before you come list
-- **`YourDataView`** — `IdentityStandingCard`, `RetentionTable`,
-  `DocumentsDownload`, `ErasureAsk` with its confirmation dialog
+- **`YourDataView`** — `CaseFactCard` for the standing, the download and the
+  ask, over `RetentionTable`
+- **The reference** — a `Text` in the mono face on the header, the list card
+  and the sent step; no component of its own
 
-### New in `packages/vault/admin-frontend` — work in grade10
+### Work in `packages/vault/admin-frontend` — grade10
 
-- **`QueueCounts`** — a count on every `Choice`
-- **`TodayBlock`** — the Today cut's rows in slot order, on the landing view
-- **`ArrearsTiles`**, **`HeldItemsTiles`** — `Figure` rows above their lists
-- **`VisitChecklist`** — the counter's seven steps as `Check`s, each with
-  its button or its reason
-- **`PolicyGates`** — the five ticks, beside an offer and inside the dialog
-- **`KeyTermsDialog`** — the loan agreement's own terms as `Check`s, the
-  reference optional; replaces the reference-only dialog
-- **`IdentityPanel`** — rewritten to the six states
-- **`ForfeitWithheld`** — the reason in words on the Custody tab
-- **`OfferDialog`**, the vault dialog, **`MoneyDialog`** — rewritten to
-  state the rule before the act
-- **`MoneyLedgerPanel`** — the kind filter, the net-out `Figure`, the
-  takes-back column, `ExportCsv`
-- **The status word** — every panel prints the collector's word for a
-  status, never the raw id
+- **`VisitChecklist`** — new: the counter's seven steps as `Check`s, each
+  with its button or its reason
+- **`PolicyGates`** — new: the five ticks, beside an offer and inside the
+  dialog
+- **`KeyTermsDialog`** — new: the loan agreement's own terms as `Check`s,
+  the reference optional; replaces the reference-only dialog
+- **`ForfeitWithheld`** — new: the reason in words on the Custody tab
+- **`IdentityPanel`** — existing, rewritten to the six states
+- **`OfferDialog`**, the vault dialog, **`MoneyDialog`** — existing,
+  rewritten to state the rule before the act
+- **`MoneyLedgerPanel`** — existing, extended: the method filter, the
+  per-kind totals, the takes-back line and the pager already run, so the
+  work is the kind filter, the net out over the range and `ExportCsv`
+- **The counts and the tiles** — a cut's count rides its own `Choice`
+  label and a tile is a `Figure` in the panel that reads it; neither is a
+  component
+- **The status word** — one map from status to the collector's word in
+  `@grade10/vault-contracts`, imported by the console and the SPA alike,
+  its words translated in the catalogue; the tech design names the home. No
+  panel prints a raw id
 
 ### Letters — work in grade10 and in this store
 
-`VaultLetter`, `FiguresTable`, `HowToPay`, `ReminderSchedule`, `CaseLine`
-and `VaultFooter` in `packages/vault/backend/src/email`, one letter per
-kind, retiring `messages.ts`; the same six components and twenty-four
-preview letters under `apps/emails/emails/vault/`, with a fixture case.
+One shell, `VaultLetter` in `packages/vault/backend/src/email` — over
+`Grade10EmailShell` in this store's previews and over
+`@grade10/email/render`'s `BaseLayout` in the worker, as the tech design
+fixes — then the heading, the greeting, the lead paragraph, the blocks, the
+case line and the footer. One letter per kind, and twenty-four preview
+letters under `apps/emails/emails/vault/` over a fixture case.
+
+- **The facts** — the label · value rows are `ProductEmail`'s facts group;
+  no table component of its own
+- **`HowToPay` and `ReminderSchedule`** — a second facts group: FPS id,
+  account under the lender's registered name, the case reference as the
+  transfer reference, card or cash at the counter, the
+  recorded-against-the-day line; then the schedule's dates
+- **`PrimaryCta`** — existing, `apps/emails/emails/_components`
+- **The case line** — reference · item, a `Text` above the footer
+- **`EmailFooter`** — existing, widened with an optional `lines` prop for
+  the registered name and the licence line, the shop address, the
+  complaints contact and the time-zone line. The prop is the one component
+  change this store carries
+
+The words stay a typed `LetterCopy` per kind in
+`packages/vault/backend/src/email/messages.ts` — today's `Copy`, widened to
+the blocks its letter carries — so a missing line is a compile error and
+the copy can still move to `@grade10/i18n`.
 
 ### Words — work in `packages/i18n`
 
