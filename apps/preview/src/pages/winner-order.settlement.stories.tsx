@@ -246,6 +246,12 @@ export const CompleteSetupFlow: Story = {
       deliveryAddressBlock(canvasElement).getByText(/Harbour Road/),
     ).toBeVisible();
     expect(
+      deliveryAddressBlock(canvasElement).getByText(/\+852/),
+    ).toBeVisible();
+    expect(
+      deliveryAddressBlock(canvasElement).getByText("Alex Chan"),
+    ).toBeVisible();
+    expect(
       canvas.queryByRole("button", { name: "Complete Order Setup" }),
     ).not.toBeInTheDocument();
 
