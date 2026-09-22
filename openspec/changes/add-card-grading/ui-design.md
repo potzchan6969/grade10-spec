@@ -139,8 +139,9 @@ or an instant through `formatLocalTime` in the zone given.
   none, `goodToKnow` (five), `consented`, `pending`, `error`, `onEdit`,
   `onConsent`, `onBook`, `onSaveForLater`
 - **`GradingStatusRail`** — `stage` (one of Planned, Booked, Handed in,
-  Sent, Graded, Back, Home), `ended` or none; a `Stepper` of seven `Step`s,
-  the stage `progress`, earlier `completed`, later `upcoming`
+  Sent, Graded, Back, Home), `ended` — the word that says the ending — or
+  none; a `Stepper` of seven `Step`s, the stage `progress`, earlier
+  `completed`, later `upcoming`
 - **`GradingOwnershipChip`** — `status` (the word and its tone) and `chip`
   (the word and its tone, or none on a closed submission); the two `Badge`s
   the status table pairs, drawn as one pair on every board
@@ -149,9 +150,10 @@ or an instant through `formatLocalTime` in the zone given.
   or nothing), `bring` (an ID line naming the collector, the collector or
   the named person, or nothing). One figure here; the lines behind it are
   `GradingMoneyBlock`'s
-- **`GradingNamedCollector`** — `named` (name, named at) or none, `pending`,
-  `error`, `onSave`, `onChange`, `onRemove`; the field, Save, or the Named
-  card with Change and Remove
+- **`GradingNamedCollector`** — `named` (name, named at) or none, `name` and
+  `onNameChange` for the field the consumer holds, `pending`, `error`,
+  `onSave`, `onChange`, `onRemove`; the field, Save, or the Named card with
+  Change and Remove
 - **`GradingGradeCards`** — `cards` (grade or none, label word, grader, name,
   cert or none, outcome badge or none, the ungraded code and note or none);
   one `Card` per card, the ungraded in the `error` tone
@@ -445,7 +447,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Not found | the site's not-found copy; a link naming nothing the same | `grade10-site-grading-submission-lifecycle-SC-52` |
 | Header | n cards to grader · level, Submission id, planned on; `GradingOwnershipChip`; `GradingStatusRail` | `grade10-site-grading-submission-lifecycle-SC-53` |
 | Rail, one per stage | seven `Step`s Planned → Home; the status's stage `progress`, earlier `completed`, later `upcoming` · `grading-submission-gradingstatusrail--planned` through `--home` | `shared-ui-grading-submission-SC-32` |
-| Rail, ended | the stage the submission ended at stays `progress`; the word says the ending | `shared-ui-grading-submission-SC-33` |
+| Rail, ended | the stage the submission ended at stays `progress`, and reads the word that says the ending under it | `shared-ui-grading-submission-SC-33` |
 | Chip: Waiting on you | Not handed in yet, Ready to collect | `shared-ui-grading-submission-SC-29` |
 | Chip: Drop-off | Drop-off booked with the visit's day | **Out of suite:** `grade10-site/grading/submission-lifecycle` - the word and the chip per status |
 | Chip: With us | Handed in, Back at the shop | `shared-ui-grading-submission-SC-29` |
@@ -525,7 +527,8 @@ Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submi
 | Name empty | Save disabled | `shared-ui-grading-submission-SC-43` |
 | Saving | Save pending | `shared-ui-grading-submission-SC-43` |
 | Named (`G18`) | the Named badge, `Avatar`, the name, named when, the one-person line; Change, Remove | `shared-ui-grading-submission-SC-44` |
-| Refused | the refusal by name under the field: already collected | `shared-ui-grading-submission-SC-45` |
+| Changing | the field prefilled with the person already named | `shared-ui-grading-submission-SC-58` |
+| Refused | the refusal by name under the field: already collected, and what was typed still there | `shared-ui-grading-submission-SC-45` |
 | Ladder, none reached (`G11`) | the three rungs with their dates, none reached; the vault line | `shared-ui-grading-submission-SC-51` |
 | Ladder, reminded | the reminder rung passed | `shared-ui-grading-submission-SC-52` |
 | Ladder, storage | the storage rung reached; the fee accruing per card | `shared-ui-grading-submission-SC-52` |

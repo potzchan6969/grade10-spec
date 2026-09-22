@@ -206,7 +206,8 @@ const CARD_LIST_COPY: GradingCardListCopy = {
   noValue: "Tell us the declared value before you continue.",
   declaredValueLabel: "Declared value",
   referenceSalesLabel: "Recent sales:",
-  minimumGrade: "Only encapsulate at {grade} or above · the fee applies either way",
+  minimumGrade:
+    "Only encapsulate at {grade} or above · the fee applies either way",
   edit: "Edit",
   remove: "Remove",
 };
@@ -398,8 +399,7 @@ const STATUS_RAIL_COPY: GradingStatusRailCopy = {
   home: "Home",
 };
 
-const ENDED_LINE =
-  "Cancelled. The cards never left you, and nothing was paid.";
+const ENDED_LINE = "Cancelled. The cards never left you, and nothing was paid.";
 
 const CARD_RECORD_COPY: GradingCardRecordCopy = {
   title: "Your cards",

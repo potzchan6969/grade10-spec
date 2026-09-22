@@ -82,7 +82,7 @@ export const Warning: Story = {
 };
 
 /** `error` binds `--destructive-foreground`, which every theme defines. */
-export const Error: Story = {
+export const ErrorTone: Story = {
   args: {
     tone: "error",
     weight: "medium",

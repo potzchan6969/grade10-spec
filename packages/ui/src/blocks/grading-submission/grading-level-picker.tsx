@@ -139,7 +139,6 @@ function GradingLevelPicker({
       ) : null}
       <RadioList
         aria-labelledby={titleId}
-        data-slot="grading-level-picker-levels"
         onValueChange={(next) => {
           if (typeof next === "string") onSelectLevel(next);
         }}

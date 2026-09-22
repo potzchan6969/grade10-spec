@@ -121,8 +121,9 @@ What a collector reads on one case, top to bottom.
   the capability's own table
 - 🚧 **What a message names** — its figures as a table, not a sentence: the
   offer its terms, total, late-day cost and expiry; a money message the
-  amount, the due date, the daily figure after it and how to pay; a reminder
-  its schedule; every message the reference, the licence line, the complaints contact
+  amount, the due date, the daily figure after it, and how to pay while a
+  balance is still owed; a reminder its schedule; every message the
+  reference, the licence line, the complaints contact
 - 🚧 **The forfeiture notice** — names the clause it acts under, the date to
   pay by, what is owed as at that day and what each further day adds, the
   condition on which the item lapses, that taking it is a person's decision,
@@ -188,7 +189,7 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Every message is a table and blocks | Decided | The figures a message is about print as a table, how to pay and the lender's licence footer with the complaints contact as blocks; the worker renders its own React Email letters, aligned with the preview source in this store's `apps/emails`, and the one-paragraph copy goes | Product |
 | A live loan can book its visit | Decided | `active` is bookable; a missed pickup closes the visit and keeps the case | Product |
 | The collector answers for themselves | Decided | Accept, decline and cancel are the collector's own acts on their own case, each behind a confirmation naming what it does; the counter keeps its own path for the customer standing at it, and the signature is what binds either way | Product |
-| How to pay | Decided | A structured block — the lender's FPS id, its bank account under the lender's registered name, the case reference as the transfer reference, or card or cash at the counter — printed under a live loan's balance and in every money message, with the line saying the balance holds until the deadline; no payoff quote with a validity, because the balance at a date is the quote | Product |
+| How to pay | Decided | A structured block — the lender's FPS id, its bank account under the lender's registered name, the case reference as the transfer reference, or card or cash at the counter — printed under a live loan's balance and in every money message sent while a balance is still owed, with the line saying the balance holds until the deadline; a message naming no balance owed carries none, so the offer, a loan repaid and an item forfeited go without it; no payoff quote with a validity, because the balance at a date is the quote | Product |
 | Reminders | Decided | **7** and **1** days before the due date, then every **7** days overdue, by email, stopping at the forfeiture notice; the schedule is an operating constant, named on the live loan, and a borrower is never charged for one | Owner |
 | Review before sending | Decided | The wizard reads the request back and takes the collection-statement tick before it sends; the statement's own text is Legal's | Product |
 | Add to calendar | Decided | A calendar file the phone's own calendar opens, from the booked screen and the case; a later file for the same visit replaces the first and a cancellation withdraws it; no calendar provider is linked | Product |

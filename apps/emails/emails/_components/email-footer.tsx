@@ -1,4 +1,4 @@
-import { Fragment, type ReactNode } from "react";
+import type { ReactNode } from "react";
 import { Hr, Link, Text } from "react-email";
 
 export type EmailFooterProps = {
@@ -25,17 +25,15 @@ const PLACEHOLDER = /(\[[^\]]+\])/;
 
 /** A value Legal has not set: named in brackets, and marked. */
 function marked(line: string): ReactNode[] {
-  return line.split(PLACEHOLDER).map((part, index) => (
-    <Fragment key={`${index}:${part}`}>
-      {PLACEHOLDER.test(part) ? (
-        <span className="text-danger" style={{ fontStyle: "italic" }}>
-          {part}
-        </span>
-      ) : (
-        part
-      )}
-    </Fragment>
-  ));
+  return line.split(PLACEHOLDER).map((part) =>
+    PLACEHOLDER.test(part) ? (
+      <span className="text-danger" key={part} style={{ fontStyle: "italic" }}>
+        {part}
+      </span>
+    ) : (
+      part
+    ),
+  );
 }
 
 export function EmailFooter({

@@ -22,9 +22,9 @@ const meta = {
   decorators: [
     // A step is a list item; `Stepper` is that list everywhere but here.
     (Story) => (
-      <div className="w-64" role="list">
+      <ol className="m-0 w-64 list-none p-0">
         <Story />
-      </div>
+      </ol>
     ),
   ],
 } satisfies Meta<typeof Step>;

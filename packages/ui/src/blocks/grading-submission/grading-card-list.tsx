@@ -234,9 +234,14 @@ function originLine(
 ): string {
   if (unreachable) return copy.catalogueUnavailable;
   if (!card.matched) return copy.keptAsTyped;
+  if (card.set == null || card.number == null) {
+    throw new Error(
+      `GradingCardList: card "${card.id}" reads as matched with no set and number`,
+    );
+  }
   return fillGradingCopy(copy.matched, {
-    set: card.set ?? "",
-    number: card.number ?? "",
+    set: card.set,
+    number: card.number,
   });
 }
 
