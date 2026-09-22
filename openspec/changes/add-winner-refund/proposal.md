@@ -79,7 +79,7 @@ None.
   already says.
 - **Auth** — the new permission in the closed vocabulary and the `staff` and
   `admin` grants.
-- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens the reason, note and Transfer to. Transfer to is the shared payment card: a card brand logo and the last four digits, or a bank icon with the bank name and the last four digits of the account. No stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
+- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason and Note. Transfer to is the shared payment card: a card brand logo and the last four digits, or a bank icon with the bank name and the last four digits of the account. A bank refund also shows its provider reference in those details; a card refund shows none. No stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
 - **Depends on** `add-winner-partial-payment`, which brings Partially Paid.
   This change's deltas on `post-sale` and `order-status` apply after that
   change archives.
