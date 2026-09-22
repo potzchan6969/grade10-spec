@@ -269,8 +269,23 @@ doing, under Edge Cases.
   settled
 - 🚧 **Receipt ID** — `RC-LK42301P1`: the paid invoice's ID plus the
   payment's sequence number within it
+- ❓ **Which receipt ID is real** — this page's form and the one Grade10
+  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
-  same Receipt PDF row, oldest first; what each one shows is under Edge Cases
+  same Receipt PDF row, oldest first
+- 🚧 **What every receipt shows** — Original Invoice Total, Previous Payments,
+  Current Payment Received and Remaining Balance Due, whether the invoice took
+  one payment or several. A single full payment reads 0 previous and 0
+  remaining
+- 🚧 **Original Invoice Total** — the total of the invoice the payment was made
+  against, fixed for the life of the collection; no invoice is reissued once
+  money has been recorded against it
+- 🚧 **Remaining Balance Due** — what is still owed, reading 0 the moment the
+  invoice is Paid. A balance an operator closed inside the 10% tolerance reads
+  0, and so does an overpayment; neither shows a shortfall or a credit
+- 🚧 **A receipt is never reissued** — a refund or a reversal leaves every
+  receipt already issued exactly as it was, and moves no later receipt's
+  Previous Payments
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -466,6 +481,9 @@ a second payment provider, and changes to the bid-time rules.
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
+| Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
+| A balance belongs on a receipt, not on a page | 🚧 In flight | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
+| Receipts are append-only | 🚧 In flight | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |
