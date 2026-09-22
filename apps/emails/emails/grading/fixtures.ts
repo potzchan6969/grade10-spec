@@ -1,3 +1,25 @@
+import type { PlanSavedProps } from "@/emails/grading/plan-saved";
+import type { PlanNudgedProps } from "@/emails/grading/plan-nudged";
+import type { PlanExpiredProps } from "@/emails/grading/plan-expired";
+import type { DropoffBookedProps } from "@/emails/grading/dropoff-booked";
+import type { DropoffMovedProps } from "@/emails/grading/dropoff-moved";
+import type { DropoffCancelledProps } from "@/emails/grading/dropoff-cancelled";
+import type { DropoffMissedProps } from "@/emails/grading/dropoff-missed";
+import type { DropoffReminderProps } from "@/emails/grading/dropoff-reminder";
+import type { DropoffDetachedProps } from "@/emails/grading/dropoff-detached";
+import type { CheckedInProps } from "@/emails/grading/checked-in";
+import type { BatchShippedProps } from "@/emails/grading/batch-shipped";
+import type { BatchReestimatedProps } from "@/emails/grading/batch-reestimated";
+import type { GradesPostedProps } from "@/emails/grading/grades-posted";
+import type { CardNotReturnedProps } from "@/emails/grading/card-not-returned";
+import type { CardDamagedProps } from "@/emails/grading/card-damaged";
+import type { ReadyProps } from "@/emails/grading/ready";
+import type { UncollectedReminderProps } from "@/emails/grading/uncollected-reminder";
+import type { StorageStartedProps } from "@/emails/grading/storage-started";
+import type { NoticePostedProps } from "@/emails/grading/notice-posted";
+import type { CollectedProps } from "@/emails/grading/collected";
+import type { CardWithdrawnProps } from "@/emails/grading/card-withdrawn";
+
 /**
  * The fixture every grading preview is written over: submission `5TW8HN`,
  * four cards to PSA Regular, planned on a Saturday in October 2026.
@@ -195,11 +217,41 @@ export type NotifyKind =
   | "card_withdrawn";
 
 /**
- * One facts member per `NotifyKind`, each the props its preview passes
- * beyond `previewSubmission`, `previewFooter` and `previewSubmissionLine` —
- * the render test supplies those three the same way for every kind.
+ * Each kind's own props, keyed to the letter that takes them. The
+ * application repository reads this map back through the submodule to render
+ * every kind, so a field dropped or renamed here is a type error rather than
+ * a failure in that repository.
  */
-export const GRADING_FIXTURES: Record<NotifyKind, Record<string, unknown>> = {
+export type GradingLetterFacts = {
+  plan_saved: Required<PlanSavedProps>;
+  plan_nudged: Required<PlanNudgedProps>;
+  plan_expired: Required<PlanExpiredProps>;
+  dropoff_booked: Required<DropoffBookedProps>;
+  dropoff_moved: Required<DropoffMovedProps>;
+  dropoff_cancelled: Required<DropoffCancelledProps>;
+  dropoff_missed: Required<DropoffMissedProps>;
+  dropoff_reminder: Required<DropoffReminderProps>;
+  dropoff_detached: Required<DropoffDetachedProps>;
+  checked_in: Required<CheckedInProps>;
+  batch_shipped: Required<BatchShippedProps>;
+  batch_reestimated: Required<BatchReestimatedProps>;
+  grades_posted: Required<GradesPostedProps>;
+  card_not_returned: Required<CardNotReturnedProps>;
+  card_damaged: Required<CardDamagedProps>;
+  ready: Required<ReadyProps>;
+  uncollected_reminder: Required<UncollectedReminderProps>;
+  storage_started: Required<StorageStartedProps>;
+  notice_posted: Required<NoticePostedProps>;
+  collected: Required<CollectedProps>;
+  card_withdrawn: Required<CardWithdrawnProps>;
+};
+
+/**
+ * One member per `NotifyKind`, each the props its preview passes beyond
+ * `previewSubmission`, `previewFooter` and `previewSubmissionLine` — the
+ * render test supplies those three the same way for every kind.
+ */
+export const GRADING_FIXTURES: GradingLetterFacts = {
   plan_saved: {
     plannedAt: previewSubmission.plannedAt,
     keptUntil: previewSubmission.keptUntil,

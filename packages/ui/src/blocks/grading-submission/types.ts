@@ -62,12 +62,18 @@ type GradingReferenceSale = { id: string; label: string; price: GradingMoney };
 type GradingListedCard = {
   id: string;
   name: string;
-  setLine: string;
+  /** The set the reference matched, where it matched one. */
+  set?: string;
+  /** The card's number in that set, where the reference gives one. */
+  number?: string;
   /** Matched in the reference, or kept as the collector typed it. */
   matched: boolean;
   declaredValue?: GradingMoney;
   referenceSales?: readonly GradingReferenceSale[];
+  /** The grade the minimum-grade option names on this card, such as `PSA 9`. */
   minimumGrade?: string;
+  /** Whether the collector asked for that minimum grade. */
+  minimumGradeWanted?: boolean;
   /** The line naming this card as declared above the level's ceiling. */
   aboveCeilingLine?: string;
 };

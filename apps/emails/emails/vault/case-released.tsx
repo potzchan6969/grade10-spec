@@ -1,4 +1,4 @@
-import { hkDate } from "@/emails/vault/_components/format";
+import { hkDate } from "@/emails/_components/format";
 import {
   FactsGroup,
   VaultLetter,

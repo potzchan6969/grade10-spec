@@ -1,4 +1,4 @@
-import { hkDateTime } from "@/emails/vault/_components/format";
+import { hkDateTime } from "@/emails/_components/format";
 import { VaultLetter } from "@/emails/vault/_components/vault-letter";
 import {
   footerLines,

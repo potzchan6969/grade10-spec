@@ -293,8 +293,7 @@
       "not_returned": "Not returned",
       "damaged": "Damaged",
       "collected": "Collected",
-      "vaulted": "Vaulted",
-      "payout_reversed": "Payout reversed"
+      "vaulted": "Vaulted"
     },
     "exception": {
       "refused": "A card the grader would not take: altered, trimmed, a reprint, or declared above the level. It stays in your hands with the reason, and its fee is never charged. The list and the estimate drop to the cards that go on.",

@@ -70,11 +70,13 @@ export const Grader: Story = {
   },
 };
 
-/** An open level reports its pick by id. */
+/** An open level reports its pick by id, as one radio of the group. */
 export const LevelOpen: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: /Regular/ }));
+    const regular = canvas.getByRole("radio", { name: /Regular/ });
+    expect(regular).not.toBeChecked();
+    await userEvent.click(regular);
     expect(args.onSelectLevel).toHaveBeenCalledWith("regular");
   },
 };
@@ -92,7 +94,7 @@ export const LevelClosedByAValue: Story = {
   args: { levels: [CLOSED_BY_VALUE, ...OPEN_LEVELS.slice(1)] },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const closed = canvas.getByRole("button", { name: /Not available/ });
+    const closed = canvas.getByRole("radio", { name: /Not available/ });
     await userEvent.click(closed);
     expect(args.onSelectLevel).not.toHaveBeenCalled();
     expect(closed).toBeDisabled();
@@ -159,6 +161,7 @@ export const Estimate: Story = {
   args: { selectedLevelId: "regular", estimate: ESTIMATE },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByRole("radio", { name: /Regular/ })).toBeChecked();
     expect(canvas.getByText("HK$1,120")).toBeInTheDocument();
     expect(canvas.getByText("4 cards × HK$250")).toBeInTheDocument();
   },

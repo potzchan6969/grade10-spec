@@ -1,4 +1,4 @@
-import { hkDate, money } from "@/emails/vault/_components/format";
+import { hkDate, money } from "@/emails/_components/format";
 import { HowToPay } from "@/emails/vault/_components/how-to-pay";
 import { NoticeClause } from "@/emails/vault/_components/notice-clause";
 import { VaultLetter } from "@/emails/vault/_components/vault-letter";

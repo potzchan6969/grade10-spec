@@ -14,8 +14,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { useState } from "react";
-import { formatGradingDay, type GradingLocaleProps } from "./grading-copy";
+import { formatGradingDay, type GradingZonedProps } from "./grading-copy";
 
 type GradingNamedCollectorCopy = {
   title: string;
@@ -32,13 +31,16 @@ type GradingNamedCollectorCopy = {
   remove: string;
 };
 
-type GradingNamedCollectorProps = GradingLocaleProps & {
+type GradingNamedCollectorProps = GradingZonedProps & {
   copy: GradingNamedCollectorCopy;
   /** The one person named, with the day they were named. */
   named?: { name: string; namedAt: number };
+  /** The name in the field, the consumer's to hold. */
+  name: string;
   pending?: boolean;
   /** The refusal the shop gave, in its words. */
   error?: string;
+  onNameChange: (name: string) => void;
   onSave: (name: string) => void;
   onChange: () => void;
   onRemove: () => void;
@@ -48,12 +50,17 @@ type GradingNamedCollectorProps = GradingLocaleProps & {
 /**
  * Nobody named, or one person with the day they were named. An empty name
  * reports no save, and no save is offered while the card reads as pending.
+ *
+ * The field is controlled: the name is the consumer's, so a Change prefills
+ * the person already named and a refused save keeps what was typed.
  */
 function GradingNamedCollector({
   copy,
   named,
+  name,
   pending = false,
   error,
+  onNameChange,
   onSave,
   onChange,
   onRemove,
@@ -61,10 +68,6 @@ function GradingNamedCollector({
   timeZone,
   className,
 }: GradingNamedCollectorProps) {
-  // Transient field state: what the collector has typed is not product state
-  // until it is saved, and `onSave` carries it out.
-  const [name, setName] = useState("");
-
   return (
     <Card className={className} data-slot="grading-named-collector">
       <CardHeader>
@@ -118,7 +121,7 @@ function GradingNamedCollector({
             <TextInput
               label={copy.nameLabel}
               message={error}
-              onChange={(event) => setName(event.target.value)}
+              onChange={(event) => onNameChange(event.target.value)}
               placeholder={copy.namePlaceholder}
               status={error ? "error" : "default"}
               value={name}

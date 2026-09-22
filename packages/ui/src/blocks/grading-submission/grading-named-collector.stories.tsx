@@ -1,17 +1,40 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useState } from "react";
 import { expect, fn, userEvent, within } from "storybook/test";
 import { FIXTURE_TIME_ZONE, NAMED_AT, NAMED_COLLECTOR_COPY } from "./fixtures";
-import { GradingNamedCollector } from "./grading-named-collector";
+import {
+  GradingNamedCollector,
+  type GradingNamedCollectorProps,
+} from "./grading-named-collector";
+
+/** The field is the consumer's; the workbench plays that consumer. */
+function Consumer({ name, onNameChange, ...args }: GradingNamedCollectorProps) {
+  const [typed, setTyped] = useState(name);
+
+  return (
+    <GradingNamedCollector
+      {...args}
+      name={typed}
+      onNameChange={(next) => {
+        setTyped(next);
+        onNameChange(next);
+      }}
+    />
+  );
+}
 
 const meta = {
   title: "Grading Submission/GradingNamedCollector",
   component: GradingNamedCollector,
+  render: (args) => <Consumer {...args} />,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
   args: {
     copy: NAMED_COLLECTOR_COPY,
     locale: "en",
+    name: "",
     timeZone: FIXTURE_TIME_ZONE,
+    onNameChange: fn(),
     onSave: fn(),
     onChange: fn(),
     onRemove: fn(),
@@ -62,9 +85,19 @@ export const Named: Story = {
   },
 };
 
-/** A refused naming reads the refusal under the field. */
+/** A Change prefills the person already named, so nothing is retyped. */
+export const Changing: Story = {
+  args: { name: "Wong Siu Ming" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByLabelText("Their name")).toHaveValue("Wong Siu Ming");
+  },
+};
+
+/** A refused naming reads the refusal under the field, and keeps what was typed. */
 export const Refused: Story = {
   args: {
+    name: "Wong Siu Ming",
     error:
       "These cards were collected on 20 September, so nobody can be named.",
   },
@@ -75,6 +108,7 @@ export const Refused: Story = {
         "These cards were collected on 20 September, so nobody can be named.",
       ),
     ).toBeInTheDocument();
+    expect(canvas.getByLabelText("Their name")).toHaveValue("Wong Siu Ming");
     expect(args.onSave).not.toHaveBeenCalled();
   },
 };

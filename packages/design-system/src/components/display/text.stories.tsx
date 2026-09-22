@@ -81,6 +81,15 @@ export const Warning: Story = {
   },
 };
 
+/** `error` binds `--destructive-foreground`, which every theme defines. */
+export const Error: Story = {
+  args: {
+    tone: "error",
+    weight: "medium",
+    children: "We could not reach the catalogue. Try again.",
+  },
+};
+
 /** `mono` is for a figure read back aloud: a pickup code, a certificate. */
 export const Faces: Story = {
   render: (args) => (

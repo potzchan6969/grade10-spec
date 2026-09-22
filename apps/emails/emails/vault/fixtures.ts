@@ -1,3 +1,28 @@
+import type { IdentityCheckInvitedProps } from "@/emails/vault/identity-check-invited";
+import type { VisitBookedProps } from "@/emails/vault/visit-booked";
+import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
+import type { VisitCancelledProps } from "@/emails/vault/visit-cancelled";
+import type { VisitMissedProps } from "@/emails/vault/visit-missed";
+import type { OfferMadeProps } from "@/emails/vault/offer-made";
+import type { OfferExpiredProps } from "@/emails/vault/offer-expired";
+import type { CaseVaultedProps } from "@/emails/vault/case-vaulted";
+import type { PayoutRecordedProps } from "@/emails/vault/payout-recorded";
+import type { RepaymentRecordedProps } from "@/emails/vault/repayment-recorded";
+import type { PayoutReversedProps } from "@/emails/vault/payout-reversed";
+import type { RepaymentReversedProps } from "@/emails/vault/repayment-reversed";
+import type { RepaymentDueSoonProps } from "@/emails/vault/repayment-due-soon";
+import type { RepaymentOverdueProps } from "@/emails/vault/repayment-overdue";
+import type { ForfeitureNoticeProps } from "@/emails/vault/forfeiture-notice";
+import type { LoanRepaidProps } from "@/emails/vault/loan-repaid";
+import type { CaseReleasedProps } from "@/emails/vault/case-released";
+import type { ForfeitedProps } from "@/emails/vault/forfeited";
+import type { CaseDeclinedProps } from "@/emails/vault/case-declined";
+import type { CaseCancelledProps } from "@/emails/vault/case-cancelled";
+import type { CaseExpiredDraftProps } from "@/emails/vault/case-expired-draft";
+import type { CaseExpiredUnbookedProps } from "@/emails/vault/case-expired-unbooked";
+import type { CaseNoShowProps } from "@/emails/vault/case-no-show";
+import type { DocumentsSealedProps } from "@/emails/vault/documents-sealed";
+
 /**
  * The fixture every vault letter preview is written over: case `H7K4PQ`, a
  * Rolex Datejust 41 financed for HKD 38,000.00 over 90 days.
@@ -186,15 +211,45 @@ export type NotifyKind =
   | "case_no_show"
   | "documents_sealed";
 
-/** Every kind's props beyond the case, the case line and the footer. */
-export type LetterFacts = Record<string, unknown>;
+/**
+ * Each kind's own props beyond the case, the case line and the footer, keyed
+ * to the letter that takes them. The application repository reads this map
+ * back through the submodule to render every kind, so a field dropped or
+ * renamed here is a type error rather than a failure in that repository.
+ */
+export type LetterFacts = {
+  identity_check_invited: Required<IdentityCheckInvitedProps>;
+  visit_booked: Required<VisitBookedProps>;
+  visit_rescheduled: Required<VisitRescheduledProps>;
+  visit_cancelled: Required<VisitCancelledProps>;
+  visit_missed: Required<VisitMissedProps>;
+  offer_made: Required<OfferMadeProps>;
+  offer_expired: Required<OfferExpiredProps>;
+  case_vaulted: Required<CaseVaultedProps>;
+  payout_recorded: Required<PayoutRecordedProps>;
+  repayment_recorded: Required<RepaymentRecordedProps>;
+  payout_reversed: Required<PayoutReversedProps>;
+  repayment_reversed: Required<RepaymentReversedProps>;
+  repayment_due_soon: Required<RepaymentDueSoonProps>;
+  repayment_overdue: Required<RepaymentOverdueProps>;
+  forfeiture_notice: Required<ForfeitureNoticeProps>;
+  loan_repaid: Required<LoanRepaidProps>;
+  case_released: Required<CaseReleasedProps>;
+  forfeited: Required<ForfeitedProps>;
+  case_declined: Required<CaseDeclinedProps>;
+  case_cancelled: Required<CaseCancelledProps>;
+  case_expired_draft: Required<CaseExpiredDraftProps>;
+  case_expired_unbooked: Required<CaseExpiredUnbookedProps>;
+  case_no_show: Required<CaseNoShowProps>;
+  documents_sealed: Required<DocumentsSealedProps>;
+};
 
 /**
  * One `LetterFacts` member per `NotifyKind`, each the props its preview
  * passes beyond `previewCase` — the render test supplies that the same way
  * for every kind.
  */
-export const VAULT_FIXTURES: Record<NotifyKind, LetterFacts> = {
+export const VAULT_FIXTURES: LetterFacts = {
   identity_check_invited: {
     visitAt: previewCase.visitAt,
     verifyUrl: previewCase.verifyUrl,
@@ -205,9 +260,7 @@ export const VAULT_FIXTURES: Record<NotifyKind, LetterFacts> = {
   visit_rescheduled: {
     visitAt: previewCase.movedVisitAt,
   },
-  visit_cancelled: {
-    visitAt: previewCase.visitAt,
-  },
+  visit_cancelled: {},
   visit_missed: {
     visitAt: previewCase.visitAt,
   },
@@ -274,9 +327,7 @@ export const VAULT_FIXTURES: Record<NotifyKind, LetterFacts> = {
   case_declined: {
     reason: previewCase.declineReason,
   },
-  case_cancelled: {
-    cancelledAt: previewCase.cancelledAt,
-  },
+  case_cancelled: {},
   case_expired_draft: {
     keptUntil: previewCase.draftKeptUntil,
   },

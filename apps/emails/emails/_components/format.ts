@@ -1,5 +1,6 @@
 /**
- * Money and dates as a grading letter prints them.
+ * Money and dates as a letter prints them — every letter this app renders,
+ * grading and vault alike.
  *
  * Amounts are minor units, as every Grade10 surface carries them, and are
  * formatted the way `@grade10/ui`'s `formatMoney` does: the amount divided by
@@ -20,7 +21,7 @@ const CURRENCY_EXPONENT: Readonly<Record<string, number>> = { HKD: 2 };
 function exponentOf(currency: string): number {
   const exponent = CURRENCY_EXPONENT[currency.toUpperCase()];
   if (exponent === undefined) {
-    throw new Error(`Unsupported currency for a grading letter: ${currency}`);
+    throw new Error(`Unsupported currency for a letter: ${currency}`);
   }
   return exponent;
 }

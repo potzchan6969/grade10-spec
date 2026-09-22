@@ -293,8 +293,7 @@
       "not_returned": "未有寄回",
       "damaged": "有损毁",
       "collected": "已领回",
-      "vaulted": "已存入金库",
-      "payout_reversed": "赔偿已撤回"
+      "vaulted": "已存入金库"
     },
     "exception": {
       "refused": "评级公司不会受理的卡：经过改动、裁切、翻印，或申报价值高于级别上限。卡会连同原因留在你手上，那张卡不会收费。清单与预算会扣减至继续送出的卡牌。",

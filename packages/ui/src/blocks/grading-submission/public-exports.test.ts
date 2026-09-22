@@ -1,3 +1,6 @@
+import { readdirSync, readFileSync } from "node:fs";
+import path from "node:path";
+import { fileURLToPath } from "node:url";
 import { describe, expect, it } from "vitest";
 import * as publicEntry from "../../index";
 import {
@@ -118,6 +121,18 @@ describe("grading submission public entry", () => {
       publicEntry.BookingConfirmation,
       publicEntry.BookingManageCard,
     ]).toEqual(Array.from({ length: 5 }, () => expect.any(Function)));
+  });
+
+  // The catalogs reach a block through props and nowhere else. Stories and
+  // fixtures may quote them; a block may not read one.
+  it("imports no message catalog into a block", () => {
+    const here = path.dirname(fileURLToPath(import.meta.url));
+    const offenders = readdirSync(here)
+      .filter((name) => name.endsWith(".tsx") && !name.endsWith(".stories.tsx"))
+      .filter((name) =>
+        readFileSync(path.join(here, name), "utf8").includes("@grade10/i18n"),
+      );
+    expect(offenders).toEqual([]);
   });
 
   it("exports nothing console-shaped for grading", () => {

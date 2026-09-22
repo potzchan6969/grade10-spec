@@ -38,22 +38,26 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Nothing listed: adding a card and pasting a list, and no card row. */
+/** Nothing listed: adding a card and pasting a list, and no card row. The
+ * paste is drawn once, in the header, whether or not the list has cards. */
 export const EmptyList: Story = {
   args: { cards: [] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByLabelText("Add a Card")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Paste a List" }),
+      canvas.getByRole("combobox", { name: CARD_LIST_COPY.searchLabel }),
     ).toBeInTheDocument();
+    expect(
+      canvas.getAllByRole("button", { name: CARD_LIST_COPY.paste }),
+    ).toHaveLength(1);
     expect(
       canvasElement.querySelector('[data-slot="grading-card-list-card"]'),
     ).toBeNull();
   },
 };
 
-/** The reference's matches, each added by the callback of its own. */
+/** The reference's matches, a listbox the primitive draws, each added by the
+ * callback of its own. */
 export const CardSearch: Story = {
   args: {
     query: "Blast",
@@ -61,7 +65,13 @@ export const CardSearch: Story = {
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("button", { name: /Blastoise/ }));
+    await userEvent.click(
+      canvas.getByRole("combobox", { name: CARD_LIST_COPY.searchLabel }),
+    );
+    const popup = within(document.body);
+    await userEvent.click(
+      await popup.findByRole("option", { name: /Blastoise/ }),
+    );
     expect(args.onAdd).toHaveBeenCalledWith({
       kind: "matched",
       match: CARD_MATCHES[0],
@@ -73,7 +83,9 @@ export const CardSearch: Story = {
 export const Matched: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Matched in our reference")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Base Set · 4/102 · matched in the catalogue"),
+    ).toBeInTheDocument();
     expect(canvas.getByText("Sold 12 May: HK$3,650")).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Edit" }));
     expect(args.onEdit).toHaveBeenCalledWith("card_charizard");
@@ -87,7 +99,7 @@ export const KeptAsTyped: Story = {
   args: { cards: [TYPED_CARD] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Kept as you typed it")).toBeInTheDocument();
+    expect(canvas.getByText(CARD_LIST_COPY.keptAsTyped)).toBeInTheDocument();
     expect(
       canvasElement.querySelector('[data-slot="grading-card-list-reference"]'),
     ).toBeNull();
@@ -99,22 +111,22 @@ export const NoValue: Story = {
   args: { cards: [MATCHED_CARD, NO_VALUE_CARD, TYPED_CARD] },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByText("This card still needs a declared value."),
-    ).toBeInTheDocument();
+    expect(canvas.getByText(CARD_LIST_COPY.noValue)).toBeInTheDocument();
     await userEvent.type(canvas.getByLabelText("Declared value"), "5");
     expect(args.onDeclare).toHaveBeenCalledWith("card_pikachu", "5");
   },
 };
 
-/** The minimum grade reads on the card, with the line that the fee applies. */
+/** The minimum grade reads on the card in one line, the catalog's. */
 export const MinimumGrade: Story = {
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("The fee applies either way.")).toBeInTheDocument();
-    expect(
-      canvas.getByText("Only encapsulate at PSA 9 or above: PSA 9"),
-    ).toBeInTheDocument();
+    const option = canvas.getByRole("checkbox", {
+      name: "Only encapsulate at PSA 9 or above · the fee applies either way",
+    });
+    expect(option).toBeChecked();
+    await userEvent.click(option);
+    expect(args.onMinimumGrade).toHaveBeenCalledWith("card_charizard", false);
   },
 };
 
@@ -143,7 +155,7 @@ export const ReferenceUnavailable: Story = {
     expect(
       canvas.getAllByText(CARD_LIST_COPY.catalogueUnavailable),
     ).toHaveLength(2);
-    expect(canvas.queryByText("Kept as you typed it")).toBeNull();
+    expect(canvas.queryByText(CARD_LIST_COPY.keptAsTyped)).toBeNull();
     expect(canvas.getAllByLabelText("Declared value")).toHaveLength(2);
   },
 };
@@ -191,9 +203,12 @@ export const OverTheCap: Story = {
   },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
-    const add = canvas.getByRole("button", { name: "Add as Typed" });
-    expect(add).toBeDisabled();
-    expect(canvas.getByRole("button", { name: /Blastoise/ })).toBeDisabled();
+    expect(
+      canvas.getByRole("button", { name: CARD_LIST_COPY.addTyped }),
+    ).toBeDisabled();
+    expect(
+      canvas.getByRole("combobox", { name: CARD_LIST_COPY.searchLabel }),
+    ).toBeDisabled();
     expect(canvas.getByText(CAP_REACHED_LINE)).toBeInTheDocument();
     expect(args.onAdd).not.toHaveBeenCalled();
   },

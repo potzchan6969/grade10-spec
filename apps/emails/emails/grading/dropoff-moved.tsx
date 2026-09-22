@@ -3,7 +3,7 @@ import {
   hkDateTime,
   hkDay,
   hkDayTime,
-} from "@/emails/grading/_components/format";
+} from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,

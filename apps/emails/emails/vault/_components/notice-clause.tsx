@@ -1,4 +1,4 @@
-import { hkDate, money } from "@/emails/vault/_components/format";
+import { hkDate, money } from "@/emails/_components/format";
 import { FactsGroup, Note } from "@/emails/vault/_components/vault-letter";
 
 export type NoticeClauseProps = {

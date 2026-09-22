@@ -1,5 +1,5 @@
 import { CardLines } from "@/emails/grading/_components/card-lines";
-import { hkDateTime, money } from "@/emails/grading/_components/format";
+import { hkDateTime, money } from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,

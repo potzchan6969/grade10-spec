@@ -43,6 +43,10 @@ type GradingFeeSheetProps = GradingLocaleProps & {
  * Every figure is the record it was given, so this block and
  * `GradingLevelPicker` are two drawings of one sheet and cannot disagree. One
  * grader draws no grader control.
+ *
+ * A `selectedGraderId` naming no grader throws by name rather than falling
+ * back to the first: a page that believes one grader is picked must not read
+ * another's prices with the substitute marked selected.
  */
 function GradingFeeSheet({
   copy,
@@ -53,8 +57,12 @@ function GradingFeeSheet({
   locale = "en",
   className,
 }: GradingFeeSheetProps) {
-  const selected =
-    graders.find((grader) => grader.id === selectedGraderId) ?? graders[0];
+  const selected = graders.find((grader) => grader.id === selectedGraderId);
+  if (selected == null) {
+    throw new Error(
+      `GradingFeeSheet: selectedGraderId "${selectedGraderId}" names no grader`,
+    );
+  }
 
   return (
     <VStack className={className} data-slot="grading-fee-sheet" gap="md">
@@ -68,7 +76,7 @@ function GradingFeeSheet({
             const picked = next.at(0);
             if (typeof picked === "string") onSelectGrader(picked);
           }}
-          value={selected ? [selected.id] : []}
+          value={[selected.id]}
         >
           {graders.map((grader) => (
             <SegmentedControlItem key={grader.id} value={grader.id}>
@@ -77,7 +85,7 @@ function GradingFeeSheet({
           ))}
         </SegmentedControl>
       ) : null}
-      {selected?.figuresLine ? (
+      {selected.figuresLine ? (
         <Text data-slot="grading-fee-sheet-figures" size="sm" tone="secondary">
           {selected.figuresLine}
         </Text>
@@ -92,7 +100,7 @@ function GradingFeeSheet({
           <TableHead>{copy.weeks}</TableHead>
         </TableHeader>
         <TableBody>
-          {(selected?.levels ?? []).map((level) => (
+          {selected.levels.map((level) => (
             <TableRow data-slot="grading-fee-sheet-level" key={level.id}>
               <TableCell>{level.name}</TableCell>
               <TableCell>{formatGradingMoney(level.ceiling, locale)}</TableCell>

@@ -1,4 +1,4 @@
-import { money } from "@/emails/vault/_components/format";
+import { money } from "@/emails/_components/format";
 import { FactsGroup } from "@/emails/vault/_components/vault-letter";
 
 export type HowToPayProps = {

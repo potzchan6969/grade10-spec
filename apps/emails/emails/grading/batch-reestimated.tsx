@@ -1,4 +1,4 @@
-import { hkDate, hkDay } from "@/emails/grading/_components/format";
+import { hkDate, hkDay } from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,

@@ -8,12 +8,16 @@ type StepperProps = ComponentProps<"div">;
  *
  * Figma component `Stepper` (`5010:5637`). Non-interactive — compose one or
  * more `Step` children in order. The slot accepts as many steps as needed.
+ *
+ * It is the list its `Step`s are items of, so a reader hears how many stages
+ * there are and which one is current.
  */
 function Stepper({ className, children, ...props }: StepperProps) {
   return (
     <div
       className={cn("flex w-full items-start", className)}
       data-slot="stepper"
+      role="list"
       {...props}
     >
       {children}

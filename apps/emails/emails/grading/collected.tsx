@@ -1,5 +1,8 @@
-import { CardLines } from "@/emails/grading/_components/card-lines";
-import { hkDateTime, money } from "@/emails/grading/_components/format";
+import {
+  CardLines,
+  type CardLine,
+} from "@/emails/grading/_components/card-lines";
+import { hkDateTime, money } from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,
@@ -14,10 +17,12 @@ import {
 
 export type CollectedProps = {
   collectedAt?: string;
+  cards?: CardLine[];
 };
 
 export default function CollectedEmail({
   collectedAt = previewSubmission.collectedAt,
+  cards = previewHandedBackCards,
 }: CollectedProps) {
   const { paidMethod, settledMinor, settledPosReference, shopName } =
     previewSubmission;
@@ -33,7 +38,7 @@ export default function CollectedEmail({
       preheader={`3 slabs and 1 card handed back, ${money(settledMinor)} settled.`}
       submission={previewSubmissionLine}
     >
-      <CardLines cards={previewHandedBackCards} />
+      <CardLines cards={cards} />
       <FactsGroup
         facts={[
           {

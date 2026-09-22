@@ -14,7 +14,6 @@ import {
   DrawerHeader,
   DrawerTitle,
 } from "@grade10/design-system/components/overlays/drawer";
-import type { GradingLocaleProps } from "./grading-copy";
 import type { GradingListedCard } from "./types";
 
 /** One outcome of a pasted list: how many lines it took, the line that words
@@ -64,7 +63,7 @@ type GradingPasteSheetCopy = {
   close: string;
 };
 
-type GradingPasteSheetProps = GradingLocaleProps & {
+type GradingPasteSheetProps = {
   copy: GradingPasteSheetCopy;
   open: boolean;
   text: string;

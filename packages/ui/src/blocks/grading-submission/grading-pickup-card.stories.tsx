@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { FIXTURE_TIME_ZONE, hkd, PICKUP_COPY } from "./fixtures";
+import { hkd, PICKUP_COPY } from "./fixtures";
 import { GradingPickupCard } from "./grading-pickup-card";
 
 const meta = {
@@ -15,7 +15,6 @@ const meta = {
     where: { shop: "Grade10 Central", address: "12/F, 8 Queen’s Road Central" },
     open: "Monday to Saturday, 11:00 to 20:00, Hong Kong time",
     locale: "en",
-    timeZone: FIXTURE_TIME_ZONE,
   },
 } satisfies Meta<typeof GradingPickupCard>;
 

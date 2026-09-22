@@ -8,7 +8,7 @@ const meta = {
   component: GradingGradeCards,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
-  args: { copy: GRADE_CARDS_COPY, cards: [GRADED_CARD], locale: "en" },
+  args: { copy: GRADE_CARDS_COPY, cards: [GRADED_CARD] },
 } satisfies Meta<typeof GradingGradeCards>;
 
 export default meta;

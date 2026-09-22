@@ -4,11 +4,12 @@ import {
   CardContent,
 } from "@grade10/design-system/components/display/card";
 import { Text } from "@grade10/design-system/components/display/text";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { SegmentedControl } from "@grade10/design-system/components/forms/segmented-control";
 import { SegmentedControlItem } from "@grade10/design-system/components/forms/segmented-control-item";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { cn } from "@grade10/design-system/lib/utils";
+import { useId } from "react";
 import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
 import type { GradingGrader, GradingMoney } from "./types";
 
@@ -76,8 +77,10 @@ type GradingLevelPickerProps = GradingLocaleProps & {
 /**
  * The grader, then that grader's levels, then the estimate the pick carries.
  *
- * A closed level reports nothing and reads the line that closes it. Every
- * figure is given: the picker computes no estimate and no ceiling of its own.
+ * The levels are a `RadioList` of `RadioCard`s: one pick at a time, announced
+ * as one of n, and a closed level is a disabled option rather than a control
+ * that reports nothing. Every figure is given: the picker computes no estimate
+ * and no ceiling of its own.
  */
 function GradingLevelPicker({
   copy,
@@ -96,10 +99,11 @@ function GradingLevelPicker({
   className,
 }: GradingLevelPickerProps) {
   const everyLevelClosed = levels.every((level) => level.state === "closed");
+  const titleId = useId();
 
   return (
     <VStack className={className} data-slot="grading-level-picker" gap="md">
-      <Text as="h2" size="lg" weight="medium">
+      <Text as="h2" id={titleId} size="lg" weight="medium">
         {copy.title}
       </Text>
       <VStack gap="sm" hAlign="stretch">
@@ -133,18 +137,18 @@ function GradingLevelPicker({
           {figuresLine}
         </Text>
       ) : null}
-      <VStack gap="sm" hAlign="stretch">
+      <RadioList
+        aria-labelledby={titleId}
+        data-slot="grading-level-picker-levels"
+        onValueChange={(next) => {
+          if (typeof next === "string") onSelectLevel(next);
+        }}
+        value={selectedLevelId ?? null}
+      >
         {levels.map((level) => (
-          <LevelCard
-            copy={copy}
-            key={level.id}
-            level={level}
-            locale={locale}
-            onSelect={onSelectLevel}
-            selected={level.id === selectedLevelId}
-          />
+          <LevelCard copy={copy} key={level.id} level={level} locale={locale} />
         ))}
-      </VStack>
+      </RadioList>
       {everyLevelClosed && counterLine ? (
         <Text data-slot="grading-level-picker-counter" size="sm" tone="warning">
           {counterLine}
@@ -195,77 +199,62 @@ function LevelCard({
   copy,
   level,
   locale,
-  onSelect,
-  selected,
 }: {
   copy: GradingLevelPickerCopy;
   level: GradingPickerLevel;
   locale: GradingLocaleProps["locale"];
-  onSelect: (levelId: string) => void;
-  selected: boolean;
 }) {
-  const closed = level.state === "closed";
-
   return (
-    <button
-      aria-pressed={closed ? undefined : selected}
-      className={cn(
-        "w-full rounded-2xl border p-4 text-left",
-        closed
-          ? "cursor-not-allowed border-border bg-muted opacity-50"
-          : "cursor-pointer border-border bg-card hover:border-border-strong focus-visible:ring-2 focus-visible:ring-ring/50 focus-visible:outline-none",
-        selected && !closed && "border-primary",
-      )}
-      data-slot="grading-level-picker-level"
-      data-state={level.state}
-      disabled={closed}
-      onClick={() => {
-        if (!closed) onSelect(level.id);
-      }}
-      type="button"
-    >
-      <VStack gap="xs" hAlign="stretch">
-        <HStack gap="sm" hAlign="space-between" vAlign="center">
-          <Text weight="medium">{level.name}</Text>
-          {closed ? (
-            <Text size="xs" tone="secondary">
+    <RadioCard
+      disabled={level.state === "closed"}
+      title={
+        <span className="flex w-full items-baseline justify-between gap-2">
+          <Text as="span" weight="medium">
+            {level.name}
+          </Text>
+          {level.state === "closed" ? (
+            <Text as="span" size="xs" tone="secondary">
               {copy.unavailable}
             </Text>
           ) : (
-            <Text size="sm" weight="medium">
+            <Text as="span" size="sm" weight="medium">
               {formatGradingMoney(level.feePerCard, locale)}
             </Text>
           )}
-        </HStack>
-        {level.state === "open" ? (
-          <>
-            <Text size="sm" tone="secondary">
-              {formatGradingMoney(level.ceiling, locale)}
-            </Text>
-            {level.coverLine ? (
-              <Text
-                data-slot="grading-level-picker-cover"
-                size="sm"
-                tone="secondary"
-              >
-                {level.coverLine}
-              </Text>
-            ) : null}
-            <Text size="sm" tone="secondary">
-              {level.weeks}
-            </Text>
-          </>
-        ) : (
-          <Text
-            data-slot="grading-level-picker-closed"
-            size="sm"
-            tone="secondary"
-          >
-            {level.closedLine}
+        </span>
+      }
+      value={level.id}
+    >
+      {level.state === "open" ? (
+        <>
+          <Text as="span" size="sm" tone="secondary">
+            {formatGradingMoney(level.ceiling, locale)}
           </Text>
-        )}
-      </VStack>
-    </button>
+          {level.coverLine ? (
+            <Text
+              as="span"
+              data-slot="grading-level-picker-cover"
+              size="sm"
+              tone="secondary"
+            >
+              {level.coverLine}
+            </Text>
+          ) : null}
+          <Text as="span" size="sm" tone="secondary">
+            {level.weeks}
+          </Text>
+        </>
+      ) : (
+        <Text
+          as="span"
+          data-slot="grading-level-picker-closed"
+          size="sm"
+          tone="secondary"
+        >
+          {level.closedLine}
+        </Text>
+      )}
+    </RadioCard>
   );
 }
 

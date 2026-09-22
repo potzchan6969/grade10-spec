@@ -12,7 +12,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   formatGradingDay,
   formatGradingMoney,
-  type GradingLocaleProps,
+  type GradingZonedProps,
 } from "./grading-copy";
 import type { GradingMoney } from "./types";
 
@@ -41,7 +41,7 @@ type GradingUncollectedLadderCopy = {
   postedLabel: string;
 };
 
-type GradingUncollectedLadderProps = GradingLocaleProps & {
+type GradingUncollectedLadderProps = GradingZonedProps & {
   copy: GradingUncollectedLadderCopy;
   rungs: readonly GradingLadderRung[];
   /** The day the cards became ready to collect. */

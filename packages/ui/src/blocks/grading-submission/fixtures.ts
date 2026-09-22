@@ -1,5 +1,10 @@
 /* Story data for the grading blocks. Every figure is HKD minor units and
- * every day an instant, because that is what a consumer passes. */
+ * every day an instant, because that is what a consumer passes.
+ *
+ * Every word a collector reads is the en catalog's — `@grade10/i18n`'s
+ * `messages/shared/en/grading.json` — quoted key for key, so the workbench
+ * shows the shipped words rather than a second English of them. The blocks
+ * themselves stay props-only and import no catalog. */
 import type { GradingCardListCopy } from "./grading-card-list";
 import type {
   GradingCardRecordCopy,
@@ -188,21 +193,20 @@ const COUNTER_LINE =
 
 const CARD_LIST_COPY: GradingCardListCopy = {
   title: "Your cards",
-  searchLabel: "Add a Card",
+  searchLabel: "Add a card",
   searchPlaceholder: "Start typing a card name",
-  addTyped: "Add as Typed",
-  paste: "Paste a List",
+  addTyped: "Add as typed",
+  paste: "Paste a list",
   emptyTitle: "No cards yet",
   emptyBody: "Add them one at a time, or paste a list you already have.",
-  matched: "Matched in our reference",
-  keptAsTyped: "Kept as you typed it",
+  matched: "{set} · {number} · matched in the catalogue",
+  keptAsTyped: "Kept as you typed it · no reference",
   catalogueUnavailable:
-    "Our catalogue could not be asked just now, so we kept every card as you typed it.",
-  noValue: "This card still needs a declared value.",
+    "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed.",
+  noValue: "Tell us the declared value before you continue.",
   declaredValueLabel: "Declared value",
-  referenceSalesLabel: "Recent sales",
-  minimumGradeLabel: "Only encapsulate at PSA 9 or above",
-  minimumGradeNote: "The fee applies either way.",
+  referenceSalesLabel: "Recent sales:",
+  minimumGrade: "Only encapsulate at {grade} or above · the fee applies either way",
   edit: "Edit",
   remove: "Remove",
 };
@@ -210,7 +214,8 @@ const CARD_LIST_COPY: GradingCardListCopy = {
 const MATCHED_CARD: GradingListedCard = {
   id: "card_charizard",
   name: "Charizard",
-  setLine: "Base Set · 4/102",
+  set: "Base Set",
+  number: "4/102",
   matched: true,
   declaredValue: hkd(380000),
   referenceSales: [
@@ -219,29 +224,34 @@ const MATCHED_CARD: GradingListedCard = {
     { id: "s3", label: "Sold 28 Apr", price: hkd(358000) },
   ],
   minimumGrade: "PSA 9",
+  minimumGradeWanted: true,
 };
 
 const TYPED_CARD: GradingListedCard = {
   id: "card_typed",
   name: "Umbreon holo, Japanese promo",
-  setLine: "As you typed it",
   matched: false,
   declaredValue: hkd(120000),
+  minimumGrade: "PSA 9",
 };
 
 const NO_VALUE_CARD: GradingListedCard = {
   id: "card_pikachu",
   name: "Pikachu Illustrator",
-  setLine: "Promo · 1998",
+  set: "Promo",
+  number: "1998",
   matched: true,
+  minimumGrade: "PSA 9",
 };
 
 const ABOVE_CEILING_CARD: GradingListedCard = {
   id: "card_lugia",
   name: "Lugia first edition",
-  setLine: "Neo Genesis · 9/111",
+  set: "Neo Genesis",
+  number: "9/111",
   matched: true,
   declaredValue: hkd(2200000),
+  minimumGrade: "PSA 9",
   aboveCeilingLine:
     "This card is worth more than Bulk takes. It can go in a second submission on the same drop-off.",
 };
@@ -271,7 +281,7 @@ const CARD_MATCHES = [
 ];
 
 const PASTE_SHEET_COPY: GradingPasteSheetCopy = {
-  title: "Paste Your List",
+  title: "Paste a list",
   body: "One card a line. We match what we can and keep the rest as you typed it.",
   textLabel: "Your list",
   textPlaceholder: "Charizard Base Set 4/102",
@@ -283,8 +293,8 @@ const PASTE_SHEET_COPY: GradingPasteSheetCopy = {
   skipped: "Skipped, already listed",
   catalogueUnavailable:
     "Our catalogue could not be asked, so every line is kept as you typed it.",
-  add: "Add These Cards",
-  close: "Go Back",
+  add: "Add these cards to the list",
+  close: "Go back",
 };
 
 const PASTE_RESULT: GradingPasteResult = {
@@ -333,8 +343,8 @@ const REVIEW_COPY: GradingReviewCopy = {
   warningHigherFeeLabel: "That level costs a card now",
   goodToKnowTitle: "Good to know",
   consent: "I agree to how the cards are collected.",
-  book: "Book the Drop-off",
-  saveForLater: "Save and Book Later",
+  book: "Book the drop-off",
+  saveForLater: "Save and book later",
   edit: "Edit",
 };
 
@@ -381,12 +391,15 @@ const GOOD_TO_KNOW: readonly string[] = [
 const STATUS_RAIL_COPY: GradingStatusRailCopy = {
   planned: "Planned",
   booked: "Booked",
-  "handed-in": "Handed in",
+  handedIn: "Handed in",
   sent: "Sent",
   graded: "Graded",
   back: "Back",
   home: "Home",
 };
+
+const ENDED_LINE =
+  "Cancelled. The cards never left you, and nothing was paid.";
 
 const CARD_RECORD_COPY: GradingCardRecordCopy = {
   title: "Your cards",
@@ -394,7 +407,7 @@ const CARD_RECORD_COPY: GradingCardRecordCopy = {
   declaredValueLabel: "Declared",
   minimumGradeLabel: "Minimum grade",
   certificateLabel: "Certificate",
-  lookupLabel: "Look Up",
+  lookupLabel: "Look it up",
 };
 
 const FRONT_PHOTO = {
@@ -427,7 +440,7 @@ const GRADE_CARDS_COPY: GradingGradeCardsCopy = {
   ungradedTitle: "Returned ungraded",
   graderLabel: "Graded by",
   certificateLabel: "Certificate",
-  lookupLabel: "Look Up",
+  lookupLabel: "Look it up",
   ungradedCodeLabel: "Grader’s code",
 };
 
@@ -526,6 +539,7 @@ export {
   CARD_RECORD_COPY,
   CGC_SHEET,
   COUNTER_LINE,
+  ENDED_LINE,
   ESTIMATE,
   FEE_SHEET_COPY,
   FIXTURE_TIME_ZONE,

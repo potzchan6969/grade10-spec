@@ -3,17 +3,27 @@ import {
   CardContent,
 } from "@grade10/design-system/components/display/card";
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
-import { Skeleton } from "@grade10/design-system/components/display/skeleton";
 import { Text } from "@grade10/design-system/components/display/text";
+import {
+  Autocomplete,
+  AutocompleteContent,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+  AutocompleteLoading,
+} from "@grade10/design-system/components/forms/autocomplete";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
-import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
-import { formatGradingMoney, type GradingLocaleProps } from "./grading-copy";
+import {
+  fillGradingCopy,
+  formatGradingMoney,
+  type GradingLocaleProps,
+} from "./grading-copy";
 import type { GradingCardMatch, GradingListedCard } from "./types";
 
 /** What the collector added: the reference's card, or the name as typed. */
@@ -30,6 +40,8 @@ type GradingCardListCap = {
   closesLevelLine?: string;
 };
 
+/** One key of the catalog's `plan` family, one prop. A key that words a whole
+ * sentence around a value arrives whole and the block fills it. */
 type GradingCardListCopy = {
   title: string;
   /** Labels the field a card is added through. */
@@ -40,6 +52,7 @@ type GradingCardListCopy = {
   paste: string;
   emptyTitle: string;
   emptyBody: string;
+  /** Read by a matched card. Fills `{set}` and `{number}`. */
   matched: string;
   keptAsTyped: string;
   /** Read on every card while the reference cannot be asked. */
@@ -47,8 +60,8 @@ type GradingCardListCopy = {
   noValue: string;
   declaredValueLabel: string;
   referenceSalesLabel: string;
-  minimumGradeLabel: string;
-  minimumGradeNote: string;
+  /** The minimum-grade option and what it costs. Fills `{grade}`. */
+  minimumGrade: string;
   edit: string;
   remove: string;
 };
@@ -72,10 +85,16 @@ type GradingCardListProps = GradingLocaleProps & {
   className?: string;
 };
 
+const NO_MATCHES: readonly GradingCardMatch[] = [];
+
 /**
  * The list a collector edits before hand-in, one card a row: matched in the
  * reference or kept as typed, its declared value, its reference sales and its
  * minimum grade.
+ *
+ * The card search is an `Autocomplete` with `mode="none"` — the matches are
+ * the consumer's, filtered wherever the consumer filters, and the popup is the
+ * listbox the primitive draws rather than a column of buttons.
  *
  * The cap, the card with no value and the card above a ceiling are each named
  * in the consumer's words. Every act reports through a callback of its own and
@@ -107,11 +126,14 @@ function GradingCardList({
         <Text as="h2" size="lg" weight="medium">
           {copy.title}
         </Text>
-        {cards.length > 0 ? (
-          <Button onClick={onPaste} size="sm" variant="secondary">
-            {copy.paste}
-          </Button>
-        ) : null}
+        <Button
+          data-slot="grading-card-list-paste"
+          onClick={onPaste}
+          size="sm"
+          variant="secondary"
+        >
+          {copy.paste}
+        </Button>
       </HStack>
       <VStack data-slot="grading-card-list-cap" gap="xs" hAlign="stretch">
         <Text size="sm" tone="secondary">
@@ -124,31 +146,36 @@ function GradingCardList({
         ) : null}
       </VStack>
       <VStack data-slot="grading-card-list-search" gap="sm" hAlign="stretch">
-        <TextInput
-          disabled={atCap}
-          label={copy.searchLabel}
-          onChange={(event) => onSearch(event.target.value)}
-          placeholder={copy.searchPlaceholder}
+        <Autocomplete
+          items={search.status === "ready" ? search.data : NO_MATCHES}
+          itemToStringValue={(match: GradingCardMatch) => match.name}
+          mode="none"
+          onValueChange={(next: string) => onSearch(next)}
+          openOnInputClick
           value={query}
-        />
-        {search.status === "loading" ? (
-          <Skeleton className="h-10 w-full" />
-        ) : null}
-        {search.status === "ready" ? (
-          <VStack gap="xs" hAlign="stretch">
-            {search.data.map((match) => (
-              <Button
-                disabled={atCap}
-                key={match.id}
-                onClick={() => onAdd({ kind: "matched", match })}
-                size="sm"
-                variant="outline"
-              >
-                {`${match.name} · ${match.setLine}`}
-              </Button>
-            ))}
-          </VStack>
-        ) : null}
+        >
+          <AutocompleteInput
+            disabled={atCap}
+            label={copy.searchLabel}
+            onClear={() => onSearch("")}
+            placeholder={copy.searchPlaceholder}
+          />
+          <AutocompleteContent>
+            {search.status === "loading" ? <AutocompleteLoading /> : null}
+            <AutocompleteList>
+              {(match: GradingCardMatch) => (
+                <AutocompleteItem
+                  key={match.id}
+                  onClick={() => onAdd({ kind: "matched", match })}
+                  trailing={match.setLine}
+                  value={match}
+                >
+                  {match.name}
+                </AutocompleteItem>
+              )}
+            </AutocompleteList>
+          </AutocompleteContent>
+        </Autocomplete>
         {search.status === "empty" || search.status === "error" ? (
           <AsyncMessage
             action={search.action}
@@ -174,11 +201,6 @@ function GradingCardList({
       </VStack>
       {cards.length === 0 ? (
         <EmptyState
-          actions={
-            <Button onClick={onPaste} size="sm" variant="secondary">
-              {copy.paste}
-            </Button>
-          }
           data-slot="grading-card-list-empty"
           description={copy.emptyBody}
           title={copy.emptyTitle}
@@ -204,6 +226,20 @@ function GradingCardList({
   );
 }
 
+/** The one line that says where a card's name came from. */
+function originLine(
+  card: GradingListedCard,
+  copy: GradingCardListCopy,
+  unreachable: boolean,
+): string {
+  if (unreachable) return copy.catalogueUnavailable;
+  if (!card.matched) return copy.keptAsTyped;
+  return fillGradingCopy(copy.matched, {
+    set: card.set ?? "",
+    number: card.number ?? "",
+  });
+}
+
 function ListedCard({
   card,
   copy,
@@ -223,12 +259,6 @@ function ListedCard({
   onRemove: GradingCardListProps["onRemove"];
   unreachable: boolean;
 }) {
-  const origin = unreachable
-    ? copy.catalogueUnavailable
-    : card.matched
-      ? copy.matched
-      : copy.keptAsTyped;
-
   return (
     <Card data-slot="grading-card-list-card">
       <CardContent>
@@ -236,15 +266,12 @@ function ListedCard({
           <HStack gap="sm" hAlign="space-between" vAlign="start">
             <VStack gap="none" hAlign="stretch">
               <Text weight="medium">{card.name}</Text>
-              <Text size="sm" tone="secondary">
-                {card.setLine}
-              </Text>
               <Text
                 data-slot="grading-card-list-origin"
-                size="xs"
+                size="sm"
                 tone="secondary"
               >
-                {origin}
+                {originLine(card, copy, unreachable)}
               </Text>
             </VStack>
             <HStack gap="xs" vAlign="center">
@@ -308,20 +335,16 @@ function ListedCard({
               ))}
             </VStack>
           ) : null}
-          <VStack gap="none" hAlign="stretch">
+          {card.minimumGrade ? (
             <CheckboxListInput
-              checked={card.minimumGrade != null}
+              checked={card.minimumGradeWanted === true}
+              data-slot="grading-card-list-minimum-grade"
               onCheckedChange={(next) => onMinimumGrade(card.id, next)}
               size="sm"
             >
-              {card.minimumGrade
-                ? `${copy.minimumGradeLabel}: ${card.minimumGrade}`
-                : copy.minimumGradeLabel}
+              {fillGradingCopy(copy.minimumGrade, { grade: card.minimumGrade })}
             </CheckboxListInput>
-            <Text size="xs" tone="secondary">
-              {copy.minimumGradeNote}
-            </Text>
-          </VStack>
+          ) : null}
         </VStack>
       </CardContent>
     </Card>

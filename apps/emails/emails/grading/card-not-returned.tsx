@@ -1,4 +1,4 @@
-import { money } from "@/emails/grading/_components/format";
+import { money } from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,

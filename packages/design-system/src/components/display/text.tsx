@@ -23,7 +23,7 @@ const textVariants = cva("leading-snug", {
       muted: "text-disabled-foreground",
       success: "text-success-foreground",
       warning: "text-warning-foreground",
-      error: "text-error-foreground",
+      error: "text-destructive-foreground",
     },
     face: {
       sans: "font-sans",
@@ -57,10 +57,13 @@ type TextProps = React.HTMLAttributes<HTMLElement> &
  *
  * `size="display"` is the rung above `xl`, for one figure a surface leads
  * with — a pickup code, a grade. `face="mono"` binds `--font-mono`, so digits
- * a collector reads back to a counter line up. `tone="warning"` binds
- * `--warning-foreground`, for a line that is due rather than failed. No Figma
- * set defines this component, so the three are code ahead of design, recorded
- * in the `add-card-grading` change.
+ * a collector reads back to a counter line up. The status tones bind the
+ * `--<tone>-foreground` text contract, never the `--<tone>-on` a fill carries:
+ * `warning` for a line that is due rather than failed, `error` for a refusal.
+ * `error` binds `--destructive-foreground`, the token every theme defines;
+ * `--error-foreground` is stock shadcn's and `.theme-grade10` sets no such
+ * slot. No Figma set defines this component, so the three axes are code ahead
+ * of design, recorded in the `add-card-grading` change.
  */
 function Text({
   as: Tag = "span",

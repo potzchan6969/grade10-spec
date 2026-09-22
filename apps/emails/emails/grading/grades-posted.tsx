@@ -1,5 +1,8 @@
-import { CardLines } from "@/emails/grading/_components/card-lines";
-import { hkDate, money, moneyRate } from "@/emails/grading/_components/format";
+import {
+  CardLines,
+  type CardLine,
+} from "@/emails/grading/_components/card-lines";
+import { hkDate, money, moneyRate } from "@/emails/_components/format";
 import {
   FactsGroup,
   GradingLetter,
@@ -15,11 +18,13 @@ import {
 export type GradesPostedProps = {
   gradesPostedAt?: string;
   backAtShopBy?: string;
+  cards?: CardLine[];
 };
 
 export default function GradesPostedEmail({
   gradesPostedAt = previewSubmission.gradesPostedAt,
   backAtShopBy = previewSubmission.readyAt,
+  cards = previewGradedCards,
 }: GradesPostedProps) {
   const {
     grader,
@@ -42,7 +47,7 @@ export default function GradesPostedEmail({
       preheader={`A ${grader} 10, two 9s and one raw card. ${money(upchargeMinor)} to settle before you collect.`}
       submission={previewSubmissionLine}
     >
-      <CardLines cards={previewGradedCards} />
+      <CardLines cards={cards} />
       <Note>
         One thing to settle: {upchargeCard} came back worth about{" "}
         {moneyRate(upchargeValueMinor)}, above the {upchargeFromLevel} level’s{" "}
