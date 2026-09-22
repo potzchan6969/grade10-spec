@@ -151,6 +151,10 @@ hours of the close.
 - 🚧 **Company on the picker** — a company address shows the company name as
   the card title; a personal address shows the recipient name; the card body
   shows street, city or region, and country only — no postal code and no phone
+- 🚧 **Order summary addresses** — after setup, Delivery and Billing on the
+  order show the confirmed snapshot: company name when the address is
+  company, recipient name, phone, and the full address including postal code
+  (not the lean picker card body)
 - ❓ **Billing country or region list** — whether billing Add Address uses the
   same full list and searchable field as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
@@ -471,7 +475,7 @@ a second payment provider, and changes to the bid-time rules.
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
 | Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
-| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. First and last name stay required on both. | Product (@tangconst) |
+| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
 | Add Address optional locality | 🚧 In flight | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
 | Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and searchable field as delivery. | Product (@tangconst) |
 | Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
