@@ -1,6 +1,6 @@
 ## User journeys
 
-### product-page-US-05: Collector shares a card and the preview shows it
+### grade10-site-store-product-page-US-13: Collector shares a card and the preview shows it
 
 **As a** collector,
 **I want** a product link I pass on to unfurl with the card's own picture,
