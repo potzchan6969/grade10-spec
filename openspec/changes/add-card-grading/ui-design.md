@@ -308,15 +308,15 @@ Stories `grading-plan-grading-home--`, the Fee sheet rows `grading-submission-gr
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading | `home.loading`; no list | `grade10-site-grading-submission-plan-US-06` |
-| Signed out (`G16`) | the lead, the four-step How it works, `GradingFeeSheet`, Start a submission, Book a drop-off without a list, Sign in in the header | `grade10-site-grading-submission-plan-US-01` |
-| Signed in (`G01`) | the account line; Your submissions as one `Card` per submission with the summary, the status word, the chip and the id; What it costs below | `grade10-site-grading-submission-plan-US-06` |
-| Signed in, none | `EmptyState` under Your submissions; Start a submission | `grade10-site-grading-submission-plan-US-06` |
-| Sign in, link sent | the same-email, no-password line after the address is given | `grade10-site-grading-submission-plan-US-06` |
-| Fee sheet, one grader | the level rows: ceiling, cards a submission, fee, weeks; the example-fees lead; the above-the-top and Bulk lines | `grade10-site-grading-submission-plan-US-01` |
-| Fee sheet, cover column | Express and Super Express rows carry the cover rate | `grade10-site-grading-submission-plan-US-01` |
-| Fee sheet, three graders | a `SegmentedControl` per grader over its own sheet | `grade10-site-grading-submission-plan-US-01` |
-| Error | the message in the error tone; no list | `grade10-site-grading-submission-plan-US-06` |
+| Loading | `home.loading`; no list | `grade10-site-grading-submission-plan-SC-02` |
+| Signed out (`G16`) | the lead, the four-step How it works, `GradingFeeSheet`, Start a submission, Book a drop-off without a list, Sign in in the header | `grade10-site-grading-submission-plan-SC-01` |
+| Signed in (`G01`) | the account line; Your submissions as one `Card` per submission with the summary, the status word, the chip and the id; What it costs below | `grade10-site-grading-submission-plan-SC-41` |
+| Signed in, none | `EmptyState` under Your submissions; Start a submission | `grade10-site-grading-submission-plan-SC-46` |
+| Sign in, link sent | the same-email, no-password line after the address is given | `grade10-site-grading-submission-plan-SC-41` |
+| Fee sheet, one grader | the level rows: ceiling, cards a submission, fee, weeks; the example-fees lead; the above-the-top and Bulk lines | `grade10-site-grading-submission-plan-SC-04`, `grade10-site-grading-submission-plan-SC-48` |
+| Fee sheet, cover column | Express and Super Express rows carry the cover rate | `grade10-site-grading-submission-plan-SC-05` |
+| Fee sheet, three graders | a `SegmentedControl` per grader over its own sheet | `grade10-site-grading-submission-plan-SC-47` |
+| Error | the message in the error tone; no list | `grade10-site-grading-submission-plan-SC-03` |
 
 ### Plan wizard — the cards
 
@@ -324,23 +324,23 @@ Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-s
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Rail, the cards | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-US-02` |
-| About you, signed in (`G02`) | name, email, phone prefilled; the change-for-this-submission line | `grade10-site-grading-submission-plan-US-02` |
-| About you, signed out | empty fields; the emailed-link line under the email | `grade10-site-grading-submission-plan-US-06` |
-| Empty list | no card; Add a card and Paste a list; Continue disabled | `grade10-site-grading-submission-plan-US-02` |
-| Card search | `Autocomplete` over the reference as the name is typed; a miss keeps the name | `grade10-site-grading-submission-plan-US-02` |
-| Card, matched (`G02`) | the set · number · matched line; Edit and remove; the declared value; the three reference sales with the reference note | `grade10-site-grading-submission-plan-US-02` |
-| Card, kept as typed | the name as typed; no reference row | `grade10-site-grading-submission-plan-US-03` |
-| Card, no value | the declared value asked for on the card; Continue disabled naming the count | `grade10-site-grading-submission-plan-US-03` |
-| Card, minimum grade | the caption: only encapsulate at PSA 9 or above, the fee applies either way | `grade10-site-grading-submission-plan-US-02` |
-| Card, above Bulk's ceiling | more than 20 cards and the card above Bulk's ceiling: the line naming a second submission on the same drop-off | `grade10-site-grading-submission-plan-US-04` |
-| Reference unavailable | the catalogue could not be asked: every card kept as typed with that line, not the kept-as-typed one, and the value still asked for | `grade10-site-grading-submission-plan-US-03` |
-| Cap notice (`G02`) | one grader at one level; 20 from Value to Super Express, 100 at Bulk; the second-submission line | `grade10-site-grading-submission-plan-US-04` |
-| More than 20 | the notice reads Bulk is the only level open at the next step | `grade10-site-grading-submission-plan-US-04` |
-| Over the cap | the 101st card refused with the second-submission-another-day line | `grade10-site-grading-submission-plan-US-04` |
-| Continue | the count on the button | `grade10-site-grading-submission-plan-US-02` |
-| Finish later | the plan kept; the emailed-link line | `grade10-site-grading-submission-plan-US-06` |
-| Finish later, no email | the email asked for before the plan is kept | `grade10-site-grading-submission-plan-US-06` |
+| Rail, the cards | `WizardRail`: The cards `progress`, The service and Book `upcoming` | `grade10-site-grading-submission-plan-SC-08` |
+| About you, signed in (`G02`) | name, email, phone prefilled; the change-for-this-submission line | `grade10-site-grading-submission-plan-SC-09` |
+| About you, signed out | empty fields; the emailed-link line under the email | `grade10-site-grading-submission-plan-SC-09` |
+| Empty list | no card; Add a card and Paste a list; Continue disabled | `grade10-site-grading-submission-plan-SC-49`, `grade10-site-grading-submission-plan-SC-52` |
+| Card search | `Autocomplete` over the reference as the name is typed; a miss keeps the name | `grade10-site-grading-submission-plan-SC-51` |
+| Card, matched (`G02`) | the set · number · matched line; Edit and remove; the declared value; the three reference sales with the reference note | `grade10-site-grading-submission-plan-SC-10` |
+| Card, kept as typed | the name as typed; no reference row | `grade10-site-grading-submission-plan-SC-11` |
+| Card, no value | the declared value asked for on the card; Continue disabled naming the count | `grade10-site-grading-submission-plan-SC-13` |
+| Card, minimum grade | the caption: only encapsulate at PSA 9 or above, the fee applies either way | `grade10-site-grading-submission-plan-SC-14` |
+| Card, above Bulk's ceiling | more than 20 cards and the card above Bulk's ceiling: the line naming a second submission on the same drop-off | `grade10-site-grading-submission-plan-SC-22` |
+| Reference unavailable | the catalogue could not be asked: every card kept as typed with that line, not the kept-as-typed one, and the value still asked for | `grade10-site-grading-submission-plan-SC-12` |
+| Cap notice (`G02`) | one grader at one level; 20 from Value to Super Express, 100 at Bulk; the second-submission line | `grade10-site-grading-submission-plan-SC-21`, `grade10-site-grading-submission-plan-SC-23` |
+| More than 20 | the notice reads Bulk is the only level open at the next step | `grade10-site-grading-submission-plan-SC-19` |
+| Over the cap | the 101st card refused with the second-submission-another-day line | `grade10-site-grading-submission-plan-SC-21` |
+| Continue | the count on the button | **Out of suite:** the view's colocated test |
+| Finish later | the plan kept; the emailed-link line | `grade10-site-grading-submission-plan-SC-38` |
+| Finish later, no email | the email asked for before the plan is kept | `grade10-site-grading-submission-plan-SC-40` |
 
 ### Paste a list
 
@@ -348,16 +348,16 @@ Stories `grading-submission-gradingpastesheet--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Open (`G17`) | `Drawer`: the lead, Your list `Textarea`, the lines-read counter; Add n cards, Go back | `grade10-site-grading-submission-plan-US-03` |
-| Nothing read | the empty `Textarea`; Add disabled | `grade10-site-grading-submission-plan-US-03` |
-| Matching | the counter reads matching; Add disabled | `grade10-site-grading-submission-plan-US-03` |
-| Matched | the row with the count and the references-show line | `grade10-site-grading-submission-plan-US-03` |
-| Kept as typed | the row naming each line kept | `grade10-site-grading-submission-plan-US-03` |
-| Without a value | the row naming each line; the list asks for it before Continue | `grade10-site-grading-submission-plan-US-03` |
-| Above the ceiling | the row naming the card and its value, and the second-submission line | `grade10-site-grading-submission-plan-US-04` |
-| Skipped | a line naming a listed card: the skipped count | `grade10-site-grading-submission-plan-US-03` |
-| Bulk notice | more than 20 lines: Bulk the only level, its fee, ceiling, weeks, the longer drop-off, up to 100 | `grade10-site-grading-submission-plan-US-04` |
-| Reference unavailable | the catalogue could not be asked: every line carries that line rather than kept as typed, and Add stays enabled | `grade10-site-grading-submission-plan-US-03` |
+| Open (`G17`) | `Drawer`: the lead, Your list `Textarea`, the lines-read counter; Add n cards, Go back | `grade10-site-grading-submission-plan-SC-15` |
+| Nothing read | the empty `Textarea`; Add disabled | `grade10-site-grading-submission-plan-SC-53` |
+| Matching | the counter reads matching; Add disabled | **Out of suite:** the view's colocated test |
+| Matched | the row with the count and the references-show line | `grade10-site-grading-submission-plan-SC-15` |
+| Kept as typed | the row naming each line kept | `grade10-site-grading-submission-plan-SC-15` |
+| Without a value | the row naming each line; the list asks for it before Continue | `grade10-site-grading-submission-plan-SC-13` |
+| Above the ceiling | the row naming the card and its value, and the second-submission line | `grade10-site-grading-submission-plan-SC-54` |
+| Skipped | a line naming a listed card: the skipped count | `grade10-site-grading-submission-plan-SC-16` |
+| Bulk notice | more than 20 lines: Bulk the only level, its fee, ceiling, weeks, the longer drop-off, up to 100 | `grade10-site-grading-submission-plan-SC-19` |
+| Reference unavailable | the catalogue could not be asked: every line carries that line rather than kept as typed, and Add stays enabled | `grade10-site-grading-submission-plan-SC-18` |
 
 ### Plan wizard — the service
 
@@ -365,20 +365,20 @@ Stories `grading-submission-gradinglevelpicker--`, the Rail and Finish-later row
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Grader (`G03`) | `SegmentedControl` PSA · CGC · BGS; the highest-declared line | `grade10-site-grading-submission-plan-US-05` |
-| Level open | `RadioCard`: the name, value up to, fee a card, back in about | `grade10-site-grading-submission-plan-US-05` |
-| Level open, cover | the cover line on Express and Super Express | `grade10-site-grading-submission-plan-US-05` |
-| Level closed by a value | greyed: Not available, the card declared above the ceiling | `grade10-site-grading-submission-plan-US-05` |
-| Level closed by a count | Bulk greyed: Not available, Bulk starts at 20 and you have n | `grade10-site-grading-submission-plan-US-05` |
-| Bulk only | more than 20 cards: every other level closed by the count, Bulk open | `grade10-site-grading-submission-plan-US-04` |
-| Every level closed | a card above the top ceiling: the ask-at-the-counter line; Continue disabled | `grade10-site-grading-submission-plan-US-05` |
-| No level picked | no estimate; Continue disabled | `grade10-site-grading-submission-plan-US-05` |
-| Estimate | the dark `Card`: the total, n × fee · level · weeks, the paid-at-the-counter line, includes | `grade10-site-grading-submission-plan-US-05` |
-| Estimate with cover | the cover line per card under the fee and the total with it | `grade10-site-grading-submission-plan-US-05` |
-| Upcharge notice (`G03`) | the `Alert`: moved up a level, the difference passed on, told before collection | `grade10-site-grading-submission-plan-US-07` |
-| Grader with example figures | CGC or BGS: the levels as data with the example-fees line | `grade10-site-grading-submission-plan-US-05` |
-| Finish later at the service | the plan kept with the grader and the level picked; the emailed-link line | `grade10-site-grading-submission-plan-US-06` |
-| Rail, the service | The cards `completed`, The service `progress` | `grade10-site-grading-submission-plan-US-05` |
+| Grader (`G03`) | `SegmentedControl` PSA · CGC · BGS; the highest-declared line | `grade10-site-grading-submission-plan-SC-23` |
+| Level open | `RadioCard`: the name, value up to, fee a card, back in about | `grade10-site-grading-submission-plan-SC-57` |
+| Level open, cover | the cover line on Express and Super Express | `grade10-site-grading-submission-plan-SC-57` |
+| Level closed by a value | greyed: Not available, the card declared above the ceiling | `grade10-site-grading-submission-plan-SC-24` |
+| Level closed by a count | Bulk greyed: Not available, Bulk starts at 20 and you have n | `grade10-site-grading-submission-plan-SC-25` |
+| Bulk only | more than 20 cards: every other level closed by the count, Bulk open | `grade10-site-grading-submission-plan-SC-20` |
+| Every level closed | a card above the top ceiling: the ask-at-the-counter line; Continue disabled | `grade10-site-grading-submission-plan-SC-26` |
+| No level picked | no estimate; Continue disabled | `grade10-site-grading-submission-plan-SC-27` |
+| Estimate | the dark `Card`: the total, n × fee · level · weeks, the paid-at-the-counter line, includes | `grade10-site-grading-submission-plan-SC-28`, `grade10-site-grading-submission-plan-SC-30` |
+| Estimate with cover | the cover line per card under the fee and the total with it | `grade10-site-grading-submission-plan-SC-29` |
+| Upcharge notice (`G03`) | the `Alert`: moved up a level, the difference passed on, told before collection | `grade10-site-grading-submission-plan-SC-32` |
+| Grader with example figures | CGC or BGS: the levels as data with the example-fees line | `grade10-site-grading-submission-plan-SC-06` |
+| Finish later at the service | the plan kept with the grader and the level picked; the emailed-link line | `grade10-site-grading-submission-plan-SC-38` |
+| Rail, the service | The cards `completed`, The service `progress` | `grade10-site-grading-submission-plan-SC-08` |
 
 ### Plan wizard — book
 
@@ -386,17 +386,17 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Review (`G04`) | the header `Card` n cards to grader · level, back in about, Edit; the schedule; the totals; Good to know; the consent tick; Book the drop-off, Save and book later | `grade10-site-grading-submission-plan-US-07` |
-| Totals with cover | the cover line under the fee, per card and in total | `grade10-site-grading-submission-plan-US-07` |
-| Minimum grade on the schedule | the min line beside the card | `grade10-site-grading-submission-plan-US-02` |
-| Upcharge warning | per card: the PSA 10 reference above the ceiling, the level the grader moves it to, the difference due before collection, the higher level's fee now | `grade10-site-grading-submission-plan-US-07` |
-| No warning | no card above the ceiling: the block absent | `grade10-site-grading-submission-plan-US-07` |
-| Good to know | the five lines in order | `grade10-site-grading-submission-plan-US-07` |
-| Consent unticked | Book the drop-off disabled until the statement is ticked | `grade10-site-grading-submission-plan-US-07` |
-| Booking | Book pending; both buttons disabled | `grade10-site-grading-submission-plan-US-07` |
-| Saved for later | the plan kept; the page opens at Planned | `grade10-site-grading-submission-plan-US-06` |
-| Plan expired meanwhile | the refusal by name; Start again | `grade10-site-grading-submission-plan-US-08` |
-| Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-US-07` |
+| Review (`G04`) | the header `Card` n cards to grader · level, back in about, Edit; the schedule; the totals; Good to know; the consent tick; Book the drop-off, Save and book later | `grade10-site-grading-submission-plan-SC-31`, `grade10-site-grading-submission-plan-SC-34` |
+| Totals with cover | the cover line under the fee, per card and in total | `grade10-site-grading-submission-plan-SC-31` |
+| Minimum grade on the schedule | the min line beside the card | `grade10-site-grading-submission-plan-SC-14` |
+| Upcharge warning | per card: the PSA 10 reference above the ceiling, the level the grader moves it to, the difference due before collection, the higher level's fee now | `grade10-site-grading-submission-plan-SC-32` |
+| No warning | no card above the ceiling: the block absent | `grade10-site-grading-submission-plan-SC-33` |
+| Good to know | the five lines in order | `grade10-site-grading-submission-plan-SC-34` |
+| Consent unticked | Book the drop-off disabled until the statement is ticked | `grade10-site-grading-submission-plan-SC-35` |
+| Booking | Book pending; both buttons disabled | **Out of suite:** the view's colocated test |
+| Saved for later | the plan kept; the page opens at Planned | `grade10-site-grading-submission-plan-SC-58` |
+| Plan expired meanwhile | the refusal by name; Start again | `grade10-site-grading-submission-plan-SC-45` |
+| Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
 
 ### Book the drop-off
 
@@ -454,9 +454,9 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Chip: On their way back | Grades are in | `grade10-site-grading-submission-lifecycle-US-01` |
 | Chip: Collected | Back with you and the date | `grade10-site-grading-submission-lifecycle-US-09` |
 | Chip: none | Cancelled, Expired: the word alone | `grade10-site-grading-submission-lifecycle-US-10` |
-| Planned | Not handed in yet · Waiting on you; the estimate; Book the drop-off; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-US-06` |
-| Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-US-08` |
-| Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-US-08` |
+| Planned | Not handed in yet · Waiting on you; the estimate; Book the drop-off; Edit the list; `GradingCardRecord` without intake ids; `GradingMoneyBlock` at the estimate; the kept-until line; History; Cancel this submission | `grade10-site-grading-submission-plan-SC-42` |
+| Nudged | the kept-until line reads the expiry day | `grade10-site-grading-submission-plan-SC-43` |
+| Expired | Expired; the rail ended at Planned; nothing paid, nothing owed; Start a submission | `grade10-site-grading-submission-plan-SC-44` |
 | Booked (`G07`) | Drop-off booked · Drop-off <day>; the lead; Edit the list; `BookingManageCard` with Add to calendar, Move, Cancel visit and the day-before line; the cards; the money block; History; Cancel this submission | `grade10-site-grading-dropoff-booking-SC-12` |
 | Booked, joined | the visit card names the submission that owns it | `grade10-site-grading-dropoff-booking-SC-20` |
 | Visit detached | the owner cancelled or missed the visit: the joiner back to Not handed in yet, the list and the estimate as they were, Book another drop-off | `grade10-site-grading-dropoff-booking-SC-22` |

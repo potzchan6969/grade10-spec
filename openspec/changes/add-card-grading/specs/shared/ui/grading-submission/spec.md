@@ -216,6 +216,17 @@ card moved up a level is charged the difference before collection.
 **Levels as data** - a grader whose figures nobody has supplied SHALL still
 render its levels, with the line it is given about them.
 
+#### Scenario: shared-ui-grading-submission-SC-60 - The picker names the graders and the highest declared value
+**Serves:** Reading what it costs - a collector reads which grader they are pricing and the figure the levels are read against
+
+- **GIVEN** `GradingLevelPicker` given three graders, the second selected, and
+  a highest declared value
+- **WHEN** it renders
+- **THEN** the three graders are shown with the second marked, and that
+  grader's levels are rendered
+- **AND** the highest declared value is shown as given
+- **AND** activating the third reports that grader's id
+
 #### Scenario: shared-ui-grading-submission-SC-06 - An open level is picked by id
 **Serves:** Reading what it costs - a collector picks the level their cards leave on
 
@@ -366,6 +377,23 @@ own.
 - **THEN** that card is named as above the ceiling
 - **AND** the line about a second submission on the same drop-off is shown
 
+#### Scenario: shared-ui-grading-submission-SC-61 - Each act on the list reports through its own callback
+**Serves:** Listing the cards - a collector building the list a card at a time
+
+- **GIVEN** a list carrying one card
+- **WHEN** the collector adds a card, edits that card, declares a value on it,
+  sets a minimum grade on it, removes it, and opens the paste sheet
+- **THEN** each act reports through the callback of its own
+- **AND** the list carries none of them out itself
+
+#### Scenario: shared-ui-grading-submission-SC-62 - The cap reads with the level the count closes
+**Serves:** Listing the cards - a collector reading how many cards this submission takes and which level a longer list leaves
+
+- **GIVEN** a list given a cap of 20 cards and 22 cards listed
+- **WHEN** `GradingCardList` renders it
+- **THEN** the cap it was given is shown
+- **AND** the level the count closes is named as it was given
+
 ### Requirement: The paste sheet accounts for every line
 
 A pasted list, one card a line, and what the paste made of each.
@@ -390,8 +418,10 @@ the longer drop-off and the cards it takes.
 SHALL carry the catalogue-unavailable line rather than the kept-as-typed one,
 and the add SHALL stay offered.
 
-**Acts** - changing the text, adding the cards and closing the sheet SHALL
-each report through a callback of its own.
+**Acts** - changing the text and closing the sheet SHALL each report through a
+callback of its own, and adding the cards SHALL report through `onApply`
+carrying the cards the paste made - matched, kept as typed and the rest - which
+the composing page feeds to `GradingCardList`'s `cards`.
 
 #### Scenario: shared-ui-grading-submission-SC-20 - Nothing read, nothing added
 **Serves:** Listing the cards - a collector who opens the paste sheet and pastes nothing
@@ -425,6 +455,14 @@ each report through a callback of its own.
 - **WHEN** `GradingPasteSheet` renders it
 - **THEN** that row names the card and its declared value
 - **AND** the second-submission line it was given is shown
+
+#### Scenario: shared-ui-grading-submission-SC-63 - The paste reports its cards through onApply
+**Serves:** Listing the cards - a dealer whose pasted list becomes the list they then edit
+
+- **GIVEN** a result of matched, kept-as-typed and valueless cards
+- **WHEN** the collector activates the add
+- **THEN** `onApply` reports those cards
+- **AND** the sheet adds none of them to any list itself
 
 ### Requirement: The review shows the schedule, the totals and what a card could cost
 
@@ -584,8 +622,9 @@ taken, and the certificate with the lookup address it is given where one was
 issued.
 
 **The outcome** - each card SHALL carry one badge with its line in the
-collector's words, from this set, and the block SHALL show the badge and the
-line it is given rather than deriving either:
+collector's words, from this set. The consumer SHALL supply the outcome and
+the line, and the block SHALL read the badge's tone from the outcome through
+one map of its own, taking no tone from the consumer:
 
 | Outcome | What the card reads beside the badge |
 | --- | --- |
@@ -620,6 +659,15 @@ line it is given rather than deriving either:
 - **WHEN** `GradingCardRecord` renders them
 - **THEN** each card shows that badge and that line
 - **AND** a card still listed shows no intake id
+
+#### Scenario: shared-ui-grading-submission-SC-64 - The badge's tone comes from the outcome
+**Serves:** The cards after hand-in - a collector reads the same outcome dressed the same way on every grading page
+
+- **GIVEN** cards carrying the outcomes of the table above, with their words
+  and lines and no tone
+- **WHEN** `GradingCardRecord` renders them
+- **THEN** each badge reads in the tone the block's map gives that outcome
+- **AND** an outcome's tone is the same on every page that renders it
 
 #### Scenario: shared-ui-grading-submission-SC-36 - A certificate reads against the address it was given
 **Serves:** The cards after hand-in - a collector looking a slab up with the grader

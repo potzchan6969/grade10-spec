@@ -40,10 +40,9 @@ it; no statute here is asserted.
   **2,555**, photos **2,555**, identity **1,825**; seven years is the
   business-record window recalled for Hong Kong, five the AML window. Legal
   confirms them
-- 🚧 **The submission record** — a case-records class at **2,555** days: a
-  grading submission's collector name, email, phone and postal address, the
-  card list, the pickup code and the messages, from the day the submission
-  ended — [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
+- 🚧 **The submission record** — a class of its own, case records, at
+  **2,555** days from the day a grading submission ended —
+  [The Submission](/p/grade10-site/grading/submission#the-record-after-collection)
 - **The review is a review** — the sweep flags a case past its window and
   deletes nothing; deletion on expiry is a second decision, and a class with
   no window is flagged as unset rather than treated as zero
