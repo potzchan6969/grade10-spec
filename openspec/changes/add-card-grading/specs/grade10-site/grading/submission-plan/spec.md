@@ -126,6 +126,22 @@ its own words and list nothing.
 - **THEN** the failure is shown in the page's own words
 - **AND** no submission is listed
 
+#### Scenario: grade10-site-grading-submission-plan-SC-46 - A collector who has planned nothing is told so
+**Serves:** grade10-site-grading-submission-plan-US-06 - a collector signing in to find a submission they have never made
+
+- **GIVEN** a signed-in collector with no submission under their email
+- **WHEN** they open the grading home
+- **THEN** the home says they have none
+- **AND** starting a submission is offered
+
+#### Scenario: grade10-site-grading-submission-plan-SC-47 - Every grader with active levels shows its own sheet
+**Serves:** grade10-site-grading-submission-plan-US-01 - a collector comparing what two graders charge before starting anything
+
+- **GIVEN** three graders whose levels are active
+- **WHEN** a collector reads the fee sheet on the home
+- **THEN** all three graders are offered
+- **AND** the sheet read is the levels of the grader chosen
+
 ### Requirement: One fee sheet per grader, one row per level
 
 The sheet is what a submission is priced on. It is a record per grader and
@@ -148,6 +164,10 @@ submission.
 
 **Above the top ceiling** - a card declared above every level's ceiling SHALL
 be sent to the counter rather than priced.
+
+**Wherever the sheet is read** - the note that such a card is asked about at
+the counter or on WhatsApp SHALL be part of the sheet and SHALL be shown
+wherever the sheet is shown, the signed-out home included.
 
 The sheet opens on these figures, in HKD minor units:
 
@@ -190,6 +210,15 @@ The sheet opens on these figures, in HKD minor units:
 - **THEN** the card is not priced
 - **AND** the collector is told to ask at the counter
 
+#### Scenario: grade10-site-grading-submission-plan-SC-48 - The signed-out home's sheet names the counter for a card above the top ceiling
+**Serves:** grade10-site-grading-submission-plan-US-01 - a collector with a card worth more than the sheet prices, reading the home before giving a name
+
+- **WHEN** a collector who is not signed in reads the fee sheet on the grading
+  home
+- **THEN** the sheet says a card declared above the top level's ceiling is
+  asked about at the counter or on WhatsApp
+- **AND** the same note is shown wherever the sheet is read
+
 ### Requirement: A collector plans a submission in three steps
 
 A submission is planned on a phone, in three steps, and nothing is paid or
@@ -211,6 +240,12 @@ still to come.
 filled in from their account and SHALL remain changeable for this submission
 alone; a collector who is not signed in SHALL be asked for them.
 
+**Starting** - starting a submission SHALL open the cards step with no card on
+it, offering both adding a card and pasting a list.
+
+**Removing a card** - a card on the list SHALL be removable, and the cards left
+SHALL be unchanged.
+
 #### Scenario: grade10-site-grading-submission-plan-SC-08 - The wizard shows which step the collector is on
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector working through the three steps with a handful of cards
 
@@ -226,6 +261,21 @@ alone; a collector who is not signed in SHALL be asked for them.
   be changed for this submission alone
 - **AND** a collector who is not signed in is asked for all three
 
+#### Scenario: grade10-site-grading-submission-plan-SC-49 - Starting a submission opens the cards step with nothing on it
+**Serves:** grade10-site-grading-submission-plan-US-02 - a collector starting their list from the home
+
+- **WHEN** a collector starts a submission from the home
+- **THEN** the cards step opens with no card listed
+- **AND** adding a card and pasting a list are both offered
+
+#### Scenario: grade10-site-grading-submission-plan-SC-50 - A card removed leaves the rest of the list alone
+**Serves:** grade10-site-grading-submission-plan-US-02 - a collector taking a card back off the list they are writing
+
+- **GIVEN** a list of two cards
+- **WHEN** the collector removes one of them
+- **THEN** that card is off the list
+- **AND** the other card is listed as it was
+
 ### Requirement: A card is matched in the card price reference or kept in the collector's own words
 
 Each card is named against the shop's card price reference, and a card the
@@ -239,6 +289,10 @@ be described as a valuation of the card.
 
 **Kept as typed** - a card the reference does not answer for SHALL be kept in
 the name the collector typed, with no reference sales beside it.
+
+**However the card arrived** - a card added by hand and a card read from a
+paste SHALL be matched the same way and SHALL carry the same outcomes: matched,
+kept as typed, or without a value.
 
 **The reference out of reach** - where the reference cannot be asked at all,
 every card SHALL be kept as typed and marked as unasked rather than unmatched,
@@ -269,6 +323,14 @@ reference.
   unmatched
 - **AND** the declared value is still asked for and the list can be finished
 
+#### Scenario: grade10-site-grading-submission-plan-SC-51 - A card added by hand is matched the way a pasted line is
+**Serves:** grade10-site-grading-submission-plan-US-02 - a collector adding by hand a card the reference does not answer for
+
+- **WHEN** a collector adds a card by hand under a name the reference does not
+  answer for
+- **THEN** the card is kept in the name as typed, as a pasted line would be
+- **AND** its declared value is asked for on the card
+
 ### Requirement: Every card carries a declared value, and may carry a minimum grade
 
 The declared value is what picks the level and what cover is bought against, so
@@ -276,6 +338,9 @@ no card goes without one.
 
 **Asked on every card** - a declared value SHALL be asked for on every card, as
 an integer count of HKD minor units.
+
+**No cards, no step** - leaving the cards step SHALL be refused while the list
+holds no card.
 
 **No value, no step** - leaving the cards step SHALL be refused while any card
 carries no declared value, and the refusal SHALL name how many cards are
@@ -305,6 +370,13 @@ the review's schedule.
 - **THEN** the card carries that minimum grade on the review's schedule
 - **AND** the fee for that card is the level's fee a card, unchanged
 
+#### Scenario: grade10-site-grading-submission-plan-SC-52 - A list with no card on it holds the step
+**Serves:** grade10-site-grading-submission-plan-US-02 - a collector who opens the wizard and lists nothing
+
+- **GIVEN** a plan whose list holds no card
+- **WHEN** the collector tries to leave the cards step
+- **THEN** it is refused
+
 ### Requirement: A pasted list accounts for every line
 
 A long list is pasted one card a line - name, set and number, then the value -
@@ -329,6 +401,16 @@ back, its cap of 100 cards and the longer drop-off it takes.
 
 **The reference out of reach** - where the reference cannot be asked, every
 line SHALL be marked as unasked and the cards SHALL still be addable.
+
+**Nothing read** - a paste holding no line SHALL report no outcome and SHALL
+offer nothing to add.
+
+**Which ceiling** - the ceiling a line is read against SHALL be the highest
+ceiling still open to the list: the grader's top ceiling, or Bulk's where the
+count has already left Bulk the only open level.
+
+**Above the top ceiling** - a line declared above the grader's top ceiling
+SHALL be sent to the counter rather than named for a second submission.
 
 #### Scenario: grade10-site-grading-submission-plan-SC-15 - A paste reports what became of every line
 **Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting many cards at once
@@ -370,6 +452,22 @@ line SHALL be marked as unasked and the cards SHALL still be addable.
   about 10 weeks, up to 100 cards
 - **AND** it says the drop-off takes the longer visit
 
+#### Scenario: grade10-site-grading-submission-plan-SC-53 - A paste with nothing in it adds nothing
+**Serves:** grade10-site-grading-submission-plan-US-03 - a collector who opens the paste and pastes nothing
+
+- **GIVEN** a paste holding no line
+- **WHEN** the collector reads it
+- **THEN** no outcome is reported and nothing is offered to add
+
+#### Scenario: grade10-site-grading-submission-plan-SC-54 - A pasted line above every level's ceiling goes to the counter
+**Serves:** grade10-site-grading-submission-plan-US-03 - a collector pasting a card worth more than the sheet prices, before a level is picked
+
+- **GIVEN** a grader whose top ceiling is 3900000 HKD minor units
+- **WHEN** a line declaring 4200000 HKD minor units is pasted
+- **THEN** the line reports above the ceiling
+- **AND** the collector is told to ask at the counter rather than named a
+  second submission
+
 ### Requirement: Cards a submission is a column of the fee sheet
 
 How many cards one submission holds is the level's own figure, not a rule of
@@ -381,8 +479,9 @@ fee sheet's cards-a-submission column for that level.
 **The floor** - a level whose column names a floor SHALL close while the list
 holds fewer cards than that floor.
 
-**Twenty or more** - a list of 20 cards or more SHALL leave Bulk as the only
-open level, because every other level's column tops out at 20.
+**More than twenty** - a list of more than 20 cards SHALL leave Bulk as the
+only open level, because every other level's column tops out at 20; a list of
+exactly 20 SHALL leave every level open.
 
 **The ceiling** - a card added past the highest cards-a-submission any level
 allows SHALL be refused, and the refusal SHALL say that the rest go in a second
@@ -403,6 +502,21 @@ submission on another day.
 - **WHEN** a hundred and first card is added
 - **THEN** it is refused
 - **AND** the refusal says the rest go in a second submission on another day
+
+#### Scenario: grade10-site-grading-submission-plan-SC-55 - Twenty cards leave every level open
+**Serves:** grade10-site-grading-submission-plan-US-04 - a dealer whose list stops at the twenty the sheet allows
+
+- **GIVEN** a list of 20 cards, none declared above any level's ceiling
+- **WHEN** the collector reads the levels
+- **THEN** Value, Regular, Express, Super Express and Bulk are all open
+
+#### Scenario: grade10-site-grading-submission-plan-SC-56 - The hundredth card is added at Bulk's cap
+**Serves:** grade10-site-grading-submission-plan-US-04 - a dealer filling one submission to the cap
+
+- **GIVEN** a list of 99 cards at Bulk
+- **WHEN** a hundredth card is added
+- **THEN** it is added to the list
+- **AND** nothing is said about a second submission
 
 ### Requirement: A card above the level's ceiling goes in a second submission on the same drop-off
 
@@ -439,6 +553,9 @@ level for every card on it.
 
 **Open** - a level SHALL be open when every declared value on the list is at or
 below its ceiling and the card count is inside its cards-a-submission column.
+
+**What an open level reads** - an open level SHALL read its ceiling, its fee a
+card, its weeks back, and its cover rate where it carries one.
 
 **Closed by a value** - a level closed because a card is declared above its
 ceiling SHALL name that card.
@@ -493,6 +610,16 @@ collector leave the service step.
 - **WHEN** a collector has picked a grader but no level
 - **THEN** no estimate is shown
 - **AND** the collector cannot leave the service step
+
+#### Scenario: grade10-site-grading-submission-plan-SC-57 - An open level reads its ceiling, its fee and its weeks back
+**Serves:** grade10-site-grading-submission-plan-US-05 - a collector reading what each open level takes and costs
+
+- **GIVEN** a list of four cards whose highest declared value is 850000 HKD
+  minor units
+- **WHEN** the collector reads the open levels
+- **THEN** Regular reads its ceiling of 1170000 HKD minor units, its fee of
+  60000 HKD minor units a card and its 5 weeks back
+- **AND** Express reads its cover rate beside the same three
 
 ### Requirement: The estimate is the fee a card times the cards, with the cover line where the level carries one
 
@@ -578,6 +705,10 @@ is booked:
 **The consent** - the collector SHALL tick the personal information collection
 statement, and booking the drop-off SHALL be refused until they have.
 
+**Saving for later** - the statement SHALL gate booking the drop-off alone;
+keeping the plan for later SHALL be offered with it unticked, and the plan
+SHALL be kept unticked.
+
 #### Scenario: grade10-site-grading-submission-plan-SC-31 - The review totals the declared value, the fee and the cover
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector reading the whole submission back before booking
 
@@ -622,6 +753,14 @@ statement, and booking the drop-off SHALL be refused until they have.
 - **WHEN** the collector tries to book the drop-off
 - **THEN** it is refused
 - **AND** booking is offered again once the statement is ticked
+
+#### Scenario: grade10-site-grading-submission-plan-SC-58 - Saving the plan for later needs no tick
+**Serves:** grade10-site-grading-submission-plan-US-07 - a collector who reads the review and leaves without booking
+
+- **GIVEN** a review whose collection statement is not ticked
+- **WHEN** the collector saves the plan to book later
+- **THEN** the plan is kept with the statement unticked
+- **AND** booking the drop-off is the only thing that was refused
 
 ### Requirement: A plan is priced on the fee sheet it was booked on
 
@@ -755,3 +894,11 @@ SHALL be refused by name, and SHALL NOT be retried against the expired plan.
 - **WHEN** the collector books the drop-off
 - **THEN** it is refused by name
 - **AND** the collector is offered starting a submission again
+
+#### Scenario: grade10-site-grading-submission-plan-SC-59 - A plan with a drop-off booked does not expire
+**Serves:** grade10-site-grading-submission-plan-US-08 - a collector whose visit is booked weeks ahead of the day it falls due
+
+- **GIVEN** a plan kept 30 Asia/Hong_Kong days ago with a drop-off booked
+- **WHEN** the day turns
+- **THEN** the plan does not expire
+- **AND** no nudge and no expiry message is sent

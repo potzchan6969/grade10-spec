@@ -138,6 +138,9 @@ named.
 **A submission that has ended** - collected, cancelled, expired, or its last
 card paid out - SHALL refuse nothing.
 
+**A submission never booked** - one still planned SHALL refuse nothing, and
+holds nothing for the review to report.
+
 **Withheld in the collector's words** - where the ask is filed, a live
 submission SHALL withhold it in the collector's words - cards of theirs with
 the grader, money to settle, or cards waiting to be collected - and nothing
@@ -176,6 +179,14 @@ SHALL be filed.
 - **WHEN** their erasure is run
 - **THEN** no submission refuses it
 
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-38 - A submission nobody booked refuses nothing and goes with the account
+**Serves:** `grade10-site-vault-retention-and-erasure-US-04` - a collector asking to be forgotten over a list they planned and never booked
+
+- **GIVEN** a collector whose only submission is still planned, never booked
+- **WHEN** their erasure is run
+- **THEN** no submission refuses it
+- **AND** the planned submission is purged, nothing of it naming the collector
+
 ### Requirement: A submission that was signed keeps its evidence and one nobody signed is purged
 
 What an erasure leaves of a submission is decided by whether anything was
@@ -191,6 +202,9 @@ SHALL be removed from every submission.
 
 **Never signed** - a submission that ended with nothing sealed SHALL be purged,
 the signing ceremony's own personal data with it.
+
+**Never booked** - a submission still planned SHALL be purged with the account,
+whether or not it has ended.
 
 **Owed mail** - every message the submission still owed SHALL be deleted.
 

@@ -9,7 +9,7 @@ signed.
 
 ### grade10-site-vault-retention-and-erasure-US-03: Compliance officer sees what is being kept too long
 
-**As an** admin answerable for what we keep,
+**As** the person answerable for what we keep,
 **I want** a list of closed cases past the window for each class, and to be
 told which windows nobody has decided,
 **so that** deleting is a decision somebody makes rather than something that

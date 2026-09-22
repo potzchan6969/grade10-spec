@@ -3,6 +3,14 @@
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
 
+**Out of suite:**
+
+- `grade10-site-grading-counter-documents-SC-01` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-11`
+- `grade10-site-grading-counter-documents-SC-03` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
+- `grade10-site-grading-counter-documents-SC-13` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-03`
+- `grade10-site-grading-counter-documents-SC-15` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
+- `grade10-site-grading-counter-documents-SC-20` — walked in `grade10-site/grading/submission-lifecycle`'s suite, at its `grade10-site-grading-submission-lifecycle-US-02`
+
 ## grade10-site-grading-counter-documents-US1: Collector signs the submission agreement at the counter
 
 **As a** collector at the shop counter with every card checked,
@@ -1006,9 +1014,9 @@ eight ADDED requirements; the blind suite wrote 23 cases over `US1` to `US5`.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| Raised: does the receipt's signing block refuse a name mismatch the way the agreement's does? | **Raised, folded in** | It does, against the booking's name or the named person's. Folded as `grade10-site-grading-counter-documents-SC-28` and a line on the ceremony requirement's `**The name**` rule; landed as `Q53`. Case `grade10-site-grading-counter-documents-US3-TC8-1` added |
-| Raised: is the named person's prefilled name editable? | **Raised, folded in** | It is fixed — the collector named them and the counter's ID glance checks it. Folded as `grade10-site-grading-counter-documents-SC-29` and a `**The named person**` rule on the hand-back receipt; landed as `Q54`. Case `grade10-site-grading-counter-documents-US4-TC2-1` added |
-| Raised: do two receipt-worthy exceptions on one submission print one receipt or two? | **Raised, folded in** | One receipt per hand-back, with a line per card stating that card's outcome. Folded as `grade10-site-grading-counter-documents-SC-30` and a `**Several outcomes at once**` rule; landed as `Q55`. Case `grade10-site-grading-counter-documents-US3-TC9-1` added |
+| Raised: does the receipt's signing block refuse a name mismatch the way the agreement's does? | **Raised, folded in** | It does, against the booking's name or the named person's. Folded as `grade10-site-grading-counter-documents-SC-28` and a line on the ceremony requirement's `**The name**` rule; landed as `Q57`. Case `grade10-site-grading-counter-documents-US3-TC8-1` added |
+| Raised: is the named person's prefilled name editable? | **Raised, folded in** | It is fixed — the collector named them and the counter's ID glance checks it. Folded as `grade10-site-grading-counter-documents-SC-29` and a `**The named person**` rule on the hand-back receipt; landed as `Q58`. Case `grade10-site-grading-counter-documents-US4-TC2-1` added |
+| Raised: do two receipt-worthy exceptions on one submission print one receipt or two? | **Raised, folded in** | One receipt per hand-back, with a line per card stating that card's outcome. Folded as `grade10-site-grading-counter-documents-SC-30` and a `**Several outcomes at once**` rule; landed as `Q59`. Case `grade10-site-grading-counter-documents-US3-TC9-1` added |
 | `grade10-site-grading-counter-documents-US1-TC1-1` — "the fee is charged at the till only after the seal" | **Kept, stated elsewhere** | Grading's money is the counter's and the lifecycle's, not this capability's paper; `Q4` decides it and no scenario is folded here |
 | `grade10-site-grading-counter-documents-US1-TC3-1` — Sign *disabled* rather than refused | **Kept, no change** | The same rule as `grade10-site-grading-counter-documents-SC-06`; the disabled control is that refusal's presentation, and the `Postal address empty` design row carries it |
 | `grade10-site-grading-counter-documents-US1-TC7-1`, `…-US3-TC6-1`, `…-US3-TC7-1` — refusal fired at the sign link | **Amended** | The rules refuse at preparation, before anything is rendered (`grade10-site-grading-counter-documents-SC-23`, `…-SC-02`), so the three cases could not be reached as written. Steps moved to preparing the document; no behaviour claimed beyond the scenarios |

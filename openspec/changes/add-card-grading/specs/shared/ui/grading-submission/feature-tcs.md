@@ -7,7 +7,7 @@
 
 * Every case opens the block under test from its own story in the design workbench, with no network, application state, routing or browser storage behind it.
 
-## grading-submission-US1: The grading submission blocks
+## shared-ui-grading-submission-US1: The grading submission blocks
 
 **Walked by:** nobody on their own - a component contract every collector-facing grading page composes; the journeys of `grade10-site/grading/submission-plan`, `grade10-site/grading/dropoff-booking` and `grade10-site/grading/submission-lifecycle` are what reach it.
 
@@ -15,7 +15,7 @@
 **I want** the collector-facing blocks and every state through props alone,
 **so that** every grading surface composes the same contract instead of redrawing it.
 
-### grading-submission-US1-TC1-1: Every named grading block exports from the package entry
+### shared-ui-grading-submission-US1-TC1-1: Every named grading block exports from the package entry
 
 **Classification:**
 
@@ -44,7 +44,7 @@
 * `GradingFeeSheet`, `GradingCardList`, `GradingCardRecord`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `GradingStatusRail`, `GradingOwnershipChip`, `GradingPickupCard`, `GradingNamedCollector`, `GradingGradeCards`, `GradingMoneyBlock` and `GradingUncollectedLadder` are all exported.
 * Each export carries its own prop type and a `copy` type for its words.
 
-### grading-submission-US1-TC2-1: The booking set is imported unchanged, not redrawn
+### shared-ui-grading-submission-US1-TC2-1: The booking set is imported unchanged, not redrawn
 
 **Classification:**
 
@@ -71,7 +71,7 @@
 
 * No grading export duplicates a booking block.
 
-### grading-submission-US1-TC3-1: No console-shaped component ships from the package
+### shared-ui-grading-submission-US1-TC3-1: No console-shaped component ships from the package
 
 **Classification:**
 
@@ -98,7 +98,7 @@
 
 * No export renders a console view; every export is collector-facing.
 
-### grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
+### shared-ui-grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
 
 **Classification:**
 
@@ -127,7 +127,7 @@
 * Every level row names its ceiling, cards a submission, fee and weeks back.
 * No `SegmentedControl` renders, since there is one grader.
 
-### grading-submission-US1-TC5-1: Cover rate shows only on the levels that carry one
+### shared-ui-grading-submission-US1-TC5-1: Cover rate shows only on the levels that carry one
 
 **Classification:**
 
@@ -156,7 +156,7 @@
 * Express and Super Express name their cover rate.
 * Every other level's cover column is empty.
 
-### grading-submission-US1-TC6-1: A grader per tab keeps three fee sheets apart
+### shared-ui-grading-submission-US1-TC6-1: A grader per tab keeps three fee sheets apart
 
 **Classification:**
 
@@ -185,7 +185,7 @@
 * A `SegmentedControl` lists all three graders.
 * `onSelectGrader` fires with the second grader's id, and its own table replaces the first's.
 
-### grading-submission-US1-TC7-1: A closed level names what closes it
+### shared-ui-grading-submission-US1-TC7-1: A closed level names what closes it
 
 **Classification:**
 
@@ -214,7 +214,7 @@
 * Each closed level renders the reason its `levels` entry carries.
 * Neither closed level can be selected.
 
-### grading-submission-US1-TC8-1: The estimate reads cards times fee plus the cover line
+### shared-ui-grading-submission-US1-TC8-1: The estimate reads cards times fee plus the cover line
 
 **Classification:**
 
@@ -242,7 +242,7 @@
 
 * The estimate shows cards × fee, the cover line and the total, matching the fee sheet's own figures for that level.
 
-### grading-submission-US1-TC9-1: No level picked shows no estimate
+### shared-ui-grading-submission-US1-TC9-1: No level picked shows no estimate
 
 **Classification:**
 
@@ -269,7 +269,7 @@
 
 * No estimate `Card` renders.
 
-### grading-submission-US1-TC10-1: A matched card shows its reference sales
+### shared-ui-grading-submission-US1-TC10-1: A matched card shows its reference sales
 
 **Classification:**
 
@@ -297,7 +297,7 @@
 
 * The card shows the set, number and matched line, the declared value and the three reference sales.
 
-### grading-submission-US1-TC11-1: A card kept as typed shows no reference row
+### shared-ui-grading-submission-US1-TC11-1: A card kept as typed shows no reference row
 
 **Classification:**
 
@@ -325,7 +325,7 @@
 * The card shows the name as typed.
 * No reference sales row renders.
 
-### grading-submission-US1-TC12-1: A card with no declared value is named on the list
+### shared-ui-grading-submission-US1-TC12-1: A card with no declared value is named on the list
 
 **Classification:**
 
@@ -352,7 +352,7 @@
 
 * The list names the card with no value.
 
-### grading-submission-US1-TC13-1: A card above a ceiling is named on the list
+### shared-ui-grading-submission-US1-TC13-1: A card above a ceiling is named on the list
 
 **Classification:**
 
@@ -379,7 +379,7 @@
 
 * The list names the card above the ceiling.
 
-### grading-submission-US1-TC14-1: An empty card list shows no card
+### shared-ui-grading-submission-US1-TC14-1: An empty card list shows no card
 
 **Classification:**
 
@@ -407,7 +407,7 @@
 * No card renders.
 * Add a card and Paste a list remain available.
 
-### grading-submission-US1-TC15-1: Adding, editing and removing a card fire their callbacks
+### shared-ui-grading-submission-US1-TC15-1: Adding, editing and removing a card fire their callbacks
 
 **Classification:**
 
@@ -437,7 +437,7 @@
 * `onEdit` fires with the changed declared value.
 * `onRemove` fires with the removed card's id.
 
-### grading-submission-US1-TC16-1: The paste result names each outcome's count and line
+### shared-ui-grading-submission-US1-TC16-1: The paste result names each outcome's count and line
 
 **Classification:**
 
@@ -465,7 +465,7 @@
 
 * Each of the five outcomes shows its own count and line.
 
-### grading-submission-US1-TC17-1: The Bulk notice renders once the pasted list carries it
+### shared-ui-grading-submission-US1-TC17-1: The Bulk notice renders once the pasted list carries it
 
 **Classification:**
 
@@ -492,7 +492,7 @@
 
 * The `bulkNotice` text renders in the sheet.
 
-### grading-submission-US1-TC18-1: Add stays disabled while the paste is matching
+### shared-ui-grading-submission-US1-TC18-1: Add stays disabled while the paste is matching
 
 **Classification:**
 
@@ -520,7 +520,7 @@
 * The line counter reads matching.
 * Add is disabled.
 
-### grading-submission-US1-TC19-1: The review schedule lists every card handed in
+### shared-ui-grading-submission-US1-TC19-1: The review schedule lists every card handed in
 
 **Classification:**
 
@@ -548,7 +548,7 @@
 
 * Every card's row names its declared value, fee and cover.
 
-### grading-submission-US1-TC20-1: The upcharge warning names both prices per card
+### shared-ui-grading-submission-US1-TC20-1: The upcharge warning names both prices per card
 
 **Classification:**
 
@@ -576,7 +576,7 @@
 
 * The warning names the card, the level it moves to, the difference due and the higher level's current fee.
 
-### grading-submission-US1-TC21-1: No card above a ceiling shows no upcharge warning
+### shared-ui-grading-submission-US1-TC21-1: No card above a ceiling shows no upcharge warning
 
 **Classification:**
 
@@ -603,7 +603,7 @@
 
 * No upcharge warning block renders.
 
-### grading-submission-US1-TC22-1: Book stays disabled until the consent tick is checked
+### shared-ui-grading-submission-US1-TC22-1: Book stays disabled until the consent tick is checked
 
 **Classification:**
 
@@ -632,7 +632,7 @@
 * Book the drop-off is disabled before the tick.
 * `onConsent` fires and Book becomes enabled once ticked.
 
-### grading-submission-US1-TC23-1: Booking pending disables both action buttons
+### shared-ui-grading-submission-US1-TC23-1: Booking pending disables both action buttons
 
 **Classification:**
 
@@ -659,7 +659,7 @@
 
 * Book the drop-off and Save and book later are both disabled.
 
-### grading-submission-US1-TC24-1: A booking error renders in the error tone
+### shared-ui-grading-submission-US1-TC24-1: A booking error renders in the error tone
 
 **Classification:**
 
@@ -686,7 +686,7 @@
 
 * The error message renders in the error tone.
 
-### grading-submission-US1-TC25-1: The status rail marks the reached stage among seven
+### shared-ui-grading-submission-US1-TC25-1: The status rail marks the reached stage among seven
 
 **Classification:**
 
@@ -716,7 +716,7 @@
 * Sent reads `progress`.
 * Graded through Home read `upcoming`.
 
-### grading-submission-US1-TC26-1: An ended submission's rail stays at its ending stage
+### shared-ui-grading-submission-US1-TC26-1: An ended submission's rail stays at its ending stage
 
 **Classification:**
 
@@ -744,7 +744,7 @@
 * The rail stays at Handed in as `progress`.
 * The word names the ending, not a later stage.
 
-### grading-submission-US1-TC27-1: The status word and the chip read as one pair
+### shared-ui-grading-submission-US1-TC27-1: The status word and the chip read as one pair
 
 **Classification:**
 
@@ -771,7 +771,7 @@
 
 * The status word and the chip render together from the one pair, in the tones the status table names.
 
-### grading-submission-US1-TC28-1: A closed submission shows the status word with no chip
+### shared-ui-grading-submission-US1-TC28-1: A closed submission shows the status word with no chip
 
 **Classification:**
 
@@ -798,7 +798,7 @@
 
 * Only the status word renders; no chip.
 
-### grading-submission-US1-TC29-1: The record names the intake id and photograph pair
+### shared-ui-grading-submission-US1-TC29-1: The record names the intake id and photograph pair
 
 **Classification:**
 
@@ -825,7 +825,7 @@
 
 * The card shows its intake id and both photographs.
 
-### grading-submission-US1-TC30-1: Every recorded outcome pairs its badge with its line
+### shared-ui-grading-submission-US1-TC30-1: Every recorded outcome pairs its badge with its line
 
 Runs once per row of **Test data**.
 
@@ -870,7 +870,7 @@ Runs once per row of **Test data**.
 
 * The card renders the badge tone and the line the row's outcome carries.
 
-### grading-submission-US1-TC31-1: A graded card names its grade and cert
+### shared-ui-grading-submission-US1-TC31-1: A graded card names its grade and cert
 
 **Classification:**
 
@@ -897,7 +897,7 @@ Runs once per row of **Test data**.
 
 * The card names the grade in the grader's words, the label word and the cert.
 
-### grading-submission-US1-TC32-1: An ungraded card names the grader's code and note
+### shared-ui-grading-submission-US1-TC32-1: An ungraded card names the grader's code and note
 
 **Classification:**
 
@@ -925,7 +925,7 @@ Runs once per row of **Test data**.
 * The card renders in the `error` tone.
 * The card names the code and the note in place of a grade.
 
-### grading-submission-US1-TC33-1: A listed card shows no photograph pair before hand-in
+### shared-ui-grading-submission-US1-TC33-1: A listed card shows no photograph pair before hand-in
 
 **Classification:**
 
@@ -952,7 +952,7 @@ Runs once per row of **Test data**.
 
 * No intake id and no photograph pair render.
 
-### grading-submission-US1-TC34-1: The pickup card asks for an ID above the threshold
+### shared-ui-grading-submission-US1-TC34-1: The pickup card asks for an ID above the threshold
 
 **Classification:**
 
@@ -979,7 +979,7 @@ Runs once per row of **Test data**.
 
 * The card shows the code, the items, where and when, what is due as one figure, and asks for an ID matching the name.
 
-### grading-submission-US1-TC35-1: The pickup card asks for nothing below the threshold
+### shared-ui-grading-submission-US1-TC35-1: The pickup card asks for nothing below the threshold
 
 **Classification:**
 
@@ -1006,7 +1006,7 @@ Runs once per row of **Test data**.
 
 * No bring-an-ID line renders.
 
-### grading-submission-US1-TC36-1: The pickup card names an ID for the named person
+### shared-ui-grading-submission-US1-TC36-1: The pickup card names an ID for the named person
 
 **Classification:**
 
@@ -1033,7 +1033,7 @@ Runs once per row of **Test data**.
 
 * The bring line names the ID as the named person's, not the collector's.
 
-### grading-submission-US1-TC37-1: Naming a person is blocked until a name is entered
+### shared-ui-grading-submission-US1-TC37-1: Naming a person is blocked until a name is entered
 
 **Classification:**
 
@@ -1060,7 +1060,7 @@ Runs once per row of **Test data**.
 
 * Save is disabled while the field is empty.
 
-### grading-submission-US1-TC38-1: Removing a named person clears the card back to nobody
+### shared-ui-grading-submission-US1-TC38-1: Removing a named person clears the card back to nobody
 
 **Classification:**
 
@@ -1089,7 +1089,7 @@ Runs once per row of **Test data**.
 * The Named badge, the name and the day render before Remove.
 * `onRemove` fires and the card returns to nobody named.
 
-### grading-submission-US1-TC39-1: The money block lists its lines in the fixed order
+### shared-ui-grading-submission-US1-TC39-1: The money block lists its lines in the fixed order
 
 **Classification:**
 
@@ -1118,7 +1118,7 @@ Runs once per row of **Test data**.
 * The lines render in the order given: fee as n × fee = total, cover, paid, moved up, storage, due.
 * The due line renders in the `warning` tone.
 
-### grading-submission-US1-TC40-1: No lead line shows when nothing is due
+### shared-ui-grading-submission-US1-TC40-1: No lead line shows when nothing is due
 
 **Classification:**
 
@@ -1145,7 +1145,7 @@ Runs once per row of **Test data**.
 
 * No settle-lead line renders.
 
-### grading-submission-US1-TC41-1: The storage line reads the fee per card per month
+### shared-ui-grading-submission-US1-TC41-1: The storage line reads the fee per card per month
 
 **Classification:**
 
@@ -1172,7 +1172,7 @@ Runs once per row of **Test data**.
 
 * The storage line names the fee per card, per month, and that it is accruing.
 
-### grading-submission-US1-TC42-1: The ladder shows three dated rungs, none reached
+### shared-ui-grading-submission-US1-TC42-1: The ladder shows three dated rungs, none reached
 
 **Classification:**
 
@@ -1200,7 +1200,7 @@ Runs once per row of **Test data**.
 * All three rungs render with their dates.
 * None is marked passed.
 
-### grading-submission-US1-TC43-1: A passed rung is marked once its day is reached
+### shared-ui-grading-submission-US1-TC43-1: A passed rung is marked once its day is reached
 
 **Classification:**
 
@@ -1227,7 +1227,7 @@ Runs once per row of **Test data**.
 
 * The reminder rung is marked passed; the storage and notice rungs are not.
 
-### grading-submission-US1-TC44-1: The notice rung names the posting date and its window
+### shared-ui-grading-submission-US1-TC44-1: The notice rung names the posting date and its window
 
 **Classification:**
 
@@ -1254,7 +1254,7 @@ Runs once per row of **Test data**.
 
 * The notice rung names the posting date and the 30 days.
 
-### grading-submission-US1-TC45-1: A withdrawn, paid out or vaulted card is not counted held
+### shared-ui-grading-submission-US1-TC45-1: A withdrawn, paid out or vaulted card is not counted held
 
 **Classification:**
 
@@ -1281,7 +1281,7 @@ Runs once per row of **Test data**.
 
 * `cardsHeld` counts only the cards still held; the excluded card is not among them.
 
-### grading-submission-US1-TC46-1: Every rendered word comes from the copy prop
+### shared-ui-grading-submission-US1-TC46-1: Every rendered word comes from the copy prop
 
 **Classification:**
 
@@ -1316,7 +1316,7 @@ Runs once per row of **Test data**.
 
 * Every label matches the text `copy` supplies; no hardcoded string appears instead.
 
-### grading-submission-US1-TC47-1: No block fetches, mutates, routes or reads app state
+### shared-ui-grading-submission-US1-TC47-1: No block fetches, mutates, routes or reads app state
 
 **Classification:**
 
@@ -1343,7 +1343,7 @@ Runs once per row of **Test data**.
 
 * No block imports a router or an app store, or calls fetch, a mutation, or browser storage.
 
-### grading-submission-US1-TC48-1: An amount renders in its minor units and ISO code
+### shared-ui-grading-submission-US1-TC48-1: An amount renders in its minor units and ISO code
 
 **Classification:**
 
@@ -1376,7 +1376,7 @@ Runs once per row of **Test data**.
 
 * The amount renders formatted by `formatMoney`, in HKD.
 
-### grading-submission-US1-TC49-1: A day renders in the locale and zone supplied
+### shared-ui-grading-submission-US1-TC49-1: A day renders in the locale and zone supplied
 
 **Classification:**
 
@@ -1403,7 +1403,7 @@ Runs once per row of **Test data**.
 
 * The day renders formatted by `formatLocalTime`, in the zone supplied, not the browser's own.
 
-### grading-submission-US1-TC50-1: Every design-record state has its own story
+### shared-ui-grading-submission-US1-TC50-1: Every design-record state has its own story
 
 **Classification:**
 

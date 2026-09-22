@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Out of suite:** grade10-site-grading-submission-plan-SC-02
 
 ## Background
 
@@ -157,6 +158,34 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * The browser leaves `<grade10 grading url>` for the walk-in booking page.
 * No card list is created for this visit.
 
+### grade10-site-grading-submission-plan-US1-TC6-1: The fee sheet names the counter for a card above the top ceiling
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-01
+
+**Pre-conditions:**
+
+* `customer(no account)` is signed out, `<grade10 grading url>`.
+
+**Steps:**
+
+1. Read the fee sheet on the grading home, below its level rows.
+
+**Expected Results:**
+
+* The sheet names a card declared above the top level's ceiling of 3900000 (HKD, minor units).
+* It says such a card is asked about at the counter or on WhatsApp rather than priced.
+
 ---
 
 ## grade10-site-grading-submission-plan-US2: Collector lists a few cards by hand
@@ -288,6 +317,135 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * The removed card no longer shows on the list.
 * One card remains listed.
 
+### grade10-site-grading-submission-plan-US2-TC5-1: The wizard rail marks the cards step in progress
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Cards step of a new plan, `<grade10 grading url>`.
+
+**Steps:**
+
+1. Read the wizard rail on the Cards step.
+2. Continue to the Service step and read the rail again.
+
+**Expected Results:**
+
+* On the Cards step, The cards reads in progress, and The service and Book read as still to come.
+* On the Service step, The cards reads done, The service reads in progress and Book reads as still to come.
+
+### grade10-site-grading-submission-plan-US2-TC6-1: Contact details are filled in for a signed-in collector and asked of a signed-out one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* `customer(collector)` has a name, an email and a phone on their account.
+
+**Steps:**
+
+1. Signed in, open the Cards step and read the About you fields.
+2. Change the phone for this submission.
+3. Sign out, open a new plan and read the same fields.
+
+**Expected Results:**
+
+* Signed in, the name, the email and the phone are filled in from the account.
+* The changed phone is held on this submission, and the account is unchanged.
+* Signed out, all three are asked for and none is filled in.
+
+### grade10-site-grading-submission-plan-US2-TC7-1: A card added by hand that the reference does not answer for is kept as typed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
+* The card price reference is reachable and carries no match for the name typed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Card typed | Homebrew Test Card |
+| Declared value | 50000 (HKD, minor units) |
+
+**Steps:**
+
+1. Type the card name from **Test data** and add it by hand.
+2. Enter the declared value from **Test data**.
+
+**Expected Results:**
+
+* The card is listed in the name as typed, the way a pasted line the reference does not answer for is.
+* No reference sales show beside it.
+* The declared value is asked for and held on the card.
+
+### grade10-site-grading-submission-plan-US2-TC8-1: A reference outage keeps a hand-added card unasked and still asks its value
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-02
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Cards step of a new plan with no card listed, `<grade10 grading url>`.
+* The card price reference cannot be reached.
+
+**Steps:**
+
+1. Type a card name and add it by hand.
+2. Read the card line.
+
+**Expected Results:**
+
+* The card carries the reference-unavailable line rather than the kept-as-typed one.
+* The declared value is still asked for.
+* Nothing on the step waits on the reference.
+
 ---
 
 ## grade10-site-grading-submission-plan-US3: Collector pastes a list of cards
@@ -407,7 +565,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * The card is added to the list with its declared value still asked for.
 * Continue is disabled, naming the one card missing a value.
 
-### grade10-site-grading-submission-plan-US3-TC4-1: A pasted line above the ceiling is named for a second submission
+### grade10-site-grading-submission-plan-US3-TC4-1: A pasted line above the top ceiling is sent to the counter
 
 **Classification:**
 
@@ -440,8 +598,9 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Expected Results:**
 
-* The line reports as above the level's ceiling.
-* It is named for a second submission on the same drop-off.
+* The line reports as above the ceiling, naming the card and its declared value.
+* The collector is told to ask at the counter or on WhatsApp, 4200000 (HKD, minor units) being above the top level's 3900000 (HKD, minor units) ceiling.
+* No second submission is named for it.
 
 ### grade10-site-grading-submission-plan-US3-TC5-1: A pasted duplicate of a listed card is skipped
 
@@ -544,6 +703,44 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 * Both lines report with the reference-unavailable line rather than kept as typed.
 * Add stays enabled, and each line's declared value is still asked for.
+
+### grade10-site-grading-submission-plan-US3-TC8-1: The paste counts every line back before any card is added
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-03
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Cards step of a new plan with the paste sheet open, `<grade10 grading url>`.
+* The card price reference is reachable.
+* One of the 30 cards pasted is already on the list.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Pasted lines | 30 lines: matched, kept as typed, without a value, above the ceiling and one already listed |
+
+**Steps:**
+
+1. Paste the 30 lines from **Test data**.
+2. Wait for matching to finish.
+3. Add the counts the paste reports together.
+
+**Expected Results:**
+
+* The five counts - matched, kept as typed, without a value, above the ceiling, skipped - add up to 30.
+* The counts show before any card is added.
 
 ---
 
@@ -949,6 +1146,112 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * CGC's levels show with the example-figures line.
 * CGC's levels are selectable the same way PSA's are.
 
+**Blocked:** Product - is a grader carrying only the example figures selectable for a submission? The requirement holds that a grader whose figures nobody has supplied shows its levels and cannot be picked.
+
+### grade10-site-grading-submission-plan-US5-TC7-1: The level picked covers every card on the list
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-05
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Service step with 4 cards listed, none above Regular's ceiling, `<grade10 grading url>`.
+
+**Steps:**
+
+1. Select PSA as the grader and Regular as the level.
+2. Continue to the Book step and read the schedule.
+
+**Expected Results:**
+
+* All four cards read as PSA Regular on the schedule.
+* No card on the submission carries another grader or another level.
+
+### grade10-site-grading-submission-plan-US5-TC8-1: The estimate reads the cards times the fee, paid at the counter
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-05
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Service step with 4 cards listed, `<grade10 grading url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Regular fee a card | 60000 (HKD, minor units) |
+| Estimate, 4 cards | 240000 (HKD, minor units) |
+
+**Steps:**
+
+1. Select PSA as the grader and Regular as the level.
+2. Read the estimate.
+
+**Expected Results:**
+
+* The estimate reads 240000 (HKD, minor units) from **Test data**, being 4 times the fee a card.
+* It carries no cover line at Regular.
+* It reads about 5 weeks back, counted from the day the batch leaves the shop.
+* It says everything on it is paid at the counter.
+
+### grade10-site-grading-submission-plan-US5-TC9-1: The estimate at Express carries a cover line per card
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-05
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Service step with one card declared at 850000 (HKD, minor units), `<grade10 grading url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Express fee a card | 120000 (HKD, minor units) |
+| Cover, 1.5% of 850000 | 12750 (HKD, minor units) |
+| Total | 132750 (HKD, minor units) |
+
+**Steps:**
+
+1. Select PSA as the grader and Express as the level.
+2. Read the estimate.
+
+**Expected Results:**
+
+* The cover line for the card reads 12750 (HKD, minor units) from **Test data**.
+* The total reads 132750 (HKD, minor units), the fee and the cover line added.
+
 ---
 
 ## grade10-site-grading-submission-plan-US6: Collector finds the plan again from the emailed link or the signed-in home
@@ -1142,6 +1445,76 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 * The failure shows in the error tone.
 * No submission list renders.
 
+### grade10-site-grading-submission-plan-US6-TC7-1: A sheet changed after booking leaves the submission's figures alone
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-06
+
+**Pre-conditions:**
+
+* `customer(collector)` has a submission booked at PSA Regular at 60000 (HKD, minor units) a card, `<grade10 grading submission url>`.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Regular fee a card, booked on | 60000 (HKD, minor units) |
+| Regular fee a card, changed to | 70000 (HKD, minor units) |
+
+**Steps:**
+
+1. Change the fee sheet's Regular fee a card to the changed figure from **Test data**.
+2. Open the booked submission again.
+
+**Expected Results:**
+
+* The submission still reads 60000 (HKD, minor units) a card.
+* Its estimate and its totals are unchanged.
+
+### grade10-site-grading-submission-plan-US6-TC8-1: A sheet changed before booking reaches the reopened plan
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-06
+
+**Pre-conditions:**
+
+* `customer(collector)` has a plan kept at PSA Regular with no drop-off booked, made while Regular was 60000 (HKD, minor units) a card.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Regular fee a card, changed to | 70000 (HKD, minor units) |
+
+**Steps:**
+
+1. Change the fee sheet's Regular fee a card to the figure from **Test data**.
+2. Open the kept plan from its emailed link.
+
+**Expected Results:**
+
+* The estimate reads 70000 (HKD, minor units) a card.
+
 ---
 
 ## grade10-site-grading-submission-plan-US7: Collector reads the review before booking
@@ -1333,6 +1706,37 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 * Book the drop-off shows pending.
 * Book the drop-off and Save and book later are both disabled while booking is in progress.
+
+### grade10-site-grading-submission-plan-US7-TC7-1: Saving the plan for later works with the statement unticked
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-07
+
+**Pre-conditions:**
+
+* `customer(collector)` is on the Book step with the collection statement unticked, `<grade10 grading url>`.
+
+**Steps:**
+
+1. Leave the collection statement unticked.
+2. Click Save and book later.
+
+**Expected Results:**
+
+* Save and book later is offered while the statement is unticked.
+* The plan is kept, and its page opens at Planned.
+* The statement is still unticked on the plan.
+* Book the drop-off was the only action the unticked statement refused.
 
 ---
 

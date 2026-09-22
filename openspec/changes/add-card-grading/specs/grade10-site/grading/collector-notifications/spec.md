@@ -123,7 +123,7 @@ submission was planned under, each carrying an action link to the submission:
 - **THEN** the handed-in message is sent by email, in English, and nothing is sent on any other channel
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-24 - A message with no document attaches nothing
-**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector told what happened without a file they were never handed
+**Serves:** grade10-site-grading-collector-notifications-US-01 - the collector reading a short message where there is no document to keep
 
 - **WHEN** a message other than the handed-in message, the hand-back receipt and the drop-off booked message is sent
 - **THEN** it carries no attachment

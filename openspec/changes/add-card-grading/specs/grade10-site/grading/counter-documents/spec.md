@@ -415,14 +415,14 @@ registered name and the complaints contact are among those facts.
 one, so the page can be read before its values are decided.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-23 - Production refuses paper that names no company
-**Serves:** Pinned figures and placeholders - a collector who would otherwise be asked to sign against a bracket
+**Serves:** Pinned figures and placeholders, grade10-site-grading-counter-documents-US-01 - a collector who would otherwise be asked to sign against a bracket
 
 - **GIVEN** a production brand whose custodian has no registered name
 - **WHEN** an agreement is prepared
 - **THEN** it is refused by name and nothing is rendered
 
 #### Scenario: grade10-site-grading-counter-documents-SC-24 - Outside production the bracket prints and is marked
-**Serves:** Pinned figures and placeholders - the shop reading the paper before Legal has settled its values
+**Serves:** Pinned figures and placeholders, grade10-site-grading-counter-documents-US-01 - the shop reading the paper before Legal has settled its values
 
 - **GIVEN** a staging brand whose complaints contact is unset
 - **WHEN** an agreement is rendered
@@ -465,7 +465,7 @@ be listed and SHALL offer no download.
 - **THEN** that document is not listed and no download is offered for it
 
 #### Scenario: grade10-site-grading-counter-documents-SC-27 - A digest grading never issued answers as unknown
-**Serves:** Copies and fingerprints - somebody checking a PDF they were handed against the shop's record
+**Serves:** Copies and fingerprints, grade10-site-grading-counter-documents-US-05 - somebody checking a PDF they were handed against the shop's record
 
 - **WHEN** a digest grading never issued or sealed is checked
 - **THEN** the answer says it is not one of grading's

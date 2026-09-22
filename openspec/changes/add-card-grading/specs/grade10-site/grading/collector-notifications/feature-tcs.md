@@ -205,7 +205,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01, `The footer`
+* **Trace:** `The footer`
 
 **Pre-conditions:**
 
@@ -234,7 +234,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01, `What is sent`
+* **Trace:** `What is sent`
 
 **Pre-conditions:**
 
@@ -325,7 +325,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
-* **Trace:** grade10-site-grading-collector-notifications-US-01, `Reminders and the notice`
+* **Trace:** `Reminders and the notice`
 
 **Pre-conditions:**
 
@@ -598,3 +598,44 @@ Runs once per row of **Test data**.
 * The message leaves the parked list once the channel accepts it.
 * The submission's row carries no Message not sent badge.
 * The submission's page shows no failed letter.
+
+## Reconciliation
+
+**Run:** Blind suite reading 2026-09-22 for change `add-card-grading`, capability `grade10-site/grading/collector-notifications`. Read the isolated bundle under `bundles/add-card-grading/`: `_change/proposal.md`, `_change/decisions.md` with its `## Raised` table, `_change/ui-design.md` with the state dispositions stripped, the linked manual pages under `_change/pages/`, and this capability's `spec-outline.md` (`## Purpose` and `## Feature set`) and `user-journeys.md`. Denied: every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/`, `tech-design.md`, and the scenario pass's draft.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `grade10-site-grading-collector-notifications-US1-TC1-1` booked email comes from grading, not the diary | **Covered:** `grade10-site-grading-collector-notifications-SC-08` | That scenario's anchor is `grade10-site/grading/dropoff-booking`'s journey, so it is listed out of suite here; the case still walks the send |
+| `grade10-site-grading-collector-notifications-US1-TC2-1` email only, English, whatever the pages read in | **Folded in:** `grade10-site-grading-collector-notifications-SC-23` | Decided in `decisions.md` Q13 and stated as a rule, with no scenario reaching it until now |
+| `grade10-site-grading-collector-notifications-US1-TC3-1` the link opens the submission with no account | **Covered:** `grade10-site-grading-collector-notifications-SC-03` | — |
+| `grade10-site-grading-collector-notifications-US1-TC4-1` a message with a document attaches it | **Covered:** `grade10-site-grading-collector-notifications-SC-05` | — |
+| `grade10-site-grading-collector-notifications-US1-TC5-1` a message with no document carries no attachment | **Folded in:** `grade10-site-grading-collector-notifications-SC-24` | The closed list of three attaching messages had no scenario proving the negative. The letter's own facts — courier, order number, estimate — are `grade10-admin/grading/batches`' to state |
+| `grade10-site-grading-collector-notifications-US1-TC6-1` the footer prints the shop's real facts in production | **Covered:** `grade10-site-grading-collector-notifications-SC-19`, `grade10-site-grading-collector-notifications-SC-20` | — |
+| `grade10-site-grading-collector-notifications-US1-TC7-1` the footer marks an unset fact outside production | **Covered:** `grade10-site-grading-collector-notifications-SC-21` | Retraced to `The footer`, the group that scenario serves; `SC-19` and `SC-20` stay with `US1-TC6-1` |
+| `grade10-site-grading-collector-notifications-US2-TC1-1` a refused card sends no email while hand-in proceeds | **Covered:** `grade10-site-grading-collector-notifications-SC-06`, `grade10-site-grading-collector-notifications-SC-05` | — |
+| `grade10-site-grading-collector-notifications-US2-TC2-1` naming, changing or removing a collector sends no email | **Covered:** `grade10-site-grading-collector-notifications-SC-07` | The removal row is a change of the named person under the requirement's "naming the person who may collect, or changing them"; no third event is claimed |
+| `grade10-site-grading-collector-notifications-US3-TC1-1` a submission is flagged when a message runs out | **Covered:** `grade10-site-grading-collector-notifications-SC-17` | — |
+| `grade10-site-grading-collector-notifications-US3-TC2-1` staff resend a parked message from the submission | **Covered:** `grade10-site-grading-collector-notifications-SC-18` | — |
+| `grade10-site-grading-collector-notifications-US3-TC3-1` a failed send never blocks the event it reports | **Covered:** `grade10-site-grading-collector-notifications-SC-16` | Same rule, read on the grades-posted message rather than the hand-in |
+| `grade10-site-grading-collector-notifications-US3-TC4-1` the queue shows no flag when every message sent | **Covered:** `grade10-site-grading-collector-notifications-SC-17` | The flag's condition is the parked message; a submission with none is the other half of it |
+| `grade10-site-grading-collector-notifications-US3-TC5-1` a read grant cannot resend a parked message | **Covered:** `grade10-site-grading-collector-notifications-SC-18` | The scenario names the grading operate grant, which answers the blind pass's second raised question (`decisions.md` Q61). The console showing a read grant no act is `grade10-admin/grading/counter`'s rule |
+| Blind pass raised: does the flag clear on the resend, or on a later delivery check? | **Answered, folded in:** `grade10-site-grading-collector-notifications-SC-25` | Landed as `decisions.md` Q60: the flag clears when the channel accepts the resend and the parked row closes. Walked by `grade10-site-grading-collector-notifications-US3-TC6-1` |
+| Blind pass raised: which grant may Send again? | **Answered:** `decisions.md` Q61 | The operate grant, as `grade10-site-grading-collector-notifications-SC-18` already stated; no new scenario |
+| Blind pass raised: does production refuse a send whose footer fact is unset? | **Answered:** `decisions.md` Q62 | It refuses the act by name and commits nothing, as the requirement and `grade10-site-grading-collector-notifications-SC-22` state; no new scenario |
+| `grade10-site-grading-collector-notifications-SC-01` every event is decided | **Out of suite:** grade10's type check — `NOTIFY_FOR_EVENT` is exhaustive over every submission event kind, `null` written for each silence (`tech-design.md`) | Not in the header list: the scenario serves `grade10-site-grading-collector-notifications-US-01`, which living cases trace |
+| `grade10-site-grading-collector-notifications-SC-02` the same event tells the same message | **Case added:** `grade10-site-grading-collector-notifications-US1-TC8-1` | Traces `What is sent`, the group the scenario serves |
+| `grade10-site-grading-collector-notifications-SC-04` a message says only what is true of this submission | **Case added:** `grade10-site-grading-collector-notifications-US1-TC9-1` | — |
+| `grade10-site-grading-collector-notifications-SC-09` the reminder comes the day before | **Case added:** `grade10-site-grading-collector-notifications-US1-TC10-1` | — |
+| `grade10-site-grading-collector-notifications-SC-14` a rung told twice is told once | **Case added:** `grade10-site-grading-collector-notifications-US1-TC11-1` | Traces `Reminders and the notice` |
+| `grade10-site-grading-collector-notifications-SC-08`, `grade10-site-grading-collector-notifications-SC-10` | **Out of suite:** `grade10-site/grading/dropoff-booking`'s suite | Their only anchor is that capability's journey |
+| `grade10-site-grading-collector-notifications-SC-11`, `grade10-site-grading-collector-notifications-SC-12`, `grade10-site-grading-collector-notifications-SC-13`, `grade10-site-grading-collector-notifications-SC-15` | **Out of suite:** `grade10-site/grading/submission-lifecycle`'s suite | The uncollected ladder is walked there |
+| `grade10-site-grading-collector-notifications-SC-22` | **Out of suite:** `grade10-admin/grading/counter`'s suite | The operator handing a list in meets the refusal there |
+
+**Uncovered anchors:** none. Every journey of this capability — `grade10-site-grading-collector-notifications-US-01`, `grade10-site-grading-collector-notifications-US-02`, `grade10-site-grading-collector-notifications-US-03` — and every feature set group a scenario serves is walked by a living case.
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-grading-collector-notifications-US1-TC6-1` | Production only: the custodian's registered name, the shop address and the complaints contact are set in production, and no other environment prints them |
+| `grade10-site-grading-collector-notifications-US1-TC2-1` | A person reads the collector's phone for the channels nothing was sent on; the worker's tests prove only what it does send |

@@ -466,7 +466,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-US-10` |
 | Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-US-10` |
 | Handed in (`G08`) | Checked in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-US-01` |
-| Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-US-02` |
+| Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-SC-06` |
 | Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-US-02` |
 | Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-US-02` |
 | With the grader (`G09`) | With the grader · With PSA; the lead; `GraderStagesCard`; Nothing to do; the cards with intake ids; History | `grade10-site-grading-submission-lifecycle-US-01` |
@@ -479,7 +479,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Collected (`G12`) | Back with you · Collected <date>; the lead; the graded record with Look up per slab; the slab photographs; `DocumentsList` with the three; `WhatNextCard`; `YourDataLine` | `grade10-site-grading-submission-lifecycle-US-09` |
 | Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-US-09` |
 | Acts by status | only the status's acts on the page; nothing from Sent to Back | `grade10-site-grading-submission-lifecycle-US-11` |
-| Erasure refused | Your data: the ask refused by name while the submission is live | `grade10-site-vault-retention-and-erasure-US-04` |
+| Erasure refused | Your data: the ask refused by name while the submission is live | `grade10-site-vault-retention-and-erasure-SC-33` |
 | Error | the message in the error tone; the page reads again | `grade10-site-grading-submission-lifecycle-US-01` |
 
 ### Cards on the submission page
@@ -491,7 +491,7 @@ Stories `grading-submission-gradingcardrecord--`, the Grade card rows `grading-s
 | Listed | number, name, set line, declared value; no intake id | `grade10-site-grading-submission-lifecycle-US-01` |
 | Handed in (`G08`) | intake id; the photograph pair, front and back | `grade10-site-grading-submission-lifecycle-US-01` |
 | Minimum grade | the min line on the set line | `grade10-site-grading-submission-lifecycle-US-03` |
-| Refused at the counter | the badge and the reason as typed; never charged | `grade10-site-grading-collector-notifications-US-02` |
+| Refused at the counter | the badge and the reason as typed; never charged | `grade10-site-grading-collector-notifications-SC-06` |
 | Withdrawn | the badge and the refund line | `grade10-site-grading-submission-lifecycle-US-02` |
 | Graded (`G10`) | the grade badge in the grader's words and the cert | `grade10-site-grading-submission-lifecycle-US-01` |
 | Moved up a level | the badge and the difference due | `grade10-site-grading-submission-lifecycle-US-04` |
@@ -581,18 +581,18 @@ One row per letter, its kind, and the blocks it carries after the lead.
 | The plan's link | `plan_saved` | `M13` | facts cards · estimate · kept until; the not-sent-when-booked line; `PrimaryCta` Book the drop-off | `apps/emails/emails/grading/plan-saved.tsx` | `grade10-site-grading-submission-plan-US-06` |
 | The nudge | `plan_nudged` | `M13` | the same letter on the nudge day | `plan-nudged.tsx` | `grade10-site-grading-submission-plan-US-08` |
 | Expired | `plan_expired` | `M16` | the nothing-paid line; the prices-move line; `PrimaryCta` Start a submission | `plan-expired.tsx` | `grade10-site-grading-submission-plan-US-08` |
-| Drop-off booked | `dropoff_booked` | `M12` | facts where · bring · your cards leave · estimated back; the move-or-cancel line; the missed line; `PrimaryCta`; the calendar file attached | `dropoff-booked.tsx` | `grade10-site-grading-collector-notifications-US-01` |
+| Drop-off booked | `dropoff_booked` | `M12` | facts where · bring · your cards leave · estimated back; the move-or-cancel line; the missed line; `PrimaryCta`; the calendar file attached | `dropoff-booked.tsx` | `grade10-site-grading-collector-notifications-SC-08` |
 | Drop-off moved | `dropoff_moved` | none drawn | facts the new visit; `PrimaryCta`; the calendar file | `dropoff-moved.tsx` | `grade10-site-grading-dropoff-booking-US-02` |
 | Drop-off cancelled | `dropoff_cancelled` | none drawn | facts the visit closed; the list kept; `PrimaryCta` | `dropoff-cancelled.tsx` | `grade10-site-grading-dropoff-booking-US-02` |
 | Drop-off missed | `dropoff_missed` | none drawn | facts the visit; the list and the estimate kept; the book-again line; `PrimaryCta` | `dropoff-missed.tsx` | `grade10-site-grading-dropoff-booking-US-03` |
-| The day before | `dropoff_reminder` | none drawn | facts the visit and what to bring; `PrimaryCta` | `dropoff-reminder.tsx` | `grade10-site-grading-collector-notifications-US-01` |
+| The day before | `dropoff_reminder` | none drawn | facts the visit and what to bring; `PrimaryCta` | `dropoff-reminder.tsx` | `grade10-site-grading-collector-notifications-SC-09` |
 | Visit detached | `dropoff_detached` | none drawn | facts the visit the owner closed; the book-again line; `PrimaryCta` | `dropoff-detached.tsx` | `grade10-site-grading-dropoff-booking-US-04` |
-| Handed in | `checked_in` | `M07` | facts paid · cards · estimated back · includes; the photographs line; the changed-your-mind line; the keep-in-account line; `PrimaryCta`; the receipt and the signed agreement attached | `checked-in.tsx` | `grade10-site-grading-collector-notifications-US-01` |
-| Handed in, cover | `checked_in` | `M07` | the paid line names the cover | `checked-in-with-cover.tsx` | `grade10-site-grading-collector-notifications-US-01` |
-| On their way | `batch_shipped` | `M08` | facts courier · order · estimated back; the past-the-estimate line; `PrimaryCta` | `batch-shipped.tsx` | `grade10-site-grading-collector-notifications-US-01` |
-| Running late | `batch_reestimated` | `M14` | facts stage · was · now; the nothing-to-do line; `PrimaryCta` | `batch-reestimated.tsx` | `grade10-site-grading-collector-notifications-US-01` |
+| Handed in | `checked_in` | `M07` | facts paid · cards · estimated back · includes; the photographs line; the changed-your-mind line; the keep-in-account line; `PrimaryCta`; the receipt and the signed agreement attached | `checked-in.tsx` | `grade10-site-grading-collector-notifications-SC-05` |
+| Handed in, cover | `checked_in` | `M07` | the paid line names the cover | `checked-in-with-cover.tsx` | `grade10-site-grading-collector-notifications-SC-05` |
+| On their way | `batch_shipped` | `M08` | facts courier · order · estimated back; the past-the-estimate line; `PrimaryCta` | `batch-shipped.tsx` | **Out of suite:** `grade10-admin/grading/batches`' suite |
+| Running late | `batch_reestimated` | `M14` | facts stage · was · now; the nothing-to-do line; `PrimaryCta` | `batch-reestimated.tsx` | **Out of suite:** `grade10-admin/grading/batches`' suite |
 | Grades are in | `grades_posted` | `M09` | `CardLines`; the settle paragraph where an upcharge stands; the ungraded paragraph where a card came back raw; the back-at-the-shop-by line; the review line; facts how to settle · reference; `PrimaryCta` See the grades | `grades-posted.tsx` | `grade10-site-grading-submission-lifecycle-US-04` |
-| Grades are in, nothing to settle | `grades_posted` | `M09` | neither paragraph | `grades-posted-clean.tsx` | `grade10-site-grading-collector-notifications-US-01` |
+| Grades are in, nothing to settle | `grades_posted` | `M09` | neither paragraph | `grades-posted-clean.tsx` | `grade10-site-grading-collector-notifications-SC-04` |
 | Not returned | `card_not_returned` | `M15` | facts we settle · we refund · by · the other cards; the we-claim line; `PrimaryCta` | `card-not-returned.tsx` | `grade10-site-grading-submission-lifecycle-US-05` |
 | Damaged | `card_damaged` | `M15` | the same letter naming damage | `card-damaged.tsx` | `grade10-site-grading-submission-lifecycle-US-05` |
 | Ready to collect | `ready` | `M10` | `PickupBlock`; the vault line; the not-collected paragraph; the someone-else paragraph with the ID line; `PrimaryCta` | `ready.tsx` | `grade10-site-grading-submission-lifecycle-US-06` |
@@ -602,9 +602,9 @@ One row per letter, its kind, and the blocks it carries after the lead.
 | Written notice | `notice_posted` | `M18` | facts due today · pickup code · after; the registered-post line; the WhatsApp line; `PrimaryCta` | `notice-posted.tsx` | `grade10-site-grading-submission-lifecycle-US-08` |
 | Hand-back receipt, collected | `collected` | none drawn | `CardLines` of what was handed back; facts settled · refunded; `PrimaryCta`; the signed receipt attached | `collected.tsx` | `grade10-site-grading-counter-documents-US-05` |
 | Hand-back receipt, withdrawn | `card_withdrawn` | none drawn | one card, its fee refunded | `card-withdrawn.tsx` | `grade10-site-grading-submission-lifecycle-US-02` |
-| Values set | every kind | none drawn | `GradingFooter` prints the registered name, the shop address, the complaints contact | every preview | `grade10-site-grading-collector-notifications-US-01` |
-| Values unset outside production | every kind | none drawn | the brackets, marked | `footer-placeholders.tsx` | `grade10-site-grading-collector-notifications-US-01` |
-| Silence on purpose | none | none drawn | no letter for a refused card or a named collector | none | `grade10-site-grading-collector-notifications-US-02` |
+| Values set | every kind | none drawn | `GradingFooter` prints the registered name, the shop address, the complaints contact | every preview | `grade10-site-grading-collector-notifications-SC-19`, `grade10-site-grading-collector-notifications-SC-20` |
+| Values unset outside production | every kind | none drawn | the brackets, marked | `footer-placeholders.tsx` | `grade10-site-grading-collector-notifications-SC-21`, `grade10-site-grading-collector-notifications-SC-22` |
+| Silence on purpose | none | none drawn | no letter for a refused card or a named collector | none | `grade10-site-grading-collector-notifications-SC-06`, `grade10-site-grading-collector-notifications-SC-07` |
 
 ### Queue
 
@@ -626,7 +626,7 @@ Stories `grading-admin-queue-queue-panel--`; every Badge row shares `--badges` a
 | Badge: Storage fee from day 90 | ready 90 days: the storage fee accrues | `grade10-admin-grading-counter-US-12` |
 | Badge: Notice due | ready 180 days: the written notice is owed | `grade10-admin-grading-counter-US-12` |
 | Badge: Payout past its window | a payout owed and unmade past the settlement window from the day the batch was received — ❓ Operations the window | `grade10-admin-grading-counter-US-09` |
-| Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-site-grading-collector-notifications-US-03` |
+| Badge: Message not sent | a letter out of attempts; Send again on the row | `grade10-site-grading-collector-notifications-SC-17` |
 | Tile: Batch closing | the grader · level, cards, submissions, more today, ships | `grade10-admin-grading-batches-US-05` |
 | Tile: With graders | the count and how many past their estimate | `grade10-admin-grading-batches-US-05` |
 | Tile: Ready, uncollected | the count and how many past 30 days | `grade10-admin-grading-counter-US-12` |
@@ -792,7 +792,7 @@ Stories `grading-admin-submission-submission-panel--`.
 | Documents tab | the three with fingerprints; Show on iPad, Copy link, Send again | `grade10-admin-grading-counter-US-11` |
 | Documents, none yet | before hand-in: nothing sealed | `grade10-admin-grading-counter-US-11` |
 | Send again | the letter re-sent; the grades email the same | `grade10-admin-grading-counter-US-11` |
-| Message not sent | the failed letter flagged with its reason; Send again | `grade10-site-grading-collector-notifications-US-03` |
+| Message not sent | the failed letter flagged with its reason; Send again | `grade10-site-grading-collector-notifications-SC-17`, `grade10-site-grading-collector-notifications-SC-18` |
 | Timeline tab | every event with its figures, the grader's stages in its words, staff-only entries marked | `grade10-admin-grading-counter-US-13` |
 | Actions by status (`GA3`) | only the status's acts; Cancel absent once the cards have left | `grade10-admin-grading-counter-US-14` |
 | Stale | an act refused because the submission moved; the panel reads again | `grade10-admin-grading-counter-US-14` |
