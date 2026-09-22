@@ -362,16 +362,16 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Counts | every cut's `Choice` carries its count | `grade10-admin-vault-operator-queue-US-06` |
-| Today block | the Today cut's rows in slot order with its count on the landing view: time, name · reference, lane · the status word | `grade10-admin-vault-operator-queue-US-06` |
-| Today, none | the block reads no visits today | `grade10-admin-vault-operator-queue-US-06` |
-| Rows | reference, item, the collector's status word, lane, asked for, visit, last touched, waiting on | `grade10-admin-vault-operator-queue-US-01` |
-| Badges | Release requested, Awaiting valuation, Valuation stalled, Offer lapsed, Message parked, Document seen before, Visit today; Collector where the collector is waited on | `grade10-admin-vault-operator-queue-US-01` |
-| Search by reference | prefix on the reference; the matches; the recorded-search line | `grade10-admin-vault-operator-queue-US-05` |
-| Search, none | No case answers to that | `grade10-admin-vault-operator-queue-US-05` |
-| Loading | `Status` pending | `grade10-admin-vault-operator-queue-US-01` |
-| Error | `Status` with the message | `grade10-admin-vault-operator-queue-US-01` |
-| More | Load more on the cursor; n in this view · showing m | `grade10-admin-vault-operator-queue-US-06` |
+| Counts | every cut's `Choice` carries its count | `grade10-admin-vault-operator-queue-SC-21` |
+| Today block | the Today cut's rows in slot order with its count on the landing view: time, name · reference, lane · the status word | `grade10-admin-vault-operator-queue-SC-22` |
+| Today, none | the block reads no visits today | `grade10-admin-vault-operator-queue-SC-23` |
+| Rows | reference, item, the collector's status word, lane, asked for, visit, last touched, waiting on | `grade10-admin-vault-operator-queue-SC-27` |
+| Badges | Release requested, Awaiting valuation, Valuation stalled, Offer lapsed, Message parked, Document seen before, Visit today; Collector where the collector is waited on | `grade10-admin-vault-operator-queue-SC-29` |
+| Search by reference | prefix on the reference; the matches; the recorded-search line | `grade10-admin-vault-operator-queue-SC-24` |
+| Search, none | No case answers to that | `grade10-admin-vault-operator-queue-SC-26` |
+| Loading | `Status` pending | **Out of suite:** the panel's colocated test |
+| Error | `Status` with the message | **Out of suite:** the panel's colocated test |
+| More | Load more on the cursor; n in this view · showing m | `grade10-admin-vault-operator-queue-SC-21` |
 
 ### Overdue
 
@@ -405,35 +405,35 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Tiles | in the vault, per shop, with a loan running, waiting for a pickup | `grade10-admin-vault-operator-queue-US-04` |
-| Rows | reference, item, shop, locker, held since, days, the status word, outstanding, pickup | `grade10-admin-vault-operator-queue-US-04` |
-| Shop filter | `Select` all shops or one | `grade10-admin-vault-operator-queue-US-04` |
-| Empty | nothing in a locker | `grade10-admin-vault-operator-queue-US-04` |
-| Loading | `Status` pending | `grade10-admin-vault-operator-queue-US-04` |
-| Error | `Status` with the message | `grade10-admin-vault-operator-queue-US-04` |
+| Tiles | three `Figure`s: in the vault, broken down per shop; with a loan running; waiting for a pickup | `grade10-admin-vault-operator-queue-SC-43` |
+| Rows | reference, item, shop, locker, held since, days, the status word, outstanding, pickup | `grade10-admin-vault-operator-queue-SC-45` |
+| Shop filter | `Select` all shops or one | `grade10-admin-vault-operator-queue-SC-44` |
+| Empty | nothing in a locker | `grade10-admin-vault-operator-queue-SC-46` |
+| Loading | `Status` pending | **Out of suite:** the panel's colocated test |
+| Error | `Status` with the message | **Out of suite:** the panel's colocated test |
 
 ### Case — header and Case tab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Header | item, reference, the status word, lane · asked for, the identity chip, the visit chip | `grade10-admin-vault-operator-queue-US-05` |
-| Visit checklist | Today's visit, in order: seven `Check`s, ticked as each lands; the current step's button; a step not offered says why | `grade10-admin-vault-operator-queue-US-07` |
-| Checklist, no visit today | the panel absent | `grade10-admin-vault-operator-queue-US-07` |
-| Checklist, storage lane | the terms step reads custody terms; no key-terms or loan agreement step | `grade10-admin-vault-operator-queue-US-07` |
+| Header | item, reference, the status word, lane · asked for, the identity chip, the visit chip | `grade10-admin-vault-operator-queue-SC-28` |
+| Visit checklist | Today's visit, in order: seven `Check`s, ticked as each lands; the current step's button; a step not offered says why | `grade10-admin-vault-operator-queue-SC-30` |
+| Checklist, no visit today | the panel absent | `grade10-admin-vault-operator-queue-SC-33` |
+| Checklist, storage lane | the terms step reads custody terms; no key-terms or loan agreement step | `grade10-admin-vault-operator-queue-SC-32` |
 | Policy gates | the five ticks beside the offer | `grade10-site-vault-valuation-and-offer-US-01` |
-| Actions not offered | the line naming the acts this status withholds | `grade10-admin-vault-operator-queue-US-03` |
-| Status word | the collector's word, never the raw id | `grade10-admin-vault-operator-queue-US-01` |
+| Actions not offered | the line naming the acts this status withholds | `grade10-admin-vault-operator-queue-SC-37` |
+| Status word | the collector's word, never the raw id | `grade10-admin-vault-operator-queue-SC-27` |
 
 ### Case — Documents tab
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Identity: None | nothing asked for; Send hosted check, Record at the counter | `grade10-admin-vault-operator-queue-US-09` |
-| Identity: Out | invited on the date; Send again, Record at the counter | `grade10-admin-vault-operator-queue-US-09` |
-| Identity: Stalled | submitted on the date, undecided; Record at the counter, Send again | `grade10-admin-vault-operator-queue-US-09` |
-| Identity: Verified | who performed it and when; the details under the identity read grant; View photograph, Record at the counter instead | `grade10-admin-vault-operator-queue-US-09` |
-| Identity: Refused | declined on the date; Record at the counter with the reason field naming who records over it | `grade10-admin-vault-operator-queue-US-09` |
-| Identity: Lapsed | expired or withdrawn on the date; Send hosted check, Record at the counter | `grade10-admin-vault-operator-queue-US-09` |
+| Identity: None | nothing asked for; Send hosted check, Record at the counter | `grade10-admin-vault-operator-queue-SC-41` |
+| Identity: Out | invited on the date; Send again, Record at the counter | `grade10-admin-vault-operator-queue-SC-39` |
+| Identity: Stalled | submitted on the date, undecided; Record at the counter, Send again | `grade10-admin-vault-operator-queue-SC-52` |
+| Identity: Verified | who performed it and when; the details under the identity read grant; View photograph, Record at the counter instead | `grade10-admin-vault-operator-queue-SC-41` |
+| Identity: Refused | declined on the date; Record at the counter with the reason field naming who records over it | `grade10-admin-vault-operator-queue-SC-40` |
+| Identity: Lapsed | expired or withdrawn on the date; Send hosted check, Record at the counter | `grade10-admin-vault-operator-queue-SC-41` |
 | Key terms dialog | the loan agreement's own terms as `Check`s; the reference field optional; Record | `grade10-site-vault-documents-and-signing-SC-22` |
 | Key terms, unticked | Record refused until every term is ticked | `grade10-site-vault-documents-and-signing-SC-23` |
 | Key terms recorded | recorded when · by; Prepare documents offered | `grade10-site-vault-documents-and-signing-SC-24` |
@@ -443,12 +443,12 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Forfeit withheld: not past due | Forfeit absent; the reason: not past the due date | `grade10-admin-vault-operator-queue-US-08` |
-| Forfeit withheld: no notice | the reason: no written notice sent; Send notice offered | `grade10-admin-vault-operator-queue-US-08` |
-| Forfeit withheld: cure running | the reason: refused until the date the borrower was given; the notice sent on which day | `grade10-admin-vault-operator-queue-US-08` |
+| Forfeit withheld: not past due | Forfeit absent; the reason: not past the due date | `grade10-admin-vault-operator-queue-SC-34` |
+| Forfeit withheld: no notice | the reason: no written notice sent; Send notice offered | `grade10-admin-vault-operator-queue-SC-35` |
+| Forfeit withheld: cure running | the reason: refused until the date the borrower was given; the notice sent on which day | `grade10-admin-vault-operator-queue-SC-36` |
 | Forfeit available | the earliest date passed; the reason field; Forfeit the item | `grade10-site-vault-loan-and-settlement-SC-22` |
-| What the collector was told | the messages sent, each with its date and channel | `grade10-admin-vault-operator-queue-US-08` |
-| Movement log | the table: movement, locker, when, by | `grade10-admin-vault-operator-queue-US-04` |
+| What the collector was told | the messages sent, each with its date and channel | `grade10-admin-vault-operator-queue-SC-38` |
+| Movement log | the table: movement, locker, when, by | `grade10-admin-vault-operator-queue-SC-49` |
 
 ### Make an offer
 

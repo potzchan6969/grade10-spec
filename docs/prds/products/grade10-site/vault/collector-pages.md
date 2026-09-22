@@ -198,6 +198,7 @@ phone. The owner's brief is [Grade10 Finance](/references/grade10-finance).
 | Total and lateness on the offer card | Decided | The card states the total to repay and what a late day costs, so a collector answers knowing both | Design |
 | SMS and WhatsApp automation | Deferred | Click-to-chat, staff-pressed, until the owner names a provider | Owner |
 | Phone number | Decided | Stored in E.164 against the brand's plan and unverified until a channel writes to it | Product |
+| Which typed numbers are one person | ❓ Open | Which forms the canonical rule reads as the same person: spacing and dashes, a leading +852, a bare eight-digit local number. One stored form however it was typed is settled; the variants it covers are not | Product |
 | Two vocabularies for one list | Decided | What happens to a case and what the collector is told stay separate lists joined by a map, so no event can ship silent | Engineering |
 | Every copy rides one ladder | Decided | The signed set retries on the same rungs as every other message — **5 minutes** to **6 hours**, an attempt giving up after **10 seconds** — and parks with its reason, rather than being retried for ever by a sweep of its own | Engineering |
 | No extension to ask for | Decided | A borrower pays at their own bank and cannot pay from the page; a renewal is a new offer somebody writes down, and nobody has written one yet | Owner |
