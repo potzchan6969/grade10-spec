@@ -132,14 +132,20 @@ const WORDS = [
 
 // A public export and a migration group: two triggers, two readers, and a
 // diff with no prose line in it, so nothing else is summoned.
-/** A task group's diff that lands code beside a migration group: what
- * summons the build's four readings and operations. */
-const CODE_AND_MIGRATION = [
+/** A task group's diff that lands code alone: one changed line in a
+ * component file, what summons the build's four readings. */
+const CODE_ONLY = [
   "diff --git a/packages/ui/src/blocks/points/points.tsx b/packages/ui/src/blocks/points/points.tsx",
   "--- a/packages/ui/src/blocks/points/points.tsx",
   "+++ b/packages/ui/src/blocks/points/points.tsx",
   "@@ -1,2 +1,3 @@",
   "+export const points = 1;",
+].join("\n");
+
+/** The code beside a migration group: the build's four readings and
+ * operations. */
+const CODE_AND_MIGRATION = [
+  CODE_ONLY,
   "diff --git a/openspec/changes/demo/tasks.md b/openspec/changes/demo/tasks.md",
   "--- a/openspec/changes/demo/tasks.md",
   "+++ b/openspec/changes/demo/tasks.md",
@@ -449,13 +455,29 @@ test("shared-planning-agent-rounds-SC-92 - a prose group summons the page's read
 
 test("shared-planning-agent-rounds-SC-93 - a code group summons the build, QA and the simpler thing, not the reader of words", () => {
   const root = fixture();
-  const code = CODE_AND_MIGRATION.split("\n").slice(0, 5).join("\n");
-  const printed = cli(root, ["demo", "3", "--diff", diffOf(root, code)]);
+  const printed = cli(root, ["demo", "3", "--diff", diffOf(root, CODE_ONLY)]);
   assert.deepEqual(names(printed.readers), [
     "code-smell",
     "conventions",
     "missing-pieces",
     "qa",
+    "simpler",
+    "simplicity",
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a group that lands code and a page's words is read by all seven", () => {
+  const root = fixture();
+  const mixed = [CODE_ONLY, PROSE_GROUP].join("\n");
+  const printed = cli(root, ["demo", "3", "--diff", diffOf(root, mixed)]);
+  // The two sets add up: neither the build's four nor the reader of words
+  // stands in for the other.
+  assert.deepEqual(names(printed.readers), [
+    "code-smell",
+    "conventions",
+    "missing-pieces",
+    "qa",
+    "reader",
     "simpler",
     "simplicity",
   ]);

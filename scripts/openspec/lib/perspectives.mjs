@@ -105,8 +105,12 @@ const under = (section, name) =>
 const ofFile = (file, found) => {
   if (file.startsWith("docs/prds/")) found.add("copy");
   if (/^\.github\/workflows\/.+\.ya?ml$/.test(file)) found.add("deploy");
-  if (!file.endsWith(".md")) found.add("code");
+  if (!isMarkdown(file)) found.add("code");
 };
+
+/** The one boundary between prose and code: a markdown file holds a page's
+ * words, and any other file is code. Read by `ofFile` and `prose` alike. */
+const isMarkdown = (file) => file.endsWith(".md");
 
 const ofLine = (text, found, file, section) => {
   const line = text.trim();
@@ -187,7 +191,7 @@ const keyed = (line, name) =>
  * words is a label. Prose lives in markdown, so a code file's comment is not
  * a page's words. */
 const prose = (line, file) => {
-  if (file && !file.endsWith(".md")) return false;
+  if (file && !isMarkdown(file)) return false;
   if (heading(line) || line.startsWith("|") || line.startsWith("```"))
     return false;
   if (/^[-*+]\s*\[[ xX]\]/.test(line)) return false;

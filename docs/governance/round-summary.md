@@ -66,9 +66,10 @@ never by a hand.
   verifier, whose table carries one row per kind of finding naming each reader
   that filed it and quoting each reader's fix where they differ
 - **The fallback** — `sonnet` for a definition on `opus`, none for one already
-  on it; a dispatch the vendor kills is retried once on it, and a reader that
-  ran on it is `<name> (fallback)` in the summary's perspectives line and the
-  row's cell, written from the model the run reports
+  on `sonnet`; a dispatch the vendor kills is retried once on the fallback,
+  and the reader that ran on it is `<name> (fallback)` in the summary's
+  perspectives line and the row's cell, written from the model the run
+  reports
 - **A reader still missing** — a dispatch killed on its model and on the
   fallback stops the round before the summary: the thread is told which reader
   the round lacks through `relay-post.mjs`, and no row is written

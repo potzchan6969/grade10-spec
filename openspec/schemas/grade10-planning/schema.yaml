@@ -1049,7 +1049,8 @@ apply:
   # lands: missing pieces, simplicity, code smell and the repository's
   # conventions, all `.claude/agents/build.md`'s, where the group lands code
   # (a changed line in any file that is not markdown); the reader of words
-  # where it lands a page's words; QA every round, since a group's tests are
+  # where it lands copy (a page under docs/prds/, or a sentence in any
+  # markdown file); QA every round, since a group's tests are
   # its subject; operations on a migration or a flag; the simpler thing
   # always. A group that lands prose alone is read by the reader of words, QA
   # and the simpler thing.

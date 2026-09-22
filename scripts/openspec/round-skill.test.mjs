@@ -241,7 +241,7 @@ test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settl
   );
 });
 
-test("shared-planning-agent-rounds-SC-95 - one verifier reads every reader's findings, and a fallback or a killed dispatch is said", () => {
+test("shared-planning-agent-rounds-SC-95, shared-planning-agent-rounds-SC-105 - one verifier reads every reader's findings, and a fallback or a killed dispatch is said", () => {
   const skill = claims(ROUND);
   // One verifier over the round, one row per kind of finding naming each
   // reader that filed it; never one verifier per group of findings.
@@ -253,6 +253,12 @@ test("shared-planning-agent-rounds-SC-95 - one verifier reads every reader's fin
   assert.match(skill, /\(fallback\)/);
   assert.match(skill, /retried once on the fallback/i);
   assert.match(skill, /stops the round/i);
+  // SC-105's three clauses live once, on the governance page the skill
+  // links: no summary, the thread told which reader, no row.
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /stops the round before the summary/i);
+  assert.match(conduct, /which reader the round lacks/i);
+  assert.match(conduct, /no row is written/i);
   const verifier = claims(".claude/agents/verifier.md");
   assert.match(verifier, /every reader's findings/i);
   assert.doesNotMatch(verifier, /per group of findings/i);

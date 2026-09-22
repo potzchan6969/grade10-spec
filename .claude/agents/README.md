@@ -22,10 +22,8 @@ resolves to one of them.
 - **The model** — `opus` where the tech design's or a task group's round can
   dispatch the reader, because those two readings are held to the eight
   principles and read code; `sonnet` everywhere else. A file has one model, so
-  a reader that sits on both kinds of list takes `opus`. The fallback is
-  `sonnet` for a definition on `opus`, and none for one already on it: a
-  dispatch the vendor kills is retried once on it, and the round names the
-  reader `<name> (fallback)`
+  a reader that sits on both kinds of list takes `opus`; the fallback is
+  [Round Summary and Landing](../../docs/governance/round-summary.md#readers)'s
 - **Read-only** — every definition carries `tools: Read, Grep, Glob, Bash` and
   writes nothing. The round applies what the verifier says stands
 
