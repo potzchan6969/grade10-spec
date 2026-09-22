@@ -42,11 +42,11 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **The blind readings are their own challenge** — the requirements and the
   cases are two readings of the same journeys, reconciled after both are
   written; what they cannot settle stops on the product manager
-- 🚧 **Two or three questions** — the first round asks what changes what is
+- **Two or three questions** — the first round asks what changes what is
   built, one question whether to do it now, and lists the defaults it applied
   as decided by the round
-- 🚧 **QA is asked when the requirements land** — the landing that puts the
-  suite up for review is a move to QA, and the walk names that review as its
+- **QA is asked when the requirements land** — the landing that puts the
+  suite up for review is a move to QA, and the walk needs it reviewed as its
   input
 
 ## Your Moves
@@ -76,13 +76,13 @@ One round per artifact, and one per task group while the change is building.
   whose word it waits on, and the relay checks the word again before `main`
   moves; a task group lands the branch whole, so only once `main` holds every
   other artifact's text the branch does, the plan and the decisions apart
-- 🚧 **Only your moves** — the summary shows you the moves that are yours; a
-  held question for another hand goes to them as its own message, with the
-  row, the sentence it would put on the page and the decisions it touches
-  quoted
-- 🚧 **Your page is yours** — a line a build round puts on your page reaches
+- **Only your moves** — the summary shows you the moves that are yours; a
+  held question for another hand goes to them as its own reply in the thread,
+  mentioning them, with the row, the sentence already on the page and the
+  decisions it touches quoted
+- **Your page is yours** — a line a build round puts on your page reaches
   you as a question with the line quoted before and after, never as decided
-- 🚧 **One reply, several moves** — an answer and remarks travel in one reply;
+- **One reply, several moves** — an answer and remarks travel in one reply;
   a remark comes back to you before anything lands
 
 ## Perspectives
@@ -96,13 +96,13 @@ Who reads a draft before you do: one row of the planning schema per artifact.
 - 🚧 **Eight principles** — determinism, simplicity, clarity, flexibility,
   modularity, consistency, resilience, observability: one governance page the
   readers cite
-- 🚧 **Prose gets the page's readers** — a task group that lands prose is
+- **Prose gets the page's readers** — a task group that lands prose is
   read by the reader of words and QA, not the build's readings of missing
   pieces, simplicity, code smell and the repository's conventions
-- 🚧 **Verified together** — one verifier reads a round's readings, so a
+- **Verified together** — one verifier reads a round's readings, so a
   finding several readers filed is verified once and no two verdicts disagree
   unseen
-- 🚧 **A fallback is named** — a reader or verifier that ran on a fallback
+- **A fallback is named** — a reader or verifier that ran on a fallback
   model is named so in the round's row and its summary; a reader the fallback
   could not run stops the round, and you are told which
 
@@ -148,25 +148,25 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **One pass over the whole** — after the last group, one reader argues the
   simpler shape for the whole change before it goes to staging; the archive
   holds a change on the round to that row and to the last group's walk row
-- 🚧 **Written, not run** — a group whose lane the environment could not start
+- **Written, not run** — a group whose lane the environment could not start
   says so first in its row and keeps its tasks unticked
-- 🚧 **The record takes the application repository** — a group's repository
+- **The record takes the application repository** — a group's repository
   tag says where its test paths live, and the landing resolves them in the
   application clone it runs beside
-- 🚧 **The cited test carries the id** — a row, or a suite's Manual row, that
+- **The cited test carries the id** — a row, or a suite's Manual row, that
   credits a test the file does not cite is refused
-- 🚧 **A walk's ids are signed** — in the application repository, a walk that
+- **A walk's ids are signed** — in the application repository, a walk that
   carries a case id whose case is still draft is refused
 
 ## Checks
 
-- 🚧 **A page first, for a new capability** — a page naming a capability an
+- **A page first, for a new capability** — a page naming a capability an
   in-flight change declares resolves, before the delta exists
-- 🚧 **A written design may wait** — a design missing its frame stays written
+- **A written design may wait** — a design missing its frame stays written
   and open; only a wait that names nothing is refused
-- 🚧 **Two deltas on one requirement** — two in-flight changes that fold one
+- **Two deltas on one requirement** — two in-flight changes that fold one
   requirement are named to each other, however each has headed its block
-- 🚧 **A suite's Manual table where it is written** — a table outside the
+- **A suite's Manual table where it is written** — a table outside the
   reconciliation is refused when the suite is validated, not at the fold
 
 ## Surfaces

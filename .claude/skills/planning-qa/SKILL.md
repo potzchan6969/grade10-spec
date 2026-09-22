@@ -68,8 +68,8 @@ over one document, and a change in another repository to fix the second.
 the readers and the landing; what follows is what the two files must hold,
 and the order they are written in.
 
-Everything this run produces is `draft`. Nothing in it claims review;
-`/tcs-review` comes later, at its own pace.
+Everything here is `draft`: `/tcs-review` is QA's turn once the requirements
+land, told by the landing.
 
 ## Steps
 

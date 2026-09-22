@@ -86,7 +86,8 @@ landing; what follows is what the three artifacts must hold, and the order they
 are written in.
 
 Everything this run produces is `draft`. Nothing in it claims review.
-`/tcs-review` is QA's, at its own pace.
+`/tcs-review` is QA's turn once the requirements land, and the landing tells
+them.
 
 ## Steps
 

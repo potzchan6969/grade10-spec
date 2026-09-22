@@ -3,9 +3,14 @@
 What a round owes the hand who reads it, and what a landing proves before it
 writes its row. The `workflow-round` and `workflow-build` skills carry the
 procedure and point here for the conduct; a rule below is read by the run,
-never by a hand.
+never by a hand. Each section links the page that says its outcome in the
+reader's words, and the page names the requirement. The rules were drawn from
+one walkthrough (`add-store-cross-sell`, 2026-09-21) and moved by the second
+change through the workflow, `address-each-hand-in-the-round`.
 
 ## Summary
+
+[Agent Rounds · The Round](../prds/products/shared/planning/agent-rounds.md#the-round)
 
 - **What has not run, first** — a lane the environment cannot start, a helper
   no executed test calls, a tests commit pushed unrun. Before any count, alone
@@ -23,6 +28,8 @@ never by a hand.
 
 ## Held Row
 
+[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
+
 - **Its own message** — a held row addressed to another hand is the round's
   own reply in the change's thread, mentioning that hand: the row, the
   sentence already on the page, and the decision rows it touches, quoted; once
@@ -39,6 +46,8 @@ never by a hand.
 
 ## Hand's Reply
 
+[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
+
 - **One reply, several moves** — a reply may carry one answer and any number
   of remarks; a remark comes back to the hand before anything lands, and the
   footer says so
@@ -53,19 +62,28 @@ never by a hand.
 
 ## Build Round
 
+[Agent Rounds · The Walk](../prds/products/shared/planning/agent-rounds.md#the-walk)
+
 - **Tests run before they push** — a tests-first commit has run and failed
   before it is pushed
 - **Pinned to a commit** — every reader brief names the landing's commit,
   never the tree, and a reader writes nothing to the run's checkout
-- **The cited file carries the id** — before the row, `grep -o
-  '<capability>-SC-[0-9]*' <path>` over every path the `--tests` cell and every
-  Manual row names
-- **Written, not run** — a group whose lane did not run says so in its row's
-  first clause and keeps its tasks unticked
-- **The repository per path** — a `--tests` cell names the repository with
-  each path, since both repositories have a `packages/` root
+- **The cited file carries the id** — `plan:land` refuses a `--tests` path
+  that does not cite the scenario id its entry credits, and `pnpm run
+  tcs:validate` a Manual row whose named test in this store does not cite the
+  row's case; a citation is the id followed by no digit
+- **Written, not run** — `plan:land --unrun "<why>"` writes `written, not run
+  — <why>` as the row's first clause; the tasks stay unticked, and a Manual
+  row naming the walk reads `to be walked in <the walk>` until the run that
+  ran the lane lands a row without the clause
+- **The clone per group** — a `--tests` path is bare, and the group's tag
+  names the repository it is resolved in: an application group's paths
+  resolve against `--app-root <dir>`, or the superproject the store clone sits
+  in, and a path neither holds is refused by name
 
 ## Interview
+
+[Agent Rounds · The Round](../prds/products/shared/planning/agent-rounds.md#the-round)
 
 - **What is asked** — at most three questions that change what is built, one
   of them whether to do it now. A sentence that leaves nothing else open is
@@ -80,6 +98,8 @@ never by a hand.
 
 ## Readers
 
+[Agent Rounds · Perspectives](../prds/products/shared/planning/agent-rounds.md#perspectives)
+
 - **One verifier over the round** — every reader's findings go to one
   verifier, whose table carries one row per kind of finding naming each reader
   that filed it and quoting each reader's fix where they differ
@@ -91,11 +111,3 @@ never by a hand.
 - **A reader still missing** — a dispatch killed on its model and on the
   fallback stops the round before the summary: the thread is told which reader
   the round lacks through `relay-post.mjs`, and no row is written
-
-## Open
-
-- ❓ `plan:land` refuses a `--tests` path this store holds no file at, so an
-  application group's row cannot land through the command; the cell's shape
-  for a path outside this store waits on a change of its own
-- ❓ The rules above were drawn from one walkthrough (`add-store-cross-sell`,
-  2026-09-21); a second change through the workflow confirms or moves them
