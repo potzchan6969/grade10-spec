@@ -70,7 +70,7 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## References
 
-- [You May Also Like · The Rail](../../../docs/prds/products/grade10-site/store/cross-sell.md#the-rail)
+- [You May Also Like · The Rail](../../../docs/prds/products/grade10-site/store/cross-sell.md#rail)
 - [You May Also Like · Picks](../../../docs/prds/products/grade10-site/store/cross-sell.md#picks)
 - [You May Also Like · Similar Cards](../../../docs/prds/products/grade10-site/store/cross-sell.md#similar-cards)
 - [Product Details · You May Also Like](../../../docs/prds/products/grade10-site/store/product-page.md#you-may-also-like)

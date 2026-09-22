@@ -4,14 +4,14 @@ spec: grade10-site/store/cross-sell
 order: 4
 ---
 
-Below a card, the store shows other cards the collector may also like.
+Below a card, the store shows other cards the collector may also like —
+[Product Details](/p/grade10-site/store/product-page).
 
 | Rule | Value |
 | --- | --- |
 | Cards shown | 🚧 up to 6 |
-| Reaches the page | 🚧 when the card's page does — [Product Details](product-page.md) |
 
-## The Rail
+## Rail
 
 - 🚧 **One rail** — under the card, headed **You may also like**: the stock
   keeper's picks first, in their order, then similar cards to fill; nothing
@@ -30,6 +30,8 @@ Below a card, the store shows other cards the collector may also like.
 - 🚧 **A rail the store cannot compose** — where the store's copy of the
   catalogue is not to hand, the card's page answers whole with no rail for that
   minute
+- 🚧 **Picks the store cannot read** — where a card's picks cannot be read,
+  the similar cards fill the rail alone
 
 ## Picks
 
@@ -51,6 +53,8 @@ the similar cards follow, within minutes
 ::story{id="store-product-related-rail--picks-and-similar" title="The rail under a card"}
 
 ::story{id="store-product-related-rail--sold-out-pick-opens" title="A sold-out pick, still open"}
+
+::story{id="store-product-related-rail--one-card" title="One card is enough"}
 
 :::detail{title="Product decisions" for="pm"}
 A collector who reaches a card and does not buy it leaves with nothing else to
@@ -83,7 +87,8 @@ curating the similar cards by hand. Auction lots.
 | Where picks live | Decided | In Shopify, on the card, by the stock keeper. Not a second store of product data in the admin panel. | Product |
 | Similar order | Decided | World, then language, then type. A Japanese card and an English one are different markets to a collector. | Product |
 | Also bought | Decided | Phase two, its own change, once the store has orders to count. | Product |
-| One rail | Decided | Picks and similar cards in one rail, unlabelled, up to 6, shown even with just one card. | Product |
-| No cart in the rail | Decided | A rail card opens the card. Adding is done on the card's own page. | Product |
+| One rail | Decided | One rail for picks and similar cards alike, unlabelled and shown with one card. Not a rail per source, which labels a distinction no collector acts on; not hiding a one-card rail, since a pick is the stock keeper's deliberate act. | Product |
+| No cart in the rail | Decided | Adding is done on the card's own page. Not adding from the rail: the listing tile sells, so the rail would have to turn that control off. | Product |
+| Narrow layout | ❓ Open | How the rail lays out on a narrow screen — the tile width, the gap, wrap or scroll — waits on the frame from design. | Design |
 | Now, before launch | Decided | Picks are a stock keeper's work and can be loaded before the store opens. | Product |
 :::

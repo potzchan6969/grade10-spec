@@ -75,5 +75,5 @@ Gated on @tangconst's frame, awaited by 2026-09-24; claimed only once it
 lands, so no other group waits on it.
 
 - [ ] 7.1 The sold-out tile's hover and focus state as the frame draws it on `Product / Product Card` `4200:155`, in `ProductCard`'s stories and the block
-- [ ] 7.2 The frame's `::figma` card on `docs/prds/products/grade10-site/store/cross-sell.md`, and the rail's narrow layout as the frame draws it
+- [ ] 7.2 The rail's narrow layout as the frame draws it, in the block and its `Narrow` story, and the page's ❓ on the narrow layout closed; no `::figma` card — the page carries the rail's `::story` cards, and Storybook is the live reference from then on
 - [ ] 7.3 Verify: `pnpm run test:stories:ui`, `pnpm run design-sync:check`, `pnpm check:manual`

@@ -67,6 +67,8 @@
 | Q40 | Does the page's read keep the decoding default on `related` (a read carrying no rail decodes to none)? | Kept while the read is not yet deployed - decided by the round: it is the design's own rollback, and its expiry is written on task 4.3 | Required on the wire now, killing every card page for the window between the two deploys |
 | Q41 | The walk's tests carry the suite's case ids while every case is still `draft` (the suite is `pending-review`), and the application repository's rule is that a case not yet `actual` has no Playwright test; does QA sign the suite off before group 6 ticks, the ids staying as the Manual table names them? | Yes - QA (@chloe9gag): the suite is reviewed with `/tcs-review` before 6.1 ticks and the ids stay; an issued id is permanent whatever the verdict, every case stays manual, and the run sheet takes actual cases only, so 5.2 and the by-hand pass wait on the review regardless | Landing the walk with no ids and adding them at sign-off; re-ordering group 6 after 5.2 |
 | Q42 | The rail renders a bare stack with no landmark and no accessible name, so a walk can only reach it by its `data-slot`; does the block become a named region carrying its heading? | Yes - decided by the round: a `region` labelled by the heading, as the listing's Products region is, landing as task 1.7 in this store, after group 6; the walk scopes its role queries under the slot until then | Leave the block; the walk keeps reaching through the slot |
+| Q43 | Does the rail's page show the one-card story beside the rail's and the sold-out pick's? | Yes - decided by the round: the one-card rule is the page's own decision and the story is built | The two cards alone |
+| Q44 | Does the rail's page carry a `::cases` block now, so the manual shows its suite? | No - decided by the round: the suite is draft, no store page embeds one, and the class is another change's | The block now, showing 27 draft cases |
 
 ## Raised
 
@@ -95,3 +97,5 @@
 | grade10-site/store/cross-sell | Build readers: the decoding default on `related` tolerates a stale worker silently. | Q40 |
 | grade10-site/store/cross-sell | Build readers: the walk cites case ids on a suite QA has not signed off. | Q41 |
 | grade10-site/store/cross-sell | Build readers: the rail has no landmark, every walk locator is a slot. | Q42 |
+| grade10-site/store/cross-sell | Build readers: the one-card story is built and no page shows it. | Q43 |
+| grade10-site/store/cross-sell | Build readers: the page names its suite and carries no `::cases` block. | Q44 |

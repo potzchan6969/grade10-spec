@@ -19,7 +19,7 @@ where the tile sells.
 
 🚧 **Opens where it does not sell** — on a surface that draws no cart control,
 a sold-out tile still opens its product, sold-out treatment and all —
-[You May Also Like](../../grade10-site/store/cross-sell.md)
+[You May Also Like](/p/grade10-site/store/cross-sell)
 
 🚧 **Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
@@ -104,4 +104,5 @@ recorded here rather than quietly folded into a group that does not mean them.
 | --- | --- | --- | --- |
 | Responsive layout | Open | The list answers the width it is given, and has since it was written, but no part of the feature set said so. Named as its own part of the map. Confirm that is where it belongs, or fold it somewhere that already means it. | Product |
 | Load more | Open | Reaching the end of the catalogue and waiting for the next products are reported like every other change, and were likewise unmapped. Named as its own part. Same question. | Product |
+| Tile as a link | Decided | A tile that navigates is a link: the product card takes an address and draws the tile as an anchor, in the listing's own round. Until it lands, a served tile opens only once the page's scripts run. | Engineering |
 :::

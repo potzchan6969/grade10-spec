@@ -2,6 +2,7 @@
 
 **Status:** pending-review
 **Drafts styled:** 2026-09-21, tcs-rules r3.0
+**Out of suite:** grade10-site-store-cross-sell-SC-25, grade10-site-store-cross-sell-SC-26
 
 ## grade10-site-store-cross-sell-US1: Collector opens a card the stock keeper chose for this one
 
@@ -174,6 +175,8 @@ Runs once per row of **Test data**.
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cross-sell-US-01
+
+**Blocked:** Engineering - the tile as a link waits on the listing's round (an address on the product card, @htonyl); until it lands, a served tile opens only once the page's scripts run.
 
 **Pre-conditions:**
 
@@ -1020,47 +1023,6 @@ the card itself, and see them on its page,
 
 * The first three tiles are `<pick_5>`, `<pick_6>`, `<pick_7>`, in that order.
 
-### Manual
-
-What stays manual, and why. The walks live in the application repository,
-and a `**Decided by:**` path resolves inside this store alone, so no case here
-is flipped. Where a test in the application repository proves part of a case,
-the row names it and what the case walks beyond it; the rest is walked on the
-run sheet, on the dev shop, where its picks and its clock are in play. The
-walk is written and has not run: its lane needs the isolated stack, which the
-build's environment could not start, so every row it names still reads as
-walked until 6.2 runs.
-
-| Manual | Why |
-| --- | --- |
-| `grade10-site-store-cross-sell-US1-TC1-1` | the picks leading and the like filling is walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` on the fixture's four tiles and proved at the rule (`packages/grade10-store/backend/test/services/catalog/related.test.ts`, `grade10-site-store-cross-sell-SC-03`); the six-tile count is a person's, on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC2-1` | the cut to six is proved at the rule (`grade10-site-store-cross-sell-SC-04`); no fixture card has six like it, so a person counts the tiles on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC3-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and proved on the page (`apps/frontend/grade10/src/pages/store/ProductPage.test.tsx`, `grade10-site-store-cross-sell-SC-07`); a person opens a tile on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC4-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` against the listing's own cart control, and proved at the block's story (`packages/ui/src/blocks/store-product/store-product-related-rail.stories.tsx`, `grade10-site-store-cross-sell-SC-26`); a person reads the tiles on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC5-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` with the scripts held, the rail under the buy box and the page not moving, and proved at `apps/frontend/grade10/src/serving/prerender.test.tsx` (`grade10-site-store-cross-sell-SC-01`); a served tile is a button until `shared/ui/store-product-listing` takes an href (Q38), so 'each tile is a link' is a person's read with scripting off, and fails today |
-| `grade10-site-store-cross-sell-US1-TC6-1` | the sold-out pick's place, words and activation are proved on the page (`grade10-site-store-cross-sell-SC-14`) and at the tile's story (`shared-ui-store-product-listing-SC-91`); no fixture card is sold out whole, so a person sells a pick out on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC7-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` (Charizard's picks name Charizard) and proved at the rule (`grade10-site-store-cross-sell-SC-06`); a person chooses a card as its own pick in the dashboard |
-| `grade10-site-store-cross-sell-US1-TC8-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` (the mug: no heading, no rail, nothing after the card's last line) and proved in the served document (`apps/frontend/grade10/src/serving/hydration.test.tsx`, `grade10-site-store-cross-sell-SC-09`); a person reads the space on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC9-1` | proved at the rule (`grade10-site-store-cross-sell-SC-28`); the fixture writes what the app writes, so a person breaks the dev shop's metafield by hand and reads the page whole |
-| `grade10-site-store-cross-sell-US1-TC10-1` | proved on the page (`grade10-site-store-cross-sell-SC-02`); no fixture card is sold out whole, so a person reads one on the dev shop |
-| `grade10-site-store-cross-sell-US1-TC12-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` (the apron's one pick) and proved on the page (`grade10-site-store-cross-sell-SC-05`) |
-| `grade10-site-store-cross-sell-US1-TC13-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` (the booster, a pick and like Charizard, once) and proved at the rule (`grade10-site-store-cross-sell-SC-22`) |
-| `grade10-site-store-cross-sell-US1-TC14-1` | proved at the rule (`grade10-site-store-cross-sell-SC-32`); a person publishes a card with picks on the dev shop and reads it within the catalogue's window |
-| `grade10-site-store-cross-sell-US2-TC1-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` (the booster, no picks, shows Charizard) and proved at the rule (`grade10-site-store-cross-sell-SC-15`) |
-| `grade10-site-store-cross-sell-US2-TC2-1` | proved at the rule (`grade10-site-store-cross-sell-SC-16`, `grade10-site-store-cross-sell-SC-17`); the fixture carries one card per fact, so a person reads the order on the dev shop |
-| `grade10-site-store-cross-sell-US2-TC3-1` | proved at the rule (`grade10-site-store-cross-sell-SC-18`); a person reads two cards sharing one fact on the dev shop |
-| `grade10-site-store-cross-sell-US2-TC4-1` | proved at the rule (`grade10-site-store-cross-sell-SC-27`); a person counts the tiles under a card with seven or more like it |
-| `grade10-site-store-cross-sell-US2-TC5-1` | proved at the rule (`grade10-site-store-cross-sell-SC-21`); a person sells a similar card out on the dev shop and reads the rail |
-| `grade10-site-store-cross-sell-US2-TC6-1` | proved at the rule (`grade10-site-store-cross-sell-SC-29`); a person reads a card the dev shop names no world for |
-| `grade10-site-store-cross-sell-US2-TC7-1` | walked in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` through the shop's own reports (Griffey taken down and reported again, Charizard's rail following the copy past the card's minute) and proved at the rule and the held copy (`grade10-site-store-cross-sell-SC-23`, `grade10-site-store-cross-sell-SC-24`, `packages/grade10-store/backend/test/services/catalog/projection.test.ts`) |
-| `grade10-site-store-cross-sell-US2-TC8-1` | proved at the rule (`grade10-site-store-cross-sell-SC-19`); a person reads two cards sharing two worlds on the dev shop |
-| `grade10-site-store-cross-sell-US2-TC9-1` | proved at the rule (`grade10-site-store-cross-sell-SC-31`); a person reads an older card sharing two facts beside a newer one sharing one |
-| `grade10-site-store-cross-sell-US3-TC1-1` | the order is proved at the rule (`grade10-site-store-cross-sell-SC-11`); the dashboard is out of the walk's lane, an occupancy skip in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`, so the stock keeper's steps are walked by hand on the dev shop and the page read within its minute |
-| `grade10-site-store-cross-sell-US3-TC2-1` | the order is proved at the rule (`grade10-site-store-cross-sell-SC-11`); the reorder in the dashboard is walked by hand (occupancy skip in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`) |
-| `grade10-site-store-cross-sell-US3-TC3-1` | proved at the rule (`grade10-site-store-cross-sell-SC-30`); the clearing in the dashboard is walked by hand (occupancy skip in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`) |
-| `grade10-site-store-cross-sell-US3-TC4-1` | proved at the rule (`grade10-site-store-cross-sell-SC-13`); the card's removal from the dev shop is walked by hand (occupancy skip in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`) |
-| `grade10-site-store-cross-sell-US3-TC5-1` | the read of a changed pick is proved at `packages/shopify/backend/test/catalog/createShopifyCatalog.test.ts` and the worker's spec (`grade10-site-store-cross-sell-SC-12`); the pick added in the dashboard is walked by hand (occupancy skip in `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`) |
-
 ## Settled
 
 None yet.
@@ -1076,3 +1038,55 @@ None yet.
 - **Contradicted** — none: the two readings stated no opposite outcomes. The one apparent one was the suite's US1-TC9 (no rail when the picks cannot be read) against the tech design (similar cards alone): the `ui-design.md` row "Picks could not be read" had said "as if there were nothing to show" and was corrected to "similar cards alone" (Q21) before the case was rewritten
 - **Uncovered anchors** — `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` (the rail's exports): **Out of suite:** the shared UI package's own tests and stories in this store, `packages/ui/src/blocks/store-product/`; the two widenings the rail leans on are `shared/ui/store-home` (`shared-ui-store-home-SC-10`) and `shared/ui/store-product-listing` (`shared-ui-store-product-listing-SC-91`, `shared-ui-store-product-listing-SC-92`), verified in those packages' own tests
 - **Cases added after the reconciliation** — US1-TC12 (`grade10-site-store-cross-sell-SC-05`), US1-TC13 (`grade10-site-store-cross-sell-SC-22`), US2-TC8 (`grade10-site-store-cross-sell-SC-19`), US3-TC5 (`grade10-site-store-cross-sell-SC-12`, on the product manager's remark): written by the run from the scenarios the blind pass left unreached, so they are not blind
+
+### Out of suite
+
+* `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` - the rail's exports: the block's own stories and public-exports test in this store, `packages/ui/src/blocks/store-product/`.
+
+### Manual
+
+What stays manual, and why. No single test decides a case whole, and the
+walks live in the application repository, where a `**Decided by:**` path
+cannot reach, so no case here is flipped. Each row names the test that proves
+part of the case, in these words, and what a person walks beyond it:
+
+- the rule's test - `packages/grade10-store/backend/test/services/catalog/related.test.ts`, in the application repository
+- the page's test - `apps/frontend/grade10/src/pages/store/ProductPage.test.tsx`, in the application repository
+- the served document's test - `apps/frontend/grade10/src/serving/hydration.test.tsx`, in the application repository
+- the shop read's test - `packages/shopify/backend/test/catalog/createShopifyCatalog.test.ts`, in the application repository
+- the rail's stories - `packages/ui/src/blocks/store-product/store-product-related-rail.stories.tsx`, in this store
+- the tile's stories - `packages/ui/src/blocks/store-product-listing/product-card.stories.tsx`, in this store
+- the walk - `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts`, in the application repository, one test per case it names; a row that names it is proved once task 6.2 has run, and task 5.2 ticks then
+
+The person's part is walked on the run sheet, on the dev shop, where its
+picks and its clock are in play.
+
+| Manual | Why |
+| --- | --- |
+| `grade10-site-store-cross-sell-US1-TC1-1` | the rule's test proves the picks lead in the stock keeper's order and the cards like it fill after them; the walk names it, on three tiles; a person counts six on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC2-1` | the rule's test proves the cut to six; a person walks a card with six or more like it on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC3-1` | the page's test proves a tile's activation opens its card's page; the walk names it; a person opens a tile on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC4-1` | the rail's stories and the page's test prove no tile carries a cart control; the walk names it; a person reads the tiles on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC5-1` | the served document's test and the page's test prove the rail is in the page's response, headed and under the buy box; the walk names it, with the scripts held and the page not moving; the tile as a link is the listing round's, and the case is blocked on it |
+| `grade10-site-store-cross-sell-US1-TC6-1` | the page's test and the tile's stories prove a sold-out pick's place, its words and its activation; a person sells a pick out on the dev shop and reads its tile |
+| `grade10-site-store-cross-sell-US1-TC7-1` | the rule's test proves the card is never under itself; the walk names it; a person chooses a card as its own pick in the dashboard |
+| `grade10-site-store-cross-sell-US1-TC8-1` | the page's test proves no rail, no heading and no space; the walk names it, nothing following the card's last line; a person reads the space on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC9-1` | the rule's test proves unreadable picks leave the similar cards and the page whole; a person breaks the dev shop's metafield by hand |
+| `grade10-site-store-cross-sell-US1-TC10-1` | the page's test proves a sold-out card shows its own rail; a person reads one on the dev shop |
+| `grade10-site-store-cross-sell-US1-TC12-1` | the page's test proves one card is enough; the walk names it, on the apron's one pick; nothing remains for a person beyond the walk |
+| `grade10-site-store-cross-sell-US1-TC13-1` | the rule's test proves a pick is not repeated among the similar cards; the walk names it; nothing remains for a person beyond the walk |
+| `grade10-site-store-cross-sell-US1-TC14-1` | the rule's test proves a card the store's copy does not hold yet shows its picks alone; a person publishes a card with picks on the dev shop and reads it within the catalogue's window |
+| `grade10-site-store-cross-sell-US2-TC1-1` | the rule's test proves a card with no picks shows the cards like it; the walk names it; nothing remains for a person beyond the walk |
+| `grade10-site-store-cross-sell-US2-TC2-1` | the rule's test proves a shared world weighs before a shared language, and a language before a type; a person reads the order on the dev shop's cards |
+| `grade10-site-store-cross-sell-US2-TC3-1` | the rule's test proves newest first among cards sharing the same fact; a person reads two such cards on the dev shop |
+| `grade10-site-store-cross-sell-US2-TC4-1` | the rule's test proves the similar cards stop at six; a person counts the tiles under a card with seven or more like it |
+| `grade10-site-store-cross-sell-US2-TC5-1` | the rule's test proves a card nobody can buy is never a similar card; a person sells a similar card out on the dev shop and reads the rail |
+| `grade10-site-store-cross-sell-US2-TC6-1` | the rule's test proves a card with no world falls to its language and type, and a card with no facts draws none; a person reads a card the dev shop names no world for |
+| `grade10-site-store-cross-sell-US2-TC7-1` | the rule's test proves a card the copy gains joins and one that sells out leaves; the walk names it, Griffey taken down and reported again through the shop's own reports; a person changes the dev shop's catalogue and waits its window |
+| `grade10-site-store-cross-sell-US2-TC8-1` | the rule's test proves a fact shared twice counts once; a person reads two cards sharing two worlds on the dev shop |
+| `grade10-site-store-cross-sell-US2-TC9-1` | the rule's test proves closer comes before newer; a person reads an older card sharing two facts beside a newer one sharing one |
+| `grade10-site-store-cross-sell-US3-TC1-1` | the rule's test proves the stock keeper's order is the rail's; the walk skips it, the dashboard being out of its lane; the stock keeper's steps are walked by hand on the dev shop and the page read within its minute |
+| `grade10-site-store-cross-sell-US3-TC2-1` | the rule's test proves the stock keeper's order is the rail's; the reorder in the dashboard is walked by hand and the page read within its minute |
+| `grade10-site-store-cross-sell-US3-TC3-1` | the rule's test proves clearing every pick leaves the similar cards; the clearing in the dashboard is walked by hand |
+| `grade10-site-store-cross-sell-US3-TC4-1` | the rule's test proves a pick the catalogue no longer holds is left out; the card's removal from the dev shop is walked by hand |
+| `grade10-site-store-cross-sell-US3-TC5-1` | the shop read's test proves a changed pick is read with the card; the pick added in the dashboard is walked by hand and the page read within its minute |

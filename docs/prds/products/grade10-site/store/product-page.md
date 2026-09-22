@@ -42,7 +42,7 @@ Store and opens Store Locator
 ## You May Also Like
 
 🚧 **You may also like** — related cards under the card —
-[You May Also Like](cross-sell.md)
+[You May Also Like](/p/grade10-site/store/cross-sell)
 
 ## Designs
 
