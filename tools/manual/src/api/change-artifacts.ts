@@ -30,7 +30,8 @@ const KNOWN: Record<string, { label: string; meaning: string }> = {
   },
   "test-cases": {
     label: "Test Cases",
-    meaning: "QA's suite, derived from the journeys and the scenarios.",
+    meaning:
+      "The cases, drawn blind from the journeys; the product manager lands them with the requirements.",
   },
   "ui-design": {
     label: "UI",

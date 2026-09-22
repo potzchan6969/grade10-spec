@@ -23,9 +23,10 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { readdirSync, readFileSync } from "node:fs";
+import { readdirSync } from "node:fs";
 import { dirname, join, relative, sep } from "node:path";
-import { fileURLToPath } from "node:url";
+import { fileURLToPath, pathToFileURL } from "node:url";
+import { readTextIfThere } from "./lib/read-text.mjs";
 
 const ROOT = dirname(dirname(dirname(fileURLToPath(import.meta.url))));
 /** This file's own usage text names ids to show the shape of one. Nobody is
@@ -105,16 +106,15 @@ function walk(dir, out = []) {
 /** Every id the store issues in a heading, and every place any id is named.
  * One pass: the walk is the expensive part, and a second query in the same
  * run is not worth a cache file. */
-function scan(files) {
+export function scan(files) {
   const definitions = new Map(); // id -> [site]
   const mentions = new Map(); // id -> [site]
   for (const file of files) {
-    let text;
-    try {
-      text = readFileSync(file, "utf8");
-    } catch {
-      continue;
-    }
+    // A file that is gone since the walk listed it issues no id; a file that
+    // is there and cannot be read would issue none either, and the ids it
+    // holds are what the query is asking for, so it stops the run instead.
+    const text = readTextIfThere(file);
+    if (text === undefined) continue;
     if (
       !text.includes("-SC-") &&
       !text.includes("-US-") &&
@@ -403,4 +403,4 @@ function listCapability(query, definitions) {
   console.log("");
 }
 
-main();
+if (import.meta.url === pathToFileURL(process.argv[1] ?? "").href) main();

@@ -57,6 +57,7 @@ const cases = [
   "**Properties:**",
   "",
   "- **Status:** draft",
+  "- **Automation status:** manual",
   "- **Trace:** alpha-SC-01",
   "",
 ].join("\n");

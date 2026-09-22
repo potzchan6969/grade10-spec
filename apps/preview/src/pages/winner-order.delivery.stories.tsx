@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, within } from "storybook/test";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   winnerOrderMeta,
   winnerOrderSettled,
@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses card (Visa + masked number); Processing Bank Transfer shows the bank-transfer method strip with no card mask.",
+          "Winner Order after payment (Processing → Shipped → Delivered). Default Processing uses a card mark and masked last four; Processing Bank Transfer shows the bank icon with the bank name and masked last four.",
       },
     },
   },
@@ -46,7 +46,7 @@ export const Processing: Story = {
     expect(canvas.getByText("Shipped")).toBeVisible();
     expect(canvas.getByText("Completed")).toBeVisible();
     expect(canvas.getByText("20 Sep 2026")).toBeVisible();
-    expect(canvas.getByText("Visa")).toBeVisible();
+    expect(canvas.getByLabelText("Visa")).toBeVisible();
     expect(canvas.getByText("···· 4242")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
@@ -76,16 +76,29 @@ export const ProcessingOverpaid: Story = {
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$15,660")).toBeVisible();
+    expect(canvas.getByText("HK$16,140")).toBeVisible();
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
+    await userEvent.click(canvas.getByRole("button", { name: "View" }));
+    const page = within(canvasElement.ownerDocument.body);
+    const dialogElement = await waitFor(() => {
+      const found = page.getByRole("dialog", { name: "Refund Details" });
+      expect(found).toBeVisible();
+      return found;
+    });
+    const dialog = within(dialogElement);
+    expect(dialog.getByText("Transfer to")).toBeVisible();
+    expect(dialog.getByLabelText("Bank")).toBeVisible();
+    expect(dialog.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(dialog.getByText("Reference")).toBeVisible();
+    expect(dialog.getByText("G10-RF-LK7P2Q")).toBeVisible();
   },
 };
 
 /**
  * Paid by bank transfer after operator confirmation — same Processing shell,
- * payment method strip shows Bank transfer with no masked card number.
+ * payment method shows the bank and a masked last-four account.
  * Processing fee may be Free when the operator set none.
  */
 export const ProcessingBankTransfer: Story = {
@@ -94,8 +107,8 @@ export const ProcessingBankTransfer: Story = {
     status: "processing",
     content: {
       ...WINNER_ORDER_CONTENTS.processing,
-      paymentMethod: "Bank transfer",
-      paymentMasked: undefined,
+      paymentMethod: "HSBC",
+      paymentMasked: "···· 8891",
       invoiceLines: BANK_TRANSFER_INVOICE_LINES,
     },
   },
@@ -109,12 +122,13 @@ export const ProcessingBankTransfer: Story = {
     ).not.toBeNull();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
-    expect(sidebar.getByText("Bank transfer")).toBeVisible();
+    expect(sidebar.getByLabelText("Bank")).toBeVisible();
+    expect(sidebar.getByText("HSBC, ···· 8891")).toBeVisible();
     expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
     expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
-    expect(sidebar.getByText("HK$15,540")).toBeVisible();
+    expect(sidebar.getByText("HK$16,020")).toBeVisible();
     expect(sidebar.queryByText("HK$120")).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();

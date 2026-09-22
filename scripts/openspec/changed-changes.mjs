@@ -1,8 +1,17 @@
 import { execFile } from "node:child_process";
+import { mkdtempSync, rmSync } from "node:fs";
 import { appendFile } from "node:fs/promises";
-import { dirname, resolve } from "node:path";
+import { tmpdir } from "node:os";
+import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
 import { parseArgs, promisify } from "node:util";
+import YAML from "yaml";
+
+import { STAGE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import { messagesOf, newlyBehind, readingOf } from "./lib/moves.mjs";
+import { deliver, readSentKeys } from "./lib/notify.mjs";
+import { readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { escapeSlackText } from "./lib/wording.mjs";
 
 const exec = promisify(execFile);
 const rootDirectory = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
@@ -178,7 +187,7 @@ export function classifyCapabilities(changed) {
   return finishChanges(groups);
 }
 
-async function changedFiles(base, head) {
+async function changedFiles(root, base, head) {
   const { stdout } = await exec(
     "git",
     [
@@ -192,7 +201,7 @@ async function changedFiles(base, head) {
       CHANGE_ROOT,
       SPEC_ROOT,
     ],
-    { cwd: rootDirectory },
+    { cwd: root },
   );
   return parseChangedFiles(stdout);
 }
@@ -201,40 +210,40 @@ function humanize(id) {
   return id.replace(/[-_]+/g, " ");
 }
 
-function escapeSlackText(text) {
-  return text
-    .replaceAll("&", "&amp;")
-    .replaceAll("<", "&lt;")
-    .replaceAll(">", "&gt;");
-}
-
 function scopesText(scopes = []) {
   return scopes.length
     ? ` — ${scopes.map((scope) => `\`${escapeSlackText(scope)}\``).join(", ")}`
     : "";
 }
 
+/** A Slack link, or the bare label where there is no url: an empty link
+ * target is a link nobody can click, not a link nobody clicks. */
+function slackLink(url, label) {
+  return url ? `<${url}|${label}>` : label;
+}
+
 function changeLink(id, title, openspecUrl) {
   const baseUrl = openspecUrl.replace(/\/$/, "");
-  return `<${baseUrl}/#/change/${encodeURIComponent(id)}|${escapeSlackText(title)}>`;
+  return slackLink(
+    `${baseUrl}/#/change/${encodeURIComponent(id)}`,
+    escapeSlackText(title),
+  );
 }
 
 function capabilityLink(id, openspecUrl) {
   const baseUrl = openspecUrl.replace(/\/$/, "");
   const path = id.split("/").map(encodeURIComponent).join("/");
-  return `<${baseUrl}/#/spec/${path}|${escapeSlackText(id)}>`;
+  return slackLink(`${baseUrl}/#/spec/${path}`, escapeSlackText(id));
 }
 
-async function titleAt(ref, directory, fallback) {
+async function titleAt(root, ref, directory, fallback) {
   try {
-    const { stdout } = await exec(
-      "git",
-      ["show", `${ref}:${CHANGE_ROOT}${directory}/proposal.md`],
-      {
-        cwd: rootDirectory,
-      },
+    const stdout = await showAt(
+      root,
+      ref,
+      `${CHANGE_ROOT}${directory}/proposal.md`,
     );
-    const title = stdout.match(/^#\s+(.+)$/m)?.[1]?.trim();
+    const title = stdout?.match(/^#\s+(.+)$/m)?.[1]?.trim();
     if (title) return title;
   } catch {
     // The proposal may have been removed in the same push.
@@ -242,13 +251,42 @@ async function titleAt(ref, directory, fallback) {
   return humanize(fallback);
 }
 
-export async function titledChanges(changes, { base, head }) {
+/**
+ * One file as a revision holds it, or nothing where that revision has none —
+ * and nothing for that one reason alone. Every other way `git show` can
+ * refuse, a revision the checkout does not hold among them, stops the run
+ * naming the ref and the path: a record read as absent because git refused
+ * something else would compute a move that never happened.
+ */
+export async function showAt(root, ref, path) {
+  try {
+    const { stdout } = await exec("git", ["show", `${ref}:${path}`], {
+      cwd: root,
+      maxBuffer: 16 * 1024 * 1024,
+    });
+    return stdout;
+  } catch (error) {
+    const said = String(error?.stderr ?? "");
+    if (/does not exist in|exists on disk, but not in/.test(said))
+      return undefined;
+    throw new Error(
+      `git show ${ref}:${path} refused in ${root}: ${(said || error.message).trim()}`,
+      { cause: error },
+    );
+  }
+}
+
+export async function titledChanges(
+  changes,
+  { base, head, root = rootDirectory },
+) {
   const titled = {};
   for (const [status, items] of Object.entries(changes)) {
     titled[status] = await Promise.all(
       items.map(async (item) => ({
         ...item,
         title: await titleAt(
+          root,
           status === "removed" ? base : head,
           item.path,
           item.id,
@@ -259,6 +297,14 @@ export async function titledChanges(changes, { base, head }) {
   return titled;
 }
 
+/** The stage a change moved into, where this run read one — the channel's own
+ * half of what every message says. A run that read no stage says nothing
+ * about one rather than guessing from the files it saw. */
+function stageText(stages, id) {
+  const stage = stages[id];
+  return stage ? ` · *${STAGE_LABEL[stage] ?? stage}*` : "";
+}
+
 export function slackPayload({
   changes,
   capabilities = { new: [], updated: [], archived: [], removed: [] },
@@ -266,7 +312,9 @@ export function slackPayload({
   commitUrl,
   manualUrl,
   openspecUrl = "https://spec.grade10-stg.com/openspec/",
+  stages = {},
 }) {
+  const sha = commitSha.slice(0, 7);
   const sections = [
     ["new", "New", ":new:"],
     ["updated", "Updated", ":pencil2:"],
@@ -283,7 +331,7 @@ export function slackPayload({
           text: `${icon} OpenSpec *${label}*\n${changes[status]
             .map(
               ({ id, title, scopes }) =>
-                `- ${changeLink(id, title, openspecUrl)} (\`${id}\`)${scopesText(scopes)}`,
+                `- ${changeLink(id, title, openspecUrl)} (\`${id}\`)${stageText(stages, id)}${scopesText(scopes)}`,
             )
             .join("\n")}`,
         },
@@ -313,12 +361,199 @@ export function slackPayload({
         elements: [
           {
             type: "mrkdwn",
-            text: `<${manualUrl}|Planning> | <${commitUrl}|${commitSha.slice(0, 7)}>`,
+            text: `${slackLink(manualUrl, "Planning")} | ${slackLink(commitUrl, sha)}`,
           },
         ],
       },
     ],
   };
+}
+
+// ── The stages, the hands and the messages ──────────────────────────────────
+
+/*
+ * A push is one repository at two revisions, so the stage, the hands and what
+ * is behind are read twice — at the push's base and at its head — and a
+ * message is what the difference between the two readings says.
+ *
+ * The readers are the manual's own, run against two roots: the checkout, and
+ * a detached worktree of the base that is removed again before the step ends.
+ * `git show` could not serve them — the reader reads files from a root, one
+ * artifact being several files — and a second reading of the stage written
+ * here would drift from the board's inside a week.
+ */
+
+/** The record, which is not an artifact: `reviewed:`, `thread:` and
+ * `landed_by:` are what a round writes about a change, never a thing it
+ * landed, so a push carrying nothing else tells nobody. */
+const RECORD_FILE = ".openspec.yaml";
+const RECORD_KEYS = ["reviewed", "thread", "landed_by"];
+
+/** The base's reading, out of a worktree that is removed again whatever
+ * happens — a temporary directory here, never inside the checkout, so a
+ * failed run leaves no tree for the next push to trip over. */
+async function readingAt(root, base) {
+  const held = mkdtempSync(join(tmpdir(), "notify-base-"));
+  const tree = join(held, "base");
+  await exec("git", ["worktree", "add", "--detach", tree, base], { cwd: root });
+  try {
+    return await readingOf(tree);
+  } finally {
+    await exec("git", ["worktree", "remove", "--force", tree], {
+      cwd: root,
+    }).catch(() => exec("git", ["worktree", "prune"], { cwd: root }));
+    rmSync(held, { recursive: true, force: true });
+  }
+}
+
+/**
+ * The changes whose record a run's own landing wrote in this push.
+ *
+ * `plan:land` writes a `Wake:` trailer on the commit it cuts in wake mode,
+ * and only there, so what says a landing was a run's is the commit the run
+ * made. A committer's e-mail cannot say it: it names the machine the push came
+ * from, which a rebase, a second account and a workflow's own identity each
+ * answer differently, and a person whose e-mail the map does not hold would be
+ * read as a run. One `git log` over the push's own range reads every trailer
+ * beside the paths each commit touched, and a change whose record a marked
+ * commit wrote has had its thread told by the run itself. A git call that
+ * refused is not "nobody landed it": it throws, and the step says so.
+ */
+async function runLandedOf(root, base, head) {
+  const { stdout } = await exec(
+    "git",
+    [
+      "log",
+      "--format=%x00%(trailers:key=Wake,valueonly,separator=%x2C)",
+      "--name-only",
+      `${base}..${head}`,
+    ],
+    { cwd: root },
+  );
+  const ids = new Set();
+  for (const commit of stdout.split("\0").slice(1)) {
+    const [marker, ...paths] = commit.split("\n");
+    if (marker.trim() === "") continue;
+    for (const path of paths) {
+      const at = location(path);
+      if (at?.kind !== "active") continue;
+      if (path === `${CHANGE_ROOT}${at.directory}/${RECORD_FILE}`)
+        ids.add(at.id);
+    }
+  }
+  return ids;
+}
+
+/** The files of each touched change, change by change — what says whether a
+ * push wrote anything but the record's own keys. */
+function touchedByChange(changed) {
+  const byChange = new Map();
+  for (const record of changed) {
+    for (const path of [record.oldPath, record.path]) {
+      const item = artifact(path);
+      if (item?.kind !== "active") continue;
+      const prefix = `${CHANGE_ROOT}${item.directory}/`;
+      const files = byChange.get(item.id) ?? new Set();
+      files.add(item.path.slice(prefix.length));
+      byChange.set(item.id, files);
+    }
+  }
+  return byChange;
+}
+
+/** The record with `reviewed:`, `thread:` and `landed_by:` taken out: what is
+ * left is what the push said about the change. One yaml parse of the whole
+ * record rather than a line scanner, so a quoted value that happens to open
+ * like a key, or a block scalar that spans several lines, is never mistaken
+ * for one. */
+function withoutRecordKeys(text) {
+  const parsed = YAML.parse(text) ?? {};
+  for (const key of RECORD_KEYS) delete parsed[key];
+  return JSON.stringify(parsed);
+}
+
+/** The changes this push touched in no way but the round's own record keys. */
+async function keysOnly(root, base, head, touched) {
+  const only = new Set();
+  for (const [id, files] of touched) {
+    if (files.size !== 1 || !files.has(RECORD_FILE)) continue;
+    const path = `${CHANGE_ROOT}${id}/${RECORD_FILE}`;
+    const [was, now] = await Promise.all([
+      showAt(root, base, path),
+      showAt(root, head, path),
+    ]);
+    if (was === undefined || now === undefined) continue;
+    if (withoutRecordKeys(was) === withoutRecordKeys(now)) only.add(id);
+  }
+  return only;
+}
+
+/**
+ * The re-read job's matrix: one entry per change this push touched whose
+ * behind set at head is not empty.
+ *
+ * Behind at head, not newly behind against the base: a landing that arrives
+ * while something of the change is already behind puts nothing new behind,
+ * and the read again is owed on what is. A change the push did not touch is
+ * left out either way — re-reading it here would fire the same change again
+ * on every unrelated push until a landing clears it. Touched is its own
+ * directory or an artifact of it this push put newly behind, which is how a
+ * commit on a page the proposal links reaches the change that links it.
+ *
+ * A change touched only through the round's own record lines is excluded by
+ * the same `suppressed` set that silences its messages, which is what keeps
+ * the cascade finite: the re-read's own commit never re-enters this matrix,
+ * even where the content id it wrote leaves the artifact reading as behind.
+ *
+ * The id is the whole entry: every step of the job names `matrix.id`, and the
+ * step that posts reads the change's `thread:` from its own record, so an
+ * entry carrying the address too would be a second copy of it to keep true.
+ */
+export function rereadMatrixOf(touched, base, head, suppressed) {
+  const ids = new Set([
+    ...touched.keys(),
+    ...newlyBehind(base, head).map((one) => one.id),
+  ]);
+  const matrix = [];
+  for (const id of ids) {
+    if (suppressed.has(id)) continue;
+    const at = head.get(id);
+    if (at === undefined || at.behind.length === 0) continue;
+    matrix.push({ id });
+  }
+  return matrix.sort((left, right) => left.id.localeCompare(right.id));
+}
+
+function without(changes, suppressed) {
+  return Object.fromEntries(
+    Object.entries(changes).map(([status, items]) => [
+      status,
+      items.filter((item) => !suppressed.has(item.id)),
+    ]),
+  );
+}
+
+/** One ref as a commit. */
+async function revision(root, ref) {
+  const { stdout } = await exec("git", ["rev-parse", ref], { cwd: root });
+  return stdout.trim();
+}
+
+/** Both ends of the range, or a refusal naming it. A base the checkout cannot
+ * reach used to fall back to `HEAD^`, which silently narrowed a multi-commit
+ * push and told nobody. */
+async function mustResolve(root, base, head) {
+  for (const ref of [base, head]) {
+    try {
+      await exec("git", ["rev-parse", "--verify", `${ref}^{commit}`], {
+        cwd: root,
+      });
+    } catch {
+      throw new Error(
+        `${ref} is not a commit this checkout holds — the push's range is ${base}..${head}`,
+      );
+    }
+  }
 }
 
 async function main() {
@@ -327,7 +562,24 @@ async function main() {
     options: {
       base: { type: "string" },
       head: { type: "string", default: "HEAD" },
-      "commit-url": { type: "string", default: "" },
+      root: { type: "string" },
+      stages: { type: "boolean", default: false },
+      team: { type: "string", default: TEAM_MAP },
+      "sent-keys": { type: "string" },
+      send: { type: "boolean", default: false },
+      // A repository variable turns the per-hand messages off in production -
+      // a role's channel among them, which is one hand's message rerouted -
+      // without touching the channel post or the thread's landing reply. The
+      // CLI default keeps a bare run - a test, a local dry run - showing what
+      // it would tell each hand.
+      dms: { type: "string", default: "true" },
+      channel: { type: "string", default: "" },
+      "sheet-url": { type: "string", default: process.env.TCS_SHEET_URL ?? "" },
+      "workspace-url": {
+        type: "string",
+        default: process.env.SLACK_WORKSPACE_URL ?? "",
+      },
+      "commit-url": { type: "string" },
       "manual-url": {
         type: "string",
         default: "https://spec.grade10-stg.com/planning",
@@ -340,39 +592,127 @@ async function main() {
     },
   });
   if (!values.base) throw new Error("--base is required");
+  const root = values.root ? resolve(values.root) : rootDirectory;
+  await mustResolve(root, values.base, values.head);
 
-  const changed = await changedFiles(values.base, values.head);
+  const changed = await changedFiles(root, values.base, values.head);
   const changedPaths = changed
     .flatMap(({ oldPath, path }) => [oldPath, path])
     .filter(Boolean);
-  const changes = await titledChanges(classifyChanges(changed), {
-    base: values.base,
-    head: values.head,
-  });
+  const touched = touchedByChange(changed);
+  const suppressed = values.stages
+    ? await keysOnly(root, values.base, values.head, touched)
+    : new Set();
+  const changes = await titledChanges(
+    without(classifyChanges(changed), suppressed),
+    { base: values.base, head: values.head, root },
+  );
   const capabilities = classifyCapabilities(changed);
-  const { stdout: commitSha } = await exec("git", ["rev-parse", values.head], {
-    cwd: rootDirectory,
-  });
+  const [head, checkout] = await Promise.all([
+    revision(root, values.head),
+    revision(root, "HEAD"),
+  ]);
+
+  let stages = {};
+  let messages = [];
+  let skipped = [];
+  let matrix = [];
+  if (values.stages) {
+    const team = readTeamMap(root, values.team);
+    // The head is the checkout, which is what a push's job holds; a head
+    // given by hand that is not the checkout is read from its own worktree
+    // rather than from whatever the working tree happens to be on.
+    const atBase = await readingAt(root, values.base);
+    const atHead =
+      head === checkout ? await readingOf(root) : await readingAt(root, head);
+    stages = Object.fromEntries([...atHead].map(([id, at]) => [id, at.stage]));
+    const told = messagesOf(atBase, atHead, team, {
+      manualUrl: values["manual-url"],
+      workspaceUrl: values["workspace-url"],
+      sheetUrl: values["sheet-url"],
+      pushHead: head,
+    });
+    const sent = readSentKeys(values["sent-keys"]);
+    // One git call for the whole push, whatever it landed: the changes whose
+    // landing a run marked, and whose threads it has told itself.
+    const runLanded = await runLandedOf(root, values.base, head);
+    // A push whose only word about a change is the round's own record keys
+    // moves nobody, and says so rather than naming the change - but the
+    // thread's landing reply is about those very keys, so it is owed even
+    // then, and is dropped only where the run that landed it replied itself.
+    // Each message carries the change's own id, so it is read off directly
+    // rather than split back out of the key.
+    const held = (one) =>
+      one.kind === "landed" ? runLanded.has(one.id) : suppressed.has(one.id);
+    messages = told.messages.filter((one) => !sent.has(one.key) && !held(one));
+    skipped = told.skipped.filter((one) => !suppressed.has(one.id));
+    matrix = rereadMatrixOf(touched, atBase, atHead, suppressed);
+  }
+
   const payload = slackPayload({
     changes,
     capabilities,
-    commitSha: commitSha.trim(),
+    commitSha: head,
     commitUrl: values["commit-url"],
     manualUrl: values["manual-url"],
     openspecUrl: values["openspec-url"],
+    stages,
   });
   const hasChanges =
     Object.values(changes).some((items) => items.length) ||
     Object.values(capabilities).some((items) => items.length);
 
+  for (const one of skipped) {
+    process.stderr.write(`nothing sent for ${one.key}: ${one.why}\n`);
+  }
+
+  // The channel post and the direct messages are one delivery: the post is
+  // keyed by the push's own head, so a re-run of one push does not post it
+  // twice either, and `--dms` is what a repository variable turns off in
+  // production without touching the post.
+  //
+  // What it turns off is the messages a hand reads. The thread's landing reply
+  // is nobody's inbox - it is the change's own record read out in the change's
+  // own thread - so it goes out either way.
+  const toDeliver = [];
+  if (hasChanges) {
+    if (values.send && !values.channel) {
+      throw new Error("no channel to post to: pass --channel");
+    }
+    toDeliver.push({
+      key: `channel:${head}`,
+      to: "channel",
+      channel: values.channel,
+      text: "OpenSpec changes on main",
+      blocks: payload.blocks,
+    });
+  }
+  toDeliver.push(
+    ...messages.filter((one) => values.dms === "true" || one.kind === "landed"),
+  );
+  await deliver(toDeliver, {
+    file: values["sent-keys"],
+    send: values.send,
+    token: process.env.SLACK_BOT_TOKEN,
+  });
+
   if (values["github-output"]) {
     await appendFile(
       values["github-output"],
-      `has-changes=${hasChanges}\npayload=${JSON.stringify(payload)}\n`,
+      `matrix=${JSON.stringify(matrix)}\n`,
     );
   }
   process.stdout.write(
-    JSON.stringify({ changedPaths, changes, capabilities, payload }),
+    JSON.stringify({
+      changedPaths,
+      changes,
+      capabilities,
+      payload,
+      stages,
+      messages,
+      skipped,
+      matrix,
+    }),
   );
 }
 

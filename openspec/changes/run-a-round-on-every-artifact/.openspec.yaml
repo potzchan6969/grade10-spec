@@ -1,0 +1,15 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-19
+depends_on:
+  - stage-changes-and-notify-hands
+hands:
+  pm: "@ecchochan"
+  tech: "@ecchochan"
+  dev: "@ecchochan"
+reviewed:
+  user-journeys: c349839c
+  tech-design: 94f0a614
+  specs: 9e6211e7
+  test-cases: 9e6211e7
+  tasks: 7803bc37

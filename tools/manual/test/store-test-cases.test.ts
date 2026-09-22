@@ -25,6 +25,7 @@ const testCase = (
   title: string,
   status: string,
   trace = "alpha-US-01",
+  automation = "manual",
 ) =>
   [
     `### ${id}: ${title}`,
@@ -37,7 +38,7 @@ const testCase = (
     "* **Behaviour:** positive",
     "* **Type:** smoke",
     "* **Layer:** e2e",
-    "* **Automation status:** manual",
+    ...(automation === "" ? [] : [`* **Automation status:** ${automation}`]),
     "* **Testability:** automation",
     `* **Trace:** ${trace}`,
     "",
@@ -147,6 +148,34 @@ describe("a suite in an older shape", () => {
   });
 });
 
+/** Q49 of `run-a-round-on-every-artifact`: a case a store unit or script test
+ * decides names the test that decides it, directly after the classification
+ * block and before `**Pre-conditions:**`. The reader has no use for the line
+ * yet - it does not export it - so it only has to read past it rather than
+ * choke on it. */
+describe("a case that also carries a `**Decided by:**` line", () => {
+  it("reads the case as it would without the line", () => {
+    const withDecidedBy = testCase(
+      "alpha-US1-TC1-1",
+      "It happens",
+      "actual",
+    ).replace(
+      "**Pre-conditions:**",
+      "**Decided by:** scripts/openspec/round-scripts.test.mjs\n\n**Pre-conditions:**",
+    );
+    const parsed = readTestCases(suite("in-review", withDecidedBy));
+    expect(parsed.cases).toEqual([
+      {
+        id: "alpha-US1-TC1-1",
+        title: "It happens",
+        traces: ["alpha-US-01"],
+        status: "actual",
+        automationStatus: "manual",
+      },
+    ]);
+  });
+});
+
 describe("what a suite says about the spec beside it", () => {
   it("reads the ids a suite leaves uncovered on purpose", () => {
     const parsed = readTestCases(
@@ -196,6 +225,70 @@ describe("what a suite says about the spec beside it", () => {
   });
 });
 
+/** `docs/governance/specs-to-test-cases.md`: `manual` means no automated
+ * test runs a case yet, but the property is owed on every case the same way
+ * `**Status:**` is — a case that names none is malformed, never read as
+ * `manual` by default. */
+describe("the Automation status property", () => {
+  it("reads `automated` when the case states it", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase(
+          "alpha-US1-TC1-1",
+          "It happens",
+          "actual",
+          "alpha-US-01",
+          "automated",
+        ),
+      ),
+    );
+    expect(parsed.cases[0].automationStatus).toBe("automated");
+  });
+
+  it("reads `manual` when the case states it", () => {
+    const parsed = readTestCases(
+      suite(
+        "pending-review",
+        testCase("alpha-US1-TC1-1", "It happens", "draft"),
+      ),
+    );
+    expect(parsed.cases[0].automationStatus).toBe("manual");
+  });
+
+  it("refuses a case that states no Automation status at all", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase("alpha-US1-TC1-1", "It happens", "draft", "alpha-US-01", ""),
+        ),
+      ),
+    ).toThrow(
+      /`alpha-US1-TC1-1: It happens` has no `\*\*Automation status:\*\*`/,
+    );
+  });
+
+  it("refuses a value outside the vocabulary", () => {
+    expect(() =>
+      readTestCases(
+        suite(
+          "pending-review",
+          testCase(
+            "alpha-US1-TC1-1",
+            "It happens",
+            "draft",
+            "alpha-US-01",
+            "flaky",
+          ),
+        ),
+      ),
+    ).toThrow(
+      /`alpha-US1-TC1-1: It happens` is `\*\*Automation status:\*\* flaky`, which is not manual or automated/,
+    );
+  });
+});
+
 /** A missing or unknown status is malformed per the governance doc, and a
  * default would let a generated draft wear a reviewed suite's authority. */
 describe("a suite that states no status", () => {
@@ -204,9 +297,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(
-      /a test-case file states `\*\*Status:\*\* pending-review`, `in-review` or `approved`/,
-    );
+    ).toThrow(/`demo-product\/alpha Test Cases` has no `\*\*Status:\*\*`/);
   });
 
   it("refuses a file status outside the vocabulary", () => {
@@ -214,7 +305,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("draft", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(/is not `pending-review`, `in-review` or `approved`/);
+    ).toThrow(/is not pending-review, in-review or approved/);
   });
 
   it("refuses a case with no `**Status:**`", () => {
@@ -222,9 +313,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("pending-review", testCase("alpha-US1-TC1-1", "It happens", "")),
       ),
-    ).toThrow(
-      /test case `alpha-US1-TC1-1: It happens` has no `\*\*Status:\*\*`/,
-    );
+    ).toThrow(/`alpha-US1-TC1-1: It happens` has no `\*\*Status:\*\*`/);
   });
 
   it("refuses a case status outside the vocabulary", () => {

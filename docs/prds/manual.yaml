@@ -28,6 +28,7 @@ groups:
     - shared/ui
     - shared/console
     - shared/design-sync
+    - shared/planning
   Shopify:
     - grade10-site/commerce
 

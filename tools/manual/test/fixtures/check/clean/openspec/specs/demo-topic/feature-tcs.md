@@ -13,4 +13,5 @@ Read the topic.
 **Properties:**
 
 - **Status:** draft
+- **Automation status:** manual
 - **Trace:** Doing the thing

@@ -10,6 +10,7 @@ const ARCHIVE_URL = "/api/archive";
 const CHANGE_URL = "/api/change";
 const REFERENCE_URL = "/api/reference";
 const FIXTURE_URL = "/fixture-snapshot.json";
+const FIXTURE_CHANGES_URL = "/fixture-changes.json";
 
 /** Where the snapshot in hand came from. The shell says so when it is not the store. */
 export type SnapshotSource = "store" | "fixture";
@@ -90,12 +91,47 @@ export type ArtifactReaders = {
  * page opens. An id nothing was written for has no artifact, and the hosted
  * site answers such a path with the app shell, which the JSON check turns into
  * an error rather than a blank page.
+ *
+ * `?fixture` reads the changes out of the bundled reading instead, the same
+ * way `loadSnapshot` reads the snapshot: one tree answers both, so a walk
+ * opening a change page sees the files the fixture store holds rather than the
+ * "unavailable" note a path nothing serves would leave. It is the forced
+ * fixture alone, never the fallback a failed `/api/snapshot` takes — a hosted
+ * page whose own change is missing says so rather than showing a demo
+ * change's files.
  */
-export function artifactReaders(): ArtifactReaders {
+export function artifactReaders(
+  search: string = currentSearch(),
+): ArtifactReaders {
   return {
     archive: once(() => fetchJson<Archive>(ARCHIVE_URL)),
-    change: perId<ChangeDocument>(CHANGE_URL),
+    change: fixtureForced(search)
+      ? fromBundledChanges()
+      : perId<ChangeDocument>(CHANGE_URL),
     reference: perId<ReferenceDocument>(REFERENCE_URL),
+  };
+}
+
+/** The address's own query, where there is an address: a node test imports
+ * this module with no window at all, and the readers it builds there fetch
+ * nothing, so no query is the honest answer rather than a crash on import. */
+function currentSearch(): string {
+  return typeof window === "undefined" ? "" : window.location.search;
+}
+
+/** The bundled changes, fetched once and answered per id — an id the file
+ * does not hold is an error, the same as a path nothing serves. */
+function fromBundledChanges(): (id: string) => Promise<ChangeDocument> {
+  const all = once(() =>
+    fetchJson<Record<string, ChangeDocument>>(FIXTURE_CHANGES_URL),
+  );
+  return async (id) => {
+    const documents = await all();
+    const found = documents[id];
+    if (!found) {
+      throw new Error(`${FIXTURE_CHANGES_URL} holds no change "${id}"`);
+    }
+    return found;
   };
 }
 

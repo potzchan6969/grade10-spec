@@ -1,9 +1,9 @@
 import { Card } from "@grade10/design-system/components/display/card";
 import { Link } from "@grade10/design-system/components/forms/link";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
+import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import { loyaltyPointsHeading } from "./loyalty-points-heading";
 import { OrderDetailsPaymentLogo } from "./order-details-payment-logo";
 import type {
@@ -228,22 +228,10 @@ function OrderDetailsSidebar({
                 <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {copy.paymentMethod}
                 </h3>
-                <Card className="gap-0 p-3" padding={false}>
-                  <HStack className="w-full" gap="sm" vAlign="center">
-                    <OrderDetailsPaymentLogo brand={payment.brand} />
-                    {payment.maskedNumber != null ? (
-                      <>
-                        <span
-                          aria-hidden
-                          className="h-5 w-px shrink-0 bg-border"
-                        />
-                        <span className="text-sm leading-5 font-medium text-foreground">
-                          {payment.maskedNumber}
-                        </span>
-                      </>
-                    ) : null}
-                  </HStack>
-                </Card>
+                <PaymentMethodCard
+                  label={payment.maskedNumber}
+                  leading={<OrderDetailsPaymentLogo brand={payment.brand} />}
+                />
               </VStack>
             ) : null}
             {pickupAddress ? (

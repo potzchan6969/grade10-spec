@@ -11,4 +11,5 @@ Ask alpha for the thing.
 **Properties:**
 
 - **Status:** draft
+- **Automation status:** manual
 - **Trace:** alpha-US-01

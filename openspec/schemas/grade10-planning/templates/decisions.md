@@ -36,10 +36,17 @@
      rounds asked them. `Q` is the number the round gave it, so a reader can
      follow a decision back to the question that raised it.
 
-     Mark `(recommended)` on a decision the author took as offered rather than
-     chose, so a later reader knows how firm it is, and `(held)` on one the
-     author kept against the interview's challenge - `Instead of` then carries
-     the alternative the interview put up and why it lost.
+     A decision the round took on the best option is written `<option> -
+     decided by the round`, so a later reader knows how firm it is and any
+     hand overturns it with one reply; one the author kept against the
+     interview's challenge carries the interview's alternative and why it
+     lost in `Instead of`.
+
+     A row held for a person is written `❓ <role> - recommended: <option>` in
+     `Decided` until they answer: the ` - ` separator is the grammar the store
+     reads the role by, and what follows `recommended:` is what that role is
+     being asked to confirm. A cell that opens ❓ and names no role that way is
+     addressed to nobody and reaches no list.
 
      `Instead of` is what the row buys: the option dropped, and in a few words
      why. Without it the same question is asked again next quarter and answered

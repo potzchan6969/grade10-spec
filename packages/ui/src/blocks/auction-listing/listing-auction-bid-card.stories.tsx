@@ -393,3 +393,24 @@ export const CustomMaximumCeiling: Story = {
     expect(field).toHaveValue(500);
   },
 };
+
+export const SuspendedBidderRefusal: Story = {
+  name: "Suspended bidder refusal (TBC)",
+  args: {
+    authorizationStatus: "error",
+    authorizationMessage:
+      "Your account remains suspended from auction bidding. Contact Grade10 support if you need help.",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText(
+        "Your account remains suspended from auction bidding. Contact Grade10 support if you need help.",
+      ),
+    ).toBeVisible();
+    expect(
+      canvas.getByRole("button", { name: /^Set maximum to/ }),
+    ).toBeVisible();
+    expect(canvas.getByText("Recent Bids")).toBeVisible();
+  },
+};

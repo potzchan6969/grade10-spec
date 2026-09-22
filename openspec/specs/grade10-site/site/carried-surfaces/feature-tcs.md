@@ -1990,3 +1990,12 @@ is noted.
 * A return address a sign-in flow lands a collector on is refused the same way
   any other route into an uncarried surface is — the refusal does not depend
   on how the address was reached.
+* Whether `/membership` and `/join` are ever named in a sitemap, robots.txt,
+  the header, the footer or the front door is answered no, independent of any
+  gate: both are `session`-kind surfaces, which are never part of
+  `PUBLIC_SURFACES` to begin with. The same holds for the profile and every
+  other session-kind surface this capability withholds.
+* Whether a withheld product's own inner content (a member's balance, a vault
+  case's detail) is this capability's to test is answered no: carried
+  surfaces owns only whether an address exists and answers, never what a
+  product shows once carried — that is each product's own capability.

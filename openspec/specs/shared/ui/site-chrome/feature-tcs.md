@@ -1,7 +1,9 @@
 # shared/ui/site-chrome Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-18, tcs-rules r3.0
+**Drafts styled:** 2026-09-21, tcs-rules r3.0
+
+**Out of suite:** shared-ui-site-chrome-SC-17, shared-ui-site-chrome-SC-29, shared-ui-site-chrome-SC-34 — walked by `grade10-site/site/page-shell`'s suite (`TC7-1`, `TC6-1`, `TC9-1`)
 
 ## shared-ui-site-chrome-US1: Shared chrome contract
 
@@ -398,11 +400,223 @@ reimplementing its behavior.
 * Primary navigation and language appear in the bar.
 * The compact menu trigger is absent.
 
+### shared-ui-site-chrome-US1-TC14-1: Account menu renders only My Auctions and Sign Out with no optional handlers supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, `accountEmail`, and no My Orders, Membership, Cart, or Profile handler.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* The menu label shows `accountEmail` with its small (xs) initial avatar above the items.
+* The menu lists only My Auctions and Sign Out, in that order.
+
+### shared-ui-site-chrome-US1-TC15-1: Account menu orders Profile, My Orders, My Auctions, Membership, then Sign Out when every handler is supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and `onProfile`, `onMyOrders`, `onMembership` with `copy.membership`, and `onSignOut` handlers.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* The items appear in the order Profile, My Orders, My Auctions, Membership, Sign Out.
+* The last item reads "Sign Out" in Title Case.
+
+### shared-ui-site-chrome-US1-TC16-1: Membership joins after My Auctions even when My Orders is not supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and `onMembership` with `copy.membership`, but no My Orders handler.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* Membership appears immediately after My Auctions.
+* My Orders does not appear, and Sign Out is the last item.
+
+### shared-ui-site-chrome-US1-TC17-1: Account menu label falls back to the configured copy when no email is supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, no `accountEmail`, and `copy.accountMenuLabel`.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* The menu label shows `copy.accountMenuLabel` instead of an email.
+
+### shared-ui-site-chrome-US1-TC18-1: Activating Membership invokes the supplied handler without a withheld route
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and `onMembership` with `copy.membership`.
+
+**Steps:**
+
+1. Open the account menu.
+2. Activate Membership.
+
+**Expected Results:**
+
+* The supplied `onMembership` handler is invoked exactly once.
+* No navigation to a membership address occurs.
+
+### shared-ui-site-chrome-US1-TC19-1: Membership is omitted without its handler
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session, a My Orders handler, and no `onMembership` handler.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* Membership does not appear in the menu.
+* My Orders, My Auctions, and Sign Out remain, in that order.
+
+### shared-ui-site-chrome-US1-TC20-1: Membership is omitted when its handler is supplied but its copy is not
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Header controls
+
+**Pre-conditions:**
+
+* `SiteHeader` receives a signed-in session and an `onMembership` handler with no `copy.membership`.
+
+**Steps:**
+
+1. Open the account menu.
+
+**Expected Results:**
+
+* Membership does not appear in the menu, even though `onMembership` was supplied.
+
 ## Raised
 
 * Should external links show a trailing external-link icon?
 
 ## Settled
 
-* `external` is optional on `NavLink`; the application supplies it.
-* Behaviour applies in primary nav (wide and compact) and utility regions.
+* `external` is optional on `NavLink`; the application supplies it. Behaviour
+  applies in primary nav (wide and compact) and utility regions.
+* The account menu's fixed item order is Profile, My Orders, My Auctions,
+  Membership, Sign Out; each of Profile, My Orders, and Membership is
+  independently omitted without a matching handler (Membership also needs
+  `copy.membership`), and the menu opens directly on whichever item is next.
+* Session-gating (signed out shows Sign In) always overrides handler-gating:
+  supplying `onProfile`, `onMyOrders`, and `onMembership` handlers while
+  signed out renders none of them.
+* The header never offers a wishlist control, even with every other handler
+  supplied — already stated by the durable requirement and `TC7-1`.
+* The small initial avatar sits above the account label, never beside it.
+* My Auctions and Sign Out are the menu's unconditional core; they are never
+  themselves handler-gated, unlike Profile, My Orders, and Membership.
+* Whether Cart's position relative to the account entry in the bar is
+  specified is unrelated to the account menu's own composition.
+* `onOrders` ("My Auction Orders") keeps its existing export contract; a
+  dedicated account-menu requirement for it is `add-my-auction-orders`'s to
+  raise, not this capability's.

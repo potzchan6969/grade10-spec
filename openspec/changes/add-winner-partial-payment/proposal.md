@@ -34,9 +34,9 @@ zero — no invoice can record a partial payment at all.
   separate write-off entry is recorded — or leave it Partially Paid at the
   real remaining balance; the prompt returns on the next payment too. An
   exact match to the full amount closes on its own, no prompt needed. A
-  payment that would push the total over the original invoice amount is
-  refused outright — the overpayment side of this rule is unconfirmed and
-  flagged ❓ on the PRD, not yet a firm decision.
+  payment that exceeds the original invoice total is accepted only after a
+  confirmation dialog before the invoice is marked Paid; the full payment
+  remains recorded and the excess is identifiable for a later refund.
 - **Reissue and Cancel are refused once any payment is recorded.** The
   invoice's address, method and total stay fixed once real money has moved
   against them; an operator resolves anything that will not be paid off by
@@ -82,7 +82,7 @@ None.
 | `apps/frontend/grade10` | Winner Order reads Partially Paid as a locked state with Contact Us and no balance figure; the Receipt PDF row lists one entry per payment; My Auctions shows Partially Paid. |
 | `apps/admin/grade10` | The manual-settlement form accepts an amount smaller than the balance owed, repeatable; the queue's Partially Paid outcome and filter; Reissue and Cancel disabled once a payment exists. |
 | Auction service | A payment ledger per invoice (amount, method, reference, proof, operator, timestamp); the 10% closing-tolerance check; the Partially Paid state and its refusal of Reissue and Cancel; a receipt generated per payment, numbered `-P1`, `-P2`, … |
-| Notification service | No new letter kind. Payment reminders already stop once the invoice leaves `pending`, so Partially Paid needs no reminder change. |
+| Notification service | The later `add-winner-contact-email` change adds one append-only `payment_received_partial` letter at the partial-payment transition. Payment reminders still stop once the invoice leaves `pending`; the later change owns the ready-email subject, body and Contact Us mailto. |
 | `@grade10/ui`, `@grade10/design-system`, `@grade10/i18n` | No export or token change proposed. New copy is catalog work for the engineer. |
 
 ## Ordering and dependencies

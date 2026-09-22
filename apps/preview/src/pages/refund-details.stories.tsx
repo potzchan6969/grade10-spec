@@ -66,7 +66,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order Refund Details — amount, reason, note, and refund method. Same dialog the Refunded and overpaid pages open from the inline alert.",
+          "Standalone Storybook preview of Winner Order Refund Details — amount, Transfer to, reason and note. A bank refund also shows its provider reference. Same dialog the Refunded and overpaid pages open from the inline alert.",
       },
     },
   },
@@ -94,7 +94,11 @@ export const ClosingRefund: Story = {
     const dialog = await findVisibleDialog(page, "Refund Details");
     const modal = within(dialog);
     expect(modal.getByText("Amount")).toBeVisible();
-    expect(modal.getByText("HK$15,660")).toBeVisible();
+    expect(modal.getByText("HK$16,140")).toBeVisible();
+    expect(modal.getByText("Transfer to")).toBeVisible();
+    expect(modal.getByLabelText("Visa")).toBeVisible();
+    expect(modal.getByText("···· 4242")).toBeVisible();
+    expect(modal.queryByText("Reference")).not.toBeInTheDocument();
     expect(modal.getByText("Reason")).toBeVisible();
     expect(modal.getByText("Not as described")).toBeVisible();
     expect(modal.getByText("Note")).toBeVisible();
@@ -103,8 +107,6 @@ export const ClosingRefund: Story = {
         "Card condition did not match the listing photos. Full amount returned.",
       ),
     ).toBeVisible();
-    expect(modal.getByText("Refund Method")).toBeVisible();
-    expect(modal.getByText("Card")).toBeVisible();
     expect(modal.getByRole("button", { name: "Close" })).toBeVisible();
   },
 };
@@ -118,8 +120,12 @@ export const Overpaid: Story = {
     const dialog = await findVisibleDialog(page, "Refund Details");
     const modal = within(dialog);
     expect(modal.getByText("HK$500")).toBeVisible();
+    expect(modal.getByText("Transfer to")).toBeVisible();
+    expect(modal.getByLabelText("Bank")).toBeVisible();
+    expect(modal.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(modal.getByText("Reference")).toBeVisible();
+    expect(modal.getByText("G10-RF-LK7P2Q")).toBeVisible();
     expect(modal.getByText("Duplicate or overpayment")).toBeVisible();
-    expect(modal.getByText("Bank transfer")).toBeVisible();
     expect(modal.getByRole("button", { name: "Close" })).toBeVisible();
   },
 };

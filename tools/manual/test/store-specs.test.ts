@@ -76,12 +76,14 @@ describe("spec entries", () => {
         title: "Reader asks for the thing and it happens",
         traces: ["alpha-SC-01"],
         status: "draft",
+        automationStatus: "manual",
       },
       {
         id: "alpha-TC-02",
         title: "Reader asks a second time and is refused",
         traces: ["alpha-SC-01", "alpha-SC-02"],
         status: "draft",
+        automationStatus: "manual",
       },
     ]);
   });
@@ -212,8 +214,7 @@ describe("a suite the reader refuses beside a spec that parsed", () => {
     expect(entry.testCasesError).toEqual({
       file: CASES,
       line: 1,
-      message:
-        "a test-case file states `**Status:** pending-review`, `in-review` or `approved` under its title",
+      message: "`Alpha test cases` has no `**Status:**`",
     });
   });
 

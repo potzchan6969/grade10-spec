@@ -33,6 +33,13 @@ shown; Receipt PDF row lists one link per payment (`Receipt · P1`,
 Won row Status **Partially Paid** (warning badge); subtitle Payment in
 progress; View order opens the Partially Paid Winner Order story.
 
+### Post-sale — overpayment confirmation
+
+When an operator enters a payment above the original invoice total, the
+manual-settlement flow opens a confirmation dialog before it records the full
+payment and marks the invoice Paid. Cancelling the dialog leaves the payment
+unrecorded so the operator can correct the amount.
+
 ## Components
 
 - **Existing:** `Alert` (`status=warning` — Warning icon), `Badge`, `Link`,

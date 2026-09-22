@@ -135,6 +135,35 @@ describe("the assets the snapshot carries", () => {
   });
 });
 
+describe("the run sheet the snapshot carries", () => {
+  /** Composed with the variable set, and set back after: the manual's Told
+   * now links the same sheet the push workflow's message does. */
+  const withSheet = async (url: string | undefined) => {
+    const set = process.env.TCS_SHEET_URL;
+    if (url === undefined) delete process.env.TCS_SHEET_URL;
+    else process.env.TCS_SHEET_URL = url;
+    try {
+      return await snapshotOfStore(writeStore(BASE));
+    } finally {
+      if (set === undefined) delete process.env.TCS_SHEET_URL;
+      else process.env.TCS_SHEET_URL = set;
+    }
+  };
+
+  it("names the run sheet the environment gave it", async () => {
+    expect((await withSheet("https://sheets.test/run")).sheetUrl).toBe(
+      "https://sheets.test/run",
+    );
+  });
+
+  it.each([
+    ["nothing is set", undefined],
+    ["the variable is empty", ""],
+  ])("names none where %s", async (_what, url) => {
+    expect((await withSheet(url)).sheetUrl).toBeUndefined();
+  });
+});
+
 describe("the warnings the snapshot carries", () => {
   it("ships the checker's own warnings, page warnings pointing at their page", async () => {
     const warnings = (await snapshotOfStore(writeStore(BASE))).warnings;

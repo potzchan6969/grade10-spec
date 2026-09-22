@@ -375,7 +375,7 @@ Two transports, one client code path:
   answer it would give filed as JSON where the page will ask for it, and its
   search run in the browser over the text it ships. It is the viewer's page,
   not the manual's — its own bundle, its own design system — reached from the
-  header's `Plan board` link and nothing else. The dev server mounts it
+  header's `OpenSpec viewer` link and nothing else. The dev server mounts it
   live at the same address (`store/viewer-mount.mts`): the viewer's own
   handler serves its built page and answers the snapshot's paths from the
   working copy per request, so a saved spec shows on the next reload rather

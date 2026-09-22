@@ -1,14 +1,19 @@
 import { join } from "node:path";
+import { readTeamMap } from "../../../../scripts/openspec/lib/team.mjs";
 import type {
   Archive,
   ChangeDocument,
   ChangeEntry,
   CheckWarning,
   ReferenceDocument,
+  Role,
   SchemaArtifact,
   Snapshot,
+  SnapshotTeam,
   SpecEntry,
+  TeamMap,
 } from "../api/types.ts";
+import { ROLES } from "../api/types.ts";
 import { DESIGN_SYNC_REPORT, readDesignSync } from "./design-sync.mts";
 import { newestMtime } from "./disk.mts";
 import {
@@ -19,6 +24,7 @@ import {
   git as runGit,
   type StoreMain,
 } from "./git.mts";
+import { markQuestions } from "./questions.mts";
 import { readChangeDocuments } from "./read-change-documents.mts";
 import {
   readArchivedChanges,
@@ -36,7 +42,26 @@ import { schemaArtifacts } from "./read-schema.mts";
 import { discoverSpecs, readSpecs } from "./read-specs.mts";
 import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
+import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
+
+/** `docs/prds/team.yaml`, projected to what the browser needs: a handle
+ * against the roles it may take, its e-mail, Slack member and channels left
+ * behind — those address a message, which is the notify script's own job.
+ * A role the map does not spell as one of the six is dropped rather than
+ * carried into a type that promises only those six: `checkHands` is where a
+ * change's own `hands:` is held to that set, and the map itself owes no such
+ * check yet. */
+function snapshotTeam(map: TeamMap): SnapshotTeam {
+  const known = new Set<string>(ROLES);
+  const handles: Record<string, Role[]> = {};
+  for (const [handle, member] of Object.entries(map.handles)) {
+    handles[handle] = member.roles.filter((role): role is Role =>
+      known.has(role),
+    );
+  }
+  return { handles };
+}
 
 /** The artifacts share one history walk — the only expensive part of a read.
  * `documents` is one artifact per in-flight change and `references` one per
@@ -55,6 +80,21 @@ function schemasInUse(
     if (artifacts) schemas[schema] = artifacts;
   }
   return schemas;
+}
+
+/**
+ * The run sheet QA is sent to walk, from the environment rather than a file:
+ * the push workflow's notify step reads `TCS_SHEET_URL` for the same
+ * sentence, so the manual reads the same variable rather than a second name
+ * for one sheet. Unset is the honest default — no per-change run tab exists
+ * in the store to link (decisions Q39) — and the message names the sheet in
+ * words instead of carrying a dead link.
+ */
+export function sheetOf(
+  env: NodeJS.ProcessEnv = process.env,
+): string | undefined {
+  const url = env.TCS_SHEET_URL?.trim();
+  return url ? url : undefined;
 }
 
 export type Store = {
@@ -96,6 +136,22 @@ export function composeStore(
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
+  const { pages, asts } = readManualPages(roots, git);
+  const schemas = schemasInUse(roots.store, changes);
+  // After both: what is before an artifact is the pages the change links and
+  // the artifacts the schema names, and this is the one place holding both.
+  markUpstream(roots.store, changes, schemas, pages, asts, git);
+  // The page's own open questions merge onto the entry here too, beside its
+  // decisions rows, so the render reads one field rather than walking the
+  // pages again.
+  markQuestions(changes, pages, asts);
+  // Read the way a page is: a store with no file yet knows nobody rather than
+  // failing to boot, and My turn is what tells a handle it does not know from
+  // one it has simply never met. Projected before it reaches the snapshot: the
+  // browser is sent a handle's roles, never the e-mail or the Slack member the
+  // full map carries for the notify script alone.
+  const team = snapshotTeam(readTeamMap(roots.store));
+  const sheetUrl = sheetOf();
 
   return {
     snapshot: {
@@ -104,16 +160,18 @@ export function composeStore(
       config,
       taxonomy: deriveTaxonomy(shape, config, roots.own),
       manualDir: roots.manual,
-      pages: readManualPages(roots, git),
+      pages,
       specs,
       changes,
-      schemas: schemasInUse(roots.store, changes),
+      schemas,
       assets: readManualAssets(roots),
       references: references.map(({ text: _text, ...entry }) => entry),
       ...(referencesReadme === undefined ? {} : { referencesReadme }),
       history: git.history,
       warnings,
       ...(designSync ? { designSync } : {}),
+      team,
+      ...(sheetUrl ? { sheetUrl } : {}),
     },
     archive: {
       generatedAt,

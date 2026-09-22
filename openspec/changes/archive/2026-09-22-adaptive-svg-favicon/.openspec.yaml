@@ -1,0 +1,10 @@
+schema: grade10-planning
+created: 2026-09-15
+skip_specs: true
+skip_specs_why: "the favicon is an asset swap the platform page already
+  describes; no capability requirement moves"
+reviewed:
+  ui-design: d64617d6
+  tech-design: d64617d6
+  tasks: 4a06bcf1
+deploy_waived: "seankcw, staging deploy 35678969234 (2026-09-22) confirms 81d788d37 (icon.svg) resolves end-to-end through grade10-site's public/icon.svg symlink; production hasn't had a successful Deploy run since 2026-09-03, blocked on the same unrelated migration gate as the other two archives this session"

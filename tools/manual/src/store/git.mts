@@ -1,10 +1,10 @@
-import { execFile, spawn } from "node:child_process";
+import { execFile, execFileSync, spawn } from "node:child_process";
 import { promisify } from "node:util";
 import type { CommitInfo, HistoryEvent, MainState } from "../api/types.ts";
 import { refsOf } from "./history.mts";
 import { DEFAULT_MANUAL_DIR, type Roots } from "./roots.mts";
 
-const run = promisify(execFile);
+const exec = promisify(execFile);
 
 /** One history walk builds the whole path → last-commit map. Spawning git per
  * file turns a snapshot into thousands of processes. */
@@ -37,15 +37,73 @@ const HISTORY_LIMIT = 100;
 // `<oid> <type> <size>`; anything else is `<ref> missing`, with no body.
 const BLOB_HEADER = /^[0-9a-f]{40,64} (?:blob|tree|commit|tag) (\d+)$/;
 
+/** What a call is given beyond its arguments: a deadline, and the environment
+ * it runs in. A call that reaches the network is given both — nothing else
+ * here needs either. */
+export type GitRun = { timeout?: number; env?: NodeJS.ProcessEnv };
+
 /** `core.quotePath=false` keeps a non-ASCII path readable — quoted, git
  * escapes it into bytes nothing here would match, and the file silently
  * loses its commit info. */
-export async function git(root: string, args: string[]): Promise<string> {
-  const { stdout } = await run("git", ["-c", "core.quotePath=false", ...args], {
-    cwd: root,
-    maxBuffer: 256 * 1024 * 1024,
-  });
+export async function git(
+  root: string,
+  args: string[],
+  run: GitRun = {},
+): Promise<string> {
+  const { stdout } = await exec(
+    "git",
+    ["-c", "core.quotePath=false", ...args],
+    { cwd: root, maxBuffer: 256 * 1024 * 1024, ...run },
+  );
   return stdout;
+}
+
+/**
+ * One synchronous git call, or nothing where git cannot make it.
+ *
+ * The readers that walk the store's own history run at composition time and
+ * lose dates and threads rather than pages when a walk is refused, so a
+ * refusal is an answer here and not a failure — a store with no repository, a
+ * depth-1 clone and a ref that does not resolve all give it.
+ *
+ * Said out loud once per root, because a board with no ages on it and a
+ * thread with no rows in it are readings nobody would otherwise question, and
+ * said with everything a reader needs to act: the call that refused, what the
+ * store loses by it (`lost`), and what git itself said. Per root rather than
+ * per process, so a second store is not silenced by the first one's answer.
+ */
+export function walkGit(
+  root: string,
+  args: string[],
+  lost: string,
+): string | undefined {
+  try {
+    return execFileSync("git", ["-c", "core.quotePath=false", ...args], {
+      cwd: root,
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "pipe"],
+      maxBuffer: 256 * 1024 * 1024,
+    });
+  } catch (cause) {
+    warnUnwalked(root, args, lost, cause);
+    return undefined;
+  }
+}
+
+const unwalked = new Set<string>();
+
+function warnUnwalked(
+  root: string,
+  args: string[],
+  lost: string,
+  cause: unknown,
+): void {
+  if (unwalked.has(root)) return;
+  unwalked.add(root);
+  const said = String((cause as { stderr?: string })?.stderr ?? "").trim();
+  console.warn(
+    `manual: \`git ${args[0]}\` in ${root} refused — ${lost}${said ? `: ${said}` : ""}`,
+  );
 }
 
 /** The git view over both roots. One repository, one walk — exactly the index
@@ -238,10 +296,15 @@ function catFile(root: string, refs: string[]): Promise<Buffer> {
 }
 
 /** A git call whose empty answer is an answer — a ref that does not exist, a
- * tree with nothing in it — rather than a reason to fail the build. */
-async function tryGit(root: string, args: string[]): Promise<string | null> {
+ * tree with nothing in it, a directory that is not a repository — rather than
+ * a reason to fail the build. */
+export async function tryGit(
+  root: string,
+  args: string[],
+  run: GitRun = {},
+): Promise<string | null> {
   try {
-    return await git(root, args);
+    return await git(root, args, run);
   } catch {
     return null;
   }

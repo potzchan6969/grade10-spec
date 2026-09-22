@@ -10,16 +10,43 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
+import type { OrderDetailsPaymentBrand } from "@grade10/ui";
+import { OrderDetailsPaymentLogo, PaymentMethodCard } from "@grade10/ui";
+import { Bank } from "@phosphor-icons/react";
+
+/** Card refund destination — same marks as Store Order Details payment row. */
+export type WinnerOrderRefundCardTransfer = {
+  kind: "card";
+  brand: OrderDetailsPaymentBrand;
+  maskedNumber: string;
+};
+
+/** Bank refund destination — bank name, masked account and statement reference. */
+export type WinnerOrderRefundBankTransfer = {
+  kind: "bank_transfer";
+  bankName: string;
+  /** Masked account — e.g. `···· 8891`. */
+  maskedAccount: string;
+  /**
+   * Provider reference the operator entered — shown so the winner can match
+   * the credit on their statement (Q21). Card refunds omit this.
+   */
+  reference: string;
+};
+
+export type WinnerOrderRefundTransfer =
+  | WinnerOrderRefundCardTransfer
+  | WinnerOrderRefundBankTransfer;
 
 export type WinnerOrderRefundDetails = {
-  /** Positive amount returned — e.g. `HK$15,660`. */
+  /** Positive amount returned — e.g. `HK$16,140`. */
   amount: string;
   /** Reason category the operator recorded. */
   reason: string;
   /** Operator note the winner may read. */
   note: string;
-  /** How the money went back — ❓ working channel label until Product settles winner-facing transaction clues (Q20). */
-  method: string;
+  /** Where the money went — card marks or bank name + masked account. */
+  transfer: WinnerOrderRefundTransfer;
 };
 
 type WinnerOrderRefundDialogProps = {
@@ -29,14 +56,20 @@ type WinnerOrderRefundDialogProps = {
 };
 
 /**
- * Winner-facing refund detail — reason, note and method only.
- * Proof, provider reference and audit number stay with the operator.
+ * Winner-facing refund detail — amount, Transfer to, reason and note.
+ * A bank refund also shows its provider reference. Proof, Stripe reference
+ * and audit number stay with the operator.
  */
 function WinnerOrderRefundDialog({
   open,
   onOpenChange,
   refund,
 }: WinnerOrderRefundDialogProps) {
+  const bankReference =
+    refund.transfer.kind === "bank_transfer"
+      ? refund.transfer.reference
+      : null;
+
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
       <DialogContent className="sm:max-w-md">
@@ -46,9 +79,12 @@ function WinnerOrderRefundDialog({
         <DialogBody>
           <VStack className="w-full" gap="md" hAlign="stretch">
             <DetailRow label="Amount" value={refund.amount} />
+            <TransferTo transfer={refund.transfer} />
+            {bankReference ? (
+              <DetailRow label="Reference" value={bankReference} />
+            ) : null}
             <DetailRow label="Reason" value={refund.reason} />
             <DetailRow label="Note" value={refund.note} />
-            <DetailRow label="Refund Method" value={refund.method} />
           </VStack>
         </DialogBody>
         <DialogFooter>
@@ -73,6 +109,27 @@ function DetailRow({ label, value }: { label: string; value: string }) {
       <Text className="whitespace-pre-line text-foreground" size="sm">
         {value}
       </Text>
+    </VStack>
+  );
+}
+
+function TransferTo({ transfer }: { transfer: WinnerOrderRefundTransfer }) {
+  return (
+    <VStack className="w-full" gap="xs" hAlign="stretch">
+      <Text className="text-secondary-foreground" size="sm">
+        Transfer to
+      </Text>
+      {transfer.kind === "card" ? (
+        <PaymentMethodCard
+          label={transfer.maskedNumber}
+          leading={<OrderDetailsPaymentLogo brand={transfer.brand} />}
+        />
+      ) : (
+        <PaymentMethodCard
+          label={`${transfer.bankName}, ${transfer.maskedAccount}`}
+          leading={<Bank aria-label="Bank" size={20} weight="regular" />}
+        />
+      )}
     </VStack>
   );
 }

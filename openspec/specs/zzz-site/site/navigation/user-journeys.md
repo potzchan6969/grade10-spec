@@ -11,8 +11,8 @@ than at home.
 ### zzz-site-site-navigation-US-02: Collector asks for a session-decided address
 
 **As a** collector,
-**I want** home, sign-in, and the profile to answer with what my session
-allows, replacing the entry they correct,
+**I want** home and sign-in to answer with what my session allows, replacing
+the entry they correct,
 **so that** I land on the surface I am actually allowed, and going back never
 bounces me forward again.
 
@@ -38,3 +38,11 @@ from the beginning.
 **I want** a surface to cost only its own page code, loaded when I move to it,
 **so that** opening one surface does not make me pay for the ones I did not
 open.
+
+### zzz-site-site-navigation-US-06: Collector opens the profile with no session
+
+**As a** collector without a session,
+**I want** the profile's own address to stay put while I sign in, and to be
+sent home if I leave without one,
+**so that** what I came for is what renders the moment I have a session, and
+leaving puts me somewhere I can read instead of on a blank page.

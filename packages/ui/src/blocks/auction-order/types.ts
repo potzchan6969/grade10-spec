@@ -61,6 +61,8 @@ type AuctionOrderDetailProps = {
     status: ReactNode;
     reachedAt: ReactNode;
   }[];
+  /** Optional consumer-owned status or guidance card shown beside the order. */
+  notice?: ReactNode;
   lot: {
     title: ReactNode;
     winningBid: ReactNode;
@@ -77,10 +79,15 @@ type AuctionOrderDetailProps = {
   className?: string;
 };
 
+type AuctionAddressKind = "personal" | "company";
+
 type AuctionAddressFormValues = {
+  addressKind: AuctionAddressKind;
   firstName: string;
   lastName: string;
   phone: string;
+  /** Calling country for the phone field — soft readiness. */
+  phoneCountry: string;
   company: string;
   country: string;
   city: string;
@@ -92,6 +99,8 @@ type AuctionAddressFormValues = {
 };
 
 type AuctionAddressFormCopy = {
+  personal: string;
+  companyKind: string;
   firstName: string;
   lastName: string;
   phone: string;
@@ -106,6 +115,8 @@ type AuctionAddressFormCopy = {
   optional: string;
   confirm: string;
   cancel: string;
+  phonePlaceholder?: string;
+  countrySearchPlaceholder?: string;
 };
 
 type AuctionAddressFormProps = {
@@ -116,12 +127,25 @@ type AuctionAddressFormProps = {
   onConfirm: (values: AuctionAddressFormValues) => void;
   onCancel: () => void;
   className?: string;
+  /** When false, Confirm / Cancel are omitted — parent supplies actions. */
+  showActions?: boolean;
+  /** Form element id for an external submit button's `form` attribute. */
+  formId?: string;
+  /** Replace the country TextInput (e.g. setup's Country/Region Select). */
+  renderCountry?: (args: {
+    value: string;
+    onChange: (value: string) => void;
+    error?: ReactNode;
+    required: boolean;
+    label: ReactNode;
+  }) => ReactNode;
 };
 
 export type {
   AuctionAddressFormCopy,
   AuctionAddressFormProps,
   AuctionAddressFormValues,
+  AuctionAddressKind,
   AuctionOrderDetailCopy,
   AuctionOrderDetailProps,
   AuctionOrderEmptyProps,

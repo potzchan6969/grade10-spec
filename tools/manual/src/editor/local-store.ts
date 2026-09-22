@@ -1,3 +1,4 @@
+import type { Role } from "../api/types";
 import type { ProposalFile } from "./propose";
 import {
   assertManualPath,
@@ -147,6 +148,20 @@ export class LocalStore implements ContentStore {
     const answer = await call(this.http, "/api/withdraw", json({ id }));
     if (answer.status !== 200) {
       throw new StoreError(answer.status, errorOf(answer, "withdraw refused"));
+    }
+  }
+
+  async hand(change: string, role: Role, handle: string): Promise<void> {
+    const answer = await call(
+      this.http,
+      "/api/hands",
+      json({ change, role, handle }),
+    );
+    if (answer.status !== 200) {
+      throw new StoreError(
+        answer.status,
+        errorOf(answer, "naming a hand was refused"),
+      );
     }
   }
 

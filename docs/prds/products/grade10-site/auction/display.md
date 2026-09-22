@@ -44,6 +44,7 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
+| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Nothing; lots are identified by their title. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
@@ -146,7 +147,7 @@ never the collector's bid or order, and every page reads the same value.
 | --- | --- | --- |
 | **Upcoming** | Published; bidding has not started | Scheduled |
 | **Active** | Bidding is open, extended bidding included | Live |
-| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Address to Refunded |
+| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Setup to Refunded |
 | Hidden | Never published, or withdrawn before a sale | Draft, Called off |
 
 - **Hidden lots** — not in the catalogue, search or filters; the lot page

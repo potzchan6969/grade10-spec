@@ -2,7 +2,8 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Text } from "@grade10/design-system/components/display/text";
 import { CheckCircle } from "@phosphor-icons/react";
 import { Link } from "react-router";
-import { byLastMoved, taskTotals } from "../api/derive";
+import { byLastMoved } from "../api/derive";
+import { taskTotals } from "../api/stages";
 import { formatDate, relativeTime } from "../api/time";
 import type { ChangeEntry, IdleClaim } from "../api/types";
 import { useManualIndex } from "../api/use-manual-index";
@@ -179,7 +180,7 @@ export function Attribution({
   );
 }
 
-/** Compact card: the shape the ribbon repeats. Links into the In Flight board. */
+/** Compact card: the shape the ribbon repeats. Links into the Board. */
 export function ChangeChip({ change }: { change: ChangeEntry }) {
   if (change.error) {
     return <BrokenCard error={change.error} what={`Change ${change.id}`} />;

@@ -1,13 +1,17 @@
 name: Test
 
+# The push that ticks a task group carries a change's plan alone, and nothing
+# here reads one; the template of the same name is code the tests read, so
+# the filter names the changes' tree. `scripts/openspec/workflows.test.mjs`
+# holds it there.
 on:
   push:
     branches: [main]
     paths-ignore:
-      - "**/tasks.md"
+      - "openspec/changes/**/tasks.md"
   pull_request:
     paths-ignore:
-      - "**/tasks.md"
+      - "openspec/changes/**/tasks.md"
 
 permissions:
   contents: read
@@ -44,6 +48,31 @@ jobs:
 
       - name: Run tests
         run: pnpm run test:stories
+
+  walk:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Install Playwright Chromium
+        run: pnpm run setup:browsers
+
+      - name: Run the walk
+        run: pnpm run test:walk
 
   catalogs:
     runs-on: ubuntu-latest

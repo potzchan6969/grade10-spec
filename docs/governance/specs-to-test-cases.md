@@ -59,6 +59,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **Blocked is not rejected** — a question nobody could answer is not a misreading, and filing it as one deletes the most valuable thing the pass produces. The case stays, a ❓ goes on the PRD, an open question goes on the proposal, and no scenario is written
 - **An escalated or deferred row is written here as well as in `decisions.md`** — that file archives with the change and is folded nowhere, so a row landing only there leaves the next blind pass with no record of what was asked. The landing says what was decided; this section says what the run did with the case, and `## Settled` carries the answer forward
 - **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
+- **Manual names what a person drives** — `### Manual` carries a `| Manual | Why |` table, one row per case no automated test decides, and that row is where the reason lives. The row names the part a person walks — a message typed in a thread, a tab in the run spreadsheet, a deploy. Where a test already proves some of it, the row names that test and what the case walks beyond it. An automated case names its test on the case itself, on its Decided-by line, and is left off the run sheet
 - **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; archive fold and `/tcs-review` both strip them, leaving the dispositions and the reasons
 
 ## Naming
@@ -121,7 +122,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 2. Intersect their journeys with the `**Trace:**` lines in that domain's `domain-tcs.md` and in `platform-tcs.md`
 3. A hit, or a capability new to a domain that has a `domain-tcs.md`, is an impact at that level
 
-On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>` — and `/spec-push` refuses without one. `## Impact` is not the signal: it records code, not paths.
+On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>`. No check parses it; the round's readers read for it. `## Impact` is not the signal: it records code, not paths.
 
 ## Who the Actor Is
 
@@ -134,6 +135,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 - **Class, qualifier, place** — `customer(gold member) is on the shopping cart page.`, `admin(holds auction:operate) is on <grade10 auction admin listings url>.` The qualifier carries what the rule under test needs and nothing more; a bare `customer` is right where state does not matter; two of a class are `customer A` and `customer B`
 - **A product serves both classes** — `openspec/config.yaml` places a capability by who is held to it, not whose screen shows it
 - **Any other actor is not a journey** — engineers, QA, reviewers and consuming applications are not end users: software this store ships is the system's side of a journey, and the people who build the product walk a test. An outside agent that acts on its own is a role — a crawler, a preview fetcher, a provider calling back — and its cases still name the class whose surface the rule is checked on. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to none of the three
+- **The team walks the delivery line** — a capability under `shared/planning/` is the store's own rails, and its users are the hands of a change: a product manager, a designer, a tech PIC, QA, an engineer, a release hand. There, and only there, a teammate is an `admin`, and a case names the role as the qualifier: `admin(product manager) is on <change page url>.`
 
 ## Where It Lives
 
@@ -151,8 +153,8 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — once `/planning-pm` has the proposal, the journeys and the outline through `pnpm run validate:changes <change>`, `/planning-qa` runs `/spec-to-tcs <change>` on that same branch: every case `draft`, as its own `test(<domain>): derive test cases for <capability>` commit, ahead of the scenarios. A draft carries no authority, so the spec's reviewer approves nothing by it; review is a later pull request
-- **`/spec-push` refuses** — a change whose capability has `user-journeys.md` and no `feature-tcs.md`; it runs `pnpm run tcs:validate` with the other checks
+- **Automatic** — once the proposal, the journeys and the outline are written, `/workflow-specify` runs `/spec-to-tcs <change>` on the change's branch: every case `draft`, ahead of the scenarios. A draft carries no authority, so the product manager approves nothing by it; review is `/tcs-review`, later
+- **Both files on one word** — `/workflow-specify` lands `spec.md` and `feature-tcs.md` together, so `main` never carries requirements with no suite beside them; CI's `pnpm run tcs:validate --require-suites` warns on a capability that still has journeys and no suite
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
 
@@ -173,7 +175,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | Regenerate | rewrites the whole file; destroys review history; explicit confirmation, and only when the guard allows |
 
 - **Regeneration guard** — refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does
-- **A delta that moves the ground under an `actual` case** — resolved in the same change, or `/spec-push` refuses: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
+- **A delta that moves the ground under an `actual` case** — resolved in the same change, before the suite lands: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
 
 ## What the approved suites teach the next one
 
@@ -185,6 +187,8 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 - **The reviewer's lever** — edit a case during `/tcs-review`, approve it, and it is evidence from then on
 
 ## The Review Lane
+
+**The one lane still on a pull request**, merged by its reviewer: a verdict is a reviewer's own over a durable file, with no artifact row and no hand for the landing to land it as.
 
 | | |
 | --- | --- |
@@ -210,7 +214,7 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 **None of it is being filled in one pass, and that is a decision rather than a backlog nobody got to.**
 
 - **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
-- **The suites are written when a change touches the capability.** `/planning-qa` runs the blind pass on the anchor set `/planning-pm` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
+- **The suites are written when a change touches the capability.** `/workflow-specify` runs the blind pass on the anchor set `/workflow-plan` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
 - **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
 - **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
 
@@ -381,7 +385,7 @@ Ten properties, in this order, on every case. Starting shapes, not substitutes f
 - **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`; say "at the limit" in the title
 - **A broken input is `negative`** — an empty payload, a blocked asset, a `500`, a dropped connection, even when the product carries on
 - **Type is exactly one** — the kind of verification; which runs it joins is `Suites`, zero or more comma-separated, written `**Suites:** none` rather than omitted
-- **Automation status** — generation writes `manual`; engineering flips it when the test lands, and `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case is frozen and changes only with its behaviour, as a `<v>` bump back to `draft`. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox
+- **Automation status** — generation writes `manual`; engineering flips it when the test lands, with `pnpm run tcs:automated <case…> --decided-by <path>` in this store or `pnpm plan automated` from `grade10`, both editing the line in place, and the flag writing the Decided-by line in the same edit, so the flip rides the commit that landed the test; `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case is frozen and changes only with its behaviour, as a `<v>` bump back to `draft`. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox
 - **Trace** — one journey per feature case; a case that would trace two is two cases or a journey not yet written, and a case with no trace does not belong in the file. Every id is defined by a `user-journeys.md` in scope; `<requirement> / <journey title>` only where a spec has no ids
 - **Scenario coverage is checked, not recorded** — generation verifies every scenario accepting a journey has a case and reports the rest as gaps
 
@@ -461,6 +465,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 ````
 
 - **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
+- **Decided by** — ``**Decided by:** `<path>`[, `<path>`]*``, the first line after the classification block and before `**Pre-conditions:**`, one or more repository-relative paths, comma-separated. It names what decides the case: a store unit or script test, or the end-to-end walk that drives it. One rule — an automated case of an in-flight change names what decides it, in its place, once; nothing else may — which `pnpm run tcs:validate` reads as three verdicts: no line is refused, a line anywhere but there or a second line is refused, and a line on a case that is not `automated` is a warning. Every path it names resolves inside the store, to a file that exists. A durable suite under `openspec/specs/` owes no line yet; the fold carries across every line the change wrote, and `pnpm run archive:preflight` refuses one that drops or changes one
 - **No execution record** — no actual result, no pass/fail column; a run lives in the run sheet against a snapshot of the case
 - **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
@@ -474,10 +479,11 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, learns the corpus, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; refuses to regenerate over `actual` cases or an `approved` file |
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
-| `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
+| `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
 | `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
 | `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
 | `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--dry-run` prints it and touches no network |
+| `pnpm run tcs:automated <case-id…> --decided-by <path>` | flips one or more cases' Automation status to `automated`, in place, in whichever suite file holds them, writing the Decided-by line in the same edit; refuses a flip of an in-flight change's case that names no path; pushes nothing — the walk's own commit carries the flip |
 
 ## The Run Sheet
 
@@ -485,6 +491,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 
 - **A tab is a snapshot** — written once, pinned to the commit it was written from, never resynced. A case that later changes, or is deprecated, leaves the tab alone: the tab says what was tested and the markdown says what the case is now
 - **`actual` only** — `--include-draft` takes drafts and amber-bands them; a `deprecated` case never crosses
+- **Automated is left out too** — a case whose Automation status is `automated` never crosses either, unless `--include-automated` says otherwise; the count crosses regardless, said in the run's own printout and on the Summary row's `Automated left out` column, and the printout names each case it left out with what decides it
 - **The selection is a list** — a filter over the properties resolves to case ids, and so does a reading of the specs; the ids are what reach the sheet, so a run can be restated
 - **The case columns are locked** — a protected range refuses an edit at the cell. `Web`, `Mobile`, `Auto web`, `Auto mobile`, `Notes`, `Tester` and `Date` are the tester's; the case to their left and the classification to their right are not. A wrong case is fixed in `openspec/`
 - **A journey is a row, not a column** — a banner above the cases that walk it, with a collapsible group beneath. Sorting happens inside the tab's filter view, which leaves the rows where they are

@@ -1,0 +1,2886 @@
+# shared/planning/agent-rounds Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-09-20, tcs-rules r3.0
+**Out of suite:** shared-planning-agent-rounds-SC-06, shared-planning-agent-rounds-SC-08, shared-planning-agent-rounds-SC-09, shared-planning-agent-rounds-SC-10, shared-planning-agent-rounds-SC-23, shared-planning-agent-rounds-SC-28, shared-planning-agent-rounds-SC-29, shared-planning-agent-rounds-SC-30, shared-planning-agent-rounds-SC-35, shared-planning-agent-rounds-SC-67
+
+## shared-planning-agent-rounds-US1: Product manager opens a change from one sentence
+
+**As a** product manager,
+**I want** to say what is wanted in the planning channel and answer numbered questions in the thread it starts,
+**so that** the proposal, the decisions and the journeys land without my opening a terminal.
+
+### shared-planning-agent-rounds-US1-TC1-1: First sentence opens the change and its thread
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* admin(product manager) is in <planning channel>.
+* No change names what they are about to ask for.
+
+**Steps:**
+
+1. Post one sentence in <planning channel> saying what is wanted.
+2. Read the reply.
+
+**Expected Results:**
+
+* A change opens, with the asker recorded as its product manager.
+* The reply starts the change's thread and names the change id.
+* `thread:` records the channel and the message the thread hangs off.
+
+### shared-planning-agent-rounds-US1-TC2-1: Later replies use the one recorded thread
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is open, its `thread:` recorded and its proposal on `main`.
+* admin(product manager of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Say land for `decisions.md` in <change thread>.
+2. Read where the landing reply went.
+3. Check `thread:`.
+
+**Expected Results:**
+
+* The landing reply is in <change thread>.
+* `thread:` is unchanged.
+
+### shared-planning-agent-rounds-US1-TC3-1: One word lands the three files that hand owns
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> was opened by a first sentence, and its proposal, decisions and journeys are drafted on its branch.
+* `ui-design.md` is drafted for admin(designer of <change>).
+* admin(product manager of <change>) is in <change thread> and opens no terminal.
+
+**Steps:**
+
+1. Answer each numbered question in <change thread>.
+2. Reply `land`.
+3. Check `main` and read the reply.
+
+**Expected Results:**
+
+* `proposal.md`, `decisions.md` and `user-journeys.md` are on `main`, each recording that handle.
+* `ui-design.md` is still drafted, and the designer is told it is their turn.
+* The reply names what landed, the handle and the stage the change reached.
+
+### shared-planning-agent-rounds-US1-TC4-1: Message naming an open change opens no second change
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is open with its `thread:` recorded.
+* admin(product manager of <change>) is in <planning channel>.
+
+**Steps:**
+
+1. Post a message in <planning channel> naming <change>.
+2. Check the changes in flight.
+3. Read the reply.
+
+**Expected Results:**
+
+* No second change opens.
+* The reply is in <change thread>.
+
+### shared-planning-agent-rounds-US1-TC5-1: First sentence from a teammate with no handle map entry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* admin(engineer) with no entry in the handle map is in <planning channel>.
+
+**Steps:**
+
+1. Post one sentence saying what is wanted.
+2. Read the reply.
+3. Check the change's record.
+
+**Expected Results:**
+
+* A change opens with its product manager unnamed, and the reply names its change id.
+* The reply says the hand is unnamed and asks for the handle.
+
+### shared-planning-agent-rounds-US1-TC6-1: A round run from a terminal lands the same way
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is open with its proposal on `main`, and <change thread> cannot be reached.
+* admin(product manager of <change>) is at a terminal in the store on <change>'s branch.
+
+**Steps:**
+
+1. Run the round for `decisions.md` from the terminal.
+2. Say land at the terminal.
+3. Check `main` and `rounds.md`.
+
+**Expected Results:**
+
+* The same six steps run, with the perspectives the draft summons.
+* `decisions.md` is on `main` with `landed_by:` naming the product manager.
+* `rounds.md` gains the round's row.
+
+### shared-planning-agent-rounds-US1-TC7-1: A plan wake drafts the chain and lands nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* admin(product manager) is in <planning channel>, and no change names what they are about to ask for.
+
+**Steps:**
+
+1. Post one sentence in <planning channel> saying what is wanted.
+2. Read the replies in the thread it starts.
+3. Read the change's branch and `main`.
+
+**Expected Results:**
+
+* The proposal, the decisions, the journeys, the design where a surface moves, the tech design, the requirements and the plan are drafted on the branch, each drawn from the one before it.
+* The cases are drawn from the anchors, beside the requirements and never from the requirements themselves.
+* Each draft's summary names the perspectives that read it, the branch carries a push per artifact, and nothing is on `main`.
+
+### shared-planning-agent-rounds-US1-TC8-1: The summary's button is the word pressed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Decided by:** `tools/relay/test/worker.test.ts`, `tools/relay/test/slack.test.ts`, `tools/relay/test/room.test.ts`
+
+**Pre-conditions:**
+
+* admin(product manager) is in <change thread>, where the proposal's summary waits on their word and carries the button `Confirm proposal`.
+* A second member, whom the team map does not name, is in the same thread.
+
+**Steps:**
+
+1. Press `Confirm proposal`.
+2. Read the summary and the replies in <change thread>.
+3. Read `main` once the wake that follows says it is done.
+4. As the unnamed member, press the button on another summary.
+
+**Expected Results:**
+
+* The thread reads `@<handle> pressed *Confirm proposal*`, and the button is replaced on the summary by who confirmed it.
+* The proposal lands as it lands on a typed `land`: the same check, the same `landed_by:` line.
+* The unnamed member's press lands nothing, and the thread says the team map does not name them.
+
+### shared-planning-agent-rounds-US1-TC9-1: A landing word wakes the run at once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Decided by:** `tools/relay/test/room-state.test.ts`
+
+**Pre-conditions:**
+
+* admin(product manager) is in <change thread>, and no wake is running on it.
+
+**Steps:**
+
+1. Reply `land` and read when the acknowledgment arrives.
+2. In a fresh thread, reply one sentence, then `land` inside the same minute.
+3. Reply one sentence that is no landing word, and read when its acknowledgment arrives.
+
+**Expected Results:**
+
+* The first `land` is acknowledged at once, with no minute's wait.
+* The second wake fires on the `land` and carries the sentence before it.
+* The sentence alone is acknowledged after the minute.
+
+### shared-planning-agent-rounds-US1-TC10-1: A sentence overlapping a change in flight is answered in its thread
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-01
+
+**Pre-conditions:**
+
+* <change> is in flight with its deltas naming <capability>, and <change thread> is its thread.
+* The asker is in <planning channel> and names no change in what they post.
+
+**Test data:**
+
+| <change>'s stage, and who asks | What the run does |
+| --- | --- |
+| Proposed or Designed, its own product manager asking | extends <change>, the round deciding it, and the reply names <change> |
+| Proposed or Designed, another hand asking | holds a row on <change>'s product manager, recommending extend |
+| Specified or Planned | holds a row recommending extend where the moved part is smaller than a task group of work, split otherwise |
+| Building | holds a row recommending split, or supersede where the sentence contradicts what is built |
+| On staging, Released or Archived | opens a new change whose `depends_on:` names <change> |
+
+**Steps:**
+
+1. Post a sentence about <capability> in <planning channel>, naming no change.
+2. Read <change thread>.
+3. Read the changes in flight and <change>'s `decisions.md`.
+
+**Expected Results:**
+
+* The reply is in <change thread> and names <change>.
+* What the row names has happened, and no second change on <capability> is opened except where the row says one is.
+* A held row the table above names is a numbered row in <change>'s `decisions.md`, addressed to <change>'s product manager, and holds <change>'s landings.
+
+---
+
+## shared-planning-agent-rounds-US2: Designer tweaks a proposed design
+
+**As a** designer told a draft is ready,
+**I want** to read its summary in the thread, remark on what to change, and say land,
+**so that** the design lands as I want it without my writing the file.
+
+### shared-planning-agent-rounds-US2-TC1-1: One word lands the design with the designer's handle
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(designer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply `land` in <change thread>.
+2. Check `main`.
+3. Check `rounds.md`.
+
+**Expected Results:**
+
+* `ui-design.md` is on `main` with `landed_by:` naming the designer.
+* `rounds.md` gains the round's row.
+* The artifacts after the design are read again.
+
+### shared-planning-agent-rounds-US2-TC2-1: Remark is applied as written and re-runs what it touches
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(designer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply with <a remark on one screen's empty state> in <change thread>.
+2. Read the reply.
+3. Check the draft.
+
+**Expected Results:**
+
+* The draft carries the remark as written.
+* The reply names the perspectives the edited lines summon.
+* A perspective the remark does not touch is not named.
+
+### shared-planning-agent-rounds-US2-TC3-1: Remark that settles a choice writes a decisions row
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and offers <two shapes for one screen>.
+* admin(designer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply choosing one of <two shapes for one screen>.
+2. Check `decisions.md`.
+3. Check `rounds.md`.
+
+**Expected Results:**
+
+* `decisions.md` gains a numbered row carrying the choice.
+* `rounds.md` gains the round's row.
+
+### shared-planning-agent-rounds-US2-TC4-1: A round of one reader verifies itself
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(designer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply with <a remark touching lines no perspective reads for>.
+2. Read the reply.
+3. Check `rounds.md`.
+
+**Expected Results:**
+
+* The reply names one reader, the one that argues the simpler shape.
+* The round's row names that one perspective and no separate verifier.
+
+### shared-planning-agent-rounds-US2-TC5-1: Design round with no frames writes a dated wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* <change> links a page section naming <a screen nobody has drawn>.
+* admin(designer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Ask for the design in <change thread> with no frame link.
+2. Read the reply.
+3. Check the change's record.
+
+**Expected Results:**
+
+* A dated wait on the designer is written.
+* `ui-design.md` describes <a screen nobody has drawn> in no prose.
+
+### shared-planning-agent-rounds-US2-TC6-1: Only the hand of the stage can land the design
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(engineer of <change>) is in <change thread> and is not the design's hand.
+
+**Steps:**
+
+1. Reply `land` as the engineer.
+2. Check `main`.
+3. Read the reply.
+
+**Expected Results:**
+
+* `ui-design.md` does not reach `main`.
+* No `landed_by:` is written for it.
+* The reply names the hand the artifact waits on.
+
+### shared-planning-agent-rounds-US2-TC7-1: A remark on the page's marked lines
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Pre-conditions:**
+
+* `ui-design.md` is drafted on <change>'s branch and its summary quotes <a marked line of the page the change links>.
+* admin(designer of <change>) and admin(product manager of <change>) are in <change thread>.
+
+**Test data:**
+
+| The hand who remarks | The page gains |
+| --- | --- |
+| admin(designer of <change>) | a ❓ line for the product manager |
+| admin(product manager of <change>) | the remark applied as written |
+
+**Steps:**
+
+1. Reply as the hand from the table with a remark changing what <a marked line of the page the change links> says.
+2. Open the page <change> links.
+3. Read the reply.
+
+**Expected Results:**
+
+* The page gains what the table names.
+* No requirement is written from the remark before the page carries it.
+
+### shared-planning-agent-rounds-US2-TC8-1: The relay moves `main` only on the hand's own word
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`, `scripts/openspec/plan-land-relay.test.mjs`
+
+**Pre-conditions:**
+
+* A run has committed the landing of `ui-design.md` on <change>'s branch.
+* The teammate each row names is in <change thread>.
+
+**Test data:**
+
+| Who replies `land` | What the landing's diff touches | `main` when the relay is asked | `main` after |
+| --- | --- | --- | --- |
+| admin(designer of <change>), the design's hand | <change>'s own directory and a page <change>'s proposal links | at the commit the run read | moves to the landing commit |
+| admin(engineer of <change>) | <change>'s own directory | at the commit the run read | stays where it was |
+| admin(designer of <change>), the design's hand | a file under `packages/` | at the commit the run read | stays where it was |
+| admin(designer of <change>), the design's hand | <change>'s own directory | moved under the run | moves once the run has read `main` again and asked again |
+
+**Steps:**
+
+1. Reply `land` in <change thread> as the teammate the row names.
+2. Read `main`.
+
+**Expected Results:**
+
+* `main` ends as the table names, and moves only as a fast-forward onto the landing commit.
+* A landing that leaves `main` where it was is answered with the check the relay refused.
+
+---
+
+### shared-planning-agent-rounds-US2-TC9-1: A group's landing carrying a draft `main` does not hold is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-02
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* <change>'s branch ticks a task of group 1 and holds, beside the tick, what the row names.
+* admin(engineer of <change>), the group's hand, is at a terminal in the store.
+
+**Test data:**
+
+| What the branch holds beside the tick | The landing |
+| --- | --- |
+| `ui-design.md` redrawn, landed by nobody, and a capability's `spec.md` drafted under `specs/` | refused, naming each file and the designer whose word it waits on |
+| `ui-design.md` redrawn after its own landing, the record naming that landing | refused the same: the text is what is read, not the record |
+| `ui-design.md` taken off the branch | refused as a removal, naming the file |
+| the decisions answered in a new row, and the design as `main` holds it | lands, with its row |
+
+**Steps:**
+
+1. Land group 1 from the terminal.
+2. Read the refusal, or `rounds.md`.
+
+**Expected Results:**
+
+* The landing ends as the table names; a refusal moves `main` nowhere and `rounds.md` gains no row.
+* A refusal names each file and the hand it waits on, and never the plan's own file.
+
+---
+
+## shared-planning-agent-rounds-US3: Tech PIC challenges a proposed design
+
+**As a** tech PIC,
+**I want** the proposed system, its data flow and its rejected options in a summary I can challenge in the thread,
+**so that** a wrong mechanism is caught before the requirements are drawn from it.
+
+### shared-planning-agent-rounds-US3-TC1-1: Summary carries the system, the flow and what was rejected
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-03
+
+**Pre-conditions:**
+
+* `tech-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(tech PIC of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Open <change thread>.
+2. Read the draft's summary.
+
+**Expected Results:**
+
+* The summary names the proposed system, its data flow and the options rejected.
+* It fits one screen.
+* Each numbered question carries the agent's recommendation.
+
+### shared-planning-agent-rounds-US3-TC2-1: Challenge becomes a decisions row with the agent's answer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-03
+
+**Pre-conditions:**
+
+* `tech-design.md` is drafted on <change>'s branch and its summary is posted in <change thread>.
+* admin(tech PIC of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply challenging <the proposed mechanism> in <change thread>.
+2. Read the reply.
+3. Check `decisions.md`.
+
+**Expected Results:**
+
+* `decisions.md` gains a numbered row carrying the challenge and the agent's answer.
+* The reply names the perspectives the challenge re-ran.
+
+### shared-planning-agent-rounds-US3-TC3-1: The design's readers cite the eight principles
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-03
+
+**Pre-conditions:**
+
+* A round on `tech-design.md` has run on <change> and its summary is posted in <change thread>.
+* admin(tech PIC of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Read the draft's summary in <change thread>.
+2. Read the round's row in `rounds.md`.
+
+**Expected Results:**
+
+* Each finding that stood names the principle it holds the draft to.
+* The row names the perspectives run and what stood.
+
+### shared-planning-agent-rounds-US3-TC4-1: Requirement reaching the design waits on the tech PIC
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-03
+
+**Pre-conditions:**
+
+* `tech-design.md` is on `main` and the requirements draft needs <a mechanism the tech design does not carry>.
+* admin(tech PIC of <change>) is at a terminal in the store on <change>'s branch.
+
+**Steps:**
+
+1. Read the change's record.
+2. Push the tech PIC's edit carrying <a mechanism the tech design does not carry>.
+3. Read the change's record again.
+
+**Expected Results:**
+
+* Step 1 shows a dated `awaiting: tech-design:` line for the tech PIC.
+* Step 3 shows the wait cleared.
+* The round records the push as the tech PIC's word for the lines it touched.
+
+---
+
+## shared-planning-agent-rounds-US4: Hand answers only what only they can
+
+**As a** hand,
+**I want** the agent to ask me what moves scope, is costly to undo or needs a fact only I have, as a numbered question with its recommendation, and to decide the rest on the best option and say so,
+**so that** I answer once and never argue with a draft.
+
+### shared-planning-agent-rounds-US4-TC1-1: A held row carries its recommendation and the hand
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* A draft round on <change> turns on <a choice that moves the change's scope>.
+* admin(hand of <change>'s open artifact) is in <change thread>.
+
+**Steps:**
+
+1. Open <change thread>.
+2. Read the questions.
+3. Check `decisions.md`.
+
+**Expected Results:**
+
+* The row reads `❓ <role> - recommended: <option>`, with the options it was chosen over beside it.
+* It carries a number and names the hand it waits on, and the draft after it takes the recommendation until the hand answers.
+* Only a choice that moves scope, is costly to undo, needs a fact only a person has, or divides its options by more than a task group of work is held.
+
+### shared-planning-agent-rounds-US4-TC2-1: An answer writes the row and closes the question
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has <question id> open on admin(hand of <change>'s open artifact).
+
+**Steps:**
+
+1. Reply `<question id>: <answer>` in <change thread>.
+2. Check `decisions.md`.
+3. Open <change page url>.
+
+**Expected Results:**
+
+* The row for <question id> carries <answer>.
+* The change page no longer lists <question id> open.
+
+### shared-planning-agent-rounds-US4-TC3-1: A question id alone takes its recommendation
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has <question id> open, carrying the agent's recommendation.
+
+**Steps:**
+
+1. Reply `<question id>` alone in <change thread>.
+2. Check `decisions.md`.
+
+**Expected Results:**
+
+* The row records the recommendation as the answer.
+* The question closes.
+
+### shared-planning-agent-rounds-US4-TC4-1: A product detail goes to the page, not the decisions
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* A draft round on <change> turns on <a product detail nobody has confirmed>.
+* admin(product manager of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Read the questions in <change thread>.
+2. Open the page <change> links.
+3. Check `decisions.md`.
+
+**Expected Results:**
+
+* The page carries a ❓ line for <a product detail nobody has confirmed>.
+* `decisions.md` holds no numbered row for it.
+
+### shared-planning-agent-rounds-US4-TC5-1: Question ids are per change and never reused
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has <question id> answered and closed.
+
+**Steps:**
+
+1. Open a later round on <change> that raises a question.
+2. Check the ids in `decisions.md`.
+
+**Expected Results:**
+
+* The new question takes an id no earlier question on <change> used.
+* <question id> still carries its own answer.
+
+### shared-planning-agent-rounds-US4-TC6-1: Open questions list per hand, and with none
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has two questions open on its designer and none on its engineer.
+
+**Test data:**
+
+| Reader | Questions on them | My turn shows |
+| --- | --- | --- |
+| admin(designer of <change>) | two open | both questions above the changes |
+| admin(engineer of <change>) | none | the changes alone |
+
+**Steps:**
+
+1. Open <my turn url> and choose the reader's handle.
+2. Read the top of the page.
+3. Open <change page url>.
+
+**Expected Results:**
+
+* My turn shows what the table names, each question row carrying the change, the id, the question's first line and the thread link.
+* The change page lists each artifact's open question ids by hand.
+
+### shared-planning-agent-rounds-US4-TC7-1: A reply naming an unissued question changes nothing
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has <question id> open and <unissued question id> issued to nothing.
+
+**Steps:**
+
+1. Reply `<unissued question id>: <answer>` in <change thread>.
+2. Check `decisions.md`.
+3. Check `main`.
+
+**Expected Results:**
+
+* No decisions row changes.
+* The reply says what it could not do.
+* No artifact reaches `main` on that reply.
+
+### shared-planning-agent-rounds-US4-TC8-1: A reply that is none of the moves holds the question open
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> has <question id> open on admin(hand of <change>'s open artifact).
+
+**Steps:**
+
+1. Reply <a message that is neither an answer, a remark nor land> in <change thread>.
+2. Open <change page url>.
+3. Check `main`.
+
+**Expected Results:**
+
+* <question id> stays listed open on its hand.
+* No artifact reaches `main` on that reply.
+
+### shared-planning-agent-rounds-US4-TC9-1: A held row holds the landing until it is answered
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> carries two held rows and a drafted artifact of admin(product manager of <change>).
+
+**Test data:**
+
+| What the hand replies | The landing |
+| --- | --- |
+| `land` | nothing lands, and the reply names both rows |
+| `land`, both rows answered first | the artifact lands |
+| `land with recommendations` | the artifact lands, both rows taken as recommended |
+
+**Steps:**
+
+1. Reply in <change thread> as the table names.
+2. Read the reply and `main`.
+
+**Expected Results:**
+
+* The landing is the one the table names.
+* A landing on `land with recommendations` records both rows as answered in its own commit.
+
+### shared-planning-agent-rounds-US4-TC10-1: A run posts with its wake's token alone
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Decided by:** `tools/relay/test/worker.test.ts`
+
+**Pre-conditions:**
+
+* admin(engineer of <change>) is at a terminal in the store.
+* A wake is running on <change thread>, and the run holds the token that wake was given.
+
+**Steps:**
+
+1. Read where the run's summary arrives.
+2. Post with that token to another change's thread.
+3. Post with it again once the wake's budget has passed.
+
+**Expected Results:**
+
+* The summary arrives in <change thread>, posted through the relay.
+* Both later posts are refused.
+* The run holds no chat token of its own.
+
+### shared-planning-agent-rounds-US4-TC11-1: Two replies inside a minute wake one run
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Decided by:** `tools/relay/test/room-state.test.ts`
+
+**Pre-conditions:**
+
+* admin(hand of <change>) is in <change thread>, and no wake is running on it.
+
+**Steps:**
+
+1. Reply twice in <change thread> inside one minute.
+2. Reply once more while the wake that follows is running.
+3. Read the replies in <change thread>.
+
+**Expected Results:**
+
+* One wake runs for the first two replies, carrying both.
+* The third reply wakes one more run once that wake finishes.
+* No two wakes run on <change thread> at once.
+
+### shared-planning-agent-rounds-US4-TC12-1: A preference the round decides names what it passed over
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* A draft round on <change> turns on <a preference that moves no scope>.
+* admin(hand of <change>'s open artifact) is in <change thread>.
+
+**Steps:**
+
+1. Open <change thread>.
+2. Read the round's summary.
+3. Check `decisions.md`.
+
+**Expected Results:**
+
+* The row reads `<option> - decided by the round`, with what it passed over beside it.
+* The draft takes that option.
+* No question on it waits on the hand.
+
+### shared-planning-agent-rounds-US4-TC13-1: Any hand's reply overturns a row the round decided
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-04
+
+**Pre-conditions:**
+
+* <change> carries a row the round decided, and the draft takes that option.
+* admin(tech PIC of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Reply in <change thread> naming that row and the option it passed over.
+2. Read the row and the draft.
+
+**Expected Results:**
+
+* The row carries the option the reply names, applied as it was written.
+* The draft is redrawn to that option.
+* What the change of option reaches is read again.
+
+---
+
+## shared-planning-agent-rounds-US5: Hand sees an artifact read again after what it was drawn from moved
+
+**As a** hand of an artifact,
+**I want** the change's agent to read my artifact again when something before it changes, and to open a round for me only when the change reaches it,
+**so that** nothing stale is built on and I am not asked to re-read for a typo.
+
+### shared-planning-agent-rounds-US5-TC1-1: A landing reads every artifact after it, oldest first
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has `ui-design.md`, `tech-design.md`, `spec.md` and `feature-tcs.md` on `main`.
+* An edit to `proposal.md` is drafted and ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Read <change thread>.
+3. Check `reviewed:`.
+
+**Expected Results:**
+
+* One reply names what was read.
+* Every artifact after the proposal is read, oldest first.
+* `reviewed:` carries one content id per artifact read.
+
+### shared-planning-agent-rounds-US5-TC2-1: A read that changes nothing writes the record line alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has `tech-design.md` on `main` and fresh.
+* An edit to `proposal.md` that leaves the tech design right is ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Check `tech-design.md` and the change's record.
+3. Read <change thread>.
+
+**Expected Results:**
+
+* `tech-design.md` is unchanged and its `reviewed:` line carries the new content id.
+* The reply says what was read and that nothing changed.
+* Writing `reviewed:` puts no artifact behind.
+
+### shared-planning-agent-rounds-US5-TC3-1: A read that edits opens a round for that hand
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has `ui-design.md` on `main` and fresh.
+* An edit to `proposal.md` reaching <a state the design does not carry> is ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Read <change thread>.
+3. Check `main`.
+
+**Expected Results:**
+
+* A round opens for the design's hand, naming the change that reached the artifact.
+* The edited design does not reach `main` on the agent's own word.
+
+### shared-planning-agent-rounds-US5-TC4-1: Edits outside the linked text leave the artifacts fresh
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> links some sections of <the page the change marks> and has every artifact on `main` and fresh.
+
+**Test data:**
+
+| Edit landed on the page | Artifacts after |
+| --- | --- |
+| A copy edit to a section <change> does not link | stay fresh |
+| A whitespace-only edit to a section <change> links | stay fresh |
+
+**Steps:**
+
+1. Land the edit from the table on <the page the change marks>.
+2. Open <change page url>.
+3. Check `reviewed:`.
+
+**Expected Results:**
+
+* No artifact of <change> goes behind.
+* No round opens and no content id moves.
+
+### shared-planning-agent-rounds-US5-TC5-1: A landing is refused while something before it is behind
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* <change>'s `tech-design.md` is behind.
+* `spec.md` is drafted on <change>'s branch and admin(product manager of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Say land for `spec.md` in <change thread>.
+2. Read the reply.
+3. Check `main`.
+
+**Expected Results:**
+
+* `spec.md` does not reach `main`.
+* The reply names the behind artifact before it.
+
+### shared-planning-agent-rounds-US5-TC6-1: A waived artifact is fresh and holds nothing after it
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `tools/manual/test/behind.test.ts`
+
+**Pre-conditions:**
+
+* <change> carries a waiver in place of `ui-design.md`.
+* An edit to `proposal.md` is drafted and `spec.md` is ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Say land for `spec.md`.
+3. Check `main`.
+
+**Expected Results:**
+
+* The waived design puts nothing behind.
+* `spec.md` lands.
+
+### shared-planning-agent-rounds-US5-TC7-1: Behind holds no tick, no claim and no wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change>'s `tasks.md` is behind.
+* admin(engineer of <change>) is at a terminal in the application repository.
+
+**Steps:**
+
+1. Tick a task whose tests and code are on `main`.
+2. Write a wait on the tech PIC.
+3. Open <change page url>.
+
+**Expected Results:**
+
+* The tick is accepted.
+* The wait is written.
+* Neither is refused for the behind artifact.
+
+### shared-planning-agent-rounds-US5-TC8-1: A landed Raised row puts the requirements and the cases behind
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change>'s `decisions.md` carries a Raised row with no answer, and `spec.md` and `feature-tcs.md` are fresh.
+* admin(product manager of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Answer the Raised row in <change thread>.
+2. Open <change page url>.
+3. Read <change thread>.
+
+**Expected Results:**
+
+* `spec.md` and `feature-tcs.md` go behind.
+* They are read again before `tasks.md` lands.
+
+### shared-planning-agent-rounds-US5-TC9-1: Two landings before one read are read once
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has every artifact on `main` and fresh.
+* Edits to `proposal.md` and to `decisions.md` are both ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Say land for `decisions.md` before the first read finishes.
+3. Read <change thread> and check `reviewed:`.
+
+**Expected Results:**
+
+* One run at a time reads <change>, and the second landing joins it.
+* The content ids it writes cover both edits.
+
+### shared-planning-agent-rounds-US5-TC10-1: A run that loses the race says so and stops
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* A read of <change> is running after a landing.
+* admin(engineer of <change>) is at a terminal on <change>'s branch.
+
+**Steps:**
+
+1. Push to <change>'s branch while the read is running.
+2. Read <change thread>.
+3. Check <change>'s branch.
+
+**Expected Results:**
+
+* The run says it lost the push and stopped.
+* Nothing the run drafted is on the branch.
+
+### shared-planning-agent-rounds-US5-TC11-1: A landing with nothing after it opens no round
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has `proposal.md` on `main` and no artifact after it.
+
+**Steps:**
+
+1. Say land for an edit to `proposal.md` in <change thread>.
+2. Open <change page url>.
+3. Check `reviewed:`.
+
+**Expected Results:**
+
+* No round opens.
+* No `reviewed:` line changes.
+
+### shared-planning-agent-rounds-US5-TC12-1: A read that edits several redraws each from the one before
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has the designs, the requirements, the cases and the plan on `main`.
+* An edit to `proposal.md` reaching the design and the requirements is ready to land.
+
+**Steps:**
+
+1. Say land for `proposal.md` in <change thread>.
+2. Read <change thread>.
+3. Read <change>'s branch.
+
+**Expected Results:**
+
+* Each artifact after the proposal is read, oldest first.
+* Each edited artifact is redrawn from the redrawn one before it, and the artifacts after it are drafted from what was redrawn.
+* A round opens for every edited artifact's hand, and nothing but the proposal is on `main`.
+
+### shared-planning-agent-rounds-US5-TC13-1: The fold at archive refuses a behind delta
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* <change> has every box ticked and `spec.md` behind.
+* admin(engineer of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Run the archive check for <change>.
+2. Read its output.
+
+**Expected Results:**
+
+* The check refuses the fold.
+* It names the behind delta.
+
+### shared-planning-agent-rounds-US5-TC14-1: A resumed run continues from the pushed draft
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Pre-conditions:**
+
+* A run for <change> pushed a draft to <change>'s branch and then stopped.
+
+**Steps:**
+
+1. Start a run for <change> again.
+2. Read <change thread>.
+3. Check <change>'s branch.
+
+**Expected Results:**
+
+* The run reads <change>'s branch, `main` and <change thread>.
+* It continues from the pushed draft rather than drafting it again.
+* A question already answered in the thread is not asked again.
+
+### shared-planning-agent-rounds-US5-TC15-1: A wake past its budget posts the failure line
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `tools/relay/test/room-state.test.ts`
+
+**Pre-conditions:**
+
+* admin(hand of <change>) is in <change thread>.
+* A wake is running there, acknowledged with <the run's link> from the moment it started.
+
+**Test data:**
+
+| The wake | Its budget |
+| --- | --- |
+| a landing, or a reply in the thread | 30 minutes |
+| one that opens a change, or is asked to plan | 2 hours |
+
+**Steps:**
+
+1. Leave the run to pass the budget the table names without saying it is done.
+2. Read <change thread>.
+3. Reply in <change thread> again.
+
+**Expected Results:**
+
+* The thread carries the failure line with <the run's link>.
+* The later reply wakes a run, so the thread was freed.
+
+### shared-planning-agent-rounds-US5-TC16-1: A read that changed nothing lands with no word
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `tools/relay/test/land.test.ts`, `tools/relay/test/room.test.ts`
+
+**Pre-conditions:**
+
+* admin(engineer of <change>) is at a terminal in the store.
+* An artifact of <change> is behind a landing that did not move what it says, and no hand has replied in <change thread> since.
+
+**Steps:**
+
+1. Let the run read that artifact again.
+2. Read `main` and the commit it added.
+
+**Expected Results:**
+
+* The artifact's `reviewed:` line is on `main` with no hand's word.
+* The commit changes nothing but `reviewed:` lines of <change>'s own record.
+* A commit touching anything else is refused.
+
+### shared-planning-agent-rounds-US5-TC17-1: A landing wakes the relay once per change
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-05
+
+**Decided by:** `scripts/openspec/reread-workflow.test.mjs`, `tools/relay/test/worker.test.ts`, `scripts/openspec/changed-changes.test.mjs`
+
+**Pre-conditions:**
+
+* admin(engineer of <change>) is at a terminal in the store.
+* A landing is ready to push to `main` that puts artifacts of two changes behind.
+
+**Test data:**
+
+| The repository variable carrying the wakes | The relay |
+| --- | --- |
+| on | is woken once for each of the two changes |
+| off | is not woken |
+
+**Steps:**
+
+1. Push the landing to `main`.
+2. Read what the push's workflow posted.
+3. Read what the relay queued.
+
+**Expected Results:**
+
+* The relay is woken as the table names.
+* Each wake is queued against its own change's thread.
+
+---
+
+## shared-planning-agent-rounds-US6: Engineer reads a landing that was checked
+
+**As an** engineer,
+**I want** each task group built test first, read by its perspectives and verified before its landing summary reaches me,
+**so that** I read a summary, not a diff.
+
+### shared-planning-agent-rounds-US6-TC1-1: A group lands its tests first, then its code
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-06
+
+**Pre-conditions:**
+
+* <change> is building and <task group> names <the scenario ids it covers>.
+* admin(engineer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Read <task group>'s commits on `main`.
+2. Read its landing summary in <change thread>.
+
+**Expected Results:**
+
+* The tests <the scenario ids it covers> name land in their own commit, before the code.
+* The summary arrives after the group's readers and the verify, not before.
+
+### shared-planning-agent-rounds-US6-TC2-1: Landing summary names the readers and the tests per scenario
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-06
+
+**Pre-conditions:**
+
+* <task group> of <change> has landed and admin(engineer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Read <task group>'s landing summary in <change thread>.
+2. Read the group's row in `rounds.md`.
+
+**Expected Results:**
+
+* The summary names the perspectives that read the group and what stood.
+* It names the tests each scenario landed with.
+* The row carries the same perspectives, findings and tests.
+
+### shared-planning-agent-rounds-US6-TC3-1: The last group walks the journeys and leaves the suite
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-06
+
+**Pre-conditions:**
+
+* Every earlier task group of <change> is ticked and its journeys are on `main`.
+* admin(engineer of <change>) is in <change thread>.
+
+**Steps:**
+
+1. Read the last group's landing summary in <change thread>.
+2. Check the end-to-end suite on `main`.
+3. Check `feature-tcs.md`.
+4. Check the walk's row in `rounds.md`.
+
+**Expected Results:**
+
+* Each journey is walked end to end through the interface its actor uses and kept as the end-to-end suite.
+* Each case the walk covers is marked automated.
+* A journey no suite can drive is named in the walk's row, and its cases stay manual.
+
+### shared-planning-agent-rounds-US6-TC4-1: One reader argues the simpler shape for the whole change
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-06
+
+**Pre-conditions:**
+
+* Every task group of <change> is ticked and nothing of it is on staging.
+
+**Steps:**
+
+1. Read `rounds.md`.
+2. Read <change thread>.
+
+**Expected Results:**
+
+* One round covers the whole change, run by the reader that argues the simpler shape.
+* It runs before <change> reaches staging.
+
+### shared-planning-agent-rounds-US6-TC5-1: A tick naming a scenario no test reaches is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-06
+
+**Pre-conditions:**
+
+* <change> is building and admin(engineer of <change>) is at a terminal in the application repository.
+* The group is tagged with the repository whose tree the tick is read against.
+
+**Steps:**
+
+1. Mark done a task naming a scenario id no test in that tree cites.
+2. Read the output.
+3. Mark done a task in the same group naming no scenario id.
+4. Check `tasks.md`.
+
+**Expected Results:**
+
+* The first tick is refused, naming the scenario id and the tree it looked in.
+* That task's box stays unticked.
+* The task naming no scenario id is ticked.
+
+---
+
+## shared-planning-agent-rounds-US7: Product manager decides what a moved goal means
+
+**As a** product manager,
+**I want** to be asked whether a change whose goals moved is extended, superseded or split,
+**so that** a change mid-build is never rewritten in place without my word.
+
+### shared-planning-agent-rounds-US7-TC1-1: A moved goal asks extend, supersede or split
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-07
+
+**Pre-conditions:**
+
+* <change> is building with every artifact on `main`.
+* admin(product manager of <change>) is in <change thread>.
+
+**Test data:**
+
+| What moved | The question |
+| --- | --- |
+| A goal in `decisions.md` | extend, supersede or split |
+| A non-goal in `decisions.md` | extend, supersede or split |
+
+**Steps:**
+
+1. Land the edit from the table.
+2. Read <change thread>.
+3. Check the artifacts after `decisions.md`.
+
+**Expected Results:**
+
+* A question to the product manager names extend, supersede and split.
+* No artifact after the moved line is rewritten in place.
+
+### shared-planning-agent-rounds-US7-TC2-1: The answer is recorded and does what it names
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-07
+
+**Pre-conditions:**
+
+* <change> has a moved-goal question open on its product manager.
+
+**Test data:**
+
+| The answer | What it does |
+| --- | --- |
+| extend | <change> goes on with the moved goal, and everything after its proposal is read again |
+| supersede | a new change opens from the moved goal and <change> is withdrawn |
+| split | a new change takes the moved part and <change> keeps the rest |
+
+**Steps:**
+
+1. Answer the moved-goal question in <change thread> with the answer from the table.
+2. Check `decisions.md`.
+3. Check the changes in flight and the artifacts after the moved line.
+
+**Expected Results:**
+
+* What the table names has happened.
+* The decisions row records the answer and the hand who gave it.
+* No goal or non-goal is rewritten in place.
+
+### shared-planning-agent-rounds-US7-TC3-1: Nothing lands while a moved-goal question is open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-07
+
+**Pre-conditions:**
+
+* <change>'s moved-goal question is open and unanswered.
+* `tasks.md` is drafted on <change>'s branch.
+
+**Steps:**
+
+1. Say land for `tasks.md` in <change thread>.
+2. Read the reply.
+3. Check `main`.
+
+**Expected Results:**
+
+* `tasks.md` does not reach `main`.
+* The reply names the open moved-goal question.
+
+---
+
+## shared-planning-agent-rounds-US8: QA walks only what staging proves
+
+**As a** QA teammate,
+**I want** the cases the end-to-end walk automates left out of the run sheet,
+**so that** the pass on staging covers what only a deployed stack can show.
+
+### shared-planning-agent-rounds-US8-TC1-1: The run tab leaves automated cases out and says how many
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* <change> is on staging and its suite holds <cases the walk automated> and <cases still manual>.
+* admin(QA of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Write the run tab for <change>.
+2. Open the tab.
+3. Read what the run said.
+
+**Expected Results:**
+
+* The tab holds <cases still manual> alone.
+* The run says how many automated cases it left out.
+
+### shared-planning-agent-rounds-US8-TC2-1: The change page counts automated cases against the total
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Decided by:** `tools/manual/walk/run-sheet-delivery.walk.ts`
+
+**Pre-conditions:**
+
+* <change> is on staging, specifying two capabilities, each with a suite holding <cases the walk automated> and <cases still manual>.
+
+**Steps:**
+
+1. Open <change page url>.
+2. Read the Delivery row.
+
+**Expected Results:**
+
+* The row shows the suite's automated count against its total.
+* Both capabilities' cases are summed once, and a suite with no automated case reads 0 against its total rather than reading nothing.
+
+### shared-planning-agent-rounds-US8-TC3-1: Every case automated, and none
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* admin(QA of <change>) is at a terminal in the store and <change> is on staging.
+
+**Test data:**
+
+| The suite | The tab |
+| --- | --- |
+| Every case automated | holds no case |
+| No case automated | holds every case |
+
+**Steps:**
+
+1. Write the run tab for the suite from the table.
+2. Open the tab.
+3. Read what the run said.
+
+**Expected Results:**
+
+* The tab holds what the table names.
+* The run says how many cases it left out, zero included.
+
+### shared-planning-agent-rounds-US8-TC4-1: The suite runs on every push, its smoke cases on deploy and cut
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* <change>'s end-to-end suite is on `main` in the application repository.
+
+**Steps:**
+
+1. Push to `main`.
+2. Deploy to staging.
+3. Cut a release.
+4. Read each run's result.
+
+**Expected Results:**
+
+* The whole suite runs on the push.
+* The suite's smoke cases run on the deploy and on the cut.
+
+### shared-planning-agent-rounds-US8-TC5-1: A case a store test decides flips with the test
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Pre-conditions:**
+
+* A suite of <change> carries cases whose automation status is manual.
+* admin(QA of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Land a test in this store that decides one of those cases.
+2. Read that case in the suite.
+3. Read a case only the end-to-end walk drives.
+
+**Expected Results:**
+
+* The case the test decides reads automated from the same commit, and names that test.
+* The case only the walk drives stays manual until the walk's commit.
+* A case neither decides stays manual, with its reason in the suite.
+
+---
+
+### shared-planning-agent-rounds-US8-TC6-1: The archive refuses a change whose journeys were never walked
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-08
+
+**Decided by:** `scripts/openspec/archive-preflight.test.mjs`
+
+**Pre-conditions:**
+
+* <change> is on the round, its last task group is ticked, and its capabilities carry journeys unless the row says otherwise.
+* admin(QA of <change>) is at a terminal in the store, about to archive it.
+
+**Test data:**
+
+| What `rounds.md` holds on `main` | The preflight |
+| --- | --- |
+| a row for the last group naming no walk, and a `whole change` row | refused, naming the group |
+| a walk named on an earlier group's row, the last group's row naming none | refused, naming the last group |
+| a row for the last group naming a `*.walk.ts`, and a `whole change` row | clear |
+| a row for the last group saying the journeys were walked by hand in its Tests cell, and a `whole change` row | clear |
+| a row for the last group naming a walk, and no `whole change` row | refused, naming the landing that writes it |
+| a `whole change` row landed before the last group's row | refused, naming both rounds |
+| the walk row and the `whole change` row in the checkout alone, landed nowhere | refused: the rows `main` holds are the record |
+| the capability's journeys durable, the delta restating none, the last group's row naming no walk | refused, naming the group |
+| the journeys say nobody walks the capability, and a `whole change` row | clear |
+| no rows at all, the change opened on the old flow | clear |
+
+**Steps:**
+
+1. Run the archive preflight for <change>.
+2. Read its output.
+
+**Expected Results:**
+
+* The preflight ends as the table names.
+* A refusal names what the record lacks and the row that would fill it.
+
+---
+
+## shared-planning-agent-rounds-US9: Reader sees what a round did
+
+**As a** reader of a change,
+**I want** one row per round saying which perspectives read the draft, what stood and what was asked,
+**so that** a round that found nothing and one that never ran do not look the same.
+
+### shared-planning-agent-rounds-US9-TC1-1: One row per round, on the page and in the file
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Pre-conditions:**
+
+* <change> has three rounds run on it.
+
+**Steps:**
+
+1. Open <change page url>.
+2. Read the Rounds row.
+3. Open `rounds.md`.
+
+**Expected Results:**
+
+* One line per round names the artifact or group, the perspectives run, what stood and the question ids raised.
+* The page and the file carry the same three rounds.
+
+### shared-planning-agent-rounds-US9-TC2-1: A task group's row names the tests per scenario
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Pre-conditions:**
+
+* <task group> of <change> has landed, naming <the scenario ids it covers>.
+
+**Steps:**
+
+1. Open `rounds.md`.
+2. Read the row for <task group>.
+
+**Expected Results:**
+
+* The row names the group, its perspectives and what stood.
+* It names the tests each of <the scenario ids it covers> landed with.
+
+### shared-planning-agent-rounds-US9-TC3-1: A round that found nothing still writes its row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/walk/rounds-record.walk.ts`
+
+**Pre-conditions:**
+
+* A round on <change> ran whose readers found nothing.
+
+**Steps:**
+
+1. Open `rounds.md`.
+2. Read that round's row.
+
+**Expected Results:**
+
+* The row names the perspectives run and that nothing stood.
+* It lists no question id.
+
+### shared-planning-agent-rounds-US9-TC4-1: A landing or a tick with no row is refused
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* <change> is on the round: its record carries a `landed_by:` line, or its `rounds.md` holds a row.
+* admin(engineer of <change>) is at a terminal in the store.
+
+**Test data:**
+
+| What has no row in `rounds.md` | The check |
+| --- | --- |
+| A landed artifact | refuses, naming the artifact |
+| A ticked task group | refuses, naming the group |
+
+**Steps:**
+
+1. Run the manual check.
+2. Read its output.
+
+**Expected Results:**
+
+* The check refuses as the table names.
+* `rounds.md` is unchanged by the check.
+
+### shared-planning-agent-rounds-US9-TC5-1: A change on the old flow is not refused
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* <change on the old flow> carries no `landed_by:` line and no `rounds.md`, and has a ticked task group; no day is set for the kept skills to go.
+* admin(engineer of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Run the manual check.
+2. Read its output.
+
+**Expected Results:**
+
+* The check does not refuse <change on the old flow>.
+* It names no missing row for it.
+
+### shared-planning-agent-rounds-US9-TC6-1: A change with no round yet shows none and passes
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* <change> is open with its first round still running and no artifact landed.
+
+**Steps:**
+
+1. Open <change page url>.
+2. Run the manual check.
+
+**Expected Results:**
+
+* The Rounds row lists no round.
+* The check does not refuse <change>.
+
+### shared-planning-agent-rounds-US9-TC7-1: A row missing a column is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* <change> is on the round, and its `rounds.md` holds a row naming no perspective.
+* admin(engineer of <change>) is at a terminal in the store.
+
+**Steps:**
+
+1. Run the manual check.
+2. Read its output.
+
+**Expected Results:**
+
+* The check refuses and names the column the row leaves empty.
+* The file's other rows are not reported.
+
+### shared-planning-agent-rounds-US9-TC8-1: The record archives with the change and folds nowhere
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* <change> is archived, having run rounds on every artifact.
+
+**Steps:**
+
+1. Open the archived change's directory.
+2. Read its `rounds.md`.
+3. Check the capability's durable files.
+
+**Expected Results:**
+
+* `rounds.md` sits in the archived change with every row it had.
+* No durable file gained its rows.
+
+### shared-planning-agent-rounds-US9-TC9-1: A ticked group with no row shows as having none
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/walk/rounds-record-roundless.walk.ts`
+
+**Pre-conditions:**
+
+* <change> carries a ticked task group and no row naming that group.
+* <change> carries a second task group that landed a round.
+
+**Steps:**
+
+1. Open <change page url>.
+2. Read the Rounds row.
+
+**Expected Results:**
+
+* The ticked group with no row is listed as having no round.
+* The group that landed a round is not listed that way.
+
+### shared-planning-agent-rounds-US9-TC10-1: A fix pass carries its row like any other round
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Pre-conditions:**
+
+* <change>'s demonstration, or the reading of the whole change, raised fixes.
+* The fix pass has landed and admin(engineer of <change>) is at <change page url>.
+
+**Steps:**
+
+1. Read the Rounds row on <change page url>.
+2. Read the fix pass's row in `rounds.md`.
+
+**Expected Results:**
+
+* The Rounds row carries one line for the fix pass.
+* Its perspectives name the reader who argues the simpler thing.
+* The Perspectives column names the verifier where one ran, and names none for this one-reader round.
+
+### shared-planning-agent-rounds-US9-TC13-1: A fix pass's row is refused for the reader or the verifier it leaves out
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `scripts/openspec/round-scripts.test.mjs`
+
+**Pre-conditions:**
+
+* admin(engineer of <change>) has fixed what a demonstration raised on group 1 and is at a terminal in the store.
+
+**Test data:**
+
+| The row the landing is given | The landing |
+| --- | --- |
+| two readers named and no verifier | refused, naming the readers and the verifier owed |
+| the fix-pass flag, and the reader every round shares left out | refused, naming the reader that reads every round |
+| the fix-pass flag, on a schema whose perspectives lists share no reader that always runs | refused: the flag has no floor to drop to |
+| the fix-pass flag beside a read that changed nothing | refused: that landing writes no row |
+| the fix-pass flag and the shared reader alone | lands, the row naming that reader and no verifier |
+
+**Steps:**
+
+1. Land group 1 from the terminal with the row the table names.
+2. Read the refusal, or `rounds.md`.
+
+**Expected Results:**
+
+* The landing ends as the table names.
+* A refusal leaves `rounds.md` without the row.
+
+---
+
+## Settled
+
+None yet - the first blind pass.
+
+### shared-planning-agent-rounds-US9-TC11-1: The change page mirrors the thread and says what the hands are told
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/walk/change-page-thread.walk.ts`, `tools/manual/test/thread-section.test.tsx`, `tools/manual/test/told-now.test.tsx`, `tools/manual/test/read-change-history.test.ts`, `scripts/openspec/wording.test.mjs`
+
+**Pre-conditions:**
+
+* admin(hand) is reading <change page> of a change whose thread has been opened, landed twice and ticked once, and whose stage names them.
+
+**Steps:**
+
+1. Read Told now under the thread link in Your turn.
+2. Read the Thread row, last before the document tabs.
+3. Read the same two on a change with no history.
+
+**Expected Results:**
+
+* Told now quotes the message each hand of the stage is being sent, in the words the push sends to Slack, and one for the earliest behind artifact.
+* The Thread row lists the change's history from `main` oldest first: opened, each landing with whose word, and each tick, and nothing the store never wrote.
+* A change with no history shows one line saying so in each place, and no error.
+
+---
+
+## Reconciliation
+
+Run: 2026-09-21, fix pass on the landing gate: wrote `US2-TC9-1` for the group landing refused while the branch holds a text of a schema artifact `main` does not, one case over the branch states it meets, and `US9-TC13-1` for the fix pass's row refused for the reader or the verifier it leaves out; `US2-TC8-1` now names the relay's tests and the relay-mode landing's alone, the terminal landing's own file deciding `US2-TC6-1`, `US2-TC9-1` and `US9-TC13-1`. Later that day, the archive gate: wrote `US8-TC6-1` for the preflight refusing a change whose last group's row names no walk or whose rounds hold no `whole change` row, and widened its table on the readers' verdicts to the rows `main` holds, the walk on an earlier group, the whole read before the last group and the capability's durable journeys.
+
+Run: 2026-09-20, fix pass on the overlap rule: `shared-planning-agent-rounds-SC-80` moved to the requirement that opens a change and now serves `shared-planning-agent-rounds-US-01`, so `US7-TC4-1` moved with it as `US1-TC10-1`, tracing that journey; its expected results name the held row written in the overlapped change's `decisions.md`.
+
+Run: 2026-09-20, later that day: the wake's tests landed, so `US5-TC17-1` is automated again and names them; `US4-TC9-1` stays manual for its thread leg and names the landing's own test.
+
+Run: 2026-09-20, amendment pass over the amended requirements and `decisions.md`'s `Q52` to `Q63`, the questions the runner and the held rows settled. Wrote `US4-TC12-1` and `US4-TC13-1` for the row the round decides and the reply that overturns it; recast `US4-TC1-1` onto the held row, `US1-TC7-1` onto the cases drawn from the anchors, `US2-TC8-1` onto the writable set and a `main` that moved under the run, and `US9-TC10-1` onto the Perspectives column; named the actor and the arrival on `US4-TC10-1`, `US4-TC11-1`, `US5-TC15-1`, `US5-TC16-1` and `US5-TC17-1`, and the layer each is checked on; moved `US4-TC9-1` and `US5-TC17-1` back to manual until the tests that decide them land; dropped `US5-TC18-1`, whose scenario is out of suite above.
+
+Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Feature set), user-journeys.md, proposal.md, decisions.md with its Raised table, ui-design.md, the Agent Rounds and Change Stages pages and the Planning index, the store context; denied every `## Requirements` section, openspec/specs/ and openspec/changes/archive/.
+
+### shared-planning-agent-rounds-US9-TC12-1: From the day the kept skills go, a change worked outside the round is refused
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** shared-planning-agent-rounds-US-09
+
+**Decided by:** `tools/manual/test/check-round.test.ts`
+
+**Pre-conditions:**
+
+* The day after the kept skills went is set in `ROUND_RECORD_SINCE`.
+* <change created on that day> carries no `landed_by:` line and no `rounds.md`, and has a ticked task group.
+* <change created the day before> is shaped the same.
+* admin(engineer of <change created on that day>) is at a terminal in the store.
+
+**Steps:**
+
+1. Run the manual check.
+2. Read its output.
+
+**Expected Results:**
+
+* The check refuses <change created on that day>, naming the ticked group.
+* It does not refuse <change created the day before>.
+
+### Folded
+
+* **The summary is one screen, and each question carries its recommendation** - `US3-TC1-1` asked of every draft's summary what the design file states of the thread's replies, and no scenario said it. Folded into `shared-planning-agent-rounds-SC-01` and the round's own requirement.
+* **A round that found nothing still writes its row** - `US9-TC3-1` reads the case the record exists for, and the scenarios said only that there is one row per round. Folded into `shared-planning-agent-rounds-SC-51` and the record's requirement.
+* **Every case automated, and none** - `US8-TC3-1` walks both ends of the run sheet's rule. Kept as a boundary of `shared-planning-agent-rounds-SC-61`, which decides both; no scenario of its own.
+
+### Rejected
+
+None. No case read a non-goal as behaviour, and none took the stage, the direct messages or the Behind chip - `shared/planning/change-stages`' - for this capability's.
+
+### Escalated
+
+Thirteen questions went to the change's `decisions.md`, and the answers landed as `Q17` to `Q28`.
+
+* **A message naming an open change** → `Q17`. Answered in that change's thread, the reply naming the id; folded into `shared-planning-agent-rounds-SC-18`, and `US1-TC4-1` stands.
+* **An asker with no entry in the team map** → `Q18`. The change opens with its product manager unnamed and the reply asks for the handle; folded as `shared-planning-agent-rounds-SC-19`, and `US1-TC5-1` recast onto the unnamed hand.
+* **Who may say land** → `Q19`, taken as the hand of the stage alone; the relay reads the same word again before `main` moves. Folded as `shared-planning-agent-rounds-SC-05` and `shared-planning-agent-rounds-SC-73`; `US2-TC6-1` stands as the blind pass wrote it, and `US2-TC8-1` reads the relay's own check.
+* **A reply that is none of the moves** → `Q20`. It is a remark, applied as written, and a reply the round cannot apply is answered with what it could not do; folded as `shared-planning-agent-rounds-SC-15`. `US4-TC8-1` stands and `US4-TC7-1` gained that reply.
+* **A re-read that would edit several artifacts** → `Q21`, since narrowed by `Q58`: it reads in order, redraws each edited artifact from the redrawn one before it and drafts ahead, landing nothing. Folded into `shared-planning-agent-rounds-SC-41`, and `US5-TC12-1` recast onto the redraw; the stop the two readings disagreed over is no longer the rule.
+* **Two landings inside one run's life** → `Q22`. A no-op re-read is not a round and writes no row, so a joined run leaves none; folded into `shared-planning-agent-rounds-SC-39` and the record's requirement.
+* **A landing with nothing after it** → `Q23`. Nothing beyond the landing line; folded as `shared-planning-agent-rounds-SC-42`, and `US5-TC11-1` stands.
+* **When `rounds.md` exists** → `Q24`. With the first round, absent until then; folded as `shared-planning-agent-rounds-SC-53`, and `US9-TC6-1` stands.
+* **A row missing a column** → `Q25`. Refused as a missing row is, naming the column; folded as `shared-planning-agent-rounds-SC-56`, and `US9-TC7-1` recast from reported to refused.
+* **The agent's own `reviewed:` landing** → `Q22`, with the row above: the landed artifacts and the ticked groups owe rows, and a read that ran no perspective owes none.
+* **What each answer to a moved goal does** → `Q26`, taken as extend, supersede and split each doing something to the change. Folded as `shared-planning-agent-rounds-SC-47`, and `US7-TC2-1` recast onto what each answer does.
+* **Where the product manager's read of the requirements is walked** → `Q27`. In `shared/planning/change-stages`, as the hand's move at Specified; here `shared-planning-agent-rounds-SC-06` states the two readings' exemption alone, and no journey and no case of this capability walks the read.
+* **A remark that touches a page's marked lines** → `Q28`. From the product manager it is applied as written; from any other hand it becomes a ❓ line for the product manager. Folded as `shared-planning-agent-rounds-SC-16`, with `US2-TC7-1` added.
+
+### Out of suite
+
+* `shared-planning-agent-rounds-SC-06` - the two readings and no verifier over them: `pnpm check:manual`'s `blind` rule, which refuses a delta whose moved behaviour no second reading brought back.
+* `shared-planning-agent-rounds-SC-08` - a words-only draft reaches the reader of the words and the floor: `scripts/openspec/perspectives.test.mjs`, which classifies the diff and asserts the whole reader set a round dispatches.
+* `shared-planning-agent-rounds-SC-09` - the readers an export and a migration summon: `scripts/openspec/perspectives.test.mjs`, as above, with what summoned each.
+* `shared-planning-agent-rounds-SC-10` - no record key changes a round's size: `scripts/openspec/perspectives.test.mjs`, which computes the readers from the diff and reads no key.
+* `shared-planning-agent-rounds-SC-23` - a row the round decided holds nothing: `shared/planning/change-stages`' suite, where the stage's derivation and its open questions are walked; `US4-TC9-1` reads what a held row does hold.
+* `shared-planning-agent-rounds-SC-28` - every round reads one table: `pnpm run test:openspec`, which reads the perspectives the schema records per artifact.
+* `shared-planning-agent-rounds-SC-29` - a new reader is one row: `pnpm run test:openspec`, as above.
+* `shared-planning-agent-rounds-SC-30` - a reader sees no other reader's output: `scripts/openspec/perspectives.test.mjs`, which gives each challenger the draft and what is before it alone.
+* `shared-planning-agent-rounds-SC-35` - the content id comparison: the store's unit tests over the content id, a pure derivation no surface shows.
+* `shared-planning-agent-rounds-SC-67` - the wake step holds no session, no write permission and no chat token: `scripts/openspec/reread-workflow.test.mjs`, which reads the step's permissions and its environment. A static reading of a workflow file is no walk through an interface, so the case the blind pass wrote for it is gone.
+
+### Anchors no case reaches
+
+Every journey from `shared-planning-agent-rounds-US-01` to `shared-planning-agent-rounds-US-09` is walked. No case traces a feature set root group - this suite carries a section per journey - so a rule with no actor is reached through the journey that meets it, or listed out of suite above. `Your moves` is served by no scenario: every move a hand has is a rule somebody walks, and each scenario names that walk instead.
+
+### Manual
+
+An automated case names the test that decides it on its own `**Decided by:**` line, directly under its classification, and the run sheet leaves it out.
+
+Every other case is walked by hand. Most are a hand's move in the change's
+Slack thread - a first sentence, a numbered answer, a remark, the word `land`
+- or the round itself, dispatched and read inside an agent's own session
+before it posts its summary back: no suite opens a Slack thread or an agent's
+conversation, and a direct message is read in Slack rather than rendered
+anywhere a walk can look. What the relay does with a thread - which wake runs,
+what a wake's budget ends in, whose word moves `main` - is decided by the
+relay's own tests against its room, its landing and its posting, opening no
+Slack thread either.
+
+| Manual | Why |
+| --- | --- |
+| `US1-TC1-1` | The first sentence and the reply, typed and read in Slack |
+| `US1-TC2-1` | A later reply in the same Slack thread |
+| `US1-TC3-1` | One word landing three artifacts, typed in the thread |
+| `US1-TC4-1` | A Slack message naming a change that already exists |
+| `US1-TC5-1` | The reply asking an unmapped teammate for their handle |
+| `US1-TC6-1` | The same round from a terminal, inside the agent's session |
+| `US1-TC7-1` | The whole chain drafted inside one run's session, from one sentence in Slack |
+| `US1-TC10-1` | The sentence and the reply, typed and read in Slack, and the held row read in the overlapped change; `scripts/openspec/round-skill.test.mjs` already proves the table's words |
+| `US2-TC1-1` | The word `land`, typed in the thread |
+| `US2-TC2-1` | A remark in the thread, and the readers it re-runs in the session |
+| `US2-TC3-1` | A remark in the thread that settles a question |
+| `US2-TC4-1` | Which readers a round dispatched, inside the session |
+| `US2-TC5-1` | The dated wait a design round writes, inside the session |
+| `US2-TC7-1` | A remark in the thread on a page's marked lines |
+| `US3-TC1-1` | The draft's summary as the session posts it |
+| `US3-TC2-1` | A challenge typed in the thread, and the answer to it |
+| `US3-TC3-1` | The readers' own findings, inside the session |
+| `US3-TC4-1` | The dated wait on the tech PIC, written inside the session |
+| `US4-TC1-1` | The question as the thread carries it |
+| `US4-TC2-1` | An answer typed in the thread |
+| `US4-TC3-1` | A question id typed alone in the thread |
+| `US4-TC4-1` | The page line a round writes instead of a row, inside the session |
+| `US4-TC5-1` | Ids issued across several rounds of one change |
+| `US4-TC6-1` | Nothing drives it yet: `tools/manual/test/my-turn-page.test.tsx` proves the render, and the case walks the hand arriving from the thread |
+| `US4-TC7-1` | A reply naming a question the change never issued |
+| `US4-TC8-1` | A reply that is none of the moves, typed in the thread |
+| `US4-TC9-1` | The hand's three replies, typed in the thread; `scripts/openspec/plan-land-relay.test.mjs` decides what each landing does |
+| `US4-TC12-1` | The row the round decided, read in the thread and the change |
+| `US4-TC13-1` | A reply overturning that row, typed in the thread |
+| `US5-TC1-1` | The re-read a landing wakes, inside the session |
+| `US5-TC2-1` | The thread reply saying what was read and that nothing changed |
+| `US5-TC3-1` | The round a re-read opens for a hand |
+| `US5-TC4-1` | Nothing drives it yet: `tools/manual/test/behind.test.ts` proves the derivation, and the case walks two landings through the round |
+| `US5-TC7-1` | A tick, a claim and a wait taken from the board while an artifact is behind |
+| `US5-TC8-1` | A Raised row landed through the round |
+| `US5-TC9-1` | Two landings inside one run's life |
+| `US5-TC11-1` | A landing with nothing after it, read in the thread |
+| `US5-TC12-1` | A re-read that redraws several, inside the session |
+| `US5-TC13-1` | The fold at archive, run by a hand |
+| `US5-TC14-1` | A run killed mid-draft and picked up again |
+| `US6-TC1-1` | The group's own commits in the application repository |
+| `US6-TC2-1` | The landing summary the thread carries |
+| `US6-TC3-1` | The last group's walks, in the application repository |
+| `US6-TC4-1` | One reader over the whole change, inside the session |
+| `US6-TC5-1` | `pnpm plan done` against the application repository's tree |
+| `US7-TC1-1` | The question the round asks in the thread |
+| `US7-TC2-1` | The product manager's answer, typed in the thread |
+| `US7-TC3-1` | A landing refused in the thread while the question is open |
+| `US8-TC1-1` | The run tab, written into the run spreadsheet |
+| `US8-TC3-1` | Both ends of the gate, in the run spreadsheet |
+| `US8-TC4-1` | A push, a staging deploy and a release cut |
+| `US8-TC5-1` | Nothing drives it yet: `scripts/openspec/decided-by.test.mjs` proves the line and its refusals, and the case walks the flip riding the test's commit |
+| `US9-TC1-1` | The page and `rounds.md` read together after three real rounds |
+| `US9-TC2-1` | A task group's row after a real build |
+| `US9-TC10-1` | A fix pass's row is read from a record a person wrote |

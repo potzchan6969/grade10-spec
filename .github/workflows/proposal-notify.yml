@@ -1,0 +1,246 @@
+name: OpenSpec changes
+
+# What a push to main moved, and who it moved it to.
+#
+# One post to the planning channel naming each change and the stage it moved
+# into, and one direct message per hand a change has reached — the same
+# derivation the board reads, run over the push's base and its head.
+#
+# The job commits nothing: `contents: read` is the whole of it, and the only
+# token it holds is the Slack bot's. `thread:` and `reviewed:` are written by
+# the round, not here.
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - "openspec/changes/**"
+      - "openspec/specs/**"
+      # A page landing can put an artifact behind, and the hand of that
+      # artifact is told about it.
+      - "docs/prds/**"
+      - ".github/workflows/proposal-notify.yml"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: openspec-notify-${{ github.sha }}
+
+env:
+  NODE_VERSION: 24.14.1
+  MANUAL_URL: https://spec.grade10-stg.com/planning
+  OPENSPEC_VIEWER_URL: https://spec.grade10-stg.com/openspec/
+  # One file per run, restored and saved by exact key: it makes a re-run of
+  # this push send nothing twice, and says nothing about the push before it.
+  SENT_KEYS: notify-sent.txt
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    outputs:
+      # The `reread` job's matrix, computed here from the same reading the
+      # messages are — never a second diff of the same push.
+      matrix: ${{ steps.changes.outputs.matrix }}
+    steps:
+      # Full history: a push can carry more than one commit, so the diff starts
+      # at the branch's previous commit rather than HEAD's parent.
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          cache: pnpm
+
+      # The script reads the store through the manual's own readers, which
+      # need the workspace's dependencies.
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      # Say which piece of setup is missing, rather than failing later inside
+      # a Slack call about a token nobody set. A channel the bot is not a
+      # member of cannot be checked without a call, so the send reports it
+      # and names the channel it was refused.
+      - name: Check the repository is configured
+        env:
+          BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
+          WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
+          NOTIFY_DMS: ${{ vars.NOTIFY_DMS }}
+        run: |
+          missing=""
+          [ -n "$BOT_TOKEN" ] || missing="$missing SLACK_BOT_TOKEN"
+          [ -n "$CHANNEL" ] || missing="$missing SLACK_PLANNING_CHANNEL_ID"
+          if [ "$NOTIFY_DMS" = "true" ] && [ -z "$WORKSPACE_URL" ]; then
+            missing="$missing SLACK_WORKSPACE_URL"
+          fi
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      # The same courtesy over the two things a wake needs, said once per push
+      # rather than once per change: the `reread` job runs on a matrix, so a
+      # preflight inside it repeats itself as many times as the push moved
+      # changes — and says it only after the matrix was computed. Behind the
+      # same variable that job is, so a store that never turned the cascade on
+      # is not told what it did not set for it.
+      - name: Check the wake is configured
+        if: vars.AGENT_REREAD == 'true'
+        env:
+          AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
+          AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
+        run: |
+          missing=""
+          [ -n "$AGENT_WAKE_URL" ] || missing="$missing AGENT_WAKE_URL"
+          [ -n "$AGENT_WAKE_TOKEN" ] || missing="$missing AGENT_WAKE_TOKEN"
+          if [ -n "$missing" ]; then
+            echo "::error::Not configured:$missing"
+            echo "Settings → Secrets and variables → Actions."
+            exit 1
+          fi
+
+      # No `restore-keys`: a prefix fallback would drag the previous push's
+      # keys in and silence a stage re-entered after a revert (decisions Q26).
+      - name: Restore the keys this run has sent
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: notify-sent-${{ github.run_id }}
+
+      # One run: the channel post and the direct messages are one delivery,
+      # the post keyed by the push's own head so a re-run does not post it
+      # twice either. `NOTIFY_DMS` turns the direct messages off without
+      # touching the post.
+      - name: Find what this push moved and tell it
+        id: changes
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          SLACK_WORKSPACE_URL: ${{ vars.SLACK_WORKSPACE_URL }}
+          TCS_SHEET_URL: ${{ vars.TCS_SHEET_URL }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
+          BEFORE: ${{ github.event.before }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          touch "$SENT_KEYS"
+          node scripts/openspec/changed-changes.mjs \
+            --stages \
+            --send \
+            --dms "${{ vars.NOTIFY_DMS }}" \
+            --base "$BEFORE" \
+            --head "$HEAD_SHA" \
+            --channel "$CHANNEL" \
+            --sent-keys "$SENT_KEYS" \
+            --manual-url "$MANUAL_URL" \
+            --openspec-url "$OPENSPEC_VIEWER_URL" \
+            --commit-url "${{ github.server_url }}/${{ github.repository }}/commit/${{ github.sha }}" \
+            --github-output "$GITHUB_OUTPUT"
+
+      # Whatever happened above: what went out is what went out, and the next
+      # push's run should not send it again.
+      - name: Save the keys this run has sent
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.SENT_KEYS }}
+          key: notify-sent-${{ github.run_id }}
+
+  # The read again: one wake per change this push put behind, on the matrix
+  # `notify` already computed from the same reading its own messages are —
+  # never a second diff of the same push. A change touched only by the
+  # round's own record lines never entered that matrix, which is what makes
+  # the cascade a run wakes finite.
+  #
+  # The relay serialises wakes per change, runs the session, and posts the
+  # failure line itself if the wake's budget runs out with no `done` — so
+  # this job holds no session and no write permission. `AGENT_WAKE_TOKEN` is
+  # the only credential the wake step reads; the bot token lives in the plain
+  # step below it, which says in the channel that a wake never arrived, and
+  # reaches no session either way (Q62).
+  #
+  # Two steps, and the preflight is not one of them: what Operations has not
+  # set is said once by `notify`, above the matrix, rather than once per
+  # change inside it. So the only step here that can fail is the wake, which
+  # is exactly what the failure line reports.
+  reread:
+    needs: notify
+    # Two gates: the variable is how Operations turns the cascade on, and the
+    # matrix gate keeps a push that moved no change from starting a job whose
+    # `include` is empty.
+    if: vars.AGENT_REREAD == 'true' && needs.notify.outputs.matrix != '[]'
+    strategy:
+      fail-fast: false
+      matrix:
+        include: ${{ fromJson(needs.notify.outputs.matrix) }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      # The change's id reaches the body through the environment and `jq
+      # --arg`, off a quoted heredoc: an id is a string a push computed, and
+      # a string spliced into a shell word is a shell word.
+      - name: Wake the relay
+        env:
+          AGENT_WAKE_URL: ${{ vars.AGENT_WAKE_URL }}
+          AGENT_WAKE_TOKEN: ${{ secrets.AGENT_WAKE_TOKEN }}
+          CHANGE: ${{ matrix.id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          filter="$(cat <<'JQ'
+          { change: $change, reason: "landing", head: $head }
+          JQ
+          )"
+          body="$(jq -nc \
+            --arg change "$CHANGE" \
+            --arg head "$HEAD_SHA" \
+            "$filter")"
+          curl -fsS -X POST "$AGENT_WAKE_URL/wake" \
+            -H "Authorization: Bearer $AGENT_WAKE_TOKEN" \
+            -H 'content-type: application/json' \
+            -d "$body"
+
+      # A wake that never arrived is a re-read nobody is waiting for and a
+      # thread nobody told: the relay cannot post its own failure line for a
+      # wake it never took. So this plain step says it in the channel the
+      # notify job posts to, naming the change and the head, and it is the
+      # only step here that reads the bot token. Slack answers 200 with
+      # `ok: false` on a channel it will not post to, so the answer is read
+      # rather than the status: a failure line nobody received is a failure
+      # nobody knows about.
+      - name: Say the wake did not reach the relay
+        if: failure()
+        env:
+          SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+          CHANNEL: ${{ vars.SLACK_PLANNING_CHANNEL_ID || vars.SLACK_CHANNEL_ID }}
+          CHANGE: ${{ matrix.id }}
+          HEAD_SHA: ${{ github.sha }}
+        run: |
+          filter="$(cat <<'JQ'
+          {
+            channel: $channel,
+            text: ("The wake for `" + $change + "` at " + $head
+              + " did not reach the relay: nothing is reading it again.")
+          }
+          JQ
+          )"
+          body="$(jq -nc \
+            --arg channel "$CHANNEL" \
+            --arg change "$CHANGE" \
+            --arg head "${HEAD_SHA:0:8}" \
+            "$filter")"
+          said="$(curl -sS -X POST https://slack.com/api/chat.postMessage \
+            -H "Authorization: Bearer $SLACK_BOT_TOKEN" \
+            -H 'content-type: application/json; charset=utf-8' \
+            -d "$body")"
+          if [ "$(printf '%s' "$said" | jq -r '.ok')" != "true" ]; then
+            echo "::error::Slack refused the line: $(printf '%s' "$said" | jq -r '.error // "no reason given"')"
+            exit 1
+          fi

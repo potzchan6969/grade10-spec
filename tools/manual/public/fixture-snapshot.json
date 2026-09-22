@@ -48,7 +48,7 @@
     },
     {
       "path": "docs/prds/products/demo-product/index.md",
-      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n"
+      "source": "---\ntitle: Demo product\nsummary: The product the fixture spec belongs to.\nspec: demo-product/alpha\nicon: storefront\norder: 1\n---\n\nWhat the product is for, in a person's words.\n\n::spec{id=\"demo-product/alpha\"}\n\n## Refunds\n\nRefunds follow one rule the store already draws elsewhere.\n\n- 🚧 **Window** — refunds close after 30 days\n\n## Discounts\n\nA cap keeps a discount from swallowing the whole order.\n\n- 🚧 **Cap** — a customer discount never exceeds 50%\n"
     }
   ],
   "specs": [
@@ -110,7 +110,8 @@
           "traces": [
             "alpha-SC-01"
           ],
-          "status": "draft"
+          "status": "draft",
+          "automationStatus": "manual"
         },
         {
           "id": "alpha-TC-02",
@@ -119,12 +120,13 @@
             "alpha-SC-01",
             "alpha-SC-02"
           ],
-          "status": "draft"
+          "status": "draft",
+          "automationStatus": "manual"
         }
       ],
       "testCasesStatus": "pending-review",
       "issuedThrough": {
-        "sc": 3,
+        "sc": 7,
         "us": 1,
         "tc": 2
       }
@@ -168,6 +170,7 @@
       "dir": "openspec/changes/add-thing",
       "schema": "grade10-planning",
       "status": "in-flight",
+      "stage": "proposed",
       "owners": [
         "tester",
         "other"
@@ -255,7 +258,1000 @@
       "followOns": [
         "**The thing happens twice**, for the collectors who asked for a second one the same day.",
         "A record anyone can read back."
-      ]
+      ],
+      "heldBy": "decisions",
+      "upstream": {
+        "specs": {
+          "id": "47e63e84",
+          "items": [
+            "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "5d89638b",
+          "items": [
+            "proposal",
+            "specs"
+          ]
+        }
+      },
+      "lastLanded": "2026-08-05T00:00:00+00:00"
+    },
+    {
+      "id": "demo-approved",
+      "dir": "openspec/changes/demo-approved",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The approved suite",
+      "why": "The fixture walk needs a second change in the same lane whose suite QA has\nbeen through, so the suite chip can be read as a verdict rather than as a\nbadge every change wears the same way.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing leaves a record",
+              "kind": "added",
+              "text": "### Requirement: The thing leaves a record\n\nThe system SHALL write one record for each thing that happens.\n\n#### Scenario: alpha-SC-06 - The record is written\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** one record is written for it"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the suite's verdict, not the designs",
+      "uiWaived": "the fixture is about the suite's verdict, not the designs",
+      "hands": {
+        "pm": "tester",
+        "qa": "tester",
+        "dev": "tester"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "approved",
+          "cases": {
+            "draft": 0,
+            "actual": 1,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "1d7bbbaa",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "e7ce6426",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "2f3e7021",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "2f3e7021",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tasks": {
+          "id": "8af647dc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "specs",
+            "test-cases"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-building",
+      "dir": "openspec/changes/demo-building",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "building",
+      "owners": [],
+      "created": "2026-09-04",
+      "title": "The Building stage",
+      "why": "The fixture walk needs a change with one task ticked and one still open, so a\nreader can tell the Building stage from Planned, and a dependency that has\nnot shipped yet, so the Blocked overlay has something to name.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "dependsOn": [
+        "demo-planned"
+      ],
+      "decisionsWaived": "the fixture is about the Building stage, not the decisions",
+      "designWaived": "the fixture is about the Building stage, not the designs",
+      "uiWaived": "the fixture is about the Building stage, not the designs",
+      "hands": {
+        "dev": "tester"
+      },
+      "skipSpecs": "the fixture is about the Building stage and the Blocked overlay, not the requirements",
+      "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "discounts"
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "artifact": "decisions",
+          "role": "tester",
+          "hand": "tester",
+          "text": "Whether the group ships behind a flag",
+          "recommended": "recommended: no, ship it plain"
+        }
+      ],
+      "upstream": {
+        "proposal": {
+          "id": "355a7f65",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts"
+          ]
+        },
+        "tasks": {
+          "id": "f5914656",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-designed",
+      "dir": "openspec/changes/demo-designed",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "The Designed stage",
+      "why": "The fixture walk needs a change that has drawn both designs and gone no\nfurther, so a reader can tell the Designed stage from the ones beside it.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "ui-design",
+        "tech-design"
+      ],
+      "reviewed": {
+        "ui-design": "0000000"
+      },
+      "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "discounts"
+        }
+      ],
+      "followOns": [
+        "The requirements, once somebody takes the two readings."
+      ],
+      "heldBy": "specs",
+      "upstream": {
+        "proposal": {
+          "id": "355a7f65",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts"
+          ]
+        },
+        "decisions": {
+          "id": "65130f4e",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "55a6205b",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "47e81a5a",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tech-design": {
+          "id": "47e81a5a",
+          "items": [
+            "docs/prds/products/demo-product/index.md#discounts",
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-half-designed",
+      "dir": "openspec/changes/demo-half-designed",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "One design waived, one owed",
+      "why": "The fixture walk needs a change whose designer has written their line and\nwhose tech design is neither a file nor a line, so a reader can be shown\nwhat one waiver alone leaves owed.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys"
+      ],
+      "uiWaived": "nothing is drawn - the change moves no screen",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester"
+      },
+      "author": "tester",
+      "heldBy": "tech-design",
+      "upstream": {
+        "decisions": {
+          "id": "3b47d22e",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "66986646",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-on-staging",
+      "dir": "openspec/changes/demo-on-staging",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "on-staging",
+      "owners": [],
+      "created": "2026-08-20",
+      "title": "The On staging stage",
+      "why": "The fixture walk needs a change whose one task is fully checked off and\ndeployed to staging, and old enough that nobody has landed anything on it\nfor a while, so a reader can see the Idle overlay beside a stage other than\nBuilding.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 1,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "decisionsWaived": "the fixture is about the On staging stage, not the decisions",
+      "designWaived": "the fixture is about the On staging stage, not the designs",
+      "uiWaived": "the fixture is about the On staging stage, not the designs",
+      "deployedEnv": "staging",
+      "skipSpecs": "the fixture is about the On staging stage and the Idle overlay, not the requirements",
+      "author": "tester",
+      "rounds": [
+        {
+          "round": 1,
+          "artifact": "tasks",
+          "perspectives": "the-simpler-thing; nitpick",
+          "stood": "nothing stood",
+          "asked": "-",
+          "tests": "-"
+        },
+        {
+          "round": 2,
+          "artifact": "1",
+          "perspectives": "missing-pieces; code-smell",
+          "stood": "the fixture's one task lands cleanly",
+          "asked": "Q1",
+          "tests": "alpha-SC-01: test/thing.test.ts"
+        },
+        {
+          "round": 3,
+          "artifact": "proposal",
+          "perspectives": "the-simpler-thing",
+          "stood": "the why holds without the extra paragraph",
+          "asked": "-",
+          "tests": "-"
+        }
+      ],
+      "upstream": {
+        "tasks": {
+          "id": "800c7b56",
+          "items": [
+            "proposal"
+          ]
+        }
+      },
+      "lastLanded": "2026-09-07T00:00:00+00:00"
+    },
+    {
+      "id": "demo-overlays",
+      "dir": "openspec/changes/demo-overlays",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The overlay set",
+      "why": "The fixture walk needs one change wearing all five overlays at once, so a\nreader can be shown the closed set and nothing outside it.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is counted once",
+              "kind": "added",
+              "text": "### Requirement: The thing is counted once\n\nThe system SHALL count the thing once however often it is asked for.\n\n#### Scenario: alpha-SC-05 - The count holds\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing is asked for twice\n- **THEN** the count goes up by one"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "dependsOn": [
+        "demo-planned"
+      ],
+      "designWaived": "the fixture is about the overlays, not the designs",
+      "uiWaived": "the fixture is about the overlays, not the designs",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester",
+        "qa": "tester",
+        "dev": "tester"
+      },
+      "reviewed": {
+        "decisions": "00000000",
+        "specs": "00000000"
+      },
+      "awaiting": [
+        {
+          "artifact": "tasks",
+          "why": "2026-09-08 - waiting on the engineer to say which group goes first"
+        }
+      ],
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "pending-review",
+          "cases": {
+            "draft": 1,
+            "actual": 0,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "153c946b",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "951cccd8",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "e7d02acc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "e7d02acc",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "tasks": {
+          "id": "c2780edb",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "specs",
+            "test-cases"
+          ]
+        }
+      },
+      "lastLanded": "2026-09-08T00:00:00+00:00"
+    },
+    {
+      "id": "demo-planned",
+      "dir": "openspec/changes/demo-planned",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-03",
+      "title": "The Planned stage",
+      "why": "The fixture walk needs a change with a plan and nothing ticked yet, so a\nreader can tell the Planned stage from Building.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            },
+            {
+              "text": "1.2 Adopt it.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the Planned stage, not the designs",
+      "uiWaived": "the fixture is about the Planned stage, not the designs",
+      "reviewed": {
+        "decisions": "1fe721a5"
+      },
+      "skipSpecs": "the fixture is about the Planned stage and the Behind overlay, not the requirements",
+      "author": "tester",
+      "followOns": [
+        "The proposal moved after `decisions.md` was reviewed, which is what the Behind overlay on this fixture shows."
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "ff87fe34",
+          "items": [
+            "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "28f20fd5",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-refund-window",
+      "dir": "openspec/changes/demo-refund-window",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "planned",
+      "owners": [],
+      "created": "2026-09-06",
+      "title": "Shorten the refund window",
+      "why": "The walk needs a Planned-stage change linking one page section on its own,\nso the pip it carries never moves what another fixture's Behind chip reads.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "The window",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 2,
+          "tasks": [
+            {
+              "text": "1.1 Shorten the window.",
+              "done": false
+            },
+            {
+              "text": "1.2 Say so on the page.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about a page's in-flight row and pip, not the designs",
+      "uiWaived": "the fixture is about a page's in-flight row and pip, not the designs",
+      "thread": "C0PLANNING/1758170000.001200",
+      "hands": {
+        "dev": "tester"
+      },
+      "skipSpecs": "the fixture is about a page's in-flight row and pip, not the requirements",
+      "author": "tester",
+      "sections": [
+        {
+          "page": "docs/prds/products/demo-product/index.md",
+          "slug": "refunds"
+        }
+      ],
+      "upstream": {
+        "proposal": {
+          "id": "cea4987f",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds"
+          ]
+        },
+        "decisions": {
+          "id": "a25a70e4",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds",
+            "proposal"
+          ]
+        },
+        "tasks": {
+          "id": "7501932c",
+          "items": [
+            "docs/prds/products/demo-product/index.md#refunds",
+            "proposal",
+            "decisions"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-released",
+      "dir": "openspec/changes/demo-released",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "released",
+      "owners": [],
+      "created": "2026-08-01",
+      "title": "The Released stage",
+      "why": "The fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging - and one whose artifacts landed on known\ndays, so the handoff has days to show.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 1,
+          "total": 1,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": true
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is shown as done",
+              "kind": "added",
+              "text": "### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "ui-design",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the Released stage, not the tech design",
+      "deployedEnv": "staging",
+      "deployedBuild": "1.4.0-rc2",
+      "releasedIn": "v2026.09.0",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "qa": "tester",
+        "dev": "tester",
+        "release": "tester"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "approved",
+          "cases": {
+            "draft": 0,
+            "actual": 1,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "37dd348d",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "435c8f4b",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "ee5b7522",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "specs": {
+          "id": "5524a95c",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "test-cases": {
+          "id": "5524a95c",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "tasks": {
+          "id": "53d3e38e",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design",
+            "specs",
+            "test-cases"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-specified",
+      "dir": "openspec/changes/demo-specified",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "specified",
+      "owners": [],
+      "created": "2026-09-02",
+      "title": "The Specified stage",
+      "why": "The fixture walk needs a change whose requirements are written and whose\nsuite is still a draft, so a reader can tell the Specified stage apart from\nPlanned.",
+      "taskGroups": [],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is counted",
+              "kind": "added",
+              "text": "### Requirement: The thing is counted\n\nThe system SHALL count how many times the thing happens.\n\n#### Scenario: alpha-SC-04 - The count goes up\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing happens\n- **THEN** the count goes up by one"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "specs",
+        "test-cases"
+      ],
+      "designWaived": "the fixture is about the Specified stage, not the designs",
+      "uiWaived": "the fixture is about the Specified stage, not the designs",
+      "hands": {
+        "dev": "tester"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "status": "pending-review",
+          "cases": {
+            "draft": 1,
+            "actual": 0,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 1
+          }
+        }
+      ],
+      "questions": [
+        {
+          "id": "Q1",
+          "artifact": "decisions",
+          "role": "tester",
+          "hand": "tester",
+          "text": "Whether the suite ships blind first",
+          "recommended": "recommended: yes, blind before the scenarios"
+        }
+      ],
+      "heldBy": "tasks",
+      "upstream": {
+        "decisions": {
+          "id": "fdbf2cd6",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "a3bddd05",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "specs": {
+          "id": "0e0b05b5",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "test-cases": {
+          "id": "0e0b05b5",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        }
+      }
+    },
+    {
+      "id": "demo-unreadable",
+      "dir": "openspec/changes/demo-unreadable",
+      "schema": "",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-06",
+      "title": "An unreadable record",
+      "why": "The fixture walk needs a change whose `.openspec.yaml` nobody could read, so\na reader can see how the board shows a record nothing could parse.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [],
+      "error": {
+        "file": "openspec/changes/demo-unreadable/.openspec.yaml",
+        "message": "Flow sequence in block collection must be sufficiently indented and end with a ] at line 3, column 1:\n\nhands: [\n\n^\n"
+      },
+      "author": "tester"
+    },
+    {
+      "id": "demo-waiting",
+      "dir": "openspec/changes/demo-waiting",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "proposed",
+      "owners": [],
+      "created": "2026-09-05",
+      "title": "The Waiting overlay",
+      "why": "The fixture walk needs a change that names what it is waiting on, so a\nreader can see the Waiting overlay beside a change still Proposed.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal"
+      ],
+      "hands": {
+        "design": "tester",
+        "tech": "tester"
+      },
+      "awaiting": [
+        {
+          "artifact": "ui-design",
+          "why": "2026-09-05 - waiting on the designer's Figma frame"
+        },
+        {
+          "artifact": "tech-design",
+          "why": "waiting on the tech PIC to say whether the queue can carry it"
+        }
+      ],
+      "author": "tester",
+      "heldBy": "decisions"
+    },
+    {
+      "id": "demo-waived",
+      "dir": "openspec/changes/demo-waived",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "designed",
+      "owners": [],
+      "created": "2026-09-01",
+      "title": "The waived design",
+      "why": "The fixture walk needs a change that says in one line that it draws\nnothing, with the other design written, so a reader can be shown a waiver\nstanding for the file it names.",
+      "taskGroups": [],
+      "deltas": [],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "tech-design"
+      ],
+      "uiWaived": "the change draws nothing - no screen moves",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "tech": "tester"
+      },
+      "author": "tester",
+      "heldBy": "specs",
+      "upstream": {
+        "decisions": {
+          "id": "4c2b1947",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "102106db",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "tech-design": {
+          "id": "fc395fd1",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        }
+      }
     }
   ],
   "schemas": {
@@ -264,15 +1260,147 @@
         "id": "proposal",
         "generates": "proposal.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [],
+        "upstream": [],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
         "required": true
       },
       {
-        "id": "specs",
-        "generates": "specs/**/spec.md",
+        "id": "decisions",
+        "generates": "decisions.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [
           "proposal"
+        ],
+        "upstream": [
+          "proposal"
+        ],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
         ],
         "required": true
       },
@@ -280,17 +1408,77 @@
         "id": "user-journeys",
         "generates": "specs/**/user-journeys.md",
         "teammate": "product-manager",
+        "hand": "pm",
         "requires": [
-          "specs"
+          "decisions",
+          "proposal"
         ],
-        "required": true
-      },
-      {
-        "id": "test-cases",
-        "generates": "specs/**/feature-tcs.md",
-        "teammate": "product-manager",
-        "requires": [
-          "user-journeys"
+        "upstream": [
+          "proposal",
+          "decisions"
+        ],
+        "perspectives": [
+          {
+            "name": "product",
+            "when": [
+              "surface",
+              "copy"
+            ],
+            "agent": ".claude/agents/product.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "backend",
+            "when": [
+              "schema",
+              "export"
+            ],
+            "agent": ".claude/agents/backend.md"
+          },
+          {
+            "name": "integration",
+            "when": [
+              "system"
+            ],
+            "agent": ".claude/agents/integration.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "operations",
+            "when": [
+              "migration",
+              "flag",
+              "money",
+              "deploy"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
         ],
         "required": true
       },
@@ -298,8 +1486,38 @@
         "id": "ui-design",
         "generates": "ui-design.md",
         "teammate": "designer",
+        "hand": "design",
         "requires": [
-          "specs"
+          "decisions",
+          "user-journeys"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys"
+        ],
+        "perspectives": [
+          {
+            "name": "design",
+            "when": [
+              "surface"
+            ],
+            "agent": ".claude/agents/design.md"
+          },
+          {
+            "name": "reader",
+            "when": [
+              "copy"
+            ],
+            "agent": ".claude/agents/reader.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
         ],
         "required": false
       },
@@ -307,17 +1525,110 @@
         "id": "tech-design",
         "generates": "tech-design.md",
         "teammate": "engineer",
+        "hand": "tech",
+        "requires": [
+          "decisions",
+          "user-journeys"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys"
+        ],
+        "perspectives": [
+          {
+            "name": "tech",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/tech.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
+        ],
+        "required": false
+      },
+      {
+        "id": "specs",
+        "generates": "specs/**/spec.md",
+        "hand": "pm",
+        "requires": [
+          "decisions",
+          "user-journeys"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design"
+        ],
+        "perspectives": [],
+        "required": true
+      },
+      {
+        "id": "test-cases",
+        "generates": "specs/**/feature-tcs.md",
+        "hand": "pm",
         "requires": [
           "specs"
         ],
-        "required": false
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design"
+        ],
+        "perspectives": [],
+        "required": true
       },
       {
         "id": "tasks",
         "generates": "tasks.md",
         "teammate": "engineer",
+        "hand": "dev",
         "requires": [
           "specs"
+        ],
+        "upstream": [
+          "proposal",
+          "decisions",
+          "user-journeys",
+          "ui-design",
+          "tech-design",
+          "specs",
+          "test-cases"
+        ],
+        "perspectives": [
+          {
+            "name": "operations",
+            "when": [
+              "always",
+              "migration",
+              "flag"
+            ],
+            "agent": ".claude/agents/operations.md"
+          },
+          {
+            "name": "qa",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/qa.md"
+          },
+          {
+            "name": "simpler",
+            "when": [
+              "always"
+            ],
+            "agent": ".claude/agents/simpler.md"
+          }
         ],
         "required": true
       }
@@ -333,5 +1644,20 @@
   ],
   "referencesReadme": "# References\n\nSource material behind a decision. A reference explains and preserves; it is\nnever authoritative.\n",
   "history": [],
-  "warnings": []
+  "warnings": [],
+  "team": {
+    "handles": {
+      "tester": [
+        "pm",
+        "design",
+        "tech",
+        "qa",
+        "dev",
+        "release"
+      ],
+      "other": [
+        "dev"
+      ]
+    }
+  }
 }

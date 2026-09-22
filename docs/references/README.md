@@ -28,3 +28,10 @@ The `shopify-*` set is the working notes behind the
 flow, the POS extension, and the resilience test plan. Application code and
 its architecture records stay documented in the application repository; these
 documents may point at them by repository and path.
+
+[`delivery-workflow-blueprint.md`](delivery-workflow-blueprint.md) is the
+owner's brief for the delivery workflow — the five phases, the eight stages a
+change moves through, the round on every artifact, the screens, the messages
+and the rails — and the shape the `stage-changes-and-notify-hands` and
+`run-a-round-on-every-artifact` changes and their follow-on changes build
+from.

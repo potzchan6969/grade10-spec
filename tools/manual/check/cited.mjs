@@ -23,9 +23,14 @@
  * checked in the durable store and in the in-flight changes only — the archive
  * is the record of what happened, and rewriting one to chase a capability the
  * store has since refolded would be a lie about the change that shipped.
+ *
+ * Two id shapes, because the store issues two: a scenario or a journey, issued
+ * once for the whole store, and a `Q<n>` decisions row, issued by one change's
+ * own table. The second resolves against that change and nowhere else.
  */
 import { join } from "node:path";
 import { readText, walkFiles } from "../src/store/disk.mts";
+import { questionIdsOf } from "../src/store/read-changes.mts";
 
 const ID = String.raw`[a-z0-9]+(?:-[a-z0-9]+)*-(?:SC|US)-\d+[a-z]?`;
 
@@ -37,6 +42,19 @@ const DEFINITION = new RegExp(
 );
 
 const CITATION = new RegExp(String.raw`\`(${ID})\``, "gi");
+
+/**
+ * The other id the store writes in backticks: a change's decisions row.
+ *
+ * `Q<n>` is issued by one table — the change's own `## Decisions` — and never
+ * by the store at large, so it resolves against the change whose directory the
+ * citing file sits in. Ids are never reused inside a change, which is what
+ * makes the citation a join: the round writes `Q12` into a proposal, a design
+ * or a tech design, and a reader goes to that row for the answer. A `Q<n>`
+ * outside any change's directory names no table at all.
+ */
+const Q_CITATION = /`(Q\d+)`/g;
+const IN_CHANGE = /^openspec\/changes\/([^/]+)\//;
 
 const ARCHIVE = "openspec/changes/archive/";
 
@@ -90,6 +108,9 @@ export function checkCited(root, add) {
     }
   }
 
+  /** The decisions rows per change, read once per run. */
+  const rows = new Map();
+
   for (const [path, text] of texts) {
     if (path.startsWith(ARCHIVE)) continue;
     // One row per id per file: sixty-five ids cited twice each is not 130
@@ -110,5 +131,40 @@ export function checkCited(root, add) {
           (guess ? ` — did you mean \`${guess}\`?` : ""),
       );
     }
+
+    const change = IN_CHANGE.exec(path)?.[1];
+    const asked = change === undefined ? NONE : rowsOf(texts, change, rows);
+    const unasked = new Map();
+    for (const { id, line } of matches(text, Q_CITATION, (one) => one[1])) {
+      if (asked.has(id)) continue;
+      if (!unasked.has(id)) unasked.set(id, { line, more: 0 });
+      else unasked.get(id).more++;
+    }
+    for (const [id, one] of unasked) {
+      add(
+        "cited",
+        path,
+        `line ${one.line}${one.more > 0 ? ` and ${one.more} more` : ""}: \`${id}\`${
+          change === undefined
+            ? " names a decisions row, and nothing outside a change's directory issues one"
+            : ` is no \`## Decisions\` row of ${change}`
+        }`,
+      );
+    }
   }
+}
+
+const NONE = new Set();
+
+/** The decisions rows one change issues, read from its own `decisions.md`,
+ * once per change however many of its files cite one. `rows` is the run's own
+ * cache — a store read again is read again. A change with no such file issues
+ * none, which is what a citation of one reads against. */
+function rowsOf(texts, change, rows) {
+  const held = rows.get(change);
+  if (held) return held;
+  const text = texts.get(`openspec/changes/${change}/decisions.md`);
+  const read = text === undefined ? NONE : questionIdsOf(text);
+  rows.set(change, read);
+  return read;
 }

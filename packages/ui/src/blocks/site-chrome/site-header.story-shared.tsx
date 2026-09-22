@@ -28,13 +28,18 @@ export const COPY = {
   profile: "Profile",
   myOrders: "My Orders",
   myAuctions: "My Auctions",
-  signOut: "Sign out",
+  membership: "Membership",
+  signOut: "Sign Out",
 };
+
+/** Signed-in address shown above the account menu items. */
+export const ACCOUNT_EMAIL = "collector@example.com";
 
 export const GRADE10_LOGO = <G10LogoMono className="h-5 w-auto @4xl:h-7" />;
 
 export const SITE_HEADER_BASE_ARGS = {
   copy: COPY,
+  accountEmail: ACCOUNT_EMAIL,
   promo: null,
   logo: GRADE10_LOGO,
   logoHref: "/",

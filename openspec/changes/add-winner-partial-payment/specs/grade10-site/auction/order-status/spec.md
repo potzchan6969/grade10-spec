@@ -15,7 +15,8 @@ An auction order with at least one recorded payment and an unpaid balance
 SHALL derive Partially Paid. Partially Paid SHALL suppress the winner's
 self-service payment, invoice reissue and cancellation actions, and SHALL
 not carry a payment deadline. The status SHALL remain until the operator
-closes the invoice as Paid or records a refund.
+closes the invoice as Paid, including after confirming an overpayment, or
+records a refund.
 
 #### Scenario: auction-status-SC-49 - A recorded payment derives Partially Paid
 **Serves:** Derived order status - a recorded payment derives Partially Paid

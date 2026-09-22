@@ -22,6 +22,7 @@ import {
 } from "@grade10/design-system/components/overlays/tooltip";
 import { CreditCard, Info } from "@phosphor-icons/react";
 import { type ReactNode, useEffect, useState } from "react";
+import { PaymentMethodCard } from "../payment-method/payment-method-card";
 import { OrderDetailsPaymentLogo } from "../store-order-detail/order-details-payment-logo";
 import type { OrderDetailsPaymentBrand } from "../store-order-detail/types";
 
@@ -78,34 +79,22 @@ function PaymentMethodRow({
   return (
     <VStack className="w-full" gap="sm">
       <PaymentMethodLabel copy={copy} />
-      <Card className="gap-0 p-3" padding={false}>
-        <HStack
-          className="w-full"
-          gap="sm"
-          hAlign="space-between"
-          vAlign="center"
-        >
-          <HStack gap="sm" vAlign="center">
-            <OrderDetailsPaymentLogo brand={brand} />
-            <span aria-hidden className="h-5 w-px shrink-0 bg-border" />
-            <Text size="sm" weight="medium">
-              {maskedNumber}
-            </Text>
-          </HStack>
-          <div className="flex h-5 shrink-0 items-center justify-end">
-            {onChange ? (
-              <Link
-                onClick={onChange}
-                render={<button type="button" />}
-                size="sm"
-                variant="secondary"
-              >
-                {copy.changeCard}
-              </Link>
-            ) : null}
-          </div>
-        </HStack>
-      </Card>
+      <PaymentMethodCard
+        action={
+          onChange ? (
+            <Link
+              onClick={onChange}
+              render={<button type="button" />}
+              size="sm"
+              variant="secondary"
+            >
+              {copy.changeCard}
+            </Link>
+          ) : null
+        }
+        label={maskedNumber}
+        leading={<OrderDetailsPaymentLogo brand={brand} />}
+      />
     </VStack>
   );
 }

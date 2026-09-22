@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { expect, userEvent, waitFor, within } from "storybook/test";
 import { Label } from "./label";
 import {
   Select,
@@ -10,6 +11,12 @@ import {
   SelectTrigger,
   SelectValue,
 } from "./select";
+
+/** Enough A–Z names to exceed the Select popup's capped height. */
+const LONG_LIST_OPTIONS = Array.from({ length: 52 }, (_, index) => {
+  const letter = String.fromCharCode(65 + Math.floor(index / 2));
+  return `${letter} Option ${index + 1}`;
+});
 
 const meta = {
   title: "Components/Select",
@@ -127,4 +134,62 @@ export const WithLabel: Story = {
       </Select>
     </div>
   ),
+};
+
+/**
+ * Typeahead on a list taller than the capped popup scrolls the highlighted
+ * match into view (`winner-order-SC-175`, `winner-order-SC-178`).
+ */
+export const LongListTypeahead: Story = {
+  render: () => (
+    <Select defaultValue={LONG_LIST_OPTIONS[0]}>
+      <SelectTrigger aria-label="Country or region" className="w-64">
+        <SelectValue />
+      </SelectTrigger>
+      <SelectContent alignItemWithTrigger={false}>
+        {LONG_LIST_OPTIONS.map((name) => (
+          <SelectItem key={name} label={name} value={name}>
+            {name}
+          </SelectItem>
+        ))}
+      </SelectContent>
+    </Select>
+  ),
+  play: async ({ canvasElement }) => {
+    const page = within(canvasElement.ownerDocument.body);
+    await userEvent.click(page.getByLabelText("Country or region"));
+    await waitFor(() => {
+      expect(page.getAllByRole("option").length).toBeGreaterThan(20);
+    });
+
+    await userEvent.keyboard("z");
+    await waitFor(() => {
+      const highlighted = canvasElement.ownerDocument.querySelector(
+        '[data-slot="select-item"][data-highlighted]',
+      );
+      expect(highlighted).not.toBeNull();
+      expect(
+        highlighted?.textContent?.trim().toLowerCase().startsWith("z"),
+      ).toBe(true);
+
+      const popup = canvasElement.ownerDocument.querySelector(
+        '[data-slot="select-content"]',
+      );
+      expect(popup).toBeInstanceOf(HTMLElement);
+      if (!(popup instanceof HTMLElement)) {
+        throw new Error("expected select content");
+      }
+      expect(popup.scrollHeight).toBeGreaterThan(popup.clientHeight);
+      expect(popup.scrollTop).toBeGreaterThan(0);
+    });
+
+    await userEvent.keyboard("z");
+    await waitFor(() => {
+      const highlighted = canvasElement.ownerDocument.querySelector(
+        '[data-slot="select-item"][data-highlighted]',
+      );
+      expect(highlighted).not.toBeNull();
+      expect(highlighted?.textContent?.trim()).toBe("Z Option 52");
+    });
+  },
 };

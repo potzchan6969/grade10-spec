@@ -25,6 +25,9 @@ const FOOTER_LOGO: ReactNode = createElement(G10LogoMono, {
   className: "h-5 w-auto",
 });
 
+/** Signed-in address shown above the account menu items. */
+const ACCOUNT_EMAIL = "collector@example.com";
+
 /** Store page chrome for `SiteHeader`. Includes cart; Store is in the nav. */
 const STORE_SITE_HEADER = {
   copy: {
@@ -39,9 +42,10 @@ const STORE_SITE_HEADER = {
     profile: "Profile",
     myOrders: "My Orders",
     myAuctions: "My Auctions",
-    signOut: "Sign out",
+    signOut: "Sign Out",
   },
   session: "signed-in" as const,
+  accountEmail: ACCOUNT_EMAIL,
   promo: "PROMO UTILITY BAR",
   logo: NAV_LOGO,
   logoHref: "/",

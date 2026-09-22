@@ -1,3 +1,5 @@
+import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
+
 export type WinnerOrderStatus =
   | "awaiting_address"
   | "awaiting_address_expired"
@@ -84,17 +86,16 @@ export type WinnerOrderContent = {
   /**
    * Refund below Order Total — inline alert amount, details in a dialog.
    * Amount is positive; the word Refund carries the direction.
-   * Proof, provider reference and audit number stay with the operator.
-   * ❓ `method` is a working channel label until Product settles winner-facing
-   * transaction clues (add-winner-refund Q20).
+   * Transfer to shows card payment marks or bank name + masked account (Q20).
+   * A bank refund also carries its provider reference (Q21). Proof, Stripe
+   * reference and audit number stay with the operator.
    */
   refund?: {
-    /** Positive amount — e.g. `HK$15,660`. */
+    /** Positive amount — e.g. `HK$16,140`. */
     amount: string;
     reason: string;
     note: string;
-    /** ❓ Working: Card / Bank transfer — see Q20. */
-    method: string;
+    transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
   paymentMethod?: string;
@@ -149,6 +150,7 @@ export const LINE_TOOLTIPS = {
     "20% of your winning bid, or the currency minimum if that is higher.",
   shippingHandling:
     "Packing, carrier, and handling for your confirmed delivery address.",
+  shippingInsurance: "0.9% of the order value during transit.",
   processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
@@ -165,25 +167,65 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$15,660" },
+  { label: "Order Total", value: "HK$16,140" },
+];
+
+/** Sent invoice with Insurance for the tooltip coverage state. */
+export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
+  { label: "Winning Bid", value: "HK$12,800" },
+  {
+    label: "Buyer’s Premium",
+    value: "HK$2,560",
+    tooltip: LINE_TOOLTIPS.buyersPremium,
+  },
+  {
+    label: "Shipping & Handling",
+    value: "HK$180",
+    tooltip: LINE_TOOLTIPS.shippingHandling,
+  },
+  {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
+    label: "Payment Processing Fee",
+    value: "HK$120",
+    tooltip: LINE_TOOLTIPS.processingFee,
+  },
+  { label: "Order Total", value: "HK$16,140" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$15,660",
+  amount: "HK$16,140",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
-  method: "Card",
+  transfer: {
+    kind: "card",
+    brand: "visa",
+    maskedNumber: "···· 4242",
+  },
 } as const;
 
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
   note: "Bank transfer exceeded the invoice. Difference returned.",
-  method: "Bank transfer",
+  transfer: {
+    kind: "bank_transfer",
+    bankName: "HSBC",
+    maskedAccount: "···· 8891",
+    reference: "G10-RF-LK7P2Q",
+  },
 } as const;
 
 /**
@@ -203,11 +245,16 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingHandling,
   },
   {
+    label: "Insurance",
+    value: "HK$480",
+    tooltip: LINE_TOOLTIPS.shippingInsurance,
+  },
+  {
     label: "Payment Processing Fee",
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$15,540" },
+  { label: "Order Total", value: "HK$16,020" },
 ];
 
 /** Shared progress dates once each milestone has happened. */

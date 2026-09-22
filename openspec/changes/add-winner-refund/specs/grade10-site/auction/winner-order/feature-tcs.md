@@ -5,9 +5,9 @@
 
 ## winner-order-US14: Winner sees a refunded order as Refunded
 
-**As a** winner whose order Grade10 refunded,
-**I want** Winner Order to read Refunded and retain my records,
-**so that** I know the order is closed and can still prove what I paid.
+**As a** winner whose order Grade10 refunded because they were not happy with the item,
+**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or bank name and last four for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
+**so that** I know the order is closed and still hold the record of what I paid.
 
 ### winner-order-US14-TC1-1: Refunded keeps the invoice and receipts
 
@@ -31,6 +31,7 @@
 **Steps:**
 
 1. Read the status, stepper, actions and receipt links.
+2. Open the refund details from the inline alert.
 
 **Expected Results:**
 
@@ -38,11 +39,14 @@
 * Pay, address editing and shipment actions are absent.
 * The invoice and every existing receipt remain downloadable.
 * No refund letter is required by this surface.
+* Refund details show Amount, then Transfer to, then Reason, then Note.
+* Transfer to uses `PaymentMethodCard` with the card brand logo and only the last four digits, or a bank icon with the bank name and only the last four digits of the account (`Bank name, ···· ####`). Not the full number or proof.
+* A card refund shows no Reference.
 
 ## winner-order-US15: Winner sees an overpayment returned
 
 **As a** winner who paid more than the order,
-**I want** only the difference returned below the invoice total,
+**I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
 **so that** I know the sale still stands.
 
 ### winner-order-US15-TC1-1: An overpayment keeps the order open
@@ -73,7 +77,44 @@
 
 * The order status and invoice lines are unchanged.
 * Only the returned difference appears below Order Total.
-* The refund details can be opened without exposing operator proof or the full provider reference.
+* The refund details can be opened without exposing operator proof or a Stripe provider reference.
+
+## winner-order-US16: Winner matches a bank refund against their own statement
+
+**As a** winner whose refund was sent by bank transfer,
+**I want** the reference the operator sent it under, beside the amount and where it went,
+**so that** I can find the credit on my statement without asking Customer Service.
+
+### winner-order-US16-TC1-1: Bank refund details show destination and reference
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-16
+
+**Pre-conditions:**
+
+* customer(winner of `<bank-refunded order>`) is on Winner Order after a bank
+  transfer refund was recorded.
+
+**Steps:**
+
+1. Open the refund details from the inline alert.
+
+**Expected Results:**
+
+* The details show Amount, then Transfer to, then Reference, then Reason, then Note.
+* Transfer to shows a bank icon, the bank name and only the last four digits of the account.
+* Reference shows the operator's bank provider reference.
+* Proof and the full account number are not shown.
 
 ## Settled
 
@@ -83,3 +124,5 @@
 | --- | --- |
 | Refunded retains issued documents and removes self-service | **Folded in:** `winner-order-SC-157` |
 | An overpayment returns only the difference and keeps the sale open | **Folded in:** `winner-order-SC-155` |
+| Refund details provide a statement-recognition clue | **Folded in:** `winner-order-SC-172` |
+| Bank refund details show destination and provider reference | **Folded in:** `winner-order-SC-173` |

@@ -2,9 +2,9 @@
 
 ## Purpose
 What a winner is sent after a lot closes and what they do with it: one order
-per lot, a delivery address and a payment method they choose, an operator's
-invoice priced for both, payment by card or by a bank transfer they prove,
-and the receipt, tracker and delivery proof the order keeps afterwards.
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 
 ## Feature set
 
@@ -47,7 +47,7 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and copy controls for account number, amount due, and transfer reference
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
-  - Payment Verifying: the deadline stops, card Pay and further uploads are hidden
+  - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
@@ -61,6 +61,12 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Payment receipt: proof of what was paid, itemised, retrievable for the life of the account
   - Shipping tracker: where the lot is once it has left
   - Delivery proof: what the carrier recorded on handover, given what these lots are worth
+- Contact Us on locked orders
+  - Copy-first ready email: Contact Us opens a dialog with To, Subject and Message; Copy Message is first, Open Mail App is second
+  - Subject names invoice or lot: the order's current invoice id when one exists; lot title when setup is overdue and no invoice has been issued
+  - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
+  - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question; Copy Message stays footer-only
+  - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 
 ## Requirements
 
@@ -479,9 +485,9 @@ no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
 A refused or failed card payment SHALL NOT void the invoice. While a card
 invoice's status is `pending`, it SHALL remain payable by card and the winner
-SHALL be able to retry with the same or a different card. When the invoice
-status is `expired` or `payment_verifying`, Grade10 SHALL NOT offer or accept
-winner card payment.
+SHALL be able to retry with the same or a different card. The primary pay
+control SHALL read **Pay with Card**. When the invoice status is `expired` or
+`payment_verifying`, Grade10 SHALL NOT offer or accept winner card payment.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -522,7 +528,7 @@ winner card payment.
 
 - **GIVEN** an auction order whose invoice was sent for card and is `pending`
 - **WHEN** the winner opens the order to pay
-- **THEN** Grade10 offers card payment
+- **THEN** Grade10 offers Pay with Card
 - **AND** shows no bank transfer details, no proof upload, and no cash or other method
 
 ### Requirement: Records the winner keeps
@@ -851,7 +857,7 @@ without time).
 When the window passes without a confirmed address, Winner Order SHALL hide
 Confirm delivery address and SHALL show Contact Us in an overdue alert that
 reads `Missed address deadline: {date}` (day-only, no middle-dot separator).
-Derived order status SHALL remain **Awaiting Address**. Invoice status SHALL
+Derived order status SHALL remain **Awaiting Setup**. Invoice status SHALL
 remain `not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel
 the order or suspend bidding solely because the address window passed; an
 operator follows up per `grade10-admin/auction/post-sale`.
@@ -862,14 +868,14 @@ operator follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
 - **WHEN** its derived status is read
-- **THEN** it is Awaiting Address
+- **THEN** it is Awaiting Setup
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-70 - Address confirm is due 48 hours after lot close
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot that closed at 2026-09-17T13:30:00Z
-- **AND** its auction order is Awaiting Address inside the confirm window
+- **AND** its auction order is Awaiting Setup inside the confirm window
 - **WHEN** the winner opens Winner Order
 - **THEN** Confirm delivery address is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
@@ -879,13 +885,13 @@ operator follows up per `grade10-admin/auction/post-sale`.
 #### Scenario: winner-order-SC-71 - A missed address deadline hides Confirm
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
-- **GIVEN** an auction order still Awaiting Address whose address confirm
+- **GIVEN** an auction order still Awaiting Setup whose address confirm
   window has passed
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no Confirm delivery address control
 - **AND** the overdue alert reads Missed address deadline with the day-only
   date and carries Contact Us
-- **AND** derived status remains Awaiting Address
+- **AND** derived status remains Awaiting Setup
 - **AND** invoice status remains `not_issued`
 
 ### Requirement: Winner Order shows five progress steps
@@ -1559,3 +1565,148 @@ the latest external reason; the invoice log keeps every reason, per
 - **THEN** it shows "Reference missing"
 - **AND** it does not show "Amount does not match"
 - **AND** the invoice log holds both reasons
+
+### Requirement: Contact Us opens a copy-first ready email
+
+When Contact Us is offered on a locked Winner Order, the winner reaches
+Grade10 through a ready email they can copy into any mail app.
+
+**Opens** — Contact Us SHALL open a dialog. It SHALL NOT open a mail client
+as the first action, and SHALL NOT show only a toast that names the address.
+
+**Hidden until open** — `support@grade10.com` SHALL NOT appear on the order
+page before Contact Us opens the dialog.
+
+**Ready email** — The open dialog SHALL show, in order:
+
+1. To — `support@grade10.com`, not editable by the winner, with copy in place
+2. Subject — the ready subject for this order and reason, not editable by the
+   winner, with copy in place
+3. Message — an editable `Textarea` prefilled with the ready body and space
+   for the winner's question. No copy control SHALL sit beside the Message
+   field; Copy Message stays footer-only
+
+**Footer** — The dialog footer SHALL offer, in order:
+
+1. Copy Message first — copies the full ready email (To, Subject and
+   Message) for pasting into any mail app
+2. Open Mail App second — optional; opens a `mailto:` to
+   `support@grade10.com` carrying the current Subject and Message
+
+**Export** — The design system SHALL export `Textarea` as a labelled
+multi-line field that shares TextInput's label, status and message contract.
+
+#### Scenario: winner-order-SC-160 - Contact Us opens the copy-first dialog
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order whose payment or setup self-service has closed
+  and whose overdue or partially paid alert offers Contact Us
+- **WHEN** the winner chooses Contact Us
+- **THEN** a dialog opens showing To `support@grade10.com`, Subject and
+  Message
+- **AND** Copy Message is the first footer action
+- **AND** Open Mail App is the second footer action
+- **AND** no mail client opens as the first action
+
+#### Scenario: winner-order-SC-161 - The support address stays off the order until Contact Us
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order whose overdue or partially paid alert offers
+  Contact Us
+- **WHEN** the winner reads Winner Order before choosing Contact Us
+- **THEN** `support@grade10.com` does not appear on the order page
+- **AND** after Contact Us opens the dialog, To shows `support@grade10.com`
+
+#### Scenario: winner-order-SC-162 - Message is an editable Textarea and Copy Message stays footer-only
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** the Contact Us dialog is open on a locked Winner Order
+- **WHEN** the winner edits Message and chooses Copy Message
+- **THEN** Message is an editable `Textarea`
+- **AND** no copy control sits beside the Message field
+- **AND** Copy Message copies To, Subject and the current Message together
+
+#### Scenario: winner-order-SC-163 - Open Mail App carries the current subject and body
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** the Contact Us dialog is open with Subject and Message filled
+- **WHEN** the winner chooses Open Mail App
+- **THEN** a `mailto:` to `support@grade10.com` opens with that Subject and
+  Message
+
+#### Scenario: winner-order-SC-167 - To and Subject copy in place and stay fixed
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** the Contact Us dialog is open on a locked Winner Order
+- **WHEN** the winner uses the To and Subject copy controls
+- **THEN** each control copies only that field's value
+- **AND** the winner cannot edit To or Subject
+- **AND** Copy Message remains the footer control for the full ready email
+
+### Requirement: The ready email names the invoice or the lot and the reason
+
+The ready email's subject and body identify the order so support can open it
+without a follow-up.
+
+**Subject** — When the order's current invoice id exists, the subject SHALL be
+`Auction order {invoice id}: {reason}`. When no invoice id exists (including
+setup overdue before send), the subject SHALL be
+`Auction lot {lot title}: {reason}`.
+
+**Reason** — On Winner Order the reason fragment SHALL be one of
+`setup overdue`, `payment overdue`, or `partial payment`.
+
+**Body** — Message SHALL greet Grade10, say the winner needs help with this
+auction order, name the lot title, name the status label for the reason
+(`Setup overdue`, `Payment overdue`, or `Partially paid`), and leave space
+for the winner's question. When an invoice id exists and the reason is not
+setup overdue, the body SHALL name that invoice id.
+
+**Partial payment** — When the reason is partial payment, the body MAY list
+receipt ids and MUST NOT name the remaining balance. When no receipt id
+exists yet, the body SHALL list none.
+
+#### Scenario: winner-order-SC-164 - Setup overdue names the lot, not an invoice
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order whose setup deadline has passed with no invoice
+  issued, for lot title "Charizard Base Set PSA 10"
+- **WHEN** the winner opens Contact Us
+- **THEN** Subject is `Auction lot Charizard Base Set PSA 10: setup overdue`
+- **AND** Message names that lot title and status Setup overdue
+- **AND** Message names no invoice id
+
+#### Scenario: winner-order-SC-165 - Payment overdue names the invoice
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order whose payment deadline has passed unpaid, with
+  current invoice id `INV-202609-LK7P2Q-01` and lot title
+  "Charizard Base Set PSA 10"
+- **WHEN** the winner opens Contact Us
+- **THEN** Subject is
+  `Auction order INV-202609-LK7P2Q-01: payment overdue`
+- **AND** Message names that invoice id, that lot title, and status Payment
+  overdue
+
+#### Scenario: winner-order-SC-166 - Partial payment may list receipts and never the balance
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a partially paid auction order with current invoice id
+  `INV-202609-LK7P2Q-01`, lot title "Charizard Base Set PSA 10", and receipt
+  ids `REC-202609-LK7P2Q-01-P1` and `REC-202609-LK7P2Q-01-P2`
+- **WHEN** the winner opens Contact Us
+- **THEN** Subject is
+  `Auction order INV-202609-LK7P2Q-01: partial payment`
+- **AND** Message may list those receipt ids
+- **AND** Message names no remaining balance
+
+#### Scenario: winner-order-SC-168 - A reissued invoice uses the current invoice id
+**Serves:** winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an auction order whose payment deadline has passed unpaid after a
+  reissue, with current invoice id `INV-202609-LK7P2Q-02` and a replaced
+  invoice id `INV-202609-LK7P2Q-01`
+- **WHEN** the winner opens Contact Us
+- **THEN** Subject is
+  `Auction order INV-202609-LK7P2Q-02: payment overdue`
+- **AND** Subject does not name `INV-202609-LK7P2Q-01`

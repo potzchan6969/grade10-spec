@@ -17,6 +17,6 @@
 - [x] 4.1 Render the operator payment history, remaining balance and tolerance prompt.
 - [x] 4.2 Render the locked Partially Paid Winner Order and My Auctions row with every receipt (`winner-order-SC-156`, `grade10-site-auction-account-record-SC-62`).
 
-## 5. Verification
+## 5. Verification (owner: @htonyl)
 
-- [ ] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.
+- [x] 5.1 Run the domain cases, contract tests, migration checks and the focused admin/site E2E journeys.

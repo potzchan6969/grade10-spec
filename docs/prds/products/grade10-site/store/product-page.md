@@ -81,4 +81,5 @@ auction lot's address.
 | Large card on X | Decided | The response names the card shape, because X sizes the card from that name alone and defaults to the small square. Wide with a picture, small without. | Product |
 | Originals under the box | Decided | A picture narrower than the box is enlarged to fill it, so it reads soft rather than small, and the declared size is always the delivered one. | Product |
 | Lot previews | ❓ Open | An auction lot's address unfurls with no picture; its images are the auction's, not the shop's. | Product |
+| A catalogue image that fails to transform | ❓ Open | Whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, the same as a card with no image, or something else. | Engineering |
 :::

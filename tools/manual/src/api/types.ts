@@ -86,6 +86,14 @@ export type Journey = {
  * generation writes `draft`, only a human review writes `actual`. */
 export type TestCaseStatus = "draft" | "actual" | "deprecated";
 
+/** Whether an automated test already covers a case
+ * (`docs/governance/specs-to-test-cases.md`, Automation status): `manual`
+ * means no automated test runs it yet. A case stating no Automation status at
+ * all is refused rather than read as `manual` — `AUTOMATION_STATUSES` in
+ * `../store/read-specs.mts` holds that refusal, because a default here would
+ * let a generated draft wear a flip nobody made. */
+export type AutomationStatus = "manual" | "automated";
+
 export type TestCase = {
   /** Permanent store id like `grade10-site-loyalty-programme-US1-TC3-1`, or the flat
    * `grade10-site-loyalty-programme-TC-03` an older suite issued. */
@@ -97,6 +105,7 @@ export type TestCase = {
    * named those. A trace reaches the scenarios that serve the same anchor. */
   traces: string[];
   status: TestCaseStatus;
+  automationStatus: AutomationStatus;
 };
 
 /** The suite file's own status — derived from its cases, never chosen:
@@ -229,7 +238,13 @@ export type ChangeSuite = {
   /** The spec id the suite belongs to. */
   spec: string;
   status?: TestSuiteStatus;
-  cases: { draft: number; actual: number; deprecated: number; total: number };
+  cases: {
+    draft: number;
+    actual: number;
+    deprecated: number;
+    total: number;
+    automated: number;
+  };
   error?: ItemError;
 };
 
@@ -253,6 +268,164 @@ export type MainState = {
  * deltas yet, `specified` has deltas and no task list, `in-progress` has
  * open tasks, `complete` has finished them all and awaits the archive. */
 export type ChangeLane = "proposed" | "specified" | "in-progress" | "complete";
+
+/**
+ * The six roles, in the order a change passes through them. Declared here,
+ * where `Role` is drawn from it; `scripts/openspec/lib/team.mjs` re-exports it
+ * for the checks and the scripts, which read this module under plain node.
+ */
+export const ROLES = ["pm", "design", "tech", "qa", "dev", "release"] as const;
+
+/** A hand a change passes through. */
+export type Role = (typeof ROLES)[number];
+
+/** What a round row's Artifact cell reads for the one reader's pass over the
+ * whole change, after its last task group: no artifact of the schema and no
+ * group of the plan, so every reader that tells a group from an artifact
+ * reads it as a group — the landing, the archive gate, the relay and the
+ * button — and the word is written once, here. */
+export const WHOLE_CHANGE = "whole change";
+
+/** How far a change has got, derived from the files on the store's main and
+ * never stored: the eight stages `shared/planning/change-stages` names, of
+ * which `ChangeLane`'s four are a projection. */
+export type Stage =
+  | "proposed"
+  | "designed"
+  | "specified"
+  | "planned"
+  | "building"
+  | "on-staging"
+  | "released"
+  | "archived";
+
+/** One thing about a change nobody has settled, and the hand it is addressed
+ * to. A decisions row carries its number; a line the page still holds carries
+ * the page and the section it sits under. */
+export type OpenQuestion = {
+  /** `Q<n>` from the `## Decisions` row, where a row asked it. */
+  id?: string;
+  /** The page a ❓ line sits on, where the page asked it. */
+  page?: string;
+  /** Slug of the `## ` section the line sits under. */
+  section?: string;
+  /** The schema artifact it counts against: `decisions` for a row, `proposal`
+   * for a line under a section the proposal links. */
+  artifact: string;
+  /** The role it is addressed to, which is where it is routed when the change
+   * names no hand for it. Any role a row names, the six or not. */
+  role: string;
+  /** The handle `hands:` names for that role, or the role itself where the
+   * change names none. */
+  hand: string;
+  /** What was asked, as written: the `Asked` cell of a row, and the line the
+   * page still carries with its ❓ dropped. */
+  text: string;
+  /** What the row's `Decided` cell says after `❓ <role> - ` — the
+   * recommendation its hand is answering, where a row carries one. */
+  recommended?: string;
+};
+
+/** One artifact whose upstream moved after it was drawn or last read again,
+ * and what says so. Derived per read, never stored. */
+export type BehindArtifact = {
+  /** The schema artifact id. */
+  artifact: string;
+  /** What the artifact is read again against, each item a linked page section
+   * as `<page>#<slug>` or an upstream artifact id: what a commit dates later
+   * than the artifact itself, or, with `whole`, everything before it. */
+  changed: string[];
+  /** Set where the recorded content id is what says the artifact moved. An id
+   * says something before it moved without saying which of them, so `changed`
+   * is the whole of what is before the artifact and every surface that names
+   * it says as much. */
+  whole?: true;
+  /** The day the artifact went behind — what the digest counts its seven days
+   * from. Where the commit dates are what say it moved, that is the oldest
+   * commit newer than the artifact: the first thing that moved after it was
+   * drawn. Where a recorded `reviewed:` id is, the id carries no date of its
+   * own and nothing older than the newest commit before the artifact is
+   * knowable, so that is the day. Absent only where no commit dates anything
+   * before the artifact, which is what a depth-1 checkout gives. */
+  since?: string;
+};
+
+/**
+ * What one artifact is drawn from, as the store read it off `main`.
+ *
+ * The reading is the store's, because hashing is `node:crypto`'s and the page
+ * texts are the reader's; the verdict is not stored — `behindOf` is a pure
+ * comparison over this, so no surface and no check has to be reordered to see
+ * a freshness field.
+ */
+export type UpstreamRead = {
+  /** The content id of everything before the artifact, in reading order. */
+  id: string;
+  /** Each thing before it, in that order: a linked page section as
+   * `<page>#<slug>`, or an upstream artifact id. */
+  items: string[];
+  /** The change's own artifacts that a commit dates later than this
+   * artifact's own newest commit — what says it is behind where no `reviewed:`
+   * line does. Absent where nothing before it is newer and where no commit
+   * dates the artifact, which is what a depth-1 checkout gives. A linked page
+   * section is never here: a commit on a page dates every section of it, so
+   * only a record line can say the linked one moved. */
+  newer?: string[];
+  /** The oldest commit date among `newer` — the first of the change's own
+   * artifacts to move after this one was drawn, which is the day it went
+   * behind. Carried onto `BehindArtifact` as `since` where the dates are what
+   * say it moved. Absent with `newer`. */
+  firstNewerOn?: string;
+  /** The newest commit date among everything before the artifact, carried
+   * onto `BehindArtifact` as `since` where a recorded `reviewed:` id is what
+   * says it moved: an id cannot single out which item changed, so no older
+   * day than this one can be claimed. Absent only where no commit dates
+   * anything before the artifact. */
+  beforeOn?: string;
+};
+
+/**
+ * One round of one artifact or one task group, as `rounds.md` records it.
+ *
+ * Every column is the cell as its author wrote it, an empty one included: the
+ * `round` rule refuses a row that leaves a column blank, and a reader that
+ * dropped the blank would leave it nothing to name. `round` is the round's
+ * number in the change, from 1 in landing order, and 0 where the cell holds no
+ * number.
+ */
+export type RoundRow = {
+  round: number;
+  /** The artifact's id, or the task group's number. */
+  artifact: string;
+  /** The names of the perspectives run. */
+  perspectives: string;
+  /** The findings that stood, as short phrases. */
+  stood: string;
+  /** The `Q<n>` ids the round raised. */
+  asked: string;
+  /** Per scenario id, the tests that landed for a task group. */
+  tests: string;
+};
+
+/** One person the store knows, and who the store knows — the one map every
+ * surface that names a person and every message that addresses one reads,
+ * from `docs/prds/team.yaml`. The shape is declared beside the parser that
+ * reads the file, and named here so a surface imports it with the rest of
+ * this module; `team-map.test.ts` holds the reader to it. */
+export type {
+  TeamMap,
+  TeamMember,
+} from "../../../../scripts/openspec/lib/team-parse.mjs";
+
+/** The team map, projected for the browser: a handle against the roles it
+ * may take, with no e-mail, Slack member or channel in it — those address a
+ * message, which is the notify script's own job, never the manual's. Assign's
+ * handle picker offers every handle in `handles`, the chosen role's own
+ * first, and My turn reads it to say a handle is unknown; neither needs more
+ * of the map than this. */
+export type SnapshotTeam = {
+  handles: Record<string, Role[]>;
+};
 
 /** One `## ` heading of a manual page, as a proposal links it. */
 export type PageSectionRef = { page: string; slug: string };
@@ -302,11 +475,18 @@ export type ChangeEntry = {
   /** Why this change writes no `tech-design.md`, from `.openspec.yaml`
    * `design_waived:`. */
   designWaived?: string;
+  /** Why this change draws no `ui-design.md`, from `.openspec.yaml`
+   * `ui_waived:` — the line that stands in for the UI design on a change
+   * nothing a reader sees moves on. */
+  uiWaived?: string;
   /** The deploy that carried the change, from `.openspec.yaml` `deployed_at:`
    * and `deployed_env:` — the sha the application repository verified, and the
    * environment it ran in. */
   deployedAt?: string;
   deployedEnv?: string;
+  /** The tagged build that deploy carried, from `.openspec.yaml`
+   * `deployed_build:` — what QA walks, named beside the environment. */
+  deployedBuild?: string;
   /** Who archived the change without deploy evidence, and why, from
    * `.openspec.yaml` `deploy_waived:`. */
   deployWaived?: string;
@@ -344,6 +524,54 @@ export type ChangeEntry = {
   mainState?: MainState;
   /** The schema artifact ids this change has written. */
   written: string[];
+  /** Who takes this change at each stage, from `.openspec.yaml` `hands:` —
+   * one handle per role, as the record wrote it. A role outside `Role`
+   * survives the read so the `hands` rule can refuse it, and a role the
+   * change does not name is unnamed rather than an error. */
+  hands?: Record<string, string>;
+  /** Whose word landed each artifact, from `.openspec.yaml` `landed_by:` — a
+   * schema artifact id against one handle, written by the landing. */
+  landedBy?: Record<string, string>;
+  /** What each artifact was last read again against, from `.openspec.yaml`
+   * `reviewed:` — a schema artifact id against the content id of what was
+   * before it. Written by the round; read here. */
+  reviewed?: Record<string, string>;
+  /** The change's Slack thread, from `.openspec.yaml` `thread:`, as
+   * `<channel>/<ts>`. Written by the round; every message links it. */
+  thread?: string;
+  /** The release this change went out in, from `.openspec.yaml`
+   * `released_in:`. */
+  releasedIn?: string;
+  /** ISO timestamp of the last commit that ticked a task, claimed a group or
+   * added an artifact of this change — what says it has stopped moving, which
+   * `lastMoved` cannot: one repository-wide commit moves every change at
+   * once. Absent where no history dates it, which is not the same as 0. */
+  lastLanded?: string;
+  /** What nobody has settled: the change's own open decisions rows, plus the
+   * questions a linked page still carries — merged on here by `markQuestions`
+   * when the snapshot is read, where the pages are at hand. */
+  questions?: OpenQuestion[];
+  /** How many rows of `decisions.md`'s `## Raised` table have landed nowhere
+   * — the blind reading's questions, which the requirements are not settled
+   * without. Absent where every row landed or the file carries no table. */
+  raisedOpen?: number;
+  /** The rounds this change has run, from `rounds.md`, one row per round in
+   * landing order. Absent until the first round writes the file — a change
+   * opened this morning owes no row, and an empty list is a file with a header
+   * and no round under it. */
+  rounds?: RoundRow[];
+  /** What each written artifact was drawn from, keyed by schema artifact id —
+   * read where the pages and the history are, compared by `behindOf`. Absent
+   * for a change whose record could not be read and for an archived one. */
+  upstream?: Record<string, UpstreamRead>;
+  /** How far the change has got, computed where the schema is — on every
+   * entry, so no surface carries a second derivation for one that has none. */
+  stage: Stage;
+  /** The artifact the ladder stopped at: what the change owes to reach the
+   * next stage. Absent where the next rung is proven by something no hand
+   * writes — a ticked box, a deploy, a cut, the fold — and where the rung is
+   * held by a raised row rather than by a file. */
+  heldBy?: string;
   /** What the change says it is waiting for, from `.openspec.yaml`
    * `awaiting:` — an artifact id against the line its author wrote. */
   awaiting?: { artifact: string; why: string }[];
@@ -358,11 +586,58 @@ export type SchemaArtifact = {
   /** The teammate that writes it. A schema naming none leaves the artifact off
    * every worklist rather than guessing whose turn it is. */
   teammate?: string;
+  /** The role that answers for it — the hand a wait, an overlay and a landing
+   * on this artifact are addressed to. Beside `teammate` rather than derived
+   * from it: the tech design and the task list are both the engineer's there,
+   * while the hand of one is the tech PIC and of the other whoever builds
+   * it. Absent where the schema names no hand. */
+  hand?: Role;
   requires: string[];
+  /** The artifacts this one's text is drawn from, in reading order — the
+   * graph, which the artifact list's order is not: the blind suite is written
+   * without sight of the requirements, and the tech design is drawn beside
+   * the UI design rather than from it. Empty where the schema says nothing. */
+  upstream: string[];
+  /** The readers a round on this artifact may dispatch, in the order the
+   * schema records them. Empty where it records none: `spec.md` and
+   * `feature-tcs.md` are challenged by the two blind readings instead. */
+  perspectives: Perspective[];
   /** Whether a change owes this artifact by default. An artifact that is not
    * required is owed only when the change says so in `awaiting:`: what makes
    * it owed is a condition no worklist can see. */
   required: boolean;
+};
+
+/** What in a draft summons a reader. `always` is every round; the other nine
+ * answer to what the draft itself changed —
+ * `openspec/specs/shared/planning/agent-rounds/spec.md`'s "A round's size is
+ * read from the draft". Read by `scripts/openspec/lib/perspectives.mjs`,
+ * which classifies a diff against this same list, and by `read-schema.mts`,
+ * which refuses a `when` outside it the way `handOf` refuses a role outside
+ * `ROLES`. */
+export const TRIGGERS: readonly string[] = [
+  "always",
+  "surface",
+  "schema",
+  "export",
+  "system",
+  "migration",
+  "flag",
+  "money",
+  "deploy",
+  "copy",
+];
+
+/** One reader a round may dispatch: its perspective's name, what in a draft
+ * summons it, and the definition under `.claude/agents/` the round runs. The
+ * size of a round is the draft's own diff read against every `when`, so a
+ * perspective no draft can summon is not an entry. */
+export type Perspective = {
+  name: string;
+  /** The triggers that summon it, each one of `TRIGGERS`. */
+  when: string[];
+  /** The reader's definition, as a store-relative path. */
+  agent: string;
 };
 
 /** How a change's artifact renders: a prose document, the directory of
@@ -429,6 +704,52 @@ export type ChangeDeltaDocument = {
   error?: ItemError;
 };
 
+/** What one commit of a change was, as its thread would tell it. A commit
+ * nothing else names keeps its subject: it happened either way. */
+/** What every event of a thread carries: the commit it is. */
+type ThreadCommit = {
+  sha: string;
+  /** ISO commit date. */
+  date: string;
+  /** The commit subject, as written — the line a kind nothing else names
+   * shows. */
+  subject: string;
+};
+
+/**
+ * One event of a change's own history on `main` — the file-derived mirror of
+ * what its Slack thread shows. Read per commit of the change's directory,
+ * never stored.
+ *
+ * Discriminated on `kind`, so what a row can read is what its kind carries: a
+ * landing always names its target, a hand always names hands, and no surface
+ * has to write a fallback for a state the store cannot produce.
+ */
+export type ThreadEvent =
+  /** The commit that brought `proposal.md`. */
+  | (ThreadCommit & { kind: "opened" })
+  /** `chore(openspec): land <target> of <id> on @<handle>` — the artifact or
+   * the task group it named, and the handle whose word landed it where the
+   * subject names one. A task group's landing names none: the tick is its
+   * proof. */
+  | (ThreadCommit & { kind: "landed"; target: string; handle?: string })
+  /** `chore(openspec): <target> of <id> read again, nothing changed`. */
+  | (ThreadCommit & { kind: "read-again"; target: string })
+  /** A commit whose record wrote a line under `hands:`, role against
+   * handle. */
+  | (ThreadCommit & {
+      kind: "hand";
+      hands: { role: string; handle: string }[];
+    })
+  /** A commit whose `tasks.md` patch ticked boxes, by task id. */
+  | (ThreadCommit & { kind: "tick"; ticked: string[] })
+  /** Anything else that touched the change: its subject is the line. */
+  | (ThreadCommit & { kind: "commit" });
+
+/** The kinds a thread event comes in — the discriminant itself, for a reader
+ * that names one. */
+export type ThreadEventKind = ThreadEvent["kind"];
+
 /** `/api/change/<id>` — one in-flight change's files, fetched only by the
  * change page. The snapshot's `ChangeEntry` stays the board's light row; this
  * is the reading. */
@@ -442,6 +763,14 @@ export type ChangeDocument = {
   schemaKnown: boolean;
   artifacts: ChangeArtifact[];
   deltas: ChangeDeltaDocument[];
+  /** The change's own commits, oldest first. Empty where no history dates
+   * them — a store that is not a checkout, and the bundled fixture, which is
+   * read with none. */
+  history: ThreadEvent[];
+  /** When each held `Q<n>` was asked, by its id: the commit that added its
+   * `decisions.md` row, which is the only thing that dates a row the record
+   * carries no date for. Absent where no history dates them. */
+  askedAt?: Record<string, string>;
 };
 
 /** A `check:manual` warning the build ships so the app can show it —
@@ -532,11 +861,51 @@ export type Snapshot = {
   history: HistoryEvent[];
   warnings: CheckWarning[];
   designSync?: DesignSyncReport;
+  /** `docs/prds/team.yaml`, projected to what the browser needs — a handle
+   * against its roles, nothing that addresses a message. Never absent: a
+   * store with no file yet knows nobody rather than refusing to boot, which
+   * is what an empty `handles` says. */
+  team: SnapshotTeam;
+  /** The run sheet QA is sent to walk, from `TCS_SHEET_URL` at build and in
+   * dev — the same variable the push workflow's notify step reads, so Told
+   * now and the Slack message link one sheet. Absent where nobody has
+   * configured one, and the sentence names the sheet in words instead. */
+  sheetUrl?: string;
 };
 
-/** `/api/archive` — fetched only by the In Flight and timeline views. */
+/** `/api/archive` — fetched only by the Board and timeline views. */
 export type Archive = {
   generatedAt: string;
   storeHead: string;
   changes: ChangeEntry[];
 };
+
+/** `/api/relay` — the relay a page listens to for `main` moving, written at
+ * build from `RELAY_URL`. No relay is the honest default: the feature is off
+ * and no page opens a socket. */
+export type RelayUrl = { url?: string };
+
+/** `/api/head` — the store head this site was built from. A page told `main`
+ * moved polls it, and re-reads the snapshot once it answers with `main`. */
+export type DeployedHead = { storeHead: string };
+
+/** `/api/upstream` — how the checkout the dev server runs on stands against
+ * `main`. Dev only: the hosted site is static files and serves no such
+ * endpoint. */
+export type CheckoutStanding = {
+  /** Commits on `origin/main` this checkout does not have. */
+  behind: number;
+  /** Commits this checkout has that `origin/main` does not. */
+  ahead: number;
+  /** Anything uncommitted in the working tree, tracked or not. */
+  dirty: boolean;
+  /** When `origin` was last read to any effect, absent where it never was —
+   * a checkout with no `origin`, or a read that failed, leaves the counts
+   * against whatever refs the clone already had. */
+  fetchedAt?: string;
+};
+
+/** `POST /api/pull` — the fast-forward onto `main`, or the line the reader is
+ * shown instead. The endpoint owns the words, and a refusal is `{ error }` as
+ * every other refusal the store answers is. */
+export type PullOutcome = { pulled: true; head: string } | { error: string };

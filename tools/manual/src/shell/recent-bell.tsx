@@ -28,6 +28,8 @@ export function RecentBell() {
     <IconButton
       aria-label={label}
       className="relative"
+      // A link dressed as a button: Base UI is told so, or it warns on every page.
+      nativeButton={false}
       render={<Link to="/recent" />}
       size="md"
       title={label}

@@ -22,6 +22,7 @@ import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
+import { readTextIfThere } from "./lib/read-text.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -42,11 +43,13 @@ const DELTA_HEADING =
  * `check:manual` is what asks the author to delete it.
  */
 export function waitingOnSpecs(dir) {
-  const manifest = join(dir, ".openspec.yaml");
-  if (!existsSync(manifest)) return undefined;
+  // A record that is there and cannot be opened stops the run naming it: read
+  // as no wait, it would run the delta gate over a change its author excused.
+  const text = readTextIfThere(join(dir, ".openspec.yaml"));
+  if (text === undefined) return undefined;
   let fields;
   try {
-    fields = YAML.parse(readFileSync(manifest, "utf8")) ?? {};
+    fields = YAML.parse(text) ?? {};
   } catch {
     // A manifest the readers refuse is `check:manual`'s `store` rule to
     // report; here it excuses nothing.

@@ -13,7 +13,6 @@ const meta = {
     session: "signed-out",
     onLocaleChange: fn(),
     onSignIn: fn(),
-    onProfile: fn(),
     onMyAuctions: fn(),
     onSignOut: fn(),
   },

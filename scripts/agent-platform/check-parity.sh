@@ -38,6 +38,23 @@ if [ ! -d "$source_dir" ]; then
   fail "$source_dir is required as the skill source of truth"
 fi
 
+# .claude/agents is canonical for the round's challenger and verifier
+# definitions, and is mirrored nowhere: every platform reads these files.
+agents_dir=".claude/agents"
+if [ -d "$agents_dir" ]; then
+  pass "$agents_dir holds the round's readers"
+else
+  fail "$agents_dir is required: the round's challengers and verifier live there"
+fi
+
+# Every reader the planning schema dispatches resolves to one of them, read
+# through the store's own reader of the schema - never a second, grep-based
+# parse that a multi-line block or a YAML anchor could miss.
+if node scripts/agent-platform/check-agent-readers.mjs; then
+  :
+else
+  fail "the planning schema names a reader that resolves to nothing, or none at all"
+fi
 
 if [ "$failures" -gt 0 ]; then
   exit 1

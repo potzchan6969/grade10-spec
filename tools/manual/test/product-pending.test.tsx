@@ -190,12 +190,14 @@ describe("the pages' own open marks", () => {
               "",
               "## Reserve",
               "",
-              "- **Floor** — ❓ whether a reserve is shown, and",
+              "- ❓ **Floor** — whether a reserve is shown, and",
               "  how it is worded",
+              "- **Birthday month** `TBC` — the month the coupon holds to",
               "",
               "| Item | Status |",
               "| --- | --- |",
-              "| Gallery `TBC` | Pending |",
+              "| Gallery | `TBC` |",
+              "| Birthday `TBC` | Once a year |",
               "",
               "```",
               "❓ not this one",
@@ -203,7 +205,7 @@ describe("the pages' own open marks", () => {
               "",
               "## Pictures",
               "",
-              "Three at most, ❓ whether a video counts.",
+              "Three at most, and a ❓ line says which. Nobody asked here.",
               "",
               ':::detail{title="Product decisions" for="pm"}',
               "| Decision | Status | Owner |",
@@ -224,12 +226,38 @@ describe("the pages' own open marks", () => {
       </MemoryRouter>,
     );
 
+    // The mark leads the item, the cell and the row it sits in.
     expect(html).toContain("whether a reserve is shown, and how it is worded");
-    expect(html).toContain("/p/demo-admin/auction/listing#pictures");
     expect(html).toContain("Gallery");
     expect(html).toContain("Preview size · ❓ Open · Design");
     expect(html).toContain("/p/demo-admin/auction/listing#reserve");
     expect(html).toContain("#detail-product-decisions");
     expect(html).not.toContain("not this one");
+  });
+
+  it("finds a mark written on the key term, in an item and in a cell", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter>
+        <ProductPendingSpec id={PRODUCT} index={marked()} />
+      </MemoryRouter>,
+    );
+
+    // The pages mark the term the line is about, not the line: the reader
+    // still owes each an answer.
+    expect(html).toContain("the month the coupon holds to");
+    expect(html).toContain("Once a year");
+  });
+
+  it("reads a mark inside a sentence as words, not as a question", () => {
+    const html = renderToStaticMarkup(
+      <MemoryRouter>
+        <ProductPendingSpec id={PRODUCT} index={marked()} />
+      </MemoryRouter>,
+    );
+
+    // "and a ❓ line says which" is prose about the grammar: nobody owes it
+    // an answer, so Pictures carries nothing pending.
+    expect(html).not.toContain("Nobody asked here");
+    expect(html).not.toContain("/p/demo-admin/auction/listing#pictures");
   });
 });

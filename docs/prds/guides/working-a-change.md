@@ -1,211 +1,203 @@
 ---
 title: Working a change
-summary: One change id, eight files, four teammates — who writes what, and how you know it is your turn.
+summary: One change id, eight files, the hand that lands each — who writes what, and how you know it is your turn.
 order: 4
 ---
 
 ## The Change Id
 
-One id names the directory, and every command you run names that id.
-`add-store-gift-receipt` — kebab-case, a verb and the thing it acts on.
+One id names the whole change: `add-store-cross-sell` — kebab-case, a verb and
+the thing it acts on. `openspec/changes/add-store-cross-sell/` holds every
+artifact, and no second change is opened for the same work.
 
-- **Chosen once**, by whoever creates the change, and never renamed — the id
-  is in the branch, the commits, the board, and every prompt below
-- **Opened through the tooling**, never by hand — the `.openspec.yaml` recording
-  its schema comes with it; a directory you make yourself records nothing
-- **The whole address** — `openspec/changes/add-store-gift-receipt/` holds
-  every artifact, and no second change is ever opened for the same work
-- **Not the capability** — `grade10-site/store/gift-receipt` is what the
-  change writes *about*; the ids inside the files carry that path instead
+- **Drawn from the first sentence**, and never renamed — it is in the branch
+  `claude/add-store-cross-sell`, the commits and the board
+- **Not the capability** — `grade10-site/store/cross-sell` is what the change
+  writes *about*; the ids inside the files carry that path instead
 
-## The Eight Files, Four Hands
+## The Eight Files, and the Hand of Each
 
-| # | File | Written by | Skill | Required |
+| # | File | Hand | Skill | Required |
 | --- | --- | --- | --- | --- |
-| 1 | `proposal.md` | Product manager | `/planning-pm` | Always |
-| 2 | `decisions.md` | Product manager | `/planning-pm` | Always — goals, non-goals, and what the interview settled |
-| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/planning-pm` | Always — one nobody walks says so in it |
-| 4 | `ui-design.md` | Designer, or the PM who already has the design | `/planning-design` | Optional — from the journeys, before the requirements |
-| 5 | `specs/<capability>/spec.md` | Generated, the PM reads | `/planning-qa` | Always — the outline, then the requirements, with 6 between them |
-| 6 | `specs/<capability>/feature-tcs.md` | Generated, QA reviews | `/planning-qa` | Always — blind, before the scenarios |
-| 7 | `tech-design.md` | Engineer | `/planning-dev` | When a task group lands outside this store — or `design_waived: <why>` |
-| 8 | `tasks.md` | Engineer | `/planning-dev` | Before anyone can build it |
+| 1 | `proposal.md` | Product manager | `/workflow-plan` | Always |
+| 2 | `decisions.md` | Product manager | `/workflow-plan` | Always — goals, non-goals, and what the interview settled |
+| 3 | `specs/<capability>/user-journeys.md` | Product manager | `/workflow-plan` | Always — one nobody walks says so in it |
+| 4 | `ui-design.md` | Designer, or the PM who already has the design | `/workflow-design` | Optional — from the journeys |
+| 5 | `tech-design.md` | Tech PIC | `/workflow-tech` | When a task group lands outside this store — or `design_waived: <why>` |
+| 6 | `specs/<capability>/spec.md` | Product manager | `/workflow-specify` | Always — the outline, then the requirements, with 7 between them |
+| 7 | `specs/<capability>/feature-tcs.md` | Product manager | `/workflow-specify` | Always — blind, before the scenarios |
+| 8 | `tasks.md` | Engineer | `/workflow-tasks` | Before anyone can build it |
 
-Write your part and stop: an artifact invented ahead of its owner is worse than a
-missing one. **Neither the PM nor the designer opens `spec.md`** — both of its
-passes belong to the run that takes the two readings from the journeys, and the
-PM is its reader of record rather than its author.
+The round drafts ahead: the first sentence puts every file above on the
+change's branch, each read by its own perspectives, and lands nothing. A hand
+lands only their own artifacts — one word lands every drafted artifact of that
+hand, in the order above, and tells the next hand. **Neither the PM nor the
+designer opens `spec.md`**: its two readings belong to the run that takes them
+from the journeys, and the PM is its reader of record.
 
-Two files every hand writes on. The PRD under `docs/prds/` is what the product
-should be: a detail you learn goes there first, marked 🚧 or ❓, before your own
-artifact cites it. `decisions.md` is what this change chose: a scope fact you
-learn — a non-goal that turns out to be load-bearing, a goal no screen can
-deliver — is a row revised there first, by whoever learned it. The PM keeps both
-whole — [PRDs and OpenSpec](https://github.com/9gag/grade10-spec/blob/main/docs/governance/prd-and-openspec.md).
+Two files every hand writes on. A product detail you learn goes on the PRD
+under `docs/prds/` first, marked 🚧 or ❓, and a scope fact on `decisions.md`,
+both before your own artifact cites them — [PRDs and OpenSpec](https://github.com/9gag/grade10-spec/blob/main/docs/governance/prd-and-openspec.md).
 
 ## What to Say to the Agent
 
 The skill carries the rules — reading the capability, opening the change, the
-interview, the store's rules for each artifact, validating, stopping at its own
-edge. You carry the feature, the change id, and the store clone the agent writes
-into. A prompt that repeats a rule goes stale first; if you ever have to write
-"do not write tasks.md", fix the skill.
+interview, what each artifact holds, validating. You carry the feature and what
+only you have: a frame, a value, a handle.
 
-**PM** — the feature in a sentence
-
-```text
-/planning-pm add-store-gift-receipt
-
-A gift receipt on a store order — a printable slip with no prices on it.
-Write into the store clone, never into external/grade10-spec.
-```
-
-**QA** — the journeys and the decisions are the input, and both are already in the change
+**The product manager says the sentence**, to the app in the planning channel;
+in a terminal `/workflow-plan` comes before it:
 
 ```text
-/planning-qa add-store-gift-receipt
-
-Write into the store clone, never into external/grade10-spec.
+cross-sell on a card's page: the products we pick per card in Shopify first,
+then similar cards by the tags and the facets they share, up to six.
+Customers-also-bought from orders is phase two, once this ships.
 ```
 
-**Designer** — the Figma URL, the one thing no skill can read off the repository.
-Specifying a new change is the PM's job, so run `/planning-pm` for that one and
-`/planning-design` to supplement a change somebody else specified
+**Every later hand is told in that change's thread**, and answers there —
+[Agent Rounds](/p/shared/planning/agent-rounds). From a terminal it is your
+artifact's line command instead — `/workflow-design`, `/workflow-tech`,
+`/workflow-specify`, `/workflow-tasks`, each with the change id, then
+`/workflow-build add-store-cross-sell <group>`, once per group.
 
-```text
-/planning-design add-store-gift-receipt
+Four things the round cannot know, so say them when they are true:
 
-Two surfaces: the print action on the order page, and the slip itself.
-Frames: <paste the Figma links>
-Write into the store clone, never into external/grade10-spec.
-```
-
-**Engineer** — the handle, which lands in `.openspec.yaml` as `promoted_by`
-
-```text
-/planning-dev add-store-gift-receipt
-
-Picking this up as @my-handle. Print rendering is server-side, so it earns a
-tech design.
-Write into the store clone, never into external/grade10-spec.
-```
-
-Four things the skill cannot know, so say them when they are true:
-
-- **The decisions are already made** — "skip the interview, draft from what
-  I've given you"; otherwise expect to be questioned before a word is written
-- **You are two hands** — "I'm the engineer as well, carry it through to
-  tasks.md"; each skill stops at its own edge unless you ask it to go on
-- **Which capability you mean**, when a name is ambiguous — the full path,
-  `grade10-site/store/gift-receipt`, not `gift-receipt`
-- **You are in `grade10`** — most skills live in the store clone, and a role
-  skill's copy there covers picking work up, not what an artifact must contain,
-  so ask the agent to read the store's rules for each artifact. Give it the store
-  clone before it writes — `/add-dir` in Claude Code, a second workspace folder in
-  Cursor, whose `.cursor/skills` is this repository's `.claude/skills` under another
-  name. [An agent workflow, end to end](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md) has the commands for that lane
+- **The decisions are already made** — "draft from what I've given you";
+  otherwise expect the interview first
+- **You are two hands** — "I'm the engineer as well, carry it to `tasks.md`"
+- **Which capability you mean** — the full path, `grade10-site/store/cross-sell`
+- **You are in `grade10`** — the line commands live in this store, so the agent
+  needs a clone of it first — [the engineer's command sheet](https://github.com/9gag/grade10-spec/blob/main/docs/governance/agent-workflow-example.md)
 
 ## The Example, End to End
 
-:::flow{title="add-store-gift-receipt" diagram="assets/diagrams/working-a-change.svg"}
-# Product manager
+The handles are examples; the team map names who takes each role —
+[Change Stages](/p/shared/planning/change-stages).
 
-*PM* — **Open the change** — `/planning-pm add-store-gift-receipt` and a sentence
-saying what the feature is; the interview follows, and a question you are not the
-right person for goes into the proposal's open questions, naming who settles it
+:::flow{title="add-store-cross-sell" diagram="assets/diagrams/working-a-change.svg"}
+## *PM* — **The sentence**
 
-## Leave Three Files, Then Hand Over
+One message to the app in the planning channel opens `add-store-cross-sell`,
+`hands: pm: @ecchochan`, and the thread it started. The run marks
+`docs/prds/products/grade10-site/store/cross-sell.md` first — one marked line
+per outcome, ❓ on what is open — and links that section from the proposal.
+Then it drafts every artifact after it and lands nothing. Two rows it holds:
+`Q1` where the per-card picks live, recommended the complementary products
+Shopify's Search & Discovery app keeps on the card; `Q2` does the rail sell,
+recommended no cart. Six cards, the order of the similar picks and the heading
+"You may also like" it decides itself, and one reply overturns each.
 
-`proposal.md`, `decisions.md`, and `user-journeys.md`. What you commit has
-journeys and no `spec.md`, which both gates refuse without a line saying why, so
-write `awaiting: specs: <what is still to come>` in the change's
-`.openspec.yaml` before you validate. The skill validates strictly before it
-stops; fix what that names, then say the change is ready — for a designer where
-it has a surface, and for `/planning-qa` either way.
+## *PM* — **The first word**
 
-# Designer
+`Q1: Shopify`, `Q2: no cart`, then `land`: the page's marks, `proposal.md`,
+`decisions.md` and `user-journeys.md` reach `main` in that order with
+`@ecchochan` on each — US-01 the picks the shop chose, US-02 similar cards
+where a card has none, US-03 a stock keeper's picks in Shopify admin, seen
+within the mirror's refresh. The designer and the tech PIC are told in the same
+thread, and everything after the journeys is read again.
 
-*Designer* — **Map the surface** — `/planning-design add-store-gift-receipt`;
-a change with no user-facing surface writes no `ui-design.md` at all
+## *Designer* — **The rail**
 
-## Link, Never Describe
+Nobody has drawn the rail, so the draft writes
+`awaiting: ui-design: "2026-09-22, frame for the rail - @kinisworking"`. One
+screen: the rail under the buy box on the card's page, from
+`StoreSectionHeader` and `ProductCard`. Five states — the picks, similar only,
+mixed, none at all and no rail, and a chosen pick nobody can buy. The frame
+arrives as a remark, and the designer's word lands `ui-design.md`.
 
-One subsection per screen linking its Figma frame, exports named exactly,
-states tied to the anchor each dresses — the requirements are not written yet.
-A variant, a token, or a block that has to be built is work in
-**grade10-spec** — flag it so `tasks.md` carries it.
+## *Tech PIC* — **The mirror and the rule**
 
-# QA
+The catalogue mirror gains the card's complementary references and its tags,
+and the similar rule runs when the card's page is served, in the response
+before any script runs. Rejected: Storefront's `productRecommendations`,
+Shopify's own ranking rather than the store's facets and not deterministic, and
+a nightly precompute, stale inside the window the mirror already closes. What
+the tech PIC remarks is applied as written, and their word lands
+`tech-design.md`.
 
-*QA* — **Write the outline, then run the two readings** —
-`/planning-qa add-store-gift-receipt` draws `## Purpose` and `## Feature set`
-from the journeys and the 🚧 lines, commits that on its own, then drafts the
-blind suite and the scenarios independently and reconciles them; a contradiction
-it cannot settle goes back to the PM
+## *PM* — **The two readings**
 
-## Review in Its Own Pull Request
+The cases are written blind of the scenarios, and the requirements are
+reconciled against them after. The ids start at
+`grade10-site-store-cross-sell-SC-01` in `spec.md` and
+`grade10-site-store-cross-sell-US1-TC1-1` in `feature-tcs.md`, beside a delta
+on `grade10-site/store/product-page` for the rail's place on the page. The
+product manager reads the two side by side, and one word lands both.
 
-`/tcs-review add-store-gift-receipt` walks the drafts one journey at a time and
-records `actual`, `deprecated`, or still `draft`. A case built from no scenario
-is a new requirement in disguise — send it back to the spec. `domain-tcs.md`,
-`product-tcs.md` and `platform-tcs.md` are QA's, beside the durable specs.
+## *Engineer* — **The plan, then the build**
 
-# Engineer
+Four groups, each with its test task first: the mirror in `grade10`, the rule
+and the page response in `grade10`, the rail block in `packages/ui` here, and
+the walk; their word lands `tasks.md`. Then `/workflow-build add-store-cross-sell 1`,
+one round per group: the tests in their own commit, the code, the group's
+readers, and the row in `rounds.md` before the tick. The last group walks
+US-01 to US-03 end to end and leaves the end-to-end suite that runs on every
+push to `main`.
 
-*Engineer* — **Plan delivery on the same change** —
-`/planning-dev add-store-gift-receipt`, picking it up as @your-handle so
-`promoted_by` lands in the change's `.openspec.yaml`
+## *QA · Release hand* — **Staging, the cut, the fold**
 
-## Write the Plan, Then Build
-
-`tech-design.md` when a task group lands outside this store, or
-`design_waived: <why>` in its place. `tasks.md` always — grouped by
-layer, each task phrased as the spec scenario it makes pass, groups unclaimed
-so an engineer claims one at pickup. Claim a group in `grade10`, work
-test-first, and archive only once the code is **deployed** — not when the
-branch merges.
-
-## Leave the Archive Copy Out of the Tasks
-
-The fold keeps `## Requirements` and nothing else, and `pnpm run archive:preflight`
-holds four gates: proof of deploy, every task ticked, the feature set and
-`user-journeys.md` carried across, and `--decisions-carried` saying which
-decision rows outlived the change and went onto the capability's
-`Product decisions` block. None of them could be ticked before the deploy, so
-the plan carries no task for them.
+The deploy, the run sheet QA walks, then the release hand's cut. The fold
+rewrites `openspec/specs/grade10-site/store/cross-sell/spec.md` and takes the
+marks off the page's lines. Phase two is its own change,
+`add-store-also-bought`, opened by the next sentence with `depends_on:
+add-store-cross-sell`; it decides first whether to compute the store's first
+behavioural signal from `Order Paid`, the only store event sent today.
 :::
 
 ## How You Know It Is Your Turn
 
-Nobody sends a message. The files themselves are the signal.
+The change carries its own stage, one of eight, and the stage names the hand.
+Answer in the change's thread when it names you, or run the command below in a
+terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/agent-rounds).
 
-| What you see | What it means | Whose turn |
-| --- | --- | --- |
-| `proposal.md` alone | A reason, no requirements yet | PM |
-| `proposal.md`, no `decisions.md` | The interview is unrecorded — write it, or `decisions_waived: <why>` on a change older than the file | PM |
-| Deltas, no `user-journeys.md` | The stories are owed — a capability nobody walks says `**Walked by:** nobody` in the file, so a missing one is never the exemption | PM |
-| Deltas, and no 🚧 line under a section the proposal links | The PRD is unmarked — mark it, or record `page_waived: <why>` in `.openspec.yaml` | PM |
-| Journeys, no `spec.md`, and `awaiting: specs:` | The PM has handed over; the outline and both readings are owed | QA |
-| An outline, no `feature-tcs.md` | The blind pass is owed, and it comes before the scenarios | QA |
-| A suite of `draft` cases | Review, in its own pull request | QA |
-| A user-facing change, no `ui-design.md` | Screens unmapped | Designer |
-| No `tasks.md` | Still being planned — the only handover signal there is | Engineer |
-| Every box ticked | Waiting on a deploy, then the archive | Whoever owns it |
+| # | Stage | Hand | Say |
+| --- | --- | --- | --- |
+| 1 | Proposed | Product manager, then Designer · Tech PIC | `/workflow-plan <id>`, then `/workflow-design <id>` · `/workflow-tech <id>` |
+| 2 | Designed | nobody — both designs land while Proposed is still the stage | — |
+| 3 | Specified | Product manager | `/workflow-specify <id>` |
+| 4 | Planned | Engineer | `/workflow-tasks <id>` |
+| 5 | Building | Engineer | `/workflow-build <id> <group>` |
+| 6 | On staging | QA · Release hand | — |
+| 7 | Released | nobody — the cut happens outside the agent | — |
+| 8 | Archived | nobody | — |
 
-Ask the agent where a change stands to read this for one of them; [In Flight](/in-flight) shows it for all of them.
+- **What proves each stage** — [Change Stages](/p/shared/planning/change-stages)
+
+[My turn](/my-turn) shows what is on you; [Board](/in-flight) shows every change; ask the agent where a change stands to read this for one.
+
+## Each Way In
+
+The round is the same whichever door you take: the same branch, the same
+readers, the same landing with your handle on it. What differs is where you
+say what you say, and what has to be running.
+
+| Door | You say it | It lands through | It needs |
+| --- | --- | --- | --- |
+| The thread | A sentence to the app in the planning channel, then your answers in the change's thread | The relay, on your word or the Confirm button | The Slack app, the relay and the Routine, which Operations sets up — [Agent Runner](/references/agent-runner) |
+| A terminal | The line command in Claude Code, in a clone of this store: `/workflow-plan <sentence>` first, then each hand's command from the table above | `/workflow-land <id> <artifact>` from the terminal, on the handle the team map gives your git e-mail | The clone, and a GitHub account that may push `main` — no Slack at all |
+| The locally run manual | Assign on a change page, Propose on a product page, Pull when the checkout is behind | Your working tree, uncommitted: committing and pushing it is yours, as any other edit | `pnpm manual` on the clone; the hosted manual is read-only |
+| The application repository | `pnpm plan claim`, `done` and `released` today; `hand` and `shipped --build <tag>` once the stages change's group 7 lands there | A commit straight to the store's `main`, as today | `grade10`, with the store clone beside it |
+| A push of your own | A push to the change's branch, from a terminal or the code host | The round, which reads it as your word for the lines it touched | Nothing more |
+
+- **A terminal alone, end to end** — `/workflow-plan` opens the change and
+  drafts ahead, as above; the readers run in your session; you answer the
+  numbered questions there and say land. The landing rebases, runs the gate
+  and pushes `main`, and the push workflow tells the channel and the change's
+  thread by itself. Slack adds two things: the message that says it is your
+  turn, which `NOTIFY_DMS` gates, and a reply in the thread that wakes a run,
+  which the relay makes
+- **The doors mix** — a change opened in the thread carries on from a
+  terminal and back: the files are the state, and each door reads them
+- **The old flow, meanwhile** — `openspec-propose`, `spec-push` and `dev-help`
+  stay until the team has adopted the line commands. A change opened with
+  them shows on the board like any other, owes no round row, and gets the
+  same channel post
 
 ## The Ids Inside the Change
 
 Different from the change id, and permanent once issued.
 
-- **Prefixed by the capability's path**, slashes as hyphens —
-  `grade10-site/store/gift-receipt` issues `grade10-site-store-gift-receipt-*`
-- **Three kinds** — `-SC-01` a scenario in `spec.md`, `-US-01` a story in
-  `user-journeys.md`, `-US1-TC1-1` a case in `feature-tcs.md`
-- **Why the whole path** — two capabilities can share a name: `grade10-site/site/navigation`
-  and `zzz-site/site/navigation` would otherwise both issue `navigation-SC-01`
-- **Never renumbered** — a retired scenario is removed, a retired case marked
-  `deprecated`, and the next one takes the next unused number; a task, a review
-  comment and a test all point at an id, so a reused number rewrites every one
-- **A renamed capability keeps its old prefix** — the ids were issued, and the
-  readers take the prefix from the ids rather than from the directory
+- **Three kinds, one prefix** — the capability's path with slashes as hyphens:
+  `grade10-site-store-cross-sell-SC-01` a scenario in `spec.md`, `-US-01` a
+  story in `user-journeys.md`, `-US1-TC1-1` a case in `feature-tcs.md` —
+  [Naming](https://github.com/9gag/grade10-spec/blob/main/docs/governance/specs-to-test-cases.md#naming)

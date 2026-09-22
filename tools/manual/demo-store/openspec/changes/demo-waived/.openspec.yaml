@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-01
+ui_waived: "the change draws nothing - no screen moves"
+hands:
+  pm: tester
+  design: tester
+  tech: tester

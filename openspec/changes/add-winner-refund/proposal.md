@@ -23,6 +23,10 @@ working day. Today the share is zero, because nothing can record one.
 - **The operator sets the amount.** It must be above zero and no more than
   the winner has paid, partial payments included. It is never fixed to the
   Order Total.
+- **A bank transfer refund shows its reference to the winner**, in the same
+  refund details, so they can match the credit on their statement. A card
+  refund shows none: a statement lists a card refund against the charge it
+  reverses. The operator enters nothing new.
 - **Each refund carries what finance needs to reconcile it:** a reason
   category and a note, the method, the Stripe or bank reference, 1 to 5
   private proof files, and the next gapless internal audit number.
@@ -75,19 +79,10 @@ None.
   already says.
 - **Auth** — the new permission in the closed vocabulary and the `staff` and
   `admin` grants.
-- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens the reason, note and refund method (❓ what transaction clues that method line carries for the winner is open); no stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
+- **Site** — a closing refund shows Refunded and an inline alert below Order Total with the amount returned; a details control opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason and Note. Transfer to is the shared payment card: a card brand logo and the last four digits, or a bank icon with the bank name and the last four digits of the account. A bank refund also shows its provider reference in those details; a card refund shows none. No stepper, Pay or address form; Order Summary stays the invoice; keeps the invoice and receipts. An overpayment keeps the order's status and shows only the difference the same way. My Auctions shows Refunded only for a closing refund. No new letter.
 - **Depends on** `add-winner-partial-payment`, which brings Partially Paid.
   This change's deltas on `post-sale` and `order-status` apply after that
   change archives.
-
-## Open Questions
-
-- **Q20 — Refund transaction clues for the winner.** What the Refund Method
-  line shows so the winner can recognise the refund on their statement —
-  channel only (Card / Bank transfer), a masked card or bank clue, or
-  something else. Full proof, provider reference and audit number stay with
-  the operator. Product (@tangconst) confirms. Preview fixtures use Card /
-  Bank transfer as a working stand-in.
 
 ## References
 

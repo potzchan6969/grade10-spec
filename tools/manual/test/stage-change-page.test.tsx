@@ -1,0 +1,1054 @@
+import { fileURLToPath } from "node:url";
+import { renderToStaticMarkup } from "react-dom/server";
+import { MemoryRouter, Route, Routes } from "react-router";
+import { describe, expect, it, vi } from "vitest";
+import { buildIndex } from "../src/api/derive";
+import type {
+  ChangeArtifact,
+  ChangeDocument,
+  ChangeEntry,
+  Delta,
+  SchemaArtifact,
+  Snapshot,
+} from "../src/api/types";
+import { HandoffRow } from "../src/blocks/artifact-list";
+import type { ContentStore } from "../src/editor/store";
+import { findStoreRoot } from "../src/store/disk.mts";
+import { schemaArtifacts } from "../src/store/read-schema.mts";
+import {
+  changeEntry,
+  pageEntry,
+  snapshotOf,
+  specEntry,
+} from "./manual-fixture";
+
+/**
+ * The change page, state by state: the stepper and its one line below `sm`,
+ * the Your turn card, the hands, the artifacts with their freshness, their
+ * open questions and who landed each, then delivery and the handoff. One case
+ * per `## States` bullet `ui-design.md` lists for the change page, named after
+ * the bullet.
+ */
+
+const storeRoot = findStoreRoot(fileURLToPath(new URL(".", import.meta.url)));
+const ARTIFACTS: SchemaArtifact[] =
+  schemaArtifacts(storeRoot, "grade10-planning") ?? [];
+
+const SPEC = "demo-product/alpha";
+const delta: Delta = { spec: SPEC, kinds: ["MODIFIED"], requirements: [] };
+
+const HANDS = {
+  pm: "robin",
+  design: "dana",
+  tech: "kim",
+  dev: "sam",
+  qa: "ari",
+  release: "lee",
+};
+
+const WRITTEN = [
+  "proposal",
+  "decisions",
+  "user-journeys",
+  "ui-design",
+  "tech-design",
+  "specs",
+  "test-cases",
+  "tasks",
+];
+
+/** When each artifact landed, as the document carries it: the proposal, the
+ * decisions and the journeys on one day, the designer's first word three days
+ * later, and the rest after that. */
+const LANDED: Record<string, string> = {
+  proposal: "2026-09-01T02:00:00.000Z",
+  decisions: "2026-09-01T03:00:00.000Z",
+  "user-journeys": "2026-09-01T04:00:00.000Z",
+  "ui-design": "2026-09-04T02:00:00.000Z",
+  "tech-design": "2026-09-05T02:00:00.000Z",
+  specs: "2026-09-06T02:00:00.000Z",
+  "test-cases": "2026-09-06T03:00:00.000Z",
+  tasks: "2026-09-08T02:00:00.000Z",
+};
+
+function change(extra: Partial<ChangeEntry> = {}): ChangeEntry {
+  return changeEntry("pos", [delta], {
+    stage: "building",
+    title: "Point of sale",
+    hands: { ...HANDS },
+    written: WRITTEN,
+    landedBy: { decisions: "robin", "ui-design": "dana" },
+    taskGroups: [
+      { num: "1", title: "Contracts", repo: "grade10-spec", done: 1, total: 3 },
+    ],
+    promotedBy: "sam",
+    ...extra,
+  });
+}
+
+/** The document the page fetches: one artifact row per schema artifact, each
+ * dated where the change has written it. */
+function documentOf(entry: ChangeEntry): ChangeDocument {
+  const artifacts: ChangeArtifact[] = ARTIFACTS.map((artifact) => ({
+    name: artifact.id,
+    kind: artifact.generates.startsWith("specs/") ? "specs" : "doc",
+    path: `openspec/changes/pos/${artifact.generates}`,
+    present: entry.written.includes(artifact.id),
+    ...(LANDED[artifact.id] && entry.written.includes(artifact.id)
+      ? {
+          lastCommit: {
+            sha: "0".repeat(40),
+            date: LANDED[artifact.id],
+            subject: `land ${artifact.id}`,
+          },
+        }
+      : {}),
+  }));
+  return {
+    id: "pos",
+    dir: "openspec/changes/pos",
+    schema: "grade10-planning",
+    schemaKnown: true,
+    artifacts,
+    deltas: [],
+    // The thread is `thread-section.test.tsx`'s own case; these are about the
+    // stage rows, and a reading with no commits is a reading the store gives.
+    history: [],
+  };
+}
+
+const held = vi.hoisted(() => ({
+  index: undefined as unknown,
+  document: { status: "loading" } as unknown,
+  // Read-only by default — a Your turn card asks for it only on the one
+  // group of cases about the locally run manual.
+  editor: { status: "ready", store: null } as unknown,
+}));
+
+vi.mock("../src/api/use-manual-index", () => ({
+  useManualIndex: () => held.index,
+}));
+vi.mock("../src/editor/session", () => ({
+  useEditorSession: () => held.editor,
+}));
+vi.mock("../src/api/use-archive", () => ({
+  useArchive: () => ({ status: "loading" }),
+}));
+vi.mock("../src/api/use-change-document", () => ({
+  useChangeDocument: () => held.document,
+}));
+
+const { ChangePage } = await import("../src/pages/change-page");
+
+function snapshot(entry: ChangeEntry, team?: Snapshot["team"]): Snapshot {
+  return snapshotOf({
+    config: {
+      storybookBase: "",
+      groups: [{ title: "Products", products: ["demo-product"] }],
+      platform: [],
+      guides: [],
+    },
+    taxonomy: { products: ["demo-product"], topics: [] },
+    pages: [
+      pageEntry("docs/prds/products/demo-product/index.md", {
+        title: "Demo product",
+      }),
+      pageEntry("docs/prds/products/demo-product/alpha.md", {
+        title: "Alpha",
+        spec: SPEC,
+      }),
+    ],
+    specs: [specEntry(SPEC, ["Points expire"])],
+    schemas: { "grade10-planning": ARTIFACTS },
+    changes: [entry],
+    ...(team ? { team } : {}),
+  });
+}
+
+function render(
+  entry: ChangeEntry = change(),
+  store: ContentStore | null = null,
+  team?: Snapshot["team"],
+): string {
+  held.index = buildIndex(snapshot(entry, team));
+  held.document = { status: "ready", document: documentOf(entry) };
+  held.editor = { status: "ready", store };
+  return renderToStaticMarkup(
+    <MemoryRouter initialEntries={["/in-flight/pos"]}>
+      <Routes>
+        <Route element={<ChangePage />} path="in-flight/:change" />
+      </Routes>
+    </MemoryRouter>,
+  );
+}
+
+/** One artifact's row, from its label to the next row. */
+function row(html: string, artifact: string): string {
+  const at = html.indexOf(`data-artifact="${artifact}"`);
+  if (at === -1) return "";
+  const next = html.indexOf("data-artifact=", at + 1);
+  return html.slice(at, next === -1 ? undefined : next);
+}
+
+/** What every `<p>` in some markup holds, its own opening tag left out — a
+ * paragraph holds no paragraph, so the next `</p>` is always its own. */
+function paragraphs(html: string): string[] {
+  const found: string[] = [];
+  for (
+    let at = html.indexOf("<p");
+    at !== -1;
+    at = html.indexOf("<p", at + 1)
+  ) {
+    if (!/^<p[\s>]/.test(html.slice(at, at + 3))) continue;
+    found.push(html.slice(html.indexOf(">", at) + 1, html.indexOf("</p>", at)));
+  }
+  return found;
+}
+
+/** The markup around one marker, for a fact carried by the tag that holds it
+ * rather than by its text. */
+function around(html: string, mark: string, span = 240): string {
+  const at = html.indexOf(mark);
+  if (at === -1) return "";
+  return html.slice(Math.max(0, at - span), at + span);
+}
+
+describe("the stepper", () => {
+  const html = render();
+
+  it("shows all eight stages and marks the one the change is in", () => {
+    for (const label of [
+      "Proposed",
+      "Designed",
+      "Specified",
+      "Planned",
+      "Building",
+      "On staging",
+      "Released",
+      "Archived",
+    ]) {
+      expect(html, label).toContain(`>${label}<`);
+    }
+    expect(html).toContain('data-stage="building"');
+    expect(around(html, 'data-stage="building"', 400)).toContain(
+      'data-state="progress"',
+    );
+    expect(around(html, 'data-stage="archived"', 400)).toContain(
+      'data-state="upcoming"',
+    );
+    expect(around(html, 'data-stage="proposed"', 400)).toContain(
+      'data-state="completed"',
+    );
+  });
+
+  it("A stepper step with the agent and the hand's move as a short caption", () => {
+    const steps = html.slice(html.indexOf('data-stepper="steps"'));
+
+    // One step of eight is a tenth of the reading column, so the caption
+    // shows the agent and the hand's move, and nothing else.
+    expect(steps).toContain("agent drafts");
+    expect(steps).toContain("read each landing");
+    // Nothing is lost: the mark stays in the DOM for a screen reader, and the
+    // whole sentence is the element's own title.
+    expect(steps).toContain("each group, test first");
+    const whole =
+      "agent drafts each group, test first \u00b7 read each landing";
+    expect(steps).toContain(`title="${whole}"`);
+    expect(html).not.toMatch(
+      /data-stage="on-staging"[\s\S]{0,400}agent drafts/,
+    );
+  });
+
+  it("The change page's stepper below `sm`, on one line", () => {
+    const line = html.slice(
+      html.indexOf('data-stepper="one-line"'),
+      html.indexOf('data-stepper="steps"'),
+    );
+
+    expect(line).toContain("Step 5 of 8");
+    expect(line).toContain("Building");
+    // The badge reads short, same as the eight-step stepper's own per-step
+    // caption: the words visible, the mark in an `sr-only` span, the whole
+    // sentence on the badge's title so a wrap grows it instead of clipping.
+    expect(line).toContain("agent drafts");
+    expect(line).toContain("each group, test first");
+    expect(line).toContain(
+      'title="agent drafts each group, test first · read each landing"',
+    );
+    // Both readings render; which one shows at a given width is the walk's
+    // own case (8.3), not a unit test's — this only asserts both exist.
+    expect(html).toContain('data-stepper="one-line"');
+    expect(html).toContain('data-stepper="steps"');
+  });
+
+  // The step's label and its description are paragraphs the design system
+  // draws, so what the stepper hands each description is inline content: a
+  // block element inside a `<p>` is markup no browser keeps, and the
+  // paragraph closes before the mark the reader came for.
+  it("shared-planning-change-stages-SC-57 - nests no block element in a step's own paragraph", () => {
+    const said = vi.spyOn(console, "error").mockImplementation(() => {});
+    let markup = "";
+    try {
+      markup = render(change({ stage: "building", heldBy: "tasks" }));
+    } finally {
+      said.mockRestore();
+    }
+    const steps = markup.slice(markup.indexOf('data-stepper="steps"'));
+
+    expect(steps).toContain("agent drafts");
+    expect(steps).toContain("held by");
+    for (const paragraph of paragraphs(steps)) {
+      expect(paragraph).not.toMatch(
+        /<(?:div|p|ul|ol|li|table|section|h[1-6])[\s>]/,
+      );
+    }
+    expect(said.mock.calls.map((one) => one.join(" "))).toEqual([]);
+  });
+
+  it("names the stage in the page's eyebrow", () => {
+    expect(html).toContain("Board");
+    expect(html).toContain(">Building<");
+    expect(html).not.toContain(">in progress<");
+  });
+
+  it("names what the ladder's walk stopped at, under the change's own step", () => {
+    const held = render(
+      change({ stage: "proposed", written: ["proposal"], heldBy: "decisions" }),
+    );
+
+    const step = held.slice(
+      held.indexOf('data-stage="proposed"'),
+      held.indexOf('data-stage="designed"'),
+    );
+    expect(step).toContain("held by");
+    expect(step).toContain("Decisions");
+    // The other stages carry no such note.
+    const next = held.slice(
+      held.indexOf('data-stage="designed"'),
+      held.indexOf('data-stage="specified"'),
+    );
+    expect(next).not.toContain("held by");
+  });
+});
+
+describe("the Your turn card", () => {
+  it("The Your turn card names the hand, the thread and the command", () => {
+    const html = render(change({ thread: "C0123ABC/1758170000.001200" }));
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("@sam");
+    expect(card).toContain("engineer");
+    expect(card).toContain("C0123ABC");
+    expect(card).toContain("/workflow-build pos");
+  });
+
+  it("falls back to the change page's own link where no thread is recorded", () => {
+    const html = render();
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("/in-flight/pos");
+    expect(card).toContain("no thread");
+  });
+
+  it("shared-planning-change-stages-SC-69 - The change page's Your turn card on the hosted manual, with Assign shown as read-only", () => {
+    const html = render();
+    const card = html.slice(html.indexOf("Your turn"));
+
+    const label = card.indexOf(">Assign<");
+    const button = card.slice(card.lastIndexOf("<", label), label);
+    expect(button).toContain('disabled=""');
+    expect(card).toContain("This hosted build is read-only");
+    expect(html).toContain("Hands");
+  });
+
+  it("Assign on the locally run manual offers a role and a handle to write", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change(), store, { handles: { robin: ["pm"] } });
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).not.toContain("read-only");
+    // Neither picker is disabled — a working form, not a read-only one. The
+    // submit button itself starts disabled until a handle is picked, which
+    // this slice stops short of.
+    const formStart = card.indexOf("<form");
+    expect(
+      card.slice(formStart, card.indexOf("<button", formStart)),
+    ).not.toContain("disabled=");
+    // The six roles are offered, and the handle names come from the team map.
+    for (const role of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(card).toContain(role);
+    }
+    expect(card).toContain("Handle");
+    expect(card).toContain("robin");
+  });
+
+  it("shared-planning-change-stages-SC-68 - The change page's Your turn card on the locally run manual, Assign as a role picker and a handle picker over every handle the team map knows, the chosen role's own first, then everyone else, each group alphabetical", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change(), store, {
+      handles: { sam: ["dev"], dana: ["design"], robin: ["pm"] },
+    });
+    const card = html.slice(html.indexOf("Your turn"));
+    const options = card.slice(
+      card.indexOf("Handle"),
+      card.indexOf("</select", card.indexOf("Handle")),
+    );
+
+    // The page's own job is to offer what `handlesFor` ordered — the rule is
+    // the role's own handles first, then the rest, each group alphabetical,
+    // and `stage-view.test.ts` holds the rule itself. The role the form opens
+    // on is the one this stage waits on, Building's engineer, so the
+    // engineer's own handle is offered first; the empty option `allowEmpty`
+    // draws carries no handle.
+    expect(
+      [...options.matchAll(/<option value="([^"]+)"/g)].map((one) => one[1]),
+    ).toEqual(["sam", "dana", "robin"]);
+  });
+
+  it("opens the Role picker on the hand this stage waits on", () => {
+    const store = {} as unknown as ContentStore;
+    const html = render(change({ stage: "specified" }), store);
+    const card = html.slice(html.indexOf("Your turn"));
+    const roles = card.slice(card.indexOf("Role"), card.indexOf("</select"));
+
+    // Specified waits on the product manager; Building on the engineer. The
+    // picker opens on the stage's own hand rather than on the first of the
+    // six, which is the hand a reader came to the card to name.
+    expect(roles).toContain('<option value="pm" selected=""');
+    const building = render(change(), store);
+    const chosen = building.slice(
+      building.indexOf("Role"),
+      building.indexOf("</select", building.indexOf("Role")),
+    );
+    expect(chosen).toContain('<option value="dev" selected=""');
+
+    // Proposed's second half is the designer's and the tech PIC's, and the
+    // card reads that hand itself: the picker opens on the designer rather
+    // than back on the product manager the stage table names.
+    const proposed = render(change({ stage: "proposed" }), store);
+    const second = proposed.slice(
+      proposed.indexOf("Role"),
+      proposed.indexOf("</select", proposed.indexOf("Role")),
+    );
+    expect(second).toContain('<option value="design" selected=""');
+  });
+
+  it("The change page for a change waiting on a stage whose hand is unnamed", () => {
+    const html = render(change({ hands: { pm: "robin" } }));
+    const card = html.slice(html.indexOf("Your turn"));
+
+    expect(card).toContain("engineer");
+    expect(card).toContain("channel");
+    const hands = html.slice(html.indexOf(">Hands<"));
+    expect(hands).toContain(">open<");
+  });
+
+  it("shared-planning-change-stages-SC-13, shared-planning-change-stages-SC-17 - every role is a row, open, on a change naming nobody", () => {
+    const html = render(change({ hands: undefined }));
+    const hands = html.slice(html.indexOf(">Hands<"));
+
+    expect(hands).not.toContain("No hands named");
+    for (const label of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(hands).toContain(label);
+    }
+    expect(hands.split(">open<").length - 1).toBe(6);
+  });
+
+  it("offers the archive command on the three stages DRAFTED lacks, and only once on the page", () => {
+    const html = render(change({ stage: "on-staging" }));
+    const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));
+
+    expect(card).toContain("/archive-change pos");
+    expect(card).toContain("confirm it deployed");
+    // The command is on the card alone: the page's own "Next" row, which used
+    // to repeat it, is gone.
+    expect(html).not.toContain(">Next<");
+    // One CopyableCommand control, not the same command offered twice.
+    expect(html.match(/Copy \/archive-change pos/g)).toHaveLength(1);
+  });
+
+  it("offers no command on Archived — the fold is already done", () => {
+    const html = render(change({ stage: "archived", status: "archived" }));
+    const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));
+
+    expect(card).not.toContain("/archive-change");
+    expect(card).toContain("waits on no hand");
+  });
+});
+
+describe("the page's own order", () => {
+  /** The stepper, the Your turn card with the message it is sending, then the
+   * state rows, and the history last: the facts a reader acts on come before
+   * the record of how the change got here. */
+  it("reads the marked lines after the artifacts and the thread last", () => {
+    const html = render(change());
+
+    for (const [before, after] of [
+      ['data-stepper="steps"', "Your turn"],
+      ["Your turn", "Told now"],
+      ["Told now", ">Hands<"],
+      [">Hands<", ">Artifacts<"],
+      [">Artifacts<", ">On the pages<"],
+      [">On the pages<", ">Delivery<"],
+      [">Delivery<", ">Thread<"],
+    ]) {
+      expect(html.indexOf(before), `${before} before ${after}`).toBeLessThan(
+        html.indexOf(after),
+      );
+    }
+  });
+});
+
+describe("the hands", () => {
+  it("shows one row per role with its handle, and open for a role nobody has taken", () => {
+    const html = render(change({ hands: { pm: "robin", dev: "sam" } }));
+    const hands = html.slice(
+      html.indexOf(">Hands<"),
+      html.indexOf(">Artifacts<"),
+    );
+
+    for (const label of [
+      "Product manager",
+      "Designer",
+      "Tech PIC",
+      "Engineer",
+      "QA",
+      "Release hand",
+    ]) {
+      expect(hands, label).toContain(label);
+    }
+    expect(hands).toContain("@robin");
+    expect(hands).toContain("@sam");
+    expect(hands.match(/>open</g)).toHaveLength(4);
+  });
+});
+
+describe("the artifacts", () => {
+  it("the question decided: an id's badge is the row's answer, the count text only for questions with no id", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q1",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Which day does the shelf start on?",
+          },
+          {
+            id: "Q2",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Who answers a wait?",
+          },
+          {
+            page: "docs/prds/products/demo-product/alpha.md",
+            section: "surfaces",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Whether a wait ever expires",
+          },
+        ],
+      }),
+    );
+    const decisions = row(html, "decisions");
+
+    expect(decisions).toContain("Q1");
+    expect(decisions).toContain("Q2");
+    // The two numbered questions are answered by their own badge, so only
+    // the one question with no id is left for the count text.
+    expect(decisions).toContain("1 open question");
+    expect(decisions).not.toContain("2 open questions");
+    expect(decisions).not.toContain("3 open questions");
+    expect(row(html, "ui-design")).toContain("@dana");
+    expect(row(html, "tasks")).not.toContain("landed by");
+  });
+
+  it("shared-planning-agent-rounds-SC-26 - shows an open question's id on the artifact row it was raised against", () => {
+    const html = render(
+      change({
+        rounds: [
+          {
+            round: 1,
+            artifact: "ui-design",
+            perspectives: "design, simpler",
+            stood: "the empty state named no control",
+            asked: "Q9",
+            tests: "-",
+          },
+        ],
+        questions: [
+          {
+            id: "Q9",
+            // `read-changes.mts` resolves a numbered question's artifact
+            // against the round that raised it before this ever renders —
+            // the row above is what said this one was ui-design's, and the
+            // page reads only the resolved field.
+            artifact: "ui-design",
+            role: "design",
+            hand: "dana",
+            text: "What does the empty state say?",
+          },
+        ],
+      }),
+    );
+
+    expect(row(html, "ui-design")).toContain("Q9");
+    expect(row(html, "decisions")).not.toContain("Q9");
+    // The id is a link to the change's decisions tab, which is where the row
+    // it names is read: the badge alone leaves the hand looking for it.
+    expect(row(html, "ui-design")).toContain(
+      'href="/in-flight/pos?tab=decisions"',
+    );
+  });
+
+  it("counts a question the page still carries against the proposal", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            page: "docs/prds/products/demo-product/alpha.md",
+            section: "surfaces",
+            artifact: "proposal",
+            role: "pm",
+            hand: "robin",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(row(html, "proposal")).toContain("1 open question");
+  });
+
+  it("The change page for a change with `ui_waived`, showing the design as not owed and fresh", () => {
+    const written = WRITTEN.filter((one) => one !== "ui-design");
+    const html = render(
+      change({ written, uiWaived: "nothing a reader sees moves" }),
+    );
+    const design = row(html, "ui-design");
+
+    expect(design).toContain("not owed");
+    expect(design).toContain("fresh");
+    expect(design).toContain("nothing a reader sees moves");
+  });
+
+  it("shows a design with neither a file nor a line as still owed", () => {
+    const written = WRITTEN.filter((one) => one !== "tech-design");
+    const html = render(change({ written, stage: "proposed" }));
+
+    expect(row(html, "tech-design")).toContain("not yet written");
+  });
+
+  it("An artifact behind, with the chip naming what changed before it", () => {
+    const html = render(
+      change({
+        reviewed: { "ui-design": "aaaaaaaa" },
+        upstream: {
+          "ui-design": {
+            id: "bbbbbbbb",
+            items: ["docs/prds/products/demo-product/alpha.md#surfaces"],
+          },
+        },
+      }),
+    );
+
+    const design = row(html, "ui-design");
+    expect(design).toContain("behind");
+    expect(design).toContain("alpha.md#surfaces");
+    expect(row(html, "specs")).toContain("fresh");
+  });
+
+  it("shows the later handle alone where a second landing replaced the first", () => {
+    const html = render(change({ landedBy: { "ui-design": "kim" } }));
+
+    expect(row(html, "ui-design")).toContain("@kim");
+    expect(row(html, "ui-design")).not.toContain("@dana");
+  });
+});
+
+describe("the overlay row carries the whole dependency and suite reading", () => {
+  it("names one chip per dependency, saying the lie an id names no change, and no second Blocked by list", () => {
+    const html = render(change({ dependsOn: ["never-written"] }));
+    const beside = html.slice(html.indexOf(">Beside the stage<"));
+
+    expect(beside).toContain("never-written — names no change");
+    expect(html).not.toContain(">Blocked by<");
+  });
+
+  it("carries the suite's counts on its own chip, and no second Test cases list", () => {
+    const html = render(
+      change({
+        suites: [
+          {
+            spec: SPEC,
+            status: "pending-review",
+            cases: { draft: 2, actual: 1, deprecated: 0, total: 3 },
+          },
+        ],
+      }),
+    );
+    const beside = html.slice(html.indexOf(">Beside the stage<"));
+
+    expect(beside).toContain(">Suite<");
+    expect(beside).toContain("3 cases");
+    expect(beside).toContain("2 draft");
+    expect(beside).toContain("1 reviewed");
+    expect(html).not.toContain(">Test cases<");
+  });
+});
+
+describe("the Rounds row", () => {
+  it("shared-planning-agent-rounds-SC-51 - the change page's Rounds row with one line per round, and a group with no round row shown as such", () => {
+    const html = render(
+      change({
+        taskGroups: [
+          {
+            num: "1",
+            title: "Contracts",
+            repo: "grade10-spec",
+            done: 3,
+            total: 3,
+          },
+          {
+            num: "2",
+            title: "Surfaces",
+            repo: "grade10-spec",
+            done: 2,
+            total: 2,
+          },
+        ],
+        rounds: [
+          {
+            round: 1,
+            artifact: "proposal",
+            perspectives: "product, qa",
+            stood: "the goal named two goals",
+            asked: "-",
+            tests: "-",
+          },
+          {
+            round: 2,
+            artifact: "decisions",
+            perspectives: "simpler",
+            stood: "nothing stood",
+            asked: "-",
+            tests: "-",
+          },
+          {
+            round: 3,
+            artifact: "1",
+            perspectives: "qa, simpler",
+            stood: "the group missed a test",
+            asked: "Q3",
+            tests: "demo-SC-01: test/one.test.ts",
+          },
+        ],
+      }),
+    );
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+
+    expect(rounds).toContain("Round 1");
+    expect(rounds).toContain("product, qa");
+    expect(rounds).toContain("the goal named two goals");
+    // A round whose readers found nothing still names its own perspectives.
+    expect(rounds).toContain("Round 2");
+    expect(rounds).toContain("nothing stood");
+    expect(rounds).toContain("Q3");
+    // Each row says which artifact or group it read: a reader counting rounds
+    // without them cannot tell which draft any of them was of.
+    expect(rounds).toContain("proposal");
+    expect(rounds).toContain("decisions");
+    expect(rounds).toContain("Group 1");
+    // Group 1 landed a round; Group 2 is ticked and carries none.
+    expect(rounds).toContain("Group 2");
+    expect(rounds).toContain("no round");
+    expect(rounds).not.toMatch(/Group 1[\s\S]{0,80}no round/);
+  });
+
+  it("shared-planning-agent-rounds-SC-51 - a round's Stood cell is clamped to two lines", () => {
+    const stood =
+      "the reader of the words found the empty state naming no control, the design naming no state for a filter that matches nothing, and `rounds.md` naming no column for the tests each scenario landed with";
+    const html = render(
+      change({
+        taskGroups: [],
+        rounds: [
+          {
+            round: 1,
+            artifact: "proposal",
+            perspectives: "reader, simpler",
+            stood,
+            asked: "-",
+            tests: "-",
+          },
+        ],
+      }),
+    );
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+
+    // Clamped, so a round of many findings is a line of the list rather than
+    // a paragraph on the change page.
+    expect(rounds).toContain("line-clamp-2");
+    expect(rounds).toContain("the reader of the words found the empty state");
+    // And the cell's backticks still reach the reader as code.
+    expect(rounds).toContain("<code");
+    expect(rounds).toContain("rounds.md");
+  });
+
+  it("carries no Rounds row before the first round lands", () => {
+    const html = render(change({ taskGroups: [] }));
+    expect(html).not.toContain(">Rounds<");
+  });
+});
+
+describe("delivery and the handoff", () => {
+  it("shared-planning-change-stages-SC-76 - names main, staging with no build beside it, and the release that carried the change", () => {
+    const html = render(
+      change({ deployedEnv: "staging", releasedIn: "v2026.09.1" }),
+    );
+    const start = html.indexOf(">Delivery<");
+    const delivery = html.slice(start, html.indexOf("</dd>", start));
+
+    expect(delivery).toContain("main");
+    expect(delivery).toContain("staging");
+    expect(delivery).toContain("v2026.09.1");
+    expect(delivery).not.toContain("·");
+  });
+
+  it("shared-planning-change-stages-SC-59 - names the build the staging deploy recorded", () => {
+    const html = render(
+      change({ deployedEnv: "staging", deployedBuild: "1.4.0-rc2" }),
+    );
+    const delivery = html.slice(html.indexOf(">Delivery<"));
+
+    expect(delivery).toContain("staging · 1.4.0-rc2");
+  });
+
+  it("shared-planning-agent-rounds-SC-61 - shows the suite's automated count against its total on the Delivery row", () => {
+    const html = render(
+      change({
+        suites: [
+          {
+            spec: SPEC,
+            status: "in-review",
+            cases: {
+              draft: 1,
+              actual: 2,
+              deprecated: 0,
+              total: 3,
+              automated: 2,
+            },
+          },
+        ],
+      }),
+    );
+    const delivery = html.slice(html.indexOf(">Delivery<"));
+
+    expect(delivery).toContain("2/3");
+  });
+
+  it("shows the days from a stage landing to the next hand's first word", () => {
+    const html = render();
+    const handoff = html.slice(html.indexOf(">Handoff<"));
+
+    expect(handoff).toContain("Proposed");
+    expect(handoff).toContain("3 days");
+    expect(handoff).toContain("@dana");
+  });
+
+  it("says what nothing dates, rather than reading it as none", () => {
+    const html = render();
+    const handoff = html.slice(html.indexOf(">Handoff<"));
+
+    // Nothing lands after the plan, so the engineer's first word on Planned
+    // has no date: the days are counted to today and the row says so.
+    expect(handoff).toContain("Planned");
+    expect(handoff).toContain("so far");
+  });
+
+  it("says landed today for a stage still open on the day it landed, and names a landing nothing dates", () => {
+    const day = "2026-09-20T02:00:00.000Z";
+    const html = renderToStaticMarkup(
+      <HandoffRow
+        handoffs={[
+          { stage: "proposed", landed: day, days: 0, open: true },
+          { stage: "designed", landed: day, days: 1, open: true },
+          { stage: "specified", open: true },
+          {
+            stage: "planned",
+            landed: day,
+            days: 3,
+            open: false,
+            role: "dev",
+            hand: "sam",
+          },
+        ]}
+      />,
+    );
+
+    // A stage that landed today and is still waiting reads as landed today,
+    // not as a count of nothing.
+    expect(html).toContain("landed today");
+    expect(html).not.toContain("0 days");
+    expect(html).toContain("1 day so far");
+    // A stage whose landing no commit dates says the landing is undated: the
+    // row cannot tell that from a landing that never happened.
+    expect(html).toContain("no dated landing");
+    // A stage somebody answered keeps its plain count.
+    expect(html).toContain("3 days");
+    expect(html).toContain("@sam");
+  });
+});
+
+describe("the questions a change still carries", () => {
+  it("lists them whatever stage the change has reached", () => {
+    const html = render(
+      change({
+        stage: "building",
+        questions: [
+          {
+            id: "Q7",
+            artifact: "decisions",
+            role: "design",
+            hand: "dana",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("Whether the shelf is a page of its own");
+    expect(html).toContain("Q7");
+    expect(html).toContain(">Building<");
+  });
+
+  it("names each question's id and leaves the thread to the card", () => {
+    const html = render(
+      change({
+        thread: "C0123ABC/1758170000.001200",
+        questions: [
+          {
+            id: "Q7",
+            artifact: "decisions",
+            role: "design",
+            hand: "dana",
+            text: "Whether the shelf is a page of its own",
+          },
+          {
+            id: "Q8",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "Whether the shelf keeps its own count",
+          },
+        ],
+      }),
+    );
+    const open = html.slice(
+      html.indexOf(">Open questions<"),
+      html.indexOf(">Owners<"),
+    );
+
+    // A question is answered by its id. The page is one change's already, so
+    // the thread link is the Your turn card's and the rows carry the ids.
+    expect(open).toContain(">Q7<");
+    expect(open).toContain(">Q8<");
+    expect(open).not.toContain("slack.com/archives");
+  });
+
+  it("reads a question's own bold and backticks", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q9",
+            artifact: "decisions",
+            role: "pm",
+            hand: "robin",
+            text: "**A question, not a guess** — a row in `decisions.md`",
+          },
+        ],
+      }),
+    );
+    const open = html.slice(
+      html.indexOf(">Open questions<"),
+      html.indexOf(">Owners<"),
+    );
+
+    expect(open).toContain("<strong>A question, not a guess</strong>");
+    expect(open).toContain("<code");
+    expect(open).toContain("decisions.md");
+    expect(open).not.toContain("**");
+  });
+
+  it("names the role's own label for a question the change names no hand for", () => {
+    const html = render(
+      change({
+        questions: [
+          {
+            id: "Q8",
+            artifact: "decisions",
+            role: "design",
+            hand: "design",
+            text: "Whether the shelf is a page of its own",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("designer — open");
+    expect(html).not.toContain("design — open");
+  });
+
+  it("a group round's Q reaches the decisions row and the Rounds row's line", () => {
+    const html = render(
+      change({
+        taskGroups: [
+          { num: "3", title: "Walk", repo: "grade10-spec", done: 1, total: 1 },
+        ],
+        rounds: [
+          {
+            round: 1,
+            artifact: "3",
+            perspectives: "qa, simpler",
+            stood: "the walk skipped a refusal",
+            asked: "Q5",
+            tests: "-",
+          },
+        ],
+        // No schema artifact is named `3`, so the question does not group
+        // under any artifact row — but it is still on the change's own list
+        // of what is open, and the round that raised it still names it.
+        questions: [
+          {
+            id: "Q5",
+            artifact: "3",
+            role: "qa",
+            hand: "ari",
+            text: "Does the refusal need its own case?",
+          },
+        ],
+      }),
+    );
+
+    expect(html).toContain("Does the refusal need its own case?");
+    expect(html).toContain("Q5");
+    const rounds = html.slice(html.indexOf(">Rounds<"));
+    expect(rounds).toContain("Q5");
+  });
+});

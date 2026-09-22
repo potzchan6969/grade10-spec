@@ -8,6 +8,7 @@ import type {
 import { type PageAst, parsePage } from "../content/grammar";
 import type { PageIcon } from "../content/icons";
 import { resolveRef } from "../content/refs";
+import { type OpenMark, openMarksOfPage } from "./open-marks";
 import {
   dirOf,
   humanize,
@@ -18,6 +19,7 @@ import {
   specTitle,
 } from "./paths";
 import { findRequirement } from "./requirements";
+import { laneOfStage } from "./stages.ts";
 import type {
   ChangeEntry,
   ChangeLane,
@@ -34,6 +36,7 @@ import type {
   TestCase,
   TestSuiteStatus,
 } from "./types";
+import { waivedOf } from "./waivers";
 
 /** A page as the app reads it: parsed, or contained with the parse error. */
 export type ParsedPage = {
@@ -583,29 +586,50 @@ export function isProductDir(manualDir: string, dir: string): boolean {
   return rest !== "" && rest.split("/").length <= 2;
 }
 
+/** The marks of every page under a product, pages in their nav order. Here
+ * rather than in `open-marks.ts`, which stays reachable from plain node: this
+ * is the app's own `ParsedPage`, and the store never asks for one product's
+ * pages at a time. */
+export function openMarksForProduct(
+  index: ManualIndex,
+  productId: string,
+): OpenMark<ParsedPage>[] {
+  const dir = `${pagePath(index.manualDir, "products", productId)}/`;
+  return index.pages
+    .filter((page) => page.path.startsWith(dir) && page.route)
+    .sort(byOrder)
+    .flatMap(openMarksOfPage);
+}
+
+function byOrder(a: ParsedPage, b: ParsedPage): number {
+  const order = (page: ParsedPage) =>
+    page.path.endsWith("/index.md")
+      ? -1
+      : (page.ast?.frontmatter.order ?? Number.POSITIVE_INFINITY);
+  return order(a) - order(b) || a.path.localeCompare(b.path);
+}
+
 /**
- * Where a change stands, read off the artifacts it has written and nothing
- * else. Deltas are what separates an idea from a specification; tasks are what
- * separates a specification from work. A change that has finished its tasks is
- * `complete` and waiting on the archive, not still in progress.
+ * Where a change stands, in the four lanes that ran before the eight stages:
+ * the lane its stage projects to, so the two can never disagree about one
+ * change. Every entry carries a stage, computed where the schema is, so there
+ * is one derivation and this is a projection of it.
  */
 export function laneOf(change: ChangeEntry): ChangeLane {
-  if (change.deltas.length === 0) return "proposed";
-  if (change.taskGroups.length === 0) return "specified";
-  const { done, total } = taskTotals(change);
-  return total > 0 && done === total ? "complete" : "in-progress";
+  return laneOfStage(change.stage);
 }
 
 /**
  * A change that is still only a reason: no delta, so it flips no capability
  * status, badges no row and bumps no product's count — it collects on the
- * In Flight board's own lane instead of standing among the work in flight. A
- * change that has written its deltas and no task list is `specified`, not
- * this: the finished state of a planning change is a specification, and filing
- * it as an unplanned thought hides the queue somebody has to promote.
+ * Board's own lane instead of standing among the work in flight.
+ *
+ * The deltas, not the lane: the ladder reads a change whose plan was written
+ * before its designs as Proposed, and a change carrying requirements is not
+ * an unplanned thought whatever rung it sits on.
  */
 export function isProposal(change: ChangeEntry): boolean {
-  return laneOf(change) === "proposed";
+  return change.deltas.length === 0;
 }
 
 /** One artifact a change still owes, and why it is owed. */
@@ -619,38 +643,6 @@ export type PendingItem = {
 
 /** What one teammate owes, oldest change first. */
 export type PendingTeammate = { teammate: string; items: PendingItem[] };
-
-/**
- * The artifacts a change's own record says it does not owe.
- *
- * `skip_specs` says a change alters no behaviour, so it owes no requirements —
- * and nothing that lives inside a capability directory either. There is no
- * capability, so there is nowhere for a journeys file or a suite to be
- * written, and asking for one put an impossible row on the product manager's
- * list for every tooling change in the store.
- *
- * `decisions_waived` says this change records no decisions: the interview
- * settled nothing it had to keep, or it was opened before `decisions.md`
- * existed and its scope is in the proposal. That is read here and not only by
- * `check:manual`, because unlike `design_waived` and `tasks_waived` — which
- * answer for a file's absence at archive — this one answers for whose turn it
- * is now. The row it would otherwise leave is the product manager's, and an
- * artifact their own record waives is not their turn. Without this, the only
- * thing that clears the row is the file, which pushes an author towards
- * writing a record of an interview nobody held.
- */
-const waivedOf = (artifacts: SchemaArtifact[], change: ChangeEntry) => {
-  const ids = new Set<string>();
-  if (change.skipSpecs !== undefined) {
-    for (const one of artifacts) {
-      if (one.id === "specs" || one.generates.startsWith("specs/")) {
-        ids.add(one.id);
-      }
-    }
-  }
-  if (change.decisionsWaived) ids.add("decisions");
-  return ids;
-};
 
 /**
  * Every teammate's worklist, derived from the artifacts each change has written
@@ -1215,19 +1207,6 @@ export function designShelves(index: ManualIndex): DesignShelf[] {
     });
   }
   return shelves.sort((a, b) => a.title.localeCompare(b.title));
-}
-
-export function taskTotals(change: ChangeEntry): {
-  done: number;
-  total: number;
-} {
-  return change.taskGroups.reduce(
-    (sum, group) => ({
-      done: sum.done + group.done,
-      total: sum.total + group.total,
-    }),
-    { done: 0, total: 0 },
-  );
 }
 
 /** Newest movement first; a change that never moved sorts last. */

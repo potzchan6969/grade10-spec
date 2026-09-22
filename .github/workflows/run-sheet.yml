@@ -47,6 +47,11 @@ on:
         required: false
         default: false
         type: boolean
+      include_automated:
+        description: "Also take cases an automated test already covers"
+        required: false
+        default: false
+        type: boolean
       dry_run:
         description: "Print the selection and write nothing"
         required: false
@@ -128,6 +133,7 @@ jobs:
           LEVEL: ${{ inputs.level }}
           SCOPE: ${{ inputs.scope }}
           INCLUDE_DRAFT: ${{ inputs.include_draft }}
+          INCLUDE_AUTOMATED: ${{ inputs.include_automated }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
@@ -140,6 +146,7 @@ jobs:
           if [ -n "$LEVEL" ]; then set -- "$@" --level "$LEVEL"; fi
           if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
           if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
+          if [ "$INCLUDE_AUTOMATED" = "true" ]; then set -- "$@" --include-automated; fi
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
 

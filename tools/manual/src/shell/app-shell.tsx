@@ -4,6 +4,7 @@ import { useSnapshot } from "../api/snapshot-provider";
 import { useHashFlash } from "../blocks/anchor";
 import { SnapshotFooter } from "./footer";
 import { Header } from "./header";
+import { MainMoved } from "./main-moved";
 import { PageSectionsProvider } from "./page-sections";
 import { useScrollMemory } from "./scroll-memory";
 import { Sidebar } from "./sidebar";
@@ -62,6 +63,9 @@ export function AppShell() {
                     {snapshot.source === "fixture" ? (
                       <FixtureNotice reason={snapshot.reason} />
                     ) : null}
+                    {/* Above the page, inside the column it reads in: what
+                        the banner says is about the reading, not the route. */}
+                    <MainMoved />
                     <Outlet />
                   </>
                 ) : null}

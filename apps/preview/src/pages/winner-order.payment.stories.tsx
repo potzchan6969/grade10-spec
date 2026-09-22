@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under View Bank Details and Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -33,7 +33,7 @@ const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
   setupPaymentMethod: "Bank transfer",
-  primaryCta: "Pay by Bank Transfer",
+  primaryCta: "Submit Payment Proof",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
 
@@ -57,10 +57,10 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$15,660")).toBeVisible();
+    expect(canvas.getByText("HK$16,140")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
+    expect(canvas.getByText("Insurance")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
-    expect(canvas.queryByText("Insurance")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
       sidebar.getByRole("button", { name: "Pay with Card" }),
@@ -86,9 +86,9 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Bank transfer invoice — CTA is Pay by Bank Transfer, not card pay. */
+/** Bank transfer invoice — Pay + View Bank Details under it. */
 export const PendingPaymentBankTransfer: Story = {
-  name: "Pending Payment Bank Transfer",
+  name: "Pending Payment — Bank Transfer",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -98,7 +98,10 @@ export const PendingPaymentBankTransfer: Story = {
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.getByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.getByRole("button", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
     ).toBeVisible();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -108,16 +111,16 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
-    expect(sidebar.getByText("HK$15,540")).toBeVisible();
+    expect(sidebar.getByText("HK$16,020")).toBeVisible();
   },
 };
 
 /**
- * Opens Pay by Bank Transfer, fills required fields, submits → Payment
- * Verifying + toast.
+ * Submit Payment Proof → fill form → Payment Verifying + toast.
+ * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Bank Payment Proof",
+  name: "Submit Proof Flow",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -128,24 +131,13 @@ export const SubmitBankPaymentProof: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Pay by Bank Transfer" }),
+      canvas.getByRole("button", { name: "Submit Payment Proof" }),
     );
     const modal = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "Pay by Bank Transfer" });
+      const found = page.getByRole("dialog", { name: "Submit Payment Proof" });
       expect(found).toBeVisible();
       return within(found);
     });
-
-    expect(modal.getByText("Bank Details")).toBeVisible();
-    expect(modal.getByText("Required Transfer Reference")).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Copy transfer reference" }),
-    ).toBeVisible();
-    expect(
-      modal.getByText(
-        "Copy the bank details, pay the amount due, then upload your receipt.",
-      ),
-    ).toBeVisible();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
     const transferDate = modal.getByLabelText("Transfer Date");
@@ -169,10 +161,6 @@ export const SubmitBankPaymentProof: Story = {
       ?.querySelector('input[type="file"]');
     expect(fileInput).toBeTruthy();
     await userEvent.upload(fileInput as HTMLInputElement, file);
-    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
-    expect(
-      modal.getByText("You can’t add or change files after you submit."),
-    ).toBeVisible();
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),
@@ -192,7 +180,10 @@ export const SubmitBankPaymentProof: Story = {
       ).toBeVisible();
     });
     expect(
-      canvas.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      canvas.queryByRole("button", { name: "Submit Payment Proof" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "View Bank Details" }),
     ).not.toBeInTheDocument();
     const verificationAlert = canvas.getByRole("alert");
     expect(verificationAlert).toBeVisible();
@@ -211,7 +202,7 @@ export const SubmitBankPaymentProof: Story = {
 
 /** Simulated card host return → Processing + Payment received toast. */
 export const PayWithCardCheckout: Story = {
-  name: "Pay with Card Checkout",
+  name: "Pay with Card",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -262,7 +253,7 @@ export const PaymentVerifying: Story = {
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -327,7 +318,7 @@ export const PartiallyPaid: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByText("Bank transfer")).toBeVisible();
@@ -375,7 +366,7 @@ export const ExpiredInvoice: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();

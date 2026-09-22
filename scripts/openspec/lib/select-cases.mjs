@@ -11,7 +11,7 @@
  */
 
 import { COLUMNS } from "./run-sheet-layout.mjs";
-import { prop, readAllSuites } from "./suites.mjs";
+import { isAutomated, prop, readAllSuites } from "./suites.mjs";
 
 /** `grade10-site/store/home` → product, domain, capability. A domain suite
  *  sits one level up and names no capability. */
@@ -46,6 +46,11 @@ export function readCandidates(root, scope = null) {
  * convenience that resolves to the same thing, and both obey the status gate:
  * `actual` only unless `includeDraft`, and never `deprecated` - a deprecated
  * case is one the spec stopped stating, and walking it proves nothing.
+ *
+ * A case whose Automation status is `automated` is left out too, unless
+ * `includeAutomated` says otherwise: a run sheet is where a case a script
+ * cannot cover leaves the store, and an automated case is proved on every
+ * push instead (`docs/governance/specs-to-test-cases.md`, "The Run Sheet").
  */
 export function selectCases(candidates, options = {}) {
   const {
@@ -54,6 +59,7 @@ export function selectCases(candidates, options = {}) {
     priority = null,
     level = null,
     includeDraft = false,
+    includeAutomated = false,
   } = options;
 
   const allowed = new Set(includeDraft ? ["actual", "draft"] : ["actual"]);
@@ -73,7 +79,19 @@ export function selectCases(candidates, options = {}) {
     if (!allowed.has(status)) {
       refused.push({
         id: one.tc.id,
+        reason: "status",
         why: `status is \`${status || "unset"}\``,
+      });
+      return false;
+    }
+    if (!includeAutomated && isAutomated(one.tc)) {
+      refused.push({
+        id: one.tc.id,
+        reason: "automation",
+        why: "automation status is `automated`",
+        // What the case's own `**Decided by:**` line names, so the run can
+        // print the file a tester would otherwise have to take on trust.
+        decidedBy: (one.tc.decidedBy ?? []).map(({ path }) => path),
       });
       return false;
     }
@@ -110,6 +128,50 @@ export function selectCases(candidates, options = {}) {
     if (gate(one)) picked.push(one);
   }
   return { picked, refused, missing };
+}
+
+/**
+ * What the automation gate did to this selection, and the one line a run
+ * prints about it: how many automated cases it left out, or how many it took
+ * with `--include-automated`.
+ *
+ * Said as zero rather than left unsaid, because the line is what proves the
+ * gate ran (`shared-planning-agent-rounds-SC-61`). Pure, so the three counts
+ * that matter — none, one and many — are asserted without a spreadsheet.
+ *
+ * `leftOut` re-reads `selectCases`' own refusals rather than running the gate
+ * again; `included` reads the picked list, which only carries an automated
+ * case where the flag let one through.
+ *
+ * `leftOutLines` names each one under the count (Q72 of
+ * `run-a-round-on-every-artifact`): the case, then what its `**Decided by:**`
+ * line names. A count alone points at no file, so a tester wondering why a
+ * journey they walk has a hole in it has nothing to open; a case carrying no
+ * line says so in the same shape, which is how a hole in the store shows up
+ * in a run's own printout.
+ */
+export function automatedGateOf({ picked, refused, includeAutomated = false }) {
+  const left = refused.filter((one) => one.reason === "automation");
+  const leftOut = left.length;
+  const included = includeAutomated
+    ? picked.filter((one) => isAutomated(one.tc)).length
+    : 0;
+  const many = includeAutomated ? included : leftOut;
+  return {
+    leftOut,
+    included,
+    leftOutLines: left.map(
+      (one) =>
+        `  ${one.id} - ${
+          one.decidedBy?.length > 0
+            ? one.decidedBy.join(", ")
+            : "decided by no named test"
+        }`,
+    ),
+    line: `${many} automated case${many === 1 ? "" : "s"} ${
+      includeAutomated ? "included" : "left out"
+    }`,
+  };
 }
 
 /**
