@@ -491,9 +491,7 @@ function checkFolded(ctx, files, shape) {
         .filter((it) => it.kind === "renamed")
         .map((it) => [it.name, it.to]),
     );
-    const renamedTo = new Map(
-      [...renamedFrom].map(([from, to]) => [to, from]),
-    );
+    const renamedTo = new Map([...renamedFrom].map(([from, to]) => [to, from]));
 
     for (const requirement of one.requirements) {
       const what = label(requirement);
@@ -506,7 +504,10 @@ function checkFolded(ctx, files, shape) {
         );
         continue;
       }
-      if (requirement.kind === "modified" && renamedFrom.has(requirement.name)) {
+      if (
+        requirement.kind === "modified" &&
+        renamedFrom.has(requirement.name)
+      ) {
         ctx.add(
           "delta",
           one.file,

@@ -62,7 +62,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
 
 ## Batches
 
-::spec{id="grade10-admin/grading/batches"}
+::changes{spec="grade10-admin/grading/batches"}
 
 - 🚧 **One grader, one level** — a batch is what the grader invoices and ships back, so it is what the shop tracks, and
   a card that does not fit waits for the next; its states: open until the cut-off → closed Thursday 19:00, ships the

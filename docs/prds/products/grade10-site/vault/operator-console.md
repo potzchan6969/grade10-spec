@@ -192,6 +192,7 @@ One line per tab, as `Surface: verb, verb, verb`.
 | A case nobody is valuing | Decided | `under_valuation` badges after **7 days** untouched, derived where every other badge is | Product |
 | Valuer versus approver | Decided | One grant prices, offers and forfeits; the split that matters is per case — the payout's recorder is not the offer's maker — and a separate valuing grant would over-split a shop of three | Owner |
 | Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |
+| The page a list pages on | ❓ Open | No number is fixed for the ledger or the arrears list; each pages on its own cursor and nothing states how many rows it takes. Recommended: 50. | Product |
 | Staging second factor | Decided | Required, because staging rehearses production; development stays optional so a local stack never locks an operator out | Owner |
 | No-show and late | Decided | The case is the item, so a different item is a new case and this one is declined or cancelled | Product |
 :::

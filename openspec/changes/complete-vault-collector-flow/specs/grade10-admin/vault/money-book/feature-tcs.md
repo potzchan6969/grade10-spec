@@ -181,6 +181,167 @@
 
 ---
 
+## grade10-admin-vault-money-book-US2: Treasurer reads what the loan book stands at
+
+**As a** treasurer,
+**I want** the principal and interest outstanding across every loan on the book at an instant — now, or a month-end I name — in one unit,
+**so that** what the business is owed is one figure I can quote and check against the cases behind it, and tie to the month it belongs to.
+
+### grade10-admin-vault-money-book-US2-TC1-1: The position agrees with the case screens behind it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-02
+
+**Pre-conditions:**
+
+* admin(holds vault:payout) is signed in to the console.
+* Three live loans are on the book, each in HKD.
+
+**Steps:**
+
+1. Read the position as at now.
+2. Read what each of the three cases owes at that instant.
+
+**Expected Results:**
+
+* The position's outstanding is the sum of the three case figures.
+* The position counts three loans on the book.
+
+### grade10-admin-vault-money-book-US2-TC2-1: A book holding two currencies is refused, not summed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-02
+
+**Pre-conditions:**
+
+* admin(holds vault:payout) is signed in to the console.
+* Live loans are on the book in two currencies.
+
+**Steps:**
+
+1. Read the position as at now.
+
+**Expected Results:**
+
+* The position is refused by name.
+* No figure sums the two currencies.
+
+### grade10-admin-vault-money-book-US2-TC3-1: A past instant replays the book as it stood
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-02
+
+**Pre-conditions:**
+
+* admin(holds vault:payout) is signed in to the console.
+* One loan was advanced in June, settled in July, and its item released in August.
+
+**Test data:**
+
+| Instant read | The loan reads |
+| --- | --- |
+| End of June | on the book, its whole term outstanding |
+| End of July | on the book, settled |
+| Now | not on the book |
+
+**Steps:**
+
+1. Read the position as at the row's instant.
+
+**Expected Results:**
+
+* The position reads the loan as <The loan reads>.
+
+### grade10-admin-vault-money-book-US2-TC4-1: A position as at a future instant is refused
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-02
+
+**Pre-conditions:**
+
+* admin(holds vault:payout) is signed in to the console.
+
+**Steps:**
+
+1. Read the position as at a date after today.
+
+**Expected Results:**
+
+* The position is refused by name.
+* No figure is given.
+
+### grade10-admin-vault-money-book-US2-TC5-1: The position is refused without the money grant
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-02
+
+**Pre-conditions:**
+
+* admin holds vault:read alone, with no vault:payout, and is signed in to the console.
+
+**Steps:**
+
+1. Read the position as at now.
+
+**Expected Results:**
+
+* The position is refused by name.
+* What the operator's own case owes still reads.
+
+---
+
 ## grade10-admin-vault-money-book-US3: Operator works the loans that are running late
 
 **As a** member of shop staff,
@@ -328,6 +489,65 @@
 **Expected Results:**
 
 * The list is refused; no row or tile is shown.
+
+
+### grade10-admin-vault-money-book-US3-TC6-1: Each arrears row prints in its loan's own currency
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-03
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on <grade10 admin vault overdue tab url>.
+* Two loans are in arrears, one in HKD and one in USD.
+
+**Steps:**
+
+1. Read the two rows in the arrears list.
+
+**Expected Results:**
+
+* Each row's outstanding is in its own loan's currency.
+* Neither row is read in the book's default currency.
+
+### grade10-admin-vault-money-book-US3-TC7-1: A loan whose advance is taken back leaves the arrears
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-03
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on <grade10 admin vault overdue tab url>.
+* A loan in arrears has had its advance taken back by a correction.
+
+**Steps:**
+
+1. Read the arrears list.
+
+**Expected Results:**
+
+* The case is not in the list.
+* The tiles above the list do not count it.
 
 ---
 
@@ -577,6 +797,64 @@ Runs once per row of **Test data**.
 * An error line appears by the button.
 * No file downloads.
 
+
+### grade10-admin-vault-money-book-US4-TC9-1: The export is refused without the money grant
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-04
+
+**Pre-conditions:**
+
+* admin holds vault:read alone, with no vault:payout, and asks for the register as a file.
+
+**Steps:**
+
+1. Ask for the register as a file.
+
+**Expected Results:**
+
+* The request is refused by name.
+* No file is served.
+
+### grade10-admin-vault-money-book-US4-TC10-1: The net out answers the range as narrowed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-04
+
+**Pre-conditions:**
+
+* admin(holds vault:payout) is on <grade10 admin vault money tab url>.
+* The range holds records for two cases.
+
+**Steps:**
+
+1. Narrow the register to one of the two cases.
+2. Read the net-out figure.
+
+**Expected Results:**
+
+* The net out covers that case alone, not both.
+
 ---
 
 ## grade10-admin-vault-money-book-US5: Operator reads the arrears summed before working them
@@ -756,3 +1034,85 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The reminder ladder reads in words under the list.
+
+### grade10-admin-vault-money-book-US5-TC7-1: More loans in arrears than one page refuses the tiles
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-vault-money-book-US-05
+
+**Pre-conditions:**
+
+* admin(holds vault:read) is on <grade10 admin vault overdue tab url>.
+* More live loans are past their due date than the arrears page in one read.
+
+**Steps:**
+
+1. Read the tiles above the arrears list.
+
+**Expected Results:**
+
+* The three figures are refused by name.
+* No tile reads a figure over part of the loans.
+
+## Settled
+
+- The arrears sit behind the vault read grant, with the list the figures sum; the money grant guards the register and the position alone.
+- The position is untouched by this change: its journey and its scenarios are the durable ones, and this suite is the first to walk them.
+- What page the register and the arrears list page on is Product's to name; until it is named, no case fixes a number.
+
+## Reconciliation
+
+**Run:** 2026-09-22. The blind pass read the outline — `## Purpose` and
+`## Feature set` — this capability's `user-journeys.md`, `proposal.md`,
+`decisions.md` with its `## Raised` table, `ui-design.md` with its state
+dispositions stripped, and the PRD sections the proposal links. It was denied
+every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/`
+and `tech-design.md`. Nothing verifies that account; it is the run's word.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US3-TC1-1` | Folded into `spec.md` | The requirement orders the list longest overdue first and no scenario read it — `grade10-admin-vault-money-book-SC-29` |
+| `US3-TC2-1` | Folded into `spec.md` | `grade10-admin-vault-money-book-SC-07` pages, but nothing stated two loans sharing one due date — `grade10-admin-vault-money-book-SC-30` |
+| `US3-TC5-1` | Folded into `spec.md` | The grant is the requirement's, the refusal nobody's — `grade10-admin-vault-money-book-SC-31`, and the question behind it is `Q29` |
+| `US1-TC1-1`, `US1-TC3-1` | Covered | `grade10-admin-vault-money-book-SC-01` |
+| `US1-TC2-1` | Covered | The durable `grade10-admin-vault-money-book-SC-03`, which this change leaves as it is |
+| `US1-TC4-1` | Covered | `grade10-admin-vault-money-book-SC-27`; a range holding nothing folds to zero by the totals requirement it already reads under |
+| `US1-TC6-1` | Covered | The durable `grade10-admin-vault-money-book-SC-09` |
+| `US3-TC3-1` | Covered | `grade10-admin-vault-money-book-SC-18` |
+| `US4-TC1-1` | Covered | `grade10-admin-vault-money-book-SC-25`, `grade10-admin-vault-money-book-SC-26` |
+| `US4-TC2-1` | Covered | `grade10-admin-vault-money-book-SC-13`, `grade10-admin-vault-money-book-SC-14` |
+| `US4-TC3-1` | Covered | `grade10-admin-vault-money-book-SC-02` |
+| `US4-TC4-1` | Covered | `grade10-admin-vault-money-book-SC-15` |
+| `US4-TC5-1` | Covered | `grade10-admin-vault-money-book-SC-20`, `grade10-admin-vault-money-book-SC-21` |
+| `US4-TC6-1` | Covered | `grade10-admin-vault-money-book-SC-23` |
+| `US4-TC7-1` | Covered | `grade10-admin-vault-money-book-SC-22` |
+| `US5-TC1-1` | Covered | `grade10-admin-vault-money-book-SC-16` |
+| `US5-TC2-1` | Covered | `grade10-admin-vault-money-book-SC-17` |
+| `US5-TC3-1`, `US5-TC4-1` | Covered | `grade10-admin-vault-money-book-SC-28`, `grade10-admin-vault-money-book-SC-16` |
+| `US1-TC5-1`, `US3-TC4-1`, `US4-TC8-1` | Kept, no scenario owed | A failed read and a failed export are the panel's own status, not a rule; the design's Loading, Error, Export in flight and Export failed rows close on the panel's colocated test |
+| `US5-TC5-1` | Kept, routed | The notice's date and the day it gives to pay by are `grade10-admin-vault-money-book-SC-28`; that no further reminder follows a notice is `grade10-site/vault/collector-notifications`' rule, walked by its own suite |
+| `US5-TC6-1` | Kept, routed | The reminder ladder's words are `grade10-site/vault/collector-notifications`', as the design's Ladder row anchors them |
+| Raised — which grant opens the arrears view | Raised, answered | The vault read grant, with the list the figures sum: the durable requirement "The book sits behind the money grant, and one case's balance does not" and the Permissions table of the [Operator Console](/p/grade10-site/vault/operator-console#permissions) page. Landed as `Q29`, and `grade10-admin-vault-money-book-SC-31` now states the refusal |
+| Raised — whether any journey reads the position | Raised, answered | No screen in this change reads it, and the blind pass wrote no case for it, rightly. Landed as `Q30`: the position is out of this change's scope, the durable journey US-02 keeps its durable scenarios, and this first suite owes them cases — `US2-TC1-1` to `US2-TC5-1` |
+| Raised — what page the register and the arrears list page on | Raised, escalated | Neither the console's blocks spec nor this capability states a number. ❓ Product on the [Operator Console](/p/grade10-site/vault/operator-console) page, recommended 50; the landing is in the change's `decisions.md` |
+| `grade10-admin-vault-money-book-SC-08` | Case added | `US3-TC7-1` |
+| `grade10-admin-vault-money-book-SC-12` | Case added | `US3-TC6-1` |
+| `grade10-admin-vault-money-book-SC-19` | Case added | `US5-TC7-1` |
+| `grade10-admin-vault-money-book-SC-24` | Case added | `US4-TC9-1` |
+| The net out over the range as narrowed | Case added | The rule stands and no scenario reads it; `Q31` records the reading and `US4-TC10-1` walks it |
+| Uncovered anchors | None | Every journey carries cases, and the group anchor "The export" is walked by `US4-TC6-1` and "The arrears" by `US3-TC6-1` |
+
+### Manual
+
+No case here waits on a person: every one carries `**Testability:** automation`
+and is decided by a test.

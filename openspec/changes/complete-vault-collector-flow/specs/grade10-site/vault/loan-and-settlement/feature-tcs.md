@@ -792,6 +792,38 @@ gave them,
 * Forfeiture is refused by name, naming that no disbursed loan stands
 * The case stays `repaid`
 
+### grade10-site-vault-loan-and-settlement-US4-TC7-1: A brand that shortens its notice period does not move the date the borrower was given
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-04
+
+**Pre-conditions:**
+
+* The case is `active`, past its due date, with a forfeiture notice sent on
+  1 November naming 15 November as the date to pay by
+* The brand's notice period is shortened to 7 days after that notice was
+  sent
+* customer(the case's own collector) is on the case page
+
+**Steps:**
+
+1. Read the date to pay by on the final-notice card.
+
+**Expected Results:**
+
+* The card names 15 November, the date the notice itself named
+* No date recomputed from the brand's shortened period is shown
+
 ---
 
 ## grade10-site-vault-loan-and-settlement-US5: Borrower knows where to send the money
@@ -934,7 +966,7 @@ Runs once per row of **Test data**.
 
 | Environment | Outcome |
 | --- | --- |
-| Production | The act that would print the how-to-pay block is refused |
+| Production | The case page shows the counter line alone, naming no payee, FPS id, account or reference; the money email's send is refused by name |
 | Outside production | The block shows a marked bracketed placeholder |
 
 **Steps:**
@@ -944,8 +976,37 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The case page and the money email both show the row's outcome
+* The case page and the money email both meet the row's outcome
 * No money email is ever sent blank of the how-to-pay block
+
+### grade10-site-vault-loan-and-settlement-US5-TC5-1: A case with no live loan names no account and no reference
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Pre-conditions:**
+
+* The case is a storage case in the vault, with no loan advanced on it
+* customer(the case's own collector) is on the case page
+
+**Steps:**
+
+1. Read the case page from the custody card down.
+
+**Expected Results:**
+
+* No how-to-pay block shows
+* No account, FPS id or transfer reference is named anywhere on the page
 
 ---
 
@@ -1167,6 +1228,72 @@ after it, and the final notice with its date to pay by,
 * The card names the dates the reminders go: 7 and 1 days before the due
   date, then every 7 days overdue, until a notice would stop them
 
+### grade10-site-vault-loan-and-settlement-US6-TC8-1: A repayment taken back leaves the list, and the balances read as if it had never been recorded
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* The case is `active`, its payout of 10,000,000 (HKD) recorded 1
+  September, with two repayments of 1,000,000 (HKD) recorded against value
+  dates 11 September and 21 September
+* A correction by a second `vault:payout` holder has taken the 11 September
+  repayment back
+* customer(the case's own collector) is on the case page
+
+**Steps:**
+
+1. Scroll to the repayments section.
+
+**Expected Results:**
+
+* Only the 21 September repayment is listed
+* Its balance after reads what would have been owed had the 11 September
+  repayment never been recorded
+* No row names the correction itself
+
+### grade10-site-vault-loan-and-settlement-US6-TC9-1: Past the last reminder with no notice sent, the card names the last reminder and the day the notice falls due
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Pre-conditions:**
+
+* The case is `active`, past its due date, with every reminder of the
+  schedule already sent and no forfeiture notice standing
+* customer(the case's own collector) is on the case page
+
+**Steps:**
+
+1. Scroll to the reminders card.
+
+**Expected Results:**
+
+* The card names no further reminder date
+* The card names the last reminder sent with the day it went
+* The card names the day a notice falls due
+
 ---
 
 ## grade10-site-vault-loan-and-settlement-US7: Operator reads the rule before the act
@@ -1385,6 +1512,77 @@ Runs once per row of **Test data**.
   said nothing
 * The case stays `vaulted`
 
+### grade10-site-vault-loan-and-settlement-US7-TC7-1: A bound the offer fails is named unmet before the send, and the control stays
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-loan-and-settlement-US-07
+
+**Pre-conditions:**
+
+* The case is `under_valuation`, with a valuation whose loan-to-value cap
+  puts the principal at 4,000,000 (HKD)
+* admin(shop staff) opens the make-offer dialog for the case
+
+**Steps:**
+
+1. Enter a principal of 5,000,000 (HKD), without sending.
+
+**Expected Results:**
+
+* The dialog names the loan-to-value cap as the bound that is unmet, and
+  what it requires
+* Make the offer is still there to press
+
 ---
+
+## Reconciliation
+
+**Run** — the blind pass read this capability's `## Purpose` and `## Feature
+set`, its `user-journeys.md`, the change's `decisions.md` with its `## Raised`
+table, `ui-design.md` with the state dispositions stripped, the PRD sections
+the proposal links, and this file for id continuity. It was denied every
+`## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and
+`tech-design.md`. Nothing verifies that list: it is the run's word.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| `US1-TC1-1` to `US1-TC7-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-01` to `grade10-site-vault-loan-and-settlement-SC-04`; the required bank reference, an advance already standing and an item not yet in custody are refusals the advance requirement lists and no scenario draws, so nothing was folded |
+| `US2-TC1-1` to `US2-TC9-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-05`, `grade10-site-vault-loan-and-settlement-SC-08`, `grade10-site-vault-loan-and-settlement-SC-09`, `grade10-site-vault-loan-and-settlement-SC-12`, `grade10-site-vault-loan-and-settlement-SC-13`, `grade10-site-vault-loan-and-settlement-SC-14`, `grade10-site-vault-loan-and-settlement-SC-15`, `grade10-site-vault-loan-and-settlement-SC-23`; the value-date bounds `US2-TC7-1` walks are the repayment requirement's own list |
+| `US2-TC2-1` and `US2-TC3-1`, "who did not record the payout" | No rule claimed | A pre-condition, not an assertion: the two-person split guards the payout alone, and a repayment's recorder is unconstrained. Raised in `decisions.md`, landed on `Q13` |
+| `US4-TC1-1` to `US4-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-19` to `grade10-site-vault-loan-and-settlement-SC-22` and the forfeiture requirement's refusals |
+| `grade10-site-vault-loan-and-settlement-SC-33` | Scenario no case reached | Case added: `US4-TC7-1`, the borrower's page holding the date the notice named after the brand shortens its period |
+| `US5-TC1-1`, `US5-TC2-1`, `US5-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-35` and `grade10-site-vault-loan-and-settlement-SC-36` |
+| `US5-TC4-1`, the production row | Answered, case amended | What a production borrower reads while Finance's values are unset was undecided — the design carried it as ❓. Answered as the counter line alone, with no account fields and no money message sent, and folded as `grade10-site-vault-loan-and-settlement-SC-47`; the row now reads that way. Raised in `decisions.md`, landed as a ❓ Product line on the loan and money page |
+| `grade10-site-vault-loan-and-settlement-SC-37` | Scenario no case reached | Case added: `US5-TC5-1`, a storage case naming no account |
+| `US6-TC1-1`, `US6-TC2-1`, `US6-TC3-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-27` and `grade10-site-vault-loan-and-settlement-SC-28`; the value-date order `US6-TC3-1` walks is the requirement's own **Order** rule, and the allocation and never-restarts lines beside a repayment are the design's copy, carrying no rule of their own |
+| `US6-TC4-1` to `US6-TC7-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-30`, `grade10-site-vault-loan-and-settlement-SC-31`, `grade10-site-vault-loan-and-settlement-SC-32`, `grade10-site-vault-loan-and-settlement-SC-34`; the rungs of the ladder `US6-TC7-1` names are `grade10-site/vault/collector-notifications`'s to set |
+| `grade10-site-vault-loan-and-settlement-SC-29` | Scenario no case reached | Case added: `US6-TC8-1`, the list and the balances after a repayment is taken back |
+| Raised: what stands between the last reminder and a notice | Answered, folded | The card names the last reminder sent and the day a notice falls due — the requirement's **The last rung** rule and `grade10-site-vault-loan-and-settlement-SC-48`; case added: `US6-TC9-1`. Raised in `decisions.md`, landed on `Q6` |
+| Raised: the Corrections bullet no journey here walks | Traced, nothing moved | Taking a record back is the console's act and is walked by `grade10-admin/vault/money-book` US-04; this suite keeps only what the borrower reads afterwards, `US6-TC8-1`. Raised in `decisions.md`, landed on `Q26` |
+| `US7-TC1-1` to `US7-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-40`, `grade10-site-vault-loan-and-settlement-SC-42` to `grade10-site-vault-loan-and-settlement-SC-46`; the shop and locker fields `US7-TC3-1` names are `grade10-admin/vault/operator-queue`'s |
+| `grade10-site-vault-loan-and-settlement-SC-41` | Scenario no case reached | Case added: `US7-TC7-1`, a set bound the offer fails |
+
+Nothing was dropped as a misreading, and no case is blocked.
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| `US4-TC2-1` | A person reads the notice the borrower was sent; the walk decides the cure date and the line on the page, not the letter in an inbox |
+| `US5-TC2-1` | A person opens each of the eight letters; the walk decides that the kind sends and carries the block |
+| `US6-TC5-1` | A person reads the notice card beside the letter, to see the two name one date |
+| `US7-TC1-1` | A person reads the dialog before pressing; the walk decides the figures, not that an operator can find them |
+| `US7-TC3-1` | The three preconditions are read as `Check`s on screen; the walk decides which is met |
+| `US7-TC4-1` | The two people, the amount and the dates are read before the send; the walk decides what the recording fixes |
 
 ## Settled

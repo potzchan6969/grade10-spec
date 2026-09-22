@@ -666,6 +666,176 @@ something else.
 
 * `<collector B>` cannot read or answer `<case_1>`'s offer.
 
+### grade10-site-vault-valuation-and-offer-US2-TC7-1: The offer reads with its terms, its valuation and the day to answer by
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* The collector is signed in and viewing <grade10 vault case page url> for
+  their own case carrying `<offer_1>` against `<valuation_1>`.
+
+**Steps:**
+
+1. Read the offer on the case page.
+
+**Expected Results:**
+
+* The page names the principal of 1,000,000 minor units (HKD 10,000.00),
+  the 30-day term, the interest for the whole term, the total to repay,
+  what a late day costs and the day to answer by.
+* The page names `<valuation_1>` as what the offer was judged against.
+* Accept this offer and Decline this offer sit on `<offer_1>`, which says
+  that accepting it books no visit.
+
+### grade10-site-vault-valuation-and-offer-US2-TC8-1: Going back from a confirmation leaves the offer live
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* The collector is signed in and viewing <grade10 vault case page url> for
+  their own case carrying `<offer_1>`.
+
+**Test data:**
+
+| Pressed | Confirmation |
+| --- | --- |
+| Accept this offer | Yes, accept |
+| Decline this offer | Yes, decline |
+
+**Steps:**
+
+1. Press the row's button.
+2. Press Go back.
+
+**Expected Results:**
+
+* The confirmation closes and the row's answer is not sent.
+* `<offer_1>` is still live, with Accept this offer and Decline this offer
+  on it.
+
+### grade10-site-vault-valuation-and-offer-US2-TC9-1: A confirmed answer is sent once and the case is read again
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* The collector is signed in and viewing <grade10 vault case page url> for
+  their own case carrying `<offer_1>`.
+
+**Steps:**
+
+1. Click Accept this offer.
+2. Confirm Yes, accept.
+3. Press Yes, accept again before the answer lands.
+
+**Expected Results:**
+
+* One acceptance is recorded against `<offer_1>`.
+* The confirmation stays until the answer lands.
+* The case is read again afterwards and the page reads the case as
+  `accepted`.
+
+### grade10-site-vault-valuation-and-offer-US2-TC10-1: The day to answer by leaves the case list with the offer
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* The collector is signed in on <grade10 vault case list url>.
+* Their case carries `<offer_1>`, whose open-until date is stated.
+
+**Steps:**
+
+1. Read the case list before that date.
+2. Read the case list again after `<offer_1>` has lapsed.
+
+**Expected Results:**
+
+* Step 1 names the day to answer by on the case's card.
+* Step 2 names no day to answer by on that card.
+
+### grade10-site-vault-valuation-and-offer-US2-TC11-1: An offer that ran out under the reader is refused in the confirmation
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-valuation-and-offer-US-02
+
+**Pre-conditions:**
+
+* The collector is signed in and viewing <grade10 vault case page url> for
+  their own case carrying `<offer_1>`, whose open-until date is minutes
+  away.
+
+**Steps:**
+
+1. Click Accept this offer.
+2. Let `<offer_1>`'s expiry pass with the confirmation open.
+3. Confirm Yes, accept.
+
+**Expected Results:**
+
+* The confirmation stays open, naming that the offer ran out.
+* The case is read again and the page reads `<offer_1>` as ran out, with no
+  Accept and no Decline.
+* The case stays `offer_made`.
+
 ---
 
 ## grade10-site-vault-valuation-and-offer-US5: Collector reads and answers an offer that replaced the last
@@ -799,3 +969,59 @@ withdrawn.
 * The page names only the second offer as the one `<offer_1>` was
   superseded by, and that second offer as closed in turn.
 * Accept and Decline sit on the third offer, the only one that stands.
+
+## Reconciliation
+
+**Run:** 2026-09-22 · the blind pass read this capability's `## Purpose` and
+`## Feature set`, its `user-journeys.md`, the change's `proposal.md` and
+`decisions.md`, its `ui-design.md` with the state dispositions stripped, the
+PRD pages the proposal links, and this suite for id continuity. It was denied
+every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/`
+and `tech-design.md`. The scenario pass issued
+`grade10-site-vault-valuation-and-offer-SC-21` to
+`grade10-site-vault-valuation-and-offer-SC-29`; the two readings were joined on
+the anchors after both landed.
+
+| Case or scenario | Disposition | Where it went / why |
+| --- | --- | --- |
+| US1-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-07` makes the offer inside every bound; the dialog's derived figures are `grade10-site-vault-loan-and-settlement-SC-40` |
+| US1-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-13` |
+| US1-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-19` |
+| US1-TC4-1 | Covered | `grade10-site-vault-loan-and-settlement-SC-45` — a bound nobody set passes outside production |
+| US1-TC5-1 | Covered | the loan-to-value row of the policy table in `Every offer is judged against the brand's lending policy`; no scenario walks the cap, and this change writes no operator requirement to fold one into |
+| US1-TC6-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-04` |
+| US1-TC7-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-06` above the band, `grade10-site-vault-valuation-and-offer-SC-07` at it |
+| US1-TC8-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-09` past the window, `grade10-site-vault-valuation-and-offer-SC-05` an expiry already gone |
+| US1-TC9-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-08` |
+| US1-TC10-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-10`; the dialog naming the bound before the act is `grade10-site-vault-loan-and-settlement-SC-45` |
+| US1-TC11-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-11` |
+| US1-TC12-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-02` |
+| US1-TC13-1 | Covered elsewhere | `grade10-admin-vault-operator-queue-SC-12` — making an offer sits behind the vault approve grant |
+| US2-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-22` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-16` for the case accepted |
+| US2-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-23` for the confirmation, `grade10-site-vault-valuation-and-offer-SC-14` for the request staying open |
+| US2-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-16` and `grade10-site-vault-valuation-and-offer-SC-17` — the expiry is judged when the acceptance lands; the shop's clock is how the page reads that instant, not a second rule |
+| US2-TC4-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-17`, with the closed offer taking no answer under `Only the offer that stands takes an answer` |
+| US2-TC5-1 | Raised, answered | Q33 — acceptance is final whichever side gave it: `grade10-site-vault-valuation-and-offer-SC-16` stands and `grade10-site-vault-valuation-and-offer-SC-29` refuses the collector's answer by name. What is left before signing is the case's own call-off, in `grade10-site/vault/case-lifecycle` |
+| US2-TC6-1 | Covered | the owner-only acceptance in `The collector or the counter accepts, and an expired offer cannot be accepted`, walked by `grade10-site-vault-valuation-and-offer-SC-16`; a case that is not the reader's is refused as its photographs are, `grade10-site-vault-case-intake-SC-12` |
+| US2-TC7-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-21` was reached by no case: the offer's terms, its valuation and the books-no-visit line |
+| US2-TC8-1 | Case added | the Go back branch of `grade10-site-vault-valuation-and-offer-SC-22` and `grade10-site-vault-valuation-and-offer-SC-23` was reached by no case |
+| US2-TC9-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-24` was reached by no case |
+| US2-TC10-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-25` was reached by no case |
+| US2-TC11-1 | Case added | `grade10-site-vault-valuation-and-offer-SC-28` was reached by no case; US2-TC4-1 reads an offer that had already lapsed, not one that ran out under the reader |
+| US5-TC1-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-26` |
+| US5-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-26` and `grade10-site-vault-valuation-and-offer-SC-22` |
+| US5-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-27` |
+| US5-TC4-1 | Covered | the closed-offer rule in `Only the offer that stands takes an answer`, walked by `grade10-site-vault-valuation-and-offer-SC-26` |
+| An offer made before any valuation is recorded | Raised, answered | Q32 — the durable spec already refuses it by name, `grade10-site-vault-valuation-and-offer-SC-03`; no scenario was written |
+| An acceptance given at the counter, re-answered before signing | Raised, answered | Q33 — it is not re-answered; see US2-TC5-1 |
+| Folded into `spec.md` | none | the blind pass carried no behaviour the scenarios and the durable spec leave unstated |
+| Dropped as a misreading | none | — |
+| Uncovered anchors | none | every scenario from `grade10-site-vault-valuation-and-offer-SC-21` to `grade10-site-vault-valuation-and-offer-SC-29` is walked by a case |
+| Contradicted readings | none | — |
+
+### Manual
+
+| Manual | Why |
+| --- | --- |
+| US1-TC10-1 | The refusal outside production is proved by US1-TC4-1. What a person walks is the brand's production configuration before the shop lends: no run is made against production |
+| US1-TC11-1 | Same reading, for the lender's registered name |

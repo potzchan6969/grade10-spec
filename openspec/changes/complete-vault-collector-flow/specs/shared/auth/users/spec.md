@@ -29,6 +29,8 @@ Auction bidder bans belong to auction, not here.
     cancelling is what they would sign in for
   - An operator's filing bans: filed from the directory, and a filing over a
     self-filed request becomes the operator's with the ban applied
+  - No filing over an admin: no caller files the erasure of an account that
+    holds `admin`, as no caller bans one
   - Asked twice is asked once: a second filing answers the open request, a
     cancel with nothing open changes nothing, and a cancel lifts only a ban the
     filing applied
@@ -82,20 +84,26 @@ it SHALL carry its own day an erasure may run.
 ### Requirement: The account holder files their own erasure request and cancels it inside the window
 
 A person asks to be forgotten from their own account, without an operator
-filing it for them. They walk it in this order:
+filing it for them.
 
-1. The person signs in and asks to be forgotten from a product's own data
-   page. The request SHALL be filed for the account that asked and for no
-   other.
-2. The request is filed, and the system SHALL answer with the day it was filed
-   and the day an erasure may run.
-3. A request the account holder filed SHALL apply no ban. That person SHALL
-   still sign in, SHALL still be treated as signed in, and SHALL keep the
-   sessions they hold, so that they can reach the page they would cancel from.
-4. Inside the window the person SHALL be able to cancel their own request. The
-   cancel SHALL close it as cancelled and SHALL leave them free to ask again.
-5. Once the day an erasure may run has passed, the request SHALL NOT be
-   cancelled, and it stands until every product has erased what it holds.
+**Filing** - the person signs in and asks to be forgotten from a product's own
+data page. The request SHALL be filed for the account that asked and for no
+other.
+
+**The answer** - the request is filed, and the system SHALL answer with the day
+it was filed and the day an erasure may run.
+
+**No ban** - a request the account holder filed SHALL apply no ban. That person
+SHALL still sign in, SHALL still be treated as signed in, and SHALL keep the
+sessions they hold, so that they can reach the page they would cancel from.
+
+**Cancelling inside the window** - inside the window the person SHALL be able to
+cancel their own request. The cancel SHALL close it as cancelled and SHALL leave
+them free to ask again.
+
+**After the window** - once the day an erasure may run has passed, the request
+SHALL NOT be cancelled, and it stands until every product has erased what it
+holds.
 
 #### Scenario: shared-auth-users-SC-30 - The account holder files their own request
 **Serves:** shared-auth-users-US-05 - somebody asking to be forgotten from their own account rather than at an operator's desk
@@ -150,6 +158,15 @@ holder's own request is already open SHALL make that one request the
 operator's and SHALL apply the ban. No second request SHALL open, and the day
 an erasure may run SHALL stay the day the account holder's filing set.
 
+**No filing over an admin** - a caller SHALL NOT file the erasure of an account
+that holds `admin`, peers included, as no caller bans one. The filing SHALL be
+refused and no request SHALL open.
+
+**What the account holder sees after a take-over** - once an operator's filing
+has taken a request over, that person's own data page SHALL read the request as
+one the shop filed and SHALL offer them no cancel. Lifting the ban SHALL NOT
+return that cancel.
+
 #### Scenario: shared-auth-users-SC-34 - An operator's filing shuts the account
 **Serves:** shared-auth-users-US-02 - an operator taking a person who must leave off the brand from the directory
 
@@ -175,6 +192,25 @@ an erasure may run SHALL stay the day the account holder's filing set.
 - **THEN** the one open request stands as the operator's
 - **AND** that person cannot sign in
 - **AND** the day an erasure may run is unchanged
+
+#### Scenario: shared-auth-users-SC-40 - The take-over leaves the person no cancel of their own
+**Serves:** shared-auth-users-US-05 - somebody who asked for themselves and comes back to the page once the shop has taken the ask over
+
+- **GIVEN** a person whose own request an operator's filing took over
+- **AND** the ban that filing applied has since been lifted
+- **WHEN** they open their own data page
+- **THEN** the request reads as one the shop filed
+- **AND** they are offered no cancel
+
+#### Scenario: shared-auth-users-SC-41 - An erasure over an admin is refused
+**Serves:** shared-auth-users-US-02 - an operator reaching for the erasure of an account that no ban may touch
+
+- **GIVEN** an operator who holds `user:delete`
+- **AND** an account that holds `admin`
+- **WHEN** they file that account's erasure
+- **THEN** the system refuses the filing
+- **AND** no request is open for that person
+- **AND** that person can still sign in
 
 ### Requirement: A filing or a cancel sent again answers the request already there
 

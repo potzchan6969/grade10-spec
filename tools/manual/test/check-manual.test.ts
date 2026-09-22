@@ -600,6 +600,44 @@ describe("the rest of what the fold refuses", () => {
     ]);
   });
 
+  it("takes a MODIFIED naming a same-file RENAMED's new header", async () => {
+    const root = changing(
+      "renaming-modified",
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "",
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does the thing", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([]);
+  });
+
+  it("fails a MODIFIED naming the OLD header of a same-file RENAMED", async () => {
+    const root = changing(
+      "renaming-old",
+      [
+        "## RENAMED Requirements",
+        "",
+        "- FROM: `### Requirement: Alpha does things`",
+        "- TO: `### Requirement: Alpha does the thing`",
+        "",
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+    );
+    expect(lines(await runChecks(root, NO_GIT), "delta")).toEqual([
+      "openspec/changes/renaming-old/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things`, but this change also renames it to `Alpha does the thing` — the fold requires MODIFIED to name the new header",
+    ]);
+  });
+
   it("names the scenarios a MODIFIED block would drop, renamed ones included", async () => {
     const root = changing(
       "dropping",

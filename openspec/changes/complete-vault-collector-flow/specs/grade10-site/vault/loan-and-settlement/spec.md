@@ -131,6 +131,9 @@ them.
 - **A notice ends them** — once a forfeiture notice stands on the case, no
   reminder date SHALL be named and the case SHALL say no further reminder
   will be sent.
+- **The last rung** — once no reminder is left ahead of the borrower and no
+  notice stands, the case SHALL name the last reminder sent with its day and
+  the day a notice falls due.
 - **A reminder costs nothing** — the case SHALL say a reminder adds nothing
   to what is owed.
 
@@ -150,6 +153,15 @@ them.
 - **WHEN** the borrower reads the case
 - **THEN** no reminder date is named and the case says no further reminder
   will be sent
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-48 - The last reminder names the day the notice falls due
+**Serves:** grade10-site-vault-loan-and-settlement-US-06 - the borrower past the last reminder reads what comes next
+
+- **GIVEN** a past-due loan whose last reminder has been sent, with no notice
+  standing
+- **WHEN** the borrower reads the case
+- **THEN** no further reminder date is named, the last reminder sent is named
+  with its day, and the case names the day a notice falls due
 
 ### Requirement: The forfeiture notice reads on the borrower's case
 
@@ -212,7 +224,9 @@ in every message about money.
   marked placeholder in place of the unset value. In production an unset FPS
   id or bank account SHALL NOT be printed: the block SHALL NOT be shown, and
   any act that would send a message carrying it SHALL be refused by name,
-  naming the unset value, before anything is written.
+  naming the unset value, before anything is written. In its place the live
+  loan SHALL show the counter line alone — pay at the counter, transfer
+  details to follow by email.
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-35 - The block names the account and the case reference
 **Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower pays at their own bank without asking the shop where
@@ -253,6 +267,15 @@ in every message about money.
 - **WHEN** a treasurer records a repayment on a live loan
 - **THEN** it is refused by name, the refusal names the unset value, and no
   repayment is written
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-47 - Production shows the counter line in place of the block
+**Serves:** grade10-site-vault-loan-and-settlement-US-05 - the borrower on a brand whose account is not set yet is still told where to pay
+
+- **GIVEN** a production brand whose FPS id and bank account are unset
+- **WHEN** the borrower reads a live loan
+- **THEN** no payee, no FPS id, no bank account and no transfer reference is
+  shown, the case shows the counter line alone — pay at the counter, transfer
+  details to follow by email — and no message naming an amount is sent
 
 ### Requirement: The console states the rule before the operator acts
 

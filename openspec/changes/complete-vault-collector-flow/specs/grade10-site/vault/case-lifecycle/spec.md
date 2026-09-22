@@ -69,11 +69,14 @@ Two moves belong to the collector, and both run from the case they are about.
 
 | Move | Offered while | The confirmation names | What confirming does |
 | --- | --- | --- | --- |
-| Call the request off | the item is not yet in the vault — `draft`, `submitted`, `under_valuation`, `offer_made`, `accepted` or `signing` | the live offer it closes and the visit it cancels | ends the case as `cancelled` |
+| Call the request off | the item is not yet in the vault — `draft`, `submitted`, `under_valuation`, `offer_made`, `accepted` or `signing` | whichever stands open — the live offer it closes, the visit it cancels, or both | ends the case as `cancelled` |
 | Ask for the item back | the item is held and nothing stands against it — a case in the vault owing nothing, or a settled loan — and no ask stands already | that the item leaves on a pickup visit against a signed release | records the ask against the case |
 
 **Confirmation first** — each move SHALL ask for confirmation before it runs,
 and the case SHALL be unchanged while that confirmation stands.
+
+**Only what stands open** — a confirmation SHALL name the live offer and the
+booked visit the move closes, and SHALL name neither where neither stands.
 
 **One ask** — an ask for the item back SHALL be recorded once, and the move
 SHALL NOT be offered again while that ask stands.
@@ -100,6 +103,14 @@ the next read.
 - **THEN** the case is `cancelled`, the offer is closed and the visit is cancelled
 - **AND** the case reads as an ended case naming who called it off
 
+#### Scenario: grade10-site-vault-case-lifecycle-SC-37 - A confirmation names only what stands open
+**Serves:** grade10-site-vault-case-lifecycle-US-01 - the collector is not told the request closes something it never held
+
+- **GIVEN** a submitted request with no offer made and no visit booked
+- **WHEN** its owner asks to call the request off
+- **THEN** the confirmation names the request alone
+- **AND** it names no offer and no visit
+
 #### Scenario: grade10-site-vault-case-lifecycle-SC-18 - Asking for the item back is recorded once
 **Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector asks for their item and reads that the ask stands
 
@@ -125,11 +136,15 @@ collector would use.
 | --- | --- |
 | `declined` | the reason staff gave, verbatim; that the item stayed with the collector and any visit was cancelled |
 | `cancelled` | who called it off — the collector, staff, or a clock — and the day; the offer that closed and the visit cancelled with it |
-| `expired` | which clock ran out; that nothing was signed and the item never left |
+| `expired` | one wording whichever clock ran out, with the clock on the timeline; that nothing was signed and the item never left |
 | `forfeited` | the figure the item settled, the day the notice was written and the date it gave to pay by |
 
 **One ending per case** — an ended case SHALL name the ending it took and the
 day it closed.
+
+**One expired wording** — an expired case SHALL read the same wording whichever
+clock ran out, and the clock that ran out SHALL be named on the case's
+timeline.
 
 **The paper stays** — a case that signed a custody or loan agreement SHALL keep
 those documents readable after it ends.
@@ -153,13 +168,13 @@ offer starting another request instead.
 - **THEN** it names that staff called it off and the day
 - **AND** it names the offer that closed and the visit cancelled with it
 
-#### Scenario: grade10-site-vault-case-lifecycle-SC-22 - An expired case names the clock that ran out
+#### Scenario: grade10-site-vault-case-lifecycle-SC-22 - An expired case reads one wording and names its clock on the timeline
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector who stopped answering reads what ended the case
 
-- **GIVEN** a case expired by an abandonment clock
-- **WHEN** its owner reads it
-- **THEN** it names which clock ran out
-- **AND** it says nothing was signed and the item never left
+- **GIVEN** two expired cases, one that never booked a visit and one whose booked visit was missed
+- **WHEN** their owners read them
+- **THEN** both read the same expired wording, and each timeline names the clock that ran out
+- **AND** each says nothing was signed and the item never left
 
 #### Scenario: grade10-site-vault-case-lifecycle-SC-23 - A forfeited case names the figure and the notice
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the borrower reads what the item settled and the notice behind it
@@ -192,6 +207,10 @@ that ran out.
 
 **A missed visit is the visit's ending** — a case reading a missed visit SHALL
 stand where it stood and SHALL offer another visit.
+
+**Two facts at once** — where a case meets more than one fact, the fact of the
+most recent event SHALL be the one read, and the other SHALL stay on the
+case's timeline.
 
 **Nothing ahead** — a case waiting on nobody but its own clock — terms agreed
 or a packet out, with no visit ahead of it — SHALL ask for a visit and name the
@@ -237,6 +256,14 @@ or a packet out, with no visit ahead of it — SHALL ask for a visit and name th
 - **THEN** it asks them to book a visit
 - **AND** it names the 30-day clock that would call the case off
 
+#### Scenario: grade10-site-vault-case-lifecycle-SC-40 - A case meeting two facts reads the later one
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector is given one thing to do next, not two
+
+- **GIVEN** a case whose offer ran out on Monday and whose booked visit was closed as missed on Wednesday
+- **WHEN** its owner reads it
+- **THEN** it reads the missed visit, the later of the two, and offers another visit
+- **AND** the offer that ran out stays on the case's timeline
+
 #### Scenario: grade10-site-vault-case-lifecycle-SC-29 - Nothing derived is written down
 **Serves:** Derived at the read - a fact nobody stored can never disagree with the case it came from
 
@@ -263,7 +290,7 @@ worked out from the status at the read.
 | Whose the item is | Read when | What it carries |
 | --- | --- | --- |
 | Waiting on you | a live offer stands, a visit was closed as missed, or an ask for the item back stands | nothing |
-| With us | `submitted`, `under_valuation`, an offer that ran out or was declined, `signing`, or `vaulted` on the storage lane | the day the item has been held since, once it is in the vault |
+| With us | `submitted`, `under_valuation`, an offer that ran out or was declined, `signing`, or `vaulted` on either lane | the day the item has been held since, once it is in the vault |
 | Visit | terms agreed with a visit ahead of it | the day of the visit |
 | Due | a loan running before its due date | the due date |
 | Past due | a loan running after its due date | how many days past due |
@@ -327,6 +354,13 @@ stored on the case.
 - **WHEN** its owner reads the case list and then the case
 - **THEN** both read that the item is with us, naming the day it has been held since
 
+#### Scenario: grade10-site-vault-case-lifecycle-SC-38 - A vaulted case reads With us on either lane
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector whose item is in the vault reads one answer, whichever lane they walk
+
+- **GIVEN** a financed case whose item is in the vault with no advance paid out yet
+- **WHEN** its owner reads it
+- **THEN** it reads that the item is with us, naming the day it has been held since
+
 #### Scenario: grade10-site-vault-case-lifecycle-SC-35 - A released case reads collected
 **Serves:** grade10-site-vault-case-lifecycle-US-04 - the collector who took the item home reads that the case is done
 
@@ -340,3 +374,21 @@ stored on the case.
 - **GIVEN** a case that expired on an abandonment clock
 - **WHEN** its owner reads it
 - **THEN** it reads that the case is closed, naming the day
+
+### Requirement: A case page answers only to the collector whose case it is
+
+A case belongs to one collector, and the page tells nobody else that it exists.
+
+**One page for both** — an id that answers to no case and a case belonging to
+another collector SHALL both read the same not-found page.
+
+**No distinction** — the not-found page SHALL carry nothing that tells the two
+apart.
+
+#### Scenario: grade10-site-vault-case-lifecycle-SC-39 - Another collector's case reads as not found
+**Serves:** grade10-site-vault-case-lifecycle-US-05 - the collector who opens a case that is not theirs learns nothing about it
+
+- **GIVEN** a signed-in collector and a case belonging to somebody else
+- **WHEN** they open it by its id
+- **THEN** they read the same not-found page an id nobody was issued reads
+- **AND** nothing on it says which of the two they met
