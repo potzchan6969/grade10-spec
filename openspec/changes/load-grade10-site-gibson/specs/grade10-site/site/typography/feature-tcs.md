@@ -181,6 +181,13 @@ to, not a generic fallback.
 
 ## Settled
 
+- Monospace text is unaffected by the family switch — already ruled out by
+  `decisions.md`'s non-goals; not this capability's behaviour to state.
+- The page's content and layout are otherwise unchanged — general
+  regression hygiene, not behaviour specific to this capability's contract.
+- Utility surfaces (sign-in, not-found) also load the kit — already covered
+  without exception by the WHEN clause on every surface the site answers.
+
 ## Reconciliation
 
 **Run:** The blind pass read this capability's `## Purpose` and
