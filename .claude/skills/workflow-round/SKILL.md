@@ -150,8 +150,8 @@ Apply what stands. Then write the summary.
 
 ## Step 5: The Thread Summary
 
-One reply, one screen, in this order, owing the hand what [Round Summary and
-Landing](../../../docs/governance/round-summary.md) says:
+One reply, one screen, in this order ([Round Summary and
+Landing](../../../docs/governance/round-summary.md)):
 
 1. **The draft** — what the artifact now says, in three or four lines
 2. **Who read it** — the perspectives dispatched, by name
@@ -162,7 +162,7 @@ Landing](../../../docs/governance/round-summary.md) says:
    round decided, on one line, so a hand who wants to can look
 5. **What is next** — the one word or answer you are waiting for, from whom
 
-Write it to `.round/thread.txt` in the workspace and post it with
+Write it to `.round/thread.txt` and post it with
 `node scripts/openspec/relay-post.mjs --message-file .round/thread.txt`: it
 goes through the relay when a wake is on, and is printed when there is none.
 Never call the chat platform yourself, and never hold or read a token.
