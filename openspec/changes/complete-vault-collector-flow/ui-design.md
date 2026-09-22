@@ -352,6 +352,7 @@ beside them.
 | Ask refused | the button withheld with the reason in words: an item in the vault or a loan running | `grade10-site-vault-retention-and-erasure-US-01` |
 | Ask confirmation | the confirm names the 7-day window and that it can be cancelled inside it | `shared-auth-users-US-05` |
 | Ask filed | filed on the date, erased from the date; Cancel the request; the still-signed-in line | `shared-auth-users-US-05` |
+| Ask filed, held | filed on the date; the hold in words beside it — an item in the vault or a loan running — and that erasure waits until it lifts; Cancel the request | `grade10-site-vault-retention-and-erasure-US-01` |
 | Ask cancelled | back to Ask available | `shared-auth-users-US-05` |
 | Window passed | filed on the date, the window passed; no cancel; each product erases | `shared-auth-users-US-05` |
 | Error | the message; the cards stay | `grade10-site-vault-retention-and-erasure-US-05` |
