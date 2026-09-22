@@ -2,11 +2,12 @@
 
 The user-approved points integration below supersedes the read-only points and
 neutral estimated-total choices in the original delivery notes that follow.
-Those notes describe completed Groups 1–4; Group 5 owns this increment.
+Those notes describe the original Groups 1–4. Group 7 supplies the shared
+pending guard before Group 5 integrates points; Group 6 follows delivery.
 
-- **State** — `CartDrawerHost` consumes `useCartTender`; replace
-  `NO_TENDER_CHOICE` with the persisted member choice when calling
-  `useBasketQuote`. Keep promo callbacks absent and preserve the coupon field.
+- **State** — retain `CartDrawerHost`'s existing `useCartTender` choice passed
+  to `useBasketQuote`. Preserve existing promo callbacks and the coupon field;
+  this points increment neither adds nor removes promo editing.
 - **Acceptance** — parse finite positive whole numbers (Remove alone writes zero), ask `useBasketQuote.read` for
   the proposed choice, persist the server-accepted points, then render the
   accepted quote. Use the returned amounts rather than local arithmetic.
@@ -19,6 +20,13 @@ Those notes describe completed Groups 1–4; Group 5 owns this increment.
   Closing cannot cancel a write already sent; scope its cache result to its
   member and re-read on reopen. Invalidate quotes after cart edits and suppress
   Checkout until the current basket is revalidated.
+- **Shared guard** — add optional `tenderPending` (default false) to existing
+  `CartDrawerProps` and `CartDrawerFooterProps`. Forward it through the compound;
+  disable existing points/promo inputs and action callbacks, including the open
+  promo sheet and Checkout. Preserve accepted values and callback guards.
+  The host keeps this guard true across quoting and persistence for a tender
+  change, including the existing promo flow, so points and promo actions cannot
+  overlap. Existing review and checkout guards still apply after it clears.
 - **UI** — reuse existing shared points callbacks, disclosure, input and applied
   state. Pending tender state disables tender actions and Checkout. Preserve
   last accepted same-basket totals on failures; once no operation is pending, Checkout can use

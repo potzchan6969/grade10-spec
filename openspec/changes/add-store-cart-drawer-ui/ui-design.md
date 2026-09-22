@@ -29,7 +29,7 @@ Storybook composition under test once the host lands: Store page assemblies in
 - Grade10 `store.cartDrawer` catalog overlay — localized copy.
 - Shared `chrome.cartLabel` — navigation label.
 
-No new primitive, variant, or token. This host retains read-only promo editing and wires existing points actions
+No new primitive, variant, or token. Optional `tenderPending` extends the existing props. This increment preserves existing promo editing and wires existing points actions
 to the accepted basket quote.
 
 **Depends on:** `cart-drawer-empty-state` for the shared empty-state export
@@ -47,7 +47,7 @@ States combine this change's Grade10 scenarios with durable
 | Signed-in member cart; signed-out access is gated before the drawer | `grade10-site-store-cart-drawer-SC-04`; `grade10-site-site-page-shell-SC-21`–`SC-24` |
 | Every open starts a fresh read | `grade10-site-store-cart-drawer-SC-05` |
 | Pending / failed review | `grade10-site-store-cart-drawer-SC-06`–`grade10-site-store-cart-drawer-SC-08`; loading bones `shared-ui-store-cart-SC-08` |
-| Reviewed summary; quoted total; read-only promo and interactive points | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
+| Reviewed summary; quoted total; existing promo behavior and interactive points | `grade10-site-store-cart-drawer-SC-09`, `grade10-site-store-cart-drawer-SC-10`, `grade10-site-store-cart-drawer-SC-16`–`grade10-site-store-cart-drawer-SC-19` |
 | Empty drawer (shared EmptyState) | `shared-ui-store-cart-SC-04` |
 | Unavailable cleanup | `grade10-site-store-cart-drawer-SC-12`; `shared-ui-store-cart-SC-10`, `shared-ui-store-cart-SC-11` |
 | Quantity / remove | `grade10-site-store-cart-drawer-SC-11` |
@@ -74,3 +74,15 @@ No new token, primitive or layout override is required.
 | Pending | Disabled tender actions and Checkout | `grade10-site-store-cart-drawer-SC-23` |
 | Failed | Localized error and last accepted same-basket summary | `grade10-site-store-cart-drawer-SC-24` |
 | Unavailable | No enabled points action until a usable quote answers | `grade10-site-store-cart-drawer-SC-26` |
+
+### Shared Pending Tender
+
+The existing Default story remains the layout reference. `CartDrawer` and
+`CartDrawerFooter` gain only optional `tenderPending`; their pending stories
+exercise the existing controls with accepted values retained.
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Pending tender | Existing points/promo inputs, tender actions and Checkout disabled, accepted figures retained | `shared-ui-store-cart-SC-37` |
+| Resolved tender | Existing callback-gated availability restored | `shared-ui-store-cart-SC-38` |
+| Pending omitted | Existing appearance and interaction | `shared-ui-store-cart-SC-39` |

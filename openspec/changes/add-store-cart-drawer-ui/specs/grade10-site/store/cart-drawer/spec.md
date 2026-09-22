@@ -191,8 +191,9 @@ checkout creation.
 ### Requirement: A signed-in collector sees current tender facts and chooses points
 
 After a successful review for a signed-in collector, the drawer SHALL show held
-promo-code answers for the reviewed lines without enabling promo editing.
-It SHALL preserve any code already selected at checkout when changing points.
+promo-code answers for the reviewed lines. This points increment SHALL preserve
+existing promo editing; it SHALL neither add nor remove promo actions.
+It SHALL preserve any existing selected code when changing points.
 Points controls SHALL use the current member balance, conversion rate and
 server ceiling. Applying points SHALL use the combined basket quote and
 persist the accepted choice before presenting it as applied. The drawer SHALL
@@ -207,7 +208,7 @@ NOT debit points or create checkout.
 - **THEN** both current codes are shown
 - **AND** the applicable code is shown as usable without being selected
 - **AND** the inapplicable code shows the answer explaining why it cannot be used
-- **AND** no new code is applied from the held-code list
+- **AND** merely opening the held-code list does not apply a new code
 - **AND** an existing selected code is preserved in the combined quote
 
 #### Scenario: grade10-site-store-cart-drawer-SC-17 - Points offer the existing interactive design

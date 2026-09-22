@@ -28,9 +28,9 @@ the existing checkout without first leaving that surface.
   shipping, images, promo redemption, points, tax, and discounts neutral or
   absent where the current integration supplies no answer.
 - For a signed-in collector, read held promo-code eligibility and the basket's
-  points ceiling against the reviewed lines. Keep promo editing read-only;
+  points ceiling against the reviewed lines. Preserve existing promo editing;
   apply, maximise or remove points through the existing persisted tender and
-  combined basket quote, preserving any code already chosen at checkout.
+  combined basket quote, preserving any existing selected code.
 - Keep edits on the current cart, and send product and checkout actions
   through the site's existing addresses.
 - Add the drawer copy to the Grade10 `store` catalog overlay for English,
@@ -41,12 +41,12 @@ the existing checkout without first leaving that surface.
 
 ## Non-Goals
 
-- Changing `shared/ui/store-cart` behavior or rebuilding its components —
-  that is `cart-drawer-empty-state`.
+- Rebuilding `shared/ui/store-cart` components or changing their layout.
+  This increment only adds the optional pending tender guard.
 - Any backend implementation or contract change: no Worker, API procedure,
   provider read, database/schema, webhook, or checkout-creation
   work.
-- Editing promotion codes or calculating shipping, tax, or discounts locally.
+- Adding or removing promo-code editing, or calculating shipping, tax, or discounts locally.
   The existing combined basket quote owns tender amounts and totals.
 - Changing Figma annotations, components, or tokens.
 - Adding a dedicated `/cart` route or changing the existing checkout page.
@@ -65,6 +65,9 @@ the existing checkout without first leaving that surface.
   handoffs.
 
 ### Modified Capabilities
+
+- `shared/ui/store-cart` — optional consumer-owned pending tender state disables
+  existing controls without changing their layout or adding promo editing.
 
 - `grade10-site/site/page-shell` — carries Cart in the header: absent until
   the Store cart drawer answers, then global on every surface. Scenarios
@@ -96,12 +99,14 @@ without changing the journeys those destination capabilities own.
 
 The user-approved Storybook plan supersedes the read-only points scope in
 completed Group 4; Group 5 delivers only the new points integration. The
-shared `CartDrawer` export already supports these actions; no new primitive
-or public export is planned. Existing read-only callback guards stay intact.
+shared `CartDrawer` export already supports these actions; optional
+`tenderPending` on its existing props supplies the missing pending guard.
+No new primitive or component export is planned. Existing read-only callback guards stay intact.
 The application owner archives after deployment acceptance.
 
 ## References
 
+- [Shared Tender Actions](../../../docs/prds/products/shared/ui/store-cart.md#tender-actions)
 - [Cart Points](../../../docs/prds/products/grade10-site/store/cart.md#points)
 - [Cart Checkout](../../../docs/prds/products/grade10-site/store/cart.md#checkout)
 - [Storybook](https://storybook.grade10-stg.com/?path=/story/store-cart-cartdrawer--default)
