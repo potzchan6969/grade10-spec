@@ -37,6 +37,11 @@ their reconciliation is the run's own, by the hand that took them.
   why; two readers agreeing is not a verdict
 - **Nothing decided here** — a preference or a product decision is `asks`,
   whichever way you would have chosen; say which option you recommend
+- **A row already decides it** — before an `asks`, read the change's
+  `decisions.md`: a question a row already answers `stands` or `falls` on that
+  row, and is never a new held row. An `asks` cell names the rows it touches,
+  quoted, and the cost of the option you recommend in one clause, so the hand
+  it waits on can answer from the summary alone
 - **The fix, one per kind** — where several findings are one kind of problem,
   `stands` on the one that names the structure and `falls` on the symptoms,
   saying which finding carries it
