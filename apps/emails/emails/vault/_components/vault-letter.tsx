@@ -1,10 +1,16 @@
 import type { ReactNode } from "react";
 import { Heading, Section, Text } from "react-email";
 
-import { EmailFooter, type EmailFooterProps } from "@/emails/_components/email-footer";
+import {
+  EmailFooter,
+  type EmailFooterProps,
+} from "@/emails/_components/email-footer";
 import { Grade10EmailShell } from "@/emails/_components/grade10-email-shell";
 import { PrimaryCta } from "@/emails/_components/primary-cta";
-import { CaseLine, type CaseLineProps } from "@/emails/vault/_components/case-line";
+import {
+  CaseLine,
+  type CaseLineProps,
+} from "@/emails/vault/_components/case-line";
 
 export type Fact = {
   label: string;

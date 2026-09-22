@@ -43,11 +43,8 @@ export function EmailFooter({
       <Text className="m-0 text-sm leading-base text-fg-3">
         © {new Date().getFullYear()} {brandName}.
       </Text>
-      {lines.map((line, index) => (
-        <Text
-          className="m-0 mt-2 text-sm leading-base text-fg-3"
-          key={`${index}:${line}`}
-        >
+      {lines.map((line) => (
+        <Text className="m-0 mt-2 text-sm leading-base text-fg-3" key={line}>
           {line}
         </Text>
       ))}

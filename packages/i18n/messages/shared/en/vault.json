@@ -77,15 +77,39 @@
     "askedFor": "Asked for {amount}",
     "visitBooked": "Visit booked for {when}",
     "noVisit": "No visit booked",
-    "open": "Open"
+    "open": "Open",
+    "heroIntro": "See every item you have asked us to hold, and start another whenever you like.",
+    "howItWorks": {
+      "title": "How it works",
+      "describe": {
+        "title": "Describe the item",
+        "body": "A few details and some photographs — no visit needed yet."
+      },
+      "visit": {
+        "title": "Book a visit and bring it in",
+        "body": "We value it at the counter and come back with what we can offer."
+      },
+      "agree": {
+        "title": "Agree what happens next",
+        "body": "Take the loan or leave it in storage — either way, you sign once."
+      },
+      "collect": {
+        "title": "Collect it whenever you are ready",
+        "body": "Repay in full, or just come back for the item — it is yours until then."
+      }
+    },
+    "emptyTitle": "Nothing here yet",
+    "emptyBody": "Start a request and we will take it from there.",
+    "draftCap": "Up to 3 unsent requests at a time.",
+    "draftNext": "Add photographs to finish this request.",
+    "answerBy": "Answer by {when}",
+    "inVaultSince": "In the vault since {when}"
   },
   "lane": {
     "financed": "With a loan",
     "storage": "Storage only"
   },
   "request": {
-    "sentTitle": "Your request is with us",
-    "sentMessage": "Book a visit and bring the item along. We value it in the shop, and you keep it until you have agreed what happens next.",
     "bookVisit": "Book a visit",
     "photosTitle": "Show us the item",
     "photosMessage": "At least one photograph. They are only ever seen by our staff.",
@@ -96,18 +120,28 @@
     "heading": "Ask us to hold something",
     "financedIntro": "We will value it and come back with an offer to lend against it.",
     "storageIntro": "Storage alone, with no loan against the item.",
-    "severalItems": "Several items? Send one request per item and book one visit on the first; bring them all together.",
     "categoryLabel": "What is it?",
     "titleLabel": "What should we call it?",
+    "titleHint": "Up to 200 characters.",
     "descriptionLabel": "Anything we should know?",
+    "descriptionHint": "Up to 2,000 characters.",
     "phoneLabel": "WhatsApp number",
     "phoneMessage": "How our staff reach you once they have the item.",
     "laneLabel": "What are you asking us for?",
     "laneFinanced": "A loan against it",
     "amountLabel": "Loan you would like",
     "amountMessage": "Amounts are in {currency}.",
+    "amountHint": "We value the item first, and lend up to what our policy allows against it.",
     "asking": "Asking for {amount}.",
     "continue": "Continue",
+    "formatHint": "JPEG, PNG or WebP, up to 20 MB each.",
+    "locationRemoved": "We remove location data from your photographs.",
+    "photoProgress": "{count} of {max} attached",
+    "photoTips": {
+      "light": "Good, even light — daylight near a window works well.",
+      "background": "A plain background, so the item stands out.",
+      "detail": "Close in on any marks, flaws or damage."
+    },
     "photoLimitReached": "This request already has as many photographs as we take.",
     "invalidContentType": "Photographs only — JPEG, PNG or WebP.",
     "emptyBody": "That file was empty.",
@@ -120,7 +154,33 @@
     "financingNotPositive": "A loan of nothing is not a loan — tell us how much, or ask for storage only.",
     "startFailed": "We could not open that request ({reason}).",
     "photoRequired": "Add a photograph before sending this in.",
-    "submitFailed": "We could not send that in ({reason})."
+    "submitFailed": "We could not send that in ({reason}).",
+    "step": {
+      "describe": "Describe",
+      "photograph": "Photograph",
+      "review": "Review"
+    },
+    "review": {
+      "title": "Check it, then send",
+      "edit": "Edit",
+      "whatHappensNext": {
+        "valuation": "We value your item from these photographs.",
+        "visit": "Book a visit to bring it in — before or after we are done.",
+        "decide": "You decide once we can tell you what we can offer."
+      },
+      "statementTick": "I have read the personal information collection statement.",
+      "statementRequired": "Tick the box to confirm you have read it before sending.",
+      "statementUnset": "The statement is still being written. Ticking still works, and records this version."
+    },
+    "sent": {
+      "title": "Your request is with us",
+      "message": "Book a visit and bring the item along. We value it in the shop, and you keep it until you have agreed what happens next.",
+      "severalItems": "Several items? Send one request per item and book one visit on the first; bring them all together.",
+      "reference": "Your reference: {reference}",
+      "openCase": "Not now — open the case",
+      "startAnother": "Start another request",
+      "closesAfter": "This closes on its own after 30 days if nothing happens."
+    }
   },
   "case": {
     "loading": "Loading the case…",
@@ -128,43 +188,107 @@
     "untitledItem": "Your item",
     "photoAlt": "Photograph of {item}",
     "itemDescription": "{category} — {description}",
-    "offerTitle": "Our offer",
-    "offerTerms": "{amount} over {days} days at {rate}% for the term.",
-    "offerRepayAfter": "Repayable {days} days after the money reaches you.",
-    "offerRepayBy": "Repay by {when}.",
-    "offerTotal": "Total to repay: {amount}.",
-    "offerLate": "If you are late, interest keeps running at {amount} a day on what is still outstanding, at the same rate.",
+    "reference": "Case reference",
+    "stage": {
+      "request": "Request",
+      "valued": "Valued",
+      "offer": "Offer",
+      "agreed": "Agreed",
+      "signed": "Signed",
+      "vault": "Vault",
+      "loan": "Loan",
+      "home": "Home"
+    },
+    "chip": {
+      "waitingOnYou": "Waiting on you",
+      "withUs": "With us",
+      "visit": "Visit {when}",
+      "due": "Due {when}",
+      "pastDue": "{days, plural, one {# day} other {# days}} past due",
+      "settled": "Settled {when}",
+      "collected": "Collected {when}",
+      "closed": "Closed {when}"
+    },
+    "fact": {
+      "offerLapsed": {
+        "title": "Offer ran out",
+        "body": "Our offer of {amount} was open until {when}. It has now closed.",
+        "nextStep": "Ask us for a new offer at your next visit."
+      },
+      "offerDeclined": {
+        "title": "You declined",
+        "body": "You declined our offer of {amount} on {when}.",
+        "nextStep": "We can make you another one — the request stays open."
+      },
+      "offerReplaced": {
+        "title": "Offer replaced",
+        "body": "We closed our offer of {amount} from {when} and made you a new one.",
+        "nextStep": "Answer the new offer above."
+      },
+      "visitMissed": {
+        "title": "Visit missed",
+        "body": "We closed your visit on {when} because it was missed.",
+        "nextStep": "Book another visit when you are ready."
+      },
+      "releaseRequested": {
+        "title": "Asked for it back",
+        "body": "You asked for your item back on {when}.",
+        "nextStep": "Book a pickup visit to collect it."
+      }
+    },
+    "ending": {
+      "declined": {
+        "title": "Declined",
+        "body": "We declined this request on {when}: {reason}. The item stayed with you, and your visit was cancelled."
+      },
+      "cancelled": {
+        "title": "Cancelled",
+        "body": "{who} cancelled this request on {when}. The offer closed and the visit was cancelled with it."
+      },
+      "expired": {
+        "title": "Expired",
+        "body": "This request expired on {when} — {clock} ran out. Nothing was signed, and the item never left you."
+      },
+      "forfeited": {
+        "title": "Forfeited",
+        "body": "The item settled {amount} of what was owed. We wrote to you on {noticeDate}, with {payBy} as the date to pay by. The agreements stay on this page."
+      }
+    },
+    "startAnother": "Start another request",
+    "offer": {
+      "title": "Our offer",
+      "terms": "{amount} over {days} days at {rate}% for the term.",
+      "repayAfter": "Repayable {days} days after the money reaches you.",
+      "repayBy": "Repay by {when}.",
+      "total": "Total to repay: {amount}.",
+      "late": "If you are late, interest keeps running at {amount} a day on what is still outstanding, at the same rate.",
+      "open": "Open until {when}. Our staff record your answer in the shop.",
+      "accept": "Accept this offer",
+      "acceptConfirm": "You accept {amount} over {days} days at {rate}% for the term. We prepare the papers for your visit.",
+      "decline": "Decline this offer",
+      "declineConfirm": "Decline this offer? We keep the item's request open and can make you another one.",
+      "cancelRequest": "Cancel this request",
+      "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
+      "howItWorks": {
+        "title": "How the loan works",
+        "sign": "Accept, and we prepare the papers for your visit.",
+        "advance": "The term starts the day the money reaches you.",
+        "late": "Late, and interest keeps running at the same rate on what is still outstanding.",
+        "repay": "Repay in full, in parts or early — the item comes home once nothing is owed."
+      },
+      "valuationNote": "This is what our staff valued the item at — not an offer to buy it.",
+      "back": "Go back"
+    },
     "offerExpired": "This offer ran out on {when}. Ask us for a new one.",
-    "offerOpen": "Open until {when}. Our staff record your answer in the shop.",
-    "acceptOffer": "Accept this offer",
-    "acceptConfirm": "You accept {amount} over {days} days at {rate}% for the term. We prepare the papers for your visit.",
     "offerAccepted": "Offer accepted. Book a visit to sign.",
-    "declineOffer": "Decline this offer",
-    "declineConfirm": "Decline this offer? We keep the item's request open and can make you another one.",
     "offerDeclined": "Offer declined.",
     "offerGone": "This offer has run out. Ask our staff for a new one.",
     "agreedTerms": "Agreed terms: {amount} over {days} days, due {when}.",
     "agreedTermsFromAdvance": "Agreed terms: {amount} over {days} days, counted from the day the money reaches you.",
-    "dueTitle": "What is owed",
-    "dueOutstanding": "{outstanding} outstanding of {total}.",
-    "dueRepaid": "{repaid} repaid. Due {when}.",
-    "dueRepaidLate": "{repaid} repaid. Due {when} — {days} days late.",
-    "dueAsOf": "As at {when}.",
-    "payTitle": "How to pay",
-    "payHolds": "This balance holds until {when}.",
     "holding": "We are holding your item.",
     "holdingSince": "We are holding your item since {day}.",
     "settled": "Nothing is owed, so it can go home with you at your next visit.",
-    "owedEntry": "{detail}: {amount}",
-    "owed": {
-      "financing_outstanding": "Loan outstanding",
-      "financing_overdue": "Loan outstanding, {overdueDays, plural, one {# day} other {# days}} past due",
-      "fee": "Fee outstanding"
-    },
     "askForItBack": "Ask for it back",
-    "cancelRequest": "Cancel this request",
-    "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
-    "cancelled": "Request cancelled.",
     "documents": "Documents",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "Signing fingerprint",
@@ -172,6 +296,60 @@
     "downloadSigned": "Download the signed copy",
     "history": "History",
     "historyEntry": "{when} — {what}"
+  },
+  "money": {
+    "howToPay": {
+      "title": "How to pay",
+      "holds": "This balance holds until {when}.",
+      "fpsId": "FPS ID",
+      "account": "Bank account, under {lenderName}",
+      "reference": "Use {reference} as the transfer reference.",
+      "counter": "Or pay by card or cash at the counter.",
+      "recordedAgainst": "Recorded against the day it reaches us.",
+      "growsBy": "Grows by {amount} a day after {when}.",
+      "receiptLine": "You will get an email once we have recorded it.",
+      "placeholder": "[Not set yet — outside production only]"
+    },
+    "owed": {
+      "title": "What is owed",
+      "outstanding": "{outstanding} outstanding of {total}.",
+      "repaid": "{repaid} repaid. Due {when}.",
+      "repaidLate": "{repaid} repaid. Due {when} — {days} days late.",
+      "asOf": "As at {when}.",
+      "financing_outstanding": "Loan outstanding",
+      "financing_overdue": "Loan outstanding, {overdueDays, plural, one {# day} other {# days}} past due",
+      "fee": "Fee outstanding",
+      "entry": "{detail}: {amount}",
+      "progress": {
+        "sent": "Sent",
+        "dayOf": "Day {day} of {total}",
+        "due": "Due {when}"
+      },
+      "loan": "Loan",
+      "termInterest": "Interest for the term",
+      "lateInterest": "Interest, {days} days late",
+      "settledTable": "Loan settled"
+    },
+    "repayments": {
+      "title": "Repayments",
+      "empty": "Each repayment appears here with its day and the balance after.",
+      "row": "{amount} by {method} · reached us {when} · recorded {recordedWhen} · {balance} left",
+      "allocation": "This clears the interest owed first, then the principal.",
+      "neverRestarts": "Interest never restarts once it has stopped.",
+      "receipt": "A receipt follows by email."
+    },
+    "notice": {
+      "title": "Final notice",
+      "wroteOn": "We wrote to you on {when}.",
+      "untilThen": "Nothing can be taken from you before {when}.",
+      "remindersSent": "{count, plural, one {# reminder} other {# reminders}} sent before this notice.",
+      "noFurther": "No further reminders follow."
+    },
+    "reminders": {
+      "title": "Reminders",
+      "schedule": "{first} and {second} before the due date, then every {days} days after.",
+      "free": "A reminder costs nothing."
+    }
   },
   "visit": {
     "title": "Your visit",
@@ -186,7 +364,28 @@
     "loadingTimes": "Loading times…",
     "nothingFree": "Nothing free at {location} in the next {days} days.",
     "unavailable": "That time is no longer free. Pick another one below — the list has just been refreshed.",
-    "failed": "We could not do that ({reason})."
+    "failed": "We could not do that ({reason}).",
+    "booked": {
+      "title": "Visit booked",
+      "emailLine": "A confirmation is on its way by email.",
+      "calendar": "Add to calendar",
+      "move": "Move",
+      "cancel": "Cancel",
+      "before": {
+        "verify": "Verify now",
+        "verified": "Verified — nothing to bring but the item.",
+        "bring": "Bring the item.",
+        "sign": "Sign the loan and custody agreements.",
+        "signStorage": "Sign the custody agreement.",
+        "moneyFollows": "The money follows once you have signed.",
+        "inPerson": "Or verify in person when you arrive."
+      }
+    },
+    "shop": {
+      "duration": "About 30 minutes.",
+      "moreShops": "More shops appear here as they open."
+    },
+    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open."
   },
   "ceremony": {
     "loading": "Opening your documents…",
@@ -368,5 +567,40 @@
     "doneTitle": "Nothing left to do",
     "doneMessage": "This check is finished. If you still need to verify your ID, bring it to your visit and we will check it at the counter.",
     "retryLabel": "Try again"
+  },
+  "data": {
+    "title": "Your data",
+    "intro": "What the vault keeps, your identity standing, and your documents — all in one place.",
+    "standing": {
+      "verified": "Verified until {when} · checked {how}, {day}",
+      "none": "No identity on file. You will be verified at your next visit.",
+      "out": "A check is out since {when}.",
+      "lapsed": "Your last check expired on {when}."
+    },
+    "keeps": {
+      "title": "What we keep",
+      "classes": "What is kept, and for how long, by class.",
+      "reviewed": "Reviewed, never deleted automatically."
+    },
+    "download": {
+      "title": "Download all",
+      "body": "Every signed document, across every case, as one file.",
+      "all": "Download all ({count})",
+      "none": "Nothing signed yet.",
+      "failed": "The download did not complete. Try again."
+    },
+    "ask": {
+      "title": "Ask to be forgotten",
+      "body": "We erase what we can, once nothing is holding it.",
+      "refused": "We cannot do this yet: {reason}.",
+      "confirmTitle": "Ask to be forgotten?",
+      "confirmBody": "This opens a 7-day window, which you can cancel inside.",
+      "confirm": "Ask to be forgotten",
+      "keep": "Keep my data",
+      "filed": "Filed on {when}. Erased from {erasedWhen}.",
+      "cancel": "Cancel the request",
+      "cancelled": "Request cancelled.",
+      "windowPassed": "Filed on {when}. The window has passed."
+    }
   }
 }
