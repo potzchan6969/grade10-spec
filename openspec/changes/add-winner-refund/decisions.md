@@ -48,6 +48,10 @@
 | Q24 | Is any of it checked? | No. No BIC shape, no IBAN checksum, no digit count — what is typed is stored | Refusing a BIC that is not 8 or 11 characters and an IBAN whose check digits fail, dropped to keep the form quick for a small operations team |
 | Q25 | How is the destination masked for the winner? | By what it looks like: digits show the last four, an email shows its first letter and domain (`j···@gmail.com`), a phone shows its last four digits | One last-four rule for every value, which reads as `···· .com` for an email |
 | Q26 | Where do the amount and date come from? | The amount is offered at what the winner has paid and stays editable, as Q6 and Q9 have it. The date is the date the money left, typed by the operator, and never in the future | Both filled in by Grade10, which dates a refund recorded days later to the day of the form |
+| Q28 | Is the note required? | No, optional on every reason, Other included | Requiring it on Other, dropped because a refund is recorded after Customer Service has already spoken to the winner and the operator may have nothing to add |
+| Q29 | What proof does a refund take? | 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB — the same as manual settlement | A refund-specific list, dropped because two proof rules on one order is two things to keep in step |
+| Q30 | Does recording a refund confirm first? | Yes. A dialog restates the amount, the method and where it went, and the lot's outcome, and says this is the order's only refund and cannot be undone | A bare yes/no with nothing restated; retyping the amount to proceed, dropped as a cost on every refund for one kind of error |
+| Q31 | Can the winner reveal the masked destination? | No. The destination is the only masked value on the page and nothing reveals it in full | A reveal control, dropped because the winner already knows the account and the mask exists for whoever else reads the page |
 
 ## Raised
 
