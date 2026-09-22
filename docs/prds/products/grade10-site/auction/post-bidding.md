@@ -135,12 +135,17 @@ hours of the close.
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 | 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
-- 🚧 **Form** — name, phone, country or region, town or city, address line 1,
-  state or province and postal code are required; an empty one is refused
-  beside the field, and the phone's format is not checked; on delivery Add
-  Address, country or region lists every country and region A–Z, and any typed
-  letter moves the highlight to the next name that starts with it and scrolls
-  that name into view
+- 🚧 **Form** — Personal or Company; first and last name, phone (country and
+  digits), country or region, town or city, address line 1 and postal code are
+  required; address line 2 and state or province are optional; Company Name is
+  required only for Company and hidden for Personal; an empty required field is
+  refused beside the field; phone stores E.164 when parseable and does not
+  refuse unusual formats; phone country and Country/Region start empty — nothing
+  preselected; on delivery Add Address, country or region lists every country
+  and region A–Z, and any typed letter moves the highlight to the next name
+  that starts with it and scrolls that name into view
+- 🚧 **Company on the picker** — a company address shows the company name as
+  the card title; a personal address shows the recipient name
 - ❓ **Billing country or region list** — whether billing Add Address uses the
   same full list and typeahead as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
@@ -445,6 +450,9 @@ a second payment provider, and changes to the bid-time rules.
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z; any typed letter moves the highlight to the next matching name and scrolls it into view. Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set. | Product (@tangconst) |
+| Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
+| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. First and last name stay required on both. | Product (@tangconst) |
+| Add Address optional locality | 🚧 In flight | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
 | Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and typeahead as delivery. | Product (@tangconst) |
 | Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |

@@ -23,10 +23,12 @@ component contract underneath them.
   form, a read-only address, or nothing the application supplies, and an
   invoice with Pay with Card only when one is supplied
 - 🚧 **Address form** — the fields [Winner
-  Order](/p/grade10-site/auction/post-bidding#winner-order) names, the required ones
+  Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
+  Company, a country-aware phone (country and digits required; E.164 when
+  parseable; unusual formats accepted; country starts empty), Company Name
+  only when Company, address line 2 and state optional, the required ones
   marked, an application-supplied error beside each field it names, and
-  Confirm with the entered values or Cancel; it checks no phone number's
-  format
+  Confirm with the entered values or Cancel
 - 🚧 **Billing address** — a Same as delivery address box,
   ticked by default; unticked, a second address with the same fields. It
   follows the form, which first ships without one
