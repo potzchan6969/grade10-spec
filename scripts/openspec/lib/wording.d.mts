@@ -6,7 +6,11 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Role, Stage } from "../../../tools/manual/src/api/types.ts";
+import type {
+  ChangeSuite,
+  Role,
+  Stage,
+} from "../../../tools/manual/src/api/types.ts";
 
 /** The change as a message reads it: the id a command is written with, the
  * stage the sentence names, and the build the deploy recorded where the
@@ -15,6 +19,9 @@ export type WordedChange = {
   id: string;
   stage: Stage;
   deployedBuild?: string;
+  /** In flight: the suites beside the change's deltas, which QA's turn at
+   * Specified names by path and case count. */
+  suites?: ChangeSuite[];
 };
 
 /** The change as a landing reply reads it: the stage it is at now, the roles

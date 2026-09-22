@@ -222,17 +222,33 @@ test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - t
     /`land with recommendations` only while a held row is open/i,
   );
   assert.match(skill, /relay-post\.mjs --row <Q>/);
-  assert.match(skill, /mentioning (that|the row's) hand/i);
-  assert.match(skill, /one answer and any number of remarks/i);
-  assert.match(skill, /comes back to the hand before anything lands/i);
+  assert.match(skill, /once\s+per change, round and row/i);
+  // The rules live once, on the governance page the skill links.
+  assert.match(skill, /round-summary\.md#held-row/);
+  assert.match(skill, /round-summary\.md#hands-reply/);
+  assert.doesNotMatch(skill, /any number of remarks/i);
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /## Held Row/);
+  assert.match(conduct, /## Hand's Reply/);
+  assert.match(conduct, /mentioning (that|the row's) hand/i);
+  assert.match(conduct, /once\s+per change, round and row/i);
+  assert.match(conduct, /one answer and any number\s+of remarks/i);
+  assert.match(conduct, /comes back to the hand before anything lands/i);
+  assert.match(conduct, /the moves of the hand it\s+addresses alone/i);
 });
 
 test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is the product manager's question, quoted before and after", () => {
   const skill = claims(ROUND);
-  assert.match(skill, /a build round .*(lands|puts) on a page\W.*❓/i);
-  assert.match(skill, /quot\w+ (the line )?before and after/i);
-  assert.match(skill, /\(none\)/);
-  assert.match(skill, /holds no landing|nothing holds the landing/i);
+  assert.match(skill, /a build round lands on a page\W.*❓/i);
+  assert.match(skill, /round-summary\.md#held-row/);
+  assert.doesNotMatch(skill, /\(none\)/);
+  // The rule's four clauses, once, on the governance page.
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /a build round lands on a page .*❓/i);
+  assert.match(conduct, /quot\w+ (the line )?before and after/i);
+  assert.match(conduct, /\(none\)/);
+  assert.match(conduct, /holds no landing|nothing holds the landing/i);
+  assert.match(conduct, /carries 🚧 until its group lands/);
 });
 
 test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
@@ -241,6 +257,8 @@ test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on t
   assert.match(conduct, /at most three questions/i);
   assert.match(conduct, /whether to do it now/i);
   assert.match(conduct, /decided by the round/i);
+  assert.match(conduct, /asked that one question alone/i);
+  assert.match(conduct, /each with the option it\s+took/i);
   assert.match(conduct, /`not now`/);
   for (const path of [
     ".claude/skills/workflow-plan/SKILL.md",

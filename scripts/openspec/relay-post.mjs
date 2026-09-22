@@ -16,10 +16,11 @@
  *
  *   node scripts/openspec/relay-post.mjs --message-file <path>
  *     [--confirm <artifact|group>] [--held] [--root <dir>]
+ *   node scripts/openspec/relay-post.mjs --row <Q> --change <id> [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --done [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --bind <change> [--root <dir>]
  *
- * One table below holds the three, keyed by the flag that names each: the
+ * One table below holds the four, keyed by the flag that names each: the
  * call it makes on the wake, the line a terminal round prints instead, and
  * what a call that went through says. A reply is the file the round wrote —
  * `.round/thread.txt` — and never a string on the command line: a summary
@@ -33,6 +34,13 @@
  * recommendations` instead, which is the button while a held row is open. A
  * terminal round prints the text and then the label on its own line.
  *
+ * `--row <Q>` is the round's reply to the hand a held row waits on, in the
+ * change's thread: the row, the sentence already on the page and the decision
+ * rows it touches, quoted, and the hand mentioned. It is keyed on the change,
+ * the round and the row in `.round/rows.txt`, read and appended through the
+ * same sent-keys helpers every message uses, so a re-run of one round posts
+ * it once and the next round posts it again while it is still held.
+ *
  * `--bind` is the plan's own call, made right after `openspec new change`: it
  * warms the room's mapping with the change the run opened, and never defines
  * it — the record's `thread:` at `main` is what a landing wake resolves.
@@ -44,14 +52,20 @@
  * request: the round found nothing to say. With `ROUND_WAKE=relay` in the
  * environment and no such file, every mode fails rather than prints.
  */
-import { createHash } from "node:crypto";
-import { appendFileSync, existsSync, mkdirSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { tableRows } from "../../tools/manual/src/store/markdown.mts";
-import { readQuestions } from "../../tools/manual/src/store/read-changes.mts";
+import { ROLE_LABEL } from "../../tools/manual/src/api/stages.ts";
+import {
+  decisionRows,
+  handsOfRecord,
+  readQuestions,
+} from "../../tools/manual/src/store/read-changes.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
+import { appendSentKeys, readSentKeys } from "./lib/notify.mjs";
 import { confirmOf, readWake, relayOf } from "./lib/relay.mjs";
+import { nextRoundOf } from "./lib/rounds.mjs";
 
 /**
  * The modes, one row each: `read` takes the flag's value off the arguments,
@@ -83,16 +97,16 @@ const KINDS = {
     confirmed: (change) => `bound ${change}`,
   },
   // A held row addressed to another hand: the round's own reply in the
-  // change's thread, mentioning that hand, with the row, the sentence it would
-  // put on the page and the decision rows it touches quoted — posted once per
-  // change, row and text (`shared-planning-agent-rounds-SC-86`).
+  // change's thread, mentioning that hand, with the row, the sentence already
+  // on the page and the decision rows it touches quoted — posted once per
+  // change, round and row (`shared-planning-agent-rounds-SC-86`).
   row: {
     read: (flags, root) => heldRowText(root, flags),
     call: (relay, text) => relay.post(text),
     printed: (text) => text,
     confirmed: () => "posted row",
     nothing: (text) => text === "",
-    after: (root, flags, text) => rememberRow(root, flags, text),
+    after: (root, flags) => rememberRow(root, flags),
   },
 };
 
@@ -155,13 +169,15 @@ async function main() {
 }
 
 /**
- * The reply a held row makes to the hand it waits on. The row is read
- * through the manual's own question reader, so the hand and the
- * recommendation are the ones the change page shows; the sentence it would
- * put on the page is every line of a page the proposal links that cites the
- * row; the rows it touches are every other decision row that names it. A row
- * that is not held is refused: a decided row asks nobody anything. An empty
- * text means the same reply was posted already.
+ * The reply a held row makes to the hand it waits on. The row, the hand and
+ * the recommendation are read through the store's own readers — the question
+ * reader, the `## Decisions` rows and the record's `hands:` — so they are the
+ * ones the change page shows; the sentence already on the page is every line
+ * of a page the proposal links that cites the row; the rows it touches are
+ * every other decision row that names it or that it names. A row that is not
+ * held is refused: a decided row asks nobody anything. A role the record
+ * names no hand for is written by its label, never as a mention nobody
+ * answers to. An empty text means this round posted the reply already.
  */
 async function heldRowText(root, flags) {
   const change = flags.change;
@@ -171,59 +187,50 @@ async function heldRowText(root, flags) {
   const decisions = readTextOr(join(dir, "decisions.md"));
   const held = readQuestions(
     decisions,
-    handsOf(readTextOr(join(dir, ".openspec.yaml"))),
+    handsOfRecord(readTextOr(join(dir, ".openspec.yaml"))),
   ).find((one) => one.id === id);
   if (!held) {
     fail(
       `${id} is not held: a row asks a hand only while its Decision cell opens ❓ — a decided row is nobody's question`,
     );
   }
-  const rows = tableRows(decisions) ?? [];
+  const rows = decisionRows(decisions);
   const own = rows.find((cells) => cells[0] === id) ?? [];
-  // The rows it touches: those the row names, and those that name it.
   const ownText = own.join(" | ");
   const touched = rows.filter(
     (cells) =>
       /^Q\d+$/.test(cells[0] ?? "") &&
       cells[0] !== id &&
-      (ownText.includes(cells[0]) || cells.join(" | ").includes(id)),
+      (citesId(ownText, cells[0]) || citesId(cells.join(" | "), id)),
   );
-  const pages = pagesLinkedBy(root, dir);
-  const onPage = pages.flatMap(({ file, text }) =>
+  const onPage = pagesLinkedBy(root, dir).flatMap(({ file, text }) =>
     text
       .split("\n")
-      .filter((line) => line.includes(`\`${id}\``))
+      .filter((line) => citesId(line, id))
       .map((line) => `${file}: ${line.trim()}`),
   );
-  const hand = held.hand.startsWith("@") ? held.hand : `@${held.hand}`;
+  const label = ROLE_LABEL[held.role] ?? held.role;
+  const hand =
+    held.hand === held.role
+      ? `${label} (no hand named)`
+      : `@${held.hand.replace(/^@/, "")} (${label})`;
   const text = [
-    `${hand} — ${id} waits on you (${held.role}).`,
+    `${hand} — ${id} waits on you.`,
     `> ${own.join(" | ")}`,
     onPage.length > 0
-      ? `The sentence it would put on the page:\n${onPage.map((one) => `> ${one}`).join("\n")}`
-      : "It puts no sentence on a page.",
+      ? `The sentence already on the page:\n${onPage.map((one) => `> ${one}`).join("\n")}`
+      : "No sentence on a page names it.",
     touched.length > 0
       ? `The rows it touches:\n${touched.map((cells) => `> ${cells.join(" | ")}`).join("\n")}`
       : "It touches no other row.",
     `Answer with \`${id}: <your answer>\`, or \`${id}\` to take the recommendation.`,
   ].join("\n");
-  return rowsSent(root).has(rowKey(change, id, text)) ? "" : text;
+  const sent = readSentKeys(join(root, ROWS_SENT));
+  return sent.has(rowKey(root, change, id)) ? "" : text;
 }
 
 const readTextOr = (path) =>
   existsSync(path) ? readFileSync(path, "utf8") : "";
-
-/** The `hands:` block of the record, role to handle, read without git: the
- * record is the one file this reply needs, and a terminal round has no wake. */
-function handsOf(record) {
-  const hands = {};
-  const block = /^hands:\n((?:[ \t]+\S.*\n?)+)/m.exec(record);
-  for (const line of block?.[1].split("\n") ?? []) {
-    const pair = /^\s+([a-z]+):\s*"?(@?[\w.-]+)"?\s*$/.exec(line);
-    if (pair) hands[pair[1]] = pair[2];
-  }
-  return hands;
-}
 
 /** The pages the proposal links, as `[…](../../../docs/prds/….md#…)`. */
 function pagesLinkedBy(root, dir) {
@@ -233,6 +240,10 @@ function pagesLinkedBy(root, dir) {
   for (const match of proposal.matchAll(
     /\]\(([^)\s]*docs\/prds\/[^)\s#]+\.md)(?:#[^)]*)?\)/g,
   )) {
+    // A page is linked by its path in this store; a link with a scheme is
+    // another host's, and is left aside by name rather than resolved to a
+    // file that is not there.
+    if (/^[a-z][a-z0-9+.-]*:/i.test(match[1])) continue;
     const file = resolve(dir, match[1]);
     if (seen.has(file) || !existsSync(file)) continue;
     seen.add(file);
@@ -244,15 +255,17 @@ function pagesLinkedBy(root, dir) {
   return pages;
 }
 
+/** The rows this run's rounds have posted, keyed on the change, the round in
+ * progress and the row: the round's number is the one its landing will write,
+ * so a re-run of one round posts nothing again and the next round posts a row
+ * still held once more. */
 const ROWS_SENT = ".round/rows.txt";
-const rowKey = (change, id, text) =>
-  `${change}/${id}/${createHash("sha1").update(text).digest("hex").slice(0, 12)}`;
-const rowsSent = (root) =>
-  new Set(readTextOr(join(root, ROWS_SENT)).split("\n").filter(Boolean));
-function rememberRow(root, flags, text) {
+const rowKey = (root, change, id) =>
+  `${change}/${nextRoundOf(root, change)}/${id}`;
+function rememberRow(root, flags) {
   const file = join(root, ROWS_SENT);
   mkdirSync(dirname(file), { recursive: true });
-  appendFileSync(file, `${rowKey(flags.change, flags.row, text)}\n`);
+  appendSentKeys(file, [rowKey(root, flags.change, flags.row)]);
 }
 
 /**

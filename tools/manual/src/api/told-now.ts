@@ -85,7 +85,12 @@ export function toldNowOf(
       role,
       ...named(role),
       ...toldBodyOf(
-        { id: change.id, stage, deployedBuild: change.deployedBuild },
+        {
+          id: change.id,
+          stage,
+          deployedBuild: change.deployedBuild,
+          suites: change.suites,
+        },
         role,
         { linked, sheetUrl },
       ),

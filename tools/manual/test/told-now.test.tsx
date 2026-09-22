@@ -122,6 +122,34 @@ describe("the stage that names the design pair", () => {
 });
 
 describe("the stages that say something else", () => {
+  it("shared-planning-agent-rounds-SC-89 - tells QA at Specified the suite's path, its case count and the review", () => {
+    const html = render(
+      gift({
+        suites: [
+          {
+            spec: "demo/store/rail",
+            status: "pending-review",
+            cases: {
+              draft: 3,
+              actual: 0,
+              deprecated: 0,
+              total: 3,
+              automated: 0,
+            },
+          },
+        ],
+      }),
+      "specified",
+    );
+
+    expect(html).toContain("@sam");
+    expect(html).toContain("/tcs-review gift-cards");
+    expect(html).toContain(
+      "openspec/changes/gift-cards/specs/demo/store/rail/feature-tcs.md",
+    );
+    expect(html).toContain("3 cases; the walk needs it reviewed as its input");
+  });
+
   it("sends QA to walk the run sheet on staging", () => {
     const html = render(gift(), "on-staging");
 

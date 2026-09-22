@@ -143,7 +143,7 @@ test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suit
     text: [
       `*Your turn* — ${LINKED} is at *Specified*.`,
       "Review: `/tcs-review probe`",
-      "Suite: `openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md`, 35 cases; the walk names this review as its input",
+      "Suite: `openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md`, 35 cases; the walk needs it reviewed as its input",
     ].join("\n"),
   });
 });

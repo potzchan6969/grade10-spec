@@ -349,7 +349,7 @@
 
 **Steps:**
 
-1. Run `pnpm plan`.
+1. Run `pnpm plan done` on <task group>.
 2. Read the output.
 
 **Expected Results:**
@@ -378,7 +378,7 @@
 
 **Steps:**
 
-1. Run `pnpm plan`.
+1. Run `pnpm plan done` on <task group>.
 2. Read the output.
 
 **Expected Results:**

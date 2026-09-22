@@ -1015,10 +1015,10 @@ artifacts:
       - The last group is the walk: it names the suite's review
       (`/tcs-review <change>`) as its input, walks every journey of every
       capability the change specifies, end to end through the interface each
-      actor uses, leaves the walks as the change's end-to-end suite, and its commit flips
-      each case the walks decide to automated with `pnpm run tcs:automated
-      <case…> --decided-by <walk path>`; the cases that stay manual are named
-      in the suite and named in the walk's `rounds.md` row.
+      actor uses, leaves the walks as the change's end-to-end suite, and its
+      commit flips each case the walks decide to automated with `pnpm run
+      tcs:automated <case…> --decided-by <walk path>`; the cases that stay
+      manual are named in the suite and named in the walk's `rounds.md` row.
 
       - End every group with its verification step - the checks that group
       runs - so an engineer ships and verifies one group at a time. Keep each

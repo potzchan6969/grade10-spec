@@ -362,27 +362,3 @@ export function checkLandedBy(ctx, changes) {
     }
   }
 }
-
-/**
- * RULE `walk`: the plan's walk group names the suite's review as its input.
- * QA is asked on the landing of the requirements, and the walk says it waits
- * on what they sign, so a walk group that names no `/tcs-review` is refused
- * (`shared-planning-agent-rounds-SC-90`). A plan with no walk group yet owes
- * nothing here: the template's shape is the schema's own test.
- */
-export function checkWalkGroup(ctx, changes) {
-  for (const change of changes) {
-    if (change.status !== "in-flight") continue;
-    const file = fileOf(change, "tasks.md");
-    const text = readTextIfExists(join(ctx.roots.store, file));
-    if (text === undefined) continue;
-    const groups = text.split(/^(?=## )/m);
-    const walk = groups.find((one) => /^## \d+\. The walk\b/i.test(one));
-    if (!walk || walk.includes("/tcs-review")) continue;
-    ctx.add(
-      "walk",
-      file,
-      "the walk group names no review of the suite — name `/tcs-review <change>` as its input, since the walk waits on what QA signs",
-    );
-  }
-}

@@ -49,7 +49,7 @@ export function withRoundRow(root, change, cells) {
   const file = join(root, path);
   const created = !existsSync(file);
   const held = created ? ROUNDS_HEADER : readFileSync(file, "utf8");
-  const round = readRounds(held).length + 1;
+  const round = nextRoundOf(root, change);
   const row = `| ${[round, ...ROW_ORDER.map((key) => cell(cells[key]))].join(" | ")} |`;
   return {
     path,
@@ -58,6 +58,14 @@ export function withRoundRow(root, change, cells) {
     round,
     created,
   };
+}
+
+/** The number the round in progress will take: the rows written plus one,
+ * which is what keys a reply the round posts before its row lands. */
+export function nextRoundOf(root, change) {
+  const file = join(root, roundsPath(change));
+  const held = existsSync(file) ? readFileSync(file, "utf8") : ROUNDS_HEADER;
+  return readRounds(held).length + 1;
 }
 
 const ROW_ORDER = ["artifact", "perspectives", "stood", "asked", "tests"];

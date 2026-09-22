@@ -72,7 +72,7 @@ Every group lands its tests in their own commit before its code, and its readers
 
 ## 8. The walk (grade10-spec)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review stage-changes-and-notify-hands`) as its input: the walk carries no case QA has not signed.
+Needs `feature-tcs.md` reviewed (`/tcs-review stage-changes-and-notify-hands`) as its input.
 
 - [x] 8.1 The walk harness: a vitest browser project with `@vitest/browser-playwright` on chromium, the manual mounted against `public/fixture-snapshot.json`, one file per journey under `tools/manual/walk/`, and `test:walk` scripts in both package manifests
 - [x] 8.2 The demo store's fixtures: one change per stage, one per overlay, an unreadable record and a team map, built by `pnpm fixture` so the walk and the snapshot read one tree

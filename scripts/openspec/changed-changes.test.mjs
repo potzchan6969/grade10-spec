@@ -729,6 +729,82 @@ test("shared-planning-change-stages-SC-44 - --stages tells the artifact's hand w
   assert.match(textOf(messages, "probe:behind:decisions"), /proposal/);
 });
 
+/** One capability's suite beside the change's delta, one draft case. */
+const SUITE = [
+  "# Rail",
+  "",
+  "**Status:** pending-review",
+  "",
+  "## demo-store-rail-US1: Person sees the rail",
+  "",
+  "### demo-store-rail-US1-TC1-1: Six tiles",
+  "",
+  "**Classification:**",
+  "",
+  "* **Status:** draft",
+  "* **Automation status:** manual",
+  "* **Trace:** demo-store-rail-US-01",
+  "",
+  "**Steps:**",
+  "",
+  "1. Open the page.",
+  "",
+  "**Expected Results:**",
+  "",
+  "* Six tiles.",
+  "",
+].join("\n");
+
+test("shared-planning-agent-rounds-SC-89 - --stages tells QA at Specified the suite's path, its case count and the review command, once per push", () => {
+  const { root, write, commit } = sandbox();
+  const designed = throughSpecs();
+  delete designed[`${DIR}/spec.md`];
+  delete designed[`${DIR}/feature-tcs.md`];
+  write({
+    ...designed,
+    [`${DIR}/.openspec.yaml`]: record(...HANDS),
+    [`${DIR}/proposal.md`]: proposalOf(),
+  });
+  const base = commit("design probe", 3);
+  write({
+    [`${DIR}/spec.md`]: "## Requirement\n\nOne.\n",
+    [`${DIR}/feature-tcs.md`]: "## Cases\n\nOne.\n",
+    [`${DIR}/specs/demo/store/rail/spec.md`]: [
+      "## ADDED Requirements",
+      "",
+      "### Requirement: Rail",
+      "",
+      "The rail SHALL show six tiles.",
+      "",
+      "#### Scenario: demo-store-rail-SC-01 - Six tiles",
+      "",
+      "- **WHEN** the page opens",
+      "- **THEN** six tiles show",
+      "",
+    ].join("\n"),
+    [`${DIR}/specs/demo/store/rail/feature-tcs.md`]: SUITE,
+  });
+  const head = commit("specify probe", 1);
+  const keys = join(root, "sent-keys.txt");
+  const args = ["--base", base, "--head", head, "--sent-keys", keys];
+
+  const first = stages(root, args);
+  const { messages, stages: reached } = first.read();
+
+  assert.equal(reached[CHANGE], "specified", first.stderr);
+  const qa = textOf(messages, "probe:specified:qa");
+  assert.match(qa, /\*Your turn\*/);
+  assert.match(qa, /Review: `\/tcs-review probe`/);
+  assert.match(
+    qa,
+    /Suite: `openspec\/changes\/probe\/specs\/demo\/store\/rail\/feature-tcs\.md`, 1 cases; the walk needs it reviewed as its input/,
+  );
+  // The product manager's own turn message carries no suite line.
+  assert.doesNotMatch(textOf(messages, "probe:specified:pm"), /Suite:/);
+  // Sent once: a re-run of the same push tells QA nothing again.
+  assert.deepEqual(stages(root, args).read().messages, []);
+});
+
 test("shared-planning-change-stages-SC-36 - --stages sends nothing twice for one push", () => {
   const { root, write, commit } = sandbox();
   write({

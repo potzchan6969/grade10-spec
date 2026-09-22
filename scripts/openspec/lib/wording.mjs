@@ -145,12 +145,12 @@ export function toldBodyOf(at, role, { linked, sheetUrl }) {
   }
   const lines = [yourTurnText(at, role, linked)];
   // QA at Specified is asked to review the suite: the message names each
-  // suite's path and case count, and says the walk waits on the review
+  // suite's path and case count, and says the walk needs it reviewed
   // (`shared-planning-agent-rounds-SC-89`).
   if (at.stage === "specified" && role === "qa") {
     for (const suite of at.suites ?? []) {
       lines.push(
-        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} cases; the walk names this review as its input`,
+        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} cases; the walk needs it reviewed as its input`,
       );
     }
   }

@@ -74,7 +74,7 @@ import { checkDeltas } from "./deltas.mjs";
 import { checkDense } from "./dense.mjs";
 import { checkMarkInProse, checkMarks } from "./marks.mjs";
 import { checkIcons, checkPages, readPages } from "./pages.mjs";
-import { checkPlanned } from "./planned.mjs";
+import { checkPlanned, checkWalkGroup } from "./planned.mjs";
 import { checkAcceptance } from "./qa.mjs";
 import {
   checkArchived,
@@ -84,7 +84,6 @@ import {
   checkHands,
   checkLandedBy,
   checkUnmarked,
-  checkWalkGroup,
 } from "./record.mjs";
 import { checkRole } from "./role.mjs";
 import { checkRounds } from "./rounds.mjs";

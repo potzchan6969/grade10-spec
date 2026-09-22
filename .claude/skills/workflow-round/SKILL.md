@@ -166,9 +166,10 @@ platform yourself, and never hold or read a token.
   <artifact|group>`, and `--held` while a held row is open: the thread shows
   one button, `Confirm <artifact>` or `Confirm with recommendations`, and a
   press is the same word as typing it
-- **A held row for another hand** — its own reply, mentioning that hand:
-  `node scripts/openspec/relay-post.mjs --row <Q> --change <change>` quotes
-  the row, its page sentence and the rows it touches, once per row and text
+- **A held row for another hand** — its own reply, as [Held
+  Row](../../../docs/governance/round-summary.md#held-row) says:
+  `node scripts/openspec/relay-post.mjs --row <Q> --change <change>`, once
+  per change, round and row
 
 ## The Hand's Four Moves
 
@@ -193,12 +194,11 @@ reply that is none of the other three is a remark.
 - **A remark on a page's marked lines** — from the product manager it is
   applied to the page as written; from any other hand it becomes a ❓ line on
   the page for the product manager
-- **A line a build round lands on a page** — a ❓ line naming the product
-  manager, never decided by the round; the reply quotes the line before and
-  after, `(none)` where it was added or removed; it holds no landing and,
-  answered, carries 🚧 until its group lands
-- **One reply, several moves** — a reply may carry one answer and any number
-  of remarks; a remark comes back to the hand before anything lands
+- **A line a build round lands on a page** — the product manager's ❓ line,
+  quoted as [Held Row](../../../docs/governance/round-summary.md#held-row)
+  says
+- **One reply, several moves** — as [Hand's
+  Reply](../../../docs/governance/round-summary.md#hands-reply) says
 - **Only the hand lands** — a word from another teammate is refused with a
   reply naming the hand the artifact waits on; the relay checks the same word
   a second time before `main` moves

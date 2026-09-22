@@ -54,7 +54,7 @@ is rebuilding, so this group follows that change's page work.
 
 ## 6. The walk (grade10)
 
-Needs `feature-tcs.md` reviewed (`/tcs-review add-store-cross-sell`) as its input: the walk carries no case QA has not signed.
+Needs `feature-tcs.md` reviewed (`/tcs-review add-store-cross-sell`) as its input.
 
 Needs groups 1 to 4 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the

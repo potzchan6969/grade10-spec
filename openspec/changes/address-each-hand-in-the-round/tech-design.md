@@ -42,7 +42,8 @@ row addressed to another hand, one more reply in the same thread through
 `relay-post.mjs --row <Q>`: the row's question, the sentence it would put on
 the page and the decision rows it touches, quoted from `decisions.md`, with
 the hand mentioned. The key is `<change>/<round>/<row>` in the run's
-`.round/thread.txt` ledger, so a re-run posts nothing again. `--held` stays
+`.round/rows.txt` ledger, read through the sent-keys helpers every message
+uses, so a re-run posts nothing again. `--held` stays
 the boolean it is (the confirm-with-recommendations button). The summary's
 footer lists the moves of the hand it addresses alone, from the same table
 the round derives the stage's hand from. Rejected: `--to <handle>` — the wake's

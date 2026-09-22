@@ -23,23 +23,28 @@ never by a hand.
 
 ## Held Row
 
-- **Its own message** — a held row addressed to another hand goes to that hand
-  alone: the row, the sentence it would put on the page, and the decision rows
-  it touches, quoted. Never a build round's thread to read
+- **Its own message** — a held row addressed to another hand is the round's
+  own reply in the change's thread, mentioning that hand: the row, the
+  sentence already on the page, and the decision rows it touches, quoted; once
+  per change, round and row. Never a build round's thread to read
 - **Its cost** — the cost of the recommended option in one clause, beside the
   option it was chosen over
 - **Already decided** — before an `asks`, the verifier reads `decisions.md`; a
   question a row already answers stands or falls on that row, and is never a
   new held row
-- **The right hand** — a product detail a round lands on a page reaches the
-  product manager as ❓, never as decided by the round
+- **The right hand** — a product detail a build round lands on a page reaches
+  the product manager as a ❓ line, never as decided by the round; the reply
+  quotes the line before and after, `(none)` where it was added or removed;
+  the line holds no landing and, answered, carries 🚧 until its group lands
 
 ## Hand's Reply
 
-- **One reply, several moves** — a reply may carry one answer and remarks; a
-  remark comes back to the hand before anything lands, and the footer says so
-- **Only their moves** — the summary shows a hand the moves that are theirs;
-  `land with recommendations` is offered only while a held row is open
+- **One reply, several moves** — a reply may carry one answer and any number
+  of remarks; a remark comes back to the hand before anything lands, and the
+  footer says so
+- **Only their moves** — the summary's footer lists the moves of the hand it
+  addresses alone; `land with recommendations` is offered only while a held
+  row is open
 - **A remark on a case** — a remark on a suite case's wording routes to
   `/tcs-review`, never to the draft
 - **Proved as a finding is** — a remark's application is written into the row
@@ -63,8 +68,8 @@ never by a hand.
 ## Interview
 
 - **What is asked** — at most three questions that change what is built, one
-  of them whether to do it now; alone, when the sentence leaves nothing else
-  open
+  of them whether to do it now. A sentence that leaves nothing else open is
+  asked that one question alone
 - **What is decided** — every other choice is applied as a default and listed
   under "decided by the round" in the same message, each with the option it
   took; one reply overturns any of them
