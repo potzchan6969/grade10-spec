@@ -5,3 +5,4 @@ decisions_waived: "opened before decisions.md existed; the scope is in the
   proposal, and the requirements and suites are written"
 reviewed:
   tech-design: d9d52ca2
+  test-cases: 53919d3b
