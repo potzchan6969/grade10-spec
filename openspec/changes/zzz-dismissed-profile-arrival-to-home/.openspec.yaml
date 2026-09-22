@@ -7,3 +7,6 @@ reviewed:
   tech-design: d9d52ca2
   test-cases: 53919d3b
   tasks: 781fa5b3
+deployed_at: "194f88cef7fdd8b75c8ed98433e9086af6f7cb2b"
+deployed_env: "production"
+decisions_carried: "none"
