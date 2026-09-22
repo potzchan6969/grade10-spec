@@ -4,8 +4,8 @@ spec: grade10-site/store/cross-sell
 order: 4
 ---
 
-Below a card, the store shows other cards the collector may also like —
-[Product Details](/p/grade10-site/store/product-page).
+Below a card on [Product Details](/p/grade10-site/store/product-page), the
+store shows other cards the collector may also like.
 
 | Rule | Value |
 | --- | --- |
@@ -87,8 +87,8 @@ curating the similar cards by hand. Auction lots.
 | Where picks live | Decided | In Shopify, on the card, by the stock keeper. Not a second store of product data in the admin panel. | Product |
 | Similar order | Decided | World, then language, then type. A Japanese card and an English one are different markets to a collector. | Product |
 | Also bought | Decided | Phase two, its own change, once the store has orders to count. | Product |
-| One rail | Decided | One rail for picks and similar cards alike, unlabelled and shown with one card. Not a rail per source, which labels a distinction no collector acts on; not hiding a one-card rail, since a pick is the stock keeper's deliberate act. | Product |
-| No cart in the rail | Decided | Adding is done on the card's own page. Not adding from the rail: the listing tile sells, so the rail would have to turn that control off. | Product |
+| One rail | Decided | One rail for picks and similar cards alike, unlabelled and shown even with one card. Not a rail per source, which labels a distinction no collector acts on; not hiding a one-card rail, since a pick is the stock keeper's deliberate act. | Product |
+| No cart in the rail | Decided | Adding is done on the card's own page, where the collector sees what they are buying. Not adding from the rail — a rail tile that sells is a card the collector has not opened. | Product |
 | Narrow layout | ❓ Open | How the rail lays out on a narrow screen — the tile width, the gap, wrap or scroll — waits on the frame from design. | Design |
 | Now, before launch | Decided | Picks are a stock keeper's work and can be loaded before the store opens. | Product |
 :::
