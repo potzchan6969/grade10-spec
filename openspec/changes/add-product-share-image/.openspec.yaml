@@ -2,3 +2,6 @@ schema: full-planning
 created: 2026-09-03
 page_waived: "predates the page rule"
 design_waived: "predates the design rule"
+deploy_waived: "seankcw, staging deploy 34324062944 (2026-09-09) confirms c4b452976 via its bundled checkout c5847d6d7; corroborated 2026-09-22 against staging deploy 35678969234 and the current production branch pin, both of which also contain it; no production Deploy run has succeeded since 2026-09-03, blocked on the same unrelated migration gate as the session's other archives"
+decisions_carried: "none - the change carried no decisions.md (full-planning schema predates it); its design.md decisions and the blind pass's one real finding (SC-32) are already durable in spec.md; the one open question (image transform failure) is on the PRD as a fresh row"
+journeys_copied: "true"
