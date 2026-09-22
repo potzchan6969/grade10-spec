@@ -10,6 +10,7 @@ as the tile exists today and the frame's follow-up rides task 5.2.
 - [x] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` in `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, re-exported from the public entry `packages/ui/src/index.ts`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
 - [x] 1.5 Answer `product.youMayAlsoLike` in the shared layer — `en`, `ko`, `zh-Hans`, `zh-Hant`
 - [x] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm --dir packages/i18n test`, `pnpm run tcs:validate`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
+- [ ] 1.7 After group 6 (Q42): `StoreProductRelatedRail` draws a `region` labelled by its heading, so a walk reaches the rail by role and name, with the story lane and `pnpm run design-sync:check` as 1.6 names them; the walk's slot queries retire in group 6's next round
 
 ## 2. The rail's rule (grade10)
 
@@ -65,7 +66,7 @@ skip per case, walked by hand on the dev shop with the page read after them
 within its minute. The walk waits on the card's own read, past the card's
 minute, never on a sleep.
 
-- [ ] 6.1 One walk per journey, end to end through the collector's browser on the isolated stack, whose fixture seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
+- [ ] 6.1 One test per case the fixture reaches, under a describe per journey, end to end through the collector's browser on the isolated stack's fixture catalogue, which seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
 - [ ] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
 
 ## 7. The frame's follow-up (grade10-spec)
