@@ -215,7 +215,7 @@ touches, and no key SHALL declare or waive them.
 | `money` | An amount in minor units |
 | `deploy` | A deploy step |
 | `copy` | A page's words, or words a reader sees |
-| `code` | A changed line in any file that is not markdown |
+| `code` | A changed line in any file that is neither markdown nor a message catalog |
 
 - **The simpler thing, always** — the `always` reader runs on every round and
   is the floor when a round has one reader

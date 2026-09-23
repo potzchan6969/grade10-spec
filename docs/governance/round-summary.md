@@ -81,11 +81,12 @@ their words.
 
 [Agent Rounds · The Round](../prds/products/shared/planning/agent-rounds.md#the-round)
 
-- **What is asked** — about three questions that change what is built, none
-  trivial, one of them whether to do it now. A sentence that leaves nothing
-  else open is asked that one question alone
-- **What is held** — a further choice that meets the [held test](#held-row) is
-  a held row in the draft's summary, never applied as a default
+- **What is asked** — about three questions, the ones that change most what is
+  built, none trivial, one of them whether to do it now. A sentence that
+  leaves nothing else open is asked that one question alone
+- **What is held** — a further choice the
+  [held test](../../.claude/skills/workflow-round/SKILL.md#questions-held-or-decided-by-the-round)
+  holds is a held row in the draft's summary, never applied as a default
 - **What is decided** — every other choice is applied as a default and listed
   under "decided by the round" in the same message, each with the option it
   took; one reply overturns any of them

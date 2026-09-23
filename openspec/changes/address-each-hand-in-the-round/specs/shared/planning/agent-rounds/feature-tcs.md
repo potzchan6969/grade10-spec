@@ -745,7 +745,7 @@ Runs once per row of **Test data**.
 * No summary is posted; one reply names <a reader of the round> as the reader the round lacks.
 * No row lands, and nothing reaches `main`.
 
-### shared-planning-agent-rounds-US12-TC9-1: A group landing prose alone is read by words, QA and the simpler thing
+### shared-planning-agent-rounds-US12-TC9-1: A group is read by the readers of what it lands
 
 Runs once per row of **Test data**.
 
@@ -1059,19 +1059,20 @@ Runs once per row of **Test data**.
 
 * admin(product manager) is in <planning channel>, and no change names what they are about to ask for.
 * The sentence they will post leaves more than three choices open.
+* One open choice beyond those asked is one the held test holds.
 
 **Steps:**
 
 1. Post the sentence in <planning channel>.
 2. Read the reply in the thread it opens.
 3. Count the numbered questions.
+4. Read the draft's summary and `decisions.md` on the change's branch.
 
 **Expected Results:**
 
-* About three numbered questions are asked, none trivial.
+* Fewer numbered questions are asked than choices the sentence left open, each changing what is built.
 * One asks whether to do it now.
-* Each other question changes what is built.
-* A further choice that moves scope is held as a row, not listed as a default.
+* The held choice is a ❓ row, not listed as a default.
 
 ### shared-planning-agent-rounds-US14-TC2-1: The defaults the round applied are listed as decided by the round
 
@@ -1101,8 +1102,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Every choice not asked is listed in the reply as a default the round applied.
+* Every choice neither asked nor held is listed in the reply as a default the round applied.
 * Each listed default is a decisions row marked decided by the round, not by the product manager.
+* A choice the held test holds is a ❓ row, not a row decided by the round.
 
 ### shared-planning-agent-rounds-US14-TC3-1: One reply overturns a listed default
 
@@ -1163,7 +1165,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The reply asks whether to do it now.
-* About three questions are asked, and none asks to confirm what the sentence said.
+* The reply asks that one question alone, and none asks to confirm what the sentence said.
 
 ### shared-planning-agent-rounds-US14-TC5-1: A fact the sentence states is not asked back as a question
 
@@ -1393,8 +1395,8 @@ case, in these words, and what a person walks beyond it:
 | `shared-planning-agent-rounds-US13-TC6-1` | a person runs a round summoning the simpler thing alone and reads its row |
 | `shared-planning-agent-rounds-US13-TC7-1` | a person runs a round leaving one hand no move and reads that hand's thread, as `run-a-round-on-every-artifact`'s Told once has it |
 | `shared-planning-agent-rounds-US13-TC8-1` | a person reads the summary's tests line against the test it names |
-| `shared-planning-agent-rounds-US14-TC1-1` | the skill's tests hold the interview's shape once, on the governance page the skills link; a person opens a change, reads the reply for the do-it-now question and that each other question changes what is built, and counts at most three |
-| `shared-planning-agent-rounds-US14-TC2-1` | a person reads the first round's summary under decided by the round |
+| `shared-planning-agent-rounds-US14-TC1-1` | the skill's tests hold the interview's shape once, on the governance page the skills link; a person opens a change, reads the reply for the do-it-now question, that each question changes what is built and that fewer are asked than were open, and reads the held choice as a ❓ row in `decisions.md` |
+| `shared-planning-agent-rounds-US14-TC2-1` | a person reads the first round's summary under decided by the round, and the held choice as a ❓ row in `decisions.md` |
 | `shared-planning-agent-rounds-US14-TC3-1` | a person overturns one listed default in a reply, reads `decisions.md` for the row recording the product manager's value and handle, and reads the reply for which artifacts are read again |
 | `shared-planning-agent-rounds-US14-TC4-1` | a person opens a change with a sentence that settles everything and reads the one question |
 | `shared-planning-agent-rounds-US14-TC5-1` | a person opens a change with a sentence stating a fact, reads the reply for no question confirming it, and reads `decisions.md` for the fact recorded as the product manager's |

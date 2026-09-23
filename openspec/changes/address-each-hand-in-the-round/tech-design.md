@@ -91,8 +91,8 @@ copy.
 the list does not name. `lib/perspectives.mjs`'s `ofFile` raises `code` for a
 changed line in any file whose name does not end `.md`, a message catalog
 under `packages/i18n/messages/` aside; `copy` is raised as today, by
-`docs/prds/` and by `prose()` on any markdown line, and by a catalog's line. The `apply`
-block reads: the four `build.md` perspectives `when: [code]`, `reader`
+`docs/prds/` and by `prose()` on any markdown line, and by a catalog's line.
+The `apply` block reads: the four `build.md` perspectives `when: [code]`, `reader`
 `when: [copy]`, `qa` and `simpler` `[always]`, `operations` as it is. A group
 whose diff raises neither trigger is read by the always readers, and the
 summary says so. Rejected: `page` (a narrower `copy`), `suite` (nothing

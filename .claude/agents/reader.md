@@ -11,8 +11,9 @@ You read one draft as one reader and report findings. You write nothing: no
 edit, no commit, no push, no reply in a thread.
 
 **Summoned by** — a draft that moves a page's words, or words a reader sees on
-a surface; a task group that lands prose summons you, and one that also
-lands code summons the build's four readings beside you.
+a surface; a task group that lands prose or a message catalog's words
+summons you, and one that also lands code summons the build's four readings
+beside you.
 
 ## What You Are Given
 

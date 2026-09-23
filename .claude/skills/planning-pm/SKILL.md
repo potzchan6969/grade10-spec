@@ -132,7 +132,7 @@ Everything this run produces is `draft`. Nothing in it claims review.
    - **List every assumption you would otherwise make silently** - the clock
      a value is measured on, the state a rule starts from, a default the spec
      already sets, the meaning of a word the author uses loosely. Each is one
-     of the three questions, a held row, or a default listed as decided by the
+     of the interview's questions, a held row, or a default listed as decided by the
      round, never a fact the draft carries unlisted. Translate the author's
      words onto what exists before accepting them: `5 days before due` on a
      seven-day window from send is `day 2 after send`, and the author may not
