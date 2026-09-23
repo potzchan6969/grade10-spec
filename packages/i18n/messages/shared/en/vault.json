@@ -200,8 +200,10 @@
       "home": "Home"
     },
     "chip": {
+      "withYou": "With you",
       "waitingOnYou": "Waiting on you",
       "withUs": "With us",
+      "withUsSince": "With us since {when}",
       "visit": "Visit {when}",
       "due": "Due {when}",
       "pastDue": "{days, plural, one {# day} other {# days}} past due",
@@ -243,16 +245,23 @@
       },
       "cancelled": {
         "title": "Cancelled",
-        "body": "{who} cancelled this request on {when}. The offer closed and the visit was cancelled with it."
+        "body": "{who, select, customer {You cancelled this request} staff {We cancelled this request} other {This request closed on its own}} on {when}.",
+        "offerClosed": "Our offer of {amount} closed with it.",
+        "visitCancelled": "Your visit on {when} was cancelled with it."
       },
       "expired": {
         "title": "Expired",
-        "body": "This request expired on {when} — {clock} ran out. Nothing was signed, and the item never left you."
+        "body": "This request expired on {when}. Nothing was signed, and the item never left you."
       },
       "forfeited": {
         "title": "Forfeited",
         "body": "The item settled {amount} of what was owed. We wrote to you on {noticeDate}, with {payBy} as the date to pay by. The agreements stay on this page."
       }
+    },
+    "expiredClock": {
+      "untouched": "Case expired before it was sent in",
+      "noVisit": "Case expired with no visit booked",
+      "noShow": "Case expired after a missed visit"
     },
     "startAnother": "Start another request",
     "offer": {
@@ -262,15 +271,19 @@
       "repayBy": "Repay by {when}.",
       "total": "Total to repay: {amount}.",
       "late": "If you are late, interest keeps running at {amount} a day on what is still outstanding, at the same rate.",
-      "open": "Open until {when}. Our staff record your answer in the shop.",
+      "open": "Open until {when}.",
+      "booksNoVisit": "Accepting books no visit — you choose when to come in and sign.",
       "accept": "Accept this offer",
       "acceptConfirm": "You accept {amount} over {days} days at {rate}% for the term. We prepare the papers for your visit.",
       "accepted": "Offer accepted. Book a visit to sign.",
       "decline": "Decline this offer",
-      "declineConfirm": "Decline this offer? We keep the item's request open and can make you another one.",
+      "declineConfirm": "Decline this offer? Your request stays open, and we can make you another one.",
+      "declineVisitStands": "Your visit on {when} stands.",
       "declined": "Offer declined.",
       "cancelRequest": "Cancel this request",
-      "cancelConfirm": "Cancel this request? Any visit is cancelled with it, and the item stays with you.",
+      "cancelConfirm": "Cancel this request? The item stays with you.",
+      "cancelClosesOffer": "Our offer of {amount} closes with it.",
+      "cancelClosesVisit": "Your visit on {when} is cancelled with it.",
       "howItWorks": {
         "title": "How the loan works",
         "sign": "Accept, and we prepare the papers for your visit.",
@@ -281,12 +294,24 @@
       "valuationNote": "This is what our staff valued the item at — not an offer to buy it.",
       "back": "Go back"
     },
+    "refused": {
+      "offerRanOut": "This offer ran out before your answer reached us. Nothing was answered.",
+      "offerReplaced": "We replaced this offer before your answer reached us. Nothing was answered — the new offer is on this page.",
+      "moved": "This case changed while you had it open. Nothing was done — the page now shows where it stands.",
+      "quoteStale": "What is owed changed while you had this open. Nothing was done — the page now shows the new figure.",
+      "failed": "We could not do that just now. Try again, or quote {reason} at the counter."
+    },
+    "cancelled": "Request cancelled.",
     "agreedTerms": "Agreed terms: {amount} over {days} days, due {when}.",
     "agreedTermsFromAdvance": "Agreed terms: {amount} over {days} days, counted from the day the money reaches you.",
+    "closesAfter": "With no visit booked, this request closes on its own {days, plural, one {# day} other {# days}} after the terms were agreed.",
     "holding": "We are holding your item.",
     "holdingSince": "We are holding your item since {day}.",
     "settled": "Nothing is owed, so it can go home with you at your next visit.",
     "askForItBack": "Ask for it back",
+    "askBack": {
+      "confirm": "Ask for your item back? It leaves with you at a pickup visit, once you sign a release at the counter."
+    },
     "documents": "Documents",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "Signing fingerprint",

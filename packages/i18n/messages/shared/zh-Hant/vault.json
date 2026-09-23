@@ -200,8 +200,10 @@
       "home": "已取回"
     },
     "chip": {
+      "withYou": "由你保管",
       "waitingOnYou": "待你回覆",
       "withUs": "與我們同行",
+      "withUsSince": "自 {when} 由我們保管",
       "visit": "{when} 到店",
       "due": "{when} 到期",
       "pastDue": "已逾期 {days} 天",
@@ -243,16 +245,23 @@
       },
       "cancelled": {
         "title": "已取消",
-        "body": "{who} 於 {when} 取消了這宗申請。報價已結束，已預約的到店亦一併取消。"
+        "body": "{who, select, customer {你於 {when} 取消了這宗申請} staff {我們於 {when} 取消了這宗申請} other {這宗申請於 {when} 自動結束}}。",
+        "offerClosed": "我們 {amount} 的報價亦一併結束。",
+        "visitCancelled": "你於 {when} 的到店預約亦一併取消。"
       },
       "expired": {
         "title": "已過期",
-        "body": "這宗申請已於 {when} 過期 — {clock} 已屆滿。沒有簽署任何文件，物品亦從未離開你手上。"
+        "body": "這宗申請已於 {when} 過期。沒有簽署任何文件，物品亦從未離開你手上。"
       },
       "forfeited": {
         "title": "已沒收",
         "body": "物品已用作結清 {amount} 的欠款。我們於 {noticeDate} 致函通知你，並訂明 {payBy} 為還款限期。相關協議仍然有效。"
       }
+    },
+    "expiredClock": {
+      "untouched": "申請未送出，個案已過期",
+      "noVisit": "未有預約到店，個案已過期",
+      "noShow": "未到訪預約，個案已過期"
     },
     "startAnother": "開始另一宗申請",
     "offer": {
@@ -262,15 +271,19 @@
       "repayBy": "請於 {when} 前還款。",
       "total": "還款總額：{amount}。",
       "late": "如逾期，利息按同一利率繼續計算，尚欠金額每日 {amount}。",
-      "open": "有效至 {when}。請在門市由職員為你記錄回覆。",
+      "open": "有效至 {when}。",
+      "booksNoVisit": "接受報價不會為你預約到店 — 何時到店簽署由你決定。",
       "accept": "接受這份報價",
       "acceptConfirm": "你接受 {amount}，為期 {days} 天，全期利率 {rate}%。我們會為你的到店預約準備文件。",
       "accepted": "已接受報價。請預約到店簽署。",
       "decline": "婉拒這份報價",
-      "declineConfirm": "婉拒這份報價？物品的申請仍然保留，我們可以再為你提出另一份。",
+      "declineConfirm": "婉拒這份報價？你的申請仍然保留，我們可以再為你提出另一份。",
+      "declineVisitStands": "你於 {when} 的到店預約維持不變。",
       "declined": "已婉拒報價。",
       "cancelRequest": "取消這宗申請",
-      "cancelConfirm": "取消這宗申請？已預約的到店會一併取消，物品仍然由你保管。",
+      "cancelConfirm": "取消這宗申請？物品仍然由你保管。",
+      "cancelClosesOffer": "我們 {amount} 的報價會一併結束。",
+      "cancelClosesVisit": "你於 {when} 的到店預約會一併取消。",
       "howItWorks": {
         "title": "貸款運作方式",
         "sign": "接受後，我們會為你的到店預約準備文件。",
@@ -281,12 +294,24 @@
       "valuationNote": "這是我們職員為物品估算的價值 — 並非購買物品的報價。",
       "back": "返回"
     },
+    "refused": {
+      "offerRanOut": "你的回覆送達前，這份報價已過期。你的回覆沒有生效。",
+      "offerReplaced": "你的回覆送達前，我們已更新這份報價。你的回覆沒有生效 — 新的報價就在此頁。",
+      "moved": "你開啟此頁期間，這宗個案有所變動。沒有執行任何操作 — 此頁現已顯示最新狀況。",
+      "quoteStale": "你開啟此頁期間，應付金額有所變動。沒有執行任何操作 — 此頁現已顯示新的金額。",
+      "failed": "暫時無法完成這項操作。請再試一次，或到門市時提供 {reason}。"
+    },
+    "cancelled": "申請已取消。",
     "agreedTerms": "已議定條款：{amount}，為期 {days} 天，{when} 到期。",
     "agreedTermsFromAdvance": "已議定條款：{amount}，為期 {days} 天，由款項到手當日起計。",
+    "closesAfter": "如未預約到店，這宗申請會在議定條款後 {days} 天自動關閉。",
     "holding": "我們正為你保管物品。",
     "holdingSince": "我們自 {day} 起為你保管物品。",
     "settled": "已無欠款，下次到店即可取回。",
     "askForItBack": "要求取回",
+    "askBack": {
+      "confirm": "要求取回物品？你在門市簽署交回文件後，即可於取件到店時取回物品。"
+    },
     "documents": "文件",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "簽署指紋碼",

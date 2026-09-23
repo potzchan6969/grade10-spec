@@ -38,7 +38,7 @@ data and the mechanism.
 | Screen | Board | Route | Composes | Stories |
 | --- | --- | --- | --- | --- |
 | Vault home | `C01`, `C21` | `grade10.com/vault` | `CaseList` → `Card`, `Badge`, `Button`, `EmptyState`, `List`, `Text` | `vault-cases-case-list--*` |
-| Request wizard | `C02`–`C05` | `/vault`, mounted by the home | `RequestWizard` → `Stepper`, `Step`, `RadioList`, `RadioListItem`, `TextInput`, `Textarea`, `NumberInput`, `FileDropzone`, `CheckboxListInput`, `Button`, `Text` | `vault-request-request-wizard--*` |
+| Request wizard | `C02`–`C05` | `/vault/new`, mounted by the home | `RequestWizard` → `Stepper`, `Step`, `RadioList`, `RadioListItem`, `TextInput`, `Textarea`, `NumberInput`, `FileDropzone`, `CheckboxListInput`, `Button`, `Text` | `vault-request-request-wizard--*` |
 | Case page | `C10`–`C19`, `C22`, `C23` | `/vault/cases/:caseId` | `CaseDetailView` → `Stepper`, `Step`, `Badge`, `Card`, `Alert`, `Dialog`, `Table`, `List`, `Link`, `Button`, `Text` | `vault-cases-case-detail-view--*` |
 | Book a visit | `C06`, superseded | on the case page | `VisitBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Button`, `Text` | `vault-booking-visit-booking--*` |
 | Visit booked | `C07` | on the case page, after a booking | new `VisitBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Link`, `Button` | `vault-booking-visit-booked--*` |
@@ -182,19 +182,28 @@ the nested shape in one move, and nothing below opens a second family
 beside them.
 
 - **`vault.case.reference`**, **`vault.case.stage.*`** (eight),
-  **`vault.case.chip.*`** (waitingOnYou, withUs, visit, due, pastDue,
-  settled, collected, closed)
+  **`vault.case.chip.*`** (withYou, waitingOnYou, withUs, withUsSince,
+  visit, due, pastDue, settled, collected, closed)
 - **`vault.case.fact.*`** — offerLapsed, offerDeclined, offerReplaced,
   visitMissed, releaseRequested, each with its title, its body and its next
   step
 - **`vault.case.ending.*`** — declined, cancelled, expired, forfeited, each
-  with its title and body; `vault.case.startAnother`
+  with its title and body; cancelled adds offerClosed and visitCancelled, each
+  shown only where it stood; `vault.case.startAnother`
+- **`vault.case.expiredClock.*`** — untouched, noVisit, noShow: the
+  timeline's words for an expiry, one per clock the worker records
 - **`vault.case.offer.*`** — renamed from `case.offerTitle`,
   `case.offerTerms`, `case.offerRepayAfter`, `case.offerRepayBy`,
   `case.offerTotal`, `case.offerLate`, `case.offerOpen`, `case.acceptOffer`,
   `case.acceptConfirm`, `case.declineOffer`, `case.declineConfirm`,
   `case.cancelRequest` and `case.cancelConfirm`; adds howItWorks (four
-  items), the valuation note and the confirmations' back labels
+  items), the valuation note, booksNoVisit, the confirmations' back labels,
+  and the lines a confirmation appends only where they stand —
+  declineVisitStands, cancelClosesOffer, cancelClosesVisit
+- **`vault.case.refused.*`** — offerRanOut, offerReplaced, moved,
+  quoteStale, failed: the case page's own refusal words
+- **`vault.case.askBack.confirm`**, **`vault.case.cancelled`**,
+  **`vault.case.closesAfter`**
 - **`vault.money.howToPay.*`** — renamed from `case.payTitle` and
   `case.payHolds`; adds fpsId, account, reference, counter,
   recordedAgainst, growsBy, receiptLine, placeholder
@@ -274,7 +283,7 @@ beside them.
 | Accept confirmation (`C12`) | `Dialog`: the total, what a late day costs, what you sign; Yes, accept and Go back | `grade10-site-vault-valuation-and-offer-SC-22` |
 | Decline confirmation | the confirm's words: the request stays open, the visit stands; Yes, decline and Go back | `grade10-site-vault-valuation-and-offer-SC-23` |
 | Answer in flight | the confirm's button pending while the effect runs; Accept's mounted dialog holds its own | `grade10-site-vault-valuation-and-offer-SC-24` |
-| Answer refused | the confirm stays open with the refusal by name — the offer ran out or the case moved; the page reads again | `grade10-site-vault-valuation-and-offer-SC-28`, `grade10-site-vault-valuation-and-offer-SC-29` |
+| Answer refused | the confirm stays open with the refusal by name — the offer ran out or was replaced, the case moved, or what is owed changed; the page reads again | `grade10-site-vault-valuation-and-offer-SC-28`, `grade10-site-vault-valuation-and-offer-SC-29` |
 | Offer replaced (`C22`) | the new offer's hero naming the closed one and its date; Accept and Decline on the new offer only | `grade10-site-vault-valuation-and-offer-SC-26` |
 | Offer ran out (`C22`) | badge Offer ran out, chip With us; the closed offer's amount and expiry; no Accept or Decline; the visit stands | `grade10-site-vault-case-lifecycle-SC-24` |
 | You declined (`C22`) | badge Being valued; the declined figure and when; the visit stands; Cancel this request lower on the page | `grade10-site-vault-case-lifecycle-SC-25` |
@@ -303,8 +312,8 @@ beside them.
 | Back with you (`C18`) | hero released at the shop on the date; Start another request; documents with the release receipt, fingerprints and the public verify address; the loan settled | `grade10-site-vault-documents-and-signing-SC-17` |
 | What we keep (`C18`) | the retention table per class with its window; the ask-to-be-forgotten line linking Your data | `grade10-site-vault-retention-and-erasure-SC-18` |
 | Declined (`C19`) | badge and closed date; the staff reason verbatim; the item stayed, the visit was cancelled; Start another request | `grade10-site-vault-case-lifecycle-SC-20` |
-| Cancelled (`C19`) | by whom and when; the offer closed and the visit cancelled with it | `grade10-site-vault-case-lifecycle-SC-21` |
-| Expired (`C19`) | which clock ran out; nothing signed, the item never left | `grade10-site-vault-case-lifecycle-SC-22` |
+| Cancelled (`C19`) | by whom and when; the offer that closed and the visit cancelled with it, each only where it stood | `grade10-site-vault-case-lifecycle-SC-21` |
+| Expired (`C19`) | one wording whichever clock ran out; nothing signed, the item never left; the timeline names the clock | `grade10-site-vault-case-lifecycle-SC-22` |
 | Forfeited (`C19`) | the figure the item settled, the notice date, the date to pay by; the agreements stay | `grade10-site-vault-case-lifecycle-SC-23` |
 | Release refused | the ask's confirm stays open with the refusal by name | `grade10-site-vault-case-lifecycle-SC-19` |
 

@@ -200,8 +200,10 @@
       "home": "已取回"
     },
     "chip": {
+      "withYou": "由你保管",
       "waitingOnYou": "待你回复",
       "withUs": "与我们同行",
+      "withUsSince": "自 {when} 由我们保管",
       "visit": "{when} 到店",
       "due": "{when} 到期",
       "pastDue": "已逾期 {days} 天",
@@ -243,16 +245,23 @@
       },
       "cancelled": {
         "title": "已取消",
-        "body": "{who} 于 {when} 取消了这宗申请。报价已结束，已预约的到店亦一并取消。"
+        "body": "{who, select, customer {你于 {when} 取消了这宗申请} staff {我们于 {when} 取消了这宗申请} other {这宗申请于 {when} 自动结束}}。",
+        "offerClosed": "我们 {amount} 的报价亦一并结束。",
+        "visitCancelled": "你于 {when} 的到店预约亦一并取消。"
       },
       "expired": {
         "title": "已过期",
-        "body": "这宗申请已于 {when} 过期 — {clock} 已届满。没有签署任何文件，物品亦从未离开你手上。"
+        "body": "这宗申请已于 {when} 过期。没有签署任何文件，物品亦从未离开你手上。"
       },
       "forfeited": {
         "title": "已没收",
         "body": "物品已用作结清 {amount} 的欠款。我们于 {noticeDate} 致函通知你，并订明 {payBy} 为还款限期。相关协议仍然有效。"
       }
+    },
+    "expiredClock": {
+      "untouched": "申请未送出，个案已过期",
+      "noVisit": "未有预约到店，个案已过期",
+      "noShow": "未到访预约，个案已过期"
     },
     "startAnother": "开始另一宗申请",
     "offer": {
@@ -262,15 +271,19 @@
       "repayBy": "请于 {when} 前还款。",
       "total": "还款总额：{amount}。",
       "late": "如逾期，利息按同一利率继续计算，尚欠金额每日 {amount}。",
-      "open": "有效至 {when}。请在门店由员工为你记录回复。",
+      "open": "有效至 {when}。",
+      "booksNoVisit": "接受报价不会为你预约到店 — 何时到店签署由你决定。",
       "accept": "接受这份报价",
       "acceptConfirm": "你接受 {amount}，为期 {days} 天，全期利率 {rate}%。我们会为你的到店预约准备文件。",
       "accepted": "已接受报价。请预约到店签署。",
       "decline": "婉拒这份报价",
-      "declineConfirm": "婉拒这份报价？物品的申请仍然保留，我们可以再为你提出另一份。",
+      "declineConfirm": "婉拒这份报价？你的申请仍然保留，我们可以再为你提出另一份。",
+      "declineVisitStands": "你于 {when} 的到店预约维持不变。",
       "declined": "已婉拒报价。",
       "cancelRequest": "取消这宗申请",
-      "cancelConfirm": "取消这宗申请？已预约的到店会一并取消，物品仍然由你保管。",
+      "cancelConfirm": "取消这宗申请？物品仍然由你保管。",
+      "cancelClosesOffer": "我们 {amount} 的报价会一并结束。",
+      "cancelClosesVisit": "你于 {when} 的到店预约会一并取消。",
       "howItWorks": {
         "title": "贷款运作方式",
         "sign": "接受后，我们会为你的到店预约准备文件。",
@@ -281,12 +294,24 @@
       "valuationNote": "这是我们员工为物品估算的价值 — 并非购买物品的报价。",
       "back": "返回"
     },
+    "refused": {
+      "offerRanOut": "你的回复送达前，这份报价已过期。你的回复没有生效。",
+      "offerReplaced": "你的回复送达前，我们已更新这份报价。你的回复没有生效 — 新的报价就在此页。",
+      "moved": "你打开此页期间，这宗个案有所变动。没有执行任何操作 — 此页现已显示最新状况。",
+      "quoteStale": "你打开此页期间，应付金额有所变动。没有执行任何操作 — 此页现已显示新的金额。",
+      "failed": "暂时无法完成这项操作。请再试一次，或到门店时提供 {reason}。"
+    },
+    "cancelled": "申请已取消。",
     "agreedTerms": "已议定条款：{amount}，为期 {days} 天，{when} 到期。",
     "agreedTermsFromAdvance": "已议定条款：{amount}，为期 {days} 天，由款项到手当日起计。",
+    "closesAfter": "如未预约到店，这宗申请会在议定条款后 {days} 天自动关闭。",
     "holding": "我们正为你保管物品。",
     "holdingSince": "我们自 {day} 起为你保管物品。",
     "settled": "已无欠款，下次到店即可取回。",
     "askForItBack": "要求取回",
+    "askBack": {
+      "confirm": "要求取回物品？你在门店签署交回文件后，即可于取件到店时取回物品。"
+    },
     "documents": "文件",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "签署指纹码",

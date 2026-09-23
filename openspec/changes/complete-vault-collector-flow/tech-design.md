@@ -201,10 +201,12 @@ The spec governs the confirmations; this is what changes.
 - **The client** — `packages/vault/frontend/src/core/api/VaultApi.ts` gains
   `accept`, `decline` and `cancel`; `requestRelease` is already there, and the
   fixture transport answers all four from the same fixture cases
-- **Accept is a mounted dialog** held on a boolean, per
-  `docs/conventions/dialogs.md`: it carries the terms, which `Confirmation` has
-  no slot for. Decline, Cancel and Ask for it back are words and one effect, so
-  each is a `useConfirm` ask
+- **Accept is a mounted dialog** held on its subject, the offer, per
+  `docs/conventions/dialogs.md`: it is about one offer and carries its terms,
+  which `Confirmation` has no slot for. The answer sends that offer, so an
+  offer replaced under the open dialog is refused and never accepted unseen.
+  Decline, Cancel and Ask for it back are words and one effect, so each is a
+  `useConfirm` ask
 - **The figure cannot move under an open dialog** — each act carries the
   detail's `asOf` into the mutation, and the worker refuses `QUOTE_STALE` when
   the balance moved, the failure `recordRepayment` already raises

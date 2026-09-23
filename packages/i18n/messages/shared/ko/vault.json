@@ -200,8 +200,10 @@
       "home": "반환됨"
     },
     "chip": {
+      "withYou": "고객님 보관 중",
       "waitingOnYou": "고객님의 확인 필요",
       "withUs": "저희가 처리 중",
+      "withUsSince": "{when}부터 저희가 보관 중",
       "visit": "{when} 방문",
       "due": "{when} 만기",
       "pastDue": "{days}일 연체",
@@ -243,16 +245,23 @@
       },
       "cancelled": {
         "title": "취소됨",
-        "body": "{who}이(가) {when}에 이 신청을 취소했습니다. 제안이 마감되고 예약된 방문도 함께 취소되었습니다."
+        "body": "{who, select, customer {{when}에 고객님이 이 신청을 취소하셨습니다} staff {{when}에 저희가 이 신청을 취소했습니다} other {{when}에 이 신청이 자동으로 종료되었습니다}}.",
+        "offerClosed": "{amount} 제안도 함께 마감되었습니다.",
+        "visitCancelled": "{when} 방문 예약도 함께 취소되었습니다."
       },
       "expired": {
         "title": "기한 만료",
-        "body": "이 신청은 {when}에 기한이 만료되었습니다 — {clock}이(가) 지났습니다. 서명된 서류는 없으며, 물품도 고객님을 떠난 적이 없습니다."
+        "body": "이 신청은 {when}에 기한이 만료되었습니다. 서명된 서류는 없으며, 물품도 고객님을 떠난 적이 없습니다."
       },
       "forfeited": {
         "title": "소유권 상실",
         "body": "물품이 {amount}의 미납액을 정산하는 데 쓰였습니다. {noticeDate}에 통지를 드렸으며, {payBy}을(를) 납부 기한으로 정했습니다. 관련 계약은 그대로 유효합니다."
       }
+    },
+    "expiredClock": {
+      "untouched": "제출 전에 건 기한 만료",
+      "noVisit": "방문 예약 없이 건 기한 만료",
+      "noShow": "방문 예약 미이행으로 건 기한 만료"
     },
     "startAnother": "새 신청 시작하기",
     "offer": {
@@ -262,15 +271,19 @@
       "repayBy": "{when}까지 상환해 주세요.",
       "total": "총 상환액: {amount}.",
       "late": "연체하시면 같은 이율로 이자가 계속 붙어, 남은 금액에 하루 {amount}씩 더해집니다.",
-      "open": "{when}까지 유효합니다. 매장에서 직원이 답변을 기록해 드립니다.",
+      "open": "{when}까지 유효합니다.",
+      "booksNoVisit": "수락하셔도 방문이 예약되지는 않습니다 — 서명하러 오실 날은 직접 정하시면 됩니다.",
       "accept": "이 제안 수락하기",
       "acceptConfirm": "{amount}, 기간 {days}일, 기간 전체 이율 {rate}% 조건을 수락하십니다. 방문에 맞춰 서류를 준비해 두겠습니다.",
       "accepted": "제안을 수락했습니다. 서명하실 방문을 예약해 주세요.",
       "decline": "이 제안 거절하기",
-      "declineConfirm": "이 제안을 거절하시겠습니까? 물품 신청은 그대로 두고, 다른 제안을 다시 드릴 수 있습니다.",
+      "declineConfirm": "이 제안을 거절하시겠습니까? 신청은 그대로 유지되며, 다른 제안을 다시 드릴 수 있습니다.",
+      "declineVisitStands": "{when} 방문 예약은 그대로 유지됩니다.",
       "declined": "제안을 거절했습니다.",
       "cancelRequest": "이 신청 취소하기",
-      "cancelConfirm": "이 신청을 취소하시겠습니까? 예약한 방문도 함께 취소되며, 물품은 고객님이 그대로 보관하십니다.",
+      "cancelConfirm": "이 신청을 취소하시겠습니까? 물품은 고객님이 그대로 보관하십니다.",
+      "cancelClosesOffer": "{amount} 제안도 함께 마감됩니다.",
+      "cancelClosesVisit": "{when} 방문 예약도 함께 취소됩니다.",
       "howItWorks": {
         "title": "대출 이용 방법",
         "sign": "수락하시면 방문에 맞춰 서류를 준비합니다.",
@@ -281,12 +294,24 @@
       "valuationNote": "이는 저희 직원이 매긴 물품의 감정가이며, 매입 제안이 아닙니다.",
       "back": "돌아가기"
     },
+    "refused": {
+      "offerRanOut": "답변이 저희에게 도착하기 전에 이 제안의 기한이 만료되었습니다. 답변은 처리되지 않았습니다.",
+      "offerReplaced": "답변이 저희에게 도착하기 전에 이 제안을 새 제안으로 변경했습니다. 답변은 처리되지 않았습니다 — 새 제안은 이 페이지에 있습니다.",
+      "moved": "페이지를 열어 두신 동안 이 건의 상태가 바뀌었습니다. 처리된 것은 없습니다 — 이제 페이지에 현재 상태가 표시됩니다.",
+      "quoteStale": "페이지를 열어 두신 동안 상환하실 금액이 바뀌었습니다. 처리된 것은 없습니다 — 이제 페이지에 새 금액이 표시됩니다.",
+      "failed": "지금은 처리하지 못했습니다. 다시 시도하시거나, 매장에서 {reason}을(를) 알려 주세요."
+    },
+    "cancelled": "신청이 취소되었습니다.",
     "agreedTerms": "합의된 조건: {amount}, 기간 {days}일, {when} 만기.",
     "agreedTermsFromAdvance": "합의된 조건: {amount}, 기간 {days}일, 대출금을 받으신 날부터 계산합니다.",
+    "closesAfter": "방문 예약이 없으면, 이 신청은 조건에 합의하신 날부터 {days}일 뒤에 자동으로 종료됩니다.",
     "holding": "물품을 보관하고 있습니다.",
     "holdingSince": "{day}부터 물품을 보관하고 있습니다.",
     "settled": "남은 금액이 없으므로 다음 방문 때 가져가실 수 있습니다.",
     "askForItBack": "반환 요청하기",
+    "askBack": {
+      "confirm": "물품 반환을 요청하시겠습니까? 매장에서 반환 확인서에 서명하신 뒤, 물품을 찾으실 방문 때 가져가실 수 있습니다."
+    },
     "documents": "서류",
     "packetLine": "{title} — {status}",
     "manifestFingerprint": "서명 지문",

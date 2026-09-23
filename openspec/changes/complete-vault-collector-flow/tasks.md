@@ -482,9 +482,10 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       `grade10-site-vault-case-lifecycle-SC-22`,
       `grade10-site-vault-case-lifecycle-SC-23`,
       `grade10-site-vault-case-lifecycle-SC-28`)
-- [ ] 12.4 Build `OfferCard` and `AcceptOfferDialog`, the dialog mounted on a
-      boolean because it carries the terms, and read a superseded offer beside
-      the live one (`grade10-site-vault-valuation-and-offer-SC-21`,
+- [ ] 12.4 Build `OfferCard` and `AcceptOfferDialog`, the dialog held on its
+      subject, the offer, because it is about that one offer and carries its
+      terms, the answer sending that offer so one replaced under the open
+      dialog is refused, and read a superseded offer beside the live one (`grade10-site-vault-valuation-and-offer-SC-21`,
       `grade10-site-vault-valuation-and-offer-SC-22`,
       `grade10-site-vault-valuation-and-offer-SC-25`,
       `grade10-site-vault-valuation-and-offer-SC-26`)
@@ -504,7 +505,7 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       `grade10-site-vault-valuation-and-offer-SC-28`,
       `grade10-site-vault-valuation-and-offer-SC-29`,
       `grade10-site-vault-case-lifecycle-SC-19`)
-- [ ] 12.7 Write the view's stories as `Vault/Cases/CaseDetailView`, one per
+- [ ] 12.7 Write the view's stories as `Vault/Cases/Case Detail View`, one per
       distinct layout, the varied value an args control
 - [ ] 12.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
@@ -542,7 +543,7 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-loan-and-settlement-SC-37`,
       `grade10-site-vault-loan-and-settlement-SC-47`)
 - [ ] 13.5 Write the stories for the loan states under
-      `Vault/Cases/CaseDetailView`
+      `Vault/Cases/Case Detail View`
 - [ ] 13.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
@@ -572,9 +573,13 @@ append to `CaseDetailView.stories.tsx`.
 - [ ] 14.5 Read the reference on the list card and the sent step, and the chip
       and the answer-by day on every list row, the chip reading what the case
       reads (`grade10-site-vault-case-intake-SC-23`,
-      `grade10-site-vault-case-lifecycle-SC-34`)
-- [ ] 14.6 Write the stories for `Vault/Request/RequestWizard` and
-      `Vault/Cases/CaseList`, the empty list among them
+      `grade10-site-vault-case-lifecycle-SC-34`); give the wizard its own
+      address, `/vault/new`, beside `vaultCase` in
+      `apps/frontend/grade10/src/surfaces.ts`, read by `VaultPage` from the
+      address rather than held in its state, so Start another request on an
+      ended case opens the wizard (`grade10-site-vault-case-lifecycle-SC-20`)
+- [ ] 14.6 Write the stories for `Vault/Request/Request Wizard` and
+      `Vault/Cases/Case List`, the empty list among them
 - [ ] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
@@ -614,8 +619,8 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-visit-booking-SC-29`)
 - [ ] 15.5 Show a sibling case the lead's visit and no picker of its own
       (`grade10-site-vault-visit-booking-SC-30`)
-- [ ] 15.6 Write the stories for `Vault/Booking/VisitBooked` and
-      `Vault/Booking/VisitBooking`
+- [ ] 15.6 Write the stories for `Vault/Booking/Visit Booked` and
+      `Vault/Booking/Visit Booking`
 - [ ] 15.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
@@ -671,7 +676,7 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-retention-and-erasure-SC-25`,
       `grade10-site-vault-retention-and-erasure-SC-26`,
       `grade10-site-vault-retention-and-erasure-SC-27`)
-- [ ] 16.7 Write the stories for `Vault/Retention/YourDataView`
+- [ ] 16.7 Write the stories for `Vault/Retention/Your Data View`
 - [ ] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
@@ -924,7 +929,7 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       (`grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
 - [ ] 22.5 Write the stories for `Vault/Admin/Settlement/*` and
-      `Vault/Admin/Valuation/OfferDialog`
+      `Vault/Admin/Valuation/Offer Dialog`
 - [ ] 22.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`

@@ -11,8 +11,9 @@ hold, a wizard to open another, and each case's own page.
   address and reads the language off the collector's cookie, so `/tc/vault`
   matches nothing; signing in is asked for in a dialog, never a redirect
   1. `grade10.com/vault` — the list and the wizard
-  2. `grade10.com/vault/cases/<id>` — one case, the address every email links to
-  3. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
+  2. 🚧 `grade10.com/vault/new` — the wizard, where Start another request lands
+  3. `grade10.com/vault/cases/<id>` — one case, the address every email links to
+  4. `grade10.com/vault/sign#<token>` — the signing ceremony, opened from the
      QR code or link staff hand over; no account needed
 - **Sign-in** — magic link, Google where enabled; no phone number and no SMS
 - **Language** — the section, the wizard, every refusal and the ceremony's
