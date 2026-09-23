@@ -1,4 +1,4 @@
-## 1. Product record
+## 1. Product record (owner: @htonyl)
 
 - [ ] 1.1 Update Winner Order, order-status and post-sale PRD pages with the
   persisted address deadline, derived `address_window_open`, 48-hour
