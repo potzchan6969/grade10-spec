@@ -277,6 +277,33 @@ payments that failed,
 * The detail shows `<buyer>`'s reissue history across all three orders.
 * It shows the reissue count for `<order_9>` itself.
 
+### post-sale-US8-TC5-1: Refunds add to the order history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* admin(holds refund-processing) is viewing an order with existing invoice and fulfilment history.
+
+**Steps:**
+
+1. Open the order history after a refund is recorded.
+
+**Expected Results:**
+
+* Existing invoice and fulfilment entries remain available beside the refund record.
+
 ## post-sale-US6: Operator sees which lots are still in extended bidding
 
 **As an** auction operator,
@@ -460,46 +487,13 @@ payments that failed,
 * The order appears in the filter.
 * The order detail and invoice log show the same complete refund record.
 
-## post-sale-US08: Operator reconstructs an order's history
-
-**As an** operator deciding whether to reinstate a buyer,
-**I want** the existing history to remain available beside refunds,
-**so that** the refund record adds to rather than replaces the order history.
-
-### post-sale-US08-TC1-1: Refunds add to the order history
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** medium
-* **Status:** draft
-* **Behaviour:** positive
-* **Type:** acceptance
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** manual
-* **Testability:** automation, manual
-* **Trace:** post-sale-US-08
-
-**Pre-conditions:**
-
-* admin(holds refund-processing) is viewing an order with existing invoice and fulfilment history.
-
-**Steps:**
-
-1. Open the order history after a refund is recorded.
-
-**Expected Results:**
-
-* Existing invoice and fulfilment entries remain available beside the refund record.
-
-## post-sale-US01: Operator works the listing queue by outcome
+## post-sale-US1: Operator works the listing queue by outcome
 
 **As an** auction operator,
 **I want** the existing outcome queue to remain available with Refunded added,
 **so that** the new filter does not change other outcomes.
 
-### post-sale-US01-TC1-1: Other queue outcomes remain available
+### post-sale-US1-TC1-1: Other queue outcomes remain available
 
 **Classification:**
 

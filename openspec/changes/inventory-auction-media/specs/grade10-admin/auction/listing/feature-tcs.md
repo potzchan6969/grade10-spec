@@ -46,4 +46,4 @@
 
 **Run:** Blind pass read the listing outline, journey, decisions, and marked PRD; it was denied requirements and scenarios.
 
-- **Raised, folded into spec:** selected-product filtering, mixed ordering, combined bounds, Save-time availability, and snapshot stability are covered by `grade10-admin-auction-listing-SC-87` through `SC-92`.
+- **Raised, folded into spec:** selected-product filtering, mixed ordering, combined bounds, Save-time availability, and snapshot stability are covered by `grade10-admin-auction-listing-SC-95` through `SC-100`.

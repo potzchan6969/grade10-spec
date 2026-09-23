@@ -9,16 +9,16 @@ import {
   FeaturedAuctions,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
-import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import {
   CATALOGUE_CANONICAL,
   CATALOGUE_DESCRIPTION,
   CATALOGUE_IMAGE,
   CATALOGUE_TITLE,
-  COLLECTION_LOTS,
   type CatalogueLot,
   type CatalogueStatus,
+  COLLECTION_LOTS,
 } from "./auction-catalogue-content";
+import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 
 const FEATURED_CAP = 4;
@@ -107,12 +107,16 @@ function AuctionCataloguePage({
     ? ordered.filter((lot) => lot.categoryId === selectedId)
     : ordered;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the page's first load runs once, on mount.
   useEffect(() => {
     setPageStatus("loading");
     setPageRevealed(false);
     setListRevealed(false);
     setSkeletonCount(
-      Math.max(ordered.filter((lot) => lot.status !== "Ended").length, DEFAULT_SKELETON_COUNT),
+      Math.max(
+        ordered.filter((lot) => lot.status !== "Ended").length,
+        DEFAULT_SKELETON_COUNT,
+      ),
     );
     const timeout = window.setTimeout(() => {
       setPageStatus("ready");
@@ -120,6 +124,7 @@ function AuctionCataloguePage({
     return () => window.clearTimeout(timeout);
   }, []);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: a reload is keyed on the chosen category alone; the count is read at that moment.
   useEffect(() => {
     if (!filterBootstrapped.current) {
       filterBootstrapped.current = true;
@@ -161,6 +166,7 @@ function AuctionCataloguePage({
     };
   }, [pageStatus]);
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: selectedId re-runs the reveal for each new category.
   useLayoutEffect(() => {
     if (filterStatus !== "ready" || pageStatus !== "ready") {
       if (filterStatus === "loading") setListRevealed(false);
@@ -247,6 +253,7 @@ function AuctionCataloguePage({
       <Toast position="bottom-right" />
       {jsonLd ? (
         <script
+          // biome-ignore lint/security/noDangerouslySetInnerHtml: JSON-LD is serialised from the page's own lots, not user input.
           dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
           type="application/ld+json"
         />
@@ -330,6 +337,7 @@ function AuctionCataloguePage({
                     className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
                   >
                     {Array.from({ length: skeletonCount }, (_, index) => (
+                      // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
                       <li key={`auction-skeleton-${index}`}>
                         <AuctionLotCard
                           heading
@@ -354,7 +362,8 @@ function AuctionCataloguePage({
                       <li
                         className={cn(
                           "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
-                          listRevealed && "translate-y-0 opacity-100 filter-none",
+                          listRevealed &&
+                            "translate-y-0 opacity-100 filter-none",
                         )}
                         key={lot.id}
                         style={{

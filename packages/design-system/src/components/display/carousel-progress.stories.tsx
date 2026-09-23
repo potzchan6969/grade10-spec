@@ -1,10 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import {
-  CarouselProgress,
-  CarouselProgressItem,
-} from "./carousel-progress";
+import { CarouselProgress, CarouselProgressItem } from "./carousel-progress";
 
 const meta = {
   title: "Components/CarouselProgress",
@@ -30,11 +27,7 @@ export const Default: Story = {
   render: () => (
     <CarouselProgress aria-label="Featured lots">
       {SLIDES.map((label, index) => (
-        <CarouselProgressItem
-          active={index === 0}
-          key={label}
-          label={label}
-        />
+        <CarouselProgressItem active={index === 0} key={label} label={label} />
       ))}
     </CarouselProgress>
   ),
@@ -56,6 +49,7 @@ export const Timed: Story = {
     const [paused, setPaused] = useState(false);
 
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: hovering pauses the demo's timer; the dots stay the keyboard controls.
       <div
         className="flex flex-col items-start gap-4"
         onMouseEnter={() => setPaused(true)}

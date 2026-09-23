@@ -105,7 +105,10 @@ export const OneFeatured: Story = {
       canvas.getByRole("navigation", { name: "Categories" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("heading", { level: 3, name: ONE_FEATURED_LOTS[0].title }),
+      canvas.getByRole("heading", {
+        level: 3,
+        name: ONE_FEATURED_LOTS[0].title,
+      }),
     ).toBeInTheDocument();
     expect(
       within(
@@ -131,9 +134,7 @@ export const FewFeatured: Story = {
     expect(
       canvas.getByRole("navigation", { name: "Categories" }),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Pokémon" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
   },
 };
 
@@ -149,17 +150,18 @@ export const BusyMany: Story = {
     expect(
       canvas.getByRole("button", { name: "Minecraft" }),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Pokémon" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
 
     const allAuctions = canvas.getByRole("region", { name: "All Auctions" });
-    const pokemonLot = BUSY_MANY_LOTS.find((lot) => lot.categoryId === "pokemon");
+    const pokemonLot = BUSY_MANY_LOTS.find(
+      (lot) => lot.categoryId === "pokemon",
+    );
     const minecraftLot = BUSY_MANY_LOTS.find(
       (lot) => lot.categoryId === "minecraft",
     );
-    expect(pokemonLot).toBeDefined();
-    expect(minecraftLot).toBeDefined();
+    if (!pokemonLot || !minecraftLot) {
+      throw new Error("the fixture holds a Pokémon lot and a Minecraft lot");
+    }
 
     const pokemon = canvas.getByRole("button", { name: "Pokémon" });
     await userEvent.click(pokemon);
@@ -168,14 +170,14 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).getByRole("heading", {
           level: 3,
-          name: pokemonLot!.title,
+          name: pokemonLot.title,
         }),
       ).toBeInTheDocument();
     });
     expect(
       within(allAuctions).queryByRole("heading", {
         level: 3,
-        name: minecraftLot!.title,
+        name: minecraftLot.title,
       }),
     ).not.toBeInTheDocument();
     expect(
@@ -193,7 +195,7 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).queryByRole("heading", {
           level: 3,
-          name: pokemonLot!.title,
+          name: pokemonLot.title,
         }),
       ).not.toBeInTheDocument();
     });
@@ -204,7 +206,7 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).getByRole("heading", {
           level: 3,
-          name: minecraftLot!.title,
+          name: minecraftLot.title,
         }),
       ).toBeInTheDocument();
     });
@@ -220,9 +222,7 @@ export const QuietTiles: Story = {
     expect(
       canvas.getByRole("navigation", { name: "Categories" }),
     ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Lorcana" }),
-    ).toBeInTheDocument();
+    expect(canvas.getByRole("button", { name: "Lorcana" })).toBeInTheDocument();
     expect(
       canvas.queryByRole("heading", { name: "Categories" }),
     ).not.toBeInTheDocument();
@@ -241,7 +241,9 @@ export const EndedOnly: Story = {
     expect(
       canvas.queryByRole("heading", { name: "Grade10 Auctions" }),
     ).not.toBeInTheDocument();
-    expect(canvas.queryByRole("button", { name: /Watch / })).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: /Watch / }),
+    ).not.toBeInTheDocument();
     expect(
       canvas.getByRole("heading", { level: 3, name: ENDED_ONLY_LOTS[0].title }),
     ).toBeInTheDocument();

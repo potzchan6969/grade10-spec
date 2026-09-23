@@ -1,4 +1,3 @@
-import { Fragment } from "react";
 import {
   Body,
   Column,
@@ -178,131 +177,119 @@ const CtaBundle_CTAWithTitleAndActionLeadSection = (
   );
   return (
     <Section style={{ backgroundColor: pageBackgroundColor }} width="100%">
-      <Fragment>
-        <Row>
-          <Column>&zwj;</Column>
-          <Column
-            style={{
-              backgroundColor,
-              maxWidth: "100%",
-              paddingBottom: "44px",
-              width: "600px",
-            }}
-          >
-            <Section width="100%">
-              <Fragment>
-                <Row>
-                  <Column style={{ padding: "0 24px", textAlign: "center" }}>
-                    <Section style={{ lineHeight: "44px" }}>&zwj;</Section>
-                    {(() => {
-                      if (variant === "minimal") {
-                        return (
-                          <>
-                            {primaryButton}
-                            <Section style={{ lineHeight: "24px" }}>
-                              &zwj;
-                            </Section>
-                            <Text
-                              style={{
-                                color: headingColor,
-                                fontFamily: CtaBundle_fontFamily,
-                                fontSize: "14px",
-                                fontWeight: 600,
-                                lineHeight: "20px",
-                                margin: 0,
-                              }}
+      <Row>
+        <Column>&zwj;</Column>
+        <Column
+          style={{
+            backgroundColor,
+            maxWidth: "100%",
+            paddingBottom: "44px",
+            width: "600px",
+          }}
+        >
+          <Section width="100%">
+            <Row>
+              <Column style={{ padding: "0 24px", textAlign: "center" }}>
+                <Section style={{ lineHeight: "44px" }}>&zwj;</Section>
+                {(() => {
+                  if (variant === "minimal") {
+                    return (
+                      <>
+                        {primaryButton}
+                        <Section style={{ lineHeight: "24px" }}>&zwj;</Section>
+                        <Text
+                          style={{
+                            color: headingColor,
+                            fontFamily: CtaBundle_fontFamily,
+                            fontSize: "14px",
+                            fontWeight: 600,
+                            lineHeight: "20px",
+                            margin: 0,
+                          }}
+                        >
+                          {signoff}
+                        </Text>
+                      </>
+                    );
+                  }
+                  return (
+                    <>
+                      <Heading
+                        style={{
+                          color: headingColor,
+                          fontFamily: CtaBundle_fontFamily,
+                          fontSize: "30px",
+                          fontWeight: 500,
+                          lineHeight: "36px",
+                          margin: 0,
+                        }}
+                        as="h2"
+                      >
+                        {heading}
+                      </Heading>
+                      <Section style={{ lineHeight: "24px" }}>&zwj;</Section>
+                      <Text
+                        style={{
+                          color: textColor,
+                          fontFamily: CtaBundle_fontFamily,
+                          fontSize: "16px",
+                          fontWeight: 300,
+                          lineHeight: "24px",
+                          margin: 0,
+                        }}
+                      >
+                        {subtext}
+                      </Text>
+                      <Section style={{ lineHeight: "36px" }}>&zwj;</Section>
+                      {variant === "title-and-lead" ? (
+                        primaryButton
+                      ) : (
+                        <Section align="center" style={{ margin: "auto" }}>
+                          <Row>
+                            <Column className="cta-title-action-cell">
+                              {primaryButton}
+                            </Column>
+                            <Column
+                              className="cta-title-action-cell cta-title-action-gap"
+                              style={{ width: "24px" }}
                             >
-                              {signoff}
-                            </Text>
-                          </>
-                        );
-                      }
-                      return (
-                        <>
-                          <Heading
-                            style={{
-                              color: headingColor,
-                              fontFamily: CtaBundle_fontFamily,
-                              fontSize: "30px",
-                              fontWeight: 500,
-                              lineHeight: "36px",
-                              margin: 0,
-                            }}
-                            as="h2"
-                          >
-                            {heading}
-                          </Heading>
-                          <Section style={{ lineHeight: "24px" }}>
-                            &zwj;
-                          </Section>
-                          <Text
-                            style={{
-                              color: textColor,
-                              fontFamily: CtaBundle_fontFamily,
-                              fontSize: "16px",
-                              fontWeight: 300,
-                              lineHeight: "24px",
-                              margin: 0,
-                            }}
-                          >
-                            {subtext}
-                          </Text>
-                          <Section style={{ lineHeight: "36px" }}>
-                            &zwj;
-                          </Section>
-                          {variant === "title-and-lead" ? (
-                            primaryButton
-                          ) : (
-                            <Section align="center" style={{ margin: "auto" }}>
-                              <Fragment>
-                                <Row>
-                                  <Column className="cta-title-action-cell">
-                                    {primaryButton}
-                                  </Column>
-                                  <Column
-                                    className="cta-title-action-cell cta-title-action-gap"
-                                    style={{ width: "24px" }}
-                                  >
-                                    &zwj;
-                                  </Column>
-                                  <Column className="cta-title-action-cell">
-                                    <Link
-                                      className="cta-title-action-secondary"
-                                      href={secondaryCtaHref}
-                                      style={{
-                                        backgroundColor:
-                                          secondaryButtonBackgroundColor,
-                                        border: `1px solid ${secondaryButtonBorderColor}`,
-                                        borderRadius: "8px",
-                                        color: secondaryButtonTextColor,
-                                        display: "inline-block",
-                                        fontFamily: CtaBundle_fontFamily,
-                                        fontSize: "16px",
-                                        fontWeight: 600,
-                                        lineHeight: "24px",
-                                        padding: "10px 22px",
-                                        textAlign: "center",
-                                        textDecoration: "none",
-                                      }}
-                                    >
-                                      {secondaryCtaLabel}
-                                    </Link>
-                                  </Column>
-                                </Row>
-                              </Fragment>
-                            </Section>
-                          )}
-                        </>
-                      );
-                    })()}
-                  </Column>
-                </Row>
-              </Fragment>
-            </Section>
-          </Column>
-          <Column>&zwj;</Column>
-        </Row>
-      </Fragment>
+                              &zwj;
+                            </Column>
+                            <Column className="cta-title-action-cell">
+                              <Link
+                                className="cta-title-action-secondary"
+                                href={secondaryCtaHref}
+                                style={{
+                                  backgroundColor:
+                                    secondaryButtonBackgroundColor,
+                                  border: `1px solid ${secondaryButtonBorderColor}`,
+                                  borderRadius: "8px",
+                                  color: secondaryButtonTextColor,
+                                  display: "inline-block",
+                                  fontFamily: CtaBundle_fontFamily,
+                                  fontSize: "16px",
+                                  fontWeight: 600,
+                                  lineHeight: "24px",
+                                  padding: "10px 22px",
+                                  textAlign: "center",
+                                  textDecoration: "none",
+                                }}
+                              >
+                                {secondaryCtaLabel}
+                              </Link>
+                            </Column>
+                          </Row>
+                        </Section>
+                      )}
+                    </>
+                  );
+                })()}
+              </Column>
+            </Row>
+          </Section>
+        </Column>
+        <Column>&zwj;</Column>
+      </Row>
     </Section>
   );
 };
