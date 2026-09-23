@@ -112,13 +112,11 @@ snapshot used to filter events and build cohorts.
   codes, pass serials, and device fingerprints are not cohort traits
 
 :::detail{title="Code map" for="engineer"}
-
 - **Architecture** — [tracking architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/tracking.md) (Simplified ID Merge, per-env tokens, empty-token no-op, capture tests)
 - **Store catalog + ingest** — `packages/grade10-store/backend/src/services/analytics/events.ts`, `…/track.ts`, `…/routes/track.ts` (`POST /api/track`)
 - **Storefront client** — `apps/frontend/grade10/src/core/analytics/` (`createTrackingClient`, device reset); feature call sites under `packages/grade10-store/frontend`
 - **Auction / vault / loyalty emits** — `packages/grade10-auction/backend/src/services/analytics/`, `packages/vault/backend/src/services/analytics/`, `packages/loyalty/backend/src/services/analytics/`
 - **Shared library** — `packages/mixpanel` (`createTracker`, `engagePerson`, browser client)
-
 :::
 
 :::detail{title="Product decisions" for="pm"}
@@ -136,5 +134,4 @@ snapshot used to filter events and build cohorts.
 | Checkout Started           | Decided | The worker sends it when checkout is accepted. The browser has already left for Shopify.                                                                                    | Product         |
 | Ownerless then claimed     | Decided | Order Paid is sent once, on the order. A later claim does not send it again and does not merge the order device onto the member.                                            | Product         |
 | Collector IP for geo       | Decided | Client and server Mixpanel sends carry the collector IP when known so Mixpanel geolocates the person, not the worker. IP is never stored as a property.                     | Product         |
-
 :::
