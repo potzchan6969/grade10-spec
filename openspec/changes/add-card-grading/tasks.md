@@ -1155,7 +1155,7 @@ Stage (c).
 
 Stage (c).
 
-- [ ] 19.1 Cover the records: the four-eyes CHECK refusing an approver who is
+- [x] 19.1 Cover the records: the four-eyes CHECK refusing an approver who is
       the recorder, `PAYOUT_EXISTS` on the netted read, the reversal, the
       waiver's window and its grant, the settlement rule storage rides, and the
       audit row each act writes (`grade10-admin-grading-counter-SC-62`,
@@ -1171,7 +1171,7 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-43`,
       `grade10-site-grading-submission-lifecycle-SC-42`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 19.2 Write `recordPayout` over the append-only `payouts` table — the
+- [x] 19.2 Write `recordPayout` over the append-only `payouts` table — the
       declared value, the fee refund line beside it, the route till or transfer
       with its reference, `recorded_by` and `approved_by` — refusing
       `SAME_APPROVER` and `PAYOUT_EXISTS` on the netted read under the
@@ -1181,13 +1181,13 @@ Stage (c).
       `grade10-admin-grading-counter-SC-96`,
       `grade10-admin-grading-counter-SC-97`,
       `grade10-site-grading-submission-lifecycle-SC-41`)
-- [ ] 19.3 Write `reversePayout` as one `payout_reversals` row keyed
+- [x] 19.3 Write `reversePayout` as one `payout_reversals` row keyed
       `payout_id`, so a card that turns up reverses its payout on the record
       rather than deleting it, its reason refused empty at the act's input
       schema, never by the column, per `docs/architecture/grading.md`'s
       exceptions table (`grade10-admin-grading-counter-SC-64`,
       `grade10-site-grading-submission-lifecycle-SC-43`)
-- [ ] 19.4 Write `waiveUpcharge` over `upcharge_waivers` with the same two
+- [x] 19.4 Write `waiveUpcharge` over `upcharge_waivers` with the same two
       approver columns and a reason, refused before the cards are back,
       refused when the second person holds no `grading:approve`, and refused
       with an empty reason at the act's input schema, never by the column,
@@ -1196,16 +1196,16 @@ Stage (c).
       `grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-61`,
       `grade10-admin-grading-counter-SC-95`)
-- [ ] 19.5 Tell the collector a damaged card the same day and pay it out at its
+- [x] 19.5 Tell the collector a damaged card the same day and pay it out at its
       declared value with its fee back
       (`grade10-site-grading-submission-lifecycle-SC-42`)
-- [ ] 19.6 Settle storage the way every other kind settles — accrued less the
+- [x] 19.6 Settle storage the way every other kind settles — accrued less the
       settled lines less the waivers — so a storage fee rung at the till clears
       and `collect` can pass
       (`grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 19.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 19.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 19.8 Write the approval pair: `admin.requestApproval` records the
+- [x] 19.8 Write the approval pair: `admin.requestApproval` records the
       recorder's request for a waiver, a payout or a reversal with its reason
       and moves no money; `admin.approveRequest` is a second `grading:approve`
       holder's own call, refused for the recorder, refused on a stale
