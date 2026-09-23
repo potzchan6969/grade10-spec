@@ -104,7 +104,7 @@ leave the line out, not blank, when withheld.
   Shipping & Handling, insurance, subtotal, payment processing fee, and order
   total
 - **WHEN** it renders
-- **THEN** the nine lines appear in that order
+- **THEN** the eight lines appear in that order
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-4 - An invoice with no insurance skips the line without disturbing the order
 **Serves:** InvoicePdf export - the lot and order-value lines render in their fixed order
