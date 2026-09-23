@@ -41,7 +41,8 @@ One round per artifact, and one per task group while the change is building.
   reader verifies itself
 - 🚧 **The blind readings are their own challenge** — the requirements and the
   cases are two readings of the same journeys, reconciled after both are
-  written; what they cannot settle stops on the product manager
+  written, then read by the simpler thing like every other draft; what they
+  cannot settle stops on the product manager
 - 🚧 **About three questions** — the first round asks what changes what is
   built, none of it trivial, one question whether to do it now, and lists the
   rest it decided as decided by the round
@@ -207,7 +208,7 @@ propose, and that every step passes through layers of checks. The brief is
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
-| Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation. | Product, QA, Engineering |
+| Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation, and the simpler thing reads what they reconciled. | Product, QA, Engineering |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |

@@ -19,7 +19,7 @@ artifacts:
     hand: pm
     # The page's marks, `proposal.md`, `decisions.md` and the journeys share
     # one reader list — `agent-rounds/spec.md`'s table names the same six
-    # for all three — so it is written once here and aliased on the other
+    # for all four — so it is written once here and aliased on the other
     # two, never repeated by hand. QA is on none of them: it reads the plan
     # and the build, so a words-only draft of these three reaches the reader
     # of the words and the floor and nobody else.
@@ -559,6 +559,13 @@ artifacts:
   - id: specs
     required: true
     hand: pm
+    # The blind readings are the requirements' challenge and their
+    # reconciliation its verify; the simpler thing reads the reconciled file
+    # after them, before the product manager's word, never during them.
+    perspectives:
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -810,6 +817,13 @@ artifacts:
   - id: test-cases
     required: true
     hand: pm
+    # The blind readings are the requirements' challenge and their
+    # reconciliation its verify; the simpler thing reads the reconciled file
+    # after them, before the product manager's word, never during them.
+    perspectives:
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md

@@ -178,6 +178,9 @@ land both files, together.
   requirements and the cases together
 - **The writer reconciles** — the run that took both readings joins them; it
   does not verify itself
+- **The simpler thing after** — once reconciled, the simpler thing reads both
+  files for size before the product manager's word, and the run applies what
+  stands to both; it never folds a case into a scenario
 
 #### Scenario: shared-planning-agent-rounds-SC-06 - The requirements' round takes two readings
 **Serves:** The round - the requirements of every change are drawn twice before anybody reads them
@@ -555,8 +558,8 @@ them from there.
 | `ui-design.md` | The journeys, walked; the design system's inventory and its parity with the design file; the words, as the reader would say them |
 | `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
 | `spec.md` and `feature-tcs.md` | The two blind readings, then the reconciliation |
-| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag; the simpler thing |
-| A task group | Missing pieces, simplicity, code smell and the repository's conventions where the group lands code; the reader of words where it lands a page's words; QA; operations on a migration or a flag; the simpler thing |
+| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag |
+| A task group | Missing pieces, simplicity, code smell and the repository's conventions where the group lands code; the reader of words where it lands a page's words; QA; operations on a migration or a flag |
 
 - **One entry, three facts** — each perspective carries its name, what in a
   draft summons it, and the reader it dispatches

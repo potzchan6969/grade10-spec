@@ -28,6 +28,9 @@ nothing else is.
   scenarios and the blind suite, neither reader seeing the other's output
 - **Verify** — their reconciliation, taken by the run that took both readings.
   No verifier agent reads them, and no agent decides between them
+- **Then the simpler thing** — once reconciled, dispatch `simpler` over both
+  files, as on every round; the run applies what stands to both, and never
+  folds a case into a scenario
 - **Stops on the product manager** — a disagreement or a question neither
   reading can settle is a numbered `Q<n>` row for them; the blind pass's own
   findings go to `decisions.md`'s `## Raised` table as `planning-qa` says

@@ -120,9 +120,8 @@ findings, and the bundle each one is given. It reads no record key.
   `agent` file is dispatched once per entry naming it. Never pass one reader
   another reader's findings, nor a verifier's verdict
 - **A verifier when `verifier` is true** — dispatch `.claude/agents/verifier.md`
-  once, with every reader's findings and the draft; its table carries one row
-  per kind of finding naming each reader that filed it, quoting each reader's
-  fix where they differ
+  once, with every reader's findings and the draft; its table is laid out as
+  [Readers](../../../docs/governance/round-summary.md#readers) says
 - **One reader verifies itself** — where `verifier` is false because the round
   dispatched one reader in all, no verifier runs: that reader argues its own
   findings
@@ -130,9 +129,11 @@ findings, and the bundle each one is given. It reads no record key.
   on the fallback and named `<name> (fallback)` in the summary and the row; a
   reader still missing stops the round, as [Round Summary and
   Landing](../../../docs/governance/round-summary.md#readers) says
-- **The requirements are exempt** — for `spec.md` and `feature-tcs.md` the
-  challenge is the two blind readings and the verify their reconciliation, by
-  the run that wrote them; what they cannot settle stops on the product manager
+- **The requirements' readings come first** — for `spec.md` and
+  `feature-tcs.md` the challenge is the two blind readings and the verify their
+  reconciliation, by the run that wrote them; the simpler thing then reads the
+  reconciled files, and the run applies what stands to both before the product
+  manager's word; what none of them settles stops on the product manager
 - **The principles** — a reader of `tech-design.md` or of a task group names
   one of [the eight](../../../docs/governance/system-design.md) per finding;
   one naming none is not carried
@@ -154,8 +155,8 @@ Landing](../../../docs/governance/round-summary.md)):
    first line and its recommendation, under "held rows"; then the ids the
    round decided, on one line
 5. **What is next** — the one word or answer you are waiting for, from whom,
-   and the moves of the hand it addresses alone; `land with recommendations`
-   only while a held row is open
+   and that hand's moves, as [Hand's
+   Reply](../../../docs/governance/round-summary.md#hands-reply) says
 
 Write it to `.round/thread.txt` and post it with
 `node scripts/openspec/relay-post.mjs --message-file .round/thread.txt`: the
@@ -168,8 +169,7 @@ platform yourself, and never hold or read a token.
   press is the same word as typing it
 - **A held row for another hand** — its own reply, as [Held
   Row](../../../docs/governance/round-summary.md#held-row) says:
-  `node scripts/openspec/relay-post.mjs --row <Q> --change <change>`, once
-  per change, round and row
+  `node scripts/openspec/relay-post.mjs --row <Q> --change <change>`
 
 ## The Hand's Four Moves
 
@@ -259,7 +259,8 @@ drafts sit above the landing.
 
 `--perspectives` and `--stood` are owed on every landing: the perspectives
 named are ones the artifact's list issues, every `always` reader among them,
-and a round that found nothing stood says so. The other flags and refusals
+and `--stood` names what stood, never what fell; a round that found nothing
+stood says so. The other flags and refusals
 are the command's header's.
 
 - **A fix pass is a round** — the fixes off a demonstration or a whole-change
