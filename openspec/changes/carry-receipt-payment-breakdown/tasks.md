@@ -26,7 +26,7 @@
     ordered-partial, tolerance-close, overpayment and refunded/reversed receipt
     cases through the shared payment transaction.
 
-## 3. Payment recording and receipt contracts (grade10)
+## 3. Payment recording and receipt contracts (grade10) (owner: @htonyl)
 
 - [ ] 3.1 In `winnerInvoice.ts`, make the shared invoice payment transaction
   calculate and persist the four receipt-time values under the existing
