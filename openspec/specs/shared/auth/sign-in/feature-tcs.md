@@ -1832,7 +1832,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1855,15 +1855,16 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Dismiss the dialog in tab A and navigate to <grade10 store url>.
-2. Follow the unused, unexpired link from that email in tab B.
-3. Return to tab A.
+1. In tab A, close the **Check Your Email** dialog.
+2. In tab A, go to the store home.
+3. In tab B, follow the unused, unexpired link from that email.
+4. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows the collector signed in.
-* The add is not carried out: dismissing the ask dropped it.
-* The cart holds no line for <listing>.
+* The add is not carried out.
+* The cart has no line for <listing>.
 
 ### shared-auth-sign-in-US8-TC6-1: Refused action is done once, not twice
 
@@ -1871,7 +1872,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1896,7 +1897,7 @@ Runs once per row of **Test data**.
 
 1. Follow the unused, unexpired link from that email in tab B.
 2. Return to tab A, and confirm <listing> is in the cart once.
-3. Leave tab A and return to it again, without touching the add control.
+3. Leave tab A for tab B, then return to tab A, without touching the add control.
 
 **Expected Results:**
 
@@ -1909,7 +1910,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1948,7 +1949,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1961,6 +1962,7 @@ Runs once per row of **Test data**.
 
 * customer is signed out on both brands.
 * Tab A is on <zzz store url> showing Check Your Email for a ZZZ link.
+* An unused, unexpired Grade10 sign-in link has been sent to <collector email>.
 
 **Test data:**
 
@@ -1984,7 +1986,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2009,8 +2011,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Follow the newest link from that address in tab B.
-2. Return to tab A, then to tab C.
+1. Ask for a sign-in link at <collector email> on tab B.
+2. Follow the newest link from that address in tab B.
+3. Return to tab A, then to tab C.
 
 **Expected Results:**
 
@@ -2023,7 +2026,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2062,7 +2065,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
