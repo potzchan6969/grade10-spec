@@ -9,7 +9,10 @@
     "label": "nav/promo",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4171-9025",
     "classes": "flex h-9 items-center justify-center overflow-hidden bg-secondary-foreground px-8",
-    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary \u2014 get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative."
+    "note": "Size/size-9 + Gap/gap-8. Fill resolves to #575757 in Figma (Grade10 secondary-foreground / gray-600), not Base/primary \u2014 get_variable_defs lists Base/primary on the node for other bindings; the audit fill is authoritative.",
+    "diverges": {
+      "bg-secondary-foreground": "Figma now fills the banner #0B0A0A, the inverse background the footer uses. The code keeps the grey main ships until design confirms the change; a designer reconciles the frame or the code follows it in its own change."
+    }
   },
   {
     "label": "nav/bar",
