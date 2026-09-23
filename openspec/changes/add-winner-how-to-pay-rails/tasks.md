@@ -23,4 +23,5 @@
       Submit Payment Proof standalone; Payment page shell + **Submit Proof
       Flow** / **Pay with Card** CTA outcomes (no duplicate dialog smokes)
 - [x] 1.6 Run ui-ux-pro-max ux/shadcn searches and pre-delivery checklist
-      (375px, QR alt, touch gap, body scroll on panels)
+      (320px hug + horizontal tab scroll; `sm+` full-width track; QR alt;
+      touch gap; body scroll on panels)

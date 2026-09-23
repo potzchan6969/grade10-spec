@@ -17,8 +17,10 @@ opened from the page secondary control.
 
 Title **View Bank Details**. Subtext: choose a transfer method and use the
 details below. Amount due as medium emphasis type only. Tabs (default pill
-variant, `defaultValue="fps"`, full-width list): FPS, HK Local, International.
-Each panel scrolls inside the dialog (tab list stays put). FPS: scan QR (solid
+variant, `defaultValue="fps"`): FPS, HK Local, International. From `sm` up
+the list is full-width and shares the track; below `sm` it hugs each label
+and scrolls horizontally so the three names stay readable. Each panel
+scrolls inside the dialog (tab list stays put). FPS: scan QR (solid
 border frame) beside manual FPS ID / account name. HK Local: bank name, bank
 code, branch code, full account number (bank and branch code included). SWIFT:
 beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC,
@@ -45,7 +47,7 @@ in `@grade10/design-system`.
 | Export | Package | Role |
 | --- | --- | --- |
 | `Dialog`, `DialogHeader`, `DialogTitle`, `DialogSubtext`, `DialogBody`, `DialogFooter`, `DialogClose` | `@grade10/design-system` | Both modals |
-| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | `@grade10/design-system` | Rail switch in View Bank Details (default / pill) |
+| `Tabs`, `TabsList`, `TabsTrigger`, `TabsContent` | `@grade10/design-system` | Rail switch in View Bank Details (pill; full-width from `sm`, hug + scroll below) |
 | `Button` | `@grade10/design-system` | Submit Payment Proof / View Bank Details / Done / Submit |
 | `Alert` | `@grade10/design-system` | OUR note on SWIFT (inline, not dismissible) |
 | `FileDropzoneTarget`, `FileDropzoneFileList` | `@grade10/design-system` | Proof upload |
@@ -54,8 +56,9 @@ in `@grade10/design-system`.
 | Preview `WinnerOrderPaymentProofDialog` | `apps/preview` | Proof-only assembly — not a published export |
 
 **ui-ux-pro-max gates (build):** one primary CTA; FPS QR descriptive `alt` /
-`role="img"`; touch gap under primary; no horizontal scroll at 375px; Phosphor
-icons only; Grade10 tokens only (no alternate palette).
+`role="img"`; touch gap under primary; below `sm` the rail tab track may
+scroll horizontally (labels hug, never crush); Phosphor icons only; Grade10
+tokens only (no alternate palette).
 
 **Copy work for `tasks.md`:** preview holds English stand-ins. When
 `grade10-site` wires the surface, answer keys in `@grade10/i18n`.
@@ -76,6 +79,8 @@ icons only; Grade10 tokens only (no alternate palette).
 | Open (FPS default) | Amount + FPS panel (ID, account name, QR with alt, payment reference at bottom) | `winner-order-SC-181` |
 | HK Local tab | Bank name, bank code, branch code, full account number (bank and branch code included); payment reference at bottom | `winner-order-SC-182` |
 | SWIFT tab | Beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number; payment reference; OUR note after reference | `winner-order-SC-183` |
+| Narrow viewport | Pill track hugs labels and scrolls horizontally; International stays readable | **Out of suite:** Storybook View Bank Details at 320px |
+| Wide viewport | Pill track full-width; three triggers share the row | **Out of suite:** Storybook View Bank Details at desktop |
 
 ### Winner Order — Submit Payment Proof
 

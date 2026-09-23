@@ -36,7 +36,7 @@
 
 **Expected Results:**
 
-* The listing's admin screen shows a listing code.
+* The Listings table and listing detail screen show the same listing code.
 * The code is present with no further operator action.
 
 ### grade10-admin-auction-listing-US72-TC2-1: A draft listing shows no listing code yet
@@ -219,7 +219,7 @@
 * The API write is refused.
 * The listing code remains `<listing code>`.
 
-### grade10-admin-auction-listing-US72-TC8-1: Listing code is withheld from an operator without permission to view the listing
+### grade10-admin-auction-listing-US72-TC8-1: Listing code follows existing admin listing access
 
 **Classification:**
 
@@ -236,20 +236,112 @@
 
 **Pre-conditions:**
 
-* A created listing.
-* A signed-in operator who may not view listings in the auction Listings section.
+* A created listing whose code is `LK423`.
+* One signed-in operator has existing listing-admin read access.
+* Another signed-in operator lacks that existing access.
 
 **Steps:**
 
-1. Navigate to <grade10 auction admin listings url>.
-2. Attempt to open that listing.
+1. As the authorized operator, read `LK423` in the Listings table and listing detail screen.
+2. As the other operator, attempt to open those same surfaces, including a request that names `LK423`.
 
 **Expected Results:**
 
-* The operator cannot open the listing's admin screen.
-* No listing code is disclosed to them.
+* The authorized operator sees `LK423` in both the Listings table and detail screen.
+* The other operator receives the ordinary listing-access denial and cannot read private listing data.
+* Knowing `LK423` does not grant or broaden admin access; no separate code permission is evaluated.
 
-**Blocked:** Product - whether the listing code needs a view permission separate from whatever already gates a listing's admin screen (this capability's existing requirements gate only writes - price-and-window, publish, call off - never a read); nothing decided this and no such gate is stated for the code.
+### grade10-admin-auction-listing-US72-TC9-1: Allocation retries a projected collision
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-72
+
+**Pre-conditions:**
+
+* A newly created listing's 5-character candidate collides with an active code or retained reservation.
+
+**Steps:**
+
+1. Create the listing.
+2. Read its code on the admin screen.
+
+**Expected Results:**
+
+* Allocation retries atomically.
+* The stored code has the required shape and differs from the colliding code.
+
+### grade10-admin-auction-listing-US72-TC10-1: A retained listing-code reservation is never allocated again
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-72
+
+**Pre-conditions:**
+
+* A retained reservation holds the previously issued code `LK423`.
+
+**Steps:**
+
+1. Create a later listing.
+2. Read its allocated code.
+
+**Expected Results:**
+
+* `LK423` remains unavailable.
+* The later listing receives a different code.
+
+### grade10-admin-auction-listing-US72-TC11-1: Cancel preserves the canonical URL and does not release it
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-72
+
+**Pre-conditions:**
+
+* A published listing has canonical URL `<listing_url>` and code `<listing_code>`.
+
+**Steps:**
+
+1. Call the listing off.
+2. Open `<listing_url>` directly.
+3. Search for the listing in browse and search.
+4. Attempt to create another listing with the same canonical URL.
+
+**Expected Results:**
+
+* `<listing_url>` still serves the called-off listing's public page.
+* The listing is absent from browse and search.
+* The canonical URL and `<listing_code>` remain permanently reserved.
+* A later listing cannot claim `<listing_url>`.
+
 
 ## Reconciliation
 
@@ -262,25 +354,26 @@ of each other's draft.
 
 | Case | Scenario | Disposition |
 | --- | --- | --- |
-| `US72-TC1-1` | `SC-87` | Same claim, kept |
+| `US72-TC1-1` | `SC-87` | Same claim, expanded to both the Listings table and detail screen, kept |
 | `US72-TC2-1` | `SC-88` | Same claim, kept |
 | `US72-TC3-1` | `SC-87` | Real, distinct route (shape assertion) to a scenario the requirement already stated; kept as its own case |
 | `US72-TC4-1` | none | Real behaviour (uniqueness) the requirement's "unique-constrained column" implies but no scenario stated; folded in as `SC-91`, case retraced to it |
 | `US72-TC5-1` | `SC-90` | Same claim, kept |
 | `US72-TC6-1` | `SC-90` | Distinct route (call-off vs. close) to the same scenario, kept |
 | `US72-TC7-1` | `SC-89` | Same claim, kept |
-| `US72-TC8-1` | none | Nobody present can settle it: this capability gates only writes (price-and-window, publish, call off), never a read, and nothing decided whether the code needs a view permission of its own. Kept `draft` with `**Blocked:** Product`; no scenario written |
+| `US72-TC8-1` | `SC-94` | Folded in: existing listing-admin read access controls the code; knowing it cannot grant access or private data. |
+| `US72-TC9-1` | `SC-92` | Folded in: projection collision retry is implementation-backed behavior required by the allocation rule. |
+| `US72-TC10-1` | `SC-93` | Folded in: permanent reservation includes deleted listings. |
 
 No contradiction: both readings agree on every point they both covered.
 
-**Raised**, added to `decisions.md`:
+**Settled**, added to `decisions.md`: the code is visible in both the Listings
+table and detail screen under existing listing-admin read access; knowing it
+cannot grant access or private data.
 
-- Does the listing code need a view permission separate from whatever
-  already gates a listing's admin screen? (blocks `US72-TC8-1`)
-- Does the listing code show only on the listing's own admin detail screen,
-  or also as a column in the Listings table? (`spec.md`'s requirement scopes
-  to the listing's own screen per the journey's wording; the Listings table
-  is not covered either way)
+The called-off address case is part of this identifier change because the
+canonical URL is a permanent listing reference. It replaces the former
+`US5-TC7-1` expectation that call off rewrites and releases the slug.
 
 Out of scope for this capability's reconciliation (raised by the blind
 reading, not carried forward): whether pre-existing listings get a

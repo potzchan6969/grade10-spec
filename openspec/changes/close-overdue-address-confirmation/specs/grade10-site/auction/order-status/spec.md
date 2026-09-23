@@ -4,7 +4,9 @@
   - Invoice status gains `not_issued`: an order exists from lot close, before any invoice has been sent
   - Invoice status gains `expired`: Grade10 writes it when the deadline passes unpaid, so expiry is a recorded fact rather than a time read
 - Supplementary conditions
-  - Address confirmed replaces deadline elapsed: the derivation reads whether the winner has confirmed an address; the deadline is carried by the invoice status
+  - Address confirmation and the persisted address deadline are separate facts:
+    `address_window_open` is derived from `address_deadline_at`, invoice status
+    and current order facts; an operator action never writes a status directly
   - Address window open: a further condition, read from the order's own facts, which gates what the winner may write rather than what the order reads as
 - Derived order status
   - Awaiting Setup and Preparing Invoice: the two states before an invoice, shared by winner and operator alike
@@ -18,12 +20,14 @@
 
 ### Requirement: The address deadline gates the winner's address write
 
-Grade10 SHALL read one further condition, `address_window_open`, from data it
-already holds, and SHALL NOT store it as a status enum.
+Grade10 SHALL persist the order's `address_deadline_at` and derive one further
+condition, `address_window_open`, from that timestamp, invoice status and the
+current order facts. Grade10 SHALL NOT store `address_window_open` as a status
+enum.
 
 | Condition | Source |
 | --- | --- |
-| `address_window_open` | The auction order's address deadline has not passed, per `grade10-site/auction/winner-order` |
+| `address_window_open` | The persisted `address_deadline_at` is in the future, the invoice is still `not_issued`, and the current order facts permit a winner write |
 
 `address_window_open` SHALL NOT be an input to the derived order status. It
 gates what the winner may write rather than what the order reads as: while it
@@ -43,15 +47,15 @@ write again. An operator reopening the address form SHALL make
 `grade10-site/auction/winner-order`, and Grade10 SHALL NOT read the condition
 afterwards.
 
-#### Scenario: auction-status-SC-30 - The address deadline is read, never stored
+#### Scenario: auction-status-SC-30 - The address window is derived from its persisted deadline
 **Serves:** Supplementary conditions - the address deadline is read from the order's own facts
 
-- **GIVEN** an auction order whose lot closed at 2026-09-12T09:00:00Z and
-  whose address form has not been reopened
+- **GIVEN** an auction order whose persisted `address_deadline_at` is
+  2026-09-14T09:00:00Z and whose address form has not been reopened
 - **WHEN** `address_window_open` is read at 2026-09-14T08:59:00Z and again at
   2026-09-14T09:01:00Z
 - **THEN** it is true at the first reading and false at the second
-- **AND** no status enum was written between the two readings
+- **AND** no `address_window_open` status enum was written between the two readings
 
 #### Scenario: auction-status-SC-31 - A passed address deadline keeps Awaiting Setup
 **Serves:** Derived order status - a passed address deadline keeps its status

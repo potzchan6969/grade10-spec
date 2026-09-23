@@ -107,7 +107,7 @@
 
 **Expected Results:**
 
-* No reopen control is offered.
+* The reopen control is visible and disabled.
 * The reopen is refused.
 * The address deadline is unchanged.
 
@@ -318,9 +318,9 @@ Runs once per row of **Test data**.
 * The needs-action treatment matches the row.
 * `<expired-invoice order>` shows its Expired invoice status beside Pending Payment.
 
-### post-sale-US18-TC10-1: Overdue marks a stalled order in either pre-invoice state
+### post-sale-US18-TC10-1: Awaiting Setup becomes Overdue at the 48-hour address deadline
 
-Runs once per row of **Test data**.
+Runs once per row of **Test data**. The Preparing Invoice stage is intentionally not included here because it has no queue Overdue mark before invoice send; TC24 asserts that absence.
 
 **Classification:**
 
@@ -346,7 +346,6 @@ Runs once per row of **Test data**.
 | --- | --- | --- | --- |
 | `<awaiting-address order>` | 2026-09-05T11:59:00Z | Awaiting Setup | absent |
 | `<awaiting-address order>` | 2026-09-05T12:00:00Z | Awaiting Setup | present |
-| `<preparing-invoice order>` | 2026-09-05T12:00:00Z | Preparing Invoice | present |
 
 **Steps:**
 
@@ -357,6 +356,99 @@ Runs once per row of **Test data**.
 * The Overdue mark is present or absent as the row states.
 * The outcome is the one the row names, marked or not.
 * The order is not expired or closed by the mark.
+
+### post-sale-US18-TC24-1: Preparing Invoice has no queue Overdue mark before invoice send
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** none
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** Queue
+
+**Pre-conditions:**
+
+* `<preparing-invoice order>` has invoice status `not_issued` and its persisted
+  48-hour address deadline has passed.
+* admin(holds payment-processing) is on the post-sale queue.
+
+**Steps:**
+
+1. Read `<preparing-invoice order>` in the queue.
+
+**Expected Results:**
+
+* The queue has no Overdue mark for `<preparing-invoice order>`.
+* The order remains Preparing Invoice and is not cancelled or expired.
+* No payment Overdue timer or payment deadline exists before invoice send.
+
+
+### post-sale-US18-TC25-1: Concurrent address write and reopen serialize
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-18
+
+**Pre-conditions:**
+
+* An Awaiting Setup order has an expired address deadline and no confirmed address.
+* A winner address write and an operator reopen can be submitted concurrently.
+
+**Steps:**
+
+1. Submit both operations concurrently.
+2. Read the final address snapshot, deadline and derived status.
+
+**Expected Results:**
+
+* The operations serialize under the order boundary.
+* The final snapshot and deadline match the last committed transition.
+* The order is internally consistent and no partial address overwrite exists.
+
+### post-sale-US18-TC26-1: Phone-recorded address carries an audit actor and reason
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Audit trail
+
+**Pre-conditions:**
+
+* An expired Awaiting Setup order has no confirmed address.
+* admin(holds payment-processing) has a phone-provided address and a reason.
+
+**Steps:**
+
+1. Record the address without reopening the window.
+2. Read the invoice log.
+
+**Expected Results:**
+
+* The order derives as Preparing Invoice while the winner window remains closed.
+* The log names the operator, timestamp and reason.
 
 ### post-sale-US18-TC11-1: Send locks the address and starts the seven days
 
@@ -828,11 +920,12 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | Whether a cancelled order's address form can be reopened | **Folded in** after a grilling round. It cannot: cancellation has already returned the lot to stock — `grade10-admin-auction-post-sale-SC-83` and `post-sale-US18-TC15-1`. The suite deliberately wrote no case rather than invent a refusal, which is why the question survived to be asked |
 | Whether an operator may record the address without reopening | **Folded in** from the same round — `grade10-admin-auction-post-sale-SC-84` and `post-sale-US18-TC16-1` |
-| Whether the Overdue mark clears on a reopen | **Agreed** by both readings, then **handed on.** `check:manual` refuses two in-flight changes folding one requirement, and the Overdue mark is `revise-auction-winner-invoicing`'s. `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` stay in the suite and become runnable when that change realigns the mark to the address window |
+| Whether the Overdue mark follows the 48-hour address deadline | **Folded in:** `post-sale-US18-TC4-1` and `post-sale-US18-TC10-1` cover the Awaiting Setup mark; `post-sale-US18-TC24-1` asserts no Preparing Invoice queue mark or payment Overdue timer before invoice send. |
+| Address write/reopen race and phone-recorded audit entry | **Folded in:** `SC-90`/`SC-91` with `post-sale-US18-TC25-1`/`TC26-1`. |
 | Whether a closed window stops an operator sending a quoted invoice | **Agreed.** It does not — the requirement gates the winner's write alone, and `post-sale-US18-TC13-1` reads it that way |
 | An expired invoice can only be paid in the admin portal | **Folded in** — `grade10-admin-auction-post-sale-SC-85`, `SC-86` and `SC-89`, walked by `post-sale-US18-TC17-1`, `TC19-1` and `TC21-1` |
 | A card payment at exactly the deadline | **Folded in.** Judged on receipt: at or after the deadline is refused — `grade10-admin-auction-post-sale-SC-86` |
 | A card payment started before the deadline that confirms after | **Folded in** after a grilling round: a payment started in time counts, and the invoice is held `pending` until its outcome — `SC-87` and `SC-88`, with `post-sale-US18-TC22-1` and `TC23-1` added |
-| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** Reissue is `revise-auction-winner-invoicing`'s; `post-sale-US18-TC20-1` checks only the new deadline and walks that change's requirement |
+| Whether a reissue re-prices the fee or the premium minimum, or needs a reason | **Out of scope.** This change checks only the existing reissue deadline behavior. |
 | Whether settling an expired invoice restores bidding | **Already decided** on the Winner Order page: paying does not restore bidding by itself. Suspension belongs to `grade10-site/auction/bidder-suspension` |
 | Whether the winner is told about a reissue | **Out of scope**, with the other letters, in a follow-on change |

@@ -29,7 +29,10 @@
 | Q6 | Does a refund or reversal touch receipts already issued? | No. Receipts are append-only: none is reissued, and no later receipt's Previous Payments moves | The reference's revision approach, where refunding the second of three payments reissues that receipt and every receipt after it to keep the chain honest — and reopens `add-winner-refund`, which already retains receipts untouched |
 | Q7 | Which total does Original Invoice Total name when an invoice is reissued? | The question does not arise: a reissue is refused once any payment is recorded, so one invoice and one total stand for the life of the collection | The reference's claim that payments survive a reissue, which leaves Original ambiguous between the invoice paid against and the one now live |
 | Q8 | The interview settled a new receipt id, `RC-LK7P2Q-01-P1`, replacing the `REC-` form already issuing. Does it ship here? | No — pulled out of scope on the author's word, and the whole id question with it. Nothing about a receipt's name changes; the breakdown is the change | Carrying a breaking id change alongside a content fix, which would have held a correct receipt behind a format nobody has to decide yet. The disagreement it would have settled does not go away: the page and the store still name receipts differently, now recorded as ❓ rather than silently |
+| Q9 | Does Winner Order show payment amounts or a running balance during partial payment? | No. It shows Partially Paid and Contact Us. Receipts are the only winner-facing surface for payment amounts and balances. | Showing a live amount on the page while self-service payment is unavailable |
 
 ## Raised
 
-None.
+| Capability | Raised | Landed |
+| --- | --- | --- |
+| `grade10-site/auction/winner-order` | Should Winner Order show partial-payment amounts or a running balance, or keep those values on receipts only? | Q9 |

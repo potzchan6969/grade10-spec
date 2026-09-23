@@ -23,10 +23,12 @@ without manual identifier clarification.
   5-character Crockford Base32 value with no fixed prefix, always leading
   with 2 letters (for example `LK423`, `UY294`). It is allocated when the
   listing is created, stored in a unique-constrained column, and never
-  reused unless the listing record is deleted entirely. It does not appear
+  reused, including after deletion. It does not appear
   on grade10-site's public listing pages, where lots are identified by their
-  titles; it is shown on grade10-admin's listing screens for operators, and
-  becomes the collector-facing payment reference — safe to type into FPS,
+  titles; it is shown in both grade10-admin's Listings table and listing detail
+  screen to operators with existing listing-admin access, and knowing the code
+  cannot grant access to the listing or its private data. It becomes the
+  collector-facing payment reference — safe to type into FPS,
   local bank transfer and SWIFT notes — once an order exists on that listing.
   There is no separate public order identifier: this one code is what a
   winner quotes for their order, on order lists, order detail, support
@@ -34,9 +36,9 @@ without manual identifier clarification.
 - Carry the payment reference code into Stripe transaction metadata so
   provider records can be matched during reconciliation without exposing a
   provider transaction ID to the collector.
-- Propose an invoice identifier built from the payment reference plus a
-  2-digit issuance sequence, so it stays short while remaining unique across
-  reissues.
+- Propose an invoice identifier built from the payment reference plus an
+  issuance sequence that starts at `01`, uses at least two digits, and
+  continues as `100` after `99`, so it remains unique across reissues.
 - Propose receipt identifiers built from the invoice identifier plus a
   receipt sequence, distinguishing each payment returned against one invoice,
   including partial-payment and final-settlement receipts.
@@ -63,10 +65,11 @@ both valid examples. The first 2 characters are drawn only from the alphabetic
 subset of the Crockford charset (`ABCDEFGHJKMNPQRSTVWXYZ`, no digits); the
 remaining 3 characters are drawn from the full 32-character charset
 `0123456789ABCDEFGHJKMNPQRSTVWXYZ`. It is allocated once, when the listing is
-created, by running a keyed one-way function (for example HMAC-SHA256 with a
-server-side secret) over the internal listing ID and mapping the resulting
-bytes into those two character pools; a collision against the unique
-constraint retries with a salted recompute. It is written to Stripe metadata
+created, and is permanently reserved, including after deletion. One permitted
+implementation is a keyed one-way function (for example HMAC-SHA256 with a
+server-side secret) over an internal system UUID or listing ID; that 5-character
+projection can collide, so allocation must retry against active codes and
+retained reservations. It is written to Stripe metadata
 under `payment_reference_code` once an order exists, and it is the payload
 both the invoice and receipt identifiers are built from:
 
@@ -129,13 +132,9 @@ None.
 
 ## Open Questions
 
-- ❓ `grade10-admin/auction/listing`: does the listing code need a view
-  permission separate from whatever already gates a listing's admin screen?
-  Raised by the blind test-design pass; nothing in this capability states a
-  read-side gate today, only write grants. PM decides.
-- ❓ `grade10-admin/auction/listing`: does the listing code show only on the
-  listing's own admin detail screen, or also as a column in the Listings
-  table? PM/Design decide.
+A previously cached shared-link preview may persist; Grade10 provides no purge
+or regeneration guarantee. The current public page and every fresh metadata
+fetch omit the code and private data.
 
 ## References
 

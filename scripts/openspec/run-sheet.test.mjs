@@ -526,7 +526,6 @@ test("a Summary run writes identity and SHA on the first row only", () => {
     selection: "Sign-in that is auction related",
     env: "staging",
     sha: "abc123",
-    drafts: 2,
   });
 
   assert.equal(rows.length, SURFACES.length);
@@ -534,6 +533,9 @@ test("a Summary run writes identity and SHA on the first row only", () => {
   assert.equal(SUMMARY_COLUMNS.at(-1), "Commit SHA");
   assert.deepEqual(SUMMARY_COLUMNS.slice(0, 6), SUMMARY_LEAD_COLUMNS);
   assert.equal(SUMMARY_LEAD_COLUMNS.at(-1), "Env");
+  assert.equal(SUMMARY_COLUMNS.includes("Draft"), false);
+  assert.equal(SUMMARY_COLUMNS.includes("Cases"), false);
+  assert.equal(SUMMARY_COLUMNS.indexOf("Pass rate"), SUMMARY_COLUMNS.indexOf("Total") + 1);
 
   const at = (row, name) => row[SUMMARY_COLUMNS.indexOf(name)];
   assert.equal(at(rows[0], "Run ID"), 3);
@@ -541,6 +543,14 @@ test("a Summary run writes identity and SHA on the first row only", () => {
   assert.equal(at(rows[0], "Env"), "staging");
   assert.equal(at(rows[0], "Commit SHA"), "abc123");
   assert.equal(at(rows[0], "Surface"), "Web");
+  const pass = colLetter(SUMMARY_COLUMNS.indexOf("Pass"));
+  const total = colLetter(SUMMARY_COLUMNS.indexOf("Total"));
+  const na = colLetter(SUMMARY_COLUMNS.indexOf("N/A"));
+  assert.match(String(at(rows[0], "Total")), /SUM\(INDIRECT/);
+  assert.match(String(at(rows[0], "Pass rate")), new RegExp(`INDIRECT\\("${pass}"&ROW`));
+  assert.match(String(at(rows[0], "Pass rate")), new RegExp(`INDIRECT\\("${total}"&ROW`));
+  assert.match(String(at(rows[0], "Pass rate")), new RegExp(`INDIRECT\\("${na}"&ROW`));
+  assert.doesNotMatch(String(at(rows[0], "Pass rate")), /COUNTIF/);
   assert.equal(at(rows[1], "Run ID"), "");
   assert.equal(at(rows[1], "Selection"), "");
   assert.equal(at(rows[1], "Env"), "");

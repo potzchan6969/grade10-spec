@@ -2,7 +2,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
   FILE_DROPZONE_MIB,
   FileDropzone,
@@ -146,7 +146,9 @@ export const Composed: Story = {
     const canvas = within(canvasElement);
     const file = new File(["proof"], "slip.pdf", { type: "application/pdf" });
     await userEvent.upload(targetInput(canvasElement), file);
-    expect(canvas.getByText("slip.pdf")).toBeVisible();
+    await waitFor(() => {
+      expect(canvas.getByText("slip.pdf")).toBeVisible();
+    });
   },
 };
 

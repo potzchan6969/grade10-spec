@@ -7,6 +7,9 @@
   - Title stays the reference: a collector and support continue to identify
     and quote a lot by its title and its address, exactly as before the
     listing code existed
+  - Canonical address: a called-off listing is removed from browse and search
+    but remains directly accessible at its canonical address; explicit hard
+    deletion is outside this change and its page accessibility is unspecified
 
 ## ADDED Requirements
 
@@ -26,15 +29,23 @@ serves.
   named by its title alone.
 - **Share preview** - The lot's `og:title`, `og:description`, `og:url`, page
   title and meta description SHALL NOT contain the listing code.
+  A previously cached preview MAY persist; Grade10 provides no purge or
+  regeneration guarantee. Every current page and fresh metadata fetch SHALL
+  still omit the code and private data.
 - **Client-fetched data** - No network response the page's own client code
   requests after scripts run SHALL contain the listing code.
 - **Sitemap** - No sitemap entry SHALL contain the listing code.
-- **Not-found response** - The response for an address naming no published
-  lot SHALL NOT contain the listing code, including in any error detail.
+- **Not-found response** - The response for an address naming no listing or a
+  draft lot SHALL NOT contain the listing code, including in any error detail.
 - **Does not resolve as an address** - The listing code SHALL NOT work as an
   alternate way to reach the lot's address; fetching the auction's
   lot-address path with the listing code in place of the lot's own address
   SHALL answer the same as any address naming no published lot.
+- **Called-off direct address** - Calling a listing off SHALL remove it from
+  browse and search while its canonical address remains directly accessible.
+  The listing code SHALL remain a non-route and SHALL NOT be accepted as the
+  public address. Explicit hard deletion is outside this change; this
+  requirement does not state what its page does.
 - **Stays true once an order exists** - Once the code becomes the order's
   payment reference on other surfaces, this capability's response, share
   preview and client-fetched data SHALL still not contain it; the lot SHALL
@@ -115,3 +126,51 @@ serves.
   address
 - **AND** neither the response, its share preview, nor any client-fetched
   data for it contains the listing code
+
+#### Scenario: grade10-site-auction-listing-page-SC-28 - A called-off listing keeps its canonical address
+**Serves:** Public identifier - the canonical address remains usable after the lot leaves browse and search
+
+- **GIVEN** a listing whose code and canonical address were allocated
+- **WHEN** the listing is called off before close and its canonical address is
+  opened directly
+- **THEN** the address still resolves to that listing
+- **AND** the listing is absent from browse and search
+- **AND** substituting the listing code for the canonical address does not
+  resolve the listing
+
+## MODIFIED Requirements
+
+### Requirement: An address that names no lot is refused
+
+The catalogue SHALL be what decides whether an id names a published lot,
+asked when the address is asked for. An address under the auction's lots
+naming no published lot SHALL answer with status 404 and the site's not-found
+screen, never an empty lot page and never the catalogue.
+
+The address of a Draft lot SHALL give the same 404 response, even if it was
+once published. A called-off lot's canonical address SHALL continue to serve
+its public listing page after it is removed from browse and search, as
+`grade10-site/auction/lot-status` defines.
+
+#### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
+**Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
+
+- **WHEN** an address under the auction's lots naming no published lot is
+  fetched
+- **THEN** the response has status 404
+- **AND** a collector opening it sees the site's Page not found screen
+
+#### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
+**Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
+
+- **GIVEN** a lot the catalogue publishes
+- **WHEN** its address is fetched
+- **THEN** the response has status 200 and carries that lot's page
+
+#### Scenario: grade10-site-auction-listing-page-SC-19 - A hidden lot's address shows Page not found
+**Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
+
+- **GIVEN** a draft lot that is not published
+- **WHEN** an address naming that lot is fetched
+- **THEN** the response has status 404
+- **AND** a collector opening it sees the site's Page not found screen
