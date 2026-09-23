@@ -491,23 +491,24 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* admin(holds vault:operate) is on the Case tab of a case at the status named in **Test data**.
+* admin(shop staff) is on the page of a financed case at the status named in **Test data**.
 
 **Test data:**
 
-| Status | Acts offered |
-| --- | --- |
-| submitted | start valuation |
-| offer_made | accept the offer, decline, withdraw the offer |
-| vaulted | move the item, release with notes, unwind, send the forfeiture notice |
+| Status | Offered | Not offered |
+| --- | --- | --- |
+| submitted | start the valuation, cancel the case | make an offer, decline the case, confirm vaulted |
+| offer_made | counter-offer, withdraw the offer, record the acceptance, cancel the case | start the valuation, decline the case, confirm vaulted |
+| vaulted | move the item, release the item, unwind | start the valuation, make an offer, record the acceptance, prepare documents, confirm vaulted, send forfeiture notice |
 
 **Steps:**
 
-1. Read the acts the Case tab offers.
+1. Read the acts each tab offers.
 
 **Expected Results:**
 
-* Only the acts named in **Test data** are offered.
+* Every act in the row's Offered column is offered.
+* No act in the row's Not offered column is offered.
 
 ### grade10-admin-vault-operator-queue-US3-TC3-1: A withheld act names what it is waiting for
 
@@ -1652,7 +1653,7 @@ Runs once per row of **Test data**.
 | `grade10-admin-vault-operator-queue-US2-TC6-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-08` |
 | `grade10-admin-vault-operator-queue-SC-09` | Case added | `grade10-admin-vault-operator-queue-US2-TC7-1`: reading the queue writes no audit entry |
 | `grade10-admin-vault-operator-queue-US3-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-12` |
-| `grade10-admin-vault-operator-queue-US3-TC2-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-10` |
+| `grade10-admin-vault-operator-queue-US3-TC2-1` | Reconciled, data corrected | `grade10-admin-vault-operator-queue-SC-10`. The draft offered a decline at `offer_made` and a forfeiture notice at `vaulted`; the case machine allows a decline only from `under_valuation` and a notice only on a loan past due, so both now sit in the Not offered column, and each row names the acts the machine allows at its status |
 | `grade10-admin-vault-operator-queue-US3-TC3-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-37` |
 | `grade10-admin-vault-operator-queue-US3-TC4-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-11` |
 | `grade10-admin-vault-operator-queue-US4-TC1-1` | Reconciled | `grade10-admin-vault-operator-queue-SC-18`; the locker's optionality is the durable requirement's, which this change does not reopen |

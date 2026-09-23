@@ -143,3 +143,70 @@ page that lists them.
 - **WHEN** they take the download
 - **THEN** each of the three is recorded as a read, and one entry on the audit
   trail names who took it, when, and that it held three documents
+
+## MODIFIED Requirements
+
+### Requirement: The signing link is single-use, short-lived and bound to one device
+
+The ceremony SHALL be reached at the brand's own signing address, carrying a
+256-bit token in the address fragment so that no server, log or referrer
+receives it. The token SHALL be stored only as a digest.
+
+The link SHALL last 30 minutes, SHALL be usable once, and SHALL be bound to
+the first device that opens it. A signer needs no account.
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-10 - A link opened on a second device is refused
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
+
+- **GIVEN** a signing link already opened on one device
+- **WHEN** it is opened on another
+- **THEN** it is refused by name and nothing is shown
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-11 - A link past its window is refused
+**Serves:** The ceremony - a link past its window is refused
+
+- **GIVEN** a signing link minted 31 minutes ago
+- **WHEN** it is opened
+- **THEN** it is refused by name, and staff can mint another
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-30 - A link that has sealed its packet is refused on a second open
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
+
+- **GIVEN** a signing link whose packet was signed and sealed through it
+- **WHEN** it is opened again, on the device that signed
+- **THEN** it is refused by name and nothing is shown
+- **AND** no further signature or seal is taken
+
+### Requirement: A document can be verified by anyone holding its digest
+
+The vault SHALL answer, at a public address taking a document's SHA-256,
+whether that digest is a document it sealed, and where it is, which template
+it was and when it was completed. The answer SHALL carry nothing about the
+person.
+
+Staff holding the vault read grant SHALL be able to re-check a whole packet:
+the manifest re-derived from its documents, every recorded digest re-taken
+from the stored bytes, and the chain entry re-checked against the rows it
+describes. The answer SHALL be computed afresh every time and never cached,
+and an operator's re-check SHALL itself be recorded.
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-18 - A digest nobody sealed answers as unknown
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
+
+- **WHEN** a digest the vault never sealed is verified
+- **THEN** the answer says it is not one of ours and names nobody
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-19 - A packet is re-derived rather than asserted
+**Serves:** grade10-site-vault-documents-and-signing-US-04 - Auditor proves what a document was when it was signed
+
+- **WHEN** an operator re-checks a sealed packet
+- **THEN** the answer is recomputed from the stored bytes and the chain, and the re-check is recorded against the case
+
+#### Scenario: grade10-site-vault-documents-and-signing-SC-31 - A digest the vault sealed answers with its document and nobody's name
+**Serves:** grade10-site-vault-documents-and-signing-US-01 - Collector signs their case's papers at the counter
+
+- **GIVEN** a document the vault sealed
+- **WHEN** anyone, signed in or not, verifies its digest
+- **THEN** the answer says it is one the vault sealed, with its template and
+  when it was completed
+- **AND** the answer names nobody

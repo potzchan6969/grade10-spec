@@ -152,12 +152,12 @@ sign each document once,
 
 **Steps:**
 
-1. Open the same signing link again.
+1. Open the same signing link again, on the device that signed.
 
 **Expected Results:**
 
-* The link is refused as already used.
-* No new certificate or seal is produced.
+* The link is refused by name, and no document is shown.
+* No further signature or seal is taken.
 
 ### grade10-site-vault-documents-and-signing-US1-TC6-1: A signing link opened after its 30-minute life is refused
 
@@ -316,6 +316,7 @@ sign each document once,
 **Pre-conditions:**
 
 * <a sealed document's SHA-256 digest> is known from a sealed case.
+* The asker is not signed in.
 
 **Steps:**
 
@@ -323,7 +324,9 @@ sign each document once,
 
 **Expected Results:**
 
-* The answer confirms the digest belongs to a sealed vault document, computed fresh at the ask.
+* The answer says the digest is a document the vault sealed.
+* It names the template and when the document was completed.
+* It names nobody.
 
 ### grade10-site-vault-documents-and-signing-US1-TC12-1: A digest nobody issued fails verification
 
@@ -799,13 +802,13 @@ over US1, US3 and US5 and raised three questions. The scenario pass issued
 | `US1-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-01`, `grade10-site-vault-documents-and-signing-SC-04` — both agreements, the term printed as a term |
 | `US1-TC3-1` | Covered | `grade10-site-vault-documents-and-signing-SC-12` |
 | `US1-TC4-1` | Covered | `grade10-site-vault-documents-and-signing-SC-13` |
-| `US1-TC5-1` | Kept, no scenario | The durable requirement *The signing link is single-use, short-lived and bound to one device* states it — the link "SHALL be usable once" — and no scenario reaches it. This change carries no MODIFIED block on that requirement, so no scenario is folded here; the case is what tests the rule, and the next change on the ceremony owes the scenario |
+| `US1-TC5-1` | Folded | `grade10-site-vault-documents-and-signing-SC-30`. The durable requirement *The signing link is single-use, short-lived and bound to one device* says the link "SHALL be usable once", and no scenario reached it; the change now opens that requirement in a MODIFIED block and the scenario lands there |
 | `US1-TC6-1` | Covered | `grade10-site-vault-documents-and-signing-SC-11` |
 | `US1-TC7-1` | Covered | `grade10-site-vault-documents-and-signing-SC-10` |
 | `US1-TC8-1` | Covered | `grade10-site-vault-documents-and-signing-SC-14` |
 | `US1-TC9-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17` |
 | `US1-TC10-1` | Covered | `grade10-site-vault-documents-and-signing-SC-17`; the public verify address beside the documents is the design's Case page row, not a requirement |
-| `US1-TC11-1` | Kept, no scenario | The durable requirement *A document can be verified by anyone holding its digest* states the positive answer; `grade10-site-vault-documents-and-signing-SC-18` states only the unknown digest and `grade10-site-vault-documents-and-signing-SC-19` the operator's re-check. Same reason as `US1-TC5-1`: no MODIFIED block here, so the case carries the rule until that requirement is next opened |
+| `US1-TC11-1` | Folded | `grade10-site-vault-documents-and-signing-SC-31`. The durable requirement *A document can be verified by anyone holding its digest* states the positive answer, and `grade10-site-vault-documents-and-signing-SC-18` and `grade10-site-vault-documents-and-signing-SC-19` state only the unknown digest and the operator's re-check; the change opens that requirement in a MODIFIED block and the scenario lands there. The draft's "computed fresh at the ask" is the re-check's rule, not the public answer's, and left the case |
 | `US1-TC12-1` | Covered | `grade10-site-vault-documents-and-signing-SC-18` |
 | `US3-TC1-1` | Covered | `grade10-site-vault-documents-and-signing-SC-25`, `grade10-site-vault-documents-and-signing-SC-02` |
 | `US3-TC2-1` | Covered | `grade10-site-vault-documents-and-signing-SC-22`, `grade10-site-vault-documents-and-signing-SC-24`, `grade10-site-vault-documents-and-signing-SC-01` |

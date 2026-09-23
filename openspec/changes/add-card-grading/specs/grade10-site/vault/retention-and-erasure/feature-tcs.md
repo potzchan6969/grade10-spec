@@ -355,6 +355,38 @@ Runs once per row of **Test data**.
 * Every history entry stands, none deleted and none rewritten beyond its actor.
 * The entries that named the collector name an erased collector.
 
+### grade10-site-vault-retention-and-erasure-US4-TC10-1: The ask stays held while grading cannot say what stands in its way
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-vault-retention-and-erasure-US-04
+
+**Pre-conditions:**
+
+* customer(closed account) is signed in and on `<grade10 vault your data url>`.
+* The account holds no open vault case and no open erasure request.
+* Grading does not answer what stands in the way of the account's erasure.
+
+**Steps:**
+
+1. Open Your data.
+2. Read the erasure block.
+
+**Expected Results:**
+
+* The page names that grading's holds could not be read.
+* The ask is not offered, and nothing is filed.
+* What the vault keeps stays on screen.
+
 ## Settled
 
 *None yet — suite pending review.*
@@ -377,6 +409,7 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-SC-34` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC7-1`, a row per end event. The blind pass ran the erasure in its pre-conditions and never read the non-refusal as an outcome |
 | `grade10-site-vault-retention-and-erasure-SC-37` | No case reached it | Case added: `grade10-site-vault-retention-and-erasure-US4-TC9-1` — owed mail and the history the erasure leaves standing |
 | `grade10-site-vault-retention-and-erasure-SC-38` | Written on the ruling | `grade10-site-vault-retention-and-erasure-US4-TC7-1`'s first row |
+| `grade10-site-vault-retention-and-erasure-US4-TC10-1` | Case added | The vault's end-to-end walk found the erasure block reading grading's holds with no case to walk when grading cannot answer. The rule is `grade10-site-vault-retention-and-erasure-SC-15` in `complete-vault-collector-flow`'s delta on this capability: a block that cannot be answered names what failed and leaves the answered blocks standing, so the ask block stays unanswered and offers nothing to file, as `grade10-site-vault-retention-and-erasure-SC-33` withholds it while cards are out |
 | Design row `Erasure refused` | Closed | `ui-design.md`'s Your data state on the submission page reads `grade10-site-vault-retention-and-erasure-SC-33` |
 
 ### Manual

@@ -513,7 +513,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * The request becomes the operator's, with a ban applied.
 * Completing a sign-in method does not sign <a subject user id> in.
 
-### shared-auth-users-US5-TC9-1: A taken-over request offers the account holder no cancel
+### shared-auth-users-US5-TC9-2: A taken-over request refuses the account holder's own cancel
 
 **Classification:**
 
@@ -521,25 +521,24 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
-* **Type:** functional
+* **Type:** security
 * **Suites:** regression
-* **Layer:** e2e
+* **Layer:** api
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-users-US-05
 
 **Pre-conditions:**
-<a subject user id> filed their own erasure request, an operator holding `user:delete` then filed over it, and the ban that filing applied has since been lifted. The seven-day window has not passed.
+<a subject user id> filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.
 
 **Steps:**
 
-1. Sign in as <a subject user id>.
-2. Open <Your data page>.
+1. Send the account holder's own cancel as <a subject user id>.
 
 **Expected Results:**
 
-* The page reads the request as one the shop filed.
-* The page offers no cancel.
+* The system refuses the cancel.
+* The request stays open, filed by the operator.
 
 ### shared-auth-users-US5-TC10-1: Closing an already-cancelled request is refused
 
@@ -572,7 +571,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 
 ## Settled
 
-- Once an operator's filing takes a self-filed request over, the account holder's own data page reads it as one the shop filed and offers no cancel; lifting the ban does not return that cancel.
+- Once an operator's filing takes a self-filed request over, the request is the shop's: the account holder's own cancel is refused, and only the run or an operator's cancel ends it. No standing changes while an erasure request is open, so the ban that filing applied stands and the person does not reach their own data page.
 - There is neither a limit nor a cool-down on filing and cancelling: a person may ask and change their mind as often as they like, one open request at a time.
 - The cancel is refused from the first instant of the day an erasure may run, and the request stands until every product has erased what it holds. The guard that holds it to that day is the tech design's, raised there for engineering.
 
@@ -591,7 +590,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-US5-TC6-1` | Joined | `shared-auth-users-SC-38` |
 | `shared-auth-users-US5-TC7-1` | Joined | `shared-auth-users-SC-33`; the cancel is refused from the first instant of the day an erasure may run and the request stays open, which the author confirmed as Q50 |
 | `shared-auth-users-US5-TC8-1` | Joined | `shared-auth-users-SC-36`; the take-over keeps the day an erasure may run, confirmed as Q51 |
-| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded | settled as Q48: the page reads the request as one the shop filed and offers no cancel, and a later unban does not return it. Folded as `shared-auth-users-SC-40`, walked by `shared-auth-users-US5-TC9-1` |
+| Raised: what the account holder sees once a filing takes their request over | Escalated, then folded, then corrected | settled as Q48 and Q65: the request is the shop's from the take-over on, and the account holder's own cancel is refused. Folded as `shared-auth-users-SC-40`. The first fold read the page after a lifted ban, which nothing reaches: no standing changes while an erasure request is open. `shared-auth-users-SC-40` now sends the own cancel instead, walked by `shared-auth-users-US5-TC9-2`, the case's version bumped because the requirement changed what it verifies |
 | Raised: a limit or a cool-down on file-then-cancel cycles | Escalated, then settled | settled as Q49: there is neither. No scenario beyond `shared-auth-users-SC-29`, which already lets a new request be filed once none is open |
 | Raised: the maturity guard behind the cancel | Deferred | the behaviour stands in `shared-auth-users-SC-33`; the mechanism that enforces it is the tech design's cancel binding, raised for engineering in `decisions.md` |
 | `shared-auth-users-SC-28` | Case added | `shared-auth-users-US5-TC10-1`, tracing `Erasure requests`, the group the scenario serves, so the group anchor is walked |
@@ -614,4 +613,3 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-US5-TC5-1` | a person asks a second time from the page and reads the same request back |
 | `shared-auth-users-US5-TC7-1` | a person reads the window as passed and finds no cancel offered |
 | `shared-auth-users-US5-TC8-1` | a person tries to sign in after the shop's filing takes the request over |
-| `shared-auth-users-US5-TC9-1` | a person reads the request as one the shop filed, with no cancel, after the ban is lifted |

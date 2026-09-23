@@ -101,6 +101,7 @@ Where account data lives and how apps reach it. Applies to every brand; examples
 - One open request per person (partial unique index). A request closes once, as `cancelled` or `completed`, under a column guard that refuses DELETE, TRUNCATE, and any second close
 - Nothing polls and nothing sweeps. The open request IS the worklist, and an admin is the retry. `scripts/checks/check-erasure-consumers.mjs` is what stops a product being forgotten, since no scheduler does
 - 🚧 The account holder files their own request from a product's Your data page — the vault's first — and cancels it there inside the seven days; a self-filed request bans nothing, so the person can still sign in to cancel, and an admin still runs each product once the window has passed
+- 🚧 An operator filing over a self-filed request takes it over and bans the account, keeping the day it may run; from then on the person's own cancel is refused, and only the run or an operator's cancel ends it
 - better-auth's `/admin/remove-user` is refused and the refusal is audited: it hard-deletes with no request behind it, so nothing would ever have authorized the products to erase
 
 ### Auth is the guard, not the orchestrator

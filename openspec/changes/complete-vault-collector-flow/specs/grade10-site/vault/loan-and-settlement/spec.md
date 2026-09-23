@@ -359,6 +359,84 @@ the dialog, before they send it.
 
 ## MODIFIED Requirements
 
+### Requirement: The advance is recorded by a second person and starts the term
+
+A person holding the vault payout grant SHALL record the advance against a
+case whose item is in the vault. The record SHALL carry:
+
+| Fact | Rule |
+| --- | --- |
+| Amount | integer minor units, equal to the accepted offer's principal |
+| Bank reference | required, shown to staff only |
+| Value date | the day the money left; not in the future, and not before the signed set was sealed |
+
+It SHALL be refused by name when: an advance already stands on the case; there
+is no completed signed set covering the case's lane; the item is not in
+custody; there is no accepted offer; the amount differs from the principal;
+the value date is in the future or earlier than the seal; or the recorder is
+the person who made the offer being paid out.
+
+The term SHALL run from the value date: the loan falls due at the last moment
+of the calendar day the brand's zone puts `term days` after it, and that due
+date SHALL be fixed when the advance is recorded and SHALL NOT move with a
+later correction of another record.
+
+The case SHALL become `active` in the same act, and the borrower SHALL be told
+the calendar date in writing.
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-01 - The offer's maker may not pay it out
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** an accepted offer written by one operator
+- **WHEN** that same operator records the advance
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-02 - A value date before the signature is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** a case whose signed set was sealed on the 10th
+- **WHEN** an advance is recorded with a value date of the 9th
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-03 - The term runs from the advance
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** an offer of a 30-day term accepted on 1 September
+- **WHEN** the advance is recorded with a value date of 15 September
+- **THEN** the loan falls due at the end of 15 October on the brand's own calendar
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-04 - An amount that is not the principal is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** an accepted principal of 4,000,000 HKD minor units
+- **WHEN** an advance of 3,900,000 HKD minor units is recorded
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-49 - An advance with no bank reference is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** a case in the vault with an accepted offer
+- **WHEN** an advance equal to its principal is recorded with no bank reference
+- **THEN** it is refused by name
+- **AND** the case stays in the vault with no advance recorded
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-50 - A second advance on the same case is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** a case whose advance is already recorded
+- **WHEN** another advance is recorded against it
+- **THEN** it is refused by name
+- **AND** the advance already recorded is unchanged
+
+#### Scenario: grade10-site-vault-loan-and-settlement-SC-51 - An advance before the item is in custody is refused
+**Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
+
+- **GIVEN** a case with an accepted offer whose signed set is not yet sealed
+  and whose item is not in the vault
+- **WHEN** an advance is recorded against it
+- **THEN** it is refused by name
+- **AND** the case has not moved
+
 ### Requirement: What a loan owes is computed at every read
 
 What a loan owes SHALL be derived, at the instant asked about, from the

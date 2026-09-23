@@ -1555,7 +1555,10 @@ the proposal links, and this file for id continuity. It was denied every
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
-| `US1-TC1-1` to `US1-TC7-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-01` to `grade10-site-vault-loan-and-settlement-SC-04`; the required bank reference, an advance already standing and an item not yet in custody are refusals the advance requirement lists and no scenario draws, so nothing was folded |
+| `US1-TC1-1` to `US1-TC4-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-01` to `grade10-site-vault-loan-and-settlement-SC-04` |
+| `US1-TC5-1` | Folded | `grade10-site-vault-loan-and-settlement-SC-49`. The advance requirement makes the bank reference required and no scenario drew the refusal; the change now opens that requirement in a MODIFIED block and the scenario lands there |
+| `US1-TC6-1` | Folded | `grade10-site-vault-loan-and-settlement-SC-50`. The advance requirement refuses an advance where one already stands, and no scenario drew it; folded in the same MODIFIED block |
+| `US1-TC7-1` | Folded | `grade10-site-vault-loan-and-settlement-SC-51`. The advance requirement refuses an advance before the signed set is sealed and the item is in custody, and no scenario drew it; folded in the same MODIFIED block, as the third refusal of the category the first reconciliation left unfolded |
 | `US2-TC1-1` to `US2-TC9-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-05`, `grade10-site-vault-loan-and-settlement-SC-08`, `grade10-site-vault-loan-and-settlement-SC-09`, `grade10-site-vault-loan-and-settlement-SC-12`, `grade10-site-vault-loan-and-settlement-SC-13`, `grade10-site-vault-loan-and-settlement-SC-14`, `grade10-site-vault-loan-and-settlement-SC-15`, `grade10-site-vault-loan-and-settlement-SC-23`; the value-date bounds `US2-TC7-1` walks are the repayment requirement's own list |
 | `US2-TC2-1` and `US2-TC3-1`, "who did not record the payout" | No rule claimed | A pre-condition, not an assertion: the two-person split guards the payout alone, and a repayment's recorder is unconstrained. Raised in `decisions.md`, landed on `Q13` |
 | `US4-TC1-1` to `US4-TC6-1` | Covered | `grade10-site-vault-loan-and-settlement-SC-19` to `grade10-site-vault-loan-and-settlement-SC-22` and the forfeiture requirement's refusals |
