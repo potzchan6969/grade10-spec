@@ -629,6 +629,9 @@
       "readyToCollect": "Hi {name}, your cards are ready to collect at {shop}. Pickup code {code}, {toSettle} to settle at the counter. Open {hours}. Your submission: {link}",
       "notReturned": "Hi {name}, one card from submission {id} did not come back from {grader}. We settle it at its declared value and refund its fee. Your submission: {link}",
       "stillHere": "Hi {name}, your graded cards have been ready at {shop} since {since}. Pickup code {code}. Nothing extra is due for the reminder. Your submission: {link}"
+    },
+    "error": {
+      "diaryUnavailable": "We could not read the diary, so the letter has nothing to print. Try again in a moment."
     }
   }
 }

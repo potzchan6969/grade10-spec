@@ -629,6 +629,9 @@
       "readyToCollect": "{name} 你好，你的卡牌已可在 {shop} 領回。取件碼 {code}，櫃檯尚需結清 {toSettle}。營業時間 {hours}。清單：{link}",
       "notReturned": "{name} 你好，清單 {id} 其中一張卡未能從 {grader} 寄回。我們會按申報價值賠償並退回該張費用。清單：{link}",
       "stillHere": "{name} 你好，你的評級卡牌自 {since} 起一直在 {shop} 等你領回。取件碼 {code}。這則提示本身不收任何費用。清單：{link}"
+    },
+    "error": {
+      "diaryUnavailable": "暫時讀不到預約系統，所以這封信沒有可印的內容，請稍後再試。"
     }
   }
 }

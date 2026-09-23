@@ -204,4 +204,5 @@ reaches only submissions not yet booked:
 | Buttons follow the machine | Decided | Each act shows only at the statuses the contract publishes, cancel never once the cards have left, and the worker refuses independently | Engineering |
 | Counter intake | Decided | A walk-in books the customer-bookable visit and the cards are listed at the counter; the runbook is the same | Product |
 | When the section opens to the shop | ❓ Open | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
+| A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
 :::
