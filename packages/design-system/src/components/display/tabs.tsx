@@ -106,6 +106,8 @@ function TabsList({
   const didMountRef = useRef(false);
   const variantRef = useRef(variant);
   const fullWidthRef = useRef(fullWidth);
+  const fromRef = useRef({ x: 0, w: 0, h: 0 });
+  const animatingRef = useRef(false);
 
   const moveIndicator = useCallback((animate: boolean) => {
     const list = listRef.current;
@@ -123,31 +125,45 @@ function TabsList({
     }
 
     const isPill = list.dataset.variant === "pill";
+    const nextX = active.offsetLeft;
+    const nextW = active.offsetWidth;
+    // `list`: 2px underline under the active trigger.
+    const nextH = isPill ? active.offsetHeight : 2;
+    const fromX = fromRef.current.x;
+    const fromW = fromRef.current.w;
+    const fromH = fromRef.current.h;
+    const samePlace = fromX === nextX && fromW === nextW && fromH === nextH;
 
-    const apply = () => {
+    const paint = (x: number, w: number, h: number) => {
       indicator.style.opacity = "1";
-      indicator.style.transform = `translateX(${active.offsetLeft}px)`;
-      if (isPill) {
-        indicator.style.width = `${active.offsetWidth}px`;
-        indicator.style.height = `${active.offsetHeight}px`;
-        return;
-      }
-
-      // `list`: 2px underline under the active trigger.
-      indicator.style.width = `${active.offsetWidth}px`;
-      indicator.style.height = "2px";
+      indicator.style.transform = `translateX(${x}px)`;
+      indicator.style.width = `${w}px`;
+      indicator.style.height = `${h}px`;
     };
 
-    if (!animate) {
-      const previous = indicator.style.transition;
+    if (!animate || samePlace) {
+      // A same-frame ResizeObserver snap must not cancel an in-flight slide
+      // (controlled tabs re-render and reconnect observers on every change).
+      if (animatingRef.current) return;
       indicator.style.transition = "none";
-      apply();
+      paint(nextX, nextW, nextH);
       void indicator.offsetWidth;
-      indicator.style.transition = previous;
+      indicator.style.transition = "";
+      fromRef.current = { x: nextX, w: nextW, h: nextH };
       return;
     }
 
-    apply();
+    // Rewind to the last resting place, then let CSS slide.
+    animatingRef.current = true;
+    fromRef.current = { x: nextX, w: nextW, h: nextH };
+    indicator.style.transition = "none";
+    paint(fromX, fromW, fromH);
+    void indicator.offsetWidth;
+    indicator.style.transition = "";
+    paint(nextX, nextW, nextH);
+    window.setTimeout(() => {
+      animatingRef.current = false;
+    }, 280);
   }, []);
 
   useLayoutEffect(() => {
@@ -157,7 +173,9 @@ function TabsList({
     fullWidthRef.current = fullWidth;
     // `children` rebinds when the trigger list is replaced.
     void children;
-    moveIndicator(didMountRef.current && !layoutChanged);
+    if (!didMountRef.current || layoutChanged) {
+      moveIndicator(false);
+    }
     didMountRef.current = true;
   }, [moveIndicator, variant, fullWidth, children]);
 
@@ -165,11 +183,9 @@ function TabsList({
     const list = listRef.current;
     if (!list) return;
 
-    // `children` rebinds the observers when the trigger list is replaced.
-    void children;
-
-    const onChange = () => moveIndicator(true);
-    const mutation = new MutationObserver(onChange);
+    // Observe `data-active` — not React children — so a controlled parent
+    // re-render does not discard the record and snap the indicator.
+    const mutation = new MutationObserver(() => moveIndicator(true));
     mutation.observe(list, {
       attributes: true,
       subtree: true,
@@ -192,7 +208,7 @@ function TabsList({
       mutation.disconnect();
       resize.disconnect();
     };
-  }, [moveIndicator, children]);
+  }, [moveIndicator]);
 
   return (
     <TabsPrimitive.List
