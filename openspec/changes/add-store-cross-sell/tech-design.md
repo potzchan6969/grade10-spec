@@ -4,9 +4,10 @@
   the 60 s cache tier; the listing reads the store's mirror of the catalogue
   ([the catalogue index](../../../docs/references/store-catalogue-index.md))
 - **The mirror holds every product whole** — the shop's own JSON per product,
-  its facets as lists of handles read from metafield references and tags
-  (`world:`, `type:`, `language:`), its variants with availability; every
-  isolate holds a copy and follows one keeper per shop from memory
+  its facets as lists of handles read from the custom-data metafields'
+  metaobject references ([Q45](decisions.md#decisions)), its variants with
+  availability; every isolate holds a copy and follows one keeper per shop
+  from memory
 - **The picks live in Shopify** — [Q1](decisions.md#decisions): chosen on the
   card by the stock keeper; which Shopify field holds them is this file's
 - **The rail is cross-sell's own** — its place on the page is a requirement of
@@ -86,10 +87,12 @@ beside `browse.ts`, returning the rail's cards in final order:
   states it; a fourth fact slots into the order rather than forcing new
   weights
 - **One facet source** — the rule reads the mirror's facet handles, drawn
-  from metafield references and tags alike; the page's badges today read the
-  tag prefixes alone, so a card whose world is set by reference and not by
-  tag can be similar by world and wear no world badge — the badge path reads
-  the same handles, as a follow-up outside this change
+  from the custom-data metafields alone (`custom.ip_worlds`,
+  `custom.collectible_type`, `custom.collectible_language`), the ones the
+  listing filters on; the page's badges today read the native product type and
+  the `world:` and `language:` tags, so a card can be similar by world and
+  wear no world badge — the badges move onto the same fields as a follow-up
+  outside this change ([Q45](decisions.md#decisions))
 - **The date the listing already calls newest** — the entry's created date,
   the listing's "latest" order; never the shop's `updatedAt`, on which any
   price edit would reshuffle every rail

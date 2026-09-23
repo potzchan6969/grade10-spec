@@ -58,7 +58,8 @@ See [Non-Goals](decisions.md#non-goals).
   the shared layer; the export set is the requirements'. The two blocks it
   composes widen: the section header's browse label and the card's cart words
   become optional, and a sold-out card can open — each on the capability that
-  owns the export.
+  owns the export. The store home's row of cards draws no cart control, so a
+  sold-out card there opens its page too.
 - `redesign-store-product-detail-page` is Building on the same page; this
   change lands the rail on the redesigned page and carries no delta on
   `grade10-site/store/product-page`.

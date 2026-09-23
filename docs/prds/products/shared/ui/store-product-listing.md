@@ -19,7 +19,8 @@ where the tile sells.
 
 🚧 **Opens where it does not sell** — on a surface that draws no cart control,
 a sold-out tile still opens its product, sold-out treatment and all —
-[You May Also Like](/p/grade10-site/store/cross-sell)
+[You May Also Like](/p/grade10-site/store/cross-sell), and the
+[Main Page](/p/grade10-site/store/home)'s row of cards
 
 🚧 **Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
