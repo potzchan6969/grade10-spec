@@ -28,8 +28,10 @@ import {
  */
 function ReceiptPdfPreview({
   settlement = "card",
+  tax = true,
 }: {
   settlement?: "card" | "manual";
+  tax?: boolean;
 }) {
   const manual = settlement === "manual";
 
@@ -85,6 +87,13 @@ function ReceiptPdfPreview({
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
         <SummaryRow label="Subtotal" value="3,120.00" />
+        {tax ? (
+          <SummaryRow
+            label="Tax"
+            note="Reserved for the separate tax change — no rate or regime is defined yet"
+            value="TBC"
+          />
+        ) : null}
         <SummaryRow label="Payment Processing Fee" value="112.25" />
         <Divider />
         <SummaryRow
@@ -156,8 +165,9 @@ const meta = {
   parameters: { layout: "padded" },
   argTypes: {
     settlement: { control: "inline-radio", options: ["card", "manual"] },
+    tax: { control: "boolean" },
   },
-  args: { settlement: "card" },
+  args: { settlement: "card", tax: true },
 } satisfies Meta<typeof ReceiptPdfPreview>;
 
 export default meta;
@@ -166,3 +176,5 @@ type Story = StoryObj<typeof meta>;
 export const CardSettled: Story = {};
 
 export const ManuallySettled: Story = { args: { settlement: "manual" } };
+
+export const WithoutTax: Story = { args: { tax: false } };

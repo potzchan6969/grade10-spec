@@ -28,9 +28,11 @@ import {
 function InvoicePdfPreview({
   method = "card",
   replaced = false,
+  tax = true,
 }: {
   method?: "card" | "bank";
   replaced?: boolean;
+  tax?: boolean;
 }) {
   const total = method === "card" ? "3,232.25" : "3,170.00";
 
@@ -77,6 +79,13 @@ function InvoicePdfPreview({
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
         <SummaryRow label="Subtotal" value="3,120.00" />
+        {tax ? (
+          <SummaryRow
+            label="Tax"
+            note="Reserved for the separate tax change — no rate or regime is defined yet"
+            value="TBC"
+          />
+        ) : null}
         <Divider />
         <SummaryRow label="Order Total" size="lg" value={total} weight="bold" />
       </VStack>
@@ -147,8 +156,9 @@ const meta = {
   argTypes: {
     method: { control: "inline-radio", options: ["card", "bank"] },
     replaced: { control: "boolean" },
+    tax: { control: "boolean" },
   },
-  args: { method: "card", replaced: false },
+  args: { method: "card", replaced: false, tax: true },
 } satisfies Meta<typeof InvoicePdfPreview>;
 
 export default meta;
@@ -157,3 +167,5 @@ type Story = StoryObj<typeof meta>;
 export const CardPayment: Story = {};
 
 export const BankTransfer: Story = { args: { method: "bank" } };
+
+export const WithoutTax: Story = { args: { tax: false } };
