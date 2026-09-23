@@ -23,7 +23,8 @@ one level, and every card in it carries its own outcome.
   cover line per card at Express and Super Express, written back to the
   submission; nothing is paid before every card is checked and the agreement
   sealed
-- 🚧 **Paper** — two one-page English documents sealed in-house on the vault's
+- 🚧 **Paper** — three English documents, each running to as many pages as
+  its list of cards needs; the two signed ones sealed in-house on the vault's
   ceremony — [Documents and Signing](/p/grade10-site/grading/documents)
 - **Specs** — `openspec/specs/grade10-site/grading` for the collector's side
   and `openspec/specs/grade10-admin/grading` for the console; each page names

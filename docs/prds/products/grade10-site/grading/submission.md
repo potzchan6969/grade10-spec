@@ -56,8 +56,7 @@ it changes; the rest of the cards carry on:
 | Not returned, or damaged | paid out at its declared value with its fee refunded, inside the payout window; Grade10 claims from the grader or the courier itself | staff at receiving; emailed the same day |
 
 - 🚧 **Nothing left to hand in** — a submission whose last card the counter
-  refuses is cancelled there, told in person; no message goes and nothing is
-  owed
+  refuses is cancelled there, told in person; no message goes and nothing is owed
 
 ## The Fee by Outcome
 
@@ -147,6 +146,8 @@ it changes; the rest of the cards carry on:
 | `sent` to `returned` | nothing; read the grader's stages and the grades |
 | `ready` | name a collector, change or remove them; collect, or vault a slab at the counter |
 | `collected` | read the record; vault it, sell it at a Grade10 auction, ask for erasure |
+
+- 🚧 **The counter's list** — no edit from the first card the counter checks
 
 <!-- story: the submission page at ready, with a collector named -->
 

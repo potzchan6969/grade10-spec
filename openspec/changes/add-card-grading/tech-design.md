@@ -165,8 +165,8 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `(product, caseRef)` and a walk-in's customer-bookable visit carries
   `product: null`, so grading can never read it: the counter creates the
   submission at the desk through `admin.savePlan`, the same service as the
-  collector's, and hands in from `planned`, `pinned_fee_sheet` pinning at
-  `handIn` when it is still null
+  collector's, and hands in from `planned`, `pinned_fee_sheet` pinned at
+  `deskPlan` with the list
 - **Grades in** — `admin.recordBatchStage({ batchId, stage })` over a closed
   `GraderStage` set, one member flagged as the move: under `lockBatch`,
   `grader_stage` set, `recordGrades` per submission in id order, one event
@@ -587,11 +587,13 @@ with a prefix; every `_by` an operator id.
 | `user_id`, `email`, `full_name`, `phone` | `text`, email `NOT NULL` | the plan lives under the email |
 | `access_hash` | `text NOT NULL` | sha256 of the link's token; re-minted on revocation |
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
-| `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `handIn` for a walk-in |
+| `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
 | `batch_id` | `text FK batches` | set at `handIn` |
+| `intake_receipt_key` | `text UNIQUE` | where the intake receipt's bytes are in the documents area; set at `handIn` |
+| `intake_receipt_sha256` | `text UNIQUE` | their digest; CHECK set together with `intake_receipt_key` or neither |
 | `pickup_code` | `text CHECK ^\d{4}$` | partial `UNIQUE WHERE status = 'ready'` |
 | `named_collector`, `postal_address` | `text` | one full name; one line taken at signing |
 | `ready_at` | `timestamptz(3)` | the three ready clocks' anchor |
