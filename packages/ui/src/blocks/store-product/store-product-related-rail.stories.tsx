@@ -32,7 +32,7 @@ function tiles(canvasElement: HTMLElement) {
 /** grade10-site-store-cross-sell-SC-26: the rail draws what it is given, in
  * order, sells nothing and draws no browse-all link under its heading. The
  * suite's grade10-site-store-cross-sell-US1-TC4-1 credits this story with the
- * cart control's absence; a person walks the tiles on the dev shop. */
+ * cart control's absence. */
 export const PicksAndSimilar: Story = {
   play: async ({ canvasElement, args }) => {
     const canvas = within(canvasElement);
@@ -92,9 +92,14 @@ export const SoldOutPickOpens: Story = {
       name: RELATED_RAIL_SOLD_OUT.name,
     });
     expect(controls).toHaveLength(2);
-    const [photoWell] = controls;
+    const [photoWell, nameControl] = controls;
     await userEvent.click(photoWell);
+    await userEvent.click(nameControl);
+    expect(args.onCardClick).toHaveBeenCalledTimes(2);
     expect(args.onCardClick).toHaveBeenCalledWith(RELATED_RAIL_SOLD_OUT.id);
+    expect(
+      within(tile).getByText(String(RELATED_RAIL_SOLD_OUT.price)),
+    ).toBeVisible();
   },
 };
 

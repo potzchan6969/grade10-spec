@@ -36,7 +36,7 @@ A tile supplied as sold out SHALL still report its activation where the
 consumer supplies an activation handler and no cart handler, so a surface that
 carries the shopper on rather than selling can open a card nobody can buy; on
 a surface that sells — one supplying a cart handler — a sold-out tile stays
-inert, as the listing requires. Its cart action SHALL NOT be activatable, and
+inert. Its cart action SHALL NOT be activatable, and
 its sold-out treatment SHALL stay.
 
 #### Scenario: shared-ui-store-product-listing-SC-91 - A sold-out product still opens where activation is handled

@@ -64,10 +64,16 @@ export const OnSale: Story = {
   },
 };
 
-/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
+/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert where
+ * the surface sells. */
 export const SoldOut: Story = {
   args: { soldOut: true },
   decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(copy.soldOut)).toBeVisible();
+    expect(canvas.queryAllByRole("button")).toHaveLength(0);
+  },
 };
 
 /** Figma `inCart=true` — cart control with the supplied count. */
@@ -284,8 +290,7 @@ export const SoldOutWithRemainingCount: Story = {
  * an activation handler is supplied and no cart handler is — a surface that
  * carries the shopper on rather than selling. The suite's
  * grade10-site-store-cross-sell-US1-TC6-1 credits this story with a sold-out
- * pick's place, its words and its activation; a person walks a pick sold out
- * on the dev shop. */
+ * pick's place, its words and its activation. */
 export const SoldOutOpensWhereNothingSells: Story = {
   args: {
     soldOut: true,

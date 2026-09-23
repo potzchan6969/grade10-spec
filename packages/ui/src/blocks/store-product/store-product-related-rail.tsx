@@ -10,9 +10,8 @@ import type { ProductSummary } from "../store-product-listing/types";
 type StoreProductRelatedRailCopy = {
   /** The heading over the rail — "You may also like". */
   heading: string;
-  /** What every tile says the same way; the rail draws no cart control, so
-   * the cart words are never read. */
-  card: ProductCardCopy;
+  /** What every tile says the same way. */
+  card: Pick<ProductCardCopy, "soldOut" | "sale">;
 };
 
 type StoreProductRelatedRailProps = {
@@ -20,7 +19,8 @@ type StoreProductRelatedRailProps = {
   /** The cards to draw, in the order given. The rail cuts no list: the page
    * decides how many, and which, before it hands them over. It sells
    * nothing, so a card's `inCart`, `cartCount`, `maxCartQuantity` and
-   * `remainingLabel` are never drawn. */
+   * `remainingLabel` are never drawn. Given none, it draws the heading over
+   * nothing: the page renders no rail where it has nothing to show. */
   cards: readonly ProductSummary[];
   /** Fires when a tile is activated, identifying the card. Omit it and the
    * tiles are inert. */
@@ -49,7 +49,7 @@ function StoreProductRelatedRail({
     >
       <StoreSectionHeader copy={{}} title={copy.heading} />
       <HStack
-        className="w-full overflow-x-auto pb-2"
+        className="-m-1 overflow-x-auto p-1 pb-3"
         data-slot="store-product-related-rail-row"
         gap="md"
         vAlign="stretch"
