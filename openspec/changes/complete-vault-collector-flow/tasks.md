@@ -158,7 +158,7 @@ group reads this one's exports.
 
 The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
-- [ ] 5.1 Cover the catalogue as one table over `LETTERS`, kind to blocks and
+- [x] 5.1 Cover the catalogue as one table over `LETTERS`, kind to blocks and
       attachments, reading the store's fixtures, plus `printedValue` per field
       (`grade10-site-vault-collector-notifications-SC-03`,
       `grade10-site-vault-collector-notifications-SC-04`,
@@ -179,7 +179,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-collector-notifications-SC-34`,
       `grade10-site-vault-loan-and-settlement-SC-36`,
       `grade10-site-vault-loan-and-settlement-SC-38`)
-- [ ] 5.2 Add `printedValue(ports, field)` in
+- [x] 5.2 Add `printedValue(ports, field)` in
       `packages/vault/backend/src/legal/printed.ts` — production and null
       throws `LEGAL_IDENTITY_UNSET` by field, any other environment answers
       the marked placeholder — and compose `printedEntity` over it with every
@@ -187,11 +187,11 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       (`grade10-site-vault-collector-notifications-SC-32`,
       `grade10-site-vault-collector-notifications-SC-33`,
       `grade10-site-vault-loan-and-settlement-SC-38`)
-- [ ] 5.3 Compose `email/letters/VaultLetter.tsx` over
+- [x] 5.3 Compose `email/letters/VaultLetter.tsx` over
       `@grade10/email/render`'s `BaseLayout`, hoisting the facts table and the
       action button beside it, and keep `TermsTable`, `HowToPay`,
       `ReminderSchedule`, `NoticeClause` and `LicenceFooter` vault-side
-- [ ] 5.4 Write one file per family under `letters/` — `offer.tsx`,
+- [x] 5.4 Write one file per family under `letters/` — `offer.tsx`,
       `money.tsx`, `notice.tsx`, `visit.tsx`, `case.tsx`, `identity.tsx` — and
       the exhaustive `LETTERS: Record<NotifyKind, Letter>` in
       `letters/index.ts` that `renderVaultLetter(kind, facts)` reads
@@ -210,19 +210,19 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-collector-notifications-SC-30`,
       `grade10-site-vault-collector-notifications-SC-31`,
       `grade10-site-vault-collector-notifications-SC-34`)
-- [ ] 5.5 Widen `email/messages.ts`'s `Copy` to a typed `LetterCopy` per kind
+- [x] 5.5 Widen `email/messages.ts`'s `Copy` to a typed `LetterCopy` per kind
       and keep `createEmailTranslator` reading it, so the path to
       `@grade10/i18n` is unchanged
-- [ ] 5.6 Build the facts once in `letterFacts(db, vaultCase, kind, extra)`,
+- [x] 5.6 Build the facts once in `letterFacts(db, vaultCase, kind, extra)`,
       called by `tellCustomer` and by `sweeps/notify.ts`'s resend, honouring
       `notification_retries`'s `amountMinor`, `notifyAt` and `packetId` over a
       re-derivation
-- [ ] 5.7 Render at the head of `recordPayout`, `recordRepayment`,
+- [x] 5.7 Render at the head of `recordPayout`, `recordRepayment`,
       `sendForfeitureNotice` and the reminder pass, before each transaction
       opens, and classify `PermanentEmailSendError` in `notifyQuietly` as the
       auction's `parkNotifyFailure` does
       (`grade10-site-vault-collector-notifications-SC-33`)
-- [ ] 5.8 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
+- [x] 5.8 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
 ## 6. The case read and the collector's acts (grade10)
@@ -333,7 +333,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
 ## 9. The visit's calendar file (grade10)
 
-- [ ] 9.1 Cover the route: the booking's own `UID` and sequence, a moved visit
+- [x] 9.1 Cover the route: the booking's own `UID` and sequence, a moved visit
       keeping both, `METHOD:CANCEL` after a cancel, a stranger refused, and
       the three visit letters carrying the file
       (`grade10-site-vault-visit-booking-SC-22`,
@@ -341,19 +341,19 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
       `grade10-site-vault-visit-booking-SC-24`,
       `grade10-site-vault-visit-booking-SC-25`,
       `grade10-site-vault-visit-booking-SC-26`)
-- [ ] 9.2 Serve `GET /api/cases/:caseId/visit.ics`
+- [x] 9.2 Serve `GET /api/cases/:caseId/visit.ics`
       (`VAULT_PATHS.visitCalendar`) in `routes/visit.ts` on `caseOwner`, to
       the shape tech-design's "The calendar file is the booking's own, served
       and attached" holds (`grade10-site-vault-visit-booking-SC-22`,
       `grade10-site-vault-visit-booking-SC-23`,
       `grade10-site-vault-visit-booking-SC-24`)
-- [ ] 9.3 Answer a cancelled visit from the booking the diary keeps, so
+- [x] 9.3 Answer a cancelled visit from the booking the diary keeps, so
       `METHOD:CANCEL` goes out against the `UID` and `DTSTART` the phone holds
       (`grade10-site-vault-visit-booking-SC-25`)
-- [ ] 9.4 Attach the same file to `visit_booked`, `visit_rescheduled` and
+- [x] 9.4 Attach the same file to `visit_booked`, `visit_rescheduled` and
       `visit_cancelled`, each sent one at a time
       (`grade10-site-vault-visit-booking-SC-26`)
-- [ ] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 9.5 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
 ## 10. The console's queue and custody reads (grade10)
@@ -449,7 +449,7 @@ The catalogue test reads the store's fixtures through `external/grade10-spec`.
 
 Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 
-- [ ] 12.1 Cover the page per chip, per stage and per ending, each
+- [x] 12.1 Cover the page per chip, per stage and per ending, each
       confirmation's words, each refusal named where the answer was given, and
       a read that writes nothing down
       (`grade10-site-vault-case-lifecycle-SC-16`,
@@ -471,18 +471,18 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       `grade10-site-vault-valuation-and-offer-SC-26`,
       `grade10-site-vault-valuation-and-offer-SC-28`,
       `grade10-site-vault-valuation-and-offer-SC-29`)
-- [ ] 12.2 Build `CaseStepper` and `OwnershipChip` over `caseStanding`, both
+- [x] 12.2 Build `CaseStepper` and `OwnershipChip` over `caseStanding`, both
       rendering the answer, deriving nothing and holding nothing between
       reads, and put the reference in the case header as a mono `Text`
       (`grade10-site-vault-case-lifecycle-SC-29`)
-- [ ] 12.3 Build `CaseFactCard` and render the fact the case meets and the
+- [x] 12.3 Build `CaseFactCard` and render the fact the case meets and the
       ending it reached over `caseEnding`
       (`grade10-site-vault-case-lifecycle-SC-20`,
       `grade10-site-vault-case-lifecycle-SC-21`,
       `grade10-site-vault-case-lifecycle-SC-22`,
       `grade10-site-vault-case-lifecycle-SC-23`,
       `grade10-site-vault-case-lifecycle-SC-28`)
-- [ ] 12.4 Build `OfferCard` and `AcceptOfferDialog`, the dialog held on its
+- [x] 12.4 Build `OfferCard` and `AcceptOfferDialog`, the dialog held on its
       subject, the offer, because it is about that one offer and carries its
       terms, the answer sending that offer so one replaced under the open
       dialog is refused, and read a superseded offer beside the live one
@@ -490,7 +490,7 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       `grade10-site-vault-valuation-and-offer-SC-22`,
       `grade10-site-vault-valuation-and-offer-SC-25`,
       `grade10-site-vault-valuation-and-offer-SC-26`)
-- [ ] 12.5 Add `accept`, `decline` and `cancel` to
+- [x] 12.5 Add `accept`, `decline` and `cancel` to
       `packages/vault/frontend/src/core/api/VaultApi.ts` beside
       `requestRelease`, answer all four from the fixture transport, and ask
       Decline, Cancel this request and Ask for it back through `useConfirm`
@@ -500,15 +500,15 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
       `grade10-site-vault-case-lifecycle-SC-19`,
       `grade10-site-vault-case-lifecycle-SC-37`,
       `grade10-site-vault-valuation-and-offer-SC-23`)
-- [ ] 12.6 Carry the detail's `asOf` into every act, send an answer once, and
+- [x] 12.6 Carry the detail's `asOf` into every act, send an answer once, and
       name a lapsed offer, a stale quote and a case that moved where the
       answer was given (`grade10-site-vault-valuation-and-offer-SC-24`,
       `grade10-site-vault-valuation-and-offer-SC-28`,
       `grade10-site-vault-valuation-and-offer-SC-29`,
       `grade10-site-vault-case-lifecycle-SC-19`)
-- [ ] 12.7 Write the view's stories as `Vault/Cases/Case Detail View`, one per
+- [x] 12.7 Write the view's stories as `Vault/Cases/Case Detail View`, one per
       distinct layout, the varied value an args control
-- [ ] 12.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 12.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
 ## 13. The live loan on the case page (grade10)
@@ -516,7 +516,7 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 Follows group 12: its cards mount in the view group 12 builds, and its stories
 append to `CaseDetailView.stories.tsx`.
 
-- [ ] 13.1 Cover the live loan: the repayments list empty, one and many, the
+- [x] 13.1 Cover the live loan: the repayments list empty, one and many, the
       reminders sent and still ahead, past the due date as well as before
       it, the notice with its date to pay by, and the how-to-pay block on a
       live loan, on no loan and in production
@@ -529,28 +529,28 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-loan-and-settlement-SC-37`,
       `grade10-site-vault-loan-and-settlement-SC-47`,
       `grade10-site-vault-loan-and-settlement-SC-48`)
-- [ ] 13.2 Build `WhatIsOwedCard` with the as-at figures, the progress line
+- [x] 13.2 Build `WhatIsOwedCard` with the as-at figures, the progress line
       and the term breakdown, and `RepaymentsList` under it, each row with its
       value date, method and the balance after it
       (`grade10-site-vault-loan-and-settlement-SC-27`,
       `grade10-site-vault-loan-and-settlement-SC-28`)
-- [ ] 13.3 Render the reminders sent and still to come, and past the due
+- [x] 13.3 Render the reminders sent and still to come, and past the due
       date the next weekly one and the notice that may follow, and the final
       notice through `CaseFactCard`
       (`grade10-site-vault-loan-and-settlement-SC-30`,
       `grade10-site-vault-loan-and-settlement-SC-32`,
       `grade10-site-vault-loan-and-settlement-SC-34`,
       `grade10-site-vault-loan-and-settlement-SC-48`)
-- [ ] 13.4 Build `HowToPayBlock` over the detail's `howToPay` — the payee, the
+- [x] 13.4 Build `HowToPayBlock` over the detail's `howToPay` — the payee, the
       FPS id, the account, the case reference as the transfer reference, and
       card or cash at the counter — shown on a live loan alone, with the
       counter line in place of an unset value in production
       (`grade10-site-vault-loan-and-settlement-SC-35`,
       `grade10-site-vault-loan-and-settlement-SC-37`,
       `grade10-site-vault-loan-and-settlement-SC-47`)
-- [ ] 13.5 Write the stories for the loan states under
+- [x] 13.5 Write the stories for the loan states under
       `Vault/Cases/Case Detail View`
-- [ ] 13.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 13.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
 ## 14. The request wizard and the case list (grade10)
@@ -688,7 +688,7 @@ append to `CaseDetailView.stories.tsx`.
 
 ## 17. The console's queue, case tabs and identity panel (grade10)
 
-- [ ] 17.1 Cover the console's reads and tabs: a count on every cut, the Today
+- [x] 17.1 Cover the console's reads and tabs: a count on every cut, the Today
       block in slot order and a day with none, the collector's word on a row,
       the reference on every case surface, the visit checklist in order, an
       act withheld with its reason, the identity panel's six states, the
@@ -719,17 +719,17 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-admin-vault-operator-queue-SC-52`,
       `grade10-site-vault-documents-and-signing-SC-24`,
       `grade10-site-vault-documents-and-signing-SC-25`)
-- [ ] 17.2 Ride each cut's count on its own `Choice` label and mount the Today
+- [x] 17.2 Ride each cut's count on its own `Choice` label and mount the Today
       block as the Today cut with its count, saying so on a day with no visit
       (`grade10-admin-vault-operator-queue-SC-21`,
       `grade10-admin-vault-operator-queue-SC-22`,
       `grade10-admin-vault-operator-queue-SC-23`)
-- [ ] 17.3 Print the collector's word from the shared map, the reference on
+- [x] 17.3 Print the collector's word from the shared map, the reference on
       every case surface, and say on a row when the collector is the one being
       waited on (`grade10-admin-vault-operator-queue-SC-27`,
       `grade10-admin-vault-operator-queue-SC-28`,
       `grade10-admin-vault-operator-queue-SC-29`)
-- [ ] 17.4 Build `VisitChecklist` over `caseStanding`'s stage and the events —
+- [x] 17.4 Build `VisitChecklist` over `caseStanding`'s stage and the events —
       the counter's steps in order, each with its button or the reason it is
       waiting, the custody terms on a case that borrows nothing, no checklist
       with no visit today, and the next step handed on after an act
@@ -738,7 +738,7 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-admin-vault-operator-queue-SC-32`,
       `grade10-admin-vault-operator-queue-SC-33`,
       `grade10-admin-vault-operator-queue-SC-50`)
-- [ ] 17.5 Build `ForfeitWithheld` on the Custody tab — the cure date, the day
+- [x] 17.5 Build `ForfeitWithheld` on the Custody tab — the cure date, the day
       the notice went, the `FORFEITURE_NOTICE_REQUIRED` refusal in words, and
       Forfeit offered once nothing holds it — and say on each tab what the
       status withholds (`grade10-admin-vault-operator-queue-SC-34`,
@@ -747,32 +747,32 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-admin-vault-operator-queue-SC-37`,
       `grade10-admin-vault-operator-queue-SC-38`,
       `grade10-admin-vault-operator-queue-SC-51`)
-- [ ] 17.6 Rewrite `IdentityPanel` to the six words `identityStanding`
+- [x] 17.6 Rewrite `IdentityPanel` to the six words `identityStanding`
       answers, each with its own panel and who may record over it
       (`grade10-admin-vault-operator-queue-SC-39`,
       `grade10-admin-vault-operator-queue-SC-40`,
       `grade10-admin-vault-operator-queue-SC-41`,
       `grade10-admin-vault-operator-queue-SC-52`)
-- [ ] 17.7 Build `KeyTermsDialog` over `admin.keyTerms` — the agreement's own
+- [x] 17.7 Build `KeyTermsDialog` over `admin.keyTerms` — the agreement's own
       terms as `Check`s, the reference optional — replacing the reference-only
       dialog, read the recorded set back on the case with the day it was
       taken, who took it and preparing the packet offered, and hold a storage
       case to no list (`grade10-site-vault-documents-and-signing-SC-24`,
       `grade10-site-vault-documents-and-signing-SC-25`)
-- [ ] 17.8 Render the held-items tiles and rows from `custodyList.totals`, a
+- [x] 17.8 Render the held-items tiles and rows from `custodyList.totals`, a
       shop holding nothing saying so, and read the locker moves back on the
       custody log (`grade10-admin-vault-operator-queue-SC-45`,
       `grade10-admin-vault-operator-queue-SC-46`,
       `grade10-admin-vault-operator-queue-SC-49`)
-- [ ] 17.9 Write the stories for `Vault/Admin/Cases/*` — the queue panel, the
+- [x] 17.9 Write the stories for `Vault/Admin/Cases/*` — the queue panel, the
       case detail panel, the custody panel and the identity panel
-- [ ] 17.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 17.10 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
 ## 18. The console's money panels (grade10)
 
-- [ ] 18.1 Cover the money panels: the register's order and its correction
+- [x] 18.1 Cover the money panels: the register's order and its correction
       line, the kind filter, an empty range, the arrears read at zero and per
       currency, the row that chases the borrower, and the file offered and
       withheld (`grade10-admin-vault-money-book-SC-01`,
@@ -783,23 +783,23 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-admin-vault-money-book-SC-24`,
       `grade10-admin-vault-money-book-SC-27`,
       `grade10-admin-vault-money-book-SC-28`)
-- [ ] 18.2 Extend `MoneyLedgerPanel` with the kind filter and the net out over
+- [x] 18.2 Extend `MoneyLedgerPanel` with the kind filter and the net out over
       the range, reading the register in written order and naming the record a
       correction takes back, and say so on a range with nothing in it
       (`grade10-admin-vault-money-book-SC-01`,
       `grade10-admin-vault-money-book-SC-02`,
       `grade10-admin-vault-money-book-SC-27`)
-- [ ] 18.3 Add `ExportCsv` over `money-ledger.csv`, passing the panel's own
+- [x] 18.3 Add `ExportCsv` over `money-ledger.csv`, passing the panel's own
       filter, cursor and limit, offering no file on an empty range and none at
       all without `vault:payout` (`grade10-admin-vault-money-book-SC-22`,
       `grade10-admin-vault-money-book-SC-24`)
-- [ ] 18.4 Render the arrears summary above the list — the count, the two
+- [x] 18.4 Render the arrears summary above the list — the count, the two
       figures, zero where nothing is late, each row in its own currency and
       carrying what it takes to chase the borrower
       (`grade10-admin-vault-money-book-SC-12`,
       `grade10-admin-vault-money-book-SC-18`,
       `grade10-admin-vault-money-book-SC-28`)
-- [ ] 18.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 18.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and its a11y run, `pnpm run check:admin-bundle`
 
 ## 19. The Storybook (grade10)
@@ -906,7 +906,7 @@ Lands once every other group is green and the change is deployed.
 
 Lands beside group 18, on group 3's exports and the fixture transport.
 
-- [ ] 22.1 Cover the three dialogs: the figures derived from the terms
+- [x] 22.1 Cover the three dialogs: the figures derived from the terms
       entered, the bound a failing offer names before the send, the missing
       precondition, the two people the payout needs, the due date and the
       reminder dates from the value date, a bound nobody has set inside
@@ -918,27 +918,27 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       `grade10-site-vault-loan-and-settlement-SC-44`,
       `grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
-- [ ] 22.2 Build `PolicyGates` over `admin.policy` and state the rule in the
+- [x] 22.2 Build `PolicyGates` over `admin.policy` and state the rule in the
       offer dialog: the figures derived from the terms entered, the annualised
       rate read from `annualisedRate` rather than derived again, and the bound
       a failing offer names before the send
       (`grade10-site-vault-loan-and-settlement-SC-40`,
       `grade10-site-vault-loan-and-settlement-SC-41`)
-- [ ] 22.3 State the missing precondition in the vault dialog and the two
+- [x] 22.3 State the missing precondition in the vault dialog and the two
       people the payout dialog needs, and follow the due date and the reminder
       dates from the value date; the Overdue view's Ladder row states the same
       ladder `admin.policy` answers, in words
       (`grade10-site-vault-loan-and-settlement-SC-42`,
       `grade10-site-vault-loan-and-settlement-SC-43`,
       `grade10-site-vault-loan-and-settlement-SC-44`)
-- [ ] 22.4 Pass a bound nobody has set outside production and refuse it in
+- [x] 22.4 Pass a bound nobody has set outside production and refuse it in
       production, and let the recording refuse what a dialog let through
       (`grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
-- [ ] 22.5 Write the stories for the three dialogs:
+- [x] 22.5 Write the stories for the three dialogs:
       `Vault/Admin/Valuation/Offer Dialog`, `Vault/Admin/Cases/Vault Dialog`
       and `Vault/Admin/Settlement/Money Dialog`
-- [ ] 22.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 22.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`
 
