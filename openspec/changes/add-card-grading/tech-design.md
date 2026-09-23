@@ -747,13 +747,13 @@ receipt, the sealed agreement and the re-minted access link.
 | --- | --- |
 | grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed) |
 | admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,detail,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,shipBatch,recordBatchStage,reestimateBatch,enterManifest,enterInvoice,scanCard,recordException,finishReceiving,mintHandBack,collect,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,resendNotification,documents,signingLink}`, `erasure.erase`, `audit.*` |
-| HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
+| HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
 | `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.{matchCards,referenceSales}`; `GradingInventoryService` |
 | `@grade10/appointment-contracts` | `APPOINTMENT_PRODUCTS` gains `grading`; `rescheduleInputSchema` gains an optional `serviceId`; `GradingAppointmentService` |
-| `@grade10/doc-sign-backend` | **BREAKING** `TemplateLayout.identity` required on every template |
+| `@grade10/doc-sign-backend` | **BREAKING** `TemplateLayout.identity` required on every template; `TemplateLayout.pageCount` takes `"fitted"` and `SignatureFieldBox.page` takes `"last"`, resolved after the render; `renderIssuedDocument` over an `IssuedTemplate`, which `renderPacket` calls per document; `storedFontPort`; `./testing` gains `fixtureFace` |
 | `@grade10/doc-sign-frontend` | **BREAKING** `createDocSignCoreModule({ ceremonyClients })`; `CeremonyFlow` takes `host` at mount |
-| `@grade10/app-env` | `ServiceId` and `BRAND_SERVICES.grade10` gain `grading`; `RETENTION_CLASSES` gains `case_records` |
+| `@grade10/app-env` | `ServiceId` and `BRAND_SERVICES.grade10` gain `grading`; `RETENTION_CLASSES` gains `case_records`; `consentCopy(brand)`, the e-sign wording the vault and grading both serve, lifted from the vault |
 | `@grade10/auth-contracts` | `grading:read`, `grading:operate`, `grading:approve` |
 
 ## Compatibility

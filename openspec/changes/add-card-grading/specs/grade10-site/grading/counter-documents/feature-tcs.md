@@ -364,6 +364,44 @@
 * The sealed agreement still prints 3000 HKD minor units a card a month.
 * What is due on that submission is worked out at the pinned 3000, not the new 5000.
 
+### grade10-site-grading-counter-documents-US1-TC11-1: A Bulk list of a hundred cards runs on and is signed once, on the last page
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-01
+
+**Pre-conditions:**
+
+* The submission is `booked` at Bulk with 100 cards, every one checked, and the agreement is not yet signed.
+* The collector is on the agreement's active sign link, inside its 30-minute window.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Cards | 100, each named as the dealer listed it |
+| Name typed | <the name on the booking> |
+| Postal address | <a one-line postal address> |
+
+**Steps:**
+
+1. Scroll the agreement through every page to its last.
+2. Type <the name on the booking>, enter <a one-line postal address>, and sign.
+
+**Expected Results:**
+
+* The schedule lists all 100 cards, running on past the first page.
+* The signature block is on the last page alone, and the sealed agreement carries one signature there.
+
 ---
 
 ## grade10-site-grading-counter-documents-US2: Collector declines to sign
@@ -1025,6 +1063,7 @@ eight ADDED requirements; the blind suite wrote 23 cases over `US1` to `US5`.
 | `grade10-site-grading-counter-documents-SC-22` — a figure pinned at signing | **Case added** | `grade10-site-grading-counter-documents-US1-TC10-1` |
 | `grade10-site-grading-counter-documents-SC-26` — a declined document on none of the three | **Case added** | `grade10-site-grading-counter-documents-US5-TC6-1` |
 | `grade10-site-grading-counter-documents-SC-27` — a digest grading never issued | **Case added** | `grade10-site-grading-counter-documents-US5-TC7-1` |
+| `grade10-site-grading-counter-documents-SC-31` — a Bulk list of a hundred cards runs on | **Case added** | `grade10-site-grading-counter-documents-US1-TC11-1`; the paper ran to one page when the suite was drawn, and a Bulk list of 100 could not be printed on it (`Q112`) |
 | `grade10-site-grading-counter-documents-SC-01` — the agreement waits for every card to be checked | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is that capability's `grade10-admin-grading-counter-US-11`; staff at the desk walk it, nobody here |
 | `grade10-site-grading-counter-documents-SC-03` — the intake receipt is issued rather than signed | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; no signer ever meets the intake receipt on a link |
 | `grade10-site-grading-counter-documents-SC-13` — a card refused at the check is off the schedule | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-03`, the refusal staff make |

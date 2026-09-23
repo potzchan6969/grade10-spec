@@ -4,8 +4,9 @@ spec: grade10-site/grading/counter-documents
 order: 4
 ---
 
-Two one-page English documents, each signed on the shop iPad with staff
-present and sealed in-house on the vault's ceremony —
+Two English documents, each one page running on as its list of cards needs,
+signed on the shop iPad with staff present and sealed in-house on the vault's
+ceremony —
 [Documents and Signing](/p/grade10-site/vault/documents-and-signing); the
 intake receipt between them is issued, not signed.
 
@@ -25,7 +26,7 @@ intake receipt between them is issued, not signed.
 - 🚧 **Your name** — as on the booking; grading needs no ID, and a vault case
   opened on the same visit does
 - 🚧 **Postal address** — one line at signing, prefilled from the account,
-  kept with the agreement and used only for the written notice under clause 6
+  kept with the signature and used only for the written notice under clause 6
 - 🚧 **Pinned at signing** — every figure the agreement prints is the value
   at signing: the level's fee and cover from the sheet the plan was booked
   on, the storage fee, the payout window and the notice days; a setting
@@ -38,8 +39,7 @@ intake receipt between them is issued, not signed.
 
 ## The Submission Agreement
 
-- 🚧 **Printed** — the submission id, the customer, the postal address, the
-  grader and level, the cards as a schedule with each declared value and its
+- 🚧 **Printed** — the submission id, the customer, the grader and level, the cards as a schedule with each declared value and its
   cover line where the level carries one, the declared value in total, the
   fee paid at the counter once signed, the estimated return as about N weeks
   from the day the batch leaves and an estimate not a promise, the date on
@@ -71,6 +71,9 @@ intake receipt between them is issued, not signed.
   on both documents and every email — Legal
 - ❓ **Complaints contact** — printed on both documents and every email —
   Legal
+- ❓ **The postal address on the paper** — kept with the signature, and
+  printed on no page; stamped beside the signature at the seal if Legal
+  wants it on the agreement — Legal
 - ❓ **Clause 5** — changes the day a policy is bought; until then the
   courier's cover and the safe's cap stand — Commercial, Legal
 - ❓ **Clause 6's wording** — the draft reads "within 90 days of notice"

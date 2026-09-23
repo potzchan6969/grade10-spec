@@ -4,8 +4,8 @@
 
 The paper a submission is held to: the agreement signed before any money
 moves, the receipt issued when the cards are handed in, and the receipt signed
-when they are handed back, each one page of English on the shop iPad with
-staff present.
+when they are handed back, each one page of English, running on to as many as
+its list of cards needs, on the shop iPad with staff present.
 
 The ceremony that seals them is the vault's
 (`grade10-site/vault/documents-and-signing`); grading keeps no identity
@@ -69,8 +69,10 @@ record, so its packet names the person from the booking and asks for none.
 
 ### Requirement: A submission is papered by three documents, two signed and one issued
 
-Every submission is papered by three one-page English documents grading
-renders itself, prepared at the counter with the collector in front of it.
+Every submission is papered by three English documents grading renders
+itself, prepared at the counter with the collector in front of it. Each is one
+page, running on to as many as its list of cards needs, signed once on the
+last.
 
 | Document | Prepared | Signed by | Reaches the collector |
 | --- | --- | --- | --- |
@@ -84,6 +86,10 @@ reached at grading's own signing address, one document to a packet.
 
 **The one issued** - the intake receipt SHALL take no signature and SHALL be
 offered no signing link: it receipts money the till has already taken.
+
+**As long as the list** - a document SHALL print every card on its list, a
+Bulk list of 100 included, running on to further pages rather than being
+refused; a signed document SHALL take its one signature on its last page.
 
 **Not before the counter is ready** - an agreement SHALL be refused while any
 card on the submission is unchecked, and a hand-back receipt SHALL be refused
@@ -113,6 +119,14 @@ missing and SHALL leave the submission where it stands.
 - **THEN** the intake receipt is issued against the submission
 - **AND** nobody is asked to sign it and no signing link is minted for it
 
+#### Scenario: grade10-site-grading-counter-documents-SC-31 - A Bulk list of a hundred cards runs on and is signed once on the last page
+**Serves:** grade10-site-grading-counter-documents-US-01 - a dealer signing for a Bulk list of a hundred cards
+
+- **GIVEN** a Bulk submission of 100 checked cards
+- **WHEN** the agreement is rendered
+- **THEN** every card is on its schedule, the page running on to as many pages as the list needs
+- **AND** the document takes one signature, on its last page
+
 ### Requirement: The counter's ceremony asks for no identity and takes the name from the booking
 
 Grading signs on the vault's ceremony and keeps no identity record of its own.
@@ -137,9 +151,9 @@ be able to prepare another.
 take a signature, as that capability's ceremony states.
 
 **The postal address** - one line SHALL be taken when the agreement is signed,
-prefilled from the account where the collector has one, kept with the agreement
-and used only for the written notice. The signature SHALL be refused while the
-line is empty, naming it.
+prefilled from the account where the collector has one, kept with the signature
+at the ceremony and used only for the written notice. The signature SHALL be
+refused while the line is empty, naming it.
 
 **Declining** - declining SHALL withdraw the document, SHALL be recorded, and
 SHALL leave nothing signed: nothing SHALL be paid on a declined agreement, and
@@ -223,8 +237,8 @@ its sealed copy SHALL be offered instead.
 The agreement is what the collector signs before any money moves, and it prints
 every fact it is held to.
 
-**Printed** - the agreement SHALL print the submission, the customer and the
-postal address taken at signing, the grader and the level, the cards as a
+**Printed** - the agreement SHALL print the submission, the customer, the
+grader and the level, the cards as a
 schedule with each card's declared value and, where the level carries cover,
 its cover line, the declared value in total, the fee payable at the counter
 once it is signed, the estimated return as a number of weeks from the day the

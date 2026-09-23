@@ -717,7 +717,10 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `ORDER_ALREADY_RECORDED`; the store's payment method kept on each line;
       and `POST /api/submissions/:id/photos` taking one photograph of a card
       behind `grading:operate` into `ITEM_PHOTOS`, under a key naming the
-      submission and the card, which `admin.checkCard` proves before it writes
+      submission and the card, which `admin.checkCard` proves before it writes;
+      and `GET /api/submissions/:id/photos/:photoId` serving one photograph of
+      a card on that submission back by its id, `no-store`, from `ITEM_PHOTOS`,
+      on the collector's own access or behind `grading:read`
       (`grade10-admin-grading-counter-SC-19`)
 - [ ] 13.4 Write `recordRefund` naming the card and the line it refunds, so a
       line already paid comes back at the till, a refused card is never
@@ -739,8 +742,8 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-admin-grading-batches-SC-41`,
       `grade10-admin-grading-batches-SC-42`)
 - [ ] 13.6 Add `admin.savePlan` and `admin.addCard` for the list written at the
-      desk, calling `pinFeeSheet` at `handIn` where `pinned_fee_sheet` is still
-      null, and give the walk-in the diary's own customer-bookable Grading
+      desk, calling `pinFeeSheet` at `deskPlan`, and at the agreement's mint
+      where `pinned_fee_sheet` is still null, and give the walk-in the diary's own customer-bookable Grading
       service as a `product: null` catalogue row, so grading never reads that
       visit and writes nothing about it (`grade10-admin-grading-counter-SC-15`,
       `grade10-site-grading-dropoff-booking-SC-23`,
@@ -765,9 +768,12 @@ Stage (b).
 
 - [ ] 14.1 Cover the three documents against their pinned facts: every clause
       and figure the agreement prints, the receipt's every exception line, the
-      intake receipt's ids and order, the mint refused where a fact is unset, a
-      storage fee written after the seal leaving the signed figure alone, and
-      the audit row each mint writes
+      intake receipt's ids and order, a Bulk list of 100 on each of the three
+      running on and signed once on the last page, the mint refused where a
+      fact is unset, a storage fee written after the seal leaving the signed
+      figure alone, each act refused where what it prints moved while it
+      rendered, the digest lookup, an open agreement voided by a write that
+      changes its list, and the audit row each mint writes
       (`grade10-site-grading-counter-documents-SC-12`,
       `grade10-site-grading-counter-documents-SC-13`,
       `grade10-site-grading-counter-documents-SC-14`,
@@ -782,7 +788,7 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-29`,
       `grade10-site-grading-counter-documents-SC-30`,
       `grade10-site-grading-counter-documents-SC-01`,
-      `grade10-site-grading-counter-documents-SC-02`,
+      `grade10-site-grading-counter-documents-SC-31`,
       `grade10-site-grading-counter-documents-SC-22`,
       `grade10-site-grading-counter-documents-SC-23`,
       `grade10-site-grading-counter-documents-SC-24`,
@@ -792,13 +798,24 @@ Stage (b).
       `GradingTemplate` over `GradingTemplateId`: the card schedule, a cover
       line per card and the cover in total where the level carries one, the
       return date as an estimate from the day the batch leaves, and a card
-      refused at the check on neither the schedule nor the fee
+      refused at the check on neither the schedule nor the fee; every grading
+      paper runs on to as many pages as its list needs, doc-sign's
+      `TemplateLayout.pageCount: "fitted"` recording the pages rendered and
+      `SignatureFieldBox.page: "last"` stamping the one signature on the last
       (`grade10-site-grading-counter-documents-SC-12`,
       `grade10-site-grading-counter-documents-SC-13`,
-      `grade10-site-grading-counter-documents-SC-14`)
+      `grade10-site-grading-counter-documents-SC-14`,
+      `grade10-site-grading-counter-documents-SC-31`)
 - [ ] 14.3 Write `documents/templates/intakeReceipt.ts` through the same page
-      helpers into the documents area with its sha256 — issued, never a packet
-      — naming every intake id and the order that paid
+      helpers into the documents area through doc-sign's
+      `renderIssuedDocument` — issued, never a packet — naming every intake id
+      and the order that paid; `handIn` takes the rendered receipt as
+      required, so `admin.handIn` reaches it only through
+      `handInWithReceipt`, builds its data again under the locks and compares
+      it whole, writes its key and sha256 onto
+      `submissions.intake_receipt_key` and `intake_receipt_sha256` in the
+      move, and answers the `checked_in` letter naming it beside the sealed
+      agreement
       (`grade10-site-grading-counter-documents-SC-03`,
       `grade10-site-grading-counter-documents-SC-15`)
 - [ ] 14.4 Write `documents/templates/handBackReceipt.ts`: who collected and
@@ -816,9 +833,12 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-30`)
 - [ ] 14.5 Write `mintAgreement`, calling `pinTerms` at the mint and refusing
       while any card is unchecked, so the storage accrued on a sealed
-      submission stands at the figure it signed however the settings move after
+      submission stands at the figure it signed however the settings move
+      after, read through `pinnedTermsOf`; `admin.mintAgreement` over it behind
+      `grading:operate`, where `COUNTER_ACTS.mintAgreement` allows; and a
+      card added, revalued, refused or listed again voiding the agreement
+      still out for signature in the same transaction
       (`grade10-site-grading-counter-documents-SC-01`,
-      `grade10-site-grading-counter-documents-SC-02`,
       `grade10-admin-grading-counter-SC-73`)
 - [ ] 14.6 Print every figure from `pinned_fee_sheet` and `pinned_terms`, never
       a live table, and render the document before its transaction opens so
@@ -855,9 +875,13 @@ Stage (b).
       `grade10-admin-grading-counter-SC-93`,
       `grade10-admin-grading-counter-SC-45`)
 - [ ] 15.2 Mount the ceremony at `${config.services.grading}/api/sign` through
-      `registerSigningRoutes`, with `routes/signing.ts`, `documents/deps.ts`
-      and `storage/areas.ts` as the vault's files in the grading schema and
-      `DocSignDeps.kyc` throwing by name if it is ever read; a document not
+      `registerSigningRoutes`, with `routes/signing.ts` and `storage/areas.ts`
+      as the vault's files in the grading schema, `documents/deps.ts` — whose
+      render half `admin.handIn`, through `handInWithReceipt`, and
+      `admin.mintAgreement` already read — gaining the database half, the
+      documents area claiming what `claimedDocumentKeys` and
+      `claimedReceiptKeys` answer together, and `DocSignDeps.kyc` throwing by
+      name if it is ever read; a document not
       read to its end takes no signature and a link past its window is refused
       while staff prepare another
       (`grade10-site-grading-counter-documents-SC-07`,
@@ -1088,8 +1112,10 @@ Stage (c).
       `grade10-admin-grading-counter-SC-34`)
 - [ ] 18.6 Write `mintHandBack`, pinning `handback_due` into the packet's
       details at the mint and refusing `BALANCE_DUE` and `ITEM_UNTICKED` by
-      name (`grade10-admin-grading-counter-SC-43`,
-      `grade10-admin-grading-counter-SC-44`)
+      name, nothing rendered and nothing handed back
+      (`grade10-admin-grading-counter-SC-43`,
+      `grade10-admin-grading-counter-SC-44`,
+      `grade10-site-grading-counter-documents-SC-02`)
 - [ ] 18.7 Write `collect` as the counter's act on the completed hand-back
       packet: under the submission lock, no open packet, `dueNow === 0` at the
       pinned figure, no card `held`, idempotent on the packet id; a second
