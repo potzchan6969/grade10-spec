@@ -17,9 +17,9 @@ describe("fillGradingCopy", () => {
   });
 
   it("fills the same placeholder wherever it reads", () => {
-    expect(fillGradingCopy("{grade} or above, at {grade}", { grade: "PSA 9" })).toBe(
-      "PSA 9 or above, at PSA 9",
-    );
+    expect(
+      fillGradingCopy("{grade} or above, at {grade}", { grade: "PSA 9" }),
+    ).toBe("PSA 9 or above, at PSA 9");
   });
 
   it("leaves a message with no placeholder as it was written", () => {
