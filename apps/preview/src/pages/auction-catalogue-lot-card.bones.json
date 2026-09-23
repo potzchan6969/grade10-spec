@@ -1,0 +1,57 @@
+{
+  "breakpoints": {
+    "375": {
+      "name": "auction-catalogue-lot-card",
+      "viewportWidth": 288,
+      "width": 288,
+      "height": 420,
+      "bones": [
+        [0, 0, 100, 288, 16],
+        [0, 304, 100, 40, 8],
+        [0, 352, 36, 16, 8],
+        [0, 372, 48, 24, 8],
+        [0, 404, 42, 16, 8]
+      ]
+    },
+    "768": {
+      "name": "auction-catalogue-lot-card",
+      "viewportWidth": 288,
+      "width": 288,
+      "height": 420,
+      "bones": [
+        [0, 0, 100, 288, 16],
+        [0, 304, 100, 40, 8],
+        [0, 352, 36, 16, 8],
+        [0, 372, 48, 24, 8],
+        [0, 404, 42, 16, 8]
+      ]
+    },
+    "1280": {
+      "name": "auction-catalogue-lot-card",
+      "viewportWidth": 288,
+      "width": 288,
+      "height": 420,
+      "bones": [
+        [0, 0, 100, 288, 16],
+        [0, 304, 100, 40, 8],
+        [0, 352, 36, 16, 8],
+        [0, 372, 48, 24, 8],
+        [0, 404, 42, 16, 8]
+      ]
+    },
+    "1440": {
+      "name": "auction-catalogue-lot-card",
+      "viewportWidth": 288,
+      "width": 288,
+      "height": 420,
+      "bones": [
+        [0, 0, 100, 288, 16],
+        [0, 304, 100, 40, 8],
+        [0, 352, 36, 16, 8],
+        [0, 372, 48, 24, 8],
+        [0, 404, 42, 16, 8]
+      ]
+    }
+  },
+  "_hash": "auction-catalogue-lot-card-v1"
+}
