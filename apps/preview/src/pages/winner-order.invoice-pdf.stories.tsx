@@ -5,12 +5,14 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
+  formatAmount,
   MetaRow,
   OrderValueTable,
   PartiesSection,
   PartyBlock,
   PdfSheet,
   SummaryRow,
+  TAX_RATE,
 } from "./winner-order-pdf.story-shared";
 
 /**
@@ -32,7 +34,10 @@ function InvoicePdfPreview({
   method?: "card" | "bank";
   tax?: boolean;
 }) {
-  const total = method === "card" ? "3,232.25" : "3,170.00";
+  const subtotal = 2500 + 500 + 80 + 40;
+  const fee = method === "card" ? 112.25 : 50;
+  const taxAmount = subtotal * TAX_RATE;
+  const total = subtotal + fee + (tax ? taxAmount : 0);
 
   return (
     <PdfSheet>
@@ -66,21 +71,26 @@ function InvoicePdfPreview({
       </Text>
 
       <Text as="h3" size="xl" weight="bold">
-        HK${total} due September 22, 2026
+        HK${formatAmount(total)} due September 22, 2026
       </Text>
 
       <OrderValueTable />
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow label="Subtotal" value="2,500.00" />
+        <SummaryRow label="Subtotal" value={formatAmount(subtotal)} />
         {tax ? (
           <SummaryRow
-            label="GST - Singapore (9% on $2,500.00) "
-            value="$225.00"
+            label={`GST - Singapore (9% on ${formatAmount(subtotal)})`}
+            value={formatAmount(taxAmount)}
           />
         ) : null}
         <Divider />
-        <SummaryRow label="Order Total" size="lg" value={total} weight="bold" />
+        <SummaryRow
+          label="Order Total"
+          size="lg"
+          value={formatAmount(total)}
+          weight="bold"
+        />
       </VStack>
 
       {method === "bank" ? <BankRailsSection /> : null}

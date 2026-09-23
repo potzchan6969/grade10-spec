@@ -2,6 +2,7 @@ import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
 
 /**
@@ -10,8 +11,8 @@ import type { ReactNode } from "react";
  * Both lay out the same A4-width sheet, the same order-value lines — a
  * receipt itemises the invoice it pays the same way, per
  * `docs/references/auction-invoice-and-receipt-contents.md` — and the same
- * meta, party, summary, and footer rows. Only the header, the big statement
- * line, and what follows the summary panel differ per document.
+ * meta, party, and summary rows. Only the header, the big statement line,
+ * and what follows the summary panel differ per document.
  */
 function PdfSheet({ children }: { children: ReactNode }) {
   return (
@@ -27,6 +28,19 @@ function PdfSheet({ children }: { children: ReactNode }) {
       </div>
     </VStack>
   );
+}
+
+/** The tax rate both sketches use when their `tax` control is on — nothing
+ * the store has committed to; see `docs/references/auction-invoice-and-receipt-contents.md`. */
+const TAX_RATE = 0.09;
+
+/** Formats a number the way every amount on these sketches reads: no
+ * currency symbol, thousands-separated, two decimal places. */
+function formatAmount(value: number): string {
+  return value.toLocaleString("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  });
 }
 
 function MetaRow({ label, value }: { label: string; value: string }) {
@@ -84,10 +98,20 @@ function PartiesSection() {
   );
 }
 
-/** The order value lines — identical on both PDFs, since a receipt itemises
- * the invoice it pays rather than re-pricing it. Plain label/value rows, no
- * bordered table shell. */
-function OrderValueTable() {
+type MultiColumnTableColumn = {
+  label: string;
+  align?: "start" | "end";
+};
+
+type MultiColumnTableProps = {
+  columns: MultiColumnTableColumn[];
+  rows: string[][];
+};
+
+/** A borderless, flex-column table: a medium-weight header row, a black
+ * divider, then plain data rows — the shape both the order-value lines and
+ * the receipt's payment breakdown share. */
+function MultiColumnTable({ columns, rows }: MultiColumnTableProps) {
   return (
     <VStack gap="sm" hAlign="stretch">
       <HStack
@@ -96,35 +120,62 @@ function OrderValueTable() {
         hAlign="space-between"
         vAlign="baseline"
       >
-        <Text size="sm" weight="medium">
-          Description
-        </Text>
-        <Text size="sm" weight="medium">
-          Amount
-        </Text>
+        {columns.map((column) => (
+          <Text
+            className={cn(
+              "min-w-0 flex-1",
+              column.align === "end" && "text-right",
+            )}
+            key={column.label}
+            size="sm"
+            weight="medium"
+          >
+            {column.label}
+          </Text>
+        ))}
       </HStack>
       <Divider className="bg-foreground" />
       <VStack gap="xs" hAlign="stretch">
-        <OrderValueRow label="Winning Bid" value="2,500.00" />
-        <OrderValueRow label="Buyer's Premium" value="500.00" />
-        <OrderValueRow label="Shipping & Handling" value="80.00" />
-        <OrderValueRow label="Insurance" value="40.00" />
+        {rows.map((row) => (
+          <HStack
+            className="w-full"
+            gap="md"
+            hAlign="space-between"
+            key={row.join("|")}
+            vAlign="baseline"
+          >
+            {row.map((cell, columnIndex) => (
+              <Text
+                className={cn(
+                  "min-w-0 flex-1",
+                  columns[columnIndex]?.align === "end" && "text-right",
+                )}
+                key={columns[columnIndex]?.label ?? columnIndex}
+                size="sm"
+              >
+                {cell}
+              </Text>
+            ))}
+          </HStack>
+        ))}
       </VStack>
     </VStack>
   );
 }
 
-function OrderValueRow({ label, value }: { label: string; value: string }) {
+/** The order value lines — identical on both PDFs, since a receipt itemises
+ * the invoice it pays rather than re-pricing it. */
+function OrderValueTable() {
   return (
-    <HStack
-      className="w-full"
-      gap="md"
-      hAlign="space-between"
-      vAlign="baseline"
-    >
-      <Text size="sm">{label}</Text>
-      <Text size="sm">{value}</Text>
-    </HStack>
+    <MultiColumnTable
+      columns={[{ label: "Description" }, { label: "Amount", align: "end" }]}
+      rows={[
+        ["Winning Bid", "2,500.00"],
+        ["Buyer's Premium", "500.00"],
+        ["Shipping & Handling", "80.00"],
+        ["Insurance", "40.00"],
+      ]}
+    />
   );
 }
 
@@ -149,11 +200,7 @@ function SummaryRow({
         hAlign="space-between"
         vAlign="baseline"
       >
-        <Text
-          size={size}
-          tone={"primary"}
-          weight={weight === "bold" ? "bold" : "regular"}
-        >
+        <Text size={size} tone="primary" weight={weight}>
           {label}
         </Text>
         <Text size={size} weight={weight}>
@@ -169,31 +216,14 @@ function SummaryRow({
   );
 }
 
-/** The disclaimer line and the print-style page marker every sketch closes
- * on. */
-function PdfPageFooter({ note }: { note: ReactNode }) {
-  return (
-    <>
-      <Divider />
-      <HStack hAlign="space-between" vAlign="baseline" wrap>
-        <Text size="xs" tone="primary">
-          {note}
-        </Text>
-        <Text size="xs" tone="primary">
-          Page 1 of 1
-        </Text>
-      </HStack>
-    </>
-  );
-}
-
 export {
-  AddressBlock,
+  formatAmount,
   MetaRow,
+  MultiColumnTable,
   OrderValueTable,
   PartiesSection,
   PartyBlock,
-  PdfPageFooter,
   PdfSheet,
   SummaryRow,
+  TAX_RATE,
 };

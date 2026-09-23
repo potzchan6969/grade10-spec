@@ -5,12 +5,15 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
+  formatAmount,
   MetaRow,
+  MultiColumnTable,
   OrderValueTable,
   PartiesSection,
   PartyBlock,
   PdfSheet,
   SummaryRow,
+  TAX_RATE,
 } from "./winner-order-pdf.story-shared";
 
 /**
@@ -34,6 +37,10 @@ function ReceiptPdfPreview({
   tax?: boolean;
 }) {
   const manual = settlement === "manual";
+  const subtotal = 2500 + 500 + 80 + 40;
+  const fee = 112.25;
+  const taxAmount = subtotal * TAX_RATE;
+  const total = subtotal + fee + (tax ? taxAmount : 0);
 
   return (
     <PdfSheet>
@@ -71,25 +78,25 @@ function ReceiptPdfPreview({
       </Text>
 
       <Text as="h3" size="xl" weight="bold">
-        HK$3,232.25 paid on September 16, 2026
+        HK${formatAmount(total)} paid on September 16, 2026
       </Text>
 
       <OrderValueTable />
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow label="Subtotal" value="3,120.00" />
+        <SummaryRow label="Subtotal" value={formatAmount(subtotal)} />
         {tax ? (
           <SummaryRow
-            label="GST - Singapore (9% on $2,500.00)"
-            value="$225.00"
+            label={`GST - Singapore (9% on ${formatAmount(subtotal)})`}
+            value={formatAmount(taxAmount)}
           />
         ) : null}
-        <SummaryRow label="Payment Processing Fee" value="112.25" />
+        <SummaryRow label="Payment Processing Fee" value={formatAmount(fee)} />
         <Divider />
         <SummaryRow
           label="Order Total"
           size="lg"
-          value="3,232.25"
+          value={formatAmount(total)}
           weight="bold"
         />
       </VStack>
@@ -98,51 +105,15 @@ function ReceiptPdfPreview({
         <Text size="sm" weight="bold">
           Payment breakdown
         </Text>
-        <VStack gap="sm" hAlign="stretch">
-          <HStack
-            className="w-full"
-            gap="md"
-            hAlign="space-between"
-            vAlign="baseline"
-          >
-            <Text className="min-w-0 flex-1" size="sm" weight="medium">
-              Original Invoice Total
-            </Text>
-            <Text className="min-w-0 flex-1" size="sm" weight="medium">
-              Previous Payments
-            </Text>
-            <Text className="min-w-0 flex-1" size="sm" weight="medium">
-              Current Payment Received
-            </Text>
-            <Text
-              className="min-w-0 flex-1 text-right"
-              size="sm"
-              weight="medium"
-            >
-              Remaining Balance Due
-            </Text>
-          </HStack>
-          <Divider className="bg-foreground" />
-          <HStack
-            className="w-full"
-            gap="md"
-            hAlign="space-between"
-            vAlign="baseline"
-          >
-            <Text className="min-w-0 flex-1" size="sm">
-              3,232.25
-            </Text>
-            <Text className="min-w-0 flex-1" size="sm">
-              0.00
-            </Text>
-            <Text className="min-w-0 flex-1" size="sm">
-              3,232.25
-            </Text>
-            <Text className="min-w-0 flex-1 text-right" size="sm">
-              0.00
-            </Text>
-          </HStack>
-        </VStack>
+        <MultiColumnTable
+          columns={[
+            { label: "Original Invoice Total" },
+            { label: "Previous Payments" },
+            { label: "Current Payment Received" },
+            { label: "Remaining Balance Due", align: "end" },
+          ]}
+          rows={[[formatAmount(total), "0.00", formatAmount(total), "0.00"]]}
+        />
       </VStack>
     </PdfSheet>
   );
