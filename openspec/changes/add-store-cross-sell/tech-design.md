@@ -222,6 +222,11 @@ wire shape.
 
 ## Migration Plan
 
-- **Nothing to migrate** — no schema, no flag; the rail shows where the read
-  answers cards and stays absent where it answers none
+- **Nothing to migrate** — no schema, no flag of its own; the rail is on the
+  card's page, which the site's `store` gate keeps out of every production
+  build until the shop opens
+  ([Where It Is Open](../../../docs/prds/products/grade10-site/store/index.md#where-it-is-open)),
+  and `related` rides a read only that page asks for, as the listing's does.
+  Where the page is carried, the rail shows where the read answers cards and
+  stays absent where it answers none
 - **Rollback** — revert the read; the page renders without `related`
