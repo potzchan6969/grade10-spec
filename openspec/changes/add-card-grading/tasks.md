@@ -1068,7 +1068,8 @@ Stage (c).
       naming the batch's card it meant, or closed as the grader's error with a
       reason kept on the line, never in the history; finishing holds only on
       a line settled neither way
-      (`grade10-admin-grading-batches-SC-24`)
+      (`grade10-admin-grading-batches-SC-24`,
+      `grade10-admin-grading-batches-SC-51`)
 
 ## 18. Hand-back, collection and the vault case (grade10)
 
