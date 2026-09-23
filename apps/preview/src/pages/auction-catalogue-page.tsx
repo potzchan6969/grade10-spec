@@ -1,26 +1,37 @@
-import { Button } from "@grade10/design-system/components/forms/button";
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
 import { SiteHeader } from "@grade10/ui";
-import { useEffect, useMemo, useState } from "react";
-import { AuctionLotCard, FeaturedAuctions } from "./auction-catalogue-card";
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import {
+  AuctionCategoryButton,
+  AuctionLotCard,
+  FeaturedAuctions,
+  FeaturedAuctionsPair,
+} from "./auction-catalogue-card";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import {
   CATALOGUE_CANONICAL,
   CATALOGUE_DESCRIPTION,
   CATALOGUE_IMAGE,
   CATALOGUE_TITLE,
+  COLLECTION_LOTS,
   type CatalogueLot,
   type CatalogueStatus,
 } from "./auction-catalogue-content";
 import { STORE_FOOTER } from "./store-content";
 
-const LIVE_CAP = 12;
 const FEATURED_CAP = 4;
+/** Matches the Product List workbench filter refetch beat. */
+const FILTER_LOAD_MS = 450;
+const REVEAL_STAGGER_MS = 40;
+const REVEAL_STAGGER_CAP = 8;
+const DEFAULT_SKELETON_COUNT = 6;
+const SKELETON_FIXTURE_LOT = COLLECTION_LOTS[0];
 
-const pressable =
-  "cursor-pointer rounded-md outline-none transition-opacity duration-200 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 active:opacity-80 motion-reduce:transition-none";
+function prefersReducedMotion() {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
 
 function rank(status: CatalogueStatus): number {
   if (status === "Active") return 0;
@@ -42,206 +53,39 @@ function lotAddress(lot: CatalogueLot): string {
   return `https://grade10.com/auction/listings/${lot.slug}`;
 }
 
-function CategoryTiles({
-  categories,
-  onSelect,
-  layout,
-}: {
-  categories: readonly { id: string; name: string; cover: CatalogueLot }[];
-  onSelect: (id: string) => void;
-  layout: "bella" | "tiles";
-}) {
-  if (layout === "tiles") {
-    return (
-      <nav aria-label="Categories" className="grid grid-cols-2 gap-2">
-        {categories.map((category) => (
-          <button
-            className={cn(
-              pressable,
-              "flex min-h-11 flex-col gap-2 bg-background p-2 text-left",
-            )}
-            key={category.id}
-            onClick={() => onSelect(category.id)}
-            type="button"
-          >
-            <img
-              alt=""
-              className="aspect-square w-full object-cover"
-              height={160}
-              loading="lazy"
-              src={CATALOGUE_IMAGE}
-              width={160}
-            />
-            <span className="text-base font-medium text-foreground">
-              {category.name}
-            </span>
-          </button>
-        ))}
-      </nav>
-    );
-  }
-
-  const [lead, ...rest] = categories;
-  if (!lead) return null;
-  return (
-    <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-      <CategoryFeature category={lead} large onSelect={onSelect} />
-      <div className="grid gap-4">
-        {rest.map((category) => (
-          <CategoryFeature
-            category={category}
-            key={category.id}
-            onSelect={onSelect}
-          />
-        ))}
-      </div>
-    </div>
-  );
-}
-
-function CategoryFeature({
-  category,
-  large,
-  onSelect,
-}: {
-  category: { id: string; name: string; cover: CatalogueLot };
-  large?: boolean;
-  onSelect: (id: string) => void;
-}) {
-  return (
-    <article className="relative min-h-44 overflow-hidden rounded-lg bg-muted">
-      <img
-        alt={category.cover.imageAlt}
-        className={cn("w-full object-cover", large ? "aspect-[4/3]" : "aspect-[2/1]")}
-        height={large ? 480 : 240}
-        loading="lazy"
-        src={CATALOGUE_IMAGE}
-        width={640}
-      />
-      <h3 className="absolute bottom-4 left-4 text-xl font-semibold text-foreground">
-        <button
-          className={cn(pressable, "min-h-11 bg-background px-3")}
-          onClick={() => onSelect(category.id)}
-          type="button"
-        >
-          {category.name}
-        </button>
-      </h3>
-    </article>
-  );
-}
-
-function ShopRows({
-  rows,
-  onSelect,
-}: {
-  rows: readonly {
-    id: string;
-    name: string;
-    lots: readonly CatalogueLot[];
-  }[];
-  onSelect: (id: string) => void;
-}) {
-  return (
-    <div className="flex flex-col gap-8">
-      {rows.map((row) => (
-        <div className="flex flex-col gap-3" key={row.id}>
-          <div className="flex items-center justify-between gap-4">
-            <h3 className="text-xl font-semibold text-foreground">{row.name}</h3>
-            <Button
-              className="min-h-11"
-              onClick={() => onSelect(row.id)}
-              size="md"
-              type="button"
-              variant="outline"
-            >
-              View {row.name}
-            </Button>
-          </div>
-          <ul className="flex max-w-full gap-3 overflow-x-auto">
-            {row.lots.slice(0, 4).map((lot) => (
-              <li className="w-36 shrink-0" key={lot.id}>
-                <img
-                  alt={lot.imageAlt}
-                  className="aspect-square w-full rounded-md object-cover"
-                  height={144}
-                  loading="lazy"
-                  src={CATALOGUE_IMAGE}
-                  width={144}
-                />
-              </li>
-            ))}
-          </ul>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function FilterChoices({
-  categories,
-  selectedId,
-  onSelect,
-}: {
-  categories: readonly { id: string; name: string }[];
-  selectedId: string | null;
-  onSelect: (id: string | null) => void;
-}) {
-  return (
-    <ul className="flex gap-2 overflow-x-auto lg:flex-col lg:overflow-visible">
-      {categories.map((category) => {
-        const selected = selectedId === category.id;
-        return (
-          <li className="shrink-0" key={category.id}>
-            <Button
-              aria-pressed={selected}
-              className="min-h-11"
-              onClick={() => onSelect(selected ? null : category.id)}
-              size="md"
-              type="button"
-              variant={selected ? "default" : "outline"}
-            >
-              {category.name}
-            </Button>
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-function ListCard({
-  lot,
-  watched,
-  onToggle,
-}: {
-  lot: CatalogueLot;
-  watched: boolean;
-  onToggle: () => void;
-}) {
-  return (
-    <AuctionLotCard
-      heading
-      lot={lot}
-      onToggle={onToggle}
-      watched={watched}
-    />
-  );
-}
-
 type AuctionCataloguePageProps = {
   lots: readonly CatalogueLot[];
+  /**
+   * Featured band layout. `row` is the scrolling cards; `pair` is the
+   * Thanks.co-style overlapping image + info exploration.
+   */
+  featuredLayout?: "row" | "pair";
 };
 
-function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
+function AuctionCataloguePage({
+  lots,
+  featuredLayout = "row",
+}: AuctionCataloguePageProps) {
   const ordered = useMemo(() => byCatalogueOrder(lots), [lots]);
   const live = ordered.filter((lot) => lot.status !== "Ended");
   const featured = live.slice(0, FEATURED_CAP);
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [watched, setWatched] = useState<ReadonlySet<string>>(new Set());
+  /** First paint + filter refetch — Product List workbench recipe. */
+  const [pageStatus, setPageStatus] = useState<"loading" | "ready">("loading");
+  const [filterStatus, setFilterStatus] = useState<"ready" | "loading">(
+    "ready",
+  );
+  const [pageRevealed, setPageRevealed] = useState(false);
+  const [listRevealed, setListRevealed] = useState(false);
+  const [skeletonCount, setSkeletonCount] = useState(DEFAULT_SKELETON_COUNT);
+  const filterBootstrapped = useRef(false);
 
   const categories = useMemo(() => {
-    const seen = new Map<string, { id: string; name: string; cover: CatalogueLot; lots: CatalogueLot[] }>();
+    const seen = new Map<
+      string,
+      { id: string; name: string; cover: CatalogueLot; lots: CatalogueLot[] }
+    >();
     for (const lot of ordered) {
       if (lot.status === "Ended") continue;
       const current = seen.get(lot.categoryId);
@@ -259,12 +103,86 @@ function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
     return [...seen.values()];
   }, [ordered]);
 
-  const busy = live.length >= LIVE_CAP && categories.length >= 2;
-  const quietTiles = !busy && categories.length >= 2 && categories.length <= 4;
   const listed = selectedId
     ? ordered.filter((lot) => lot.categoryId === selectedId)
     : ordered;
-  const selected = categories.find((category) => category.id === selectedId);
+
+  useEffect(() => {
+    setPageStatus("loading");
+    setPageRevealed(false);
+    setListRevealed(false);
+    setSkeletonCount(
+      Math.max(ordered.filter((lot) => lot.status !== "Ended").length, DEFAULT_SKELETON_COUNT),
+    );
+    const timeout = window.setTimeout(() => {
+      setPageStatus("ready");
+    }, FILTER_LOAD_MS);
+    return () => window.clearTimeout(timeout);
+  }, []);
+
+  useEffect(() => {
+    if (!filterBootstrapped.current) {
+      filterBootstrapped.current = true;
+      return;
+    }
+
+    setSkeletonCount(Math.max(listed.length, DEFAULT_SKELETON_COUNT));
+    setFilterStatus("loading");
+    setListRevealed(false);
+    const timeout = window.setTimeout(() => {
+      setFilterStatus("ready");
+    }, FILTER_LOAD_MS);
+    return () => window.clearTimeout(timeout);
+  }, [selectedId]);
+
+  useLayoutEffect(() => {
+    if (pageStatus !== "ready") {
+      setPageRevealed(false);
+      setListRevealed(false);
+      return;
+    }
+
+    if (prefersReducedMotion()) {
+      setPageRevealed(true);
+      setListRevealed(true);
+      return;
+    }
+
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => {
+        setPageRevealed(true);
+        setListRevealed(true);
+      });
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [pageStatus]);
+
+  useLayoutEffect(() => {
+    if (filterStatus !== "ready" || pageStatus !== "ready") {
+      if (filterStatus === "loading") setListRevealed(false);
+      return;
+    }
+
+    if (!filterBootstrapped.current) return;
+
+    if (prefersReducedMotion()) {
+      setListRevealed(true);
+      return;
+    }
+
+    let second = 0;
+    const first = requestAnimationFrame(() => {
+      second = requestAnimationFrame(() => setListRevealed(true));
+    });
+    return () => {
+      cancelAnimationFrame(first);
+      cancelAnimationFrame(second);
+    };
+  }, [filterStatus, pageStatus, selectedId]);
 
   useEffect(() => {
     const previousTitle = document.title;
@@ -317,6 +235,13 @@ function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
     });
   }
 
+  function toggleCategory(id: string) {
+    setSelectedId((current) => (current === id ? null : id));
+  }
+
+  const pageLoading = pageStatus === "loading";
+  const listLoading = pageLoading || filterStatus === "loading";
+
   return (
     <div className="flex min-h-dvh w-full flex-col bg-background text-foreground">
       <Toast position="bottom-right" />
@@ -331,113 +256,126 @@ function AuctionCataloguePage({ lots }: AuctionCataloguePageProps) {
         <h1 className="sr-only">Auctions</h1>
 
         {featured.length > 0 ? (
-          <FeaturedAuctions
-            lots={featured}
-            onToggle={toggleWatch}
-            watched={watched}
-          />
+          featuredLayout === "pair" ? (
+            <FeaturedAuctionsPair
+              lots={featured}
+              onToggle={toggleWatch}
+              watched={watched}
+            />
+          ) : (
+            <FeaturedAuctions
+              loading={pageLoading}
+              lots={featured}
+              onToggle={toggleWatch}
+              revealed={pageRevealed}
+              watched={watched}
+            />
+          )
         ) : null}
 
-        <div
-          className={cn(
-            "mx-auto w-full max-w-7xl px-4 pb-8 sm:px-8",
-            featured.length === 0 && "pt-8",
-          )}
-        >
-
-        {busy ? (
-          <section
-            aria-labelledby="auction-categories"
-            className="mt-12 min-w-0"
-          >
-            <h2
-              className="mb-4 text-2xl font-semibold text-foreground"
-              id="auction-categories"
-            >
-              Categories
-            </h2>
-            {categories.length <= 3 ? (
-              <CategoryTiles
-                categories={categories}
-                layout="bella"
-                onSelect={setSelectedId}
-              />
-            ) : (
-              <ShopRows onSelect={setSelectedId} rows={categories} />
-            )}
-          </section>
-        ) : null}
-
-        <div
-          className={cn(
-            "mt-12",
-            busy && "grid gap-8 lg:grid-cols-[16rem_minmax(0,1fr)]",
-          )}
-        >
-          {busy ? (
-            <aside aria-labelledby="auction-filter" className="min-w-0">
-              <h2
-                className="mb-4 text-2xl font-semibold text-foreground"
-                id="auction-filter"
-              >
-                Filter
-              </h2>
-              <FilterChoices
-                categories={categories}
-                onSelect={setSelectedId}
-                selectedId={selectedId}
-              />
-            </aside>
-          ) : null}
+        <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-8">
           <section aria-labelledby="all-auctions" className="min-w-0">
             <h2
-              className="text-2xl font-semibold text-foreground"
+              className={cn(
+                "text-2xl font-semibold text-foreground",
+                "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
+                pageRevealed && "translate-y-0 opacity-100 filter-none",
+              )}
               id="all-auctions"
             >
-              All auctions
+              All Auctions
             </h2>
-            {selected ? (
-              <p className="mt-2 text-base text-foreground">
-                {selected.name}
-                <Button
-                  className="ml-2 min-h-11"
-                  onClick={() => setSelectedId(null)}
-                  size="md"
-                  type="button"
-                  variant="ghost"
-                >
-                  Clear {selected.name}
-                </Button>
-              </p>
-            ) : null}
-            {listed.length === 0 ? (
-              <p className="mt-4 max-w-prose text-base text-foreground">
+            {listed.length === 0 && categories.length === 0 && !pageLoading ? (
+              <p className="mt-8 max-w-prose text-base text-foreground">
                 There are no auctions.
               </p>
             ) : (
-              <ul className="mt-4 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
-                {quietTiles ? (
-                  <li className="sm:col-span-2 lg:col-span-1">
-                    <CategoryTiles
-                      categories={categories}
-                      layout="tiles"
-                      onSelect={setSelectedId}
-                    />
-                  </li>
+              <div
+                className={
+                  categories.length > 0
+                    ? "mt-8 flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-12"
+                    : "mt-8"
+                }
+              >
+                {categories.length > 0 ? (
+                  <nav
+                    aria-label="Categories"
+                    className={cn(
+                      "flex gap-2 overflow-x-auto overscroll-x-contain lg:grid lg:grid-cols-2 lg:gap-2 lg:overflow-visible lg:self-start",
+                      "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
+                      pageRevealed && "translate-y-0 opacity-100 filter-none",
+                    )}
+                    style={{
+                      transitionDelay: pageRevealed ? "40ms" : "0ms",
+                    }}
+                  >
+                    {categories.map((category) => (
+                      <div
+                        className="w-36 shrink-0 lg:w-auto lg:shrink"
+                        key={category.id}
+                      >
+                        <AuctionCategoryButton
+                          name={category.name}
+                          onSelect={() => toggleCategory(category.id)}
+                          selected={selectedId === category.id}
+                        />
+                      </div>
+                    ))}
+                  </nav>
                 ) : null}
-                {listed.map((lot) => (
-                  <li key={lot.id}>
-                    <ListCard
-                      lot={lot}
-                      onToggle={() => toggleWatch(lot.id)}
-                      watched={watched.has(lot.id)}
-                    />
-                  </li>
-                ))}
-              </ul>
+                {listLoading ? (
+                  <ul
+                    aria-busy="true"
+                    aria-label="Loading auctions"
+                    className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+                  >
+                    {Array.from({ length: skeletonCount }, (_, index) => (
+                      <li key={`auction-skeleton-${index}`}>
+                        <AuctionLotCard
+                          heading
+                          loading
+                          lot={SKELETON_FIXTURE_LOT}
+                          onToggle={() => {}}
+                          watched={false}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                ) : listed.length === 0 ? (
+                  <p className="max-w-prose text-base text-foreground">
+                    There are no auctions in this category.
+                  </p>
+                ) : (
+                  <ul
+                    className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+                    data-revealed={listRevealed || undefined}
+                  >
+                    {listed.map((lot, index) => (
+                      <li
+                        className={cn(
+                          "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
+                          listRevealed && "translate-y-0 opacity-100 filter-none",
+                        )}
+                        key={lot.id}
+                        style={{
+                          transitionDelay: listRevealed
+                            ? `${Math.min(index, REVEAL_STAGGER_CAP) * REVEAL_STAGGER_MS}ms`
+                            : "0ms",
+                        }}
+                      >
+                        <AuctionLotCard
+                          heading
+                          lot={lot}
+                          onToggle={() => toggleWatch(lot.id)}
+                          watched={watched.has(lot.id)}
+                        />
+                      </li>
+                    ))}
+                  </ul>
+                )}
+              </div>
             )}
           </section>
-        </div>
         </div>
       </main>
       <Footer {...STORE_FOOTER} />
