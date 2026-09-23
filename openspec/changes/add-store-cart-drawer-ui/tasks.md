@@ -39,3 +39,29 @@ contract change rather than hiding it in the application adapter.
 - [x] 4.2 In `CartDrawerHost`, key both reads from `review.items`, map successful coupon answers to held promo-code display data with localized value/expiry text and refusal reasons, map a quoted points answer to the existing collapsed points state plus a localized balance/ceiling label while reusing the existing rate copy, and pass `selectedHeldPromoId={null}` with no apply/select callbacks; make `grade10-site-store-cart-drawer-SC-16` and `grade10-site-store-cart-drawer-SC-17` pass while subtotal and estimated total remain the reviewed subtotal.
 - [x] 4.3 Reset disclosure state and suppress prior read results on close, scope changes, cart edits, review refetches, and optional-read failures; prove that only the latest successful reviewed basket supplies tender context for `grade10-site-store-cart-drawer-SC-18` and `grade10-site-store-cart-drawer-SC-19` in focused hook and shell tests.
 - [x] 4.4 Verify the affected Grade10 frontend with the focused Cart Drawer and checkout-hook tests, `pnpm run typecheck`, `pnpm run lint`, and `pnpm run build`; do not run `pnpm run test:backend` because this group adds no backend files.
+
+## 5. Interactive Cart Drawer points (grade10)
+
+This user-approved increment supersedes Group 4's read-only points behavior.
+Group 5 depends on Group 7 landing and its shared package being available.
+Preserve completed task ids and existing promo editing; this points increment
+neither adds nor removes promo callbacks. Existing Group 3.2
+waits for archive and is outside this implementation increment.
+
+- [ ] 5.1 Make `grade10-site-store-cart-drawer-SC-20`, `grade10-site-store-cart-drawer-SC-23`, and `grade10-site-store-cart-drawer-SC-24` pass by exposing accepted completion, pending and failure from `useCartTender`, preserving existing callers and coupon choice. Include focused hook tests.
+- [ ] 5.2 Make `grade10-site-store-cart-drawer-SC-17` and `grade10-site-store-cart-drawer-SC-20` through `grade10-site-store-cart-drawer-SC-26` pass in the host with Apply, Use max, Remove, current quotes, persisted choice, pending guards and stale-result rejection. Pass Group 7's `tenderPending` across quote and persistence for points and existing promo actions. Include focused integration tests and supported-locale copy checks.
+- [ ] 5.3 Make `grade10-site-store-cart-drawer-SC-27` pass through reload and checkout handoff; preserve the selected code, re-quote and submit accepted spendPoints. Include checkout integration tests.
+- [ ] 5.4 Verify focused affected tests, repository typecheck, lint, test and build; compare the integrated drawer against the Default story at narrow and desktop widths with keyboard and locale checks. Record unavailable browser verification separately from passing local checks.
+
+## 6. Interactive points product record (grade10-spec)
+
+Follows Group 5 delivery; Group 7 is the shared prerequisite, not a later phase.
+
+- [ ] 6.1 Keep the Cart Points and Checkout product record aligned with Group 5 delivery; validate the change, feature suite and manual. Preserve construction marks until deployment acceptance; do not archive as part of this increment.
+
+## 7. Shared pending tender contract (grade10-spec)
+
+Prerequisite for Group 5; appended to preserve existing task ids.
+
+- [ ] 7.1 Make `shared-ui-store-cart-SC-37` through `shared-ui-store-cart-SC-39` pass with optional `tenderPending` on `CartDrawerProps` and `CartDrawerFooterProps`, forwarding it through the compound and disabling existing tender inputs/actions and Checkout, including an open promo sheet. Preserve callback absence guards and existing appearance; add focused component tests and pending stories in `cart-drawer.stories.tsx` and `cart-drawer-footer.stories.tsx`.
+- [ ] 7.2 Verify the affected shared component tests, typecheck and UI Storybook build; keep the shared Tender Actions product record aligned and validate this change and its suites before Group 5 consumes the shared package.
