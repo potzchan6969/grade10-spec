@@ -69,3 +69,25 @@
       commit; name the ones that stay manual in the suite and in the walk's
       `rounds.md` row
 - [x] 5.3 Verify: the e2e suite run named in `docs/architecture/e2e.md`
+
+## 6. Fix: gate `sign-in-settled` through Postgres (grade10)
+
+- [ ] 6.1 Write the backend tests this group makes pass, in their own commit
+      before its code: `settled: true` is answered without waiting on KV
+      cross-colo propagation once a live watch exists for the address
+      (`shared-auth-sign-in-SC-71`), and a sign-in with no live watch still
+      settles through the unchanged KV path (`SC-73`)
+- [ ] 6.2 Widen `secondaryStorage.ts`'s Postgres routing from the single
+      `POSTGRES_KEY_PREFIX` to a small set of prefixes, adding
+      `sign-in-settled-fast:` alongside `verification:` without merging their
+      scans
+- [ ] 6.3 Write `sign-in-watch-active:{sha256(email)}` to KV in
+      `mintSignInWatch`, same TTL margin as `sign-in-watch`
+- [ ] 6.4 In the settle-marking hook (`securityHooks.ts`), check
+      `sign-in-watch-active`; when present, additionally write
+      `sign-in-settled-fast:{hash}` to Postgres alongside the existing
+      `sign-in-settled:{hash}` KV write; when absent, write only the
+      existing KV key, unchanged
+- [ ] 6.5 In `resolveSignInWatch`, check `sign-in-settled-fast:{hash}` first,
+      falling back to the existing `sign-in-settled:{hash}` KV check
+- [ ] 6.6 Verify: `pnpm run typecheck`, `pnpm run test:backend`
