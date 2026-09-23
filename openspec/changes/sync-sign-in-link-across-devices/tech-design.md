@@ -158,6 +158,40 @@ On `settled: true`: unmount the Check Your Email step (no reload) and fire
 already landed in `grade10-spec`. No session read, no session request: the
 surface's own session state is untouched (`SC-72`).
 
+### Amendment: the requesting tab still needs one forced session read, to tell its own carry-on apart from a true settle elsewhere
+
+The rule above holds for a genuinely different device. It does not hold for
+the tab that sent the link when the collector follows that same link in a
+second tab of the *same* browser — `feature-tcs.md`'s `TC3-1`, folded into
+`SC-70`/`SC-72` rather than kept as a separate scenario, "since nothing
+behavioural remains once both are read together." That fold assumed both
+scenarios, read together, already say what should happen; building the
+poll handler literally (no session read, ever) surfaced the case they don't
+settle: on the SAME browser, the settle poll's `{ settled: true }` can win
+the race against that browser's own `BroadcastChannel` session announce
+(`sessionAnnounce.ts`), and a handler that trusts the poll unconditionally
+would show "signed in elsewhere" — with no session — on the very tab about
+to carry its own session forward.
+
+`useCloseOnSettledElsewhere` (`packages/grade10-auth/frontend/.../presentation/overlay/signInOverlay.tsx`)
+resolves the race with one forced, disambiguating read —
+`refetch({ query: { disableCookieCache: true } })` — before deciding: a
+session found means this tab's own carry-on wins, and the settle handler
+defers to `useAskAnsweredBySession` rather than also closing it as a
+dismissal; no session found confirms the address settled on a genuinely
+different device, and the dialog closes as `SC-70`/`SC-72` already specify.
+This is the one exception to "no session read, no session request" — scoped
+to the requesting tab telling same-device carry-on apart from a true
+cross-device settle, never a read that changes the outcome for an actually
+different device.
+
+Rejected: trusting the poll result unconditionally, matching the rule's
+literal text — wrong on the one device this feature exists to get right.
+Rejected: a new scenario for this — `TC3-1`'s fold decision already covers
+the behaviour once `SC-70` and `SC-72` are read together; this amendment
+records the mechanism the fold's assumption turned out to need, not a new
+requirement.
+
 ### Rejected: SSE or a WebSocket via Durable Object
 
 Would remove the polling interval's small latency, but adds a stateful
@@ -201,7 +235,10 @@ if a future feature needs push infrastructure for its own reasons.
 1. Backend: mint and return `watchId` from `sendMagicLink`'s callback; add
    the settle-marking hook at session creation; add the poll route.
 2. Frontend: capture `watchId` from the send response; add the poll effect
-   (interval + visibility-change) and the settle handler (unmount + toast).
+   (interval + visibility-change) and the settle handler (unmount + toast),
+   including the forced session read that tells the requesting tab's own
+   same-device carry-on apart from a true settle elsewhere (see the
+   Decisions amendment above).
 3. Bump the `external/grade10-spec` submodule pin past the commits already
    carrying `signIn.settledElsewhere` and the `Settled elsewhere` story.
 4. Rollback: revert the frontend poll effect and the backend route/hook:
