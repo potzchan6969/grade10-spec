@@ -95,11 +95,11 @@ One intake label per card, the cards sealed into the intake bag with the printed
   the batch; the drop-off or the pickup block; the collector's email, phone and WhatsApp click-to-chat templates
 - 🚧 **Cards tab** — per card the intake id, declared value, level and the one it was moved to, grade and cert in the
   grader's words, the outcome; refuse or add a card at hand-in; withdraw one at Handed in until the batch closes
-- 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge, storage accrued, to settle before
-  collection, refunds and payouts; once the cards are back, waive the upcharge or record a payout, each with a reason
-  and a second person; a payout is its own record with its route, till or transfer, and a reversal if the card turns up
-- 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter
-  has carried it
+- 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge, storage accrued, what is due, refunds and
+  payouts; once the cards are back, a waiver or a payout, its own record by till or transfer, reversed if the card turns up
+- ❓ **After a reversal** — whether the collector repays the payout and the refunded fee at the till — Operations
+- ❓ **A payout received** — stamped when a till payout is recorded; a transfer by a later act, or not at all — Operations
+- 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
 
 ## Hand-back
@@ -157,8 +157,8 @@ reaches only submissions not yet booked:
 | 🚧 `grading:operate` | staff, admin | check, refuse, mint, hand in, ship, re-estimate, receive, hand back, withdraw a card, vault a slab, post the notice |
 | 🚧 `grading:approve` | staff, admin | a waiver of the upcharge, a payout for a card not returned or damaged, a settings write |
 
-- 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason and a second `grading:approve`
-  holder who is not the recorder; a settings write is filed under its own audit subject, `settings`
+- 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
+  and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
 - 🚧 **Second factor and audit** — as the vault's: required in production and staging, and every action filed under its
   submission on the audit chain — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
 - 🚧 **Staff hear nothing** — no email to staff; the badges, the tiles and the day's strip are the signal

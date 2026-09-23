@@ -1679,12 +1679,13 @@ Admin A(holds `grading:approve`) is on the Money tab of a `returned` submission 
 
 1. Open Waive the upcharge.
 2. Type the reason.
-3. Name admin B as the second approve holder.
-4. Confirm.
+3. Send the request.
+4. As admin B, on admin B's own console, open the request and approve it.
 
 **Expected Results:**
 
-* The waiver records the reason and admin B's approval.
+* Step 3 leaves the due as it was and shows the request waiting for a second approve holder.
+* Step 4 records the waiver with the reason, admin A as the recorder and admin B as the approver.
 * The collector's due drops by 60000 minor units (HKD 600.00) before collection.
 
 ### grade10-admin-grading-counter-US8-TC2-1: Waive is absent until the cards are back
@@ -1730,16 +1731,16 @@ Admin(holds `grading:approve`) is on the Money tab of a `sent` submission with a
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) opened Waive the upcharge on a `returned` submission.
+Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission.
 
 **Steps:**
 
-1. Type the reason.
-2. Name admin A as the second approve holder.
+1. As admin A, open the request and approve it.
 
 **Expected Results:**
 
-* The dialog refuses admin A by name as the second approve holder.
+* The approval is refused by name: the recorder cannot approve their own request.
+* No waiver is written and the due is unchanged.
 
 ### grade10-admin-grading-counter-US8-TC4-1: A waiver refuses a second person who does not hold `grading:approve`
 
@@ -1757,15 +1758,16 @@ Admin A(holds `grading:approve`) opened Waive the upcharge on a `returned` submi
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) opens Waive the upcharge on a `returned` submission. Admin C holds `grading:operate` but not `grading:approve`.
+Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission. Admin C's roles hold `grading:operate` but not `grading:approve`.
 
 **Steps:**
 
-1. Name admin C as the second approve holder.
+1. As admin C, on admin C's own console, send the approval of admin A's request.
 
 **Expected Results:**
 
-* The dialog refuses admin C, naming that they do not hold `grading:approve`.
+* The approval is refused by name, naming `grading:approve`.
+* No waiver is written and the due is unchanged.
 
 ### grade10-admin-grading-counter-US8-TC5-1: A waived upcharge is filed under the submission on the audit chain
 
@@ -1783,11 +1785,11 @@ Admin A(holds `grading:approve`) opens Waive the upcharge on a `returned` submis
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A and admin B both hold `grading:approve`; A waives an upcharge on a `returned` submission with B's approval.
+Admin A and admin B both hold `grading:approve`; A asks for a waiver of an upcharge on a `returned` submission.
 
 **Steps:**
 
-1. Complete the waiver.
+1. As admin B, on admin B's own console, approve the request.
 2. Open the Timeline tab.
 
 **Expected Results:**
@@ -1832,13 +1834,14 @@ Admin A(holds `grading:approve`) is on the Money tab of a submission whose batch
 **Steps:**
 
 1. Open Payout.
-2. Choose the row's route.
-3. Name admin B as the second approve holder.
-4. Confirm.
+2. Choose the row's route and type the reason.
+3. Send the request.
+4. As admin B, on admin B's own console, open the request and approve it.
 
 **Expected Results:**
 
-* The payout records the row's declared value and refunds the row's fee, on its own record with admin B's approval, by the row's route.
+* Step 3 records no payout and no refund.
+* Step 4 records the row's declared value and refunds the row's fee, on its own record with admin A as the recorder and admin B as the approver, by the row's route.
 
 ### grade10-admin-grading-counter-US9-TC2-1: A payout past its settlement window is marked on the dialog
 
@@ -1888,12 +1891,13 @@ Admin(holds `grading:approve`) opens Payout on a card not returned, 15 days afte
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin(holds `grading:approve`) recorded a payout for a card the grader has now located.
+Admin A(holds `grading:approve`) recorded a payout for a card the grader has now located; admin B also holds `grading:approve`.
 
 **Steps:**
 
 1. Open the payout's record.
-2. Reverse it.
+2. Ask for its reversal with a reason.
+3. As admin B, on admin B's own console, approve the request.
 
 **Expected Results:**
 
@@ -1915,15 +1919,16 @@ Admin(holds `grading:approve`) recorded a payout for a card the grader has now l
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) opens Payout on a card not returned.
+Admin A(holds `grading:approve`) asked for a payout on a card not returned.
 
 **Steps:**
 
-1. Name admin A as the second approve holder.
+1. As admin A, open the request and approve it.
 
 **Expected Results:**
 
-* The dialog refuses admin A by name.
+* The approval is refused by name: the recorder cannot approve their own request.
+* No payout and no refund is written.
 
 ### grade10-admin-grading-counter-US9-TC5-1: A payout is filed under the submission on the audit chain
 
@@ -1941,11 +1946,11 @@ Admin A(holds `grading:approve`) opens Payout on a card not returned.
 * **Trace:** grade10-admin-grading-counter-US-09
 
 **Pre-conditions:**
-Admin A and admin B both hold `grading:approve`; a payout is recorded and approved.
+Admin A and admin B both hold `grading:approve`; admin A asked for a payout on a card not returned.
 
 **Steps:**
 
-1. Complete the payout.
+1. As admin B, on admin B's own console, approve the request.
 2. Open the Timeline tab.
 
 **Expected Results:**
@@ -2000,12 +2005,42 @@ Admin(holds `grading:approve`) opens Payout on a card that already carries a pay
 **Steps:**
 
 1. Open Payout on that card.
-2. Record a second payout with a second approve holder.
+2. Ask for a second payout.
 
 **Expected Results:**
 
 * The second payout is refused by name, naming the payout the card already carries.
 * Nothing is written and the first record is untouched.
+
+### grade10-admin-grading-counter-US9-TC8-1: A payout request nobody has approved moves no money
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-09
+
+**Pre-conditions:**
+Admin A(holds `grading:approve`) is on the Money tab of a submission with one card not returned; nobody else has opened it.
+
+**Steps:**
+
+1. Open Payout, choose the till and type the reason.
+2. Send the request.
+3. Read the Money tab and the Timeline tab.
+
+**Expected Results:**
+
+* No payout and no fee refund appear on the Money tab; the card is still owed its payout.
+* The request shows as waiting for a second approve holder.
+* The timeline carries no payout.
 
 ---
 
@@ -3238,6 +3273,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-SC-34` | Case added | `grade10-admin-grading-counter-US4-TC11-1` — the held card untickable and named on the receipt |
 | `grade10-admin-grading-counter-SC-09` | Case added | `grade10-admin-grading-counter-US9-TC6-1` — the queue badging a payout past its window |
 | `grade10-admin-grading-counter-SC-63` | Case added | `grade10-admin-grading-counter-US9-TC7-1` — a second payout on a card already carrying one refused |
+| `grade10-admin-grading-counter-SC-103` | Case added | `grade10-admin-grading-counter-US9-TC8-1` — a payout asked for and never approved, which moves no money |
 | `grade10-admin-grading-counter-SC-78` | Case added | `grade10-admin-grading-counter-US14-TC6-1` — the second factor asked for in staging |
 | `grade10-admin-grading-counter-SC-79` | Case added | `grade10-admin-grading-counter-US14-TC7-1` — one verification covering the next act for twelve hours |
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |

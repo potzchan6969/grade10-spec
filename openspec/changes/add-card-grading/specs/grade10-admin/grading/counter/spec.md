@@ -920,6 +920,12 @@ writing a money setting SHALL each take a reason and a second holder of
 `grading:approve` who is not the person recording it. A second approver who is
 the recorder SHALL be refused by name.
 
+**Asked, then approved** - the recorder SHALL ask for the act with its reason
+and its figures, and the second approve holder SHALL approve that request
+under their own sign-in, on their own console. A request alone SHALL move no
+money, and the approval SHALL record the request's figures unchanged. No act
+SHALL take the second person's name or grants from the recorder.
+
 **Not before the cards are back** - waiving an upcharge SHALL be offered only
 once the submission's cards are back at the shop, because there is nothing to
 write off before.
@@ -937,7 +943,7 @@ what the till took, never as an edit of it, and SHALL name the card it waives.
 #### Scenario: grade10-admin-grading-counter-SC-60 - The recorder cannot be the approver
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
 
-- **WHEN** an approve holder records a waiver naming themselves as the second approve holder
+- **WHEN** an approve holder approves a waiver they asked for themselves
 - **THEN** it is refused by name and nothing is written
 
 #### Scenario: grade10-admin-grading-counter-SC-61 - Nothing is waived before the cards are back
@@ -950,9 +956,16 @@ what the till took, never as an edit of it, and SHALL name the card it waives.
 #### Scenario: grade10-admin-grading-counter-SC-95 - A second approver without the grant is refused
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
 
-- **GIVEN** a member of staff holding `grading:operate` and not `grading:approve`
-- **WHEN** an approve holder names them as the second approve holder on a waiver
-- **THEN** it is refused by name, saying they do not hold `grading:approve`, and nothing is written
+- **GIVEN** an operator whose roles hold `grading:operate` and not `grading:approve`, and a waiver an approve holder asked for
+- **WHEN** the operator approves that waiver on their own console
+- **THEN** the console's grant check refuses it by name, naming `grading:approve`, before any act runs, and nothing is written
+
+#### Scenario: grade10-admin-grading-counter-SC-103 - A request alone moves no money
+**Serves:** grade10-admin-grading-counter-US-09 - the approver settles a card that did not come back
+
+- **GIVEN** a card recorded as not returned
+- **WHEN** an approve holder asks for its payout with a reason and nobody has approved it yet
+- **THEN** no payout and no fee refund is recorded, and the request waits for a second approve holder
 
 ### Requirement: A payout is its own record, with its route and its reversal
 

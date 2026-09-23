@@ -1205,6 +1205,14 @@ Stage (c).
       (`grade10-site-grading-submission-lifecycle-SC-40`)
 - [ ] 19.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 19.8 Write the approval pair: `admin.requestApproval` records the
+      recorder's request for a waiver, a payout or a reversal with its reason
+      and moves no money; `admin.approveRequest` is a second `grading:approve`
+      holder's own call, refused for the recorder, refused on a stale
+      request, and writes the record naming both from their sessions, once
+      per request (`grade10-admin-grading-counter-SC-60`,
+      `grade10-admin-grading-counter-SC-95`,
+      `grade10-admin-grading-counter-SC-103`)
 
 ## 20. The uncollected ladder and the written notice (grade10)
 
