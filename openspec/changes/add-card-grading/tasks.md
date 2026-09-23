@@ -1440,7 +1440,7 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       `eraseCeremonyPersonalData` included
       (`grade10-site-vault-retention-and-erasure-SC-35`,
       `grade10-site-vault-retention-and-erasure-SC-36`)
-- [ ] 23.5 Send the owed mail and keep the history's entries under the
+- [ ] 23.5 Delete the owed mail and keep the history's entries under the
       append-only guards' `redactable` lists, `submission_events` redacting its
       actor alone (`grade10-site-vault-retention-and-erasure-SC-37`)
 - [ ] 23.6 Add `erasure.erase` and `erasure.holds` on the vault's router shape,
@@ -1451,6 +1451,10 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
 - [ ] 23.7 Verify: `node scripts/checks/check-erasure-consumers.mjs`,
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 23.8 Read grading's holds on Your data beside the vault's, through the
+      site's own grading client, each block failing on its own, the ask
+      withheld while any hold of either product stands and each named in the
+      collector's words (`grade10-site-vault-retention-and-erasure-SC-33`)
 
 ## 24. The console's reads, the settings and the grants (grade10)
 

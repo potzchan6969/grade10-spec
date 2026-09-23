@@ -89,6 +89,8 @@ it changes; the rest of the cards carry on:
 - 🚧 **The rungs never pause** — they count from the ready day whatever the
   collector books or names; only collecting, vaulting or a payout leaves it
 - ❓ **A part month** — counts as a whole month — Commercial
+- ❓ **Ended, when every card is paid out** — whether a submission whose every card was paid out has ended,
+  for erasure and for retention — Product
 - 🚧 **The notice is a counter act** — from day 180 the submission asks staff
   for it; the posting date and tracking are recorded, and the 30 days run from it
 - 🚧 **After the notice** — the release stops here: the cards stay the
