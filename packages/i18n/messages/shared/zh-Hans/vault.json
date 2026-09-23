@@ -672,7 +672,6 @@
       "cancelled": "要求已取消。",
       "windowPassed": "已于 {when} 提出要求，期限已过。",
       "heldWaits": "{reason}，期间不会删除任何资料；删除会等到此事完结。",
-      "shopFiled": "此要求已由本店接手，只有本店可以取消。",
       "eachProduct": "我们的每项服务都会删除其保留的你的资料。",
       "windowClosed": "期限已过，此要求无法再取消。"
     },

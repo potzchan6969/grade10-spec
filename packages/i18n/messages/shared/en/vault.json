@@ -672,7 +672,6 @@
       "cancelled": "Request cancelled.",
       "windowPassed": "Filed on {when}. The window has passed.",
       "heldWaits": "Nothing is erased while {reason}; it waits until that ends.",
-      "shopFiled": "The shop has taken this request over, so only the shop can call it off.",
       "eachProduct": "Each part of our service erases what it holds of yours.",
       "windowClosed": "The window has passed, so this request can no longer be cancelled."
     },
