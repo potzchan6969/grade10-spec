@@ -190,7 +190,7 @@ function CopyableDetailRow({
                   : "absolute size-3 scale-100 opacity-100 transition-[opacity,transform] duration-150 ease-out motion-reduce:transition-none"
               }
             >
-              <Copy aria-hidden size={12} weight="regular" />
+              <Copy aria-hidden size={12} weight="bold" />
             </span>
             <span
               className={
