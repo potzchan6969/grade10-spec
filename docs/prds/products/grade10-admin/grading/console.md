@@ -136,6 +136,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 | --- | --- | --- |
 | `grading.plan_nudge_days` | ❓ 21 | Operations |
 | `grading.plan_expiry_days` | ❓ 30 | Operations |
+| `grading.booked_expiry_days` | ❓ 14, past the visit nobody arrived for | Operations |
 | `grading.batch_cutoff` | ❓ Thursday 19:00; the batch ships the next day | Operations, against the courier's pickup schedule |
 | `grading.reminder_days` | ❓ 30 and 60 | Operations |
 | `grading.storage_from_day` | ❓ 90 | Operations |
