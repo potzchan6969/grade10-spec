@@ -49,15 +49,17 @@ afterEach(() => {
  * loader for it outright rather than leaving the walk to the fallback a failed
  * `/api/snapshot` takes, so one fixed tree is what every walk reads.
  *
- * Called once per file: the router reads the address as the module loads, so a
- * second address is a second walk - or a click, which is what a walk does. An
- * existing `#root` is replaced rather than left beside a new one, so a second
- * call in one session mounts once and a query for a heading never meets two.
+ * The router reads the address as its module loads and follows the browser's
+ * history after, so a second call tells it the new address the way the browser
+ * would, with a `popstate`: a router a click moved never answers the next
+ * address. An existing `#root` is replaced rather than left beside a new one,
+ * so a query for a heading never meets two.
  */
 export async function openManual(path: string): Promise<void> {
   const url = new URL(path, window.location.origin);
   url.searchParams.set("fixture", "");
   window.history.replaceState(null, "", url);
+  window.dispatchEvent(new PopStateEvent("popstate"));
 
   const { App } = await import("../src/app");
   document.getElementById("root")?.remove();

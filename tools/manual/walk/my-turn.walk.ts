@@ -130,17 +130,11 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
   await expect
     .element(
       told.getByText(
-        /Suite: .*feature-tcs\.md.*cases; the walk needs it reviewed as its input/,
+        /Suite: .*feature-tcs\.md, \d+ cases?; the walk needs it reviewed as its input/,
       ),
     )
     .toBeVisible();
 
-  // Back through the browser's own history, so the file's later cases open
-  // My turn at the address they name.
-  window.history.back();
-  await expect
-    .element(page.getByRole("heading", { level: 2, name: "Open questions" }))
-    .toBeVisible();
 });
 
 test("shared-planning-change-stages-SC-61 - nothing on the reader", async () => {
