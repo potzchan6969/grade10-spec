@@ -6,6 +6,8 @@ export type ReminderScheduleProps = {
   dates: readonly string[];
 };
 
+const listed = new Intl.ListFormat("en", { style: "long", type: "conjunction" });
+
 /**
  * When the borrower will hear from us next, and that a reminder adds
  * nothing to what is owed. Once a forfeiture notice stands, no further
@@ -18,7 +20,7 @@ export function ReminderSchedule({ dates }: ReminderScheduleProps) {
 
   return (
     <Note>
-      We will write again on {dates.map(hkDate).join(" and ")}. A reminder adds
+      We will write again on {listed.format(dates.map(hkDate))}. A reminder adds
       nothing to what you owe.
     </Note>
   );

@@ -31,7 +31,7 @@ export default function DocumentsSealedEmail({
       greeting={`Hi ${previewCase.collectorName},`}
       heading="Your copies of what you signed"
       lead={`The documents you signed for ${itemTitle} are attached, each with its certificate of completion. They are also on your case whenever you need them.`}
-      preheader={`Your signed documents for ${itemTitle} are attached.`}
+      preheader={`Your signed documents for ${itemTitle}.`}
     >
       <FactsGroup facts={[{ label: "Packet", value: packetId }]} />
     </VaultLetter>

@@ -1,6 +1,7 @@
 import { hkDateTime } from "@/emails/_components/format";
 import {
   FactsGroup,
+  Note,
   VaultLetter,
 } from "@/emails/vault/_components/vault-letter";
 import {
@@ -40,6 +41,7 @@ export default function IdentityCheckInvitedEmail({
           { label: "Bring", value: "A photo ID, either way" },
         ]}
       />
+      <Note>If you are already verified with us, there is nothing to do.</Note>
     </VaultLetter>
   );
 }

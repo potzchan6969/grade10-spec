@@ -1,5 +1,8 @@
 import { hkDate } from "@/emails/_components/format";
-import { VaultLetter } from "@/emails/vault/_components/vault-letter";
+import {
+  FactsGroup,
+  VaultLetter,
+} from "@/emails/vault/_components/vault-letter";
 import {
   footerLines,
   previewCase,
@@ -25,9 +28,11 @@ export default function OfferExpiredEmail({
       }}
       greeting={`Hi ${previewCase.collectorName},`}
       heading="That offer has run out"
-      lead={`Nobody accepted the offer on ${itemTitle} before it expired on ${hkDate(expiresAt)}, so it is closed. ${itemTitle} and your case are untouched, and we can write you another offer whenever you want one.`}
+      lead={`Nobody accepted the offer on ${itemTitle} before it expired, so it is closed. ${itemTitle} and your case are untouched, and we can write you another offer whenever you want one.`}
       preheader={`The offer expired ${hkDate(expiresAt)}. Your item and your case are untouched.`}
-    />
+    >
+      <FactsGroup facts={[{ label: "Expired on", value: hkDate(expiresAt) }]} />
+    </VaultLetter>
   );
 }
 

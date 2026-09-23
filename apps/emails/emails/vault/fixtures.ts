@@ -55,10 +55,10 @@ export const previewCase = {
   collectorFullName: "Wing-Yan Chu",
   email: "wing.chu@example.com",
 
-  custodianName: "Grade Ten Vault Limited",
+  custodianName: "Grade 10 Vault Limited",
   lenderLegalName: "Grade Ten Finance Limited",
-  licenceWording:
-    "Licensed under the Money Lenders Ordinance, licence no. ML/2026/00142.",
+  licenceWording: "Licensed under the Money Lenders Ordinance, licence no.",
+  licenceNumber: "ML/2026/00142",
   shopName: "Grade10 Shop, Causeway Bay",
   shopAddress: "Shop 5, 18 Yee Wo Street, Causeway Bay, Hong Kong",
   complaintsContact: "complaints@grade10.com",
@@ -136,7 +136,11 @@ export const previewCase = {
   fpsId: "165 2200 7743",
   bankAccount: "004-231-8-847215",
 
-  reminderScheduleAdvance: ["2026-12-09T05:00:00Z", "2026-12-15T05:00:00Z"],
+  reminderScheduleAdvance: [
+    "2026-12-09T05:00:00Z",
+    "2026-12-15T05:00:00Z",
+    "2026-12-23T05:00:00Z",
+  ],
   reminderScheduleDueSoon: ["2026-12-15T05:00:00Z", "2026-12-23T05:00:00Z"],
   reminderScheduleOverdue: ["2027-01-06T05:00:00Z"],
 } as const;
@@ -165,14 +169,14 @@ export const previewCaseLine = {
 export function footerLines(party: "lender" | "custodian"): string[] {
   const name =
     party === "lender"
-      ? `${previewCase.lenderLegalName}, trading as Grade10. ${previewCase.licenceWording}`
+      ? `${previewCase.lenderLegalName}, trading as Grade10. ${previewCase.licenceWording} ${previewCase.licenceNumber}`
       : `${previewCase.custodianName}, trading as Grade10.`;
 
   return [
     name,
     previewCase.shopAddress,
     `Complaints: ${previewCase.complaintsContact}.`,
-    "Dates and times are Hong Kong time.",
+    "Dates and times are in Hong Kong Standard Time.",
   ];
 }
 
@@ -256,6 +260,7 @@ export const VAULT_FIXTURES: LetterFacts = {
   },
   visit_booked: {
     visitAt: previewCase.visitAt,
+    visitMinutes: previewCase.visitMinutes,
   },
   visit_rescheduled: {
     visitAt: previewCase.movedVisitAt,
@@ -263,6 +268,7 @@ export const VAULT_FIXTURES: LetterFacts = {
   visit_cancelled: {},
   visit_missed: {
     visitAt: previewCase.visitAt,
+    itemWithYou: true,
   },
   offer_made: {
     principalMinor: previewCase.offerPrincipalMinor,

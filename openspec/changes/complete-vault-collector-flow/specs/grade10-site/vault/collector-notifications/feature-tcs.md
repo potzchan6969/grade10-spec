@@ -502,8 +502,8 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The footer names the custodian under its registered name, with the licence line and the complaints contact.
-* The footer names no lender.
+* The footer names the custodian under its registered name, with the complaints contact.
+* The footer names no lender and no licence line.
 
 ---
 
@@ -728,7 +728,7 @@ and that a person decides,
 **Expected Results:**
 
 * The message carries the case reference and the item.
-* The footer names the sending party under its registered name, the licence line and the complaints contact.
+* The footer names the sending party under its registered name and the complaints contact, with the lender's licence line on a money message.
 
 ### grade10-site-vault-collector-notifications-US5-TC6-1: An unset value prints as a marked placeholder outside production
 
@@ -1011,7 +1011,7 @@ reconciliation folded one more,
 | Manual | Why |
 | --- | --- |
 | `US2-TC7-1` | The chat app opens outside the product; a person reads the pre-filled template and confirms the vault queued nothing of its own |
-| `US2-TC13-1` | A person reads the custodian's registered name and its licence line off the message; no assertion restates them without keeping a second copy of them |
+| `US2-TC13-1` | A person reads the custodian's registered name off the message and sees no licence line; no assertion restates the name without keeping a second copy of it |
 | `US5-TC1-1` | The automated walk proves the table's rows; a person reads the whole message to confirm no figure is also written into a sentence |
 | `US5-TC5-1` | A person reads the footer against the party the message is from, which is the one thing the walk cannot decide for every kind of message at once |
 | `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |

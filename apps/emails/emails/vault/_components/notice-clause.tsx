@@ -2,7 +2,6 @@ import { hkDate, money } from "@/emails/_components/format";
 import { FactsGroup, Note } from "@/emails/vault/_components/vault-letter";
 
 export type NoticeClauseProps = {
-  clause: string;
   itemTitle: string;
   payBy: string;
   outstandingMinor: number;
@@ -10,12 +9,11 @@ export type NoticeClauseProps = {
 };
 
 /**
- * The written forfeiture notice's own furniture: the clause it acts under,
+ * The written forfeiture notice's own furniture after the clause it opens on:
  * the figures, that taking the item is a person's decision and never
  * automatic, and that it is the last reminder this loan gets.
  */
 export function NoticeClause({
-  clause,
   itemTitle,
   payBy,
   outstandingMinor,
@@ -23,7 +21,6 @@ export function NoticeClause({
 }: NoticeClauseProps) {
   return (
     <>
-      <Note>This notice acts under {clause}.</Note>
       <FactsGroup
         facts={[
           { label: "Pay in full by", value: hkDate(payBy) },

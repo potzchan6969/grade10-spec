@@ -44,8 +44,8 @@
     each further day adds, the condition the item lapses on, and that taking it
     is a person's decision
   - The case line and the footer: the reference and the item, the party the
-    message is from under its registered name, the licence line and the
-    complaints contact
+    message is from under its registered name, the lender's licence line on a
+    money message, and the complaints contact
   - A value nobody has set: bracketed outside production, and in production the
     act that would print one refuses before it commits, so nothing is written
     that cannot be sent
@@ -106,7 +106,7 @@ invitation to verify, whose link opens the identity check:
 Every message ends the same way, whatever it is about.
 
 - **The case line** — every message SHALL carry the case's reference and the item's title, directly above the footer.
-- **The footer** — every message SHALL name the party it is from under that party's registered name, with that party's licence line and the complaints contact.
+- **The footer** — every message SHALL name the party it is from under that party's registered name, with the complaints contact; the lender's footer SHALL carry its licence line, and the custodian's none.
 - **Which party** — a message naming an amount of money SHALL name the lender, and every other message SHALL name the custodian.
 
 #### Scenario: grade10-site-vault-collector-notifications-SC-21 - The case line carries the reference
@@ -119,7 +119,7 @@ Every message ends the same way, whatever it is about.
 **Serves:** grade10-site-vault-collector-notifications-US-02 - the collector hearing that their item is now in the vault
 
 - **WHEN** the item-vaulted message is sent
-- **THEN** its footer names the custodian under its registered name, with the licence line and the complaints contact, and not the lender
+- **THEN** its footer names the custodian under its registered name, with the complaints contact, and names neither the lender nor a licence line
 
 ### Requirement: A money message tables its figures and carries how to pay
 

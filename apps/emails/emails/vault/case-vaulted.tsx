@@ -20,7 +20,6 @@ export default function CaseVaultedEmail({
 
   return (
     <VaultLetter
-      attachments={["your signed documents"]}
       caseLine={previewCaseLine}
       cta={{ href: previewCase.url, label: "See your case" }}
       footer={{
@@ -30,7 +29,7 @@ export default function CaseVaultedEmail({
       greeting={`Hi ${previewCase.collectorName},`}
       heading="Safely stored"
       lead={`${itemTitle} is now in our vault, and your signed documents are on your case.`}
-      preheader={`${itemTitle} is safely stored. Your signed documents are attached.`}
+      preheader={`${itemTitle} is safely stored.`}
     >
       <FactsGroup
         facts={[{ label: "In the vault since", value: hkDate(vaultedAt) }]}

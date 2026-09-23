@@ -34,11 +34,13 @@ export default function ForfeitureNoticeEmail({
       }}
       greeting={`Hi ${previewCase.collectorName},`}
       heading={`We may take ${itemTitle} to settle this loan`}
-      lead={`Your loan on ${itemTitle} is overdue and ${money(outstandingMinor)} is outstanding today. Pay in full before ${hkDate(payBy)} and the item stays yours to collect.`}
+      lead={[
+        `This notice acts under ${clause}.`,
+        `Your loan on ${itemTitle} is overdue and ${money(outstandingMinor)} is outstanding today. Pay in full before ${hkDate(payBy)} and the item stays yours to collect.`,
+      ]}
       preheader={`Final notice: pay by ${hkDate(payBy)} or we may take ${itemTitle}.`}
     >
       <NoticeClause
-        clause={clause}
         itemTitle={itemTitle}
         lateDayMinor={lateDayMinor}
         outstandingMinor={outstandingMinor}

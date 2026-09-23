@@ -3,6 +3,7 @@ import { HowToPay } from "@/emails/vault/_components/how-to-pay";
 import { ReminderSchedule } from "@/emails/vault/_components/reminder-schedule";
 import {
   FactsGroup,
+  Note,
   VaultLetter,
 } from "@/emails/vault/_components/vault-letter";
 import {
@@ -48,6 +49,10 @@ export default function RepaymentOverdueEmail({
           { label: "Each further day adds", value: money(lateDayMinor) },
         ]}
       />
+      <Note>
+        Paying part of it now brings the balance down. While it stays unpaid we
+        may send you a written notice naming a date to pay by.
+      </Note>
       <HowToPay {...previewHowToPay} outstandingMinor={outstandingMinor} />
       <ReminderSchedule dates={previewCase.reminderScheduleOverdue} />
     </VaultLetter>

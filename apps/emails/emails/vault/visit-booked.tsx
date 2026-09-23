@@ -11,12 +11,14 @@ import {
 
 export type VisitBookedProps = {
   visitAt?: string;
+  visitMinutes?: number;
 };
 
 export default function VisitBookedEmail({
   visitAt = previewCase.visitAt,
+  visitMinutes = previewCase.visitMinutes,
 }: VisitBookedProps) {
-  const { itemTitle, shopAddress, shopName, visitMinutes } = previewCase;
+  const { itemTitle, shopAddress, shopName } = previewCase;
 
   return (
     <VaultLetter
@@ -29,11 +31,12 @@ export default function VisitBookedEmail({
       }}
       greeting={`Hi ${previewCase.collectorName},`}
       heading="We'll see you soon"
-      lead={`Your visit for ${itemTitle} is booked for ${hkDateTime(visitAt)}. Bring the item and a photo ID — we check your ID before anything is signed, either from the link we sent you or at the counter.`}
+      lead={`Your visit for ${itemTitle} is booked for ${hkDateTime(visitAt)}. Bring the item and a photo ID — we check your ID before anything is signed, either from the link we send you or at the counter.`}
       preheader={`${hkDateTime(visitAt)} at ${shopName}. Bring ${itemTitle} and a photo ID.`}
     >
       <FactsGroup
         facts={[
+          { label: "Your visit", value: hkDateTime(visitAt) },
           { label: "Where", value: shopName, subtext: shopAddress },
           { label: "Bring", value: `${itemTitle} and a photo ID` },
           { label: "Takes about", value: `${visitMinutes} minutes` },
@@ -45,4 +48,5 @@ export default function VisitBookedEmail({
 
 VisitBookedEmail.PreviewProps = {
   visitAt: previewCase.visitAt,
+  visitMinutes: previewCase.visitMinutes,
 } satisfies VisitBookedProps;

@@ -1,5 +1,8 @@
 import { hkDateTime } from "@/emails/_components/format";
-import { VaultLetter } from "@/emails/vault/_components/vault-letter";
+import {
+  FactsGroup,
+  VaultLetter,
+} from "@/emails/vault/_components/vault-letter";
 import {
   footerLines,
   previewCase,
@@ -31,7 +34,9 @@ export default function VisitRescheduledEmail({
         "The attached file replaces the one on your phone from the earlier time.",
       ]}
       preheader={`Now ${hkDateTime(visitAt)}. Nothing else about your case has changed.`}
-    />
+    >
+      <FactsGroup facts={[{ label: "Your visit", value: hkDateTime(visitAt) }]} />
+    </VaultLetter>
   );
 }
 

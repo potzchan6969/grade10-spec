@@ -103,7 +103,8 @@ Every item is a value or an act outside the code, with who closes it;
    `packages/app-env/src/legalIdentity.ts`, each refusing its own act while
    unset: the custodian's name a production deploy; the lender's an offer in
    production; the licence number and wording the loan agreement and every money
-   email in production; the complaints contact prints where set
+   email in production; the complaints contact every email in production, and
+   the paper prints it where set
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
    method, whether an AML duty applies, the retention windows, and whether
@@ -184,6 +185,7 @@ the code holds until they do.
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
 | The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; the privacy page reads "Being prepared" until it exists, and the tick ships against that page | Legal |
+| One rule for the complaints contact | ❓ Open | In production an email refuses to go without the complaints contact, while the paper prints it where set. Recommended: the paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
 | Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |
 | Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
