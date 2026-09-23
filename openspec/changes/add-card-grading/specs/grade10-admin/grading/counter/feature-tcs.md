@@ -698,6 +698,44 @@ Admin(holds `grading:operate`) has every card checked on a `booked` submission a
 * The check-in is refused by name, naming the unsealed agreement.
 * The submission stays `booked` and the cards stay with the collector.
 
+### grade10-admin-grading-counter-US2-TC14-1: An order recorded on another submission is refused, and a replay answers the first its own lines
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-02
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First submission | Express, one card, agreement sealed |
+| Second submission | Regular, one card, agreement sealed |
+| Paid order | one order carrying a Grading Service line at each level |
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) is at the till step of both submissions' hand-in runbooks, and the one paid order is in the till.
+
+**Steps:**
+
+1. Record the paid order on the Express submission.
+2. Record the same order on the Regular submission.
+3. Record the same order on the Express submission again.
+
+**Expected Results:**
+
+* Step 1 writes the Express line back to the Express submission.
+* Step 2 is refused by name, naming the Express submission as the one holding the order, and the Regular submission shows no fee line and no new timeline entry.
+* Step 3 writes nothing and shows the Express submission's own line from step 1.
+
 ---
 
 ## grade10-admin-grading-counter-US3: Operator refuses one card and the rest go on
@@ -3067,7 +3105,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 
 ## Reconciliation
 
-**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and two cases against a hundred scenarios.
+**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and three cases against a hundred and one scenarios.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
@@ -3167,6 +3205,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-SC-03` | Case added | `grade10-admin-grading-counter-US1-TC9-1` — a `planned` submission in none of the views |
 | `grade10-admin-grading-counter-SC-77` | Case added | `grade10-admin-grading-counter-US1-TC10-1` — no email and no push to staff over a shift |
 | `grade10-admin-grading-counter-SC-22` | Case added | `grade10-admin-grading-counter-US2-TC13-1` — check in refused while the agreement is unsealed |
+| `grade10-admin-grading-counter-SC-101` | Case added | `grade10-admin-grading-counter-US2-TC14-1` — an order recorded on one submission refused on another at a second level, and a replay on the first answering its own lines |
 | `grade10-admin-grading-counter-SC-34` | Case added | `grade10-admin-grading-counter-US4-TC11-1` — the held card untickable and named on the receipt |
 | `grade10-admin-grading-counter-SC-09` | Case added | `grade10-admin-grading-counter-US9-TC6-1` — the queue badging a payout past its window |
 | `grade10-admin-grading-counter-SC-63` | Case added | `grade10-admin-grading-counter-US9-TC7-1` — a second payout on a card already carrying one refused |

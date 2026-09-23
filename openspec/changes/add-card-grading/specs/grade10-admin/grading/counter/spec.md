@@ -335,6 +335,12 @@ offered before the one above it is done:
 **Where two submissions share one drop-off**, each SHALL run its own hand-in,
 and the other SHALL be named under the visit.
 
+**One paid order, one submission** - the first submission to record a paid
+order SHALL claim it; another submission presenting the same order, at any
+level, SHALL be refused by name with nothing written, and recording the order
+again on the submission that claimed it SHALL answer that submission's own
+lines.
+
 #### Scenario: grade10-admin-grading-counter-SC-14 - The day's booking opens its submission
 **Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
 
@@ -398,6 +404,15 @@ and the other SHALL be named under the visit.
 - **GIVEN** a submission at a level whose pinned ceiling is 390000 HKD minor units
 - **WHEN** the operator checks a card declared at 390000 HKD minor units
 - **THEN** the card is checked in at that level, the ceiling being the highest declared value the level carries
+
+#### Scenario: grade10-admin-grading-counter-SC-101 - An order recorded on another submission is refused
+**Serves:** grade10-admin-grading-counter-US-02 - the operator takes a booked list in at the desk
+
+- **GIVEN** two sealed submissions, one at Express and one at Regular, and one paid order carrying the fee lines of both levels
+- **WHEN** the operator records the order on the Express submission, then on the Regular one
+- **THEN** the Express submission claims the order, and the Regular one is refused by name with nothing written on it
+- **AND** the refusal names the Express submission as the one holding the order
+- **AND** recording the order again on the Express submission writes nothing and answers its own lines
 
 ### Requirement: A hand-in is refused whole rather than done in part
 

@@ -665,7 +665,7 @@ Stage (b).
 
 Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 
-- [ ] 13.1 Cover the counter's writes: the check and the refusal under the
+- [x] 13.1 Cover the counter's writes: the check and the refusal under the
       submission lock, the till's line matching and its retry, the hand-in's
       three refusals, the safe cap taken `FOR UPDATE` by two desks at once, the
       withdrawal's refund, the desk's own list, and the audit row each act
@@ -697,7 +697,7 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-admin-grading-batches-SC-42`,
       `grade10-site-grading-dropoff-booking-SC-23`,
       `grade10-site-grading-dropoff-booking-SC-24`)
-- [ ] 13.2 Write `checkCard` and `refuseCard` under the submission lock: the
+- [x] 13.2 Write `checkCard` and `refuseCard` under the submission lock: the
       condition note and the two photographs, a declared value above the pinned
       ceiling refused at that level and one at the ceiling taken, a refusal
       carrying its reason and the collector's words, one refusal never holding
@@ -710,7 +710,7 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-admin-grading-counter-SC-88`,
       `grade10-admin-grading-counter-SC-89`,
       `grade10-site-grading-submission-lifecycle-SC-58`)
-- [ ] 13.3 Write `recordFeePaid`: `STORE_SERVICE.orderByName` read before any
+- [x] 13.3 Write `recordFeePaid`: `STORE_SERVICE.orderByName` read before any
       transaction opens, one store line to one card in `position` order with a
       cover line per covered card, `POS_LINES_MISMATCH` refused with the gap on
       a wrong count, a multiple, a wrong figure or a null subtotal, and the
@@ -727,15 +727,16 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       and `GET /api/submissions/:id/photos/:photoId` serving one photograph of
       a card on that submission back by its id, `no-store`, from `ITEM_PHOTOS`,
       on the collector's own access or behind `grading:read`
-      (`grade10-admin-grading-counter-SC-19`)
-- [ ] 13.4 Write `recordRefund` naming the card and the line it refunds, so a
+      (`grade10-admin-grading-counter-SC-19`,
+      `grade10-admin-grading-counter-SC-101`)
+- [x] 13.4 Write `recordRefund` naming the card and the line it refunds, so a
       line already paid comes back at the till, a refused card is never
       charged, and the fee stands on a card that came back raw
       (`grade10-admin-grading-counter-SC-27`,
       `grade10-site-grading-submission-lifecycle-SC-20`,
       `grade10-site-grading-submission-lifecycle-SC-21`,
       `grade10-site-grading-submission-lifecycle-SC-22`)
-- [ ] 13.5 Write `handIn`: `safe_declared_cap` taken `FOR UPDATE` before the
+- [x] 13.5 Write `handIn`: `safe_declared_cap` taken `FOR UPDATE` before the
       total is counted, then the open batch, then the submission's lock; the
       intake ids `<reference>-<n>` and the grader written onto each card, the
       intake receipt stored, one event; refusing `AGREEMENT_UNSEALED`,
@@ -747,14 +748,14 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-admin-grading-batches-SC-40`,
       `grade10-admin-grading-batches-SC-41`,
       `grade10-admin-grading-batches-SC-42`)
-- [ ] 13.6 Add `admin.savePlan` and `admin.addCard` for the list written at the
+- [x] 13.6 Add `admin.savePlan` and `admin.addCard` for the list written at the
       desk, calling `pinFeeSheet` at `deskPlan`, and at the agreement's mint
       where `pinned_fee_sheet` is still null, and give the walk-in the diary's own customer-bookable Grading
       service as a `product: null` catalogue row, so grading never reads that
       visit and writes nothing about it (`grade10-admin-grading-counter-SC-15`,
       `grade10-site-grading-dropoff-booking-SC-23`,
       `grade10-site-grading-dropoff-booking-SC-24`)
-- [ ] 13.7 Write `withdrawCard`, refunding the paid line and releasing the card
+- [x] 13.7 Write `withdrawCard`, refunding the paid line and releasing the card
       while its batch is open and taking the act away once it has closed, the
       last withdrawal cancelling the submission through an eleventh move,
       `withdrawLast` (`checked_in → cancelled`), so `cancel` stays
@@ -765,14 +766,14 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-15`,
       `grade10-site-grading-submission-lifecycle-SC-16`,
       `grade10-site-grading-submission-lifecycle-SC-54`)
-- [ ] 13.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 13.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 14. The two templates and the intake receipt (grade10)
 
 Stage (b).
 
-- [ ] 14.1 Cover the three documents against their pinned facts: every clause
+- [x] 14.1 Cover the three documents against their pinned facts: every clause
       and figure the agreement prints, the receipt's every exception line, the
       intake receipt's ids and order, a Bulk list of 100 on each of the three
       running on and signed once on the last page, the mint refused where a
@@ -800,7 +801,7 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-24`,
       `grade10-admin-grading-counter-SC-46`,
       `grade10-admin-grading-counter-SC-73`)
-- [ ] 14.2 Write `documents/templates/submissionAgreement.ts` as a
+- [x] 14.2 Write `documents/templates/submissionAgreement.ts` as a
       `GradingTemplate` over `GradingTemplateId`: the card schedule, a cover
       line per card and the cover in total where the level carries one, the
       return date as an estimate from the day the batch leaves, and a card
@@ -812,7 +813,7 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-13`,
       `grade10-site-grading-counter-documents-SC-14`,
       `grade10-site-grading-counter-documents-SC-31`)
-- [ ] 14.3 Write `documents/templates/intakeReceipt.ts` through the same page
+- [x] 14.3 Write `documents/templates/intakeReceipt.ts` through the same page
       helpers into the documents area through doc-sign's
       `renderIssuedDocument` — issued, never a packet — naming every intake id
       and the order that paid; `handIn` takes the rendered receipt as
@@ -824,7 +825,7 @@ Stage (b).
       agreement
       (`grade10-site-grading-counter-documents-SC-03`,
       `grade10-site-grading-counter-documents-SC-15`)
-- [ ] 14.4 Write `documents/templates/handBackReceipt.ts`: who collected and
+- [x] 14.4 Write `documents/templates/handBackReceipt.ts`: who collected and
       the ID that was glanced at, the named person in the collector's place
       with a prefilled name that takes no edit, a card the grader held, a slab
       that went into a vault case, a card withdrawn before its batch closed,
@@ -837,7 +838,7 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-21`,
       `grade10-site-grading-counter-documents-SC-29`,
       `grade10-site-grading-counter-documents-SC-30`)
-- [ ] 14.5 Write `mintAgreement`, calling `pinTerms` at the mint and refusing
+- [x] 14.5 Write `mintAgreement`, calling `pinTerms` at the mint and refusing
       while any card is unchecked, so the storage accrued on a sealed
       submission stands at the figure it signed however the settings move
       after, read through `pinnedTermsOf`; `admin.mintAgreement` over it behind
@@ -846,7 +847,7 @@ Stage (b).
       still out for signature in the same transaction
       (`grade10-site-grading-counter-documents-SC-01`,
       `grade10-admin-grading-counter-SC-73`)
-- [ ] 14.6 Print every figure from `pinned_fee_sheet` and `pinned_terms`, never
+- [x] 14.6 Print every figure from `pinned_fee_sheet` and `pinned_terms`, never
       a live table, and render the document before its transaction opens so
       `printedValue` refuses the mint in production on a fact nobody has set
       and prints the marked bracket outside it
@@ -854,7 +855,7 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-23`,
       `grade10-site-grading-counter-documents-SC-24`,
       `grade10-admin-grading-counter-SC-46`)
-- [ ] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`
 
 ## 15. The counter's ceremony and the sealed copies (grade10)
