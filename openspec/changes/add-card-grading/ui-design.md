@@ -587,7 +587,7 @@ One row per letter, its kind, and the blocks it carries after the lead.
 | The nudge | `plan_nudged` | `M13` | the same letter on the nudge day | `plan-nudged.tsx` | `grade10-site-grading-submission-plan-SC-43` |
 | Expired | `plan_expired` | `M16` | the nothing-paid line; the prices-move line; `PrimaryCta` Start a submission | `plan-expired.tsx` | `grade10-site-grading-submission-plan-SC-44` |
 | Drop-off booked | `dropoff_booked` | `M12` | facts where · bring · your cards leave · estimated back; the move-or-cancel line; the missed line; `PrimaryCta`; the calendar file attached | `dropoff-booked.tsx` | `grade10-site-grading-collector-notifications-SC-08` |
-| Drop-off moved | `dropoff_moved` | none drawn | facts the new visit; `PrimaryCta`; the calendar file | `dropoff-moved.tsx` | `grade10-site-grading-dropoff-booking-SC-15` |
+| Drop-off moved | `dropoff_moved` | none drawn | facts the new visit; `PrimaryCta` | `dropoff-moved.tsx` | `grade10-site-grading-dropoff-booking-SC-15` |
 | Drop-off cancelled | `dropoff_cancelled` | none drawn | facts the visit closed; the list kept; `PrimaryCta` | `dropoff-cancelled.tsx` | `grade10-site-grading-dropoff-booking-SC-16` |
 | Drop-off missed | `dropoff_missed` | none drawn | facts the visit; the list and the estimate kept; the book-again line; `PrimaryCta` | `dropoff-missed.tsx` | `grade10-site-grading-dropoff-booking-SC-18`, `grade10-site-grading-collector-notifications-SC-10` |
 | The day before | `dropoff_reminder` | none drawn | facts the visit and what to bring; `PrimaryCta` | `dropoff-reminder.tsx` | `grade10-site-grading-collector-notifications-SC-09` |

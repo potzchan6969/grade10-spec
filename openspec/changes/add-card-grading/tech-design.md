@@ -225,7 +225,7 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `markOutcome(caseRef, "no_show", bookingRef)` after the grace, as
   `sweepNoShows` does, and only then clears the cache and writes
   `dropoff_missed` in one commit; a refused telling leaves the row due
-- The five drop-off letters attach `buildCalendarFile`'s file, served at
+- The drop-off booked letter attaches `buildCalendarFile`'s file, served at
   `GET /api/submissions/:id/visit.ics` — as `complete-vault-collector-flow`
   decides
 - Alternatives rejected: a second booking for the joiner — a case holds one

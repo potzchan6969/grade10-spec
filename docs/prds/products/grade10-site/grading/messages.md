@@ -44,6 +44,11 @@ new event cannot ship silent:
   [Collector Pages](/p/grade10-site/vault/collector-pages)
 - ❓ **Registered post** — whether email alone serves the written notice —
   Legal
+- ❓ **The plan's link, when it goes** — sent when the collector leaves the wizard without booking; the server
+  cannot see a tab close — Product
+- ❓ **Opening hours and the contact** — the diary's weekly rules or a written line; the shop phone or a
+  WhatsApp number — Operations
+- ❓ **The shop on a plan's letter** — which shop a submission with no visit yet prints — Product
 
 <!-- story: an email in the grading shell, with the footer -->
 

@@ -1370,7 +1370,8 @@ fixtures through `external/grade10-spec`. Stage (c).
       and `UncollectedLadder` beside the shared blocks, every message's action
       link opening the submission it is about at its own address with no
       account asked for (`grade10-site-grading-collector-notifications-SC-03`)
-- [ ] 22.4 Write `LETTERS: Record<NotifyKind, Letter>` over the nineteen kinds,
+- [ ] 22.4 Write `LETTERS: Record<NotifyKind, Letter>` over the twenty kinds —
+      nineteen messages, the hand-back receipt drawn as two kinds —
       each saying only what is true of the submission it names, the handed-in
       letter carrying the papers, a letter with no document attaching nothing,
       and the written notice naming what is due, the pickup code, the thirty
@@ -1384,9 +1385,11 @@ fixtures through `external/grade10-spec`. Stage (c).
       (`grade10-site-grading-collector-notifications-SC-19`,
       `grade10-site-grading-collector-notifications-SC-20`,
       `grade10-site-grading-collector-notifications-SC-23`)
-- [ ] 22.6 Render the letter before its transaction opens, `printedValue`
-      printing the marked bracket outside production and refusing the act in
-      production rather than sending a blank
+- [ ] 22.6 Draft each letter as its act's last step inside the act's
+      transaction, rendered there so `printedValue` prints the marked bracket
+      outside production and refuses the act in production rather than
+      sending a blank; post it after the commit, the retry row keeping the
+      drafted facts
       (`grade10-site-grading-collector-notifications-SC-21`,
       `grade10-site-grading-collector-notifications-SC-22`)
 - [ ] 22.7 Send `plan_expired` for a booked submission that expires, keep every

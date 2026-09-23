@@ -35,7 +35,6 @@ export default function DropoffMovedEmail({
 
   return (
     <GradingLetter
-      attachments={["a calendar file"]}
       cta={{ href: previewSubmission.url, label: "Open your submission" }}
       footer={previewFooter}
       greeting={`Hi ${previewSubmission.collectorName},`}

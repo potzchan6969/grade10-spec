@@ -33,8 +33,10 @@ import type { UncollectedReminderProps } from "@/emails/grading/uncollected-remi
  * against this store's preview. The kinds are `ui-design.md`'s Letters
  * table: the plan's three, the drop-off's six, checked in, the batch's two,
  * the grades' two — posted, and a card not back with the box, held, not
- * returned or damaged all told in the one message — ready, the two rungs of
- * waiting to be collected, and the counter's two hand-back receipts.
+ * returned or damaged all told in the one message — ready, the three rungs of
+ * waiting to be collected (a reminder, storage and the notice), and the
+ * counter's two hand-back receipts: twenty kinds, nineteen messages, the
+ * hand-back receipt one message drawn as two kinds.
  */
 
 const submissionUrl = "https://grade10.com/grading/submissions/5TW8HN";
