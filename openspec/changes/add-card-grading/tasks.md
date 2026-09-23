@@ -862,7 +862,7 @@ Stage (b).
 
 Stage (b).
 
-- [ ] 15.1 Cover the ceremony on the grading host: the name rung, the postal
+- [x] 15.1 Cover the ceremony on the grading host: the name rung, the postal
       address, the read-to-the-end rung, the window, both declines, the copy a
       sealed link offers, the three ways out, the digest lookup, and the audit
       row each act writes (`grade10-site-grading-counter-documents-SC-07`,
@@ -881,7 +881,7 @@ Stage (b).
       `grade10-admin-grading-counter-SC-49`,
       `grade10-admin-grading-counter-SC-93`,
       `grade10-admin-grading-counter-SC-45`)
-- [ ] 15.2 Mount the ceremony at `${config.services.grading}/api/sign` through
+- [x] 15.2 Mount the ceremony at `${config.services.grading}/api/sign` through
       `registerSigningRoutes`, with `routes/signing.ts` and `storage/areas.ts`
       as the vault's files in the grading schema, `documents/deps.ts` — whose
       render half `admin.handIn`, through `handInWithReceipt`, and
@@ -893,34 +893,34 @@ Stage (b).
       while staff prepare another
       (`grade10-site-grading-counter-documents-SC-07`,
       `grade10-site-grading-counter-documents-SC-08`)
-- [ ] 15.3 Take the signer's name from the booking and refuse another, and
+- [x] 15.3 Take the signer's name from the booking and refuse another, and
       refuse a hand-back name the submission does not hold
       (`grade10-site-grading-counter-documents-SC-04`,
       `grade10-site-grading-counter-documents-SC-28`)
-- [ ] 15.4 Refuse the agreement's signature until the postal address is given,
+- [x] 15.4 Refuse the agreement's signature until the postal address is given,
       and write it to `submissions.postal_address`
       (`grade10-site-grading-counter-documents-SC-06`)
-- [ ] 15.5 Leave a declined agreement with nothing paid, a declined receipt
+- [x] 15.5 Leave a declined agreement with nothing paid, a declined receipt
       with nothing handed back, and the declined document on none of the three
       ways out (`grade10-site-grading-counter-documents-SC-09`,
       `grade10-site-grading-counter-documents-SC-10`,
       `grade10-site-grading-counter-documents-SC-26`,
       `grade10-admin-grading-counter-SC-47`)
-- [ ] 15.6 Offer the copy rather than a second signature on a sealed document's
+- [x] 15.6 Offer the copy rather than a second signature on a sealed document's
       link, serve it again at the counter through `admin.documents`, send the
       same copy to a collector who lost the email, and say so on a submission
       with nothing sealed (`grade10-site-grading-counter-documents-SC-11`,
       `grade10-admin-grading-counter-SC-48`,
       `grade10-admin-grading-counter-SC-49`,
       `grade10-admin-grading-counter-SC-93`)
-- [ ] 15.7 Deliver every sealed document three ways, each carrying its
+- [x] 15.7 Deliver every sealed document three ways, each carrying its
       fingerprint, and answer `GET /api/documents/verify/:sha256` as unknown
       for a digest grading never issued
       (`grade10-site-grading-counter-documents-SC-25`,
       `grade10-site-grading-counter-documents-SC-27`)
-- [ ] 15.8 Mint one signing link per document, good for thirty minutes, through
+- [x] 15.8 Mint one signing link per document, good for thirty minutes, through
       `admin.signingLink` (`grade10-admin-grading-counter-SC-45`)
-- [ ] 15.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 15.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 16. The batch, the ship and the grader's stages (grade10)
