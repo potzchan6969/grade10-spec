@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T15:52:54.257Z",
+  "generatedAt": "2026-09-23T16:15:04.351Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -107,7 +107,7 @@
     "layout: footer/grid": "ok",
     "layout: footer/logo": "ok",
     "layout: nav/bar": "skipped",
-    "layout: nav/promo": "fail",
+    "layout: nav/promo": "ok",
     "layout: navigation-list/root": "ok",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
@@ -963,9 +963,6 @@
       "Text Area.status: no getEnum('status') in any template — this Figma axis reaches no code prop",
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
-    ],
-    "layout: nav/promo": [
-      "bg-secondary-foreground  #75726FFF in code, #0B0A0AFF in Figma"
     ]
   }
 }
