@@ -1,4 +1,4 @@
-## 1. Product record (grade10-spec)
+## 1. Product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Update `docs/prds/products/grade10-site/auction/post-bidding.md` so
   the receipt requirement names the four payment-time lines, their ordering,
