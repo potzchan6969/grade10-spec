@@ -118,6 +118,12 @@ export const HkLocalTab: Story = {
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     await userEvent.click(modal.getByRole("tab", { name: "HK Local" }));
+    await waitFor(() => {
+      expect(modal.getByText("Branch code")).toBeVisible();
+      expect(
+        modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
+      ).toBeVisible();
+    });
     expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
@@ -142,6 +148,15 @@ export const SwiftTab: Story = {
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     await userEvent.click(modal.getByRole("tab", { name: "International" }));
+    await waitFor(() => {
+      expect(modal.getByRole("alert")).toBeVisible();
+      expect(
+        modal.getByText(WINNER_ORDER_BANK_DETAILS.beneficiaryAddress),
+      ).toBeVisible();
+      expect(
+        modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
+      ).toBeVisible();
+    });
     expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
