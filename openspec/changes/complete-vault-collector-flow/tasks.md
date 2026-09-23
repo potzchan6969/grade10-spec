@@ -793,19 +793,19 @@ append to `CaseDetailView.stories.tsx`.
 
 ## 19. The Storybook (grade10)
 
-- [ ] 19.1 Stand `packages/storybook` (`@grade10/storybook`) to the shape
+- [x] 19.1 Stand `packages/storybook` (`@grade10/storybook`) to the shape
       tech-design's "One Storybook, in its own plain-Vite package" holds,
       globbing `packages/*/frontend/src/**/*.stories.tsx` and
       `packages/*/admin-frontend/src/**/*.stories.tsx`
-- [ ] 19.2 Pick the decorator off a `surface` parameter — `site` mounts the
+- [x] 19.2 Pick the decorator off a `surface` parameter — `site` mounts the
       grade10 theme root and the Theme toolbar, `console` mounts
       `apps/admin/grade10/src/AppProviders` and the Astryx theme with no
       toolbar — and add that one preview path to `check-astryx-boundary`'s
       allowlist
-- [ ] 19.3 Add the `storybook` job to `.github/workflows/test.yml` beside
+- [x] 19.3 Add the `storybook` job to `.github/workflows/test.yml` beside
       `admin-bundle`, to that same heading's CI bullet, and fail it on an axe
       violation
-- [ ] 19.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `storybook build`
+- [x] 19.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `storybook build`
       and the a11y job green on the stories present when the group lands
 
 ## 20. The manual (grade10-spec)
