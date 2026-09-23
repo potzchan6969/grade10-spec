@@ -1062,8 +1062,7 @@ apply:
     - tasks
   tracks: tasks.md
   # `agent-rounds/spec.md`'s "A task group" row sizes a group by what it
-  # lands: missing pieces, simplicity, code smell and the repository's
-  # conventions, all `.claude/agents/build.md`'s, where the group lands code
+  # lands: missing pieces, code smell and the repository's conventions, all `.claude/agents/build.md`'s, where the group lands code
   # (a changed line in any file that is neither markdown nor a message
   # catalog); the reader of words where it lands copy (a page under
   # docs/prds/, a sentence in any markdown file, or a catalog's line); QA
@@ -1072,9 +1071,6 @@ apply:
   # and the simpler thing.
   perspectives:
     - name: missing-pieces
-      when: [code]
-      agent: .claude/agents/build.md
-    - name: simplicity
       when: [code]
       agent: .claude/agents/build.md
     - name: code-smell

@@ -99,8 +99,8 @@ Who reads a draft before you do: one row of the planning schema per artifact.
   readers cite
 - 🚧 **Prose gets the page's readers** — a task group that lands prose, or the
   words in a message catalog, is read by the reader of words, QA and the
-  simpler thing, not the build's readings of missing pieces, simplicity, code
-  smell and the repository's conventions
+  simpler thing, not the build's readings of missing pieces, code smell and the
+  repository's conventions
 - 🚧 **Verified together** — one verifier reads a round's readings, so a
   finding several readers filed is verified once and no two verdicts disagree
   unseen

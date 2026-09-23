@@ -17,7 +17,7 @@ through.
   - One reply, several moves: a reply carries one answer and remarks; a remark comes back before anything lands
 - Sized
   - Short interview: about three questions, one whether to do it now, a choice the held test holds held, the defaults listed as decided
-  - Sized by what it lands: a task group's readers are summoned by its diff, the build's four on code, the reader of words on words
+  - Sized by what it lands: a task group's readers are summoned by its diff, the build's three on code, the reader of words on words
   - Fallback named: a reader or verifier that ran on a fallback model is named in the row and the summary; a dispatch the vendor killed stops the round
 - Recorded
   - Paths by the group's tag: a row's paths are bare and live where the group's repository tag says; the landing resolves an application group's paths in the clone it runs beside
@@ -99,14 +99,14 @@ The first round's interview SHALL ask about three questions, the ones whose answ
 
 ### Requirement: A task group is sized by what it lands
 
-The `apply` block's perspectives SHALL carry `when:` triggers read from the group's diff as an artifact's are: the build's four readings on `code`, the reader of words on `copy`, QA and the simpler thing always, a message catalog's line raising `copy` and never `code`; a group that lands prose alone SHALL be read by the reader of words, QA and the simpler thing, one that lands code by the build's four readings, QA and the simpler thing, and one that lands both by all.
+The `apply` block's perspectives SHALL carry `when:` triggers read from the group's diff as an artifact's are: the build's three readings on `code`, the reader of words on `copy`, QA and the simpler thing always, a message catalog's line raising `copy` and never `code`; a group that lands prose alone SHALL be read by the reader of words, QA and the simpler thing, one that lands code by the build's three readings, QA and the simpler thing, and one that lands both by all.
 
 #### Scenario: shared-planning-agent-rounds-SC-92 - A prose group summons the page's readers
 **Serves:** shared-planning-agent-rounds-US-13 - a hand's prose is read by the reader of words, not the build
 
 - **GIVEN** a task group whose diff touches manual pages and a suite alone
 - **WHEN** its readers are computed
-- **THEN** the reader of words, QA and the simpler thing are summoned and the build's four readings are not
+- **THEN** the reader of words, QA and the simpler thing are summoned and the build's three readings are not
 - **AND** a group whose diff touches a message catalog alone is read the same way
 
 #### Scenario: shared-planning-agent-rounds-SC-93 - A code group summons the build
@@ -114,7 +114,7 @@ The `apply` block's perspectives SHALL carry `when:` triggers read from the grou
 
 - **GIVEN** a task group whose diff touches a package and no page
 - **WHEN** its readers are computed
-- **THEN** the build's four readings, QA and the simpler thing are summoned and the reader of words is not
+- **THEN** the build's three readings, QA and the simpler thing are summoned and the reader of words is not
 
 ### Requirement: A fallback is named and a killed dispatch stops the round
 

@@ -123,7 +123,6 @@ describe("the readers each artifact may summon", () => {
       applyPerspectives(storeRoot, "grade10-planning").map(({ name }) => name),
     ).toEqual([
       "missing-pieces",
-      "simplicity",
       "code-smell",
       "conventions",
       "reader",
@@ -133,7 +132,7 @@ describe("the readers each artifact may summon", () => {
     ]);
   });
 
-  it("shared-planning-agent-rounds-SC-92 - sizes a task group by what it lands: the build's four on `code`, the reader of words on `copy`, QA and the simpler thing always", () => {
+  it("shared-planning-agent-rounds-SC-92 - sizes a task group by what it lands: the build's three on `code`, the reader of words on `copy`, QA and the simpler thing always", () => {
     expect(TRIGGERS).toContain("code");
     const when = new Map(
       applyPerspectives(storeRoot, "grade10-planning").map((one) => [
@@ -141,12 +140,7 @@ describe("the readers each artifact may summon", () => {
         one.when,
       ]),
     );
-    for (const name of [
-      "missing-pieces",
-      "simplicity",
-      "code-smell",
-      "conventions",
-    ])
+    for (const name of ["missing-pieces", "code-smell", "conventions"])
       expect(when.get(name), `${name} reads code`).toEqual(["code"]);
     expect(when.get("reader")).toEqual(["copy"]);
     expect(when.get("qa")).toEqual(["always"]);

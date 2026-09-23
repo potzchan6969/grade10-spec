@@ -559,7 +559,7 @@ them from there.
 | `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
 | `spec.md` and `feature-tcs.md` | The two blind readings, then the reconciliation |
 | `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag |
-| A task group | Missing pieces, simplicity, code smell and the repository's conventions where the group lands code; the reader of words where it lands a page's words; QA; operations on a migration or a flag |
+| A task group | Missing pieces, code smell and the repository's conventions where the group lands code; the reader of words where it lands a page's words; QA; operations on a migration or a flag |
 
 - **One entry, three facts** — each perspective carries its name, what in a
   draft summons it, and the reader it dispatches

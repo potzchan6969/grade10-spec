@@ -119,7 +119,7 @@ const isCatalog = (file) => file.startsWith("packages/i18n/messages/");
 
 const ofLine = (text, found, file, section) => {
   // code — a changed line in any file that is neither markdown nor a catalog:
-  // a task group that lands code is read by the build's four readings, and
+  // a task group that lands code is read by the build's three readings, and
   // one that lands words alone is not
   if (file && !isWords(file)) found.add("code");
   const line = text.trim();

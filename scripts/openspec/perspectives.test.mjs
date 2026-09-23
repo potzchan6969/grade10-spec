@@ -133,7 +133,7 @@ const WORDS = [
 // A public export and a migration group: two triggers, two readers, and a
 // diff with no prose line in it, so nothing else is summoned.
 /** A task group's diff that lands code alone: one changed line in a
- * component file, what summons the build's four readings. */
+ * component file, what summons the build's three readings. */
 const CODE_ONLY = [
   "diff --git a/packages/ui/src/blocks/points/points.tsx b/packages/ui/src/blocks/points/points.tsx",
   "--- a/packages/ui/src/blocks/points/points.tsx",
@@ -142,7 +142,7 @@ const CODE_ONLY = [
   "+export const points = 1;",
 ].join("\n");
 
-/** The code beside a migration group: the build's four readings and
+/** The code beside a migration group: the build's three readings and
  * operations. */
 const CODE_AND_MIGRATION = [
   CODE_ONLY,
@@ -441,7 +441,7 @@ test("a task group is read against the schema's apply block", () => {
     diffOf(root, CODE_AND_MIGRATION),
   ]);
 
-  // build's four readings join because the group lands code; qa and simpler
+  // build's three readings join because the group lands code; qa and simpler
   // always run; operations joins because the diff names a migration group.
   assert.deepEqual(names(printed.readers), [
     "code-smell",
@@ -450,7 +450,6 @@ test("a task group is read against the schema's apply block", () => {
     "operations",
     "qa",
     "simpler",
-    "simplicity",
   ]);
   assert.equal(printed.bundle.draft, "openspec/changes/demo/tasks.md");
 });
@@ -472,16 +471,15 @@ test("shared-planning-agent-rounds-SC-93 - a code group summons the build, QA an
     "missing-pieces",
     "qa",
     "simpler",
-    "simplicity",
   ]);
 });
 
 // Decides shared-planning-agent-rounds-US12-TC9-1.
-test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a group that lands code and a page's words is read by all seven", () => {
+test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a group that lands code and a page's words is read by all six", () => {
   const root = fixture();
   const mixed = [CODE_ONLY, PROSE_GROUP].join("\n");
   const printed = cli(root, ["demo", "3", "--diff", diffOf(root, mixed)]);
-  // The two sets add up: neither the build's four nor the reader of words
+  // The two sets add up: neither the build's three nor the reader of words
   // stands in for the other.
   assert.deepEqual(names(printed.readers), [
     "code-smell",
@@ -490,7 +488,6 @@ test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a
     "qa",
     "reader",
     "simpler",
-    "simplicity",
   ]);
 });
 
