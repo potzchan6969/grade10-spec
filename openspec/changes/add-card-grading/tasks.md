@@ -473,7 +473,7 @@ Every other application group reads this one's exports. Stage (b).
 
 Stage (b).
 
-- [ ] 11.1 Cover the one writer and the plan: every move and every conflict in
+- [x] 11.1 Cover the one writer and the plan: every move and every conflict in
       `submissions/transitions.test.ts`, the reference on a forced collision,
       the paste's six answers per line, the fee sheet read, and the access
       resolver on the right token, a stale token after a re-mint, no token, the
@@ -505,21 +505,21 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-48`,
       `grade10-admin-grading-counter-SC-72`,
       `grade10-admin-grading-counter-SC-74`)
-- [ ] 11.2 Write `submissions/transitions.ts` as the one writer of the status —
+- [x] 11.2 Write `submissions/transitions.ts` as the one writer of the status —
       `UPDATE … WHERE status IN (from…) RETURNING`, the `submission_events` row
       in the same transaction, zero rows a named `SUBMISSION_CONFLICT` — over
       the ten moves, leaving a card's exception to the card
       (`grade10-site-grading-submission-lifecycle-SC-01`,
       `grade10-site-grading-submission-lifecycle-SC-03`,
       `grade10-site-grading-submission-lifecycle-SC-51`)
-- [ ] 11.3 Write `savePlan`: the reference row inserted before the transaction
+- [x] 11.3 Write `savePlan`: the reference row inserted before the transaction
       opens, an independent insert per attempt guarded by `isUniqueViolation`
       and a throw by name after eight, `matchCards` called once outside any
       transaction, and the access token minted with `newBearerSecret(32)` and
       kept as `sha256Hex` in `submissions.access_hash`
       (`grade10-site-grading-submission-plan-SC-38`,
       `grade10-site-grading-submission-plan-SC-40`)
-- [ ] 11.4 Add `submissions.paste`, accounting for every line as matched, kept
+- [x] 11.4 Add `submissions.paste`, accounting for every line as matched, kept
       as typed, without a value, above the ceiling, skipped or unavailable, and
       writing the degrade as a `reference_unavailable` event with the count and
       the provider's error logged by name
@@ -533,20 +533,20 @@ Stage (b).
       `grade10-site-grading-submission-plan-SC-19`,
       `grade10-site-grading-submission-plan-SC-53`,
       `grade10-site-grading-submission-plan-SC-54`)
-- [ ] 11.5 Add the public `quotes.feeSheet` and `quotes.estimate`, one row per
+- [x] 11.5 Add the public `quotes.feeSheet` and `quotes.estimate`, one row per
       level with cover only where the level carries a rate and a grader nobody
       has priced still listing its levels
       (`grade10-site-grading-submission-plan-SC-04`,
       `grade10-site-grading-submission-plan-SC-05`,
       `grade10-site-grading-submission-plan-SC-06`)
-- [ ] 11.6 Add the `submissionAccess` resolver — the link's digest beside the
+- [x] 11.6 Add the `submissionAccess` resolver — the link's digest beside the
       session arm, a signed-in caller's email equal to `submissions.email`, a
       stranger reading not found — and re-mint the token on the `handed_in` and
       `ready` letters (`grade10-site-grading-submission-plan-SC-39`,
       `grade10-site-grading-submission-plan-SC-41`,
       `grade10-site-grading-submission-plan-SC-42`,
       `grade10-site-grading-submission-lifecycle-SC-52`)
-- [ ] 11.7 Write `pinFeeSheet` and `pinTerms` as the one pair every pin calls,
+- [x] 11.7 Write `pinFeeSheet` and `pinTerms` as the one pair every pin calls,
       `pinFeeSheet` pinning `pinned_fee_sheet` at `book` and every figure read
       from it after, so a sheet changed before booking reaches the plan, one
       changed after leaves the booked submission priced as it was, and a new
@@ -557,12 +557,12 @@ Stage (b).
       `grade10-site-grading-submission-plan-SC-37`,
       `grade10-admin-grading-counter-SC-72`,
       `grade10-admin-grading-counter-SC-74`)
-- [ ] 11.8 Add
+- [x] 11.8 Add
       `submissions.{update,list,detail,cancel,nameCollector,removeCollector}`,
       cancel refused once the cards are in and every act carrying the detail's
       `asOf` so a submission that moved refuses by name
       (`grade10-site-grading-submission-lifecycle-SC-48`)
-- [ ] 11.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 11.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 12. The drop-off, the joiner and the shared visit (grade10)
