@@ -73,12 +73,11 @@ function AddressBlock({ heading }: { heading: string }) {
   );
 }
 
-/** The winner's snapshot — issuer, billing and shipping addresses — the same
- * three columns on both PDFs. */
+/** The winner's snapshot — billing and shipping addresses. The issuer's
+ * `PartyBlock` sits beside the meta rows instead, not in this grid. */
 function PartiesSection() {
   return (
-    <div className="grid gap-6 sm:grid-cols-3">
-      <PartyBlock heading="Grade10" issuer />
+    <div className="grid gap-6 sm:grid-cols-2">
       <AddressBlock heading="Bill to" />
       <AddressBlock heading="Ship to" />
     </div>

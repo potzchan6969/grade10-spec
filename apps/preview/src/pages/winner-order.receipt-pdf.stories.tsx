@@ -8,6 +8,7 @@ import {
   MetaRow,
   OrderValueTable,
   PartiesSection,
+  PartyBlock,
   PdfSheet,
   SummaryRow,
 } from "./winner-order-pdf.story-shared";
@@ -43,22 +44,25 @@ function ReceiptPdfPreview({
         <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
       </HStack>
 
-      <VStack className="max-w-full" gap="xs" hAlign="stretch">
-        <MetaRow
-          label="Invoice number"
-          value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
-        />
-        <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
-        <MetaRow
-          label="Paid by"
-          value={
-            manual
-              ? "Bank transfer — recorded manually by admin"
-              : "Visa card ending 4242"
-          }
-        />
-        <MetaRow label="Confirmed" value="September 16, 2026 · 09:47 HKT" />
-      </VStack>
+      <HStack hAlign="space-between" vAlign="start">
+        <VStack className="max-w-sm" gap="xs" hAlign="stretch">
+          <MetaRow
+            label="Invoice number"
+            value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
+          />
+          <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
+          <MetaRow
+            label="Paid by"
+            value={
+              manual
+                ? "Bank transfer — recorded manually by admin"
+                : "Visa card ending 4242"
+            }
+          />
+          <MetaRow label="Confirmed" value="September 16, 2026 · 09:47 HKT" />
+        </VStack>
+        <PartyBlock heading="Grade10" issuer />
+      </HStack>
 
       <PartiesSection />
 
