@@ -8,7 +8,7 @@
   `winner-order-SC-146`).
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
 
-## 2. Data and contracts
+## 2. Data and contracts (owner: @htonyl)
 
 - [ ] 2.1 Add the persisted `address_deadline_at`, reopen count and reasoned
   address-reopen/address-recorded audit facts to
