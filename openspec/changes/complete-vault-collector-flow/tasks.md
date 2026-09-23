@@ -834,12 +834,12 @@ Lands once every other group is green and the change is deployed.
       `docs/prds/products/shared/auth/users.md` and
       `docs/prds/platform/account-data.md`, leaving the marks the
       `add-hosted-identity-verification` change still owes
-- [ ] 20.2 Leave `TBC Legal` and ❓ Finance on what nobody has answered — the
+- [x] 20.2 Leave `TBC Legal` and ❓ Finance on what nobody has answered — the
       notice's wording, the licence line, the complaints contact, the
       collection statement, the FPS id and the bank account — and say on
       `loan-and-money.md` that the block prints its placeholders outside
       production until they are set
-- [ ] 20.3 Verify: `pnpm check:manual`, then
+- [x] 20.3 Verify: `pnpm check:manual`, then
       `pnpm run validate:changes complete-vault-collector-flow`
 
 ## 21. The walk (grade10)

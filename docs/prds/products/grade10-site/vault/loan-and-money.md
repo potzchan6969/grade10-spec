@@ -119,9 +119,8 @@ every bound unset and writes no offer in production.
   a second currency is refused by name rather than summed
 - **The arrears** — every live loan past its due date, longest overdue first,
   judged on the payout's own due date and paged on a keyset cursor over it
-- **What the collector sees** — the offer's amount, term, rate, total to
-  repay and what a late day costs; on a live loan the outstanding of the
-  total, repaid, due date, days overdue and the instant computed. No
+- **What the collector sees** — the offer and what is owed, as the
+  [Case page](/p/grade10-site/vault/collector-pages#case-page) lists them; no
   annualised rate and no payoff quote with a validity: the balance is the quote
 - 🚧 **How to pay** — one block: the lender's FPS id, its bank account under the
   lender's registered name, the case reference as the transfer reference, or
@@ -134,6 +133,7 @@ every bound unset and writes no offer in production.
 - ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
   one set per brand beside its legal identity, refused in production while
   unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
+- 🚧 **Unset, outside production** — the block prints `[fpsId]` and `[bankAccount]`
 - ❓ Product — what a borrower reads in production while those two are unset;
   recommended: the counter line alone, transfer details by email, no money message
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)

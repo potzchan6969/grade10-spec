@@ -177,6 +177,7 @@ the code holds until they do.
 | --- | --- | --- | --- |
 | Regime and licence | TBC Legal | Which regime governs a loan secured on a collectible in a shop locker in Hong Kong. Posture: the seeded band, presets no longer than **120 days**, the term's own daily rate after the due date, no fee and no compounding — which satisfies both the pawnbroking and the money-lending reading | Legal |
 | The two registered names and the licence line | TBC Legal | The custodian, the lender, the licence number and its wording. Until they are given, production refuses the paper and the offer; `check:libs` lists them among its unset values, six of them Grade10's own | Legal |
+| The complaints contact | TBC Legal | Where a customer complains, in every email's footer and on the paper where set. Until it is given, production refuses every act that sends a vault email, and brackets print outside production only | Legal |
 | The notice's operative text | TBC Legal | The forfeiture notice names the clause it acts under, the date to pay by, the lapse condition and that a person decides; its structure is built, production refuses the send while the wording is unset, and brackets print outside production only | Legal |
 | E-sign adequacy | TBC Legal | Posture: in person on the shop's iPad, staff present, identity verified, the disclosure and each consent printed in full on the certificate above their digests | Legal |
 | Upload as a verification method | TBC Legal | Posture: in person and from an upload both stand, and the certificate says which was used | Legal |
