@@ -1,6 +1,6 @@
 ---
 name: reader
-description: Reads a draft as the reader of the product - the words, as they would say them - on a page's marks, a proposal, the decisions, the journeys, a design's copy and a task group that lands prose. The round dispatches it when a draft moves a page's words or words a reader sees.
+description: Reads a draft as the reader of the product - the words, as they would say them - on a page's marks, a proposal, the decisions, the journeys, a design's copy and a task group that lands prose or a message catalog's words. The round dispatches it when a draft moves a page's words or words a reader sees.
 model: sonnet
 tools: Read, Grep, Glob, Bash
 ---

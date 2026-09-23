@@ -95,18 +95,20 @@ const heading = (text) => /^\s*#{1,6}\s+\S/.test(text);
 const under = (section, name) =>
   new RegExp(`^\\s*#{1,6}\\s+${name}\\b`, "i").test(section);
 
-/** What the file a line sits in says on its own: a page under `docs/prds/` is
- * words a reader sees, a workflow is a deploy step, and any file that is not
- * markdown is code — a task group that lands one is read by the build's four
- * readings, and one that lands prose alone is not. `ui-design.md` is not
+/** What the file a line sits in says on its own: a page under `docs/prds/` and
+ * a message catalog are words a reader sees, a workflow is a deploy step, and
+ * any other file that is not markdown is code — a task group that lands one is
+ * read by the build's four readings, and one that lands prose alone is not. `ui-design.md` is not
  * here — its name would raise `surface` on every design round, an empty diff
  * included, and a screen, a state and a story each raise it from the line
  * itself. */
 const ofFile = (file, found) => {
-  if (file.startsWith("docs/prds/")) found.add("copy");
+  if (file.startsWith("docs/prds/") || isCatalog(file)) found.add("copy");
   if (/^\.github\/workflows\/.+\.ya?ml$/.test(file)) found.add("deploy");
-  if (!isMarkdown(file)) found.add("code");
+  if (!isMarkdown(file) && !isCatalog(file)) found.add("code");
 };
+
+const isCatalog = (file) => file.startsWith("packages/i18n/messages/");
 
 /** The one boundary between prose and code: a markdown file holds a page's
  * words, and any other file is code. Read by `ofFile` and `prose` alike. */
