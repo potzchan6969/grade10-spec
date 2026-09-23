@@ -101,6 +101,9 @@
 * The preview's title names the lot and its url is the lot's own address.
 * None of the share-preview fields contain the listing code.
 
+Previously cached preview content may persist; the test does not require a
+purge or regeneration. A fresh preview fetch must satisfy the absence above.
+
 ### grade10-site-auction-listing-page-US10-TC4-1: Listing code absent from the page title and meta description
 
 **Classification:**
@@ -309,6 +312,73 @@
 
 ---
 
+### grade10-site-auction-listing-page-US10-TC11-1: A listing removed from browse and search remains available at its original URL
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A previously published listing has canonical address `<listing_url>` and code `<listing_code>`.
+* The listing has been removed from browse and search without being explicitly deleted.
+
+**Steps:**
+
+1. Browse the auction catalogue and search for the listing.
+2. Open `<listing_url>` directly.
+3. Inspect the rendered page, response source and fresh share-preview metadata.
+
+**Expected Results:**
+
+* Browse and search do not return the listing.
+* `<listing_url>` still returns its public listing page.
+* The page and fresh preview identify the listing by its public title and canonical URL.
+* `<listing_code>` is absent from the page, source, embedded data, network responses and fresh preview metadata.
+* Removal from browse and search does not release or replace `<listing_url>` or `<listing_code>`.
+
+### grade10-site-auction-listing-page-US10-TC12-1: A cached preview may persist after browse/search removal without private data
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-10
+
+**Pre-conditions:**
+
+* A preview for `<listing_url>` was cached while the listing was publicly available.
+* The listing is subsequently removed from browse and search, without explicit deletion.
+* An authorized admin or the winner knows `<listing_code>`.
+
+**Steps:**
+
+1. Request the existing cached preview for `<listing_url>`.
+2. Inspect its title, description, URL, image and embedded metadata.
+
+**Expected Results:**
+
+* The cached preview may continue to show previously cached public listing metadata and `<listing_url>`.
+* It contains no listing code, payment reference, internal/provider reference, winner data or admin-only data.
+* A persistent preview does not make the listing discoverable through browse or search.
+
+
 ## grade10-site-auction-listing-page-US11: Collector contacts support about a lot
 
 **As a** collector contacting support about a lot,
@@ -401,6 +471,39 @@
 * The title and address are the same a collector would have quoted before the order existed.
 * The listing code does not appear on the page.
 
+### grade10-site-auction-listing-page-US11-TC4-1: Called-off listing remains directly accessible
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-listing-page-US-11
+
+**Pre-conditions:**
+
+* A listing has an allocated canonical address and listing code.
+
+**Steps:**
+
+1. Call the listing off before close.
+2. Open its canonical address directly.
+3. Search browse and search results for the listing.
+4. Try the listing code as the address.
+
+**Expected Results:**
+
+* The canonical address still resolves to the called-off listing.
+* The listing is absent from browse and search.
+* The listing code does not resolve as a public route.
+
+
 ## Reconciliation
 
 **Run:** the suite pass read the isolated bundle assembled by hand at
@@ -424,7 +527,7 @@ did not read `feature-tcs.md` or the suite draft.
 | Suite carried two positive cases on US11 (title/address together identify exactly one lot; the address a collector quotes reopens the same lot) | Misreading of scope: both duplicate durable `SC-01`/`SC-02`/`SC-05` (two lots answer as two pages; a published lot's address answers). Not new behaviour from this change. Dropped |
 | Suite carried a case on US11 for a closed lot still resolving by title and address | Misreading of scope: tests general lot-status resolution (Ended lots stay published), which is `grade10-site/auction/lot-status`'s durable behaviour, not this change's identifier guard. Dropped |
 | Scenario draft's `SC-24` (not-found response carries no listing code) reached no suite case | Hole: added `grade10-site-auction-listing-page-US10-TC10-1`, tracing `US-10` — an in-flight delta's suite can only trace journeys this same delta defines, and the durable `US-03` journey (whose not-found requirement this scenario extends) is not part of this delta's `user-journeys.md` |
-| Suite's raised question on whether a stale/cached share-preview generated before this change could still surface on a re-share | Nobody decided it — the material is silent on share-preview caching/regeneration. Recorded under `decisions.md`'s `## Raised` |
+| Suite's raised question on whether a stale/cached share-preview generated before this change could still surface on a re-share | **Decided in Q15:** old cached content may persist and no purge or regeneration is guaranteed; current pages and fresh metadata still omit the code and private data |
 | Suite's raised question on whether the collector-facing payment reference (Q6) ever appears on the listing page after an order exists | Already settled, not a genuine gap: Q10 and the proposal are unconditional that the listing page never shows the code, in any order state. Resolved directly as `SC-27` rather than raised |
 | Suite's raised question on whether signed-in state matters here | Already settled, not a genuine gap: the requirement's rule is stated with no actor qualifier. No row raised |
 | Suite's raised question on whether a code-shaped-but-wrong guess is handled differently from an ordinary bad address | Already settled by the durable "An address that names no lot is refused" requirement plus this delta's `SC-26`: a listing code is not wired into the address's lookup at all, so it is refused the same as any other unrecognized address. No row raised |

@@ -42,7 +42,7 @@
   - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
-  - Receipt ID and breakdown: every receipt has a unique receipt ID, built from the invoice ID it pays plus a receipt sequence within that invoice, and shows what was billed, paid and left to pay
+  - Receipt identifier: every receipt carries its existing unique receipt ID; receipt contents remain outside this identifier change
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
 - Settlement
   - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
@@ -60,28 +60,19 @@
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
 
-## RENAMED Requirements
-
-- FROM: `### Requirement: Every invoice carries an invoice ID and a bank reference`
-- TO: `### Requirement: Every invoice carries an invoice ID and a payment reference`
-
-The requirement no longer defines a second, separately-formatted "bank
-reference" value: Q12 collapses it into the payment reference itself (the
-listing code carried forward), so the old name promised a concept the body no
-longer holds.
-
 ## MODIFIED Requirements
 
-### Requirement: Every invoice carries an invoice ID and a payment reference
+### Requirement: Every invoice carries an invoice ID and a bank reference
 
 Every sent invoice carries the order's payment reference and an invoice ID
 built from it; a reissue takes the next invoice ID while the payment
 reference never changes.
 
-**Payment reference** - The payment reference SHALL be the winner's order's
-one collector-facing reference: the listing code that
-`grade10-admin/auction/listing` allocates for the lot, carried forward
-unchanged once a winner exists on it. This capability SHALL NOT allocate,
+**Payment reference** - The bank reference and payment reference are the same
+value; Grade10 SHALL NOT issue a second identifier. The payment reference
+SHALL be the winner's order's one collector-facing reference: the listing
+code that `grade10-admin/auction/listing` allocates for the lot, carried
+forward unchanged once a winner exists on it. This capability SHALL NOT allocate,
 derive, or reissue the code; it only consumes the value
 `grade10-admin/auction/listing` already holds for the listing. There is no
 separate public order ID — the payment reference stands in for one.
@@ -97,7 +88,7 @@ invoice ID when it is sent. Each SHALL be unique across all invoices.
 | Part | Rule |
 | --- | --- |
 | `[PAYMENT_REF]` | The order's payment reference, above |
-| `[SEQ]` | The count of the order's invoices: `01` for the first invoice sent, the next number on each reissue |
+| `[SEQ]` | The count of the order's invoices: `01` for the first invoice sent, the next number on each reissue; it uses at least two digits and continues as `100` after `99` |
 
 **Invariant across reissue** - A reissue replaces the current invoice with a
 new one, per `grade10-admin/auction/post-sale`, and the new invoice SHALL take
@@ -133,7 +124,7 @@ used only in internal document filenames created after the payment is
 obtained, and SHALL NOT reach the winner on any surface.
 
 #### Scenario: winner-order-SC-97 - A replaced invoice's identifiers still find the order
-**Serves:** winner-order-US-13 - Winner quotes their order
+**Serves:** winner-order-US-17 - Winner quotes their order
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** a payment quoting the first invoice's invoice ID, or the order's payment reference, is looked up
@@ -141,14 +132,14 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **AND** the order's current invoice carries its own invoice ID, built from the same unchanged payment reference
 
 #### Scenario: winner-order-SC-98 - A replaced invoice names its replacement
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** an auction order whose first invoice an operator replaced with a reissue
 - **WHEN** the winner opens the first invoice's PDF
 - **THEN** it says the invoice was replaced and names the new invoice's invoice ID
 - **AND** the first invoice holds no invoice status and does not read `cancelled`
 
-#### Scenario: winner-order-SC-114 - The invoice ID and payment reference are shown on the order and the PDF
+#### Scenario: winner-order-SC-114 - The invoice ID is shown on the order and the PDF
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** one auction order whose invoice was sent for card and one sent for bank transfer
@@ -157,14 +148,14 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **AND** its PDF shows the same invoice ID
 - **AND** the card order's payment reference is shown exactly as the bank transfer order's is
 
-#### Scenario: winner-order-SC-122 - The invoice ID is built from the payment reference
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
+#### Scenario: winner-order-SC-122 - The invoice ID and bank reference take the Hong Kong month
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** a lot on an order whose payment reference is `LK423`, with no invoice sent yet
 - **WHEN** an operator sends its first invoice
 - **THEN** the invoice ID is `IN-LK42301`
 
-#### Scenario: winner-order-SC-123 - A reissue takes the next sequence and keeps the payment reference fixed
+#### Scenario: winner-order-SC-123 - A reissue takes the next number and its own month
 **Serves:** Invoice - a reissue takes a new invoice ID while the payment reference stays put
 
 - **GIVEN** an order whose payment reference is `LK423` and whose first invoice `IN-LK42301` was sent
@@ -174,177 +165,63 @@ obtained, and SHALL NOT reach the winner on any surface.
 - **AND** looking up `IN-LK42301`, `IN-LK42302`, or `LK423` all find the same order
 - **AND** the first invoice's PDF names `IN-LK42302`
 
-#### Scenario: winner-order-SC-169 - The payment reference is shown unconditionally, not gated by payment method
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
+#### Scenario: winner-order-SC-124 - The invoice count grows to three digits after 99
+**Serves:** Invoice - a reissue takes a new invoice ID while the payment reference stays put
+
+- **GIVEN** an order whose payment reference is `LK423` and whose latest invoice is `IN-LK42399`
+- **WHEN** an operator reissues it
+- **THEN** the new invoice ID is `IN-LK423100`
+- **AND** the payment reference remains `LK423`
+
+#### Scenario: winner-order-SC-125 - A listing code that is already held is hashed again
+**Serves:** winner-order-US-17 - Winner quotes their order
+
+- **GIVEN** a listing-code candidate collides with an active code or retained reservation
+- **WHEN** the listing is created
+- **THEN** allocation retries and stores a distinct valid 5-character code
+
+#### Scenario: winner-order-SC-126 - A stored listing code never moves
+**Serves:** winner-order-US-17 - Winner quotes their order
+
+- **GIVEN** a listing already stores payment reference `LK423`
+- **WHEN** the allocator implementation changes
+- **THEN** the listing and its order continue to use `LK423`
+
+#### Scenario: winner-order-SC-127 - The public listing page does not show the listing code
+**Serves:** winner-order-US-17 - Winner quotes their order
+
+- **GIVEN** a listing whose payment reference is `LK423`
+- **WHEN** its public page or shared preview is fetched
+- **THEN** the payment reference is absent from every public representation
+
+#### Scenario: winner-order-SC-128 - Only a bank transfer invoice shows the bank reference
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
+
+- **GIVEN** one pending invoice sent for card and one pending invoice sent for bank transfer
+- **WHEN** the winner opens each invoice
+- **THEN** both show the payment reference
+- **AND** the card invoice requires no separate bank-reference identifier
+
+#### Scenario: winner-order-SC-209 - The payment reference is shown unconditionally, not gated by payment method
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** one order whose `pending` invoice was sent for bank transfer, and one whose `pending` invoice was sent for card
 - **WHEN** the winner opens each on Winner Order
 - **THEN** both orders show the payment reference
 - **AND** the bank transfer order's copy control for the payment reference copies exactly the payment reference
 
-#### Scenario: winner-order-SC-171 - Stripe metadata carries the payment reference and never the provider reference to the winner
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
+#### Scenario: winner-order-SC-210 - Stripe metadata carries the payment reference and never the provider reference to the winner
+**Serves:** winner-order-US-18 - Winner reviews invoice and payment details
 
 - **GIVEN** an auction order paid by card
 - **WHEN** Grade10 creates the Stripe payment for that order
 - **THEN** the Stripe payment's metadata carries `payment_reference_code` equal to the order's payment reference
 - **AND** Stripe's own returned provider reference appears on no surface the winner reads
 
-#### Scenario: winner-order-SC-172 - Nothing identifying the lot's order is shown before a winner exists
-**Serves:** winner-order-US-13 - Winner quotes their order
+#### Scenario: winner-order-SC-211 - Nothing identifying the lot's order is shown before a winner exists
+**Serves:** winner-order-US-17 - Winner quotes their order
 
 - **GIVEN** a lot that has not yet closed, and the same lot just after it closes with no winner
 - **WHEN** anyone reads the lot outside a winning order
 - **THEN** no payment reference, invoice ID, or receipt ID is shown for it
 - **AND** the lot is identified only by its title
-
-### Requirement: Records the winner keeps
-
-Each auction order SHALL carry these records, retrievable by the winner for
-the life of their account. Grade10 SHALL archive every invoice PDF, replaced
-invoices included, and every receipt PDF, and SHALL keep each retrievable for
-at least 7 years, or for the life of the account if longer. Deleting the
-account SHALL NOT shorten the 7 years.
-
-| Record | When | Contents |
-| --- | --- | --- |
-| Payment receipt | Payment confirmed, by any route | A receipt ID, then itemised: winning bid, buyer's premium, Shipping & Handling, insurance when added, any tax amount, the subtotal, the payment processing fee, the order total, the invoice ID, the payment method, and the breakdown below |
-| Shipping tracker | Fulfilment status is `fulfilled` | Carrier name, tracking number, and a link to the carrier |
-| Delivery proof | `delivery_confirmed` is set | Whatever the carrier provided — handover timestamp, signature, proof-of-delivery image |
-
-Every receipt SHALL carry a receipt ID, unique across all receipts:
-`RC-[INVOICE_PAYLOAD][P][n]`, for example `RC-LK42301P1`. `[INVOICE_PAYLOAD]`
-is the paid invoice's invoice ID with the `IN-` prefix dropped (payment
-reference plus sequence, for example `LK42301`). `[n]` counts the payments
-recorded against that invoice, in the order they are recorded; a single
-payment on an invoice ends `P1`, and a second payment recorded against the
-same invoice — for example completing a balance a first, partial payment left
-open — takes `P2`. The receipt ID carries no month component: it is anchored
-to the invoice it pays, not to the order or to the calendar month the payment
-was confirmed in.
-
-Every receipt SHALL show this breakdown:
-
-| Line | Value |
-| --- | --- |
-| Original Invoice Total | The paid invoice's order total |
-| Previous Payments | 0 |
-| Current Payment Received | The amount this payment settled |
-| Remaining Balance Due | 0 |
-
-The receipt SHALL name the payment method:
-
-| Route | Method shown |
-| --- | --- |
-| Card, paid by the winner | Card, with its brand and last four digits |
-| Bank transfer, proof confirmed by an operator | Bank transfer |
-| Recorded by an operator | Bank transfer, cash, or the description the operator gave for another method, with the external reference where one was recorded |
-
-A receipt for a confirmed bank transfer SHALL NOT be marked as manually
-settled. A receipt for a manually settled order SHALL be marked as manually settled,
-SHALL be visually distinguishable from a card-settled receipt, and SHALL
-record the amount settled, the payment method, the external reference, and a
-pointer to any invoice it supersedes. No proof file, the winner's or an
-operator's, SHALL appear on the receipt.
-
-#### Scenario: winner-order-SC-18 - A receipt is itemised and stays retrievable
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an auction order paid at an order total of 316000 minor units in HKD
-- **WHEN** the winner opens the order a year later
-- **THEN** the receipt shows the winning bid, buyer's premium, Shipping &
-  Handling, insurance, any tax amount supplied by the separate tax capability,
-  the subtotal, the payment processing fee, and the order total
-
-#### Scenario: winner-order-SC-19 - A manually settled receipt says so
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an auction order an operator settled by bank transfer with an
-  external reference, after reissuing and replacing an earlier invoice
-- **WHEN** the winner opens the receipt
-- **THEN** it is marked as manually settled and is distinguishable from a
-  card-settled receipt
-- **AND** it records the amount settled, which includes the payment processing
-  fee, bank transfer as the method, the external reference, and the invoice it
-  supersedes
-- **AND** it shows no proof file
-
-#### Scenario: winner-order-SC-20 - The tracker appears once the lot is dispatched
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an auction order whose fulfilment status has just become
-  `fulfilled` with a tracking number attached
-- **WHEN** the winner opens the order
-- **THEN** it shows the carrier name, the tracking number, and a link to the
-  carrier
-
-#### Scenario: winner-order-SC-21 - Delivery proof records what the carrier provided
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** a dispatched auction order for which the carrier reports delivery
-  with a handover timestamp and a signature
-- **WHEN** `delivery_confirmed` is set
-- **THEN** the order records that timestamp and that signature
-- **AND** does not reduce them to a bare confirmation flag
-
-#### Scenario: winner-order-SC-36 - A card receipt names the card
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an auction order the winner paid by a Visa card ending 4242
-- **WHEN** the winner opens the receipt
-- **THEN** the payment method reads as a Visa card ending 4242
-
-#### Scenario: winner-order-SC-112 - Every receipt carries a receipt ID
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
-
-- **GIVEN** one order paid by card, one confirmed from bank transfer proof, and one settled manually
-- **WHEN** the winner opens each receipt
-- **THEN** each carries a receipt ID ending `P1`
-- **AND** each names its invoice ID
-
-#### Scenario: winner-order-SC-113 - A confirmed bank transfer receipt names bank transfer
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an auction order whose bank transfer proof an operator confirmed at an order total of 317000 minor units in HKD
-- **WHEN** the winner opens the receipt
-- **THEN** the payment method reads Bank transfer and the amount paid is 317000 minor units in HKD
-- **AND** it is not marked as manually settled
-- **AND** it shows no proof file and no file name
-
-#### Scenario: winner-order-SC-131 - A receipt ID takes the paid invoice's payload
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
-
-- **GIVEN** an order whose bank transfer invoice `IN-LK42302` has an order total of 317000 minor units in HKD
-- **WHEN** an operator confirms its proof and the winner opens the receipt
-- **THEN** the receipt ID is `RC-LK42302P1`
-- **AND** it shows Original Invoice Total 317000, Previous Payments 0, Current Payment Received 317000 and Remaining Balance Due 0, in minor units of HKD
-
-#### Scenario: winner-order-SC-132 - Two receipts never share an ID
-**Serves:** Records the winner keeps - receipt ID and breakdown
-
-- **GIVEN** two paid orders on different listings
-- **WHEN** the winner opens both receipts
-- **THEN** the two receipt IDs differ
-
-#### Scenario: winner-order-SC-133 - Invoice and receipt PDFs outlive a deleted account
-**Serves:** Records the winner keeps - retention
-
-- **GIVEN** a paid order with a replaced invoice, its current invoice and a receipt, whose winner deleted their account a year after payment
-- **WHEN** Grade10 retrieves the order's documents 6 years after payment
-- **THEN** the replaced invoice PDF, the current invoice PDF and the receipt PDF are all returned
-
-#### Scenario: winner-order-SC-135 - A repeated confirmation keeps one receipt ID
-**Serves:** Records the winner keeps - receipt ID and breakdown
-
-- **GIVEN** an auction order whose receipt ID is `RC-LK42301P1`
-- **WHEN** the payment confirmation is delivered again
-- **THEN** the receipt ID is still `RC-LK42301P1`
-- **AND** no other receipt ID and no other internal audit number is issued
-
-#### Scenario: winner-order-SC-170 - A second payment on one invoice increments the receipt's sequence, not the invoice
-**Serves:** winner-order-US-14 - Winner reviews invoice and payment details
-
-- **GIVEN** an invoice `IN-LK42301` whose first payment was partial and received a receipt `RC-LK42301P1`
-- **WHEN** a second payment completes the balance on the same invoice
-- **THEN** the second receipt is `RC-LK42301P2`
-- **AND** the invoice ID `IN-LK42301` and the order's payment reference `LK423` are unchanged by either payment

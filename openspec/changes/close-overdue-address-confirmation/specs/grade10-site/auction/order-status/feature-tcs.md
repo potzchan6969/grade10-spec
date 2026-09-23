@@ -309,7 +309,7 @@ of any requirement, and a scenario draft written without sight of this suite.
 | --- | --- |
 | What fact says the window is open — a stored closing time, close plus 48 hours, or a reopen count | **Left to the engineer.** The requirement says the condition is read from the order's own facts and stored as no enum, which `auction-status-SC-30` proves. Which fact carries it is `tech-design.md` |
 | Whether an operator may correct the address on a closed-window order | **Folded in** after a grilling round. They may, without reopening — `auction-status-SC-35` and `auction-status-US1-TC12-1` |
-| Whether the Overdue mark is a live read or a historical flag | **Agreed** by both readings, then **handed on.** The mark's requirement belongs to `revise-auction-winner-invoicing`, which this change may not fold, so the rule is an open item on the Post-Sale Queue page rather than a scenario here |
-| What `not_issued` becomes on a pre-invoice cancellation | **Dropped.** `revise-auction-winner-invoicing` already permits `not_issued` to `cancelled`. The suite was blind to it |
-| What a reissue does to a stored `expired` | **Dropped.** Already settled by `revise-auction-winner-invoicing`, and out of scope here |
+| Whether the Overdue mark is a live read or a historical flag | **Folded in:** the Awaiting Setup mark follows the persisted 48-hour address deadline. Preparing Invoice has no queue mark; its payment Overdue timer starts only after invoice send and winner visibility. |
+| What `not_issued` becomes on a pre-invoice cancellation | **Dropped.** the durable Winner Order rules already permits `not_issued` to `cancelled`. The suite was blind to it |
+| What a reissue does to a stored `expired` | **Dropped.** Already settled by the durable Winner Order rules, and out of scope here |
 | This capability's section heading | **Retitled.** Nobody walks this capability on its own, so its cases trace feature set groups and the heading names the reading rather than a journey |

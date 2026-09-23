@@ -55,17 +55,14 @@ the card is in the winner's hands. The collector's half is
   exists it doubles as the order's payment reference — [Auction Display ·
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
-- ❓ **Listing code view permission** — whether reading the code needs a
-  grant of its own, or inherits whatever already gates the listing's admin
-  screen; Product confirms
-- ❓ **Listing code on the Listings table** — whether the code shows only on
-  a listing's own admin screen or also as a column on the Listings table;
-  Product and Design confirm
+- **Listing code access and placement** — operators with existing listing-admin
+  read access see the same read-only code in both the Listings table and listing
+  detail screen; knowing the code cannot grant admin access or private data
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the
-  stock are released, and the slug is freed while the called-off lot stops
-  answering at it
+  stock are released, the listing leaves browse and search, and its canonical
+  slug remains reserved and directly accessible
 - **Media** — a picked file is previewed and stored only on confirm, then
   shown at card size with a zoom preview on hover; an item joins, is
   replaced, removed or re-captioned until the close — [Auction Display ·
@@ -108,7 +105,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- |
 | Payment window | **7 calendar days** from send |
 | Address window | **48 hours** from close; a reopen gives a fresh **48 hours** |
-| Overdue | **72 hours** or more idle in Awaiting Setup or Preparing Invoice |
+| Overdue | **48 hours** from lot close while Awaiting Setup; Preparing Invoice has no queue Overdue mark |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -125,11 +122,13 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Shipped · Delivered | Dispatched; delivery confirmed | No |
 | Cancelled · Refunded | A recorded terminal outcome | No |
 
-- **Overdue** — a separate, filterable mark on an order idle 72 hours or more;
-  it changes nothing, and the operator decides whether to contact the winner,
-  invoice or cancel
-- ❓ **Overdue after the address deadline** — whether the mark should follow
-  the 48-hour deadline instead of 72 hours idle; Product confirms
+- **Overdue** — a separate, filterable mark on an Awaiting Setup order after its
+  persisted 48-hour address deadline; Preparing Invoice has no queue Overdue
+  mark, and the operator decides whether to contact the winner, invoice or
+  cancel
+- **Payment Overdue** — the winner's invoice is overdue after the payment
+  deadline, which starts when the invoice is sent and visible to the winner;
+  this is separate from the address deadline
 - **Extended bidding: ON** — a lot past its scheduled close and still taking
   bids carries this label; its outcome does not change
 - 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced
@@ -348,7 +347,8 @@ settings.
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | Decided | Under Auction because auction invoices use it; behind the settlement permission because changing it changes the amount collected. | Product and finance |
-| Overdue and the address deadline | ❓ Open | Whether the Overdue mark should follow the 48-hour address deadline instead of 72 hours idle, so a winner is not blocked for a day before an operator is told. | Product |
+| Overdue mark in Awaiting Setup | Decided | The Overdue mark follows the 48-hour address deadline. | Product |
+| Overdue mark in Preparing Invoice | Decided | Preparing Invoice has no queue Overdue mark; its payment Overdue timer starts only after invoice send and winner visibility. | Product |
 | Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
 | Who records a refund | 🚧 In flight | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
 | Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
