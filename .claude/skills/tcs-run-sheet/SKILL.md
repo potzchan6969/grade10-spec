@@ -107,7 +107,7 @@ in the same pass when the request covers both.
   one file fold under a row that names the file (`shared/auth/sign-in`). The
   Summary tab has no filter view: it is a register.
 - **Do not rename or delete the tab.** The Summary rows point at it by name,
-  and Google Sheets cannot prevent either — they will read `tab deleted`.
+  and Google Sheets cannot prevent either — they will read `tab missing`.
 - **Automated cases land on the tab.** Their Auto columns start at `to_do`.
   They are left out only when the person asked to leave them out.
 

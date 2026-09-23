@@ -940,7 +940,6 @@ const payload = summaryRows({
   selection: args.selection ?? "",
   env: args.env,
   sha,
-  drafts,
 });
 
 let sheetId;
