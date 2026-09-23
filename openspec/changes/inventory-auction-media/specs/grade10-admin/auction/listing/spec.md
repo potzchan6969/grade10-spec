@@ -117,14 +117,14 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** an operator uploads an image
 - **THEN** Grade10 refuses the upload
 
-#### Scenario: grade10-admin-auction-listing-SC-87 - Operator combines direct uploads and product assets
+#### Scenario: grade10-admin-auction-listing-SC-95 - Operator combines direct uploads and product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a listing with a selected product that has reusable assets
 - **WHEN** an authorized operator adds direct uploads and selects product assets in an interleaved order
 - **THEN** Grade10 saves one listing gallery in that order
 
-#### Scenario: grade10-admin-auction-listing-SC-88 - Listing selection is limited to its product assets
+#### Scenario: grade10-admin-auction-listing-SC-96 - Listing selection is limited to its product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a listing with a selected product and another product with assets
@@ -132,7 +132,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **THEN** Grade10 refuses the selection
 - **AND** the listing gallery is unchanged
 
-#### Scenario: grade10-admin-auction-listing-SC-89 - The combined gallery cannot exceed eight items
+#### Scenario: grade10-admin-auction-listing-SC-97 - The combined gallery cannot exceed eight items
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a listing whose direct uploads and selected product assets total eight items
@@ -140,14 +140,14 @@ reading a published listing SHALL receive the gallery in its display order.
 - **THEN** Grade10 refuses the operation
 - **AND** the gallery still has eight items
 
-#### Scenario: grade10-admin-auction-listing-SC-90 - Saving snapshots selected product assets
+#### Scenario: grade10-admin-auction-listing-SC-98 - Saving snapshots selected product assets
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a selected product asset available to a listing editor
 - **WHEN** an authorized operator selects it and saves the listing
 - **THEN** Grade10 stores that asset in the listing gallery as saved media
 
-#### Scenario: grade10-admin-auction-listing-SC-91 - A missing source asset refuses Save
+#### Scenario: grade10-admin-auction-listing-SC-99 - A missing source asset refuses Save
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** an operator has selected a product asset for a listing
@@ -155,7 +155,7 @@ reading a published listing SHALL receive the gallery in its display order.
 - **WHEN** the operator saves the listing
 - **THEN** Grade10 refuses the save
 
-#### Scenario: grade10-admin-auction-listing-SC-92 - A saved listing does not follow later product-gallery changes
+#### Scenario: grade10-admin-auction-listing-SC-100 - A saved listing does not follow later product-gallery changes
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
 - **GIVEN** a listing saved with a selected product asset
