@@ -94,7 +94,8 @@ export type WinnerOrderContent = {
     /** Positive amount — e.g. `HK$16,140`. */
     amount: string;
     reason: string;
-    note: string;
+    /** Optional — omitted from Refund Details when empty (Q28). */
+    note?: string;
     transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
@@ -117,7 +118,8 @@ const LOT = {
 
 const INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
 
-const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
+const ADDRESS =
+  "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong" as const;
 
 /** Lot closed 17 Sep 2026, 21:30 HKT → complete setup within 48 hours. */
 const ADDRESS_DEADLINE = "Confirm by 19 Sep 2026, 21:30 HKT" as const;
@@ -219,7 +221,6 @@ export const WINNER_ORDER_REFUND_CLOSING = {
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
-  note: "Bank transfer exceeded the invoice. Difference returned.",
   transfer: {
     kind: "bank_transfer",
     bankName: "HSBC",

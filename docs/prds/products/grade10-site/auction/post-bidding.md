@@ -109,7 +109,8 @@ meaning.
   address form and no letter; the invoice and every receipt already issued
   stay downloadable; Order Summary stays the invoice; an inline alert below
   Order Total shows the amount returned, and opens a dialog that stacks
-  Amount, Transfer to, Reference (bank only), Reason and Note
+  Amount, Transfer to, Reference (bank only), Reason, and Note when the
+  operator recorded one
 - 🚧 **The bank reference** — a refund sent by bank transfer shows the
   operator's reference in the same details, between Transfer to and Reason,
   so the winner can find the credit on their statement; a card refund shows
@@ -121,10 +122,10 @@ meaning.
   shows only the difference, with the same detail dialog
 - 🚧 **Refund transaction clues** — Transfer to uses the shared payment card.
   A card shows the brand logo and the last four digits. A bank transfer shows
-  a bank icon with the bank name and the last four digits of the account.
-  A paid order's payment method uses that same last-four mask. Full proof,
-  Stripe reference and audit number stay with the operator; a bank refund
-  shows its provider reference as above
+  a bank icon with the masked destination on the primary line and the
+  free-text bank name as secondary text under it. A paid order's payment
+  method uses that same layout. Full proof, Stripe reference and audit number
+  stay with the operator; a bank refund shows its provider reference as above
 
 ## Order Setup
 
@@ -137,19 +138,26 @@ hours of the close.
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 | 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
-- 🚧 **Form** — Personal or Company; first and last name, phone (country and
+- **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
   required; address line 2 and state or province are optional; Company Name is
   required only for Company and hidden for Personal; an empty required field is
   refused beside the field; phone stores E.164 when parseable and does not
   refuse unusual formats; phone country and Country/Region start empty — nothing
-  preselected; on delivery Add Address, country or region lists every country
-  and region A–Z, and any typed letter moves the highlight to the next name
-  that starts with it and scrolls that name into view
-- 🚧 **Company on the picker** — a company address shows the company name as
-  the card title; a personal address shows the recipient name
+  preselected; phone placeholder shows an example with calling code
+  (`+852 12345678`)
+- 🚧 **Country or region list** — on delivery Add Address, country or region
+  lists every country and region A–Z in a searchable field — typing filters the
+  list to matching names
+- **Company on the picker** — a company address shows the company name as
+  the card title; a personal address shows the recipient name; the card body
+  shows street, city or region, and country only — no postal code and no phone
+- **Order summary addresses** — after setup, Delivery and Billing on the
+  order show the confirmed snapshot: company name when the address is
+  company, recipient name, phone, and the full address including postal code
+  (not the lean picker card body)
 - ❓ **Billing country or region list** — whether billing Add Address uses the
-  same full list and typeahead as delivery; Product confirms
+  same full list and searchable field as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
   destinations Grade10 ships to; until settled the catalogue is complete
 - ❓ **Catalogue display locale** — whether Country/Region names follow
@@ -233,9 +241,10 @@ doing, under Edge Cases.
 - 🚧 **View Bank Details** — amount due and rail fields as detail rows (no
   Copy); each rail tab ends with payment reference and a warning to enter it
   in the bank memo, after the rail fields: FPS ID, account name and QR; HK
-  local bank name, bank code, branch code and account number; SWIFT
-  beneficiary name, business address, SWIFT/BIC, account or IBAN, then
-  payment reference, then a note to choose OUR for transfer fees so Grade10
+  local bank name, bank code, branch code and full account number (bank and
+  branch code included); SWIFT beneficiary name, beneficiary address, bank
+  name, bank address, SWIFT/BIC, full account or IBAN, then payment
+  reference, then a note to choose OUR for transfer fees so Grade10
   receives the full order total
 - 🚧 **Submit Payment Proof** — proof fields and upload only (no amount due
   or transfer reference); **1 to 3** PDF, PNG, JPG or HEIC files, **5 MB**
@@ -253,7 +262,8 @@ doing, under Edge Cases.
 - 🚧 **Proof stays private** — the winner never sees a proof file or its name;
   the order shows only that proof was sent
 - ❓ **The accounts** — the details for each of the three ways; Finance
-  confirms
+  confirms. Preview uses Grade10 Finance Limited / HSBC Hong Kong samples
+  until then
 - ❓ **Contact channel** — how an operator reaches a winner about a transfer
   or a proof; WhatsApp is the working assumption, on the number from the
   address form; Operations confirms
@@ -269,8 +279,23 @@ doing, under Edge Cases.
   settled
 - 🚧 **Receipt ID** — `RC-LK42301P1`: the paid invoice's ID plus the
   payment's sequence number within it
+- ❓ **Which receipt ID is real** — this page's form and the one Grade10
+  issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
-  same Receipt PDF row, oldest first; what each one shows is under Edge Cases
+  same Receipt PDF row, oldest first
+- 🚧 **What every receipt shows** — Original Invoice Total, Previous Payments,
+  Current Payment Received and Remaining Balance Due, whether the invoice took
+  one payment or several. A single full payment reads 0 previous and 0
+  remaining
+- 🚧 **Original Invoice Total** — the total of the invoice the payment was made
+  against, fixed for the life of the collection; no invoice is reissued once
+  money has been recorded against it
+- 🚧 **Remaining Balance Due** — what is still owed, reading 0 the moment the
+  invoice is Paid. A balance an operator closed inside the 10% tolerance reads
+  0, and so does an overpayment; neither shows a shortfall or a credit
+- 🚧 **A receipt is never reissued** — a refund or a reversal leaves every
+  receipt already issued exactly as it was, and moves no later receipt's
+  Previous Payments
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
   details and tax ID; Finance confirms
 
@@ -431,9 +456,9 @@ a second payment provider, and changes to the bid-time rules.
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
 | A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
-| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason and Note. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
+| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
 | An overpaid difference | 🚧 In flight | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
-| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the bank name and the last four digits of the account. A paid order's payment method uses that same last-four mask. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
+| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
@@ -449,11 +474,11 @@ a second payment provider, and changes to the bid-time rules.
 | A separate orders page | Decided | Won lots are followed on My Auction Orders — needs action first, then newest close — and each Won row opens the order. | Product |
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
-| Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z; any typed letter moves the highlight to the next matching name and scrolls it into view. Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set. | Product (@tangconst) |
-| Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
-| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. First and last name stay required on both. | Product (@tangconst) |
-| Add Address optional locality | 🚧 In flight | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
-| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and typeahead as delivery. | Product (@tangconst) |
+| Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
+| Phone on Add Address | Decided | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
+| Personal or company address | Decided | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
+| Add Address optional locality | Decided | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
+| Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and searchable field as delivery. | Product (@tangconst) |
 | Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
@@ -466,6 +491,9 @@ a second payment provider, and changes to the bid-time rules.
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
+| Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
+| A balance belongs on a receipt, not on a page | 🚧 In flight | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
+| Receipts are append-only | 🚧 In flight | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |

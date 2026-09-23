@@ -122,10 +122,12 @@ export const Overpaid: Story = {
     expect(modal.getByText("HK$500")).toBeVisible();
     expect(modal.getByText("Transfer to")).toBeVisible();
     expect(modal.getByLabelText("Bank")).toBeVisible();
-    expect(modal.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(modal.getByText("···· 8891")).toBeVisible();
+    expect(modal.getByText("HSBC")).toBeVisible();
     expect(modal.getByText("Reference")).toBeVisible();
     expect(modal.getByText("G10-RF-LK7P2Q")).toBeVisible();
     expect(modal.getByText("Duplicate or overpayment")).toBeVisible();
+    expect(modal.queryByText("Note")).not.toBeInTheDocument();
     expect(modal.getByRole("button", { name: "Close" })).toBeVisible();
   },
 };

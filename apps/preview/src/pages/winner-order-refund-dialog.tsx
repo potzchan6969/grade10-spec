@@ -21,11 +21,11 @@ export type WinnerOrderRefundCardTransfer = {
   maskedNumber: string;
 };
 
-/** Bank refund destination — bank name, masked account and statement reference. */
+/** Bank refund destination — masked destination with free-text bank name. */
 export type WinnerOrderRefundBankTransfer = {
   kind: "bank_transfer";
   bankName: string;
-  /** Masked account — e.g. `···· 8891`. */
+  /** Masked destination — e.g. `···· 8891`. */
   maskedAccount: string;
   /**
    * Provider reference the operator entered — shown so the winner can match
@@ -43,8 +43,10 @@ export type WinnerOrderRefundDetails = {
   amount: string;
   /** Reason category the operator recorded. */
   reason: string;
-  /** Operator note the winner may read. */
-  note: string;
+  /**
+   * Optional operator note. Omitted from the dialog when empty (Q28).
+   */
+  note?: string;
   /** Where the money went — card marks or bank name + masked account. */
   transfer: WinnerOrderRefundTransfer;
 };
@@ -56,9 +58,10 @@ type WinnerOrderRefundDialogProps = {
 };
 
 /**
- * Winner-facing refund detail — amount, Transfer to, reason and note.
- * A bank refund also shows its provider reference. Proof, Stripe reference
- * and audit number stay with the operator.
+ * Winner-facing refund detail — amount, Transfer to, reason and optional note.
+ * A bank refund also shows its provider reference. Note is hidden when the
+ * operator left none. Proof, Stripe reference and audit number stay with the
+ * operator.
  */
 function WinnerOrderRefundDialog({
   open,
@@ -69,6 +72,7 @@ function WinnerOrderRefundDialog({
     refund.transfer.kind === "bank_transfer"
       ? refund.transfer.reference
       : null;
+  const note = refund.note?.trim() ? refund.note : null;
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -84,7 +88,7 @@ function WinnerOrderRefundDialog({
               <DetailRow label="Reference" value={bankReference} />
             ) : null}
             <DetailRow label="Reason" value={refund.reason} />
-            <DetailRow label="Note" value={refund.note} />
+            {note ? <DetailRow label="Note" value={note} /> : null}
           </VStack>
         </DialogBody>
         <DialogFooter>
@@ -126,7 +130,8 @@ function TransferTo({ transfer }: { transfer: WinnerOrderRefundTransfer }) {
         />
       ) : (
         <PaymentMethodCard
-          label={`${transfer.bankName}, ${transfer.maskedAccount}`}
+          description={transfer.bankName}
+          label={transfer.maskedAccount}
           leading={<Bank aria-label="Bank" size={20} weight="regular" />}
         />
       )}

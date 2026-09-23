@@ -15,7 +15,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Shared payment-method row: leading mark, divider, and label. Used on Store Order Details, Winner Order, and refund Transfer to.",
+          "Shared payment-method row: leading mark, divider, and label. Optional description under the label for a free-text bank name. Used on Store Order Details, Winner Order, and refund Transfer to.",
       },
     },
   },
@@ -52,17 +52,36 @@ export const Mastercard: Story = {
   },
 };
 
-/** Bank transfer — Phosphor Bank icon with bank name and masked account. */
+/** Bank transfer — masked account with bank name as subtext. */
 export const BankTransfer: Story = {
   name: "Bank Transfer",
   args: {
     leading: <Bank aria-label="Bank" size={20} weight="regular" />,
-    label: "HSBC, ···· 8891",
+    label: "···· 8891",
+    description: "HSBC",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByLabelText("Bank")).toBeVisible();
-    expect(canvas.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(canvas.getByText("···· 8891")).toBeVisible();
+    expect(canvas.getByText("HSBC")).toBeVisible();
+  },
+};
+
+/** Long free-text bank name wraps under the masked account. */
+export const LongBankName: Story = {
+  name: "Long Bank Name",
+  args: {
+    leading: <Bank aria-label="Bank" size={20} weight="regular" />,
+    label: "···· 8891",
+    description: "Hongkong and Shanghai Banking Corporation Limited",
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("···· 8891")).toBeVisible();
+    expect(
+      canvas.getByText("Hongkong and Shanghai Banking Corporation Limited"),
+    ).toBeVisible();
   },
 };
 
@@ -94,7 +113,8 @@ export const CardAndBank: Story = {
         leading={<OrderDetailsPaymentLogo brand="visa" />}
       />
       <PaymentMethodCard
-        label="HSBC, ···· 8891"
+        description="Hongkong and Shanghai Banking Corporation Limited"
+        label="···· 8891"
         leading={<Bank aria-label="Bank" size={20} weight="regular" />}
       />
     </VStack>

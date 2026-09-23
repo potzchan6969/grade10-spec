@@ -6,19 +6,21 @@ Product context: [Post-Bidding · Order Setup](../../../docs/prds/products/grade
 
 A winner adding a delivery address on Winner Order setup meets a short,
 designated country or region list. Collectors shipping outside that sample
-cannot name where the lot should go, and a long list without letter jump and
-scroll leaves the match off-screen in the nested dialog.
+cannot name where the lot should go, and a long list without search leaves
+the match hard to find in the nested dialog — letter typeahead on Select is
+poorly usable on phones.
 
 **Metric:** share of delivery Add Address opens where Country/Region offers a
-complete A–Z catalogue and a typed letter scrolls the highlighted match into
-the popup (target: 100% of those opens).
+complete A–Z catalogue and typing filters the list to matching names
+(target: 100% of those opens).
 
 ## What Changes
 
 - **Delivery Add Address lists every country and region A–Z** on Winner Order
   setup — no short designated set.
-- **Letter typeahead** — any typed letter moves the highlight to the next name
-  that starts with it; the popup scrolls that name into view.
+- **Searchable Autocomplete** — Country/Region is a filter-as-you-type field;
+  typing narrows the list to matching names. **BREAKING** vs letter typeahead
+  on Select (prior non-goal reversed after mobile review).
 - **Field reads Country/Region** — matching the manual's wording.
 
 ## Non-Goals
@@ -34,13 +36,13 @@ None.
 ### Modified Capabilities
 
 - `grade10-site/auction/winner-order` — delivery address country or region
-  picker is a complete catalogue with letter typeahead and scroll-into-view.
+  picker is a complete catalogue with searchable Autocomplete.
 
 ## Impact
 
 - Winner Order Complete Order Setup preview under `apps/preview` (delivery Add
-  Address select).
-- Design-system `Select` scroll-into-view for typeahead on long lists.
+  Address Autocomplete).
+- Design-system `Autocomplete` for filter-as-you-type on long country lists.
 - Catalogue acquisition (owned ISO, package, or crawl from grade10-admin) is
   engineering's — recorded in `tech-design.md` when planned, not in the
   requirement text.
@@ -50,7 +52,7 @@ None.
 ## Open Questions
 
 - **Billing country or region list** — whether billing Add Address uses the
-  same full list and typeahead as delivery; Product (@tangconst).
+  same full list and searchable field as delivery; Product (@tangconst).
 - **Shippable destinations only** — whether the picker later limits to
   destinations Grade10 ships to; until settled the catalogue stays complete;
   Product (@tangconst).

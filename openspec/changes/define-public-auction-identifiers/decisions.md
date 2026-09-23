@@ -41,4 +41,6 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| <!-- blind suite has not run; this proposal is waiting for PM and Finance confirmation --> | <!-- none yet --> | <!-- none yet --> |
+| grade10-admin/auction/listing | Does the listing code need a view permission separate from whatever already gates a listing's admin screen? This capability's existing requirements gate only writes (price-and-window, publish, call off), never a read, and nothing states a view gate for the code. | |
+| grade10-admin/auction/listing | Does the listing code show only on the listing's own admin detail screen, or also as a column in the Listings table? | |
+| grade10-site/auction/listing-page | Does a stale or cached shared-link preview generated before this change (or before a listing code existed) ever regenerate to surface the code on a later re-share, or does every unfurl read the current page live? The material settles that the served page and a fresh preview fetch never carry the code, but says nothing about caching or regeneration of previews already issued. | |

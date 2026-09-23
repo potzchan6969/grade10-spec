@@ -19,11 +19,14 @@ Title **View Bank Details**. Subtext: choose a transfer method and use the
 details below. Amount due as medium emphasis type only. Tabs (default pill
 variant, `defaultValue="fps"`, full-width list): FPS, HK Local, International.
 Each panel scrolls inside the dialog (tab list stays put). FPS: scan QR (solid
-border frame) beside manual FPS ID / account name. HK Local / SWIFT: denser
-field groups (paired codes where useful). Each tab ends with a
-payment-reference band (label, code, memo warning, tight code-to-hint gap) in
-the same field rhythm as the rail rows. SWIFT places the OUR alert **after**
-that band so destination fields stay continuous. Footer **Done**.
+border frame) beside manual FPS ID / account name. HK Local: bank name, bank
+code, branch code, full account number (bank and branch code included). SWIFT:
+beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC,
+full account number or IBAN. Each tab ends with a payment-reference band
+(label, code, memo warning, tight code-to-hint gap) in the same field rhythm
+as the rail rows. SWIFT places the OUR alert **after** that band so destination
+fields stay continuous. Preview samples use Grade10 Finance Limited / HSBC Hong
+Kong. Footer **Done**.
 
 ### Winner Order — Submit Payment Proof
 
@@ -71,8 +74,8 @@ icons only; Grade10 tokens only (no alternate palette).
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Open (FPS default) | Amount + FPS panel (ID, account name, QR with alt, payment reference at bottom) | `winner-order-SC-181` |
-| HK Local tab | Bank name, bank code, branch code, account; payment reference at bottom | `winner-order-SC-182` |
-| SWIFT tab | Beneficiary, business address, SWIFT/BIC, account; payment reference; OUR note after reference | `winner-order-SC-183` |
+| HK Local tab | Bank name, bank code, branch code, full account number (bank and branch code included); payment reference at bottom | `winner-order-SC-182` |
+| SWIFT tab | Beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account number; payment reference; OUR note after reference | `winner-order-SC-183` |
 
 ### Winner Order — Submit Payment Proof
 

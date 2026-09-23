@@ -1,7 +1,7 @@
 # shared/auth/sign-in Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-15, tcs-rules r3.0
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
@@ -1226,7 +1226,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1236,16 +1236,25 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link whose time to live has ended.
+
+* customer is signed out.
+* <expired link> for <collector email> is past its time to live.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<expired link>` | A sign-in link whose time to live has ended |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <expired link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link has expired.
 
 ### shared-auth-sign-in-US6-TC2-1: Used link toasts that it no longer works
@@ -1254,7 +1263,7 @@ A sign-in link whose time to live has ended.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1264,16 +1273,25 @@ A sign-in link whose time to live has ended.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link that has already created a session.
+
+* A sign-in link for <collector email> has already created a session.
+* customer is signed out in a fresh browser session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<used link>` | The sign-in link that already created a session |
 
 **Steps:**
 
-1. Follow that link again.
+1. Follow <used link>.
 
 **Expected Results:**
 
 * No new session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC3-1: Superseded link toasts that it no longer works
@@ -1282,7 +1300,7 @@ A sign-in link that has already created a session.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1292,16 +1310,27 @@ A sign-in link that has already created a session.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-An unused unexpired sign-in link that a later sign-in-link email for the same address replaced.
+
+* customer is signed out.
+* <earlier link> is unused and unexpired for <collector email>.
+* The sixty-second window since <earlier link> was sent has passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<earlier link>` | The unused unexpired link from the first sign-in email |
 
 **Steps:**
 
-1. Follow the earlier link.
+1. Submit <collector email> at the email step to send a later sign-in email.
+2. Follow <earlier link>.
 
 **Expected Results:**
 
-* No session is created.
-* They are on this brand's home.
+* No session is created from <earlier link>.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC4-1: Invalid link toasts that it no longer works
@@ -1310,7 +1339,7 @@ An unused unexpired sign-in link that a later sign-in-link email for the same ad
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1320,16 +1349,24 @@ An unused unexpired sign-in link that a later sign-in-link email for the same ad
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link token that is malformed or unknown.
+
+* customer is signed out.
+* <invalid link> is a sign-in link whose token is malformed or unknown.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<invalid link>` | A sign-in link token that is malformed or unknown |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <invalid link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
 ### shared-auth-sign-in-US6-TC5-1: Banned account link follow toasts cannot sign in
@@ -1338,7 +1375,7 @@ A sign-in link token that is malformed or unknown.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1348,16 +1385,26 @@ A sign-in link token that is malformed or unknown.
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A banned account and a sign-in link for that account's address.
+
+* customer is signed out.
+* The account for <banned email> is banned.
+* <banned link> is a sign-in link for <banned email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<banned email>` | banned@example.com, an address whose account is banned |
+| `<banned link>` | A sign-in link for <banned email> |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <banned link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that they cannot sign in.
 * The toast does not invite them to request another link.
 
@@ -1376,7 +1423,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -1416,7 +1463,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1432,11 +1479,13 @@ Resend after a short wait,
 **Steps:**
 
 1. Inspect the controls on the dialog body.
+2. Dismiss the dialog.
 
 **Expected Results:**
 
 * No Back control is present.
-* Leaving the dialog is by dismissing it.
+* The dialog is dismissed.
+* The collector stays on the same page.
 
 ---
 
@@ -1446,7 +1495,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1477,7 +1526,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
@@ -1509,7 +1558,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1541,7 +1590,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1574,7 +1623,7 @@ Resend after a short wait,
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1615,7 +1664,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -1653,7 +1702,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -1699,7 +1748,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1738,7 +1787,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1761,7 +1810,7 @@ Runs once per row of **Test data**.
 
 | `<failed link>` | What it is |
 | --- | --- |
-| expired | a link older than sixty seconds |
+| expired | a link older than five minutes |
 | already used | a link followed once already |
 | banned | a link for an account that is banned |
 
@@ -1773,6 +1822,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Tab A shows nobody signed in.
+* Tab A still shows the Check Your Email dialog.
 * <listing> is in no cart.
 * Tab A says nothing about the link.
 

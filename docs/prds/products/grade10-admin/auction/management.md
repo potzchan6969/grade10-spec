@@ -55,6 +55,12 @@ the card is in the winner's hands. The collector's half is
   exists it doubles as the order's payment reference — [Auction Display ·
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
+- ❓ **Listing code view permission** — whether reading the code needs a
+  grant of its own, or inherits whatever already gates the listing's admin
+  screen; Product confirms
+- ❓ **Listing code on the Listings table** — whether the code shows only on
+  a listing's own admin screen or also as a column on the Listings table;
+  Product and Design confirm
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the
@@ -220,10 +226,15 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 
 | The refund records | Value |
 | --- | --- |
-| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; the operator decides it, never fixed |
-| 🚧 Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other, with a note carrying what the winner asked |
+| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; offered at what was paid, and the operator decides it |
+| 🚧 Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other; the note carries what the winner asked and is optional, Other included |
+| 🚧 Date | When the money left, typed by the operator and never in the future |
 | 🚧 Method and reference | How the money went back, with its Stripe or bank reference |
-| 🚧 Proof | 1 to 5 files, operators only |
+| 🚧 Bank channel | A bank refund names it: FPS, HK local bank transfer, or SWIFT international wire; a card refund has none |
+| 🚧 Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing, and the same three fields whichever channel sent it |
+| 🚧 What the winner sees of it | The bank name and a masked destination, read from what was typed: the last four digits of an account or a phone, or the first letter and domain of an email. The destination is the only masked value, and nothing on the winner's page reveals it in full |
+| 🚧 Before it commits | The operator confirms a restatement of the amount, the method and where it went, and the lot's outcome, saying this is the order's only refund and cannot be undone |
+| 🚧 Proof | 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB, as manual settlement takes them; operators only |
 | 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
 | 🚧 Its number | The next one in the internal audit series |
 
@@ -234,10 +245,10 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   change
 - 🚧 **Refund transaction clues for the winner** — Transfer to uses the
   shared payment card: brand logo and the last four digits for a card, or a
-  bank icon with the bank name and the last four digits of the account. A
-  bank refund also shows its provider reference in the winner details; a card
-  refund shows none. Full proof, Stripe reference and audit number stay with
-  the operator
+  bank icon with the masked destination on the primary line and the free-text
+  bank name as secondary text under it. A bank refund also shows its provider
+  reference in the winner details; a card refund shows none. Full proof,
+  Stripe reference and audit number stay with the operator
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -343,7 +354,7 @@ settings.
 | Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
 | One refund, any amount | 🚧 In flight | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
 | Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
-| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the bank name and the last four digits of the account. A bank refund also shows its provider reference to the winner; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product |
+| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A bank refund also shows its provider reference to the winner; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product |
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |

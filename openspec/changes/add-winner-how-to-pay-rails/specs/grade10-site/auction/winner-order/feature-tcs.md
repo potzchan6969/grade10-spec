@@ -110,8 +110,8 @@
 
 **Expected result:**
 
-* HK Local shows bank name, bank code, branch code, account number, then payment reference.
-* SWIFT shows beneficiary name, business address, SWIFT/BIC, account or IBAN, then payment reference, then the OUR charges note after the reference.
+* HK Local shows bank name, bank code, branch code, full account number including bank and branch code, then payment reference.
+* SWIFT shows beneficiary name, beneficiary address, bank name, bank address, SWIFT/BIC, full account or IBAN, then payment reference, then the OUR charges note after the reference.
 
 ### winner-order-US9-TC4-1: Submit Payment Proof is proof-only
 
@@ -150,7 +150,9 @@ draft from the requirements reading; suite from the blind reading; neither
 saw the other's draft before join.
 
 - **Raised:** none — entry points, CTA label, FPS default, expanded rail
-  fields, OUR placement and proof-only dialog were settled in `decisions.md`.
+  fields (beneficiary address, bank name, bank address, full account number),
+  OUR placement, Grade10 / HSBC preview samples and proof-only dialog were
+  settled in `decisions.md` (including Q16–Q19).
 - **Folded:** none.
 - **Covered:** `winner-order-SC-180` ← `US9-TC1-1`; `winner-order-SC-181` ←
   `US9-TC2-1`; `winner-order-SC-182` and `winner-order-SC-183` ←

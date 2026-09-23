@@ -39,7 +39,8 @@ type WinnerOrderHowToPayDialogProps = {
 
 /**
  * Preview-only: View Bank Details after Order summary secondary control.
- * Not a published `@grade10/ui` export. Account values are Finance TBC.
+ * Not a published `@grade10/ui` export. Sample values are Grade10 / HSBC Hong
+ * Kong until Finance confirms live accounts.
  */
 function WinnerOrderHowToPayDialog({
   open,
@@ -148,8 +149,16 @@ function WinnerOrderHowToPayDialog({
                     value={WINNER_ORDER_BANK_DETAILS.beneficiaryName}
                   />
                   <DetailRow
-                    label="Business address"
-                    value={WINNER_ORDER_BANK_DETAILS.businessAddress}
+                    label="Beneficiary address"
+                    value={WINNER_ORDER_BANK_DETAILS.beneficiaryAddress}
+                  />
+                  <DetailRow
+                    label="Bank name"
+                    value={WINNER_ORDER_BANK_DETAILS.bankName}
+                  />
+                  <DetailRow
+                    label="Bank address"
+                    value={WINNER_ORDER_BANK_DETAILS.bankAddress}
                   />
                   <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
                     <DetailRow
