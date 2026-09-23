@@ -1,6 +1,6 @@
 ## 1. Product record (grade10-spec) (owner: @htonyl)
 
-- [ ] 1.1 Reconcile the listing/invoice identifier wording, including permanent
+- [x] 1.1 Reconcile the listing/invoice identifier wording, including permanent
   code and URL reservation, settled admin access and placement, cached-preview
   limits, and sequence continuation after `99`.
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
