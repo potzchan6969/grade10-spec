@@ -569,7 +569,7 @@ Stage (b).
 
 Stage (b).
 
-- [ ] 12.1 Cover the booking seam: the remote call outside every transaction,
+- [x] 12.1 Cover the booking seam: the remote call outside every transaction,
       the all-or-none cache, the diary's four refusals by name, the batch the
       chosen day names opened once per shop, grader and level on its key,
       with two desks racing on a real Postgres, the joiner resolved through one
@@ -596,7 +596,7 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-27`,
       `grade10-site-grading-submission-plan-SC-45`,
       `grade10-site-grading-submission-lifecycle-SC-47`)
-- [ ] 12.2 Write `booking/bind.ts` as the vault's: `bookVisit`,
+- [x] 12.2 Write `booking/bind.ts` as the vault's: `bookVisit`,
       `rescheduleVisit` and `cancelVisit` calling `APPOINTMENT_SERVICE` outside
       every transaction, then `withSubmissionLock` writing `booking_ref`,
       `service_id`, `appointment_at` and `location_id` all or none, then
@@ -605,7 +605,7 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-05`,
       `grade10-site-grading-dropoff-booking-SC-15`,
       `grade10-site-grading-dropoff-booking-SC-16`)
-- [ ] 12.3 Let the diary's refusals reach the page by name —
+- [x] 12.3 Let the diary's refusals reach the page by name —
       `SLOT_NOT_OFFERED`, `SLOT_FULL`, `RESOURCE_NOT_AVAILABLE`,
       `ALREADY_BOOKED` — answer no free day when the diary cannot be read,
       offer no day past the service's horizon, and refuse a plan that expired
@@ -614,7 +614,7 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-08`,
       `grade10-site-grading-dropoff-booking-SC-03`,
       `grade10-site-grading-submission-plan-SC-45`)
-- [ ] 12.4 Write `openBatchFor(location, grader, level, now)` whole, the way
+- [x] 12.4 Write `openBatchFor(location, grader, level, now)` whole, the way
       every batch writer opens one — the hand-in and 30.3's new batch — the
       cut-off on `Asia/Hong_Kong` days from `settings.batch_cutoff` read share
       locked so it cannot move while a batch opens, the trio's open batch
@@ -635,27 +635,27 @@ Stage (b).
       `grade10-admin-grading-batches-SC-03`,
       `grade10-admin-grading-batches-SC-07`,
       `grade10-admin-grading-batches-SC-44`)
-- [ ] 12.5 Write `visit_owner_id` in `joinVisit` and read the visit through one
+- [x] 12.5 Write `visit_owner_id` in `joinVisit` and read the visit through one
       resolver in `repositories/submissions.ts` for every predicate, index and
       read, so a joiner holds no cache of its own
       (`grade10-site-grading-dropoff-booking-SC-20`)
-- [ ] 12.6 Upsize with one `reschedule` carrying `serviceId` when the two lists
+- [x] 12.6 Upsize with one `reschedule` carrying `serviceId` when the two lists
       pass twenty cards, at the same slot, writing nothing locally if it fails
       (`grade10-site-grading-dropoff-booking-SC-21`)
-- [ ] 12.7 Detach every joiner in the owner's cancel commit — its own
+- [x] 12.7 Detach every joiner in the owner's cancel commit — its own
       `dropoff_detached` event and letter each, the joiner back to `booked` with
       no visit — and the same on the missed visit
       (`grade10-site-grading-dropoff-booking-SC-22`,
       `grade10-site-grading-dropoff-booking-SC-27`)
-- [ ] 12.8 Take the drop-off with the submission on `cancel`, the visit
+- [x] 12.8 Take the drop-off with the submission on `cancel`, the visit
       cancelled before the status moves, replacing the `VISIT_BOOKED` guard
       group 11 put on `cancel`, and decide what a joiner's cancel does to the
       owner's visit, since a joiner holds no booking of its own
       (`grade10-site-grading-submission-lifecycle-SC-47`)
-- [ ] 12.9 Serve `GET /api/submissions/:id/visit.ics` from `buildCalendarFile`
+- [x] 12.9 Serve `GET /api/submissions/:id/visit.ics` from `buildCalendarFile`
       over the owner's booking, and attach the same file to the five drop-off
       letters (`grade10-site-grading-dropoff-booking-US1-TC1-1`)
-- [ ] 12.10 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 12.10 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 13. The hand-in, the till and the safe (grade10)
