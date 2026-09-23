@@ -339,7 +339,7 @@
 **Pre-conditions:**
 
 * admin(holds grading:operate) is checking in <a submission at a grader and level> at the counter.
-* No un-shipped batch stands for that shop, grader and level.
+* No open batch stands for that shop, grader and level.
 
 **Steps:**
 
@@ -370,7 +370,7 @@
 **Pre-conditions:**
 
 * admin(holds grading:operate) is checking in <a second submission at the same grader and level>.
-* <an un-shipped batch> already stands for that shop, grader and level.
+* <an open batch> already stands for that shop, grader and level.
 
 **Steps:**
 

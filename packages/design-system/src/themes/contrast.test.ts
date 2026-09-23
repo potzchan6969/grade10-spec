@@ -153,6 +153,7 @@ function pairs(): [string, string][] {
     ["--primary-on", "--primary"],
     ["--foreground", "--background"],
     ["--foreground", "--muted"],
+    ["--foreground", "--accent"],
     ["--muted-foreground", "--background"],
     ["--secondary-foreground", "--background"],
   ];
@@ -221,4 +222,13 @@ describe("the two contracts stay apart", () => {
       expect(offenders).toEqual([]);
     },
   );
+
+  // grade10's accent foreground is the orange fill, 2.8:1 on the page and on
+  // the accent tint alike, so no control reads in it.
+  it("no component sets its text in the accent foreground", () => {
+    const offenders = tsxFiles(path.join(SRC, "components")).filter((file) =>
+      readFileSync(file, "utf8").includes("text-accent-foreground"),
+    );
+    expect(offenders).toEqual([]);
+  });
 });

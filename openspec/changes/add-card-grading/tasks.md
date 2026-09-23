@@ -617,7 +617,7 @@ Stage (b).
 - [ ] 12.4 Write `openBatchFor(location, grader, level, now)` whole — the
       cut-off on `Asia/Hong_Kong` days from `settings.batch_cutoff`, the row
       created `ON CONFLICT DO NOTHING … RETURNING` behind the partial unique
-      among un-shipped batches and re-read, and read at booking so the chosen
+      among open batches and re-read, and read at booking so the chosen
       day names the batch the cards leave in and the day back counts from it:
       one shop, one grader and one level to a batch, no second batch beside an
       un-shipped one, a card at another level waiting for its own, the cut-off

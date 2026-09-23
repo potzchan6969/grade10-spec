@@ -73,17 +73,18 @@ parcel, one order, one set of cards at one level.
 **The pair** - a batch SHALL hold submissions of one grader and one level, at
 one shop.
 
-**One at a time** - at most one un-shipped batch SHALL stand for a shop, a
-grader and a level, and every card handed in for that trio SHALL join it.
+**One at a time** - at most one open batch SHALL stand for a shop, a grader
+and a level, and every card handed in for that trio before its cut-off SHALL
+join it; a batch closed at its cut-off and not yet shipped takes no more cards.
 
-**Opened on first use** - where that trio has no un-shipped batch, one SHALL be
-opened with its cut-off when the first card for it is handed in.
+**Opened on first use** - where that trio has no open batch, one SHALL be opened
+with its cut-off when the first card for it is handed in.
 
 **A card that fits neither** - a card at another grader or another level SHALL
 wait for that trio's own batch and SHALL never join this one.
 
 **Opened ahead of the first card** - a batch MAY also be opened from the
-console for a trio that has no un-shipped batch, and the first card handed in
+console for a trio that has no open batch, and the first card handed in
 for that trio SHALL join it rather than opening a second.
 
 **Its name** - a batch SHALL be named by its shop, its grader and level, and
@@ -92,7 +93,7 @@ its cut-off date.
 #### Scenario: grade10-admin-grading-batches-SC-01 - The first card handed in opens the batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator finds the day's cards already gathered into the parcel that will leave
 
-- **GIVEN** no un-shipped batch stands for the shop, the grader and the level
+- **GIVEN** no open batch stands for the shop, the grader and the level
 - **WHEN** a submission at that grader and level is handed in
 - **THEN** a batch is opened for that shop, grader and level with its cut-off,
   and the submission joins it
@@ -100,14 +101,14 @@ its cut-off date.
 #### Scenario: grade10-admin-grading-batches-SC-02 - A second batch never opens beside an un-shipped one
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends one parcel for the shop, the grader and the level rather than two
 
-- **GIVEN** an un-shipped batch stands for the shop, the grader and the level
+- **GIVEN** an open batch stands for the shop, the grader and the level
 - **WHEN** another submission at that grader and level is handed in
 - **THEN** it joins that batch, and no second batch is opened for the trio
 
 #### Scenario: grade10-admin-grading-batches-SC-03 - A card at another level waits for its own batch
 **Serves:** grade10-admin-grading-batches-US-01 - the operator keeps one order at one level in the parcel that leaves
 
-- **GIVEN** an un-shipped batch at one grader and level
+- **GIVEN** an open batch at one grader and level
 - **WHEN** a submission at the same grader and a different level is handed in
 - **THEN** it joins that grader and level's own batch instead, and the first
   batch is unchanged
@@ -115,7 +116,7 @@ its cut-off date.
 #### Scenario: grade10-admin-grading-batches-SC-44 - A batch opened from the console takes the trio's first card
 **Serves:** grade10-admin-grading-batches-US-01 - the operator opens the week's parcel before the first collector walks in
 
-- **GIVEN** no un-shipped batch stands for the shop, the grader and the level
+- **GIVEN** no open batch stands for the shop, the grader and the level
 - **WHEN** the operator opens one for that grader and level, and a submission
   at that grader and level is then handed in
 - **THEN** the submission joins that batch, and no second batch is opened for
