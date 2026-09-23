@@ -52,7 +52,7 @@
 
 ## 4. Receipt presentation (grade10) (owner: @htonyl)
 
-- [ ] 4.1 Render the stored values in the existing receipt/PDF path in this
+- [x] 4.1 Render the stored values in the existing receipt/PDF path in this
   order: Original Invoice Total, Previous Payments, Current Payment Received,
   Remaining Balance Due.
   - Covers: `winner-order-SC-204` through `SC-208`.

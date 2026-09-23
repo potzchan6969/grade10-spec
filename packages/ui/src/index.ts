@@ -60,6 +60,13 @@ export type {
   BookingStep,
 } from "./blocks/appointment-booking/types";
 export {
+  AuctionCard,
+  type AuctionCardBadge,
+  type AuctionCardCopy,
+  type AuctionCardProps,
+  type AuctionCardWhen,
+} from "./blocks/auction-listing/auction-card";
+export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,

@@ -33,6 +33,7 @@ export default defineConfig({
             "src/__tests__/audit-freshness.test.ts",
             "src/lib/format-datetime.test.ts",
             "src/lib/format-money.test.ts",
+            "src/blocks/auction-listing/auction-card.test.ts",
             "src/blocks/auction-listing/listing-age-verification-form.test.ts",
             "src/blocks/auction-listing/listing-bid-money.test.ts",
             "src/blocks/auth-sign-in/public-exports.test.ts",
