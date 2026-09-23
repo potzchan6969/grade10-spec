@@ -1,12 +1,4 @@
 import { Divider } from "@grade10/design-system/components/display/divider";
-import {
-  Table,
-  TableBody,
-} from "@grade10/design-system/components/display/table";
-import { TableCell } from "@grade10/design-system/components/display/table-cell";
-import { TableHead } from "@grade10/design-system/components/display/table-head";
-import { TableHeader } from "@grade10/design-system/components/display/table-header";
-import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -99,46 +91,46 @@ function PartiesSection() {
 }
 
 /** The order value lines — identical on both PDFs, since a receipt itemises
- * the invoice it pays rather than re-pricing it. */
-const ORDER_VALUE_AMOUNT_COLUMN_CLASS =
-  "w-32 shrink-0 whitespace-nowrap tabular-nums";
-
+ * the invoice it pays rather than re-pricing it. Plain label/value rows, no
+ * bordered table shell. */
 function OrderValueTable() {
   return (
-    <Table>
-      <TableHeader>
-        <TableHead className="min-w-0 flex-1">Description</TableHead>
-        <TableHead align="end" className={ORDER_VALUE_AMOUNT_COLUMN_CLASS}>
+    <VStack gap="sm" hAlign="stretch">
+      <HStack
+        className="w-full"
+        gap="md"
+        hAlign="space-between"
+        vAlign="baseline"
+      >
+        <Text size="sm" weight="medium">
+          Description
+        </Text>
+        <Text size="sm" weight="medium">
           Amount
-        </TableHead>
-      </TableHeader>
-      <TableBody>
-        <TableRow>
-          <TableCell className="min-w-0 flex-1">Winning Bid</TableCell>
-          <TableCell align="end" className={ORDER_VALUE_AMOUNT_COLUMN_CLASS}>
-            2,500.00
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="min-w-0 flex-1">Buyer's Premium</TableCell>
-          <TableCell align="end" className={ORDER_VALUE_AMOUNT_COLUMN_CLASS}>
-            500.00
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="min-w-0 flex-1">Shipping & Handling</TableCell>
-          <TableCell align="end" className={ORDER_VALUE_AMOUNT_COLUMN_CLASS}>
-            80.00
-          </TableCell>
-        </TableRow>
-        <TableRow>
-          <TableCell className="min-w-0 flex-1">Insurance</TableCell>
-          <TableCell align="end" className={ORDER_VALUE_AMOUNT_COLUMN_CLASS}>
-            40.00
-          </TableCell>
-        </TableRow>
-      </TableBody>
-    </Table>
+        </Text>
+      </HStack>
+      <Divider className="bg-foreground" />
+      <VStack gap="xs" hAlign="stretch">
+        <OrderValueRow label="Winning Bid" value="2,500.00" />
+        <OrderValueRow label="Buyer's Premium" value="500.00" />
+        <OrderValueRow label="Shipping & Handling" value="80.00" />
+        <OrderValueRow label="Insurance" value="40.00" />
+      </VStack>
+    </VStack>
+  );
+}
+
+function OrderValueRow({ label, value }: { label: string; value: string }) {
+  return (
+    <HStack
+      className="w-full"
+      gap="md"
+      hAlign="space-between"
+      vAlign="baseline"
+    >
+      <Text size="sm">{label}</Text>
+      <Text size="sm">{value}</Text>
+    </HStack>
   );
 }
 
