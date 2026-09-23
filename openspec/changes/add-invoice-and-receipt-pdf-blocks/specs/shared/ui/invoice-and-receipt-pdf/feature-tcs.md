@@ -1,0 +1,869 @@
+# shared/ui/invoice-and-receipt-pdf Test Cases
+
+**Status:** pending-review
+**Drafts styled:** 2026-09-23, tcs-rules r3
+
+## shared-ui-invoice-and-receipt-pdf-US1: Invoice and Receipt PDF component contract
+
+**Walked by:** nobody on their own — a component contract; the journeys live in `grade10-site/auction/winner-order`, which composes the block behind the Invoice PDF control (`winner-order-SC-57`, `winner-order-SC-109`) and the Receipt PDF control (`winner-order-SC-67`)
+
+**As a** customer,
+**I want** the Invoice and Receipt PDFs I open from Winner Order to show every line and address Grade10 already committed to, from one shared component,
+**so that** the document I read or download matches what the order page told me, however the page that composes it is built.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC1-1: Fully supplied invoice renders every meta row and line
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every prop supplied as non-empty content: invoice ID, payment method (card), sent at, payment deadline, bank reference, issuer, Bill To, Ship To, lot, winning bid, buyer's premium, shipping & handling, insurance, subtotal, payment processing fee, order total.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the meta rows, the issuer and party blocks, and the order-value lines.
+
+**Expected Results:**
+
+* Every meta row renders its supplied content.
+* Issuer, Bill To and Ship To each render as a distinct block.
+* Every order-value line renders, in the order named.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC2-1: Card-paid invoice omits bank rails despite a bank reference
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with payment method card, a bank reference supplied, and no bank rails prop supplied.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The bank reference renders.
+* Bank rails do not render.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC3-1: Bank-transfer invoice renders bank rails when supplied
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with payment method bank-transfer, a bank reference supplied, and bank rails supplied.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The bank reference renders.
+* Bank rails render beside it.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC4-1: Insurance line renders only when supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Insurance prop | Insurance line |
+| --- | --- |
+| Supplied | Renders |
+| Omitted | Does not render |
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and Insurance set per the row.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the row's Insurance prop.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* The Insurance line matches the row's outcome.
+* Every other order-value line still renders.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC5-1: Subtotal and Order Total survive Insurance being omitted
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with Insurance omitted and every other order-value line supplied.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the Subtotal and Order Total rows.
+
+**Expected Results:**
+
+* Subtotal renders its supplied content.
+* Order Total renders its supplied content.
+* Neither row is dropped or reordered by Insurance's absence.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC6-1: Replaced by renders only when given
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Replaced by prop | Replaced by line |
+| --- | --- |
+| Supplied | Renders |
+| Omitted | Does not render |
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other line supplied, and Replaced by set per the row.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the row's Replaced by prop.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* Replaced by matches the row's outcome.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC7-1: Bill To and Ship To render independently when they differ
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with Bill To content naming one recipient and Ship To content naming a different recipient.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the Bill To and Ship To blocks.
+
+**Expected Results:**
+
+* Bill To renders its own supplied content.
+* Ship To renders its own, distinct, supplied content.
+* Neither block echoes the other's content.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC8-1: Fully supplied receipt renders every row in order
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every prop supplied: receipt ID, the invoice ID it pays, payment method, the manually-settled mark, Bill To, Ship To, every order-value line, and all four payment-breakdown lines.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the supplied props.
+2. Inspect the meta rows, party blocks, order-value lines and payment breakdown.
+
+**Expected Results:**
+
+* Every meta row renders its supplied content.
+* Bill To and Ship To render as distinct blocks.
+* Every order-value line renders.
+* The payment breakdown renders Original Invoice Total, then Previous Payments, then Current Payment Received, then Remaining Balance Due, in that order.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC9-1: Payment breakdown keeps its order at zero values
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with Previous Payments and Remaining Balance Due each supplied as a zero-reading `ReactNode`, and Original Invoice Total and Current Payment Received supplied as non-zero content, as a single full payment produces.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the payment breakdown.
+
+**Expected Results:**
+
+* All four payment-breakdown lines render; none is omitted for reading zero.
+* The order stays Original Invoice Total, Previous Payments, Current Payment Received, Remaining Balance Due.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC10-1: Manually-settled mark renders only for operator-recorded settlements
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** ReceiptPdf export
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Manually-settled prop | Mark |
+| --- | --- |
+| Supplied (operator-recorded settlement) | Renders, visually distinguishable |
+| Omitted (card, or a confirmed bank transfer) | Does not render |
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the manually-settled mark prop set per the row.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the row's prop.
+2. Inspect the meta rows for the mark.
+
+**Expected Results:**
+
+* The mark matches the row's outcome.
+* When it renders, it is visually distinguishable from an unmarked receipt.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC11-1: Payment method content renders unchanged across its variants
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Payment method content |
+| --- |
+| Card brand and last four digits |
+| Bank Transfer |
+| An operator-given description with an external reference |
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the payment method meta row set to the row's content.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the row's payment method content.
+2. Inspect the payment method meta row.
+
+**Expected Results:**
+
+* The payment method row renders the row's content verbatim, unchanged by which variant it is.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC12-1: Superseded invoice renders only when given
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Superseded invoice prop | Superseded invoice line |
+| --- | --- |
+| Supplied | Renders |
+| Omitted | Does not render |
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every other line supplied, and Superseded invoice set per the row.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the row's Superseded invoice prop.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* Superseded invoice matches the row's outcome.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC13-1: Insurance line renders only when given on the receipt
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every order-value line supplied except Insurance, which is omitted.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* Every order-value line other than Insurance renders.
+* Insurance does not render.
+* The remaining lines keep the same shape as `InvoicePdf`'s: Winning Bid, Buyer's Premium, Shipping & Handling, Subtotal, Payment Processing Fee, Order Total.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC14-1: Receipt ID and invoice ID render as distinct rows
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with a receipt ID and a different invoice ID supplied.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The receipt ID row renders its own content.
+* The invoice ID row renders its own, distinct, content.
+* Neither row is conflated with the other.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC15-1: Bill To and Ship To render independently on the receipt
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with Bill To content naming one recipient and Ship To content naming a different recipient.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the Bill To and Ship To blocks.
+
+**Expected Results:**
+
+* Bill To renders its own supplied content.
+* Ship To renders its own, distinct, supplied content.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC16-1: Tax line does not render when omitted on the invoice
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other line supplied and no tax-line prop supplied.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* No tax line renders.
+* Every other order-value line renders unaffected.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC17-1: Tax line renders with its content when supplied
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with the tax-line prop supplied as a non-empty `ReactNode`.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* The tax line renders the supplied content among the order-value lines.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC18-1: An empty tax line renders differently from an absent one
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Tax-line prop | Tax row |
+| --- | --- |
+| Omitted entirely (prop never passed) | Does not render |
+| Supplied as an empty `ReactNode` | Renders, with blank content |
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with every other order-value line supplied, and the tax-line prop set per the row.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the row's tax-line prop.
+2. Inspect the order-value lines for a tax row.
+
+**Expected Results:**
+
+* The tax row's presence matches the row's outcome.
+* Omitting the prop and passing it as empty content are not treated the same.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC19-1: Issuer tax-details block does not render when omitted
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every other block supplied and no issuer tax-details prop supplied.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the rendered output for an issuer tax-details block.
+
+**Expected Results:**
+
+* No issuer tax-details block renders.
+* Every other block renders unaffected.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC20-1: Issuer tax-details and tax line render independently
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+Runs once per row of **Test data**.
+
+**Test data:**
+
+| Tax-line prop | Issuer tax-details prop | Issuer tax-details block |
+| --- | --- | --- |
+| Omitted | Supplied | Renders |
+| Supplied | Omitted | Does not render |
+| Supplied | Supplied | Renders |
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with the tax-line and issuer tax-details props set per the row.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the row's props.
+2. Inspect the output for the tax line and the issuer tax-details block.
+
+**Expected Results:**
+
+* Each slot's presence matches its own prop, independent of the other slot's state.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC21-1: Tax line behaves the same on invoice and receipt
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Reserved extension slots
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with every other line supplied and no tax-line prop supplied.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the order-value lines.
+
+**Expected Results:**
+
+* No tax line renders on the receipt.
+* The reserved slot's omitted behaviour matches `InvoicePdf`'s.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC22-1: Preformatted amount content renders exactly as supplied
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression, release
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with Order Total supplied as a `ReactNode` carrying custom markup — a currency symbol and a tooltip wrapper — rather than a plain string.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-condition.
+2. Inspect the rendered Order Total row.
+
+**Expected Results:**
+
+* The Order Total row renders the supplied markup unchanged.
+* No value is recomputed, reformatted, or stripped down to plain text.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC23-1: Labels render from the copy prop, not a default
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` and `ReceiptPdf` are each rendered with a copy prop naming labels in a non-English locale for every row they show.
+
+**Steps:**
+
+1. Render each component with the pre-conditions.
+2. Inspect every rendered label.
+
+**Expected Results:**
+
+* Every label reads the supplied copy prop's text.
+* No row falls back to an English or other built-in label.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC24-1: A whitespace amount still renders its row structure
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with the Subtotal content supplied as a whitespace-only `ReactNode`, and every other required line supplied normally.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-condition.
+2. Inspect the Subtotal row.
+
+**Expected Results:**
+
+* The Subtotal row still renders its label and row structure.
+* The row is not silently dropped for carrying whitespace content.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC25-1: Neither component shows a loading or error state
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` and `ReceiptPdf` are each rendered with a full set of props, with no network access available to the test environment.
+
+**Steps:**
+
+1. Render each component with the pre-conditions, network access blocked.
+2. Inspect the rendered output.
+
+**Expected Results:**
+
+* Each component renders its content immediately from props.
+* Neither shows a loading skeleton or a fetch-error state.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC26-1: Re-rendering with new props leaves no stale content
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered once, then re-rendered with an entirely new, unrelated set of props for a different invoice.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the first set of props.
+2. Re-render it with the second set of props.
+3. Inspect the output after the second render.
+
+**Expected Results:**
+
+* The second render shows only the second set of props' content.
+* No row from the first render's props persists.
+
+## Reconciliation
+
+**Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
+(SC-1–SC-17) were taken independently from the same outline and reconciled
+below. No contradiction: every finding either confirmed a scenario, exposed a
+real gap the scenario pass had not written, or was a misreading/duplicate the
+existing scenarios already cover.
+
+| Finding | Disposition |
+| --- | --- |
+| TC1, TC8 (fully supplied document) | Already covered: `SC-1`, `SC-7` |
+| TC2, TC3 (bank reference/rails given or withheld together) | Already covered: `SC-1`, `SC-2` |
+| TC4 (Insurance conditional) | Already covered: `SC-3`, `SC-4` |
+| TC5 (Subtotal/Order Total survive Insurance's absence) | Already covered: `SC-4` |
+| TC6 (Replaced by conditional) | Already covered: `SC-5`, `SC-6` |
+| TC7 (Bill To/Ship To never echo each other, invoice) | Real gap. **Folded in:** `shared-ui-invoice-and-receipt-pdf-SC-19` |
+| TC9 (payment breakdown keeps all four lines at zero values) | Real gap. **Folded in:** `shared-ui-invoice-and-receipt-pdf-SC-22` |
+| TC10, TC12 (manually-settled mark; Superseded invoice conditional) | Already covered: `SC-9`, `SC-10`, `SC-11`, `SC-12` |
+| TC11 (payment method content renders unchanged across its variants) | **Dropped as redundant:** the general "renders exactly what is given" rule (`SC-16`, `SC-17`) already covers any field, payment method included; no field-specific scenario adds new behavior |
+| TC13 (receipt's own order-value lines and Insurance conditional) | Real gap — the scenario pass had written no scenario proving `ReceiptPdf` renders its order-value lines at all. **Folded in as a new requirement:** "ReceiptPdf renders its order-value lines in the same fixed order as InvoicePdf's", scenario `SC-21` |
+| TC14 (receipt ID and invoice ID never conflate) | Real gap. **Folded in:** `SC-20` |
+| TC15 (Bill To/Ship To never echo each other, receipt) | Real gap. **Folded in:** `SC-29` |
+| TC16, TC17 (tax line conditional on the invoice) | Already covered: `SC-13`, `SC-14` |
+| TC18 (empty-content tax prop vs the prop never being passed) | Real gap, and a genuine reading nobody had settled: whether "supplied" means the prop key is present or its content is non-empty. Not costly to undo, so **decided by the round rather than paused** — see `decisions.md` Q10. **Folded in:** `SC-25` |
+| TC19 (issuer tax-details conditional) | Real gap — `SC-14` only ever tested `taxLine`'s absence, never `issuerTaxDetails`'s. **Folded in:** `SC-30` |
+| TC20 (tax line and issuer tax-details render independently) | Real gap. **Folded in:** `SC-24` |
+| TC21 (tax line's omitted behaviour matches across both documents) | Already covered: `SC-14` (its GIVEN clause already exercises both `InvoicePdf` and `ReceiptPdf` together) |
+| TC22 (rich `ReactNode` markup renders unchanged, not reduced to text) | Real gap — `SC-16` only proved no computation, never that non-string markup survives. **Folded in:** `SC-26` |
+| TC23 (labels render from `copy`, non-English content) | Already covered: `SC-17` |
+| TC24 (a required line with whitespace-only content still renders its row) | Real gap. **Folded in:** `SC-27` |
+| TC25 (neither component shows a loading or error state) | Real gap, and a direct consequence of the "presentation-only, no data fetching" contract every `@grade10/ui` block already carries. **Folded in:** `SC-28` |
+| TC26 (re-rendering with new props leaves no stale content) | **Dropped:** a generic React rendering guarantee true of any prop-driven function component, not a rule specific to this capability's export contract |
+| Uncovered anchors | None — every `## Feature set` group is served by at least one scenario and walked by at least one case |
+| Contradicted readings | None |

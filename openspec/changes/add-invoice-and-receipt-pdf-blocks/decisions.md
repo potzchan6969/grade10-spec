@@ -1,0 +1,52 @@
+## Goals
+
+- Give the Invoice and Receipt PDFs one shared, reviewable implementation in
+  `@grade10/ui`, replacing `grade10`'s placeholder and this repository's own
+  sketch.
+- Carry every line `winner-order/spec.md` and
+  `docs/references/auction-invoice-and-receipt-contents.md` already require,
+  as props — no new content, no new requirement.
+- Leave an optional `ReactNode` slot for the two things nobody has confirmed
+  yet (the tax line, a formal tax receipt's company/tax-ID block), so the
+  change that eventually answers either does not also owe a new prop.
+
+## Non-Goals
+
+- Rendering an actual `.pdf` file. `InvoicePdf`/`ReceiptPdf` are ordinary
+  `@grade10/design-system`-composed DOM components, the same family as every
+  other `@grade10/ui` block; turning the rendered page into a stored,
+  downloadable PDF file is `grade10`'s own delivery mechanism (a headless
+  render/print step), not this component's job.
+- Wiring the components into `grade10`'s real invoice/receipt data or
+  replacing its `PLACEHOLDER_RECEIPT_PDF` path. That is `grade10`'s task,
+  named in this change's impact but not built here.
+- Defining the tax line's rate, regime or shape. A separate change owns it;
+  this one only reserves the slot.
+- Answering whether a receipt needs Grade10's company details and a tax ID.
+  Finance owns it; this change only reserves the slot.
+- Resolving the invoice/receipt ID format disagreement
+  (`docs/references/auction-invoice-and-receipt-contents.md#open-questions`).
+  Out of scope, as it is everywhere else that has touched these documents.
+- Changing anything `winner-order/spec.md` already requires about either
+  document's content, controls or visibility.
+
+## Decisions
+
+| Q | Asked | Decided | Instead of |
+| --- | --- | --- | --- |
+| Q1 | Two capabilities or one combined `invoice-and-receipt-pdf` capability? | Two separate capabilities, `shared/ui/invoice-pdf` and `shared/ui/receipt-pdf`, each its own export contract (author's choice) — **superseded by Q9** | One combined capability sharing a single spec — considered: the two documents are ~90% the same layout, but a combined spec makes an invoice-only or receipt-only requirement change harder to scope to one PR |
+| Q2 | Does the reserved tax-line prop ship in this change's contract? | Yes, as an optional `ReactNode` `taxLine` prop marked ❓ (author's choice) | Exclude it entirely until the tax change defines a shape (recommended) — rejected: the author preferred reserving the slot now so the tax change adds a value, not a prop |
+| Q3 | Does receipt-pdf reserve a company/tax-ID block now? | Yes, as an optional `ReactNode` `issuerTaxDetails` block marked ❓ (author's choice) | Exclude until Finance answers (recommended) — rejected: same reasoning as Q2, reserving the slot costs nothing and saves a later prop addition |
+| Q4 | How do the components actually render — DOM composed of `@grade10/design-system`, or a PDF-native renderer (react-pdf/Takumi-style)? | Ordinary DOM block, same family as every other `@grade10/ui` block; the app prints it to an actual PDF file (recommended) | A PDF-native renderer — rejected: incompatible with `@grade10/design-system`'s DOM primitives, and a new rendering-engine dependency needs its own recorded product decision under CLAUDE.md's package list |
+| Q5 | Does this change carry a new 🚧 line on Post-Bidding, or is it component-contract-only? | Contract-only; `page_waived` recorded in `.openspec.yaml` (recommended) | Mark it 🚧 as a live-content fix — rejected: every fact either document renders is already marked (🚧 or ❓) on Post-Bidding; nothing here is a new reader-visible outcome |
+| Q6 | How do the components receive amounts and dates — raw minor units plus currency code, or preformatted content? | `ReactNode`, already formatted under `shared/money-amounts`' collector-facing shape, passed in by the consumer — decided by the round | Raw `{ amountMinor, currencyCode }` per line — rejected: every existing `@grade10/ui` block (`AuctionOrderRow`, `AuctionOrderDetail`) already takes amounts and dates as `ReactNode`; formatting and locale stay the app's job, consistent with the component-contract rule that no i18n reaches `@grade10/ui` |
+| Q7 | Where do the layout pieces both documents share (the sheet frame, meta rows, party blocks, the multi-column table, summary rows) live? | Redrawn by Q9's cascade: private files inside the one `packages/ui/src/blocks/invoice-and-receipt-pdf/` directory, no cross-capability home needed — decided by the round | Originally `packages/ui/src/blocks/shared/` (decided by the round, while Q1 still held two capabilities) — superseded: once `InvoicePdf` and `ReceiptPdf` share one capability and one block directory, the pieces they share are ordinary private files in that directory, not cross-capability code, so `blocks/shared/` adds nothing |
+| Q8 | Does `InvoicePdf` carry the full bank rails (SWIFT/FPS/HK local details), or only the bank reference? | Full bank rails, in addition to the bank reference (author's choice) | Bank reference only (recommended) — rejected: the reference doc lists the rails under the Invoice PDF's "Other information", and `winner-order/spec.md`'s invoice-fields requirement only carries Bank reference today, with SWIFT/FPS/HK local details written under a separate Order Summary "ways to pay" requirement; the author chose to carry the rails on the PDF anyway rather than leave them screen-only |
+| Q9 | Revisit Q1 — one capability or two? | One capability, `shared/ui/invoice-and-receipt-pdf`, exporting both `InvoicePdf` and `ReceiptPdf` from one spec (author's choice, reopening Q1) | Keep two capabilities (Q1's original choice) — reversed: the round's readers (`simpler`, then the verifier) showed Q1's stated reason doesn't hold, since OpenSpec deltas are per-requirement, not per-capability, so one spec scopes an invoice-only or receipt-only change just as cleanly, with one spec, one journeys file and one `feature-tcs.md` instead of two. Folding into the existing `shared/ui/auction-order` capability was also considered and rejected: that capability's cohesion is order display and the address form, not documents |
+| Q10 | The blind pass (`feature-tcs.md` TC18) found the requirements pass never defined whether `taxLine`/`issuerTaxDetails` count as "supplied" when the prop is passed but its content is empty, as distinct from the prop not being passed at all. Which reading? | A reserved slot renders whenever its prop key is supplied, regardless of whether the content is empty — absence of the prop, not emptiness of its content, is what withholds the row (`shared-ui-invoice-and-receipt-pdf-SC-25`) — decided by the round at reconciliation | Treat empty content the same as withheld (no row either way) — rejected: this is not a costly-to-undo product judgment, just an implementation-semantics gap the blind pass surfaced; "supplied" reading as "the prop key is present" matches how every other optional slot in this contract is phrased (`replacedBy`, `supersededInvoice`) and is the more predictable default for a consumer who explicitly passed something |
+
+## Raised
+
+| Capability | Raised | Landed |
+| --- | --- | --- |
+| `shared/ui/invoice-and-receipt-pdf` | Does `taxLine`/`issuerTaxDetails` count as "supplied" when the prop is passed but its content is empty, as distinct from the prop never being passed at all? (`feature-tcs.md` TC18) | Q10 |
