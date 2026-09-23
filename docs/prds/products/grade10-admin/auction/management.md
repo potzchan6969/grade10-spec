@@ -63,10 +63,13 @@ the card is in the winner's hands. The collector's half is
   slug remains reserved and directly accessible. Its listing code stays
   reserved and never resolves as a route; explicit hard deletion is outside
   this rule
-- **Media** — a picked file is previewed and stored only on confirm, then
-  shown at card size with a zoom preview on hover; an item joins, is
-  replaced, removed or re-captioned until the close — [Auction Display ·
-  Media Gallery](/p/grade10-site/auction/display#auction-details)
+- 🚧 **Media** — an operator can choose reusable assets from the selected
+  inventory product or upload media directly to the listing, then order every
+  item together. A chosen product asset becomes part of the listing on Save:
+  later product-media edits, reordering, or deletion do not change that lot.
+  A picked direct-upload file is previewed and stored only on confirm; an item
+  joins, is replaced, removed or re-captioned until the close — [Auction
+  Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
 - **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count

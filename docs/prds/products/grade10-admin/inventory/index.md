@@ -20,3 +20,21 @@ before and after — so the arithmetic is never lost.
 This is an operator product: everything here happens in the admin console,
 and the number that matters is whether stock reconciles — available plus
 every hold, grouped by who holds it, equal to what the house actually has.
+
+## Product Assets
+
+| Rule | Value |
+| --- | --- |
+| Files | JPEG, PNG, WebP, AVIF, MP4, WebM or QuickTime |
+| File size | At most **100 MiB** each |
+| Gallery | **0 to 8** images or videos, in the inventory admin's order |
+
+- 🚧 **Reusable product media** — an inventory admin keeps photographs and
+  video on the catalogue product, not on an individual Cert ID. The gallery
+  can be added to, replaced, reordered, or cleared while the product record
+  remains editable. It prepares material for Auction; it does not appear on a
+  storefront product page.
+- 🚧 **Stable auction selection** — when an auction operator selects a product
+  asset for a listing and saves, that listing keeps its own copy of the
+  selected media. Changing, reordering, or removing the product gallery later
+  does not change the listing.
