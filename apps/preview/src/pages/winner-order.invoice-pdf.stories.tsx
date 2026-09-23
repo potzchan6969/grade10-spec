@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
@@ -9,6 +8,7 @@ import {
   MetaRow,
   OrderValueTable,
   PartiesSection,
+  PartyBlock,
   PdfSheet,
   SummaryRow,
 } from "./winner-order-pdf.story-shared";
@@ -27,11 +27,9 @@ import {
  */
 function InvoicePdfPreview({
   method = "card",
-  replaced = false,
   tax = false,
 }: {
   method?: "card" | "bank";
-  replaced?: boolean;
   tax?: boolean;
 }) {
   const total = method === "card" ? "3,232.25" : "3,170.00";
@@ -39,31 +37,27 @@ function InvoicePdfPreview({
   return (
     <PdfSheet>
       <HStack hAlign="space-between" vAlign="start">
-        <VStack gap="xs" hAlign="start">
-          <Text as="h2" size="xl" weight="bold">
-            Invoice
-          </Text>
-          {replaced ? <Badge variant="error">Replaced</Badge> : null}
-        </VStack>
+        <Text as="h2" size="xl" weight="bold">
+          Invoice
+        </Text>
         <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
       </HStack>
 
-      {replaced ? (
-        <Text size="sm" tone="error">
-          Replaced — superseded by INV-202610-LK7P2Q-02. Kept for the record
-          only; it carries no invoice status.
-        </Text>
-      ) : null}
-
-      <VStack className="max-w-sm" gap="xs" hAlign="stretch">
-        <MetaRow label="Invoice number" value="INV-202609-LK7P2Q-01" />
-        <MetaRow
-          label="Payment method"
-          value={method === "card" ? "Card" : "Bank transfer"}
-        />
-        <MetaRow label="Date of issue" value="September 15, 2026 · 11:04 HKT" />
-        <MetaRow label="Date due" value="September 22, 2026 · 11:04 HKT" />
-      </VStack>
+      <HStack hAlign="space-between" vAlign="start">
+        <VStack className="max-w-sm" gap="xs" hAlign="stretch">
+          <MetaRow label="Invoice number" value="INV-202609-LK7P2Q-01" />
+          <MetaRow
+            label="Payment method"
+            value={method === "card" ? "Card" : "Bank transfer"}
+          />
+          <MetaRow
+            label="Date of issue"
+            value="September 15, 2026 · 11:04 HKT"
+          />
+          <MetaRow label="Date due" value="September 22, 2026 · 11:04 HKT" />
+        </VStack>
+        <PartyBlock heading="Grade10" issuer />
+      </HStack>
 
       <PartiesSection />
 
@@ -154,10 +148,9 @@ const meta = {
   parameters: { layout: "padded" },
   argTypes: {
     method: { control: "inline-radio", options: ["card", "bank"] },
-    replaced: { control: "boolean" },
     tax: { control: "boolean" },
   },
-  args: { method: "card", replaced: false, tax: false },
+  args: { method: "card", tax: false },
 } satisfies Meta<typeof InvoicePdfPreview>;
 
 export default meta;
