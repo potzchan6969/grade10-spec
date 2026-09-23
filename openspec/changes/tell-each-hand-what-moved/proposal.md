@@ -71,6 +71,7 @@ See [Non-Goals](decisions.md#non-goals).
   an answer, and takes `--reviewed` on the hand's word; `lib/wording.mjs`
   and `lib/moves.mjs` send one message per person per landing, quoting what
   moved.
+- `tools/relay/src/land.ts` - `checkReviewed` takes the hand's word.
 - `tools/manual/src/` - My turn lists a small move until its hand reads it;
   Told now and the chip quote what moved and whether it holds.
 - `.claude/skills/workflow-round/` - the re-read reads the quoted move.

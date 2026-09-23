@@ -1,177 +1,150 @@
-## Context
-
-The motivation is the [proposal](proposal.md)'s. The machinery it changes:
-
-- **Reading** — `upstreamOf` (`tools/manual/src/store/upstream.mts`) hashes
-  all that is before each artifact with `contentIdOf` and dates the change's
-  own artifacts, onto every in-flight entry
-- **Verdict** — `behindOf` (`tools/manual/src/api/stages.ts`) compares the
-  `reviewed:` id, or else the commit dates (`newer`); it names whole
-  artifacts, never a row or a line
-- **Record** — `reviewed:` is written by `plan:land --reviewed` with no hand's
-  word and by `reviewedAfterDecisions`; 58 of 60 in-flight records carry none
-- **Told** — `newlyBehind` (`scripts/openspec/lib/moves.mjs`) tells the
-  earliest newly behind artifact's hand; Told now, the chip and the digest read
-  that same artifact
-- **Held** — `plan-land.mjs` step 4 and `archive-preflight.mjs` refuse on any
-  behind artifact
-
-## Goals / Non-Goals
-
-**Goals:**
-
-- **No new stored state** — one scalar `reviewed:` id per artifact; the before
-  text is git's, and the class one pure function every reader shares
-
-**Non-Goals:**
-
-- **A second hasher** — `contentIdOf` and what it hashes stay as they are
-- **The archive gate** — it refuses any behind artifact today and still does
-
 ## Decisions
 
 ### What Moved Is Read From Git
 
-Q1 and Q7 govern it. Where an artifact's `reviewed:` id differs from its
-current id, the store walks the commits touching what is before it, newest
-first, to the first whose texts hash to the recorded id under `upstreamOf`'s
-own construction. Those texts are the before, the checkout's the after, and
-the next commit in the walk dates `since`. No match — a shallow checkout,
-`NO_GIT`, an id never on `main` — reads the artifact behind as a whole, and
-major. `upstreamOf` takes a text reader, so one construction serves the disk
-and a revision; `GitIndex` gains a synchronous `log` and `cat-file` beside
-`readBlobs`, since the snapshot is synchronous. Rejected: a per-unit id or a
-text snapshot in the record, a copy of what git holds; the commit that wrote
-the line, which is wrong for a backfilled id and needs the hash check anyway.
+Q1 and Q7 govern it: the record keeps one id per artifact, the before is git's.
 
-### Units Come From the Readers That Exist
+- **The line's commit** — where the `reviewed:` id differs from the current
+  one, `git log -1 --format=%H -S<id> -- <record>` through `walkGit`
+  (`store/git.mts`) finds the commit that wrote it, `plan:land`'s own `L`
+- **The before** — `upstreamOf`'s items and files read at that commit, one
+  `git show <sha>:<path>` each through `walkGit`, a page through `parsePage`
+  and `sectionTextOf`, hashed once with `contentIdOf`; a match is the before
+- **No before** — no line, no commit or a missed hash is one whole move,
+  major, and step 4 says which; a git refusal throws in `plan-land.mjs` and
+  `archive-preflight.mjs`, and the manual keeps `walkGit`'s one warning
+- **`since`** — `beforeOn` renamed, dating page files by `commitOf` too
+- **Rejected** — walking history for a match, which helps only a line written
+  outside `plan:land`; rebuilding the reading at a revision, where a changed
+  link, capability or waiver reads whole; a per-unit id or text in the record;
+  a second git reader beside `readBlobs`, so `GitIndex` is unchanged
 
-Q1 governs it. `unitsOf` splits an item with the store's own parsers: a row
-through `decisionRows`, a requirement through `deltaRequirementSections`, a
-case through the section `readTestCases` finds, anything else by `##` section.
-A row, a requirement and a case are quoted whole; a section from its first to
-its last changed line. Rejected: a line-diff dependency, which cuts a row
-mid-cell.
+### Units Come From One Outline Walk
+
+Q1 governs it: one `outline` walk (`store/markdown.mts`) per file puts each
+line in one unit — a Decisions row through `tableRows` keyed by Q-id, a
+`### Requirement:` block, a case `CASE_HEADING` matches, each `##` section
+less those, and the preamble before the first heading.
+
+- **Key** — `<capability>/<key>` in `specs/**`; a repeated key reads it whole
+- **Quote** — a unit trimmed of its common leading and trailing lines, a row
+  by its moved cells; a property test holds that the units give back the text
+- **Browser-safe** — both heading patterns move beside `outline`; none throws
+- **Rejected** — `decisionRows`, `deltaRequirementSections` and
+  `readTestCases`, three shapes with no text to quote, the last throwing on an
+  old revision; a line diff, which cuts a row mid-cell
 
 ### The Class Is One Pure Function
 
-Q3, Q4 and Q6 govern it. `classOf` reads a unit's kind and place, never its
-meaning. A Decided cell that went from `❓ <role> - recommended: X` to `X`, or
-to `X - <whose word>`, reads as unmoved; then the first rule that matches
-decides.
+Q3, Q4 and Q6 govern it. `decidedOf(cell)` takes off the ❓ wrapper by
+`ASKED_OF`'s pattern and `recommended:`, then one attribution from a closed
+set kept in `src/api` with `DECIDED_BY_THE_ROUND`, which `lib/held.mjs`
+imports: `decided by the round`, `the owner's word`, `the round's word`, `the
+<role>'s word`. A row is compared cell by cell and takes its largest class;
+the first rule that matches decides.
 
 | # | When | Class |
 | --- | --- | --- |
-| 1 | Equal once whitespace is collapsed | none |
-| 2 | Added or removed | major |
-| 3 | Equal once punctuation is removed | small |
-| 4 | A row whose Decided cell moved, other than gaining the ❓ wrapper | major |
-| 5 | Any other row move: Asked, Instead of, the ❓ wrapper put on | small |
-| 6 | A line under the proposal's `## Why` | small |
-| 7 | Anything else | major |
+| 1 | Equal once whitespace is collapsed, `/\s+/` as `contentIdOf` does | none |
+| 2 | A unit added or removed | major |
+| 3 | Equal once punctuation, `\p{P}` not touching a digit, is removed | small |
+| 4 | A Decided cell | none on an equal `decidedOf` value, small where the ❓ wrapper was put on, else major |
+| 5 | An Asked or Instead of cell | small |
+| 6 | The proposal's `## Why` section | small |
+| 7 | Anything else, the preamble included | major |
 
-An artifact whose units all read none is not behind, so taking a
-recommendation needs no carve-out: `reviewedAfterDecisions` and its call are
-deleted from `plan-land.mjs`. Rejected: classing by which artifact moved,
-which holds on a reworded Asked cell; a class the landing sets, a judgement
-the non-goals rule out.
+A taken recommendation reads none, so it needs no carve-out. Rejected:
+classing by which artifact moved; a class the landing sets.
 
 ### Behind Keeps One State
 
-Q3 and Q5 govern it. `BehindArtifact` gains `moved` and `holds`. Small is
-today's Behind: shown, told, in the digest after seven days, refused by the
-fold. Major adds `holds`, which step 4 of `plan-land.mjs` alone refuses on;
-`archive-preflight.mjs` is unchanged. My turn and the digest read `behindOf`
-for each of the person's artifacts, not the chip's earliest; the chip says
-whether it holds. Rejected: a `read` verb and a second state beside behind.
+Q3 and Q5 govern it: a major move holds, and small is today's Behind.
+
+- **Types** (`src/api/types.ts`) — `Moved = { item, key, before?, after?,
+  major }`; `UpstreamRead = { id, items, moved?, since? }`, the store writing
+  `moved` through `movedOf`; `BehindArtifact = { artifact, moved, since? }`
+- **Holding** — `holdsOf(behind)` in `src/api/stages.ts`, true on a major
+  move: step 4 refuses every landing after it until its own landing or read;
+  `archive-preflight.mjs` still refuses any behind artifact
+- **Surfaces** — My turn and the digest read each of the person's behind
+  artifacts; the chip says whether it holds
+- **Deleted** — `newer`, `firstNewerOn`, `beforeOn`, `changed`, `whole`, the
+  dated branch of `behindOf`, and `oldest` with the `newer` block
+- **Rejected** — a `read` verb and a second state; `holds` stored on the read
 
 ### Every Artifact Landing Writes the Line
 
-Q7 governs it. `plan-land.mjs` writes `reviewed:` beside `landed_by:` on every
-artifact landing, its id read over `MAIN` with the landing's files laid over
-it, through the overlay `reviewedAfterDecisions` uses today; a group landing
-writes none, so a tick clears nothing. Deleted: `newer`, `firstNewerOn` and
-the artifact's own date in `upstreamOf`, and the dated branch of `behindOf`.
-A written artifact with no line reads behind as a whole, and major. Rejected:
-the dates kept as a fallback, which a tick moves.
+Q7 and Q8 govern it: a hand's landing writes `reviewed:`, a tick never does.
+
+- **One read** — step 4 reads the change over a worktree at `MAIN` with the
+  landing's carried and written files laid over it, the overlay kept from
+  `reviewedAfterDecisions`; it gives both the verdict and the id
+- **No line** — for an artifact with nothing before it and for a group;
+  `readAgainst`'s refusal fails no landing
+- **Shallow clone** — step 3's `fetchMain` runs `git fetch --unshallow` where
+  `git rev-parse --is-shallow-repository` says true, else stops with stderr
+- **`--reviewed`** — an artifact landing carrying only the record: it resolves
+  the hand in step 2 and skips the row and the held rows; the bypass and the
+  other `reviewedOnly` branches are deleted
+- **Relay** — `checkReviewed` (`tools/relay/src/land.ts`) gains `checkWord`'s
+  check of the word and the hand, keeping its record-only path check; the
+  `reread` job's agent redraws for the hand's word
+- **Rejected** — the id over the branch checkout or tip, a tree `main` never
+  holds; the dates as a fallback, which a tick moves; the agent landing a read
 
 ### One Message Per Person Per Landing
 
-Q2 governs it. `toldOf` in `lib/moves.mjs` replaces `newlyBehind`: an artifact
-is reached where its `moved` at the head holds a unit its `moved` at the base
-did not, grouped by the handle of its role, keyed `<change>:<head>:<handle>` —
-`<role>` for an unnamed hand — through the sent-keys file. `rereadMatrixOf`
-reads the same reach; Told now calls `toldOf` with an empty base. Rejected:
-one message per artifact, several to one person for one landing.
+Q2 governs it: `toldOf` in `src/api/told.ts` replaces `newlyBehind`, and
+`lib/moves.mjs`, `rereadMatrixOf` and Told now, with an empty base, call it.
 
-### The Hand Says It Was Read
-
-Q8 governs it. `--reviewed` resolves the hand in step 2 like any landing; its
-bypass and the wake with no sender are deleted. Rejected: the agent landing
-the read.
+- **Reach** — a unit `(item, key, after)` in `moved` at the head and not at
+  the base; a whole reading is one unit keyed by the artifact, the id after
+- **Key** — `messagesOf` builds `<change>:behind:<handle or role>` against
+  the run's sent-keys file, one message per handle or unnamed role
+- **Words** — `movedText` (`lib/wording.mjs`) replaces `behindText` in the
+  message, Told now, the digest and `behindLabelOf`; the kind stays `behind`
+- **Rejected** — a message per artifact; `toldOf` in node-only `lib/moves.mjs`
 
 ## Service Interfaces
 
-Pure over their arguments; only the walk reads git.
-
-- **`unitsOf(item, text) → Unit[]`** — `Unit = { kind: "row" | "requirement" |
-  "case" | "section", item, key, text }`
+- **`movedOf(item, before, after) → Moved[]`** — pure, `src/api/moved.ts`;
+  split, pairing and class are private, the class table tested through it
 
   ```text
-  unitsOf("decisions", "…| Q3 | Does every move hold the next landing? | A major move holds … |…")
-  → [{ kind: "row", item: "decisions", key: "Q3", text: "| Q3 | Does every move hold … |" }, …]
+  movedOf("decisions", "| Q3 | … | ❓ pm - recommended: X | … |", "| Q3 | … | X - the owner's word | … |") → []
+  movedOf("decisions", "| Q3 | … | Every move holds | … |", "| Q3 | … | A major move holds | … |")
+  → [{ item: "decisions", key: "Q3", before: "Every move holds", after: "A major move holds", major: true }]
   ```
 
-- **`classOf(unit, before?, after?) → "none" | "small" | "major"`** — no
-  `before` is an added unit, no `after` a removed one
+- **`toldOf(base, head) → Told[]`** — pure; `Told = { hand?, roles: Role[],
+  behind: BehindArtifact[] }`, worded by `movedText`, which quotes a unit once
 
   ```text
-  classOf({ kind: "row", item: "decisions", key: "Q4" },
-    "| Q4 | … | ❓ pm - recommended: Everything … but a named small set | … |",
-    "| Q4 | … | Everything … but a named small set - the owner's word | … |")
-  → "none"
-  ```
-
-- **`toldOf(base, head) → Told[]`** — `Told = { key, id, hand?, role, reached:
-  { artifact, holds }[], moved: { item, key, before?, after?, major }[] }`,
-  worded by `movedText` in `lib/wording.mjs`
-
-  ```text
-  { key: "tell-each-hand-what-moved:4e1f0c2:ecchochan", hand: "ecchochan", role: "tech",
-    reached: [{ artifact: "tech-design", holds: true }, { artifact: "tasks", holds: true }],
-    moved: [{ item: "decisions", key: "Q3", before: "…Every move holds…", after: "…A major move holds…", major: true }] }
-
-  *What moved* — before `tech-design`, `tasks` on <change>
-  `decisions` Q3, major — before: Every move holds … — after: A major move holds …
-  Holds your next landing of `tech-design`, `tasks` until you read it again.
+  *What moved* on <change>, before `tech-design`, `tasks`
+  `decisions` Q3, major — before: Every move holds — after: A major move holds
+  Holds every landing after `tech-design` until you read it again or land it.
   ```
 
 ## Risks / Trade-offs
 
-- [Risk] The walk slows the snapshot → it runs only where the ids differ,
-  stops at the first match, and reads a revision in one `cat-file --batch`
-- [Risk] A checkout without history holds every move → closed on purpose; the
-  manual, notify, digest and test workflows fetch in full, and on a shallow
-  relay clone step 4 fetches `main` unshallowed once and reads again
-- [Risk] An artifact reaching `main` outside `plan:land` has no line and holds
-  → step 4 names it; `--reviewed` on its hand's word writes the line
-- [Risk] An answer that extends the recommendation reads unmoved → the taken
-  reading allows nothing after `X` but ` - <whose word>`, the form
-  `takeRecommendations` writes (`lib/held.mjs`)
+- [Risk] A changed link, capability or waiver, a line typed by hand, or an
+  reaching `main` outside `plan:land` reads whole → held, step 4 says why, and
+  `--reviewed` on its hand's word writes the line
+- [Risk] A git refusal reads as a move → it throws in the scripts
+- [Risk] `X - only for admins` reads as taken → the attribution set is closed
+- [Risk] A linked page section is hashed whole, so a reworded unmarked line
+  or another change's fold is major → one hash construction; step 4 quotes
+  the section, and `--reviewed` on the hand's word clears it
 
 ## Migration Plan
 
-1. **Backfill** — a one-off script writes, for each in-flight change and each
-   written, unwaived artifact with no `reviewed:` line, the content id of what
-   was before it at the artifact's own last commit, which is what the dated
-   path reads as drawn; it writes only a missing line, so a rerun writes
-   nothing
+1. **Backfill** — a one-off script writes `readAgainst`'s current id for every
+   in-flight, written, unwaived artifact with no line, 58 of 60 records, that
+   `behindOf` does not name today; one it names gets none and is held whole
+   until read, as today. It writes only a missing line, so a rerun is safe
 2. **Silenced** — one commit touching only `reviewed:` keys, so `keysOnly`
-   puts every change in `suppressed`: no message, no re-read wake; it lands
-   before the code in one pull request, and the script is deleted after it
-3. **What moves** — an artifact whose linked page section changed after its
-   last commit now reads behind, which the dated path never showed; the dry
-   run lists them first
-4. **Rollback** — revert the code commit and the dated path returns, reading
-   the backfilled lines by id; revert the backfill commit, also suppressed,
-   to restore today's verdicts exactly
+   puts every change in `suppressed`. It lands before the code in one pull
+   request, is rerun on it rebased just before merge, and the script goes
+3. **Rollback** — revert the code; the old id comparison reads every line, so
+   a before moved since its line, a taken recommendation included, reads
+   behind until read, and no line takes the dated path. The backfill stays
