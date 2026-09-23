@@ -495,6 +495,7 @@
         "payout_recorded": "Paid out {amount} at declared value",
         "payout_reversed": "Payout reversed: the card turned up",
         "upcharge_waived": "Upcharge waived",
+        "handed_back": "Handed back {count, plural, one {# card} other {# cards}}",
         "collected": "Collected",
         "cancelled": "Submission cancelled",
         "expired": "Submission expired"
