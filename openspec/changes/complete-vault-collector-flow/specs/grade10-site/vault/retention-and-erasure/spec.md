@@ -13,8 +13,8 @@ account and an operator runs.
 ## Feature set
 
 - Retention windows
-  - Three classes: the agreements, the identity records behind them, and the
-    item photographs
+  - Four classes: the agreements, the identity records behind them, the item
+    photographs, and the record of each case
   - Per brand, per class: days after the case ends, because how long evidence
     is kept is a decision about a jurisdiction
   - The review is a review: it flags, gauges and writes nothing, so a wrong

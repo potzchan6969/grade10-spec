@@ -103,7 +103,8 @@
     "draftCap": "最多可同時保留 3 宗未送出的申請。",
     "draftNext": "加入相片以完成這宗申請。",
     "answerBy": "請於 {when} 前回覆",
-    "inVaultSince": "自 {when} 起存入金庫"
+    "inVaultSince": "自 {when} 起存入金庫",
+    "failed": "暫時無法載入你的個案，請再試一次。"
   },
   "lane": {
     "financed": "連貸款",
@@ -170,7 +171,8 @@
       },
       "statementTick": "我已閱讀個人資料收集聲明。",
       "statementRequired": "請先勾選方格，確認你已閱讀，才可送出。",
-      "statementUnset": "聲明內容仍在撰寫中。此刻勾選仍然有效，並會記錄現時顯示的版本。"
+      "statementUnset": "聲明內容仍在撰寫中。此刻勾選仍然有效，並會記錄現時顯示的版本。",
+      "statementLink": "閱讀聲明"
     },
     "sent": {
       "title": "申請已交到我們手上",
@@ -418,7 +420,8 @@
       "duration": "約 30 分鐘。",
       "moreShops": "更多門市開放後會顯示在此。"
     },
-    "rules": "可於預約時段前隨時改期或取消。錯過時段，我們會結束該次預約 — 個案本身仍然保留。"
+    "rules": "可於預約時段前隨時改期或取消。錯過時段，我們會結束該次預約 — 個案本身仍然保留。",
+    "loadFailed": "暫時無法載入，請再試一次。"
   },
   "ceremony": {
     "loading": "正在開啟你的文件…",
@@ -620,12 +623,30 @@
       "verified": "有效至 {when} · 於 {day} 以{how}核實",
       "none": "尚未有身分紀錄在案，下次到店時會為你核實。",
       "out": "自 {when} 起有一項核實正在進行。",
-      "lapsed": "你上一次的核實已於 {when} 失效。"
+      "lapsed": "你上一次的核實已於 {when} 失效。",
+      "title": "你的身分",
+      "refused": "你上一次的核實於 {when} 未獲接納。",
+      "how": "{how, select, manual {到店方式} hosted {網上方式} other {}}",
+      "undated": {
+        "verified": "已核實 · 於 {day} 以{how}核實",
+        "out": "有一項核實正在進行。",
+        "lapsed": "你上一次的核實已失效。",
+        "refused": "你上一次的核實未獲接納。"
+      }
     },
     "keeps": {
       "title": "我們保留的資料",
       "classes": "按類別列出保留甚麼，以及保留多久。",
-      "reviewed": "會定期覆檢，不會自動刪除。"
+      "reviewed": "會定期覆檢，不會自動刪除。",
+      "class": {
+        "agreements": "協議",
+        "identity": "協議背後的身分紀錄",
+        "photos": "物品相片",
+        "caseRecords": "每個個案的紀錄"
+      },
+      "window": "個案結束後 {days, plural, other {# 天}}",
+      "undecided": "正在決定",
+      "askLink": "如要求被遺忘，請到「你的資料」提出"
     },
     "download": {
       "title": "全部下載",
@@ -650,7 +671,16 @@
       "filed": "已於 {when} 提出要求，將於 {erasedWhen} 起刪除。",
       "cancel": "取消要求",
       "cancelled": "要求已取消。",
-      "windowPassed": "已於 {when} 提出要求，期限已過。"
+      "windowPassed": "已於 {when} 提出要求，期限已過。",
+      "heldWaits": "{reason}，期間不會刪除任何資料；刪除會等到此事完結。",
+      "shopFiled": "此要求已由本店接手，只有本店可以取消。",
+      "eachProduct": "我們的每項服務都會刪除其保留的你的資料。",
+      "windowClosed": "期限已過，此要求無法再取消。"
+    },
+    "failed": {
+      "page": "暫時無法讀取你的資料，請再試一次。",
+      "identity": "暫時無法讀取你的身分核實狀況。",
+      "ask": "暫時無法讀取你的刪除要求，因此暫不能在此提出或取消。"
     }
   }
 }

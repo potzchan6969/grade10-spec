@@ -103,7 +103,8 @@
     "draftCap": "Up to 3 unsent requests at a time.",
     "draftNext": "Add photographs to finish this request.",
     "answerBy": "Answer by {when}",
-    "inVaultSince": "In the vault since {when}"
+    "inVaultSince": "In the vault since {when}",
+    "failed": "Your cases could not be loaded just now. Try again."
   },
   "lane": {
     "financed": "With a loan",
@@ -170,7 +171,8 @@
       },
       "statementTick": "I have read the personal information collection statement.",
       "statementRequired": "Tick the box to confirm you have read it before sending.",
-      "statementUnset": "The statement is still being written. Ticking still works, and records this version."
+      "statementUnset": "The statement is still being written. Ticking still works, and records this version.",
+      "statementLink": "Read the statement"
     },
     "sent": {
       "title": "Your request is with us",
@@ -418,7 +420,8 @@
       "duration": "About 30 minutes.",
       "moreShops": "More shops appear here as they open."
     },
-    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open."
+    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open.",
+    "loadFailed": "This could not be loaded just now. Try again."
   },
   "ceremony": {
     "loading": "Opening your documents…",
@@ -620,12 +623,30 @@
       "verified": "Verified until {when} · checked {how}, {day}",
       "none": "No identity on file. You will be verified at your next visit.",
       "out": "A check is out since {when}.",
-      "lapsed": "Your last check expired on {when}."
+      "lapsed": "Your last check expired on {when}.",
+      "title": "Your identity",
+      "refused": "Your last check was not accepted, on {when}.",
+      "how": "{how, select, manual {at the counter} hosted {online} other {}}",
+      "undated": {
+        "verified": "Verified · checked {how}, {day}",
+        "out": "A check is out.",
+        "lapsed": "Your last check has expired.",
+        "refused": "Your last check was not accepted."
+      }
     },
     "keeps": {
       "title": "What we keep",
       "classes": "What is kept, and for how long, by class.",
-      "reviewed": "Reviewed, never deleted automatically."
+      "reviewed": "Reviewed, never deleted automatically.",
+      "class": {
+        "agreements": "The agreements",
+        "identity": "The identity records behind them",
+        "photos": "The item photographs",
+        "caseRecords": "The record of each case"
+      },
+      "window": "{days, plural, one {# day} other {# days}} after the case ends",
+      "undecided": "Being decided",
+      "askLink": "To be forgotten, ask on Your data"
     },
     "download": {
       "title": "Download all",
@@ -650,7 +671,16 @@
       "filed": "Filed on {when}. Erased from {erasedWhen}.",
       "cancel": "Cancel the request",
       "cancelled": "Request cancelled.",
-      "windowPassed": "Filed on {when}. The window has passed."
+      "windowPassed": "Filed on {when}. The window has passed.",
+      "heldWaits": "Nothing is erased while {reason}; it waits until that ends.",
+      "shopFiled": "The shop has taken this request over, so only the shop can call it off.",
+      "eachProduct": "Each part of our service erases what it holds of yours.",
+      "windowClosed": "The window has passed, so this request can no longer be cancelled."
+    },
+    "failed": {
+      "page": "Your data could not be read just now. Try again.",
+      "identity": "Your identity standing could not be read just now.",
+      "ask": "Your request to be forgotten could not be read just now, so nothing can be asked or cancelled here yet."
     }
   }
 }

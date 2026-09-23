@@ -482,6 +482,7 @@ stands, and where I ask to be forgotten,
 | Agreements | 2,555 days after the case ends |
 | Identity records | 1,825 days after the case ends |
 | Item photographs | 2,555 days after the case ends |
+| Case records | 2,555 days after the case ends |
 
 **Steps:**
 
@@ -489,8 +490,8 @@ stands, and where I ask to be forgotten,
 
 **Expected Results:**
 
-* What the vault keeps lists agreements, identity records and item
-  photographs, each with its window from Test data.
+* What the vault keeps lists agreements, identity records, item photographs
+  and case records, each with its window from Test data.
 * Each window reads as the days kept after the case ends.
 
 ### grade10-site-vault-retention-and-erasure-US5-TC2-1: Your data states that review deletes nothing by itself
