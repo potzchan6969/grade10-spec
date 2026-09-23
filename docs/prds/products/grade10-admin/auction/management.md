@@ -49,20 +49,20 @@ the card is in the winner's hands. The collector's half is
   of the selected product, or `No Cert ID` for an unnumbered unit; each Cert
   ID can have its own live listing, and only one
 - 🚧 **Listing code** — a stable opaque 5-character code, always leading with
-  2 letters, allocated at create and shown on the listing's admin screen for
-  support, finance and reconciliation; never shown to collectors on the
-  public listing page, where the lot reads by title only. Once a winner
-  exists it doubles as the order's payment reference — [Auction Display ·
+  2 letters, allocated when a listing is created and shown read-only in the
+  Listings table and on its admin screen under the existing listing-read
+  access. It is never shown on the public listing page or accepted as a route
+  or access grant. Once a winner exists it doubles as the order's payment
+  reference. The code stays reserved after deletion — [Auction Display ·
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
-- **Listing code access and placement** — operators with existing listing-admin
-  read access see the same read-only code in both the Listings table and listing
-  detail screen; knowing the code cannot grant admin access or private data
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the
   stock are released, the listing leaves browse and search, and its canonical
-  slug remains reserved and directly accessible
+  slug remains reserved and directly accessible. Its listing code stays
+  reserved and never resolves as a route; explicit hard deletion is outside
+  this rule
 - **Media** — a picked file is previewed and stored only on confirm, then
   shown at card size with a zoom preview on hover; an item joins, is
   replaced, removed or re-captioned until the close — [Auction Display ·
@@ -104,8 +104,8 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| Address window | **48 hours** from close; a reopen gives a fresh **48 hours** |
-| Overdue | **48 hours** from lot close while Awaiting Setup; Preparing Invoice has no queue Overdue mark |
+| Address window | **48 hours** from actual close; a reasoned operator reopen gives a fresh **48 hours**; invoice send ends address changes |
+| Overdue | **48 hours** from lot close while Awaiting Setup only; Preparing Invoice has no queue Overdue mark, and its payment timer starts when the invoice is sent and visible to the winner |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
