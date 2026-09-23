@@ -38,7 +38,7 @@
   - Covers: `winner-order-SC-125`–`SC-128`, `SC-209`, and `SC-211`.
   - Verification: contract and public-projection checks.
 
-## 4. Stripe reconciliation (grade10)
+## 4. Stripe reconciliation (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Carry the stored payment reference into Stripe metadata under
   `payment_reference_code` through the existing Stripe creation/webhook path;
