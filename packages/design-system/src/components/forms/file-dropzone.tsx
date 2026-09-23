@@ -15,12 +15,47 @@ import {
   type DragEvent,
   useEffect,
   useId,
+  useLayoutEffect,
   useRef,
   useState,
 } from "react";
 
 /** Binary mebibyte — matches OpenSpec file-size language. */
 export const FILE_DROPZONE_MIB = 1_048_576;
+
+const FILE_ROW_MS = 200;
+const FILE_ROW_EASE = "cubic-bezier(0.22, 1, 0.36, 1)";
+
+function prefersReducedMotion(): boolean {
+  return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+}
+
+/**
+ * Ids added after the first commit. Rows present on mount stay put so a
+ * static list does not play an enter transition.
+ */
+function useEnteringFileIds(
+  files: readonly { id: string }[],
+): ReadonlySet<string> {
+  const knownIds = useRef<Set<string>>(new Set());
+  const primed = useRef(false);
+  const entering = new Set<string>();
+
+  if (primed.current) {
+    for (const file of files) {
+      if (!knownIds.current.has(file.id)) entering.add(file.id);
+    }
+  }
+
+  const live = new Set(files.map((file) => file.id));
+  for (const id of knownIds.current) {
+    if (!live.has(id)) knownIds.current.delete(id);
+  }
+  for (const file of files) knownIds.current.add(file.id);
+  primed.current = true;
+
+  return entering;
+}
 
 export type FileDropzoneItem = {
   id: string;
@@ -407,7 +442,101 @@ type FileDropzoneFileListProps = {
   className?: string;
 };
 
-/** Stack of uploaded file rows. Renders nothing when empty. */
+function FileDropzoneFileMotion({
+  item,
+  enter,
+  spaced,
+  onRemove,
+  copy,
+  disabled,
+}: {
+  item: FileDropzoneItem;
+  enter: boolean;
+  spaced: boolean;
+  onRemove: (id: string) => void;
+  copy: FileDropzoneFileCopy;
+  disabled?: boolean;
+}) {
+  const [present, setPresent] = useState(!enter);
+  const [exiting, setExiting] = useState(false);
+  const onRemoveRef = useRef(onRemove);
+  onRemoveRef.current = onRemove;
+
+  useLayoutEffect(() => {
+    if (!enter || prefersReducedMotion()) {
+      setPresent(true);
+      return;
+    }
+    const frame = requestAnimationFrame(() => setPresent(true));
+    return () => cancelAnimationFrame(frame);
+  }, [enter]);
+
+  useEffect(() => {
+    if (!exiting) return;
+    const timer = window.setTimeout(
+      () => onRemoveRef.current(item.id),
+      FILE_ROW_MS,
+    );
+    return () => window.clearTimeout(timer);
+  }, [exiting, item.id]);
+
+  const open = present && !exiting;
+
+  function startRemove() {
+    if (exiting) return;
+    if (prefersReducedMotion()) {
+      onRemoveRef.current(item.id);
+      return;
+    }
+    setExiting(true);
+  }
+
+  return (
+    <div
+      aria-hidden={exiting || undefined}
+      className={cn(
+        "grid transition-[grid-template-rows] duration-200 motion-reduce:transition-none",
+        open ? "grid-rows-[1fr]" : "grid-rows-[0fr]",
+      )}
+      data-slot="file-dropzone-file-motion"
+      onTransitionEnd={(event) => {
+        if (
+          exiting &&
+          event.propertyName === "grid-template-rows" &&
+          event.target === event.currentTarget
+        ) {
+          onRemoveRef.current(item.id);
+        }
+      }}
+      style={{ transitionTimingFunction: FILE_ROW_EASE }}
+    >
+      <div className="overflow-hidden">
+        <div
+          className={cn(
+            "transition-[opacity,transform,margin] duration-200 motion-reduce:transition-none",
+            open
+              ? "translate-y-0 opacity-100"
+              : "pointer-events-none -translate-y-1 opacity-0 motion-reduce:translate-y-0",
+            spaced && open && "mt-1",
+          )}
+          style={{ transitionTimingFunction: FILE_ROW_EASE }}
+        >
+          <FileDropzoneFile
+            copy={copy}
+            disabled={disabled || exiting}
+            item={item}
+            onRemove={startRemove}
+          />
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * Stack of uploaded file rows. An empty list stays mounted (hidden) so a
+ * file added later can play its enter transition.
+ */
 function FileDropzoneFileList({
   files,
   onRemove,
@@ -415,22 +544,28 @@ function FileDropzoneFileList({
   disabled = false,
   className,
 }: FileDropzoneFileListProps) {
-  if (files.length === 0) return null;
+  const enteringIds = useEnteringFileIds(files);
+
+  if (files.length === 0) {
+    return <div className="hidden" data-slot="file-dropzone-file-list" />;
+  }
 
   return (
     <VStack
       className={cn("w-full", className)}
       data-slot="file-dropzone-file-list"
-      gap="xs"
+      gap="none"
       hAlign="stretch"
     >
-      {files.map((item) => (
-        <FileDropzoneFile
+      {files.map((item, index) => (
+        <FileDropzoneFileMotion
           copy={copy}
           disabled={disabled}
+          enter={enteringIds.has(item.id)}
           item={item}
           key={item.id}
           onRemove={onRemove}
+          spaced={index > 0}
         />
       ))}
     </VStack>
