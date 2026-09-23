@@ -922,11 +922,18 @@ const built = ({ files = LANDED_PLAN, drafts = {}, deleted = [] } = {}) => {
   for (const path of deleted) rmSync(join(made.root, path));
   made.git("config", "user.email", "erin@test");
   made.git("add", "-A");
-  made.git(
-    "commit",
-    "--quiet",
-    "-m",
-    "tick 1.1, and whatever else the build left",
+  // Dated as the plan it builds on: the commit dates are what `behind` reads
+  // where the record carries no id, so a runner that crosses a second between
+  // the two commits would put every artifact after a touched one behind.
+  const at = made.git("log", "-1", "--format=%cI").trim();
+  execFileSync(
+    "git",
+    ["commit", "--quiet", "-m", "tick 1.1, and whatever else the build left"],
+    {
+      cwd: made.root,
+      stdio: ["ignore", "pipe", "pipe"],
+      env: { ...process.env, GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at },
+    },
   );
   made.git("push", "--quiet", "origin", `HEAD:refs/heads/${BRANCH}`);
   return made;
