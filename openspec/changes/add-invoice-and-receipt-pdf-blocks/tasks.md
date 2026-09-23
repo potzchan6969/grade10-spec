@@ -1,0 +1,31 @@
+## 1. InvoicePdf and the shared contract (grade10-spec)
+
+- [ ] 1.1 Write `invoice-pdf.stories.tsx`'s `play`-function proofs for InvoicePdf's own behaviour, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-3`, `SC-4`, `SC-5`, `SC-6`, `SC-13`, `SC-16`, `SC-18`, `SC-19`, `SC-25`, `SC-26`, `SC-27`)
+- [ ] 1.2 Build `InvoicePdf`, its prop types (`InvoicePdfProps`, `InvoicePdfCopy`, `OrderValueLines`, `OrderValueLinesCopy`), and the shared `pdf-document.tsx` layout pieces (`PdfSheet`, `MetaRow`, `PartyBlock`, `ValueRow`, `SummaryRow`) per `tech-design.md`'s Decisions, making 1.1's stories pass (same scenario ids)
+- [ ] 1.3 Add `public-exports.test.ts` asserting `InvoicePdf` and its prop types export from `../../index`; add this directory's `public-exports.test.ts` to `packages/ui/vitest.config.ts`'s `audit` project `include` list, per `tech-design.md`
+- [ ] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
+
+## 2. ReceiptPdf, completing the shared contract (grade10-spec)
+
+Needs group 1's `types.ts` (`OrderValueLines`, `OrderValueLinesCopy`) and `pdf-document.tsx` landed first; not independently parallel with it.
+
+- [ ] 2.1 Write `receipt-pdf.stories.tsx`'s `play`-function proofs for ReceiptPdf's own behaviour, plus the two-component scenarios only both together can prove, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-7`, `SC-8`, `SC-9`, `SC-10`, `SC-11`, `SC-12`, `SC-14`, `SC-15`, `SC-17`, `SC-20`, `SC-21`, `SC-22`, `SC-23`, `SC-24`, `SC-28`, `SC-29`, `SC-30`)
+- [ ] 2.2 Build `ReceiptPdf` and its prop types (`ReceiptPdfProps`, `ReceiptPdfCopy`, `PaymentBreakdown`, `PaymentBreakdownCopy`), reusing group 1's `OrderValueLines` and `pdf-document.tsx` pieces per `tech-design.md`'s "One order-value shape, not two", making 2.1's stories pass (same scenario ids)
+- [ ] 2.3 Extend `public-exports.test.ts` to also assert `ReceiptPdf` and its prop types
+- [ ] 2.4 Retire `apps/preview`'s sketch (`winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx`, `winner-order-pdf.story-shared.tsx`), replacing it with pages that compose the real `InvoicePdf`/`ReceiptPdf` and sample props, dropping the sketch's hardcoded `TAX_RATE` and `formatAmount` per `tech-design.md`'s Risks
+- [ ] 2.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint`
+
+## 3. Wire grade10 onto the real components (grade10)
+
+Needs groups 1 and 2 landed on `main` and the submodule bumped first.
+
+- [ ] 3.1 Bump `external/grade10-spec` to this change's landing
+- [ ] 3.2 Replace the invoice PDF's rendering path and `PLACEHOLDER_RECEIPT_PDF` with `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, wiring real order data through `shared/money-amounts`-formatted `ReactNode` props and the application's own `@grade10/i18n` catalog for `copy` (`winner-order-SC-57`, `winner-order-SC-67`, `winner-order-SC-109`)
+- [ ] 3.3 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
+
+## 4. Walk Winner Order's Invoice and Receipt PDFs (grade10)
+
+- [ ] 4.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a reissued invoice naming its replacement (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-109`)
+- [ ] 4.2 Walk `winner-order-US-02` opening the receipt PDF once paid, before payment, and a manually settled receipt distinguishable from a card- or bank-transfer-settled one (`winner-order-SC-67`, `winner-order-SC-68`, `winner-order-SC-18`, `winner-order-SC-19`)
+- [ ] 4.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 1–2's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
+- [ ] 4.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
