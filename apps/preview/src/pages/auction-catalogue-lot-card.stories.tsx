@@ -20,7 +20,7 @@ const meta = {
   parameters: { layout: "padded" },
   decorators: [
     (Story) => (
-      <div className="w-[17.5rem]">
+      <div className="w-72">
         <Story />
       </div>
     ),
@@ -70,8 +70,9 @@ export const Active: Story = {
   render: () => <WatchedCard lot={activeLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Active")).toBeInTheDocument();
-    expect(canvas.getByText(/Ends in \d+d \d+h/)).toBeInTheDocument();
+    expect(canvas.getByText("Current Bid")).toBeInTheDocument();
+    expect(canvas.getByText(`${activeLot.bidCount} bids`)).toBeInTheDocument();
+    expect(canvas.getByText(/Ends in \d+d \d+h \d+m/)).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", {
         level: 3,
@@ -89,7 +90,7 @@ export const Active: Story = {
 };
 
 /**
- * One card as Featured renders it — lifted shell, title stays a link (the
+ * One card as Featured renders it — white shell, title stays a link (the
  * section already heads the band). The scrolling row lives under Featured.
  */
 export const Featured: Story = {
@@ -98,8 +99,9 @@ export const Featured: Story = {
   render: () => <WatchedCard heading={false} lift lot={activeLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Active")).toBeInTheDocument();
-    expect(canvas.getByText(/Ends in \d+d \d+h/)).toBeInTheDocument();
+    expect(canvas.getByText("Current Bid")).toBeInTheDocument();
+    expect(canvas.getByText(`${activeLot.bidCount} bids`)).toBeInTheDocument();
+    expect(canvas.getByText(/Ends in \d+d \d+h \d+m/)).toBeInTheDocument();
     expect(canvas.queryByRole("heading", { level: 3 })).toBeNull();
     expect(
       canvas.getByRole("link", { name: activeLot.title }),
@@ -121,8 +123,8 @@ export const Upcoming: Story = {
   render: () => <WatchedCard lot={upcomingLot} />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Upcoming")).toBeInTheDocument();
-    expect(canvas.getByText(/Opens in \d+d \d+h/)).toBeInTheDocument();
+    expect(canvas.getByText("Starting bid")).toBeInTheDocument();
+    expect(canvas.getByText(/Opens in \d+d \d+h \d+m/)).toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: `Watch ${upcomingLot.title}` }),
     ).toBeInTheDocument();
