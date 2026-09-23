@@ -1,3 +1,7 @@
+import {
+  CarouselProgress,
+  CarouselProgressItem,
+} from "@grade10/design-system/components/display/carousel-progress";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { toast } from "@grade10/design-system/components/overlays/toast";
@@ -7,7 +11,7 @@ import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
 import { Bell, BellSlash, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, type FocusEvent } from "react";
 import { AUCTION_LOT_DETAILS_COPY } from "./auction-lot-details-content";
 import {
   CATALOGUE_IMAGE,
@@ -276,7 +280,7 @@ function AuctionLotCardContent({
               )}
               height={640}
               loading={eager ? "eager" : "lazy"}
-              src={CATALOGUE_IMAGE}
+              src={lot.imageSrc}
               width={640}
             />
             {lift ? (
@@ -587,7 +591,140 @@ type FeaturedAuctionsPairProps = {
 };
 
 const PAIR_AUTO_MS = 5000;
-const PAIR_EASE = [0.23, 1, 0.32, 1] as const;
+const PAIR_EASE_ENTER = [0.16, 1, 0.3, 1] as const;
+const PAIR_EASE_EXIT = [0.4, 0, 1, 1] as const;
+const PAIR_EASE = PAIR_EASE_ENTER;
+const PAIR_ENTER_S = 0.7;
+const PAIR_EXIT_S = 0.42;
+const PAIR_FIRST_ENTER_MS = 720;
+const LETTER_STAGGER_S = 0.035;
+const LETTER_DURATION_S = 0.45;
+
+type PairPhase = "enter" | "rest" | "exit";
+
+function pairImageTransform(kind: PairPhase, dir: number) {
+  if (kind === "rest") {
+    return "translateX(0px) translateY(0px) scale(1) rotate(-3deg)";
+  }
+  if (kind === "enter") {
+    return `translateX(${dir * 72}px) translateY(40px) scale(0.86) rotate(${-3 + dir * -10}deg)`;
+  }
+  return `translateX(${dir * -56}px) translateY(-24px) scale(0.92) rotate(${-3 + dir * -6}deg)`;
+}
+
+function pairInfoTransform(kind: PairPhase, dir: number) {
+  if (kind === "rest") {
+    return "translateX(0px) translateY(0px) scale(1) rotate(2deg)";
+  }
+  if (kind === "enter") {
+    return `translateX(${dir * 80}px) translateY(44px) scale(0.88) rotate(${2 + dir * 10}deg)`;
+  }
+  return `translateX(${dir * -60}px) translateY(-20px) scale(0.93) rotate(${2 + dir * 6}deg)`;
+}
+
+const pairImageVariants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    filter: "blur(14px)",
+    transform: pairImageTransform("enter", dir),
+  }),
+  rest: {
+    opacity: 1,
+    filter: "blur(0px)",
+    transform: pairImageTransform("rest", 1),
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    filter: "blur(10px)",
+    transform: pairImageTransform("exit", dir),
+  }),
+};
+
+const pairInfoVariants = {
+  enter: (dir: number) => ({
+    opacity: 0,
+    filter: "blur(14px)",
+    transform: pairInfoTransform("enter", dir),
+  }),
+  rest: {
+    opacity: 1,
+    filter: "blur(0px)",
+    transform: pairInfoTransform("rest", 1),
+  },
+  exit: (dir: number) => ({
+    opacity: 0,
+    filter: "blur(10px)",
+    transform: pairInfoTransform("exit", dir),
+  }),
+};
+
+const pairContentVariants = {
+  enter: { opacity: 0, transform: "translateY(12px)" },
+  rest: { opacity: 1, transform: "translateY(0px)" },
+  exit: { opacity: 0, transform: "translateY(-6px)" },
+};
+
+/**
+ * Thanks.co-style masked character rise for a short marketing heading.
+ * Accessible name stays on the heading; visual letters are decorative.
+ */
+function StaggeredHeading({
+  id,
+  children,
+  className,
+}: {
+  id: string;
+  children: string;
+  className?: string;
+}) {
+  const reduceMotion = useReducedMotion();
+  const chars = Array.from(children);
+
+  if (reduceMotion) {
+    return (
+      <h2 className={className} id={id}>
+        {children}
+      </h2>
+    );
+  }
+
+  return (
+    <h2
+      aria-label={children}
+      className={cn("flex flex-wrap justify-start", className)}
+      id={id}
+    >
+      {chars.map((char, index) =>
+        char === " " ? (
+          <span
+            aria-hidden="true"
+            className="inline-block w-[0.3em]"
+            key={`space-${index}`}
+          />
+        ) : (
+          <span
+            aria-hidden="true"
+            className="inline-block overflow-hidden pb-[0.08em] leading-[1.05]"
+            key={`${char}-${index}`}
+          >
+            <motion.span
+              animate={{ opacity: 1, transform: "translateY(0%)" }}
+              className="inline-block will-change-transform"
+              initial={{ opacity: 0, transform: "translateY(100%)" }}
+              transition={{
+                duration: LETTER_DURATION_S,
+                ease: PAIR_EASE,
+                delay: index * LETTER_STAGGER_S,
+              }}
+            >
+              {char}
+            </motion.span>
+          </span>
+        ),
+      )}
+    </h2>
+  );
+}
 
 /**
  * Thanks.co-style featured band: one lot at a time as an overlapping
@@ -602,13 +739,24 @@ function FeaturedAuctionsPair({
   const [paused, setPaused] = useState(false);
   const [playKey, setPlayKey] = useState(0);
   const reduceMotion = useReducedMotion();
+  const [pairReady, setPairReady] = useState(() => Boolean(reduceMotion));
+  const directionRef = useRef(1);
   const safeIndex = lots.length === 0 ? 0 : Math.min(index, lots.length - 1);
   const lot = lots[safeIndex];
-  const directionRef = useRef(1);
+  const direction = directionRef.current;
 
   useEffect(() => {
     if (index >= lots.length) setIndex(0);
   }, [index, lots.length]);
+
+  useEffect(() => {
+    if (reduceMotion) {
+      setPairReady(true);
+      return;
+    }
+    const timer = window.setTimeout(() => setPairReady(true), PAIR_FIRST_ENTER_MS);
+    return () => window.clearTimeout(timer);
+  }, [reduceMotion]);
 
   // Reduced motion: advance on an interval with no progress tween.
   useEffect(() => {
@@ -626,7 +774,10 @@ function FeaturedAuctionsPair({
       setPlayKey((key) => key + 1);
       return;
     }
-    directionRef.current = nextIndex > safeIndex ? 1 : -1;
+    const last = lots.length - 1;
+    if (safeIndex === last && nextIndex === 0) directionRef.current = 1;
+    else if (safeIndex === 0 && nextIndex === last) directionRef.current = -1;
+    else directionRef.current = nextIndex > safeIndex ? 1 : -1;
     setIndex(nextIndex);
     setPlayKey((key) => key + 1);
   }
@@ -642,218 +793,285 @@ function FeaturedAuctionsPair({
 
   const softShadow =
     "shadow-[0_12px_32px_-12px_rgb(0_0_0_/_12%),0_4px_12px_-6px_rgb(0_0_0_/_6%)]";
-  const direction = directionRef.current;
-  const slideMs = reduceMotion ? 0.01 : 0.32;
+  const enterMs = reduceMotion ? 0.01 : PAIR_ENTER_S;
+  const exitMs = reduceMotion ? 0.01 : PAIR_EXIT_S;
+  const imageTransition = {
+    opacity: { duration: enterMs, ease: PAIR_EASE_ENTER },
+    filter: { duration: enterMs, ease: PAIR_EASE_ENTER },
+    transform: { duration: enterMs, ease: PAIR_EASE_ENTER },
+  } as const;
+  const imageExitTransition = {
+    opacity: { duration: exitMs, ease: PAIR_EASE_EXIT },
+    filter: { duration: exitMs * 0.85, ease: PAIR_EASE_EXIT },
+    transform: { duration: exitMs, ease: PAIR_EASE_EXIT },
+  } as const;
+  const infoTransition = {
+    opacity: { duration: enterMs, ease: PAIR_EASE_ENTER, delay: reduceMotion ? 0 : 0.1 },
+    filter: { duration: enterMs, ease: PAIR_EASE_ENTER, delay: reduceMotion ? 0 : 0.1 },
+    transform: { duration: enterMs, ease: PAIR_EASE_ENTER, delay: reduceMotion ? 0 : 0.1 },
+  } as const;
+  const infoExitTransition = {
+    opacity: { duration: exitMs, ease: PAIR_EASE_EXIT },
+    filter: { duration: exitMs * 0.85, ease: PAIR_EASE_EXIT },
+    transform: { duration: exitMs, ease: PAIR_EASE_EXIT },
+  } as const;
+  const contentTransition = (delay: number) =>
+    ({
+      duration: reduceMotion ? 0.01 : 0.45,
+      ease: PAIR_EASE_ENTER,
+      delay: reduceMotion ? 0 : delay,
+    }) as const;
+  const imageHover =
+    reduceMotion
+      ? undefined
+      : {
+          transform: "translateX(0px) translateY(-6px) scale(1.04) rotate(-3deg)",
+          transition: { duration: 0.35, ease: PAIR_EASE_ENTER },
+        };
 
   return (
     <section
       aria-labelledby="featured-auctions-pair"
       aria-roledescription="carousel"
       className="w-full bg-gradient-to-b from-[var(--orange-100)] to-background text-foreground"
-      onBlurCapture={(event) => {
-        if (!event.currentTarget.contains(event.relatedTarget as Node | null)) {
-          setPaused(false);
-        }
-      }}
-      onFocusCapture={() => setPaused(true)}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
     >
-      <div className="mx-auto flex w-full max-w-7xl flex-col items-center gap-16 px-4 pt-28 pb-20 sm:gap-20 sm:px-8">
-        <div className="flex w-full flex-col items-center gap-3 text-center">
-          <h2
+      <div className="mx-auto flex w-full max-w-7xl flex-col gap-12 px-4 pt-28 pb-20 lg:flex-row lg:items-center lg:justify-between lg:gap-16 lg:px-8 lg:pt-32 lg:pb-24">
+        <div className="flex w-full max-w-md shrink-0 flex-col items-start gap-3 text-left lg:max-w-sm xl:max-w-md">
+          <StaggeredHeading
             className="w-full text-4xl font-bold leading-tight sm:text-5xl sm:leading-[48px]"
             id="featured-auctions-pair"
           >
             Grade10 Auctions
-          </h2>
-          <p className="w-full text-xl leading-7 text-secondary-foreground">
+          </StaggeredHeading>
+          <motion.p
+            animate={{
+              opacity: 1,
+              transform: reduceMotion ? "none" : "translateY(0px)",
+            }}
+            className="w-full text-xl font-medium leading-7 text-foreground"
+            initial={{
+              opacity: reduceMotion ? 1 : 0,
+              transform: reduceMotion ? "none" : "translateY(8px)",
+            }}
+            transition={{
+              duration: reduceMotion ? 0 : 0.4,
+              ease: PAIR_EASE,
+              delay: reduceMotion ? 0 : 0.18,
+            }}
+          >
             New auctions every week
-          </p>
+          </motion.p>
         </div>
 
-        <div className="flex w-full flex-col items-center gap-10">
-          <div
-            aria-live="polite"
-            className="relative mx-auto w-full max-w-3xl sm:min-h-[28rem]"
-          >
-            <AnimatePresence mode="wait" initial={false}>
-              <motion.div
-                key={lot.id}
-                animate={{ opacity: 1 }}
-                className="flex w-full flex-col items-center justify-center gap-6 sm:absolute sm:inset-0 sm:flex-row sm:items-center sm:gap-0"
-                exit={{ opacity: 0 }}
-                initial={{ opacity: 0 }}
-                transition={{ duration: slideMs, ease: PAIR_EASE }}
-              >
-                <motion.a
-                  animate={{
-                    opacity: 1,
-                    transform: reduceMotion
-                      ? "none"
-                      : "translateX(0px) rotate(-3deg)",
-                  }}
-                  className={cn(
-                    pressable,
-                    "relative z-0 w-[min(100%,14.5rem)] shrink-0 overflow-hidden rounded-[16px] bg-background-subtle sm:w-[15.5rem] sm:-mr-3",
-                    softShadow,
-                    "motion-reduce:sm:rotate-0",
-                  )}
-                  exit={{
-                    opacity: 0,
-                    transform: reduceMotion
-                      ? "none"
-                      : `translateX(${direction * -28}px) rotate(-5deg)`,
-                  }}
-                  href={lotAddress(lot)}
-                  initial={{
-                    opacity: 0,
-                    transform: reduceMotion
-                      ? "none"
-                      : `translateX(${direction * -28}px) rotate(-5deg)`,
-                  }}
-                  transition={{ duration: slideMs, ease: PAIR_EASE }}
-                >
-                  <img
-                    alt={lot.imageAlt}
-                    className="block h-auto w-full object-contain"
-                    height={800}
-                    loading="eager"
-                    src={CATALOGUE_IMAGE}
-                    width={600}
-                  />
-                </motion.a>
-
+        <div className="flex min-w-0 w-full flex-1 justify-center lg:justify-end">
+          <div className="flex w-full max-w-3xl flex-col items-center gap-10">
+            <div
+              aria-live="polite"
+              className="relative w-full overflow-visible sm:min-h-[28rem]"
+            >
+            {pairReady ? (
+              <AnimatePresence custom={direction} mode="sync">
                 <motion.div
-                  animate={{
-                    opacity: 1,
-                    transform: reduceMotion
-                      ? "none"
-                      : "translateX(0px) rotate(2deg)",
-                  }}
-                  className={cn(
-                    "relative z-10 flex w-[min(100%,20rem)] shrink-0 flex-col items-center justify-center gap-5 rounded-[32px] border border-border bg-background px-8 py-10 text-center sm:w-[22rem] sm:px-10 sm:py-12",
-                    softShadow,
-                    "motion-reduce:sm:rotate-0",
-                  )}
+                  key={lot.id}
+                  animate={{ opacity: 1 }}
+                  className="flex w-full flex-col items-center justify-center gap-6 sm:absolute sm:inset-0 sm:flex-row sm:items-center sm:justify-center sm:gap-0"
                   exit={{
-                    opacity: 0,
-                    transform: reduceMotion
-                      ? "none"
-                      : `translateX(${direction * 28}px) rotate(4deg)`,
+                    opacity: 1,
+                    transition: { duration: exitMs + 0.05 },
                   }}
-                  initial={{
-                    opacity: 0,
-                    transform: reduceMotion
-                      ? "none"
-                      : `translateX(${direction * 28}px) rotate(4deg)`,
-                  }}
-                  transition={{ duration: slideMs, ease: PAIR_EASE }}
+                  initial={{ opacity: 1 }}
                 >
-                  <span className="absolute top-3 right-3 z-10">
-                    <CatalogueWatch
-                      lot={lot}
-                      onToggle={() => onToggle(lot.id)}
-                      size="sm"
-                      watched={watched.has(lot.id)}
-                    />
-                  </span>
-                  <a
+                  <motion.a
+                    animate="rest"
                     className={cn(
                       pressable,
-                      "line-clamp-3 pr-10 text-xl font-semibold leading-7 text-foreground underline-offset-2 hover:underline sm:text-2xl sm:leading-8",
+                      "relative z-0 w-[min(100%,14.5rem)] shrink-0 overflow-hidden rounded-[16px] bg-background-subtle sm:w-[15.5rem] sm:-mr-3",
+                      softShadow,
+                      "motion-reduce:sm:rotate-0",
                     )}
+                    custom={direction}
+                    exit="exit"
                     href={lotAddress(lot)}
+                    initial={reduceMotion ? false : "enter"}
+                    onBlur={(event: FocusEvent<HTMLAnchorElement>) => {
+                      if (
+                        !event.currentTarget.contains(
+                          event.relatedTarget as Node | null,
+                        )
+                      ) {
+                        setPaused(false);
+                      }
+                    }}
+                    onFocus={() => setPaused(true)}
+                    onMouseEnter={() => setPaused(true)}
+                    onMouseLeave={() => setPaused(false)}
+                    transition={{
+                      ...imageTransition,
+                      exit: imageExitTransition,
+                    }}
+                    variants={
+                      reduceMotion
+                        ? {
+                            enter: { opacity: 1 },
+                            rest: { opacity: 1 },
+                            exit: { opacity: 0 },
+                          }
+                        : pairImageVariants
+                    }
+                    whileHover={imageHover}
                   >
-                    {lot.title}
-                  </a>
-                  <div className="flex w-full flex-col items-center gap-1">
-                    <p className="text-sm text-secondary-foreground">
-                      {lot.status === "Upcoming"
-                        ? "Starting bid"
-                        : "Current Bid"}
-                    </p>
-                    <p className="text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
-                      {lot.bidLabel}
-                    </p>
-                    {lot.status !== "Ended" ? (
+                    <img
+                      alt={lot.imageAlt}
+                      className="block h-auto w-full object-contain"
+                      height={800}
+                      loading="eager"
+                      src={lot.imageSrc}
+                      width={600}
+                    />
+                  </motion.a>
+
+                  <motion.div
+                    animate="rest"
+                    className={cn(
+                      "relative z-10 flex w-[min(100%,20rem)] shrink-0 flex-col items-center justify-center gap-5 rounded-[32px] border border-border bg-background px-8 py-10 text-center sm:w-[22rem] sm:px-10 sm:py-12",
+                      softShadow,
+                      "motion-reduce:sm:rotate-0",
+                    )}
+                    custom={direction}
+                    exit="exit"
+                    initial={reduceMotion ? false : "enter"}
+                    onBlurCapture={(event: FocusEvent<HTMLDivElement>) => {
+                      if (
+                        !event.currentTarget.contains(
+                          event.relatedTarget as Node | null,
+                        )
+                      ) {
+                        setPaused(false);
+                      }
+                    }}
+                    onFocusCapture={() => setPaused(true)}
+                    onMouseEnter={() => setPaused(true)}
+                    onMouseLeave={() => setPaused(false)}
+                    transition={{
+                      ...infoTransition,
+                      exit: infoExitTransition,
+                    }}
+                    variants={
+                      reduceMotion
+                        ? {
+                            enter: { opacity: 1 },
+                            rest: { opacity: 1 },
+                            exit: { opacity: 0 },
+                          }
+                        : pairInfoVariants
+                    }
+                  >
+                    <span className="absolute top-3 right-3 z-10">
+                      <CatalogueWatch
+                        lot={lot}
+                        onToggle={() => onToggle(lot.id)}
+                        size="sm"
+                        watched={watched.has(lot.id)}
+                      />
+                    </span>
+                    <motion.a
+                      animate="rest"
+                      className={cn(
+                        pressable,
+                        "line-clamp-3 w-full text-balance text-xl font-semibold leading-7 text-foreground underline-offset-2 hover:underline sm:text-2xl sm:leading-8",
+                      )}
+                      href={lotAddress(lot)}
+                      initial={reduceMotion ? false : "enter"}
+                      transition={contentTransition(0.22)}
+                      variants={reduceMotion ? undefined : pairContentVariants}
+                    >
+                      {lot.title}
+                    </motion.a>
+                    <motion.div
+                      animate="rest"
+                      className="flex w-full flex-col items-center gap-1"
+                      initial={reduceMotion ? false : "enter"}
+                      transition={contentTransition(0.3)}
+                      variants={reduceMotion ? undefined : pairContentVariants}
+                    >
                       <p className="text-sm text-secondary-foreground">
-                        {bidsLabel(lot.bidCount)}
+                        {lot.status === "Upcoming"
+                          ? "Starting bid"
+                          : "Current Bid"}
                       </p>
-                    ) : null}
-                  </div>
-                  <LotCountdown lot={lot} />
-                  <Button
-                    nativeButton={false}
-                    render={<a href={lotAddress(lot)} />}
-                    size="lg"
-                    variant="default"
-                  >
-                    Bid Now
-                  </Button>
+                      <p className="text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
+                        {lot.bidLabel}
+                      </p>
+                      {lot.status !== "Ended" ? (
+                        <p className="text-sm text-secondary-foreground">
+                          {bidsLabel(lot.bidCount)}
+                        </p>
+                      ) : null}
+                    </motion.div>
+                    <motion.div
+                      animate="rest"
+                      initial={reduceMotion ? false : "enter"}
+                      transition={contentTransition(0.36)}
+                      variants={reduceMotion ? undefined : pairContentVariants}
+                    >
+                      <LotCountdown lot={lot} />
+                    </motion.div>
+                    <motion.div
+                      animate="rest"
+                      initial={reduceMotion ? false : "enter"}
+                      transition={contentTransition(0.42)}
+                      variants={reduceMotion ? undefined : pairContentVariants}
+                    >
+                      <Button
+                        nativeButton={false}
+                        render={<a href={lotAddress(lot)} />}
+                        size="lg"
+                        variant="default"
+                      >
+                        Bid Now
+                      </Button>
+                    </motion.div>
+                  </motion.div>
                 </motion.div>
-              </motion.div>
-            </AnimatePresence>
+              </AnimatePresence>
+            ) : null}
           </div>
 
           {lots.length > 1 ? (
-            <nav
+            <CarouselProgress
               aria-label="Featured lots"
-              className="flex items-center justify-center gap-2"
+              className="justify-center"
+              onBlurCapture={(event: FocusEvent<HTMLElement>) => {
+                if (
+                  !event.currentTarget.contains(
+                    event.relatedTarget as Node | null,
+                  )
+                ) {
+                  setPaused(false);
+                }
+              }}
+              onFocusCapture={() => setPaused(true)}
+              onMouseEnter={() => setPaused(true)}
+              onMouseLeave={() => setPaused(false)}
             >
-              {lots.map((item, itemIndex) => {
-                const active = itemIndex === safeIndex;
-                return (
-                  <button
-                    aria-current={active ? "true" : undefined}
-                    aria-label={`Show featured lot ${itemIndex + 1}: ${item.title}`}
-                    className={cn(
-                      "relative overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
-                      active
-                        ? "h-1.5 w-8 bg-border"
-                        : "size-1.5 bg-border opacity-80 hover:opacity-100",
-                    )}
-                    key={item.id}
-                    onClick={() => goTo(itemIndex)}
-                    type="button"
-                  >
-                    {active ? (
-                      <span
-                        aria-hidden="true"
-                        className="absolute inset-y-0 left-0 rounded-full bg-[var(--orange-500)]"
-                        key={playKey}
-                        onAnimationEnd={(event) => {
-                          if (event.animationName !== "featured-pair-progress") {
-                            return;
-                          }
-                          advanceFromTimer();
-                        }}
-                        style={
-                          reduceMotion
-                            ? { width: "100%" }
-                            : {
-                                animation: `featured-pair-progress ${PAIR_AUTO_MS}ms linear forwards`,
-                                animationPlayState: paused
-                                  ? "paused"
-                                  : "running",
-                                width: "0%",
-                              }
-                        }
-                      />
-                    ) : null}
-                  </button>
-                );
-              })}
-            </nav>
+              {lots.map((item, itemIndex) => (
+                <CarouselProgressItem
+                  active={itemIndex === safeIndex}
+                  durationMs={PAIR_AUTO_MS}
+                  key={item.id}
+                  label={`Show featured lot ${itemIndex + 1}: ${item.title}`}
+                  onClick={() => goTo(itemIndex)}
+                  onComplete={advanceFromTimer}
+                  paused={paused}
+                  playKey={playKey}
+                  reduceMotion={Boolean(reduceMotion)}
+                />
+              ))}
+            </CarouselProgress>
           ) : null}
+          </div>
         </div>
       </div>
-      <style>{`
-        @keyframes featured-pair-progress {
-          from { width: 0%; }
-          to { width: 100%; }
-        }
-      `}</style>
     </section>
   );
 }
