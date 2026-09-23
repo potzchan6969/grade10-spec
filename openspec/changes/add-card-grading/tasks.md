@@ -713,11 +713,14 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
 - [ ] 13.3 Write `recordFeePaid`: `STORE_SERVICE.orderByName` read before any
       transaction opens, one store line to one card in `position` order with a
       cover line per covered card, `POS_LINES_MISMATCH` refused with the gap on
-      a wrong count, a multiple, a wrong figure or a null subtotal, and
-      `money_lines` written `ON CONFLICT DO NOTHING` on the order's line,
-      `(pos_order_ref, pos_line_no)`, so a repeat answers the rows already
-      written and an order recorded on another submission is refused
-      `ORDER_ALREADY_RECORDED`; the store's payment method kept on each line;
+      a wrong count, a multiple, a wrong figure or a null subtotal, and the
+      order claimed in `pos_orders(order_ref primary key, submission_id)`,
+      append-only, `ON CONFLICT DO NOTHING` in the till's transaction before
+      its lines, so one order pays one submission whatever levels it pays: a
+      repeat on the claiming submission answers its own lines and writes
+      nothing, and another submission presenting it is refused
+      `ORDER_ALREADY_RECORDED`; each line unique on the order's line,
+      `(pos_order_ref, pos_line_no)`; the store's payment method kept on each line;
       and `POST /api/submissions/:id/photos` taking one photograph of a card
       behind `grading:operate` into `ITEM_PHOTOS`, under a key naming the
       submission and the card, which `admin.checkCard` proves before it writes;
@@ -1760,7 +1763,12 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 - [ ] 28.3 Build `SubmissionPanel`: the header answering the phone, the cards
       tab carrying each card's record, the money tab reading the till's figure,
       the documents and timeline tabs, staff reaching the collector from the
-      header, and a submission id that resolves to nothing saying so
+      header, and a submission id that resolves to nothing saying so; the
+      timeline words the kinds `STAFF_ONLY_EVENT_KINDS` holds in the
+      console's own English, each marked Staff only: `reference_unavailable`
+      "Price reference unavailable: cards kept as typed",
+      `booking_cache_repaired` "Booking copy put back in step with the diary"
+      and `card_checked` "Card checked at the desk: note and photographs"
       (`grade10-admin-grading-counter-SC-50`,
       `grade10-admin-grading-counter-SC-51`,
       `grade10-admin-grading-counter-SC-52`,
