@@ -41,7 +41,7 @@
   - Covers: `grade10-admin-auction-post-sale-SC-85`–`SC-89`.
   - Verification: invoice-send race and settlement checks.
 
-## 4. Frontend
+## 4. Frontend (owner: @htonyl)
 
 - [ ] 4.1 Hide Confirm and address change after the derived deadline condition,
   then restore them after an operator reopen.
