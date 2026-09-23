@@ -620,7 +620,7 @@ Stage (b).
       among open batches and re-read, and read at booking so the chosen
       day names the batch the cards leave in and the day back counts from it:
       one shop, one grader and one level to a batch, no second batch beside an
-      un-shipped one, a card at another level waiting for its own, the cut-off
+      open one, a card at another level waiting for its own, the cut-off
       instant falling in that week's batch, and a card handed in after it
       joining the next (`grade10-site-grading-dropoff-booking-SC-09`,
       `grade10-site-grading-dropoff-booking-SC-10`,

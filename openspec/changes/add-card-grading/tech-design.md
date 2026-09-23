@@ -641,8 +641,9 @@ No `state` column: `batchState(batch, asOf)` in contracts, beside
 `submissionStanding`, derives `open`, `closed`, `shipped`, `returned` and
 `received` from `cutoff_at`, `ship_date`, `received_at` and `finished_at`, and
 every act guards on it under `lockBatch`, refusing `BATCH_CONFLICT` by name.
-Unique `(location_id, grader, level, cutoff_at)`, and a partial unique index
-admitting one open batch per `(location_id, grader, level)`; the row is
+Unique `(location_id, grader, level, cutoff_at)`, with the cut-off derived from
+the hand-in's instant, so one open batch stands per `(location_id, grader,
+level)` while a closed one waits to ship; the row is
 created on first use by `handIn`, `ON CONFLICT DO NOTHING … RETURNING`.
 
 `batch_manifest_lines`: `batch_id FK`, `line_no`, `intake_id`, `cert`,

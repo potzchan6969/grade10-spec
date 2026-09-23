@@ -98,7 +98,7 @@ its cut-off date.
 - **THEN** a batch is opened for that shop, grader and level with its cut-off,
   and the submission joins it
 
-#### Scenario: grade10-admin-grading-batches-SC-02 - A second batch never opens beside an un-shipped one
+#### Scenario: grade10-admin-grading-batches-SC-02 - A second batch never opens beside an open one
 **Serves:** grade10-admin-grading-batches-US-01 - the operator sends one parcel for the shop, the grader and the level rather than two
 
 - **GIVEN** an open batch stands for the shop, the grader and the level
