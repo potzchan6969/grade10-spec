@@ -20,7 +20,8 @@ export const Booked: Story = { args: { stage: "booked" } };
 
 export const HandedIn: Story = { args: { stage: "handedIn" } };
 
-/** The stage reached is marked, the earlier ones done, the later ones not. */
+/** The stage reached is marked, the earlier ones done, the later ones not
+ * (shared-ui-grading-submission-SC-32). */
 export const Sent: Story = {
   args: { stage: "sent" },
   play: async ({ canvasElement }) => {
@@ -30,9 +31,15 @@ export const Sent: Story = {
     expect(canvas.getAllByRole("listitem", { current: "step" })).toEqual([
       steps[3],
     ]);
-    expect(steps[0]?.getAttribute("data-state")).toBe("completed");
-    expect(steps[2]?.getAttribute("data-state")).toBe("completed");
-    expect(steps[4]?.getAttribute("data-state")).toBe("upcoming");
+    expect(steps.map((step) => step.getAttribute("data-state"))).toEqual([
+      "completed",
+      "completed",
+      "completed",
+      "progress",
+      "upcoming",
+      "upcoming",
+      "upcoming",
+    ]);
     expect(canvas.getByText("Home")).toBeInTheDocument();
   },
 };
@@ -43,7 +50,8 @@ export const Back: Story = { args: { stage: "back" } };
 
 export const Home: Story = { args: { stage: "home" } };
 
-/** A submission that ended stays at the stage it ended on, and says so. */
+/** A submission that ended stays at the stage it ended on, says so, and no
+ * later stage reads as reached (shared-ui-grading-submission-SC-33). */
 export const Ended: Story = {
   args: { stage: "planned", ended: ENDED_LINE },
   play: async ({ canvasElement }) => {
@@ -53,6 +61,8 @@ export const Ended: Story = {
       steps[0],
     ]);
     expect(canvas.getByText(ENDED_LINE)).toBeInTheDocument();
-    expect(steps[1]?.getAttribute("data-state")).toBe("upcoming");
+    for (const later of steps.slice(1)) {
+      expect(later.getAttribute("data-state")).toBe("upcoming");
+    }
   },
 };

@@ -24,12 +24,19 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Before hand-in: the fee, and what it includes. Nothing is paid yet. */
+/** Before hand-in: the fee and the line that it is paid at the counter, the
+ * amount in the locale given and no other amount derived from it. Nothing is
+ * paid yet (shared-ui-grading-submission-SC-46,
+ * shared-ui-grading-submission-SC-55). */
 export const Estimate: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Fee, 4 cards × HK$250")).toBeInTheDocument();
     expect(canvas.getByText("HK$1,000")).toBeInTheDocument();
+    expect(canvas.getAllByText(/HK\$/)).toHaveLength(2);
+    expect(
+      canvas.getByText("Paid at the counter once every card is checked."),
+    ).toBeInTheDocument();
     expect(
       canvasElement.querySelector('[data-slot="grading-money-block-paid"]'),
     ).toBeNull();
@@ -39,7 +46,8 @@ export const Estimate: Story = {
   },
 };
 
-/** The cover reads under the fee. */
+/** The cover reads under the fee, and nothing reads as paid
+ * (shared-ui-grading-submission-SC-46). */
 export const EstimateWithCover: Story = {
   args: {
     lines: {
@@ -51,9 +59,20 @@ export const EstimateWithCover: Story = {
       },
     },
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const fee = canvas.getByText("Fee, 4 cards × HK$250");
+    const cover = canvas.getByText("Cover");
+    expect(canvas.getByText("HK$120")).toBeInTheDocument();
+    expect(
+      fee.compareDocumentPosition(cover) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(canvas.queryByText("Paid")).toBeNull();
+  },
 };
 
-/** What was paid reads how it was paid. */
+/** What was paid reads its amount, its method, its instant and its till
+ * reference (shared-ui-grading-submission-SC-50). */
 export const Paid: Story = {
   args: {
     lines: {
@@ -67,6 +86,8 @@ export const Paid: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Paid")).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$1,000")).toHaveLength(2);
     expect(
       canvas.getByText("Card · 15 Jun 2026, 17:00 · POS 4471-0098"),
     ).toBeInTheDocument();
@@ -87,7 +108,9 @@ export const Refunded: Story = {
   },
 };
 
-/** Something due leads the block, so what stands in the way reads first. */
+/** Something due leads the block, so what stands in the way reads first; the
+ * moved-up line and the due figure follow it
+ * (shared-ui-grading-submission-SC-47). */
 export const Due: Story = {
   args: {
     copy: { ...MONEY_BLOCK_COPY, lead: SETTLE_LEAD },
@@ -106,14 +129,21 @@ export const Due: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText(SETTLE_LEAD)).toBeInTheDocument();
+    const lead = canvas.getByText(SETTLE_LEAD);
+    expect(
+      lead.compareDocumentPosition(canvas.getByText("Fee, 4 cards × HK$250")) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(canvas.getByText("Moved up a level, Charizard")).toBeInTheDocument();
     expect(
       canvas.getByText("Due at the counter before collection"),
     ).toBeInTheDocument();
+    expect(canvas.getAllByText("HK$300")).toHaveLength(2);
   },
 };
 
-/** A waived upcharge, and nothing due. */
+/** A waived upcharge, and no settle lead
+ * (shared-ui-grading-submission-SC-49). */
 export const Waived: Story = {
   args: {
     lines: {
@@ -127,12 +157,16 @@ export const Waived: Story = {
   },
   play: async ({ canvasElement }) => {
     expect(
+      within(canvasElement).getByText("Upcharge waived"),
+    ).toBeInTheDocument();
+    expect(
       canvasElement.querySelector('[data-slot="grading-money-block-lead"]'),
     ).toBeNull();
   },
 };
 
-/** Storage reads per card and per month, accruing. */
+/** Storage reads per card and per month, accruing, under the settle lead and
+ * above the due figure (shared-ui-grading-submission-SC-47). */
 export const Storage: Story = {
   args: {
     copy: { ...MONEY_BLOCK_COPY, lead: SETTLE_LEAD },
@@ -146,9 +180,20 @@ export const Storage: Story = {
       due: { label: "Due at the counter before collection", amount: hkd(9000) },
     },
   },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(SETTLE_LEAD)).toBeInTheDocument();
+    expect(canvas.getByText("Storage")).toBeInTheDocument();
+    expect(
+      canvas.getByText("A card a month from 14 Aug 2026."),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("HK$30")).toBeInTheDocument();
+    expect(canvas.getByText("HK$90")).toBeInTheDocument();
+  },
 };
 
-/** A card paid out reads its route, beside the refunded fee. */
+/** A card paid out reads its route, beside the refunded fee
+ * (shared-ui-grading-submission-SC-48). */
 export const PaidOut: Story = {
   args: {
     lines: {
@@ -164,13 +209,16 @@ export const PaidOut: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("HK$6,000")).toBeInTheDocument();
+    expect(canvas.getByText("Fee refunded")).toBeInTheDocument();
+    expect(canvas.getByText("HK$250")).toBeInTheDocument();
     expect(
       canvas.getByText("To your bank account ending 4471."),
     ).toBeInTheDocument();
   },
 };
 
-/** Settled at collection, with the till reference and nothing due. */
+/** A waived upcharge and the line settled at collection with its till
+ * reference, and no settle lead (shared-ui-grading-submission-SC-49). */
 export const Settled: Story = {
   args: {
     lines: {
@@ -185,6 +233,8 @@ export const Settled: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Upcharge waived")).toBeInTheDocument();
+    expect(canvas.getByText("Settled at collection")).toBeInTheDocument();
     expect(canvas.getByText("POS 4471-1180")).toBeInTheDocument();
     expect(
       canvasElement.querySelector('[data-slot="grading-money-block-lead"]'),

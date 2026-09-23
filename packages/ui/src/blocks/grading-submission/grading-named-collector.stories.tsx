@@ -54,7 +54,7 @@ export const NobodyNamed: Story = {
   },
 };
 
-/** An empty name reports nothing. */
+/** An empty name reports nothing (shared-ui-grading-submission-SC-43). */
 export const NameEmpty: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -63,7 +63,8 @@ export const NameEmpty: Story = {
   },
 };
 
-/** While the shop answers, no save is offered. */
+/** While the shop answers, no save is offered
+ * (shared-ui-grading-submission-SC-43). */
 export const Saving: Story = {
   args: { pending: true },
   play: async ({ canvasElement }) => {
@@ -72,20 +73,25 @@ export const Saving: Story = {
   },
 };
 
-/** One person, with the day they were named, and the two acts. */
+/** One person, with the day they were named, and the two acts, each through
+ * its own callback (shared-ui-grading-submission-SC-44). */
 export const Named: Story = {
   args: { named: { name: "Wong Siu Ming", namedAt: NAMED_AT } },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Wong Siu Ming")).toBeInTheDocument();
     expect(canvas.getByText("Named on 15 Jun 2026")).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Change" }));
-    expect(args.onChange).toHaveBeenCalled();
+    expect(args.onChange).toHaveBeenCalledOnce();
+    expect(args.onRemove).not.toHaveBeenCalled();
     await userEvent.click(canvas.getByRole("button", { name: "Remove" }));
-    expect(args.onRemove).toHaveBeenCalled();
+    expect(args.onRemove).toHaveBeenCalledOnce();
+    expect(args.onChange).toHaveBeenCalledOnce();
   },
 };
 
-/** A Change prefills the person already named, so nothing is retyped. */
+/** A Change prefills the person already named, so nothing is retyped: a
+ * state reached from props alone (shared-ui-grading-submission-SC-58). */
 export const Changing: Story = {
   args: { name: "Wong Siu Ming" },
   play: async ({ canvasElement }) => {
@@ -94,7 +100,8 @@ export const Changing: Story = {
   },
 };
 
-/** A refused naming reads the refusal under the field, and keeps what was typed. */
+/** A refused naming reads the refusal under the field, keeps what was typed,
+ * and reports no save (shared-ui-grading-submission-SC-45). */
 export const Refused: Story = {
   args: {
     name: "Wong Siu Ming",

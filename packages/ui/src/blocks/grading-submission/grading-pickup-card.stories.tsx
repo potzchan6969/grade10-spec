@@ -21,7 +21,9 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** Above the threshold: the identity line names the collector. */
+/** Above the threshold: the code, the items, the shop and its hours, the one
+ * figure to settle with its line, and the identity line naming the collector
+ * (shared-ui-grading-submission-SC-40, shared-ui-grading-submission-SC-42). */
 export const AboveTheThreshold: Story = {
   args: {
     bring: "An ID in your own name, Chan Tai Man",
@@ -35,12 +37,23 @@ export const AboveTheThreshold: Story = {
     expect(canvas.getByText("GR-4821-7730")).toBeInTheDocument();
     expect(canvas.getByText("3 slabs and 1 raw card")).toBeInTheDocument();
     expect(
+      canvas.getByText("Grade10 Central, 12/F, 8 Queen’s Road Central"),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByText("Monday to Saturday, 11:00 to 20:00, Hong Kong time"),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("HK$330")).toBeInTheDocument();
+    expect(
+      canvas.getByText("Paid at the counter when you collect."),
+    ).toBeInTheDocument();
+    expect(
       canvas.getByText("An ID in your own name, Chan Tai Man"),
     ).toBeInTheDocument();
   },
 };
 
-/** Below the threshold: nothing beyond the code is needed. */
+/** Below the threshold: nothing beyond the code is needed
+ * (shared-ui-grading-submission-SC-41). */
 export const BelowTheThreshold: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -48,7 +61,8 @@ export const BelowTheThreshold: Story = {
   },
 };
 
-/** Somebody named: the line names them instead. */
+/** Somebody named: the line names them instead
+ * (shared-ui-grading-submission-SC-40). */
 export const SomeoneNamed: Story = {
   args: {
     bring: "An ID in the name you gave us, Wong Siu Ming",
@@ -62,7 +76,7 @@ export const SomeoneNamed: Story = {
   },
 };
 
-/** Nothing due reads as nothing due. */
+/** Nothing due reads as nothing due (shared-ui-grading-submission-SC-42). */
 export const NothingDue: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -70,7 +84,8 @@ export const NothingDue: Story = {
   },
 };
 
-/** One figure to settle, with the clause that dresses it. */
+/** One figure to settle, with the clause that dresses it
+ * (shared-ui-grading-submission-SC-42). */
 export const StorageDue: Story = {
   args: {
     due: {

@@ -79,8 +79,20 @@ type PublicGradingTypes = [
 const publicGradingTypes: PublicGradingTypes | undefined = undefined;
 void publicGradingTypes;
 
+/** The block sources beside this test: every `.tsx` that is not a story. */
+function blockSources(): readonly { name: string; source: string }[] {
+  const here = path.dirname(fileURLToPath(import.meta.url));
+  return readdirSync(here)
+    .filter((name) => name.endsWith(".tsx") && !name.endsWith(".stories.tsx"))
+    .map((name) => ({
+      name,
+      source: readFileSync(path.join(here, name), "utf8"),
+    }));
+}
+
 describe("grading submission public entry", () => {
-  it("exports the thirteen named grading blocks", () => {
+  // shared-ui-grading-submission-SC-01
+  it("exports the thirteen named grading blocks and no other", () => {
     expect([
       GradingFeeSheet,
       GradingCardList,
@@ -96,8 +108,28 @@ describe("grading submission public entry", () => {
       GradingMoneyBlock,
       GradingUncollectedLadder,
     ]).toEqual(Array.from({ length: 13 }, () => expect.any(Function)));
+    expect(
+      Object.keys(publicEntry)
+        .filter((name) => name.startsWith("Grading"))
+        .sort(),
+    ).toEqual([
+      "GradingCardList",
+      "GradingCardRecord",
+      "GradingFeeSheet",
+      "GradingGradeCards",
+      "GradingLevelPicker",
+      "GradingMoneyBlock",
+      "GradingNamedCollector",
+      "GradingOwnershipChip",
+      "GradingPasteSheet",
+      "GradingPickupCard",
+      "GradingReview",
+      "GradingStatusRail",
+      "GradingUncollectedLadder",
+    ]);
   });
 
+  // shared-ui-grading-submission-SC-02
   it("redraws no booking block under a grading name", () => {
     const names = Object.keys(publicEntry);
     for (const redrawn of [
@@ -113,6 +145,7 @@ describe("grading submission public entry", () => {
     }
   });
 
+  // shared-ui-grading-submission-SC-02
   it("composes the booking set unchanged", () => {
     expect([
       publicEntry.BookingLocationPicker,
@@ -126,13 +159,35 @@ describe("grading submission public entry", () => {
   // The catalogs reach a block through props and nowhere else. Stories and
   // fixtures may quote them; a block may not read one.
   it("imports no message catalog into a block", () => {
-    const here = path.dirname(fileURLToPath(import.meta.url));
-    const offenders = readdirSync(here)
-      .filter((name) => name.endsWith(".tsx") && !name.endsWith(".stories.tsx"))
-      .filter((name) =>
-        readFileSync(path.join(here, name), "utf8").includes("@grade10/i18n"),
-      );
+    const offenders = blockSources()
+      .filter(({ source }) => source.includes("@grade10/i18n"))
+      .map(({ name }) => name);
     expect(offenders).toEqual([]);
+  });
+
+  // Every state is reached from props, so no block asks for data, a route or
+  // a store (shared-ui-grading-submission-SC-58).
+  it("asks for no data, route or store in a block", () => {
+    const reaches =
+      /\bfetch\(|XMLHttpRequest|localStorage|sessionStorage|indexedDB|document\.cookie|window\.location|react-router|@tanstack\/|useNavigate|useQuery|useStore/;
+    const offenders = blockSources()
+      .filter(({ source }) => reaches.test(source))
+      .map(({ name }) => name);
+    expect(offenders).toEqual([]);
+  });
+
+  // The sheet and the picker are two drawings of one record: neither reads,
+  // checks or reports on the other (shared-ui-grading-submission-SC-59).
+  it("keeps the fee sheet and the level picker apart", () => {
+    const sources = new Map(
+      blockSources().map(({ name, source }) => [name, source]),
+    );
+    expect(sources.get("grading-fee-sheet.tsx")).not.toMatch(
+      /grading-level-picker/,
+    );
+    expect(sources.get("grading-level-picker.tsx")).not.toMatch(
+      /grading-fee-sheet/,
+    );
   });
 
   it("exports nothing console-shaped for grading", () => {

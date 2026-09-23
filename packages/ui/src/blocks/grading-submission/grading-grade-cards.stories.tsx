@@ -1,7 +1,45 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { GRADE_CARDS_COPY, GRADED_CARD } from "./fixtures";
-import { GradingGradeCards } from "./grading-grade-cards";
+import {
+  type GradingGradeCard,
+  GradingGradeCards,
+} from "./grading-grade-cards";
+import type { GradingCardOutcome, GradingTone } from "./types";
+
+/** The tones `GradingCardRecord`'s stories pin for the same outcomes: an
+ * outcome is dressed the same on every page that draws it. */
+const OUTCOME_TONES: Readonly<
+  Partial<Record<GradingCardOutcome, GradingTone>>
+> = {
+  "moved-up": "warning",
+  ungraded: "error",
+  "minimum-not-met": "warning",
+  held: "warning",
+  "not-returned": "error",
+  damaged: "error",
+};
+
+/** Each card with a badge reads it in the tone its outcome names, and a card
+ * the grader issued no grade for shows none. */
+function expectBadges(
+  canvasElement: HTMLElement,
+  cards: readonly GradingGradeCard[],
+) {
+  const canvas = within(canvasElement);
+  for (const card of cards) {
+    if (card.outcome == null || card.outcomeLabel == null) continue;
+    expect(canvas.getByText(card.outcomeLabel)).toHaveAttribute(
+      "data-variant",
+      OUTCOME_TONES[card.outcome],
+    );
+  }
+  if (cards.every((card) => card.grade == null)) {
+    expect(
+      canvasElement.querySelector('[data-slot="grading-grade-card-grade"]'),
+    ).toBeNull();
+  }
+}
 
 const meta = {
   title: "Grading Submission/GradingGradeCards",
@@ -14,7 +52,8 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-/** The grade, its word, the grader, the card and the certificate. */
+/** The grade, its word, the grader, the card and the certificate
+ * (shared-ui-grading-submission-SC-37). */
 export const Graded: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -25,7 +64,8 @@ export const Graded: Story = {
   },
 };
 
-/** A card the grader moved up a level carries its badge. */
+/** A card the grader moved up a level carries its badge
+ * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const MovedUp: Story = {
   args: {
     cards: [
@@ -36,9 +76,13 @@ export const MovedUp: Story = {
       },
     ],
   },
+  play: async ({ args, canvasElement }) => {
+    expectBadges(canvasElement, args.cards);
+  },
 };
 
-/** Returned ungraded: no grade, the grader's code and note, drawn apart. */
+/** Returned ungraded: no grade, the grader's code and note, drawn apart
+ * (shared-ui-grading-submission-SC-38, shared-ui-grading-submission-SC-64). */
 export const Ungraded: Story = {
   args: {
     cards: [
@@ -56,8 +100,9 @@ export const Ungraded: Story = {
       },
     ],
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expectBadges(canvasElement, args.cards);
     const ungraded = canvasElement.querySelector(
       '[data-slot="grading-grade-card-ungraded"]',
     );
@@ -70,7 +115,8 @@ export const Ungraded: Story = {
   },
 };
 
-/** Below its minimum grade: the grade and the badge, and it comes back raw. */
+/** Below its minimum grade: the grade and the badge, and it comes back raw
+ * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const MinimumNotMet: Story = {
   args: {
     cards: [
@@ -83,9 +129,13 @@ export const MinimumNotMet: Story = {
       },
     ],
   },
+  play: async ({ args, canvasElement }) => {
+    expectBadges(canvasElement, args.cards);
+  },
 };
 
-/** Held by the grader: no grade, the badge and the date it is expected. */
+/** Held by the grader: no grade, the badge and the date it is expected
+ * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const Held: Story = {
   args: {
     cards: [
@@ -98,8 +148,9 @@ export const Held: Story = {
       },
     ],
   },
-  play: async ({ canvasElement }) => {
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    expectBadges(canvasElement, args.cards);
     expect(
       canvas.getByText("Held by PSA until 12 November"),
     ).toBeInTheDocument();
@@ -109,6 +160,8 @@ export const Held: Story = {
   },
 };
 
+/** Not returned: no grade, and the badge
+ * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const NotReturned: Story = {
   args: {
     cards: [
@@ -121,8 +174,13 @@ export const NotReturned: Story = {
       },
     ],
   },
+  play: async ({ args, canvasElement }) => {
+    expectBadges(canvasElement, args.cards);
+  },
 };
 
+/** Damaged: no grade, and the badge
+ * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const Damaged: Story = {
   args: {
     cards: [
@@ -134,5 +192,8 @@ export const Damaged: Story = {
         outcomeLabel: "Damaged",
       },
     ],
+  },
+  play: async ({ args, canvasElement }) => {
+    expectBadges(canvasElement, args.cards);
   },
 };

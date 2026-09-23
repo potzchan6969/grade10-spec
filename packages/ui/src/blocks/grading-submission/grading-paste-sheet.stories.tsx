@@ -44,7 +44,7 @@ export const Open: Story = {
   },
 };
 
-/** Nothing read, nothing added. */
+/** Nothing read, nothing added (shared-ui-grading-submission-SC-20). */
 export const NothingRead: Story = {
   args: { text: "", linesRead: 0, result: undefined },
   play: async ({ args }) => {
@@ -57,7 +57,8 @@ export const NothingRead: Story = {
   },
 };
 
-/** While the paste is being matched the add reports nothing either. */
+/** While the paste is being matched the add reports nothing either
+ * (shared-ui-grading-submission-SC-20). */
 export const Matching: Story = {
   args: { result: { status: "loading" } },
   play: async ({ args }) => {
@@ -69,11 +70,16 @@ export const Matching: Story = {
   },
 };
 
-/** Every matched line is counted, and the add carries the cards it made. */
+/** Every matched line is counted against the lines read and named, and the
+ * add carries the cards the paste made through `onApply`, adding none of them
+ * itself (shared-ui-grading-submission-SC-21,
+ * shared-ui-grading-submission-SC-63). */
 export const Matched: Story = {
   play: async ({ args }) => {
     const sheet = within(document.body);
+    expect(sheet.getByText("Lines read: 20")).toBeInTheDocument();
     expect(sheet.getByText("Matched: 12")).toBeInTheDocument();
+    expect(sheet.getByText(PASTE_RESULT.matched.line)).toBeInTheDocument();
     await userEvent.click(
       sheet.getByRole("button", { name: "Add these cards to the list" }),
     );
@@ -83,26 +89,33 @@ export const Matched: Story = {
       ...(PASTE_RESULT.withoutValue.cards ?? []),
       ...(PASTE_RESULT.aboveCeiling.cards ?? []),
     ]);
+    expect(args.onChange).not.toHaveBeenCalled();
+    expect(sheet.getByText("Matched: 12")).toBeInTheDocument();
   },
 };
 
-/** The lines kept as typed are named by their own row. */
+/** The lines kept as typed are counted and named by their own row
+ * (shared-ui-grading-submission-SC-21). */
 export const KeptAsTyped: Story = {
   play: async () => {
     const sheet = within(document.body);
     expect(sheet.getByText("Kept as typed: 3")).toBeInTheDocument();
+    expect(sheet.getByText(PASTE_RESULT.keptAsTyped.line)).toBeInTheDocument();
   },
 };
 
-/** The lines still needing a declared value are named. */
+/** The lines still needing a declared value are counted and named
+ * (shared-ui-grading-submission-SC-21). */
 export const WithoutAValue: Story = {
   play: async () => {
     const sheet = within(document.body);
     expect(sheet.getByText("Without a value: 2")).toBeInTheDocument();
+    expect(sheet.getByText(PASTE_RESULT.withoutValue.line)).toBeInTheDocument();
   },
 };
 
-/** A line above the ceiling names the card, its value and what follows. */
+/** A line above the ceiling names the card, its value and what follows
+ * (shared-ui-grading-submission-SC-23). */
 export const AboveTheCeiling: Story = {
   args: { secondSubmissionLine: SECOND_SUBMISSION_LINE },
   play: async () => {
@@ -115,15 +128,18 @@ export const AboveTheCeiling: Story = {
   },
 };
 
-/** A card already listed is skipped, and counted as skipped. */
+/** A card already listed is skipped, counted as skipped and named
+ * (shared-ui-grading-submission-SC-21). */
 export const Skipped: Story = {
   play: async () => {
     const sheet = within(document.body);
     expect(sheet.getByText("Skipped, already listed: 2")).toBeInTheDocument();
+    expect(sheet.getByText(PASTE_RESULT.skipped.line)).toBeInTheDocument();
   },
 };
 
-/** A long list reads the Bulk line it was given. */
+/** A long list reads the Bulk line it was given
+ * (shared-ui-grading-submission-SC-22). */
 export const BulkNotice: Story = {
   args: { linesRead: 34, bulkNotice: BULK_NOTICE },
   play: async () => {
@@ -132,7 +148,9 @@ export const BulkNotice: Story = {
   },
 };
 
-/** The catalogue out of reach: the lines carry that line, and Add stays on. */
+/** The catalogue out of reach: the consumer's message, the lines carry that
+ * line, the result still reads its counts rather than a list that matched
+ * nothing, and Add stays on (shared-ui-grading-submission-SC-57). */
 export const ReferenceUnavailable: Story = {
   args: {
     result: {
@@ -149,6 +167,7 @@ export const ReferenceUnavailable: Story = {
     expect(
       sheet.getByText(PASTE_SHEET_COPY.catalogueUnavailable),
     ).toBeInTheDocument();
+    expect(sheet.getByText("Matched: 12")).toBeInTheDocument();
     expect(
       sheet.getByRole("button", { name: "Add these cards to the list" }),
     ).toBeEnabled();

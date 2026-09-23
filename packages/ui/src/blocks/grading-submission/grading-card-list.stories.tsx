@@ -39,7 +39,8 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 /** Nothing listed: adding a card and pasting a list, and no card row. The
- * paste is drawn once, in the header, whether or not the list has cards. */
+ * paste is drawn once, in the header, whether or not the list has cards
+ * (shared-ui-grading-submission-SC-18). */
 export const EmptyList: Story = {
   args: { cards: [] },
   play: async ({ canvasElement }) => {
@@ -57,7 +58,7 @@ export const EmptyList: Story = {
 };
 
 /** The reference's matches, a listbox the primitive draws, each added by the
- * callback of its own. */
+ * callback of its own (shared-ui-grading-submission-SC-61). */
 export const CardSearch: Story = {
   args: {
     query: "Blast",
@@ -79,26 +80,55 @@ export const CardSearch: Story = {
   },
 };
 
-/** A matched card reads its set line, its declared value and its sales. */
+/** A matched card reads its set line, its declared value, its three sales and
+ * its minimum grade; editing, removing and pasting each report through a
+ * callback of their own, and the list carries none of them out
+ * (shared-ui-grading-submission-SC-13, shared-ui-grading-submission-SC-61). */
 export const Matched: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(
       canvas.getByText("Base Set · 4/102 · matched in the catalogue"),
     ).toBeInTheDocument();
+    expect(canvas.getByText("Declared value: HK$3,800")).toBeInTheDocument();
     expect(canvas.getByText("Sold 12 May: HK$3,650")).toBeInTheDocument();
+    expect(canvas.getByText("Sold 3 May: HK$3,720")).toBeInTheDocument();
+    expect(canvas.getByText("Sold 28 Apr: HK$3,580")).toBeInTheDocument();
+    expect(
+      canvas.getByRole("checkbox", {
+        name: "Only encapsulate at PSA 9 or above · the fee applies either way",
+      }),
+    ).toBeInTheDocument();
     await userEvent.click(canvas.getByRole("button", { name: "Edit" }));
     expect(args.onEdit).toHaveBeenCalledWith("card_charizard");
     await userEvent.click(canvas.getByRole("button", { name: "Remove" }));
     expect(args.onRemove).toHaveBeenCalledWith("card_charizard");
+    expect(canvas.getByText("Charizard")).toBeInTheDocument();
+    await userEvent.click(
+      canvas.getByRole("button", { name: CARD_LIST_COPY.paste }),
+    );
+    expect(args.onPaste).toHaveBeenCalledOnce();
   },
 };
 
-/** A name that matched nothing is kept as typed, with no reference row. */
+/** A name that matched nothing is added as typed, reported with that name,
+ * and reads as kept as typed with no reference row
+ * (shared-ui-grading-submission-SC-14). */
 export const KeptAsTyped: Story = {
-  args: { cards: [TYPED_CARD] },
-  play: async ({ canvasElement }) => {
+  args: {
+    cards: [TYPED_CARD],
+    query: "Umbreon holo, Japanese promo",
+    search: { status: "empty", message: "No card by that name." },
+  },
+  play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: CARD_LIST_COPY.addTyped }),
+    );
+    expect(args.onAdd).toHaveBeenCalledWith({
+      kind: "typed",
+      name: "Umbreon holo, Japanese promo",
+    });
     expect(canvas.getByText(CARD_LIST_COPY.keptAsTyped)).toBeInTheDocument();
     expect(
       canvasElement.querySelector('[data-slot="grading-card-list-reference"]'),
@@ -106,7 +136,9 @@ export const KeptAsTyped: Story = {
   },
 };
 
-/** A card with no declared value is named, and asked for one. */
+/** A card with no declared value is named, and asked for one through the
+ * callback of its own (shared-ui-grading-submission-SC-15,
+ * shared-ui-grading-submission-SC-61). */
 export const NoValue: Story = {
   args: { cards: [MATCHED_CARD, NO_VALUE_CARD, TYPED_CARD] },
   play: async ({ args, canvasElement }) => {
@@ -117,7 +149,9 @@ export const NoValue: Story = {
   },
 };
 
-/** The minimum grade reads on the card in one line, the catalog's. */
+/** The minimum grade reads on the card in one line, the catalog's, and is set
+ * through the callback of its own (shared-ui-grading-submission-SC-13,
+ * shared-ui-grading-submission-SC-61). */
 export const MinimumGrade: Story = {
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
@@ -130,18 +164,21 @@ export const MinimumGrade: Story = {
   },
 };
 
-/** A card above the level's ceiling is named, with the second-submission line. */
+/** A card above the level's ceiling is named, with the second-submission line
+ * (shared-ui-grading-submission-SC-19). */
 export const AboveBulksCeiling: Story = {
   args: { cards: [MATCHED_CARD, ABOVE_CEILING_CARD] },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
+    expect(canvas.getByText("Lugia first edition")).toBeInTheDocument();
     expect(
       canvas.getByText(ABOVE_CEILING_CARD.aboveCeilingLine ?? ""),
     ).toBeInTheDocument();
   },
 };
 
-/** The catalogue out of reach: every card reads that line, not kept as typed. */
+/** The catalogue out of reach: every card reads that line, not kept as typed,
+ * and the value is still asked for (shared-ui-grading-submission-SC-17). */
 export const ReferenceUnavailable: Story = {
   args: {
     cards: [NO_VALUE_CARD, { ...TYPED_CARD, declaredValue: undefined }],
@@ -160,7 +197,8 @@ export const ReferenceUnavailable: Story = {
   },
 };
 
-/** The cap it was given, and the level the count closes. */
+/** The cap it was given, and the level the count closes
+ * (shared-ui-grading-submission-SC-62). */
 export const CapNotice: Story = {
   args: {
     cap: {
@@ -193,7 +231,8 @@ export const MoreThan20: Story = {
   },
 };
 
-/** At the cap, the card past it is refused and nothing is reported. */
+/** At the cap, the card past it is refused, nothing is reported, and the
+ * second-submission line reads (shared-ui-grading-submission-SC-16). */
 export const OverTheCap: Story = {
   args: {
     cards: [MATCHED_CARD, TYPED_CARD],
