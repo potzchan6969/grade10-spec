@@ -85,7 +85,7 @@ export const OverflowingContent: Story = {
     docs: {
       description: {
         story:
-          "Give flexible columns `min-w-0` and `truncate` so long labels ellipsize. Give fixed columns enough width and `shrink-0 whitespace-nowrap` so values like currency are never clipped. Cap the shell and scroll `TableBody` when rows exceed the available height.",
+          "Give flexible columns `min-w-0` and `truncate` so long labels ellipsize. Give fixed columns enough width and `shrink-0 whitespace-nowrap` so values like currency are never clipped. Cap the shell and scroll `TableBody` when rows exceed the available height, with `tabIndex={0}` so a keyboard can scroll it too.",
       },
     },
   },
@@ -100,7 +100,10 @@ export const OverflowingContent: Story = {
             Total
           </TableHead>
         </TableHeader>
-        <TableBody className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain">
+        <TableBody
+          className="min-h-0 flex-1 overflow-y-auto overscroll-y-contain"
+          tabIndex={0}
+        >
           {OVERFLOW_ROWS.map((row) => (
             <TableRow className="shrink-0" key={row.item}>
               <TableCell className="min-w-0 flex-1">

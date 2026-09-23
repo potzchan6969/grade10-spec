@@ -7,7 +7,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { CircleNotch, MagnifyingGlass, X } from "@phosphor-icons/react";
 import type { VariantProps } from "class-variance-authority";
 import type { ComponentProps, ReactNode } from "react";
-import { useId } from "react";
+import { createContext, useContext, useId } from "react";
+
+/** The id that names the field, shared so the suggestions listbox carries the
+ * same name as the input it belongs to. */
+const AutocompleteLabelContext = createContext<string | undefined>(undefined);
 
 /**
  * Autocomplete: a Search Input with a Dropdown Menu of suggestions beneath
@@ -26,9 +30,15 @@ import { useId } from "react";
  * Dropdown Menu Item / Group Label separately.
  */
 function Autocomplete(props: AutocompletePrimitive.Root.Props<any>) {
+  const labelId = useId();
   // Root is overloaded for flat vs grouped `items`; forward both shapes.
   return (
-    <AutocompletePrimitive.Root data-slot="autocomplete" {...(props as any)} />
+    <AutocompleteLabelContext.Provider value={labelId}>
+      <AutocompletePrimitive.Root
+        data-slot="autocomplete"
+        {...(props as any)}
+      />
+    </AutocompleteLabelContext.Provider>
   );
 }
 
@@ -60,6 +70,8 @@ function AutocompleteInput({
 }: AutocompleteInputProps) {
   const generatedId = useId();
   const inputId = id ?? generatedId;
+  const labelId = useContext(AutocompleteLabelContext);
+  const ariaLabel = props["aria-label"];
 
   const clearIcon = (
     <span className="text-secondary-foreground">
@@ -74,6 +86,7 @@ function AutocompleteInput({
         disabled && "opacity-50",
         className,
       )}
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       data-slot="autocomplete-input-shell"
     >
@@ -82,9 +95,14 @@ function AutocompleteInput({
           className="text-sm font-medium text-secondary-foreground"
           data-slot="input-label"
           htmlFor={inputId}
+          id={labelId}
         >
           {label}
         </label>
+      ) : ariaLabel && labelId ? (
+        <span hidden id={labelId}>
+          {ariaLabel}
+        </span>
       ) : null}
       <AutocompletePrimitive.InputGroup
         className={cn(
@@ -161,8 +179,10 @@ function AutocompleteList({
   className,
   ...props
 }: AutocompletePrimitive.List.Props) {
+  const labelId = useContext(AutocompleteLabelContext);
   return (
     <AutocompletePrimitive.List
+      aria-labelledby={labelId}
       data-slot="autocomplete-list"
       className={cn(
         // Hide when there are no option rows so Content's `gap-1` does not

@@ -598,9 +598,9 @@ function AddressBlock({
     <VStack className="w-full" gap="sm" hAlign="start">
       {content.addressValue ? (
         <>
-          <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+          <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
             {content.addressLabel}
-          </h3>
+          </h2>
           <Text className="whitespace-pre-line text-foreground" size="sm">
             {content.addressValue}
           </Text>
@@ -669,9 +669,9 @@ function OrderSummary({
         gap="none"
         vAlign="center"
       >
-        <h3 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
+        <h2 className="min-w-0 text-sm leading-5 font-medium text-secondary-foreground">
           Order summary
-        </h3>
+        </h2>
         {onViewInvoicePdf ? (
           <Link
             aria-label="Invoice PDF"
@@ -788,9 +788,9 @@ function WinnerProgressCard({
           gap="none"
           vAlign="center"
         >
-          <h3 className="min-w-0 text-base leading-6 font-medium text-foreground">
+          <h2 className="min-w-0 text-base leading-6 font-medium text-foreground">
             Order progress
-          </h3>
+          </h2>
           {trackLabel && onTrack ? (
             <Button
               className="shrink-0"
@@ -924,9 +924,9 @@ function OrderSidebar({
           <VStack className="w-full p-4 sm:p-6" gap="lg" hAlign="stretch">
             {showPayment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   Payment method
-                </h3>
+                </h2>
                 <WinnerOrderPaymentMethod
                   masked={content.paymentMasked}
                   method={content.paymentMethod!}
@@ -987,9 +987,9 @@ function OrderSidebar({
             ) : null}
             {showSetupPaymentMethod ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   Payment method
-                </h3>
+                </h2>
                 <Text className="text-foreground" size="sm">
                   {content.setupPaymentMethod}
                 </Text>
@@ -1005,9 +1005,9 @@ function OrderSidebar({
             ) : null}
             {showBilling ? (
               <VStack className="w-full" gap="sm" hAlign="start">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {content.billingLabel ?? "Billing address"}
-                </h3>
+                </h2>
                 <Text className="whitespace-pre-line text-foreground" size="sm">
                   {content.billingValue}
                 </Text>

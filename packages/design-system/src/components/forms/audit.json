@@ -17,7 +17,7 @@
   {
     "label": "link/root",
     "node": "https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=86-3524",
-    "classes": "group/link inline-flex w-fit cursor-pointer items-center justify-center gap-1 font-normal underline decoration-solid decoration-from-font transition-colors outline-none [text-underline-position:from-font] focus-visible:rounded-(--radius-sm) focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:text-disabled-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
+    "classes": "group/link inline-flex w-fit cursor-pointer items-center justify-center gap-1 font-normal underline decoration-solid decoration-from-font transition-colors outline-none [text-underline-position:from-font] focus-visible:rounded-(--radius-sm) focus-visible:ring-3 focus-visible:ring-ring/50 aria-disabled:pointer-events-none aria-disabled:text-muted-foreground [&_svg]:pointer-events-none [&_svg]:shrink-0",
     "note": "variant=default, size=default, enabled \u2014 the cva's own defaults."
   },
   {

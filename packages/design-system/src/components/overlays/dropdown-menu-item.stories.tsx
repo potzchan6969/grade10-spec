@@ -13,7 +13,9 @@ const meta = {
   decorators: [
     (Story) => (
       <DropdownMenu modal={false} open>
-        <div className="w-60">
+        {/* The popup's role without its portal and positioner: an item is
+            only a menu item inside a menu. */}
+        <div aria-label="Menu" className="w-60" role="menu" tabIndex={-1}>
           <Story />
         </div>
       </DropdownMenu>

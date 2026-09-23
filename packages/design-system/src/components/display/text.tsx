@@ -20,7 +20,7 @@ const textVariants = cva("leading-snug", {
     tone: {
       primary: "text-foreground",
       secondary: "text-muted-foreground",
-      muted: "text-disabled-foreground",
+      muted: "text-muted-foreground",
       success: "text-success-foreground",
       warning: "text-warning-foreground",
       error: "text-destructive-foreground",
@@ -62,7 +62,10 @@ type TextProps = React.HTMLAttributes<HTMLElement> &
  * `warning` for a line that is due rather than failed, `error` for a refusal.
  * `error` binds `--destructive-foreground`, the token every theme defines;
  * `--error-foreground` is stock shadcn's and `.theme-grade10` sets no such
- * slot. No Figma set defines this component, so the three axes are code ahead
+ * slot. `muted` is page text too, so it binds `--muted-foreground`, never
+ * `--disabled-foreground`: that is the text on the dark disabled fill and
+ * reads 1.0 on the page in `.theme-grade10`. No Figma set defines this
+ * component, so the three axes are code ahead
  * of design, recorded in the `add-card-grading` change.
  */
 function Text({

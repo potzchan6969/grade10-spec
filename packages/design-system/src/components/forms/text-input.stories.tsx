@@ -57,7 +57,10 @@ export const LoadingWithStatus: Story = {
   args: { loading: true, status: "error", defaultValue: "Value" },
 };
 
-export const WithoutLabel: Story = { args: { label: undefined } };
+/** No visible label, so the field takes its name from `aria-label`. */
+export const WithoutLabel: Story = {
+  args: { label: undefined, "aria-label": "Input Field" },
+};
 export const WithoutMessage: Story = { args: { message: undefined } };
 
 export const WithPrefix: Story = {

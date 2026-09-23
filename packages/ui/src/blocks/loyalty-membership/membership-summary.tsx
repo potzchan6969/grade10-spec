@@ -136,7 +136,9 @@ function MembershipSummary({
             {balanceExpiry ? (
               <Text
                 className={
-                  balanceExpiry.tone === "warning" ? "text-warning" : undefined
+                  balanceExpiry.tone === "warning"
+                    ? "text-warning-foreground"
+                    : undefined
                 }
                 data-slot="membership-balance-expiry"
                 size="sm"

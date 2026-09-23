@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import { Stack } from "./stack";
 
 const Box = ({ children }: { children: ReactNode }) => (
-  <div className="rounded-md bg-muted px-3 py-2 text-sm text-muted-foreground">
+  <div className="rounded-md bg-muted px-3 py-2 text-sm text-secondary-foreground">
     {children}
   </div>
 );

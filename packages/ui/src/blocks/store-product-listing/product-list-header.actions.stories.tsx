@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, screen, userEvent, within } from "storybook/test";
+import { expect, fn, screen, userEvent, waitFor, within } from "storybook/test";
 import { ProductListHeader } from "./product-list-header";
 import {
   productListHeaderArgs,
@@ -41,6 +41,8 @@ export const SortIsReported: Story = {
     expect(
       canvas.getByRole("button", { name: SORT_TRIGGER }),
     ).toBeInTheDocument();
+    // The pick closes the menu; the story ends once it has, not mid-exit.
+    await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
   },
 };
 
@@ -55,6 +57,8 @@ export const ActiveSortReportsNothing: Story = {
     );
 
     expect(args.onSortChange).not.toHaveBeenCalled();
+    // The pick closes the menu; the story ends once it has, not mid-exit.
+    await waitFor(() => expect(screen.queryByRole("menu")).toBeNull());
   },
 };
 

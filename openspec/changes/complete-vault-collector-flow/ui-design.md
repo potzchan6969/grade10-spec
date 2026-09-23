@@ -465,7 +465,7 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Before the act | the latest valuation, the cap, asked for; principal, rate, the term presets; interest, total, a late day, per annum derived live; open until; the five gates as `Check`s | `grade10-site-vault-loan-and-settlement-SC-40` |
+| Before the act | the latest valuation, the cap, asked for; principal, rate, the term presets; interest, total, a late day, per annum derived live; open until; the six gates as `Check`s | `grade10-site-vault-loan-and-settlement-SC-40` |
 | A gate fails | the failing gate unticked with its bound; Make the offer stays, the worker refuses | `grade10-site-vault-loan-and-settlement-SC-41` |
 | Bounds unset | the gates read not set and the offer goes through outside production; in production the dialog names the refusal before the act | `grade10-site-vault-loan-and-settlement-SC-45` |
 | Refused | the worker's refusal by name under the form | `grade10-site-vault-valuation-and-offer-SC-03`, `grade10-site-vault-valuation-and-offer-SC-04`, `grade10-site-vault-valuation-and-offer-SC-05`, `grade10-site-vault-valuation-and-offer-SC-06`, `grade10-site-vault-valuation-and-offer-SC-08`, `grade10-site-vault-valuation-and-offer-SC-09`, `grade10-site-vault-valuation-and-offer-SC-10`, `grade10-site-vault-valuation-and-offer-SC-11` |

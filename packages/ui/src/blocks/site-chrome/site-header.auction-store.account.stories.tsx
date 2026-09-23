@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { SiteHeader } from "./site-header";
 import { AUCTION_STORE_BASE_ARGS } from "./site-header.auction-store.story-shared";
 import { ACCOUNT_EMAIL } from "./site-header.story-shared";
@@ -85,5 +85,7 @@ export const WithProfile: Story = {
     expect(args.onMyAuctions).not.toHaveBeenCalled();
     expect(args.onMembership).not.toHaveBeenCalled();
     expect(args.onSignOut).not.toHaveBeenCalled();
+    // The pick closes the menu; the story ends once it has, not mid-exit.
+    await waitFor(() => expect(body.queryByRole("menu")).toBeNull());
   },
 };

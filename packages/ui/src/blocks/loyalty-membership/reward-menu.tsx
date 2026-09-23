@@ -100,6 +100,7 @@ function RewardRow({
       {item.maxQuantity != null ? (
         <VStack gap="xs">
           <StepperInput
+            aria-label={item.name}
             className="w-28"
             decrementLabel={copy.decreaseQuantity}
             incrementLabel={copy.increaseQuantity}

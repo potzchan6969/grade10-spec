@@ -58,9 +58,9 @@ function AddressSection({
 }) {
   return (
     <VStack className="w-full" gap="sm" hAlign="stretch">
-      <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+      <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
         {heading}
-      </h3>
+      </h2>
       <VStack className="w-full text-sm leading-5" gap="xs">
         <p className="font-medium text-foreground">{address.name}</p>
         {address.lines.map((line) =>
@@ -158,9 +158,9 @@ function OrderDetailsSidebar({
             gap="md"
             hAlign="stretch"
           >
-            <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+            <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
               {copy.orderSummary}
-            </h3>
+            </h2>
             {hasLineMoneyRows ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
                 {summary?.subtotal ? (
@@ -173,14 +173,14 @@ function OrderDetailsSidebar({
                   <SummaryRow
                     label={summary.discount.label}
                     value={summary.discount.value}
-                    valueClassName="text-success"
+                    valueClassName="text-success-foreground"
                   />
                 ) : null}
                 {summary?.points ? (
                   <SummaryRow
                     label={summary.points.label}
                     value={summary.points.value}
-                    valueClassName="text-success"
+                    valueClassName="text-success-foreground"
                   />
                 ) : null}
                 {summary?.refund ? (
@@ -225,9 +225,9 @@ function OrderDetailsSidebar({
           <VStack className="w-full p-6" gap="lg" hAlign="stretch">
             {payment ? (
               <VStack className="w-full" gap="sm" hAlign="stretch">
-                <h3 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
+                <h2 className="w-full text-sm leading-5 font-medium text-secondary-foreground">
                   {copy.paymentMethod}
-                </h3>
+                </h2>
                 <PaymentMethodCard
                   label={payment.maskedNumber}
                   leading={<OrderDetailsPaymentLogo brand={payment.brand} />}

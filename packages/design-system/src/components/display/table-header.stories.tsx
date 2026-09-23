@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { Table } from "./table";
 import { TableHead } from "./table-head";
 import { TableHeader } from "./table-header";
 
@@ -6,6 +7,14 @@ const meta = {
   title: "Components/TableHeader",
   component: TableHeader,
   tags: ["autodocs"],
+  // A part only has its table semantics inside the parts that own it.
+  decorators: [
+    (Story) => (
+      <Table className="w-fit">
+        <Story />
+      </Table>
+    ),
+  ],
 } satisfies Meta<typeof TableHeader>;
 
 export default meta;

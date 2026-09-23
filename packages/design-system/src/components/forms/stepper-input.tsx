@@ -271,6 +271,7 @@ function StepperInput({
     <VStack
       gap="sm"
       data-slot="stepper"
+      aria-disabled={disabled || undefined}
       data-disabled={disabled || undefined}
       data-status={status}
       className={cn("w-full", disabled && "opacity-50", className)}
@@ -334,7 +335,10 @@ function StepperInput({
             status === "error" && messageId ? messageId : undefined
           }
           aria-invalid={status === "error" || undefined}
-          aria-label={typeof label === "string" ? label : undefined}
+          aria-label={
+            props["aria-label"] ??
+            (typeof label === "string" ? label : undefined)
+          }
           aria-valuemax={max}
           aria-valuemin={min}
           aria-valuenow={numeric}

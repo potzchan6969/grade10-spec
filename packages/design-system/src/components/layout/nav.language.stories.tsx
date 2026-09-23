@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, fn, userEvent, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { Nav } from "./nav";
 import { NAV_BASE_ARGS } from "./nav.story-shared";
 
@@ -30,6 +30,8 @@ export const SwitchLanguage: Story = {
       await body.findByRole("menuitemradio", { name: "繁體中文" }),
     );
     expect(args.onLocaleChange).toHaveBeenCalledWith("zh-Hant");
+    // The pick closes the menu; the story ends once it has, not mid-exit.
+    await waitFor(() => expect(body.queryByRole("menu")).toBeNull());
   },
 };
 

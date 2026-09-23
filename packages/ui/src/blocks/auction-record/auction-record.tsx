@@ -4,6 +4,7 @@ import {
   Table,
   TableBody,
 } from "@grade10/design-system/components/display/table";
+import { TableCell } from "@grade10/design-system/components/display/table-cell";
 import { TableHead } from "@grade10/design-system/components/display/table-head";
 import { TableHeader } from "@grade10/design-system/components/display/table-header";
 import { Button } from "@grade10/design-system/components/forms/button";
@@ -242,7 +243,9 @@ function AuctionRecord({
               <TableHead className={AUCTION_RECORD_COLUMNS.emailAlerts}>
                 {copy.emailAlertsColumn}
               </TableHead>
-              <TableHead className={AUCTION_RECORD_COLUMNS.actions} />
+              {/* No copy names the actions column, so it holds a cell rather
+                  than a header with no name. */}
+              <TableCell className={AUCTION_RECORD_COLUMNS.actions} />
             </TableHeader>
             <TableBody className={AUCTION_RECORD_TABLE_LAYOUT.body}>
               {rows.map((item, index) => {

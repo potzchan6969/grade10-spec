@@ -103,8 +103,8 @@ every bound unset and writes no offer in production.
   correct it and read the book; the two roles share no grant, `admin` holds
   both, and per case the person who priced the loan may not pay it out
 - 🚧 **Said before the act** — the offer dialog shows the cap, the presets, the
-  interest, total, late-day figure and annualised rate it derives, and the five
-  gates; the vault dialog its three preconditions; the payout dialog the two
+  interest, total, late-day figure and annualised rate it derives, and the six
+  gates; the vault dialog its two preconditions; the payout dialog the two
   people, the due date and the reminder days the recording fixes
 
 ## Reading the book
