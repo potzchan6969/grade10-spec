@@ -7,7 +7,7 @@
   existing ❓ questions.
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
 
-## 2. Contracts and data (grade10)
+## 2. Contracts and data (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Extend the observed `auctionInvoicePayments` table in
   `packages/grade10-auction/backend/src/db/schema/auctionOrders.ts` with
