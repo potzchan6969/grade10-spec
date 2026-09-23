@@ -52,7 +52,7 @@ const defaults = {
 };
 
 const meta = {
-  title: "Auction Listing/AuctionCard",
+  title: "Auction List/AuctionCard",
   component: AuctionCard,
   tags: ["autodocs"],
   args: defaults,
