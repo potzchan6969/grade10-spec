@@ -60,3 +60,16 @@ payments that failed,
 **As a** payment operator,
 **I want** to see the proof a winner uploaded against the invoice, then confirm the payment or return the invoice with a reason,
 **so that** money I can match settles the order, and a winner whose proof I cannot match knows why and keeps the time they had.
+
+### post-sale-US-16: Operator records a refund a winner asked Customer Service for
+
+**As an** operator with refund processing,
+**I want** to record the refund I sent in Stripe or by bank transfer on the order, with its amount, reason, reference and proof, and say whether the lot goes back to stock,
+**so that** a closing refund reads Refunded, an overpayment keeps the order's status, and the lot's stock matches where the card is.
+
+### post-sale-US-17: Finance reconciles auction refunds
+
+**As a** finance operator,
+**I want** to read each refund's amount, method, reference, reason, audit number, and who recorded it and when, filtering a closing refund as Refunded,
+**so that** every refund in Stripe or the bank matches one record in Grade10.
+
