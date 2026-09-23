@@ -197,6 +197,7 @@ reaches only submissions not yet booked:
 | Send again is a letter's copy | Decided | Only a sealed document a letter has already carried is sent again; before the hand-in the agreement is downloaded on the iPad, and a send is refused by name | Product |
 | Staff notifications | Decided | The queue is the inbox; nothing is emailed to staff | Product |
 | Drafts on the queue | ❓ Open | Whether a `planned` submission has a view of its own | Product |
+| The link to a vault case | ❓ Open | Grading records the case's six-character reference as typed, and nothing checks that the case exists; how the submission's page links the case from its reference | Product |
 | The safe's cap | ❓ Open | HKD 300,000 of declared value in the safe, ready slabs counted, refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
 | Every default a setting | ❓ Open | Each row of the settings table, adopted from the canvas until its owner confirms or changes it; pinned to a submission at booking and at signing | Operations, Commercial, Legal, Product |
 | Staff-only history entries | ❓ Open | Only a price reference that would not answer, a repair on our copy of the diary's booking and a card checked at the desk stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has | Operations |

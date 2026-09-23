@@ -9,7 +9,6 @@
 - `grade10-site-grading-counter-documents-SC-03` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
 - `grade10-site-grading-counter-documents-SC-13` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-03`
 - `grade10-site-grading-counter-documents-SC-15` — walked in `grade10-admin/grading/counter`'s suite, at its `grade10-admin-grading-counter-US-02`
-- `grade10-site-grading-counter-documents-SC-20` — walked in `grade10-site/grading/submission-lifecycle`'s suite, at its `grade10-site-grading-submission-lifecycle-US-02`
 
 ## grade10-site-grading-counter-documents-US1: Collector signs the submission agreement at the counter
 
@@ -1037,6 +1036,43 @@
 * The listed fingerprint answers as one grading sealed.
 
 
+### grade10-site-grading-counter-documents-US5-TC8-1: A withdrawn card's receipt is issued and listed with its fingerprint
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-counter-documents-US-05
+
+**Pre-conditions:**
+
+* A `checked_in` submission of two cards, each with its fee paid, and its batch not yet closed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Fee refunded | 15000 minor units (HKD 150.00) |
+
+**Steps:**
+
+1. Withdraw one card from the submission in the console.
+2. Open `grade10.com/grading/submissions/<id>`.
+3. Check the listed fingerprint of the withdrawal receipt against grading's record.
+
+**Expected Results:**
+
+* Step 1 issues a receipt naming the withdrawn card alone and the fee of 15000 minor units refunded for it, with nobody asked to sign it and no signing link minted.
+* Step 2 lists the withdrawal receipt with its fingerprint and a download, and the withdrawal email carries it attached.
+* Step 3 answers as a document grading issued.
+
 ---
 
 ## Reconciliation
@@ -1068,7 +1104,8 @@ eight ADDED requirements; the blind suite wrote 23 cases over `US1` to `US5`.
 | `grade10-site-grading-counter-documents-SC-03` — the intake receipt is issued rather than signed | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; no signer ever meets the intake receipt on a link |
 | `grade10-site-grading-counter-documents-SC-13` — a card refused at the check is off the schedule | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-03`, the refusal staff make |
 | `grade10-site-grading-counter-documents-SC-15` — the intake receipt names every intake id | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its only anchor is `grade10-admin-grading-counter-US-02`; `grade10-site-grading-counter-documents-US5-TC2-1` walks the attachment alone |
-| `grade10-site-grading-counter-documents-SC-20` — a withdrawn card has a receipt of its own | **Out of suite:** `grade10-site/grading/submission-lifecycle`'s suite | Its only anchor is `grade10-site-grading-submission-lifecycle-US-02`, the withdrawal itself |
+| `grade10-site-grading-counter-documents-SC-20` — a withdrawn card has a receipt of its own | **Case added** | `grade10-site-grading-counter-documents-US5-TC8-1`. It was routed out of suite, serving `grade10-site-grading-submission-lifecycle-US-02`, while the document table named no such document. The table now lists the withdrawal receipt as issued, so the scenario serves `grade10-site-grading-counter-documents-US-05`, the copy the collector keeps |
+| `grade10-site-grading-counter-documents-SC-18` — the second receipt | **Kept, stated elsewhere** | The second receipt prints only its own cards and names the first. `grade10-site-grading-counter-documents-US3-TC3-1` stops at the first receipt, and `grade10-admin-grading-counter-US4-TC10-1` walks the second hand-back |
 
 ### Manual
 

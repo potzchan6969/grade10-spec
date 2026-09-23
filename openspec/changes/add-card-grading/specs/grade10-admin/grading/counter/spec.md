@@ -520,10 +520,10 @@ close only on the sealed receipt:
 
 1. **Who is collecting** — the pickup code and the name, read against the
    collector and the person they named on the submission page.
-2. **The ID glance** — where the submission's declared total is at or above
+2. **The ID glance** — where the submission's declared total is above
    `grading.id_glance_threshold`, an identity document SHALL be matched to that
    name and nothing about it SHALL be kept; the receipt records only that an ID
-   was matched. Below the threshold no document SHALL be asked for.
+   was matched. At or below the threshold no document SHALL be asked for.
 3. **Settle** — the upcharge and the storage accrued SHALL be taken at the till
    before anything is handed over; where nothing is due, the step ticks with
    nothing taken.
@@ -556,10 +556,10 @@ as every hand-back does.
 - **THEN** the step asks for an identity document matching the name
 - **AND** the receipt records only that an ID was matched, holding no number, no image and no document kind
 
-#### Scenario: grade10-admin-grading-counter-SC-31 - Below the threshold no document is asked for
+#### Scenario: grade10-admin-grading-counter-SC-31 - At or below the threshold no document is asked for
 **Serves:** grade10-admin-grading-counter-US-04 - the operator hands the cards back at the desk
 
-- **GIVEN** a threshold of 1000000 HKD minor units and a submission declaring 600000 HKD minor units
+- **GIVEN** a threshold of 1000000 HKD minor units and a submission declaring exactly 1000000 HKD minor units
 - **WHEN** the operator works the hand-back
 - **THEN** the code and the name release the cards, with no identity document asked for
 

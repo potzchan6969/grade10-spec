@@ -973,7 +973,7 @@ Admin(holds `grading:operate`) is verifying a collector at hand-back whose submi
 * Step 2 shows the ID line.
 * Step 3 records that an ID was matched to the name, keeping no document number or photograph.
 
-### grade10-admin-grading-counter-US4-TC3-1: Below the threshold, the code and the name alone release the cards
+### grade10-admin-grading-counter-US4-TC3-1: At the threshold, the code and the name alone release the cards
 
 **Classification:**
 
@@ -993,10 +993,10 @@ Admin(holds `grading:operate`) is verifying a collector at hand-back whose submi
 | Field | Value |
 | --- | --- |
 | ID glance threshold | 1000000 minor units (HKD 10,000.00) |
-| Declared total | 900000 minor units (HKD 9,000.00) |
+| Declared total | 1000000 minor units (HKD 10,000.00) |
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is verifying a collector at hand-back whose submission's declared total is below the threshold.
+Admin(holds `grading:operate`) is verifying a collector at hand-back whose submission's declared total is exactly the threshold.
 
 **Steps:**
 
@@ -1005,7 +1005,7 @@ Admin(holds `grading:operate`) is verifying a collector at hand-back whose submi
 
 **Expected Results:**
 
-* No ID line is offered; the matched code and name alone release the cards.
+* No ID line is offered at exactly the figure: above the threshold is more than the figure, never the figure itself. The matched code and name alone release the cards.
 
 ### grade10-admin-grading-counter-US4-TC4-1: A wrong pickup code is refused on the field
 
@@ -3198,7 +3198,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-US3-TC5-1` | Raised, answered, folded | The blind pass could not tell what the submission becomes when its last card is refused. Answered: the counter cancels it from `booked` at the desk and tells the collector there, and no message is sent. Folded as `grade10-admin-grading-counter-SC-89`, added to the case, and landed as `Q75` |
 | `grade10-admin-grading-counter-US4-TC1-1` | Covered | `grade10-admin-grading-counter-SC-29` |
 | `grade10-admin-grading-counter-US4-TC2-1` | Covered | `grade10-admin-grading-counter-SC-30` |
-| `grade10-admin-grading-counter-US4-TC3-1` | Covered | `grade10-admin-grading-counter-SC-31` |
+| `grade10-admin-grading-counter-US4-TC3-1` | **Covered by `grade10-admin-grading-counter-SC-31`, corrected** | The requirement said at or above while `grade10-site/grading/submission-lifecycle` said above. Above is more than the figure, as the lifecycle's Q85 rules, so the scenario and the case now stand at exactly 1000000 HKD minor units on the no-ID side |
 | `grade10-admin-grading-counter-US4-TC5-1` | Covered | `grade10-admin-grading-counter-SC-32` |
 | `grade10-admin-grading-counter-US4-TC6-1` | Covered | `grade10-admin-grading-counter-SC-33` |
 | `grade10-admin-grading-counter-US4-TC7-1` | Covered | `grade10-admin-grading-counter-SC-33` |

@@ -13,9 +13,10 @@ record, so its packet names the person from the booking and asks for none.
 
 ## Feature set
 
-- The three documents
-  - Two signed, one issued: the submission agreement, the hand-back receipt,
-    and the intake receipt that needs no signature
+- The documents
+  - Two signed, two issued: the submission agreement, the hand-back receipt,
+    the intake receipt that needs no signature, and the withdrawal receipt of
+    a card taken back before its batch closes
   - When each is signed: the agreement once every card is checked, the receipt
     once the balance is settled and every item is ticked
   - Who signs: the collector at hand-in, whoever collects at hand-back
@@ -67,25 +68,27 @@ record, so its packet names the person from the booking and asks for none.
 
 ## ADDED Requirements
 
-### Requirement: A submission is papered by three documents, two signed and one issued
+### Requirement: A submission is papered by three documents, and a withdrawn card by a receipt of its own
 
 Every submission is papered by three English documents grading renders
-itself, prepared at the counter with the collector in front of it. Each is one
-page, running on to as many as its list of cards needs, signed once on the
-last.
+itself, prepared at the counter with the collector in front of it, and a card
+withdrawn before its batch closes by a fourth. Each is one page, running on to
+as many as its list of cards needs, a signed one signed once on the last.
 
 | Document | Prepared | Signed by | Reaches the collector |
 | --- | --- | --- | --- |
 | Submission agreement | at hand-in, once every card on the submission is checked | the collector | the download after the seal, and the hand-in email with the sealed document attached |
 | Intake receipt | at hand-in, when the cards are taken in | nobody: it is issued | the hand-in email, and the submission page |
 | Hand-back receipt | at collection, once the balance is settled and every item is ticked | whoever collects | the download after the seal, and the collection email with the sealed document attached |
+| Withdrawal receipt | as a card is withdrawn before its batch closes, once its fee is refunded | nobody: it is issued | the withdrawal email, and the submission page |
 
 **The two signed** - the submission agreement and the hand-back receipt SHALL
 be sealed on the ceremony `grade10-site/vault/documents-and-signing` states,
 reached at grading's own signing address, one document to a packet.
 
-**The one issued** - the intake receipt SHALL take no signature and SHALL be
-offered no signing link: it receipts money the till has already taken.
+**The two issued** - the intake receipt and the withdrawal receipt SHALL take
+no signature and SHALL be offered no signing link: each receipts money the
+till has already moved.
 
 **As long as the list** - a document SHALL print every card on its list, a
 Bulk list of 100 included, running on to further pages rather than being
@@ -93,8 +96,9 @@ refused; a signed document SHALL take its one signature on its last page.
 
 **Not before the counter is ready** - an agreement SHALL be refused while any
 card on the submission is unchecked, and a hand-back receipt SHALL be refused
-while anything is due or any item is unticked. A refusal SHALL name what is
-missing and SHALL leave the submission where it stands.
+while anything is due, any item is unticked, or a card not returned or returned
+damaged is not yet paid out. A refusal SHALL name what is missing and SHALL
+leave the submission where it stands.
 
 #### Scenario: grade10-site-grading-counter-documents-SC-01 - The agreement waits for every card to be checked
 **Serves:** grade10-admin/grading/counter#grade10-admin-grading-counter-US-11 - staff at the desk with one card of the list still unchecked
@@ -322,7 +326,9 @@ it and SHALL NOT be editable. The counter's ID glance checks it.
 
 **A card the grader held** - the receipt SHALL name the card still out, the
 submission SHALL stay ready for it, and a second receipt SHALL close the
-submission when that card is handed back.
+submission when that card is handed back. The second receipt SHALL print only
+the cards handed over on it and the money moved since the first, and SHALL
+name the first by its date and fingerprint.
 
 **A slab that went to the vault** - the receipt SHALL say the card went into a
 vault case rather than to the customer.
@@ -366,6 +372,7 @@ a vault case, withdrawn, or paid out.
 - **WHEN** the hand-back receipt for the other three is sealed
 - **THEN** the receipt names the card still out and the submission stays ready
 - **AND** the card handed back later is receipted on a second hand-back receipt that closes the submission
+- **AND** the second receipt prints that card alone and names the first receipt by its date and fingerprint
 
 #### Scenario: grade10-site-grading-counter-documents-SC-19 - A slab that went into a vault case says so
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector leaving one slab with the shop to vault
@@ -375,11 +382,12 @@ a vault case, withdrawn, or paid out.
 - **THEN** it says that card went to the vault rather than to the customer
 
 #### Scenario: grade10-site-grading-counter-documents-SC-20 - A card withdrawn before its batch closed has a receipt of its own
-**Serves:** grade10-site/grading/submission-lifecycle#grade10-site-grading-submission-lifecycle-US-02 - a collector asking for one card back before the cards leave
+**Serves:** grade10-site-grading-counter-documents-US-05 - a collector keeping the receipt for one card taken back before the cards leave
 
 - **GIVEN** a card withdrawn from a submission before its batch closed
 - **WHEN** it is handed back at the counter
 - **THEN** a receipt names that card alone and the fee refunded for it
+- **AND** it is issued, with nobody asked to sign it, and the submission page lists it with its fingerprint
 
 #### Scenario: grade10-site-grading-counter-documents-SC-21 - The receipt prints what was paid, refunded and paid out
 **Serves:** grade10-site-grading-counter-documents-US-03 - a collector reading the money on the paper before signing for the cards
