@@ -657,7 +657,10 @@
       "holds": {
         "requestInFlight": "你有一项申请仍未完成",
         "itemInVault": "你有物品仍在金库",
-        "loanRunning": "你有贷款仍未还清"
+        "loanRunning": "你有贷款仍未还清",
+        "liveSubmission": "你有卡片仍在评级机构",
+        "moneyDue": "你有一项提交仍有款项未结清",
+        "readyUncollected": "你有已评级的卡片仍待领取"
       },
       "confirmTitle": "要求被遗忘？",
       "confirmBody": "这会开启一个 7 天的期限，期内可以取消。",
@@ -676,7 +679,8 @@
     "failed": {
       "page": "暂时无法读取你的资料，请再试一次。",
       "identity": "暂时无法读取你的身份核验状况。",
-      "ask": "暂时无法读取你的删除要求，因此暂不能在此提出或取消。"
+      "ask": "暂时无法读取你的删除要求，因此暂不能在此提出或取消。",
+      "gradingHolds": "暂时无法读取你的评级提交是否构成阻碍，因此暂时无法在此提出要求。"
     }
   }
 }

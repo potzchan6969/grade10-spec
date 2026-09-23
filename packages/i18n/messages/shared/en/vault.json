@@ -657,7 +657,10 @@
       "holds": {
         "requestInFlight": "a request of yours is still open",
         "itemInVault": "an item of yours is in the vault",
-        "loanRunning": "a loan of yours is still running"
+        "loanRunning": "a loan of yours is still running",
+        "liveSubmission": "cards of yours are with the grader",
+        "moneyDue": "money is still to settle on a submission of yours",
+        "readyUncollected": "graded cards of yours are waiting to be collected"
       },
       "confirmTitle": "Ask to be forgotten?",
       "confirmBody": "This opens a 7-day window, which you can cancel inside.",
@@ -676,7 +679,8 @@
     "failed": {
       "page": "Your data could not be read just now. Try again.",
       "identity": "Your identity standing could not be read just now.",
-      "ask": "Your request to be forgotten could not be read just now, so nothing can be asked or cancelled here yet."
+      "ask": "Your request to be forgotten could not be read just now, so nothing can be asked or cancelled here yet.",
+      "gradingHolds": "Whether a grading submission of yours stands in the way could not be read just now, so nothing can be asked here yet."
     }
   }
 }
