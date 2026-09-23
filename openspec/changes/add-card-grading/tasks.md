@@ -418,7 +418,7 @@ the words and the blocks arrive on. Stage (a).
 
 Every other application group reads this one's exports. Stage (b).
 
-- [ ] 10.1 Table-test the pure answers in `packages/grading/contracts`, `asOf`
+- [x] 10.1 Table-test the pure answers in `packages/grading/contracts`, `asOf`
       on both sides of every deadline — the standing and its badges, the
       uncollected ladder's rungs, the batch's word, storage per month started
       and the upcharge (`grade10-admin-grading-batches-SC-04`,
@@ -432,17 +432,17 @@ Every other application group reads this one's exports. Stage (b).
       `grade10-site-grading-submission-plan-SC-28`,
       `grade10-site-grading-submission-plan-SC-29`,
       `grade10-site-grading-submission-plan-SC-30`)
-- [ ] 10.2 Add `submissionStanding(input, asOf, timeZone)` in `src/standing.ts`
+- [x] 10.2 Add `submissionStanding(input, asOf, timeZone)` in `src/standing.ts`
       over a declared `SubmissionStandingInput` the list row also carries,
       answering the status word, the chip, the rail's stage and every badge —
       the drop-off today, uncollected at a month, the notice due at six, the
       payout past its window — derived and never written down
-- [ ] 10.3 Add `uncollectedLadder(readyAt, terms)` beside it, counting the
+- [x] 10.3 Add `uncollectedLadder(readyAt, terms)` beside it, counting the
       three dated rungs and the notice's day once from the pinned
       `reminder_days`, `storage_from_day` and `notice_day`, so groups 20 and 21
       and the console's tiles read the same dates rather than each counting its
       own
-- [ ] 10.4 Add `batchState(batch, asOf)` beside it, deriving open, closed,
+- [x] 10.4 Add `batchState(batch, asOf)` beside it, deriving open, closed,
       shipped, returned and received from `cutoff_at`, `ship_date`,
       `received_at` and `finished_at`, with the running-late read and the
       due-back badge that stands from the estimated day until the batch is
@@ -451,7 +451,7 @@ Every other application group reads this one's exports. Stage (b).
       `grade10-admin-grading-batches-SC-06`,
       `grade10-admin-grading-batches-SC-20`,
       `grade10-admin-grading-batches-SC-50`)
-- [ ] 10.5 Add `src/money.ts`: `coverLine(declaredMinor, coverBps)` half-up to
+- [x] 10.5 Add `src/money.ts`: `coverLine(declaredMinor, coverBps)` half-up to
       the cent, `upchargeOf(sheet, from, to)`,
       `storageDue(readyAt, cardsHeld, asOf, terms)` counting months started on
       `Asia/Hong_Kong` days, and `dueNow(input, asOf)` over a declared
@@ -463,10 +463,10 @@ Every other application group reads this one's exports. Stage (b).
       `grade10-site-grading-submission-plan-SC-28`,
       `grade10-site-grading-submission-plan-SC-29`,
       `grade10-site-grading-submission-plan-SC-30`)
-- [ ] 10.6 Add `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent`, the
+- [x] 10.6 Add `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent`, the
       status-to-collector-word map both SPAs import, `GradingTemplateId` and
       the closed `GraderStage` set
-- [ ] 10.7 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
+- [x] 10.7 Verify: `pnpm run check:libs`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
 ## 11. The plan, the paste and the collector's own acts (grade10)
