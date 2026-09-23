@@ -88,29 +88,30 @@ completed — the exact failure `edge-cache.md`'s own rule warns against,
 been priced." This key's staleness was never priced; it fell into KV by
 analogy with `sign-in-watch` rather than by weighing that rule.
 
-The fix routes the settle marker through Postgres, gated so the cost lands
-only on sign-ins that are actually part of a cross-device wait — most
-sign-ins on the product are not, and a synchronous Neon round trip on every
-sign-in is not free: sessions deliberately stay off Postgres today
-(`secondaryStorage.ts`), so this would otherwise be the first synchronous
-Postgres write in the sign-in hot path, not a marginal one.
+The fix writes the settle marker to Postgres on every sign-in, unconditionally.
 
-- `sign-in-watch-active:{sha256(email.toLowerCase())}` → a bare marker,
-  written to KV alongside `sign-in-watch:{watchId}` at mint time, same TTL
-  margin. It is the gate: the settle hook checks it to decide whether this
-  sign-in has a live watch worth paying Postgres for. No explicit delete on
-  settle — TTL expiry alone cleans it up, since a marker outliving its watch
-  only risks one harmless extra Postgres write on a later, unrelated sign-in
-  within the TTL window.
 - `sign-in-settled-fast:{sha256(email.toLowerCase())}` → `{ settledAt }`,
-  written to Postgres (a distinct prefix, routed alongside but never merged
-  with `verification:` — see below) only when `sign-in-watch-active` is
-  present for that email. `resolveSignInWatch` checks this key first; absent,
-  it falls back to the existing `sign-in-settled:{hash}` KV check, unchanged.
-- `sign-in-settled:{hash}` on KV keeps being written on every sign-in exactly
-  as before — the fast path is additive, not a replacement, so a gate false
-  negative (the `-active` marker itself hasn't propagated to this colo yet)
-  degrades to today's KV-only behavior rather than to no answer at all.
+  written to Postgres by the same session-creation hook, under a distinct
+  prefix routed alongside but never merged with `verification:` (see below).
+  `resolveSignInWatch` checks this key first; absent, it falls back to the
+  existing `sign-in-settled:{hash}` KV check.
+- `sign-in-settled:{hash}` on KV keeps being written exactly as before. It
+  covers the rollout window (a watch minted before the Postgres write ships,
+  read after) and costs nothing to keep; once every live watch predates the
+  fast key it can go.
+
+Rejected: gating the Postgres write behind a "live watch exists for this
+email" marker, so only sign-ins that are part of a cross-device wait pay for
+it. The marker would itself be minted on the requesting device's colo and
+read on the settling device's colo — the same cross-colo KV read this fix
+exists to remove — and it misses precisely for the collector who opens the
+email fastest, the one who notices a stall most. And the saving is small:
+every sign-in already reads Postgres through the drizzle adapter (the user
+lookup on magic-link verify and on the OAuth callback), and a magic-link
+sign-in also reads and consumes its `verification:` token there, so one more
+indexed upsert is a marginal addition to a request that already talks to
+Neon, not the first Neon round trip in the path. Only sessions stay off
+Postgres by design (`secondaryStorage.ts`), and this key is not a session.
 
 `sign-in-settled-fast` gets its own literal prefix rather than joining
 `verification:` — `secondaryStorage.ts`'s Postgres routing widens from a
@@ -119,10 +120,10 @@ against, and `invalidateEarlierSignInMail`'s `LIKE 'verification:%'` scan
 never sees these rows, so the collision this file already rejected once for
 `sign-in-watch` does not reopen here either.
 
-Neither new key takes an email as input from outside the Worker: the gate
-check and the fast write both happen server-side inside the existing
-session-creation hook, so `SC-79`'s non-disclosure guarantee is unchanged —
-there is still no path from a bare address to an answer.
+The new key takes no email as input from outside the Worker: the write
+happens server-side inside the existing session-creation hook, so `SC-79`'s
+non-disclosure guarantee is unchanged — there is still no path from a bare
+address to an answer.
 
 ### The poll endpoint takes a watch id, never an email
 
@@ -186,10 +187,10 @@ if a future feature needs push infrastructure for its own reasons.
   harmless: the `sign-in-settled` write happens unconditionally on session
   creation, and a poll simply never runs against it when no watch id exists
   for that email — no read amplifies this into a symptom.
-- [`sign-in-watch-active` itself has not propagated to the settling device's
-  colo yet] → the gate reads a false negative and skips the Postgres write →
-  the settle falls back to the existing KV-only path, which is today's
-  behavior, not a regression — the gate can only add speed, never remove it.
+- [Every sign-in now pays one Postgres upsert for the settle marker] →
+  marginal on a request that already reads Postgres for the user lookup;
+  if it ever shows in sign-in latency, the write can be gated on a live
+  watch with real numbers behind the decision, not ahead of them.
 - [The fast path adds a Postgres point-read to every poll tick that has not
   yet settled] → one extra cheap indexed read against Neon per tick, while
   the flow is live; bounded by the same poll interval and TTL that already
@@ -207,9 +208,8 @@ if a future feature needs push infrastructure for its own reasons.
    `watchId` being present but unused, or absent entirely, changes no
    existing behavior — every other sign-in path is untouched.
 5. Follow-up (this amendment): widen `secondaryStorage.ts`'s Postgres
-   routing to a small prefix set; write `sign-in-watch-active` at mint time;
-   gate `sign-in-settled-fast` on it in the settle hook; check
-   `sign-in-settled-fast` before the existing KV check in
+   routing to a small prefix set; write `sign-in-settled-fast` from the
+   settle hook; check it before the existing KV check in
    `resolveSignInWatch`. Rollback: stop writing and stop checking
-   `sign-in-settled-fast`/`sign-in-watch-active` — `resolveSignInWatch` falls
-   straight back to the KV-only path this change originally shipped with.
+   `sign-in-settled-fast` — `resolveSignInWatch` falls straight back to the
+   KV-only path this change originally shipped with.
