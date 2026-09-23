@@ -66,7 +66,7 @@ function AddressBlock({ heading }: { heading: string }) {
         {heading}
       </Text>
       <Text size="sm">Alexandra Tran</Text>
-      <Text size="sm">21/F, One Harbour Square, 181 Java Road</Text>
+      <Text size="sm">Flat A, 21/F, One Harbour Square, 181 Java Road</Text>
       <Text size="sm">North Point, Hong Kong SAR</Text>
       <Text size="sm">+852 9123 4567</Text>
     </VStack>

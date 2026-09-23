@@ -28,7 +28,7 @@ import {
 function InvoicePdfPreview({
   method = "card",
   replaced = false,
-  tax = true,
+  tax = false,
 }: {
   method?: "card" | "bank";
   replaced?: boolean;
@@ -157,7 +157,7 @@ const meta = {
     replaced: { control: "boolean" },
     tax: { control: "boolean" },
   },
-  args: { method: "card", replaced: false, tax: true },
+  args: { method: "card", replaced: false, tax: false },
 } satisfies Meta<typeof InvoicePdfPreview>;
 
 export default meta;
@@ -167,4 +167,4 @@ export const CardPayment: Story = {};
 
 export const BankTransfer: Story = { args: { method: "bank" } };
 
-export const WithoutTax: Story = { args: { tax: false } };
+export const WithTax: Story = { args: { tax: true } };

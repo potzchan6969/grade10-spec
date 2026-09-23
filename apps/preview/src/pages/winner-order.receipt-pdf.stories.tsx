@@ -27,7 +27,7 @@ import {
  */
 function ReceiptPdfPreview({
   settlement = "card",
-  tax = true,
+  tax = false,
 }: {
   settlement?: "card" | "manual";
   tax?: boolean;
@@ -44,11 +44,11 @@ function ReceiptPdfPreview({
       </HStack>
 
       <VStack className="max-w-full" gap="xs" hAlign="stretch">
-        <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
         <MetaRow
           label="Invoice number"
           value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
         />
+        <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
         <MetaRow
           label="Paid by"
           value={
@@ -153,7 +153,7 @@ const meta = {
     settlement: { control: "inline-radio", options: ["card", "manual"] },
     tax: { control: "boolean" },
   },
-  args: { settlement: "card", tax: true },
+  args: { settlement: "card", tax: false },
 } satisfies Meta<typeof ReceiptPdfPreview>;
 
 export default meta;
@@ -163,4 +163,4 @@ export const CardSettled: Story = {};
 
 export const ManuallySettled: Story = { args: { settlement: "manual" } };
 
-export const WithoutTax: Story = { args: { tax: false } };
+export const WithTax: Story = { args: { tax: true } };
