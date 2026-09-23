@@ -69,15 +69,12 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **The ship form** — the packing list, one line per intake id; the grader's order number; insured to the declared
   total against the courier's written cover figure; courier, tracking and the ship date, never in the future; the
   estimate back, the level's counted from the ship day
-- ❓ **Above the courier's cover** — a batch whose declared total passes the courier's written figure is split or
-  held — Operations
-- ❓ **A ship date before the cut-off** — whether a ship date earlier than the batch's cut-off day is refused —
-  Operations
+- ❓ **Above the courier's cover** — a batch past the courier's written figure is split or held — Operations
+- ❓ **A ship date before the cut-off** — refused, or taken as typed — Operations
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
   and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
 - 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
-- ❓ **The safe's cap** — HKD 300,000 of declared value in the safe, an operational cap until cover is bought —
-  Commercial, Legal
+- ❓ **The safe's cap** — HKD 300,000 of declared value in the safe until cover is bought — Commercial, Legal
 
 ## Receiving
 
