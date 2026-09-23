@@ -555,7 +555,7 @@ append to `CaseDetailView.stories.tsx`.
 
 ## 14. The request wizard and the case list (grade10)
 
-- [ ] 14.1 Cover the third step and the list: the read-back, the tick a send
+- [x] 14.1 Cover the third step and the list: the read-back, the tick a send
       is refused without, a statement nobody has written yet, the draft list,
       a photograph refused after the send, the reference where a person needs
       it, and the held item reading the same on the list as on the case
@@ -566,17 +566,17 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-case-intake-SC-18`,
       `grade10-site-vault-case-intake-SC-23`,
       `grade10-site-vault-case-lifecycle-SC-34`)
-- [ ] 14.2 Build `RequestReview` as the wizard's third step — the read-back
+- [x] 14.2 Build `RequestReview` as the wizard's third step — the read-back
       with Edit per block, what happens next, and the collection statement's
       tick (`grade10-site-vault-case-intake-SC-15`,
       `grade10-site-vault-case-intake-SC-16`)
-- [ ] 14.3 Show "Being prepared" in place of a statement no brand has set, and
+- [x] 14.3 Show "Being prepared" in place of a statement no brand has set, and
       leave the request sendable (`grade10-site-vault-case-intake-SC-18`)
-- [ ] 14.4 Send `collectionStatement` with the submit, keep a draft listed as
+- [x] 14.4 Send `collectionStatement` with the submit, keep a draft listed as
       unsent, and refuse a photograph once the request has gone
       (`grade10-site-vault-case-intake-SC-01`,
       `grade10-site-vault-case-intake-SC-02`)
-- [ ] 14.5 Read the reference on the list card and the sent step, and the chip
+- [x] 14.5 Read the reference on the list card and the sent step, and the chip
       and the answer-by day on every list row, the chip reading what the case
       reads (`grade10-site-vault-case-intake-SC-23`,
       `grade10-site-vault-case-lifecycle-SC-34`); give the wizard its own
@@ -584,17 +584,17 @@ append to `CaseDetailView.stories.tsx`.
       `apps/frontend/grade10/src/surfaces.ts`, read by `VaultPage` from the
       address rather than held in its state, so Start another request on an
       ended case opens the wizard (`grade10-site-vault-case-lifecycle-SC-20`)
-- [ ] 14.6 Write the stories for `Vault/Request/Request Wizard` and
+- [x] 14.6 Write the stories for `Vault/Request/Request Wizard` and
       `Vault/Cases/Case List`, the empty list among them
-- [ ] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
-- [ ] 14.8 Build the Describe and Photograph steps as the design draws them:
+- [x] 14.8 Build the Describe and Photograph steps as the design draws them:
       the stepper, the field hints, the photograph dropzone with its tips, and
       the location line, each word from the catalog
 
 ## 15. The booked visit (grade10)
 
-- [ ] 15.1 Cover the booked screen and the picker: the confirmation taking the
+- [x] 15.1 Cover the booked screen and the picker: the confirmation taking the
       picker's place, what to bring on each lane and each identity standing,
       the visit read on the case, a cancel, a move, a window with nothing
       free, a slot taken while the collector chose, and a sibling case
@@ -609,7 +609,7 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-visit-booking-SC-28`,
       `grade10-site-vault-visit-booking-SC-29`,
       `grade10-site-vault-visit-booking-SC-30`)
-- [ ] 15.2 Build `VisitBooked` over `@grade10/ui`'s `BookingConfirmation` and
+- [x] 15.2 Build `VisitBooked` over `@grade10/ui`'s `BookingConfirmation` and
       `BookingManageCard`, with the Before you come list, add to calendar
       pointing at `visit.ics`, move and cancel
       (`grade10-site-vault-visit-booking-SC-15`,
@@ -617,25 +617,25 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-visit-booking-SC-17`,
       `grade10-site-vault-visit-booking-SC-18`,
       `grade10-site-vault-visit-booking-SC-19`)
-- [ ] 15.3 Read the standing visit on the case and leave the case standing
+- [x] 15.3 Read the standing visit on the case and leave the case standing
       when the visit is called off (`grade10-site-vault-visit-booking-SC-20`,
       `grade10-site-vault-visit-booking-SC-21`)
-- [ ] 15.4 Compose the picker from `BookingLocationPicker` and
+- [x] 15.4 Compose the picker from `BookingLocationPicker` and
       `BookingSlotPicker` for a first booking and for a move alike, say so
       when a window has nothing free, and name a slot taken under the
       collector (`grade10-site-vault-visit-booking-SC-27`,
       `grade10-site-vault-visit-booking-SC-28`,
       `grade10-site-vault-visit-booking-SC-29`)
-- [ ] 15.5 Show a sibling case the lead's visit and no picker of its own
+- [x] 15.5 Show a sibling case the lead's visit and no picker of its own
       (`grade10-site-vault-visit-booking-SC-30`)
-- [ ] 15.6 Write the stories for `Vault/Booking/Visit Booked` and
+- [x] 15.6 Write the stories for `Vault/Booking/Visit Booked` and
       `Vault/Booking/Visit Booking`
-- [ ] 15.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 15.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
 ## 16. Your data (grade10)
 
-- [ ] 16.1 Cover the page: the account holder's own page, the retention
+- [x] 16.1 Cover the page: the account holder's own page, the retention
       classes, the identity standing in its four words, the documents listed
       under their case, a block that cannot be answered, and the ask filed,
       refused, cancelled and past its window
@@ -656,16 +656,16 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-retention-and-erasure-SC-39`,
       `grade10-site-vault-retention-and-erasure-SC-40`,
       `grade10-site-vault-documents-and-signing-SC-27`)
-- [ ] 16.2 Build `YourDataView` over `cases.yourData`, each block standing on
+- [x] 16.2 Build `YourDataView` over `cases.yourData`, each block standing on
       its own so one that cannot be answered leaves the rest
       (`grade10-site-vault-retention-and-erasure-SC-12`,
       `grade10-site-vault-retention-and-erasure-SC-15`)
-- [ ] 16.3 Build `RetentionTable` for the classes and their windows, reading a
+- [x] 16.3 Build `RetentionTable` for the classes and their windows, reading a
       class nobody has decided as undecided, and render it on the released
       case as well (`grade10-site-vault-retention-and-erasure-SC-16`,
       `grade10-site-vault-retention-and-erasure-SC-17`,
       `grade10-site-vault-retention-and-erasure-SC-18`)
-- [ ] 16.4 Render the identity standing through `identityStanding`, naming
+- [x] 16.4 Render the identity standing through `identityStanding`, naming
       neither the person nor their document
       (`grade10-site-vault-retention-and-erasure-SC-19`,
       `grade10-site-vault-retention-and-erasure-SC-20`,
@@ -673,12 +673,12 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-retention-and-erasure-SC-22`,
       `grade10-site-vault-retention-and-erasure-SC-39`,
       `grade10-site-vault-retention-and-erasure-SC-40`)
-- [ ] 16.5 List every sealed document under its case and offer the one
+- [x] 16.5 List every sealed document under its case and offer the one
       download `grade10-site/vault/documents-and-signing` defines, which
       offers none where nothing is signed
       (`grade10-site-vault-retention-and-erasure-SC-13`,
       `grade10-site-vault-documents-and-signing-SC-27`)
-- [ ] 16.6 Ask for the erasure through `useConfirm`, read when it may run,
+- [x] 16.6 Ask for the erasure through `useConfirm`, read when it may run,
       cancel inside the window, name the holds beside an open request, and
       offer no cancel once the window has passed
       (`grade10-site-vault-retention-and-erasure-SC-24`,
@@ -686,8 +686,8 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-retention-and-erasure-SC-26`,
       `grade10-site-vault-retention-and-erasure-SC-27`,
       `shared-auth-users-SC-40`)
-- [ ] 16.7 Write the stories for `Vault/Retention/Your Data View`
-- [ ] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
+- [x] 16.7 Write the stories for `Vault/Retention/Your Data View`
+- [x] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
 
 ## 17. The console's queue, case tabs and identity panel (grade10)
