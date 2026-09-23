@@ -1,4 +1,3 @@
-import { Badge } from "@grade10/design-system/components/display/badge";
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
@@ -38,23 +37,11 @@ function ReceiptPdfPreview({
   return (
     <PdfSheet>
       <HStack hAlign="space-between" vAlign="start">
-        <VStack gap="xs" hAlign="start">
-          <Text as="h2" size="xl" weight="bold">
-            Receipt
-          </Text>
-          <Badge variant={manual ? "warning" : "success"}>
-            {manual ? "Manually Settled" : "Paid"}
-          </Badge>
-        </VStack>
+        <Text as="h2" size="xl" weight="bold">
+          Receipt
+        </Text>
         <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
       </HStack>
-
-      {manual ? (
-        <Text size="sm">
-          Supersedes invoice <Text weight="medium">INV-202609-LK7P2Q-01</Text>,
-          reissued before settlement.
-        </Text>
-      ) : null}
 
       <VStack className="max-w-full" gap="xs" hAlign="stretch">
         <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />

@@ -54,12 +54,7 @@ function PartyBlock({
       <Text size="sm" weight="bold">
         {heading}
       </Text>
-      {issuer ? (
-        <>
-          <Text size="sm">Fine Art &amp; Collectibles Auction</Text>
-          <Text size="sm">support@grade10.com</Text>
-        </>
-      ) : null}
+      {issuer ? <Text size="sm">support@grade10.com</Text> : null}
     </VStack>
   );
 }
