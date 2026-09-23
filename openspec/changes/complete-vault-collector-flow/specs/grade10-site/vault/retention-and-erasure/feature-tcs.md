@@ -131,6 +131,7 @@ signed.
 **Expected Results:**
 
 * The vault reports no hold, and nothing blocks the request.
+* The vault names nothing it still holds of the collector.
 
 ### grade10-site-vault-retention-and-erasure-US1-TC5-1: Filed ask stays held while a case is in flight
 
@@ -978,7 +979,7 @@ Run: 2026-09-22, blind pass over the isolated input — this capability's `## Pu
 | `grade10-site-vault-retention-and-erasure-US1-TC1-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-06` |
 | `grade10-site-vault-retention-and-erasure-US1-TC2-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-07` |
 | `grade10-site-vault-retention-and-erasure-US1-TC3-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-09`, `grade10-site-vault-retention-and-erasure-SC-10` and `grade10-site-vault-retention-and-erasure-SC-11` |
-| `grade10-site-vault-retention-and-erasure-US1-TC4-1` | Kept, no scenario of its own | The empty partition of the refusal rule: an account holding no case holds none in flight. `grade10-site-vault-retention-and-erasure-SC-04` states when an erasure is refused and `grade10-site-vault-retention-and-erasure-SC-24` files the ask on the same condition, so the case is a boundary of both and not new behaviour |
+| `grade10-site-vault-retention-and-erasure-US1-TC4-1` | Folded | `grade10-site-vault-retention-and-erasure-SC-41`. The empty partition of the refusal rule: an account holding no case holds none in flight. `grade10-site-vault-retention-and-erasure-SC-04` states only the refusal, so the change opens `An erasure is refused while any of the person's cases is in flight` in a MODIFIED block and the scenario lands there |
 | `grade10-site-vault-retention-and-erasure-US1-TC5-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-26` |
 | `grade10-site-vault-retention-and-erasure-US1-TC6-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-23` |
 | `grade10-site-vault-retention-and-erasure-US1-TC7-1` | Covered | `grade10-site-vault-retention-and-erasure-SC-04` and `grade10-site-vault-retention-and-erasure-SC-26` — a case that closed does not clear the hold another case stands |

@@ -81,6 +81,137 @@ carry photographs only while it is unsent.
 - **WHEN** a further photograph is offered for it
 - **THEN** it is refused by name and nothing is stored
 
+### Requirement: A request states one item, in the brand's own currency
+
+A request SHALL carry exactly these facts about the item, and SHALL describe
+one item only:
+
+| Fact | Rule |
+| --- | --- |
+| Category | one of: trading card, coin, bullion, watch, jewellery, other |
+| Title | required, at most 200 characters |
+| Description | optional, at most 2,000 characters |
+| Contact number | optional, stored canonical to the brand's numbering plan however it was typed, and never verified |
+| Currency | the brand's own; a request naming another SHALL be refused by name |
+| Financing amount | optional, an integer count of minor units in that currency |
+
+A contact number the brand's numbering plan cannot read SHALL be refused by
+name, and no case SHALL be opened with it.
+
+A collector with several items SHALL open one request for each.
+
+#### Scenario: grade10-site-vault-case-intake-SC-03 - A request in another currency is refused
+**Serves:** grade10-site-vault-case-intake-US-02 - Collector sends in a card they only want kept safe
+
+- **WHEN** a request is opened naming a currency that is not the brand's
+- **THEN** it is refused by name and no case exists
+
+#### Scenario: grade10-site-vault-case-intake-SC-04 - A number is stored one way
+**Serves:** Describing the item - a number is stored one way
+
+- **WHEN** two collectors give the same number typed differently
+- **THEN** both cases store it in the same canonical form
+
+#### Scenario: grade10-site-vault-case-intake-SC-24 - A title and a description at their caps are taken
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request with a title of exactly 200 characters
+  and a description of exactly 2,000
+- **THEN** the request is opened carrying both as written
+
+#### Scenario: grade10-site-vault-case-intake-SC-25 - A title or a description past its cap is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request with a title of 201 characters
+- **THEN** it is refused by name and no case is opened
+- **WHEN** a collector opens a request with a description of 2,001 characters
+- **THEN** it is refused by name and no case is opened
+
+#### Scenario: grade10-site-vault-case-intake-SC-26 - A number the brand's plan cannot read is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **WHEN** a collector opens a request whose contact number is `123-abc`
+- **THEN** it is refused by name and no case is opened
+
+#### Scenario: grade10-site-vault-case-intake-SC-27 - A second item is a second request
+**Serves:** grade10-site-vault-case-intake-US-05 - Collector gets a reference they can say and type
+
+- **GIVEN** a collector who has just sent in a request for one item
+- **WHEN** they open a request for another item
+- **THEN** a new request is opened with a reference of its own
+- **AND** the request already sent keeps its reference and its status
+
+### Requirement: A case carries between one and ten photographs
+
+A case SHALL carry at most ten photographs. Each SHALL be a JPEG, PNG or WebP
+of at most 20 MB - 20,971,520 bytes - and anything else SHALL be refused by name before it is
+stored. The same bytes offered twice SHALL attach one photograph.
+
+#### Scenario: grade10-site-vault-case-intake-SC-08 - An eleventh photograph is refused
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
+
+- **GIVEN** a request carrying ten photographs
+- **WHEN** another is offered
+- **THEN** it is refused by name and nothing is stored
+
+#### Scenario: grade10-site-vault-case-intake-SC-09 - A file of another kind is refused
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
+
+- **WHEN** a file that is not one of the three image types is offered
+- **THEN** it is refused by name and nothing is stored
+
+#### Scenario: grade10-site-vault-case-intake-SC-10 - The same photograph twice is one photograph
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
+
+- **WHEN** the same bytes are offered twice for one case
+- **THEN** the case carries one photograph, not two
+
+#### Scenario: grade10-site-vault-case-intake-SC-28 - Ten photographs at the size cap are all taken
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a request carrying no photograph
+- **WHEN** ten different JPEGs of exactly 20,971,520 bytes each are offered for
+  it
+- **THEN** all ten are stored on the request
+
+#### Scenario: grade10-site-vault-case-intake-SC-29 - A photograph past the size cap is refused
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a request carrying fewer than ten photographs
+- **WHEN** a JPEG of 20,971,521 bytes is offered for it
+- **THEN** it is refused by name and nothing is stored
+
+### Requirement: A photograph is stored without its location and read under a trail
+
+Every stored photograph SHALL have its metadata stripped before it is stored,
+and a photograph whose metadata cannot be removed SHALL be refused by name
+rather than stored as it arrived. The stripping SHALL happen where the bytes
+land, whatever the client did first.
+
+A photograph SHALL be served to the case's owner and to staff holding the
+vault read grant, and to nobody else. Every read SHALL be recorded in a ledger
+that is never rewritten.
+
+#### Scenario: grade10-site-vault-case-intake-SC-11 - Location metadata never reaches the vault
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
+
+- **WHEN** a photograph carrying a location is offered
+- **THEN** what is stored carries none
+
+#### Scenario: grade10-site-vault-case-intake-SC-12 - A photograph is not another collector's to read
+**Serves:** grade10-site-vault-case-intake-US-03 - Collector photographs the item from their phone
+
+- **WHEN** a signed-in collector asks for a photograph on a case that is not theirs
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-case-intake-SC-30 - Every read of a photograph is recorded
+**Serves:** grade10-site-vault-case-intake-US-01 - Collector sends in a card they want cash against
+
+- **GIVEN** a collector's case carrying a photograph
+- **WHEN** the collector opens that photograph
+- **THEN** the read is recorded, naming who read it and when
+- **AND** the photograph is served only once the read is recorded
+
 ## ADDED Requirements
 
 ### Requirement: The last step reads the request back before it sends

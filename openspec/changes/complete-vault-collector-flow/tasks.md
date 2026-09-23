@@ -680,7 +680,9 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-documents-and-signing-SC-27`)
 - [x] 16.6 Ask for the erasure through `useConfirm`, read when it may run,
       cancel inside the window, name the holds beside an open request, and
-      offer no cancel once the window has passed
+      offer no cancel once the window has passed; a cancel sent through the
+      collector's own request on one the shop took over comes back refused
+      and the request stands as the shop's
       (`grade10-site-vault-retention-and-erasure-SC-24`,
       `grade10-site-vault-retention-and-erasure-SC-25`,
       `grade10-site-vault-retention-and-erasure-SC-26`,
@@ -849,13 +851,22 @@ Lands once every other group is green and the change is deployed.
       `grade10-site-vault-case-intake-US-01`,
       `grade10-site-vault-case-intake-US-04`,
       `grade10-site-vault-case-intake-US-05` and
-      `grade10-site-vault-case-lifecycle-US-01`
+      `grade10-site-vault-case-lifecycle-US-01`, proving the caps, the
+      unreadable number, one request per item and the photograph read trail
+      (`grade10-site-vault-case-intake-SC-24`,
+      `grade10-site-vault-case-intake-SC-25`,
+      `grade10-site-vault-case-intake-SC-26`,
+      `grade10-site-vault-case-intake-SC-27`,
+      `grade10-site-vault-case-intake-SC-28`,
+      `grade10-site-vault-case-intake-SC-29`,
+      `grade10-site-vault-case-intake-SC-30`)
 - [ ] 21.2 Walk the offer in `vault/offer.spec.ts`:
       `grade10-site-vault-valuation-and-offer-US-01`,
       `grade10-site-vault-valuation-and-offer-US-02`,
       `grade10-site-vault-valuation-and-offer-US-05`,
       `grade10-site-vault-case-lifecycle-US-02` and
-      `grade10-site-vault-case-lifecycle-US-05`
+      `grade10-site-vault-case-lifecycle-US-05`, proving the loan-to-value
+      bound (`grade10-site-vault-valuation-and-offer-SC-30`)
 - [ ] 21.3 Walk the loan in `vault/loan.spec.ts`:
       `grade10-site-vault-loan-and-settlement-US-01`,
       `grade10-site-vault-loan-and-settlement-US-02`,
@@ -867,7 +878,10 @@ Lands once every other group is green and the change is deployed.
       `grade10-site-vault-collector-notifications-US-01`,
       `grade10-site-vault-collector-notifications-US-02`,
       `grade10-site-vault-collector-notifications-US-04` and
-      `grade10-site-vault-collector-notifications-US-05`
+      `grade10-site-vault-collector-notifications-US-05`, proving the
+      advance's refusals (`grade10-site-vault-loan-and-settlement-SC-49`,
+      `grade10-site-vault-loan-and-settlement-SC-50`,
+      `grade10-site-vault-loan-and-settlement-SC-51`)
 - [ ] 21.4 Walk the visit in `vault/visit.spec.ts`:
       `grade10-site-vault-visit-booking-US-01`,
       `grade10-site-vault-visit-booking-US-03` — the move and the cancel —
@@ -879,14 +893,21 @@ Lands once every other group is green and the change is deployed.
       `grade10-admin-vault-operator-queue-US-03`,
       `grade10-admin-vault-operator-queue-US-04`,
       `grade10-admin-vault-operator-queue-US-07` and
-      `grade10-admin-vault-operator-queue-US-09`
+      `grade10-admin-vault-operator-queue-US-09`, proving the used signing
+      link and the public digest answer
+      (`grade10-site-vault-documents-and-signing-SC-30`,
+      `grade10-site-vault-documents-and-signing-SC-31`)
 - [ ] 21.5 Walk the collector's own data in `vault/your-data.spec.ts`:
       `grade10-site-vault-retention-and-erasure-US-01`,
       `grade10-site-vault-retention-and-erasure-US-02`,
       `grade10-site-vault-retention-and-erasure-US-03`,
       `grade10-site-vault-retention-and-erasure-US-05`,
       `grade10-site-vault-documents-and-signing-US-05`,
-      `shared-auth-users-US-02` and `shared-auth-users-US-05`
+      `shared-auth-users-US-02` and `shared-auth-users-US-05`, proving the
+      erasure no case holds back, the own cancel refused on a request the
+      shop took over, and standing held while a request is open
+      (`grade10-site-vault-retention-and-erasure-SC-41`,
+      `shared-auth-users-SC-40`, `shared-auth-users-SC-42`)
 - [ ] 21.6 Walk the console's own reads in `vault/console.spec.ts`:
       `grade10-admin-vault-operator-queue-US-01`,
       `grade10-admin-vault-operator-queue-US-02`,

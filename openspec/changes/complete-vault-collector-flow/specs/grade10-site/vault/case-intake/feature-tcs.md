@@ -195,7 +195,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| Photographs | ten JPEG files, each exactly 20 MB |
+| Photographs | ten different JPEG files, each exactly 20,971,520 bytes (20 MB) |
 
 **Steps:**
 
@@ -203,7 +203,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* All ten attach; the dropzone reads 10 of 10.
+* All ten attach to the draft.
 
 ---
 
@@ -259,7 +259,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| Photograph | a JPEG file over 20 MB |
+| Photograph | a JPEG file of 20,971,521 bytes, one past 20 MB |
 
 **Steps:**
 
@@ -267,7 +267,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The photograph is refused with the size message; nothing attaches.
+* The photograph is refused by name; nothing attaches.
 
 ---
 
@@ -923,7 +923,8 @@ have read the collection statement,
 
 **Expected Results:**
 
-* The draft is saved as it stands, tick included; the request is not sent.
+* The request is not sent.
+* It is listed as an unsent request on the collector's own list.
 
 ---
 
@@ -999,7 +1000,7 @@ reference at my bank.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1194,30 +1195,30 @@ requirements, and neither pass saw the other's file before this join.
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
 | `US1-TC1-1`, `US1-TC2-1` | Covered | `grade10-site-vault-case-intake-SC-05`, `grade10-site-vault-case-intake-SC-06`, `grade10-site-vault-case-intake-SC-13`, `grade10-site-vault-case-intake-SC-14`, `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` — the two lanes walked end to end |
-| `US1-TC3-1`, `US1-TC4-1` | Covered, no scenario | The durable requirement `A request states one item, in the brand's own currency` tables the 200 and 2,000 character caps; no scenario states them and this change does not open that requirement |
-| `US1-TC5-1`, `US1-TC7-1` | Covered, no scenario; question landed | The durable photograph requirement caps each photograph at 20 MB; the blind pass's question whether the cap also bounds the ten together landed as `Q57` — it does not |
+| `US1-TC3-1`, `US1-TC4-1` | Folded | `grade10-site-vault-case-intake-SC-24` and `grade10-site-vault-case-intake-SC-25`. The durable requirement `A request states one item, in the brand's own currency` tables the 200 and 2,000 character caps and no scenario stated them; the change now opens that requirement in a MODIFIED block and the two scenarios land there |
+| `US1-TC5-1`, `US1-TC7-1` | Folded; question landed | `grade10-site-vault-case-intake-SC-28` and `grade10-site-vault-case-intake-SC-29`, in a MODIFIED block on the photograph requirement, which now names the cap in bytes, 20,971,520, so the bound cannot move with a rounded megabyte. Whether the cap also bounds the ten together landed as `Q57` — it does not |
 | `US1-TC6-1` | Covered | `grade10-site-vault-case-intake-SC-08` |
 | `US1-TC8-1` | Covered | `grade10-site-vault-case-intake-SC-09` |
 | `US1-TC9-1` | Covered; question landed | A zero-byte JPEG is not one of the three image types, so `grade10-site-vault-case-intake-SC-09` refuses it by name; the blind pass's question about what the empty refusal catches landed as `Q57` |
 | `US1-TC10-1` | Covered | `grade10-site-vault-case-intake-SC-13` |
 | `US1-TC11-1` | Covered | `grade10-site-vault-case-intake-SC-11` |
 | `US1-TC12-1` | Covered | `grade10-site-vault-case-intake-SC-12` |
-| `US1-TC13-1` | Covered, no scenario | The durable requirement `A photograph is stored without its location and read under a trail` states the ledger; no scenario walks a recorded read |
+| `US1-TC13-1` | Folded | `grade10-site-vault-case-intake-SC-30`, in a MODIFIED block on `A photograph is stored without its location and read under a trail`, which states the ledger and had no scenario for a recorded read |
 | `US1-TC14-1` | Covered | `grade10-site-vault-case-intake-SC-07` |
 | `US1-TC15-1` | Covered | `grade10-site-vault-case-intake-SC-01` |
 | `US1-TC16-1` | Covered by another capability | `grade10-site-vault-case-lifecycle-SC-04` — a case that moved under the caller is refused by name; the blind pass's question about what produces `request.caseConflict` landed as `Q58`, and the design's Moved on state closes on that same scenario |
 | `US1-TC17-1`, `US1-TC19-1` | Covered; question escalated | `grade10-site-vault-case-intake-SC-04` stores one canonical number however it was typed, and the number is optional by the requirement's table; which typed forms count as one person is the ❓ on `collector-pages.md` |
-| `US1-TC18-1` | Covered, no scenario | The canonical rule refuses what the brand's numbering plan cannot canonicalise; no scenario states the refusal, and the same ❓ carries the variant list |
+| `US1-TC18-1` | Folded | `grade10-site-vault-case-intake-SC-26`. The requirement now says a number the brand's plan cannot read is refused by name, as the worker already refuses it; which typed forms count as one person stays the ❓ on `collector-pages.md` |
 | `US1-TC20-1` | Covered; question landed | `grade10-site-vault-case-intake-SC-03`; whether the amount field shows the brand's currency to the collector landed as `Q56` |
 | `US4-TC1-1`, `US4-TC2-1`, `US4-TC3-1` | Covered | `grade10-site-vault-case-intake-SC-15`, `grade10-site-vault-case-intake-SC-17` |
 | `US4-TC4-1` | Covered | `grade10-site-vault-case-intake-SC-16` |
 | `US4-TC5-1` | Covered | `grade10-site-vault-case-intake-SC-18` |
 | `US4-TC6-1` | Dropped as a misreading; `deprecated`, id kept | It refuses the send in production while the statement is unset. `decisions.md` Q8 and Q17 settle the opposite — the tick is not one of the acts production refuses — and `grade10-site-vault-case-intake-SC-18` states the send goes through in every environment |
-| `US4-TC7-1` | Covered, no scenario | Finish later leaves the request unsent, which the requirement `A collector opens a request for one item` states; nothing states whether the tick survives the save, and `grade10-site-vault-case-intake-SC-17` records the version at the send rather than at the tick |
+| `US4-TC7-1` | Covered, trimmed | `grade10-site-vault-case-intake-SC-01` — a request left unsent is listed unsent on the collector's own list. The draft also claimed the tick survives the save, which nothing states; `grade10-site-vault-case-intake-SC-17` records the version at the send, so that result left the case |
 | `US5-TC1-1` | Covered | `grade10-site-vault-case-intake-SC-19`, `grade10-site-vault-case-intake-SC-23`; the reference is drawn when the request is opened, so what the case reads at the send is the reference the draft already carried. The letter that carries it is `grade10-site/vault/collector-notifications`', and its suite walks it |
 | `US5-TC2-1`, `US5-TC4-1`, `US5-TC5-1` | Covered, retraced | `grade10-site-vault-case-intake-SC-20`, `grade10-site-vault-case-intake-SC-21`, `grade10-site-vault-case-intake-SC-22`; each case now traces `The case reference`, the group those scenarios serve, in place of the journey — one anchor per case, and US-05 keeps its own cases |
-| `US5-TC3-1` | Covered, no scenario | Uniqueness is per brand by the requirement — across every case the brand has ever opened; no scenario walks two brands |
-| `US5-TC6-1` | Covered, no scenario | One request per item is the durable requirement's last line; the Sent step's several-items block is the design's |
+| `US5-TC3-1` | Retired; `deprecated`, id kept | Its within-brand half is `US5-TC2-1` on `grade10-site-vault-case-intake-SC-20`. Its cross-brand half cannot be walked: Grade10 alone runs a vault, and each brand's vault is its own database, so no second brand's reference exists to clash with |
+| `US5-TC6-1` | Folded | `grade10-site-vault-case-intake-SC-27`. One request per item is the durable requirement's last line and no scenario stated it; the several-items block on the Sent step is the design's |
 | `US5-TC7-1` | Covered | `grade10-site-vault-case-intake-SC-22` — Not now opens the case at its id-based address |
 | `grade10-site-vault-case-intake-SC-02` | Case added | `US1-TC21-1`, tracing `Opening a request`, the group the scenario serves |
 | `grade10-site-vault-case-intake-SC-19` | Case added | `US5-TC8-1` — no case read the reference before the request was sent |

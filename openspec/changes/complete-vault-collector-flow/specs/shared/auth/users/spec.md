@@ -32,6 +32,8 @@ Auction bidder bans belong to auction, not here.
     on only the run or an operator's cancel ends it
   - No filing over an admin: no caller files the erasure of an account that
     holds `admin`, as no caller bans one
+  - Standing waits for the request: while one is open, a ban or an unban of
+    that account is refused, and the request closing is what changes standing
   - Asked twice is asked once: a second filing answers the open request, a
     cancel with nothing open changes nothing, and a cancel lifts only a ban the
     filing applied
@@ -157,6 +159,11 @@ NOT sign in and SHALL NOT be treated as signed in.
 **Cancelling** - cancelling an operator's request inside the window SHALL close
 it as cancelled and SHALL lift the ban that filing applied.
 
+**Standing waits for the request** - while an erasure request is open, whoever
+filed it, a ban or an unban of that account SHALL be refused by name and the
+account's standing SHALL stay as it is. The request closing, cancelled or
+completed, is what changes standing.
+
 **Over a request the person filed** - an operator filing where the account
 holder's own request is already open SHALL make that one request the
 operator's and SHALL apply the ban. No second request SHALL open, and the day
@@ -205,6 +212,15 @@ SHALL end only by running or by an operator's cancel.
   request
 - **THEN** the system refuses the cancel
 - **AND** the request stays open as the one the shop filed
+
+#### Scenario: shared-auth-users-SC-42 - Standing does not change while an erasure request is open
+**Serves:** shared-auth-users-US-02 - an operator reaching for Ban or Unban on an account whose erasure is under way
+
+- **GIVEN** a person with an open erasure request
+- **WHEN** an operator bans or unbans that account
+- **THEN** the system refuses it by name
+- **AND** the account's standing is unchanged
+- **AND** the request is still open
 
 #### Scenario: shared-auth-users-SC-41 - An erasure over an admin is refused
 **Serves:** shared-auth-users-US-02 - an operator reaching for the erasure of an account that no ban may touch

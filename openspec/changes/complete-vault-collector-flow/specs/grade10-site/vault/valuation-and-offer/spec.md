@@ -161,3 +161,62 @@ page shows where the case now stands rather than the offer that was answered.
 - **WHEN** they confirm
 - **THEN** the confirmation stays open naming that the case moved under the answer
 - **AND** the case is read again and the page shows where the case now stands
+
+## MODIFIED Requirements
+
+### Requirement: Every offer is judged against the brand's lending policy
+
+One brand-level table SHALL hold every bound an offer is judged against, and
+one gate SHALL apply all of them:
+
+| Bound | Rule when set | Grade10 |
+| --- | --- | --- |
+| Loan to value | principal at most this share of the latest valuation | 4,000 basis points |
+| Rate band | interest compared as `interest × 30 ÷ term days`, so one band judges every term | 150 to 250 basis points per 30 days |
+| Term presets | the term is one of these | 30, 60, 90, 120 days |
+| Offer validity | the expiry is no further off than this | 7 days |
+| Grace | days past the due date before overdue interest starts | 0 |
+| Accrual ceiling | interest of every kind together never passes this share of the principal | 10,000 basis points |
+| Forfeiture notice | the cure period a written notice gives | 14 days |
+
+A bound nobody has set SHALL allow everything outside production.
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-06 - A rate above the band is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
+
+- **GIVEN** a brand whose band is 150 to 250 basis points per 30 days
+- **WHEN** an offer of 600 basis points over a 60-day term is written
+- **THEN** it is refused by name, because 600 over 60 days is 300 per 30 days
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-07 - One band judges every term
+**Serves:** What the brand lends under - one band judges every term
+
+- **GIVEN** the same brand
+- **WHEN** an offer of 500 basis points over a 60-day term is written
+- **THEN** it is accepted, because 500 over 60 days is 250 per 30 days
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-08 - A term the brand does not write is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
+
+- **GIVEN** a brand whose presets are 30, 60, 90 and 120 days
+- **WHEN** an offer over 45 days is written
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-09 - An expiry past the validity window is refused
+**Serves:** What the brand lends under - an expiry past the validity window is refused
+
+- **GIVEN** a brand that leaves an offer open for 7 days
+- **WHEN** an offer expiring in 30 days is written
+- **THEN** it is refused by name
+
+#### Scenario: grade10-site-vault-valuation-and-offer-SC-30 - An offer at the loan-to-value bound is made and one unit past it is refused
+**Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
+
+- **GIVEN** a brand that lends at most 4,000 basis points of the latest
+  valuation, and an item whose latest valuation is 2,500,000 HKD minor units
+- **WHEN** an offer of 1,000,000 HKD minor units is written, every other bound
+  met
+- **THEN** it is made
+- **WHEN** an offer of 1,000,001 HKD minor units is written, every other bound
+  met
+- **THEN** it is refused by name, naming the loan-to-value bound

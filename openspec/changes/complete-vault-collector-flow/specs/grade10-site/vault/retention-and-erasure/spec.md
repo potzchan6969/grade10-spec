@@ -264,3 +264,38 @@ order:
 - **WHEN** they open Your data
 - **THEN** no cancel is offered
 - **AND** the page says each product erases what it holds
+
+## MODIFIED Requirements
+
+### Requirement: An erasure is refused while any of the person's cases is in flight
+
+An erasure SHALL be refused while the person holds a case that is neither a
+never-signed ending nor a closed-after-custody one: an item still held, a loan
+still running, or documents still out for signature. The refusal SHALL name
+each case so an operator knows where to look.
+
+Erasure SHALL be asked for on the account, and each product SHALL answer for
+its own data. A run that stops part-way SHALL leave the rest for the next run
+rather than failing the whole.
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-04 - A live loan blocks the erasure
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
+
+- **GIVEN** a person with one closed case and one running loan
+- **WHEN** their erasure is run
+- **THEN** it is refused, naming the running case, and neither case is touched
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-05 - A case that goes live mid-run is not erased
+**Serves:** grade10-site-vault-retention-and-erasure-US-02 - Admin runs an erasure without touching a live case
+
+- **GIVEN** an erasure running over a person's cases
+- **WHEN** one of them becomes live between being listed and being reached
+- **THEN** that case is refused and reported, and the others are erased
+
+#### Scenario: grade10-site-vault-retention-and-erasure-SC-41 - A person who never held a case is held back by nothing
+**Serves:** grade10-site-vault-retention-and-erasure-US-01 - Collector asks to be forgotten and the vault answers for its own data
+
+- **GIVEN** a person who has never held a vault case
+- **WHEN** their erasure is run
+- **THEN** no case refuses it
+- **AND** the vault names nothing it still holds of them

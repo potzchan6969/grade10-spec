@@ -287,6 +287,44 @@ Signed in as an operator who holds `user:delete`. <an admin user id> holds `admi
 * No erasure request is open for that account.
 * That person can still sign in.
 
+
+### shared-auth-users-US2-TC11-1: Ban and unban are refused while an erasure request is open
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-users-US-02
+
+**Pre-conditions:**
+Signed in as an operator who holds `user:ban` and `user:delete`. <a subject user id> holds the open erasure request and the standing named in **Test data**.
+
+**Test data:**
+
+| Request filed by | Standing | Act |
+| --- | --- | --- |
+| the account holder | unbanned | ban |
+| an operator | banned by that filing | unban |
+
+**Steps:**
+
+1. Send the row's act for <a subject user id>.
+
+**Expected Results:**
+
+* The system refuses the act by name.
+* The account's standing is unchanged.
+* The erasure request is still open.
+
 ---
 
 ## shared-auth-users-US5: Account holder files their own request to be forgotten
@@ -598,6 +636,7 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 | `shared-auth-users-SC-35` | Case added | `shared-auth-users-US2-TC8-1` |
 | `shared-auth-users-SC-39` | Case added | `shared-auth-users-US2-TC9-1` |
 | `shared-auth-users-SC-41` | Folded, then walked | an erasure filed over an account that holds `admin` is refused by name, as a direct ban of one is, settled as Q52; walked by `shared-auth-users-US2-TC10-1` |
+| `shared-auth-users-SC-42` | Written for a shipped rule, case added | The vault walk found auth refusing a ban or an unban by name while an erasure request is open, with only the console's hidden buttons in any spec. The rule now stands in `An operator's erasure request bans the account`, and `shared-auth-users-US2-TC11-1` walks it, a row per filer |
 | Design: Ask available, Ask confirmation, Ask filed, Ask cancelled, Window passed | Closed on the row | `ui-design.md` under Your data now names `shared-auth-users-SC-30`, `shared-auth-users-SC-31`, `shared-auth-users-SC-32`, `shared-auth-users-SC-29` and `shared-auth-users-SC-33`, beside the vault scenarios that state what the same rows render |
 
 ### Manual

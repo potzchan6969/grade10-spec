@@ -993,7 +993,7 @@ the anchors after both landed.
 | US1-TC2-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-13` |
 | US1-TC3-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-19` |
 | US1-TC4-1 | Covered | `grade10-site-vault-loan-and-settlement-SC-45` — a bound nobody set passes outside production |
-| US1-TC5-1 | Covered | the loan-to-value row of the policy table in `Every offer is judged against the brand's lending policy`; no scenario walks the cap, and this change writes no operator requirement to fold one into |
+| US1-TC5-1 | Folded | `grade10-site-vault-valuation-and-offer-SC-30`. The loan-to-value row of the policy table in `Every offer is judged against the brand's lending policy` had no scenario at its bound; the change now opens that requirement in a MODIFIED block and the scenario lands there, at the case's own figures |
 | US1-TC6-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-04` |
 | US1-TC7-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-06` above the band, `grade10-site-vault-valuation-and-offer-SC-07` at it |
 | US1-TC8-1 | Covered | `grade10-site-vault-valuation-and-offer-SC-09` past the window, `grade10-site-vault-valuation-and-offer-SC-05` an expiry already gone |

@@ -71,3 +71,6 @@ stays in the directory, marked banned, so it can be found and unbanned later.
 - 🚧 **The account holder files their own request** — from a product's Your
   data page, and cancels it there inside the seven days; a self-filed request
   bans nothing — [Account Data](/platform/account-data#erasure)
+- **Standing waits for the request** — while an erasure request is open, a ban
+  or an unban of that account is refused by name; the request closing,
+  cancelled or completed, is what changes standing
