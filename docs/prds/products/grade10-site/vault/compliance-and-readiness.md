@@ -101,10 +101,9 @@ Every item is a value or an act outside the code, with who closes it;
 
 1. *Legal* — **Name the two entities and their licence** — in
    `packages/app-env/src/legalIdentity.ts`, each refusing its own act while
-   unset: the custodian's name a production deploy; the lender's an offer in
-   production; the licence number and wording the loan agreement and every money
-   email in production; the complaints contact every email in production, and
-   the paper prints it where set
+   unset: the custodian's name a production deploy; the lender's an offer, the
+   licence the loan agreement and every money email, the complaints contact
+   every email, all in production; the paper prints the contact where set
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
    method, whether an AML duty applies, the retention windows, and whether

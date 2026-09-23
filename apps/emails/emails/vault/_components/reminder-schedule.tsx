@@ -6,7 +6,10 @@ export type ReminderScheduleProps = {
   dates: readonly string[];
 };
 
-const listed = new Intl.ListFormat("en", { style: "long", type: "conjunction" });
+const listed = new Intl.ListFormat("en", {
+  style: "long",
+  type: "conjunction",
+});
 
 /**
  * When the borrower will hear from us next, and that a reminder adds

@@ -35,7 +35,9 @@ export default function VisitRescheduledEmail({
       ]}
       preheader={`Now ${hkDateTime(visitAt)}. Nothing else about your case has changed.`}
     >
-      <FactsGroup facts={[{ label: "Your visit", value: hkDateTime(visitAt) }]} />
+      <FactsGroup
+        facts={[{ label: "Your visit", value: hkDateTime(visitAt) }]}
+      />
     </VaultLetter>
   );
 }

@@ -122,10 +122,9 @@ What a collector reads on one case, top to bottom.
   the capability's own table
 - 🚧 **What a message names** — its figures as a table, not a sentence: the
   offer its terms, total, late-day cost and expiry; a money message the
-  amount, the due date, the daily figure after it, and how to pay while a
-  balance is still owed; a reminder its schedule; every message the
-  reference and the complaints contact, and a money message the lender's
-  licence line
+  amount, the due date, the daily figure after it, how to pay while a balance
+  is owed and the lender's licence line; a reminder its schedule; every
+  message the reference and the complaints contact
 - 🚧 **The forfeiture notice** — names the clause it acts under, the date to
   pay by, what is owed as at that day and what each further day adds, the
   condition on which the item lapses, that taking it is a person's decision,
