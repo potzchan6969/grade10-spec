@@ -42,16 +42,30 @@ on:
         description: "Only read suites whose path contains this"
         required: false
         type: string
+      env:
+        description: "Where the pass is walked — staging or production. Defaults to staging"
+        required: false
+        default: "staging"
+        type: string
       include_draft:
-        description: "Also take draft cases (grey-banded in the tab)"
+        description: "Also take draft cases (stone-grey in the tab)"
         required: false
         default: false
         type: boolean
       include_automated:
-        description: "Also take cases an automated test already covers"
+        description: "Take cases an automated test already covers (default yes)"
+        required: false
+        default: true
+        type: boolean
+      sandbox:
+        description: "Write to TCS_SHEET_SANDBOX_ID instead of the production sheet"
         required: false
         default: false
         type: boolean
+      overwrite:
+        description: "Rewrite this run id's tab and Summary block (same id)"
+        required: false
+        type: string
       dry_run:
         description: "Print the selection and write nothing"
         required: false
@@ -91,11 +105,17 @@ jobs:
           PROVIDER: ${{ vars.GCP_WORKLOAD_IDENTITY_PROVIDER }}
           ACCOUNT: ${{ vars.GCP_SERVICE_ACCOUNT }}
           SHEET: ${{ vars.TCS_SHEET_ID }}
+          SANDBOX_SHEET: ${{ vars.TCS_SHEET_SANDBOX_ID }}
+          SANDBOX: ${{ inputs.sandbox }}
         run: |
           missing=""
           [ -n "$PROVIDER" ] || missing="$missing GCP_WORKLOAD_IDENTITY_PROVIDER"
           [ -n "$ACCOUNT" ] || missing="$missing GCP_SERVICE_ACCOUNT"
-          [ -n "$SHEET" ] || missing="$missing TCS_SHEET_ID"
+          if [ "$SANDBOX" = "true" ]; then
+            [ -n "$SANDBOX_SHEET" ] || missing="$missing TCS_SHEET_SANDBOX_ID"
+          else
+            [ -n "$SHEET" ] || missing="$missing TCS_SHEET_ID"
+          fi
           if [ -n "$missing" ]; then
             echo "::error::Repository variables not set:$missing"
             echo "Settings → Secrets and variables → Actions → Variables."
@@ -126,19 +146,23 @@ jobs:
         env:
           GOOGLE_ACCESS_TOKEN: ${{ steps.auth.outputs.access_token }}
           TCS_SHEET_ID: ${{ vars.TCS_SHEET_ID }}
+          TCS_SHEET_SANDBOX_ID: ${{ vars.TCS_SHEET_SANDBOX_ID }}
           RUN_NAME: ${{ inputs.name }}
           SELECTION: ${{ inputs.selection }}
+          RUN_ENV: ${{ inputs.env }}
           SUITES: ${{ inputs.suites }}
           PRIORITY: ${{ inputs.priority }}
           LEVEL: ${{ inputs.level }}
           SCOPE: ${{ inputs.scope }}
           INCLUDE_DRAFT: ${{ inputs.include_draft }}
           INCLUDE_AUTOMATED: ${{ inputs.include_automated }}
+          SANDBOX: ${{ inputs.sandbox }}
+          OVERWRITE: ${{ inputs.overwrite }}
           DRY_RUN: ${{ inputs.dry_run }}
         run: |
           # `if` rather than `&&`: the default shell is `bash -e`, and a false
           # test on an empty input would end the step rather than skip a flag.
-          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA"
+          set -- --name "$RUN_NAME" --sha "$GITHUB_SHA" --env "${RUN_ENV:-staging}"
           if [ -n "$SELECTION" ]; then set -- "$@" --selection "$SELECTION"; fi
           if [ -s /tmp/cases.txt ]; then set -- "$@" --cases-file /tmp/cases.txt; fi
           if [ -n "$SUITES" ]; then set -- "$@" --suites "$SUITES"; fi
@@ -147,7 +171,11 @@ jobs:
           if [ -n "$SCOPE" ]; then set -- "$@" --scope "$SCOPE"; fi
           if [ "$INCLUDE_DRAFT" = "true" ]; then set -- "$@" --include-draft; fi
           if [ "$INCLUDE_AUTOMATED" = "true" ]; then set -- "$@" --include-automated; fi
+          if [ "$INCLUDE_AUTOMATED" = "false" ]; then set -- "$@" --exclude-automated; fi
+          if [ "$SANDBOX" = "true" ]; then set -- "$@" --sandbox; fi
+          if [ -n "$OVERWRITE" ]; then set -- "$@" --overwrite "$OVERWRITE"; fi
           if [ "$DRY_RUN" = "true" ]; then set -- "$@" --dry-run; fi
+          set -o pipefail
           node scripts/openspec/run-sheet.mjs "$@" | tee /tmp/run-sheet.out
 
       - name: Summarise
