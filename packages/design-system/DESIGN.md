@@ -45,9 +45,10 @@ pnpm run test:stories:design-system       # this package only
 pnpm run test:stories                     # both Storybooks, as CI runs them
 ```
 
-`a11y.test` is set to `"todo"` in `.storybook/preview.tsx`, so violations are
-reported but do not fail the run. Set it to `"error"` to gate CI once the
-outstanding violations are cleared.
+`a11y.test` is `"error"` in `.storybook/preview.tsx`, so an axe violation
+fails the run. Fix it in the primitive, or in `tokens.json` where a contrast
+pair fails AA. A story fixes its own markup only where it draws something no
+consumer renders, and no story turns a rule off.
 
 Design source of truth: the Figma file, via the token pipeline below. (A
 diverged Pencil `.pen` library under a root `designs/` directory was the
