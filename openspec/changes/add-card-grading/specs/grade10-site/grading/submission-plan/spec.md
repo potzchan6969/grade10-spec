@@ -281,8 +281,9 @@ SHALL be unchanged.
 Each card is named against the shop's card price reference, and a card the
 reference does not answer for is still listed.
 
-**Matched** - a matched card SHALL carry its set and number from the reference,
-and SHALL show recent sales at ungraded, PSA 9 and PSA 10 beside it.
+**Matched** - a matched card SHALL carry the reference's name for it, which
+names its set, and SHALL show recent sales at ungraded, PSA 9 and PSA 10
+beside it; its set and number stay as the collector typed them.
 
 **Reference sales** - those sales SHALL be shown as a reference and SHALL never
 be described as a valuation of the card.
@@ -299,11 +300,12 @@ every card SHALL be kept as typed and marked as unasked rather than unmatched,
 the declared value SHALL still be asked for, and no step SHALL wait on the
 reference.
 
-#### Scenario: grade10-site-grading-submission-plan-SC-10 - A matched card carries its set and its reference sales
+#### Scenario: grade10-site-grading-submission-plan-SC-10 - A matched card carries the reference's name and its sales
 **Serves:** grade10-site-grading-submission-plan-US-02 - a collector adding a card by name and reading what it sells for
 
 - **WHEN** a collector types a name the card price reference answers for
-- **THEN** the card carries the set and number from the reference
+- **THEN** the card carries the reference's name for it, and the set and
+  number the collector typed
 - **AND** recent sales at ungraded, PSA 9 and PSA 10 are shown beside it as a
   reference and not as a valuation
 

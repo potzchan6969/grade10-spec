@@ -227,7 +227,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 **Expected Results:**
 
-* The card line shows its set and number matched in the card price reference.
+* The card line shows the card price reference's name for the card, with the set and number as typed.
 * The recent sales at ungraded, PSA 9 and PSA 10 show beside the card as a reference, not a valuation.
 * The declared value entered is held on the card.
 
