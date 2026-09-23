@@ -69,9 +69,7 @@ function WinnerOrderRefundDialog({
   refund,
 }: WinnerOrderRefundDialogProps) {
   const bankReference =
-    refund.transfer.kind === "bank_transfer"
-      ? refund.transfer.reference
-      : null;
+    refund.transfer.kind === "bank_transfer" ? refund.transfer.reference : null;
   const note = refund.note?.trim() ? refund.note : null;
 
   return (

@@ -54,7 +54,8 @@ function lot(
   return {
     slug: partial.slug ?? partial.id,
     startsAt: partial.startsAt ?? partial.closesAt,
-    closeLabel: partial.closeLabel ?? partial.closesAt.slice(0, 16).replace("T", " "),
+    closeLabel:
+      partial.closeLabel ?? partial.closesAt.slice(0, 16).replace("T", " "),
     bidLabel: partial.bidLabel ?? "HK$1,200.00",
     bidCount: partial.bidCount ?? 0,
     imageAlt: partial.imageAlt ?? partial.title,
@@ -77,35 +78,40 @@ const COLLECTION: readonly {
   {
     cert: "116339449",
     title: "Zombie Hamburglar, PSA 9",
-    imageAlt: "2025 McDonald's A Minecraft Movie collectible card, Zombie Hamburglar, PSA 9",
+    imageAlt:
+      "2025 McDonald's A Minecraft Movie collectible card, Zombie Hamburglar, PSA 9",
     categoryId: "minecraft",
     category: "Minecraft",
   },
   {
     cert: "82397796",
     title: "Belle — Strange but Special, Enchanted, PSA 10",
-    imageAlt: "2023 Disney Lorcana The First Chapter #214 Belle — Strange but Special, Enchanted, PSA 10",
+    imageAlt:
+      "2023 Disney Lorcana The First Chapter #214 Belle — Strange but Special, Enchanted, PSA 10",
     categoryId: "lorcana",
     category: "Lorcana",
   },
   {
     cert: "114001914",
     title: "Full Art Reshiram, PSA 10",
-    imageAlt: "2021 Pokémon Japanese Promo 25th Anniversary #020 Full Art Reshiram, PSA 10",
+    imageAlt:
+      "2021 Pokémon Japanese Promo 25th Anniversary #020 Full Art Reshiram, PSA 10",
     categoryId: "pokemon",
     category: "Pokémon",
   },
   {
     cert: "124585253",
     title: "Heung-min Son, PSA 10",
-    imageAlt: "2024-25 Panini Prizm Premier League Manga #2 Heung-min Son, PSA 10",
+    imageAlt:
+      "2024-25 Panini Prizm Premier League Manga #2 Heung-min Son, PSA 10",
     categoryId: "sports",
     category: "Sports",
   },
   {
     cert: "92181213",
     title: "Trafalgar Law, Manga Alternate Art, PSA 10",
-    imageAlt: "2023 One Piece Japanese OP05 #069 Trafalgar Law, Manga Alternate Art, PSA 10",
+    imageAlt:
+      "2023 One Piece Japanese OP05 #069 Trafalgar Law, Manga Alternate Art, PSA 10",
     categoryId: "one-piece",
     category: "One Piece",
   },
@@ -119,21 +125,24 @@ const COLLECTION: readonly {
   {
     cert: "90774695",
     title: "Mai Shiranui, Gold Signature, PSA 10",
-    imageAlt: "2023 Weiss Schwarz King of Fighters #34 Mai Shiranui, Gold Signature, PSA 10",
+    imageAlt:
+      "2023 Weiss Schwarz King of Fighters #34 Mai Shiranui, Gold Signature, PSA 10",
     categoryId: "weiss",
     category: "Weiss Schwarz",
   },
   {
     cert: "116858030",
     title: "Birdie Wings, PSA 8",
-    imageAlt: "2025 McDonald's A Minecraft Movie collectible card, Birdie Wings, PSA 8",
+    imageAlt:
+      "2025 McDonald's A Minecraft Movie collectible card, Birdie Wings, PSA 8",
     categoryId: "minecraft",
     category: "Minecraft",
   },
   {
     cert: "84409084",
     title: "Kronk — Right-Hand Man, PSA 10",
-    imageAlt: "2023 Disney Lorcana The First Chapter #183 Kronk — Right-Hand Man, PSA 10",
+    imageAlt:
+      "2023 Disney Lorcana The First Chapter #183 Kronk — Right-Hand Man, PSA 10",
     categoryId: "lorcana",
     category: "Lorcana",
   },
@@ -147,7 +156,8 @@ const COLLECTION: readonly {
   {
     cert: "127813497",
     title: "Daniel, PSA 9",
-    imageAlt: "2012 Topps Allen & Ginter People of the Bible #PB-6 Daniel, PSA 9",
+    imageAlt:
+      "2012 Topps Allen & Ginter People of the Bible #PB-6 Daniel, PSA 9",
     categoryId: "sports",
     category: "Sports",
   },
@@ -161,21 +171,24 @@ const COLLECTION: readonly {
   {
     cert: "119777886",
     title: "Zoom on the Colorful Monogram, PSA 10",
-    imageAlt: "2025 Louis Vuitton x Murakami #019 Zoom on the Colorful Monogram, PSA 10",
+    imageAlt:
+      "2025 Louis Vuitton x Murakami #019 Zoom on the Colorful Monogram, PSA 10",
     categoryId: "louis-vuitton",
     category: "Louis Vuitton",
   },
   {
     cert: "101445655",
     title: '"Mage" Frieren, Gold Signature, PSA 10',
-    imageAlt: '2023 Weiss Schwarz Frieren trial deck #T11 "Mage" Frieren, Gold Signature, PSA 10',
+    imageAlt:
+      '2023 Weiss Schwarz Frieren trial deck #T11 "Mage" Frieren, Gold Signature, PSA 10',
     categoryId: "weiss",
     category: "Weiss Schwarz",
   },
   {
     cert: "116339448",
     title: "Fry Helmet, PSA 9",
-    imageAlt: "2025 McDonald's A Minecraft Movie collectible card, Fry Helmet, PSA 9",
+    imageAlt:
+      "2025 McDonald's A Minecraft Movie collectible card, Fry Helmet, PSA 9",
     categoryId: "minecraft",
     category: "Minecraft",
   },
@@ -281,4 +294,3 @@ export const ENDED_ONLY_LOTS: CatalogueLot[] = [
   withStatus(COLLECTION_LOTS[1], "Ended"),
   withStatus(COLLECTION_LOTS[2], "Ended"),
 ];
-

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@grade10/design-system/lib/utils";
-import { motion, type MotionStyle, type Transition } from "motion/react";
+import { type MotionStyle, motion, type Transition } from "motion/react";
 import type { CSSProperties } from "react";
 
 type BorderBeamProps = {
@@ -92,5 +92,5 @@ function BorderBeam({
   );
 }
 
-export { BorderBeam };
 export type { BorderBeamProps };
+export { BorderBeam };

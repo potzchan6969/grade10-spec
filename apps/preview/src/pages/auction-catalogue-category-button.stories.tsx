@@ -69,8 +69,9 @@ export const Selected: Story = {
   render: () => <ToggleCategory initiallySelected name="Pokémon" />,
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("button", { name: "Pokémon" }),
-    ).toHaveAttribute("aria-pressed", "true");
+    expect(canvas.getByRole("button", { name: "Pokémon" })).toHaveAttribute(
+      "aria-pressed",
+      "true",
+    );
   },
 };

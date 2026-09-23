@@ -114,9 +114,7 @@ export const OverlappingPair: Story = {
       expect(
         canvas.getByRole("link", { name: featuredLots[0].title }),
       ).toBeInTheDocument();
-      expect(
-        canvas.getByRole("link", { name: "Bid Now" }),
-      ).toBeInTheDocument();
+      expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
     });
 
     const second = canvas.getByRole("button", {

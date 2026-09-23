@@ -172,15 +172,11 @@ export type {
 // shared/ui/auction-order
 export {
   AuctionAddressForm,
-  auctionPhoneConfirmValue,
-  auctionPhoneSoftReady,
   type AuctionAddressFormCopy,
   type AuctionAddressFormProps,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
-export {
-  AuctionPhoneField,
-  type AuctionPhoneFieldProps,
-} from "./blocks/auction-order/auction-phone-field";
 export {
   AuctionOrderDetail,
   type AuctionOrderDetailCopy,
@@ -199,6 +195,10 @@ export {
   type AuctionOrderRowCopy,
   type AuctionOrderRowProps,
 } from "./blocks/auction-order/auction-order-row";
+export {
+  AuctionPhoneField,
+  type AuctionPhoneFieldProps,
+} from "./blocks/auction-order/auction-phone-field";
 export type {
   AuctionAddressFormValues,
   AuctionAddressKind,

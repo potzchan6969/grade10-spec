@@ -28,9 +28,9 @@ function SubmitPaymentProofDemo({
           Submit Payment Proof
         </Text>
         <Text size="sm" tone="secondary">
-          Standalone preview of the proof dialog Winner Order opens from
-          Submit Payment Proof. Rails live under View Bank Details; page wiring
-          lives under My Auctions / Winner Order / Payment.
+          Standalone preview of the proof dialog Winner Order opens from Submit
+          Payment Proof. Rails live under View Bank Details; page wiring lives
+          under My Auctions / Winner Order / Payment.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -101,9 +101,7 @@ export const Form: Story = {
     expect(modal.getByLabelText("Sender Name")).toBeVisible();
     expect(modal.getByLabelText("Transfer Date")).toBeVisible();
     expect(modal.getByLabelText("Transaction Reference / ID")).toBeVisible();
-    expect(
-      modal.queryByText("Proof of Payment File"),
-    ).not.toBeInTheDocument();
+    expect(modal.queryByText("Proof of Payment File")).not.toBeInTheDocument();
     expect(modal.getByText(WINNER_ORDER_PROOF_FILE_HINT)).toBeVisible();
     expect(modal.getByRole("button", { name: "Choose Files" })).toBeVisible();
     expect(modal.getByLabelText("Additional Notes (optional)")).toBeVisible();
