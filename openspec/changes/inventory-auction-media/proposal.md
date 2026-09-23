@@ -47,5 +47,5 @@ None.
 
 ## References
 
-- [Inventory · Product Assets](/p/grade10-admin/inventory#product-assets)
-- [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+- [Inventory · Product Assets](../../../docs/prds/products/grade10-admin/inventory/index.md#product-assets)
+- [Auction Management · Listings](../../../docs/prds/products/grade10-admin/auction/management.md#listings)
