@@ -485,7 +485,8 @@ Needs group 3's exports; the fixture transport stands in for groups 4 and 6.
 - [ ] 12.4 Build `OfferCard` and `AcceptOfferDialog`, the dialog held on its
       subject, the offer, because it is about that one offer and carries its
       terms, the answer sending that offer so one replaced under the open
-      dialog is refused, and read a superseded offer beside the live one (`grade10-site-vault-valuation-and-offer-SC-21`,
+      dialog is refused, and read a superseded offer beside the live one
+      (`grade10-site-vault-valuation-and-offer-SC-21`,
       `grade10-site-vault-valuation-and-offer-SC-22`,
       `grade10-site-vault-valuation-and-offer-SC-25`,
       `grade10-site-vault-valuation-and-offer-SC-26`)
