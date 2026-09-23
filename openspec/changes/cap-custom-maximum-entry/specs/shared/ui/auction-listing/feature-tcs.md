@@ -21,9 +21,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** smoke, release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
@@ -49,9 +51,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
@@ -78,9 +82,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
@@ -108,9 +114,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
@@ -136,9 +144,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
@@ -164,9 +174,11 @@ contract states,
 * **Type:** acceptance
 * **Suites:** release
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** Custom maximum ceiling
+
+**Decided by:** `packages/ui/src/blocks/auction-listing/listing-bid-money.test.ts`
 
 **Pre-conditions:**
 
