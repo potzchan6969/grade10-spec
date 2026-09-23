@@ -112,7 +112,10 @@ function AuctionCataloguePage({
     setPageRevealed(false);
     setListRevealed(false);
     setSkeletonCount(
-      Math.max(ordered.filter((lot) => lot.status !== "Ended").length, DEFAULT_SKELETON_COUNT),
+      Math.max(
+        ordered.filter((lot) => lot.status !== "Ended").length,
+        DEFAULT_SKELETON_COUNT,
+      ),
     );
     const timeout = window.setTimeout(() => {
       setPageStatus("ready");
@@ -354,7 +357,8 @@ function AuctionCataloguePage({
                       <li
                         className={cn(
                           "translate-y-3 opacity-0 blur-[3px] transition-[opacity,transform,filter] duration-400 ease-[cubic-bezier(0.22,1,0.36,1)] motion-reduce:translate-y-0 motion-reduce:opacity-100 motion-reduce:filter-none motion-reduce:transition-none",
-                          listRevealed && "translate-y-0 opacity-100 filter-none",
+                          listRevealed &&
+                            "translate-y-0 opacity-100 filter-none",
                         )}
                         key={lot.id}
                         style={{

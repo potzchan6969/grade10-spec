@@ -18,7 +18,13 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
+import {
+  type ReactNode,
+  useEffect,
+  useLayoutEffect,
+  useRef,
+  useState,
+} from "react";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 
 const REFERENCE_WARNING =
@@ -255,9 +261,7 @@ function WinnerOrderHowToPayDialog({
               ref={tabScrollRef}
             >
               <div
-                className={
-                  wideTrack ? "w-full" : "flex w-max px-5 pt-2 pb-5"
-                }
+                className={wideTrack ? "w-full" : "flex w-max px-5 pt-2 pb-5"}
               >
                 <TabsList
                   className={
