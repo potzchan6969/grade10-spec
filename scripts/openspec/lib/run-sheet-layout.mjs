@@ -217,15 +217,14 @@ export function envOf(value) {
 export const SUMMARY_COLUMNS = [
   ...SUMMARY_LEAD_COLUMNS,
   "Surface",
-  "Cases",
-  "Draft",
+  "Total",
+  "Pass rate",
   "To do",
   "Pass",
   "Fail",
   "Blocked",
   "Skipped",
   "N/A",
-  "Pass rate",
   "Commit SHA",
 ];
 
@@ -314,12 +313,11 @@ export function locateRun(summaryValues, titles, runId) {
  * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
  * the row points at.
  *
- * `Cases` counts the surface's own column rather than `Case ID`, because a
- * journey banner has a `Case ID` cell and no result cell: counting the results
- * counts cases and skips the banners for free.
+ * `Total` is the sum of To do through N/A on the same Summary row, so it
+ * stays the count of cases and not of journey banners.
  *
- * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
- * over cases automation has not reached is not reported as half failing.
+ * `Pass rate` is Pass over Total minus N/A on the same row, so a run over
+ * cases automation has not reached is not reported as half failing.
  *
  * Identity (`Run ID` through `Env`) and `Commit SHA` sit on the first
  * row only. The three surfaces below it are empty in those columns so a merge
@@ -334,14 +332,18 @@ export function summaryRows({
   selection,
   env,
   sha,
-  drafts,
 }) {
   const t = quoteTab(tab);
   return SURFACES.map((surface, i) => {
     const col = colLetter(MARKING_START + i);
     const range = `${t}!${col}2:${col}`;
     const count = (what) =>
-      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
+      `=IFERROR(COUNTIF(${range},"${what}"),"tab missing")`;
+    const todoCol = colLetter(SUMMARY_COLUMNS.indexOf("To do"));
+    const naCol = colLetter(SUMMARY_COLUMNS.indexOf("N/A"));
+    const passCol = colLetter(SUMMARY_COLUMNS.indexOf("Pass"));
+    const totalCol = colLetter(SUMMARY_COLUMNS.indexOf("Total"));
+    const atRow = (letter) => `INDIRECT("${letter}"&ROW())`;
     const first = i === 0;
     return [
       first ? runId : "",
@@ -351,15 +353,14 @@ export function summaryRows({
       first ? selection : "",
       first ? env : "",
       surface,
-      `=IFERROR(COUNTA(${range}),"tab deleted")`,
-      drafts,
+      `=IFERROR(SUM(INDIRECT("${todoCol}"&ROW()&":${naCol}"&ROW())),"tab missing")`,
+      `=IFERROR(${atRow(passCol)}/(${atRow(totalCol)}-${atRow(naCol)}),"")`,
       count("to_do"),
       count("pass"),
       count("fail"),
       count("blocked"),
       count("skipped"),
       count("n/a"),
-      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
       first ? sha : "",
     ];
   });

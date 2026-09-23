@@ -11,6 +11,7 @@ derivation that resolves one status a buyer and an operator both read.
   - Invoice status gains `payment_verifying`: the winner uploaded payment proof and an operator has not checked it
   - Stopped deadline: while proof is checked the deadline does not run, and the time left is kept
 - Derived order status
+  - Refunded from partial collection: makes a refund terminal after any recorded payment
   - Payment Verifying: its own name, read by the winner and the operator alike
   - Replaced invoices hold no status: the order's invoice status is always its current invoice's
 
@@ -26,9 +27,7 @@ derivation that resolves one status a buyer and an operator both read.
   - Permitted transitions: every other move between states is refused
 - Independence from the store
   - Separate derivation: an auction order and a store order share label names and share no meaning
-
 ## Requirements
-
 ### Requirement: An auction order carries two writable status fields
 
 Each auction order SHALL carry exactly one invoice status and exactly one
@@ -425,3 +424,27 @@ invoice refuses proof upload, so the two states never meet.
 - **WHEN** an operator returns it to `pending` at 2026-09-25T09:00:00Z
 - **THEN** its payment deadline is 2026-09-27T09:00:00Z
 - **AND** Grade10 writes `expired` at that deadline if the invoice is still `pending`
+
+### Requirement: Refunded is a terminal auction order status
+
+An auction order with a recorded refund SHALL derive status Refunded whether
+the cumulative payment was full or partial. The status SHALL be terminal and
+SHALL not be replaced by a later payment or shipment event.
+
+#### Scenario: auction-status-SC-51 - A refund derives Refunded
+**Serves:** Derived order status - a refund derives Refunded
+
+- **GIVEN** an order with a recorded refund after partial collection
+- **WHEN** any order-status surface reads it
+- **THEN** the derived status is Refunded
+- **AND** a later payment event does not change that status
+
+#### Scenario: auction-status-SC-54 - An overpayment does not derive Refunded
+**Serves:** Derived order status - an overpayment keeps the order status
+
+- **GIVEN** an order with a payment above its invoice total and a returned
+  difference
+- **WHEN** any order-status surface reads it
+- **THEN** the derived status remains the status before the overpayment return
+- **AND** it is not Refunded
+

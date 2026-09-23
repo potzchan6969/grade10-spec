@@ -80,13 +80,13 @@
 * Only the returned difference appears below Order Total.
 * The refund details can be opened without exposing operator proof or a Stripe provider reference.
 
-## winner-order-US16: Winner matches a bank refund against their own statement
+## winner-order-US17: Winner matches a bank refund against their own statement
 
 **As a** winner whose refund was sent by bank transfer,
 **I want** the reference the operator sent it under, beside the amount and where it went,
 **so that** I can find the credit on my statement without asking Customer Service.
 
-### winner-order-US16-TC1-1: Bank refund details show destination and reference
+### winner-order-US17-TC1-1: Bank refund details show destination and reference
 
 **Classification:**
 
@@ -99,7 +99,7 @@
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
-* **Trace:** winner-order-US-16
+* **Trace:** winner-order-US-17
 
 **Pre-conditions:**
 

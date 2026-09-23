@@ -59,7 +59,7 @@ showing the operator's proof or a Stripe provider reference.
 - **AND** the full card number, Stripe provider reference and proof are not shown
 
 #### Scenario: winner-order-SC-173 - Bank refund details show destination and reference
-**Serves:** winner-order-US-16 - matching a bank refund against their own statement
+**Serves:** winner-order-US-17 - matching a bank refund against their own statement
 
 - **GIVEN** a refunded order with a bank transfer refund and a refund detail record with no operator note
 - **WHEN** the winner opens the refund details

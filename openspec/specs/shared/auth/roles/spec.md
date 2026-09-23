@@ -11,11 +11,10 @@ role is data; what a role grants is not.
 - Closed role set
   - Named roles: user, staff, support, auditor, admin; unknown names are dropped
 - Permission checks
+  - Refund permission: separates refund processing from payment settlement
   - Grants not names: a product checks permission, never the role string at the call site
   - Stacking: combined roles stack; an operator cannot widen what a role grants
-
 ## Requirements
-
 ### Requirement: A person holds roles from a closed set
 
 A signed-in person SHALL hold one or more of: `user`, `staff`, `support`,
@@ -127,3 +126,24 @@ what a role grants.
 - **WHEN** they use the users directory
 - **THEN** they can change who holds a role
 - **AND** they cannot change what that role grants
+
+### Requirement: Refund permission follows the closed role vocabulary
+
+The permission vocabulary SHALL include `auction:refund`. `staff` and
+`admin` SHALL receive it; `finance` SHALL not receive it; and a role without
+the grant SHALL be refused when recording a refund. Reading refund records
+remains available wherever the existing auction read grant allows it.
+
+#### Scenario: shared-auth-roles-SC-14 - Staff and admin can record refunds
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
+
+- **WHEN** the role matrix is read for `staff` and `admin`
+- **THEN** both roles include `auction:refund`
+
+#### Scenario: shared-auth-roles-SC-15 - Finance cannot record refunds
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
+
+- **WHEN** finance attempts to record a refund
+- **THEN** Grade10 refuses the mutation
+- **AND** finance can still read a recorded refund
+

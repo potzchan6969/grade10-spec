@@ -44,12 +44,15 @@ What a listing carries, from the operator's form to the card.
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
 | Address | A slug, unique among every listing | `/auction/listings/<slug>` |
-| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated at creation and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Nothing; lots are identified by their title. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
+| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated at creation and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Nothing; the code is not a route or public identifier, and fresh pages and metadata omit it. A cached preview may remain stale without a purge guarantee. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
   [Auction Management](/p/grade10-admin/auction/management#listings)
+- ❓ **Cached shared-link previews** — whether an already cached preview
+  refreshes when the listing changes; until Product confirms, an old preview
+  may remain stale without a purge or regeneration guarantee
 
 ## Auction Details
 

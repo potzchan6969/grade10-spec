@@ -504,7 +504,7 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 - **Nothing returns** — no result reaches the store, and no suite carries one
 - **CI holds the credentials** — the `Run sheet` workflow mints a short-lived token from the repository's own OIDC identity; no service-account key exists
 - **The layout is code** — `scripts/openspec/lib/run-sheet-layout.mjs`, not a template tab inside the spreadsheet
-- **Renaming or deleting a tab cannot be prevented** — Sheets protects cells, not tabs. The Summary row then reads `tab deleted`, and its provenance survives
+- **Renaming or deleting a tab cannot be prevented** — Sheets protects cells, not tabs. The Summary row then reads `tab missing`, and its provenance survives
 
 ❓ Open: recording a tab somebody deleted.
 

@@ -36,7 +36,7 @@ winner of three lots has three orders, each with its own deadlines.
 
 | Rule | Value |
 | --- | --- |
-| Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address |
+| Order setup | **48 hours** from the lot's actual close to confirm a delivery address, a payment method and a billing address; an operator reopen starts a fresh **48 hours** |
 | Payment | **7 calendar days** from when Grade10 sends the invoice, never from the close; nothing the winner does moves it |
 | Buyer's premium | **20%** of the winning bid, rounded half up, or the currency's minimum charge when higher — **0** in USD, HKD and JPY |
 | Payment proof | 🚧 **1 to 3** PDF, PNG, JPG or HEIC files of up to **5 MB** each, **15 MB** total, uploaded once |
@@ -88,7 +88,7 @@ meaning.
 | **Shipped** | Paid | The warehouse dispatches, with a tracking number |
 | **Delivered** | Paid | The carrier confirms delivery |
 | **Cancelled** | Cancelled | An operator cancels an unpaid order; the lot goes back to stock |
-| **Refunded** | Refunded | 🚧 A refund that closes the sale, on a paid or Partially Paid order, for any amount up to what was paid. An overpayment is not this status. Failing to pay is never Refunded |
+| **Refunded** | Refunded | A refund that closes the sale, on a paid or Partially Paid order, for any amount up to what was paid. An overpayment is not this status. Failing to pay is never Refunded |
 
 - **Read, never written** — one ordered rule chain derives it, so it cannot
   contradict the facts; dispatch before payment, cancelling a dispatched
@@ -104,23 +104,23 @@ meaning.
   suspension stays until an operator reinstates
 - 🚧 **Suspended winner** — the order remains payable and the page gives
   contact guidance without showing the operator's reason
-- 🚧 **A refunded order** — reads Refunded as both the order status and the
+- **A refunded order** — reads Refunded as both the order status and the
   invoice status, however much was paid and wherever the card is; no Pay, no
   address form and no letter; the invoice and every receipt already issued
   stay downloadable; Order Summary stays the invoice; an inline alert below
   Order Total shows the amount returned, and opens a dialog that stacks
   Amount, Transfer to, Reference (bank only), Reason, and Note when the
   operator recorded one
-- 🚧 **The bank reference** — a refund sent by bank transfer shows the
+- **The bank reference** — a refund sent by bank transfer shows the
   operator's reference in the same details, between Transfer to and Reason,
   so the winner can find the credit on their statement; a card refund shows
   none, because a statement lists a card refund against the charge it
   reverses
-- 🚧 **An overpaid difference** — the order keeps its status on Winner Order
+- **An overpaid difference** — the order keeps its status on Winner Order
   and on My Auctions; Winning Bid, Shipping & Handling and Order Total stay
   the amount that should have been paid; an inline alert below Order Total
   shows only the difference, with the same detail dialog
-- 🚧 **Refund transaction clues** — Transfer to uses the shared payment card.
+- **Refund transaction clues** — Transfer to uses the shared payment card.
   A card shows the brand logo and the last four digits. A bank transfer shows
   a bank icon with the masked destination on the primary line and the
   free-text bank name as secondary text under it. A paid order's payment
@@ -195,15 +195,17 @@ by card, reads:
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
-  forward as the order's one public reference once a winner exists; shown on
-  the winner's order, in operator support surfaces, and safe to copy into
-  FPS, local bank transfer or SWIFT notes. Grade10 writes it to Stripe
-  transaction metadata under `payment_reference_code`, then uses Stripe's
-  returned provider reference in internal document filenames. There is no
-  separate order ID — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
-- 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus a 2-digit
-  issuance sequence; a reissue increments the sequence and keeps the old ID
-  finding the order
+  forward unchanged as the order's one public reference once a winner
+  exists; shown on the winner's invoice and operator support surfaces, and
+  safe to copy into FPS, local bank transfer or SWIFT notes. The public
+  listing never shows or routes by this code. Grade10 writes it to Stripe
+  transaction metadata under `payment_reference_code`, then keeps Stripe's
+  returned provider reference internal. There is no separate order ID —
+  [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+- 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
+  sequence with at least 2 digits; it continues as `100` after `99`. A reissue
+  increments the sequence, keeps the payment reference and lets the old ID
+  find the order
 - 🚧 **Bill To and Ship To** — both from the order's snapshot, each with
   name, company name, phone and address; they read the same unless the
   winner unticked Same as delivery address
@@ -456,9 +458,9 @@ a second payment provider, and changes to the bid-time rules.
 | Payment deadline | Decided | 7 calendar days from invoice send, not from lot close, as an absolute datetime with no countdown. At expiry Winner Order hides card Pay and shows Contact Us; the invoice is `expired` and the order reads Payment Overdue; a card payment received before the deadline counts even if it confirms after. | Product (@tangconst, @jeffffej0909) |
 | Cancelled vs Refunded | Decided | Failing to pay ends as Cancelled when an operator cancels; Refunded is a recorded refund only. A missed setup deadline reads Setup Overdue; a missed payment deadline reads Payment Overdue — neither is Cancelled on its own. | Product |
 | A cancelled order | 🚧 In flight | `Cancelled on {date}` with the lot and the winning bid, and Contact Us as the only action; no reason is shown, as the cancellation letter gives none, and a suspension stays. Chosen over showing the winner the operator's reason category. | Product and Operations (@jeffffej0909) |
-| A refunded order | 🚧 In flight | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
-| An overpaid difference | 🚧 In flight | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
-| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
+| A refunded order | Decided | Refunded beside the title, paid in full or in part and wherever the card is; no stepper, Pay or address form; the invoice and receipts stay; Order Summary stays the invoice; an inline alert below Order Total shows the amount returned and opens a dialog that stacks Amount, Transfer to, Reference (bank only), Reason, and Note when the operator recorded one. Proof, Stripe reference and audit number stay with the operator. | Product (@jeffffej0909, @tangconst) |
+| An overpaid difference | Decided | The order keeps its status. Winning Bid, Shipping & Handling and Order Total stay the amount that should have been paid. An inline alert below Order Total shows only the difference, with the same detail dialog. My Auctions does not change. Chosen over ending every refund, including an overpayment, as Refunded. | Product (@tangconst) |
+| Refund transaction clues | Decided | Transfer to uses the shared payment card. A card shows the brand logo and the last four digits. A bank transfer shows a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A paid order's payment method uses that same layout. A bank refund shows its provider reference in the details; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product (@tangconst) |
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
@@ -487,7 +489,8 @@ a second payment provider, and changes to the bid-time rules.
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
 | Awaiting Setup | Decided | Incomplete setup — delivery address, payment method and billing address — reads Awaiting Setup for the winner and the operator alike. | Product (@jeffffej0909) |
-| Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: inside the window the order reads Awaiting Setup or Pending Payment; once the deadline passes it reads Setup Overdue or Payment Overdue on Winner Order, My Auctions and the operator queue alike. | Product and design (@tangconst) |
+| Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: an incomplete setup reads Setup Overdue after 48 hours from the lot's actual close; Payment Overdue starts only after Grade10 sends the invoice and its 7-day payment deadline passes. Preparing Invoice has no setup-overdue queue mark. | Product and design (@tangconst) |
+| Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
 | My Auctions Status column | 🚧 In flight | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
 | Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: once payments reach 90% of the total, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
@@ -495,6 +498,7 @@ a second payment provider, and changes to the bid-time rules.
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 | Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
+| Receipt breakdown | 🚧 In flight | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
 | A balance belongs on a receipt, not on a page | 🚧 In flight | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
 | Receipts are append-only | 🚧 In flight | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |

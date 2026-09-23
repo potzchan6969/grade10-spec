@@ -377,6 +377,7 @@ Runs once per row of **Test data**.
 
 * A signed-in collector's cart review has succeeded.
 * The member holds one applicable promo code and one inapplicable code.
+* The cart has no selected code or points.
 
 **Steps:**
 
@@ -409,6 +410,7 @@ Runs once per row of **Test data**.
 
 * A signed-in collector's cart review has succeeded.
 * The points read quotes a balance and a maximum for the reviewed goods.
+* The cart has no selected code or points.
 
 **Steps:**
 
@@ -418,10 +420,10 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The balance, conversion rate, and maximum points and amount are shown.
-* No points amount is applied.
+* Opening the points view applies no points.
 * The subtotal and estimated total remain the reviewed subtotal.
 
-### grade10-site-store-cart-drawer-US04-TC03-1: Unresolved reviews receive no tender facts
+### grade10-site-store-cart-drawer-US04-TC03-2: Unresolved reviews receive no tender facts
 
 **Classification:**
 
@@ -456,6 +458,7 @@ Runs once per row of **Test data**.
 
 * Member-only promo and points facts are not shown.
 * No member-only tender read is required to render the cart review state.
+* Points actions remain unavailable until a usable quote answers.
 
 ### grade10-site-store-cart-drawer-US04-TC04-1: Latest basket replaces earlier tender facts
 
@@ -493,7 +496,508 @@ Runs once per row of **Test data**.
 * The previous tender facts are not presented as current.
 * The drawer shows only the successful reads for the latest reviewed basket.
 
+
+---
+
+## grade10-site-store-cart-drawer-US05: Signed-in collector chooses points before checkout
+
+**As a** signed-in collector,
+**I want** to apply, maximise or remove points against the reviewed cart and keep that choice at checkout,
+**so that** I can see the accepted saving before leaving the page.
+
+### grade10-site-store-cart-drawer-US05-TC01-1: Apply carries accepted points and the existing code to checkout
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* A usable quote supplies the live balance, rate and ceiling.
+* The cart already holds an accepted code.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <points request> | A positive whole amount below the quoted ceiling |
+
+**Steps:**
+
+1. Open the points view.
+2. Enter <points request> and click Apply.
+3. Wait for the accepted quote.
+4. Click Checkout.
+
+**Expected Results:**
+
+* The drawer shows accepted points and their quoted saving.
+* The existing code and its accepted discount remain.
+* Estimated total equals goods minus accepted code and points.
+* Checkout retains the accepted code and points.
+* Checkout reads current figures against the same cart.
+
+### grade10-site-store-cart-drawer-US05-TC02-1: Use max applies the quoted ceiling after the code
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* A usable quote supplies <ceiling state>.
+
+**Test data:**
+
+| `<ceiling state>` |
+| --- |
+| Available points balance is less than qualifying goods after code |
+| Qualifying goods after code are less than available points balance |
+
+**Steps:**
+
+1. Open the points view.
+2. Click Use max.
+3. Wait for the accepted quote.
+
+**Expected Results:**
+
+* Applied points equal the accepted ceiling for this basket.
+* The ceiling accounts for balance, qualifying goods and existing code.
+* The summary uses the accepted saving and estimated total.
+
+### grade10-site-store-cart-drawer-US05-TC03-1: Apply above the ceiling keeps only accepted points
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* A usable quote supplies a positive ceiling.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <points request> | One whole point above the current quoted ceiling |
+
+**Steps:**
+
+1. Enter <points request>.
+2. Click Apply and wait for the accepted quote.
+
+**Expected Results:**
+
+* The accepted points are trimmed to the quoted ceiling.
+* The summary shows only the accepted saving.
+* Checkout carries the accepted choice.
+
+### grade10-site-store-cart-drawer-US05-TC04-1: Remove clears points and preserves the existing code
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The current cart holds accepted points and a code.
+
+**Steps:**
+
+1. Click Remove in the applied points section.
+2. Wait for the accepted quote.
+3. Click Checkout.
+
+**Expected Results:**
+
+* No points remain applied in the drawer or checkout.
+* The existing code remains selected.
+* The summary retains the accepted code discount.
+* Estimated total excludes a points saving.
+
+### grade10-site-store-cart-drawer-US05-TC05-1: Pending changes block duplicate actions and Checkout
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The current basket has an accepted choice and total.
+* The response to <points action> can be held in flight.
+
+**Test data:**
+
+| `<points action>` |
+| --- |
+| Apply a new points amount |
+| Use max |
+| Remove applied points |
+
+**Steps:**
+
+1. Perform <points action> and hold its response.
+2. Inspect points controls and Checkout.
+3. Attempt the same action again.
+4. Complete the change with a usable quote.
+
+**Expected Results:**
+
+* Pending controls prevent duplicate tender changes.
+* Checkout remains disabled while the change is unresolved.
+* No unaccepted saving replaces the accepted total.
+* The completed summary uses the accepted quote.
+
+### grade10-site-store-cart-drawer-US05-TC06-1: Failed changes preserve the accepted same-basket choice
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The basket has an accepted points choice and total.
+* The basket remains unchanged.
+* The response to <points action> fails.
+
+**Test data:**
+
+| `<points action>` |
+| --- |
+| Apply a different points amount |
+| Use max |
+| Remove applied points |
+
+**Steps:**
+
+1. Perform <points action>.
+2. Wait for the failure.
+3. Inspect the error, applied choice and total.
+
+**Expected Results:**
+
+* A localized error explains the unsuccessful change.
+* The last accepted same-basket points choice remains.
+* The last accepted same-basket total remains.
+* The existing code remains selected.
+
+### grade10-site-store-cart-drawer-US05-TC07-1: A changed basket rejects an earlier points result
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* A points change against the original basket is pending.
+
+**Steps:**
+
+1. Change a cart line before the points response arrives.
+2. Wait for the changed basket review and quote.
+3. Deliver the earlier points response.
+4. Inspect the points choice and summary.
+
+**Expected Results:**
+
+* The changed basket is reviewed and quoted again.
+* Old-basket saving and total are not shown as current.
+* Checkout stays unavailable until the current basket is resolved.
+* The earlier response cannot replace the current basket summary.
+
+### grade10-site-store-cart-drawer-US05-TC08-1: Reload and another device recover the accepted choice
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The member has accepted points and a code in the drawer.
+
+**Test data:**
+
+| `<return route>` |
+| --- |
+| Reload the current page |
+| Sign in as the same member on another device |
+
+**Steps:**
+
+1. Perform <return route>.
+2. Open the drawer and wait for current review and quote.
+3. Open Checkout.
+
+**Expected Results:**
+
+* The accepted code and points choice follow the member cart.
+* Displayed figures come from a fresh quote.
+* Checkout receives the same accepted choice.
+
+### grade10-site-store-cart-drawer-US05-TC09-1: Unavailable points cannot be applied
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The programme or quote is in <points state>.
+
+**Test data:**
+
+| `<points state>` |
+| --- |
+| Member is outside the programme |
+| Programme has not answered |
+| No usable quote is available |
+| Available points balance is zero |
+
+**Steps:**
+
+1. Inspect the points section.
+2. Attempt to apply points if a control is shown.
+
+**Expected Results:**
+
+* No enabled points action is available.
+* No unaccepted points saving appears.
+
+### grade10-site-store-cart-drawer-US05-TC10-1: A code covering all qualifying goods leaves no points to apply
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in programme member has opened a successfully reviewed drawer.
+* The accepted code covers all qualifying goods.
+* The programme has answered with the member balance.
+
+**Steps:**
+
+1. Open the points section.
+2. Inspect the amount field and points actions.
+
+**Expected Results:**
+
+* The field explains that points have nothing left to pay.
+* No positive points saving is applied.
+* The accepted code remains selected.
+
+### grade10-site-store-cart-drawer-US05-TC11-1: Invalid amounts do not mutate points
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in member has a reviewed basket and accepted tender choice.
+
+**Steps:**
+
+1. Try empty, zero, negative, fractional, non-numeric and non-finite amounts.
+
+**Expected Results:**
+
+* No invalid amount is persisted; the accepted choice and total remain.
+
+### grade10-site-store-cart-drawer-US05-TC12-1: Closing or changing member rejects stale results
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in member has a reviewed basket and accepted tender choice.
+
+**Steps:**
+
+1. Start a points operation; close the drawer or change member before its response. Reopen after the response.
+
+**Expected Results:**
+
+* No stale result updates the view or starts a stale write. A write already sent remains scoped to its member; reopening reads current persisted intent.
+
+### grade10-site-store-cart-drawer-US05-TC13-1: Persistence success followed by refresh failure stays unresolved
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-drawer-US-05
+
+**Pre-conditions:**
+
+* A signed-in member has a reviewed basket and accepted tender choice.
+
+**Steps:**
+
+1. Save a points choice successfully, then fail the next basket refresh.
+
+**Expected Results:**
+
+* The UI does not claim rollback of the successful write. Stale totals remain unavailable and Checkout waits for authoritative reread.
+
 ## Reconciliation
+
+**Run:** 2026-09-22. Independent scenario and test-design readings used the
+same points anchors. The blind reader received only `/tmp/cart-points-blind`:
+purpose, feature set, journeys, decisions, points design, linked PRD and the
+previous suite without reconciliation. Requirements, archives and tech design
+were excluded. The coordinator supplied dispositions after both readings.
+
+- **Preserved** — the prior US01–US03 cases and their original reconciliation below.
+- **Aligned** — Apply, Use max, Remove, persistence and checkout map to
+  `grade10-site-store-cart-drawer-SC-20`, `grade10-site-store-cart-drawer-SC-21`
+  and `grade10-site-store-cart-drawer-SC-27`.
+- **Boundary** — invalid input, zero and ceiling cases land in
+  `grade10-site-store-cart-drawer-SC-22` and `grade10-site-store-cart-drawer-SC-26`.
+- **Failure** — pending, failed, refreshed and stale operations land in
+  `grade10-site-store-cart-drawer-SC-23` through `grade10-site-store-cart-drawer-SC-25`.
+- **Out of suite:** `grade10-site-store-cart-drawer-SC-17` visual parity is
+  verified by Group 5.4's Storybook comparison, keyboard and locale checks.
+
+### Earlier Reconciliation
+
 
 **Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the member-cart decision.
 
@@ -509,8 +1013,8 @@ Runs once per row of **Test data**.
 | grade10-site-store-cart-drawer-SC-13 | US03-TC01-1 |
 | grade10-site-store-cart-drawer-SC-15 | US03-TC03-1 |
 | grade10-site-store-cart-drawer-SC-16 | US04-TC01-1 |
-| grade10-site-store-cart-drawer-SC-17 | US04-TC02-1 |
-| grade10-site-store-cart-drawer-SC-18 | US04-TC03-1 |
+| grade10-site-store-cart-drawer-SC-17 | Group 5.4 visual verification; US04-TC02-1 retains opening-without-mutation coverage |
+| grade10-site-store-cart-drawer-SC-18 | US04-TC03-2 |
 | grade10-site-store-cart-drawer-SC-19 | US04-TC04-1 |
 | Uncovered anchors | none |
 | Contradicted readings | none |

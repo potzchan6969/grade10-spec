@@ -26,6 +26,9 @@ actually creates the checkout session.
 
 ## Tender Actions
 
+🚧 **Unresolved choice** — tender actions and Checkout wait while the
+application saves a choice; accepted figures stay visible until it answers.
+
 🚧 **Tender actions need an answer** — a promo or points action appears only
 when the application supplies the callback that can perform it. The drawer can
 show current tender context without offering an action that cannot change it.
