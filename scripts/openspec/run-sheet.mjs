@@ -31,23 +31,33 @@
 import { execFileSync } from "node:child_process";
 import { readFileSync } from "node:fs";
 import {
+  BODY_FOREGROUND,
   COLUMN_WIDTHS,
   COLUMNS,
+  capabilityBackground,
   colLetter,
   DRAFT_BACKGROUND,
+  envOf,
   FILTER_START,
   FONT,
   FONT_SIZE,
-  JOURNEY_BACKGROUND,
+  HEADER_BACKGROUND,
+  HEADER_FOREGROUND,
+  journeyBackground,
+  locateRun,
   MARKING_START,
   quoteTab,
   RESULT_COLORS,
   RESULTS,
   SUMMARY_BANDS,
   SUMMARY_COLUMNS,
+  SUMMARY_LEAD_COLUMNS,
+  SUMMARY_SHA_COL,
   SUMMARY_TAB,
   SURFACE_END,
   SURFACES,
+  summaryRows,
+  tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
   automatedGateOf,
@@ -84,10 +94,13 @@ Selection - one of these, and the first two resolve to the third:
 Flags:
   --name <run>        Run name; the tab becomes <id>-<slug of name>   (required)
   --selection <text>  What was asked for, recorded on the Summary row
-  --include-draft     Also take \`draft\` cases (grey-banded in the tab)
-  --include-automated Also take cases an automated test already covers
+  --env <name>        staging or production; defaults to staging
+  --include-draft     Also take \`draft\` cases (stone-grey in the tab)
+  --exclude-automated Leave out cases an automated test already covers
+  --sandbox           Write to TCS_SHEET_SANDBOX_ID instead of TCS_SHEET_ID
+  --overwrite <id>    Rewrite that run's tab and its Summary block (same id)
   --sha <sha>         Commit to record; defaults to the current HEAD
-  --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID
+  --sheet <id>        Spreadsheet id; defaults to TCS_SHEET_ID (or sandbox)
   --dry-run           Print what would be written and touch no network
   --help              Print this help and exit
 `);
@@ -97,26 +110,31 @@ function parseArgs(argv) {
   const args = {
     name: null,
     selection: null,
+    env: null,
     suites: null,
     priority: null,
     level: null,
     scope: null,
     cases: null,
     includeDraft: false,
-    includeAutomated: false,
+    includeAutomated: true,
+    sandbox: false,
+    overwrite: null,
     sha: null,
-    sheet: process.env.TCS_SHEET_ID ?? null,
+    sheet: null,
     dryRun: false,
   };
   const takes = {
     "--name": "name",
     "--selection": "selection",
+    "--env": "env",
     "--suites": "suites",
     "--priority": "priority",
     "--level": "level",
     "--scope": "scope",
     "--sha": "sha",
     "--sheet": "sheet",
+    "--overwrite": "overwrite",
   };
   for (let i = 0; i < argv.length; i += 1) {
     const a = argv[i];
@@ -126,6 +144,8 @@ function parseArgs(argv) {
     } else if (a === "--dry-run") args.dryRun = true;
     else if (a === "--include-draft") args.includeDraft = true;
     else if (a === "--include-automated") args.includeAutomated = true;
+    else if (a === "--exclude-automated") args.includeAutomated = false;
+    else if (a === "--sandbox") args.sandbox = true;
     else if (a === "--cases") args.cases = (argv[++i] ?? "").split(",");
     else if (a === "--cases-file") args.cases = readIdFile(argv[++i]);
     else if (a in takes) args[takes[a]] = argv[++i] ?? null;
@@ -156,6 +176,40 @@ function die(message, hint = null) {
   if (hint) console.error(`\n${dim(hint)}`);
   console.error("");
   process.exit(1);
+}
+
+function resolveSpreadsheet(args) {
+  if (args.sheet) return args.sheet;
+  if (args.sandbox) {
+    const id = process.env.TCS_SHEET_SANDBOX_ID ?? null;
+    if (!id)
+      die(
+        "no TCS_SHEET_SANDBOX_ID",
+        "Set the repository variable, or pass --sheet <id>. It is the part of the sheet's URL between /d/ and /edit.",
+      );
+    return id;
+  }
+  const id = process.env.TCS_SHEET_ID ?? null;
+  if (!id)
+    die(
+      "no spreadsheet id",
+      "Set TCS_SHEET_ID, or pass --sheet <id>. It is the part of the sheet's URL between /d/ and /edit.",
+    );
+  return id;
+}
+
+function printRegister(titles, summaryValues) {
+  const tabs = titles.length
+    ? titles.map((t) => `  ${t}`).join("\n")
+    : "  (none)";
+  const ids = (summaryValues ?? [])
+    .slice(1)
+    .map((row) => row?.[0])
+    .filter(
+      (one) => String(one ?? "").trim() !== "" && Number.isFinite(Number(one)),
+    );
+  const runs = ids.length ? ids.map((id) => `  ${id}`).join("\n") : "  (none)";
+  return `Tabs:\n${tabs}\nSummary Run IDs:\n${runs}`;
 }
 
 function headSha() {
@@ -209,7 +263,7 @@ async function call(token, path, { method = "GET", body = null } = {}) {
   if (res.status === 404)
     die(
       "No such spreadsheet (404).",
-      "Check TCS_SHEET_ID — it is the id in the sheet's URL, between /d/ and /edit.",
+      "Check TCS_SHEET_ID or TCS_SHEET_SANDBOX_ID — it is the id in the sheet's URL, between /d/ and /edit.",
     );
   die(`Sheets API ${res.status}: ${text.slice(0, 400)}`);
 }
@@ -252,9 +306,14 @@ async function ensureSummary(token, id, sheets) {
         ])
       ).replies[0].addSheet.properties.sheetId;
 
-  const head = await values(token, id, `${quoteTab(SUMMARY_TAB)}!A1:A1`);
-  if ((head.values?.[0]?.[0] ?? "") !== SUMMARY_COLUMNS[0]) {
-    if (found)
+  const head = await values(
+    token,
+    id,
+    `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}1`,
+  );
+  const current = head.values?.[0] ?? [];
+  if (current.join("\t") !== SUMMARY_COLUMNS.join("\t")) {
+    if (found && (current[0] ?? "") !== SUMMARY_COLUMNS[0])
       await batchUpdate(token, id, [
         {
           insertDimension: {
@@ -267,35 +326,27 @@ async function ensureSummary(token, id, sheets) {
     ]);
   }
 
-  const rate = SUMMARY_COLUMNS.indexOf("Pass rate");
   await batchUpdate(token, id, [
     {
       repeatCell: {
-        range: { sheetId },
+        range: {
+          sheetId,
+          startRowIndex: 0,
+          endRowIndex: 1,
+        },
         cell: {
           userEnteredFormat: {
-            textFormat: { fontFamily: FONT, fontSize: FONT_SIZE },
+            backgroundColor: HEADER_BACKGROUND,
+            textFormat: {
+              fontFamily: FONT,
+              fontSize: FONT_SIZE,
+              bold: true,
+              foregroundColor: HEADER_FOREGROUND,
+            },
           },
         },
-        fields: "userEnteredFormat.textFormat(fontFamily,fontSize)",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
-        cell: { userEnteredFormat: { textFormat: { bold: true } } },
-        fields: "userEnteredFormat.textFormat.bold",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 1, startColumnIndex: rate },
-        cell: {
-          userEnteredFormat: {
-            numberFormat: { type: "PERCENT", pattern: "0.0%" },
-          },
-        },
-        fields: "userEnteredFormat.numberFormat",
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat(fontFamily,fontSize,bold,foregroundColor))",
       },
     },
     {
@@ -305,6 +356,29 @@ async function ensureSummary(token, id, sheets) {
       },
     },
   ]);
+  return sheetId;
+}
+
+async function writeRunTab(token, spreadsheetId, tab, rows, lines) {
+  const made = await batchUpdate(token, spreadsheetId, [
+    {
+      addSheet: {
+        properties: {
+          title: tab,
+          gridProperties: {
+            rowCount: rows.length + 1,
+            columnCount: COLUMNS.length,
+          },
+        },
+      },
+    },
+  ]);
+  const sheetId = made.replies[0].addSheet.properties.sheetId;
+  await putValues(token, spreadsheetId, `${quoteTab(tab)}!A1`, [
+    COLUMNS,
+    ...rows,
+  ]);
+  await batchUpdate(token, spreadsheetId, dressing(sheetId, lines));
   return sheetId;
 }
 
@@ -376,25 +450,14 @@ function dressing(sheetId, lines) {
         range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
         cell: {
           userEnteredFormat: {
-            textFormat: { bold: true },
-            backgroundColor: { red: 0.2, green: 0.25, blue: 0.3 },
+            textFormat: { bold: true, foregroundColor: HEADER_FOREGROUND },
+            backgroundColor: HEADER_BACKGROUND,
             verticalAlignment: "MIDDLE",
             wrapStrategy: "WRAP",
           },
         },
         fields:
           "userEnteredFormat(textFormat,backgroundColor,verticalAlignment,wrapStrategy)",
-      },
-    },
-    {
-      repeatCell: {
-        range: { sheetId, startRowIndex: 0, endRowIndex: 1 },
-        cell: {
-          userEnteredFormat: {
-            textFormat: { foregroundColor: { red: 1, green: 1, blue: 1 } },
-          },
-        },
-        fields: "userEnteredFormat.textFormat.foregroundColor",
       },
     },
     // Two frozen columns, so the case a tester is marking stays named however
@@ -480,8 +543,8 @@ function dressing(sheetId, lines) {
     });
   }
 
-  // A draft case, banded amber. Contiguous runs only, so a tab of drafts costs
-  // one request rather than one per row.
+  // A draft case, banded stone grey. Contiguous runs only, so a tab of drafts
+  // costs one request rather than one per row.
   for (const run of runsOf(lines, (line) =>
     line.kind === "case" && prop(line.one.tc, "Status") === "draft"
       ? "draft"
@@ -521,8 +584,8 @@ function dressing(sheetId, lines) {
         },
         cell: {
           userEnteredFormat: {
-            backgroundColor: JOURNEY_BACKGROUND,
-            textFormat: { bold: true },
+            backgroundColor: journeyBackground(line.capabilityId),
+            textFormat: { bold: true, foregroundColor: BODY_FOREGROUND },
             wrapStrategy: "OVERFLOW_CELL",
             verticalAlignment: "MIDDLE",
           },
@@ -533,6 +596,47 @@ function dressing(sheetId, lines) {
     });
     let end = i + 1;
     while (end < lines.length && lines[end].kind === "case") end += 1;
+    if (end > i + 1)
+      requests.push({
+        addDimensionGroup: {
+          range: {
+            sheetId,
+            dimension: "ROWS",
+            startIndex: row + 1,
+            endIndex: end + 1,
+          },
+        },
+      });
+  }
+
+  // Outer fold: every journey and case under the capability file they came
+  // from. Inner groups have to exist first or Sheets refuses the nest.
+  for (const [i, line] of lines.entries()) {
+    if (line.kind !== "capability") continue;
+    const row = i + 1;
+    requests.push({
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: row,
+          endRowIndex: row + 1,
+          startColumnIndex: 0,
+          endColumnIndex: COLUMNS.length,
+        },
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: capabilityBackground(line.capabilityId),
+            textFormat: { bold: true, foregroundColor: HEADER_FOREGROUND },
+            wrapStrategy: "OVERFLOW_CELL",
+            verticalAlignment: "MIDDLE",
+          },
+        },
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat,wrapStrategy,verticalAlignment)",
+      },
+    });
+    let end = i + 1;
+    while (end < lines.length && lines[end].kind !== "capability") end += 1;
     if (end > i + 1)
       requests.push({
         addDimensionGroup: {
@@ -582,92 +686,103 @@ function dressing(sheetId, lines) {
   return requests;
 }
 
-/**
- * A run's four Summary rows, one per surface.
- *
- * Counts are formulas, so a tester marking the tab moves them without a second
- * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
- * the row points at.
- *
- * `Cases` counts the surface's own column rather than `Case ID`, because a
- * journey banner has a `Case ID` cell and no result cell: counting the results
- * counts cases and skips the banners for free.
- *
- * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
- * over cases automation has not reached is not reported as half failing.
- *
- * `Automated left out` repeats down the four rows like the provenance does:
- * it is the run's count, not a surface's.
- */
-function summaryRows({
-  runId,
-  tab,
-  date,
-  name,
-  selection,
-  sha,
-  drafts,
-  automatedLeftOut,
-}) {
-  const t = quoteTab(tab);
-  return SURFACES.map((surface, i) => {
-    const col = colLetter(MARKING_START + i);
-    const range = `${t}!${col}2:${col}`;
-    const count = (what) =>
-      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
-    return [
-      runId,
-      tab,
-      date,
-      name,
-      selection,
-      sha,
-      surface,
-      `=IFERROR(COUNTA(${range}),"tab deleted")`,
-      drafts,
-      count("to_do"),
-      count("pass"),
-      count("fail"),
-      count("blocked"),
-      count("skipped"),
-      count("n/a"),
-      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
-      automatedLeftOut,
-    ];
-  });
-}
-
 /** `'Summary'!A6:P9` → the 0-based row the block starts at. */
 function startRowOf(updatedRange) {
   const match = /![A-Z]+(\d+)/.exec(String(updatedRange ?? ""));
   return match ? Number(match[1]) - 1 : null;
 }
 
-/** A band over a run's four rows, alternating by run id, so the Summary reads
- *  as a list of runs rather than a wall of near-identical rows. */
-function summaryBand(sheetId, startRow, rows, runId) {
-  return {
-    repeatCell: {
-      range: {
-        sheetId,
-        startRowIndex: startRow,
-        endRowIndex: startRow + rows,
-        startColumnIndex: 0,
-        endColumnIndex: SUMMARY_COLUMNS.length,
+/**
+ * A run's four Summary rows as one block: one band, identity merged down the
+ * first five columns and SHA down the last, and the three surfaces grouped
+ * under the first row. Collapsed they still name the run; expanded they show
+ * each surface's counts. There is no filter view - this tab is a register.
+ */
+function summaryDressing(sheetId, startRow, rows, runId) {
+  const end = startRow + rows;
+  const block = {
+    sheetId,
+    startRowIndex: startRow,
+    endRowIndex: end,
+    startColumnIndex: 0,
+    endColumnIndex: SUMMARY_COLUMNS.length,
+  };
+  const rate = SUMMARY_COLUMNS.indexOf("Pass rate");
+  return [
+    {
+      repeatCell: {
+        range: block,
+        cell: {
+          userEnteredFormat: {
+            backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
+            textFormat: { bold: false, fontFamily: FONT, fontSize: FONT_SIZE },
+            verticalAlignment: "MIDDLE",
+          },
+        },
+        fields:
+          "userEnteredFormat(backgroundColor,textFormat,verticalAlignment)",
       },
-      cell: {
-        userEnteredFormat: {
-          backgroundColor: SUMMARY_BANDS[runId % SUMMARY_BANDS.length],
+    },
+    {
+      repeatCell: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: rate,
+          endColumnIndex: rate + 1,
+        },
+        cell: {
+          userEnteredFormat: {
+            numberFormat: { type: "PERCENT", pattern: "0.0%" },
+          },
+        },
+        fields: "userEnteredFormat.numberFormat",
+      },
+    },
+    {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: 0,
+          endColumnIndex: SUMMARY_LEAD_COLUMNS.length,
+        },
+        mergeType: "MERGE_COLUMNS",
+      },
+    },
+    {
+      mergeCells: {
+        range: {
+          sheetId,
+          startRowIndex: startRow,
+          endRowIndex: end,
+          startColumnIndex: SUMMARY_SHA_COL,
+          endColumnIndex: SUMMARY_SHA_COL + 1,
+        },
+        mergeType: "MERGE_COLUMNS",
+      },
+    },
+    {
+      addDimensionGroup: {
+        range: {
+          sheetId,
+          dimension: "ROWS",
+          startIndex: startRow + 1,
+          endIndex: end,
         },
       },
-      fields: "userEnteredFormat.backgroundColor",
     },
-  };
+  ];
 }
 
 // ---------------------------------------------------------------------------
 
 const args = parseArgs(process.argv.slice(2));
+args.env = envOf(args.env);
+if (!args.env)
+  die("--env is staging or production", "Omit it to default to staging.");
 if (!args.name) {
   help();
   die("--name is required: it names the run and the tab.");
@@ -745,7 +860,7 @@ if (picked.length === 0) {
           ? "\n  Most of the store is still `draft`; pass --include-draft to walk drafts."
           : "") +
         (automatedLeftOut > 0 && !args.includeAutomated
-          ? "\n  Every match is already automated; pass --include-automated to walk them anyway."
+          ? "\n  Every match is already automated; omit --exclude-automated to walk them."
           : ""),
     ),
   );
@@ -770,16 +885,12 @@ const journeys = lines.filter((line) => line.kind === "journey").length;
 
 if (args.dryRun) {
   console.log(
-    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, would record commit ${sha.slice(0, 12)}`)}`,
+    `\n${green("✓")} dry run — nothing written.  ${dim(`${journeys} journey banner${journeys === 1 ? "" : "s"}, ${rows.length} rows, ${args.env}, would record commit ${sha.slice(0, 12)}${args.overwrite ? `, would overwrite run ${args.overwrite}` : ""}${args.sandbox ? ", sandbox" : ""}`)}`,
   );
   process.exit(0);
 }
 
-if (!args.sheet)
-  die(
-    "no spreadsheet id",
-    "Set TCS_SHEET_ID, or pass --sheet <id>. It is the part of the sheet's URL between /d/ and /edit.",
-  );
+args.sheet = resolveSpreadsheet(args);
 const token = process.env.GOOGLE_ACCESS_TOKEN;
 if (!token)
   die(
@@ -792,61 +903,98 @@ if (!token)
 
 const meta = await call(token, `/${args.sheet}?fields=sheets.properties`);
 const sheets = meta.sheets ?? [];
+const titles = sheets.map((s) => s.properties.title);
 const summarySheetId = await ensureSummary(token, args.sheet, sheets);
-const runId = await nextRunId(token, args.sheet);
-const taken = new Set(sheets.map((s) => s.properties.title));
-let tab = `${runId}-${slug(args.name)}`;
-for (let n = 2; taken.has(tab); n += 1)
-  tab = `${runId}-${slug(args.name)}-${n}`;
-
-const made = await batchUpdate(token, args.sheet, [
-  {
-    addSheet: {
-      properties: {
-        title: tab,
-        gridProperties: {
-          rowCount: rows.length + 1,
-          columnCount: COLUMNS.length,
-        },
-      },
-    },
-  },
-]);
-const sheetId = made.replies[0].addSheet.properties.sheetId;
-
-await putValues(token, args.sheet, `${quoteTab(tab)}!A1`, [COLUMNS, ...rows]);
-await batchUpdate(token, args.sheet, dressing(sheetId, lines));
-
-const appended = await appendValues(
+const summaryRead = await values(
   token,
   args.sheet,
-  `${quoteTab(SUMMARY_TAB)}!A1`,
-  summaryRows({
-    runId,
-    tab,
-    date,
-    name: args.name,
-    selection: args.selection ?? "",
-    sha,
-    drafts,
-    automatedLeftOut,
-  }),
+  `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
 );
-const blockStart = startRowOf(appended.updates?.updatedRange);
-if (blockStart !== null)
+const summaryValues = summaryRead.values ?? [];
+
+let runId;
+let tab;
+let overwriteAt = null;
+if (args.overwrite != null && String(args.overwrite).trim() !== "") {
+  const found = locateRun(summaryValues, titles, args.overwrite);
+  if (!found.ok) die(found.why, printRegister(titles, summaryValues));
+  runId = Number(args.overwrite);
+  tab = found.tab;
+  overwriteAt = found.startRow;
+} else {
+  runId = await nextRunId(token, args.sheet);
+  tab = tabTitle(runId, slug(args.name));
+  if (titles.includes(tab))
+    die(
+      `cannot write \`${tab}\`: a tab is already named that`,
+      printRegister(titles, summaryValues) +
+        "\n\nDelete or rename the spare in the UI, then dispatch again.",
+    );
+}
+
+const payload = summaryRows({
+  runId,
+  tab,
+  date,
+  name: args.name,
+  selection: args.selection ?? "",
+  env: args.env,
+  sha,
+});
+
+let sheetId;
+if (overwriteAt !== null) {
+  const existing = sheets.find((s) => s.properties.title === tab);
+  if (!existing)
+    die(
+      `Summary names \`${tab}\` for run ${runId}; no tab has that title`,
+      printRegister(titles, summaryValues),
+    );
   await batchUpdate(token, args.sheet, [
-    summaryBand(summarySheetId, blockStart, SURFACES.length, runId),
+    { deleteSheet: { sheetId: existing.properties.sheetId } },
   ]);
+  sheetId = await writeRunTab(token, args.sheet, tab, rows, lines);
+  await putValues(
+    token,
+    args.sheet,
+    `${quoteTab(SUMMARY_TAB)}!A${overwriteAt + 1}`,
+    payload,
+    false,
+  );
+} else {
+  sheetId = await writeRunTab(token, args.sheet, tab, rows, lines);
+  const appended = await appendValues(
+    token,
+    args.sheet,
+    `${quoteTab(SUMMARY_TAB)}!A1`,
+    payload,
+  );
+  const after = await values(
+    token,
+    args.sheet,
+    `${quoteTab(SUMMARY_TAB)}!A1:${colLetter(SUMMARY_COLUMNS.length - 1)}`,
+  );
+  const placed = locateRun(after.values ?? [], [...titles, tab], runId);
+  const blockStart = placed.ok
+    ? placed.startRow
+    : startRowOf(appended.updates?.updatedRange);
+  if (blockStart !== null)
+    await batchUpdate(
+      token,
+      args.sheet,
+      summaryDressing(summarySheetId, blockStart, SURFACES.length, runId),
+    );
+}
 
 const cases = lines.filter((line) => line.kind === "case").length;
 console.log(
-  `\n${green("✓")} wrote ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, commit ${sha.slice(0, 12)}`)}`,
+  `\n${green("✓")} ${overwriteAt !== null ? "rewrote" : "wrote"} ${bold(tab)}  ${dim(`${cases} cases under ${journeys} journey banner${journeys === 1 ? "" : "s"}, ${args.env}, commit ${sha.slice(0, 12)}`)}`,
 );
 console.log(
   `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,
 );
 console.log(
-  `\n${dim(`Mark ${SURFACES.join(", ")}, Notes and Tester. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
+  `\n${dim(`Mark ${SURFACES.join(", ")} and Notes. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
 );
 console.log(
   `${dim("The case and its classification are locked. Sort inside the Walk filter view, not the sheet.")}`,

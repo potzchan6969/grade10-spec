@@ -11,14 +11,17 @@ before a winner's invoice is sent.
   - Needs-action highlight: the outcomes waiting on an operator are marked, so the queue is a worklist rather than a report
   - Winner contact: whoever must reach the buyer can, without hunting through payment records
   - Extended bidding label: an operator sees which lots are still taking bids past their scheduled close, without a second outcome
+  - Refunded outcome: lets finance find completed refunds
 - Resolving an unpaid order
   - Reissue: a fresh invoice and a fresh deadline where non-payment was a genuine failure
   - Manual settlement: money taken outside the invoice flow, recorded against a confirmed address
   - Cancellation: the end of an order and the return of the lot
+  - Refund: records money returned after full or partial collection
 - Audit trail
   - Invoice log: every log entry against the money, including the attempts that failed
   - Fulfilment log: every log entry against the goods, with the address as it stood at each one
   - Retention: append-only, kept for the life of the account
+  - Refund record: keeps the amount, method, reason, proof and audit number
 - Grants
   - Payment processing: recording money is a grant catalogue work does not carry
   - Shipment processing: recording dispatch is a separate grant again
@@ -48,9 +51,7 @@ before a winner's invoice is sent.
 - Audit trail
   - What a reissue changed: the log names each changed part
   - Internal audit number: on the order and in the log, for operators only
-
 ## Requirements
-
 ### Requirement: Listing outcomes
 
 Each listing SHALL show exactly one outcome from this set. The queue
@@ -845,12 +846,12 @@ A system-initiated log entry SHALL record the event that triggered it.
 
 ### Requirement: The order detail shows how long an order has waited
 
-An auction order in Awaiting Address or Preparing Invoice SHALL show, on its
+An auction order in Awaiting Setup or Preparing Invoice SHALL show, on its
 detail, how long it has waited in that stage.
 
 | Stage | Waiting since |
 | --- | --- |
-| Awaiting Address | The lot's close |
+| Awaiting Setup | The lot's close |
 | Preparing Invoice | The winner's latest address confirmation |
 
 An order that has waited 72 hours or more in its current stage SHALL carry an
@@ -865,7 +866,7 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-45 - An order waiting on an address shows time since close
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** an auction order in Awaiting Address whose lot closed 30 hours ago
+- **GIVEN** an auction order in Awaiting Setup whose lot closed 30 hours ago
 - **WHEN** an operator opens it
 - **THEN** the detail shows that it has waited 30 hours since the lot's close
 - **AND** it carries no Overdue mark
@@ -873,7 +874,7 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-46 - An order idle 72 hours is marked Overdue
 **Serves:** post-sale-US-07 - Operator resolves an unpaid order
 
-- **GIVEN** one auction order in Awaiting Address whose lot closed 72 hours ago
+- **GIVEN** one auction order in Awaiting Setup whose lot closed 72 hours ago
 - **AND** one in Preparing Invoice whose winner confirmed an address 80 hours ago
 - **WHEN** an operator reads the queue
 - **THEN** both rows carry the Overdue mark
@@ -882,9 +883,9 @@ the invoice, or cancel the order.
 #### Scenario: grade10-admin-auction-post-sale-SC-47 - Overdue changes no status
 **Serves:** Queue - overdue changes no status
 
-- **GIVEN** an auction order in Awaiting Address carrying the Overdue mark
+- **GIVEN** an auction order in Awaiting Setup carrying the Overdue mark
 - **WHEN** another 30 days pass with no operator action
-- **THEN** its derived status is still Awaiting Address
+- **THEN** its derived status is still Awaiting Setup
 - **AND** the winner's account is not suspended
 
 ### Requirement: An operator quotes and sends the invoice
@@ -1582,3 +1583,47 @@ action on the server.
 - **AND** an operator opens the order at 2026-09-15T09:00:00Z
 - **THEN** the detail shows it has waited 72 hours since the winner's confirmation
 - **AND** it carries the Overdue mark
+
+### Requirement: Operators can record one bounded refund and its stock outcome
+
+An operator with `auction:refund` SHALL be able to record exactly one refund
+on an auction order in Processing, Shipped, Delivered or Partially Paid. The
+entered amount SHALL be greater than zero and no greater than the cumulative
+amount paid. The record SHALL include method, provider reference, reason,
+note, one to five proof files, the operator and timestamp, and whether the
+lot returns to stock. Recording it SHALL make the order Refunded, preserve
+the shipment record, fix the stock choice, and refuse a second refund.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-145 - A refund closes a partially paid order
+**Serves:** post-sale-US-16 - recording the external refund on the order
+
+- **GIVEN** a Partially Paid order with 40000 minor units paid
+- **WHEN** an operator records a 40000 minor unit bank refund with its reason, reference and proof
+- **THEN** the order reads Refunded
+- **AND** the refund stores the amount, method, audit number and stock choice
+
+#### Scenario: grade10-admin-auction-post-sale-SC-146 - An over-refund is refused
+**Serves:** post-sale-US-16 - refusing an amount the winner did not pay
+
+- **GIVEN** an order with 40000 minor units paid
+- **WHEN** an operator enters a refund above 40000 minor units
+- **THEN** Grade10 refuses the record
+- **AND** the order remains in its previous outcome
+
+### Requirement: Refunds are findable and permissioned
+
+The post-sale queue SHALL offer a Refunded outcome and the order detail SHALL
+show one refund record with its amount, method, reference, reason, note,
+proof, audit number, actor and time. `staff` and `admin` SHALL receive
+`auction:refund`; `finance` SHALL read refund records but SHALL NOT record
+one. A refund SHALL appear in the invoice log without exposing payment
+credentials.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-147 - Finance reconciles one refund record
+**Serves:** post-sale-US-17 - reconciling the refund record
+
+- **GIVEN** a refunded order
+- **WHEN** finance filters the queue to Refunded and opens the order
+- **THEN** the queue returns the order
+- **AND** the detail exposes the same refund amount, method, reference, reason, audit number and actor
+

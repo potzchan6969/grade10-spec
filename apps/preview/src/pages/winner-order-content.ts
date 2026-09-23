@@ -86,14 +86,16 @@ export type WinnerOrderContent = {
   /**
    * Refund below Order Total — inline alert amount, details in a dialog.
    * Amount is positive; the word Refund carries the direction.
-   * Proof, provider reference and audit number stay with the operator.
    * Transfer to shows card payment marks or bank name + masked account (Q20).
+   * A bank refund also carries its provider reference (Q21). Proof, Stripe
+   * reference and audit number stay with the operator.
    */
   refund?: {
     /** Positive amount — e.g. `HK$16,140`. */
     amount: string;
     reason: string;
-    note: string;
+    /** Optional — omitted from Refund Details when empty (Q28). */
+    note?: string;
     transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
@@ -116,7 +118,8 @@ const LOT = {
 
 const INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
 
-const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
+const ADDRESS =
+  "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong" as const;
 
 /** Lot closed 17 Sep 2026, 21:30 HKT → complete setup within 48 hours. */
 const ADDRESS_DEADLINE = "Confirm by 19 Sep 2026, 21:30 HKT" as const;
@@ -218,11 +221,11 @@ export const WINNER_ORDER_REFUND_CLOSING = {
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
-  note: "Bank transfer exceeded the invoice. Difference returned.",
   transfer: {
     kind: "bank_transfer",
     bankName: "HSBC",
     maskedAccount: "···· 8891",
+    reference: "G10-RF-LK7P2Q",
   },
 } as const;
 

@@ -86,7 +86,69 @@ async function winnerOrderContactSheet(
   );
 }
 
+type StoryWithin = ReturnType<typeof within>;
+
+/** Soft phone + Country/Region + required locality for Add Address plays. */
+async function fillWinnerOrderAddAddress(
+  page: StoryWithin,
+  form: StoryWithin,
+  values: {
+    firstName: string;
+    lastName: string;
+    street: string;
+    city: string;
+    postalCode: string;
+    phone?: string;
+    phoneCountry?: string;
+    country?: string;
+  },
+) {
+  await userEvent.type(form.getByLabelText(/First name/i), values.firstName);
+  await userEvent.type(form.getByLabelText(/Last name/i), values.lastName);
+
+  await userEvent.click(
+    form.getByRole("button", { name: "Select country calling code" }),
+  );
+  const phoneSearch = await waitFor(() => {
+    const input = page.getByPlaceholderText("e.g. United States");
+    expect(input).toBeVisible();
+    return input;
+  });
+  await userEvent.clear(phoneSearch);
+  await userEvent.type(phoneSearch, values.phoneCountry ?? "Hong Kong");
+  await userEvent.click(
+    await waitFor(() => {
+      const option = page.getByRole("option", {
+        name: new RegExp(values.phoneCountry ?? "Hong Kong", "i"),
+      });
+      expect(option).toBeVisible();
+      return option;
+    }),
+  );
+  const phone = form.getByPlaceholderText("+852 12345678");
+  await userEvent.clear(phone);
+  await userEvent.type(phone, values.phone ?? "91234567");
+
+  const country = form.getByRole("combobox", { name: /Country\/Region/i });
+  await userEvent.click(country);
+  await userEvent.type(country, values.country ?? "Hong Kong");
+  await userEvent.click(
+    await waitFor(() => {
+      const option = page.getByRole("option", {
+        name: values.country ?? "Hong Kong",
+      });
+      expect(option).toBeVisible();
+      return option;
+    }),
+  );
+
+  await userEvent.type(form.getByLabelText(/City/i), values.city);
+  await userEvent.type(form.getByLabelText(/Address line 1/i), values.street);
+  await userEvent.type(form.getByLabelText(/Postal code/i), values.postalCode);
+}
+
 export {
+  fillWinnerOrderAddAddress,
   winnerOrderContactSheet,
   winnerOrderMeta,
   winnerOrderRevealed,

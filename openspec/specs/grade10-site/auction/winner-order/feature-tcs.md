@@ -1428,7 +1428,967 @@ An authenticated winner account with six saved shipping addresses, held from bef
 * Subject does not name <replaced_invoice_id>.
 
 
+### winner-order-US1-TC12-1: Add Address opens with phone country unset
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on <the winner's auction order url> inside the address setup deadline.
+
+**Steps:**
+
+1. Open Complete Order Setup.
+2. Open Add Address for delivery.
+3. Inspect the Phone field before choosing a calling country.
+
+**Expected Results:**
+
+* Phone shows a globe only, with no flag and no calling-code divider.
+* `+852 12345678` placeholder appears with a small gap after the globe.
+* No calling country is preselected.
+
+### winner-order-US1-TC13-1: Personal is selected and Company Name stays hidden
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address in Complete Order Setup.
+
+**Steps:**
+
+1. Inspect the Personal / Company control on first open.
+2. Scan the fields below it.
+
+**Expected Results:**
+
+* Personal is selected on the segmented control.
+* Company Name is not shown.
+
+### winner-order-US1-TC14-1: Company selection reveals required Company Name
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Steps:**
+
+1. Select Company on the Personal / Company control.
+2. Inspect the fields below it.
+
+**Expected Results:**
+
+* Company is selected on the segmented control.
+* Company Name appears as a required field.
+
+### winner-order-US1-TC15-1: Empty Company Name is refused on Company
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Company selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+
+**Steps:**
+
+1. Fill every required field except Company Name.
+2. Attempt to confirm the address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* A refusal appears beside Company Name.
+* No address is saved or applied to the order.
+
+### winner-order-US1-TC16-1: Empty phone digits are refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | (empty) |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+
+**Steps:**
+
+1. Select a phone country.
+2. Leave the national number empty.
+3. Fill every other required field.
+4. Attempt to confirm the address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* A refusal appears beside Phone.
+* No address is saved or applied to the order.
+
+### winner-order-US1-TC17-1: Confirm without a phone country is refused
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | (unset) |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+
+**Steps:**
+
+1. Type digits into Phone without choosing a calling country.
+2. Fill every other required field.
+3. Attempt to confirm the address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* A refusal appears beside Phone.
+* No address is saved or applied to the order.
+
+### winner-order-US1-TC18-1: Unusual phone format is accepted on confirm
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United Kingdom |
+| Phone digits | +44 (0)20 7946 0958 |
+| Country or region | United Kingdom |
+| Town or city | London |
+| Address line 1 | 10 Downing St |
+| Postal code | SW1A 2AA |
+
+**Steps:**
+
+1. Select the phone country.
+2. Enter the unusual phone digits.
+3. Fill every other required field.
+4. Confirm the address.
+
+**Expected Results:**
+
+* Grade10 accepts the confirm.
+* No hard phone-format refusal appears.
+* The address is applied to the order.
+
+### winner-order-US1-TC19-1: Parseable phone is stored as E.164
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | (415) 555-0100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+| Stored phone | +14155550100 |
+
+**Steps:**
+
+1. Enter the phone digits with punctuation.
+2. Fill every other required field.
+3. Confirm the address.
+4. Read the stored phone on the order address snapshot.
+
+**Expected Results:**
+
+* Step 3 succeeds.
+* The stored phone reads +14155550100.
+
+### winner-order-US1-TC20-1: Address confirms with optional line 2 and state empty
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Address line 2 | (empty) |
+| State or province | (empty) |
+| Postal code | 94105 |
+
+**Steps:**
+
+1. Fill every required field.
+2. Leave address line 2 and state or province empty.
+3. Confirm the address.
+
+**Expected Results:**
+
+* Grade10 accepts the confirm.
+* The order address snapshot shows the entered line 1 and postal code.
+* Address line 2 and state or province are empty on the snapshot.
+
+### winner-order-US1-TC21-1: Add Address collects no Apt or Suite field
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address.
+
+**Steps:**
+
+1. Scan every field label on the form.
+
+**Expected Results:**
+
+* No Apt., Suite, or Building field is shown.
+* Address line 2 remains available as the optional second line.
+
+### winner-order-US1-TC22-1: Personal saved address card title is recipient name
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup delivery picker.
+* A saved personal delivery address exists for Alex Chen.
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Read the card title on the Alex Chen personal address.
+
+**Expected Results:**
+
+* The card title reads Alex Chen.
+* It does not read a company name.
+* The card body shows street, city or region, and country.
+* The card body does not show postal code or phone.
+
+### winner-order-US1-TC23-1: Company saved address card title is company name
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup delivery picker.
+* A saved company delivery address exists for Northwind Collectibles with recipient Alex Chen.
+
+**Steps:**
+
+1. Open the delivery address picker.
+2. Read the card title on the Northwind Collectibles company address.
+
+**Expected Results:**
+
+* The card title reads Northwind Collectibles.
+* It does not read Alex Chen.
+* The card body shows street, city or region, and country.
+* The card body does not show postal code or phone.
+
+### winner-order-US1-TC24-1: Company delivery address with phone confirms successfully
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on delivery Add Address inside the address setup deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Kind | Company |
+| Company name | Northwind Collectibles |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | United States |
+| Phone digits | 4155550100 |
+| Country or region | United States |
+| Town or city | San Francisco |
+| Address line 1 | 100 Market St |
+| Postal code | 94105 |
+
+**Steps:**
+
+1. Select Company.
+2. Fill every required field, including Company Name and phone.
+3. Confirm the address.
+4. Reopen the delivery address picker.
+
+**Expected Results:**
+
+* Step 3 succeeds.
+* The delivery address on the order carries Northwind Collectibles, Alex Chen, a phone with country and digits, and postal code 94105.
+* Step 4 shows the address card title as Northwind Collectibles.
+* Step 4 card body does not show the phone or postal code.
+
+### winner-order-US1-TC25-1: Order summary shows the full address snapshot after setup
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression, release
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is on Winner Order Awaiting Setup inside the address setup deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Kind | Company |
+| Company name | Northwind Collectibles |
+| First name | Alex |
+| Last name | Chen |
+| Phone | +14155550100 |
+| Address line 1 | 100 Market St |
+| Town or city | San Francisco |
+| Postal code | 94105 |
+| Country or region | United States |
+| Billing | Same as delivery |
+
+**Steps:**
+
+1. Complete Order Setup with the company delivery address from **Test data** and Same as delivery checked.
+2. Read Delivery address and Billing address on the Order summary.
+
+**Expected Results:**
+
+* Delivery shows Northwind Collectibles, Alex Chen, the phone, 100 Market St, San Francisco with 94105, and United States.
+* Billing matches Delivery.
+* The values are the full snapshot, not the lean picker card body alone.
+
+---
+
+### winner-order-US11-TC1-1: Billing Add Address shows phone and Personal or Company
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup with billing set to differ from delivery.
+
+**Steps:**
+
+1. Open Add Address for billing.
+2. Inspect the form controls and fields.
+
+**Expected Results:**
+
+* Personal / Company control is shown above the address fields.
+* Phone shows a country selector and national number input.
+* Phone country starts empty with a globe only.
+* Company Name is hidden while Personal is selected.
+
+### winner-order-US11-TC2-1: Billing Add Address refuses empty phone
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on billing Add Address with Personal selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | (empty) |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Select a phone country.
+2. Leave the national number empty.
+3. Fill every other required billing field.
+4. Attempt to confirm the billing address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* A refusal appears beside Phone.
+* Billing address on the order stays unchanged.
+
+### winner-order-US11-TC3-1: Billing company address requires Company Name
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on billing Add Address with Company selected.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Alex |
+| Last name | Chen |
+| Phone country | Canada |
+| Phone digits | 4165550100 |
+| Country or region | Canada |
+| Town or city | Toronto |
+| Address line 1 | 1 Front St |
+| Postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Fill every required field except Company Name.
+2. Attempt to confirm the billing address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* A refusal appears beside Company Name.
+* Billing address on the order stays unchanged.
+
+### winner-order-US11-TC4-1: Billing address with phone and kind applies separately from delivery
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-11
+
+**Pre-conditions:**
+
+* customer(winner) is on Complete Order Setup with a confirmed personal delivery address for Alex Chen in San Francisco.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Billing kind | Company |
+| Billing company name | Northwind Billing Ltd |
+| Billing first name | Alex |
+| Billing last name | Chen |
+| Billing phone country | Canada |
+| Billing phone digits | 4165550199 |
+| Billing country or region | Canada |
+| Billing town or city | Toronto |
+| Billing address line 1 | 1 Front St |
+| Billing postal code | M5E 1B2 |
+
+**Steps:**
+
+1. Untick billing same as delivery.
+2. Open billing Add Address.
+3. Enter the company billing address with phone country and digits.
+4. Confirm billing.
+5. Read delivery and billing on the setup form.
+
+**Expected Results:**
+
+* Step 4 succeeds.
+* Delivery still shows the San Francisco personal address.
+* Billing shows Northwind Billing Ltd with the entered Toronto address and phone.
+
+---
+
+### winner-order-US12-TC1-1: Add Address at the five-address cap shows phone and kind
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner) with exactly five saved shipping addresses is on <the winner's auction order url> before the address deadline.
+
+**Steps:**
+
+1. Open the Confirm Delivery Address selector.
+2. Select Add new address.
+3. Inspect the form.
+
+**Expected Results:**
+
+* Personal / Company control is shown.
+* Phone shows a country selector and national number input with no country preselected.
+* Company Name is hidden while Personal is selected.
+
+### winner-order-US12-TC2-1: One-time personal address at the cap collects phone and confirms
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner) with exactly five saved shipping addresses is on <the winner's auction order url> before the address deadline.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | United States |
+| Phone digits | 2125550147 |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+**Steps:**
+
+1. Open Add new address.
+2. Fill every required field, including phone country and digits.
+3. Leave Save this address for future orders unselected.
+4. Confirm the address for this order.
+
+**Expected Results:**
+
+* Step 4 succeeds.
+* The order delivery address is the entered one-time address with phone country and digits.
+* The account still holds exactly five saved addresses.
+
+### winner-order-US12-TC3-1: One-time company address at the cap requires Company Name and phone
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-12
+
+**Pre-conditions:**
+
+* customer(winner) with exactly five saved shipping addresses is on Add new address for delivery.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Kind | Company |
+| Company name | (empty) |
+| First name | Jordan |
+| Last name | Lee |
+| Phone country | (unset) |
+| Phone digits | (empty) |
+| Country or region | United States |
+| Town or city | New York |
+| Address line 1 | 350 5th Ave |
+| Postal code | 10118 |
+
+**Steps:**
+
+1. Select Company.
+2. Fill name and locality fields only.
+3. Leave Company Name, phone country, and phone digits empty.
+4. Leave Save this address for future orders unselected.
+5. Attempt to confirm the one-time address.
+
+**Expected Results:**
+
+* Grade10 refuses the confirm.
+* Refusals appear beside Company Name and Phone.
+* The order delivery address stays unchanged.
+* The account still holds exactly five saved addresses.
+
+---
+
+## winner-order-US14: Winner sees a refunded order as Refunded
+
+**As a** winner whose order Grade10 refunded because they were not happy with the item,
+**I want** Winner Order to read Refunded, with the amount returned below the invoice total and a way to see Amount, Transfer to, Reason and Note — brand and last four for a card, or masked destination with the bank name under it for a transfer — whether I had paid in full or in part and wherever the card is, and my invoice and receipts still there,
+**so that** I know the order is closed and still hold the record of what I paid.
+
+### winner-order-US14-TC1-1: Refunded keeps the invoice and receipts
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-14
+
+**Pre-conditions:**
+
+* customer(winner of `<refunded order>`) is on Winner Order.
+
+**Steps:**
+
+1. Read the status, stepper, actions and receipt links.
+2. Open the refund details from the inline alert.
+
+**Expected Results:**
+
+* The order reads Refunded.
+* Pay, address editing and shipment actions are absent.
+* The invoice and every existing receipt remain downloadable.
+* No refund letter is required by this surface.
+* Refund details show Amount, then Transfer to, then Reason, then Note when the operator recorded one.
+* Transfer to uses `PaymentMethodCard` with the card brand logo and only the last four digits, or a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. Not the full number or proof.
+* A card refund shows no Reference.
+* Note is omitted when the operator left none.
+
+## winner-order-US15: Winner sees an overpayment returned
+
+**As a** winner who paid more than the order,
+**I want** only the difference returned below the invoice total, while the lot, the shipping and the amount I should have paid stay, with a way to see why,
+**so that** I know the sale still stands.
+
+### winner-order-US15-TC1-1: An overpayment keeps the order open
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-15
+
+**Pre-conditions:**
+
+* customer(winner of `<overpaid order>`) is on Winner Order after the
+  overpayment difference was returned.
+
+**Steps:**
+
+1. Read the order status, invoice lines, returned amount and refund details.
+
+**Expected Results:**
+
+* The order status and invoice lines are unchanged.
+* Only the returned difference appears below Order Total.
+* The refund details can be opened without exposing operator proof or a Stripe provider reference.
+
+## winner-order-US17: Winner matches a bank refund against their own statement
+
+**As a** winner whose refund was sent by bank transfer,
+**I want** the reference the operator sent it under, beside the amount and where it went,
+**so that** I can find the credit on my statement without asking Customer Service.
+
+### winner-order-US17-TC1-1: Bank refund details show destination and reference
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-17
+
+**Pre-conditions:**
+
+* customer(winner of `<bank-refunded order>`) is on Winner Order after a bank
+  transfer refund was recorded with no operator note.
+
+**Steps:**
+
+1. Open the refund details from the inline alert.
+
+**Expected Results:**
+
+* The details show Amount, then Transfer to, then Reference, then Reason.
+* Transfer to shows a bank icon, the masked destination on the primary line, and the free-text bank name as secondary text under it.
+* Reference shows the operator's bank provider reference.
+* Note is not shown.
+* Proof and the full account number are not shown.
+
 ## Settled
+
+- Non-parseable phone still applies with the entered value; E.164 only when parseable
+- Missing phone country or digits share one refusal beside Phone
+- Switching back to Personal drops the Company Name requirement
+- Billing country or region list parity stays the open PRD question, outside this change
 
 - Partial-payment letter Contact Us is in scope with the same ready mailto
 

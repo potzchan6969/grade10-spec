@@ -50,7 +50,7 @@ Hidden:
 | Live | Active |
 | Unsold | Ended |
 | Called off | Hidden |
-| Awaiting Address | Ended |
+| Awaiting Setup | Ended |
 | Preparing Invoice | Ended |
 | Pending Payment | Ended |
 | Processing | Ended |

@@ -4,7 +4,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
-import { COUNTRY_OPTIONS } from "./country-regions";
+import { fillWinnerOrderAddAddress } from "./winner-order.story-shared";
 import {
   WINNER_ORDER_FULL_SAVED_ADDRESSES,
   WINNER_ORDER_SAVED_ADDRESSES,
@@ -86,7 +86,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order Complete Order Setup (delivery, payment method, billing). Same dialog the Awaiting Setup page opens. Replaces the retired Confirm Delivery Address stories. Address options use `RadioCard`; an empty book uses `EmptyState`. At five saved addresses, Add New Address still confirms a one-time draft and Save for future is refused.",
+          "Standalone Storybook preview of Winner Order Complete Order Setup (delivery, payment method, billing). Same dialog the Awaiting Setup page opens. Replaces the retired Confirm Delivery Address stories. Address options use `RadioCard`; an empty book uses `EmptyState`. At five saved addresses, Add New Address still confirms a one-time draft and Save for future is refused. Add Address uses `AuctionAddressForm` — Personal/Company, country-aware phone, and a searchable Country/Region field.",
       },
     },
   },
@@ -125,7 +125,8 @@ export const DeliveryPicker: Story = {
     });
     expect(
       modal.getAllByRole("button", { name: "Remove Alex Chan" }).length,
-    ).toBe(2);
+    ).toBe(1);
+    expect(modal.getByText("Harbour View Ltd")).toBeVisible();
     expect(modal.getByText(/Harbour Road/)).toBeVisible();
     expect(
       modal.getByRole("button", { name: "Add New Address" }),
@@ -146,11 +147,21 @@ export const AddDeliveryAddress: Story = {
 
     const nested = await findVisibleDialog(page, "Add Address");
     const form = within(nested);
-    expect(form.getByLabelText("First name")).toBeVisible();
-    expect(form.getByLabelText("Street address")).toBeVisible();
-    expect(form.getByLabelText("Postal code")).toBeVisible();
-    expect(form.getByLabelText("Country/Region")).toBeVisible();
-    expect(form.getByText("Hong Kong")).toBeVisible();
+    expect(form.getByRole("button", { name: "Personal" })).toBeVisible();
+    expect(form.getByRole("button", { name: "Company" })).toBeVisible();
+    expect(form.getByLabelText(/First name/i)).toBeVisible();
+    expect(form.getByLabelText(/Phone/i)).toBeVisible();
+    expect(form.getByPlaceholderText("+852 12345678")).toBeVisible();
+    expect(form.getByLabelText(/Address line 1/i)).toBeVisible();
+    expect(form.getByLabelText(/Address line 2/i)).toBeVisible();
+    expect(form.queryByLabelText(/Apt/i)).toBeNull();
+    expect(form.getByLabelText(/State/i)).toBeVisible();
+    expect(form.getAllByText(/\(Optional\)/).length).toBeGreaterThan(0);
+    expect(form.getByLabelText(/Postal code/i)).toBeVisible();
+    expect(form.getByLabelText(/Country\/Region/i)).toBeVisible();
+    expect(form.queryByText("+852")).toBeNull();
+    expect(form.queryByText("Hong Kong")).toBeNull();
+    expect(form.queryByLabelText(/Company Name/i)).toBeNull();
     expect(form.getByText("Save this address for future orders")).toBeVisible();
     expect(
       form.getByRole("checkbox", {
@@ -162,40 +173,18 @@ export const AddDeliveryAddress: Story = {
     ).toBeVisible();
     expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
 
-    // Typeahead: pick a late-alphabet letter so the match sits below the fold.
-    const currentInitial = "Hong Kong".charAt(0).toLowerCase();
-    const letter =
-      [
-        ...new Set(
-          COUNTRY_OPTIONS.map((name) => name.charAt(0).toLowerCase()).filter(
-            (ch) => /^[a-z]$/.test(ch),
-          ),
-        ),
-      ]
-        .filter((ch) => ch !== currentInitial)
-        .at(-1) ?? "z";
-
-    await userEvent.click(form.getByLabelText("Country/Region"));
+    const country = form.getByRole("combobox", { name: /Country\/Region/i });
+    await userEvent.click(country);
     await waitFor(() => {
       expect(page.getAllByRole("option").length).toBeGreaterThan(1);
     });
-    await userEvent.keyboard(letter);
+    await userEvent.type(country, "hong");
     await waitFor(() => {
-      const highlighted = nested.ownerDocument.querySelector(
-        '[data-slot="select-item"][data-highlighted]',
-      );
-      expect(highlighted).not.toBeNull();
-      expect(
-        highlighted!.textContent?.trim().toLowerCase().startsWith(letter),
-      ).toBe(true);
-
-      const popup = nested.ownerDocument.querySelector(
-        '[data-slot="select-content"]',
-      ) as HTMLElement | null;
-      expect(popup).not.toBeNull();
-      expect(popup!.scrollHeight).toBeGreaterThan(popup!.clientHeight);
-      expect(popup!.scrollTop).toBeGreaterThan(0);
+      expect(page.getByRole("option", { name: "Hong Kong" })).toBeVisible();
+      expect(page.queryByRole("option", { name: "Australia" })).toBeNull();
     });
+    const option = page.getByRole("option", { name: "Hong Kong" });
+    expect(option.getBoundingClientRect().height).toBeGreaterThanOrEqual(44);
   },
 };
 
@@ -281,14 +270,13 @@ export const AddressBookFull: Story = {
       }),
     ).toBeVisible();
 
-    await userEvent.type(form.getByLabelText("First name"), "Pat");
-    await userEvent.type(form.getByLabelText("Last name"), "Ng");
-    await userEvent.type(
-      form.getByLabelText("Street address"),
-      "9 Queen's Road Central",
-    );
-    await userEvent.type(form.getByLabelText("City"), "Central");
-    await userEvent.type(form.getByLabelText("Postal code"), "000000");
+    await fillWinnerOrderAddAddress(page, form, {
+      firstName: "Pat",
+      lastName: "Ng",
+      street: "9 Queen's Road Central",
+      city: "Central",
+      postalCode: "000000",
+    });
     await userEvent.click(
       form.getByRole("button", { name: "Use This Address" }),
     );

@@ -1,7 +1,7 @@
 # grade10-site/auction/bid-increments Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-03, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-auction-bid-increments-US1: Collector places a bid across a price tier
 
@@ -15,7 +15,7 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Layer:** e2e
@@ -24,7 +24,13 @@
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
+An open HKD listing has starting price <starting price> and no accepted bid.
+
+**Test data:**
+
+| starting price | increment | minimum next amount |
+| --- | ---: | ---: |
+| 20000 HKD minor units | 1000 | 21000 |
 
 **Steps:**
 
@@ -33,15 +39,17 @@ An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
 
 **Expected Results:**
 
-* Minimum next amount is 21000 HKD minor units.
+* The minimum next amount is <minimum next amount>.
 
 ### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -50,16 +58,25 @@ An open HKD listing has a 20000-minor-unit starting price and no accepted bid.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-An open USD listing has a current bid of 10000 minor units.
+An open USD listing has current public price <current public price>.
+The collector is enrolled and can bid.
+
+**Test data:**
+
+| current public price | increment | minimum next amount |
+| --- | ---: | ---: |
+| 10000 USD minor units | 500 | 10500 |
+| 9999 USD minor units | 100 | 10099 |
+| 50000 USD minor units | 1000 | 51000 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Read the minimum next amount.
+2. Place a bid of <current public price> plus <increment>.
 
 **Expected Results:**
 
-* Minimum next amount is 10500 USD minor units.
+* The new public price is <minimum next amount>.
 
 ### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
 
@@ -67,7 +84,7 @@ An open USD listing has a current bid of 10000 minor units.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -76,18 +93,18 @@ An open USD listing has a current bid of 10000 minor units.
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is 10500 minor units.
+The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Bid amount | 12000 USD minor units |
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 12000 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter 12000 as the bid amount.
+2. Enter <bid amount> as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
@@ -100,7 +117,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -109,32 +126,34 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is 10500 minor units.
+The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Bid amount | 10499 USD minor units |
+| minimum | bid amount |
+| --- | ---: |
+| 10500 USD minor units | 10499 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter 10499 as the bid amount.
+2. Enter <bid amount> as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
 
 * The bid is refused.
-* The refusal names 10500 USD minor units as the minimum.
+* The refusal names <minimum> as the minimum.
 
 ### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
+
+Runs once per row of **Test data**.
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -143,7 +162,15 @@ The collector is enrolled on an open USD listing whose minimum bid is 10500 mino
 * **Trace:** grade10-site-auction-bid-increments-US-01
 
 **Pre-conditions:**
-An open listing is available in its listing currency.
+An open listing is available in <listing currency>.
+
+**Test data:**
+
+| listing currency |
+| --- |
+| USD |
+| HKD |
+| JPY |
 
 **Steps:**
 
@@ -152,7 +179,7 @@ An open listing is available in its listing currency.
 
 **Expected Results:**
 
-* The minimum next amount is shown in the listing currency.
+* The minimum next amount is shown in <listing currency>.
 
 **Out of suite:**
 
@@ -171,7 +198,7 @@ An open listing is available in its listing currency.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Layer:** e2e
@@ -180,18 +207,18 @@ An open listing is available in its listing currency.
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose minimum bid is 999990000 minor units.
+The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Bid amount | 1000000000 USD minor units |
+| minimum | ceiling | bid amount |
+| --- | ---: | ---: |
+| 999990000 USD minor units | 1000000000 | 1000000000 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter 1000000000 as the bid amount.
+2. Enter <bid amount> as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
@@ -204,7 +231,7 @@ The collector is enrolled on an open USD listing whose minimum bid is 999990000 
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -213,23 +240,23 @@ The collector is enrolled on an open USD listing whose minimum bid is 999990000 
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open HKD listing whose minimum bid is 820000 minor units.
+The collector is enrolled on an open HKD listing whose minimum bid is <minimum>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Bid amount | 8000000001 HKD minor units |
+| minimum | ceiling | bid amount |
+| --- | ---: | ---: |
+| 820000 HKD minor units | 8000000000 | 8000000001 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter 8000000001 as the bid amount.
+2. Enter <bid amount> as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
 
-* The bid is refused and the refusal names 8000000000 HKD minor units as the ceiling.
+* The bid is refused and the refusal names <ceiling> as the ceiling.
 * The listing's price and leader are unchanged.
 
 ### grade10-site-auction-bid-increments-US2-TC3-1: Auto-bid maximum above the ceiling is refused
@@ -238,7 +265,7 @@ The collector is enrolled on an open HKD listing whose minimum bid is 820000 min
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -247,23 +274,23 @@ The collector is enrolled on an open HKD listing whose minimum bid is 820000 min
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open JPY listing whose minimum bid is 150000 minor units.
+The collector is enrolled on an open JPY listing whose minimum bid is <minimum>.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Maximum | 1500000001 JPY minor units |
+| minimum | ceiling | maximum |
+| --- | ---: | ---: |
+| 150000 JPY minor units | 150000000000 | 150000000001 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter 1500000001 as the auto-bid maximum.
+2. Enter <maximum> as the auto-bid maximum.
 3. Confirm the maximum.
 
 **Expected Results:**
 
-* The maximum is refused and the refusal names 150000000000 JPY minor units as the ceiling.
+* The maximum is refused and the refusal names <ceiling> as the ceiling.
 * No maximum is recorded for the collector.
 
 ### grade10-site-auction-bid-increments-US2-TC4-1: Listing at the ceiling takes no further bid
@@ -272,7 +299,7 @@ The collector is enrolled on an open JPY listing whose minimum bid is 150000 min
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Layer:** e2e
@@ -281,20 +308,20 @@ The collector is enrolled on an open JPY listing whose minimum bid is 150000 min
 * **Trace:** grade10-site-auction-bid-increments-US-02
 
 **Pre-conditions:**
-The collector is enrolled on an open USD listing whose current bid is 1000000000 minor units, held by another collector.
+The collector is enrolled on an open USD listing whose current bid is <ceiling>, held by another collector.
 
 **Test data:**
 
-| Field | Value |
-| --- | --- |
-| Bid amount | Any amount |
+| ceiling | bid amount |
+| --- | ---: |
+| 1000000000 USD minor units | 1000000001 |
 
 **Steps:**
 
 1. Open the listing bid panel.
-2. Enter a bid amount.
+2. Enter <bid amount> as the bid amount.
 3. Confirm the bid.
 
 **Expected Results:**
 
-* The bid is refused and the refusal names 1000000000 USD minor units as the ceiling.
+* The bid is refused and the refusal names <ceiling> as the ceiling.

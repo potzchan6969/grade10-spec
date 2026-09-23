@@ -48,11 +48,21 @@ the card is in the winner's hands. The collector's half is
 - **Cert ID** — creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for an unnumbered unit; each Cert
   ID can have its own live listing, and only one
+- 🚧 **Listing code** — a stable opaque 5-character code, always leading with
+  2 letters, allocated when a listing is created and shown read-only in the
+  Listings table and on its admin screen under the existing listing-read
+  access. It is never shown on the public listing page or accepted as a route
+  or access grant. Once a winner exists it doubles as the order's payment
+  reference. The code stays reserved after deletion — [Auction Display ·
+  Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
+  Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)
 - **Publish** — a created listing is ready but not visible; publishing is a
   separate move, now or at a Publish at after now that can be cleared
 - **Call off** — any time before the close, bids or not; live holds and the
-  stock are released, and the slug is freed while the called-off lot stops
-  answering at it
+  stock are released, the listing leaves browse and search, and its canonical
+  slug remains reserved and directly accessible. Its listing code stays
+  reserved and never resolves as a route; explicit hard deletion is outside
+  this rule
 - **Media** — a picked file is previewed and stored only on confirm, then
   shown at card size with a zoom preview on hover; an item joins, is
   replaced, removed or re-captioned until the close — [Auction Display ·
@@ -94,8 +104,8 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Rule | Value |
 | --- | --- |
 | Payment window | **7 calendar days** from send |
-| Address window | **48 hours** from close; a reopen gives a fresh **48 hours** |
-| Overdue | **72 hours** or more idle in Awaiting Address or Preparing Invoice |
+| Address window | **48 hours** from actual close; a reasoned operator reopen gives a fresh **48 hours**; invoice send ends address changes |
+| Overdue | **48 hours** from lot close while Awaiting Setup only; Preparing Invoice has no queue Overdue mark, and its payment timer starts when the invoice is sent and visible to the winner |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -103,7 +113,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- | --- |
 | Draft · Scheduled · Live | Before a sale; time left is read from the close | No |
 | Unsold · Called off | Ended without a payable order | No |
-| Awaiting Address | The lot closed without a confirmed delivery address | No |
+| Awaiting Setup | The lot closed with setup incomplete | No |
 | Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
 | Pending Payment | The invoice is unpaid; an expired one shows Expired beside it | When expired |
 | 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
@@ -112,11 +122,13 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Shipped · Delivered | Dispatched; delivery confirmed | No |
 | Cancelled · Refunded | A recorded terminal outcome | No |
 
-- **Overdue** — a separate, filterable mark on an order idle 72 hours or more;
-  it changes nothing, and the operator decides whether to contact the winner,
-  invoice or cancel
-- ❓ **Overdue after the address deadline** — whether the mark should follow
-  the 48-hour deadline instead of 72 hours idle; Product confirms
+- **Overdue** — a separate, filterable mark on an Awaiting Setup order after its
+  persisted 48-hour address deadline; Preparing Invoice has no queue Overdue
+  mark, and the operator decides whether to contact the winner, invoice or
+  cancel
+- **Payment Overdue** — the winner's invoice is overdue after the payment
+  deadline, which starts when the invoice is sent and visible to the winner;
+  this is separate from the address deadline
 - **Extended bidding: ON** — a lot past its scheduled close and still taking
   bids carries this label; its outcome does not change
 - 🚧 **Search** — by listing code, invoice ID or bank reference; a replaced
@@ -135,9 +147,9 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 Confirm or return proof | Payment Verifying, where these are the only actions | Payment processing |
 | Settle manually | A bank transfer invoice, pending or expired | Payment processing |
 | 🚧 Record a partial payment | An invoice pending or expired, or already Partially Paid | Payment processing |
-| 🚧 Cancel order | Awaiting Address, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
-| 🚧 Reopen the address form, or record an address | Awaiting Address after the deadline, before send | Payment processing |
-| 🚧 Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
+| 🚧 Cancel order | Awaiting Setup, Preparing Invoice, or an expired invoice, never Partially Paid | Payment processing |
+| 🚧 Reopen the address form, or record an address | Awaiting Setup after the deadline, before send | Payment processing |
+| Refund | Processing, Shipped, Delivered or Partially Paid, once | Refund processing |
 | Dispatch | A paid order | Shipment processing |
 | Confirm delivery | A dispatched order | Shipment processing |
 | Comment | Any order the operator can open | None |
@@ -205,7 +217,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | 🚧 Relisting it | The order links to its lot, which an operator relists by hand; nothing is relisted on its own |
 | 🚧 A payment that lands after | Recorded, and it flags the order: the order stays Cancelled, finance sends the money back outside Grade10, and the operator clears the flag once it has gone |
 
-- 🚧 **Refund** — the winner asks Customer Service, outside Grade10; the
+- **Refund** — the winner asks Customer Service, outside Grade10; the
   operator sends the money by hand, in the Stripe dashboard or by bank
   transfer, then records it on the order. One refund per order, never
   reversed. A closing refund reads Refunded for good. An overpayment returns
@@ -213,22 +225,29 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 
 | The refund records | Value |
 | --- | --- |
-| 🚧 Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; the operator decides it, never fixed |
-| 🚧 Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other, with a note carrying what the winner asked |
-| 🚧 Method and reference | How the money went back, with its Stripe or bank reference |
-| 🚧 Proof | 1 to 5 files, operators only |
-| 🚧 The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
-| 🚧 Its number | The next one in the internal audit series |
+| Amount | Above zero and no more than the winner has paid — the Order Total where they paid in full, what was collected where they paid in parts; offered at what was paid, and the operator decides it |
+| Reason and note | Damaged, Not as described, Not received, Duplicate or overpayment, or Other; the note carries what the winner asked and is optional, Other included |
+| Date | When the money left, typed by the operator and never in the future |
+| Method and reference | How the money went back, with its Stripe or bank reference |
+| Bank channel | A bank refund names it: FPS, HK local bank transfer, or SWIFT international wire; a card refund has none |
+| Where it went | The bank name, and the account, IBAN or FPS ID — a phone number, an email or an FPS id — typed in full and stored in full; free text, checked for nothing, and the same three fields whichever channel sent it |
+| What the winner sees of it | The bank name and a masked destination, read from what was typed: the last four digits of an account or a phone, or the first letter and domain of an email. The destination is the only masked value, and nothing on the winner's page reveals it in full |
+| Before it commits | The operator confirms a restatement of the amount, the method and where it went, and the lot's outcome, saying this is the order's only refund and cannot be undone |
+| Proof | 1 to 5 files, each a PDF, JPEG or PNG of at most 10 MB, as manual settlement takes them; operators only |
+| The lot | Back to stock, when the card came back or never left, or kept by the winner, when it stays sold |
+| Its number | The next one in the internal audit series |
 
-- 🚧 **Finding refunds** — a closing refund filters as Refunded; an overpayment stays on the order's current status. Both are on the order detail and
+- **Finding refunds** — a closing refund filters as Refunded; an overpayment stays on the order's current status. Both are on the order detail and
   the invoice log, with who recorded it and when
-- 🚧 **The winner** — a closing refund reads Refunded, an overpayment keeps
+- **The winner** — a closing refund reads Refunded, an overpayment keeps
   the order's status, neither gets a letter, and bidder standing does not
   change
-- 🚧 **Refund transaction clues for the winner** — Transfer to uses the
+- **Refund transaction clues for the winner** — Transfer to uses the
   shared payment card: brand logo and the last four digits for a card, or a
-  bank icon with the bank name and the last four digits of the account. Full
-  proof, provider reference and audit number stay with the operator
+  bank icon with the masked destination on the primary line and the free-text
+  bank name as secondary text under it. A bank refund also shows its provider
+  reference in the winner details; a card refund shows none. Full proof,
+  Stripe reference and audit number stay with the operator
 - 🚧 **Internal audit number** — every invoice and receipt carries one
   gapless number, such as `#00010482`, shown to operators and never to the
   winner; a replaced invoice keeps its number
@@ -269,7 +288,7 @@ The buyer-premium minimums, as the Payment settings tab under `/auction`.
 | Drafting, editing, publishing and calling off a listing or a campaign | `auction:write` and `auction:operate` | `staff` |
 | Sending, reissuing and settling an invoice, checking proof, cancelling, reopening the address form, the premium minimums | `auction:settle` — payment processing | `finance`, and `admin` |
 | Dispatch and delivery | Shipment processing | `staff`, and `admin` |
-| 🚧 Recording a refund | `auction:refund` — refund processing | `staff`, and `admin` |
+| Recording a refund | `auction:refund` — refund processing | `staff`, and `admin` |
 
 - **A control the operator lacks** — stays visible and disabled, and the
   server refuses it too; reissue, returning proof, manual settlement and
@@ -328,13 +347,14 @@ settings.
 | Who reopens the address form | Decided | The operator, with payment processing and a mandatory reason; a reopen gives a fresh 48 hours and changes no status. Refused on a cancelled order, whose lot is back in stock. | Product and Operations |
 | Operational history | Decided | Invoice and fulfilment logs remain append-only and separate from the compliance audit chain. | Product and Engineering |
 | Premium minimum | Decided | Under Auction because auction invoices use it; behind the settlement permission because changing it changes the amount collected. | Product and finance |
-| Overdue and the address deadline | ❓ Open | Whether the Overdue mark should follow the 48-hour address deadline instead of 72 hours idle, so a winner is not blocked for a day before an operator is told. | Product |
+| Overdue mark in Awaiting Setup | Decided | The Overdue mark follows the 48-hour address deadline. | Product |
+| Overdue mark in Preparing Invoice | Decided | Preparing Invoice has no queue Overdue mark; its payment Overdue timer starts only after invoice send and winner visibility. | Product |
 | Partial payment stays operator-only | 🚧 In flight | Recorded the same way as manual settlement, for less than the full balance, any number of times. Self-service card and bank transfer are untouched. Chosen over a winner-facing partial-pay flow to keep the change small. | Product and finance |
-| Who records a refund | 🚧 In flight | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
-| Refund money path | 🚧 In flight | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
-| One refund, any amount | 🚧 In flight | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
-| Refund letter | 🚧 In flight | None; Customer Service already speaks to the winner. | Product |
-| Refund transaction clues | 🚧 In flight | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the bank name and the last four digits of the account. Full proof and provider reference stay with the operator. | Product |
+| Who records a refund | Decided | Operations, with a refund grant of its own held by `staff` and `admin`, apart from `auction:settle`. Chosen over finance approving each refund, to keep one step; finance reconciles from the order detail. | Product, Operations and finance |
+| Refund money path | Decided | Sent by hand in Stripe or by bank transfer and recorded in Grade10, as refunds after capture already are. Chosen over refunding cards from Grade10 through Stripe. | Product and finance |
+| One refund, any amount | Decided | One refund per order. A closing refund ends it as Refunded. An overpayment returns only the difference and the order keeps its status. Chosen over every refund, including an overpayment, ending as Refunded. | Product and finance |
+| Refund letter | Decided | None; Customer Service already speaks to the winner. | Product |
+| Refund transaction clues | Decided | Transfer to uses the shared payment card: brand logo and the last four digits for a card, or a bank icon with the masked destination on the primary line and the free-text bank name as secondary text under it. A bank refund also shows its provider reference to the winner; a card refund shows none. Full proof, Stripe reference and audit number stay with the operator. | Product |
 | Who cancels | 🚧 In flight | Operators only; a winner who wants out asks Contact Us. Chosen over a winner cancelling before the invoice is sent, which would let a bid be walked away from. | Product and Operations |
 | Cancel is final | 🚧 In flight | No undo, and a late payment never revives the order: the lot may already be relisted and the winner already emailed. Chosen over a short undo window. | Product and Operations |
 | Paid after cancel | 🚧 In flight | Refunded by finance outside Grade10, then cleared on the order. Chosen over widening the Refund action to cancelled orders, for a rare case. | Product and finance |

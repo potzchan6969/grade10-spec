@@ -20,11 +20,11 @@ The profile answers differently. It has nothing to show without a session, but
 it is not corrected — the collector keeps the address they asked for while
 they sign in.
 
-- 🚧 **The address stays put** — a collector without a session who opens the
+- **The address stays put** — a collector without a session who opens the
   profile, by a typed address, a bookmark, or the back button, lands there. The
   sign-in dialog opens over it, and signing in renders the profile at that same
   address with no navigation in between
-- 🚧 **Leaving goes home** — dismissing the dialog without a session takes the
+- **Leaving goes home** — dismissing the dialog without a session takes the
   collector to home instead, replacing the entry the profile holds, so going
   back leads where they came from rather than to the profile asking again
 

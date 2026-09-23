@@ -32,9 +32,9 @@ The stock ceiling and remaining-count work described by the frontend completion
 plan is delivered by `hold-cart-quantity-to-stock`, groups 3 and 5. Do not add
 a second stock helper or threshold to this change.
 
-## 6. Product manual (grade10-spec)
+## 6. Product manual (grade10-spec) (owner: @sean)
 
 Depends on the remaining frontend groups landing and on the stock-limit change's
 manual task coordinating any overlapping product-page edits.
 
-- [ ] 6.1 Update `docs/prds/products/grade10-site/store/product-page.md` to describe the shipped product-detail surface and its product decisions without duplicating requirements; verify with `pnpm check:manual`
+- [x] 6.1 Update `docs/prds/products/grade10-site/store/product-page.md` to describe the shipped product-detail surface and its product decisions without duplicating requirements; verify with `pnpm check:manual`

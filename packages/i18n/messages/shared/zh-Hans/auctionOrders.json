@@ -44,5 +44,24 @@
     "delivered": "已送达",
     "cancelled": "已取消",
     "refunded": "已退款"
+  },
+  "addAddress": {
+    "personal": "个人",
+    "companyKind": "公司",
+    "phone": "电话",
+    "company": "公司名称",
+    "phonePlaceholder": "+852 12345678",
+    "firstName": "名",
+    "lastName": "姓",
+    "country": "国家/地区",
+    "city": "城市/城镇",
+    "addressLine1": "地址行 1",
+    "addressLine2": "地址行 2",
+    "state": "州/省/地区",
+    "postalCode": "邮政编码",
+    "optional": "可选",
+    "confirm": "确认",
+    "cancel": "取消",
+    "countrySearchPlaceholder": "例如 United States"
   }
 }

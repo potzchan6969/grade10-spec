@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-09-18T10:08:11.307Z",
+  "generatedAt": "2026-09-23T08:35:36.059Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
     "Alert": "warn",
     "Auction": "warn",
+    "Auctions / Category Button": "warn",
     "Avatar": "skipped",
     "Badge": "skipped",
     "BreadcrumbEllipsis": "ok",
@@ -25,6 +26,9 @@
     "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
+    "Featured": "warn",
+    "Featured Auction": "warn",
+    "Featured Lot Card": "warn",
     "Footer": "skipped",
     "Google Icon": "warn",
     "Icon Button": "warn",
@@ -34,7 +38,7 @@
     "List": "skipped",
     "List Item": "warn",
     "Login Dialog": "warn",
-    "Nav": "skipped",
+    "Nav": "ok",
     "Navigation List": "skipped",
     "NavigationLink": "ok",
     "Number Input": "skipped",
@@ -102,7 +106,7 @@
     "layout: footer/grid": "ok",
     "layout: footer/logo": "ok",
     "layout: nav/bar": "skipped",
-    "layout: nav/promo": "ok",
+    "layout: nav/promo": "fail",
     "layout: navigation-list/root": "ok",
     "overlays: drawer-overlay/root": "skipped",
     "overlays: dropdown-menu-content/items": "ok",
@@ -811,6 +815,13 @@
     "6586-6383": "Tab List",
     "6610-6434": "PDP Filter",
     "6618-7019": "status_annotations",
+    "6905-3631": "Auctions",
+    "6905-4519": "Featured Lot Card",
+    "6929-4826": "Featured",
+    "6929-4864": "Auctions / Category Button",
+    "6929-4906": "Featured Auction",
+    "6929-4990": "Auctions / Category Button",
+    "6929-4991": "Auctions / Category Button",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -849,6 +860,9 @@
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
     ],
+    "Auctions / Category Button": [
+      "Auctions / Category Button: no code component (looked for src/components/**/auctionscategorybutton.tsx or categorybutton.tsx)"
+    ],
     "Collection Card": [
       "Collection Card: no code component (looked for src/components/**/collectioncard.tsx or collectioncard.tsx)"
     ],
@@ -857,6 +871,15 @@
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
+    ],
+    "Featured": [
+      "Featured: no code component (looked for src/components/**/featured.tsx or featured.tsx)"
+    ],
+    "Featured Auction": [
+      "Featured Auction: no code component (looked for src/components/**/featuredauction.tsx or featuredauction.tsx)"
+    ],
+    "Featured Lot Card": [
+      "Featured Lot Card: no code component (looked for src/components/**/featuredlotcard.tsx or featuredlotcard.tsx)"
     ],
     "Google Icon": [
       "Google Icon: no code component (looked for src/components/**/googleicon.tsx or googleicon.tsx)"
@@ -934,6 +957,9 @@
       "Text Area.status: no getEnum('status') in any template — this Figma axis reaches no code prop",
       "Text Area.state: no getEnum('state') in any template — this Figma axis reaches no code prop",
       "Text Area.isDisabled: no getEnum('isDisabled') in any template — this Figma axis reaches no code prop"
+    ],
+    "layout: nav/promo": [
+      "bg-secondary-foreground  #75726FFF in code, #0B0A0AFF in Figma"
     ]
   }
 }

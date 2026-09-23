@@ -2,7 +2,7 @@
 title: Product Details
 spec: grade10-site/store/product-page
 order: 3
-reviewed: 2026-09-11
+reviewed: 2026-09-23
 ---
 
 The product details page is one product: what it is, what it costs, and the
@@ -10,17 +10,19 @@ button to buy it.
 
 - **Card** — name, description, images, a price; badges, compare-at
   price and low-stock notes where the catalogue provides them
-- 🚧 **One product item** — each product has one sellable item; the page offers
+- **One product item** — each product has one sellable item; the page offers
   no size, option or variant choice
 - **Buy** — choose a quantity, add the product, and stay on the page while the
   cart total updates; adding it again stays on one line
+- **Description** — a long description shows collapsed to three lines with a
+  button to read it in full, without leaving the page
 - **Stock is a ceiling** — the quantity stops where the shop's count stops, and
   the page says how many are left when the shop is nearly out or the collector
   has asked for the last one
 - **Sold out** — a sold-out product says so and cannot be added; its price
   remains visible
-- **Shipping and pickup** — shown on the card where the catalogue provides
-  them
+- **Shipping and pickup** — static copy on every card: shipping calculated at
+  checkout, free pick-up at Hong Kong Grade10 Store
 - **Shared link** — unfurls with the card's first picture, fitted whole into
   the wide box a preview fetcher lays out and padded white, and says it is the
   wide card; a card the catalogue pictures no way unfurls without a picture,
@@ -81,4 +83,5 @@ auction lot's address.
 | Large card on X | Decided | The response names the card shape, because X sizes the card from that name alone and defaults to the small square. Wide with a picture, small without. | Product |
 | Originals under the box | Decided | A picture narrower than the box is enlarged to fill it, so it reads soft rather than small, and the declared size is always the delivered one. | Product |
 | Lot previews | ❓ Open | An auction lot's address unfurls with no picture; its images are the auction's, not the shop's. | Product |
+| A catalogue image that fails to transform | ❓ Open | Whether a card whose image exists but fails to load or resize from the CDN falls back to no `og:image`, the same as a card with no image, or something else. | Engineering |
 :::

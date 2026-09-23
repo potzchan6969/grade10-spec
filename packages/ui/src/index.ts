@@ -60,6 +60,13 @@ export type {
   BookingStep,
 } from "./blocks/appointment-booking/types";
 export {
+  AuctionCard,
+  type AuctionCardBadge,
+  type AuctionCardCopy,
+  type AuctionCardProps,
+  type AuctionCardWhen,
+} from "./blocks/auction-listing/auction-card";
+export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,
@@ -165,9 +172,15 @@ export type {
 // shared/ui/auction-order
 export {
   AuctionAddressForm,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
   type AuctionAddressFormCopy,
   type AuctionAddressFormProps,
 } from "./blocks/auction-order/auction-address-form";
+export {
+  AuctionPhoneField,
+  type AuctionPhoneFieldProps,
+} from "./blocks/auction-order/auction-phone-field";
 export {
   AuctionOrderDetail,
   type AuctionOrderDetailCopy,
@@ -186,7 +199,10 @@ export {
   type AuctionOrderRowCopy,
   type AuctionOrderRowProps,
 } from "./blocks/auction-order/auction-order-row";
-export type { AuctionAddressFormValues } from "./blocks/auction-order/types";
+export type {
+  AuctionAddressFormValues,
+  AuctionAddressKind,
+} from "./blocks/auction-order/types";
 // shared/ui/auction-record
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";

@@ -90,7 +90,10 @@ export const ProcessingOverpaid: Story = {
     const dialog = within(dialogElement);
     expect(dialog.getByText("Transfer to")).toBeVisible();
     expect(dialog.getByLabelText("Bank")).toBeVisible();
-    expect(dialog.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(dialog.getByText("···· 8891")).toBeVisible();
+    expect(dialog.getByText("HSBC")).toBeVisible();
+    expect(dialog.getByText("Reference")).toBeVisible();
+    expect(dialog.getByText("G10-RF-LK7P2Q")).toBeVisible();
   },
 };
 
@@ -121,7 +124,8 @@ export const ProcessingBankTransfer: Story = {
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByLabelText("Bank")).toBeVisible();
-    expect(sidebar.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(sidebar.getByText("···· 8891")).toBeVisible();
+    expect(sidebar.getByText("HSBC")).toBeVisible();
     expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
     expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();

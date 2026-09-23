@@ -2,9 +2,9 @@
 
 ## Purpose
 What a winner is sent after a lot closes and what they do with it: one order
-per lot, a delivery address and a payment method they choose, an operator's
-invoice priced for both, payment by card or by a bank transfer they prove,
-and the receipt, tracker and delivery proof the order keeps afterwards.
+per lot, a delivery address, payment method and billing address they choose, an
+operator's invoice priced for both, payment by card or by a bank transfer they
+prove, and the receipt, tracker and delivery proof the order keeps afterwards.
 
 ## Feature set
 
@@ -27,6 +27,13 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Same as delivery address is selected by default
   - A separate saved or one-time address uses the existing address fields
   - Billing is confirmed with delivery and payment method
+- Address phone and kind
+  - Phone with country: country and digits required; E.164 when parseable; unusual formats accepted; phone country starts empty; placeholder shows an example with calling code
+  - Personal or company: Company Name required only for company and hidden on personal; first and last name stay required on both
+  - Optional locality: address line 1 and postal code required; address line 2 and state or province optional; no Apt./Suite/Building on this form
+  - Picker card title: company name for a company address; recipient first and last name for a personal address
+  - Picker card body: street, city or region, and country only — no postal code and no phone
+  - Order summary addresses: Delivery and Billing show company when company, recipient name, phone, and full address including postal
 - Address snapshots
   - The confirmed billing address is locked on the order
   - Later account-address changes do not rewrite the order
@@ -47,11 +54,13 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
 - Bank transfer
   - Three ways to pay: SWIFT, FPS and Hong Kong local bank transfer details, with the bank reference to quote and copy controls for account number, amount due, and transfer reference
   - Payment proof: one upload of 1 to 3 files (1 required), behind a confirm step
-  - Payment Verifying: the deadline stops, card Pay and further uploads are hidden
+  - Payment Verifying: the deadline stops, Pay with Card and further uploads are hidden
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
+  - Refunded order: shows the terminal outcome while retaining invoices and receipts
+  - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
 - Settlement
   - Hold release: the bid-time authorization verified a bidder and is not the instrument that settles
   - Single fresh charge: one transaction for the final amount, retryable on failure
@@ -67,9 +76,7 @@ and the receipt, tracker and delivery proof the order keeps afterwards.
   - Address hidden until open: `support@grade10.com` is not on the order page before Contact Us
   - Editable message field: Message is an editable Textarea with order facts prefilled and space for the winner's question; Copy Message stays footer-only
   - Partial payment body: receipt ids may be listed; the remaining balance stays off the mail
-
 ## Requirements
-
 ### Requirement: Invoice fields
 
 Each invoice SHALL carry these fields. Every amount SHALL be an integer count
@@ -485,9 +492,9 @@ no-op. Grade10 SHALL NOT treat an expired authorization as a failure.
 
 A refused or failed card payment SHALL NOT void the invoice. While a card
 invoice's status is `pending`, it SHALL remain payable by card and the winner
-SHALL be able to retry with the same or a different card. When the invoice
-status is `expired` or `payment_verifying`, Grade10 SHALL NOT offer or accept
-winner card payment.
+SHALL be able to retry with the same or a different card. The primary pay
+control SHALL read **Pay with Card**. When the invoice status is `expired` or
+`payment_verifying`, Grade10 SHALL NOT offer or accept winner card payment.
 
 #### Scenario: winner-order-SC-12 - The winning hold is released and the invoice is a fresh charge
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -528,7 +535,7 @@ winner card payment.
 
 - **GIVEN** an auction order whose invoice was sent for card and is `pending`
 - **WHEN** the winner opens the order to pay
-- **THEN** Grade10 offers card payment
+- **THEN** Grade10 offers Pay with Card
 - **AND** shows no bank transfer details, no proof upload, and no cash or other method
 
 ### Requirement: Records the winner keeps
@@ -857,7 +864,7 @@ without time).
 When the window passes without a confirmed address, Winner Order SHALL hide
 Confirm delivery address and SHALL show Contact Us in an overdue alert that
 reads `Missed address deadline: {date}` (day-only, no middle-dot separator).
-Derived order status SHALL remain **Awaiting Address**. Invoice status SHALL
+Derived order status SHALL remain **Awaiting Setup**. Invoice status SHALL
 remain `not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel
 the order or suspend bidding solely because the address window passed; an
 operator follows up per `grade10-admin/auction/post-sale`.
@@ -868,14 +875,14 @@ operator follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
 - **WHEN** its derived status is read
-- **THEN** it is Awaiting Address
+- **THEN** it is Awaiting Setup
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-70 - Address confirm is due 48 hours after lot close
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** a lot that closed at 2026-09-17T13:30:00Z
-- **AND** its auction order is Awaiting Address inside the confirm window
+- **AND** its auction order is Awaiting Setup inside the confirm window
 - **WHEN** the winner opens Winner Order
 - **THEN** Confirm delivery address is offered
 - **AND** the confirm deadline shown under the control is 2026-09-19T13:30:00Z
@@ -885,13 +892,13 @@ operator follows up per `grade10-admin/auction/post-sale`.
 #### Scenario: winner-order-SC-71 - A missed address deadline hides Confirm
 **Serves:** winner-order-US-07 - Winner misses the address deadline
 
-- **GIVEN** an auction order still Awaiting Address whose address confirm
+- **GIVEN** an auction order still Awaiting Setup whose address confirm
   window has passed
 - **WHEN** the winner opens Winner Order
 - **THEN** Grade10 offers no Confirm delivery address control
 - **AND** the overdue alert reads Missed address deadline with the day-only
   date and carries Contact Us
-- **AND** derived status remains Awaiting Address
+- **AND** derived status remains Awaiting Setup
 - **AND** invoice status remains `not_issued`
 
 ### Requirement: Winner Order shows five progress steps
@@ -1059,9 +1066,11 @@ address and payment method.
 
 Confirming with any required field empty SHALL be refused, SHALL show an error
 on each empty required field, and SHALL keep the order in Awaiting Setup.
-Grade10 SHALL NOT check the phone number's format. The winner MAY untick Same
-as delivery address and choose a saved or one-time billing address. Cancel
-SHALL leave the order in Awaiting Setup with no address confirmed.
+Phone country and digits SHALL be required; a missing phone country or missing
+digits SHALL show one field refusal beside Phone. Grade10 SHALL store the phone
+as E.164 when parseable and SHALL NOT refuse unusual formats. The winner MAY
+untick Same as delivery address and choose a saved or one-time billing address.
+Cancel SHALL leave the order in Awaiting Setup with no address confirmed.
 
 #### Scenario: winner-order-SC-152 - Same delivery details bill the order by default
 **Serves:** winner-order-US-11 - Winner bills a won lot to a different address
@@ -1080,6 +1089,24 @@ SHALL leave the order in Awaiting Setup with no address confirmed.
 - **THEN** the second address is used as the billing address
 - **AND** the delivery address remains the shipping address
 - **AND** both addresses are confirmed with the payment method
+
+#### Scenario: winner-order-SC-185 - An empty phone country is refused
+**Serves:** winner-order-US-01 - confirming Add Address without a phone country
+
+- **GIVEN** a winner on Add Address with phone digits entered and phone country empty
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 refuses applying the address
+- **AND** a field refusal shows beside Phone
+- **AND** the order stays in Awaiting Setup
+
+#### Scenario: winner-order-SC-186 - Empty phone digits are refused
+**Serves:** winner-order-US-01 - confirming Add Address without phone digits
+
+- **GIVEN** a winner on Add Address with a phone country selected and no digits entered
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 refuses applying the address
+- **AND** a field refusal shows beside Phone
+- **AND** the order stays in Awaiting Setup
 
 ### Requirement: Invoices and receipts show immutable billing and delivery snapshots
 
@@ -1710,3 +1737,255 @@ exists yet, the body SHALL list none.
 - **THEN** Subject is
   `Auction order INV-202609-LK7P2Q-02: payment overdue`
 - **AND** Subject does not name `INV-202609-LK7P2Q-01`
+
+### Requirement: Add Address collects phone with country
+
+Add Address on Winner Order setup collects the winner's phone with a country
+selector.
+
+**Country selector** — The phone field SHALL include a country selector. Phone
+country SHALL start empty on Add Address — nothing preselected.
+
+**Placeholder** — When phone country is empty, the phone field SHALL show an
+example placeholder with a calling code (`+852 12345678`).
+
+**Required parts** — Phone country and digits SHALL be required.
+
+**Storage** — Grade10 SHALL store the phone as E.164 when parseable. When the
+value is not parseable to E.164, Grade10 SHALL still apply the address with the
+entered phone value and SHALL NOT refuse it for format.
+
+**Unusual formats** — Grade10 SHALL NOT refuse a phone value because its format
+is unusual or fails hard validity checks.
+
+#### Scenario: winner-order-SC-187 - Add Address opens with no phone country preselected
+**Serves:** winner-order-US-01 - entering a phone on Add Address
+
+- **GIVEN** a winner opening Add Address on Winner Order setup
+- **WHEN** Add Address is shown
+- **THEN** phone country is empty with nothing preselected
+
+#### Scenario: winner-order-SC-201 - Phone shows an example placeholder with calling code
+**Serves:** winner-order-US-01 - entering a phone on Add Address
+
+- **GIVEN** a winner on Add Address with phone country empty
+- **WHEN** the phone field is shown
+- **THEN** the placeholder shows an example with a calling code (`+852 12345678`)
+
+#### Scenario: winner-order-SC-188 - A parseable phone is stored as E.164
+**Serves:** winner-order-US-01 - saving a phone on Add Address
+
+- **GIVEN** a winner on Add Address with a phone country selected and digits that parse to E.164
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 stores the phone as E.164
+- **AND** the address is applied
+
+#### Scenario: winner-order-SC-189 - An unusual phone format is accepted
+**Serves:** winner-order-US-01 - saving a phone that does not pass hard validity
+
+- **GIVEN** a winner on Add Address with a phone country selected and digits in an unusual format
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 accepts the phone
+- **AND** the address is applied
+- **AND** no field refusal shows beside Phone for format
+
+#### Scenario: winner-order-SC-197 - A non-parseable phone still applies with the entered value
+**Serves:** winner-order-US-01 - saving a phone that does not parse to E.164
+
+- **GIVEN** a winner on Add Address with a phone country selected and digits that do not parse to E.164
+- **WHEN** the winner confirms the address
+- **THEN** Grade10 applies the address with the entered phone value
+- **AND** no field refusal shows beside Phone for format
+
+### Requirement: Add Address is Personal or Company
+
+Add Address lets the winner mark the address Personal or Company.
+
+**Toggle** — Add Address SHALL offer Personal and Company. Personal SHALL be
+selected by default.
+
+**Company Name** — Company Name SHALL be required only when Company is
+selected. Company Name SHALL be hidden when Personal is selected. Confirming
+while Personal is selected SHALL NOT require Company Name, including after the
+winner had entered a company name and switched back to Personal.
+
+**Recipient names** — First name and last name SHALL remain required for both
+Personal and Company.
+
+**Picker card title** — A company address SHALL show the company name as the
+picker card title. A personal address SHALL show the recipient's first and last
+name as the picker card title.
+
+**Picker card body** — The picker card body SHALL show street, city or region,
+and country only. It SHALL NOT show postal code or phone.
+
+**Order summary** — After setup is confirmed, Winner Order Delivery address and
+Billing address SHALL show the confirmed snapshot: company name when the
+address is company, recipient first and last name, phone, and the full address
+including postal code.
+
+#### Scenario: winner-order-SC-190 - Personal is selected by default and Company Name is hidden
+**Serves:** winner-order-US-01 - choosing a personal address on Add Address
+
+- **GIVEN** a winner opening Add Address on Winner Order setup
+- **WHEN** Add Address is shown
+- **THEN** Personal is selected
+- **AND** Company Name is not shown
+
+#### Scenario: winner-order-SC-191 - Company requires Company Name
+**Serves:** winner-order-US-01 - choosing a company address on Add Address
+
+- **GIVEN** a winner on Add Address with Company selected
+- **WHEN** the winner confirms with Company Name empty
+- **THEN** Grade10 refuses applying the address
+- **AND** a field refusal shows beside Company Name
+- **AND** the order stays in Awaiting Setup
+
+#### Scenario: winner-order-SC-198 - Switching back to Personal drops the Company Name requirement
+**Serves:** winner-order-US-01 - leaving a company name after switching to Personal
+
+- **GIVEN** a winner on Add Address who selected Company, entered a Company Name, then switched to Personal
+- **WHEN** the winner confirms with every Personal required field complete
+- **THEN** Grade10 applies the address as personal
+- **AND** no field refusal shows beside Company Name
+
+#### Scenario: winner-order-SC-192 - A personal saved address shows the recipient name on the picker card
+**Serves:** winner-order-US-01 - picking a personal delivery address
+
+- **GIVEN** a winner on the delivery picker with a saved personal address
+- **WHEN** the picker lists saved addresses
+- **THEN** that address card title is the recipient's first and last name
+
+#### Scenario: winner-order-SC-193 - A company saved address shows the company name on the picker card
+**Serves:** winner-order-US-01 - picking a company delivery address
+
+- **GIVEN** a winner on the delivery picker with a saved company address
+- **WHEN** the picker lists saved addresses
+- **THEN** that address card title is the company name
+
+#### Scenario: winner-order-SC-202 - Picker card body omits postal code and phone
+**Serves:** winner-order-US-01 - reading a saved address on the delivery picker
+
+- **GIVEN** a winner on the delivery picker with a saved address that has street, city or region, country, postal code, and phone
+- **WHEN** the picker lists that address
+- **THEN** the card body shows street, city or region, and country
+- **AND** the card body does not show postal code or phone
+
+#### Scenario: winner-order-SC-203 - Order summary shows the full address snapshot
+**Serves:** winner-order-US-01 - reading Delivery and Billing after setup
+
+- **GIVEN** a winner who confirmed Complete Order Setup with a company delivery address that includes company name, recipient name, phone, and postal code
+- **WHEN** Winner Order shows Delivery address and Billing address
+- **THEN** each block shows the company name, recipient name, phone, and full address including postal code
+
+#### Scenario: winner-order-SC-194 - A one-time address applies without saving a sixth
+**Serves:** winner-order-US-12 - confirming delivery when five addresses are already saved
+
+- **GIVEN** a winner with five saved shipping addresses on Winner Order setup
+- **WHEN** the winner adds a one-time address with Personal or Company, phone country and digits, and the other required fields complete
+- **THEN** Grade10 applies the one-time address for this order
+- **AND** no sixth address is saved to the account
+
+#### Scenario: winner-order-SC-199 - Billing Add Address uses the same phone and kind rules
+**Serves:** winner-order-US-11 - Winner bills a won lot to a different address
+
+- **GIVEN** a winner on billing Add Address after unticking Same as delivery address
+- **WHEN** Add Address is shown
+- **THEN** Personal or Company and the country-aware phone are offered with the same required fields as delivery Add Address
+
+#### Scenario: winner-order-SC-200 - Billing Company requires Company Name
+**Serves:** winner-order-US-11 - Winner bills a won lot to a different address
+
+- **GIVEN** a winner on billing Add Address with Company selected
+- **WHEN** the winner confirms with Company Name empty
+- **THEN** Grade10 refuses applying the billing address
+- **AND** a field refusal shows beside Company Name
+
+### Requirement: Add Address optional locality fields
+
+Add Address collects locality with required and optional parts.
+
+**Required** — Address line 1 and postal code SHALL be required.
+
+**Optional** — Address line 2 and state or province SHALL be optional.
+Confirming with them empty SHALL NOT be refused.
+
+**Not collected** — Apt./Suite/Building SHALL NOT be collected on Add Address.
+
+#### Scenario: winner-order-SC-195 - Address line 2 and state may be left empty
+**Serves:** winner-order-US-01 - confirming Add Address with only required locality fields
+
+- **GIVEN** a winner on Add Address with address line 1 and postal code filled and address line 2 and state or province empty
+- **WHEN** the winner confirms the address with every other required field complete
+- **THEN** Grade10 applies the address
+- **AND** no field refusal shows beside address line 2 or state or province
+
+#### Scenario: winner-order-SC-196 - Apt./Suite/Building is not collected
+**Serves:** winner-order-US-01 - entering locality on Add Address
+
+- **WHEN** a winner is on Add Address on Winner Order setup
+- **THEN** Apt./Suite/Building is not shown
+
+### Requirement: Winner Order renders a refunded order as a retained record
+
+When an order is Refunded, Winner Order SHALL show Refunded as the order and
+invoice status, the invoice and receipts already issued, and no stepper, Pay,
+address form or other self-service action. The page SHALL show the refund
+details in a dialog that stacks, each a label above its value: Amount, then
+Transfer to, then Reference when the refund is a bank transfer, then Reason,
+then Note when the operator recorded one. Transfer to SHALL use `PaymentMethodCard`. A card refund SHALL show
+the brand logo and only the last four digits, and SHALL not show a provider
+reference. A bank refund SHALL show a bank icon, the masked destination on the
+primary line, and the free-text bank name as secondary text under it, and SHALL
+show the operator's bank provider reference as Reference. The page SHALL omit
+Note when the operator left none. The page SHALL not show operator proof, a
+Stripe provider reference, a full card number, or a full account number.
+
+#### Scenario: winner-order-SC-157 - A refunded order keeps its documents
+**Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
+
+- **GIVEN** a refunded order that had one partial payment and an invoice
+- **WHEN** the winner opens Winner Order
+- **THEN** the order and invoice read Refunded
+- **AND** the invoice and payment receipt remain downloadable
+- **AND** no Pay, address form or stepper appears
+- **AND** the refund details show Transfer to with the card payment marks or bank destination
+
+### Requirement: Winner Order shows an overpayment without closing the order
+
+When an overpayment is returned, Winner Order SHALL show only the returned
+difference below Order Total. It SHALL keep the order's existing status and
+the invoice lines unchanged, and SHALL offer the refund details without
+showing the operator's proof or a Stripe provider reference.
+
+#### Scenario: winner-order-SC-155 - An overpayment keeps the order open
+**Serves:** winner-order-US-15 - seeing an overpayment returned without closing the sale
+
+- **GIVEN** an order whose recorded payment exceeds its invoice total and the
+  difference has been returned
+- **WHEN** the winner opens Winner Order
+- **THEN** the order status and invoice lines are unchanged
+- **AND** the returned difference appears below Order Total
+- **AND** the winner can open the refund details
+
+#### Scenario: winner-order-SC-172 - Refund details show statement-recognition clues
+**Serves:** winner-order-US-14 - seeing a refunded order after full or partial payment
+
+- **GIVEN** a refunded order with a card refund, a refund detail record and an operator note
+- **WHEN** the winner opens the refund details
+- **THEN** the details show Amount, then Transfer to, then Reason, then Note
+- **AND** Transfer to shows the card brand logo and only the last four digits
+- **AND** Reference is not shown
+- **AND** the full card number, Stripe provider reference and proof are not shown
+
+#### Scenario: winner-order-SC-173 - Bank refund details show destination and reference
+**Serves:** winner-order-US-17 - matching a bank refund against their own statement
+
+- **GIVEN** a refunded order with a bank transfer refund and a refund detail record with no operator note
+- **WHEN** the winner opens the refund details
+- **THEN** the details show Amount, then Transfer to, then Reference, then Reason
+- **AND** Transfer to shows a bank icon, the masked destination on the primary line, and the free-text bank name as secondary text under it
+- **AND** Reference shows the operator's bank provider reference
+- **AND** Note is not shown
+- **AND** the full account number and proof are not shown
+

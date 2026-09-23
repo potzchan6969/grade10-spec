@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* Collector has Won standings across Awaiting Address, Pending Payment, and Refunded.
+* Collector has Won standings across Awaiting Setup, Pending Payment, and Refunded.
 
 **Steps:**
 
@@ -96,7 +96,7 @@
 * View order is present.
 * No secondary helper under the standing, including no how-to-reach-Grade10 on the row.
 
-### grade10-site-auction-account-record-US8-TC4-1: Awaiting Address Won row has no confirm-address helper line
+### grade10-site-auction-account-record-US8-TC4-1: Awaiting Setup Won row has no confirm-address helper line
 
 **Classification:**
 
@@ -113,7 +113,7 @@
 
 **Pre-conditions:**
 
-* Won listing in Awaiting Address.
+* Won listing in Awaiting Setup.
 
 **Steps:**
 

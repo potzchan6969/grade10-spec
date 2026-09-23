@@ -50,12 +50,17 @@ session, and the person lands on the brand home with a toast.
   signed in without being reloaded, and whatever they were stopped from doing
   carries on. It is tried once, and a card that sold out while they were in
   their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
+- 🚧 **Settled on another device** — a surface still showing Check Your Email
+  learns when that address signs in anywhere else, by any offered method, and
+  ends its own wait with a message instead of counting toward a resend nobody
+  needs. It gains no session of its own; only the device that actually signed
+  in has one.
 - **Expired** — the toast says the link has expired.
 - **No longer works** — a used, replaced, or otherwise invalid link shares
   one toast that the link no longer works.
 - **Banned** — a banned account's link follow shows they cannot sign in,
   and does not invite them to ask for another link.
-- 🚧 **Different account** — when the person is already signed in as someone
+- **Different account** — when the person is already signed in as someone
   else, the link does not switch them. A toast says they are signed in with a
   different account, names the link’s email in the description, and offers
   **Switch** or **Stay**; dismissing keeps the current session.
@@ -94,8 +99,12 @@ path, the link, beside Google.
 | Figma `OTP Dialog` frame | ❓ Open | Retire, or keep as reference for the second-factor dialog. | Design |
 | Failed link follow copy | Decided | Expired is its own toast; used, replaced, and invalid share one; banned is its own and does not nudge a resend. | Product |
 | Link while signed in as someone else | Decided | No automatic switch. Warning toast: title names the mismatch; description names the link’s email. Switch enters that account; Stay or dismiss keeps the current session. | Product |
+| Mismatch toast against an invalid link | Decided | The failed-follow toast wins. The invalid-link check (expired, used, banned) runs first and unchanged, so the mismatch check never reaches an invalid link. | Product |
+| Mismatch toast and the link’s token | Decided | Stay or dismiss leaves the link exactly as unused as before the follow — not invalidated. It expires on its own five minutes after the send. | Product |
+| A second mismatched link while the toast is showing | Decided | Replaces it. Every follow is a full-page redirect to the brand home, so the earlier toast’s state cannot survive to conflict with the new one. | Product |
 | Link lifetime | Decided | Five minutes, and the email says five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
 | How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
+| A device still waiting when the address signs in on another | Decided | The waiting surface ends its own wait with a message; it gains no session of its own — only the device that actually signed in has one. Checked without exposing whether an arbitrary address has a session: gated behind the waiting device's own flow, never a bare email. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
