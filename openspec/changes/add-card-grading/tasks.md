@@ -1150,6 +1150,33 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-34`)
 - [ ] 18.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 18.10 Write `recordSettlement` at `ready`: the store order read before the
+      transaction, matched against each card's due under the lock, a line
+      above a card's due refused by name, so settled never passes accrued on
+      a card (`grade10-admin-grading-counter-SC-32`,
+      `grade10-site-grading-submission-lifecycle-SC-26`,
+      `grade10-site-grading-submission-lifecycle-SC-40`)
+- [ ] 18.11 Write `tickItem` under the lock: one photograph for a slab and none
+      for a raw card, refused while anything is due, for a held card and for
+      a card no hand-back may carry (`grade10-admin-grading-counter-SC-32`,
+      `grade10-admin-grading-counter-SC-33`,
+      `grade10-admin-grading-counter-SC-34`)
+- [ ] 18.12 Close each hand-back on its own: `collect` stamps the cards its
+      receipt printed and writes a `handed_back` event naming the packet,
+      moves to `collected` only once no card is left, accepts only the newest
+      sealed hand-back, and judges what is due as of the mint; storage and
+      the ladder stop on a card handed back; the second receipt prints only
+      its own cards and names the first; the mint and the vault take the
+      pickup code or the glance themselves (`grade10-admin-grading-counter-SC-36`,
+      `grade10-admin-grading-counter-SC-37`,
+      `grade10-admin-grading-counter-SC-43`,
+      `grade10-admin-grading-counter-SC-90`,
+      `grade10-admin-grading-counter-SC-91`)
+- [ ] 18.13 Withdraw a card and issue its receipt in one transaction, the
+      receipt its own document with its own clauses, listed with the
+      submission's papers and answered by the digest check
+      (`grade10-admin-grading-counter-SC-54`,
+      `grade10-site-grading-counter-documents-SC-20`)
 
 ## 19. Payouts, waivers and what is due (grade10)
 
