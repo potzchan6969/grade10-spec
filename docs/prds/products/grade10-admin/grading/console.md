@@ -98,7 +98,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **Money tab** — paid at hand-in with the POS reference, the upcharge, storage accrued, to settle before
   collection, refunds and payouts; once the cards are back, waive the upcharge or record a payout, each with a reason
   and a second person; a payout is its own record with its route, till or transfer, and a reversal if the card turns up
-- 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again
+- 🚧 **Documents tab** — the three documents with their fingerprints; show on iPad, copy link, send again once a letter
+  has carried it
 - 🚧 **Timeline tab** — every event with its figures and the grader's stages in its words; staff-only entries stay here
 
 ## Hand-back
@@ -193,6 +194,7 @@ reaches only submissions not yet booked:
 | Two people for money | Decided | A waiver, a payout and a money setting take a reason and a second `grading:approve` holder, never the recorder | Product |
 | The notice is a counter act | Decided | A queue rung from day 180, a posting record with the date and tracking, the email the same day; the 30 days run from the posting; nothing after it in the first release | Product |
 | One submission is one capability | Decided | The runbooks and the tabs are one screen at one address, so they are one spec, as the vault keeps one case inside its queue | Product |
+| Send again is a letter's copy | Decided | Only a sealed document a letter has already carried is sent again; before the hand-in the agreement is downloaded on the iPad, and a send is refused by name | Product |
 | Staff notifications | Decided | The queue is the inbox; nothing is emailed to staff | Product |
 | Drafts on the queue | ❓ Open | Whether a `planned` submission has a view of its own | Product |
 | The safe's cap | ❓ Open | HKD 300,000 of declared value in the safe, ready slabs counted, refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |

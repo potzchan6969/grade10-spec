@@ -752,9 +752,16 @@ fact the document prints has not been set.
 
 A collector who lost an email gets the same sealed copy rather than a new one.
 
-**What can be sent again** - every sealed document on the submission, and the
-message telling the collector the grades are in, SHALL be sendable to the
-collector again from the console.
+**What can be sent again** - every sealed document a letter has already
+carried, and the message telling the collector the grades are in, SHALL be
+sendable to the collector again from the console (`Q113`). The handed-in
+message carries the agreement and the intake receipt, and the message at
+collection carries the hand-back receipt.
+
+**Not yet carried** - a sealed document no letter has carried SHALL NOT be
+offered to send again, and a send SHALL be refused by name with nothing sent
+(`Q113`). Before the hand-in the agreement is downloaded on the iPad there and
+then.
 
 **What is sent** - sending again SHALL send the copy already sealed, changing
 no fingerprint and sealing nothing new.
@@ -774,6 +781,14 @@ rather than list an empty set of documents.
 
 - **WHEN** the operator sends a sealed document to the collector again
 - **THEN** the collector is sent the copy already sealed, with the same fingerprint
+
+#### Scenario: grade10-admin-grading-counter-SC-102 - A document no letter has carried is not offered again
+**Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it
+
+- **GIVEN** a `booked` submission whose agreement is sealed and whose cards are not yet checked in
+- **WHEN** the operator opens its documents
+- **THEN** the agreement is listed with its fingerprint and is not offered to send again
+- **AND** a send of it is refused by name, and nothing is sent
 
 #### Scenario: grade10-admin-grading-counter-SC-93 - A submission with nothing sealed says so
 **Serves:** grade10-admin-grading-counter-US-11 - the operator hands a document over only when the counter is ready for it

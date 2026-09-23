@@ -2379,6 +2379,34 @@ Admin(holds `grading:read`) opens a submission whose grades email failed to send
 
 * The failed letter is flagged with its reason; Send again is offered on it.
 
+### grade10-admin-grading-counter-US11-TC8-1: An agreement sealed before the hand-in is not sent again
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-11
+
+**Pre-conditions:**
+Admin(holds `grading:operate`) is at a `booked` submission whose agreement the collector has just sealed on the iPad, before the cards are checked in.
+
+**Steps:**
+
+1. Open the Documents tab.
+2. Call the send for the agreement directly, outside the tab.
+
+**Expected Results:**
+
+* Step 1 lists the agreement with its fingerprint and offers no Send again on it.
+* Step 2 is refused by name, and the collector's mailbox receives nothing.
+
 ---
 
 ## grade10-admin-grading-counter-US12: Operator posts the written notice from the Notice due rung
@@ -3105,7 +3133,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 
 ## Reconciliation
 
-**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and three cases against a hundred and one scenarios.
+**Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and four cases against a hundred and two scenarios.
 
 | Case or scenario | Disposition | Where it went / why |
 | --- | --- | --- |
@@ -3206,6 +3234,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-SC-77` | Case added | `grade10-admin-grading-counter-US1-TC10-1` — no email and no push to staff over a shift |
 | `grade10-admin-grading-counter-SC-22` | Case added | `grade10-admin-grading-counter-US2-TC13-1` — check in refused while the agreement is unsealed |
 | `grade10-admin-grading-counter-SC-101` | Case added | `grade10-admin-grading-counter-US2-TC14-1` — an order recorded on one submission refused on another at a second level, and a replay on the first answering its own lines |
+| `grade10-admin-grading-counter-SC-102` | Case added | `grade10-admin-grading-counter-US11-TC8-1` — an agreement sealed before the hand-in, which no letter has carried, not offered again and a send of it refused by name |
 | `grade10-admin-grading-counter-SC-34` | Case added | `grade10-admin-grading-counter-US4-TC11-1` — the held card untickable and named on the receipt |
 | `grade10-admin-grading-counter-SC-09` | Case added | `grade10-admin-grading-counter-US9-TC6-1` — the queue badging a payout past its window |
 | `grade10-admin-grading-counter-SC-63` | Case added | `grade10-admin-grading-counter-US9-TC7-1` — a second payout on a card already carrying one refused |

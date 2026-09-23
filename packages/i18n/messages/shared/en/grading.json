@@ -502,16 +502,102 @@
   },
   "ceremony": {
     "refusal": {
-      "expired": "This signing link has expired. Signing links last a short while for your safety; ask staff for a new one.",
-      "consumed": "This signing link has already been used. If you signed with it, your copy is at the counter and on your submission page; if not, ask staff for a new link.",
-      "anotherDevice": "This link was opened on another device. A signing link stays on the device it was first opened on; ask staff for a new link for this device.",
-      "withdrawn": "These documents were withdrawn. A newer set replaced them; ask staff for the link to the current documents.",
-      "alreadySigned": "These documents are already signed. You can close this page.",
-      "notFound": "This signing link does not open anything. Ask staff to prepare it again.",
-      "notReady": "The counter is not ready for this document yet. The member of staff with you can say what is outstanding.",
-      "pagesNotViewed": "Read the whole document before signing: scroll to the end of every page.",
-      "nameMismatch": "That is not the name this submission was booked under. Type it as it was given at booking.",
-      "postalAddress": "Your postal address is needed before you sign. It is used only for the written notice."
+      "TOKEN_INVALID": {
+        "title": "This signing link does not open anything",
+        "message": "Ask staff to prepare it again."
+      },
+      "TOKEN_EXPIRED": {
+        "title": "This signing link has expired",
+        "message": "Signing links last a short while for your safety; ask staff for a new one."
+      },
+      "TOKEN_CONSUMED": {
+        "title": "This signing link has already been used",
+        "message": "If you signed with it, your copy is at the counter and on your submission page; if not, ask staff for a new link."
+      },
+      "TOKEN_CONFLICT": {
+        "title": "This link was opened on another device",
+        "message": "A signing link stays on the device it was first opened on; ask staff for a new link for this device."
+      },
+      "PACKET_VOIDED": {
+        "title": "These documents were withdrawn",
+        "message": "A newer set replaced them; ask staff for the link to the current documents."
+      },
+      "PACKET_EXPIRED": {
+        "title": "These documents have expired",
+        "message": "They were prepared too long ago to sign now. Ask for them to be prepared again."
+      },
+      "PACKET_COMPLETED": {
+        "title": "These documents are already signed",
+        "message": "You can close this page."
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "That document is not part of this signing",
+        "message": "Reload the page to see the documents you were asked to sign."
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "You have already signed that one",
+        "message": "Reload the page to carry on with whatever is still left to sign."
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "Read the whole document before signing",
+        "message": "Scroll to the end of every page."
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "That page is not in this document",
+        "message": "Reload the page and read the document through again."
+      },
+      "CONSENT_REQUIRED": {
+        "title": "Please confirm you agree first",
+        "message": "Tick the box confirming you have read the document and agree to sign it."
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "Please agree to sign electronically first",
+        "message": "Read the notice about signing electronically and agree to it before signing anything."
+      },
+      "KYC_REQUIRED": {
+        "title": "Your identity check is not recorded yet",
+        "message": "The member of staff with you needs to record your ID check before you sign."
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "That is not the name on your ID",
+        "message": "Type your name exactly as it appears on the ID the member of staff with you checked. If the ID is in another name, they need to record the check again."
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "The counter is not ready for this document yet",
+        "message": "The member of staff with you can say what is outstanding."
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "You have already signed everything",
+        "message": "Nothing further is needed from you. You can close this page."
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "That is not the name this submission was booked under",
+        "message": "Type it as it was given at booking."
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "Your postal address is needed before you sign",
+        "message": "It is used only for the written notice."
+      },
+      "SIGNATURE_INVALID": {
+        "title": "That signature could not be read",
+        "message": "Clear the signature box and sign again."
+      },
+      "SOURCE_MISSING": {
+        "title": "The document could not be loaded",
+        "message": "Ask the member of staff with you to prepare it again."
+      },
+      "SOURCE_TAMPERED": {
+        "title": "The document does not match what was prepared",
+        "message": "Do not sign. Ask the member of staff with you to prepare it again."
+      },
+      "FONT_MISSING": {
+        "title": "The document cannot be drawn right now",
+        "message": "Nothing has been signed. Ask the member of staff with you; the shop has to restore its document font first."
+      },
+      "CONFLICT": {
+        "title": "This signing was finished elsewhere",
+        "message": "Another device completed or withdrew it while this page was open."
+      }
     },
     "yourName": {
       "label": "Your name",

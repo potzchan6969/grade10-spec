@@ -502,16 +502,102 @@
   },
   "ceremony": {
     "refusal": {
-      "expired": "这条签署链接已经过期。为安全起见，签署链接只在短时间内有效；请向同事索取新的链接。",
-      "consumed": "这条签署链接已经用过。如果你已用它签署，副本在柜台，也在清单页；否则请向同事索取新的链接。",
-      "anotherDevice": "这条链接已在另一部设备开启。签署链接只留在最先开启它的设备上；请向同事索取这部设备的新链接。",
-      "withdrawn": "这批文件已经作废，由新一批取代。请向同事索取现行文件的链接。",
-      "alreadySigned": "这批文件已经签妥，可以关闭这一页。",
-      "notFound": "这条签署链接打不开任何文件。请同事重新准备。",
-      "notReady": "柜台这边还未准备好这份文件。在场的同事可以说明尚欠什么。",
-      "pagesNotViewed": "签署前请看完整份文件：每一页都要卷到最后。",
-      "nameMismatch": "这不是这张清单预约时所用的姓名。请按预约时填写的姓名输入。",
-      "postalAddress": "签署前请填上通讯地址。地址只会用于寄发书面通知。"
+      "TOKEN_INVALID": {
+        "title": "这条签署链接打不开任何文件",
+        "message": "请同事重新准备。"
+      },
+      "TOKEN_EXPIRED": {
+        "title": "这条签署链接已经过期",
+        "message": "为安全起见，签署链接只在短时间内有效；请向同事索取新的链接。"
+      },
+      "TOKEN_CONSUMED": {
+        "title": "这条签署链接已经用过",
+        "message": "如果你已用它签署，副本在柜台，也在清单页；否则请向同事索取新的链接。"
+      },
+      "TOKEN_CONFLICT": {
+        "title": "这条链接已在另一部设备开启",
+        "message": "签署链接只留在最先开启它的设备上；请向同事索取这部设备的新链接。"
+      },
+      "PACKET_VOIDED": {
+        "title": "这批文件已经作废，由新一批取代",
+        "message": "请向同事索取现行文件的链接。"
+      },
+      "PACKET_EXPIRED": {
+        "title": "这批文件已过期",
+        "message": "文件准备至今太久，现在不能签署。请要求重新准备。"
+      },
+      "PACKET_COMPLETED": {
+        "title": "这批文件已经签妥",
+        "message": "可以关闭这一页。"
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "这份文件不属于本次签署",
+        "message": "请重新加载页面，查看需要你签署的文件。"
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "这一份你已经签署",
+        "message": "请重新加载页面，继续签署尚未完成的文件。"
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "签署前请看完整份文件",
+        "message": "每一页都要卷到最后。"
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "这份文件没有这一页",
+        "message": "请重新加载页面，再从头阅读文件。"
+      },
+      "CONSENT_REQUIRED": {
+        "title": "请先确认你同意",
+        "message": "请勾选方格，确认你已阅读文件并同意签署。"
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "请先同意以电子方式签署",
+        "message": "签署任何文件前，请先阅读关于电子签署的说明并表示同意。"
+      },
+      "KYC_REQUIRED": {
+        "title": "尚未记录你的身份核对",
+        "message": "签署前，身旁的员工需要先记录核对你的证件。"
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "这不是你证件上的姓名",
+        "message": "请完全按照员工核对过的证件输入姓名。如果证件上是另一个姓名，员工需要重新记录核对。"
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "柜台这边还未准备好这份文件",
+        "message": "在场的同事可以说明尚欠什么。"
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "你已经全部签妥",
+        "message": "你不用再做什么。可以关闭这个页面。"
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "这不是这张清单预约时所用的姓名",
+        "message": "请按预约时填写的姓名输入。"
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "签署前请填上通讯地址",
+        "message": "地址只会用于寄发书面通知。"
+      },
+      "SIGNATURE_INVALID": {
+        "title": "无法辨识这个签名",
+        "message": "请清除签名方格，再签一次。"
+      },
+      "SOURCE_MISSING": {
+        "title": "无法加载文件",
+        "message": "请身旁的员工重新准备文件。"
+      },
+      "SOURCE_TAMPERED": {
+        "title": "文件与准备好的版本不符",
+        "message": "请勿签署。请身旁的员工重新准备文件。"
+      },
+      "FONT_MISSING": {
+        "title": "文件暂时无法显示",
+        "message": "尚未签署任何文件。请告知身旁的员工；店铺须先恢复文件字体。"
+      },
+      "CONFLICT": {
+        "title": "本次签署已在别处完成",
+        "message": "这个页面打开期间，另一台设备已完成或撤回签署。"
+      }
     },
     "yourName": {
       "label": "你的姓名",

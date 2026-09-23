@@ -502,16 +502,102 @@
   },
   "ceremony": {
     "refusal": {
-      "expired": "這條簽署連結已經過期。為安全起見，簽署連結只在短時間內有效；請向同事索取新的連結。",
-      "consumed": "這條簽署連結已經用過。如果你已用它簽署，副本在櫃檯，亦在清單頁；否則請向同事索取新的連結。",
-      "anotherDevice": "這條連結已在另一部裝置開啟。簽署連結只留在最先開啟它的裝置上；請向同事索取這部裝置的新連結。",
-      "withdrawn": "這批文件已經作廢，由新一批取代。請向同事索取現行文件的連結。",
-      "alreadySigned": "這批文件已經簽妥，可以關閉這一頁。",
-      "notFound": "這條簽署連結打不開任何文件。請同事重新準備。",
-      "notReady": "櫃檯這邊還未準備好這份文件。在場的同事可以說明尚欠什麼。",
-      "pagesNotViewed": "簽署前請看完整份文件：每一頁都要捲到最後。",
-      "nameMismatch": "這不是這張清單預約時所用的姓名。請按預約時填寫的姓名輸入。",
-      "postalAddress": "簽署前請填上通訊地址。地址只會用於寄發書面通知。"
+      "TOKEN_INVALID": {
+        "title": "這條簽署連結打不開任何文件",
+        "message": "請同事重新準備。"
+      },
+      "TOKEN_EXPIRED": {
+        "title": "這條簽署連結已經過期",
+        "message": "為安全起見，簽署連結只在短時間內有效；請向同事索取新的連結。"
+      },
+      "TOKEN_CONSUMED": {
+        "title": "這條簽署連結已經用過",
+        "message": "如果你已用它簽署，副本在櫃檯，亦在清單頁；否則請向同事索取新的連結。"
+      },
+      "TOKEN_CONFLICT": {
+        "title": "這條連結已在另一部裝置開啟",
+        "message": "簽署連結只留在最先開啟它的裝置上；請向同事索取這部裝置的新連結。"
+      },
+      "PACKET_VOIDED": {
+        "title": "這批文件已經作廢，由新一批取代",
+        "message": "請向同事索取現行文件的連結。"
+      },
+      "PACKET_EXPIRED": {
+        "title": "這批文件已過期",
+        "message": "文件準備至今太久，現在不能簽署。請要求重新準備。"
+      },
+      "PACKET_COMPLETED": {
+        "title": "這批文件已經簽妥",
+        "message": "可以關閉這一頁。"
+      },
+      "DOCUMENT_UNKNOWN": {
+        "title": "這份文件不屬於今次簽署",
+        "message": "請重新載入頁面，查看需要你簽署的文件。"
+      },
+      "DOCUMENT_ALREADY_SIGNED": {
+        "title": "這一份你已經簽署",
+        "message": "請重新載入頁面，繼續簽署尚未完成的文件。"
+      },
+      "PAGES_NOT_VIEWED": {
+        "title": "簽署前請看完整份文件",
+        "message": "每一頁都要捲到最後。"
+      },
+      "PAGE_OUT_OF_RANGE": {
+        "title": "這份文件沒有這一頁",
+        "message": "請重新載入頁面，再從頭閱讀文件。"
+      },
+      "CONSENT_REQUIRED": {
+        "title": "請先確認你同意",
+        "message": "請勾選方格，確認你已閱讀文件並同意簽署。"
+      },
+      "ESIGN_CONSENT_REQUIRED": {
+        "title": "請先同意以電子方式簽署",
+        "message": "簽署任何文件前，請先閱讀關於電子簽署的說明並表示同意。"
+      },
+      "KYC_REQUIRED": {
+        "title": "尚未記錄你的身分核對",
+        "message": "簽署前，身旁的職員需要先記錄核對你的證件。"
+      },
+      "IDENTITY_NAME_MISMATCH": {
+        "title": "這不是你證件上的姓名",
+        "message": "請完全按照職員核對過的證件輸入姓名。如果證件上是另一個姓名，職員需要重新記錄核對。"
+      },
+      "SIGNER_OUT_OF_ORDER": {
+        "title": "櫃檯這邊還未準備好這份文件",
+        "message": "在場的同事可以說明尚欠什麼。"
+      },
+      "SIGNER_ALREADY_SIGNED": {
+        "title": "你已經全部簽妥",
+        "message": "你不用再做甚麼。可以關閉這個頁面。"
+      },
+      "SIGNER_NAME_MISMATCH": {
+        "title": "這不是這張清單預約時所用的姓名",
+        "message": "請按預約時填寫的姓名輸入。"
+      },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "簽署前請填上通訊地址",
+        "message": "地址只會用於寄發書面通知。"
+      },
+      "SIGNATURE_INVALID": {
+        "title": "無法辨識這個簽名",
+        "message": "請清除簽名方格，再簽一次。"
+      },
+      "SOURCE_MISSING": {
+        "title": "無法載入文件",
+        "message": "請身旁的職員重新準備文件。"
+      },
+      "SOURCE_TAMPERED": {
+        "title": "文件與準備好的版本不符",
+        "message": "請勿簽署。請身旁的職員重新準備文件。"
+      },
+      "FONT_MISSING": {
+        "title": "文件暫時無法顯示",
+        "message": "尚未簽署任何文件。請告知身旁的職員；店舖須先恢復文件字型。"
+      },
+      "CONFLICT": {
+        "title": "今次簽署已在別處完成",
+        "message": "這個頁面開啟期間，另一部裝置已完成或撤回簽署。"
+      }
     },
     "yourName": {
       "label": "你的姓名",
