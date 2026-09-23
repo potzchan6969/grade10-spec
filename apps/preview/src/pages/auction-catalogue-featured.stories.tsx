@@ -5,8 +5,9 @@ import { FeaturedAuctions } from "./auction-catalogue-card";
 import { COLLECTION_LOTS } from "./auction-catalogue-content";
 
 /**
- * The featured row on its own. Site chrome and the rest of the list live on
- * the page story. The four lots are the soonest closes from the collection.
+ * The featured row on its own. One card from that row lives under Lot Card →
+ * A featured lot. Site chrome and the rest of the list live on the page story.
+ * The four lots are the soonest closes from the collection.
  */
 const meta = {
   title: "Auction List/Featured",
