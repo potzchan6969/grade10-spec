@@ -1772,6 +1772,10 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-11`,
       `grade10-site-grading-counter-documents-SC-17`,
       `grade10-site-grading-counter-documents-SC-29`)
+- [ ] 27.11 Show a payout on the card it pays for: the amount, the route, the
+      day it was recorded, and a reversal once the card turns up
+      (`grade10-site-grading-submission-lifecycle-SC-41`,
+      `grade10-site-grading-submission-lifecycle-SC-43`)
 
 ## 28. The console's queue, tiles and one submission (grade10)
 
@@ -1820,6 +1824,16 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 - [ ] 28.6 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
+- [ ] 28.7 Build `PayoutDialog`, `WaiveUpchargeDialog` and the approvals
+      waiting on a second person: the recorder asks with a reason, a second
+      `grading:approve` holder approves on their own console, the recorder's
+      own request is never theirs to approve, and the card shows its payout,
+      its reversal, its waiver and what is due
+      (`grade10-admin-grading-counter-SC-59`,
+      `grade10-admin-grading-counter-SC-60`,
+      `grade10-admin-grading-counter-SC-61`,
+      `grade10-admin-grading-counter-SC-95`,
+      `grade10-admin-grading-counter-SC-97`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
