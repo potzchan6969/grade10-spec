@@ -281,40 +281,40 @@ Needs `complete-vault-collector-flow` merged: it creates `BaseLayout`, the dev
 outbox and `packages/storybook`, and writes the two helpers this group lifts.
 Stage (a).
 
-- [ ] 7.1 Cover the lifts and the option: the reference alphabet and the throw
+- [x] 7.1 Cover the lifts and the option: the reference alphabet and the throw
       by name after eight attempts from `packages/utils`, `printedValue` per
       field from `packages/app-env`, doc-sign's `templates/identity.test.ts`
       and the ceremony suite's `KYC_REQUIRED` case on each arm
       (`grade10-site-grading-counter-documents-SC-05`)
-- [ ] 7.2 Lift `caseReference(random)` to `packages/utils/src/reference.ts` as
+- [x] 7.2 Lift `caseReference(random)` to `packages/utils/src/reference.ts` as
       `SHORT_REFERENCE_ALPHABET` and `shortReference(random)`, add the
       `@grade10/utils/reference` export and its Handbook card row, and move the
       vault's call sites in the same commit with no re-export left behind
-- [ ] 7.3 Lift `printedValue` to `packages/app-env/src/printed.ts` and move the
+- [x] 7.3 Lift `printedValue` to `packages/app-env/src/printed.ts` and move the
       vault's `legal/printed.ts` call sites the same way, so both products
       throw by name on an unset value in production and print the marked
       placeholder outside it
-- [ ] 7.4 Add `identity: "required" | "not_required"` to `TemplateLayout` with
+- [x] 7.4 Add `identity: "required" | "not_required"` to `TemplateLayout` with
       no default, and branch `ceremony/capture.ts` on the layout it already
       resolves before `deps.kyc.read`: a `not_required` packet skips the read,
       the refusal chain skips `KYC_REQUIRED` and the name rung, and the
       certificate prints its no-identity line
       (`grade10-site-grading-counter-documents-SC-05`)
-- [ ] 7.5 Add `identity: "required"` to the vault's three templates and arm
+- [x] 7.5 Add `identity: "required"` to the vault's three templates and arm
       `alwaysOnSql("sign_signatures", ["sign_signatures_column_guard", "sign_signatures_no_truncate"], { schema })`
       in `docSignProtectionSql`, so every host inherits the guard
-- [ ] 7.6 Take `ceremonyClients: Record<Host, CeremonyClient>` on
+- [x] 7.6 Take `ceremonyClients: Record<Host, CeremonyClient>` on
       `createDocSignCoreModule`, bind `CeremonyClient` to a
       `RoutedCeremonyClient`, take `host` on `CeremonyFlow` at mount and carry
       it through doc-sign's own context;
       `apps/frontend/grade10/src/di/container.ts` and
       `pages/vault/SignPage.tsx` pass `host: "vault"`
-- [ ] 7.7 Add `grading` to `ServiceId` and `BRAND_SERVICES.grade10`,
+- [x] 7.7 Add `grading` to `ServiceId` and `BRAND_SERVICES.grade10`,
       `case_records` to `RETENTION_CLASSES` with the vault's
       `sweeps/retention.ts` and `cases.yourData` answering under it, and
       `grading:read`, `grading:operate` and `grading:approve` to the auth
       contracts and their descriptions
-- [ ] 7.8 Verify:
+- [x] 7.8 Verify:
       `pnpm --dir packages/grade10-auth/contracts run generate:rbac-docs` and
       commit its output, `pnpm run check:handbook`, `pnpm run check:libs`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`,
@@ -324,12 +324,12 @@ Stage (a).
 
 Stage (a).
 
-- [ ] 8.1 Cover the three: the appointment product guard and the optional
+- [x] 8.1 Cover the three: the appointment product guard and the optional
       `serviceId`, the store's `rpc/gradingEntrypoint.test.ts` over each
       refusal, and the inventory's `rpc/gradingMatch.test.ts` over matched,
       unmatched and unavailable (`grade10-site-grading-dropoff-booking-SC-01`,
       `grade10-site-grading-dropoff-booking-SC-02`)
-- [ ] 8.2 Add `grading` to `APPOINTMENT_PRODUCTS`, mint
+- [x] 8.2 Add `grading` to `APPOINTMENT_PRODUCTS`, mint
       `GradingAppointmentService` with
       `createAppointmentServiceEntrypoint("grading")` on the appointment
       worker, and move the pin in
@@ -337,21 +337,21 @@ Stage (a).
       migration, the entrypoint is the guard
       (`grade10-site-grading-dropoff-booking-SC-01`,
       `grade10-site-grading-dropoff-booking-SC-02`)
-- [ ] 8.3 Add the optional `serviceId` to `rescheduleInputSchema`, additive,
+- [x] 8.3 Add the optional `serviceId` to `rescheduleInputSchema`, additive,
       slot sizing staying the diary's
-- [ ] 8.4 Add `GradingInventoryServiceApi.{matchCards,referenceSales}` to
+- [x] 8.4 Add `GradingInventoryServiceApi.{matchCards,referenceSales}` to
       `@grade10/inventory-contracts` and `GradingInventoryService` on the
       inventory worker, answering per line a product id with title and
       reference sales, `unmatched`, or `unavailable`, the token and the cache
       staying the inventory's
-- [ ] 8.5 Add `GradingStoreServiceApi.orderByName` and `getGradingStoreService`
+- [x] 8.5 Add `GradingStoreServiceApi.orderByName` and `getGradingStoreService`
       to `@grade10/store-contracts` and `GradingStoreService` on the store
       worker, answering `{ orderRef, orderName, paidAt, lines }` with the
       provider's lines verbatim or refusing `ORDER_NOT_FOUND`,
       `ORDER_AMBIGUOUS` or `ORDER_NOT_PAID` by name
-- [ ] 8.6 Write the store migration that indexes `orders.order_name`, with the
+- [x] 8.6 Write the store migration that indexes `orders.order_name`, with the
       `-- contract:` and `-- lock:` lines `check:migrations` asks for
-- [ ] 8.7 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
+- [x] 8.7 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
@@ -360,7 +360,7 @@ Stage (a).
 Needs groups 1 to 5 merged to this store's `main`: task 9.2 bumps the pointer
 the words and the blocks arrive on. Stage (a).
 
-- [ ] 9.1 Cover the schema, the wiring and the two mechanisms every act group
+- [x] 9.1 Cover the schema, the wiring and the two mechanisms every act group
       reads: a spec over the committed migrations for every table, the
       four-eyes CHECK on each table carrying the two approver columns, the
       append-only guards' `redactable` and `erasable` lists and every partial
@@ -371,40 +371,40 @@ the words and the blocks arrive on. Stage (a).
       (`grade10-admin-grading-counter-SC-81`)
 - [ ] 9.2 Bump the `external/grade10-spec` submodule pointer to the commit
       carrying groups 1 to 5
-- [ ] 9.3 Stand `packages/grading/{contracts,backend}` on the vault's exports
+- [x] 9.3 Stand `packages/grading/{contracts,backend}` on the vault's exports
       maps — contracts `.`; backend `.`, `./schema`, `./router-type`,
       `./worker`, `./worker/secrets`, `./testing` — each with its
       `vitest.config.ts` and its Handbook card
-- [ ] 9.4 Stand `packages/grading/{frontend,admin-frontend}` the same way —
+- [x] 9.4 Stand `packages/grading/{frontend,admin-frontend}` the same way —
       frontend one subpath per slice plus `./modules`, `./core`,
       `./core/testing`; admin-frontend those and `./testing` — each with its
       `vitest.config.ts` and its Handbook card
-- [ ] 9.5 Add `apps/backend/grade10/grading`: `grade10-grading-service`, port
+- [x] 9.5 Add `apps/backend/grade10/grading`: `grade10-grading-service`, port
       4450, inspector 9244, crons `*/15 * * * *` and `0 * * * *`, Hyperdrive to
       `grade10_grading`, the three buckets, the `AUTH_SERVICE`,
       `APPOINTMENT_SERVICE`, `INVENTORY_SERVICE` and `STORE_SERVICE` bindings
       and no `KYC_SERVICE`, with `RESEND_API_KEY` declared in `src/secrets.ts`
-- [ ] 9.6 Write `0000_grading_schema.sql`, generated over every table
-- [ ] 9.7 Write `0001_append_only.sql` with each table's `redactable` and
+- [x] 9.6 Write `0000_grading_schema.sql`, generated over every table
+- [x] 9.7 Write `0001_append_only.sql` with each table's `redactable` and
       `erasable` lists armed always, `0002_sign_lifecycle_guards.sql` over
       `docSignProtectionSql`, and `0003_seed_settings.sql` seeding the clocks
       and the non-money defaults alone
-- [ ] 9.8 Edit the registries: `packages/app-env/src/services.ts`, the
+- [x] 9.8 Edit the registries: `packages/app-env/src/services.ts`, the
       gateway's `wrangler.jsonc` and `routing.spec.ts`,
       `scripts/dev/services.mjs`, `scripts/deploy/components.mjs` with
       `grading` after `store` and before the gateway, the `DEFAULT_CRON_LANES`
       twin naming both cron expressions, `packages/api-docs`, and
       `check-erasure-consumers.mjs`'s row
-- [ ] 9.9 Write `docs/architecture/grading.md`, add the four package rows to
+- [x] 9.9 Write `docs/architecture/grading.md`, add the four package rows to
       `docs/conventions/packages.md` and the four cards and the topology nodes
       to `docs/architecture/handbook.html`
-- [ ] 9.10 Write `settings/read.ts` parsing every key through its schema and
+- [x] 9.10 Write `settings/read.ts` parsing every key through its schema and
       throwing `SETTING_UNSET` naming the key — never a default in code — so
       every group after this one reads a setting through one file
-- [ ] 9.11 Add the hash-chained audit port every act writes its row through, so
+- [x] 9.11 Add the hash-chained audit port every act writes its row through, so
       an act with nowhere to record itself is refused rather than performed
       (`grade10-admin-grading-counter-SC-81`)
-- [ ] 9.12 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
+- [x] 9.12 Verify: `pnpm run db:drizzle:generate`, `pnpm run check:migrations`,
       `pnpm run cf-typegen`, `pnpm run check:submodules`,
       `pnpm run check:handbook`, `pnpm run check:libs`,
       `node scripts/checks/check-config.mjs`,
@@ -1124,11 +1124,15 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-41`)
 - [ ] 19.3 Write `reversePayout` as one `payout_reversals` row keyed
       `payout_id`, so a card that turns up reverses its payout on the record
-      rather than deleting it (`grade10-admin-grading-counter-SC-64`,
+      rather than deleting it, its reason refused empty at the act's input
+      schema, never by the column, per `docs/architecture/grading.md`'s
+      exceptions table (`grade10-admin-grading-counter-SC-64`,
       `grade10-site-grading-submission-lifecycle-SC-43`)
 - [ ] 19.4 Write `waiveUpcharge` over `upcharge_waivers` with the same two
-      approver columns and a reason, refused before the cards are back and
-      refused when the second person holds no `grading:approve`
+      approver columns and a reason, refused before the cards are back,
+      refused when the second person holds no `grading:approve`, and refused
+      with an empty reason at the act's input schema, never by the column,
+      per `docs/architecture/grading.md`'s exceptions table
       (`grade10-admin-grading-counter-SC-59`,
       `grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-61`,

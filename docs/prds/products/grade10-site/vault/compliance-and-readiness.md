@@ -132,8 +132,8 @@ Every item is a value or an act outside the code, with who closes it;
     these pages, so the timers, the arithmetic, the grants and the mail kinds
     are validated rather than described
 11. *Finance* — **Where a borrower pays** — the lender's FPS id and bank account
-    beside its legal identity; unset, they refuse the how-to-pay block and every
-    money email in production, and print a marked placeholder outside it
+    beside its legal identity; unset, they refuse every offer in production, so
+    no loan goes live without them, and print a marked placeholder outside it
 
 ## Specs and journeys
 

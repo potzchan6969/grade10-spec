@@ -175,11 +175,12 @@ what refuses them.
   `packages/vault/backend/src/legal/printed.ts` is the primitive: production
   and null throws `LEGAL_IDENTITY_UNSET` naming the field, any other
   environment answers a marked `[fpsId]` placeholder
-- **`printedEntity` stays the composition over it** and keeps every behaviour
-  it has: `legalName` and `lenderLegalName` still fall back to the trading name
-  outside production, the licence line is still composed from `licenceWording`
-  and `licenceNumber`, and `assertLenderNamed` is still a call to it. Only
-  `fpsId` and `bankAccount` take the placeholder
+- **`printedEntity` and `printedPayee` compose over it** — every name, the
+  FPS id and the bank account print through `printedValue`, so an unset field
+  prints its placeholder outside production and never a trading-name
+  fallback; the licence line is still composed from `licenceWording` and
+  `licenceNumber`. `assertLoanPrintable` calls both at the offer, so a
+  production loan never goes live without a named lender and a way to pay
 - **The act renders before it commits** — `renderVaultLetter(kind, facts)` is
   pure and calls `printedValue`, so an act that would print an unset value
   refuses by name before its transaction opens. `recordPayout`,
