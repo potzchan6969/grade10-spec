@@ -1800,7 +1800,8 @@ Needs group 10's exports and group 25's fixture transport. Stage (c).
 - [ ] 30.3 Build `NewBatchDialog` and `ReestimateDialog`, the stage recorded
       from the grader's own stages as a `ChoiceList` with one member the move
       to graded and the grader's words in a `NotesField` beside it, never free
-      text (`grade10-admin-grading-batches-US1-TC7-1`,
+      text; the new batch opens through `openBatchFor`, as the hand-in's does,
+      never a second insert (`grade10-admin-grading-batches-US1-TC7-1`,
       `grade10-admin-grading-batches-US4-TC1-1`,
       `grade10-admin-grading-batches-US4-TC3-1`,
       `grade10-admin-grading-batches-US4-TC4-1`,
