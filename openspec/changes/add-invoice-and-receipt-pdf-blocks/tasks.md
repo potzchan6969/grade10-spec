@@ -1,9 +1,9 @@
 ## 1. InvoicePdf and the shared contract (grade10-spec)
 
-- [ ] 1.1 Write `invoice-pdf.stories.tsx`'s `play`-function proofs for InvoicePdf's own behaviour, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-3`, `SC-4`, `SC-5`, `SC-6`, `SC-13`, `SC-16`, `SC-18`, `SC-19`, `SC-25`, `SC-26`, `SC-27`)
-- [ ] 1.2 Build `InvoicePdf`, its prop types (`InvoicePdfProps`, `InvoicePdfCopy`, `OrderValueLines`, `OrderValueLinesCopy`), and the shared `pdf-document.tsx` layout pieces (`PdfSheet`, `MetaRow`, `PartyBlock`, `ValueRow`, `SummaryRow`) per `tech-design.md`'s Decisions, making 1.1's stories pass (same scenario ids)
-- [ ] 1.3 Add `public-exports.test.ts` asserting `InvoicePdf` and its prop types export from `../../index`; add this directory's `public-exports.test.ts` to `packages/ui/vitest.config.ts`'s `audit` project `include` list, per `tech-design.md`
-- [ ] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
+- [x] 1.1 Write `invoice-pdf.stories.tsx`'s `play`-function proofs for InvoicePdf's own behaviour, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-3`, `SC-4`, `SC-5`, `SC-6`, `SC-13`, `SC-16`, `SC-18`, `SC-19`, `SC-25`, `SC-26`, `SC-27`)
+- [x] 1.2 Build `InvoicePdf`, its prop types (`InvoicePdfProps`, `InvoicePdfCopy`, `OrderValueLines`, `OrderValueLinesCopy`), and the shared `pdf-document.tsx` layout pieces (`PdfSheet`, `MetaRow`, `PartyBlock`, `ValueRow`, `SummaryRow`) per `tech-design.md`'s Decisions, making 1.1's stories pass (same scenario ids)
+- [x] 1.3 Add `public-exports.test.ts` asserting `InvoicePdf` and its prop types export from `../../index`; add this directory's `public-exports.test.ts` to `packages/ui/vitest.config.ts`'s `audit` project `include` list, per `tech-design.md`
+- [x] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
 
 ## 2. ReceiptPdf, completing the shared contract (grade10-spec)
 

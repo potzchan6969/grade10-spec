@@ -254,6 +254,16 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
+// shared/ui/invoice-and-receipt-pdf
+export {
+  InvoicePdf,
+  type InvoicePdfCopy,
+  type InvoicePdfProps,
+} from "./blocks/invoice-and-receipt-pdf/invoice-pdf";
+export type {
+  OrderValueLines,
+  OrderValueLinesCopy,
+} from "./blocks/invoice-and-receipt-pdf/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,

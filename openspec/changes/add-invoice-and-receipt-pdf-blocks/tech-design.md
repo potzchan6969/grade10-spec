@@ -82,9 +82,16 @@ type OrderValueLines = {
 
 // One shared type for both documents' order-value lines, deliberately not
 // split per component — see "One order-value shape, not two" below.
-type OrderValueLinesCopy = { [K in keyof OrderValueLines]: string };
+// -? strips the optionality insurance/taxLine would otherwise carry into
+// their labels; a line that may not render still owes a real label for when
+// it does. lot is excluded — it renders as a bare heading, not a labelled
+// line, so nothing needs a label for it.
+type OrderValueLinesCopy = {
+  [K in keyof Omit<OrderValueLines, "lot">]-?: string;
+};
 
 type InvoicePdfCopy = {
+  documentTitle: string; // the "Invoice" heading itself is a label, like every other — not component-owned text
   invoiceIdLabel: string;
   paymentMethodLabel: string;
   sentAtLabel: string;
@@ -92,7 +99,6 @@ type InvoicePdfCopy = {
   bankReferenceLabel: string;
   bankRailsLabel: string;
   replacedByLabel: string;
-  issuerHeading: string;
   billToHeading: string;
   shipToHeading: string;
   orderValue: OrderValueLinesCopy;
@@ -105,7 +111,7 @@ type InvoicePdfProps = {
   paymentDeadline: ReactNode;
   bankReference?: ReactNode; // SC-2, SC-18: independent of bankRails
   bankRails?: ReactNode; // SC-1, SC-2, SC-18: independent of bankReference
-  issuer: ReactNode;
+  issuer: ReactNode; // one opaque block, unlike billTo/shipTo — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
   billTo: ReactNode;
   shipTo: ReactNode; // SC-19: never echoes billTo
   orderValue: OrderValueLines; // SC-3: the lot is orderValue.lot, not a separate prop
@@ -124,6 +130,7 @@ type PaymentBreakdown = {
 type PaymentBreakdownCopy = { [K in keyof PaymentBreakdown]: string };
 
 type ReceiptPdfCopy = {
+  documentTitle: string; // the "Receipt" heading itself is a label, like every other — not component-owned text
   receiptIdLabel: string;
   invoiceIdLabel: string;
   paymentMethodLabel: string;
@@ -175,6 +182,12 @@ treatment (an icon, a badge, a border), and its own text comes from
 `copy.manuallySettledLabel`, the same split every other label in this
 contract already makes between content and label.
 
+**The Grade10 wordmark is rendered internally, not a prop.** `G10LogoMono`
+(`@grade10/design-system`) is a graphic brand mark, not localizable text — no
+`spec.md` requirement names it, and it is the same on every document. It is
+component-owned the same way `manuallySettled`'s visual treatment is, so it
+carries no prop.
+
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,
 deliberately, not split per component. The requirement this satisfies is
@@ -203,7 +216,20 @@ instead, with `OrderValueLines` and `PaymentBreakdown` each mapped from their
 own named keys in `invoice-pdf.tsx`/`receipt-pdf.tsx` — the header row is
 written twice (once per document) rather than once, a deliberate trade for
 dropping the generic table's column/alignment machinery this contract never
-varies.
+varies. `Divider` is not one of `pdf-document.tsx`'s pieces — each document
+file imports it directly from `@grade10/design-system`, the same as every
+other block does, rather than laundering a primitive through a private
+module that does not own it.
+
+**The sheet frame's root names which document it is.** `PdfSheet` takes a
+`slot: "invoice-pdf" | "receipt-pdf"` prop and renders it as the root
+`data-slot`, since the frame itself is shared: without it, `InvoicePdf`'s and
+`ReceiptPdf`'s root elements would carry the identical, unaddressable
+`data-slot`. The pieces inside the frame (`MetaRow`, `PartyBlock`, `ValueRow`,
+`SummaryRow`, `LotHeading`) keep a plain `pdf-`-prefixed slot each, since they
+are genuinely owned by `pdf-document.tsx` and rendered identically by both
+documents — a per-component prefix on them would misname where the markup
+actually lives.
 
 **Failure is not handled — it propagates.** Neither component adds an error
 boundary or a fallback. A `ReactNode` prop that throws when rendered
