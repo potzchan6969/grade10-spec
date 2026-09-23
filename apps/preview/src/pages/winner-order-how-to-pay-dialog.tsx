@@ -18,7 +18,7 @@ import {
   DialogSubtext,
   DialogTitle,
 } from "@grade10/design-system/components/overlays/dialog";
-import { type ReactNode, useLayoutEffect, useRef, useState } from "react";
+import { type ReactNode, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 
 const REFERENCE_WARNING =
@@ -26,6 +26,26 @@ const REFERENCE_WARNING =
 
 const OUR_NOTE =
   "In your bank app, choose OUR for transfer fees so we receive the full order total." as const;
+
+/** Tailwind `sm` — hug + scroll below; full-width shared track from here up. */
+const WIDE_TAB_QUERY = "(min-width: 640px)";
+
+function useWideTabTrack() {
+  const [wide, setWide] = useState(() => {
+    if (typeof window === "undefined") return true;
+    return window.matchMedia(WIDE_TAB_QUERY).matches;
+  });
+
+  useEffect(() => {
+    const media = window.matchMedia(WIDE_TAB_QUERY);
+    const onChange = () => setWide(media.matches);
+    onChange();
+    media.addEventListener("change", onChange);
+    return () => media.removeEventListener("change", onChange);
+  }, []);
+
+  return wide;
+}
 
 const TAB_PANEL_CLASS =
   "absolute inset-0 mt-0 overflow-x-clip overflow-y-auto overscroll-contain" as const;
@@ -167,26 +187,32 @@ function WinnerOrderHowToPayDialog({
   const [rail, setRail] = useState("fps");
   const tabScrollRef = useRef<HTMLDivElement>(null);
   const animateSwap = useRef(false);
+  const wideTrack = useWideTabTrack();
 
   useLayoutEffect(() => {
     animateSwap.current = true;
   }, []);
 
+  // Keep the active tab in view when the rail changes on a narrow scrollport.
   useLayoutEffect(() => {
+    if (wideTrack) return;
     const scroller = tabScrollRef.current;
     if (!scroller || rail.length === 0) return;
     const active = scroller.querySelector<HTMLElement>(
       '[data-slot="tabs-trigger"][data-active]',
     );
     if (!active) return;
-    const start = active.offsetLeft;
-    const end = start + active.offsetWidth;
-    if (start < scroller.scrollLeft) {
-      scroller.scrollLeft = start;
-    } else if (end > scroller.scrollLeft + scroller.clientWidth) {
-      scroller.scrollLeft = end - scroller.clientWidth;
+    const scrollerBox = scroller.getBoundingClientRect();
+    const activeBox = active.getBoundingClientRect();
+    const pad = 12;
+    const left = activeBox.left - scrollerBox.left + scroller.scrollLeft;
+    const right = left + activeBox.width;
+    if (left - pad < scroller.scrollLeft) {
+      scroller.scrollLeft = Math.max(0, left - pad);
+    } else if (right + pad > scroller.scrollLeft + scroller.clientWidth) {
+      scroller.scrollLeft = right + pad - scroller.clientWidth;
     }
-  }, [rail]);
+  }, [rail, wideTrack]);
 
   return (
     <Dialog onOpenChange={onOpenChange} open={open}>
@@ -212,38 +238,55 @@ function WinnerOrderHowToPayDialog({
           </div>
 
           <Tabs
-            className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-3 overflow-visible"
+            className="flex min-h-0 w-full min-w-0 flex-1 flex-col gap-2 overflow-visible"
             onValueChange={(next) => {
               if (next != null) setRail(next);
             }}
             value={rail}
           >
-            {/* Full-width triggers share the row. On a narrow dialog they
-                keep their labels and the row scrolls instead of overlapping. */}
+            {/* Narrow: hug labels and scroll. Wide (sm+): full-width shared
+                track. Inner/bleed padding keeps the pill shadow visible. */}
             <div
-              className="w-full min-w-0 shrink-0 overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              className={
+                wideTrack
+                  ? "w-full min-w-0 shrink-0 overflow-visible pt-2 pb-5"
+                  : "-mx-5 min-w-0 shrink-0 touch-pan-x overflow-x-auto overscroll-x-contain [-ms-overflow-style:none] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+              }
               ref={tabScrollRef}
             >
-              <TabsList className="w-max min-w-full" fullWidth>
-                <TabsTrigger
-                  className="min-w-max! shrink-0! px-3 sm:px-4"
-                  value="fps"
+              <div
+                className={
+                  wideTrack ? "w-full" : "flex w-max px-5 pt-2 pb-5"
+                }
+              >
+                <TabsList
+                  className={
+                    wideTrack
+                      ? "w-full overflow-visible"
+                      : "w-max overflow-visible"
+                  }
+                  fullWidth={wideTrack}
                 >
-                  FPS
-                </TabsTrigger>
-                <TabsTrigger
-                  className="min-w-max! shrink-0! px-3 sm:px-4"
-                  value="local"
-                >
-                  HK Local
-                </TabsTrigger>
-                <TabsTrigger
-                  className="min-w-max! shrink-0! px-3 sm:px-4"
-                  value="swift"
-                >
-                  International
-                </TabsTrigger>
-              </TabsList>
+                  <TabsTrigger
+                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
+                    value="fps"
+                  >
+                    FPS
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
+                    value="local"
+                  >
+                    HK Local
+                  </TabsTrigger>
+                  <TabsTrigger
+                    className={wideTrack ? "min-w-0 px-4" : "shrink-0 px-4"}
+                    value="swift"
+                  >
+                    International
+                  </TabsTrigger>
+                </TabsList>
+              </div>
             </div>
 
             <RailFrame animateContent={animateSwap.current} rail={rail}>
