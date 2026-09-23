@@ -1058,6 +1058,12 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-14`)
 - [ ] 17.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 17.9 Write `receiveBatch`: the box recorded back at the shop under the
+      batch lock, `received_at` stamped and `receive` moving each member
+      `graded → returned` with one event each, refused by name on a batch not
+      shipped, and a repeat writing nothing; the manifest, the invoice and the
+      scans refused until it has run
+      (`grade10-admin-grading-batches-SC-05`)
 
 ## 18. Hand-back, collection and the vault case (grade10)
 
