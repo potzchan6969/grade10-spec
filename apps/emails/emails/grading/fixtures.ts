@@ -1,7 +1,6 @@
 import type { BatchReestimatedProps } from "@/emails/grading/batch-reestimated";
 import type { BatchShippedProps } from "@/emails/grading/batch-shipped";
-import type { CardDamagedProps } from "@/emails/grading/card-damaged";
-import type { CardNotReturnedProps } from "@/emails/grading/card-not-returned";
+import type { CardNotBackProps } from "@/emails/grading/card-not-back";
 import type { CardWithdrawnProps } from "@/emails/grading/card-withdrawn";
 import type { CheckedInProps } from "@/emails/grading/checked-in";
 import type { CollectedProps } from "@/emails/grading/collected";
@@ -33,8 +32,9 @@ import type { UncollectedReminderProps } from "@/emails/grading/uncollected-remi
  * through `external/grade10-spec` to render every kind and compare it
  * against this store's preview. The kinds are `ui-design.md`'s Letters
  * table: the plan's three, the drop-off's six, checked in, the batch's two,
- * the grades' three, ready, the two rungs of waiting to be collected, and
- * the counter's two hand-back receipts.
+ * the grades' two — posted, and a card not back with the box, held, not
+ * returned or damaged all told in the one message — ready, the two rungs of
+ * waiting to be collected, and the counter's two hand-back receipts.
  */
 
 const submissionUrl = "https://grade10.com/grading/submissions/5TW8HN";
@@ -207,8 +207,7 @@ export type NotifyKind =
   | "batch_shipped"
   | "batch_reestimated"
   | "grades_posted"
-  | "card_not_returned"
-  | "card_damaged"
+  | "card_not_back"
   | "ready"
   | "uncollected_reminder"
   | "storage_started"
@@ -236,8 +235,7 @@ export type GradingLetterFacts = {
   batch_shipped: Required<BatchShippedProps>;
   batch_reestimated: Required<BatchReestimatedProps>;
   grades_posted: Required<GradesPostedProps>;
-  card_not_returned: Required<CardNotReturnedProps>;
-  card_damaged: Required<CardDamagedProps>;
+  card_not_back: Required<CardNotBackProps>;
   ready: Required<ReadyProps>;
   uncollected_reminder: Required<UncollectedReminderProps>;
   storage_started: Required<StorageStartedProps>;
@@ -299,13 +297,16 @@ export const GRADING_FIXTURES: GradingLetterFacts = {
     backAtShopBy: previewSubmission.readyAt,
     cards: previewGradedCards,
   },
-  card_not_returned: {
-    card: previewSubmission.notReturnedCard,
-    intakeId: previewSubmission.notReturnedIntakeId,
-  },
-  card_damaged: {
-    card: previewSubmission.notReturnedCard,
-    intakeId: previewSubmission.notReturnedIntakeId,
+  card_not_back: {
+    cards: [
+      {
+        card: previewSubmission.notReturnedCard,
+        intakeId: previewSubmission.notReturnedIntakeId,
+        outcome: "not_returned",
+        declaredMinor: previewSubmission.notReturnedDeclaredMinor,
+        feeMinor: previewSubmission.notReturnedFeeMinor,
+      },
+    ],
   },
   ready: {
     readyAt: previewSubmission.readyAt,
