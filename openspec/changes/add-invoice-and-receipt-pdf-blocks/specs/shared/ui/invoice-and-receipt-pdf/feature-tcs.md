@@ -976,6 +976,65 @@ Runs once per row of **Test data**.
 * The bank rails section renders after the order-value summary, not inside the meta rows column.
 * The bank rails section spans the same width as the order-value summary.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC32-1: The order-value table header renders above the invoice's line items
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with a full order-value section.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the order-value lines for a header row and a divider above the first line.
+
+**Expected Results:**
+
+* A header row reads Description and Amount.
+* A divider separates the header from the first order-value line.
+* The header sits immediately above the order-value lines, not the summary.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC33-1: The order-value table header renders above the receipt's line items
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with a full order-value section.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the order-value lines for a header row and a divider above the first line.
+
+**Expected Results:**
+
+* A header row reads Description and Amount.
+* A divider separates the header from the first order-value line.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1032,3 +1091,18 @@ rendered document (`decisions.md` Q12). `SC-1`/`SC-2` were reworded in place
 (same ids, same claims, corrected shape), `SC-18` moved under a new
 requirement with it, and `SC-35`/`TC31` were added for the position and
 width claims the move itself makes testable.
+
+**Amendment, post-landing:** the author then asked to drop `bankReference`
+entirely, redundant once `bankRails` already carries the reference
+(`decisions.md` Q13). `SC-2` retired — its remaining claim (no bank rails on
+a card invoice, every other row unaffected) folded into a new
+`SC-36`; `SC-18` was rewritten to a dedicated "bank rails given" positive
+case, since the scenario it previously proved (bank reference independent of
+bank rails) no longer has a bank reference to be independent of.
+
+**Amendment, post-landing:** the author asked for a Description/Amount
+header and a divider above the order-value lines on both documents,
+referencing a screenshot (`decisions.md` Q14). New requirement
+"The order-value lines carry a Description/Amount header"
+(`SC-37`/`SC-38`, `TC32`/`TC33`) — additive, no existing scenario's claim
+changed.

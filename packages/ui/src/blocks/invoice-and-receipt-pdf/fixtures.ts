@@ -6,6 +6,8 @@ import type {
 
 /** Shared between InvoicePdf's and ReceiptPdf's stories — each `*Copy` still carries its own `orderValue: orderValueCopy`. */
 const orderValueCopy: OrderValueLinesCopy = {
+  descriptionLabel: "Description",
+  amountLabel: "Amount",
   winningBid: "Winning Bid",
   buyersPremium: "Buyer’s Premium",
   shippingAndHandling: "Shipping & Handling",

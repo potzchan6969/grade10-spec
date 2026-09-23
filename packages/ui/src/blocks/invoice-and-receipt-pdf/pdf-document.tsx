@@ -233,6 +233,21 @@ function OrderValueSection({
       <LotHeading>{orderValue.lot}</LotHeading>
 
       <VStack gap="xs" hAlign="stretch">
+        <HStack
+          className="w-full"
+          data-slot="pdf-order-value-header"
+          gap="md"
+          hAlign="space-between"
+          vAlign="baseline"
+        >
+          <Text size="sm" weight="bold">
+            {copy.descriptionLabel}
+          </Text>
+          <Text size="sm" weight="bold">
+            {copy.amountLabel}
+          </Text>
+        </HStack>
+        <Divider className="bg-foreground" />
         <ValueRow label={copy.winningBid} value={orderValue.winningBid} />
         <ValueRow label={copy.buyersPremium} value={orderValue.buyersPremium} />
         <ValueRow

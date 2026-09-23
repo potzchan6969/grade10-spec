@@ -6,6 +6,8 @@
 - [x] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
 - [x] 1.5 Amendment: structure `billTo`/`shipTo` as the nine-field `PartyAddress` (`decisions.md` Q11), adding `AddressLines` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-31`, `SC-32`)
 - [x] 1.6 Amendment: move bank rails from a meta row to a full-width section below the order value (`decisions.md` Q12), adding `BankRailsSection` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-18`, `SC-35`)
+- [x] 1.7 Amendment: remove `bankReference`/`bankReferenceLabel` entirely, redundant once `bankRails` carries the reference (`decisions.md` Q13) (`shared-ui-invoice-and-receipt-pdf-SC-18`, `SC-36`)
+- [x] 1.8 Amendment: add a Description/Amount header and divider above the order-value lines, shared by both documents via `OrderValueSection` (`decisions.md` Q14) (`shared-ui-invoice-and-receipt-pdf-SC-37`, `SC-38`)
 
 ## 2. ReceiptPdf, completing the shared contract (grade10-spec)
 

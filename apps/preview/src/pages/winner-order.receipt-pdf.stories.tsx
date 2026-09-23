@@ -15,6 +15,8 @@ const copy: ReceiptPdfCopy = {
   billToHeading: "Bill to",
   shipToHeading: "Ship to",
   orderValue: {
+    descriptionLabel: "Description",
+    amountLabel: "Amount",
     winningBid: "Winning Bid",
     buyersPremium: "Buyer’s Premium",
     shippingAndHandling: "Shipping & Handling",

@@ -86,9 +86,13 @@ type OrderValueLines = {
 // -? strips the optionality insurance/taxLine would otherwise carry into
 // their labels; a line that may not render still owes a real label for when
 // it does. lot is excluded — it renders as a bare heading, not a labelled
-// line, so nothing needs a label for it.
+// line, so nothing needs a label for it. descriptionLabel/amountLabel head
+// the table itself (SC-37, SC-38), not any one line.
 type OrderValueLinesCopy = {
   [K in keyof Omit<OrderValueLines, "lot">]-?: string;
+} & {
+  descriptionLabel: string;
+  amountLabel: string;
 };
 
 // Bill To and Ship To's structured shape (spec.md "Party address fields"),
@@ -113,7 +117,6 @@ type InvoicePdfCopy = {
   paymentMethodLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
-  bankReferenceLabel: string;
   bankRailsLabel: string;
   replacedByLabel: string;
   billToHeading: string;
@@ -126,8 +129,7 @@ type InvoicePdfProps = {
   paymentMethod: ReactNode;
   sentAt: ReactNode;
   paymentDeadline: ReactNode;
-  bankReference?: ReactNode; // SC-2, SC-18: independent of bankRails; meta row
-  bankRails?: ReactNode; // SC-2, SC-18, SC-35: independent of bankReference; full-width section below the order value, not a meta row
+  bankRails?: ReactNode; // SC-18, SC-35, SC-36: full-width section below the order value, not a meta row
   issuer: ReactNode; // one opaque block — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
   billTo: PartyAddress;
   shipTo: PartyAddress; // SC-19: never echoes billTo
@@ -222,8 +224,27 @@ is rendered exactly as given, per the presentation-only contract.
 sheet's full content width rather than the meta rows' narrower column. This
 reversed the original placement (a `MetaRow` beside the issuer block), made
 on the rendered document rather than on the prop shape alone — `bankRails`'s
-type is unchanged (still `ReactNode`, still `!== undefined`-gated,
-independent of `bankReference`); only where it renders moved.
+type is unchanged (still `ReactNode`, still `!== undefined`-gated); only
+where it renders moved.
+
+**`bankReference` is removed entirely (`decisions.md` Q13).** The bank
+reference no longer has its own prop, `MetaRow`, or copy key — the author
+judged it redundant once `bankRails` carries the same reference (the sketch's
+own sample content already quoted it in the "Enter this reference…" line).
+A consumer that still needs the reference shown separately embeds it in the
+`bankRails` `ReactNode` it supplies; `InvoicePdf` no longer renders a
+reference on its own account. `winner-order/spec.md`'s own "Bank reference"
+field is untouched — this only removes the prop this component's contract no
+longer names for it.
+
+**The order-value lines carry a Description/Amount header (`decisions.md`
+Q14).** Two columns, matching `ValueRow`'s own label/value shape — not the
+five-column table (Description, Qty, Unit price, Tax, Amount) in the
+reference screenshot the author cited, which named fields
+(`Qty`, `Unit price`, `Tax`) `OrderValueLines` does not carry. The header and
+its divider are part of `OrderValueSection` itself, so both documents get it
+for free; `descriptionLabel`/`amountLabel` head `OrderValueLinesCopy` rather
+than sitting on a per-line key, since they label the table, not a line.
 
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,

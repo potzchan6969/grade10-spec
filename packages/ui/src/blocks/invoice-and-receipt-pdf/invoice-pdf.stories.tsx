@@ -17,7 +17,6 @@ const copy: InvoicePdfCopy = {
   paymentMethodLabel: "Payment method",
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
-  bankReferenceLabel: "Bank reference",
   bankRailsLabel: "Bank details",
   replacedByLabel: "Replaced by",
   billToHeading: "Bill to",
@@ -57,11 +56,10 @@ type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
 
-/** SC-1: a bank-transfer invoice's meta rows and party blocks all render, bank reference and bank rails included. */
+/** SC-1, SC-18: a bank-transfer invoice's meta rows and party blocks all render, bank rails included. */
 export const BankTransfer: Story = {
   args: {
-    bankReference: "LK7P2Q01",
-    bankRails: "SWIFT, FPS, HK local transfer",
+    bankRails: "SWIFT, FPS, HK local transfer. Quote LK7P2Q01.",
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -69,8 +67,6 @@ export const BankTransfer: Story = {
     expect(canvas.getByText("Visa card ending 4242")).toBeVisible();
     expect(canvas.getByText("September 15, 2026, 11:04 HKT")).toBeVisible();
     expect(canvas.getByText("September 22, 2026, 11:04 HKT")).toBeVisible();
-    expect(canvas.getByText("Bank reference")).toBeVisible();
-    expect(canvas.getByText("LK7P2Q01")).toBeVisible();
     expect(canvas.getByText("Grade10, support@grade10.com")).toBeVisible();
 
     // Bank rails render as their own full-width section below the order
@@ -85,7 +81,7 @@ export const BankTransfer: Story = {
     ).toBeVisible();
     expect(
       within(bankRails as HTMLElement).getByText(
-        "SWIFT, FPS, HK local transfer",
+        "SWIFT, FPS, HK local transfer. Quote LK7P2Q01.",
       ),
     ).toBeVisible();
     const metaRows = canvasElement.querySelectorAll(
@@ -155,12 +151,14 @@ export const ShipToOmitsOptionalFields: Story = {
   },
 };
 
-/** SC-2, SC-6: a card invoice shows no bank reference, no bank rails, and no Replaced by line, with every other row unaffected. */
+/** SC-6, SC-36: a card invoice shows no bank rails and no Replaced by line, with every other row unaffected. */
 export const CardPayment: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.queryByText("Bank reference")).not.toBeInTheDocument();
     expect(canvas.queryByText("Bank details")).not.toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="pdf-bank-rails"]'),
+    ).toBeNull();
     expect(canvas.queryByText("Replaced by")).not.toBeInTheDocument();
     expect(canvas.getByText("INV-202609-LK7P2Q-01")).toBeVisible();
     expect(canvas.getByText("Visa card ending 4242")).toBeVisible();
@@ -169,17 +167,6 @@ export const CardPayment: Story = {
     expect(canvas.getByText("Grade10, support@grade10.com")).toBeVisible();
     expect(canvas.getByText("Bill to")).toBeVisible();
     expect(canvas.getByText("Ship to")).toBeVisible();
-  },
-};
-
-/** SC-18: a bank reference can render without bank rails — the two are independently optional. */
-export const BankReferenceOnly: Story = {
-  args: { bankReference: "LK7P2Q01" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Bank reference")).toBeVisible();
-    expect(canvas.getByText("LK7P2Q01")).toBeVisible();
-    expect(canvas.queryByText("Bank details")).not.toBeInTheDocument();
   },
 };
 
@@ -196,6 +183,24 @@ export const OrderValueOrder: Story = {
     expected.forEach((label, index) => {
       expect(rows[index]).toContain(label);
     });
+
+    // SC-37: a Description/Amount header and a divider sit immediately
+    // above the order-value lines, not the lot heading or the summary.
+    const header = canvasElement.querySelector(
+      '[data-slot="pdf-order-value-header"]',
+    );
+    expect(header).not.toBeNull();
+    expect(
+      within(header as HTMLElement).getByText("Description"),
+    ).toBeVisible();
+    expect(within(header as HTMLElement).getByText("Amount")).toBeVisible();
+    const firstValueRow = canvasElement.querySelector(
+      '[data-slot="pdf-value-row"]',
+    ) as HTMLElement;
+    expect(
+      (header as HTMLElement).compareDocumentPosition(firstValueRow) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   },
 };
 

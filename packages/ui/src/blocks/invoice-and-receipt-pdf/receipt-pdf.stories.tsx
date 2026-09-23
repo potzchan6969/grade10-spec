@@ -179,6 +179,17 @@ export const OrderValueOrder: Story = {
     expected.forEach((label, index) => {
       expect(rows[index]).toContain(label);
     });
+
+    // SC-38: a Description/Amount header and a divider sit immediately
+    // above the order-value lines, not the lot heading or the summary.
+    const header = canvasElement.querySelector(
+      '[data-slot="pdf-order-value-header"]',
+    );
+    expect(header).not.toBeNull();
+    expect(
+      within(header as HTMLElement).getByText("Description"),
+    ).toBeVisible();
+    expect(within(header as HTMLElement).getByText("Amount")).toBeVisible();
   },
 };
 

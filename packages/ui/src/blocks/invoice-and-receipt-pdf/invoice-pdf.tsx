@@ -18,7 +18,6 @@ function InvoicePdf({
   paymentMethod,
   sentAt,
   paymentDeadline,
-  bankReference,
   bankRails,
   issuer,
   billTo,
@@ -42,9 +41,6 @@ function InvoicePdf({
           <MetaRow label={copy.paymentMethodLabel} value={paymentMethod} />
           <MetaRow label={copy.sentAtLabel} value={sentAt} />
           <MetaRow label={copy.paymentDeadlineLabel} value={paymentDeadline} />
-          {bankReference !== undefined ? (
-            <MetaRow label={copy.bankReferenceLabel} value={bankReference} />
-          ) : null}
           {replacedBy !== undefined ? (
             <MetaRow label={copy.replacedByLabel} value={replacedBy} />
           ) : null}

@@ -19,9 +19,13 @@ type OrderValueLines = {
  * as a bare heading with no label of its own. `-?` strips the optionality
  * `insurance`/`taxLine` would otherwise carry into their labels — a line
  * that may not render still owes a real label for when it does.
+ * `descriptionLabel`/`amountLabel` head the table itself, above the lines.
  */
 type OrderValueLinesCopy = {
   [K in keyof Omit<OrderValueLines, "lot">]-?: string;
+} & {
+  descriptionLabel: string;
+  amountLabel: string;
 };
 
 /**
@@ -50,7 +54,6 @@ type InvoicePdfCopy = {
   paymentMethodLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
-  bankReferenceLabel: string;
   bankRailsLabel: string;
   replacedByLabel: string;
   billToHeading: string;
@@ -64,9 +67,7 @@ type InvoicePdfProps = {
   paymentMethod: ReactNode;
   sentAt: ReactNode;
   paymentDeadline: ReactNode;
-  /** Independent of `bankRails` — either may be given without the other. */
-  bankReference?: ReactNode;
-  /** Independent of `bankReference` — either may be given without the other. */
+  /** A full-width section below the order value, not a meta row. */
   bankRails?: ReactNode;
   issuer: ReactNode;
   billTo: PartyAddress;

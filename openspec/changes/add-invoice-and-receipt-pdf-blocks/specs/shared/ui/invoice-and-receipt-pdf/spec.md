@@ -10,12 +10,11 @@ already requires without maintaining its own copy.
 ## Feature set
 
 - InvoicePdf export
-  - Meta rows: invoice ID, payment method, sent at, payment deadline, bank
-    reference
+  - Meta rows: invoice ID, payment method, sent at, payment deadline
   - Issuer and party blocks: the issuer, Bill To, Ship To
-  - Lot and order-value lines: the lot, winning bid, buyer's premium,
-    shipping & handling, insurance when given, subtotal, payment processing
-    fee, order total
+  - Lot and order-value lines: a Description/Amount header and divider, then
+    the lot, winning bid, buyer's premium, shipping & handling, insurance
+    when given, subtotal, payment processing fee, order total
   - Replaced by, shown only when given
   - Bank rails: a full-width section below the order-value summary, shown
     only on a bank-transfer invoice — not a meta row
@@ -23,7 +22,8 @@ already requires without maintaining its own copy.
   - Meta rows: receipt ID, the invoice ID it pays, payment method, the
     manually-settled mark
   - Party blocks: Bill To, Ship To
-  - Order-value lines: the same shape as InvoicePdf's
+  - Order-value lines: the same shape as InvoicePdf's, including the
+    Description/Amount header
   - Payment breakdown: Original Invoice Total, Previous Payments, Current
     Payment Received, Remaining Balance Due, in that order
   - Superseded invoice, shown only when given
@@ -52,29 +52,17 @@ InvoicePdf's meta rows and party blocks name the invoice, when it was sent,
 how it is paid, and who it bills and ships to.
 
 **Meta rows** — InvoicePdf SHALL render the invoice ID, payment method, sent
-at, and payment deadline for every invoice. **Bank reference** — InvoicePdf
-SHALL render the bank reference only when the consumer supplies it, and SHALL
-render no bank reference row when withheld. **Party blocks** — InvoicePdf
+at, and payment deadline for every invoice. **Party blocks** — InvoicePdf
 SHALL render the issuer block, Bill To, and Ship To for every invoice, each
 rendering only its own supplied content.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - A bank-transfer invoice's meta rows and party blocks all render
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
 **Serves:** InvoicePdf export - the invoice's meta rows all render
 
 - **GIVEN** an InvoicePdf given an invoice ID, payment method, sent-at date,
-  payment deadline, bank reference, bank rails, issuer block, Bill To, and
-  Ship To
+  payment deadline, issuer block, Bill To, and Ship To
 - **WHEN** it renders
 - **THEN** every meta row and party block given is shown
-- **AND** the bank rails section renders too, per its own requirement below
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-2 - A card invoice shows no bank reference or bank rails
-**Serves:** InvoicePdf export - a card invoice withholds the bank rows a card carries none of
-
-- **GIVEN** an InvoicePdf given no bank reference and no bank rails
-- **WHEN** it renders
-- **THEN** no bank reference row and no bank rails section appear
-- **AND** every other meta row and party block still renders
 
 ### Requirement: InvoicePdf renders bank rails as a full-width section below the order value
 
@@ -87,18 +75,25 @@ column beside the issuer block.
 **Given** — InvoicePdf SHALL render the bank rails section, labelled from
 `copy.bankRailsLabel`, only when the consumer supplies `bankRails`.
 **Withheld** — InvoicePdf SHALL render no bank rails section when `bankRails`
-is not supplied, independently of whether a bank reference is also given.
+is not supplied.
 **Position** — Where rendered, the bank rails section SHALL follow the
 order-value summary and SHALL span the sheet's full content width, not the
 meta rows' narrower column.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-18 - A bank reference can render without bank rails
-**Serves:** InvoicePdf export - the bank reference and bank rails rows are independently optional
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-18 - A bank-transfer invoice renders its bank rails
+**Serves:** InvoicePdf export - the bank rails section renders where a consumer supplies it
 
-- **GIVEN** an InvoicePdf given a bank reference and no bank rails
+- **GIVEN** an InvoicePdf given bank rails
 - **WHEN** it renders
-- **THEN** the bank reference row appears
-- **AND** no bank rails section appears
+- **THEN** the bank rails section shows the value given
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-36 - A card invoice shows no bank rails
+**Serves:** InvoicePdf export - a card invoice withholds the bank rails a card carries none of
+
+- **GIVEN** an InvoicePdf given no bank rails
+- **WHEN** it renders
+- **THEN** no bank rails section appears
+- **AND** every other meta row and party block still renders
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-35 - The bank rails section sits below the order value, full width
 **Serves:** InvoicePdf export - bank rails render as their own full-width section below the order-value summary
@@ -198,6 +193,35 @@ leave the line out, not blank, when withheld.
 - **WHEN** it renders
 - **THEN** no insurance line appears
 - **AND** subtotal, payment processing fee, and order total keep their order
+
+### Requirement: The order-value lines carry a Description/Amount header
+
+Both InvoicePdf and ReceiptPdf head the order-value lines with a two-column
+table header, Description and Amount, and a divider — directly above the
+line items, naming what the two columns hold before the winning bid and
+every line after it appear.
+
+**Header** — InvoicePdf and ReceiptPdf SHALL render a header row reading
+`copy.orderValue.descriptionLabel` and `copy.orderValue.amountLabel`,
+followed by a divider, immediately above the order-value lines.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-37 - The order-value table header renders above the invoice's line items
+**Serves:** InvoicePdf export - the order-value lines render in their fixed order
+
+- **GIVEN** an InvoicePdf given order-value lines
+- **WHEN** it renders
+- **THEN** a header row shows Description and Amount, immediately above the
+  order-value lines
+- **AND** a divider separates the header from the first line
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-38 - The order-value table header renders above the receipt's line items
+**Serves:** ReceiptPdf export - the order-value lines render in the same fixed order as InvoicePdf's
+
+- **GIVEN** a ReceiptPdf given order-value lines
+- **WHEN** it renders
+- **THEN** a header row shows Description and Amount, immediately above the
+  order-value lines
+- **AND** a divider separates the header from the first line
 
 ### Requirement: InvoicePdf shows Replaced by only when given
 

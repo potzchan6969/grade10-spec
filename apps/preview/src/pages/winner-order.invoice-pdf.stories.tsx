@@ -14,12 +14,13 @@ const copy: InvoicePdfCopy = {
   paymentMethodLabel: "Payment method",
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
-  bankReferenceLabel: "Bank reference",
   bankRailsLabel: "Bank details",
   replacedByLabel: "Replaced by",
   billToHeading: "Bill to",
   shipToHeading: "Ship to",
   orderValue: {
+    descriptionLabel: "Description",
+    amountLabel: "Amount",
     winningBid: "Winning Bid",
     buyersPremium: "Buyer’s Premium",
     shippingAndHandling: "Shipping & Handling",
@@ -109,7 +110,6 @@ function InvoicePdfPreview({
     <InvoicePdf
       billTo={address}
       bankRails={method === "bank" ? <BankRails /> : undefined}
-      bankReference={method === "bank" ? "LK7P2Q01" : undefined}
       copy={copy}
       invoiceId="INV-202609-LK7P2Q-01"
       issuer={
