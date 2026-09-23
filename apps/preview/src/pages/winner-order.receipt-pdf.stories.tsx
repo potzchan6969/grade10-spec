@@ -1,33 +1,55 @@
-import { Divider } from "@grade10/design-system/components/display/divider";
-import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
-import { Text } from "@grade10/design-system/components/display/text";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  formatAmount,
-  MetaRow,
-  MultiColumnTable,
-  OrderValueTable,
-  PartiesSection,
-  PartyBlock,
-  PdfSheet,
-  SummaryRow,
-  TAX_RATE,
-} from "./winner-order-pdf.story-shared";
+  type PartyAddress,
+  ReceiptPdf,
+  type ReceiptPdfCopy,
+} from "@grade10/ui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+
+const copy: ReceiptPdfCopy = {
+  documentTitle: "Receipt",
+  receiptIdLabel: "Receipt number",
+  invoiceIdLabel: "Invoice number",
+  paymentMethodLabel: "Paid by",
+  manuallySettledLabel: "Manually settled",
+  supersededInvoiceLabel: "Supersedes",
+  billToHeading: "Bill to",
+  shipToHeading: "Ship to",
+  orderValue: {
+    winningBid: "Winning Bid",
+    buyersPremium: "Buyer’s Premium",
+    shippingAndHandling: "Shipping & Handling",
+    insurance: "Insurance",
+    taxLine: "Tax",
+    subtotal: "Subtotal",
+    paymentProcessingFee: "Payment Processing Fee",
+    orderTotal: "Order Total",
+  },
+  paymentBreakdown: {
+    originalInvoiceTotal: "Original Invoice Total",
+    previousPayments: "Previous Payments",
+    currentPaymentReceived: "Current Payment Received",
+    remainingBalanceDue: "Remaining Balance Due",
+  },
+};
+
+const address: PartyAddress = {
+  fullName: "Alexandra Tran",
+  addressLine1: "Flat A, 21/F, One Harbour Square",
+  addressLine2: "181 Java Road",
+  city: "North Point",
+  postalCode: "999077",
+  country: "Hong Kong SAR",
+  phone: "+852 9123 4567",
+};
 
 /**
- * Illustrative sketch of the Receipt PDF's content — not a `packages/ui`
- * block. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
- * (`PLACEHOLDER_RECEIPT_PDF`); nothing renders the real document anywhere in
- * this repository. This composes only `@grade10/design-system` primitives to
- * stand in for that gap during design review, laid out as a flat document
- * page rather than a bordered card. A committed block needs its own OpenSpec
- * change first — see `docs/references/auction-invoice-and-receipt-contents.md`
- * and `openspec/specs/grade10-site/auction/winner-order/spec.md`. The full
- * Payment breakdown panel is 🚧 per that spec — today only Current Payment
- * Received is real, the other three lines ship with
- * `carry-receipt-payment-breakdown`.
+ * The Receipt PDF, composed from the real `@grade10/ui` export.
+ * `winner-order-page.tsx` opens a hardcoded placeholder PDF today
+ * (`PLACEHOLDER_RECEIPT_PDF`); wiring the real component into that page is
+ * `grade10`'s own task (`add-invoice-and-receipt-pdf-blocks` group 3), not
+ * built here. This page supplies sample props only. Every receipt itemises
+ * the invoice it pays — see `winner-order.invoice-pdf.stories.tsx` and
+ * `docs/references/auction-invoice-and-receipt-contents.md`.
  */
 function ReceiptPdfPreview({
   settlement = "card",
@@ -37,85 +59,39 @@ function ReceiptPdfPreview({
   tax?: boolean;
 }) {
   const manual = settlement === "manual";
-  const subtotal = 2500 + 500 + 80 + 40;
-  const fee = 112.25;
-  const taxAmount = subtotal * TAX_RATE;
-  const total = subtotal + fee + (tax ? taxAmount : 0);
+  const total = tax ? "3,412.25" : "3,232.25";
 
   return (
-    <PdfSheet>
-      <HStack hAlign="space-between" vAlign="start">
-        <Text as="h2" size="xl" weight="bold">
-          Receipt
-        </Text>
-        <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
-      </HStack>
-
-      <HStack hAlign="space-between" vAlign="start">
-        <VStack className="max-w-sm" gap="xs" hAlign="stretch">
-          <MetaRow
-            label="Invoice number"
-            value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
-          />
-          <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
-          <MetaRow
-            label="Paid by"
-            value={
-              manual
-                ? "Bank transfer — recorded manually by admin"
-                : "Visa card ending 4242"
-            }
-          />
-          <MetaRow label="Confirmed" value="September 16, 2026 · 09:47 HKT" />
-        </VStack>
-        <PartyBlock heading="Grade10" issuer />
-      </HStack>
-
-      <PartiesSection />
-
-      <Text as="h3" size="xl" weight="bold" tone="primary">
-        2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10
-      </Text>
-
-      <Text as="h3" size="xl" weight="bold">
-        HK${formatAmount(total)} paid on September 16, 2026
-      </Text>
-
-      <OrderValueTable />
-
-      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow label="Subtotal" value={formatAmount(subtotal)} />
-        {tax ? (
-          <SummaryRow
-            label={`GST - Singapore (9% on ${formatAmount(subtotal)})`}
-            value={formatAmount(taxAmount)}
-          />
-        ) : null}
-        <SummaryRow label="Payment Processing Fee" value={formatAmount(fee)} />
-        <Divider />
-        <SummaryRow
-          label="Order Total"
-          size="lg"
-          value={formatAmount(total)}
-          weight="bold"
-        />
-      </VStack>
-
-      <VStack gap="sm" hAlign="stretch">
-        <Text size="sm" weight="bold">
-          Payment breakdown
-        </Text>
-        <MultiColumnTable
-          columns={[
-            { label: "Original Invoice Total" },
-            { label: "Previous Payments" },
-            { label: "Current Payment Received" },
-            { label: "Remaining Balance Due", align: "end" },
-          ]}
-          rows={[[formatAmount(total), "0.00", formatAmount(total), "0.00"]]}
-        />
-      </VStack>
-    </PdfSheet>
+    <ReceiptPdf
+      billTo={address}
+      copy={copy}
+      invoiceId={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
+      manuallySettled={manual}
+      orderValue={{
+        lot: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+        winningBid: "2,500.00",
+        buyersPremium: "500.00",
+        shippingAndHandling: "80.00",
+        insurance: "40.00",
+        ...(tax ? { taxLine: "9% GST: 280.80" } : {}),
+        subtotal: "3,120.00",
+        paymentProcessingFee: "112.25",
+        orderTotal: total,
+      }}
+      paymentBreakdown={{
+        originalInvoiceTotal: total,
+        previousPayments: "0.00",
+        currentPaymentReceived: total,
+        remainingBalanceDue: "0.00",
+      }}
+      paymentMethod={
+        manual
+          ? "Bank transfer, recorded manually by admin"
+          : "Visa card ending 4242"
+      }
+      receiptId="REC-202609-LK7P2Q-01-P1"
+      shipTo={address}
+    />
   );
 }
 

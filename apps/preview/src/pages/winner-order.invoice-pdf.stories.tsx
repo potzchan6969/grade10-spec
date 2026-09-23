@@ -1,104 +1,47 @@
 import { Divider } from "@grade10/design-system/components/display/divider";
-import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import type { Meta, StoryObj } from "@storybook/react-vite";
 import {
-  formatAmount,
-  MetaRow,
-  OrderValueTable,
-  PartiesSection,
-  PartyBlock,
-  PdfSheet,
-  SummaryRow,
-  TAX_RATE,
-} from "./winner-order-pdf.story-shared";
+  InvoicePdf,
+  type InvoicePdfCopy,
+  type PartyAddress,
+} from "@grade10/ui";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 
-/**
- * Illustrative sketch of the Invoice PDF's content — not a `packages/ui`
- * block. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
- * (`PLACEHOLDER_INVOICE_PDF`); nothing renders the real document anywhere in
- * this repository. This composes only `@grade10/design-system` primitives to
- * stand in for that gap during design review, laid out as a flat document
- * page rather than a bordered card. A committed block needs its own OpenSpec
- * change first — see `docs/references/auction-invoice-and-receipt-contents.md`
- * and `openspec/specs/grade10-site/auction/winner-order/spec.md`. Figures
- * trace to `winner-order-SC-62` (card fee gross-up) and `SC-110` (bank
- * transfer fee); the bank-rails account values are TBC per the spec itself.
- */
-function InvoicePdfPreview({
-  method = "card",
-  tax = false,
-}: {
-  method?: "card" | "bank";
-  tax?: boolean;
-}) {
-  const subtotal = 2500 + 500 + 80 + 40;
-  const fee = method === "card" ? 112.25 : 50;
-  const taxAmount = subtotal * TAX_RATE;
-  const total = subtotal + fee + (tax ? taxAmount : 0);
+const copy: InvoicePdfCopy = {
+  documentTitle: "Invoice",
+  invoiceIdLabel: "Invoice number",
+  paymentMethodLabel: "Payment method",
+  sentAtLabel: "Date of issue",
+  paymentDeadlineLabel: "Date due",
+  bankReferenceLabel: "Bank reference",
+  bankRailsLabel: "Bank details",
+  replacedByLabel: "Replaced by",
+  billToHeading: "Bill to",
+  shipToHeading: "Ship to",
+  orderValue: {
+    winningBid: "Winning Bid",
+    buyersPremium: "Buyer’s Premium",
+    shippingAndHandling: "Shipping & Handling",
+    insurance: "Insurance",
+    taxLine: "Tax",
+    subtotal: "Subtotal",
+    paymentProcessingFee: "Payment Processing Fee",
+    orderTotal: "Order Total",
+  },
+};
 
-  return (
-    <PdfSheet>
-      <HStack hAlign="space-between" vAlign="start">
-        <Text as="h2" size="xl" weight="bold">
-          Invoice
-        </Text>
-        <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
-      </HStack>
+const address: PartyAddress = {
+  fullName: "Alexandra Tran",
+  addressLine1: "Flat A, 21/F, One Harbour Square",
+  addressLine2: "181 Java Road",
+  city: "North Point",
+  postalCode: "999077",
+  country: "Hong Kong SAR",
+  phone: "+852 9123 4567",
+};
 
-      <HStack hAlign="space-between" vAlign="start">
-        <VStack className="max-w-sm" gap="xs" hAlign="stretch">
-          <MetaRow label="Invoice number" value="INV-202609-LK7P2Q-01" />
-          <MetaRow
-            label="Payment method"
-            value={method === "card" ? "Card" : "Bank transfer"}
-          />
-          <MetaRow
-            label="Date of issue"
-            value="September 15, 2026 · 11:04 HKT"
-          />
-          <MetaRow label="Date due" value="September 22, 2026 · 11:04 HKT" />
-        </VStack>
-        <PartyBlock heading="Grade10" issuer />
-      </HStack>
-
-      <PartiesSection />
-
-      <Text as="h3" size="xl" weight="bold" tone="primary">
-        2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10
-      </Text>
-
-      <Text as="h3" size="xl" weight="bold">
-        HK${formatAmount(total)} due September 22, 2026
-      </Text>
-
-      <OrderValueTable />
-
-      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow label="Subtotal" value={formatAmount(subtotal)} />
-        {tax ? (
-          <SummaryRow
-            label={`GST - Singapore (9% on ${formatAmount(subtotal)})`}
-            value={formatAmount(taxAmount)}
-          />
-        ) : null}
-        <Divider />
-        <SummaryRow
-          label="Order Total"
-          size="lg"
-          value={formatAmount(total)}
-          weight="bold"
-        />
-      </VStack>
-
-      {method === "bank" ? <BankRailsSection /> : null}
-    </PdfSheet>
-  );
-}
-
-function BankRailsSection() {
+function BankRails() {
   return (
     <VStack className="border-t border-border pt-4" gap="sm" hAlign="stretch">
       <Text size="sm" weight="bold">
@@ -129,7 +72,7 @@ function BankRailsSection() {
       <Divider />
       <Text size="sm">
         Enter this reference in your bank app’s Memo or Remarks field. Missing
-        it delays verification. Quote this reference on your transfer —{" "}
+        it delays verification. Quote this reference on your transfer:{" "}
         <Text weight="medium">LK7P2Q01</Text>
       </Text>
     </VStack>
@@ -148,6 +91,54 @@ function BankWay({ heading, lines }: { heading: string; lines: string[] }) {
         </Text>
       ))}
     </VStack>
+  );
+}
+
+/**
+ * The Invoice PDF, composed from the real `@grade10/ui` export.
+ * `winner-order-page.tsx` opens a hardcoded placeholder PDF today
+ * (`PLACEHOLDER_INVOICE_PDF`); wiring the real component into that page is
+ * `grade10`'s own task (`add-invoice-and-receipt-pdf-blocks` group 3), not
+ * built here. This page supplies sample props only.
+ */
+function InvoicePdfPreview({
+  method = "card",
+  tax = false,
+}: {
+  method?: "card" | "bank";
+  tax?: boolean;
+}) {
+  return (
+    <InvoicePdf
+      billTo={address}
+      bankRails={method === "bank" ? <BankRails /> : undefined}
+      bankReference={method === "bank" ? "LK7P2Q01" : undefined}
+      copy={copy}
+      invoiceId="INV-202609-LK7P2Q-01"
+      issuer={
+        <VStack gap="xs" hAlign="start">
+          <Text size="sm" weight="bold">
+            Grade10
+          </Text>
+          <Text size="sm">support@grade10.com</Text>
+        </VStack>
+      }
+      orderValue={{
+        lot: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+        winningBid: "2,500.00",
+        buyersPremium: "500.00",
+        shippingAndHandling: "80.00",
+        insurance: "40.00",
+        ...(tax ? { taxLine: "9% GST: 280.80" } : {}),
+        subtotal: "3,120.00",
+        paymentProcessingFee: method === "card" ? "112.25" : "50.00",
+        orderTotal: method === "card" ? "3,232.25" : "3,170.00",
+      }}
+      paymentDeadline="September 22, 2026, 11:04 HKT"
+      paymentMethod={method === "card" ? "Card" : "Bank transfer"}
+      sentAt="September 15, 2026, 11:04 HKT"
+      shipTo={address}
+    />
   );
 }
 
