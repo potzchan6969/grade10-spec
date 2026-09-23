@@ -275,7 +275,10 @@ The spec governs what the page names and refuses; this is who answers.
 - **`cases.requestErasure`** (authed, mutation) refuses `ERASURE_HELD` with the
   holds in words while any stand, then calls
   `AUTH_SERVICE.requestOwnErasure(headers)`; `cases.cancelErasure` calls
-  `cancelOwnErasure(headers)`. All three binding methods are new on
+  `cancelOwnErasure(headers)`, which answers a typed outcome — cancelled, or
+  refused `ERASURE_WINDOW_PASSED` or `ERASURE_NOT_SELF_FILED` — the vault maps
+  to its own codes with no second read. Your data lives at `/profile/data`,
+  under the account, behind the vault's gate. All three binding methods are new on
   `packages/grade10-auth/backend/src/entrypoint.ts`, resolve the person from
   the session the headers carry as `lookupUsers` does, and are idempotent: a
   second request answers the open row's `executeAfter` rather than

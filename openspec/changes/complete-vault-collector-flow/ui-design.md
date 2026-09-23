@@ -42,7 +42,7 @@ data and the mechanism.
 | Case page | `C10`–`C19`, `C22`, `C23` | `/vault/cases/:caseId` | `CaseDetailView` → `Stepper`, `Step`, `Badge`, `Card`, `Alert`, `Dialog`, `Table`, `List`, `Link`, `Button`, `Text` | `vault-cases-case-detail-view--*` |
 | Book a visit | `C06`, superseded | on the case page | `VisitBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Button`, `Text` | `vault-booking-visit-booking--*` |
 | Visit booked | `C07` | on the case page, after a booking | new `VisitBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Link`, `Button` | `vault-booking-visit-booked--*` |
-| Your data | `C20` | `/profile/data` — ❓ the tech design fixes the address | new `YourDataView` → `Card`, `Badge`, `Table`, `Button`, `Alert`, `Dialog`, `Text` | `vault-retention-your-data-view--*` |
+| Your data | `C20` | `/profile/data`, under the account, behind the vault's gate | new `YourDataView` → `Card`, `Badge`, `Table`, `Button`, `Alert`, `Dialog`, `Text` | `vault-retention-your-data-view--*` |
 | Queue | `A01` | `admin.grade10.com/vault`, the cut in the address | `VaultPage`, `CaseQueuePanel` → `SectionHeader`, `Search`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Badge`, `Status`, `Button` | `vault-admin-cases-case-queue-panel--*` |
 | Overdue | `A02` | `/vault`, the Overdue cut | `OverdueLoansPanel` → `Figure`, `Table`, `Badge`, `CursorPager`, `Status`, `Text` | `vault-admin-cases-overdue-loans-panel--*` |
 | Money | `A07` | `/vault`, Money tab | `MoneyLedgerPanel` → `Figure`, `DateField`, `ChoiceList`, `Choice`, `Select`, `Table`, `Money`, `CursorPager`, `Button`, `Status` | `vault-admin-settlement-money-ledger-panel--*` |
