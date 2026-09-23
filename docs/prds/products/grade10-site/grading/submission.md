@@ -85,7 +85,7 @@ it changes; the rest of the cards carry on:
 
 - 🚧 **Storage per card still at the shop** — a month started since day 90
   counts; a card withdrawn, paid out or vaulted does not, and it is one line
-  at the till
+  per card held at the till
 - 🚧 **The rungs never pause** — they count from the ready day; only collecting, vaulting or a payout leaves it
 - ❓ **A part month** — counts as a whole month — Commercial
 - ❓ **Every card paid out** — whether that submission has ended, for erasure and retention — Product
@@ -190,7 +190,7 @@ The balance is what the collector owes on that day.
 | Running late is not a status | Decided | It is the estimate against the clock, read on the page and by the queue the same way | Engineering |
 | Held by the grader keeps the submission ready | Decided | The rest are handed back against a receipt that names the card still out; a second hand-back closes it | Product |
 | The fee's fate is one table | Decided | Refused never charged, withdrawn refunded at the till, ungraded and minimum not met stand, held stands, not returned or damaged refunded with the payout; every refund goes back the way it was paid | Product |
-| Storage fee | ❓ Open | HKD 30 a card a month from day 90, per card still held and per month started, derived at the read, one line at collection, a nudge rather than revenue; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
+| Storage fee | ❓ Open | HKD 30 a card a month from day 90, per card still held and per month started, derived at the read, one line per card held at collection, a nudge rather than revenue; vault storage stays free, so a slab kept on purpose moves into a case | Commercial |
 | The notice | ❓ Open | Reminders at 30 and 60, the fee at 90, then from 180 a counter act: posted by registered post and emailed, the posting date and tracking recorded, 30 days from posting; the first release stops there and clause 6 keeps the disposal basis; the notice's form and wording | Legal |
 | Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
 | ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |

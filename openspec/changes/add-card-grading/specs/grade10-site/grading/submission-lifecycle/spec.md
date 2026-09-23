@@ -707,7 +707,8 @@ cards the shop still holds.
 - **Derived** - the figure SHALL be worked out when it is read, from the ready
   day and the cards held, and SHALL NOT be written down month by month.
 - **When it is paid** - the storage accrued SHALL be due at the counter before
-  collection, as one line at the till.
+  collection, as one line per card held, the hand-in's own convention: one
+  store line to one card.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-38 - A part month counts whole
 **Serves:** grade10-site-grading-submission-lifecycle-US-08 - the collector reads what the wait has cost so far
@@ -728,7 +729,7 @@ cards the shop still holds.
 
 - **GIVEN** a ready submission with storage accrued
 - **WHEN** the collector comes in to collect
-- **THEN** the storage accrued to that day is taken at the till as one line before anything is handed back
+- **THEN** the storage accrued to that day is taken at the till, one line per card held, before anything is handed back
 
 ### Requirement: A card that did not come back is paid out at its declared value
 

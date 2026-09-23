@@ -406,9 +406,9 @@ this is how the paid order reaches the submission.
   against that card's own lines and waivers, and reports what was applied
   and a `creditMinor` apart, so accrued less settled less waived is its due
 - **The mint fixes what is due** — `mintHandBack` writes
-  `hand_back_prepared { packetId, dueMinor, cards }`, a submission event, and
-  `collect` judges what is due as of that instant against the cards the
-  receipt printed
+  `hand_back_prepared { packetId, cards }`, a submission event, and `collect`
+  judges what is due as of that instant against the cards the receipt
+  printed
 - Alternatives rejected: storage accrued by a sweep as a line per month — a
   row per month per card for a figure one fold answers; live settings on a
   booked submission — Q43's rejection; freezing `dueNow` at the till — it

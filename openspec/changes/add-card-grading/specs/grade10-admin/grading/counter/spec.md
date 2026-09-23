@@ -860,14 +860,15 @@ submission until its batch closes, and SHALL be offered nowhere else.
 
 **What it does** - the card SHALL be recorded as withdrawn, its paid lines
 SHALL be refunded at the till, and the card SHALL be released to the collector
-against a hand-back receipt. The rest of the cards SHALL stay in the batch.
+against its own withdrawal receipt. The rest of the cards SHALL stay in the
+batch.
 
 #### Scenario: grade10-admin-grading-counter-SC-54 - A withdrawal refunds the line and releases the card
 **Serves:** grade10-admin-grading-counter-US-07 - the operator gives one card back before the batch leaves
 
 - **GIVEN** a `checked_in` submission whose batch is still open, with a paid fee line of 15000 HKD minor units on the card
 - **WHEN** the operator withdraws that card
-- **THEN** the card is recorded as withdrawn, 15000 HKD minor units are refunded at the till, and the card is released against a hand-back receipt
+- **THEN** the card is recorded as withdrawn, 15000 HKD minor units are refunded at the till, and the card is released against its own withdrawal receipt
 - **AND** the other cards stay in the batch
 
 #### Scenario: grade10-admin-grading-counter-SC-55 - A closed batch takes the withdrawal away

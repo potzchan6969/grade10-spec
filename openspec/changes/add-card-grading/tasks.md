@@ -1129,9 +1129,9 @@ Stage (c).
       hold back a card the grader still has
       (`grade10-admin-grading-counter-SC-33`,
       `grade10-admin-grading-counter-SC-34`)
-- [ ] 18.6 Write `mintHandBack`, pinning `handback_due` into the packet's
-      details at the mint and refusing `BALANCE_DUE` and `ITEM_UNTICKED` by
-      name, nothing rendered and nothing handed back
+- [ ] 18.6 Write `mintHandBack`, pinning `hand_back_prepared { packetId,
+      cards }` as a submission event at the mint and refusing `BALANCE_DUE`
+      and `ITEM_UNTICKED` by name, nothing rendered and nothing handed back
       (`grade10-admin-grading-counter-SC-43`,
       `grade10-admin-grading-counter-SC-44`,
       `grade10-site-grading-counter-documents-SC-02`)
