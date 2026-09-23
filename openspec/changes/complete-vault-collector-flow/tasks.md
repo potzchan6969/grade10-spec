@@ -929,8 +929,9 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       production, and let the recording refuse what a dialog let through
       (`grade10-site-vault-loan-and-settlement-SC-45`,
       `grade10-site-vault-loan-and-settlement-SC-46`)
-- [ ] 22.5 Write the stories for `Vault/Admin/Settlement/*` and
-      `Vault/Admin/Valuation/Offer Dialog`
+- [ ] 22.5 Write the stories for the three dialogs:
+      `Vault/Admin/Valuation/Offer Dialog`, `Vault/Admin/Cases/Vault Dialog`
+      and `Vault/Admin/Settlement/Money Dialog`
 - [ ] 22.6 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories,
       `pnpm run check:admin-bundle`

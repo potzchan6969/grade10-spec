@@ -1377,7 +1377,7 @@ Runs once per row of **Test data**.
 
 * The dialog and the outcome match the row
 
-### grade10-site-vault-loan-and-settlement-US7-TC3-1: The vault dialog states its three preconditions before the item is confirmed in
+### grade10-site-vault-loan-and-settlement-US7-TC3-1: The vault dialog states its two preconditions before the item is confirmed in
 
 **Classification:**
 
@@ -1394,8 +1394,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The case is `signing`, its packet executed, identity bound and a visit
-  slot started
+* The case is `signing`, its packet executed and identity bound
 * admin(shop staff) opens the vault dialog from the Custody tab
 
 **Steps:**
@@ -1406,7 +1405,7 @@ Runs once per row of **Test data**.
 
 * The dialog states the packet-executed precondition as met
 * The dialog states the identity-bound precondition as met
-* The dialog states the visit-slot-started precondition as met
+* The dialog asks for no visit slot
 * The dialog states the shop is required and the locker optional
 
 ### grade10-site-vault-loan-and-settlement-US7-TC4-1: The payout dialog states its preconditions, the two people and the dates it will fix before it is sent
@@ -1582,7 +1581,7 @@ Nothing was dropped as a misreading, and no case is blocked.
 | `US5-TC2-1` | A person opens each of the eight letters; the walk decides that the kind sends and carries the block |
 | `US6-TC5-1` | A person reads the notice card beside the letter, to see the two name one date |
 | `US7-TC1-1` | A person reads the dialog before pressing; the walk decides the figures, not that an operator can find them |
-| `US7-TC3-1` | The three preconditions are read as `Check`s on screen; the walk decides which is met |
+| `US7-TC3-1` | The two preconditions are read as `Check`s on screen; the walk decides which is met |
 | `US7-TC4-1` | The two people, the amount and the dates are read before the send; the walk decides what the recording fixes |
 
 ## Settled

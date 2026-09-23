@@ -283,7 +283,7 @@ the dialog, before they send it.
 | Dialog | States before the send |
 | --- | --- |
 | Make an offer | the latest valuation, the brand's loan-to-value cap and the amount asked for; the term presets; the interest, the total to repay, what a late day costs and the annualised rate the arithmetic derives, all from the terms entered; the date the offer runs out; each bound the offer must meet, met or unmet |
-| Put the item in the vault | the three preconditions it needs: the signed packet executed, the identity bound, the visit slot started |
+| Put the item in the vault | the two preconditions it needs: the signed packet executed and the identity bound; no visit slot, since a sibling case reaches the vault with no visit of its own |
 | Record the payout | the two people it needs; the amount equal to the accepted principal; the value-date bounds; the due date and the reminder dates the value date fixes |
 
 - **Derived live** — every figure SHALL re-derive as the operator changes
@@ -318,11 +318,10 @@ the dialog, before they send it.
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-42 - The vault dialog names the precondition that is missing
 **Serves:** grade10-site-vault-loan-and-settlement-US-07 - the operator at the counter learns what the vaulting still needs
 
-- **GIVEN** a case whose signed packet is executed and whose visit slot has
-  started, with no identity bound
+- **GIVEN** a case whose signed packet is executed, with no identity bound
 - **WHEN** an operator opens the dialog that puts the item in the vault
-- **THEN** it names the executed packet and the started slot as met, the
-  identity as unmet, and the control that confirms the vaulting is still
+- **THEN** it names the executed packet as met and the identity as unmet,
+  asks for no visit slot, and the control that confirms the vaulting is still
   there
 
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-43 - The payout dialog names the two people it needs

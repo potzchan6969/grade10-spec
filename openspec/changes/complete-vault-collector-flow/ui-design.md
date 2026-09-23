@@ -474,7 +474,7 @@ beside them.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Before the act | the three preconditions as `Check`s: packet executed, identity bound, visit slot started; shop `Select` required; locker optional; the consequence line | `grade10-site-vault-loan-and-settlement-SC-42` |
+| Before the act | the two preconditions as `Check`s: packet executed, identity bound; shop `Select` required; locker optional; the consequence line | `grade10-site-vault-loan-and-settlement-SC-42` |
 | A precondition unmet | the `Check` unmet with its reason; Confirm vaulted stays, the worker refuses | `grade10-site-vault-loan-and-settlement-SC-42` |
 
 ### Record the payout
