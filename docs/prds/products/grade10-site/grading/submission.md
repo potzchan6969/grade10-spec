@@ -162,7 +162,8 @@ it changes; the rest of the cards carry on:
 | 2027/02/24 | Storage from day 90: 4 cards × $30 | +120 | 720 |
 | 2027/03/24 | Storage, the second month | +120 | 840 |
 | 2027/04/24 | Storage, the third month | +120 | 960 |
-| 2027/05/25 | Written notice posted: $600 upcharge and $360 storage to date, due before collection, 30 days from today to collect | | 960 |
+| 2027/05/24 | Storage, the fourth month | +120 | 1080 |
+| 2027/05/25 | Written notice posted: $600 upcharge and $480 storage to date, due before collection, 30 days from today to collect | | 1080 |
 
 The balance is what the collector owes on that day.
 :::

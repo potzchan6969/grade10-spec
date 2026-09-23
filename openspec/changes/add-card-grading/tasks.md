@@ -550,7 +550,9 @@ Stage (b).
       `pinFeeSheet` pinning `pinned_fee_sheet` at `book` and every figure read
       from it after, so a sheet changed before booking reaches the plan, one
       changed after leaves the booked submission priced as it was, and a new
-      fee-sheet row reaches only what is not yet booked
+      fee-sheet row reaches only what is not yet booked; `pinFeeSheet` pins
+      the grader's active rows, keyed by level, in one read, so an upcharge
+      prices off both levels the collector agreed to
       (`grade10-site-grading-submission-plan-SC-36`,
       `grade10-site-grading-submission-plan-SC-37`,
       `grade10-admin-grading-counter-SC-72`,
@@ -637,7 +639,7 @@ Stage (b).
       pass twenty cards, at the same slot, writing nothing locally if it fails
       (`grade10-site-grading-dropoff-booking-SC-21`)
 - [ ] 12.7 Detach every joiner in the owner's cancel commit — its own
-      `visit_detached` event and letter each, the joiner back to `booked` with
+      `dropoff_detached` event and letter each, the joiner back to `booked` with
       no visit — and the same on the missed visit
       (`grade10-site-grading-dropoff-booking-SC-22`,
       `grade10-site-grading-dropoff-booking-SC-27`)
@@ -1225,7 +1227,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-submission-lifecycle-SC-49`)
 - [ ] 21.5 Write `missedVisits` calling
       `markOutcome(caseRef, "no_show", bookingRef)` after the grace and only
-      then clearing the cache and writing `visit_missed` in one commit, telling
+      then clearing the cache and writing `dropoff_missed` in one commit, telling
       the collector within the hour and leaving the list and the estimate as
       they were; a refused telling leaves the row due
       (`grade10-site-grading-dropoff-booking-SC-18`,

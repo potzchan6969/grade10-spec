@@ -217,14 +217,14 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `SLOT_NOT_OFFERED`, `SLOT_FULL`, `RESOURCE_NOT_AVAILABLE`,
   `ALREADY_BOOKED` — and each offers a move
 - **The owner's cancel or missed visit detaches every joiner** in the same
-  commit, each with its own `visit_detached` event and letter, the joiner
+  commit, each with its own `dropoff_detached` event and letter, the joiner
   back to `booked` with no visit, which the page reads as book again
 - **The missed visit is told, not read** — `BOOKING_STATUSES` holds no
   `absent` and an operator close of a product booking is refused
   `PRODUCT_BOOKING`, so `missedVisits` calls
   `markOutcome(caseRef, "no_show", bookingRef)` after the grace, as
   `sweepNoShows` does, and only then clears the cache and writes
-  `visit_missed` in one commit; a refused telling leaves the row due
+  `dropoff_missed` in one commit; a refused telling leaves the row due
 - The five drop-off letters attach `buildCalendarFile`'s file, served at
   `GET /api/submissions/:id/visit.ics` — as `complete-vault-collector-flow`
   decides
@@ -333,8 +333,8 @@ this is how the paid order reaches the submission.
 
 ### Money: pinned at booking and signing, derived at the read, two people on a record
 
-- `pinned_fee_sheet jsonb` is the `fee_sheet` row copied at `book`;
-  `pinned_terms jsonb` copies `storage_fee_per_card_month`, `storage_from_day`,
+- `pinned_fee_sheet jsonb` is the grader's active `fee_sheet` rows, keyed by
+  level, copied at `book` in one read; `pinned_terms jsonb` copies `storage_fee_per_card_month`, `storage_from_day`,
   `settlement_days`, `notice_day`, `reminder_days` and `id_glance_threshold`
   at the agreement's mint. A later change reaches only rows not yet booked,
   by construction
@@ -407,7 +407,7 @@ otherwise falls back to `DEFAULT_LIMIT`.
 | `dueLetters` | one row per `{ status, anchor, offsetsSetting, eventKind, letter }`: plan nudge, visit reminder, the 30/60 collection pair, storage started | the event and the letter | routine · fast |
 | `planExpiry` | `planned`, older than `plan_expiry_days` | `expire` | routine · fast |
 | `expiredBooked` | `booked`, `booked_expiry_days` past the visit | `expireBooked` | routine · fast |
-| `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed | `markOutcome(…, "no_show", …)`, then the cache cleared and `visit_missed` | routine · fast |
+| `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed | `markOutcome(…, "no_show", …)`, then the cache cleared and `dropoff_missed` | routine · fast |
 | `repairedBookings`, `recoveredBookings` | the vault's two, over `visit_owner_id` | the cache repaired | repair · fast |
 | `expiredPackets`, `sealedDeliveries` | the vault's | `expirePacket`; the letter with the PDF | routine · fast |
 | `verifiedChainRows`, `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset`, `orphanedObjects` | the vault's six | the vault's | routine · slow |
@@ -587,7 +587,7 @@ with a prefix; every `_by` an operator id.
 | `user_id`, `email`, `full_name`, `phone` | `text`, email `NOT NULL` | the plan lives under the email |
 | `access_hash` | `text NOT NULL` | sha256 of the link's token; re-minted on revocation |
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
-| `pinned_fee_sheet` | `jsonb` | the `fee_sheet` row at `book`, or at `handIn` for a walk-in |
+| `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `handIn` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
@@ -701,7 +701,7 @@ events, distinct by kind and instant).
 | `savePlan(db, args)` | cards, declared values, grader, level, contact | the submission and its access token | the reference row inserted first; `matchCards` before the transaction; one transaction after |
 | `bookVisit(db, appointments, mail, args)` | submission, location, slot, service | the booking | remote call outside; then lock, `book`, pin the sheet, cache, event; mail after commit |
 | `joinVisit(db, appointments, mail, args)` | joiner, owner | the shared booking | one `reschedule` carrying `serviceId` when the two lists pass 20; then one transaction writes `visit_owner_id` and the owner's cache |
-| `detachJoiners(tx, args)` | the owner's submission | each joiner | in the owner's cancel or miss commit; one `visit_detached` event and letter each |
+| `detachJoiners(tx, args)` | the owner's submission | each joiner | in the owner's cancel or miss commit; one `dropoff_detached` event and letter each |
 | `checkCard(tx, args)` / `refuseCard(tx, args)` | card, condition, photos / reason, words | the card | under the submission lock; refuses above the pinned ceiling; a paid line refunds through `recordRefund` |
 | `mintAgreement(db, deps, args)` | submission | the packet and token | the document rendered first, so an unset printed value refuses before the transaction; refuses while any card is unchecked; pins the terms |
 | `recordFeePaid(db, store, args)` | submission, order name | the lines, `ORDER_NOT_FOUND`, `ORDER_AMBIGUOUS`, `ORDER_NOT_PAID`, `POS_LINES_MISMATCH` | binding read outside; one transaction, `ON CONFLICT DO NOTHING`, so a repeat answers the lines already written |

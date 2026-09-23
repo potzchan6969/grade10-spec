@@ -146,6 +146,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 | `grading.id_glance_threshold` | ❓ HKD 10,000 | Operations |
 | `grading.safe_declared_cap` | ❓ HKD 300,000 | Commercial, Legal |
 | the fee sheet | ❓ one setting per grader and level: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
+| the grader's stages | ❓ each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
 | the diary services | ❓ the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
 
 - 🚧 **Pinned** — the fee sheet is pinned to a submission at booking and every figure the agreement prints at
@@ -200,6 +201,7 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 | Drafts on the queue | ❓ Open | Whether a `planned` submission has a view of its own | Product |
 | The safe's cap | ❓ Open | HKD 300,000 of declared value in the safe, ready slabs counted, refusing a hand-in past it; an operational cap that exists only because cover does not | Commercial, Legal |
 | Every default a setting | ❓ Open | Each row of the settings table, adopted from the canvas until its owner confirms or changes it; pinned to a submission at booking and at signing | Operations, Commercial, Legal, Product |
+| Staff-only history entries | ❓ Open | Only a price reference that would not answer and a repair on our copy of the diary's booking stay off the collector's history; a payout taken back and an upcharge written off show there, so the history never claims money the collector no longer has | Operations |
 | Buttons follow the machine | Decided | Each act shows only at the statuses the contract publishes, cancel never once the cards have left, and the worker refuses independently | Engineering |
 | Counter intake | Decided | A walk-in books the customer-bookable visit and the cards are listed at the counter; the runbook is the same | Product |
 | When the section opens to the shop | ❓ Open | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
