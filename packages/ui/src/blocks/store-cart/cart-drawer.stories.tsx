@@ -485,8 +485,8 @@ const DELISTED_PRODUCT_NAME =
   "1998 Japanese Base Set No Rarity Charmander PSA 10";
 
 /**
- * After open fetch, a delisted catalogue line is cleared silently and
- * one bottom-right toast explains the removal. Remaining lines stay.
+ * After open fetch, a delisted catalogue line is cleared and named in the
+ * bottom-right toast. Remaining lines stay.
  */
 export const UnavailableItemsRemoved: Story = {
   render: (args) => {
@@ -514,6 +514,10 @@ export const UnavailableItemsRemoved: Story = {
             {...args}
             open={open}
             onClose={() => setOpen(false)}
+            copy={{
+              ...args.copy,
+              unavailableItemsRemovedDescription: `No longer sold: ${DELISTED_PRODUCT_NAME}`,
+            }}
             items={items}
             subtotal="HK$24,500.00"
             estimatedTotal="HK$24,500.00"
@@ -543,6 +547,7 @@ export const UnavailableItemsRemoved: Story = {
     );
   },
   play: async ({ canvasElement }) => {
+    // Cart-validation SC-09: a withdrawn product is named as unavailable.
     await userEvent.click(
       within(canvasElement).getByRole("button", { name: "Open Cart" }),
     );
@@ -568,7 +573,7 @@ export const UnavailableItemsRemoved: Story = {
       expect(canvas.getByText("Items removed from cart")).toBeInTheDocument();
     });
     expect(
-      canvas.getByText("Some products are no longer available"),
+      canvas.getByText(`No longer sold: ${DELISTED_PRODUCT_NAME}`),
     ).toBeInTheDocument();
   },
 };

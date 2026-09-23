@@ -8,17 +8,18 @@ reviewed: 2026-09-23
 The product details page is one product: what it is, what it costs, and the
 button to buy it.
 
-- **Card** — name, description, images, a price; badges, compare-at
-  price and low-stock notes where the catalogue provides them
-- **One product item** — each product has one sellable item; the page offers
-  no size, option or variant choice
+- **Card** — name, description, images and the selected variant's price;
+  badges and compare-at price where the catalogue provides them
+- 🚧 **Variant choice** — each listed variant has its own price and
+  availability; the page opens on a priced, buyable variant where one exists
+  and lets the collector choose another
 - **Buy** — choose a quantity, add the product, and stay on the page while the
   cart total updates; adding it again stays on one line
 - **Description** — a long description shows collapsed to three lines with a
   button to read it in full, without leaving the page
-- **Stock is a ceiling** — the quantity stops where the shop's count stops, and
-  the page says how many are left when the shop is nearly out or the collector
-  has asked for the last one
+- 🚧 **Availability without stock pressure** — the page says whether each
+  variant can be bought, with no remaining count or scarcity cue. A requested
+  quantity is not capped by the browse read; Cart explains a short fill
 - **Sold out** — a sold-out product says so and cannot be added; its price
   remains visible
 - **Shipping and pickup** — static copy on every card: shipping calculated at
@@ -49,6 +50,15 @@ Store and opens Store Locator
 ## Designs
 
 ::story{id="pages-product-detail-page--docs" title="Product details"}
+
+:::detail{title="Implementation map" for="engineer"}
+- [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)
+- [Product view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductView.tsx)
+- [Purchase view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductBuyBox.tsx)
+- [Product variant model](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts)
+- [Standalone product detail preview](https://github.com/9gag/grade10-spec/blob/main/apps/preview/src/store-product/store-product-detail.tsx)
+- [Frontend feature layout](https://github.com/9gag/grade10/blob/main/docs/conventions/code-layout.md)
+:::
 
 :::detail{title="Product decisions" for="pm"}
 A card travels as a pasted address — a group chat, a Discord, a reply — more

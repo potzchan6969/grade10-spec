@@ -16,9 +16,10 @@ product.
 - **A count of the whole set** — above the grid, how many cards the narrowed
   catalogue holds, never how many are on screen; it moves when the narrowing
   moves and stays still while the collector reads on
-- **Stock is a ceiling** — a card's cart control stops where the shop's count
-  stops, and the card says how many are left when the shop is nearly out or the
-  collector has asked for the last one; a shop that counts nothing stops nothing
+- 🚧 **Availability without stock pressure** — each tile reads available while
+  any listed variant is offered for sale and out of stock only when none is;
+  the tile shows no remaining count or scarcity cue. A collector's requested
+  add quantity is not capped by the browse read, and Cart explains a short fill
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole

@@ -45,8 +45,10 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
 - **A card's tile reflects its most available variant.** Out of stock only when
   every variant on it is; per-variant availability stays on the card's page.
 - **Browse surfaces communicate no quantity.** No remaining count, no scarcity
-  treatment, no label separating one available variant from another. Scoped to
-  browsing, so the cart can still explain a quantity it changed.
+  treatment, no label separating one available variant from another. A
+  collector may still request a quantity while adding from a browse surface,
+  but the control does not expose or cap to the shop's count; the cart review
+  explains a short fill.
 - **Unavailable is not a browse condition.** An unpublished product is absent
   from the listing and its address already answers 404.
 
@@ -116,26 +118,29 @@ states what the store puts into them.
 
 ### Modified Capabilities
 
-None. `shared/ui/store-product-listing` already takes a supplied condition and
-forbids deriving one, `shared/ui/store-cart` already carries the statuses and
-the open-time read these requirements feed, and
-`grade10-site/store/product-page`'s per-variant for-sale requirement is
-unchanged by stating where that condition
-comes from.
+- `grade10-site/store/product-listing`: remove stock-derived quantity limits
+  and low-stock counts from listing tiles.
+- `grade10-site/store/product-page`: remove stock-derived quantity limits and
+  low-stock counts from the product page while preserving per-variant choice
+  and status.
 
 ## Impact
 
-No change to `packages/ui` or `packages/i18n`. The typed Store review already
-returns current availability and price per line. The work is the storefront
-mapping those answers onto the statuses the drawer and checkout page render.
-The cart drawer's statuses and warning lifecycle are durable in
-`shared/ui/store-cart`; this change owns what the storefront puts into them.
-No backend implementation or Figma change is part of this plan.
+No backend, database, or shared UI contract change is required. The typed
+Store product read already supplies each variant's availability, price and
+optional quantity, and the live cart review already returns the current
+answers used by the drawer and checkout. The frontend work selects the variant
+being bought, maps its availability to the existing purchase states, and
+stops exposing browse-time quantity information. On a failed cart review it
+marks affected lines unchecked, replaces their last availability and prices
+and the cart total with unchecked states, names them in a retryable notice, and
+withholds checkout. The product
+page adds a shared `variantLabel` message in all four supported locales.
 
-The change directory is named `add-store-product-status` and carries two
+The change directory is named `add-store-product-status` and carries four
 capabilities; the name is left alone so the open pull request keeps its
-history.
+history. Its standalone Storybook product-detail preview is updated to match
+the variant and availability behavior specified here.
 
-No domain impact: the new `cart-validation` capability does not yet join an
-existing Store cross-capability path; its journeys stay at feature level, and
-the existing Store domain suite remains unchanged.
+`product-status` walks the listing, product page and cart as one Store path;
+the Store domain test suite is updated with that path.

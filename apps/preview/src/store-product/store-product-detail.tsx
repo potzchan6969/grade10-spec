@@ -1,4 +1,6 @@
 import { Link } from "@grade10/design-system/components/forms/link";
+import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
+import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   StoreProductDescription,
@@ -26,6 +28,8 @@ const COPY = {
     shippingFee: "Shipping fee",
     skuLabel: "SKU",
   },
+  variantLabel: "Variant",
+  forSale: "For sale",
   purchase: {
     addedToCart: "Added to cart",
     addToCart: "Add to cart",
@@ -35,6 +39,7 @@ const COPY = {
     quantityLabel: "Quantity",
     soldOut: "Sold out",
   },
+  soldOut: "Sold out",
 };
 
 type StoreProductDetailProps = {
@@ -43,8 +48,15 @@ type StoreProductDetailProps = {
 
 function StoreProductDetail({ product }: StoreProductDetailProps) {
   const [quantity, setQuantity] = useState(1);
-  const [added, setAdded] = useState(false);
-  const saleItem = product.variants[0];
+  const [addedVariantId, setAddedVariantId] = useState<string>();
+  const [selectedVariantId, setSelectedVariantId] = useState(
+    product.variants.find((variant) => variant.availableForSale)?.id ??
+      product.variants[0]?.id ??
+      "",
+  );
+  const saleItem =
+    product.variants.find((variant) => variant.id === selectedVariantId) ??
+    product.variants[0];
 
   return (
     <main className="flex-1">
@@ -57,31 +69,54 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
 
           <VStack gap="lg" className="lg:sticky lg:top-24">
             <StoreProductHeader
-              availabilityCount={
-                saleItem?.quantityAvailable != null &&
-                saleItem.quantityAvailable > 0 &&
-                saleItem.quantityAvailable <= 3
-                  ? saleItem.quantityAvailable
-                  : undefined
-              }
               copy={COPY.header}
               homeHref="#home"
               saleItem={saleItem}
               shopHref="#shop"
               title={product.title}
             />
+            {product.variants.length > 1 ? (
+              <RadioList
+                aria-label={COPY.variantLabel}
+                label={COPY.variantLabel}
+                onValueChange={(value) => {
+                  if (typeof value === "string") setSelectedVariantId(value);
+                }}
+                value={saleItem?.id}
+              >
+                {product.variants.map((variant) => (
+                  <RadioCard
+                    key={variant.id}
+                    description={`${variant.price} · ${variant.availableForSale ? COPY.forSale : COPY.soldOut}`}
+                    title={variant.title}
+                    value={variant.id}
+                  />
+                ))}
+              </RadioList>
+            ) : null}
             <StoreProductDescription
               copy={COPY.description}
               description={product.description}
             />
             <StoreProductPurchasePanel
-              added={added}
+              added={addedVariantId === saleItem?.id}
               copy={COPY.purchase}
-              onAddToCart={() => setAdded(true)}
+              onAddToCart={() => {
+                if (saleItem) setAddedVariantId(saleItem.id);
+              }}
               onQuantityChange={setQuantity}
               quantity={quantity}
-              saleItem={saleItem}
+              saleItem={
+                saleItem
+                  ? {
+                      availableForSale: saleItem.availableForSale,
+                    }
+                  : undefined
+              }
             />
+            {addedVariantId === saleItem?.id && saleItem ? (
+              <p role="status">{saleItem.title} added to cart.</p>
+            ) : null}
             <StoreProductMetadata
               badges={product.badges}
               copy={COPY.metadata}

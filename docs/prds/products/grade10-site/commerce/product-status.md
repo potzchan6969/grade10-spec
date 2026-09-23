@@ -23,7 +23,7 @@ the cart never derive their own answer.
 
 ## Browsing limits
 
-The listing and a product's own page say whether a variant can be bought and
+🚧 The listing and a product's own page say whether a variant can be bought and
 nothing about how many are left — no remaining count, no scarcity label, no
 difference between a variant with one left and one with four hundred. An
 unpublished product carries no unavailable tile; it is absent from the
@@ -31,7 +31,9 @@ listing, and its own address answers as any missing product's does.
 
 ## Quantity requests
 
-Only the cart and checkout ask for a quantity, and the shop answers one of
+🚧 The listing and product page may carry the collector's requested add
+quantity, but do not expose or apply a stock-derived limit. When the cart opens
+or is offered for checkout, the shop answers a requested quantity in one of
 three ways:
 
 | Answer | When |
