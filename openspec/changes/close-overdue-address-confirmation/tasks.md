@@ -19,7 +19,7 @@
   - Verification: contract checks cover the persisted timestamp and derived
     condition.
 
-## 3. Backend
+## 3. Backend (owner: @htonyl)
 
 - [ ] 3.1 In `services/orderStatus.ts`, `rpc/AuctionService.ts` and
   `services/auctionOrders.ts`, derive `address_window_open` from the stored
