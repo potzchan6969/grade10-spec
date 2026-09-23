@@ -7,6 +7,16 @@
 export const CATALOGUE_IMAGE = new URL("./product.fixture.png", import.meta.url)
   .href;
 
+export const CATALOGUE_IMAGE_CARDDASS_STARTERS = new URL(
+  "./auction-catalogue-carddass-starters.fixture.png",
+  import.meta.url,
+).href;
+
+export const CATALOGUE_IMAGE_MEW_EX = new URL(
+  "./auction-catalogue-mew-ex.fixture.png",
+  import.meta.url,
+).href;
+
 export const CATALOGUE_TITLE = "Auctions | Grade10";
 
 export const CATALOGUE_DESCRIPTION =
@@ -32,6 +42,8 @@ export type CatalogueLot = {
   /** Live bid count shown beside the price. */
   bidCount: number;
   imageAlt: string;
+  /** Lot photo URL. Defaults to the shared catalogue fixture. */
+  imageSrc: string;
 };
 
 function lot(
@@ -46,6 +58,7 @@ function lot(
     bidLabel: partial.bidLabel ?? "HK$1,200.00",
     bidCount: partial.bidCount ?? 0,
     imageAlt: partial.imageAlt ?? partial.title,
+    imageSrc: partial.imageSrc ?? CATALOGUE_IMAGE,
     ...partial,
   };
 }
@@ -203,14 +216,50 @@ export const ONE_FEATURED_LOTS: CatalogueLot[] = [
   withStatus(COLLECTION_LOTS[2], "Ended"),
 ];
 
-/** The Minecraft lots only: a short featured row, and no category chrome. */
+/** Three high-value Pokémon samples for the short featured band. */
 export const FEW_FEATURED_LOTS: CatalogueLot[] = [
-  COLLECTION_LOTS[0],
-  COLLECTION_LOTS[7],
-  withStatus(COLLECTION_LOTS[14], "Upcoming", {
-    startsAt: "2026-10-20T10:00:00+08:00",
-    closesAt: "2026-10-24T18:00:00+08:00",
-    closeLabel: "24 Oct 2026, 6:00 pm",
+  lot({
+    id: "carddass-checklist",
+    title: "1997 Pocket Monsters Carddass Checklist, PSA 10",
+    imageAlt:
+      "1997 Pocket Monsters Carddass Checklist graded PSA 10 in a PSA slab",
+    imageSrc: CATALOGUE_IMAGE,
+    status: "Active",
+    categoryId: "pokemon",
+    category: "Pokémon",
+    closesAt: "2026-10-01T18:00:00+08:00",
+    closeLabel: "1 Oct 2026, 6:00 pm",
+    bidLabel: "HK$82,160.00",
+    bidCount: 12,
+  }),
+  lot({
+    id: "63261275",
+    title: "1997 Pocket Monsters Carddass 000 Bandai Starters, PSA 10",
+    imageAlt:
+      "1997 Pocket Monsters Carddass #000 Bandai Starters graded PSA 10 in a PSA slab",
+    imageSrc: CATALOGUE_IMAGE_CARDDASS_STARTERS,
+    status: "Active",
+    categoryId: "pokemon",
+    category: "Pokémon",
+    closesAt: "2026-10-02T18:00:00+08:00",
+    closeLabel: "2 Oct 2026, 6:00 pm",
+    bidLabel: "HK$147,064.00",
+    bidCount: 18,
+  }),
+  lot({
+    id: "127466456",
+    title:
+      "2025 Pokemon Simplified Chinese Sv P Promo 003 Mew Ex Pokemon Card Membership, PSA 10",
+    imageAlt:
+      "2025 Pokémon Simplified Chinese SV-P Promo #003 Mew ex Pokemon Card Membership graded PSA 10",
+    imageSrc: CATALOGUE_IMAGE_MEW_EX,
+    status: "Active",
+    categoryId: "pokemon",
+    category: "Pokémon",
+    closesAt: "2026-10-03T18:00:00+08:00",
+    closeLabel: "3 Oct 2026, 6:00 pm",
+    bidLabel: "HK$365,057.23",
+    bidCount: 27,
   }),
 ];
 

@@ -132,7 +132,7 @@ export const FewFeatured: Story = {
       canvas.getByRole("navigation", { name: "Categories" }),
     ).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Minecraft" }),
+      canvas.getByRole("button", { name: "Pokémon" }),
     ).toBeInTheDocument();
   },
 };
