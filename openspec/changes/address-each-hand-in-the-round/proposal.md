@@ -38,7 +38,8 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
 - **QA is a hand of Specified** — the landing that puts the suite up for
   review is a move to QA, told by the message every hand gets, and the walk
   group names the review as its input.
-- **The interview asks two or three questions** — the defaults the round
+- **The interview asks about three questions** — none trivial; a further
+  choice that moves scope is held, never a default; the defaults the round
   applies are listed as such, the questions asked are the ones that change
   what is built, and one asks whether to do it now.
 - **A round is sized by what it lands** — a task group that lands prose is

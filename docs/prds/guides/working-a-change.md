@@ -72,7 +72,7 @@ once per group.
 Four things the round cannot know, so say them when they are true:
 
 - **The decisions are already made** — "draft from what I've given you";
-  otherwise expect at most three questions first, one of them whether to do
+  otherwise expect about three questions first, one of them whether to do
   it now, with every default the round took listed for one reply to overturn
 - **You are two hands** — "I'm the engineer as well, carry it to `tasks.md`"
 - **Which capability you mean** — the full path, `grade10-site/store/cross-sell`

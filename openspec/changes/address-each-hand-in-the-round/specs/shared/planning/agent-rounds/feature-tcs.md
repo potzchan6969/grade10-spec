@@ -775,6 +775,7 @@ Runs once per row of **Test data**.
 | --- | --- |
 | Pages under `docs/` alone | the reader of words, QA and the simpler thing; no code reading |
 | Pages under `docs/` and one code file | the reader of words, QA, the simpler thing and the build's code readings |
+| A message catalog alone | the reader of words, QA and the simpler thing; no code reading |
 
 **Steps:**
 
@@ -1036,10 +1037,10 @@ Runs once per row of **Test data**.
 ## shared-planning-agent-rounds-US14: Product manager answers a short interview
 
 **As a** product manager,
-**I want** the first round to ask me the two or three questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
+**I want** the first round to ask me the few questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
 **so that** I spend the round on decisions, not confirmations.
 
-### shared-planning-agent-rounds-US14-TC1-1: The first round asks at most three questions, one whether to do it now
+### shared-planning-agent-rounds-US14-TC1-1: The first round asks about three questions, one whether to do it now
 
 **Classification:**
 
@@ -1067,9 +1068,10 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* Two or three numbered questions are asked, no more.
+* About three numbered questions are asked, none trivial.
 * One asks whether to do it now.
 * Each other question changes what is built.
+* A further choice that moves scope is held as a row, not listed as a default.
 
 ### shared-planning-agent-rounds-US14-TC2-1: The defaults the round applied are listed as decided by the round
 
@@ -1161,7 +1163,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The reply asks whether to do it now.
-* At most three questions are asked, and none asks to confirm what the sentence said.
+* About three questions are asked, and none asks to confirm what the sentence said.
 
 ### shared-planning-agent-rounds-US14-TC5-1: A fact the sentence states is not asked back as a question
 

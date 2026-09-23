@@ -16,7 +16,7 @@ through.
   - Review asked: the requirements' landing is a move to QA, and the walk group names the review as its input
   - One reply, several moves: a reply carries one answer and remarks; a remark comes back before anything lands
 - Sized
-  - Short interview: at most three questions, one whether to do it now, the defaults listed as decided
+  - Short interview: about three questions, none trivial, one whether to do it now, a choice that moves scope held, the defaults listed as decided
   - Sized by what it lands: a task group's readers are summoned by its diff, the build's four on code, the reader of words on words
   - Fallback named: a reader or verifier that ran on a fallback model is named in the row and the summary; a dispatch the vendor killed stops the round
 - Recorded
@@ -87,19 +87,19 @@ The landing of `spec.md` and `feature-tcs.md` SHALL be a move to the `qa` hand: 
 
 ### Requirement: The interview asks what changes what is built
 
-The first round's interview SHALL ask at most three questions, each one whose answer changes what is built and one of them whether to do the change now, alone when nothing else is open; SHALL list every default it applies as decided by the round in the same message; and on `not now` SHALL write a wait on the product manager and draft nothing ahead.
+The first round's interview SHALL ask about three questions, none trivial, each one whose answer changes what is built and one of them whether to do the change now, alone when nothing else is open; SHALL hold as a row, never apply as a default, any further choice that moves scope, is costly to undo or needs a fact only a person has; SHALL list every default it applies as decided by the round in the same message; and on `not now` SHALL write a wait on the product manager and draft nothing ahead.
 
 #### Scenario: shared-planning-agent-rounds-SC-91 - Three questions and the defaults
 **Serves:** shared-planning-agent-rounds-US-14 - the product manager spends the round on decisions
 
 - **GIVEN** a first sentence whose frontier holds ten open points
 - **WHEN** the interview is posted
-- **THEN** it asks at most three, one of them whether to do the change now, and lists the seven it decided with the option each took
+- **THEN** it asks the three that change most what is built, one of them whether to do the change now, holds as a row any other that moves scope, and lists each of the rest as decided with the option it took
 - **AND** a sentence that leaves nothing else open is asked whether to do it now, alone
 
 ### Requirement: A task group is sized by what it lands
 
-The `apply` block's perspectives SHALL carry `when:` triggers read from the group's diff as an artifact's are: the build's four readings on `code`, the reader of words on `copy`, QA and the simpler thing always; a group that lands prose alone SHALL be read by the reader of words, QA and the simpler thing, one that lands code by the build's four readings, QA and the simpler thing, and one that lands both by all.
+The `apply` block's perspectives SHALL carry `when:` triggers read from the group's diff as an artifact's are: the build's four readings on `code`, the reader of words on `copy`, QA and the simpler thing always, a message catalog's line raising `copy` and never `code`; a group that lands prose alone SHALL be read by the reader of words, QA and the simpler thing, one that lands code by the build's four readings, QA and the simpler thing, and one that lands both by all.
 
 #### Scenario: shared-planning-agent-rounds-SC-92 - A prose group summons the page's readers
 **Serves:** shared-planning-agent-rounds-US-13 - a hand's prose is read by the reader of words, not the build
@@ -107,6 +107,7 @@ The `apply` block's perspectives SHALL carry `when:` triggers read from the grou
 - **GIVEN** a task group whose diff touches manual pages and a suite alone
 - **WHEN** its readers are computed
 - **THEN** the reader of words, QA and the simpler thing are summoned and the build's four readings are not
+- **AND** a group whose diff touches a message catalog alone is read the same way
 
 #### Scenario: shared-planning-agent-rounds-SC-93 - A code group summons the build
 **Serves:** shared-planning-agent-rounds-US-12 - the engineer's code is read by the build

@@ -27,7 +27,7 @@
 ### shared-planning-agent-rounds-US-14: Product manager answers a short interview
 
 **As a** product manager,
-**I want** the first round to ask me the two or three questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
+**I want** the first round to ask me the few questions that change what is built, one of them whether to do it now, with the defaults it applied listed,
 **so that** I spend the round on decisions, not confirmations.
 
 ### shared-planning-agent-rounds-US-15: Designer's written design waits on its frame

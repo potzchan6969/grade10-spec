@@ -64,3 +64,12 @@ Needs groups 1 to 5 landed, `feature-tcs.md` reviewed (`/tcs-review address-each
 - [x] 7.2 The journeys and the cases no script drives - a hand's moves in Slack's own client (`shared-planning-agent-rounds-US-13`), the interview inside an agent's session (`shared-planning-agent-rounds-US-14`), the held row's reply, the page question's reply, QA's turn message and the fallback's suffix - walked once by hand in `stage-changes-and-notify-hands`' 8.2's first walk, their cases left manual with the reason on each, and named in this walk's `rounds.md` row; the tick's refusal (`shared-planning-agent-rounds-US11-TC3-1` to `US11-TC5-1`) is proved by group 6's tests in the application repository and stays manual here, its Manual row naming them
 - [x] 7.3 One reader argues the simpler shape for the whole change after the last group lands and before it goes to staging, with its row in `rounds.md`
 - [x] 7.4 Verify: `pnpm run test:walk`, `pnpm run tcs:validate`, `pnpm check:manual`
+
+## 8. The owner's answers after the audit (grade10-spec)
+
+Needs group 7 landed. The owner's word on two rows: the interview asks about three questions and holds a further one that moves scope (`Q4`, `Q27`), and a message catalog's words are read as words (`Q5`).
+
+- [ ] 8.1 The tests this group's scenarios name, in their own commit before its code: `scripts/openspec/perspectives.test.mjs` for a group landing a message catalog alone read by the reader of words, QA and the simpler thing, its line raising `copy` and never `code`; `scripts/openspec/round-skill.test.mjs` for the interview's about three questions and a held choice never applied as a default - `shared-planning-agent-rounds-SC-91`, `shared-planning-agent-rounds-SC-92`
+- [ ] 8.2 Make `shared-planning-agent-rounds-SC-92` pass for a catalog: `ofFile` in `scripts/openspec/lib/perspectives.mjs` raises `copy`, never `code`, for a file under `packages/i18n/messages/`
+- [ ] 8.3 Make `shared-planning-agent-rounds-SC-91` pass: `docs/governance/round-summary.md` § Interview asks about three questions, none trivial, and holds a further choice that meets the held test as a row
+- [ ] 8.4 Verify: `pnpm run test:openspec`, `pnpm check:manual`

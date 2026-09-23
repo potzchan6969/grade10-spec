@@ -75,9 +75,10 @@ Rejected: a `review` kind, a second sender, a new stage.
 
 ### The interview's shape is one rule in the governance page
 
-`Q4`. `docs/governance/round-summary.md` § Interview states it: at most three
-questions that change what is built, one of them whether to do it now, alone
-when nothing else is open; every default listed under "decided by the round";
+`Q4`. `docs/governance/round-summary.md` § Interview states it: about three
+questions that change what is built, none trivial, one of them whether to do
+it now, alone when nothing else is open; a further choice that meets the held
+test held as a row (`Q27`); every default listed under "decided by the round";
 `not now` writes `awaiting: proposal` on the product manager and drafts
 nothing ahead. `workflow-plan` and `planning-pm` link the section and restate
 nothing; `round-skill.test.mjs` asserts the link and the absence of a second
@@ -88,8 +89,9 @@ copy.
 `Q5`. `TRIGGERS` in `tools/manual/src/api/types.ts` gains `code`, landed with
 `schema.yaml` in one commit since `read-schema.mts` throws on a `when:` value
 the list does not name. `lib/perspectives.mjs`'s `ofFile` raises `code` for a
-changed line in any file whose name does not end `.md`; `copy` is raised as
-today, by `docs/prds/` and by `prose()` on any markdown line. The `apply`
+changed line in any file whose name does not end `.md`, a message catalog
+under `packages/i18n/messages/` aside; `copy` is raised as today, by
+`docs/prds/` and by `prose()` on any markdown line, and by a catalog's line. The `apply`
 block reads: the four `build.md` perspectives `when: [code]`, `reader`
 `when: [copy]`, `qa` and `simpler` `[always]`, `operations` as it is. A group
 whose diff raises neither trigger is read by the always readers, and the
