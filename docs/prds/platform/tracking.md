@@ -10,16 +10,31 @@ directly:
 :::flow{title="Posting to Mixpanel" case="Client events"}
 ## *Browser* — **Posts `/api/track`**
 Typed client events, batched; retries until the route acks.
-## *Backend route* — **Validates and stamps identity**
-Rejects names outside the client catalog; one Mixpanel request for the whole batch.
+## *Analytics worker* — **Validates, stamps identity, enqueues**
+🚧 Rejects names outside the client catalog; AUTH session; the request
+succeeds once the batch is on the analytics queue.
+## *Analytics queue* — **Retries then delivers**
 ## *Mixpanel* — **Receives `/import`**
 :::
 
 :::flow{title="Posting to Mixpanel" case="Server events"}
-## *Domain worker* — **Calls `/import`**
-Store, auction, vault, or loyalty — server events only; same project token per environment; no browser hop.
-## *Mixpanel* — **Receives the event**
+## *Domain worker* — **Enqueues `/import` or `/engage`**
+🚧 Store, auction, vault, or loyalty — server events and profile writes;
+same project token per environment; same queue as first-party track.
+## *Analytics queue* — **Retries then delivers**
+## *Mixpanel* — **Receives the event or profile write**
 :::
+
+When the queue binding is missing (local, tests, a branch without the
+resource), workers fall back to today's `waitUntil` send.
+
+🚧 First-party `/api/track` lives on the analytics service; the request
+succeeds once the batch is on the analytics queue.
+
+🚧 Server imports, engage writes, and first-party track batches reach
+Mixpanel after a Mixpanel or worker blip — the analytics queue retries, then
+drops with a counter; the same `$insert_id` keeps a retry from counting
+twice.
 
 Domain signals and the Mixpanel catalog sit on
 [Analytics](/p/grade10-site/analytics) and

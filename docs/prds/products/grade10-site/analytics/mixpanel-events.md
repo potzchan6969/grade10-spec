@@ -82,6 +82,10 @@ Workers send these when the domain fact lands. The browser cannot.
 - **Collector IP for geo** — every Mixpanel send, client or server,
   carries the collector's IP when Grade10 knows it so Mixpanel can set
   city and country; the IP is not stored as a property
+- 🚧 **Durable send** — server imports, engage writes, and first-party
+  `/api/track` batches reach Mixpanel through the analytics queue after a
+  Mixpanel or worker blip; the same `$insert_id` keeps a retry from
+  counting twice — [Product Analytics](/platform/tracking)
 
 ## User Profile
 
