@@ -37,8 +37,8 @@ means to the collector is `grade10-site/grading/submission-lifecycle`.
     day it is set
 - Receiving against the manifest
   - The manifest and the invoice first: no slab is scanned before they are in
-  - A line that matches nothing: held as unmatched until staff resolve it, and
-    finishing waits
+  - A line that matches nothing: held as unmatched until staff name the card it
+    meant or close it as the grader's error, and finishing waits
   - A cert belongs to one submission: a scan matching a cert held elsewhere is
     refused by name, so a slab can never be handed to the wrong collector
   - The counters: scanned, matched, ungraded, and the upcharges with their sum
@@ -487,6 +487,15 @@ and that total's currency.
 batch SHALL be held as unmatched until staff resolve it, and SHALL hold the
 batch from being finished.
 
+**Resolving a line** - staff SHALL resolve an unmatched line one of two ways:
+naming the card in the batch the line meant, after which the line scans onto
+that card; or closing it as the grader's error with a reason, which stands on
+the line. A card outside the batch, or a close with no reason, SHALL be refused
+by name. A line resolved either way SHALL no longer hold the batch.
+
+**One line each** - a manifest repeating a line number, a cert or an intake id
+SHALL be refused by name, and nothing entered.
+
 #### Scenario: grade10-admin-grading-batches-SC-23 - Nothing is scanned until the manifest and the invoice are in
 **Serves:** grade10-admin-grading-batches-US-02 - the operator opening the box works against what the grader said it sent
 
@@ -503,6 +512,16 @@ batch from being finished.
 - **WHEN** the manifest is entered
 - **THEN** that line is listed as unmatched, and the batch cannot be finished
   while it stands
+
+#### Scenario: grade10-admin-grading-batches-SC-51 - Staff resolve an unmatched line by naming its card or closing it
+**Serves:** grade10-admin-grading-batches-US-02 - the operator clears the grader's mistyped line without re-entering the manifest
+
+- **GIVEN** a batch with two unmatched manifest lines, one whose intake id is
+  mistyped for a card in the batch and one the grader listed in error
+- **WHEN** staff name the card the first line meant, and close the second as
+  the grader's error with a reason
+- **THEN** the first line's cert scans onto that card, the second reads closed
+  with its reason, and neither holds the batch from being finished
 
 ### Requirement: A scan matches one cert to one card
 
@@ -601,8 +620,9 @@ every exception recorded so far.
 **Still waiting** - the batch SHALL go on reading Back, unchecked until
 receiving is finished.
 
-**Nothing told** - no collector SHALL be told anything about the batch until
-it is finished.
+**Told at the finish** - a plain scan SHALL tell no collector anything until
+the batch is finished; an exception recorded on a card is told that day, as
+the exceptions and the upcharge say.
 
 #### Scenario: grade10-admin-grading-batches-SC-30 - A half-scanned box is put down and taken up again
 **Serves:** grade10-admin-grading-batches-US-02 - the operator serves a customer in the middle of a box and comes back to it
@@ -610,7 +630,8 @@ it is finished.
 - **GIVEN** a batch of 10 cards with 6 slabs scanned
 - **WHEN** the operator saves and opens the batch again
 - **THEN** the 6 scans, their matches and the exceptions recorded stand, the
-  batch reads Back, unchecked, and no collector has been told anything
+  batch reads Back, unchecked, and no collector has been told of a plain scan,
+  only of an exception on the day it was recorded
 
 ### Requirement: Finishing receiving makes every submission ready at once
 
@@ -685,7 +706,8 @@ carry on, and the batch SHALL be finishable with a card held, not returned or
 damaged.
 
 **Told the same day** - the collector SHALL be told on the day the outcome is
-recorded.
+recorded, in the message for a card not back with the box; a held card's
+message SHALL name the day the grader holds it until.
 
 #### Scenario: grade10-admin-grading-batches-SC-34 - A card held by the grader is recorded with the date it is expected
 **Serves:** grade10-admin-grading-batches-US-03 - the operator finishing the box records the one card the grader kept and lets the others go
@@ -726,7 +748,9 @@ recorded.
 **Serves:** grade10-admin-grading-batches-US-03 - the collector hears about the card from the shop rather than by counting the slabs at the counter
 
 - **WHEN** a card is recorded held by the grader, not returned or damaged
-- **THEN** its collector is told on that day
+- **THEN** its collector is told on that day, in the message for a card not
+  back with the box, and a held card's message names the day the grader holds
+  it until
 
 ### Requirement: The upcharge is the fee sheet's difference
 
