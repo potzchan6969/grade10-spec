@@ -22,9 +22,8 @@ type StoreProductRelatedRailProps = {
    * `remainingLabel` are never drawn. Given none, it draws the heading over
    * nothing: the page renders no rail where it has nothing to show. */
   cards: readonly ProductSummary[];
-  /** Fires when a tile is activated, identifying the card. Omit it and the
-   * tiles are inert. */
-  onCardClick?: (productId: string) => void;
+  /** Fires when a tile is activated, identifying the card. */
+  onCardClick: (productId: string) => void;
   className?: string;
 };
 
@@ -63,7 +62,7 @@ function StoreProductRelatedRail({
             imageSrc={card.imageSrc}
             key={card.id}
             name={card.name}
-            onClick={onCardClick ? () => onCardClick(card.id) : undefined}
+            onClick={() => onCardClick(card.id)}
             originalPrice={card.originalPrice}
             price={card.price}
             soldOut={card.soldOut}
