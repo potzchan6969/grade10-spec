@@ -9,7 +9,7 @@
 - [ ] 2.1 Make `grade10-admin-inventory-catalog-SC-123` through `SC-127` pass: add ordered product-media persistence, private object storage, validation, authorization, and the typed Auction source-read contract.
 - [ ] 2.2 Add the Inventory migration, Worker binding, generated types, API documentation, and focused backend coverage.
 
-## 3. Auction snapshot gallery (grade10)
+## 3. Auction snapshot gallery (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Make `grade10-admin-auction-listing-SC-87` through `SC-92` pass: select assets only from the listing product, preserve one mixed order, materialize selected assets on Save, and retain snapshot stability.
 - [ ] 3.2 Extend the existing Auction media dialog and fixtures; preserve direct upload, reorder, and status behavior under `SC-46` through `SC-55`.
