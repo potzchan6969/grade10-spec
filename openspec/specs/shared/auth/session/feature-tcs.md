@@ -1,7 +1,7 @@
 # shared/auth/session Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** in-review
+**Drafts styled:** 2026-09-23, tcs-rules r3.0
 
 ## Background
 
@@ -30,7 +30,8 @@
 * **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
-Signed in as a collector on Grade10.
+
+* customer is signed in on <grade10 store url>.
 
 **Steps:**
 
@@ -49,17 +50,19 @@ Signed in as a collector on Grade10.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
-The caller is not signed in.
+
+* customer is not signed in on <grade10 store url>.
 
 **Steps:**
 
-1. Ask a product who is calling.
+1. Ask a Grade10 product who is calling.
 
 **Expected Results:**
 
@@ -74,13 +77,15 @@ The caller is not signed in.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
-A product must show another person's name.
+
+* customer is on a Grade10 surface that names another person.
 
 **Steps:**
 
@@ -99,13 +104,15 @@ A product must show another person's name.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-01
 
 **Pre-conditions:**
-The caller is not signed in.
+
+* customer is not signed in on <grade10 store url>.
 
 **Steps:**
 
@@ -132,17 +139,19 @@ The caller is not signed in.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
 
 **Pre-conditions:**
-Signed in on one Grade10 site.
+
+* customer is signed in on <grade10 store url>.
 
 **Steps:**
 
-1. Open another Grade10 site of the same brand.
+1. Open <grade10 auction url>.
 
 **Expected Results:**
 
@@ -157,17 +166,19 @@ Signed in on one Grade10 site.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-session-US-02
 
 **Pre-conditions:**
-Signed in on Grade10.
+
+* customer is signed in on <grade10 store url>.
 
 **Steps:**
 
-1. Open a ZZZ site.
+1. Open <zzz store url>.
 
 **Expected Results:**
 
@@ -190,13 +201,15 @@ Signed in on Grade10.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** smoke
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
-Signed in as a collector.
+
+* customer is signed in on <grade10 store url>.
 
 **Steps:**
 
@@ -215,13 +228,15 @@ Signed in as a collector.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
-The caller is not signed in.
+
+* customer is not signed in on <grade10 store url>.
 
 **Steps:**
 
@@ -241,17 +256,20 @@ The caller is not signed in.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
 * **Trace:** shared-auth-session-US-03
 
 **Pre-conditions:**
-Analytics events were recorded against this device while unsigned.
+
+* customer is not signed in on <grade10 store url>.
+* Analytics events were recorded against this device while unsigned.
 
 **Steps:**
 
-1. Sign in as a collector on that device.
+1. Sign in as that collector on this device.
 2. Trigger a product analytics event for that visit.
 
 **Expected Results:**
@@ -273,7 +291,7 @@ Analytics events were recorded against this device while unsigned.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -302,6 +320,7 @@ Analytics events were recorded against this device while unsigned.
 
 * Tab A shows the collector signed in.
 * Nothing in tab A is reloaded to get there.
+* Tab A raises no toast or message about the session.
 
 ### shared-auth-session-US4-TC2-1: Every open tab of the brand picks the session up
 
@@ -309,7 +328,7 @@ Analytics events were recorded against this device while unsigned.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -366,7 +385,7 @@ Analytics events were recorded against this device while unsigned.
 
 **Steps:**
 
-1. Sign in as <collector email> on Grade10 in tab B.
+1. Sign in as <collector email> on <grade10 store url> in tab B.
 2. Return to tab A.
 
 **Expected Results:**
@@ -379,7 +398,7 @@ Analytics events were recorded against this device while unsigned.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -416,7 +435,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -437,8 +456,8 @@ Runs once per row of **Test data**.
 
 | `<tab state>` | How tab A is left |
 | --- | --- |
-| back-forward cache | navigated away in tab A, then back to <grade10 store url> |
-| discarded | left until the browser discards tab A, then reopened |
+| back-forward cache | In tab A, leave <grade10 store url> by navigating away, then use Back. Tab A stays open. Do not use reload. |
+| discarded | Tab A stays in the tab strip. The browser discards its page process (Chrome: chrome://discards). Click that same tab. Do not close it. |
 
 **Steps:**
 
@@ -456,7 +475,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -491,13 +510,13 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-session-US-04
 
 **Pre-conditions:**
@@ -527,7 +546,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** usability
 * **Suites:** regression
@@ -562,7 +581,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -600,7 +619,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -640,7 +659,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -652,7 +671,7 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin is signed out, with tab A open on <grade10 admin url>.
-* The second factor is not proved in this browser.
+* No second factor is proved in this browser.
 
 **Test data:**
 
@@ -662,13 +681,14 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Sign in as <operator email> in tab B.
+1. Sign in as <operator email> in tab B. Do not enter a TOTP or backup code in any tab.
 2. Return to tab A.
 
 **Expected Results:**
 
-* Tab A shows no console surface.
-* The arriving session alone unlocks nothing.
+* Tab A still does not show the console.
+* A sign-in page or a second-factor prompt is allowed.
+* The session arriving in tab A does not open the console.
 
 ---
 
@@ -695,7 +715,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10, with tab A open on <grade10 store url>.
+* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
 * Tab A is in the background.
 
 **Steps:**
@@ -725,7 +745,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10, with tab A open on <grade10 store url>.
+* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
 * The session is seeded to run out while tab A is in the background.
 
 **Steps:**
@@ -754,7 +774,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10 with <listing> in their cart.
+* customer is signed in on <grade10 store url> with <listing> in their cart.
 * Tab A is open on <grade10 store url>, showing the cart count.
 
 **Test data:**
@@ -789,7 +809,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10.
+* customer is signed in on <grade10 store url>.
 * Tabs A and B are open on <grade10 store url>, tab C on <grade10 auction url>.
 
 **Steps:**
@@ -882,17 +902,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10 and on ZZZ in one browser.
+* customer is signed in on <grade10 store url> and on <zzz store url> in one browser.
 * Tab A is open on <zzz store url>.
 
 **Steps:**
 
-1. Sign out of Grade10 in tab B.
+1. Sign out of <grade10 store url> in tab B.
 2. Return to tab A.
 
 **Expected Results:**
 
-* Tab A still shows the collector signed in on ZZZ.
+* Tab A still shows the collector signed in on <zzz store url>.
 
 ### shared-auth-session-US5-TC8-1: Nothing is announced when the session ends
 
@@ -911,7 +931,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10, with tab A open on <grade10 store url>.
+* customer is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
 
 **Steps:**
 
@@ -940,7 +960,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer is signed in on Grade10, with tab A open on <signed-in-only page>.
+* customer is signed in on <grade10 store url>, with tab A open on <signed-in-only page>.
 
 **Test data:**
 
@@ -959,6 +979,8 @@ Runs once per row of **Test data**.
 * Tab A shows none of that person's orders.
 * Tab A asks the collector to sign in, exactly as it does when that address is opened with no session.
 * Dismissing the ask leaves tab A on the front door.
+
+---
 
 ## shared-auth-session-US6: Collector who signs in after somebody else sees their own things
 
@@ -983,7 +1005,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10, with tab A open on <grade10 store url>, in the background.
+* customer A is signed in on <grade10 store url>, with tab A open on <grade10 store url>, in the background.
 
 **Test data:**
 
@@ -1020,7 +1042,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10, with tab A open on <per-person surface>.
+* customer A is signed in on <grade10 store url>, with tab A open on <per-person surface>.
 * collector A and collector B each hold different items on that surface.
 
 **Test data:**
@@ -1062,7 +1084,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10 with <listing> in their cart.
+* customer A is signed in on <grade10 store url> with <listing> in their cart.
 * Tab A is open on <grade10 store url>, showing the cart count.
 
 **Test data:**
@@ -1100,7 +1122,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10, with tab A open on the cart.
+* customer A is signed in on <grade10 store url>, with tab A open on the cart.
 * Tab A's cart read is held open by manipulated network conditions.
 
 **Test data:**
@@ -1138,7 +1160,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10 with <listing> in their cart.
+* customer A is signed in on <grade10 store url> with <listing> in their cart.
 * Tab A is open on <grade10 store url>, in the background.
 
 **Test data:**
@@ -1175,7 +1197,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10.
+* customer A is signed in on <grade10 store url>.
 * Tabs A and B are open on <grade10 store url>, tab C on <grade10 auction url>.
 
 **Test data:**
@@ -1246,7 +1268,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10, with tab A open on <collector A order>.
+* customer A is signed in on <grade10 store url>, with tab A open on <collector A order>.
 
 **Test data:**
 
@@ -1281,7 +1303,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* customer A is signed in on Grade10, with tab A open on <grade10 store url>.
+* customer A is signed in on <grade10 store url>, with tab A open on <grade10 store url>.
 
 **Test data:**
 
