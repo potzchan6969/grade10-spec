@@ -49,7 +49,7 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 | Waiting | `awaiting:`, one line per artifact, dated | An amber chip with the line |
 | Blocked | `depends_on:` naming a change not yet released | A grey chip naming it |
 | Idle | 7 days without a tick, a claim or an artifact landing; shelved at 30 | A red chip with the day count |
-| Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | A chip naming the earliest behind artifact and its hand |
+| 🚧 Behind | An artifact whose page lines or artifacts before it changed after it was drawn or last read again | A chip naming the earliest behind artifact and its hand, and whether it holds their next landing |
 | Suite | `feature-tcs.md` status, `draft` or `approved` | A chip beside the stage |
 
 - **Waiting and blocked** — read today from the same two keys —
@@ -57,7 +57,9 @@ A fact beside the stage, never a stage of its own. The set is five, and closed.
 - 🚧 **Idle** — counted from the last tick, claim or artifact landing, so a
   repository-wide commit moves nobody's count
 - 🚧 **Behind** — shown, told once, and listed in the digest after 7 days
-  counted from the day it went behind; it holds a tick, a claim and a wait never, and the fold at archive always —
+  counted from the day it went behind; it holds a tick, a claim and a wait
+  never, the fold at archive always, and the next landing where what moved is
+  major —
   what clears it is [Agent Rounds · Read Again](agent-rounds#read-again)
 - 🚧 **Suite** — shown beside the stage and never holding the ladder
 - **Flag and hotfix** — the release line carries both: a flag on a change and a
@@ -101,7 +103,7 @@ Slack tells one person, once per move, in the change's thread.
 | --- | --- | --- |
 | A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
 | A change reaches staging | Its QA hand, by direct message; the release hand by the message above | The change, and the run sheet to walk |
-| 🚧 A move reaches an artifact | The hand of each artifact it reaches | The move, before and after, and whether it holds their next landing |
+| 🚧 What moved reaches their artifacts | Each hand it reaches, one message per person per landing | What moved, before and after, and which of their artifacts it holds |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |
@@ -131,7 +133,8 @@ Slack tells one person, once per move, in the change's thread.
   by group; where the code is: `main`, staging, a release
 - 🚧 **[My turn](/my-turn)** — the open questions addressed to the reader, then the
   changes whose current stage names them, then the ones that are theirs
-  later; the handle is chosen once per browser
+  later, then what moved before their artifacts and is not read yet; the
+  handle is chosen once per browser
 - 🚧 **A section's in-flight row** — names the stage and the hand of each
   change delivering it
 - 🚧 **A page's marked line** — a line a page marks as being built wears the
@@ -162,7 +165,7 @@ lane as one waiting on a deploy. The owner's brief is
 | Tech design order | Decided | Before the requirements, from the page, the decisions and the journeys, on every change; owed when the work lands outside this store. | Product, tech PIC |
 | Hands | Decided | Recorded in the change's manifest, one handle per role. | Product |
 | Messages | Decided | One direct message per move to the hand it reaches, each linking the change's thread, the channel post per push kept, a weekly digest; never one per commit. | Product |
-| Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold. | Product, Engineering |
+| Behind | Decided | An overlay, told once, listed in the digest; it holds nothing but the fold, 🚧 and the next landing where what moved is major. | Product, Engineering |
 | Suite review | Decided | An overlay beside the stage, so planning never waits on QA's verdict. | Product, QA |
 | Measure | Decided | Days between a stage landing and the next hand's word, shown on the change page. | Product |
 | Team map | Decided | `docs/prds/team.yaml`: one entry per handle with the e-mail, the Slack member and the roles, and a channel per role. | Operations |

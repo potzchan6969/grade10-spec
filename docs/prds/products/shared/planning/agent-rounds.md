@@ -123,23 +123,21 @@ An artifact is drawn from what is before it, the page's marks first.
   the artifact was drawn or last read again; read from the content, never set
 - 🚧 **Read again, ahead** — a landing wakes the change's agent, which reads
   every artifact after it in order and redraws each one the landing reached, on
-  the branch, for its hand's word; where nothing reached one, the record and
-  the thread say it was read
-- 🚧 **Nothing is built on a behind artifact** — an artifact lands only when
-  no major move before it is unread, the fold refuses a behind delta, and a
+  the branch, for its hand's word; where nothing reached one, the thread says
+  so, and it is read again on its hand's word
+- 🚧 **Nothing is built on what moved unread** — an artifact lands only when
+  nothing major before it moved unread; the fold refuses a behind delta; a
   tick, a claim and a wait are never held
-- 🚧 **What moved, quoted** — the hand of each artifact a move reaches is told
-  the move itself, once: a decision row, or the lines of a proposal, a journey
-  or a page section, before and after
-- 🚧 **Major holds, small tells** — a changed decision, goal, non-goal,
-  requirement or case result holds what is drawn from it until its hand reads
-  it again and says so; a move that changes none of these holds nothing and
-  stays on the hand's list until they read it
+- 🚧 **What moved, quoted** — each hand it reaches is told in one message per
+  landing: a decision row, a requirement or a case, or the lines of any other
+  artifact or page section before theirs, before and after
+- 🚧 **Major holds, small tells** — what moved and is major holds what is drawn
+  from it until its hand reads it again and says so; what is small holds
+  nothing but the fold and stays on the hand's list until read
+- ❓ **What counts as major** — open with the product manager; recommended:
+  everything before an artifact but a named small set
 - 🚧 **Taking the recommendation moves nothing** — the drafts were drawn on it;
-  an answer that overturns a recommendation is a major move
-- 🚧 **Signed before it folds** — a change archives only with every case in its
-  suite reviewed, and a case the review changes after the walk ran is walked
-  again
+  an answer that overturns one is major, like any changed decision
 - 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
   non-goal moved asks the product manager to extend, supersede or split, and
   lands nothing until they answer
@@ -210,7 +208,7 @@ propose, and that every step passes through layers of checks. The brief is
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
 | Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation. | Product, QA, Engineering |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
-| Read again | Decided | A landing reads every artifact after it, in order; behind holds only a landing and the fold, never a tick. | Product, Engineering |
+| Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
 | The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards every deploy and cut. | QA, Engineering |

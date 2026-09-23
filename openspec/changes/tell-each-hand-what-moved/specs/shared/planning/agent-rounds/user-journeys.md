@@ -9,23 +9,11 @@
 ### shared-planning-agent-rounds-US-18: Engineer lands past a small move
 
 **As an** engineer,
-**I want** a reworded line before my plan to reach me as a notice that holds nothing,
-**so that** my next group lands and I read the line when I can.
+**I want** a small move before my plan to reach me as a notice that holds nothing,
+**so that** my next group lands and I read the move when I can.
 
 ### shared-planning-agent-rounds-US-19: Hand reads a major move before building on it
 
-**As a** hand whose artifact a changed decision reaches,
-**I want** my next landing held until I have read the change and said so,
+**As a** hand whose artifact a major move reaches, an overturned recommendation among them,
+**I want** my next landing held until I have read what moved and said so,
 **so that** nothing is built on a decision I have not seen.
-
-### shared-planning-agent-rounds-US-20: Product manager overturns a recommendation
-
-**As a** product manager,
-**I want** an answer that overturns the round's recommendation to reach every hand whose draft was drawn on it,
-**so that** no draft stands on a choice I turned down.
-
-### shared-planning-agent-rounds-US-21: QA signs the suite before it folds
-
-**As a** QA engineer,
-**I want** a change held from archiving while its suite holds a draft case, and the walk sent back when I change a case it walked,
-**so that** the durable suite and the walk carry only what I signed.

@@ -3,11 +3,10 @@ created: 2026-09-23
 depends_on:
   - run-a-round-on-every-artifact
   - stage-changes-and-notify-hands
-  - address-each-hand-in-the-round
 hands:
   pm: "@ecchochan"
   qa: "@chloe9gag"
   tech: "@ecchochan"
   dev: "@ecchochan"
 awaiting:
-  specs: "2026-09-23, the product manager's answers to Q4 and Q5 before the outline - @ecchochan"
+  specs: "2026-09-23, the product manager's answer to Q4 before the outline - @ecchochan"
