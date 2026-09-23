@@ -588,6 +588,9 @@ append to `CaseDetailView.stories.tsx`.
       `Vault/Cases/Case List`, the empty list among them
 - [ ] 14.7 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
+- [ ] 14.8 Build the Describe and Photograph steps as the design draws them:
+      the stepper, the field hints, the photograph dropzone with its tips, and
+      the location line, each word from the catalog
 
 ## 15. The booked visit (grade10)
 
@@ -681,7 +684,8 @@ append to `CaseDetailView.stories.tsx`.
       (`grade10-site-vault-retention-and-erasure-SC-24`,
       `grade10-site-vault-retention-and-erasure-SC-25`,
       `grade10-site-vault-retention-and-erasure-SC-26`,
-      `grade10-site-vault-retention-and-erasure-SC-27`)
+      `grade10-site-vault-retention-and-erasure-SC-27`,
+      `shared-auth-users-SC-40`)
 - [ ] 16.7 Write the stories for `Vault/Retention/Your Data View`
 - [ ] 16.8 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`,
       `storybook build` and the a11y run over this group's stories
