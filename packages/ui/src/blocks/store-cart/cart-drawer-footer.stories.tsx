@@ -982,6 +982,83 @@ export const ConfirmingCartUpdate: Story = {
   },
 };
 
+export const TenderPendingPoints: Story = {
+  args: { pointsState: { status: "expanded" } },
+  render: (args) => {
+    const [tenderPending, setTenderPending] = useState(false);
+    return (
+      <CartDrawerFooter
+        {...args}
+        tenderPending={tenderPending}
+        onUseMaxPoints={() => {
+          args.onUseMaxPoints?.();
+          setTenderPending(true);
+        }}
+      />
+    );
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const input = canvas.getByPlaceholderText("0");
+    const apply = canvas.getByRole("button", { name: "Apply" });
+    const useMax = canvas.getByRole("button", { name: "Use max" });
+    const points = canvas.getByRole("button", { name: "Use points" });
+    const promo = canvas.getByRole("button", { name: /Select or enter code/i });
+    const checkout = canvas.getByRole("button", {
+      name: "Proceed to Checkout",
+    });
+
+    await userEvent.type(input, "120");
+    await userEvent.click(useMax);
+    await waitFor(() => expect(input).toBeDisabled());
+    expect(input).toBeDisabled();
+    expect(apply).toBeDisabled();
+    expect(useMax).toHaveAttribute("aria-disabled", "true");
+    expect(points).toBeDisabled();
+    expect(promo).toBeDisabled();
+    expect(checkout).toBeDisabled();
+
+    apply.click();
+    useMax.click();
+    promo.click();
+    points.click();
+    input.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
+    expect(args.onApplyPoints).not.toHaveBeenCalled();
+    expect(args.onUseMaxPoints).toHaveBeenCalledTimes(1);
+    expect(args.onPointsStateChange).not.toHaveBeenCalled();
+    expect(args.onPromoStateChange).not.toHaveBeenCalled();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
+export const TenderPendingAppliedPoints: Story = {
+  args: {
+    tenderPending: true,
+    promoState: {
+      status: "applied",
+      code: "TEN-OFF",
+      discountAmount: "−HK$4,270.00",
+    },
+    pointsState: { status: "applied", amountLabel: "HK$120.00" },
+    estimatedTotal: "HK$38,310.00",
+  },
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    const removePromo = canvas.getAllByRole("button", { name: "Remove" })[0];
+    const removePoints = canvas.getAllByRole("button", { name: "Remove" })[1];
+
+    expect(canvas.getByText("HK$120.00")).toBeInTheDocument();
+    expect(removePromo).toHaveAttribute("aria-disabled", "true");
+    expect(removePoints).toHaveAttribute("aria-disabled", "true");
+    removePromo.click();
+    removePoints.click();
+    expect(args.onRemovePromo).not.toHaveBeenCalled();
+    expect(args.onRemovePoints).not.toHaveBeenCalled();
+  },
+};
+
 /** Boneyard skeleton loading state for summary amounts during fetching */
 export const Loading: Story = {
   args: {
