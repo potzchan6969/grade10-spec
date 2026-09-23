@@ -6,19 +6,19 @@ import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
-import { BorderBeam } from "@/components/ui/border-beam";
+import { Bell, BellSlash, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
-import { Bell, BellSlash, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
-import { useEffect, useRef, useState, type FocusEvent } from "react";
-import { AUCTION_LOT_DETAILS_COPY } from "./auction-lot-details-content";
+import { type FocusEvent, useEffect, useRef, useState } from "react";
+import { BorderBeam } from "@/components/ui/border-beam";
 import {
   CATALOGUE_IMAGE,
-  COLLECTION_LOTS,
   type CatalogueLot,
+  COLLECTION_LOTS,
 } from "./auction-catalogue-content";
 import auctionLotCardBones from "./auction-catalogue-lot-card.bones.json";
+import { AUCTION_LOT_DETAILS_COPY } from "./auction-lot-details-content";
 
 registerBones({
   "auction-catalogue-lot-card": auctionLotCardBones,
@@ -435,6 +435,7 @@ function FeaturedAuctions({
   const [atEnd, setAtEnd] = useState(true);
   const cardCount = loading ? Math.max(lots.length, 4) : lots.length;
 
+  // biome-ignore lint/correctness/useExhaustiveDependencies: the scroller is re-measured whenever the lots or the loading state change.
   useEffect(() => {
     const scroller = scrollerRef.current;
     if (!scroller) return;
@@ -538,6 +539,7 @@ function FeaturedAuctions({
                       "shrink-0 snap-start px-2 py-8",
                       featuredCardWidth(cardCount),
                     )}
+                    // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
                     key={`featured-skeleton-${index}`}
                   >
                     <AuctionLotCard
@@ -698,12 +700,14 @@ function StaggeredHeading({
           <span
             aria-hidden="true"
             className="inline-block w-[0.3em]"
+            // biome-ignore lint/suspicious/noArrayIndexKey: a heading's letters have no identity beyond position.
             key={`space-${index}`}
           />
         ) : (
           <span
             aria-hidden="true"
             className="inline-block overflow-hidden pb-[0.08em] leading-[1.05]"
+            // biome-ignore lint/suspicious/noArrayIndexKey: a heading's letters have no identity beyond position.
             key={`${char}-${index}`}
           >
             <motion.span
@@ -761,6 +765,7 @@ function FeaturedAuctionsPair({
   }, [reduceMotion]);
 
   // Reduced motion: advance on an interval with no progress tween.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: playKey and safeIndex re-arm the timer after each move.
   useEffect(() => {
     if (!reduceMotion || lots.length <= 1 || paused) return;
     const timer = window.setTimeout(() => {

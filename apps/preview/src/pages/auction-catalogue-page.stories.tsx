@@ -159,8 +159,9 @@ export const BusyMany: Story = {
     const minecraftLot = BUSY_MANY_LOTS.find(
       (lot) => lot.categoryId === "minecraft",
     );
-    expect(pokemonLot).toBeDefined();
-    expect(minecraftLot).toBeDefined();
+    if (!pokemonLot || !minecraftLot) {
+      throw new Error("the fixture holds a Pokémon lot and a Minecraft lot");
+    }
 
     const pokemon = canvas.getByRole("button", { name: "Pokémon" });
     await userEvent.click(pokemon);
@@ -169,14 +170,14 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).getByRole("heading", {
           level: 3,
-          name: pokemonLot!.title,
+          name: pokemonLot.title,
         }),
       ).toBeInTheDocument();
     });
     expect(
       within(allAuctions).queryByRole("heading", {
         level: 3,
-        name: minecraftLot!.title,
+        name: minecraftLot.title,
       }),
     ).not.toBeInTheDocument();
     expect(
@@ -194,7 +195,7 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).queryByRole("heading", {
           level: 3,
-          name: pokemonLot!.title,
+          name: pokemonLot.title,
         }),
       ).not.toBeInTheDocument();
     });
@@ -205,7 +206,7 @@ export const BusyMany: Story = {
       expect(
         within(allAuctions).getByRole("heading", {
           level: 3,
-          name: minecraftLot!.title,
+          name: minecraftLot.title,
         }),
       ).toBeInTheDocument();
     });

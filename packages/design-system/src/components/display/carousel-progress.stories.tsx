@@ -49,6 +49,7 @@ export const Timed: Story = {
     const [paused, setPaused] = useState(false);
 
     return (
+      // biome-ignore lint/a11y/noStaticElementInteractions: hovering pauses the demo's timer; the dots stay the keyboard controls.
       <div
         className="flex flex-col items-start gap-4"
         onMouseEnter={() => setPaused(true)}

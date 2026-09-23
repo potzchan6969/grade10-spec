@@ -471,7 +471,7 @@ function FpsQrPlaceholder() {
       role="img"
     >
       <svg
-        aria-hidden
+        aria-hidden="true"
         className="size-24 text-foreground"
         viewBox="0 0 120 120"
         xmlns="http://www.w3.org/2000/svg"
