@@ -47,35 +47,83 @@ Rejected: reusing the magic-link token as the watch secret — the requesting
 browser never has it (see Context). Rejected: keying the poll on the email
 address directly — that is exactly the oracle `SC-79` forbids.
 
-### Two Cloudflare KV entries, not a Postgres table
+### `sign-in-watch`: one Cloudflare KV entry
 
-- `sign-in-watch:{watchId}` → `{ email }`, written on send, TTL a few minutes
-  past the link's own `SIGN_IN_LINK_TTL_SECONDS` so a slow poll near the end
-  of the window still resolves.
-- `sign-in-settled:{sha256(email.toLowerCase())}` → `{ settledAt }`, written
-  once by a single hook at the point better-auth creates a session — the
-  point every method (magic link, Google, a trusted product's
-  create-or-enter) already funnels through — with a short TTL (comfortably
-  longer than `SIGN_IN_LINK_TTL_SECONDS`, short enough that it is gone long
-  before anyone could reuse it for anything else).
+`sign-in-watch:{watchId}` → `{ email }`, written on send, TTL a few minutes
+past the link's own `SIGN_IN_LINK_TTL_SECONDS` so a slow poll near the end of
+the window still resolves. Minted and read back by the same requesting
+device shortly after send, so KV's propagation window never sits between the
+write and the read that matters — approximate, eventually-consistent,
+short-TTL data is exactly what KV is for here, and the row does not have to
+survive a restart or support a query more complex than a point lookup.
 
-Both live in Cloudflare KV via the existing `secondaryStorage`, not
+It lives in Cloudflare KV via the existing `secondaryStorage`, not
 `authKv`/Postgres: `secondaryStorage.ts`'s `POSTGRES_KEY_PREFIX =
 "verification:"` routes only that prefix to Postgres, and
 `invalidateEarlierSignInMail` scans every `verification:`-prefixed row by
 decoded shape, not by a type tag (a fragility already on record). A `watch`
-or `settled` key under that same prefix is one future collision waiting to
-happen; a disjoint KV namespace sidesteps it structurally instead of adding
-another name to the exclusion list in `signInMail.ts`. Approximate,
-eventually-consistent, short-TTL data is exactly what KV is for, and neither
-entry has to survive a restart or support a query more complex than a point
-lookup — no Postgres migration, no new table.
+key under that same prefix is one future collision waiting to happen; a
+disjoint KV namespace sidesteps it structurally instead of adding another
+name to the exclusion list in `signInMail.ts`.
 
 The email is hashed before it becomes part of a KV key so a leaked key
 listing (Cloudflare's dashboard, a log line) does not itself carry the
 address in the clear; the watch row's stored value carries the plain address
 because only the request holding that watch id's server-side value ever
 reads it back.
+
+### `sign-in-settled`: KV was wrong for this one
+
+`sign-in-settled:{sha256(email.toLowerCase())}` was written once by a single
+hook at the point better-auth creates a session — the point every method
+(magic link, Google, a trusted product's create-or-enter) already funnels
+through — and read back from a *different* device's poll. That pair straddles
+Cloudflare's own documented KV propagation window (`docs/architecture/edge-cache.md`:
+up to 60s cross-colo) whenever the settling device and the watching device
+land on different colos, which two separate physical devices routinely do.
+The result: a real user signs in on a second device and the first device's
+dialog can sit open for up to a minute past the point sign-in actually
+completed — the exact failure `edge-cache.md`'s own rule warns against,
+"KV holds only keys that are immutable until expiry or whose staleness has
+been priced." This key's staleness was never priced; it fell into KV by
+analogy with `sign-in-watch` rather than by weighing that rule.
+
+The fix writes the settle marker to Postgres on every sign-in, unconditionally.
+
+- `sign-in-settled-fast:{sha256(email.toLowerCase())}` → `{ settledAt }`,
+  written to Postgres by the same session-creation hook, under a distinct
+  prefix routed alongside but never merged with `verification:` (see below).
+  `resolveSignInWatch` checks this key first; absent, it falls back to the
+  existing `sign-in-settled:{hash}` KV check.
+- `sign-in-settled:{hash}` on KV keeps being written exactly as before. It
+  covers the rollout window (a watch minted before the Postgres write ships,
+  read after) and costs nothing to keep; once every live watch predates the
+  fast key it can go.
+
+Rejected: gating the Postgres write behind a "live watch exists for this
+email" marker, so only sign-ins that are part of a cross-device wait pay for
+it. The marker would itself be minted on the requesting device's colo and
+read on the settling device's colo — the same cross-colo KV read this fix
+exists to remove — and it misses precisely for the collector who opens the
+email fastest, the one who notices a stall most. And the saving is small:
+every sign-in already reads Postgres through the drizzle adapter (the user
+lookup on magic-link verify and on the OAuth callback), and a magic-link
+sign-in also reads and consumes its `verification:` token there, so one more
+indexed upsert is a marginal addition to a request that already talks to
+Neon, not the first Neon round trip in the path. Only sessions stay off
+Postgres by design (`secondaryStorage.ts`), and this key is not a session.
+
+`sign-in-settled-fast` gets its own literal prefix rather than joining
+`verification:` — `secondaryStorage.ts`'s Postgres routing widens from a
+single `POSTGRES_KEY_PREFIX` string to a small set of prefixes it tests
+against, and `invalidateEarlierSignInMail`'s `LIKE 'verification:%'` scan
+never sees these rows, so the collision this file already rejected once for
+`sign-in-watch` does not reopen here either.
+
+The new key takes no email as input from outside the Worker: the write
+happens server-side inside the existing session-creation hook, so `SC-79`'s
+non-disclosure guarantee is unchanged — there is still no path from a bare
+address to an answer.
 
 ### The poll endpoint takes a watch id, never an email
 
@@ -139,6 +187,14 @@ if a future feature needs push infrastructure for its own reasons.
   harmless: the `sign-in-settled` write happens unconditionally on session
   creation, and a poll simply never runs against it when no watch id exists
   for that email — no read amplifies this into a symptom.
+- [Every sign-in now pays one Postgres upsert for the settle marker] →
+  marginal on a request that already reads Postgres for the user lookup;
+  if it ever shows in sign-in latency, the write can be gated on a live
+  watch with real numbers behind the decision, not ahead of them.
+- [The fast path adds a Postgres point-read to every poll tick that has not
+  yet settled] → one extra cheap indexed read against Neon per tick, while
+  the flow is live; bounded by the same poll interval and TTL that already
+  bound the KV reads.
 
 ## Migration Plan
 
@@ -151,3 +207,9 @@ if a future feature needs push infrastructure for its own reasons.
 4. Rollback: revert the frontend poll effect and the backend route/hook:
    `watchId` being present but unused, or absent entirely, changes no
    existing behavior — every other sign-in path is untouched.
+5. Follow-up (this amendment): widen `secondaryStorage.ts`'s Postgres
+   routing to a small prefix set; write `sign-in-settled-fast` from the
+   settle hook; check it before the existing KV check in
+   `resolveSignInWatch`. Rollback: stop writing and stop checking
+   `sign-in-settled-fast` — `resolveSignInWatch` falls straight back to the
+   KV-only path this change originally shipped with.
