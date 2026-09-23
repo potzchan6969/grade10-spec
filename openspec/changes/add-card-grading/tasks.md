@@ -1216,7 +1216,8 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-vault-retention-and-erasure-SC-30`)
 - [ ] 21.2 Write `sweeps/pass.ts` over `createSweepPass` with `WORK_LISTS`
       laned and ordered, every row carrying its `kind` and its `limit`, so
-      `grading.sweep.repair` fires for the repair lists alone
+      `grading.sweep.repair` fires for the repair lists alone, keeping group
+      11's `attemptsPruned`, the slow lane's retention on `plan_attempts`
 - [ ] 21.3 Write `dueLetters` as one row per
       `{ status, anchor, offsetsSetting, eventKind, letter }` off
       `uncollectedLadder`'s rungs — the plan nudge at twenty-one days, the
@@ -1335,7 +1336,9 @@ fixtures through `external/grade10-spec`. Stage (c).
 Stage (c). From group 11 a collector's row holds an email, a name, a phone
 and a named collector, and `plan_attempts` holds the address each plan was
 asked under; this group erases them and moves grading into `CONSUMERS`, and
-the product does not open to collectors in production before it lands.
+the product does not open to collectors in production before it lands. Until
+it does, the grading worker refuses every collector write in production by
+name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
 
 - [ ] 23.1 Cover erasure in the portable suite `src/testing/suites/erasure.ts`
       against the committed migrations: the three holds by name, the ask
@@ -1371,7 +1374,9 @@ the product does not open to collectors in production before it lands.
       actor alone (`grade10-site-vault-retention-and-erasure-SC-37`)
 - [ ] 23.6 Add `erasure.erase` and `erasure.holds` on the vault's router shape,
       and join `appointment:grading` to `check-erasure-consumers.mjs`'s `ids`,
-      the console's erasure checklist and its `ERASURE_PRODUCTS`
+      the console's erasure checklist and its `ERASURE_PRODUCTS`; once erasure
+      runs, remove the collector rung's production refusal and its
+      `GRADING_NOT_OPEN` code
 - [ ] 23.7 Verify: `node scripts/checks/check-erasure-consumers.mjs`,
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
