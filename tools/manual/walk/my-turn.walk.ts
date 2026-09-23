@@ -134,7 +134,6 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
       ),
     )
     .toBeVisible();
-
 });
 
 test("shared-planning-change-stages-SC-61 - nothing on the reader", async () => {
