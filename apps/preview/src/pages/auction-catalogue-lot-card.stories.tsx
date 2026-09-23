@@ -30,8 +30,14 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const activeLot = COLLECTION_LOTS[0];
-const upcomingLot = FEW_FEATURED_LOTS[2];
+const activeLot = FEW_FEATURED_LOTS[0];
+const upcomingLot = {
+  ...COLLECTION_LOTS[2],
+  status: "Upcoming" as const,
+  startsAt: "2026-10-20T10:00:00+08:00",
+  closesAt: "2026-10-24T18:00:00+08:00",
+  closeLabel: "24 Oct 2026, 6:00 pm",
+};
 const endedLot = ENDED_ONLY_LOTS[0];
 
 function WatchedCard({
