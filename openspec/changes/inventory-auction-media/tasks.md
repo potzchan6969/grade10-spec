@@ -4,7 +4,7 @@
 
 - [ ] 1.1 Verify the Product Assets and Auction Listings PRDs, QA suites, and delivery plan with `pnpm check:manual`, `pnpm run tcs:validate`, and `openspec validate inventory-auction-media --strict`.
 
-## 2. Inventory source media (grade10)
+## 2. Inventory source media (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Make `grade10-admin-inventory-catalog-SC-123` through `SC-127` pass: add ordered product-media persistence, private object storage, validation, authorization, and the typed Auction source-read contract.
 - [ ] 2.2 Add the Inventory migration, Worker binding, generated types, API documentation, and focused backend coverage.
