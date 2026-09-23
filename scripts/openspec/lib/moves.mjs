@@ -44,6 +44,7 @@ export async function readingOf(root) {
       deployedBuild: change.deployedBuild,
       behind: behindOf(change, artifactsOf(change)),
       landedBy: change.landedBy ?? {},
+      suites: change.suites,
     });
   }
   return read;

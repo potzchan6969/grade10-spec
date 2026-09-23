@@ -194,10 +194,18 @@ describe("against the store as it stands", () => {
       realStore.snapshot.changes,
       realStore.snapshot.schemas,
     )) {
-      for (const item of items) {
+      for (const item of items.filter((one) => one.why === undefined)) {
         expect(item.change.written).not.toContain(item.artifact);
       }
     }
+  });
+
+  it("shared-planning-agent-rounds-SC-101 - keeps a written artifact the change still waits on", () => {
+    const awaiting = [{ artifact: "ui-design", why: "the frame - @tangconst" }];
+    const written = ["proposal", "specs", "ui-design"];
+    expect(owed([on("framed", [delta], { written, awaiting })])).toContainEqual(
+      ["designer", ["ui-design"]],
+    );
   });
 });
 

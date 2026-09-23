@@ -60,6 +60,8 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **An escalated or deferred row is written here as well as in `decisions.md`** — that file archives with the change and is folded nowhere, so a row landing only there leaves the next blind pass with no record of what was asked. The landing says what was decided; this section says what the run did with the case, and `## Settled` carries the answer forward
 - **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
 - **Manual names what a person drives** — `### Manual` carries a `| Manual | Why |` table, one row per case no automated test decides, and that row is where the reason lives. The row names the part a person walks — a message typed in a thread, a tab in the run spreadsheet, a deploy. Where a test already proves some of it, the row names that test and what the case walks beyond it. An automated case names its test on the case itself, on its Decided-by line, and is left off the run sheet
+- **A credited test carries the case id** — a legend above the table binds each name a row uses to a path, `` - <name> - `<path>`, in this store `` or `` in the application repository ``; a test in this store that a row credits cites the row's case id, and `pnpm run tcs:validate` refuses one that does not, and a legend path this store does not hold; a path in the application repository is checked where that repository ticks the group
+- **A row waiting on a walk names it** — a row whose walk nobody has run yet reads `to be walked in <the walk>`, and the run that runs the lane rewrites the rows to what the walk reached
 - **Scenario ids are temporary here** — they may appear in `## Reconciliation` only while the change is open; archive fold and `/tcs-review` both strip them, leaving the dispositions and the reasons
 
 ## Naming
@@ -78,6 +80,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | `platform-e2e-US<n>-TC<m>-<v>` | `platform-tcs.md` case | `platform-e2e-US1-TC1-1` |
 
 - **`<capability>`** — the full path with slashes as hyphens, `<product>-<domain>-<capability>`, so two capabilities of one name stay apart
+- **A scenario added beside one takes a letter** — `<n>` may carry one lower-case letter, `…-SC-07a`, so a scenario placed beside `…-SC-07` renumbers no other; the letter is part of the id
 - **`e2e` sits in the capability slot** — a domain, product or platform suite numbers its own journeys; each is a path across capabilities, domains or products, and its `**Trace:**` names every capability journey it crosses
 - **A prefix never moves** — fixed at a capability's first ids; a renamed or moved capability goes on issuing what it issued. Read the ids that exist before issuing one; only a first id derives the prefix from the path
 - **Compact form in a suite** — the hyphen after `US` dropped, no zero-pad: `…-US-01` becomes the section `## …-US1: …` holding `…-US1-TC1-1`. The journeys file and the `**Trace:**` line keep the canonical `…-US-01`

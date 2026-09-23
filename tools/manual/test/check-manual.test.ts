@@ -651,6 +651,55 @@ describe("one requirement two changes both fold", () => {
     ]);
   });
 
+  // Decides shared-planning-agent-rounds-US16-TC1-1.
+  it("shared-planning-agent-rounds-SC-102 - names an ADDED block to the MODIFIED one of the same name in another change, however each is headed", async () => {
+    const root = changing(
+      "first",
+      [
+        "## MODIFIED Requirements",
+        "",
+        ...requirement("Alpha does things", "alpha-SC-01", "the thing"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## ADDED Requirements",
+          "",
+          ...requirement("Alpha does things", "alpha-SC-03", "the same thing"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([
+      "openspec/changes/first/specs/demo-product/alpha/spec.md — MODIFIED `Alpha does things` is also folded by `second` (ADDED) — archiving this one first fails the other's fold, and second rewrites what it added",
+      "openspec/changes/second/specs/demo-product/alpha/spec.md — ADDED `Alpha does things` is also folded by `first` (MODIFIED) — archiving this one second fails outright, since the fold refuses to add a name that exists",
+    ]);
+  });
+
+  // Decides shared-planning-agent-rounds-US16-TC2-1.
+  it("shared-planning-agent-rounds-SC-102 - says nothing when two changes ADD requirements of different names to one spec", async () => {
+    const root = changing(
+      "first",
+      [
+        "## ADDED Requirements",
+        "",
+        ...requirement("Alpha greets", "alpha-SC-03", "hello"),
+        "",
+      ].join("\n"),
+      {
+        "openspec/changes/second/proposal.md": proposal("Second"),
+        "openspec/changes/second/specs/demo-product/alpha/spec.md": [
+          "## ADDED Requirements",
+          "",
+          ...requirement("Alpha waves", "alpha-SC-04", "goodbye"),
+          "",
+        ].join("\n"),
+      },
+    );
+    expect(lines(await runChecks(root, NO_GIT), "overlap")).toEqual([]);
+  });
+
   it("says nothing when two changes fold different requirements of one spec", async () => {
     const root = changing(
       "first",

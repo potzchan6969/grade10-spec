@@ -46,7 +46,8 @@ type ProductCardImageProps = {
   maxCartQuantity?: number;
   /** Supply one to sell: the cart control is drawn only where it is present. */
   onCartQuantityChange?: (quantity: number) => void;
-  /** Tile activation for the photo well. Ignored when `soldOut`. */
+  /** Tile activation for the photo well. The card passes none for a sold-out
+   * tile on a surface that sells, so a well with a handler always opens. */
   onClick?: () => void;
   /** The product's own name, which names the well for a screen reader. */
   name?: string;
@@ -97,8 +98,8 @@ function ProductCardImage({
       >
         {imageSrc ? (
           <img
-            alt={soldOut ? imageAlt : ""}
-            aria-hidden={soldOut ? undefined : true}
+            alt={onClick ? "" : imageAlt}
+            aria-hidden={onClick ? true : undefined}
             className={photoClassName}
             src={imageSrc}
           />
@@ -144,7 +145,7 @@ function ProductCardImage({
         className,
       )}
     >
-      {soldOut || !onClick ? (
+      {!onClick ? (
         <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
           {well}
         </div>

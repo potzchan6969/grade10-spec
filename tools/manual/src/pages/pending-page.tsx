@@ -18,7 +18,7 @@ import { useDocumentTitle } from "./use-document-title";
  * The Board answers how far a change has come; this answers whose
  * turn it is, which is the question somebody arriving with an afternoon free
  * actually has. Both read the same artifacts — nothing here is assigned, and
- * a row leaves the moment its file is written.
+ * a row leaves the moment its file is written, unless the change still waits on it.
  *
  * A row with a reason is one the change declared in `awaiting:`, because
  * nothing could derive it: a screen nobody has drawn, an answer nobody has

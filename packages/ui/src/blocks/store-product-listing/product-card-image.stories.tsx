@@ -151,3 +151,28 @@ export const DoesNotSell: Story = {
     expect(args.onClick).toHaveBeenCalledTimes(1);
   },
 };
+
+/** A sold-out well opens where a handler is supplied and nothing sells: the
+ * card, not the well, decides when a sold-out tile stays inert. */
+export const SoldOutWithHandler: Story = {
+  args: {
+    copy: { soldOut: "SOLD OUT", sale: "SALE" },
+    name: "Ninja Spinner booster box",
+    soldOut: true,
+    onClick: fn(),
+  },
+  decorators: well,
+  render: (args) => (
+    <ProductCardImage {...args} onCartQuantityChange={undefined} />
+  ),
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const [well] = canvas.getAllByRole("button", {
+      name: "Ninja Spinner booster box",
+    });
+    expect(canvas.getAllByRole("button")).toHaveLength(1);
+    expect(canvas.getByText("SOLD OUT")).toBeVisible();
+    await userEvent.click(well);
+    expect(args.onClick).toHaveBeenCalledTimes(1);
+  },
+};

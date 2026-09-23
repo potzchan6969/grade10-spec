@@ -1,0 +1,11 @@
+schema: grade10-planning
+promoted_by: "@ecchochan"
+created: 2026-09-22
+depends_on:
+  - run-a-round-on-every-artifact
+  - stage-changes-and-notify-hands
+hands:
+  pm: "@ecchochan"
+  qa: "@chloe9gag"
+  tech: "@ecchochan"
+  dev: "@ecchochan"

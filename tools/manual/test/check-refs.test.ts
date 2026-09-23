@@ -3,6 +3,8 @@ import { describe, expect, it } from "vitest";
 import { runChecks } from "../check/check-manual.mjs";
 import { findStoreRoot } from "../src/store/disk.mts";
 import { NO_GIT } from "../src/store/git.mts";
+import { demoSchema } from "./demo-schema";
+import { findingsOf, recordStoreFiles } from "./record-store";
 import { writeStore } from "./tmp-store";
 
 type Finding = { rule: string; path: string; reason: string };
@@ -146,5 +148,44 @@ const live = await runChecks(
 describe("the manual as it stands", () => {
   it("carries no reference the store cannot answer", () => {
     expect(refs(live)).toEqual([]);
+  });
+});
+
+/** A page is written before the delta: the change declares the capability as
+ * a `specs/<capability>/` directory holding its journeys, and the page's
+ * `spec:` resolves to it before any `spec.md` exists beside them. */
+describe("a page written first for a capability an in-flight change declares", () => {
+  const SCHEMA = demoSchema(["proposal", "specs"]);
+  const files = (extra: Record<string, string>) =>
+    recordStoreFiles({
+      change: "page-first",
+      schema: SCHEMA,
+      record: "awaiting:\n  specs: the requirements come after the journeys\n",
+      title: "Page first",
+      files: {
+        "docs/prds/products/demo-product/gamma.md":
+          "---\ntitle: Gamma\nspec: demo-product/gamma\n---\n\nGamma exists so a page has something to cite.\n",
+        ...extra,
+      },
+    });
+
+  // Decides shared-planning-agent-rounds-US10-TC7-1.
+  it("shared-planning-agent-rounds-SC-100 - resolves the page's spec to the journeys the change holds, with no delta yet", async () => {
+    const found = await findingsOf(
+      files({
+        "openspec/changes/page-first/specs/demo-product/gamma/user-journeys.md":
+          "## ADDED User journeys\n\n### gamma-US-01: Collector browses\n\n**As a** collector,\n**I want** the grid,\n**so that** I can browse.\n",
+      }),
+      "reference",
+    );
+    expect(found).toEqual([]);
+  });
+
+  it("shared-planning-agent-rounds-SC-100 - still refuses a page whose spec no change declares", async () => {
+    const found = await findingsOf(files({}), "reference");
+    expect(found).toHaveLength(1);
+    expect(found[0].reason).toContain(
+      "names no spec on disk and no in-flight change",
+    );
   });
 });

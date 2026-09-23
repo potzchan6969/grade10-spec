@@ -12,12 +12,20 @@
  * So the parse lives here and says everything either caller needs: the counts
  * the validator judges, and the text the sheet carries.
  *
- * Zero dependencies: Node built-ins only, matching the other scripts here.
+ * No package dependencies: Node built-ins and the store's own scenario id,
+ * matching the other scripts here.
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
+
+/** A scenario's heading, and a scenario listed on its own bullet. */
+const SCENARIO_HEADING = new RegExp(
+  `^####\\s+Scenario:\\s*(${SCENARIO_ID.source})\\b`,
+);
+const SCENARIO_BULLET = new RegExp(`^\\s*[-*]\\s+\`(${SCENARIO_ID.source})\``);
 
 export const ROOT = dirname(
   dirname(dirname(dirname(fileURLToPath(import.meta.url)))),
@@ -240,9 +248,9 @@ export function readSpecIds(specPath) {
   for (const line of `${text}\n${stories}`.split("\n")) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j) journeys.set(j[1], j[2]);
-    const s = line.match(/^####\s+Scenario:\s*([\w-]+-SC-\d+)\b/);
+    const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
-    const inline = line.match(/^\s*[-*]\s+`([\w-]+-SC-\d+)`/);
+    const inline = line.match(SCENARIO_BULLET);
     if (inline) scenarios.add(inline[1]);
   }
   return {

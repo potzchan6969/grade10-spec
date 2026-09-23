@@ -54,16 +54,26 @@ then similar cards by the tags and the facets they share, up to six.
 Customers-also-bought from orders is phase two, once this ships.
 ```
 
-**Every later hand is told in that change's thread**, and answers there —
-[Agent Rounds](/p/shared/planning/agent-rounds). From a terminal it is your
-artifact's line command instead — `/workflow-design`, `/workflow-tech`,
-`/workflow-specify`, `/workflow-tasks`, each with the change id, then
-`/workflow-build add-store-cross-sell <group>`, once per group.
+**Every later hand is told by direct message**, and answers in that change's thread —
+[Agent Rounds](/p/shared/planning/agent-rounds). You answer only what is yours:
+
+- **Your moves** — the summary lists the moves that are yours
+- **A question held for you** — arrives as its own reply mentioning you, with
+  the row and the page's sentence quoted
+- **A line a build round puts on your page** — comes back to you as ❓, with
+  the line before and after
+- **QA** — is told when the requirements land, with the suite to review
+
+From a terminal it is your artifact's line command instead —
+`/workflow-design`, `/workflow-tech`, `/workflow-specify`, `/workflow-tasks`,
+each with the change id, then `/workflow-build add-store-cross-sell <group>`,
+once per group.
 
 Four things the round cannot know, so say them when they are true:
 
 - **The decisions are already made** — "draft from what I've given you";
-  otherwise expect the interview first
+  otherwise expect about three questions first, one of them whether to do
+  it now, with every default the round took listed for one reply to overturn
 - **You are two hands** — "I'm the engineer as well, carry it to `tasks.md`"
 - **Which capability you mean** — the full path, `grade10-site/store/cross-sell`
 - **You are in `grade10`** — the line commands live in this store, so the agent
@@ -122,7 +132,10 @@ reconciled against them after. The ids start at
 `grade10-site-store-cross-sell-SC-01` in `spec.md` and
 `grade10-site-store-cross-sell-US1-TC1-1` in `feature-tcs.md`, beside a delta
 on `grade10-site/store/product-page` for the rail's place on the page. The
-product manager reads the two side by side, and one word lands both.
+product manager reads the two side by side, and one word lands both. The
+landing tells QA by direct message. It carries the suite's path, its case
+count and `/tcs-review add-store-cross-sell`, which the walk group takes as its
+input.
 
 ## *Engineer* — **The plan, then the build**
 
@@ -130,9 +143,13 @@ Four groups, each with its test task first: the mirror in `grade10`, the rule
 and the page response in `grade10`, the rail block in `packages/ui` here, and
 the walk; their word lands `tasks.md`. Then `/workflow-build add-store-cross-sell 1`,
 one round per group: the tests in their own commit, the code, the group's
-readers, and the row in `rounds.md` before the tick. The last group walks
-US-01 to US-03 end to end and leaves the end-to-end suite that runs on every
-push to `main`.
+readers, and the row in `rounds.md` before the tick. A group in `grade10`
+lands its row from that clone. Its test paths are bare, and the group's tag
+names the repository. A lane the environment could not start says `written,
+not run` first and leaves its tasks unticked. A reader that ran on a fallback
+model is named so. A reader the fallback could not run stops the round and
+tells the thread which one is missing. The last group walks US-01 to US-03
+end to end and leaves the end-to-end suite that runs on every push to `main`.
 
 ## *QA · Release hand* — **Staging, the cut, the fold**
 
@@ -154,7 +171,7 @@ terminal — how an artifact gets written is [Agent Rounds](/p/shared/planning/a
 | --- | --- | --- | --- |
 | 1 | Proposed | Product manager, then Designer · Tech PIC | `/workflow-plan <id>`, then `/workflow-design <id>` · `/workflow-tech <id>` |
 | 2 | Designed | nobody — both designs land while Proposed is still the stage | — |
-| 3 | Specified | Product manager | `/workflow-specify <id>` |
+| 3 | Specified | Product manager · QA | `/workflow-specify <id>` · `/tcs-review <id>` |
 | 4 | Planned | Engineer | `/workflow-tasks <id>` |
 | 5 | Building | Engineer | `/workflow-build <id> <group>` |
 | 6 | On staging | QA · Release hand | — |

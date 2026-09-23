@@ -62,7 +62,7 @@ export function checkWalked(ctx, shape, changes) {
   // Every journeys file a change carries, whether a delta sits beside it or
   // not. The PM hands a change over with journeys and no `spec.md`, so a rule
   // keyed on the deltas asked nothing of the one file that hand writes.
-  for (const { spec, file } of journeysOf(ctx.roots.store, changes)) {
+  for (const { spec, file } of journeysOf(ctx, changes)) {
     const text = readTextIfExists(join(ctx.roots.store, file));
     if (text === undefined) continue;
     let stories;

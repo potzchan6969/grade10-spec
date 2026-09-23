@@ -95,13 +95,16 @@ tooling on both sides parses. Beyond them:
 
 ## Finish
 
-A change that needs an artifact nobody has written yet says so: `awaiting:`
-with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
-what puts it on [Pending](/pending) under the teammate who owes it.
+The round's conduct is [Round Summary and
+Landing](../../../docs/governance/round-summary.md)'s.
+
+A change that needs an artifact nobody has written yet says so: `awaiting:
+<artifact>: <what is missing>` in its `.openspec.yaml`, which puts it on
+[Pending](/pending) under the teammate who owes it.
 
 Then hand off: an engineer claims one group at a time from the application
-repository with `/workflow-build`. Archive belongs to whoever owns the change, **after
-it is deployed** — not when the code lands.
+repository with `/workflow-build`. Archive belongs to whoever owns the change,
+**after it is deployed**.
 
 ## Related
 

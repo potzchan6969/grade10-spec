@@ -137,18 +137,40 @@ export function stagingText(linked, { sheetUrl, build } = {}) {
  * which sentence a hand was sent.
  */
 export function toldBodyOf(at, role, { linked, sheetUrl }) {
-  return at.stage === "on-staging" && role === "qa"
-    ? {
-        kind: "staging",
-        text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
-      }
-    : { kind: "your-turn", text: yourTurnText(at, role, linked) };
+  if (at.stage === "on-staging" && role === "qa") {
+    return {
+      kind: "staging",
+      text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
+    };
+  }
+  const lines = [yourTurnText(at, role, linked)];
+  // QA at Specified is asked to review the suite: the message names each
+  // suite's path and case count, and says the walk needs it reviewed
+  // (`shared-planning-agent-rounds-SC-89`).
+  if (at.stage === "specified" && role === "qa") {
+    for (const suite of (at.suites ?? []).filter(
+      (one) => !one.error && one.status !== "approved",
+    )) {
+      lines.push(
+        `Suite: \`${suite.path}\`, ${suite.cases.total} ${suite.cases.total === 1 ? "case" : "cases"}; the walk needs it reviewed as its input`,
+      );
+    }
+  }
+  return { kind: "your-turn", text: lines.join("\n") };
 }
 
 /** The artifact that is behind, and what moved before it. */
 export function behindText(behind, linked) {
   const changed = behind.changed.map((one) => `\`${one}\``).join(", ");
   return `*Behind* — \`${behind.artifact}\` on ${linked} is behind ${changed || "what it was drawn from"}.`;
+}
+
+/** A hand as a thread names it: `@<handle> (<role>)`, or `<role> (open)`
+ * where the change names nobody for that role — one spelling for every reply
+ * that asks a hand to act. */
+export function handText(role, hand) {
+  const label = ROLE_LABEL[role] ?? role;
+  return hand ? `@${hand.replace(/^@/, "")} (${label})` : `${label} (open)`;
 }
 
 /**
@@ -171,11 +193,7 @@ export function landedText(at, landed) {
   const what = [...words]
     .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
     .join(", ");
-  const turns = at.roles.map((role) =>
-    at.hands[role]
-      ? `@${at.hands[role]} (${ROLE_LABEL[role]})`
-      : `${ROLE_LABEL[role]} (open)`,
-  );
+  const turns = at.roles.map((role) => handText(role, at.hands[role]));
   const turn = turns.length > 0 ? turns.join(", ") : "nobody";
   return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
 }

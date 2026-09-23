@@ -18,6 +18,8 @@
 
 ## 4. The walk (grade10) (owner: @htonyl)
 
+Needs `feature-tcs.md` reviewed (`/tcs-review add-shipping-insurance-order-summary-tooltip`) as its input.
+
 - [x] 4.1 Walk `winner-order-US-01` through the isolated Winner Order browser flow, covering sent Insurance with its tooltip, pre-invoice Insurance as TBD, and sent invoices without Insurance; keep the cases in the change's E2E suite
 - [x] 4.2 Capture asserted sent-with-Insurance and pre-invoice states as temporary PR evidence; leave the no-Insurance assertion without a misleading tooltip
 - [x] 4.3 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- --grep "winner order Insurance"`

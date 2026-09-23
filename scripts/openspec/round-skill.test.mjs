@@ -214,6 +214,77 @@ test("shared-planning-agent-rounds-SC-15 - a reply the round cannot apply is ans
   );
 });
 
+// Proves part of shared-planning-agent-rounds-US13-TC1-1, shared-planning-agent-rounds-US13-TC4-1.
+test("shared-planning-agent-rounds-SC-86, shared-planning-agent-rounds-SC-87 - the summary shows one hand's moves, a held row for another hand is its own reply, and one reply carries several moves", () => {
+  const skill = claims(ROUND);
+  assert.match(skill, /relay-post\.mjs --row <Q>/);
+  // The rules live once, on the governance page the skill links.
+  assert.match(skill, /round-summary\.md#held-row/);
+  assert.match(skill, /round-summary\.md#hands-reply/);
+  assert.doesNotMatch(skill, /any number of remarks/i);
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /## Held Row/);
+  assert.match(conduct, /## Hand's Reply/);
+  assert.match(conduct, /mentioning (that|the row's) hand/i);
+  assert.match(conduct, /once\s+per change, round and row/i);
+  assert.match(conduct, /one answer and any number\s+of remarks/i);
+  assert.match(conduct, /comes back to the hand before anything lands/i);
+  assert.match(conduct, /the moves of the hand it\s+addresses alone/i);
+  assert.match(
+    conduct,
+    /`land with recommendations` is offered only while a held row is open/i,
+  );
+});
+
+// Proves part of shared-planning-agent-rounds-US10-TC1-1, shared-planning-agent-rounds-US10-TC2-1, shared-planning-agent-rounds-US10-TC6-1.
+test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is the product manager's question, quoted before and after", () => {
+  const skill = claims(ROUND);
+  assert.match(skill, /a build round lands on a page\W.*❓/i);
+  assert.match(skill, /round-summary\.md#held-row/);
+  assert.doesNotMatch(skill, /\(none\)/);
+  // The rule's four clauses, once, on the governance page.
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /a build round lands on a page .*❓/i);
+  assert.match(conduct, /quot\w+ (the line )?before and after/i);
+  assert.match(conduct, /\(none\)/);
+  assert.match(conduct, /holds no landing|nothing holds the landing/i);
+  assert.match(
+    conduct,
+    /carries 🚧 until the change that delivers it archives/,
+  );
+});
+
+// Proves part of shared-planning-agent-rounds-US14-TC1-1.
+test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /## Interview/);
+  assert.match(conduct, /about three questions/i);
+  assert.match(conduct, /whether to do it now/i);
+  assert.match(conduct, /never applied as a default/i);
+  assert.match(conduct, /none\s+trivial/i);
+  assert.match(conduct, /change most what is built/i);
+  assert.match(
+    conduct,
+    /workflow-round\/SKILL\.md#questions-held-or-decided-by-the-round/,
+  );
+  assert.match(conduct, /decided by the round/i);
+  assert.match(conduct, /asked that one question alone/i);
+  assert.match(conduct, /each with the option it\s+took/i);
+  assert.match(conduct, /`not now`/);
+  for (const path of [
+    ".claude/skills/workflow-plan/SKILL.md",
+    ".claude/skills/planning-pm/SKILL.md",
+  ]) {
+    const text = claims(path);
+    assert.match(
+      text,
+      /round-summary\.md#interview/,
+      `${path} links the interview`,
+    );
+    assert.doesNotMatch(text, /three questions/i, `${path} restates the count`);
+  }
+});
+
 test("shared-planning-agent-rounds-SC-16 - a remark on a page's marked lines", () => {
   const skill = claims(ROUND);
   assert.match(
@@ -239,6 +310,33 @@ test("shared-planning-agent-rounds-SC-07 - a reading raises what it cannot settl
     skill,
     /a disagreement or a question neither\s+reading can settle is a numbered `Q<n>` row for them/i,
   );
+});
+
+// Proves part of shared-planning-agent-rounds-US12-TC8-1, shared-planning-agent-rounds-US12-TC10-1, shared-planning-agent-rounds-US13-TC5-1.
+test("shared-planning-agent-rounds-SC-95, shared-planning-agent-rounds-SC-105 - one verifier reads every reader's findings, and a fallback or a killed dispatch is said", () => {
+  const skill = claims(ROUND);
+  // One verifier over the round, its table laid out where the skill links;
+  // never one verifier per group of findings.
+  assert.match(skill, /every reader's findings/i);
+  assert.match(skill, /round-summary\.md#readers/);
+  assert.doesNotMatch(skill, /per group of findings/i);
+  // The fallback is named in the summary and the row, and a reader the
+  // fallback could not run stops the round.
+  assert.match(skill, /\(fallback\)/);
+  assert.match(skill, /retried once on the fallback/i);
+  assert.match(skill, /stops the round/i);
+  // SC-105's three clauses live once, on the governance page the skill
+  // links: no summary, the thread told which reader, no row.
+  const conduct = claims("docs/governance/round-summary.md");
+  assert.match(conduct, /one row per kind of finding naming each reader/i);
+  assert.match(conduct, /stops the round before the summary/i);
+  assert.match(conduct, /which reader the round lacks/i);
+  assert.match(conduct, /no row is written/i);
+  const verifier = claims(".claude/agents/verifier.md");
+  assert.match(verifier, /every reader's findings/i);
+  assert.doesNotMatch(verifier, /per group of findings/i);
+  const readme = claims(".claude/agents/README.md");
+  assert.doesNotMatch(readme, /per group of findings/i);
 });
 
 test("the round skill reads its perspectives through the CLI", () => {

@@ -103,6 +103,15 @@ import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import {
+  SCENARIO_ID,
+  scenarioIdsIn,
+  sectionSpan,
+} from "../../tools/manual/src/store/markdown.mts";
+import {
+  DECISION_ROW,
+  decisionRows,
+} from "../../tools/manual/src/store/read-changes.mts";
+import {
   readRounds,
   roundArtifactOf,
 } from "../../tools/manual/src/store/read-rounds.mts";
@@ -136,11 +145,12 @@ const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
-const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 // The anchor line as `read-specs.mts` reads it: anywhere in the scenario's
 // body, bulleted or not, so this gate and the checker agree on what counts.
 const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
-const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
+const SCENARIO_HEADING = new RegExp(
+  `^####\\s+Scenario:\\s+(${SCENARIO_ID.source})\\b`,
+);
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
 /** A task group heading, and the repository tag `task-ownership.md` puts at the
  * end of it: `## 3. Store prose (grade10-spec)`. An owner tag is `(owner: …)`
@@ -252,18 +262,9 @@ function anchorlessScenarios(text) {
  * such heading. Sections end at the next `## ` heading, so an empty string
  * means the heading is there and says nothing — which is not the same answer. */
 function sectionBody(text, name) {
-  const out = [];
-  let inside = false;
-  for (const line of text.split("\n")) {
-    const heading = line.match(/^##\s+(.+?)\s*$/);
-    if (heading) {
-      if (inside) break;
-      inside = heading[1] === name;
-      continue;
-    }
-    if (inside) out.push(line);
-  }
-  return inside ? out.join("\n").trim() : null;
+  const span = sectionSpan(text, name);
+  if (!span) return null;
+  return text.split("\n").slice(span.from, span.until).join("\n").trim();
 }
 
 /** The bullet lines of a section body, continuations folded in and whitespace
@@ -670,18 +671,17 @@ const decisions = existsSync(join(ROOT, decisionsFile))
 const rows =
   decisions === null
     ? []
-    : (sectionBody(decisions, "Decisions") ?? "")
-        .split("\n")
-        .filter((line) => /^\s*\|/.test(line) && !/^\s*\|\s*-{2,}/.test(line))
-        .slice(1);
+    : decisionRows(decisions).filter(
+        (cells) => DECISION_ROW.test(cells[0]) && !cells[1]?.startsWith("<!--"),
+      );
 if (rows.length > 0 && decisionsCarried === null) {
   fail(
     yellow(
       `${changeId} records ${rows.length} decision(s) that the fold carries nowhere:`,
     ),
   );
-  for (const row of rows.slice(0, SHOWN)) {
-    console.error(`  ${row.trim().slice(0, 100)}`);
+  for (const cells of rows.slice(0, SHOWN)) {
+    console.error(`  | ${cells.join(" | ")} |`.slice(0, 102));
   }
   if (rows.length > SHOWN) {
     console.error(dim(`  … and ${rows.length - SHOWN} more`));
@@ -818,7 +818,7 @@ for (const { file, capability } of deltaFiles(changeId)) {
     // Scenario ids belong to the change. A `## Reconciliation` that keeps
     // them past the fold points at a change that is about to stop existing.
     const ids = [
-      ...new Set(sectionBody(arrived, "Reconciliation")?.match(SC_ID) ?? []),
+      ...new Set(scenarioIdsIn(sectionBody(arrived, "Reconciliation") ?? "")),
     ];
     if (ids.length > 0) {
       wrong.push({

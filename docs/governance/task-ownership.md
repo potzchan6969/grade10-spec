@@ -30,7 +30,7 @@ A group is a level-two heading numbered with a single integer. Its tasks are che
 | Owner tag | `(owner: @<handle>)` | Optional, and **last on the line**. The `@` is optional; handles may hold letters, digits, `.`, `-`, `_`, and match case-insensitively. |
 | No owner | Omit the tag, or write `(owner: unassigned)` | The two are equivalent everywhere. |
 | Task | `- [ ] <id> <text>` | `- [x]` or `- [X]` when done. `<id>` is the first whitespace-delimited token; `<text>` is required. |
-| Scenario ids | `` `<capability>-SC-<n>` `` in the task's text | Optional, backticked, comma-separated, conventionally last. `pnpm plan done` refuses the tick when no test in the group's tree cites one it names. |
+| Scenario ids | `` `<capability>-SC-<n>` `` in the task's text | Optional, backticked, comma-separated, conventionally last. `<n>` may carry one lower-case letter, `-SC-07a`. `pnpm plan done` refuses the tick when no test in the group's tree cites one it names. |
 
 A group title that names a repository names it by clone name — `(grade10-spec)`, `(grade10)` — never "this repo" or "here": `tasks.md` is written in this store and read from the application repository, so a deictic reference flips meaning between the two.
 

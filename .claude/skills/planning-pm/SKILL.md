@@ -86,7 +86,6 @@ landing; what follows is what the three artifacts must hold, and the order they
 are written in.
 
 Everything this run produces is `draft`. Nothing in it claims review.
-`/tcs-review` is QA's, at its own pace.
 
 ## Steps
 
@@ -104,10 +103,9 @@ Everything this run produces is `draft`. Nothing in it claims review.
    rule already running to them as a challenge naming the rule and where it
    is written; one the author holds is **BREAKING** in the proposal.
 
-2. **Interview the author.** Run the `grilling` skill's round-based frontier
-   interview before drafting. Do not write until the frontier is empty and the
-   author confirms shared understanding. The interview scales with the open
-   questions, not the change's size.
+2. **Interview the author.** Ask what changes what is built, as [Round
+   Summary and Landing · Interview](../../../docs/governance/round-summary.md#interview)
+   shapes it, listing the defaults you applied as decided by the round.
 
    A question the author answers is a row in their own words, whichever way
    the answer arrived - given, taken as offered, or kept against your
@@ -123,21 +121,22 @@ Everything this run produces is `draft`. Nothing in it claims review.
    draft. Sizing, export names, and what code a change touches are never the
    author's to answer.
 
-   **Challenge an answer before you record it.** What the author arrives with
-   is a claim, not a row. An interview that only maps what the author already
-   holds writes down what they would have written alone - a reminder cadence
-   recorded one afternoon as `5 days before due`, on an invoice whose window
-   is fixed from send, and rewritten the same day once somebody asked what
-   that was on the clock the invoice already runs on. Every round, before the
-   frontier moves:
+   **Challenge an answer before you record it.** A fact the author states is
+   theirs; what it assumes is not. An interview that only maps what the
+   author already holds writes down what they would have written alone - a
+   reminder cadence recorded one afternoon as `5 days before due`, on an
+   invoice whose window is fixed from send, and rewritten the same day once
+   somebody asked what that was on the clock the invoice already runs on.
+   Every round, before the interview is posted:
 
    - **List every assumption you would otherwise make silently** - the clock
      a value is measured on, the state a rule starts from, a default the spec
-     already sets, the meaning of a word the author uses loosely. Each is a
-     question with your reading as the recommendation, never a fact the draft
-     carries unasked. Translate the author's words onto what exists before
-     accepting them: `5 days before due` on a seven-day window from send is
-     `day 2 after send`, and the author may not have meant it.
+     already sets, the meaning of a word the author uses loosely. Each is one
+     of the interview's questions, a held row, or a default listed as decided by the
+     round, never a fact the draft carries unlisted. Translate the author's
+     words onto what exists before accepting them: `5 days before due` on a
+     seven-day window from send is `day 2 after send`, and the author may not
+     have meant it.
    - **Flag a solution disguised as a requirement** - a schedule, a screen, a
      field, a mechanism, offered where an outcome belongs. Ask what it buys
      the reader. The outcome is the goal and the 🚧 line; the mechanism is a
@@ -147,8 +146,8 @@ Everything this run produces is `draft`. Nothing in it claims review.
      letter that lands after the action it asks for has closed, a clock that
      pauses, a reissue that restarts it), who else is affected (the other
      capabilities, the operator, the service that sends it), and what this
-     change is not doing. Ask each as its own frontier question. A non-goal
-     the author never named is the one an artifact downstream crosses.
+     change is not doing. Each is routed the same way. A non-goal the author
+     never named is the one an artifact downstream crosses.
 
    Disagree out loud. Where your reading and the author's differ, say so with
    the reason and put your alternative to them. The author decides, and the
@@ -262,7 +261,7 @@ grilling round, not a self-service waiver.
 
 ## Related
 
-- `grilling` - the interview that precedes the proposal, and the escalation.
+- `grilling` - the escalation pauses in steps 8 and 9.
 - `planning-qa` - `spec.md`, both passes, and the two readings taken from your
   journeys and marks.
 - `spec-to-tcs` - the blind pass and the isolated input it builds.

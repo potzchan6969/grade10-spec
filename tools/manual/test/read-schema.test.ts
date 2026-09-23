@@ -107,9 +107,15 @@ describe("the readers each artifact may summon", () => {
     ]);
   });
 
-  it("leaves the requirements and the cases to the two blind readings", () => {
-    expect(byId.get("specs")?.perspectives).toEqual([]);
-    expect(byId.get("test-cases")?.perspectives).toEqual([]);
+  it("gives the requirements and the cases the simpler thing alone, after the two blind readings", () => {
+    for (const id of ["specs", "test-cases"])
+      expect(byId.get(id)?.perspectives).toEqual([
+        {
+          name: "simpler",
+          when: ["always"],
+          agent: ".claude/agents/simpler.md",
+        },
+      ]);
   });
 
   it("reads a task group's readers off the apply block", () => {
@@ -120,15 +126,35 @@ describe("the readers each artifact may summon", () => {
       "simplicity",
       "code-smell",
       "conventions",
+      "reader",
       "qa",
       "operations",
       "simpler",
     ]);
   });
 
-  it("gives every artifact but those two the reader of the simpler thing", () => {
+  it("shared-planning-agent-rounds-SC-92 - sizes a task group by what it lands: the build's four on `code`, the reader of words on `copy`, QA and the simpler thing always", () => {
+    expect(TRIGGERS).toContain("code");
+    const when = new Map(
+      applyPerspectives(storeRoot, "grade10-planning").map((one) => [
+        one.name,
+        one.when,
+      ]),
+    );
+    for (const name of [
+      "missing-pieces",
+      "simplicity",
+      "code-smell",
+      "conventions",
+    ])
+      expect(when.get(name), `${name} reads code`).toEqual(["code"]);
+    expect(when.get("reader")).toEqual(["copy"]);
+    expect(when.get("qa")).toEqual(["always"]);
+    expect(when.get("simpler")).toEqual(["always"]);
+  });
+
+  it("gives every artifact the reader of the simpler thing", () => {
     for (const artifact of planning) {
-      if (artifact.id === "specs" || artifact.id === "test-cases") continue;
       expect(
         artifact.perspectives.map(({ name }) => name),
         `${artifact.id} is read for the simpler thing`,

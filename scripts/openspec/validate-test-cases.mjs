@@ -35,7 +35,13 @@ import {
   writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  everySection,
+  outline,
+  sectionSpan,
+} from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
 import {
   CASE_STATUSES,
   caseIndex,
@@ -95,6 +101,85 @@ Flags:
 const problems = [];
 const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
+
+/**
+ * Where the Manual table sits. It belongs under `## Reconciliation`, where the
+ * archive's strip reads it; a `### Manual` anywhere else is refused where it
+ * is written (`shared-planning-agent-rounds-SC-103`). Returns the table's span
+ * inside the reconciliation, or undefined where there is none.
+ */
+function checkManualPlacement(text, err) {
+  const reconciliation = sectionSpan(text, "Reconciliation");
+  if (!reconciliation) return undefined;
+  const manual = sectionSpan(
+    text,
+    "Manual",
+    reconciliation.section.children.filter((one) => one.level === 3),
+  );
+  for (const one of everySection(outline(text))) {
+    if (one.level !== 3 || one.heading !== "Manual") continue;
+    if (one.line === manual?.section.line) continue;
+    err(
+      one.line,
+      "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
+    );
+  }
+  return manual;
+}
+
+/**
+ * The Manual table's rows, held to the tests they credit. A legend above the
+ * table binds each name a row uses to a path — `- <name> - \`<path>\`, in
+ * this store` — and a row's Why names the tests that prove part of its case
+ * in the legend's words. A legend path this store holds is read for the row's
+ * case id, and a row whose test cites no such id is refused naming the path
+ * and the id (`shared-planning-agent-rounds-SC-106`); a legend line that says
+ * `in this store` and names no file there is refused too, since a credit
+ * nobody can check is no credit. A path in the application repository is
+ * skipped: its ids are checked where that repository ticks the group.
+ */
+function checkManualRows(root, text, cases, err) {
+  const lines = text.split("\n");
+  const manual = checkManualPlacement(text, err);
+  if (!manual) return;
+  const legend = new Map();
+  const ids = new Set(cases.map((tc) => tc.id));
+  for (let i = manual.from; i < manual.until; i++) {
+    const line = lines[i];
+    const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
+    if (named) {
+      const full = resolve(root, named[2]);
+      if (!existsSync(full) || !statSync(full).isFile()) {
+        err(
+          i + 1,
+          `the Manual legend names \`${named[2]}\` in this store, and the store holds no file there — name the test's path, or say it is in the application repository`,
+        );
+        continue;
+      }
+      legend.set(named[1].trim(), {
+        path: named[2],
+        text: readFileSync(full, "utf8"),
+        // The name as a whole word in a row's Why, so `the test` is not
+        // found inside `the rule's test`.
+        pattern: new RegExp(
+          `(^|[^\\w'])${named[1].trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w'])`,
+          "i",
+        ),
+      });
+      continue;
+    }
+    const row = /^\|\s*`?([\w-]+-US\d+-TC\d+-\d+)`?\s*\|(.*)\|\s*$/.exec(line);
+    if (!row || !ids.has(row[1])) continue;
+    for (const [name, test] of legend) {
+      if (!test.pattern.test(row[2])) continue;
+      if (citesId(test.text, row[1])) continue;
+      err(
+        i + 1,
+        `Manual row for \`${row[1]}\` credits ${name} (\`${test.path}\`), which cites no such case id — name the test that cites it, or say what a person walks instead`,
+      );
+    }
+  }
+}
 
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
@@ -483,6 +568,8 @@ function checkSuite(root, filePath, rulesRev) {
         warn(1, `spec journey \`${id}\` has no section in this suite`);
     }
   }
+
+  checkManualRows(root, text, cases, err);
 
   return { rel, suite, counts, derived, cases: cases.length };
 }

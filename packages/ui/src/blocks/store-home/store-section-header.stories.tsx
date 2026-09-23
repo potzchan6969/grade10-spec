@@ -36,3 +36,17 @@ export const NoBrowseLink: Story = {
     expect(canvas.queryByRole("link", { name: "Browse all" })).toBeNull();
   },
 };
+
+/** shared-ui-store-home-SC-10: a heading over a set with nothing to browse
+ * names no word for a link it never draws — even handed a destination, the
+ * absent word alone keeps the link off. */
+export const NoBrowseLabel: Story = {
+  args: { copy: {} },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", { name: "Collections" }),
+    ).toBeInTheDocument();
+    expect(canvas.queryByRole("link")).toBeNull();
+  },
+};

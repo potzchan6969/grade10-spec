@@ -27,15 +27,53 @@
  */
 import { join } from "node:path";
 import { readTextIfExists } from "../src/store/disk.mts";
-import { findSection, outline, tableRows } from "../src/store/markdown.mts";
+import {
+  findSection,
+  outline,
+  SCENARIO_ID,
+  tableRows,
+} from "../src/store/markdown.mts";
+import { DECISION_ROW, decisionRows } from "../src/store/read-changes.mts";
 
-/** A `Q<n>` the change's `## Decisions` table issues, cited from a landing. */
-const DECISION = /^Q\d+$/;
 /** The mark a deferral wears, on the PRD and in a landing that names one. */
 const DEFERRED = "❓";
 /** A scenario id, which is what closes a design state that became one. */
-const SCENARIO = /`[a-z0-9][a-z0-9-]*-SC-\d+`/;
+const SCENARIO = new RegExp(`\`${SCENARIO_ID.source}\``);
 const OUT_OF_SUITE = "**Out of suite:**";
+
+/**
+ * RULE `walk`: the plan's walk group names the suite's review as its input.
+ * QA is asked on the landing of the requirements, and the walk needs the suite
+ * reviewed as its input, so a walk group that names no `/tcs-review` is
+ * refused (`shared-planning-agent-rounds-SC-90`). A plan with no walk group
+ * yet owes nothing here: the template's shape is the schema's own test. The
+ * groups are read through `outline`, so a `##` quoted in a fence is no group.
+ */
+export function checkWalkGroup(ctx, changes) {
+  for (const change of changes) {
+    if (change.status !== "in-flight") continue;
+    const file = `${change.dir}/tasks.md`;
+    const text = readTextIfExists(join(ctx.roots.store, file));
+    if (text === undefined) continue;
+    const walk = walkGroupOf(outline(text));
+    if (!walk || walk.raw.includes(`/tcs-review ${change.id}`)) continue;
+    ctx.add(
+      "walk",
+      file,
+      `the walk group names no review of the suite — it needs \`feature-tcs.md\` reviewed (\`/tcs-review ${change.id}\`) as its input`,
+    );
+  }
+}
+
+/** The group headed `<n>. The walk`, wherever the outline nests it. */
+function walkGroupOf(sections) {
+  for (const one of sections) {
+    if (/^\d+\.\s*The walk\b/i.test(one.heading)) return one;
+    const found = walkGroupOf(one.children);
+    if (found) return found;
+  }
+  return undefined;
+}
 
 export function checkPlanned(ctx, changes) {
   for (const change of changes) {
@@ -75,10 +113,7 @@ function checkRaised(ctx, change, text) {
     );
     return;
   }
-  const decided = new Set(
-    tableRows(findSection(sections, "Decisions")?.body)?.map((row) => row[0]) ??
-      [],
-  );
+  const decided = new Set(decisionRows(text).map((row) => row[0]));
   for (const row of raised) {
     const [capability, question, landed = ""] = row;
     const named = question || capability || "a raised question";
@@ -91,7 +126,7 @@ function checkRaised(ctx, change, text) {
       continue;
     }
     if (landed.includes(DEFERRED)) continue;
-    if (!DECISION.test(landed)) {
+    if (!DECISION_ROW.test(landed)) {
       ctx.add(
         "raised",
         file,

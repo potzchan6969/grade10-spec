@@ -72,6 +72,8 @@ Every group lands its tests in their own commit before its code, and its readers
 
 ## 8. The walk (grade10-spec)
 
+Needs `feature-tcs.md` reviewed (`/tcs-review stage-changes-and-notify-hands`) as its input.
+
 - [x] 8.1 The walk harness: a vitest browser project with `@vitest/browser-playwright` on chromium, the manual mounted against `public/fixture-snapshot.json`, one file per journey under `tools/manual/walk/`, and `test:walk` scripts in both package manifests
 - [x] 8.2 The demo store's fixtures: one change per stage, one per overlay, an unreadable record and a team map, built by `pnpm fixture` so the walk and the snapshot read one tree
 - [x] 8.3 The walks of the board, My turn, the page's marked line and the hand's arrival on the change page - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-51`, `shared-planning-change-stages-SC-52`, `shared-planning-change-stages-SC-53`, `shared-planning-change-stages-SC-54`, `shared-planning-change-stages-SC-55`, `shared-planning-change-stages-SC-56`, `shared-planning-change-stages-SC-57`, `shared-planning-change-stages-SC-58`, `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`, `shared-planning-change-stages-SC-62`, `shared-planning-change-stages-SC-63`, `shared-planning-change-stages-SC-65`, `shared-planning-change-stages-SC-66`, `shared-planning-change-stages-SC-67`, `shared-planning-change-stages-SC-69`
