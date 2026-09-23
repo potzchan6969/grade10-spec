@@ -22,7 +22,7 @@
   - Covers: `SC-91`, `SC-92`, `SC-93`.
   - Verification: concurrent create and retained-reservation checks.
 
-## 3. Invoice and payment-reference contracts (grade10)
+## 3. Invoice and payment-reference contracts (grade10) (owner: @htonyl)
 
 - [ ] 3.1 In `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`,
   consume the stored listing/payment reference and allocate invoice IDs with
