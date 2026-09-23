@@ -1064,6 +1064,11 @@ Stage (c).
       shipped, and a repeat writing nothing; the manifest, the invoice and the
       scans refused until it has run
       (`grade10-admin-grading-batches-SC-05`)
+- [ ] 17.10 Write `resolveManifestLine`: an unmatched line settled by staff
+      naming the batch's card it meant, or closed as the grader's error with a
+      reason kept on the line, never in the history; finishing holds only on
+      a line settled neither way
+      (`grade10-admin-grading-batches-SC-24`)
 
 ## 18. Hand-back, collection and the vault case (grade10)
 
@@ -1729,6 +1734,8 @@ Stage (b).
       offer a review as a new submission
       (`grade10-site-grading-submission-lifecycle-SC-12`,
       `grade10-site-grading-submission-lifecycle-SC-13`,
+      `grade10-site-grading-submission-lifecycle-SC-14`,
+      `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-19`)
 - [ ] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
       submission: the code, the hours and the one figure to settle or none, a

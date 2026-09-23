@@ -49,6 +49,9 @@ value, and the recent sales at ungraded, PSA 9 and PSA 10 as a reference, not
 a valuation. A card may carry a minimum grade, only encapsulate at PSA 9 or
 above, the fee applying either way.
 
+- ❓ **The minimum's scale** — whether a minimum is a number on the chosen grader's own scale, half grades included, checked
+  when the plan is written, and how the grader's manifest marks a card returned below it — Operations
+
 ## *Collector* — **The service**
 The grader — PSA, CGC or BGS — then the level. A level is open when every
 declared value is inside its ceiling and the count fits; a closed one names
