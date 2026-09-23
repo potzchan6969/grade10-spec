@@ -941,7 +941,6 @@ const payload = summaryRows({
   env: args.env,
   sha,
   drafts,
-  automatedLeftOut,
 });
 
 let sheetId;

@@ -226,7 +226,6 @@ export const SUMMARY_COLUMNS = [
   "Skipped",
   "N/A",
   "Pass rate",
-  "Automated left out",
   "Commit SHA",
 ];
 
@@ -336,7 +335,6 @@ export function summaryRows({
   env,
   sha,
   drafts,
-  automatedLeftOut,
 }) {
   const t = quoteTab(tab);
   return SURFACES.map((surface, i) => {
@@ -362,7 +360,6 @@ export function summaryRows({
       count("skipped"),
       count("n/a"),
       `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
-      automatedLeftOut,
       first ? sha : "",
     ];
   });

@@ -229,8 +229,8 @@ test("isAutomated reads the same case the automation gate does", () => {
   assert.equal(isAutomated(automated), true);
 });
 
-test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
-  assert.equal(SUMMARY_COLUMNS.includes("Automated left out"), true);
+test("shared-planning-agent-rounds-SC-61 - the Summary register does not carry how many automated cases were left out", () => {
+  assert.equal(SUMMARY_COLUMNS.includes("Automated left out"), false);
 });
 
 test("shared-planning-agent-rounds-SC-61 - the count and its line, at none, one and many", () => {
@@ -527,7 +527,6 @@ test("a Summary run writes identity and SHA on the first row only", () => {
     env: "staging",
     sha: "abc123",
     drafts: 2,
-    automatedLeftOut: 1,
   });
 
   assert.equal(rows.length, SURFACES.length);
