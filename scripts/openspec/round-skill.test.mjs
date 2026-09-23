@@ -260,8 +260,9 @@ test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is
 test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on the governance page, and the plan's skills link it", () => {
   const conduct = claims("docs/governance/round-summary.md");
   assert.match(conduct, /## Interview/);
-  assert.match(conduct, /at most three questions/i);
+  assert.match(conduct, /about three questions/i);
   assert.match(conduct, /whether to do it now/i);
+  assert.match(conduct, /never applied as a default/i);
   assert.match(conduct, /decided by the round/i);
   assert.match(conduct, /asked that one question alone/i);
   assert.match(conduct, /each with the option it\s+took/i);
@@ -278,7 +279,7 @@ test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on t
     );
     assert.doesNotMatch(
       text,
-      /at most three questions/i,
+      /about three questions/i,
       `${path} restates the count`,
     );
   }

@@ -156,6 +156,15 @@ const CODE_AND_MIGRATION = [
 ].join("\n");
 
 /** A task group's diff that lands prose alone: a manual page and a suite. */
+/** A catalog's words: what a reader sees, in a file that is not markdown. */
+const CATALOG_ONLY = [
+  "diff --git a/packages/i18n/messages/shared/en/product.json b/packages/i18n/messages/shared/en/product.json",
+  "--- a/packages/i18n/messages/shared/en/product.json",
+  "+++ b/packages/i18n/messages/shared/en/product.json",
+  "@@ -19,3 +19,3 @@",
+  '+  "youMayAlsoLike": "More like this",',
+].join("\n");
+
 const PROSE_GROUP = [
   `diff --git a/${PAGE} b/${PAGE}`,
   `--- a/${PAGE}`,
@@ -498,6 +507,21 @@ test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file 
   );
   assert.ok(yaml.has("code"));
   assert.ok(!yaml.has("copy"));
+});
+
+// Decides shared-planning-agent-rounds-US12-TC9-1.
+test("shared-planning-agent-rounds-SC-92 - a group landing a message catalog alone is read as words, not code", () => {
+  const root = fixture();
+  const printed = cli(root, [
+    "demo",
+    "3",
+    "--diff",
+    diffOf(root, CATALOG_ONLY),
+  ]);
+  assert.deepEqual(names(printed.readers), ["qa", "reader", "simpler"]);
+  const found = classifyDiff(CATALOG_ONLY, REAL_SCHEMA, "tasks");
+  assert.ok(found.has("copy"));
+  assert.ok(!found.has("code"));
 });
 
 test("the change may be named by the flag rather than the first argument", () => {
