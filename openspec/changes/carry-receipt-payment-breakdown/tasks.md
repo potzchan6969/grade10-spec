@@ -1,6 +1,6 @@
 ## 1. Product record (grade10-spec) (owner: @htonyl)
 
-- [ ] 1.1 Update `docs/prds/products/grade10-site/auction/post-bidding.md` so
+- [x] 1.1 Update `docs/prds/products/grade10-site/auction/post-bidding.md` so
   the receipt requirement names the four payment-time lines, their ordering,
   zero-floor rule for tolerance-close and overpayment, and immutability after
   refund or reversal. Keep receipt and invoice identifier formats as the
