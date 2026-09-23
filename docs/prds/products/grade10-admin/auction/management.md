@@ -70,6 +70,11 @@ the card is in the winner's hands. The collector's half is
   A picked direct-upload file is previewed and stored only on confirm; an item
   joins, is replaced, removed or re-captioned until the close — [Auction
   Display · Media Gallery](/p/grade10-site/auction/display#auction-details)
+- 🚧 **Cert-aware inventory media** — a listing for one Cert ID starts with
+  untagged product media and media tagged to that Cert. Media tagged to another
+  printed-Cert record stays in a separately labelled drawer until the operator
+  deliberately adds it. Each selected source is copied into the listing
+  gallery.
 - **Watchers** — opening Stats on a listing shows how many collectors watch
   that lot, across both brands; interest, not a count of expected bidders; the
   Listings table does not show the count

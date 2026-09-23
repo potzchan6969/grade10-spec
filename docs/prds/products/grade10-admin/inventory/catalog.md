@@ -97,3 +97,7 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
+- 🚧 **Cert-scoped media** — an Inventory image or video stays product-level
+  when untagged, or is tagged to one Cert record of that product; an operator
+  can tag, untag, or retag it, and removing the Cert record removes its tag
+  without removing the uploaded media
