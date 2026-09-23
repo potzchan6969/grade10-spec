@@ -1528,6 +1528,11 @@ Stage (b).
       `grade10-admin-grading-counter-SC-84`)
 - [ ] 24.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
+- [ ] 24.10 Add `admin.receiving` for one batch — the manifest's lines with
+      what each matched, the invoice as entered, and the counters folded from
+      them: scanned of the batch's cards, matched, ungraded, the upcharges and
+      their sum, and the submissions ready once finished
+      (`grade10-admin-grading-batches-SC-29`)
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10)
 
