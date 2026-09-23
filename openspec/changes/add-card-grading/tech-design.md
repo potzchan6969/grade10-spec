@@ -483,14 +483,11 @@ answering the question it was for.
   reminder's day-before judgment reads the diary's own `slot_start` at the
   claim, not the page's cached `appointment_at` — a visit the diary moved
   since the page was read is judged, and reminded, on the day it now falls
-- **No letter goes out before the shop's morning** (`SEND_FROM_HOUR`, 9):
-  every rung still reads its candidates and reports its backlog every pass,
-  so a stalled morning is still visible, but the claim, the event and the
-  send wait for the hour. Grading keeps its own copy of the vault's
-  `REMINDER_SEND_FROM_HOUR` rule rather than importing it: the vault's
-  sweeps and `@grade10/postgres` were out of this pass's scope to touch, so
-  hoisting the two into one shared constant is a recorded follow-up, not
-  done here
+- **No letter goes out before the shop's morning** (`REMINDER_SEND_FROM_HOUR`,
+  9, in `@grade10/utils/dates` — hoisted there, and the vault's
+  `remindBorrowers` reads the same constant now): every rung still reads its
+  candidates and reports its backlog every pass, so a stalled morning is
+  still visible, but the claim, the event and the send wait for the hour
 - **Notice due** and **running late** are no lists: the badge derives from
   `notice_day` and the send is the counter act `recordNoticePosted`; the
   late letter goes on `reestimateBatch`. `retentionReviews` dates a
