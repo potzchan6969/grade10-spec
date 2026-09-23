@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T04:50:34.184Z",
+  "generatedAt": "2026-09-23T06:59:44.681Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -25,6 +25,7 @@
     "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
+    "Featured": "warn",
     "Featured Auction": "warn",
     "Footer": "skipped",
     "Google Icon": "warn",
@@ -812,8 +813,9 @@
     "6586-6383": "Tab List",
     "6610-6434": "PDP Filter",
     "6618-7019": "status_annotations",
-    "6905-3631": "Auctions | Grade10",
+    "6905-3631": "Auctions",
     "6905-4519": "Featured Auction",
+    "6929-4826": "Featured",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -860,6 +862,9 @@
     ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
+    ],
+    "Featured": [
+      "Featured: no code component (looked for src/components/**/featured.tsx or featured.tsx)"
     ],
     "Featured Auction": [
       "Featured Auction: no code component (looked for src/components/**/featuredauction.tsx or featuredauction.tsx)"
