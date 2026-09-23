@@ -2,7 +2,6 @@ import { Badge } from "@grade10/design-system/components/display/badge";
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
-import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -10,7 +9,6 @@ import {
   MetaRow,
   OrderValueTable,
   PartiesSection,
-  PdfPageFooter,
   PdfSheet,
   SummaryRow,
 } from "./winner-order-pdf.story-shared";
@@ -34,7 +32,6 @@ function InvoicePdfPreview({
   method?: "card" | "bank";
   replaced?: boolean;
 }) {
-  const fee = method === "card" ? "112.25" : "50.00";
   const total = method === "card" ? "3,232.25" : "3,170.00";
 
   return (
@@ -62,11 +59,8 @@ function InvoicePdfPreview({
           label="Payment method"
           value={method === "card" ? "Card" : "Bank transfer"}
         />
-        <MetaRow label="Sent" value="September 15, 2026 · 11:04 HKT" />
-        <MetaRow
-          label="Payment deadline"
-          value="September 22, 2026 · 23:59 HKT"
-        />
+        <MetaRow label="Date of issue" value="September 15, 2026 · 11:04 HKT" />
+        <MetaRow label="Date due" value="September 22, 2026 · 11:04 HKT" />
       </VStack>
 
       <PartiesSection />
@@ -83,22 +77,11 @@ function InvoicePdfPreview({
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
         <SummaryRow label="Subtotal" value="3,120.00" />
-        <SummaryRow
-          label="Payment Processing Fee"
-          note={
-            method === "card"
-              ? "Card gross-up at send — provider fee 235 + 3.4% of the charge"
-              : "Bank transfer fee entered by the operator at send"
-          }
-          value={fee}
-        />
         <Divider />
         <SummaryRow label="Order Total" size="lg" value={total} weight="bold" />
       </VStack>
 
       {method === "bank" ? <BankRailsSection /> : null}
-
-      <PdfPageFooter note="Amounts are integer minor units of HKD, rounded to the cent. No line above is an estimate." />
     </PdfSheet>
   );
 }
@@ -107,7 +90,7 @@ function BankRailsSection() {
   return (
     <VStack className="border-t border-border pt-4" gap="sm" hAlign="stretch">
       <Text size="sm" weight="bold">
-        Three ways to pay
+        Payment Information
       </Text>
       <div className="grid gap-4 sm:grid-cols-3">
         <BankWay
@@ -132,15 +115,11 @@ function BankRailsSection() {
         />
       </div>
       <Divider />
-      <HStack hAlign="space-between" vAlign="center" wrap>
-        <Text size="sm">
-          Quote this reference on your transfer —{" "}
-          <Text weight="medium">LK7P2Q01</Text>
-        </Text>
-        <Button size="sm" variant="outline">
-          Copy
-        </Button>
-      </HStack>
+      <Text size="sm">
+        Enter this reference in your bank app’s Memo or Remarks field. Missing
+        it delays verification. Quote this reference on your transfer —{" "}
+        <Text weight="medium">LK7P2Q01</Text>
+      </Text>
     </VStack>
   );
 }
@@ -178,5 +157,3 @@ type Story = StoryObj<typeof meta>;
 export const CardPayment: Story = {};
 
 export const BankTransfer: Story = { args: { method: "bank" } };
-
-export const Replaced: Story = { args: { replaced: true } };

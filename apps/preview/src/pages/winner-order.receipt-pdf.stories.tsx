@@ -17,7 +17,6 @@ import {
   MetaRow,
   OrderValueTable,
   PartiesSection,
-  PdfPageFooter,
   PdfSheet,
   SummaryRow,
 } from "./winner-order-pdf.story-shared";
@@ -66,14 +65,14 @@ function ReceiptPdfPreview({
       <VStack className="max-w-full" gap="xs" hAlign="stretch">
         <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
         <MetaRow
-          label="Pays invoice"
+          label="Invoice number"
           value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
         />
         <MetaRow
-          label="Payment method"
+          label="Paid by"
           value={
             manual
-              ? "Bank transfer — recorded manually, ref. OPS-3391"
+              ? "Bank transfer — recorded manually by admin"
               : "Visa card ending 4242"
           }
         />
@@ -129,8 +128,6 @@ function ReceiptPdfPreview({
           </TableBody>
         </Table>
       </VStack>
-
-      <PdfPageFooter note="No payment proof file appears on this receipt. Retained for at least 7 years, or the life of the account if longer." />
     </PdfSheet>
   );
 }
