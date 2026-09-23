@@ -503,6 +503,7 @@
   "ceremony": {
     "refusal": {
       "expired": "This signing link has expired. Signing links last a short while for your safety; ask staff for a new one.",
+      "consumed": "This signing link has already been used. If you signed with it, your copy is at the counter and on your submission page; if not, ask staff for a new link.",
       "anotherDevice": "This link was opened on another device. A signing link stays on the device it was first opened on; ask staff for a new link for this device.",
       "withdrawn": "These documents were withdrawn. A newer set replaced them; ask staff for the link to the current documents.",
       "alreadySigned": "These documents are already signed. You can close this page.",

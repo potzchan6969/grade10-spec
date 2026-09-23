@@ -468,6 +468,9 @@
     "signatureTypedFailed": "此设备无法将你输入的内容转成签名。请告知身旁的员工。",
     "signatureTypedCaption": "输入式签名",
     "fullNameLabel": "你的姓名，须与出示证件上的完全相同",
+    "heldNameHint": "这是文件拟备时所用的姓名。",
+    "postalAddressLabel": "你的通讯地址",
+    "postalAddressHint": "只会用于寄发书面通知。",
     "submitLabel": "签署{title}",
     "submittingLabel": "正在签署…",
     "retryLabel": "再试一次",
@@ -475,6 +478,7 @@
     "missingConsent": "请勾选方格，确认你已阅读。",
     "missingSignature": "请在上方方格内签名。",
     "missingName": "请输入与证件相同的姓名。",
+    "missingPostalAddress": "请填上你的通讯地址。",
     "signUnconfirmed": "送出签名后我们未收到回应，因此暂时无法确定是否已记录。请勿再次签署 — 请先查看结果。",
     "signRecheckLabel": "查看结果",
     "sealedTitle": "已签署并封存",
@@ -561,6 +565,10 @@
         "title": "这不是你开始签署时所用的姓名",
         "message": "本次签署的所有文件都用同一个姓名。请用你之前签署时的姓名，或索取一批新文件。"
       },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "需要你的通讯地址",
+        "message": "请在通讯地址一栏填上地址，然后签署。"
+      },
       "SIGNATURE_INVALID": {
         "title": "无法辨识这个签名",
         "message": "请清除签名方格，再签一次。"
@@ -572,6 +580,10 @@
       "SOURCE_TAMPERED": {
         "title": "文件与准备好的版本不符",
         "message": "请勿签署。请身旁的员工重新准备文件。"
+      },
+      "FONT_MISSING": {
+        "title": "文件暂时无法显示",
+        "message": "尚未签署任何文件。请告知身旁的员工；店铺须先恢复文件字体。"
       },
       "CONFLICT": {
         "title": "本次签署已在别处完成",

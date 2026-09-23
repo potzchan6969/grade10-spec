@@ -468,6 +468,9 @@
     "signatureTypedFailed": "This device could not turn what you typed into a signature. Ask the member of staff with you.",
     "signatureTypedCaption": "Typed signature",
     "fullNameLabel": "Your name, exactly as printed on the ID you showed us",
+    "heldNameHint": "The name these documents were prepared under.",
+    "postalAddressLabel": "Your postal address",
+    "postalAddressHint": "Used only to send you written notice.",
     "submitLabel": "Sign the {title}",
     "submittingLabel": "Signing…",
     "retryLabel": "Try again",
@@ -475,6 +478,7 @@
     "missingConsent": "Please tick the box to confirm you have read it.",
     "missingSignature": "Please sign in the box above.",
     "missingName": "Please type your name as it appears on your ID.",
+    "missingPostalAddress": "Please type your postal address.",
     "signUnconfirmed": "We did not hear back after your signature was sent, so we cannot yet say whether it was recorded. Do not sign again — check what happened instead.",
     "signRecheckLabel": "Check what happened",
     "sealedTitle": "Signed and sealed",
@@ -561,6 +565,10 @@
         "title": "That is not the name you started signing under",
         "message": "Everything in this session is signed under one name. Use the name on your earlier signature, or ask for a fresh set of documents."
       },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "Your postal address is needed",
+        "message": "Type it on the postal address line, then sign."
+      },
       "SIGNATURE_INVALID": {
         "title": "That signature could not be read",
         "message": "Clear the signature box and sign again."
@@ -572,6 +580,10 @@
       "SOURCE_TAMPERED": {
         "title": "The document does not match what was prepared",
         "message": "Do not sign. Ask the member of staff with you to prepare it again."
+      },
+      "FONT_MISSING": {
+        "title": "The document cannot be drawn right now",
+        "message": "Nothing has been signed. Ask the member of staff with you; the shop has to restore its document font first."
       },
       "CONFLICT": {
         "title": "This signing was finished elsewhere",

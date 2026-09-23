@@ -468,6 +468,9 @@
     "signatureTypedFailed": "이 기기에서 입력하신 내용을 서명으로 만들지 못했습니다. 옆에 있는 직원에게 알려 주세요.",
     "signatureTypedCaption": "입력한 서명",
     "fullNameLabel": "제시하신 신분증에 적힌 것과 똑같은 성명",
+    "heldNameHint": "서류를 준비할 때 쓰인 성명입니다.",
+    "postalAddressLabel": "우편 주소",
+    "postalAddressHint": "서면 통지를 보낼 때만 사용됩니다.",
     "submitLabel": "{title} 서명하기",
     "submittingLabel": "서명 중…",
     "retryLabel": "다시 시도",
@@ -475,6 +478,7 @@
     "missingConsent": "읽으셨음을 확인하는 상자에 표시해 주세요.",
     "missingSignature": "위 상자에 서명해 주세요.",
     "missingName": "신분증에 적힌 대로 성명을 입력해 주세요.",
+    "missingPostalAddress": "우편 주소를 입력해 주세요.",
     "signUnconfirmed": "서명을 보낸 뒤 응답을 받지 못해 아직 기록 여부를 확인할 수 없습니다. 다시 서명하지 마세요 — 대신 결과를 확인해 주세요.",
     "signRecheckLabel": "결과 확인",
     "sealedTitle": "서명 및 봉인 완료",
@@ -561,6 +565,10 @@
         "title": "서명을 시작하신 성명과 다릅니다",
         "message": "이번 절차의 모든 서류는 같은 성명으로 서명합니다. 앞서 서명하신 성명을 사용하시거나, 새 서류를 요청해 주세요."
       },
+      "POSTAL_ADDRESS_REQUIRED": {
+        "title": "우편 주소가 필요합니다",
+        "message": "우편 주소 칸에 주소를 입력한 뒤 서명해 주세요."
+      },
       "SIGNATURE_INVALID": {
         "title": "서명을 읽지 못했습니다",
         "message": "서명 상자를 지우고 다시 서명해 주세요."
@@ -572,6 +580,10 @@
       "SOURCE_TAMPERED": {
         "title": "서류가 준비된 내용과 일치하지 않습니다",
         "message": "서명하지 마세요. 옆에 있는 직원에게 서류를 다시 준비해 달라고 요청해 주세요."
+      },
+      "FONT_MISSING": {
+        "title": "지금은 서류를 표시할 수 없습니다",
+        "message": "아직 아무것도 서명되지 않았습니다. 옆에 있는 직원에게 알려 주세요. 매장에서 서류 글꼴을 먼저 복구해야 합니다."
       },
       "CONFLICT": {
         "title": "이 서명은 다른 곳에서 마무리되었습니다",
