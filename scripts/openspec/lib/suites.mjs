@@ -340,19 +340,12 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
   for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
 }
 
-/** Split a suite into its header, journey sections and cases. Current format only;
- *  older shapes are detected and reported rather than parsed into silence.
- *
- *  A case carries both a count and the text of its steps and expected results:
- *  the validator judges that there is something to verify, and the run sheet
- *  carries what a tester reads. */
 /**
  * Where a heading sits among lines: the index of the first `#`-level `level`
  * heading reading `name` at or after `from`, or -1. A section runs from its
  * heading to the next heading of the same or a higher level, which
- * `sectionRange` returns as `[start, end)`; both are what the suite's
- * validation and the archive's strip read a `## Reconciliation` by, so one
- * finder answers both.
+ * `sectionRange` returns as `[start, end)`: what the suite validator and
+ * archive-preflight read a section by.
  */
 export function headingAt(lines, level, name, from = 0) {
   const re = new RegExp(`^#{${level}}\\s+${name}\\s*$`);
@@ -373,6 +366,12 @@ export function sectionRange(lines, level, name, from = 0) {
   return { start, end };
 }
 
+/** Split a suite into its header, journey sections and cases. Current format only;
+ *  older shapes are detected and reported rather than parsed into silence.
+ *
+ *  A case carries both a count and the text of its steps and expected results:
+ *  the validator judges that there is something to verify, and the run sheet
+ *  carries what a tester reads. */
 export function parseSuite(text) {
   const lines = text.split("\n");
   const suite = {

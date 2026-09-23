@@ -444,7 +444,10 @@ test("admin banners use the fall orange, product banners the noble green", () =>
     FUTURE_CAPABILITY_BACKGROUND,
     PRODUCT_CAPABILITY_BACKGROUND,
   );
-  assert.notDeepEqual(FUTURE_CAPABILITY_BACKGROUND, ADMIN_CAPABILITY_BACKGROUND);
+  assert.notDeepEqual(
+    FUTURE_CAPABILITY_BACKGROUND,
+    ADMIN_CAPABILITY_BACKGROUND,
+  );
 });
 
 test("draft stone grey is not the result to_do grey", () => {

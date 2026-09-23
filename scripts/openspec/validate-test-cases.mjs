@@ -141,7 +141,7 @@ function checkManualRows(root, text, cases, err) {
   const ids = new Set(cases.map((tc) => tc.id));
   for (let i = manual + 1; i < lines.length; i++) {
     const line = lines[i];
-    if (/^##\s/.test(line)) break;
+    if (/^#{1,3}\s/.test(line)) break;
     const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
     if (named) {
       const full = resolve(root, named[2]);

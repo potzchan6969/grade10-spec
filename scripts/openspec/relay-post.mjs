@@ -35,7 +35,7 @@
  * terminal round prints the text and then the label on its own line.
  *
  * `--row <Q>` is the round's reply to the hand a held row waits on, in the
- * change's thread: the row, the sentence already on the page and the decision
+ * change's thread: the row, the sentence it would put on the page and the decision
  * rows it touches, quoted, and the hand mentioned. It is keyed on the change,
  * the round and the row in `.round/rows.txt`, read and appended through the
  * same sent-keys helpers every message uses, so a re-run of one round posts
@@ -53,7 +53,7 @@
  * environment and no such file, every mode fails rather than prints.
  */
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
-import { dirname, join, resolve } from "node:path";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
 import { ROLE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import {
@@ -71,8 +71,8 @@ import { nextRoundOf } from "./lib/rounds.mjs";
  * The modes, one row each: `read` takes the flag's value off the arguments,
  * `call` is what the wake is asked, `printed` is what a terminal round says
  * instead, `confirmed` is what a call that went through says, `nothing` is
- * the value that makes the whole run a no-op, and `button` is whether a
- * `--confirm` may ride this mode.
+ * the value that makes the whole run a no-op, `button` is whether a
+ * `--confirm` may ride this mode, and `after` runs once the text is out.
  */
 const KINDS = {
   "message-file": {
@@ -172,8 +172,8 @@ async function main() {
  * The reply a held row makes to the hand it waits on. The row, the hand and
  * the recommendation are read through the store's own readers — the question
  * reader, the `## Decisions` rows and the record's `hands:` — so they are the
- * ones the change page shows; the sentence already on the page is every line
- * of a page the proposal links that cites the row; the rows it touches are
+ * ones the change page shows; the sentence it would put on the page is its
+ * recommendation; the rows it touches are
  * every other decision row that names it or that it names. A row that is not
  * held is refused: a decided row asks nobody anything. A role the record
  * names no hand for is written by its label, never as a mention nobody
@@ -203,12 +203,6 @@ async function heldRowText(root, flags) {
       cells[0] !== id &&
       (citesId(ownText, cells[0]) || citesId(cells.join(" | "), id)),
   );
-  const onPage = pagesLinkedBy(root, dir).flatMap(({ file, text }) =>
-    text
-      .split("\n")
-      .filter((line) => citesId(line, id))
-      .map((line) => `${file}: ${line.trim()}`),
-  );
   const label = ROLE_LABEL[held.role] ?? held.role;
   const hand =
     held.hand === held.role
@@ -217,9 +211,7 @@ async function heldRowText(root, flags) {
   const text = [
     `${hand} — ${id} waits on you.`,
     `> ${own.join(" | ")}`,
-    onPage.length > 0
-      ? `The sentence already on the page:\n${onPage.map((one) => `> ${one}`).join("\n")}`
-      : "No sentence on a page names it.",
+    `The sentence it would put on the page:\n> ${held.recommended.replace(/^recommended:\s*/i, "")}`,
     touched.length > 0
       ? `The rows it touches:\n${touched.map((cells) => `> ${cells.join(" | ")}`).join("\n")}`
       : "It touches no other row.",
@@ -231,29 +223,6 @@ async function heldRowText(root, flags) {
 
 const readTextOr = (path) =>
   existsSync(path) ? readFileSync(path, "utf8") : "";
-
-/** The pages the proposal links, as `[…](../../../docs/prds/….md#…)`. */
-function pagesLinkedBy(root, dir) {
-  const proposal = readTextOr(join(dir, "proposal.md"));
-  const seen = new Set();
-  const pages = [];
-  for (const match of proposal.matchAll(
-    /\]\(([^)\s]*docs\/prds\/[^)\s#]+\.md)(?:#[^)]*)?\)/g,
-  )) {
-    // A page is linked by its path in this store; a link with a scheme is
-    // another host's, and is left aside by name rather than resolved to a
-    // file that is not there.
-    if (/^[a-z][a-z0-9+.-]*:/i.test(match[1])) continue;
-    const file = resolve(dir, match[1]);
-    if (seen.has(file) || !existsSync(file)) continue;
-    seen.add(file);
-    pages.push({
-      file: file.slice(root.length + 1),
-      text: readFileSync(file, "utf8"),
-    });
-  }
-  return pages;
-}
 
 /** The rows this run's rounds have posted, keyed on the change, the round in
  * progress and the row: the round's number is the one its landing will write,

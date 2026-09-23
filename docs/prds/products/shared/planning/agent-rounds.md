@@ -78,7 +78,7 @@ One round per artifact, and one per task group while the change is building.
   other artifact's text the branch does, the plan and the decisions apart
 - 🚧 **Only your moves** — the summary shows you the moves that are yours; a
   held question for another hand goes to them as its own reply in the thread,
-  mentioning them, with the row, the sentence already on the page and the
+  mentioning them, with the row, the sentence it would put on the page and the
   decisions it touches quoted
 - 🚧 **Your page is yours** — a line a build round puts on your page reaches
   you as a question with the line quoted before and after, never as decided

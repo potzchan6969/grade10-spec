@@ -141,7 +141,7 @@ import { main as validateChanges } from "./validate-changes.mjs";
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** A scenario a task line cites, the way the store writes a citation: in
  * backticks, so prose about a scenario is not read as one. */
-const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+)`/g;
+const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+[a-z]?)`/g;
 /** What a push the remote refused because the ref moved under it says, in
  * git's own words: step 9's one retry. Anything else git says is git refusing
  * to push at all, which is nobody's race to re-run. */
@@ -928,19 +928,17 @@ function citedByGroup(read) {
 function testsCell(read, group, value) {
   const cell = String(value ?? "");
   if (!group) return cell;
-  const missing = citedByGroup(read).filter((id) => !cell.includes(id));
+  const missing = citedByGroup(read).filter((id) => !citesId(cell, id));
   if (missing.length > 0) {
     fail(
       `${target}'s tasks cite a scenario --tests names no test for:\n${listed(missing)}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
     );
   }
   const tree = landsHere(read) ? root : applicationRoot(read);
-  // One read of the cell: each scenario id with the paths it credits, and
-  // the paths themselves for the file check.
   const credits = creditsIn(cell);
-  const absent = [...new Set(credits.map(({ path }) => path))].filter(
-    (path) => !existsSync(join(tree, path)),
-  );
+  const isFile = (path) =>
+    existsSync(join(tree, path)) && statSync(join(tree, path)).isFile();
+  const absent = [...new Set(pathsIn(cell))].filter((path) => !isFile(path));
   if (absent.length > 0) {
     fail(
       `${target}'s --tests names a path ${tree === root ? "the store" : tree} holds no file at:\n${listed(absent)}\nName each test as its path from the repository's root.`,

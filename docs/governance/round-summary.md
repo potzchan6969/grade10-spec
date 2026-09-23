@@ -20,7 +20,7 @@ their words.
 
 - **Its own message** — a held row addressed to another hand is the round's
   own reply in the change's thread, mentioning that hand: the row, the
-  sentence already on the page, and the decision rows it touches, quoted; once
+  sentence it would put on the page, and the decision rows it touches, quoted; once
   per change, round and row. Never a build round's thread to read
 - **Its cost** — the cost of the recommended option in one clause, beside the
   option it was chosen over

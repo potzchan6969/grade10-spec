@@ -398,10 +398,6 @@ function rowRoot(url) {
     'schema: grade10-planning\ncreated: 2026-09-22\nhands:\n  pm: "@ecchochan"\n  qa: "@chloe"\n',
   );
   writeFileSync(
-    join(change, "proposal.md"),
-    "# Demo\n\nProduct context: [Rail](../../../docs/prds/products/demo/rail.md#rail)\n",
-  );
-  writeFileSync(
     join(change, "decisions.md"),
     [
       "## Decisions",
@@ -412,13 +408,6 @@ function rowRoot(url) {
       "| Q3 | Does a sold-out pick stay in the rail? | ❓ qa - recommended: yes, with its badge, as Q1 counts it | Dropped |",
       "",
     ].join("\n"),
-  );
-  mkdirSync(join(root, "docs", "prds", "products", "demo"), {
-    recursive: true,
-  });
-  writeFileSync(
-    join(root, "docs", "prds", "products", "demo", "rail.md"),
-    "---\ntitle: Rail\nspec: demo/rail\n---\n\n## Rail\n\n- ❓ **Sold-out picks** — a sold-out pick stays in the rail with its badge (`Q3`)\n",
   );
   return root;
 }
@@ -440,10 +429,9 @@ test("shared-planning-agent-rounds-SC-86 - --row posts the held row as a reply m
   assert.match(result.stdout, /Q3/);
   assert.match(result.stdout, /Does a sold-out pick stay in the rail\?/);
   assert.match(result.stdout, /recommended: yes, with its badge/);
-  // The sentence the row would put on the page, quoted from the page.
   assert.match(
     result.stdout,
-    /a sold-out pick stays in the rail with its badge/,
+    /The sentence it would put on the page:\n> yes, with its badge/,
   );
   // The decision rows the held row touches, quoted.
   assert.match(result.stdout, /Q1 \| How many tiles\?/);

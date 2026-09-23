@@ -798,7 +798,7 @@ test("shared-planning-agent-rounds-SC-89 - --stages tells QA at Specified the su
   assert.match(qa, /Review: `\/tcs-review probe`/);
   assert.match(
     qa,
-    /Suite: `openspec\/changes\/probe\/specs\/demo\/store\/rail\/feature-tcs\.md`, 1 cases; the walk needs it reviewed as its input/,
+    /Suite: `openspec\/changes\/probe\/specs\/demo\/store\/rail\/feature-tcs\.md`, 1 case; the walk needs it reviewed as its input/,
   );
   // The product manager's own turn message carries no suite line.
   assert.doesNotMatch(textOf(messages, "probe:specified:pm"), /Suite:/);

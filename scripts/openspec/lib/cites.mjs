@@ -1,13 +1,14 @@
-/**
- * Whether a text cites an id: the id followed by no digit, so `SC-1` is never
- * found inside `SC-12`. One helper, one verdict, read by the landing over a
- * `--tests` path and by the suite's validation over a Manual row's test
- * (`shared-planning-agent-rounds-SC-98`, `shared-planning-agent-rounds-SC-106`).
- */
 /** What a scenario id looks like, named once for every reader of a cell. */
-export const SCENARIO_ID = /[\w-]+-SC-\d+/;
+export const SCENARIO_ID = /[\w-]+-SC-\d+[a-z]?/;
 
+/**
+ * Whether a text cites an id, bounded on both sides: `SC-1` is never found
+ * inside `SC-12` or `SC-1a`, nor `alpha-SC-1` inside `demo-alpha-SC-1`. Read
+ * by the landing over a `--tests` path and by the suite's validation over a
+ * Manual row's test (`shared-planning-agent-rounds-SC-98`,
+ * `shared-planning-agent-rounds-SC-106`).
+ */
 export function citesId(text, id) {
   const escaped = String(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
-  return new RegExp(`${escaped}(?!\\d)`).test(String(text ?? ""));
+  return new RegExp(`(?<![\\w-])${escaped}(?!\\w)`).test(String(text ?? ""));
 }

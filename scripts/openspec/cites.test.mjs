@@ -26,5 +26,6 @@ test("shared-planning-agent-rounds-SC-98 - an id in backticks, brackets or a tit
   assert.equal(citesId("`demo-alpha-SC-7`", "demo-alpha-SC-7"), true);
   assert.equal(citesId("[demo-alpha-US1-TC7-1]", "demo-alpha-US1-TC7-1"), true);
   assert.equal(citesId("demo-alpha-SC-70 stands", "demo-alpha-SC-7"), false);
-  assert.equal(citesId("demo-alpha-SC-7a", "demo-alpha-SC-7"), true);
+  assert.equal(citesId("demo-alpha-SC-7a", "demo-alpha-SC-7"), false);
+  assert.equal(citesId("other-demo-alpha-SC-7", "demo-alpha-SC-7"), false);
 });

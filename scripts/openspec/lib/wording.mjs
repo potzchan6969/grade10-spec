@@ -152,7 +152,7 @@ export function toldBodyOf(at, role, { linked, sheetUrl }) {
       (one) => !one.error && one.status !== "approved",
     )) {
       lines.push(
-        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} cases; the walk needs it reviewed as its input`,
+        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} ${suite.cases.total === 1 ? "case" : "cases"}; the walk needs it reviewed as its input`,
       );
     }
   }

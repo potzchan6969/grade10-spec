@@ -1150,6 +1150,38 @@ test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --t
   assert.doesNotMatch(result.stderr, /SC-57/);
 });
 
+test("shared-planning-agent-rounds-SC-58 - an id that only begins a longer one is not named", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
+    "`shared-planning-agent-rounds-SC-580`: scripts/openspec/fifty-eight.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /names no test for:\n.*SC-58\b/);
+});
+
+test("shared-planning-agent-rounds-SC-58 - every path the cell names is held, and a directory is no file", () => {
+  const { root, git } = sandbox({ files: CITING });
+  git("config", "user.email", "erin@test");
+  const tests = [
+    "`shared-planning-agent-rounds-SC-57`: scripts/openspec",
+    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/fifty-eight.test.mjs",
+    "walked by hand: scripts/openspec/nowhere.test.mjs",
+  ].join("; ");
+
+  const result = landGroup(root, ["--tests", tests]);
+
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /the store holds no file at/);
+  assert.match(result.stderr, /scripts\/openspec\n/);
+  assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
+  assert.doesNotMatch(result.stderr, /EISDIR/);
+});
+
 test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the store does not hold, naming it", () => {
   const { root, git } = sandbox({ files: CITING });
   git("config", "user.email", "erin@test");
