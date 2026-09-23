@@ -1075,7 +1075,7 @@ Stage (c).
 
 Stage (c).
 
-- [ ] 18.1 Cover the hand-back: the code and the name, the glance above the
+- [x] 18.1 Cover the hand-back: the code and the name, the glance above the
       threshold, what is due taken first, the ticks and the photographs, the
       mint refused on a balance due and on an unticked item, the seal that
       closes the submission and the second one that closes it later, the vault
@@ -1104,7 +1104,7 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-26`,
       `grade10-site-grading-submission-lifecycle-SC-46`,
       `grade10-site-grading-submission-lifecycle-SC-34`)
-- [ ] 18.2 Open the hand-back on the pickup code and the name, refusing a wrong
+- [x] 18.2 Open the hand-back on the pickup code and the name, refusing a wrong
       code as often as it is typed, handing over to the person the collector
       named with the receipt saying so, turning anybody else away with no
       override, and letting the collector collect although another person is
@@ -1116,26 +1116,26 @@ Stage (c).
       `grade10-admin-grading-counter-SC-92`,
       `grade10-site-grading-submission-lifecycle-SC-29`,
       `grade10-site-grading-submission-lifecycle-SC-30`)
-- [ ] 18.3 Glance at an identity document above the `id_glance_threshold` and
+- [x] 18.3 Glance at an identity document above the `id_glance_threshold` and
       keep nothing of it, and ask for none below it
       (`grade10-admin-grading-counter-SC-30`,
       `grade10-admin-grading-counter-SC-31`,
       `grade10-site-grading-submission-lifecycle-SC-28`)
-- [ ] 18.4 Take everything due before anything is handed over, at the figure
+- [x] 18.4 Take everything due before anything is handed over, at the figure
       `dueNow` answers under the submission lock
       (`grade10-admin-grading-counter-SC-32`,
       `grade10-site-grading-submission-lifecycle-SC-26`)
-- [ ] 18.5 Tick each item and photograph each slab as it is handed over, and
+- [x] 18.5 Tick each item and photograph each slab as it is handed over, and
       hold back a card the grader still has
       (`grade10-admin-grading-counter-SC-33`,
       `grade10-admin-grading-counter-SC-34`)
-- [ ] 18.6 Write `mintHandBack`, pinning `hand_back_prepared { packetId,
+- [x] 18.6 Write `mintHandBack`, pinning `hand_back_prepared { packetId,
       cards }` as a submission event at the mint and refusing `BALANCE_DUE`
       and `ITEM_UNTICKED` by name, nothing rendered and nothing handed back
       (`grade10-admin-grading-counter-SC-43`,
       `grade10-admin-grading-counter-SC-44`,
       `grade10-site-grading-counter-documents-SC-02`)
-- [ ] 18.7 Write `collect` as the counter's act on the completed hand-back
+- [x] 18.7 Write `collect` as the counter's act on the completed hand-back
       packet: under the submission lock, no open packet, `dueNow === 0` at the
       pinned figure, no card `held`, idempotent on the packet id; a second
       hand-back seals a second receipt, reads who is collecting again and
@@ -1143,25 +1143,25 @@ Stage (c).
       `grade10-admin-grading-counter-SC-36`,
       `grade10-admin-grading-counter-SC-90`,
       `grade10-site-grading-submission-lifecycle-SC-46`)
-- [ ] 18.8 Write `vaultCard`, opening the vault case from the hand-back step on
+- [x] 18.8 Write `vaultCard`, opening the vault case from the hand-back step on
       a settled balance and holding it while anything is due
       (`grade10-admin-grading-counter-SC-40`,
       `grade10-admin-grading-counter-SC-41`,
       `grade10-site-grading-submission-lifecycle-SC-34`)
-- [ ] 18.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 18.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 18.10 Write `recordSettlement` at `ready`: the store order read before the
+- [x] 18.10 Write `recordSettlement` at `ready`: the store order read before the
       transaction, matched against each card's due under the lock, a line
       above a card's due refused by name, so settled never passes accrued on
       a card (`grade10-admin-grading-counter-SC-32`,
       `grade10-site-grading-submission-lifecycle-SC-26`,
       `grade10-site-grading-submission-lifecycle-SC-40`)
-- [ ] 18.11 Write `tickItem` under the lock: one photograph for a slab and none
+- [x] 18.11 Write `tickItem` under the lock: one photograph for a slab and none
       for a raw card, refused while anything is due, for a held card and for
       a card no hand-back may carry (`grade10-admin-grading-counter-SC-32`,
       `grade10-admin-grading-counter-SC-33`,
       `grade10-admin-grading-counter-SC-34`)
-- [ ] 18.12 Close each hand-back on its own: `collect` stamps the cards its
+- [x] 18.12 Close each hand-back on its own: `collect` stamps the cards its
       receipt printed and writes a `handed_back` event naming the packet,
       moves to `collected` only once no card is left, accepts only the newest
       sealed hand-back, and judges what is due as of the mint; storage and
@@ -1172,7 +1172,7 @@ Stage (c).
       `grade10-admin-grading-counter-SC-43`,
       `grade10-admin-grading-counter-SC-90`,
       `grade10-admin-grading-counter-SC-91`)
-- [ ] 18.13 Withdraw a card and issue its receipt in one transaction, the
+- [x] 18.13 Withdraw a card and issue its receipt in one transaction, the
       receipt its own document with its own clauses, listed with the
       submission's papers and answered by the digest check
       (`grade10-admin-grading-counter-SC-54`,
@@ -1365,7 +1365,7 @@ the slow lane of 21.8; walk 34 decides them.
 Needs group 5 merged to this store's `main`: the render test reads the store's
 fixtures through `external/grade10-spec`. Stage (c).
 
-- [ ] 22.1 Cover the catalogue as one table over `LETTERS`, kind to blocks and
+- [x] 22.1 Cover the catalogue as one table over `LETTERS`, kind to blocks and
       attachments, reading the store's fixtures, with `NOTIFY_FOR_EVENT`
       exhaustive over every `SubmissionEventKind` and one render snapshot per
       drawn state (`grade10-site-grading-collector-notifications-SC-01`,
@@ -1384,7 +1384,7 @@ fixtures through `external/grade10-spec`. Stage (c).
       `grade10-site-grading-collector-notifications-SC-08`,
       `grade10-admin-grading-counter-SC-77`,
       `grade10-site-grading-collector-notifications-SC-13`)
-- [ ] 22.2 Write `notify/vocabulary.ts` with `NOTIFY_FOR_EVENT` exhaustive over
+- [x] 22.2 Write `notify/vocabulary.ts` with `NOTIFY_FOR_EVENT` exhaustive over
       every event kind and `null` written for each silence, so the same event
       always decides the same message: a card refused at the counter and a
       collector named on the page send nothing
@@ -1392,12 +1392,12 @@ fixtures through `external/grade10-spec`. Stage (c).
       `grade10-site-grading-collector-notifications-SC-02`,
       `grade10-site-grading-collector-notifications-SC-06`,
       `grade10-site-grading-collector-notifications-SC-07`)
-- [ ] 22.3 Compose `email/letters/GradingLetter.tsx` over
+- [x] 22.3 Compose `email/letters/GradingLetter.tsx` over
       `@grade10/email/render`'s `BaseLayout` with `CardSchedule`, `PickupCard`
       and `UncollectedLadder` beside the shared blocks, every message's action
       link opening the submission it is about at its own address with no
       account asked for (`grade10-site-grading-collector-notifications-SC-03`)
-- [ ] 22.4 Write `LETTERS: Record<NotifyKind, Letter>` over the twenty kinds —
+- [x] 22.4 Write `LETTERS: Record<NotifyKind, Letter>` over the twenty kinds —
       nineteen messages, the hand-back receipt drawn as two kinds —
       each saying only what is true of the submission it names, the handed-in
       letter carrying the papers, a letter with no document attaching nothing,
@@ -1407,26 +1407,26 @@ fixtures through `external/grade10-spec`. Stage (c).
       `grade10-site-grading-collector-notifications-SC-05`,
       `grade10-site-grading-collector-notifications-SC-24`,
       `grade10-site-grading-collector-notifications-SC-13`)
-- [ ] 22.5 End every letter with the submission's line and the shop's footer,
+- [x] 22.5 End every letter with the submission's line and the shop's footer,
       print every date in the shop's zone, and send one channel in one language
       (`grade10-site-grading-collector-notifications-SC-19`,
       `grade10-site-grading-collector-notifications-SC-20`,
       `grade10-site-grading-collector-notifications-SC-23`)
-- [ ] 22.6 Draft each letter as its act's last step inside the act's
+- [x] 22.6 Draft each letter as its act's last step inside the act's
       transaction, rendered there so `printedValue` prints the marked bracket
       outside production and refuses the act in production rather than
       sending a blank; post it after the commit, the retry row keeping the
       drafted facts
       (`grade10-site-grading-collector-notifications-SC-21`,
       `grade10-site-grading-collector-notifications-SC-22`)
-- [ ] 22.7 Send `plan_expired` for a booked submission that expires, keep every
+- [x] 22.7 Send `plan_expired` for a booked submission that expires, keep every
       drop-off message the submission's, and send no email or push to any
       member of staff (`grade10-site-grading-collector-notifications-SC-08`,
       `grade10-admin-grading-counter-SC-77`)
-- [ ] 22.8 Build the facts once per send and honour `notification_retries`'s
+- [x] 22.8 Build the facts once per send and honour `notification_retries`'s
       recorded figures over a re-derivation, classifying a permanent send
       failure as the vault does
-- [ ] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
+- [x] 22.9 Verify: `pnpm run check:submodules`, `pnpm run typecheck`,
       `pnpm run lint`, `pnpm run test:backend`
 
 ## 23. Retention and erasure (grade10)
@@ -1438,7 +1438,7 @@ the product does not open to collectors in production before it lands. Until
 it does, the grading worker refuses every collector write in production by
 name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
 
-- [ ] 23.1 Cover erasure in the portable suite `src/testing/suites/erasure.ts`
+- [x] 23.1 Cover erasure in the portable suite `src/testing/suites/erasure.ts`
       against the committed migrations: the three holds by name, the ask
       withheld in words, the `collected` arm that keeps the packets and the
       never-signed arm that purges whole
@@ -1450,7 +1450,7 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       `grade10-site-vault-retention-and-erasure-SC-35`,
       `grade10-site-vault-retention-and-erasure-SC-36`,
       `grade10-site-vault-retention-and-erasure-SC-37`)
-- [ ] 23.2 Write `erasure/eraseUser.ts` with the subject `{userId, email}`,
+- [x] 23.2 Write `erasure/eraseUser.ts` with the subject `{userId, email}`,
       the address resolved from the directory when the console sends none
       and refused by name where the directory has no row for the id; the
       holds `live_submission` from `booked` through `ready`, `money_due`
@@ -1460,28 +1460,28 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       (`grade10-site-vault-retention-and-erasure-SC-31`,
       `grade10-site-vault-retention-and-erasure-SC-32`,
       `grade10-site-vault-retention-and-erasure-SC-38`)
-- [ ] 23.3 Withhold the ask in the collector's own words while cards are out,
+- [x] 23.3 Withhold the ask in the collector's own words while cards are out,
       and hold nothing back once every submission has ended
       (`grade10-site-vault-retention-and-erasure-SC-33`,
       `grade10-site-vault-retention-and-erasure-SC-34`)
-- [ ] 23.4 Keep a `collected` submission's sealed packets and photographs under
+- [x] 23.4 Keep a `collected` submission's sealed packets and photographs under
       `signed_documents` and purge the contact, the address, the named
       collector and the actor ids; purge one nobody signed whole,
       `eraseCeremonyPersonalData` included
       (`grade10-site-vault-retention-and-erasure-SC-35`,
       `grade10-site-vault-retention-and-erasure-SC-36`)
-- [ ] 23.5 Delete the owed mail and keep the history's entries under the
+- [x] 23.5 Delete the owed mail and keep the history's entries under the
       append-only guards' `redactable` lists, `submission_events` redacting its
       actor alone (`grade10-site-vault-retention-and-erasure-SC-37`)
-- [ ] 23.6 Add `erasure.erase` and `erasure.holds` on the vault's router shape,
+- [x] 23.6 Add `erasure.erase` and `erasure.holds` on the vault's router shape,
       and join `appointment:grading` to `check-erasure-consumers.mjs`'s `ids`,
       the console's erasure checklist and its `ERASURE_PRODUCTS`; once erasure
       runs, remove the collector rung's production refusal and its
       `GRADING_NOT_OPEN` code
-- [ ] 23.7 Verify: `node scripts/checks/check-erasure-consumers.mjs`,
+- [x] 23.7 Verify: `node scripts/checks/check-erasure-consumers.mjs`,
       `pnpm --dir packages/api-docs run generate` and commit its output,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 23.8 Read grading's holds on Your data beside the vault's, through the
+- [x] 23.8 Read grading's holds on Your data beside the vault's, through the
       site's own grading client, each block failing on its own, the ask
       withheld while any hold of either product stands and each named in the
       collector's words (`grade10-site-vault-retention-and-erasure-SC-33`)
