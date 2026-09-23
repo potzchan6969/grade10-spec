@@ -1758,7 +1758,7 @@ Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `return
 * **Trace:** grade10-admin-grading-counter-US-08
 
 **Pre-conditions:**
-Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission. Admin C's roles hold `grading:operate` but not `grading:approve`.
+Admin A(holds `grading:approve`) asked for a waiver of the upcharge on a `returned` submission. Admin C's roles do not hold `grading:approve`.
 
 **Steps:**
 

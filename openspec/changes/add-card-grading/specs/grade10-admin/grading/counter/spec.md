@@ -956,8 +956,8 @@ what the till took, never as an edit of it, and SHALL name the card it waives.
 #### Scenario: grade10-admin-grading-counter-SC-95 - A second approver without the grant is refused
 **Serves:** grade10-admin-grading-counter-US-08 - the approver writes off an upcharge with a second person
 
-- **GIVEN** an operator whose roles hold `grading:operate` and not `grading:approve`, and a waiver an approve holder asked for
-- **WHEN** the operator approves that waiver on their own console
+- **GIVEN** a member of staff whose roles do not hold `grading:approve`, and a waiver an approve holder asked for
+- **WHEN** they approve that waiver on their own console
 - **THEN** the console's grant check refuses it by name, naming `grading:approve`, before any act runs, and nothing is written
 
 #### Scenario: grade10-admin-grading-counter-SC-103 - A request alone moves no money
