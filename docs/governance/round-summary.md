@@ -2,26 +2,16 @@
 
 What a round owes the hand who reads it, and what a landing proves before it
 writes its row. The `workflow-round` and `workflow-build` skills carry the
-procedure and point here for the conduct; a rule below is read by the run,
-never by a hand. A section whose outcome a hand meets links the page that
-says it in the reader's words, and the page names the requirement; the summary
-and the build round are the run's own, and each of their rules names the
-command that holds it.
+procedure and link here; a section a hand meets links the page that says it in
+their words.
 
 ## Summary
 
-- **What has not run, first** — a lane the environment cannot start, a helper
-  no executed test calls, a tests commit pushed unrun. Before any count, alone
-  on its line
 - **The shape, quoted** — the signature, the answer shape, the asserted list;
   never a count. Counts get copied and lists get checked
 - **One finding per line, with its reason** — the two or three that changed
   the shape first, the rest under them; a line a page owner will read quotes
   the page's line before and after
-- **Files outside the artifact** — every file a fix pass touched that the
-  group's tasks do not name, with what it changed
-- **The verify line, word for word** — checked against the group's verify
-  task; a command the fix pass skipped is the hand's first question
 - **The branch** — what else sits unlanded on it, in one line
 
 ## Held Row
@@ -34,13 +24,16 @@ command that holds it.
   per change, round and row. Never a build round's thread to read
 - **Its cost** — the cost of the recommended option in one clause, beside the
   option it was chosen over
-- **Already decided** — before an `asks`, the verifier reads `decisions.md`; a
-  question a row already answers stands or falls on that row, and is never a
-  new held row
+
+## Page Line
+
+[Agent Rounds · Your Moves](../prds/products/shared/planning/agent-rounds.md#your-moves)
+
 - **The right hand** — a product detail a build round lands on a page reaches
   the product manager as a ❓ line, never as decided by the round; the reply
   quotes the line before and after, `(none)` where it was added or removed;
-  the line holds no landing and, answered, carries 🚧 until its group lands
+  the line holds no landing and, answered, carries 🚧 until the change that
+  delivers it archives
 
 ## Hand's Reply
 
@@ -62,6 +55,13 @@ command that holds it.
 
 [Agent Rounds · The Walk](../prds/products/shared/planning/agent-rounds.md#the-walk)
 
+- **What has not run, above the draft** — a lane the environment cannot start,
+  a helper no executed test calls, a tests commit pushed unrun. Before any
+  count, alone on its line
+- **Files outside the artifact** — every file a fix pass touched that the
+  group's tasks do not name, with what it changed
+- **The verify line, word for word** — checked against the group's verify
+  task; a command the fix pass skipped is the hand's first question
 - **Tests run before they push** — a tests-first commit has run and failed
   before it is pushed
 - **Pinned to a commit** — every reader brief names the landing's commit,
@@ -87,8 +87,9 @@ command that holds it.
 - **What is decided** — every other choice is applied as a default and listed
   under "decided by the round" in the same message, each with the option it
   took; one reply overturns any of them
-- **`not now`** — the change stays Proposed with `awaiting: proposal` on the
-  product manager, and nothing is drafted ahead until they lift it
+- **`not now`** — the change stays Proposed with a dated `awaiting:` line on
+  `proposal`, naming the product manager, and nothing is drafted ahead until
+  they lift it
 - **A fact the sentence states** — is recorded as the product manager's, never
   asked back
 
@@ -99,8 +100,8 @@ command that holds it.
 - **One verifier over the round** — every reader's findings go to one
   verifier, whose table carries one row per kind of finding naming each reader
   that filed it and quoting each reader's fix where they differ
-- **The fallback** — `sonnet` for a definition on `opus`, none for one already
-  on `sonnet`; a dispatch the vendor kills is retried once on the fallback,
+- **The fallback** — `sonnet` for a definition on `opus`; one already on
+  `sonnet` is retried once on `sonnet`; a dispatch the vendor kills is retried once on the fallback,
   and the reader that ran on it is `<name> (fallback)` in the summary's
   perspectives line and the row's cell, written from the model the run
   reports

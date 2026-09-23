@@ -55,7 +55,7 @@ The summary a round posts SHALL show the hand of the stage the moves that are th
 
 ### Requirement: A line a build round puts on a page is the product manager's question
 
-A product detail a build round lands on a page — from a fix pass, a decided row or a reader's finding — SHALL be written as a ❓ line naming the change's product manager, never as decided by the round, and the reply to the product manager SHALL quote the page's line before and after the change, nothing before for a line added and nothing after for a line removed; the line SHALL hold no landing, and once answered SHALL carry 🚧 until the group that delivers it lands.
+A product detail a build round lands on a page — from a fix pass, a decided row or a reader's finding — SHALL be written as a ❓ line naming the change's product manager, never as decided by the round, and the reply to the product manager SHALL quote the page's line before and after the change, nothing before for a line added and nothing after for a line removed; the line SHALL hold no landing, and once answered SHALL carry 🚧 until the change that delivers it archives.
 
 #### Scenario: shared-planning-agent-rounds-SC-88 - A build round's product line reaches the product manager
 **Serves:** shared-planning-agent-rounds-US-10 - the product manager's page changes only on their word

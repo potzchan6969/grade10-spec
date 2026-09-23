@@ -47,7 +47,7 @@
 | Q17 | One change, or the four gates as their own? | One change: the gates were met in the same walkthrough, share its pull request, and each extends a check that exists; they get their own journeys - the round's word | Two changes, the gates first |
 | Q18 | Whose is a page a round edits? | The change's product manager, whatever product the page belongs to - the round's word | The page's product's manager, looked up |
 | Q19 | Does a task group land while a ❓ the round put on the page is open? | Yes: a page question holds nothing; the line stays ❓ until its product manager answers - the round's word | Held like a decisions row |
-| Q20 | What mark does an answered page line carry? | 🚧 until the group that delivers it lands, which takes the mark off as any landing does - the round's word | None; ❓ kept |
+| Q20 | What mark does an answered page line carry? | 🚧 until the change that delivers it archives, whose fold takes the mark off - the round's word | None; ❓ kept |
 | Q21 | Whom does the requirements' landing address when the record names no QA? | The QA channel, as the turn message already does for an unnamed hand; the walk group names the review as its input still - the round's word | Nobody |
 | Q22 | Which walk ids does the tick refuse? | Any whose case is not `actual`: draft, deprecated, or one the suite does not issue - the round's word | Draft alone |
 | Q23 | What does a conditional Manual row read, and who rewrites it? | `to be walked in <test>`, in the row's own words; the run that ran the lane rewrites the rows to what the walk reached; the validator reads the rows as prose in both states - the round's word | A key on the row |

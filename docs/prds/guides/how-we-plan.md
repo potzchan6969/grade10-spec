@@ -36,11 +36,14 @@ is live, not whether the branch is closed.
 A change passes through the hands
 [Change Stages](/p/shared/planning/change-stages) names, each landing their own
 artifacts on their word — [Working a change](/guides/working-a-change) walks one
-feature through them all. Each hand answers only what is theirs in the
-change's thread: the summary shows their own moves, a question held for them
-arrives as its own reply, a line a build put on their page comes back as ❓,
-QA is told the suite to review when the requirements land, and a round that
-lost a reader stops and says which — [Agent Rounds](/p/shared/planning/agent-rounds).
+feature through them all. Each hand answers only what is theirs, in the
+change's thread — [Agent Rounds](/p/shared/planning/agent-rounds):
+
+- **Their own moves** — the summary shows only those
+- **A question held for them** — arrives as its own reply
+- **A line a build put on their page** — comes back as ❓
+- **QA** — is told the suite to review when the requirements land
+- **A round that lost a reader** — stops and says which
 
 ## The rules themselves
 

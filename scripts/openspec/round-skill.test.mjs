@@ -250,7 +250,10 @@ test("shared-planning-agent-rounds-SC-88 - a product line a build round lands is
   assert.match(conduct, /quot\w+ (the line )?before and after/i);
   assert.match(conduct, /\(none\)/);
   assert.match(conduct, /holds no landing|nothing holds the landing/i);
-  assert.match(conduct, /carries 🚧 until its group lands/);
+  assert.match(
+    conduct,
+    /carries 🚧 until the change that delivers it archives/,
+  );
 });
 
 // Proves part of shared-planning-agent-rounds-US14-TC1-1.

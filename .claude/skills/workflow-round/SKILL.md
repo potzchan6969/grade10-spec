@@ -195,13 +195,13 @@ reply that is none of the other three is a remark.
   applied to the page as written; from any other hand it becomes a ❓ line on
   the page for the product manager
 - **A line a build round lands on a page** — the product manager's ❓ line,
-  quoted as [Held Row](../../../docs/governance/round-summary.md#held-row)
+  quoted as [Page Line](../../../docs/governance/round-summary.md#page-line)
   says
 - **One reply, several moves** — as [Hand's
   Reply](../../../docs/governance/round-summary.md#hands-reply) says
-- **Only the hand lands** — a word from another teammate is refused with a
-  reply naming the hand the artifact waits on; the relay checks the same word
-  a second time before `main` moves
+- **Only the hand lands or answers** — a word or an answer from another
+  teammate is refused with a reply naming the hand the artifact waits on; the
+  relay checks a landing's word a second time before `main` moves
 
 ## Questions: Held, or Decided by the Round
 

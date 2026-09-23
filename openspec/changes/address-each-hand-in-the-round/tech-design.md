@@ -59,7 +59,8 @@ round itself: a line a fix pass or a decided row puts on a page is written as
 and after (`(none)` on one side for a line added or removed). The routing is
 `run-a-round-on-every-artifact`'s SC-16 and SC-24; the quoting is held by
 `round-skill.test.mjs`, which reads the skill's moves table. Nothing holds a
-landing on the line; an answered line carries 🚧 until its group lands.
+landing on the line; an answered line carries 🚧 until the change that
+delivers it archives.
 
 ### QA is a hand of Specified
 

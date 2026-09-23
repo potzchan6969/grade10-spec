@@ -78,10 +78,6 @@ One handle per role on each change.
 | Engineer | `dev` | Planned and Building |
 | Release hand | `release` | On staging |
 
-- **QA at Specified** — the landing that puts the suite up for review is a
-  move to QA: one message naming the suite, its cases and the review command,
-  and the walk needs it reviewed as its input
-
 - 🚧 **Recorded in git** — `hands:` in the change's `.openspec.yaml`, written
   by the product manager at the interview's end, by Assign on the locally run
   manual, or by `pnpm plan hand` from the application repository

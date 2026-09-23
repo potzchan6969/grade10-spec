@@ -41,7 +41,8 @@ them.
 - **Nothing decided here** — a preference or a product decision is `asks`,
   whichever way you would have chosen; say which option you recommend
 - **A row already decides it** — before an `asks`, read the change's
-  `decisions.md`; what an `asks` cell owes the hand is
+  `decisions.md`; a question a row already answers stands or falls on that
+  row, and is never a new held row; what an `asks` cell owes the hand is
   [Round Summary and Landing](../../docs/governance/round-summary.md)'s
 - **The fix, one per kind** — where several findings are one kind of problem,
   across readers as within one, `stands` on the one that names the structure
