@@ -147,15 +147,12 @@
     "invalidContentType": "사진만 가능합니다: JPEG, PNG 또는 WebP.",
     "emptyBody": "빈 파일입니다.",
     "tooLarge": "사진 용량이 너무 큽니다.",
-    "photoFailed": "사진을 첨부하지 못했습니다({reason}).",
     "draftLimitReached": "제출하지 않은 신청서가 이미 최대 개수입니다. 하나를 제출하시거나 나중에 다시 이어서 작성해 주세요.",
     "caseConflict": "작성하시는 동안 이 신청 건의 상태가 바뀌었습니다. 목록에서 다시 열어 주세요.",
     "notCaseOwner": "고객님의 신청 건이 아닙니다.",
     "titleRequired": "어떤 물품인지 먼저 알려 주세요.",
     "financingNotPositive": "금액이 없는 대출은 대출이 아닙니다 — 금액을 입력하시거나 보관만 선택해 주세요.",
-    "startFailed": "신청서를 열지 못했습니다({reason}).",
     "photoRequired": "제출하기 전에 사진을 한 장 추가해 주세요.",
-    "submitFailed": "신청서를 제출하지 못했습니다({reason}).",
     "step": {
       "describe": "설명",
       "photograph": "사진",
@@ -399,7 +396,6 @@
     "loadingTimes": "시간을 불러오는 중…",
     "nothingFree": "{location} 매장은 앞으로 {days}일 동안 빈 시간이 없습니다.",
     "unavailable": "이 시간은 이미 예약되었습니다. 아래에서 다른 시간을 골라 주세요 — 목록은 방금 갱신되었습니다.",
-    "failed": "처리하지 못했습니다({reason}).",
     "booked": {
       "title": "방문 예약 완료",
       "emailLine": "확인 이메일을 보내드리고 있습니다.",
@@ -420,8 +416,7 @@
       "duration": "약 30분 소요.",
       "moreShops": "더 많은 매장이 열리면 여기에 표시됩니다."
     },
-    "rules": "예약 시간 전이라면 언제든 일정을 변경하거나 취소하실 수 있습니다. 시간을 놓치시면 이번 방문만 종료되며, 신청 건은 그대로 유지됩니다.",
-    "loadFailed": "지금은 불러올 수 없습니다. 다시 시도해 주세요."
+    "rules": "예약 시간 전이라면 언제든 일정을 변경하거나 취소하실 수 있습니다. 시간을 놓치시면 이번 방문만 종료되며, 신청 건은 그대로 유지됩니다."
   },
   "ceremony": {
     "loading": "서류를 여는 중…",
@@ -669,6 +664,7 @@
       "confirm": "삭제 요청하기",
       "keep": "내 정보 유지하기",
       "filed": "{when}에 요청하셨으며, {erasedWhen}부터 삭제됩니다.",
+      "filedOn": "{when}에 요청하셨습니다.",
       "cancel": "요청 취소하기",
       "cancelled": "요청이 취소되었습니다.",
       "windowPassed": "{when}에 요청하셨으며, 기간이 지났습니다.",

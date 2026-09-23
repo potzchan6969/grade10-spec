@@ -147,15 +147,12 @@
     "invalidContentType": "只接受相片：JPEG、PNG 或 WebP。",
     "emptyBody": "這個檔案是空的。",
     "tooLarge": "這張相片太大了。",
-    "photoFailed": "無法附上這張相片（{reason}）。",
     "draftLimitReached": "你未送出的申請已達上限。先送出一宗，或留待稍後再回來處理。",
     "caseConflict": "你填寫期間，這宗申請已有變動。請從個案列表重新開啟。",
     "notCaseOwner": "這宗申請不屬於你。",
     "titleRequired": "請先告訴我們這是甚麼物品。",
     "financingNotPositive": "借零元不算借貸 — 請填寫金額，或選擇只作保管。",
-    "startFailed": "無法開立這宗申請（{reason}）。",
     "photoRequired": "送出前請先加入一張相片。",
-    "submitFailed": "無法送出這宗申請（{reason}）。",
     "step": {
       "describe": "描述",
       "photograph": "拍照",
@@ -399,7 +396,6 @@
     "loadingTimes": "正在載入時間…",
     "nothingFree": "{location} 未來 {days} 天沒有空檔。",
     "unavailable": "這個時間已被預約。請在下方另選一個 — 列表剛剛更新過。",
-    "failed": "無法完成這項操作（{reason}）。",
     "booked": {
       "title": "已預約到店",
       "emailLine": "確認電郵正在發送中。",
@@ -420,8 +416,7 @@
       "duration": "約 30 分鐘。",
       "moreShops": "更多門市開放後會顯示在此。"
     },
-    "rules": "可於預約時段前隨時改期或取消。錯過時段，我們會結束該次預約 — 個案本身仍然保留。",
-    "loadFailed": "暫時無法載入，請再試一次。"
+    "rules": "可於預約時段前隨時改期或取消。錯過時段，我們會結束該次預約 — 個案本身仍然保留。"
   },
   "ceremony": {
     "loading": "正在開啟你的文件…",
@@ -669,6 +664,7 @@
       "confirm": "要求被遺忘",
       "keep": "保留我的資料",
       "filed": "已於 {when} 提出要求，將於 {erasedWhen} 起刪除。",
+      "filedOn": "已於 {when} 提出要求。",
       "cancel": "取消要求",
       "cancelled": "要求已取消。",
       "windowPassed": "已於 {when} 提出要求，期限已過。",

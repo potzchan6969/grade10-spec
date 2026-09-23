@@ -147,15 +147,12 @@
     "invalidContentType": "Photographs only — JPEG, PNG or WebP.",
     "emptyBody": "That file was empty.",
     "tooLarge": "That photograph is too large.",
-    "photoFailed": "We could not attach that photograph ({reason}).",
     "draftLimitReached": "You already have as many unsent requests as we keep open. Send one in or leave it and come back to it.",
     "caseConflict": "This request moved on while you were filling it in. Open it again from your cases.",
     "notCaseOwner": "That request is not yours.",
     "titleRequired": "Tell us what the item is first.",
     "financingNotPositive": "A loan of nothing is not a loan — tell us how much, or ask for storage only.",
-    "startFailed": "We could not open that request ({reason}).",
     "photoRequired": "Add a photograph before sending this in.",
-    "submitFailed": "We could not send that in ({reason}).",
     "step": {
       "describe": "Describe",
       "photograph": "Photograph",
@@ -399,7 +396,6 @@
     "loadingTimes": "Loading times…",
     "nothingFree": "Nothing free at {location} in the next {days} days.",
     "unavailable": "That time is no longer free. Pick another one below — the list has just been refreshed.",
-    "failed": "We could not do that ({reason}).",
     "booked": {
       "title": "Visit booked",
       "emailLine": "A confirmation is on its way by email.",
@@ -420,8 +416,7 @@
       "duration": "About 30 minutes.",
       "moreShops": "More shops appear here as they open."
     },
-    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open.",
-    "loadFailed": "This could not be loaded just now. Try again."
+    "rules": "Move or cancel any time before the slot. Miss it, and we close the visit — the case stays open."
   },
   "ceremony": {
     "loading": "Opening your documents…",
@@ -669,6 +664,7 @@
       "confirm": "Ask to be forgotten",
       "keep": "Keep my data",
       "filed": "Filed on {when}. Erased from {erasedWhen}.",
+      "filedOn": "Filed on {when}.",
       "cancel": "Cancel the request",
       "cancelled": "Request cancelled.",
       "windowPassed": "Filed on {when}. The window has passed.",
