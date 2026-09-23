@@ -1,4 +1,4 @@
-## 1. Product record (grade10-spec)
+## 1. Product record (grade10-spec) (owner: @htonyl)
 
 - [ ] 1.1 Reconcile the listing/invoice identifier wording, including permanent
   code and URL reservation, settled admin access and placement, cached-preview
