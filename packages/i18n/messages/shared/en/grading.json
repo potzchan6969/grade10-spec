@@ -428,7 +428,7 @@
       "reminders": "We remind you on {first} and {second}. Reminders never cost anything.",
       "storage": "From {day}, a storage fee of {rate} a card a month. It accrues here and is due before collection.",
       "notice": "Written notice on {day}.",
-      "afterNotice": "After it the cards may be sold under the Disposal of Uncollected Goods Ordinance (Cap. 456); the proceeds less our fees are held for you. They stay yours until then.",
+      "afterNotice": "After it, nothing further follows: the cards stay yours, and a slab can go into a vault case.",
       "closing": "We do not ship slabs back. Rather keep them here on purpose? Vault it, above."
     },
     "collected": {

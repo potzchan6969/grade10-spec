@@ -711,7 +711,7 @@ unmatched line holds `finishReceiving`.
 | `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `route CHECK (till, transfer)`, `bank_ref`, `recorded_by`, `approved_by`, `recorded_at`, `received_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
 | `payout_reversals` | `payout_id PK FK`, `reason`, `recorded_by`, `approved_by`, `at` | append-only; the same CHECK |
 | `upcharge_waivers` | `id`, `submission_id`, `card_id`, `amount_minor`, `reason`, `recorded_by`, `approved_by`, `at` | append-only; the same CHECK; plain index on `card_id` |
-| `notices` | `submission_id PK FK`, `posted_on date`, `tracking`, `recorded_by`, `at`, `emailed_at` | one per submission, which is the replay guard a double-click needs |
+| `notices` | `submission_id PK FK`, `posted_on date`, `tracking NOT NULL`, `recorded_by`, `at` | one per submission, which is the replay guard a double-click needs |
 
 ### History, mail, evidence
 
