@@ -1299,7 +1299,9 @@ the slow lane of 21.8; walk 34 decides them.
       `recoveredBookings` over `visit_owner_id`, `expiredPackets` and
       `sealedDeliveries`; a list keyed on `booking_ref` filters on status,
       since a `cancelled` row keeps its cache when the counter cancelled it
-      and holds none when the collector did
+      and holds none when the collector did; each step's email carries its
+      sealed document attached
+      (`grade10-site-grading-counter-documents-SC-25`)
 - [ ] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
       `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset` and
       `orphanedObjects`
@@ -1806,8 +1808,14 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       check-in panel (`grade10-admin-grading-counter-SC-14`,
       `grade10-admin-grading-counter-SC-21`)
 - [ ] 29.3 Open the till step only on the sealed agreement, and hand the next
-      step on after each act (`grade10-admin-grading-counter-SC-18`,
-      `grade10-admin-grading-counter-SC-42`)
+      step on after each act; the sign step shows a decline and offers the
+      agreement again, offers Show on iPad and Copy link, shows the sealed
+      copies' fingerprints, and says when nothing has been sealed yet
+      (`grade10-admin-grading-counter-SC-18`,
+      `grade10-admin-grading-counter-SC-42`,
+      `grade10-admin-grading-counter-SC-47`,
+      `grade10-admin-grading-counter-SC-48`,
+      `grade10-admin-grading-counter-SC-93`)
 - [ ] 29.4 Build `RefuseCardDialog` with the three reasons, the
       collector's-words field and the consequence `Notice`
 - [ ] 29.5 Build `HandbackRunbook` as six `Check`s: the code and name step, the
