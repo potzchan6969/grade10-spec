@@ -49,8 +49,8 @@ metafield's `value`, a JSON list of product ids in the order stored.
   makes, so it cannot fail on its own and the one-read goal holds; a shop
   whose product carries no such field answers `null`, which is "no picks"
 - **`value`, not `references`** — every pick is resolved against the mirror,
-  so only the ids are wanted; a `references` connection would pull nested
-  product nodes the read throws away
+  so only the ids are wanted; the shared fragment's `references` answers
+  one empty node per pick, which the read drops
 - **Rejected: `productRecommendations`** — mixes the shop's ranking in when
   the list is short, in the shop's order
 - **Rejected: a custom metafield of handles** — a second definition the
