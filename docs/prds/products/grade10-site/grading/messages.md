@@ -24,7 +24,7 @@ new event cannot ship silent:
 | Batch shipped | Your cards are on their way to PSA | the ship day | the courier and tracking, the grader's order number, the estimate | Open your submission |
 | Running late | PSA is running late with your cards | the day the batch is re-estimated, to every collector in it | the grader's stage, the old and the new estimate | Open your submission |
 | Grades posted | Grades are in: a PSA 10, two 9s, and one returned ungraded | the morning the grades are read | each card's grade and cert, any upcharge and that it is settled at the counter, any ungraded card with the grader's note, the review line | See the grades |
-| A card not returned, or damaged | One card did not come back: Lugia V (Alternate Art) | the day the batch is received | the payout at declared value and the fee refunded, inside the payout window from that day; the other cards ready now | Open your submission |
+| A card not back with the box: held by the grader, not returned, or damaged | One card did not come back: Lugia V (Alternate Art) | the day it is recorded at receiving | a held card, the day the grader holds it until; a card not returned or damaged, the payout at declared value and the fee refunded, inside the payout window | Open your submission |
 | Ready to collect | Ready to collect: 3 slabs and 1 card | when receiving finishes | the pickup code, the shop's hours, what is due, the vault offer, the uncollected ladder, naming someone to collect and the ID line | Open your submission |
 | Still here | Your graded cards are still with us | 30 and 60 days after the ready email | the code, what is due, the storage day and the notice day | Open your submission |
 | Storage fee | Your graded cards: a storage fee from today | day 90 | the fee a card a month, what is due, the notice day, the vault offer | Open your submission |
@@ -63,5 +63,6 @@ new event cannot ship silent:
 | Every event tells the collector or is decided silent | Decided | One map from event to message; a refused card and a named collector are the two silences, because both are told at the counter or on the page | Product |
 | Email only, English | Decided | No SMS and no WhatsApp automation; the console's click-to-chat templates are staff-pressed | Product |
 | The link needs no account | Decided | Every message links to the submission page, which the emailed link opens on any device | Product |
+| A held card is told in the not-back message | Decided | Told the day it is recorded, with the day the grader holds it until, inside the message for a card not back with the box; the set of messages does not grow for it | Product |
 | The notice's channels | ❓ Open | By email and by registered post to the address taken at signing, the day staff post it; whether email alone serves | Legal |
 :::

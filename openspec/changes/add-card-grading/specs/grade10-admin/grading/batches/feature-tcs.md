@@ -985,6 +985,48 @@
 
 ---
 
+### grade10-admin-grading-batches-US2-TC16-1: An unmatched line is resolved by naming its card or closing it as the grader's error
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-grading-batches-US-02
+
+**Pre-conditions:**
+
+* admin(holds grading:operate) has entered the manifest and invoice for <a batch back from the grader, unchecked>.
+* One unmatched line carries a mistyped intake id for <a card in the batch>; a second unmatched line names a card the shop never sent.
+* Every other card in the batch is scanned or recorded as an exception.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Reason for the second line | Listed in error by the grader |
+
+**Steps:**
+
+1. On the first line, name the card it meant.
+2. Scan the first line's cert.
+3. Close the second line as the grader's error with the reason.
+4. Attempt Finish receiving.
+
+**Expected Results:**
+
+* The first line's cert is recorded on the card named, and the line reads matched.
+* The second line reads closed with its reason.
+* Finish receiving goes ahead; neither line holds it.
+
+---
+
 ## grade10-admin-grading-batches-US3: Operator records what did not come back as drawn
 
 **As a** member of shop staff finishing a batch,
@@ -1672,6 +1714,7 @@
 | `grade10-admin-grading-batches-SC-19` | Case added | `grade10-admin-grading-batches-US4-TC7-1` - the same stage on a second morning tells nobody again |
 | `grade10-admin-grading-batches-SC-22` | Case added | `grade10-admin-grading-batches-US4-TC8-1` - a re-estimate to the date already set tells nobody again |
 | `grade10-admin-grading-batches-SC-50` | Case added | `grade10-admin-grading-batches-US4-TC9-1` - the due-back badge stands from the estimated day, gives way to running late the day after, and stands no longer once the batch is received |
+| `grade10-admin-grading-batches-SC-51` | Case added | `grade10-admin-grading-batches-US2-TC16-1` - an unmatched line resolved by naming the card it meant, a second closed as the grader's error with a reason, and neither holding the finish |
 | `grade10-admin-grading-batches-SC-14`, `grade10-admin-grading-batches-SC-33`, `grade10-admin-grading-batches-SC-42` | Out of suite | Listed in the header: the concurrency and replay guards, verified by the backend's own tests rather than from one panel |
 
 ### Manual

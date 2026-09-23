@@ -479,6 +479,7 @@
         "grades_posted": "成績已公布",
         "moved_up": "升一級：{amount}",
         "card_ungraded": "一張卡退回未評級",
+        "card_minimum_not_met": "一張卡未達指定最低評分，不入殼退回",
         "card_held": "評級公司暫留一張卡",
         "card_not_returned": "一張卡未有寄回",
         "card_damaged": "一張卡有損毀",

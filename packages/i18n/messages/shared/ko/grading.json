@@ -479,6 +479,7 @@
         "grades_posted": "감정 결과 공개",
         "moved_up": "한 레벨 상향: {amount}",
         "card_ungraded": "카드 미감정 반환",
+        "card_minimum_not_met": "지정한 최저 등급 미달로 카드 그대로 반환",
         "card_held": "감정사가 카드 보류",
         "card_not_returned": "카드 반환되지 않음",
         "card_damaged": "카드 손상됨",

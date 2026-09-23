@@ -87,12 +87,13 @@ submission was planned under, each carrying an action link to the submission:
 | The drop-off | booked, moved, cancelled, missed, the visit closed by the submission that owned it, the day before |
 | The counter | handed in, the hand-back receipt for a card withdrawn and for the cards collected |
 | The batch | on its way to the grader, re-estimated |
-| The grades | the grades posted, a card not returned or damaged |
+| The grades | the grades posted, a card not back with the box |
 | Waiting to be collected | ready to collect, still here, the storage fee started, the written notice |
 
 - **One channel, one language** — every message SHALL be sent by email, in English, whatever language the collector reads the pages in, and grading SHALL send nothing on any other channel.
 - **The link** — every message's action link SHALL open the submission at its own address, which SHALL need no account.
 - **What it names** — every message SHALL state the facts it is about rather than only linking to them, and SHALL leave out a paragraph whose fact does not stand for this submission.
+- **Not back with the box** — a card recorded held by the grader, not returned or damaged SHALL be told in the message for a card not back with the box, sent the day it is recorded; a held card SHALL be named with the day the grader holds it until.
 - **What it attaches** — the handed-in message SHALL carry the intake receipt and the signed agreement, the hand-back receipt SHALL carry the signed receipt, and the drop-off booked message SHALL carry a calendar file.
 
 #### Scenario: grade10-site-grading-collector-notifications-SC-03 - The link opens the submission with no account

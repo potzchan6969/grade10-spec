@@ -79,7 +79,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
 ## Receiving
 
 - 🚧 **The manifest and the invoice** — enter before the first scan; a manifest line naming no intake id in the
-  batch is listed as unmatched and holds finishing until staff resolve it
+  batch is listed as unmatched and holds finishing until staff name the card it meant or close it as the grader's
+  error with a reason
 - ❓ **How they enter** — imported as a file, or typed as the morning read is — Operations
 - 🚧 **Scan and match** — each scan matches a cert to a card by the intake id on the grader's manifest; a cert already
   held by another submission is refused by name; counters: scanned, matched, ungraded, upcharges and their sum
@@ -87,7 +88,7 @@ One intake label per card, the cards sealed into the intake bag with the printed
   difference between the two levels, the invoice reconciled against it and a gap Commercial's; a slab on the manifest
   not scanned, finished as held by the grader with its expected date or as not returned; damaged, photographed in the box
 - 🚧 **Finish receiving** — `graded → returned → ready` for every submission in the batch, each collector emailed the
-  pickup code and what is due, a card not returned or damaged the same day; a batch saved half scanned keeps its scans
+  pickup code and what is due, a card held, not returned or damaged the day it is recorded; a batch saved half scanned keeps its scans
 
 ## One Submission
 

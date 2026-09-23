@@ -479,6 +479,7 @@
         "grades_posted": "Grades posted",
         "moved_up": "Moved up a level: {amount}",
         "card_ungraded": "Card returned ungraded",
+        "card_minimum_not_met": "Card below its minimum grade, returned raw",
         "card_held": "Card held by the grader",
         "card_not_returned": "Card not returned",
         "card_damaged": "Card damaged",
