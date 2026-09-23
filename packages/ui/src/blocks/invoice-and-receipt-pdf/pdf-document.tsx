@@ -65,6 +65,24 @@ function MetaRow({
   );
 }
 
+/** A full-width section below the order-value summary — the invoice's bank rails, given only on a bank-transfer invoice. */
+function BankRailsSection({
+  label,
+  children,
+}: {
+  label: ReactNode;
+  children: ReactNode;
+}) {
+  return (
+    <VStack data-slot="pdf-bank-rails" gap="sm" hAlign="stretch">
+      <Text size="sm" weight="bold">
+        {label}
+      </Text>
+      {children}
+    </VStack>
+  );
+}
+
 function PartyBlock({
   heading,
   children,
@@ -250,6 +268,7 @@ function OrderValueSection({
 export type { PdfDocumentSlot };
 export {
   AddressLines,
+  BankRailsSection,
   MetaRow,
   OrderValueSection,
   PartyBlock,

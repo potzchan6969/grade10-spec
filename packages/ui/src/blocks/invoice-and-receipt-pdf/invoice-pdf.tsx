@@ -4,6 +4,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   AddressLines,
+  BankRailsSection,
   MetaRow,
   OrderValueSection,
   PartyBlock,
@@ -44,9 +45,6 @@ function InvoicePdf({
           {bankReference !== undefined ? (
             <MetaRow label={copy.bankReferenceLabel} value={bankReference} />
           ) : null}
-          {bankRails !== undefined ? (
-            <MetaRow label={copy.bankRailsLabel} value={bankRails} />
-          ) : null}
           {replacedBy !== undefined ? (
             <MetaRow label={copy.replacedByLabel} value={replacedBy} />
           ) : null}
@@ -64,6 +62,12 @@ function InvoicePdf({
       </div>
 
       <OrderValueSection copy={copy.orderValue} orderValue={orderValue} />
+
+      {bankRails !== undefined ? (
+        <BankRailsSection label={copy.bankRailsLabel}>
+          {bankRails}
+        </BankRailsSection>
+      ) : null}
     </PdfSheet>
   );
 }

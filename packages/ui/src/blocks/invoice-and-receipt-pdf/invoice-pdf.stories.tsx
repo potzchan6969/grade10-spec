@@ -71,9 +71,39 @@ export const BankTransfer: Story = {
     expect(canvas.getByText("September 22, 2026, 11:04 HKT")).toBeVisible();
     expect(canvas.getByText("Bank reference")).toBeVisible();
     expect(canvas.getByText("LK7P2Q01")).toBeVisible();
-    expect(canvas.getByText("Bank details")).toBeVisible();
-    expect(canvas.getByText("SWIFT, FPS, HK local transfer")).toBeVisible();
     expect(canvas.getByText("Grade10, support@grade10.com")).toBeVisible();
+
+    // Bank rails render as their own full-width section below the order
+    // value, not as a meta row: after pdf-order-value-section in document
+    // order, outside every pdf-meta-row, and as wide as that section.
+    const bankRails = canvasElement.querySelector(
+      '[data-slot="pdf-bank-rails"]',
+    );
+    expect(bankRails).not.toBeNull();
+    expect(
+      within(bankRails as HTMLElement).getByText("Bank details"),
+    ).toBeVisible();
+    expect(
+      within(bankRails as HTMLElement).getByText(
+        "SWIFT, FPS, HK local transfer",
+      ),
+    ).toBeVisible();
+    const metaRows = canvasElement.querySelectorAll(
+      '[data-slot="pdf-meta-row"]',
+    );
+    metaRows.forEach((row) => {
+      expect(row.contains(bankRails)).toBe(false);
+    });
+    const orderValueSection = canvasElement.querySelector(
+      '[data-slot="pdf-order-value-section"]',
+    ) as HTMLElement;
+    expect(
+      orderValueSection.compareDocumentPosition(bankRails as HTMLElement) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+    expect(
+      (bankRails as HTMLElement).getBoundingClientRect().width,
+    ).toBeCloseTo(orderValueSection.getBoundingClientRect().width, 0);
     const [bill, ship] = canvasElement.querySelectorAll(
       '[data-slot="pdf-party-block"]',
     );

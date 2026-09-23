@@ -947,6 +947,35 @@ Runs once per row of **Test data**.
 * No company name, address line 2, or state field renders.
 * Full name, address line 1, city, postal code, country, and phone number still render.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC31-1: Bank rails render below the order value, full width, not as a meta row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with bank rails supplied and a full order-value section.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the bank rails section's position and width relative to the meta rows and the order-value summary.
+
+**Expected Results:**
+
+* The bank rails section renders after the order-value summary, not inside the meta rows column.
+* The bank rails section spans the same width as the order-value summary.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -996,3 +1025,10 @@ capability rather than a new one.
 "InvoicePdf and ReceiptPdf SHALL render" wording — the same gap `SC-21`
 closed for the order-value lines, caught before drafting rather than at
 reconciliation.
+
+**Amendment, post-landing:** the author moved bank rails from a meta row to
+its own full-width section below the order-value summary, on seeing the
+rendered document (`decisions.md` Q12). `SC-1`/`SC-2` were reworded in place
+(same ids, same claims, corrected shape), `SC-18` moved under a new
+requirement with it, and `SC-35`/`TC31` were added for the position and
+width claims the move itself makes testable.

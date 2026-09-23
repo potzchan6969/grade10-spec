@@ -43,10 +43,7 @@ const address: PartyAddress = {
 
 function BankRails() {
   return (
-    <VStack className="border-t border-border pt-4" gap="sm" hAlign="stretch">
-      <Text size="sm" weight="bold">
-        Payment Information
-      </Text>
+    <VStack gap="sm" hAlign="stretch">
       <div className="grid gap-4 sm:grid-cols-3">
         <BankWay
           heading="SWIFT"

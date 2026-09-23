@@ -51,7 +51,7 @@ one-directory convention every other block already follows
 | --- | --- |
 | `invoice-pdf.tsx` | `InvoicePdf`, exported |
 | `receipt-pdf.tsx` | `ReceiptPdf`, exported |
-| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, and `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
+| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — and `BankRailsSection`, InvoicePdf's full-width bank-rails block (SC-35) — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
 | `types.ts` | Every exported prop type: `InvoicePdfProps`, `InvoicePdfCopy`, `ReceiptPdfProps`, `ReceiptPdfCopy`, and the shared row shapes both use |
 | `fixtures.ts` | Story fixtures and DOM-reading helpers both story files share (`orderValue`, `orderValueCopy`, `billToAddress`, `shipToAddress`, `readRows`, `readBreakdownRows`, `readAddressLines`), unexported from the package |
 | `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Storybook stories with sample props — the behavior proof for `spec.md`'s scenarios (see Risks) |
@@ -126,8 +126,8 @@ type InvoicePdfProps = {
   paymentMethod: ReactNode;
   sentAt: ReactNode;
   paymentDeadline: ReactNode;
-  bankReference?: ReactNode; // SC-2, SC-18: independent of bankRails
-  bankRails?: ReactNode; // SC-1, SC-2, SC-18: independent of bankReference
+  bankReference?: ReactNode; // SC-2, SC-18: independent of bankRails; meta row
+  bankRails?: ReactNode; // SC-2, SC-18, SC-35: independent of bankReference; full-width section below the order value, not a meta row
   issuer: ReactNode; // one opaque block — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
   billTo: PartyAddress;
   shipTo: PartyAddress; // SC-19: never echoes billTo
@@ -215,6 +215,15 @@ same way it is on a personal address. Each field stays `ReactNode` (Q6) and
 renders as its own line, in the order named — the component does not join
 city, state and postal code onto one line or otherwise combine fields; each
 is rendered exactly as given, per the presentation-only contract.
+
+**Bank rails render as their own full-width section, not a meta row
+(`decisions.md` Q12).** `BankRailsSection` (`pdf-document.tsx`) sits after
+`OrderValueSection`, labelled from `copy.bankRailsLabel`, spanning the
+sheet's full content width rather than the meta rows' narrower column. This
+reversed the original placement (a `MetaRow` beside the issuer block), made
+on the rendered document rather than on the prop shape alone — `bankRails`'s
+type is unchanged (still `ReactNode`, still `!== undefined`-gated,
+independent of `bankReference`); only where it renders moved.
 
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,

@@ -11,12 +11,14 @@ already requires without maintaining its own copy.
 
 - InvoicePdf export
   - Meta rows: invoice ID, payment method, sent at, payment deadline, bank
-    reference, bank rails on a bank-transfer invoice
+    reference
   - Issuer and party blocks: the issuer, Bill To, Ship To
   - Lot and order-value lines: the lot, winning bid, buyer's premium,
     shipping & handling, insurance when given, subtotal, payment processing
     fee, order total
   - Replaced by, shown only when given
+  - Bank rails: a full-width section below the order-value summary, shown
+    only on a bank-transfer invoice — not a meta row
 - ReceiptPdf export
   - Meta rows: receipt ID, the invoice ID it pays, payment method, the
     manually-settled mark
@@ -52,12 +54,9 @@ how it is paid, and who it bills and ships to.
 **Meta rows** — InvoicePdf SHALL render the invoice ID, payment method, sent
 at, and payment deadline for every invoice. **Bank reference** — InvoicePdf
 SHALL render the bank reference only when the consumer supplies it, and SHALL
-render no bank reference row when withheld. **Bank rails** — InvoicePdf SHALL
-render the bank rails only when the consumer supplies them, and SHALL render
-no bank rails row when withheld, independently of whether a bank reference is
-also given. **Party blocks** — InvoicePdf SHALL render the issuer block, Bill
-To, and Ship To for every invoice, each rendering only its own supplied
-content.
+render no bank reference row when withheld. **Party blocks** — InvoicePdf
+SHALL render the issuer block, Bill To, and Ship To for every invoice, each
+rendering only its own supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - A bank-transfer invoice's meta rows and party blocks all render
 **Serves:** InvoicePdf export - the invoice's meta rows all render
@@ -67,14 +66,31 @@ content.
   Ship To
 - **WHEN** it renders
 - **THEN** every meta row and party block given is shown
+- **AND** the bank rails section renders too, per its own requirement below
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-2 - A card invoice shows no bank reference or bank rails
 **Serves:** InvoicePdf export - a card invoice withholds the bank rows a card carries none of
 
 - **GIVEN** an InvoicePdf given no bank reference and no bank rails
 - **WHEN** it renders
-- **THEN** no bank reference row and no bank rails row appear
+- **THEN** no bank reference row and no bank rails section appear
 - **AND** every other meta row and party block still renders
+
+### Requirement: InvoicePdf renders bank rails as a full-width section below the order value
+
+Bank rails — SWIFT, FPS and Hong Kong local transfer details — read as their
+own section, the full width of the sheet, below the order-value summary and
+Order Total. They are not a meta row: a meta row's label-and-value shape does
+not fit a rail-by-rail table, and every invoice's meta rows sit in a narrow
+column beside the issuer block.
+
+**Given** — InvoicePdf SHALL render the bank rails section, labelled from
+`copy.bankRailsLabel`, only when the consumer supplies `bankRails`.
+**Withheld** — InvoicePdf SHALL render no bank rails section when `bankRails`
+is not supplied, independently of whether a bank reference is also given.
+**Position** — Where rendered, the bank rails section SHALL follow the
+order-value summary and SHALL span the sheet's full content width, not the
+meta rows' narrower column.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-18 - A bank reference can render without bank rails
 **Serves:** InvoicePdf export - the bank reference and bank rails rows are independently optional
@@ -82,7 +98,18 @@ content.
 - **GIVEN** an InvoicePdf given a bank reference and no bank rails
 - **WHEN** it renders
 - **THEN** the bank reference row appears
-- **AND** no bank rails row appears
+- **AND** no bank rails section appears
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-35 - The bank rails section sits below the order value, full width
+**Serves:** InvoicePdf export - bank rails render as their own full-width section below the order-value summary
+
+- **GIVEN** an InvoicePdf given bank rails and a full order-value section
+- **WHEN** it renders
+- **THEN** the bank rails section follows the order-value summary in the
+  document
+- **AND** it is not nested inside any meta row
+- **AND** it spans the same width as the order-value summary, not the
+  narrower meta-rows column
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-19 - Bill To and Ship To never echo each other
 **Serves:** InvoicePdf export - Bill To and Ship To each render only their own content
