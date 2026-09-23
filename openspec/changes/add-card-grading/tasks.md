@@ -927,7 +927,7 @@ Stage (b).
 
 Stage (b).
 
-- [ ] 16.1 Cover the batch's writes: the ship act over every submission in one
+- [x] 16.1 Cover the batch's writes: the ship act over every submission in one
       transaction, the cover comparison inside one currency, the stage recorded
       twice, the re-estimate, and the audit row each act writes
       (`grade10-admin-grading-batches-SC-08`,
@@ -947,10 +947,10 @@ Stage (b).
       `grade10-admin-grading-batches-SC-22`,
       `grade10-admin-grading-batches-SC-48`,
       `grade10-site-grading-submission-lifecycle-SC-10`)
-- [ ] 16.2 Derive the batch's human label and its ship day from the shop, the
+- [x] 16.2 Derive the batch's human label and its ship day from the shop, the
       pair and the cut-off date, so the batch that closed on Thursday ships the
       next day (`grade10-admin-grading-batches-SC-08`)
-- [ ] 16.3 Write `shipBatch` under `lockBatch` then each submission's lock in
+- [x] 16.3 Write `shipBatch` under `lockBatch` then each submission's lock in
       id order: the packing list naming every intake id, `markShipped` per
       submission, one event each and the letters after commit; refusing a ship
       date ahead of today, an unset field, an open batch and the loser of two
@@ -960,27 +960,27 @@ Stage (b).
       `grade10-admin-grading-batches-SC-13`,
       `grade10-admin-grading-batches-SC-14`,
       `grade10-admin-grading-batches-SC-45`)
-- [ ] 16.4 Read the insured total off the cards in the batch and compare it to
+- [x] 16.4 Read the insured total off the cards in the batch and compare it to
       the courier's written cover inside one currency, refusing `OVER_COVER`
       above it and `CURRENCY_MISMATCH` otherwise, converting nothing
       (`grade10-admin-grading-batches-SC-15`,
       `grade10-admin-grading-batches-SC-16`,
       `grade10-admin-grading-batches-SC-43`)
-- [ ] 16.5 Write `recordBatchStage` over the closed `GraderStage` set with one
+- [x] 16.5 Write `recordBatchStage` over the closed `GraderStage` set with one
       member flagged as the move: under `lockBatch`, `grader_stage` set,
       `recordGrades` per submission in id order, one event each, the letters
       after commit, and the same stage twice writing nothing further
       (`grade10-admin-grading-batches-SC-17`,
       `grade10-admin-grading-batches-SC-18`,
       `grade10-admin-grading-batches-SC-19`)
-- [ ] 16.6 Write `reestimateBatch` taking a reason and refusing without one,
+- [x] 16.6 Write `reestimateBatch` taking a reason and refusing without one,
       one event per submission, a repeat of the same date a no-op, and every
       collector told the new date that day
       (`grade10-admin-grading-batches-SC-21`,
       `grade10-admin-grading-batches-SC-22`,
       `grade10-admin-grading-batches-SC-48`,
       `grade10-site-grading-submission-lifecycle-SC-10`)
-- [ ] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 16.7 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 17. Receiving, the scans and finishing (grade10)
