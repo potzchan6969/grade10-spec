@@ -1143,34 +1143,6 @@ test("shared-planning-agent-rounds-SC-58 - plan:land refuses a group's landing t
   assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
-test("shared-planning-agent-rounds-SC-58 - plan:land names the ids a group's --tests left out, and no others", () => {
-  const { root, git } = sandbox({ files: CITING });
-  git("config", "user.email", "erin@test");
-
-  const result = landGroup(root, [
-    "--tests",
-    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
-  ]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /shared-planning-agent-rounds-SC-58/);
-  assert.doesNotMatch(result.stderr, /SC-57/);
-});
-
-test("shared-planning-agent-rounds-SC-58 - an id that only begins a longer one is not named", () => {
-  const { root, git } = sandbox({ files: CITING });
-  git("config", "user.email", "erin@test");
-  const tests = [
-    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs",
-    "`shared-planning-agent-rounds-SC-580`: scripts/openspec/fifty-eight.test.mjs",
-  ].join("; ");
-
-  const result = landGroup(root, ["--tests", tests]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /names no test for:\n.*SC-58\b/);
-});
-
 test("shared-planning-agent-rounds-SC-58 - every path the cell names is held, and a directory is no file", () => {
   const { root, git } = sandbox({ files: CITING });
   git("config", "user.email", "erin@test");
@@ -1187,25 +1159,6 @@ test("shared-planning-agent-rounds-SC-58 - every path the cell names is held, an
   assert.match(result.stderr, /scripts\/openspec\n/);
   assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
   assert.doesNotMatch(result.stderr, /EISDIR/);
-});
-
-test("shared-planning-agent-rounds-SC-58 - plan:land refuses a --tests path the store does not hold, naming it", () => {
-  const { root, git } = sandbox({ files: CITING });
-  git("config", "user.email", "erin@test");
-  // The absent file is the second of its id, after a comma: every path the
-  // cell names is held, not the first of each.
-  const tests = [
-    "`shared-planning-agent-rounds-SC-57`: scripts/openspec/round-scripts.test.mjs, scripts/openspec/nowhere.test.mjs",
-    "`shared-planning-agent-rounds-SC-58`: scripts/openspec/round-scripts.test.mjs",
-  ].join("; ");
-
-  const result = landGroup(root, ["--tests", tests]);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /the store holds no file at/);
-  assert.match(result.stderr, /scripts\/openspec\/nowhere\.test\.mjs/);
-  assert.doesNotMatch(result.stderr, /round-scripts\.test\.mjs/);
-  assert.equal(existsSync(join(root, DIR, "rounds.md")), false);
 });
 
 /** A sandbox whose group is the application repository's, and a clone of

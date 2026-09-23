@@ -24,7 +24,9 @@ import {
   findSection,
   findSectionAnywhere,
   outline,
+  SCENARIO_ID,
   type Section,
+  scenarioIdsIn,
 } from "./markdown.mts";
 
 /** Disk shape is the taxonomy. A directory holding `spec.md` is a capability;
@@ -43,9 +45,9 @@ export type SpecShape = {
 };
 
 const REQUIREMENT = "Requirement:";
-const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
-const SCENARIO_HEADING =
-  /^Scenario:\s*(?:([a-z0-9][a-z0-9-]*-SC-\d+)\s+-\s+)?(.+)$/;
+const SCENARIO_HEADING = new RegExp(
+  `^Scenario:\\s*(?:(${SCENARIO_ID.source})\\s+-\\s+)?(.+)$`,
+);
 const JOURNEY_HEADING = /^([a-z0-9][a-z0-9-]*-US-\d+):\s*(.+)$/;
 /** A case id is journey-scoped, `<capability>-US<n>-TC<m>-<v>`
  * (`docs/governance/specs-to-test-cases.md`, Naming). Older suites still
@@ -538,7 +540,7 @@ function outOfSuite(text: string): string[] {
   for (const line of text.split("\n")) {
     const out = OUT_OF_SUITE.exec(line);
     if (out) {
-      const inline = out[1].match(SCENARIO_ID) ?? [];
+      const inline = scenarioIdsIn(out[1]);
       for (const id of inline) ids.add(id);
       listing = true;
       started = inline.length > 0;
@@ -554,7 +556,7 @@ function outOfSuite(text: string): string[] {
       continue;
     }
     started = true;
-    for (const id of line.match(SCENARIO_ID) ?? []) ids.add(id);
+    for (const id of scenarioIdsIn(line)) ids.add(id);
   }
   return [...ids];
 }

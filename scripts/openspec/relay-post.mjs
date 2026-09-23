@@ -55,7 +55,6 @@
 import { existsSync, mkdirSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { ROLE_LABEL } from "../../tools/manual/src/api/stages.ts";
 import {
   decisionRows,
   handsOfRecord,
@@ -66,13 +65,15 @@ import { citesId } from "./lib/cites.mjs";
 import { appendSentKeys, readSentKeys } from "./lib/notify.mjs";
 import { confirmOf, readWake, relayOf } from "./lib/relay.mjs";
 import { nextRoundOf } from "./lib/rounds.mjs";
+import { handText } from "./lib/wording.mjs";
 
 /**
  * The modes, one row each: `read` takes the flag's value off the arguments,
  * `call` is what the wake is asked, `printed` is what a terminal round says
  * instead, `confirmed` is what a call that went through says, `nothing` is
  * the value that makes the whole run a no-op, `button` is whether a
- * `--confirm` may ride this mode, and `after` runs once the text is out.
+ * `--confirm` may ride this mode, and `key` names what is posted once, in the
+ * `ledger` file, which a post or a print appends it to.
  */
 const KINDS = {
   "message-file": {
@@ -100,13 +101,17 @@ const KINDS = {
   // change's thread, mentioning that hand, with the row, the sentence already
   // on the page and the decision rows it touches quoted — posted once per
   // change, round and row (`shared-planning-agent-rounds-SC-86`).
+  //
+  // The key's round is the one this round's landing will write, so a re-run of
+  // one round posts nothing again and the next round posts a row still held
+  // once more.
   row: {
     read: (flags, root) => heldRowText(root, flags),
     call: (relay, text) => relay.post(text),
     printed: (text) => text,
     confirmed: () => "posted row",
-    nothing: (text) => text === "",
-    after: (root, flags) => rememberRow(root, flags),
+    key: (root, f) => `${f.change}/${nextRoundOf(root, f.change)}/${f.row}`,
+    ledger: ".round/rows.txt",
   },
 };
 
@@ -137,9 +142,20 @@ async function main() {
   const confirm = buttonOf(flags, kind);
 
   if (kind.nothing?.(value)) {
-    console.log(given[0] === "row" ? "already posted" : "nothing to post");
+    console.log("nothing to post");
     return;
   }
+  const key = kind.key?.(root, flags);
+  const ledger = kind.ledger && join(root, kind.ledger);
+  if (key && readSentKeys(ledger).has(key)) {
+    console.log("already posted");
+    return;
+  }
+  const remember = () => {
+    if (!key) return;
+    mkdirSync(dirname(ledger), { recursive: true });
+    appendSentKeys(ledger, [key]);
+  };
 
   let wake;
   try {
@@ -149,7 +165,7 @@ async function main() {
   }
   if (!wake) {
     console.log(kind.printed(value, confirm));
-    kind.after?.(root, flags, value);
+    remember();
     return;
   }
 
@@ -165,7 +181,7 @@ async function main() {
     return;
   }
   console.log(kind.confirmed(value));
-  kind.after?.(root, flags, value);
+  remember();
 }
 
 /**
@@ -176,8 +192,8 @@ async function main() {
  * recommendation; the rows it touches are
  * every other decision row that names it or that it names. A row that is not
  * held is refused: a decided row asks nobody anything. A role the record
- * names no hand for is written by its label, never as a mention nobody
- * answers to. An empty text means this round posted the reply already.
+ * names no hand for is written as its label and `(open)`, as a landing reply
+ * writes it (`handText`), never as a mention nobody answers to.
  */
 async function heldRowText(root, flags) {
   const change = flags.change;
@@ -203,11 +219,10 @@ async function heldRowText(root, flags) {
       cells[0] !== id &&
       (citesId(ownText, cells[0]) || citesId(cells.join(" | "), id)),
   );
-  const label = ROLE_LABEL[held.role] ?? held.role;
-  const hand =
-    held.hand === held.role
-      ? `${label} (no hand named)`
-      : `@${held.hand.replace(/^@/, "")} (${label})`;
+  const hand = handText(
+    held.role,
+    held.hand === held.role ? undefined : held.hand,
+  );
   const text = [
     `${hand} — ${id} waits on you.`,
     `> ${own.join(" | ")}`,
@@ -217,25 +232,11 @@ async function heldRowText(root, flags) {
       : "It touches no other row.",
     `Answer with \`${id}: <your answer>\`, or \`${id}\` to take the recommendation.`,
   ].join("\n");
-  const sent = readSentKeys(join(root, ROWS_SENT));
-  return sent.has(rowKey(root, change, id)) ? "" : text;
+  return text;
 }
 
 const readTextOr = (path) =>
   existsSync(path) ? readFileSync(path, "utf8") : "";
-
-/** The rows this run's rounds have posted, keyed on the change, the round in
- * progress and the row: the round's number is the one its landing will write,
- * so a re-run of one round posts nothing again and the next round posts a row
- * still held once more. */
-const ROWS_SENT = ".round/rows.txt";
-const rowKey = (root, change, id) =>
-  `${change}/${nextRoundOf(root, change)}/${id}`;
-function rememberRow(root, flags) {
-  const file = join(root, ROWS_SENT);
-  mkdirSync(dirname(file), { recursive: true });
-  appendSentKeys(file, [rowKey(root, flags.change, flags.row)]);
-}
 
 /**
  * The button this call carries, or nothing. A button rides a message: it is

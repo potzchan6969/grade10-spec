@@ -463,6 +463,26 @@ test("shared-planning-agent-rounds-SC-86 - --row posts a row once: a re-run with
   assert.doesNotMatch(again.stdout, /@chloe/);
 });
 
+test("shared-planning-agent-rounds-SC-86 - --row names a role the record names no hand for as open, never as a mention", async () => {
+  const root = rowRoot();
+  writeFileSync(
+    join(root, "openspec", "changes", "demo-change", ".openspec.yaml"),
+    'schema: grade10-planning\ncreated: 2026-09-22\nhands:\n  pm: "@ecchochan"\n',
+  );
+  const result = await run([
+    "--row",
+    "Q3",
+    "--change",
+    "demo-change",
+    "--root",
+    root,
+  ]);
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(result.stdout, /^QA \(open\) — Q3 waits on you\./m);
+  assert.doesNotMatch(result.stdout, /@qa\b/);
+});
+
 test("shared-planning-agent-rounds-SC-86 - --row refuses a row that is not held", async () => {
   const root = rowRoot();
   const result = await run([

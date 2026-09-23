@@ -35,6 +35,11 @@ import {
   writeFileSync,
 } from "node:fs";
 import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  everySection,
+  outline,
+  sectionSpan,
+} from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import {
@@ -60,7 +65,6 @@ import {
   revCmp,
   revText,
   ROOT as STORE_ROOT,
-  sectionRange,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -101,25 +105,26 @@ const record = (severity, file, line, message) =>
 /**
  * Where the Manual table sits. It belongs under `## Reconciliation`, where the
  * archive's strip reads it; a `### Manual` anywhere else is refused where it
- * is written (`shared-planning-agent-rounds-SC-103`). Returns the heading's
- * line inside the reconciliation, or -1 where there is none.
+ * is written (`shared-planning-agent-rounds-SC-103`). Returns the table's span
+ * inside the reconciliation, or undefined where there is none.
  */
-function checkManualPlacement(lines, err) {
-  const reconciliation = sectionRange(lines, 2, "Reconciliation");
-  if (!reconciliation) return -1;
-  let inside = -1;
-  for (let i = 0; i < lines.length; i++) {
-    if (!/^###\s+Manual\s*$/.test(lines[i])) continue;
-    if (i > reconciliation.start && i < reconciliation.end) {
-      inside = i;
-      continue;
-    }
+function checkManualPlacement(text, err) {
+  const reconciliation = sectionSpan(text, "Reconciliation");
+  if (!reconciliation) return undefined;
+  const manual = sectionSpan(
+    text,
+    "Manual",
+    reconciliation.section.children.filter((one) => one.level === 3),
+  );
+  for (const one of everySection(outline(text))) {
+    if (one.level !== 3 || one.heading !== "Manual") continue;
+    if (one.line === manual?.section.line) continue;
     err(
-      i + 1,
+      one.line,
       "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
     );
   }
-  return inside;
+  return manual;
 }
 
 /**
@@ -135,13 +140,12 @@ function checkManualPlacement(lines, err) {
  */
 function checkManualRows(root, text, cases, err) {
   const lines = text.split("\n");
-  const manual = checkManualPlacement(lines, err);
-  if (manual < 0) return;
+  const manual = checkManualPlacement(text, err);
+  if (!manual) return;
   const legend = new Map();
   const ids = new Set(cases.map((tc) => tc.id));
-  for (let i = manual + 1; i < lines.length; i++) {
+  for (let i = manual.from; i < manual.until; i++) {
     const line = lines[i];
-    if (/^#{1,3}\s/.test(line)) break;
     const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
     if (named) {
       const full = resolve(root, named[2]);

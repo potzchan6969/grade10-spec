@@ -12,12 +12,20 @@
  * So the parse lives here and says everything either caller needs: the counts
  * the validator judges, and the text the sheet carries.
  *
- * Zero dependencies: Node built-ins only, matching the other scripts here.
+ * No package dependencies: Node built-ins and the store's own scenario id,
+ * matching the other scripts here.
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
+
+/** A scenario's heading, and a scenario listed on its own bullet. */
+const SCENARIO_HEADING = new RegExp(
+  `^####\\s+Scenario:\\s*(${SCENARIO_ID.source})\\b`,
+);
+const SCENARIO_BULLET = new RegExp(`^\\s*[-*]\\s+\`(${SCENARIO_ID.source})\``);
 
 export const ROOT = dirname(
   dirname(dirname(dirname(fileURLToPath(import.meta.url)))),
@@ -240,9 +248,9 @@ export function readSpecIds(specPath) {
   for (const line of `${text}\n${stories}`.split("\n")) {
     const j = line.match(/^###\s+([\w-]+-US-\d+):\s*(.+?)\s*$/);
     if (j) journeys.set(j[1], j[2]);
-    const s = line.match(/^####\s+Scenario:\s*([\w-]+-SC-\d+)\b/);
+    const s = line.match(SCENARIO_HEADING);
     if (s) scenarios.add(s[1]);
-    const inline = line.match(/^\s*[-*]\s+`([\w-]+-SC-\d+)`/);
+    const inline = line.match(SCENARIO_BULLET);
     if (inline) scenarios.add(inline[1]);
   }
   return {
@@ -338,32 +346,6 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
     repeated: !first,
   });
   for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
-}
-
-/**
- * Where a heading sits among lines: the index of the first `#`-level `level`
- * heading reading `name` at or after `from`, or -1. A section runs from its
- * heading to the next heading of the same or a higher level, which
- * `sectionRange` returns as `[start, end)`: what the suite validator and
- * archive-preflight read a section by.
- */
-export function headingAt(lines, level, name, from = 0) {
-  const re = new RegExp(`^#{${level}}\\s+${name}\\s*$`);
-  for (let i = from; i < lines.length; i++) if (re.test(lines[i])) return i;
-  return -1;
-}
-
-export function sectionRange(lines, level, name, from = 0) {
-  const start = headingAt(lines, level, name, from);
-  if (start < 0) return null;
-  const closes = new RegExp(`^#{1,${level}}\\s+\\S`);
-  let end = lines.length;
-  for (let i = start + 1; i < lines.length; i++)
-    if (closes.test(lines[i])) {
-      end = i;
-      break;
-    }
-  return { start, end };
 }
 
 /** Split a suite into its header, journey sections and cases. Current format only;

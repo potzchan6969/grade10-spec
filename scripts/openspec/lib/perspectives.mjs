@@ -96,16 +96,15 @@ const under = (section, name) =>
   new RegExp(`^\\s*#{1,6}\\s+${name}\\b`, "i").test(section);
 
 /** What the file a line sits in says on its own: a page under `docs/prds/` and
- * a message catalog are words a reader sees, a workflow is a deploy step, and
- * any other file is code — a task group that lands code is read by the build's
- * four readings, and one that lands words alone is not. `ui-design.md` is not
- * here — its name would raise `surface` on every design round, an empty diff
+ * a message catalog are words a reader sees, and a workflow is a deploy step.
+ * `code` is not here — it is a changed line, so a rename, a mode change or a
+ * binary diff raises nothing (`ofLine`). `ui-design.md` is not here either —
+ * its name would raise `surface` on every design round, an empty diff
  * included, and a screen, a state and a story each raise it from the line
  * itself. */
 const ofFile = (file, found) => {
   if (file.startsWith("docs/prds/") || isCatalog(file)) found.add("copy");
   if (/^\.github\/workflows\/.+\.ya?ml$/.test(file)) found.add("deploy");
-  if (!isWords(file)) found.add("code");
 };
 
 /** The one boundary between words and code: a markdown file or a message
@@ -119,6 +118,10 @@ const isMarkdown = (file) => file.endsWith(".md");
 const isCatalog = (file) => file.startsWith("packages/i18n/messages/");
 
 const ofLine = (text, found, file, section) => {
+  // code — a changed line in any file that is neither markdown nor a catalog:
+  // a task group that lands code is read by the build's four readings, and
+  // one that lands words alone is not
+  if (file && !isWords(file)) found.add("code");
   const line = text.trim();
   if (!line) return;
   const place = `${section}\n${line}`;

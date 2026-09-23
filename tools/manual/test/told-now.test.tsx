@@ -128,6 +128,7 @@ describe("the stages that say something else", () => {
         suites: [
           {
             spec: "demo/store/rail",
+            path: "openspec/changes/gift-cards/specs/demo/store/rail/feature-tcs.md",
             status: "pending-review",
             cases: {
               draft: 3,

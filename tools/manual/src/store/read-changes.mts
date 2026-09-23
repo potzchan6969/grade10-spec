@@ -31,7 +31,14 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { leadingTitle, outline, type Section, tableRows } from "./markdown.mts";
+import {
+  leadingTitle,
+  outline,
+  type Section,
+  type SectionSpan,
+  sectionSpan,
+  tableRows,
+} from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
 import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -427,6 +434,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
       const suite = readTestCases(text);
       suites.push({
         spec,
+        path: casesFile,
         status: suite.status,
         cases: {
           draft: suite.cases.filter((one) => one.status === "draft").length,
@@ -442,6 +450,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
     } catch (cause) {
       suites.push({
         spec,
+        path: casesFile,
         cases: { draft: 0, actual: 0, deprecated: 0, total: 0, automated: 0 },
         error: toItemError(casesFile, cause),
       });
@@ -520,7 +529,7 @@ function readIdMap(
 
 /** The `Q` column of a `## Decisions` row: the number the round gave the
  * question. */
-const DECISION_ROW = /^Q\d+$/;
+export const DECISION_ROW = /^Q\d+$/;
 
 /**
  * Which artifact or task group each open `Q<n>` was raised against, from
@@ -605,10 +614,15 @@ export function questionIdsOf(text: string): Set<string> {
  * no such table has no rows.
  */
 export function decisionRows(text: string): string[][] {
-  const decisions = outline(text)
-    .flatMap((one) => (one.level === 1 ? one.children : [one]))
-    .find((one) => /^Decisions\b/.test(one.heading));
-  return decisions ? (tableRows(decisions.raw) ?? []) : [];
+  const decisions = decisionsSection(text);
+  return decisions ? (tableRows(decisions.section.raw) ?? []) : [];
+}
+
+/** The `## Decisions` section and the lines of the file it holds — where
+ * `decisionRows` reads its table, and the span a rewrite of a row stays
+ * inside. */
+export function decisionsSection(text: string): SectionSpan | undefined {
+  return sectionSpan(text, /^Decisions\b/);
 }
 
 /**

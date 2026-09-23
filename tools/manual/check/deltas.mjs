@@ -15,7 +15,12 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
-import { findSection, outline } from "../src/store/markdown.mts";
+import {
+  findSection,
+  outline,
+  SCENARIO_ID,
+  scenarioIdsIn,
+} from "../src/store/markdown.mts";
 import {
   deltaKindOf,
   deltaRequirementSections,
@@ -43,10 +48,12 @@ import {
  * journeys are their own file beside the delta, and one written here is read
  * by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set"]);
-const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
-const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
+const ISSUED_ID = new RegExp(
+  `${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*-(?:US|TC)-\\d+`,
+  "g",
+);
+const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);
 const SCENARIO_HEADING = /^Scenario:\s*/i;
-const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
@@ -295,7 +302,7 @@ function movesBehaviour(one, durable) {
 function behaviourOf(raw) {
   const text = raw ?? "";
   return {
-    ids: new Set(text.match(SCENARIO_ID) ?? []),
+    ids: new Set(scenarioIdsIn(text)),
     lines: text
       .split("\n")
       .filter((line) => GWT.test(line))

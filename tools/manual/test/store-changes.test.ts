@@ -350,6 +350,7 @@ describe("a promoted change carrying its suites", () => {
     expect(entry.suites).toEqual([
       {
         spec: "demo-product/alpha",
+        path: "openspec/changes/promoted-thing/specs/demo-product/alpha/feature-tcs.md",
         status: "pending-review",
         cases: { draft: 1, actual: 1, deprecated: 0, total: 2, automated: 0 },
       },

@@ -111,13 +111,21 @@ export const RESULT_COLORS = {
 };
 
 /** Frozen column-header fill and the text that sits on it. `#1E332C` / `#F4F1EA`. */
-export const HEADER_BACKGROUND = { red: 30 / 255, green: 51 / 255, blue: 44 / 255 };
+export const HEADER_BACKGROUND = {
+  red: 30 / 255,
+  green: 51 / 255,
+  blue: 44 / 255,
+};
 export const HEADER_FOREGROUND = {
   red: 244 / 255,
   green: 241 / 255,
   blue: 234 / 255,
 };
-export const BODY_FOREGROUND = { red: 28 / 255, green: 28 / 255, blue: 28 / 255 };
+export const BODY_FOREGROUND = {
+  red: 28 / 255,
+  green: 28 / 255,
+  blue: 28 / 255,
+};
 
 /**
  * Capability and journey banners take the side they belong to.
@@ -324,15 +332,7 @@ export function locateRun(summaryValues, titles, runId) {
  * can span them, and so the register is read as runs rather than as a table
  * somebody would filter.
  */
-export function summaryRows({
-  runId,
-  tab,
-  date,
-  name,
-  selection,
-  env,
-  sha,
-}) {
+export function summaryRows({ runId, tab, date, name, selection, env, sha }) {
   const t = quoteTab(tab);
   return SURFACES.map((surface, i) => {
     const col = colLetter(MARKING_START + i);

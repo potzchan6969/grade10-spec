@@ -135,6 +135,7 @@ test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suit
     suites: [
       {
         spec: "shared/planning/agent-rounds",
+        path: "openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md",
         cases: { draft: 35, actual: 0, deprecated: 0, total: 35, automated: 0 },
       },
     ],

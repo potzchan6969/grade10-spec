@@ -1,7 +1,7 @@
 /*
  * A round's size is read from the draft. These tests hold
- * `lib/perspectives.mjs` and its CLI to that: the eleven triggers classified off
- * a diff, the readers whose `when` the diff summons plus every `always`, a
+ * `lib/perspectives.mjs` and its CLI to that: the triggers classified off a
+ * diff, the readers whose `when` the diff summons plus every `always`, a
  * bundle that is the draft and what is before it and nothing else, and a
  * record key that changes none of it.
  *
@@ -512,6 +512,19 @@ test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file 
   assert.ok(!catalog.has("code"));
 });
 
+test("shared-planning-agent-rounds-SC-92 - a rename, a mode change or a binary diff of a code file changes no line, so raises no `code`", () => {
+  const file = "packages/ui/src/blocks/points/points.tsx";
+  const moved = "packages/ui/src/blocks/points/balance.tsx";
+  for (const diff of [
+    `diff --git a/${file} b/${file}\nold mode 100644\nnew mode 100755`,
+    `diff --git a/${file} b/${moved}\nsimilarity index 100%\nrename from ${file}\nrename to ${moved}`,
+    `diff --git a/${file} b/${file}\nBinary files a/${file} and b/${file} differ`,
+  ])
+    assert.ok(!classifyDiff(diff, REAL_SCHEMA, "tasks").has("code"), diff);
+  const edited = `diff --git a/${file} b/${moved}\nsimilarity index 90%\nrename from ${file}\nrename to ${moved}\n--- a/${file}\n+++ b/${moved}\n@@ -1,2 +1,2 @@\n-export const points = 1;\n+export const balance = 1;`;
+  assert.ok(classifyDiff(edited, REAL_SCHEMA, "tasks").has("code"));
+});
+
 // Decides shared-planning-agent-rounds-US12-TC9-1.
 test("shared-planning-agent-rounds-SC-92 - a group landing a message catalog alone is read as words, not code", () => {
   const root = fixture();
@@ -670,7 +683,7 @@ test("a trigger is keyed on structure, never on a bare word in prose", () => {
   }
 });
 
-test("a trigger is one of the eleven the requirement tables", () => {
+test("a trigger is one of those the requirement tables", () => {
   assert.deepEqual([...TRIGGERS].sort(), [
     "always",
     "code",
@@ -773,12 +786,15 @@ test("a design's Components table summons the inventory alone", () => {
   ]);
 });
 
-test("the requirements and the cases have no readers: the two blind readings are theirs", () => {
+test("the requirements and the cases are read by the simpler thing alone: the two blind readings are their challenge", () => {
   const root = fixture();
   const schema = planningSchema(root);
 
   for (const artifact of ["specs", "test-cases"])
-    assert.deepEqual(readersFor(schema, artifact, new Set(["copy"])), []);
+    assert.deepEqual(
+      names(readersFor(schema, artifact, new Set(["copy", "export"]))),
+      ["simpler"],
+    );
 });
 
 test("every reader the schema dispatches resolves on disk", () => {

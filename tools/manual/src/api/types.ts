@@ -237,6 +237,8 @@ export type ChangeStatus = "in-flight" | "archived";
 export type ChangeSuite = {
   /** The spec id the suite belongs to. */
   spec: string;
+  /** The suite's own file, from the store's root. */
+  path: string;
   status?: TestSuiteStatus;
   cases: {
     draft: number;
@@ -608,7 +610,7 @@ export type SchemaArtifact = {
   required: boolean;
 };
 
-/** What in a draft summons a reader. `always` is every round; the other ten
+/** What in a draft summons a reader. `always` is every round; the others
  * answer to what the draft itself changed —
  * `openspec/specs/shared/planning/agent-rounds/spec.md`'s "A round's size is
  * read from the draft". Read by `scripts/openspec/lib/perspectives.mjs`,

@@ -22,20 +22,17 @@
  * Pure over the markdown text, so it is tested without a change or a git
  * checkout of its own.
  */
+import { cellsOf } from "../../../tools/manual/src/store/markdown.mts";
 import {
-  cellsOf,
-  outline,
-  tableRows,
-} from "../../../tools/manual/src/store/markdown.mts";
-import { readQuestions } from "../../../tools/manual/src/store/read-changes.mts";
+  DECISION_ROW,
+  decisionRows,
+  decisionsSection,
+  readQuestions,
+} from "../../../tools/manual/src/store/read-changes.mts";
 
 /** `❓ <role> - recommended: <option>` is how the interview writes what it
  * would do; a cell that says it another way is its own recommendation. */
 const RECOMMENDED = /^recommended:\s*/;
-
-/** A row of the table this reads: `Q<n>` in the first cell, the same id the
- * question reader answers with. */
-const DECISION_ROW = /^Q\d+$/;
 
 /** A cell nobody has settled, whatever else it says. */
 const OPEN = /^❓/;
@@ -73,7 +70,7 @@ export function takeRecommendations(markdown) {
     held.map((row) => [row.id, row.recommendation]),
   );
   const lines = markdown.split("\n");
-  const { from, until } = decisionsIn(markdown);
+  const { from, until } = decisionsSection(markdown);
   for (let at = from; at < until; at += 1) {
     const cells = cellsOf(lines[at]);
     if (!cells || !OPEN.test(cells[2] ?? "")) continue;
@@ -90,13 +87,11 @@ export function takeRecommendations(markdown) {
  * and a refusal naming any row the reader cannot take.
  */
 function heldRowsOf(markdown) {
-  const read = decisionsIn(markdown);
-  if (!read) return [];
   const recommended = new Map(
     readQuestions(markdown).map((one) => [one.id, one.recommended]),
   );
   const rows = [];
-  for (const cells of tableRows(read.section.raw) ?? []) {
+  for (const cells of decisionRows(markdown)) {
     const id = cells[0] ?? "";
     if (!DECISION_ROW.test(id) || !OPEN.test(cells[2] ?? "")) continue;
     const says = recommended.get(id);
@@ -113,36 +108,6 @@ function heldRowsOf(markdown) {
   }
   return rows;
 }
-
-/**
- * The `## Decisions` section, and the lines of the file it holds: the one
- * table the rows are read from, and the fence the rewrite stays inside.
- *
- * The section is found the way `readQuestions` finds it, so both read the
- * same table of the same file. Its lines run from the one after its heading
- * to the one before the next heading at its level or above — the same span
- * `raw` covers, read here as line numbers because the rewrite writes lines.
- */
-function decisionsIn(markdown) {
-  const roots = outline(markdown);
-  const section = roots
-    .flatMap((one) => (one.level === 1 ? one.children : [one]))
-    .find((one) => /^Decisions\b/.test(one.heading));
-  if (!section) return undefined;
-  const next = flatten(roots).find(
-    (one) => one.line > section.line && one.level <= section.level,
-  );
-  return {
-    section,
-    // `line` is the 1-based line of the heading, which is the 0-based index
-    // of the line after it.
-    from: section.line,
-    until: next ? next.line - 1 : markdown.split("\n").length,
-  };
-}
-
-const flatten = (sections) =>
-  sections.flatMap((one) => [one, ...flatten(one.children)]);
 
 function refuse(id, why) {
   throw new Error(

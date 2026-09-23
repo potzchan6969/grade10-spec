@@ -27,14 +27,18 @@
  */
 import { join } from "node:path";
 import { readTextIfExists } from "../src/store/disk.mts";
-import { findSection, outline, tableRows } from "../src/store/markdown.mts";
+import {
+  findSection,
+  outline,
+  SCENARIO_ID,
+  tableRows,
+} from "../src/store/markdown.mts";
+import { DECISION_ROW, decisionRows } from "../src/store/read-changes.mts";
 
-/** A `Q<n>` the change's `## Decisions` table issues, cited from a landing. */
-const DECISION = /^Q\d+$/;
 /** The mark a deferral wears, on the PRD and in a landing that names one. */
 const DEFERRED = "❓";
 /** A scenario id, which is what closes a design state that became one. */
-const SCENARIO = /`[a-z0-9][a-z0-9-]*-SC-\d+`/;
+const SCENARIO = new RegExp(`\`${SCENARIO_ID.source}\``);
 const OUT_OF_SUITE = "**Out of suite:**";
 
 /**
@@ -109,10 +113,7 @@ function checkRaised(ctx, change, text) {
     );
     return;
   }
-  const decided = new Set(
-    tableRows(findSection(sections, "Decisions")?.body)?.map((row) => row[0]) ??
-      [],
-  );
+  const decided = new Set(decisionRows(text).map((row) => row[0]));
   for (const row of raised) {
     const [capability, question, landed = ""] = row;
     const named = question || capability || "a raised question";
@@ -125,7 +126,7 @@ function checkRaised(ctx, change, text) {
       continue;
     }
     if (landed.includes(DEFERRED)) continue;
-    if (!DECISION.test(landed)) {
+    if (!DECISION_ROW.test(landed)) {
       ctx.add(
         "raised",
         file,

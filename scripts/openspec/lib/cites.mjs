@@ -1,5 +1,9 @@
-/** What a scenario id looks like, named once for every reader of a cell. */
-export const SCENARIO_ID = /[\w-]+-SC-\d+[a-z]?/;
+/** What a scenario id looks like, named once for the store in
+ * `tools/manual/src/store/markdown.mts`. */
+export {
+  SCENARIO_ID,
+  scenarioIdsIn,
+} from "../../../tools/manual/src/store/markdown.mts";
 
 /**
  * Whether a text cites an id, bounded on both sides: `SC-1` is never found

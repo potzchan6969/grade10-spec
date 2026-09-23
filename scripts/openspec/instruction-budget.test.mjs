@@ -30,6 +30,10 @@ const AGENTS_BUDGET = 2570;
 // the wake and the chain one home each (`Q77`): the next rule earns its
 // words by cutting others, or raises this number in a commit that says why.
 const ROUND_BUDGET = 3200;
+// The round's conduct: the skill's step 5 loads it every round, to lay out the
+// summary, so it costs what the skill costs. 922 is its size once the skill's
+// restatements of it became links.
+const ROUND_SUMMARY_BUDGET = 922;
 // The skills a line command loads: the seven command skills a hand invokes,
 // and the four role skills each of those loads for its rules, beside `workflow-round`,
 // which carries the procedure for all of them. Each number is that skill's
@@ -40,7 +44,8 @@ const SKILLS_BUDGET = {
   "workflow-plan": 717,
   "workflow-design": 253,
   "workflow-tech": 265,
-  "workflow-specify": 332,
+  // 364 once the simpler thing reads the reconciled requirements and cases.
+  "workflow-specify": 364,
   // 178 after the enforcement audit's pass cut its three rules to a pointer
   // at the instruction that holds them.
   "workflow-tasks": 178,
@@ -80,6 +85,15 @@ test("the round skill holds to its word budget", () => {
   assert.ok(
     count <= ROUND_BUDGET,
     `${skill} is ${count} words; the budget is ${ROUND_BUDGET}. Point at the document or the script header that owns the rule, or raise the budget here and say why in the commit.`,
+  );
+});
+
+test("the round summary holds to its word budget", () => {
+  const page = "docs/governance/round-summary.md";
+  const count = words(read(page));
+  assert.ok(
+    count <= ROUND_SUMMARY_BUDGET,
+    `${page} is ${count} words; the budget is ${ROUND_SUMMARY_BUDGET}. Every round loads it: cut a rule the skill or another page owns, or raise the budget here and say why in the commit.`,
   );
 });
 

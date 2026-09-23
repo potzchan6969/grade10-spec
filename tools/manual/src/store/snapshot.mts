@@ -203,7 +203,7 @@ function markIssuedIds(root: string, specs: SpecEntry[]): void {
 function tokenOf(spec: SpecEntry): string {
   for (const requirement of spec.requirements) {
     for (const scenario of requirement.scenarios) {
-      const token = scenario.id?.replace(/-SC-\d+$/, "");
+      const token = scenario.id?.replace(/-SC-\d+[a-z]?$/, "");
       if (token) return token;
     }
   }

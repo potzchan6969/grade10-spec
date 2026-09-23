@@ -1,6 +1,7 @@
 /* RULE: a page committed before the specs it embeds. */
 import { join } from "node:path";
 import { readText } from "../src/store/disk.mts";
+import { SCENARIO_ID } from "../src/store/markdown.mts";
 import { requirementBlocks } from "../src/store/read-specs.mts";
 import { everyBlock } from "./context.mjs";
 
@@ -71,7 +72,10 @@ const reviewedThrough = (day) =>
   day === undefined ? 0 : Date.parse(`${day}T00:00:00Z`) + DAY;
 
 const LINK_TARGET = /\]\([^)]*\)/g;
-const SCENARIO_ID = /^(#{4}\s+Scenario:\s+)\S+-SC-\d+\s+-\s+/gm;
+const WORN_ID = new RegExp(
+  `^(#{4}\\s+Scenario:\\s+)${SCENARIO_ID.source}\\s+-\\s+`,
+  "gm",
+);
 const SPACE = /\s+/g;
 
 /** A requirement as it reads: where a link points and which permanent id a
@@ -79,7 +83,7 @@ const SPACE = /\s+/g;
 const meaning = (raw) =>
   raw
     .replace(LINK_TARGET, "]")
-    .replace(SCENARIO_ID, "$1")
+    .replace(WORN_ID, "$1")
     .replace(SPACE, " ")
     .trim();
 

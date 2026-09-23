@@ -152,7 +152,7 @@ export function toldBodyOf(at, role, { linked, sheetUrl }) {
       (one) => !one.error && one.status !== "approved",
     )) {
       lines.push(
-        `Suite: \`openspec/changes/${at.id}/specs/${suite.spec}/feature-tcs.md\`, ${suite.cases.total} ${suite.cases.total === 1 ? "case" : "cases"}; the walk needs it reviewed as its input`,
+        `Suite: \`${suite.path}\`, ${suite.cases.total} ${suite.cases.total === 1 ? "case" : "cases"}; the walk needs it reviewed as its input`,
       );
     }
   }
@@ -163,6 +163,14 @@ export function toldBodyOf(at, role, { linked, sheetUrl }) {
 export function behindText(behind, linked) {
   const changed = behind.changed.map((one) => `\`${one}\``).join(", ");
   return `*Behind* — \`${behind.artifact}\` on ${linked} is behind ${changed || "what it was drawn from"}.`;
+}
+
+/** A hand as a thread names it: `@<handle> (<role>)`, or `<role> (open)`
+ * where the change names nobody for that role — one spelling for every reply
+ * that asks a hand to act. */
+export function handText(role, hand) {
+  const label = ROLE_LABEL[role] ?? role;
+  return hand ? `@${hand.replace(/^@/, "")} (${label})` : `${label} (open)`;
 }
 
 /**
@@ -185,11 +193,7 @@ export function landedText(at, landed) {
   const what = [...words]
     .map(([by, artifacts]) => `${artifacts.join(", ")} by @${by}`)
     .join(", ");
-  const turns = at.roles.map((role) =>
-    at.hands[role]
-      ? `@${at.hands[role]} (${ROLE_LABEL[role]})`
-      : `${ROLE_LABEL[role]} (open)`,
-  );
+  const turns = at.roles.map((role) => handText(role, at.hands[role]));
   const turn = turns.length > 0 ? turns.join(", ") : "nobody";
   return `*Landed* — ${what} · now at *${STAGE_LABEL[at.stage]}* · your turn: ${turn}`;
 }

@@ -118,22 +118,22 @@ import { behindOf, handOfArtifact } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import { roundArtifactOf } from "../../tools/manual/src/store/read-rounds.mts";
 import { parseArgs } from "./lib/args.mjs";
-import { citesId, SCENARIO_ID } from "./lib/cites.mjs";
+import { SCENARIO_ID } from "./lib/cites.mjs";
 import { heldIdsOf, takeRecommendations } from "./lib/held.mjs";
 import { appendLanded, changedPaths, LANDED } from "./lib/landed.mjs";
-import {
-  fixPassFloor,
-  isGroup,
-  perspectivesOf,
-  planningSchema,
-  verifierNeeded,
-} from "./lib/perspectives.mjs";
+import { fixPassFloor, isGroup, planningSchema } from "./lib/perspectives.mjs";
 import { openRecord, setEntry } from "./lib/record.mjs";
 import { answerOf, readWake, relayOf, wakeIdOf } from "./lib/relay.mjs";
 import { readAgainst } from "./lib/reviewed.mjs";
-import { listCell, roundsPath, withRoundRow } from "./lib/rounds.mjs";
+import {
+  listCell,
+  perspectivesRefusals,
+  roundsPath,
+  withRoundRow,
+} from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
 import { handleOfEmail, readTeamMap, TEAM_MAP } from "./lib/team.mjs";
+import { checkTestsCell, parseTestsCell } from "./lib/tests-cell.mjs";
 import { isWritable, writableBy } from "./lib/writable.mjs";
 import { git as storeGit, storeMain } from "./store-main.mjs";
 import { main as validateChanges } from "./validate-changes.mjs";
@@ -141,7 +141,7 @@ import { main as validateChanges } from "./validate-changes.mjs";
 const HERE = dirname(fileURLToPath(import.meta.url));
 /** A scenario a task line cites, the way the store writes a citation: in
  * backticks, so prose about a scenario is not read as one. */
-const CITED = /`([a-z0-9][a-z0-9-]*-SC-\d+[a-z]?)`/g;
+const CITED = new RegExp(`\`(${SCENARIO_ID.source})\``, "g");
 /** What a push the remote refused because the ref moved under it says, in
  * git's own words: step 9's one retry. Anything else git says is git refusing
  * to push at all, which is nobody's race to re-run. */
@@ -890,11 +890,9 @@ function rowOf(read, artifact, group) {
 /** The scenarios one group's own task lines cite, in the order they are
  * written and each once: the plan on `main` is what the group owes tests for,
  * so they are read from `tasks.md` rather than taken from the round's word. */
-function citedByGroup(read) {
-  const wanted = roundArtifactOf(target);
-  const group = read.entry.taskGroups.find((one) => one.num === wanted);
+function citedBy(tasks) {
   const ids = [];
-  for (const task of group?.tasks ?? []) {
+  for (const task of tasks) {
     for (const [, id] of task.text.matchAll(CITED)) {
       if (!ids.includes(id)) ids.push(id);
     }
@@ -920,7 +918,8 @@ function citedByGroup(read) {
  *
  * Every path that resolves is read for the scenario id the entry credits it
  * with, and one that carries no such id is refused naming the path and the id:
- * the row never credits a file for what it does not prove.
+ * the row never credits a file for what it does not prove. The cell is read
+ * and held in `lib/tests-cell.mjs`.
  *
  * An artifact's landing is not held to anything here: no artifact of the
  * schema carries scenario ids of its own to answer for.
@@ -928,25 +927,27 @@ function citedByGroup(read) {
 function testsCell(read, group, value) {
   const cell = String(value ?? "");
   if (!group) return cell;
-  const missing = citedByGroup(read).filter((id) => !citesId(cell, id));
+  const one = read.entry.taskGroups.find(
+    (each) => each.num === roundArtifactOf(target),
+  );
+  const tree = landsHere(one?.repo) ? root : applicationRoot(one?.repo);
+  const { missing, absent, uncited } = checkTestsCell({
+    entries: parseTestsCell(cell),
+    cited: citedBy(one?.tasks ?? []),
+    isFile: (path) =>
+      existsSync(join(tree, path)) && statSync(join(tree, path)).isFile(),
+    textOf: (path) => readFileSync(join(tree, path), "utf8"),
+  });
   if (missing.length > 0) {
     fail(
       `${target}'s tasks cite a scenario --tests names no test for:\n${listed(missing)}\nThe row names the tests per scenario id, so pass --tests "<id>: <file>[; …]" naming one for each.`,
     );
   }
-  const tree = landsHere(read) ? root : applicationRoot(read);
-  const credits = creditsIn(cell);
-  const isFile = (path) =>
-    existsSync(join(tree, path)) && statSync(join(tree, path)).isFile();
-  const absent = [...new Set(pathsIn(cell))].filter((path) => !isFile(path));
   if (absent.length > 0) {
     fail(
       `${target}'s --tests names a path ${tree === root ? "the store" : tree} holds no file at:\n${listed(absent)}\nName each test as its path from the repository's root.`,
     );
   }
-  const uncited = credits.filter(
-    ({ id, path }) => !citesId(readFileSync(join(tree, path), "utf8"), id),
-  );
   if (uncited.length > 0) {
     fail(
       `${target}'s --tests credits a test for a scenario it does not cite:\n${listed(uncited.map(({ id, path }) => `${path} for ${id}`))}\nA row never credits a file for what it does not prove: name the test that cites the id.`,
@@ -959,34 +960,17 @@ function testsCell(read, group, value) {
  * given, else the working tree this store is a submodule of. A landing that
  * reaches neither is refused, naming the group's tag: the engineer lands from
  * the application repository, where the tests are. */
-function applicationRoot(read) {
+function applicationRoot(tag) {
   const given = flags["app-root"];
   const tree = given
     ? resolve(given)
     : git(["rev-parse", "--show-superproject-working-tree"]);
   if (tree && existsSync(tree) && statSync(tree).isDirectory()) return tree;
-  const tag = read.entry.taskGroups.find(
-    (one) => one.num === roundArtifactOf(target),
-  )?.repo;
   fail(
     given
       ? `${target} is tagged \`${tag}\`, and --app-root ${given} is ${existsSync(tree) ? "not a directory" : "not there"} — pass the directory that holds the application repository.`
       : `${target} is tagged \`${tag}\`, and the landing reaches no clone of it — run the landing from the application repository, or pass --app-root <dir>.`,
   );
-}
-
-/** Each scenario id the cell credits, with each path it credits it to:
- * `\`<id>\`: <path>[, <path>]` between semicolons, backticks aside. */
-function creditsIn(cell) {
-  const credits = [];
-  for (const entry of cell.split(";")) {
-    const match = new RegExp(
-      `^\\s*\`?(${SCENARIO_ID.source})\`?\\s*:\\s*(.*)$`,
-    ).exec(entry);
-    if (!match) continue;
-    for (const path of pathsIn(match[2])) credits.push({ id: match[1], path });
-  }
-  return credits;
 }
 
 /** The stood cell, opened by `written, not run — <why>` where the group's
@@ -1001,42 +985,19 @@ function stoodCell(stood, unrun) {
   return `written, not run — ${why}; ${stood}`;
 }
 
-/** The store paths a `--tests` cell names: every token between the separators
- * the cell writes — `;` between ids, `,` between files, `:` after an id —
- * kept where it reads as a path, a slash and no space, backticks aside. */
-function pathsIn(cell) {
-  return cell
-    .split(/[;,:]/)
-    .map((one) => one.trim().replace(/^`|`$/g, ""))
-    .filter((one) => /^[\w.@-]+(?:\/[\w.@-]+)+$/.test(one));
-}
-
 /** Whether the group's tests live in this store: its heading's repository tag
  * names this clone, or names none. The reading of the whole change is the
  * store's own. A group tagged for the application repository proves its tests
  * there, and its paths are that clone's. */
-function landsHere(read) {
-  if (whole) return true;
-  const one = read.entry.taskGroups.find(
-    (group) => group.num === roundArtifactOf(target),
-  );
-  return !one?.repo || one.repo === "grade10-spec";
+function landsHere(tag) {
+  return whole || !tag || tag === "grade10-spec";
 }
 
 /**
  * The readers the round says it dispatched, held to the target's own list in
- * the schema: a name the list does not issue is a typo or a reader nobody
- * dispatched, and an `always` one left out is a round that skipped the floor.
- * ` (fallback)` after a name records that the reader ran on the fallback
- * model, and is the one thing the cell carries in parentheses.
- * A narrow re-run may name fewer readers than the last round did — a trigger
- * the draft no longer raises summons nobody — but never fewer than the
- * `always` set.
- *
- * `verifier` is no perspective of any artifact: it records that a verifier
- * read the round's findings, so the cell names it, and owes it wherever more
- * than one reader ran — two readings are reconciled, and only a round of one
- * argues its own findings.
+ * the schema by `perspectivesRefusals` in `lib/rounds.mjs`. A narrow re-run
+ * may name fewer readers than the last round did — a trigger the draft no
+ * longer raises summons nobody — but never fewer than the `always` set.
  *
  * Under `--fix-pass` the floor is `fixPassFloor`'s, since the apply block's
  * `always` readers read the plan rather than the fix; a wider row still
@@ -1045,8 +1006,7 @@ function landsHere(read) {
 function perspectivesCell(read, value) {
   const cell = listCell(value);
   const schema = planningSchema(root, read.entry.schema);
-  const issued = perspectivesOf(schema, target);
-  let floor = [];
+  let floor;
   if (floorDrops) {
     try {
       floor = fixPassFloor(schema);
@@ -1054,36 +1014,14 @@ function perspectivesCell(read, value) {
       fail(cause.message);
     }
   }
-  const given = new Set(
-    cell
-      .split(/[,;]/)
-      .map((one) =>
-        one
-          .replace(/\s*\(fallback\)\s*$/, "")
-          .trim()
-          .toLowerCase(),
-      )
-      .filter((one) => one !== ""),
-  );
-  for (const one of given) {
-    if (one === "verifier" || issued.some(({ name }) => name === one)) continue;
-    fail(
-      `\`${one}\` is no perspective of ${target} — the \`${read.entry.schema}\` schema issues ${issued.map(({ name }) => `\`${name}\``).join(", ")}, \`verifier\` records that a verifier ran, and \` (fallback)\` after a name is the one suffix a reader carries`,
-    );
-  }
-  for (const { name, when } of issued) {
-    if (!when.includes("always") || given.has(name)) continue;
-    if (floorDrops && !floor.includes(name)) continue;
-    fail(
-      `${target}'s \`${name}\` reads every round — a narrow re-run may name fewer readers, never an \`always\` one`,
-    );
-  }
-  const readers = [...given].filter((one) => one !== "verifier");
-  if (verifierNeeded(readers) && !given.has("verifier")) {
-    fail(
-      `${readers.join(", ")} read ${target} and the cell names no \`verifier\` — a round of more than one reader is reconciled by one`,
-    );
-  }
+  const refusals = perspectivesRefusals({
+    schema,
+    named: read.entry.schema,
+    target,
+    cell,
+    floor,
+  });
+  if (refusals.length > 0) fail(refusals.join("\n"));
   return cell;
 }
 
