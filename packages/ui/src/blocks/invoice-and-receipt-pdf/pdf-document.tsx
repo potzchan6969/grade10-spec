@@ -1,9 +1,14 @@
+import { Divider } from "@grade10/design-system/components/display/divider";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
-import type { PartyAddress } from "./types";
+import type {
+  OrderValueLines,
+  OrderValueLinesCopy,
+  PartyAddress,
+} from "./types";
 
 type PdfDocumentSlot = "invoice-pdf" | "receipt-pdf";
 
@@ -35,15 +40,27 @@ function PdfSheet({
   );
 }
 
-function MetaRow({ label, value }: { label: ReactNode; value: ReactNode }) {
+/** `mark` is an optional trailing node beside the value — the receipt's manually-settled badge uses it. */
+function MetaRow({
+  label,
+  value,
+  mark,
+}: {
+  label: ReactNode;
+  value: ReactNode;
+  mark?: ReactNode;
+}) {
   return (
     <HStack data-slot="pdf-meta-row" gap="md" hAlign="start" vAlign="baseline">
       <Text className="w-36 shrink-0" size="sm" weight="medium">
         {label}
       </Text>
-      <Text className="min-w-0 flex-1" size="sm" weight="medium">
-        {value}
-      </Text>
+      <HStack className="min-w-0 flex-1" gap="sm" vAlign="center" wrap>
+        <Text className="min-w-0" size="sm" weight="medium">
+          {value}
+        </Text>
+        {mark}
+      </HStack>
     </HStack>
   );
 }
@@ -176,13 +193,66 @@ function SummaryRow({
   );
 }
 
+/**
+ * The lot heading, the order-value lines and the subtotal/fee/total
+ * summary — identical in InvoicePdf and ReceiptPdf (SC-21: "the same fixed
+ * order as InvoicePdf's"), so declared once rather than kept in step by
+ * hand across two files. `data-slot="pdf-order-value-section"` scopes a
+ * test's row queries to this section alone, apart from a receipt's payment
+ * breakdown, which reuses `SummaryRow` for its own, separate rows.
+ */
+function OrderValueSection({
+  copy,
+  orderValue,
+}: {
+  copy: OrderValueLinesCopy;
+  orderValue: OrderValueLines;
+}) {
+  const hasTaxLine = "taxLine" in orderValue;
+
+  return (
+    <VStack data-slot="pdf-order-value-section" gap="lg" hAlign="stretch">
+      <LotHeading>{orderValue.lot}</LotHeading>
+
+      <VStack gap="xs" hAlign="stretch">
+        <ValueRow label={copy.winningBid} value={orderValue.winningBid} />
+        <ValueRow label={copy.buyersPremium} value={orderValue.buyersPremium} />
+        <ValueRow
+          label={copy.shippingAndHandling}
+          value={orderValue.shippingAndHandling}
+        />
+        {orderValue.insurance !== undefined ? (
+          <ValueRow label={copy.insurance} value={orderValue.insurance} />
+        ) : null}
+        {hasTaxLine ? (
+          <ValueRow label={copy.taxLine} value={orderValue.taxLine} />
+        ) : null}
+      </VStack>
+
+      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
+        <SummaryRow label={copy.subtotal} value={orderValue.subtotal} />
+        <SummaryRow
+          label={copy.paymentProcessingFee}
+          value={orderValue.paymentProcessingFee}
+        />
+        <Divider className="bg-foreground" />
+        <SummaryRow
+          label={copy.orderTotal}
+          size="lg"
+          value={orderValue.orderTotal}
+          weight="bold"
+        />
+      </VStack>
+    </VStack>
+  );
+}
+
 export type { PdfDocumentSlot };
 export {
   AddressLines,
-  LotHeading,
   MetaRow,
+  OrderValueSection,
   PartyBlock,
   PdfSheet,
   SummaryRow,
-  ValueRow,
 };

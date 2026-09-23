@@ -260,9 +260,17 @@ export {
   type InvoicePdfCopy,
   type InvoicePdfProps,
 } from "./blocks/invoice-and-receipt-pdf/invoice-pdf";
+export {
+  ReceiptPdf,
+  type ReceiptPdfCopy,
+  type ReceiptPdfProps,
+} from "./blocks/invoice-and-receipt-pdf/receipt-pdf";
 export type {
   OrderValueLines,
   OrderValueLinesCopy,
+  PartyAddress,
+  PaymentBreakdown,
+  PaymentBreakdownCopy,
 } from "./blocks/invoice-and-receipt-pdf/types";
 // shared-ui/loyalty-membership
 export {

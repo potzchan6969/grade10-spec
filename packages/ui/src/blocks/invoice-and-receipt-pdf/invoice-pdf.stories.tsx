@@ -1,7 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
+import {
+  billToAddress,
+  orderValue,
+  orderValueCopy,
+  readAddressLines,
+  readRows,
+  shipToAddress,
+} from "./fixtures";
 import { InvoicePdf } from "./invoice-pdf";
-import type { InvoicePdfCopy, OrderValueLines, PartyAddress } from "./types";
+import type { InvoicePdfCopy } from "./types";
 
 const copy: InvoicePdfCopy = {
   documentTitle: "Invoice",
@@ -14,56 +22,8 @@ const copy: InvoicePdfCopy = {
   replacedByLabel: "Replaced by",
   billToHeading: "Bill to",
   shipToHeading: "Ship to",
-  orderValue: {
-    winningBid: "Winning Bid",
-    buyersPremium: "Buyer’s Premium",
-    shippingAndHandling: "Shipping & Handling",
-    insurance: "Insurance",
-    taxLine: "Tax",
-    subtotal: "Subtotal",
-    paymentProcessingFee: "Payment Processing Fee",
-    orderTotal: "Order Total",
-  },
+  orderValue: orderValueCopy,
 };
-
-const orderValue: OrderValueLines = {
-  lot: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
-  winningBid: "2,500.00",
-  buyersPremium: "500.00",
-  shippingAndHandling: "80.00",
-  insurance: "40.00",
-  subtotal: "3,120.00",
-  paymentProcessingFee: "112.25",
-  orderTotal: "3,232.25",
-};
-
-const billToAddress: PartyAddress = {
-  fullName: "Alexandra Tran",
-  companyName: "Tran Collectibles Ltd.",
-  addressLine1: "Flat A, 21/F, One Harbour Square",
-  addressLine2: "181 Java Road",
-  city: "North Point",
-  state: "Hong Kong Island",
-  postalCode: "999077",
-  country: "Hong Kong SAR",
-  phone: "+852 9123 4567",
-};
-
-const shipToAddress: PartyAddress = {
-  fullName: "Alexandra Tran",
-  addressLine1: "Flat A, 21/F, One Harbour Square",
-  city: "North Point",
-  postalCode: "999077",
-  country: "Hong Kong SAR",
-  phone: "+852 9123 4567",
-};
-
-/** Reads one party block's address lines in DOM order. */
-function readAddressLines(partyBlock: Element) {
-  return Array.from(
-    partyBlock.querySelectorAll('[data-slot="pdf-address-line"]'),
-  ).map((node) => node.textContent ?? "");
-}
 
 /** The lot and every order-value label, lot first, in the fixed order `spec.md` requires. */
 const ORDER_VALUE_LABELS = [
@@ -73,14 +33,6 @@ const ORDER_VALUE_LABELS = [
   copy.orderValue.shippingAndHandling,
   copy.orderValue.insurance,
 ];
-
-/** Reads the document's order-value and summary rows in DOM order, by their `data-slot`, never by matching text anywhere on the page. */
-function readRows(canvasElement: HTMLElement) {
-  const nodes = canvasElement.querySelectorAll(
-    '[data-slot="pdf-lot-heading"], [data-slot="pdf-value-row"], [data-slot="pdf-summary-row"]',
-  );
-  return Array.from(nodes).map((node) => node.textContent ?? "");
-}
 
 const meta = {
   title: "Invoice And Receipt Pdf/InvoicePdf",
@@ -259,11 +211,21 @@ export const WithTaxLine: Story = {
   },
 };
 
-/** SC-14: the tax line's own key withheld entirely — no row, blank or otherwise. */
+/** SC-14: the tax line's own key withheld entirely — no row, blank or otherwise, and every other line keeps its position. */
 export const WithoutTaxLine: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Tax")).not.toBeInTheDocument();
+    const rows = readRows(canvasElement);
+    const expected = ORDER_VALUE_LABELS.concat([
+      copy.orderValue.subtotal,
+      copy.orderValue.paymentProcessingFee,
+      copy.orderValue.orderTotal,
+    ]);
+    expect(rows).toHaveLength(expected.length);
+    expected.forEach((label, index) => {
+      expect(rows[index]).toContain(label);
+    });
   },
 };
 
@@ -335,5 +297,29 @@ export const WhitespaceSubtotal: Story = {
     expect(label).toBeVisible();
     const row = label.closest('[data-slot="pdf-summary-row"]');
     expect(row?.children).toHaveLength(2);
+  },
+};
+
+/** SC-17: every label reads the copy prop, with no catalog fallback — proven on InvoicePdf; ReceiptPdf's half is `receipt-pdf.stories.tsx`'s `LabelsFromCopy`. */
+export const LabelsFromCopy: Story = {
+  args: {
+    copy: {
+      ...copy,
+      invoiceIdLabel: "Numéro de facture",
+      billToHeading: "Facturé à",
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Numéro de facture")).toBeVisible();
+    expect(canvas.getByText("Facturé à")).toBeVisible();
+  },
+};
+
+/** SC-28: neither component shows a loading or error state — proven on InvoicePdf; ReceiptPdf's half is `receipt-pdf.stories.tsx`'s `RendersImmediately`. */
+export const RendersImmediately: Story = {
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("INV-202609-LK7P2Q-01")).toBeVisible();
   },
 };

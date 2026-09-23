@@ -77,10 +77,56 @@ type InvoicePdfProps = {
   className?: string;
 };
 
+type PaymentBreakdown = {
+  originalInvoiceTotal: ReactNode;
+  previousPayments: ReactNode;
+  currentPaymentReceived: ReactNode;
+  /** All four lines render on every receipt — none is conditional on being given, unlike Insurance or the reserved slots. */
+  remainingBalanceDue: ReactNode;
+};
+
+/** One required label per `PaymentBreakdown` key. */
+type PaymentBreakdownCopy = { [K in keyof PaymentBreakdown]-?: string };
+
+type ReceiptPdfCopy = {
+  documentTitle: string;
+  receiptIdLabel: string;
+  invoiceIdLabel: string;
+  paymentMethodLabel: string;
+  manuallySettledLabel: string;
+  supersededInvoiceLabel: string;
+  billToHeading: string;
+  shipToHeading: string;
+  orderValue: OrderValueLinesCopy;
+  paymentBreakdown: PaymentBreakdownCopy;
+};
+
+type ReceiptPdfProps = {
+  copy: ReceiptPdfCopy;
+  receiptId: ReactNode;
+  invoiceId: ReactNode;
+  paymentMethod: ReactNode;
+  /** Gates a component-owned visual treatment, not presence-gated like the reserved slots — `false` and "not supplied" both mean no mark. */
+  manuallySettled?: boolean;
+  billTo: PartyAddress;
+  shipTo: PartyAddress;
+  orderValue: OrderValueLines;
+  paymentBreakdown: PaymentBreakdown;
+  /** On a settlement that supersedes an earlier invoice only. */
+  supersededInvoice?: ReactNode;
+  /** Reserved for the formal-tax-receipt question — presence-gated, like `taxLine`. */
+  issuerTaxDetails?: ReactNode;
+  className?: string;
+};
+
 export type {
   InvoicePdfCopy,
   InvoicePdfProps,
   OrderValueLines,
   OrderValueLinesCopy,
   PartyAddress,
+  PaymentBreakdown,
+  PaymentBreakdownCopy,
+  ReceiptPdfCopy,
+  ReceiptPdfProps,
 };

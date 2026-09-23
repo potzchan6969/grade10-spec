@@ -51,8 +51,9 @@ one-directory convention every other block already follows
 | --- | --- |
 | `invoice-pdf.tsx` | `InvoicePdf`, exported |
 | `receipt-pdf.tsx` | `ReceiptPdf`, exported |
-| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row, a party block, a fixed two-column value row, a summary row — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
+| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, and `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
 | `types.ts` | Every exported prop type: `InvoicePdfProps`, `InvoicePdfCopy`, `ReceiptPdfProps`, `ReceiptPdfCopy`, and the shared row shapes both use |
+| `fixtures.ts` | Story fixtures and DOM-reading helpers both story files share (`orderValue`, `orderValueCopy`, `billToAddress`, `shipToAddress`, `readRows`, `readBreakdownRows`, `readAddressLines`), unexported from the package |
 | `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Storybook stories with sample props — the behavior proof for `spec.md`'s scenarios (see Risks) |
 | `public-exports.test.ts` | Asserts `InvoicePdf`/`ReceiptPdf` and every prop type in this table are exported from `../../index`, per `auction-order`'s own test |
 

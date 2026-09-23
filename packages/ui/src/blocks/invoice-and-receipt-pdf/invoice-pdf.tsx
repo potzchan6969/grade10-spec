@@ -1,16 +1,13 @@
-import { Divider } from "@grade10/design-system/components/display/divider";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   AddressLines,
-  LotHeading,
   MetaRow,
+  OrderValueSection,
   PartyBlock,
   PdfSheet,
-  SummaryRow,
-  ValueRow,
 } from "./pdf-document";
 import type { InvoicePdfProps } from "./types";
 
@@ -29,8 +26,6 @@ function InvoicePdf({
   replacedBy,
   className,
 }: InvoicePdfProps) {
-  const hasTaxLine = "taxLine" in orderValue;
-
   return (
     <PdfSheet className={className} slot="invoice-pdf">
       <HStack hAlign="space-between" vAlign="start">
@@ -68,52 +63,7 @@ function InvoicePdf({
         </PartyBlock>
       </div>
 
-      <LotHeading>{orderValue.lot}</LotHeading>
-
-      <VStack gap="xs" hAlign="stretch">
-        <ValueRow
-          label={copy.orderValue.winningBid}
-          value={orderValue.winningBid}
-        />
-        <ValueRow
-          label={copy.orderValue.buyersPremium}
-          value={orderValue.buyersPremium}
-        />
-        <ValueRow
-          label={copy.orderValue.shippingAndHandling}
-          value={orderValue.shippingAndHandling}
-        />
-        {orderValue.insurance !== undefined ? (
-          <ValueRow
-            label={copy.orderValue.insurance}
-            value={orderValue.insurance}
-          />
-        ) : null}
-        {hasTaxLine ? (
-          <ValueRow
-            label={copy.orderValue.taxLine}
-            value={orderValue.taxLine}
-          />
-        ) : null}
-      </VStack>
-
-      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow
-          label={copy.orderValue.subtotal}
-          value={orderValue.subtotal}
-        />
-        <SummaryRow
-          label={copy.orderValue.paymentProcessingFee}
-          value={orderValue.paymentProcessingFee}
-        />
-        <Divider className="bg-foreground" />
-        <SummaryRow
-          label={copy.orderValue.orderTotal}
-          size="lg"
-          value={orderValue.orderTotal}
-          weight="bold"
-        />
-      </VStack>
+      <OrderValueSection copy={copy.orderValue} orderValue={orderValue} />
     </PdfSheet>
   );
 }

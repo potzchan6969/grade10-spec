@@ -10,11 +10,12 @@
 
 Needs group 1's `types.ts` (`OrderValueLines`, `OrderValueLinesCopy`) and `pdf-document.tsx` landed first; not independently parallel with it.
 
-- [ ] 2.1 Write `receipt-pdf.stories.tsx`'s `play`-function proofs for ReceiptPdf's own behaviour, plus the two-component scenarios only both together can prove, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-7`, `SC-8`, `SC-9`, `SC-10`, `SC-11`, `SC-12`, `SC-14`, `SC-15`, `SC-17`, `SC-20`, `SC-21`, `SC-22`, `SC-23`, `SC-24`, `SC-28`, `SC-29`, `SC-30`)
-- [ ] 2.2 Build `ReceiptPdf` and its prop types (`ReceiptPdfProps`, `ReceiptPdfCopy`, `PaymentBreakdown`, `PaymentBreakdownCopy`), reusing group 1's `OrderValueLines` and `pdf-document.tsx` pieces per `tech-design.md`'s "One order-value shape, not two", making 2.1's stories pass (same scenario ids)
-- [ ] 2.3 Extend `public-exports.test.ts` to also assert `ReceiptPdf` and its prop types
-- [ ] 2.4 Retire `apps/preview`'s sketch (`winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx`, `winner-order-pdf.story-shared.tsx`), replacing it with pages that compose the real `InvoicePdf`/`ReceiptPdf` and sample props, dropping the sketch's hardcoded `TAX_RATE` and `formatAmount` per `tech-design.md`'s Risks
-- [ ] 2.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint`
+- [x] 2.1 Write `receipt-pdf.stories.tsx`'s `play`-function proofs for ReceiptPdf's own behaviour, plus the two-component scenarios only both together can prove, landing before the component exists (`shared-ui-invoice-and-receipt-pdf-SC-7`, `SC-8`, `SC-9`, `SC-10`, `SC-11`, `SC-12`, `SC-14`, `SC-15`, `SC-17`, `SC-20`, `SC-21`, `SC-22`, `SC-23`, `SC-24`, `SC-28`, `SC-29`, `SC-30`, `SC-33`, `SC-34`)
+- [x] 2.2 Build `ReceiptPdf` and its prop types (`ReceiptPdfProps`, `ReceiptPdfCopy`, `PaymentBreakdown`, `PaymentBreakdownCopy`), reusing group 1's `OrderValueLines` and `pdf-document.tsx` pieces per `tech-design.md`'s "One order-value shape, not two", making 2.1's stories pass (same scenario ids)
+- [x] 2.3 Extend `public-exports.test.ts` to also assert `ReceiptPdf` and its prop types
+- [x] 2.4 Retire `apps/preview`'s sketch (`winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx`, `winner-order-pdf.story-shared.tsx`), replacing it with pages that compose the real `InvoicePdf`/`ReceiptPdf` and sample props, dropping the sketch's hardcoded `TAX_RATE` and `formatAmount` per `tech-design.md`'s Risks
+- [x] 2.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint`
+- [x] 2.6 Amendment: extract `OrderValueSection` into `pdf-document.tsx` (dropping ~45 duplicated lines between the two documents), give `MetaRow` an optional `mark` slot, scope the payment breakdown behind its own `data-slot`, and share both story files' fixtures/DOM-reading helpers via `fixtures.ts` — per the build round's readers
 
 ## 3. Wire grade10 onto the real components (grade10)
 

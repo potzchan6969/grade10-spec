@@ -890,6 +890,63 @@ Runs once per row of **Test data**.
 * No company name, address line 2, or state field renders.
 * Full name, address line 1, city, postal code, country, and phone number still render.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC29-1: A receipt's company address renders every field it is given
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with a Bill To supplying all nine address fields.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the Bill To block.
+
+**Expected Results:**
+
+* All nine fields render.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC30-1: A receipt's personal address omits company name, address line 2 and state
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with a Ship To omitting company name, address line 2, and state.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the Ship To block.
+
+**Expected Results:**
+
+* No company name, address line 2, or state field renders.
+* Full name, address line 1, city, postal code, country, and phone number still render.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -933,3 +990,9 @@ opaque `ReactNode` at reconciliation time. `SC-31`/`SC-32` and
 Feature set group, author-reviewed rather than run through a fresh blind
 pass, since the addition is narrow and additive to an already-reconciled
 capability rather than a new one.
+
+**Amendment, group 2:** `SC-33`/`SC-34` and `TC29`/`TC30` extend the same
+"Party address fields" group to `ReceiptPdf`, per the requirement's own
+"InvoicePdf and ReceiptPdf SHALL render" wording — the same gap `SC-21`
+closed for the order-value lines, caught before drafting rather than at
+reconciliation.

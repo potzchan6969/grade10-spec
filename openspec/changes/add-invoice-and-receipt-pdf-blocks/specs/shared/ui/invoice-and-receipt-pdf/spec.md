@@ -97,14 +97,16 @@ content.
 
 Bill To and Ship To each carry a full name, an optional company name, a
 street address, an optional locality, a postal code, a country, and a phone
-number, matching the address form's own field set and optionality.
+number, matching the address form's own field set and optionality. Both
+InvoicePdf and ReceiptPdf render the same structure.
 
-**Fields** — InvoicePdf SHALL render full name, address line 1, city, postal
-code, country, and phone number for every Bill To and every Ship To.
-**Company name** — InvoicePdf SHALL render the company name only when the
-consumer supplies it. **Address line 2** — InvoicePdf SHALL render address
-line 2 only when the consumer supplies it. **State** — InvoicePdf SHALL
-render state only when the consumer supplies it.
+**Fields** — InvoicePdf and ReceiptPdf SHALL render full name, address line
+1, city, postal code, country, and phone number for every Bill To and every
+Ship To. **Company name** — InvoicePdf and ReceiptPdf SHALL render the
+company name only when the consumer supplies it. **Address line 2** —
+InvoicePdf and ReceiptPdf SHALL render address line 2 only when the consumer
+supplies it. **State** — InvoicePdf and ReceiptPdf SHALL render state only
+when the consumer supplies it.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-31 - A company address renders every field it is given
 **Serves:** Party address fields - every address field renders when supplied
@@ -119,6 +121,23 @@ render state only when the consumer supplies it.
 **Serves:** Party address fields - company name, address line 2 and state are the only optional fields
 
 - **GIVEN** an InvoicePdf given a Ship To with no company name, no address
+  line 2, and no state
+- **WHEN** it renders
+- **THEN** no company name, no address line 2, and no state field appear
+- **AND** full name, address line 1, city, postal code, country, and phone
+  number still render
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-33 - A receipt's company address renders every field it is given
+**Serves:** Party address fields - every address field renders when supplied
+
+- **GIVEN** a ReceiptPdf given a Bill To with all nine address fields
+- **WHEN** it renders
+- **THEN** every one of those nine fields is shown
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-34 - A receipt's personal address omits company name, address line 2 and state
+**Serves:** Party address fields - company name, address line 2 and state are the only optional fields
+
+- **GIVEN** a ReceiptPdf given a Ship To with no company name, no address
   line 2, and no state
 - **WHEN** it renders
 - **THEN** no company name, no address line 2, and no state field appear
