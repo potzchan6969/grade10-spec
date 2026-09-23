@@ -101,7 +101,7 @@ Slack tells one person, once per move, in the change's thread.
 | --- | --- | --- |
 | A change reaches a hand: a stage lands, the decisions and the journeys complete Proposed, or a hand is taken off | That hand, by direct message; the role's channel when the change names nobody for it | The change, the stage, the thread to answer in, the command to paste |
 | A change reaches staging | Its QA hand, by direct message; the release hand by the message above | The change, and the run sheet to walk |
-| An artifact is behind | The hand of the earliest behind artifact | The artifact, and what changed before it |
+| 🚧 A move reaches an artifact | The hand of each artifact it reaches | The move, before and after, and whether it holds their next landing |
 | 🚧 An artifact lands from a terminal | The change's thread | What landed, whose word landed it, the stage now, and whose turn it is |
 | A push lands on `main` | The channel | Each change the push moved, and its stage |
 | Monday morning | Each person with a line to read, by direct message | On you now; open questions; idle; behind for 7 days; waiting; freed by a dependency |

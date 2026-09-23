@@ -127,8 +127,20 @@ An artifact is drawn from what is before it, the page's marks first.
   the branch, for its hand's word; where nothing reached one, the record and
   the thread say it was read
 - 🚧 **Nothing is built on a behind artifact** — an artifact lands only when
-  everything before it is fresh, the fold refuses a behind delta, and a tick, a
-  claim and a wait are never held
+  no major move before it is unread, the fold refuses a behind delta, and a
+  tick, a claim and a wait are never held
+- 🚧 **What moved, quoted** — the hand of each artifact a move reaches is told
+  the move itself, once: a decision row, or the lines of a proposal, a journey
+  or a page section, before and after
+- 🚧 **Major holds, small tells** — a changed decision, goal, non-goal,
+  requirement or case result holds what is drawn from it until its hand reads
+  it again and says so; a move that changes none of these holds nothing and
+  stays on the hand's list until they read it
+- 🚧 **Taking the recommendation moves nothing** — the drafts were drawn on it;
+  an answer that overturns a recommendation is a major move
+- 🚧 **Signed before it folds** — a change archives only with every case in its
+  suite reviewed, and a case the review changes after the walk ran is walked
+  again
 - 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
   non-goal moved asks the product manager to extend, supersede or split, and
   lands nothing until they answer
