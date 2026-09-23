@@ -335,9 +335,11 @@ drop-off.
 A visit nobody came to is the diary's fact, and the submission hears it rather
 than deciding it.
 
-**The diary closes it** - the shop's diary console SHALL close a visit nobody
-started, after its start time, and grading SHALL never mark a visit missed
-itself.
+**Grading tells the diary** - after the grace period, grading SHALL tell the
+diary the collector did not come (`markOutcome(…, "no_show", …)`), the same
+shape the vault's `sweepNoShows` already takes for consistency across
+products; the shop's diary console may also close a visit nobody started,
+and whichever side tells it first is the fact the other reads.
 
 **Heard within the hour** - the submission SHALL read that outcome within an
 hour of the close, drop the visit from the page and send the missed message.
@@ -347,6 +349,11 @@ estimate SHALL stay exactly as they were, and a missed visit SHALL end no
 submission and no plan.
 
 **Book again** - the page SHALL offer another drop-off.
+
+**The plan's clock restarts** - a missed visit SHALL restart the plan's own
+clock from the day of the miss: `plan_expiry_days` counted from there, never
+from the day the plan was first kept. A missed visit spends the slot the
+collector booked, not the plan's own chance to book again.
 
 #### Scenario: grade10-site-grading-dropoff-booking-SC-18 - A visit nobody started is closed and the collector hears within the hour
 **Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector who did not make it to the shop
@@ -373,6 +380,16 @@ submission and no plan.
 - **THEN** the 6 cards, the sheet the plan was priced on and the estimate are
   unchanged
 - **AND** another drop-off is offered
+
+#### Scenario: grade10-site-grading-dropoff-booking-SC-28 - A missed visit restarts the plan's clock from the day of the miss
+**Serves:** grade10-site-grading-dropoff-booking-US-03 - a collector who missed a visit weeks into their plan
+
+- **GIVEN** a plan kept 25 days ago, `plan_expiry_days` 30, whose visit was
+  missed today
+- **WHEN** the plan expiry sweep runs `plan_expiry_days` after today
+- **THEN** the plan has not expired
+- **AND** it expires `plan_expiry_days` after today, not `plan_expiry_days`
+  after the day it was first kept
 
 ### Requirement: One visit holds a second submission
 

@@ -467,6 +467,35 @@ Runs once per row of **Test data**.
 * The new visit books against the same list and estimate the missed visit carried.
 * The submission reads Drop-off booked with the new day.
 
+### grade10-site-grading-dropoff-booking-US3-TC4-1: A missed visit restarts the plan's clock from the day of the miss
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** service
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-grading-dropoff-booking-US-03
+
+**Pre-conditions:**
+
+* A plan kept 25 days ago, `plan_expiry_days` set to 30, whose visit was missed today.
+
+**Steps:**
+
+1. Run the plan expiry sweep `plan_expiry_days` after today.
+2. Run the plan expiry sweep `plan_expiry_days` after the day the plan was first kept.
+
+**Expected Results:**
+
+* The plan has not expired after step 1.
+* The plan expires only once `plan_expiry_days` has run from the day of the miss, not from the day it was first kept.
+
 ### grade10-site-grading-dropoff-booking-US3-TC3-1: The page reads the visit as booked until the diary closes it
 
 **Classification:**
@@ -819,6 +848,7 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-dropoff-booking-US2-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-16` |
 | `grade10-site-grading-dropoff-booking-US3-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-18`, `grade10-site-grading-dropoff-booking-SC-19` |
 | `grade10-site-grading-dropoff-booking-US3-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-19` |
+| `grade10-site-grading-dropoff-booking-US3-TC4-1` | Covered | `grade10-site-grading-dropoff-booking-SC-28` |
 | `grade10-site-grading-dropoff-booking-US4-TC1-1` | Covered | `grade10-site-grading-dropoff-booking-SC-20` |
 | `grade10-site-grading-dropoff-booking-US4-TC2-1` | Covered | `grade10-site-grading-dropoff-booking-SC-21` |
 | `grade10-site-grading-dropoff-booking-US4-TC3-1` | Folded | The Cancels row is `grade10-site-grading-dropoff-booking-SC-22`; the Misses row reached no scenario, and the requirement's "cancels or misses" is folded as `grade10-site-grading-dropoff-booking-SC-27` |

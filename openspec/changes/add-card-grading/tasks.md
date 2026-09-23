@@ -1343,11 +1343,18 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-18`,
       `grade10-site-grading-collector-notifications-SC-25`)
 - [ ] 21.7 Add the fast lane's repair lists: `repairedBookings` and
-      `recoveredBookings` over `visit_owner_id`, `expiredPackets` and
-      `sealedDeliveries`; a list keyed on `booking_ref` filters on status,
-      since a `cancelled` row keeps its cache when the counter cancelled it
-      and holds none when the collector did; each step's email carries its
-      sealed document attached
+      `recoveredBookings` over `visit_owner_id`, and `expiredPackets`; a list
+      keyed on `booking_ref` filters on status, since a `cancelled` row keeps
+      its cache when the counter cancelled it and holds none when the
+      collector did. No `sealedDeliveries` list: SC-25's attached copy is
+      already carried by the step act's own letter
+      (`documents/papers.ts`'s `CARRYING_STEP`), so no sweep owes a sending
+      list for it — a gauge with no real predicate only fires
+      `grading.sweep.repair` forever. `terminalBookingsClosed` joins this
+      lane too: a terminal row still caching a visit closes the diary's own
+      booking behind it, `cancel` for a future slot and `markOutcome` for a
+      past one (21.5's `expiredBooked` and the counter's cancel-after-
+      last-card both leave one otherwise)
       (`grade10-site-grading-counter-documents-SC-25`)
 - [ ] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
       `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset` and

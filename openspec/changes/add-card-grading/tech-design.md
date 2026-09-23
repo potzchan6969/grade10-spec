@@ -435,30 +435,72 @@ this is how the paid order reaches the submission.
 ### Sweeps: the vault's pass, every row claimed, every list budgeted
 
 `sweeps/pass.ts` over `createSweepPass`, `WORK_LISTS` laned and ordered, the
-order pinned by a test. Every row carries `kind` and `limit`, because
-`createSweepPass` fires `<product>.sweep.repair` only for `kind: "repair"` and
-otherwise falls back to `DEFAULT_LIMIT`.
+order pinned by a test. Every row carries its own `kind` and an explicit
+`limit` (`DEFAULT_LIMIT` where nothing narrower applies), because
+`createSweepPass` fires `<product>.sweep.repair` only for `kind: "repair"`.
 
 | List | Predicate | Writes | Kind · Lane |
 | --- | --- | --- | --- |
-| `retriedNotifications` | `notification_retries` due | the send, or the parked row | repair · fast |
-| `dueLetters` | one row per `{ status, anchor, offsetsSetting, eventKind, letter }`: plan nudge, visit reminder, the 30/60 collection pair, storage started | the event and the letter | routine · fast |
-| `planExpiry` | `planned`, older than `plan_expiry_days` | `expire` | routine · fast |
-| `expiredBooked` | `booked`, `booked_expiry_days` past the visit | `expireBooked` | routine · fast |
-| `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed | `markOutcome(…, "no_show", …)`, then the cache cleared and `dropoff_missed` | routine · fast |
+| `retriedNotifications` | `notification_retries` due | the send, or the row leased for a further attempt | repair · fast |
+| `dueLetters` | one registry row, one shared budget, over four rungs each paged through `readWorkList` under its own internal cursor key: the plan nudge (`created_at`, `NOT EXISTS plan_nudged`), the visit reminder (every submission the visit carries — the owner and each joiner, resolved through `visit_owner_id`, ordered by the visit's own `appointment_at`), the 30/60 collection pair (`ready_at`, no notice posted), storage started (`ready_at`, no notice, `NOT EXISTS storage_started`) | the event and the letter | routine · fast |
+| `planExpiry` | `planned` or `booked` holding no visit, older than `plan_expiry_days` off the plan's own clock — which restarts from a missed visit's own day, never the day the plan was first kept | `expire` / `expireBooked` | routine · fast |
+| `expiredBooked` | `booked`, `booked_expiry_days` past the visit's own slot (`bookedExpiresAt`) | `expireBooked`, cache cleared | routine · fast |
+| `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed, re-read from the diary before it is told — a cached slot is a candidate, never a fact | `markOutcome(…, "no_show", …)`, then the cache cleared and `dropoff_missed` | routine · fast |
 | `repairedBookings`, `recoveredBookings` | the vault's two, over `visit_owner_id` | the cache repaired | repair · fast |
-| `expiredPackets`, `sealedDeliveries` | the vault's | `expirePacket`; the letter with the PDF | routine · fast |
+| `terminalBookingsClosed` | a terminal submission (cancelled, expired or collected) still caching a visit | the diary's booking closed — `cancel` for a future slot, `markOutcome` for a past one — and the cache cleared | repair · fast |
+| `expiredPackets` | the vault's | `expirePacket` | routine · fast |
 | `verifiedChainRows`, `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset`, `orphanedObjects` | the vault's six | the vault's | routine · slow |
 
-- **Every per-row list runs through `claimRow`**, the claim re-reading its
-  predicate under the submission's lock in the transaction that writes the
-  event and the retry row, with a partial unique index behind the
-  once-per-submission kinds: event absence read in the page phase is a
-  read-then-write race two overlapping passes both pass
+No `sealedDeliveries` list: SC-25's attached copy is the completing counter
+act's own letter (`documents/papers.ts`'s `CARRYING_STEP`), drafted as that
+act's last step inside its own transaction, so no sweep ever owes a sending
+list for it. A gauge with no real predicate — every completed packet, capped
+at `limit` — fires `grading.sweep.repair` on every pass forever instead of
+answering the question it was for.
+
+- **Every per-row list runs through `claimRow`**, and the claim itself is
+  `FOR UPDATE SKIP LOCKED` on the submission, filtered to the statuses that
+  rung still runs from — `lockForAct`'s blocking, throwing lock is for an act
+  with a page behind it to refuse by name, never for a sweep's own claim,
+  which has nobody to refuse and everything to lose waiting on a lock a
+  rival pass might hold for a slow send. A row an overlapping pass already
+  holds, or one that has moved past every status the rung offers, answers
+  null rather than blocking or throwing, and each row's own failure is
+  caught and reported (`rowError`) rather than aborting the rungs behind it.
+  The once-per-submission kinds (`ONCE_PER_SUBMISSION_KINDS` in
+  `grading-contracts`: `plan_nudged`, `storage_started`) carry a partial
+  unique index as the backstop a claim's own re-check cannot cover on its
+  own: event absence read in the page phase is a read-then-write race two
+  overlapping passes both pass
+- **The visit reminder is every submission the visit carries**, not the
+  cache the owner alone holds: a joiner's own row never caches
+  `appointment_at`/`booking_ref`, so the page reads the visit resolved
+  through `visit_owner_id` (`withVisit`/`resolvedVisit`, the same resolver
+  `visit_of` reads), and each submission on the visit is reminded under its
+  own id, with its own fee — never the owner's letter naming every
+  submission's total (decided here, per the audit's finding 16)
+- **The claim asks the diary before it opens**, never after: the visit
+  reminder's day-before judgment reads the diary's own `slot_start` at the
+  claim, not the page's cached `appointment_at` — a visit the diary moved
+  since the page was read is judged, and reminded, on the day it now falls
+- **No letter goes out before the shop's morning** (`SEND_FROM_HOUR`, 9):
+  every rung still reads its candidates and reports its backlog every pass,
+  so a stalled morning is still visible, but the claim, the event and the
+  send wait for the hour. Grading keeps its own copy of the vault's
+  `REMINDER_SEND_FROM_HOUR` rule rather than importing it: the vault's
+  sweeps and `@grade10/postgres` were out of this pass's scope to touch, so
+  hoisting the two into one shared constant is a recorded follow-up, not
+  done here
 - **Notice due** and **running late** are no lists: the badge derives from
   `notice_day` and the send is the counter act `recordNoticePosted`; the
   late letter goes on `reestimateBatch`. `retentionReviews` dates a
-  submission from its last terminal event over the classes it answers
+  submission from its last terminal event over the classes it answers — one
+  grouped query per terminal status (never per row), filtered to what has
+  already run past the shortest set window and ordered oldest first, so a
+  page of `limit` never returns undue rows at the cost of a genuinely
+  overdue one; the event kind(s) each status dates from are derived off
+  `SUBMISSION_MOVES` rather than restated by hand, `payout_recorded` the
+  one addition a move never carries
 - Alternative rejected: a `nudged_at` column per clock — the event row is
   the stamp; five day-count lists — they differ only in their settings
 
