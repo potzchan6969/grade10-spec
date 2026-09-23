@@ -14,18 +14,18 @@ other-Cert items deliberately added from the separate drawer.
 ## What Changes
 
 - **Cert-scoped Inventory media** — lets an authorized Inventory operator
-  leave source media untagged for the product, or tag it to exactly one Cert
-  record of that product. The tag stores the immutable Cert record id, not its
-  printed Cert ID, which may be absent. Operators can tag, untag, and retag a
-  saved source item. Deleting the Cert record clears its tag and retains the
-  source media.
+  leave source media untagged for the product, or tag it to exactly one
+  same-product Cert record with a printed Cert ID. The tag stores the immutable
+  Cert record id, not its printed Cert ID. Media for a record without a printed
+  Cert ID remains untagged. Operators can tag, untag, and retag a saved source
+  item. Deleting the Cert record clears its tag and retains the source media.
 - **Cert-aware listing source** — when an authorized Auction operator selects
   a product and one Cert ID, the main source selector contains that product's
   untagged source media and media tagged to the selected Cert record. Source
   media tagged to another Cert is absent from that selector.
 - **Deliberate other-Cert selection** — a separately labelled Other Cert media
-  drawer groups the hidden source items by Cert ID. An operator can inspect
-  them and add one only through an explicit action that names its Cert ID.
+  drawer groups hidden source items by their printed Cert ID. An operator can
+  inspect them and add one only through an explicit action that names that ID.
 - **No-Cert source** — a listing whose explicit unit is No Cert ID offers
   product-level untagged source media only; it does not bring forward
   Cert-tagged media by default.
