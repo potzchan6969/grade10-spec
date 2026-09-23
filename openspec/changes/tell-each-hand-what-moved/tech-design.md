@@ -132,15 +132,17 @@ Q2 governs it: `toldOf` in `src/api/told.ts` replaces `newlyBehind`, and
   `--reviewed` on its hand's word writes the line
 - [Risk] A git refusal reads as a move → it throws in the scripts
 - [Risk] `X - only for admins` reads as taken → the attribution set is closed
-- [Risk] A linked page section is hashed whole, so a reworded unmarked line
-  or another change's fold is major → one hash construction; step 4 quotes
+- [Risk] A linked page section is hashed whole
+  ([Q10](decisions.md#decisions)), so a reworded unmarked line or another
+  change's fold is major → one hash construction; step 4 quotes
   the section, and `--reviewed` on the hand's word clears it
 
 ## Migration Plan
 
-1. **Backfill** — a one-off script writes `readAgainst`'s current id for every
-   in-flight, written, unwaived artifact with no line, 58 of 60 records, that
-   `behindOf` does not name today; one it names gets none and is held whole
+1. **Backfill** — [Q9](decisions.md#decisions): a one-off script writes
+   `readAgainst`'s current id for every in-flight, written, unwaived
+   artifact with no line, 58 of 60 records, that `behindOf` does not name
+   today; one it names gets none and is held whole
    until read, as today. It writes only a missing line, so a rerun is safe
 2. **Silenced** — one commit touching only `reviewed:` keys, so `keysOnly`
    puts every change in `suppressed`. It lands before the code in one pull

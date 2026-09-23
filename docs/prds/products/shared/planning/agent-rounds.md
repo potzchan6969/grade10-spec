@@ -113,7 +113,7 @@ An artifact is drawn from what is before it, the page's marks first.
 
 | Before | After |
 | --- | --- |
-| The page's marked and open lines the change links | Everything below |
+| The page sections the change links | Everything below |
 | `proposal.md`, `decisions.md`, `user-journeys.md` | The designs, the requirements, the cases, the plan, the code |
 | `ui-design.md`, `tech-design.md` | The requirements, the cases, the plan, the code |
 | `spec.md`, `feature-tcs.md` | The plan, the code |
