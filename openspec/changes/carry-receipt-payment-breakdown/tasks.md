@@ -50,7 +50,7 @@
   - Covers: `winner-order-SC-208`.
   - Verification: refund/reversal regression check over three issued receipts.
 
-## 4. Receipt presentation (grade10)
+## 4. Receipt presentation (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Render the stored values in the existing receipt/PDF path in this
   order: Original Invoice Total, Previous Payments, Current Payment Received,
