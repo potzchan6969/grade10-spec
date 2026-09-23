@@ -1,133 +1,106 @@
 ---
 title: Analytics
+spec: grade10-site/analytics
 icon: chart-bar
 ---
 
-What Grade10 measures, by domain, and where each number is read from. A
-signal is read from one of three sources: an event Mixpanel holds, a record
-the site's own tables hold, or a counter the systems keep as they run.
-Events reach Mixpanel through the site's own backend, never from the browser
-directly — [Product Analytics](/platform/tracking) holds the pipeline, the
-identity rules and how a duplicate is dropped.
+What Grade10 measures, by domain, and where each number is read from.
+The pipeline that carries events is [Product Analytics](/platform/tracking);
+the engineering record is
+[tracking architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/tracking.md).
+
+| Page                                                           | What it holds                                                      |
+| -------------------------------------------------------------- | ------------------------------------------------------------------ |
+| [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events)   | Who did what in a session or funnel, and the user-profile snapshot |
+| [Datadog Counters](/p/grade10-site/analytics/datadog-counters) | How often something happened, never who                            |
+| [Site Records](/p/grade10-site/analytics/site-records)         | Money, liability, and durable outcomes in the site's own tables    |
+
+A signal names one source. The same fact may appear in two places for
+different jobs — Order Paid describes a paid moment; Orders hold revenue.
 
 ## Membership
 
-| Signal | Definition | Read from | Owner |
-| --- | --- | --- | --- |
-| Repeat purchase rate | Share of buyers with a second purchase within 90 days, members against non-members | Order Paid, by member — [Events](#events) | Product |
-| Physical attribution | Share of till sales that belong to a member | Order Paid at the till, with a member against without — [Events](#events) | Product |
-| Staff-assisted redemption | Coupons used at the till per week | Redemptions and coupons — [Records](#records) | Product |
-| Tier progression | Members reaching Gold per month | Tier changes — [Records](#records) | Product |
-| Tier retention | Share of Gold members who earn the retention threshold inside their tier period | Tier changes, at review — [Records](#records) | Product |
-| Point redemption | Share of earned points spent before the balance lapses | Points ledger — [Records](#records) | Product |
-| Coupon usage | Share of issued coupons used before their own validity ends | Redemptions and coupons — [Records](#records) | Product |
-| Arriving by pass | Share of till identifications made from a wallet pass, split Google against Apple | ❓ Till identifications count outcomes, not how the member was found — [Counters](#counters) | Product |
-| Codes that never landed | Till identifications refused because the code expired or was already used; a Google pass drives this to zero | Till identifications — [Counters](#counters) | Product |
-| Spend after an Apple identification | Apple identifications followed by a spend from the card on the site in the same visit | ❓ Nothing joins a till identification to a later order; Product confirms whether this is measured | Product |
-| Points outstanding | Unexpired, unspent points, plus the money out in unused coupons, as a liability | Points ledger and coupons — [Records](#records) | Finance |
-| Earning delivery | Money events awaiting delivery to the programme, and their age | Earning delivery — [Counters](#counters) | Engineering |
+| Signal                              | Definition                                                                         | Source                                                                                           | Owner       |
+| ----------------------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | ----------- |
+| Repeat purchase rate                | Share of buyers with a second purchase within 90 days, members against non-members | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Order Paid                        | Product     |
+| Physical attribution                | Share of till sales that belong to a member                                        | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Order Paid                        | Product     |
+| Staff-assisted redemption           | Coupons used at the till per week                                                  | [Site Records](/p/grade10-site/analytics/site-records) · Redemptions and coupons                 | Product     |
+| Tier progression                    | Members reaching Gold per month                                                    | [Site Records](/p/grade10-site/analytics/site-records) · Tier changes                            | Product     |
+| Tier retention                      | Share of Gold members who earn the retention threshold inside their tier period    | [Site Records](/p/grade10-site/analytics/site-records) · Tier changes                            | Product     |
+| Point redemption                    | Share of earned points spent before the balance lapses                             | [Site Records](/p/grade10-site/analytics/site-records) · Points ledger                           | Product     |
+| Coupon usage                        | Share of issued coupons used before their own validity ends                        | [Site Records](/p/grade10-site/analytics/site-records) · Redemptions and coupons                 | Product     |
+| Arriving by pass                    | Share of till identifications from a wallet pass, Google against Apple             | [Datadog Counters](/p/grade10-site/analytics/datadog-counters) · Till identifications            | Product     |
+| Codes that never landed             | Till identifications refused because the code expired or was already used          | [Datadog Counters](/p/grade10-site/analytics/datadog-counters) · Till identifications            | Product     |
+| Spend after an Apple identification | Apple identification followed by a spend from the card in the same visit           | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Member Identified then Order Paid | Product     |
+| Points outstanding                  | Unexpired points plus unused coupon money, as a liability                          | [Site Records](/p/grade10-site/analytics/site-records) · Points ledger and coupons               | Finance     |
+| Earning delivery                    | Money events awaiting delivery to the programme, and their age                     | [Datadog Counters](/p/grade10-site/analytics/datadog-counters) · Earning delivery                | Engineering |
 
-At $1 a point the programme returns 10% of spend at Silver, 12% at Gold and
-17% at Black, so points outstanding is the one number that decides whether
-the catalog's prices and the reported liability are sustainable. A member
-who buys once a year never loses a point, so the balance only grows —
-[Membership](/p/grade10-site/loyalty).
+🚧 Order Paid carries member, the tier the spend was priced at, and the
+points that order earned and spent.
+
+🚧 Mixpanel records a reward bought with points, a member card saved to a
+wallet, and a successful till identification.
+
+At $1 a point the programme returns 10% / 12% / 17% of spend at Silver /
+Gold / Black, so points outstanding decides whether prices and liability
+stay sustainable — [Membership](/p/grade10-site/loyalty).
 
 ## Store
 
-| Signal | Definition | Read from | Owner |
-| --- | --- | --- | --- |
-| Row-led product views | Share of front-door sessions that open a product page from the merchandised row; the first delivery sets the baseline | Page Viewed, then Product Viewed in the same session — [Events](#events) | Product |
+| Signal                    | Definition                                                                                 | Source                                                                                                      | Owner   |
+| ------------------------- | ------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------------- | ------- |
+| Row-led product views     | Share of front-door sessions that open a product from the merchandised row                 | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Page Viewed then Product Viewed (Source Row) | Product |
+| 🚧 Identified paid orders | Share of Order Paid whose distinct_id is a user id, among orders that had a checkout email | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Order Paid                                   | Product |
+
+🚧 The storefront records page view, product view and source, add to cart,
+cart open, and a checkout the worker started.
 
 ## Auction
 
-| Signal | Definition | Read from | Owner |
-| --- | --- | --- | --- |
-| Completed-auction payment rate | Closed listings whose winner reaches paid state, divided by closed listings with a winner | Auction listings — [Records](#records) | Product and finance |
-| Time to ship | Elapsed time from paid to shipment started, for listings that reach shipped | Auction listings — [Records](#records) | Operations |
-| Bid integrity incidents | Accepted bid outcomes later found to conflict with the recorded close or highest valid bid | ❓ Nothing records an incident; Engineering confirms where one is filed | Engineering and operations |
+| Signal                         | Definition                                                                    | Source                                                                                    | Owner                      |
+| ------------------------------ | ----------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------- | -------------------------- |
+| Completed-auction payment rate | Closed listings whose winner reaches paid, over closed listings with a winner | [Site Records](/p/grade10-site/analytics/site-records) · Auction listings                 | Product and finance        |
+| Time to ship                   | Elapsed time from paid to shipment started                                    | [Site Records](/p/grade10-site/analytics/site-records) · Auction listings                 | Operations                 |
+| Bid integrity incidents        | Accepted bids later found to conflict with the close                          | ❓ Nothing records an incident; Engineering confirms where one is filed                   | Engineering and operations |
+| 🚧 Bid conversion              | Share of Lot Viewed sessions that reach Bid Placed                            | [Mixpanel Events](/p/grade10-site/analytics/mixpanel-events) · Lot Viewed then Bid Placed | Product                    |
+
+🚧 Mixpanel holds the collector funnel: lot view, card linked, bid, watch,
+outbid, win, and invoice paid. Payment rate and time to ship stay on
+[Site Records](/p/grade10-site/analytics/site-records).
 
 ## Vault
 
-| Signal | Definition | Read from | Owner |
-| --- | --- | --- | --- |
-| Financed cases | Cases that took a loan, per week | Vault ledger and positions — [Records](#records) | Product |
-| Redemption rate | Share of loans repaid and the item returned | Vault ledger and positions — [Records](#records) | Product |
-| Time to payout | Days from submission to payout | Vault ledger and positions — [Records](#records) | Operations |
-| Recording lag | Days from a money row's value date to its recording | Vault ledger and positions — [Records](#records) | Finance |
-| Loans outstanding | What is owed at a date | Vault ledger and positions — [Records](#records) | Finance |
+| Signal            | Definition                                          | Source                                                                              | Owner      |
+| ----------------- | --------------------------------------------------- | ----------------------------------------------------------------------------------- | ---------- |
+| Financed cases    | Cases that took a loan, per week                    | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Product    |
+| Redemption rate   | Share of loans repaid and the item returned         | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Product    |
+| Time to payout    | Days from submission to payout                      | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Operations |
+| Recording lag     | Days from a money row's value date to its recording | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Finance    |
+| Loans outstanding | What is owed at a date                              | [Site Records](/p/grade10-site/analytics/site-records) · Vault ledger and positions | Finance    |
 
-## Events
+🚧 Mixpanel holds financed-case conversion: submitted, visit booked, offer
+made or answered, payout recorded, and identity bound. Financed cases and
+loans outstanding stay on [Site Records](/p/grade10-site/analytics/site-records).
 
-Every event the site knows, one row each. A row without a mark is sent
-today.
+:::detail{title="Product decisions" for="pm"}
+🚧 Until this change archives, Mixpanel still shows mainly Order Paid in
+production; the catalog, storefront funnel, auction, vault, and loyalty
+emits land with the change and stay marked 🚧 on the domain rows above.
 
-| Event | Fires when | Carries | Sent by |
-| --- | --- | --- | --- |
-| Order Paid | A paid order lands, online or at the till, and when a shop's own sale is matched to the store | Order id · currency · online or till · the goods · the whole charge · item count | The store's backend, once per order however many times the shop reports it |
-| Checkout Started | A collector opens the store's checkout | Order id · currency · the goods | ❓ Nothing yet; Product confirms the site sends it |
-| Product Viewed | A collector opens a product page | Product · variant | ❓ Nothing yet; Product confirms the site sends it |
-| Page Viewed | A collector opens a page | Page | ❓ Nothing yet; Product confirms the site sends it |
+**Not in scope.** Mixpanel as the money or liability ledger. Operator
+consoles. ZZZ storefront emit. A consent gate. Bid ticks, KYC payloads,
+coupon codes, and pass serials.
 
-- **The goods and the charge apart** — Order Paid carries what the goods
-  came to and what was charged as two numbers, because tax and shipping are
-  not revenue
-- **A member or a device** — a signed-in collector's events sit on their
-  profile; an anonymous visit sits on the device; an ownerless paid order
-  sits on the order alone, so the money is still counted
-- **Once per order** — a replayed webhook or a reconcile pass reports the
-  same paid order again and Mixpanel keeps one
+**Measurement.** [Bid conversion](#auction) once auction is live;
+[Identified paid orders](#store) once the store is live.
 
-## Loyalty Events
+**Decisions.**
 
-The programme sends nothing to Mixpanel. Every loyalty signal is read from
-the records below until these are confirmed:
+| Item                | Status  | Decision                                                                                                                            | Owner   |
+| ------------------- | ------- | ----------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| Where Mixpanel sits | Decided | Who did what in a session. Records stay the ledger. Counters stay how-often.                                                        | Product |
+| One Grade10 project | Decided | Store, auction, loyalty, and vault events share it so a lot view can join a bid. ZZZ gets its own project when it has a storefront. | Product |
+| Consent             | ❓ Open | Whether a gate sits in front of the browser client. The library can already drop.                                                   | Legal   |
+| Mixpanel erasure    | ❓ Open | Whether a deleted account must be deleted in Mixpanel. First-party data is the console checklist; Mixpanel is not on it.            | Legal   |
 
-- ❓ **Points Earned** — a paid order credits points; would carry the points,
-  the order and the tier rate; Product confirms
-- ❓ **Reward Redeemed** — a member buys a reward with points; would carry
-  the reward and its cost; Product confirms
-- ❓ **Tier Changed** — a member moves up or down; would carry the tiers and
-  the cause; Product confirms
-- ❓ **Pass Added** — a member saves the card to a wallet; would carry which
-  wallet; Product confirms
-
-## Records
-
-What the site's own tables answer without an event. A report reads them
-directly.
-
-| Record | Answers | Domain |
-| --- | --- | --- |
-| Orders | Revenue, refunds, where a sale happened, which member it belongs to | [Store](/p/grade10-site/store) |
-| Points ledger | Points earned, spent, returned, expired, and what a member holds, dated | [Membership](/p/grade10-site/loyalty/points) |
-| Tier changes | Every move up or down, its cause, and every review's outcome | [Membership](/p/grade10-site/loyalty/tiers) |
-| Redemptions and coupons | What was bought with points, what each coupon did, and where it was used | [Membership](/p/grade10-site/loyalty/coupons) |
-| Auction listings | Who won, whether and how they paid, when the lot shipped | [Auction](/p/grade10-site/auction) |
-| Vault ledger and positions | Cases, loans, payouts and what is outstanding at a date | [Vault](/p/grade10-site/vault) |
-
-## Counters
-
-What the systems count as they run. They answer how often something
-happened, never who it happened to, so a signal read from a counter is an
-operations number.
-
-| Counter | Answers | Split by |
-| --- | --- | --- |
-| Till identifications | How many members were identified at the counter, and how many attempts were refused: a code already used, a code expired, the till paused | Shop · outcome |
-| Wallet passes | How many passes were issued and ended | Wallet |
-| Tier reviews | How many members kept or lost a tier at each review | Outcome |
-| Earning delivery | How many money events reached the programme, were refused, or could not reach it | Outcome |
-
-- ❓ **How a member was found** — the till counts an identification by
-  outcome, not by whether it came from a pass, a typed code, an email or the
-  cart; Engineering confirms the split before a wallet signal can be read
-
-:::detail{title="Code map" for="engineer"}
-- **Event catalog** —
-  `packages/grade10-store/backend/src/services/analytics/events.ts`, sent
-  through `services/analytics/track.ts`
-- **Counters** — `ddCount` from `@grade10/utils/metrics`, read in Datadog
-- **Design record** —
-  [tracking architecture](https://github.com/9gag/grade10/blob/main/docs/architecture/tracking.md)
 :::

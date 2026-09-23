@@ -5,11 +5,12 @@ import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { Country } from "react-phone-number-input";
 import type { FormEvent } from "react";
 import { useEffect, useId, useRef, useState } from "react";
+import type { Country } from "react-phone-number-input";
 import {
   AuctionPhoneField,
+  auctionPhoneConfirmValue,
   auctionPhoneSoftReady,
 } from "./auction-phone-field";
 import type {
@@ -95,10 +96,7 @@ function AuctionAddressForm({
   ) {
     const error = errors?.[name];
     const localRefuse =
-      attempted &&
-      required &&
-      !String(values[name]).trim() &&
-      error == null
+      attempted && required && !String(values[name]).trim() && error == null
         ? `Enter ${labelText.toLowerCase()}.`
         : undefined;
     const message = error ?? localRefuse;
@@ -159,6 +157,7 @@ function AuctionAddressForm({
 
     onConfirm({
       ...values,
+      phone: auctionPhoneConfirmValue(values.phone, phoneCountry),
       company: values.addressKind === "company" ? values.company : "",
     });
   }
@@ -188,8 +187,15 @@ function AuctionAddressForm({
       onSubmit={handleSubmit}
       ref={formRef}
     >
-      <VStack className="flex min-h-0 flex-1 flex-col" gap="md" hAlign="stretch">
-        <div className="w-fit shrink-0 self-start" data-slot="auction-address-kind">
+      <VStack
+        className="flex min-h-0 flex-1 flex-col"
+        gap="md"
+        hAlign="stretch"
+      >
+        <div
+          className="w-fit shrink-0 self-start"
+          data-slot="auction-address-kind"
+        >
           <SegmentedControl
             aria-label="Address kind"
             className="w-fit self-start"
@@ -212,94 +218,94 @@ function AuctionAddressForm({
           className="scroll-fade flex min-h-0 flex-1 flex-col gap-4 overflow-y-auto overscroll-contain"
           data-slot="auction-address-fields"
         >
-        <div className="grid gap-3 sm:grid-cols-2">
-          {textField("firstName", copy.firstName, true, {
-            autoComplete: "given-name",
-          })}
-          {textField("lastName", copy.lastName, true, {
-            autoComplete: "family-name",
-          })}
-        </div>
+          <div className="grid gap-3 sm:grid-cols-2">
+            {textField("firstName", copy.firstName, true, {
+              autoComplete: "given-name",
+            })}
+            {textField("lastName", copy.lastName, true, {
+              autoComplete: "family-name",
+            })}
+          </div>
 
-        <AuctionPhoneField
-          country={phoneCountry}
-          countrySearchPlaceholder={copy.countrySearchPlaceholder}
-          label={label(copy.phone, true, copy.optional)}
-          message={phoneMessage}
-          name="phone"
-          onChange={(next) => update("phone", next)}
-          onCountryChange={(next) => update("phoneCountry", next ?? "")}
-          placeholder={copy.phonePlaceholder}
-          status={phoneMessage != null ? "error" : "default"}
-          value={values.phone}
-        />
-
-        {companyRequired ? (
-          <TextInput
-            autoComplete="organization"
-            label={label(copy.company, true, copy.optional)}
-            message={companyMessage}
-            name="company"
-            onChange={(event) => update("company", event.currentTarget.value)}
-            required
-            status={companyMessage != null ? "error" : "default"}
-            value={values.company}
+          <AuctionPhoneField
+            country={phoneCountry}
+            countrySearchPlaceholder={copy.countrySearchPlaceholder}
+            label={label(copy.phone, true, copy.optional)}
+            message={phoneMessage}
+            name="phone"
+            onChange={(next) => update("phone", next)}
+            onCountryChange={(next) => update("phoneCountry", next ?? "")}
+            placeholder={copy.phonePlaceholder}
+            status={phoneMessage != null ? "error" : "default"}
+            value={values.phone}
           />
-        ) : null}
 
-        {renderCountry ? (
-          renderCountry({
-            value: values.country,
-            onChange: (next) => update("country", next),
-            error: countryMessage,
-            required: true,
-            label: countryLabel,
-          })
-        ) : (
-          <TextInput
-            autoComplete="country-name"
-            label={countryLabel}
-            message={countryMessage}
-            name="country"
-            onChange={(event) => update("country", event.currentTarget.value)}
-            required
-            status={countryMessage != null ? "error" : "default"}
-            value={values.country}
-          />
-        )}
+          {companyRequired ? (
+            <TextInput
+              autoComplete="organization"
+              label={label(copy.company, true, copy.optional)}
+              message={companyMessage}
+              name="company"
+              onChange={(event) => update("company", event.currentTarget.value)}
+              required
+              status={companyMessage != null ? "error" : "default"}
+              value={values.company}
+            />
+          ) : null}
 
-        {textField("city", copy.city, true, {
-          autoComplete: "address-level2",
-        })}
-        {textField("addressLine1", copy.addressLine1, true, {
-          autoComplete: "address-line1",
-        })}
-        {textField("addressLine2", copy.addressLine2, false, {
-          autoComplete: "address-line2",
-        })}
-        <div className="grid gap-3 sm:grid-cols-2">
-          {textField("state", copy.state, false, {
-            autoComplete: "address-level1",
+          {renderCountry ? (
+            renderCountry({
+              value: values.country,
+              onChange: (next) => update("country", next),
+              error: countryMessage,
+              required: true,
+              label: countryLabel,
+            })
+          ) : (
+            <TextInput
+              autoComplete="country-name"
+              label={countryLabel}
+              message={countryMessage}
+              name="country"
+              onChange={(event) => update("country", event.currentTarget.value)}
+              required
+              status={countryMessage != null ? "error" : "default"}
+              value={values.country}
+            />
+          )}
+
+          {textField("city", copy.city, true, {
+            autoComplete: "address-level2",
           })}
-          {textField("postalCode", copy.postalCode, true, {
-            autoComplete: "postal-code",
+          {textField("addressLine1", copy.addressLine1, true, {
+            autoComplete: "address-line1",
           })}
-        </div>
-        {showActions ? (
-          <HStack className="flex-wrap" gap="sm" vAlign="center">
-            <Button loading={pending} size="md" type="submit">
-              {copy.confirm}
-            </Button>
-            <Button
-              onClick={onCancel}
-              size="md"
-              type="button"
-              variant="outline"
-            >
-              {copy.cancel}
-            </Button>
-          </HStack>
-        ) : null}
+          {textField("addressLine2", copy.addressLine2, false, {
+            autoComplete: "address-line2",
+          })}
+          <div className="grid gap-3 sm:grid-cols-2">
+            {textField("state", copy.state, false, {
+              autoComplete: "address-level1",
+            })}
+            {textField("postalCode", copy.postalCode, true, {
+              autoComplete: "postal-code",
+            })}
+          </div>
+          {showActions ? (
+            <HStack className="flex-wrap" gap="sm" vAlign="center">
+              <Button loading={pending} size="md" type="submit">
+                {copy.confirm}
+              </Button>
+              <Button
+                onClick={onCancel}
+                size="md"
+                type="button"
+                variant="outline"
+              >
+                {copy.cancel}
+              </Button>
+            </HStack>
+          ) : null}
         </div>
       </VStack>
     </form>
@@ -310,4 +316,4 @@ export type {
   AuctionAddressFormCopy,
   AuctionAddressFormProps,
 } from "./types";
-export { AuctionAddressForm, auctionPhoneSoftReady };
+export { AuctionAddressForm, auctionPhoneConfirmValue, auctionPhoneSoftReady };

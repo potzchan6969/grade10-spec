@@ -1,7 +1,7 @@
 # shared/auth/sign-out Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-02, tcs-rules r1
+**Status:** approved
+**Reviewed:** 2026-09-23, tcs-rules r3.0
 
 ## shared-auth-sign-out-US1: Collector or operator signs out and lands signed out
 
@@ -15,23 +15,25 @@
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
-Signed in on <grade10 profile url>. Network manipulation holds the sign-out request in flight.
+
+* customer is signed in on <grade10 profile url>.
+* Network manipulation holds the sign-out request in flight.
 
 **Steps:**
 
 1. Navigate to <grade10 profile url>.
 2. Activate the sign-out control.
-3. Activate the sign-out control again while the request is still running.
+3. Sign out again while the request is still running.
 
 **Expected Results:**
 
@@ -44,16 +46,18 @@ Signed in on <grade10 profile url>. Network manipulation holds the sign-out requ
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
-Signed in as an operator on <grade10 admin console url>.
+
+* admin is signed in on <grade10 admin console url>.
 
 **Steps:**
 
@@ -70,16 +74,18 @@ Signed in as an operator on <grade10 admin console url>.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-out-US-01
 
 **Pre-conditions:**
-Signed in as a collector on <grade10 profile url>.
+
+* customer is signed in on <grade10 profile url>.
 
 **Steps:**
 
@@ -104,16 +110,19 @@ Signed in as a collector on <grade10 profile url>.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-02
 
 **Pre-conditions:**
-Signed in on <grade10 profile url>. <The sign-out endpoint> is mocked to refuse the request.
+
+* customer is signed in on <grade10 profile url>.
+* <The sign-out endpoint> is mocked to refuse the request.
 
 **Steps:**
 
@@ -131,16 +140,19 @@ Signed in on <grade10 profile url>. <The sign-out endpoint> is mocked to refuse 
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
-* **Testability:** automation, manual
+* **Testability:** automation
 * **Trace:** shared-auth-sign-out-US-02
 
 **Pre-conditions:**
-Signed in on <grade10 profile url> with sign-out failure feedback showing. <The sign-out endpoint> then confirms.
+
+* customer is signed in on <grade10 profile url> with sign-out failure feedback showing.
+* <The sign-out endpoint> then confirms.
 
 **Steps:**
 

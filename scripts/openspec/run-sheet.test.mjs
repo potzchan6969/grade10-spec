@@ -14,18 +14,32 @@ import assert from "node:assert/strict";
 import { test } from "node:test";
 
 import {
+  ADMIN_CAPABILITY_BACKGROUND,
   COLUMNS,
+  capabilityBackground,
   colLetter,
+  DEFAULT_ENV,
+  DRAFT_BACKGROUND,
+  envOf,
   FILTER_COLUMNS,
   FILTER_START,
+  FUTURE_CAPABILITY_BACKGROUND,
+  isAdminCapability,
+  locateRun,
   MARKING_COLUMNS,
   MARKING_START,
+  PRODUCT_CAPABILITY_BACKGROUND,
   quoteTab,
   READING_COLUMNS,
+  RESULT_COLORS,
   RESULTS,
+  SUMMARY_BANDS,
   SUMMARY_COLUMNS,
+  SUMMARY_LEAD_COLUMNS,
   SURFACE_END,
   SURFACES,
+  summaryRows,
+  tabTitle,
 } from "./lib/run-sheet-layout.mjs";
 import {
   automatedGateOf,
@@ -215,8 +229,8 @@ test("isAutomated reads the same case the automation gate does", () => {
   assert.equal(isAutomated(automated), true);
 });
 
-test("shared-planning-agent-rounds-SC-61 - the Summary row carries how many the run left out automated", () => {
-  assert.equal(SUMMARY_COLUMNS.at(-1), "Automated left out");
+test("shared-planning-agent-rounds-SC-61 - the Summary register does not carry how many automated cases were left out", () => {
+  assert.equal(SUMMARY_COLUMNS.includes("Automated left out"), false);
 });
 
 test("shared-planning-agent-rounds-SC-61 - the count and its line, at none, one and many", () => {
@@ -344,6 +358,8 @@ test("the three bands sit in reading order and account for every column", () => 
   assert.equal(MARKING_START, READING_COLUMNS.length);
   assert.equal(FILTER_START, MARKING_START + MARKING_COLUMNS.length);
   assert.deepEqual(COLUMNS.slice(MARKING_START, SURFACE_END), SURFACES);
+  assert.equal(MARKING_COLUMNS.includes("Tester"), false);
+  assert.equal(MARKING_COLUMNS.includes("Date"), false);
 
   // The reading band ends where the tester's band begins: a tester who never
   // scrolls right can read a case and mark it.
@@ -380,13 +396,71 @@ test("a journey reaches the grid as a banner row above the cases that walk it", 
   const { rows, lines } = buildGrid([candidates[0], candidates[1]]);
   assert.deepEqual(
     lines.map((line) => line.kind),
-    ["journey", "case", "case"],
+    ["capability", "journey", "case", "case"],
   );
-  assert.equal(rows[0][0], "demo-thing-widget-US1 — Somebody does a thing");
-  // The banner has no result cells, which is what lets `COUNTA` over a result
-  // column count cases and skip banners.
+  assert.equal(rows[0][0], "demo/thing/widget");
+  assert.equal(rows[1][0], "demo-thing-widget-US1 — Somebody does a thing");
+  // Banners have no result cells, which is what lets `COUNTA` over a result
+  // column count cases and skip them.
   assert.equal(at(rows[0], "Web"), "");
+  assert.equal(at(rows[1], "Web"), "");
   assert.equal(rows[0].length, COLUMNS.length);
+});
+
+test("journeys of two files fold under their capability paths", () => {
+  const other = {
+    ...candidates[0],
+    read: {
+      rel: "openspec/specs/shared/auth/sign-out/feature-tcs.md",
+      level: "feature",
+      capabilityId: "shared/auth/sign-out",
+    },
+    tc: {
+      ...candidates[0].tc,
+      id: "shared-auth-sign-out-US1-TC1-1",
+      journeyNum: 1,
+      journey: { raw: "shared-auth-sign-out-US1", title: "Sign out" },
+    },
+  };
+  const { rows, lines } = buildGrid(inReadingOrder([other, candidates[0]]));
+  const caps = lines
+    .map((line, i) => (line.kind === "capability" ? rows[i][0] : null))
+    .filter(Boolean);
+  assert.deepEqual(caps, ["demo/thing/widget", "shared/auth/sign-out"]);
+});
+
+test("admin banners use the fall orange, product banners the noble green", () => {
+  assert.equal(isAdminCapability("grade10-admin/auction/listing"), true);
+  assert.equal(isAdminCapability("grade10-site/auction/listing-page"), false);
+  assert.deepEqual(
+    capabilityBackground("grade10-admin/auction/listing"),
+    ADMIN_CAPABILITY_BACKGROUND,
+  );
+  assert.deepEqual(
+    capabilityBackground("grade10-site/auction/listing-page"),
+    PRODUCT_CAPABILITY_BACKGROUND,
+  );
+  assert.notDeepEqual(
+    FUTURE_CAPABILITY_BACKGROUND,
+    PRODUCT_CAPABILITY_BACKGROUND,
+  );
+  assert.notDeepEqual(FUTURE_CAPABILITY_BACKGROUND, ADMIN_CAPABILITY_BACKGROUND);
+});
+
+test("draft stone grey is not the result to_do grey", () => {
+  assert.notDeepEqual(DRAFT_BACKGROUND, RESULT_COLORS.to_do);
+});
+
+test("env defaults to staging and refuses anything else", () => {
+  assert.equal(envOf(undefined), DEFAULT_ENV);
+  assert.equal(envOf(""), "staging");
+  assert.equal(envOf("Production"), "production");
+  assert.equal(envOf("lab"), null);
+});
+
+test("Summary odd runs are the light green band", () => {
+  assert.deepEqual(SUMMARY_BANDS[1 % SUMMARY_BANDS.length], SUMMARY_BANDS[1]);
+  assert.notDeepEqual(SUMMARY_BANDS[0], SUMMARY_BANDS[1]);
 });
 
 test("rows read in journey order, so the tab's grouping is its order", () => {
@@ -406,6 +480,74 @@ test("a column index reads as its A1 letter past Z", () => {
   assert.equal(colLetter(0), "A");
   assert.equal(colLetter(25), "Z");
   assert.equal(colLetter(26), "AA");
+});
+
+test("a tab title is the run id, a hyphen, and the name slug", () => {
+  assert.equal(tabTitle(1, "auction-auth"), "1-auction-auth");
+});
+
+test("locateRun finds the identity row and the tab it names", () => {
+  const summary = [
+    ["Run ID", "Tab"],
+    ["1", "1-auction-auth"],
+    ["", ""],
+    ["", ""],
+    ["", ""],
+    ["2", "2-smoke"],
+  ];
+  const found = locateRun(summary, ["Summary", "1-auction-auth", "2-smoke"], 1);
+  assert.equal(found.ok, true);
+  assert.equal(found.startRow, 1);
+  assert.equal(found.tab, "1-auction-auth");
+});
+
+test("locateRun refuses a Summary row whose tab is missing", () => {
+  const summary = [
+    ["Run ID", "Tab"],
+    ["3", "3-gone"],
+  ];
+  const found = locateRun(summary, ["Summary", "1-auction-auth"], 3);
+  assert.equal(found.ok, false);
+  assert.match(found.why, /no tab has that title/);
+});
+
+test("locateRun refuses a run id Summary does not hold", () => {
+  const found = locateRun([["Run ID", "Tab"]], ["Summary"], 4);
+  assert.equal(found.ok, false);
+  assert.match(found.why, /no run 4/);
+});
+
+test("a Summary run writes identity and SHA on the first row only", () => {
+  const rows = summaryRows({
+    runId: 3,
+    tab: "3-auction-signin",
+    date: "2026-09-22",
+    name: "auction-signin",
+    selection: "Sign-in that is auction related",
+    env: "staging",
+    sha: "abc123",
+    drafts: 2,
+  });
+
+  assert.equal(rows.length, SURFACES.length);
+  assert.equal(rows[0].length, SUMMARY_COLUMNS.length);
+  assert.equal(SUMMARY_COLUMNS.at(-1), "Commit SHA");
+  assert.deepEqual(SUMMARY_COLUMNS.slice(0, 6), SUMMARY_LEAD_COLUMNS);
+  assert.equal(SUMMARY_LEAD_COLUMNS.at(-1), "Env");
+
+  const at = (row, name) => row[SUMMARY_COLUMNS.indexOf(name)];
+  assert.equal(at(rows[0], "Run ID"), 3);
+  assert.equal(at(rows[0], "Tab"), "3-auction-signin");
+  assert.equal(at(rows[0], "Env"), "staging");
+  assert.equal(at(rows[0], "Commit SHA"), "abc123");
+  assert.equal(at(rows[0], "Surface"), "Web");
+  assert.equal(at(rows[1], "Run ID"), "");
+  assert.equal(at(rows[1], "Selection"), "");
+  assert.equal(at(rows[1], "Env"), "");
+  assert.equal(at(rows[1], "Commit SHA"), "");
+  assert.equal(at(rows[1], "Surface"), "Mobile");
+  assert.equal(at(rows[3], "Surface"), "Auto mobile");
+  assert.equal(at(rows[3], "Commit SHA"), "");
 });
 
 test("shared-planning-agent-rounds-SC-78 - the left-out cases are named under the count, with what decides each", () => {

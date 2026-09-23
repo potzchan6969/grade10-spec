@@ -37,51 +37,90 @@ in the same pass when the request covers both.
 
 ## The steps
 
-1. **Resolve the request** to a selection, by either route above.
-2. **Dry run it.** `--dry-run` prints every case it would write and touches no
-   network. Read the list yourself first: a case that does not belong is
-   cheaper to drop now than to explain in the tab.
-3. **Show the list and wait.** Name the count, the suites and capabilities it
-   spans, and any draft cases. Do not dispatch before the person confirms.
-4. **Dispatch.** The run tab is written by CI, which holds the only credentials:
+1. **Resolve the request** to a selection, by either route above. Automated
+   cases are in by default. Drafts stay out unless the person asked for them.
+2. **Dry run it.** Pass `--include-automated` unless they asked to leave
+   automated cases out. `--dry-run` prints every case it would write and
+   touches no network. Read the list yourself first: a case that does not
+   belong is cheaper to drop now than to explain in the tab.
+3. **Show the list and stop.** Group by capability (or by file). Name the
+   count, how many are draft, how many are already automated, and what you
+   left out on purpose. Ask whether the coverage is correct. Ask Env
+   (`staging` or `production`); if they do not name one, use staging. Do not
+   dispatch until they say the coverage is, or name what to add or drop.
+4. **Dispatch**, only after that yes. The run tab is written by CI, which
+   holds the only credentials:
 
    ```bash
    gh workflow run run-sheet.yml \
      -f name=<run name> \
      -f selection="<the request, in their words>" \
-     -f cases="<id,id,id>"
+     -f cases="<id,id,id>" \
+     -f env=staging \
+     -f include_automated=true
    ```
 
    Pass `suites=`, `priority=`, `level=` or `scope=` instead of `cases=` when a
    filter resolved it. Add `include_draft=true` only when the person asked for
-   drafts, and `include_automated=true` only when they asked for cases an
-   automated test already covers.
+   drafts. Omit `include_automated` (or pass `false`) only when they asked to
+   leave automated cases out.
+
+   **Env.** Ask which environment the pass is walked against (`staging` or
+   `production`). If they do not name one, use `staging`. Pass `-f env=<name>`
+   on either sheet — sandbox and production both record it on the Summary row.
+
+   **Sandbox.** Production is the default. Add `-f sandbox=true` only when they
+   asked to write to the sandbox sheet, a test spreadsheet, or not production.
+   Asking for a test run of a feature is not that. The sandbox spreadsheet id
+   lives in the repository variable `TCS_SHEET_SANDBOX_ID`; do not put it in a
+   command, a skill, or the code.
+
+   **Overwrite.** A run already written is left alone. Rewrite it only when
+   they ask to redo a run **this conversation created**, and name that run id.
+   Then add `-f overwrite=<id>` (and `-f sandbox=true` if that write was a
+   sandbox write). The writer recreates the same tab title and overwrites that
+   run's four Summary rows. It does not delete anything else.
+
+   If the writer prints that Summary and the tabs disagree, or that a new
+   write's title is already taken, show them the printed register. Do not
+   invent a suffix, pick another id, or delete a tab.
+
 5. **Report the tab.** Give them the run id, the tab name and the link the job
    prints.
 
 ## What to tell them
 
-- **Four surfaces, `Notes`, `Tester` and `Date` are theirs.** `Web`, `Mobile`,
-  `Auto web` and `Auto mobile` are separate answers: one case can pass in a
-  browser and fail on a phone. The case to their left and the classification to
-  their right are locked, and an edit there is refused at the cell. A wrong case
-  is fixed in `openspec/`, not in the sheet.
+- **Four surfaces and `Notes` are theirs.** `Web`, `Mobile`, `Auto web` and
+  `Auto mobile` are separate answers: one case can pass in a browser and fail
+  on a phone. The case to their left and the classification to their right are
+  locked, and an edit there is refused at the cell. A wrong case is fixed in
+  `openspec/`, not in the sheet.
 - **Every case starts at `to_do`, so the Summary counts down.** An automation
   column reading `n/a` is a case no automated test covers; `skipped` is a case
   somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
   against the run.
-- **The Summary tab gives each run four rows**, one per surface, counted live.
-  Marking a row moves them; no second sync is needed.
+- **The Summary tab gives each run four rows**, one per surface, grouped under
+  the first. Identity, env and the commit sit once, on that first row. Marking a
+  cell moves the counts; no second sync is needed.
 - **Sort inside the `Walk` filter view, not the sheet.** A sheet-level sort
-  would lift the cases out from under their journey banners.
+  would lift the cases out from under their journey banners. The journeys of
+  one file fold under a row that names the file (`shared/auth/sign-in`). The
+  Summary tab has no filter view: it is a register.
 - **Do not rename or delete the tab.** The Summary rows point at it by name,
   and Google Sheets cannot prevent either — they will read `tab deleted`.
-- **Amber rows are draft cases**, which no reviewer has approved. They appear
-  only when the run asked for them.
+- **Automated cases land on the tab.** Their Auto columns start at `to_do`.
+  They are left out only when the person asked to leave them out.
 
 ## What not to do
 
-- **Do not write a tab nobody confirmed.** The dry run is the conversation.
+- **Do not write a tab nobody confirmed.** The coverage list is the
+  conversation. A yes to "write a run" is not a yes to this list.
+- **Do not overwrite a run this conversation did not create.** A redo is
+  `--overwrite` of that id, after they ask; it is not a second tab and not
+  a new run id.
+- **Do not delete a tab or empty the Summary.** A new run is a new tab. Run
+  ids count up. Clearing the spreadsheet is not this skill. An occupied
+  title is a refusal the person resolves in the sheet UI.
 - **Do not take `deprecated` cases.** The spec stopped stating them; walking one
   proves nothing. The script refuses them outright.
 - **Do not put results back in the store.** A suite carries no execution record

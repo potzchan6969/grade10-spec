@@ -6,6 +6,7 @@
   - Optional locality: address line 1 and postal code required; address line 2 and state or province optional; no Apt./Suite/Building on this form
   - Picker card title: company name for a company address; recipient first and last name for a personal address
   - Picker card body: street, city or region, and country only — no postal code and no phone
+  - Order summary addresses: Delivery and Billing show company when company, recipient name, phone, and full address including postal
 
 ## MODIFIED Requirements
 
@@ -143,6 +144,11 @@ name as the picker card title.
 **Picker card body** — The picker card body SHALL show street, city or region,
 and country only. It SHALL NOT show postal code or phone.
 
+**Order summary** — After setup is confirmed, Winner Order Delivery address and
+Billing address SHALL show the confirmed snapshot: company name when the
+address is company, recipient first and last name, phone, and the full address
+including postal code.
+
 #### Scenario: winner-order-SC-190 - Personal is selected by default and Company Name is hidden
 **Serves:** winner-order-US-01 - choosing a personal address on Add Address
 
@@ -189,6 +195,13 @@ and country only. It SHALL NOT show postal code or phone.
 - **WHEN** the picker lists that address
 - **THEN** the card body shows street, city or region, and country
 - **AND** the card body does not show postal code or phone
+
+#### Scenario: winner-order-SC-203 - Order summary shows the full address snapshot
+**Serves:** winner-order-US-01 - reading Delivery and Billing after setup
+
+- **GIVEN** a winner who confirmed Complete Order Setup with a company delivery address that includes company name, recipient name, phone, and postal code
+- **WHEN** Winner Order shows Delivery address and Billing address
+- **THEN** each block shows the company name, recipient name, phone, and full address including postal code
 
 #### Scenario: winner-order-SC-194 - A one-time address applies without saving a sixth
 **Serves:** winner-order-US-12 - confirming delivery when five addresses are already saved

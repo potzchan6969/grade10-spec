@@ -138,19 +138,24 @@ hours of the close.
 | 🚧 Billing address | The delivery address, or any saved or one-time address with the same required fields | Same as delivery address, ticked |
 | 🚧 Payment method | Card in every currency; bank transfer where the currency has bank details, HKD at launch; each choice shows its fee range | Nothing preselected |
 
-- 🚧 **Form** — Personal or Company; first and last name, phone (country and
+- **Form** — Personal or Company; first and last name, phone (country and
   digits), country or region, town or city, address line 1 and postal code are
   required; address line 2 and state or province are optional; Company Name is
   required only for Company and hidden for Personal; an empty required field is
   refused beside the field; phone stores E.164 when parseable and does not
   refuse unusual formats; phone country and Country/Region start empty — nothing
   preselected; phone placeholder shows an example with calling code
-  (`+852 12345678`); on delivery Add Address, country or region lists every
-  country and region A–Z in a searchable field — typing filters the list to
-  matching names
-- 🚧 **Company on the picker** — a company address shows the company name as
+  (`+852 12345678`)
+- 🚧 **Country or region list** — on delivery Add Address, country or region
+  lists every country and region A–Z in a searchable field — typing filters the
+  list to matching names
+- **Company on the picker** — a company address shows the company name as
   the card title; a personal address shows the recipient name; the card body
   shows street, city or region, and country only — no postal code and no phone
+- **Order summary addresses** — after setup, Delivery and Billing on the
+  order show the confirmed snapshot: company name when the address is
+  company, recipient name, phone, and the full address including postal code
+  (not the lean picker card body)
 - ❓ **Billing country or region list** — whether billing Add Address uses the
   same full list and searchable field as delivery; Product confirms
 - ❓ **Shippable destinations only** — whether the picker later limits to
@@ -457,7 +462,10 @@ a second payment provider, and changes to the bid-time rules.
 | Progress stepper | Decided | Five presentation steps, Address → Invoice → Payment → Shipped → Completed, with day-only dates; Setup Overdue under Address, Payment Overdue and Payment Verifying under Payment, Processing under Shipped, Delivered as Completed. | Product and design (@tangconst) |
 | Invoice and receipt PDFs | Decided | After send until Cancelled, Invoice is a text link beside the Order summary heading. After payment, Receipt is a text link under the payment-method card. They are not paired on one row. Only the payment-received letter attaches a PDF, the receipt. | Product and design (@tangconst) |
 | Payment Verifying alert | Decided | While proof is checked, Winner Order shows an inline Alert: verifying the transfer, email when payment is confirmed; Hourglass on default Alert. Under Order progress on small viewports; under the lot from `lg` up. No proof-received letter. | Product and design (@tangconst) |
-| Identifiers | ❓ Open | Public listing, order, invoice, receipt and payment-reference IDs are opaque and stable. Listing codes use the Crockford Base32 payload charset `0123456789ABCDEFGHJKMNPQRSTVWXYZ` with a fixed `L` prefix, are allocated on listing creation, contain letters and digits as a whole, and are never reused unless the record is deleted entirely. The unique-constrained column rejects duplicates. Invoice revision starts at `01`, increments on reissue, and uses the Hong Kong timezone for `YYYYMM`. Receipts anchor to the order with payment sequence and receipt revision; Stripe's returned provider reference remains operator-only and is passed into internal document filenames. PM and Finance still confirm the listing-code payload length. | Product and Finance |
+| Identifiers | 🚧 In flight | Listing/payment references are opaque 5-character Crockford codes with no fixed prefix, two leading alphabetic characters, allocation at listing creation, and permanent nonreuse including deletion. A UUID/listing-ID-derived 5-character projection may collide; the allocator must retry against active codes and retained reservations. Invoice IDs use the payment reference and an issuance sequence starting at `01`, with at least two digits and continuation as `100` after `99`; old invoice IDs remain searchable. Receipt identifier format remains unresolved on the Receipt ID row below. | Product and Finance |
+| Listing-code read permission | Decided | Existing listing-admin read access controls the code; knowing it cannot grant admin access or private data. | Product |
+| Listing-code placement | Decided | The code appears in both the Listings table and listing detail screen. | Product and Design |
+| Cached listing preview | Decided | Previously cached preview content may persist; no purge or regeneration is guaranteed. The current page and fresh metadata omit the code and private data. | Product |
 | Setup mail | 🚧 In flight | One setup reminder at 24 hours after close while setup is incomplete; auction-won and setup-reminder letters name delivery address, payment method and billing address as bullets; setup overdue at 48 hours is generic, names manual review, and never cancels automatically. No second (72h) reminder. | Product (@tangconst) |
 | Payment mail | 🚧 In flight | The first payment reminder goes at send, then day 3 and day 6 on the running deadline; the final notice 24 hours before the deadline while Pay is offered; payment overdue replaces invoice-expired. Letters name the total and `Pay by …`, never a method. Durable `notifications-order` holds that schedule; `add-winner-bank-transfer` adds proof holds and the receipt PDF. | Product (@tangconst) |
 | Letter CTA | Decided | Default opens the lot's Winner Order, sign-in first; overdue letters lead with Contact Us; the Shipped letter leads with the carrier's tracking. | Product (@tangconst) |
@@ -470,9 +478,9 @@ a second payment provider, and changes to the bid-time rules.
 | Suspension | Decided | Auction-only, forward-looking; a standing maximum keeps bidding and can win; only an operator's reinstatement lifts it, and the operator's reason is never shown to the collector. | Product |
 | Billing address on setup | 🚧 In flight | Asked at order setup with the delivery address, not at payment, so the invoice is sent with it and never reissued for it. Same as delivery by default, chosen from the same address book, shown as Bill To beside Ship To on the invoice and receipt. It reverses the rule that the form offers no billing address. | Product (@jeffffej0909) |
 | Country or region on delivery setup | 🚧 In flight | On Winner Order delivery Add Address, country or region lists every country and region A–Z in a searchable field; typing filters matching names. **BREAKING** vs letter typeahead on Select (`full-winner-order-country-region-list` non-goal reversed). Catalogue source is an engineering choice (owned list, package, or admin portal crawl). Chosen over a short designated set and over letter-jump Select. | Product (@tangconst) |
-| Phone on Add Address | 🚧 In flight | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
-| Personal or company address | 🚧 In flight | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. First and last name stay required on both. | Product (@tangconst) |
-| Add Address optional locality | 🚧 In flight | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
+| Phone on Add Address | Decided | Country-aware phone: country and digits required; E.164 when parseable; unusual formats accepted. Phone country starts empty — nothing preselected. Placeholder shows an example with calling code (`+852 12345678`). Chosen over hard validity refuse and over free-text with no country selector. | Product (@tangconst) |
+| Personal or company address | Decided | Personal / Company toggle on Add Address; Company Name required only for company, hidden on personal. No tax ID or VAT. A company address shows the company name as the picker card title; a personal address shows the recipient name. Card body shows street, city or region, and country only — no postal code and no phone. Order summary Delivery and Billing show the full snapshot (company when company, recipient name, phone, full address including postal). First and last name stay required on both. | Product (@tangconst) |
+| Add Address optional locality | Decided | Address line 2 and state or province are optional; address line 1 and postal code stay required. Apt./Suite/Building is not collected on this form. | Product (@tangconst) |
 | Billing country or region list | ❓ Open | Whether billing Add Address uses the same full list and searchable field as delivery. | Product (@tangconst) |
 | Shippable destinations only | ❓ Open | Whether the picker later limits to destinations Grade10 ships to; until settled the catalogue stays complete. | Product (@tangconst) |
 | Catalogue display locale | ❓ Open | Whether delivery Add Address Country/Region names follow browser locale, account language, or fixed English. | Product (@tangconst) |

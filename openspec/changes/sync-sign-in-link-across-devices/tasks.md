@@ -12,37 +12,37 @@
       --strict`, `pnpm run check:manual` — landed on PR #594; merge before
       starting Group 3 or 4
 
-## 2. Shared contracts (grade10)
+## 2. Shared contracts (grade10) (owner: @sean)
 
-- [ ] 2.1 Add the poll response type (`{ settled: boolean }`) and the
+- [x] 2.1 Add the poll response type (`{ settled: boolean }`) and the
       optional `watchId` field on the magic-link send response to
       `packages/grade10-auth/contracts` — the wire shapes `SC-70` and
       `SC-79` need
-- [ ] 2.2 Verify: `pnpm run typecheck`
+- [x] 2.2 Verify: `pnpm run typecheck`
 
-## 3. Backend and API (grade10)
+## 3. Backend and API (grade10) (owner: @sean)
 
-- [ ] 3.1 Write the backend tests this group makes pass, in their own
+- [x] 3.1 Write the backend tests this group makes pass, in their own
       commit before its code: a send returns a `watchId` that resolves to
       `settled: true` only once that address's session is created by any
       method (`shared-auth-sign-in-SC-70`, `SC-71`), stays `false` for a
       different address (`SC-73`) and for a failed attempt on the token
       itself (`SC-74`), is never answerable from a bare email (`SC-79`), and
       leaves the magic-link verification row untouched (`SC-78`)
-- [ ] 3.2 Mint and return `watchId` from `sendMagicLink`'s callback in
+- [x] 3.2 Mint and return `watchId` from `sendMagicLink`'s callback in
       `createAuth.ts`, writing `sign-in-watch:{watchId}` to Cloudflare KV via
       `secondaryStorage` (`SC-70`, `SC-71`)
-- [ ] 3.3 Add the session-creation hook in `securityHooks.ts` that writes
+- [x] 3.3 Add the session-creation hook in `securityHooks.ts` that writes
       `sign-in-settled:{sha256(email)}` for any sign-in method (`SC-71`,
       `SC-73`)
-- [ ] 3.4 Add `GET /sign-in/magic-link/watch/{watchId}`, resolving through
+- [x] 3.4 Add `GET /sign-in/magic-link/watch/{watchId}`, resolving through
       both KV entries per `tech-design.md`'s Decisions (`SC-74`, `SC-78`,
       `SC-79`)
-- [ ] 3.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
+- [x] 3.5 Verify: `pnpm run typecheck`, `pnpm run test:backend`
 
-## 4. Frontend (grade10)
+## 4. Frontend (grade10) (owner: @sean)
 
-- [ ] 4.1 Write the frontend tests this group makes pass, in their own
+- [x] 4.1 Write the frontend tests this group makes pass, in their own
       commit before its code: the Check Your Email step unmounts and the
       settled-elsewhere toast fires once polling reports settled, with no
       session read or request (`SC-70`, `SC-71`, `SC-72`), every surface
@@ -51,23 +51,23 @@
       independent of the resend countdown's state (`SC-77`), and a
       different address or a failed attempt elsewhere changes nothing
       (`SC-73`, `SC-74`)
-- [ ] 4.2 Capture `watchId` from the send/resend response in the sign-in
+- [x] 4.2 Capture `watchId` from the send/resend response in the sign-in
       flow's state alongside its existing `sent: {email, at}`
-- [ ] 4.3 Add the poll effect (interval, plus once immediately on
+- [x] 4.3 Add the poll effect (interval, plus once immediately on
       `visibilitychange`) and the settle handler (unmount the step, fire
       `toast.info(signIn.settledElsewhere)`) — stop polling on dismissal or
       once the link's own lifetime has elapsed
-- [ ] 4.4 Verify: `pnpm run typecheck`, `pnpm run test`, `pnpm run lint`
+- [x] 4.4 Verify: `pnpm run typecheck`, `pnpm run test`, `pnpm run lint`
 
-## 5. The walk (grade10)
+## 5. The walk (grade10) (owner: @sean)
 
 Needs `feature-tcs.md` reviewed (`/tcs-review sync-sign-in-link-across-devices`) as its input.
 
-- [ ] 5.1 Walk `shared-auth-sign-in-US-10` end to end through the sign-in
+- [x] 5.1 Walk `shared-auth-sign-in-US-10` end to end through the sign-in
       dialog on two browser contexts for one address, kept as the change's
       end-to-end suite
 - [ ] 5.2 Flip the cases the walk decides to automated with `pnpm run
       tcs:automated <case…> --decided-by <walk path>`, in the walk's own
       commit; name the ones that stay manual in the suite and in the walk's
       `rounds.md` row
-- [ ] 5.3 Verify: the e2e suite run named in `docs/architecture/e2e.md`
+- [x] 5.3 Verify: the e2e suite run named in `docs/architecture/e2e.md`

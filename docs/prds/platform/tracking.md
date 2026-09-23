@@ -3,13 +3,26 @@ title: Product Analytics
 order: 3
 ---
 
-Events flow through the product's own backend, never from the browser to Mixpanel directly:
+Events reach Mixpanel from Grade10's own backends — never from the browser
+directly:
 
-```
-browser client ──POST /api/track──▶ backend route ──POST /import──▶ Mixpanel
-(typed, batched,  (validate against  (stamp identity, one request
- retries unacked)  client catalog)    for the whole batch)
-```
+:::flow{title="Posting to Mixpanel" case="Client events"}
+## *Browser* — **Posts `/api/track`**
+Typed client events, batched; retries until the route acks.
+## *Backend route* — **Validates and stamps identity**
+Rejects names outside the client catalog; one Mixpanel request for the whole batch.
+## *Mixpanel* — **Receives `/import`**
+:::
+
+:::flow{title="Posting to Mixpanel" case="Server events"}
+## *Domain worker* — **Calls `/import`**
+Store, auction, vault, or loyalty — server events only; same project token per environment; no browser hop.
+## *Mixpanel* — **Receives the event**
+:::
+
+Domain signals and the Mixpanel catalog sit on
+[Analytics](/p/grade10-site/analytics) and
+[Mixpanel Events](/p/grade10-site/analytics/mixpanel-events).
 
 ## Catalog
 
@@ -41,7 +54,8 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
 
 ### Simplified ID Merge
 
-- Enable it in the Mixpanel project settings
+- Enable **Simplified ID Merge** in the Mixpanel project settings before the first event
+- Grade10 does not use Original ID Merge or Mixpanel's [`$merge` identity API](https://docs.mixpanel.com/reference/identity-merge) — linking is `$device_id` on identified emits, not a merge call
 - Anonymous: `distinct_id = "$device:<deviceId>"`; the browser client persists the device id in localStorage
 - Signed in: `distinct_id = userId`, with `$device_id` still attached so Mixpanel links the anonymous history to the user
 
@@ -54,6 +68,29 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
 
 - The server resolves the user from the session
 - The wire format has no user field — a client can name its device but never its user
+
+### 🚧 Sign-out and session expiry rotate the device
+
+- The browser client drops the device id and mints a new one so the next guest is not merged onto the last person
+
+### 🚧 Server emits keep `$device_id` when Grade10 still holds it
+
+- Checkout Started, web Order Paid, and every other server event that continues a browser or till visit attach that `$device_id` when Grade10 still has it, so pre-login browse joins after pay or sign-in
+
+### 🚧 Collector IP for Mixpanel geo
+
+- `/import` and `/engage` pass the collector's IP when Grade10 knows it so Mixpanel sets city and country
+- The IP is never stored as an event or profile property; on `/engage`, `$ip` is `0` when none was captured so the worker's location is never written
+
+## User Profile
+
+### 🚧 Server writes the user-profile snapshot via `/engage`
+
+- Only for a user id — never an anonymous device
+- Servers that own the fact call `engagePerson` in `packages/mixpanel`; the browser never writes a profile
+- Which properties, and when they write:
+  [Mixpanel Events · User Profile](/p/grade10-site/analytics/mixpanel-events#user-profile)
+- No `$email` / `$name` / `$phone` until Consent and Mixpanel erasure settle
 
 ## Failure and dedupe
 
@@ -102,6 +139,7 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
 3. Wrangler: `MIXPANEL_PROJECT_TOKEN` secret per environment — the empty dev value keeps tracking a logged no-op locally
 4. Route: `handleTrackRequest` behind `withSession` in `src/app.ts`
 5. Web: `createTrackingClient` typed by the catalog, bound through DI under `src/core/analytics/`
+6. 🚧 User profiles, when the product owns user-profile facts: call `engagePerson` from the backend that holds the fact — not from the browser
 
 ## Q & A
 
@@ -109,5 +147,5 @@ browser client ──POST /api/track──▶ backend route ──POST /import�
   - Content blockers do not filter our own API host, and the session cookie gives the server the real user.
 - Why one request with no queue?
   - The endpoint already holds the whole validated batch, so it sends it in one `fetch` — no queue table, no scheduler, no Durable Object; the browser client is the retry mechanism and already knows how.
-- Does the tracker sync people profiles or gate on consent?
-  - No — it sends events only; people-profile sync (`/engage`) and a consent gate in front of the browser client are not built.
+- Does the tracker sync user profiles or gate on consent?
+  - 🚧 User-profile sync (`/engage`) lands with this change. A consent gate in front of the browser client is not built until Legal requires one.

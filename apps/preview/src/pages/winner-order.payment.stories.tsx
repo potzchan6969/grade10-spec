@@ -72,6 +72,8 @@ export const PendingPayment: Story = {
     expect(sidebar.queryByText("Payment method")).not.toBeInTheDocument();
     const deliveryAddress = sidebar.getByText("Delivery address").parentElement;
     expect(deliveryAddress).toHaveTextContent(/Wan Chai/);
+    expect(deliveryAddress).toHaveTextContent(/Alex Chan/);
+    expect(deliveryAddress).toHaveTextContent(/\+852/);
     expect(
       canvas.queryByText(/Locked after invoice send/i),
     ).not.toBeInTheDocument();

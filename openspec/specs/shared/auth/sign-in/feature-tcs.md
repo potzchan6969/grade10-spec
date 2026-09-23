@@ -1300,7 +1300,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1339,7 +1339,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1375,7 +1375,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1423,7 +1423,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -1463,7 +1463,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1479,11 +1479,13 @@ Resend after a short wait,
 **Steps:**
 
 1. Inspect the controls on the dialog body.
+2. Dismiss the dialog.
 
 **Expected Results:**
 
 * No Back control is present.
-* Leaving the dialog is by dismissing it.
+* The dialog is dismissed.
+* The collector stays on the same page.
 
 ---
 
@@ -1493,7 +1495,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -1524,7 +1526,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
@@ -1556,7 +1558,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1588,7 +1590,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1621,7 +1623,7 @@ Resend after a short wait,
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1662,7 +1664,7 @@ Resend after a short wait,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -1700,7 +1702,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -1746,7 +1748,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1785,7 +1787,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1808,7 +1810,7 @@ Runs once per row of **Test data**.
 
 | `<failed link>` | What it is |
 | --- | --- |
-| expired | a link older than sixty seconds |
+| expired | a link older than five minutes |
 | already used | a link followed once already |
 | banned | a link for an account that is banned |
 
@@ -1820,6 +1822,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Tab A shows nobody signed in.
+* Tab A still shows the Check Your Email dialog.
 * <listing> is in no cart.
 * Tab A says nothing about the link.
 

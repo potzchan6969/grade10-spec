@@ -84,9 +84,15 @@ export const Form: Story = {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.totalAmountDue)).toBeVisible();
-    expect(modal.queryByRole("button", { name: /Copy/i })).not.toBeInTheDocument();
-    expect(modal.getByRole("tab", { name: "FPS", selected: true })).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.totalAmountDue),
+    ).toBeVisible();
+    expect(
+      modal.queryByRole("button", { name: /Copy/i }),
+    ).not.toBeInTheDocument();
+    expect(
+      modal.getByRole("tab", { name: "FPS", selected: true }),
+    ).toBeVisible();
     expect(
       modal.getByRole("img", { name: "FPS QR code for Grade10" }),
     ).toBeVisible();
@@ -112,7 +118,7 @@ export const HkLocalTab: Story = {
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     await userEvent.click(modal.getByRole("tab", { name: "HK Local" }));
-    expect(modal.getByText("Payment reference")).toBeVisible();
+    expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
     ).toBeVisible();
@@ -136,7 +142,7 @@ export const SwiftTab: Story = {
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
     await userEvent.click(modal.getByRole("tab", { name: "International" }));
-    expect(modal.getByText("Payment reference")).toBeVisible();
+    expect(modal.getAllByText("Payment reference").length).toBeGreaterThan(0);
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.transferReference),
     ).toBeVisible();
@@ -147,7 +153,9 @@ export const SwiftTab: Story = {
     expect(modal.getByText("Bank name")).toBeVisible();
     expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankName)).toBeVisible();
     expect(modal.getByText("Bank address")).toBeVisible();
-    expect(modal.getByText(WINNER_ORDER_BANK_DETAILS.bankAddress)).toBeVisible();
+    expect(
+      modal.getByText(WINNER_ORDER_BANK_DETAILS.bankAddress),
+    ).toBeVisible();
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.accountNumber),
     ).toBeVisible();

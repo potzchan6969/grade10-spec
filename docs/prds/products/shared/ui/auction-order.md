@@ -22,7 +22,7 @@ component contract underneath them.
   and Lots, in that order; Collection Method shows whichever of an address
   form, a read-only address, or nothing the application supplies, and an
   invoice with Pay with Card only when one is supplied
-- 🚧 **Address form** — the fields [Winner
+- **Address form** — the fields [Winner
   Order](/p/grade10-site/auction/post-bidding#winner-order) names, Personal or
   Company, a country-aware phone (country and digits required; E.164 when
   parseable; unusual formats accepted; country starts empty; placeholder

@@ -31,8 +31,6 @@ export const MARKING_COLUMNS = [
   "Auto web",
   "Auto mobile",
   "Notes",
-  "Tester",
-  "Date",
 ];
 
 /** Filter axes. Locked, and out of the reading path: nobody reads these, they
@@ -72,8 +70,6 @@ export const MARKING_START = READING_COLUMNS.length;
 export const FILTER_START = MARKING_START + MARKING_COLUMNS.length;
 export const SURFACE_END = MARKING_START + SURFACES.length;
 export const NOTES_COL = SURFACE_END;
-export const TESTER_COL = SURFACE_END + 1;
-export const DATE_COL = SURFACE_END + 2;
 
 /** Pixels. Explicit, because `autoResizeDimensions` sizes a column to its
  *  longest cell, and a `Steps` cell is a paragraph: the tab came out wider than
@@ -90,8 +86,6 @@ export const COLUMN_WIDTHS = {
   "Auto web": 90,
   "Auto mobile": 100,
   Notes: 240,
-  Tester: 150,
-  Date: 110,
   Product: 110,
   Domain: 110,
   Capability: 150,
@@ -116,13 +110,77 @@ export const RESULT_COLORS = {
   "n/a": { red: 0.99, green: 0.99, blue: 0.99 },
 };
 
-/** A journey's banner row, spanning the table above the cases that walk it. */
-export const JOURNEY_BACKGROUND = { red: 0.85, green: 0.88, blue: 0.92 };
+/** Frozen column-header fill and the text that sits on it. `#1E332C` / `#F4F1EA`. */
+export const HEADER_BACKGROUND = { red: 30 / 255, green: 51 / 255, blue: 44 / 255 };
+export const HEADER_FOREGROUND = {
+  red: 244 / 255,
+  green: 241 / 255,
+  blue: 234 / 255,
+};
+export const BODY_FOREGROUND = { red: 28 / 255, green: 28 / 255, blue: 28 / 255 };
 
-/** A light band on a draft case, so a tester can see they are walking a case no
- *  reviewer has approved. Static, not a rule: a run tab is a snapshot, and a
- *  row's status cannot change inside it. */
-export const DRAFT_BACKGROUND = { red: 1, green: 0.96, blue: 0.87 };
+/**
+ * Capability and journey banners take the side they belong to.
+ *
+ * Product (`grade10-site`, `shared`) is noble green. Admin (`grade10-admin`) is
+ * fall orange. A third product, when one arrives, takes the reserved umber
+ * pair - not wired until a capability uses it.
+ */
+export const PRODUCT_CAPABILITY_BACKGROUND = {
+  red: 58 / 255,
+  green: 95 / 255,
+  blue: 74 / 255,
+};
+export const PRODUCT_JOURNEY_BACKGROUND = {
+  red: 201 / 255,
+  green: 220 / 255,
+  blue: 206 / 255,
+};
+export const ADMIN_CAPABILITY_BACKGROUND = {
+  red: 138 / 255,
+  green: 74 / 255,
+  blue: 34 / 255,
+};
+export const ADMIN_JOURNEY_BACKGROUND = {
+  red: 237 / 255,
+  green: 208 / 255,
+  blue: 176 / 255,
+};
+/** Reserved: a later product, umber / sand. `#5C4A3A` / `#E4D5C4`. */
+export const FUTURE_CAPABILITY_BACKGROUND = {
+  red: 92 / 255,
+  green: 74 / 255,
+  blue: 58 / 255,
+};
+export const FUTURE_JOURNEY_BACKGROUND = {
+  red: 228 / 255,
+  green: 213 / 255,
+  blue: 196 / 255,
+};
+
+export function isAdminCapability(capabilityId) {
+  return String(capabilityId ?? "").startsWith("grade10-admin");
+}
+
+export function capabilityBackground(capabilityId) {
+  return isAdminCapability(capabilityId)
+    ? ADMIN_CAPABILITY_BACKGROUND
+    : PRODUCT_CAPABILITY_BACKGROUND;
+}
+
+export function journeyBackground(capabilityId) {
+  return isAdminCapability(capabilityId)
+    ? ADMIN_JOURNEY_BACKGROUND
+    : PRODUCT_JOURNEY_BACKGROUND;
+}
+
+/** A draft case, warm stone grey. Cooler than this is `to_do` on a result
+ *  cell (`#F2F2F2`); this is `#DDD8CE`. Static: a run tab is a snapshot. */
+export const DRAFT_BACKGROUND = {
+  red: 221 / 255,
+  green: 216 / 255,
+  blue: 206 / 255,
+};
 
 export const SUMMARY_TAB = "Summary";
 
@@ -131,17 +189,33 @@ export const SUMMARY_TAB = "Summary";
  *
  * One row per run would need `Pass` to mean something across four columns that
  * answer different questions, and the aggregate hides the case the run is
- * about: web green, mobile red reads as half a pass either way. Each surface
- * gets its own row, and the run's provenance repeats down all four so a filter
- * on `Run name` or `Commit SHA` returns whole rows.
+ * about: web green, mobile red reads as half a pass either way. The Summary is
+ * a register, not a filterable table: the run's identity sits once on the
+ * first row, the three surfaces below it are grouped under that row, and
+ * `Commit SHA` lives at the far right of the same first row.
  */
-export const SUMMARY_COLUMNS = [
+export const SUMMARY_LEAD_COLUMNS = [
   "Run ID",
   "Tab",
   "Date created",
   "Run name",
   "Selection",
-  "Commit SHA",
+  "Env",
+];
+
+export const ENVIRONMENTS = ["staging", "production"];
+export const DEFAULT_ENV = "staging";
+
+export function envOf(value) {
+  const v = String(value ?? "")
+    .trim()
+    .toLowerCase();
+  if (v === "") return DEFAULT_ENV;
+  return ENVIRONMENTS.includes(v) ? v : null;
+}
+
+export const SUMMARY_COLUMNS = [
+  ...SUMMARY_LEAD_COLUMNS,
   "Surface",
   "Cases",
   "Draft",
@@ -152,14 +226,16 @@ export const SUMMARY_COLUMNS = [
   "Skipped",
   "N/A",
   "Pass rate",
-  "Automated left out",
+  "Commit SHA",
 ];
 
-/** Alternating bands on the Summary, one per run rather than one per row, so a
- *  run's four surfaces read as one block. */
+export const SUMMARY_SHA_COL = SUMMARY_COLUMNS.indexOf("Commit SHA");
+
+/** Run 1, 3, 5… light green `#E4EFE6`; run 2, 4, 6… white. Index with
+ *  `runId % 2` so 1 lands on green. */
 export const SUMMARY_BANDS = [
   { red: 1, green: 1, blue: 1 },
-  { red: 0.95, green: 0.96, blue: 0.98 },
+  { red: 228 / 255, green: 239 / 255, blue: 230 / 255 },
 ];
 
 /** `test cases` needs quoting in A1 notation and `it's` needs its apostrophe
@@ -177,4 +253,114 @@ export function colLetter(index) {
     n = Math.floor(n / 26) - 1;
   } while (n >= 0);
   return out;
+}
+
+export function tabTitle(runId, nameSlug) {
+  return `${runId}-${nameSlug}`;
+}
+
+/**
+ * Find run `runId` in the Summary grid (row 0 is the header) and check the
+ * tab it names is among `titles`.
+ *
+ * Disagreement is returned, not repaired: a missing tab, a duplicate Run ID,
+ * or an empty Tab cell means a human moved something, and guessing is how a
+ * marked tab dies.
+ */
+export function locateRun(summaryValues, titles, runId) {
+  const wanted = Number(runId);
+  if (!Number.isFinite(wanted) || wanted < 1)
+    return {
+      ok: false,
+      why: `Run ID must be a positive number, got \`${runId}\``,
+      titles,
+    };
+
+  const hits = [];
+  for (let i = 1; i < summaryValues.length; i += 1) {
+    if (Number(summaryValues[i]?.[0]) === wanted) hits.push(i);
+  }
+  if (hits.length === 0)
+    return { ok: false, why: `Summary has no run ${wanted}`, titles };
+  if (hits.length > 1)
+    return {
+      ok: false,
+      why: `Summary has ${hits.length} identity rows with Run ID ${wanted}`,
+      titles,
+    };
+
+  const startRow = hits[0];
+  const tab = String(summaryValues[startRow]?.[1] ?? "").trim();
+  if (!tab)
+    return {
+      ok: false,
+      why: `run ${wanted} has no Tab in Summary`,
+      titles,
+    };
+  if (!titles.includes(tab))
+    return {
+      ok: false,
+      why: `Summary names \`${tab}\` for run ${wanted}; no tab has that title`,
+      tab,
+      titles,
+    };
+  return { ok: true, startRow, tab };
+}
+
+/**
+ * A run's four Summary rows, one per surface.
+ *
+ * Counts are formulas, so a tester marking the tab moves them without a second
+ * sync, and `IFERROR` says so plainly when somebody renames or deletes the tab
+ * the row points at.
+ *
+ * `Cases` counts the surface's own column rather than `Case ID`, because a
+ * journey banner has a `Case ID` cell and no result cell: counting the results
+ * counts cases and skips the banners for free.
+ *
+ * `Pass rate` divides by the applicable cells - everything but `n/a` - so a run
+ * over cases automation has not reached is not reported as half failing.
+ *
+ * Identity (`Run ID` through `Env`) and `Commit SHA` sit on the first
+ * row only. The three surfaces below it are empty in those columns so a merge
+ * can span them, and so the register is read as runs rather than as a table
+ * somebody would filter.
+ */
+export function summaryRows({
+  runId,
+  tab,
+  date,
+  name,
+  selection,
+  env,
+  sha,
+  drafts,
+}) {
+  const t = quoteTab(tab);
+  return SURFACES.map((surface, i) => {
+    const col = colLetter(MARKING_START + i);
+    const range = `${t}!${col}2:${col}`;
+    const count = (what) =>
+      `=IFERROR(COUNTIF(${range},"${what}"),"tab deleted")`;
+    const first = i === 0;
+    return [
+      first ? runId : "",
+      first ? tab : "",
+      first ? date : "",
+      first ? name : "",
+      first ? selection : "",
+      first ? env : "",
+      surface,
+      `=IFERROR(COUNTA(${range}),"tab deleted")`,
+      drafts,
+      count("to_do"),
+      count("pass"),
+      count("fail"),
+      count("blocked"),
+      count("skipped"),
+      count("n/a"),
+      `=IFERROR(COUNTIF(${range},"pass")/(COUNTA(${range})-COUNTIF(${range},"n/a")),"")`,
+      first ? sha : "",
+    ];
+  });
 }

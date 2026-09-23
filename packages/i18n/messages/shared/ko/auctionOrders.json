@@ -44,5 +44,24 @@
     "delivered": "배송 완료",
     "cancelled": "취소됨",
     "refunded": "환불됨"
+  },
+  "addAddress": {
+    "personal": "개인",
+    "companyKind": "회사",
+    "phone": "전화",
+    "company": "회사명",
+    "phonePlaceholder": "+852 12345678",
+    "firstName": "이름",
+    "lastName": "성",
+    "country": "국가/지역",
+    "city": "시/군/구",
+    "addressLine1": "주소 1",
+    "addressLine2": "주소 2",
+    "state": "주/도/지역",
+    "postalCode": "우편번호",
+    "optional": "선택",
+    "confirm": "확인",
+    "cancel": "취소",
+    "countrySearchPlaceholder": "예: United States"
   }
 }

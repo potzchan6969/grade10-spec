@@ -2,7 +2,10 @@
 
 - Queue
   - Two states before an invoice: Awaiting Setup waits on the winner, Preparing Invoice waits on an operator and needs action
-  - Overdue mark: an order idle 72 hours or more in either stage is marked, so a stalled order is chased rather than forgotten
+  - Overdue mark: an Awaiting Setup order is marked when its persisted
+    48-hour address deadline passes; Preparing Invoice has no queue Overdue
+    mark, and its payment Overdue timer starts only after invoice send and
+    winner visibility
   - Expired invoices: an order whose invoice has expired reads Pending Payment and is highlighted as needing action
 - Quote and send
   - Operator quote: Shipping & Handling, and Insurance when added, are priced by a person for the winner's confirmed address
@@ -50,7 +53,8 @@ An operator holding payment-processing SHALL also be able to record a delivery
 address on an order whose address deadline has passed, without reopening the
 address form, so a winner who gives their address by telephone is quoted in one
 step. Recording it SHALL NOT reopen the window and SHALL NOT let the winner
-write again.
+write again. Grade10 SHALL write an address-recorded invoice-log entry carrying
+the named operator, timestamp and reason.
 
 #### Scenario: grade10-admin-auction-post-sale-SC-75 - A reopen gives a fresh 48 hours
 **Serves:** post-sale-US-18 - Operator reopens the address form
@@ -134,6 +138,24 @@ write again.
 - **THEN** Grade10 accepts it
 - **AND** the order derives as Preparing Invoice
 - **AND** the address deadline has still passed, so the winner cannot change it
+
+#### Scenario: grade10-admin-auction-post-sale-SC-90 - Address write and reopen serialize
+**Serves:** post-sale-US-18 - Operator reopens the address form
+
+- **GIVEN** an expired order with no confirmed address
+- **WHEN** a winner address write and an operator reopen are submitted concurrently
+- **THEN** Grade10 serializes the operations under the order boundary
+- **AND** the final address snapshot and persisted deadline match the last
+  committed transition
+- **AND** no partial address overwrite is possible
+
+#### Scenario: grade10-admin-auction-post-sale-SC-91 - Address recording is logged
+**Serves:** Audit trail - the reopen and phone-recorded address name who did them and why
+
+- **GIVEN** an operator records an address supplied by phone without reopening
+- **WHEN** another operator reads the invoice log
+- **THEN** it contains an address-recorded entry with the named operator,
+  timestamp and reason
 
 ### Requirement: Only an operator settles an expired invoice
 

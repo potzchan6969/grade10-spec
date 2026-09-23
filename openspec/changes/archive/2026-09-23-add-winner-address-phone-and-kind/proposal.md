@@ -24,7 +24,9 @@ with digits and, when the address is a company address, a company name
   shows Company Name as required; Personal hides it. A company address shows
   the company name as the picker card title; a personal address shows the
   recipient name. The card body shows street, city or region, and country
-  only — no postal code and no phone.
+  only — no postal code and no phone. Order summary Delivery and Billing show
+  the full confirmed snapshot (company when company, recipient name, phone,
+  full address including postal).
 - **Locality** — address line 2 and state are optional; Apt./Suite/Building
   is not collected on this form.
 - **Shared form and setup** — `AuctionAddressForm` carries both; Winner Order
@@ -51,6 +53,7 @@ None.
 
 - `@grade10/ui` `AuctionAddressForm` (and a block-local phone field).
 - Winner Order Complete Order Setup preview under `apps/preview`.
+- Winner Order page Order summary Delivery / Billing snapshot display.
 - `react-phone-number-input` as a `packages/ui` dependency.
 - Consuming `grade10-site` wiring follows the submodule bump.
 

@@ -33,7 +33,7 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
-import { COUNTRY_OPTIONS, COUNTRY_SELECT_ITEMS } from "./country-regions";
+import { COUNTRY_SELECT_ITEMS } from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
@@ -617,13 +617,13 @@ function WinnerOrderAddressDialog({
                       data-highlighted work like DropdownMenu in the nested dialog.
                     */}
                     <SelectContent alignItemWithTrigger={false}>
-                      {COUNTRY_OPTIONS.map((country) => (
+                      {COUNTRY_SELECT_ITEMS.map((country) => (
                         <SelectItem
-                          key={country}
-                          label={country}
-                          value={country}
+                          key={country.value}
+                          label={country.label}
+                          value={country.value}
                         >
-                          {country}
+                          {country.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

@@ -9,6 +9,9 @@
 - Show street, city or region, and country on the picker card body — not
   postal code or phone.
 - Show a phone placeholder with an example calling code.
+- Show the full address snapshot on Order summary Delivery and Billing —
+  company when company, recipient name, phone, and full address including
+  postal.
 
 ## Non-Goals
 
@@ -40,6 +43,7 @@
 | Q12 | When Same as delivery is checked, how are kind and phone reported for billing? | Confirm reports the same kind and phone for billing as delivery | Omit billing kind and phone from the payload |
 | Q13 | What does the phone placeholder show? | Example with calling code `+852 12345678` (recommended) | Generic "Phone number"; or empty placeholder |
 | Q14 | What does the picker card body show? | Street, city or region, and country only — no postal code and no phone (recommended) | Street + postal + phone; or full formatted address including phone |
+| Q15 | What does Order summary Delivery / Billing show? | Full confirmed snapshot — company when company, recipient name, phone, and full address including postal (recommended) | Same lean body as the picker card |
 
 ## Raised
 

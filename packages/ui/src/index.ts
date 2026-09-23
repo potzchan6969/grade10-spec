@@ -165,6 +165,7 @@ export type {
 // shared/ui/auction-order
 export {
   AuctionAddressForm,
+  auctionPhoneConfirmValue,
   auctionPhoneSoftReady,
   type AuctionAddressFormCopy,
   type AuctionAddressFormProps,

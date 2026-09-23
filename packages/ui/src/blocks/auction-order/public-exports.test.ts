@@ -16,6 +16,8 @@ import {
   AuctionOrderEmpty,
   AuctionOrderList,
   AuctionOrderRow,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
 } from "../../index";
 
 type PublicAuctionOrderTypes = [
@@ -41,7 +43,11 @@ describe("auction-order public entry", () => {
       AuctionOrderEmpty,
       AuctionOrderDetail,
       AuctionAddressForm,
+      auctionPhoneSoftReady,
+      auctionPhoneConfirmValue,
     ]).toEqual([
+      expect.any(Function),
+      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
       expect.any(Function),

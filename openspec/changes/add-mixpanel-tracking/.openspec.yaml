@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-15
+promoted_by: "@rita-liu"
+ui_waived: no collector or admin surface; Mixpanel catalog, ingest, and server emits only
+design_waived: no collector or admin surface; Mixpanel catalog, ingest, and server emits only
+hands:
+  dev: "@rita-liu"
