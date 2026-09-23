@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
 import { InvoicePdf } from "./invoice-pdf";
-import type { InvoicePdfCopy, OrderValueLines } from "./types";
+import type { InvoicePdfCopy, OrderValueLines, PartyAddress } from "./types";
 
 const copy: InvoicePdfCopy = {
   documentTitle: "Invoice",
@@ -37,6 +37,34 @@ const orderValue: OrderValueLines = {
   orderTotal: "3,232.25",
 };
 
+const billToAddress: PartyAddress = {
+  fullName: "Alexandra Tran",
+  companyName: "Tran Collectibles Ltd.",
+  addressLine1: "Flat A, 21/F, One Harbour Square",
+  addressLine2: "181 Java Road",
+  city: "North Point",
+  state: "Hong Kong Island",
+  postalCode: "999077",
+  country: "Hong Kong SAR",
+  phone: "+852 9123 4567",
+};
+
+const shipToAddress: PartyAddress = {
+  fullName: "Alexandra Tran",
+  addressLine1: "Flat A, 21/F, One Harbour Square",
+  city: "North Point",
+  postalCode: "999077",
+  country: "Hong Kong SAR",
+  phone: "+852 9123 4567",
+};
+
+/** Reads one party block's address lines in DOM order. */
+function readAddressLines(partyBlock: Element) {
+  return Array.from(
+    partyBlock.querySelectorAll('[data-slot="pdf-address-line"]'),
+  ).map((node) => node.textContent ?? "");
+}
+
 /** The lot and every order-value label, lot first, in the fixed order `spec.md` requires. */
 const ORDER_VALUE_LABELS = [
   orderValue.lot as string,
@@ -66,8 +94,8 @@ const meta = {
     sentAt: "September 15, 2026, 11:04 HKT",
     paymentDeadline: "September 22, 2026, 11:04 HKT",
     issuer: "Grade10, support@grade10.com",
-    billTo: "Alexandra Tran",
-    shipTo: "One Harbour Square",
+    billTo: billToAddress,
+    shipTo: shipToAddress,
     orderValue,
   },
 } satisfies Meta<typeof InvoicePdf>;
@@ -98,13 +126,50 @@ export const BankTransfer: Story = {
       '[data-slot="pdf-party-block"]',
     );
     expect(within(bill as HTMLElement).getByText("Bill to")).toBeVisible();
-    expect(
-      within(bill as HTMLElement).getByText("Alexandra Tran"),
-    ).toBeVisible();
     expect(within(ship as HTMLElement).getByText("Ship to")).toBeVisible();
-    expect(
-      within(ship as HTMLElement).getByText("One Harbour Square"),
-    ).toBeVisible();
+    // SC-19: Bill To and Ship To never echo each other — each block's own
+    // fixture differs (Ship To carries no company name), so this also
+    // proves the blocks aren't rendering the same address twice.
+    expect(readAddressLines(bill as HTMLElement)).not.toEqual(
+      readAddressLines(ship as HTMLElement),
+    );
+  },
+};
+
+/** SC-31: a company address renders all nine fields it is given. */
+export const BillToWithAllFields: Story = {
+  play: async ({ canvasElement }) => {
+    const [bill] = canvasElement.querySelectorAll(
+      '[data-slot="pdf-party-block"]',
+    );
+    expect(readAddressLines(bill as HTMLElement)).toEqual([
+      billToAddress.fullName,
+      billToAddress.companyName,
+      billToAddress.addressLine1,
+      billToAddress.addressLine2,
+      billToAddress.city,
+      billToAddress.state,
+      billToAddress.postalCode,
+      billToAddress.country,
+      billToAddress.phone,
+    ]);
+  },
+};
+
+/** SC-32: a personal address omits company name, address line 2 and state, keeping every other field. */
+export const ShipToOmitsOptionalFields: Story = {
+  play: async ({ canvasElement }) => {
+    const [, ship] = canvasElement.querySelectorAll(
+      '[data-slot="pdf-party-block"]',
+    );
+    expect(readAddressLines(ship as HTMLElement)).toEqual([
+      shipToAddress.fullName,
+      shipToAddress.addressLine1,
+      shipToAddress.city,
+      shipToAddress.postalCode,
+      shipToAddress.country,
+      shipToAddress.phone,
+    ]);
   },
 };
 

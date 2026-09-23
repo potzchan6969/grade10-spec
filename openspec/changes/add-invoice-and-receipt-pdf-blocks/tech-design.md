@@ -90,6 +90,22 @@ type OrderValueLinesCopy = {
   [K in keyof Omit<OrderValueLines, "lot">]-?: string;
 };
 
+// Bill To and Ship To's structured shape (spec.md "Party address fields"),
+// shared by both InvoicePdf and ReceiptPdf. No per-field label: an address
+// block reads as plain lines, the way the sketch's AddressBlock already did
+// — only the section itself (`billToHeading`/`shipToHeading`) is a label.
+type PartyAddress = {
+  fullName: ReactNode;
+  companyName?: ReactNode; // SC-32: omitted, not blank, when withheld
+  addressLine1: ReactNode;
+  addressLine2?: ReactNode; // SC-32: omitted, not blank, when withheld
+  city: ReactNode;
+  state?: ReactNode; // SC-32: omitted, not blank, when withheld
+  postalCode: ReactNode;
+  country: ReactNode;
+  phone: ReactNode;
+};
+
 type InvoicePdfCopy = {
   documentTitle: string; // the "Invoice" heading itself is a label, like every other — not component-owned text
   invoiceIdLabel: string;
@@ -111,9 +127,9 @@ type InvoicePdfProps = {
   paymentDeadline: ReactNode;
   bankReference?: ReactNode; // SC-2, SC-18: independent of bankRails
   bankRails?: ReactNode; // SC-1, SC-2, SC-18: independent of bankReference
-  issuer: ReactNode; // one opaque block, unlike billTo/shipTo — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
-  billTo: ReactNode;
-  shipTo: ReactNode; // SC-19: never echoes billTo
+  issuer: ReactNode; // one opaque block — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
+  billTo: PartyAddress;
+  shipTo: PartyAddress; // SC-19: never echoes billTo
   orderValue: OrderValueLines; // SC-3: the lot is orderValue.lot, not a separate prop
   replacedBy?: ReactNode; // SC-5, SC-6
   copy: InvoicePdfCopy;
@@ -147,8 +163,8 @@ type ReceiptPdfProps = {
   invoiceId: ReactNode;
   paymentMethod: ReactNode;
   manuallySettled?: boolean; // SC-9, SC-10: see below — not presence-gated like the reserved slots
-  billTo: ReactNode;
-  shipTo: ReactNode; // SC-29: never echoes billTo
+  billTo: PartyAddress;
+  shipTo: PartyAddress; // SC-29: never echoes billTo
   orderValue: OrderValueLines; // SC-21: the same shared type InvoicePdf uses
   paymentBreakdown: PaymentBreakdown;
   supersededInvoice?: ReactNode; // SC-11, SC-12
@@ -187,6 +203,17 @@ contract already makes between content and label.
 `spec.md` requirement names it, and it is the same on every document. It is
 component-owned the same way `manuallySettled`'s visual treatment is, so it
 carries no prop.
+
+**Bill To and Ship To carry a fixed nine-field address, not an opaque block.**
+The author specified the field set directly (`decisions.md` amendment): full
+name, company name, address line 1, address line 2, city, state, postal
+code, country, phone number — the same optionality as the address form
+(`shared/ui/auction-order`'s "Optional locality: address line 2 and state
+optional; line 1 and postal code required"), plus company name, optional the
+same way it is on a personal address. Each field stays `ReactNode` (Q6) and
+renders as its own line, in the order named — the component does not join
+city, state and postal code onto one line or otherwise combine fields; each
+is rendered exactly as given, per the presentation-only contract.
 
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,

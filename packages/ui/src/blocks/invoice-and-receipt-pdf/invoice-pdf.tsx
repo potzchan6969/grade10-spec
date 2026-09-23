@@ -4,6 +4,7 @@ import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
+  AddressLines,
   LotHeading,
   MetaRow,
   PartyBlock,
@@ -59,8 +60,12 @@ function InvoicePdf({
       </HStack>
 
       <div className="grid gap-6 sm:grid-cols-2">
-        <PartyBlock heading={copy.billToHeading}>{billTo}</PartyBlock>
-        <PartyBlock heading={copy.shipToHeading}>{shipTo}</PartyBlock>
+        <PartyBlock heading={copy.billToHeading}>
+          <AddressLines address={billTo} />
+        </PartyBlock>
+        <PartyBlock heading={copy.shipToHeading}>
+          <AddressLines address={shipTo} />
+        </PartyBlock>
       </div>
 
       <LotHeading>{orderValue.lot}</LotHeading>

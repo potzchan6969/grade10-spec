@@ -24,6 +24,26 @@ type OrderValueLinesCopy = {
   [K in keyof Omit<OrderValueLines, "lot">]-?: string;
 };
 
+/**
+ * Bill To and Ship To's structured shape, shared by InvoicePdf and
+ * ReceiptPdf. Renders as plain lines, no per-field label — only the party
+ * block's own heading (`billToHeading`/`shipToHeading`) is a label.
+ */
+type PartyAddress = {
+  fullName: ReactNode;
+  /** Omitted, not blank, when withheld. */
+  companyName?: ReactNode;
+  addressLine1: ReactNode;
+  /** Omitted, not blank, when withheld. */
+  addressLine2?: ReactNode;
+  city: ReactNode;
+  /** Omitted, not blank, when withheld. */
+  state?: ReactNode;
+  postalCode: ReactNode;
+  country: ReactNode;
+  phone: ReactNode;
+};
+
 type InvoicePdfCopy = {
   documentTitle: string;
   invoiceIdLabel: string;
@@ -49,8 +69,8 @@ type InvoicePdfProps = {
   /** Independent of `bankReference` — either may be given without the other. */
   bankRails?: ReactNode;
   issuer: ReactNode;
-  billTo: ReactNode;
-  shipTo: ReactNode;
+  billTo: PartyAddress;
+  shipTo: PartyAddress;
   orderValue: OrderValueLines;
   /** On a replaced invoice only. */
   replacedBy?: ReactNode;
@@ -62,4 +82,5 @@ export type {
   InvoicePdfProps,
   OrderValueLines,
   OrderValueLinesCopy,
+  PartyAddress,
 };

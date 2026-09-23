@@ -833,6 +833,63 @@ Runs once per row of **Test data**.
 * The second render shows only the second set of props' content.
 * No row from the first render's props persists.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC27-1: A company address renders every field it is given
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with a Bill To supplying full name, company name, address line 1, address line 2, city, state, postal code, country, and phone number.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the Bill To block.
+
+**Expected Results:**
+
+* All nine fields render.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC28-1: A personal address omits company name, address line 2 and state
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with a Ship To omitting company name, address line 2, and state.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the Ship To block.
+
+**Expected Results:**
+
+* No company name, address line 2, or state field renders.
+* Full name, address line 1, city, postal code, country, and phone number still render.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -867,3 +924,12 @@ existing scenarios already cover.
 | TC26 (re-rendering with new props leaves no stale content) | **Dropped:** a generic React rendering guarantee true of any prop-driven function component, not a rule specific to this capability's export contract |
 | Uncovered anchors | None — every `## Feature set` group is served by at least one scenario and walked by at least one case |
 | Contradicted readings | None |
+
+**Amendment, 2026-09-23:** the author specified Bill To/Ship To's structured
+address fields after group 1 landed — a real product detail the original
+readings could not have anchored on, since `billTo`/`shipTo` were still
+opaque `ReactNode` at reconciliation time. `SC-31`/`SC-32` and
+`TC27`/`TC28` were added directly against the new "Party address fields"
+Feature set group, author-reviewed rather than run through a fresh blind
+pass, since the addition is narrow and additive to an already-reconciled
+capability rather than a new one.

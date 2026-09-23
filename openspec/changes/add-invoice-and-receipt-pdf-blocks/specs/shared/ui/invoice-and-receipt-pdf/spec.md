@@ -25,6 +25,13 @@ already requires without maintaining its own copy.
   - Payment breakdown: Original Invoice Total, Previous Payments, Current
     Payment Received, Remaining Balance Due, in that order
   - Superseded invoice, shown only when given
+- Party address fields
+  - Bill To and Ship To are each a structured address: full name, company
+    name when given, address line 1, address line 2 when given, city, state
+    when given, postal code, country, phone number
+  - Company name, address line 2 and state are the only optional fields,
+    matching the address form's own optionality; every other field is
+    required
 - Reserved extension slots
   - An optional tax line on both documents, rendered only when given
   - An optional issuer tax-details block on ReceiptPdf, rendered only when
@@ -85,6 +92,38 @@ content.
 - **WHEN** it renders
 - **THEN** Bill To shows its own supplied content
 - **AND** Ship To shows its own, distinct, supplied content
+
+### Requirement: Bill To and Ship To render as structured address fields
+
+Bill To and Ship To each carry a full name, an optional company name, a
+street address, an optional locality, a postal code, a country, and a phone
+number, matching the address form's own field set and optionality.
+
+**Fields** — InvoicePdf SHALL render full name, address line 1, city, postal
+code, country, and phone number for every Bill To and every Ship To.
+**Company name** — InvoicePdf SHALL render the company name only when the
+consumer supplies it. **Address line 2** — InvoicePdf SHALL render address
+line 2 only when the consumer supplies it. **State** — InvoicePdf SHALL
+render state only when the consumer supplies it.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-31 - A company address renders every field it is given
+**Serves:** Party address fields - every address field renders when supplied
+
+- **GIVEN** an InvoicePdf given a Bill To with a full name, company name,
+  address line 1, address line 2, city, state, postal code, country, and
+  phone number
+- **WHEN** it renders
+- **THEN** every one of those nine fields is shown
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits company name, address line 2 and state
+**Serves:** Party address fields - company name, address line 2 and state are the only optional fields
+
+- **GIVEN** an InvoicePdf given a Ship To with no company name, no address
+  line 2, and no state
+- **WHEN** it renders
+- **THEN** no company name, no address line 2, and no state field appear
+- **AND** full name, address line 1, city, postal code, country, and phone
+  number still render
 
 ### Requirement: InvoicePdf renders the order-value lines in order
 

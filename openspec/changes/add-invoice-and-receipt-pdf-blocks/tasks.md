@@ -4,6 +4,7 @@
 - [x] 1.2 Build `InvoicePdf`, its prop types (`InvoicePdfProps`, `InvoicePdfCopy`, `OrderValueLines`, `OrderValueLinesCopy`), and the shared `pdf-document.tsx` layout pieces (`PdfSheet`, `MetaRow`, `PartyBlock`, `ValueRow`, `SummaryRow`) per `tech-design.md`'s Decisions, making 1.1's stories pass (same scenario ids)
 - [x] 1.3 Add `public-exports.test.ts` asserting `InvoicePdf` and its prop types export from `../../index`; add this directory's `public-exports.test.ts` to `packages/ui/vitest.config.ts`'s `audit` project `include` list, per `tech-design.md`
 - [x] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
+- [x] 1.5 Amendment: structure `billTo`/`shipTo` as the nine-field `PartyAddress` (`decisions.md` Q11), adding `AddressLines` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-31`, `SC-32`)
 
 ## 2. ReceiptPdf, completing the shared contract (grade10-spec)
 

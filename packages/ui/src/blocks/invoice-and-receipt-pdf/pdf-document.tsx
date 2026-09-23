@@ -3,6 +3,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { cn } from "@grade10/design-system/lib/utils";
 import type { ReactNode } from "react";
+import type { PartyAddress } from "./types";
 
 type PdfDocumentSlot = "invoice-pdf" | "receipt-pdf";
 
@@ -60,6 +61,52 @@ function PartyBlock({
         {heading}
       </Text>
       {children}
+    </VStack>
+  );
+}
+
+/**
+ * Bill To/Ship To's nine fields, one per line, in the fixed order
+ * `spec.md`'s "Party address fields" names — full name, company name when
+ * given, address line 1, address line 2 when given, city, state when
+ * given, postal code, country, phone number.
+ */
+function AddressLines({ address }: { address: PartyAddress }) {
+  return (
+    <VStack data-slot="pdf-address-lines" gap="none" hAlign="start">
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.fullName}
+      </Text>
+      {address.companyName !== undefined ? (
+        <Text data-slot="pdf-address-line" size="sm">
+          {address.companyName}
+        </Text>
+      ) : null}
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.addressLine1}
+      </Text>
+      {address.addressLine2 !== undefined ? (
+        <Text data-slot="pdf-address-line" size="sm">
+          {address.addressLine2}
+        </Text>
+      ) : null}
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.city}
+      </Text>
+      {address.state !== undefined ? (
+        <Text data-slot="pdf-address-line" size="sm">
+          {address.state}
+        </Text>
+      ) : null}
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.postalCode}
+      </Text>
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.country}
+      </Text>
+      <Text data-slot="pdf-address-line" size="sm">
+        {address.phone}
+      </Text>
     </VStack>
   );
 }
@@ -130,4 +177,12 @@ function SummaryRow({
 }
 
 export type { PdfDocumentSlot };
-export { LotHeading, MetaRow, PartyBlock, PdfSheet, SummaryRow, ValueRow };
+export {
+  AddressLines,
+  LotHeading,
+  MetaRow,
+  PartyBlock,
+  PdfSheet,
+  SummaryRow,
+  ValueRow,
+};
