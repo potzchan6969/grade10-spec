@@ -1,6 +1,6 @@
 ## 1. Product record (owner: @htonyl)
 
-- [ ] 1.1 Update Winner Order, order-status and post-sale PRD pages with the
+- [x] 1.1 Update Winner Order, order-status and post-sale PRD pages with the
   persisted address deadline, derived `address_window_open`, 48-hour
   Awaiting Setup-only Overdue mark, and the payment Overdue timer that starts
   when the invoice is sent and visible to the winner
