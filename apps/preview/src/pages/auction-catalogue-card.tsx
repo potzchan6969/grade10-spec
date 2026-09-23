@@ -2,7 +2,7 @@ import {
   CarouselProgress,
   CarouselProgressItem,
 } from "@grade10/design-system/components/display/carousel-progress";
-import { Button } from "@grade10/design-system/components/forms/button";
+import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
@@ -1022,14 +1022,15 @@ function FeaturedAuctionsPair({
                       transition={contentTransition(0.42)}
                       variants={reduceMotion ? undefined : pairContentVariants}
                     >
-                      <Button
-                        nativeButton={false}
-                        render={<a href={lotAddress(lot)} />}
-                        size="lg"
-                        variant="default"
+                      <a
+                        className={buttonVariants({
+                          size: "lg",
+                          variant: "default",
+                        })}
+                        href={lotAddress(lot)}
                       >
                         Bid Now
-                      </Button>
+                      </a>
                     </motion.div>
                   </motion.div>
                 </motion.div>
