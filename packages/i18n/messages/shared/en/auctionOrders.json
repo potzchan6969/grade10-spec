@@ -14,6 +14,9 @@
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
   "insuranceTooltip": "0.9% of the order value during transit.",
+  "buyersPremiumTooltip": "20% of your winning bid, or the currency minimum if that is higher.",
+  "shippingHandlingTooltip": "Packing, carrier, and handling for your confirmed delivery address.",
+  "processingFeeTooltip": "Set by your payment method when this invoice was sent.",
   "contactDialog": {
     "title": "Email Grade10",
     "to": "To",

@@ -14,6 +14,9 @@
   "viewDetail": "查看详情",
   "contactUs": "联系我们",
   "insuranceTooltip": "运输途中按订单金额的 0.9% 计算。",
+  "buyersPremiumTooltip": "得标价的 20%，或该货币的最低额（取较高者）。",
+  "shippingHandlingTooltip": "按你确认的收货地址计算的包装、承运与处理费用。",
+  "processingFeeTooltip": "按此发票发出时的付款方式而定。",
   "contactDialog": {
     "title": "给 Grade10 发邮件",
     "to": "收件人",
