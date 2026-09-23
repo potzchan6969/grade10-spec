@@ -328,6 +328,7 @@
       "account": "銀行戶口，戶名為 {lenderName}",
       "reference": "請以 {reference} 作為轉帳附言。",
       "counter": "或於門市以現金或信用卡付款。",
+      "counterOnly": "請於門市以現金或信用卡付款。銀行轉帳資料稍後以電郵發送。",
       "recordedAgainst": "以款項到達我們的日期入賬。",
       "growsBy": "{when} 後，欠款每日增加 {amount}。",
       "receiptLine": "入賬後我們會以電郵通知你。",
@@ -357,12 +358,18 @@
       "title": "還款紀錄",
       "empty": "每次還款都會在此列出，連同還款日期及還款後的餘額。",
       "row": "{amount}，以{method}支付 · {when} 到達 · {recordedWhen} 記錄 · 餘 {balance}",
+      "method": {
+        "bank_transfer": "銀行轉帳",
+        "cash": "現金",
+        "card": "信用卡"
+      },
       "allocation": "先清還應付利息，再清還本金。",
       "neverRestarts": "利息一旦停止計算，就不會重新開始。",
       "receipt": "收據隨後以電郵發送。"
     },
     "notice": {
       "title": "最後通知",
+      "payBy": "全數清還限期",
       "wroteOn": "我們已於 {when} 致函通知你。",
       "untilThen": "在 {when} 之前，不會取走你的物品。",
       "remindersSent": "在此通知之前，已發出 {count} 次提醒。",
@@ -371,7 +378,10 @@
     "reminders": {
       "title": "提醒",
       "schedule": "到期前 {first} 及 {second}各發一次，其後每 {days} 天一次。",
-      "free": "提醒不會收取任何費用。"
+      "free": "提醒不會收取任何費用。",
+      "sentOn": "已於 {when} 發出",
+      "nextOn": "下一次提醒：{when}",
+      "noticeMayFollow": "貸款未清還期間，我們可能會致函通知你，訂明還款限期。"
     }
   },
   "visit": {

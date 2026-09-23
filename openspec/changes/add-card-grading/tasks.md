@@ -571,9 +571,9 @@ Stage (b).
 
 - [ ] 12.1 Cover the booking seam: the remote call outside every transaction,
       the all-or-none cache, the diary's four refusals by name, the batch the
-      chosen day names opened once per shop, grader and level behind its
-      partial unique, the joiner resolved through one column, and the upsize as
-      one reschedule (`grade10-site-grading-dropoff-booking-SC-04`,
+      chosen day names opened once per shop, grader and level on its key,
+      with two desks racing on a real Postgres, the joiner resolved through one
+      column, and the upsize as one reschedule (`grade10-site-grading-dropoff-booking-SC-04`,
       `grade10-site-grading-dropoff-booking-SC-05`,
       `grade10-site-grading-dropoff-booking-SC-15`,
       `grade10-site-grading-dropoff-booking-SC-16`,
@@ -614,10 +614,14 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-08`,
       `grade10-site-grading-dropoff-booking-SC-03`,
       `grade10-site-grading-submission-plan-SC-45`)
-- [ ] 12.4 Write `openBatchFor(location, grader, level, now)` whole — the
-      cut-off on `Asia/Hong_Kong` days from `settings.batch_cutoff`, the row
-      created `ON CONFLICT DO NOTHING … RETURNING` behind the partial unique
-      among open batches and re-read, and read at booking so the chosen
+- [ ] 12.4 Write `openBatchFor(location, grader, level, now)` whole, the way
+      every batch writer opens one — the hand-in and 30.3's new batch — the
+      cut-off on `Asia/Hong_Kong` days from `settings.batch_cutoff` read share
+      locked so it cannot move while a batch opens, the trio's open batch
+      preferred and returned `FOR UPDATE` so no ship closes it under a
+      hand-in, else the row created `ON CONFLICT DO NOTHING … RETURNING` on
+      the key `(location_id, grader, level, cutoff_at)` and re-read, and its
+      rule read by the booked page so the chosen
       day names the batch the cards leave in and the day back counts from it:
       one shop, one grader and one level to a batch, no second batch beside an
       open one, a card at another level waiting for its own, the cut-off
@@ -1231,7 +1235,9 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-14`)
 - [ ] 21.4 Write `planExpiry` and `expiredBooked`, a plan nobody books expiring
       at `plan_expiry_days` owing nothing, one with a drop-off booked not
-      expiring, and a booked submission expiring `booked_expiry_days` after its
+      expiring, a booked submission holding no visit expiring on the plan's
+      own clock through `booking/standing.ts`'s `planClock`, and a booked
+      submission expiring `booked_expiry_days` after its
       visit (`grade10-site-grading-submission-plan-SC-44`,
       `grade10-site-grading-submission-plan-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-49`)

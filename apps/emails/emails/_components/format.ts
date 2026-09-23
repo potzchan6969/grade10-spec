@@ -1,19 +1,18 @@
 /**
- * Money and dates as a letter prints them — every letter this app renders,
- * grading and vault alike.
+ * Money, dates and lists as a letter prints them — every letter this app
+ * renders, grading and vault alike, in the shapes the worker prints them in.
  *
- * Amounts are minor units, as every Grade10 surface carries them, and are
- * formatted the way `@grade10/ui`'s `formatMoney` does: the amount divided by
- * the currency's exponent through `Intl.NumberFormat`. Letters print the
- * currency code rather than its symbol, because a letter is read outside the
- * shop's own chrome.
+ * Amounts are minor units, as every Grade10 surface carries them, divided by
+ * the currency's exponent and printed with its symbol in the platform's
+ * language: `HK$2,400.00`.
  *
  * Dates are the shop's, `Asia/Hong_Kong`, whatever clock the reader keeps —
- * the footer says so on every letter.
+ * the footer says so on every letter — in the platform's two shapes: a
+ * calendar date, `4 Dec 2026`, and a date with its time, `4 Dec 2026, 19:00`.
  */
 
 const TIME_ZONE = "Asia/Hong_Kong";
-const LOCALE = "en-GB";
+const LOCALE = "en";
 
 /** ISO 4217 minor-unit exponent, for the currencies a letter can carry. */
 const CURRENCY_EXPONENT: Readonly<Record<string, number>> = { HKD: 2 };
@@ -35,18 +34,17 @@ function format(
   return new Intl.NumberFormat(LOCALE, {
     style: "currency",
     currency: currency.toUpperCase(),
-    currencyDisplay: "code",
     minimumFractionDigits: fractionDigits,
     maximumFractionDigits: fractionDigits,
   }).format(major);
 }
 
-/** An exact amount — paid, due, refunded, declared. `HKD 2,400.00`. */
+/** An exact amount — paid, due, refunded, declared. `HK$2,400.00`. */
 export function money(minor: number, currency = "HKD"): string {
   return format(minor, currency, exponentOf(currency));
 }
 
-/** A rate or a round reference figure — a ceiling, a monthly fee. `HKD 30`. */
+/** A rate or a round reference figure — a ceiling, a monthly fee. `HK$30`. */
 export function moneyRate(minor: number, currency = "HKD"): string {
   return format(minor, currency, 0);
 }
@@ -60,25 +58,14 @@ function fieldsOf(iso: string, options: Intl.DateTimeFormatOptions) {
     parts.find((part) => part.type === type)?.value ?? "";
 }
 
-/** `Fri 4 Dec 2026` */
+/** `4 Dec 2026` */
 export function hkDate(iso: string): string {
   const field = fieldsOf(iso, {
-    weekday: "short",
     day: "numeric",
     month: "short",
     year: "numeric",
   });
-  return `${field("weekday")} ${field("day")} ${field("month")} ${field("year")}`;
-}
-
-/** `Thu 29 Oct` — a day inside the same season as the rest of the letter. */
-export function hkDay(iso: string): string {
-  const field = fieldsOf(iso, {
-    weekday: "short",
-    day: "numeric",
-    month: "short",
-  });
-  return `${field("weekday")} ${field("day")} ${field("month")}`;
+  return `${field("day")} ${field("month")} ${field("year")}`;
 }
 
 /** `19:00` */
@@ -91,12 +78,26 @@ export function hkTime(iso: string): string {
   return `${field("hour")}:${field("minute")}`;
 }
 
-/** `Thu 29 Oct 2026, 19:00` */
+/** `29 Oct 2026, 19:00` */
 export function hkDateTime(iso: string): string {
   return `${hkDate(iso)}, ${hkTime(iso)}`;
 }
 
-/** `Thu 29 Oct, 19:00` */
-export function hkDayTime(iso: string): string {
-  return `${hkDay(iso)}, ${hkTime(iso)}`;
+/**
+ * A day inside the same season as the rest of the letter. The worker prints
+ * one calendar-date shape, so this is that shape: `29 Oct 2026`.
+ */
+export const hkDay = hkDate;
+
+/** A day and its time, in the one shape the worker prints: `29 Oct 2026, 19:00`. */
+export const hkDayTime = hkDateTime;
+
+const LIST = new Intl.ListFormat(LOCALE, {
+  style: "long",
+  type: "conjunction",
+});
+
+/** `a, b, and c`, as the worker joins what rides with a letter. */
+export function list(items: readonly string[]): string {
+  return LIST.format(items);
 }

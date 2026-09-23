@@ -25,7 +25,7 @@ import type { VisitRescheduledProps } from "@/emails/vault/visit-rescheduled";
 
 /**
  * The fixture every vault letter preview is written over: case `H7K4PQ`, a
- * Rolex Datejust 41 financed for HKD 38,000.00 over 90 days.
+ * Rolex Datejust 41 financed for HK$38,000.00 over 90 days.
  *
  * Instants are ISO, so the letters print them on the shop's clock through
  * `format.ts` rather than carrying a formatted string each. Amounts are

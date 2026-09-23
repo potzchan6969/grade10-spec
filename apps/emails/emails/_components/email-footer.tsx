@@ -19,6 +19,12 @@ export type EmailFooterProps = {
    * nobody mistakes the placeholder for the name.
    */
   lines?: string[];
+  /**
+   * The `© year` line. A collector letter carries none — its footer names
+   * the party by its registered name instead — so the letter shell turns it
+   * off; the notification mail keeps it, as the auction's worker prints it.
+   */
+  copyright?: boolean;
 };
 
 const PLACEHOLDER = /(\[[^\]]+\])/;
@@ -43,6 +49,7 @@ export function EmailFooter({
   muteUrl,
   unwatchUrl,
   lines = [],
+  copyright = true,
 }: EmailFooterProps) {
   const alertsUrl = muteUrl ?? unwatchUrl;
 
@@ -60,9 +67,11 @@ export function EmailFooter({
           </>
         ) : null}
       </Text>
-      <Text className="m-0 text-sm leading-base text-fg-3">
-        © {new Date().getFullYear()} {brandName}.
-      </Text>
+      {copyright ? (
+        <Text className="m-0 text-sm leading-base text-fg-3">
+          © {new Date().getFullYear()} {brandName}.
+        </Text>
+      ) : null}
       {lines.map((line) => (
         <Text className="m-0 mt-2 text-sm leading-base text-fg-3" key={line}>
           {marked(line)}

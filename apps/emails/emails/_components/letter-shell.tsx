@@ -5,6 +5,7 @@ import {
   EmailFooter,
   type EmailFooterProps,
 } from "@/emails/_components/email-footer";
+import { list } from "@/emails/_components/format";
 import { Grade10EmailShell } from "@/emails/_components/grade10-email-shell";
 import { PrimaryCta } from "@/emails/_components/primary-cta";
 
@@ -77,7 +78,8 @@ export type LetterShellProps = {
 /**
  * The shell every collector letter is written in: the heading, the greeting,
  * the lead, the letter's own blocks, then the line naming what the letter is
- * about and the shop's footer.
+ * about and the shop's footer — which names the party by its registered name
+ * and carries no copyright line, as the worker's does not.
  *
  * `Grade10EmailShell` here, `@grade10/email/render`'s `BaseLayout` in the
  * worker — the two shells cannot be shared, so this one is an unchecked copy
@@ -116,11 +118,11 @@ export function LetterShell({
       {cta ? <PrimaryCta href={cta.href} label={cta.label} /> : null}
       {attachments.length > 0 ? (
         <Text className="mb-0 mt-0 text-sm leading-base text-fg-3">
-          Attached: {attachments.join(", ")}.
+          Attached: {list(attachments)}.
         </Text>
       ) : null}
       {trailer}
-      <EmailFooter {...footer} />
+      <EmailFooter {...footer} copyright={false} />
     </Grade10EmailShell>
   );
 }

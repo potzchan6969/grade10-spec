@@ -35,8 +35,11 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
 - 🚧 **A walk-in** — books the customer-bookable Grading service at
   `grade10.com/book` with a name and an email, and lists the cards at the
   counter
-- 🚧 **Move or cancel** — any time before the visit starts, from the
-  submission page; an email each
+- 🚧 **Move or cancel** — any time before the visit starts, from the page
+  of the submission that owns the visit; an email each
+- 🚧 **Leaving a joined visit** — a second submission's page offers no move
+  and no cancel of the visit: it leaves by cancelling itself, and the visit
+  stands, sized for the lists left on it
 - 🚧 **A missed visit** — the diary's console closes a visit nobody started;
   within the hour the submission reads it, sends the missed email and keeps
   the list and the estimate as they were, and another drop-off is booked from

@@ -328,6 +328,7 @@
       "account": "Bank account, under {lenderName}",
       "reference": "Use {reference} as the transfer reference.",
       "counter": "Or pay by card or cash at the counter.",
+      "counterOnly": "Pay by card or cash at the counter. The bank transfer details follow by email.",
       "recordedAgainst": "Recorded against the day it reaches us.",
       "growsBy": "Grows by {amount} a day after {when}.",
       "receiptLine": "You will get an email once we have recorded it.",
@@ -357,12 +358,18 @@
       "title": "Repayments",
       "empty": "Each repayment appears here with its day and the balance after.",
       "row": "{amount} by {method} · reached us {when} · recorded {recordedWhen} · {balance} left",
+      "method": {
+        "bank_transfer": "bank transfer",
+        "cash": "cash",
+        "card": "card"
+      },
       "allocation": "This clears the interest owed first, then the principal.",
       "neverRestarts": "Interest never restarts once it has stopped.",
       "receipt": "A receipt follows by email."
     },
     "notice": {
       "title": "Final notice",
+      "payBy": "Pay in full by",
       "wroteOn": "We wrote to you on {when}.",
       "untilThen": "Nothing can be taken from you before {when}.",
       "remindersSent": "{count, plural, one {# reminder} other {# reminders}} sent before this notice.",
@@ -371,7 +378,10 @@
     "reminders": {
       "title": "Reminders",
       "schedule": "{first} and {second} before the due date, then every {days} days after.",
-      "free": "A reminder costs nothing."
+      "free": "A reminder costs nothing.",
+      "sentOn": "Sent on {when}",
+      "nextOn": "Next reminder on {when}",
+      "noticeMayFollow": "While the loan stays unpaid, we may send you a written notice naming a date to pay by."
     }
   },
   "visit": {

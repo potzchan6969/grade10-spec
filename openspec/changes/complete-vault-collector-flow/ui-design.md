@@ -205,16 +205,18 @@ beside them.
 - **`vault.case.askBack.confirm`**, **`vault.case.cancelled`**,
   **`vault.case.closesAfter`**
 - **`vault.money.howToPay.*`** — renamed from `case.payTitle` and
-  `case.payHolds`; adds fpsId, account, reference, counter,
+  `case.payHolds`; adds fpsId, account, reference, counter, counterOnly,
   recordedAgainst, growsBy, receiptLine, placeholder
 - **`vault.money.owed.*`** — renamed from `case.dueTitle`,
   `case.dueOutstanding`, `case.dueRepaid`, `case.dueRepaidLate`,
   `case.dueAsOf` and `case.owed.*`; adds progress (sent, dayOf, due),
   loan, termInterest, lateInterest, settledTable
-- **`vault.money.repayments.*`** — title, empty, row, allocation,
-  neverRestarts, receipt
-- **`vault.money.notice.*`** — title, wroteOn, untilThen, remindersSent,
-  noFurther; **`vault.money.reminders.*`** — title, schedule, free
+- **`vault.money.repayments.*`** — title, empty, row, method (one per
+  repayment method the contract names: bank_transfer, cash, card),
+  allocation, neverRestarts, receipt
+- **`vault.money.notice.*`** — title, payBy, wroteOn, untilThen,
+  remindersSent, noFurther; **`vault.money.reminders.*`** — title,
+  schedule, free, sentOn, nextOn, noticeMayFollow
 - **`vault.request.step.*`** (three), the field hints, the photo tips,
   **`vault.request.review.*`** — title, edit, whatHappensNext (three),
   statementTick, statementRequired, statementUnset
@@ -300,14 +302,14 @@ beside them.
 | In the vault, storage (`C14`) | hero the shop; Book a pickup visit, Ask for it back; the custody card with outstanding Nothing; documents with fingerprints | `grade10-site-vault-case-lifecycle-SC-34`, `grade10-site-vault-case-lifecycle-SC-18` |
 | Loan running (`C15`) | hero total by the due date with the holds line; Book a visit to collect; What is owed as at: outstanding of total · repaid, the progress line, the breakdown | `grade10-site-vault-loan-and-settlement-SC-05` |
 | How to pay | the block: FPS id, account under the lender's name, reference = the case reference, the counter line; holds until, grows by after | `grade10-site-vault-loan-and-settlement-SC-35` |
-| How to pay, values unset | the bracketed placeholder outside production; in production the block is refused — ❓ what stands in its place, flagged below | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
+| How to pay, values unset | the bracketed placeholder outside production; in production the block is refused and the counter line stands alone, card or cash at the counter and the transfer details by email — ❓ Product confirms it, flagged below | `grade10-site-vault-loan-and-settlement-SC-38`, `grade10-site-vault-loan-and-settlement-SC-47` |
 | Reminders | the two dates before the due date and the 7-day rung after; a reminder costs nothing | `grade10-site-vault-loan-and-settlement-SC-30` |
 | Repayments, none | the empty line: each appears here with its day and the balance after | `grade10-site-vault-loan-and-settlement-SC-28` |
 | Repayments, one (`C23`) | amount by method · reached us · recorded · balance after; the allocation sentence; the never-restarts line; the receipt line; the hero reads the remainder and the reduced daily figure | `grade10-site-vault-loan-and-settlement-SC-27` |
 | Repayments, many (`C17`) | the list in value-date order, each with its balance after | `grade10-site-vault-loan-and-settlement-SC-27` |
 | Past due (`C16`) | hero owed and n days past due with the daily figure; the breakdown adds late interest for n days; Book a visit to repay and collect | `grade10-site-vault-loan-and-settlement-SC-06` |
-| Past due, no notice | the past-due hero and the reminders card; no notice card | `grade10-site-vault-loan-and-settlement-SC-34` |
-| Final notice (`C16`) | `Alert` error: pay by the date, wrote to you on, until then nothing can be taken, the reminders sent, no further reminders | `grade10-site-vault-loan-and-settlement-SC-32` |
+| Past due, no notice | the past-due hero; the reminders card with each reminder sent on its day, the next one by its date, and that a written notice naming a date to pay by may follow, with no day; no notice card | `grade10-site-vault-loan-and-settlement-SC-34`, `grade10-site-vault-loan-and-settlement-SC-48` |
+| Final notice (`C16`) | `Alert` error: pay in full by the date, wrote to you on, until then nothing can be taken, the reminders sent, no further reminders | `grade10-site-vault-loan-and-settlement-SC-32` |
 | Repaid (`C17`) | hero repaid in full; Book a pickup visit, Ask for it back; the repayments; the loan settled table; custody outstanding Nothing; the no-clock line | `grade10-site-vault-loan-and-settlement-SC-15` |
 | Back with you (`C18`) | hero released at the shop on the date; Start another request; documents with the release receipt, fingerprints and the public verify address; the loan settled | `grade10-site-vault-documents-and-signing-SC-17` |
 | What we keep (`C18`) | the retention table per class with its window; the ask-to-be-forgotten line linking Your data | `grade10-site-vault-retention-and-erasure-SC-18` |
@@ -531,8 +533,9 @@ One row per kind, and the blocks each carries after the lead.
   for reading where the case stands, or the requirements pass states them
   out of suite
 - **❓ Product** — what a production borrower reads in place of the
-  how-to-pay block while Finance's values are unset; the PRD says refused,
-  not what stands there
+  how-to-pay block while Finance's values are unset; the spec and the PRD's
+  recommendation give the counter line alone, which Product has not
+  confirmed
 - **❓ Tech design** — how the withdrawal of a cancelled visit's calendar
   file reaches the phone, and the address of Your data under `/profile`
 - **Drawn, not carried** — `A06`'s quote widget and recorder's key,

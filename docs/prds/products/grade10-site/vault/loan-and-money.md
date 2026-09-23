@@ -131,11 +131,16 @@ every bound unset and writes no offer in production.
 - 🚧 **Each repayment, to the borrower** — on the case with its value date,
   method and the balance after it; once a notice is sent, the date to pay by,
   the reminders already sent, and that nothing can be taken before that date
+- 🚧 **Past due, before a notice** — the reminders already sent with their
+  days, the next weekly one by its date, and that a written notice naming a
+  date to pay by may follow; no day is named for it, because a person decides
+  whether to send one
 - ❓ Finance — the FPS id and the bank account; recommended: the lender's own,
   one set per brand beside its legal identity, refused in production while
   unset — [Compliance and Readiness](/p/grade10-site/vault/compliance-and-readiness#before-the-first-production-case)
 - ❓ Product — what a borrower reads in production while those two are unset;
-  recommended: the counter line alone, no account fields, no money message
+  recommended: the counter line alone — pay by card or cash at the counter,
+  the transfer details follow by email — no account fields, no money message
 - **What the collector is mailed** — [Messages](/p/grade10-site/vault/collector-pages#messages)
 
 ## Specs and journeys
