@@ -263,6 +263,12 @@ test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on t
   assert.match(conduct, /about three questions/i);
   assert.match(conduct, /whether to do it now/i);
   assert.match(conduct, /never applied as a default/i);
+  assert.match(conduct, /none\s+trivial/i);
+  assert.match(conduct, /change most what is built/i);
+  assert.match(
+    conduct,
+    /workflow-round\/SKILL\.md#questions-held-or-decided-by-the-round/,
+  );
   assert.match(conduct, /decided by the round/i);
   assert.match(conduct, /asked that one question alone/i);
   assert.match(conduct, /each with the option it\s+took/i);
@@ -277,11 +283,7 @@ test("shared-planning-agent-rounds-SC-91 - the interview's shape lives once on t
       /round-summary\.md#interview/,
       `${path} links the interview`,
     );
-    assert.doesNotMatch(
-      text,
-      /about three questions/i,
-      `${path} restates the count`,
-    );
+    assert.doesNotMatch(text, /three questions/i, `${path} restates the count`);
   }
 });
 

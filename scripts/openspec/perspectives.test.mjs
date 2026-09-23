@@ -156,15 +156,6 @@ const CODE_AND_MIGRATION = [
 ].join("\n");
 
 /** A task group's diff that lands prose alone: a manual page and a suite. */
-/** A catalog's words: what a reader sees, in a file that is not markdown. */
-const CATALOG_ONLY = [
-  "diff --git a/packages/i18n/messages/shared/en/product.json b/packages/i18n/messages/shared/en/product.json",
-  "--- a/packages/i18n/messages/shared/en/product.json",
-  "+++ b/packages/i18n/messages/shared/en/product.json",
-  "@@ -19,3 +19,3 @@",
-  '+  "youMayAlsoLike": "More like this",',
-].join("\n");
-
 const PROSE_GROUP = [
   `diff --git a/${PAGE} b/${PAGE}`,
   `--- a/${PAGE}`,
@@ -176,6 +167,15 @@ const PROSE_GROUP = [
   "+++ b/openspec/specs/shared/planning/agent-rounds/feature-tcs.md",
   "@@ -8,3 +8,4 @@",
   "+* The reply quotes the row and the sentence it would put on the page.",
+].join("\n");
+
+/** A catalog's words: what a reader sees, in a file that is not markdown. */
+const CATALOG_ONLY = [
+  "diff --git a/packages/i18n/messages/shared/en/product.json b/packages/i18n/messages/shared/en/product.json",
+  "--- a/packages/i18n/messages/shared/en/product.json",
+  "+++ b/packages/i18n/messages/shared/en/product.json",
+  "@@ -19,3 +19,3 @@",
+  '+  "youMayAlsoLike": "More like this",',
 ].join("\n");
 
 const EXPORT_AND_MIGRATION = [
@@ -494,7 +494,7 @@ test("shared-planning-agent-rounds-SC-92, shared-planning-agent-rounds-SC-93 - a
   ]);
 });
 
-test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file that is not markdown, and no markdown line", () => {
+test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file that is neither markdown nor a message catalog, and no markdown line", () => {
   const code = classifyDiff(CODE_AND_MIGRATION, REAL_SCHEMA, "tasks");
   assert.ok(code.has("code"));
   const prose = classifyDiff(PROSE_GROUP, REAL_SCHEMA, "tasks");
@@ -507,6 +507,9 @@ test("shared-planning-agent-rounds-SC-92 - `code` is a changed line in any file 
   );
   assert.ok(yaml.has("code"));
   assert.ok(!yaml.has("copy"));
+  const catalog = classifyDiff(CATALOG_ONLY, REAL_SCHEMA, "tasks");
+  assert.ok(catalog.has("copy"));
+  assert.ok(!catalog.has("code"));
 });
 
 // Decides shared-planning-agent-rounds-US12-TC9-1.
@@ -519,9 +522,6 @@ test("shared-planning-agent-rounds-SC-92 - a group landing a message catalog alo
     diffOf(root, CATALOG_ONLY),
   ]);
   assert.deepEqual(names(printed.readers), ["qa", "reader", "simpler"]);
-  const found = classifyDiff(CATALOG_ONLY, REAL_SCHEMA, "tasks");
-  assert.ok(found.has("copy"));
-  assert.ok(!found.has("code"));
 });
 
 test("the change may be named by the flag rather than the first argument", () => {
