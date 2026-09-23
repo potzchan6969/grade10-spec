@@ -644,7 +644,9 @@ Stage (b).
       (`grade10-site-grading-dropoff-booking-SC-22`,
       `grade10-site-grading-dropoff-booking-SC-27`)
 - [ ] 12.8 Take the drop-off with the submission on `cancel`, the visit
-      cancelled before the status moves
+      cancelled before the status moves, replacing the `VISIT_BOOKED` guard
+      group 11 put on `cancel`, and decide what a joiner's cancel does to the
+      owner's visit, since a joiner holds no booking of its own
       (`grade10-site-grading-submission-lifecycle-SC-47`)
 - [ ] 12.9 Serve `GET /api/submissions/:id/visit.ics` from `buildCalendarFile`
       over the owner's booking, and attach the same file to the five drop-off
@@ -736,7 +738,10 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       `grade10-site-grading-dropoff-booking-SC-24`)
 - [ ] 13.7 Write `withdrawCard`, refunding the paid line and releasing the card
       while its batch is open and taking the act away once it has closed, the
-      last withdrawal cancelling the submission
+      last withdrawal cancelling the submission through an eleventh move,
+      `withdrawLast` (`checked_in → cancelled`), so `cancel` stays
+      `planned, booked` and the collector is never offered a cancel once the
+      cards are in
       (`grade10-admin-grading-counter-SC-54`,
       `grade10-admin-grading-counter-SC-55`,
       `grade10-site-grading-submission-lifecycle-SC-15`,
@@ -1327,7 +1332,10 @@ fixtures through `external/grade10-spec`. Stage (c).
 
 ## 23. Retention and erasure (grade10)
 
-Stage (c).
+Stage (c). From group 11 a collector's row holds an email, a name, a phone
+and a named collector, and `plan_attempts` holds the address each plan was
+asked under; this group erases them and moves grading into `CONSUMERS`, and
+the product does not open to collectors in production before it lands.
 
 - [ ] 23.1 Cover erasure in the portable suite `src/testing/suites/erasure.ts`
       against the committed migrations: the three holds by name, the ask
