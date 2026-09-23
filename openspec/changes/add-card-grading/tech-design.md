@@ -177,8 +177,14 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   `packages/grading/contracts/src/standing.ts` over a declared
   `SubmissionStandingInput` the list row also carries, tested as a table — as
   `caseStanding` is
-- A second hand-back on a submission whose card was held keeps `ready` and
-  seals a second receipt; `collect` runs when no card is still `held`
+- **Each hand-back closes on its own.** `collect` on a sealed receipt stamps
+  every card the receipt printed, bar one still `held`, with its packet
+  (`submission_cards.handed_back_packet_id`, `handed_back_at`) and writes
+  `handed_back { packetId }`. It moves `ready → collected` only once no card
+  is left unstamped, writing `collected { packetId }` instead. It accepts only
+  the newest sealed hand-back receipt, and a retry on a packet its stamps
+  already name answers what ran. The lock comes before every read, the
+  retry's included
 - Alternatives rejected: a status per exception — Q3's own rejection, the
   card's `outcome` is the closed set; deriving the three from the batch — a
   card withdrawn or held would need a rule per join, and the queue's cut
@@ -264,6 +270,14 @@ this is how the paid order reaches the submission.
 - The upcharge, storage and refund lines are the same read; `recordRefund`
   names the card and the line it refunds. `handIn` is guarded on every card
   carrying a paid fee line
+- **`recordSettlement`** takes what is due at `ready` the way
+  `recordFeePaid` takes the fee. The order is read before the transaction
+  and claimed in `pos_orders`, so a repeat writes nothing. Under the lock,
+  its `pos_upcharge_variant` and `pos_storage_variant` lines are matched one
+  to a card, in `position` order, against each card still owing that kind.
+  A line above its card's due refuses `LINE_ABOVE_DUE`, so settled never
+  passes accrued on a card. It writes a `paid` event and voids the open
+  hand-back receipt
 - Alternatives rejected: grading as an `OrderEventConsumer` of the store's
   queue — the queue carries no submission reference, so grading could only
   park unmatched lines for staff to match; a POS extension panel stamping the
@@ -308,6 +322,21 @@ this is how the paid order reaches the submission.
   `legal/printed.ts` lifted to `packages/app-env/src/printed.ts` by this
   change — throws by name, so no map of what each letter prints is kept in
   step by hand
+- **The withdrawal receipt** — `withdrawalReceipt.ts`, issued, printing the
+  card, the fee refunded and the day under clauses of its own. The
+  withdrawal runs in `handInWithReceipt`'s shape: the entity, the refunds and
+  the receipt are read, rendered and stored first, then one transaction
+  locks the batch and the submission, writes the outcome with the receipt's
+  key and digest, the refunds, the event and the letter, and refuses where
+  the printed data it rebuilds differs. Its key is claimed by the documents
+  area's sweep, and it is listed and answered by digest as `issued`
+- **A copy is carried per document** — by the event of the letter that
+  attached it: `checked_in` for the agreement and the intake receipt,
+  `handed_back` or `collected` naming the receipt's packet, and
+  `card_withdrawn` naming the card
+- **A second receipt prints only its own cards** — the cards no receipt has
+  stamped, the money recorded since the first hand-back's figure was fixed,
+  and one line naming the first receipt by its day and fingerprint
 - Alternatives rejected: the vault worker hosting grading's ceremony — the
   seal on the wrong chain; `kyc: null` as the option — a null port and a
   missing binding look the same; the option on `DocSignDeps` — a host-wide
@@ -371,6 +400,15 @@ this is how the paid order reaches the submission.
   `handIn` takes `safe_declared_cap` `FOR UPDATE` before it counts: the batch
   lock is not the cap's scope, advisory locks are out over Hyperdrive, so the
   row is the serializer
+- **Storage and the upcharge are per card.** Each card accrues storage from
+  the storage day until its hand-back's figure was fixed, while the shop
+  holds it or it waits to go into a vault case. Each card's line is settled
+  against that card's own lines and waivers, and reports what was applied
+  and a `creditMinor` apart, so accrued less settled less waived is its due
+- **The mint fixes what is due** — `mintHandBack` writes
+  `hand_back_prepared { packetId, dueMinor, cards }`, a submission event, and
+  `collect` judges what is due as of that instant against the cards the
+  receipt printed
 - Alternatives rejected: storage accrued by a sweep as a line per month — a
   row per month per card for a figure one fold answers; live settings on a
   booked submission — Q43's rejection; freezing `dueNow` at the till — it
@@ -620,7 +658,9 @@ index, not a stamp column.
 | `grade`, `cert` | `text`; partial unique `(grader, cert)` | position is derived from the submission's status and these |
 | `grader_code`, `outcome_note`, `condition_note` | `text` | the grader's; the one note both `refuseCard` and `recordException` write; intake condition |
 | `moved_to_level`, `held_until` | `text`; `date` | with `moved_up`; with `held` |
-| `vault_case_id` | `text` | with `vaulted` |
+| `vault_case_reference` | `text`, CHECK the reference's shape | with `vaulted`; the case's six characters as typed. Grading holds no vault binding, so nothing confirms the case exists |
+| `handed_back_packet_id`, `handed_back_at` | `text`; `timestamptz`; both or neither | the receipt that closed the card, and the instant its figure was fixed |
+| `withdrawal_receipt_key`, `withdrawal_receipt_sha256` | `text`; unique digest; both or neither | the withdrawal receipt, only on `withdrawn` |
 
 `card_photos`: `id`, `card_id FK`, `kind CHECK (intake_front, intake_back,
 handback, damaged)`, `object_key UNIQUE`, `taken_by`, `at`; the
@@ -716,8 +756,12 @@ events, distinct by kind and instant).
 | `scanCard(tx, args)` | batch, cert, intake id | the card | `CERT_HELD_ELSEWHERE` read under the lock before the insert; sets the exception, grade, cert and `moved_to_level` |
 | `finishReceiving(db, mail, args)` | batch | `ready` for every submission | refuses `MANIFEST_UNRESOLVED`; each code drawn in its own savepoint; one transaction; letters after |
 | `recordPayout(db, args)` | card, route, reference, approver | the record | refuses `SAME_APPROVER`, `PAYOUT_EXISTS` on the netted read under the lock; the refund line beside it |
-| `mintHandBack(db, deps, args)` | submission | the packet | pins `handback_due` into the packet's details at the mint; refuses `BALANCE_DUE`, `ITEM_UNTICKED` |
-| `collect(db, args)` | the completed packet id | `collected` | the counter's act after the seal, as `releaseCase` is: under the submission lock, on a completed hand-back packet covering the receipt template, no open packet, `dueNow === 0` at the pinned figure, no card `held`; idempotent on the packet id |
+| `recordSettlement(db, store, args)` | submission, order name | the lines | at `ready`; the order read outside; one transaction, the order claimed first, a line above a card's due refused `LINE_ABOVE_DUE` |
+| `tickItem(db, args)` | card, a photograph on a slab | the tick | under the lock; one photograph for a slab and none for a raw card; refuses `BALANCE_DUE`, `CARD_HELD`, `ITEM_NOT_TICKABLE`; writes the photograph, `item_ticked` and the audit row |
+| `mintHandBack(db, deps, args)` | submission, the pickup code or the glance, the ID glance above the threshold | the packet | the code checked under the lock, a wrong one recorded in its own transaction; writes `hand_back_prepared`; refuses `WRONG_PICKUP_CODE`, `ID_GLANCE_REQUIRED`, `BALANCE_DUE` with the unticked positions, `ITEM_UNTICKED`, `PAYOUT_OWED` |
+| `collect(db, args)` | the completed packet id | `handed_back`, or `collected` once no card is left | the lock first; the newest sealed hand-back receipt only; no open packet; nothing due as of the mint; the cards as the receipt printed them; idempotent on the packet id |
+| `vaultCard(db, args)` | card, case reference, the pickup code or the glance | the card | a slab handed back and not yet stamped; refuses `BALANCE_DUE`; voids the open receipt |
+| `withdrawCard(db, deps, args)` | card | the card, its refunds and its receipt | rendered first; one transaction, the batch then the submission locked |
 | `recordNoticePosted(db, mail, args)` | submission, date, tracking | the notice | refuses before `notice_day`; letter after |
 | `updateSetting(db, args)` | key, value, approver | the row | money keys refuse `SAME_APPROVER`; audit subject `settings` |
 | `eraseUser(db, deps, userId)` | account | holds, or what was purged | the vault's shape without the identity release |
@@ -748,7 +792,7 @@ receipt, the sealed agreement and the re-minted access link.
 | Surface | Change |
 | --- | --- |
 | grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed) |
-| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,detail,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,shipBatch,recordBatchStage,reestimateBatch,enterManifest,enterInvoice,scanCard,recordException,finishReceiving,mintHandBack,collect,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,resendNotification,documents,signingLink}`, `erasure.erase`, `audit.*` |
+| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,detail,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,shipBatch,recordBatchStage,reestimateBatch,enterManifest,enterInvoice,scanCard,recordException,finishReceiving,recordSettlement,tickItem,mintHandBack,collect,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,resendNotification,documents,signingLink}`, `erasure.erase`, `audit.*` |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
 | `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.{matchCards,referenceSales}`; `GradingInventoryService` |
