@@ -484,6 +484,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Collected, one card still out | the record with the card held and the second-hand-back line | `grade10-site-grading-submission-lifecycle-SC-46` |
 | Acts by status | only the status's acts on the page; nothing from Sent to Back | `grade10-site-grading-submission-lifecycle-SC-50` |
 | Erasure refused | Your data: the ask refused by name while the submission is live | `grade10-site-vault-retention-and-erasure-SC-33` |
+| Grading holds unanswered | Your data: the grading block that could not be answered is named, logged by name, and the ask stays held back | `grade10-site-vault-retention-and-erasure-SC-15` |
 | Error | the message in the error tone; the page reads again | **Out of suite:** the view's colocated test |
 
 ### Cards on the submission page

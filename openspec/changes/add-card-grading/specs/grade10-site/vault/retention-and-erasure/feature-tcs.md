@@ -317,7 +317,7 @@ Runs once per row of **Test data**.
 
 * The ask is withheld, in the collector's own words: cards of theirs are with the grader.
 * The words name the cards, never a status word and never an internal hold.
-* No ask can be filed from the block, and no request stands against the account afterwards.
+* The block offers no control to file the ask, and the page files nothing while it reads this way.
 
 ### grade10-site-vault-retention-and-erasure-US4-TC9-1: Owed mail goes with the erasure and the history keeps its entries
 

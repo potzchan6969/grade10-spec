@@ -470,15 +470,23 @@ otherwise falls back to `DEFAULT_LIMIT`.
   per brand and Legal's. The review answers `agreements` (the packets, the
   intake receipt), `photos` and `case_records` (the row, the cards, the
   messages), each from the terminal event
-- `erasure/eraseUser.ts`: holds `live_submission` (`booked` through `ready`),
-  `upcharge_unsettled` (`dueNow > 0` at `ready`) and `ready_uncollected`; a
+- `erasure/eraseUser.ts`: the subject is `{userId, email}`, the address
+  resolved from the directory when the console sends none, refused by name
+  when the directory has no row for the id — never erased by id alone.
+  Holds `live_submission` (`booked` through `ready`), `money_due` (an
+  upcharge, storage, or both, at `ready`) and `ready_uncollected`; a
   `collected` submission with a sealed packet keeps the packets and the
   photographs under `signed_documents` and purges contact, address, the
-  named collector and the actor ids; one that never signed is purged whole,
-  `eraseCeremonyPersonalData` included. `erasure.erase` and `erasure.holds`
-  are the vault's router shape; `appointment:grading` joins the appointment
-  row's `ids` in `check-erasure-consumers.mjs`, the console's checklist and
-  its `ERASURE_PRODUCTS`, and the pin in
+  named collector and the actor ids; one that never signed and past a
+  purgeable status (`planned`, `cancelled`, `expired`) is purged whole,
+  `eraseCeremonyPersonalData` included; any other unsealed submission is
+  held under `custody_closed` instead, never purged. `email` is nullable,
+  guarded by `ck_grading_submissions_email_erased` (null only once
+  `erased_at` is set); the access link is revoked in the same write
+  (`accessHash: erased:<id>`). `erasure.erase` and `erasure.holds` are the
+  vault's router shape; `appointment:grading` joins the appointment row's
+  `ids` in `check-erasure-consumers.mjs`, the console's checklist and its
+  `ERASURE_PRODUCTS`, and the pin in
   `packages/appointment/contracts/test/schemas.test.ts` moves with them
 - **The append-only guards name what erasure may touch.** `appendOnlySql`
   refuses every UPDATE unless the columns are listed, so
@@ -764,7 +772,7 @@ events, distinct by kind and instant).
 | `withdrawCard(db, deps, args)` | card | the card, its refunds and its receipt | rendered first; one transaction, the batch then the submission locked |
 | `recordNoticePosted(db, mail, args)` | submission, date, tracking | the notice | refuses before `notice_day`; letter after |
 | `updateSetting(db, args)` | key, value, approver | the row | money keys refuse `SAME_APPROVER`; audit subject `settings` |
-| `eraseUser(db, deps, userId)` | account | holds, or what was purged | the vault's shape without the identity release |
+| `eraseUser(db, clock, subject, timeZone)` | `{userId, email}` | holds, or what was purged or held | each submission decided under its own lock; the vault's shape without the identity release |
 
 Every guard reads under the submission's lock inside the transition's
 transaction; a binding is called before any transaction opens, and its

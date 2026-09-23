@@ -1450,10 +1450,13 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
       `grade10-site-vault-retention-and-erasure-SC-35`,
       `grade10-site-vault-retention-and-erasure-SC-36`,
       `grade10-site-vault-retention-and-erasure-SC-37`)
-- [ ] 23.2 Write `erasure/eraseUser.ts` with the holds `live_submission` from
-      `booked` through `ready`, `upcharge_unsettled` where `dueNow > 0` at
-      `ready`, and `ready_uncollected`, each refused by name and leaving the
-      rest of the account alone; a submission nobody booked refuses nothing
+- [ ] 23.2 Write `erasure/eraseUser.ts` with the subject `{userId, email}`,
+      the address resolved from the directory when the console sends none
+      and refused by name where the directory has no row for the id; the
+      holds `live_submission` from `booked` through `ready`, `money_due`
+      where `dueNow > 0` at `ready`, and `ready_uncollected`, each refused
+      by name and leaving the rest of the account alone; a submission
+      nobody booked refuses nothing
       (`grade10-site-vault-retention-and-erasure-SC-31`,
       `grade10-site-vault-retention-and-erasure-SC-32`,
       `grade10-site-vault-retention-and-erasure-SC-38`)
