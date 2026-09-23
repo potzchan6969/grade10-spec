@@ -883,6 +883,9 @@ something the shop would refuse.
   the submission's status would refuse.
 - **An act on a status that has moved** - an act asked for on a submission that
   has since moved SHALL be refused by name.
+- **The counter owns the list** - from the first card the counter checks or
+  refuses, the page SHALL offer no edit of the list, and an edit or a paste
+  sent onto it SHALL be refused by name before anything is written.
 
 #### Scenario: grade10-site-grading-submission-lifecycle-SC-50 - Each status offers its own acts and no others
 **Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector reads one page and sees only what they can do now
@@ -898,3 +901,14 @@ something the shop would refuse.
 - **GIVEN** a collector reading a handed-in submission whose batch has since closed
 - **WHEN** they ask to withdraw a card
 - **THEN** it is refused by name and no card is withdrawn
+
+#### Scenario: grade10-site-grading-submission-lifecycle-SC-59 - The counter owns the list from the first card it checks or refuses
+**Serves:** grade10-site-grading-submission-lifecycle-US-11 - the collector at the counter is never offered an edit the shop would refuse
+
+- **GIVEN** a booked submission one of whose cards the counter has checked, or
+  refused before checking any
+- **WHEN** the collector opens the submission page, or sends an edit or a
+  paste of the list from a page read before
+- **THEN** the page offers no edit of the list
+- **AND** the edit and the paste are refused by name, and the cards, their
+  photographs and the refusal's words stay as the counter wrote them

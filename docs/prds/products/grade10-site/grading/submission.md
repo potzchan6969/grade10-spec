@@ -147,7 +147,7 @@ it changes; the rest of the cards carry on:
 | `ready` | name a collector, change or remove them; collect, or vault a slab at the counter |
 | `collected` | read the record; vault it, sell it at a Grade10 auction, ask for erasure |
 
-- 🚧 **The counter's list** — no edit from the first card the counter checks
+- 🚧 **The counter's list** — no edit once the counter checks or refuses a card
 
 <!-- story: the submission page at ready, with a collector named -->
 

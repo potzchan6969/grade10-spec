@@ -559,11 +559,12 @@ Stage (b).
       `grade10-admin-grading-counter-SC-74`)
 - [x] 11.8 Add
       `submissions.{update,list,detail,cancel,nameCollector,removeCollector}`,
-      cancel refused once the cards are in, `update` refused as
-      `LIST_AT_COUNTER` before any write once the counter has checked a card
-      and the edit no longer offered from then, and every act carrying the
-      detail's `asOf` so a submission that moved refuses by name
-      (`grade10-site-grading-submission-lifecycle-SC-48`)
+      cancel refused once the cards are in, `update` and the paste refused as
+      `LIST_AT_COUNTER` before any write once the counter checks or refuses a
+      card and the edit no longer offered from then, and every act carrying
+      the detail's `asOf` so a submission that moved refuses by name
+      (`grade10-site-grading-submission-lifecycle-SC-48`,
+      `grade10-site-grading-submission-lifecycle-SC-59`)
 - [x] 11.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 

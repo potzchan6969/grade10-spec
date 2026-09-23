@@ -1346,6 +1346,48 @@ Runs once per row of **Test data**.
 
 ---
 
+### grade10-site-grading-submission-lifecycle-US11-TC2-1: The edit of the list goes once the counter checks or refuses a card
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-grading-submission-lifecycle-US-11
+
+**Pre-conditions:**
+
+* The collector has <grade10 grading submission page url> open in a second tab for a submission of two cards at Booked, loaded before the counter acted.
+* At the counter, staff have acted on the first card as in the row, and on nothing else.
+
+**Test data:**
+
+| The counter | On the first card |
+| --- | --- |
+| Checked it | the condition note and both intake photographs |
+| Refused it | the Refused at the counter badge with the reason as staff typed it |
+
+**Steps:**
+
+1. Load the submission page in the first tab.
+2. In the second tab, change a card's name and save the list.
+
+**Expected Results:**
+
+* Step 1: the page offers no edit of the list; moving or cancelling the drop-off and cancelling the submission are still offered.
+* Step 2: the save is refused with a message that the list is at the counter.
+* After step 2, reloading the page shows both cards as before, and the first card as in the row.
+
+---
+
 ## Reconciliation
 
 **Run:** the blind pass read the bundle built for `grade10-site/grading/submission-lifecycle` under `add-card-grading` - this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the linked pages under `docs/prds/products/grade10-site/grading/`. Denied: every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. It wrote 38 cases over US1-US11 and four raised questions; the scenario pass wrote SC-01 to SC-51 over eighteen requirements. The two are joined here on anchors.
@@ -1368,6 +1410,7 @@ Runs once per row of **Test data**.
 | `US10-TC1-1`'s rail after a cancel from Booked | Corrected | The case ended the rail at Planned for both rows; `grade10-site-grading-submission-lifecycle-SC-06` leaves it at the stage the submission ended on |
 | `US10-TC3-1` backing out of the cancel confirmation | No scenario: the dialog's own | `grade10-site-grading-submission-lifecycle-SC-47` states the cancel; Go back is the view's branch, and the case stays as its guard |
 | The last card refused at the counter | Folded in | `grade10-site-grading-submission-lifecycle-SC-58` - the counter cancels the submission and tells the collector there, and no message sends; landed as `decisions.md`'s last-card-refused row, which the counter's hand wrote from its own side as `grade10-admin-grading-counter-SC-89`, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md`, and the `ui-design.md` Flags ❓ closed. Case `US10-TC4-1` added |
+| The counter owns the list from the first card it checks or refuses | Folded in | `grade10-site-grading-submission-lifecycle-SC-59` - an edit sent after the counter checked a card deleted cards its photographs hang off; the director ruled the list the counter's from its first check or refusal, written as a 🚧 line on `docs/prds/products/grade10-site/grading/submission.md` and in task 11.8. Case `US11-TC2-1` added |
 | `US11-TC1-1`'s acts for a Collected submission | Corrected | The case offered Vault it and erasure alone; the acts table also offers reading the record and consigning to an auction |
 | `grade10-site-grading-submission-lifecycle-SC-01` a move the status does not name is refused | **Out of suite:** `grade10-admin/grading/counter`'s suite | Its anchor is the feature set group The statuses: no journey of this capability walks a move, and every move is made at the counter |
 
