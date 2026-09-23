@@ -52,9 +52,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
 
 - 🚧 **No hand-in without a paid line** — a sealed agreement with no paid line leaves the submission booked, the seal
   standing and the cards with the collector; the till is run again or another drop-off is booked
-- 🚧 **Refusing a card** — three reasons, the grader will not take it, declared above the level, or the collector
-  withdrew it, with a line in the collector's words that shows on the submission page and the receipt exactly as
-  typed; the card stays in their hands, its fee is never charged, and a line already paid is refunded at the till
+- 🚧 **Refusing a card** — the grader will not take it, it is above the level, or the collector withdrew it, with a
+  line in their words on the page and the receipt; the card stays with them and a paid line is refunded at the till
 - 🚧 **The safe is full** — a hand-in that would carry the declared value in the safe past its cap is refused: the
   counter tells the collector and books the next drop-off; ready slabs count toward the safe
 - ❓ **Grading lines earn no points** — the fee, an upcharge, a storage fee and a refund ride the loyalty programme's
@@ -124,13 +123,14 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 
 ## Written Notice
 
-- 🚧 **Notice due** — from day 180 the badge asks for it: staff post it by registered post to the address on the
-  agreement and record the posting date and tracking; the email goes the same day and the 30 days run from the posting
-- 🚧 **After the 30 days** — nothing more in the first release: the cards stay in the safe, ready, and storage accrues
+- 🚧 **Notice due** — from day 180, posted registered to the agreement's address with its date and tracking; the email
+  goes the same day, the 30 days run from the posting, and after them the cards stay ready as storage accrues
 
 ## Settings
 
-🚧 **Every default is a setting the console reads** — never a constant; each row stands until its owner confirms it:
+🚧 **Every default is a setting the console reads** — never a constant, and each row stands until its owner confirms
+it; the fee sheet is pinned to a submission at booking and every figure the agreement prints at signing, so a change
+reaches only submissions not yet booked:
 
 | Setting | Default | Confirms |
 | --- | --- | --- |
@@ -148,9 +148,6 @@ A slab goes straight into a vault case: the collector opens the case on their ph
 | the fee sheet | ❓ one setting per grader and level: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
 | the grader's stages | ❓ each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
 | the diary services | ❓ the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
-
-- 🚧 **Pinned** — the fee sheet is pinned to a submission at booking and every figure the agreement prints at
-  signing; a change reaches only submissions not yet booked
 
 ## Grants
 
