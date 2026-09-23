@@ -1,27 +1,31 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@grade10/design-system/components/display/card";
 import { Divider } from "@grade10/design-system/components/display/divider";
+import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  MetaRow,
+  OrderValueTable,
+  PartiesSection,
+  PdfPageFooter,
+  PdfSheet,
+  SummaryRow,
+} from "./winner-order-pdf.story-shared";
 
 /**
  * Illustrative sketch of the Invoice PDF's content — not a `packages/ui`
  * block. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
  * (`PLACEHOLDER_INVOICE_PDF`); nothing renders the real document anywhere in
  * this repository. This composes only `@grade10/design-system` primitives to
- * stand in for that gap during design review. A committed block needs its
- * own OpenSpec change first — see
- * `docs/references/auction-invoice-and-receipt-contents.md` and
- * `openspec/specs/grade10-site/auction/winner-order/spec.md`. Figures trace
- * to `winner-order-SC-62` (card fee gross-up) and `SC-110` (bank transfer
- * fee); the bank-rails account values are TBC per the spec itself.
+ * stand in for that gap during design review, laid out as a flat document
+ * page rather than a bordered card. A committed block needs its own OpenSpec
+ * change first — see `docs/references/auction-invoice-and-receipt-contents.md`
+ * and `openspec/specs/grade10-site/auction/winner-order/spec.md`. Figures
+ * trace to `winner-order-SC-62` (card fee gross-up) and `SC-110` (bank
+ * transfer fee); the bank-rails account values are TBC per the spec itself.
  */
 function InvoicePdfPreview({
   method = "card",
@@ -34,235 +38,121 @@ function InvoicePdfPreview({
   const total = method === "card" ? "3,232.25" : "3,170.00";
 
   return (
-    <VStack className="mx-auto w-full max-w-xl py-10" gap="md" hAlign="stretch">
-      <Card>
-        <CardHeader className="border-b border-border">
-          <HStack hAlign="space-between" vAlign="start" wrap>
-            <VStack gap="xs" hAlign="start">
-              <Text as="h2" size="lg" weight="bold">
-                Grade10
-              </Text>
-              <Text size="xs" tone="secondary">
-                Fine Art &amp; Collectibles Auction
-              </Text>
-            </VStack>
-            <VStack className="sm:items-end" gap="xs" hAlign="start">
-              <Text
-                className="uppercase tracking-wide"
-                size="xs"
-                tone="secondary"
-              >
-                Invoice
-              </Text>
-              <Text size="lg" weight="bold">
-                INV-202609-LK7P2Q-01
-              </Text>
-              {replaced ? <Badge variant="error">Replaced</Badge> : null}
-            </VStack>
-          </HStack>
-        </CardHeader>
-
-        <CardContent>
-          <VStack gap="md" hAlign="stretch">
-            {replaced ? (
-              <Text size="sm" tone="error">
-                Replaced — superseded by INV-202610-LK7P2Q-02. Kept for the
-                record only; it carries no invoice status.
-              </Text>
-            ) : null}
-
-            <div className="grid gap-3 sm:grid-cols-3">
-              <DetailFact
-                label="Payment method"
-                value={method === "card" ? "Card" : "Bank transfer"}
-              />
-              <DetailFact label="Sent" value="15 Sep 2026 · 11:04 HKT" />
-              <DetailFact
-                label="Payment deadline"
-                value="22 Sep 2026 · 11:04 HKT"
-              />
-            </div>
-
-            <Text size="sm">
-              Lot 14 — <Text weight="medium">Qianlong-Mark Famille Rose</Text>{" "}
-              Moon Flask, Qing Dynasty, circa 1750 · Grade10 Autumn Fine Art
-              Auction
-            </Text>
-
-            <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-2">
-              <AddressBlock heading="Bill to" />
-              <AddressBlock heading="Ship to" />
-            </div>
-
-            <VStack
-              className="border-t border-border pt-4"
-              gap="sm"
-              hAlign="stretch"
-            >
-              <LedgerRow label="Winning Bid" value="2,500.00" />
-              <LedgerRow label="Buyer's Premium" value="500.00" />
-              <LedgerRow label="Shipping & Handling" value="80.00" />
-              <LedgerRow label="Insurance" value="40.00" />
-              <Divider />
-              <LedgerRow label="Subtotal" value="3,120.00" weight="bold" />
-              <LedgerRow
-                label="Payment Processing Fee"
-                note={
-                  method === "card"
-                    ? "Card gross-up at send — provider fee 235 + 3.4% of the charge"
-                    : "Bank transfer fee entered by the operator at send"
-                }
-                value={fee}
-              />
-              <Divider />
-              <LedgerRow
-                label="Order Total"
-                size="lg"
-                value={total}
-                weight="bold"
-              />
-            </VStack>
-
-            {method === "bank" ? <BankRailsPanel /> : null}
-
-            <Text size="xs" tone="secondary">
-              Amounts are integer minor units of HKD, rounded to the cent. No
-              line above is an estimate.
-            </Text>
-          </VStack>
-        </CardContent>
-      </Card>
-    </VStack>
-  );
-}
-
-function DetailFact({ label, value }: { label: string; value: string }) {
-  return (
-    <VStack gap="xs" hAlign="start">
-      <Text className="uppercase tracking-wide" size="xs" tone="secondary">
-        {label}
-      </Text>
-      <Text size="sm" weight="medium">
-        {value}
-      </Text>
-    </VStack>
-  );
-}
-
-function AddressBlock({ heading }: { heading: string }) {
-  return (
-    <VStack gap="xs" hAlign="start">
-      <Text className="uppercase tracking-wide" size="xs" tone="secondary">
-        {heading}
-      </Text>
-      <Text size="sm">Alexandra Tran</Text>
-      <Text size="sm" tone="secondary">
-        Vermilion Bay Holdings Ltd.
-      </Text>
-      <Text size="sm" tone="secondary">
-        +852 9123 4567
-      </Text>
-      <Text size="sm" tone="secondary">
-        21/F, One Harbour Square, 181 Java Road
-      </Text>
-      <Text size="sm" tone="secondary">
-        North Point, Hong Kong SAR
-      </Text>
-    </VStack>
-  );
-}
-
-function LedgerRow({
-  label,
-  value,
-  note,
-  size = "sm",
-  weight = "medium",
-}: {
-  label: string;
-  value: string;
-  note?: string;
-  size?: "sm" | "lg";
-  weight?: "medium" | "bold";
-}) {
-  return (
-    <VStack gap="none" hAlign="stretch">
-      <HStack
-        className="w-full"
-        gap="md"
-        hAlign="space-between"
-        vAlign="baseline"
-      >
-        <Text size={size} tone="secondary">
-          {label}
-        </Text>
-        <Text size={size} weight={weight}>
-          {value}
-        </Text>
+    <PdfSheet>
+      <HStack hAlign="space-between" vAlign="start">
+        <VStack gap="xs" hAlign="start">
+          <Text as="h2" size="xl" weight="bold">
+            Invoice
+          </Text>
+          {replaced ? <Badge variant="error">Replaced</Badge> : null}
+        </VStack>
+        <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
       </HStack>
-      {note ? (
-        <Text size="xs" tone="secondary">
-          {note}
+
+      {replaced ? (
+        <Text size="sm" tone="error">
+          Replaced — superseded by INV-202610-LK7P2Q-02. Kept for the record
+          only; it carries no invoice status.
         </Text>
       ) : null}
-    </VStack>
+
+      <VStack className="max-w-sm" gap="xs" hAlign="stretch">
+        <MetaRow label="Invoice number" value="INV-202609-LK7P2Q-01" />
+        <MetaRow
+          label="Payment method"
+          value={method === "card" ? "Card" : "Bank transfer"}
+        />
+        <MetaRow label="Sent" value="September 15, 2026 · 11:04 HKT" />
+        <MetaRow
+          label="Payment deadline"
+          value="September 22, 2026 · 23:59 HKT"
+        />
+      </VStack>
+
+      <PartiesSection />
+
+      <Text as="h3" size="xl" weight="bold" tone="primary">
+        2025 POKEMON JAPANESE M-P PROMO #020 PIKACHU McDONALD'S
+      </Text>
+
+      <Text as="h3" size="xl" weight="bold">
+        HK${total} due September 22, 2026
+      </Text>
+
+      <OrderValueTable />
+
+      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
+        <SummaryRow label="Subtotal" value="3,120.00" />
+        <SummaryRow
+          label="Payment Processing Fee"
+          note={
+            method === "card"
+              ? "Card gross-up at send — provider fee 235 + 3.4% of the charge"
+              : "Bank transfer fee entered by the operator at send"
+          }
+          value={fee}
+        />
+        <Divider />
+        <SummaryRow label="Order Total" size="lg" value={total} weight="bold" />
+      </VStack>
+
+      {method === "bank" ? <BankRailsSection /> : null}
+
+      <PdfPageFooter note="Amounts are integer minor units of HKD, rounded to the cent. No line above is an estimate." />
+    </PdfSheet>
   );
 }
 
-function BankRailsPanel() {
+function BankRailsSection() {
   return (
-    <Card>
-      <CardContent>
-        <VStack gap="sm" hAlign="stretch">
-          <Text className="uppercase tracking-wide" size="xs" tone="secondary">
-            Three ways to pay
-          </Text>
-          <div className="grid gap-4 sm:grid-cols-3">
-            <BankWay
-              heading="SWIFT"
-              lines={[
-                "Beneficiary: Grade10 HK Ltd.",
-                "SWIFT/BIC: TBC",
-                "Account/IBAN: TBC",
-              ]}
-            />
-            <BankWay
-              heading="FPS"
-              lines={["FPS ID: TBC", "Beneficiary: Grade10 HK Ltd."]}
-            />
-            <BankWay
-              heading="HK local transfer"
-              lines={[
-                "Bank & code: TBC",
-                "Beneficiary: Grade10 HK Ltd.",
-                "Account no.: TBC",
-              ]}
-            />
-          </div>
-          <Divider />
-          <HStack hAlign="space-between" vAlign="center" wrap>
-            <Text size="sm">
-              Quote this reference on your transfer —{" "}
-              <Text weight="medium">LK7P2Q01</Text>
-            </Text>
-            <Button size="sm" variant="outline">
-              Copy
-            </Button>
-          </HStack>
-        </VStack>
-      </CardContent>
-    </Card>
+    <VStack className="border-t border-border pt-4" gap="sm" hAlign="stretch">
+      <Text size="sm" weight="bold">
+        Three ways to pay
+      </Text>
+      <div className="grid gap-4 sm:grid-cols-3">
+        <BankWay
+          heading="SWIFT"
+          lines={[
+            "Beneficiary: Grade10 HK Ltd.",
+            "SWIFT/BIC: TBC",
+            "Account/IBAN: TBC",
+          ]}
+        />
+        <BankWay
+          heading="FPS"
+          lines={["FPS ID: TBC", "Beneficiary: Grade10 HK Ltd."]}
+        />
+        <BankWay
+          heading="HK local transfer"
+          lines={[
+            "Bank & code: TBC",
+            "Beneficiary: Grade10 HK Ltd.",
+            "Account no.: TBC",
+          ]}
+        />
+      </div>
+      <Divider />
+      <HStack hAlign="space-between" vAlign="center" wrap>
+        <Text size="sm">
+          Quote this reference on your transfer —{" "}
+          <Text weight="medium">LK7P2Q01</Text>
+        </Text>
+        <Button size="sm" variant="outline">
+          Copy
+        </Button>
+      </HStack>
+    </VStack>
   );
 }
 
 function BankWay({ heading, lines }: { heading: string; lines: string[] }) {
   return (
     <VStack gap="xs" hAlign="start">
-      <Text className="uppercase tracking-wide" size="xs" tone="secondary">
+      <Text size="xs" tone="primary" weight="medium">
         {heading}
       </Text>
       {lines.map((line) => (
-        <Text key={line} size="xs" tone="secondary">
+        <Text key={line} size="xs" tone="primary">
           {line}
         </Text>
       ))}

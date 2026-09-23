@@ -1,24 +1,36 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-} from "@grade10/design-system/components/display/card";
 import { Divider } from "@grade10/design-system/components/display/divider";
+import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
+import {
+  Table,
+  TableBody,
+} from "@grade10/design-system/components/display/table";
+import { TableCell } from "@grade10/design-system/components/display/table-cell";
+import { TableHead } from "@grade10/design-system/components/display/table-head";
+import { TableHeader } from "@grade10/design-system/components/display/table-header";
+import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import {
+  MetaRow,
+  OrderValueTable,
+  PartiesSection,
+  PdfPageFooter,
+  PdfSheet,
+  SummaryRow,
+} from "./winner-order-pdf.story-shared";
 
 /**
  * Illustrative sketch of the Receipt PDF's content — not a `packages/ui`
  * block. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
  * (`PLACEHOLDER_RECEIPT_PDF`); nothing renders the real document anywhere in
  * this repository. This composes only `@grade10/design-system` primitives to
- * stand in for that gap during design review. A committed block needs its
- * own OpenSpec change first — see
- * `docs/references/auction-invoice-and-receipt-contents.md` and
- * `openspec/specs/grade10-site/auction/winner-order/spec.md`. The full
+ * stand in for that gap during design review, laid out as a flat document
+ * page rather than a bordered card. A committed block needs its own OpenSpec
+ * change first — see `docs/references/auction-invoice-and-receipt-contents.md`
+ * and `openspec/specs/grade10-site/auction/winner-order/spec.md`. The full
  * Payment breakdown panel is 🚧 per that spec — today only Current Payment
  * Received is real, the other three lines ship with
  * `carry-receipt-payment-breakdown`.
@@ -31,187 +43,95 @@ function ReceiptPdfPreview({
   const manual = settlement === "manual";
 
   return (
-    <VStack className="mx-auto w-full max-w-xl py-10" gap="md" hAlign="stretch">
-      <Card>
-        <CardHeader className="border-b border-border">
-          <HStack hAlign="space-between" vAlign="start" wrap>
-            <VStack gap="xs" hAlign="start">
-              <Text as="h2" size="lg" weight="bold">
-                Grade10
-              </Text>
-              <Text size="xs" tone="secondary">
-                Fine Art &amp; Collectibles Auction
-              </Text>
-            </VStack>
-            <VStack className="sm:items-end" gap="xs" hAlign="start">
-              <Text
-                className="uppercase tracking-wide"
-                size="xs"
-                tone="secondary"
-              >
-                Receipt
-              </Text>
-              <Text size="lg" weight="bold">
-                REC-202609-LK7P2Q-01-P1
-              </Text>
-              <Badge variant={manual ? "warning" : "success"}>
-                {manual ? "Manually Settled" : "Paid"}
-              </Badge>
-            </VStack>
-          </HStack>
-        </CardHeader>
+    <PdfSheet>
+      <HStack hAlign="space-between" vAlign="start">
+        <VStack gap="xs" hAlign="start">
+          <Text as="h2" size="xl" weight="bold">
+            Receipt
+          </Text>
+          <Badge variant={manual ? "warning" : "success"}>
+            {manual ? "Manually Settled" : "Paid"}
+          </Badge>
+        </VStack>
+        <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
+      </HStack>
 
-        <CardContent>
-          <VStack gap="md" hAlign="stretch">
-            {manual ? (
-              <Text size="sm">
-                Supersedes invoice{" "}
-                <Text weight="medium">INV-202609-LK7P2Q-01</Text>, reissued
-                before settlement.
-              </Text>
-            ) : null}
+      {manual ? (
+        <Text size="sm">
+          Supersedes invoice <Text weight="medium">INV-202609-LK7P2Q-01</Text>,
+          reissued before settlement.
+        </Text>
+      ) : null}
 
-            <div className="grid gap-3 sm:grid-cols-3">
-              <DetailFact
-                label="Pays invoice"
-                value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
-              />
-              <DetailFact
-                label="Payment method"
-                value={
-                  manual
-                    ? "Bank transfer — recorded manually, ref. OPS-3391"
-                    : "Visa card ending 4242"
-                }
-              />
-              <DetailFact label="Confirmed" value="16 Sep 2026 · 09:47 HKT" />
-            </div>
+      <VStack className="max-w-full" gap="xs" hAlign="stretch">
+        <MetaRow label="Receipt number" value="REC-202609-LK7P2Q-01-P1" />
+        <MetaRow
+          label="Pays invoice"
+          value={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
+        />
+        <MetaRow
+          label="Payment method"
+          value={
+            manual
+              ? "Bank transfer — recorded manually, ref. OPS-3391"
+              : "Visa card ending 4242"
+          }
+        />
+        <MetaRow label="Confirmed" value="September 16, 2026 · 09:47 HKT" />
+      </VStack>
 
-            <div className="grid gap-4 border-t border-border pt-4 sm:grid-cols-2">
-              <AddressBlock heading="Bill to" />
-              <AddressBlock heading="Ship to" />
-            </div>
+      <PartiesSection />
 
-            <VStack
-              className="border-t border-border pt-4"
-              gap="sm"
-              hAlign="stretch"
-            >
-              <LedgerRow label="Winning Bid" value="2,500.00" />
-              <LedgerRow label="Buyer's Premium" value="500.00" />
-              <LedgerRow label="Shipping & Handling" value="80.00" />
-              <LedgerRow label="Insurance" value="40.00" />
-              <Divider />
-              <LedgerRow label="Subtotal" value="3,120.00" weight="bold" />
-              <LedgerRow label="Payment Processing Fee" value="112.25" />
-              <Divider />
-              <LedgerRow
-                label="Order Total"
-                size="lg"
-                value="3,232.25"
-                weight="bold"
-              />
-            </VStack>
+      <Text as="h3" size="xl" weight="bold">
+        HK$3,232.25 paid on September 16, 2026
+      </Text>
 
-            <Card>
-              <CardHeader className="border-b border-border">
-                <Text
-                  className="uppercase tracking-wide"
-                  size="xs"
-                  tone="secondary"
-                >
-                  Payment breakdown
-                </Text>
-              </CardHeader>
-              <CardContent>
-                <VStack gap="sm" hAlign="stretch">
-                  <LedgerRow label="Original Invoice Total" value="3,232.25" />
-                  <LedgerRow label="Previous Payments" value="0.00" />
-                  <LedgerRow
-                    label="Current Payment Received"
-                    value="3,232.25"
-                  />
-                  <LedgerRow
-                    label="Remaining Balance Due"
-                    value="0.00"
-                    weight="bold"
-                  />
-                </VStack>
-              </CardContent>
-            </Card>
+      <OrderValueTable />
 
-            <Text size="xs" tone="secondary">
-              No payment proof file appears on this receipt. Retained for at
-              least 7 years, or the life of the account if longer.
-            </Text>
-          </VStack>
-        </CardContent>
-      </Card>
-    </VStack>
-  );
-}
+      <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
+        <SummaryRow label="Subtotal" value="3,120.00" />
+        <SummaryRow label="Payment Processing Fee" value="112.25" />
+        <Divider />
+        <SummaryRow
+          label="Order Total"
+          size="lg"
+          value="3,232.25"
+          weight="bold"
+        />
+      </VStack>
 
-function DetailFact({ label, value }: { label: string; value: string }) {
-  return (
-    <VStack gap="xs" hAlign="start">
-      <Text className="uppercase tracking-wide" size="xs" tone="secondary">
-        {label}
-      </Text>
-      <Text size="sm" weight="medium">
-        {value}
-      </Text>
-    </VStack>
-  );
-}
+      <VStack gap="sm" hAlign="stretch">
+        <Text size="sm" weight="bold">
+          Payment breakdown
+        </Text>
+        <Table>
+          <TableHeader>
+            <TableHead className="min-w-0 flex-1">
+              Original Invoice Total
+            </TableHead>
+            <TableHead className="min-w-0 flex-1">Previous Payments</TableHead>
+            <TableHead className="min-w-0 flex-1">
+              Current Payment Received
+            </TableHead>
+            <TableHead align="end" className="min-w-0 flex-1">
+              Remaining Balance Due
+            </TableHead>
+          </TableHeader>
+          <TableBody>
+            <TableRow>
+              <TableCell className="min-w-0 flex-1">3,232.25</TableCell>
+              <TableCell className="min-w-0 flex-1">0.00</TableCell>
+              <TableCell className="min-w-0 flex-1">3,232.25</TableCell>
+              <TableCell align="end" className="min-w-0 flex-1">
+                0.00
+              </TableCell>
+            </TableRow>
+          </TableBody>
+        </Table>
+      </VStack>
 
-function AddressBlock({ heading }: { heading: string }) {
-  return (
-    <VStack gap="xs" hAlign="start">
-      <Text className="uppercase tracking-wide" size="xs" tone="secondary">
-        {heading}
-      </Text>
-      <Text size="sm">Alexandra Tran</Text>
-      <Text size="sm" tone="secondary">
-        Vermilion Bay Holdings Ltd.
-      </Text>
-      <Text size="sm" tone="secondary">
-        +852 9123 4567
-      </Text>
-      <Text size="sm" tone="secondary">
-        21/F, One Harbour Square, 181 Java Road
-      </Text>
-      <Text size="sm" tone="secondary">
-        North Point, Hong Kong SAR
-      </Text>
-    </VStack>
-  );
-}
-
-function LedgerRow({
-  label,
-  value,
-  size = "sm",
-  weight = "medium",
-}: {
-  label: string;
-  value: string;
-  size?: "sm" | "lg";
-  weight?: "medium" | "bold";
-}) {
-  return (
-    <HStack
-      className="w-full"
-      gap="md"
-      hAlign="space-between"
-      vAlign="baseline"
-    >
-      <Text size={size} tone="secondary">
-        {label}
-      </Text>
-      <Text size={size} weight={weight}>
-        {value}
-      </Text>
-    </HStack>
+      <PdfPageFooter note="No payment proof file appears on this receipt. Retained for at least 7 years, or the life of the account if longer." />
+    </PdfSheet>
   );
 }
 
