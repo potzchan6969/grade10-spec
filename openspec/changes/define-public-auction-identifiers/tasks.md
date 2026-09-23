@@ -46,7 +46,7 @@
   - Covers: `winner-order-SC-210`.
   - Verification: metadata and winner-surface checks.
 
-## 5. Admin surfaces and public address
+## 5. Admin surfaces and public address (owner: @htonyl)
 
 - [ ] 5.1 Show the stored code read-only in the existing Listings table and
   `AuctionListingPage` for operators with existing listing-admin read access;
