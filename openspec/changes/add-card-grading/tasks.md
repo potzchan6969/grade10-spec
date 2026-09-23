@@ -1755,6 +1755,15 @@ Stage (b).
 - [ ] 27.9 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
+- [ ] 27.10 Build grading's sign page at `/grading/sign`, mounting
+      `CeremonyFlow` with `host: "grading"` and grading's ceremony words, one
+      refusal per code: the postal address line on the agreement, the named
+      person's name held and not taking an edit, and a used link pointing at
+      the copy at the counter and on the submission page, with a story per
+      design state (`grade10-site-grading-counter-documents-SC-06`,
+      `grade10-site-grading-counter-documents-SC-11`,
+      `grade10-site-grading-counter-documents-SC-17`,
+      `grade10-site-grading-counter-documents-SC-29`)
 
 ## 28. The console's queue, tiles and one submission (grade10)
 

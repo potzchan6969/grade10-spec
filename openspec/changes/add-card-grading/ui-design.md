@@ -559,9 +559,9 @@ Stories `grading-documents-sign-page--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Agreement, signable (`G14`) | the ceremony chrome: the shop, the link timer, one document · the submission; the document: the parties, the schedule, seven clauses; Your name as on the booking; Postal address prefilled; draw or type; Sign; Decline | `grade10-site-grading-counter-documents-SC-12`, `grade10-site-grading-counter-documents-SC-14` |
+| Agreement, signable (`G14`) | the ceremony chrome: the shop, the link timer, one document · the submission; the document: the parties, the schedule, seven clauses; Your name as on the booking; Postal address, typed at the counter; draw or type; Sign; Decline | `grade10-site-grading-counter-documents-SC-12`, `grade10-site-grading-counter-documents-SC-14` |
 | Agreement, cover schedule | the cover column per card and the cover in total | `grade10-site-grading-counter-documents-SC-12` |
-| Postal address empty | Sign disabled naming the line | `grade10-site-grading-counter-documents-SC-06` |
+| Postal address empty | Sign names the empty line | `grade10-site-grading-counter-documents-SC-06` |
 | Pages not viewed | the refusal by name; the document scrolled to the end first | `grade10-site-grading-counter-documents-SC-07` |
 | Name mismatch | the refusal by name against the booking | `grade10-site-grading-counter-documents-SC-04`, `grade10-site-grading-counter-documents-SC-28` |
 | Declined | the declined outcome; nothing paid, nothing signed | `grade10-site-grading-counter-documents-SC-09`, `grade10-site-grading-counter-documents-SC-10` |
