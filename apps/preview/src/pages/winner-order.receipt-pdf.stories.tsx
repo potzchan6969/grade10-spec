@@ -1,14 +1,6 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { Divider } from "@grade10/design-system/components/display/divider";
 import { G10LogoMono } from "@grade10/design-system/components/display/g10-logo-mono";
-import {
-  Table,
-  TableBody,
-} from "@grade10/design-system/components/display/table";
-import { TableCell } from "@grade10/design-system/components/display/table-cell";
-import { TableHead } from "@grade10/design-system/components/display/table-head";
-import { TableHeader } from "@grade10/design-system/components/display/table-header";
-import { TableRow } from "@grade10/design-system/components/display/table-row";
 import { Text } from "@grade10/design-system/components/display/text";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
@@ -81,6 +73,10 @@ function ReceiptPdfPreview({
 
       <PartiesSection />
 
+      <Text as="h3" size="xl" weight="bold" tone="primary">
+        2025 POKEMON JAPANESE M-P PROMO #020 PIKACHU McDONALD'S
+      </Text>
+
       <Text as="h3" size="xl" weight="bold">
         HK$3,232.25 paid on September 16, 2026
       </Text>
@@ -103,30 +99,51 @@ function ReceiptPdfPreview({
         <Text size="sm" weight="bold">
           Payment breakdown
         </Text>
-        <Table>
-          <TableHeader>
-            <TableHead className="min-w-0 flex-1">
+        <VStack gap="sm" hAlign="stretch">
+          <HStack
+            className="w-full"
+            gap="md"
+            hAlign="space-between"
+            vAlign="baseline"
+          >
+            <Text className="min-w-0 flex-1" size="sm" weight="medium">
               Original Invoice Total
-            </TableHead>
-            <TableHead className="min-w-0 flex-1">Previous Payments</TableHead>
-            <TableHead className="min-w-0 flex-1">
+            </Text>
+            <Text className="min-w-0 flex-1" size="sm" weight="medium">
+              Previous Payments
+            </Text>
+            <Text className="min-w-0 flex-1" size="sm" weight="medium">
               Current Payment Received
-            </TableHead>
-            <TableHead align="end" className="min-w-0 flex-1">
+            </Text>
+            <Text
+              className="min-w-0 flex-1 text-right"
+              size="sm"
+              weight="medium"
+            >
               Remaining Balance Due
-            </TableHead>
-          </TableHeader>
-          <TableBody>
-            <TableRow>
-              <TableCell className="min-w-0 flex-1">3,232.25</TableCell>
-              <TableCell className="min-w-0 flex-1">0.00</TableCell>
-              <TableCell className="min-w-0 flex-1">3,232.25</TableCell>
-              <TableCell align="end" className="min-w-0 flex-1">
-                0.00
-              </TableCell>
-            </TableRow>
-          </TableBody>
-        </Table>
+            </Text>
+          </HStack>
+          <Divider className="bg-foreground" />
+          <HStack
+            className="w-full"
+            gap="md"
+            hAlign="space-between"
+            vAlign="baseline"
+          >
+            <Text className="min-w-0 flex-1" size="sm">
+              3,232.25
+            </Text>
+            <Text className="min-w-0 flex-1" size="sm">
+              0.00
+            </Text>
+            <Text className="min-w-0 flex-1" size="sm">
+              3,232.25
+            </Text>
+            <Text className="min-w-0 flex-1 text-right" size="sm">
+              0.00
+            </Text>
+          </HStack>
+        </VStack>
       </VStack>
     </PdfSheet>
   );
