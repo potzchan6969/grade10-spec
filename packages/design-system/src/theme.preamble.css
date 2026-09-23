@@ -57,6 +57,7 @@
   --color-warning-on: var(--warning-on);
   --color-destructive-on: var(--destructive-on);
   --color-accent-foreground: var(--accent-foreground);
+  --color-link-foreground: var(--link-foreground);
   --color-accent: var(--accent);
   --color-muted-foreground: var(--muted-foreground);
   --color-muted: var(--muted);

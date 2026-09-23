@@ -21,6 +21,7 @@
   --muted-foreground: var(--gray-500); /* Placeholders, disabled labels, markers */
   --accent: color-mix(in oklab, var(--gray-950) 4%, transparent); /* Highlight color for active or focused elements */
   --accent-foreground: var(--orange-400); /* Text and icons on accent-colored elements */
+  --link-foreground: var(--orange-600); /* Link text on a page surface */
   --border: var(--gray-200); /* Default border color */
   --border-subtle: var(--gray-100); /* Subtle border color */
   --border-strong: var(--gray-300); /* Border color for hovering cards */

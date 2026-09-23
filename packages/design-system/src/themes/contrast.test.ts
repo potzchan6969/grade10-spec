@@ -191,6 +191,20 @@ function tsxFiles(dir: string): string[] {
   });
 }
 
+// A link is page text in the brand's accent. The default sheet is stock
+// shadcn and states no link tone, so the pair is held where the token is.
+describe.each(THEMES)("%s link", (_label, theme) => {
+  const table = new Map([...BASE, ...theme]);
+  it.each([
+    ["--link-foreground", "--background"],
+    ["--link-foreground", "--muted"],
+  ])("%s on %s clears AA", (text, base) => {
+    expect(
+      contrast(resolve(text, table), resolve(base, table)),
+    ).toBeGreaterThanOrEqual(AA);
+  });
+});
+
 describe("the two contracts stay apart", () => {
   it.each(["primary", ...STATUS])(
     "no component puts the %s text tone on the %s fill",
