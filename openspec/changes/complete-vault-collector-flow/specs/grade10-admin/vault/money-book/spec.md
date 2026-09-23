@@ -277,7 +277,7 @@ past its due date, longest overdue first, each row carrying:
 | --- | --- |
 | Case | the case, by the reference a person can read out |
 | Item | what is held against the loan |
-| Borrower | who owes it |
+| Borrower | who owes it, named by the case reference and the contact the case holds; the vault copies no name |
 | How to reach them | the phone number and the email address the case holds |
 | Due date | the day the advance fixed |
 | Days overdue | how far past that day the loan has run |
@@ -322,9 +322,10 @@ worklist SHALL never let one hide the other.
 - **GIVEN** a loan in arrears whose borrower has been reminded twice and sent a
   forfeiture notice
 - **WHEN** the arrears are read
-- **THEN** its row names the case reference, the item, the borrower, their phone
-  number and email address, the day the notice was sent with the day it gives to
-  pay by, and the day the last reminder was sent
+- **THEN** its row names the case reference, the item and the contact — the
+  phone number and the email address the case holds — the day the notice was
+  sent with the day it gives to pay by, and the day the last reminder was sent,
+  and no name
 
 #### Scenario: grade10-admin-vault-money-book-SC-29 - The loan behind longest is read first
 **Serves:** grade10-admin-vault-money-book-US-03 - shop staff open the list and chase the borrower who has run latest

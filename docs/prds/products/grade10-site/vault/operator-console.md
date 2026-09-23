@@ -47,8 +47,9 @@ waits for, and one case opens into tabs whose buttons follow the case's status.
 - 🚧 **Search by reference** — prefix on the six-character case reference,
   so the characters a customer reads out at the counter find the case
 - 🚧 **Overdue, at a glance** — three tiles: the view's count, outstanding
-  in arrears, how many carry no notice; rows name the borrower, their
-  contact, the notice and the last reminder sent
+  in arrears, how many carry no notice; rows name the case reference, the
+  item, the contact the case holds, the notice and the last reminder sent —
+  no name, which stays on the case behind the identity grant
 - 🚧 **Money tab, more** — a filter by kind; the net out of the business —
   payouts less repayments, per currency, a correction netting the row it took
   back once, positive when money is out; a takes-back column naming that row;

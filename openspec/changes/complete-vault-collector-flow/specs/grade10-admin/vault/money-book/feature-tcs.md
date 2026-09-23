@@ -922,7 +922,7 @@ Runs once per row of **Test data**.
 * The outstanding figure is shown per currency.
 * No combined figure sums the two currencies.
 
-### grade10-admin-vault-money-book-US5-TC3-1: Each row names the borrower, their contact, the notice and the last reminder sent
+### grade10-admin-vault-money-book-US5-TC3-1: Each row names the case reference, the item, the contact, the notice and the last reminder sent
 
 **Classification:**
 
@@ -948,7 +948,9 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The row names the borrower, how to reach them, the notice and the last reminder sent.
+* The row names the case reference and the item held against the loan.
+* The row names the phone number and the email address the case holds, and no name.
+* The row names the day the notice was sent with the day it gives to pay by, and the day the last reminder was sent.
 
 ### grade10-admin-vault-money-book-US5-TC4-1: A loan with no notice sent reads none yet
 
