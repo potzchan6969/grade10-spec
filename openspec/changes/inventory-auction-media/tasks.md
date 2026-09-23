@@ -14,7 +14,7 @@
 - [ ] 3.1 Make `grade10-admin-auction-listing-SC-87` through `SC-92` pass: select assets only from the listing product, preserve one mixed order, materialize selected assets on Save, and retain snapshot stability.
 - [ ] 3.2 Extend the existing Auction media dialog and fixtures; preserve direct upload, reorder, and status behavior under `SC-46` through `SC-55`.
 
-## 4. Integrated validation (grade10)
+## 4. Integrated validation (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Add the Inventory-admin to Auction-operator mixed-media E2E walk, including source edit/removal after Save.
 - [ ] 4.2 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run build`, `pnpm run check:migrations`, and `pnpm --dir packages/api-docs run generate`.
