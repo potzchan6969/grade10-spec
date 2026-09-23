@@ -5,7 +5,7 @@
   limits, and sequence continuation after `99`.
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
 
-## 2. Listing identifier data (grade10)
+## 2. Listing identifier data (grade10) (owner: @htonyl)
 
 - [ ] 2.1 In `packages/grade10-auction/backend/src/db/schema/listings.ts`, add
   the stored listing/payment reference and the uniqueness/retention mechanism
