@@ -63,7 +63,7 @@ function ReceiptPdfPreview({
       <PartiesSection />
 
       <Text as="h3" size="xl" weight="bold" tone="primary">
-        2025 POKEMON JAPANESE M-P PROMO #020 PIKACHU McDONALD'S
+        2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10
       </Text>
 
       <Text as="h3" size="xl" weight="bold">
@@ -76,9 +76,8 @@ function ReceiptPdfPreview({
         <SummaryRow label="Subtotal" value="3,120.00" />
         {tax ? (
           <SummaryRow
-            label="Tax"
-            note="Reserved for the separate tax change — no rate or regime is defined yet"
-            value="TBC"
+            label="GST - Singapore (9% on $2,500.00)"
+            value="$225.00"
           />
         ) : null}
         <SummaryRow label="Payment Processing Fee" value="112.25" />
@@ -146,7 +145,7 @@ function ReceiptPdfPreview({
 }
 
 const meta = {
-  title: "Pages/Winner Order/Receipt PDF (sketch)",
+  title: "Pages/Winner Order/Receipt PDF",
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

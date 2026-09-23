@@ -68,7 +68,7 @@ function InvoicePdfPreview({
       <PartiesSection />
 
       <Text as="h3" size="xl" weight="bold" tone="primary">
-        2025 POKEMON JAPANESE M-P PROMO #020 PIKACHU McDONALD'S
+        2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10
       </Text>
 
       <Text as="h3" size="xl" weight="bold">
@@ -78,12 +78,11 @@ function InvoicePdfPreview({
       <OrderValueTable />
 
       <VStack className="ml-auto w-full max-w-xs" gap="xs" hAlign="stretch">
-        <SummaryRow label="Subtotal" value="3,120.00" />
+        <SummaryRow label="Subtotal" value="2,500.00" />
         {tax ? (
           <SummaryRow
-            label="Tax"
-            note="Reserved for the separate tax change — no rate or regime is defined yet"
-            value="TBC"
+            label="GST - Singapore (9% on $2,500.00) "
+            value="$225.00"
           />
         ) : null}
         <Divider />
@@ -149,7 +148,7 @@ function BankWay({ heading, lines }: { heading: string; lines: string[] }) {
 }
 
 const meta = {
-  title: "Pages/Winner Order/Invoice PDF (sketch)",
+  title: "Pages/Winner Order/Invoice PDF",
   component: InvoicePdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
