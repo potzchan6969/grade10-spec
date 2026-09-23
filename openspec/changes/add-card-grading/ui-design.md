@@ -318,6 +318,7 @@ Stories `grading-plan-grading-home--`, the Fee sheet rows `grading-submission-gr
 | Fee sheet, one grader | the level rows: ceiling, cards a submission, fee, weeks; the example-fees lead; the above-the-top and Bulk lines | `shared-ui-grading-submission-SC-03` |
 | Fee sheet, cover column | Express and Super Express rows carry the cover rate | `shared-ui-grading-submission-SC-04` |
 | Fee sheet, three graders | a `SegmentedControl` per grader over its own sheet | `shared-ui-grading-submission-SC-05` |
+| One record, two drawings | the fee sheet and the level picker each drawn from the one sheet they are given, neither reaching for the other | `shared-ui-grading-submission-SC-59` |
 | Error | the message in the error tone; no list | `grade10-site-grading-submission-plan-SC-03` |
 
 ### Plan wizard — the cards
@@ -389,6 +390,7 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Review (`G04`) | the header `Card` n cards to grader · level, back in about, Edit; the schedule; the totals; Good to know; the consent tick; Book the drop-off, Save and book later | `shared-ui-grading-submission-SC-24` |
+| Review, Traditional Chinese | every word the consumer's `copy` in Traditional Chinese; none of the block's own | `shared-ui-grading-submission-SC-54` |
 | Totals with cover | the cover line under the fee, per card and in total | `shared-ui-grading-submission-SC-24` |
 | Minimum grade on the schedule | the min line beside the card | `shared-ui-grading-submission-SC-24` |
 | Upcharge warning | per card: the PSA 10 reference above the ceiling, the level the grader moves it to, the difference due before collection, the higher level's fee now | `shared-ui-grading-submission-SC-25` |
@@ -467,7 +469,7 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Visit missed | Drop-off booked with the visit closed; chip Waiting on you; the list and the estimate as they were; Book another drop-off | `grade10-site-grading-dropoff-booking-SC-19` |
 | Cancel this submission | the button with its line; `CancelSubmissionDialog` naming the drop-off it cancels; Yes, cancel and Go back | `grade10-site-grading-submission-lifecycle-SC-47` |
 | Cancelled | Cancelled; the rail ended; the cards never left, nothing paid; Start a submission | `grade10-site-grading-submission-lifecycle-SC-47` |
-| Handed in (`G08`) | Checked in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-SC-53` |
+| Handed in (`G08`) | Handed in · With us; the lead with the cut-off and the ship day; the estimate; the paid `Card` with the POS reference; `WithdrawCard`; `GradingCardRecord` with intake ids and photograph pairs; `DocumentsList` with the agreement and the intake receipt; History | `grade10-site-grading-submission-lifecycle-SC-53` |
 | Refused card | the card's Refused at the counter badge and the staff's words as typed; the list and the fee dropped | `grade10-site-grading-collector-notifications-SC-06` |
 | Withdrawn card | the card's Withdrawn badge with the refund line; the estimate dropped | `grade10-site-grading-submission-lifecycle-SC-15` |
 | Batch closed | `WithdrawCard` gone once the batch closed | `grade10-site-grading-submission-lifecycle-SC-16` |

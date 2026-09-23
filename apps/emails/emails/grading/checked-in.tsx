@@ -41,7 +41,7 @@ export default function CheckedInEmail({
       cta={{ href: previewSubmission.url, label: "Open your submission" }}
       footer={previewFooter}
       greeting={`Hi ${previewSubmission.collectorName},`}
-      heading={`Checked in: ${cardCount} cards for ${grader} ${level}`}
+      heading={`Handed in: ${cardCount} cards for ${grader} ${level}`}
       lead={[
         `Thanks for coming in. Your cards are sealed in our intake bag and leave for ${grader} with the batch that closes ${hkDateTime(batchCutOff)} and ships ${hkDate(batchShipDay)}.`,
         "This email is your intake receipt, with the POS reference; the receipt and your signed submission agreement are attached.",

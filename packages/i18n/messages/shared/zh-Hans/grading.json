@@ -488,7 +488,7 @@
         "ready": "可以领回",
         "collector_named": "指定 {name} 代领",
         "collector_removed": "已移除代领人",
-        "uncollected_reminder": "已发出提示",
+        "uncollected_reminder": "已发出取卡提示",
         "storage_started": "开始计保管费",
         "notice_posted": "已寄出书面通知",
         "payout_recorded": "按申报价值赔偿 {amount}",

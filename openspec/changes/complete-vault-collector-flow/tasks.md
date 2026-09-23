@@ -114,7 +114,7 @@ group reads this one's exports.
       over a year, a percentage rounded to one decimal place — and point
       `packages/vault/backend/src/documents/annualRate.ts` at it, which prints
       two decimals of its own today
-- [ ] 3.8 Bump the `external/grade10-spec` submodule pointer to the commit
+- [x] 3.8 Bump the `external/grade10-spec` submodule pointer to the commit
       carrying groups 1 and 2
 - [x] 3.9 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run test:backend`, `pnpm run check:libs`,

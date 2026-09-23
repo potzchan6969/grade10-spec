@@ -488,7 +488,7 @@
         "ready": "찾아가실 수 있음",
         "collector_named": "{name}을(를) 대리인으로 지정",
         "collector_removed": "대리인 지정 해제",
-        "uncollected_reminder": "안내 발송",
+        "uncollected_reminder": "수령 안내 발송",
         "storage_started": "보관료 시작",
         "notice_posted": "서면 통지 발송",
         "payout_recorded": "신고 가액 {amount} 보상",

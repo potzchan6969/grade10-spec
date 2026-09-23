@@ -63,7 +63,7 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 Composes the design-system primitives group 2 widens. Every export takes
 `copy`, `locale` and `className`, and renders with no application behind it.
 
-- [ ] 3.1 Write the stories and the tests for the five planning blocks in
+- [x] 3.1 Write the stories and the tests for the five planning blocks in
       `packages/ui/src/blocks/grading-submission/`, one story per state and
       every query by role (`shared-ui-grading-submission-SC-03`,
       `shared-ui-grading-submission-SC-04`,
@@ -96,14 +96,14 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-26`,
       `shared-ui-grading-submission-SC-27`,
       `shared-ui-grading-submission-SC-28`)
-- [ ] 3.2 Build `GradingFeeSheet` — a `Table` per grader under a
+- [x] 3.2 Build `GradingFeeSheet` — a `Table` per grader under a
       `SegmentedControl`, the cover column only where the level carries one,
       the grader picked by id, the sheet drawn as it was given
       (`shared-ui-grading-submission-SC-03`,
       `shared-ui-grading-submission-SC-04`,
       `shared-ui-grading-submission-SC-05`,
       `shared-ui-grading-submission-SC-59`)
-- [ ] 3.3 Build `GradingLevelPicker` — the graders, the highest declared value,
+- [x] 3.3 Build `GradingLevelPicker` — the graders, the highest declared value,
       a `RadioCard` per level open or closed with the card or the count that
       closed it, the dark estimate card and the upcharge `Alert`
       (`shared-ui-grading-submission-SC-60`,
@@ -114,7 +114,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-10`,
       `shared-ui-grading-submission-SC-11`,
       `shared-ui-grading-submission-SC-12`)
-- [ ] 3.4 Build `GradingCardList` — a `Card` per card with `Autocomplete`,
+- [x] 3.4 Build `GradingCardList` — a `Card` per card with `Autocomplete`,
       `NumberInput` and the minimum grade, the reference sales or the
       kept-as-typed line, the cap that refuses the card past it, the empty
       list's two ways to start, and one callback per act
@@ -127,7 +127,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-19`,
       `shared-ui-grading-submission-SC-61`,
       `shared-ui-grading-submission-SC-62`)
-- [ ] 3.5 Build `GradingPasteSheet` — a `Drawer` over a `Textarea`, the line
+- [x] 3.5 Build `GradingPasteSheet` — a `Drawer` over a `Textarea`, the line
       counter, the four counts with their lines and the skipped count, the Bulk
       notice, and the cards reported through `onApply`
       (`shared-ui-grading-submission-SC-20`,
@@ -135,7 +135,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-22`,
       `shared-ui-grading-submission-SC-23`,
       `shared-ui-grading-submission-SC-63`)
-- [ ] 3.6 Build `GradingReview` — the schedule, the three totals, the per-card
+- [x] 3.6 Build `GradingReview` — the schedule, the three totals, the per-card
       warning with both prices, the five good-to-know lines, the tick nothing
       is booked without, and the refusal it was given
       (`shared-ui-grading-submission-SC-24`,
@@ -143,12 +143,12 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-26`,
       `shared-ui-grading-submission-SC-27`,
       `shared-ui-grading-submission-SC-28`)
-- [ ] 3.7 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+- [x] 3.7 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
 ## 4. The submission blocks and the barrel (grade10-spec)
 
-- [ ] 4.1 Write the stories and the tests for the eight submission blocks and
+- [x] 4.1 Write the stories and the tests for the eight submission blocks and
       the barrel, one story per state (`shared-ui-grading-submission-SC-29`,
       `shared-ui-grading-submission-SC-30`,
       `shared-ui-grading-submission-SC-31`,
@@ -182,7 +182,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-56`,
       `shared-ui-grading-submission-SC-57`,
       `shared-ui-grading-submission-SC-58`)
-- [ ] 4.2 Build `GradingOwnershipChip` as the two `Badge`s the status table
+- [x] 4.2 Build `GradingOwnershipChip` as the two `Badge`s the status table
       pairs and `GradingStatusRail` as seven `Step`s, the reached stage
       `progress` and an ended submission staying where it ended
       (`shared-ui-grading-submission-SC-29`,
@@ -190,7 +190,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-31`,
       `shared-ui-grading-submission-SC-32`,
       `shared-ui-grading-submission-SC-33`)
-- [ ] 4.3 Build `GradingCardRecord` and `GradingGradeCards` — the intake id,
+- [x] 4.3 Build `GradingCardRecord` and `GradingGradeCards` — the intake id,
       the photograph pair, the outcome badge in the tone the outcome names, the
       certificate against the address it was given, the grade at display size
       and the ungraded card in the `error` tone with its code and note
@@ -201,7 +201,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-37`,
       `shared-ui-grading-submission-SC-38`,
       `shared-ui-grading-submission-SC-39`)
-- [ ] 4.4 Build `GradingPickupCard` — the code in the mono face, the items,
+- [x] 4.4 Build `GradingPickupCard` — the code in the mono face, the items,
       where and open, the one figure to settle or none, and what to bring above
       and below the threshold — and `GradingNamedCollector`
       (`shared-ui-grading-submission-SC-40`,
@@ -210,7 +210,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-43`,
       `shared-ui-grading-submission-SC-44`,
       `shared-ui-grading-submission-SC-45`)
-- [ ] 4.5 Build `GradingMoneyBlock` as the one place the lines live, the due
+- [x] 4.5 Build `GradingMoneyBlock` as the one place the lines live, the due
       row in the `warning` tone and the settle lead above it, and
       `GradingUncollectedLadder` with its three dated rungs and the posted
       notice's day (`shared-ui-grading-submission-SC-46`,
@@ -221,7 +221,7 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-51`,
       `shared-ui-grading-submission-SC-52`,
       `shared-ui-grading-submission-SC-53`)
-- [ ] 4.6 Re-export all thirteen blocks from `packages/ui/src/index.ts` under a
+- [x] 4.6 Re-export all thirteen blocks from `packages/ui/src/index.ts` under a
       `shared/ui/grading-submission` comment, take every word, figure and act
       through props, and render each state with no application behind it
       (`shared-ui-grading-submission-SC-01`,
@@ -231,10 +231,10 @@ Composes the design-system primitives group 2 widens. Every export takes
       `shared-ui-grading-submission-SC-56`,
       `shared-ui-grading-submission-SC-57`,
       `shared-ui-grading-submission-SC-58`)
-- [ ] 4.7 Add the `::story` cards for the thirteen blocks to
+- [x] 4.7 Add the `::story` cards for the thirteen blocks to
       `docs/prds/products/shared/ui/grading-submission.md`, one per block, and
       drop the `::figma` card where a story answers the same drawing
-- [ ] 4.8 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
+- [x] 4.8 Verify: `pnpm run test:stories:ui`, `pnpm run test`,
       `pnpm check:manual`, `pnpm run typecheck`, `pnpm run lint`
 
 ## 5. The preview letters (grade10-spec)
@@ -369,7 +369,7 @@ the words and the blocks arrive on. Stage (a).
       `test/worker/` proving the three bindings resolve their named entrypoints
       through stub workers and the health probe answering
       (`grade10-admin-grading-counter-SC-81`)
-- [ ] 9.2 Bump the `external/grade10-spec` submodule pointer to the commit
+- [x] 9.2 Bump the `external/grade10-spec` submodule pointer to the commit
       carrying groups 1 to 5
 - [x] 9.3 Stand `packages/grading/{contracts,backend}` on the vault's exports
       maps — contracts `.`; backend `.`, `./schema`, `./router-type`,
