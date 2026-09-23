@@ -9,7 +9,7 @@
 ### shared-planning-agent-rounds-US-18: Engineer lands past a small move
 
 **As an** engineer,
-**I want** a small move before my plan to reach me as a notice that holds nothing,
+**I want** a small move before my plan, the proposal's Why reworded, to reach me as a notice that holds nothing,
 **so that** my next group lands and I read the move when I can.
 
 ### shared-planning-agent-rounds-US-19: Hand reads a major move before building on it

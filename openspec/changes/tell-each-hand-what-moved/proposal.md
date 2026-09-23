@@ -31,8 +31,10 @@ builds, from every reworded line today to none.
   behind artifact's hand.
 - **A major move holds, a small one tells** - what moved and is major holds
   every landing drawn from it until its hand reads it again; what is small is
-  told, holds only the fold, and stays on the hand's list until read. What
-  counts as major is open with the product manager (Q4).
+  told, holds only the fold, and stays on the hand's list until read. Major
+  is everything before an artifact but a named small set: the proposal's
+  Why, a decision row's Asked and Instead of cells, the ❓ around a
+  recommendation, and punctuation (Q4).
 - **Fresh is a hand's read or landing** - every artifact landing writes
   `reviewed:`, a tick never does, and the dated fallback retires; the
   in-flight records are backfilled once.

@@ -134,8 +134,9 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **Major holds, small tells** — what moved and is major holds what is drawn
   from it until its hand reads it again and says so; what is small holds
   nothing but the fold and stays on the hand's list until read
-- ❓ **What counts as major** — open with the product manager; recommended:
-  everything before an artifact but a named small set
+- 🚧 **What counts as major** — everything that moves before an artifact but a
+  named small set: the proposal's Why, a decision row's Asked and Instead of
+  cells, the open-question mark around a recommendation, and punctuation
 - 🚧 **Taking the recommendation moves nothing** — the drafts were drawn on it;
   an answer that overturns one is major, like any changed decision
 - 🚧 **Goals that moved are a question** — a re-read that finds a goal or a
