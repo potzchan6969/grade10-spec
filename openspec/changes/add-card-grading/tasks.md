@@ -711,9 +711,14 @@ Follows group 12: the hand-in reads the batch `openBatchFor` opens. Stage (b).
       transaction opens, one store line to one card in `position` order with a
       cover line per covered card, `POS_LINES_MISMATCH` refused with the gap on
       a wrong count, a multiple, a wrong figure or a null subtotal, and
-      `money_lines` written `ON CONFLICT DO NOTHING` on
-      `(submission_id, card_id, kind, pos_order_ref)` so a repeat answers the
-      rows already written (`grade10-admin-grading-counter-SC-19`)
+      `money_lines` written `ON CONFLICT DO NOTHING` on the order's line,
+      `(pos_order_ref, pos_line_no)`, so a repeat answers the rows already
+      written and an order recorded on another submission is refused
+      `ORDER_ALREADY_RECORDED`; the store's payment method kept on each line;
+      and `POST /api/submissions/:id/photos` taking one photograph of a card
+      behind `grading:operate` into `ITEM_PHOTOS`, under a key naming the
+      submission and the card, which `admin.checkCard` proves before it writes
+      (`grade10-admin-grading-counter-SC-19`)
 - [ ] 13.4 Write `recordRefund` naming the card and the line it refunds, so a
       line already paid comes back at the till, a refused card is never
       charged, and the fee stands on a card that came back raw
@@ -1259,7 +1264,9 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-25`)
 - [ ] 21.7 Add the fast lane's repair lists: `repairedBookings` and
       `recoveredBookings` over `visit_owner_id`, `expiredPackets` and
-      `sealedDeliveries`
+      `sealedDeliveries`; a list keyed on `booking_ref` filters on status,
+      since a `cancelled` row keeps its cache when the counter cancelled it
+      and holds none when the collector did
 - [ ] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
       `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset` and
       `orphanedObjects`
