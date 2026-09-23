@@ -43,15 +43,20 @@
 The spec governs what the rail holds and in what order. The picks are the
 product's **complementary products** list — the standard metafield Shopify's
 Search & Discovery app writes when a stock keeper picks products on the card
-— read as **one more field on the `catalog.product` Storefront query**: the
-metafield's `value`, a JSON list of product ids in the order stored.
+— read as **one more field on the card page's Storefront query**: the
+metafield's `value`, a JSON list of product gids in the order stored.
 
-- **A field, not a round trip** — the list rides the query the page already
-  makes, so it cannot fail on its own and the one-read goal holds; a shop
+- **A field, not a round trip** — the list rides the query that reads the
+  card, so it cannot fail on its own and the one-read goal holds; a shop
   whose product carries no such field answers `null`, which is "no picks"
+- **A query of its own** — `GET_PRODUCT_WITH_PICKS` is the product fragment
+  plus the field, aliased `picks`, behind `getProductWithPicks(handle)` on
+  the `ShopifyCatalog` port; the shared fragment and `getProductByHandle`
+  stay as they were, so no other read, and not the mirror's body, carries
+  the list
 - **`value`, not `references`** — every pick is resolved against the mirror,
-  so only the ids are wanted; the shared fragment's `references` answers
-  one empty node per pick, which the read drops
+  so only the ids are wanted; a value that is not a list of product gids is
+  unreadable, and the card still answers
 - **Rejected: `productRecommendations`** — mixes the shop's ranking in when
   the list is short, in the shop's order
 - **Rejected: a custom metafield of handles** — a second definition the
@@ -103,14 +108,15 @@ beside `browse.ts`, returning the rail's cards in final order:
 
 ### The card's read composes the rail from the copy it holds, and never waits on the mirror
 
-`catalog.product` gains `related`: the per-tile shape `catalog.products`
-already answers (its contract sits in `packages/grade10-store/contracts`, as
-the redesign's Impact names it; cited from that proposal, not read here), in
-final order; nothing on the wire says which half a card came from, and nothing
-of the mirror's internal cut reaches the wire. The page maps each entry to the
-block's prop type, `ProductSummary` in `@grade10/ui`, with the formatter the
-listing already uses — `ProductSummary` is display-ready React props, never a
-wire shape.
+`catalog.product` gains an optional `related` input, set by the card's page
+alone, and where it is set, `related` on the answer: the per-tile shape
+`catalog.products` already answers (its contract sits in
+`packages/grade10-store/contracts`, as the redesign's Impact names it; cited
+from that proposal, not read here), in final order; nothing on the wire says
+which half a card came from, and nothing of the mirror's internal cut reaches
+the wire. The page maps each entry to the block's prop type, `ProductSummary`
+in `@grade10/ui`, with the formatter the listing already uses —
+`ProductSummary` is display-ready React props, never a wire shape.
 
 - **A held-copy read, new to this procedure** — the rail reads the copy the
   isolate holds through `storeKeeper(env)` and nothing else: no `sync` inside
@@ -149,23 +155,25 @@ wire shape.
 
 | Function | Input | Output |
 | --- | --- | --- |
-| `relatedRail({ cardId, pickIds, entries, forSale, limit? })` — `services/catalog/related.ts` | the card's id; the pick ids in the entry id's form, in the stock keeper's order, empty where absent or unreadable; the held projection's entries; whether an id has a variant for sale; the limit, six by default | the rail's entries in final order: resolved picks in stored order, then similar cards on the triple, the date, the id; never the card, never a pick twice, never sold out among similar; at most the limit; with the unresolved pick ids and whether the copy holds the card, for the counter |
-| `composeRelated({ product, projection })` — `services/catalog/related.ts` | the product as the shop answered it, carrying its complementary list; the copy the isolate holds now, or null | whole cards in rail order, the outcome and the picks let go; counted, timed and logged with the copy's version; never a throw |
-| `catalog.product` — `trpc/routers/catalog.ts` | `{ handle }` | the product as today, plus `related` in the wire shape above |
+| `relatedRail({ cardId, pickIds, entries, limit? })` — `services/catalog/related.ts` | the card's id; the pick ids in the entry id's form, in the stock keeper's order, empty where absent or unreadable; the held projection's entries, each saying whether it has a variant for sale; the limit, six by default | the rail's entries in final order: resolved picks in stored order, then similar cards on the triple, the date, the id; never the card, never a pick twice, never sold out among similar; at most the limit; with the unresolved pick ids and whether the copy holds the card, for the counter |
+| `composeRelated({ product, picks, projection })` — `services/catalog/related.ts` | the product as the shop answered it; its picks as the read found them — `ids`, `absent` or `unreadable` with the reason; the copy the isolate holds now, or null | whole cards in rail order, each its entry's own product, the outcome and the picks let go; counted, timed and logged with the copy's version; never a throw |
+| `getProductWithPicks(handle)` — `ShopifyCatalog`, `@grade10/shopify-backend` | the card's handle | the product and its picks from `GET_PRODUCT_WITH_PICKS`, one Storefront query; `notFound` and the shop's failures as `getProductByHandle` answers them |
+| `projectionEntryOf(product)` — `services/catalog/projection.ts` | one product of the keeper's body | its `ProjectionEntry`, carrying `forSale` — any variant for sale — and the `product` itself, the one object the listing and the rail answer |
+| `catalog.product` — `trpc/routers/catalog.ts` | `{ handle, related? }` | the product as today; with `related: true`, plus `related` in the wire shape above |
 
-- **The boundary** — entrypoint (`catalog.product`, which reads the copy the
-  isolate holds through `ctx.projection.held()`, as the listing's procedures
-  read `projectionOf(ctx)`) → service (the rail's compose, pure over the
-  product and the held copy, calling `relatedRail`) → keeper (the held copy
-  alone; no `sync` in the request; past the interval a check behind the
-  response). No table, no
-  write, no transaction: every value is derived on the read
+- **The boundary** — entrypoint (`catalog.product` asked for `related`, which
+  reads the copy the isolate holds through `ctx.projection.held()`, as the
+  listing's procedures read `projectionOf(ctx)`) → service (the rail's
+  compose, pure over the product and the held copy, calling `relatedRail`) →
+  keeper (the held copy alone; no `sync` in the request; past the interval a
+  check behind the response). No table, no write, no transaction: every value
+  is derived on the read
 
 ## API Contracts
 
 | Procedure | Change | Consumer |
 | --- | --- | --- |
-| `catalog.product` | Additive: `related`, the per-tile shape `catalog.products` answers today, in rail order; empty where there is nothing to show | The card's page in `grade10` |
+| `catalog.product` | Additive: an optional `related` input; set, the answer gains `related`, the per-tile shape `catalog.products` answers today, in rail order, empty where there is nothing to show; unset, the answer is today's | The card's page in `grade10`, the one caller that sets it |
 | `ProductSummary` (`@grade10/ui`) | Unchanged: the block's prop type; the page builds one per `related` entry with the listing's formatter | The rail block |
 
 | Half | Where it lands |
@@ -189,7 +197,7 @@ wire shape.
 | The copy does not hold the card yet | Its picks, no similar cards | `outcome:card_unresolved` |
 | The product carries no complementary field | Similar cards alone | `outcome:picks_absent`, alerted |
 | A pick the mirror has no entry for | Left out; the rest of the rail stands; the ids on the log line | `outcome:pick_unresolved` |
-| The complementary list cannot be read | Similar cards alone, as for a card nobody chose for | `outcome:picks_unreadable`, the reason logged |
+| The complementary list cannot be read, or holds anything but product gids | Similar cards alone, as for a card nobody chose for | `outcome:picks_unreadable`, the reason logged |
 | Nothing shared, no picks | No rail — the ordinary answer | `outcome:empty` |
 
 ## Risks / Trade-offs
