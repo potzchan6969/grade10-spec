@@ -32,13 +32,14 @@
 | Q10 | Amount Copy on View Bank Details? | No — amount is display-only | Copy control beside amount due |
 | Q11 | Payment reference control? | Detail row at the bottom of each rail tab with the memo warning; no Copy | Read-only input; highlighted box above the tabs |
 | Q13 | Copy on rail fields (FPS ID, account, SWIFT…)? | No — all fields are detail rows only | Icon Copy on ID-like fields |
-| Q12 | Rail tab style? | Default (pill) Tabs variant, full-width | `list` Tabs variant |
+| Q12 | Rail tab style? | Default (pill) Tabs variant | `list` Tabs variant |
 | Q14 | Primary bank CTA label? | **Submit Payment Proof** (matches the dialog) | Pay by Bank Transfer |
 | Q15 | Where does the OUR note sit on SWIFT? | After the payment-reference band (fields stay continuous) | Between account fields and payment reference |
 | Q16 | What is the SWIFT address field called? (2026-09-22) | **Beneficiary address** — the beneficiary's address | Business address |
 | Q17 | What bank destination fields does SWIFT show beyond name and account? (2026-09-22) | Bank name and bank address (main branch address, city, country), with beneficiary name and beneficiary address | Beneficiary and business address alone, without the receiving bank's name and address |
 | Q18 | How is the account number shown? (2026-09-22) | The full account number including bank and branch code on HK Local and SWIFT (bank code and branch code still shown separately on HK Local) | Account digits alone, without bank and branch code in the number |
 | Q19 | What values does the preview use while Finance confirms live accounts? (2026-09-22) | Grade10 Finance Limited as beneficiary; HSBC Hong Kong as the sample bank (name, main-branch address, codes, SWIFT). Live account values stay Finance TBC | Leaving every rail value as `{tbc}` in the preview |
+| Q20 | How wide is the rail tab list? (2026-09-23) | From `sm` up, full-width shared pill track. Below `sm`, the track hugs each label and scrolls horizontally so FPS / HK Local / International stay readable | Always full-width (labels crush on a narrow dialog); always hug (empty track on a wide dialog) |
 
 ## Raised
 
