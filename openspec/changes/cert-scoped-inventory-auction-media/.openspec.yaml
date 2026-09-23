@@ -1,4 +1,5 @@
 schema: grade10-planning
+promoted_by: "@codex"
 created: 2026-09-24
 awaiting:
   specs: "planning-qa must write the inventory catalog and auction listing requirement deltas and blind test suites from the marked product records and journeys"

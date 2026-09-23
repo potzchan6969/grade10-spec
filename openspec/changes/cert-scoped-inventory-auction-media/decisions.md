@@ -34,4 +34,4 @@
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
-| None | None | None |
+| grade10-admin/auction/listing | How does the Other Cert media drawer identify a source Cert record whose printed Cert ID is absent, so the group and explicit Add to listing action still identify the source? | |
