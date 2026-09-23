@@ -10,8 +10,9 @@ import {
 } from "./auction-catalogue-content";
 
 /**
- * One list lot, the card Featured and the list both use. Site chrome lives
- * on the page story. The lots are from the collection draw.
+ * One lot card. The list uses a heading title; Featured uses `lift` and a
+ * link title. Site chrome lives on the page story. Lots are from the
+ * collection draw.
  */
 const meta = {
   title: "Auction List/Lot Card",
@@ -33,11 +34,21 @@ const activeLot = COLLECTION_LOTS[0];
 const upcomingLot = FEW_FEATURED_LOTS[2];
 const endedLot = ENDED_ONLY_LOTS[0];
 
-function WatchedCard({ lot }: { lot: CatalogueLot }) {
+function WatchedCard({
+  lot,
+  heading = true,
+  lift,
+}: {
+  lot: CatalogueLot;
+  heading?: boolean;
+  lift?: boolean;
+}) {
   const [watched, setWatched] = useState(false);
   return (
     <AuctionLotCard
-      heading
+      eager={lift}
+      heading={heading}
+      lift={lift}
       lot={lot}
       onToggle={() => setWatched((value) => !value)}
       watched={watched}
@@ -52,7 +63,7 @@ const cardArgs = {
   onToggle: () => {},
 } satisfies Story["args"];
 
-/** A live lot. The title is a heading, and watch is on the card. */
+/** A live lot on the list. The title is a heading, and watch is on the card. */
 export const Active: Story = {
   name: "An active lot",
   args: cardArgs,
@@ -66,6 +77,32 @@ export const Active: Story = {
         level: 3,
         name: activeLot.title,
       }),
+    ).toBeInTheDocument();
+    const watch = canvas.getByRole("button", {
+      name: `Watch ${activeLot.title}`,
+    });
+    await userEvent.click(watch);
+    expect(
+      canvas.getByRole("button", { name: `Unwatch ${activeLot.title}` }),
+    ).toBeInTheDocument();
+  },
+};
+
+/**
+ * One card as Featured renders it — lifted shell, title stays a link (the
+ * section already heads the band). The scrolling row lives under Featured.
+ */
+export const Featured: Story = {
+  name: "A featured lot",
+  args: { ...cardArgs, heading: false, lift: true },
+  render: () => <WatchedCard heading={false} lift lot={activeLot} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Active")).toBeInTheDocument();
+    expect(canvas.getByText(/Ends in \d+d \d+h/)).toBeInTheDocument();
+    expect(canvas.queryByRole("heading", { level: 3 })).toBeNull();
+    expect(
+      canvas.getByRole("link", { name: activeLot.title }),
     ).toBeInTheDocument();
     const watch = canvas.getByRole("button", {
       name: `Watch ${activeLot.title}`,
