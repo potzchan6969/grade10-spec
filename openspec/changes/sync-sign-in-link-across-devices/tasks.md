@@ -72,7 +72,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review sync-sign-in-link-across-devices`)
       `rounds.md` row
 - [x] 5.3 Verify: the e2e suite run named in `docs/architecture/e2e.md`
 
-## 6. Fix: settle through Postgres, not KV (grade10)
+## 6. Fix: settle through Postgres, not KV (grade10) (owner: @sean)
 
 - [ ] 6.1 Write the backend tests this group makes pass, in their own commit
       before its code: `settled: true` is answered from the Postgres row
