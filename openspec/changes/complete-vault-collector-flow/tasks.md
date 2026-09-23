@@ -517,8 +517,9 @@ Follows group 12: its cards mount in the view group 12 builds, and its stories
 append to `CaseDetailView.stories.tsx`.
 
 - [ ] 13.1 Cover the live loan: the repayments list empty, one and many, the
-      reminders still ahead, the notice with its date to pay by, and the
-      how-to-pay block on a live loan, on no loan and in production
+      reminders sent and still ahead, past the due date as well as before
+      it, the notice with its date to pay by, and the how-to-pay block on a
+      live loan, on no loan and in production
       (`grade10-site-vault-loan-and-settlement-SC-27`,
       `grade10-site-vault-loan-and-settlement-SC-28`,
       `grade10-site-vault-loan-and-settlement-SC-30`,
@@ -526,16 +527,20 @@ append to `CaseDetailView.stories.tsx`.
       `grade10-site-vault-loan-and-settlement-SC-34`,
       `grade10-site-vault-loan-and-settlement-SC-35`,
       `grade10-site-vault-loan-and-settlement-SC-37`,
-      `grade10-site-vault-loan-and-settlement-SC-47`)
+      `grade10-site-vault-loan-and-settlement-SC-47`,
+      `grade10-site-vault-loan-and-settlement-SC-48`)
 - [ ] 13.2 Build `WhatIsOwedCard` with the as-at figures, the progress line
       and the term breakdown, and `RepaymentsList` under it, each row with its
       value date, method and the balance after it
       (`grade10-site-vault-loan-and-settlement-SC-27`,
       `grade10-site-vault-loan-and-settlement-SC-28`)
-- [ ] 13.3 Render the reminders still to come and the final notice through
-      `CaseFactCard` (`grade10-site-vault-loan-and-settlement-SC-30`,
+- [ ] 13.3 Render the reminders sent and still to come, and past the due
+      date the next weekly one and the notice that may follow, and the final
+      notice through `CaseFactCard`
+      (`grade10-site-vault-loan-and-settlement-SC-30`,
       `grade10-site-vault-loan-and-settlement-SC-32`,
-      `grade10-site-vault-loan-and-settlement-SC-34`)
+      `grade10-site-vault-loan-and-settlement-SC-34`,
+      `grade10-site-vault-loan-and-settlement-SC-48`)
 - [ ] 13.4 Build `HowToPayBlock` over the detail's `howToPay` — the payee, the
       FPS id, the account, the case reference as the transfer reference, and
       card or cash at the counter — shown on a live loan alone, with the
@@ -921,7 +926,8 @@ Lands beside group 18, on group 3's exports and the fixture transport.
       `grade10-site-vault-loan-and-settlement-SC-41`)
 - [ ] 22.3 State the missing precondition in the vault dialog and the two
       people the payout dialog needs, and follow the due date and the reminder
-      dates from the value date
+      dates from the value date; the Overdue view's Ladder row states the same
+      ladder `admin.policy` answers, in words
       (`grade10-site-vault-loan-and-settlement-SC-42`,
       `grade10-site-vault-loan-and-settlement-SC-43`,
       `grade10-site-vault-loan-and-settlement-SC-44`)

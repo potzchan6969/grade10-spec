@@ -30,7 +30,6 @@ export default function RepaymentReversedEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "A payment record on your vault case was taken back.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="A payment record was taken back"
       lead={`We have taken back a payment of ${money(amountMinor)} recorded against your loan on ${itemTitle}, because it recorded money we had not received. What you owe has changed; the balance below is the current one.`}
       preheader={`${money(amountMinor)} taken back. ${money(balanceAfterMinor)} is now outstanding.`}

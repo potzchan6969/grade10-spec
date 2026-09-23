@@ -19,7 +19,6 @@ export default function VisitCancelledEmail() {
         lines: footerLines("custodian"),
         whyYouGotThis: "Your vault visit was cancelled.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Your visit is off"
       lead={[
         `The visit for ${itemTitle} has been cancelled. You can book another time whenever you are ready.`,

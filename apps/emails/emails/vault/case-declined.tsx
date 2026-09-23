@@ -22,7 +22,6 @@ export default function CaseDeclinedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: `We could not take ${itemTitle} into the vault.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="We are not able to take this item"
       lead={`After looking at ${itemTitle} we are not able to take it into the vault. Nothing has been signed and nothing is owed.`}
       preheader={`We could not take ${itemTitle}. Nothing has been signed and nothing is owed.`}

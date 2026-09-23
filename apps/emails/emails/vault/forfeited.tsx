@@ -29,7 +29,6 @@ export default function ForfeitedEmail({
         lines: footerLines("lender"),
         whyYouGotThis: `The loan on ${itemTitle} was not repaid by its due date.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="The item has passed to us"
       lead={`The loan on ${itemTitle} was not repaid by its due date, so under the agreement you signed the item has passed to us and the loan is settled. Nothing further is owed.`}
       preheader={`${itemTitle} has been forfeited. The loan is settled; nothing further is owed.`}

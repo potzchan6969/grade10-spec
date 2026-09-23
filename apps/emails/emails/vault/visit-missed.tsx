@@ -29,7 +29,6 @@ export default function VisitMissedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "Your vault visit passed without us seeing you.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="We missed you"
       lead={
         itemWithYou

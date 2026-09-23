@@ -30,7 +30,6 @@ export default function PayoutReversedEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "A payout record on your vault case was taken back.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="A payout record was taken back"
       lead={`We have taken back a payout of ${money(amountMinor)} recorded against ${itemTitle}, because it recorded a transfer that did not happen. What you owe has changed; the balance below is the current one.`}
       preheader={`${money(amountMinor)} taken back. ${money(balanceAfterMinor)} is now outstanding.`}

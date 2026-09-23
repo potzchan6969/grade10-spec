@@ -33,7 +33,6 @@ export default function RepaymentDueSoonEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "Your loan is coming due soon.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="A reminder about your loan"
       lead={`Your loan on ${itemTitle} is repayable by ${hkDate(dueAt)}. Come in or get in touch before then and the item goes home with you.`}
       preheader={`${money(outstandingMinor)} outstanding, due ${hkDate(dueAt)}.`}

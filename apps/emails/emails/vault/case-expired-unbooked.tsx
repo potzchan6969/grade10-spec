@@ -26,7 +26,6 @@ export default function CaseExpiredUnbookedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "Your vault request has expired.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="This request timed out"
       lead={`Your request for ${itemTitle} expired because no visit was ever booked for it. Start a new one whenever you like — nothing was signed and nothing is owed.`}
       preheader="No visit was ever booked, so your request expired. Nothing is owed."

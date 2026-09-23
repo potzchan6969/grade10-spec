@@ -32,7 +32,6 @@ export default function ForfeitureNoticeEmail({
         lines: footerLines("lender"),
         whyYouGotThis: `Your loan on ${itemTitle} is overdue.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading={`We may take ${itemTitle} to settle this loan`}
       lead={[
         `This notice acts under ${clause}.`,

@@ -36,7 +36,6 @@ export default function OfferMadeEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "We have an offer ready on your vault case.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Your offer is ready"
       lead={`We can lend you ${money(principalMinor)} against ${itemTitle}. The terms are below, and the offer stands until it expires.`}
       preheader={`${money(principalMinor)} against ${itemTitle}, open until ${hkDate(expiresAt)}.`}

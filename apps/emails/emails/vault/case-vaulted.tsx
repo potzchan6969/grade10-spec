@@ -26,7 +26,6 @@ export default function CaseVaultedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: `${itemTitle} is now in our vault.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Safely stored"
       lead={`${itemTitle} is now in our vault, and your signed documents are on your case.`}
       preheader={`${itemTitle} is safely stored.`}

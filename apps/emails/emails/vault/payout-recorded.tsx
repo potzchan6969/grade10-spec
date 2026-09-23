@@ -35,7 +35,6 @@ export default function PayoutRecordedEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "We have sent you money against your vault case.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Your loan has been paid out"
       lead={`We have sent ${money(amountMinor)} against ${itemTitle}. Your loan runs from the day the money left us and is repayable by ${hkDate(dueAt)}.`}
       preheader={`${money(amountMinor)} sent. Repayable by ${hkDate(dueAt)}.`}

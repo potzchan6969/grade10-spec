@@ -27,7 +27,6 @@ export default function VisitRescheduledEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "Your vault visit was moved.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Your visit was rescheduled"
       lead={[
         `Your visit for ${itemTitle} is now ${hkDateTime(visitAt)}. Nothing else about your case has changed.`,

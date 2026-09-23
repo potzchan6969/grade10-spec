@@ -51,8 +51,6 @@ export const previewCase = {
   url: caseUrl,
   verifyUrl: "https://grade10.com/vault/verify#preview-secret",
 
-  collectorName: "Wing",
-  collectorFullName: "Wing-Yan Chu",
   email: "wing.chu@example.com",
 
   custodianName: "Grade 10 Vault Limited",

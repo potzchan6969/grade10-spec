@@ -29,7 +29,6 @@ export default function VisitBookedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "You booked a vault visit with us.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="We'll see you soon"
       lead={`Your visit for ${itemTitle} is booked for ${hkDateTime(visitAt)}. Bring the item and a photo ID — we check your ID before anything is signed, either from the link we send you or at the counter.`}
       preheader={`${hkDateTime(visitAt)} at ${shopName}. Bring ${itemTitle} and a photo ID.`}

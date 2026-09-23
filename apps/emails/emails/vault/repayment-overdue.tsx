@@ -36,7 +36,6 @@ export default function RepaymentOverdueEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "Your loan is past its due date.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="This loan is overdue"
       lead={`Your loan on ${itemTitle} was repayable by ${hkDate(dueAt)} and has not been settled. Interest is running on it at the same daily rate for every day it stays unpaid — there is no late fee and no higher rate.`}
       preheader={`${money(outstandingMinor)} outstanding, due since ${hkDate(dueAt)}.`}

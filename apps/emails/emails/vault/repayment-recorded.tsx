@@ -30,7 +30,6 @@ export default function RepaymentRecordedEmail({
         lines: footerLines("lender"),
         whyYouGotThis: "We have recorded a payment against your vault case.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Payment received"
       lead={`We have recorded ${money(amountMinor)} against your loan on ${itemTitle}.`}
       preheader={`${money(amountMinor)} recorded. ${money(balanceAfterMinor)} left to pay.`}

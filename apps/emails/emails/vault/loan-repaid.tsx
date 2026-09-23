@@ -28,7 +28,6 @@ export default function LoanRepaidEmail({
         lines: footerLines("lender"),
         whyYouGotThis: `Your loan on ${itemTitle} is repaid.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="Nothing left to pay"
       lead={`Your loan on ${itemTitle} is fully repaid. Book a time to come and collect it whenever suits you — we hand it back in person, against a signed receipt.`}
       preheader={`${itemTitle} is repaid in full. Book a time to collect it.`}

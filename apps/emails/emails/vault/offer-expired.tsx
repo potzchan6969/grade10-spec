@@ -26,7 +26,6 @@ export default function OfferExpiredEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "The offer on your vault case has expired.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="That offer has run out"
       lead={`Nobody accepted the offer on ${itemTitle} before it expired, so it is closed. ${itemTitle} and your case are untouched, and we can write you another offer whenever you want one.`}
       preheader={`The offer expired ${hkDate(expiresAt)}. Your item and your case are untouched.`}

@@ -29,7 +29,6 @@ export default function IdentityCheckInvitedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: "You have a vault visit booked with us.",
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="One step before you come in"
       lead={`Before we can take ${itemTitle} into the vault we need to check your ID. It takes a couple of minutes on your phone. If you would rather do it at the counter, bring your ID to your visit instead.`}
       preheader={`Verify before ${hkDateTime(visitAt)} and your visit takes less time.`}

@@ -26,7 +26,6 @@ export default function CaseReleasedEmail({
         lines: footerLines("custodian"),
         whyYouGotThis: `${itemTitle} has been released back to you.`,
       }}
-      greeting={`Hi ${previewCase.collectorName},`}
       heading="The item is back with you"
       lead={`${itemTitle} has left our custody and been handed back to you. Nothing is outstanding.`}
       preheader={`${itemTitle} is back with you. Nothing is outstanding.`}
