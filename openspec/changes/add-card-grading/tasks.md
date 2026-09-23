@@ -1489,7 +1489,8 @@ Stage (b).
       `grade10-admin-grading-counter-SC-10`)
 - [ ] 24.4 Add `admin.tiles` — the ready slabs still in the safe against its
       declared cap, what is owed, the batch closing and the batches with
-      graders — folded at one instant in the brand's zone
+      graders — folded at one instant in the brand's zone; a closed batch with
+      no submission at `checked_in` neither ships nor counts
       (`grade10-admin-grading-counter-SC-12`,
       `grade10-admin-grading-counter-SC-13`,
       `grade10-admin-grading-counter-SC-87`,
@@ -1705,10 +1706,12 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-53`)
 - [ ] 27.3 Build `GraderStagesCard`: the grader's stage in its own words, the
       estimate counted from the day the batch left, the running-late line past
-      it, and nothing to do while the cards are away
+      it, a re-estimated day shown the day it is set, and nothing to do while
+      the cards are away
       (`grade10-site-grading-submission-lifecycle-SC-07`,
       `grade10-site-grading-submission-lifecycle-SC-08`,
       `grade10-site-grading-submission-lifecycle-SC-09`,
+      `grade10-site-grading-submission-lifecycle-SC-10`,
       `grade10-site-grading-submission-lifecycle-SC-11`)
 - [ ] 27.4 Render the cards over `GradingCardRecord` and `GradingGradeCards` —
       one outcome line per card, three ready while one did not come back — and
@@ -1845,7 +1848,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (c).
 - [ ] 30.2 Build `BatchesPanel` and `ShipBatchForm`: the batch list with its
       open, closed and due-back words, the insured total read off the batch's
       cards and no typed figure taken, and shipping withheld while the batch is
-      open or a field is missing (`grade10-admin-grading-batches-US1-TC1-1`,
+      open, holds no submission at `checked_in`, or a field is missing (`grade10-admin-grading-batches-US1-TC1-1`,
       `grade10-admin-grading-batches-US1-TC3-1`,
       `grade10-admin-grading-batches-US1-TC4-1`,
       `grade10-admin-grading-batches-US1-TC12-1`,

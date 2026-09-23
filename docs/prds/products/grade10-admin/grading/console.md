@@ -71,6 +71,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
   estimate back, the level's counted from the ship day
 - ❓ **Above the courier's cover** — a batch whose declared total passes the courier's written figure is split or
   held — Operations
+- ❓ **A ship date before the cut-off** — whether a ship date earlier than the batch's cut-off day is refused —
+  Operations
 - 🚧 **Mark as shipped** — `checked_in → sent` for every submission in the batch, each collector emailed the tracking
   and the estimate; a re-estimate takes a reason and emails every collector in the batch the day it is set
 - 🚧 **Tiles** — ship today; with graders, past their estimate; back, unchecked; the safe's value against its cap
