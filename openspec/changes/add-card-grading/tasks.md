@@ -987,7 +987,7 @@ Stage (b).
 
 Stage (c).
 
-- [ ] 17.1 Cover receiving: the manifest and invoice before the first scan, the
+- [x] 17.1 Cover receiving: the manifest and invoice before the first scan, the
       invoice read against the sheet, the cert read under the lock before the
       insert, every exception on the card, the part-scanned batch taken up
       again, finishing held and then run twice, and the audit row each act
@@ -1013,7 +1013,7 @@ Stage (c).
       `grade10-site-grading-submission-lifecycle-SC-18`,
       `grade10-site-grading-submission-lifecycle-SC-23`,
       `grade10-site-grading-submission-lifecycle-SC-14`)
-- [ ] 17.2 Add `enterManifest` and `enterInvoice`, nothing scanned until both
+- [x] 17.2 Add `enterManifest` and `enterInvoice`, nothing scanned until both
       are in, a manifest line naming no intake id in the batch held unmatched,
       and `enterInvoice` recording the invoice total against the batch's sheet
       sum, each with its own currency, so a gap is the shop's and the collector
@@ -1021,7 +1021,7 @@ Stage (c).
       (`grade10-admin-grading-batches-SC-23`,
       `grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-39`)
-- [ ] 17.3 Write `scanCard` under the submission lock: the cert matched to the
+- [x] 17.3 Write `scanCard` under the submission lock: the cert matched to the
       card the manifest names, `CERT_HELD_ELSEWHERE` read before the insert
       behind the partial unique on `(grader, cert)`, a cert returned in an
       earlier batch refused, and a cert the manifest does not carry refused
@@ -1029,7 +1029,7 @@ Stage (c).
       `grade10-admin-grading-batches-SC-26`,
       `grade10-admin-grading-batches-SC-27`,
       `grade10-admin-grading-batches-SC-46`)
-- [ ] 17.4 Write `recordException` over the card's closed outcome set: ungraded
+- [x] 17.4 Write `recordException` over the card's closed outcome set: ungraded
       with the grader's code and note, held with the date it is expected and
       refused without one, not returned owing its declared value, a damaged
       slab photographed in the box, a card below its minimum grade coming back
@@ -1040,14 +1040,14 @@ Stage (c).
       `grade10-admin-grading-batches-SC-47`,
       `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-18`)
-- [ ] 17.5 Tell the collector either outcome the same day, and tell the
+- [x] 17.5 Tell the collector either outcome the same day, and tell the
       upcharge the day the grades post, at the pinned sheet's difference
       (`grade10-admin-grading-batches-SC-37`,
       `grade10-admin-grading-batches-SC-38`,
       `grade10-site-grading-submission-lifecycle-SC-23`)
-- [ ] 17.6 Keep a part-scanned batch's scans when it is saved and taken up
+- [x] 17.6 Keep a part-scanned batch's scans when it is saved and taken up
       again (`grade10-admin-grading-batches-SC-30`)
-- [ ] 17.7 Write `finishReceiving`: refusing `MANIFEST_UNRESOLVED` while a line
+- [x] 17.7 Write `finishReceiving`: refusing `MANIFEST_UNRESOLVED` while a line
       or a slab is unresolved, each pickup code drawn in its own savepoint
       behind the partial unique among `ready` submissions, one transaction
       making every submission ready, the letters after commit, a second finish
@@ -1056,15 +1056,15 @@ Stage (c).
       `grade10-admin-grading-batches-SC-32`,
       `grade10-admin-grading-batches-SC-33`,
       `grade10-site-grading-submission-lifecycle-SC-14`)
-- [ ] 17.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 17.8 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 17.9 Write `receiveBatch`: the box recorded back at the shop under the
+- [x] 17.9 Write `receiveBatch`: the box recorded back at the shop under the
       batch lock, `received_at` stamped and `receive` moving each member
       `graded → returned` with one event each, refused by name on a batch not
       shipped, and a repeat writing nothing; the manifest, the invoice and the
       scans refused until it has run
       (`grade10-admin-grading-batches-SC-05`)
-- [ ] 17.10 Write `resolveManifestLine`: an unmatched line settled by staff
+- [x] 17.10 Write `resolveManifestLine`: an unmatched line settled by staff
       naming the batch's card it meant, or closed as the grader's error with a
       reason kept on the line, never in the history; finishing holds only on
       a line settled neither way
