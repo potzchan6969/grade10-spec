@@ -40,7 +40,17 @@ describe("the walk group names the suite's review", () => {
     expect(found).toHaveLength(1);
     expect(found[0].level).toBe("fail");
     expect(found[0].path).toBe(`openspec/changes/${CHANGE}/tasks.md`);
-    expect(found[0].reason).toContain("/tcs-review");
+    expect(found[0].reason).toContain("/tcs-review walk-probe");
+  });
+
+  it("refuses the template's placeholder in place of this change's review", async () => {
+    const found = await findingsOf(
+      plan(
+        "Needs `feature-tcs.md` reviewed (`/tcs-review <change>`) as its input.",
+      ),
+      "walk",
+    );
+    expect(found).toHaveLength(1);
   });
 
   it("shared-planning-agent-rounds-SC-90 - says nothing where the walk group names the review as its input", async () => {

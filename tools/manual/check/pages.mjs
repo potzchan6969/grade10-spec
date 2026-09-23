@@ -282,7 +282,8 @@ function checkBlock(ctx, path, block) {
     case "changes":
     case "next": {
       // Either may point at a capability that is still being introduced, so
-      // an in-flight change's deltas resolve it as well as a durable spec.
+      // any capability an in-flight change declares resolves it as well as a
+      // durable spec.
       if (block.type === "changes") ctx.referenced.add(block.spec);
       if (specs.has(block.spec) || ctx.changing.has(block.spec)) break;
       add(

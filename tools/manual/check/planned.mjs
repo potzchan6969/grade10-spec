@@ -52,11 +52,11 @@ export function checkWalkGroup(ctx, changes) {
     const text = readTextIfExists(join(ctx.roots.store, file));
     if (text === undefined) continue;
     const walk = walkGroupOf(outline(text));
-    if (!walk || walk.raw.includes("/tcs-review")) continue;
+    if (!walk || walk.raw.includes(`/tcs-review ${change.id}`)) continue;
     ctx.add(
       "walk",
       file,
-      "the walk group names no review of the suite — it needs `feature-tcs.md` reviewed (`/tcs-review <change>`) as its input",
+      `the walk group names no review of the suite — it needs \`feature-tcs.md\` reviewed (\`/tcs-review ${change.id}\`) as its input`,
     );
   }
 }

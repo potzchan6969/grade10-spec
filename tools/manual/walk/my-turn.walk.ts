@@ -15,9 +15,8 @@ import { openManual } from "./setup";
  * names `dev`) and is the `qa` and `dev` hand of `demo-specified`, whose
  * Specified stage is QA's turn for the suite's review
  * (`shared-planning-agent-rounds-SC-89`; proves part of
- * `shared-planning-agent-rounds-US11-TC1-1`) - so the same two fixtures the
- * section-pip and my-turn cases both need carry every state this file
- * decides. `other` is left
+ * `shared-planning-agent-rounds-US11-TC1-1`), and the design hand of
+ * `demo-waiting`, the one Yours later lists. `other` is left
  * exactly as the store already has it: no question, no hand, no wait, which
  * is what SC-61 needs and no fixture edit has to manufacture.
  *
@@ -105,7 +104,7 @@ test("shared-planning-change-stages-SC-60 - the order of the page", async () => 
 
   const later = page.elementLocator(sectionFor("Yours later"));
   await expect
-    .element(later.getByRole("link", { name: /Waiting/ }))
+    .element(later.getByRole("link", { name: "The Waiting overlay" }))
     .toBeVisible();
 
   // Through the page's own link, since one file opens one address: the

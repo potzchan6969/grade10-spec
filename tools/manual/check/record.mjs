@@ -14,7 +14,6 @@ import {
 } from "../../../scripts/openspec/lib/team.mjs";
 import { BUILDING, marksOfPage } from "../src/api/open-marks.ts";
 import { waiverLineOf } from "../src/api/waivers.ts";
-import { readTextIfExists } from "../src/store/disk.mts";
 import { productPages } from "./context.mjs";
 import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
@@ -218,21 +217,17 @@ export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
   }
 }
 
-/**
- * A wait names an artifact of the change's own schema, and stops being a wait
- * once that artifact exists or the record waives it. None of these is a
- * judgement about whether the wait is over — only its author ends that — but
- * about whether the line says anything: an artifact the schema does not
- * declare reaches no worklist at all, and one the same record waives is the
- * change saying both that nobody owes it and that it is waiting for it. Each
- * is one line to delete, in a file the author has just edited. A wait on an
- * artifact the change has written stands: a written design may wait on its
- * frame, and the wait names what is missing or the record's reader refuses
- * it (`shared-planning-agent-rounds-SC-101`).
- */
 const waitsOnSpecs = (change) =>
   (change.awaiting ?? []).some((one) => one.artifact === "specs");
 
+/**
+ * A wait names an artifact of the change's own schema and ends only when its
+ * author deletes the line; a written design may wait on its frame
+ * (`shared-planning-agent-rounds-SC-101`). The check refuses only a line that
+ * says nothing: an artifact the schema does not declare reaches no worklist,
+ * and one the record waives says both that nobody owes it and that somebody
+ * does.
+ */
 export function checkAwaiting(ctx, changes) {
   for (const change of changes) {
     if (change.status !== "in-flight" || !change.awaiting) continue;

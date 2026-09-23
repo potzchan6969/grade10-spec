@@ -149,6 +149,19 @@ test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suit
   });
 });
 
+test("shared-planning-agent-rounds-SC-89 - QA's turn names no suite already approved or unreadable", () => {
+  const cases = { draft: 0, actual: 3, deprecated: 0, total: 3, automated: 0 };
+  const at = {
+    id: "probe",
+    stage: "specified",
+    suites: [
+      { spec: "a/signed", status: "approved", cases },
+      { spec: "a/broken", error: "no cases", cases: { ...cases, total: 0 } },
+    ],
+  };
+  assert.doesNotMatch(toldBodyOf(at, "qa", { linked: LINKED }).text, /Suite:/);
+});
+
 test("behindText names the artifact and what changed before it", () => {
   assert.equal(
     behindText({ artifact: "tasks", changed: ["decisions", "specs"] }, LINKED),

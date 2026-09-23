@@ -539,9 +539,6 @@ function checkOverlap(files, add) {
   const claims = new Map();
   for (const one of files) {
     for (const requirement of one.requirements) {
-      // An ADDED block claims the name as a MODIFIED one does: two changes
-      // that fold one requirement are named to each other whatever their
-      // headings (`shared-planning-agent-rounds-SC-102`).
       const key = `${one.spec}\n${requirement.name}`;
       const held = claims.get(key) ?? [];
       held.push({ ...requirement, change: one.change, file: one.file });
@@ -561,7 +558,9 @@ function checkOverlap(files, add) {
         `${label(claim)} is also folded by ${others.join(", ")} — ${
           claim.kind === "added"
             ? "archiving this one second fails outright, since the fold refuses to add a name that exists"
-            : "whichever archives second reverts the first"
+            : held.some((one) => one.kind === "added")
+              ? "archiving this one first fails the other's fold, and second rewrites what it added"
+              : "whichever archives second reverts the first"
         }`,
       );
     }
