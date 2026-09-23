@@ -147,7 +147,10 @@ export const SubmitProof: Story = {
       ?.querySelector('input[type="file"]');
     expect(fileInput).toBeTruthy();
     await userEvent.upload(fileInput as HTMLInputElement, file);
-    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
+    // The row fades in over 200ms, as the dropzone's own story waits for.
+    await waitFor(() => {
+      expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
+    });
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),

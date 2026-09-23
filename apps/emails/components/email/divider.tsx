@@ -1,5 +1,4 @@
 import type { CSSProperties, ReactNode } from "react";
-import { Fragment } from "react";
 import {
   Body,
   Column,
@@ -90,30 +89,28 @@ const DividerFrame = ({
         style={{ borderCollapse: "collapse", width: "100%" }}
         width="100%"
       >
-        <Fragment>
-          <Row>
-            {showLeftRule ? (
-              <Column style={{ verticalAlign: "middle", width: "50%" }}>
-                <HorizontalRule />
-              </Column>
-            ) : null}
-            <Column
-              style={{
-                padding: contentPadding,
-                verticalAlign: "middle",
-                whiteSpace: "nowrap",
-                width: "1%",
-              }}
-            >
-              {children}
+        <Row>
+          {showLeftRule ? (
+            <Column style={{ verticalAlign: "middle", width: "50%" }}>
+              <HorizontalRule />
             </Column>
-            {showRightRule ? (
-              <Column style={{ verticalAlign: "middle", width: "50%" }}>
-                <HorizontalRule />
-              </Column>
-            ) : null}
-          </Row>
-        </Fragment>
+          ) : null}
+          <Column
+            style={{
+              padding: contentPadding,
+              verticalAlign: "middle",
+              whiteSpace: "nowrap",
+              width: "1%",
+            }}
+          >
+            {children}
+          </Column>
+          {showRightRule ? (
+            <Column style={{ verticalAlign: "middle", width: "50%" }}>
+              <HorizontalRule />
+            </Column>
+          ) : null}
+        </Row>
       </Section>
     </Section>
   );
@@ -256,26 +253,24 @@ const DividerIconButton_DividerWithIconButtonSection = ({
 }: Omit<DividerIconButton_DividerWithIconButtonProps, "theme">) => (
   <DividerFrame variant={variant}>
     <Section>
-      <Fragment>
-        <Row>
-          <Column style={{ paddingRight: "8px", verticalAlign: "middle" }}>
-            <Text
-              style={{
-                ...dividerTextStyle,
-                fontSize: "18px",
-                lineHeight: "28px",
-              }}
-            >
-              {icon}
-            </Text>
-          </Column>
-          <Column style={{ verticalAlign: "middle" }}>
-            <Link href={href} style={dividerButtonStyle}>
-              {label}
-            </Link>
-          </Column>
-        </Row>
-      </Fragment>
+      <Row>
+        <Column style={{ paddingRight: "8px", verticalAlign: "middle" }}>
+          <Text
+            style={{
+              ...dividerTextStyle,
+              fontSize: "18px",
+              lineHeight: "28px",
+            }}
+          >
+            {icon}
+          </Text>
+        </Column>
+        <Column style={{ verticalAlign: "middle" }}>
+          <Link href={href} style={dividerButtonStyle}>
+            {label}
+          </Link>
+        </Column>
+      </Row>
     </Section>
   </DividerFrame>
 );

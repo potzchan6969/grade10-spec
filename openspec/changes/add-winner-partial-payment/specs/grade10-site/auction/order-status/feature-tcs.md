@@ -9,7 +9,7 @@
 **I want** an invoice with a recorded payment to read Partially Paid,
 **so that** the status says who settles the remaining money.
 
-### auction-status-US2-TC1-1: A recorded payment derives Partially Paid
+### auction-status-US2-TC3-1: A recorded payment derives Partially Paid
 
 **Classification:**
 
@@ -37,7 +37,7 @@
 * The derived status is Partially Paid.
 * The remaining balance is not used to derive a different status.
 
-### auction-status-US2-TC2-1: Partially Paid has no self-service deadline
+### auction-status-US2-TC4-1: Partially Paid has no self-service deadline
 
 **Classification:**
 
