@@ -17,43 +17,43 @@ both SPAs deploy from one commit in one window — Migration Plan, step 2.
 
 ## 1. The collector's words (grade10-spec)
 
-- [ ] 1.1 Name the new keys in the vocabulary type first, so
+- [x] 1.1 Name the new keys in the vocabulary type first, so
       `pnpm --filter @grade10/i18n run test` refuses every language that has
       not answered them yet
-- [ ] 1.2 Rename the flat `case.*` and `request.*` keys in
+- [x] 1.2 Rename the flat `case.*` and `request.*` keys in
       `packages/i18n/messages/shared/<locale>/vault.json` into the nested
       `vault.case.offer.*`, `vault.money.howToPay.*`, `vault.money.owed.*` and
       `vault.request.sent.*` families, in `en`, `zh-Hant`, `zh-Hans` and `ko`,
       opening no second family beside them
-- [ ] 1.3 Answer the case's own words: `vault.case.reference`, the eight
+- [x] 1.3 Answer the case's own words: `vault.case.reference`, the eight
       `vault.case.stage.*`, the eight `vault.case.chip.*`, the five
       `vault.case.fact.*` with their title, body and next step, and the four
       `vault.case.ending.*` with `vault.case.startAnother`
-- [ ] 1.4 Answer the money words: `vault.money.howToPay.*`,
+- [x] 1.4 Answer the money words: `vault.money.howToPay.*`,
       `vault.money.owed.*`, `vault.money.repayments.*`, `vault.money.notice.*`
       and `vault.money.reminders.*`
-- [ ] 1.5 Answer the request, visit, data and list words:
+- [x] 1.5 Answer the request, visit, data and list words:
       `vault.request.step.*`, `vault.request.review.*`,
       `vault.request.sent.*`, `vault.visit.booked.*`, `vault.visit.shop.*`,
       `vault.visit.rules`, `vault.data.*` and `vault.list.*`
-- [ ] 1.6 Verify: `pnpm --filter @grade10/i18n run test`,
+- [x] 1.6 Verify: `pnpm --filter @grade10/i18n run test`,
       `pnpm run typecheck`, `pnpm run lint`
 
 ## 2. The preview letters (grade10-spec)
 
-- [ ] 2.1 Write `apps/emails/emails/vault/fixtures.ts` as one `LetterFacts`
+- [x] 2.1 Write `apps/emails/emails/vault/fixtures.ts` as one `LetterFacts`
       member per `NotifyKind`, the data the worker's `render.test.tsx` reads
       back through `external/grade10-spec` — the fixtures land before the
       letters that render them
-- [ ] 2.2 Widen `EmailFooter` with the optional `lines` prop for the
+- [x] 2.2 Widen `EmailFooter` with the optional `lines` prop for the
       registered name and the licence line, the shop address, the complaints
       contact and the time-zone line, the one component change this store
       carries
-- [ ] 2.3 Add the preview letters under `apps/emails/emails/vault/`, one file
+- [x] 2.3 Add the preview letters under `apps/emails/emails/vault/`, one file
       per kind over `Grade10EmailShell`, composing the facts table, the
       how-to-pay and reminder groups, the notice clause, the case line,
       `PrimaryCta` and the widened footer
-- [ ] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
+- [x] 2.4 Verify: `pnpm run typecheck`, `pnpm run lint`,
       `pnpm run email:build`
 
 ## 3. The derived facts and the wire (grade10)

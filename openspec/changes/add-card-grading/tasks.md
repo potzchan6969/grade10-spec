@@ -17,42 +17,42 @@ reaches it, and `batch.spec.ts` lands with (c) because it reaches receiving, so
 
 ## 1. The collector's words (grade10-spec)
 
-- [ ] 1.1 Name every key of the new `grading` namespace in the vocabulary type
+- [x] 1.1 Name every key of the new `grading` namespace in the vocabulary type
       first, so `pnpm --filter @grade10/i18n run test` refuses each language
       that has not answered them yet
-- [ ] 1.2 Answer `grading.home.*` and `grading.plan.*` in
+- [x] 1.2 Answer `grading.home.*` and `grading.plan.*` in
       `messages/shared/{en,zh-Hant,zh-Hans,ko}/grading.json` — the lead and the
       four how-it-works lines, the price sheet with its above-the-top line, the
       wizard's three steps, the card's words, the paste sheet's five counts,
       the service step's levels and estimate, and the review's totals, warning
       and five good-to-know lines
-- [ ] 1.3 Answer `grading.dropoff.*` — the shop durations, the batch line, the
+- [x] 1.3 Answer `grading.dropoff.*` — the shop durations, the batch line, the
       booked page's four Before you come items, the calendar, move and cancel
       words, and the joined and resized lines
-- [ ] 1.4 Answer `grading.submission.*` — the ten status words, the seven
+- [x] 1.4 Answer `grading.submission.*` — the ten status words, the seven
       chips, the seven stages, the fourteen outcome badges and each exception's
       line, the grader block, the grades block, the pickup card, the named
       collector, every money line, the ladder's rungs and the collected record
-- [ ] 1.5 Answer `grading.ceremony.*` — one `RefusalWords` entry per
+- [x] 1.5 Answer `grading.ceremony.*` — one `RefusalWords` entry per
       `DocSignFailureCode`, the name and postal-address fields, sign, decline
       and sealed — and `grading.console.*`, the seven WhatsApp templates and
       nothing else
-- [ ] 1.6 Add the grading nav key to `chrome` and assemble the namespace in
+- [x] 1.6 Add the grading nav key to `chrome` and assemble the namespace in
       `packages/i18n/src/catalogs.ts`
-- [ ] 1.7 Verify: `pnpm --filter @grade10/i18n run test`, `pnpm run typecheck`,
+- [x] 1.7 Verify: `pnpm --filter @grade10/i18n run test`, `pnpm run typecheck`,
       `pnpm run lint`
 
 ## 2. The three rungs on `Text` (grade10-spec)
 
-- [ ] 2.1 Write the stories for the three rungs beside `Text` — the `display`
+- [x] 2.1 Write the stories for the three rungs beside `Text` — the `display`
       size, the `mono` face and the `warning` tone, one story per rung — and
       run the axe pass over each
-- [ ] 2.2 Add the `display` size above `xl` and the `mono` face axis on the
+- [x] 2.2 Add the `display` size above `xl` and the `mono` face axis on the
       existing `--font-mono` token, leaving every size and face `Text` already
       offers as it is
-- [ ] 2.3 Add the `warning` tone on the existing `--warning-foreground` token,
+- [x] 2.3 Add the `warning` tone on the existing `--warning-foreground` token,
       which the money block's due row reads
-- [ ] 2.4 Verify: `pnpm run design-sync:check`, whose two warnings stand on
+- [x] 2.4 Verify: `pnpm run design-sync:check`, whose two warnings stand on
       [`ui-design.md`](ui-design.md)'s record of `Text`'s three rungs and
       `RadioCard` as code ahead of design,
       `pnpm run test:stories:design-system`, `pnpm run typecheck`,
@@ -242,19 +242,19 @@ Composes the design-system primitives group 2 widens. Every export takes
 Its evidence is group 22's `email/letters/render.test.tsx` in grade10, which
 reads these fixtures back; a failure there is a fix here.
 
-- [ ] 5.1 Write `apps/emails/emails/grading/fixtures.ts` as one facts member
+- [x] 5.1 Write `apps/emails/emails/grading/fixtures.ts` as one facts member
       per `NotifyKind` over the fixture submission `5TW8HN`, the data the
       worker's `email/letters/render.test.tsx` reads back through
       `external/grade10-spec` — the fixtures land before the letters that
       render them
-- [ ] 5.2 Add `CardLines`, `PickupBlock`, `SubmissionLine` and `GradingFooter`
+- [x] 5.2 Add `CardLines`, `PickupBlock`, `SubmissionLine` and `GradingFooter`
       beside the existing `_components`, the footer carrying the custodian's
       registered name, the shop and its address, the complaints contact and the
       Hong Kong time line
-- [ ] 5.3 Add one preview letter per `NotifyKind` under
+- [x] 5.3 Add one preview letter per `NotifyKind` under
       `apps/emails/emails/grading/`, each over `Grade10EmailShell` composing
       the facts group, the blocks that kind carries and `PrimaryCta`
-- [ ] 5.4 Verify: `pnpm run email:build`, `pnpm run typecheck`, `pnpm run lint`
+- [x] 5.4 Verify: `pnpm run email:build`, `pnpm run typecheck`, `pnpm run lint`
 
 ## 6. Provisioning the grading database, its buckets and its fonts (grade10)
 
