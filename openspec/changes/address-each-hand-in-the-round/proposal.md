@@ -43,7 +43,7 @@ spends per read, from 20 to 30 in the walkthrough to under 10.
   applies are listed as such, the questions asked are the ones that change
   what is built, and one asks whether to do it now.
 - **A round is sized by what it lands** — a task group that lands prose is
-  read by the reader of words and QA, not the build's four readings; one
+  read by the reader of words and QA, not the build's three readings; one
   verifier reads a round's readings together; a reader or verifier that ran
   on a fallback model is named in the row, and a dispatch the vendor killed
   stops the round rather than thinning it.

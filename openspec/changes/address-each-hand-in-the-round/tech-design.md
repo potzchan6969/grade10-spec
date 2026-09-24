@@ -197,7 +197,7 @@ command, a Playwright reporter, reading the submodule.
 
 ## Risks / Trade-offs
 
-- [A mixed group raises `code` and `copy` and is read by all seven] → that is
+- [A mixed group raises `code` and `copy` and is read by all six] → that is
   the decision; a group that wants fewer readers lands prose and code apart.
 - [A reader's dissent hidden in one verdict] → the verifier's row quotes each
   reader's fix where they differ (`Q30`).
