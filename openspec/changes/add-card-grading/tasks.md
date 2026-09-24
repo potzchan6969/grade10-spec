@@ -1981,11 +1981,16 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-US4-TC5-1`,
       `grade10-admin-grading-counter-US4-TC7-1`,
       `grade10-admin-grading-counter-US4-TC9-1`)
-- [ ] 29.6 Write the stories for `Grading/Admin/Handin` and
-      `Grading/Admin/Handback`, each with `surface: console`
+- [ ] 29.6 Write the stories for `Grading/Admin/Intake` and
+      `Grading/Admin/Handback`, each with `surface: console`, one per States
+      row of the intake and hand-back runbooks
 - [ ] 29.7 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
+- [ ] 29.8 Start a walk-in at the desk in `IntakeRunbook`: a submission opened
+      with the collector there, its cards added one at a time, and handed in
+      from the same runbook with the fee sheet pinned at the hand-in
+      (`grade10-admin-grading-counter-SC-15`)
 
 ## 30. The console's batches, receiving, the notice and the settings (grade10)
 
