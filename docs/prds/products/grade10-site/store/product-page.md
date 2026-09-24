@@ -53,9 +53,10 @@ Store and opens Store Locator
 
 :::detail{title="Implementation map" for="engineer"}
 - [Product listing page](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductListingPage.tsx)
+- [Product page route](https://github.com/9gag/grade10/blob/main/apps/frontend/grade10/src/pages/store/ProductPage.tsx)
 - [Product view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductView.tsx)
-- [Purchase view](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductBuyBox.tsx)
-- [Product variant model](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts)
+- [Purchase view and internal sale identity](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/presentation/views/ProductBuyBox.tsx)
+- [Product variant model and priced item selection](https://github.com/9gag/grade10/blob/main/packages/grade10-store/frontend/src/features/products/product/domain/models/Product.ts)
 - [Standalone product detail preview](https://github.com/9gag/grade10-spec/blob/main/apps/preview/src/store-product/store-product-detail.tsx)
 - [Frontend feature layout](https://github.com/9gag/grade10/blob/main/docs/conventions/code-layout.md)
 :::

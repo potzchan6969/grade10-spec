@@ -18,9 +18,9 @@ sellable item, without a shopper-facing variant chooser or variant title.
 **This reference is out of sync:** its accepted “Low inventory indicator”
 annotation asks for an `Only X left` cue, while the product-status requirement
 forbids stock counts and scarcity cues on browse surfaces. This change follows
-the requirement and removes that cue from the Storybook reference. The frame
-owner must supersede the annotation through the design annotation workflow
-before this frame is treated as current.
+the requirement and removes that cue from the Storybook reference; it does not
+edit the Figma frame. The frame owner must supersede the annotation through
+the design annotation workflow before this frame is treated as current.
 
 ### Cart drawer
 
