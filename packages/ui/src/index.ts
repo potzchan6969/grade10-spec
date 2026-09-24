@@ -63,20 +63,25 @@ export type {
 export {
   InvoicePdf,
   type InvoicePdfCopy,
-  type InvoicePdfProps,
+  type InvoicePdfData,
+  type InvoicePdfLineItem,
+  type InvoicePdfRenderOptions,
 } from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
+export type {
+  PdfDocumentCopy,
+  PdfLineItem,
+  PdfPartyAddress,
+} from "./blocks/auction-invoice-and-receipt-pdf/pdf-document";
 export {
+  addressLines,
+  type ReceiptPaymentBreakdown,
   ReceiptPdf,
   type ReceiptPdfCopy,
-  type ReceiptPdfProps,
+  type ReceiptPdfData,
+  type ReceiptPdfLineItem,
+  type ReceiptPdfRenderOptions,
+  receiptBreakdown,
 } from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
-export type {
-  OrderValueLines,
-  OrderValueLinesCopy,
-  PartyAddress,
-  PaymentBreakdown,
-  PaymentBreakdownCopy,
-} from "./blocks/auction-invoice-and-receipt-pdf/types";
 export {
   AuctionCard,
   type AuctionCardBadge,

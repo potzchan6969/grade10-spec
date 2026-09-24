@@ -1,27 +1,38 @@
 import { describe, expect, it } from "vitest";
 import type {
   InvoicePdfCopy,
-  InvoicePdfProps,
-  OrderValueLines,
-  OrderValueLinesCopy,
-  PartyAddress,
-  PaymentBreakdown,
-  PaymentBreakdownCopy,
+  InvoicePdfData,
+  InvoicePdfLineItem,
+  InvoicePdfRenderOptions,
+  PdfDocumentCopy,
+  PdfLineItem,
+  PdfPartyAddress,
+  ReceiptPaymentBreakdown,
   ReceiptPdfCopy,
-  ReceiptPdfProps,
+  ReceiptPdfData,
+  ReceiptPdfLineItem,
+  ReceiptPdfRenderOptions,
 } from "../../index";
-import { InvoicePdf, ReceiptPdf } from "../../index";
+import {
+  addressLines,
+  InvoicePdf,
+  ReceiptPdf,
+  receiptBreakdown,
+} from "../../index";
 
 type PublicInvoiceAndReceiptPdfTypes = [
-  InvoicePdfProps,
   InvoicePdfCopy,
-  ReceiptPdfProps,
+  InvoicePdfData,
+  InvoicePdfLineItem,
+  InvoicePdfRenderOptions,
+  PdfDocumentCopy,
+  PdfLineItem,
+  PdfPartyAddress,
   ReceiptPdfCopy,
-  OrderValueLines,
-  OrderValueLinesCopy,
-  PartyAddress,
-  PaymentBreakdown,
-  PaymentBreakdownCopy,
+  ReceiptPdfData,
+  ReceiptPdfLineItem,
+  ReceiptPaymentBreakdown,
+  ReceiptPdfRenderOptions,
 ];
 
 const publicInvoiceAndReceiptPdfTypes:
@@ -30,8 +41,10 @@ const publicInvoiceAndReceiptPdfTypes:
 void publicInvoiceAndReceiptPdfTypes;
 
 describe("invoice-and-receipt-pdf public entry", () => {
-  it("exports every named invoice-and-receipt-pdf component", () => {
-    expect([InvoicePdf, ReceiptPdf]).toEqual([
+  it("exports every named invoice-and-receipt-pdf function", () => {
+    expect([InvoicePdf, ReceiptPdf, receiptBreakdown, addressLines]).toEqual([
+      expect.any(Function),
+      expect.any(Function),
       expect.any(Function),
       expect.any(Function),
     ]);
