@@ -41,7 +41,7 @@ export const WINNER_ORDER_BANK_DETAILS = {
   swiftCode: "HSBCHKHHXXX",
   fpsId: "12345678",
   /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
-  totalAmountDue: "HK$16,020",
+  totalAmountDue: "HK$16,340",
   /** Durable bank reference shape from winner-order identifiers. */
   transferReference: "LK7P2Q01",
 } as const;

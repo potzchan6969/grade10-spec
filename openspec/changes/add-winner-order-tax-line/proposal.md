@@ -35,7 +35,7 @@ watch.
   disappears
 - **Tax sits inside the Subtotal**, so a card invoice's processing fee is
   grossed up on it and Grade10 keeps the Subtotal whole
-- **The line carries an info tip** reading `We set this from where your order
+- **The line carries an info tip** reading `Set by Grade10 for where your order
   ships. Some orders have none.`, whenever the line shows. The first sentence
   names who sets the amount, so a winner whose address is already confirmed
   does not read the address as the thing holding it up; the second answers

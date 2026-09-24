@@ -39,7 +39,7 @@ export type WinnerOrderRefundTransfer =
   | WinnerOrderRefundBankTransfer;
 
 export type WinnerOrderRefundDetails = {
-  /** Positive amount returned — e.g. `HK$16,140`. */
+  /** Positive amount returned — e.g. `HK$16,460`. */
   amount: string;
   /** Reason category the operator recorded. */
   reason: string;

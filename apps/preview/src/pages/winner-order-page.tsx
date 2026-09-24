@@ -377,6 +377,12 @@ function summaryLinesFor(
       tooltip: LINE_TOOLTIPS.shippingInsurance,
     },
     {
+      label: "Tax",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.tax,
+    },
+    {
       label: "Payment Processing Fee",
       value: "TBD",
       muted: true,
