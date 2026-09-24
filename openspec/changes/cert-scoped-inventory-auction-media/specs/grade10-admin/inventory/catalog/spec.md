@@ -58,8 +58,11 @@ An authorized Inventory operator using the existing Inventory media-management
 authority SHALL be able to tag, untag, or retag a saved source media item.
 Grade10 SHALL refuse a tag write whose target record is missing, belongs to a
 different product, or has no printed Cert ID, and SHALL preserve the item's
-current tag and source media. Removing a Cert record SHALL clear any tags to
-that record and SHALL retain the source media as untagged product-level media.
+current tag and source media. Physical removal of a Cert unit SHALL require an available record with no
+active reservation. In the same Inventory transaction, Grade10 SHALL decrement
+stock by one, increment withdrawn by one, remove the Cert record, and delete
+source media tagged to that record. Untagged product media and media tagged to
+other Cert records SHALL remain unchanged.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
@@ -132,10 +135,20 @@ that record and SHALL retain the source media as untagged product-level media.
 - **THEN** Grade10 refuses the write under existing Inventory authorization
 - **AND** the tag and source media remain unchanged
 
-#### Scenario: grade10-admin-inventory-catalog-SC-134 - Removing a Cert record clears its media tags and preserves media
-**Serves:** grade10-admin-inventory-catalog-US-13 - Operator keeps source media after a Cert record is removed
+#### Scenario: grade10-admin-inventory-catalog-SC-134 - Removing an available Cert unit withdraws the unit and its tagged media
+**Serves:** grade10-admin-inventory-catalog-US-13 - Operator removes an available copy and its source media
 
-- **GIVEN** a source media item tagged to a Cert record of its product
-- **WHEN** an authorized operator removes that Cert record
-- **THEN** the Cert record is removed and the source media remains on the product
-- **AND** the source media has no Cert tag
+- **GIVEN** an available Cert record with one source media item tagged to it and no active reservation
+- **WHEN** an authorized Inventory operator removes the physical unit and its Cert record
+- **THEN** stock decreases by one and withdrawn increases by one
+- **AND** the inventory ledger remains unchanged
+- **AND** the Cert record and its tagged source media are removed
+- **AND** untagged product media and media tagged to other Cert records remain unchanged
+
+#### Scenario: grade10-admin-inventory-catalog-SC-135 - A reserved Cert unit cannot be removed
+**Serves:** grade10-admin-inventory-catalog-US-13 - Operator removes an available copy and its source media
+
+- **GIVEN** a Cert record has an active reservation
+- **WHEN** an authorized Inventory operator attempts to remove the physical unit
+- **THEN** Grade10 refuses the removal
+- **AND** the reservation, stock, withdrawn count, Cert record, and tagged source media remain unchanged
