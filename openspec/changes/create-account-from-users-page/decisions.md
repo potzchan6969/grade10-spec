@@ -37,6 +37,8 @@
 | Q12 | Password? | Passwordless. No password field on Users create. | A password field at create |
 | Q13 | Empty role selection at create? | Leave the account as `user` only — same as clearing roles on set-role. - decided by the round | Refuse create until a role is picked |
 | Q14 | Are name and email required on create? | Name and email are required. - decided by the round | Optional name, or accept any string including blank |
+| Q15 | Required name and email — Confirm disabled until both present, or refuse on submit with an inline message? | Confirm disabled until both name and email are present. - decided by the round | Refuse on submit with an inline required message |
+| Q16 | When the session lacks `user:set-role`, offer only `user` in the create dialog, or offer every role and refuse after submit? | Console offers only `user` in the role options when the session lacks `user:set-role`; server still refuses a non-`user` role (stale session). - decided by the round | Offer every closed-set role and refuse after submit |
 
 ## Raised
 

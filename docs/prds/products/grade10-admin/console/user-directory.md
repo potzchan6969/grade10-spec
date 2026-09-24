@@ -37,9 +37,10 @@ Shared rules for the read and the components:
 
 🚧 An operator holding `user:create` creates a passwordless Auth account from
 Users — name, email, and roles from the closed set — for someone who has never
-signed in. Create is offered only with that grant. A successful create opens the
-new account's panel. A duplicate email is refused, with a way to open the
-existing account.
+signed in. Create is offered only with that grant. Without `user:set-role`, the
+create dialog offers only `user`. A successful create opens the new account's
+panel. A duplicate email is refused in the create dialog, with a control there
+that opens the existing account.
 
 :::detail{title="Product decisions" for="pm"}
 An operator holding a ticket that names a person could not find them by name,

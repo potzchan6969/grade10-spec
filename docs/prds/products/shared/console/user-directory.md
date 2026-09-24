@@ -31,7 +31,9 @@ submits an empty list, leaving what an empty list means to the console.
   does not reorder the rows it was given
 - 🚧 **Create** — offered only when the console supplies a create handler; the
   create dialog collects name, email, and roles from the console-supplied
-  vocabulary; success reports the created account for the console to open
+  vocabulary; success reports the created account for the console to open; a
+  duplicate email shows a refusal and an open-existing action that reports the
+  existing account
 
 ## Account Panel
 
