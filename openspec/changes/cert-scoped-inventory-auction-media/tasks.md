@@ -10,13 +10,16 @@
   `grade10-admin-inventory-catalog-SC-131`,
   `grade10-admin-inventory-catalog-SC-132`,
   `grade10-admin-inventory-catalog-SC-133`,
-  `grade10-admin-inventory-catalog-SC-134`)
+  `grade10-admin-inventory-catalog-SC-134`,
+  `grade10-admin-inventory-catalog-SC-135`)
 - [ ] 1.2 Add the nullable Cert-record media tag, migration, same-product and
-  printed-Cert validation, and Cert-removal clearing behavior
+  printed-Cert validation, guarded physical-unit withdrawal, cascading
+  tagged-media deletion, and reference-checked product-object cleanup
   (`grade10-admin-inventory-catalog-SC-128`,
   `grade10-admin-inventory-catalog-SC-129`,
   `grade10-admin-inventory-catalog-SC-130`,
-  `grade10-admin-inventory-catalog-SC-134`)
+  `grade10-admin-inventory-catalog-SC-134`,
+  `grade10-admin-inventory-catalog-SC-135`)
 - [ ] 1.3 Add Inventory media-manager tag, untag, and retag controls using
   existing Inventory authority (`grade10-admin-inventory-catalog-SC-131`,
   `grade10-admin-inventory-catalog-SC-132`,

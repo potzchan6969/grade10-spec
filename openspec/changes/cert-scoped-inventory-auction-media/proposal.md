@@ -41,7 +41,8 @@ other-Cert items deliberately added from the separate drawer.
 - Cert-scoped media on storefront product pages or any collector-facing
   product gallery.
 - Bulk tagging one media item to multiple Cert records, or changing Inventory
-  reservation, hold, sale, withdrawal, or vaulting behavior.
+  reservation, hold, sale, or vault behavior. The guarded physical-unit
+  removal path uses the existing withdrawn accounting.
 - Changing direct listing upload, the one-to-eight listing-gallery cap, its
   accepted file types, or its order rules.
 - A new permission, a new shared UI component, or a new design-system

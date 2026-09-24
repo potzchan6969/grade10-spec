@@ -122,11 +122,11 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** Inventory clears the source media tag
 - **THEN** the listing copy's bytes and alt text remain unchanged
 
-#### Scenario: grade10-admin-auction-listing-SC-111 - Deleting a source Cert does not alter a listing copy
+#### Scenario: grade10-admin-auction-listing-SC-111 - Removing a source Cert unit deletes its media but not a listing copy
 **Serves:** grade10-admin-auction-listing-US-14 - Operator keeps a listing gallery independent of its source
 
 - **GIVEN** a listing gallery with a copy of source media tagged to a Cert record
-- **WHEN** Inventory removes that Cert record
+- **WHEN** Inventory removes that physical unit and Cert record, deleting its tagged source media
 - **THEN** the listing copy's bytes and alt text remain unchanged
 
 #### Scenario: grade10-admin-auction-listing-SC-112 - A source item can fill the eighth gallery place
