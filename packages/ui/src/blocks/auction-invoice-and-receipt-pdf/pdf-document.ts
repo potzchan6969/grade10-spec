@@ -192,7 +192,7 @@ export function drawRuleSpan(
   return y - gap;
 }
 
-/** An identity row - label muted and small, value right-aligned. */
+/** An identity row - label bold and black, value right-aligned. */
 export function drawMetaRow(
   page: PDFPage,
   fonts: Fonts,
@@ -200,7 +200,7 @@ export function drawMetaRow(
   value: string,
   y: number,
 ): void {
-  drawText(page, fonts.regular, label, MARGIN, y, SMALL_SIZE, MUTED);
+  drawText(page, fonts.bold, label, MARGIN, y, BODY_SIZE, INK);
   drawTextRight(
     page,
     fonts.regular,
