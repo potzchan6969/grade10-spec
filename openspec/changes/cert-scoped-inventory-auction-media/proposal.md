@@ -75,6 +75,10 @@ other-Cert items deliberately added from the separate drawer.
   selector and Other Cert media drawer reads and additions. No new grant is
   introduced.
 
+No domain impact: the changed journeys add Inventory media classification and unit removal to an Inventory-to-Auction path; existing Auction domain composed paths do not trace these new journeys.
+
+No platform impact: this change stays within Grade10 Admin and leaves collector-facing journeys unchanged.
+
 ## References
 
 - [Products and Stock · Intake](../../../docs/prds/products/grade10-admin/inventory/catalog.md#intake)
