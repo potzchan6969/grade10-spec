@@ -11,7 +11,7 @@ level or associate it with one physical Cert record.
   - The tag identifies the immutable Cert record; its printed Cert ID is display data and may be absent.
   - An authorized Inventory operator may tag or untag saved source media. Retagging clears the original association and leaves the source item untagged and shared; assigning it to another Cert requires a separate explicit tag action.
   - A record without a printed Cert ID has no tag; its media remains product-level shared media.
-  - Removing a Cert record clears its source-media tags and preserves the uploaded media as untagged product media.
+  - Removing a Cert unit requires physical withdrawal; the operation removes its Cert record and currently tagged source-media rows while preserving unrelated product media.
 
 ## MODIFIED Requirements
 
