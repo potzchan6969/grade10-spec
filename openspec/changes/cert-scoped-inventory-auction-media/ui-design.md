@@ -31,32 +31,32 @@
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading source media | Loading status; media actions wait for the source list | `grade10-admin-inventory-catalog-US-12` |
-| Empty source media | Empty gallery with the existing upload control | `grade10-admin-inventory-catalog-US-12` |
-| Untagged source item | Product-level media with a control for assigning one printed-Cert record | `grade10-admin-inventory-catalog-US-12` |
-| Tagged source item | Current printed-Cert label; retagging clears the old association and leaves the item shared before any separate tag assignment | `grade10-admin-inventory-catalog-US-12` |
-| Tag write refused | Error notice; existing tag and source media remain visible | `grade10-admin-inventory-catalog-US-12` |
+| Loading source media | Loading status; media actions wait for the source list | **Out of suite:** loading presentation |
+| Empty source media | Empty gallery with the existing upload control | **Out of suite:** empty-gallery presentation |
+| Untagged source item | Product-level media with a control for assigning one printed-Cert record | `grade10-admin-inventory-catalog-SC-128` |
+| Tagged source item | Current printed-Cert label; retagging clears the old association and leaves the item shared before any separate tag assignment | `grade10-admin-inventory-catalog-SC-131`, `grade10-admin-inventory-catalog-SC-132` |
+| Tag write refused | Error notice; existing tag and source media remain visible | `grade10-admin-inventory-catalog-SC-129`, `grade10-admin-inventory-catalog-SC-130`, `grade10-admin-inventory-catalog-SC-133` |
 
 ### Inventory Cert ID details
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| No Cert records | Existing empty Cert list | `grade10-admin-inventory-catalog-US-13` |
-| Removable Cert record | Selected Cert record with a removal action when its removal guard passes | `grade10-admin-inventory-catalog-US-13` |
-| Removal pending | Confirmation remains open and the removal action is pending | `grade10-admin-inventory-catalog-US-13` |
-| Removal refused | Error notice identifies an active reservation; no record, counter, history, or media changes | `grade10-admin-inventory-catalog-US-13` |
-| Removal complete | Cert record and its tagged source media are gone; the physical unit is counted as withdrawn | `grade10-admin-inventory-catalog-US-13` |
+| No Cert records | Existing empty Cert list | **Out of suite:** empty-list presentation |
+| Removable Cert record | Selected Cert record with a removal action when its removal guard passes | `grade10-admin-inventory-catalog-SC-134` |
+| Removal pending | Confirmation remains open and the removal action is pending | `grade10-admin-inventory-catalog-SC-134` |
+| Removal refused | Error notice identifies an active reservation; no record, counter, history, or media changes | `grade10-admin-inventory-catalog-SC-135` |
+| Removal complete | Cert record and its tagged source media are gone; the physical unit is counted as withdrawn | `grade10-admin-inventory-catalog-SC-134` |
 
 ### Auction listing media dialog
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Loading source media | Loading status while Inventory resolves the selected product and unit | `grade10-admin-auction-listing-US-11` |
-| Matching source media | Untagged media and selected-Cert media in the main source selector | `grade10-admin-auction-listing-US-11` |
-| No matching source media | Empty main selector with the existing direct-upload gallery available | `grade10-admin-auction-listing-US-11` |
-| Other Cert drawer closed | Separate Other Cert entry point; other-Cert media is not in the main selector | `grade10-admin-auction-listing-US-12` |
-| Other Cert drawer open | Media groups labelled by printed Cert ID, with an explicit add action naming the source Cert | `grade10-admin-auction-listing-US-12` |
-| No Cert ID selected | Untagged product-level media only in the main source selector | `grade10-admin-auction-listing-US-13` |
-| Gallery at capacity | Combined gallery count is eight; adding more source or direct media is disabled | `grade10-admin-auction-listing-US-14` |
-| Source selection stale | Save error; the existing listing gallery remains unchanged | `grade10-admin-auction-listing-US-14` |
-| Listing snapshot saved | Copied listing media with editable listing alt text and order | `grade10-admin-auction-listing-US-14` |
+| Loading source media | Loading status while Inventory resolves the selected product and unit | `grade10-admin-auction-listing-SC-101` |
+| Matching source media | Untagged media and selected-Cert media in the main source selector | `grade10-admin-auction-listing-SC-101` |
+| No matching source media | Empty main selector with the existing direct-upload gallery available | **Out of suite:** empty-selector presentation |
+| Other Cert drawer closed | Separate Other Cert entry point; other-Cert media is not in the main selector | `grade10-admin-auction-listing-SC-103` |
+| Other Cert drawer open | Media groups labelled by printed Cert ID, with an explicit add action naming the source Cert | `grade10-admin-auction-listing-SC-103`, `grade10-admin-auction-listing-SC-104` |
+| No Cert ID selected | Untagged product-level media only in the main source selector | `grade10-admin-auction-listing-SC-105` |
+| Gallery at capacity | Combined gallery count is eight; adding more source or direct media is disabled | `grade10-admin-auction-listing-SC-112`, `grade10-admin-auction-listing-SC-113` |
+| Source selection stale | Save error; the existing listing gallery remains unchanged | `grade10-admin-auction-listing-SC-117` |
+| Listing snapshot saved | Copied listing media with editable listing alt text and order | `grade10-admin-auction-listing-SC-106`, `grade10-admin-auction-listing-SC-107` |
