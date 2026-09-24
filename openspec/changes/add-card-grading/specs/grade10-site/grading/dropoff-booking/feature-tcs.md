@@ -345,6 +345,35 @@ Runs once per row of **Test data**.
 * The visit reads the new day and time, and the batch line reads again for the newly picked day.
 * A moved email is sent naming the new visit.
 
+### grade10-site-grading-dropoff-booking-US2-TC4-1: Moving the drop-off never offers its own current slot back
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-dropoff-booking-US-02
+
+**Pre-conditions:**
+
+* customer(with a drop-off booked and not yet started) is on <the submission page>.
+
+**Steps:**
+
+1. Open Move on the booked visit.
+2. Read the days and times offered.
+
+**Expected Results:**
+
+* The day and time the visit already holds is not offered.
+* Every other free slot is offered as before.
+
 ### grade10-site-grading-dropoff-booking-US2-TC2-1: Collector cancels the drop-off and keeps the card list
 
 **Classification:**
