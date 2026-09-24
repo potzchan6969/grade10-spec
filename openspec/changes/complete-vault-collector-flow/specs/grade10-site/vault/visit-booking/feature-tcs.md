@@ -730,6 +730,37 @@ Runs once per row of **Test data**.
 * The message carries the visit's calendar file.
 * The file names the same visit the case reads.
 
+### grade10-site-vault-visit-booking-US4-TC13-1: Moving the visit never offers its own current slot back
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation
+* **Trace:** grade10-site-vault-visit-booking-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* The collector has a live booking for <a shop> at <a free slot>.
+
+**Steps:**
+
+1. Choose Move.
+2. Read the shops and slots offered.
+
+**Expected Results:**
+
+* The slot the visit already holds is not offered.
+* Every other free slot is offered as before.
+
 ## Settled
 
 - A case whose collector holds a live booking on another of their cases reads that visit, its shop and its slot, and offers no picker of its own.

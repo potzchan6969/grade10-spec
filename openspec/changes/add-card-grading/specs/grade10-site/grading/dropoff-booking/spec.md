@@ -298,6 +298,9 @@ collector their own message.
 booked again, so the submission is never left with no visit while it is being
 moved.
 
+**Never the visit's own slot** - the picker a move opens SHALL NOT offer back
+the slot the visit already holds, since the diary counts that slot taken.
+
 **The list survives a cancellation** - the cards, the sheet the plan was priced
 on and the estimate SHALL stay as they were, and the page SHALL offer another
 drop-off.
@@ -329,6 +332,14 @@ drop-off.
 - **GIVEN** a booked visit whose start time has passed
 - **WHEN** the collector opens the submission page
 - **THEN** neither moving nor cancelling the visit is offered
+
+#### Scenario: grade10-site-grading-dropoff-booking-SC-29 - A move never offers the visit's own current slot back
+**Serves:** grade10-site-grading-dropoff-booking-US-02 - a collector moving a visit reads only slots other than the one they already hold
+
+- **GIVEN** a submission holding a booked visit that has not started
+- **WHEN** the collector opens the picker to move it
+- **THEN** the slot the visit already holds is not offered
+- **AND** every other free slot is offered as before
 
 ### Requirement: A missed visit is closed by the diary and costs nothing but the day
 

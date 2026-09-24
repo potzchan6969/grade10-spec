@@ -199,6 +199,9 @@ chose cannot be taken.
 booking offers, so a move MAY take another shop as readily as another day and
 time.
 
+**Never the visit's own slot** - the picker a move opens SHALL NOT offer back
+the slot the visit already holds, since the diary counts that slot taken.
+
 **Nothing free** - a window the diary holds no free slot in SHALL read the
 no-slot line where the times sit, and SHALL offer the next window.
 
@@ -227,6 +230,14 @@ refused by name, and the picker SHALL read the slots again without it.
 - **GIVEN** a collector who has chosen a free slot
 - **WHEN** somebody else takes that slot before they confirm
 - **THEN** the take is refused by name and the slots are read again without it
+
+#### Scenario: grade10-site-vault-visit-booking-SC-31 - A move never offers the visit's own current slot back
+**Serves:** grade10-site-vault-visit-booking-US-03 - the collector moving a visit reads only slots other than the one they already hold
+
+- **GIVEN** a case holding a booked visit
+- **WHEN** its owner opens the picker to move it
+- **THEN** the slot the visit already holds is not offered
+- **AND** every other free slot is offered as before
 
 ### Requirement: A sibling case reads the visit its lead holds and offers no picker of its own
 
