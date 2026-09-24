@@ -347,3 +347,44 @@ test("shared-planning-agent-rounds-SC-78 - refuses `--decided-by` with an empty 
   assert.match(result.stderr, /--decided-by names an empty path/);
   assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
 });
+
+test("shared-planning-agent-rounds-SC-78 - writes a path in the application repository with its prefix", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const walk = "grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts";
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    `${walk},${DECIDER}`,
+  );
+
+  assert.equal(result.status, 0, result.stderr);
+  assert.match(
+    readFileSync(join(root, CHANGE_PATH), "utf8"),
+    new RegExp(`\\*\\*Decided by:\\*\\* \`${walk}\`, \`${DECIDER}\``),
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - refuses `--decided-by` naming a repository the store does not know", () => {
+  const root = sandbox({
+    [CHANGE_PATH]: SUITE(CASE("demo-thing-widget-US1-TC1-1")),
+  });
+  const before = readFileSync(join(root, CHANGE_PATH), "utf8");
+
+  const result = run(
+    root,
+    ["demo-thing-widget-US1-TC1-1"],
+    "--decided-by",
+    "grade11:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts",
+  );
+
+  assert.notEqual(result.status, 0);
+  assert.match(
+    result.stderr,
+    /--decided-by names `grade11:apps\/frontend\/grade10\/e2e\/tests\/vault\/offer\.spec\.ts`, whose prefix names no repository this store knows — write `grade10:`/,
+  );
+  assert.equal(readFileSync(join(root, CHANGE_PATH), "utf8"), before);
+});

@@ -20,9 +20,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -163,9 +165,11 @@
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -417,9 +421,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -570,9 +576,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -608,9 +616,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -636,9 +646,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -693,9 +705,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -750,9 +764,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 
@@ -1021,9 +1037,11 @@ Runs once per row of **Test data**.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-admin-vault-money-book-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/console.spec.ts`
 
 **Pre-conditions:**
 

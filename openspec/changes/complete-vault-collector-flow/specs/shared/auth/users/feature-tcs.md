@@ -20,9 +20,11 @@
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned and signed in.
@@ -51,9 +53,11 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 <a subject user id> is banned. Signed in as an operator who can ban.
@@ -78,9 +82,11 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 * **Type:** security
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who does not hold `user:ban`. <a subject user id> is unbanned.
@@ -186,9 +192,11 @@ Signed in as an operator who can ban. <an admin user id> is the only account tha
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who holds `user:delete`. <a subject user id> holds no open erasure request and is unbanned.
@@ -270,9 +278,11 @@ Signed in as an operator who holds `user:delete`. <a subject user id> was banned
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as an operator who holds `user:delete`. <an admin user id> holds `admin` and is unbanned.
@@ -346,9 +356,11 @@ before anything is erased.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as <a subject user id>, on <Your data page>. No erasure request is open for that account.
@@ -374,9 +386,11 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 <a subject user id> has filed their own erasure request. The seven-day window is still open.
@@ -400,9 +414,11 @@ Signed in as <a subject user id>, on <Your data page>. No erasure request is ope
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as <a subject user id>, on <Your data page>. <a subject user id> has an open self-filed erasure request, filed six days ago on the brand's own zone, so the day an erasure may run has not opened.
@@ -427,9 +443,11 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> has a
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as <a subject user id>, on <Your data page>. <a subject user id> previously filed and then cancelled an erasure request.
@@ -454,9 +472,11 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 <a subject user id> already has an open self-filed erasure request.
@@ -481,9 +501,11 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> previ
 * **Type:** functional
 * **Suites:** none
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 Signed in as <a subject user id>. <a subject user id> holds no open erasure request.
@@ -535,9 +557,11 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 <a subject user id> has an open self-filed erasure request, inside the seven-day window. An operator holding `user:delete` files an erasure request for <a subject user id> from the directory.
@@ -562,9 +586,11 @@ Signed in as <a subject user id>, on <Your data page>. <a subject user id> filed
 * **Type:** security
 * **Suites:** regression
 * **Layer:** api
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-users-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 <a subject user id> filed their own erasure request, and an operator holding `user:delete` then filed over it. The seven-day window has not passed.

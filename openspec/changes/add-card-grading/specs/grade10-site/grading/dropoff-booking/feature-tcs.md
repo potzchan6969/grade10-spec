@@ -477,10 +477,12 @@ Runs once per row of **Test data**.
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
-* **Layer:** service
+* **Layer:** api
 * **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-grading-dropoff-booking-US-03
+
+**Decided by:** `grade10:packages/grading/backend/test/sweeps/expiry.repo.test.ts`
 
 **Pre-conditions:**
 

@@ -161,8 +161,11 @@
         "cover": "保额，已包含在费用内"
       },
       "warning": {
-        "line": "{card}：若评到 {grade}，价值约 {value}，高于 {level} 的 {ceiling}，评级公司会升至 {nextLevel}，领回前须在柜台补付 {difference}。",
-        "nowLine": "这张卡现在直接走 {nextLevel} 要 {higherFee}；走 {level} 是 {fee}，只有评到 {grade} 才另加 {difference}。"
+        "title": "卡有可能升到更高级别",
+        "line": "{card}：若评为 {grade}，价值约 {value}，超过 {level} 的上限 {ceiling}。",
+        "levelLabel": "会升至",
+        "differenceLabel": "取卡前于柜台补付",
+        "higherFeeLabel": "现时收费"
       },
       "goodToKnow": {
         "title": "预约前请留意",

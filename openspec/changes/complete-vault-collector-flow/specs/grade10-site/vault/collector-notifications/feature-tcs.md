@@ -600,9 +600,11 @@ and that a person decides,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -628,9 +630,11 @@ and that a person decides,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -713,9 +717,11 @@ and that a person decides,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-collector-notifications-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1012,6 +1018,9 @@ reconciliation folded one more,
 | --- | --- |
 | `US2-TC7-1` | The chat app opens outside the product; a person reads the pre-filled template and confirms the vault queued nothing of its own |
 | `US2-TC13-1` | A person reads the custodian's registered name off the message and sees no licence line; no assertion restates the name without keeping a second copy of it |
+| `US3-TC1-1` | Needs a first delivery already failed and retried hours later; a person drives the retry in the provider sandbox |
 | `US5-TC1-1` | The automated walk proves the table's rows; a person reads the whole message to confirm no figure is also written into a sentence |
 | `US5-TC5-1` | A person reads the footer against the party the message is from, which is the one thing the walk cannot decide for every kind of message at once |
 | `US5-TC8-1` | The walk proves the offer's six rows; a person confirms the prose around them repeats none of them |
+| `US6-TC1-1` | The isolated stack configures no hosted verification provider, so e-kyc raises no check and the invitation is never sent |
+| `US6-TC2-1` | As above |

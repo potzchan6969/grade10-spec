@@ -155,11 +155,18 @@ function store(at, options) {
 const CHANGE = "openspec/changes/demo-change/specs/demo/alpha";
 const DURABLE = "openspec/specs/demo/alpha";
 
-const run = (root) =>
-  spawnSync(process.execPath, [SCRIPT, "--root", root], {
+/** `appRoot`, when given, is the grade10 clone the run is pointed at; the
+ *  variable is otherwise removed, so a developer's own shell never decides a
+ *  verdict. */
+const run = (root, { appRoot = null } = {}) => {
+  const env = { ...process.env, NO_COLOR: "1" };
+  delete env.GRADE10_ROOT;
+  if (appRoot !== null) env.GRADE10_ROOT = appRoot;
+  return spawnSync(process.execPath, [SCRIPT, "--root", root], {
     encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1" },
+    env,
   });
+};
 
 const inChange = (options) => run(store(CHANGE, options));
 
@@ -168,7 +175,9 @@ const inChange = (options) => run(store(CHANGE, options));
 test("shared-planning-agent-rounds-SC-78 - the line reaches `decidedBy` with its own line number", () => {
   const suite = parseSuite(caseSuite({ decidedBy: DECIDER }));
   const [tc] = suite.journeys[0].cases;
-  assert.deepEqual(tc.decidedBy, [{ path: DECIDER, line: 27 }]);
+  assert.deepEqual(tc.decidedBy, [
+    { path: DECIDER, line: 27, repo: null, file: DECIDER },
+  ]);
   assert.deepEqual(tc.decidedByLines, [
     {
       line: 27,
@@ -299,6 +308,99 @@ test("shared-planning-agent-rounds-SC-78 - a line on a case that is not automate
     result.stdout,
     /carries `\*\*Decided by:\*\*` but its \*\*Automation status\*\* is not `automated`/,
   );
+});
+
+// --- a path in the application repository ---------------------------------
+
+const WALK = "apps/frontend/grade10/e2e/tests/vault/offer.spec.ts";
+
+/** A throwaway grade10 clone holding the one walk a prefixed path names. */
+function appClone() {
+  const root = mkdtempSync(join(tmpdir(), "decided-by-app-"));
+  mkdirSync(dirname(join(root, WALK)), { recursive: true });
+  writeFileSync(join(root, WALK), "// the walk that decides the case\n");
+  return root;
+}
+
+test("shared-planning-agent-rounds-SC-78 - a prefixed path reaches `decidedBy` split into its repository and file", () => {
+  const suite = parseSuite(caseSuite({ decidedBy: `\`grade10:${WALK}\`` }));
+  assert.deepEqual(suite.journeys[0].cases[0].decidedBy, [
+    { path: `grade10:${WALK}`, line: 27, repo: "grade10", file: WALK },
+  ]);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a prefixed path that exists in the named clone draws no error and no warning", () => {
+  const result = run(store(CHANGE, { decidedBy: `grade10:${WALK}` }), {
+    appRoot: appClone(),
+  });
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.doesNotMatch(result.stdout, /Decided by/);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a prefixed path the named clone does not hold is refused", () => {
+  const app = appClone();
+  const result = run(
+    store(CHANGE, {
+      decidedBy: "grade10:apps/frontend/grade10/e2e/tests/vault/gone.spec.ts",
+    }),
+    { appRoot: app },
+  );
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    new RegExp(
+      `names \`grade10:apps/frontend/grade10/e2e/tests/vault/gone\\.spec\\.ts\`, which does not exist in the grade10 clone at ${app.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}`,
+    ),
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - a prefixed path with no clone named is a warning, once per suite", () => {
+  const result = run(store(CHANGE, { decidedBy: `grade10:${WALK}` }));
+  assert.equal(result.status, 0, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /1 `\*\*Decided by:\*\*` path names the grade10 repository, unchecked because `GRADE10_ROOT` names no clone: `grade10:apps\/frontend\/grade10\/e2e\/tests\/vault\/offer\.spec\.ts`/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - a prefix no repository answers to is refused by name", () => {
+  const result = run(store(CHANGE, { decidedBy: `grade11:${WALK}` }), {
+    appRoot: appClone(),
+  });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stdout,
+    /whose prefix `grade11:` names no repository this store knows — write `grade10:`, or a bare path for the store's own/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - a prefixed path that climbs out of the clone is refused", () => {
+  const result = run(
+    store(CHANGE, { decidedBy: "grade10:../elsewhere/decides.spec.ts" }),
+    { appRoot: appClone() },
+  );
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stdout, /which resolves outside the grade10 clone/);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a bare path keeps its meaning with a clone named: the store's, and it must exist", () => {
+  const app = appClone();
+  const found = run(store(CHANGE, { decidedBy: DECIDER }), { appRoot: app });
+  assert.equal(found.status, 0, found.stdout + found.stderr);
+  assert.doesNotMatch(found.stdout, /Decided by/);
+
+  // The walk is in the clone, not the store: bare, it is looked for here.
+  const bare = run(store(CHANGE, { decidedBy: WALK }), { appRoot: app });
+  assert.equal(bare.status, 1, bare.stdout + bare.stderr);
+  assert.match(bare.stdout, /which does not exist in this checkout/);
+});
+
+test("shared-planning-agent-rounds-SC-78 - a clone variable naming no directory stops the run", () => {
+  const result = run(store(CHANGE, { decidedBy: DECIDER }), {
+    appRoot: join(tmpdir(), "decided-by-no-such-clone"),
+  });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(result.stderr, /GRADE10_ROOT names `.*`, which is no directory/);
 });
 
 // --- the two suites this store back-filled ---------------------------------

@@ -161,8 +161,11 @@
         "cover": "보상, 요금에 포함"
       },
       "warning": {
-        "line": "{card}: {grade}을(를) 받으면 가액이 약 {value}으로 {level}의 {ceiling}을 넘어, 감정사가 {nextLevel}로 올리고 찾아가시기 전에 창구에서 {difference}을(를) 더 내셔야 합니다.",
-        "nowLine": "이 카드를 지금 {nextLevel}로 보내면 {higherFee}입니다. {level}은 {fee}이고, {grade}을(를) 받을 때만 {difference}이 추가됩니다."
+        "title": "카드가 상위 레벨로 이동할 수 있습니다",
+        "line": "{card}: {grade} 등급을 받으면 약 {value}의 가치가 있어 {level}의 상한 {ceiling}을 초과합니다.",
+        "levelLabel": "이동할 레벨",
+        "differenceLabel": "수령 전 창구에서 추가 결제",
+        "higherFeeLabel": "현재 요금"
       },
       "goodToKnow": {
         "title": "예약 전에 알아두실 것",

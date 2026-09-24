@@ -32,9 +32,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -79,9 +81,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -118,9 +122,11 @@ Runs once per row of **Test data**.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -152,9 +158,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -251,9 +259,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -293,9 +303,11 @@ money I have already returned.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -327,9 +339,11 @@ money I have already returned.
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -403,9 +417,11 @@ money I have already returned.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -437,9 +453,11 @@ money I have already returned.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -471,9 +489,11 @@ money I have already returned.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -548,9 +568,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-02
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -844,9 +866,11 @@ account, whose name it is under and the reference to type,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -923,9 +947,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -989,9 +1015,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1027,9 +1055,11 @@ after it, and the final notice with its date to pay by,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1056,9 +1086,11 @@ after it, and the final notice with its date to pay by,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1088,9 +1120,11 @@ after it, and the final notice with its date to pay by,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1209,9 +1243,11 @@ after it, and the final notice with its date to pay by,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1238,9 +1274,11 @@ after it, and the final notice with its date to pay by,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-06
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1419,9 +1457,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1453,9 +1493,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-loan-and-settlement-US-07
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 
@@ -1488,9 +1530,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** `The rule before the act`
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/loan.spec.ts`
 
 **Pre-conditions:**
 

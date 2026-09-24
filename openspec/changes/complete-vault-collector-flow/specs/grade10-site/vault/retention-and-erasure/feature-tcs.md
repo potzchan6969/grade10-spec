@@ -146,9 +146,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -187,9 +189,11 @@ Runs once per row of **Test data**.
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -224,9 +228,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -468,9 +474,11 @@ stands, and where I ask to be forgotten,
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -564,9 +572,11 @@ stands, and where I ask to be forgotten,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -646,9 +656,11 @@ stands, and where I ask to be forgotten,
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -675,9 +687,11 @@ stands, and where I ask to be forgotten,
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -703,9 +717,11 @@ stands, and where I ask to be forgotten,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -794,9 +810,11 @@ stands, and where I ask to be forgotten,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -883,9 +901,11 @@ stands, and where I ask to be forgotten,
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 
@@ -916,9 +936,11 @@ stands, and where I ask to be forgotten,
 * **Type:** acceptance
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-retention-and-erasure-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/your-data.spec.ts`
 
 **Pre-conditions:**
 

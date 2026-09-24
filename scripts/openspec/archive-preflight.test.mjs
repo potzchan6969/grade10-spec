@@ -801,6 +801,34 @@ test("shared-planning-agent-rounds-SC-78 - a line that travels across is clear",
   assert.equal(result.status, 0, result.stderr);
 });
 
+test("shared-planning-agent-rounds-SC-78 - a line naming the application repository's walk travels whole, prefix and all", () => {
+  const walk = "grade10:apps/frontend/grade10/e2e/tests/listing.spec.ts";
+  const named = {
+    ...CARRIED,
+    [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(walk),
+  };
+
+  const carried = run(
+    sandbox(named, { ...DURABLE, [`${CAP}/feature-tcs.md`]: SUITE_CASE(walk) })
+      .root,
+    ...SHIPPED,
+  );
+  assert.equal(carried.status, 0, carried.stderr);
+
+  const bare = run(
+    sandbox(named, {
+      ...DURABLE,
+      [`${CAP}/feature-tcs.md`]: SUITE_CASE(walk.replace(/^grade10:/, "")),
+    }).root,
+    ...SHIPPED,
+  );
+  assert.equal(bare.status, 1);
+  assert.match(
+    bare.stderr,
+    /lands `listing-US1-TC1-1`'s `\*\*Decided by:\*\*` as `apps\/frontend\/grade10\/e2e\/tests\/listing\.spec\.ts`, where the change names `grade10:apps\/frontend\/grade10\/e2e\/tests\/listing\.spec\.ts`/,
+  );
+});
+
 test("a suite with no durable file yet is a promise --journeys-copied can make", () => {
   const { [`${CAP}/feature-tcs.md`]: _suite, ...missing } = DURABLE;
   const refused = run(sandbox(CARRIED, missing).root, ...SHIPPED);

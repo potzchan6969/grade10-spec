@@ -161,8 +161,11 @@
         "cover": "Cover, included in the fee"
       },
       "warning": {
-        "line": "{card}: if it grades {grade} it is worth about {value}, above {level}’s {ceiling}, so the grader moves it to {nextLevel} and {difference} more is due at the counter before you collect.",
-        "nowLine": "{nextLevel} for this card would cost {higherFee} now; {level} costs {fee}, plus {difference} only if it grades {grade}."
+        "title": "A card can move up a level",
+        "line": "{card}: if it grades {grade} it is worth about {value}, above {level}’s {ceiling}.",
+        "levelLabel": "Moves to",
+        "differenceLabel": "Due at the counter before you collect",
+        "higherFeeLabel": "costs now"
       },
       "goodToKnow": {
         "title": "Good to know before you book",

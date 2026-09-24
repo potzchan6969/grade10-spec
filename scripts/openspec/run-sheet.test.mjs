@@ -418,6 +418,24 @@ test("shared-planning-agent-rounds-SC-78 - the left-out cases are named under th
   ]);
 });
 
+test("shared-planning-agent-rounds-SC-78 - a left-out case decided in the application repository names the walk as written", () => {
+  const walk = "grade10:apps/frontend/grade10/e2e/tests/vault/offer.spec.ts";
+  const [tc] = parseSuite(
+    SUITE.replace(
+      "**Decided by:** `scripts/openspec/run-sheet.test.mjs`",
+      `**Decided by:** \`${walk}\``,
+    ),
+  ).journeys[0].cases.filter((one) => one.id.endsWith("TC4-1"));
+  const { picked, refused } = selectCases(
+    [{ read: candidates[0].read, tc: { ...tc, journey } }],
+    {},
+  );
+
+  assert.deepEqual(automatedGateOf({ picked, refused }).leftOutLines, [
+    `  demo-thing-widget-US1-TC4-1 - ${walk}`,
+  ]);
+});
+
 test("shared-planning-agent-rounds-SC-78 - a left-out case naming no test says so in the same shape", () => {
   const gate = automatedGateOf({
     picked: [],

@@ -18,6 +18,7 @@
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { basename, dirname, join, relative } from "node:path";
 import { fileURLToPath } from "node:url";
+import { readDecidedPath } from "./decided-by.mjs";
 
 export const ROOT = dirname(
   dirname(dirname(dirname(fileURLToPath(import.meta.url)))),
@@ -307,8 +308,9 @@ function blockAfter(lines, from) {
   return body;
 }
 
-/** One `**Decided by:**` line onto the case: its paths, and what is wrong with
- *  the line itself.
+/** One `**Decided by:**` line onto the case: its paths, each split into the
+ *  repository it names and the file inside it, and what is wrong with the line
+ *  itself.
  *
  *  Nothing is dropped and nothing is fixed. A second line, a line that is not
  *  the first non-blank line after the last classification bullet, an empty
@@ -337,7 +339,8 @@ function readDecidedBy(tc, value, at, { lines = null, bullet = false } = {}) {
     empty: empty > 0,
     repeated: !first,
   });
-  for (const path of values) tc.decidedBy.push({ path, line: at + 1 });
+  for (const path of values)
+    tc.decidedBy.push({ path, line: at + 1, ...readDecidedPath(path) });
 }
 
 /** Split a suite into its header, journey sections and cases. Current format only;

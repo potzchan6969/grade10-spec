@@ -27,15 +27,15 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import {
-  existsSync,
-  readdirSync,
-  readFileSync,
-  statSync,
-  writeFileSync,
-} from "node:fs";
-import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
+import { basename, dirname, join, relative, resolve } from "node:path";
 import { parseArgs } from "./lib/args.mjs";
+import {
+  checkDecidedPath,
+  knownPrefixes,
+  REPOSITORIES,
+  repositoryRoots,
+} from "./lib/decided-by.mjs";
 import {
   CASE_STATUSES,
   caseIndex,
@@ -90,6 +90,15 @@ Flags:
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
   --help            Print this help and exit
+
+Environment:
+${Object.entries(REPOSITORIES)
+  .map(
+    ([name, { env }]) =>
+      `  ${env.padEnd(16)}  The ${name} clone a \`${name}:<path>\` Decided-by path\n` +
+      `                    is checked against. Unset, those paths are a warning`,
+  )
+  .join("\n")}
 `;
 
 const problems = [];
@@ -115,6 +124,9 @@ function checkSuite(root, filePath, rulesRev) {
   // those is a rules revision of its own (Q70) - and the archive is never
   // read here at all.
   const decidedByOwed = changeOf(root, filePath) !== null;
+  /** repo -> the prefixed paths this suite names in a clone nobody pointed
+   *  the run at, warned once per repository rather than once per case. */
+  const unchecked = {};
 
   if (!spec)
     err(
@@ -390,29 +402,36 @@ function checkSuite(root, filePath, rulesRev) {
             `case \`${tc.id}\` writes \`**Decided by:**\` as a classification bullet at line ${line} — the block is the ten properties, and the line is its own, directly after it`,
           );
       }
-      // Resolved against the store this run reads, so a fixture is checked
-      // against itself. A path that climbs out of the store names a file no
-      // clone of it has, and a directory decides nothing.
+      // A bare path resolves against the store this run reads, so a fixture
+      // is checked against itself; a prefixed one against the clone its
+      // repository's variable names. A path that climbs out of its tree names
+      // a file no clone holds, and a directory decides nothing.
       for (const { path, line } of tc.decidedBy) {
-        const full = resolve(root, path);
-        if (full !== root && !full.startsWith(root + sep)) {
+        const { verdict, repo } = checkDecidedPath(root, path, APP_ROOTS);
+        const tree = repo === null ? "the store" : `the ${repo} clone`;
+        const said = `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\``;
+        if (verdict === "unknown")
           err(
             line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which resolves outside the store — write it relative to the repository root`,
+            `${said}, whose prefix \`${repo}:\` names no repository this store knows — write ${knownPrefixes()}, or a bare path for the store's own`,
           );
-          continue;
-        }
-        if (!existsSync(full)) {
+        else if (verdict === "unchecked") {
+          unchecked[repo] ??= [];
+          unchecked[repo].push(path);
+        } else if (verdict === "outside")
           err(
             line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which does not exist in this checkout`,
+            `${said}, which resolves outside ${tree} — write it relative to the repository root`,
           );
-          continue;
-        }
-        if (!statSync(full).isFile())
+        else if (verdict === "missing")
           err(
             line,
-            `case \`${tc.id}\`'s \`**Decided by:**\` names \`${path}\`, which is not a file — name the test, not the directory holding it`,
+            `${said}, which does not exist in ${repo === null ? "this checkout" : `the ${repo} clone at ${APP_ROOTS[repo]}`}`,
+          );
+        else if (verdict === "directory")
+          err(
+            line,
+            `${said}, which is not a file — name the test, not the directory holding it`,
           );
       }
       if (tc.decidedBy.length > 0 && !automated)
@@ -484,6 +503,14 @@ function checkSuite(root, filePath, rulesRev) {
     }
   }
 
+  for (const [repo, paths] of Object.entries(unchecked)) {
+    const files = [...new Set(paths)];
+    warn(
+      1,
+      `${paths.length} \`**Decided by:**\` path${paths.length === 1 ? "" : "s"} name${paths.length === 1 ? "s" : ""} the ${repo} repository, unchecked because \`${REPOSITORIES[repo].env}\` names no clone: ${files.map((one) => `\`${one}\``).join(", ")}`,
+    );
+  }
+
   return { rel, suite, counts, derived, cases: cases.length };
 }
 
@@ -507,6 +534,16 @@ const args = {
 // it, so a suite's checks are proved by this script rather than by a copy of
 // it beside the test.
 const ROOT = flags.root ? resolve(flags.root) : STORE_ROOT;
+// The clones a prefixed `**Decided by:**` path is checked against, named by
+// each repository's variable in `lib/decided-by.mjs`, read once.
+const APP_ROOTS = (() => {
+  try {
+    return repositoryRoots();
+  } catch (cause) {
+    console.error(red(cause.message));
+    process.exit(1);
+  }
+})();
 const rulesRev = currentRulesRev();
 const inScope = (d) =>
   args.scope ? relative(ROOT, d).includes(args.scope) : true;

@@ -27,9 +27,11 @@ borrow against it,
 * **Type:** functional
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -69,9 +71,11 @@ borrow against it,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -109,9 +113,11 @@ borrow against it,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -147,9 +153,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -218,9 +226,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -247,9 +257,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -282,9 +294,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -317,9 +331,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -352,9 +368,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -475,9 +493,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -504,9 +524,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -533,9 +555,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -600,9 +624,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -635,9 +661,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-01
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -729,9 +757,11 @@ have read the collection statement,
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -820,9 +850,11 @@ have read the collection statement,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -909,9 +941,11 @@ have read the collection statement,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-04
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -946,9 +980,11 @@ reference at my bank.
 * **Type:** acceptance
 * **Suites:** smoke
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** grade10-site-vault-case-intake-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -1121,9 +1157,11 @@ reference at my bank.
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
@@ -1150,9 +1188,11 @@ reference at my bank.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** grade10-site-vault-case-intake-US-05
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/request.spec.ts`
 
 **Pre-conditions:**
 
