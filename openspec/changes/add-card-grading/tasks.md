@@ -1940,6 +1940,10 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       which asks for a payout's reversal the way the payout is asked
       (`grade10-admin-grading-counter-SC-49`,
       `grade10-admin-grading-counter-SC-64`)
+- [ ] 28.9 Build `WithdrawDialog` on the submission's cards: a card withdrawn
+      with its line refunded and its receipt issued, and the act gone once
+      the batch closes (`grade10-admin-grading-counter-SC-54`,
+      `grade10-admin-grading-counter-SC-55`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
