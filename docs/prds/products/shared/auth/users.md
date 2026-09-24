@@ -35,6 +35,9 @@ on the identity trail. Grade10's page that uses this read is the
   Auth account with name, email, and roles from the closed set; a duplicate
   email is refused; creating with a non-`user` role also requires
   `user:set-role`; no loyalty enroll or invite mail
+- ❓ **Email verification on create** — what verification standing a newly
+  created Auth account starts with (unverified until they prove the address,
+  or verified because an operator typed it) — @rita-liu
 
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction

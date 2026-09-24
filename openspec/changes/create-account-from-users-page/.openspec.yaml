@@ -4,5 +4,3 @@ depends_on:
   - fix-roles-spec-divergence
 hands:
   pm: "@rita-liu"
-awaiting:
-  specs: outline, blind suite, and requirement deltas from the journeys and 🚧 lines — /workflow-specify

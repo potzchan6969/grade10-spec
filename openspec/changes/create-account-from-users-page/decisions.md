@@ -35,8 +35,13 @@
 | Q10 | Show Create on `user:create` or on `user:set-role`? | Offer Create only when the session holds `user:create`. Choosing a non-`user` role also requires `user:set-role`. Do not gate the button on `user:set-role` alone. (`user:create` is already in the roles vocabulary via `fix-roles-spec-divergence`; this change does not restate the full roles table.) | Show Create whenever the operator can set roles |
 | Q11 | Tell the new person? | Silent create. No invite or magic-link email on create. They sign in later when they need to. | Send an invite or magic-link email when create succeeds |
 | Q12 | Password? | Passwordless. No password field on Users create. | A password field at create |
+| Q13 | Empty role selection at create? | Leave the account as `user` only — same as clearing roles on set-role. - decided by the round | Refuse create until a role is picked |
+| Q14 | Are name and email required on create? | Name and email are required. - decided by the round | Optional name, or accept any string including blank |
 
 ## Raised
 
 | Capability | Raised | Landed |
 | --- | --- | --- |
+| shared/auth/users | Empty role selection at create — leave as `user`, or refuse? | Q13 |
+| shared/auth/users | Are name and email required on create? | Q14 |
+| shared/auth/users | What email-verification standing does a newly created Auth account start with? | ❓ on [Users · Create Account](../../../docs/prds/products/shared/auth/users.md#create-account) |
