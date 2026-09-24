@@ -1297,6 +1297,198 @@ Runs once per row of **Test data**.
 * Each returned document has exactly one page.
 * Each page is sized 595.28×841.89pt (A4).
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC43-1: An invoice's payment method renders as its own meta row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with an invoice number, sent-at date, payment
+  deadline, payment method, issuer, Bill To, and Ship To.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The payment method renders as its own meta row, alongside invoice number,
+  sent-at date, and payment deadline.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC44-1: The payment method row appends after payment deadline, never reordering the rows before it
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with distinct, recognizable values for invoice
+  number, sent-at date, payment deadline, and payment method.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Read the meta rows top to bottom.
+
+**Expected Results:**
+
+* The four meta rows read, top to bottom: invoice number, sent-at date,
+  payment deadline, payment method.
+* The three original rows keep the order they already had; payment method
+  never inserts among them.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC45-1: A bank-transfer invoice shows the Bank details section below Order Total
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `bankRails` given (`swift`, `fps`,
+  `hkLocalTransfer`, and `reference` all supplied), alongside every other
+  required prop.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the sheet immediately below the Subtotal/Payment Processing Fee/Order Total summary.
+
+**Expected Results:**
+
+* A full-width "Bank details" section appears directly below the
+  order-value summary.
+* Every other meta row, party block, and the lot/charges table still
+  renders.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC46-1: A card-paid invoice shows no Bank details section, and no gap where it would sit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with no `bankRails` given (a card-paid invoice).
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the sheet below the order-value summary and the space it occupies.
+
+**Expected Results:**
+
+* No "Bank details" heading, columns, divider, or reference note appear
+  anywhere on the sheet.
+* The issuer block renders directly after the order-value summary, with no
+  blank space reserved where the section would have sat.
+* Every other section of the invoice still renders.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC47-1: Bank details lists all three rails under their own headings
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `bankRails` given: `swift` (beneficiary,
+  SWIFT/BIC, account), `fps` (FPS ID, beneficiary), `hkLocalTransfer` (bank
+  & code, beneficiary, account no.).
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the three columns of the Bank details section.
+
+**Expected Results:**
+
+* The SWIFT column shows Beneficiary, SWIFT/BIC, and Account/IBAN as the
+  values given.
+* The FPS column shows FPS ID and Beneficiary as the values given.
+* The HK local transfer column shows Bank & code, Beneficiary, and Account
+  no. as the values given.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC48-1: The bank reference note bolds only the reference value
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with `bankRails` given, `reference` set to a
+  distinct value.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the wrapped note line below the three columns' divider.
+
+**Expected Results:**
+
+* The note line names the reference given.
+* Only the reference value's own text renders more heavily weighted; the
+  rest of the line renders at normal weight.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1428,3 +1620,40 @@ read the Feature set without sight of the scenarios is the same person who
 just wrote both, for a swap already fully decided in `decisions.md`. The
 retirements above are a direct, checkable consequence of `spec.md`'s own
 diff, not a product judgment this suite is positioned to catch independently.
+
+**Run, 2026-09-24 (`decisions.md` Q21):** `InvoicePdf` gains a `paymentMethod`
+meta row, run as a proper two-reading pass rather than an author amendment —
+a scenario reading and a test-case reading were taken independently from the
+same isolated anchors (the Feature set's updated meta-rows bullet, the
+journeys file, `decisions.md` Q21, the linked PRD line, and `tech-design.md`'s
+implementation note), neither seeing the other's output or the existing
+suite.
+
+| Finding | Disposition |
+| --- | --- |
+| Payment method renders as a meta row (scenario reading's `SC-1` extension; suite reading's `TC43`) | Agreement. **Folded in:** `SC-1`'s `GIVEN` extended to include payment method; `TC43` added |
+| The row appends after payment deadline rather than reordering the existing three (suite reading only — the scenario reading did not write this as a separate claim) | Real gap the suite reading caught alone: `tech-design.md`'s "appends... rather than reordering" is an independently-breakable positional contract, not implied by presence alone. **Folded in:** new requirement clause **Position**, scenario `SC-46`, `TC44` |
+| A second scenario/case distinguishing "Card" from "Bank transfer" content | Both readings independently declined this: the value arrives preformatted with no branching on its content, so a second literal string would only re-prove pass-through already exercised once. **Not added** |
+
+No contradiction, no question raised for `decisions.md`'s `## Raised` table
+— both readings agreed on scope; the divergence was completeness, not a
+product judgment, and resolves by folding the suite reading's extra finding
+in.
+
+**Run, 2026-09-24 (`decisions.md` Q22):** InvoicePdf gains a conditional
+Bank details section (SWIFT/FPS/HK local transfer rails plus the bank
+reference), run as a second two-reading pass on the same isolated-anchor
+basis as Q21's — the updated Feature set bullet, the journeys file,
+`decisions.md` Q22, the linked PRD line, `tech-design.md`'s implementation
+note, and the exact mockup, with neither reading seeing the other's output
+or the existing suite.
+
+| Finding | Disposition |
+| --- | --- |
+| The section renders only when `bankRails` is given, mirroring `ReceiptPdf`'s transfer-reference precedent (scenario reading's `SC-47`/`SC-48`; suite reading's `TC45`/`TC46`) | Agreement on the presence/absence split. **Folded in:** `SC-47`, `TC45` (presence + position); `SC-48`, `TC46` (absence) |
+| No vertical space is reserved when the section is withheld (suite reading only — the scenario reading's `SC-48` claimed absence but not the gap) | Real gap the suite reading caught alone: a lazy implementation could still reserve the section's height even while skipping its content. **Folded in:** `SC-48`'s `Withheld` clause extended to require no reserved space, and its `THEN`/`AND` to name the issuer block sitting directly after the order-value summary; `TC46` extended the same way |
+| The three columns' content is its own concern, separate from presence (scenario reading's `SC-49`; suite reading folded this into `TC45` rather than splitting it) | Same substance, different granularity. **Folded in, scenario reading's split kept:** `SC-49`/`TC47`, matching this capability's established one-scenario-per-concern pattern rather than one broad case |
+| The reference note's bold interpolation is a distinct rendering mechanic (partial bold within a wrapped line), not covered by presence or column content alone (both readings independently proposed this) | Agreement. **Folded in:** `SC-50`/`TC48` |
+| A case per rail (SWIFT-only, FPS-only, …) | Both readings independently declined this: `bankRails` ties all three rails to one optional value with no independent conditionality — "all three rails are required once `bankRails` is given at all" (`decisions.md` Q22). **Not added** |
+
+No contradiction, no question raised for `decisions.md`'s `## Raised` table.

@@ -23,11 +23,8 @@ import {
   LINE_HEIGHT,
   loadFonts,
   MARGIN,
-  MUTED,
   RIGHT_EDGE,
-  SMALL_SIZE,
   SUMMARY_LEFT,
-  wrap,
 } from "./pdf-document";
 
 /**
@@ -61,7 +58,6 @@ export type ReceiptPdfCopy = PdfDocumentCopy & {
   previousPaymentsLabel: string;
   currentPaymentReceivedLabel: string;
   remainingBalanceDueLabel: string;
-  footer: string;
 };
 
 /** The only values a receipt renderer is allowed to consume. */
@@ -195,18 +191,6 @@ function drawPaymentBreakdown(
   drawMoneyRow(page, fonts, lastLabel, lastAmount, SUMMARY_LEFT, y, true);
 }
 
-/** Pinned to the bottom margin, independent of how far the sections above ran. */
-function drawFooter(page: PDFPage, fonts: Fonts, footer: string): void {
-  for (const line of wrap(
-    footer,
-    fonts.regular,
-    SMALL_SIZE,
-    A4_WIDTH - MARGIN * 2,
-  )) {
-    drawText(page, fonts.regular, line, MARGIN, MARGIN, SMALL_SIZE, MUTED);
-  }
-}
-
 /** Render one deterministic A4 receipt from immutable payment and invoice snapshots. */
 export async function ReceiptPdf(
   data: ReceiptPdfData,
@@ -236,7 +220,6 @@ export async function ReceiptPdf(
   y -= LINE_HEIGHT;
   y = drawPaymentSection(page, fonts, data, y);
   drawPaymentBreakdown(page, fonts, data, y);
-  drawFooter(page, fonts, data.copy.footer);
   drawIssuer(page, fonts, data.issuerName, data.issuerEmail);
 
   const bytes = await pdf.save({ useObjectStreams: false });

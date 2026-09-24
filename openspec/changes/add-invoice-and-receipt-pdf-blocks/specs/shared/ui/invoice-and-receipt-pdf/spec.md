@@ -22,11 +22,14 @@ removed, per the amendment note above each one.
 - InvoicePdf export
   - Title and issuer mark: "Invoice" at the top left, the issuer's wordmark —
     or its name as text, when no mark is on file — at the top right
-  - Meta rows: invoice number, sent-at date, payment deadline
+  - Meta rows: invoice number, sent-at date, payment deadline, payment method
   - Party blocks: Bill To, Ship To
   - Lot and charges: a Description/Amount table headed by the lot title, the
     charges given, and a boxed Subtotal/Payment Processing Fee/Order Total
     summary
+  - Bank details: SWIFT, FPS and HK local transfer rails plus the bank
+    reference, a full-width section below the order-value summary, shown
+    only on a bank-transfer invoice
   - Issuer block: the issuer's name and email, right-aligned at the foot of
     the sheet
 - ReceiptPdf export
@@ -39,7 +42,6 @@ removed, per the amendment note above each one.
   - Payment breakdown: Original Invoice Total, Previous Payments, Current
     Payment Received, Remaining Balance Due, in that fixed order, always
     rendered
-  - A footer line
   - Issuer block, matching InvoicePdf's
 - Party address fields
   - Bill To and Ship To each render as up to six lines — recipient, company,
@@ -58,32 +60,47 @@ removed, per the amendment note above each one.
   - Every label arrives through a `copy` argument; neither renderer imports
     `@grade10/i18n` or hardcodes a label
 - Reserved extension slots
-  - Retired (`decisions.md` Q19), along with bank rails and the
-    manually-settled mark and Superseded invoice under InvoicePdf/ReceiptPdf
-    export above — carried no further until a concrete requirement
-    resurfaces one
+  - Retired (`decisions.md` Q19): the manually-settled mark and Superseded
+    invoice under InvoicePdf/ReceiptPdf export above — carried no further
+    until a concrete requirement resurfaces one. Bank rails, also retired
+    under Q19, resurfaced with a concrete requirement and rejoins
+    InvoicePdf export above (`decisions.md` Q22), structured rather than
+    restored to its pre-retirement opaque shape
 
 ## ADDED Requirements
 
 ### Requirement: InvoicePdf renders its meta rows and party blocks
 
 InvoicePdf's meta rows and party blocks name the invoice, when it was sent,
-and who it bills and ships to.
+how it is to be paid, and who it bills and ships to.
 
-**Meta rows** — InvoicePdf SHALL render the invoice number, sent-at date, and
-payment deadline for every invoice. **Party blocks** — InvoicePdf SHALL
-render Bill To and Ship To for every invoice, each rendering only its own
-supplied content.
+**Meta rows** — InvoicePdf SHALL render the invoice number, sent-at date,
+payment deadline, and payment method for every invoice, each as its own row.
+**Position** — The payment method row SHALL render last, after payment
+deadline, never reordering the invoice number, sent-at date, and payment
+deadline rows before it. **Party blocks** — InvoicePdf SHALL render Bill To
+and Ship To for every invoice, each rendering only its own supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
 
 **Serves:** InvoicePdf export - the invoice's meta rows all render
 
 - **GIVEN** data for an invoice number, sent-at date, payment deadline,
-  issuer, Bill To, and Ship To
+  payment method, issuer, Bill To, and Ship To
 - **WHEN** InvoicePdf renders it
 - **THEN** the returned PDF's one page shows every meta row and party block
   given
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-46 - The payment method row appends after payment deadline, never reordering the rows before it
+
+**Serves:** InvoicePdf export - the invoice's meta rows all render
+
+- **GIVEN** distinct, recognizable values for invoice number, sent-at date,
+  payment deadline, and payment method
+- **WHEN** InvoicePdf renders them
+- **THEN** the four meta rows read top to bottom as invoice number, sent-at
+  date, payment deadline, then payment method
+- **AND** the three original rows keep the order they already had
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-19 - Bill To and Ship To never echo each other
 
@@ -230,6 +247,73 @@ immediately above the lot title.
 - **WHEN** ReceiptPdf renders them
 - **THEN** a header row shows `copy.descriptionLabel` and `copy.amountLabel`
 - **AND** a divider separates the header from the lot title
+
+### Requirement: InvoicePdf renders bank details only on a bank-transfer invoice
+
+Grade10 settles a bank-transfer order by wire, while a card order needs no
+transfer instructions.
+
+**Given** — InvoicePdf SHALL render a full-width "Bank details" section below
+the Subtotal/Payment Processing Fee/Order Total summary when the consumer
+supplies `bankRails`. **Withheld** — InvoicePdf SHALL render no such section,
+and SHALL reserve no vertical space for it, when `bankRails` is omitted.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-47 - A bank-transfer invoice shows its bank details below Order Total
+
+**Serves:** InvoicePdf export - the Bank details section renders where the invoice carries bank rails
+
+- **GIVEN** an InvoicePdfData with `bankRails` supplied
+- **WHEN** InvoicePdf renders it
+- **THEN** a "Bank details" section appears full width, positioned below the
+  order-value summary
+- **AND** every other meta row, party block, and the lot/charges table still
+  renders
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-48 - A card invoice shows no bank details section, and no gap where it would sit
+
+**Serves:** InvoicePdf export - the Bank details section renders where the invoice carries bank rails
+
+- **GIVEN** an InvoicePdfData with no `bankRails`
+- **WHEN** InvoicePdf renders it
+- **THEN** no "Bank details" section appears
+- **AND** the issuer block renders directly after the order-value summary,
+  with no blank space where the section would have sat
+- **AND** every other meta row, party block, and the lot/charges table still
+  renders
+
+### Requirement: InvoicePdf's bank details section names all three transfer rails and the bank reference
+
+A winner may quote the SWIFT, FPS, or HK local transfer rail, so the section
+gives all three plus the reference to write on the transfer.
+
+**Given** — InvoicePdf SHALL render, within the Bank details section, three
+equal columns headed SWIFT, FPS, and HK local transfer, each with its own
+stacked label/value lines drawn from `bankRails`. **Reference** — InvoicePdf
+SHALL follow the three columns with a divider and one line naming
+`bankRails.reference`, rendered more heavily weighted than the rest of that
+line.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-49 - Bank details lists all three rails under their own headings
+
+**Serves:** InvoicePdf export - the Bank details section names all three transfer rails
+
+- **GIVEN** a `bankRails` value with `swift`, `fps`, and `hkLocalTransfer`
+  all supplied
+- **WHEN** InvoicePdf renders the Bank details section
+- **THEN** a SWIFT column shows Beneficiary, SWIFT/BIC, and Account/IBAN
+- **AND** an FPS column shows FPS ID and Beneficiary
+- **AND** an HK local transfer column shows Bank & code, Beneficiary, and
+  Account no.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-50 - Bank details' reference note bolds the quoted reference
+
+**Serves:** InvoicePdf export - the Bank details section names all three transfer rails
+
+- **GIVEN** a `bankRails` value with `reference` set to a distinct value
+- **WHEN** InvoicePdf renders the Bank details section
+- **THEN** a line below the three columns' divider names the reference
+- **AND** only the reference's own text renders more heavily weighted; the
+  rest of the line renders at normal weight
 
 ### Requirement: ReceiptPdf renders its meta rows and party blocks
 

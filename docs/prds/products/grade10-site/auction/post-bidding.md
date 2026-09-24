@@ -199,6 +199,8 @@ by card, reads:
   Some orders have none.`
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
+- 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
+  the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
   forward unchanged as the order's one public reference once a winner
   exists; shown on the winner's invoice and operator support surfaces, and
@@ -207,6 +209,10 @@ by card, reads:
   transaction metadata under `payment_reference_code`, then keeps Stripe's
   returned provider reference internal. There is no separate order ID —
   [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+- 🚧 **Bank details** — SWIFT, FPS and HK local transfer rails, printed on
+  the invoice below Order Total when paid by Bank Transfer; each rail ends
+  at the same payment reference code, with a reminder to quote it in the
+  bank app's memo or remarks field
 - 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
   sequence with at least 2 digits; it continues as `100` after `99`. A reissue
   increments the sequence, keeps the payment reference and lets the old ID

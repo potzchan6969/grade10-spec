@@ -103,7 +103,25 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   invoiceNumberLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
-  footer: string;
+  paymentMethodLabel: string;
+  bankDetailsHeading: string;
+  swiftLabel: string;
+  fpsLabel: string;
+  hkLocalTransferLabel: string;
+  beneficiaryLabel: string;
+  swiftBicLabel: string;
+  accountIbanLabel: string;
+  fpsIdLabel: string;
+  bankAndCodeLabel: string;
+  accountNoLabel: string;
+  bankReferenceNoteLabel: string;
+};
+
+export type InvoicePdfBankRails = {
+  swift: { beneficiary: string; swiftBic: string; account: string };
+  fps: { fpsId: string; beneficiary: string };
+  hkLocalTransfer: { bankAndCode: string; beneficiary: string; accountNo: string };
+  reference: string;
 };
 
 export type InvoicePdfData = {
@@ -111,9 +129,12 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
+  paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly PdfLineItem[];
+  /** Given only on a bank-transfer invoice (`decisions.md` Q22); `undefined` omits the whole section. */
+  bankRails?: InvoicePdfBankRails;
   issuerName: string;
   issuerEmail: string;
   copy: InvoicePdfCopy;
@@ -133,7 +154,6 @@ export type ReceiptPdfCopy = PdfDocumentCopy & {
   previousPaymentsLabel: string;
   currentPaymentReceivedLabel: string;
   remainingBalanceDueLabel: string;
-  footer: string;
 };
 
 export type ReceiptPdfData = {
@@ -211,6 +231,40 @@ calls for validating the shape at the type level.
 version: neither renderer catches a `pdf-lib` failure or a bad font byte;
 both surface as a rejected `Promise` to the caller.
 
+**InvoicePdf gains a fourth meta row, `paymentMethod` (`decisions.md`
+Q21).** `drawMetaBlock` in `invoice-pdf.ts` draws it last, after Date due —
+appending rather than reordering the three rows already there, since no
+decision fixes a different order and this is the least disruptive place to
+add one. The value arrives preformatted (`"Card"`, `"Bank transfer"`, or
+whatever string the caller already built for `ReceiptPdf`'s own
+`paymentMethod`), matching the presentation-only contract every other field
+here already follows — this renderer does not know payment methods exist as
+a concept, only that it draws whatever string it is given.
+
+**InvoicePdf gains a conditional `drawBankRails` section, full width below
+the order value (`decisions.md` Q22).** Living in `invoice-pdf.ts` itself,
+matching `receipt-pdf.ts`'s own document-specific sections
+(`drawPaymentSection`, `drawPaymentBreakdown`) rather than the shared
+`pdf-document.ts` — no other document draws it. `drawBankRails` draws
+`copy.bankDetailsHeading`
+then three columns at equal thirds of the content width — SWIFT, FPS, HK
+local transfer, each column its own heading plus its own stack of label/value
+lines, independently sized the way `drawParties`'s Bill To/Ship To columns
+already are — followed by a rule and one wrapped line of
+`copy.bankReferenceNoteLabel` ending in the bold `bankRails.reference`. Called
+only when `data.bankRails` is given; `invoice-pdf.ts` skips the call and the
+vertical space entirely on a card invoice, the same `!== undefined` gate
+`OrderValueSection`'s summary rows already use. Every field arrives as a
+plain string — no rail-specific formatting, validation or a rail's absence
+within `bankRails` (all three are required once `bankRails` is given at
+all, since a caller with only some of Grade10's rails on file is not a
+shape this contract is asked to represent yet).
+
+**`footer`/`drawFooter` removed from both renderers (`decisions.md`
+Q23).** Neither document draws a footer sentence any more; `InvoicePdfCopy`
+and `ReceiptPdfCopy` drop the field, and each `drawFooter` function is
+deleted along with its call site.
+
 ## Risks / Trade-offs
 
 - **[Risk]** Moving `pdf-document.ts`'s hardcoded strings to `copy` fields is
@@ -269,6 +323,6 @@ independently. Step 3 is an ordinary application-side dependency bump
 
 ## Open Questions
 
-None. `decisions.md` Q18-Q20 settle the approach; the `key` discriminant and
+None. `decisions.md` Q18-Q23 settle the approach; the `key` discriminant and
 the `copy` field list above are this document's own implementation choices,
 not product judgments needing a decision row.

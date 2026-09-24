@@ -1,3 +1,4 @@
+import type { ReceiptPdfData } from "@grade10/ui";
 import { ReceiptPdf } from "@grade10/ui";
 import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -75,7 +76,41 @@ const SAMPLE_RECEIPT = {
     previousPaymentsLabel: "Previous Payments",
     currentPaymentReceivedLabel: "Current Payment Received",
     remainingBalanceDueLabel: "Remaining Balance Due",
-    footer: "This receipt records the payment snapshot shown above.",
+  },
+};
+
+/** Same payment, paid by bank transfer - no separate transfer reference, since `paymentReferenceCode` above already names it once. */
+const BANK_TRANSFER_RECEIPT: ReceiptPdfData = {
+  ...SAMPLE_RECEIPT,
+  paymentMethod: "Bank transfer, recorded manually by admin",
+};
+
+/** Same payment with a Tax charge added, per `winner-order/spec.md`'s "Invoice fields" - an ordinary line like any other, in the order given, no dedicated prop. */
+const WITH_TAX_RECEIPT: ReceiptPdfData = {
+  ...SAMPLE_RECEIPT,
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2,500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { label: "Tax", amount: "HKD 156.00" },
+    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,276.00" },
+    {
+      key: "paymentProcessingFee" as const,
+      label: "Payment Processing Fee",
+      amount: "HKD 118.00",
+    },
+    {
+      key: "orderTotal" as const,
+      label: "Order Total",
+      amount: "HKD 3,394.00",
+    },
+  ],
+  paymentBreakdown: {
+    originalInvoiceTotal: "HKD 3,394.00",
+    previousPayments: "HKD 0.00",
+    currentPaymentReceived: "HKD 3,394.00",
+    remainingBalanceDue: "HKD 0.00",
   },
 };
 
@@ -88,25 +123,29 @@ const SAMPLE_RECEIPT = {
  * the invoice it pays — see `winner-order.invoice-pdf.stories.tsx` and
  * `docs/references/auction-invoice-and-receipt-contents.md`.
  */
-function ReceiptPdfPreview() {
+function ReceiptPdfPreview({
+  data = SAMPLE_RECEIPT,
+}: {
+  data?: ReceiptPdfData;
+}) {
   const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    void ReceiptPdf(SAMPLE_RECEIPT).then((rendered) => {
+    void ReceiptPdf(data).then((rendered) => {
       if (!cancelled) setBytes(rendered);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [data]);
 
   if (!bytes) return <p>Generating…</p>;
   return <PdfPreview bytes={bytes} />;
 }
 
 const meta = {
-  title: "Pages/Winner Order/Receipt PDF",
+  title: "My Auctions/Winner Order/PDF/Receipt",
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -116,3 +155,11 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const BankTransfer: Story = {
+  args: { data: BANK_TRANSFER_RECEIPT },
+};
+
+export const WithTax: Story = {
+  args: { data: WITH_TAX_RECEIPT },
+};
