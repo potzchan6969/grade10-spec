@@ -11,7 +11,8 @@
 
 - Showing Cert-scoped Inventory media on storefront product pages.
 - Tagging one source item to more than one Cert, or bulk tagging media.
-- Changing how Inventory reserves, sells, withdraws, or vaults a unit.
+- Changing how Inventory reserves, sells, or vaults a unit. Guarded Cert-unit
+  removal uses the existing withdrawn category.
 - Changing direct listing uploads, listing-gallery file limits, or gallery
   ordering.
 - Creating a permission, shared component export, or design-system primitive.
