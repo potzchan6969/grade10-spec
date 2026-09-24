@@ -47,8 +47,9 @@ submission into the shop's diary — [Appointments](/p/grade10-site/appointment)
   booked from the submission page
 - 🚧 **A missed visit restarts the plan's clock** — from the day of the miss,
   `plan_expiry_days` counted from there rather than from the day the plan
-  was first kept, so a collector who missed a visit weeks into their plan
-  is not left with only what was originally left to book again in
+  was first kept, for every submission on the visit, a joined one too, so a
+  collector who missed a visit weeks into their plan is not left with only
+  what was originally left to book again in
 - 🚧 **The booked page** — the day, the time and the shop, add to calendar,
   move, cancel, and the day the cards leave with the estimated day back
 

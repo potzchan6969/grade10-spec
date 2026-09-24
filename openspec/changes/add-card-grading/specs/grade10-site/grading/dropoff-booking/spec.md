@@ -351,8 +351,9 @@ submission and no plan.
 **Book again** - the page SHALL offer another drop-off.
 
 **The plan's clock restarts** - a missed visit SHALL restart the plan's own
-clock from the day of the miss: `plan_expiry_days` counted from there, never
-from the day the plan was first kept. A missed visit spends the slot the
+clock from the day of the miss, for every submission the visit carried, a
+joined one too: `plan_expiry_days` counted from there, never from the day the
+plan was first kept. A missed visit spends the slot the
 collector booked, not the plan's own chance to book again.
 
 #### Scenario: grade10-site-grading-dropoff-booking-SC-18 - A visit nobody started is closed and the collector hears within the hour
@@ -386,7 +387,8 @@ collector booked, not the plan's own chance to book again.
 
 - **GIVEN** a plan kept 25 days ago, `plan_expiry_days` 30, whose visit was
   missed today
-- **WHEN** the plan expiry sweep runs `plan_expiry_days` after today
+- **WHEN** the plan expiry sweep runs 30 days after the plan was kept, 5 days
+  from today
 - **THEN** the plan has not expired
 - **AND** it expires `plan_expiry_days` after today, not `plan_expiry_days`
   after the day it was first kept

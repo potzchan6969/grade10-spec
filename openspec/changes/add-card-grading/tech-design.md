@@ -442,12 +442,15 @@ order pinned by a test. Every row carries its own `kind` and an explicit
 | List | Predicate | Writes | Kind · Lane |
 | --- | --- | --- | --- |
 | `retriedNotifications` | `notification_retries` due | the send, or the row leased for a further attempt | repair · fast |
-| `dueLetters` | one registry row, one shared budget, over four rungs each paged through `readWorkList` under its own internal cursor key: the plan nudge (`created_at`, `NOT EXISTS plan_nudged`), the visit reminder (every submission the visit carries — the owner and each joiner, resolved through `visit_owner_id`, ordered by the visit's own `appointment_at`), the 30/60 collection pair (`ready_at`, no notice posted), storage started (`ready_at`, no notice, `NOT EXISTS storage_started`) | the event and the letter | routine · fast |
+| `planNudges` | `planned`/`booked` holding no visit, `created_at` a day short of `plan_nudge_days`, `NOT EXISTS plan_nudged` | the event and the letter | routine · fast |
+| `visitReminders` | `booked`, the visit resolved through `visit_owner_id` starting within two days — every submission it carries, the owner and each joiner, ordered by the visit's own `appointment_at` | the event and the letter | routine · fast |
+| `uncollectedReminders` | `ready`, no notice posted, more pinned reminder days come (a day wide) than told | the event and the letter | routine · fast |
+| `storageStarted` | `ready`, no notice posted, the pinned storage day come (a day wide), `NOT EXISTS storage_started` | the event and the letter | routine · fast |
 | `planExpiry` | `planned` or `booked` holding no visit, older than `plan_expiry_days` off the plan's own clock — which restarts from a missed visit's own day, never the day the plan was first kept | `expire` / `expireBooked` | routine · fast |
 | `expiredBooked` | `booked`, `booked_expiry_days` past the visit's own slot (`bookedExpiresAt`) | `expireBooked`, cache cleared | routine · fast |
 | `missedVisits` | `booked` on a visit resolved through `visit_owner_id`, grace passed, re-read from the diary before it is told — a cached slot is a candidate, never a fact | `markOutcome(…, "no_show", …)`, then the cache cleared and `dropoff_missed` | routine · fast |
-| `repairedBookings`, `recoveredBookings` | the vault's two, over `visit_owner_id` | the cache repaired | repair · fast |
-| `terminalBookingsClosed` | a terminal submission (cancelled, expired or collected) still caching a visit | the diary's booking closed — `cancel` for a future slot, `markOutcome` for a past one — and the cache cleared | repair · fast |
+| `repairedBookings`, `recoveredBookings` | the vault's two, over `visit_owner_id`; the cache compared on booking, service, shop and slot, since the diary keeps a booking's id across a move | the cache repaired | repair · fast |
+| `terminalBookingsClosed` | a `cancelled` or `expired` submission still caching a visit — one whose close the counter could not tell the diary | the diary's booking closed — `cancel` for a future slot, `no_show` for a past one — and the cache cleared | repair · fast |
 | `expiredPackets` | the vault's | `expirePacket` | routine · fast |
 | `verifiedChainRows`, `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset`, `orphanedObjects` | the vault's six | the vault's | routine · slow |
 
@@ -479,10 +482,33 @@ answering the question it was for.
   `visit_of` reads), and each submission on the visit is reminded under its
   own id, with its own fee — never the owner's letter naming every
   submission's total (decided here, per the audit's finding 16)
+- **Each rung is its own registry row** — its own limit, cursor, gauges and
+  due window in its query — so a page one rung cannot tell never spends
+  what another rung owes
 - **The claim asks the diary before it opens**, never after: the visit
-  reminder's day-before judgment reads the diary's own `slot_start` at the
-  claim, not the page's cached `appointment_at` — a visit the diary moved
-  since the page was read is judged, and reminded, on the day it now falls
+  reminder asks once per owner's booking, a joiner through its owner's,
+  and judges the day before on the diary's own `slot_start`, never the
+  page's cached `appointment_at`; a visit the diary moved that the cache
+  has not caught up with is repaired by `repairedBookings` and reminded
+  once the two agree. `expiredBooked` judges its own clock first, then
+  tells the diary, then claims
+- **The counter closes the visit its cards came to**: after the hand-in, or
+  the cancel after the last card is refused, commits, the diary is told the
+  visit was kept (`completed`) and only then is the cache cleared — kept
+  while a joiner still waits on it. A diary that cannot be told is counted
+  (`grading.booking.outcome_failed`) and leaves the cache for
+  `terminalBookingsClosed`
+- **A missed visit restarts every clock on it**: each joiner's
+  `dropoff_detached` off a miss carries `missed`, and `lastMissedVisitAt`
+  reads it beside the owner's `dropoff_missed`
+- **A retry is delivered at least once, never exactly once**: the lease is
+  claimed only while the row stands as its page read it (the same
+  `attempts`, the same parked state, still due), and the row is deleted
+  after the send in its own claim. A worker that dies between the provider
+  accepting the letter and the delete, or a delete that fails
+  (`grading.notify.retry_delete_failed`), sends it again at the lease's
+  `next_at`. An operator's resend leaves the row parked, so the flag stays
+  until the message goes, and writes its own audit row
 - **No letter goes out before the shop's morning** (`REMINDER_SEND_FROM_HOUR`,
   9, in `@grade10/utils/dates` — hoisted there, and the vault's
   `remindBorrowers` reads the same constant now): every rung still reads its

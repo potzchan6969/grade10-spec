@@ -1307,12 +1307,14 @@ the slow lane of 21.8; walk 34 decides them.
       laned and ordered, every row carrying its `kind` and its `limit`, so
       `grading.sweep.repair` fires for the repair lists alone, keeping group
       11's `attemptsPruned`, the slow lane's retention on `plan_attempts`
-- [ ] 21.3 Write `dueLetters` as one row per
-      `{ status, anchor, offsetsSetting, eventKind, letter }` off
-      `uncollectedLadder`'s rungs — the plan nudge at twenty-one days, the
-      visit reminder the day before, the thirty- and sixty-day collection pair
-      naming what being reminded costs, and the storage fee told the day it
-      starts — each claimed so a rung told twice is told once
+- [ ] 21.3 Write the due letters as four registry rows, each with its own
+      limit, cursor and due window in its query — `planNudges` at
+      twenty-one days, `visitReminders` the day before for every submission
+      on the visit, a joiner through its owner's booking,
+      `uncollectedReminders` for the thirty- and sixty-day pair naming what
+      being reminded costs, and `storageStarted` the day the fee starts —
+      read off `uncollectedLadder`'s rungs and each claimed so a rung told
+      twice is told once
       (`grade10-site-grading-submission-plan-SC-43`,
       `grade10-site-grading-collector-notifications-SC-09`,
       `grade10-site-grading-collector-notifications-SC-11`,
@@ -1321,9 +1323,11 @@ the slow lane of 21.8; walk 34 decides them.
 - [ ] 21.4 Write `planExpiry` and `expiredBooked`, a plan nobody books expiring
       at `plan_expiry_days` owing nothing, one with a drop-off booked not
       expiring, a booked submission holding no visit expiring on the plan's
-      own clock through `booking/standing.ts`'s `planClock`, and a booked
-      submission expiring `booked_expiry_days` after its
-      visit (`grade10-site-grading-submission-plan-SC-44`,
+      own clock through `booking/standing.ts`'s `planClock`, restarted from a
+      missed visit for every submission on it, and a booked submission
+      expiring `booked_expiry_days` after its visit, the clock judged before
+      the diary is told (`grade10-site-grading-submission-plan-SC-44`,
+      `grade10-site-grading-dropoff-booking-SC-28`,
       `grade10-site-grading-submission-plan-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-49`)
 - [ ] 21.5 Write `missedVisits` calling
@@ -1336,25 +1340,28 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-10`)
 - [ ] 21.6 Write `retriedNotifications` over `notification_retries` on the
       vault's ladder — the cards handed in although the mail failed, the ladder
-      spent and the row parked and flagged, the flag cleared when the channel
-      accepts — and `admin.resendNotification` sending a parked message again
+      spent and the row parked and flagged, the flag cleared only when the
+      channel accepts — and `admin.resendNotification` sending a parked
+      message again, on the audit chain, the lease claimed only while the row
+      stands as its page read it
       (`grade10-site-grading-collector-notifications-SC-16`,
       `grade10-site-grading-collector-notifications-SC-17`,
       `grade10-site-grading-collector-notifications-SC-18`,
       `grade10-site-grading-collector-notifications-SC-25`)
 - [ ] 21.7 Add the fast lane's repair lists: `repairedBookings` and
-      `recoveredBookings` over `visit_owner_id`, and `expiredPackets`; a list
-      keyed on `booking_ref` filters on status, since a `cancelled` row keeps
-      its cache when the counter cancelled it and holds none when the
-      collector did. No `sealedDeliveries` list: SC-25's attached copy is
+      `recoveredBookings` over `visit_owner_id`, repairing a cache whose
+      booking, service, shop or slot the diary no longer holds, and
+      `expiredPackets`. No `sealedDeliveries` list: SC-25's attached copy is
       already carried by the step act's own letter
       (`documents/papers.ts`'s `CARRYING_STEP`), so no sweep owes a sending
       list for it — a gauge with no real predicate only fires
-      `grading.sweep.repair` forever. `terminalBookingsClosed` joins this
-      lane too: a terminal row still caching a visit closes the diary's own
-      booking behind it, `cancel` for a future slot and `markOutcome` for a
-      past one (21.5's `expiredBooked` and the counter's cancel-after-
-      last-card both leave one otherwise)
+      `grading.sweep.repair` forever. The counter's hand-in and its
+      cancel-after-last-card tell the diary the visit was kept, and only
+      then clear the cache. `terminalBookingsClosed` joins this lane for a
+      `cancelled` or `expired` row still caching a visit — one the diary
+      could not be told at the counter — closing the booking behind it,
+      `cancel` for a future slot and `no_show` for a past one; a collected
+      row's visit was kept and is never closed as missed
       (`grade10-site-grading-counter-documents-SC-25`)
 - [ ] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
       `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset` and
