@@ -116,10 +116,10 @@ const run = runValidator;
 test("product and platform suites validate their scoped journeys and id prefixes", () => {
  const root = mkdtempSync(join(tmpdir(), "composed-suites-"));
  const capabilities = [
-   ["openspec/specs/demo/alpha/item", "demo-alpha-item"],
-   ["openspec/specs/demo/beta/item", "demo-beta-item"],
-   ["openspec/specs/another/market/item", "another-market-item"],
- ];
+    ["openspec/specs/demo/alpha/item", "demo-alpha-item"],
+    ["openspec/changes/demo-change/specs/demo/gamma/item", "demo-gamma-item"],
+    ["openspec/specs/another/market/item", "another-market-item"],
+  ];
  for (const [base, prefix] of capabilities) {
    for (const [name, content] of Object.entries(specFiles(base))) {
      const file = join(root, name);
@@ -184,7 +184,7 @@ test("product and platform suites validate their scoped journeys and id prefixes
  const productSuite = suite(
    "demo product",
    "demo-e2e",
-   "demo-alpha-item-US-01, demo-beta-item-US-01",
+   "demo-alpha-item-US-01, demo-gamma-item-US-01",
  );
  const platformSuite = suite(
    "platform",
