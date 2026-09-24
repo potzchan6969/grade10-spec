@@ -141,8 +141,6 @@ lot before any script runs.
   item while the listing is draft, created or published, never after it
   closes — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 
-::story{id="auction-listing-listinggallery--mixed-media" title="A gallery holding both images and video"}
-
 ### Lot Status
 
 Every lot a collector can see shows one status. It describes the lot,
