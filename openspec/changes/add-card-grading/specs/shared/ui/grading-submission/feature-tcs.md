@@ -1945,6 +1945,34 @@ Runs once per row of **Test data**.
 
 * The amount, the method, the instant and the till reference all read as they were given.
 
+### shared-ui-grading-submission-US1-TC68-1: A matched card with no set or number reads from its name alone
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Listing the cards
+
+**Pre-conditions:**
+
+* `GradingCardList` carries one card matched in the reference, carrying no set and no number.
+
+**Steps:**
+
+1. Open the `GradingCardList` story with that card.
+
+**Expected Results:**
+
+* The card reads as matched, from its name alone.
+* Rendering the card raises no error.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -1974,6 +2002,7 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-SC-48` | Case added | `shared-ui-grading-submission-US1-TC66-1` — the payout and the refunded fee |
 | `shared-ui-grading-submission-SC-50` | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
 | `shared-ui-grading-submission-SC-57` | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
+| `shared-ui-grading-submission-SC-65` | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
 

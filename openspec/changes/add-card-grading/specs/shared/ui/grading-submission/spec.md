@@ -298,10 +298,11 @@ render its levels, with the line it is given about them.
 
 The list a collector edits before hand-in, one card a row.
 
-**A card** - `GradingCardList` SHALL show each card's name, its set line,
-whether it was matched in the reference or kept as typed, its declared value
-where one is given, its reference sales where they are given, and its minimum
-grade where one is set.
+**A card** - `GradingCardList` SHALL show each card's name, its set line
+where one is given, whether it was matched in the reference or kept as typed,
+its declared value where one is given, its reference sales where they are
+given, and its minimum grade where one is set. A card matched with no set and
+no number of its own SHALL read as matched, from its name alone.
 
 **Searching** - the list SHALL take the matches as loading, empty, error or
 ready and report each search; a name that matches nothing SHALL be kept as
@@ -343,6 +344,15 @@ own.
   and the three sales
 - **AND** the minimum grade reads on the card, with the line that the fee
   applies either way
+
+#### Scenario: shared-ui-grading-submission-SC-65 - A matched card names no set or number of its own
+**Serves:** Listing the cards - a collector lists a card the reference matched by name alone
+
+- **GIVEN** a card matched in the reference, carrying no set and no number
+  (`Q109`: the reference names neither)
+- **WHEN** `GradingCardList` renders it
+- **THEN** the card reads as matched, from its name alone
+- **AND** rendering it raises no error
 
 #### Scenario: shared-ui-grading-submission-SC-14 - A name that matches nothing is kept as typed
 **Serves:** Listing the cards - a collector lists a card in their own words

@@ -54,8 +54,12 @@ type GradingCardListCopy = {
   paste: string;
   emptyTitle: string;
   emptyBody: string;
-  /** Read by a matched card. Fills `{set}` and `{number}`. */
+  /** Read by a matched card that carries a set and a number. Fills `{set}`
+   * and `{number}`. */
   matched: string;
+  /** Read by a matched card that carries neither: the reference names
+   * nothing beyond the card itself. */
+  matchedNoDetail: string;
   keptAsTyped: string;
   /** Read on every card while the reference cannot be asked. */
   catalogueUnavailable: string;
@@ -244,11 +248,7 @@ function originLine(
 ): string {
   if (unreachable) return copy.catalogueUnavailable;
   if (!card.matched) return copy.keptAsTyped;
-  if (card.set == null || card.number == null) {
-    throw new Error(
-      `GradingCardList: card "${card.id}" reads as matched with no set and number`,
-    );
-  }
+  if (card.set == null || card.number == null) return copy.matchedNoDetail;
   return fillGradingCopy(copy.matched, {
     set: card.set,
     number: card.number,

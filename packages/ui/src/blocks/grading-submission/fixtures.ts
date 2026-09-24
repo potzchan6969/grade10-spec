@@ -215,6 +215,7 @@ const CARD_LIST_COPY: GradingCardListCopy = {
   emptyTitle: "No cards yet",
   emptyBody: "Add them one at a time, or paste a list you already have.",
   matched: "{set} · {number} · matched in the catalogue",
+  matchedNoDetail: "Matched in the catalogue",
   keptAsTyped: "Kept as you typed it · no reference",
   catalogueUnavailable:
     "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed.",
@@ -241,6 +242,16 @@ const MATCHED_CARD: GradingListedCard = {
   ],
   minimumGrade: "PSA 9",
   minimumGradeWanted: true,
+};
+
+/** Matched in the reference, which names no set or number of its own
+ * (`Q109`): the card reads as matched from its name alone. */
+const MATCHED_NO_DETAIL_CARD: GradingListedCard = {
+  id: "card_mewtwo",
+  name: "Mewtwo",
+  matched: true,
+  declaredValue: hkd(90000),
+  referenceSales: [{ id: "s1", label: "Sold 9 May", price: hkd(88000) }],
 };
 
 const TYPED_CARD: GradingListedCard = {
@@ -569,6 +580,7 @@ export {
   LEVEL_PICKER_COPY,
   LIST_CAP,
   MATCHED_CARD,
+  MATCHED_NO_DETAIL_CARD,
   MONEY_BLOCK_COPY,
   NAMED_AT,
   NAMED_COLLECTOR_COPY,

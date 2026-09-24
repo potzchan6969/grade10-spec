@@ -1860,6 +1860,11 @@ Stage (b).
       day it was recorded, and a reversal once the card turns up
       (`grade10-site-grading-submission-lifecycle-SC-41`,
       `grade10-site-grading-submission-lifecycle-SC-43`)
+- [ ] 27.12 Build the page's own `SubmissionAccess` from the address's `#t=`
+      fragment with `core/api/accessToken.ts`'s `accessFromHash`
+      (`accessTokenFromHash` underneath it), sent as the access header on
+      every read and act the page makes — the token group 25.2 lifts out is
+      wired in here, at the one page that reads it
 
 ## 28. The console's queue, tiles and one submission (grade10)
 

@@ -7,6 +7,7 @@ import {
   CARD_MATCHES,
   LIST_CAP,
   MATCHED_CARD,
+  MATCHED_NO_DETAIL_CARD,
   NO_VALUE_CARD,
   TYPED_CARD,
 } from "./fixtures";
@@ -108,6 +109,18 @@ export const Matched: Story = {
       canvas.getByRole("button", { name: CARD_LIST_COPY.paste }),
     );
     expect(args.onPaste).toHaveBeenCalledOnce();
+  },
+};
+
+/** The reference names no set or number of its own (`Q109`): a matched card
+ * reads as matched from its name alone, never a card it cannot fill `{set}`
+ * and `{number}` on. */
+export const MatchedNoDetail: Story = {
+  args: { cards: [MATCHED_NO_DETAIL_CARD] },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Matched in the catalogue")).toBeInTheDocument();
+    expect(canvas.getByText("Declared value: HK$900")).toBeInTheDocument();
   },
 };
 
