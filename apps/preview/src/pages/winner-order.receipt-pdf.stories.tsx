@@ -78,11 +78,10 @@ const SAMPLE_RECEIPT = {
   },
 };
 
-/** Same payment, its transfer reference shown per `spec.md`'s "ReceiptPdf renders a transfer-reference line only when the payment carries one". */
+/** Same payment, paid by bank transfer - no separate transfer reference, since `paymentReferenceCode` above already names it once. */
 const BANK_TRANSFER_RECEIPT: ReceiptPdfData = {
   ...SAMPLE_RECEIPT,
-  paymentMethod: "Bank transfer",
-  paymentReference: "LK7P2Q01",
+  paymentMethod: "Bank transfer, recorded manually by admin",
 };
 
 /** Same payment with a Tax charge added, per `winner-order/spec.md`'s "Invoice fields" - an ordinary line like any other, in the order given, no dedicated prop. */
