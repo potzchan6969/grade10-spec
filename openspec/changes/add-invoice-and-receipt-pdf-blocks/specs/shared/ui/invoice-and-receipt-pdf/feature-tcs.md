@@ -1,6 +1,6 @@
 # shared/ui/invoice-and-receipt-pdf Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-23, tcs-rules r3
 
 ## shared-ui-invoice-and-receipt-pdf-US1: Invoice and Receipt PDF component contract
@@ -47,7 +47,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -76,7 +76,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -300,7 +300,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -376,7 +376,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -502,7 +502,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -531,7 +531,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -559,7 +559,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -597,7 +597,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -626,7 +626,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -693,7 +693,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
@@ -780,7 +780,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1095,6 +1095,208 @@ Runs once per row of **Test data**.
 * The issuer block renders after every other section in the document.
 * The issuer block aligns to the right of the sheet.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC36-1: A company address renders every line it is given
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* A Bill To carrying a recipient, company, address line 1, address line 2, city, region, postal code, and country.
+
+**Steps:**
+
+1. Render InvoicePdf with the pre-conditions.
+2. Inspect the Bill To block.
+
+**Expected Results:**
+
+* Every one of those lines is shown.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC37-1: A personal address omits the company line
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* A Ship To with no company and no address line 2.
+
+**Steps:**
+
+1. Render InvoicePdf with the pre-conditions.
+2. Inspect the Ship To block.
+
+**Expected Results:**
+
+* No company line and no address-line-2 line appear.
+* Recipient, address line 1, the city/region/postal-code line, and country still render.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC38-1: No address given renders "Not recorded"
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Party address fields
+
+**Pre-conditions:**
+
+* A ReceiptPdf given no address for Ship To.
+
+**Steps:**
+
+1. Render ReceiptPdf with the pre-conditions.
+2. Inspect the Ship To block.
+
+**Expected Results:**
+
+* The Ship To block shows the single line "Not recorded".
+* No blank address lines appear in its place.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC39-1: A bank-transfer receipt names its transfer reference
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* A ReceiptPdf given a transfer reference.
+
+**Steps:**
+
+1. Render ReceiptPdf with the pre-conditions.
+2. Inspect the Payment section.
+
+**Expected Results:**
+
+* The Payment section shows the transfer reference given.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC40-1: A card-paid receipt shows no transfer-reference line
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* A ReceiptPdf given no transfer reference.
+
+**Steps:**
+
+1. Render ReceiptPdf with the pre-conditions.
+2. Inspect the document for a Payment section.
+
+**Expected Results:**
+
+* No Payment section appears.
+* Every other meta row and party block still renders.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC41-1: A date renders fixed to Hong Kong time with its zone name
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Presentation-only contract
+
+**Pre-conditions:**
+
+* A `Date` value, and a machine clock not set to Hong Kong time.
+
+**Steps:**
+
+1. Render InvoicePdf with the pre-conditions.
+2. Inspect the sent-at meta row.
+
+**Expected Results:**
+
+* The row shows that instant's Hong Kong calendar date and clock time.
+* The row ends in the zone name `HKT`.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC42-1: Each renderer returns exactly one A4 page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Document shape
+
+**Pre-conditions:**
+
+* Valid invoice data, and valid receipt data.
+
+**Steps:**
+
+1. Render InvoicePdf and ReceiptPdf with their respective pre-conditions.
+2. Parse the returned bytes as a PDF document.
+3. Inspect the page count and page size of each.
+
+**Expected Results:**
+
+* Each returned document has exactly one page.
+* Each page is sized 595.28×841.89pt (A4).
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1188,3 +1390,41 @@ requires the invoice PDF to name a replacement (`SC-98`, and a line of
 own MODIFIED delta in the open `define-public-auction-identifiers` change;
 see `proposal.md`'s Open Questions for the reconciliation this leaves for
 whoever lands that change.
+
+**Amendment, 2026-09-24 (`decisions.md` Q18-Q20):** the DOM component this
+capability specified is retired, replaced by the pdf-lib renderer `grade10`
+already built and ships in production. `spec.md`'s `## Feature set` and
+requirements were rewritten to describe what that renderer actually draws,
+and this suite gained `TC36`-`TC42` for the behaviour that changed or is new:
+
+- **Retired, no longer resolving to a live scenario** — `TC2`/`TC3` (bank
+  rails), `TC10`/`TC12` (manually-settled mark, Superseded invoice),
+  `TC16`-`TC20` (the reserved tax-line/issuer-tax-details slots), `TC22`
+  (rich `ReactNode` markup — there is no JSX left to carry it, every value is
+  now a plain string), and `TC25` (loading/error state — a meaningful claim
+  about a React component's render cycle, not about a data-in/bytes-out
+  function). None was ever exercised by a real `grade10` consumer; `SC-19`'s
+  own retirement of the fields they proved is `decisions.md` Q19.
+- **Superseded by new cases** — `TC27`-`TC30` proved the DOM contract's
+  nine-field `PartyAddress` (including phone and state, both absent from the
+  address shape `grade10`'s renderer actually takes). `TC36`-`TC38` prove
+  the six-line shape it draws instead, including the "Not recorded" fallback
+  the DOM contract never had, since it required an address rather than
+  allowing one to be withheld entirely.
+- **New** — `TC39`/`TC40` prove the transfer-reference line, a real
+  behaviour `grade10`'s renderer already has that the DOM contract never
+  specified. `TC41` proves the Hong Kong-time date formatting the renderer
+  does itself — the one value it computes rather than taking preformatted,
+  a deliberate asymmetry with money (`spec.md`'s Presentation-only contract).
+  `TC42` proves the one fact every other case assumes: each call returns
+  exactly one A4 page.
+- **Unaffected** — every other live case (`TC1`, `TC4`-`TC9`, `TC11`, `TC13`-
+  `TC15`, `TC21`, `TC23`, `TC24`, `TC31`-`TC35`) still resolves to a live
+  scenario in the rewritten `spec.md`, under the same or a renumbered
+  requirement; none of their claims changed.
+
+This amendment was not run as a fresh blind pass: the round that would have
+read the Feature set without sight of the scenarios is the same person who
+just wrote both, for a swap already fully decided in `decisions.md`. The
+retirements above are a direct, checkable consequence of `spec.md`'s own
+diff, not a product judgment this suite is positioned to catch independently.

@@ -1,373 +1,274 @@
 ## Context
 
 `shared/ui/invoice-and-receipt-pdf` (see `specs/shared/ui/invoice-and-receipt-pdf/spec.md`)
-adds `InvoicePdf` and `ReceiptPdf` to `@grade10/ui`. Both are presentation-only
-`@grade10/design-system`-composed React components — no data fetching, no
-computation, no `@grade10/i18n` import, every amount/date a preformatted
-`ReactNode`, every label from a `copy` prop, per the existing component-contract
-rule (`docs/governance/ui-component-contracts.md`) every other `packages/ui`
-block already follows.
-
-`apps/preview`'s current sketch
-(`winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx`,
-`winner-order-pdf.story-shared.tsx`) composes `@grade10/design-system`
-primitives directly, in this repository, with no export contract behind it.
-`grade10` opens a hardcoded placeholder PDF today (`PLACEHOLDER_RECEIPT_PDF`).
-This design turns the sketch's layout into the real export; wiring `grade10`
-onto it is a task this change names but does not build (see Migration Plan).
+exports `InvoicePdf` and `ReceiptPdf` from `@grade10/ui`. This document
+originally designed them as `@grade10/design-system`-composed React
+components; `grade10` never adopted that design — it built and shipped its
+own pdf-lib renderer instead (`packages/grade10-auction/contracts`:
+`pdfDocument.ts`, `receiptPdf.ts`, `invoicePdf.ts`), already replacing
+`PLACEHOLDER_RECEIPT_PDF` in production. `decisions.md` Q18 adopts that
+renderer as this capability's real implementation; this revision of the
+design describes moving it here, not building it fresh.
 
 ## Goals / Non-Goals
 
 **Goals:**
-- Fix the two components' prop shapes precisely enough that `packages/ui`'s
-  `public-exports.test.ts` convention and a consuming app's typecheck are the
-  enforcement, not a code review.
-- No new exported component beyond `InvoicePdf` and `ReceiptPdf` — every
-  prop type in this design exists to type those two, not as a public surface
-  of its own.
-- Colocated stories, with `play` assertions on every conditional-rendering
-  scenario, as the executable proof — the same way every other `packages/ui`
-  block's stories are the proof, not `apps/preview`'s.
+- Move `grade10`'s renderer verbatim in behaviour — same layout, same
+  `pdf-lib` calls, same tested output — changing only what this move and
+  `decisions.md` Q20 require: every hardcoded label routed through a `copy`
+  argument, and the boxed-summary grouping keyed on something other than an
+  English label string (see "The summary grouping can no longer match on
+  label text" below).
+- `packages/ui`'s `public-exports.test.ts` convention and a consuming app's
+  typecheck are the enforcement that the exported functions and types match
+  `spec.md`, not a code review.
+- No new exported name beyond `InvoicePdf`, `ReceiptPdf`, and the types a
+  caller needs to build their arguments — everything else in
+  `pdf-document.ts` stays unexported, as it already is in `grade10`.
+- Tests that call the renderer and inspect the returned PDF's structure
+  (page count, page size, and whatever `pdf-lib`'s own reader can confirm),
+  the same shape `grade10`'s existing `invoicePdf.test.ts`/`receiptPdf.test.ts`
+  already prove, colocated here instead.
 
 **Non-Goals:**
-- Generating an actual `.pdf` file. See `decisions.md`'s Non-Goals — that is
-  `grade10`'s own headless-render step, outside this design entirely.
+- Building bank rails, the manually-settled mark, Superseded invoice, or the
+  reserved `taxLine`/`issuerTaxDetails` slots. Retired, `decisions.md` Q19.
 - A data model, a service, or a wire contract. Nothing here touches a
-  database, a backend service, or an API — `Database Schema`, `Service
-  Interfaces`, and `API Contracts` are omitted from this document because
-  none apply.
-- Deciding the tax line's or the formal tax receipt's shape. Both stay the
-  loosely-typed `ReactNode` slots `spec.md` already fixes.
+  database, a backend service, or an API.
+- Pixel-level layout assertions (position, alignment, rule thickness).
+  `pdf-lib` writes a content stream, not a DOM; there is no `data-slot` to
+  query. Tests prove the data-in/bytes-out contract — order, presence,
+  values, page shape — the same ceiling `grade10`'s own tests already
+  accepted; a visual regression is caught by the Storybook `pdfjs-dist` preview
+  (see Risks), not by an assertion.
 
 ## Decisions
 
-**Directory: one block, not two.** Per `decisions.md` Q7 (redrawn after Q9
-merged the capability), `InvoicePdf` and `ReceiptPdf` live in one directory,
-`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/` (renamed from
-`invoice-and-receipt-pdf`, `decisions.md` Q17 — the `auction-` prefix matches
-`packages/ui/src/blocks/`'s own domain-prefix convention: `auction-listing`,
-`auction-order`, `auction-record` beside `store-cart`, `store-order-history`,
-and the rest), mirroring the one-capability, one-directory convention every
-other block already follows (`packages/ui/src/blocks/auction-order/`). Both
-stories files' Storybook `title` moved with it, from `Invoice And Receipt
-Pdf/…` to `Auction Invoice And Receipt Pdf/…`. Files:
+**Directory and files carry over, contents change.** Still one directory,
+`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/` — the name
+`decisions.md` Q17 already settled survives this swap. Files:
 
 | File | Holds |
 | --- | --- |
-| `invoice-pdf.tsx` | `InvoicePdf`, exported |
-| `receipt-pdf.tsx` | `ReceiptPdf`, exported |
-| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — `BankRailsSection`, InvoicePdf's full-width bank-rails block (SC-35) — and `IssuerBlock`, the right-aligned block both documents render last (SC-39, SC-40) — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
-| `types.ts` | Every exported prop type: `InvoicePdfProps`, `InvoicePdfCopy`, `ReceiptPdfProps`, `ReceiptPdfCopy`, and the shared row shapes both use |
-| `fixtures.ts` | Story fixtures and DOM-reading helpers both story files share (`orderValue`, `orderValueCopy`, `billToAddress`, `shipToAddress`, `readRows`, `readBreakdownRows`, `readAddressLines`), unexported from the package |
-| `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Storybook stories with sample props — the behavior proof for `spec.md`'s scenarios (see Risks) |
-| `public-exports.test.ts` | Asserts `InvoicePdf`/`ReceiptPdf` and every prop type in this table are exported from `../../index`, per `auction-order`'s own test |
+| `pdf-document.ts` | The A4 layout and drawing primitives both documents share, moved from `grade10`'s `pdfDocument.ts` verbatim except for the `copy`-threading and `key`-discriminant changes below. Unexported except through `invoice-pdf.ts`/`receipt-pdf.ts`. |
+| `invoice-pdf.ts` | `InvoicePdf`, `InvoicePdfData`, `InvoicePdfCopy`, exported |
+| `receipt-pdf.ts` | `ReceiptPdf`, `receiptBreakdown`, `ReceiptPdfData`, `ReceiptPdfCopy`, exported |
+| `fixtures.ts` | Sample data both story files and `apps/preview`'s pages share, unexported from the package — the role `grade10`'s `invoiceSample.ts`/`receiptSample.ts` played there, moved here so both consumers stop keeping their own copy |
+| `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Call the renderer on `fixtures.ts` sample data and preview the returned bytes with `pdf-preview.tsx`'s `pdfjs-dist` viewer — there is no component to render as JSX |
+| `pdf-preview.tsx` | `PdfPreview`, a small `pdfjs-dist`-based canvas viewer for the returned bytes — Storybook-only, not exported from `../../index` |
+| `public-exports.test.ts` | Asserts every name in this table's second column exports from `../../index`, per `auction-order`'s own test |
+| `pdf-document.test.ts`, `invoice-pdf.test.ts`, `receipt-pdf.test.ts` | Moved from `grade10`'s `contracts/test/`, proving `spec.md`'s scenarios at the level Non-Goals fixes |
 
-**Also edits:** `packages/ui/vitest.config.ts` — its `audit` project runs
-tests from an explicit `include` allowlist rather than a glob, so this
-directory's `public-exports.test.ts` is added to that list. Without this edit
-the file exists and never runs.
+**Also edits:** `packages/ui/package.json` — adds `pdf-lib` and
+`@pdf-lib/fontkit` as dependencies, the two packages `grade10`'s renderer
+already depends on, and `pdfjs-dist` as a devDependency for the Storybook
+preview. Its `"./blocks/*"` export previously resolved only `*.tsx`
+(`["./src/blocks/*.tsx"]`), since every existing block is a component; this
+directory's entry files are plain `.ts` (no JSX), so the export becomes
+`["./src/blocks/*.tsx", "./src/blocks/*.ts"]` — the first pattern that
+resolves wins, and no other block's `.tsx` file is affected.
+`packages/ui/vitest.config.ts`'s `audit` project now runs its plain tests
+from a glob (`src/**/*.test.ts`) rather than the explicit allowlist this
+document originally described, so this directory's `public-exports.test.ts`
+and the moved renderer's own tests are picked up automatically — no config
+edit needed.
 
-**Prop shape.** Every field `spec.md`'s requirements name becomes exactly one
-prop. Content and amounts are `ReactNode` (per `decisions.md` Q6); every
-`copy` field is `string`, matching every other `*Copy` type in `packages/ui`
-(SC-17: "every label reads the string `copy` gave it"). `manuallySettled` is
-the one further exception, explained below.
+**Data shape carries over from `grade10` unchanged, except money and dates.**
+`InvoicePdfData`/`ReceiptPdfData` keep the shape `grade10`'s already-tested
+renderer takes — `PdfLineItem { key?, label, amount }` (see below for `key`),
+`PdfPartyAddress = Record<string, string | null> | null`, plain `string`
+amounts, `Date` for every date. This is a deliberate difference from the
+retired DOM design's `ReactNode` props (`decisions.md` Q6): there is no JSX
+here to hold a `ReactNode`, so every value is the plain type `pdf-lib` can
+draw directly.
 
 ```ts
-type OrderValueLines = {
-  lot: ReactNode;
-  winningBid: ReactNode;
-  buyersPremium: ReactNode;
-  shippingAndHandling: ReactNode;
-  insurance?: ReactNode; // SC-4, SC-21: omitted, not blank, when withheld — `!== undefined` gates it
-  taxLine?: ReactNode; // SC-13, SC-14, SC-23, SC-25: reserved — presence-gated, see below
-  subtotal: ReactNode;
-  paymentProcessingFee: ReactNode;
-  orderTotal: ReactNode;
+export type PdfLineItem = {
+  /** Recognized regardless of `label`'s text, so a translated label still
+   * routes into the boxed summary. Absent on an ordinary charge. */
+  key?: "subtotal" | "paymentProcessingFee" | "orderTotal";
+  label: string;
+  amount: string;
 };
 
-// One shared type for both documents' order-value lines, deliberately not
-// split per component — see "One order-value shape, not two" below.
-// -? strips the optionality insurance/taxLine would otherwise carry into
-// their labels; a line that may not render still owes a real label for when
-// it does. lot is excluded — it renders as a bare heading, not a labelled
-// line, so nothing needs a label for it. descriptionLabel/amountLabel head
-// the table itself (SC-37, SC-38), not any one line.
-type OrderValueLinesCopy = {
-  [K in keyof Omit<OrderValueLines, "lot">]-?: string;
-} & {
+export type PdfDocumentCopy = {
+  billToHeading: string;
+  shipToHeading: string;
   descriptionLabel: string;
   amountLabel: string;
 };
 
-// Bill To and Ship To's structured shape (spec.md "Party address fields"),
-// shared by both InvoicePdf and ReceiptPdf. No per-field label: an address
-// block reads as plain lines, the way the sketch's AddressBlock already did
-// — only the section itself (`billToHeading`/`shipToHeading`) is a label.
-type PartyAddress = {
-  fullName: ReactNode;
-  companyName?: ReactNode; // SC-32: omitted, not blank, when withheld
-  addressLine1: ReactNode;
-  addressLine2?: ReactNode; // SC-32: omitted, not blank, when withheld
-  city: ReactNode;
-  state?: ReactNode; // SC-32: omitted, not blank, when withheld
-  postalCode: ReactNode;
-  country: ReactNode;
-  phone: ReactNode;
-};
-
-type InvoicePdfCopy = {
-  documentTitle: string; // the "Invoice" heading itself is a label, like every other — not component-owned text
-  invoiceIdLabel: string;
-  paymentMethodLabel: string;
+export type InvoicePdfCopy = PdfDocumentCopy & {
+  documentTitle: string;
+  invoiceNumberLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
-  bankRailsLabel: string;
-  billToHeading: string;
-  shipToHeading: string;
-  orderValue: OrderValueLinesCopy;
+  footer: string;
 };
 
-type InvoicePdfProps = {
-  invoiceId: ReactNode;
-  paymentMethod: ReactNode;
-  sentAt: ReactNode;
-  paymentDeadline: ReactNode;
-  bankRails?: ReactNode; // SC-18, SC-35, SC-36: full-width section below the order value, not a meta row
-  issuer: ReactNode; // SC-39: foot of the sheet, right-aligned — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
-  billTo: PartyAddress;
-  shipTo: PartyAddress; // SC-19: never echoes billTo
-  orderValue: OrderValueLines; // SC-3: the lot is orderValue.lot, not a separate prop
+export type InvoicePdfData = {
+  listingTitle: string;
+  invoiceNumber: string;
+  sentAt: Date;
+  paymentDeadline: Date;
+  billTo: PdfPartyAddress;
+  shipTo: PdfPartyAddress;
+  lineItems: readonly PdfLineItem[];
+  issuerName: string;
+  issuerEmail: string;
   copy: InvoicePdfCopy;
-  className?: string; // convention across every packages/ui block
 };
 
-type PaymentBreakdown = {
-  originalInvoiceTotal: ReactNode;
-  previousPayments: ReactNode;
-  currentPaymentReceived: ReactNode;
-  remainingBalanceDue: ReactNode; // SC-22: all four render even at zero
-};
-
-type PaymentBreakdownCopy = { [K in keyof PaymentBreakdown]: string };
-
-type ReceiptPdfCopy = {
-  documentTitle: string; // the "Receipt" heading itself is a label, like every other — not component-owned text
-  receiptIdLabel: string;
-  invoiceIdLabel: string;
+export type ReceiptPdfCopy = PdfDocumentCopy & {
+  documentTitle: string;
+  receiptNumberLabel: string;
+  invoiceNumberLabel: string;
+  datePaidLabel: string;
   paymentMethodLabel: string;
-  manuallySettledLabel: string;
-  supersededInvoiceLabel: string;
-  billToHeading: string;
-  shipToHeading: string;
-  orderValue: OrderValueLinesCopy;
-  paymentBreakdown: PaymentBreakdownCopy;
+  paymentReferenceLabel: string;
+  paymentSectionLabel: string;
+  transferReferenceLabel: string;
+  paymentBreakdownLabel: string;
+  originalInvoiceTotalLabel: string;
+  previousPaymentsLabel: string;
+  currentPaymentReceivedLabel: string;
+  remainingBalanceDueLabel: string;
+  footer: string;
 };
 
-type ReceiptPdfProps = {
-  receiptId: ReactNode;
-  invoiceId: ReactNode;
-  paymentMethod: ReactNode;
-  manuallySettled?: boolean; // SC-9, SC-10: see below — not presence-gated like the reserved slots
-  issuer: ReactNode; // SC-40: foot of the sheet, right-aligned — same shape as InvoicePdf's, ReceiptPdf's own addition
-  billTo: PartyAddress;
-  shipTo: PartyAddress; // SC-29: never echoes billTo
-  orderValue: OrderValueLines; // SC-21: the same shared type InvoicePdf uses
-  paymentBreakdown: PaymentBreakdown;
-  supersededInvoice?: ReactNode; // SC-11, SC-12
-  issuerTaxDetails?: ReactNode; // SC-15, SC-24, SC-30: independent of taxLine
+export type ReceiptPdfData = {
+  listingTitle: string;
+  receiptNumber: string;
+  paidAt: Date;
+  invoiceId: string;
+  paymentReferenceCode: string;
+  billTo: PdfPartyAddress;
+  shipTo: PdfPartyAddress;
+  lineItems: readonly PdfLineItem[];
+  paymentBreakdown: ReceiptPaymentBreakdown;
+  paymentMethod: string;
+  paymentReference: string | null;
+  issuerName: string;
+  issuerEmail: string;
   copy: ReceiptPdfCopy;
-  className?: string;
 };
 ```
 
-**The empty-vs-absent tax convention (`decisions.md` Q10) needs a named
-discriminator, not just an optional type.** `taxLine?: ReactNode` alone is
-ambiguous: `ReactNode` itself includes `undefined`, so both of the obvious
-implementations — `taxLine && <Row>{taxLine}</Row>` and `taxLine !==
-undefined` — collapse SC-25's two states (prop withheld: no row; prop
-supplied with empty content: a blank row) into one. The actual mechanism is
-**key presence**: `InvoicePdf` and `ReceiptPdf` check `"taxLine" in props`
-(and `"issuerTaxDetails" in props`), not the value. A consumer who writes
-`taxLine={maybeUndefinedValue}` has *supplied* the key either way — that is
-the one deliberate difference from `insurance` and `supersededInvoice`, which
-stay `!== undefined` checks, because nothing in
-`spec.md` reserves an empty-but-present state for them the way SC-25 reserves
-one for the tax line and (by the same rule, SC-15/SC-30) for
-`issuerTaxDetails`.
+**The summary grouping can no longer match on label text (`decisions.md`
+Q20).** `grade10`'s `drawLineItems` currently sorts a charge into the boxed
+summary by `SUMMARY_LABELS.has(item.label)` — a `Set` of the literal English
+strings `"Subtotal"`, `"Payment Processing Fee"`, `"Order Total"`. That only
+ever worked because `grade10`'s backend happens to hardcode those same
+strings; once a caller's `label` is a translated `copy` value, the match
+silently stops firing and every summary line falls back into the ordinary
+charge list. `key` (above) replaces it: `drawLineItems` groups by
+`item.key !== undefined`, and singles out `key === "orderTotal"` for the
+bold, rule-set-off treatment `ORDER_TOTAL_LABEL` used to identify by string
+equality. This is not part of Q20's literal ask (routing hardcoded labels
+through `copy`) but the same class of bug: a mechanism keyed on English text
+that a translated label would silently break, caught while doing that work
+rather than left for whoever localizes this renderer first.
 
-**`manuallySettled` stays a `boolean`, the one prop that is not `ReactNode`
-and not presence-gated.** The requirement is explicit that `false` and
-"not supplied" both mean no mark (SC-10 gives it `false`, not an absent key),
-which a presence-gated `ReactNode` cannot express — passing `false` would
-still be a supplied key. The `boolean` gates a component-owned visual
-treatment (an icon, a badge, a border), and its own text comes from
-`copy.manuallySettledLabel`, the same split every other label in this
-contract already makes between content and label.
+**Every string `pdf-document.ts`/`invoice-pdf.ts`/`receipt-pdf.ts` currently
+hardcodes moves to a `copy` field (`decisions.md` Q20).** `drawParties`'s
+`"Bill To"`/`"Ship To"`, `drawLineItems`'s `"Description"`/`"Amount"`
+header, `drawTitle`'s caller-supplied `"Invoice"`/`"Receipt"` title, every
+meta-row label (`"Receipt number"`, `"Invoice number"`, `"Date paid"`,
+`"Payment method"`, `"Payment reference"`, `"Date of issue"`, `"Date due"`),
+`drawPaymentSection`'s `"Payment"`/`"Transfer reference"`,
+`drawPaymentBreakdown`'s `"Payment breakdown"` and `receiptBreakdown`'s four
+row labels, and each footer sentence — all become `copy.*` fields instead of
+string literals in `pdf-document.ts`. A line item's own `label` (`"Winning
+Bid"`, `"Subtotal"`, …) already arrives as a caller-supplied string on
+`PdfLineItem` and needed no change; only the section/meta labels the
+renderer itself used to own move.
 
-**The Grade10 wordmark is rendered internally, not a prop.** `G10LogoMono`
-(`@grade10/design-system`) is a graphic brand mark, not localizable text — no
-`spec.md` requirement names it, and it is the same on every document. It is
-component-owned the same way `manuallySettled`'s visual treatment is, so it
-carries no prop.
+**Dates stay computed inside the renderer, not routed through `copy` or
+taken as strings.** `formatDateTime` (fixed to `Asia/Hong_Kong`, `spec.md`'s
+Dates requirement) is the one value this renderer computes rather than
+taking preformatted — a deliberate asymmetry with money, since a locale
+choice belongs to the caller but the timezone every document is issued
+under does not vary by caller. This is unchanged from `grade10`'s current
+`pdfDocument.ts` and carries over as-is.
 
-**Bill To and Ship To carry a fixed nine-field address, not an opaque block.**
-The author specified the field set directly (`decisions.md` amendment): full
-name, company name, address line 1, address line 2, city, state, postal
-code, country, phone number — the same optionality as the address form
-(`shared/ui/auction-order`'s "Optional locality: address line 2 and state
-optional; line 1 and postal code required"), plus company name, optional the
-same way it is on a personal address. Each field stays `ReactNode` (Q6) and
-renders as its own line, in the order named — the component does not join
-city, state and postal code onto one line or otherwise combine fields; each
-is rendered exactly as given, per the presentation-only contract.
+**The Grade10 wordmark stays a component-owned SVG path, not a prop.**
+`LOGO_PATHS` (`pdf-document.ts`) is unchanged from `grade10`'s version — a
+graphic brand mark keyed by issuer name, falling back to the issuer's name
+as text when no mark is on file. Nothing in `spec.md` requires a specific
+mark; this is implementation detail carried over rather than newly decided.
 
-**Bank rails render as their own full-width section, not a meta row
-(`decisions.md` Q12).** `BankRailsSection` (`pdf-document.tsx`) sits after
-`OrderValueSection`, labelled from `copy.bankRailsLabel`, spanning the
-sheet's full content width rather than the meta rows' narrower column. This
-reversed the original placement (a `MetaRow` beside the issuer block), made
-on the rendered document rather than on the prop shape alone — `bankRails`'s
-type is unchanged (still `ReactNode`, still `!== undefined`-gated); only
-where it renders moved.
+**Party address stays `PdfPartyAddress = Record<string, string | null> |
+null`, not a structured type.** The retired DOM design's nine-field
+`PartyAddress` (`decisions.md`'s prior Q11) is not restored: `grade10`'s
+`addressLines` already draws a well-defined six-line shape from this looser
+type (`spec.md`'s "Bill To and Ship To render as an address, or 'Not
+recorded' when withheld"), and restructuring it into named fields here would
+mean rewriting and re-testing working code for a stronger type than any
+current caller needs. A future change can tighten it if a real requirement
+calls for validating the shape at the type level.
 
-**`bankReference` is removed entirely (`decisions.md` Q13).** The bank
-reference no longer has its own prop, `MetaRow`, or copy key — the author
-judged it redundant once `bankRails` carries the same reference (the sketch's
-own sample content already quoted it in the "Enter this reference…" line).
-A consumer that still needs the reference shown separately embeds it in the
-`bankRails` `ReactNode` it supplies; `InvoicePdf` no longer renders a
-reference on its own account. `winner-order/spec.md`'s own "Bank reference"
-field is untouched — this only removes the prop this component's contract no
-longer names for it.
-
-**The order-value lines carry a Description/Amount header (`decisions.md`
-Q14).** Two columns, matching `ValueRow`'s own label/value shape — not the
-five-column table (Description, Qty, Unit price, Tax, Amount) in the
-reference screenshot the author cited, which named fields
-(`Qty`, `Unit price`, `Tax`) `OrderValueLines` does not carry. The header and
-its divider are part of `OrderValueSection` itself, so both documents get it
-for free; `descriptionLabel`/`amountLabel` head `OrderValueLinesCopy` rather
-than sitting on a per-line key, since they label the table, not a line.
-
-**The issuer block moves to the foot of the sheet, right-aligned, and
-ReceiptPdf gains the same prop (`decisions.md` Q15).** `IssuerBlock`
-(`pdf-document.tsx`) is a plain right-aligned wrapper (`ml-auto w-fit`,
-`data-slot="pdf-issuer"`) both `InvoicePdf` and `ReceiptPdf` render last,
-after every other section — `InvoicePdf`'s issuer moved out of the top-right
-row it shared with the meta-rows column, and `issuer: ReactNode` is now a
-required field on `ReceiptPdfProps` too, matching `InvoicePdfProps`'s. The
-prop stays required on both, unlike the reserved slots — every document names
-who sent it — and its type is unchanged (`ReactNode`, no presence gate);
-only where it renders moved, the same shape of change Q12 made for bank
-rails.
-
-**`replacedBy`/`replacedByLabel` are removed from `InvoicePdf` entirely
-(`decisions.md` Q16).** `InvoicePdfProps` and `InvoicePdfCopy` carry no field
-for it, and the meta-row it rendered is gone. Removing it left
-`winner-order/spec.md`'s "Every invoice carries an invoice ID and a bank
-reference" requirement stating something this contract can no longer do —
-that the invoice PDF names its replacement (`SC-98`, and a line of `SC-123`).
-That requirement is not reworded here: the OpenSpec CLI's scenario-loss guard
-would force retiring and reissuing every scenario id it carries just to
-reword one, and the requirement already carries its own MODIFIED delta in
-the open `define-public-auction-identifiers` change, so doubling it here
-would collide at archive. See `proposal.md`'s Open Questions.
-
-**One order-value shape, not two.** `OrderValueLines` is a single type used
-by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,
-deliberately, not split per component. The requirement this satisfies is
-titled "ReceiptPdf renders its order-value lines in the same fixed order as
-InvoicePdf's," and its body states "the Feature set carries one order-value
-shape for both documents" — the coupling this type enforces *is* the
-requirement, not a risk to mitigate. `decisions.md` Q9 (deltas scope per
-requirement, not per capability) is about which change can add a requirement
-to which document, not about the two documents' shapes being independent;
-nothing in `spec.md` asks for them to diverge, and SC-21 forbids it. Rejected:
-`InvoicePdfOrderValue`/`ReceiptPdfOrderValue` as two separate types built from
-a private shared base — rejected because it would let `tsc` accept a state
-SC-21 explicitly forbids.
-
-**Reuse over rebuild, reshaped.** `pdf-document.tsx`'s pieces are lifted from
-`apps/preview/src/pages/winner-order-pdf.story-shared.tsx`, composing
-`@grade10/design-system`'s `Divider`, `Text`, `HStack`, `VStack` exactly as
-the sketch already proved out over five commits on this branch — but not
-verbatim. The sketch's `MultiColumnTable` takes `rows: string[][]` and keys
-each row by `row.join("|")`; this contract's cells are `ReactNode`, which
-cannot be joined into a string key (every row would stringify to
-`[object Object]` and collide). Both this contract's tables are exactly two
-columns in one fixed order over named keys, so `pdf-document.tsx` carries a
-smaller `ValueRow({ label, value }: { label: ReactNode; value: ReactNode })`
-instead, with `OrderValueLines` and `PaymentBreakdown` each mapped from their
-own named keys in `invoice-pdf.tsx`/`receipt-pdf.tsx` — the header row is
-written twice (once per document) rather than once, a deliberate trade for
-dropping the generic table's column/alignment machinery this contract never
-varies. `Divider` is not one of `pdf-document.tsx`'s pieces — each document
-file imports it directly from `@grade10/design-system`, the same as every
-other block does, rather than laundering a primitive through a private
-module that does not own it.
-
-**The sheet frame's root names which document it is.** `PdfSheet` takes a
-`slot: "invoice-pdf" | "receipt-pdf"` prop and renders it as the root
-`data-slot`, since the frame itself is shared: without it, `InvoicePdf`'s and
-`ReceiptPdf`'s root elements would carry the identical, unaddressable
-`data-slot`. The pieces inside the frame (`MetaRow`, `PartyBlock`, `ValueRow`,
-`SummaryRow`, `LotHeading`) keep a plain `pdf-`-prefixed slot each, since they
-are genuinely owned by `pdf-document.tsx` and rendered identically by both
-documents — a per-component prefix on them would misname where the markup
-actually lives.
-
-**Failure is not handled — it propagates.** Neither component adds an error
-boundary or a fallback. A `ReactNode` prop that throws when rendered
-propagates to the consumer's own boundary; a missing required prop is a
-`tsc` failure at the call site, never a silent runtime default. This is
-distinct from SC-28 (no *fetch* loading/error state, since neither component
-fetches anything) — this is about a broken value the consumer already gave
-it, which fails loudly rather than rendering a blank total.
+**Failure is not handled — it propagates.** Unchanged from `grade10`'s
+version: neither renderer catches a `pdf-lib` failure or a bad font byte;
+both surface as a rejected `Promise` to the caller.
 
 ## Risks / Trade-offs
 
-- **[Risk]** A consumer misreads "supplied" as "truthy" and writes
-  `taxLine={value || undefined}`, silently turning SC-25's blank-row case back
-  into a withheld one. → **Mitigation:** the discriminator is named in this
-  document and repeated as a comment beside `taxLine`/`issuerTaxDetails` in
-  `types.ts`; `invoice-pdf.stories.tsx` carries a
-  `WithEmptyTaxLine` story (see the `Auction Invoice And Receipt Pdf/InvoicePdf`
-  title convention below) with a `play` function asserting the row renders
-  with empty content when the key is present, distinct from a story that
-  omits the key entirely and asserts no row at all.
-- **[Risk]** `apps/preview`'s sketch has diverged slightly from `spec.md`'s
-  reconciled requirements during this change's own drafting: it still carries
-  a `TAX_RATE = 0.09` constant and a `formatAmount` helper, both of which
-  SC-16 (no computation) and SC-26 (no reformatting) forbid inside the
-  component. → **Mitigation:** neither is lifted into `pdf-document.tsx` —
-  every amount and the tax row's content arrive as props; the constant and
-  the formatter, if kept at all, stay in the story file as sample-data
-  helpers, never inside the exported components.
+- **[Risk]** Moving `pdf-document.ts`'s hardcoded strings to `copy` fields is
+  a mechanical but wide-reaching edit across every `draw*` function; a
+  missed call site silently keeps drawing English regardless of `copy`.
+  → **Mitigation:** `pdf-document.ts`'s functions take `copy` (or the
+  specific label they need) as a parameter with no default — `tsc` refuses a
+  call site that forgot to pass one, rather than falling back to a hardcoded
+  string.
+- **[Risk]** Without DOM assertions, a layout regression (wrong position,
+  wrong page) is only caught visually. → **Mitigation:** the Storybook
+  stories preview every fixture through `pdf-preview.tsx`'s `pdfjs-dist`
+  viewer, so a
+  reviewer sees the rendered page on every PR that touches this directory;
+  Non-Goals already accepts this ceiling rather than pretending pixel
+  assertions exist.
+- **[Risk]** `grade10`'s backend and demo lab currently import
+  `@grade10/auction-contracts/{invoice-pdf,receipt-pdf}`; after this move
+  those subpaths either re-export from `@grade10/ui` or are removed, and a
+  consumer left on the old import breaks at build time, not silently.
+  → **Mitigation:** `grade10`'s own task group (`tasks.md`) switches both
+  consumers in the same change that bumps the submodule, verified by that
+  repository's own typecheck.
 
 ## Migration Plan
 
-1. Add the `invoice-and-receipt-pdf` block, its stories, and the
-   `vitest.config.ts` include-list edit to `@grade10/ui` (this repository).
-   No consumer is broken by this step: nothing imports it yet.
-2. Retire `apps/preview`'s sketch, replacing its three files with pages that
-   compose the real `InvoicePdf`/`ReceiptPdf` and sample props (this
-   repository).
+1. Move `pdfDocument.ts`, `receiptPdf.ts`, `invoicePdf.ts`, and their tests
+   from `grade10`'s `packages/grade10-auction/contracts` into
+   `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/`, renamed per
+   the file table above, threading `copy` through every `draw*` call and
+   replacing `SUMMARY_LABELS`'s string match with `key` (this repository).
+   Delete the retired DOM component files (`pdf-document.tsx`,
+   `invoice-pdf.tsx`, `receipt-pdf.tsx`, `types.ts`, the old `fixtures.ts`)
+   and their stories, replacing the latter with the `pdfjs-dist`-preview
+   versions. Add `pdf-lib`/`@pdf-lib/fontkit` to `packages/ui/package.json`.
+2. Retire `apps/preview`'s `winner-order.invoice-pdf.stories.tsx`/
+   `winner-order.receipt-pdf.stories.tsx`, which currently render
+   `InvoicePdf`/`ReceiptPdf` as JSX (group 2.4's landing) — switch them to
+   calling the renderer and previewing the bytes, the same pattern as the
+   block's own stories (this repository).
 3. `grade10` bumps its `external/grade10-spec` submodule SHA past this
-   change's landing, then imports `InvoicePdf`/`ReceiptPdf` from
-   `@grade10/ui` and replaces its placeholder invoice/receipt PDF rendering,
-   wiring real order data through `shared/money-amounts`-formatted `ReactNode`
-   props and its own `@grade10/i18n` catalog for `copy`. That step is
-   `grade10`'s own task, named in `tasks.md`'s impact but not built in this
-   repository — see `proposal.md`'s Impact table.
+   change's landing, then switches `packages/grade10-auction/backend/src/
+   services/auctions/{receiptPdf,invoicePdf}.ts` and the `/demo/pdf` lab
+   from importing `@grade10/auction-contracts/{invoice-pdf,receipt-pdf}` to
+   importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, then removes its
+   own now-redundant copy under `packages/grade10-auction/contracts`. Data
+   it already builds (`InvoicePdfData`/`ReceiptPdfData`) needs a `copy`
+   argument added at each of the two call sites, sourced from
+   `@grade10/i18n`; no other shape changes. `grade10`'s own task
+   (`tasks.md`), not built here.
 
-No rollback beyond a normal revert applies: steps 1–2 add and rename files in
-this repository only, and step 3 is an ordinary application-side dependency
-bump `grade10` can defer or revert independently.
+Rollback: step 1 only adds and moves files inside this repository — nothing
+consumes them until `grade10` bumps its submodule pin, so it reverts
+independently. Step 3 is an ordinary application-side dependency bump
+`grade10` can defer or revert on its own.
 
 ## Open Questions
 
-None. Every question this design turns on is already settled by `decisions.md`
-(Q1–Q10) or reserved as an unshaped `ReactNode` slot by design (the tax line,
-the issuer tax-details block) — neither changes this approach, the specs, or
-the task breakdown if answered later; both just fill an already-typed prop.
+None. `decisions.md` Q18-Q20 settle the approach; the `key` discriminant and
+the `copy` field list above are this document's own implementation choices,
+not product judgments needing a decision row.

@@ -6,7 +6,7 @@
 - [x] 1.4 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories`
 - [x] 1.5 Amendment: structure `billTo`/`shipTo` as the nine-field `PartyAddress` (`decisions.md` Q11), adding `AddressLines` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-31`, `SC-32`)
 - [x] 1.6 Amendment: move bank rails from a meta row to a full-width section below the order value (`decisions.md` Q12), adding `BankRailsSection` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-18`, `SC-35`)
-- [x] 1.7 Amendment: remove `bankReference`/`bankReferenceLabel` entirely, redundant once `bankRails` carries the reference (`decisions.md` Q13) (`shared-ui-invoice-and-receipt-pdf-SC-18`, `SC-36`)
+- [x] 1.7 Amendment: remove `bankReference`/`bankReferenceLabel` entirely, redundant once `bankRails` carries the reference (`decisions.md` Q13) (`SC-18`, `SC-36`, both retired under Q19)
 - [x] 1.8 Amendment: add a Description/Amount header and divider above the order-value lines, shared by both documents via `OrderValueSection` (`decisions.md` Q14) (`shared-ui-invoice-and-receipt-pdf-SC-37`, `SC-38`)
 - [x] 1.9 Amendment: remove `replacedBy`/`replacedByLabel` from `InvoicePdfProps`/`InvoicePdfCopy` entirely, retiring the "InvoicePdf shows Replaced by only when given" requirement and its two scenarios (`decisions.md` Q16). `winner-order/spec.md`'s "Every invoice carries an invoice ID and a bank reference" requirement still claims the PDF names a replacement (`winner-order-SC-98`, `winner-order-SC-123`) — left unreworded here, since `define-public-auction-identifiers` already carries its own MODIFIED delta on it; see `proposal.md`'s Open Questions
 - [x] 1.10 Amendment: rename `packages/ui/src/blocks/invoice-and-receipt-pdf/` to `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/`, fixing `packages/ui/src/index.ts`'s import paths (`decisions.md` Q17)
@@ -23,17 +23,41 @@ Needs group 1's `types.ts` (`OrderValueLines`, `OrderValueLinesCopy`) and `pdf-d
 - [x] 2.6 Amendment: extract `OrderValueSection` into `pdf-document.tsx` (dropping ~45 duplicated lines between the two documents), give `MetaRow` an optional `mark` slot, scope the payment breakdown behind its own `data-slot`, and share both story files' fixtures/DOM-reading helpers via `fixtures.ts` — per the build round's readers
 - [x] 2.7 Amendment: move the issuer block to the foot of the sheet, right-aligned, adding `IssuerBlock` to `pdf-document.tsx`; add the same required `issuer` prop to `ReceiptPdfProps` (`decisions.md` Q15) (`shared-ui-invoice-and-receipt-pdf-SC-39`, `SC-40`)
 
-## 3. Wire grade10 onto the real components (grade10)
+## 3. Retire the DOM component, move the pdf-lib renderer in (grade10-spec)
 
-Needs groups 1 and 2 landed on `main` and the submodule bumped first.
+Amendment (`decisions.md` Q18-Q20). Needs this change's rewritten `spec.md`/`feature-tcs.md`; not built on groups 1-2's DOM output, which this group deletes.
 
-- [ ] 3.1 Bump `external/grade10-spec` to this change's landing
-- [ ] 3.2 Replace the invoice PDF's rendering path and `PLACEHOLDER_RECEIPT_PDF` with `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, wiring real order data through `shared/money-amounts`-formatted `ReactNode` props and the application's own `@grade10/i18n` catalog for `copy` (`winner-order-SC-57`, `winner-order-SC-67`, `winner-order-SC-109`)
-- [ ] 3.3 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
+- [x] 3.1 Move `pdfDocument.ts` from `grade10`'s `packages/grade10-auction/contracts/src` into `pdf-document.ts` here, threading a `copy` argument through every `draw*` call for the labels `tech-design.md` lists, and replacing `SUMMARY_LABELS`'s string match with `PdfLineItem.key` (`shared-ui-invoice-and-receipt-pdf-SC-3`, `SC-4`, `SC-37`, `SC-38`, `SC-43`, `SC-44`, `SC-45`)
+- [x] 3.2 Move `receiptPdf.ts`/`invoicePdf.ts` into `receipt-pdf.ts`/`invoice-pdf.ts`, adding `copy: InvoicePdfCopy`/`copy: ReceiptPdfCopy` to `InvoicePdfData`/`ReceiptPdfData` per `tech-design.md` (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-7`, `SC-8`, `SC-16`, `SC-17`, `SC-19`, `SC-20`, `SC-22`, `SC-27`, `SC-29`, `SC-39`, `SC-40`, `SC-41`, `SC-42`) — the exported names are `InvoicePdf`/`ReceiptPdf` (author's choice), not `renderInvoicePdf`/`renderReceiptPdf`, matching `spec.md`'s prose
+- [x] 3.3 Move `pdfDocument.test.ts`/`invoicePdf.test.ts`/`receiptPdf.test.ts` from `grade10`'s `contracts/test/` into colocated `pdf-document.test.ts`/`invoice-pdf.test.ts`/`receipt-pdf.test.ts`, updating fixtures for the new `copy` argument; add cases for the withheld-address fallback (`shared-ui-invoice-and-receipt-pdf-SC-33`) and the Hong Kong-time date formatting (`SC-43`)
+- [x] 3.4 Add `public-exports.test.ts` asserting `InvoicePdf`, `ReceiptPdf`, `receiptBreakdown`, and every type `tech-design.md` names export from `../../index` — picked up automatically by `packages/ui/vitest.config.ts`'s `audit` project glob, no config edit needed
+- [x] 3.5 Add `pdf-lib` and `@pdf-lib/fontkit` to `packages/ui/package.json`
+- [x] 3.6 Delete the retired DOM component: `pdf-document.tsx`, `invoice-pdf.tsx`, `receipt-pdf.tsx`, `types.ts`, and their `fixtures.ts`; fix `packages/ui/src/index.ts`'s exports to the new file names — also widened `package.json`'s `"./blocks/*"` export to resolve `.ts` alongside `.tsx`, since these two entry files carry no JSX (`tech-design.md` "Also edits")
+- [x] 3.7 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test`
 
-## 4. Walk Winner Order's Invoice and Receipt PDFs (grade10)
+## 4. Preview the renderer in Storybook and apps/preview (grade10-spec)
 
-- [ ] 4.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a reissued invoice naming its replacement (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-109`) — note `winner-order-SC-98`'s "names its replacement" claim is stale against `InvoicePdf`'s `decisions.md` Q16 removal of `replacedBy`; confirm which side has landed by the time this walk runs
-- [ ] 4.2 Walk `winner-order-US-02` opening the receipt PDF once paid, before payment, and a manually settled receipt distinguishable from a card- or bank-transfer-settled one (`winner-order-SC-67`, `winner-order-SC-68`, `winner-order-SC-18`, `winner-order-SC-19`)
-- [ ] 4.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 1–2's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
-- [ ] 4.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)
+Needs group 3 landed.
+
+- [ ] 4.1 Add sample fixtures to `fixtures.ts` (an invoice and a receipt, each with a full `copy` argument) for both story files and `apps/preview`'s pages to share — deferred: each of the four story files (two here, two in `apps/preview`) inlines its own sample data today, duplicated rather than shared; low risk, but the file this task names does not exist yet
+- [x] 4.2 Rewrite `invoice-pdf.stories.tsx`/`receipt-pdf.stories.tsx` to call `InvoicePdf`/`ReceiptPdf` on sample data and preview the returned bytes with `pdf-preview.tsx`'s `PdfPreview` (a small `pdfjs-dist`-based canvas viewer), keeping the `Auction Invoice And Receipt Pdf/…` Storybook title (`decisions.md` Q17)
+- [x] 4.3 Add `pdfjs-dist` as a devDependency of `packages/ui`, which hosts `pdf-preview.tsx`
+- [x] 4.4 Rewrite `apps/preview/src/pages/winner-order.invoice-pdf.stories.tsx`/`winner-order.receipt-pdf.stories.tsx` the same way, replacing their `<InvoicePdf/>`/`<ReceiptPdf/>` JSX (landed by group 2.4, now stale — this was a live typecheck break, `PartyAddress`/`bankRails`/`orderValue`/`taxLine` all gone) with a call to the renderer and `pdf-preview.tsx`'s `PdfPreview`, imported via `@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview` since it is not part of the `../../index` barrel
+- [x] 4.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint` — also `pnpm --dir apps/preview exec storybook build` to catch the `pdf-preview` import resolving through the workspace
+
+## 5. Wire grade10 onto the real renderer (grade10)
+
+Needs groups 3-4 landed on `main` and the submodule bumped first.
+
+- [ ] 5.1 Bump `external/grade10-spec` to this change's landing
+- [ ] 5.2 Switch `packages/grade10-auction/backend/src/services/auctions/{receiptPdf,invoicePdf}.ts` from importing `@grade10/auction-contracts/{receipt-pdf,invoice-pdf}` to importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, adding a `copy` argument sourced from `@grade10/i18n` at each call site (`winner-order-SC-57`, `winner-order-SC-67`, `winner-order-SC-109`)
+- [ ] 5.3 Switch `apps/frontend/grade10/src/pages/demo/pdf/PdfLabPage.tsx` (and its `invoiceSample.ts`/`receiptSample.ts`) the same way
+- [ ] 5.4 Remove `packages/grade10-auction/contracts`'s now-redundant `pdfDocument.ts`/`receiptPdf.ts`/`invoicePdf.ts` and their tests, and the package's `/invoice-pdf`/`/receipt-pdf` subpath exports
+- [ ] 5.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
+
+## 6. Walk Winner Order's Invoice and Receipt PDFs (grade10)
+
+- [ ] 6.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, and a cancelled order (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`) — note `winner-order-SC-98`'s "names its replacement" claim and `winner-order-SC-109` are stale against both `decisions.md` Q16 (which already dropped `replacedBy`) and this change's own Q19 (which never rebuilt it against the pdf-lib renderer); confirm which side has landed by the time this walk runs
+- [ ] 6.2 Walk `winner-order-US-02` opening the receipt PDF once paid and before payment (`winner-order-SC-67`, `winner-order-SC-68`) — `winner-order-SC-18`/`SC-19`'s manually-settled distinction is not a claim this contract makes any more (`decisions.md` Q19); walk it against whatever `winner-order/spec.md` still requires there, not against a mark this renderer does not draw
+- [ ] 6.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 3-4's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
+- [ ] 6.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)

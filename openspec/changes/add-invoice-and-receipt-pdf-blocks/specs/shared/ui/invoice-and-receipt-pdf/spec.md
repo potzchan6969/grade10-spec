@@ -2,312 +2,298 @@
 
 ## Purpose
 
-`InvoicePdf` and `ReceiptPdf` are presentation-only `@grade10/ui` components
-that render an auction order's Invoice and Receipt documents from props
-alone, so an application shows the same document `winner-order/spec.md`
-already requires without maintaining its own copy.
+`InvoicePdf` and `ReceiptPdf` are `@grade10/ui` functions that render an
+auction order's Invoice and Receipt as PDF bytes from a plain data object, so
+an application shows the same document `winner-order/spec.md` already
+requires without maintaining its own copy of the renderer.
+
+**Amendment, 2026-09-24 (`decisions.md` Q18-Q20):** the DOM
+`@grade10/design-system`-composed components this Purpose and Feature set
+described until now are retired. `grade10` never adopted them — it built and
+shipped its own pdf-lib renderer instead, already replacing
+`PLACEHOLDER_RECEIPT_PDF` in production — so this capability now specifies
+that renderer, moved here rather than rebuilt. Every requirement below
+reflects what it actually draws today; `## Feature set` bullets and
+requirements this move drops are documented as retired rather than silently
+removed, per the amendment note above each one.
 
 ## Feature set
 
 - InvoicePdf export
-  - Meta rows: invoice ID, payment method, sent at, payment deadline
+  - Title and issuer mark: "Invoice" at the top left, the issuer's wordmark —
+    or its name as text, when no mark is on file — at the top right
+  - Meta rows: invoice number, sent-at date, payment deadline
   - Party blocks: Bill To, Ship To
-  - Lot and order-value lines: a Description/Amount header and divider, then
-    the lot, winning bid, buyer's premium, shipping & handling, insurance
-    when given, subtotal, payment processing fee, order total
-  - Bank rails: a full-width section below the order-value summary, shown
-    only on a bank-transfer invoice — not a meta row
-  - Issuer block: the issuer, right-aligned at the foot of the sheet, below
-    every other section — not a meta row or a party block
+  - Lot and charges: a Description/Amount table headed by the lot title, the
+    charges given, and a boxed Subtotal/Payment Processing Fee/Order Total
+    summary
+  - Issuer block: the issuer's name and email, right-aligned at the foot of
+    the sheet
 - ReceiptPdf export
-  - Meta rows: receipt ID, the invoice ID it pays, payment method, the
-    manually-settled mark
-  - Party blocks: Bill To, Ship To
-  - Order-value lines: the same shape as InvoicePdf's, including the
-    Description/Amount header
+  - Title and issuer mark, matching InvoicePdf's
+  - Meta rows: receipt number, the invoice number it pays, date paid,
+    payment method, payment reference
+  - Party blocks: Bill To, Ship To, matching InvoicePdf's
+  - The same lot-and-charges table as InvoicePdf
+  - A transfer-reference line, shown only when the payment carries one
   - Payment breakdown: Original Invoice Total, Previous Payments, Current
-    Payment Received, Remaining Balance Due, in that order
-  - Superseded invoice, shown only when given
-  - Issuer block: the issuer, right-aligned at the foot of the sheet, below
-    every other section, matching InvoicePdf's
+    Payment Received, Remaining Balance Due, in that fixed order, always
+    rendered
+  - A footer line
+  - Issuer block, matching InvoicePdf's
 - Party address fields
-  - Bill To and Ship To are each a structured address: full name, company
-    name when given, address line 1, address line 2 when given, city, state
-    when given, postal code, country, phone number
-  - Company name, address line 2 and state are the only optional fields,
-    matching the address form's own optionality; every other field is
-    required
-- Reserved extension slots
-  - An optional tax line on both documents, rendered only when given
-  - An optional issuer tax-details block on ReceiptPdf, rendered only when
-    given
+  - Bill To and Ship To each render as up to six lines — recipient, company,
+    address line 1, address line 2, a combined city/region/postal-code line,
+    and country — every field optional except recipient, each line withheld
+    rather than blank when not given, and the whole block reading
+    "Not recorded" when no address is given at all
+- Document shape
+  - Each renderer returns exactly one A4 page (595.28×841.89pt)
 - Presentation-only contract
-  - Every amount and date arrives as a preformatted `ReactNode`; neither
-    component computes, sums or formats a value
-  - Every label arrives through a `copy` prop; neither component imports
-    `@grade10/i18n`
+  - Every amount arrives as a preformatted string; neither renderer
+    computes, sums or reformats a value
+  - Every date arrives as a `Date`; the renderer formats it once, fixed to
+    Hong Kong time — the one value it formats itself, since every document
+    is issued from Hong Kong regardless of storefront
+  - Every label arrives through a `copy` argument; neither renderer imports
+    `@grade10/i18n` or hardcodes a label
+- Reserved extension slots
+  - Retired (`decisions.md` Q19), along with bank rails and the
+    manually-settled mark and Superseded invoice under InvoicePdf/ReceiptPdf
+    export above — carried no further until a concrete requirement
+    resurfaces one
 
 ## ADDED Requirements
 
 ### Requirement: InvoicePdf renders its meta rows and party blocks
 
 InvoicePdf's meta rows and party blocks name the invoice, when it was sent,
-how it is paid, and who it bills and ships to.
+and who it bills and ships to.
 
-**Meta rows** — InvoicePdf SHALL render the invoice ID, payment method, sent
-at, and payment deadline for every invoice. **Party blocks** — InvoicePdf
-SHALL render Bill To and Ship To for every invoice, each rendering only its
-own supplied content.
+**Meta rows** — InvoicePdf SHALL render the invoice number, sent-at date, and
+payment deadline for every invoice. **Party blocks** — InvoicePdf SHALL
+render Bill To and Ship To for every invoice, each rendering only its own
+supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
+
 **Serves:** InvoicePdf export - the invoice's meta rows all render
 
-- **GIVEN** an InvoicePdf given an invoice ID, payment method, sent-at date,
-  payment deadline, issuer block, Bill To, and Ship To
-- **WHEN** it renders
-- **THEN** every meta row and party block given is shown
-
-### Requirement: InvoicePdf renders bank rails as a full-width section below the order value
-
-Bank rails — SWIFT, FPS and Hong Kong local transfer details — read as their
-own section, the full width of the sheet, below the order-value summary and
-Order Total. They are not a meta row: a meta row's label-and-value shape does
-not fit a rail-by-rail table, and every invoice's meta rows sit in a narrow
-column beside the issuer block.
-
-**Given** — InvoicePdf SHALL render the bank rails section, labelled from
-`copy.bankRailsLabel`, only when the consumer supplies `bankRails`.
-**Withheld** — InvoicePdf SHALL render no bank rails section when `bankRails`
-is not supplied.
-**Position** — Where rendered, the bank rails section SHALL follow the
-order-value summary and SHALL span the sheet's full content width, not the
-meta rows' narrower column.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-18 - A bank-transfer invoice renders its bank rails
-**Serves:** InvoicePdf export - the bank rails section renders where a consumer supplies it
-
-- **GIVEN** an InvoicePdf given bank rails
-- **WHEN** it renders
-- **THEN** the bank rails section shows the value given
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-36 - A card invoice shows no bank rails
-**Serves:** InvoicePdf export - a card invoice withholds the bank rails a card carries none of
-
-- **GIVEN** an InvoicePdf given no bank rails
-- **WHEN** it renders
-- **THEN** no bank rails section appears
-- **AND** every other meta row and party block still renders
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-35 - The bank rails section sits below the order value, full width
-**Serves:** InvoicePdf export - bank rails render as their own full-width section below the order-value summary
-
-- **GIVEN** an InvoicePdf given bank rails and a full order-value section
-- **WHEN** it renders
-- **THEN** the bank rails section follows the order-value summary in the
-  document
-- **AND** it is not nested inside any meta row
-- **AND** it spans the same width as the order-value summary, not the
-  narrower meta-rows column
+- **GIVEN** data for an invoice number, sent-at date, payment deadline,
+  issuer, Bill To, and Ship To
+- **WHEN** InvoicePdf renders it
+- **THEN** the returned PDF's one page shows every meta row and party block
+  given
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-19 - Bill To and Ship To never echo each other
+
 **Serves:** InvoicePdf export - Bill To and Ship To each render only their own content
 
-- **GIVEN** an InvoicePdf given Bill To content naming one recipient and Ship To
-  content naming a different recipient
-- **WHEN** it renders
+- **GIVEN** a Bill To naming one recipient and a Ship To naming a different
+  recipient
+- **WHEN** InvoicePdf renders them
 - **THEN** Bill To shows its own supplied content
 - **AND** Ship To shows its own, distinct, supplied content
 
-### Requirement: Bill To and Ship To render as structured address fields
+### Requirement: Bill To and Ship To render as an address, or "Not recorded" when withheld
 
-Bill To and Ship To each carry a full name, an optional company name, a
-street address, an optional locality, a postal code, a country, and a phone
-number, matching the address form's own field set and optionality. Both
-InvoicePdf and ReceiptPdf render the same structure.
+Bill To and Ship To each carry a recipient, an optional company, a street
+address, an optional locality line, and a country — the same six-line shape
+`addressLines` already draws — or the single line "Not recorded" when no
+address is given at all, rather than a block of blank rows.
 
-**Fields** — InvoicePdf and ReceiptPdf SHALL render full name, address line
-1, city, postal code, country, and phone number for every Bill To and every
-Ship To. **Company name** — InvoicePdf and ReceiptPdf SHALL render the
-company name only when the consumer supplies it. **Address line 2** —
-InvoicePdf and ReceiptPdf SHALL render address line 2 only when the consumer
-supplies it. **State** — InvoicePdf and ReceiptPdf SHALL render state only
-when the consumer supplies it.
+**Given an address** — InvoicePdf and ReceiptPdf SHALL render recipient,
+address line 1, the combined city/region/postal-code line, and country for
+every Bill To and every Ship To given as an address. **Company** — InvoicePdf
+and ReceiptPdf SHALL render the company line only when given. **Address line
+2** — InvoicePdf and ReceiptPdf SHALL render address line 2 only when given.
+**No address given** — InvoicePdf and ReceiptPdf SHALL render the single line
+"Not recorded" in place of Bill To or Ship To when no address is given for
+it, never a block of blank lines.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-31 - A company address renders every field it is given
-**Serves:** Party address fields - every address field renders when supplied
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-31 - A company address renders every line it is given
 
-- **GIVEN** an InvoicePdf given a Bill To with a full name, company name,
-  address line 1, address line 2, city, state, postal code, country, and
-  phone number
+**Serves:** Party address fields - every address line renders when supplied
+
+- **GIVEN** a Bill To with a recipient, company, address line 1, address
+  line 2, city, region, postal code, and country
+- **WHEN** InvoicePdf renders it
+- **THEN** every one of those lines is shown
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits the company line
+
+**Serves:** Party address fields - company and address line 2 are the only optional lines
+
+- **GIVEN** a Ship To with no company and no address line 2
+- **WHEN** InvoicePdf renders it
+- **THEN** no company line and no address-line-2 line appear
+- **AND** recipient, address line 1, the city/region/postal-code line, and
+  country still render
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-33 - No address given renders "Not recorded"
+
+**Serves:** Party address fields - a withheld address renders one line, not a blank block
+
+- **GIVEN** a ReceiptPdf given no address for Ship To
 - **WHEN** it renders
-- **THEN** every one of those nine fields is shown
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-32 - A personal address omits company name, address line 2 and state
-**Serves:** Party address fields - company name, address line 2 and state are the only optional fields
-
-- **GIVEN** an InvoicePdf given a Ship To with no company name, no address
-  line 2, and no state
-- **WHEN** it renders
-- **THEN** no company name, no address line 2, and no state field appear
-- **AND** full name, address line 1, city, postal code, country, and phone
-  number still render
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-33 - A receipt's company address renders every field it is given
-**Serves:** Party address fields - every address field renders when supplied
-
-- **GIVEN** a ReceiptPdf given a Bill To with all nine address fields
-- **WHEN** it renders
-- **THEN** every one of those nine fields is shown
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-34 - A receipt's personal address omits company name, address line 2 and state
-**Serves:** Party address fields - company name, address line 2 and state are the only optional fields
-
-- **GIVEN** a ReceiptPdf given a Ship To with no company name, no address
-  line 2, and no state
-- **WHEN** it renders
-- **THEN** no company name, no address line 2, and no state field appear
-- **AND** full name, address line 1, city, postal code, country, and phone
-  number still render
+- **THEN** the Ship To block shows the single line "Not recorded"
+- **AND** no blank address lines appear in its place
 
 ### Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned
 
-The issuer names Grade10, who sent the document — not a party the consumer
-addresses, so it reads apart from Bill To and Ship To, at the foot of the
-sheet, right-aligned, following every other section.
+The issuer names who sent the document — not a party the consumer addresses,
+so it reads apart from Bill To and Ship To, at the foot of the sheet,
+right-aligned, following every other section.
 
-**Given** — InvoicePdf and ReceiptPdf SHALL render the issuer block for every
-document. **Position** — The issuer block SHALL follow every other section
-and SHALL align to the right of the sheet.
+**Given** — InvoicePdf and ReceiptPdf SHALL render the issuer's name and
+email for every document. **Position** — The issuer block SHALL follow every
+other section and SHALL align to the right of the sheet. **Emphasis** — The
+issuer's name SHALL render more heavily weighted than its email.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-39 - The issuer block sits at the foot of the invoice, right-aligned
+
 **Serves:** InvoicePdf export - the issuer block renders at the foot of the sheet, right-aligned
 
-- **GIVEN** an InvoicePdf given an issuer block and a full order-value section
-- **WHEN** it renders
-- **THEN** the issuer block shows the value given
-- **AND** it follows every other section in the document
-- **AND** it aligns to the right of the sheet
+- **GIVEN** an issuer name and email
+- **WHEN** InvoicePdf renders them
+- **THEN** the issuer's name and email both show, name above email
+- **AND** the block sits at the bottom of the sheet, right-aligned
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-40 - The issuer block sits at the foot of the receipt, right-aligned
+
 **Serves:** ReceiptPdf export - the issuer block renders at the foot of the sheet, right-aligned
 
-- **GIVEN** a ReceiptPdf given an issuer block and a full order-value section
-- **WHEN** it renders
-- **THEN** the issuer block shows the value given
-- **AND** it follows every other section in the document
-- **AND** it aligns to the right of the sheet
+- **GIVEN** an issuer name and email
+- **WHEN** ReceiptPdf renders them
+- **THEN** the issuer's name and email both show, name above email
+- **AND** the block sits at the bottom of the sheet, right-aligned
 
-### Requirement: InvoicePdf renders the order-value lines in order
+### Requirement: InvoicePdf and ReceiptPdf render their charges in the order given, ending in a boxed summary
 
-The order-value lines total what the invoice charges, in one fixed order
-regardless of which optional line is given.
+The lot and its charges total what the document charges. Subtotal, Payment
+Processing Fee, and Order Total are pulled out of the flat charge list into
+their own boxed, right-aligned summary regardless of where the caller placed
+them in the list; every other charge renders above it, in the order the
+caller gave.
 
-**Fixed order** — InvoicePdf SHALL render the lot, winning bid, buyer's
-premium, Shipping & Handling, insurance when given, subtotal, payment
-processing fee, and order total, in that order. **Insurance** — InvoicePdf
-SHALL render the insurance line only when the consumer supplies it, and SHALL
-leave the line out, not blank, when withheld.
+**Order** — InvoicePdf and ReceiptPdf SHALL render every charge that is not
+Subtotal, Payment Processing Fee, or Order Total in the order the caller
+supplied it. **Summary** — InvoicePdf and ReceiptPdf SHALL render Subtotal
+and Payment Processing Fee inside a boxed summary below the other charges,
+and SHALL render Order Total inside that same summary, set off by a rule and
+rendered more heavily weighted than every other line.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - The order-value lines total the invoice in one fixed order
-**Serves:** InvoicePdf export - the lot and order-value lines render in their fixed order
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-3 - Charges render in the order given, with the summary boxed below them
 
-- **GIVEN** an InvoicePdf given the lot, winning bid, buyer's premium,
-  Shipping & Handling, insurance, subtotal, payment processing fee, and order
-  total
-- **WHEN** it renders
-- **THEN** the eight lines appear in that order
+**Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-4 - An invoice with no insurance skips the line without disturbing the order
-**Serves:** InvoicePdf export - the lot and order-value lines render in their fixed order
+- **GIVEN** the lot's charges — winning bid, buyer's premium, shipping &
+  handling, insurance — followed by Subtotal, Payment Processing Fee, and
+  Order Total
+- **WHEN** InvoicePdf renders them
+- **THEN** the four charges appear above the summary, in the order given
+- **AND** Subtotal, Payment Processing Fee, and Order Total appear together
+  in a boxed summary below them, Order Total set off by a rule
 
-- **GIVEN** an InvoicePdf given every order-value line except insurance
-- **WHEN** it renders
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-4 - Omitting a charge does not disturb the others' order
+
+**Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
+
+- **GIVEN** every charge from `SC-3` except insurance
+- **WHEN** InvoicePdf renders them
 - **THEN** no insurance line appears
-- **AND** subtotal, payment processing fee, and order total keep their order
+- **AND** the remaining charges and the summary keep their given order
 
-### Requirement: The order-value lines carry a Description/Amount header
+### Requirement: The lot and charges carry a Description/Amount header
 
-Both InvoicePdf and ReceiptPdf head the order-value lines with a two-column
-table header, Description and Amount, and a divider — directly above the
-line items, naming what the two columns hold before the winning bid and
-every line after it appear.
+Both InvoicePdf and ReceiptPdf head the charges with a two-column table
+header and a divider, directly above the lot title and the first charge.
 
 **Header** — InvoicePdf and ReceiptPdf SHALL render a header row reading
-`copy.orderValue.descriptionLabel` and `copy.orderValue.amountLabel`,
-followed by a divider, immediately above the order-value lines.
+`copy.descriptionLabel` and `copy.amountLabel`, followed by a divider,
+immediately above the lot title.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-37 - The order-value table header renders above the invoice's line items
-**Serves:** InvoicePdf export - the order-value lines render in their fixed order
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-37 - The charges table header renders above the invoice's lot title
 
-- **GIVEN** an InvoicePdf given order-value lines
-- **WHEN** it renders
-- **THEN** a header row shows Description and Amount, immediately above the
-  order-value lines
-- **AND** a divider separates the header from the first line
+**Serves:** InvoicePdf export - charges render in the order given, ending in a boxed summary
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-38 - The order-value table header renders above the receipt's line items
-**Serves:** ReceiptPdf export - the order-value lines render in the same fixed order as InvoicePdf's
+- **GIVEN** a lot title and its charges
+- **WHEN** InvoicePdf renders them
+- **THEN** a header row shows `copy.descriptionLabel` and `copy.amountLabel`
+- **AND** a divider separates the header from the lot title
 
-- **GIVEN** a ReceiptPdf given order-value lines
-- **WHEN** it renders
-- **THEN** a header row shows Description and Amount, immediately above the
-  order-value lines
-- **AND** a divider separates the header from the first line
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-38 - The charges table header renders above the receipt's lot title
+
+**Serves:** ReceiptPdf export - the charges table renders the same shape as InvoicePdf's
+
+- **GIVEN** a lot title and its charges
+- **WHEN** ReceiptPdf renders them
+- **THEN** a header row shows `copy.descriptionLabel` and `copy.amountLabel`
+- **AND** a divider separates the header from the lot title
 
 ### Requirement: ReceiptPdf renders its meta rows and party blocks
 
 ReceiptPdf's meta rows and party blocks name the receipt, the invoice it
 pays, how it was paid, and who it bills and ships to.
 
-**Meta rows** — ReceiptPdf SHALL render the receipt ID, the invoice ID it
-pays, and the payment method for every receipt, each as its own row. **Party
-blocks** — ReceiptPdf SHALL render Bill To and Ship To for every receipt,
-each rendering only its own supplied content.
+**Meta rows** — ReceiptPdf SHALL render the receipt number, the invoice
+number it pays, the date paid, and the payment method for every receipt,
+each as its own row. **Party blocks** — ReceiptPdf SHALL render Bill To and
+Ship To for every receipt, each rendering only its own supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-7 - A receipt's meta rows and party blocks all render
+
 **Serves:** ReceiptPdf export - the receipt's meta rows and party blocks all render
 
-- **GIVEN** a ReceiptPdf given a receipt ID, the invoice ID it pays, a
+- **GIVEN** a receipt number, the invoice number it pays, a date paid, a
   payment method, Bill To, and Ship To
-- **WHEN** it renders
+- **WHEN** ReceiptPdf renders them
 - **THEN** every meta row and party block given is shown
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-20 - Receipt ID and the invoice ID it pays never conflate
-**Serves:** ReceiptPdf export - the receipt ID and the invoice ID it pays render as distinct rows
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-20 - Receipt number and the invoice number it pays never conflate
 
-- **GIVEN** a ReceiptPdf given a receipt ID and a different invoice ID
-- **WHEN** it renders
-- **THEN** the receipt ID row shows its own content
-- **AND** the invoice ID row shows its own, distinct, content
+**Serves:** ReceiptPdf export - the receipt number and the invoice number it pays render as distinct rows
+
+- **GIVEN** a receipt number and a different invoice number
+- **WHEN** ReceiptPdf renders them
+- **THEN** the receipt-number row shows its own content
+- **AND** the invoice-number row shows its own, distinct, content
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-29 - A receipt's Bill To and Ship To never echo each other
+
 **Serves:** ReceiptPdf export - Bill To and Ship To each render only their own content
 
-- **GIVEN** a ReceiptPdf given Bill To content naming one recipient and Ship
-  To content naming a different recipient
-- **WHEN** it renders
+- **GIVEN** a Bill To naming one recipient and a Ship To naming a different
+  recipient
+- **WHEN** ReceiptPdf renders them
 - **THEN** Bill To shows its own supplied content
 - **AND** Ship To shows its own, distinct, supplied content
 
-### Requirement: ReceiptPdf renders its order-value lines in the same fixed order as InvoicePdf's
+### Requirement: ReceiptPdf renders a transfer-reference line only when the payment carries one
 
-The Feature set carries one order-value shape for both documents, since a
-receipt itemises the invoice it pays. ReceiptPdf follows the same fixed order
-and the same conditional Insurance line InvoicePdf does.
+A bank-transfer payment carries a reference the winner quoted; a card payment
+does not.
 
-**Fixed order** — ReceiptPdf SHALL render the lot, winning bid, buyer's
-premium, Shipping & Handling, insurance when given, subtotal, payment
-processing fee, and order total, in that order. **Insurance** — ReceiptPdf
-SHALL render the insurance line only when the consumer supplies it, and SHALL
-leave the line out, not blank, when withheld.
+**Given** — ReceiptPdf SHALL render a "Payment" section naming the transfer
+reference when the consumer supplies one. **Withheld** — ReceiptPdf SHALL
+render no such section when no transfer reference is supplied.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-21 - A receipt's order-value lines render in the same fixed order, Insurance included or not
-**Serves:** ReceiptPdf export - the order-value lines render in the same fixed order as InvoicePdf's
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-41 - A bank-transfer receipt names its transfer reference
 
-- **GIVEN** a ReceiptPdf given every order-value line except insurance
-- **WHEN** it renders
-- **THEN** the remaining lines appear in their fixed order
-- **AND** no insurance line appears
+**Serves:** ReceiptPdf export - the transfer-reference line renders where the payment carries one
+
+- **GIVEN** a transfer reference
+- **WHEN** ReceiptPdf renders it
+- **THEN** the Payment section shows the reference given
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-42 - A card-paid receipt shows no transfer-reference line
+
+**Serves:** ReceiptPdf export - the transfer-reference line renders where the payment carries one
+
+- **GIVEN** no transfer reference
+- **WHEN** ReceiptPdf renders it
+- **THEN** no Payment section appears
+- **AND** every other meta row and party block still renders
 
 ### Requirement: ReceiptPdf renders the payment breakdown in a fixed order
 
@@ -316,205 +302,111 @@ already carried, what this payment settled, and what is left, on every
 receipt.
 
 **Fixed order** — ReceiptPdf SHALL render Original Invoice Total, Previous
-Payments, Current Payment Received, and Remaining Balance Due, in that order.
-**Always rendered** — ReceiptPdf SHALL render all four lines on every
-receipt; none is conditional on being given, unlike Insurance or the reserved
-slots.
+Payments, Current Payment Received, and Remaining Balance Due, in that
+order. **Always rendered** — ReceiptPdf SHALL render all four lines on every
+receipt; none is conditional on being given.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-8 - The payment breakdown renders in one fixed order
+
 **Serves:** ReceiptPdf export - the payment breakdown renders in its fixed order
 
-- **GIVEN** a ReceiptPdf given values for Original Invoice Total, Previous
-  Payments, Current Payment Received, and Remaining Balance Due
-- **WHEN** it renders
+- **GIVEN** values for Original Invoice Total, Previous Payments, Current
+  Payment Received, and Remaining Balance Due
+- **WHEN** ReceiptPdf renders them
 - **THEN** the four lines appear in that order
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-22 - The payment breakdown keeps all four lines when two read zero
+
 **Serves:** ReceiptPdf export - none of the four payment-breakdown lines is conditional on its value
 
-- **GIVEN** a ReceiptPdf given a single full payment, where Previous Payments
-  and Remaining Balance Due are each a zero-reading `ReactNode`
-- **WHEN** it renders
-- **THEN** all four payment-breakdown lines still appear, in their fixed order
+- **GIVEN** a single full payment, where Previous Payments and Remaining
+  Balance Due are each a zero-reading string
+- **WHEN** ReceiptPdf renders it
+- **THEN** all four payment-breakdown lines still appear, in their fixed
+  order
 - **AND** none is dropped for reading zero
 
-### Requirement: The manually-settled mark is visually distinguishable when given
+### Requirement: Dates render fixed to Hong Kong time
 
-The manually-settled mark tells a winner a receipt was recorded by an
-operator rather than confirmed by a card charge or a bank-transfer proof.
+Every document is issued from Hong Kong, whichever storefront it names, so a
+date renders in Hong Kong time regardless of the timezone the caller's clock
+runs on.
 
-**Given** — ReceiptPdf SHALL render a mark visually distinguishable from an
-unmarked receipt when `manuallySettled` is true. **Withheld** — ReceiptPdf
-SHALL render no mark when `manuallySettled` is false or not supplied.
+**Given** — InvoicePdf and ReceiptPdf SHALL render every date as its
+Hong Kong calendar date and clock time, with the `HKT` zone name.
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-9 - A manually settled receipt carries a distinguishable mark
-**Serves:** ReceiptPdf export - the manually-settled mark stands out from an unmarked receipt
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-43 - A date renders in Hong Kong time with its zone name
 
-- **GIVEN** a ReceiptPdf given `manuallySettled` as true
-- **WHEN** it renders
-- **THEN** a mark shows that is visually distinguishable from a receipt
-  rendered with `manuallySettled` false
+**Serves:** Presentation-only contract - every date renders fixed to Hong Kong time
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-10 - A card- or bank-transfer-settled receipt carries no mark
-**Serves:** ReceiptPdf export - the manually-settled mark stands out from an unmarked receipt
-
-- **GIVEN** a ReceiptPdf given `manuallySettled` as false
-- **WHEN** it renders
-- **THEN** no manually-settled mark appears
-
-### Requirement: ReceiptPdf shows Superseded invoice only when given
-
-Superseded invoice points to any invoice an operator-recorded settlement
-replaces.
-
-**Given** — ReceiptPdf SHALL render `supersededInvoice` when the consumer
-supplies it. **Withheld** — ReceiptPdf SHALL render no Superseded invoice
-line when `supersededInvoice` is not supplied.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-11 - A settlement that supersedes an invoice names it
-**Serves:** ReceiptPdf export - Superseded invoice, shown only when given
-
-- **GIVEN** a ReceiptPdf given a `supersededInvoice` value
-- **WHEN** it renders
-- **THEN** the Superseded invoice line shows the value given
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-12 - A receipt with nothing superseded shows no such line
-**Serves:** ReceiptPdf export - Superseded invoice, shown only when given
-
-- **GIVEN** a ReceiptPdf given no `supersededInvoice` value
-- **WHEN** it renders
-- **THEN** no Superseded invoice line appears
-
-### Requirement: The reserved tax-line and issuer-tax-details slots render only when given
-
-The tax line and the issuer tax-details block are reserved for two open
-product questions — the tax regime and the formal-receipt question. Until
-either is answered, InvoicePdf and ReceiptPdf carry only the slot, with no
-shape of its own.
-
-**Tax line** — InvoicePdf and ReceiptPdf SHALL render `taxLine` whenever the
-consumer supplies the prop, whether or not its content is empty, and SHALL
-render no tax row — not even a blank one — only when the prop itself is not
-supplied. **Issuer tax details** — ReceiptPdf SHALL render `issuerTaxDetails`
-under the same rule: rendered whenever the prop is supplied, absent only when
-it is not. **Independence** — InvoicePdf and ReceiptPdf SHALL render each
-reserved slot strictly on its own prop, never on the other slot's presence or
-absence.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-13 - A given tax line renders on the invoice
-**Serves:** Reserved extension slots - the tax line renders where a consumer supplies one
-
-- **GIVEN** an InvoicePdf given a `taxLine` value
-- **WHEN** it renders
-- **THEN** the tax line shows the value given, positioned among the
-  order-value lines
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-14 - Withholding the tax line changes nothing else
-**Serves:** Reserved extension slots - withholding a reserved slot changes nothing else on the document
-
-- **GIVEN** an InvoicePdf and a ReceiptPdf, neither given a `taxLine` value
-- **WHEN** each renders
-- **THEN** neither shows a tax row, an empty row, or a placeholder in its
-  place
-- **AND** every other line keeps its position
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-15 - A given issuer tax-details block renders on the receipt
-**Serves:** Reserved extension slots - the issuer tax-details block renders where a consumer supplies one
-
-- **GIVEN** a ReceiptPdf given an `issuerTaxDetails` value
-- **WHEN** it renders
-- **THEN** the issuer tax-details block shows the value given
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-23 - A given tax line renders on the receipt too
-**Serves:** Reserved extension slots - the tax line renders where a consumer supplies one
-
-- **GIVEN** a ReceiptPdf given a `taxLine` value
-- **WHEN** it renders
-- **THEN** the tax line shows the value given, positioned among the
-  order-value lines
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-24 - The tax line and the issuer tax-details block render independently
-**Serves:** Reserved extension slots - each reserved slot renders strictly on its own prop
-
-- **GIVEN** a ReceiptPdf given an `issuerTaxDetails` value and no `taxLine`
-  value
-- **WHEN** it renders
-- **THEN** the issuer tax-details block shows
-- **AND** no tax line appears
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-25 - A tax line supplied as empty content still renders its row
-**Serves:** Reserved extension slots - the tax line renders whenever the prop is supplied, whether or not its content is empty
-
-- **GIVEN** an InvoicePdf given a `taxLine` prop holding empty content, as
-  distinct from `taxLine` not being supplied at all
-- **WHEN** it renders
-- **THEN** the tax row appears, with the empty content it was given
-- **AND** this differs from the prop not being supplied, under which no row
-  appears at all
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-30 - Withholding the issuer tax-details block changes nothing else
-**Serves:** Reserved extension slots - withholding a reserved slot changes nothing else on the document
-
-- **GIVEN** a ReceiptPdf given no `issuerTaxDetails` value
-- **WHEN** it renders
-- **THEN** no issuer tax-details block appears
-- **AND** every other block keeps its position
+- **GIVEN** a `Date` value
+- **WHEN** InvoicePdf renders it as a meta row
+- **THEN** the row shows that instant's Hong Kong calendar date and clock
+  time, followed by `HKT`
 
 ### Requirement: InvoicePdf and ReceiptPdf render only what they are given
 
-Neither component computes, sums, formats, or translates a value; every
-amount and date is a `ReactNode` the consumer already formatted, and every
-label comes from the `copy` prop.
+Neither renderer computes, sums, formats, or translates a value; every
+amount is a string the caller already formatted, and every label comes from
+the `copy` argument.
 
-**No computation** — InvoicePdf and ReceiptPdf SHALL render every amount and
-date exactly as the `ReactNode` given, and SHALL derive no rendered value
-from another prop. **No label lookup** — InvoicePdf and ReceiptPdf SHALL
-render every label from the `copy` prop and SHALL import no message catalog.
-This is a type-level guarantee more than an observable one: a consumer
-passing a wrong or inconsistent value sees exactly that wrong value rendered,
-never a corrected one, because neither component holds the rule that would
-let it check or fix it.
+**No computation** — InvoicePdf and ReceiptPdf SHALL render every amount
+exactly as the string given, and SHALL derive no rendered value from another
+argument. **No label lookup** — InvoicePdf and ReceiptPdf SHALL render every
+label from the `copy` argument and SHALL import no message catalog.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-16 - Order Total renders exactly what is given, not a computed sum
+
 **Serves:** Presentation-only contract - a rendered amount is exactly the value given, never a derived one
 
-- **GIVEN** an InvoicePdf given subtotal, payment processing fee, and order
-  total values that would not sum correctly if added together
-- **WHEN** it renders
+- **GIVEN** Subtotal, Payment Processing Fee, and Order Total values that
+  would not sum correctly if added together
+- **WHEN** InvoicePdf renders them
 - **THEN** Order Total shows exactly the value given, not the sum of
-  subtotal and the fee
+  Subtotal and the fee
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-17 - Every label reads the copy prop, with no catalog fallback
-**Serves:** Presentation-only contract - every label comes from the copy prop, not a catalog
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-17 - Every label reads the copy argument, with no hardcoded fallback
 
-- **GIVEN** an InvoicePdf and a ReceiptPdf rendered with a `copy` prop of
-  arbitrary strings
-- **WHEN** each renders
+**Serves:** Presentation-only contract - every label comes from the copy argument, not a hardcoded string
+
+- **GIVEN** a `copy` argument of arbitrary strings
+- **WHEN** InvoicePdf and ReceiptPdf each render with it
 - **THEN** every label reads the string `copy` gave it
 - **AND** no label shows a default `copy` did not supply
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-26 - Rich ReactNode content renders unchanged, not reduced to text
-**Serves:** Presentation-only contract - a rendered amount is exactly the value given, never a derived one
-
-- **GIVEN** an InvoicePdf given Order Total as a `ReactNode` carrying markup
-  rather than a plain string
-- **WHEN** it renders
-- **THEN** Order Total shows that markup unchanged
-- **AND** no value is stripped down to plain text
-
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-27 - A required line still renders its row when its content is blank
-**Serves:** Presentation-only contract - every amount and date renders exactly as given, never dropped for its content
 
-- **GIVEN** an InvoicePdf given Subtotal as a whitespace-only `ReactNode`,
-  with every other required line supplied normally
-- **WHEN** it renders
+**Serves:** Presentation-only contract - every amount renders exactly as given, never dropped for its content
+
+- **GIVEN** Subtotal as a whitespace-only string, with every other required
+  line supplied normally
+- **WHEN** InvoicePdf renders them
 - **THEN** the Subtotal row still renders
 - **AND** it is not silently dropped for carrying blank content
 
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-28 - Neither component shows a loading or error state
-**Serves:** Presentation-only contract - neither component fetches its own data
+### Requirement: Each renderer produces one A4 document
 
-- **GIVEN** an InvoicePdf and a ReceiptPdf, each given a full set of props
-- **WHEN** each renders, with no data fetch made
-- **THEN** each shows its content immediately from the props given
-- **AND** neither shows a loading state or a fetch-error state
+`InvoicePdf` and `ReceiptPdf` each return the bytes of one complete PDF
+document, sized to one A4 page, regardless of how much or how little content
+the caller supplies.
+
+**Given** — InvoicePdf and ReceiptPdf SHALL each return PDF bytes describing
+exactly one page, sized 595.28×841.89pt (A4).
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-44 - InvoicePdf returns one A4 page
+
+**Serves:** Document shape - each renderer produces one A4 document
+
+- **GIVEN** any valid invoice data
+- **WHEN** InvoicePdf renders it
+- **THEN** the returned bytes parse as a PDF document with exactly one page
+- **AND** that page is sized 595.28×841.89pt
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-45 - ReceiptPdf returns one A4 page
+
+**Serves:** Document shape - each renderer produces one A4 document
+
+- **GIVEN** any valid receipt data
+- **WHEN** ReceiptPdf renders it
+- **THEN** the returned bytes parse as a PDF document with exactly one page
+- **AND** that page is sized 595.28×841.89pt

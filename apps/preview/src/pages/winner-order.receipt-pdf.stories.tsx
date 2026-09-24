@@ -1,110 +1,107 @@
-import { Text } from "@grade10/design-system/components/display/text";
-import { VStack } from "@grade10/design-system/components/layout/vstack";
-import {
-  type PartyAddress,
-  ReceiptPdf,
-  type ReceiptPdfCopy,
-} from "@grade10/ui";
+import { ReceiptPdf } from "@grade10/ui";
+import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import { useEffect, useState } from "react";
 
-const copy: ReceiptPdfCopy = {
-  documentTitle: "Receipt",
-  receiptIdLabel: "Receipt number",
-  invoiceIdLabel: "Invoice number",
-  paymentMethodLabel: "Paid by",
-  manuallySettledLabel: "Manually settled",
-  supersededInvoiceLabel: "Supersedes",
-  billToHeading: "Bill to",
-  shipToHeading: "Ship to",
-  orderValue: {
+const SAMPLE_RECEIPT = {
+  listingTitle: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
+  receiptNumber: "REC-202609-LK7P2Q-01-P1",
+  paidAt: new Date("2026-09-15T11:04:00.000Z"),
+  invoiceId: "INV-202609-LK7P2Q-01",
+  paymentReferenceCode: "LK7P2Q01",
+  billTo: {
+    recipient: "Alexandra Tran",
+    company: null,
+    line1: "Flat A, 21/F, One Harbour Square",
+    line2: "181 Java Road",
+    city: "North Point",
+    region: null,
+    postalCode: "999077",
+    countryCode: "Hong Kong SAR",
+  },
+  shipTo: {
+    recipient: "Alexandra Tran",
+    company: null,
+    line1: "Flat A, 21/F, One Harbour Square",
+    line2: null,
+    city: "North Point",
+    region: null,
+    postalCode: "999077",
+    countryCode: "Hong Kong SAR",
+  },
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2,500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
+    {
+      key: "paymentProcessingFee" as const,
+      label: "Payment Processing Fee",
+      amount: "HKD 112.25",
+    },
+    {
+      key: "orderTotal" as const,
+      label: "Order Total",
+      amount: "HKD 3,232.25",
+    },
+  ],
+  paymentBreakdown: {
+    originalInvoiceTotal: "HKD 3,232.25",
+    previousPayments: "HKD 0.00",
+    currentPaymentReceived: "HKD 3,232.25",
+    remainingBalanceDue: "HKD 0.00",
+  },
+  paymentMethod: "Visa card ending 4242",
+  paymentReference: null,
+  issuerName: "Grade10",
+  issuerEmail: "support@grade10.com",
+  copy: {
+    documentTitle: "Receipt",
+    billToHeading: "Bill To",
+    shipToHeading: "Ship To",
     descriptionLabel: "Description",
     amountLabel: "Amount",
-    winningBid: "Winning Bid",
-    buyersPremium: "Buyer’s Premium",
-    shippingAndHandling: "Shipping & Handling",
-    insurance: "Insurance",
-    taxLine: "Tax",
-    subtotal: "Subtotal",
-    paymentProcessingFee: "Payment Processing Fee",
-    orderTotal: "Order Total",
+    receiptNumberLabel: "Receipt number",
+    invoiceNumberLabel: "Invoice number",
+    datePaidLabel: "Date paid",
+    paymentMethodLabel: "Payment method",
+    paymentReferenceLabel: "Payment reference",
+    paymentSectionLabel: "Payment",
+    transferReferenceLabel: "Transfer reference",
+    paymentBreakdownLabel: "Payment breakdown",
+    originalInvoiceTotalLabel: "Original Invoice Total",
+    previousPaymentsLabel: "Previous Payments",
+    currentPaymentReceivedLabel: "Current Payment Received",
+    remainingBalanceDueLabel: "Remaining Balance Due",
+    footer: "This receipt records the payment snapshot shown above.",
   },
-  paymentBreakdown: {
-    originalInvoiceTotal: "Original Invoice Total",
-    previousPayments: "Previous Payments",
-    currentPaymentReceived: "Current Payment Received",
-    remainingBalanceDue: "Remaining Balance Due",
-  },
-};
-
-const address: PartyAddress = {
-  fullName: "Alexandra Tran",
-  addressLine1: "Flat A, 21/F, One Harbour Square",
-  addressLine2: "181 Java Road",
-  city: "North Point",
-  postalCode: "999077",
-  country: "Hong Kong SAR",
-  phone: "+852 9123 4567",
 };
 
 /**
- * The Receipt PDF, composed from the real `@grade10/ui` export.
- * `winner-order-page.tsx` opens a hardcoded placeholder PDF today
- * (`PLACEHOLDER_RECEIPT_PDF`); wiring the real component into that page is
- * `grade10`'s own task (`add-invoice-and-receipt-pdf-blocks` group 3), not
- * built here. This page supplies sample props only. Every receipt itemises
+ * The Receipt PDF, previewing the real bytes the `@grade10/ui` renderer
+ * produces. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
+ * (`PLACEHOLDER_RECEIPT_PDF`); wiring the real renderer into that page is
+ * `grade10`'s own task (`add-invoice-and-receipt-pdf-blocks` group 5), not
+ * built here. This page supplies sample data only. Every receipt itemises
  * the invoice it pays — see `winner-order.invoice-pdf.stories.tsx` and
  * `docs/references/auction-invoice-and-receipt-contents.md`.
  */
-function ReceiptPdfPreview({
-  settlement = "card",
-  tax = false,
-}: {
-  settlement?: "card" | "manual";
-  tax?: boolean;
-}) {
-  const manual = settlement === "manual";
-  const total = tax ? "3,412.25" : "3,232.25";
+function ReceiptPdfPreview() {
+  const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
 
-  return (
-    <ReceiptPdf
-      billTo={address}
-      copy={copy}
-      invoiceId={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
-      issuer={
-        <VStack gap="xs" hAlign="start">
-          <Text size="sm" weight="bold">
-            Grade10
-          </Text>
-          <Text size="sm">support@grade10.com</Text>
-        </VStack>
-      }
-      manuallySettled={manual}
-      orderValue={{
-        lot: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",
-        winningBid: "2,500.00",
-        buyersPremium: "500.00",
-        shippingAndHandling: "80.00",
-        insurance: "40.00",
-        ...(tax ? { taxLine: "9% GST: 280.80" } : {}),
-        subtotal: "3,120.00",
-        paymentProcessingFee: "112.25",
-        orderTotal: total,
-      }}
-      paymentBreakdown={{
-        originalInvoiceTotal: total,
-        previousPayments: "0.00",
-        currentPaymentReceived: total,
-        remainingBalanceDue: "0.00",
-      }}
-      paymentMethod={
-        manual
-          ? "Bank transfer, recorded manually by admin"
-          : "Visa card ending 4242"
-      }
-      receiptId="REC-202609-LK7P2Q-01-P1"
-      shipTo={address}
-    />
-  );
+  useEffect(() => {
+    let cancelled = false;
+    void ReceiptPdf(SAMPLE_RECEIPT).then((rendered) => {
+      if (!cancelled) setBytes(rendered);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, []);
+
+  if (!bytes) return <p>Generating…</p>;
+  return <PdfPreview bytes={bytes} />;
 }
 
 const meta = {
@@ -112,18 +109,9 @@ const meta = {
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
-  argTypes: {
-    settlement: { control: "inline-radio", options: ["card", "manual"] },
-    tax: { control: "boolean" },
-  },
-  args: { settlement: "card", tax: false },
 } satisfies Meta<typeof ReceiptPdfPreview>;
 
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-export const CardSettled: Story = {};
-
-export const ManuallySettled: Story = { args: { settlement: "manual" } };
-
-export const WithTax: Story = { args: { tax: true } };
+export const Default: Story = {};
