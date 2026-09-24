@@ -284,12 +284,13 @@
   },
   "submission": {
     "header": "{count} cards to {grader} · {level}",
-    "id": "Submission",
+    "idLine": "Submission {reference}",
     "plannedOn": "Planned {day}",
     "loading": "Loading this submission…",
     "error": "We could not load this submission. Try again in a moment.",
     "notFound": "We could not find that submission. Check the link we emailed you.",
     "edit": "Edit the list",
+    "retry": "Try again",
     "paid": "Paid at the counter",
     "cancelled": "Cancelled. The cards never left you, and nothing was paid.",
     "expired": "Expired. Nothing was paid and nothing is owed.",
@@ -387,6 +388,7 @@
       "order": "At {grader} · order {order}",
       "readMostDays": "Read most days · {when}",
       "stages": "{grader}’s stages, in its words. A stage can take days; the estimate is what we promise, the stages are what the grader reports.",
+      "estimate": "Back by about {when}",
       "nextStage": "We email you the moment the grades post.",
       "runningLate": "Past {estimate} this reads Running late, the new date shows here with the grader’s stage, and we email it the day we set it. Nothing changes at the counter."
     },
@@ -406,7 +408,6 @@
       },
       "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect.",
       "cards": {
-        "ungradedTitle": "Ungraded",
         "graderLabel": "Grader",
         "codeLabel": "Grader's code"
       }

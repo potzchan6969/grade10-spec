@@ -284,12 +284,13 @@
   },
   "submission": {
     "header": "{count} 張卡 · {grader} {level}",
-    "id": "清單編號",
+    "idLine": "提交 {reference}",
     "plannedOn": "{day} 建立",
     "loading": "載入這張清單⋯",
     "error": "暫時載入不到這張清單，請稍後再試。",
     "notFound": "找不到這張清單，請核對我們寄給你的連結。",
     "edit": "修改清單",
+    "retry": "重試",
     "paid": "已在櫃檯付款",
     "cancelled": "已取消。卡牌一直在你手上，也沒有付過款。",
     "expired": "已過期。沒有付過款，也沒有欠款。",
@@ -387,6 +388,7 @@
       "order": "在 {grader} · 單號 {order}",
       "readMostDays": "大部分日子都會查看 · {when}",
       "stages": "以下是 {grader} 自己用的階段說法。一個階段可能要好幾日；預計時間是我們的承諾，階段是評級公司的匯報。",
+      "estimate": "預計約於 {when} 送回",
       "nextStage": "成績一出，我們即電郵通知你。",
       "runningLate": "超過 {estimate} 之後，這裡會顯示「比預期慢」，並列出新日期與評級公司的階段，我們亦會在訂出新日期當日電郵你。櫃檯這邊不受影響。"
     },
@@ -406,7 +408,6 @@
       },
       "aboutGrades": "評級是評級公司的決定，不是我們的。如想再評一次，須以評級公司的覆核收費另立一張清單；領回時可在櫃檯查詢。",
       "cards": {
-        "ungradedTitle": "未評級",
         "graderLabel": "評級公司",
         "codeLabel": "評級公司代碼"
       }
