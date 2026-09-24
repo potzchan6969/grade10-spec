@@ -223,15 +223,15 @@
   },
   "dropoff": {
     "title": "預約交卡",
-    "lead": "請帶同 {count} 張卡。整個過程約 {minutes} 分鐘；每張卡核對好、你簽署之前，都不用付款。",
-    "bulkLead": "請帶同 {count} 張卡。二十張或以上走較長的 Bulk 交卡，約 {minutes} 分鐘；每張卡核對好、你簽署之前，都不用付款。",
+    "lead": "{count, plural, other {請帶同 # 張卡。}}整個過程約 {minutes} 分鐘；每張卡核對好、你簽署之前，都不用付款。",
+    "bulkLead": "{count, plural, other {請帶同 # 張卡。}}二十張或以上走較長的 Bulk 交卡，約 {minutes} 分鐘；每張卡核對好、你簽署之前，都不用付款。",
     "where": "地點",
     "day": "日期",
     "time": "{day} 的時間",
     "nothingFree": "這一日已經沒有剩餘時段。",
     "error": "暫時讀不到預約系統，請稍後再試。",
     "shop": {
-      "durations": "{standard} 張以內約 {minutes} 分鐘；{standard} 張或以上走較長的 Bulk 交卡，約 {bulkMinutes} 分鐘",
+      "durations": "{standard, plural, other {# 張}}以內約 {minutes} 分鐘；{standard, plural, other {# 張}}或以上走較長的 Bulk 交卡，約 {bulkMinutes} 分鐘",
       "moreShops": "日後有新門市，會在這裡出現。",
       "joinsExisting": "已經預約了交卡？第二張清單可以併入同一次：一次到店，兩張清單。"
     },
@@ -244,7 +244,7 @@
     "moveOrCancel": "開始之前，隨時可以改期或取消。錯過了，我們只會結束該次到店，不會取消你的清單：可在清單頁再約一次交卡。",
     "book": "預約 {day} {time}",
     "joined": "這張清單併入你已預約的 {day} {time} 交卡。一次到店，兩張清單。",
-    "resized": "兩張清單合共超過 {standard} 張，所以改為較長的 Bulk 交卡。我們已在預約系統調整一次，日期與時間不變。",
+    "resized": "兩張清單合共超過 {standard, plural, other {# 張}}，所以改為較長的 Bulk 交卡。我們已在預約系統調整一次，日期與時間不變。",
     "alreadyBooked": "你在這一天已有預約，請另選一天。",
     "conflict": "預約在你讀取後已有變化。正在重新讀取最新情況——請重新選擇時間。",
     "booked": {
@@ -283,7 +283,7 @@
     }
   },
   "submission": {
-    "header": "{count} 張卡 · {grader} {level}",
+    "header": "{count, plural, other {# 張卡}} · {grader} {level}",
     "idLine": "提交 {reference}",
     "plannedOn": "{day} 建立",
     "loading": "載入這張清單⋯",
@@ -326,7 +326,7 @@
     },
     "lead": {
       "planned": "尚未交卡。預約一次交卡並把卡牌帶來；卡牌交收之前都不用付款。",
-      "booked": "請於 {when} 帶同 {count} 張卡前來。同事會對著清單同你逐張核對，你簽署評級委託協議，並在櫃檯付 {amount}。在此之前，清單仍可隨時修改。",
+      "booked": "請於 {when} 帶同 {count, plural, other {# 張卡}} 前來。同事會對著清單同你逐張核對，你簽署評級委託協議，並在櫃檯付 {amount}。在此之前，清單仍可隨時修改。",
       "checked_in": "你的卡牌已封入我們的收件袋，會隨 {cutOff} 截、{shipDay} 寄出的批次送往 {grader}。卡牌上路時我們會電郵你，成績一出也會即時通知。",
       "sent": "自 {when} 起在 {grader} 評級中。不用做什麼：我們大部分日子都會查看進度，成績一出即電郵通知你。",
       "graded": "{grader} 已於 {when} 公布成績，並於 {shippedOn} 把卡牌寄回。卡牌回到門市核對好之後我們會再電郵你，預計 {estimate} 前。",
@@ -433,7 +433,7 @@
       "title": "取件碼 · 在櫃檯出示",
       "codeLabel": "取件碼",
       "itemsLabel": "物品",
-      "items": "{count} 件 · {slabs} 個卡殼、{raw} 張裸卡",
+      "items": "{count, plural, other {# 件}} · {slabs, plural, other {# 個卡殼}}、{raw, plural, other {# 張裸卡}}",
       "where": "地點",
       "open": "營業時間",
       "toSettle": "尚需結清",
@@ -522,7 +522,7 @@
     "history": {
       "title": "紀錄",
       "events": {
-        "plan_saved": "建立清單：{count} 張卡，{grader} {level}",
+        "plan_saved": "建立清單：{count, plural, other {# 張卡}}，{grader} {level}",
         "plan_updated": "清單已修改",
         "plan_nudged": "已提示預約交卡",
         "plan_expired": "清單未預約交卡而過期",
@@ -536,7 +536,7 @@
         "dropoff_joined": "加入另一張清單預約的交卡",
         "agreement_signed": "已簽署評級委託協議",
         "paid": "以 {method} 付款 {amount}",
-        "checked_in": "已交收：{count} 張卡",
+        "checked_in": "已交收：{count, plural, other {# 張卡}}",
         "card_refused": "櫃檯拒收一張卡",
         "card_withdrawn": "批次截止前取回一張卡",
         "batch_shipped": "隨批次 {batch} 寄出",

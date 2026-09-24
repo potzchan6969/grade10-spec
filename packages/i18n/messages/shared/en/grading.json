@@ -223,15 +223,15 @@
   },
   "dropoff": {
     "title": "Book the drop-off",
-    "lead": "Bring the {count} cards. The visit takes about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
-    "bulkLead": "Bring the {count} cards. Twenty or more books the longer Bulk drop-off, about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
+    "lead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} The visit takes about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
+    "bulkLead": "{count, plural, one {Bring the # card.} other {Bring the # cards.}} Twenty or more books the longer Bulk drop-off, about {minutes} minutes; nothing is paid until each card is checked and you have signed.",
     "where": "Where",
     "day": "Day",
     "time": "Time on {day}",
     "nothingFree": "Nothing is free on this day any more.",
     "error": "We could not read the diary. Try again in a moment.",
     "shop": {
-      "durations": "about {minutes} minutes for up to {standard} cards; {standard} or more books the longer Bulk drop-off, about {bulkMinutes} minutes",
+      "durations": "about {minutes} minutes for up to {standard, plural, one {# card} other {# cards}}; {standard, plural, one {# card} other {# cards}} or more books the longer Bulk drop-off, about {bulkMinutes} minutes",
       "moreShops": "More shops appear here as they open.",
       "joinsExisting": "Already have a drop-off booked? A second submission joins it: one visit, both lists."
     },
@@ -244,7 +244,7 @@
     "moveOrCancel": "Move or cancel the visit any time before it starts. Miss it and we close the visit, not your list: book another drop-off from the submission page.",
     "book": "Book {day}, {time}",
     "joined": "This submission joins the drop-off you already have on {day}, {time}. One visit, both lists.",
-    "resized": "Both lists together pass {standard} cards, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
+    "resized": "Both lists together pass {standard, plural, one {# card} other {# cards}}, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
     "alreadyBooked": "You already have a visit booked for this day. Pick another.",
     "conflict": "This booking has moved on since you read it. We’re reading the latest — pick a time again.",
     "booked": {
@@ -283,7 +283,7 @@
     }
   },
   "submission": {
-    "header": "{count} cards to {grader} · {level}",
+    "header": "{count, plural, one {# card} other {# cards}} to {grader} · {level}",
     "idLine": "Submission {reference}",
     "plannedOn": "Planned {day}",
     "loading": "Loading this submission…",
@@ -326,7 +326,7 @@
     },
     "lead": {
       "planned": "Not handed in yet. Book the drop-off and bring the cards; nothing is paid until they are checked in.",
-      "booked": "Bring the {count} cards on {when}. Staff check each card against your list with you, you sign the submission agreement, and you pay {amount} at the counter. Change the list any time until then.",
+      "booked": "Bring the {count, plural, one {# card} other {# cards}} on {when}. Staff check each card against your list with you, you sign the submission agreement, and you pay {amount} at the counter. Change the list any time until then.",
       "checked_in": "Your cards are sealed in our intake bag and leave for {grader} with the batch that closes {cutOff} and ships {shipDay}. We email you when they are on their way, and the moment the grades are in.",
       "sent": "With {grader} since {when} — being graded. Nothing to do: we read the grader’s status most days and email you the moment the grades are in.",
       "graded": "{grader} posted the grades on {when} and shipped the cards back on {shippedOn}. We email you again once they are checked in at the shop, by about {estimate}.",
@@ -433,7 +433,7 @@
       "title": "Pickup code · show it at the counter",
       "codeLabel": "Code",
       "itemsLabel": "Items",
-      "items": "{count} items · {slabs} slabs, {raw} raw cards",
+      "items": "{count, plural, one {# item} other {# items}} · {slabs, plural, one {# slab} other {# slabs}}, {raw, plural, one {# raw card} other {# raw cards}}",
       "where": "Where",
       "open": "Open",
       "toSettle": "To settle",
@@ -522,7 +522,7 @@
     "history": {
       "title": "History",
       "events": {
-        "plan_saved": "Submission planned: {count} cards, {grader} {level}",
+        "plan_saved": "Submission planned: {count, plural, one {# card} other {# cards}}, {grader} {level}",
         "plan_updated": "List changed",
         "plan_nudged": "Reminded to book the drop-off",
         "plan_expired": "List expired unbooked",
@@ -536,7 +536,7 @@
         "dropoff_joined": "Joined the drop-off another submission booked",
         "agreement_signed": "Submission agreement signed",
         "paid": "Paid {amount} by {method}",
-        "checked_in": "Handed in: {count} cards",
+        "checked_in": "Handed in: {count, plural, one {# card} other {# cards}}",
         "card_refused": "Card refused at the counter",
         "card_withdrawn": "Card withdrawn before the batch closed",
         "batch_shipped": "Left with batch {batch}",

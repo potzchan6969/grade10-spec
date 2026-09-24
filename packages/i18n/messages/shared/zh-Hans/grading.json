@@ -223,15 +223,15 @@
   },
   "dropoff": {
     "title": "预约交卡",
-    "lead": "请带同 {count} 张卡。整个过程约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
-    "bulkLead": "请带同 {count} 张卡。二十张或以上走较长的 Bulk 交卡，约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
+    "lead": "{count, plural, other {请带同 # 张卡。}}整个过程约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
+    "bulkLead": "{count, plural, other {请带同 # 张卡。}}二十张或以上走较长的 Bulk 交卡，约 {minutes} 分钟；每张卡核对好、你签署之前，都不用付款。",
     "where": "地点",
     "day": "日期",
     "time": "{day} 的时间",
     "nothingFree": "这一日已经没有剩余时段。",
     "error": "暂时读不到预约系统，请稍后再试。",
     "shop": {
-      "durations": "{standard} 张以内约 {minutes} 分钟；{standard} 张或以上走较长的 Bulk 交卡，约 {bulkMinutes} 分钟",
+      "durations": "{standard, plural, other {# 张}}以内约 {minutes} 分钟；{standard, plural, other {# 张}}或以上走较长的 Bulk 交卡，约 {bulkMinutes} 分钟",
       "moreShops": "日后有新门店，会在这里出现。",
       "joinsExisting": "已经预约了交卡？第二张清单可以并入同一次：一次到店，两张清单。"
     },
@@ -244,7 +244,7 @@
     "moveOrCancel": "开始之前，随时可以改期或取消。错过了，我们只会结束该次到店，不会取消你的清单：可在清单页再约一次交卡。",
     "book": "预约 {day} {time}",
     "joined": "这张清单并入你已预约的 {day} {time} 交卡。一次到店，两张清单。",
-    "resized": "两张清单合共超过 {standard} 张，所以改为较长的 Bulk 交卡。我们已在预约系统调整一次，日期与时间不变。",
+    "resized": "两张清单合共超过 {standard, plural, other {# 张}}，所以改为较长的 Bulk 交卡。我们已在预约系统调整一次，日期与时间不变。",
     "alreadyBooked": "你在这一天已有预约，请另选一天。",
     "conflict": "预约在你读取后已有变化。正在重新读取最新情况——请重新选择时间。",
     "booked": {
@@ -283,7 +283,7 @@
     }
   },
   "submission": {
-    "header": "{count} 张卡 · {grader} {level}",
+    "header": "{count, plural, other {# 张卡}} · {grader} {level}",
     "idLine": "提交 {reference}",
     "plannedOn": "{day} 建立",
     "loading": "载入这张清单⋯",
@@ -326,7 +326,7 @@
     },
     "lead": {
       "planned": "尚未交卡。预约一次交卡并把卡牌带来；卡牌交收之前都不用付款。",
-      "booked": "请于 {when} 带同 {count} 张卡前来。同事会对着清单同你逐张核对，你签署评级委托协议，并在柜台付 {amount}。在此之前，清单仍可随时修改。",
+      "booked": "请于 {when} 带同 {count, plural, other {# 张卡}} 前来。同事会对着清单同你逐张核对，你签署评级委托协议，并在柜台付 {amount}。在此之前，清单仍可随时修改。",
       "checked_in": "你的卡牌已封入我们的收件袋，会随 {cutOff} 截、{shipDay} 寄出的批次送往 {grader}。卡牌上路时我们会电邮你，成绩一出也会即时通知。",
       "sent": "自 {when} 起在 {grader} 评级中。不用做什么：我们大部分日子都会查看进度，成绩一出即电邮通知你。",
       "graded": "{grader} 已于 {when} 公布成绩，并于 {shippedOn} 把卡牌寄回。卡牌回到门店核对好之后我们会再电邮你，预计 {estimate} 前。",
@@ -433,7 +433,7 @@
       "title": "取件码 · 在柜台出示",
       "codeLabel": "取件码",
       "itemsLabel": "物品",
-      "items": "{count} 件 · {slabs} 个卡壳、{raw} 张裸卡",
+      "items": "{count, plural, other {# 件}} · {slabs, plural, other {# 个卡壳}}、{raw, plural, other {# 张裸卡}}",
       "where": "地点",
       "open": "营业时间",
       "toSettle": "尚需结清",
@@ -522,7 +522,7 @@
     "history": {
       "title": "记录",
       "events": {
-        "plan_saved": "建立清单：{count} 张卡，{grader} {level}",
+        "plan_saved": "建立清单：{count, plural, other {# 张卡}}，{grader} {level}",
         "plan_updated": "清单已修改",
         "plan_nudged": "已提示预约交卡",
         "plan_expired": "清单未预约交卡而过期",
@@ -536,7 +536,7 @@
         "dropoff_joined": "加入另一张清单预约的交卡",
         "agreement_signed": "已签署评级委托协议",
         "paid": "以 {method} 付款 {amount}",
-        "checked_in": "已交收：{count} 张卡",
+        "checked_in": "已交收：{count, plural, other {# 张卡}}",
         "card_refused": "柜台拒收一张卡",
         "card_withdrawn": "批次截止前取回一张卡",
         "batch_shipped": "随批次 {batch} 寄出",
