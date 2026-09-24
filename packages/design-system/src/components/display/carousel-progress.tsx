@@ -88,7 +88,7 @@ function CarouselProgressItem({
       aria-current={active ? "true" : undefined}
       aria-label={label}
       className={cn(
-        "relative overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
+        "relative cursor-pointer overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
         active
           ? "h-1.5 w-8 bg-border"
           : "size-1.5 bg-border opacity-80 hover:opacity-100",
