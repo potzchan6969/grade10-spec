@@ -469,8 +469,10 @@ pnpm run tcs:validate        # errors fail CI; an older shape is one of them
 pnpm run tcs:stale           # which suites' drafts sit below the current rules rev
 ```
 
-What a **minor** and a **major** each reach, and how, is
-`docs/governance/specs-to-test-cases.md`'s **Rules Revisions**.
+What a revision reaches, and how — drafts regenerated top down, reviewed
+cases restyled — is `docs/governance/specs-to-test-cases.md`'s **Rules
+Revisions**; how a case reads is `docs/governance/tcs-conventions.md`, which
+moves without one.
 
 ## Related
 

@@ -9,7 +9,9 @@
  * (`shared-planning-agent-rounds-SC-106`).
  */
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -268,4 +270,50 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test cites 
     store("// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n"),
   );
   assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+// A sweep regenerates drafts freely, and may never move a reviewed case: every
+// `actual` or `deprecated` case the baseline recorded keeps its id, its trace
+// and its status (docs/governance/specs-to-test-cases.md, Rules Revisions).
+test("a sweep check lets drafts move and holds reviewed cases still", () => {
+  const SCRIPT = fileURLToPath(
+    new URL("./validate-test-cases.mjs", import.meta.url),
+  );
+  const sweep = (root, flag, file) =>
+    spawnSync(process.execPath, [SCRIPT, "--root", root, flag, file], {
+      encoding: "utf8",
+      env: { ...process.env, NO_COLOR: "1" },
+    });
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8");
+  const reviewed = original.replace(
+    /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+    "$1 actual",
+  );
+  writeFileSync(suite, reviewed);
+  const baseline = join(root, "baseline.json");
+  assert.equal(sweep(root, "--capture-baseline", baseline).status, 0);
+
+  // The drafts regenerate: TC3 is gone and TC4 is new. The reviewed TC1 stays.
+  writeFileSync(
+    suite,
+    reviewed
+      .replaceAll("demo-alpha-US1-TC3-1", "demo-alpha-US1-TC4-1")
+      .replace("The thing happens, 3", "The thing happens again, 4"),
+  );
+  const moved = sweep(root, "--swept", baseline);
+  assert.equal(moved.status, 0, moved.stdout + moved.stderr);
+
+  // The reviewed case goes back to draft: a sweep may not do that unasked.
+  writeFileSync(
+    suite,
+    reviewed.replace(
+      /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) actual/,
+      "$1 draft",
+    ),
+  );
+  const reopened = sweep(root, "--swept", baseline);
+  assert.equal(reopened.status, 1);
+  assert.match(reopened.stdout, /demo-alpha-US1-TC1-1` was actual, now draft/);
 });

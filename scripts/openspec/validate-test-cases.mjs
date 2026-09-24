@@ -88,15 +88,16 @@ const USAGE = `Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [f
 Flags:
   --strict          Treat warnings as errors (legacy-shape suites fail too)
   --stale-report    Skip validation; list suites whose drafts sit below the
-                    current tcs-rules rev, for a per-capability update run
+                    current tcs-rules revision, each owed a regenerate
   --require-suites  Also report a capability that has journeys but no suite
                     beside it (warning)
   --capture-baseline <file>
-                    Write every case id and its traces to <file>, before a
-                    sweep, and exit
-  --swept <file>    Assert the store still holds exactly the case ids and
-                    traces <file> recorded. A sweep may re-word a draft; it
-                    may never change what a case claims
+                    Write every case id, its traces and its status to <file>,
+                    before a sweep, and exit
+  --swept <file>    Assert every case <file> recorded as reviewed (actual or
+                    deprecated) is still there with the same traces and status.
+                    A sweep regenerates drafts freely; it may never change what
+                    a reviewed case claims
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
   --help            Print this help and exit
@@ -697,7 +698,7 @@ if (args.stale) {
     );
   }
   console.log(
-    `\n${dim("Update one at a time:")} /spec-to-tcs <capability-or-change>  ${dim("— never in one sweep")}`,
+    `\n${dim("Each is owed a regenerate, top down, after one yes:")} /spec-to-tcs <capability-or-change>  ${dim("— or /tcs-review, which regenerates on opening it")}`,
   );
   process.exit(0);
 }
@@ -713,7 +714,7 @@ const index = caseIndex(ROOT, suites);
 
 if (args.captureBaseline) {
   const out = {};
-  for (const [id, v] of index) out[id] = v.traces;
+  for (const [id, v] of index) out[id] = { traces: v.traces, status: v.status };
   writeFileSync(args.captureBaseline, JSON.stringify(out, null, 2) + "\n");
   console.log(
     `${green("✓")} baseline captured: ${index.size} cases across ${suites.length} suites ` +
@@ -725,23 +726,29 @@ if (args.captureBaseline) {
 if (args.swept) {
   const before = JSON.parse(readFileSync(args.swept, "utf8"));
   const drift = [];
-  for (const id of Object.keys(before))
-    if (!index.has(id)) drift.push(`case \`${id}\` disappeared`);
-  for (const [id, v] of index) {
-    if (!(id in before)) {
-      drift.push(`case \`${id}\` is new`);
+  // A baseline written before statuses were recorded holds bare trace lists;
+  // every case in it is held as reviewed, the safe reading.
+  for (const [id, was] of Object.entries(before)) {
+    const traces = Array.isArray(was) ? was : was.traces;
+    const status = Array.isArray(was) ? null : was.status;
+    if (status === "draft") continue;
+    if (!index.has(id)) {
+      drift.push(`case \`${id}\` disappeared`);
       continue;
     }
-    const a = before[id].join(", ");
-    const b = v.traces.join(", ");
+    const now = index.get(id);
+    const a = traces.join(", ");
+    const b = now.traces.join(", ");
     if (a !== b) drift.push(`case \`${id}\` traced "${a}", now traces "${b}"`);
+    if (status !== null && now.status !== status)
+      drift.push(`case \`${id}\` was ${status}, now ${now.status}`);
   }
   console.log(
     `${bold("Sweep check")}  ${dim(`${index.size} cases against ${args.swept}`)}\n`,
   );
   if (drift.length === 0) {
     console.log(
-      `${green("✓")} every case id and trace is unchanged — the sweep changed no claim.`,
+      `${green("✓")} every reviewed case keeps its id, trace and status — the sweep changed no reviewed claim.`,
     );
     process.exit(0);
   }

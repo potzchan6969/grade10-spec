@@ -130,13 +130,14 @@ export function currentRulesRev() {
     /^tcs_rules_rev:\s*(\d+)(?:\.(\d+))?\s*$/m,
   );
   if (!m) return null;
-  return { major: Number(m[1]), minor: m[2] === undefined ? 0 : Number(m[2]) };
+  return Number(m[1]);
 }
 
-/** A revision as it is written in a stamp: `r3.0`. */
-export const revText = (r) => (r == null ? "?" : `r${r.major}.${r.minor}`);
+/** A revision as it is written in a stamp: `r4`. The revision is one integer;
+ *  a stamp written before that (`r3.0`) reads as its first number. */
+export const revText = (r) => (r == null ? "?" : `r${r}`);
 /** Negative when a is older than b, 0 when equal. */
-export const revCmp = (a, b) => a.major - b.major || a.minor - b.minor;
+export const revCmp = (a, b) => a - b;
 
 // --- where suites and specs live -------------------------------------------
 
@@ -493,10 +494,7 @@ export function parseSuite(text) {
       if (ds) {
         suite.draftsStyled = {
           date: ds[1],
-          rev: {
-            major: Number(ds[2]),
-            minor: ds[3] === undefined ? 0 : Number(ds[3]),
-          },
+          rev: Number(ds[2]),
           line: i + 1,
         };
         continue;
@@ -507,12 +505,7 @@ export function parseSuite(text) {
       if (rv) {
         suite.reviewed = rv[1];
         suite.reviewedRev =
-          rv[2] === undefined
-            ? null
-            : {
-                major: Number(rv[2]),
-                minor: rv[3] === undefined ? 0 : Number(rv[3]),
-              };
+          rv[2] === undefined ? null : Number(rv[2]);
         suite.reviewedLine = i + 1;
         continue;
       }
@@ -829,12 +822,21 @@ export function caseIndex(root, paths) {
       if (h) {
         id = h[1];
         if (!index.has(id))
-          index.set(id, { level, rel, line: lineNo, traces: [] });
+          index.set(id, {
+            level,
+            rel,
+            line: lineNo,
+            traces: [],
+            status: null,
+          });
         continue;
       }
       const t = line.match(/^\*\s+\*\*Trace:\*\*\s*(.+?)\s*$/);
       if (t && id && index.has(id))
         index.get(id).traces = commaList(t[1]).values.sort();
+      const st = line.match(/^\*\s+\*\*Status:\*\*\s*(\S+)\s*$/);
+      if (st && id && index.has(id) && index.get(id).status === null)
+        index.get(id).status = st[1].toLowerCase();
     }
   }
   return index;

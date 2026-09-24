@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 3.0
+tcs_rules_rev: 3
 ---
 
 # Specs to Test Cases
@@ -219,31 +219,27 @@ Thirty capabilities carry a suite and thirty-nine do not; seventeen of those thi
 - **A blind reading of a finished spec is not a blind reading.** These scenarios are written, reviewed and shipped. The second reading's whole value is that it happens beside the first without seeing it; run against a spec that already exists, it can only be a derived reading wearing the new shape, and its `## Raised` would come back empty — which is the signal this document names as the mechanism having failed
 - **The suites are written when a change touches the capability.** `/workflow-specify` runs the blind pass on the anchor set `/workflow-plan` just fixed, as it stands at that moment, with a PM available for what it raises. Filling them ahead of time means doing every future change's QA now, with less information than that change will have
 - **`pnpm check:manual`'s `derived` finding is the register.** It names every capability with anchors and no suite, recomputed on every run, so it cannot go stale the way a checklist in a document would. There is no second list to keep
-- **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A major revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
+- **No rules revision was bumped for this.** The cases these files hold did not change; what changed is what a *new* run must record about itself. A revision would have required sweeping thirty suites to say so, which is the work this section exists to decline
 
 The anchors are gated accordingly: a suite is held to the new shape when it carries a `## Reconciliation`, and left alone when it does not. The raised list is gated on its own file — a change with a `decisions.md` owes the table there, and the suites written before that artifact existed are left alone.
 
 ## Rules Revisions
 
-`tcs_rules_rev` is `<major>.<minor>`. Run the store against the new rules: a valid file now rejected is a **major**, nothing broken is a **minor**, a typo is neither.
+`tcs_rules_rev` is one integer, bumped by hand when the contract changes: a property, a vocabulary value, an id form, a file name, a level, or a rule about what a case may claim. Run the store against the new rules; a valid file now rejected is a bump, a typo is not. How a case *reads* is not a revision: it lives in `docs/governance/tcs-conventions.md` and moves without one. A stamp written before the revision was one integer (`r3.0`) reads as its first number.
 
-| | Minor | Major |
-| --- | --- | --- |
-| What changed | how a case reads | the contract: a property, a vocabulary value, an id form, a file name, a level |
-| Existing suites | valid, in an older voice | non-conformant until they move |
-| How it reaches them | restyle, one capability at a time: `pnpm run tcs:stale`, then `/spec-to-tcs <capability>`, one PR each | sweep, every suite, in the bump's own commit |
-
-- **A minor restyle** — drafts re-worded, ids kept, `<v>` unchanged, status `draft`; only `**Drafts styled:**` moves; `actual` and `deprecated` never
-- **A sweep rewrites, never restamps** — if the drafts are not rewritten, the revision does not move
-- **A sweep changes no claim** — same ids, same traces, no `<v>` bump; `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove it
-- **A major may only require what is mechanically derivable on an approved case** — anything more is a re-review programme, scoped or budgeted, and the bump states which outcome it takes
-- **An approved case is never migrated silently** — the sweep reports what it derives, on how many cases, in which files, and waits for a yes
-
-| The new rule | The sweep does |
+| Case | The sweep does |
 | --- | --- |
-| derivable from what the case carries | migrates it, `actual` included |
-| not derivable, old shape still readable | grandfathers it: shape kept, `**Reviewed:**` revision says why, it stops teaching |
-| not derivable, not readable | that suite goes back to `draft`, one at a time, a human deciding each |
+| `draft` below the revision | regenerated, whole file, after one yes for the set: top down — platform, product, domain, then feature — and line 1 to the end within a file; never merely restyled |
+| `actual`, `manual` | restyled to the new rule — ids, `<v>`, status and claim unchanged |
+| `actual`, `automated` | left as it is; a rule it breaks is a behaviour change, `<v>` bumped back to `draft`, or nothing |
+| `deprecated` | never touched |
+
+- **The stamp moves only on a regenerate** — `**Drafts styled:**` takes the new revision when the drafts were regenerated under it, never for a restyle and never restamped
+- **An `actual` case is skipped by the regenerate** — unless the new rule changes what it verifies or the journey it walks; then the sweep shows it and asks, and on a yes it goes back to `draft` and is regenerated and reviewed again
+- **Inside one journey a sweep may restructure** — merge two cases that now serve one purpose, add a step a case needs to serve it, retire a case whose purpose another holds (`deprecated`, never deleted or renumbered)
+- **Across journeys it may not** — a rule that implies merging, splitting or removing a journey is a finding for the spec's author, landed on the capability's PRD as a ❓ or in the next change's `decisions.md`; the sweep leaves the journeys as they are
+- **A reviewed claim does not move silently** — `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status
+- **The sweep lands in its own commits** — separate from any review verdict, pushed before review starts, so the review's diff holds only the reviewer's decisions
 
 ## Step 1: Digest the Capability
 
@@ -407,7 +403,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 - **`**Drafts styled:**`** — the revision of this document the file's `draft` cases were last written against, and when; present exactly while the file holds a `draft`. `actual` cases carry no revision: a reviewer's yes is the convention
 - **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition, removed when the file falls out of `approved`; no reviewer name, git records who
 - **`**Out of suite:**`** — scenario ids the suite leaves uncovered on purpose, under the header (`openspec/config.yaml`, `rules.user-journeys`); `pnpm check:manual` counts them as covered and refuses one a living case traces
-- **`tcs_rules_rev`** — this document's frontmatter, bumped by hand
+- **`tcs_rules_rev`** — this document's frontmatter, one integer, bumped by hand
 
 ## The Format
 
@@ -483,7 +479,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
-| `pnpm run tcs:stale` | suites whose drafts sit below the current minor; a report, never a sweep |
+| `pnpm run tcs:stale` | suites whose drafts sit below the current revision, each owed a regenerate; a report, never a sweep |
 | `/tcs-run-sheet <what to walk>` (`tcs-run-sheet` skill) | resolves a request to an explicit case-id list, dry-runs it, and dispatches the run tab once a person confirms |
 | `pnpm run tcs:run-sheet` | writes the selection to a new tab; `--sandbox` uses `TCS_SHEET_SANDBOX_ID`; `--overwrite <id>` rewrites that run; `--env` is `staging` or `production` and defaults to staging; `--dry-run` prints the selection and touches no network |
 | `pnpm run tcs:automated <case-id…> --decided-by <path>` | flips one or more cases' Automation status to `automated`, in place, in whichever suite file holds them, writing the Decided-by line in the same edit; refuses a flip of an in-flight change's case that names no path; pushes nothing — the walk's own commit carries the flip |

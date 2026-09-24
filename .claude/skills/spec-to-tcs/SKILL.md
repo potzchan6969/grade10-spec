@@ -217,7 +217,7 @@ and are unchanged.
    with the header lines directly under the title and no preamble. **The
    File Header** is computed, never chosen: `**Status:**` from the cases
    (`pending-review`, `in-review`, `approved`); `**Drafts styled:** <today>,
-   tcs-rules r<major>.<minor>` from `tcs_rules_rev` in the document's
+   tcs-rules r<n>` from `tcs_rules_rev` in the document's
    frontmatter, present exactly while a `draft` remains; `**Reviewed:**` is
    `/tcs-review`'s and never yours. `pnpm run tcs:validate`
    (`scripts/openspec/validate-test-cases.mjs`) refuses:
