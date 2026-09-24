@@ -10,6 +10,7 @@
 - [x] 1.8 Amendment: add a Description/Amount header and divider above the order-value lines, shared by both documents via `OrderValueSection` (`decisions.md` Q14) (`shared-ui-invoice-and-receipt-pdf-SC-37`, `SC-38`)
 - [x] 1.9 Amendment: remove `replacedBy`/`replacedByLabel` from `InvoicePdfProps`/`InvoicePdfCopy` entirely, retiring the "InvoicePdf shows Replaced by only when given" requirement and its two scenarios (`decisions.md` Q16). `winner-order/spec.md`'s "Every invoice carries an invoice ID and a bank reference" requirement still claims the PDF names a replacement (`winner-order-SC-98`, `winner-order-SC-123`) — left unreworded here, since `define-public-auction-identifiers` already carries its own MODIFIED delta on it; see `proposal.md`'s Open Questions
 - [x] 1.10 Amendment: rename `packages/ui/src/blocks/invoice-and-receipt-pdf/` to `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/`, fixing `packages/ui/src/index.ts`'s import paths (`decisions.md` Q17)
+- [x] 1.11 Amendment: add `paymentMethod`/`paymentMethodLabel` to `InvoicePdfData`/`InvoicePdfCopy`, drawn by `drawMetaBlock` as a fourth meta row appended after payment deadline, never reordering the three rows before it (`decisions.md` Q21) (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-46`)
 
 ## 2. ReceiptPdf, completing the shared contract (grade10-spec)
 
@@ -44,6 +45,7 @@ Needs group 3 landed.
 - [x] 4.3 Add `pdfjs-dist` as a devDependency of `packages/ui`, which hosts `pdf-preview.tsx`
 - [x] 4.4 Rewrite `apps/preview/src/pages/winner-order.invoice-pdf.stories.tsx`/`winner-order.receipt-pdf.stories.tsx` the same way, replacing their `<InvoicePdf/>`/`<ReceiptPdf/>` JSX (landed by group 2.4, now stale — this was a live typecheck break, `PartyAddress`/`bankRails`/`orderValue`/`taxLine` all gone) with a call to the renderer and `pdf-preview.tsx`'s `PdfPreview`, imported via `@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview` since it is not part of the `../../index` barrel
 - [x] 4.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint` — also `pnpm --dir apps/preview exec storybook build` to catch the `pdf-preview` import resolving through the workspace
+- [x] 4.6 Amendment: needs 1.11 landed. Add `paymentMethod`/`paymentMethodLabel` to `invoice-pdf.stories.tsx`'s and `apps/preview/winner-order.invoice-pdf.stories.tsx`'s sample invoice data, and a second `BankTransfer` story beside each existing `Default` (Card) one so a bank-transfer invoice previews too (`decisions.md` Q21) (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-46`)
 
 ## 5. Wire grade10 onto the real renderer (grade10)
 
@@ -54,6 +56,7 @@ Needs groups 3-4 landed on `main` and the submodule bumped first.
 - [x] 5.3 Switch `apps/frontend/grade10/src/pages/demo/pdf/PdfLabPage.tsx` (and its `invoiceSample.ts`/`receiptSample.ts`) the same way
 - [x] 5.4 Remove `packages/grade10-auction/contracts`'s now-redundant `pdfDocument.ts`/`receiptPdf.ts`/`invoicePdf.ts` and their tests, and the package's `/invoice-pdf`/`/receipt-pdf` subpath exports and `pdf-lib`/`@pdf-lib/fontkit` dependencies
 - [x] 5.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10` — also surfaced the `"./blocks/*"` export bug this branch's `fix(auction)` commit corrects: the array-fallback pattern PR #627 shipped does not actually resolve for an external consumer
+- [ ] 5.6 Amendment: needs 1.11 landed and the submodule re-bumped. Pass `paymentMethod` at `invoicePdf.ts`'s call site, sourced from the order's own payment method the same way `receiptPdf.ts` already sources it for `ReceiptPdf` (`decisions.md` Q21)
 
 ## 6. Walk Winner Order's Invoice and Receipt PDFs (grade10)
 

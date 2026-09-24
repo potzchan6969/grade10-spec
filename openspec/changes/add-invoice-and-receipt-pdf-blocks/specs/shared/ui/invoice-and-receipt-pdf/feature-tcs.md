@@ -1297,6 +1297,68 @@ Runs once per row of **Test data**.
 * Each returned document has exactly one page.
 * Each page is sized 595.28×841.89pt (A4).
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC43-1: An invoice's payment method renders as its own meta row
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with an invoice number, sent-at date, payment
+  deadline, payment method, issuer, Bill To, and Ship To.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Inspect the meta rows.
+
+**Expected Results:**
+
+* The payment method renders as its own meta row, alongside invoice number,
+  sent-at date, and payment deadline.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC44-1: The payment method row appends after payment deadline, never reordering the rows before it
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with distinct, recognizable values for invoice
+  number, sent-at date, payment deadline, and payment method.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the supplied props.
+2. Read the meta rows top to bottom.
+
+**Expected Results:**
+
+* The four meta rows read, top to bottom: invoice number, sent-at date,
+  payment deadline, payment method.
+* The three original rows keep the order they already had; payment method
+  never inserts among them.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1428,3 +1490,22 @@ read the Feature set without sight of the scenarios is the same person who
 just wrote both, for a swap already fully decided in `decisions.md`. The
 retirements above are a direct, checkable consequence of `spec.md`'s own
 diff, not a product judgment this suite is positioned to catch independently.
+
+**Run, 2026-09-24 (`decisions.md` Q21):** `InvoicePdf` gains a `paymentMethod`
+meta row, run as a proper two-reading pass rather than an author amendment —
+a scenario reading and a test-case reading were taken independently from the
+same isolated anchors (the Feature set's updated meta-rows bullet, the
+journeys file, `decisions.md` Q21, the linked PRD line, and `tech-design.md`'s
+implementation note), neither seeing the other's output or the existing
+suite.
+
+| Finding | Disposition |
+| --- | --- |
+| Payment method renders as a meta row (scenario reading's `SC-1` extension; suite reading's `TC43`) | Agreement. **Folded in:** `SC-1`'s `GIVEN` extended to include payment method; `TC43` added |
+| The row appends after payment deadline rather than reordering the existing three (suite reading only — the scenario reading did not write this as a separate claim) | Real gap the suite reading caught alone: `tech-design.md`'s "appends... rather than reordering" is an independently-breakable positional contract, not implied by presence alone. **Folded in:** new requirement clause **Position**, scenario `SC-46`, `TC44` |
+| A second scenario/case distinguishing "Card" from "Bank transfer" content | Both readings independently declined this: the value arrives preformatted with no branching on its content, so a second literal string would only re-prove pass-through already exercised once. **Not added** |
+
+No contradiction, no question raised for `decisions.md`'s `## Raised` table
+— both readings agreed on scope; the divergence was completeness, not a
+product judgment, and resolves by folding the suite reading's extra finding
+in.

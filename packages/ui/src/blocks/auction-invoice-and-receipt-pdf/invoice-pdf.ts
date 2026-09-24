@@ -42,6 +42,7 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   invoiceNumberLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
+  paymentMethodLabel: string;
   footer: string;
 };
 
@@ -52,6 +53,8 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
+  /** Preformatted, e.g. "Card" or "Bank transfer" - this renderer draws it, never branches on it. */
+  paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly InvoicePdfLineItem[];
@@ -66,13 +69,13 @@ export type InvoicePdfRenderOptions = {
 
 export { addressLines };
 
-/** Invoice number / Date of issue / Date due, one underlined identity row each. */
+/** Invoice number / Date of issue / Date due / Payment method, one underlined identity row each. */
 function drawMetaBlock(
   page: PDFPage,
   fonts: Fonts,
   data: Pick<
     InvoicePdfData,
-    "invoiceNumber" | "sentAt" | "paymentDeadline" | "copy"
+    "invoiceNumber" | "sentAt" | "paymentDeadline" | "paymentMethod" | "copy"
   >,
   y: number,
 ): number {
@@ -93,6 +96,8 @@ function drawMetaBlock(
     formatDateTime(data.paymentDeadline),
     y,
   );
+  y -= LINE_HEIGHT;
+  drawMetaRow(page, fonts, data.copy.paymentMethodLabel, data.paymentMethod, y);
   return y - LINE_HEIGHT * 2;
 }
 

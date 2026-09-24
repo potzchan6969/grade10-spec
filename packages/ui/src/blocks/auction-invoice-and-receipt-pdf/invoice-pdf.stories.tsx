@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useEffect, useState } from "react";
+import type { InvoicePdfData } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 import { PdfPreview } from "./pdf-preview";
 
@@ -8,6 +9,7 @@ const SAMPLE_INVOICE = {
   invoiceNumber: "IN-202609-LK7P2Q01",
   sentAt: new Date("2026-09-15T11:04:00.000Z"),
   paymentDeadline: new Date("2026-09-22T11:04:00.000Z"),
+  paymentMethod: "Card",
   billTo: {
     recipient: "Alexandra Tran",
     company: null,
@@ -52,23 +54,47 @@ const SAMPLE_INVOICE = {
     invoiceNumberLabel: "Invoice number",
     sentAtLabel: "Date of issue",
     paymentDeadlineLabel: "Date due",
+    paymentMethodLabel: "Payment method",
     footer: "This invoice records the charges for the lot shown above.",
   },
 } as const;
 
+/** Same order, its Payment Processing Fee showing Free per `winner-order/spec.md`'s bank-transfer pricing. */
+const BANK_TRANSFER_INVOICE: InvoicePdfData = {
+  ...SAMPLE_INVOICE,
+  paymentMethod: "Bank transfer",
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { key: "subtotal", label: "Subtotal", amount: "HKD 3120.00" },
+    {
+      key: "paymentProcessingFee",
+      label: "Payment Processing Fee",
+      amount: "Free",
+    },
+    { key: "orderTotal", label: "Order Total", amount: "HKD 3120.00" },
+  ],
+};
+
 /** Generates the real PDF bytes once, on mount - a preview of what `InvoicePdf` actually draws, not a second guess at it. */
-function InvoicePdfPreview() {
+function InvoicePdfPreview({
+  data = SAMPLE_INVOICE,
+}: {
+  data?: InvoicePdfData;
+}) {
   const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    void InvoicePdf(SAMPLE_INVOICE).then((rendered) => {
+    void InvoicePdf(data).then((rendered) => {
       if (!cancelled) setBytes(rendered);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [data]);
 
   if (!bytes) return <p>Generating…</p>;
   return <PdfPreview bytes={bytes} />;
@@ -83,3 +109,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const BankTransfer: Story = {
+  args: { data: BANK_TRANSFER_INVOICE },
+};

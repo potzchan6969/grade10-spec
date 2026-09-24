@@ -199,6 +199,8 @@ by card, reads:
   Some orders have none.`
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
+- 🚧 **Payment method** — Card or Bank Transfer, printed on the invoice so
+  the document names it rather than leaving it to the fee amount alone
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
   forward unchanged as the order's one public reference once a winner
   exists; shown on the winner's invoice and operator support surfaces, and

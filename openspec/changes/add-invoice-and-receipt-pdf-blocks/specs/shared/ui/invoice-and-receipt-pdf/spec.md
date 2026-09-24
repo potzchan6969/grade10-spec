@@ -22,7 +22,7 @@ removed, per the amendment note above each one.
 - InvoicePdf export
   - Title and issuer mark: "Invoice" at the top left, the issuer's wordmark —
     or its name as text, when no mark is on file — at the top right
-  - Meta rows: invoice number, sent-at date, payment deadline
+  - Meta rows: invoice number, sent-at date, payment deadline, payment method
   - Party blocks: Bill To, Ship To
   - Lot and charges: a Description/Amount table headed by the lot title, the
     charges given, and a boxed Subtotal/Payment Processing Fee/Order Total
@@ -68,22 +68,35 @@ removed, per the amendment note above each one.
 ### Requirement: InvoicePdf renders its meta rows and party blocks
 
 InvoicePdf's meta rows and party blocks name the invoice, when it was sent,
-and who it bills and ships to.
+how it is to be paid, and who it bills and ships to.
 
-**Meta rows** — InvoicePdf SHALL render the invoice number, sent-at date, and
-payment deadline for every invoice. **Party blocks** — InvoicePdf SHALL
-render Bill To and Ship To for every invoice, each rendering only its own
-supplied content.
+**Meta rows** — InvoicePdf SHALL render the invoice number, sent-at date,
+payment deadline, and payment method for every invoice, each as its own row.
+**Position** — The payment method row SHALL render last, after payment
+deadline, never reordering the invoice number, sent-at date, and payment
+deadline rows before it. **Party blocks** — InvoicePdf SHALL render Bill To
+and Ship To for every invoice, each rendering only its own supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
 
 **Serves:** InvoicePdf export - the invoice's meta rows all render
 
 - **GIVEN** data for an invoice number, sent-at date, payment deadline,
-  issuer, Bill To, and Ship To
+  payment method, issuer, Bill To, and Ship To
 - **WHEN** InvoicePdf renders it
 - **THEN** the returned PDF's one page shows every meta row and party block
   given
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-46 - The payment method row appends after payment deadline, never reordering the rows before it
+
+**Serves:** InvoicePdf export - the invoice's meta rows all render
+
+- **GIVEN** distinct, recognizable values for invoice number, sent-at date,
+  payment deadline, and payment method
+- **WHEN** InvoicePdf renders them
+- **THEN** the four meta rows read top to bottom as invoice number, sent-at
+  date, payment deadline, then payment method
+- **AND** the three original rows keep the order they already had
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-19 - Bill To and Ship To never echo each other
 

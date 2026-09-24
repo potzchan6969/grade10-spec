@@ -11,6 +11,7 @@ const COPY = {
   invoiceNumberLabel: "Invoice number",
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
+  paymentMethodLabel: "Payment method",
   footer: "This invoice records the charges for the lot shown above.",
 } as const;
 
@@ -19,6 +20,7 @@ const DATA = {
   invoiceNumber: "IN-202609-LK7P2Q01",
   sentAt: new Date("2026-09-15T11:04:00.000Z"),
   paymentDeadline: new Date("2026-09-22T11:04:00.000Z"),
+  paymentMethod: "Card",
   billTo: null,
   shipTo: null,
   lineItems: [
@@ -60,6 +62,7 @@ describe("invoice PDF renderer", () => {
       invoiceNumberLabel: "Numéro de facture",
       sentAtLabel: "Date d'émission",
       paymentDeadlineLabel: "Date d'échéance",
+      paymentMethodLabel: "Mode de paiement",
       footer: "Cette facture enregistre les frais du lot indiqué ci-dessus.",
     };
     const bytes = await InvoicePdf({

@@ -1,3 +1,4 @@
+import type { InvoicePdfData } from "@grade10/ui";
 import { InvoicePdf } from "@grade10/ui";
 import { PdfPreview } from "@grade10/ui/blocks/auction-invoice-and-receipt-pdf/pdf-preview";
 import type { Meta, StoryObj } from "@storybook/react-vite";
@@ -8,6 +9,7 @@ const SAMPLE_INVOICE = {
   invoiceNumber: "INV-202609-LK7P2Q-01",
   sentAt: new Date("2026-09-15T11:04:00.000Z"),
   paymentDeadline: new Date("2026-09-22T11:04:00.000Z"),
+  paymentMethod: "Card",
   billTo: {
     recipient: "Alexandra Tran",
     company: null,
@@ -56,8 +58,32 @@ const SAMPLE_INVOICE = {
     invoiceNumberLabel: "Invoice number",
     sentAtLabel: "Date of issue",
     paymentDeadlineLabel: "Date due",
+    paymentMethodLabel: "Payment method",
     footer: "This invoice records the charges for the lot shown above.",
   },
+};
+
+/** Same order, its Payment Processing Fee showing Free per `winner-order/spec.md`'s bank-transfer pricing. */
+const BANK_TRANSFER_INVOICE: typeof SAMPLE_INVOICE = {
+  ...SAMPLE_INVOICE,
+  paymentMethod: "Bank transfer",
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2,500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
+    {
+      key: "paymentProcessingFee" as const,
+      label: "Payment Processing Fee",
+      amount: "Free",
+    },
+    {
+      key: "orderTotal" as const,
+      label: "Order Total",
+      amount: "HKD 3,120.00",
+    },
+  ],
 };
 
 /**
@@ -67,18 +93,22 @@ const SAMPLE_INVOICE = {
  * `grade10`'s own task (`add-invoice-and-receipt-pdf-blocks` group 5), not
  * built here. This page supplies sample data only.
  */
-function InvoicePdfPreview() {
+function InvoicePdfPreview({
+  data = SAMPLE_INVOICE,
+}: {
+  data?: InvoicePdfData;
+}) {
   const [bytes, setBytes] = useState<ArrayBuffer | null>(null);
 
   useEffect(() => {
     let cancelled = false;
-    void InvoicePdf(SAMPLE_INVOICE).then((rendered) => {
+    void InvoicePdf(data).then((rendered) => {
       if (!cancelled) setBytes(rendered);
     });
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [data]);
 
   if (!bytes) return <p>Generating…</p>;
   return <PdfPreview bytes={bytes} />;
@@ -95,3 +125,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 export const Default: Story = {};
+
+export const BankTransfer: Story = {
+  args: { data: BANK_TRANSFER_INVOICE },
+};

@@ -103,6 +103,7 @@ export type InvoicePdfCopy = PdfDocumentCopy & {
   invoiceNumberLabel: string;
   sentAtLabel: string;
   paymentDeadlineLabel: string;
+  paymentMethodLabel: string;
   footer: string;
 };
 
@@ -111,6 +112,7 @@ export type InvoicePdfData = {
   invoiceNumber: string;
   sentAt: Date;
   paymentDeadline: Date;
+  paymentMethod: string;
   billTo: PdfPartyAddress;
   shipTo: PdfPartyAddress;
   lineItems: readonly PdfLineItem[];
@@ -211,6 +213,16 @@ calls for validating the shape at the type level.
 version: neither renderer catches a `pdf-lib` failure or a bad font byte;
 both surface as a rejected `Promise` to the caller.
 
+**InvoicePdf gains a fourth meta row, `paymentMethod` (`decisions.md`
+Q21).** `drawMetaBlock` in `invoice-pdf.ts` draws it last, after Date due —
+appending rather than reordering the three rows already there, since no
+decision fixes a different order and this is the least disruptive place to
+add one. The value arrives preformatted (`"Card"`, `"Bank transfer"`, or
+whatever string the caller already built for `ReceiptPdf`'s own
+`paymentMethod`), matching the presentation-only contract every other field
+here already follows — this renderer does not know payment methods exist as
+a concept, only that it draws whatever string it is given.
+
 ## Risks / Trade-offs
 
 - **[Risk]** Moving `pdf-document.ts`'s hardcoded strings to `copy` fields is
@@ -269,6 +281,6 @@ independently. Step 3 is an ordinary application-side dependency bump
 
 ## Open Questions
 
-None. `decisions.md` Q18-Q20 settle the approach; the `key` discriminant and
+None. `decisions.md` Q18-Q21 settle the approach; the `key` discriminant and
 the `copy` field list above are this document's own implementation choices,
 not product judgments needing a decision row.
