@@ -46,8 +46,13 @@ export const Default: Story = {
       }),
     ).toBeVisible();
     expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
-    expect(canvas.getByText("Only 3 left")).toBeVisible();
-    expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
+    expect(canvas.queryByText("Only 3 left")).toBeNull();
+    expect(canvas.queryByRole("radiogroup")).toBeNull();
+    expect(canvas.queryByText("Standard box")).toBeNull();
+    expect(canvas.queryByText("Collector case")).toBeNull();
+    expect(canvas.queryByText("Gift bundle")).toBeNull();
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
+    expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
     expect(canvas.getByRole("contentinfo")).toBeInTheDocument();
 

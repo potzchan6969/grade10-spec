@@ -5,8 +5,7 @@ order: 2
 reviewed: 2026-09-11
 ---
 
-The product listing is where a collector browses the catalogue and opens a
-product.
+The product listing lets collectors browse the catalogue and open a product.
 
 - **Every product** — a card that opens its Product Details Page
 - **One list that lengthens** — reaching the end of the cards adds the next
@@ -16,9 +15,10 @@ product.
 - **A count of the whole set** — above the grid, how many cards the narrowed
   catalogue holds, never how many are on screen; it moves when the narrowing
   moves and stays still while the collector reads on
-- **Stock is a ceiling** — a card's cart control stops where the shop's count
-  stops, and the card says how many are left when the shop is nearly out or the
-  collector has asked for the last one; a shop that counts nothing stops nothing
+- 🚧 **Availability without stock pressure** — each tile reads available while
+  any listed variant is offered for sale and out of stock only when none is;
+  the tile shows no remaining count or scarcity cue. A collector's requested
+  add quantity is not capped by the browse read, and Cart explains a short fill
 - **Filter** — the sidebar narrows by the world a card comes from and the kind
   of collectible it is, each choice with the catalogue's count beside it;
   worlds show five and an invitation to the rest, types show whole
@@ -196,7 +196,7 @@ popularity ordering — nothing computes one. Searching inside a collection. The
 | Seconds after save | Decided | A change reaches the listing in seconds, not minutes. The shop's report and its own reads are the floor, so nothing here can be faster than Shopify: the store reads a change back rather than trusting the report, and a report that never arrives is caught by the 5-minute re-read. A listing narrowed to a collection stays on the shop's own read, which the mirror does not reproduce in the collection's own order. | Product |
 | Collection with facets | ❓ Open | Whether a collection and a facet can be applied together; nothing in the catalogue's own reads prevents it. | Product |
 | Free text matches | ❓ Open | The title only, as today, or title, description, tags and vendor as Shopify's own search read. | Product |
-| Price order | Decided | Sorts on the product's lowest price. The card and the order come from one copy of the mirror, so the price a card shows is the price it sorts on while a product has one variant; a product with several sorts on its cheapest, sold out or not, as Shopify's own price sort does, while the card shows the one for sale. | Product |
+| Price order | ❓ Open | Whether lowest price means the cheapest listed product regardless of availability, as Shopify's price sort exposes, or the cheapest item the collector can buy, as the active user journey promises. | Product |
 | The address is the state | Decided | Facets, search and order all live in the address, each a history entry, so a narrowing links and Back widens. | Product |
 | Counts are the catalogue's | Decided | Counted over the whole narrowed set with the facet's own selection excluded, so ticking one world leaves the others showing what picking them instead would find. | Engineering |
 | The count above the grid is the same count | Decided | The number over the listing is the catalogue's own over the whole narrowed set, the rule the facet counts already follow, so a choice's count is the size of the listing choosing it opens. Counting the cards on screen instead read the page size back as the shop's size and grew as the collector read on, leaving the one question a count answers — whether it is worth going on — the one it could not. A narrowing whose first page has not arrived says nothing, because `0 products` is a claim the catalogue never made. | Engineering |

@@ -4,9 +4,9 @@ spec: grade10-site/commerce/product-status
 order: 5
 ---
 
-Product Status is what "can this be bought" means for a Shopify variant, read
-the same way everywhere one appears — the listing, a product's own page, and
-the cart never derive their own answer.
+Product Status defines Shopify's answer for each variant, the listing tile's
+rollup for a product, and the one internal sale identity a product page uses.
+The cart reads the identity on each line again when it reviews the cart.
 
 ## Availability
 
@@ -16,22 +16,26 @@ the cart never derive their own answer.
 - **Selling past zero is the shop's call** — a variant Shopify keeps selling
   at a count of zero stays available; one it stops selling at zero goes out
   of stock
-- **A card rolls up to its best variant** — a card reads out of stock only
-  when every variant on it is; its own page still answers per variant
+- **A card rolls up on the listing** — its tile reads out of stock only when
+  every Shopify variant is; its page reports availability for the one sellable
+  item, using that item's internal Shopify sale identity
 - **Priced either way** — an out-of-stock variant keeps its price and offers
   no control that cannot be used
 
 ## Browsing limits
 
-The listing and a product's own page say whether a variant can be bought and
-nothing about how many are left — no remaining count, no scarcity label, no
+🚧 The listing says whether any variant on a product is available; the product
+page says whether its one internal sale item can be bought. Neither browse
+surface says how many are left — no remaining count, no scarcity label, no
 difference between a variant with one left and one with four hundred. An
 unpublished product carries no unavailable tile; it is absent from the
 listing, and its own address answers as any missing product's does.
 
 ## Quantity requests
 
-Only the cart and checkout ask for a quantity, and the shop answers one of
+🚧 The listing and product page may carry the collector's requested add
+quantity, but do not expose or apply a stock-derived limit. When the cart opens
+or is offered for checkout, the shop answers a requested quantity in one of
 three ways:
 
 | Answer | When |

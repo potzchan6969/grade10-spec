@@ -60,7 +60,12 @@ defines it. Price SHALL be read as an integer count of minor units and an ISO
 
 **In flight** - While a read is in flight the store SHALL NOT present the
 lines it is checking as confirmed, and SHALL NOT let the cart be offered for
-checkout on the strength of the previous read.
+checkout on the strength of the previous read. If a read fails, the store
+SHALL mark each affected line unchecked and SHALL NOT present its recorded
+availability, price, or the cart total as current.
+If the initial cart read fails before any lines are known, the drawer SHALL
+show a cart-level unchecked state with Retry and SHALL NOT present a total or
+allow checkout.
 
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -83,6 +88,22 @@ checkout on the strength of the previous read.
 - **GIVEN** a collector who opened the cart and whose re-read has not returned
 - **THEN** the lines being checked are not presented as confirmed
 - **AND** the cart cannot be offered for checkout until the read returns
+
+#### Scenario: grade10-site-store-cart-validation-SC-22 - The cart read cannot be completed
+**Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
+
+- **GIVEN** a collector opening a cart whose read cannot be completed
+- **THEN** every held line is named as unchecked
+- **AND** no recorded availability, price, or cart total is presented as current
+- **AND** Retry is available while checkout remains unavailable
+
+#### Scenario: grade10-site-store-cart-validation-SC-23 - The cart cannot be loaded
+**Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
+
+- **GIVEN** a collector opening a cart whose lines are not yet known
+- **WHEN** the initial cart read fails
+- **THEN** the drawer says the cart could not be checked and offers Retry
+- **AND** no line or total is presented as current, and checkout is unavailable
 
 #### Scenario: grade10-site-store-cart-validation-SC-04 - A browse cache is not the answer
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -309,3 +330,7 @@ recorded, and SHALL NOT create a checkout order.
 - **THEN** no checkout order is created
 - **AND** the collector is told the check could not be completed, with no
   invented availability or price shown
+- **AND** each held line is marked unchecked; no recorded availability,
+  price, or cart total is presented as current
+- **AND** Retry is available, and Pay remains unavailable until a later read
+  confirms the lines

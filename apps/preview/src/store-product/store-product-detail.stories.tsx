@@ -26,6 +26,7 @@ export const Default: Story = {
   args: { product: PRODUCT_DETAIL_PRODUCT },
   decorators: [content],
   play: async ({ canvasElement }) => {
+    // Product-status SC-10 and SC-11: no stock cue or count reaches browse UI.
     const canvas = within(canvasElement);
     expect(
       canvas.getByRole("heading", {
@@ -34,8 +35,13 @@ export const Default: Story = {
       }),
     ).toBeVisible();
     expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
-    expect(canvas.getByText("Only 3 left")).toBeVisible();
-    expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
+    expect(canvas.queryByText("Only 3 left")).toBeNull();
+    expect(canvas.queryByRole("radiogroup")).toBeNull();
+    expect(canvas.queryByText("Standard box")).toBeNull();
+    expect(canvas.queryByText("Collector case")).toBeNull();
+    expect(canvas.queryByText("Gift bundle")).toBeNull();
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
+    expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
   },
 };
@@ -59,7 +65,8 @@ export const SoldOut: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
     expect(canvas.getByText("This product is not for sale.")).toBeVisible();
-    expect(canvas.queryByRole("radiogroup", { name: "Grade" })).toBeNull();
+    expect(canvas.queryByRole("radiogroup", { name: "Variant" })).toBeNull();
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
   },
 };
 
@@ -87,12 +94,14 @@ export const QuantityAndCart: Story = {
   args: { product: PRODUCT_DETAIL_PRODUCT },
   decorators: [content],
   play: async ({ canvasElement }) => {
+    // Product-status SC-11: the requested quantity can exceed the browse count.
     const canvas = within(canvasElement);
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Increase quantity" }),
-    );
+    const increase = canvas.getByRole("button", { name: "Increase quantity" });
+    await userEvent.click(increase);
+    await userEvent.click(increase);
+    await userEvent.click(increase);
     expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
-      "2",
+      "4",
     );
     await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
     expect(canvas.getByRole("button", { name: "Added to cart" })).toBeVisible();

@@ -200,7 +200,7 @@ function checkSuite(root, filePath, rulesRev) {
       : level === "product"
         ? readProductIds(dir, root)
         : level === "domain"
-          ? readDomainIds(dir)
+          ? readDomainIds(dir, root)
           : readSpecIds(join(dir, "spec.md"));
   const capability =
     level === "platform"
