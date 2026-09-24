@@ -9,7 +9,7 @@ listing-owned gallery snapshot.
 ## Feature set
 
 - Unit-aware source selection
-  - For a selected Cert record with a printed Cert ID, the main selector offers the product's untagged source media and media tagged to that record; a record without a printed Cert ID brings forward untagged product media only.
+  - For a selected Cert record, the main selector offers the product's untagged source media and media tagged to that record. Every Cert record has a Cert ID.
   - Other media tagged to a printed-Cert record stays outside the main selector; the separately labelled drawer contains only that media, grouped and named by the printed Cert ID, which an explicit Add to listing action names.
   - For `No Cert ID`, the main selector offers only untagged product media.
 - Listing-owned gallery snapshot
@@ -21,21 +21,20 @@ listing-owned gallery snapshot.
 
 ### Requirement: Cert-scoped source-media selection
 
-For a selected Cert record with a printed Cert ID, the main source selector
-SHALL offer the product's untagged source media and media tagged to that
-record. Media tagged to another Cert record SHALL be absent from the main
-selector. If the selected Cert record has no printed Cert ID, the main
-selector SHALL offer only untagged product media. When the listing selects
-`No Cert ID`, the main selector SHALL offer only untagged product media.
+For a selected Cert record, the main source selector SHALL offer the product's
+untagged source media and media tagged to that record. Every Cert record SHALL
+have a Cert ID. Media tagged to another Cert record SHALL be absent from the
+main selector. When the listing selects `No Cert ID`, the item is regular
+inventory with no Cert record and the main selector SHALL offer only untagged
+product media.
 
 The separately labelled Other Cert media drawer SHALL contain only source
-media tagged to Cert records with a printed Cert ID that are outside the main
-selector. For a selected Cert record with a printed Cert ID, it SHALL contain
-media tagged to other Cert records of that product. When the selected record
-has no printed Cert ID or the listing selects `No Cert ID`, it SHALL contain
-the product's printed-Cert-tagged media. The drawer SHALL group and name each
-group by its printed Cert ID. An operator SHALL add an item from this drawer
-only through an explicit Add to listing action that names the source Cert ID.
+media tagged to Cert records that are outside the main selector. For a
+selected Cert record, it SHALL contain media tagged to other Cert records of
+that product. When the listing selects `No Cert ID`, it SHALL contain the
+product's Cert-tagged media. The drawer SHALL group and name each group by its
+printed Cert ID. An operator SHALL add an item from this drawer only through
+an explicit Add to listing action that names the source Cert ID.
 
 Existing Auction listing-edit authority SHALL govern reads of the main source
 selector and Other Cert media drawer and additions from either surface. This
@@ -54,14 +53,6 @@ reordering, tag changes, and Cert-record deletion.
 - **WHEN** an authorized operator opens the main source selector
 - **THEN** it offers untagged product media and media tagged to the selected record
 - **AND** media tagged to the other record is absent
-
-#### Scenario: grade10-admin-auction-listing-SC-102 - A selected Cert record without a printed ID defaults to untagged media
-**Serves:** grade10-admin-auction-listing-US-11 - Operator starts a Cert-specific listing with its usual media
-
-- **GIVEN** a selected same-product Cert record without a printed Cert ID and product media tagged to another printed-ID Cert
-- **WHEN** an authorized operator opens the main source selector
-- **THEN** it offers untagged product media only
-- **AND** other Cert-tagged media is absent
 
 #### Scenario: grade10-admin-auction-listing-SC-103 - Other Cert media is grouped by printed Cert ID
 **Serves:** grade10-admin-auction-listing-US-12 - Operator deliberately uses another Cert's media

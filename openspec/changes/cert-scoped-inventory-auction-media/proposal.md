@@ -15,10 +15,11 @@ other-Cert items deliberately added from the separate drawer.
 
 - **Cert-scoped Inventory media** - lets an authorized Inventory operator
   leave source media untagged for the product, or tag it to exactly one
-  same-product Cert record with a printed Cert ID. The tag stores the immutable
-  Cert record id, not its printed Cert ID. Media for a record without a printed
-  Cert ID remains untagged. Removing a media tag or retagging leaves the
-  originally tagged source item untagged. Removing a physical unit is allowed
+  same-product Cert record. Every Cert record has one Cert ID; stock without a
+  Cert ID is regular inventory and has no Cert record to target. The tag stores
+  the immutable Cert record id, not its printed Cert ID. Removing a media tag
+  or retagging leaves the originally tagged source item untagged. Removing a
+  physical unit is allowed
   only for an available Cert record with no active reservation; it withdraws
   the unit, removes its Cert record, and deletes source media tagged to it.
 - **Cert-aware listing source** — when an authorized Auction operator selects

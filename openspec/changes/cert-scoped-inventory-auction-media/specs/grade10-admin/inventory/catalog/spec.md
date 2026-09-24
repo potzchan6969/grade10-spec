@@ -7,30 +7,32 @@ level or associate it with one physical Cert record.
 ## Feature set
 
 - Cert-scoped source media
-  - A saved source item may be untagged and shared by the product, or tagged to one Cert record with a printed Cert ID owned by that product.
-  - The tag identifies the immutable Cert record; its printed Cert ID is display data and may be absent.
+  - A saved source item may be untagged and shared by the product, or tagged to one Cert record owned by that product. Every Cert record has one Cert ID.
+  - The tag identifies the immutable Cert record; its Cert ID is display data.
   - An authorized Inventory operator may tag or untag saved source media. Retagging clears the original association and leaves the source item untagged and shared; assigning it to another Cert requires a separate explicit tag action.
-  - A record without a printed Cert ID has no tag; its media remains product-level shared media.
+  - Inventory without a Cert ID is regular product stock, not a Cert record or a media-tag target; its media remains product-level shared media.
   - Removing a Cert unit requires physical withdrawal; the operation removes its Cert record and currently tagged source-media rows while preserving unrelated product media.
 
 ## MODIFIED Requirements
 
 ### Requirement: Inventory may own optional Cert ID records and copy facts
 
-An inventory can track its units one by one, each with the facts that belong
-to that copy.
+An inventory SHALL represent certified physical units as Cert records and
+regular stock as aggregate product inventory. A regular stock unit without a
+Cert ID SHALL NOT create a Cert record.
 
-**Unit records** - An inventory SHALL own zero or more records for
-individually tracked units. Each record SHALL identify one physical unit and
-SHALL contain a system-minted immutable record id, its owning product
-inventory, and its copy-level facts.
+**Cert records** - An inventory MAY own zero or more records for certified
+units. Each Cert record SHALL identify one physical unit and SHALL contain a
+system-minted immutable record id, its owning product inventory, one required
+non-empty Cert ID, and its copy-level facts.
 
-**Grade Issuer** - Grade Issuer SHALL identify the unit as `RAW` or name its
-grading issuer.
+**Grade Issuer** - Grade Issuer SHALL name the unit's grading issuer. A unit
+without a Cert ID SHALL be intaken as regular product stock, not with
+`Grade Issuer` `RAW` as a Cert record.
 
-**Cert ID** - A `RAW` unit MUST NOT have a Cert ID; every graded unit MUST
-have a non-empty Cert ID after trimming surrounding whitespace. Grade10 SHALL
-trim a supplied Cert ID before checking its per-inventory uniqueness.
+**Cert ID** - Every Cert record MUST have a non-empty Cert ID after trimming
+surrounding whitespace. Grade10 SHALL trim a supplied Cert ID before checking
+its per-inventory uniqueness.
 
 **Copy facts** - Serial, Grade Issuer, Grade, and Autograph Grade SHALL remain
 inventory facts rather than product attributes. Grade SHALL be stored as text.
@@ -39,8 +41,8 @@ inventory facts rather than product attributes. Grade SHALL be stored as text.
 | --- | --- |
 | Record id | Unique, system-minted, immutable |
 | Inventory | Required owner, immutable |
-| Cert ID | Prohibited for `RAW`; required and non-empty after trimming for graded units; unique within the owning inventory |
-| Grade Issuer | Required copy-level text identifying `RAW` or a grading issuer |
+| Cert ID | Required and non-empty after trimming; unique within the owning inventory |
+| Grade Issuer | Required copy-level text identifying a grading issuer |
 | Grade | Optional copy-level text; no numeric coercion |
 | Autograph Grade | Optional copy-level text |
 | Serial | Optional copy-level text |
@@ -49,22 +51,21 @@ inventory facts rather than product attributes. Grade SHALL be stored as text.
 **Cert-scoped source media** - Each source media item owned by a product MAY
 have no Cert-record tag or one tag. An untagged item SHALL remain shared at
 the product level. A tag SHALL store the immutable record id of one Cert
-record owned by that same product. The target record SHALL have a printed
-Cert ID; the printed ID is display data and SHALL NOT be used as tag identity.
-A record without a printed Cert ID SHALL receive no tag, and its source media
-SHALL remain untagged and shared at product level.
+record owned by that same product. Every Cert record has a required Cert ID;
+the ID is display data and SHALL NOT be used as tag identity. Regular product
+stock has no Cert record and cannot be a tag target.
 
 An authorized Inventory operator using the existing Inventory media-management
 authority SHALL be able to tag or untag a saved source media item. Retagging
 SHALL clear the original association and leave the item untagged and shared;
 assigning it to another Cert SHALL require a separate explicit tag action.
-Grade10 SHALL refuse a tag write whose target record is missing, belongs to a
-different product, or has no printed Cert ID, and SHALL preserve the item's
-current tag and source media. Physical removal of a Cert unit SHALL require an available record with no
-active reservation. In the same Inventory transaction, Grade10 SHALL decrement
-stock by one, increment withdrawn by one, remove the Cert record, and delete
-source media tagged to that record. Untagged product media and media tagged to
-other Cert records SHALL remain unchanged.
+Grade10 SHALL refuse a tag write whose target record is missing or belongs to
+a different product, and SHALL preserve the item's current tag and source
+media. Physical removal of a Cert unit SHALL require an available record with
+no active reservation. In the same Inventory transaction, Grade10 SHALL
+decrement stock by one, increment withdrawn by one, remove the Cert record,
+and delete source media tagged to that record. Untagged product media and
+media tagged to other Cert records SHALL remain unchanged.
 
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
@@ -99,11 +100,11 @@ other Cert records SHALL remain unchanged.
 - **THEN** the tag identifies that immutable Cert record id
 - **AND** the source media item remains owned by its product
 
-#### Scenario: grade10-admin-inventory-catalog-SC-129 - Media for a record without a printed Cert ID stays shared
+#### Scenario: grade10-admin-inventory-catalog-SC-129 - Regular stock has no Cert media tag target
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
-- **GIVEN** an untagged source media item and a same-product Cert record without a printed Cert ID
-- **WHEN** an operator attempts to tag the media to that record
+- **GIVEN** an untagged source media item for a product with regular inventory stock and no Cert record for that stock
+- **WHEN** an operator attempts to tag the media to the regular stock item
 - **THEN** Grade10 refuses the tag write
 - **AND** the source media remains untagged and shared at product level
 

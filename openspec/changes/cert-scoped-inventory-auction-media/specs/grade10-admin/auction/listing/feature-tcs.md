@@ -1,6 +1,6 @@
 # grade10-admin/auction/listing Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-24, tcs-rules r3.0
 
 ## grade10-admin-auction-listing-US11: Operator starts a Cert-specific listing with its usual media
@@ -57,7 +57,7 @@ document the unit I selected.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -153,7 +153,7 @@ selected unit's normal media.
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
 * <product> has media tagged to <selected Cert ID>, <other Cert ID A>, and <other Cert ID B>.
 * <selected Cert ID>, <other Cert ID A>, and <other Cert ID B> are printed Cert IDs for <product>.
-* <product> also has untagged source media, including any media from a Cert record without a printed Cert ID.
+* <product> also has untagged source media.
 
 **Test data:**
 
@@ -695,7 +695,7 @@ changes later.
 
 | Diff | Disposition |
 | --- | --- |
-| The first listing pass asked how a Cert record without a printed ID could be named in the Other Cert drawer and Add to listing action. | Q10 settles that such a record has no Cert tag, contributes only untagged shared media, and is absent from the drawer. TC2-1 covers the selected no-ID record; SC-102 records untagged-only main selection. No fallback label is needed. |
+| The first listing pass asked how a Cert record without a printed ID could be named in the Other Cert drawer and Add to listing action. | Q10 settles that every Cert record has an ID; No Cert ID stock is regular inventory with no Cert record. US11-TC2-1 is deprecated, SC-102 is removed, and US13-TC1-1 covers the untagged-only default for regular stock. |
 | The outline separates the normal selector from deliberate cross-Cert selection. | TC1-1 and TC2-1 cover the default selector, TC1-1 of US12 covers drawer grouping, and TC2-1 of US12 covers an explicit addition naming its source Cert. SC-101 through SC-105 state those rules. |
 | Inventory edits, retagging, untagging, and Cert deletion must not mutate a saved listing copy. | TC1-1 through TC6-1 of US14 cover copying current bytes/alt, listing edits, and later source changes; SC-106 through SC-111 state the snapshot behavior. |
 | Existing direct uploads and gallery bounds remain unchanged while source media uses the same ordered gallery. | TC7-1 and TC8-1 cover source additions at the eight-item boundary; TC9-1 covers combined order; TC10-1 covers refusal when the selected source is no longer available at Save. Existing direct-upload type, size, order, and ninth-upload cases remain covered by the durable listing feature suite at `openspec/specs/grade10-admin/auction/listing/feature-tcs.md`. |

@@ -3,7 +3,7 @@
 ## 1. Inventory Cert-scoped source media (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add failing Inventory service and admin API coverage for Cert media
-  tagging, printed-Cert eligibility, same-product validation, authorization,
+  tagging, Cert-only eligibility, same-product validation, authorization,
   retagging, untagging, and Cert removal (`grade10-admin-inventory-catalog-SC-128`,
   `grade10-admin-inventory-catalog-SC-129`,
   `grade10-admin-inventory-catalog-SC-130`,
@@ -13,7 +13,7 @@
   `grade10-admin-inventory-catalog-SC-134`,
   `grade10-admin-inventory-catalog-SC-135`)
 - [ ] 1.2 Add the nullable Cert-record media tag, migration, same-product and
-  printed-Cert validation, guarded physical-unit withdrawal, cascading
+  Cert-record validation, guarded physical-unit withdrawal, cascading
   tagged-media deletion, and reference-checked product-object cleanup
   (`grade10-admin-inventory-catalog-SC-128`,
   `grade10-admin-inventory-catalog-SC-129`,
@@ -32,7 +32,6 @@
 - [ ] 2.1 Add failing Auction service and editor coverage for Cert-aware
   default sources, No Cert ID, Other Cert drawer grouping, authorization, and
   cross-product refusal (`grade10-admin-auction-listing-SC-101`,
-  `grade10-admin-auction-listing-SC-102`,
   `grade10-admin-auction-listing-SC-103`,
   `grade10-admin-auction-listing-SC-104`,
   `grade10-admin-auction-listing-SC-105`,
@@ -40,8 +39,7 @@
   `grade10-admin-auction-listing-SC-115`)
 - [ ] 2.2 Extend the Inventory-to-Auction source-media contract and Auction
   editor so the main selector and Other Cert drawer enforce the selected
-  product and printed-Cert rules (`grade10-admin-auction-listing-SC-101`,
-  `grade10-admin-auction-listing-SC-102`,
+  product and Cert-record rules (`grade10-admin-auction-listing-SC-101`,
   `grade10-admin-auction-listing-SC-103`,
   `grade10-admin-auction-listing-SC-104`,
   `grade10-admin-auction-listing-SC-105`)
@@ -62,12 +60,14 @@
 ## 3. Cross-domain operator path (grade10)
 
 - [ ] 3.1 Add an end-to-end test that classifies source media in Inventory and
-  uses it in a matching Cert listing (`grade10-admin-inventory-catalog-US-12`,
+  uses it in a matching Cert listing (`grade10-admin-e2e-US1-TC1-1`,
+  `grade10-admin-inventory-catalog-US-12`,
   `grade10-admin-auction-listing-US-11`,
   `grade10-admin-auction-listing-US-14`)
 - [ ] 3.2 Add an end-to-end test that deliberately selects other-Cert media,
-  saves its listing snapshot, then removes the source Cert
-  (`grade10-admin-inventory-catalog-US-13`,
+  saves its listing snapshot, then physically removes the source Cert and its
+  tagged source media (`grade10-admin-e2e-US2-TC1-1`,
+  `grade10-admin-inventory-catalog-US-13`,
   `grade10-admin-auction-listing-US-12`,
   `grade10-admin-auction-listing-US-14`)
 - [ ] 3.3 Verify: run the Grade10 Admin cross-domain media E2E suite and the

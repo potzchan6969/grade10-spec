@@ -1,6 +1,6 @@
 # grade10-admin/inventory/catalog Test Cases
 
-**Status:** pending-review
+**Status:** in-review
 **Drafts styled:** 2026-09-24, tcs-rules r3.0
 
 ## grade10-admin-inventory-catalog-US12: Operator classifies source media for one copy
@@ -17,7 +17,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke
@@ -55,7 +55,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -86,7 +86,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -117,7 +117,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -150,7 +150,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -211,6 +211,38 @@ Runs once per row of **Test data**.
 
 * Grade10 refuses the write under existing Inventory authorization.
 * The tag and source media remain unchanged.
+
+### grade10-admin-inventory-catalog-US12-TC7-1: Regular stock is not a Cert media tag target
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-inventory-catalog-US-12
+
+**Pre-conditions:**
+
+* admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
+* <inventory product> has regular stock without a Cert record and one Cert record with a Cert ID.
+* One saved, untagged source media item belongs to <inventory product>.
+
+**Steps:**
+
+1. Open the saved source media item for <inventory product>.
+2. Inspect the Cert tag choices.
+
+**Expected Results:**
+
+* The Cert record with a Cert ID is offered as a tag target.
+* Regular stock without a Cert record is not offered as a tag target.
+* The source media item remains untagged and available as product-level media.
 
 ---
 
@@ -327,7 +359,7 @@ Runs once per row of **Test data**.
 
 | Diff | Disposition |
 | --- | --- |
-| The original TC2 treated a same-product Cert record without a printed ID as taggable. | Q10 settles that the record cannot receive a tag and its media remains shared. TC2 is revised to a negative case at v2; SC-129 records the refusal and shared-media result. |
-| The blind pass asked whether a cross-product Cert target is refused or merely hidden. | Q2 limits a tag to a same-product Cert record with a printed ID. SC-130 and TC5 cover refusal and preservation of the current tag; no product question remains. |
+| The original TC2 and its predecessor assumed a Cert record could lack an ID. | Q10 settles that only certified units create Cert records and every Cert has an ID. TC2-2 is deprecated; TC7-1 and SC-129 cover regular stock not being offered as a Cert tag target. |
+| The blind pass asked whether a cross-product Cert target is refused or merely hidden. | Q2 limits a tag to a same-product Cert record. SC-130 and TC5 cover refusal and preservation of the current tag; no product question remains. |
 | The requirements add an explicit existing-authority refusal and distinguish missing targets from valid retags. | TC5 and TC6 cover the invalid-target and authorization scenarios SC-130 and SC-133. |
 | Physical-unit removal is part of the Cert lifecycle. | TC1 v2 covers SC-134's guarded withdrawal and tagged-media deletion; TC2 covers the active-reservation refusal in SC-135. |

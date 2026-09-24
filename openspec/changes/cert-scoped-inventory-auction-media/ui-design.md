@@ -33,9 +33,10 @@
 | --- | --- | --- |
 | Loading source media | Loading status; media actions wait for the source list | **Out of suite:** loading presentation |
 | Empty source media | Empty gallery with the existing upload control | **Out of suite:** empty-gallery presentation |
-| Untagged source item | Product-level media with a control for assigning one printed-Cert record | `grade10-admin-inventory-catalog-SC-128` |
+| Untagged source item | Product-level media with a control for assigning one Cert record that has a Cert ID | `grade10-admin-inventory-catalog-SC-128` |
 | Tagged source item | Current printed-Cert label; retagging clears the old association and leaves the item shared before any separate tag assignment | `grade10-admin-inventory-catalog-SC-131`, `grade10-admin-inventory-catalog-SC-132` |
-| Tag write refused | Error notice; existing tag and source media remain visible | `grade10-admin-inventory-catalog-SC-129`, `grade10-admin-inventory-catalog-SC-130`, `grade10-admin-inventory-catalog-SC-133` |
+| Tag target choices | Only same-product Cert records with a Cert ID are offered; regular No Cert ID stock is not a target | `grade10-admin-inventory-catalog-SC-129` |
+| Tag write refused | Error notice; existing tag and source media remain visible | `grade10-admin-inventory-catalog-SC-130`, `grade10-admin-inventory-catalog-SC-133` |
 
 ### Inventory Cert ID details
 
@@ -56,7 +57,7 @@
 | No matching source media | Empty main selector with the existing direct-upload gallery available | **Out of suite:** empty-selector presentation |
 | Other Cert drawer closed | Separate Other Cert entry point; other-Cert media is not in the main selector | `grade10-admin-auction-listing-SC-103` |
 | Other Cert drawer open | Media groups labelled by printed Cert ID, with an explicit add action naming the source Cert | `grade10-admin-auction-listing-SC-103`, `grade10-admin-auction-listing-SC-104` |
-| No Cert ID selected | Untagged product-level media only in the main source selector | `grade10-admin-auction-listing-SC-105` |
+| No Cert ID selected | Regular stock without a Cert record; untagged product-level media only in the main source selector | `grade10-admin-auction-listing-SC-105` |
 | Gallery at capacity | Combined gallery count is eight; adding more source or direct media is disabled | `grade10-admin-auction-listing-SC-112`, `grade10-admin-auction-listing-SC-113` |
 | Source selection stale | Save error; the existing listing gallery remains unchanged | `grade10-admin-auction-listing-SC-117` |
 | Listing snapshot saved | Copied listing media with editable listing alt text and order | `grade10-admin-auction-listing-SC-106`, `grade10-admin-auction-listing-SC-107` |
