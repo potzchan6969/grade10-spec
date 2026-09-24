@@ -212,7 +212,7 @@ change the underlying address or payment records.
 #### Scenario: auction-status-SC-52 - An expired invoice derives Payment Overdue
 **Serves:** Derived order status - an expired invoice derives Payment Overdue
 
-- **GIVEN** an order whose invoice status is `expired`
+- **GIVEN** an order whose invoice status is expired
 - **WHEN** its status is read
 - **THEN** the derived status is Payment Overdue
 
@@ -473,3 +473,4 @@ SHALL not be replaced by a later payment or shipment event.
 - **WHEN** any order-status surface reads it
 - **THEN** the derived status remains the status before the overpayment return
 - **AND** it is not Refunded
+

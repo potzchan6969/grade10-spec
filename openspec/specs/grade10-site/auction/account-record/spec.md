@@ -44,9 +44,7 @@ Owner-only — nobody but the collector sees their record.
   - Ownership: resolves the record from the session and nothing else.
   - Landing, empty, and failed reads: makes an unused record and a broken one
     tell the collector different things.
-
 ## Requirements
-
 ### Requirement: A collector watches a listing from where it is shown
 
 Grade10 SHALL let a signed-in collector watch and unwatch a listing from that
@@ -665,3 +663,19 @@ Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 - **WHEN** they read that row
 - **THEN** the row offers Email alerts
 - **AND** it does not offer Unwatch
+
+### Requirement: My Auctions names overdue orders in the Status column
+
+The My Auctions list SHALL call the mixed standing and order-state column
+Status. A missed setup deadline SHALL render Setup Overdue and an expired
+invoice SHALL render Payment Overdue. Both rows SHALL retain View order and
+the same lot and winning-bid facts as the Won row.
+
+#### Scenario: grade10-site-auction-account-record-SC-63 - My Auctions names both overdue states
+**Serves:** grade10-site-auction-account-record-US-09 - Winner finds an overdue order in My Auctions
+
+- **GIVEN** one order in Setup Overdue and one in Payment Overdue
+- **WHEN** the winner reads My Auctions
+- **THEN** the column header is Status
+- **AND** the two rows show their matching overdue labels and View order
+
