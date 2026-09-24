@@ -35,6 +35,15 @@
         "level": "{grader} 級別",
         "fee": "每張收費"
       },
+      "table": {
+        "level": "級別",
+        "ceiling": "卡值上限",
+        "cardsPerSubmission": "每次可交卡數",
+        "feePerCard": "每張收費",
+        "cover": "保額",
+        "weeks": "約需時間",
+        "noCover": "—"
+      },
       "row": "卡值上限 {ceiling} · 約 {weeks} 星期回到門市",
       "perCard": "每張",
       "coverLine": "另加 {rate} 保額",
@@ -94,6 +103,14 @@
     "finishLaterEmail": "留下電郵地址，我們會把連結寄給你，並保留這張清單。",
     "pasteSheet": {
       "title": "貼上清單",
+      "labels": {
+        "matched": "已配對",
+        "keptAsTyped": "按輸入保留",
+        "withoutValue": "未有價值",
+        "aboveCeiling": "超出上限",
+        "skipped": "已略過",
+        "linesRead": "已讀取行數"
+      },
       "lead": "一行一張卡：卡名、系列與編號，然後是你想保多少。我們會逐行對目錄；對不上的行會保留你輸入的名稱，也不會顯示參考成交。已在清單上的卡會略過。",
       "yourList": "你的清單",
       "linesRead": "讀到 {count} 行",
@@ -110,10 +127,12 @@
     "service": {
       "title": "選評級公司與級別",
       "lead": "級別看的是最貴那一張卡值多少，以及多快回來。",
+      "highestDeclaredLabel": "你申報的最高價值",
       "highestDeclared": "你申報的最高價值是 {amount}。",
       "grader": "評級公司",
       "level": {
         "open": "每張卡值上限 {ceiling} · 每張 {fee}",
+        "unavailable": "未提供",
         "closedByValue": "未能選用：{card} 的申報價值高於 {ceiling}",
         "closedByCount": "未能選用：Bulk 由 {minimum} 張起，你現時有 {count} 張。",
         "bulkOnly": "超過 {standard} 張，所以只開放 Bulk 級別。",

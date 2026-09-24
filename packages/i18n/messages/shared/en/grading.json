@@ -35,6 +35,15 @@
         "level": "{grader} level",
         "fee": "Fee, a card"
       },
+      "table": {
+        "level": "Level",
+        "ceiling": "Value up to",
+        "cardsPerSubmission": "Cards per submission",
+        "feePerCard": "Fee per card",
+        "cover": "Cover",
+        "weeks": "Back in about",
+        "noCover": "—"
+      },
       "row": "Cards up to {ceiling} · back in about {weeks} weeks",
       "perCard": "a card",
       "coverLine": "+ {rate} cover",
@@ -94,6 +103,14 @@
     "finishLaterEmail": "Tell us where to email the link, and we keep the list.",
     "pasteSheet": {
       "title": "Paste a list",
+      "labels": {
+        "matched": "Matched",
+        "keptAsTyped": "Kept as typed",
+        "withoutValue": "Without a value",
+        "aboveCeiling": "Above the ceiling",
+        "skipped": "Skipped",
+        "linesRead": "Lines read"
+      },
       "lead": "One card a line: name, set and number, then the value you would insure it for. We match each line against the catalogue; a line we cannot match keeps the name you typed and shows no reference. A line naming a card already on your list is skipped.",
       "yourList": "Your list",
       "linesRead": "{count} lines read",
@@ -110,10 +127,12 @@
     "service": {
       "title": "Pick the grader and the level",
       "lead": "The level is the most any one card is worth, and how fast it comes back.",
+      "highestDeclaredLabel": "Your highest declared value",
       "highestDeclared": "Your highest declared value is {amount}.",
       "grader": "Grader",
       "level": {
         "open": "Value up to {ceiling} a card · {fee} a card",
+        "unavailable": "Not available",
         "closedByValue": "Not available: {card} is declared above {ceiling}",
         "closedByCount": "Not available: Bulk starts at {minimum} cards and you have {count}.",
         "bulkOnly": "More than {standard} cards, so Bulk is the only level open.",
