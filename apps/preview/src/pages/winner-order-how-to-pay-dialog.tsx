@@ -176,6 +176,8 @@ type WinnerOrderHowToPayDialogProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   amountDue?: string;
+  /** Collector-facing invoice ID — shown as DialogSubtext. */
+  invoiceId?: string;
   transferReference?: string;
 };
 
@@ -188,6 +190,7 @@ function WinnerOrderHowToPayDialog({
   open,
   onOpenChange,
   amountDue = WINNER_ORDER_BANK_DETAILS.totalAmountDue,
+  invoiceId,
   transferReference = WINNER_ORDER_BANK_DETAILS.transferReference,
 }: WinnerOrderHowToPayDialogProps) {
   const [rail, setRail] = useState("fps");
@@ -228,9 +231,9 @@ function WinnerOrderHowToPayDialog({
       >
         <DialogHeader showCloseButton={false}>
           <DialogTitle>View Bank Details</DialogTitle>
-          <DialogSubtext>
-            Choose a transfer method and use the details below.
-          </DialogSubtext>
+          {invoiceId ? (
+            <DialogSubtext>Invoice: {invoiceId}</DialogSubtext>
+          ) : null}
         </DialogHeader>
         {/* scroll-fade on DialogBody clips the pill tab shadow; panels own scroll. */}
         <DialogBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible [mask-image:none]">

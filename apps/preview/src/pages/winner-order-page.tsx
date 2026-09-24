@@ -1311,6 +1311,7 @@ function WinnerOrderPage({
         open={setupDialogOpen}
       />
       <WinnerOrderHowToPayDialog
+        invoiceId={content.invoiceId ?? undefined}
         onOpenChange={setHowToPayDialogOpen}
         open={howToPayDialogOpen}
       />
