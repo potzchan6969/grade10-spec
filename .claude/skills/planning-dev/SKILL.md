@@ -94,7 +94,10 @@ tooling on both sides parses. Beyond them:
   the groups are written without owner tags.
 - **Link selected app tests** - once a scenario and case have stable markers,
   the test task adds its adjacent acceptance or support marker with the
-  [trace CLI](../../../docs/governance/test-traceability.md). The app test
+  [trace CLI](../../../docs/governance/test-traceability.md):
+  `acceptance=<product>/TC/<capability>-<sequence>@<revision>` or
+  `supports=<product>/SC/<capability>-<sequence>`. The CLI accepts
+  case-insensitive references and writes canonical casing. The app test
   remains the evidence; the marker only identifies which record it decides.
 
 ## Finish

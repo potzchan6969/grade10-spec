@@ -202,7 +202,7 @@ within the cap admin-listing sets.
 * The preview is cleared.
 * No upload was sent.
 
-<!-- trace:case id=tcase_25a3b3f1-598c-4d0c-931b-782053b91179 rev=1 covers=scn_6dcb29c0-1596-4d61-a063-322d137a98af -->
+<!-- trace:case id=auction/TC/listing-media-c94 rev=1 covers=auction/SC/listing-media-c93 -->
 ### grade10-site-auction-listing-media-US1-TC6-1: Ninth media item is refused
 
 **Classification:**

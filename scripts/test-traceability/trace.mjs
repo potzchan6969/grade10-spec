@@ -1,6 +1,5 @@
 #!/usr/bin/env node
 
-import { randomUUID } from "node:crypto";
 import {
   existsSync,
   readFileSync,
@@ -38,9 +37,9 @@ const skippedDirectories = new Set([
 ]);
 
 const usage = `Usage:
-  pnpm run trace -- init scenario --file <path> --target <exact heading line> --key <semantic-key> [--dry-run]
-  pnpm run trace -- init case --file <path> --target <exact case heading line> --covers <scn_id[,scn_id...]> [--dry-run]
-  pnpm run trace -- link --file <path> --target <exact test line> (--acceptance <tcase_id@revision> | --supports <scn_id>) [--dry-run]
+  pnpm run trace -- init scenario --file <path> --target <exact heading line> --product <slug> --capability <slug> [--dry-run]
+  pnpm run trace -- init case --file <path> --target <exact case heading line> --product <slug> --capability <slug> --covers <SC-ref[,SC-ref...]> [--dry-run]
+  pnpm run trace -- link --file <path> --target <exact test line> (--acceptance <TC-ref@revision> | --supports <SC-ref>) [--dry-run]
   pnpm run trace -- validate [--store-root <path>] [--app-root <Grade10 root>]
   pnpm run trace -- report [--store-root <path>] [--app-root <Grade10 root>] [--json]
 
@@ -145,22 +144,95 @@ function checkFields(record, expected, issue) {
   }
 }
 
-function validId(type, id) {
-  return new RegExp(`^${type}_[a-z0-9][a-z0-9_-]*$`).test(id ?? "");
+const referencePattern =
+  /^([a-z][a-z0-9]*(?:-[a-z0-9]+)*)\/(US|SC|TC)\/([a-z][a-z0-9]*(?:-[a-z0-9]+)*)-([0-9a-z]{3})$/i;
+
+function parseReference(value) {
+  const match = referencePattern.exec(value ?? "");
+  if (!match) return null;
+  const [, product, kind, capability, sequence] = match;
+  const canonical = `${product.toLowerCase()}/${kind.toUpperCase()}/${capability.toLowerCase()}-${sequence.toLowerCase()}`;
+  return {
+    product: product.toLowerCase(),
+    kind: kind.toUpperCase(),
+    capability: capability.toLowerCase(),
+    sequence: sequence.toLowerCase(),
+    canonical,
+  };
+}
+
+function canonicalMarkerReference(value, expectedKind, issue, label) {
+  const parsed = parseReference(value);
+  if (!parsed) {
+    issue("invalid-id", `invalid ${label}: ${value || "(empty)"}`);
+    return value ?? "";
+  }
+  if (value !== parsed.canonical)
+    issue(
+      "noncanonical-id",
+      `${label} must use canonical form ${parsed.canonical}: ${value}`,
+    );
+  if (parsed.kind !== expectedKind)
+    issue(
+      "invalid-id-kind",
+      `${label} must use ${expectedKind}: ${value}`,
+    );
+  return parsed.canonical;
+}
+
+function normalizeInputReference(value, expectedKind, option) {
+  const parsed = parseReference(value);
+  if (!parsed)
+    fail(`${option} must use <product>/${expectedKind}/<capability>-<3-character-base36-sequence>`);
+  if (parsed.kind !== expectedKind)
+    fail(`${option} must reference a ${expectedKind} id: ${value}`);
+  return parsed.canonical;
 }
 
 function positiveRevision(value) {
   return /^\d+$/.test(value ?? "") && Number(value) > 0;
 }
 
-function semanticKey(value) {
-  return /^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(value ?? "");
+function normalizeSlug(value, option) {
+  const normalized = value.toLowerCase();
+  if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(normalized))
+    fail(`${option} must be a lower-case slug made of letters, numbers, and single hyphens`);
+  return normalized;
 }
 
-function positionalKey(value) {
-  return /^(?:[a-z0-9]+-)*(?:us|sc|tc)-\d+(?:-[a-z0-9]+)*$/i.test(
-    value ?? "",
+function formatReference(product, kind, capability, sequence) {
+  return `${product}/${kind}/${capability}-${sequence}`;
+}
+
+function nextSequence(storeRoot, product, capability) {
+  const markdownRoots = [
+    resolve(storeRoot, "openspec/specs"),
+    resolve(storeRoot, "openspec/changes"),
+  ];
+  const files = markdownRoots.flatMap((root) =>
+    walk(root, (path) => extname(path) === ".md"),
   );
+  let highest = 0;
+  for (const file of files) {
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    for (const line of lines) {
+      const comment = traceComment(line);
+      if (!comment || comment.syntax !== "html") continue;
+      const marker = /^([a-z]+)(?:\s+([\s\S]*))?$/.exec(comment.body);
+      if (!marker || !["scenario", "case"].includes(marker[1])) continue;
+      const id = /(?:^|\s)id=([^\s]+)/.exec(marker[2] ?? "")?.[1];
+      const parsed = parseReference(id);
+      if (
+        parsed?.product === product &&
+        parsed.capability === capability
+      ) {
+        highest = Math.max(highest, Number.parseInt(parsed.sequence, 36));
+      }
+    }
+  }
+  if (highest >= 36 ** 3 - 1)
+    fail(`no trace sequence remains for ${product}/${capability}`);
+  return (highest + 1).toString(36).padStart(3, "0");
 }
 
 function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
@@ -194,40 +266,34 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
         }
         const [, type, rawFields = ""] = marker;
         const fields = attributes(rawFields, issue);
-        const expected = type === "scenario" ? ["id", "key", "rev"] : ["id", "rev", "covers"];
+        const expected = type === "scenario" ? ["id", "rev"] : ["id", "rev", "covers"];
         checkFields(fields, expected, issue);
+        const kind = type === "scenario" ? "SC" : "TC";
         const record = {
           type,
-          id: fields.id ?? "",
+          id: canonicalMarkerReference(fields.id ?? "", kind, issue, `${type} id`),
           revision: fields.rev ?? "",
           file: source.file,
           line,
-          key: fields.key ?? null,
           covers: [],
         };
-        if (!validId(type === "scenario" ? "scn" : "tcase", record.id))
-          issue("invalid-id", `invalid ${type} id: ${record.id || "(empty)"}`);
         if (!positiveRevision(record.revision))
           issue("invalid-revision", `revision must be a positive integer: ${record.revision || "(empty)"}`);
 
         if (type === "scenario") {
-          if (!semanticKey(record.key))
-            issue("invalid-key", `key must be a lower-case semantic slug: ${record.key ?? "(empty)"}`);
-          if (positionalKey(record.key))
-            issue("positional-key", `key cannot be a positional US, SC, or TC id: ${record.key}`);
           if (!/^\s*####\s+Scenario:\s+\S/.test(nextLine))
             issue("marker-adjacency", "scenario marker must sit immediately above a scenario heading");
           scenarios.push(record);
         } else {
           const rawCovers = fields.covers ?? "";
-          record.covers = rawCovers.split(",").filter(Boolean);
-          if (!record.covers.length)
+          const covers = rawCovers.split(",").filter(Boolean);
+          if (!covers.length)
             issue("marker-shape", "case marker must cover at least one scenario id");
+          record.covers = covers.map((id) =>
+            canonicalMarkerReference(id, "SC", issue, "covered scenario id"),
+          );
           if (new Set(record.covers).size !== record.covers.length)
             issue("duplicate-cover", "case marker repeats a covered scenario id");
-          for (const id of record.covers) {
-            if (!validId("scn", id)) issue("invalid-reference", `invalid covered scenario id: ${id}`);
-          }
           if (!/^\s*###\s+\S/.test(nextLine))
             issue("marker-adjacency", "case marker must sit immediately above a case heading");
           cases.push(record);
@@ -248,25 +314,35 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
         continue;
       }
       if (kind === "acceptance") {
-        const match = /^(tcase_[a-z0-9][a-z0-9_-]*)@(\d+)$/.exec(value);
+        const match = /^(.+)@(\d+)$/.exec(value);
         if (!match) {
-          issue("invalid-reference", `acceptance must use tcase_id@revision: ${value}`);
+          issue("invalid-reference", `acceptance must use <product>/TC/<capability>-<3-character-base36-sequence>@revision: ${value}`);
           tests.push({ type: kind, value, file: source.file, line });
         } else {
+          const caseId = canonicalMarkerReference(
+            match[1],
+            "TC",
+            issue,
+            "acceptance case id",
+          );
           if (!positiveRevision(match[2]))
             issue("invalid-revision", `acceptance revision must be positive: ${match[2]}`);
           tests.push({
             type: kind,
-            caseId: match[1],
+            caseId,
             revision: match[2],
             file: source.file,
             line,
           });
         }
       } else {
-        if (!validId("scn", value))
-          issue("invalid-reference", `supports must name a scenario id: ${value}`);
-        tests.push({ type: kind, scenarioId: value, file: source.file, line });
+        const scenarioId = canonicalMarkerReference(
+          value,
+          "SC",
+          issue,
+          "supported scenario id",
+        );
+        tests.push({ type: kind, scenarioId, file: source.file, line });
       }
     }
   }
@@ -381,7 +457,7 @@ function summarize(graph) {
   ];
   if (issues.length) lines.push("Issues:", ...issues.map((issue) => issueLine(issue, graph.roots)));
   const unlinkedLines = [
-    ...unlinked.scenarios.map((record) => `  scenario ${record.id} key=${record.key} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`),
+    ...unlinked.scenarios.map((record) => `  scenario ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`),
     ...unlinked.cases.map((record) => `  case ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`),
   ];
   if (unlinkedLines.length) lines.push("Unlinked records:", ...unlinkedLines);
@@ -423,7 +499,7 @@ function renderReport(graph) {
   const output = ["Trace report", summarize(graph).replace("Trace validation:", "Validation:")];
   output.push("Scenarios:");
   for (const record of graph.scenarios)
-    output.push(`  ${record.id} key=${record.key} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`);
+    output.push(`  ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`);
   output.push("Cases:");
   for (const record of graph.cases)
     output.push(`  ${record.id} rev=${record.revision} covers=${record.covers.join(",")} at ${displayPath(record.file, graph.roots)}:${record.line}`);
@@ -513,27 +589,31 @@ function initialize(kind, values) {
   const storeRoot = resolve(values.storeRoot ?? scriptRoot);
   const file = resolve(requireOption(values, "file"));
   const target = requireOption(values, "target");
+  const product = normalizeSlug(requireOption(values, "product"), "--product");
+  const capability = normalizeSlug(
+    requireOption(values, "capability"),
+    "--capability",
+  );
   checkStoreMarkdownFile(file, storeRoot);
   const lines = readFileSync(file, "utf8").split(/\r?\n/);
   const index = exactTargetIndex(lines, target, file);
   ensureNoAdjacentTrace(lines, index);
-  const id = `${kind === "scenario" ? "scn" : "tcase"}_${randomUUID()}`;
+  const markerKind = kind === "scenario" ? "SC" : "TC";
+  const sequence = nextSequence(storeRoot, product, capability);
+  const id = formatReference(product, markerKind, capability, sequence);
   let marker;
   if (kind === "scenario") {
     if (!/^\s*####\s+Scenario:\s+\S/.test(target))
       fail("scenario target must be one exact #### Scenario heading line");
-    const key = requireOption(values, "key");
-    if (!semanticKey(key) || positionalKey(key))
-      fail("--key must be a lower-case semantic slug, not a positional US, SC, or TC id");
-    marker = `trace:scenario id=${id} key=${key} rev=1`;
+    marker = `trace:scenario id=${id} rev=1`;
   } else {
     if (!/^\s*###\s+\S/.test(target))
       fail("case target must be one exact ### case heading line");
-    const covers = requireOption(values, "covers").split(",");
-    if (covers.some((item) => !item) || new Set(covers).size !== covers.length)
-      fail("--covers must be a comma-separated list of distinct scn_ ids");
-    if (covers.some((item) => !validId("scn", item)))
-      fail("--covers may contain only scn_ ids");
+    const covers = requireOption(values, "covers")
+      .split(",")
+      .map((item) => normalizeInputReference(item, "SC", "--covers"));
+    if (new Set(covers).size !== covers.length)
+      fail("--covers must be a comma-separated list of distinct SC ids");
     validateReferencesForMutation(storeRoot, "scenario", covers);
     marker = `trace:case id=${id} rev=1 covers=${covers.join(",")}`;
   }
@@ -553,18 +633,19 @@ function linkTest(values) {
 
   let marker;
   if (hasAcceptance) {
-    const match = /^(tcase_[a-z0-9][a-z0-9_-]*)@(\d+)$/.exec(values.acceptance);
+    const match = /^(.+)@(\d+)$/.exec(values.acceptance);
     if (!match || !positiveRevision(match[2]))
-      fail("--acceptance must be tcase_id@positive-revision");
-    const graph = validateReferencesForMutation(storeRoot, "case", [match[1]]);
-    const record = graph.cases.find((item) => item.id === match[1]);
+      fail("--acceptance must be <product>/TC/<capability>-<3-character-base36-sequence>@positive-revision");
+    const caseId = normalizeInputReference(match[1], "TC", "--acceptance");
+    const graph = validateReferencesForMutation(storeRoot, "case", [caseId]);
+    const record = graph.cases.find((item) => item.id === caseId);
     if (record.revision !== match[2])
-      fail(`--acceptance revision ${match[2]} is stale; current ${match[1]} revision is ${record.revision}`);
-    marker = `trace:acceptance=${values.acceptance}`;
+      fail(`--acceptance revision ${match[2]} is stale; current ${caseId} revision is ${record.revision}`);
+    marker = `trace:acceptance=${caseId}@${match[2]}`;
   } else {
-    if (!validId("scn", values.supports)) fail("--supports must be a scn_ id");
-    validateReferencesForMutation(storeRoot, "scenario", [values.supports]);
-    marker = `trace:supports=${values.supports}`;
+    const scenarioId = normalizeInputReference(values.supports, "SC", "--supports");
+    validateReferencesForMutation(storeRoot, "scenario", [scenarioId]);
+    marker = `trace:supports=${scenarioId}`;
   }
   insertMarker({ file, target, marker, syntax: "line", dryRun: values.dryRun });
 }
@@ -595,12 +676,13 @@ function parseCommand(argv) {
     options: {
       acceptance: { type: "string" },
       appRoot: { type: "string" },
+      capability: { type: "string" },
       covers: { type: "string" },
       dryRun: { type: "boolean", default: false },
       file: { type: "string" },
       help: { type: "boolean", short: "h", default: false },
       json: { type: "boolean", default: false },
-      key: { type: "string" },
+      product: { type: "string" },
       storeRoot: { type: "string" },
       supports: { type: "string" },
       target: { type: "string" },

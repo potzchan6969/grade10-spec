@@ -7,35 +7,38 @@ The trace CLI joins selected OpenSpec scenarios, feature cases, and application 
 Place each marker immediately above the heading or test line it belongs to:
 
 ```markdown
-<!-- trace:scenario id=scn_<stable-id> key=visitor-signs-in rev=1 -->
-#### Scenario: Existing scenario heading
+<!-- trace:scenario id=auction/SC/listing-media-c93 rev=1 -->
+#### Scenario: The gallery refuses a ninth media item
 
-<!-- trace:case id=tcase_<stable-id> rev=1 covers=scn_<stable-id> -->
-### Existing case heading
+<!-- trace:case id=auction/TC/listing-media-c94 rev=2 covers=auction/SC/listing-media-c93 -->
+### The gallery refuses a ninth media item
 ```
 
 ```ts
-// trace:acceptance=tcase_<stable-id>@1
-test("the case's full outcome", () => {});
+// trace:acceptance=auction/TC/listing-media-c94@2
+test("the gallery refuses a ninth media item", () => {});
 
-// trace:supports=scn_<stable-id>
-test("a supporting behavior", () => {});
+// trace:supports=auction/SC/listing-media-c93
+test("supporting gallery behavior", () => {});
 ```
 
-- **Scenario id** - `scn_` plus an immutable generated id. The semantic `key` is editable and names the behavior in plain words. It is not a cross-artifact reference.
-- **Case id** - `tcase_` plus an immutable generated id. `covers` names one or more `scn_` ids, separated by commas.
-- **Revision** - a positive integer, starting at `1`. Increase it when the scenario or case meaning changes. An acceptance test names the exact current case revision; `supports` names a scenario id directly.
-- **Legacy identifiers** - existing `US`, `SC`, and `TC` headings and `**Trace:**` lines remain as they are. They do not become keys in this graph.
-- **Scope** - initialize markers only for records whose app-test relationship needs stable tracking. Existing scenarios and cases are not backfilled by this change.
+- **Reference** - `<product>/<US|SC|TC>/<capability-slug>-<seq>`. `US` identifies a user story, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
+- **Casing** - Product, capability, and sequence use lowercase letters. The kind token is the fixed uppercase value `US`, `SC`, or `TC`. CLI inputs are case-insensitive and are written in canonical casing. A stored marker with different casing fails validation as `noncanonical-id`.
+- **Capability slug** - The capability slug stays stable across its user stories, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
+- **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization starts at `001` and takes the next value after the highest existing scenario or case marker for that product and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
+- **Scenario id** - An `SC` reference identifies one scenario. A scenario marker carries its positive `rev`.
+- **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A case can cover multiple scenarios, and a scenario can be covered by multiple cases.
+- **Revision** - A positive integer, starting at `1`. Increase it when the scenario or case meaning changes. An acceptance test names the exact current case revision; `supports` names a scenario directly.
 
 ## Commands
 
 Run the CLI from this repository:
 
 ```sh
-pnpm run trace -- init scenario --file openspec/specs/<path>/spec.md --target '#### Scenario: Exact existing heading' --key visitor-signs-in --dry-run
-pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --covers scn_<stable-id> --dry-run
-pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance tcase_<stable-id>@1 --dry-run
+pnpm run trace -- init scenario --file openspec/specs/<path>/spec.md --target '#### Scenario: Exact existing heading' --product auction --capability listing-media --dry-run
+pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target '### Exact existing case heading' --product auction --capability listing-media --covers auction/SC/listing-media-c93 --dry-run
+pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance auction/TC/listing-media-c94@2 --dry-run
+pnpm run trace -- link --file <app-test-file> --target '  test("supporting behavior", () => {});' --supports auction/SC/listing-media-c93 --dry-run
 pnpm run trace -- validate --app-root <grade10-app-root>
 pnpm run trace -- report --app-root <grade10-app-root>
 ```
@@ -46,9 +49,9 @@ From a Grade10 app checkout, use the spec-store checkout explicitly:
 pnpm --dir <grade10-spec-root> run trace -- validate --app-root "$PWD"
 ```
 
-`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
+`--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--product` and `--capability`; it allocates the next sequence and accepts those slugs in any casing. `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
 
-`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate ids, malformed or non-positive revisions, malformed markers, unresolved references, marker adjacency, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
+`validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate ids, malformed or non-positive revisions, malformed markers, noncanonical casing, unresolved references, marker adjacency, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
 
 `report` lists the records and links and calls out unlinked records. A scenario is unlinked when no case covers it and no test supports it. A case is unlinked when no current acceptance test accepts it. Pass `--json` for structured output. `--store-root` selects another store root, chiefly for isolated fixtures.
 

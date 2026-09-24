@@ -62,8 +62,8 @@ test("validate and report build a graph from fixtures without a registry", () =>
   ]);
   assert.equal(report.status, 0, report.stderr || report.stdout);
   assert.match(report.stdout, /Trace report/);
-  assert.match(report.stdout, /tcase_demo_acceptance/);
-  assert.match(report.stdout, /scn_active_change/);
+  assert.match(report.stdout, /demo\/TC\/sign-in-003/);
+  assert.match(report.stdout, /demo\/SC\/active-change-001/);
   assert.match(report.stdout, /Unlinked records:/);
 
   const json = runCli([
@@ -82,7 +82,7 @@ test("validate and report build a graph from fixtures without a registry", () =>
   assert.equal(parsed.status, "valid");
 });
 
-test("validate reports duplicate ids, bad revisions, positional keys, unresolved refs, and stale links", () => {
+test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, unresolved refs, and stale links", () => {
   const result = runCli([
     "validate",
     "--store-root",
@@ -94,12 +94,20 @@ test("validate reports duplicate ids, bad revisions, positional keys, unresolved
   for (const code of [
     "duplicate-id",
     "invalid-revision",
-    "positional-key",
+    "invalid-id",
+    "noncanonical-id",
     "unresolved-reference",
     "stale-acceptance",
   ]) {
     assert.match(result.stdout, new RegExp(`\\[${code}\\]`));
   }
+  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-01/);
+  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-1234/);
+  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-0!1/);
+  assert.doesNotMatch(
+    result.stdout,
+    /case demo\/TC\/sign-in-010 covers unknown scenario demo\/SC\/sign-in-001/,
+  );
 });
 
 test("init and link dry runs preserve files and real runs add only adjacent markers", () => {
@@ -121,15 +129,20 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetScenario,
-      "--key",
-      "visitor-checks-settings",
+      "--product",
+      "DEMO",
+      "--capability",
+      "SIGN-IN",
       "--store-root",
       storeRoot,
       "--dry-run",
     ]);
     assert.equal(scenarioDryRun.status, 0, scenarioDryRun.stderr);
     assert.match(scenarioDryRun.stdout, /DRY RUN/);
-    assert.match(scenarioDryRun.stdout, /trace:scenario id=scn_/);
+    assert.match(
+      scenarioDryRun.stdout,
+      /trace:scenario id=demo\/SC\/sign-in-006 rev=1/,
+    );
     assert.equal(readFileSync(targetFile, "utf8"), originalSpec);
 
     const scenarioInit = runCli([
@@ -139,15 +152,19 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetScenario,
-      "--key",
-      "visitor-checks-settings",
+      "--product",
+      "DEMO",
+      "--capability",
+      "SIGN-IN",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(scenarioInit.status, 0, scenarioInit.stderr);
-    const scenarioMarker = /<!-- trace:scenario id=(scn_[a-z0-9_-]+) key=visitor-checks-settings rev=1 -->/.exec(readFileSync(targetFile, "utf8"));
+    const scenarioMarker =
+      /<!-- trace:scenario id=(demo\/SC\/sign-in-006) rev=1 -->/.exec(
+        readFileSync(targetFile, "utf8"),
+      );
     assert.ok(scenarioMarker);
-    const scenarioId = scenarioMarker[1];
     assert.equal(
       readFileSync(targetFile, "utf8"),
       originalSpec.replace(targetScenario, `${scenarioMarker[0]}\n${targetScenario}`),
@@ -161,14 +178,21 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetCase,
+      "--product",
+      "DEMO",
+      "--capability",
+      "SIGN-IN",
       "--covers",
-      scenarioId,
+      "DEMO/sc/SIGN-IN-001",
       "--store-root",
       storeRoot,
       "--dry-run",
     ]);
     assert.equal(caseDryRun.status, 0, caseDryRun.stderr);
-    assert.match(caseDryRun.stdout, /trace:case id=tcase_/);
+    assert.match(
+      caseDryRun.stdout,
+      /trace:case id=demo\/TC\/sign-in-007 rev=1 covers=demo\/SC\/sign-in-001/,
+    );
     assert.equal(readFileSync(targetFile, "utf8"), beforeCaseDryRun);
 
     const caseInit = runCli([
@@ -178,15 +202,21 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetCase,
+      "--product",
+      "DEMO",
+      "--capability",
+      "SIGN-IN",
       "--covers",
-      scenarioId,
+      "DEMO/sc/SIGN-IN-001",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(caseInit.status, 0, caseInit.stderr);
-    const caseMarker = /<!-- trace:case id=(tcase_[a-z0-9_-]+) rev=1 covers=/.exec(readFileSync(targetFile, "utf8"));
+    const caseMarker =
+      /<!-- trace:case id=(demo\/TC\/sign-in-007) rev=1 covers=demo\/SC\/sign-in-001 -->/.exec(
+        readFileSync(targetFile, "utf8"),
+      );
     assert.ok(caseMarker);
-    const caseId = caseMarker[1];
 
     const acceptanceDryRun = runCli([
       "link",
@@ -195,7 +225,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      `${caseId}@1`,
+      "DEMO/tc/SIGN-IN-007@1",
       "--store-root",
       storeRoot,
       "--dry-run",
@@ -210,12 +240,15 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      `${caseId}@1`,
+      "DEMO/tc/SIGN-IN-007@1",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(acceptanceLink.status, 0, acceptanceLink.stderr);
-    assert.match(readFileSync(appFile, "utf8"), new RegExp(`trace:acceptance=${caseId}@1\\n  test\\("the visitor updates settings"`));
+    assert.match(
+      readFileSync(appFile, "utf8"),
+      /trace:acceptance=demo\/TC\/sign-in-007@1\n  test\("the visitor updates settings"/,
+    );
 
     const supportLink = runCli([
       "link",
@@ -224,12 +257,15 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetSupportTest,
       "--supports",
-      scenarioId,
+      "DEMO/sc/SIGN-IN-001",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(supportLink.status, 0, supportLink.stderr);
-    assert.match(readFileSync(appFile, "utf8"), new RegExp(`trace:supports=${scenarioId}\\n  test\\("supporting settings detail"`));
+    assert.match(
+      readFileSync(appFile, "utf8"),
+      /trace:supports=demo\/SC\/sign-in-001\n  test\("supporting settings detail"/,
+    );
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -248,15 +284,25 @@ test("mutations refuse ambiguous targets and require exact file selectors", () =
       "--target",
       repeatedTarget,
       "--supports",
-      "scn_demo_signin",
+      "DEMO/sc/SIGN-IN-001",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(result.status, 2);
     assert.match(result.stderr, /ambiguous/);
-    assert.equal(readFileSync(appFile, "utf8"), `${repeatedTarget}\n${repeatedTarget}\n`);
+    assert.equal(
+      readFileSync(appFile, "utf8"),
+      `${repeatedTarget}\n${repeatedTarget}\n`,
+    );
 
-    const missingFileAndTarget = runCli(["init", "scenario", "--key", "visitor-signs-in"]);
+    const missingFileAndTarget = runCli([
+      "init",
+      "scenario",
+      "--product",
+      "demo",
+      "--capability",
+      "sign-in",
+    ]);
     assert.equal(missingFileAndTarget.status, 2);
     assert.match(missingFileAndTarget.stderr, /--file is required/);
   } finally {
