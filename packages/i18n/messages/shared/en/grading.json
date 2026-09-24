@@ -402,11 +402,19 @@
         "body": "{card} comes back raw, in a sleeve with the grader’s note: {code}, {note}. The grader charges its fee whether or not it encapsulates, so nothing is refunded for it.",
         "codesLink": "What the {grader} codes mean"
       },
-      "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect."
+      "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect.",
+      "cards": {
+        "ungradedTitle": "Ungraded",
+        "graderLabel": "Grader",
+        "codeLabel": "Grader's code"
+      }
     },
     "cards": {
       "title": "The cards · {count}",
       "declaredValues": "Declared values · change them until the cards are checked in",
+      "intakeIdLabel": "Intake id",
+      "declaredValueLabel": "Declared value",
+      "minimumGradeLabel": "Minimum grade",
       "intakeIds": "Intake ids and photographs",
       "intakeIdsOnly": "Intake ids, printed on the sleeves",
       "grades": "Grades in the grader’s words",
@@ -420,6 +428,8 @@
     },
     "pickup": {
       "title": "Pickup code · show it at the counter",
+      "codeLabel": "Code",
+      "itemsLabel": "Items",
       "items": "{count} items · {slabs} slabs, {raw} raw cards",
       "where": "Where",
       "open": "Open",
@@ -501,6 +511,7 @@
       "title": "Documents",
       "agreement": "Submission agreement",
       "intakeReceipt": "Intake receipt",
+      "withdrawalReceipt": "Withdrawal receipt",
       "handbackReceipt": "Hand-back receipt",
       "signedAt": "Signed {when}",
       "issuedAt": "Issued {when}"

@@ -402,11 +402,19 @@
         "body": "{card} 会连同评级公司的说明退回，放在卡套内未入壳：{code}，{note}。无论是否入壳，评级公司都会收费，所以这张卡不设退款。",
         "codesLink": "{grader} 的代码是什么意思"
       },
-      "aboutGrades": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；领回时可在柜台查询。"
+      "aboutGrades": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；领回时可在柜台查询。",
+      "cards": {
+        "ungradedTitle": "未评级",
+        "graderLabel": "评级公司",
+        "codeLabel": "评级公司代码"
+      }
     },
     "cards": {
       "title": "卡牌 · {count} 张",
       "declaredValues": "申报价值 · 卡牌交收之前都可以更改",
+      "intakeIdLabel": "收件编号",
+      "declaredValueLabel": "申报价值",
+      "minimumGradeLabel": "最低评分",
       "intakeIds": "收件编号与相片",
       "intakeIdsOnly": "收件编号，已印在卡套上",
       "grades": "成绩以评级公司的说法显示",
@@ -420,6 +428,8 @@
     },
     "pickup": {
       "title": "取件码 · 在柜台出示",
+      "codeLabel": "取件码",
+      "itemsLabel": "物品",
       "items": "{count} 件 · {slabs} 个卡壳、{raw} 张裸卡",
       "where": "地点",
       "open": "营业时间",
@@ -501,6 +511,7 @@
       "title": "文件",
       "agreement": "评级委托协议",
       "intakeReceipt": "收件单据",
+      "withdrawalReceipt": "撤回收据",
       "handbackReceipt": "交收单据",
       "signedAt": "{when} 签署",
       "issuedAt": "{when} 发出"

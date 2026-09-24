@@ -402,11 +402,19 @@
         "body": "{card}은(는) 슬랩에 들어가지 않고 감정사의 설명과 함께 슬리브에 담겨 돌아옵니다: {code}, {note}. 슬랩 여부와 관계없이 감정사는 요금을 받으므로 이 카드는 환불되지 않습니다.",
         "codesLink": "{grader} 코드의 의미"
       },
-      "aboutGrades": "등급은 저희가 아니라 감정사의 판단입니다. 다시 보시려면 감정사의 재심 요금으로 새 신청을 하셔야 합니다. 찾아가실 때 창구에 문의해 주세요."
+      "aboutGrades": "등급은 저희가 아니라 감정사의 판단입니다. 다시 보시려면 감정사의 재심 요금으로 새 신청을 하셔야 합니다. 찾아가실 때 창구에 문의해 주세요.",
+      "cards": {
+        "ungradedTitle": "미감정",
+        "graderLabel": "감정사",
+        "codeLabel": "감정사 코드"
+      }
     },
     "cards": {
       "title": "카드 · {count}장",
       "declaredValues": "신고 가액 · 접수 전까지 바꾸실 수 있습니다",
+      "intakeIdLabel": "접수 번호",
+      "declaredValueLabel": "신고 가액",
+      "minimumGradeLabel": "최저 등급",
       "intakeIds": "접수 번호와 사진",
       "intakeIdsOnly": "슬리브에 인쇄된 접수 번호",
       "grades": "감정사의 표현 그대로의 결과",
@@ -420,6 +428,8 @@
     },
     "pickup": {
       "title": "픽업 코드 · 창구에서 보여주세요",
+      "codeLabel": "코드",
+      "itemsLabel": "물품",
       "items": "{count}점 · 슬랩 {slabs}개, 생카드 {raw}장",
       "where": "장소",
       "open": "영업시간",
@@ -501,6 +511,7 @@
       "title": "문서",
       "agreement": "감정 위탁 계약서",
       "intakeReceipt": "접수 영수증",
+      "withdrawalReceipt": "철회 영수증",
       "handbackReceipt": "전달 영수증",
       "signedAt": "{when} 서명",
       "issuedAt": "{when} 발행"
