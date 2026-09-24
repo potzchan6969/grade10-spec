@@ -1209,7 +1209,7 @@ badges, its tiles and the day's strip are the whole signal.
 #### Scenario: grade10-admin-grading-counter-SC-99 - A read holder opens the settings and changes nothing
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
-- **GIVEN** an operator holding `grading:read` alone
+- **GIVEN** an operator without `grading:approve`
 - **WHEN** they open the settings
 - **THEN** every setting is listed with its value and the owner who confirms it, no field opens, and sending a write is refused by name
 

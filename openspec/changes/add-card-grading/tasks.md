@@ -1504,7 +1504,7 @@ name (`GRADING_NOT_OPEN`) and keeps the reads open; 23.6 removes the refusal.
 
 Stage (b).
 
-- [ ] 24.1 Cover the reads with both halves — the query shape and the rows: one
+- [x] 24.1 Cover the reads with both halves — the query shape and the rows: one
       `GROUP BY status` folded onto the seven cuts, the Today strip in slot
       order, the cursor, the row's own fields and every badge worked out at the
       read, the four tiles' folds, the timeline, the settings' refusals and the
@@ -1536,7 +1536,7 @@ Stage (b).
       `grade10-admin-grading-counter-SC-84`,
       `grade10-admin-grading-batches-SC-09`,
       `grade10-admin-grading-batches-SC-49`)
-- [ ] 24.2 Add `admin.queue` and `admin.queueCounts` — one `GROUP BY status`
+- [x] 24.2 Add `admin.queue` and `admin.queueCounts` — one `GROUP BY status`
       folded onto the seven cuts with every status in exactly one home, the
       Today cut carrying the day's drop-offs in slot order, a page resuming on
       its cursor, and a plan nobody booked off the queue
@@ -1545,7 +1545,7 @@ Stage (b).
       `grade10-admin-grading-counter-SC-03`,
       `grade10-admin-grading-counter-SC-04`,
       `grade10-admin-grading-counter-SC-85`)
-- [ ] 24.3 Carry on each row the submission id, the collector, the card count,
+- [x] 24.3 Carry on each row the submission id, the collector, the card count,
       the grader and level, the collector's status word, the visit, when it was
       last touched, and every reason it waits on somebody — the drop-off today,
       uncollected at thirty days, the notice due at a hundred and eighty, a
@@ -1558,7 +1558,7 @@ Stage (b).
       `grade10-admin-grading-counter-SC-08`,
       `grade10-admin-grading-counter-SC-09`,
       `grade10-admin-grading-counter-SC-10`)
-- [ ] 24.4 Add `admin.tiles` — the ready slabs still in the safe against its
+- [x] 24.4 Add `admin.tiles` — the ready slabs still in the safe against its
       declared cap, what is owed, the batch closing and the batches with
       graders — folded at one instant in the brand's zone; a closed batch with
       no submission at `checked_in` neither ships nor counts. Add
@@ -1570,38 +1570,38 @@ Stage (b).
       `grade10-admin-grading-counter-SC-87`,
       `grade10-admin-grading-batches-SC-09`,
       `grade10-admin-grading-batches-SC-49`)
-- [ ] 24.5 Add `admin.detail` with the timeline, `isCustomerEvent` deciding who
+- [x] 24.5 Add `admin.detail` with the timeline, `isCustomerEvent` deciding who
       sees an entry so a staff-only one never reaches the collector, and the
       grader's stage standing in its own words
       (`grade10-admin-grading-counter-SC-56`,
       `grade10-admin-grading-counter-SC-57`,
       `grade10-admin-grading-counter-SC-58`)
-- [ ] 24.6 Add `admin.updateSetting` under `grading:approve` over group 9's
+- [x] 24.6 Add `admin.updateSetting` under `grading:approve` over group 9's
       `settings/read.ts`: a money key taking an approver who is not the caller,
       every write filed under the `settings` subject, and a surface that needs
       a key nobody has written refused by name rather than run on a default
       (`grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-70`,
       `grade10-admin-grading-counter-SC-71`)
-- [ ] 24.7 Map every admin procedure to its grant in
+- [x] 24.7 Map every admin procedure to its grant in
       `contracts/src/permissions.ts`, pinned both ways by a test, with the
       settings read-only below `grading:approve` and the operator's
       verification standing for twelve hours
       (`grade10-admin-grading-counter-SC-76`,
       `grade10-admin-grading-counter-SC-78`,
       `grade10-admin-grading-counter-SC-79`)
-- [ ] 24.8 Hash-chain the audit log so one submission's trail is one query, and
+- [x] 24.8 Hash-chain the audit log so one submission's trail is one query, and
       refuse independently of the console what a stale screen offers
       (`grade10-admin-grading-counter-SC-80`,
       `grade10-admin-grading-counter-SC-84`)
-- [ ] 24.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 24.9 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
-- [ ] 24.10 Add `admin.receiving` for one batch — the manifest's lines with
+- [x] 24.10 Add `admin.receiving` for one batch — the manifest's lines with
       what each matched, the invoice as entered, and the counters folded from
       them: scanned of the batch's cards, matched, ungraded, the upcharges and
       their sum, and the submissions ready once finished
       (`grade10-admin-grading-batches-SC-29`)
-- [ ] 24.11 Add the settings page's reads under `grading:read`:
+- [x] 24.11 Add the settings page's reads under `grading:read`:
       `admin.settings`, every key with its value or unset, the owner who
       confirms it, whether it is money, who wrote and approved it and when,
       and its pending request; `admin.feeSheet`, each row with the figures it
@@ -1610,7 +1610,7 @@ Stage (b).
       (`grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-98`,
       `grade10-admin-grading-counter-SC-99`)
-- [ ] 24.12 Add `admin.updateFeeSheet` as a request, and make
+- [x] 24.12 Add `admin.updateFeeSheet` as a request, and make
       `admin.approveRequest` the one approval over every request — a money
       act, a money setting, a fee-sheet row — each asked against the
       version of the row it would write and refused by name once that row
@@ -1618,7 +1618,7 @@ Stage (b).
       confirmed value (`grade10-admin-grading-counter-SC-70`,
       `grade10-admin-grading-counter-SC-71`,
       `grade10-admin-grading-counter-SC-76`)
-- [ ] 24.13 Add `admin.pendingApprovals`, every request still waiting on a
+- [x] 24.13 Add `admin.pendingApprovals`, every request still waiting on a
       second approve holder, which 28.7's approvals read
       (`grade10-admin-grading-counter-SC-59`,
       `grade10-admin-grading-counter-SC-60`,

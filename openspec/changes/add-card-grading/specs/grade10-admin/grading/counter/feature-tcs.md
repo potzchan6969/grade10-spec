@@ -3257,7 +3257,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-US14-TC3-1` | Covered | `grade10-admin-grading-counter-SC-84` |
 | `grade10-admin-grading-counter-US14-TC4-1` | Covered | `grade10-admin-grading-counter-SC-75` |
 | `grade10-admin-grading-counter-US14-TC5-1` | Folded | An operator holding more than one grant being offered the acts of each reached no scenario; the grants requirement gains the rule and it is folded as `grade10-admin-grading-counter-SC-100` |
-| `grade10-admin-grading-counter-US15-TC1-1` | Raised, answered, folded | The blind pass could not tell whether a bare `grading:read` opens the settings at all. Answered: it opens them read-only, with every value and the owner who confirms it, and only `grading:approve` edits them. The feature set's grants line and the grants table are amended, folded as `grade10-admin-grading-counter-SC-99`, and landed as `Q77` |
+| `grade10-admin-grading-counter-US15-TC1-1` | Raised, answered, folded | The blind pass could not tell whether an operator without `grading:approve` opens the settings at all. Answered: it opens them read-only, with every value and the owner who confirms it, and only `grading:approve` edits them. The feature set's grants line and the grants table are amended, folded as `grade10-admin-grading-counter-SC-99`, and landed as `Q77` |
 | `grade10-admin-grading-counter-US15-TC2-1` | Covered | `grade10-admin-grading-counter-SC-71` |
 | `grade10-admin-grading-counter-US15-TC3-1` | Covered | `grade10-admin-grading-counter-SC-70` |
 | `grade10-admin-grading-counter-US15-TC4-1` | Covered | `grade10-admin-grading-counter-SC-60` |
