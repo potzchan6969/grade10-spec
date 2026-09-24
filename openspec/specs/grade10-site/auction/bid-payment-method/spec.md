@@ -21,6 +21,12 @@ preview.
   - Raised commitment: a higher maximum raises the existing authorization
   - Accepted after authorization: a bid is not accepted until the authorization
     is confirmed
+- Raised authorization
+  - Existing hold increment: raises one active authorization to the new committed maximum
+  - Provider eligibility: asks for incremental and extended authorization when the payment method supports them
+- Refusal resolution
+  - Terminal raise outcome: resolves a refused raise without changing the prior accepted commitment
+  - Pending cleanup: prevents a completed provider refusal from leaving a bid that blocks the next action
 - Bid-CTA outcomes
   - Decline and unusable method: refusal copy near the bid action
   - Provider failure: distinct network/provider failure copy
