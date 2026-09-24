@@ -3,3 +3,5 @@ created: 2026-09-17
 promoted_by: "@htonyl"
 depends_on:
   - close-overdue-address-confirmation
+reviewed:
+  user-journeys: 15d89ce9
