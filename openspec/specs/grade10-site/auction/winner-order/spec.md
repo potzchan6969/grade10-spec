@@ -243,16 +243,19 @@ info tooltip beside it.
 **Copy** - The tooltip SHALL read `0.9% of the order value during transit.`
 
 #### Scenario: winner-order-SC-169 - A shown Insurance line carries its info tooltip
-**Serves:** winner-order-US-01 - the winner reads Order Summary while settling the lot
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling
+the lot
 
-- **GIVEN** an operator sent an invoice with Insurance of 4000 minor units in HKD
+- **GIVEN** an operator sent an invoice with Insurance of 4000 minor units in
+  HKD
 - **WHEN** the winner opens Winner Order
 - **THEN** the Insurance line shows 4000 minor units in HKD
 - **AND** the line offers a brief info tooltip
 - **AND** the tooltip reads `0.9% of the order value during transit.`
 
 #### Scenario: winner-order-SC-170 - An absent Insurance line offers no tooltip
-**Serves:** winner-order-US-01 - the winner reads Order Summary while settling the lot
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling
+the lot
 
 - **GIVEN** an operator sent an invoice without adding Insurance
 - **WHEN** the winner opens Winner Order
@@ -271,7 +274,8 @@ summary SHALL show Insurance as TBD with the other fee rows.
 invoice is sent.
 
 #### Scenario: winner-order-SC-171 - Insurance reads TBD before the invoice is sent
-**Serves:** winner-order-US-01 - the winner reads Order Summary before the invoice is sent
+**Serves:** winner-order-US-01 - the winner reads Order Summary before the
+invoice is sent
 
 - **GIVEN** an auction order before an operator has sent its invoice
 - **WHEN** the winner reads the order summary
@@ -2137,3 +2141,4 @@ showing the operator's proof or a Stripe provider reference.
 - **AND** Reference shows the operator's bank provider reference
 - **AND** Note is not shown
 - **AND** the full account number and proof are not shown
+
