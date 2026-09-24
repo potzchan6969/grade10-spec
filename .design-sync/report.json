@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-24T07:50:09.560Z",
+  "generatedAt": "2026-09-24T10:42:32.989Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -40,6 +40,7 @@
     "Link": "skipped",
     "List": "skipped",
     "List Item": "warn",
+    "ListingLotGallery": "warn",
     "Login Dialog": "warn",
     "Nav": "ok",
     "Navigation List": "skipped",
@@ -841,6 +842,12 @@
     "6951-6": "CarouselProgress",
     "6951-8": "CarouselProgress",
     "6951-9": "Page title",
+    "6959-13518": "Product Gallery",
+    "6965-5290": "Page title",
+    "6965-5291": "Page description",
+    "6965-5292": "ListingLotGallery",
+    "6965-5320": "ListingLotGallery",
+    "6965-5323": "ListingLotGallery",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -920,6 +927,10 @@
     ],
     "List Item": [
       "List Item: no code component (looked for src/components/**/listitem.tsx or listitem.tsx)"
+    ],
+    "ListingLotGallery": [
+      "ListingLotGallery: description \"Auction lot media gallery.\" is not in packages/ui/src/blocks/auction-listing/listing-lot-gallery.tsx — carry it into the JSDoc, or fix the description in Figma",
+      "ListingLotGallery.images: no getEnum('images') in any template — this Figma axis reaches no code prop"
     ],
     "Login Dialog": [
       "Login Dialog: no code component (looked for src/components/**/logindialog.tsx or logindialog.tsx)"
