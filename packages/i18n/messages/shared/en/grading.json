@@ -246,6 +246,7 @@
     "joined": "This submission joins the drop-off you already have on {day}, {time}. One visit, both lists.",
     "resized": "Both lists together pass {standard} cards, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
     "alreadyBooked": "You already have a visit booked for this day. Pick another.",
+    "conflict": "This booking has moved on since you read it. We’re reading the latest — pick a time again.",
     "booked": {
       "title": "Your drop-off is booked",
       "emailLine": "A confirmation is on its way by email, with a calendar file and this submission’s link. We remind you the day before.",
@@ -255,7 +256,7 @@
       "beforeYouCome": {
         "title": "Before you come",
         "cards": {
-          "title": "Bring the {count} cards, each in a sleeve",
+          "title": "{count, plural, one {Bring the # card, each in a sleeve} other {Bring the # cards, each in a sleeve}}",
           "body": "Penny sleeves are fine. No toploaders taped shut, and nothing you want back: the grader keeps the sleeve."
         },
         "list": {
@@ -264,7 +265,8 @@
         },
         "pay": {
           "title": "Sign on our iPad, then pay {amount} at the counter",
-          "body": "Once every card is checked with you and photographed. By card, cash or FPS at the till."
+          "body": "Once every card is checked with you and photographed. By card, cash or FPS at the till.",
+          "cover": "Cover"
         },
         "leave": {
           "title": "Your cards leave on {shipDay}",
