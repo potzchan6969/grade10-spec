@@ -24,12 +24,16 @@ type GradingFeeSheetCopy = {
   weeks: string;
   /** What a level carrying no cover rate reads in the cover column. */
   noCover: string;
+  /** What a level nobody has priced reads where a figure would be. */
+  noFigure: string;
 };
 
 type GradingFeeSheetProps = GradingLocaleProps & {
   copy: GradingFeeSheetCopy;
   graders: readonly GradingFeeSheetRecord[];
   selectedGraderId: string;
+  /** The rung the sheet's title takes under the page's own headings. */
+  titleAs?: "h2" | "h3";
   /** What a card worth more than any level takes reads, where given. */
   aboveTopLine?: string;
   onSelectGrader: (graderId: string) => void;
@@ -42,7 +46,8 @@ type GradingFeeSheetProps = GradingLocaleProps & {
  *
  * Every figure is the record it was given, so this block and
  * `GradingLevelPicker` are two drawings of one sheet and cannot disagree. One
- * grader draws no grader control.
+ * grader draws no grader control. A level nobody has priced reads the
+ * no-figure word where its ceiling and fee would be, never a price of nought.
  *
  * A `selectedGraderId` naming no grader throws by name rather than falling
  * back to the first: a page that believes one grader is picked must not read
@@ -54,6 +59,7 @@ function GradingFeeSheet({
   selectedGraderId,
   aboveTopLine,
   onSelectGrader,
+  titleAs = "h2",
   locale = "en",
   className,
 }: GradingFeeSheetProps) {
@@ -66,7 +72,7 @@ function GradingFeeSheet({
 
   return (
     <VStack className={className} data-slot="grading-fee-sheet" gap="md">
-      <Text as="h2" size="lg" weight="medium">
+      <Text as={titleAs} size="lg" weight="medium">
         {copy.title}
       </Text>
       {graders.length > 1 ? (
@@ -103,10 +109,16 @@ function GradingFeeSheet({
           {selected.levels.map((level) => (
             <TableRow data-slot="grading-fee-sheet-level" key={level.id}>
               <TableCell>{level.name}</TableCell>
-              <TableCell>{formatGradingMoney(level.ceiling, locale)}</TableCell>
+              <TableCell>
+                {level.ceiling
+                  ? formatGradingMoney(level.ceiling, locale)
+                  : copy.noFigure}
+              </TableCell>
               <TableCell>{level.cardsPerSubmission}</TableCell>
               <TableCell>
-                {formatGradingMoney(level.feePerCard, locale)}
+                {level.feePerCard
+                  ? formatGradingMoney(level.feePerCard, locale)
+                  : copy.noFigure}
               </TableCell>
               <TableCell>{level.coverRate ?? copy.noCover}</TableCell>
               <TableCell>{level.weeks}</TableCell>

@@ -42,14 +42,16 @@
         "feePerCard": "Fee per card",
         "cover": "Cover",
         "weeks": "Back in about",
-        "noCover": "—"
+        "noCover": "—",
+        "noFigure": "—"
       },
       "row": "Cards up to {ceiling} · back in about {weeks} weeks",
       "perCard": "a card",
       "coverLine": "+ {rate} cover",
       "graders": "Each grader has its own sheet; the others are on their tabs when you pick the service.",
       "aboveTop": "A card worth more than {ceiling}? Ask at the counter or WhatsApp us first, so the right level is ready.",
-      "bulkLine": "Twenty cards or more take the Bulk level and a longer drop-off, booked the same way."
+      "bulkLine": "Twenty cards or more take the Bulk level and a longer drop-off, booked the same way.",
+      "error": "We could not load the prices. Try again in a moment."
     },
     "submissions": {
       "title": "Your submissions",
@@ -58,7 +60,9 @@
       "empty": "Nothing here yet. Start a submission and it shows up here.",
       "emptySignedOut": "Sign in to see yours here",
       "open": "Planned {day} · {amount} at the counter",
-      "closed": "{grades} · certs on the page"
+      "closed": "{grades} · certs on the page",
+      "cards": "{count, plural, one {# card} other {# cards}}",
+      "service": "{grader} · {level}"
     },
     "lostLink": "Every submission is also reachable from its emailed link, with no account. Lost the link? Sign in with the same email; there is no password."
   },
@@ -90,7 +94,8 @@
       "minimumGrade": "Only encapsulate at {grade} or above · the fee applies either way",
       "noValue": "Tell us the declared value before you continue.",
       "aboveCeiling": "{name} is worth more than this level takes. It goes in a second submission at a higher level, on the same drop-off.",
-      "referenceUnavailable": "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed."
+      "referenceUnavailable": "We could not reach the catalogue, so this card keeps the name you typed. The value is still needed.",
+      "ungraded": "Ungraded"
     },
     "add": "Add a card",
     "paste": "Paste a list",
@@ -122,7 +127,9 @@
       "skipped": "{count} skipped — already on your list.",
       "bulkNotice": "{count} cards: more than {standard}, so Bulk is the only level open at the next step. At {grader} that is {fee} a card, cards up to {ceiling}, about {weeks} weeks and the longer drop-off; up to {bulk} cards a submission.",
       "add": "Add {count} cards to the list",
-      "goBack": "Go back"
+      "goBack": "Go back",
+      "toCounter": "{count} worth more than any level takes — {names}: ask at the counter or WhatsApp us first.",
+      "failed": "We could not read the list just now. Try again in a moment."
     },
     "service": {
       "title": "Pick the grader and the level",
@@ -145,7 +152,8 @@
         "perCard": "{count} cards × {fee} · {grader} {level}",
         "coverPerCard": "Cover {rate} of the declared value · {amount} a card",
         "paidAtCounter": "Paid at the counter once the cards are checked.",
-        "includes": "Includes the grader’s fee and insured shipping both ways."
+        "includes": "Includes the grader’s fee and insured shipping both ways.",
+        "total": "Total"
       },
       "upchargeNotice": "If a card comes back worth more than the level allows, the grader moves it up a level and we pass on the difference. You are told the amount before you collect, never at the counter."
     },
@@ -188,13 +196,28 @@
         "collect": {
           "title": "We do not ship slabs back",
           "body": "You collect in person, or someone you name on the submission page collects for you."
-        }
+        },
+        "line": "{title} — {body}"
       },
       "consent": "I have read the personal information collection statement.",
       "book": "Book the drop-off",
       "saveForLater": "Save and book later",
-      "expired": "This list has expired. Prices and references move, so start again from the price sheet."
-    }
+      "expired": "This list has expired. Prices and references move, so start again from the price sheet.",
+      "failed": "We could not save this just now. Try again in a moment.",
+      "minimumGrade": "Minimum grade"
+    },
+    "search": {
+      "label": "Card name",
+      "placeholder": "Start typing the card's name",
+      "addTyped": "Add this card"
+    },
+    "empty": {
+      "title": "No cards yet",
+      "body": "Add a card by its name, or paste a list of them."
+    },
+    "withoutValue": "{count, plural, one {One card is} other {# cards are}} still without a declared value.",
+    "kept": "Your list is kept. We emailed its link to {email}, so you can finish on any device.",
+    "keepFailed": "We could not keep your list just now. Try again in a moment."
   },
   "dropoff": {
     "title": "Book the drop-off",
@@ -655,5 +678,19 @@
     "error": {
       "diaryUnavailable": "We could not read the diary, so the letter has nothing to print. Try again in a moment."
     }
+  },
+  "graders": {
+    "psa": "PSA",
+    "cgc": "CGC",
+    "bgs": "BGS",
+    "grade": "{grader} {grade}",
+    "noFigures": "{grader} has not confirmed its fees yet, so its levels cannot be picked."
+  },
+  "levels": {
+    "value": "Value",
+    "regular": "Regular",
+    "express": "Express",
+    "super_express": "Super Express",
+    "bulk": "Bulk"
   }
 }

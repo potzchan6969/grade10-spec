@@ -17,6 +17,7 @@ import { CheckboxListInput } from "@grade10/design-system/components/forms/check
 import { NumberInput } from "@grade10/design-system/components/forms/number-input";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
+import { useState } from "react";
 import type { AsyncState } from "../shared/async";
 import { AsyncMessage } from "../shared/async-message";
 import {
@@ -33,7 +34,8 @@ type GradingCardAddition =
 
 /** The cap on one submission, and the level the count leaves open. */
 type GradingCardListCap = {
-  count: number;
+  /** The most cards the list takes; null where the sheet sets no most. */
+  count: number | null;
   /** The cap in the consumer's words. */
   line: string;
   /** The level this many cards closes, where the consumer names one. */
@@ -78,7 +80,10 @@ type GradingCardListProps = GradingLocaleProps & {
   onAdd: (addition: GradingCardAddition) => void;
   onEdit: (cardId: string) => void;
   onRemove: (cardId: string) => void;
-  /** The value as the collector typed it; the consumer reads it into minor units. */
+  /**
+   * The value as the collector typed it, reported once the field is left or
+   * Enter is pressed; the consumer reads it into minor units.
+   */
   onDeclare: (cardId: string, declared: string) => void;
   onMinimumGrade: (cardId: string, wanted: boolean) => void;
   onPaste: () => void;
@@ -95,6 +100,11 @@ const NO_MATCHES: readonly GradingCardMatch[] = [];
  * The card search is an `Autocomplete` with `mode="none"` — the matches are
  * the consumer's, filtered wherever the consumer filters, and the popup is the
  * listbox the primitive draws rather than a column of buttons.
+ *
+ * The declared value is a field of its own on a card with none, or on one the
+ * consumer reopens with `editing`: what is typed stays in the field and is
+ * reported once, when the field is left or Enter is pressed, so a value is
+ * never read off a keystroke halfway through it.
  *
  * The cap, the card with no value and the card above a ceiling are each named
  * in the consumer's words. Every act reports through a callback of its own and
@@ -117,7 +127,7 @@ function GradingCardList({
   locale = "en",
   className,
 }: GradingCardListProps) {
-  const atCap = cards.length >= cap.count;
+  const atCap = cap.count !== null && cards.length >= cap.count;
   const unreachable = search.status === "error";
 
   return (
@@ -296,23 +306,30 @@ function ListedCard({
               </Button>
             </HStack>
           </HStack>
-          {card.declaredValue ? (
+          {card.declaredValue && !card.editing ? (
             <Text size="sm">
               {`${copy.declaredValueLabel}: ${formatGradingMoney(card.declaredValue, locale)}`}
             </Text>
           ) : (
             <VStack gap="xs" hAlign="stretch">
-              <NumberInput
+              <DeclaredValueField
                 label={copy.declaredValueLabel}
-                onChange={(event) => onDeclare(card.id, event.target.value)}
+                onCommit={(typed) => onDeclare(card.id, typed)}
+                placeholder={
+                  card.declaredValue
+                    ? formatGradingMoney(card.declaredValue, locale)
+                    : undefined
+                }
               />
-              <Text
-                data-slot="grading-card-list-no-value"
-                size="sm"
-                tone="warning"
-              >
-                {copy.noValue}
-              </Text>
+              {card.declaredValue ? null : (
+                <Text
+                  data-slot="grading-card-list-no-value"
+                  size="sm"
+                  tone="warning"
+                >
+                  {copy.noValue}
+                </Text>
+              )}
             </VStack>
           )}
           {card.aboveCeilingLine ? (
@@ -353,6 +370,38 @@ function ListedCard({
         </VStack>
       </CardContent>
     </Card>
+  );
+}
+
+/**
+ * The declared value as it is being typed. What is typed is the field's own
+ * until it is left or Enter is pressed, and only then reported; an empty
+ * field reports nothing, so leaving a reopened value untouched keeps it.
+ */
+function DeclaredValueField({
+  label,
+  placeholder,
+  onCommit,
+}: {
+  label: string;
+  placeholder?: string;
+  onCommit: (typed: string) => void;
+}) {
+  const [typed, setTyped] = useState("");
+  const commit = () => {
+    if (typed.trim() !== "") onCommit(typed);
+  };
+  return (
+    <NumberInput
+      label={label}
+      onBlur={commit}
+      onChange={(event) => setTyped(event.target.value)}
+      onKeyDown={(event) => {
+        if (event.key === "Enter") commit();
+      }}
+      placeholder={placeholder}
+      value={typed}
+    />
   );
 }
 

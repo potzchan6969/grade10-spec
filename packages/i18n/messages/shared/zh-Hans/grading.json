@@ -42,14 +42,16 @@
         "feePerCard": "每张收费",
         "cover": "保额",
         "weeks": "约需时间",
-        "noCover": "—"
+        "noCover": "—",
+        "noFigure": "—"
       },
       "row": "卡值上限 {ceiling} · 约 {weeks} 星期回到门店",
       "perCard": "每张",
       "coverLine": "另加 {rate} 保额",
       "graders": "每间评级公司各有收费表；选服务时可在其分页查看其余几间。",
       "aboveTop": "有卡值超过 {ceiling}？请先到柜台或 WhatsApp 我们，好让我们预备合适级别。",
-      "bulkLine": "二十张或以上走 Bulk 级别，交卡时间较长，同样在此预约。"
+      "bulkLine": "二十张或以上走 Bulk 级别，交卡时间较长，同样在此预约。",
+      "error": "暂时加载不到收费表，请稍后再试。"
     },
     "submissions": {
       "title": "你的清单",
@@ -58,7 +60,9 @@
       "empty": "这里暂时空空如也。开始一张清单，之后就会在此显示。",
       "emptySignedOut": "登录即可在此看到你的清单",
       "open": "{day} 建立 · 柜台付 {amount}",
-      "closed": "{grades} · 证书编号在页内"
+      "closed": "{grades} · 证书编号在页内",
+      "cards": "{count} 张卡",
+      "service": "{grader} · {level}"
     },
     "lostLink": "每张清单都可以用电邮里的链接打开，不用账户。链接不见了？用同一个电邮登录即可，没有密码。"
   },
@@ -90,7 +94,8 @@
       "minimumGrade": "只在 {grade} 或以上才入壳 · 无论如何都要收费",
       "noValue": "请先填上申报价值才继续。",
       "aboveCeiling": "{name} 的价值高于这个级别的上限，须另立一张清单走更高级别，同一次交卡一并带来。",
-      "referenceUnavailable": "暂时连不上目录，所以这张卡保留你输入的名称。申报价值仍然要填。"
+      "referenceUnavailable": "暂时连不上目录，所以这张卡保留你输入的名称。申报价值仍然要填。",
+      "ungraded": "未评级"
     },
     "add": "新增一张卡",
     "paste": "贴上清单",
@@ -122,7 +127,9 @@
       "skipped": "略过 {count} 张 — 已经在你的清单上。",
       "bulkNotice": "{count} 张：超过 {standard} 张，所以下一步只开放 Bulk 级别。{grader} 的 Bulk 是每张 {fee}、卡值上限 {ceiling}、约 {weeks} 星期，交卡时间较长；每张清单最多 {bulk} 张。",
       "add": "把 {count} 张卡加入清单",
-      "goBack": "返回"
+      "goBack": "返回",
+      "toCounter": "{count} 张卡的价值高于所有级别 — {names}：请先到柜台或 WhatsApp 我们。",
+      "failed": "暂时未能读取清单，请稍后再试。"
     },
     "service": {
       "title": "选评级公司与级别",
@@ -145,7 +152,8 @@
         "perCard": "{count} 张 × {fee} · {grader} {level}",
         "coverPerCard": "保额为申报价值的 {rate} · 每张 {amount}",
         "paidAtCounter": "核对好所有卡牌后，在柜台付款。",
-        "includes": "已包括评级公司费用及来回投保运费。"
+        "includes": "已包括评级公司费用及来回投保运费。",
+        "total": "合计"
       },
       "upchargeNotice": "若卡牌回来时价值高于级别上限，评级公司会把它升上一级，差额会由你支付。金额会在你领回之前告知，不会在柜台才讲。"
     },
@@ -188,13 +196,28 @@
         "collect": {
           "title": "入壳卡牌一律不寄出",
           "body": "请亲身领回，或在清单页指定一位代领人。"
-        }
+        },
+        "line": "{title} — {body}"
       },
       "consent": "我已阅读个人资料收集声明。",
       "book": "预约交卡",
       "saveForLater": "保存，稍后再约",
-      "expired": "这张清单已经过期。价格与参考成交会变，请由收费表重新开始。"
-    }
+      "expired": "这张清单已经过期。价格与参考成交会变，请由收费表重新开始。",
+      "failed": "暂时未能保存，请稍后再试。",
+      "minimumGrade": "最低评级"
+    },
+    "search": {
+      "label": "卡名",
+      "placeholder": "输入卡的名称",
+      "addTyped": "加入这张卡"
+    },
+    "empty": {
+      "title": "还没有卡",
+      "body": "按卡名逐张加入，或粘贴一份清单。"
+    },
+    "withoutValue": "有 {count} 张卡仍未填申报价值。",
+    "kept": "清单已保存。链接已发送到 {email}，你可以在任何设备继续。",
+    "keepFailed": "暂时未能保存清单，请稍后再试。"
   },
   "dropoff": {
     "title": "预约交卡",
@@ -655,5 +678,19 @@
     "error": {
       "diaryUnavailable": "暂时读不到预约系统，所以这封信没有可印的内容，请稍后再试。"
     }
+  },
+  "graders": {
+    "psa": "PSA",
+    "cgc": "CGC",
+    "bgs": "BGS",
+    "grade": "{grader} {grade}",
+    "noFigures": "{grader} 尚未确认收费，所以暂时不能选择它的级别。"
+  },
+  "levels": {
+    "value": "Value",
+    "regular": "Regular",
+    "express": "Express",
+    "super_express": "Super Express",
+    "bulk": "Bulk"
   }
 }

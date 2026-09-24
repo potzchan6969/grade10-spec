@@ -9,6 +9,7 @@ import {
   LEVEL_PICKER_COPY,
   PSA_SHEET,
   THREE_SHEETS,
+  UNPRICED_SHEET,
 } from "./fixtures";
 import {
   GradingFeeSheet,
@@ -146,14 +147,19 @@ export const ThreeGraders: Story = {
 
 /** The picker's levels as a consumer reads them off the one PSA record. */
 const PSA_PICKER_LEVELS: readonly GradingPickerLevel[] = PSA_SHEET.levels.map(
-  (level) => ({
-    id: level.id,
-    name: level.name,
-    state: "open",
-    ceiling: level.ceiling,
-    feePerCard: level.feePerCard,
-    weeks: level.weeks,
-  }),
+  (level) => {
+    if (!level.ceiling || !level.feePerCard) {
+      throw new Error(`PSA_SHEET: ${level.id} carries no figures`);
+    }
+    return {
+      id: level.id,
+      name: level.name,
+      state: "open",
+      ceiling: level.ceiling,
+      feePerCard: level.feePerCard,
+      weeks: level.weeks,
+    };
+  },
 );
 
 /** The sheet and the picker each draw the one record they were given, and
@@ -190,5 +196,35 @@ export const OneRecordTwoDrawings: Story = {
       expect(canvas.getByRole("radio", { name: picked })).toBeInTheDocument();
     }
     expect(args.onSelectGrader).not.toHaveBeenCalled();
+  },
+};
+
+/** A grader nobody has priced lists its levels, each carrying no figure
+ * where a price would be, and says why (the capability's Levels as data). */
+export const UnpricedGrader: Story = {
+  args: { graders: [UNPRICED_SHEET], selectedGraderId: "bgs" },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByText(UNPRICED_SHEET.figuresLine ?? ""),
+    ).toBeInTheDocument();
+    const row = levelRow(canvasElement, "Value");
+    expect(
+      within(row).getAllByRole("cell", { name: "—" }).length,
+    ).toBeGreaterThanOrEqual(2);
+    expect(row.textContent).not.toMatch(/HK\$/);
+  },
+};
+
+/** The title takes the rung the page gives it under its own headings. */
+export const TitleUnderASection: Story = {
+  args: { titleAs: "h3" },
+  play: async ({ canvasElement }) => {
+    expect(
+      within(canvasElement).getByRole("heading", {
+        level: 3,
+        name: FEE_SHEET_COPY.title,
+      }),
+    ).toBeInTheDocument();
   },
 };

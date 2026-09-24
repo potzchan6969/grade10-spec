@@ -36,11 +36,12 @@ type GradingGrader = { id: string; name: string };
 type GradingFeeLevel = {
   id: string;
   name: string;
-  /** The declared value this level takes up to. */
-  ceiling: GradingMoney;
+  /** The declared value this level takes up to; absent on a level nobody has priced. */
+  ceiling?: GradingMoney;
   /** The cards a submission this level allows, in the consumer's words. */
   cardsPerSubmission: string;
-  feePerCard: GradingMoney;
+  /** Absent on a level nobody has priced. */
+  feePerCard?: GradingMoney;
   /** The cover rate in the consumer's words, where the level carries one. */
   coverRate?: string;
   /** The weeks back, in the consumer's words. */
@@ -69,6 +70,8 @@ type GradingListedCard = {
   /** Matched in the reference, or kept as the collector typed it. */
   matched: boolean;
   declaredValue?: GradingMoney;
+  /** The declared value reopened for the collector to change. */
+  editing?: boolean;
   referenceSales?: readonly GradingReferenceSale[];
   /** The grade the minimum-grade option names on this card, such as `PSA 9`. */
   minimumGrade?: string;

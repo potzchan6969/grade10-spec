@@ -146,6 +146,13 @@ the level carries one, and the weeks back.
 **Above the top** - the sheet SHALL show the line it is given for a card worth
 more than any level takes, and SHALL price no such card.
 
+**A level with no figures** - a level given no ceiling and no fee a card SHALL
+read the no-figure word it is given in those columns, and SHALL NOT read as a
+price of nought.
+
+**The title's rung** - the sheet's title SHALL take the heading rung it is
+given, a second-rung heading where it is given none.
+
 **The figures are given** - the sheet SHALL render the fee sheet record it is
 given and SHALL carry no figure of its own, so it and `GradingLevelPicker`
 cannot disagree.
@@ -302,12 +309,18 @@ typed.
 
 **No value** - a card with no declared value SHALL be named on the list.
 
+**The value field** - a card with no declared value, or one given as being
+edited, SHALL carry a field for it; what is typed SHALL stay in the field and
+SHALL be reported once, when the field is left or Enter is pressed, and an
+empty field SHALL report nothing. A card being edited SHALL show the value it
+holds in the empty field.
+
 **Above the ceiling** - a card declared above the level's ceiling SHALL be
 named with the second-submission line it is given.
 
 **The cap** - the list SHALL show the cap it is given and the level the count
 closes, and SHALL report no add past the cap, showing the line it is given
-instead.
+instead; a cap given as none SHALL refuse no add.
 
 **Empty** - with no card the list SHALL offer adding a card and pasting a
 list, and nothing else.

@@ -116,6 +116,20 @@ const BGS_SHEET: GradingFeeSheetRecord = {
   })),
 };
 
+/** A grader nobody has priced: its levels listed, carrying no figures. */
+const UNPRICED_SHEET: GradingFeeSheetRecord = {
+  id: "bgs",
+  name: "BGS",
+  figuresLine:
+    "BGS has not confirmed its fees yet, so its levels cannot be picked.",
+  levels: PSA_LEVELS.map(({ id, name }) => ({
+    id,
+    name,
+    cardsPerSubmission: "—",
+    weeks: "—",
+  })),
+};
+
 const THREE_SHEETS: readonly GradingFeeSheetRecord[] = [
   PSA_SHEET,
   CGC_SHEET,
@@ -137,6 +151,7 @@ const FEE_SHEET_COPY: GradingFeeSheetCopy = {
   cover: "Cover",
   weeks: "Back in about",
   noCover: "No cover",
+  noFigure: "—",
 };
 
 const ABOVE_TOP_LINE =
@@ -579,6 +594,7 @@ export {
   STORAGE_FROM,
   THREE_SHEETS,
   TYPED_CARD,
+  UNPRICED_SHEET,
   UPCHARGE_NOTICE,
   VAULT_LINE,
 };

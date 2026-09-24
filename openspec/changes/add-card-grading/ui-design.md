@@ -95,6 +95,10 @@ parts, `Tabs`, `Text`, `TextInput`, `Textarea`, `HStack`, `VStack`.
   and `RadioCard` no published set, so the rungs and the level card are code
   ahead of design, recorded here as
   [`design-code-sync.md`](../../../docs/governance/design-code-sync.md) asks
+- ❓ **An `h1` rung on `Text`** — `TextElement` offers `span`, `p`, `div`,
+  `h2` and `h3`, so the grading home's title is an `h2` with its sections
+  `h3` under it, as vault's surface is; whether the design system adds an
+  `h1` rung for a page's title is Design's
 
 ### `@grade10/ui` — new, work in this repository
 
@@ -344,6 +348,7 @@ Stories `grading-plan-plan-wizard--`, Empty list through Over the cap `grading-s
 | Continue | the count on the button | **Out of suite:** the view's colocated test |
 | Finish later | the plan kept; the emailed-link line | `grade10-site-grading-submission-plan-SC-38` |
 | Finish later, no email | the email asked for before the plan is kept | `grade10-site-grading-submission-plan-SC-40` |
+| Cards, paste open | the paste sheet open over the cards step, read against the list it adds to | `shared-ui-grading-submission-SC-20` |
 
 ### Paste a list
 

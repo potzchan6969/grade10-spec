@@ -15,12 +15,14 @@ is [Booking Blocks](/p/shared/ui/appointment-booking).
 
 - 🚧 **`GradingFeeSheet`** — one sheet per grader: each level's ceiling,
   cards a submission, fee a card, cover rate where the level carries one and
-  weeks; a tab per grader when there is more than one
+  weeks; a tab per grader when there is more than one; a level nobody has
+  priced listed with no figure where its price would be
 - 🚧 **`GradingCardList`** — the list a collector edits before hand-in: a
   card matched in the reference or kept as typed, its declared value, its
   reference sales and a minimum grade; the cap, the count that closes a
   level, a card with no value and a card above a ceiling, each named on the
-  list
+  list; a value is kept in its field until the field is left, and reopened
+  from Edit to change it
 - 🚧 **`GradingCardRecord`** — the list after hand-in, read only: intake
   id, the photograph pair, and the card's outcome as a badge with its line
   in the collector's words — refused, withdrawn, graded, moved up, ungraded,
@@ -94,5 +96,6 @@ blocks are what draws them. The design record is the change's
 | Two card lists | Decided | An editable planning list and a read-only record are two blocks, because one carries fields and callbacks the other never renders; a third for the visit is not needed, the booking set already ships it | Design |
 | The drop-off is the diary's | Decided | The shop, the day, the time, the confirmation and the visit card are the appointment-booking exports unchanged; grading adds the batch line and its own three-step rail in the application | Design |
 | The status word and the chip are one block | Decided | Every board draws them as one pair, and the status table pairs them, so one block keeps the two from disagreeing | Design |
+| A page's title | ❓ Open | `Text` offers no `h1`, so a grading page's title is an `h2` with its sections `h3` under it, as vault's is; whether the design system adds an `h1` rung | Design |
 | Story ids | Decided | `grading-submission-<component>--<state>`, the package's own `<Capability>/<Component>` title, the state being the design record's row in kebab-case | Design |
 :::

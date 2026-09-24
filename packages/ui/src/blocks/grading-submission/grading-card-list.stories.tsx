@@ -137,15 +137,40 @@ export const KeptAsTyped: Story = {
 };
 
 /** A card with no declared value is named, and asked for one through the
- * callback of its own (shared-ui-grading-submission-SC-15,
+ * callback of its own: the whole figure, once the field is left, never a
+ * keystroke of it (shared-ui-grading-submission-SC-15,
  * shared-ui-grading-submission-SC-61). */
 export const NoValue: Story = {
   args: { cards: [MATCHED_CARD, NO_VALUE_CARD, TYPED_CARD] },
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText(CARD_LIST_COPY.noValue)).toBeInTheDocument();
-    await userEvent.type(canvas.getByLabelText("Declared value"), "5");
-    expect(args.onDeclare).toHaveBeenCalledWith("card_pikachu", "5");
+    const field = canvas.getByLabelText("Declared value");
+    await userEvent.type(field, "8500");
+    expect(field).toHaveValue(8500);
+    expect(args.onDeclare).not.toHaveBeenCalled();
+    await userEvent.tab();
+    expect(args.onDeclare).toHaveBeenCalledOnce();
+    expect(args.onDeclare).toHaveBeenCalledWith("card_pikachu", "8500");
+  },
+};
+
+/** A value the consumer reopens reads as a field again, the kept figure
+ * shown in it until something is typed; Enter reports what was typed, and
+ * leaving it untouched reports nothing (shared-ui-grading-submission-SC-61). */
+export const EditingValue: Story = {
+  args: { cards: [{ ...MATCHED_CARD, editing: true }] },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    const field = canvas.getByLabelText("Declared value");
+    expect(field).toHaveAttribute("placeholder", "HK$3,800");
+    expect(canvas.queryByText(CARD_LIST_COPY.noValue)).toBeNull();
+    await userEvent.click(field);
+    await userEvent.tab();
+    expect(args.onDeclare).not.toHaveBeenCalled();
+    await userEvent.type(field, "4200{Enter}");
+    expect(args.onDeclare).toHaveBeenCalledOnce();
+    expect(args.onDeclare).toHaveBeenCalledWith("card_charizard", "4200");
   },
 };
 
@@ -250,5 +275,23 @@ export const OverTheCap: Story = {
     ).toBeDisabled();
     expect(canvas.getByText(CAP_REACHED_LINE)).toBeInTheDocument();
     expect(args.onAdd).not.toHaveBeenCalled();
+  },
+};
+
+/** A sheet that sets no most takes a card however long the list is. */
+export const NoCap: Story = {
+  args: {
+    cards: [MATCHED_CARD, TYPED_CARD],
+    cap: { count: null, line: "One grader at one level." },
+    query: "Lugia",
+    search: { status: "ready", data: [] },
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    await userEvent.click(
+      canvas.getByRole("button", { name: CARD_LIST_COPY.addTyped }),
+    );
+    expect(args.onAdd).toHaveBeenCalledWith({ kind: "typed", name: "Lugia" });
+    expect(canvas.queryByText(CAP_REACHED_LINE)).toBeNull();
   },
 };
