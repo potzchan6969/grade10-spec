@@ -35,10 +35,21 @@ watch.
   disappears
 - **Tax sits inside the Subtotal**, so a card invoice's processing fee is
   grossed up on it and Grade10 keeps the Subtotal whole
+- **The line carries an info tip** reading `We set this from where your order
+  ships. Some orders have none.`, whenever the line shows. The first sentence
+  names who sets the amount, so a winner whose address is already confirmed
+  does not read the address as the thing holding it up; the second answers
+  what a winner in Awaiting Setup actually wonders, since the row reads TBD
+  whether or not they will owe anything. The tip rides the line rather than
+  appearing in one status and vanishing in the next
 - **The invoice and the receipt state it**, filling the `taxLine` slot the
   PDF blocks already expose
 - **Grade10 prices nothing.** No rate, no regime, no jurisdiction rule, no tax
   provider. The operator decides the amount and owns it
+
+**Depends on `add-shipping-insurance-order-summary-tooltip`.** That change
+owns the Order Summary tip mechanism and the rule that a quoted row reads TBD
+before send. This change lands after it and refers to both.
 
 ## Non-Goals
 
@@ -57,8 +68,8 @@ See [Non-Goals](decisions.md#non-goals).
 
 ## Impact
 
-- **Order Summary** on Winner Order — one row, and the Subtotal that contains
-  it
+- **Order Summary** on Winner Order — one row, its info tip, and the Subtotal
+  that contains it
 - **The operator quote and reissue forms** — one optional amount field each
 - **`shared/ui/invoice-and-receipt-pdf`** — no contract change; this change
   supplies the `taxLine` the block already accepts
@@ -69,7 +80,8 @@ See [Non-Goals](decisions.md#non-goals).
   action summary, the audit `Changed parts` cell, the quote steps, the send
   refusals, the reissue requirement, and what counts as a change. Adding Tax
   moves all six in step, or names the set once and has the others refer to it.
-  The requirements round decides which
+  The fee rows that carry an info tip are a seventh such set, in the other
+  capability. The requirements round decides both together
 - **`docs/prds/products/grade10-site/auction/post-bidding.md`** and
   **`docs/prds/products/grade10-admin/auction/management.md`** — marked 🚧
   ahead of this change

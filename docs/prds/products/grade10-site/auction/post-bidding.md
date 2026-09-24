@@ -193,9 +193,10 @@ by card, reads:
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
   order value during transit.`) when the operator added it, and stays absent
   when none
-- 🚧 **Tax on Order Summary** — before send, Tax sits with the other fee
-  rows as TBD; after send it shows the amount the operator entered, and
-  stays absent when none
+- 🚧 **Tax on Order Summary** — before send, Tax sits with the other fee rows
+  as TBD, whether or not the winner will owe any. Whenever the line shows it
+  carries a brief info tooltip — `We set this from where your order ships.
+  Some orders have none.`
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried

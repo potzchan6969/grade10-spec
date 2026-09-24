@@ -11,8 +11,10 @@
 
 - Computing tax. Grade10 holds no rate table, no jurisdiction rule and no
   rounding rule for tax
-- Deciding which address governs tax, or whether a lot is taxable at all. The
-  operator decides both, outside the product
+- Computing tax from an address. The Tax tip tells the winner the amount
+  follows where the order ships, because it does; Grade10 still reads no
+  address to price it, and the operator decides both the amount and whether
+  the lot is taxable at all
 - A tax provider. No vendor, no credential, no failure path for one that does
   not answer
 - The formal tax receipt — Grade10's company details and tax ID on a receipt.
@@ -35,6 +37,9 @@
 | Q8 | Does a reissue carry Tax? | Yes — Tax joins the quoted amounts a reissue can change, with its before and after in the audit log | Freezing tax at the first send, which would force a full cancellation to correct an operator's typo |
 
 | Q9 | Insurance and Tax are the same shape — an optional operator-entered amount, above zero, TBD before send, absent when none. Write the rules twice, or once for both? | ❓ Product - recommended: twice now, generalised at the third such line. Generalising here re-anchors the Insurance scenarios this change cites as its precedent, for a saving of one requirement | Generalising now, which rewrites requirements this change does not otherwise touch |
+| Q10 | When does the Tax line's info tip show? | Whenever the Tax line shows — Awaiting Setup, Preparing Invoice and after send, as Insurance's tip rides its line. That precedent is itself in flight on `add-shipping-insurance-order-summary-tooltip` and has not landed, so this change cannot lean on a durable id for it | Awaiting Setup alone, which drops the tip the moment a winner confirms an address and leaves the same TBD unexplained in Preparing Invoice |
+| Q11 | What does the Tax tip say? | `We set this from where your order ships. Some orders have none.` — the first sentence names who sets the amount, so a winner whose address is already confirmed does not think the address is holding the number up; the second answers what Q3 leaves open, since before send every winner sees TBD whether or not they will owe anything | `Confirm your address and we will set the amount`, false once the address is confirmed and again once the invoice is sent, in both of which the tip still shows (Q10); and `Tax depends on where your order ships.`, which names no actor and so reads as a rate Grade10 computes from an address, which it does not. One sentence, against the siblings' one, was dropped because it answers only what sets the size and not whether the winner owes any |
+| Q12 | `add-shipping-insurance-order-summary-tooltip` already owns the Order Summary tip mechanism and the pre-send TBD rule. Double them, or depend on it? | Depend on it. This change declares `depends_on: add-shipping-insurance-order-summary-tooltip` and its requirements reference that change's tip rule and pre-send rule rather than restating them for a fifth row | Moving the Tax tip into that change, which edits a Planned change already carrying a `tasks.md` and needs its hand's agreement; and doubling both rules, which the store forbids — whichever folded second would rewrite the first |
 
 ## Raised
 
