@@ -1623,7 +1623,7 @@ Stage (b).
       (`grade10-admin-grading-counter-SC-59`,
       `grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`)
-- [ ] 24.14 Add the reference rate: `reference_usd_rate` a non-money key
+- [x] 24.14 Add the reference rate: `reference_usd_rate` a non-money key
       stored as the HKD cents one US dollar buys and seeded at 784 by the
       migration that renders its key into the CHECK;
       `referenceSaleInSheetCurrency` in the contracts; and `submissions.paste`
