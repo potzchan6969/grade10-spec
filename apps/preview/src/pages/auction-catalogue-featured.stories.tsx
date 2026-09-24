@@ -3,6 +3,7 @@ import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
 import {
   FeaturedAuctions,
+  FeaturedAuctionsBanner,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
 import { FEW_FEATURED_LOTS } from "./auction-catalogue-content";
@@ -124,6 +125,44 @@ export const OverlappingPair: Story = {
     await waitFor(() => {
       expect(
         canvas.getByRole("link", { name: featuredLots[1].title }),
+      ).toBeInTheDocument();
+    });
+    expect(second).toHaveAttribute("aria-current", "true");
+  },
+};
+
+/**
+ * Full-width Figma carousel banner (`6945:12258`): muted copy column + bronze
+ * staged image, as on the Auctions page frame.
+ */
+export const CarouselBanner: Story = {
+  name: "Carousel banner",
+  render: () => <FeaturedAuctionsBanner lots={featuredLots} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: featuredLots[0].title,
+      }),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
+    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("navigation", { name: "Featured lots" }),
+    ).toBeInTheDocument();
+
+    const second = canvas.getByRole("button", {
+      name: `Show featured lot 2: ${featuredLots[1].title}`,
+    });
+    await userEvent.click(second);
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("heading", {
+          level: 2,
+          name: featuredLots[1].title,
+        }),
       ).toBeInTheDocument();
     });
     expect(second).toHaveAttribute("aria-current", "true");

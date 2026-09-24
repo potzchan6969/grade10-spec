@@ -9,7 +9,9 @@ type CarouselProgressProps = ComponentProps<"nav">;
  * Dot pagination for a carousel. The active item can show a linear fill that
  * reports completion through `onComplete` — used for auto-advance timers.
  *
- * No Figma component set yet; contract is code-owned until design publishes one.
+ * Storybook is the layout source of truth. Figma `CarouselProgress` draws the
+ * item states (`inactive` | `active` | `filling` | `complete`); timed fill is
+ * driven in code by `durationMs`, not a Figma prop.
  */
 function CarouselProgress({
   className,
@@ -86,7 +88,7 @@ function CarouselProgressItem({
       aria-current={active ? "true" : undefined}
       aria-label={label}
       className={cn(
-        "relative overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
+        "relative cursor-pointer overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
         active
           ? "h-1.5 w-8 bg-border"
           : "size-1.5 bg-border opacity-80 hover:opacity-100",

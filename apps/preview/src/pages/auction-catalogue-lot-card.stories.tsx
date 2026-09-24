@@ -77,7 +77,9 @@ export const Active: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Current Bid")).toBeInTheDocument();
-    expect(canvas.getByText(`${activeLot.bidCount} bids`)).toBeInTheDocument();
+    expect(
+      canvas.queryByText(`${activeLot.bidCount} bids`),
+    ).not.toBeInTheDocument();
     expect(canvas.getByText(/Ends in \d+d \d+h \d+m/)).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", {

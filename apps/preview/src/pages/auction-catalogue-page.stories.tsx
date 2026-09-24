@@ -22,7 +22,11 @@ const meta = {
   component: AuctionCataloguePage,
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
-  args: { lots: FEW_FEATURED_LOTS, featuredLayout: "pair" },
+  args: {
+    lots: FEW_FEATURED_LOTS,
+    featuredLayout: "banner",
+    showCategories: false,
+  },
 } satisfies Meta<typeof AuctionCataloguePage>;
 
 export default meta;
@@ -58,9 +62,57 @@ async function waitForPageEnter(canvas: ReturnType<typeof within>) {
   );
 }
 
-/** Full page with the overlapping image + info featured band. Docs primary. */
+/** Full page with the Figma full-width carousel banner. Docs primary. */
+export const CarouselBanner: Story = {
+  name: "Carousel banner",
+  play: async ({ canvasElement }) => {
+    const canvas = await expectCatalogueHead(canvasElement);
+    await waitForPageEnter(canvas);
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: FEW_FEATURED_LOTS[0].title,
+      }),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
+    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("navigation", { name: "Featured lots" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("navigation", { name: "Categories" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("heading", {
+        level: 3,
+        name: FEW_FEATURED_LOTS[0].title,
+      }),
+    ).toBeInTheDocument();
+
+    const second = canvas.getByRole("button", {
+      name: `Show featured lot 2: ${FEW_FEATURED_LOTS[1].title}`,
+    });
+    await userEvent.click(second);
+    await waitFor(() => {
+      expect(second).toHaveAttribute("aria-current", "true");
+    });
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: FEW_FEATURED_LOTS[1].title,
+      }),
+    ).toBeInTheDocument();
+  },
+};
+
+/** Full page with the overlapping image + info featured band. */
 export const OverlappingFeatured: Story = {
   name: "Overlapping featured",
+  args: { featuredLayout: "pair", showCategories: true },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -85,7 +137,7 @@ export const OverlappingFeatured: Story = {
 
 export const OneFeatured: Story = {
   name: "One featured lot",
-  args: { lots: ONE_FEATURED_LOTS, featuredLayout: "row" },
+  args: { lots: ONE_FEATURED_LOTS, featuredLayout: "row", showCategories: true },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -123,7 +175,7 @@ export const OneFeatured: Story = {
 
 export const FewFeatured: Story = {
   name: "A few featured lots",
-  args: { lots: FEW_FEATURED_LOTS, featuredLayout: "row" },
+  args: { lots: FEW_FEATURED_LOTS, featuredLayout: "row", showCategories: true },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -140,7 +192,7 @@ export const FewFeatured: Story = {
 
 export const BusyMany: Story = {
   name: "Many categories",
-  args: { lots: BUSY_MANY_LOTS, featuredLayout: "row" },
+  args: { lots: BUSY_MANY_LOTS, featuredLayout: "row", showCategories: true },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -215,7 +267,7 @@ export const BusyMany: Story = {
 
 export const QuietTiles: Story = {
   name: "Category tiles",
-  args: { lots: QUIET_TILE_LOTS, featuredLayout: "row" },
+  args: { lots: QUIET_TILE_LOTS, featuredLayout: "row", showCategories: true },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
