@@ -105,7 +105,7 @@ function ReceiptPdfPreview() {
 }
 
 const meta = {
-  title: "Pages/Winner Order/Receipt PDF",
+  title: "My Auctions/Winner Order/PDF/Receipt",
   component: ReceiptPdfPreview,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
