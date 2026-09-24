@@ -17,7 +17,7 @@
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, dirname, join, relative } from "node:path";
+import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
 
@@ -309,10 +309,13 @@ function activeChangeSpecRoots(root) {
 /** Product spec scopes include durable capabilities and open change deltas. */
 function productSpecRoots(dir, root) {
   if (!root) return [dir];
-  const rel = relative(root, dir)
-    .replace(/^openspec\\/specs\\//, "")
-    .replace(/^openspec\\/changes\\/[^/]+\\/specs\\//, "");
-  const product = rel.split("/")[0];
+  const parts = relative(root, dir).split(sep);
+  const product =
+    parts[0] === "openspec" && parts[1] === "specs"
+      ? parts[2]
+      : parts[0] === "openspec" && parts[1] === "changes"
+        ? parts[4]
+        : basename(dir);
   return [
     join(root, "openspec", "specs", product),
     ...activeChangeSpecRoots(root).map((specs) => join(specs, product)),
