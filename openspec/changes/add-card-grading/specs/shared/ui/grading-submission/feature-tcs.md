@@ -424,17 +424,18 @@
 
 **Pre-conditions:**
 
-* `GradingCardList` carries one card and its `onAdd`, `onEdit` and `onRemove` callbacks.
+* `GradingCardList` carries one card and its `onAdd`, `onEdit`, `onDeclare` and `onRemove` callbacks.
 
 **Steps:**
 
 1. Open the `GradingCardList` story with that card.
-2. Search and add a card, edit the existing card's declared value, then remove it.
+2. Search and add a card, open the existing card for editing, type a declared value and leave the field, then remove the card.
 
 **Expected Results:**
 
 * `onAdd` fires with the searched card.
-* `onEdit` fires with the changed declared value.
+* `onEdit` fires with the card's id, opening it for editing.
+* `onDeclare` fires once, when the field is left, with the card's id and the value typed.
 * `onRemove` fires with the removed card's id.
 
 ### shared-ui-grading-submission-US1-TC16-1: The paste result names each outcome's count and line
@@ -2003,6 +2004,10 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-SC-50` | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
 | `shared-ui-grading-submission-SC-57` | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
 | `shared-ui-grading-submission-SC-65` | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
+| `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as `shared-ui-grading-submission-SC-66`; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
+| A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67` |
+| A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68` |
+| The title's rung | Folded | Named no scenario; the `TitleUnderASection` story already proved it. Folded as `shared-ui-grading-submission-SC-69` |
 | The tone on `shared-ui-grading-submission-US1-TC32-1` and `-TC39-1` | Kept | A tone that dresses an outcome is the design record's and the suite's, not a requirement's; the scenarios state the substance the tone dresses |
 | The other 45 cases | Joined, unchanged | Each reaches a scenario that states it; no case was dropped, and nothing in the two readings stated opposite things |
 

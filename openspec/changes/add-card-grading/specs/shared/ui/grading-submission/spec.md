@@ -181,6 +181,23 @@ cannot disagree.
 - **WHEN** the collector activates the second
 - **THEN** the sheet reports that grader's id and marks it selected
 
+#### Scenario: shared-ui-grading-submission-SC-68 - A level with no figures reads the no-figure word, not nought
+**Serves:** Reading what it costs - a collector reads a grader nobody has priced yet
+
+- **GIVEN** a grader whose levels carry no ceiling and no fee
+- **WHEN** `GradingFeeSheet` renders it
+- **THEN** each level's ceiling and fee columns read the no-figure word it
+  was given
+- **AND** no column reads as HK$0
+
+#### Scenario: shared-ui-grading-submission-SC-69 - The title takes the rung it is given
+**Serves:** Reading what it costs - a collector reads the sheet under whatever heading the page draws above it
+
+- **GIVEN** `GradingFeeSheet` given a third-rung heading
+- **WHEN** it renders
+- **THEN** its title reads as a third-rung heading
+- **AND** given none it reads as a second-rung heading
+
 #### Scenario: shared-ui-grading-submission-SC-59 - The sheet and the picker each render the sheet they were given
 **Serves:** Reading what it costs - a collector reads one set of figures wherever the page draws them
 
@@ -369,6 +386,15 @@ own.
 - **WHEN** `GradingCardList` renders it
 - **THEN** that card is named as still needing a value
 
+#### Scenario: shared-ui-grading-submission-SC-66 - The value field commits once, on leaving it or Enter
+**Serves:** Listing the cards - a collector typing what a card is worth
+
+- **GIVEN** a card carrying the value field, empty or reopened for editing
+- **WHEN** the collector types a figure and leaves the field, or presses Enter
+- **THEN** the field reports that figure once, through its own callback
+- **AND** what was typed stays in the field as it is typed
+- **AND** leaving the field untouched reports nothing
+
 #### Scenario: shared-ui-grading-submission-SC-16 - The cap refuses the card past it
 **Serves:** Listing the cards - a dealer listing more cards than one submission takes
 
@@ -376,6 +402,14 @@ own.
 - **WHEN** the collector adds one more
 - **THEN** nothing is reported
 - **AND** the line about a second submission on another day is shown
+
+#### Scenario: shared-ui-grading-submission-SC-67 - A cap given as none refuses no add
+**Serves:** Listing the cards - a collector building a list against a level that takes any count
+
+- **GIVEN** a list given no cap
+- **WHEN** the collector adds a card
+- **THEN** the add is reported
+- **AND** no card is ever refused for being past a cap
 
 #### Scenario: shared-ui-grading-submission-SC-17 - The reference out of reach keeps the list working
 **Serves:** Listing the cards - a collector listing cards while the shop's catalogue cannot be asked

@@ -170,7 +170,8 @@ export const NoValue: Story = {
 
 /** A value the consumer reopens reads as a field again, the kept figure
  * shown in it until something is typed; Enter reports what was typed, and
- * leaving it untouched reports nothing (shared-ui-grading-submission-SC-61). */
+ * leaving it untouched reports nothing (shared-ui-grading-submission-SC-61,
+ * shared-ui-grading-submission-SC-66). */
 export const EditingValue: Story = {
   args: { cards: [{ ...MATCHED_CARD, editing: true }] },
   play: async ({ args, canvasElement }) => {
@@ -291,7 +292,8 @@ export const OverTheCap: Story = {
   },
 };
 
-/** A sheet that sets no most takes a card however long the list is. */
+/** A sheet that sets no most takes a card however long the list is
+ * (shared-ui-grading-submission-SC-67). */
 export const NoCap: Story = {
   args: {
     cards: [MATCHED_CARD, TYPED_CARD],

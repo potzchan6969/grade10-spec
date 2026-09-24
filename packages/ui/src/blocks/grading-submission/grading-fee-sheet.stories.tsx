@@ -200,7 +200,8 @@ export const OneRecordTwoDrawings: Story = {
 };
 
 /** A grader nobody has priced lists its levels, each carrying no figure
- * where a price would be, and says why (the capability's Levels as data). */
+ * where a price would be, and says why (the capability's Levels as data,
+ * shared-ui-grading-submission-SC-68). */
 export const UnpricedGrader: Story = {
   args: { graders: [UNPRICED_SHEET], selectedGraderId: "bgs" },
   play: async ({ canvasElement }) => {
@@ -216,7 +217,8 @@ export const UnpricedGrader: Story = {
   },
 };
 
-/** The title takes the rung the page gives it under its own headings. */
+/** The title takes the rung the page gives it under its own headings
+ * (shared-ui-grading-submission-SC-69). */
 export const TitleUnderASection: Story = {
   args: { titleAs: "h3" },
   play: async ({ canvasElement }) => {
