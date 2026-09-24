@@ -2,23 +2,25 @@
 
 - Create and catalogue
   - Listing code: Grade10 allocates a stable, opaque 5-character code for a
-    listing when it is created, and shows that code on the listing's admin
+    listing on its first saved draft, and shows that code on the listing's admin
     screen for operators to match against a quoted support, finance or
     reconciliation reference
+  - Generated slug: a saved draft starts with a distinct title-and-code address
+    that an operator can replace
 
 ## ADDED Requirements
 
-### Requirement: Listing code is allocated at create and shown on the admin screen
+### Requirement: Listing code is allocated on first draft save and shown on the admin screen
 
 Every listing carries one stable, opaque **listing code**, system-allocated
 and shown to operators with existing listing-admin read access on both the
 Listings table and the listing detail screen. Knowing a code SHALL NOT grant
 admin access or expose private listing data.
 
-- **Allocation** - Grade10 SHALL allocate the code when the listing is
-  created. A keyed one-way derivation over an internal system UUID or listing
-  ID is permitted, but the public value SHALL not expose or reversibly encode
-  that internal identifier. A draft not yet created SHALL NOT carry a code.
+- **Allocation** - Grade10 SHALL allocate the code on the first successful
+  explicit Save of a draft, including an incomplete draft. A keyed one-way
+  derivation over an internal system UUID or listing ID is permitted, but the
+  public value SHALL not expose or reversibly encode that internal identifier.
 - **Uniqueness** - No two listings SHALL show the same code at once.
 - **Shape** - The code SHALL be exactly 5 characters: the first 2 drawn only
   from the alphabetic Crockford Base32 subset `ABCDEFGHJKMNPQRSTVWXYZ`, and
@@ -40,27 +42,27 @@ admin access or expose private listing data.
   grade10-admin's listing screens; the code's absence from grade10-site's
   public listing pages is specified by `grade10-site/auction/listing-page`.
 
-#### Scenario: grade10-admin-auction-listing-SC-87 - Operator reads a newly created listing's code
+#### Scenario: grade10-admin-auction-listing-SC-87 - Operator reads a newly saved draft's code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
-- **GIVEN** a draft with every required create field set
-- **WHEN** an operator creates the listing
+- **GIVEN** a draft that has not previously been saved
+- **WHEN** an operator saves the draft
 - **THEN** the Listings table and listing detail screen show the same
   5-character listing code
 - **AND** the code's first 2 characters are letters drawn from
   `ABCDEFGHJKMNPQRSTVWXYZ`
 
-#### Scenario: grade10-admin-auction-listing-SC-88 - A draft not yet created shows no listing code
+#### Scenario: grade10-admin-auction-listing-SC-88 - An unsaved draft shows no listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
-- **GIVEN** a draft listing that has not been created
+- **GIVEN** a draft listing that has not been saved
 - **WHEN** an operator opens its admin screen
 - **THEN** no listing code is shown
 
 #### Scenario: grade10-admin-auction-listing-SC-89 - The listing code has no editable control
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
-- **GIVEN** a created listing with an allocated listing code
+- **GIVEN** a saved draft with an allocated listing code
 - **WHEN** an operator opens its admin screen
 - **THEN** the code renders as read-only text, with no form control to change
   it
@@ -69,14 +71,14 @@ admin access or expose private listing data.
 #### Scenario: grade10-admin-auction-listing-SC-90 - A closed or called-off listing keeps its listing code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
-- **GIVEN** a listing whose code was allocated at create
+- **GIVEN** a listing whose code was allocated on its first saved draft
 - **WHEN** the listing is closed, or called off before close
 - **THEN** its admin screen still shows the same listing code
 
 #### Scenario: grade10-admin-auction-listing-SC-91 - Two listings never show the same code
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
-- **GIVEN** two listings created one after the other
+- **GIVEN** two listings whose drafts are saved one after the other
 - **WHEN** an operator reads each listing's code on its admin screen
 - **THEN** the two codes are different
 
@@ -85,7 +87,7 @@ admin access or expose private listing data.
 
 - **GIVEN** a new listing's 5-character candidate collides with an active code
   or retained reservation
-- **WHEN** the listing is created
+- **WHEN** the draft is saved
 - **THEN** allocation retries atomically
 - **AND** the stored code has the required shape and differs from the reserved code
 
@@ -93,7 +95,7 @@ admin access or expose private listing data.
 **Serves:** grade10-admin-auction-listing-US-72 - Operator reads a listing's code to act on a quoted reference
 
 - **GIVEN** a deleted listing previously held `LK423`
-- **WHEN** a later listing is created
+- **WHEN** a later draft is saved
 - **THEN** `LK423` remains unavailable
 - **AND** the later listing receives a different code
 
@@ -105,6 +107,73 @@ admin access or expose private listing data.
 - **WHEN** the operator presents `LK423` to the Listings table or detail route
 - **THEN** Grade10 refuses access without exposing the listing or its private
   data
+
+### Requirement: A saved draft receives an editable generated slug
+
+The listing editor gives an operator a distinct starting address without
+overwriting an address they chose.
+
+- **Generated value** - On a draft's first successful Save, Grade10 SHALL
+  normalize its title with Unicode normalization, lower-casing,
+  transliteration where available, replacement of non-alphanumeric runs with
+  one hyphen, hyphen collapse, and trim. It SHALL append one hyphen and the
+  lower-case listing code. Before appending, Grade10 SHALL truncate the title
+  portion so the complete slug is at most 64 characters. When normalization
+  yields no title words, it SHALL use `lot` as the title portion.
+- **Title edits** - When a later title edit occurs while the stored slug equals
+  the immediately preceding generated value, Grade10 SHALL replace only its
+  title portion and retain the same lower-case code suffix. It SHALL NOT
+  replace a slug an operator changed.
+- **Field exit** - When an operator leaves the Slug field, Grade10 SHALL check
+  the selected value against the same reservation rule enforced on Save and
+  report whether it is available. The helper text SHALL state: `Slug must be
+  unique. Completed, expired, and unsold listings also reserve their
+  addresses.` The check SHALL NOT disclose another listing's private details.
+- **Authoritative save** - Save SHALL remain authoritative. If another listing
+  claims a slug after an available field-exit check, Grade10 SHALL refuse the
+  Save and leave the draft's stored slug unchanged.
+
+#### Scenario: grade10-admin-auction-listing-SC-118 - First saved draft receives a generated slug
+**Serves:** grade10-admin-auction-listing-US-73 - Operator starts from a distinct public address
+
+- **GIVEN** an unsaved draft titled `Charizard PSA 10`
+- **WHEN** an operator saves it
+- **THEN** the draft stores a listing code and slug `charizard-psa-10-<lowercase code>`
+
+#### Scenario: grade10-admin-auction-listing-SC-119 - A title-less saved draft uses the neutral prefix
+**Serves:** grade10-admin-auction-listing-US-73 - Operator can save an unfinished listing without losing a valid address
+
+- **GIVEN** an unsaved draft with no title
+- **WHEN** an operator saves it
+- **THEN** the draft stores slug `lot-<lowercase code>`
+
+#### Scenario: grade10-admin-auction-listing-SC-120 - A title edit refreshes an untouched generated slug
+**Serves:** grade10-admin-auction-listing-US-73 - Operator keeps the generated address aligned with the title while drafting
+
+- **GIVEN** a saved draft whose slug equals its last generated value
+- **WHEN** an operator changes its title
+- **THEN** the slug's title portion changes and its lower-case code suffix stays the same
+
+#### Scenario: grade10-admin-auction-listing-SC-121 - A title edit preserves an operator slug
+**Serves:** grade10-admin-auction-listing-US-73 - Operator retains an address they selected
+
+- **GIVEN** a saved draft whose operator changed the generated slug
+- **WHEN** the operator changes its title
+- **THEN** the slug remains unchanged
+
+#### Scenario: grade10-admin-auction-listing-SC-122 - Slug field exit reports a retained collision
+**Serves:** grade10-admin-auction-listing-US-73 - Operator learns that a chosen address is unavailable before Save
+
+- **GIVEN** a completed, expired, or unsold listing holds the selected slug
+- **WHEN** an operator leaves Slug on another draft
+- **THEN** the editor reports the slug unavailable, keeps its value for correction, and shows the retained-address note
+
+#### Scenario: grade10-admin-auction-listing-SC-123 - Save rejects a collision after an available check
+**Serves:** grade10-admin-auction-listing-US-73 - Operator receives the authoritative collision result when another save races
+
+- **GIVEN** Slug reported available on a draft and another listing later claims that slug
+- **WHEN** the operator saves the draft
+- **THEN** Grade10 refuses the Save and leaves the draft's stored slug unchanged
 
 ## MODIFIED Requirements
 

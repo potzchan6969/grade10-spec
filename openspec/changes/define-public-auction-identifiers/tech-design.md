@@ -1,56 +1,64 @@
-## Scope
+## Decisions
 
-This plan covers the settled identifier behavior. Existing listing-admin read
-access governs the code, which is shown in both the Listings table and the
-listing detail screen; knowing a code cannot grant admin access or private
-data. Previously cached previews may persist without a purge or regeneration
-guarantee, while the current public page and fresh metadata fetches omit the
-code and private data.
-
-## Shape
-
-- Persist one opaque listing/payment reference on the listing record. A keyed
-  one-way candidate over an internal system UUID or listing ID is permitted,
-  but the 5-character projection can collide.
-- Allocate under a uniqueness check with retry against active codes and
-  retained reservations. Deletion never releases a code.
-- Keep the public projection separate from the internal UUID/listing ID and
-  never expose or reversibly encode the internal value.
-- Build invoice IDs from the unchanged payment reference and an issuance
-  sequence starting at `01`, with at least two digits and continuation as
-  `100` after `99`.
+- Derive the 5-character listing-code candidate from the listing's immutable
+  system UUID with the approved keyed one-way projection. The UUID is never
+  exposed, and the stored code is never regenerated when the allocator changes.
+- Allocate the code in the same transaction as the first successful explicit
+  draft save. Insert the candidate into a permanent reservation table with a
+  unique key; retry a new projection after a conflict. The reservation remains
+  after listing deletion.
+- Generate the initial slug from the normalized title and the lower-case stored
+  code. Reserve space for the hyphen and suffix before truncating the title
+  portion to 64 characters. Use `lot` when the normalized title is empty.
+- Track the last generated slug value while a draft is editable. A title edit
+  may replace only that untouched generated value; an operator-edited slug is
+  preserved.
+- Run the same case-insensitive slug reservation query on Slug field exit and
+  on Save. The field-exit result is advisory; the database unique constraint
+  and transaction remain authoritative for races.
+- Keep the lower-case code suffix in the canonical public address, but omit the
+  code as a labelled value from public page data, HTML and metadata. The code
+  is not an alternate route.
 
 ## Boundaries
 
-- `packages/grade10-auction/backend/src/db/schema/listings.ts` owns the stored
-  listing code and the uniqueness/reservation data. Verify the existing schema
-  export and migration conventions before choosing whether retained codes use
-  a reservation table or a tombstone column.
-- Listing creation and schedule/repository paths own allocation and persistence;
-  use the existing `schedule.ts` and repository seams rather than deriving a
-  code in the UI or in a winner-order request.
-- `packages/grade10-auction/backend/src/services/auctions/winnerInvoice.ts`
-  owns invoice-sequence allocation and old-invoice lookup. The sequence must
-  preserve the existing two-digit minimum and continue to three digits after
-  99.
-- The Stripe creation/webhook path carries the payment reference in
-  `payment_reference_code` metadata and keeps provider references internal.
-- Winner-order projections consume the stored reference. Public listing-page
-  projections omit it. Receipt content and receipt breakdown remain outside
-  this change.
-- The admin surfaces are the existing Listings table and `AuctionListingPage`.
-  Both use existing listing-admin read access and display the same read-only
-  code; the code is not an access token.
-
-- The canonical public listing URL remains directly accessible for a called-off
-  listing after the listing is removed from browse and search. The listing code
-  remains a non-route and never resolves as a public URL. Explicit hard deletion
-  is outside this change, so its page accessibility is unspecified.
+- `packages/grade10-auction/backend/src/db/schema/listings.ts` and
+  `packages/grade10-auction/backend/src/db/schema/listingCodes.ts` own the
+  listing code, slug columns, unique indexes and permanent code reservations.
+- `packages/grade10-auction/backend/src/services/listings/listingCode.ts`
+  owns UUID projection and collision retry. Draft persistence and generated
+  slug decisions belong in `services/listings/draft.ts`; create and schedule
+  gates stay in `services/listings/schedule.ts`.
+- `packages/grade10-auction/backend/src/repositories/listings.ts` owns the
+  reservation query used by field-exit feedback and Save. The API maps a
+  collision to a safe availability result without revealing the other listing.
+- Admin listing form and table surfaces show the code under existing listing
+  access. The public listing projection and metadata omit the labelled code
+  while retaining the canonical slug.
+- Winner-order services consume the stored code for payment references and
+  invoice IDs. Stripe metadata uses `payment_reference_code`; provider IDs
+  remain internal. Receipt format and breakdown remain outside this change.
 
 ## Concurrency and retention
 
-Allocation must be atomic: a failed unique insert retries a new candidate in
-one create operation. A deleted listing's code remains reserved. A stored code
-is never regenerated when hashing or allocator implementation changes. The
-called-off listing's canonical URL remains reserved and directly accessible,
-even though browse and search omit the listing.
+- A field-exit availability result can become stale. Save must recheck inside
+  its transaction and translate a unique violation to the existing slug-taken
+  refusal without changing the draft.
+- A code or slug held by a completed, expired or unsold listing remains
+  unavailable according to the existing reservation rule. A called-off listing
+  leaves browse and search but keeps its canonical URL directly accessible.
+- The UUID projection is not assumed collision-free. The unique reservation
+  key is the final authority, and bounded retry fails loudly if allocation is
+  exhausted.
+
+## Rejected alternatives
+
+- Title-only slugs with `-2`, `-3` retries are not the generated default: they
+  are order-dependent under concurrent saves and can change after deletion.
+- A random suffix is not the generated default: the settled listing-code
+  contract requires deriving the candidate from the system UUID.
+- Checking slug availability only in the browser is insufficient: it cannot
+  close the race between blur and Save.
+- Releasing slugs or codes when a listing is completed, expired, unsold or
+  called off would break stable historical addresses and the existing
+  reservation rule.

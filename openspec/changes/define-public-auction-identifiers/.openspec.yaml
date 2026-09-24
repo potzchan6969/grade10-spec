@@ -1,4 +1,3 @@
 schema: grade10-planning
 created: 2026-09-21
-awaiting:
-  specs: "The listing and public listing-page requirement deltas remain for /planning-qa."
+promoted_by: "@htonyl"

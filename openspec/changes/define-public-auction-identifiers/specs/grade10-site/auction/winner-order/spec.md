@@ -93,8 +93,8 @@ invoice ID when it is sent. Each SHALL be unique across all invoices.
 **Invariant across reissue** - A reissue replaces the current invoice with a
 new one, per `grade10-admin/auction/post-sale`, and the new invoice SHALL take
 the next `[SEQ]`. The payment reference SHALL NOT change on a reissue, or at
-any other point in the order's life — it is fixed once, when the listing is
-created, and carried forward as-is.
+any other point in the order's life — it is fixed on the listing's first saved
+draft and carried forward as-is.
 
 **Where shown** - Winner Order and the invoice PDF SHALL show both the
 invoice ID and the payment reference, on every invoice regardless of payment
@@ -102,9 +102,9 @@ method; the payment reference is also the value quoted in FPS, local bank
 transfer and SWIFT notes on a bank transfer invoice, per "A bank transfer
 invoice shows how to pay". Grade10 SHALL NOT show the payment reference, the
 invoice ID, or any receipt ID before a winning order exists on the listing;
-until then a lot is identified only by its title. The public listing page's
-own omission of the listing code is `grade10-site/auction/listing-page`'s
-requirement.
+until then a lot is identified by its title and canonical address. The public
+listing page exposes the lower-case code only through that address, per
+`grade10-site/auction/listing-page`.
 
 **An old invoice ID still finds the order** - Looking up any invoice's
 invoice ID, including a replaced invoice's, or the order's payment reference,
@@ -177,7 +177,7 @@ obtained, and SHALL NOT reach the winner on any surface.
 **Serves:** winner-order-US-17 - Winner quotes their order
 
 - **GIVEN** a listing-code candidate collides with an active code or retained reservation
-- **WHEN** the listing is created
+- **WHEN** its draft is first saved
 - **THEN** allocation retries and stores a distinct valid 5-character code
 
 #### Scenario: winner-order-SC-126 - A stored listing code never moves
@@ -192,7 +192,8 @@ obtained, and SHALL NOT reach the winner on any surface.
 
 - **GIVEN** a listing whose payment reference is `LK423`
 - **WHEN** its public page or shared preview is fetched
-- **THEN** the payment reference is absent from every public representation
+- **THEN** the payment reference appears only as the lower-case canonical URL suffix
+- **AND** no public representation exposes a labelled payment-reference field
 
 #### Scenario: winner-order-SC-128 - Only a bank transfer invoice shows the bank reference
 **Serves:** winner-order-US-18 - Winner reviews invoice and payment details

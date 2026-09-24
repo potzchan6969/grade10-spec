@@ -342,6 +342,185 @@
 * The canonical URL and `<listing_code>` remain permanently reserved.
 * A later listing cannot claim `<listing_url>`.
 
+## grade10-admin-auction-listing-US73: Operator keeps a usable listing address while drafting
+
+**As an** auction operator,
+**I want** a saved draft to suggest a listing slug from its title and stable code,
+**so that** I can start with a distinct public address and learn before Save when a chosen address is already reserved.
+
+### grade10-admin-auction-listing-US73-TC1-1: A saved draft receives a title-and-code slug
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* An authorized operator has an unsaved draft titled `Charizard PSA 10`.
+
+**Steps:**
+
+1. Save the draft.
+
+**Expected Results:**
+
+* The draft receives a listing code.
+* The Slug field is prefilled with normalized title words followed by the lower-case code, such as `charizard-psa-10-<lowercase code>`.
+* The complete slug is at most 64 characters.
+
+### grade10-admin-auction-listing-US73-TC2-1: A titleless draft uses the neutral slug prefix
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* An authorized operator has an unsaved draft with no title.
+
+**Steps:**
+
+1. Save the draft.
+
+**Expected Results:**
+
+* The draft receives a slug in the form `lot-<lowercase code>`.
+
+### grade10-admin-auction-listing-US73-TC3-1: An untouched generated slug follows a title edit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* A saved draft's Slug field still equals its last generated value.
+
+**Steps:**
+
+1. Change the title.
+2. Save the draft.
+
+**Expected Results:**
+
+* The slug title portion is regenerated.
+* The lower-case listing-code suffix is unchanged.
+
+### grade10-admin-auction-listing-US73-TC4-1: An operator-edited slug survives a title edit
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* A saved draft has a generated slug that the operator replaced with another valid slug.
+
+**Steps:**
+
+1. Change the title.
+2. Save the draft.
+
+**Expected Results:**
+
+* The operator's slug remains unchanged.
+
+### grade10-admin-auction-listing-US73-TC5-1: Leaving Slug reports a retained address collision
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* A completed, expired, or unsold listing already holds `charizard-psa-10-lk423`.
+* An authorized operator is editing another draft.
+
+**Steps:**
+
+1. Enter `charizard-psa-10-lk423` in Slug.
+2. Leave the Slug field.
+
+**Expected Results:**
+
+* The editor reports that the slug is unavailable without exposing the other listing's details.
+* The value remains available for correction.
+* Helper text states: `Slug must be unique. Completed, expired, and unsold listings also reserve their addresses.`
+
+### grade10-admin-auction-listing-US73-TC6-1: Save remains authoritative after a race
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-auction-listing-US-73
+
+**Pre-conditions:**
+
+* A draft's field-exit check reports `charizard-psa-10-lk423` available.
+* Another listing claims that slug before the draft is saved.
+
+**Steps:**
+
+1. Save the draft with `charizard-psa-10-lk423`.
+
+**Expected Results:**
+
+* Save is refused with an unavailable-slug result.
+* The draft's stored slug remains unchanged.
+
 
 ## Reconciliation
 
@@ -364,6 +543,12 @@ of each other's draft.
 | `US72-TC8-1` | `SC-94` | Folded in: existing listing-admin read access controls the code; knowing it cannot grant access or private data. |
 | `US72-TC9-1` | `SC-92` | Folded in: projection collision retry is implementation-backed behavior required by the allocation rule. |
 | `US72-TC10-1` | `SC-93` | Folded in: permanent reservation includes deleted listings. |
+| `US73-TC1-1` | `SC-118` | Same generated title-and-code behavior, with the length bound made observable, kept |
+| `US73-TC2-1` | `SC-119` | Same neutral-prefix behavior, kept |
+| `US73-TC3-1` | `SC-120` | Same untouched-generated-slug title-edit behavior, kept |
+| `US73-TC4-1` | `SC-121` | Same operator-edit preservation behavior, kept |
+| `US73-TC5-1` | `SC-122` | Same blur collision feedback and retained-address note, kept |
+| `US73-TC6-1` | `SC-123` | Same authoritative save race behavior, kept |
 
 No contradiction: both readings agree on every point they both covered.
 
