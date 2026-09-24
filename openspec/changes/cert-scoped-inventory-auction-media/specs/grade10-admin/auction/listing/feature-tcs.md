@@ -233,7 +233,6 @@ selected unit's normal media.
 **Pre-conditions:**
 
 * admin(without existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
-* <source Cert record> is available with no active reservation.
 * <source media> is tagged to printed Cert ID <source Cert ID> for <product>.
 * <listing> belongs to <product> and has a saved gallery.
 
@@ -466,7 +465,6 @@ changes later.
 
 **Expected Results:**
 
-* Inventory deletes the Cert record and its tagged source media as part of physical-unit removal.
 * The saved listing copy retains the same bytes and alt text as before the Inventory change.
 
 ### grade10-admin-auction-listing-US14-TC5-1: Untagging source media preserves the listing snapshot
@@ -526,6 +524,7 @@ changes later.
 
 * admin(Inventory operator with existing Inventory media-management authority) is on <grade10 Inventory Cert record url>.
 * admin(Auction operator with existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
+* <source Cert record> is available with no active reservation.
 * <source media> is tagged to printed Cert ID <source Cert ID> for <product>.
 * <saved listing> contains a copy of <source media>.
 
@@ -545,6 +544,7 @@ changes later.
 
 **Expected Results:**
 
+* Inventory deletes the Cert record and its tagged source media as part of physical-unit removal.
 * The saved listing copy retains the same bytes and alt text as before the Inventory change.
 
 ### grade10-admin-auction-listing-US14-TC7-1: Source selection accepts an eighth gallery item
