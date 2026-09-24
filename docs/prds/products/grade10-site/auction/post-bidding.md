@@ -184,6 +184,7 @@ by card, reads:
 | Buyer's Premium | 20,000 | 20% of the winning bid, or the currency minimum; Grade10 computes it, and no operator enters, waives or changes it |
 | Shipping & Handling | 800 | Quoted for the confirmed address; zero reads Free, and a difference found after payment is neither charged nor refunded |
 | Insurance | 500 | Optional and above zero; absent when none |
+| 🚧 Tax | — | Optional and above zero, entered by the operator; absent when none, as on this example order |
 | Subtotal | 121,300 | The lines above; the page summary may leave it out, the invoice and receipt keep it |
 | Payment Processing Fee | 4,272 | Priced by method and fixed at send; for card, grossed up from the Subtotal at the provider's live fees, so Grade10 keeps the Subtotal whole |
 | Order Total | 125,572 | Subtotal plus the fee — what the winner pays |
@@ -192,6 +193,9 @@ by card, reads:
   fee rows as TBD; after send it carries a brief info tooltip (`0.9% of the
   order value during transit.`) when the operator added it, and stays absent
   when none
+- 🚧 **Tax on Order Summary** — before send, Tax sits with the other fee
+  rows as TBD; after send it shows the amount the operator entered, and
+  stays absent when none
 - 🚧 **Bank transfer fee** — the amount the operator enters on each invoice,
   Free when zero
 - 🚧 **Payment reference code** — `LK423`: the listing's own code, carried
@@ -446,6 +450,7 @@ a second payment provider, and changes to the bid-time rules.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Tax line | 🚧 In flight | Tax is an amount the operator enters, shaped like Insurance. Chosen over a rate Grade10 computes, which needs a jurisdiction rule and a rate per regime nobody has written, and over a tax provider, which adds a vendor to price a number the operator already knows. Zero is refused, so "no tax" and "tax of nothing" stay distinct. What a receipt must carry beyond the amount is still the open Formal tax receipt row below. | Product (@jeffffej0909) |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
 | Insurance tooltip | 🚧 In flight | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
