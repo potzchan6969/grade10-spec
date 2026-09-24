@@ -1,5 +1,5 @@
 {
-  "generatedAt": "2026-09-23T16:15:04.351Z",
+  "generatedAt": "2026-09-24T05:50:23.545Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
@@ -14,6 +14,8 @@
     "Breadcrumbs": "ok",
     "Button": "ok",
     "Card": "skipped",
+    "CarouselProgress": "warn",
+    "CarouselProgressGroup": "warn",
     "Checkbox Button": "skipped",
     "Checkbox List": "skipped",
     "Checkbox List Input": "ok",
@@ -824,7 +826,21 @@
     "6929-4990": "Auctions / Category Button",
     "6929-4991": "Auctions / Category Button",
     "6940-5817": "Container",
-    "6942-5863": "Auctions | Grade10",
+    "6945-12258": "Featured",
+    "6945-12695": "Carousel",
+    "6945-12900": "CarouselProgressGroup",
+    "6945-8948": "Featured",
+    "6945-8949": "Featured",
+    "6951-10": "Page description",
+    "6951-11": "Example / Default",
+    "6951-18": "Example / Timed",
+    "6951-2": "CarouselProgress",
+    "6951-26": "Example / Reduced motion",
+    "6951-3": "CarouselProgress",
+    "6951-4": "CarouselProgress",
+    "6951-6": "CarouselProgress",
+    "6951-8": "CarouselProgress",
+    "6951-9": "Page title",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -865,6 +881,12 @@
     ],
     "Auctions / Category Button": [
       "Auctions / Category Button: no code component (looked for src/components/**/auctionscategorybutton.tsx or categorybutton.tsx)"
+    ],
+    "CarouselProgress": [
+      "CarouselProgress.state: no getEnum('state') in any template — this Figma axis reaches no code prop"
+    ],
+    "CarouselProgressGroup": [
+      "CarouselProgressGroup: no code component (looked for src/components/**/carouselprogressgroup.tsx or carouselprogressgroup.tsx)"
     ],
     "Collection Card": [
       "Collection Card: no code component (looked for src/components/**/collectioncard.tsx or collectioncard.tsx)"
