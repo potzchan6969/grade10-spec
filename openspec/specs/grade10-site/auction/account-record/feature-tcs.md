@@ -26,7 +26,7 @@
 
 **Pre-conditions:**
 
-* Collector has Won standings across Awaiting Setup, Pending Payment, and Refunded.
+* Collector has Won standings across Awaiting Setup, Pending Payment, Payment Overdue, and Refunded.
 
 **Steps:**
 
@@ -92,7 +92,7 @@
 
 **Expected Results:**
 
-* Standing is Pending Payment.
+* Standing is Payment Overdue.
 * View order is present.
 * No secondary helper under the standing, including no how-to-reach-Grade10 on the row.
 
@@ -127,7 +127,44 @@
 
 - Exact control label (View order vs Open order) is design copy; suite accepts either clear entry.
 
+## grade10-site-auction-account-record-US9: Won Status shows Setup Overdue and Payment Overdue
+
+**As a** winner scanning My Auctions,
+**I want** overdue won lots to read their overdue state in Status,
+**so that** I can tell closed self-service from an open window.
+
+### grade10-site-auction-account-record-US9-TC1-1: My Auctions names both overdue states
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-account-record-US-09
+
+**Pre-conditions:**
+
+* Customer has one Won order past the setup deadline and one unpaid invoice past the payment deadline.
+
+**Steps:**
+
+1. Open My Auctions and read the Status column.
+
+**Expected Results:**
+
+* The rows read Setup Overdue and Payment Overdue.
+* Each row still offers View order.
+* Each row retains the same lot and winning-bid facts as the Won row.
+
 ## Settled
+
+- My Auctions carries the mixed standing and order-state values in Status, including Setup Overdue and Payment Overdue.
 
 - Contact for expired payment is Winner Order only (author @tangconst).
 - Didn’t win hold copy stays.
@@ -140,3 +177,4 @@
 | Suite required no View order on Didn’t win | Folded as SC-57 |
 | Suite required no row contact / no Won helpers | Folded as SC-22 amend + SC-58 |
 | Hold copy retained for Didn’t win | Covered by redesign/durable hold scenarios; not removed here |
+| My Auctions uses Status for both overdue outcomes | Folded as SC-63 |
