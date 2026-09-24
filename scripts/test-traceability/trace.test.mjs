@@ -12,6 +12,7 @@ const validStoreFixture = resolve(here, "fixtures/store");
 const validAppFixture = resolve(here, "fixtures/app");
 const invalidStoreFixture = resolve(here, "fixtures/invalid/store");
 const invalidAppFixture = resolve(here, "fixtures/invalid/app");
+const foldStoreFixture = resolve(here, "fixtures/fold/valid");
 const sourceFile = resolve(
   validStoreFixture,
   "openspec/specs/demo/spec.md",
@@ -34,6 +35,13 @@ function copyFixtures() {
   cpSync(validStoreFixture, storeRoot, { recursive: true });
   cpSync(validAppFixture, appRoot, { recursive: true });
   return { root, storeRoot, appRoot };
+}
+
+function copyFoldFixture() {
+  const root = mkdtempSync(resolve(tmpdir(), "trace-fold-test-"));
+  const storeRoot = resolve(root, "store");
+  cpSync(foldStoreFixture, storeRoot, { recursive: true });
+  return { root, storeRoot };
 }
 
 test("validate and report build a graph from fixtures without a registry", () => {
@@ -80,6 +88,158 @@ test("validate and report build a graph from fixtures without a registry", () =>
   assert.equal(parsed.counts.cases, 2);
   assert.equal(parsed.counts.tests, 2);
   assert.equal(parsed.status, "valid");
+});
+
+test("fold validates exact case handover across change capabilities while validate stays strict", () => {
+  const fold = runCli([
+    "fold",
+    "--change",
+    "trace-fold-demo",
+    "--store-root",
+    foldStoreFixture,
+  ]);
+  assert.equal(fold.status, 0, fold.stderr || fold.stdout);
+  assert.match(fold.stdout, /Trace fold validation: PASS/);
+  assert.match(fold.stdout, /Capabilities checked: 2/);
+  assert.match(fold.stdout, /Case markers checked: 2/);
+
+  const validate = runCli(["validate", "--store-root", foldStoreFixture]);
+  assert.equal(validate.status, 1, validate.stderr || validate.stdout);
+  assert.match(validate.stdout, /\[duplicate-id\]/);
+});
+
+test("fold reports a missing durable case marker", () => {
+  const { root, storeRoot } = copyFoldFixture();
+  try {
+    const durableCases = resolve(
+      storeRoot,
+      "openspec/specs/auction/store/listing-media/feature-tcs.md",
+    );
+    const text = readFileSync(durableCases, "utf8");
+    const marker = "<!-- trace:case id=auction/TC/listing-media-003 rev=2 covers=auction/SC/listing-media-001,auction/SC/listing-media-002 -->\n";
+    assert.ok(text.includes(marker));
+    writeFileSync(durableCases, text.replace(marker, ""));
+
+    const result = runCli([
+      "fold",
+      "--change",
+      "trace-fold-demo",
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /\[missing-case\]/);
+    assert.match(result.stdout, /auction\/TC\/listing-media-003/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("fold reports changed revisions and reordered covers in durable case markers", () => {
+  const { root, storeRoot } = copyFoldFixture();
+  try {
+    const durableCases = resolve(
+      storeRoot,
+      "openspec/specs/auction/store/listing-media/feature-tcs.md",
+    );
+    const text = readFileSync(durableCases, "utf8");
+    const changedRevision = text.replace(
+      "id=auction/TC/listing-media-003 rev=2 covers=",
+      "id=auction/TC/listing-media-003 rev=3 covers=",
+    );
+    assert.notEqual(changedRevision, text);
+    const changedCovers = changedRevision.replace(
+      "covers=auction/SC/listing-media-001,auction/SC/listing-media-002",
+      "covers=auction/SC/listing-media-002,auction/SC/listing-media-001",
+    );
+    assert.notEqual(changedCovers, changedRevision);
+    writeFileSync(durableCases, changedCovers);
+
+    const result = runCli([
+      "fold",
+      "--change",
+      "trace-fold-demo",
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /\[case-mismatch\]/);
+    assert.match(result.stdout, /field rev/);
+    assert.match(result.stdout, /field covers/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
+});
+
+test("fold rejects unresolved active covers and duplicate durable target markers", () => {
+  const { root, storeRoot } = copyFoldFixture();
+  try {
+    const activeCases = resolve(
+      storeRoot,
+      "openspec/changes/trace-fold-demo/specs/auction/store/listing-media/feature-tcs.md",
+    );
+    const durableCases = resolve(
+      storeRoot,
+      "openspec/specs/auction/store/listing-media/feature-tcs.md",
+    );
+    const missingScenario = "auction/SC/listing-media-999";
+    for (const file of [activeCases, durableCases]) {
+      const text = readFileSync(file, "utf8");
+      const updated = text.replaceAll(
+        "auction/SC/listing-media-002",
+        missingScenario,
+      );
+      assert.notEqual(updated, text);
+      writeFileSync(file, updated);
+    }
+
+    const unresolved = runCli([
+      "fold",
+      "--change",
+      "trace-fold-demo",
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(unresolved.status, 1, unresolved.stderr || unresolved.stdout);
+    assert.match(unresolved.stdout, /\[unresolved-reference\]/);
+    assert.match(unresolved.stdout, new RegExp(missingScenario.replaceAll("/", "\\/")));
+
+    const duplicateRoot = mkdtempSync(resolve(tmpdir(), "trace-fold-duplicate-"));
+    try {
+      const duplicateStore = resolve(duplicateRoot, "store");
+      cpSync(foldStoreFixture, duplicateStore, { recursive: true });
+      const target = resolve(
+        duplicateStore,
+        "openspec/specs/shared/auth/sign-in/feature-tcs.md",
+      );
+      const targetText = readFileSync(target, "utf8");
+      const marker = "<!-- trace:case id=shared/TC/sign-in-008 rev=3 covers=shared/SC/sign-in-007 -->";
+      const heading = "### The visitor is refused invalid details";
+      assert.ok(targetText.includes(`${marker}\n${heading}`));
+      writeFileSync(
+        target,
+        targetText.replace(
+          `${marker}\n${heading}`,
+          `${marker}\n${heading}\n\n${marker}\n### The visitor is refused invalid details again`,
+        ),
+      );
+
+      const duplicate = runCli([
+        "fold",
+        "--change",
+        "trace-fold-demo",
+        "--store-root",
+        duplicateStore,
+      ]);
+      assert.equal(duplicate.status, 1, duplicate.stderr || duplicate.stdout);
+      assert.match(duplicate.stdout, /\[duplicate-target-marker\]/);
+      assert.match(duplicate.stdout, /shared\/TC\/sign-in-008/);
+    } finally {
+      rmSync(duplicateRoot, { recursive: true, force: true });
+    }
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, unresolved refs, and stale links", () => {

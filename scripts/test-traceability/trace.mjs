@@ -41,9 +41,10 @@ const usage = `Usage:
   pnpm run trace -- init case --file <path> --target <exact case heading line> --product <slug> --capability <slug> --covers <SC-ref[,SC-ref...]> [--dry-run]
   pnpm run trace -- link --file <path> --target <exact test line> (--acceptance <TC-ref@revision> | --supports <SC-ref>) [--dry-run]
   pnpm run trace -- validate [--store-root <path>] [--app-root <Grade10 root>]
+  pnpm run trace -- fold --change <id> [--store-root <path>]
   pnpm run trace -- report [--store-root <path>] [--app-root <Grade10 root>] [--json]
 
-Mutating commands require one exact file and one exact, unique target line. Markers are inserted immediately above that line. Use --store-root only for an alternate store or isolated fixtures.`;
+Mutating commands require one exact file and one exact, unique target line. Markers are inserted immediately above that line. Use --store-root only for an alternate store or isolated fixtures. fold validates the pre-archive feature case handover for one active change.`;
 
 function fail(message) {
   throw new Error(message);
@@ -405,6 +406,241 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
   };
 }
 
+function readCaseMarkers(file, issues) {
+  const lines = readFileSync(file, "utf8").split(/\r?\n/);
+  const records = [];
+  for (let index = 0; index < lines.length; index += 1) {
+    const comment = traceComment(lines[index]);
+    if (comment?.syntax !== "html") continue;
+    const marker = /^([a-z]+)(?:\s+([\s\S]*))?$/.exec(comment.body);
+    if (marker?.[1] !== "case") {
+      if (comment.body.toLowerCase().startsWith("case")) {
+        issues.push({
+          code: "marker-kind",
+          message: `invalid case marker: ${comment.body}`,
+          file,
+          line: index + 1,
+        });
+      }
+      continue;
+    }
+
+    const line = index + 1;
+    const issue = (code, message) =>
+      issues.push({ code, message, file, line });
+    const fields = attributes(marker[2] ?? "", issue);
+    checkFields(fields, ["id", "rev", "covers"], issue);
+    const parsedId = parseReference(fields.id ?? "");
+    const id = canonicalMarkerReference(
+      fields.id ?? "",
+      "TC",
+      issue,
+      "case id",
+    );
+    const revision = fields.rev ?? "";
+    if (!positiveRevision(revision))
+      issue("invalid-revision", `revision must be a positive integer: ${revision || "(empty)"}`);
+
+    const covers = fields.covers ?? "";
+    const coveredIds = covers.split(",");
+    if (!covers || !coveredIds.length)
+      issue("marker-shape", "case marker must cover at least one scenario id");
+    const canonicalCovers = coveredIds.map((coveredId) =>
+      canonicalMarkerReference(coveredId, "SC", issue, "covered scenario id"),
+    );
+    if (new Set(canonicalCovers).size !== canonicalCovers.length)
+      issue("duplicate-cover", "case marker repeats a covered scenario id");
+    if (!/^\s*###\s+\S/.test(lines[index + 1] ?? ""))
+      issue("marker-adjacency", "case marker must sit immediately above a case heading");
+
+    records.push({
+      id: parsedId?.canonical ?? id,
+      fields: {
+        id: fields.id ?? "",
+        rev: revision,
+        covers,
+      },
+      coveredIds: canonicalCovers,
+      file,
+      line,
+    });
+  }
+  return records;
+}
+
+function scenarioIdsUnder(directory) {
+  const ids = new Set();
+  for (const file of walk(directory, (path) => extname(path) === ".md")) {
+    const lines = readFileSync(file, "utf8").split(/\r?\n/);
+    for (const line of lines) {
+      const comment = traceComment(line);
+      if (comment?.syntax !== "html") continue;
+      const marker = /^scenario\s+([\s\S]+)$/.exec(comment.body);
+      if (!marker) continue;
+      const fields = {};
+      for (const token of marker[1].trim().split(/\s+/).filter(Boolean)) {
+        const field = /^([a-z]+)=([^\s]+)$/.exec(token);
+        if (field) fields[field[1]] = field[2];
+      }
+      const parsed = parseReference(fields.id);
+      if (
+        parsed?.kind === "SC" &&
+        fields.id === parsed.canonical &&
+        positiveRevision(fields.rev)
+      ) {
+        ids.add(parsed.canonical);
+      }
+    }
+  }
+  return ids;
+}
+
+function validateFoldHandover({ storeRoot = scriptRoot, changeId }) {
+  const roots = { storeRoot: resolve(storeRoot), appRoot: null };
+  const specsRoot = resolve(roots.storeRoot, "openspec/specs");
+  const changesRoot = resolve(roots.storeRoot, "openspec/changes");
+  if (!existsSync(specsRoot))
+    fail(`OpenSpec specs directory not found under --store-root: ${specsRoot}`);
+  if (!changeId) fail("--change is required");
+  if (
+    changeId !== changeId.trim() ||
+    changeId === "." ||
+    changeId === ".." ||
+    changeId === "archive" ||
+    changeId.includes("/") ||
+    changeId.includes("\\")
+  ) {
+    fail("--change must name one active change directory, not a path or archive directory");
+  }
+  const changeRoot = resolve(changesRoot, changeId);
+  if (!inside(changesRoot, changeRoot) || !existsSync(changeRoot))
+    fail(`active change directory not found: ${changeRoot}`);
+  const changeSpecsRoot = resolve(changeRoot, "specs");
+  if (!existsSync(changeSpecsRoot))
+    fail(`change specs directory not found: ${changeSpecsRoot}`);
+
+  const suiteFiles = walk(
+    changeSpecsRoot,
+    (path) => extname(path) === ".md" && path.split(sep).at(-1) === "feature-tcs.md",
+  );
+  if (!suiteFiles.length)
+    fail(`no capability feature-tcs.md files found for change ${changeId}`);
+
+  const issues = [];
+  let caseCount = 0;
+  for (const activeSuite of suiteFiles) {
+    const capabilityRelative = relative(changeSpecsRoot, dirname(activeSuite));
+    const capabilityParts = capabilityRelative.split(sep);
+    if (capabilityParts.length !== 3) {
+      issues.push({
+        code: "capability-path",
+        message: "feature-tcs.md must be under specs/<product>/<domain>/<capability>",
+        file: activeSuite,
+        line: 1,
+      });
+      continue;
+    }
+
+    const activeCapability = dirname(activeSuite);
+    const durableCapability = resolve(specsRoot, capabilityRelative);
+    const durableSuite = resolve(durableCapability, "feature-tcs.md");
+    const activeCases = readCaseMarkers(activeSuite, issues);
+    const durableCases = existsSync(durableSuite)
+      ? readCaseMarkers(durableSuite, issues)
+      : [];
+    caseCount += activeCases.length;
+
+    const activeScenarioIds = scenarioIdsUnder(activeCapability);
+    const durableScenarioIds = scenarioIdsUnder(durableCapability);
+    const knownScenarioIds = new Set([
+      ...activeScenarioIds,
+      ...durableScenarioIds,
+    ]);
+
+    const activeById = groupBy(activeCases, (record) => record.id);
+    for (const [id, records] of activeById) {
+      if (id && records.length > 1) {
+        for (const record of records) {
+          issues.push({
+            code: "duplicate-source-marker",
+            message: `duplicate active case marker ${id} (${records.length} markers)`,
+            file: record.file,
+            line: record.line,
+          });
+        }
+      }
+    }
+
+    const durableById = groupBy(durableCases, (record) => record.id);
+    for (const activeCase of activeCases) {
+      for (const coveredId of activeCase.coveredIds) {
+        if (!knownScenarioIds.has(coveredId)) {
+          issues.push({
+            code: "unresolved-reference",
+            message: `case ${activeCase.id} covers unknown scenario ${coveredId} in its active or durable capability`,
+            file: activeCase.file,
+            line: activeCase.line,
+          });
+        }
+      }
+
+      const targets = durableById.get(activeCase.id) ?? [];
+      if (!targets.length) {
+        issues.push({
+          code: "missing-case",
+          message: `durable case marker ${activeCase.id} is missing from ${displayPath(durableSuite, roots)}`,
+          file: activeCase.file,
+          line: activeCase.line,
+        });
+        continue;
+      }
+      if (targets.length > 1) {
+        for (const target of targets) {
+          issues.push({
+            code: "duplicate-target-marker",
+            message: `durable case marker ${activeCase.id} appears ${targets.length} times in ${displayPath(durableSuite, roots)}`,
+            file: target.file,
+            line: target.line,
+          });
+        }
+        continue;
+      }
+
+      const [target] = targets;
+      for (const field of ["id", "rev", "covers"]) {
+        if (activeCase.fields[field] !== target.fields[field]) {
+          issues.push({
+            code: "case-mismatch",
+            message: `durable case marker ${activeCase.id} field ${field} differs: expected ${JSON.stringify(activeCase.fields[field])}, found ${JSON.stringify(target.fields[field])}`,
+            file: target.file,
+            line: target.line,
+          });
+        }
+      }
+    }
+  }
+
+  return {
+    roots,
+    changeId,
+    capabilityCount: suiteFiles.length,
+    caseCount,
+    issues,
+  };
+}
+
+function summarizeFold(result) {
+  const lines = [
+    `Trace fold validation: ${result.issues.length ? "FAIL" : "PASS"}`,
+    `Change: ${result.changeId}`,
+    `Capabilities checked: ${result.capabilityCount}`,
+    `Case markers checked: ${result.caseCount}`,
+  ];
+  if (result.issues.length)
+    lines.push("Issues:", ...result.issues.map((issue) => issueLine(issue, result.roots)));
+  return lines.join("\n");
+}
+
 function groupBy(items, getKey) {
   const grouped = new Map();
   for (const item of items) {
@@ -677,6 +913,7 @@ function parseCommand(argv) {
       acceptance: { type: "string" },
       appRoot: { type: "string" },
       capability: { type: "string" },
+      change: { type: "string" },
       covers: { type: "string" },
       dryRun: { type: "boolean", default: false },
       file: { type: "string" },
@@ -709,6 +946,14 @@ export function runCli(argv = process.argv.slice(2)) {
     if (parsed.command === "link") {
       linkTest(values);
       return 0;
+    }
+    if (parsed.command === "fold") {
+      const result = validateFoldHandover({
+        storeRoot: values.storeRoot ?? scriptRoot,
+        changeId: values.change,
+      });
+      console.log(summarizeFold(result));
+      return result.issues.length ? 1 : 0;
     }
     if (parsed.command === "validate" || parsed.command === "report") {
       const graph = parseTraceGraph({

@@ -40,6 +40,7 @@ pnpm run trace -- init case --file openspec/specs/<path>/feature-tcs.md --target
 pnpm run trace -- link --file <app-test-file> --target '  test("exact test title", () => {});' --acceptance auction/TC/listing-media-c94@2 --dry-run
 pnpm run trace -- link --file <app-test-file> --target '  test("supporting behavior", () => {});' --supports auction/SC/listing-media-c93 --dry-run
 pnpm run trace -- validate --app-root <grade10-app-root>
+pnpm run trace -- fold --change <change-id>
 pnpm run trace -- report --app-root <grade10-app-root>
 ```
 
@@ -52,6 +53,10 @@ pnpm --dir <grade10-spec-root> run trace -- validate --app-root "$PWD"
 `--target` matches the entire source line. Mutating commands require `--file` and `--target`, refuse a missing or ambiguous target, and insert one adjacent marker. `init` requires `--product` and `--capability`; it allocates the next sequence and accepts those slugs in any casing. `--covers`, `--acceptance`, and `--supports` resolve references without regard to input casing and write canonical values. `--dry-run` prints the proposed marker without writing. Case initialization and test linking also require referenced ids to resolve to one record.
 
 `validate` scans durable specs and active changes under the store, then source files under `--app-root`. It excludes archived changes and generated or third-party directories. It checks duplicate ids, malformed or non-positive revisions, malformed markers, noncanonical casing, unresolved references, marker adjacency, and acceptance links whose revision no longer matches the case. Invalid links return a non-zero exit code. Unlinked scenarios and cases are reported as rollout information and do not fail validation.
+
+`fold --change <id>` checks the pre-archive handover for one active change. For each `openspec/changes/<id>/specs/<product>/<domain>/<capability>/feature-tcs.md`, it reads the matching durable suite under `openspec/specs/`. Every active case marker must appear exactly once there with the same `id`, `rev`, and ordered `covers` values. Each active case's `covers` references must resolve to a scenario marker in that capability's active change or durable spec. Missing, changed, or duplicate durable case markers and unresolved references fail the command. Use `--store-root` for an alternate store or an isolated fixture.
+
+`validate` remains strict across active and durable files, so it can report the deliberate case marker duplication before archive. `fold` is the transitional validator for that handover; run `validate` after archive.
 
 `report` lists the records and links and calls out unlinked records. A scenario is unlinked when no case covers it and no test supports it. A case is unlinked when no current acceptance test accepts it. Pass `--json` for structured output. `--store-root` selects another store root, chiefly for isolated fixtures.
 
