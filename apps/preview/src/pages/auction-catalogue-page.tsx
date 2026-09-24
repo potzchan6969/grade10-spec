@@ -7,6 +7,7 @@ import {
   AuctionCategoryButton,
   AuctionLotCard,
   FeaturedAuctions,
+  FeaturedAuctionsBanner,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
 import {
@@ -57,14 +58,18 @@ type AuctionCataloguePageProps = {
   lots: readonly CatalogueLot[];
   /**
    * Featured band layout. `row` is the scrolling cards; `pair` is the
-   * Thanks.co-style overlapping image + info exploration.
+   * Thanks.co-style overlapping image + info exploration; `banner` is the
+   * full-width Figma carousel (muted copy + bronze stage).
    */
-  featuredLayout?: "row" | "pair";
+  featuredLayout?: "row" | "pair" | "banner";
+  /** When false, the All Auctions block shows only the lot grid. */
+  showCategories?: boolean;
 };
 
 function AuctionCataloguePage({
   lots,
   featuredLayout = "row",
+  showCategories = true,
 }: AuctionCataloguePageProps) {
   const ordered = useMemo(() => byCatalogueOrder(lots), [lots]);
   const live = ordered.filter((lot) => lot.status !== "Ended");
@@ -263,7 +268,9 @@ function AuctionCataloguePage({
         <h1 className="sr-only">Auctions</h1>
 
         {featured.length > 0 ? (
-          featuredLayout === "pair" ? (
+          featuredLayout === "banner" ? (
+            <FeaturedAuctionsBanner lots={featured} />
+          ) : featuredLayout === "pair" ? (
             <FeaturedAuctionsPair
               lots={featured}
               onToggle={toggleWatch}
@@ -280,7 +287,7 @@ function AuctionCataloguePage({
           )
         ) : null}
 
-        <div className="mx-auto w-full max-w-7xl px-4 pt-16 pb-16 sm:px-8">
+        <div className="w-full px-4 pt-16 pb-16 sm:px-8 lg:px-12">
           <section aria-labelledby="all-auctions" className="min-w-0">
             <h2
               className={cn(
@@ -292,19 +299,21 @@ function AuctionCataloguePage({
             >
               All Auctions
             </h2>
-            {listed.length === 0 && categories.length === 0 && !pageLoading ? (
+            {listed.length === 0 &&
+            (!showCategories || categories.length === 0) &&
+            !pageLoading ? (
               <p className="mt-8 max-w-prose text-base text-foreground">
                 There are no auctions.
               </p>
             ) : (
               <div
                 className={
-                  categories.length > 0
+                  showCategories && categories.length > 0
                     ? "mt-8 flex flex-col gap-8 lg:grid lg:grid-cols-[minmax(0,1fr)_minmax(0,3fr)] lg:gap-12"
                     : "mt-8"
                 }
               >
-                {categories.length > 0 ? (
+                {showCategories && categories.length > 0 ? (
                   <nav
                     aria-label="Categories"
                     className={cn(
@@ -334,7 +343,7 @@ function AuctionCataloguePage({
                   <ul
                     aria-busy="true"
                     aria-label="Loading auctions"
-                    className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+                    className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4"
                   >
                     {Array.from({ length: skeletonCount }, (_, index) => (
                       // biome-ignore lint/suspicious/noArrayIndexKey: placeholders have no identity beyond position.
@@ -355,7 +364,7 @@ function AuctionCataloguePage({
                   </p>
                 ) : (
                   <ul
-                    className="grid grid-cols-1 gap-x-8 gap-y-16 sm:grid-cols-2 lg:grid-cols-3"
+                    className="grid grid-cols-2 gap-x-6 gap-y-12 sm:grid-cols-3 sm:gap-x-8 sm:gap-y-16 lg:grid-cols-4"
                     data-revealed={listRevealed || undefined}
                   >
                     {listed.map((lot, index) => (
