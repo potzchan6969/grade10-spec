@@ -254,7 +254,10 @@ export {
   type GradingCardRecordCopy,
   type GradingCardRecordProps,
 } from "./blocks/grading-submission/grading-card-record";
-export type { GradingLocaleProps } from "./blocks/grading-submission/grading-copy";
+export {
+  fillGradingCopy,
+  type GradingLocaleProps,
+} from "./blocks/grading-submission/grading-copy";
 export {
   GradingFeeSheet,
   type GradingFeeSheetCopy,
