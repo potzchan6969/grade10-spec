@@ -59,6 +59,24 @@ export type {
   BookingSlot,
   BookingStep,
 } from "./blocks/appointment-booking/types";
+// shared/ui/invoice-and-receipt-pdf
+export {
+  InvoicePdf,
+  type InvoicePdfCopy,
+  type InvoicePdfProps,
+} from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
+export {
+  ReceiptPdf,
+  type ReceiptPdfCopy,
+  type ReceiptPdfProps,
+} from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
+export type {
+  OrderValueLines,
+  OrderValueLinesCopy,
+  PartyAddress,
+  PaymentBreakdown,
+  PaymentBreakdownCopy,
+} from "./blocks/auction-invoice-and-receipt-pdf/types";
 export {
   AuctionCard,
   type AuctionCardBadge,
