@@ -47,6 +47,8 @@ The concrete setup that produces the scenario's GIVEN, in the environment's term
 - **Results are checkable by looking** — the thing that worked and, where the spec states it, what survived beside it (`Both buttons still work`); none is a step in disguise
 - **The UI event, not the spec's UX term** — activate → the click; navigate or render → the browser event; unscoped → `The listing URL names no collection`. Never `affordance`, `unscoped`, `narrowing`, `way on` in a case, even when the spec says them; `e.g.` only where the spec gives the example
 - **Few words** — ten per bullet, a step a short imperative; cut `successfully`, `as expected`, `the application`, `the user is able to`; one idea per bullet. Short is not vague: `Hero is missing` is vague, `Hero collapses, page layout intact` is short and checkable
+- **Exact about where, open about which** — a step says precisely where a tester looks and what they touch; the values it uses come by name from **Test data**, so the case survives a changed value
+- **Interface text only when it is the claim** — quote a label only where the words are what the case verifies; elsewhere name the control by what it does (`the shop button in the hero`), so a copy change does not rewrite the case
 - **Before** — step `1. The user is able to open the store front door successfully.`, result `The front door renders successfully, with the marketing hero visible immediately, and both buttons work.`
 - **After** — steps `1. Navigate to <grade10 store url>.` `2. Click the shop button in the hero.` `3. Click the auction button in the hero.`, results `Front door renders, hero visible.` `Both buttons open their destinations without JavaScript.`
 

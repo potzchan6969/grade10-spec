@@ -578,6 +578,17 @@ function checkSuite(root, filePath, rulesRev) {
           `case \`${tc.id}\` has no pre-conditions line (use \`None.\` when it needs nothing)`,
         );
       if (tc.steps === 0) err(at, `case \`${tc.id}\` has no numbered steps`);
+      // A state only a mock, a stub or a manipulated environment produces is
+      // one a script sets up; a case that needs one and plans no automation
+      // is raised, not refused (Step 3, Executable without asking).
+      if (
+        /\b(mock(?:ed|s)?|stub(?:bed|s)?|manipulated)\b/i.test(tc.preconditions) &&
+        !/\bautomation\b/.test(tc.props.get("Testability") ?? "")
+      )
+        warn(
+          at,
+          `case \`${tc.id}\` needs a mocked or manipulated state but its **Testability** plans no \`automation\``,
+        );
       if (tc.expected === 0)
         err(
           at,

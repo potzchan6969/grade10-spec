@@ -317,3 +317,22 @@ test("a sweep check lets drafts move and holds reviewed cases still", () => {
   assert.equal(reopened.status, 1);
   assert.match(reopened.stdout, /demo-alpha-US1-TC1-1` was actual, now draft/);
 });
+
+// A state only a mock produces is a script's to set up: a case that needs one
+// and plans no automation is raised (Step 3, Executable without asking).
+test("a case needing a mocked state and planning no automation is warned", () => {
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  writeFileSync(
+    suite,
+    readFileSync(suite, "utf8").replace(
+      "None.",
+      "The catalogue endpoint is mocked to return a 500.",
+    ),
+  );
+  const result = run(root);
+  assert.match(
+    result.stdout,
+    /demo-alpha-US1-TC1-1` needs a mocked or manipulated state but its \*\*Testability\*\* plans no `automation`/,
+  );
+});
