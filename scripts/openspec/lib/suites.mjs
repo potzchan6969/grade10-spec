@@ -288,17 +288,29 @@ export function readSpecIds(specPath) {
 /** A domain suite (`domain-tcs.md`) has no `spec.md` beside it: it reads the journeys
  * every capability in that domain issues. Collect them from each capability one
  * level down, so a domain case can trace the journeys it crosses. */
-export function readDomainIds(dir) {
+export function readDomainIds(dir, root = ROOT) {
   const journeys = new Map();
   const scenarios = new Set();
   let found = false;
-  for (const e of readdirSync(dir, { withFileTypes: true })) {
-    if (!e.isDirectory()) continue;
-    const ids = readSpecIds(join(dir, e.name, "spec.md"));
-    if (!ids) continue;
-    found = true;
-    for (const [id, title] of ids.journeys) journeys.set(id, title);
-    for (const id of ids.scenarios) scenarios.add(id);
+  const rel = relative(root, dir);
+  const change = rel.match(
+    /^openspec\/changes\/[^/]+\/specs\/([^/]+)\/([^/]+)$/,
+  );
+  // An in-flight domain suite replaces its durable sibling suite at archive,
+  // so its traces can include unchanged capabilities as well as local deltas.
+  const sources = change
+    ? [join(root, "openspec", "specs", change[1], change[2]), dir]
+    : [dir];
+  for (const source of sources) {
+    if (!existsSync(source)) continue;
+    for (const e of readdirSync(source, { withFileTypes: true })) {
+      if (!e.isDirectory()) continue;
+      const ids = readSpecIds(join(source, e.name, "spec.md"));
+      if (!ids) continue;
+      found = true;
+      for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.scenarios) scenarios.add(id);
+    }
   }
   return found ? { journeys, scenarios, hasJourneySection: true } : null;
 }
