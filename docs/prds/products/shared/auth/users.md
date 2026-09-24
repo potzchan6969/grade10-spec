@@ -29,6 +29,13 @@ components render is the console's own capability, and each of these moves lands
 on the identity trail. Grade10's page that uses this read is the
 [Users access desk](/p/grade10-admin/console/user-directory).
 
+## Create Account
+
+- 🚧 **Create** — an operator holding `user:create` may create a passwordless
+  Auth account with name, email, and roles from the closed set; a duplicate
+  email is refused; creating with a non-`user` role also requires
+  `user:set-role`; no loyalty enroll or invite mail
+
 :::callout{kind="note"}
 Auction bidder bans are a separate thing with a separate switch. The auction
 service keeps its own flag because an identity ban does not cross brands and the

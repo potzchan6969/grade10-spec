@@ -29,6 +29,9 @@ submits an empty list, leaving what an empty list means to the console.
   about what shows next
 - **Order** — sortable headings report the column and direction; the table
   does not reorder the rows it was given
+- 🚧 **Create** — offered only when the console supplies a create handler; the
+  create dialog collects name, email, and roles from the console-supplied
+  vocabulary; success reports the created account for the console to open
 
 ## Account Panel
 

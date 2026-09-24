@@ -33,6 +33,14 @@ Shared rules for the read and the components:
 [Users](/p/shared/auth/users),
 [User Directory](/p/shared/console/user-directory).
 
+## Create Account
+
+🚧 An operator holding `user:create` creates a passwordless Auth account from
+Users — name, email, and roles from the closed set — for someone who has never
+signed in. Create is offered only with that grant. A successful create opens the
+new account's panel. A duplicate email is refused, with a way to open the
+existing account.
+
 :::detail{title="Product decisions" for="pm"}
 An operator holding a ticket that names a person could not find them by name,
 could not ask who holds `admin`, and had to open separate confirmations to see
@@ -43,11 +51,17 @@ but is the wrong shape for an access desk.
 | --- | --- |
 | Support / admin | Find the person on a ticket and see their access whole |
 | Admin | Answer who holds a closed role right now from Users alone |
+| Admin | Stand up an elevated account before the person has signed in |
 
 | Measure | Reading |
 | --- | --- |
 | Ticket person found | Name or email fragment from the ticket reaches the account |
 | Who holds admin | Directory narrowed to `admin` without leaving Users |
+| Elevated account before sign-in | An admin with no prior Auth row is creatable from Users and opens in the panel |
+
+| Decision | Choice |
+| --- | --- |
+| Create on Users | Auth-only access desk — name, email, roles; not loyalty enroll or opening points. Override keeps Create user and member for non-prod loyalty provisioning |
 
 Non-goals:
 
