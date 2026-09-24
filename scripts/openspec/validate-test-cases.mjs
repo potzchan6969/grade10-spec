@@ -190,6 +190,7 @@ function checkSuite(root, filePath, rulesRev) {
   const dir = dirname(filePath);
   const suite = parseSuite(text);
   const level = levelOf(filePath);
+  const domain = level === "domain";
   const composed = level !== "feature";
   const spec =
     level === "platform"
