@@ -16,6 +16,10 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Invoice premium: 20% of the winning bid
   - Integer amount: rounded to the nearest minor unit
   - Bid-panel boundary: only the rate appears before invoicing
+- Invoice summary guidance
+  - Fee tooltips: Buyer’s Premium, Shipping & Handling, Insurance and Payment Processing Fee carry brief info tooltips when those lines are shown
+  - Insurance before send: before the invoice is sent, Order Summary shows Insurance as TBD with the other fee rows; after send, Insurance stays optional and absent when none
+  - Insurance tip copy: the Insurance tooltip reads `0.9% of the order value during transit.`
 - Premium minimum
   - Currency minimum: the current Auction Payment settings mapping sets the lower bound for the calculated premium
 - Delivery address
@@ -58,6 +62,8 @@ prove, and the receipt, tracker and delivery proof the order keeps afterwards.
   - Proof not accepted: the latest reason the winner reads, and the deadline running again with the time that was left
 - Records the winner keeps
   - Receipt ID and breakdown: every receipt has a unique receipt ID and shows what was billed, paid and left to pay
+  - Receipt payment breakdown: each receipt identifies the invoice total, prior payments, the current payment and remaining amount
+  - Historical receipt values: issued receipts and later receipts' prior-payment values remain unchanged after a refund or reversal
   - Retention: every invoice and receipt PDF kept at least 7 years, or for the life of the account if longer
   - Refunded order: shows the terminal outcome while retaining invoices and receipts
   - Refund details: Amount, Transfer to and Reason; Reference for a bank refund; Note only when the operator recorded one
@@ -129,7 +135,7 @@ Payment Processing Fee are separate lines: omitting Insurance does not replace
 it with the fee.
 
 On Winner Order's order summary, Grade10 SHALL offer brief info tooltips beside
-**Buyer’s Premium**, **Shipping & Handling**, and **Payment Processing Fee**
+**Buyer’s Premium**, **Shipping & Handling**, **Insurance**, and **Payment Processing Fee**
 when those lines are shown. The Payment Processing Fee tooltip SHALL describe
 the fee for the invoice's method briefly and SHALL NOT restate the gross-up
 formula.
@@ -225,6 +231,54 @@ historical: a manually settled order keeps its payment processing fee.
 - **WHEN** the winner opens the order
 - **THEN** the Payment Processing Fee line is shown and reads Free
 - **AND** the order total is 312000 minor units in HKD
+
+### Requirement: Insurance info tooltip
+
+On Winner Order's order summary, Insurance explains itself when the line is
+shown.
+
+**Tooltip** - When the Insurance line is shown, Grade10 SHALL offer a brief
+info tooltip beside it.
+
+**Copy** - The tooltip SHALL read `0.9% of the order value during transit.`
+
+#### Scenario: winner-order-SC-169 - A shown Insurance line carries its info tooltip
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling the lot
+
+- **GIVEN** an operator sent an invoice with Insurance of 4000 minor units in HKD
+- **WHEN** the winner opens Winner Order
+- **THEN** the Insurance line shows 4000 minor units in HKD
+- **AND** the line offers a brief info tooltip
+- **AND** the tooltip reads `0.9% of the order value during transit.`
+
+#### Scenario: winner-order-SC-170 - An absent Insurance line offers no tooltip
+**Serves:** winner-order-US-01 - the winner reads Order Summary while settling the lot
+
+- **GIVEN** an operator sent an invoice without adding Insurance
+- **WHEN** the winner opens Winner Order
+- **THEN** no Insurance line is shown
+- **AND** no Insurance tooltip is offered
+
+### Requirement: Insurance before the invoice is sent
+
+Before an operator sends the invoice, Order Summary names Insurance without an
+amount.
+
+**Before send** - Before an operator has sent the invoice, Winner Order's order
+summary SHALL show Insurance as TBD with the other fee rows.
+
+**No amount** - Grade10 SHALL NOT show a calculated Insurance amount before the
+invoice is sent.
+
+#### Scenario: winner-order-SC-171 - Insurance reads TBD before the invoice is sent
+**Serves:** winner-order-US-01 - the winner reads Order Summary before the invoice is sent
+
+- **GIVEN** an auction order before an operator has sent its invoice
+- **WHEN** the winner reads the order summary
+- **THEN** Insurance is shown as TBD with the other fee rows
+- **AND** no calculated Insurance amount is shown
+- **AND** the Insurance line offers a brief info tooltip that reads
+  `0.9% of the order value during transit.`
 
 ### Requirement: Grade10 computes the buyer's premium
 
@@ -564,9 +618,24 @@ Every receipt SHALL show this breakdown:
 | Line | Value |
 | --- | --- |
 | Original Invoice Total | The paid invoice's order total |
-| Previous Payments | 0 |
-| Current Payment Received | The amount this payment settled |
-| Remaining Balance Due | 0 |
+| Previous Payments | The payments recorded against that invoice before this payment |
+| Current Payment Received | The amount recorded for this payment |
+| Remaining Balance Due | The amount still owed after this payment, floored at 0 once the invoice is Paid |
+
+The four lines SHALL appear on receipts for a single full payment, ordered
+partial payments, a payment that closes an invoice within the agreed tolerance,
+and a confirmed overpayment. A tolerance-close or overpayment SHALL show
+`Remaining Balance Due` as `0`; it SHALL NOT add a shortfall, write-off or
+negative-credit line.
+
+The values SHALL describe the invoice and payment state when the receipt was
+issued. Grade10 SHALL NOT reissue a receipt or mutate an issued receipt after a
+refund or reversal. A later receipt's `Previous Payments` value SHALL remain
+the value recorded when that later receipt was issued.
+
+This requirement governs receipt contents only. Winner Order's live balance
+and its absence from the order page remain governed by the partial-payment
+capability.
 
 The receipt SHALL name the payment method:
 
@@ -669,6 +738,62 @@ operator's, SHALL appear on the receipt.
 - **WHEN** the payment confirmation is delivered again
 - **THEN** the receipt ID is still `REC-202609-LK7P2Q-01-P1`
 - **AND** no other receipt ID and no other internal audit number is issued
+
+#### Scenario: winner-order-SC-204 - A full payment receipt shows zero previous and remaining
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an invoice total of 100000 minor units in HKD with one confirmed payment of 100000 minor units
+- **WHEN** the winner opens that payment receipt
+- **THEN** Original Invoice Total is 100000 minor units in HKD
+- **AND** Previous Payments is 0
+- **AND** Current Payment Received is 100000 minor units in HKD
+- **AND** Remaining Balance Due is 0
+
+#### Scenario: winner-order-SC-205 - Ordered partial receipts preserve the payment history
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an invoice total of 100000 minor units in HKD
+- **AND** a first payment of 40000 minor units and a second payment of 30000 minor units were recorded in that order
+- **WHEN** the winner opens the receipt for each payment
+- **THEN** the first receipt shows Original Invoice Total 100000, Previous Payments 0, Current Payment Received 40000 and Remaining Balance Due 60000, all in minor units of HKD
+- **AND** the second receipt shows Original Invoice Total 100000, Previous Payments 40000, Current Payment Received 30000 and Remaining Balance Due 30000, all in minor units of HKD
+
+#### Scenario: winner-order-SC-206 - A tolerance-close receipt floors the remaining balance at zero
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an invoice total of 100000 minor units in HKD
+- **AND** 90000 minor units have already been paid
+- **AND** the operator records a 5000-minor-unit payment and closes the invoice as Paid within the agreed closing tolerance
+- **WHEN** the winner opens that payment receipt
+- **THEN** Original Invoice Total is 100000 minor units in HKD
+- **AND** Previous Payments is 90000 minor units in HKD
+- **AND** Current Payment Received is 5000 minor units in HKD
+- **AND** Remaining Balance Due is 0
+- **AND** the receipt contains no shortfall or write-off line
+
+#### Scenario: winner-order-SC-207 - A confirmed overpayment receipt records the full payment
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an invoice total of 100000 minor units in HKD
+- **AND** the operator confirms a payment of 110000 minor units
+- **WHEN** the winner opens that payment receipt
+- **THEN** Original Invoice Total is 100000 minor units in HKD
+- **AND** Previous Payments is 0
+- **AND** Current Payment Received is 110000 minor units in HKD
+- **AND** Remaining Balance Due is 0
+- **AND** the receipt contains no negative balance or credit line
+
+#### Scenario: winner-order-SC-208 - A refund or reversal does not rewrite issued receipts
+**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
+
+- **GIVEN** an invoice total of 100000 minor units in HKD
+- **AND** payments of 20000, 30000 and 10000 minor units were recorded in that order, with a receipt issued for each
+- **AND** the second payment is later refunded or reversed
+- **WHEN** the winner opens the three receipts
+- **THEN** the first receipt still shows Previous Payments 0, Current Payment Received 20000 and Remaining Balance Due 80000
+- **AND** the second receipt still shows Previous Payments 20000, Current Payment Received 30000 and Remaining Balance Due 50000
+- **AND** the third receipt still shows Previous Payments 50000, Current Payment Received 10000 and Remaining Balance Due 40000
+- **AND** no issued receipt is reissued
 
 #### Scenario: winner-order-SC-133 - Invoice and receipt PDFs outlive a deleted account
 **Serves:** Records the winner keeps - retention
@@ -812,11 +937,11 @@ window is separate and does not write `expired` on the invoice.
 
 When the deadline passes with the invoice `pending`, Grade10 SHALL set the
 invoice status to `expired`, per `grade10-site/auction/order-status`. The
-order still reads Pending Payment. The winner SHALL NOT be offered card
-payment or proof upload while the invoice is `expired`; the order SHALL show
-Contact Us in its overdue alert. An operator SHALL restore self-service
-payment only by reissuing the invoice to `pending`, or SHALL settle manually
-or cancel, per `grade10-admin/auction/post-sale`.
+order reads Payment Overdue. The winner SHALL NOT be offered card payment or
+proof upload while the invoice is `expired`; the order SHALL show Contact Us in
+its overdue alert. An operator SHALL restore self-service payment only by
+reissuing the invoice to `pending`, or SHALL settle manually or cancel, per
+`grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-31 - The deadline is seven days from send
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -864,10 +989,10 @@ without time).
 When the window passes without a confirmed address, Winner Order SHALL hide
 Confirm delivery address and SHALL show Contact Us in an overdue alert that
 reads `Missed address deadline: {date}` (day-only, no middle-dot separator).
-Derived order status SHALL remain **Awaiting Setup**. Invoice status SHALL
-remain `not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel
-the order or suspend bidding solely because the address window passed; an
-operator follows up per `grade10-admin/auction/post-sale`.
+Derived order status SHALL be Setup Overdue. Invoice status SHALL remain
+`not_issued` and SHALL NOT become `expired`. Grade10 SHALL NOT cancel the order
+or suspend bidding solely because the address window passed; an operator
+follows up per `grade10-admin/auction/post-sale`.
 
 #### Scenario: winner-order-SC-32 - An unpaid address wait never expires the invoice
 **Serves:** winner-order-US-01 - Winner settles a won lot
@@ -875,7 +1000,7 @@ operator follows up per `grade10-admin/auction/post-sale`.
 - **GIVEN** an auction order whose winner has confirmed no delivery address
   30 days after its lot closed
 - **WHEN** its derived status is read
-- **THEN** it is Awaiting Setup
+- **THEN** it is Setup Overdue
 - **AND** its invoice status is `not_issued`, never `expired`
 
 #### Scenario: winner-order-SC-70 - Address confirm is due 48 hours after lot close
@@ -898,21 +1023,45 @@ operator follows up per `grade10-admin/auction/post-sale`.
 - **THEN** Grade10 offers no Confirm delivery address control
 - **AND** the overdue alert reads Missed address deadline with the day-only
   date and carries Contact Us
-- **AND** derived status remains Awaiting Setup
+- **AND** derived status is Setup Overdue
 - **AND** invoice status remains `not_issued`
+
+### Requirement: Winner Order removes the self-service action for each overdue outcome
+
+Winner Order SHALL show Payment Overdue when an invoice expires and SHALL
+remove Pay, while retaining Contact Us and the order's payment facts. It SHALL
+show Setup Overdue when address setup expires before invoice send and SHALL
+remove Confirm, while retaining Contact Us and the order's address facts. The
+winner SHALL not be offered a way to reopen either window.
+
+#### Scenario: winner-order-SC-158 - Payment Overdue removes Pay
+**Serves:** winner-order-US-05 - Winner misses the payment deadline
+
+- **GIVEN** an order with an expired invoice
+- **WHEN** the winner opens Winner Order
+- **THEN** it reads Payment Overdue
+- **AND** Pay is absent while Contact Us remains
+
+#### Scenario: winner-order-SC-159 - Setup Overdue removes Confirm
+**Serves:** winner-order-US-07 - Winner misses the address deadline
+
+- **GIVEN** an order without a sent invoice whose address deadline passed
+- **WHEN** the winner opens Winner Order
+- **THEN** it reads Setup Overdue
+- **AND** Confirm is absent while Contact Us remains
 
 ### Requirement: Winner Order shows five progress steps
 
 Winner Order SHALL present settlement progress as five steps in this order:
 **Address**, **Invoice**, **Payment**, **Shipped**, **Completed**. The steps
-SHALL be presentation only and SHALL NOT replace the nine-value derived order
-status vocabulary in `grade10-site/auction/order-status`.
+SHALL be presentation only and SHALL NOT replace the derived order status
+vocabulary in `grade10-site/auction/order-status`.
 
 | Current step | Derived order status |
 | --- | --- |
-| Address | Awaiting Setup |
+| Address | Awaiting Setup or Setup Overdue |
 | Invoice | Preparing Invoice |
-| Payment | Pending Payment (invoice `pending` or `expired`) or Payment Verifying |
+| Payment | Pending Payment (invoice `pending`), Payment Overdue (invoice `expired`), or Payment Verifying |
 | Shipped | Processing or Shipped |
 | Completed | Delivered |
 
@@ -1581,7 +1730,7 @@ the latest external reason; the invoice log keeps every reason, per
 
 - **GIVEN** a bank transfer invoice that became `payment_verifying` with 1 minute left
 - **WHEN** an operator returns it at 2026-09-16T09:00:00Z and 2026-09-16T09:01:00Z passes unpaid
-- **THEN** the invoice is `expired` and the order reads Pending Payment
+- **THEN** the invoice is `expired` and the order reads Payment Overdue
 - **AND** Winner Order offers no upload and shows Contact Us in its overdue alert
 
 #### Scenario: winner-order-SC-134 - Only the latest return reason is shown
@@ -1988,4 +2137,3 @@ showing the operator's proof or a Stripe provider reference.
 - **AND** Reference shows the operator's bank provider reference
 - **AND** Note is not shown
 - **AND** the full account number and proof are not shown
-

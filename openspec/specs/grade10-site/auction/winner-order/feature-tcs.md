@@ -889,10 +889,122 @@ An unpaid order whose selected delivery address is the account's work address.
 
 ---
 
+### winner-order-US1-TC12-1: Invoice with Insurance shows the amount and tip
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <the winner's auction order url> for <order_with_insurance>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_with_insurance> | An auction order whose sent invoice includes Insurance |
+| <insurance_amount> | The Insurance money amount on that invoice |
+
+**Steps:**
+
+1. Open <the winner's auction order url> for <order_with_insurance>.
+2. Find Insurance on the order summary.
+3. Open the Insurance info tooltip.
+
+**Expected Results:**
+
+* Insurance shows <insurance_amount>.
+* Insurance does not read TBD.
+* The Insurance info tooltip opens.
+* The tooltip reads `0.9% of the order value during transit.`
+
+### winner-order-US1-TC13-1: Pre-invoice summary shows Insurance as TBD
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <the winner's auction order url> for <order_pre_invoice>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_pre_invoice> | An auction order before the invoice is sent |
+
+**Steps:**
+
+1. Open <the winner's auction order url> for <order_pre_invoice>.
+2. Read the order summary fee rows.
+3. Open the Insurance info tooltip.
+
+**Expected Results:**
+
+* Insurance is shown with the other fee rows.
+* Insurance reads TBD.
+* The tooltip reads `0.9% of the order value during transit.`
+
+### winner-order-US1-TC14-1: Sent invoice without Insurance omits the row
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-01
+
+**Pre-conditions:**
+
+* customer(winner) is signed in on <the winner's auction order url> for <order_without_insurance>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <order_without_insurance> | An auction order whose sent invoice includes no Insurance |
+
+**Steps:**
+
+1. Open <the winner's auction order url> for <order_without_insurance>.
+2. Read the order summary.
+
+**Expected Results:**
+
+* The order summary shows no Insurance row.
+* No Insurance tooltip is shown.
+
 ## winner-order-US2: Winner follows a settled lot to delivery
 
 **As a** winner who has paid,
-**I want** a receipt, a tracker, and proof of what was handed over,
+**I want** a receipt that says what was billed, paid before it, paid now and
+what is still owed, a tracker, and proof of what was handed over,
 **so that** I can account for a high-value purchase without asking Grade10 for
 records.
 
@@ -923,6 +1035,165 @@ An auction order paid at a final amount of 316000 minor units in HKD.
 
 * The receipt shows hammer price, buyer's premium, shipping, insurance, any tax amount supplied by the separate tax capability, and final amount.
 * Those components sum to 316000 minor units in HKD.
+
+### winner-order-US2-TC4-1: A full payment receipt shows zero previous and remaining
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* An auction order has an invoice total of 100000 minor units in HKD and one confirmed payment of 100000 minor units.
+
+**Steps:**
+
+1. Open the payment receipt.
+
+**Expected Results:**
+
+* Original Invoice Total is 100000 minor units in HKD.
+* Previous Payments is 0.
+* Current Payment Received is 100000 minor units in HKD.
+* Remaining Balance Due is 0.
+
+### winner-order-US2-TC5-1: Ordered partial receipts preserve the payment history
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* An auction order has an invoice total of 100000 minor units in HKD.
+* Its first payment is 40000 minor units and its second payment is 30000 minor units, recorded in that order.
+
+**Steps:**
+
+1. Open the receipt for the first payment.
+2. Open the receipt for the second payment.
+
+**Expected Results:**
+
+* The first receipt shows Original Invoice Total 100000, Previous Payments 0, Current Payment Received 40000 and Remaining Balance Due 60000, all in minor units of HKD.
+* The second receipt shows Original Invoice Total 100000, Previous Payments 40000, Current Payment Received 30000 and Remaining Balance Due 30000, all in minor units of HKD.
+
+### winner-order-US2-TC6-1: A tolerance-close receipt floors the remaining balance at zero
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* An auction order has an invoice total of 100000 minor units in HKD.
+* 90000 minor units have already been paid.
+* The operator records a 5000-minor-unit payment and closes the invoice as Paid within the agreed closing tolerance.
+
+**Steps:**
+
+1. Open the receipt for the closing payment.
+
+**Expected Results:**
+
+* Original Invoice Total is 100000 minor units in HKD.
+* Previous Payments is 90000 minor units in HKD.
+* Current Payment Received is 5000 minor units in HKD.
+* Remaining Balance Due is 0.
+* The receipt contains no shortfall or write-off line.
+
+### winner-order-US2-TC7-1: A confirmed overpayment receipt records the full payment
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* An auction order has an invoice total of 100000 minor units in HKD.
+* The operator confirms a payment of 110000 minor units.
+
+**Steps:**
+
+1. Open the payment receipt.
+
+**Expected Results:**
+
+* Original Invoice Total is 100000 minor units in HKD.
+* Previous Payments is 0.
+* Current Payment Received is 110000 minor units in HKD.
+* Remaining Balance Due is 0.
+* The receipt contains no negative balance or credit line.
+
+### winner-order-US2-TC8-1: A refund or reversal does not rewrite issued receipts
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** winner-order-US-02
+
+**Pre-conditions:**
+
+* An auction order has an invoice total of 100000 minor units in HKD.
+* Payments of 20000, 30000 and 10000 minor units were recorded in that order, with one receipt issued for each.
+* The second payment is later refunded or reversed.
+
+**Steps:**
+
+1. Open the first receipt.
+2. Open the second receipt.
+3. Open the third receipt.
+
+**Expected Results:**
+
+* The first receipt still shows Previous Payments 0, Current Payment Received 20000 and Remaining Balance Due 80000.
+* The second receipt still shows Previous Payments 20000, Current Payment Received 30000 and Remaining Balance Due 50000.
+* The third receipt still shows Previous Payments 50000, Current Payment Received 10000 and Remaining Balance Due 40000.
+* No issued receipt is reissued.
 
 ### winner-order-US2-TC2-1: Tracker appears once the lot is dispatched
 
@@ -1422,8 +1693,10 @@ An authenticated winner account with six saved shipping addresses, held from bef
 
 **Expected Results:**
 
+* The page reads Payment Overdue.
 * Contact Us is shown.
 * No card Pay control is offered.
+* The payment deadline is absent.
 
 ---
 
@@ -1465,8 +1738,10 @@ An authenticated winner account with six saved shipping addresses, held from bef
 
 **Expected Results:**
 
+* The page reads Setup Overdue.
 * Contact Us is shown.
 * No Confirm control is offered.
+* Address editing is absent.
 
 ---
 
@@ -2408,12 +2683,19 @@ An authenticated winner account with six saved shipping addresses, held from bef
 
 
 - Expired ends self-service card pay (author @tangconst, 2026-09-15).
-- Progress is presentation only; eight status names stay.
+- Progress is presentation only; status names stay derived from order facts,
+  including Payment Overdue and Setup Overdue.
 - Absolute deadline datetime; no countdown.
 - 48-hour address confirm window; missed window hides Confirm and shows Contact Us (Storybook 2026-09-16).
 - Insurance remains optional and separate from Payment Processing Fee.
 - Receipt PDF after payment on the same row as Invoice.
-- Fee tooltips on Buyer’s Premium, Shipping & Handling, and Payment Processing Fee (brief fee copy).
+- Fee tooltips on Buyer’s Premium, Shipping & Handling, Insurance, and Payment
+  Processing Fee (brief fee copy); the Insurance copy is `0.9% of the order
+  value during transit.`
+- Receipt and invoice identifier formats are outside this receipt-breakdown suite.
+- Winner Order's live balance is outside this receipt-breakdown suite; only receipt values are covered here.
+- Receipt contents after tolerance-close or confirmed overpayment use `Remaining Balance Due = 0`.
+- Refunds and reversals preserve issued receipts; this suite does not define what a later payment may do.
 
 ## Reconciliation
 
