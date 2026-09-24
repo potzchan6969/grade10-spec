@@ -889,7 +889,7 @@ An unpaid order whose selected delivery address is the account's work address.
 
 ---
 
-### winner-order-US1-TC12-1: Invoice with Insurance shows the amount and tip
+### winner-order-US1-TC26-1: Invoice with Insurance shows the amount and tip
 
 **Classification:**
 
@@ -928,7 +928,7 @@ An unpaid order whose selected delivery address is the account's work address.
 * The Insurance info tooltip opens.
 * The tooltip reads `0.9% of the order value during transit.`
 
-### winner-order-US1-TC13-1: Pre-invoice summary shows Insurance as TBD
+### winner-order-US1-TC27-1: Pre-invoice summary shows Insurance as TBD
 
 **Classification:**
 
@@ -965,7 +965,7 @@ An unpaid order whose selected delivery address is the account's work address.
 * Insurance reads TBD.
 * The tooltip reads `0.9% of the order value during transit.`
 
-### winner-order-US1-TC14-1: Sent invoice without Insurance omits the row
+### winner-order-US1-TC28-1: Sent invoice without Insurance omits the row
 
 **Classification:**
 

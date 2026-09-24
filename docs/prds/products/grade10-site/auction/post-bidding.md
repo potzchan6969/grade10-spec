@@ -290,17 +290,17 @@ doing, under Edge Cases.
   issues, `REC-202609-LK7P2Q-01-P1`, do not agree; no change resolves it
 - 🚧 **One receipt per payment** — every receipt for an invoice lists on the
   same Receipt PDF row, oldest first
-- 🚧 **What every receipt shows** — Original Invoice Total, Previous Payments,
+- **What every receipt shows** — Original Invoice Total, Previous Payments,
   Current Payment Received and Remaining Balance Due, whether the invoice took
   one payment or several. A single full payment reads 0 previous and 0
   remaining
-- 🚧 **Original Invoice Total** — the total of the invoice the payment was made
+- **Original Invoice Total** — the total of the invoice the payment was made
   against, fixed for the life of the collection; no invoice is reissued once
   money has been recorded against it
-- 🚧 **Remaining Balance Due** — what is still owed, reading 0 the moment the
+- **Remaining Balance Due** — what is still owed, reading 0 the moment the
   invoice is Paid. A balance an operator closed inside the 10% tolerance reads
   0, and so does an overpayment; neither shows a shortfall or a credit
-- 🚧 **A receipt is never reissued** — a refund or a reversal leaves every
+- **A receipt is never reissued** — a refund or a reversal leaves every
   receipt already issued exactly as it was, and moves no later receipt's
   Previous Payments
 - ❓ **Formal tax receipt** — whether a receipt must carry Grade10's company
@@ -390,8 +390,8 @@ other lots.
 | While suspended | Allowed |
 | --- | --- |
 | Place a new bid | No |
-| Raise a standing maximum | 🚧 No |
-| Standing maxima on open lots | 🚧 Keep bidding to their cap, and can win; each lot won gets its own order and deadline |
+| Raise a standing maximum | No |
+| Standing maxima on open lots | Keep bidding to their cap, and can win; each lot won gets its own order and deadline |
 | Pay what is owed | Yes; paying, and a reissue, lift nothing — only an operator's reinstatement does |
 | Store, loyalty, sign-in, reading the account and its orders | Yes |
 
@@ -399,13 +399,13 @@ other lots.
   My Auctions explains the restriction beside the affected order
 - 🚧 **No amount once partly paid** — a Partially Paid order's notice names
   no balance; Contact Us covers it
-- 🚧 **By an operator** — an operator suspends or reinstates from the
+- **By an operator** — an operator suspends or reinstates from the
   account's panel on the admin Users page, with a required reason the
   collector never sees; a new cause while suspended is recorded beside the
   first, and reinstating lifts every cause
-- 🚧 **Bid history untouched** — a suspension adds, edits and removes nothing
+- **Bid history untouched** — a suspension adds, edits and removes nothing
   in any lot's history, and no lot's price or leader changes because of it
-- 🚧 **One auction standing** — the auction admin's Bidders ban is the same auction
+- **One auction standing** — the auction admin's Bidders ban is the same auction
   suspension; it does not create a separate standing or a platform ban
 
 :::detail{title="Code map" for="engineer"}
@@ -453,7 +453,7 @@ a second payment provider, and changes to the bid-time rules.
 | --- | --- | --- | --- |
 | Tax line | 🚧 In flight | Tax is an amount the operator enters, shaped like Insurance. Chosen over a rate Grade10 computes, which needs a jurisdiction rule and a rate per regime nobody has written, and over a tax provider, which adds a vendor to price a number the operator already knows. Zero is refused, so "no tax" and "tax of nothing" stay distinct. What a receipt must carry beyond the amount is still the open Formal tax receipt row below. | Product (@jeffffej0909) |
 | Line names | Decided | Hammer price reads Winning Bid, Shipping reads Shipping & Handling, Final amount reads Order Total, for the winner and the operator; zero shipping reads Free; Insurance is optional and above zero. | Product |
-| Insurance tooltip | 🚧 In flight | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
+| Insurance tooltip | Decided | On Winner Order's Order Summary, Insurance carries a brief info tooltip — `0.9% of the order value during transit.` — beside Buyer’s Premium, Shipping & Handling and Payment Processing Fee. Before send, Insurance shows as TBD with the other fee rows; after send it stays optional and absent when none. Chosen over renaming the line Shipping insurance, and over hiding Payment Processing Fee when Free. | Product (@tangconst) |
 | Buyer's premium | Decided | 20% of the winning bid alone, rounded half up, or the currency's minimum when higher; Grade10 computes it; the rate is disclosed on the bid panel only. The minimum is one Grade10-owned amount per currency under Payment Settings, 0 at first, applied to invoices sent or reissued after it takes effect. | Product and finance |
 | Payment processing fee | 🚧 In flight | On every invoice, priced by method: card grossed up from the Subtotal at send from the provider's live fees, never from an admin rate; bank transfer entered by the operator, no cap. A fee that costs more than quoted is absorbed; the sent invoice never re-prices. | Product (@jeffffej0909) |
 | Bank transfer by the winner | 🚧 In flight | The winner may pay by bank transfer and upload proof, reversing the card-only rule; card fees on high-value lots make a transfer worth offering. Proof waiting for an operator reads Payment Verifying to both, and stops the deadline, which resumes with the time left if the proof is returned. A confirmed transfer's receipt reads Bank Transfer. | Product (@jeffffej0909) |
@@ -495,18 +495,18 @@ a second payment provider, and changes to the bid-time rules.
 | Overdue penalties | ❓ Open | What "penalties or extra charges" means after a setup miss vs a payment miss. | Product (@tangconst) |
 | Partial payment | 🚧 In flight | Operator-only: manual settlement gains the ability to record a payment smaller than the balance owed, any number of times. Self-service card and bank transfer stay full-amount only. | Product and finance |
 | Awaiting Setup | Decided | Incomplete setup — delivery address, payment method and billing address — reads Awaiting Setup for the winner and the operator alike. | Product (@jeffffej0909) |
-| Setup Overdue and Payment Overdue | 🚧 In flight | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: an incomplete setup reads Setup Overdue after 48 hours from the lot's actual close; Payment Overdue starts only after Grade10 sends the invoice and its 7-day payment deadline passes. Preparing Invoice has no setup-overdue queue mark. | Product and design (@tangconst) |
+| Setup Overdue and Payment Overdue | Decided | **BREAKING** vs keeping Awaiting Setup / Pending Payment after the deadline: an incomplete setup reads Setup Overdue after 48 hours from the lot's actual close; Payment Overdue starts only after Grade10 sends the invoice and its 7-day payment deadline passes. Preparing Invoice has no setup-overdue queue mark. | Product and design (@tangconst) |
 | Address window | 🚧 In flight | The stored 48-hour deadline is based on the actual lot close and does not move with configuration changes. Confirm and address changes close at expiry. An operator can reopen with a reason for another 48 hours, or record a phone-supplied address with an audit entry. Invoice send ends the address window. | Product and finance |
-| My Auctions Status column | 🚧 In flight | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
+| My Auctions Status column | Decided | The table column formerly Your Standing is Status — bid standing while open, the order's status once won. | Product and design (@tangconst) |
 | Partially Paid | 🚧 In flight | Its own status, entered the moment an operator records a payment smaller than the balance owed; ends the payment deadline for good rather than pausing it, since self-service Pay is never offered again on that invoice. | Product (@jeffffej0909) |
 | Closing a partial balance | 🚧 In flight | Measured against the original invoice total, cumulative across every payment, not the balance left at that moment: once payments reach 90% of the total, every further payment offers the operator a close, Paid with no separate write-off entry, or kept Partially Paid at the real balance. The prompt returns on each payment while still under 100%, so a `keep open` answer never quietly waives later checks. An exact match closes on its own. | Product and finance |
 | Overpaying a partial balance | 🚧 In flight | A payment above the original invoice total is accepted after an operator confirmation dialog before the invoice is marked Paid. The full payment remains recorded; the excess can be returned through the refund flow. | Product and finance |
 | Partial payment locks Reissue and Cancel | 🚧 In flight | Once any payment is recorded, the invoice's address, method and total stay fixed; an operator resolves the rest by hand outside the system rather than Grade10 reconciling a changed total against money already collected. | Product and finance |
 | Balance owed stays operator-only | 🚧 In flight | Winner Order never shows a running balance; a Partially Paid winner sees a locked page and Contact Us. Each payment still reaches the winner as its own receipt PDF. | Product and finance |
 | Receipt ID format | ❓ Open | This page reads `RC-LK42301P1`; Grade10 issues `REC-202609-LK7P2Q-01-P1`. Whether the shorter form replaces the one already issuing, and what happens to receipts already sent, is not settled and no change carries it. | Product (@jeffffej0909) |
-| Receipt breakdown | 🚧 In flight | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
-| A balance belongs on a receipt, not on a page | 🚧 In flight | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
-| Receipts are append-only | 🚧 In flight | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
+| Receipt breakdown | Decided | Each receipt freezes and shows, in order, Original Invoice Total, Previous Payments, Current Payment Received and Remaining Balance Due. The remaining balance is zero when payment closes the invoice, including a tolerance close or confirmed overpayment. Refunds and reversals do not change an issued receipt or a later receipt's Previous Payments. | Product and finance |
+| A balance belongs on a receipt, not on a page | Decided | A receipt freezes what was owed at one payment and is the winner's proof; a page shows a live figure and invites a self-service payment that is no longer offered. So Remaining Balance Due is on every receipt PDF while Winner Order shows none. | Product and finance |
+| Receipts are append-only | Decided | A refund or reversal issues no new receipt and rewrites none: every receipt already issued stands, and no later receipt's Previous Payments moves. Chosen over a revision suffix on the receipt id, which would rewrite every receipt after the one refunded to keep the chain honest. | Product and finance |
 | Formal tax receipt | ❓ Open | Whether a receipt must carry Grade10's company details and tax ID. | Finance |
 | One-time address persistence | ❓ Open | Whether an unsaved one-time address survives leaving and returning to the order. | Product (@tangconst) |
 | Bidders ban and suspension | Decided | The auction admin's Bidders ban is the same auction suspension; it records another cause on the one standing and never becomes a platform ban. | Engineering |

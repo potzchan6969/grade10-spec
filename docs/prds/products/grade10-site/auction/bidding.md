@@ -19,7 +19,7 @@ highest accepted bid at the close wins it.
 | Extension cap | Optional, per listing; the close never moves past the scheduled close plus the cap |
 | Currencies | **USD**, **HKD** or **JPY**, one per lot, each with its own increment schedule |
 | Ceiling | **USD 10,000,000**, **HKD 80,000,000**, **JPY 150,000,000,000**, the same on every lot |
-| Verified bidder | 🚧 A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
+| Verified bidder | A bid of **HKD 120,000** or more — [Account · Verified Identity](/p/grade10-site/auction/account#verified-identity) |
 | Bid-time hold | **Off** by default; when on, one card authorization per bidder per listing covers the maximum |
 | Listing terms | The fee, currency, region and deadline terms are fixed when bidding opens |
 
@@ -84,14 +84,14 @@ increment is 100:
   close on their own
 - **A raise the card cannot cover** — nothing moves: the maximum, the leader
   and the price stay as they were
-- 🚧 **One authorization** — when holds are on, a raise increases the existing
+- **One authorization** — when holds are on, a raise increases the existing
   manual-capture authorization and keeps its provider reference; Grade10 does
   not cancel and recreate it
-- 🚧 **Provider window** — a new hold requests incremental and extended
+- **Provider window** — a new hold requests incremental and extended
   authorization when the payment method supports them, and the provider's
   returned capture deadline controls expiry and reauthorization; a shorter
   window is not a 14-day guarantee
-- 🚧 **Close and settlement** — bid-time holds release at close; the winner is
+- **Close and settlement** — bid-time holds release at close; the winner is
   charged through the invoice flow, not by capturing the bid-time hold
 
 ### Bid Increments
@@ -127,7 +127,7 @@ lower bound, the schedules are Grade10's, and no listing overrides them.
 | Below the next minimum | Refused, naming the minimum |
 | Before the start, or after the recorded close | Refused |
 | Above the currency's ceiling | Refused, naming the ceiling; the price, the leader and every maximum stay as they were |
-| 🚧 At or above the bar without a verified identity | Held at the storefront, with where to verify; nothing is recorded |
+| At or above the bar without a verified identity | Held at the storefront, with where to verify; nothing is recorded |
 | No linked card, or a declined hold when holds are on | Refused before the bid stands — [Auction Panel](/p/grade10-site/auction/bidding#auction-panel) |
 
 ## Auction Panel
@@ -142,7 +142,7 @@ Blocks](/p/shared/ui/auction-listing).
 | Quick bids | 🚧 Three chips at **1×**, **2×** and **4×** the listing increment, from the current bid, or from their own maximum when they lead |
 | Custom maximum | 🚧 Whole major units only, up to **9,999,999,999**; a typed decimal mark is refused |
 | A leader's typed raise | 🚧 Starts at their maximum plus **100 minor units** |
-| Hold window | 🚧 At least **14 days** after the scheduled close, where the provider offers it |
+| Hold window | The provider's returned capture deadline, where it offers extended authorization |
 
 :::flow{title="From sign-in to a standing bid"}
 ## *Collector* — **Opens a live lot**
@@ -206,7 +206,7 @@ authorization rather than adding a second.
   raises keep that card
 - **Enrolled** — an accepted first bid completes enrolment, bookmarks the lot
   on My Auctions and turns its email alerts on
-- 🚧 **A raise keeps its reference** — a supported raise updates the existing
+- **A raise keeps its reference** — a supported raise updates the existing
   authorization; a refused raise settles at once with the card message, and
   the prior maximum stands
 
@@ -276,7 +276,7 @@ count in the title. The former Bidding and Watching sections do not appear.
 - 🚧 **Payment Verifying and Partially Paid** — a won lot reads Payment
   Verifying while its proof waits for an operator, and Partially Paid while
   an operator collects it in parts
-- 🚧 **Setup Overdue and Payment Overdue** — a won lot reads Setup Overdue
+- **Setup Overdue and Payment Overdue** — a won lot reads Setup Overdue
   once the setup deadline passes incomplete, and Payment Overdue once the
   payment deadline passes unpaid — not Awaiting Setup or Pending Payment
   after the miss
@@ -433,8 +433,8 @@ surface.
 | Increments | Decided | Grade10 owns one fixed schedule per currency, selected from the amount being beaten; a threshold includes its lower bound; a bid may exceed the minimum and need not be a multiple; no listing-level override; collectors see the next minimum, not the schedule. | Product |
 | Bid ceiling | Decided | One ceiling per currency for every lot, refused above it: USD 10,000,000, HKD 80,000,000, JPY 150,000,000,000. | Product |
 | Bid-time hold | Decided | Off by default; when on, one manual-capture authorization per bidder per listing covers the maximum, taken when the maximum is committed and never in setup, and a raise updates it. | Product and finance |
-| Hold window | 🚧 In flight | At least 14 days past the scheduled close, where the provider offers it; a raise increments the same authorization. | Product and finance |
-| Verified bidder | 🚧 In flight | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
+| Hold window | Decided | The provider's returned capture deadline controls expiry and reauthorization where the payment method supports extended authorization; a raise increments the same authorization. | Product and finance |
+| Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked by the storefront before the auction hears of the bid. | Product |
 | Setup is link only | Decided | Title Link a card to bid; body Link a card for bidding. When you set a maximum, we authorize a hold for that amount. You are only charged if you win.; continue Link Card. The card carries to a new lot, and Change stays until the first bid on that lot. | Product |
 | Mechanism disclosure | Decided | Always-on subtext under Set your private maximum: bid as needed, raise only; with holds on, that the hold matches the maximum. | Product |
 | Quick bids and custom maximum | Decided | Three chips at 1×, 2× and 4× the increment — from the committed maximum for a leader, from the current bid otherwise; a leader's typed floor is the maximum plus 100 minor units and is not chip 1; whole major units only, capped at 9,999,999,999, and an over-limit entry restores the previous draft. | Product |

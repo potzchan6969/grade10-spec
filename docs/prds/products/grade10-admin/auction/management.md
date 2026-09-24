@@ -121,7 +121,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | --- | --- |
 | Payment window | **7 calendar days** from send |
 | Address window | **48 hours** from actual close; a reasoned operator reopen gives a fresh **48 hours**; invoice send ends address changes |
-| Overdue | **48 hours** from lot close while Awaiting Setup only; Preparing Invoice has no queue Overdue mark, and its payment timer starts when the invoice is sent and visible to the winner |
+| Setup Overdue | **48 hours** from lot close while Awaiting Setup only; Preparing Invoice has no queue Setup Overdue mark, and its payment timer starts when the invoice is sent and visible to the winner |
 | Proof files | **1 to 5** PDF, JPEG or PNG files of at most **10 MB** each, kept for the life of the account |
 | Buyer's premium | **20%** of the winning bid or the currency minimum — [Payment Settings](/p/grade10-admin/auction/management#payment-settings) |
 
@@ -131,14 +131,15 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
 | Unsold · Called off | Ended without a payable order | No |
 | Awaiting Setup | The lot closed with setup incomplete | No |
 | Preparing Invoice | The winner confirmed an address; no invoice yet | Yes |
-| Pending Payment | The invoice is unpaid; an expired one shows Expired beside it | When expired |
+| Pending Payment | The invoice is unpaid before its deadline | No |
+| Payment Overdue | The unpaid invoice passed its payment deadline | Yes |
 | 🚧 Payment Verifying | The winner uploaded payment proof | Yes, until the proof is checked |
 | 🚧 Partially Paid | An operator has recorded at least one payment and money is still owed | No |
 | Processing | Paid, not dispatched | Yes |
 | Shipped · Delivered | Dispatched; delivery confirmed | No |
 | Cancelled · Refunded | A recorded terminal outcome | No |
 
-- **Overdue** — a separate, filterable mark on an Awaiting Setup order after its
+- **Setup Overdue** — a separate, filterable mark on an Awaiting Setup order after its
   persisted 48-hour address deadline; Preparing Invoice has no queue Overdue
   mark, and the operator decides whether to contact the winner, invoice or
   cancel

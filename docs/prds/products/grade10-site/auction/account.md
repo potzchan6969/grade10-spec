@@ -41,12 +41,12 @@ Link](/p/shared/auth/sign-in#following-the-link).
 
 ## Verified Identity
 
-- 🚧 **The bar** — a bid of **HKD 120,000** or more asks for a verified
+- **The bar** — a bid of **HKD 120,000** or more asks for a verified
   identity; below it, nothing is asked
-- 🚧 **Checked once** — the collector verifies from their account page and is
+- **Checked once** — the collector verifies from their account page and is
   recognised wherever Grade10 asks: at a bid, a high-value checkout or a vault
   visit — [KYC](/p/grade10-site/account/kyc)
-- 🚧 **Held, not refused** — a bid at or above the bar from an unverified
+- **Held, not refused** — a bid at or above the bar from an unverified
   collector is held at the storefront and told where to verify; no card hold
   is taken and the auction records nothing — [Bidding · Auction
   Logic](/p/grade10-site/auction/bidding#auction-logic)
@@ -85,7 +85,7 @@ book's own management is the one part nobody has specified.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Email paths | Decided | The sign-in link alone; the code is withdrawn — [Sign-In](/p/shared/auth/sign-in). | Product |
-| Verified bidder | 🚧 In flight | A bid of HKD 120,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
+| Verified bidder | Decided | A bid of HKD 120,000 or more needs a verified identity, checked once from the account and before the auction hears of the bid. | Product |
 | Saved address cap | Decided | Five named addresses per account; at the cap a one-time address still settles an order, and saving waits until one is removed. | Product (@tangconst) |
 | Managing the book | ❓ Open | No surface adds, edits or removes a saved address outside an order. | Product and design |
 | Store checkout | ❓ Open | Whether the store's checkout address and this book are one set. | Product |

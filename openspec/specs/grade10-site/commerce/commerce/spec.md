@@ -1,5 +1,11 @@
 # grade10-site/commerce/commerce Specification
 
+## Purpose
+
+A checkout prices the basket before an order exists and, at the brand's
+identity bar, admits only a signed-in buyer whose identity standing is
+verified. Below the bar, checkout has no identity gate.
+
 ## Feature set
 
 - The identity bar at checkout
