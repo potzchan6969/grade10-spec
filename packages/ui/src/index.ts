@@ -159,7 +159,11 @@ export {
   type ListingGalleryImage,
   type ListingGalleryProps,
 } from "./blocks/auction-listing/listing-gallery";
-export { ListingLotGallery } from "./blocks/auction-listing/listing-lot-gallery";
+export {
+  ListingLotGallery,
+  type ListingLotGalleryCopy,
+  type ListingLotGalleryProps,
+} from "./blocks/auction-listing/listing-lot-gallery";
 export {
   ListingLotHeader,
   type ListingLotHeaderCopy,

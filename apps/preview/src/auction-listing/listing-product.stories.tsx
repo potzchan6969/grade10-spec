@@ -100,7 +100,10 @@ function lotPage(state: BiddingState) {
   const view = buildListingAuctionBidView(state);
   return lotShell(
     <>
-      <ListingLotGallery images={AUCTION_LOT.images} />
+      <ListingLotGallery
+        copy={AUCTION_LOT_DETAILS_COPY.gallery}
+        images={AUCTION_LOT.images}
+      />
       <ListingAuctionCardSidebar
         badges={AUCTION_LOT_BADGES}
         copy={AUCTION_LOT_DETAILS_COPY.sidebar}
