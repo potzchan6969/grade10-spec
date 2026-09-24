@@ -1678,11 +1678,11 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-35`,
       `grade10-site-grading-submission-plan-SC-58`,
       `grade10-site-grading-submission-plan-SC-60`)
-- [ ] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
+- [x] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
       as a header, with the fixture transport and its fixture state beside it,
       so groups 25 to 30 run against no worker
-- [ ] 25.3 Build the grading home over `GradingFeeSheet`: the lead and the four
+- [x] 25.3 Build the grading home over `GradingFeeSheet`: the lead and the four
       how-it-works lines, every grader with active levels, the price read
       before a name is given, the counter line for a card above the top
       ceiling, the submissions list still reading, unreadable, or empty
@@ -1706,7 +1706,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-14`,
       `grade10-site-grading-submission-plan-SC-52`,
       `grade10-site-grading-submission-plan-SC-51`)
-- [ ] 25.5 Read the cap and the ceilings on the list: the twenty-first card
+- [x] 25.5 Read the cap and the ceilings on the list: the twenty-first card
       leaving Bulk the only level open, twenty leaving every level open, the
       hundredth added at Bulk's cap, the card past it refused rather than
       dropped, and a card above Bulk's ceiling moved into a second submission
@@ -1715,7 +1715,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-55`,
       `grade10-site-grading-submission-plan-SC-56`,
       `grade10-site-grading-submission-plan-SC-22`)
-- [ ] 25.6 Build the service step over `GradingLevelPicker`: one grader and one
+- [x] 25.6 Build the service step over `GradingLevelPicker`: one grader and one
       level for the whole list, a level closed by a declared value naming the
       card and one closed by the count naming the count, every level closed
       sending the collector to the counter, no estimate before a level is
@@ -1726,7 +1726,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-26`,
       `grade10-site-grading-submission-plan-SC-27`,
       `grade10-site-grading-submission-plan-SC-57`)
-- [ ] 25.7 Build the review step over `GradingReview`: the three totals, the
+- [x] 25.7 Build the review step over `GradingReview`: the three totals, the
       per-card warning with both prices and none where no card is above a
       ceiling, the five good-to-know lines, booking refused until the statement
       is ticked, and Save for later taking no tick
@@ -1757,7 +1757,7 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-14`,
       `grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.2 Compose the picker from `BookingLocationPicker` and
+- [x] 26.2 Compose the picker from `BookingLocationPicker` and
       `BookingSlotPicker` for a first booking and for a move alike, with
       `BatchLine` beside the picked day carrying the cut-off, the ship day and
       the day back
@@ -1768,7 +1768,7 @@ Stage (b).
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`)
-- [ ] 26.4 Offer neither move nor cancel once the visit has started, and read
+- [x] 26.4 Offer neither move nor cancel once the visit has started, and read
       the visit as booked until the diary answers it missed
       (`grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
