@@ -110,6 +110,101 @@ function store(story, manual = MANUAL) {
 
 const run = runValidator;
 
+
+// Product and platform suites have no adjacent spec.md: their traces resolve
+// across every capability in the composed scope.
+test("product and platform suites validate their scoped journeys and id prefixes", () => {
+ const root = mkdtempSync(join(tmpdir(), "composed-suites-"));
+ const capabilities = [
+   ["openspec/specs/demo/alpha/item", "demo-alpha-item"],
+   ["openspec/specs/demo/beta/item", "demo-beta-item"],
+   ["openspec/specs/another/market/item", "another-market-item"],
+ ];
+ for (const [base, prefix] of capabilities) {
+   for (const [name, content] of Object.entries(specFiles(base))) {
+     const file = join(root, name);
+     mkdirSync(dirname(file), { recursive: true });
+     writeFileSync(file, content.replaceAll("demo-alpha", prefix));
+   }
+ }
+
+ const suite = (title, prefix, trace) =>
+   [
+     `# ${title} Test Cases`,
+     "",
+     "**Status:** pending-review",
+     "**Drafts styled:** 2026-09-24, tcs-rules r3.0",
+     "",
+     `## ${prefix}-US1: Admin completes a cross-domain path`,
+     "",
+     "**As an** admin,",
+     "**I want** to complete the path,",
+     "**so that** the composed outcome is correct.",
+     "",
+     `### ${prefix}-US1-TC1-1: The composed path succeeds`,
+     "",
+     "**Classification:**",
+     "",
+     "* **Severity:** critical",
+     "* **Priority:** high",
+     "* **Status:** draft",
+     "* **Behaviour:** positive",
+     "* **Type:** integration",
+     "* **Suites:** smoke",
+     "* **Layer:** e2e",
+     "* **Automation status:** manual",
+     "* **Testability:** manual",
+     `* **Trace:** ${trace}`,
+     "",
+     "**Pre-conditions:**",
+     "None.",
+     "",
+     "**Steps:**",
+     "",
+     "1. Complete the composed path.",
+     "",
+     "**Expected Results:**",
+     "",
+     "* The composed outcome is correct.",
+     "",
+     "## Settled",
+     "",
+     "- Composed suites read journeys from their full source scope.",
+     "",
+     "## Reconciliation",
+     "",
+     "**Run:** 2026-09-24; derived composed-suite fixture.",
+     "",
+     "| Diff | Disposition |",
+     "| --- | --- |",
+     "| The suite has no adjacent spec.md. | Its traces resolve across the composed scope. |",
+     "",
+   ].join("\n");
+
+ const productSuite = suite(
+   "demo product",
+   "demo-e2e",
+   "demo-alpha-item-US-01, demo-beta-item-US-01",
+ );
+ const platformSuite = suite(
+   "platform",
+   "platform-e2e",
+   "demo-alpha-item-US-01, another-market-item-US-01",
+ );
+ for (const [path, content] of [
+   ["openspec/specs/demo/product-tcs.md", productSuite],
+   ["openspec/specs/platform-tcs.md", platformSuite],
+ ]) {
+   const file = join(root, path);
+   mkdirSync(dirname(file), { recursive: true });
+   writeFileSync(file, content);
+ }
+
+ const result = run(root);
+ assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+
 // Decides shared-planning-agent-rounds-US12-TC2-1.
 test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test carries no such case id is refused, and a row naming the application repository's walk is skipped", () => {
   const result = run(
