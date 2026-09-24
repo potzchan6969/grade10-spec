@@ -282,6 +282,45 @@ Runs once per row of **Test data**.
 * Grade10 refuses the removal while the active reservation exists.
 * The reservation, stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
 
+### grade10-admin-inventory-catalog-US13-TC3-1: A non-available Cert unit cannot be removed
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-inventory-catalog-US-13
+
+**Pre-conditions:**
+
+* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url>.
+* <cert record> has no active reservation and has a status other than available.
+* One source media item is tagged to <cert record>.
+
+**Test data:**
+
+| Status | Value |
+| --- | --- |
+| Cert status | Sold |
+| Cert status | Withdrawn |
+| Cert status | Vaulted |
+
+**Steps:**
+
+1. Attempt to remove the physical unit for <cert record>.
+
+**Expected Results:**
+
+* Grade10 refuses removal because <cert record> is not available.
+* Stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
+
 ## Reconciliation
 
 **Run:** 2026-09-24; the blind inventory suite was reconciled with the independent requirement reading. The suite pass read the outline, journey, proposal, then-current decisions and Raised table, linked Intake PRD, config context, and prior suite for ID continuity. It was denied requirements, durable specs, archive, tech-design, and the other reading's draft. Q10 was settled after the original blind read and is applied here without rerunning it.
