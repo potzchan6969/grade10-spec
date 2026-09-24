@@ -334,12 +334,7 @@ function AuctionLotCardContent({
                 {lot.bidLabel}
               </p>
               {lot.status !== "Ended" ? (
-                <p
-                  className={cn(
-                    "shrink-0 whitespace-nowrap text-secondary-foreground",
-                    lift ? "text-xs leading-4" : "text-sm leading-5",
-                  )}
-                >
+                <p className="shrink-0 whitespace-nowrap text-sm leading-5 text-secondary-foreground">
                   {bidsLabel(lot.bidCount)}
                 </p>
               ) : null}
