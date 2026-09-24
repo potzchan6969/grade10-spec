@@ -289,6 +289,7 @@
     "loading": "이 신청을 불러오는 중…",
     "error": "이 신청을 불러오지 못했습니다. 잠시 후 다시 시도해 주세요.",
     "notFound": "해당 신청을 찾지 못했습니다. 메일로 보내드린 링크를 확인해 주세요.",
+    "notFoundLink": "신청 시작하기",
     "edit": "목록 수정",
     "retry": "다시 시도",
     "paid": "창구에서 결제함",
@@ -425,6 +426,7 @@
       "cert": "인증 번호",
       "refusedReason": "창구에서 반려 · {reason}",
       "withdrawnRefund": "회수함 · {amount} 환불됨",
+      "movedUpLine": "{level} 상향으로 {amount} 추가",
       "heldUntil": "감정사 보류 · {day} 예상",
       "payoutLine": "{amount}으로 보상하고 그 카드의 요금도 환불했습니다",
       "reversalLine": "카드를 다시 찾아 보상이 취소되었고, 이 카드는 신청으로 돌아왔습니다."

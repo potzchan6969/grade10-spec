@@ -289,6 +289,7 @@
     "loading": "載入這張清單⋯",
     "error": "暫時載入不到這張清單，請稍後再試。",
     "notFound": "找不到這張清單，請核對我們寄給你的連結。",
+    "notFoundLink": "開始提交",
     "edit": "修改清單",
     "retry": "重試",
     "paid": "已在櫃檯付款",
@@ -425,6 +426,7 @@
       "cert": "證書編號",
       "refusedReason": "櫃檯拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
+      "movedUpLine": "升級到 {level}，需補 {amount}",
       "heldUntil": "評級公司暫留 · 預計 {day}",
       "payoutLine": "已按 {amount} 賠償，該張費用亦已退回",
       "reversalLine": "卡牌其後尋回，賠償已撤回，該張卡回到這張清單。"

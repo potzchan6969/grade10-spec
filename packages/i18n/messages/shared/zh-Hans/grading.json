@@ -289,6 +289,7 @@
     "loading": "载入这张清单⋯",
     "error": "暂时载入不到这张清单，请稍后再试。",
     "notFound": "找不到这张清单，请核对我们寄给你的链接。",
+    "notFoundLink": "开始提交",
     "edit": "修改清单",
     "retry": "重试",
     "paid": "已在柜台付款",
@@ -425,6 +426,7 @@
       "cert": "证书编号",
       "refusedReason": "柜台拒收 · {reason}",
       "withdrawnRefund": "已取回 · 已退回 {amount}",
+      "movedUpLine": "升级到 {level}，需补 {amount}",
       "heldUntil": "评级公司暂留 · 预计 {day}",
       "payoutLine": "已按 {amount} 赔偿，该张费用也已退回",
       "reversalLine": "卡牌其后寻回，赔偿已撤回，该张卡回到这张清单。"

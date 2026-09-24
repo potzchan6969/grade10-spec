@@ -289,6 +289,7 @@
     "loading": "Loading this submission…",
     "error": "We could not load this submission. Try again in a moment.",
     "notFound": "We could not find that submission. Check the link we emailed you.",
+    "notFoundLink": "Start a submission",
     "edit": "Edit the list",
     "retry": "Try again",
     "paid": "Paid at the counter",
@@ -425,6 +426,7 @@
       "cert": "Cert",
       "refusedReason": "Refused at the counter · {reason}",
       "withdrawnRefund": "Withdrawn · {amount} refunded",
+      "movedUpLine": "{amount} due for {level}",
       "heldUntil": "Held by the grader · expected {day}",
       "payoutLine": "Settled at {amount}, its fee refunded",
       "reversalLine": "The card turned up, so the settlement was reversed and the card is back on this submission."
