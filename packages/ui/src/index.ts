@@ -59,6 +59,24 @@ export type {
   BookingSlot,
   BookingStep,
 } from "./blocks/appointment-booking/types";
+// shared/ui/invoice-and-receipt-pdf
+export {
+  InvoicePdf,
+  type InvoicePdfCopy,
+  type InvoicePdfProps,
+} from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
+export {
+  ReceiptPdf,
+  type ReceiptPdfCopy,
+  type ReceiptPdfProps,
+} from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
+export type {
+  OrderValueLines,
+  OrderValueLinesCopy,
+  PartyAddress,
+  PaymentBreakdown,
+  PaymentBreakdownCopy,
+} from "./blocks/auction-invoice-and-receipt-pdf/types";
 export {
   AuctionCard,
   type AuctionCardBadge,
@@ -254,24 +272,6 @@ export {
   type TwoFactorVerifyFormCopy,
   type TwoFactorVerifyFormProps,
 } from "./blocks/auth-two-factor/two-factor-verify-form";
-// shared/ui/invoice-and-receipt-pdf
-export {
-  InvoicePdf,
-  type InvoicePdfCopy,
-  type InvoicePdfProps,
-} from "./blocks/invoice-and-receipt-pdf/invoice-pdf";
-export {
-  ReceiptPdf,
-  type ReceiptPdfCopy,
-  type ReceiptPdfProps,
-} from "./blocks/invoice-and-receipt-pdf/receipt-pdf";
-export type {
-  OrderValueLines,
-  OrderValueLinesCopy,
-  PartyAddress,
-  PaymentBreakdown,
-  PaymentBreakdownCopy,
-} from "./blocks/invoice-and-receipt-pdf/types";
 // shared-ui/loyalty-membership
 export {
   ActivityList,

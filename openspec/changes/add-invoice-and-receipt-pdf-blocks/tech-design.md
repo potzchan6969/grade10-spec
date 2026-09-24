@@ -43,9 +43,14 @@ onto it is a task this change names but does not build (see Migration Plan).
 
 **Directory: one block, not two.** Per `decisions.md` Q7 (redrawn after Q9
 merged the capability), `InvoicePdf` and `ReceiptPdf` live in one directory,
-`packages/ui/src/blocks/invoice-and-receipt-pdf/`, mirroring the one-capability,
-one-directory convention every other block already follows
-(`packages/ui/src/blocks/auction-order/`). Files:
+`packages/ui/src/blocks/auction-invoice-and-receipt-pdf/` (renamed from
+`invoice-and-receipt-pdf`, `decisions.md` Q17 — the `auction-` prefix matches
+`packages/ui/src/blocks/`'s own domain-prefix convention: `auction-listing`,
+`auction-order`, `auction-record` beside `store-cart`, `store-order-history`,
+and the rest), mirroring the one-capability, one-directory convention every
+other block already follows (`packages/ui/src/blocks/auction-order/`). Both
+stories files' Storybook `title` moved with it, from `Invoice And Receipt
+Pdf/…` to `Auction Invoice And Receipt Pdf/…`. Files:
 
 | File | Holds |
 | --- | --- |
@@ -118,7 +123,6 @@ type InvoicePdfCopy = {
   sentAtLabel: string;
   paymentDeadlineLabel: string;
   bankRailsLabel: string;
-  replacedByLabel: string;
   billToHeading: string;
   shipToHeading: string;
   orderValue: OrderValueLinesCopy;
@@ -134,7 +138,6 @@ type InvoicePdfProps = {
   billTo: PartyAddress;
   shipTo: PartyAddress; // SC-19: never echoes billTo
   orderValue: OrderValueLines; // SC-3: the lot is orderValue.lot, not a separate prop
-  replacedBy?: ReactNode; // SC-5, SC-6
   copy: InvoicePdfCopy;
   className?: string; // convention across every packages/ui block
 };
@@ -187,8 +190,8 @@ supplied with empty content: a blank row) into one. The actual mechanism is
 **key presence**: `InvoicePdf` and `ReceiptPdf` check `"taxLine" in props`
 (and `"issuerTaxDetails" in props`), not the value. A consumer who writes
 `taxLine={maybeUndefinedValue}` has *supplied* the key either way — that is
-the one deliberate difference from `insurance`, `replacedBy`, and
-`supersededInvoice`, which stay `!== undefined` checks, because nothing in
+the one deliberate difference from `insurance` and `supersededInvoice`, which
+stay `!== undefined` checks, because nothing in
 `spec.md` reserves an empty-but-present state for them the way SC-25 reserves
 one for the tax line and (by the same rule, SC-15/SC-30) for
 `issuerTaxDetails`.
@@ -259,6 +262,18 @@ who sent it — and its type is unchanged (`ReactNode`, no presence gate);
 only where it renders moved, the same shape of change Q12 made for bank
 rails.
 
+**`replacedBy`/`replacedByLabel` are removed from `InvoicePdf` entirely
+(`decisions.md` Q16).** `InvoicePdfProps` and `InvoicePdfCopy` carry no field
+for it, and the meta-row it rendered is gone. Removing it left
+`winner-order/spec.md`'s "Every invoice carries an invoice ID and a bank
+reference" requirement stating something this contract can no longer do —
+that the invoice PDF names its replacement (`SC-98`, and a line of `SC-123`).
+That requirement is not reworded here: the OpenSpec CLI's scenario-loss guard
+would force retiring and reissuing every scenario id it carries just to
+reword one, and the requirement already carries its own MODIFIED delta in
+the open `define-public-auction-identifiers` change, so doubling it here
+would collide at archive. See `proposal.md`'s Open Questions.
+
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,
 deliberately, not split per component. The requirement this satisfies is
@@ -317,7 +332,7 @@ it, which fails loudly rather than rendering a blank total.
   into a withheld one. → **Mitigation:** the discriminator is named in this
   document and repeated as a comment beside `taxLine`/`issuerTaxDetails` in
   `types.ts`; `invoice-pdf.stories.tsx` carries a
-  `WithEmptyTaxLine` story (see the `Invoice And Receipt Pdf/InvoicePdf`
+  `WithEmptyTaxLine` story (see the `Auction Invoice And Receipt Pdf/InvoicePdf`
   title convention below) with a `play` function asserting the row renders
   with empty content when the key is present, distinct from a story that
   omits the key entirely and asserts no row at all.

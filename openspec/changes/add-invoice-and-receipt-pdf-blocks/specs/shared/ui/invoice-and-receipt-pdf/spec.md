@@ -15,7 +15,6 @@ already requires without maintaining its own copy.
   - Lot and order-value lines: a Description/Amount header and divider, then
     the lot, winning bid, buyer's premium, shipping & handling, insurance
     when given, subtotal, payment processing fee, order total
-  - Replaced by, shown only when given
   - Bank rails: a full-width section below the order-value summary, shown
     only on a bank-transfer invoice — not a meta row
   - Issuer block: the issuer, right-aligned at the foot of the sheet, below
@@ -254,29 +253,6 @@ followed by a divider, immediately above the order-value lines.
 - **THEN** a header row shows Description and Amount, immediately above the
   order-value lines
 - **AND** a divider separates the header from the first line
-
-### Requirement: InvoicePdf shows Replaced by only when given
-
-Replaced by names the invoice that replaced this one, and only an invoice a
-reissue replaced carries a value for it.
-
-**Given** — InvoicePdf SHALL render `replacedBy` when the consumer supplies
-it. **Withheld** — InvoicePdf SHALL render no Replaced by line when
-`replacedBy` is not supplied.
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-5 - A replaced invoice's PDF names its replacement
-**Serves:** InvoicePdf export - Replaced by, shown only when given
-
-- **GIVEN** an InvoicePdf given a `replacedBy` value
-- **WHEN** it renders
-- **THEN** the Replaced by line shows the value given
-
-#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-6 - A current invoice's PDF shows no Replaced by line
-**Serves:** InvoicePdf export - Replaced by, shown only when given
-
-- **GIVEN** an InvoicePdf given no `replacedBy` value
-- **WHEN** it renders
-- **THEN** no Replaced by line appears
 
 ### Requirement: ReceiptPdf renders its meta rows and party blocks
 

@@ -24,7 +24,6 @@ function InvoicePdf({
   billTo,
   shipTo,
   orderValue,
-  replacedBy,
   className,
 }: InvoicePdfProps) {
   return (
@@ -41,9 +40,6 @@ function InvoicePdf({
         <MetaRow label={copy.paymentMethodLabel} value={paymentMethod} />
         <MetaRow label={copy.sentAtLabel} value={sentAt} />
         <MetaRow label={copy.paymentDeadlineLabel} value={paymentDeadline} />
-        {replacedBy !== undefined ? (
-          <MetaRow label={copy.replacedByLabel} value={replacedBy} />
-        ) : null}
       </VStack>
 
       <div className="grid gap-6 sm:grid-cols-2">

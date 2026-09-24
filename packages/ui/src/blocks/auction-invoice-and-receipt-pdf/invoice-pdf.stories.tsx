@@ -18,7 +18,6 @@ const copy: InvoicePdfCopy = {
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
   bankRailsLabel: "Bank details",
-  replacedByLabel: "Replaced by",
   billToHeading: "Bill to",
   shipToHeading: "Ship to",
   orderValue: orderValueCopy,
@@ -34,7 +33,7 @@ const ORDER_VALUE_LABELS = [
 ];
 
 const meta = {
-  title: "Invoice And Receipt Pdf/InvoicePdf",
+  title: "Auction Invoice And Receipt Pdf/InvoicePdf",
   component: InvoicePdf,
   tags: ["autodocs"],
   parameters: { layout: "padded" },
@@ -186,7 +185,7 @@ export const ShipToOmitsOptionalFields: Story = {
   },
 };
 
-/** SC-6, SC-36: a card invoice shows no bank rails and no Replaced by line, with every other row unaffected. */
+/** SC-36: a card invoice shows no bank rails, with every other row unaffected. */
 export const CardPayment: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -194,7 +193,6 @@ export const CardPayment: Story = {
     expect(
       canvasElement.querySelector('[data-slot="pdf-bank-rails"]'),
     ).toBeNull();
-    expect(canvas.queryByText("Replaced by")).not.toBeInTheDocument();
     expect(canvas.getByText("INV-202609-LK7P2Q-01")).toBeVisible();
     expect(canvas.getByText("Visa card ending 4242")).toBeVisible();
     expect(canvas.getByText("September 15, 2026, 11:04 HKT")).toBeVisible();
@@ -251,16 +249,6 @@ export const NoInsurance: Story = {
     expect(summarySubtotal).toContain(copy.orderValue.subtotal);
     expect(summaryFee).toContain(copy.orderValue.paymentProcessingFee);
     expect(summaryTotal).toContain(copy.orderValue.orderTotal);
-  },
-};
-
-/** SC-5: a replaced invoice's PDF names its replacement. */
-export const Replaced: Story = {
-  args: { replacedBy: "IN-LK42301" },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("Replaced by")).toBeVisible();
-    expect(canvas.getByText("IN-LK42301")).toBeVisible();
   },
 };
 

@@ -15,7 +15,6 @@ const copy: InvoicePdfCopy = {
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
   bankRailsLabel: "Bank details",
-  replacedByLabel: "Replaced by",
   billToHeading: "Bill to",
   shipToHeading: "Ship to",
   orderValue: {

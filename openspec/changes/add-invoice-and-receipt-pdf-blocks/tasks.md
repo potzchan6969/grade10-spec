@@ -8,6 +8,8 @@
 - [x] 1.6 Amendment: move bank rails from a meta row to a full-width section below the order value (`decisions.md` Q12), adding `BankRailsSection` to `pdf-document.tsx` (`shared-ui-invoice-and-receipt-pdf-SC-1`, `SC-2`, `SC-18`, `SC-35`)
 - [x] 1.7 Amendment: remove `bankReference`/`bankReferenceLabel` entirely, redundant once `bankRails` carries the reference (`decisions.md` Q13) (`shared-ui-invoice-and-receipt-pdf-SC-18`, `SC-36`)
 - [x] 1.8 Amendment: add a Description/Amount header and divider above the order-value lines, shared by both documents via `OrderValueSection` (`decisions.md` Q14) (`shared-ui-invoice-and-receipt-pdf-SC-37`, `SC-38`)
+- [x] 1.9 Amendment: remove `replacedBy`/`replacedByLabel` from `InvoicePdfProps`/`InvoicePdfCopy` entirely, retiring the "InvoicePdf shows Replaced by only when given" requirement and its two scenarios (`decisions.md` Q16). `winner-order/spec.md`'s "Every invoice carries an invoice ID and a bank reference" requirement still claims the PDF names a replacement (`winner-order-SC-98`, `winner-order-SC-123`) — left unreworded here, since `define-public-auction-identifiers` already carries its own MODIFIED delta on it; see `proposal.md`'s Open Questions
+- [x] 1.10 Amendment: rename `packages/ui/src/blocks/invoice-and-receipt-pdf/` to `packages/ui/src/blocks/auction-invoice-and-receipt-pdf/`, fixing `packages/ui/src/index.ts`'s import paths (`decisions.md` Q17)
 
 ## 2. ReceiptPdf, completing the shared contract (grade10-spec)
 
@@ -31,7 +33,7 @@ Needs groups 1 and 2 landed on `main` and the submodule bumped first.
 
 ## 4. Walk Winner Order's Invoice and Receipt PDFs (grade10)
 
-- [ ] 4.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a reissued invoice naming its replacement (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-109`)
+- [ ] 4.1 Walk `winner-order-US-01` opening the invoice PDF from a sent invoice, a not-yet-sent order, a cancelled order, and a reissued invoice naming its replacement (`winner-order-SC-57`, `winner-order-SC-64`, `winner-order-SC-65`, `winner-order-SC-109`) — note `winner-order-SC-98`'s "names its replacement" claim is stale against `InvoicePdf`'s `decisions.md` Q16 removal of `replacedBy`; confirm which side has landed by the time this walk runs
 - [ ] 4.2 Walk `winner-order-US-02` opening the receipt PDF once paid, before payment, and a manually settled receipt distinguishable from a card- or bank-transfer-settled one (`winner-order-SC-67`, `winner-order-SC-68`, `winner-order-SC-18`, `winner-order-SC-19`)
 - [ ] 4.3 Flip the `shared/ui/invoice-and-receipt-pdf` `feature-tcs.md` cases the walks and groups 1–2's stories together decide to automated with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name any that stay manual in the suite and the walk's `rounds.md` row
 - [ ] 4.4 Verify: `pnpm run test --filter grade10` (and the e2e lane that covers Winner Order when this walk lands there)

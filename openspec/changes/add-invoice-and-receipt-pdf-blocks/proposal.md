@@ -62,8 +62,14 @@ See [Non-Goals](decisions.md#non-goals).
 
 ### Modified Capabilities
 
-None. `grade10-site/auction/winner-order`'s requirements for the two PDFs are
-unchanged; this change gives them a shared implementation, not new behavior.
+None here. Post-landing, the author removed `InvoicePdf`'s `replacedBy` prop
+(`decisions.md` Q16), which leaves `grade10-site/auction/winner-order`'s
+"Every invoice carries an invoice ID and a bank reference" requirement
+stating something this contract can no longer do — that a replaced invoice's
+PDF names its replacement (`SC-98`, and a line of `SC-123`). That requirement
+already carries a MODIFIED delta in the open `define-public-auction-
+identifiers` change, so the reword belongs there, not doubled here — see
+Open Questions.
 
 ## Impact
 
@@ -92,3 +98,13 @@ unchanged; this change gives them a shared implementation, not new behavior.
 - **Bank account details.** `InvoicePdf`'s bank-rails props carry whatever
   value the app has; the SWIFT/FPS/HK local account values themselves are
   still ❓. Finance owns it.
+- **Stale "replaced invoice names its replacement" claim on
+  `winner-order/spec.md`.** Removing `InvoicePdf`'s `replacedBy` prop
+  (`decisions.md` Q16) leaves the "Every invoice carries an invoice ID and a
+  bank reference" requirement asserting something this contract no longer
+  does (`SC-98`, and a line of `SC-123`). That requirement already carries a
+  MODIFIED delta in the open `define-public-auction-identifiers` change,
+  which still repeats the same claim (its own `SC-98`) unchanged — whoever
+  lands that change should fold this reword into it rather than this one
+  opening a second, conflicting delta on the same requirement. Engineering
+  owns reconciling the two.

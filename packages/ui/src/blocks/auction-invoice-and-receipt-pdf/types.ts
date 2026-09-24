@@ -55,7 +55,6 @@ type InvoicePdfCopy = {
   sentAtLabel: string;
   paymentDeadlineLabel: string;
   bankRailsLabel: string;
-  replacedByLabel: string;
   billToHeading: string;
   shipToHeading: string;
   orderValue: OrderValueLinesCopy;
@@ -73,8 +72,6 @@ type InvoicePdfProps = {
   billTo: PartyAddress;
   shipTo: PartyAddress;
   orderValue: OrderValueLines;
-  /** On a replaced invoice only. */
-  replacedBy?: ReactNode;
   className?: string;
 };
 

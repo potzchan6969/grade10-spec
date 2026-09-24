@@ -54,7 +54,7 @@ const BREAKDOWN_LABELS = [
 ];
 
 const meta = {
-  title: "Invoice And Receipt Pdf/ReceiptPdf",
+  title: "Auction Invoice And Receipt Pdf/ReceiptPdf",
   component: ReceiptPdf,
   tags: ["autodocs"],
   parameters: { layout: "padded" },

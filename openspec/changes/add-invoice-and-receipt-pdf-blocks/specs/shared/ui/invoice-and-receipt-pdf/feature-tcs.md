@@ -1175,3 +1175,16 @@ foot of the sheet, right-aligned" (`SC-39`/`SC-40`, `TC34`/`TC35`); ReceiptPdf
 gained the `issuer` prop it never had, closing the same asymmetry `SC-21` and
 `SC-33`/`SC-34` closed for the order-value lines and the address fields —
 additive, no existing scenario's claim changed.
+
+**Amendment, post-landing:** the author asked to remove `replacedBy` and
+`replacedByLabel` from `InvoicePdf` entirely (`decisions.md` Q16). The
+requirement "InvoicePdf shows Replaced by only when given" and its scenarios
+`SC-5`/`SC-6` are retired — `TC6`'s "Already covered" disposition above no
+longer resolves to a live scenario, the same way `TC2`/`TC3`'s did once
+`SC-2` retired under the bank-rails amendment. `winner-order/spec.md`'s
+"Every invoice carries an invoice ID and a bank reference" requirement still
+requires the invoice PDF to name a replacement (`SC-98`, and a line of
+`SC-123`) — left untouched here, since that requirement already carries its
+own MODIFIED delta in the open `define-public-auction-identifiers` change;
+see `proposal.md`'s Open Questions for the reconciliation this leaves for
+whoever lands that change.
