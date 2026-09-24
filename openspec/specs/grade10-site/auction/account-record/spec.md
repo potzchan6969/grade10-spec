@@ -440,15 +440,6 @@ remove them.
 - **THEN** neither row shows secondary helper detail under its standing
 - **AND** both rows still show their standing and View order
 
-#### Scenario: grade10-site-auction-account-record-SC-63 - My Auctions names both overdue states
-**Serves:** After a close - overdue orders are visible in Status
-
-- **GIVEN** one order in Setup Overdue and one in Payment Overdue
-- **WHEN** the winner reads My Auctions
-- **THEN** the column header is Status
-- **AND** the two rows show their matching overdue labels and View order
-- **AND** each row retains the same lot and winning-bid facts as the Won row
-
 #### Scenario: grade10-site-auction-account-record-SC-60 - Proof waiting for an operator reads Payment Verifying
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -678,4 +669,3 @@ the same lot and winning-bid facts as the Won row.
 - **WHEN** the winner reads My Auctions
 - **THEN** the column header is Status
 - **AND** the two rows show their matching overdue labels and View order
-

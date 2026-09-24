@@ -743,62 +743,6 @@ operator's, SHALL appear on the receipt.
 - **THEN** the receipt ID is still `REC-202609-LK7P2Q-01-P1`
 - **AND** no other receipt ID and no other internal audit number is issued
 
-#### Scenario: winner-order-SC-204 - A full payment receipt shows zero previous and remaining
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an invoice total of 100000 minor units in HKD with one confirmed payment of 100000 minor units
-- **WHEN** the winner opens that payment receipt
-- **THEN** Original Invoice Total is 100000 minor units in HKD
-- **AND** Previous Payments is 0
-- **AND** Current Payment Received is 100000 minor units in HKD
-- **AND** Remaining Balance Due is 0
-
-#### Scenario: winner-order-SC-205 - Ordered partial receipts preserve the payment history
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an invoice total of 100000 minor units in HKD
-- **AND** a first payment of 40000 minor units and a second payment of 30000 minor units were recorded in that order
-- **WHEN** the winner opens the receipt for each payment
-- **THEN** the first receipt shows Original Invoice Total 100000, Previous Payments 0, Current Payment Received 40000 and Remaining Balance Due 60000, all in minor units of HKD
-- **AND** the second receipt shows Original Invoice Total 100000, Previous Payments 40000, Current Payment Received 30000 and Remaining Balance Due 30000, all in minor units of HKD
-
-#### Scenario: winner-order-SC-206 - A tolerance-close receipt floors the remaining balance at zero
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an invoice total of 100000 minor units in HKD
-- **AND** 90000 minor units have already been paid
-- **AND** the operator records a 5000-minor-unit payment and closes the invoice as Paid within the agreed closing tolerance
-- **WHEN** the winner opens that payment receipt
-- **THEN** Original Invoice Total is 100000 minor units in HKD
-- **AND** Previous Payments is 90000 minor units in HKD
-- **AND** Current Payment Received is 5000 minor units in HKD
-- **AND** Remaining Balance Due is 0
-- **AND** the receipt contains no shortfall or write-off line
-
-#### Scenario: winner-order-SC-207 - A confirmed overpayment receipt records the full payment
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an invoice total of 100000 minor units in HKD
-- **AND** the operator confirms a payment of 110000 minor units
-- **WHEN** the winner opens that payment receipt
-- **THEN** Original Invoice Total is 100000 minor units in HKD
-- **AND** Previous Payments is 0
-- **AND** Current Payment Received is 110000 minor units in HKD
-- **AND** Remaining Balance Due is 0
-- **AND** the receipt contains no negative balance or credit line
-
-#### Scenario: winner-order-SC-208 - A refund or reversal does not rewrite issued receipts
-**Serves:** winner-order-US-02 - Winner follows a settled lot to delivery
-
-- **GIVEN** an invoice total of 100000 minor units in HKD
-- **AND** payments of 20000, 30000 and 10000 minor units were recorded in that order, with a receipt issued for each
-- **AND** the second payment is later refunded or reversed
-- **WHEN** the winner opens the three receipts
-- **THEN** the first receipt still shows Previous Payments 0, Current Payment Received 20000 and Remaining Balance Due 80000
-- **AND** the second receipt still shows Previous Payments 20000, Current Payment Received 30000 and Remaining Balance Due 50000
-- **AND** the third receipt still shows Previous Payments 50000, Current Payment Received 10000 and Remaining Balance Due 40000
-- **AND** no issued receipt is reissued
-
 #### Scenario: winner-order-SC-133 - Invoice and receipt PDFs outlive a deleted account
 **Serves:** Records the winner keeps - retention
 
@@ -2234,4 +2178,3 @@ its absence from the order page remain governed by
 - **AND** the third receipt still shows Previous Payments 50000,
   Current Payment Received 10000 and Remaining Balance Due 40000
 - **AND** no issued receipt is reissued
-
