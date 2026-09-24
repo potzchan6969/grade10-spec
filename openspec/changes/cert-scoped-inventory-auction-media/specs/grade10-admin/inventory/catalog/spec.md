@@ -9,7 +9,7 @@ level or associate it with one physical Cert record.
 - Cert-scoped source media
   - A saved source item may be untagged and shared by the product, or tagged to one Cert record with a printed Cert ID owned by that product.
   - The tag identifies the immutable Cert record; its printed Cert ID is display data and may be absent.
-  - An authorized Inventory operator may tag, untag, and retag saved source media.
+  - An authorized Inventory operator may tag or untag saved source media. Retagging clears the original association and leaves the source item untagged and shared; assigning it to another Cert requires a separate explicit tag action.
   - A record without a printed Cert ID has no tag; its media remains product-level shared media.
   - Removing a Cert record clears its source-media tags and preserves the uploaded media as untagged product media.
 
@@ -55,7 +55,9 @@ A record without a printed Cert ID SHALL receive no tag, and its source media
 SHALL remain untagged and shared at product level.
 
 An authorized Inventory operator using the existing Inventory media-management
-authority SHALL be able to tag, untag, or retag a saved source media item.
+authority SHALL be able to tag or untag a saved source media item. Retagging
+SHALL clear the original association and leave the item untagged and shared;
+assigning it to another Cert SHALL require a separate explicit tag action.
 Grade10 SHALL refuse a tag write whose target record is missing, belongs to a
 different product, or has no printed Cert ID, and SHALL preserve the item's
 current tag and source media. Physical removal of a Cert unit SHALL require an available record with no
@@ -120,12 +122,13 @@ other Cert records SHALL remain unchanged.
 - **WHEN** an authorized Inventory operator clears its tag
 - **THEN** the source media item has no Cert tag and remains shared at product level
 
-#### Scenario: grade10-admin-inventory-catalog-SC-132 - Operator retags media to another same-product Cert
+#### Scenario: grade10-admin-inventory-catalog-SC-132 - Retagging leaves the original source item untagged
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
 
 - **GIVEN** a source media item tagged to one Cert record and a second same-product Cert record with a printed Cert ID
-- **WHEN** an authorized Inventory operator retags the media to the second record
-- **THEN** the source media item is tagged to the second record only
+- **WHEN** an authorized Inventory operator retags the source item
+- **THEN** the existing Cert association is cleared and the source item remains on the product as untagged shared media
+- **AND** Grade10 does not automatically transfer that source item to the second record
 
 #### Scenario: grade10-admin-inventory-catalog-SC-133 - Unauthorized source-media tag writes are refused
 **Serves:** grade10-admin-inventory-catalog-US-12 - Operator classifies source media for one copy
