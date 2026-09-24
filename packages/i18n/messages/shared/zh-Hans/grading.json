@@ -704,6 +704,7 @@
   "console": {
     "cards": "{count, plural, other {# 张卡}}",
     "submissions": "{count, plural, other {# 份提交}}",
+    "labels": "{count, plural, other {# 张标签}}",
     "whatsapp": {
       "confirmDropoff": "{name} 你好，确认你于 {when} 在 {shop} 的评级交卡预约。请带同 {count} 张卡，每张放在卡套内。清单：{link}",
       "onTheirWay": "{name} 你好，你的 {count} 张卡今日已投保寄往 {grader}，预计 {estimate} 前回到门店。清单：{link}",

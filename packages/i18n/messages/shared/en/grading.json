@@ -704,6 +704,7 @@
   "console": {
     "cards": "{count, plural, one {# card} other {# cards}}",
     "submissions": "{count, plural, one {# submission} other {# submissions}}",
+    "labels": "{count, plural, one {# label} other {# labels}}",
     "whatsapp": {
       "confirmDropoff": "Hi {name}, confirming your grading drop-off on {when} at {shop}. Bring the {count} cards, each in a sleeve. Your submission: {link}",
       "onTheirWay": "Hi {name}, your {count} cards left us today for {grader}, insured. Estimated back at the shop by {estimate}. Your submission: {link}",
