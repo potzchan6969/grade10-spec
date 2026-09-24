@@ -391,7 +391,8 @@
       "stages": "{grader}’s stages, in its words. A stage can take days; the estimate is what we promise, the stages are what the grader reports.",
       "estimate": "Back by about {when}",
       "nextStage": "We email you the moment the grades post.",
-      "runningLate": "Past {estimate} this reads Running late, the new date shows here with the grader’s stage, and we email it the day we set it. Nothing changes at the counter."
+      "runningLate": "Past {estimate} this reads Running late, the new date shows here with the grader’s stage, and we email it the day we set it. Nothing changes at the counter.",
+      "nothingToDo": "Nothing to do while the cards are with the grader."
     },
     "grades": {
       "headline": "Grades are in: {summary}",
