@@ -17,7 +17,7 @@
  */
 
 import { existsSync, readdirSync, readFileSync } from "node:fs";
-import { basename, dirname, join, relative } from "node:path";
+import { basename, dirname, join, relative, sep } from "node:path";
 import { fileURLToPath } from "node:url";
 import { SCENARIO_ID } from "../../../tools/manual/src/store/markdown.mts";
 
@@ -204,6 +204,14 @@ export function domainPrefix(root, dir) {
   return `${rel.split("/").join("-")}-e2e`;
 }
 
+/** The product prefix issued by a product-level suite. */
+export function productPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  return `${rel.split("/")[0]}-e2e`;
+}
+
 /** The `decisions.md` of the change this suite sits in, if it sits in one at
  * all. Walks up to the directory holding `.openspec.yaml` — a durable suite
  * finds none, and so does a change written before the artifact existed. */
@@ -285,6 +293,72 @@ export function readDomainIds(dir) {
     found = true;
     for (const [id, title] of ids.journeys) journeys.set(id, title);
     for (const id of ids.scenarios) scenarios.add(id);
+  }
+  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+}
+
+/** The active change spec roots under a store. */
+export function activeChangeSpecRoots(root) {
+  const changes = join(root, "openspec", "changes");
+  if (!existsSync(changes)) return [];
+  return readdirSync(changes, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name !== "archive")
+    .map((entry) => join(changes, entry.name, "specs"));
+}
+
+/** Product spec scopes include durable capabilities and open change deltas. */
+function productSpecRoots(dir, root) {
+  if (!root) return [dir];
+  const parts = relative(root, dir).split(sep);
+  const product =
+    parts[0] === "openspec" && parts[1] === "specs"
+      ? parts[2]
+      : parts[0] === "openspec" && parts[1] === "changes"
+        ? parts[4]
+        : basename(dir);
+  return [
+    join(root, "openspec", "specs", product),
+    ...activeChangeSpecRoots(root).map((specs) => join(specs, product)),
+  ];
+}
+
+/** Journey and scenario ids issued by every capability under a product. */
+export function readProductIds(dir, root = null) {
+  const journeys = new Map();
+  const scenarios = new Set();
+  let found = false;
+  for (const product of new Set(productSpecRoots(dir, root))) {
+    if (!existsSync(product)) continue;
+    for (const domain of readdirSync(product, { withFileTypes: true })) {
+      if (!domain.isDirectory()) continue;
+      const ids = readDomainIds(join(product, domain.name));
+      if (!ids) continue;
+      found = true;
+      for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.scenarios) scenarios.add(id);
+    }
+  }
+  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+}
+
+/** Journey and scenario ids issued by every product under a platform. */
+export function readPlatformIds(dir, root = null) {
+  const journeys = new Map();
+  const scenarios = new Set();
+  const specsRoots = root
+    ? [join(root, "openspec", "specs"), ...activeChangeSpecRoots(root)]
+    : [dir];
+  let found = false;
+  for (const specs of specsRoots) {
+    if (!existsSync(specs)) continue;
+    for (const product of readdirSync(specs, { withFileTypes: true })) {
+      if (!product.isDirectory()) continue;
+      const ids = readProductIds(join(specs, product.name));
+      if (!ids) continue;
+      found = true;
+      for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.scenarios) scenarios.add(id);
+    }
   }
   return found ? { journeys, scenarios, hasJourneySection: true } : null;
 }

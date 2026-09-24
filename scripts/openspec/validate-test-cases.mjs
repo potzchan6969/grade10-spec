@@ -8,9 +8,9 @@
  *   pnpm run tcs:stale               # which suites' drafts are below the current rules rev
  *
  * A suite is a derived reading of the `spec.md` beside it, so almost everything
- * here is a cross-check against that file rather than a taste judgement:
- * a journey heading names a journey the spec defines, a case traces an id the
- * spec still issues, and the file's own `**Status:**` is the value its case
+ * here is a cross-check against the suite's source scope rather than a taste
+ * judgement: a feature suite names journeys from one spec, a composed suite
+ * reads journeys in the domains or products it crosses, and the file's own `**Status:**` is the value its case
  * statuses imply — never an independent claim a reviewer typed.
  *
  * Two severities, deliberately:
@@ -44,6 +44,7 @@ import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import {
   CASE_STATUSES,
+  activeChangeSpecRoots,
   caseIndex,
   changeOf,
   commaList,
@@ -60,7 +61,10 @@ import {
   levelOf,
   PROPERTIES,
   parseSuite,
+  productPrefix,
   readDomainIds,
+  readPlatformIds,
+  readProductIds,
   readSpecIds,
   revCmp,
   revText,
@@ -186,11 +190,25 @@ function checkSuite(root, filePath, rulesRev) {
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
   const suite = parseSuite(text);
-  const domain = basename(filePath) === "domain-tcs.md";
-  const spec = domain ? readDomainIds(dir) : readSpecIds(join(dir, "spec.md"));
-  const capability = domain
-    ? domainPrefix(root, dir)
-    : (issuedPrefix(spec) ?? basename(dir));
+  const level = levelOf(filePath);
+  const domain = level === "domain";
+  const composed = level !== "feature";
+  const spec =
+    level === "platform"
+      ? readPlatformIds(dir, root)
+      : level === "product"
+        ? readProductIds(dir, root)
+        : level === "domain"
+          ? readDomainIds(dir)
+          : readSpecIds(join(dir, "spec.md"));
+  const capability =
+    level === "platform"
+      ? "platform-e2e"
+      : level === "product"
+        ? productPrefix(root, dir)
+        : level === "domain"
+          ? domainPrefix(root, dir)
+          : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
@@ -201,13 +219,15 @@ function checkSuite(root, filePath, rulesRev) {
   // read here at all.
   const decidedByOwed = changeOf(root, filePath) !== null;
 
-  if (!spec)
-    err(
-      1,
-      domain
-        ? "no capability with a spec.md under this domain — a domain suite reads the journeys its capabilities issue"
-        : "no spec.md beside this suite — a suite is a reading of a spec, not a standalone file",
-    );
+  if (!spec) {
+    const missingScope = {
+      feature: "no spec.md beside this suite — a feature suite reads one capability",
+      domain: "no capability with a spec.md under this domain — a domain suite reads its capabilities",
+      product: "no capability with a spec.md under this product — a product suite reads its domains",
+      platform: "no capability with a spec.md under this platform — a platform suite reads its products",
+    }[level];
+    err(1, missingScope);
+  }
 
   const cases = [];
   for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
@@ -324,7 +344,7 @@ function checkSuite(root, filePath, rulesRev) {
       err(j.line, `journey ${j.num} appears more than once`);
     seenJourneys.add(j.num);
     if (
-      !domain &&
+      level === "feature" &&
       spec &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
@@ -338,7 +358,7 @@ function checkSuite(root, filePath, rulesRev) {
     // A capability nobody walks carries exactly one section. More than one
     // would have to be numbered by a feature set group's position, and an
     // issued case id is permanent.
-    if (!domain && spec?.unwalked && j.num !== 1)
+    if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
         `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
@@ -535,12 +555,12 @@ function checkSuite(root, filePath, rulesRev) {
             `case \`${tc.id}\` traces \`${id}\`, which is neither a journey nor a feature set group of the spec beside it`,
           );
         }
-        if (ids.length > 1 && !domain)
+        if (ids.length > 1 && !composed)
           warn(
             at,
             `case \`${tc.id}\` traces ${ids.length} ids — one journey per case`,
           );
-        if (domain && ids.length === 1)
+        if (composed && ids.length === 1)
           warn(
             at,
             `case \`${tc.id}\` traces one journey — a domain case crosses capabilities, or it belongs in that capability's own suite`,
@@ -561,7 +581,7 @@ function checkSuite(root, filePath, rulesRev) {
     }
   }
 
-  if (spec && !domain) {
+  if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
       const num = Number(id.match(/-US-(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
@@ -602,16 +622,25 @@ const inScope = (d) =>
  *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
-const PRODUCTS = existsSync(specsRoot)
-  ? readdirSync(specsRoot, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name)
-  : [];
-const DOMAINS = PRODUCTS.flatMap((prod) =>
-  readdirSync(join(specsRoot, prod), { withFileTypes: true })
-    .filter((e) => e.isDirectory())
-    .map((e) => `${prod}-${e.name}`),
-);
+const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(existsSync);
+const directories = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory())
+    : [];
+const PRODUCTS = [
+  ...new Set(specScopes.flatMap((scope) => directories(scope).map((entry) => entry.name))),
+];
+const DOMAINS = [
+  ...new Set(
+    specScopes.flatMap((scope) =>
+      directories(scope).flatMap((product) =>
+        directories(join(scope, product.name)).map(
+          (domain) => `${product.name}-${domain.name}`,
+        ),
+      ),
+    ),
+  ),
+];
 const longestPrefix = (id, list) =>
   list
     .filter((v) => id === v || id.startsWith(`${v}-`))
