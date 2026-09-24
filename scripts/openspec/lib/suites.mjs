@@ -298,7 +298,7 @@ export function readDomainIds(dir) {
 }
 
 /** The active change spec roots under a store. */
-function activeChangeSpecRoots(root) {
+export function activeChangeSpecRoots(root) {
   const changes = join(root, "openspec", "changes");
   if (!existsSync(changes)) return [];
   return readdirSync(changes, { withFileTypes: true })
