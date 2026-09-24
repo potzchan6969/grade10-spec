@@ -94,7 +94,7 @@ export const ClosingRefund: Story = {
     const dialog = await findVisibleDialog(page, "Refund Details");
     const modal = within(dialog);
     expect(modal.getByText("Amount")).toBeVisible();
-    expect(modal.getByText("HK$16,140")).toBeVisible();
+    expect(modal.getByText("HK$16,460")).toBeVisible();
     expect(modal.getByText("Transfer to")).toBeVisible();
     expect(modal.getByLabelText("Visa")).toBeVisible();
     expect(modal.getByText("···· 4242")).toBeVisible();

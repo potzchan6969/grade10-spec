@@ -6,7 +6,6 @@ import {
   winnerOrderMeta,
   winnerOrderSettled,
 } from "./winner-order.story-shared";
-import { LINE_TOOLTIPS } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
 
 const meta = {
@@ -26,18 +25,6 @@ const meta = {
 
 export default meta;
 type Story = StoryObj<typeof meta>;
-
-async function expectInsuranceTooltip(canvasElement: HTMLElement) {
-  const canvas = within(canvasElement);
-  await userEvent.hover(canvas.getByLabelText(LINE_TOOLTIPS.shippingInsurance));
-  await waitFor(() => {
-    const tooltip = canvasElement.ownerDocument.querySelector(
-      '[data-slot="tooltip-content"]',
-    );
-    expect(tooltip).toBeTruthy();
-    expect(tooltip).toHaveTextContent(LINE_TOOLTIPS.shippingInsurance);
-  });
-}
 
 function deliveryAddressBlock(canvasElement: HTMLElement) {
   const sidebar = within(canvasElement).getByRole("complementary");
@@ -82,7 +69,7 @@ export const AwaitingSetup: Story = {
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
-    await expectInsuranceTooltip(canvasElement);
+    expect(canvas.getByText("Tax")).toBeVisible();
     expect(canvas.getByText(/^Winning bid:/)).toBeVisible();
     expect(
       canvas.getByRole("link", {
@@ -173,7 +160,7 @@ export const PreparingInvoice: Story = {
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
-    await expectInsuranceTooltip(canvasElement);
+    expect(canvas.getByText("Tax")).toBeVisible();
     expect(canvas.getAllByText("TBD").length).toBeGreaterThan(0);
     expect(canvas.getByRole("complementary")).toBeVisible();
     expect(canvas.getByText("Card")).toBeVisible();

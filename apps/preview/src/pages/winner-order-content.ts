@@ -91,7 +91,7 @@ export type WinnerOrderContent = {
    * reference and audit number stay with the operator.
    */
   refund?: {
-    /** Positive amount — e.g. `HK$16,140`. */
+    /** Positive amount — e.g. `HK$16,460`. */
     amount: string;
     reason: string;
     /** Optional — omitted from Refund Details when empty (Q28). */
@@ -153,6 +153,7 @@ export const LINE_TOOLTIPS = {
   shippingHandling:
     "Packing, carrier, and handling for your confirmed delivery address.",
   shippingInsurance: "0.9% of the order value during transit.",
+  tax: "Set by Grade10 for where your order ships. Some orders have none.",
   processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
@@ -174,11 +175,16 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,140" },
+  { label: "Order Total", value: "HK$16,460" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -200,15 +206,20 @@ export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,140" },
+  { label: "Order Total", value: "HK$16,460" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$16,140",
+  amount: "HK$16,460",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   transfer: {
@@ -251,11 +262,16 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,020" },
+  { label: "Order Total", value: "HK$16,340" },
 ];
 
 /** Shared progress dates once each milestone has happened. */

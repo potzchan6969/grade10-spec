@@ -33,7 +33,8 @@ const SAMPLE_INVOICE = {
     { label: "Buyer's Premium", amount: "HKD 500.00" },
     { label: "Shipping & Handling", amount: "HKD 80.00" },
     { label: "Insurance", amount: "HKD 40.00" },
-    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,120.00" },
+    { label: "Tax", amount: "HKD 50.00" },
+    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,170.00" },
     {
       key: "paymentProcessingFee" as const,
       label: "Payment Processing Fee",
@@ -42,7 +43,7 @@ const SAMPLE_INVOICE = {
     {
       key: "orderTotal" as const,
       label: "Order Total",
-      amount: "HKD 3,232.25",
+      amount: "HKD 3,282.25",
     },
   ],
   issuerName: "Grade10",
