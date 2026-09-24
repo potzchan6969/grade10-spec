@@ -111,7 +111,7 @@ Runs once per row of **Test data**.
 * The source media item has no Cert tag.
 * The uploaded media remains available as product-level media.
 
-### grade10-admin-inventory-catalog-US12-TC4-2: Retag saved media to another same-product Cert with a printed ID
+### grade10-admin-inventory-catalog-US12-TC4-2: Retagging leaves the original media item untagged
 
 **Classification:**
 
@@ -129,18 +129,20 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * admin(holds existing Inventory media-management authority) is on <grade10 admin inventory media manager url>.
-* One saved source media item for <inventory product> is tagged to <source cert record> with a printed Cert ID.
+* One saved source media item for <inventory product> is tagged to <source cert record>.
 * <target cert record> belongs to <inventory product>, has a printed Cert ID, and differs from <source cert record>.
 
 **Steps:**
 
 1. Open the tagged source media item for <inventory product>.
-2. Select <target cert record>.
+2. Retag the item from <source cert record> to <target cert record>.
 3. Save the tag change.
 
 **Expected Results:**
 
-* The source media item is tagged to <target cert record> only.
+* The source media item remains on <inventory product> with no Cert tag and is shared at product level.
+* Grade10 does not automatically transfer the existing source media item to <target cert record>.
+* A later tag assignment to <target cert record> is a separate explicit action.
 
 ### grade10-admin-inventory-catalog-US12-TC5-1: Invalid retag targets preserve the current tag
 
