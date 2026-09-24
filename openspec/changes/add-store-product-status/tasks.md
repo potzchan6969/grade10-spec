@@ -20,6 +20,6 @@
 
 ## 4. The walk (grade10-spec)
 
-- [ ] 4.1 After groups 2 and 3 land, walk every active journey of the affected Store capabilities through their collector interfaces end to end: product-listing US-01 through US-05, US-07 through US-09, and US-11 through US-13; product-page US-01 through US-04, US-11 through US-13; product-status US-01 and US-02; and cart-validation US-01 through US-03. Extend the in-flight `openspec/changes/add-store-product-status/specs/grade10-site/store/domain-tcs.md` with any paths the browser walks require
+- [ ] 4.1 After groups 2 and 3 land, review the affected feature suites (`/tcs-review add-store-product-status`) as input to the walk. Then walk every active journey of the affected Store capabilities through their collector interfaces end to end: product-listing US-01 through US-05, US-07 through US-09, and US-11 through US-13; product-page US-01 through US-04, US-11 through US-13; product-status US-01 and US-02; and cart-validation US-01 through US-03. Extend the in-flight `openspec/changes/add-store-product-status/specs/grade10-site/store/domain-tcs.md` with any paths the browser walks require
 - [ ] 4.2 In the walks' commit, mark only the cases the browser walks decide to automate with `pnpm run tcs:automated <case…> --decided-by <walk path>`; name manual cases in the suite and in their `rounds.md` row
 - [ ] 4.3 Verify: the Store domain end-to-end suite, `pnpm run tcs:validate`, and `pnpm run validate:changes add-store-product-status`
