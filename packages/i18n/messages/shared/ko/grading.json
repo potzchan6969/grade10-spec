@@ -238,7 +238,8 @@
     "batchLine": {
       "before": "{cutOff}까지 맡기시면 카드는 {shipDay} 배치와 함께 발송됩니다.",
       "after": "그 이후의 배치는 {cutOff}에 마감되어 {shipDay}에 발송됩니다.",
-      "estimateFrom": "예상 일정은 배치가 떠나는 날부터 계산됩니다."
+      "estimateFrom": "예상 일정은 배치가 떠나는 날부터 계산됩니다.",
+      "backBy": "매장 도착 예정일은 {estimate}입니다."
     },
     "moveOrCancel": "방문 시작 전에는 언제든 변경하거나 취소하실 수 있습니다. 오지 못하셔도 방문만 종료되고 목록은 그대로 남으니, 신청 페이지에서 다시 예약해 주세요.",
     "book": "{day} {time} 예약",
@@ -272,7 +273,11 @@
       },
       "openTheList": "목록 열기",
       "vaultLine": "같은 방문에 금고 보관도 함께 신청하고 싶으신가요? 감정을 맡기지 않는 카드든, 돌아온 카드든 가능합니다. 휴대폰으로 신분 확인을 먼저 해 주세요. 등급 감정 자체에는 신분증이 필요 없습니다.",
-      "bulkDuration": "약 {minutes}분 걸립니다."
+      "bulkDuration": "약 {minutes}분 걸립니다.",
+      "service": {
+        "standard": "카드 접수",
+        "bulk": "Bulk 카드 접수"
+      }
     }
   },
   "submission": {

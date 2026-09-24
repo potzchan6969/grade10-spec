@@ -238,7 +238,8 @@
     "batchLine": {
       "before": "在 {cutOff} 之前交卡，你的卡牌就会随 {shipDay} 的批次寄出。",
       "after": "其后的一批于 {cutOff} 截，{shipDay} 寄出。",
-      "estimateFrom": "预计时间由批次寄出当日起计。"
+      "estimateFrom": "预计时间由批次寄出当日起计。",
+      "backBy": "预计 {estimate} 前回到门店。"
     },
     "moveOrCancel": "开始之前，随时可以改期或取消。错过了，我们只会结束该次到店，不会取消你的清单：可在清单页再约一次交卡。",
     "book": "预约 {day} {time}",
@@ -272,7 +273,11 @@
       },
       "openTheList": "打开清单",
       "vaultLine": "想同一次到店开立金库寄存 — 无论是不去评级的卡，还是稍后回来的卡？请先用手机完成身份验证；评级本身不需要身份证明。",
-      "bulkDuration": "整个过程约 {minutes} 分钟。"
+      "bulkDuration": "整个过程约 {minutes} 分钟。",
+      "service": {
+        "standard": "交卡",
+        "bulk": "Bulk 交卡"
+      }
     }
   },
   "submission": {

@@ -238,7 +238,8 @@
     "batchLine": {
       "before": "Hand in by {cutOff} and your cards leave with the batch on {shipDay}.",
       "after": "After that, the next batch closes {cutOff} and leaves {shipDay}.",
-      "estimateFrom": "The estimate runs from the day the batch leaves."
+      "estimateFrom": "The estimate runs from the day the batch leaves.",
+      "backBy": "Estimated back by {estimate}."
     },
     "moveOrCancel": "Move or cancel the visit any time before it starts. Miss it and we close the visit, not your list: book another drop-off from the submission page.",
     "book": "Book {day}, {time}",
@@ -272,7 +273,11 @@
       },
       "openTheList": "Open the list",
       "vaultLine": "Want to open a vault case on the same visit — for a card you are not grading, or one coming back? Verify your identity on your phone first; grading itself needs no ID.",
-      "bulkDuration": "The visit takes about {minutes} minutes."
+      "bulkDuration": "The visit takes about {minutes} minutes.",
+      "service": {
+        "standard": "Card drop-off",
+        "bulk": "Bulk card drop-off"
+      }
     }
   },
   "submission": {

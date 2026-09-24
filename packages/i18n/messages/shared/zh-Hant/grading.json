@@ -238,7 +238,8 @@
     "batchLine": {
       "before": "在 {cutOff} 之前交卡，你的卡牌就會隨 {shipDay} 的批次寄出。",
       "after": "其後的一批於 {cutOff} 截，{shipDay} 寄出。",
-      "estimateFrom": "預計時間由批次寄出當日起計。"
+      "estimateFrom": "預計時間由批次寄出當日起計。",
+      "backBy": "預計 {estimate} 前回到門市。"
     },
     "moveOrCancel": "開始之前，隨時可以改期或取消。錯過了，我們只會結束該次到店，不會取消你的清單：可在清單頁再約一次交卡。",
     "book": "預約 {day} {time}",
@@ -272,7 +273,11 @@
       },
       "openTheList": "打開清單",
       "vaultLine": "想同一次到店開立金庫寄存 — 無論是不去評級的卡，還是稍後回來的卡？請先用手機完成身分驗證；評級本身不需要身分證明。",
-      "bulkDuration": "整個過程約 {minutes} 分鐘。"
+      "bulkDuration": "整個過程約 {minutes} 分鐘。",
+      "service": {
+        "standard": "交卡",
+        "bulk": "Bulk 交卡"
+      }
     }
   },
   "submission": {
