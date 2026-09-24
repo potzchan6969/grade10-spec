@@ -204,6 +204,14 @@ export function domainPrefix(root, dir) {
   return `${rel.split("/").join("-")}-e2e`;
 }
 
+/** The product prefix issued by a product-level suite. */
+export function productPrefix(root, dir) {
+  const rel = relative(root, dir)
+    .replace(/^openspec\/specs\//, "")
+    .replace(/^openspec\/changes\/[^/]+\/specs\//, "");
+  return `${rel.split("/")[0]}-e2e`;
+}
+
 /** The `decisions.md` of the change this suite sits in, if it sits in one at
  * all. Walks up to the directory holding `.openspec.yaml` — a durable suite
  * finds none, and so does a change written before the artifact existed. */
@@ -281,6 +289,38 @@ export function readDomainIds(dir) {
   for (const e of readdirSync(dir, { withFileTypes: true })) {
     if (!e.isDirectory()) continue;
     const ids = readSpecIds(join(dir, e.name, "spec.md"));
+    if (!ids) continue;
+    found = true;
+    for (const [id, title] of ids.journeys) journeys.set(id, title);
+    for (const id of ids.scenarios) scenarios.add(id);
+  }
+  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+}
+
+/** Journey and scenario ids issued by every capability under a product. */
+export function readProductIds(dir) {
+  const journeys = new Map();
+  const scenarios = new Set();
+  let found = false;
+  for (const domain of readdirSync(dir, { withFileTypes: true })) {
+    if (!domain.isDirectory()) continue;
+    const ids = readDomainIds(join(dir, domain.name));
+    if (!ids) continue;
+    found = true;
+    for (const [id, title] of ids.journeys) journeys.set(id, title);
+    for (const id of ids.scenarios) scenarios.add(id);
+  }
+  return found ? { journeys, scenarios, hasJourneySection: true } : null;
+}
+
+/** Journey and scenario ids issued by every product under a platform. */
+export function readPlatformIds(dir) {
+  const journeys = new Map();
+  const scenarios = new Set();
+  let found = false;
+  for (const product of readdirSync(dir, { withFileTypes: true })) {
+    if (!product.isDirectory()) continue;
+    const ids = readProductIds(join(dir, product.name));
     if (!ids) continue;
     found = true;
     for (const [id, title] of ids.journeys) journeys.set(id, title);
