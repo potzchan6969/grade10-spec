@@ -84,8 +84,11 @@ it; no statute here is asserted.
   governs the loan, and any particular it prescribes, is Legal's to name, and
   no licence line prints until Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
-  read "Being prepared", and the personal information collection statement
-  with them
+  still read “Being prepared” on the live site. An auction-launch draft for
+  review lives in Storybook under Pages/Legal, not in the message catalogs
+- ❓ **Counsel's wording on those pages** — Legal confirms the Terms, Privacy
+  Policy, and personal information collection statement before live catalogs
+  and the app’s legal pages carry them
 - **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
   in the US carrying no personal data, Resend; no processor register
 - **Disputes** — beyond the complaints contact the paper prints, no path for a
@@ -204,7 +207,7 @@ holds until they do.
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
-| The collection statement | TBC Legal | The personal information collection statement the wizard links; the privacy page reads "Being prepared" until it exists | Legal |
+| The collection statement | TBC Legal | The personal information collection statement the wizard links; live Terms and Privacy still read “Being prepared”; auction-launch draft copy is in Storybook Pages/Legal until counsel confirms | Legal |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
 | Forfeiture | Decided | Past due, a written notice naming a cure date at least **14 days** off, and only then a person's decision to take the item; the surplus and the accounting after it are the firm's books | Legal |
 | A document held under another account | Decided | Flag, never refuse: a refusal needs an override the vault has nowhere and would strand a customer with two accounts | Owner |
