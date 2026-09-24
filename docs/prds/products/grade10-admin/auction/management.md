@@ -48,11 +48,18 @@ the card is in the winner's hands. The collector's half is
 - **Cert ID** — creating a listing takes an explicit choice of one Cert ID
   of the selected product, or `No Cert ID` for an unnumbered unit; each Cert
   ID can have its own live listing, and only one
+- 🚧 **Slug helper** — the first saved draft receives a title-and-code slug:
+  lower-case title words, then its lower-case listing code. The helper follows
+  title edits only while the operator has left that generated value unchanged.
+  An operator may replace it. Leaving the Slug field checks the chosen value
+  and names a collision before Save; a slug already held by a completed,
+  expired or unsold listing remains unavailable
 - 🚧 **Listing code** — a stable opaque 5-character code, always leading with
-  2 letters, allocated when a listing is created and shown read-only in the
+  2 letters, allocated on the first saved draft and shown read-only in the
   Listings table and on its admin screen under the existing listing-read
-  access. It is never shown on the public listing page or accepted as a route
-  or access grant. Once a winner exists it doubles as the order's payment
+  access. Its lower-case form is the suffix of the public listing address, but
+  it is never shown as a separate public-page field or accepted as a route or
+  access grant. Once a winner exists it doubles as the order's payment
   reference. The code stays reserved after deletion — [Auction Display ·
   Listing Schema](/p/grade10-site/auction/display#listing-schema), [Post-
   Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice)

@@ -21,18 +21,24 @@ without manual identifier clarification.
 - Propose one stable, opaque code per listing that doubles as the listing
   code and, once a lot closes with a winner, the payment reference — a
   5-character Crockford Base32 value with no fixed prefix, always leading
-  with 2 letters (for example `LK423`, `UY294`). It is allocated when the
-  listing is created, stored in a unique-constrained column, and never
-  reused, including after deletion. It does not appear
-  on grade10-site's public listing pages, where lots are identified by their
-  titles; it is shown in both grade10-admin's Listings table and listing detail
-  screen to operators with existing listing-admin access, and knowing the code
-  cannot grant access to the listing or its private data. It becomes the
+  with 2 letters (for example `LK423`, `UY294`). It is allocated on the first
+  saved draft, stored in a unique-constrained column, and never reused,
+  including after deletion. **BREAKING**: its lower-case form becomes the
+  suffix of the public listing slug, after normalized title words. It does not
+  appear as a labelled field on grade10-site's public listing pages; it is
+  shown in both grade10-admin's Listings table and listing detail screen to
+  operators with existing listing-admin access, and knowing the code cannot
+  grant access to the listing or its private data. It becomes the
   collector-facing payment reference — safe to type into FPS,
   local bank transfer and SWIFT notes — once an order exists on that listing.
   There is no separate public order identifier: this one code is what a
   winner quotes for their order, on order lists, order detail, support
   contact, operator reconciliation and payment instructions.
+- Add a Slug helper to the auction listing editor. The first saved draft
+  receives the title-and-lowercase-code value. A later title edit updates that
+  value only while the operator has not changed it. Leaving the Slug field
+  checks the selected value and identifies a collision before Save, including
+  a value retained by a completed, expired or unsold listing.
 - Carry the payment reference code into Stripe transaction metadata so
   provider records can be matched during reconciliation without exposing a
   provider transaction ID to the collector.
@@ -53,7 +59,7 @@ without manual identifier clarification.
 
 | Record | Example | Use |
 | --- | --- | --- |
-| Listing code / payment reference | `LK423` | One code per listing: shown on grade10-admin's listing screens before a winner exists; becomes the winner's payment reference afterward — order lists, order detail, support, FPS/wire/SWIFT notes, Stripe transaction metadata. Never shown on the public listing page, and there is no separate order ID. |
+| Listing code / payment reference | `LK423` | One code per listing: shown on grade10-admin's listing screens before a winner exists; becomes the winner's payment reference afterward — order lists, order detail, support, FPS/wire/SWIFT notes, Stripe transaction metadata. The public address may end in `lk423`, but the page has no separate code field or order ID. |
 | Public invoice ID | `IN-LK42301` | First invoice issued against payment reference `LK423` |
 | Reissued invoice | `IN-LK42302` | Reissue of the invoice above; the issuance sequence increments |
 | First payment receipt | `RC-LK42301P1` | First receipt returned against invoice `IN-LK42301` |
@@ -64,8 +70,8 @@ with no fixed prefix, always leading with 2 letters — `LK423` and `UY294` are
 both valid examples. The first 2 characters are drawn only from the alphabetic
 subset of the Crockford charset (`ABCDEFGHJKMNPQRSTVWXYZ`, no digits); the
 remaining 3 characters are drawn from the full 32-character charset
-`0123456789ABCDEFGHJKMNPQRSTVWXYZ`. It is allocated once, when the listing is
-created, and is permanently reserved, including after deletion. One permitted
+`0123456789ABCDEFGHJKMNPQRSTVWXYZ`. It is allocated once, on the first saved
+draft, and is permanently reserved, including after deletion. One permitted
 implementation is a keyed one-way function (for example HMAC-SHA256 with a
 server-side secret) over an internal system UUID or listing ID; that 5-character
 projection can collide, so allocation must retry against active codes and
@@ -95,11 +101,12 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/listing-page`: confirm the listing code / payment
-  reference is never shown on the public listing page, which continues to
-  identify a lot by its title, without changing the lot's public slug.
-- `grade10-admin/auction/listing`: show the listing code on the admin listing
-  screens for operator support, finance and reconciliation use.
+- `grade10-site/auction/listing-page`: expose the lower-case listing-code
+  suffix through the canonical slug without adding a labelled listing-code
+  field to the public page.
+- `grade10-admin/auction/listing`: allocate the listing code at first draft
+  save, prefill the editable title-and-code slug, and check the chosen slug on
+  field exit before Save.
 - `grade10-site/auction/winner-order`: define the payment-reference identifier
   (the listing code carried forward) that stands in for a public order ID,
   plus the invoice and receipt identifiers built from it, and their
