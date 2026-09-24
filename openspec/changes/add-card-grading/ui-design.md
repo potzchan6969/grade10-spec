@@ -822,7 +822,7 @@ Stories `grading-admin-settings-settings-panel--`.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Table | every setting with its default, its owner and the pinned line | `grade10-admin-grading-counter-SC-99` |
+| Table | every setting with its value in force, or "not set", its owner and the pinned line | `grade10-admin-grading-counter-SC-99` |
 | Fee sheet | one row per grader and level: ceiling, fee, cover rate, weeks, cards a submission | `grade10-admin-grading-counter-SC-99` |
 | Diary services | the three entries with their durations | `grade10-admin-grading-counter-SC-99` |
 | Edit a clock | `SaveableField`; saved under the settings subject | `grade10-admin-grading-counter-SC-71` |
