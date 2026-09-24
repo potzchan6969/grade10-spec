@@ -212,18 +212,17 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-admin-inventory-catalog-US13: Operator keeps source media after a Cert record is removed
+## grade10-admin-inventory-catalog-US13: Operator removes an available copy and its source media
 
 **As an** Inventory operator,
-**I want** the media to remain on the product when its tagged Cert record is
-removed,
-**so that** deleting a stock record does not delete a reusable uploaded asset.
+**I want** to remove an available physical unit and its Cert record together,
+**so that** the unit is withdrawn and its Cert-scoped source media cannot be reused.
 
-### grade10-admin-inventory-catalog-US13-TC1-1: Removing a Cert record preserves its source media
+### grade10-admin-inventory-catalog-US13-TC1-2: Physical removal withdraws the unit and deletes its tagged media
 
 **Classification:**
 
-* **Severity:** major
+* **Severity:** critical
 * **Priority:** high
 * **Status:** draft
 * **Behaviour:** destructive
@@ -236,19 +235,50 @@ removed,
 
 **Pre-conditions:**
 
-* admin is on <grade10 admin inventory record url>.
-* One saved source media item for <inventory product> is tagged to <cert record>.
-* <cert record> belongs to <inventory product>.
+* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url>.
+* <cert record> belongs to <inventory product>, has status available, and has no active reservation.
+* One source media item is tagged to <cert record>; <shared media> is untagged; <other media> is tagged to a different Cert record.
 
 **Steps:**
 
 1. Open <cert record> for <inventory product>.
-2. Remove <cert record>.
+2. Remove the physical unit and confirm the removal.
 
 **Expected Results:**
 
-* <cert record> is removed.
-* The uploaded source media remains on <inventory product> without a Cert tag.
+* <cert record> is removed and stock decreases by one.
+* The withdrawn count increases by one; the inventory ledger remains unchanged.
+* The source media tagged to <cert record> is deleted.
+* <shared media> and <other media> remain on <inventory product> with their existing tags.
+
+### grade10-admin-inventory-catalog-US13-TC2-1: An actively reserved Cert unit cannot be removed
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-admin-inventory-catalog-US-13
+
+**Pre-conditions:**
+
+* admin(holds existing Inventory write authority) is on <grade10 admin inventory record url>.
+* <cert record> has an active reservation and one source media item is tagged to it.
+
+**Steps:**
+
+1. Attempt to remove the physical unit for <cert record>.
+
+**Expected Results:**
+
+* Grade10 refuses the removal while the active reservation exists.
+* The reservation, stock, withdrawn count, inventory ledger, Cert record, and tagged source media remain unchanged.
 
 ## Reconciliation
 
@@ -259,4 +289,4 @@ removed,
 | The original TC2 treated a same-product Cert record without a printed ID as taggable. | Q10 settles that the record cannot receive a tag and its media remains shared. TC2 is revised to a negative case at v2; SC-129 records the refusal and shared-media result. |
 | The blind pass asked whether a cross-product Cert target is refused or merely hidden. | Q2 limits a tag to a same-product Cert record with a printed ID. SC-130 and TC5 cover refusal and preservation of the current tag; no product question remains. |
 | The requirements add an explicit existing-authority refusal and distinguish missing targets from valid retags. | TC5 and TC6 cover the invalid-target and authorization scenarios SC-130 and SC-133. |
-| Cert deletion must clear tags without deleting the upload. | TC1 in US13 covers SC-134. |
+| Physical-unit removal is part of the Cert lifecycle. | TC1 v2 covers SC-134's guarded withdrawal and tagged-media deletion; TC2 covers the active-reservation refusal in SC-135. |
