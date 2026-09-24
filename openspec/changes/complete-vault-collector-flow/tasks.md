@@ -846,7 +846,7 @@ Lands once every other group is green and the change is deployed.
 
 ## 21. The walk (grade10)
 
-- [ ] 21.1 Walk the request in
+- [x] 21.1 Walk the request in
       `apps/frontend/grade10/e2e/tests/vault/request.spec.ts`:
       `grade10-site-vault-case-intake-US-01`,
       `grade10-site-vault-case-intake-US-04`,
@@ -860,14 +860,14 @@ Lands once every other group is green and the change is deployed.
       `grade10-site-vault-case-intake-SC-28`,
       `grade10-site-vault-case-intake-SC-29`,
       `grade10-site-vault-case-intake-SC-30`)
-- [ ] 21.2 Walk the offer in `vault/offer.spec.ts`:
+- [x] 21.2 Walk the offer in `vault/offer.spec.ts`:
       `grade10-site-vault-valuation-and-offer-US-01`,
       `grade10-site-vault-valuation-and-offer-US-02`,
       `grade10-site-vault-valuation-and-offer-US-05`,
       `grade10-site-vault-case-lifecycle-US-02` and
       `grade10-site-vault-case-lifecycle-US-05`, proving the loan-to-value
       bound (`grade10-site-vault-valuation-and-offer-SC-30`)
-- [ ] 21.3 Walk the loan in `vault/loan.spec.ts`:
+- [x] 21.3 Walk the loan in `vault/loan.spec.ts`:
       `grade10-site-vault-loan-and-settlement-US-01`,
       `grade10-site-vault-loan-and-settlement-US-02`,
       `grade10-site-vault-loan-and-settlement-US-04`,
@@ -882,7 +882,7 @@ Lands once every other group is green and the change is deployed.
       advance's refusals (`grade10-site-vault-loan-and-settlement-SC-49`,
       `grade10-site-vault-loan-and-settlement-SC-50`,
       `grade10-site-vault-loan-and-settlement-SC-51`)
-- [ ] 21.4 Walk the visit in `vault/visit.spec.ts`:
+- [x] 21.4 Walk the visit in `vault/visit.spec.ts`:
       `grade10-site-vault-visit-booking-US-01`,
       `grade10-site-vault-visit-booking-US-03` — the move and the cancel —
       `grade10-site-vault-visit-booking-US-04`,
@@ -897,7 +897,7 @@ Lands once every other group is green and the change is deployed.
       link and the public digest answer
       (`grade10-site-vault-documents-and-signing-SC-30`,
       `grade10-site-vault-documents-and-signing-SC-31`)
-- [ ] 21.5 Walk the collector's own data in `vault/your-data.spec.ts`:
+- [x] 21.5 Walk the collector's own data in `vault/your-data.spec.ts`:
       `grade10-site-vault-retention-and-erasure-US-01`,
       `grade10-site-vault-retention-and-erasure-US-02`,
       `grade10-site-vault-retention-and-erasure-US-03`,
@@ -908,7 +908,7 @@ Lands once every other group is green and the change is deployed.
       shop took over, and standing held while a request is open
       (`grade10-site-vault-retention-and-erasure-SC-41`,
       `shared-auth-users-SC-40`, `shared-auth-users-SC-42`)
-- [ ] 21.6 Walk the console's own reads in `vault/console.spec.ts`:
+- [x] 21.6 Walk the console's own reads in `vault/console.spec.ts`:
       `grade10-admin-vault-operator-queue-US-01`,
       `grade10-admin-vault-operator-queue-US-02`,
       `grade10-admin-vault-operator-queue-US-05`,
@@ -919,11 +919,11 @@ Lands once every other group is green and the change is deployed.
       `grade10-admin-vault-money-book-US-03`,
       `grade10-admin-vault-money-book-US-04` and
       `grade10-admin-vault-money-book-US-05`
-- [ ] 21.7 Flip the cases the walks decide with
+- [x] 21.7 Flip the cases the walks decide with
       `pnpm run tcs:automated <case…> --decided-by <walk path>` in the walks'
       own commit, and name the ones that stay manual in their suite and in
       this change's `rounds.md` row
-- [ ] 21.8 Verify: `pnpm run test:e2e` on the isolated stack,
+- [x] 21.8 Verify: `pnpm run test:e2e` on the isolated stack,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run tcs:validate` in
       grade10-spec
 
