@@ -125,13 +125,10 @@ it changes; the rest of the cards carry on:
 - 🚧 **The graded record** — grade, grader and cert per slab with a look-up
   link, the slab photographs from hand-back, and the three documents, each
   with its fingerprint and a download; on the page and in the account
-- ❓ **The look-up page** — PSA's, CGC's and BGS's own cert-verification
-  pages, one per grader, `{cert}` filled in; each was read off that grader's
-  public site rather than confirmed against a live cert — Product owner
-  confirms `https://www.psacard.com/cert/{cert}`,
-  `https://www.cgccards.com/certlookup/{cert}` and
-  `https://www.beckett.com/grading/card-lookup?number={cert}`, or supplies
-  the address each grader actually uses
+- ❓ **The look-up page** — one cert-verification page a grader, `{cert}`
+  filled in; each was read off that grader's public site, not confirmed
+  against a live cert — owner confirms or corrects PSA's, CGC's and BGS's
+  own, in `@grade10/grading-contracts`
 - 🚧 **Never stock** — a collector's slab never enters the catalogue; a vault
   valuation or an auction consignment reads the record from here
 - ❓ **Retention** — 2,555 days on the vault's table: the sealed documents and
