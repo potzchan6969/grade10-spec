@@ -110,6 +110,7 @@
     "retry": "다시 시도",
     "slotTaken": "방금 다른 분이 예약한 시간입니다. 다른 시간을 골라 주세요.",
     "slotNotOffered": "더 이상 제공되지 않는 시간입니다. 다른 시간을 골라 주세요.",
+    "resourceNotAvailable": "그 시간에는 자리가 없습니다. 다른 시간을 골라 주세요.",
     "alreadyBooked": "{when}에 이 서비스 방문이 이미 예약되어 있습니다.",
     "bookingFailed": "예약하지 못했습니다. 다시 시도해 주세요.",
     "moveFailed": "방문을 옮기지 못했습니다. 다시 시도해 주세요.",

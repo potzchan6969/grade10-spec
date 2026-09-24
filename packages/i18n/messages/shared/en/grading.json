@@ -244,6 +244,7 @@
     "book": "Book {day}, {time}",
     "joined": "This submission joins the drop-off you already have on {day}, {time}. One visit, both lists.",
     "resized": "Both lists together pass {standard} cards, so the visit takes the longer Bulk drop-off. We moved it once in the diary; the day and time stand.",
+    "alreadyBooked": "You already have a visit booked for this day. Pick another.",
     "booked": {
       "title": "Your drop-off is booked",
       "emailLine": "A confirmation is on its way by email, with a calendar file and this submission’s link. We remind you the day before.",
