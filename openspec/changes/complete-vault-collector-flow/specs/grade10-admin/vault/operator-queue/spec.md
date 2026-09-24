@@ -192,7 +192,24 @@ queue with nothing in it.
 - **THEN** the case is not found
 
 
+## REMOVED Requirements
+
 ### Requirement: An operator's session is verified, and stays verified for twelve hours
+
+**Reason**: The platform-wide second-factor rule requires it in production
+only, for every brand; the requirement's own claim that staging asks for it
+too no longer holds.
+
+**Migration**: Replaced by "An operator's session is verified with a second
+factor, and stays verified for twelve hours". `SC-14` and `SC-15` retire with
+it — a scenario id is issued once and never freed — and the new requirement
+carries their assertions forward as `grade10-admin-vault-operator-queue-SC-53`
+(production, not staging) and `grade10-admin-vault-operator-queue-SC-54`
+(the twelve-hour stamp, unchanged).
+
+## ADDED Requirements
+
+### Requirement: An operator's session is verified with a second factor, and stays verified for twelve hours
 
 A second factor SHALL be required in production, for every brand, and SHALL
 be optional in staging and in development.
@@ -200,21 +217,19 @@ be optional in staging and in development.
 One verification SHALL stamp the session for 12 hours, and no act inside that
 window SHALL ask for another.
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-14 - Production asks for the second factor
+#### Scenario: grade10-admin-vault-operator-queue-SC-53 - Production asks for the second factor
 **Serves:** Who may act - production asks for the second factor
 
 - **GIVEN** an operator signing in to production
 - **WHEN** they open a vault surface
 - **THEN** a second factor is required
 
-#### Scenario: grade10-admin-vault-operator-queue-SC-15 - One verification covers the shift's next act
+#### Scenario: grade10-admin-vault-operator-queue-SC-54 - One verification covers the shift's next act
 **Serves:** Who may act - one verification covers the shift's next act
 
 - **GIVEN** an operator who verified an hour ago
 - **WHEN** they record a payment
 - **THEN** nothing asks them again
-
-## ADDED Requirements
 
 ### Requirement: A case reads on the console in the words the collector reads
 

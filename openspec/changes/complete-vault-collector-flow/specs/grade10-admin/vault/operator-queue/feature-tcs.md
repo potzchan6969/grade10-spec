@@ -1803,7 +1803,7 @@ Runs once per row of **Test data**.
 | Raised: the Out → Stalled boundary | Answered | Q53: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `grade10-site-e-kyc-hosted-verification-SC-22`; the panel's table, its new bullet and `grade10-admin-vault-operator-queue-SC-52` read that state rather than deciding one |
 | Raised: three tiles or four | Answered | Q54: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `grade10-admin-vault-operator-queue-SC-43` now agree |
 | The visit checklist's steps | Answered | Q55: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `grade10-admin-vault-operator-queue-SC-30` and `grade10-admin-vault-operator-queue-SC-32` take them |
-| `grade10-admin-vault-operator-queue-SC-14` | Case added, added after the run | `grade10-admin-vault-operator-queue-US3-TC5-1`: the platform-wide second-factor rule corrected outside the blind pass — production required, staging optional for every brand, ZZZ included |
+| `grade10-admin-vault-operator-queue-SC-53` | Case added, added after the run | `grade10-admin-vault-operator-queue-US3-TC5-1`: the platform-wide second-factor rule corrected outside the blind pass — production required, staging optional for every brand, ZZZ included; `SC-14` retires with the requirement it named, and the twelve-hour scenario carries forward as `SC-54` |
 
 ### Manual
 
