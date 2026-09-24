@@ -1428,7 +1428,7 @@ Resend after a short wait,
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1468,7 +1468,7 @@ Resend after a short wait,
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1500,7 +1500,7 @@ Resend after a short wait,
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1531,7 +1531,7 @@ Resend after a short wait,
 * **Type:** usability
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1563,7 +1563,7 @@ Resend after a short wait,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1595,7 +1595,7 @@ Resend after a short wait,
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
