@@ -7,3 +7,5 @@ reviewed:
   ui-design: 641790ed
   specs: "063304e8"
   test-cases: "063304e8"
+deploy_waived: "Owner: deployed offline"
+decisions_carried: "account, checkout and bidding product records"
