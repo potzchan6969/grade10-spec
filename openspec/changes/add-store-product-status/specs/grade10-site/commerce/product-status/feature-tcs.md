@@ -453,6 +453,13 @@ Runs once per row of **Test data**.
 
 ## Reconciliation
 
+**Run:** Implementation update on 2026-09-25. Kept the existing 13 case IDs,
+draft statuses and review history. Confirmed the reference implementation
+covers availability without browse counts, the one internal sale identity with
+no shopper-facing choice, unbounded browse quantity requests, and the zero or
+missing-count paths. No case was marked automated; the end-to-end walk decides
+that in task 4.2.
+
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/commerce/product-status; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; this change-local user-journeys.md; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; this change-local suite through its cases; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments). No durable product-status feature suite existed. Retained all 13 case IDs and draft statuses; bumped behavior versions for US1-TC1, TC2, TC6–TC9 and US2-TC1–TC4.
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.

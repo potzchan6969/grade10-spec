@@ -1143,6 +1143,13 @@ collection I came for.
 
 ## Reconciliation
 
+**Run:** Implementation update on 2026-09-25. Kept the existing case IDs,
+draft statuses and review history. Confirmed the active listing cases cover
+availability roll-up, no remaining-count or scarcity cue, and a requested
+quantity above the browse count reaching cart review; the retired US-06
+stock-limit journey remains retired in `user-journeys.md` and is not
+reintroduced. The price-order question remains escalated for review.
+
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/store/product-listing; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; the product-listing, product-page and product-status change-local user-journeys.md files; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; the durable product-listing feature suite for case-ID continuity only; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments). The no-stock-ceiling and tile availability checks sit under the active listing-address journey because the former US-06 is retired.
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.

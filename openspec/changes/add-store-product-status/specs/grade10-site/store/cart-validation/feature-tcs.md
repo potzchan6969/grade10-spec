@@ -656,6 +656,13 @@ the next request.
 
 ## Reconciliation
 
+**Run:** Implementation update on 2026-09-25. Kept the existing case IDs,
+draft statuses and review history. Confirmed the active suite covers named
+withdrawn products, short fills, repricing, checkout refusal, unchecked
+cart-open and checkout review, and the drawer-level retry when the initial cart
+load fails before lines are known. No case was marked automated; the end-to-end
+walk decides that in task 4.2.
+
 **Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the two read moments were settled.
 
 | Spec scenario | Suite coverage |
