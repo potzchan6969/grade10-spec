@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { expect, within } from "storybook/test";
-import { GRADE_CARDS_COPY, GRADED_CARD } from "./fixtures";
+import { GRADE_CARDS_COPY, GRADED_CARD, SLAB_PHOTO } from "./fixtures";
 import {
   type GradingGradeCard,
   GradingGradeCards,
@@ -61,6 +61,20 @@ export const Graded: Story = {
     expect(canvas.getByText("Mint")).toBeInTheDocument();
     expect(canvas.getByText("Graded by: PSA")).toBeInTheDocument();
     expect(canvas.getByText("Certificate: PSA 84213377")).toBeInTheDocument();
+  },
+};
+
+/** A collected slab carries the photograph taken at hand-back, beside its
+ * grade, grader and certificate (shared-ui-grading-submission-SC-37,
+ * shared-ui-grading-submission-SC-70). */
+export const Collected: Story = {
+  args: {
+    cards: [{ ...GRADED_CARD, slabPhotograph: SLAB_PHOTO }],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("9")).toBeInTheDocument();
+    expect(canvas.getByAltText("Charizard in its slab")).toBeInTheDocument();
   },
 };
 

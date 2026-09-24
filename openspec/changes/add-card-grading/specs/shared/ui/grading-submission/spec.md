@@ -739,7 +739,11 @@ one map of its own, taking no tone from the consumer:
 One card a card, once the grades are in.
 
 **Graded** - `GradingGradeCards` SHALL show the grade, its label word, the
-grader, the card's name and the certificate where one was issued.
+grader, the card's name and the certificate where one was issued, and SHALL
+show the photograph taken at hand-back where the consumer gives one — the
+same photograph shape `GradingCardRecord`'s own slab photograph takes. This
+is the collected page's own record: `grade10-site`'s submission page is the
+export's one consumer for it.
 
 **Ungraded** - a card returned ungraded SHALL show no grade, and SHALL show
 the grader's code and note, drawn apart from a graded card.
@@ -757,6 +761,14 @@ gave it, and SHALL translate or re-word none of them.
 - **WHEN** `GradingGradeCards` renders a card with a grade, its label word, the
   grader and a certificate
 - **THEN** all four are shown, in the grader's words
+
+#### Scenario: shared-ui-grading-submission-SC-70 - A collected slab carries its hand-back photograph
+**Serves:** The cards after hand-in - a collector on `grade10-site`'s submission page checking the slab is theirs
+
+- **WHEN** `GradingGradeCards` renders a graded card with the photograph
+  taken at hand-back
+- **THEN** the photograph is shown beside its grade, grader and certificate
+- **AND** a card given no photograph shows none
 
 #### Scenario: shared-ui-grading-submission-SC-38 - An ungraded card reads the code and the note
 **Serves:** The cards after hand-in - a collector reading why one card came back raw

@@ -8,7 +8,7 @@ import { Link } from "@grade10/design-system/components/forms/link";
 import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import { outcomeTone } from "./grading-card-record";
-import type { GradingCardOutcome } from "./types";
+import type { GradingCardOutcome, GradingPhoto } from "./types";
 
 /** One card once the grader's reading is in. Every word is the grader's. */
 type GradingGradeCard = {
@@ -26,6 +26,10 @@ type GradingGradeCard = {
   outcomeLabel?: string;
   /** What the grader said about a card it returned raw. */
   ungraded?: { code: string; note: string };
+  /** The photograph taken at hand-back, where the collector's slab has
+   * one — `GradingCardRecord`'s own `slabPhotograph` slot, modelled the
+   * same way here so a collected card reads it whichever block draws it. */
+  slabPhotograph?: GradingPhoto;
 };
 
 type GradingGradeCardsCopy = {
@@ -153,6 +157,14 @@ function GradeCard({
                 <Link href={card.lookupHref}>{copy.lookupLabel}</Link>
               ) : null}
             </HStack>
+          ) : null}
+          {!ungraded && card.slabPhotograph ? (
+            <img
+              alt={card.slabPhotograph.alt}
+              className="size-20 rounded-lg object-cover"
+              data-slot="grading-grade-card-slab"
+              src={card.slabPhotograph.src}
+            />
           ) : null}
         </VStack>
       </CardContent>
