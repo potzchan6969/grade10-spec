@@ -404,8 +404,8 @@ values a pass is written against. A case there **composes**: it traces two or
 more journeys, from two or more capabilities, domains or products, and a single
 trace means it is a feature case written at the wrong level.
 
-`/spec-to-tcs` learns this store's conventions from every `actual` case in the
-corpus before it writes, so a hand-written suite is both more work and less
+`/spec-to-tcs` writes to this store's conventions
+(`docs/governance/tcs-conventions.md`), so a hand-written suite is both more work and less
 consistent than a generated one. It refuses to regenerate over `actual` cases
 or an `approved` file, and shows an existing suite before touching it.
 
@@ -469,8 +469,10 @@ pnpm run tcs:validate        # errors fail CI; an older shape is one of them
 pnpm run tcs:stale           # which suites' drafts sit below the current rules rev
 ```
 
-What a **minor** and a **major** each reach, and how, is
-`docs/governance/specs-to-test-cases.md`'s **Rules Revisions**.
+What a revision reaches, and how — drafts regenerated top down, reviewed
+cases restyled — is `docs/governance/specs-to-test-cases.md`'s **Rules
+Revisions**; how a case reads is `docs/governance/tcs-conventions.md`, which
+moves without one.
 
 ## Related
 

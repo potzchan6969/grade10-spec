@@ -1,14 +1,14 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - every draft case in that journey together, with the spec's scenarios quoted on request - and record each verdict as actual, deprecated, or still draft. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering what the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Reviewing Test Cases With QA
 
 Follow `docs/governance/specs-to-test-cases.md` — **The Review Lane** is this
-skill's rule book; **Step 5**, **The File Header** and **What the approved
-suites teach the next one** hold the properties, the statuses, and why review
-comes first; a bold name below is a heading there.
+skill's rule book; **Step 5**, **The File Header** and **How a Case Reads** hold the
+properties, the statuses, and the house style
+(`docs/governance/tcs-conventions.md`); a bold name below is a heading there.
 
 Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a suite is `/spec-to-tcs` (`.cursor/skills/spec-to-tcs/SKILL.md`).
 The reviewer decides, never this skill: present the case beside the spec, answer
@@ -16,8 +16,10 @@ what they ask, and record their words untidied — generation copies what they a
 
 ## Steps
 
-0. **Read the rulebook whole.** `docs/governance/specs-to-test-cases.md`,
-   one read, under 450 lines, before anything else on every run.
+0. **Read the rulebook and the conventions whole.**
+   `docs/governance/specs-to-test-cases.md` and
+   `docs/governance/tcs-conventions.md`, one read each, before anything else
+   on every run.
 
 1. **Get on a review branch before the first verdict.** Names are the table in
    **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
@@ -59,16 +61,16 @@ what they ask, and record their words untidied — generation copies what they a
 
 4. **Pick one suite.** None: say so, name where suites live, offer
    `/spec-to-tcs <capability-or-change>`. One: say which and start, no menu.
-   More: list capability or change, path, file status and `draft` count out of
-   the total, then ask. One suite per run unless the reviewer asks to continue.
+   More: list `reopened` suites first — with the drafts added since the lapse —
+   then `in-review`, then `pending-review`: capability or change, path, file
+   status and `draft` count out of the total, then ask. One suite per run
+   unless the reviewer asks to continue.
 
-5. **Restyle before you present anything.** **Restyle first** under **The Review Lane** and
-   the `<v>` table under **Naming** say what each status allows: `draft`
-   freely, `actual` still `manual` on the reviewer's yes, `automated` and
-   `deprecated` never. Report what you restyled before the first journey; a
-   behaviour change is `/spec-to-tcs`'s, not a restyle. A pre-condition the
-   reviewer reshapes reads as **Who the Actor Is** has it —
-   `customer(gold member) is on the shopping cart page`.
+5. **Prepare before you present anything,** as `## Preparing the Suite` below
+   lays out, in its order, each part its own commit, pushed before the first
+   journey. **Prepare first** under **The Review Lane** and the `<v>` table
+   under **Naming** say what each status allows: `draft` freely, `actual`
+   still `manual` on the reviewer's yes, `automated` and `deprecated` never.
 
 6. **Open the suite and its journeys together.** Read the whole suite and the
    `spec.md` beside it end to end — above feature level, every `user-journeys.md`
@@ -78,7 +80,10 @@ what they ask, and record their words untidied — generation copies what they a
 7. **Walk the suite one journey at a time,** in file order, as **The Review
    Lane** describes: the journey, every `draft` case in full — id and title,
    classification block, pre-conditions, test data, steps, expected results —
-   and `actual` or `deprecated` cases by id and title only. Scenarios are
+   and `actual` or `deprecated` cases by id and title only. A case preparation
+   changed carries a one-line note of what changed — steps filled, a result
+   sharpened, a value changed, a row added — with test data called out apart
+   from the rest. Scenarios are
    offered, never quoted unasked; when asked, quote the whole clause from
    `spec.md`. Before asking for verdicts, report duplicates — **A Case That
    Already Exists Is Not Written Twice**, against the journey and the domain
@@ -92,7 +97,12 @@ what they ask, and record their words untidied — generation copies what they a
    scenario clause by id. When the spec does not answer, say so — a gap for
    the spec's author, recorded at close — never how the product probably
    behaves. Never talk the reviewer out of a doubt; a doubted case is wrong
-   until the spec says otherwise.
+   until the spec says otherwise. "How do I run this" means the case fails
+   **Executable without asking**: answer from the spec's flow, `ui-design.md`,
+   the PRD and the conventions' `## Setup Recipes`, and offer the answer as
+   an edit to the case — a Change verdict like any other. A doubt about the
+   journey itself is a finding for the spec's author, as **Journeys are the
+   author's** says; never edit `user-journeys.md`.
 
 9. **Add a case the reviewer asks for** only where the anchor it traces already
    carries the behaviour — otherwise it is a new requirement, routed to the
@@ -114,8 +124,8 @@ what they ask, and record their words untidied — generation copies what they a
    | Retire | `**Status:** deprecated`, only when the spec no longer states the behaviour; never delete or renumber |
 
    Then recompute the header as **The File Header** says: `**Status:**` from
-   the cases; `**Reviewed:** <today>, tcs-rules r<n>` added when and only
-   when the file reaches `approved`, removed if it falls back; `**Drafts
+   the cases; `**Reviewed:** <today>, tcs-rules r<n>` written fresh when the
+   file reaches `approved`, and marked `, lapsed <today>` if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.
 
 11. **Close the run and land the work.** Run `pnpm run tcs:validate` and fix
@@ -123,13 +133,73 @@ what they ask, and record their words untidied — generation copies what they a
    (`/pr-push`), titled with the range that has verdicts —
    `test(<domain>): approve <target> US<n>–<m> test cases`. Merge at journey
    boundaries: mark the PR ready and merge a finished journey while others
-   are still `draft`; the file lands as `in-review`. Say which journeys hold
+   are still `draft`; the file lands as `in-review`, or `reopened` when it was
+   approved before. Say which journeys hold
    drafts and whether the branch continues or a new one starts; when the file
-   is `approved`, say the suite is ready to hand on. When the reviewer's edits
-   repeated a theme, say those approved cases carry it into the next
-   generation run, and point at the document as the place to write it as a
-   rule. Report cases approved, edited, deferred and retired, the gaps for the
-   spec's author, and any other suite still awaiting review.
+   is `approved`, say the suite is ready to hand on. Then offer what the
+   review taught, as `## What the Review Taught` below lays out. Report cases
+   approved, edited, deferred and retired, the conventions confirmed and
+   refused, the gaps and journey findings for the spec's author, and any
+   other suite still awaiting review.
+
+## Preparing the Suite
+
+Before the first journey, in this order. Each part is its own commit, named in
+**The Review Lane**'s table, and the branch is pushed before the reviewer sees
+a case, so the verdict commits hold only the reviewer's decisions.
+
+1. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
+   `tcs_rules_rev` is regenerated, as **Rules Revisions** says: name the file,
+   its level, the journeys and the drafts, and take one yes; regenerate the
+   levels above it first, then the file from line 1 to its end, through
+   `/spec-to-tcs`. `actual` cases are skipped; one whose behaviour or journey
+   the new rule changes is shown and asked about, and goes back to `draft`
+   only on a yes. A suite at the current revision has its drafts restyled to
+   `docs/governance/tcs-conventions.md` instead.
+
+2. **Fill in the mechanism.** Read the spec's flow requirement,
+   `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
+   `## Where Things Are`. Bring every `draft` to **Executable without
+   asking**: where to go, which control, what goes in, how a state is
+   reached. Results may be sharpened into what a tester sees, as **A result
+   may sharpen, never move** allows; a value that only stands for the rule
+   may change within its class, as **A value is the rule, or stands for it**
+   allows. Never the trace, never an assertion added or removed, never an
+   outcome, never a value that is the rule. Where the spec gives no flow,
+   leave the step and list it as a question for the reviewer. Where the flow
+   disagrees with the case, classify it as **A flow that disagrees is
+   classified, not fixed** says. List every case needing a mocked state whose
+   Testability plans no `automation`. An `actual` case still `manual` is
+   filled only on the reviewer's yes.
+
+3. **Propose test data.** Rows the rule implies, as **Rows may add what the
+   rule implies** says, each with the rule it traces. The reviewer takes or
+   refuses each row; a taken row is written in. A row added to an `actual`
+   case changes what it verifies: `<v>` bumped, back to `draft`.
+
+4. **Summarise.** One message before the first journey: regenerated or
+   restyled, the steps filled per case, the results sharpened, the values
+   changed, the rows added and refused, the flow disagreements and how each
+   was classified, the mocked states without automation, and the questions
+   the spec could not answer. Test data is its own list.
+
+## What the Review Taught
+
+When the verdicts are done, and before the pull request is marked ready:
+
+- **Every edit is a candidate** — each Change the reviewer asked for, each
+  "how do I run this" answer written into a case, each row taken or refused.
+  One line each: what changed, and the pattern it suggests, worded as a rule,
+  with the scope you would file it under
+- **One at a time** — the reviewer confirms, rewords or refuses each. A
+  confirmed line lands in `docs/governance/tcs-conventions.md` under its
+  scope as `- <YYYY-MM-DD>, <suite path>: <the pattern>`; a setup the
+  reviewer explained lands under `## Setup Recipes`; a refused line lands
+  under `## Refused` with the reviewer's reason
+- **Never offered twice** — a candidate matching a `## Refused` line is not
+  offered again; one that contradicts the rulebook is reported, not offered
+- **Its own commit** — `docs(governance): conventions from the <target>
+  review`, after the verdict commits
 
 ## Closing a feature review
 
@@ -172,8 +242,12 @@ reviewer, and it is never resolved here — only by the person named on it.
   traced scenario does not say, even when asked; route it to `/spec-to-tcs`
   after the spec is fixed
 - Never delete a case or a suite file; retirement is `deprecated`
-- Never regenerate the suite mid-review; if it is badly out of date, stop and
-  hand back to `/spec-to-tcs`
+- Never regenerate once the first verdict is written; regeneration is
+  preparation, and a suite found badly out of date mid-review stops the review
+  and goes back to `/spec-to-tcs`
+- Never edit `user-journeys.md`; a journey finding goes to the spec's author
+- Never write a line into `docs/governance/tcs-conventions.md` the reviewer
+  did not confirm, and never fold preparation into a verdict commit
 - Never resolve, re-word or drop a case carrying `**Blocked:**`, and never
   reclassify a deferred finding as a rejected one — a question nobody could
   answer is not a misreading

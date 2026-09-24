@@ -9,7 +9,9 @@
  * (`shared-planning-agent-rounds-SC-106`).
  */
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import { fileURLToPath } from "node:url";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
@@ -268,4 +270,109 @@ test("shared-planning-agent-rounds-SC-106 - a Manual row whose store test cites 
     store("// demo-alpha-US1-TC1-1 and demo-alpha-US1-TC3-1 are drawn here\n"),
   );
   assert.equal(result.status, 0, result.stdout + result.stderr);
+});
+
+// A sweep regenerates drafts freely, and may never move a reviewed case: every
+// `actual` or `deprecated` case the baseline recorded keeps its id, its trace
+// and its status (docs/governance/specs-to-test-cases.md, Rules Revisions).
+test("a sweep check lets drafts move and holds reviewed cases still", () => {
+  const SCRIPT = fileURLToPath(
+    new URL("./validate-test-cases.mjs", import.meta.url),
+  );
+  const sweep = (root, flag, file) =>
+    spawnSync(process.execPath, [SCRIPT, "--root", root, flag, file], {
+      encoding: "utf8",
+      env: { ...process.env, NO_COLOR: "1" },
+    });
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const original = readFileSync(suite, "utf8");
+  const reviewed = original.replace(
+    /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+    "$1 actual",
+  );
+  writeFileSync(suite, reviewed);
+  const baseline = join(root, "baseline.json");
+  assert.equal(sweep(root, "--capture-baseline", baseline).status, 0);
+
+  // The drafts regenerate: TC3 is gone and TC4 is new. The reviewed TC1 stays.
+  writeFileSync(
+    suite,
+    reviewed
+      .replaceAll("demo-alpha-US1-TC3-1", "demo-alpha-US1-TC4-1")
+      .replace("The thing happens, 3", "The thing happens again, 4"),
+  );
+  const moved = sweep(root, "--swept", baseline);
+  assert.equal(moved.status, 0, moved.stdout + moved.stderr);
+
+  // The reviewed case goes back to draft: a sweep may not do that unasked.
+  writeFileSync(
+    suite,
+    reviewed.replace(
+      /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) actual/,
+      "$1 draft",
+    ),
+  );
+  const reopened = sweep(root, "--swept", baseline);
+  assert.equal(reopened.status, 1);
+  assert.match(reopened.stdout, /demo-alpha-US1-TC1-1` was actual, now draft/);
+});
+
+// A state only a mock produces is a script's to set up: a case that needs one
+// and plans no automation is raised (Step 3, Executable without asking).
+test("a case needing a mocked state and planning no automation is warned", () => {
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  writeFileSync(
+    suite,
+    readFileSync(suite, "utf8").replace(
+      "None.",
+      "The catalogue endpoint is mocked to return a 500.",
+    ),
+  );
+  const result = run(root);
+  assert.match(
+    result.stdout,
+    /demo-alpha-US1-TC1-1` needs a mocked or manipulated state but its \*\*Testability\*\* plans no `automation`/,
+  );
+});
+
+// A file that was approved and holds a draft again is `reopened`: its
+// `**Reviewed:**` line stays, marked lapsed (The File Header).
+test("an approved file with a new draft reads reopened through its lapsed Reviewed line", () => {
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const approvedOnce = readFileSync(suite, "utf8")
+    .replace(
+      /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+      "$1 actual",
+    )
+    .replace(
+      /(### demo-alpha-US1-TC2-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+      "$1 actual",
+    );
+  const header = (status, reviewed) =>
+    approvedOnce.replace(
+      "**Status:** pending-review\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+      `**Status:** ${status}\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
+    );
+
+  writeFileSync(
+    suite,
+    header("reopened", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+  );
+  const reopened = run(root);
+  assert.doesNotMatch(reopened.stdout, /file status is|Reviewed:\*\*` line/);
+
+  writeFileSync(
+    suite,
+    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+  );
+  assert.match(run(root).stdout, /file status is `in-review` but its cases imply `reopened`/);
+
+  writeFileSync(suite, header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"));
+  assert.match(
+    run(root).stdout,
+    /carries a `\*\*Reviewed:\*\*` line but is not approved — a file that falls out/,
+  );
 });

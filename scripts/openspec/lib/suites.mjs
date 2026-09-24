@@ -37,7 +37,12 @@ export const GOVERNANCE = join(
   "specs-to-test-cases.md",
 );
 
-export const FILE_STATUSES = ["pending-review", "in-review", "approved"];
+export const FILE_STATUSES = [
+  "pending-review",
+  "in-review",
+  "reopened",
+  "approved",
+];
 export const CASE_STATUSES = ["draft", "actual", "deprecated"];
 /** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
 export const LEGACY_TYPES = ["smoke", "regression"];
@@ -130,13 +135,14 @@ export function currentRulesRev() {
     /^tcs_rules_rev:\s*(\d+)(?:\.(\d+))?\s*$/m,
   );
   if (!m) return null;
-  return { major: Number(m[1]), minor: m[2] === undefined ? 0 : Number(m[2]) };
+  return Number(m[1]);
 }
 
-/** A revision as it is written in a stamp: `r3.0`. */
-export const revText = (r) => (r == null ? "?" : `r${r.major}.${r.minor}`);
+/** A revision as it is written in a stamp: `r4`. The revision is one integer;
+ *  a stamp written before that (`r3.0`) reads as its first number. */
+export const revText = (r) => (r == null ? "?" : `r${r}`);
 /** Negative when a is older than b, 0 when equal. */
-export const revCmp = (a, b) => a.major - b.major || a.minor - b.minor;
+export const revCmp = (a, b) => a - b;
 
 // --- where suites and specs live -------------------------------------------
 
@@ -435,6 +441,7 @@ export function parseSuite(text) {
     status: null,
     draftsStyled: null,
     reviewed: null,
+    reviewedLapsed: null,
     journeys: [],
     legacy: new Set(),
     // The blind reading's own output: what the isolated input did not settle.
@@ -493,26 +500,19 @@ export function parseSuite(text) {
       if (ds) {
         suite.draftsStyled = {
           date: ds[1],
-          rev: {
-            major: Number(ds[2]),
-            minor: ds[3] === undefined ? 0 : Number(ds[3]),
-          },
+          rev: Number(ds[2]),
           line: i + 1,
         };
         continue;
       }
       const rv = line.match(
-        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+)(?:\.(\d+))?)?\s*$/,
+        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+)(?:\.(\d+))?)?(?:,\s*lapsed (\d{4}-\d{2}-\d{2}))?\s*$/,
       );
       if (rv) {
         suite.reviewed = rv[1];
         suite.reviewedRev =
-          rv[2] === undefined
-            ? null
-            : {
-                major: Number(rv[2]),
-                minor: rv[3] === undefined ? 0 : Number(rv[3]),
-              };
+          rv[2] === undefined ? null : Number(rv[2]);
+        suite.reviewedLapsed = rv[4] ?? null;
         suite.reviewedLine = i + 1;
         continue;
       }
@@ -753,10 +753,13 @@ export function statusCounts(cases) {
 }
 
 /** The file status its cases imply. Derived, never chosen: a reviewer approves
- *  cases one at a time and the file follows. */
-export function deriveStatus(counts, caseCount) {
+ *  cases one at a time and the file follows. A file that was approved once and
+ *  holds a draft again carries a lapsed `**Reviewed:**` line, and is
+ *  `reopened` rather than `in-review`. */
+export function deriveStatus(counts, caseCount, lapsed = false) {
   if (caseCount === 0) return "pending-review";
   if (counts.draft === 0) return "approved";
+  if (lapsed) return "reopened";
   return counts.actual + counts.deprecated === 0
     ? "pending-review"
     : "in-review";
@@ -802,7 +805,7 @@ export function readSuite(root, filePath) {
     suite,
     cases,
     counts,
-    derived: deriveStatus(counts, cases.length),
+    derived: deriveStatus(counts, cases.length, Boolean(suite.reviewedLapsed)),
   };
 }
 
@@ -829,12 +832,21 @@ export function caseIndex(root, paths) {
       if (h) {
         id = h[1];
         if (!index.has(id))
-          index.set(id, { level, rel, line: lineNo, traces: [] });
+          index.set(id, {
+            level,
+            rel,
+            line: lineNo,
+            traces: [],
+            status: null,
+          });
         continue;
       }
       const t = line.match(/^\*\s+\*\*Trace:\*\*\s*(.+?)\s*$/);
       if (t && id && index.has(id))
         index.get(id).traces = commaList(t[1]).values.sort();
+      const st = line.match(/^\*\s+\*\*Status:\*\*\s*(\S+)\s*$/);
+      if (st && id && index.has(id) && index.get(id).status === null)
+        index.get(id).status = st[1].toLowerCase();
     }
   }
   return index;

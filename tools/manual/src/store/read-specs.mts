@@ -77,11 +77,13 @@ const TRACE = /^\s*(?:[-*]\s+)?\*\*Trace:\*\*(.*)$/m;
  * resolves — the suite beside a spec that predates journeys traces those. */
 const TRACE_ID = /[a-z0-9][a-z0-9-]*-(?:US|SC)-\d+/g;
 /** Derived from the cases, never chosen: every case `draft` is
- * `pending-review`, a first verdict makes it `in-review`, and no `draft`
- * left makes it `approved`. */
+ * `pending-review`, a first verdict makes it `in-review`, no `draft` left
+ * makes it `approved`, and a draft in a file that was approved makes it
+ * `reopened`. */
 const SUITE_STATUSES: ReadonlySet<TestSuiteStatus> = new Set([
   "pending-review",
   "in-review",
+  "reopened",
   "approved",
 ]);
 const CASE_STATUSES: ReadonlySet<TestCaseStatus> = new Set([
