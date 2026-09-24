@@ -68,6 +68,7 @@ a second gallery keyed by side.
 - **AND** the details page shows that one image
 - **AND** no empty gallery slots are invented
 
+<!-- trace:scenario id=scn_6dcb29c0-1596-4d61-a063-322d137a98af key=ninth-media-item-refused rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-02 - A ninth media item is refused by the gallery cap
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 

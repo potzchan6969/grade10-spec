@@ -40,6 +40,8 @@ sections, the case ids, the classification block, the `**Trace:**` line, and
 the file header. Follow that document; this skill routes to it and adds
 nothing that contradicts it.
 
+For selected app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) after scenarios and feature cases exist. Its stable markers supplement the suite's `**Trace:**` line and never replace the journey or positional case headings.
+
 ## Why this workflow has the shape it has
 
 A suite derived from the scenarios can only find inconsistency inside them. It

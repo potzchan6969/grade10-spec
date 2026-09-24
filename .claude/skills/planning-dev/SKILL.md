@@ -92,6 +92,10 @@ tooling on both sides parses. Beyond them:
   check warns (`dense`) on an engineer block holding a paragraph.
 - **Engineers claim groups at pickup** with `pnpm plan claim`, which is why
   the groups are written without owner tags.
+- **Link selected app tests** - once a scenario and case have stable markers,
+  the test task adds its adjacent acceptance or support marker with the
+  [trace CLI](../../../docs/governance/test-traceability.md). The app test
+  remains the evidence; the marker only identifies which record it decides.
 
 ## Finish
 
