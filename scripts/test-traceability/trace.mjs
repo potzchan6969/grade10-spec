@@ -527,8 +527,8 @@ function initialize(kind, values) {
       fail("--key must be a lower-case semantic slug, not a positional US, SC, or TC id");
     marker = `trace:scenario id=${id} key=${key} rev=1`;
   } else {
-    if (!/^\s*###\s+\S/.test(target) || !/-TC\d+-\d+\s*:/i.test(target))
-      fail("case target must be one exact ### case heading line with a case id");
+    if (!/^\s*###\s+\S/.test(target))
+      fail("case target must be one exact ### case heading line");
     const covers = requireOption(values, "covers").split(",");
     if (covers.some((item) => !item) || new Set(covers).size !== covers.length)
       fail("--covers must be a comma-separated list of distinct scn_ ids");

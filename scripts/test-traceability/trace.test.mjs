@@ -107,7 +107,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
   try {
     const targetFile = resolve(storeRoot, "openspec/specs/demo/spec.md");
     const targetScenario = "#### Scenario: A visitor checks account preferences";
-    const targetCase = "### demo-US1-TC3-1: The visitor updates settings";
+    const targetCase = "### The visitor updates settings";
     const targetTest = '  test("the visitor updates settings", () => {});';
     const targetSupportTest = '  test("supporting settings detail", () => {});';
     const appFile = resolve(appRoot, "apps/site/src/sign-in.test.ts");

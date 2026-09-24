@@ -21,7 +21,7 @@
 <!-- trace:case id=tcase_demo_manual rev=3 covers=scn_demo_error -->
 ### demo-US1-TC2-1: The visitor sees a rejected sign-in
 
-### demo-US1-TC3-1: The visitor updates settings
+### The visitor updates settings
 
 #### Scenario: A visitor checks account preferences
 **WHEN** the visitor opens preferences
