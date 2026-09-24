@@ -88,6 +88,10 @@ Needs groups 2 and 3 landed. Claimable against fixtures for the page shell.
 Needs `feature-tcs.md` reviewed (`/tcs-review create-account-from-users-page`)
 as its input, and groups 2–4 landed.
 
+<!-- Disposition (2026-09-24 review): leave unchecked. Walk awaits
+     `/tcs-review` + a real e2e pass — do not invent e2e theater. Groups 2–4
+     already cover the named SC scenarios with unit/integration tests. -->
+
 - [ ] 5.1 One walk per journey of every capability this change specifies, end to
   end through the interface its actor uses, kept as the change's end-to-end
   suite (`shared-auth-users-US-05`, `shared-console-user-directory-US-06`,
