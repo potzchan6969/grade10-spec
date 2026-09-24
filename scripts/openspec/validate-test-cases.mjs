@@ -89,14 +89,17 @@ Flags:
                     may never change what a case claims
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
+  --app-root <repository>=<dir>[,…]
+                    The clone a \`<repository>:<path>\` Decided-by path is
+                    checked against, over its variable below. With neither,
+                    those paths are a warning
   --help            Print this help and exit
 
 Environment:
 ${Object.entries(REPOSITORIES)
   .map(
     ([name, { env }]) =>
-      `  ${env.padEnd(16)}  The ${name} clone a \`${name}:<path>\` Decided-by path\n` +
-      `                    is checked against. Unset, those paths are a warning`,
+      `  ${env.padEnd(16)}  The ${name} clone, when \`--app-root\` names none`,
   )
   .join("\n")}
 `;
@@ -507,7 +510,7 @@ function checkSuite(root, filePath, rulesRev) {
     const files = [...new Set(paths)];
     warn(
       1,
-      `${paths.length} \`**Decided by:**\` path${paths.length === 1 ? "" : "s"} name${paths.length === 1 ? "s" : ""} the ${repo} repository, unchecked because \`${REPOSITORIES[repo].env}\` names no clone: ${files.map((one) => `\`${one}\``).join(", ")}`,
+      `${paths.length} \`**Decided by:**\` path${paths.length === 1 ? "" : "s"} name${paths.length === 1 ? "s" : ""} the ${repo} repository, unchecked because no ${repo} clone is named — \`--app-root ${repo}=<dir>\` or \`${REPOSITORIES[repo].env}\`: ${files.map((one) => `\`${one}\``).join(", ")}`,
     );
   }
 
@@ -517,7 +520,7 @@ function checkSuite(root, filePath, rulesRev) {
 // ---------------------------------------------------------------------------
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
-  keys: ["capture-baseline", "root", "swept"],
+  keys: ["app-root", "capture-baseline", "root", "swept"],
   booleans: ["require-suites", "stale-report", "strict"],
   usage: USAGE,
 });
@@ -535,10 +538,10 @@ const args = {
 // it beside the test.
 const ROOT = flags.root ? resolve(flags.root) : STORE_ROOT;
 // The clones a prefixed `**Decided by:**` path is checked against, named by
-// each repository's variable in `lib/decided-by.mjs`, read once.
+// `--app-root` or each repository's variable in `lib/decided-by.mjs`.
 const APP_ROOTS = (() => {
   try {
-    return repositoryRoots();
+    return repositoryRoots(process.env, flags["app-root"] ?? null);
   } catch (cause) {
     console.error(red(cause.message));
     process.exit(1);

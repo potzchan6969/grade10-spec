@@ -4,9 +4,9 @@
  * A bare path is the store's own: it resolves inside the store and must name a
  * file that exists. A path written `<repository>:<path>` names a file in a
  * repository the store knows - the application repository's end-to-end walks
- * live there, not here. That file is checked when the clone is named through
- * the repository's environment variable, and reported as unchecked when it is
- * not, since the store's own CI checks out the store alone.
+ * live there, not here. That file is checked when the clone is named, by
+ * `--app-root <repository>=<dir>` or the repository's environment variable,
+ * and reported as unchecked when it is not.
  *
  * `REPOSITORIES` is the one place a prefix is declared. A prefix it does not
  * name is refused by name, never read as a bare path with a colon in it.
@@ -40,23 +40,41 @@ export const knownPrefixes = () =>
     .join(", ");
 
 /**
- * Every declared repository's clone, as the environment names it: repo ->
- * absolute directory, or `null` where the variable is unset. A variable that
- * names no directory throws, because a checker quietly skipping a clone it was
- * told about would report every path as unchecked for a typo.
+ * Every declared repository's clone: repo -> absolute directory, or `null`
+ * where none is named. `given` is the `--app-root` value,
+ * `<repository>=<dir>[,<repository>=<dir>]`, and wins over the repository's
+ * environment variable. A pair that is malformed, names an undeclared
+ * repository, or names no directory throws, because a checker quietly
+ * skipping a clone it was told about would report every path as unchecked for
+ * a typo.
  */
-export function repositoryRoots(env = process.env) {
+export function repositoryRoots(env = process.env, given = null) {
+  const named = {};
+  for (const [name, { env: variable }] of Object.entries(REPOSITORIES))
+    if (env[variable]) named[name] = { dir: env[variable], from: variable };
+  for (const pair of given === null ? [] : String(given).split(",")) {
+    const match = /^\s*([^=\s]+)=(.+?)\s*$/.exec(pair);
+    if (!match)
+      throw new Error(
+        `--app-root takes \`<repository>=<dir>\`, not \`${pair.trim()}\``,
+      );
+    if (!Object.hasOwn(REPOSITORIES, match[1]))
+      throw new Error(
+        `--app-root names \`${match[1]}\`, which is no repository this store knows — write ${knownPrefixes().replaceAll(":`", "=<dir>`")}`,
+      );
+    named[match[1]] = { dir: match[2], from: "--app-root" };
+  }
   const roots = {};
-  for (const [name, { env: variable }] of Object.entries(REPOSITORIES)) {
-    const value = env[variable];
-    if (!value) {
+  for (const name of Object.keys(REPOSITORIES)) {
+    if (!named[name]) {
       roots[name] = null;
       continue;
     }
+    const { dir: value, from } = named[name];
     const dir = resolve(value);
     if (!existsSync(dir) || !statSync(dir).isDirectory())
       throw new Error(
-        `${variable} names \`${value}\`, which is no directory — point it at the ${name} clone, or unset it`,
+        `${from} names \`${value}\` for ${name}, which is no directory — point it at the ${name} clone, or leave it out`,
       );
     roots[name] = dir;
   }

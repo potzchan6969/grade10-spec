@@ -158,11 +158,11 @@ const DURABLE = "openspec/specs/demo/alpha";
 /** `appRoot`, when given, is the grade10 clone the run is pointed at; the
  *  variable is otherwise removed, so a developer's own shell never decides a
  *  verdict. */
-const run = (root, { appRoot = null } = {}) => {
+const run = (root, { appRoot = null, args = [] } = {}) => {
   const env = { ...process.env, NO_COLOR: "1" };
   delete env.GRADE10_ROOT;
   if (appRoot !== null) env.GRADE10_ROOT = appRoot;
-  return spawnSync(process.execPath, [SCRIPT, "--root", root], {
+  return spawnSync(process.execPath, [SCRIPT, "--root", root, ...args], {
     encoding: "utf8",
     env,
   });
@@ -359,7 +359,7 @@ test("shared-planning-agent-rounds-SC-78 - a prefixed path with no clone named i
   assert.equal(result.status, 0, result.stdout + result.stderr);
   assert.match(
     result.stdout,
-    /1 `\*\*Decided by:\*\*` path names the grade10 repository, unchecked because `GRADE10_ROOT` names no clone: `grade10:apps\/frontend\/grade10\/e2e\/tests\/vault\/offer\.spec\.ts`/,
+    /1 `\*\*Decided by:\*\*` path names the grade10 repository, unchecked because no grade10 clone is named — `--app-root grade10=<dir>` or `GRADE10_ROOT`: `grade10:apps\/frontend\/grade10\/e2e\/tests\/vault\/offer\.spec\.ts`/,
   );
 });
 
@@ -400,7 +400,36 @@ test("shared-planning-agent-rounds-SC-78 - a clone variable naming no directory 
     appRoot: join(tmpdir(), "decided-by-no-such-clone"),
   });
   assert.equal(result.status, 1, result.stdout + result.stderr);
-  assert.match(result.stderr, /GRADE10_ROOT names `.*`, which is no directory/);
+  assert.match(
+    result.stderr,
+    /GRADE10_ROOT names `.*` for grade10, which is no directory/,
+  );
+});
+
+test("shared-planning-agent-rounds-SC-78 - `--app-root` names the clone, over the variable", () => {
+  const app = appClone();
+  const flagged = run(store(CHANGE, { decidedBy: `grade10:${WALK}` }), {
+    args: ["--app-root", `grade10=${app}`],
+  });
+  assert.equal(flagged.status, 0, flagged.stdout + flagged.stderr);
+  assert.doesNotMatch(flagged.stdout, /Decided by/);
+
+  const over = run(store(CHANGE, { decidedBy: `grade10:${WALK}` }), {
+    appRoot: mkdtempSync(join(tmpdir(), "decided-by-empty-")),
+    args: [`--app-root=grade10=${app}`],
+  });
+  assert.equal(over.status, 0, over.stdout + over.stderr);
+});
+
+test("shared-planning-agent-rounds-SC-78 - `--app-root` naming a repository the store does not know stops the run", () => {
+  const result = run(store(CHANGE, { decidedBy: DECIDER }), {
+    args: ["--app-root", `grade11=${appClone()}`],
+  });
+  assert.equal(result.status, 1, result.stdout + result.stderr);
+  assert.match(
+    result.stderr,
+    /--app-root names `grade11`, which is no repository this store knows — write `grade10=<dir>`/,
+  );
 });
 
 // --- the two suites this store back-filled ---------------------------------
