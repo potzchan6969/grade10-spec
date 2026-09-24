@@ -2025,9 +2025,13 @@ Needs group 10's exports and group 25's fixture transport. Stage (c).
 - [ ] 30.6 Build `SettingsPanel`: one `SaveableField` per row, the fee sheet
       and the diary services as their own tables, the second-person dialog on a
       money row, a row nobody has written marked unset with its owner, and
-      every field closed to a `grading:read` holder
-      (`grade10-admin-grading-counter-SC-98`,
-      `grade10-admin-grading-counter-SC-99`)
+      every field closed to a `grading:read` holder, and the reference rate
+      a single approve holder's row
+      (`grade10-admin-grading-counter-SC-69`,
+      `grade10-admin-grading-counter-SC-71`,
+      `grade10-admin-grading-counter-SC-98`,
+      `grade10-admin-grading-counter-SC-99`,
+      `grade10-admin-grading-counter-SC-104`)
 - [ ] 30.7 Write the stories for `Grading/Admin/Batches`,
       `Grading/Admin/Receiving` and `Grading/Admin/Settings`, each with
       `surface: console`

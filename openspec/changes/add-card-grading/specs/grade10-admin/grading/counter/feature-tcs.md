@@ -3166,6 +3166,34 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 * The read is refused by name, naming that setting and its owner.
 * No value compiled into the code is used in its place.
 
+### grade10-admin-grading-counter-US15-TC9-1: The reference rate is written by one approve holder, and nought is refused
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-grading-counter-US-15
+
+**Pre-conditions:**
+Admin(holds `grading:approve`) opens Settings, with the reference rate at 7.84.
+
+**Steps:**
+
+1. Change the reference rate to 7.90 and save.
+2. Change it to 0 and save.
+
+**Expected Results:**
+
+* The first save writes 7.90 with no second-person dialog, naming the writer alone.
+* The second save is refused, naming the reference rate, and 7.90 stays.
+
 ## Reconciliation
 
 **Run:** the blind pass read the isolated bundle — this capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and its `decisions.md` with the `## Raised` table, `ui-design.md` with the state dispositions stripped, and the PRD sections the proposal links. It was denied every `## Requirements` section, `openspec/specs/` entirely, `openspec/changes/archive/` entirely, and `tech-design.md`. Ninety-two cases over fifteen journeys came back against eighty-four scenarios; the two readings are joined below on the journey anchors, and the suite now carries a hundred and four cases against a hundred and two scenarios.
@@ -3277,6 +3305,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-SC-78` | Case added | `grade10-admin-grading-counter-US14-TC6-1` — the second factor asked for in production |
 | `grade10-admin-grading-counter-SC-79` | Case added | `grade10-admin-grading-counter-US14-TC7-1` — one verification covering the next act for twelve hours |
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
+| `grade10-admin-grading-counter-SC-104` | Case added, added after the run | `grade10-admin-grading-counter-US15-TC9-1`: the staff-set reference rate decided outside the blind pass; it prices nothing a collector pays, so one approve holder writes it and nought is refused |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
 | `grade10-admin-grading-counter-SC-81` | Out of suite | **Out of suite:** the grading worker's audit-write test in the application repository — an audit entry can only be made unwritable below the console, and no counter act reaches that state from a screen |
 

@@ -1125,6 +1125,14 @@ written, naming the owner who owes it.
 - **WHEN** an approve holder changes the notice day
 - **THEN** the audit chain carries the write under the settings subject, naming the key, the old value, the new value, the writer and the approver
 
+#### Scenario: grade10-admin-grading-counter-SC-104 - The reference rate takes one approve holder, and nought is refused
+**Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
+
+- **WHEN** an approve holder writes the reference rate as 7.90 HKD to the US dollar, with no second holder
+- **THEN** the rate is written, carrying their name alone, and the next pasted list reads its USD sales at 7.90
+- **AND WHEN** they write the rate as 0
+- **THEN** the write is refused, naming the reference rate, and the rate stays at 7.90
+
 #### Scenario: grade10-admin-grading-counter-SC-98 - A setting nobody has written is marked on the settings page
 **Serves:** grade10-admin-grading-counter-US-15 - operations confirms a default before the counter can run on it
 
