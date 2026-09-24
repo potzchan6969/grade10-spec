@@ -2692,10 +2692,13 @@ An authenticated winner account with six saved shipping addresses, held from bef
 - Fee tooltips on Buyer’s Premium, Shipping & Handling, Insurance, and Payment
   Processing Fee (brief fee copy); the Insurance copy is `0.9% of the order
   value during transit.`
-- Receipt and invoice identifier formats are outside this receipt-breakdown suite.
-- Winner Order's live balance is outside this receipt-breakdown suite; only receipt values are covered here.
-- Receipt contents after tolerance-close or confirmed overpayment use `Remaining Balance Due = 0`.
-- Refunds and reversals preserve issued receipts; this suite does not define what a later payment may do.
+- Receipt and invoice identifier formats remain out of scope.
+- Winner Order's live balance remains out of scope; only receipt values are
+  covered here.
+- Receipt contents after a tolerance-close or confirmed overpayment use
+  `Remaining Balance Due = 0`.
+- Refunds and reversals preserve issued receipts; this suite does not define
+  what a later payment may do.
 
 ## Reconciliation
 
