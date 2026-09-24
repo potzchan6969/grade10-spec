@@ -8,7 +8,7 @@
     grade10-site-auction-lot-status-SC-13.
   - Verification: `pnpm check:manual` in the registered `grade10-spec` store.
 
-## 2. Listing persistence and allocation (grade10)
+## 2. Listing persistence and allocation (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add the listing-code reservation data and UUID-derived candidate
   projection. Allocate on the first successful explicit draft save, retrying
