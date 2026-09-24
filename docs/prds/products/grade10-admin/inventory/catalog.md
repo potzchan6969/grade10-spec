@@ -97,8 +97,9 @@ product history.
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
-- 🚧 **Cert-scoped media** — an Inventory image or video stays product-level
+- 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
   when untagged, or is tagged to one same-product Cert record with a printed
   Cert ID. Media for a record without a printed Cert ID stays untagged and
-  shared. An operator can tag, untag, or retag it, and removing the Cert record
-  removes its tag without removing the uploaded media
+  shared. Removing a media Cert tag or retagging leaves the originally tagged
+  source item untagged. Removing a physical unit removes its Cert record and
+  the source media tied to that record; Inventory records the unit as withdrawn
