@@ -43,7 +43,8 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   request. A shop that exposes no count, or a count of zero while still
   offering the variant, bounds nothing.
 - **A card's tile reflects its most available variant.** Out of stock only when
-  every variant on it is; per-variant availability stays on the card's page.
+  every variant on it is. Its page presents one sellable item and reads
+  availability from that item's internal Shopify sale identity.
 - **Browse surfaces communicate no quantity.** No remaining count, no scarcity
   treatment, no label separating one available variant from another. A
   collector may still request a quantity while adding from a browse surface,
@@ -121,21 +122,21 @@ states what the store puts into them.
 - `grade10-site/store/product-listing`: remove stock-derived quantity limits
   and low-stock counts from listing tiles.
 - `grade10-site/store/product-page`: remove stock-derived quantity limits and
-  low-stock counts from the product page while preserving per-variant choice
-  and status.
+  low-stock counts from the product page while keeping its one sellable item
+  and internal Shopify sale identity; the page offers no variant choice.
 
 ## Impact
 
 No backend, database, or shared UI contract change is required. The typed
 Store product read already supplies each variant's availability, price and
 optional quantity, and the live cart review already returns the current
-answers used by the drawer and checkout. The frontend work selects the variant
-being bought, maps its availability to the existing purchase states, and
-stops exposing browse-time quantity information. On a failed cart review it
+answers used by the drawer and checkout. The frontend maps the product page's
+one sellable item's internal variant availability to the existing purchase
+states and stops exposing browse-time quantity information. The Shopify sale
+identifier remains internal to the cart add. On a failed cart review it
 marks affected lines unchecked, replaces their last availability and prices
 and the cart total with unchecked states, names them in a retryable notice, and
-withholds checkout. The product
-page adds a shared `variantLabel` message in all four supported locales.
+withholds checkout.
 
 The change directory is named `add-store-product-status` and carries four
 capabilities; the name is left alone so the open pull request keeps its
@@ -143,4 +144,6 @@ history. Its standalone Storybook product-detail preview is updated to match
 the variant and availability behavior specified here.
 
 `product-status` walks the listing, product page and cart as one Store path;
-the Store domain test suite is updated with that path.
+the Store domain test suite is updated with that path. The product-detail
+preview uses the same one-item presentation and keeps its Shopify sale
+identifier out of shopper-facing copy.

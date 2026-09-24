@@ -13,13 +13,14 @@ availability information the listing shows.
 Use the existing product-detail composition in the PRD's
 `pages-product-detail-page--docs` Storybook story and the registered
 [Product Detail page frame](https://www.figma.com/design/GW2WL6JcWok5ypUrUFi9bU/Grade10-DS-2026?node-id=4098-2423).
-Keep the established page layout while adding the variant chooser. **This
-reference is out of sync:** its accepted “Low inventory indicator” annotation
-asks for an `Only X left` cue, while the product-status requirement forbids
-stock counts and scarcity cues on browse surfaces. This change follows the
-requirement and removes that cue from the Storybook reference. The frame owner
-must supersede the annotation through the design annotation workflow before
-this frame is treated as current.
+Keep the established one-item page: show the price and availability of its
+sellable item, without a shopper-facing variant chooser or variant title.
+**This reference is out of sync:** its accepted “Low inventory indicator”
+annotation asks for an `Only X left` cue, while the product-status requirement
+forbids stock counts and scarcity cues on browse surfaces. This change follows
+the requirement and removes that cue from the Storybook reference. The frame
+owner must supersede the annotation through the design annotation workflow
+before this frame is treated as current.
 
 ### Cart drawer
 
@@ -40,14 +41,12 @@ visible before the collector can leave for Shopify.
 - **Store listing:** `ProductBrowse`, `ProductCard` from `@grade10/ui`.
 - **Product details:** `StoreProductGallery`, `StoreProductHeader`,
   `StoreProductDescription`, `StoreProductMetadata`,
-  `StoreProductPurchasePanel` from `@grade10/ui`; `RadioList`, `RadioCard` from
-  `@grade10/design-system`.
+  `StoreProductPurchasePanel` from `@grade10/ui`.
 - **Cart drawer:** `CartDrawer` from `@grade10/ui`.
 - **Checkout review:** the existing Grade10 `CheckoutPage` line summary and
   review notice.
-- **Copy:** add the `variantLabel` entry to the shared `product` message
-  catalog in all four supported locales. No component, primitive variant or
-  token is missing.
+- **Copy:** reuse the existing availability and sold-out messages. No new
+  variant-choice label, component or token is needed.
 
 ## States
 
@@ -64,11 +63,9 @@ visible before the collector can leave for Shopify.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| A product has one variant | Its price, availability and purchase controls; no variant chooser | `grade10-site-store-product-page-SC-08` |
-| A product has several variants | Each variant's name, price and availability; a priced available variant is selected on entry | `grade10-site-commerce-product-status-SC-12` |
-| Another available variant is selected and added | Its own price, available status, SKU and cart identity | `grade10-site-store-product-page-SC-07` |
-| An unavailable variant is selected | Its price and out-of-stock status remain visible; Add to cart is disabled | `grade10-site-commerce-product-status-SC-15` |
-| No variant is available | A listed price remains visible and no variant can be added | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-13` |
+| The product's internal sale item is available | Its price and available purchase control; no variant name or chooser | `grade10-site-store-product-page-SC-08`, `grade10-site-commerce-product-status-SC-12` |
+| The internal sale item is unavailable | Its price remains visible, the product reads sold out, and no add is offered | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-15` |
+| No product item can be bought | The listed price remains visible and no product can be added | `grade10-site-store-product-page-SC-11`, `grade10-site-commerce-product-status-SC-13` |
 | A requested quantity exceeds the browse count | The requested quantity without a stock-derived maximum or remaining-count message | `grade10-site-commerce-product-status-SC-07`, `grade10-site-commerce-product-status-SC-11` |
 
 ### Cart drawer

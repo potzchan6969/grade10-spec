@@ -5,21 +5,21 @@ order: 3
 reviewed: 2026-09-23
 ---
 
-The product details page is one product: what it is, what it costs, and the
-button to buy it.
+The product details page shows one product, its price, and the one sellable
+item a collector can add.
 
-- **Card** — name, description, images and the selected variant's price;
+- **Card** — name, description, images and the one sellable item's price;
   badges and compare-at price where the catalogue provides them
-- 🚧 **Variant choice** — each listed variant has its own price and
-  availability; the page opens on a priced, buyable variant where one exists
-  and lets the collector choose another
+- 🚧 **One item to buy** — the page offers no size, option or variant choice.
+  Shopify's sale identifier stays internal to availability and cart handling
 - **Buy** — choose a quantity, add the product, and stay on the page while the
   cart total updates; adding it again stays on one line
 - **Description** — a long description shows collapsed to three lines with a
   button to read it in full, without leaving the page
-- 🚧 **Availability without stock pressure** — the page says whether each
-  variant can be bought, with no remaining count or scarcity cue. A requested
-  quantity is not capped by the browse read; Cart explains a short fill
+- 🚧 **Availability without stock pressure** — the page says whether its one
+  sellable item can be bought, with no remaining count or scarcity cue. A
+  requested quantity is not capped by the browse read; Cart explains a short
+  fill
 - **Sold out** — a sold-out product says so and cannot be added; its price
   remains visible
 - **Shipping and pickup** — static copy on every card: shipping calculated at

@@ -36,8 +36,12 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByRole("img", { name: /front view/ })).toBeVisible();
     expect(canvas.queryByText("Only 3 left")).toBeNull();
-    expect(canvas.getByRole("radiogroup", { name: "Variant" })).toBeVisible();
-    expect(canvas.getByText("Collector case")).toBeVisible();
+    expect(canvas.queryByRole("radiogroup")).toBeNull();
+    expect(canvas.queryByText("Standard box")).toBeNull();
+    expect(canvas.queryByText("Collector case")).toBeNull();
+    expect(canvas.queryByText("Gift bundle")).toBeNull();
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
+    expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
     expect(canvas.getByRole("button", { name: "Add to cart" })).toBeVisible();
   },
 };
@@ -61,53 +65,8 @@ export const SoldOut: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
     expect(canvas.getByText("This product is not for sale.")).toBeVisible();
-    expect(canvas.getByRole("radiogroup", { name: "Variant" })).toBeVisible();
-  },
-};
-
-export const SingleVariant: Story = {
-  args: {
-    product: {
-      ...PRODUCT_DETAIL_PRODUCT,
-      variants: PRODUCT_DETAIL_PRODUCT.variants.slice(0, 1),
-    },
-  },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
     expect(canvas.queryByRole("radiogroup", { name: "Variant" })).toBeNull();
-  },
-};
-
-export const SelectUnavailableVariant: Story = {
-  args: { product: PRODUCT_DETAIL_PRODUCT },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    // Product-status SC-15 and product-page SC-12 keep the unavailable price visible.
-    const canvas = within(canvasElement);
-    await userEvent.click(canvas.getByRole("radio", { name: /Collector case/ }));
-    expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
-    expect(canvas.getByText("HK$1,050.00")).toBeVisible();
-    expect(canvas.getByText("SKU: G10-M5-ABYSS-CASE")).toBeVisible();
-  },
-};
-
-export const SelectAnotherAvailableVariant: Story = {
-  args: { product: PRODUCT_DETAIL_PRODUCT },
-  decorators: [content],
-  play: async ({ canvasElement }) => {
-    // Product-page SC-07: the selected and added variant keeps its identity.
-    const canvas = within(canvasElement);
-    const giftBundle = canvas.getByRole("radio", { name: /Gift bundle/ });
-    await userEvent.click(giftBundle);
-    expect(giftBundle).toBeChecked();
-    expect(giftBundle).toHaveAccessibleName(/Gift bundle HK\$210\.00 · For sale/);
-    expect(canvas.getByText("HK$210.00")).toBeVisible();
-    expect(canvas.getByText("SKU: G10-M5-ABYSS-GIFT")).toBeVisible();
-    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
-    expect(canvas.getByRole("status")).toHaveTextContent(
-      "Gift bundle added to cart.",
-    );
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
   },
 };
 

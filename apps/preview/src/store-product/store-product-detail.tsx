@@ -1,6 +1,4 @@
 import { Link } from "@grade10/design-system/components/forms/link";
-import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
-import { RadioList } from "@grade10/design-system/components/forms/radio-list";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   StoreProductDescription,
@@ -28,8 +26,6 @@ const COPY = {
     shippingFee: "Shipping fee",
     skuLabel: "SKU",
   },
-  variantLabel: "Variant",
-  forSale: "For sale",
   purchase: {
     addedToCart: "Added to cart",
     addToCart: "Add to cart",
@@ -39,7 +35,6 @@ const COPY = {
     quantityLabel: "Quantity",
     soldOut: "Sold out",
   },
-  soldOut: "Sold out",
 };
 
 type StoreProductDetailProps = {
@@ -49,13 +44,8 @@ type StoreProductDetailProps = {
 function StoreProductDetail({ product }: StoreProductDetailProps) {
   const [quantity, setQuantity] = useState(1);
   const [addedVariantId, setAddedVariantId] = useState<string>();
-  const [selectedVariantId, setSelectedVariantId] = useState(
-    product.variants.find((variant) => variant.availableForSale)?.id ??
-      product.variants[0]?.id ??
-      "",
-  );
   const saleItem =
-    product.variants.find((variant) => variant.id === selectedVariantId) ??
+    product.variants.find((variant) => variant.availableForSale) ??
     product.variants[0];
 
   return (
@@ -75,25 +65,6 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
               shopHref="#shop"
               title={product.title}
             />
-            {product.variants.length > 1 ? (
-              <RadioList
-                aria-label={COPY.variantLabel}
-                label={COPY.variantLabel}
-                onValueChange={(value) => {
-                  if (typeof value === "string") setSelectedVariantId(value);
-                }}
-                value={saleItem?.id}
-              >
-                {product.variants.map((variant) => (
-                  <RadioCard
-                    key={variant.id}
-                    description={`${variant.price} · ${variant.availableForSale ? COPY.forSale : COPY.soldOut}`}
-                    title={variant.title}
-                    value={variant.id}
-                  />
-                ))}
-              </RadioList>
-            ) : null}
             <StoreProductDescription
               copy={COPY.description}
               description={product.description}
@@ -115,7 +86,7 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
               }
             />
             {addedVariantId === saleItem?.id && saleItem ? (
-              <p role="status">{saleItem.title} added to cart.</p>
+              <p role="status">{COPY.purchase.addedToCart}.</p>
             ) : null}
             <StoreProductMetadata
               badges={product.badges}
