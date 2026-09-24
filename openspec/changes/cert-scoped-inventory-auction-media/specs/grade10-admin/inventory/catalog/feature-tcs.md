@@ -276,12 +276,13 @@ Runs once per row of **Test data**.
 **Steps:**
 
 1. Open <cert record> for <inventory product>.
-2. Remove the physical unit and confirm the removal.
+2. Enter a non-empty withdrawal reason, then remove the physical unit and confirm the removal.
 
 **Expected Results:**
 
 * <cert record> is removed and stock decreases by one.
 * The withdrawn count increases by one; the inventory ledger remains unchanged.
+* The withdrawal changelog records the supplied reason.
 * The source media tagged to <cert record> is deleted.
 * <shared media> and <other media> remain on <inventory product> with their existing tags.
 

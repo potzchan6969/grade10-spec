@@ -83,13 +83,14 @@ Smoke paths from Inventory Cert media classification into Auction listing galler
 1. Start a draft listing for <product> and <selected Cert ID>.
 2. Open the Other Cert media drawer and add <source media> by naming <source Cert ID>.
 3. Save the listing gallery and record the saved copy's bytes and alt text.
-4. Remove the physical unit for <source Cert ID> in Inventory and confirm.
+4. Enter a non-empty withdrawal reason, then remove the physical unit for <source Cert ID> in Inventory and confirm.
 5. Reopen the product media, Cert records, and saved listing gallery.
 
 **Expected Results:**
 
 * The <source Cert ID> record and its tagged <source media> are removed; <shared media> remains untagged.
 * Inventory stock decreases by one and withdrawn increases by one, with the ledger unchanged.
+* The withdrawal changelog records the supplied reason.
 * The saved listing gallery retains its copied bytes and alt text after source deletion.
 
 ## Settled
