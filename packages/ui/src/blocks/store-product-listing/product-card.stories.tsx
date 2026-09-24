@@ -199,14 +199,14 @@ export const BelowCartMaximum: Story = {
 export const NoCartMaximum: Story = {
   args: {
     inCart: true,
-    cartCount: "2",
+    cartCount: "3",
     onCartQuantityChange: fn(),
   },
   decorators: well,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+      canvas.getByRole("button", { name: `3. ${copy.adjustQuantity}` }),
     );
 
     const increment = canvas.getByRole("button", {
@@ -216,7 +216,7 @@ export const NoCartMaximum: Story = {
 
     await userEvent.click(increment);
     expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
-    expect(args.onCartQuantityChange).toHaveBeenCalledWith(3);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(4);
   },
 };
 

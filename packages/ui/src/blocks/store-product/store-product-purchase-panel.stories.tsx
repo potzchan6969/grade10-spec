@@ -62,6 +62,29 @@ export const Default: Story = {
   },
 };
 
+/**
+ * Product-status SC-11: a browse count does not cap the requested quantity.
+ * The fixture still carries the count until the product-detail preview drops
+ * that browse-only value, so this is the red tracer for the next task.
+ */
+export const QuantityBeyondBrowseCount: Story = {
+  render: () => <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} />,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const increase = canvas.getByRole("button", {
+      name: "Increase quantity",
+    });
+
+    await userEvent.click(increase);
+    await userEvent.click(increase);
+    await userEvent.click(increase);
+
+    expect(canvas.getByRole("spinbutton", { name: "Quantity" })).toHaveValue(
+      "4",
+    );
+  },
+};
+
 export const SoldOut: Story = {
   render: () => <InteractivePurchasePanel product={SOLD_OUT_PRODUCT_STORY} />,
   play: async ({ canvasElement }) => {
