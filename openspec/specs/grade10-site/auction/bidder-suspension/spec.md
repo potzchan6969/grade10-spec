@@ -24,9 +24,7 @@ it.
 - Reinstatement
   - Operator review only: an operator reinstates whatever the cause, from the admin Users page
   - Account record: the state and its reason are visible to whoever decides
-
 ## Requirements
-
 ### Requirement: An elapsed payment deadline suspends the account
 
 When an auction order's payment deadline passes with its invoice status still
@@ -64,7 +62,8 @@ A suspension SHALL stop and leave open exactly these capabilities.
 | Capability | Suspended |
 | --- | --- |
 | Placing a new bid or committing a maximum | Yes |
-| Standing bids on lots that have not closed | Yes — retracted |
+| Raising a standing maximum | Yes |
+| Standing maxima on lots that have not closed | No — they stay in force |
 | Paying an outstanding invoice | **No** — this SHALL remain available |
 | Grade10 Store purchases | No |
 | Grade10 Loyalty earning and redemption | No |
@@ -91,76 +90,20 @@ signing in, and it SHALL NOT change anything `shared/auth/users` governs.
   loyalty, and read their own orders and invoices
 - **AND** they cannot place a bid or commit a maximum
 
-### Requirement: Suspension retracts every standing bid on an open lot
-
-On suspension Grade10 SHALL retract every maximum the account has standing on
-a lot that has not yet closed, and SHALL re-resolve each affected lot.
-
-- Retraction SHALL apply to **every** open lot, with no value threshold and
-  no partial application.
-- Retraction SHALL NOT apply to a lot the account has already won. That lot
-  stays won, and its invoice stays payable.
-- On retraction, the auto-bidding engine SHALL re-resolve the lot normally:
-  the next-highest bidder becomes leader at their own resolved price. That is
-  a legitimate price outcome, not a correction.
-- Grade10 SHALL log the retraction as a distinct `bid_retracted_suspension`
-  event in the lot's bid history, and the resulting re-resolution as a normal
-  bid resolution event.
-- Outbid-to-leading notice SHALL fire as normal for the bidder who inherits
-  the lead.
-- Where a lot is in extended bidding when suspension triggers, retraction
-  SHALL still apply, and retraction and re-resolution SHALL complete
-  atomically so the lot cannot close part-way through.
-
-Grade10 accepts that a seller may realise a lower hammer price on an affected
-lot. That cost is accepted against the cost of a repeat default.
-
-#### Scenario: suspension-SC-05 - Standing maxima on open lots are retracted
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
-
-- **GIVEN** a collector leading two open lots and holding a standing maximum
-  on a third
-- **WHEN** their account is suspended
-- **THEN** Grade10 retracts all three maxima
-- **AND** logs each as a `bid_retracted_suspension` event in that lot's bid
-  history
-
-#### Scenario: suspension-SC-06 - A lot already won stays won
-**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
-
-- **GIVEN** a suspended account that won a lot before the suspension
-- **WHEN** the retraction runs
-- **THEN** that lot is still won by the account
-- **AND** its invoice is still payable
-
-#### Scenario: suspension-SC-07 - The next bidder inherits at their own price
-**Serves:** Standing bids - the next bidder inherits at their own price
-
-- **GIVEN** an open lot led by a suspended account, with a second bidder
-  holding a lower maximum
-- **WHEN** the suspended account's maximum is retracted
-- **THEN** the second bidder becomes the leader at their own resolved price
-- **AND** Grade10 records the re-resolution as a normal bid resolution
-- **AND** notifies that bidder that they now lead
-
-#### Scenario: suspension-SC-08 - Retraction during extended bidding is atomic
-**Serves:** Standing bids - retraction during extended bidding is atomic
-
-- **GIVEN** an open lot in extended bidding, led by an account being suspended
-- **WHEN** the retraction and re-resolution run
-- **THEN** they complete atomically
-- **AND** the lot does not close part-way through the recalculation
-
 ### Requirement: Only an operator lifts a suspension
 
 A suspension SHALL NOT lift itself. Grade10 SHALL lift one only on an
-explicit operator action following review.
+explicit operator action following review, taken by an operator holding
+`auction:moderate` from the account's panel on the admin Users page
+(`grade10-admin/console/user-directory`).
 
 - Paying the outstanding invoice SHALL NOT lift the suspension. Settlement
   resolves the order; reinstatement resolves the account.
 - Reissuing an invoice SHALL NOT lift the suspension. An operator may give a
   winner a fresh chance to settle one lot while the account stays barred from
   bidding on anything new.
+- Reinstating SHALL lift the suspension whatever caused it, and every cause
+  recorded on it.
 
 Grade10 SHALL show the suspension state and its reason on the account record.
 
@@ -188,3 +131,146 @@ Grade10 SHALL show the suspension state and its reason on the account record.
 - **WHEN** the operator reinstates it
 - **THEN** the account can place bids and commit maxima again
 - **AND** the account record retains the suspension and its reason as history
+
+### Requirement: An operator suspends an account from auctions
+
+An operator's suspension is the same suspension a missed deadline causes, with
+a reason only operators read.
+
+**Operator suspension** - An operator holding `auction:moderate` SHALL be able
+to suspend an account from auction activity, from the account's panel on the
+admin Users page (`grade10-admin/console/user-directory`), and SHALL give a
+reason to do so.
+
+**One suspension, two causes** - An operator's suspension SHALL be the same
+suspension a missed payment deadline causes: the same scope, the same effect on
+bids, and lifted the same way. Only its cause differs.
+
+| Cause | Recorded reason | Collector is told |
+| --- | --- | --- |
+| Payment deadline passed | The expired auction order | The outstanding amount and how to resolve it |
+| Operator action | The operator's reason, who suspended, and when | They can no longer bid, and how to contact Grade10 |
+
+- The operator's reason SHALL be shown to operators on the account record,
+  and SHALL NOT be shown or sent to the collector.
+- An account that is already suspended SHALL NOT be suspended again. A new
+  cause while suspended SHALL be recorded beside the first, and the account
+  SHALL stay suspended once.
+
+#### Scenario: suspension-SC-17 - An operator suspends an account with a reason
+**Serves:** Trigger and notice - an operator suspends an account with a reason
+
+- **GIVEN** an operator holding `auction:moderate` and an account that is not suspended
+- **WHEN** the operator suspends the account with a reason
+- **THEN** the account cannot place a bid or commit a maximum
+- **AND** the account record shows the operator's reason, who suspended, and when
+
+#### Scenario: suspension-SC-18 - A suspension without a reason is refused
+**Serves:** Trigger and notice - a suspension without a reason is refused
+
+- **GIVEN** an operator holding `auction:moderate`
+- **WHEN** the operator tries to suspend an account without a reason
+- **THEN** Grade10 refuses the suspension
+- **AND** the account is not suspended
+
+#### Scenario: suspension-SC-19 - An operator without the grant cannot suspend
+**Serves:** Trigger and notice - an operator without the grant cannot suspend
+
+- **GIVEN** an operator who does not hold `auction:moderate`
+- **WHEN** they try to suspend an account
+- **THEN** Grade10 refuses it on the server
+- **AND** the account is not suspended
+
+#### Scenario: suspension-SC-20 - The collector is told without the operator's reason
+**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
+
+- **GIVEN** an account an operator has just suspended with a reason
+- **WHEN** the collector reads the suspension notice and their account record
+- **THEN** both say they can no longer bid and how to contact Grade10
+- **AND** neither shows the operator's reason
+
+#### Scenario: suspension-SC-21 - A missed deadline on a suspended account adds a cause
+**Serves:** suspension-US-03 - Collector suspended by an operator learns they can no longer bid
+
+- **GIVEN** an account an operator suspended, with an auction order whose invoice is `pending`
+- **WHEN** that order's payment deadline passes
+- **THEN** the account is suspended once
+- **AND** the account record shows both causes
+
+#### Scenario: suspension-SC-22 - Reinstating lifts an operator's suspension
+**Serves:** Reinstatement - reinstating lifts an operator's suspension
+
+- **GIVEN** an account an operator suspended
+- **WHEN** an operator holding `auction:moderate` reinstates it
+- **THEN** the account can place bids and commit maxima again
+- **AND** the account record keeps the suspension and its reason as history
+
+### Requirement: Suspension stops new bids and leaves standing bids as they are
+
+A suspended account places no new bid, and every bid it already placed keeps
+competing.
+
+**No new bids** - While an account is suspended, Grade10 SHALL refuse every new
+bid and every raise of a maximum from it, on every lot.
+
+**Standing bids** - A suspension SHALL NOT change any bid the account placed
+before it:
+
+- Every maximum the account has on an open lot SHALL stay in force. Auto-bidding
+  SHALL resolve the lot with that maximum exactly as it would for an account
+  that is not suspended, and it SHALL bid for the account up to its cap.
+- A suspended account that holds the highest maximum when a lot closes SHALL
+  win that lot. The lot gets its own auction order, invoice and payment
+  deadline, as for any winner.
+- A lot the account won before the suspension SHALL stay won, and its invoice
+  SHALL stay payable.
+- Suspension SHALL NOT add, edit or remove any entry in any lot's bid history,
+  and SHALL NOT change any lot's current price or leader.
+
+#### Scenario: suspension-SC-16 - A lot already won stays won
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+
+- **GIVEN** a suspended account that won a lot before the suspension
+- **WHEN** the suspension takes effect
+- **THEN** that lot is still won by the account
+- **AND** its invoice is still payable
+
+#### Scenario: suspension-SC-12 - A suspended account cannot bid or raise its maximum
+**Serves:** suspension-US-01 - Collector who misses a deadline loses their auction standing
+
+- **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
+  an open lot
+- **WHEN** the collector tries to raise that maximum, and to place a bid on a
+  second open lot
+- **THEN** Grade10 refuses both
+- **AND** the maximum on the first lot is still 50000 HKD minor units
+
+#### Scenario: suspension-SC-13 - Suspension leaves open lots and their history unchanged
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+
+- **GIVEN** an open lot led by an account at a current price of 30000 HKD
+  minor units, with a second bidder holding a lower maximum
+- **WHEN** the leading account is suspended
+- **THEN** the account still leads the lot at 30000 HKD minor units
+- **AND** the lot's bid history has the same entries as before the suspension
+
+#### Scenario: suspension-SC-14 - A standing maximum keeps bidding after suspension
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+
+- **GIVEN** a suspended account holding a maximum of 50000 HKD minor units on
+  an open lot it leads at 30000 HKD minor units
+- **WHEN** another bidder commits a maximum of 40000 HKD minor units
+- **THEN** auto-bidding resolves the lot with the suspended account's maximum
+  as for any bidder
+- **AND** the suspended account still leads, at the price auto-bidding
+  resolves
+
+#### Scenario: suspension-SC-15 - A suspended account wins through a standing maximum
+**Serves:** suspension-US-02 - Bidder competes on a lot whose leader is suspended
+
+- **GIVEN** a suspended account holding the highest maximum on an open lot
+- **WHEN** the lot closes
+- **THEN** the account wins the lot
+- **AND** Grade10 creates its auction order with its own invoice and payment
+  deadline
+
