@@ -69,21 +69,21 @@ Override's `CreateMemberDialog` — loyalty enroll and opening points (Q9).
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Create offered | Create control present when the session holds `user:create` and the console supplies a create handler | `grade10-admin-console-user-directory-US-04` |
-| Create withheld | No Create control when the session lacks `user:create`, or when the console supplies no create handler | `grade10-admin-console-user-directory-US-04` |
-| Success opens panel | New account's panel open beside the list, same as picking a row | `grade10-admin-console-user-directory-US-04` |
-| Duplicate email opens existing | After the dialog's open-existing action, that account's panel is open beside the list; no second Auth row | `grade10-admin-console-user-directory-US-04` |
-| Create as plain user | Create with role `user` (or empty selection) succeeds with only `user:create`; panel shows `user` only | `grade10-admin-console-user-directory-US-04` |
+| Create offered | Create control present when the session holds `user:create` and the console supplies a create handler | `grade10-admin-console-user-directory-SC-20` |
+| Create withheld | No Create control when the session lacks `user:create`, or when the console supplies no create handler | `grade10-admin-console-user-directory-SC-21` |
+| Success opens panel | New account's panel open beside the list, same as picking a row | `grade10-admin-console-user-directory-SC-20` |
+| Duplicate email opens existing | After the dialog's open-existing action, that account's panel is open beside the list; no second Auth row | `grade10-admin-console-user-directory-SC-22` |
+| Create as plain user | Create with role `user` (or empty selection) succeeds with only `user:create`; panel shows `user` only | `grade10-admin-console-user-directory-SC-23` |
 
 ### Create account dialog
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Collecting | `FormDialog` open with name, email, and console role options; no password field; Confirm disabled until name and email are both present | `shared-console-user-directory-US-06` |
-| Roles without `user:set-role` | Role options offer only `user` when the console's session lacks `user:set-role` | `shared-auth-users-US-05` |
-| Empty roles | No role selected; submit sends an empty list | `shared-console-user-directory-US-06` |
-| Success — account identifier reported | Dialog reports the created account identifier; decides nothing about what shows next | `shared-console-user-directory-US-06` |
-| Submitting | Confirm busy while create is in flight; fields unchanged | `shared-console-user-directory-US-06` |
-| Duplicate email refused | Clear refusal that the email is taken, plus an open-existing action in the dialog; choosing it calls `onOpenExisting` with the existing account identifier | `shared-auth-users-US-05` |
-| Elevated role without `user:set-role` | Stale or bypassed submit with a non-`user` role when the session lacks `user:set-role`; create refused in the dialog; no account created | `shared-auth-users-US-05` |
-| Create without `user:create` | Create refused in the dialog when the session no longer holds `user:create`; no account created | `shared-auth-users-US-05` |
+| Collecting | `FormDialog` open with name, email, and console role options; no password field; Confirm disabled until name and email are both present | `shared-console-user-directory-SC-34` |
+| Roles without `user:set-role` | Role options offer only `user` when the console's session lacks `user:set-role` | `grade10-admin-console-user-directory-SC-23` |
+| Empty roles | No role selected; submit sends an empty list | `shared-auth-users-SC-33` |
+| Success — account identifier reported | Dialog reports the created account identifier; decides nothing about what shows next | `shared-console-user-directory-SC-35` |
+| Submitting | Confirm busy while create is in flight; fields unchanged | **Out of suite:** `FormDialog` pending — shared shell, not a create scenario |
+| Duplicate email refused | Clear refusal that the email is taken, plus an open-existing action in the dialog; choosing it calls `onOpenExisting` with the existing account identifier | `shared-console-user-directory-SC-36` |
+| Elevated role without `user:set-role` | Stale or bypassed submit with a non-`user` role when the session lacks `user:set-role`; create refused in the dialog; no account created | `shared-auth-users-SC-31` |
+| Create without `user:create` | Create refused in the dialog when the session no longer holds `user:create`; no account created | `shared-auth-users-SC-30` |

@@ -15,6 +15,7 @@ requirements of `shared-ui/auth-user-directory` forward; only the home moved.
   - Create gated: create appears only when the console supplies a create handler
   - Create dialog: collects name, email, and roles from the console-supplied vocabulary
   - Success reports the created account: the components decide nothing about what shows next
+  - Duplicate open-existing: when create is refused as taken and the consumer supplies the existing account id, the dialog offers `onOpenExisting`
 
 ## ADDED Requirements
 
@@ -35,6 +36,11 @@ selection SHALL be submitted as an empty list.
 **Success** - On a successful create the dialog SHALL report the created
 account's identifier to the consumer. It SHALL decide nothing about what is
 shown next.
+
+**Duplicate** - When create is refused because the email is taken and the
+consumer supplies the existing account's identifier, the dialog SHALL offer an
+open-existing action. Choosing that action SHALL call `onOpenExisting` with
+that identifier. The dialog SHALL decide nothing about what is shown next.
 
 #### Scenario: shared-console-user-directory-SC-33 - Create appears only with a create handler
 **Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
@@ -57,6 +63,16 @@ shown next.
 - **GIVEN** a console that supplies a create handler
 - **WHEN** create succeeds
 - **THEN** the dialog reports the created account's identifier
+- **AND THEN** the dialog decides nothing about what is shown next
+
+#### Scenario: shared-console-user-directory-SC-36 - Duplicate open-existing reports the existing account
+**Serves:** shared-console-user-directory-US-06 - Operator creates an account from the directory
+
+- **GIVEN** a console that supplies a create handler
+- **AND** create is refused because the email is taken
+- **AND** the consumer has supplied the existing account's identifier
+- **WHEN** the operator chooses the open-existing action
+- **THEN** the dialog calls `onOpenExisting` with that identifier
 - **AND THEN** the dialog decides nothing about what is shown next
 
 ## MODIFIED Requirements
