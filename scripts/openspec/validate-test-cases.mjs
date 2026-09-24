@@ -44,6 +44,7 @@ import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import {
   CASE_STATUSES,
+  activeChangeSpecRoots,
   caseIndex,
   changeOf,
   commaList,
@@ -621,16 +622,25 @@ const inScope = (d) =>
  *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
-const PRODUCTS = existsSync(specsRoot)
-  ? readdirSync(specsRoot, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name)
-  : [];
-const DOMAINS = PRODUCTS.flatMap((prod) =>
-  readdirSync(join(specsRoot, prod), { withFileTypes: true })
-    .filter((e) => e.isDirectory())
-    .map((e) => `${prod}-${e.name}`),
-);
+const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(existsSync);
+const directories = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory())
+    : [];
+const PRODUCTS = [
+  ...new Set(specScopes.flatMap((scope) => directories(scope).map((entry) => entry.name))),
+];
+const DOMAINS = [
+  ...new Set(
+    specScopes.flatMap((scope) =>
+      directories(scope).flatMap((product) =>
+        directories(join(scope, product.name)).map(
+          (domain) => `${product.name}-${domain.name}`,
+        ),
+      ),
+    ),
+  ),
+];
 const longestPrefix = (id, list) =>
   list
     .filter((v) => id === v || id.startsWith(`${v}-`))
