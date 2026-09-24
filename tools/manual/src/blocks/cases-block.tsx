@@ -171,6 +171,8 @@ const SUITE_STATUS_TITLES: Record<TestSuiteStatus, string> = {
     "Every case here is still a draft; nothing in this file exports.",
   "in-review":
     "A reviewer has started, and at least one case is still a draft; nothing in this file exports.",
+  reopened:
+    "This suite was approved, and a draft has been added since; nothing in this file exports until it is reviewed.",
   approved: "A reviewer stands behind every case in this suite.",
 };
 

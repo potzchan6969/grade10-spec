@@ -110,8 +110,13 @@ export type TestCase = {
 
 /** The suite file's own status — derived from its cases, never chosen:
  * `pending-review` while every case is a draft, `in-review` from the first
- * verdict, `approved` once no draft is left. */
-export type TestSuiteStatus = "pending-review" | "in-review" | "approved";
+ * verdict, `approved` once no draft is left, and `reopened` when a file that
+ * was approved holds a draft again. */
+export type TestSuiteStatus =
+  | "pending-review"
+  | "in-review"
+  | "reopened"
+  | "approved";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */

@@ -336,3 +336,43 @@ test("a case needing a mocked state and planning no automation is warned", () =>
     /demo-alpha-US1-TC1-1` needs a mocked or manipulated state but its \*\*Testability\*\* plans no `automation`/,
   );
 });
+
+// A file that was approved and holds a draft again is `reopened`: its
+// `**Reviewed:**` line stays, marked lapsed (The File Header).
+test("an approved file with a new draft reads reopened through its lapsed Reviewed line", () => {
+  const root = store("export const Alpha = {};\n");
+  const suite = join(root, CHANGE, "feature-tcs.md");
+  const approvedOnce = readFileSync(suite, "utf8")
+    .replace(
+      /(### demo-alpha-US1-TC1-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+      "$1 actual",
+    )
+    .replace(
+      /(### demo-alpha-US1-TC2-1:[\s\S]*?\* \*\*Status:\*\*) draft/,
+      "$1 actual",
+    );
+  const header = (status, reviewed) =>
+    approvedOnce.replace(
+      "**Status:** pending-review\n**Drafts styled:** 2026-09-01, tcs-rules r3.0",
+      `**Status:** ${status}\n**Drafts styled:** 2026-09-01, tcs-rules r3\n${reviewed}`,
+    );
+
+  writeFileSync(
+    suite,
+    header("reopened", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+  );
+  const reopened = run(root);
+  assert.doesNotMatch(reopened.stdout, /file status is|Reviewed:\*\*` line/);
+
+  writeFileSync(
+    suite,
+    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+  );
+  assert.match(run(root).stdout, /file status is `in-review` but its cases imply `reopened`/);
+
+  writeFileSync(suite, header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"));
+  assert.match(
+    run(root).stdout,
+    /carries a `\*\*Reviewed:\*\*` line but is not approved — a file that falls out/,
+  );
+});

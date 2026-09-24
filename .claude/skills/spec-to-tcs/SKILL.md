@@ -211,15 +211,16 @@ and are unchanged.
    `domain-tcs.md`, `product-tcs.md` or `platform-tcs.md` — to **The Format**,
    with the header lines directly under the title and no preamble. **The
    File Header** is computed, never chosen: `**Status:**` from the cases
-   (`pending-review`, `in-review`, `approved`); `**Drafts styled:** <today>,
-   tcs-rules r<n>` from `tcs_rules_rev` in the document's
+   (`pending-review`, `in-review`, `reopened`, `approved`); `**Drafts styled:**
+   <today>, tcs-rules r<n>` from `tcs_rules_rev` in the document's
    frontmatter, present exactly while a `draft` remains; `**Reviewed:**` is
-   `/tcs-review`'s and never yours. `pnpm run tcs:validate`
+   `/tcs-review`'s, and yours only to mark lapsed — a draft you add to an
+   `approved` file appends `, lapsed <today>` to it. `pnpm run tcs:validate`
    (`scripts/openspec/validate-test-cases.mjs`) refuses:
 
    - **Header** — a status its cases do not imply; `**Drafts styled:**`
-     with no draft under it or missing above one; `**Reviewed:**` on a file
-     not `approved`; a revision above the store's
+     with no draft under it or missing above one; a live `**Reviewed:**` on a
+     file not `approved`, or a lapsed one on a file that is; a revision above the store's
    - **Journey** — a heading not `## <capability>-US<n>: <title>`, a prefix
      the spec does not issue, a journey it does not define, one missing
      `**As a**`, `**I want**` or `**so that**`
@@ -316,8 +317,9 @@ misreading.
 - Never invent a journey the scenarios do not justify; step 3 adds no behaviour
 - Never overwrite, regenerate or delete a suite without showing it and asking,
   and never at all over an `actual` case or an `approved` file
-- Never write `**Status:** actual`, `**Status:** approved` or `**Reviewed:**`,
-  and never choose a file status; it is derived
+- Never write `**Status:** actual`, `**Status:** approved` or a fresh
+  `**Reviewed:**` — only mark one lapsed — and never choose a file status; it
+  is derived
 - Never sweep every stale suite in one run, and never write a QA-review or any other task into `tasks.md` for a suite;
   review state lives in the suite's status lines
 - Never write in the tree the user did not ask for, and never under

@@ -371,18 +371,20 @@ Ten properties, in this order, on every case. Where a value usually starts is **
 
 ## The File Header
 
-At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>` — every one computed, never chosen.
+At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY-MM-DD>, tcs-rules r<n>`, `**Reviewed:** <YYYY-MM-DD>, tcs-rules r<n>[, lapsed <YYYY-MM-DD>]` — every one computed, never chosen.
 
 | Cases in the file | `**Status:**` |
 | --- | --- |
 | every case `draft`, or none yet | `pending-review` |
 | an `actual` or `deprecated`, and a `draft` left | `in-review` |
+| a `draft` in a file that was `approved` — its `**Reviewed:**` lapsed | `reopened` |
 | no `draft` left | `approved` |
 
-- **Derived, never claimed** — `/spec-to-tcs` and `/tcs-review` recompute it after every write; `pnpm run tcs:validate` fails a header that disagrees with its cases. `in-review` reserves nothing, and a new `draft` drops `approved` on its own
+- **Derived, never claimed** — `/spec-to-tcs` and `/tcs-review` recompute it after every write; `pnpm run tcs:validate` fails a header that disagrees with its cases. `in-review` reserves nothing, and a new `draft` drops `approved` to `reopened` on its own
 - **Only `approved` exports** — and only its `actual` cases, only when someone runs an export
 - **`**Drafts styled:**`** — the revision of this document the file's `draft` cases were last written against, and when; present exactly while the file holds a `draft`. `actual` cases carry no revision: a reviewer's yes is the convention
-- **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition, removed when the file falls out of `approved`; no reviewer name, git records who
+- **`**Reviewed:**`** — the date the file reached `approved` and the revision, written by `/tcs-review` on that transition; no reviewer name, git records who. When the file falls out of `approved` the line stays and gains `, lapsed <YYYY-MM-DD>`, written by whichever run added the draft, so the file reads `reopened` — a quick re-review of what is new, not a first review — and a new approval writes the line fresh
+- **`reopened` sorts first** — `/tcs-review` lists `reopened` suites ahead of `in-review` and `pending-review` ones, with the drafts added since the lapse
 - **`**Out of suite:**`** — scenario ids the suite leaves uncovered on purpose, under the header (`openspec/config.yaml`, `rules.user-journeys`); `pnpm check:manual` counts them as covered and refuses one a living case traces
 - **`tcs_rules_rev`** — this document's frontmatter, one integer, bumped by hand
 

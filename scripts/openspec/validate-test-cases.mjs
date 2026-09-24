@@ -246,7 +246,11 @@ function checkSuite(root, filePath, rulesRev) {
     );
 
   const counts = statusCounts(cases);
-  const derived = deriveStatus(counts, cases.length);
+  const derived = deriveStatus(
+    counts,
+    cases.length,
+    Boolean(suite.reviewedLapsed),
+  );
   if (
     suite.status &&
     FILE_STATUSES.includes(suite.status) &&
@@ -324,8 +328,16 @@ function checkSuite(root, filePath, rulesRev) {
       suite.reviewedLine ?? 1,
       `claims it was approved under tcs-rules ${revText(suite.reviewedRev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived !== "approved" && suite.reviewed)
-    err(1, "carries a `**Reviewed:**` line but is not approved");
+  if (derived === "approved" && suite.reviewedLapsed)
+    err(
+      suite.reviewedLine ?? 1,
+      "is approved again but its `**Reviewed:**` line still reads lapsed — write it fresh: `**Reviewed:** <today>, tcs-rules r<n>`",
+    );
+  if (derived !== "approved" && suite.reviewed && !suite.reviewedLapsed)
+    err(
+      suite.reviewedLine ?? 1,
+      "carries a `**Reviewed:**` line but is not approved — a file that falls out of `approved` keeps the line and adds `, lapsed <YYYY-MM-DD>`",
+    );
 
   for (const shape of suite.legacy)
     err(1, `written in an older shape: ${shape}`);

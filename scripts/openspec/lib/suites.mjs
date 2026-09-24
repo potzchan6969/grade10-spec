@@ -37,7 +37,12 @@ export const GOVERNANCE = join(
   "specs-to-test-cases.md",
 );
 
-export const FILE_STATUSES = ["pending-review", "in-review", "approved"];
+export const FILE_STATUSES = [
+  "pending-review",
+  "in-review",
+  "reopened",
+  "approved",
+];
 export const CASE_STATUSES = ["draft", "actual", "deprecated"];
 /** Values that were `Type` before tcs-rules r2 and are `Suites` now. */
 export const LEGACY_TYPES = ["smoke", "regression"];
@@ -436,6 +441,7 @@ export function parseSuite(text) {
     status: null,
     draftsStyled: null,
     reviewed: null,
+    reviewedLapsed: null,
     journeys: [],
     legacy: new Set(),
     // The blind reading's own output: what the isolated input did not settle.
@@ -500,12 +506,13 @@ export function parseSuite(text) {
         continue;
       }
       const rv = line.match(
-        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+)(?:\.(\d+))?)?\s*$/,
+        /^\*\*Reviewed:\*\*\s*(\d{4}-\d{2}-\d{2})(?:,\s*tcs-rules r(\d+)(?:\.(\d+))?)?(?:,\s*lapsed (\d{4}-\d{2}-\d{2}))?\s*$/,
       );
       if (rv) {
         suite.reviewed = rv[1];
         suite.reviewedRev =
           rv[2] === undefined ? null : Number(rv[2]);
+        suite.reviewedLapsed = rv[4] ?? null;
         suite.reviewedLine = i + 1;
         continue;
       }
@@ -746,10 +753,13 @@ export function statusCounts(cases) {
 }
 
 /** The file status its cases imply. Derived, never chosen: a reviewer approves
- *  cases one at a time and the file follows. */
-export function deriveStatus(counts, caseCount) {
+ *  cases one at a time and the file follows. A file that was approved once and
+ *  holds a draft again carries a lapsed `**Reviewed:**` line, and is
+ *  `reopened` rather than `in-review`. */
+export function deriveStatus(counts, caseCount, lapsed = false) {
   if (caseCount === 0) return "pending-review";
   if (counts.draft === 0) return "approved";
+  if (lapsed) return "reopened";
   return counts.actual + counts.deprecated === 0
     ? "pending-review"
     : "in-review";
@@ -795,7 +805,7 @@ export function readSuite(root, filePath) {
     suite,
     cases,
     counts,
-    derived: deriveStatus(counts, cases.length),
+    derived: deriveStatus(counts, cases.length, Boolean(suite.reviewedLapsed)),
   };
 }
 

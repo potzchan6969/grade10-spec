@@ -114,8 +114,8 @@ what they ask, and record their words untidied — generation copies what they a
    | Retire | `**Status:** deprecated`, only when the spec no longer states the behaviour; never delete or renumber |
 
    Then recompute the header as **The File Header** says: `**Status:**` from
-   the cases; `**Reviewed:** <today>, tcs-rules r<n>` added when and only
-   when the file reaches `approved`, removed if it falls back; `**Drafts
+   the cases; `**Reviewed:** <today>, tcs-rules r<n>` written fresh when the
+   file reaches `approved`, and marked `, lapsed <today>` if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.
 
 11. **Close the run and land the work.** Run `pnpm run tcs:validate` and fix
@@ -123,7 +123,8 @@ what they ask, and record their words untidied — generation copies what they a
    (`/pr-push`), titled with the range that has verdicts —
    `test(<domain>): approve <target> US<n>–<m> test cases`. Merge at journey
    boundaries: mark the PR ready and merge a finished journey while others
-   are still `draft`; the file lands as `in-review`. Say which journeys hold
+   are still `draft`; the file lands as `in-review`, or `reopened` when it was
+   approved before. Say which journeys hold
    drafts and whether the branch continues or a new one starts; when the file
    is `approved`, say the suite is ready to hand on. When the reviewer's edits
    repeated a theme, say those approved cases carry it into the next
