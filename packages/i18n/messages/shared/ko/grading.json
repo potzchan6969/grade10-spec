@@ -17,7 +17,7 @@
       },
       "handIn": {
         "title": "방문을 예약하고 카드를 맡깁니다",
-        "body": "창구에서 약 {minutes}분: 목록과 카드를 한 장씩 대조하고, 매장 iPad에 서명하신 뒤 계산대에서 결제합니다."
+        "body": "창구에서 약 {minutes, plural, other {#분}}: 목록과 카드를 한 장씩 대조하고, 매장 iPad에 서명하신 뒤 계산대에서 결제합니다."
       },
       "leave": {
         "title": "그 주 배치와 함께 발송됩니다",
@@ -45,7 +45,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "카드당 {ceiling}까지 · 약 {weeks}주 뒤 매장 도착",
+      "row": "카드당 {ceiling}까지 · 약 {weeks, plural, other {#주}} 뒤 매장 도착",
       "perCard": "카드당",
       "coverLine": "+ 보상 {rate}",
       "graders": "감정사마다 요금표가 다릅니다. 서비스를 고르실 때 각 탭에서 확인하실 수 있습니다.",
@@ -101,11 +101,11 @@
     "add": "카드 추가",
     "paste": "목록 붙여넣기",
     "pasteNote": "한 줄에 한 장씩 이름, 세트, 번호, 가액을 적으면 여러 장을 한 번에 넣을 수 있습니다. 카탈로그에서 찾지 못한 카드는 입력하신 이름 그대로 두고 참고 시세를 보여주지 않습니다.",
-    "capNotice": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. Value부터 Super Express까지는 최대 {standard}장, Bulk는 최대 {bulk}장입니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
+    "capNotice": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. Value부터 Super Express까지는 최대 {standard, plural, other {#장}}, Bulk는 최대 {bulk}장입니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
     "capNoticeUncapped": "한 신청의 카드는 모두 같은 감정사, 같은 레벨로 갑니다. 다른 레벨이 필요한 카드는 두 번째 신청으로 나뉘며, 두 신청 모두 같은 방문에 맡기시면 됩니다.",
-    "overTwenty": "{standard}장을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다.",
-    "overCap": "한 신청에는 최대 {bulk}장까지 담을 수 있습니다. 나머지는 다른 날 두 번째 신청으로 맡겨 주세요.",
-    "continueWithCount": "계속 · {count}장",
+    "overTwenty": "{standard, plural, other {#장}}을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다.",
+    "overCap": "한 신청에는 최대 {bulk, plural, other {#장}}까지 담을 수 있습니다. 나머지는 다른 날 두 번째 신청으로 맡겨 주세요.",
+    "continueWithCount": "계속 · {count, plural, other {#장}}",
     "finishLater": "나중에 이어서",
     "finishLaterEmail": "링크를 보낼 메일 주소를 알려주시면 목록을 보관해 둡니다.",
     "pasteSheet": {
@@ -120,15 +120,15 @@
       },
       "lead": "한 줄에 한 장씩, 이름과 세트와 번호, 그다음에 보험 가액을 적어 주세요. 각 줄을 카탈로그와 대조하며, 찾지 못한 줄은 입력하신 이름 그대로 두고 참고 시세를 보여주지 않습니다. 이미 목록에 있는 카드는 건너뜁니다.",
       "yourList": "목록",
-      "linesRead": "{count}줄 읽음",
+      "linesRead": "{count, plural, other {#줄 읽음}}",
       "matching": "대조하는 중…",
       "matched": "{count}장 카탈로그에서 확인됨 — 목록에 미감정, {lower}, {upper} 참고 시세가 함께 표시됩니다.",
       "keptAsTyped": "{count}장 입력하신 이름 그대로 — {names}: 참고 시세가 없고 입력하신 이름을 그대로 씁니다.",
       "withoutValue": "{count}장 가액 없음 — {names}: 계속하시기 전에 목록에서 가액을 입력받습니다.",
       "aboveCeiling": "{count}장 {level} 상한 초과 — {names}은(는) 상위 레벨의 두 번째 신청으로 나뉘며 같은 방문에 함께 맡기시면 됩니다. 다음 단계에서 다시 안내하며, 그동안 이 목록에 그대로 남습니다.",
       "skipped": "{count}장 건너뜀 — 이미 목록에 있습니다.",
-      "bulkNotice": "{count}장: {standard}장을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다. {grader} 기준으로 카드당 {fee}, 카드당 {ceiling}까지, 약 {weeks}주가 걸리며 방문 시간이 더 깁니다. 한 신청에 최대 {bulk}장입니다.",
-      "add": "{count}장을 목록에 추가",
+      "bulkNotice": "{count, plural, other {#장}}: {standard}장을 넘어 다음 단계에서는 Bulk 레벨만 선택할 수 있습니다. {grader} 기준으로 카드당 {fee}, 카드당 {ceiling}까지, 약 {weeks, plural, other {#주}}가 걸리며 방문 시간이 더 깁니다. 한 신청에 최대 {bulk, plural, other {#장}}입니다.",
+      "add": "{count, plural, other {#장}}을 목록에 추가",
       "goBack": "돌아가기",
       "toCounter": "어느 레벨의 상한보다도 비싼 카드 {count}장 — {names}: 창구나 WhatsApp으로 먼저 문의해 주세요.",
       "failed": "지금은 목록을 읽지 못했습니다. 잠시 후 다시 시도해 주세요."
@@ -143,15 +143,15 @@
         "open": "카드당 {ceiling}까지 · 카드당 {fee}",
         "unavailable": "이용 불가",
         "closedByValue": "선택 불가: {card}의 신고 가액이 {ceiling}을 넘습니다",
-        "closedByCount": "선택 불가: Bulk는 {minimum}장부터이며 지금은 {count}장입니다.",
-        "bulkOnly": "{standard}장을 넘어 Bulk 레벨만 선택할 수 있습니다.",
+        "closedByCount": "선택 불가: Bulk는 {minimum, plural, other {#장}}부터이며 지금은 {count}장입니다.",
+        "bulkOnly": "{standard, plural, other {#장}}을 넘어 Bulk 레벨만 선택할 수 있습니다.",
         "allClosed": "가장 높은 레벨의 상한을 넘는 카드가 있습니다. 알맞은 레벨을 준비할 수 있도록 창구나 WhatsApp으로 먼저 문의해 주세요.",
         "coverLine": "+ 보상 {rate}",
-        "backIn": "약 {weeks}주 뒤 도착"
+        "backIn": "약 {weeks, plural, other {#주}} 뒤 도착"
       },
       "estimate": {
         "title": "예상 금액",
-        "perCard": "{count}장 × {fee} · {grader} {level}",
+        "perCard": "{count, plural, other {#장}} × {fee} · {grader} {level}",
         "coverPerCard": "보상은 신고 가액의 {rate} · 카드당 {amount}",
         "paidAtCounter": "카드를 모두 확인한 뒤 창구에서 결제합니다.",
         "includes": "감정사 수수료와 왕복 보험 배송비가 포함되어 있습니다.",
@@ -161,8 +161,8 @@
     },
     "review": {
       "title": "확인하고 방문을 예약하세요",
-      "header": "{count}장 · {grader} {level}",
-      "backIn": "카드가 발송되는 날부터 약 {weeks}주",
+      "header": "{count, plural, other {#장}} · {grader} {level}",
+      "backIn": "카드가 발송되는 날부터 약 {weeks, plural, other {#주}}",
       "edit": "수정",
       "schedule": "적어 주신 카드",
       "totals": {

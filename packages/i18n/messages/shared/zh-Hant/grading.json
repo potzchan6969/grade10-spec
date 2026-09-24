@@ -17,7 +17,7 @@
       },
       "handIn": {
         "title": "預約交卡，親身送到門市",
-        "body": "櫃檯大約 {minutes} 分鐘：我們對著清單逐張核對，你在 iPad 上簽署，然後在收銀處付費。"
+        "body": "櫃檯大約 {minutes, plural, other {# 分鐘}}：我們對著清單逐張核對，你在 iPad 上簽署，然後在收銀處付費。"
       },
       "leave": {
         "title": "隨當周的批次寄出",
@@ -45,7 +45,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "卡值上限 {ceiling} · 約 {weeks} 星期回到門市",
+      "row": "卡值上限 {ceiling} · 約 {weeks, plural, other {# 星期}}回到門市",
       "perCard": "每張",
       "coverLine": "另加 {rate} 保額",
       "graders": "每間評級公司各有收費表；選服務時可在其分頁查看其餘幾間。",
@@ -101,11 +101,11 @@
     "add": "新增一張卡",
     "paste": "貼上清單",
     "pasteNote": "一行一張卡，填卡名、系列、編號與價值，可一次過加入多張。目錄對不上的卡會保留你輸入的名稱，也不會顯示參考成交。",
-    "capNotice": "同一張清單只走一間評級公司、一個級別。Value 至 Super Express 最多 {standard} 張；Bulk 最多 {bulk} 張。需要其他級別的卡另立一張清單，兩張清單可同一次交卡。",
+    "capNotice": "同一張清單只走一間評級公司、一個級別。Value 至 Super Express 最多 {standard, plural, other {# 張}}；Bulk 最多 {bulk} 張。需要其他級別的卡另立一張清單，兩張清單可同一次交卡。",
     "capNoticeUncapped": "同一張清單只走一間評級公司、一個級別。需要其他級別的卡另立一張清單，兩張清單可同一次交卡。",
-    "overTwenty": "超過 {standard} 張，所以下一步只開放 Bulk 級別。",
-    "overCap": "一張清單最多 {bulk} 張。其餘的請另立一張清單，另約一日。",
-    "continueWithCount": "繼續 · {count} 張卡",
+    "overTwenty": "超過 {standard, plural, other {# 張}}，所以下一步只開放 Bulk 級別。",
+    "overCap": "一張清單最多 {bulk, plural, other {# 張}}。其餘的請另立一張清單，另約一日。",
+    "continueWithCount": "繼續 · {count, plural, other {# 張卡}}",
     "finishLater": "稍後再做",
     "finishLaterEmail": "留下電郵地址，我們會把連結寄給你，並保留這張清單。",
     "pasteSheet": {
@@ -120,15 +120,15 @@
       },
       "lead": "一行一張卡：卡名、系列與編號，然後是你想保多少。我們會逐行對目錄；對不上的行會保留你輸入的名稱，也不會顯示參考成交。已在清單上的卡會略過。",
       "yourList": "你的清單",
-      "linesRead": "讀到 {count} 行",
+      "linesRead": "讀到 {count, plural, other {# 行}}",
       "matching": "對目錄中⋯",
       "matched": "{count} 張在目錄中對上 — 清單上會顯示未評級、{lower} 與 {upper} 的參考成交。",
       "keptAsTyped": "{count} 張保留你輸入的名稱 — {names}：旁邊沒有參考成交，以你輸入的名稱為準。",
       "withoutValue": "{count} 張未填價值 — {names}：清單會先要你填好才繼續。",
       "aboveCeiling": "{count} 張高於 {level} 上限 — {names} 須另立一張清單走更高級別，同一次交卡一併帶來；下一步會點名，這張清單仍然保留它。",
       "skipped": "略過 {count} 張 — 已經在你的清單上。",
-      "bulkNotice": "{count} 張：超過 {standard} 張，所以下一步只開放 Bulk 級別。{grader} 的 Bulk 是每張 {fee}、卡值上限 {ceiling}、約 {weeks} 星期，交卡時間較長；每張清單最多 {bulk} 張。",
-      "add": "把 {count} 張卡加入清單",
+      "bulkNotice": "{count, plural, other {# 張}}：超過 {standard} 張，所以下一步只開放 Bulk 級別。{grader} 的 Bulk 是每張 {fee}、卡值上限 {ceiling}、約 {weeks, plural, other {# 星期}}，交卡時間較長；每張清單最多 {bulk, plural, other {# 張}}。",
+      "add": "把 {count, plural, other {# 張卡}}加入清單",
       "goBack": "返回",
       "toCounter": "{count} 張卡的價值高於所有級別 — {names}：請先到櫃檯或 WhatsApp 我們。",
       "failed": "暫時未能讀取清單，請稍後再試。"
@@ -143,15 +143,15 @@
         "open": "每張卡值上限 {ceiling} · 每張 {fee}",
         "unavailable": "未提供",
         "closedByValue": "未能選用：{card} 的申報價值高於 {ceiling}",
-        "closedByCount": "未能選用：Bulk 由 {minimum} 張起，你現時有 {count} 張。",
-        "bulkOnly": "超過 {standard} 張，所以只開放 Bulk 級別。",
+        "closedByCount": "未能選用：Bulk 由 {minimum, plural, other {# 張}}起，你現時有 {count} 張。",
+        "bulkOnly": "超過 {standard, plural, other {# 張}}，所以只開放 Bulk 級別。",
         "allClosed": "有一張卡高於最高級別的上限。請先到櫃檯或 WhatsApp 我們，好讓我們預備合適級別。",
         "coverLine": "另加 {rate} 保額",
-        "backIn": "約 {weeks} 星期回來"
+        "backIn": "約 {weeks, plural, other {# 星期}}回來"
       },
       "estimate": {
         "title": "你的預算",
-        "perCard": "{count} 張 × {fee} · {grader} {level}",
+        "perCard": "{count, plural, other {# 張}} × {fee} · {grader} {level}",
         "coverPerCard": "保額為申報價值的 {rate} · 每張 {amount}",
         "paidAtCounter": "核對好所有卡牌後，在櫃檯付款。",
         "includes": "已包括評級公司費用及來回投保運費。",
@@ -161,8 +161,8 @@
     },
     "review": {
       "title": "核對後預約交卡",
-      "header": "{count} 張卡 · {grader} {level}",
-      "backIn": "由卡牌寄出當日起計，約 {weeks} 星期回來",
+      "header": "{count, plural, other {# 張卡}} · {grader} {level}",
+      "backIn": "由卡牌寄出當日起計，約 {weeks, plural, other {# 星期}}回來",
       "edit": "修改",
       "schedule": "你列出的卡牌",
       "totals": {

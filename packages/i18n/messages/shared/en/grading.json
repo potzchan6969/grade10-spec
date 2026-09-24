@@ -17,7 +17,7 @@
       },
       "handIn": {
         "title": "Book a drop-off and hand them in",
-        "body": "About {minutes} minutes at the counter: we check each card against your list, you sign on our iPad, and you pay the fee at the till."
+        "body": "About {minutes, plural, one {# minute} other {# minutes}} at the counter: we check each card against your list, you sign on our iPad, and you pay the fee at the till."
       },
       "leave": {
         "title": "They leave with the week’s batch",
@@ -45,7 +45,7 @@
         "noCover": "—",
         "noFigure": "—"
       },
-      "row": "Cards up to {ceiling} · back in about {weeks} weeks",
+      "row": "Cards up to {ceiling} · back in about {weeks, plural, one {# week} other {# weeks}}",
       "perCard": "a card",
       "coverLine": "+ {rate} cover",
       "graders": "Each grader has its own sheet; the others are on their tabs when you pick the service.",
@@ -101,11 +101,11 @@
     "add": "Add a card",
     "paste": "Paste a list",
     "pasteNote": "Paste one card a line, name, set, number and value, for many cards at once. A card the catalogue cannot match keeps the name you typed and shows no reference.",
-    "capNotice": "All the cards go to one grader at one level. Up to {standard} cards from Value to Super Express; up to {bulk} at Bulk. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
+    "capNotice": "All the cards go to one grader at one level. Up to {standard, plural, one {# card} other {# cards}} from Value to Super Express; up to {bulk} at Bulk. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
     "capNoticeUncapped": "All the cards go to one grader at one level. A card that needs a different level goes in a second submission, and both come to the same drop-off.",
-    "overTwenty": "More than {standard} cards, so Bulk is the only level open at the next step.",
-    "overCap": "{bulk} cards is the most one submission takes. The rest go in a second submission, another day.",
-    "continueWithCount": "Continue · {count} cards",
+    "overTwenty": "More than {standard, plural, one {# card} other {# cards}}, so Bulk is the only level open at the next step.",
+    "overCap": "{bulk, plural, one {# card} other {# cards}} is the most one submission takes. The rest go in a second submission, another day.",
+    "continueWithCount": "Continue · {count, plural, one {# card} other {# cards}}",
     "finishLater": "Finish later",
     "finishLaterEmail": "Tell us where to email the link, and we keep the list.",
     "pasteSheet": {
@@ -120,15 +120,15 @@
       },
       "lead": "One card a line: name, set and number, then the value you would insure it for. We match each line against the catalogue; a line we cannot match keeps the name you typed and shows no reference. A line naming a card already on your list is skipped.",
       "yourList": "Your list",
-      "linesRead": "{count} lines read",
+      "linesRead": "{count, plural, one {# line read} other {# lines read}}",
       "matching": "Matching…",
       "matched": "{count} matched in the catalogue — the ungraded, {lower} and {upper} references show beside each on the list.",
       "keptAsTyped": "{count} kept as typed — {names}: no reference beside them; the name you typed stands.",
       "withoutValue": "{count} without a value — {names}: the list asks for it before you continue.",
       "aboveCeiling": "{count} above the {level} ceiling — {names} goes in a second submission at a higher level, on the same drop-off; the next step names it while it stays on this list.",
       "skipped": "{count} skipped — already on your list.",
-      "bulkNotice": "{count} cards: more than {standard}, so Bulk is the only level open at the next step. At {grader} that is {fee} a card, cards up to {ceiling}, about {weeks} weeks and the longer drop-off; up to {bulk} cards a submission.",
-      "add": "Add {count} cards to the list",
+      "bulkNotice": "{count, plural, one {# card} other {# cards}}: more than {standard}, so Bulk is the only level open at the next step. At {grader} that is {fee} a card, cards up to {ceiling}, about {weeks, plural, one {# week} other {# weeks}} and the longer drop-off; up to {bulk, plural, one {# card} other {# cards}} a submission.",
+      "add": "Add {count, plural, one {# card} other {# cards}} to the list",
       "goBack": "Go back",
       "toCounter": "{count} worth more than any level takes — {names}: ask at the counter or WhatsApp us first.",
       "failed": "We could not read the list just now. Try again in a moment."
@@ -143,15 +143,15 @@
         "open": "Value up to {ceiling} a card · {fee} a card",
         "unavailable": "Not available",
         "closedByValue": "Not available: {card} is declared above {ceiling}",
-        "closedByCount": "Not available: Bulk starts at {minimum} cards and you have {count}.",
-        "bulkOnly": "More than {standard} cards, so Bulk is the only level open.",
+        "closedByCount": "Not available: Bulk starts at {minimum, plural, one {# card} other {# cards}} and you have {count}.",
+        "bulkOnly": "More than {standard, plural, one {# card} other {# cards}}, so Bulk is the only level open.",
         "allClosed": "One card is worth more than the top level takes. Ask at the counter or WhatsApp us first, so the right level is ready.",
         "coverLine": "+ {rate} cover",
-        "backIn": "back in about {weeks} weeks"
+        "backIn": "back in about {weeks, plural, one {# week} other {# weeks}}"
       },
       "estimate": {
         "title": "Your estimate",
-        "perCard": "{count} cards × {fee} · {grader} {level}",
+        "perCard": "{count, plural, one {# card} other {# cards}} × {fee} · {grader} {level}",
         "coverPerCard": "Cover {rate} of the declared value · {amount} a card",
         "paidAtCounter": "Paid at the counter once the cards are checked.",
         "includes": "Includes the grader’s fee and insured shipping both ways.",
@@ -161,8 +161,8 @@
     },
     "review": {
       "title": "Check it, then book the drop-off",
-      "header": "{count} cards to {grader} · {level}",
-      "backIn": "Back in about {weeks} weeks from the day your cards leave",
+      "header": "{count, plural, one {# card} other {# cards}} to {grader} · {level}",
+      "backIn": "Back in about {weeks, plural, one {# week} other {# weeks}} from the day your cards leave",
       "edit": "Edit",
       "schedule": "The cards, as you listed them",
       "totals": {
