@@ -1,5 +1,6 @@
 import { PDFDocument } from "pdf-lib";
 import { describe, expect, it } from "vitest";
+import type { InvoicePdfBankRails } from "./invoice-pdf";
 import { InvoicePdf } from "./invoice-pdf";
 
 const COPY = {
@@ -12,8 +13,34 @@ const COPY = {
   sentAtLabel: "Date of issue",
   paymentDeadlineLabel: "Date due",
   paymentMethodLabel: "Payment method",
-  footer: "This invoice records the charges for the lot shown above.",
+  bankDetailsHeading: "Bank details",
+  swiftLabel: "SWIFT",
+  fpsLabel: "FPS",
+  hkLocalTransferLabel: "HK local transfer",
+  beneficiaryLabel: "Beneficiary",
+  swiftBicLabel: "SWIFT/BIC",
+  accountIbanLabel: "Account/IBAN",
+  fpsIdLabel: "FPS ID",
+  bankAndCodeLabel: "Bank & code",
+  accountNoLabel: "Account no.",
+  bankReferenceNoteLabel:
+    "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer:",
 } as const;
+
+const BANK_RAILS: InvoicePdfBankRails = {
+  swift: {
+    beneficiary: "Grade10 HK Ltd.",
+    swiftBic: "GRADE10HKXXX",
+    account: "HK0000000000000000000",
+  },
+  fps: { fpsId: "165123456", beneficiary: "Grade10 HK Ltd." },
+  hkLocalTransfer: {
+    bankAndCode: "Example Bank (003)",
+    beneficiary: "Grade10 HK Ltd.",
+    accountNo: "003-456-123456-001",
+  },
+  reference: "LK7P2Q01",
+};
 
 const DATA = {
   listingTitle: "藏品 A",
@@ -63,7 +90,18 @@ describe("invoice PDF renderer", () => {
       sentAtLabel: "Date d'émission",
       paymentDeadlineLabel: "Date d'échéance",
       paymentMethodLabel: "Mode de paiement",
-      footer: "Cette facture enregistre les frais du lot indiqué ci-dessus.",
+      bankDetailsHeading: "Coordonnées bancaires",
+      swiftLabel: "SWIFT",
+      fpsLabel: "FPS",
+      hkLocalTransferLabel: "Virement local HK",
+      beneficiaryLabel: "Bénéficiaire",
+      swiftBicLabel: "SWIFT/BIC",
+      accountIbanLabel: "Compte/IBAN",
+      fpsIdLabel: "ID FPS",
+      bankAndCodeLabel: "Banque et code",
+      accountNoLabel: "Numéro de compte",
+      bankReferenceNoteLabel:
+        "Indiquez cette référence dans le champ mémo de votre virement.",
     };
     const bytes = await InvoicePdf({
       ...DATA,
@@ -72,5 +110,28 @@ describe("invoice PDF renderer", () => {
     });
     const pdf = await PDFDocument.load(bytes);
     expect(pdf.getPageCount()).toBe(1);
+  });
+
+  it("renders the Bank details section when bankRails is given (SC-47, SC-49, SC-50)", async () => {
+    const bytes = await InvoicePdf({
+      ...DATA,
+      listingTitle: "Lot A",
+      bankRails: BANK_RAILS,
+    });
+    const pdf = await PDFDocument.load(bytes);
+    expect(pdf.getPageCount()).toBe(1);
+    expect(bytes.byteLength).toBeGreaterThan(500);
+  });
+
+  it("renders no Bank details section when bankRails is omitted (SC-48)", async () => {
+    const withRails = await InvoicePdf({
+      ...DATA,
+      listingTitle: "Lot A",
+      bankRails: BANK_RAILS,
+    });
+    const withoutRails = await InvoicePdf({ ...DATA, listingTitle: "Lot A" });
+    const pdf = await PDFDocument.load(withoutRails);
+    expect(pdf.getPageCount()).toBe(1);
+    expect(withoutRails.byteLength).toBeLessThan(withRails.byteLength);
   });
 });

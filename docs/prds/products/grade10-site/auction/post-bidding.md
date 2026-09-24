@@ -209,6 +209,10 @@ by card, reads:
   transaction metadata under `payment_reference_code`, then keeps Stripe's
   returned provider reference internal. There is no separate order ID —
   [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+- 🚧 **Bank details** — SWIFT, FPS and HK local transfer rails, printed on
+  the invoice below Order Total when paid by Bank Transfer; each rail ends
+  at the same payment reference code, with a reminder to quote it in the
+  bank app's memo or remarks field
 - 🚧 **Invoice ID** — `IN-LK42301`: the payment reference plus an issuance
   sequence with at least 2 digits; it continues as `100` after `99`. A reissue
   increments the sequence, keeps the payment reference and lets the old ID

@@ -59,12 +59,23 @@ const SAMPLE_INVOICE = {
     sentAtLabel: "Date of issue",
     paymentDeadlineLabel: "Date due",
     paymentMethodLabel: "Payment method",
-    footer: "This invoice records the charges for the lot shown above.",
+    bankDetailsHeading: "Bank details",
+    swiftLabel: "SWIFT",
+    fpsLabel: "FPS",
+    hkLocalTransferLabel: "HK local transfer",
+    beneficiaryLabel: "Beneficiary",
+    swiftBicLabel: "SWIFT/BIC",
+    accountIbanLabel: "Account/IBAN",
+    fpsIdLabel: "FPS ID",
+    bankAndCodeLabel: "Bank & code",
+    accountNoLabel: "Account no.",
+    bankReferenceNoteLabel:
+      "Enter this reference in your bank app's Memo or Remarks field. Missing it delays verification. Quote this reference on your transfer:",
   },
 };
 
-/** Same order, its Payment Processing Fee showing Free per `winner-order/spec.md`'s bank-transfer pricing. */
-const BANK_TRANSFER_INVOICE: typeof SAMPLE_INVOICE = {
+/** Same order, its Payment Processing Fee showing Free per `winner-order/spec.md`'s bank-transfer pricing, and the Bank details section a bank-transfer invoice carries. */
+const BANK_TRANSFER_INVOICE: InvoicePdfData = {
   ...SAMPLE_INVOICE,
   paymentMethod: "Bank transfer",
   lineItems: [
@@ -84,6 +95,20 @@ const BANK_TRANSFER_INVOICE: typeof SAMPLE_INVOICE = {
       amount: "HKD 3,120.00",
     },
   ],
+  bankRails: {
+    swift: {
+      beneficiary: "Grade10 HK Ltd.",
+      swiftBic: "TBC",
+      account: "TBC",
+    },
+    fps: { fpsId: "TBC", beneficiary: "Grade10 HK Ltd." },
+    hkLocalTransfer: {
+      bankAndCode: "TBC",
+      beneficiary: "Grade10 HK Ltd.",
+      accountNo: "TBC",
+    },
+    reference: "LK7P2Q01",
+  },
 };
 
 /**

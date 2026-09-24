@@ -70,7 +70,6 @@ const SAMPLE_RECEIPT = {
     previousPaymentsLabel: "Previous Payments",
     currentPaymentReceivedLabel: "Current Payment Received",
     remainingBalanceDueLabel: "Remaining Balance Due",
-    footer: "This receipt records the payment snapshot shown above.",
   },
 } as const;
 
