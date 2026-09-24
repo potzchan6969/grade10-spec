@@ -111,6 +111,29 @@ const BANK_TRANSFER_INVOICE: InvoicePdfData = {
   },
 };
 
+/** Same order with a Tax charge added, per `winner-order/spec.md`'s "Invoice fields" - an ordinary line like any other, in the order given, no dedicated prop. */
+const WITH_TAX_INVOICE: InvoicePdfData = {
+  ...SAMPLE_INVOICE,
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2,500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { label: "Tax", amount: "HKD 156.00" },
+    { key: "subtotal" as const, label: "Subtotal", amount: "HKD 3,276.00" },
+    {
+      key: "paymentProcessingFee" as const,
+      label: "Payment Processing Fee",
+      amount: "HKD 118.00",
+    },
+    {
+      key: "orderTotal" as const,
+      label: "Order Total",
+      amount: "HKD 3,394.00",
+    },
+  ],
+};
+
 /**
  * The Invoice PDF, previewing the real bytes the `@grade10/ui` renderer
  * produces. `winner-order-page.tsx` opens a hardcoded placeholder PDF today
@@ -153,4 +176,8 @@ export const Default: Story = {};
 
 export const BankTransfer: Story = {
   args: { data: BANK_TRANSFER_INVOICE },
+};
+
+export const WithTax: Story = {
+  args: { data: WITH_TAX_INVOICE },
 };

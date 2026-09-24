@@ -103,6 +103,25 @@ const BANK_TRANSFER_INVOICE: InvoicePdfData = {
   },
 };
 
+/** Same order with a Tax charge added, per `winner-order/spec.md`'s "Invoice fields" - an ordinary line like any other, in the order given, no dedicated prop. */
+const WITH_TAX_INVOICE: InvoicePdfData = {
+  ...SAMPLE_INVOICE,
+  lineItems: [
+    { label: "Winning Bid", amount: "HKD 2500.00" },
+    { label: "Buyer's Premium", amount: "HKD 500.00" },
+    { label: "Shipping & Handling", amount: "HKD 80.00" },
+    { label: "Insurance", amount: "HKD 40.00" },
+    { label: "Tax", amount: "HKD 156.00" },
+    { key: "subtotal", label: "Subtotal", amount: "HKD 3276.00" },
+    {
+      key: "paymentProcessingFee",
+      label: "Payment Processing Fee",
+      amount: "HKD 118.00",
+    },
+    { key: "orderTotal", label: "Order Total", amount: "HKD 3394.00" },
+  ],
+};
+
 /** Generates the real PDF bytes once, on mount - a preview of what `InvoicePdf` actually draws, not a second guess at it. */
 function InvoicePdfPreview({
   data = SAMPLE_INVOICE,
@@ -137,4 +156,8 @@ export const Default: Story = {};
 
 export const BankTransfer: Story = {
   args: { data: BANK_TRANSFER_INVOICE },
+};
+
+export const WithTax: Story = {
+  args: { data: WITH_TAX_INVOICE },
 };
