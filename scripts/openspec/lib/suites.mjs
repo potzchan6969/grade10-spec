@@ -297,34 +297,65 @@ export function readDomainIds(dir) {
   return found ? { journeys, scenarios, hasJourneySection: true } : null;
 }
 
+/** The active change spec roots under a store. */
+function activeChangeSpecRoots(root) {
+  const changes = join(root, "openspec", "changes");
+  if (!existsSync(changes)) return [];
+  return readdirSync(changes, { withFileTypes: true })
+    .filter((entry) => entry.isDirectory() && entry.name !== "archive")
+    .map((entry) => join(changes, entry.name, "specs"));
+}
+
+/** Product spec scopes include durable capabilities and open change deltas. */
+function productSpecRoots(dir, root) {
+  if (!root) return [dir];
+  const rel = relative(root, dir)
+    .replace(/^openspec\\/specs\\//, "")
+    .replace(/^openspec\\/changes\\/[^/]+\\/specs\\//, "");
+  const product = rel.split("/")[0];
+  return [
+    join(root, "openspec", "specs", product),
+    ...activeChangeSpecRoots(root).map((specs) => join(specs, product)),
+  ];
+}
+
 /** Journey and scenario ids issued by every capability under a product. */
-export function readProductIds(dir) {
+export function readProductIds(dir, root = null) {
   const journeys = new Map();
   const scenarios = new Set();
   let found = false;
-  for (const domain of readdirSync(dir, { withFileTypes: true })) {
-    if (!domain.isDirectory()) continue;
-    const ids = readDomainIds(join(dir, domain.name));
-    if (!ids) continue;
-    found = true;
-    for (const [id, title] of ids.journeys) journeys.set(id, title);
-    for (const id of ids.scenarios) scenarios.add(id);
+  for (const product of new Set(productSpecRoots(dir, root))) {
+    if (!existsSync(product)) continue;
+    for (const domain of readdirSync(product, { withFileTypes: true })) {
+      if (!domain.isDirectory()) continue;
+      const ids = readDomainIds(join(product, domain.name));
+      if (!ids) continue;
+      found = true;
+      for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.scenarios) scenarios.add(id);
+    }
   }
   return found ? { journeys, scenarios, hasJourneySection: true } : null;
 }
 
 /** Journey and scenario ids issued by every product under a platform. */
-export function readPlatformIds(dir) {
+export function readPlatformIds(dir, root = null) {
   const journeys = new Map();
   const scenarios = new Set();
+  const specsRoots = root
+    ? [join(root, "openspec", "specs"), ...activeChangeSpecRoots(root)]
+    : [dir];
   let found = false;
-  for (const product of readdirSync(dir, { withFileTypes: true })) {
-    if (!product.isDirectory()) continue;
-    const ids = readProductIds(join(dir, product.name));
-    if (!ids) continue;
-    found = true;
-    for (const [id, title] of ids.journeys) journeys.set(id, title);
-    for (const id of ids.scenarios) scenarios.add(id);
+  for (const specs of specsRoots) {
+    if (!existsSync(specs)) continue;
+    for (const product of readdirSync(specs, { withFileTypes: true })) {
+      if (!product.isDirectory()) continue;
+      const ids = readProductIds(join(specs, product.name));
+      if (!ids) continue;
+      found = true;
+      for (const [id, title] of ids.journeys) journeys.set(id, title);
+      for (const id of ids.scenarios) scenarios.add(id);
+    }
   }
   return found ? { journeys, scenarios, hasJourneySection: true } : null;
 }
