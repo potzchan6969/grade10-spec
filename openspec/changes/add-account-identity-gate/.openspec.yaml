@@ -2,3 +2,5 @@ schema: grade10-planning
 promoted_by: "@ecchochan"
 created: 2026-09-05
 page_waived: "predates the page rule"
+reviewed:
+  user-journeys: 3fd636a4
