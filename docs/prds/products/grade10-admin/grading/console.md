@@ -159,7 +159,7 @@ reaches only submissions not yet booked:
 
 - 🚧 **Two people for money** — a waiver, a payout and a money setting take a reason; one `grading:approve` holder asks
   and a second, never the recorder, approves on their own console; a settings write is filed under `settings`
-- 🚧 **Second factor and audit** — as the vault's: required in production and staging, and every action filed under its
+- 🚧 **Second factor and audit** — as the vault's: required in production, and every action filed under its
   submission on the audit chain — [Operator Console](/p/grade10-site/vault/operator-console#permissions)
 - 🚧 **Staff hear nothing** — no email to staff; the badges, the tiles and the day's strip are the signal
 

@@ -100,7 +100,7 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
 - The grants
   - Three grants: read, which opens the settings read-only, operate, and
     approve, which edits them
-  - A verified session: as the vault's, in production and staging
+  - A verified session: as the vault's, in production
   - Filed under its submission: every act is on the audit chain
   - Staff hear nothing: the badges, the tiles and the day's strip are the
     signal
@@ -1224,16 +1224,16 @@ badges, its tiles and the day's strip are the whole signal.
 
 Working a grading surface takes a verified session, and takes it once a shift.
 
-**Where it is asked for** - A second factor SHALL be required in production and
-in staging, and SHALL be optional in development.
+**Where it is asked for** - A second factor SHALL be required in production,
+and SHALL be optional in staging and development.
 
 **How long it holds** - One verification SHALL stamp the session for 12 hours,
 and no act inside that window SHALL ask for another.
 
-#### Scenario: grade10-admin-grading-counter-SC-78 - Staging asks for the second factor
-**Serves:** The grants - an operator opening a grading surface off development meets the second factor before any act
+#### Scenario: grade10-admin-grading-counter-SC-78 - Production asks for the second factor
+**Serves:** The grants - an operator opening a grading surface in production meets the second factor before any act
 
-- **GIVEN** an operator signing in to staging
+- **GIVEN** an operator signing in to production
 - **WHEN** they open a grading surface
 - **THEN** a second factor is required
 

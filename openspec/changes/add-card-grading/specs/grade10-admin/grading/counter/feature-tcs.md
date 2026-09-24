@@ -2858,7 +2858,7 @@ Admin(holds `grading:approve`) opens a `checked_in` submission with a card to ch
 * Step 1 succeeds as it would for `grading:operate`.
 * Step 2 also offers Waive and Payout, the acts of both grants offered together.
 
-### grade10-admin-grading-counter-US14-TC6-1: Staging asks for the second factor before any grading surface opens
+### grade10-admin-grading-counter-US14-TC6-1: Production asks for the second factor before any grading surface opens
 
 **Classification:**
 
@@ -2874,17 +2874,17 @@ Admin(holds `grading:approve`) opens a `checked_in` submission with a card to ch
 * **Trace:** grade10-admin-grading-counter-US-14
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) signs in to staging without a verified session.
+Admin(holds `grading:operate`) signs in to production without a verified session.
 
 **Steps:**
 
-1. Sign in to the staging console.
+1. Sign in to the production console.
 2. Open a grading surface.
 
 **Expected Results:**
 
 * The second factor is required before the surface opens.
-* The same is required in production, and is optional in development.
+* The same is optional in staging and development.
 
 ### grade10-admin-grading-counter-US14-TC7-1: One verification covers the next act for twelve hours
 
@@ -3274,7 +3274,7 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-SC-09` | Case added | `grade10-admin-grading-counter-US9-TC6-1` — the queue badging a payout past its window |
 | `grade10-admin-grading-counter-SC-63` | Case added | `grade10-admin-grading-counter-US9-TC7-1` — a second payout on a card already carrying one refused |
 | `grade10-admin-grading-counter-SC-103` | Case added | `grade10-admin-grading-counter-US9-TC8-1` — a payout asked for and never approved, which moves no money |
-| `grade10-admin-grading-counter-SC-78` | Case added | `grade10-admin-grading-counter-US14-TC6-1` — the second factor asked for in staging |
+| `grade10-admin-grading-counter-SC-78` | Case added | `grade10-admin-grading-counter-US14-TC6-1` — the second factor asked for in production |
 | `grade10-admin-grading-counter-SC-79` | Case added | `grade10-admin-grading-counter-US14-TC7-1` — one verification covering the next act for twelve hours |
 | `grade10-admin-grading-counter-SC-69` | Case added | `grade10-admin-grading-counter-US15-TC8-1` — a read refused by name for a setting nobody has written |
 | `grade10-admin-grading-counter-SC-47` | Out of suite | **Out of suite:** `grade10-site/grading/counter-documents`'s feature suite, which walks the collector declining on the iPad; the counter only reads the decline back on its step |
@@ -3291,5 +3291,5 @@ Admin(holds `grading:read`) opens a surface that needs `grading.storage_fee_per_
 | `grade10-admin-grading-counter-US9-TC1-1` | Row B leaves the till: a person makes the bank transfer and reads its reference onto the record |
 | `grade10-admin-grading-counter-US11-TC1-1` | The link runs on the clock; a person holds it past 30 minutes and reads the expiry, then mints again |
 | `grade10-admin-grading-counter-US12-TC2-1` | The notice goes by registered post; a person posts it and enters the date and tracking the counter clerk gave them |
-| `grade10-admin-grading-counter-US14-TC6-1` | The second factor is the console's own, driven on staging by a person with the device |
+| `grade10-admin-grading-counter-US14-TC6-1` | The second factor is the console's own, driven on production by a person with the device |
 | `grade10-admin-grading-counter-US10-TC5-1` | The click-to-chat template opens WhatsApp outside the console, and the test is that nothing sends until staff press it |
