@@ -175,6 +175,9 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   winning bid and the premium, enters Shipping & Handling (zero allowed) and
   optional Insurance (above zero), and sends; the send locks the address and
   starts the 7 days
+- 🚧 **Tax** — a third quoted amount beside Shipping & Handling and
+  Insurance, optional and above zero. Grade10 computes no rate: the operator
+  decides what is owed and enters it
 - 🚧 **Billing address** — shown beside the delivery address on the quote;
   send is refused while the order has none, and the edit before send adds
   it; an address recorded by phone asks for billing too, same as delivery by
@@ -187,7 +190,7 @@ opens into its winner, invoices, payments, addresses, fulfilment and trail.
   new values; the order stays Preparing Invoice. Bank transfer only in a
   currency with bank details — HKD at launch
 - 🚧 **Reissue** — one action for any change after send: address, method,
-  fee, shipping, insurance, and the deadline kept or restarted, with a reason
+  fee, shipping, insurance, tax, and the deadline kept or restarted, with a reason
   and at least one change; no limit, each logged with its count, and the
   buyer's reissue history across all their orders shown before another is
   granted
