@@ -13,10 +13,9 @@
   },
   "exports": {
     ".": "./src/index.ts",
-    "./blocks/*": [
-      "./src/blocks/*.tsx",
-      "./src/blocks/*.ts"
-    ],
+    "./blocks/auction-invoice-and-receipt-pdf/pdf-preview": "./src/blocks/auction-invoice-and-receipt-pdf/pdf-preview.tsx",
+    "./blocks/auction-invoice-and-receipt-pdf/*": "./src/blocks/auction-invoice-and-receipt-pdf/*.ts",
+    "./blocks/*": "./src/blocks/*.tsx",
     "./bones/registry": "./src/bones/registry.ts",
     "./lib/*": "./src/lib/*.ts"
   },

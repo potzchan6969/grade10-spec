@@ -49,11 +49,11 @@ Needs group 3 landed.
 
 Needs groups 3-4 landed on `main` and the submodule bumped first.
 
-- [ ] 5.1 Bump `external/grade10-spec` to this change's landing
-- [ ] 5.2 Switch `packages/grade10-auction/backend/src/services/auctions/{receiptPdf,invoicePdf}.ts` from importing `@grade10/auction-contracts/{receipt-pdf,invoice-pdf}` to importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, adding a `copy` argument sourced from `@grade10/i18n` at each call site (`winner-order-SC-57`, `winner-order-SC-67`, `winner-order-SC-109`)
-- [ ] 5.3 Switch `apps/frontend/grade10/src/pages/demo/pdf/PdfLabPage.tsx` (and its `invoiceSample.ts`/`receiptSample.ts`) the same way
-- [ ] 5.4 Remove `packages/grade10-auction/contracts`'s now-redundant `pdfDocument.ts`/`receiptPdf.ts`/`invoicePdf.ts` and their tests, and the package's `/invoice-pdf`/`/receipt-pdf` subpath exports
-- [ ] 5.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10`
+- [x] 5.1 Bump `external/grade10-spec` to this change's landing
+- [x] 5.2 Switch `packages/grade10-auction/backend/src/services/auctions/{receiptPdf,invoicePdf}.ts` from importing `@grade10/auction-contracts/{receipt-pdf,invoice-pdf}` to importing `InvoicePdf`/`ReceiptPdf` from `@grade10/ui`, adding a `copy` argument at each call site — hardcoded English literals (`RECEIPT_COPY`/`INVOICE_COPY`), not `@grade10/i18n`: the auction backend's own email catalog (`../email/messages.ts`) is documented as the same interim state, moving to `@grade10/i18n` only as its own, separate pull request; introducing that dependency for this one call site first would be inconsistent with the pattern already established in this package (`winner-order-SC-57`, `winner-order-SC-67`, `winner-order-SC-109`)
+- [x] 5.3 Switch `apps/frontend/grade10/src/pages/demo/pdf/PdfLabPage.tsx` (and its `invoiceSample.ts`/`receiptSample.ts`) the same way
+- [x] 5.4 Remove `packages/grade10-auction/contracts`'s now-redundant `pdfDocument.ts`/`receiptPdf.ts`/`invoicePdf.ts` and their tests, and the package's `/invoice-pdf`/`/receipt-pdf` subpath exports and `pdf-lib`/`@pdf-lib/fontkit` dependencies
+- [x] 5.5 Verify: `pnpm run typecheck && pnpm run lint && pnpm run test --filter grade10` — also surfaced the `"./blocks/*"` export bug this branch's `fix(auction)` commit corrects: the array-fallback pattern PR #627 shipped does not actually resolve for an external consumer
 
 ## 6. Walk Winner Order's Invoice and Receipt PDFs (grade10)
 
