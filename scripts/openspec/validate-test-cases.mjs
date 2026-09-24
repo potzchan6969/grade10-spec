@@ -194,9 +194,9 @@ function checkSuite(root, filePath, rulesRev) {
   const composed = level !== "feature";
   const spec =
     level === "platform"
-      ? readPlatformIds(dir)
+      ? readPlatformIds(dir, root)
       : level === "product"
-        ? readProductIds(dir)
+        ? readProductIds(dir, root)
         : level === "domain"
           ? readDomainIds(dir)
           : readSpecIds(join(dir, "spec.md"));
