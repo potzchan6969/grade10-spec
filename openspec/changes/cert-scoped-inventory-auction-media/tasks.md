@@ -1,6 +1,6 @@
 # Tasks: Cert-scoped Inventory media in Auction listings
 
-## 1. Inventory Cert-scoped source media (grade10)
+## 1. Inventory Cert-scoped source media (grade10) (owner: @htonyl)
 
 - [ ] 1.1 Add failing Inventory service and admin API coverage for Cert media
   tagging, printed-Cert eligibility, same-product validation, authorization,
