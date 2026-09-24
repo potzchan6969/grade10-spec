@@ -44,7 +44,7 @@
 | No Cert records | Existing empty Cert list | **Out of suite:** empty-list presentation |
 | Removable Cert record | Selected Cert record with a removal action when its removal guard passes | `grade10-admin-inventory-catalog-SC-134` |
 | Removal pending | Confirmation remains open and the removal action is pending | `grade10-admin-inventory-catalog-SC-134` |
-| Removal refused | Error notice identifies an active reservation; no record, counter, history, or media changes | `grade10-admin-inventory-catalog-SC-135` |
+| Removal refused | Error notice identifies that the unit is unavailable or actively reserved; no record, counter, history, or media changes | `grade10-admin-inventory-catalog-SC-135` |
 | Removal complete | Cert record and its tagged source media are gone; the physical unit is counted as withdrawn | `grade10-admin-inventory-catalog-SC-134` |
 
 ### Auction listing media dialog
