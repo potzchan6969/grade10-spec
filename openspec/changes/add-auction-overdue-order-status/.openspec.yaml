@@ -4,4 +4,4 @@ promoted_by: "@htonyl"
 depends_on:
   - close-overdue-address-confirmation
 reviewed:
-  user-journeys: 15d89ce9
+  user-journeys: a39351cc
