@@ -194,7 +194,7 @@ customer is on <grade10 sign-in url>, signed out.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
 
@@ -1231,7 +1231,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
 
@@ -1268,7 +1268,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
@@ -1305,7 +1305,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
@@ -1344,7 +1344,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
@@ -1380,7 +1380,7 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
 
