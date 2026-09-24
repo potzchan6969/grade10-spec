@@ -309,6 +309,39 @@ returns the current line answers on the next request.
 * After Retry, the returned availability and prices are shown and checkout is
   available when every line is confirmed.
 
+### grade10-site-store-cart-validation-US1-TC10-1: Cart cannot be loaded before its lines are known
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-01
+
+**Pre-conditions:**
+The initial cart request returns a 500 before the drawer knows any lines; a
+retry returns a cart with one line.
+
+**Steps:**
+
+1. Open the cart and wait for the failed read.
+2. Check the drawer, total, Retry and checkout control.
+3. Use Retry and wait for the cart and its current line review.
+
+**Expected Results:**
+
+* The drawer says the cart could not be checked and offers Retry without
+  inventing or naming a line it has not loaded.
+* No total is shown as current and checkout remains unavailable.
+* After Retry, the line is reviewed before its availability, price and total
+  are presented as current.
+
 ---
 
 ## grade10-site-store-cart-validation-US2: Collector offers the cart for checkout
@@ -378,8 +411,8 @@ stock.
 
 * Step 1 creates no checkout order; no order appears in <the store's order
   list>.
-* Step 2 shows the cart with that one line identified as out of stock and the
-  other two untouched.
+* Step 2 keeps the drawer open with that one line identified as out of stock
+  and the other two untouched.
 * Step 4 creates the checkout order from the two remaining lines and the
   browser goes to <the shop's checkout url>.
 
@@ -608,18 +641,18 @@ the next request.
 **Steps:**
 
 1. Click the checkout button in the cart.
-2. On the pre-checkout page, check the message, both lines, the total and Pay.
-3. Use Retry and wait for the checkout-time read to return.
-4. Check the current line answers and Pay.
+2. In the drawer, check the message, both lines, the total and Retry.
+3. Use Retry to offer the cart for checkout again.
+4. Check the current line answers and the handoff to Shopify.
 
 **Expected Results:**
 
 * No checkout order is created.
 * The persistent message names both lines as unchecked and offers Retry.
 * Neither recorded availability nor price is shown as current; the total is
-  unchecked, and Pay remains unavailable until the later read returns.
-* After Retry, the current availability and prices are shown and Pay becomes
-  available when every line is confirmed.
+  unchecked, and the drawer does not leave for Shopify on the failed request.
+* After Retry, the store reads the lines again and creates an order only when
+  they are confirmed; the browser then leaves for Shopify.
 
 ## Reconciliation
 
@@ -629,6 +662,7 @@ the next request.
 | --- | --- |
 | grade10-site-store-cart-validation-SC-01, SC-03 | US1-TC1-1 |
 | grade10-site-store-cart-validation-SC-22 | US1-TC9-1 |
+| grade10-site-store-cart-validation-SC-23 | US1-TC10-1 |
 | grade10-site-store-cart-validation-SC-04 | US1-TC2-1 |
 | grade10-site-store-cart-validation-SC-05 | US1-TC3-1 |
 | grade10-site-store-cart-validation-SC-06 | US1-TC4-1 |

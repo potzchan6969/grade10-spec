@@ -27,14 +27,9 @@ before this frame is treated as current.
 Use the existing Cart Drawer composition in the PRD's
 `store-cart-cartdrawer--default` and
 `store-cart-cartdrawer--unavailable-items-removed` Storybook stories. Cart
-layout remains owned by the existing cart capability.
-
-### Checkout review
-
-The Grade10 pre-checkout route is assembled by `CheckoutPage`; the Checkout
-PRD has no registered page Storybook story or Figma frame. Keep its existing
-line-summary layout and make the review, refusal and retry states below
-visible before the collector can leave for Shopify.
+layout remains owned by the existing cart capability. Add reference states for
+an unchecked cart, checkout-time changes and shop refusal. The drawer remains
+open unless the store creates an order with a Shopify hosted checkout URL.
 
 ## Components
 
@@ -43,10 +38,11 @@ visible before the collector can leave for Shopify.
   `StoreProductDescription`, `StoreProductMetadata`,
   `StoreProductPurchasePanel` from `@grade10/ui`.
 - **Cart drawer:** `CartDrawer` from `@grade10/ui`.
-- **Checkout review:** the existing Grade10 `CheckoutPage` line summary and
-  review notice.
-- **Copy:** reuse the existing availability and sold-out messages. No new
-  variant-choice label, component or token is needed.
+- **Checkout feedback:** the Grade10 cart host supplies line states, persistent
+  retry notices and checkout results to the drawer.
+- **Copy:** reuse the existing availability, sold-out, tender and checkout
+  outcome messages. Localize unchecked and retry notices. No new variant-choice
+  label, component or token is needed.
 
 ## States
 
@@ -78,13 +74,12 @@ visible before the collector can leave for Shopify.
 | A product is withdrawn from the store | The unavailable line is removed after review; a distinct toast names each removed product | `grade10-site-store-cart-validation-SC-09`, `grade10-site-store-cart-validation-SC-10` |
 | A line's price changes | The current price and a clear price-change message | `grade10-site-store-cart-validation-SC-11`, `grade10-site-store-cart-validation-SC-12` |
 | Cart-open review cannot finish | A persistent error toast names each unchecked line and offers retry; the affected lines' availability, prices and cart total are replaced with unchecked copy; checkout remains unavailable | `grade10-site-store-cart-validation-SC-22` |
-
-### Checkout review
-
-| State | Shows | Anchor |
-| --- | --- | --- |
-| The checkout-time review is pending | The affected lines are not presented as confirmed; Pay is unavailable | `grade10-site-store-cart-validation-SC-03` |
-| The checkout-time review confirms every line | The current price is used for the handoff and Pay becomes available | `grade10-site-store-cart-validation-SC-17` |
-| A cart line changes before checkout | Every changed line is named with its out-of-stock, unavailable, adjusted or repriced result; Pay is unavailable until the cart is resolved | `grade10-site-store-cart-validation-SC-15`, `grade10-site-store-cart-validation-SC-16` |
-| The checkout-time review cannot finish | Each held line is named as unchecked, its last availability, price and total are replaced by unchecked copy, and Retry is available | `grade10-site-store-cart-validation-SC-21` |
-| The shop refuses after its review passed | The refused line and any short-fill answer are named from the checkout result; the cart remains available to resolve | `grade10-site-store-cart-validation-SC-19`, `grade10-site-store-cart-validation-SC-20` |
+| The initial cart read fails before lines are known | A drawer-level unchecked notice and Retry; no line name or total is invented and checkout remains unavailable | `grade10-site-store-cart-validation-SC-23` |
+| Checkout is in progress | The drawer remains open; the action cannot be sent twice and its lines are not presented as confirmed by the earlier read | `grade10-site-store-cart-validation-SC-02`, `grade10-site-store-cart-validation-SC-18` |
+| Checkout confirms every line | The accepted quote is sent with the lines; the collector leaves for Shopify | `grade10-site-store-cart-validation-SC-17` |
+| A line changes at checkout | The drawer stays open and names every changed line with its out-of-stock, unavailable, adjusted or repriced result | `grade10-site-store-cart-validation-SC-15`, `grade10-site-store-cart-validation-SC-16` |
+| The checkout-time read fails | The drawer stays open; each known line and the total are unchecked, and Retry offers the cart again | `grade10-site-store-cart-validation-SC-21` |
+| The shop refuses after a passing read | The drawer names each refused line and any short-fill amount; the cart remains available to resolve | `grade10-site-store-cart-validation-SC-19`, `grade10-site-store-cart-validation-SC-20` |
+| Checkout requires identity verification | The drawer explains the threshold and offers the existing account verification action; the cart remains available | **Out of suite:** existing `CheckoutResolution.verify` treatment and Checkout PRD buyer-verification rule |
+| Checkout creates an order without a hosted URL | The drawer shows the existing settling outcome and the order remains trackable | **Out of suite:** existing `CheckoutResolution.settling` treatment and Checkout PRD order flow |
+| Checkout cannot proceed for another reason | The drawer preserves the existing retry or support treatment and any coupon or points refusal; an unchanged request is not silently retried when its choice must change | **Out of suite:** existing `CheckoutResolution.retry` and `CheckoutResolution.support` treatments |

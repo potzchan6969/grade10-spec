@@ -17,9 +17,9 @@ In the cart drawer, signed in with Google or a magic link.
 Current price and stock, from Shopify. A line that moved comes back named.
 
 ## Collector — Check the price
-The promo code and the points carried from the drawer, or chosen here, and
-the estimated total they leave — [Cart Drawer](/p/grade10-site/store/cart).
-Pay sends them with the lines.
+The promo code, points and estimated total are shown in the drawer —
+[Cart Drawer](/p/grade10-site/store/cart). Checkout sends the accepted choice
+with the lines. A changed line, failed read or shop refusal is resolved there.
 
 # On Shopify's page
 
