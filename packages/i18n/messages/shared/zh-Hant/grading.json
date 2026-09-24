@@ -688,6 +688,8 @@
     "declined": "沒有簽署任何文件，也沒有付款。在場的同事可以協助你下一步怎樣做。"
   },
   "console": {
+    "cards": "{count, plural, other {# 張卡}}",
+    "submissions": "{count, plural, other {# 份提交}}",
     "whatsapp": {
       "confirmDropoff": "{name} 你好，確認你於 {when} 在 {shop} 的評級交卡預約。請帶同 {count} 張卡，每張放在卡套內。清單：{link}",
       "onTheirWay": "{name} 你好，你的 {count} 張卡今日已投保寄往 {grader}，預計 {estimate} 前回到門市。清單：{link}",
