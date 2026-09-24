@@ -40,10 +40,11 @@ the spec.
 :::
 
 :::callout{kind="warning"}
-Two-factor is the second of the three gates and no capability covers it at all,
-although the UI blocks and stories for it ship. The written policy disagrees
-with the code as well: the security doc says a second factor is required in
-staging and production, a QA doc says it is optional in every environment
-deliberately, and the environment package currently sets staging to optional and
-production to required. Two of the three are stale.
+Two-factor is the second of the three gates and no capability of this
+product's own covers it, although the UI blocks and stories for it ship. The
+written policy is now one thing everywhere: a platform-wide rule requires a
+second factor in production only, for every brand, and leaves it optional in
+staging and development — `packages/app-env`'s `ADMIN_TWO_FACTOR` states it,
+`docs/prds/platform/admin-access.md` and the vault's own
+`grade10-admin/vault/operator-queue` spec agree.
 :::

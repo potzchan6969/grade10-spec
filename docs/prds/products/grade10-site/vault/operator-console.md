@@ -116,8 +116,9 @@ One line per tab, as `Surface: verb, verb, verb`.
   for a treasurer, because recording money needs `vault:payout`
 - **One grant prices and forfeits** — `vault:approve` covers the valuer, the
   offer-maker and the person who forfeits
-- **Second factor** — required in production and staging, optional in
-  development; one verification stamps the session for **12 hours**
+- 🚧 **Second factor** — required in production only, for every brand;
+  optional in staging and development; one verification stamps the session
+  for **12 hours**
 - **Every case action is filed under its case** on the audit chain
 - **Staff hear nothing** — no email or push to staff; the queue's badges and
   the Today and Overdue views are the signal
@@ -195,6 +196,6 @@ One line per tab, as `Surface: verb, verb, verb`.
 | Paging the arrears | Decided | A keyset cursor over the payout's due date and the case id, the same idiom the ledger pages on; the ledger's own pager stays as it is | Engineering |
 | Who recorded a ledger row | ❓ Open | Naming the operator reads the auth directory, which asks for `user:list` and a live second factor a treasurer does not hold, so until this is decided the ledger prints the recorder as the worker sends it: a staff handle, the first eight characters of the account id. Recommended: the recorder's name through a narrow read the ledger's own grant allows. | Product, Finance |
 | The page a list pages on | ❓ Open | No number is fixed for the ledger or the arrears list; each pages on its own cursor and nothing states how many rows it takes. Recommended: 50. | Product |
-| Staging second factor | Decided | Required, because staging rehearses production; development stays optional so a local stack never locks an operator out | Owner |
+| Second factor | Decided | Required in production only, for every brand — a platform-wide rule, not a per-brand one; staging and development stay optional so a rehearsal or a local stack never locks an operator out | Owner |
 | No-show and late | Decided | The case is the item, so a different item is a new case and this one is declined or cancelled | Product |
 :::

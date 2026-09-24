@@ -74,7 +74,7 @@ it; no statute here is asserted.
 | Archive copy of sealed bytes | yes, hourly, digest-checked, through a port that cannot delete | the bucket's lock rule, set by hand and verified by nothing |
 | Integrity re-hash | yes, **200** rows per pass | — |
 | Database backups | one check grades the gaps file against the registry, run by the build and by the nightly alike, across every environment | two age recipients, one green nightly, a restore drill |
-| Second factor | required in production and staging, optional in development | — |
+| 🚧 Second factor | required in production only, for every brand; optional in staging and development | — |
 | A read that names a person | yes — a search records who searched, when, the kind of term and how many cases matched, never the term | — |
 | Identity rebind under a sealed case | closed; a case with sealed evidence refuses a re-record, and a displaced unbound check is purged durably | — |
 

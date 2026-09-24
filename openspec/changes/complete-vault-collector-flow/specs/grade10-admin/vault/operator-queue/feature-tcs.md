@@ -595,6 +595,44 @@ Runs once per row of **Test data**.
 * The worker refuses the act.
 * The page re-reads and no longer offers it.
 
+### grade10-admin-vault-operator-queue-US3-TC5-1: Production asks for the second factor, staging does not
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** automated
+* **Testability:** automation, manual
+* **Trace:** grade10-admin-vault-operator-queue-US-03
+
+**Decided by:** `grade10:apps/frontend/grade10/e2e/tests/vault/visit.spec.ts`
+
+**Pre-conditions:**
+
+* admin(shop staff, unenrolled in a second factor) signs in to the deploy environment named in **Test data**.
+
+**Test data:**
+
+| Deploy environment | Second factor |
+| --- | --- |
+| production | required |
+| staging | optional |
+
+**Steps:**
+
+1. Open a vault surface.
+
+**Expected Results:**
+
+* Whether a second factor is asked for matches **Test data**.
+
 ---
 
 ## grade10-admin-vault-operator-queue-US4: Operator takes an item in and can say where it is
@@ -1765,6 +1803,7 @@ Runs once per row of **Test data**.
 | Raised: the Out → Stalled boundary | Answered | Q53: the boundary belongs to `grade10-site/e-kyc/hosted-verification`, which states it at its `grade10-site-e-kyc-hosted-verification-SC-22`; the panel's table, its new bullet and `grade10-admin-vault-operator-queue-SC-52` read that state rather than deciding one |
 | Raised: three tiles or four | Answered | Q54: three, the first broken down per shop, each counting what the filter in force holds; the ui-design Tiles row and `grade10-admin-vault-operator-queue-SC-43` now agree |
 | The visit checklist's steps | Answered | Q55: the seven board A03 names — identity, inspect and value, terms, explain key terms, prepare documents, hand over the link, vault the item; `grade10-admin-vault-operator-queue-SC-30` and `grade10-admin-vault-operator-queue-SC-32` take them |
+| `grade10-admin-vault-operator-queue-SC-14` | Case added, added after the run | `grade10-admin-vault-operator-queue-US3-TC5-1`: the platform-wide second-factor rule corrected outside the blind pass — production required, staging optional for every brand, ZZZ included |
 
 ### Manual
 

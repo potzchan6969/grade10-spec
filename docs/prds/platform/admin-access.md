@@ -116,9 +116,9 @@ That module holds one predicate per decision, because a single "is this dev?" bo
 - An operator who has none proves the sign-in instead: the session has to be under 15 minutes old. Enrolling is the one admin operation that cannot demand a second factor — it is how you get one — so what it demands is the channel, and a stolen cookie is old by the time it is used. Refused as `RECENT_SIGN_IN_REQUIRED`; the answer is to sign in again
 - Sign-in here is passwordless, so better-auth runs the two-factor plugin with `allowPasswordless`. Without this rung `/two-factor/enable` asked for nothing at all, and a stolen but un-enrolled admin session could mint its own authenticator and satisfy the gate that had just stopped it
 
-### Required in staging and production
+### Required in production only
 
-- The policy is per brand and environment in `packages/app-env` (`adminTwoFactorPolicy`): `required` in staging and production, `optional` in development, and an unknown brand or environment answers `required`. Only the `testing` and `e2e` stacks skip the gate
+- The policy is per brand and environment in `packages/app-env` (`adminTwoFactorPolicy`): `required` in production, `optional` in staging and development, for every brand — a platform-wide rule, not a per-brand one — and an unknown brand or environment answers `required`. Only the `testing` and `e2e` stacks skip the gate
 - The admin SPAs react to `TWO_FACTOR_ENROLLMENT_REQUIRED` and `TWO_FACTOR_STEP_UP_REQUIRED` by opening the enroll or verify flow; the server stays the authority
 
 ## Audit trail
