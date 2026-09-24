@@ -24,8 +24,8 @@ export const RULE_STRONG = rgb(0.1, 0.1, 0.1);
 
 /** Where a money row's amount right-aligns to. */
 export const RIGHT_EDGE = A4_WIDTH - MARGIN;
-/** Where an identity row's value right-aligns to - narrower than the full sheet. */
-export const META_VALUE_RIGHT = MARGIN + 250;
+/** Where an identity row's value starts - clear of every label this sheet draws, including "Payment reference". */
+export const META_VALUE_LEFT = MARGIN + 160;
 /** A boxed summary: right-aligned, narrower than the sheet. */
 export const SUMMARY_WIDTH = 220;
 export const SUMMARY_LEFT = RIGHT_EDGE - SUMMARY_WIDTH;
@@ -192,7 +192,7 @@ export function drawRuleSpan(
   return y - gap;
 }
 
-/** An identity row - label bold and black, value right-aligned. */
+/** An identity row - label bold and black, value left-aligned in its own column. */
 export function drawMetaRow(
   page: PDFPage,
   fonts: Fonts,
@@ -201,15 +201,7 @@ export function drawMetaRow(
   y: number,
 ): void {
   drawText(page, fonts.bold, label, MARGIN, y, BODY_SIZE, INK);
-  drawTextRight(
-    page,
-    fonts.regular,
-    value,
-    META_VALUE_RIGHT,
-    y,
-    BODY_SIZE,
-    INK,
-  );
+  drawText(page, fonts.regular, value, META_VALUE_LEFT, y, BODY_SIZE, INK);
 }
 
 /** A money row - label and its right-aligned amount, bold for a total. */
