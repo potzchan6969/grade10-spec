@@ -1,93 +1,35 @@
-**Author:** @htonyl - 2026-09-21
+**Author** - @htonyl, 2026-09-21
 
 ## Why
 
-Collectors and operators currently meet internal auction, order and invoice
-keys in places where they need a stable reference they can read, quote and
-reconcile. The existing invoice note and winner-order product record establish
-some conventions, but they do not yet give PM and Finance one confirmed family
-for the lot, winner order, invoice and bank reference; support and payment
-matching therefore fall back to implementation identifiers.
-
-The change proposes a public identifier family while keeping internal keys
-private. It should reduce support ambiguity and payment-matching errors without
-revealing a platform-wide sequential volume. The success measure is the share
-of collector and operator surfaces that can identify the same lot and order
-with one stable public reference, and the share of bank-transfer proofs matched
-without manual identifier clarification.
+- **Shared reference** - Collectors, operators, Finance and support need one stable, readable reference for a listing, its winning order and payment records without exposing internal IDs or a sequential volume signal
+- **Success** - More surfaces identify the same listing and order consistently, and bank-transfer proofs match without manual identifier clarification
 
 ## What Changes
 
-- Propose one stable, opaque code per listing that doubles as the listing
-  code and, once a lot closes with a winner, the payment reference — a
-  5-character Crockford Base32 value with no fixed prefix, always leading
-  with 2 letters (for example `LK423`, `UY294`). It is allocated on the first
-  saved draft, stored in a unique-constrained column, and never reused,
-  including after deletion. **BREAKING**: its lower-case form becomes the
-  suffix of the public listing slug, after normalized title words. It does not
-  appear as a labelled field on grade10-site's public listing pages; it is
-  shown in both grade10-admin's Listings table and listing detail screen to
-  operators with existing listing-admin access, and knowing the code cannot
-  grant access to the listing or its private data. It becomes the
-  collector-facing payment reference — safe to type into FPS,
-  local bank transfer and SWIFT notes — once an order exists on that listing.
-  There is no separate public order identifier: this one code is what a
-  winner quotes for their order, on order lists, order detail, support
-  contact, operator reconciliation and payment instructions.
-- Add a Slug helper to the auction listing editor. The first saved draft
-  receives the title-and-lowercase-code value. A later title edit updates that
-  value only while the operator has not changed it. Leaving the Slug field
-  checks the selected value and identifies a collision before Save, including
-  a value retained by a completed, expired or unsold listing.
-- Carry the payment reference code into Stripe transaction metadata so
-  provider records can be matched during reconciliation without exposing a
-  provider transaction ID to the collector.
-- Propose an invoice identifier built from the payment reference plus an
-  issuance sequence that starts at `01`, uses at least two digits, and
-  continues as `100` after `99`, so it remains unique across reissues.
-- Propose receipt identifiers built from the invoice identifier plus a
-  receipt sequence, distinguishing each payment returned against one invoice,
-  including partial-payment and final-settlement receipts.
-- Keep internal database IDs, gapless audit numbers and provider references
-  separate from every collector-facing identifier.
-- Record the format recommendations as provisional PM/Finance decisions; the
-  requirements remain waiting until PM and Finance confirm the open listing
-  code rules and the rules for allocation, reissue, receipt sequencing and
-  retention.
+- **Listing code** - Allocate one opaque, permanent 5-character Crockford Base32 code on the first saved draft. It starts with 2 letters, is unique and never reused, including after deletion
+- **Public address** - **BREAKING**: append the lower-case code to the normalized listing-title slug. Public pages expose it only in the canonical address, not as a labelled field or code-only route
+- **Admin and payment reference** - Show the code to authorized listing operators. After a winner exists, use the same code as the collector-facing payment reference across order, support and payment instructions; it is not a second public order ID
+- **Slug helper** - Prefill the editable title-and-code slug, refresh only an untouched generated value after title edits, and check availability on Slug field exit. Retained completed, expired and unsold addresses still block reuse
+- **Stripe matching** - Store the payment reference in Stripe metadata so reconciliation does not expose provider transaction IDs to collectors
+- **Invoice and receipt IDs** - Build invoice IDs from the code plus issuance sequence and receipt IDs from the invoice payload plus receipt sequence, including reissues and partial payments
+- **Private identifiers** - Keep database IDs, audit numbers and provider references separate from collector-facing identifiers
 
 ## Examples
 
 | Record | Example | Use |
 | --- | --- | --- |
-| Listing code / payment reference | `LK423` | One code per listing: shown on grade10-admin's listing screens before a winner exists; becomes the winner's payment reference afterward — order lists, order detail, support, FPS/wire/SWIFT notes, Stripe transaction metadata. The public address may end in `lk423`, but the page has no separate code field or order ID. |
-| Public invoice ID | `IN-LK42301` | First invoice issued against payment reference `LK423` |
-| Reissued invoice | `IN-LK42302` | Reissue of the invoice above; the issuance sequence increments |
-| First payment receipt | `RC-LK42301P1` | First receipt returned against invoice `IN-LK42301` |
-| Second payment receipt | `RC-LK42301P2` | Second receipt against the same invoice — for example, the first payment was partial and this completes it |
+| Listing code / payment reference | `LK423` | Admin listing screens; later winner order, support, payment instructions and Stripe metadata. The public address may end in `lk423`, without a separate code or order-ID field |
+| Public invoice ID | `IN-LK42301` | First invoice for `LK423` |
+| Reissued invoice | `IN-LK42302` | Next issuance for the same payment reference |
+| First payment receipt | `RC-LK42301P1` | First receipt for `IN-LK42301` |
+| Second payment receipt | `RC-LK42301P2` | Second receipt, for example after a partial first payment |
 
-The listing code / payment reference is a 5-character Crockford Base32 value
-with no fixed prefix, always leading with 2 letters — `LK423` and `UY294` are
-both valid examples. The first 2 characters are drawn only from the alphabetic
-subset of the Crockford charset (`ABCDEFGHJKMNPQRSTVWXYZ`, no digits); the
-remaining 3 characters are drawn from the full 32-character charset
-`0123456789ABCDEFGHJKMNPQRSTVWXYZ`. It is allocated once, on the first saved
-draft, and is permanently reserved, including after deletion. One permitted
-implementation is a keyed one-way function (for example HMAC-SHA256 with a
-server-side secret) over an internal system UUID or listing ID; that 5-character
-projection can collide, so allocation must retry against active codes and
-retained reservations. It is written to Stripe metadata
-under `payment_reference_code` once an order exists, and it is the payload
-both the invoice and receipt identifiers are built from:
-
-- Invoice ID: `IN-[CODE][SEQ]`, where `SEQ` is a 2-digit issuance sequence
-  starting at `01` and incrementing on each reissue.
-- Receipt ID: `RC-[INVOICE_PAYLOAD][P][n]`, where `INVOICE_PAYLOAD` is the
-  invoice ID's code-plus-sequence part (for example `LK42301`) and `P[n]` is
-  the receipt sequence within that invoice.
-
-Stripe supplies a separate provider reference, such as the returned
-PaymentIntent ID; Grade10 stores that reference and uses it in internal
-document filenames created after the payment is obtained.
+- **Code format** - The first 2 characters use `ABCDEFGHJKMNPQRSTVWXYZ`; the final 3 use `0123456789ABCDEFGHJKMNPQRSTVWXYZ`. `LK423` and `UY294` are valid
+- **Allocation** - Derive a candidate from the system UUID with a keyed one-way function, for example HMAC-SHA256. Retry the 5-character projection against active and retained reservations because it can collide
+- **Invoice format** - `IN-[CODE][SEQ]`, where `SEQ` starts at `01`, has at least 2 digits and continues after `99`
+- **Receipt format** - `RC-[INVOICE_PAYLOAD][P][n]`, where `INVOICE_PAYLOAD` is the code and invoice sequence, such as `LK42301`
+- **Provider reference** - Store Stripe's provider reference separately and use it only in authorized internal records and document filenames
 
 ## Non-Goals
 
@@ -101,47 +43,24 @@ None.
 
 ### Modified Capabilities
 
-- `grade10-site/auction/listing-page`: expose the lower-case listing-code
-  suffix through the canonical slug without adding a labelled listing-code
-  field to the public page.
-- `grade10-admin/auction/listing`: allocate the listing code at first draft
-  save, prefill the editable title-and-code slug, and check the chosen slug on
-  field exit before Save.
-- `grade10-site/auction/winner-order`: define the payment-reference identifier
-  (the listing code carried forward) that stands in for a public order ID,
-  plus the invoice and receipt identifiers built from it, and their
-  relationship to reissues and payment records.
+- **`grade10-site/auction/listing-page`** - Resolve the canonical lower-case code suffix without adding a labelled public code
+- **`grade10-admin/auction/listing`** - Allocate the code on first draft save, prefill the slug and check it on field exit
+- **`grade10-site/auction/winner-order`** - Carry the payment reference forward and define its invoice and receipt identifiers
 
 ## Impact
 
-- Winner-order and auction-listing API projections will eventually need
-  explicit public identifier fields rather than exposing database IDs.
-- Shared order and listing blocks will consume application-supplied display
-  identifiers; they will not generate or infer them.
-- grade10-admin's listing screens will need a place to display the listing
-  code to operators; grade10-site's listing page will not.
-- Operator reconciliation, invoice and receipt PDFs, payment instructions,
-  support messages and bank-transfer proof matching will use the approved
-  public values.
-- Stripe transaction metadata will carry the approved Grade10 payment
-  reference code for reconciliation.
-- The Stripe-supplied provider reference is stored after payment creation or
-  confirmation and passed into internal invoice, receipt and refund document
-  filenames; it is not a collector-facing identifier.
-- Existing internal IDs, audit numbering and provider references remain
-  available to operators and integrations where authorized, but are outside
-  the collector-facing format.
+- **API and UI** - Listing and winner-order projections expose display identifiers; shared blocks consume them and never generate or infer them
+- **Operations** - Admin listings, payment instructions, support, reconciliation, invoices, receipts and bank-transfer proof matching use the approved public values
+- **Provider boundary** - Stripe metadata holds the payment reference; the Stripe provider reference stays internal
+- **Existing IDs** - Internal IDs, audit numbering and provider references remain available only where authorized
 
-## Follow-on changes
+## Follow-on Changes
 
-- PM and Finance confirmation can unlock the requirements delta, API projection
-  work and shared UI adoption for the approved formats.
+- **Implementation** - Deliver the requirement delta, API projections and shared UI adoption from the approved formats
 
 ## Open Questions
 
-A previously cached shared-link preview may persist; Grade10 provides no purge
-or regeneration guarantee. The current public page and every fresh metadata
-fetch omit the code and private data.
+- **Cached previews** - A cached shared-link preview can persist. Grade10 does not guarantee a purge or regeneration; fresh pages and metadata omit private data and any separately labelled code
 
 ## References
 
