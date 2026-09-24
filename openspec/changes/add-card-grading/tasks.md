@@ -1245,7 +1245,7 @@ Stage (c).
 
 Stage (c).
 
-- [ ] 20.1 Cover the ladder and the notice: the rungs read off
+- [x] 20.1 Cover the ladder and the notice: the rungs read off
       `uncollectedLadder`, the naming that does not pause them, the posting
       date the thirty days run from, what is offered after them, and the audit
       row each act writes (`grade10-site-grading-submission-lifecycle-SC-35`,
@@ -1257,24 +1257,24 @@ Stage (c).
       `grade10-admin-grading-counter-SC-67`,
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-collector-notifications-SC-15`)
-- [ ] 20.2 Read every rung off group 10's `uncollectedLadder` for the
+- [x] 20.2 Read every rung off group 10's `uncollectedLadder` for the
       submission's `ready_at` and its pinned terms, counting no date of its
       own, and leave the ladder running when a collector is named
       (`grade10-site-grading-submission-lifecycle-SC-35`,
       `grade10-site-grading-submission-lifecycle-SC-57`)
-- [ ] 20.3 Write `recordNoticePosted` as the counter's act from the Notice due
+- [x] 20.3 Write `recordNoticePosted` as the counter's act from the Notice due
       rung, refusing before `notice_day`, taking the posting date and the
       tracking together, and writing one `notices` row per submission so a
       double-click is a no-op (`grade10-admin-grading-counter-SC-65`,
       `grade10-admin-grading-counter-SC-66`)
-- [ ] 20.4 Run the thirty days from the posting date, offer nothing further
+- [x] 20.4 Run the thirty days from the posting date, offer nothing further
       once they have passed, and leave the cards the collector's
       (`grade10-admin-grading-counter-SC-67`,
       `grade10-admin-grading-counter-SC-68`,
       `grade10-site-grading-submission-lifecycle-SC-36`,
       `grade10-site-grading-submission-lifecycle-SC-37`,
       `grade10-site-grading-collector-notifications-SC-15`)
-- [ ] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
+- [x] 20.5 Verify: `pnpm --dir packages/api-docs run generate` and commit its
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 21. The sweeps (grade10)
@@ -1282,7 +1282,7 @@ Stage (c).
 Stage (c). No case in the change's suites decides the repair lists of 21.7 or
 the slow lane of 21.8; walk 34 decides them.
 
-- [ ] 21.1 Cover the pass: the list order pinned by a test, every per-row list
+- [x] 21.1 Cover the pass: the list order pinned by a test, every per-row list
       claimed under `claimRow` with two overlapping passes, the partial unique
       behind the once-per-submission kinds, and each list's query shape
       (`grade10-site-grading-submission-plan-SC-43`,
@@ -1303,11 +1303,11 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-vault-retention-and-erasure-SC-28`,
       `grade10-site-vault-retention-and-erasure-SC-29`,
       `grade10-site-vault-retention-and-erasure-SC-30`)
-- [ ] 21.2 Write `sweeps/pass.ts` over `createSweepPass` with `WORK_LISTS`
+- [x] 21.2 Write `sweeps/pass.ts` over `createSweepPass` with `WORK_LISTS`
       laned and ordered, every row carrying its `kind` and its `limit`, so
       `grading.sweep.repair` fires for the repair lists alone, keeping group
       11's `attemptsPruned`, the slow lane's retention on `plan_attempts`
-- [ ] 21.3 Write the due letters as four registry rows, each with its own
+- [x] 21.3 Write the due letters as four registry rows, each with its own
       limit, cursor and due window in its query — `planNudges` at
       twenty-one days, `visitReminders` the day before for every submission
       on the visit, a joiner through its owner's booking,
@@ -1320,7 +1320,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-11`,
       `grade10-site-grading-collector-notifications-SC-12`,
       `grade10-site-grading-collector-notifications-SC-14`)
-- [ ] 21.4 Write `planExpiry` and `expiredBooked`, a plan nobody books expiring
+- [x] 21.4 Write `planExpiry` and `expiredBooked`, a plan nobody books expiring
       at `plan_expiry_days` owing nothing, one with a drop-off booked not
       expiring, a booked submission holding no visit expiring on the plan's
       own clock through `booking/standing.ts`'s `planClock`, restarted from a
@@ -1330,7 +1330,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-dropoff-booking-SC-28`,
       `grade10-site-grading-submission-plan-SC-59`,
       `grade10-site-grading-submission-lifecycle-SC-49`)
-- [ ] 21.5 Write `missedVisits` calling
+- [x] 21.5 Write `missedVisits` calling
       `markOutcome(caseRef, "no_show", bookingRef)` after the grace and only
       then clearing the cache and writing `dropoff_missed` in one commit, telling
       the collector within the hour and leaving the list and the estimate as
@@ -1338,7 +1338,7 @@ the slow lane of 21.8; walk 34 decides them.
       (`grade10-site-grading-dropoff-booking-SC-18`,
       `grade10-site-grading-dropoff-booking-SC-19`,
       `grade10-site-grading-collector-notifications-SC-10`)
-- [ ] 21.6 Write `retriedNotifications` over `notification_retries` on the
+- [x] 21.6 Write `retriedNotifications` over `notification_retries` on the
       vault's ladder — the cards handed in although the mail failed, the ladder
       spent and the row parked and flagged, the flag cleared only when the
       channel accepts — and `admin.resendNotification` sending a parked
@@ -1348,7 +1348,7 @@ the slow lane of 21.8; walk 34 decides them.
       `grade10-site-grading-collector-notifications-SC-17`,
       `grade10-site-grading-collector-notifications-SC-18`,
       `grade10-site-grading-collector-notifications-SC-25`)
-- [ ] 21.7 Add the fast lane's repair lists: `repairedBookings` and
+- [x] 21.7 Add the fast lane's repair lists: `repairedBookings` and
       `recoveredBookings` over `visit_owner_id`, repairing a cache whose
       booking, service, shop or slot the diary no longer holds, and
       `expiredPackets`. No `sealedDeliveries` list: SC-25's attached copy is
@@ -1363,15 +1363,15 @@ the slow lane of 21.8; walk 34 decides them.
       `cancel` for a future slot and `no_show` for a past one; a collected
       row's visit was kept and is never closed as missed
       (`grade10-site-grading-counter-documents-SC-25`)
-- [ ] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
+- [x] 21.8 Add the vault's six slow-lane lists — `verifiedChainRows`,
       `archivedObjects`, `verifiedDigests`, `retentionReviews`, `fontAsset` and
       `orphanedObjects`
-- [ ] 21.9 Date each submission in `retentionReviews` from its last terminal
+- [x] 21.9 Date each submission in `retentionReviews` from its last terminal
       event, report it under each class it holds and report one that has not
       ended under none (`grade10-site-vault-retention-and-erasure-SC-28`,
       `grade10-site-vault-retention-and-erasure-SC-29`,
       `grade10-site-vault-retention-and-erasure-SC-30`)
-- [ ] 21.10 Verify: `node scripts/checks/check-crons.mjs`,
+- [x] 21.10 Verify: `node scripts/checks/check-crons.mjs`,
       `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 
 ## 22. The letters (grade10)
