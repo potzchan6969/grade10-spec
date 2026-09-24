@@ -197,16 +197,19 @@ The house style — titles, step and result shape, pre-condition and placeholder
 | | |
 | --- | --- |
 | Branch | `tcs-review/<level>-<target>`, off `main`, before the first verdict; a second reviewer on the same suite appends `-US<n>-<m>` |
-| Commits | `test(<domain>): approve <target> US<n> test cases`, one per journey |
+| Commits | preparation first, each its own commit and pushed before the first journey: `test(<domain>): regenerate <target> test cases under tcs-rules r<n>` or `test(<domain>): restyle <target> test cases`, then `test(<domain>): fill in how to run <target> test cases`, then `test(<domain>): add test data to <target> test cases`; then `test(<domain>): approve <target> US<n> test cases`, one per journey; last, `docs(governance): conventions from the <target> review` |
 | PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys the branch carries |
 | PR label | `documentation` |
 | Merges | at journey boundaries; a stopped review still opens a draft PR for what has verdicts |
 
 - **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
-- **Questions are answered from the spec** — quoting the clause, never from an assumption about the product
-- **Restyle first** — drafts to the conventions before review (a draft below the rules revision is regenerated instead); offered for an `actual` case still `manual`; an `automated` case left as it is
-- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list with pending counts and ask
+- **Questions are answered from the spec** — quoting the clause, never from an assumption about the product. A "how do I run this" is a case failing **Executable without asking**: the answer is offered as an edit to its steps
+- **Prepare first** — before the first journey, in order: a draft below the rules revision is regenerated, otherwise restyled to the conventions; the mechanism is filled in until every draft is **Executable without asking**; test data is proposed. An `actual` case still `manual` is touched only on the reviewer's yes; an `automated` case is left as it is. The reviewer gets one summary of what preparation changed, and each changed case carries its note again when its journey is walked
+- **A flow that disagrees is classified, not fixed** — where the spec's flow, `ui-design.md` or the PRD disagrees with a case, the PRD, the Feature set, `decisions.md`, `## Reconciliation` and `## Settled` are read first: already settled → follow it; the case misread → a proposed change; the spec wrong or silent → a gap for its author; undecidable → both sides shown to the reviewer
+- **Journeys are the author's** — a doubt about a journey itself (two with one purpose, one too wide, a wrong actor) is a finding for the spec's author, landed on the PRD as a ❓ or in the next change's `decisions.md`; a review never edits `user-journeys.md`
+- **Teach at the end** — every edit the reviewer made is offered back as a candidate line for [`tcs-conventions.md`](tcs-conventions.md), one at a time; confirmed lines land in their scope, refused ones under `## Refused`
+- **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list `reopened` first, then `in-review`, then `pending-review`, with pending counts, and ask
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
 - **Push at the end of a session** — `/tcs-review` offers to commit and push what has a verdict
