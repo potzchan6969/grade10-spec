@@ -43,8 +43,8 @@ import {
 import { parseArgs } from "./lib/args.mjs";
 import { citesId } from "./lib/cites.mjs";
 import {
-  CASE_STATUSES,
   activeChangeSpecRoots,
+  CASE_STATUSES,
   caseIndex,
   changeOf,
   commaList,
@@ -221,10 +221,14 @@ function checkSuite(root, filePath, rulesRev) {
 
   if (!spec) {
     const missingScope = {
-      feature: "no spec.md beside this suite — a feature suite reads one capability",
-      domain: "no capability with a spec.md under this domain — a domain suite reads its capabilities",
-      product: "no capability with a spec.md under this product — a product suite reads its domains",
-      platform: "no capability with a spec.md under this platform — a platform suite reads its products",
+      feature:
+        "no spec.md beside this suite — a feature suite reads one capability",
+      domain:
+        "no capability with a spec.md under this domain — a domain suite reads its capabilities",
+      product:
+        "no capability with a spec.md under this product — a product suite reads its domains",
+      platform:
+        "no capability with a spec.md under this platform — a platform suite reads its products",
     }[level];
     err(1, missingScope);
   }
@@ -622,13 +626,21 @@ const inScope = (d) =>
  *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
-const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(existsSync);
+const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(
+  existsSync,
+);
 const directories = (dir) =>
   existsSync(dir)
-    ? readdirSync(dir, { withFileTypes: true }).filter((entry) => entry.isDirectory())
+    ? readdirSync(dir, { withFileTypes: true }).filter((entry) =>
+        entry.isDirectory(),
+      )
     : [];
 const PRODUCTS = [
-  ...new Set(specScopes.flatMap((scope) => directories(scope).map((entry) => entry.name))),
+  ...new Set(
+    specScopes.flatMap((scope) =>
+      directories(scope).map((entry) => entry.name),
+    ),
+  ),
 ];
 const DOMAINS = [
   ...new Set(
