@@ -6,9 +6,9 @@ description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md,
 # Reviewing Test Cases With QA
 
 Follow `docs/governance/specs-to-test-cases.md` — **The Review Lane** is this
-skill's rule book; **Step 5**, **The File Header** and **What the approved
-suites teach the next one** hold the properties, the statuses, and why review
-comes first; a bold name below is a heading there.
+skill's rule book; **Step 5**, **The File Header** and **How a Case Reads** hold the
+properties, the statuses, and the house style
+(`docs/governance/tcs-conventions.md`); a bold name below is a heading there.
 
 Invoke as `/tcs-review [<capability-or-change>]`. Generating or updating a suite is `/spec-to-tcs` (`.cursor/skills/spec-to-tcs/SKILL.md`).
 The reviewer decides, never this skill: present the case beside the spec, answer

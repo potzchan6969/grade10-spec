@@ -135,7 +135,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 | `admin` | anyone inside it — the people who run the shop |
 
 - **Every role is a class holding a state or a grant** — collector, bidder, shop staff, treasurer: the state is a pre-condition, not the actor
-- **Class, qualifier, place** — `customer(gold member) is on the shopping cart page.`, `admin(holds auction:operate) is on <grade10 auction admin listings url>.` The qualifier carries what the rule under test needs and nothing more; a bare `customer` is right where state does not matter; two of a class are `customer A` and `customer B`
+- **A qualifier carries what the rule needs** — the class, then the state or grant in brackets; its wording is **How a Case Reads**
 - **A product serves both classes** — `openspec/config.yaml` places a capability by who is held to it, not whose screen shows it
 - **Any other actor is not a journey** — engineers, QA, reviewers and consuming applications are not end users: software this store ships is the system's side of a journey, and the people who build the product walk a test. An outside agent that acts on its own is a role — a crawler, a preview fetcher, a provider calling back — and its cases still name the class whose surface the rule is checked on. A capability nobody reaches writes `**Walked by:** nobody on their own — <who inherits it>`; `pnpm run tcs:validate` fails a journey whose actor resolves to none of the three
 - **The team walks the delivery line** — a capability under `shared/planning/` is the store's own rails, and its users are the hands of a change: a product manager, a designer, a tech PIC, QA, an engineer, a release hand. There, and only there, a teammate is an `admin`, and a case names the role as the qualifier: `admin(product manager) is on <change page url>.`
@@ -180,14 +180,15 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 - **Regeneration guard** — refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does
 - **A delta that moves the ground under an `actual` case** — resolved in the same change, before the suite lands: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
 
-## What the approved suites teach the next one
+## How a Case Reads
 
-- **The corpus** — every `actual` case under `openspec/specs/` and `openspec/changes/`, never `archive/`, weighted capability first, then product, then store
-- **A convention** — a pattern across three or more approved cases, or two in the capability at hand; below that the defaults here stand, and a corpus under three cases teaches nothing, which the run says
-- **Only the current major teaches** — `**Reviewed:**` records the revision; the corpus is filtered on `tcs_rules_rev`'s major, so a minor behind still teaches. A bare-dated file teaches nothing until reviewed again
-- **It refines how, never what** — it cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting approved case is reported and the written rule followed. A convention becomes permanent only by amending this document
-- **Drafts follow it** — every `draft` in the resolved suite is re-worded to the convention, id kept, `<v>` unchanged, status `draft`; coverage never moves. `actual` and `deprecated` cases are never restyled
-- **The reviewer's lever** — edit a case during `/tcs-review`, approve it, and it is evidence from then on
+The house style — titles, step and result shape, pre-condition and placeholder wording, classification starting shapes, setup recipes — is [`tcs-conventions.md`](tcs-conventions.md), not this document. This document is the contract; that file is how a case reads on top of it, and it moves without a rules revision.
+
+- **Generation writes to it** — `/spec-to-tcs` reads the conventions before it writes, the narrowest scope first; a draft is born in the current style
+- **Review restyles to it** — `/tcs-review` brings every `draft` to the conventions before the first journey: id kept, `<v>` unchanged, status `draft`, coverage untouched. `actual` and `deprecated` cases are never restyled; a manual `actual` case only on the reviewer's yes
+- **Review adds to it** — when a review ends, every edit the reviewer made is offered back as a candidate line; each is confirmed, reworded or refused, and lands in that file's scope or its `## Refused`. Nothing lands unasked
+- **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting line is reported and this document followed
+- **A convention that must hold everywhere is a contract** — it moves here with a rules revision
 
 ## The Review Lane
 
@@ -204,7 +205,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 - **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
 - **Questions are answered from the spec** — quoting the clause, never from an assumption about the product
-- **Restyle first** — drafts to the current revision before review; offered for an `actual` case still `manual`; an `automated` case left as it is
+- **Restyle first** — drafts to the conventions before review (a draft below the rules revision is regenerated instead); offered for an `actual` case still `manual`; an `automated` case left as it is
 - **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list with pending counts and ask
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
@@ -261,7 +262,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 | Component | Rule |
 | --- | --- |
 | Id | `<capability>-US<n>-TC<m>-<v>` |
-| Title | five to twelve words, sentence case, naming the behaviour or condition: `Core navigation is accessible before scripts run`. Not opened with the actor unless the actor is the point; never the journey title; never a trailing `(Negative)` |
+| Title | a clean descriptive title naming the behaviour or condition; its wording is **How a Case Reads** |
 | Classification | `**Classification:**`, a blank line, then the ten properties as `*` bullets in Step 5 order, directly under the title |
 | Pre-conditions | `**Pre-conditions:**`, the condition on the line below: one sentence, or short bullets when several are independent; `None.` when nothing is needed |
 | Test data | `**Test data:**`, a `Field \| Value` table; omitted whole when the case takes no input — no empty table, no `None` |
@@ -270,53 +271,30 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 
 - **That order, a blank line between parts** — no description field
 - **Positive first** — then refusals, empty and failure paths; a journey whose accepting scenarios include refusals but whose cases are all positive is unfinished. `destructive` only where the scenarios state cancel, remove, withdraw or unwind
-- **A case is a run, not a transcribed scenario** — one to four steps, one to three results; a one-step case restating a WHEN left out the arrival and the observation
 - **Scenarios sharing a condition share a case** — unrelated behaviours stay apart; a distinct route to the same behaviour, where the spec states its outcome, is its own case with its own pre-condition
 - **Clauses land** — GIVEN → pre-conditions or a test-data row; WHEN → a numbered step, after the steps that reach it; AND after WHEN → the next step; THEN and its ANDs → expected results, in the spec's substance
-- **One action per step** — "sign in, open settings, change the password" is three; a continuous flow with one outcome stays one case
 - **Every case stands alone** — never leans on another case having run, never cites another case or scenario for its setup; repeating a setup is cheaper than a suite that passes only in order
 - **Mechanism is yours, coverage is the spec's** — how the tester reaches the condition, where they look and what they click is invented freely; what must then be true is only what the traced scenarios state. A failure mode the spec says nothing about is a gap, reported, not a case
-- **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
-- **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
+- **No invented label** — a control's text appears in a case only where the spec, its `ui-design.md` or the PRD gives it
 
 ### Pre-conditions
 
-The concrete setup that produces the scenario's GIVEN, in the environment's terms, one condition per bullet: a manipulated condition (`Network conditions are manipulated to block static styling assets (CSS)`), a stubbed upstream (`The catalogue endpoint is mocked to return a 500`), seeded data (`At least one collection is missing its artwork`), or where the actor already is.
+The concrete setup that produces the scenario's GIVEN, in the environment's terms: a manipulated condition, a stubbed upstream, seeded data, or where the actor already is. How it is worded is **How a Case Reads**.
 
-- **State, not actions** — `The admin is on <admin listings url>` is state; `Open the media manager` is a step
-- **Specific** — `A user is signed in with <card> saved and is on <listing_4>`, qualified by what the rule needs
-- **Domain words, not plumbing** — never an endpoint name, a table or a provider's product
 - **Independent** — never an outcome another case produces
-- **Reusable** — the same condition in the same words everywhere it appears
-- **Never that the feature exists** — only what state it is in
 - **`## Background`** — optional, before the first journey, holding only the conditions and data every case shares
-
-### Steps and Expected Results
-
-- **Arrive once** — the first step (`Navigate to <grade10 store url>`) or a pre-condition placing the actor; one or the other, never neither
-- **Then look, then act** — `Scroll to the collections section`, `Click the incomplete collection tile`, `Wait for the catalogue request to fail`
-- **Results are checkable by looking** — the thing that worked and, where the spec states it, what survived beside it (`Both buttons still work`); none is a step in disguise
-- **The UI event, not the spec's UX term** — activate → the click; navigate or render → the browser event; unscoped → `The listing URL names no collection`. Never `affordance`, `unscoped`, `narrowing`, `way on` in a case, even when the spec says them; never an invented label (`"Shop now"`) unless the spec gives it, and `e.g.` only where the spec gives the example
-- **Few words** — ten per bullet, a step a short imperative; cut `successfully`, `as expected`, `the application`, `the user is able to`; one idea per bullet. Short is not vague: `Hero is missing` is vague, `Hero collapses, page layout intact` is short and checkable
-- **Before** — step `1. The user is able to open the store front door successfully.`, result `The front door renders successfully, with the marketing hero visible immediately, and both buttons work.`
-- **After** — steps `1. Navigate to <grade10 store url>.` `2. Click the shop button in the hero.` `3. Click the auction button in the hero.`, results `Front door renders, hero visible.` `Both buttons open their destinations without JavaScript.`
 
 ### Placeholders
 
 - **For the built, deployed site** — no hedging about whether a page exists; a value the spec leaves open is an angle-bracket placeholder
-- **Self-describing, in the store's words** — `<grade10 browse listing url>`, `<a collection with no artwork>`; never `<url1>`, `<TBD>`, or a bare `<store url>` where the store runs more than one brand
 - **`<lang>`** — the locale prefix in force: nothing for the default, `/tc`, `/sc`
-- **For the value, not the thing** — where the spec names a control, name what the tester clicks
-- **Consistent within a suite** — one surface, one placeholder
 - **Anywhere in the case** — pre-conditions, steps and results alike
-- **Never wrapped, never capitalised** — rewrite the sentence instead
 
 ## Step 4: Test Data
 
 - **Every value is stated** — the tester never chooses one; a `Field | Value` table when there is more than one, and the steps refer to it
 - **Every value comes from a scenario** — the table never generates variations the spec did not state; no input, no section
 - **Runs per row** — same steps, different data: one case, a column per varying value and one for the outcome, and under the title `Runs once per row of **Test data**.` Two refusals with one set of steps is one case
-- **Readable units, the requirement's unit** — `100 mebibytes`, `30 minutes`; never a rounded megabyte that moves the bound
 - **Name the data, then use the name** — a value a run could change gets a `<placeholder>` row and is named from pre-conditions, steps and results; a derived value states its derivation: `Highest bid reads <user B maximum> plus <increment>`, not `530000`
 - **A name means one thing in the file** — `<listing_1>` the draft with an empty gallery, `<listing_6>` the live one led by user A, numbered by first appearance; the same state shares the name and repeats its row
 - **A row defines the state** — `<listing_6> | A live listing led by user A, current bid <leader price>`, so independence is checkable
@@ -334,7 +312,7 @@ Read the suite before adding a case, by agent or by hand: a duplicate is a defec
 
 ## Step 5: Classify the Case
 
-Ten properties, in this order, on every case. Starting shapes, not substitutes for reading the case: a core positive path `critical` / `high`; a degradation the journey survives `major` / `medium`; an empty state `normal` / `medium`; a presentational fallback `minor` / `low`; a case run through the interface `e2e`; worth a script and a human eye `automation, manual`.
+Ten properties, in this order, on every case. Where a value usually starts is **How a Case Reads**; it is never a substitute for reading the case.
 
 ### Values
 
@@ -381,7 +359,7 @@ Ten properties, in this order, on every case. Starting shapes, not substitutes f
 - **Severity** — a refusal that protects money or permission is `critical` even when nothing happens
 - **Priority** — the schedule, where severity is the failure: a `trivial` bug on the first screen can be `high`
 - **Status** — generation writes `draft`; only `/tcs-review`, with a human's yes, writes `actual`
-- **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`; say "at the limit" in the title
+- **Behaviour at a limit** — the accepted edge is `positive`, the refused one `negative`
 - **A broken input is `negative`** — an empty payload, a blocked asset, a `500`, a dropped connection, even when the product carries on
 - **Type is exactly one** — the kind of verification; which runs it joins is `Suites`, zero or more comma-separated, written `**Suites:** none` rather than omitted
 - **Automation status** — generation writes `manual`; engineering flips it when the test lands, with `pnpm run tcs:automated <case…> --decided-by <path>` in this store or `pnpm plan automated` from `grade10`, both editing the line in place, and the flag writing the Decided-by line in the same edit, so the flip rides the commit that landed the test; `automation` testability still `manual` is the backlog. It decides whether wording may move: a `manual` case may be re-worded in review, an `automated` case is frozen and changes only with its behaviour, as a `<v>` bump back to `draft`. `automation` testability plans QA's suite; it satisfies neither `ui-component-testing.md` nor a `tasks.md` checkbox
@@ -475,7 +453,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, learns the corpus, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; refuses to regenerate over `actual` cases or an `approved` file |
+| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; refuses to regenerate over `actual` cases or an `approved` file |
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
@@ -508,5 +486,6 @@ A manual pass is walked in a Google Sheet, one spreadsheet, one tab per run.
 ## See Also
 
 - [`prd-and-openspec.md`](prd-and-openspec.md) — why `spec.md` is the sole source of truth
+- [`tcs-conventions.md`](tcs-conventions.md) — how a case reads: the house style, setup recipes, and what reviews have taught
 - [`ui-component-testing.md`](ui-component-testing.md) — the automated coverage obligation for UI components
 - `openspec/config.yaml` — Feature set, user-journeys and id rules this derivation assumes

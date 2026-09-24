@@ -146,20 +146,15 @@ and are unchanged.
    continue from step 4. Refuse only when the feature set and the journeys
    together describe nothing checkable; that gap is the author's.
 
-4. **Learn the house style from the approved corpus.** **What the approved
-   suites teach the next one** holds which cases count, the weighting, the
-   threshold, the major-revision filter, and what the corpus may never teach.
-   Scan `openspec/specs/**/*-tcs.md` and `openspec/changes/*/specs/**/*-tcs.md`,
-   never `archive/`, for title shape, pre-condition phrasing, step
-   granularity, expected-result shape, property calibration and domain
-   vocabulary. A suite approved under an older major or with no revision is
-   named in the report as approved-but-stale and read for nothing; a corpus
-   under three cases is said to be thin and the defaults stand; an approved
-   case contradicting a written rule is reported in step 10 and the rule
-   followed. Then bring every `draft` in the resolved suite — yours and an
-   earlier run's — to the learned conventions: id kept, `<v>` unchanged,
-   status still `draft`, coverage untouched; never an `actual` or
-   `deprecated` case. List every draft you re-worded, and why, in step 10.
+4. **Read the house style.** **How a Case Reads** points at
+   `docs/governance/tcs-conventions.md`: read it whole, the narrowest scope
+   that covers the target first, and its `## Refused` so a refused pattern is
+   not written back in. Write every new case to it. Then bring every `draft`
+   in the resolved suite — yours and an earlier run's — to it: id kept, `<v>`
+   unchanged, status still `draft`, coverage untouched; never an `actual` or
+   `deprecated` case. A convention that contradicts the rulebook is reported
+   in step 10 and the rulebook followed. List every draft you re-worded, and
+   why, in step 10.
 
 5. **Take the journeys as the suite's sections.** **Step 2** in the document:
    one `## <capability>-US<n>: <title>` per `### <capability>-US-<n>` in
@@ -250,11 +245,9 @@ and are unchanged.
    every uncovered user-facing scenario gets the next unused `TC<m>`; the
    file `**Status:**` is recomputed.
 
-10. **Report.** The corpus first: how many `actual` cases you read and from
-   which capabilities, each convention with the approved ids behind it,
-   patterns rejected for want of evidence, any approved case contradicting a
-   written rule, whether the corpus was thin; then the drafts re-worded, with
-   their `<v>`. Then what you wrote: each suite path and its tree, the
+10. **Report.** The conventions first: which scopes applied, and any line
+   that contradicted the rulebook; then the drafts re-worded, with their
+   `<v>`. Then what you wrote: each suite path and its tree, the
    journeys and their case counts, the ids added, re-worded and deprecated,
    every `actual` case moved, and any `spec.md` step 3 rewrote. Separately,
    as gaps for the spec's author: a requirement whose prose states a rule no
@@ -329,8 +322,9 @@ misreading.
   review state lives in the suite's status lines
 - Never write in the tree the user did not ask for, and never under
   `openspec/changes/archive/`
-- Never learn from a `draft` or `deprecated` case, and never let the corpus
-  add coverage, soften a prohibition or overrule the spec
+- Never let a convention add coverage, soften a prohibition or overrule the
+  spec, and never add a line to `docs/governance/tcs-conventions.md` yourself;
+  lines land there only from a review, on the reviewer's word
 - Never restyle, renumber or re-word an `actual` case
 - Never read a `## Requirements` section, a durable `spec.md` beyond its Purpose
   and feature set, or anything under `openspec/changes/archive/` on a feature
