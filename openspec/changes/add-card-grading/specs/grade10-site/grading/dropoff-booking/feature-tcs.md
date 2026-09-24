@@ -893,6 +893,7 @@ Runs once per row of **Test data**.
 | `grade10-site-grading-dropoff-booking-SC-17` | Case added | `grade10-site-grading-dropoff-booking-US2-TC3-1`. It also answers the blind pass's question about the window between a visit's start and the shop closing it: Move and Cancel are offered until the start instant and not after. Landed as `Q55` |
 | `grade10-site-grading-dropoff-booking-SC-24` | Case added | `grade10-site-grading-dropoff-booking-US5-TC4-1` — the walk-in's cards listed at the desk, with grading silent about the visit |
 | `grade10-site-grading-dropoff-booking-SC-26` | Raised, answered, folded and cased | The blind pass could not tell what the page reads after a missed slot and before the diary answers. Answered still booked, folded as `grade10-site-grading-dropoff-booking-SC-26` and walked by `grade10-site-grading-dropoff-booking-US3-TC3-1`; landed as `Q54` |
+| `grade10-site-grading-dropoff-booking-SC-29` | Case added, added after the run | `grade10-site-grading-dropoff-booking-US2-TC4-1`: moving the drop-off never offers its own current slot back, since the diary already counts it taken |
 
 ### Manual
 
