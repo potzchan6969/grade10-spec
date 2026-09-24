@@ -461,7 +461,7 @@
     },
     "vaultIt": {
       "title": "Keep it with us instead?",
-      "body": "{card} can go straight into the vault from the counter: no second visit, and storage is free. A loan against it is an offer the vault makes after valuing it. The other cards come home with you. Say so at the counter: the identity check and the custody agreement take about {minutes} minutes there.",
+      "body": "{card} can go straight into the vault from the counter: no second visit, and storage is free. A loan against it is an offer the vault makes after valuing it. The other cards come home with you. Say so at the counter: the identity check and the custody agreement happen there, before you leave.",
       "howItWorks": "How the vault works"
     },
     "money": {
