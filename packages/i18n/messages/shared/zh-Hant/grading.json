@@ -547,6 +547,20 @@
         "cancelled": "清單已取消",
         "expired": "清單已過期"
       }
+    },
+    "badge": {
+      "visitToday": "今天到店",
+      "batchClosesToday": "批次今天截止",
+      "dueBack": "預計回貨",
+      "runningLate": "已延誤",
+      "upchargeToSettle": "有加收費用待付",
+      "ungradedCard": "有卡未評級",
+      "uncheckedReturn": "回貨未核對",
+      "uncollected": "已可領取 {day} 天未領",
+      "storageAccruing": "第 {day} 天起計倉存費",
+      "noticeDue": "須寄出書面通知",
+      "payoutPastWindow": "賠付已逾期",
+      "messageNotSent": "訊息未發送"
     }
   },
   "ceremony": {

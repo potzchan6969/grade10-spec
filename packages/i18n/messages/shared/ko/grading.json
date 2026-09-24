@@ -547,6 +547,20 @@
         "cancelled": "신청 취소됨",
         "expired": "신청 만료됨"
       }
+    },
+    "badge": {
+      "visitToday": "오늘 방문",
+      "batchClosesToday": "배치 오늘 마감",
+      "dueBack": "회수 예정일 도래",
+      "runningLate": "지연됨",
+      "upchargeToSettle": "추가 요금 미정산",
+      "ungradedCard": "등급 미부여 카드",
+      "uncheckedReturn": "미확인 반입",
+      "uncollected": "{day}일째 미수령",
+      "storageAccruing": "{day}일째부터 보관료 발생",
+      "noticeDue": "서면 통지 필요",
+      "payoutPastWindow": "환급 기한 초과",
+      "messageNotSent": "메시지 미발송"
     }
   },
   "ceremony": {

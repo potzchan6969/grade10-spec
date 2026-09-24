@@ -547,6 +547,20 @@
         "cancelled": "Submission cancelled",
         "expired": "Submission expired"
       }
+    },
+    "badge": {
+      "visitToday": "Visit today",
+      "batchClosesToday": "Batch closes today",
+      "dueBack": "Due back",
+      "runningLate": "Running late",
+      "upchargeToSettle": "Upcharge to settle",
+      "ungradedCard": "Ungraded card",
+      "uncheckedReturn": "Unchecked return",
+      "uncollected": "Uncollected {day} days",
+      "storageAccruing": "Storage fee from day {day}",
+      "noticeDue": "Notice due",
+      "payoutPastWindow": "Payout past its window",
+      "messageNotSent": "Message not sent"
     }
   },
   "ceremony": {
