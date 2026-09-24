@@ -233,6 +233,7 @@ selected unit's normal media.
 **Pre-conditions:**
 
 * admin(without existing Auction listing-edit authority) is on <grade10 auction listing editor url>.
+* <source Cert record> is available with no active reservation.
 * <source media> is tagged to printed Cert ID <source Cert ID> for <product>.
 * <listing> belongs to <product> and has a saved gallery.
 
@@ -465,6 +466,7 @@ changes later.
 
 **Expected Results:**
 
+* Inventory deletes the Cert record and its tagged source media as part of physical-unit removal.
 * The saved listing copy retains the same bytes and alt text as before the Inventory change.
 
 ### grade10-admin-auction-listing-US14-TC5-1: Untagging source media preserves the listing snapshot
@@ -505,7 +507,7 @@ changes later.
 
 * The saved listing copy retains the same bytes and alt text as before the Inventory change.
 
-### grade10-admin-auction-listing-US14-TC6-1: Deleting a source Cert preserves the listing snapshot
+### grade10-admin-auction-listing-US14-TC6-1: Physical Cert removal deletes the source and preserves the listing snapshot
 
 **Classification:**
 
@@ -538,7 +540,7 @@ changes later.
 
 **Steps:**
 
-1. Delete the Cert record for <source Cert ID>.
+1. Remove the physical unit for <source Cert ID> in Inventory.
 2. Open <saved listing>'s gallery as the Auction operator.
 
 **Expected Results:**
