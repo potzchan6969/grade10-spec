@@ -7,9 +7,8 @@
 **so that** a listing for that physical copy can begin with the photographs
 that document it while shared product media stays available to every copy.
 
-### grade10-admin-inventory-catalog-US-13: Operator keeps source media after a Cert record is removed
+### grade10-admin-inventory-catalog-US-13: Operator removes an available copy and its source media
 
 **As an** Inventory operator,
-**I want** the media to remain on the product when its tagged Cert record is
-removed,
-**so that** deleting a stock record does not delete a reusable uploaded asset.
+**I want** to remove an available physical unit and its Cert record together,
+**so that** the unit is withdrawn and its Cert-scoped source media cannot be reused.
