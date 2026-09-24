@@ -9,13 +9,18 @@ import {
   REFERENCE_WARNING,
   WinnerOrderHowToPayDialog,
 } from "./winner-order-how-to-pay-dialog";
+import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 
 type HowToPayDemoProps = {
   onOpenChange?: (open: boolean) => void;
+  invoiceId?: string;
 };
 
-function HowToPayDemo({ onOpenChange = fn() }: HowToPayDemoProps) {
+function HowToPayDemo({
+  onOpenChange = fn(),
+  invoiceId = WINNER_ORDER_INVOICE_ID,
+}: HowToPayDemoProps) {
   const [open, setOpen] = useState(true);
 
   return (
@@ -26,7 +31,8 @@ function HowToPayDemo({ onOpenChange = fn() }: HowToPayDemoProps) {
         </Text>
         <Text size="sm" tone="secondary">
           Standalone preview of the bank-transfer rails dialog Winner Order
-          opens from Order summary → View Bank Details.
+          opens from Order summary → View Bank Details. DialogSubtext is the
+          invoice ID; the payment-reference band is the listing code.
         </Text>
         {!open ? (
           <Button onClick={() => setOpen(true)} size="md">
@@ -37,6 +43,7 @@ function HowToPayDemo({ onOpenChange = fn() }: HowToPayDemoProps) {
 
       <WinnerOrderHowToPayDialog
         amountDue={WINNER_ORDER_BANK_DETAILS.totalAmountDue}
+        invoiceId={invoiceId}
         onOpenChange={(next) => {
           setOpen(next);
           onOpenChange(next);
@@ -57,9 +64,12 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order View Bank Details — amount due, FPS (QR + manual fields), HK Local / International rails, payment reference band, OUR note on SWIFT; panels scroll inside the dialog.",
+          "Standalone Storybook preview of Winner Order View Bank Details — invoice ID as DialogSubtext, amount due, FPS (QR + manual fields), HK Local / International rails, payment reference band (listing code), OUR note on SWIFT; panels scroll inside the dialog.",
       },
     },
+  },
+  args: {
+    invoiceId: WINNER_ORDER_INVOICE_ID,
   },
 } satisfies Meta<typeof HowToPayDemo>;
 
@@ -84,6 +94,10 @@ export const Form: Story = {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
+    expect(modal.getByText(`Invoice: ${WINNER_ORDER_INVOICE_ID}`)).toBeVisible();
+    expect(
+      modal.queryByText("Choose a transfer method and use the details below."),
+    ).not.toBeInTheDocument();
     expect(
       modal.getByText(WINNER_ORDER_BANK_DETAILS.totalAmountDue),
     ).toBeVisible();

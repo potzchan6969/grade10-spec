@@ -20,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under View Bank Details and Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under View Bank Details, Submit Payment Proof and Email Grade10; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -339,7 +339,7 @@ export const PartiallyPaid: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
-      "Auction order INV-202609-LK7P2Q-01: partial payment",
+      "Auction order IN-LK7P2Q01: partial payment",
     );
   },
 };
@@ -381,7 +381,7 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
-      "Auction order INV-202609-LK7P2Q-01: payment overdue",
+      "Auction order IN-LK7P2Q01: payment overdue",
     );
   },
 };

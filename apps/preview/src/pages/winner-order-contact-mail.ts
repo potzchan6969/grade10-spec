@@ -1,6 +1,7 @@
 export const WINNER_ORDER_SUPPORT_EMAIL = "support@grade10.com" as const;
 
-export const WINNER_ORDER_INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
+/** Collector-facing invoice ID — `IN-[payment ref][SEQ]` from define-public-auction-identifiers. */
+export const WINNER_ORDER_INVOICE_ID = "IN-LK7P2Q01" as const;
 
 export type WinnerOrderContactReason =
   | "setup_overdue"

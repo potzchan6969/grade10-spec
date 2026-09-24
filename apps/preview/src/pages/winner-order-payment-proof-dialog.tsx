@@ -42,8 +42,8 @@ export const WINNER_ORDER_BANK_DETAILS = {
   fpsId: "12345678",
   /** Preview fixture aligned to bank-transfer invoice Order Total (fee Free). */
   totalAmountDue: "HK$16,340",
-  /** Durable bank reference shape from winner-order identifiers. */
-  transferReference: "LK7P2Q01",
+  /** Payment reference — listing code, unchanged across reissues. */
+  transferReference: "LK7P2Q",
 } as const;
 
 /**

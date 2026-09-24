@@ -17,7 +17,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order setup stages (Awaiting Setup → Preparing Invoice). Dialog form coverage lives under My Auctions / Winner Order / Setup / Complete Order Setup; these stories cover the page shell and end-to-end setup flows.",
+          "Winner Order setup stages (Awaiting Setup → Preparing Invoice). Dialog form coverage lives under Complete Order Setup and Email Grade10; these stories cover the page shell and end-to-end setup flows.",
       },
     },
   },

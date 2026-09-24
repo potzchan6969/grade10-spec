@@ -1,4 +1,5 @@
 import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
+import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 
 export type WinnerOrderStatus =
   | "awaiting_address"
@@ -116,7 +117,8 @@ const LOT = {
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
 } as const;
 
-const INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
+/** Same collector-facing invoice ID as Email Grade10 / Contact Us. */
+const INVOICE_ID = WINNER_ORDER_INVOICE_ID;
 
 const ADDRESS =
   "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong" as const;
