@@ -21,8 +21,6 @@ and Retry without naming lines it does not know.
 When a product has left the channel, name it in the unavailable-items notice
 as it is removed from the cart; keep an out-of-stock line visible for the
 collector to remove.
-🚧 **Checkout from the cart** — the drawer keeps the cart and names any changed
-line, failed check or shop refusal. Only a confirmed cart leaves for Shopify.
 
 :::detail{title="Product decisions" for="pm"}
 A collector should learn about a moved cart line while they can still fix it,
@@ -35,9 +33,9 @@ intent and the shop's current answer as evidence.
 | Collector checking out | The cart looked valid earlier | Gets a new decision based on the shop's current answer. |
 | Collector facing a refusal | The read or shop cannot complete the handoff | Keeps the cart and learns which line or check blocked it. |
 
-**Not in scope.** The Cart Drawer's layout. Browse refresh cadence. Backend
-checkout creation and Shopify's hosted-checkout lifecycle. Overriding the
-shop's inventory policy.
+**Not in scope.** The Cart Drawer's layout. Browse refresh cadence. Checkout
+creation and hosted-checkout lifecycle. Overriding the shop's inventory
+policy.
 
 **Measurement.**
 

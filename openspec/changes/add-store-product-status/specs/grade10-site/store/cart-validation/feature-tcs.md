@@ -411,8 +411,8 @@ stock.
 
 * Step 1 creates no checkout order; no order appears in <the store's order
   list>.
-* Step 2 keeps the drawer open with that one line identified as out of stock
-  and the other two untouched.
+* Step 2 shows the cart with that one line identified as out of stock and the
+  other two untouched.
 * Step 4 creates the checkout order from the two remaining lines and the
   browser goes to <the shop's checkout url>.
 
@@ -641,18 +641,18 @@ the next request.
 **Steps:**
 
 1. Click the checkout button in the cart.
-2. In the drawer, check the message, both lines, the total and Retry.
-3. Use Retry to offer the cart for checkout again.
-4. Check the current line answers and the handoff to Shopify.
+2. On the pre-checkout page, check the message, both lines, the total and Pay.
+3. Use Retry and wait for the checkout-time read to return.
+4. Check the current line answers and Pay.
 
 **Expected Results:**
 
 * No checkout order is created.
 * The persistent message names both lines as unchecked and offers Retry.
 * Neither recorded availability nor price is shown as current; the total is
-  unchecked, and the drawer does not leave for Shopify on the failed request.
-* After Retry, the store reads the lines again and creates an order only when
-  they are confirmed; the browser then leaves for Shopify.
+  unchecked, and Pay remains unavailable until the later read returns.
+* After Retry, the current availability and prices are shown and Pay becomes
+  available when every line is confirmed.
 
 ## Reconciliation
 

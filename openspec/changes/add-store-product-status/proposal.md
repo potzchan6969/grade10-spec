@@ -77,9 +77,9 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   after a passing read is reported with the line named, a cart the shop would
   fill short is refused rather than sold short, and a read that cannot complete
   blocks checkout rather than guessing.
-- **Checkout stays in the drawer.** The drawer sends the accepted cart and
-  tender choice, keeps changed lines and refusals available to resolve, and
-  leaves Grade10 only when Shopify can take the confirmed order.
+- **An initial cart read can fail before any lines are known.** The drawer
+  presents an unchecked cart with Retry, no current total and no checkout
+  action; it does not invent line names.
 
 No component contract changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
@@ -97,9 +97,8 @@ states what the store puts into them.
 - **Low stock as a cue to buy.** Browse surfaces state availability and nothing
   about quantity. The cart's `adjusted` warning explains a quantity the store
   already changed; it is not a scarcity badge.
-- **Backend order creation and the hosted checkout lifecycle.** The existing
-  checkout request and Shopify handoff remain; this change does not define a
-  reservation window.
+- **Checkout order creation and the hosted checkout lifecycle.** This change
+  stops at the handoff and does not define a reservation window.
 - **Multi-location inventory.** Available quantity is read as one number.
 - **How money is formatted.** Already `money-amounts`; this change only requires
   that a price read be minor units plus an ISO 4217 code.
@@ -134,21 +133,13 @@ states what the store puts into them.
 No backend, database, or shared UI contract change is required. The typed
 Store product read already supplies each variant's availability, price and
 optional quantity, and the live cart review already returns the current
-answers used by the drawer. The frontend maps the product page's
+answers used by the drawer and checkout. The frontend maps the product page's
 one sellable item's internal variant availability to the existing purchase
 states and stops exposing browse-time quantity information. The Shopify sale
 identifier remains internal to the cart add. On a failed cart review it
-marks known affected lines unchecked, replaces their last availability and
-prices and the cart total with unchecked states, names them in a retryable
-notice, and withholds checkout. A failed initial cart load shows a drawer-level
-unchecked state instead. The drawer starts checkout with the accepted quote,
-handles checkout-time changes and refusals, and redirects only a confirmed
-order to Shopify. The Grade10 checkout page and its internal links retire;
-an old `/checkout` address opens the Store with the drawer instead.
-
-The active `add-store-cart-drawer-ui` delta still states that the drawer opens
-`/checkout`. Its handoff contract must be superseded before that change is
-archived; this change does not duplicate its active requirement.
+marks affected lines unchecked, replaces their last availability and prices
+and the cart total with unchecked states, names them in a retryable notice, and
+withholds checkout.
 
 The change directory is named `add-store-product-status` and carries four
 capabilities; the name is left alone so the open pull request keeps its

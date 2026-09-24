@@ -24,14 +24,11 @@ the cart host currently gives only a generic review-failure toast.
   product-page requirements.
 - Keep a failed cart read visibly unchecked without presenting its recorded
   price as current.
-- Initiate checkout and handle its outcome in the Cart Drawer, then redirect
-  to Shopify only after the store confirms the order.
 
 **Non-Goals:**
 
 - Changing the Store API, backend, database, or shared UI component contracts.
-- Changing backend checkout pricing, order creation or Shopify's hosted
-  checkout lifecycle.
+- Changing the cart review or checkout read and correction lifecycle.
 
 ## Decisions
 
@@ -46,12 +43,9 @@ outcomes. This design maps those existing answers into the Grade10 storefront.
 | Requested quantity | Do not pass `quantityAvailable` to the listing or product purchase controls. The request remains in the client cart, whose existing review re-reads each line and explains a short fill. | Use the browse response as a quantity ceiling or add another availability endpoint. |
 | Copy | Reuse the existing availability and sold-out messages. Add no variant-choice label. | Expose the internal Shopify sale identity as a shopper-facing label. |
 | Storybook reference | Update the standalone product-detail composition and its page/component stories to show the one sellable item's price and availability, preserve its internal cart identity, and omit stock-derived cues and quantity limits. | Leave the visual reference asserting behavior the application is removing. |
-| Failed cart review | In the cart host, replace each known affected line's last availability and price and the total with localized unchecked copy, and name the lines in a persistent retryable notice. When the initial cart read fails before lines are known, show a drawer-level unchecked notice and Retry without inventing line names. Keep checkout unavailable. | Present any recorded availability, price or total as current, or add an `unreviewed` status to the shared `CartDrawer` contract. |
+| Failed cart review | In the cart host, replace each affected line's last availability and price and the total with localized unchecked copy, and name the lines in a persistent retryable toast. If the initial cart read fails before any lines are known, show a drawer-level unchecked message and Retry without inventing line names. On the pre-checkout page, use the existing inline review notice and Retry action, mark affected lines unchecked, and keep Pay unavailable. | Present any recorded availability, price or total as current, or add an `unreviewed` status to the shared `CartDrawer` contract. |
 | Withdrawn product notice | Keep the existing auto-removal behavior; include removed line names in the localized unavailable-items toast. Out-of-stock lines remain visible for manual removal. | Conflate a withdrawn product with a variant the shop still lists but cannot fill. |
-| Checkout action | Use the drawer's accepted quote and existing checkout request when its action is pressed. Preserve member-only session and quote-readiness gates, keep the drawer open while the request is pending, prevent duplicate submission, and redirect to Shopify on success. Remove `CheckoutPage`, replace product and membership entry points with drawer opening, and let an old `/checkout` URL open the Store with its drawer without submitting an order. | Navigate to a Grade10 pre-checkout page or create an order from the open-time review alone. |
-| Checkout contradiction or shop refusal | Preserve named lines and short-fill amounts through `CheckoutResolution`, keep the drawer open, and show the outcome there. Refresh the cart review and quote after a contradiction; keep the accepted code and points choice unless the store refuses it. | Depend on a later review alone to reconstruct which line the shop refused. |
-| Checkout-time read failure | Keep the drawer open with known lines and total unchecked. Retry issues a new checkout request; the backend's fresh read still decides whether an order is created. | Treat Retry as a page-only preflight read or reuse a stale open-time answer. |
-| Remaining checkout outcomes | Move the existing `settling`, `verify`, `retry` and `support` treatments, points-spent confirmation and replaced-coupon notice from `CheckoutPage` into the drawer host. Keep the account-verification link and accepted tender choice behavior. | Delete the route while leaving a checkout result with no visible treatment. |
+| Shop refusal | Preserve the named lines in `CheckoutOutcome.contradicted` through `CheckoutResolution` and show their status and any short-fill amount on the pre-checkout page. | Depend on a later review alone to reconstruct which line the shop refused. |
 | Data and API | Reuse the existing `ProductVariant` fields and cart-review path; add no endpoint or persistence. | Duplicate availability state in the storefront or persist a browse-time count. |
 
 ## Risks / Trade-offs
@@ -68,9 +62,6 @@ outcomes. This design maps those existing answers into the Grade10 storefront.
 - [A failed read may retain its prior query data] → gate displayed line
   availability, prices and totals on the current `CartReviewState`, not on
   cached presence alone.
-- [An active Cart Drawer change still specifies `/checkout`] → supersede its
-  handoff requirement before that change is archived. Do not leave two active
-  route contracts as if both can ship.
 
 ## Open Questions
 

@@ -17,7 +17,7 @@ back to that page.
 | Points | **After the code**, at **$1** a point, on qualifying goods only; an ask past the ceiling is trimmed to it — [Paying with Points](/p/grade10-site/loyalty/paying-with-points) |
 | Estimated total | **Goods − code − points** — before shipping, tax and the shop's own sale, which the invoice prices |
 | Held codes | The member's own store codes and reward coupons, the ones that fit first, the soonest to expire first; every store code is minted to a member, so the list is complete |
-| Sent to checkout | The code and the points, held with the cart; the drawer shows the quoted figures and sends the accepted choice with the lines; a paid order clears them |
+| Carried to checkout | The code and the points, held with the cart; `/checkout` shows the same figures and Pay sends them; a paid order clears them |
 
 ## Reviewing the Cart
 
@@ -48,7 +48,7 @@ read against the cart as it stands and held nowhere.
 - 🚧 **Removed** — Remove puts the code back; a cart edit that makes it
   stop fitting takes it off with a notice
 - 🚧 **Wallet not answered** — the codes the store minted are still listed
-  and a typed code still applies; the drawer says the programme's rewards
+  and a typed code still applies; `/checkout` says the programme's rewards
   could not be read
 - 🚧 **Gift** — a code that gives an item adds it as a line at no charge;
   taking that line out puts the code back
@@ -73,15 +73,11 @@ The refusals are the coupon's own —
 
 ## Checkout
 
-- 🚧 **Sent** — Checkout in the drawer sends the accepted code and points
-  with the lines; the store reads them again before creating an order —
+- 🚧 **Carried** — Checkout opens `/checkout` with the same code and
+  points; that page reads the cart again and shows the same figures
+- 🚧 **Sent** — Pay sends the code and the points, and the order is
+  promised with them —
   [Shopify Integration](/p/grade10-site/loyalty/shopify-integration#online-checkout)
-- 🚧 **Blocked** — a changed line, failed read or shop refusal stays in the
-  drawer with its cause named; only a confirmed cart leaves for Shopify
-- 🚧 **Other answers** — identity verification, an order still settling and a
-  failure that needs retry or support are explained in the drawer
-- 🚧 **Old checkout links** — an old Grade10 checkout address opens the Store
-  with its drawer; visiting it does not place an order
 
 ::image{src="assets/diagrams/store-cart-quote.svg" alt="How the drawer and the store arrive at the cart's total"}
 
@@ -122,7 +118,7 @@ second code on one cart.
 
 | Signal | Definition | Owner |
 | --- | --- | --- |
-| Drawer-to-Shopify sessions | Share of drawer opens that reach Shopify checkout. | Product |
+| Drawer-to-checkout sessions | Share of sessions that open Cart and proceed to checkout without first navigating there. | Product |
 | Failed open reviews | Share of drawer opens whose current-cart read cannot complete. | Engineering |
 | Refused tender | Share of quotes whose code or points were refused, by reason. | Engineering |
 
@@ -131,16 +127,16 @@ second code on one cart.
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Overlay, not page | Decided | Cart stays attached to the browsing moment; a new route would make the collector leave before the drawer solves anything. | Product |
-| Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
+| Global cart | Decided | Once Store answers the cart drawer, Cart stays in the header on every surface (including Auction), not only Store and checkout — so checkout stays one tap away. Absent only on auction-first while that drawer does not answer. Page-shell owns the control; this page owns the drawer. | Product |
 | Current read first | Decided | The drawer waits for Cart Validation rather than dressing held values as current. | Product |
 | One session scope | Decided | The cart is the signed-in member's. A signed-out session holds no lines; there is no guest checkout and no guest cart to merge. | Product |
-| One quote | Decided | The drawer reads one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
-| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the accepted choice is sent from the drawer with the lines. | Product |
+| One quote | Decided | The drawer and `/checkout` read one store quote — the lines, the one code or reward, points after it — on the same arithmetic the checkout then writes, so no total is shown that the order records differently. | Product |
+| Tender in the drawer | Decided | A signed-in member applies a code and points in the drawer and the total moves; the choice is held with the cart and carried to `/checkout`. | Product |
 | Held list | Decided | The member's own store codes and reward coupons, answered before they are picked. | Product |
 | Another member's code | Decided | Answered as a code nobody minted, so a typed code tells nobody whose wallet it is in. | Product |
 | Points after the code | Decided | Points pay what the code leaves, so the ceiling moves with the code — [Paying with Points](/p/grade10-site/loyalty/paying-with-points). | Product |
 | Shipping and sale | Decided | Unknown until the invoice; the estimated total is the goods after this store's own tender. | Product |
-| Checkout from the drawer | Decided | The drawer initiates checkout and handles changed lines, failed reads and shop refusals. A confirmed order with a hosted URL sends the collector to Shopify. | Product |
+| Existing checkout surface | Decided | The drawer opens `/checkout`; that surface keeps ownership of its live read and checkout creation. | Engineering |
 | Public codes | Decided | The store mints every code to one member. A public code is a Shopify discount, created in the shop's admin and promoted elsewhere; the cart neither lists nor takes one. | Product |
 | The choice on a second visit | Decided | The cart holds which code and how many points the member means to use, so a choice survives a reload and reaches another device. The cart holds the choice, never the figures: those stay the store's, read against the cart as it stands. | Product |
 :::

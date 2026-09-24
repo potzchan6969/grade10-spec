@@ -29,13 +29,12 @@ cart is offered for checkout, where the shop becomes the authority.
   - Never grown: a line keeps the quantity the collector asked for when more
     becomes available
 - Handoff
-  - Nothing contradicted goes: a cart with any moved line remains in the
-    drawer with every such line named
+  - Nothing contradicted goes: a cart with any moved line is returned to the
+    collector with every such line named
   - Proceed after resolving: a cart of confirmed lines goes without being
     rebuilt
   - Shop's last word: a refusal from the shop after a passing read is reported
-    in the drawer with the line named, and a read that cannot complete blocks
-    the handoff
+    with the line named, and a read that cannot complete blocks the handoff
 
 ## ADDED Requirements
 
@@ -63,9 +62,10 @@ defines it. Price SHALL be read as an integer count of minor units and an ISO
 lines it is checking as confirmed, and SHALL NOT let the cart be offered for
 checkout on the strength of the previous read. If a read fails, the store
 SHALL mark each affected line unchecked and SHALL NOT present its recorded
-availability, price, or the cart total as current. If the initial cart read
-fails before any lines are known, the drawer SHALL show a cart-level unchecked
-state with Retry and SHALL NOT present a total or allow checkout.
+availability, price, or the cart total as current.
+If the initial cart read fails before any lines are known, the drawer SHALL
+show a cart-level unchecked state with Retry and SHALL NOT present a total or
+allow checkout.
 
 #### Scenario: grade10-site-store-cart-validation-SC-01 - The cart is opened
 **Serves:** grade10-site-store-cart-validation-US-01 - Collector opens the cart and learns what moved
@@ -249,7 +249,7 @@ one answers both.
 
 **Nothing contradicted goes** - When that read finds any line out of stock,
 unavailable, adjusted, or repriced, the store SHALL NOT create the checkout
-order. It SHALL keep the collector in the drawer with every such line
+order. It SHALL return the collector to their cart with every such line
 identified and what happened to each of them said — every contradicted line at
 once, not the first one found.
 
@@ -262,7 +262,7 @@ cart holds only lines the read confirmed, without rebuilding it from nothing.
 - **GIVEN** a cart of three lines, one of which the read finds out of stock
 - **WHEN** the collector offers the cart for checkout
 - **THEN** no checkout order is created
-- **AND** the drawer stays open with that line identified
+- **AND** the collector is returned to the cart with that line identified
 
 #### Scenario: grade10-site-store-cart-validation-SC-16 - Every contradicted line is named at once
 **Serves:** grade10-site-store-cart-validation-US-02 - Collector offers the cart for checkout
@@ -295,7 +295,7 @@ reported, a short fill is refused, and a read that fails blocks the handoff.
 **Shop's last word** - The store's re-read SHALL be treated as the best
 available answer at the moment it was taken, not as a guarantee. A checkout
 the shop subsequently refuses SHALL be reported to the collector with the
-refused lines identified in the drawer, and SHALL NOT be presented as a fault of the
+refused lines identified, and SHALL NOT be presented as a fault of the
 collector's or hidden behind a generic failure.
 
 **Filled short** - A cart the shop would fill short — accepting fewer of a
@@ -332,5 +332,5 @@ recorded, and SHALL NOT create a checkout order.
   invented availability or price shown
 - **AND** each held line is marked unchecked; no recorded availability,
   price, or cart total is presented as current
-- **AND** Retry in the drawer offers the cart for checkout again; the drawer
-  does not leave for Shopify unless that later read confirms the lines
+- **AND** Retry is available, and Pay remains unavailable until a later read
+  confirms the lines
