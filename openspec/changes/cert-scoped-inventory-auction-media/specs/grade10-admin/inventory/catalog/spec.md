@@ -148,10 +148,10 @@ other Cert records SHALL remain unchanged.
 - **AND** the Cert record and its tagged source media are removed
 - **AND** untagged product media and media tagged to other Cert records remain unchanged
 
-#### Scenario: grade10-admin-inventory-catalog-SC-135 - A reserved Cert unit cannot be removed
+#### Scenario: grade10-admin-inventory-catalog-SC-135 - A Cert unit that fails a removal guard cannot be removed
 **Serves:** grade10-admin-inventory-catalog-US-13 - Operator removes an available copy and its source media
 
-- **GIVEN** a Cert record has an active reservation
+- **GIVEN** a Cert record is not available or has an active reservation
 - **WHEN** an authorized Inventory operator attempts to remove the physical unit
 - **THEN** Grade10 refuses the removal
 - **AND** the reservation, stock, withdrawn count, Cert record, and tagged source media remain unchanged
