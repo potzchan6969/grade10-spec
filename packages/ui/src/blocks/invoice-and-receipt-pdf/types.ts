@@ -109,6 +109,7 @@ type ReceiptPdfProps = {
   paymentMethod: ReactNode;
   /** Gates a component-owned visual treatment, not presence-gated like the reserved slots — `false` and "not supplied" both mean no mark. */
   manuallySettled?: boolean;
+  issuer: ReactNode;
   billTo: PartyAddress;
   shipTo: PartyAddress;
   orderValue: OrderValueLines;

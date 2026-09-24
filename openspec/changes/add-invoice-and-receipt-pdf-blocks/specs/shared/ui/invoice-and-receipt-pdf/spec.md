@@ -11,13 +11,15 @@ already requires without maintaining its own copy.
 
 - InvoicePdf export
   - Meta rows: invoice ID, payment method, sent at, payment deadline
-  - Issuer and party blocks: the issuer, Bill To, Ship To
+  - Party blocks: Bill To, Ship To
   - Lot and order-value lines: a Description/Amount header and divider, then
     the lot, winning bid, buyer's premium, shipping & handling, insurance
     when given, subtotal, payment processing fee, order total
   - Replaced by, shown only when given
   - Bank rails: a full-width section below the order-value summary, shown
     only on a bank-transfer invoice — not a meta row
+  - Issuer block: the issuer, right-aligned at the foot of the sheet, below
+    every other section — not a meta row or a party block
 - ReceiptPdf export
   - Meta rows: receipt ID, the invoice ID it pays, payment method, the
     manually-settled mark
@@ -27,6 +29,8 @@ already requires without maintaining its own copy.
   - Payment breakdown: Original Invoice Total, Previous Payments, Current
     Payment Received, Remaining Balance Due, in that order
   - Superseded invoice, shown only when given
+  - Issuer block: the issuer, right-aligned at the foot of the sheet, below
+    every other section, matching InvoicePdf's
 - Party address fields
   - Bill To and Ship To are each a structured address: full name, company
     name when given, address line 1, address line 2 when given, city, state
@@ -53,8 +57,8 @@ how it is paid, and who it bills and ships to.
 
 **Meta rows** — InvoicePdf SHALL render the invoice ID, payment method, sent
 at, and payment deadline for every invoice. **Party blocks** — InvoicePdf
-SHALL render the issuer block, Bill To, and Ship To for every invoice, each
-rendering only its own supplied content.
+SHALL render Bill To and Ship To for every invoice, each rendering only its
+own supplied content.
 
 #### Scenario: shared-ui-invoice-and-receipt-pdf-SC-1 - An invoice's meta rows and party blocks all render
 **Serves:** InvoicePdf export - the invoice's meta rows all render
@@ -165,6 +169,34 @@ when the consumer supplies it.
 - **THEN** no company name, no address line 2, and no state field appear
 - **AND** full name, address line 1, city, postal code, country, and phone
   number still render
+
+### Requirement: InvoicePdf and ReceiptPdf render the issuer block at the foot of the sheet, right-aligned
+
+The issuer names Grade10, who sent the document — not a party the consumer
+addresses, so it reads apart from Bill To and Ship To, at the foot of the
+sheet, right-aligned, following every other section.
+
+**Given** — InvoicePdf and ReceiptPdf SHALL render the issuer block for every
+document. **Position** — The issuer block SHALL follow every other section
+and SHALL align to the right of the sheet.
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-39 - The issuer block sits at the foot of the invoice, right-aligned
+**Serves:** InvoicePdf export - the issuer block renders at the foot of the sheet, right-aligned
+
+- **GIVEN** an InvoicePdf given an issuer block and a full order-value section
+- **WHEN** it renders
+- **THEN** the issuer block shows the value given
+- **AND** it follows every other section in the document
+- **AND** it aligns to the right of the sheet
+
+#### Scenario: shared-ui-invoice-and-receipt-pdf-SC-40 - The issuer block sits at the foot of the receipt, right-aligned
+**Serves:** ReceiptPdf export - the issuer block renders at the foot of the sheet, right-aligned
+
+- **GIVEN** a ReceiptPdf given an issuer block and a full order-value section
+- **WHEN** it renders
+- **THEN** the issuer block shows the value given
+- **AND** it follows every other section in the document
+- **AND** it aligns to the right of the sheet
 
 ### Requirement: InvoicePdf renders the order-value lines in order
 

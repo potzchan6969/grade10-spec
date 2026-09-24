@@ -19,6 +19,7 @@ Needs group 1's `types.ts` (`OrderValueLines`, `OrderValueLinesCopy`) and `pdf-d
 - [x] 2.4 Retire `apps/preview`'s sketch (`winner-order.invoice-pdf.stories.tsx`, `winner-order.receipt-pdf.stories.tsx`, `winner-order-pdf.story-shared.tsx`), replacing it with pages that compose the real `InvoicePdf`/`ReceiptPdf` and sample props, dropping the sketch's hardcoded `TAX_RATE` and `formatAmount` per `tech-design.md`'s Risks
 - [x] 2.5 Verify: `pnpm --filter @grade10/ui run typecheck && pnpm --filter @grade10/ui run test:stories && pnpm run typecheck && pnpm run lint`
 - [x] 2.6 Amendment: extract `OrderValueSection` into `pdf-document.tsx` (dropping ~45 duplicated lines between the two documents), give `MetaRow` an optional `mark` slot, scope the payment breakdown behind its own `data-slot`, and share both story files' fixtures/DOM-reading helpers via `fixtures.ts` — per the build round's readers
+- [x] 2.7 Amendment: move the issuer block to the foot of the sheet, right-aligned, adding `IssuerBlock` to `pdf-document.tsx`; add the same required `issuer` prop to `ReceiptPdfProps` (`decisions.md` Q15) (`shared-ui-invoice-and-receipt-pdf-SC-39`, `SC-40`)
 
 ## 3. Wire grade10 onto the real components (grade10)
 

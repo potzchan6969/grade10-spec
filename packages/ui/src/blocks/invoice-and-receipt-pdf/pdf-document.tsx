@@ -83,6 +83,15 @@ function BankRailsSection({
   );
 }
 
+/** The issuer's own block, right-aligned at the bottom of the sheet. */
+function IssuerBlock({ children }: { children: ReactNode }) {
+  return (
+    <div className="ml-auto w-fit" data-slot="pdf-issuer">
+      {children}
+    </div>
+  );
+}
+
 function PartyBlock({
   heading,
   children,
@@ -284,6 +293,7 @@ export type { PdfDocumentSlot };
 export {
   AddressLines,
   BankRailsSection,
+  IssuerBlock,
   MetaRow,
   OrderValueSection,
   PartyBlock,

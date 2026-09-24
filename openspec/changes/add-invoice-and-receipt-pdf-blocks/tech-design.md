@@ -51,7 +51,7 @@ one-directory convention every other block already follows
 | --- | --- |
 | `invoice-pdf.tsx` | `InvoicePdf`, exported |
 | `receipt-pdf.tsx` | `ReceiptPdf`, exported |
-| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — and `BankRailsSection`, InvoicePdf's full-width bank-rails block (SC-35) — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
+| `pdf-document.tsx` | Private layout pieces both share: the sheet frame, a meta-row (with an optional trailing `mark`, the receipt's manually-settled badge), a party block, a fixed two-column value row, a summary row, `OrderValueSection` — the lot heading, the order-value lines and the subtotal/fee/total summary, identical in both documents (SC-21) and so declared once, behind `data-slot="pdf-order-value-section"` so a test can scope its row queries apart from a receipt's payment breakdown — `BankRailsSection`, InvoicePdf's full-width bank-rails block (SC-35) — and `IssuerBlock`, the right-aligned block both documents render last (SC-39, SC-40) — lifted and reshaped from `apps/preview`'s sketch (see "Reuse over rebuild" below), unexported |
 | `types.ts` | Every exported prop type: `InvoicePdfProps`, `InvoicePdfCopy`, `ReceiptPdfProps`, `ReceiptPdfCopy`, and the shared row shapes both use |
 | `fixtures.ts` | Story fixtures and DOM-reading helpers both story files share (`orderValue`, `orderValueCopy`, `billToAddress`, `shipToAddress`, `readRows`, `readBreakdownRows`, `readAddressLines`), unexported from the package |
 | `invoice-pdf.stories.tsx`, `receipt-pdf.stories.tsx` | Storybook stories with sample props — the behavior proof for `spec.md`'s scenarios (see Risks) |
@@ -130,7 +130,7 @@ type InvoicePdfProps = {
   sentAt: ReactNode;
   paymentDeadline: ReactNode;
   bankRails?: ReactNode; // SC-18, SC-35, SC-36: full-width section below the order value, not a meta row
-  issuer: ReactNode; // one opaque block — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
+  issuer: ReactNode; // SC-39: foot of the sheet, right-aligned — "Grade10" is the issuer's own content, not a copy label the way "Bill to" is
   billTo: PartyAddress;
   shipTo: PartyAddress; // SC-19: never echoes billTo
   orderValue: OrderValueLines; // SC-3: the lot is orderValue.lot, not a separate prop
@@ -166,6 +166,7 @@ type ReceiptPdfProps = {
   invoiceId: ReactNode;
   paymentMethod: ReactNode;
   manuallySettled?: boolean; // SC-9, SC-10: see below — not presence-gated like the reserved slots
+  issuer: ReactNode; // SC-40: foot of the sheet, right-aligned — same shape as InvoicePdf's, ReceiptPdf's own addition
   billTo: PartyAddress;
   shipTo: PartyAddress; // SC-29: never echoes billTo
   orderValue: OrderValueLines; // SC-21: the same shared type InvoicePdf uses
@@ -245,6 +246,18 @@ reference screenshot the author cited, which named fields
 its divider are part of `OrderValueSection` itself, so both documents get it
 for free; `descriptionLabel`/`amountLabel` head `OrderValueLinesCopy` rather
 than sitting on a per-line key, since they label the table, not a line.
+
+**The issuer block moves to the foot of the sheet, right-aligned, and
+ReceiptPdf gains the same prop (`decisions.md` Q15).** `IssuerBlock`
+(`pdf-document.tsx`) is a plain right-aligned wrapper (`ml-auto w-fit`,
+`data-slot="pdf-issuer"`) both `InvoicePdf` and `ReceiptPdf` render last,
+after every other section — `InvoicePdf`'s issuer moved out of the top-right
+row it shared with the meta-rows column, and `issuer: ReactNode` is now a
+required field on `ReceiptPdfProps` too, matching `InvoicePdfProps`'s. The
+prop stays required on both, unlike the reserved slots — every document names
+who sent it — and its type is unchanged (`ReactNode`, no presence gate);
+only where it renders moved, the same shape of change Q12 made for bank
+rails.
 
 **One order-value shape, not two.** `OrderValueLines` is a single type used
 by both `InvoicePdfProps.orderValue` and `ReceiptPdfProps.orderValue`,

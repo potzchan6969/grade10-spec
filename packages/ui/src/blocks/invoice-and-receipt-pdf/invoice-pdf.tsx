@@ -5,6 +5,7 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   AddressLines,
   BankRailsSection,
+  IssuerBlock,
   MetaRow,
   OrderValueSection,
   PartyBlock,
@@ -35,18 +36,15 @@ function InvoicePdf({
         <G10LogoMono aria-hidden className="h-6 w-auto text-foreground" />
       </HStack>
 
-      <HStack hAlign="space-between" vAlign="start">
-        <VStack className="max-w-sm" gap="xs" hAlign="stretch">
-          <MetaRow label={copy.invoiceIdLabel} value={invoiceId} />
-          <MetaRow label={copy.paymentMethodLabel} value={paymentMethod} />
-          <MetaRow label={copy.sentAtLabel} value={sentAt} />
-          <MetaRow label={copy.paymentDeadlineLabel} value={paymentDeadline} />
-          {replacedBy !== undefined ? (
-            <MetaRow label={copy.replacedByLabel} value={replacedBy} />
-          ) : null}
-        </VStack>
-        {issuer}
-      </HStack>
+      <VStack className="max-w-sm" gap="xs" hAlign="stretch">
+        <MetaRow label={copy.invoiceIdLabel} value={invoiceId} />
+        <MetaRow label={copy.paymentMethodLabel} value={paymentMethod} />
+        <MetaRow label={copy.sentAtLabel} value={sentAt} />
+        <MetaRow label={copy.paymentDeadlineLabel} value={paymentDeadline} />
+        {replacedBy !== undefined ? (
+          <MetaRow label={copy.replacedByLabel} value={replacedBy} />
+        ) : null}
+      </VStack>
 
       <div className="grid gap-6 sm:grid-cols-2">
         <PartyBlock heading={copy.billToHeading}>
@@ -64,6 +62,8 @@ function InvoicePdf({
           {bankRails}
         </BankRailsSection>
       ) : null}
+
+      <IssuerBlock>{issuer}</IssuerBlock>
     </PdfSheet>
   );
 }

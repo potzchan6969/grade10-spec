@@ -5,6 +5,7 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   AddressLines,
+  IssuerBlock,
   MetaRow,
   OrderValueSection,
   PartyBlock,
@@ -20,6 +21,7 @@ function ReceiptPdf(props: ReceiptPdfProps) {
     invoiceId,
     paymentMethod,
     manuallySettled,
+    issuer,
     billTo,
     shipTo,
     orderValue,
@@ -104,6 +106,8 @@ function ReceiptPdf(props: ReceiptPdfProps) {
           value={paymentBreakdown.remainingBalanceDue}
         />
       </VStack>
+
+      <IssuerBlock>{issuer}</IssuerBlock>
     </PdfSheet>
   );
 }

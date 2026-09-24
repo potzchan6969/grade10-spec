@@ -1,3 +1,5 @@
+import { Text } from "@grade10/design-system/components/display/text";
+import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   type PartyAddress,
   ReceiptPdf,
@@ -68,6 +70,14 @@ function ReceiptPdfPreview({
       billTo={address}
       copy={copy}
       invoiceId={manual ? "INV-202609-LK7P2Q-02" : "INV-202609-LK7P2Q-01"}
+      issuer={
+        <VStack gap="xs" hAlign="start">
+          <Text size="sm" weight="bold">
+            Grade10
+          </Text>
+          <Text size="sm">support@grade10.com</Text>
+        </VStack>
+      }
       manuallySettled={manual}
       orderValue={{
         lot: "2024 TOPPS 50/50 SHOHEI OHTANI #74 SHOHEI OHTANI SSP PSA-10",

@@ -1035,6 +1035,66 @@ Runs once per row of **Test data**.
 * A header row reads Description and Amount.
 * A divider separates the header from the first order-value line.
 
+### shared-ui-invoice-and-receipt-pdf-US1-TC34-1: The issuer block sits at the foot of the invoice, right-aligned
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** InvoicePdf export
+
+**Pre-conditions:**
+
+* `InvoicePdf` is rendered with an issuer block and a full order-value section.
+
+**Steps:**
+
+1. Render `InvoicePdf` with the pre-conditions.
+2. Inspect the issuer block's position and alignment relative to the other sections.
+
+**Expected Results:**
+
+* The issuer block shows the value given.
+* The issuer block renders after every other section in the document.
+* The issuer block aligns to the right of the sheet.
+
+### shared-ui-invoice-and-receipt-pdf-US1-TC35-1: The issuer block sits at the foot of the receipt, right-aligned
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** ReceiptPdf export
+
+**Pre-conditions:**
+
+* `ReceiptPdf` is rendered with an issuer block and a full order-value section.
+
+**Steps:**
+
+1. Render `ReceiptPdf` with the pre-conditions.
+2. Inspect the issuer block's position and alignment relative to the other sections.
+
+**Expected Results:**
+
+* The issuer block shows the value given.
+* The issuer block renders after every other section in the document.
+* The issuer block aligns to the right of the sheet.
+
 ## Reconciliation
 
 **Run:** 2026-09-23 · the blind suite (TC1–TC26) and the scenario reading
@@ -1106,3 +1166,12 @@ referencing a screenshot (`decisions.md` Q14). New requirement
 "The order-value lines carry a Description/Amount header"
 (`SC-37`/`SC-38`, `TC32`/`TC33`) — additive, no existing scenario's claim
 changed.
+
+**Amendment, post-landing:** the author asked for the issuer to move to the
+bottom right of the sheet, referencing a screenshot (`decisions.md` Q15).
+InvoicePdf's issuer moved out of the "Party blocks" SHALL line and into a new
+shared requirement, "InvoicePdf and ReceiptPdf render the issuer block at the
+foot of the sheet, right-aligned" (`SC-39`/`SC-40`, `TC34`/`TC35`); ReceiptPdf
+gained the `issuer` prop it never had, closing the same asymmetry `SC-21` and
+`SC-33`/`SC-34` closed for the order-value lines and the address fields —
+additive, no existing scenario's claim changed.

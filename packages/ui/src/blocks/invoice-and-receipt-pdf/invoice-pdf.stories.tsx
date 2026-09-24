@@ -114,6 +114,41 @@ export const BankTransfer: Story = {
   },
 };
 
+/** SC-39: the issuer block sits at the foot of the sheet, right-aligned, after every other section including bank rails. */
+export const IssuerPosition: Story = {
+  args: {
+    bankRails: "SWIFT, FPS, HK local transfer. Quote LK7P2Q01.",
+  },
+  play: async ({ canvasElement }) => {
+    const issuerBlock = canvasElement.querySelector(
+      '[data-slot="pdf-issuer"]',
+    ) as HTMLElement;
+    expect(issuerBlock).not.toBeNull();
+    expect(
+      within(issuerBlock).getByText("Grade10, support@grade10.com"),
+    ).toBeVisible();
+
+    const bankRails = canvasElement.querySelector(
+      '[data-slot="pdf-bank-rails"]',
+    ) as HTMLElement;
+    expect(
+      bankRails.compareDocumentPosition(issuerBlock) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    const orderValueSection = canvasElement.querySelector(
+      '[data-slot="pdf-order-value-section"]',
+    ) as HTMLElement;
+    expect(issuerBlock.getBoundingClientRect().right).toBeCloseTo(
+      orderValueSection.getBoundingClientRect().right,
+      0,
+    );
+    expect(issuerBlock.getBoundingClientRect().left).toBeGreaterThan(
+      orderValueSection.getBoundingClientRect().left,
+    );
+  },
+};
+
 /** SC-31: a company address renders all nine fields it is given. */
 export const BillToWithAllFields: Story = {
   play: async ({ canvasElement }) => {

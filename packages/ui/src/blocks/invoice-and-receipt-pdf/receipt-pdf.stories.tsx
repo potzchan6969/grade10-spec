@@ -63,6 +63,7 @@ const meta = {
     receiptId: "REC-202609-LK7P2Q-01-P1",
     invoiceId: "INV-202609-LK7P2Q-01",
     paymentMethod: "Visa card ending 4242",
+    issuer: "Grade10, support@grade10.com",
     billTo: billToAddress,
     shipTo: shipToAddress,
     orderValue,
@@ -90,6 +91,38 @@ export const FullyPaid: Story = {
     BREAKDOWN_LABELS.forEach((label, index) => {
       expect(breakdownRows[index]).toContain(label);
     });
+  },
+};
+
+/** SC-40: the issuer block sits at the foot of the sheet, right-aligned, after every other section including the payment breakdown. */
+export const IssuerPosition: Story = {
+  play: async ({ canvasElement }) => {
+    const issuerBlock = canvasElement.querySelector(
+      '[data-slot="pdf-issuer"]',
+    ) as HTMLElement;
+    expect(issuerBlock).not.toBeNull();
+    expect(
+      within(issuerBlock).getByText("Grade10, support@grade10.com"),
+    ).toBeVisible();
+
+    const paymentBreakdownSection = canvasElement.querySelector(
+      '[data-slot="pdf-payment-breakdown"]',
+    ) as HTMLElement;
+    expect(
+      paymentBreakdownSection.compareDocumentPosition(issuerBlock) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
+
+    const orderValueSection = canvasElement.querySelector(
+      '[data-slot="pdf-order-value-section"]',
+    ) as HTMLElement;
+    expect(issuerBlock.getBoundingClientRect().right).toBeCloseTo(
+      orderValueSection.getBoundingClientRect().right,
+      0,
+    );
+    expect(issuerBlock.getBoundingClientRect().left).toBeGreaterThan(
+      orderValueSection.getBoundingClientRect().left,
+    );
   },
 };
 
