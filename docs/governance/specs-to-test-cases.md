@@ -1,5 +1,5 @@
 ---
-tcs_rules_rev: 3
+tcs_rules_rev: 4
 ---
 
 # Specs to Test Cases
@@ -245,6 +245,8 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 - **Across journeys it may not** — a rule that implies merging, splitting or removing a journey is a finding for the spec's author, landed on the capability's PRD as a ❓ or in the next change's `decisions.md`; the sweep leaves the journeys as they are
 - **A reviewed claim does not move silently** — `pnpm run tcs:validate --capture-baseline=<file>` before and `--swept=<file>` after prove every `actual` and `deprecated` case kept its id, trace and status
 - **The sweep lands in its own commits** — separate from any review verdict, pushed before review starts, so the review's diff holds only the reviewer's decisions
+- **A bump does not sweep** — the bump is its own commit and touches no suite. A suite below it is regenerated when `/tcs-review` next prepares it, or when someone runs `/spec-to-tcs` on it from `pnpm run tcs:stale`; a bulk sweep is a separate run somebody chooses, never part of the bump
+- **What each revision changed** — r4: the revision became one integer and how a case reads moved to `tcs-conventions.md`; a sweep regenerates drafts; the `reopened` status and the lapsed `**Reviewed:**` line; **Executable without asking**, **A result may sharpen, never move**, **A value is the rule, or stands for it** and **Rows may add what the rule implies**
 
 ## Step 1: Digest the Capability
 
@@ -453,7 +455,7 @@ At most three lines under the title — `**Status:**`, `**Drafts styled:** <YYYY
 - **Fixed points** — header lines computed; journey heading and its three-line statement copied, compact id, no `**Covers:**`; `**Classification:**` directly under the title, ten `*` bullets in order, generation writing `**Status:** draft` and `**Automation status:** manual` and never `exploratory`; a per-row case carries `Runs once per row of **Test data**.` between title and block; `## Background` optional between header and first journey; `**Test data:**` the one omittable section; a blank line after every `**Label:**` and between parts; `---` between journeys; a case with no pre-conditions line or an empty Expected Results list is not finished
 - **Decided by** — ``**Decided by:** `<path>`[, `<path>`]*``, the first line after the classification block and before `**Pre-conditions:**`, one or more repository-relative paths, comma-separated. It names what decides the case: a store unit or script test, or the end-to-end walk that drives it. One rule — an automated case of an in-flight change names what decides it, in its place, once; nothing else may — which `pnpm run tcs:validate` reads as three verdicts: no line is refused, a line anywhere but there or a second line is refused, and a line on a case that is not `automated` is a warning. Every path it names resolves inside the store, to a file that exists. A durable suite under `openspec/specs/` owes no line yet; the fold carries across every line the change wrote, and `pnpm run archive:preflight` refuses one that drops or changes one
 - **No execution record** — no actual result, no pass/fail column; a run lives in the run sheet against a snapshot of the case
-- **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, the one suite approved under the current revision; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; the corpus is validator-held
+- **Copy** — `openspec/specs/grade10-site/auction/auction/feature-tcs.md`, approved under r3; its `US2-TC1-1` is a case at the right size. A case pasted here would drift; an approved case is validator-held
 - **Deltas use the same format** — under `openspec/changes/<change>/specs/<product>/<domain>/<capability>/feature-tcs.md`
 
 ## The Tools
