@@ -118,7 +118,6 @@ export const UsesFirstAvailableSaleItem: Story = {
           title: "Retired box",
           price: "HK$95.00",
           availableForSale: false,
-          quantityAvailable: 0,
           sku: "G10-M5-ABYSS-RETIRED",
         },
         {
@@ -126,7 +125,6 @@ export const UsesFirstAvailableSaleItem: Story = {
           title: "Available box",
           price: "HK$105.00",
           availableForSale: true,
-          quantityAvailable: 3,
           sku: "G10-M5-ABYSS-STD",
         },
       ],

@@ -64,8 +64,8 @@ export const Default: Story = {
 
 /**
  * Product-status SC-11: a browse count does not cap the requested quantity.
- * The fixture still carries the count until the product-detail preview drops
- * that browse-only value, so this is the red tracer for the next task.
+ * The product-detail fixture intentionally leaves the browse-only count out
+ * of the purchase item, so the request reaches cart review unbounded.
  */
 export const QuantityBeyondBrowseCount: Story = {
   render: () => <InteractivePurchasePanel product={PRODUCT_DETAIL_STORY} />,

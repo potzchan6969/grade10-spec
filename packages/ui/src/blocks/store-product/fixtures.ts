@@ -22,7 +22,6 @@ const SALE_ITEM: StoreProductSaleItem = {
   price: "HK$105.00",
   compareAtPrice: "HK$123.00",
   availableForSale: true,
-  quantityAvailable: 3,
   sku: "G10-M5-ABYSS-STD",
 };
 
@@ -71,7 +70,6 @@ const SOLD_OUT_PRODUCT_STORY = {
   saleItem: {
     ...SALE_ITEM,
     availableForSale: false,
-    quantityAvailable: 0,
   },
 };
 
