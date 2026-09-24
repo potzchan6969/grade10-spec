@@ -689,6 +689,12 @@ cost for that card now.
 **One figure** - the difference quoted here SHALL be the figure charged at the
 counter.
 
+**The reference rate** - the card price reference's PSA 10 sale is in USD and
+the ceilings are in HKD, so the warning SHALL read the sale in HKD at the
+reference rate staff set, rounded half-up to the cent, and SHALL compare that
+figure with the ceiling. A rate nobody has written SHALL refuse the read that
+needs it by name, and no rate SHALL be assumed in its place.
+
 **No warning** - a list with no card whose PSA 10 reference is above the
 ceiling SHALL carry no upcharge warning at all.
 
@@ -741,6 +747,19 @@ SHALL be kept unticked.
   level's ceiling
 - **WHEN** the review is read
 - **THEN** no upcharge warning is shown
+
+#### Scenario: grade10-site-grading-submission-plan-SC-60 - A USD sale is read in HKD at the rate staff set
+**Serves:** grade10-site-grading-submission-plan-US-07 - a collector choosing a level knowing what a high grade would cost
+
+- **GIVEN** the reference rate set at 784 HKD minor units to 1 USD
+- **AND** a card at PSA Regular whose PSA 10 reference sale is 150000 USD minor
+  units
+- **WHEN** the review is read
+- **THEN** the sale reads 1176000 HKD minor units, above Regular's ceiling of
+  1170000 HKD minor units
+- **AND** the card is named with Express as the level the grader would move it
+  to, and the difference of 60000 HKD minor units as due at the counter before
+  collection
 
 #### Scenario: grade10-site-grading-submission-plan-SC-34 - The five good-to-know lines are read before booking
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector meeting the agreement's terms before the counter

@@ -1086,16 +1086,19 @@ waits for.
 service the counter runs on SHALL be a setting the console reads: the plan's
 nudge and expiry days, the reminder days, the day the storage fee starts and
 its amount per card per month, the notice day, the settlement days, the ID
-glance threshold, the safe's declared cap, the batch cut-off, and the fee sheet
-one row per grader and level with its ceiling, fee, cover rate, estimate and
-cards a submission.
+glance threshold, the safe's declared cap, the batch cut-off, the reference
+rate that reads a USD reference sale in HKD, and the fee sheet one row per
+grader and level with its ceiling, fee, cover rate, estimate and cards a
+submission.
 
 **Unset stops the read** - a value that no owner has written SHALL refuse the
 read that needs it, by name, naming the setting; no value SHALL fall back to
 one compiled in.
 
 **Who writes one** - a settings write SHALL require `grading:approve`, and a
-money setting SHALL take a second approve holder who is not the writer.
+money setting SHALL take a second approve holder who is not the writer. The
+reference rate prices nothing a collector pays, so it is not money: one
+approve holder SHALL write it, and a rate of nought or less SHALL be refused.
 
 **Its own subject** - a settings write SHALL be filed on the audit chain under
 its own subject, `settings`, rather than under a submission.

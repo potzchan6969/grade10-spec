@@ -1623,6 +1623,15 @@ Stage (b).
       (`grade10-admin-grading-counter-SC-59`,
       `grade10-admin-grading-counter-SC-60`,
       `grade10-admin-grading-counter-SC-95`)
+- [ ] 24.14 Add the reference rate: `reference_usd_rate` a non-money key
+      stored as the HKD cents one US dollar buys and seeded at 784 by the
+      migration that renders its key into the CHECK;
+      `referenceSaleInSheetCurrency` in the contracts; and `submissions.paste`
+      answering each matched card's PSA 10 sale in HKD beside the USD one,
+      a rate nobody wrote refused by name
+      (`grade10-site-grading-submission-plan-SC-60`,
+      `grade10-admin-grading-counter-SC-69`,
+      `grade10-admin-grading-counter-SC-71`)
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10)
 
@@ -1667,7 +1676,8 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-33`,
       `grade10-site-grading-submission-plan-SC-34`,
       `grade10-site-grading-submission-plan-SC-35`,
-      `grade10-site-grading-submission-plan-SC-58`)
+      `grade10-site-grading-submission-plan-SC-58`,
+      `grade10-site-grading-submission-plan-SC-60`)
 - [ ] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
       as a header, with the fixture transport and its fixture state beside it,
@@ -1725,7 +1735,9 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-33`,
       `grade10-site-grading-submission-plan-SC-34`,
       `grade10-site-grading-submission-plan-SC-35`,
-      `grade10-site-grading-submission-plan-SC-58`)
+      `grade10-site-grading-submission-plan-SC-58`); the warning compares
+      the paste's PSA 10 sale in HKD, 24.14's, with the ceiling
+      (`grade10-site-grading-submission-plan-SC-60`)
 - [ ] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
       the paste sheet, one per distinct layout, each with `surface: site`
 - [ ] 25.9 Verify: `pnpm run test`,

@@ -1738,6 +1738,46 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 
 ---
 
+### grade10-site-grading-submission-plan-US7-TC8-1: A USD reference sale is warned about at the rate staff set
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-grading-submission-plan-US-07
+
+**Pre-conditions:**
+
+* The console's reference rate reads 7.84 HKD to 1 USD.
+* `customer(collector)` is on the Book step at PSA Regular, `<grade10 grading url>`.
+* One card, Umbreon VMAX (Alternate Art), is declared at 850000 (HKD, minor units) with a PSA 10 reference sale of 150000 (USD, minor units).
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| Reference rate | 784 (HKD, minor units) to 1 USD |
+| Regular ceiling | 1170000 (HKD, minor units) |
+| Regular fee a card | 60000 (HKD, minor units) |
+| Express fee a card | 120000 (HKD, minor units) |
+
+**Steps:**
+
+1. Read the review step's upcharge warning for Umbreon VMAX.
+
+**Expected Results:**
+
+* The PSA 10 sale reads 1176000 (HKD, minor units), 150000 (USD, minor units) at the rate from **Test data**, above Regular's ceiling.
+* Umbreon VMAX is named with Express as the level the grader would move it to.
+* The difference due at the counter reads 60000 (HKD, minor units).
+
 ## grade10-site-grading-submission-plan-US8: Collector who never books is nudged and then let go
 
 **As a** collector who planned a submission and booked no drop-off,
@@ -1893,6 +1933,7 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 | `grade10-site-grading-submission-plan-SC-29` the cover line on the estimate | **Case added:** `US5-TC9-1` | |
 | `grade10-site-grading-submission-plan-SC-36` the sheet pinned at booking | **Case added:** `US6-TC7-1` | |
 | `grade10-site-grading-submission-plan-SC-37` a sheet changed before booking | **Case added:** `US6-TC8-1` | |
+| `grade10-site-grading-submission-plan-SC-60` a USD sale read at the rate staff set | **Case added:** `US7-TC8-1` | written after the blind pass, with Q116; the reference answers in USD alone, so without the rate `US7-TC2-1` never fires |
 
 ### Manual
 

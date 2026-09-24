@@ -831,6 +831,7 @@ Stories `grading-admin-settings-settings-panel--`.
 | Fee sheet | one row per grader and level: ceiling, fee, cover rate, weeks, cards a submission | `grade10-admin-grading-counter-SC-99` |
 | Diary services | the three entries with their durations | `grade10-admin-grading-counter-SC-99` |
 | Edit a clock | `SaveableField`; saved under the settings subject | `grade10-admin-grading-counter-SC-71` |
+| Edit the reference rate | `SaveableField` taking the HKD one US dollar buys, 7.84 at the start; saved by one approve holder under the settings subject, nought refused on the field | `grade10-admin-grading-counter-SC-71` |
 | Edit a money setting | the second-person dialog with the reason | `grade10-admin-grading-counter-SC-70` |
 | Refused | the refusal by name on the field | `grade10-admin-grading-counter-SC-60` |
 | Operate grant | the table read-only; no field opens | `grade10-admin-grading-counter-SC-76` |

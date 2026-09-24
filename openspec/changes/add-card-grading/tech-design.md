@@ -356,6 +356,15 @@ this is how the paid order reaches the submission.
   pastes is visible and a level chosen on the declared value alone is
   traceable. The product id lands on
   `submission_cards.reference_product_id`; sales are re-read, never stored
+- **The sale in HKD** — the reference sells in USD and the ceilings are in
+  HKD, so `submissions.paste` reads the setting `reference_usd_rate` and
+  answers each matched card's PSA 10 sale in HKD beside the USD one,
+  `sales.grade10InSheetMinor`, through the contracts'
+  `referenceSaleInSheetCurrency`. The rate is stored as an integer, the HKD
+  cents one US dollar buys (7.84 is 784), and the product rounds half-up to
+  the cent through `applyBasisPointsHalfUp`. The answer that names the sale
+  converts it, so the browser holds no rate and the review compares one
+  figure with the ceiling; a rate nobody wrote refuses the paste by name
 - Alternatives rejected: grading caching prices — the inventory's one cache
   row per reference is the authority; splitting the sales out of the match —
   a second remote call on a step kept to one

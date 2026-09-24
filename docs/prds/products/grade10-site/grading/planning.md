@@ -35,6 +35,7 @@ Both are paid at the counter once the cards are checked.
 | Above the top ceiling | ❓ a card worth more than $39,000: ask at the counter or WhatsApp the shop first | Commercial |
 | Cover | ❓ 1.5% of the declared value a card at Express and Super Express, its own line on the estimate, the review, the till and the agreement's schedule | Commercial |
 | Turnaround | ❓ the grader's published time plus two weeks, counted from the day the batch leaves | Commercial |
+| Reference rate | 7.84 HKD to 1 USD at the start; staff move it on the console — [Settings](/p/grade10-admin/grading/console#settings) | Operations |
 | Nudge | ❓ 21 days, a plan with no drop-off booked | Operations |
 | Expiry | ❓ 30 days, a plan with no drop-off booked | Operations |
 | Fee policy | ❓ the fee's fate per outcome — [The Submission](/p/grade10-site/grading/submission#the-fee-by-outcome) | Commercial |
@@ -91,6 +92,9 @@ to book later.
   between the two levels' fees on this sheet, due at the counter before
   collection, and what the higher level would cost now; the difference quoted
   here is the one charged
+- 🚧 **The reference in HKD** — the card price reference sells in USD and the
+  ceilings are in HKD, so the warning reads a card's PSA 10 sale in HKD at the
+  reference rate staff set; the sales beside the card stay in USD
 - 🚧 **Priced at booking** — the sheet a plan is booked on is the one it is
   priced on and the agreement prints; a sheet changed later reaches only
   plans not yet booked
@@ -154,6 +158,6 @@ Express for the card now would be $1,200; Regular is $600, plus $600 only on a
 | Cards a submission | ❓ Open | 100 at Bulk from a pasted list, 20 at every other level, a column of the fee sheet; above it a second submission on another day. Revisited once dealer volume is known | Operations |
 | Fee sheet | ❓ Open | Example figures modelled on PSA's; Commercial supplies one sheet per grader and level, ceiling, fee, cover rate, estimate and cards a submission | Commercial |
 | Fee policies | ❓ Open | The fee stands on an ungraded card, a refused card is never charged, a withdrawn card is refunded at the till; told on the review step and in clause 3 | Commercial |
-| The reference's currency | ❓ Open | Which rate turns a USD sale into HKD for the ceiling warning? The reference's sales are in USD and the ceilings in HKD, so the per-card warning compares the two only where the sale is already in HKD | Operations |
+| The reference's currency | Decided | The warning turns a USD sale into HKD at a rate staff set on the console, 7.84 HKD to 1 USD at the start, rounded to the cent; a rate that moves daily is not fetched, because the warning is a caution and the fee sheet, not the sale, is what is charged. Decided by the user | Operations |
 | A grader with only example figures | Decided | Example figures are not figures supplied: CGC's and BGS's levels are listed and marked as carrying no figures, and none of them can be picked until Commercial supplies their sheets | Product |
 :::

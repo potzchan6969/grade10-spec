@@ -145,6 +145,7 @@ reaches only submissions not yet booked:
 | `grading.settlement_days` | ❓ 14, from the day the batch is received at the shop | Operations |
 | `grading.id_glance_threshold` | ❓ HKD 10,000 | Operations |
 | `grading.safe_declared_cap` | ❓ HKD 300,000 | Commercial, Legal |
+| `grading.reference_usd_rate` | 7.84 HKD to 1 USD, decided by the user; the rate the review's upcharge warning reads a USD reference sale at, written by one approve holder as it is not charged | Operations |
 | the fee sheet | ❓ one setting per grader and level: ceiling, fee, cover rate, estimate, cards a submission | Commercial |
 | the grader's stages | ❓ each grader's own; PSA's published order stages — Arrived, Order Prep, Research & ID, Grading, Assembly, QA Checks, Completed, Shipped — Completed moving the grades in; CGC's and BGS's open until their levels open | Operations |
 | the diary services | ❓ the Grading drop-off at about 20 minutes, its Bulk variant at about 45, the customer-bookable Grading visit; names, durations and horizon | Product, Engineering |
