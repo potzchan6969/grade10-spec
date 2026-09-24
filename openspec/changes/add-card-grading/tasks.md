@@ -1598,6 +1598,28 @@ Stage (b).
       them: scanned of the batch's cards, matched, ungraded, the upcharges and
       their sum, and the submissions ready once finished
       (`grade10-admin-grading-batches-SC-29`)
+- [ ] 24.11 Add the settings page's reads under `grading:read`:
+      `admin.settings`, every key with its value or unset, the owner who
+      confirms it, whether it is money, who wrote and approved it and when,
+      and its pending request; `admin.feeSheet`, each row with the figures it
+      still lacks and its owner; and `admin.diaryServices`, the diary's
+      grading services with their owner
+      (`grade10-admin-grading-counter-SC-69`,
+      `grade10-admin-grading-counter-SC-98`,
+      `grade10-admin-grading-counter-SC-99`)
+- [ ] 24.12 Add `admin.updateFeeSheet` as a request, and make
+      `admin.approveRequest` the one approval over every request — a money
+      act, a money setting, a fee-sheet row — each asked against the
+      version of the row it would write and refused by name once that row
+      has moved, so a replay or a stale request never overwrites a newer
+      confirmed value (`grade10-admin-grading-counter-SC-70`,
+      `grade10-admin-grading-counter-SC-71`,
+      `grade10-admin-grading-counter-SC-76`)
+- [ ] 24.13 Add `admin.pendingApprovals`, every request still waiting on a
+      second approve holder, which 28.7's approvals read
+      (`grade10-admin-grading-counter-SC-59`,
+      `grade10-admin-grading-counter-SC-60`,
+      `grade10-admin-grading-counter-SC-95`)
 
 ## 25. The collector's home, the wizard and the paste sheet (grade10)
 
