@@ -175,9 +175,10 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | --- | --- |
 | Update | new cases for untraced scenarios, re-worded cases for changed ones, `deprecated` for scenarios the spec lost; ids and reviewed properties survive |
 | Another target | leaves this suite untouched |
+| Regenerate the drafts | offered when `**Drafts styled:**` sits below `tcs_rules_rev`: every `draft` rewritten under the current rules, as **Rules Revisions** says; `actual` and `deprecated` cases kept; one yes |
 | Regenerate | rewrites the whole file; destroys review history; explicit confirmation, and only when the guard allows |
 
-- **Regeneration guard** — refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does
+- **Regeneration guard** — a whole-file regenerate is refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does. Regenerating the drafts is not under the guard: it leaves every reviewed case as it is
 - **A delta that moves the ground under an `actual` case** — resolved in the same change, before the suite lands: changed what the case verifies → `<v>` bumped, `**Status:** draft`, rewritten, reviewed again; removed the behaviour → `**Status:** deprecated`; did not touch what the case asserts → left `actual`, and the run says so. Marking is never deferred: the case goes back to `draft` at once, and only the review waits
 
 ## How a Case Reads
@@ -234,7 +235,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 | Case | The sweep does |
 | --- | --- |
 | `draft` below the revision | regenerated, whole file, after one yes for the set: top down — platform, product, domain, then feature — and line 1 to the end within a file; never merely restyled |
-| `actual`, `manual` | restyled to the new rule — ids, `<v>`, status and claim unchanged |
+| `actual`, `manual` | restyled to the new rule at its next review, on the reviewer's yes — ids, `<v>`, status and claim unchanged |
 | `actual`, `automated` | left as it is; a rule it breaks is a behaviour change, `<v>` bumped back to `draft`, or nothing |
 | `deprecated` | never touched |
 
@@ -461,7 +462,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; refuses to regenerate over `actual` cases or an `approved` file |
+| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates and a case needing a mocked state that plans no automation; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |

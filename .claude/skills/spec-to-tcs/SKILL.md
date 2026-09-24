@@ -110,9 +110,10 @@ and are unchanged.
 
 ## Steps
 
-0. **Read the rulebook whole.** `docs/governance/specs-to-test-cases.md`,
-   one read, under 450 lines, before step 1 on every run; a bold name below
-   is a heading there.
+0. **Read the rulebook and the conventions whole.**
+   `docs/governance/specs-to-test-cases.md` and
+   `docs/governance/tcs-conventions.md`, one read each, before step 1 on every
+   run; a bold name below is a heading in the rulebook.
 
 1. **Resolve the target.** **When Suites Are Generated** in the document
    holds the argument table: a change name is every delta `spec.md` under
@@ -124,14 +125,32 @@ and are unchanged.
 
 2. **Stop if a suite is already there.** Read it and show the user: the
    `**Status:**` line; each journey and its case count; cases by
-   `**Status:**` — `draft`, `actual`, `deprecated`; scenario ids no case
+   `**Status:**` — `draft`, `actual`, `deprecated`; the revision its
+   `**Drafts styled:**` names against `tcs_rules_rev`; scenario ids no case
    traces and traced ids the spec no longer defines. Then ask, and wait:
    update (continue from step 3, in update mode), another target (back to
-   step 1, file untouched), or regenerate — only under the **Regeneration
-   guard** in **When a Suite Already Exists**, and only after a second explicit confirmation that review history
-   will be lost. Say which cases block a refused regeneration and offer the
-   update path. Never move a case back to `draft` for a reviewer, and never
-   delete a suite file.
+   step 1, file untouched), regenerate the drafts when the stamp sits below
+   the revision (step 2a), or regenerate the whole file — only under the
+   **Regeneration guard** in **When a Suite Already Exists**, and only after a
+   second explicit confirmation that review history will be lost. Say which
+   cases block a refused regeneration and offer the update path. Never move a
+   case back to `draft` for a reviewer unasked, and never delete a suite file.
+
+   2a. **Regenerating the drafts under a new revision.** **Rules Revisions**
+   holds the rule. One yes covers the set: name the files, their levels,
+   journeys and draft counts before asking. Run top down — the levels above
+   first — and each file from line 1 to its end. Every `draft` is rewritten
+   under the current rules; `actual` and `deprecated` cases are kept as they
+   are. An `actual` case whose behaviour or journey the new rule changes is
+   shown and asked about, and on a yes goes back to `draft`, `<v>` bumped,
+   and is regenerated with the rest. Inside a journey you may merge two cases
+   that now serve one purpose, add the step a case needs, and retire a case
+   whose purpose another holds (`deprecated`); across journeys you change
+   nothing, and a merge, split or removal the rule implies is reported as a
+   finding for the spec's author. `**Drafts styled:**` takes the new revision
+   only here. Capture a baseline first and check it after:
+   `pnpm run tcs:validate --capture-baseline=<file>`, then `--swept=<file>`.
+   Land it as its own commit.
 
 3. **Digest the capability, and upgrade the journeys if missing.** Read as
    **What a Run Reads** says. When `user-journeys.md` is missing or empty, do
@@ -187,6 +206,15 @@ and are unchanged.
    - **Standing rules** — atomicity (one intent per case), independence (no
      case leans on another having run), NLP automation readiness (the same
      condition phrased identically everywhere, no blank expected results)
+   - **Runnable** — **Executable without asking**, from what the run may
+     read: the PRD, `ui-design.md`, the conventions' `## Setup Recipes` and
+     `## Where Things Are`. A blind feature run cannot see the spec's flow, so
+     a step it cannot place is written as far as the input goes and left for
+     the review's preparation, never guessed
+   - **Values** — **A value is the rule, or stands for it**: a value that is
+     the rule is copied, one that stands for it is named and given its class;
+     **Rows may add what the rule implies** — a row per value a stated rule
+     implies, each outcome traced to that rule
 
 7. **Classify every case** — **Step 5** in the document, ten properties in
    its order with `*` bullets. On generation `**Status:**` is `draft` and
@@ -254,9 +282,11 @@ and are unchanged.
    as gaps for the spec's author: a requirement whose prose states a rule no
    scenario covers, a scenario under no journey, a journey naming an unknown
    scenario id. Point at `/tcs-review` next; the suite is not ready to hand on
-   until every case is `actual`. When `pnpm run tcs:stale` named this suite,
-   say the revision it moved from and to and how many drafts moved; each
-   capability is its own run and pull request, so do not offer the rest.
+   until every case is `actual`. After a revision regenerate, say the revision
+   it moved from and to, how many drafts moved, the `actual` cases asked about
+   and what was decided, the restructures inside journeys, and the findings
+   across them; then offer the next suite `pnpm run tcs:stale` names, top
+   down.
 
 ## End with what you had to decide
 
@@ -307,27 +337,32 @@ misreading.
 
 ## Never
 
-- Never state a step, pre-condition, expected result or data value the traced
-  scenarios do not say; where the spec names a control by its role, say the
-  same and never invent its label or hedge about whether the product exists
+- Never state an expected result the traced scenarios do not say, or change a
+  value that is the rule; where the spec names a control by its role, say the
+  same and never invent its label — only the spec, `ui-design.md` or the PRD
+  gives one — or hedge about whether the product exists
 - Never write a step that embeds its outcome, several actions in one step, an
   empty `**Expected Results:**` list, or a case that depends on another
 - Never write `**Description:**`, `**Covers:**`, a summary sentence, a
   `**Properties:**` block, or `**Test data:**` on a case with no input
 - Never invent a journey the scenarios do not justify; step 3 adds no behaviour
 - Never overwrite, regenerate or delete a suite without showing it and asking,
-  and never at all over an `actual` case or an `approved` file
+  and never regenerate a whole file over an `actual` case or an `approved`
+  file; a revision regenerate rewrites drafts only
 - Never write `**Status:** actual`, `**Status:** approved` or a fresh
   `**Reviewed:**` — only mark one lapsed — and never choose a file status; it
   is derived
-- Never sweep every stale suite in one run, and never write a QA-review or any other task into `tasks.md` for a suite;
-  review state lives in the suite's status lines
+- Never regenerate drafts under a new revision without one yes for the set,
+  out of top-down order, or across a journey boundary; and never write a
+  QA-review or any other task into `tasks.md` for a suite — review state lives
+  in the suite's status lines
 - Never write in the tree the user did not ask for, and never under
   `openspec/changes/archive/`
 - Never let a convention add coverage, soften a prohibition or overrule the
   spec, and never add a line to `docs/governance/tcs-conventions.md` yourself;
   lines land there only from a review, on the reviewer's word
-- Never restyle, renumber or re-word an `actual` case
+- Never restyle, renumber or re-word an `actual` case; restyling one is a
+  review's, on the reviewer's yes
 - Never read a `## Requirements` section, a durable `spec.md` beyond its Purpose
   and feature set, or anything under `openspec/changes/archive/` on a feature
   run — the blind property cannot be recovered once lost, and nothing
