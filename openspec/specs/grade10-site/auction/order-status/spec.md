@@ -12,6 +12,7 @@ derivation that resolves one status a buyer and an operator both read.
   - Stopped deadline: while proof is checked the deadline does not run, and the time left is kept
 - Derived order status
   - Refunded from partial collection: makes a refund terminal after any recorded payment
+  - Deadline-derived outcomes: distinguishes an overdue setup from an overdue payment
   - Payment Verifying: its own name, read by the winner and the operator alike
   - Replaced invoices hold no status: the order's invoice status is always its current invoice's
 
@@ -97,7 +98,7 @@ to `paid`, or cancel it.
 
 ### Requirement: Order status is derived, never written
 
-Grade10 SHALL compute order status from the two status fields and the two
+Grade10 SHALL compute order status from the two status fields and the three
 supplementary conditions, evaluating the rules below **in order** and taking
 the first match.
 
@@ -109,12 +110,13 @@ the first match.
 | 4 | `paid` | `fulfilled` | `delivery_confirmed` is false | **Shipped** |
 | 5 | `paid` | `unfulfilled` | — | **Processing** |
 | 6 | `payment_verifying` | `unfulfilled` | — | **Payment Verifying** |
-| 7 | `expired` | `unfulfilled` | — | **Pending Payment** |
+| 7 | `expired` | `unfulfilled` | — | **Payment Overdue** |
 | 8 | `pending` | `unfulfilled` | — | **Pending Payment** |
 | 9 | `not_issued` | `unfulfilled` | `address_confirmed` is true | **Preparing Invoice** |
-| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false | **Awaiting Setup** |
+| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false and `address_deadline_passed` is true | **Setup Overdue** |
+| 11 | `not_issued` | `unfulfilled` | `address_confirmed` is false and `address_deadline_passed` is false | **Awaiting Setup** |
 
-The derived order status vocabulary SHALL be these nine names, read the same
+The derived order status vocabulary SHALL be these eleven names, read the same
 by the winner and the operator.
 
 Grade10 SHALL compute order status at read time, or maintain it as a
@@ -134,14 +136,13 @@ Refunded.
 - **WHEN** its order status is read
 - **THEN** it is Pending Payment
 
-#### Scenario: auction-status-SC-06 - The same order past its deadline is Expired
-**Serves:** Derived order status - an expired invoice keeps Pending Payment
+#### Scenario: auction-status-SC-06 - The same order past its deadline is Payment Overdue
+**Serves:** Derived order status - an expired invoice derives Payment Overdue
 
 - **GIVEN** an auction order with invoice status `expired` and fulfilment
   status `unfulfilled`
 - **WHEN** its order status is read
-- **THEN** it is Pending Payment
-- **AND** no order status reads Expired
+- **THEN** it is Payment Overdue
 
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
 **Serves:** Derived order status - a paid, undispatched order is Processing
@@ -180,7 +181,7 @@ Refunded.
 **Serves:** Derived order status - an order with no address is Awaiting Setup
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has
-  confirmed no delivery address
+  confirmed no delivery address and whose address deadline has not passed
 - **WHEN** its order status is read
 - **THEN** it is Awaiting Setup
 
@@ -199,6 +200,28 @@ Refunded.
 - **WHEN** its order status is read by the winner and by an operator
 - **THEN** both read Payment Verifying
 - **AND** neither reads Pending Payment
+
+### Requirement: Deadline-derived order status distinguishes setup and payment overdue
+
+An order whose address deadline has passed before an invoice is sent SHALL
+derive Setup Overdue. An order whose invoice is expired SHALL derive Payment
+Overdue. These names SHALL be derived from the authoritative deadline and
+invoice facts, not manually stored as a second status model, and SHALL not
+change the underlying address or payment records.
+
+#### Scenario: auction-status-SC-52 - An expired invoice derives Payment Overdue
+**Serves:** Derived order status - an expired invoice derives Payment Overdue
+
+- **GIVEN** an order whose invoice status is `expired`
+- **WHEN** its status is read
+- **THEN** the derived status is Payment Overdue
+
+#### Scenario: auction-status-SC-53 - An incomplete setup derives Setup Overdue
+**Serves:** Derived order status - an incomplete setup derives Setup Overdue
+
+- **GIVEN** an order without a sent invoice whose address deadline has passed
+- **WHEN** its status is read
+- **THEN** the derived status is Setup Overdue
 
 ### Requirement: Invalid combinations are refused at write time
 
@@ -303,13 +326,13 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **AND** the invoice status is still `not_issued`
 
 #### Scenario: auction-status-SC-25 - An expired invoice refuses winner card payment
-**Serves:** Derived order status - an expired invoice keeps Pending Payment without winner card pay
+**Serves:** Derived order status - an expired invoice derives Payment Overdue without winner card pay
 
 - **GIVEN** an auction order whose invoice status is `expired`
 - **WHEN** the winner's card payment for it is attempted
 - **THEN** Grade10 refuses the payment
 - **AND** the invoice status remains `expired`
-- **AND** the order still derives as Pending Payment
+- **AND** the order still derives as Payment Overdue
 
 #### Scenario: auction-status-SC-45 - Proof moves the invoice to payment_verifying and back
 **Serves:** Writable primitives - `payment_verifying` is entered on upload and left by an operator
@@ -361,16 +384,19 @@ imply shared meaning, and no surface SHALL derive one from the other.
 
 ### Requirement: Supplementary conditions qualify the primitives
 
-Grade10 SHALL read these two conditions from data it already holds and
-SHALL NOT store either as a status enum.
+Grade10 SHALL read these three conditions from data it already holds and
+SHALL NOT store any as a status enum.
 
 | Condition | Source |
 | --- | --- |
 | `address_confirmed` | The winner has confirmed a delivery address on the auction order |
+| `address_deadline_passed` | The address deadline has passed while no invoice has been sent |
 | `delivery_confirmed` | The carrier has confirmed delivery and delivery proof is recorded |
 
-Whether the payment deadline has passed SHALL NOT be a condition of the
-derivation; invoice status `expired` carries it.
+Whether the payment deadline has passed SHALL NOT be a separate condition of
+the derivation; invoice status `expired` carries it. `address_deadline_passed`
+SHALL be read from the authoritative address deadline and SHALL not be stored
+as a second order status.
 `delivery_confirmed` SHALL be settable only on an auction order whose
 fulfilment status is `fulfilled`. Delivery is a confirmation event on an
 already-dispatched order rather than a third fulfilment status, because the
@@ -447,4 +473,3 @@ SHALL not be replaced by a later payment or shipment event.
 - **WHEN** any order-status surface reads it
 - **THEN** the derived status remains the status before the overpayment return
 - **AND** it is not Refunded
-

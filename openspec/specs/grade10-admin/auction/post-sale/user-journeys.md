@@ -73,3 +73,8 @@ payments that failed,
 **I want** to read each refund's amount, method, reference, reason, audit number, and who recorded it and when, filtering a closing refund as Refunded,
 **so that** every refund in Stripe or the bank matches one record in Grade10.
 
+### post-sale-US-15: Operator filters Setup Overdue and Payment Overdue
+
+**As an** operator,
+**I want** Setup Overdue and Payment Overdue as queue outcomes,
+**so that** I find deadline-missed orders the same way the winner's Status names them.

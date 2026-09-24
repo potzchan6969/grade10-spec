@@ -11,6 +11,7 @@ before a winner's invoice is sent.
   - Needs-action highlight: the outcomes waiting on an operator are marked, so the queue is a worklist rather than a report
   - Winner contact: whoever must reach the buyer can, without hunting through payment records
   - Extended bidding label: an operator sees which lots are still taking bids past their scheduled close, without a second outcome
+  - Overdue outcomes: names setup and payment deadlines after self-service closes
   - Refunded outcome: lets finance find completed refunds
 - Resolving an unpaid order
   - Reissue: a fresh invoice and a fresh deadline where non-payment was a genuine failure
@@ -1627,3 +1628,26 @@ credentials.
 - **THEN** the queue returns the order
 - **AND** the detail exposes the same refund amount, method, reference, reason, audit number and actor
 
+### Requirement: The post-sale queue names the two deadline outcomes
+
+The auction post-sale queue SHALL expose Setup Overdue when the address
+deadline has passed before an invoice is sent, and Payment Overdue when the
+invoice is expired. Each SHALL be a filterable outcome with its own visual
+label. The row SHALL retain the winner, lot, amount and action context needed
+for an operator to contact the winner or resolve the order.
+
+#### Scenario: grade10-admin-auction-post-sale-SC-148 - The queue uses the two overdue outcomes
+**Serves:** post-sale-US-15 - Operator filters Setup Overdue and Payment Overdue
+
+- **GIVEN** one order past its setup deadline and one expired invoice
+- **WHEN** the operator filters the queue by each overdue outcome
+- **THEN** Setup Overdue and Payment Overdue return the matching orders
+- **AND** the labels are distinct
+
+#### Scenario: grade10-admin-auction-post-sale-SC-149 - Overdue outcomes do not erase the action context
+**Serves:** post-sale-US-15 - Operator filters Setup Overdue and Payment Overdue
+
+- **GIVEN** an overdue order with a winner, lot and outstanding amount
+- **WHEN** an operator opens the queue row
+- **THEN** those facts remain visible
+- **AND** the row offers the existing contact or resolution path rather than a new self-service action
