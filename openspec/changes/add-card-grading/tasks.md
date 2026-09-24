@@ -1935,6 +1935,11 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-61`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-97`)
+- [ ] 28.8 Build the documents tab's read-only list, each paper with its
+      fingerprint and Send again where its letter failed, and `ReversalDialog`,
+      which asks for a payout's reversal the way the payout is asked
+      (`grade10-admin-grading-counter-SC-49`,
+      `grade10-admin-grading-counter-SC-64`)
 
 ## 29. The console's hand-in and hand-back runbooks (grade10)
 
