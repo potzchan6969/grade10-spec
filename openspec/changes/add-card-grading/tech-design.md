@@ -662,13 +662,21 @@ Schema `grading`. Money is `bigint` minor, HKD unless a currency column beside
 it says otherwise; instants `timestamptz(3)` through `msTimestamp`; ids text
 with a prefix; every `_by` an operator id.
 
+Every CHECK naming a closed vocabulary — a status, a grader, a card's
+outcome, a grader's own stage — is rendered from `SUBMISSION_STATUSES`,
+`GRADERS`, `CARD_OUTCOMES`, `GRADER_STAGES` and `SUBMISSION_EVENT_KINDS` in
+`@grade10/grading-contracts`' `vocabulary.ts`, through a shared `sqlInList`
+helper next to the schema, rather than typed a second time in the migration.
+`batches.grader_stage` is a pair CHECK generated from `GRADER_STAGES`, so a
+stage read off PSA's order page can never sit on a CGC or BGS batch.
+
 ### `submissions`
 
 | Column | Definition | Meaning |
 | --- | --- | --- |
 | `id` | `text PK` | `gs_<uuid>` |
 | `reference` | `text NOT NULL UNIQUE CHECK` | six characters of the alphabet |
-| `status` | `text NOT NULL CHECK` | the ten |
+| `status` | `text NOT NULL CHECK` | the ten, rendered from `SUBMISSION_STATUSES` |
 | `user_id`, `email`, `full_name`, `phone` | `text`, email `NOT NULL` | the plan lives under the email |
 | `access_hash` | `text NOT NULL` | sha256 of the link's token; re-minted on revocation |
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
@@ -696,7 +704,7 @@ index, not a stamp column.
 | --- | --- | --- |
 | `id`, `submission_id`, `position` | `text PK`; `FK NOT NULL`; `integer NOT NULL` | `gc_<uuid>`; position unique with the submission |
 | `intake_id` | `text UNIQUE` | `<reference>-<n>`, from `handIn` |
-| `grader` | `text` | written from the submission at `handIn`; FK `(submission_id, grader)` |
+| `grader` | `text CHECK` | written from the submission at `handIn`; FK `(submission_id, grader)` |
 | `name`, `set_name`, `card_number` | `text` | as typed or matched |
 | `reference_product_id` | `text` | the inventory product; null kept-as-typed or unavailable |
 | `declared_minor` | `bigint NOT NULL CHECK > 0` | |
@@ -718,11 +726,11 @@ handback, damaged)`, `object_key UNIQUE`, `taken_by`, `at`; the
 | Column | Definition | Meaning |
 | --- | --- | --- |
 | `id` | `text PK` | `bt_<uuid>`; the human label is derived at the read from the shop, the pair and the cut-off date |
-| `location_id`, `grader`, `level` | `text NOT NULL` | the shop and the pair; unique with `cutoff_at` |
+| `location_id`, `grader`, `level` | `text NOT NULL`, `grader` CHECK | the shop and the pair; unique with `cutoff_at` |
 | `cutoff_at` | `timestamptz(3) NOT NULL` | derived by `openBatchFor(location, grader, level, now)` from `settings.batch_cutoff` on `Asia/Hong_Kong` |
 | `ship_date`, `courier`, `tracking`, `order_number` | `date`; `text` | the ship date never in the future |
 | `insured_minor`, `cover_figure_minor`, `cover_currency` | `bigint`; `bigint`, `text` | the figure declared to the courier at ship; the courier's written cover and its currency |
-| `estimate_at`, `grader_stage` | `date`; `text` | the level's weeks from the ship day, moved by a re-estimate; the last `GraderStage` recorded |
+| `estimate_at`, `grader_stage` | `date`; `text`, pair CHECK with `grader` | the level's weeks from the ship day, moved by a re-estimate; the last `GraderStage` recorded, from that row's own grader's set |
 | `invoice_ref`, `invoice_total_minor`, `invoice_currency` | `text`, `bigint`, `text` | entered before the first scan |
 | `manifest_entered_at`, `received_at`, `finished_at` | `timestamptz(3)` | |
 
@@ -744,7 +752,7 @@ unmatched line holds `finishReceiving`.
 
 | Table | Columns | Guard |
 | --- | --- | --- |
-| `fee_sheet` | `grader`, `level` (PK); `ceiling_minor`, `fee_minor`, `cover_bps`, `estimate_weeks`, `cards_min`, `cards_max`, `pos_variant_id`, `active`, `updated_by`, `approved_by`, `updated_at` | the four-eyes CHECK |
+| `fee_sheet` | `grader` CHECK, `level` (PK); `ceiling_minor`, `fee_minor`, `cover_bps`, `estimate_weeks`, `cards_min`, `cards_max`, `pos_variant_id`, `active`, `updated_by`, `approved_by`, `updated_at` | the four-eyes CHECK |
 | `settings` | `key` (PK); `value jsonb NOT NULL`; `updated_by`, `approved_by`, `updated_at` | the four-eyes CHECK; the console's keys plus the three variants, `batch_cutoff { weekday, time }` and `booked_expiry_days` |
 | `money_lines` | `id`, `submission_id FK NOT NULL`, `card_id FK NOT NULL`, `kind CHECK (fee, cover, upcharge, storage, refund)`, `amount_minor > 0`, `pos_order_ref NOT NULL`, `pos_order_name`, `pos_line_ref` (nullable, recorded), `refund_of_line_id FK`, `paid_at`, `recorded_by`, `recorded_at` | append-only; unique `(submission_id, card_id, kind, pos_order_ref)`, written `ON CONFLICT DO NOTHING` |
 | `payouts` | `id`, `submission_id`, `card_id`, `amount_minor`, `fee_refund_line_id`, `route CHECK (till, transfer)`, `bank_ref`, `recorded_by`, `approved_by`, `recorded_at`, `received_at` | append-only; the four-eyes CHECK; plain index on `card_id` |
@@ -756,7 +764,7 @@ unmatched line holds `finishReceiving`.
 
 | Table | Shape |
 | --- | --- |
-| `submission_events` | the vault's `case_events`; `details` references and figures only; indexes `(submission_id, id)`, `(submission_id, to_status, at)`, `(submission_id, kind)` for every sweep's key. Who sees an event is `isCustomerEvent`, derived |
+| `submission_events` | the vault's `case_events`; `kind`, `from_status`, `to_status` CHECK against the same contract lists as `submissions.status`; `details` references and figures only; indexes `(submission_id, id)`, `(submission_id, to_status, at)`, `(submission_id, kind)` for every sweep's key. Who sees an event is `isCustomerEvent`, derived |
 | `notification_retries` | the vault's, keyed `submission_id`, `packet_id` for the sealed copies |
 | `sign_packets`, `sign_documents`, `sign_signers`, `sign_tokens`, `sign_signatures`, `sign_events` | `createDocSignTables(gradingSchema)` |
 | `audit_logs`, `audit_verify_cursors`, `sealed_archive`, `storage_cursors` | the vault's four |
