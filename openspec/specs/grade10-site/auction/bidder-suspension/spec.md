@@ -1,24 +1,28 @@
 # grade10-site/auction/bidder-suspension Specification
 
 ## Purpose
-The auction-scoped suspension a missed payment deadline triggers: what it
-stops a collector doing, what it must leave untouched, what becomes of the
-bids they already have standing, and why only an operator lifts it.
+The auction-scoped suspension a missed payment deadline or an operator
+triggers: what it stops a collector doing, what it must leave untouched, what
+becomes of the bids they already have standing, and why only an operator lifts
+it.
 
 ## Feature set
 
 - Trigger and notice
   - Deadline expiry: the one event that suspends an account, on any one of its expired invoices
   - Winner notice: what is owed and how to resolve it, so a suspension is never discovered by being refused
+  - Operator suspension: an operator holding `auction:moderate` suspends an account with a reason
+  - One suspension, two causes: a missed deadline and an operator's action are the same restriction
 - Scope of the suspension
   - Auction-scoped only: bidding stops and nothing else does
   - Paying stays open: an account barred from bidding must still be able to settle what it owes
 - Standing bids
-  - Retraction on suspension: an account with a demonstrated default cannot go on winning lots
-  - Re-resolution: the lot resolves to the next bidder at their own price, as a legitimate outcome
+  - No new bids: a suspended account cannot bid or raise a maximum
+  - Standing maximums stay: a bid placed before the suspension is binding and keeps competing
+  - History untouched: suspension writes nothing into any lot's bid history
   - Won lots stand: a lot already won stays won and its invoice stays payable
 - Reinstatement
-  - Operator review only: neither paying nor a reissued invoice lifts a suspension
+  - Operator review only: an operator reinstates whatever the cause, from the admin Users page
   - Account record: the state and its reason are visible to whoever decides
 
 ## Requirements

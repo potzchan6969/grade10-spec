@@ -5,7 +5,7 @@
 The Grade10 admin page where an operator finds a person and reads or changes
 their access: which accounts the directory offers, how one account is
 addressed, the grants it resolves for that account, and where it hands the
-operator on for everything access is not.
+operator on for everything access is not, including auction standing.
 
 ## Feature set
 
@@ -14,6 +14,7 @@ operator on for everything access is not.
   - One account open: the panel holds the account the operator picked, beside the list they picked it from
   - Granted moves only: a move reaches the row or the panel only when the operator's grants allow it
   - Open erasure: ban and unban are not offered while erasure is filed
+  - Auction standing: an operator holding `auction:moderate` suspends or reinstates an account's bidding from its panel
 - Addressing an account
   - One address: the account's identifier in the page's address opens its panel
   - A view survives a paste: the search, the narrowing and the page position travel in the address

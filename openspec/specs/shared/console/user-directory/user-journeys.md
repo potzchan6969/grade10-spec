@@ -3,7 +3,7 @@
 ### shared-console-user-directory-US-01: Operator moderates an account from the directory
 
 **As an** operator
-**I want** to change an account's roles or standing through a confirmation that speaks my console's words
+**I want** to change an account's roles or auction standing through a confirmation that speaks my console's words
 **so that** every change is deliberate and my console's own vocabulary is what I act in.
 
 ### shared-console-user-directory-US-02: Operator reviews where an account is signed in

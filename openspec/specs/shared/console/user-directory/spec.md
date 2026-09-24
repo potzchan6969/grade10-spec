@@ -8,7 +8,7 @@ from the console package, where admin UI lives. What an operator is *allowed*
 to do is `shared/auth/users` and `shared/auth/sessions`; this capability
 governs only what the components render and the contract they expose. It
 carries the requirements of `shared-ui/auth-user-directory` forward; only the
-home moved.
+home moved. It also carries the auction-standing moves the console supplies.
 
 ## Feature set
 
@@ -18,6 +18,8 @@ home moved.
   - Account panel: identity and actions, roles and grants, and timeline with sessions — each area only when the console supplies it
   - Roles in the panel: the selection is changed where the account is read, under the roles dialog's contract
   - Confirmations stay dialogs: a move that cannot be undone is reported, never confirmed in the panel
+- One account open
+  - Auction standing: suspend from auctions and reinstate appear only with a handler, and confirm in the moderation dialog
 - What an account can do
   - Grant rows: the grants the console resolved, elevated ones marked once for the account
   - Actions together: hand-offs and standing moves the console offered, hand-offs before ban, unban, or erase
