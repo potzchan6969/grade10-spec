@@ -18,7 +18,7 @@ this layout and the management page marks are the source.
 
 | Export | Package | Exists | Composes |
 | --- | --- | --- | --- |
-| `FeaturedAuctionsBanner` | Preview today (`apps/preview/src/pages/auction-catalogue-card.tsx`); promote to `@grade10/ui` if this change owns the public block — **new work in this store when promoted** | Partly — page draft only | Full-width carousel: front page image background and slab, title, status, countdown, rolling current bid, Bid Now, `CarouselProgress` dots |
+| `FeaturedAuctionsBanner` | Preview today (`apps/preview/src/pages/auction-catalogue-card.tsx`); promote to `@grade10/ui` if this change owns the public block — **new work in this store when promoted** | Partly — page draft only | Full-width carousel: front page image background and slab, title, status, countdown, rolling current bid, Bid Now or View Auction by status, `CarouselProgress` dots |
 | `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid; no category chrome in the carousel-banner layout |
 | `AuctionCard` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | All auctions list tile: image, title, bid, countdown, watch |
 | `WatchButton` | `@grade10/ui`, `src/blocks/auction-record/` | Yes | Watch on/off on an All auctions card (same control as lot page / My Auctions) |
@@ -40,12 +40,16 @@ when the export lands. Admin curator labels are application copy.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Empty Featured | No Featured band; All auctions only | `grade10-site-auction-auction-SC-30` |
-| One Featured slide | Carousel with one slide; progress may be absent or a single item; Bid Now | `grade10-site-auction-auction-SC-36` |
-| Two or three Featured slides | Carousel; progress dots; advancing changes the visible lot | `grade10-site-auction-auction-SC-35` |
-| Live bid roll | Current bid amount animates when the served bid changes | `grade10-site-auction-auction-SC-32` |
-| Countdown | Client countdown from served close (Active) or open (Upcoming) | `grade10-site-auction-auction-SC-31` |
-| Bid Now | Link or control opens the featured lot's page | `grade10-site-auction-auction-SC-34` |
-| Loading catalogue | Page shell while lots are not yet shown — as the page story treats enter | **Out of suite:** presentation; page story enter |
+| One Featured slide | Carousel with one slide; progress may be absent or a single item; Bid Now when Active | `grade10-site-auction-auction-SC-36` |
+| Two or three Featured slides | Carousel; progress dots; advancing changes the visible lot; mixed Active and Upcoming allowed | `grade10-site-auction-auction-SC-35` |
+| Live bid roll | Current bid animates when the served amount **increases** after first paint (Active only); same freshness updates Ends in when the recorded close moves | `grade10-site-auction-auction-SC-32` |
+| Countdown | Relative **Ends in** / **Opens in** with list-card short remaining; neutral colour; at zero shows now until refresh; extended bidding still Ends in with no Extended cue | `grade10-site-auction-auction-SC-31` |
+| Bid Now | Active slide: Bid Now opens the lot details page | `grade10-site-auction-auction-SC-34` |
+| View Auction | Upcoming slide: View Auction opens the lot details page; UPCOMING has no live status dot | `grade10-site-auction-auction-SC-58` |
+| Upcoming Featured | UPCOMING (no live status dot), STARTING BID, View Auction, Opens in … | `grade10-site-auction-auction-SC-33` |
+| Bid roll while paused | Hover/focus pause stops auto-advance only; Active bid may still roll | `grade10-site-auction-auction-SC-32` |
+| Front page image load failure | Fall back to lot gallery first item, else container default background | `grade10-site-auction-auction-SC-31` |
+| Loading catalogue | Page shell while lots are not yet shown — as the page story treats enter; no separate Featured skeleton | **Out of suite:** presentation; page story enter |
 | Empty All auctions | Message that there are no auctions; Featured still shows if slots are set | `grade10-site-auction-auction-SC-41` |
 | Watch on | All auctions card shows watched state after toggle | `grade10-site-auction-auction-SC-38` |
 | Watch off | All auctions card shows unwatched state; closed lots show no watch | `grade10-site-auction-auction-SC-39` |

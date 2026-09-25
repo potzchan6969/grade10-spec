@@ -3,8 +3,8 @@
 - Featured catalogue band
   - Dedicated Featured read: `/auction` loads Featured from its own public answer, separate from All auctions
   - Operator slides: when at least one complete slot is set, `/auction` leads with a full-width carousel of those slides in operator order
-  - Slide facts: each slide shows the slot's front page image as banner and slab, lot title, status, client countdown from served close or open, and current bid with a rolling number when the amount changes
-  - Bid Now: opens that featured lot's page
+  - Slide facts: each slide shows the slot's front page image as banner and slab (load failure falls back to the lot's first gallery image, else the stage default background), lot title, status chrome by lot status, relative Ends in / Opens in from served close or open, and money (Active current bid rolls when the amount increases after first paint; Upcoming starting bid is static)
+  - Open lot: Bid Now on Active or View Auction on Upcoming opens that lot's details page
   - Progress: dots advance among two or three slides; a single slide needs no multi-dot advance
 - Quiet catalogue
   - Featured then All auctions: the only sections on `/auction` in this layout; Featured is absent when no complete slot is set
@@ -61,11 +61,12 @@ and `ListingCountdownDisplay`.
 
 | Fact | Shows |
 | --- | --- |
-| Front page image | The slot's uploaded image as banner background and lot slab |
+| Front page image | The slot's uploaded image as banner background and lot slab; if it fails to load, the lot's first gallery image, else the stage default background |
 | Title | The lot's title |
-| Status | The lot's external status |
-| Countdown | Client countdown from the served close (Active) or open (Upcoming) |
-| Current bid | The served current bid; a rolling number when that amount changes |
+| Status | Active: LIVE BIDDING with a live status dot. Upcoming: UPCOMING with no live status dot |
+| Countdown | Relative **Ends in** (Active) or **Opens in** (Upcoming) with the All auctions short remaining form; no Extended label; recorded close moves with the same freshness as the live current bid |
+| Money | Active: served current bid; rolls when that amount **increases** after first paint. Upcoming: starting bid, static |
+| Open lot | Active: Bid Now. Upcoming: View Auction. Either opens that lot's details page |
 
 #### Scenario: grade10-site-auction-auction-SC-31 - A Featured slide shows front page image, title, status, countdown and bid
 **Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
@@ -73,15 +74,15 @@ and `ListingCountdownDisplay`.
 - **GIVEN** a complete Featured slide for a published Active lot with a served
   close and a current bid in minor units and ISO currency
 - **WHEN** a collector views that slide on `/auction`
-- **THEN** the slide shows the slot front page image as banner and slab, the lot title, its
-  status, a client countdown from the served close, and the current bid as
-  minor units with that currency code
+- **THEN** the slide shows the slot front page image as banner and slab, the lot title,
+  LIVE BIDDING with a live status dot, relative Ends in from the served close,
+  and the current bid as minor units with that currency code
 
-#### Scenario: grade10-site-auction-auction-SC-32 - The current bid rolls when the served amount changes
-**Serves:** grade10-site-auction-auction-US-06 - Collector reads Featured on the catalogue
+#### Scenario: grade10-site-auction-auction-SC-32 - The current bid rolls when the served amount increases
+**Serves:** grade10-site-auction-auction-US-10 - Collector sees a live Featured bid and clock
 
-- **GIVEN** a Featured slide whose served current bid changes while the
-  collector is on `/auction`
+- **GIVEN** an Active Featured slide whose served current bid **increases** after
+  first paint while the collector is on `/auction`
 - **WHEN** the new amount is shown
 - **THEN** the current bid updates with a rolling number to the new minor-unit
   amount and currency code
@@ -92,19 +93,27 @@ and `ListingCountdownDisplay`.
 - **GIVEN** a complete Featured slide for a published Upcoming lot with a
   served open time
 - **WHEN** a collector views that slide
-- **THEN** the countdown runs from the served open
+- **THEN** the slide shows UPCOMING with no live status dot, STARTING BID, View
+  Auction, and Opens in from the served open
 
-### Requirement: Bid Now opens the featured lot
+### Requirement: Bid Now or View Auction opens the lot details page
 
-Each Featured slide SHALL offer Bid Now. Activating it SHALL open that featured
-lot's page.
+An Active Featured slide SHALL offer Bid Now. An Upcoming Featured slide SHALL
+offer View Auction. Activating either SHALL open that lot's details page.
 
-#### Scenario: grade10-site-auction-auction-SC-34 - Bid Now opens the featured lot's page
-**Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot to bid
+#### Scenario: grade10-site-auction-auction-SC-34 - Bid Now opens an Active lot's details page
+**Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
 
-- **GIVEN** a Featured slide for a lot
+- **GIVEN** an Active Featured slide
 - **WHEN** the collector activates Bid Now
-- **THEN** that lot's page opens
+- **THEN** that lot's details page opens
+
+#### Scenario: grade10-site-auction-auction-SC-58 - View Auction opens an Upcoming lot's details page
+**Serves:** grade10-site-auction-auction-US-08 - Collector opens a Featured lot
+
+- **GIVEN** an Upcoming Featured slide
+- **WHEN** the collector activates View Auction
+- **THEN** that lot's details page opens
 
 ### Requirement: Progress advances among two or three Featured slides
 

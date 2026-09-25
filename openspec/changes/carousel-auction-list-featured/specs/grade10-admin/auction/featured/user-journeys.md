@@ -4,7 +4,8 @@
 
 **As an** authorized auction operator on Listings,
 **I want** Manage Featured to open the ordered slots so I can bind a published
-Active or Upcoming listing and upload one front page image,
+Active or Upcoming listing and upload one front page image (that single asset
+is both bronze stage and slab),
 **so that** that slide leads the collector catalogue.
 
 ### grade10-admin-auction-featured-US-02: Operator orders and clears Featured slots
