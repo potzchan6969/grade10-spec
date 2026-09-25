@@ -1,7 +1,7 @@
 # grade10-site/auction/auction Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-25, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-25, tcs-rules r4
 
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
@@ -644,7 +644,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -686,7 +686,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -729,7 +729,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
