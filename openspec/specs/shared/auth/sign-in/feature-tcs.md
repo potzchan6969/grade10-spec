@@ -1,7 +1,8 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** approved
-**Reviewed:** 2026-09-25, tcs-rules r4
+**Status:** reopened
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
