@@ -132,19 +132,19 @@ and are unchanged.
    `**Status:**` line; each journey and its case count; cases by
    `**Status:**` — `draft`, `actual`, `deprecated`; the revision its
    `**Drafts styled:**` names against `tcs_rules_rev`; scenario ids no case
-   traces and traced ids the spec no longer defines. Then ask, and wait:
-   update (continue from step 3, in update mode), another target (back to
-   step 1, file untouched), regenerate the drafts when the stamp sits below
-   the revision (step 2a), or regenerate the whole file — only under the
+   traces and traced ids the spec no longer defines. A stamp below the
+   revision is not a question: regenerate its drafts first (step 2a), then
+   ask, and wait: update (continue from step 3, in update mode), another
+   target (back to step 1, file untouched), or regenerate the whole file —
+   only under the
    **Regeneration guard** in **When a Suite Already Exists**, and only after a
    second explicit confirmation that review history will be lost. Say which
    cases block a refused regeneration and offer the update path. Never move a
    case back to `draft` for a reviewer unasked, and never delete a suite file.
 
    2a. **Regenerating the drafts under a new revision.** **Rules Revisions**
-   holds the rule. One yes covers the set: name the files, their levels,
-   journeys and draft counts before asking. Run top down — the levels above
-   first — and each file from line 1 to its end. Every `draft` is rewritten
+   holds the rule. It needs no yes and is not narrated. Run top down — the
+   levels above first — and each file from line 1 to its end. Every `draft` is rewritten
    under the current rules; `actual` and `deprecated` cases are kept as they
    are. An `actual` case whose behaviour or journey the new rule changes is
    shown and asked about, and on a yes goes back to `draft`, `<v>` bumped,
@@ -305,11 +305,11 @@ and are unchanged.
    as gaps for the spec's author: a requirement whose prose states a rule no
    scenario covers, a scenario under no journey, a journey naming an unknown
    scenario id. Point at `/tcs-review` next; the suite is not ready to hand on
-   until every case is `actual`. After a revision regenerate, say the revision
-   it moved from and to, how many drafts moved, the `actual` cases asked about
-   and what was decided, the restructures inside journeys, and the findings
-   across them; then offer the next suite `pnpm run tcs:stale` names, top
-   down.
+   until every case is `actual`. After a revision regenerate, say only what
+   someone must act on: the `actual` cases asked about and what was decided,
+   and the findings across journeys for the spec's author — not the revision
+   moved or the drafts rewritten; then offer the next suite
+   `pnpm run tcs:stale` names, top down.
 
 ## End with what you had to decide
 
@@ -375,8 +375,9 @@ misreading.
 - Never write `**Status:** actual`, `**Status:** approved` or a fresh
   `**Reviewed:**` — only mark one lapsed — and never choose a file status; it
   is derived
-- Never regenerate drafts under a new revision without one yes for the set,
-  out of top-down order, or across a journey boundary; and never write a
+- Never regenerate drafts under a new revision out of top-down order or
+  across a journey boundary, and never send an `actual` case back to `draft`
+  for it without a yes; and never write a
   QA-review or any other task into `tasks.md` for a suite — review state lives
   in the suite's status lines
 - Never write in the tree the user did not ask for, and never under
