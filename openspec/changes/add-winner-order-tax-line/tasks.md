@@ -28,7 +28,7 @@ Needs group 1.
 - [ ] 2.4 Add the operator field and refusal copy in every Grade10 admin locale
 - [ ] 2.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the focused admin quote and reissue E2E journey
 
-## 3. Winner summary, invoice and receipt (grade10)
+## 3. Winner summary, invoice and receipt (grade10) (owner: @htonyl)
 
 Needs group 1.
 
