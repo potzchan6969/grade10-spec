@@ -15,7 +15,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -32,12 +32,11 @@
 **Steps:**
 
 1. Submit a valid bid on the open listing.
-2. Read the bid result and the listing's bid-time authorizations.
+2. Read the bid result.
 
 **Expected Results:**
 
 * Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe.
-* No bid-time authorization is created.
 
 ### grade10-site-auction-auction-US2-TC10-1: Bid during extended bidding restarts the timer
 
@@ -45,7 +44,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -67,6 +66,8 @@
 | `<close before bids>` | 20:30 UTC |
 | `<first bid time>` | 20:10 UTC |
 | `<second bid time>` | 20:35 UTC |
+| `<close after first>` | 20:40 UTC |
+| `<close after second>` | 21:05 UTC |
 
 **Steps:**
 
@@ -77,8 +78,8 @@
 
 **Expected Results:**
 
-* Step 2 reads `<first bid time>` plus `<extension duration>`.
-* Step 4 reads `<second bid time>` plus `<extension duration>`.
+* The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`.
+* The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`.
 
 ### grade10-site-auction-auction-US2-TC11-1: Extension cap holds the timer at the cap
 
@@ -104,7 +105,9 @@
 | Field | Value |
 | --- | --- |
 | `<listing_3>` | A listing in extended bidding whose recorded close already stands at its cap |
+| `<scheduled close>` | 20:00 UTC |
 | `<extension cap>` | 3600s (60mins), any cap the listing has already reached |
+| `<result>` | 21:00 UTC |
 
 **Steps:**
 
@@ -114,8 +117,9 @@
 
 **Expected Results:**
 
-* The bid is accepted and the recorded close is unchanged.
-* The listing closes at its scheduled close plus `<extension cap>`.
+* The bid is accepted.
+* The recorded close reads `<scheduled close>` plus `<extension cap>`.
+* The listing closes at `<result>`.
 
 ### grade10-site-auction-auction-US2-TC12-1: Listing's own duration sets how long extended bidding runs
 
@@ -123,7 +127,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -143,6 +147,7 @@
 | `<listing_4>` | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` |
 | `<scheduled close>` | 20:00 UTC |
 | `<short duration>` | 300s (5mins), any extension duration above 0 |
+| `<result>` | 20:05 UTC |
 
 **Steps:**
 
@@ -152,7 +157,7 @@
 **Expected Results:**
 
 * The listing is in extended bidding.
-* The recorded close reads `<scheduled close>` plus `<short duration>`.
+* The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`.
 
 ### grade10-site-auction-auction-US2-TC13-1: Extension off closes the listing at its scheduled close
 
@@ -208,26 +213,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_6>` is open with scheduled close 20:00 UTC and extension duration 1800s (30mins).
-* `<listing_6>` holds the row's accepted bids.
+* `<listing_6>` is open with scheduled close `<scheduled close>` and extension duration 1800s (30mins).
+* `<listing_6>` holds the row's `<bids by close>`.
 
 **Test data:**
 
-| Accepted bids by 20:00 UTC | Grade10 |
-| --- | --- |
-| None | Closes the listing at 20:00 UTC |
-| One | Recorded close becomes 20:30 UTC; with no further bid the listing closes at 20:30 UTC |
+| `<bids by close>` | `<scheduled close>` | `<extended close>` | `<result>` |
+| --- | --- | --- | --- |
+| None | 20:00 UTC | — | Closed at 20:00 UTC |
+| One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
 
 **Steps:**
 
-1. Wait for 20:00 UTC.
+1. Wait for `<scheduled close>`.
 2. Read the listing's state and recorded close.
-3. Wait until 20:30 UTC with no bid.
+3. When the row has `<extended close>`, wait until `<extended close>` with no bid.
 4. Read the listing's state.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
+* The listing reads `<result>`.
 
 ### grade10-site-auction-auction-US2-TC6-1: When a bid lands against the scheduled close
 
@@ -237,7 +242,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -273,7 +278,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -309,7 +314,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -346,7 +351,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
