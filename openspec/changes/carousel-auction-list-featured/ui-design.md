@@ -39,26 +39,26 @@ when the export lands. Admin curator labels are application copy.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Empty Featured | No Featured band; All auctions only | **Out of suite:** closes on Featured scenarios when requirements land |
-| One Featured slide | Carousel with one slide; progress may be absent or a single item; Bid Now | **Out of suite:** closes on Featured scenarios when requirements land |
-| Two or three Featured slides | Carousel; progress dots; advancing changes the visible lot | **Out of suite:** closes on Featured scenarios when requirements land |
-| Live bid roll | Current bid amount animates when the served bid changes | **Out of suite:** closes on Featured scenarios when requirements land |
-| Countdown | Client countdown from served close (Active) or open (Upcoming) | **Out of suite:** closes on Featured scenarios when requirements land |
-| Bid Now | Link or control opens the featured lot's page | **Out of suite:** closes on Featured scenarios when requirements land |
+| Empty Featured | No Featured band; All auctions only | `grade10-site-auction-auction-SC-30` |
+| One Featured slide | Carousel with one slide; progress may be absent or a single item; Bid Now | `grade10-site-auction-auction-SC-36` |
+| Two or three Featured slides | Carousel; progress dots; advancing changes the visible lot | `grade10-site-auction-auction-SC-35` |
+| Live bid roll | Current bid amount animates when the served bid changes | `grade10-site-auction-auction-SC-32` |
+| Countdown | Client countdown from served close (Active) or open (Upcoming) | `grade10-site-auction-auction-SC-31` |
+| Bid Now | Link or control opens the featured lot's page | `grade10-site-auction-auction-SC-34` |
 | Loading catalogue | Page shell while lots are not yet shown — as the page story treats enter | **Out of suite:** presentation; page story enter |
-| Empty All auctions | Message that there are no auctions; Featured still shows if slots are set | **Out of suite:** closes on Featured scenarios when requirements land |
-| Watch on | All auctions card shows watched state after toggle | **Out of suite:** closes on Featured scenarios when requirements land |
-| Watch off | All auctions card shows unwatched state; closed lots show no watch | **Out of suite:** closes on Featured scenarios when requirements land |
-| No category section | No Categories heading, tiles, or filter chrome | **Out of suite:** closes on Featured scenarios when requirements land |
+| Empty All auctions | Message that there are no auctions; Featured still shows if slots are set | `grade10-site-auction-auction-SC-41` |
+| Watch on | All auctions card shows watched state after toggle | `grade10-site-auction-auction-SC-38` |
+| Watch off | All auctions card shows unwatched state; closed lots show no watch | `grade10-site-auction-auction-SC-39` |
+| No category section | No Categories heading, tiles, or filter chrome | `grade10-site-auction-auction-SC-37` |
 
 ### Admin Featured curation
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Empty slots | Up to three empty ordered slots ready to fill | **Out of suite:** closes on Featured scenarios when requirements land |
-| Manage Featured entry | Manage Featured beside Create listing opens the sub-page | **Out of suite:** closes on Featured scenarios when requirements land |
-| Slot filled | Listing title (or id) and front page image preview on that slot | **Out of suite:** closes on Featured scenarios when requirements land |
-| Front page image upload | Upload control; no listing gallery picker | **Out of suite:** closes on Featured scenarios when requirements land |
-| Reordered | Slots in the new order; site Featured follows | **Out of suite:** closes on Featured scenarios when requirements land |
-| Cleared slot | Slot empty; that slide leaves `/auction` Featured | **Out of suite:** closes on Featured scenarios when requirements land |
-| Cap reached | Third slot filled; no fourth slot offered | **Out of suite:** closes on Featured scenarios when requirements land |
+| Empty slots | Up to three empty ordered slots ready to fill | `grade10-admin-auction-featured-SC-01` |
+| Manage Featured entry | Manage Featured beside Create listing opens the sub-page | `grade10-admin-auction-featured-SC-11` |
+| Slot filled | Listing title (or id) and front page image preview on that slot | `grade10-admin-auction-featured-SC-04` |
+| Front page image upload | Upload control; no listing gallery picker | `grade10-admin-auction-featured-SC-12` |
+| Reordered | Slots in the new order; site Featured follows | `grade10-admin-auction-featured-SC-07` |
+| Cleared slot | Slot empty; that slide leaves `/auction` Featured | `grade10-admin-auction-featured-SC-08` |
+| Cap reached | Third slot filled; no fourth slot offered | `grade10-admin-auction-featured-SC-01` |
