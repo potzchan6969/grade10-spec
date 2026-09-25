@@ -25,7 +25,9 @@ The lines below came across from `tcs-rules` r3 when this file was split from it
 
 ### Size and shape
 
-- **A case is a run, not a transcribed scenario** — one to four steps, one to three results; a one-step case restating a WHEN left out the arrival and the observation
+- **A case is one run, not a transcribed scenario** — one starting state, one route, and every result observed on that route; a one-step case restating a WHEN left out the arrival and the observation
+- **Results follow the steps** — listed in the order the run reaches them, each naming or implying the step it is checked at, so a failed bullet points at one step and one cause
+- **A long case is a signal, not a limit** — past about six steps or six results on a `feature` case, check it is not two routes, or two starting states, in one; one route with more to see stays one case, so a tester runs it once. `domain`, `product` and `platform` cases walk composed paths and take no count
 - **One action per step** — "sign in, open settings, change the password" is three; a continuous flow with one outcome stays one case
 - **The arrival may be the first result** — `The listing loads` tells "could not get there" from "wrong"; a case whose results are only the arrival is not a case
 - **Plain words, no internal names** — `Click the collection tile`, not `dispatch the tile's click handler`
