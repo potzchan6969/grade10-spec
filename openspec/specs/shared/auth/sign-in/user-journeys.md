@@ -49,3 +49,10 @@ the entry step.
 **As a** collector already signed in,
 **I want** a clear choice when a sign-in link is meant for another account,
 **so that** I am not switched without asking, and can Switch or Stay.
+
+### shared-auth-sign-in-US-10: Collector sees the wait end when they sign in from another device
+
+**As a** collector who asked for a sign-in link on one device,
+**I want** that device's wait to end once I sign in from another,
+**so that** I am not left resending for an address I already used to sign in
+elsewhere.

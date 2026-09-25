@@ -20,6 +20,7 @@ contract for leaving a session.
   - Failed follow feedback: expired, dead, and banned links land on the brand home with a toast
   - Followed elsewhere: the surface that asked carries on once the session arrives
   - Signed-in mismatch: a link follow while signed in as a different account offers Switch or Stay instead of replacing the session
+  - Settled elsewhere: a surface still waiting on its own request stops waiting, without gaining a session of its own, once that address signs in by any method on another device
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
 - Account identity

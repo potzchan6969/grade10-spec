@@ -2353,6 +2353,354 @@ Runs once per row of **Test data**.
 * No mismatch toast is shown.
 * The collector remains signed in as `<current account email>`.
 
+## shared-auth-sign-in-US10: Collector sees the wait end when they sign in from another device
+
+**As a** collector who asked for a sign-in link on one device,
+**I want** that device's wait to end once I sign in from another,
+**so that** I am not left resending for an address I already used to sign in
+elsewhere.
+
+### shared-auth-sign-in-US10-TC1-1: Wait ends with a message when the link is followed on another device
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+* Only device B holds a session.
+
+### shared-auth-sign-in-US10-TC2-1: Wait ends the same way when the other device signs in with Google
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 sign-in url> showing Check Your Email for <collector email>.
+* Device A's brand has Google sign-in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+
+### shared-auth-sign-in-US10-TC3-1: The asking device's own link followed on a different device still only closes the wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link asked for on device A, but open it on device B instead.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+* Device A does not carry on any action the way a same-device tab would.
+
+### shared-auth-sign-in-US10-TC4-1: A failed attempt on the other device leaves the wait running
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<failed attempt>` | What it is |
+| --- | --- |
+| expired link | a link older than five minutes, followed on device B |
+| already used link | a link followed once already, followed again on device B |
+| banned account | a link for <collector email> after the account is banned, followed on device B |
+
+**Steps:**
+
+1. Attempt the <failed attempt> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A still shows Check Your Email, counting down toward Resend.
+* Device A is not signed in.
+
+### shared-auth-sign-in-US10-TC5-1: A settle for a different address leaves the wait running
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<other address>` | What it is |
+| --- | --- |
+| unrelated@example.com | an address with no relation to <collector email> |
+| collector+shop@example.com | the plus-tag variant of <collector email>, its own account |
+
+**Steps:**
+
+1. Sign in as <other address> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A still shows Check Your Email, counting down toward Resend.
+* Device A is not signed in.
+
+### shared-auth-sign-in-US10-TC6-1: Every surface waiting on the address ends its wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A and device C each showing Check Your Email after separately asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B.
+2. Return to device A, then to device C.
+
+**Expected Results:**
+
+* Both device A and device C end their wait with a message that sign-in completed on another device.
+* Neither device A nor device C is signed in.
+
+### shared-auth-sign-in-US10-TC7-1: A backgrounded waiting surface shows the message once returned to
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A showing Check Your Email for <collector email>, left in the background.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B while device A stays backgrounded.
+2. Bring device A back to the foreground.
+
+**Expected Results:**
+
+* Device A shows the message that sign-in completed on another device.
+* Device A is not signed in.
+
+### shared-auth-sign-in-US10-TC8-1: The wait ends the same way whether or not Resend has turned on
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<resend state>` | On device A |
+| --- | --- |
+| Resend disabled, counting down | less than sixty seconds since the send |
+| Resend enabled | sixty seconds or more since the send, Resend not yet activated |
+
+**Steps:**
+
+1. Reach <resend state> on device A.
+2. Complete Google sign-in with <collector email> on device B.
+3. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* No further resend email goes out from device A.
+
+### shared-auth-sign-in-US10-TC9-1: The check does not disclose whether an unrelated address is signed in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* <signed-in address> is signed in on device B.
+* customer is on <grade10 sign-in url> on device A, signed out, having asked for no link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<signed-in address>` | collector@example.com, currently signed in on device B |
+
+**Steps:**
+
+1. Ask the auth service, from device A, whether <signed-in address> currently holds a session, naming no flow of device A's own.
+
+**Expected Results:**
+
+* The request is refused.
+* Nothing in the response states whether <signed-in address> holds a session.
+
 ## Settled
 
 * Whether a console tab carries on a refused action after its second factor
@@ -2364,3 +2712,15 @@ Runs once per row of **Test data**.
   promise lives in the email only.
 * A lifetime settable per environment or brand was rejected; one lifetime
   applies everywhere.
+* A pending, unused, unexpired link stays valid after its address settles
+  elsewhere by another method; only the link's own expiry or a later send
+  ends it, exactly as before this change.
+* A settle on a different brand does not close this brand's wait: grade10
+  and zzz run entirely separate auth deployments and databases (no shared
+  account, no shared check between them), so a settle on one brand
+  affecting the other's wait is not a reachable case for this capability's
+  mechanism to guard against.
+* Dismissing the wait and reopening sign-in starts fresh: already governed
+  by the existing dismiss/reopen contract (opening sign-in again starts at
+  the email step); nothing persists across a dismissal that would need
+  asserting separately.
