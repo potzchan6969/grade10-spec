@@ -8,7 +8,7 @@ The data shape, pricing boundary and rollout order are in
 [`tech-design.md`](tech-design.md). The surfaces and their states are in
 [`ui-design.md`](ui-design.md).
 
-## 1. Invoice Tax contract and pricing (grade10)
+## 1. Invoice Tax contract and pricing (grade10) (owner: @htonyl)
 
 Needs `add-shipping-insurance-order-summary-tooltip`.
 
