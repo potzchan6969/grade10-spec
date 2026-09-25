@@ -1,2 +1,2 @@
-<!-- trace:case id=shared/TC/sign-in-008 rev=3 covers=shared/SC/sign-in-007 -->
+<!-- trace:case id=g10.shared-sign-in.TC-008 rev=3 covers=g10.shared-sign-in.SC-007 -->
 ### The visitor is refused invalid details

@@ -415,12 +415,12 @@ const DURABLE = {
   [`${CAP}/feature-tcs.md`]: SUITE,
 };
 
-const TRACE_SCENARIO = `<!-- trace:scenario id=auction/SC/listing-media-001 rev=1 -->
+const TRACE_SCENARIO = `<!-- trace:scenario id=g10.auction-listing-media.SC-001 rev=1 -->
 #### Scenario: listing-SC-04 - Search lists matching cards
 
 **Serves:** listing-US-01
 `;
-const TRACE_CASE = `<!-- trace:case id=auction/TC/listing-media-002 rev=1 covers=auction/SC/listing-media-001 -->
+const TRACE_CASE = `<!-- trace:case id=g10.auction-listing-media.TC-002 rev=1 covers=g10.auction-listing-media.SC-001 -->
 ### listing-US1-TC1-1: Search lists matching cards
 `;
 

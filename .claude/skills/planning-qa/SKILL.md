@@ -40,7 +40,7 @@ sections, the case ids, the classification block, the `**Trace:**` line, and
 the file header. Follow that document; this skill routes to it and adds
 nothing that contradicts it.
 
-For selected app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) after scenarios and feature cases exist. Scenario markers use `SC` references and case markers use `TC` references in the form `<product>/<kind>/<capability>-<three-character-base36-sequence>`. The CLI allocates the sequence; keep the capability slug stable and put behavior-specific meaning in the heading. These markers supplement the suite's `**Trace:**` line and never replace the journey or positional case headings.
+For selected app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) after scenarios and feature cases exist. Scenario markers use `SC` references and case markers use `TC` references in the form `<app>.<product>-<capability>.<kind>-<three-character-base36-sequence>`. The CLI allocates the sequence; keep the capability slug stable and put behavior-specific meaning in the heading. These markers supplement the suite's `**Trace:**` line and never replace the journey or positional case headings.
 
 ## Why this workflow has the shape it has
 

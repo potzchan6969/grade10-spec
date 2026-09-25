@@ -95,8 +95,8 @@ tooling on both sides parses. Beyond them:
 - **Link selected app tests** - once a scenario and case have stable markers,
   the test task adds its adjacent acceptance or support marker with the
   [trace CLI](../../../docs/governance/test-traceability.md):
-  `acceptance=<product>/TC/<capability>-<sequence>@<revision>` or
-  `supports=<product>/SC/<capability>-<sequence>`. The CLI accepts
+  `acceptance=<app>.<product>-<capability>.TC-<sequence>@<revision>` or
+  `supports=<app>.<product>-<capability>.SC-<sequence>`. The CLI accepts
   case-insensitive references and writes canonical casing. The app test
   remains the evidence; the marker only identifies which record it decides.
 

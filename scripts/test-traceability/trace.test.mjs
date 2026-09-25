@@ -56,8 +56,8 @@ test("validate and report build a graph from fixtures without a registry", () =>
   assert.match(validate.stdout, /Trace validation: PASS/);
   assert.match(validate.stdout, /Scenarios: 4/);
   assert.match(validate.stdout, /Cases: 2/);
-  assert.match(validate.stdout, /Test markers: 2/);
-  assert.match(validate.stdout, /Unlinked scenarios: 2/);
+  assert.match(validate.stdout, /Test markers: 3/);
+  assert.match(validate.stdout, /Unlinked scenarios: 1/);
   assert.match(validate.stdout, /Unlinked cases: 1/);
   assert.doesNotMatch(validate.stdout, /duplicate-id/);
 
@@ -70,8 +70,8 @@ test("validate and report build a graph from fixtures without a registry", () =>
   ]);
   assert.equal(report.status, 0, report.stderr || report.stdout);
   assert.match(report.stdout, /Trace report/);
-  assert.match(report.stdout, /demo\/TC\/sign-in-003/);
-  assert.match(report.stdout, /demo\/SC\/active-change-001/);
+  assert.match(report.stdout, /g10\.demo-sign-in\.TC-003/);
+  assert.match(report.stdout, /g10\.demo-active-change\.SC-001/);
   assert.match(report.stdout, /Unlinked records:/);
 
   const json = runCli([
@@ -86,7 +86,7 @@ test("validate and report build a graph from fixtures without a registry", () =>
   const parsed = JSON.parse(json.stdout);
   assert.equal(parsed.counts.scenarios, 4);
   assert.equal(parsed.counts.cases, 2);
-  assert.equal(parsed.counts.tests, 2);
+  assert.equal(parsed.counts.tests, 3);
   assert.equal(parsed.status, "valid");
 });
 
@@ -116,7 +116,7 @@ test("fold reports a missing durable case marker", () => {
       "openspec/specs/auction/store/listing-media/feature-tcs.md",
     );
     const text = readFileSync(durableCases, "utf8");
-    const marker = "<!-- trace:case id=auction/TC/listing-media-003 rev=2 covers=auction/SC/listing-media-001,auction/SC/listing-media-002 -->\n";
+    const marker = "<!-- trace:case id=g10.auction-listing-media.TC-003 rev=2 covers=g10.auction-listing-media.SC-001,g10.auction-listing-media.SC-002,g10.e-kyc-identity-record.SC-005 -->\n";
     assert.ok(text.includes(marker));
     writeFileSync(durableCases, text.replace(marker, ""));
 
@@ -129,7 +129,7 @@ test("fold reports a missing durable case marker", () => {
     ]);
     assert.equal(result.status, 1, result.stderr || result.stdout);
     assert.match(result.stdout, /\[missing-case\]/);
-    assert.match(result.stdout, /auction\/TC\/listing-media-003/);
+    assert.match(result.stdout, /g10\.auction-listing-media\.TC-003/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
@@ -144,13 +144,13 @@ test("fold reports changed revisions and reordered covers in durable case marker
     );
     const text = readFileSync(durableCases, "utf8");
     const changedRevision = text.replace(
-      "id=auction/TC/listing-media-003 rev=2 covers=",
-      "id=auction/TC/listing-media-003 rev=3 covers=",
+      "id=g10.auction-listing-media.TC-003 rev=2 covers=",
+      "id=g10.auction-listing-media.TC-003 rev=3 covers=",
     );
     assert.notEqual(changedRevision, text);
     const changedCovers = changedRevision.replace(
-      "covers=auction/SC/listing-media-001,auction/SC/listing-media-002",
-      "covers=auction/SC/listing-media-002,auction/SC/listing-media-001",
+      "covers=g10.auction-listing-media.SC-001,g10.auction-listing-media.SC-002,g10.e-kyc-identity-record.SC-005",
+      "covers=g10.auction-listing-media.SC-002,g10.auction-listing-media.SC-001,g10.e-kyc-identity-record.SC-005",
     );
     assert.notEqual(changedCovers, changedRevision);
     writeFileSync(durableCases, changedCovers);
@@ -182,11 +182,11 @@ test("fold rejects unresolved active covers and duplicate durable target markers
       storeRoot,
       "openspec/specs/auction/store/listing-media/feature-tcs.md",
     );
-    const missingScenario = "auction/SC/listing-media-999";
+    const missingScenario = "g10.auction-listing-media.SC-999";
     for (const file of [activeCases, durableCases]) {
       const text = readFileSync(file, "utf8");
       const updated = text.replaceAll(
-        "auction/SC/listing-media-002",
+        "g10.auction-listing-media.SC-002",
         missingScenario,
       );
       assert.notEqual(updated, text);
@@ -213,7 +213,7 @@ test("fold rejects unresolved active covers and duplicate durable target markers
         "openspec/specs/shared/auth/sign-in/feature-tcs.md",
       );
       const targetText = readFileSync(target, "utf8");
-      const marker = "<!-- trace:case id=shared/TC/sign-in-008 rev=3 covers=shared/SC/sign-in-007 -->";
+      const marker = "<!-- trace:case id=g10.shared-sign-in.TC-008 rev=3 covers=g10.shared-sign-in.SC-007 -->";
       const heading = "### The visitor is refused invalid details";
       assert.ok(targetText.includes(`${marker}\n${heading}`));
       writeFileSync(
@@ -233,7 +233,7 @@ test("fold rejects unresolved active covers and duplicate durable target markers
       ]);
       assert.equal(duplicate.status, 1, duplicate.stderr || duplicate.stdout);
       assert.match(duplicate.stdout, /\[duplicate-target-marker\]/);
-      assert.match(duplicate.stdout, /shared\/TC\/sign-in-008/);
+      assert.match(duplicate.stdout, /g10\.shared-sign-in\.TC-008/);
     } finally {
       rmSync(duplicateRoot, { recursive: true, force: true });
     }
@@ -253,6 +253,7 @@ test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, u
   assert.equal(result.status, 1, result.stderr || result.stdout);
   for (const code of [
     "duplicate-id",
+    "invalid-app",
     "invalid-revision",
     "invalid-id",
     "noncanonical-id",
@@ -261,13 +262,34 @@ test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, u
   ]) {
     assert.match(result.stdout, new RegExp(`\\[${code}\\]`));
   }
-  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-01/);
-  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-1234/);
-  assert.match(result.stdout, /invalid scenario id: demo\/SC\/sign-in-0!1/);
+  assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-01/);
+  assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-1234/);
+  assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-0!1/);
+  assert.match(result.stdout, /unknown app nope/);
+  assert.match(result.stdout, /noncanonical-id/);
   assert.doesNotMatch(
     result.stdout,
-    /case demo\/TC\/sign-in-010 covers unknown scenario demo\/SC\/sign-in-001/,
+    /case g10\.demo-sign-in\.TC-010 covers unknown scenario g10\.demo-sign-in\.SC-001/,
   );
+});
+
+test("validate requires one app and capability scope for each Markdown marker file", () => {
+  const { root, storeRoot } = copyFixtures();
+  try {
+    const targetFile = resolve(storeRoot, "openspec/specs/demo/spec.md");
+    const text = readFileSync(targetFile, "utf8");
+    writeFileSync(
+      targetFile,
+      `${text}\n<!-- trace:scenario id=g10.demo-settings.SC-010 rev=1 -->\n#### Scenario: A mixed-scope marker\n`,
+    );
+
+    const result = runCli(["validate", "--store-root", storeRoot]);
+    assert.equal(result.status, 1, result.stderr || result.stdout);
+    assert.match(result.stdout, /\[scope-mismatch\]/);
+    assert.match(result.stdout, /one <app>\.<product>-<capability> prefix/);
+  } finally {
+    rmSync(root, { recursive: true, force: true });
+  }
 });
 
 test("init and link dry runs preserve files and real runs add only adjacent markers", () => {
@@ -279,6 +301,14 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     const targetTest = '  test("the visitor updates settings", () => {});';
     const targetSupportTest = '  test("supporting settings detail", () => {});';
     const appFile = resolve(appRoot, "apps/site/src/sign-in.test.ts");
+    const otherAppMarker = resolve(
+      storeRoot,
+      "openspec/specs/demo/other-app.md",
+    );
+    writeFileSync(
+      otherAppMarker,
+      "<!-- trace:scenario id=zzz.demo-sign-in.SC-011 rev=1 -->\n#### Scenario: A separate app sequence\n",
+    );
     const originalSpec = readFileSync(targetFile, "utf8");
     const originalTests = readFileSync(appFile, "utf8");
 
@@ -289,6 +319,8 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetScenario,
+      "--app",
+      "G10",
       "--product",
       "DEMO",
       "--capability",
@@ -301,7 +333,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.match(scenarioDryRun.stdout, /DRY RUN/);
     assert.match(
       scenarioDryRun.stdout,
-      /trace:scenario id=demo\/SC\/sign-in-006 rev=1/,
+      /trace:scenario id=g10\.demo-sign-in\.SC-006 rev=1/,
     );
     assert.equal(readFileSync(targetFile, "utf8"), originalSpec);
 
@@ -312,6 +344,8 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetScenario,
+      "--app",
+      "G10",
       "--product",
       "DEMO",
       "--capability",
@@ -321,7 +355,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     ]);
     assert.equal(scenarioInit.status, 0, scenarioInit.stderr);
     const scenarioMarker =
-      /<!-- trace:scenario id=(demo\/SC\/sign-in-006) rev=1 -->/.exec(
+      /<!-- trace:scenario id=(g10\.demo-sign-in\.SC-006) rev=1 -->/.exec(
         readFileSync(targetFile, "utf8"),
       );
     assert.ok(scenarioMarker);
@@ -338,12 +372,14 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetCase,
+      "--app",
+      "G10",
       "--product",
       "DEMO",
       "--capability",
       "SIGN-IN",
       "--covers",
-      "DEMO/sc/SIGN-IN-001",
+      "G10.DEMO-SIGN-IN.sc-001",
       "--store-root",
       storeRoot,
       "--dry-run",
@@ -351,7 +387,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(caseDryRun.status, 0, caseDryRun.stderr);
     assert.match(
       caseDryRun.stdout,
-      /trace:case id=demo\/TC\/sign-in-007 rev=1 covers=demo\/SC\/sign-in-001/,
+      /trace:case id=g10\.demo-sign-in\.TC-007 rev=1 covers=g10\.demo-sign-in\.SC-001/,
     );
     assert.equal(readFileSync(targetFile, "utf8"), beforeCaseDryRun);
 
@@ -362,18 +398,20 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       targetFile,
       "--target",
       targetCase,
+      "--app",
+      "G10",
       "--product",
       "DEMO",
       "--capability",
       "SIGN-IN",
       "--covers",
-      "DEMO/sc/SIGN-IN-001",
+      "G10.DEMO-SIGN-IN.sc-001",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(caseInit.status, 0, caseInit.stderr);
     const caseMarker =
-      /<!-- trace:case id=(demo\/TC\/sign-in-007) rev=1 covers=demo\/SC\/sign-in-001 -->/.exec(
+      /<!-- trace:case id=(g10\.demo-sign-in\.TC-007) rev=1 covers=g10\.demo-sign-in\.SC-001 -->/.exec(
         readFileSync(targetFile, "utf8"),
       );
     assert.ok(caseMarker);
@@ -385,7 +423,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      "DEMO/tc/SIGN-IN-007@1",
+      "G10.DEMO-SIGN-IN.tc-007@1",
       "--store-root",
       storeRoot,
       "--dry-run",
@@ -400,14 +438,14 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      "DEMO/tc/SIGN-IN-007@1",
+      "G10.DEMO-SIGN-IN.tc-007@1",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(acceptanceLink.status, 0, acceptanceLink.stderr);
     assert.match(
       readFileSync(appFile, "utf8"),
-      /trace:acceptance=demo\/TC\/sign-in-007@1\n  test\("the visitor updates settings"/,
+      /trace:acceptance=g10\.demo-sign-in\.TC-007@1\n  test\("the visitor updates settings"/,
     );
 
     const supportLink = runCli([
@@ -417,14 +455,14 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetSupportTest,
       "--supports",
-      "DEMO/sc/SIGN-IN-001",
+      "G10.DEMO-SIGN-IN.sc-001",
       "--store-root",
       storeRoot,
     ]);
     assert.equal(supportLink.status, 0, supportLink.stderr);
     assert.match(
       readFileSync(appFile, "utf8"),
-      /trace:supports=demo\/SC\/sign-in-001\n  test\("supporting settings detail"/,
+      /trace:supports=g10\.demo-sign-in\.SC-001\n  test\("supporting settings detail"/,
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
@@ -444,7 +482,7 @@ test("mutations refuse ambiguous targets and require exact file selectors", () =
       "--target",
       repeatedTarget,
       "--supports",
-      "DEMO/sc/SIGN-IN-001",
+      "G10.DEMO-SIGN-IN.sc-001",
       "--store-root",
       storeRoot,
     ]);
@@ -465,6 +503,23 @@ test("mutations refuse ambiguous targets and require exact file selectors", () =
     ]);
     assert.equal(missingFileAndTarget.status, 2);
     assert.match(missingFileAndTarget.stderr, /--file is required/);
+
+    const missingApp = runCli([
+      "init",
+      "scenario",
+      "--file",
+      resolve(storeRoot, "openspec/specs/demo/spec.md"),
+      "--target",
+      "#### Scenario: A visitor checks account preferences",
+      "--product",
+      "demo",
+      "--capability",
+      "sign-in",
+      "--store-root",
+      storeRoot,
+    ]);
+    assert.equal(missingApp.status, 2);
+    assert.match(missingApp.stderr, /--app is required/);
   } finally {
     rmSync(root, { recursive: true, force: true });
   }
