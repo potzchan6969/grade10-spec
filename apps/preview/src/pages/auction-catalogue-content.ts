@@ -39,6 +39,10 @@ export type CatalogueLot = {
   closesAt: string;
   closeLabel: string;
   bidLabel: string;
+  /** Minor units for live roll; when set, Featured banner uses rolling digits. */
+  bidAmountMinor?: number;
+  /** ISO currency for `bidAmountMinor`. Defaults to HKD in fixtures. */
+  currency?: string;
   /** Live bid count shown beside the price. */
   bidCount: number;
   imageAlt: string;
@@ -243,6 +247,8 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-01T18:00:00+08:00",
     closeLabel: "1 Oct 2026, 6:00 pm",
     bidLabel: "HK$82,160.00",
+    bidAmountMinor: 8_216_000,
+    currency: "HKD",
     bidCount: 12,
   }),
   lot({
@@ -257,6 +263,8 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-02T18:00:00+08:00",
     closeLabel: "2 Oct 2026, 6:00 pm",
     bidLabel: "HK$147,064.00",
+    bidAmountMinor: 14_706_400,
+    currency: "HKD",
     bidCount: 18,
   }),
   lot({
@@ -272,6 +280,8 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-03T18:00:00+08:00",
     closeLabel: "3 Oct 2026, 6:00 pm",
     bidLabel: "HK$365,057.23",
+    bidAmountMinor: 36_505_723,
+    currency: "HKD",
     bidCount: 27,
   }),
 ];

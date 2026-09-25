@@ -92,20 +92,13 @@ export const CarouselBanner: Story = {
         name: FEW_FEATURED_LOTS[0].title,
       }),
     ).toBeInTheDocument();
-
-    const second = canvas.getByRole("button", {
-      name: `Show featured lot 2: ${FEW_FEATURED_LOTS[1].title}`,
-    });
-    await userEvent.click(second);
-    await waitFor(() => {
-      expect(second).toHaveAttribute("aria-current", "true");
-    });
+    // Stay on slide 1 — Storybook runs play on open; clicking through looked
+    // like the banner auto-advanced after a fraction of a second.
     expect(
-      canvas.getByRole("heading", {
-        level: 2,
-        name: FEW_FEATURED_LOTS[1].title,
+      canvas.getByRole("button", {
+        name: `Show featured lot 1: ${FEW_FEATURED_LOTS[0].title}`,
       }),
-    ).toBeInTheDocument();
+    ).toHaveAttribute("aria-current", "true");
   },
 };
 

@@ -7,6 +7,7 @@ import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
+import { ListingRollingMoneyDisplay } from "@grade10/ui";
 import {
   ArrowRight,
   Bell,
@@ -14,7 +15,6 @@ import {
   CalendarBlank,
   CaretLeft,
   CaretRight,
-  Gavel,
 } from "@phosphor-icons/react";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
@@ -146,25 +146,15 @@ function bidsLabel(count: number) {
   return `${count} ${count === 1 ? "bid" : "bids"}`;
 }
 
-/** Figma carousel banner clock: `Ends 07:20:55:59`. */
-function paddedClock(ms: number) {
-  const total = Math.max(0, Math.floor(ms / 1000));
-  const days = Math.floor(total / 86400);
-  const hours = Math.floor((total % 86400) / 3600);
-  const minutes = Math.floor((total % 3600) / 60);
-  const seconds = total % 60;
-  const pad = (value: number) => String(value).padStart(2, "0");
-  return `${pad(days)}:${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
-}
-
+/** Banner countdown — same short remaining form as the lot cards. */
 function BannerCountdown({ lot }: { lot: CatalogueLot }) {
   const opens = lot.status === "Upcoming";
   const target = opens ? lot.startsAt : lot.closesAt;
   const targetMs = Date.parse(target);
   const now = useNow(targetMs);
   const left = targetMs - now;
-  const clock = paddedClock(left);
-  const lead = opens ? "Opens" : "Ends";
+  const parts = remainingParts(left);
+  const lead = opens ? "Opens in" : "Ends in";
 
   if (lot.status === "Ended") {
     return (
@@ -177,10 +167,10 @@ function BannerCountdown({ lot }: { lot: CatalogueLot }) {
   return (
     <time className="text-sm tabular-nums text-secondary-foreground" dateTime={target}>
       <span className="sr-only">
-        {lead} in {remainingParts(left).long}
+        {lead} {parts.long}
       </span>
       <span aria-hidden="true">
-        {lead} {clock}
+        {lead} {parts.short}
       </span>
     </time>
   );
@@ -637,8 +627,17 @@ type FeaturedAuctionsPairProps = {
 const PAIR_AUTO_MS = 5000;
 /** Full-width banner dwell — slower than the overlapping pair. */
 const BANNER_AUTO_MS = 8000;
-const BANNER_CROSSFADE_S = 0.65;
-const BANNER_EASE = [0.4, 0, 0.2, 1] as const;
+/** Image slab crossfade — panel-scale reveal (`--duration-slow`). */
+const BANNER_IMAGE_FADE_S = 0.4;
+/** Copy swap — text reveal (`--duration-fast` + `--ease-in-out`). */
+const BANNER_COPY_DURATION_S = 0.25;
+/** Enter travel on X — matches CarouselProgress left→right (`--distance-medium`). */
+const BANNER_COPY_X_ENTER = 12;
+/** Exit travel on X — quieter than enter (open/close asymmetry). */
+const BANNER_COPY_X_EXIT = -6;
+/** Soften the swap on a shared muted ground (`--blur-small`). */
+const BANNER_COPY_BLUR_PX = 2;
+const BANNER_IMAGE_EASE = [0.22, 1, 0.36, 1] as const;
 const PAIR_EASE_ENTER = [0.16, 1, 0.3, 1] as const;
 const PAIR_EASE_EXIT = [0.4, 0, 1, 1] as const;
 const PAIR_EASE = PAIR_EASE_ENTER;
@@ -1158,20 +1157,28 @@ type FeaturedAuctionsBannerProps = {
  * Full-width Figma carousel banner (`6945:12258`): copy on muted left,
  * staged lot image on the bronze right, with CarouselProgress under the copy
  * on desktop. Mobile stacks image → progress band → copy so the dots stay
- * clear of Ends and sit above LIVE BIDDING with room to breathe.
+ * clear of Ends and sit above LIVE BIDDING with room to breathe. The copy
+ * column keeps a desktop minimum width so the title does not wrap early.
  */
 function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [playKey, setPlayKey] = useState(0);
   const reduceMotion = useReducedMotion();
+  const directionRef = useRef(1);
   const safeIndex = lots.length === 0 ? 0 : Math.min(index, lots.length - 1);
   const lot = lots[safeIndex];
-  const fadeMs = reduceMotion ? 0.01 : BANNER_CROSSFADE_S;
-  const fadeTransition = {
-    duration: fadeMs,
-    ease: BANNER_EASE,
+  const direction = directionRef.current;
+  const imageFadeMs = reduceMotion ? 0.01 : BANNER_IMAGE_FADE_S;
+  const copyDurationS = reduceMotion ? 0.01 : BANNER_COPY_DURATION_S;
+  const imageTransition = {
+    duration: imageFadeMs,
+    ease: BANNER_IMAGE_EASE,
   } as const;
+  const copyTransition = {
+    duration: copyDurationS,
+    ease: "ease-in-out" as const,
+  };
 
   useEffect(() => {
     if (index >= lots.length) setIndex(0);
@@ -1180,6 +1187,7 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
   useEffect(() => {
     if (!reduceMotion || lots.length <= 1 || paused) return;
     const timer = window.setTimeout(() => {
+      directionRef.current = 1;
       setIndex((current) => (current + 1) % lots.length);
       setPlayKey((key) => key + 1);
     }, BANNER_AUTO_MS);
@@ -1191,12 +1199,17 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
       setPlayKey((key) => key + 1);
       return;
     }
+    const last = lots.length - 1;
+    if (safeIndex === last && nextIndex === 0) directionRef.current = 1;
+    else if (safeIndex === 0 && nextIndex === last) directionRef.current = -1;
+    else directionRef.current = nextIndex > safeIndex ? 1 : -1;
     setIndex(nextIndex);
     setPlayKey((key) => key + 1);
   }
 
   function advanceFromTimer() {
     if (paused || lots.length <= 1) return;
+    directionRef.current = 1;
     setIndex((current) => (current + 1) % lots.length);
     setPlayKey((key) => key + 1);
   }
@@ -1210,7 +1223,17 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
         ? "ENDED"
         : "LIVE BIDDING";
   const bidCaption =
-    lot.status === "Upcoming" ? "STARTING BID" : "CURRENT BID";
+    lot.status === "Upcoming"
+      ? "STARTING BID"
+      : lot.status === "Ended"
+        ? "FINAL BID"
+        : "CURRENT BID";
+  const ctaLabel = lot.status === "Active" ? "Bid Now" : "View Auction";
+  const showLiveBidRoll =
+    lot.status === "Active" && lot.bidAmountMinor != null;
+  const copyEnterX = reduceMotion ? 0 : BANNER_COPY_X_ENTER;
+  const copyExitX = reduceMotion ? 0 : BANNER_COPY_X_EXIT;
+  const copyBlur = reduceMotion ? "blur(0px)" : `blur(${BANNER_COPY_BLUR_PX}px)`;
 
   return (
     <section
@@ -1228,7 +1251,7 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      <div className="grid w-full grid-cols-1 md:h-[600px] md:grid-cols-[minmax(0,1fr)_minmax(0,2fr)] md:grid-rows-[minmax(0,1fr)_auto]">
+      <div className="grid w-full grid-cols-1 md:h-[600px] md:grid-cols-[minmax(28rem,1fr)_minmax(0,2fr)] md:grid-rows-[minmax(0,1fr)_auto]">
         {/* Image first on small screens; right column from md. */}
         <div className="relative order-1 h-72 overflow-hidden sm:h-80 md:col-start-2 md:row-span-2 md:h-full md:order-none">
           <img
@@ -1246,7 +1269,7 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
               className="absolute inset-0"
               exit={{ opacity: 0 }}
               initial={{ opacity: 0 }}
-              transition={fadeTransition}
+              transition={imageTransition}
             >
               <a
                 className={cn(
@@ -1275,12 +1298,11 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
         {lots.length > 1 ? (
           <CarouselProgress
             aria-label="Featured lots"
-            className="relative z-10 order-2 justify-center border-y border-border bg-background px-6 py-5 sm:px-10 md:order-none md:col-start-1 md:row-start-2 md:justify-start md:border-0 md:bg-muted md:px-16 md:pt-8 md:pb-12"
+            className="relative z-10 order-2 justify-center border-y border-border bg-background px-6 py-5 sm:px-10 md:order-none md:col-start-1 md:row-start-2 md:justify-start md:border-0 md:bg-muted md:px-16 md:pt-5 md:pb-10"
           >
             {lots.map((item, itemIndex) => (
               <CarouselProgressItem
                 active={itemIndex === safeIndex}
-                className="after:absolute after:-inset-3 after:content-['']"
                 durationMs={BANNER_AUTO_MS}
                 key={item.id}
                 label={`Show featured lot ${itemIndex + 1}: ${item.title}`}
@@ -1296,18 +1318,30 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
 
         <div
           className={cn(
-            "relative order-3 min-h-[22rem] overflow-hidden bg-muted sm:min-h-[24rem] md:order-none md:col-start-1 md:row-start-1 md:h-full md:min-h-0",
+            "relative order-3 min-h-[22rem] min-w-0 overflow-hidden bg-muted sm:min-h-[24rem] md:order-none md:col-start-1 md:row-start-1 md:h-full md:min-h-0 md:min-w-[28rem]",
             lots.length > 1 ? null : "md:row-span-2",
           )}
         >
           <AnimatePresence initial={false} mode="sync">
             <motion.div
               key={lot.id}
-              animate={{ opacity: 1 }}
+              animate={{
+                opacity: 1,
+                x: 0,
+                filter: "blur(0px)",
+              }}
               className="absolute inset-0 flex flex-col justify-start gap-5 overflow-y-auto px-6 pt-12 pb-10 sm:gap-6 sm:px-10 sm:pt-12 sm:pb-12 md:justify-center md:gap-8 md:overflow-hidden md:px-16 md:pt-12 md:pb-12"
-              exit={{ opacity: 0 }}
-              initial={{ opacity: 0 }}
-              transition={fadeTransition}
+              exit={{
+                opacity: 0,
+                x: copyExitX * direction,
+                filter: copyBlur,
+              }}
+              initial={{
+                opacity: 0,
+                x: copyEnterX * direction,
+                filter: copyBlur,
+              }}
+              transition={copyTransition}
             >
               <div className="flex items-center gap-2">
                 {lot.status === "Active" ? (
@@ -1318,7 +1352,7 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
                 </p>
               </div>
               <h2
-                className="max-w-xl text-balance text-2xl font-semibold leading-8 text-foreground sm:text-3xl sm:leading-10 md:text-4xl"
+                className="max-w-xl text-2xl font-semibold leading-8 text-foreground sm:text-3xl sm:leading-10 md:text-4xl"
                 id="featured-auctions-banner"
               >
                 <a
@@ -1336,7 +1370,14 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
                   {bidCaption}
                 </p>
                 <p className="text-xl font-semibold tabular-nums leading-7 text-foreground sm:text-2xl sm:leading-8">
-                  {lot.bidLabel}
+                  {showLiveBidRoll ? (
+                    <ListingRollingMoneyDisplay
+                      amountMinor={lot.bidAmountMinor!}
+                      currency={lot.currency ?? "HKD"}
+                    />
+                  ) : (
+                    lot.bidLabel
+                  )}
                 </p>
               </div>
               <div className="flex items-center gap-4">
@@ -1347,7 +1388,7 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
                   })}
                   href={lotAddress(lot)}
                 >
-                  Bid Now
+                  {ctaLabel}
                   <ArrowRight aria-hidden size={16} weight="bold" />
                 </a>
               </div>
@@ -1356,18 +1397,6 @@ function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
                   <CalendarBlank aria-hidden size={14} weight="bold" />
                   <BannerCountdown lot={lot} />
                 </span>
-                {lot.status !== "Ended" ? (
-                  <>
-                    <span
-                      aria-hidden="true"
-                      className="hidden h-5 w-px shrink-0 bg-border sm:block"
-                    />
-                    <span className="inline-flex items-center gap-1 text-sm">
-                      <Gavel aria-hidden size={14} weight="bold" />
-                      {bidsLabel(lot.bidCount)}
-                    </span>
-                  </>
-                ) : null}
               </div>
             </motion.div>
           </AnimatePresence>
