@@ -1,6 +1,6 @@
 ---
 name: tcs-review
-description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering what the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
+description: Walk a QA reviewer through a pending feature-tcs.md, domain-tcs.md, product-tcs.md or platform-tcs.md suite one user journey at a time - first preparing it (regenerate or restyle, cover every scenario by claim, fill in how to run each case, propose test data), then every draft case in a journey together, with the spec's scenarios quoted on request - record each verdict as actual, deprecated, or still draft, and end by offering what the review taught as conventions. Use when QA asks to review, approve, or sign off test cases for a capability or an OpenSpec change. Invoke as /tcs-review [<capability-or-change>].
 ---
 
 # Reviewing Test Cases With QA
@@ -24,9 +24,8 @@ what they ask, and record their words untidied — generation copies what they a
 1. **Get on a review branch before the first verdict.** Names are the table in
    **The Review Lane**: `git switch -c tcs-review/<level>-<target>` from
    `main` whatever the suite holds, `<level>` one of `feature`, `domain`,
-   `product`, `platform`; commits `test(<domain>): approve <target> US<n> test
-   cases`; the pull request a draft, label `documentation`. Never write
-   verdicts on `main`.
+   `product`, `platform`; commits, pushes and the one pull request as that
+   table says, label `documentation`. Never write verdicts on `main`.
 
 2. **Find the suites awaiting review.** Search `openspec/specs/**/feature-tcs.md`,
    `openspec/specs/**/domain-tcs.md`, `openspec/specs/*/product-tcs.md` and
@@ -67,8 +66,8 @@ what they ask, and record their words untidied — generation copies what they a
    unless the reviewer asks to continue.
 
 5. **Prepare before you present anything,** as `## Preparing the Suite` below
-   lays out, in its order, each part its own commit, pushed before the first
-   journey. **Prepare first** under **The Review Lane** and the `<v>` table
+   lays out, in its order, each part its own commit, and one push when it is
+   all done, before the first journey. **Prepare first** under **The Review Lane** and the `<v>` table
    under **Naming** say what each status allows: `draft` freely, `actual`
    still `manual` on the reviewer's yes, `automated` and `deprecated` never.
 
@@ -91,7 +90,9 @@ what they ask, and record their words untidied — generation copies what they a
    ask; never merge or drop on your own. Then ask and wait. **Echo before you
    write:** repeat the ids about to be marked and what each becomes; "all
    good" covers the cases just shown and nothing else. **A verdict never
-   carries forward:** ask again for the next journey.
+   carries forward:** ask again for the next journey. Moving on from a journey
+   whose cases changed, commit that journey's verdicts and edits as one
+   commit; never push between journeys.
 
 8. **Answer their questions from the spec,** quoting the requirement or
    scenario clause by id. When the spec does not answer, say so — a gap for
@@ -128,36 +129,49 @@ what they ask, and record their words untidied — generation copies what they a
    file reaches `approved`, and marked `, lapsed <today>` if it falls back; `**Drafts
    styled:**` dropped once no draft is left. Never type the status.
 
-11. **Close the run and land the work.** Run `pnpm run tcs:validate` and fix
-   what it names. Commit, push, and open the pull request even unfinished
-   (`/pr-push`), titled with the range that has verdicts —
-   `test(<domain>): approve <target> US<n>–<m> test cases`. Merge at journey
-   boundaries: mark the PR ready and merge a finished journey while others
-   are still `draft`; the file lands as `in-review`, or `reopened` when it was
-   approved before. Say which journeys hold
-   drafts and whether the branch continues or a new one starts; when the file
-   is `approved`, say the suite is ready to hand on. Then offer what the
-   review taught, as `## What the Review Taught` below lays out. Report cases
-   approved, edited, deferred and retired, the conventions confirmed and
-   refused, the gaps and journey findings for the spec's author, and any
-   other suite still awaiting review.
+11. **Close the run and land the work.** Offer what the review taught, as
+   `## What the Review Taught` below lays out, and commit what follows from
+   it. Run `pnpm run tcs:validate` and fix what it names. Then push once and
+   open the one pull request (`/pr-push`), titled with the range that has
+   verdicts — `test(<domain>): approve <target> US<n>–<m> test cases` — its
+   description listing every case the follow-ups changed, file by file. The
+   file lands as `in-review`, `reopened` when it was approved before, or
+   `approved`. Say which journeys still hold drafts; when the file is
+   `approved`, say the suite is ready to hand on. Report cases approved,
+   edited, deferred and retired, the conventions confirmed and refused, the
+   gaps and journey findings for the spec's author, and any other suite still
+   awaiting review.
+
+   **A reviewer who leaves midway** — **Leaving midway still lands**: commit
+   what is done, push, and open the pull request with the journeys that have
+   verdicts, then stop.
 
 ## Preparing the Suite
 
 Before the first journey, in this order. Each part is its own commit, named in
-**The Review Lane**'s table, and the branch is pushed before the reviewer sees
-a case, so the verdict commits hold only the reviewer's decisions.
+**The Review Lane**'s table; the branch is pushed once, when every part is
+done, so the verdict commits hold only the reviewer's decisions.
 
 1. **Regenerate or restyle.** A suite whose `**Drafts styled:**` sits below
-   `tcs_rules_rev` is regenerated, as **Rules Revisions** says: name the file,
-   its level, the journeys and the drafts, and take one yes; regenerate the
-   levels above it first, then the file from line 1 to its end, through
-   `/spec-to-tcs`. `actual` cases are skipped; one whose behaviour or journey
-   the new rule changes is shown and asked about, and goes back to `draft`
-   only on a yes. A suite at the current revision has its drafts restyled to
-   `docs/governance/tcs-conventions.md` instead.
+   `tcs_rules_rev` has its drafts regenerated, as **Rules Revisions** says,
+   without asking and without narrating it: the levels above first, then the
+   file from line 1 to its end, through `/spec-to-tcs`. `actual` cases are
+   skipped; one whose behaviour or journey the new rule changes is shown and
+   asked about, and goes back to `draft` only on a yes. A suite at the current
+   revision has its drafts restyled to `docs/governance/tcs-conventions.md`
+   instead.
 
-2. **Fill in the mechanism.** Read the spec's flow requirement,
+2. **Check coverage by claim.** **Coverage is checked by claim** holds the
+   rule. Read every scenario serving the suite's journeys and find the case
+   whose expected results assert its THEN; a case that only traces the
+   journey does not count. A scenario no case asserts gets a new `draft` at
+   the journey's next unused `TC<m>`, `<v>` at `1`, without asking — it is
+   walked like any other draft. A journey with no case at all is covered the
+   same way. List the scenarios under `**Out of suite:**` and ask whether to
+   write a case for each; write one only on a yes, and take its id off the
+   list.
+
+3. **Fill in the mechanism.** Read the spec's flow requirement,
    `ui-design.md`, the PRD pages, and the conventions' `## Setup Recipes` and
    `## Where Things Are`. Bring every `draft` to **Executable without
    asking**: where to go, which control, what goes in, how a state is
@@ -172,16 +186,18 @@ a case, so the verdict commits hold only the reviewer's decisions.
    Testability plans no `automation`. An `actual` case still `manual` is
    filled only on the reviewer's yes.
 
-3. **Propose test data.** Rows the rule implies, as **Rows may add what the
+4. **Propose test data.** Rows the rule implies, as **Rows may add what the
    rule implies** says, each with the rule it traces. The reviewer takes or
    refuses each row; a taken row is written in. A row added to an `actual`
    case changes what it verifies: `<v>` bumped, back to `draft`.
 
-4. **Summarise.** One message before the first journey: regenerated or
-   restyled, the steps filled per case, the results sharpened, the values
-   changed, the rows added and refused, the flow disagreements and how each
-   was classified, the mocked states without automation, and the questions
-   the spec could not answer. Test data is its own list.
+5. **Push, then summarise.** Push the branch once. Then one message before
+   the first journey: the cases written for bare scenarios and the
+   out-of-suite answers, the steps filled per case, the results sharpened,
+   the values changed, the rows added and refused, the flow disagreements and
+   how each was classified, the mocked states without automation, and the
+   questions the spec could not answer. Test data is its own list. The
+   regenerate is not narrated.
 
 ## What the Review Taught
 
@@ -189,17 +205,25 @@ When the verdicts are done, and before the pull request is marked ready:
 
 - **Every edit is a candidate** — each Change the reviewer asked for, each
   "how do I run this" answer written into a case, each row taken or refused.
-  One line each: what changed, and the pattern it suggests, worded as a rule,
-  with the scope you would file it under
+  One line each: what changed, and the pattern it suggests, worded as a rule
 - **One at a time** — the reviewer confirms, rewords or refuses each. A
-  confirmed line lands in `docs/governance/tcs-conventions.md` under its
-  scope as `- <YYYY-MM-DD>, <suite path>: <the pattern>`; a setup the
-  reviewer explained lands under `## Setup Recipes`; a refused line lands
-  under `## Refused` with the reviewer's reason
+  confirmed line applies everywhere and lands under `## Store-wide` as
+  `- <YYYY-MM-DD>, <suite path>: <the pattern>`; only a line that cannot hold
+  everywhere is scoped narrower, saying why, and then the reviewer is asked
+  which scope. A setup the reviewer explained lands under `## Setup Recipes`;
+  a refused line lands under `## Refused` with the reviewer's reason
 - **Never offered twice** — a candidate matching a `## Refused` line is not
   offered again; one that contradicts the rulebook is reported, not offered
-- **Its own commit** — `docs(governance): conventions from the <target>
-  review`, after the verdict commits
+- **Applied at once** — as the conventions file's rule on applying a
+  confirmed line says: the reviewed file's remaining drafts and its `actual`
+  cases still `manual`, then the `actual` cases still `manual` in every other
+  suite in the same domain folder, skipping one with an open `tcs-review/*`
+  branch or pull request. Unasked, and not narrated in the conversation: the
+  pull request's description lists what changed
+- **Follow-up commits** — `docs(governance): conventions from the <target>
+  review`, then `test(<domain>): apply conventions from the <target>
+  review`, batched by purpose; committed only, pushed with the rest when the
+  process ends
 
 ## Closing a feature review
 
@@ -248,6 +272,8 @@ reviewer, and it is never resolved here — only by the person named on it.
 - Never edit `user-journeys.md`; a journey finding goes to the spec's author
 - Never write a line into `docs/governance/tcs-conventions.md` the reviewer
   did not confirm, and never fold preparation into a verdict commit
+- Never push between journeys; push once after preparation, once when the
+  process ends, and once if the reviewer leaves midway
 - Never resolve, re-word or drop a case carrying `**Blocked:**`, and never
   reclassify a deferred finding as a rejected one — a question nobody could
   answer is not a misreading
