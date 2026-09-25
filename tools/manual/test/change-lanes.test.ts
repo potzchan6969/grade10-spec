@@ -57,18 +57,18 @@ describe("which lane a change is in", () => {
     );
   });
 
-  /** Three in-flight changes are fully checked off and wear the same badge as
-   * a 0/45 one; the openspec CLI has said "Complete" about them all along. */
-  it("is complete once the work is on staging or past it", () => {
+  /** Acceptance and implementation completion place a change in the complete
+   * planning lane; deployment availability is read separately. */
+  it("is complete once accepted or implemented", () => {
     expect(
       laneOf(
         changeEntry("done", [delta], {
-          stage: "on-staging",
+          stage: "accepted",
           taskGroups: [group(6, 6)],
         }),
       ),
     ).toBe("complete");
-    expect(laneOf(changeEntry("cut", [delta], { stage: "released" }))).toBe(
+    expect(laneOf(changeEntry("cut", [delta], { stage: "archived" }))).toBe(
       "complete",
     );
   });

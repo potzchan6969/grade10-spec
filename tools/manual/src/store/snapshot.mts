@@ -44,6 +44,7 @@ import type { Roots } from "./roots.mts";
 import { signWarningCallouts } from "./signatures.mts";
 import { markUpstream } from "./upstream.mts";
 import { checkWarnings } from "./warnings.mts";
+import { projectAvailability, receiptsFrom } from "./availability.mts";
 
 /** `docs/prds/team.yaml`, projected to what the browser needs: a handle
  * against the roles it may take, its e-mail, Slack member and channels left
@@ -133,6 +134,11 @@ export function composeStore(
   const designSync = readDesignSync(roots.store);
   const specs = readSpecs(roots.store, git);
   const changes = readChanges(roots.store, git, main);
+  const archivedChanges = readArchivedChanges(roots.store, git);
+  const availabilityEnvironments = projectAvailability(
+    [...changes, ...archivedChanges],
+    receiptsFrom(process.env.MANUAL_DEPLOYMENT_RECEIPTS),
+  );
   markIssuedIds(roots.store, specs);
   const references = readReferences(roots.store, git);
   const referencesReadme = readReferencesReadme(roots.store);
@@ -171,12 +177,16 @@ export function composeStore(
       warnings,
       ...(designSync ? { designSync } : {}),
       team,
+      ...(["ready", "unconfigured"].includes(process.env.MANUAL_AVAILABILITY_STATUS ?? "")
+        ? { availabilityStatus: process.env.MANUAL_AVAILABILITY_STATUS as "ready" | "unconfigured" }
+        : {}),
+      ...(availabilityEnvironments.length > 0 ? { availabilityEnvironments } : {}),
       ...(sheetUrl ? { sheetUrl } : {}),
     },
     archive: {
       generatedAt,
       storeHead: git.head,
-      changes: readArchivedChanges(roots.store, git),
+      changes: archivedChanges,
     },
     documents: readChangeDocuments(roots.store, git, main),
     references,

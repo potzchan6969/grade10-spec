@@ -222,9 +222,9 @@ describe("the stepper", () => {
       "Designed",
       "Specified",
       "Planned",
+      "Accepted",
       "Building",
-      "On staging",
-      "Released",
+      "Implementation complete",
       "Archived",
     ]) {
       expect(html, label).toContain(`>${label}<`);
@@ -255,7 +255,7 @@ describe("the stepper", () => {
       "agent drafts each group, test first \u00b7 read each landing";
     expect(steps).toContain(`title="${whole}"`);
     expect(html).not.toMatch(
-      /data-stage="on-staging"[\s\S]{0,400}agent drafts/,
+      /data-stage="implementation-complete"[\s\S]{0,400}agent drafts/,
     );
   });
 
@@ -265,7 +265,7 @@ describe("the stepper", () => {
       html.indexOf('data-stepper="steps"'),
     );
 
-    expect(line).toContain("Step 5 of 8");
+    expect(line).toContain("Step 6 of 8");
     expect(line).toContain("Building");
     // The badge reads short, same as the eight-step stepper's own per-step
     // caption: the words visible, the mark in an `sr-only` span, the whole
@@ -467,12 +467,12 @@ describe("the Your turn card", () => {
     expect(hands.split(">open<").length - 1).toBe(6);
   });
 
-  it("offers the archive command on the three stages DRAFTED lacks, and only once on the page", () => {
-    const html = render(change({ stage: "on-staging" }));
+  it("offers the archive command after implementation is complete, and only once on the page", () => {
+    const html = render(change({ stage: "implementation-complete" }));
     const card = html.slice(html.indexOf("Your turn"), html.indexOf(">Hands<"));
 
     expect(card).toContain("/archive-change pos");
-    expect(card).toContain("confirm it deployed");
+    expect(card).toContain("archive the verified implementation");
     // The command is on the card alone: the page's own "Next" row, which used
     // to repeat it, is gone.
     expect(html).not.toContain(">Next<");
@@ -816,29 +816,7 @@ describe("the Rounds row", () => {
   });
 });
 
-describe("delivery and the handoff", () => {
-  it("shared-planning-change-stages-SC-76 - names main, staging with no build beside it, and the release that carried the change", () => {
-    const html = render(
-      change({ deployedEnv: "staging", releasedIn: "v2026.09.1" }),
-    );
-    const start = html.indexOf(">Delivery<");
-    const delivery = html.slice(start, html.indexOf("</dd>", start));
-
-    expect(delivery).toContain("main");
-    expect(delivery).toContain("staging");
-    expect(delivery).toContain("v2026.09.1");
-    expect(delivery).not.toContain("·");
-  });
-
-  it("shared-planning-change-stages-SC-59 - names the build the staging deploy recorded", () => {
-    const html = render(
-      change({ deployedEnv: "staging", deployedBuild: "1.4.0-rc2" }),
-    );
-    const delivery = html.slice(html.indexOf(">Delivery<"));
-
-    expect(delivery).toContain("staging · 1.4.0-rc2");
-  });
-
+describe("implementation verification", () => {
   it("shared-planning-agent-rounds-SC-61 - shows the suite's automated count against its total on the Delivery row", () => {
     const html = render(
       change({

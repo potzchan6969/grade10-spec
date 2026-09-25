@@ -16,12 +16,11 @@ import type { ChangeEntry, SchemaArtifact } from "./types.ts";
  * `decisions_waived` says this change records no decisions: the interview
  * settled nothing it had to keep, or it was opened before `decisions.md`
  * existed and its scope is in the proposal. That is read here and not only by
- * `check:manual`, because unlike `deploy_waived` and `tasks_waived` — which
- * answer for a file's absence at archive — this one answers for whose turn it
- * is now. The row it would otherwise leave is the product manager's, and an
- * artifact their own record waives is not their turn. Without this, the only
- * thing that clears the row is the file, which pushes an author towards
- * writing a record of an interview nobody held.
+ * `check:manual`, because it answers for whose turn it is now. The row it
+ * would otherwise leave is the product manager's, and an artifact their own
+ * record waives is not their turn. Without this, the only thing that clears
+ * the row is the file, which pushes an author towards writing a record of an
+ * interview nobody held.
  *
  * `ui_waived` stands for the UI design and `design_waived` for the tech
  * design, so a change that draws nothing is proven by both designs, by both

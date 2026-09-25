@@ -12,7 +12,7 @@ import {
   laneOfStage,
   laterRolesOf,
   openHands,
-  releasedOf,
+  completedOf,
   STAGES,
   stageOf,
 } from "../src/api/stages.ts";
@@ -79,11 +79,14 @@ function at(rung: Stage, extra: Partial<ChangeEntry> = {}): ChangeEntry {
     fields.taskGroups = [group(0, 3)];
   }
   if (from("building")) fields.taskGroups = [group(1, 3)];
-  if (from("on-staging")) {
-    fields.taskGroups = [group(3, 3)];
-    fields.deployedEnv = "staging";
+  if (from("accepted")) {
+    fields.accepted = true;
+    fields.acceptanceFingerprint = "a".repeat(64);
   }
-  if (from("released")) fields.releasedIn = "v2026.09.1";
+  if (from("implementation-complete")) {
+    fields.taskGroups = [group(3, 3)];
+    fields.implementationComplete = true;
+  }
   if (rung === "archived") fields.status = "archived";
   return changeEntry("probe", [], { ...fields, written, ...extra });
 }
@@ -96,19 +99,12 @@ describe("the stage a change's files prove", () => {
   });
 
   it("drops to the furthest rung still proven when a proof leaves main", () => {
-    // The deploy is taken back: every box is still ticked, and the change is
-    // where the boxes leave it.
-    expect(stage(at("on-staging", { deployedEnv: undefined }))).toBe(
-      "building",
-    );
-    // A design leaves `main` under a released change: the rung below it is
-    // missing, so nothing above it is proven either.
+    // Acceptance is a separate record, and a missing record leaves the
+    // complete plan at Planned.
+    expect(stage(at("accepted", { accepted: undefined }))).toBe("planned");
+    // An implementation record cannot advance a change past missing tasks.
     expect(
-      stage(
-        at("released", {
-          written: [...PROPOSED, "tech-design", "specs", "test-cases", "tasks"],
-        }),
-      ),
+      stage(at("implementation-complete", { written: [...PROPOSED] })),
     ).toBe("proposed");
   });
 
@@ -336,8 +332,8 @@ describe("the four lanes the eight stages project to", () => {
       "proposed",
       "specified",
       "in-progress",
-      "in-progress",
       "complete",
+      "in-progress",
       "complete",
       "complete",
     ]);
@@ -345,7 +341,7 @@ describe("the four lanes the eight stages project to", () => {
 
   it("reads the stage the entry carries, never a second derivation", () => {
     const carried = changeEntry("carried", [], {
-      stage: "on-staging",
+      stage: "implementation-complete",
       taskGroups: [group(1, 3)],
     });
 
@@ -406,12 +402,11 @@ describe("whose turn it is", () => {
     expect(handsAt("specified")).toEqual(["pm", "qa"]);
     expect(handsAt("planned")).toEqual(["dev"]);
     expect(handsAt("building")).toEqual(["dev"]);
-    expect(handsAt("on-staging")).toEqual(["qa", "release"]);
+    expect(handsAt("implementation-complete")).toEqual(["qa", "release"]);
   });
 
-  it("names nobody in Designed, Released or Archived", () => {
+  it("names nobody in Designed or Archived", () => {
     expect(handsAt("designed")).toEqual([]);
-    expect(handsAt("released")).toEqual([]);
     expect(handsAt("archived")).toEqual([]);
   });
 
@@ -425,7 +420,7 @@ describe("whose turn it is", () => {
       openHands(at("planned"), handOf(at("planned"), "planned", artifacts())),
     ).toEqual([]);
     expect(
-      openHands(at("on-staging", { hands: { qa: "ari" } }), ["qa", "release"]),
+      openHands(at("implementation-complete", { hands: { qa: "ari" } }), ["qa", "release"]),
     ).toEqual(["release"]);
   });
 });
@@ -776,9 +771,9 @@ describe("the ladder's own surface", () => {
       "designed",
       "specified",
       "planned",
+      "accepted",
       "building",
-      "on-staging",
-      "released",
+      "implementation-complete",
       "archived",
     ]);
   });
@@ -798,39 +793,36 @@ describe("the ladder's own surface", () => {
   });
 });
 
-describe("what a release has carried", () => {
-  // One reading behind the board, the change page and the digest: a change
-  // in flight whose record carries `released_in:`, and every archived change.
-  it("counts a change in flight that carries released_in, dated by its last move, and the archive by its prefix", () => {
-    const shipped = at("released", {
-      id: "shipped",
-      releasedIn: "v2026.09.1",
+describe("what a completed implementation has carried", () => {
+  it("counts in-flight implementations with a matching record and archived changes by their prefix", () => {
+    const complete = at("implementation-complete", {
+      id: "complete",
       lastMoved: "2026-09-10T08:00:00.000Z",
     });
     const building = at("building", { id: "building" });
-    const released = releasedOf(
-      [shipped, building],
+    const completed = completedOf(
+      [complete, building],
       [{ id: "archived-one", shippedOn: "2026-08-01" }],
     );
 
-    expect(released.get("shipped")).toEqual({
-      id: "shipped",
+    expect(completed.get("complete")).toEqual({
+      id: "complete",
       on: "2026-09-10T08:00:00.000Z",
     });
-    expect(released.get("archived-one")).toEqual({
+    expect(completed.get("archived-one")).toEqual({
       id: "archived-one",
       on: "2026-08-01",
     });
-    expect(released.has("building")).toBe(false);
+    expect(completed.has("building")).toBe(false);
   });
 
-  it("frees a dependent of a change released in flight, not only of an archived one", () => {
-    const shipped = at("released", { id: "shipped", releasedIn: "v1" });
-    const dependent = at("specified", { dependsOn: ["shipped", "elsewhere"] });
-    const released = new Set(releasedOf([shipped], []).keys());
+  it("frees a dependent once the implementation record matches acceptance", () => {
+    const complete = at("implementation-complete", { id: "complete" });
+    const dependent = at("specified", { dependsOn: ["complete", "elsewhere"] });
+    const completedIds = new Set(completedOf([complete], []).keys());
 
     expect(
-      overlaysOf(dependent, { now: NOW, released, artifacts: artifacts() }),
+      overlaysOf(dependent, { now: NOW, released: completedIds, artifacts: artifacts() }),
     ).toEqual([{ kind: "blocked", change: "elsewhere" }]);
   });
 });

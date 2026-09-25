@@ -178,6 +178,7 @@ export function specSourceUrl(specId: string): string {
   return `${GITHUB_BLOB}/${specDir(specId)}/spec.md`;
 }
 
-export function changeSourceUrl(changeId: string): string {
-  return `${GITHUB_BLOB}/openspec/changes/${changeId}`;
+export function changeSourceUrl(changeId: string, shippedOn?: string): string {
+  const directory = shippedOn ? `archive/${shippedOn}-${changeId}` : changeId;
+  return `${GITHUB_BLOB}/openspec/changes/${directory}`;
 }

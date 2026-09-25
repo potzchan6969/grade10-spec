@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "change": "demo-implementation-complete",
+  "baseline": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+  "fingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "reviewedBy": "tester",
+  "acceptedAt": "2026-09-07T00:00:00.000Z",
+  "artifacts": [
+    {
+      "path": "openspec/changes/demo-implementation-complete/proposal.md",
+      "sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+    }
+  ]
+}

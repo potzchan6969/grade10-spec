@@ -5,6 +5,7 @@ import {
   BookOpenText,
   CaretDown,
   CaretRight,
+  Globe,
   type Icon,
   Kanban,
   ListChecks,
@@ -30,6 +31,7 @@ import {
  * the store's pages cannot reach either. */
 const FIXED_ENTRIES: { to: string; label: string; icon: Icon }[] = [
   { to: "/in-flight", label: "Board", icon: Kanban },
+  { to: "/availability", label: "Availability", icon: Globe },
   { to: "/my-turn", label: "My turn", icon: ListChecks },
 ];
 

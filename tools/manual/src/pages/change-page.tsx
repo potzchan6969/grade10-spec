@@ -33,34 +33,31 @@ export function ChangePage() {
   const index = useManualIndex();
   const archive = useArchive();
   const change = index.changeById.get(id);
-  useDocumentTitle(change?.title ?? id);
+  const archived = archive.status === "ready"
+    ? archive.archive.changes.find((one) => one.id === id)
+    : undefined;
+  const entry = change ?? archived;
+  useDocumentTitle(entry?.title ?? id);
 
-  if (!change) {
-    const shipped =
-      archive.status === "ready" &&
-      archive.archive.changes.some((one) => one.id === id);
+  if (!entry) {
     return (
       <>
         <PageHeading
           eyebrow="Board"
           summary={
-            shipped
-              ? "This change has shipped and been archived — its deltas are folded into the durable specs."
-              : "No change in flight answers to that id."
+            "No change in flight or archive answers to that id."
           }
-          title={shipped ? "Shipped and folded in" : "No such change"}
+          title="No such change"
         />
         <Text as="p" className="mb-6 font-mono" size="sm" tone="secondary">
           {id}
         </Text>
         <EmptyState
           description={
-            shipped
-              ? "The archive timeline on the Board keeps its record."
-              : "The Board lists what's still moving."
+            "The Board lists what is moving and the archive timeline keeps its record."
           }
           icon={<Kanban aria-hidden />}
-          title={shipped ? "In the archive" : "Not on the board"}
+          title="Not on the board"
         />
         <Text as="p" className="mt-4" size="sm">
           <Link className="underline underline-offset-2" to="/in-flight">
@@ -78,11 +75,13 @@ export function ChangePage() {
           ← Board
         </Link>
       </Text>
-      <ChangeHeader change={change} />
-      {change.error ? (
-        <BrokenCard error={change.error} what={`Change ${change.id}`} />
+      <ChangeHeader change={entry} />
+      {entry.error ? (
+        <BrokenCard error={entry.error} what={`Change ${entry.id}`} />
+      ) : entry.status === "archived" ? (
+        <ArchivedChangeBody change={entry} />
       ) : (
-        <ChangeBody change={change} />
+        <ChangeBody change={entry} />
       )}
     </>
   );
@@ -99,7 +98,7 @@ function ChangeHeader({ change }: { change: ChangeEntry }) {
           <Badge
             size="sm"
             variant={
-              stage === "released" || stage === "archived"
+              stage === "implementation-complete" || stage === "archived"
                 ? "success"
                 : "outline"
             }
@@ -123,7 +122,7 @@ function ChangeHeader({ change }: { change: ChangeEntry }) {
         <a
           aria-label={`Open ${change.id} on GitHub`}
           className="inline-flex items-center gap-1 text-secondary-foreground text-xs hover:text-foreground"
-          href={changeSourceUrl(change.id)}
+          href={changeSourceUrl(change.id, change.shippedOn)}
           rel="noreferrer noopener"
           target="_blank"
         >
@@ -144,6 +143,27 @@ function ChangeHeader({ change }: { change: ChangeEntry }) {
         ) : null}
       </div>
     </PageHeading>
+  );
+}
+
+/** Archived changes still need a stable detail page from availability and
+ * the recent feed. Their source files have moved out of the in-flight API,
+ * so render the archived facts instead of presenting a misleading read error. */
+function ArchivedChangeBody({ change }: { change: ChangeEntry }) {
+  const index = useManualIndex();
+  const archive = useArchive();
+  const artifacts = index.snapshot.schemas[change.schema] ?? [];
+
+  return (
+    <>
+      <StageStepper heldBy={change.heldBy} stage={change.stage} />
+      <YourTurnCard artifacts={artifacts} change={change} sheetUrl={index.snapshot.sheetUrl} stage={change.stage} />
+      <ChangeStatus
+        archived={archive.status === "ready" ? archive.archive.changes : undefined}
+        change={change}
+        index={index}
+      />
+    </>
   );
 }
 

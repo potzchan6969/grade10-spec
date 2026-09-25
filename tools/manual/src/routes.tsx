@@ -1,5 +1,6 @@
 import { createBrowserRouter } from "react-router";
 import { ChangePage } from "./pages/change-page";
+import { AvailabilityPage } from "./pages/availability-page";
 import { DesignPage } from "./pages/design-page";
 import { GuidePage } from "./pages/guide-page";
 import { HomePage } from "./pages/home-page";
@@ -23,6 +24,7 @@ export const router = createBrowserRouter([
       { path: "platform/:topic", element: <PlatformPage /> },
       { path: "guides/:slug", element: <GuidePage /> },
       { path: "in-flight", element: <InFlightPage /> },
+      { path: "availability", element: <AvailabilityPage /> },
       { path: "in-flight/:change", element: <ChangePage /> },
       { path: "pending", element: <PendingPage /> },
       { path: "my-turn", element: <MyTurnPage /> },

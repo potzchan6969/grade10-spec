@@ -278,6 +278,134 @@
       "lastLanded": "2026-08-05T00:00:00+00:00"
     },
     {
+      "id": "demo-accepted",
+      "dir": "openspec/changes/demo-accepted",
+      "schema": "grade10-planning",
+      "status": "in-flight",
+      "stage": "accepted",
+      "owners": [],
+      "created": "2026-08-01",
+      "title": "The Accepted stage",
+      "why": "The fixture walk needs an accepted plan that is waiting for implementation,\nwith artifact dates the handoff can show.",
+      "taskGroups": [
+        {
+          "num": "1",
+          "title": "Contracts",
+          "repo": "grade10-spec",
+          "done": 0,
+          "total": 1,
+          "tasks": [
+            {
+              "text": "1.1 Publish the contract.",
+              "done": false
+            }
+          ]
+        }
+      ],
+      "deltas": [
+        {
+          "spec": "demo-product/alpha",
+          "kinds": [
+            "ADDED"
+          ],
+          "requirements": [
+            {
+              "name": "The thing is shown as done",
+              "kind": "added",
+              "text": "### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done"
+            }
+          ]
+        }
+      ],
+      "written": [
+        "proposal",
+        "decisions",
+        "user-journeys",
+        "ui-design",
+        "specs",
+        "test-cases",
+        "tasks"
+      ],
+      "accepted": true,
+      "acceptanceFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "promotedBy": "tester",
+      "designWaived": "the fixture is about the Accepted stage, not the tech design",
+      "hands": {
+        "pm": "tester",
+        "design": "tester",
+        "qa": "tester",
+        "dev": "tester",
+        "release": "tester"
+      },
+      "author": "tester",
+      "suites": [
+        {
+          "spec": "demo-product/alpha",
+          "path": "openspec/changes/demo-accepted/specs/demo-product/alpha/feature-tcs.md",
+          "status": "approved",
+          "cases": {
+            "draft": 0,
+            "actual": 1,
+            "deprecated": 0,
+            "total": 1,
+            "automated": 0
+          }
+        }
+      ],
+      "upstream": {
+        "decisions": {
+          "id": "a1912404",
+          "items": [
+            "proposal"
+          ]
+        },
+        "user-journeys": {
+          "id": "8a3eea61",
+          "items": [
+            "proposal",
+            "decisions"
+          ]
+        },
+        "ui-design": {
+          "id": "bf7dcd25",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys"
+          ]
+        },
+        "specs": {
+          "id": "e2bad992",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "test-cases": {
+          "id": "e2bad992",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design"
+          ]
+        },
+        "tasks": {
+          "id": "dfa79a65",
+          "items": [
+            "proposal",
+            "decisions",
+            "user-journeys",
+            "ui-design",
+            "specs",
+            "test-cases"
+          ]
+        }
+      }
+    },
+    {
       "id": "demo-approved",
       "dir": "openspec/changes/demo-approved",
       "schema": "grade10-planning",
@@ -429,6 +557,8 @@
         "decisions",
         "tasks"
       ],
+      "accepted": true,
+      "acceptanceFingerprint": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
       "promotedBy": "tester",
       "dependsOn": [
         "demo-planned"
@@ -590,15 +720,15 @@
       }
     },
     {
-      "id": "demo-on-staging",
-      "dir": "openspec/changes/demo-on-staging",
+      "id": "demo-implementation-complete",
+      "dir": "openspec/changes/demo-implementation-complete",
       "schema": "grade10-planning",
       "status": "in-flight",
-      "stage": "on-staging",
+      "stage": "implementation-complete",
       "owners": [],
       "created": "2026-08-20",
-      "title": "The On staging stage",
-      "why": "The fixture walk needs a change whose one task is fully checked off and\ndeployed to staging, and old enough that nobody has landed anything on it\nfor a while, so a reader can see the Idle overlay beside a stage other than\nBuilding.",
+      "title": "The Implementation complete stage",
+      "why": "The fixture walk needs an implementation-complete change whose one task is\nfully checked off and old enough that nobody has landed anything on it for a\nwhile, so a reader can see the Idle overlay beside a stage other than Building.",
       "taskGroups": [
         {
           "num": "1",
@@ -619,12 +749,14 @@
         "proposal",
         "tasks"
       ],
+      "accepted": true,
+      "acceptanceFingerprint": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "implementationComplete": true,
       "promotedBy": "tester",
-      "decisionsWaived": "the fixture is about the On staging stage, not the decisions",
-      "designWaived": "the fixture is about the On staging stage, not the designs",
-      "uiWaived": "the fixture is about the On staging stage, not the designs",
-      "deployedEnv": "staging",
-      "skipSpecs": "the fixture is about the On staging stage and the Idle overlay, not the requirements",
+      "decisionsWaived": "the fixture is about the Implementation complete stage, not the decisions",
+      "designWaived": "the fixture is about the Implementation complete stage, not the designs",
+      "uiWaived": "the fixture is about the Implementation complete stage, not the designs",
+      "skipSpecs": "the fixture is about the Implementation complete stage and the Idle overlay, not the requirements",
       "author": "tester",
       "rounds": [
         {
@@ -654,7 +786,7 @@
       ],
       "upstream": {
         "tasks": {
-          "id": "800c7b56",
+          "id": "1409ea19",
           "items": [
             "proposal"
           ]
@@ -927,135 +1059,6 @@
             "docs/prds/products/demo-product/index.md#refunds",
             "proposal",
             "decisions"
-          ]
-        }
-      }
-    },
-    {
-      "id": "demo-released",
-      "dir": "openspec/changes/demo-released",
-      "schema": "grade10-planning",
-      "status": "in-flight",
-      "stage": "released",
-      "owners": [],
-      "created": "2026-08-01",
-      "title": "The Released stage",
-      "why": "The fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging - and one whose artifacts landed on known\ndays, so the handoff has days to show.",
-      "taskGroups": [
-        {
-          "num": "1",
-          "title": "Contracts",
-          "repo": "grade10-spec",
-          "done": 1,
-          "total": 1,
-          "tasks": [
-            {
-              "text": "1.1 Publish the contract.",
-              "done": true
-            }
-          ]
-        }
-      ],
-      "deltas": [
-        {
-          "spec": "demo-product/alpha",
-          "kinds": [
-            "ADDED"
-          ],
-          "requirements": [
-            {
-              "name": "The thing is shown as done",
-              "kind": "added",
-              "text": "### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done"
-            }
-          ]
-        }
-      ],
-      "written": [
-        "proposal",
-        "decisions",
-        "user-journeys",
-        "ui-design",
-        "specs",
-        "test-cases",
-        "tasks"
-      ],
-      "promotedBy": "tester",
-      "designWaived": "the fixture is about the Released stage, not the tech design",
-      "deployedEnv": "staging",
-      "deployedBuild": "1.4.0-rc2",
-      "releasedIn": "v2026.09.0",
-      "hands": {
-        "pm": "tester",
-        "design": "tester",
-        "qa": "tester",
-        "dev": "tester",
-        "release": "tester"
-      },
-      "author": "tester",
-      "suites": [
-        {
-          "spec": "demo-product/alpha",
-          "path": "openspec/changes/demo-released/specs/demo-product/alpha/feature-tcs.md",
-          "status": "approved",
-          "cases": {
-            "draft": 0,
-            "actual": 1,
-            "deprecated": 0,
-            "total": 1,
-            "automated": 0
-          }
-        }
-      ],
-      "upstream": {
-        "decisions": {
-          "id": "37dd348d",
-          "items": [
-            "proposal"
-          ]
-        },
-        "user-journeys": {
-          "id": "435c8f4b",
-          "items": [
-            "proposal",
-            "decisions"
-          ]
-        },
-        "ui-design": {
-          "id": "ee5b7522",
-          "items": [
-            "proposal",
-            "decisions",
-            "user-journeys"
-          ]
-        },
-        "specs": {
-          "id": "5524a95c",
-          "items": [
-            "proposal",
-            "decisions",
-            "user-journeys",
-            "ui-design"
-          ]
-        },
-        "test-cases": {
-          "id": "5524a95c",
-          "items": [
-            "proposal",
-            "decisions",
-            "user-journeys",
-            "ui-design"
-          ]
-        },
-        "tasks": {
-          "id": "53d3e38e",
-          "items": [
-            "proposal",
-            "decisions",
-            "user-journeys",
-            "ui-design",
-            "specs",
-            "test-cases"
           ]
         }
       }

@@ -413,6 +413,7 @@ function readDeltaFiles(root, changes) {
       const sections = deltaSections(text);
       files.push({
         change: change.id,
+        accepted: change.accepted === true,
         spec: delta.spec,
         file,
         text,
@@ -485,6 +486,12 @@ function checkShape(files, add) {
 function checkFolded(ctx, files, shape) {
   const blocks = durableBlocks(ctx.roots.store, shape);
   for (const one of files) {
+    // Acceptance publishes these exact deltas to the durable spec before
+    // implementation. They remain beside the active plan for traceability;
+    // rechecking them as new fold input would call their own publication a
+    // duplicate. The acceptance reader only sets this flag for a valid v1
+    // record naming the same change.
+    if (one.accepted) continue;
     const spec = ctx.specs.get(one.spec);
     // A spec the readers refused has no requirements to match against, and
     // the store rule already names it.

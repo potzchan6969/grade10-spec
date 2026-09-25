@@ -214,16 +214,16 @@ describe("the lanes", () => {
       "designed",
       "specified",
       "planned",
+      "accepted",
       "building",
-      "on-staging",
-      "released",
+      "implementation-complete",
       "archived",
     ] as Stage[]) {
       const found = html.indexOf(`data-lane="${stage}"`);
       expect(found, stage).toBeGreaterThan(last);
       last = found;
     }
-    expect(html).toContain(">On staging<");
+    expect(html).toContain(">Implementation complete<");
 
     // The Archived lane's own rows are the in-flight changes, always none;
     // its heading carries the archive's whole count and links to the
@@ -253,19 +253,19 @@ describe("the lanes", () => {
 
   it("A lane with no change in it, collapsed to its heading", () => {
     const html = render([at("planned")]);
-    const staging = lane(html, "on-staging", "released");
+    const complete = lane(html, "implementation-complete", "archived");
 
-    expect(staging).toContain(">0<");
-    expect(staging).toContain("QA");
-    expect(staging).toContain("release hand");
-    expect(laneOpen(html, "released")).toBe("shut");
+    expect(complete).toContain(">0<");
+    expect(complete).toContain("QA");
+    expect(complete).toContain("release hand");
+    expect(laneOpen(html, "archived")).toBe("shut");
   });
 
   it("A lane whose stage names nobody, collapsed while a lane on a hand is open", () => {
     const html = render([at("proposed"), at("designed"), at("planned")]);
 
     expect(laneOpen(html, "designed")).toBe("shut");
-    expect(laneOpen(html, "released")).toBe("shut");
+    expect(laneOpen(html, "implementation-complete")).toBe("shut");
     expect(laneOpen(html, "archived")).toBe("shut");
     expect(laneOpen(html, "proposed")).toBe("open");
     expect(laneOpen(html, "planned")).toBe("open");
@@ -284,8 +284,8 @@ describe("the lanes", () => {
     expect(html).toContain(
       'title="agent drafts each group, test first · read each landing"',
     );
-    expect(lane(html, "on-staging", "released")).not.toContain("agent drafts");
-    expect(lane(html, "released", "archived")).not.toContain("agent drafts");
+    expect(lane(html, "implementation-complete", "archived")).not.toContain("agent drafts");
+    expect(lane(html, "archived", "archived")).not.toContain("agent drafts");
   });
 
   it("gives two changes in one stage the same pair", () => {

@@ -17,10 +17,6 @@ import { waiverLineOf } from "../src/api/waivers.ts";
 import { productPages } from "./context.mjs";
 import { heldToRounds, ROUND_RECORD_SINCE } from "./rounds.mjs";
 
-/** The day the deploy record became a rule: every archive before it shipped
- * without one. */
-export const DEPLOY_RECORD_SINCE = "2026-09-12";
-
 /** The day after `decisions.md` became required. The four changes opened on
  * the day itself were opened before the flag moved, and a register of changes
  * that could not have complied is a check people learn to read past. */
@@ -171,12 +167,7 @@ export function checkDecided(ctx, changes) {
   }
 }
 
-/** An archive says which deploy carried it. The store cannot see the
- * application repository's runs, so it checks the record `pnpm plan shipped`
- * leaves — unless nothing in the change deploys, which the repository tags
- * already say.
- *
- * The same pass checks the other thing archive can lose: `rounds.md` is
+/** The store checks the thing archive can lose: `rounds.md` is
  * folded into no durable capability, so it archives with the change like
  * `decisions.md` does, and the one way to lose it is an archived copy that
  * does not carry it across. Held the way `round`'s own rule holds a change
@@ -185,25 +176,6 @@ export function checkDecided(ctx, changes) {
  * an archive from the old flow owes nothing (`Q96`). */
 export function checkArchived(ctx, archived, since = ROUND_RECORD_SINCE) {
   for (const change of archived) {
-    if (change.shippedOn && change.shippedOn >= DEPLOY_RECORD_SINCE) {
-      if (!change.deployedAt && !change.deployWaived) {
-        const isStoreOnly =
-          change.taskGroups.length > 0 &&
-          change.taskGroups.every((one) => one.repo === STORE_GROUP);
-        if (!isStoreOnly) {
-          const file = fileOf(change, ".openspec.yaml");
-          const missing = existsSync(join(ctx.roots.store, file))
-            ? "records no deploy"
-            : "carries no `.openspec.yaml`, so it records no deploy";
-          ctx.add(
-            "archived",
-            file,
-            `${missing} — \`pnpm plan shipped ${change.id}\` writes \`deployed_at\`, or say who archived it without one in \`deploy_waived\``,
-          );
-        }
-      }
-    }
-
     if (heldToRounds(change, since)) {
       const roundsFile = fileOf(change, "rounds.md");
       if (!existsSync(join(ctx.roots.store, roundsFile))) {

@@ -39,9 +39,9 @@ describe("the bundled fixture snapshot", () => {
   /** The handoff is read from these dates and from nothing else: `NO_GIT`
    * leaves every `lastCommit` absent, so a fixture's stage landings are
    * whatever `fixture-dates.json` names. */
-  it("dates the released change's artifacts from fixture-dates.json", () => {
+  it("dates the accepted change's artifacts from fixture-dates.json", () => {
     const dates = Object.fromEntries(
-      committedChanges["demo-released"].artifacts
+      committedChanges["demo-accepted"].artifacts
         .filter((one: { lastCommit?: { date: string } }) => one.lastCommit)
         .map((one: { name: string; lastCommit: { date: string } }) => [
           one.name,

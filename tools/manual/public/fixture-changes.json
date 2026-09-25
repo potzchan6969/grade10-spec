@@ -95,6 +95,148 @@
     ],
     "history": []
   },
+  "demo-accepted": {
+    "id": "demo-accepted",
+    "dir": "openspec/changes/demo-accepted",
+    "schema": "grade10-planning",
+    "schemaKnown": true,
+    "artifacts": [
+      {
+        "name": "proposal",
+        "kind": "doc",
+        "path": "openspec/changes/demo-accepted/proposal.md",
+        "present": true,
+        "text": "# The Accepted stage\n\n**Author:** @tester - 2026-08-01\n\n## Why\n\nThe fixture walk needs an accepted plan that is waiting for implementation,\nwith artifact dates the handoff can show.\n\n## What Changes\n\n- **The accepted plan waits on implementation**, with its task still open.\n\n## Capabilities\n\n- **Modified Capabilities**: demo-product/alpha\n",
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-01T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "decisions",
+        "kind": "doc",
+        "path": "openspec/changes/demo-accepted/decisions.md",
+        "present": true,
+        "text": "## Goals\n\n- The change ships, and the days it took are readable after it has.\n\n## Non-Goals\n\n- Reopening anything the release closed.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Whether a shipped change keeps its handoff | Yes | Dropping the days at the cut |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n",
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-03T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "user-journeys",
+        "kind": "journeys",
+        "present": true,
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-05T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "ui-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-accepted/ui-design.md",
+        "present": true,
+        "text": "# UI: the Accepted stage\n\n## Screens\n\n- The thing's page: https://figma.example/file/accepted\n\n## Components\n\n- Badge (`@grade10/design-system`)\n\n## States\n\n- The thing, as accepted - `alpha-US-01`\n",
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-08T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "tech-design",
+        "kind": "doc",
+        "path": "openspec/changes/demo-accepted/tech-design.md",
+        "present": false
+      },
+      {
+        "name": "specs",
+        "kind": "specs",
+        "present": true,
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-10T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "test-cases",
+        "kind": "cases",
+        "present": true,
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-11T00:00:00+00:00"
+        }
+      },
+      {
+        "name": "tasks",
+        "kind": "tasks",
+        "path": "openspec/changes/demo-accepted/tasks.md",
+        "present": true,
+        "lastCommit": {
+          "sha": "0000000000000000000000000000000000000000",
+          "subject": "fixture-dates.json",
+          "date": "2026-08-12T00:00:00+00:00"
+        }
+      }
+    ],
+    "deltas": [
+      {
+        "spec": "demo-product/alpha",
+        "path": "openspec/changes/demo-accepted/specs/demo-product/alpha/spec.md",
+        "text": "## ADDED Requirements\n\n### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done\n",
+        "sections": [
+          {
+            "kind": "added",
+            "requirements": [
+              {
+                "name": "The thing is shown as done",
+                "text": "The system SHALL show the thing as done once it has happened.",
+                "scenarios": [
+                  {
+                    "name": "The thing reads as done",
+                    "text": "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done",
+                    "id": "alpha-SC-07",
+                    "serves": [
+                      "alpha-US-01"
+                    ],
+                    "servesProse": "Reader follows the thing end to end"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "journeys": [
+          {
+            "id": "alpha-US-01",
+            "title": "Reader follows the thing end to end",
+            "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened."
+          }
+        ],
+        "suite": {
+          "status": "approved",
+          "cases": [
+            {
+              "id": "alpha-TC-06",
+              "title": "Reader sees the thing as done",
+              "traces": [
+                "alpha-SC-07"
+              ],
+              "status": "actual",
+              "automationStatus": "manual"
+            }
+          ]
+        }
+      }
+    ],
+    "history": []
+  },
   "demo-approved": {
     "id": "demo-approved",
     "dir": "openspec/changes/demo-approved",
@@ -420,23 +562,23 @@
     "deltas": [],
     "history": []
   },
-  "demo-on-staging": {
-    "id": "demo-on-staging",
-    "dir": "openspec/changes/demo-on-staging",
+  "demo-implementation-complete": {
+    "id": "demo-implementation-complete",
+    "dir": "openspec/changes/demo-implementation-complete",
     "schema": "grade10-planning",
     "schemaKnown": true,
     "artifacts": [
       {
         "name": "proposal",
         "kind": "doc",
-        "path": "openspec/changes/demo-on-staging/proposal.md",
+        "path": "openspec/changes/demo-implementation-complete/proposal.md",
         "present": true,
-        "text": "# The On staging stage\n\n**Author:** @tester - 2026-08-20\n\n## Why\n\nThe fixture walk needs a change whose one task is fully checked off and\ndeployed to staging, and old enough that nobody has landed anything on it\nfor a while, so a reader can see the Idle overlay beside a stage other than\nBuilding.\n\n## What Changes\n\n- **The only task lands**, and the deploy is recorded.\n"
+        "text": "# The Implementation complete stage\n\n**Author:** @tester - 2026-08-20\n\n## Why\n\nThe fixture walk needs an implementation-complete change whose one task is\nfully checked off and old enough that nobody has landed anything on it for a\nwhile, so a reader can see the Idle overlay beside a stage other than Building.\n\n## What Changes\n\n- **The implementation is complete**, with its task and repository record.\n"
       },
       {
         "name": "decisions",
         "kind": "doc",
-        "path": "openspec/changes/demo-on-staging/decisions.md",
+        "path": "openspec/changes/demo-implementation-complete/decisions.md",
         "present": false
       },
       {
@@ -447,13 +589,13 @@
       {
         "name": "ui-design",
         "kind": "doc",
-        "path": "openspec/changes/demo-on-staging/ui-design.md",
+        "path": "openspec/changes/demo-implementation-complete/ui-design.md",
         "present": false
       },
       {
         "name": "tech-design",
         "kind": "doc",
-        "path": "openspec/changes/demo-on-staging/tech-design.md",
+        "path": "openspec/changes/demo-implementation-complete/tech-design.md",
         "present": false
       },
       {
@@ -469,13 +611,13 @@
       {
         "name": "tasks",
         "kind": "tasks",
-        "path": "openspec/changes/demo-on-staging/tasks.md",
+        "path": "openspec/changes/demo-implementation-complete/tasks.md",
         "present": true
       },
       {
         "name": "rounds",
         "kind": "doc",
-        "path": "openspec/changes/demo-on-staging/rounds.md",
+        "path": "openspec/changes/demo-implementation-complete/rounds.md",
         "present": true,
         "text": "# Rounds\n\nOne row per round: what it read, who read it, what stood and what it asked.\nWritten by the landing, in the landing's own commit.\n\n| Round | Artifact | Perspectives | Stood | Asked | Tests |\n| --- | --- | --- | --- | --- | --- |\n| 1 | tasks | the-simpler-thing; nitpick | nothing stood | - | - |\n| 2 | 1 | missing-pieces; code-smell | the fixture's one task lands cleanly | Q1 | alpha-SC-01: test/thing.test.ts |\n| 3 | proposal | the-simpler-thing | the why holds without the extra paragraph | - | - |\n"
       }
@@ -701,148 +843,6 @@
       }
     ],
     "deltas": [],
-    "history": []
-  },
-  "demo-released": {
-    "id": "demo-released",
-    "dir": "openspec/changes/demo-released",
-    "schema": "grade10-planning",
-    "schemaKnown": true,
-    "artifacts": [
-      {
-        "name": "proposal",
-        "kind": "doc",
-        "path": "openspec/changes/demo-released/proposal.md",
-        "present": true,
-        "text": "# The Released stage\n\n**Author:** @tester - 2026-08-01\n\n## Why\n\nThe fixture walk needs a change that has shipped, so a reader can tell the\nReleased stage from On staging - and one whose artifacts landed on known\ndays, so the handoff has days to show.\n\n## What Changes\n\n- **The only task lands**, deployed and released.\n\n## Capabilities\n\n- **Modified Capabilities**: demo-product/alpha\n",
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-01T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "decisions",
-        "kind": "doc",
-        "path": "openspec/changes/demo-released/decisions.md",
-        "present": true,
-        "text": "## Goals\n\n- The change ships, and the days it took are readable after it has.\n\n## Non-Goals\n\n- Reopening anything the release closed.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Whether a shipped change keeps its handoff | Yes | Dropping the days at the cut |\n\n## Raised\n\n| Capability | Raised | Landed |\n| --- | --- | --- |\n",
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-03T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "user-journeys",
-        "kind": "journeys",
-        "present": true,
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-05T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "ui-design",
-        "kind": "doc",
-        "path": "openspec/changes/demo-released/ui-design.md",
-        "present": true,
-        "text": "# UI: the Released stage\n\n## Screens\n\n- The thing's page: https://figma.example/file/released\n\n## Components\n\n- Badge (`@grade10/design-system`)\n\n## States\n\n- The thing, once it has happened - `alpha-US-01`\n",
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-08T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "tech-design",
-        "kind": "doc",
-        "path": "openspec/changes/demo-released/tech-design.md",
-        "present": false
-      },
-      {
-        "name": "specs",
-        "kind": "specs",
-        "present": true,
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-10T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "test-cases",
-        "kind": "cases",
-        "present": true,
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-11T00:00:00+00:00"
-        }
-      },
-      {
-        "name": "tasks",
-        "kind": "tasks",
-        "path": "openspec/changes/demo-released/tasks.md",
-        "present": true,
-        "lastCommit": {
-          "sha": "0000000000000000000000000000000000000000",
-          "subject": "fixture-dates.json",
-          "date": "2026-08-12T00:00:00+00:00"
-        }
-      }
-    ],
-    "deltas": [
-      {
-        "spec": "demo-product/alpha",
-        "path": "openspec/changes/demo-released/specs/demo-product/alpha/spec.md",
-        "text": "## ADDED Requirements\n\n### Requirement: The thing is shown as done\n\nThe system SHALL show the thing as done once it has happened.\n\n#### Scenario: alpha-SC-07 - The thing reads as done\n**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done\n",
-        "sections": [
-          {
-            "kind": "added",
-            "requirements": [
-              {
-                "name": "The thing is shown as done",
-                "text": "The system SHALL show the thing as done once it has happened.",
-                "scenarios": [
-                  {
-                    "name": "The thing reads as done",
-                    "text": "**Serves:** alpha-US-01 - Reader follows the thing end to end\n\n- **WHEN** the thing has happened\n- **THEN** it is shown as done",
-                    "id": "alpha-SC-07",
-                    "serves": [
-                      "alpha-US-01"
-                    ],
-                    "servesProse": "Reader follows the thing end to end"
-                  }
-                ]
-              }
-            ]
-          }
-        ],
-        "journeys": [
-          {
-            "id": "alpha-US-01",
-            "title": "Reader follows the thing end to end",
-            "text": "**As a** reader,\n**I want** the thing to happen once and leave a record,\n**so that** I can tell whether it already happened."
-          }
-        ],
-        "suite": {
-          "status": "approved",
-          "cases": [
-            {
-              "id": "alpha-TC-06",
-              "title": "Reader sees the thing as done",
-              "traces": [
-                "alpha-SC-07"
-              ],
-              "status": "actual",
-              "automationStatus": "manual"
-            }
-          ]
-        }
-      }
-    ],
     "history": []
   },
   "demo-specified": {

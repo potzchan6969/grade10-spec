@@ -110,7 +110,7 @@ describe("the lanes", () => {
   });
   const done = changeEntry("finished", [delta()], {
     title: "Waiting on the archive",
-    stage: "on-staging",
+    stage: "implementation-complete",
     taskGroups: [
       { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
     ],
@@ -123,7 +123,7 @@ describe("the lanes", () => {
       [">Proposed<", "Only a reason"],
       [">Specified<", "Deltas, no plan"],
       [">Building<", "Half built"],
-      [">On staging<", "Waiting on the archive"],
+      [">Implementation complete<", "Waiting on the archive"],
     ]) {
       expect(html).toContain(lane);
       expect(html).toContain(title);
@@ -136,7 +136,7 @@ describe("the lanes", () => {
   /** Three changes have been fully checked off for months and wore the same
    * "in flight" badge as a 0/45 one. */
   it("says a change every box is ticked on is waiting on the archive", () => {
-    expect(render([done])).toContain("fold it into the durable specs");
+    expect(render([done])).toContain("archive the verified implementation");
   });
 
   it("collapses a lane it has nothing for to its heading", () => {
@@ -228,7 +228,7 @@ describe("the loop's continuation on the card", () => {
   it("hands a complete change to /archive-change", () => {
     const html = render([
       changeEntry("finished", [delta()], {
-        stage: "on-staging",
+        stage: "implementation-complete",
         taskGroups: [
           { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
         ],
@@ -262,7 +262,7 @@ describe("where the change stands against the store's main", () => {
   it("says a complete change cannot archive off main", () => {
     const html = render([
       changeEntry("finished", [delta()], {
-        stage: "on-staging",
+        stage: "implementation-complete",
         taskGroups: [
           { title: "Contracts", repo: "grade10-spec", done: 3, total: 3 },
         ],
