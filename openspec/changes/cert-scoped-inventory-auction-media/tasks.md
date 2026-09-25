@@ -20,14 +20,14 @@
   `grade10-admin-inventory-catalog-SC-130`,
   `grade10-admin-inventory-catalog-SC-134`,
   `grade10-admin-inventory-catalog-SC-135`)
-- [ ] 1.3 Add Inventory media-manager tag, untag, and retag controls using
+- [x] 1.3 Add Inventory media-manager tag, untag, and retag controls using
   existing Inventory authority (`grade10-admin-inventory-catalog-SC-131`,
   `grade10-admin-inventory-catalog-SC-132`,
   `grade10-admin-inventory-catalog-SC-133`)
 - [ ] 1.4 Verify: run Inventory migration, service, API, and admin-editor
   coverage plus `pnpm run typecheck` and `pnpm run lint` in `grade10`.
 
-## 2. Auction Cert-aware source selection (grade10)
+## 2. Auction Cert-aware source selection (grade10) (owner: @htonyl)
 
 - [ ] 2.1 Add failing Auction service and editor coverage for Cert-aware
   default sources, No Cert ID, Other Cert drawer grouping, authorization, and
@@ -37,13 +37,13 @@
   `grade10-admin-auction-listing-SC-105`,
   `grade10-admin-auction-listing-SC-114`,
   `grade10-admin-auction-listing-SC-115`)
-- [ ] 2.2 Extend the Inventory-to-Auction source-media contract and Auction
+- [x] 2.2 Extend the Inventory-to-Auction source-media contract and Auction
   editor so the main selector and Other Cert drawer enforce the selected
   product and Cert-record rules (`grade10-admin-auction-listing-SC-101`,
   `grade10-admin-auction-listing-SC-103`,
   `grade10-admin-auction-listing-SC-104`,
   `grade10-admin-auction-listing-SC-105`)
-- [ ] 2.3 Preserve the existing direct-upload gallery, shared cap and order,
+- [x] 2.3 Preserve the existing direct-upload gallery, shared cap and order,
   and source snapshot behavior (`grade10-admin-auction-listing-SC-106`,
   `grade10-admin-auction-listing-SC-107`,
   `grade10-admin-auction-listing-SC-108`,
