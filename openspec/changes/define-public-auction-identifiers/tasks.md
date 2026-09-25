@@ -36,7 +36,7 @@
   - Covers: grade10-admin-auction-listing-SC-87-SC-94.
   - Verification: admin frontend tests and `pnpm run build` for the affected app.
 
-## 4. Public listing address (grade10)
+## 4. Public listing address (grade10) (owner: @htonyl)
 
 - [ ] 4.1 Resolve the generated canonical slug with its lower-case code suffix,
   omit the labelled code from public HTML, metadata and client data, and keep
