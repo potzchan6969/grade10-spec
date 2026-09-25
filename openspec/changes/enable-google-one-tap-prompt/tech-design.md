@@ -29,7 +29,7 @@ The button mounts inside `SignInCard`, itself inside `SignInOverlayProvider` (`p
 - Watches `open` transition `false → true` and calls `cancelOneTapPrompt()` the same render.
 - Passes `promptOptions.onPromptNotification` through to `promptOneTap()` (a documented better-auth option, not a new one) to detect a `dismissed` or `skipped` moment and set the suppression flag from there — not from the awaited promise's resolution, which better-auth's client does not shape into a distinct "declined" value.
 
-**Library defaults stand.** `promptOptions.fedCM` stays on and `cancelOnTapOutside` is left unset — better-auth's own note says the two conflict, and no product decision asked for either to move.
+**Library defaults stand.** `promptOptions.fedCM` stays on and `cancelOnTapOutside` is left unset — better-auth's own note says the two conflict. FedCM's own account chooser is browser-owned UI no page can recolor or brand, which the shipped prompt's dark chrome on this light-only product surfaced immediately; `decisions.md` Q6 is the author's word that this is an accepted limit, not a gap to code around.
 
 **Mount point.** A new sibling component wrapping the hook (or the hook called directly from an existing chrome component, engineer's choice at implementation) sits inside `SignInOverlayProvider` beside `SignInDialog`: `apps/frontend/grade10/src/root.tsx` near `SignInBeforeNavigating` (~line 334) and `apps/frontend/zzz/src/root.tsx` near `SignInDialog` (~line 76). Each app's own `useSession()` and brand check are what it reads — no new context, no new provider.
 
@@ -37,7 +37,7 @@ The button mounts inside `SignInCard`, itself inside `SignInOverlayProvider` (`p
 
 - **[Risk]** A better-auth upgrade changes how the GSI script is loaded or shapes `window.google` differently → `cancelOneTapPrompt()`'s direct global call breaks silently. **Mitigation:** the guarded existence check makes a missing API a no-op, not a crash, and the call is isolated to one method for a future upgrade to update.
 - **[Risk]** better-auth's built-in retry/backoff re-invokes `prompt()` after a decline, racing the suppression flag. **Mitigation:** the flag is checked at every call site the hook has, not only at mount, and is set the moment `onPromptNotification` reports a decline — before the library's own next attempt could fire.
-- **[Risk]** FedCM vs. legacy prompt behavior differs across browsers. **Mitigation:** left at library defaults; no product decision depends on which path a given browser takes.
+- **[Risk]** FedCM's account chooser cannot be recolored — a visitor on a dark browser sees dark chrome even on this light-only product. **Mitigation:** `color_scheme: light` styles the classic-iframe fallback for a browser without FedCM; the FedCM path itself is an accepted limit (`decisions.md` Q6), not a gap this change codes around.
 
 ## Open Questions
 
