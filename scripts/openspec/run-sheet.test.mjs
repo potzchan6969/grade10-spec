@@ -47,6 +47,7 @@ import {
   caseRow,
   inReadingOrder,
   selectCases,
+  surfacePrefill,
 } from "./lib/select-cases.mjs";
 import { isAutomated, parseSuite } from "./lib/suites.mjs";
 
@@ -366,19 +367,65 @@ test("the three bands sit in reading order and account for every column", () => 
   assert.equal(COLUMNS[MARKING_START - 1], "Expected results");
 });
 
-test("a case no automated test covers starts its automation cells at `n/a`", () => {
+test("surface prefill follows Testability, then Automation status on mixed cases", () => {
+  const withClass = (testability, automationStatus) => {
+    const base = candidates[0].tc;
+    const props = new Map(base.props);
+    props.set("Testability", testability);
+    props.set("Automation status", automationStatus);
+    return surfacePrefill({ ...base, props });
+  };
+
+  assert.deepEqual(withClass("manual", "manual"), {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": "n/a",
+    "Auto mobile": "n/a",
+  });
+  assert.deepEqual(withClass("manual", "automated"), {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": "n/a",
+    "Auto mobile": "n/a",
+  });
+  assert.deepEqual(withClass("automation", "manual"), {
+    Web: "n/a",
+    Mobile: "n/a",
+    "Auto web": "to_do",
+    "Auto mobile": "to_do",
+  });
+  assert.deepEqual(withClass("automation", "automated"), {
+    Web: "n/a",
+    Mobile: "n/a",
+    "Auto web": "to_do",
+    "Auto mobile": "to_do",
+  });
+  assert.deepEqual(withClass("automation, manual", "manual"), {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": "n/a",
+    "Auto mobile": "n/a",
+  });
+  assert.deepEqual(withClass("automation, manual", "automated"), {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": "to_do",
+    "Auto mobile": "to_do",
+  });
+});
+
+test("a manual-only case starts Auto at `n/a`; an automation-only case starts Web and Mobile at `n/a`", () => {
   const manual = caseRow(candidates[0]);
   assert.equal(at(manual, "Web"), "to_do");
   assert.equal(at(manual, "Mobile"), "to_do");
   assert.equal(at(manual, "Auto web"), "n/a");
   assert.equal(at(manual, "Auto mobile"), "n/a");
 
-  // `automated` is the only value that opens the automation columns, and it
-  // leaves the manual ones alone: CI passing is not somebody having looked.
-  const automated = caseRow(candidates[1]);
-  assert.equal(at(automated, "Web"), "to_do");
-  assert.equal(at(automated, "Auto web"), "to_do");
-  assert.equal(at(automated, "Auto mobile"), "to_do");
+  const automationOnly = caseRow(candidates[1]);
+  assert.equal(at(automationOnly, "Web"), "n/a");
+  assert.equal(at(automationOnly, "Mobile"), "n/a");
+  assert.equal(at(automationOnly, "Auto web"), "to_do");
+  assert.equal(at(automationOnly, "Auto mobile"), "to_do");
 });
 
 test("every prefilled value is one the dropdown offers", () => {

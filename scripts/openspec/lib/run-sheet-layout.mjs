@@ -59,9 +59,9 @@ export const SURFACES = ["Web", "Mobile", "Auto web", "Auto mobile"];
  *
  * `n/a` and `skipped` are not the same answer and the Summary would lie if they
  * were: `skipped` is a case somebody chose not to walk this time, `n/a` is a
- * case this surface cannot answer at all - an automation column on a case no
- * automated test covers. A pass rate that counted `n/a` against itself would
- * fall every time QA wrote a case automation has not reached.
+ * surface that cannot answer - a person cannot walk an automation-only case,
+ * and Auto cannot answer a manual-only case. A pass rate that counted `n/a`
+ * against itself would fall every time a surface was never in play.
  */
 export const RESULTS = ["to_do", "pass", "fail", "blocked", "skipped", "n/a"];
 

@@ -994,7 +994,7 @@ console.log(
   `  ${dim(`https://docs.google.com/spreadsheets/d/${args.sheet}/edit#gid=${sheetId}`)}`,
 );
 console.log(
-  `\n${dim(`Mark ${SURFACES.join(", ")} and Notes. Every case starts at to_do; an automation column reading n/a is a case no automated test covers.`)}`,
+  `\n${dim(`Mark ${SURFACES.join(", ")} and Notes. Prefill follows Testability: a surface that cannot answer starts at n/a.`)}`,
 );
 console.log(
   `${dim("The case and its classification are locked. Sort inside the Walk filter view, not the sheet.")}`,

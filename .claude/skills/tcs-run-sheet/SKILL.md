@@ -95,8 +95,10 @@ in the same pass when the request covers both.
   on a phone. The case to their left and the classification to their right are
   locked, and an edit there is refused at the cell. A wrong case is fixed in
   `openspec/`, not in the sheet.
-- **Every case starts at `to_do`, so the Summary counts down.** An automation
-  column reading `n/a` is a case no automated test covers; `skipped` is a case
+- **Prefill follows Testability.** `manual` only: Web and Mobile `to_do`, Auto
+  `n/a`. `automation` only: Web and Mobile `n/a`, Auto `to_do` even when no
+  script has landed. `automation, manual`: Web and Mobile `to_do`; Auto `to_do`
+  if **Automation status** is `automated`, else `n/a`. `skipped` is a case
   somebody chose not to walk. The pass rate ignores `n/a` and counts `skipped`
   against the run.
 - **The Summary tab gives each run four rows**, one per surface, grouped under

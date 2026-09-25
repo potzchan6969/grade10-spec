@@ -175,24 +175,65 @@ export function automatedGateOf({ picked, refused, includeAutomated = false }) {
 }
 
 /**
+ * Prefill for the four surfaces.
+ *
+ * **Testability** says which side can answer. **Automation status** only
+ * opens Auto when a person can also walk the case.
+ *
+ * - `manual` only: Web and Mobile `to_do`, Auto `n/a`.
+ * - `automation` only: Web and Mobile `n/a`, Auto `to_do` even when no
+ *   script has landed yet.
+ * - `automation, manual`: Web and Mobile `to_do`; Auto `to_do` if status is
+ *   `automated`, else `n/a`.
+ */
+export function surfacePrefill(tc) {
+  const parts = prop(tc, "Testability")
+    .toLowerCase()
+    .split(/[,\s]+/)
+    .filter(Boolean);
+  const byScript = parts.includes("automation");
+  const byHand = parts.includes("manual");
+  const automated = isAutomated(tc);
+
+  if (byScript && !byHand) {
+    return {
+      Web: "n/a",
+      Mobile: "n/a",
+      "Auto web": "to_do",
+      "Auto mobile": "to_do",
+    };
+  }
+  if (byHand && !byScript) {
+    return {
+      Web: "to_do",
+      Mobile: "to_do",
+      "Auto web": "n/a",
+      "Auto mobile": "n/a",
+    };
+  }
+  return {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": automated ? "to_do" : "n/a",
+    "Auto mobile": automated ? "to_do" : "n/a",
+  };
+}
+
+/**
  * A case as its row, in `COLUMNS` order.
  *
  * The four surface cells arrive filled in, not empty. `to_do` is what makes the
  * Summary's progress honest: an empty cell is indistinguishable from a tab
- * nobody opened, where a column of `to_do` counts down as a tester works. The
- * automation columns of a case no automated test covers get `n/a` instead -
- * there is nothing there to do, and the case's `Automation status` is the only
- * record of that, so the prefill is where it reaches the sheet.
- *
- * Nothing carries the automation status as its own column any more. The pair of
- * `n/a`s says it, and a column saying it again would be a second place for it
- * to be wrong.
+ * nobody opened, where a column of `to_do` counts down as a tester works.
+ * `n/a` is a surface that cannot answer: a person cannot walk an
+ * automation-only case, and Auto cannot answer a manual-only case, or a mixed
+ * case whose **Automation status** is still `manual`.
  */
 export function caseRow({ read, tc }) {
   const { product, domain, capability } = splitCapability(read.capabilityId);
   const steps = tc.stepTexts.map((one, i) => `${i + 1}. ${one}`);
   if (tc.perRow) steps.unshift("Runs once per row of Test data.");
-  const automated = prop(tc, "Automation status").toLowerCase() === "automated";
+  const surfaces = surfacePrefill(tc);
   const cells = {
     "Case ID": tc.id,
     Title: tc.title,
@@ -200,10 +241,7 @@ export function caseRow({ read, tc }) {
     "Test data": tc.testData.map((r) => `${r.field}: ${r.value}`).join("\n"),
     Steps: steps.join("\n"),
     "Expected results": tc.expectedTexts.join("\n"),
-    Web: "to_do",
-    Mobile: "to_do",
-    "Auto web": automated ? "to_do" : "n/a",
-    "Auto mobile": automated ? "to_do" : "n/a",
+    ...surfaces,
     Product: product,
     Domain: domain,
     Capability: capability,
