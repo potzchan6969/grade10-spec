@@ -157,7 +157,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 | Platform | `openspec/specs/platform-tcs.md`, one for the store |
 
 - **One tree per run** — `/spec-to-tcs` writes only to the tree the argument names; when a capability is in both, ask, never prefer the delta
-- **Archive carries the suite** — the delta's `feature-tcs.md` moves with its `spec.md`
+- **Archive carries the suite** — the delta's `feature-tcs.md` moves with its `spec.md`, every case under its id, `<v>` and status; `pnpm run archive:preflight` refuses a suite that leaves one behind
 - **Every capability with checkable scenarios gets a suite** — missing or empty journeys are written first, from `spec.md`, to `openspec/config.yaml` (`rules.specs`, `rules.user-journeys`); a spec with no scenarios is not ready
 
 ## When Suites Are Generated

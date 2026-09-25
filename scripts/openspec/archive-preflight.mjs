@@ -75,8 +75,9 @@
  *          `--decisions-carried "<what went where>"`, or the same flag with
  *          `none` where nothing outlived the change.
  *
- *          A copy that did land is read for the four things only archive can
- *          get wrong: a written `## Purpose` replaces the durable one whole, a
+ *          A copy that did land is read for the five things only archive can
+ *          get wrong: every case of the change's suites lands under its id,
+ *          `<v>` and status, a written `## Purpose` replaces the durable one whole, a
  *          removed journey leaves a `## Retired` tombstone instead of vanishing
  *          (archived suites still trace its id), a carried `## Reconciliation`
  *          has its scenario ids stripped, and `## Settled` travels with the
@@ -119,7 +120,7 @@ import {
 import { walkedByNobody } from "../../tools/manual/src/store/read-specs.mts";
 import { roundsPath } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
-import { parseSuite } from "./lib/suites.mjs";
+import { caseIndex, parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -814,11 +815,13 @@ for (const { file, capability } of deltaFiles(changeId)) {
   }
 
   // The suites travel beside the spec — `feature-tcs.md` into the capability,
-  // `domain-tcs.md` into the domain above it. Every capability under a domain
-  // reaches the same domain suite, so it is read once.
+  // `domain-tcs.md` into the domain above it, `product-tcs.md` into the
+  // product above that. Every capability under a domain reaches the same
+  // domain suite, so it is read once.
   for (const [name, dir] of [
     ["feature-tcs.md", capability],
     ["domain-tcs.md", dirname(capability)],
+    ["product-tcs.md", dirname(dirname(capability))],
   ]) {
     const source = join(CHANGES, changeId, "specs", dir, name);
     if (!existsSync(source) || suitesSeen.has(source)) continue;
@@ -883,6 +886,32 @@ for (const { file, capability } of deltaFiles(changeId)) {
           capability: dir,
           what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
         });
+    }
+
+    // Every case the change's suite holds lands under the same id - `<v>`
+    // included, since the id carries it - and the same status. Copying the
+    // file's header and its sections while leaving cases behind is how
+    // archived changes lost whole journeys of cases: the durable file existed,
+    // so nothing above noticed.
+    const landedCases = caseIndex(ROOT, [target]);
+    const missing = [];
+    for (const [id, one] of caseIndex(ROOT, [source])) {
+      const there = landedCases.get(id);
+      if (there === undefined) missing.push(id);
+      else if (there.status !== one.status)
+        wrong.push({
+          capability: dir,
+          what: `${name} lands \`${id}\` as \`${there.status}\`, where the change holds it \`${one.status}\``,
+        });
+    }
+    if (missing.length > 0) {
+      const shown = missing.slice(0, SHOWN).join(", ");
+      const more =
+        missing.length > SHOWN ? `, … and ${missing.length - SHOWN} more` : "";
+      wrong.push({
+        capability: dir,
+        what: `${name} leaves ${missing.length} case(s) behind — each lands under its id and \`<v>\`: ${shown}${more}`,
+      });
     }
   }
 }
