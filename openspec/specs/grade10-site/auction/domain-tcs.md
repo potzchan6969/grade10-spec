@@ -1,7 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-25, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-25, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -771,7 +771,7 @@ them.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, release
@@ -791,7 +791,7 @@ them.
 | Field | Value |
 | --- | --- |
 | <listing_14> | An open HKD listing with no bids, holds off, starting price <starting price> |
-| <starting price> | 20000 minor units |
+| <starting price> | 20000 minor units, for example 200.00 HKD or 20000 JPY |
 | <increment> | 1000 minor units, the HKD step at <starting price> |
 | <user A maximum> | 50000 minor units |
 | <user B maximum> | 80000 minor units, above <user A maximum> |
