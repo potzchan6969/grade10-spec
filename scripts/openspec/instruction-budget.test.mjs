@@ -44,10 +44,8 @@ const SKILLS_BUDGET = {
   "workflow-plan": 717,
   "workflow-design": 253,
   "workflow-tech": 265,
-  // 364 once the simpler thing reads the reconciled requirements and cases;
-  // 398 once the levels above run first, so the blind suite reads the domain
-  // draft instead of re-walking its paths.
-  "workflow-specify": 398,
+  // 364 once the simpler thing reads the reconciled requirements and cases.
+  "workflow-specify": 364,
   // 178 after the enforcement audit's pass cut its three rules to a pointer
   // at the instruction that holds them.
   "workflow-tasks": 178,

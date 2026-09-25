@@ -19,13 +19,12 @@ An engineer who authored the change runs the same passes in their own lane;
 | `specs/<capability>/spec.md` — pass one | In the change, beside the journeys | `## Purpose` and `## Feature set`: the outline, written from the journeys and the marked PRD |
 | `specs/<capability>/feature-tcs.md` | In the change, beside the journeys | The blind suite and its `## Reconciliation`; you generate both, and review them with `/tcs-review` |
 | `specs/<capability>/spec.md` — pass two | In the change, beside the journeys | The requirement deltas and their scenarios, reconciled against that suite |
-| `openspec/specs/<product>/<domain>/domain-tcs.md` | Beside the durable specs | The paths a person walks across that domain's capabilities |
-| `openspec/specs/<product>/product-tcs.md` | Beside the durable specs | The paths a person walks across that product's domains |
+| `<product>/<domain>/domain-tcs.md` | Beside the durable specs, or in the change | The paths a person walks across that domain's capabilities |
+| `<product>/product-tcs.md` | Beside the durable specs, or in the change | The paths a person walks across that product's domains |
 | `openspec/specs/platform-tcs.md` | Beside the durable specs | The paths a person walks across products |
 
-The upper three are written only where a path exists to hold them, never under
-a change's deltas, and carry no coverage obligation: `product` and `platform`
-are smoke passes.
+The upper three are written only where a path exists to hold them: `product`
+and `platform` are smoke passes.
 
 Neither `specs` nor `test-cases` names a teammate in the schema: they sit on
 nobody's worklist. **The PM is the reader of record for both** - you run the
@@ -40,7 +39,7 @@ sections, the case ids, the classification block, the `**Trace:**` line, and
 the file header. Follow that document; this skill routes to it and adds
 nothing that contradicts it.
 
-For selected app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) after scenarios and feature cases exist. Scenario markers use `SC` references and case markers use `TC` references in the form `<app>.<product>-<capability>.<kind>-<three-character-base36-sequence>`. The CLI allocates the sequence; keep the capability slug stable and put behavior-specific meaning in the heading. These markers supplement the suite's `**Trace:**` line and never replace the journey or positional case headings.
+For app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) once scenarios and cases exist; its markers supplement the suite's `**Trace:**` line and never replace the journey or case headings.
 
 ## Why this workflow has the shape it has
 
@@ -59,9 +58,7 @@ scenarios from it would be a relay, not a cross-check - whoever writes second
 copies the first.
 
 The schema cannot express that order — `requires` is advisory and has never
-stopped anyone writing the scenarios first. The split that used to try was
-undone: it bought nothing and cost a false status line, two viewer tabs over
-one document, and a fix in another repository.
+stopped anyone writing the scenarios first.
 
 ## The run
 
