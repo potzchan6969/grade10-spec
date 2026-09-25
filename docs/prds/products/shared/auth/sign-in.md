@@ -66,6 +66,20 @@ session, and the person lands on the brand home with a toast.
   different account, names the link’s email in the description, and offers
   **Switch** or **Stay**; dismissing keeps the current session.
 
+## Google One Tap
+
+🚧 A signed-out collector on a brand that offers Google sign-in sees Google's
+own prompt in the browser corner, without opening sign-in first. Tapping it
+signs them in the same way the Google control does; leaving it alone leaves
+the page exactly as it was.
+
+- 🚧 **Brand-offered** - the prompt follows the Google control's own rule: a
+  brand without Google sign-in never shows it.
+- 🚧 **One ask at a time** - the prompt does not appear while the sign-in
+  dialog is already open, and opening the dialog dismisses it.
+- 🚧 **Every page** - the prompt can appear on any page a signed-out
+  collector visits, not only a sign-in step.
+
 ::story{id="auth-sign-in-signinemailform--default" title="The email step"}
 
 ::story{id="auth-sign-in-signinemailform--link-request-running" title="The send in flight"}
@@ -106,6 +120,9 @@ path, the link, beside Google.
 | Link lifetime | Decided | Five minutes, and the email says five minutes. Sixty seconds was shorter than delivery, so a collector reading mail on another device met a dead link. | Product |
 | How a locale writes the number | ❓ Open | A digit in every language, or each language's own word for five. | Product |
 | A device still waiting when the address signs in on another | Decided | The waiting surface ends its own wait with a message; it gains no session of its own — only the device that actually signed in has one. Checked without exposing whether an arbitrary address has a session: gated behind the waiting device's own flow, never a bare email. | Product |
+| Google One Tap and the sign-in dialog | Decided | The prompt yields to the dialog — suppressed while it is open, dismissed when it opens. | Product |
+| Google One Tap scope | Decided | Wherever Google sign-in is already brand-offered; a brand with no Google client id is unaffected until a separate change gives it one. | Product |
+| Google One Tap rollout | Decided | Ships to all eligible traffic at merge — no staged rollout, since the repository has no flag platform and the behavior reverts cleanly. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
