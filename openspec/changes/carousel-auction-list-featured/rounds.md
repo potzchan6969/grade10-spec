@@ -11,3 +11,4 @@ Written by the landing, in the landing's own commit.
 | 4 | tech-design | deterministic, simple, consistent, testable, simpler, verifier | Featured slots table, dedicated publicList, Manage Featured curator, front page image upload | - | - |
 | 5 | specs | simpler, verifier | Featured catalogue and Manage Featured requirements with dedicated publicList and front page image | - | - |
 | 6 | ui-design | simpler, verifier | Close Featured design states on issued scenario ids | - | - |
+| 7 | test-cases | simpler, verifier | Blind Featured suites reconciled to scenarios for site auction and admin featured | - | - |
