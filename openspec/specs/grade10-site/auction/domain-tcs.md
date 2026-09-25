@@ -783,19 +783,31 @@ them.
 **Pre-conditions:**
 
 * Bid-time holds are off.
-* customer A is signed in with a linked card and is on the lot page for an open listing.
-* customer B is signed in with a linked card, on a separate session, and can bid on that listing.
+* customer A is signed in with a linked card and is on the lot page for <listing_14>.
+* customer B is signed in with a linked card, on a separate session, and can bid on <listing_14>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_14> | An open HKD listing with no bids, holds off, starting price <starting price> |
+| <starting price> | 20000 minor units |
+| <increment> | 1000 minor units, the HKD step at <starting price> |
+| <user A maximum> | 50000 minor units |
+| <user B maximum> | 80000 minor units, above <user A maximum> |
+| <price after A> | <starting price> |
+| <price after B> | <user A maximum> plus <increment> |
 
 **Steps:**
 
-1. As customer A, enter a valid first maximum in the custom maximum on the bid panel and confirm the bid.
-2. As customer B, enter a higher maximum in the custom maximum on the same lot and confirm the bid.
+1. As customer A, enter <user A maximum> in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter <user B maximum> in the custom maximum on the same lot and confirm the bid.
 3. Read the bid panel.
 
 **Expected Results:**
 
-* Step 1 accepts the bid, and Change is unavailable.
-* The two maxima resolve by the listing's bid rules.
+* Step 1 accepts the bid at <price after A>, and Change is unavailable.
+* Highest bid reads <price after B>, and customer B leads.
 * The bid stands at once, and no bid-time hold is created or awaited.
 
 ---
