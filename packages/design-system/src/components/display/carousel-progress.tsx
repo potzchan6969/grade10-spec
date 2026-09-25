@@ -3,15 +3,18 @@ import type { AnimationEvent, ComponentProps } from "react";
 
 const FILL_ANIMATION = "carousel-progress-fill";
 
+/** Fixed track height — Figma `Size` rung is 6px (`h-1.5`). */
+const TRACK_SIZE = "h-1.5 min-h-1.5 max-h-1.5";
+
 type CarouselProgressProps = ComponentProps<"nav">;
 
 /**
  * Dot pagination for a carousel. The active item can show a linear fill that
  * reports completion through `onComplete` — used for auto-advance timers.
  *
- * Storybook is the layout source of truth. Figma `CarouselProgress` draws the
- * item states (`inactive` | `active` | `filling` | `complete`); timed fill is
- * driven in code by `durationMs`, not a Figma prop.
+ * Figma `CarouselProgress` draws the item states (`inactive` | `active` |
+ * `filling` | `complete`). Timed fill is driven in code by `durationMs`, not
+ * a Figma prop. With no timer, `active` is solid `primary` like `complete`.
  */
 function CarouselProgress({
   className,
@@ -61,8 +64,9 @@ type CarouselProgressItemProps = Omit<ComponentProps<"button">, "children"> & {
 };
 
 /**
- * One carousel progress control. Active items widen into a pill; when
- * `durationMs` is set they fill with `primary` until `onComplete`.
+ * One carousel progress control. Active items widen into a pill; with no timer
+ * they use solid `primary`. When `durationMs` is set the track stays
+ * `background-strong` and fills with `primary` until `onComplete`.
  */
 function CarouselProgressItem({
   className,
@@ -88,10 +92,13 @@ function CarouselProgressItem({
       aria-current={active ? "true" : undefined}
       aria-label={label}
       className={cn(
-        "relative cursor-pointer overflow-hidden rounded-full outline-none transition-[width,height] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
+        "relative inline-block shrink-0 appearance-none overflow-hidden rounded-full border-0 p-0 leading-none outline-none transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
+        TRACK_SIZE,
         active
-          ? "h-1.5 w-8 bg-border"
-          : "size-1.5 bg-border opacity-80 hover:opacity-100",
+          ? timed
+            ? "w-8 bg-background-strong"
+            : "w-8 bg-primary"
+          : "w-1.5 bg-background-strong opacity-80 hover:opacity-100",
         className,
       )}
       data-active={active ? "" : undefined}
@@ -102,7 +109,7 @@ function CarouselProgressItem({
       {timed ? (
         <span
           aria-hidden="true"
-          className="absolute inset-y-0 left-0 rounded-full bg-primary"
+          className="absolute top-0 left-0 h-full rounded-full bg-primary"
           key={playKey}
           onAnimationEnd={handleAnimationEnd}
           style={

@@ -11,7 +11,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Dot pagination for carousels. The active item can run a linear fill timer and call `onComplete` when it finishes.",
+          "Dot pagination for carousels. With no timer the active pill is solid primary; with `durationMs` it fills primary over a background-strong track and calls `onComplete` when finished.",
       },
     },
   },
