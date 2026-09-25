@@ -28,7 +28,7 @@
   - Covers: grade10-admin-auction-listing-SC-122-SC-123.
   - Verification: API and repository collision tests, then `pnpm run test:backend`.
 
-## 3. Admin listing surfaces (grade10)
+## 3. Admin listing surfaces (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Show the stored listing code read-only in the Listings table and
   listing detail screen for existing listing-admin readers. Keep code knowledge
