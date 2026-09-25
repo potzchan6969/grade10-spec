@@ -23,6 +23,7 @@ SHALL NOT include the secret that authenticates it. A caller without the
 grant SHALL be refused and SHALL receive no sessions. A caller who does not
 hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 
+<!-- trace:scenario id=g10.shared-sessions.SC-h95 rev=1 -->
 #### Scenario: shared-auth-sessions-SC-01 - An operator with the grant lists one person's sessions
 **Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
@@ -31,6 +32,7 @@ hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 - **THEN** they see that account's sessions
 - **AND** no session secret is in the result
 
+<!-- trace:scenario id=g10.shared-sessions.SC-bo7 rev=1 -->
 #### Scenario: shared-auth-sessions-SC-02 - A caller without the grant is refused
 **Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
@@ -39,6 +41,7 @@ hold `admin` SHALL NOT list sessions of an account that holds `admin`.
 - **THEN** the system refuses the request
 - **AND** returns no sessions
 
+<!-- trace:scenario id=g10.shared-sessions.SC-jz2 rev=1 -->
 #### Scenario: shared-auth-sessions-SC-03 - Support cannot list an admin's sessions
 **Serves:** shared-auth-sessions-US-01 - Operator lists a person's sessions
 
@@ -57,6 +60,7 @@ session of an account that holds `admin` unless the caller holds `admin`. A
 caller without the grant SHALL be refused, and the session SHALL remain.
 WHEN the caller revokes the session they are using, they are signed out.
 
+<!-- trace:scenario id=g10.shared-sessions.SC-4af rev=1 -->
 #### Scenario: shared-auth-sessions-SC-04 - A revoked session is not signed in
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
@@ -65,6 +69,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **THEN** a product reading who is calling on that session reports no
   person
 
+<!-- trace:scenario id=g10.shared-sessions.SC-lr6 rev=1 -->
 #### Scenario: shared-auth-sessions-SC-05 - Every session of an account can be revoked
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
@@ -72,6 +77,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **WHEN** they revoke every session of an account
 - **THEN** none of that account's sessions is signed in
 
+<!-- trace:scenario id=g10.shared-sessions.SC-txa rev=1 -->
 #### Scenario: shared-auth-sessions-SC-06 - A caller who cannot revoke is refused
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
@@ -80,6 +86,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **THEN** the system refuses the request
 - **AND** the session remains signed in
 
+<!-- trace:scenario id=g10.shared-sessions.SC-bcq rev=1 -->
 #### Scenario: shared-auth-sessions-SC-07 - Support cannot revoke an admin's session
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 
@@ -88,6 +95,7 @@ WHEN the caller revokes the session they are using, they are signed out.
 - **THEN** the system refuses the request
 - **AND** the session remains signed in
 
+<!-- trace:scenario id=g10.shared-sessions.SC-ots rev=1 -->
 #### Scenario: shared-auth-sessions-SC-08 - Revoking the current session signs the operator out
 **Serves:** shared-auth-sessions-US-02 - Operator ends a session
 

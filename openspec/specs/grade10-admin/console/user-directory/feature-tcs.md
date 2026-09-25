@@ -11,6 +11,7 @@ of those accounts can actually do,
 **so that** I can review the elevated access in the console without reading
 authorization source or asking an engineer.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-dac rev=1 covers=g10adm.console-user-directory.SC-s3c,g10adm.console-user-directory.SC-fjy,g10adm.console-user-directory.SC-2zy,g10adm.console-user-directory.SC-8pc,g10adm.console-user-directory.SC-0vu,g10adm.console-user-directory.SC-4l4,g10adm.console-user-directory.SC-w5y,g10adm.console-user-directory.SC-fy9,g10adm.console-user-directory.SC-k2t -->
 ### grade10-admin-console-user-directory-US1-TC1-1: Narrow to a role and read mapping grants
 
 **Classification:**
@@ -45,6 +46,7 @@ Signed in as admin(holds `user:list` and `user:set-role`). Directory holds <supp
 * Step 5 shows exactly the grants the mapping gives `support`, elevated ones marked once.
 * Step 6 opens Roles & Permissions on that role.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-k1h rev=1 covers=g10adm.console-user-directory.SC-s3c,g10adm.console-user-directory.SC-fjy,g10adm.console-user-directory.SC-2zy,g10adm.console-user-directory.SC-8pc,g10adm.console-user-directory.SC-0vu,g10adm.console-user-directory.SC-4l4,g10adm.console-user-directory.SC-w5y,g10adm.console-user-directory.SC-fy9,g10adm.console-user-directory.SC-k2t -->
 ### grade10-admin-console-user-directory-US1-TC2-1: Ungranted moves are not offered
 
 **Classification:**
@@ -84,6 +86,7 @@ whatever it points at,
 **so that** a colleague's link, a trail entry and my own bookmark all land me
 in the same place, and I never hunt for the person twice.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-ww8 rev=1 covers=g10adm.console-user-directory.SC-kyo,g10adm.console-user-directory.SC-pix,g10adm.console-user-directory.SC-thq,g10adm.console-user-directory.SC-akc,g10adm.console-user-directory.SC-wee,g10adm.console-user-directory.SC-xy1 -->
 ### grade10-admin-console-user-directory-US2-TC1-1: Address opens the panel; view survives a paste
 
 **Classification:**
@@ -114,6 +117,7 @@ Signed in as admin(holds `user:list`). Directory holds <known account>.
 * Step 2 opens the account panel beside the list.
 * Step 4 shows the same search, narrowing, page, and open panel without searching again.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-uh8 rev=1 covers=g10adm.console-user-directory.SC-kyo,g10adm.console-user-directory.SC-pix,g10adm.console-user-directory.SC-thq,g10adm.console-user-directory.SC-akc,g10adm.console-user-directory.SC-wee,g10adm.console-user-directory.SC-xy1 -->
 ### grade10-admin-console-user-directory-US2-TC2-1: Panel offers loyalty and audit hand-offs
 
 **Classification:**
@@ -153,6 +157,7 @@ reinstate it later,
 **so that** I can stop a bidder I have reason to stop without banning them
 from the whole platform.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-3ua rev=1 covers=g10adm.console-user-directory.SC-8ll,g10adm.console-user-directory.SC-e0b,g10adm.console-user-directory.SC-gn2,g10adm.console-user-directory.SC-25v -->
 ### grade10-admin-console-user-directory-US3-TC1-1: Suspend an account from its panel with a reason
 
 **Classification:**
@@ -191,6 +196,7 @@ is not suspended and not banned.
 * Panel offers reinstate, not suspend.
 * Account still shows as not banned.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-ed0 rev=1 covers=g10adm.console-user-directory.SC-8ll,g10adm.console-user-directory.SC-e0b,g10adm.console-user-directory.SC-gn2,g10adm.console-user-directory.SC-25v -->
 ### grade10-admin-console-user-directory-US3-TC2-1: Suspension cannot be confirmed without a reason
 
 **Classification:**
@@ -222,6 +228,7 @@ is not suspended.
 * The suspension cannot be confirmed.
 * Panel still shows <active account> as not suspended.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-14a rev=1 covers=g10adm.console-user-directory.SC-8ll,g10adm.console-user-directory.SC-e0b,g10adm.console-user-directory.SC-gn2,g10adm.console-user-directory.SC-25v -->
 ### grade10-admin-console-user-directory-US3-TC3-1: Reinstate an account suspended for a missed deadline
 
 **Classification:**
@@ -252,6 +259,7 @@ account> is suspended for a missed payment deadline.
 * Panel shows not suspended from auctions.
 * Panel offers suspend, not reinstate.
 
+<!-- trace:case id=g10adm.console-user-directory.TC-a2x rev=1 covers=g10adm.console-user-directory.SC-8ll,g10adm.console-user-directory.SC-e0b,g10adm.console-user-directory.SC-gn2,g10adm.console-user-directory.SC-25v -->
 ### grade10-admin-console-user-directory-US3-TC4-1: Operator without auction:moderate sees neither move
 
 **Classification:**

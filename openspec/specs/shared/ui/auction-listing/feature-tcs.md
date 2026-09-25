@@ -10,6 +10,7 @@
 contract states,
 **so that** each storefront embedding the panel shows collectors the same thing.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-qgl rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
 ### shared-ui-auction-listing-US1-TC1-1: Buyer fee shows inline at 20%
 
 **Classification:**
@@ -41,6 +42,7 @@ contract states,
   bid.
 * No buyer-fee info tooltip is present.
 
+<!-- trace:case id=g10.shared-auction-listing.TC-5tu rev=1 covers=g10.shared-auction-listing.SC-w7x,g10.shared-auction-listing.SC-tzp -->
 ### shared-ui-auction-listing-US1-TC2-1: Signed-out panel omits the fee line
 
 **Classification:**

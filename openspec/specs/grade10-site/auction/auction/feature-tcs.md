@@ -9,6 +9,7 @@
 **I want** a lot I bid on by its close to stay open until bidding stops,
 **so that** a bid placed at the last second can always be answered, up to the lot's cap.
 
+<!-- trace:case id=g10.auction-auction.TC-b19 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC5-1: The default bid path creates no authorization hold
 
 **Classification:**
@@ -38,6 +39,7 @@
 
 * Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe.
 
+<!-- trace:case id=g10.auction-auction.TC-rj4 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC10-1: Bid during extended bidding restarts the timer
 
 **Classification:**
@@ -81,6 +83,7 @@
 * The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`.
 * The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`.
 
+<!-- trace:case id=g10.auction-auction.TC-4fd rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC11-1: Extension cap holds the timer at the cap
 
 **Classification:**
@@ -121,6 +124,7 @@
 * The recorded close reads `<scheduled close>` plus `<extension cap>`.
 * The listing closes at `<result>`.
 
+<!-- trace:case id=g10.auction-auction.TC-sge rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC12-1: Listing's own duration sets how long extended bidding runs
 
 **Classification:**
@@ -159,6 +163,7 @@
 * The listing is in extended bidding.
 * The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`.
 
+<!-- trace:case id=g10.auction-auction.TC-o03 rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC13-1: Extension off closes the listing at its scheduled close
 
 **Classification:**
@@ -194,6 +199,7 @@
 * The listing is closed at its scheduled close.
 * It never entered extended bidding.
 
+<!-- trace:case id=g10.auction-auction.TC-ftw rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC14-1: Bids by the close decide whether extended bidding starts
 
 Runs once per row of **Test data**.
@@ -234,6 +240,7 @@ Runs once per row of **Test data**.
 
 * The listing reads `<result>`.
 
+<!-- trace:case id=g10.auction-auction.TC-m7f rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC6-1: When a bid lands against the scheduled close
 
 Runs once per row of **Test data**.
@@ -272,6 +279,7 @@ Runs once per row of **Test data**.
 * The bid is accepted.
 * The recorded close reads as the row states.
 
+<!-- trace:case id=g10.auction-auction.TC-iid rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC7-1: Each listing runs its own timer
 
 **Classification:**
@@ -308,6 +316,7 @@ Runs once per row of **Test data**.
 * `<listing_8>` reads 20:40 UTC.
 * `<listing_9>` still reads 20:30 UTC.
 
+<!-- trace:case id=g10.auction-auction.TC-q6k rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC8-1: Collector with no earlier bid bids during extended bidding
 
 **Classification:**
@@ -345,6 +354,7 @@ Runs once per row of **Test data**.
 * The bid is accepted.
 * The close moves to `<extension duration>` after that bid.
 
+<!-- trace:case id=g10.auction-auction.TC-ott rev=1 covers=g10.auction-auction.SC-jsr,g10.auction-auction.SC-5ao,g10.auction-auction.SC-2js,g10.auction-auction.SC-p70,g10.auction-auction.SC-n8w,g10.auction-auction.SC-z62,g10.auction-auction.SC-dnt,g10.auction-auction.SC-a33,g10.auction-auction.SC-cib,g10.auction-auction.SC-z5s,g10.auction-auction.SC-h4d,g10.auction-auction.SC-ch5,g10.auction-auction.SC-bz7,g10.auction-auction.SC-t3k -->
 ### grade10-site-auction-auction-US2-TC9-1: Bid after extended bidding ends is refused
 
 **Classification:**
@@ -386,6 +396,7 @@ Runs once per row of **Test data**.
 **I want** the catalogue to show Auction listings with money in minor units,
 **so that** I am not offered Buy Now and a close with bids is absolute.
 
+<!-- trace:case id=g10.auction-auction.TC-7os rev=1 covers=g10.auction-auction.SC-ian,g10.auction-auction.SC-fec,g10.auction-auction.SC-djb,g10.auction-auction.SC-kg8 -->
 ### grade10-site-auction-auction-US1-TC2-1: Public listing read exposes the close and extension policy
 
 **Classification:**
@@ -427,6 +438,7 @@ Runs once per row of **Test data**.
 **I want** one authorization per listing, released when I am outbid,
 **so that** a delayed lower hold or a duplicate Stripe event cannot take a second bite.
 
+<!-- trace:case id=g10.auction-auction.TC-tmg rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC1-1: Outbid authorization is marked for release
 
 **Classification:**
@@ -466,6 +478,7 @@ Runs once per row of **Test data**.
 * Customer A no longer holds an eligible top authorization for `<listing_1>`.
 * Grade10 records the Stripe release outcome when it arrives.
 
+<!-- trace:case id=g10.auction-auction.TC-g81 rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC2-1: Concurrent bids keep the highest valid outcome
 
 **Classification:**
@@ -503,6 +516,7 @@ Runs once per row of **Test data**.
 * The current bid is the highest valid accepted amount.
 * No lower bid overwrites that current bid.
 
+<!-- trace:case id=g10.auction-auction.TC-m5k rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC3-1: Delayed lower authorization cannot land
 
 **Classification:**
@@ -534,6 +548,7 @@ Runs once per row of **Test data**.
 * It does not record that lower bid as accepted.
 * The current bid is unchanged.
 
+<!-- trace:case id=g10.auction-auction.TC-9qw rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC4-1: Invalid or duplicate Stripe event changes nothing twice
 
 **Classification:**
@@ -572,6 +587,7 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * No bid, hold, release, capture, invoice or order state is duplicated.
 
+<!-- trace:case id=g10.auction-auction.TC-nna rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC5-1: Incomplete Stripe configuration fails the operation explicitly
 
 **Classification:**
@@ -601,6 +617,7 @@ Runs once per row of **Test data**.
 * Grade10 fails the operation, naming the unavailable capability.
 * No bid or fixture-backed outcome is created.
 
+<!-- trace:case id=g10.auction-auction.TC-ghi rev=1 covers=g10.auction-auction.SC-mrb,g10.auction-auction.SC-uha,g10.auction-auction.SC-8h7,g10.auction-auction.SC-fna,g10.auction-auction.SC-lk6,g10.auction-auction.SC-9io -->
 ### grade10-site-auction-auction-US3-TC6-1: Missed authorization webhook is repaired once
 
 **Classification:**
@@ -638,6 +655,7 @@ Runs once per row of **Test data**.
 **I want** to be told at once that a verified identity is needed and where to get one,
 **so that** my card is not held for a bid the auction cannot take, and I can verify and bid again before the lot closes.
 
+<!-- trace:case id=g10.auction-auction.TC-zsd rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
 ### grade10-site-auction-auction-US4-TC1-1: Verified bidder's bid at the bar is forwarded as any other
 
 **Classification:**
@@ -678,6 +696,7 @@ Runs once per row of **Test data**.
 * The bid is forwarded and accepted as any other — no refusal names a verified identity.
 * Highest bid reads `<bid at the bar>`, and one hold for it stands against `<card>`.
 
+<!-- trace:case id=g10.auction-auction.TC-5gi rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
 ### grade10-site-auction-auction-US4-TC2-1: Bidder without a verified standing is held at the storefront at and above the bar
 
 Runs once per row of **Test data**.
@@ -721,6 +740,7 @@ Runs once per row of **Test data**.
 * Highest bid and the bid count are unchanged — the auction records no bid.
 * No hold is taken against `<card>`.
 
+<!-- trace:case id=g10.auction-auction.TC-49i rev=1 covers=g10.auction-auction.SC-uhh,g10.auction-auction.SC-d78,g10.auction-auction.SC-ndj -->
 ### grade10-site-auction-auction-US4-TC3-1: Bid below the bar asks nothing of any bidder
 
 Runs once per row of **Test data**.

@@ -28,6 +28,7 @@ mapping and SHALL not be able to save it. A save with a missing currency, an
 unsupported currency, a negative amount, or a non-integer amount SHALL be
 refused without changing any stored value.
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-erw rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-01 - Settlement operator reads all currency minimums
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -35,6 +36,7 @@ refused without changing any stored value.
 - **WHEN** they open Payment settings under `/auction`
 - **THEN** Grade10 shows USD 0, HKD 0, and JPY 0 minor units on the initial mapping
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-veg rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-02 - Settlement operator replaces the mapping
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -43,6 +45,7 @@ refused without changing any stored value.
 - **THEN** Grade10 stores and returns exactly that complete mapping
 - **AND** records the acting operator and save timestamp
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-ieg rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-03 - Invalid mapping is atomic
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 
@@ -51,6 +54,7 @@ refused without changing any stored value.
 - **THEN** Grade10 refuses the save
 - **AND** all three stored values remain unchanged
 
+<!-- trace:scenario id=g10adm.auction-payment-settings.SC-s8d rev=1 -->
 #### Scenario: grade10-admin-auction-payment-settings-SC-04 - Other operators cannot read or write minimums
 **Serves:** grade10-admin-auction-payment-settings-US-01 - Operator maintains the auction premium minimums
 

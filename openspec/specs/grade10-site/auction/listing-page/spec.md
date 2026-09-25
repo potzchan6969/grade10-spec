@@ -54,6 +54,7 @@ response HTML without any script executing.
 Two lot addresses SHALL answer with their own lot — the page a collector
 reads is the one the address names, not the catalogue it was reached from.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-vnl rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-01 - A lot answers whole
 **Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
@@ -61,6 +62,7 @@ reads is the one the address names, not the catalogue it was reached from.
 - **THEN** the response HTML contains that lot's name, its description, and
   where its bidding stands
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-4q9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-02 - Two lots, two pages
 **Serves:** grade10-site-auction-listing-page-US-01 - Collector opens a lot at its own address
 
@@ -74,6 +76,7 @@ A lot address SHALL carry Open Graph title, description and URL naming that
 lot and its own canonical address, readable without executing scripts. A
 shared lot link SHALL NOT unfurl as the auction catalogue.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-mda rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-03 - A preview fetcher reads a lot
 **Serves:** grade10-site-auction-listing-page-US-02 - Collector shares a lot link
 
@@ -93,6 +96,7 @@ The address of a hidden lot, as `grade10-site/auction/lot-status` defines it,
 SHALL give the same response, even if the lot was once published. A hidden lot
 is a Draft or Called off lot.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-s88 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-04 - An id the catalogue publishes no lot for
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -101,6 +105,7 @@ is a Draft or Called off lot.
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's Page not found screen
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-jj1 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-05 - A lot the catalogue publishes answers
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -108,6 +113,7 @@ is a Draft or Called off lot.
 - **WHEN** its address is fetched
 - **THEN** the response has status 200 and carries that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c13 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-19 - A hidden lot's address shows Page not found
 **Serves:** grade10-site-auction-listing-page-US-03 - Collector opens an address that names no lot
 
@@ -125,6 +131,7 @@ its served content still present. Nothing the document showed SHALL be
 replaced by a loading placeholder, and a value that follows the clock SHALL
 carry on from what was served rather than disagreeing with it.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-c09 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-06 - The served lot stays on screen
 **Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
@@ -134,6 +141,7 @@ carry on from what was served rather than disagreeing with it.
   standing still present
 - **AND** none of them is replaced by a loading placeholder
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-y8j rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-07 - A value that follows the clock carries on
 **Serves:** grade10-site-auction-listing-page-US-04 - Collector reads a live lot while scripts load
 
@@ -151,6 +159,7 @@ The sitemap lists the surfaces the build writes a document for, and a lot is
 not one of them: which lots the auction publishes is not known when the site
 is built.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-fl9 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-08 - A lot is opened from the catalogue
 **Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
@@ -158,6 +167,7 @@ is built.
 - **WHEN** they open a lot it lists
 - **THEN** that lot's address is what they are on, showing that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-aga rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-09 - The sitemap names no lot
 **Serves:** grade10-site-auction-listing-page-US-05 - Collector reaches a lot from the catalogue
 
@@ -192,6 +202,7 @@ scenarios this capability already carries were written before ids were
 required, and `grade10-site-auction-listing-page-SC-01` through `grade10-site-auction-listing-page-SC-09` are reserved
 for them.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-z67 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-10 - A collector watches the lot they are reading
 **Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
 
@@ -201,6 +212,7 @@ for them.
 - **THEN** the page shows the lot as watched
 - **AND** they are still on that lot's page
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-vl7 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-11 - The control acts on the addressed lot
 **Serves:** Watching a lot - the control acts on the addressed lot
 
@@ -208,6 +220,7 @@ for them.
 - **WHEN** a collector watches the lot from one of those addresses
 - **THEN** only the lot that address names is watched
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-irg rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-12 - Watching changes nothing else on the page
 **Serves:** Watching a lot - watching changes nothing else on the page
 
@@ -215,6 +228,7 @@ for them.
 - **WHEN** they watch it
 - **THEN** the lot's bidding standing and its close are unchanged
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-krh rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-13 - A bid locks Watching on the lot page
 **Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 
@@ -224,6 +238,7 @@ for them.
 - **THEN** the control shows Watching and is disabled
 - **AND** activating it does not unwatch the lot
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-n70 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-18 - A closed lot has no watch control
 **Serves:** grade10-site-auction-listing-page-US-09 - Closed lot has no watch control
 
@@ -246,6 +261,7 @@ SHALL announce that the lot left My Auctions / email alerts are off for it, in
 wording aligned with My Auctions Unwatch, and SHALL offer **Undo** that
 restores the watch without finding the lot again.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-omp rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-14 - Watch announces alerts and My Auctions
 **Serves:** grade10-site-auction-listing-page-US-06 - Watch a lot and open My Auctions from the toast
 
@@ -255,6 +271,7 @@ restores the watch without finding the lot again.
 - **THEN** a toast says email alerts are on for this lot
 - **AND** the toast offers **View My Auctions**, which opens My Auctions
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-15a rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-15 - Unwatch announces and can be undone
 **Serves:** grade10-site-auction-listing-page-US-07 - Unwatch from the lot and undo
 
@@ -279,6 +296,7 @@ lot **at most once per listing per collector**, recorded on the account.
 **Later visits** - Later visits to the lot page SHALL NOT show that toast again
 for the same collector and listing.
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-arf rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-16 - The first bid toast fires once
 **Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 
@@ -288,6 +306,7 @@ for the same collector and listing.
 - **THEN** a toast says email alerts are on for this lot
 - **AND** Grade10 records that the toast was shown for that collector and L
 
+<!-- trace:scenario id=g10.auction-listing-page.SC-bs7 rev=1 -->
 #### Scenario: grade10-site-auction-listing-page-SC-17 - A later visit stays quiet
 **Serves:** grade10-site-auction-listing-page-US-08 - After bidding, Watching stays locked
 

@@ -40,6 +40,7 @@ A caller SHALL be able to ask for the order results come back in, by when the
 account joined or by email, in either direction. Asked for no order, the
 system SHALL return the newest account first.
 
+<!-- trace:scenario id=g10.shared-users.SC-cv3 rev=1 -->
 #### Scenario: shared-auth-users-SC-01 - An operator with the grant lists accounts
 **Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
@@ -48,6 +49,7 @@ system SHALL return the newest account first.
 - **THEN** they see accounts from this brand's identity system
 - **AND** each account is named by user id
 
+<!-- trace:scenario id=g10.shared-users.SC-k1h rev=1 -->
 #### Scenario: shared-auth-users-SC-02 - A caller without the grant is refused
 **Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
@@ -56,6 +58,7 @@ system SHALL return the newest account first.
 - **THEN** the system refuses the request
 - **AND** returns no account records
 
+<!-- trace:scenario id=g10.shared-users.SC-0qd rev=1 -->
 #### Scenario: shared-auth-users-SC-03 - Search matches email without letter case
 **Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
@@ -64,6 +67,7 @@ system SHALL return the newest account first.
   letter case than the account
 - **THEN** the results are accounts whose email contains that fragment
 
+<!-- trace:scenario id=g10.shared-users.SC-s50 rev=1 -->
 #### Scenario: shared-auth-users-SC-04 - An account opens by user id
 **Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
@@ -73,6 +77,7 @@ system SHALL return the newest account first.
 - **AND** they do not receive a different account that shares an email
   attribute
 
+<!-- trace:scenario id=g10.shared-users.SC-pik rev=1 -->
 #### Scenario: shared-auth-users-SC-05 - A banned account stays in the directory
 **Serves:** shared-auth-users-US-01 - Operator lists people in the identity directory
 
@@ -80,6 +85,7 @@ system SHALL return the newest account first.
 - **WHEN** an operator who can list users opens the directory
 - **THEN** that account is still listed
 
+<!-- trace:scenario id=g10.shared-users.SC-r7i rev=1 -->
 #### Scenario: shared-auth-users-SC-19 - Search matches a name without letter case
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -89,6 +95,7 @@ system SHALL return the newest account first.
   letter case
 - **THEN** that account is among the results
 
+<!-- trace:scenario id=g10.shared-users.SC-1kr rev=1 -->
 #### Scenario: shared-auth-users-SC-20 - The directory narrows to a role
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -97,6 +104,7 @@ system SHALL return the newest account first.
 - **THEN** every account returned holds `admin`
 - **AND** an account that holds no elevated role is not returned
 
+<!-- trace:scenario id=g10.shared-users.SC-kly rev=1 -->
 #### Scenario: shared-auth-users-SC-21 - Two narrowings apply together
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -105,6 +113,7 @@ system SHALL return the newest account first.
 - **THEN** every account returned is banned and holds `support`
 - **AND** a banned account that does not hold `support` is not returned
 
+<!-- trace:scenario id=g10.shared-users.SC-u7q rev=1 -->
 #### Scenario: shared-auth-users-SC-22 - The caller asks for an order
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -114,6 +123,7 @@ system SHALL return the newest account first.
 - **THEN** the accounts come back in that order
 - **AND** asking for no order returns the newest account first
 
+<!-- trace:scenario id=g10.shared-users.SC-aqk rev=1 -->
 #### Scenario: shared-auth-users-SC-23 - The directory narrows to elevated accounts
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -122,6 +132,7 @@ system SHALL return the newest account first.
 - **THEN** every account returned holds at least one elevated role
 - **AND** an account that holds none is not returned
 
+<!-- trace:scenario id=g10.shared-users.SC-a4z rev=1 -->
 #### Scenario: shared-auth-users-SC-24 - The directory narrows to users without elevated roles
 **Serves:** shared-auth-users-US-04 - Operator finds the accounts they mean
 
@@ -143,6 +154,7 @@ remaining `admin` SHALL NOT be banned. A caller without the grant SHALL be
 refused, and the account SHALL be unchanged. Banning an already-banned
 account SHALL leave it banned.
 
+<!-- trace:scenario id=g10.shared-users.SC-bc9 rev=1 -->
 #### Scenario: shared-auth-users-SC-06 - A ban stops money-moving
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -150,6 +162,7 @@ account SHALL leave it banned.
 - **WHEN** they ban an account
 - **THEN** that person cannot complete a money-moving action
 
+<!-- trace:scenario id=g10.shared-users.SC-1m7 rev=1 -->
 #### Scenario: shared-auth-users-SC-07 - A banned person cannot sign in
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -157,6 +170,7 @@ account SHALL leave it banned.
 - **WHEN** that person completes a sign-in method
 - **THEN** they are not signed in
 
+<!-- trace:scenario id=g10.shared-users.SC-57f rev=1 -->
 #### Scenario: shared-auth-users-SC-08 - A banned person is not signed in
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -164,6 +178,7 @@ account SHALL leave it banned.
 - **WHEN** a product reads who is calling
 - **THEN** it reports no person
 
+<!-- trace:scenario id=g10.shared-users.SC-qss rev=1 -->
 #### Scenario: shared-auth-users-SC-09 - An unban lets them sign in again
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -171,6 +186,7 @@ account SHALL leave it banned.
 - **WHEN** an operator who can ban unbans it
 - **THEN** that person can sign in again
 
+<!-- trace:scenario id=g10.shared-users.SC-s2t rev=1 -->
 #### Scenario: shared-auth-users-SC-10 - A caller who cannot ban is refused
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -179,6 +195,7 @@ account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
+<!-- trace:scenario id=g10.shared-users.SC-dbb rev=1 -->
 #### Scenario: shared-auth-users-SC-11 - An operator cannot ban themselves
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -187,6 +204,7 @@ account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** their account remains unbanned
 
+<!-- trace:scenario id=g10.shared-users.SC-v7f rev=1 -->
 #### Scenario: shared-auth-users-SC-12 - Support cannot ban an admin
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -195,6 +213,7 @@ account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
+<!-- trace:scenario id=g10.shared-users.SC-uoq rev=1 -->
 #### Scenario: shared-auth-users-SC-13 - The last admin cannot be banned
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -203,6 +222,7 @@ account SHALL leave it banned.
 - **THEN** the system refuses the request
 - **AND** the account remains unbanned
 
+<!-- trace:scenario id=g10.shared-users.SC-y5y rev=1 -->
 #### Scenario: shared-auth-users-SC-25 - An admin cannot ban another admin
 **Serves:** shared-auth-users-US-02 - Operator bans and unbans an account
 
@@ -224,6 +244,7 @@ account still holds `admin`. The last remaining `admin` SHALL NOT have `admin`
 removed, by self or by another caller. A caller without the grant SHALL be
 refused, and the roles SHALL be unchanged.
 
+<!-- trace:scenario id=g10.shared-users.SC-cg2 rev=1 -->
 #### Scenario: shared-auth-users-SC-14 - Admin changes another person's roles
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -231,6 +252,7 @@ refused, and the roles SHALL be unchanged.
 - **WHEN** they set another account to `staff`
 - **THEN** that account's roles include `staff`
 
+<!-- trace:scenario id=g10.shared-users.SC-3pf rev=1 -->
 #### Scenario: shared-auth-users-SC-15 - Clearing operator roles leaves a user
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -238,6 +260,7 @@ refused, and the roles SHALL be unchanged.
 - **WHEN** they save another account with no operator role selected
 - **THEN** that account's roles are `user` only
 
+<!-- trace:scenario id=g10.shared-users.SC-3br rev=1 -->
 #### Scenario: shared-auth-users-SC-16 - Support cannot set roles
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -246,6 +269,7 @@ refused, and the roles SHALL be unchanged.
 - **THEN** the system refuses the request
 - **AND** the roles are unchanged
 
+<!-- trace:scenario id=g10.shared-users.SC-a8m rev=1 -->
 #### Scenario: shared-auth-users-SC-17 - An operator may change their own roles
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -253,6 +277,7 @@ refused, and the roles SHALL be unchanged.
 - **WHEN** they save their own account with `staff` and still with `admin`
 - **THEN** their account's roles include `staff` and `admin`
 
+<!-- trace:scenario id=g10.shared-users.SC-xhl rev=1 -->
 #### Scenario: shared-auth-users-SC-18 - The last admin keeps admin
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -260,6 +285,7 @@ refused, and the roles SHALL be unchanged.
 - **WHEN** that admin or another operator who can set roles saves it without `admin`
 - **THEN** that account still holds `admin`
 
+<!-- trace:scenario id=g10.shared-users.SC-m57 rev=1 -->
 #### Scenario: shared-auth-users-SC-26 - An admin cannot remove admin from another admin
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 
@@ -269,6 +295,7 @@ refused, and the roles SHALL be unchanged.
 - **THEN** the system refuses the request
 - **AND** that account still holds `admin`
 
+<!-- trace:scenario id=g10.shared-users.SC-jw6 rev=1 -->
 #### Scenario: shared-auth-users-SC-27 - An admin may strip their own admin
 **Serves:** shared-auth-users-US-03 - Operator changes roles
 

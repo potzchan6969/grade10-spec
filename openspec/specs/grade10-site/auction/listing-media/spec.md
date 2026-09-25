@@ -59,6 +59,7 @@ vocabulary (`front`, `back`, and the rest) as identity. A listing SHALL NOT
 invent empty slots for unused positions. This capability SHALL NOT introduce
 a second gallery keyed by side.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-1uo rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-01 - A listing may hold fewer than eight items
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -87,6 +88,7 @@ characters with the upload. Unsupported image types and oversize bodies
 SHALL be refused. Video attach and playback stay under admin-listing; this
 requirement covers image items and their alt.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-dqz rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-03 - An accepted upload becomes a gallery image
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -96,6 +98,7 @@ requirement covers image items and their alt.
 - **THEN** that image is stored in gallery order
 - **AND** the admin listings surface can show it on that listing
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-99z rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-04 - An unsupported type is refused
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -104,6 +107,7 @@ requirement covers image items and their alt.
 - **THEN** the system refuses the upload
 - **AND** the gallery is unchanged
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-zlc rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-05 - An oversized image is refused
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -122,6 +126,7 @@ that slot unchanged. Discarding the preview SHALL clear the preview, leave
 the gallery unchanged, and SHALL NOT upload. Confirm applies to both adding
 an item and replacing a draft item.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-6ya rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-06 - Choosing a file shows a preview without uploading
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -130,6 +135,7 @@ an item and replacing a draft item.
 - **THEN** the admin media manager shows a preview of that file
 - **AND** the listing still has no new stored image for that slot
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-giq rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-07 - Confirming the preview stores the image
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -139,6 +145,7 @@ an item and replacing a draft item.
 - **THEN** that slot holds the image
 - **AND** the preview is cleared
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-gop rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-08 - Discarding the preview leaves the gallery unchanged
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -160,6 +167,7 @@ image at zoom size in a preview at least three-quarters of the viewport
 height. Leaving the control SHALL hide the zoom preview. The magnify control
 SHALL NOT require a click to reveal zoom.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-ez7 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-09 - The admin media manager shows card size
 **Serves:** grade10-site-auction-listing-media-US-02 - Operator inspects a stored image at zoom size
 
@@ -167,6 +175,7 @@ SHALL NOT require a click to reveal zoom.
 - **WHEN** an operator opens the media manager for that listing
 - **THEN** that image shows at card size
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-wuz rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-10 - Hovering the magnify control shows zoom size
 **Serves:** grade10-site-auction-listing-media-US-02 - Operator inspects a stored image at zoom size
 
@@ -176,6 +185,7 @@ SHALL NOT require a click to reveal zoom.
 - **THEN** a zoom-size preview of that image is shown
 - **AND** that preview is at least three-quarters of the viewport height
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-qgb rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-11 - Leaving the magnify control hides zoom
 **Serves:** grade10-site-auction-listing-media-US-02 - Operator inspects a stored image at zoom size
 
@@ -191,6 +201,7 @@ Replace and remove of gallery images SHALL follow
 closed-listing refusals. A closed, settled, or canceled listing SHALL refuse
 every image mutation from this surface.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-dgy rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-12 - Replacing a gallery image on a published listing
 **Serves:** grade10-site-auction-listing-media-US-03 - Operator corrects a listing's gallery images
 
@@ -199,6 +210,7 @@ every image mutation from this surface.
 - **THEN** that position holds the new image
 - **AND** other gallery items are unchanged
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-gj8 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-13 - Removing the last image after create is refused
 **Serves:** grade10-site-auction-listing-media-US-03 - Operator corrects a listing's gallery images
 
@@ -207,6 +219,7 @@ every image mutation from this surface.
 - **THEN** the system refuses the removal
 - **AND** the gallery still has that JPEG
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-82s rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-14 - A draft gallery image can be replaced and removed
 **Serves:** grade10-site-auction-listing-media-US-03 - Operator corrects a listing's gallery images
 
@@ -220,6 +233,7 @@ The system SHALL accept an additional image while the listing is `draft`,
 `created`, or `published` and the gallery has fewer than eight items. Once
 the listing has closed, settled, or been canceled, an add SHALL be refused.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-cnb rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-15 - A published listing can gain another image
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -229,6 +243,7 @@ the listing has closed, settled, or been canceled, an add SHALL be refused.
 - **THEN** the details page shows both images in gallery order
 - **AND** the first image is unchanged
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-r6j rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-16 - Adding after close is refused
 **Serves:** grade10-site-auction-listing-media-US-01 - Operator attaches an image to a listing gallery
 
@@ -247,6 +262,7 @@ replacing the image while the listing is a draft, created, or published.
 After close, an alt-only edit SHALL be refused. Video items are outside this
 alt requirement.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-mo0 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-17 - Missing alt uses the listing title
 **Serves:** grade10-site-auction-listing-media-US-04 - Operator describes a gallery image with alt text
 
@@ -255,6 +271,7 @@ alt requirement.
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "1999 Charizard, PSA 10"
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-k31 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-18 - Supplied alt is shown
 **Serves:** grade10-site-auction-listing-media-US-04 - Operator describes a gallery image with alt text
 
@@ -263,6 +280,7 @@ alt requirement.
 - **WHEN** a collector opens the listing
 - **THEN** that image's accessible name is "Holo Charizard, front of slab"
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-46l rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-19 - Alt can be edited on a published listing
 **Serves:** grade10-site-auction-listing-media-US-04 - Operator describes a gallery image with alt text
 
@@ -271,6 +289,7 @@ alt requirement.
 - **THEN** the image bytes are unchanged
 - **AND** the details page uses the new alt text
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-0b1 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-20 - Over-length alt is refused
 **Serves:** grade10-site-auction-listing-media-US-04 - Operator describes a gallery image with alt text
 
@@ -290,6 +309,7 @@ upscale it. An unknown size name SHALL be indistinguishable from a missing
 image. Video gallery items SHALL keep their original public path from
 admin-listing; named sizes apply to images only.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-wbd rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-21 - The catalogue uses card size for an image card
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -297,6 +317,7 @@ admin-listing; named sizes apply to images only.
 - **WHEN** a collector opens the auction catalogue
 - **THEN** that listing's card image is requested at size `card`
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-ds2 rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-22 - The details gallery uses thumb, detail, and zoom
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -306,6 +327,7 @@ admin-listing; named sizes apply to images only.
 - **AND** the main frame requests size `detail`
 - **AND** zoom requests size `zoom`
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-7si rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-23 - An unknown size is not found
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -322,6 +344,7 @@ is not an image, the listing SHALL still appear; this capability SHALL NOT
 invent a placeholder image. Which item is first is gallery order from
 admin-listing, not a physical side named `front`.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-78a rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-24 - A listing with a first gallery image shows it on the catalogue
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -330,6 +353,7 @@ admin-listing, not a physical side named `front`.
 - **THEN** the listing row shows image A at card size
 - **AND** it does not show image B on the card
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-0nc rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-25 - A listing without a catalogue image still lists
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -348,6 +372,7 @@ with no images SHALL render the rest of the page. Video items in the gallery
 remain admin-listing's concern for playback; this requirement covers the
 sized image slots passed into the shared gallery.
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-yei rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-26 - Several images appear in gallery order
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -356,6 +381,7 @@ sized image slots passed into the shared gallery.
 - **WHEN** a collector opens that listing
 - **THEN** the gallery shows three images in the order A, B, C
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-iki rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-27 - One image has no strip
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 
@@ -364,6 +390,7 @@ sized image slots passed into the shared gallery.
 - **THEN** the gallery shows that image
 - **AND** it does not show a thumbnail strip
 
+<!-- trace:scenario id=g10.auction-listing-media.SC-70a rev=1 -->
 #### Scenario: grade10-site-auction-listing-media-SC-28 - No images still shows the listing
 **Serves:** grade10-site-auction-listing-media-US-05 - Collector views a listing's gallery images
 

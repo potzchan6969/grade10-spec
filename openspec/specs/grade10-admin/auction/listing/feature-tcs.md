@@ -11,6 +11,7 @@
 **I want** to save a listing before I know every fact about the card,
 **so that** I can start from the item in front of me and finish once the rest arrives.
 
+<!-- trace:case id=g10adm.auction-listing.TC-mqd rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC1-1: Operator saves an empty draft
 
 **Classification:**
@@ -40,6 +41,7 @@ An authorized operator on the Grade10 auction listings section.
 * Grade10 persists a draft listing with those fields empty.
 * The listing is absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-27b rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC2-1: Operator saves a partial draft
 
 **Classification:**
@@ -68,6 +70,7 @@ An authorized operator.
 * The listing remains a draft.
 * Starting price stays empty.
 
+<!-- trace:case id=g10adm.auction-listing.TC-qk8 rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC3-1: Draft rejects a malformed price
 
 **Classification:**
@@ -96,6 +99,7 @@ A draft listing.
 * Grade10 refuses the write.
 * Starting price is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-09o rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC4-1: Draft rejects a malformed slug
 
 **Classification:**
@@ -130,6 +134,7 @@ A draft listing.
 * Grade10 refuses the write.
 * The slug is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-ys7 rev=1 covers=g10adm.auction-listing.SC-xue,g10adm.auction-listing.SC-vnl,g10adm.auction-listing.SC-r6p,g10adm.auction-listing.SC-2pj,g10adm.auction-listing.SC-bso -->
 ### grade10-admin-auction-listing-US1-TC5-1: Unauthorized draft save is refused
 
 **Classification:**
@@ -165,6 +170,7 @@ A signed-in operator who may not set an auction's prices and window.
 **I want** to attach, order, and replace the photographs and video of a card,
 **so that** a collector judges the item from the images without asking me for more.
 
+<!-- trace:case id=g10adm.auction-listing.TC-m8c rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC1-1: Operator uploads an eighth file
 
 **Classification:**
@@ -193,6 +199,7 @@ A draft listing with seven media items. An authorized operator.
 
 * Grade10 stores eight media items in the operator's order.
 
+<!-- trace:case id=g10adm.auction-listing.TC-yrz rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC2-1: Ninth file is refused
 
 **Classification:**
@@ -221,6 +228,7 @@ A draft listing with eight media items.
 * Grade10 refuses the upload.
 * The gallery still has eight items.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4p2 rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC3-1: Mixed images and videos are accepted
 
 **Classification:**
@@ -252,6 +260,7 @@ A draft listing with no media. An authorized operator.
 * A collector reading the published listing receives the JPEG, the MP4, and the WebP in that order.
 * The MP4 plays as video from the uploaded bytes.
 
+<!-- trace:case id=g10adm.auction-listing.TC-fsq rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC4-1: Upload is stored without processing
 
 **Classification:**
@@ -287,6 +296,7 @@ A draft listing.
 * Grade10 stores and serves that same body and type as the item's original.
 * Any named-size paths for the image come from `grade10-site/auction/listing-media`, not from a second stored object written at upload.
 
+<!-- trace:case id=g10adm.auction-listing.TC-g0p rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC5-1: Unsupported type is refused
 
 **Classification:**
@@ -315,6 +325,7 @@ A draft listing.
 * Grade10 refuses the upload.
 * The gallery is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-vfa rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC6-1: File over 100 mebibytes is refused
 
 **Classification:**
@@ -349,6 +360,7 @@ A draft listing.
 * Grade10 refuses the upload.
 * The gallery is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-2rk rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC7-1: Operator reorders and removes media
 
 **Classification:**
@@ -378,6 +390,7 @@ A published listing with three images in order A, B, C.
 * The gallery is C, A.
 * A collector's catalogue card is C.
 
+<!-- trace:case id=g10adm.auction-listing.TC-9cs rev=1 covers=g10adm.auction-listing.SC-slk,g10adm.auction-listing.SC-51l,g10adm.auction-listing.SC-md4,g10adm.auction-listing.SC-v8v,g10adm.auction-listing.SC-qna,g10adm.auction-listing.SC-vg4,g10adm.auction-listing.SC-h2e,g10adm.auction-listing.SC-49k -->
 ### grade10-admin-auction-listing-US2-TC8-1: Last media item cannot be removed after create
 
 **Classification:**
@@ -414,6 +427,7 @@ A published listing with one JPEG.
 **I want** the listing checked against everything an auction needs at the moment I create it,
 **so that** nothing incomplete can reach a bidder.
 
+<!-- trace:case id=g10adm.auction-listing.TC-igg rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC1-1: Operator creates a filled draft
 
 **Classification:**
@@ -453,6 +467,7 @@ A draft listing with a title, slug `charizard-psa-9`, a starting price of 100000
 * Grade10 moves it to `created`.
 * The listing is still absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4hw rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC2-1: Create without a title is refused on the form and the API
 
 **Classification:**
@@ -483,6 +498,7 @@ A draft listing with no title and every other required field set.
 * A create sent to the API without a title is refused.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-yte rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC3-1: Create without a slug is refused
 
 **Classification:**
@@ -511,6 +527,7 @@ A draft listing with every required field set except slug.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-xx5 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC4-1: Create without a starting price is refused
 
 **Classification:**
@@ -539,6 +556,7 @@ A draft listing with a title, a window, and no starting price.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-78a rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC5-1: Create without media is refused
 
 **Classification:**
@@ -567,6 +585,7 @@ A draft listing with every required field set except media.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-vtd rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC6-1: Created listing cannot clear a required field
 
 **Classification:**
@@ -595,6 +614,7 @@ A created listing with a title.
 * Grade10 refuses the write.
 * The title is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hdm rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC7-1: Create of a published listing is refused
 
 **Classification:**
@@ -623,6 +643,7 @@ A published listing.
 * Grade10 refuses the create.
 * The listing remains published.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hr0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC8-1: Two categories from one taxonomy are refused
 
 **Classification:**
@@ -651,6 +672,7 @@ A taxonomy with categories Pokémon and Sport. A listing the operator can write 
 * Grade10 refuses the write.
 * The listing's categories are unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-wcd rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC9-1: Canceled sale cannot receive a listing
 
 **Classification:**
@@ -679,6 +701,7 @@ A canceled sale. A draft listing.
 * Grade10 refuses the write.
 * The listing's sale is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-b59 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC10-1: Duplicate slug is refused
 
 **Classification:**
@@ -713,6 +736,7 @@ A listing that is not canceled whose slug is `charizard-psa-9`. A second listing
 * Grade10 refuses the write.
 * The second listing's slug is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-3s0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC11-1: Two drafts cannot share a slug
 
 **Classification:**
@@ -747,6 +771,7 @@ A draft whose slug is `charizard-psa-9`. A second draft.
 * Grade10 refuses the write.
 * The second draft's slug is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-ohw rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC12-1: Empty slugs on drafts are not a collision
 
 **Classification:**
@@ -774,6 +799,7 @@ A draft with no slug. An authorized operator.
 * Grade10 accepts the save.
 * Neither draft occupies a slug.
 
+<!-- trace:case id=g10adm.auction-listing.TC-yjr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC13-1: Create can reuse a canceled listing's original slug
 
 **Classification:**
@@ -809,6 +835,7 @@ A canceled listing that previously used slug `charizard-psa-9`. A draft with eve
 * Grade10 moves the draft to `created`.
 * The canceled listing still does not hold `charizard-psa-9`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-xtt rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC14-1: Create cannot reuse a closed listing's slug
 
 **Classification:**
@@ -845,6 +872,7 @@ A closed listing whose slug is `charizard-psa-9`. A draft with every required fi
 * The draft remains a draft.
 * `/auction/listings/charizard-psa-9` still returns the closed listing.
 
+<!-- trace:case id=g10adm.auction-listing.TC-8u6 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC15-1: Operator corrects a created listing's starting price
 
 **Classification:**
@@ -880,6 +908,7 @@ A created listing with starting price 100000 minor units `HKD`.
 * Grade10 stores 150000 minor units `HKD`.
 * The listing remains created.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4sr rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC16-1: Scheduled close at in the past is refused at create
 
 **Classification:**
@@ -908,6 +937,7 @@ A draft listing whose scheduled close at is not after now.
 * Grade10 refuses the create.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-o5r rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC18-1: Sandbox cannot change after create
 
 **Classification:**
@@ -936,6 +966,7 @@ A created listing that was drafted as sandbox.
 * Grade10 refuses the write.
 * The listing remains sandbox.
 
+<!-- trace:case id=g10adm.auction-listing.TC-xt0 rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC20-1: Extension values the listing refuses
 
 Runs once per row of **Test data**.
@@ -974,6 +1005,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the write.
 * The extension settings are unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-o8h rev=1 covers=g10adm.auction-listing.SC-mmr,g10adm.auction-listing.SC-jr4,g10adm.auction-listing.SC-9v7,g10adm.auction-listing.SC-gm3,g10adm.auction-listing.SC-neb,g10adm.auction-listing.SC-jne,g10adm.auction-listing.SC-86p,g10adm.auction-listing.SC-9fl,g10adm.auction-listing.SC-23q,g10adm.auction-listing.SC-ng3,g10adm.auction-listing.SC-g0h,g10adm.auction-listing.SC-hp2,g10adm.auction-listing.SC-jx5,g10adm.auction-listing.SC-4kw,g10adm.auction-listing.SC-rj8,g10adm.auction-listing.SC-yly,g10adm.auction-listing.SC-zr3,g10adm.auction-listing.SC-bvf,g10adm.auction-listing.SC-ynn,g10adm.auction-listing.SC-8on -->
 ### grade10-admin-auction-listing-US3-TC19-1: Omitted extension duration defaults to 30 minutes
 
 **Classification:**
@@ -1017,6 +1049,7 @@ Runs once per row of **Test data**.
 **I want** to publish a listing now or at a time I set in advance,
 **so that** a lot opens at the hour the sale was announced for and reads at its own public address from then on.
 
+<!-- trace:case id=g10adm.auction-listing.TC-amk rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC1-1: Operator publishes a created listing immediately
 
 **Classification:**
@@ -1047,6 +1080,7 @@ A created listing with no publish at. An authorized operator.
 * Grade10 moves it to `published`.
 * A collector can read it on the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-cp1 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC2-1: Created listing publishes at the scheduled time
 
 **Classification:**
@@ -1076,6 +1110,7 @@ A created listing whose publish at is in the future.
 * A collector can read it on the public catalogue.
 * No further operator action was required.
 
+<!-- trace:case id=g10adm.auction-listing.TC-4ju rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC3-1: Collector opens a listing by slug
 
 **Classification:**
@@ -1107,6 +1142,7 @@ A published listing whose slug is `charizard-psa-9`.
 
 * Grade10 returns that listing.
 
+<!-- trace:case id=g10adm.auction-listing.TC-h6l rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC4-1: Unknown slug is not found
 
 **Classification:**
@@ -1138,6 +1174,7 @@ No published, closed, or settled listing with slug `no-such-lot`.
 
 * Grade10 answers as not found.
 
+<!-- trace:case id=g10adm.auction-listing.TC-ld9 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC5-1: Operator updates copy on a published listing
 
 **Classification:**
@@ -1175,6 +1212,7 @@ A published listing titled "Charizard 1st Edition".
 * A collector reading the listing sees the new copy.
 * The title, prices, and window are unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-mj0 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC6-1: Published slug cannot change
 
 **Classification:**
@@ -1210,6 +1248,7 @@ A published listing whose slug is `charizard-psa-9`.
 * Grade10 refuses the write.
 * `/auction/listings/charizard-psa-9` still returns that listing.
 
+<!-- trace:case id=g10adm.auction-listing.TC-ofm rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC7-1: Published listing refuses a price change
 
 **Classification:**
@@ -1244,6 +1283,7 @@ A published listing with starting price 100000 minor units.
 * Grade10 refuses the write.
 * The starting price remains 100000 minor units.
 
+<!-- trace:case id=g10adm.auction-listing.TC-8yj rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC8-1: A publish at in the past is refused
 
 **Classification:**
@@ -1272,6 +1312,7 @@ A created listing.
 * Grade10 refuses the write.
 * The listing remains created and unpublished.
 
+<!-- trace:case id=g10adm.auction-listing.TC-bjv rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC9-1: Create with a past publish at is refused
 
 **Classification:**
@@ -1302,6 +1343,7 @@ A draft listing with every required field set and publish at in the past.
 * The listing remains a draft.
 * It stays absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-qpo rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC10-1: Draft is not published when publish at arrives
 
 **Classification:**
@@ -1331,6 +1373,7 @@ A draft listing with a publish at that has arrived and a missing title.
 * It remains a draft.
 * It stays absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-6j1 rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC11-1: Manual publish of a draft is refused
 
 **Classification:**
@@ -1359,6 +1402,7 @@ A draft listing.
 * Grade10 refuses the publish.
 * The listing remains a draft.
 
+<!-- trace:case id=g10adm.auction-listing.TC-hji rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC12-1: Publish at cannot change after publish
 
 **Classification:**
@@ -1387,6 +1431,7 @@ A published listing.
 * Grade10 refuses the write.
 * The listing remains published.
 
+<!-- trace:case id=g10adm.auction-listing.TC-i4e rev=1 covers=g10adm.auction-listing.SC-30a,g10adm.auction-listing.SC-9oe,g10adm.auction-listing.SC-4f0,g10adm.auction-listing.SC-2d5,g10adm.auction-listing.SC-o1z,g10adm.auction-listing.SC-del,g10adm.auction-listing.SC-7xn,g10adm.auction-listing.SC-kr8,g10adm.auction-listing.SC-cdt,g10adm.auction-listing.SC-yrj,g10adm.auction-listing.SC-83t,g10adm.auction-listing.SC-usa,g10adm.auction-listing.SC-gj3 -->
 ### grade10-admin-auction-listing-US4-TC13-1: First item is the catalogue card
 
 **Classification:**
@@ -1422,6 +1467,7 @@ A published listing whose gallery is a video then a JPEG.
 **I want** to withdraw a lot at any point up to its close,
 **so that** a consignor who pulls out or a card that fails authentication leaves the sale cleanly.
 
+<!-- trace:case id=g10adm.auction-listing.TC-k37 rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC1-1: Operator calls off a draft
 
 **Classification:**
@@ -1451,6 +1497,7 @@ A draft listing. An authorized operator.
 * Grade10 moves it to `canceled`.
 * It stays absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-gw7 rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC2-1: Operator calls off a created listing before publish at
 
 **Classification:**
@@ -1482,6 +1529,7 @@ A created listing with a publish at still in the future. An authorized operator.
 * When that publish at arrives, Grade10 does not publish it.
 * It stays absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-s7i rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC3-1: Operator calls off a published listing that has bids
 
 **Classification:**
@@ -1513,6 +1561,7 @@ A published listing with accepted bids and live authorizations. An authorized op
 * It releases every live authorization standing against it.
 * It is absent from the public catalogue.
 
+<!-- trace:case id=g10adm.auction-listing.TC-32t rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC4-1: Closed listing cannot be called off
 
 **Classification:**
@@ -1541,6 +1590,7 @@ A closed listing.
 * Grade10 refuses the cancel.
 * The listing remains closed.
 
+<!-- trace:case id=g10adm.auction-listing.TC-zkl rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC5-1: Settled listing cannot be called off
 
 **Classification:**
@@ -1569,6 +1619,7 @@ A settled listing.
 * Grade10 refuses the cancel.
 * The listing remains settled.
 
+<!-- trace:case id=g10adm.auction-listing.TC-uba rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC6-1: Already canceled listing cannot be called off again
 
 **Classification:**
@@ -1597,6 +1648,7 @@ A canceled listing.
 * Grade10 refuses the cancel.
 * The listing remains canceled.
 
+<!-- trace:case id=g10adm.auction-listing.TC-z2r rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC7-1: Cancel rewrites the slug and frees the original
 
 **Classification:**
@@ -1634,6 +1686,7 @@ A published listing whose id is `auc_550e8400-e29b-41d4-a716-446655440000` and w
 * `/auction/listings/charizard-psa-9` does not return that listing.
 * A later listing may be created with slug `charizard-psa-9`.
 
+<!-- trace:case id=g10adm.auction-listing.TC-uyd rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC8-1: Cancel of a draft with no slug does not invent one
 
 **Classification:**
@@ -1662,6 +1715,7 @@ A draft listing with no slug. An authorized operator.
 * Grade10 moves it to `canceled`.
 * The listing still has no slug.
 
+<!-- trace:case id=g10adm.auction-listing.TC-u5z rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC9-1: Unauthorized cancel is refused
 
 **Classification:**
@@ -1691,6 +1745,7 @@ A published listing. A signed-in operator who may not call a listing off.
 * The listing remains published.
 * Its slug is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-uu5 rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC10-1: Closed listing rejects a title edit
 
 **Classification:**
@@ -1719,6 +1774,7 @@ A closed listing.
 * Grade10 refuses the write.
 * The title is unchanged.
 
+<!-- trace:case id=g10adm.auction-listing.TC-72d rev=1 covers=g10adm.auction-listing.SC-pfl,g10adm.auction-listing.SC-2px,g10adm.auction-listing.SC-oc9,g10adm.auction-listing.SC-e1b,g10adm.auction-listing.SC-f4v,g10adm.auction-listing.SC-j48,g10adm.auction-listing.SC-ysx,g10adm.auction-listing.SC-lj7,g10adm.auction-listing.SC-tjj,g10adm.auction-listing.SC-ztg,g10adm.auction-listing.SC-8zz -->
 ### grade10-admin-auction-listing-US5-TC11-1: Closed listing rejects a media upload
 
 **Classification:**
@@ -1754,6 +1810,7 @@ A closed listing.
 campaign,
 **so that** a one-off lot can go live without inventing a cover I do not need.
 
+<!-- trace:case id=g10adm.auction-listing.TC-lev rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC1-1: Create listing control appears for an authorized operator
 
 **Classification:**
@@ -1781,6 +1838,7 @@ An authorized operator (holding `auction:operate`) on the Grade10 auction Listin
 
 * A Create listing action is present.
 
+<!-- trace:case id=g10adm.auction-listing.TC-wnl rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC2-1: Listing editor opens with no campaign
 
 **Classification:**
@@ -1808,6 +1866,7 @@ An authorized operator on <grade10 auction admin listings url>.
 * The listing editor opens.
 * No campaign is selected in the Campaign control.
 
+<!-- trace:case id=g10adm.auction-listing.TC-fxz rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC3-1: Full lifecycle with no campaign — draft, create, publish, slug lookup
 
 **Classification:**
@@ -1846,6 +1905,7 @@ A new listing opened from <grade10 auction admin listings url> with no campaign,
 * Step 3 moves the listing to `published`; it still has no campaign.
 * Step 4 returns that listing.
 
+<!-- trace:case id=g10adm.auction-listing.TC-34a rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC4-1: Listings table shows an unattached row
 
 **Classification:**
@@ -1872,6 +1932,7 @@ A listing with no campaign exists. An authorized operator is on <grade10 auction
 * The column shows "-".
 * A campaign id is not the only label shown for that row.
 
+<!-- trace:case id=g10adm.auction-listing.TC-duk rev=1 covers=g10adm.auction-listing.SC-yhm,g10adm.auction-listing.SC-s6o,g10adm.auction-listing.SC-44k,g10adm.auction-listing.SC-toy,g10adm.auction-listing.SC-8pr,g10adm.auction-listing.SC-5oo,g10adm.auction-listing.SC-ssk,g10adm.auction-listing.SC-2ir -->
 ### grade10-admin-auction-listing-US6-TC5-1: Create listing is withheld from an unauthorized operator
 
 **Classification:**
@@ -1906,6 +1967,7 @@ A signed-in operator without `auction:operate` on <grade10 auction admin listing
 **so that** I can judge interest beside the bidder count without a second
 surface for the same figure.
 
+<!-- trace:case id=g10adm.auction-listing.TC-wkx rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US-08-TC1-1: Stats counts watches across both brands
 
 **Classification:**
@@ -1935,6 +1997,7 @@ A published listing watched by two collectors on Grade10 and one collector on ZZ
 * Stats shows 3 watchers.
 * No watcher is named.
 
+<!-- trace:case id=g10adm.auction-listing.TC-gl0 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US-08-TC2-1: An unwatched listing shows zero in Stats
 
 **Classification:**
@@ -1962,6 +2025,7 @@ A published listing with no watches. An authorized operator is on <grade10 aucti
 
 * Stats shows 0 watchers, not a blank or "-".
 
+<!-- trace:case id=g10adm.auction-listing.TC-6o9 rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US-08-TC3-1: A closed listing keeps its watchers in Stats
 
 **Classification:**
@@ -1989,6 +2053,7 @@ A closed listing still watched by two collectors. An authorized operator is on <
 
 * Stats shows 2 watchers.
 
+<!-- trace:case id=g10adm.auction-listing.TC-otd rev=1 covers=g10adm.auction-listing.SC-qlf,g10adm.auction-listing.SC-7qf,g10adm.auction-listing.SC-sil,g10adm.auction-listing.SC-de9 -->
 ### grade10-admin-auction-listing-US-08-TC4-1: The Listings table has no Watchers column
 
 **Classification:**

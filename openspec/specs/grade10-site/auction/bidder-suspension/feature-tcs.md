@@ -10,6 +10,7 @@
 how to resolve it,
 **so that** I understand what I can still do and what it takes to bid again.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-7ui rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC1-1: Elapsed deadline suspends the account
 
 **Classification:**
@@ -41,6 +42,7 @@ An auction order whose invoice is `pending` and whose payment deadline is one se
 * The winner was notified of the outstanding amount and how to resolve it.
 * The account record shows the suspension, its reason, and the causing order.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC2-1: Suspended account can still pay what it owes
 
 **Classification:**
@@ -70,6 +72,7 @@ A suspended account holding one outstanding invoice.
 * Grade10 accepts the payment.
 * The invoice status becomes `paid`.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-m3t rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC3-1: Standing maxima on open lots are retracted
 
 **Classification:**
@@ -100,6 +103,7 @@ A collector leading two open lots and holding a standing maximum on a third, wit
 * Each retraction is logged as a `bid_retracted_suspension` event.
 * Each lot the collector led has re-resolved to the next bidder at their own price.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC4-1: A lot already won stays won
 
 **Classification:**
@@ -129,6 +133,7 @@ A collector who won a lot before being suspended, with a second unpaid auction o
 * The won lot is still won by that collector.
 * Its invoice is still payable.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-o67 rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC5-1: Paying does not lift the suspension
 
 **Classification:**
@@ -159,6 +164,7 @@ A suspended account holding one outstanding invoice.
 * Grade10 refuses the maximum at step 2.
 * The account record still shows the suspension and its reason.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-80a rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC6-1: Suspended account cannot bid or raise its maximum
 
 **Classification:**
@@ -206,6 +212,7 @@ and is signed in.
 **I want** the lot's price, leader and bid history to stay as they were,
 **so that** the bids I placed against that account still count as I made them.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stk rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
 ### suspension-US2-TC1-1: Suspension leaves an open lot and its history unchanged
 
 **Classification:**
@@ -238,6 +245,7 @@ and is signed in.
 * customer A still leads at 30000 HKD minor units.
 * The bid history has the same entries as at step 1.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-bw8 rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
 ### suspension-US2-TC2-1: Standing maximum keeps bidding after suspension
 
 **Classification:**
@@ -269,6 +277,7 @@ and is signed in.
 * customer A still leads <listing_4>.
 * The current price is what auto-bidding resolves for these two maximums.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
 ### suspension-US2-TC3-1: Suspended account wins through a standing maximum
 
 **Classification:**
@@ -307,6 +316,7 @@ about to close.
 **I want** to be told plainly that I can no longer bid and how to contact Grade10,
 **so that** I know where I stand without being refused on a lot first.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stl rev=1 covers=g10.auction-bidder-suspension.SC-6y9,g10.auction-bidder-suspension.SC-nq6 -->
 ### suspension-US3-TC1-1: Operator suspension notice leaves out the reason
 
 **Classification:**
@@ -336,6 +346,7 @@ customer(suspended by an operator with <operator reason>) is signed in.
 * Both say how to contact Grade10.
 * Neither shows <operator reason>.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-ao5 rev=1 covers=g10.auction-bidder-suspension.SC-6y9,g10.auction-bidder-suspension.SC-nq6 -->
 ### suspension-US3-TC2-1: Missed deadline while suspended adds a second cause
 
 **Classification:**

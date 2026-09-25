@@ -11,6 +11,7 @@
 **I want** a coupon I hold to cut my order the moment I check out,
 **so that** I get the reward I redeemed without needing a second code.
 
+<!-- trace:case id=g10.store-discounts.TC-l5p rev=1 covers=g10.store-discounts.SC-d4g,g10.store-discounts.SC-o8t,g10.store-discounts.SC-s75,g10.store-discounts.SC-9rf,g10.store-discounts.SC-gtt,g10.store-discounts.SC-pl1 -->
 ### grade10-site-store-discounts-US1-TC1-1: Submitted checkout carries the product coupon's own code
 
 **Classification:**
@@ -50,6 +51,7 @@
 * The draft order carries that code.
 * No line on the draft order carries a welded discount.
 
+<!-- trace:case id=g10.store-discounts.TC-vem rev=1 covers=g10.store-discounts.SC-d4g,g10.store-discounts.SC-o8t,g10.store-discounts.SC-s75,g10.store-discounts.SC-9rf,g10.store-discounts.SC-gtt,g10.store-discounts.SC-pl1 -->
 ### grade10-site-store-discounts-US1-TC2-1: Editing the cart mints no coupon code
 
 **Classification:**
@@ -89,6 +91,7 @@
 * The cart price re-previews with <product coupon_1>'s cut after each edit.
 * No Shopify discount code exists for <product coupon_1>.
 
+<!-- trace:case id=g10.store-discounts.TC-fj0 rev=1 covers=g10.store-discounts.SC-d4g,g10.store-discounts.SC-o8t,g10.store-discounts.SC-s75,g10.store-discounts.SC-9rf,g10.store-discounts.SC-gtt,g10.store-discounts.SC-pl1 -->
 ### grade10-site-store-discounts-US1-TC3-1: Gift comes off by its own full-cut code
 
 **Classification:**
@@ -128,6 +131,7 @@
 * The draft order carries <gift product> at a full cut, through <gift_1>'s own single-use code.
 * <gift product>'s line carries no discount of its own.
 
+<!-- trace:case id=g10.store-discounts.TC-q9x rev=1 covers=g10.store-discounts.SC-d4g,g10.store-discounts.SC-o8t,g10.store-discounts.SC-s75,g10.store-discounts.SC-9rf,g10.store-discounts.SC-gtt,g10.store-discounts.SC-pl1 -->
 ### grade10-site-store-discounts-US1-TC4-1: Reward coupon settles reporting its own customer-scoped code
 
 **Classification:**
@@ -168,6 +172,7 @@
 * The paid order reports that code.
 * No line carries a welded discount.
 
+<!-- trace:case id=g10.store-discounts.TC-e7e rev=1 covers=g10.store-discounts.SC-d4g,g10.store-discounts.SC-o8t,g10.store-discounts.SC-s75,g10.store-discounts.SC-9rf,g10.store-discounts.SC-gtt,g10.store-discounts.SC-pl1 -->
 ### grade10-site-store-discounts-US1-TC5-1: Facet-scoped coupon takes only from the lines its facet reaches
 
 **Classification:**
@@ -217,6 +222,7 @@
 **I want** to be asked which coupon to apply when my basket qualifies for more than one,
 **so that** I choose the one I want rather than losing one to a silent rule.
 
+<!-- trace:case id=g10.store-discounts.TC-nql rev=1 covers=g10.store-discounts.SC-kr9,g10.store-discounts.SC-qip -->
 ### grade10-site-store-discounts-US2-TC1-1: Two eligible coupons ask the collector to choose one
 
 **Classification:**
@@ -257,6 +263,7 @@
 * Step 1 asks the collector to choose exactly one coupon.
 * The draft order carries <order coupon_1>'s code and no other coupon.
 
+<!-- trace:case id=g10.store-discounts.TC-1hn rev=1 covers=g10.store-discounts.SC-kr9,g10.store-discounts.SC-qip -->
 ### grade10-site-store-discounts-US2-TC2-1: A second discount is refused, not stacked
 
 Runs once per row of **Test data**.
@@ -307,6 +314,7 @@ Runs once per row of **Test data**.
 **I want** a coupon back in my wallet whenever the checkout it was meant for does not complete,
 **so that** a refusal or an abandoned order never costs me what I redeemed.
 
+<!-- trace:case id=g10.store-discounts.TC-62k rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39 -->
 ### grade10-site-store-discounts-US3-TC1-1: Shop's larger sale sets the coupon aside and keeps the order
 
 **Classification:**
@@ -348,6 +356,7 @@ Runs once per row of **Test data**.
 * The member is told the sale gave more than the coupon.
 * <product coupon_2> is back in the wallet, unused.
 
+<!-- trace:case id=g10.store-discounts.TC-kdb rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39 -->
 ### grade10-site-store-discounts-US3-TC2-1: A mint the shop refuses refuses the checkout
 
 **Classification:**
@@ -388,6 +397,7 @@ Runs once per row of **Test data**.
 * No order is left behind.
 * <product coupon_1> is still spendable.
 
+<!-- trace:case id=g10.store-discounts.TC-nia rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39 -->
 ### grade10-site-store-discounts-US3-TC3-1: A member with no paired Shopify customer is refused
 
 **Classification:**
@@ -424,6 +434,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused, naming the pairing as the reason.
 * No discount code is minted for <product coupon_1>.
 
+<!-- trace:case id=g10.store-discounts.TC-wae rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39 -->
 ### grade10-site-store-discounts-US3-TC4-1: Unknown catalogue facets refuse the coupon rather than guess
 
 **Classification:**
@@ -462,6 +473,7 @@ Runs once per row of **Test data**.
 * <facet coupon_1> is refused.
 * No discount code is minted.
 
+<!-- trace:case id=g10.store-discounts.TC-14n rev=1 covers=g10.store-discounts.SC-2qg,g10.store-discounts.SC-5v2,g10.store-discounts.SC-v2s,g10.store-discounts.SC-vsw,g10.store-discounts.SC-na4,g10.store-discounts.SC-w39 -->
 ### grade10-site-store-discounts-US3-TC5-1: A dead order's unspent code is deactivated
 
 Runs once per row of **Test data**.
@@ -509,6 +521,7 @@ Runs once per row of **Test data**.
 **I want** a member's product coupon to settle the same way at the till as it does online,
 **so that** I can ring it up with the same confidence either channel gives me.
 
+<!-- trace:case id=g10.store-discounts.TC-ye2 rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr -->
 ### grade10-site-store-discounts-US4-TC1-1: Till coupon settles by its own code
 
 **Classification:**
@@ -547,6 +560,7 @@ Runs once per row of **Test data**.
 * The paid order names <product coupon_1>'s own single-use code, with no welded line discount.
 * <product coupon_1> reads spent in the wallet.
 
+<!-- trace:case id=g10.store-discounts.TC-9h9 rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr -->
 ### grade10-site-store-discounts-US4-TC2-1: Re-planned sale keeps one code for its coupon
 
 **Classification:**
@@ -583,6 +597,7 @@ Runs once per row of **Test data**.
 
 * The sale carries exactly one code for <product coupon_1>.
 
+<!-- trace:case id=g10.store-discounts.TC-rf9 rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr -->
 ### grade10-site-store-discounts-US4-TC3-1: Coupon cleared with 移除所有折扣 cannot go back on the sale
 
 **Classification:**
@@ -620,6 +635,7 @@ Runs once per row of **Test data**.
 * Step 1 is refused: the coupon has come off this sale, ring it up on a new one.
 * <product coupon_1> stands live in the wallet.
 
+<!-- trace:case id=g10.store-discounts.TC-pic rev=1 covers=g10.store-discounts.SC-q23,g10.store-discounts.SC-3cr -->
 ### grade10-site-store-discounts-US4-TC4-1: Code the paid sale does not name stops standing
 
 **Classification:**

@@ -49,6 +49,7 @@ does not hold the grant for SHALL NOT be offered. Changing roles SHALL be
 offered on the signed-in operator's own account when they hold `user:set-role`,
 subject to the same refusals as `shared/auth/users`.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-kyo rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-01 - An operator opens an account beside the list
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -57,6 +58,7 @@ subject to the same refusals as `shared/auth/users`.
 - **THEN** that account opens in a panel beside the list
 - **AND** the list they picked it from is still there
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-s3c rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-02 - A move the operator cannot make is not offered
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -65,6 +67,7 @@ subject to the same refusals as `shared/auth/users`.
 - **THEN** neither the row nor the panel offers changing roles or erasure
 - **AND** both still offer ban or unban
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-fjy rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-15 - An operator may change their own roles
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -80,6 +83,7 @@ narrowing in force, and the page position SHALL be carried in the address too,
 so opening that address again shows the same view. When the address names no
 roles narrowing, the page SHALL open on elevated accounts.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-pix rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-03 - An address opens one account
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -88,6 +92,7 @@ roles narrowing, the page SHALL open on elevated accounts.
 - **THEN** that account's panel is open
 - **AND** they did not have to search for it
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-thq rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-04 - A view is handed to a colleague
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -95,6 +100,7 @@ roles narrowing, the page SHALL open on elevated accounts.
 - **WHEN** another operator who holds the same grants opens that address
 - **THEN** they see the same search, the same narrowing, and the same page
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-2zy rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-12 - Users opens on elevated accounts
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -117,6 +123,7 @@ not choosable when Type is Users.
 | Status | Banned, or active |
 | Email | Verified, or not verified |
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-8pc rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-05 - An admin asks who holds a role
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -125,6 +132,7 @@ not choosable when Type is Users.
 - **THEN** the directory shows those accounts and no others
 - **AND** how many there are is stated
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-0vu rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-06 - An operator narrows by status and population
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -132,6 +140,7 @@ not choosable when Type is Users.
 - **WHEN** they narrow the directory to banned accounts under Users
 - **THEN** every account shown is banned and holds no elevated role
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-akc rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-13 - A search miss offers the other Type
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -140,6 +149,7 @@ not choosable when Type is Users.
 - **THEN** the page offers a link to search that query in the other Type
 - **AND** following it keeps the query and lists the matching accounts
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-4l4 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-14 - An open erasure withholds ban and unban
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -158,6 +168,7 @@ SHALL NOT open Roles & Permissions. A role name on the account's identity
 SHALL open that role on Roles & Permissions when the console supplies an
 address for it and the operator may open that page.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-w5y rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-07 - An account's grants are the mapping's
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -166,6 +177,7 @@ address for it and the operator may open that page.
 - **THEN** the grants shown are exactly the grants the mapping gives `support`
 - **AND** each grant the mapping marks elevated is marked elevated once for the account
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-fy9 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-08 - A role opens on the grants page
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -182,6 +194,7 @@ with ban, unban, and erase as the account's actions, with the hand-offs before
 those standing moves. Neither hand-off SHALL be restated as its own record in
 the panel.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-wee rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-09 - A customer's loyalty record is one move away
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -190,6 +203,7 @@ the panel.
 - **THEN** the panel offers that person's loyalty record among its actions
 - **AND** an account that holds an elevated role is not offered one
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-xy1 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-10 - What an account has done is one move away
 **Serves:** grade10-admin-console-user-directory-US-02 - Operator works one account from a single address
 
@@ -203,6 +217,7 @@ The panel SHALL show when the account joined. When the account is banned, it
 SHALL show that it is banned and the reason when one was supplied. It SHALL
 NOT invent a ban time the directory did not return.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-k2t rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-11 - An operator reads when the account joined
 **Serves:** grade10-admin-console-user-directory-US-01 - Admin reviews who holds elevated grants
 
@@ -241,6 +256,7 @@ lifts, is `grade10-site/auction/bidder-suspension`.
 account's platform ban. Suspending SHALL NOT ban the account, and banning SHALL
 NOT suspend it.
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-8ll rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-16 - An operator suspends an account from its panel
 **Serves:** grade10-admin-console-user-directory-US-03 - Operator suspends an account from auctions
 
@@ -250,6 +266,7 @@ NOT suspend it.
 - **AND** the panel offers reinstate and not suspend
 - **AND** the account's platform standing is unchanged
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-e0b rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-17 - Suspending cannot be confirmed without a reason
 **Serves:** grade10-admin-console-user-directory-US-03 - Operator suspends an account from auctions
 
@@ -258,6 +275,7 @@ NOT suspend it.
 - **THEN** the suspension cannot be confirmed
 - **AND** the account is not suspended
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-gn2 rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-18 - An operator reinstates an account from its panel
 **Serves:** grade10-admin-console-user-directory-US-03 - Operator suspends an account from auctions
 
@@ -266,6 +284,7 @@ NOT suspend it.
 - **THEN** the panel shows the account as not suspended from auctions
 - **AND** the panel offers suspend and not reinstate
 
+<!-- trace:scenario id=g10adm.console-user-directory.SC-25v rev=1 -->
 #### Scenario: grade10-admin-console-user-directory-SC-19 - An operator without the grant is not offered either move
 **Serves:** grade10-admin-console-user-directory-US-03 - Operator suspends an account from auctions
 

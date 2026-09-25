@@ -9,6 +9,7 @@
 **I want** every console I open to arrange the same kinds of fact the same way,
 **so that** moving between nine of them costs me no re-reading.
 
+<!-- trace:case id=g10.shared-visual-standard.TC-3h8 rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
 ### shared-console-visual-standard-US1-TC1-1: Two consoles render the same control the same way
 
 **Classification:**
@@ -37,6 +38,7 @@ Signed in as an operator who can open <grade10 admin console url> and <a second 
 * Both consoles render that control from the same vocabulary.
 * No admin surface mixes a second vocabulary for it.
 
+<!-- trace:case id=g10.shared-visual-standard.TC-a78 rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
 ### shared-console-visual-standard-US1-TC2-1: Shared customer component matches the console around it
 
 **Classification:**
@@ -64,6 +66,7 @@ An admin console renders a component that customer surfaces also render.
 * One definition serves the admin and customer surfaces.
 * The admin rendering is not visibly foreign to the console around it.
 
+<!-- trace:case id=g10.shared-visual-standard.TC-kmm rev=1 covers=g10.shared-visual-standard.SC-f6s,g10.shared-visual-standard.SC-04e,g10.shared-visual-standard.SC-cm9 -->
 ### shared-console-visual-standard-US1-TC3-1: Refused read stays distinguishable after the swap
 
 **Classification:**
@@ -99,6 +102,7 @@ An admin console renders a component that customer surfaces also render.
 **I want** each console to look like the brand it belongs to,
 **so that** I never act on one brand's data believing it is the other's.
 
+<!-- trace:case id=g10.shared-visual-standard.TC-fsv rev=1 covers=g10.shared-visual-standard.SC-aro,g10.shared-visual-standard.SC-uk3 -->
 ### shared-console-visual-standard-US2-TC1-1: Two brands differ only by the brand mechanism
 
 **Classification:**
@@ -126,6 +130,7 @@ Signed in as an operator who can open both brands' admin consoles.
 * Every visual difference between the two comes from the brand mechanism.
 * Neither rendering carries a brand value written into a block.
 
+<!-- trace:case id=g10.shared-visual-standard.TC-nhz rev=1 covers=g10.shared-visual-standard.SC-aro,g10.shared-visual-standard.SC-uk3 -->
 ### shared-console-visual-standard-US2-TC2-1: A brand visual value has one source
 
 **Classification:**

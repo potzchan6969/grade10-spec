@@ -9,6 +9,7 @@
 **I want** a ban, unban, set-role, or revoke — including a refusal — on the identity trail,
 **so that** a dispute can name who did what, by user id, without secrets.
 
+<!-- trace:case id=g10.shared-audit.TC-63y rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC1-1: Successful ban is on the trail by user id
 
 **Classification:**
@@ -38,6 +39,7 @@ Signed in as an operator who can ban. <a subject user id> is unbanned.
 * The entry names actor and subject by user id, not email.
 * The entry keeps the ban reason and keeps no secret.
 
+<!-- trace:case id=g10.shared-audit.TC-cci rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC2-1: Refused ban is on the trail as unsuccessful
 
 **Classification:**
@@ -65,6 +67,7 @@ Signed in as a caller who cannot ban.
 * The trail records that attempt.
 * It records that it did not succeed.
 
+<!-- trace:case id=g10.shared-audit.TC-psr rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC3-1: Session revoke is on the trail
 
 **Classification:**
@@ -91,6 +94,7 @@ Signed in as an operator who can revoke. <a subject user id> has a live session.
 
 * The trail records that actor, that subject, and the revoke.
 
+<!-- trace:case id=g10.shared-audit.TC-aph rev=1 covers=g10.shared-audit.SC-s5y,g10.shared-audit.SC-hya,g10.shared-audit.SC-6pa,g10.shared-audit.SC-pgv,g10.shared-audit.SC-m8q,g10.shared-audit.SC-qhl,g10.shared-audit.SC-r4t,g10.shared-audit.SC-jbf -->
 ### shared-auth-audit-US1-TC4-1: Directory and session lists write no trail entry
 
 **Classification:**
@@ -127,6 +131,7 @@ Signed in as an operator who can list users and sessions.
 **I want** to read the trail and check it is consistent,
 **so that** I can answer whether the record holds without being shown the proof.
 
+<!-- trace:case id=g10.shared-audit.TC-etq rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC1-1: Auditor with the grant reads recorded identity actions
 
 **Classification:**
@@ -154,6 +159,7 @@ Signed in as a person who holds `audit:read`. At least one identity action is al
 
 * They receive the recorded identity actions.
 
+<!-- trace:case id=g10.shared-audit.TC-afw rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC2-1: Consistency check reports without returning the proof
 
 **Classification:**
@@ -180,6 +186,7 @@ Signed in as a person who holds `audit:read`.
 * They receive whether it is internally consistent.
 * They do not receive the proof of that check.
 
+<!-- trace:case id=g10.shared-audit.TC-u47 rev=1 covers=g10.shared-audit.SC-31z,g10.shared-audit.SC-ren,g10.shared-audit.SC-2ig -->
 ### shared-auth-audit-US2-TC3-1: Caller without audit read is refused
 
 **Classification:**
@@ -213,6 +220,7 @@ Signed in as a person who does not hold `audit:read`.
 **I want** an action that cannot be recorded to be refused,
 **so that** the trail is not a best-effort log of what already happened.
 
+<!-- trace:case id=g10.shared-audit.TC-74z rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC1-1: Trail entry cannot be rewritten or removed
 
 **Classification:**
@@ -238,6 +246,7 @@ An identity action is already on the trail.
 
 * The entry is unchanged.
 
+<!-- trace:case id=g10.shared-audit.TC-2cz rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC2-1: Unrecorded ban does not take effect
 
 **Classification:**
@@ -263,6 +272,7 @@ Signed in as an operator who can ban. The identity trail cannot accept an entry.
 
 * The account is not banned.
 
+<!-- trace:case id=g10.shared-audit.TC-vf9 rev=1 covers=g10.shared-audit.SC-r7d,g10.shared-audit.SC-1rb,g10.shared-audit.SC-ci1 -->
 ### shared-auth-audit-US3-TC3-1: Unrecorded revoke does not take effect
 
 **Classification:**

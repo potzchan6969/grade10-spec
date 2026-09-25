@@ -9,6 +9,7 @@
 **I want** the control to show the request in flight and, on success, leave the signed-in surface,
 **so that** I know the tap registered and I am not still looking at my account.
 
+<!-- trace:case id=g10.shared-sign-out.TC-lsq rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
 ### shared-auth-sign-out-US1-TC1-1: Sign-out control is busy until the request settles
 
 **Classification:**
@@ -40,6 +41,7 @@
 * The control shows a busy state until the auth service answers.
 * The second activation starts no second request.
 
+<!-- trace:case id=g10.shared-sign-out.TC-p3n rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
 ### shared-auth-sign-out-US1-TC2-1: Operator sign-out returns the admin panel to sign-in
 
 **Classification:**
@@ -68,6 +70,7 @@
 
 * The panel shows its sign-in page.
 
+<!-- trace:case id=g10.shared-sign-out.TC-r6b rev=1 covers=g10.shared-sign-out.SC-9oa,g10.shared-sign-out.SC-vrp,g10.shared-sign-out.SC-x67 -->
 ### shared-auth-sign-out-US1-TC3-1: Collector sign-out returns the grade10 site to marketing
 
 **Classification:**
@@ -104,6 +107,7 @@
 **I want** a refused sign-out named as a failure I can retry,
 **so that** a network miss does not leave me signed in with no explanation.
 
+<!-- trace:case id=g10.shared-sign-out.TC-d61 rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
 ### shared-auth-sign-out-US2-TC1-1: Refused sign-out is reported beside the control
 
 **Classification:**
@@ -134,6 +138,7 @@
 * The surface stays signed in.
 * Failure feedback appears beside the sign-out control.
 
+<!-- trace:case id=g10.shared-sign-out.TC-t2b rev=1 covers=g10.shared-sign-out.SC-ud0,g10.shared-sign-out.SC-i5o -->
 ### shared-auth-sign-out-US2-TC2-1: Retry clears the failure and can complete
 
 **Classification:**

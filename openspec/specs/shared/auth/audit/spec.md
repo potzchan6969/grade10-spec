@@ -29,6 +29,7 @@ read that trail and to check whether it is internally consistent. That
 check SHALL report whether the trail is consistent, and SHALL NOT return
 the proof. A caller without that grant SHALL NOT.
 
+<!-- trace:scenario id=g10.shared-audit.SC-s5y rev=1 -->
 #### Scenario: shared-auth-audit-SC-01 - A ban is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -36,6 +37,7 @@ the proof. A caller without that grant SHALL NOT.
 - **THEN** the identity audit trail records that actor, that subject, and
   the ban
 
+<!-- trace:scenario id=g10.shared-audit.SC-hya rev=1 -->
 #### Scenario: shared-auth-audit-SC-02 - A refused ban is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -43,6 +45,7 @@ the proof. A caller without that grant SHALL NOT.
 - **THEN** the identity audit trail records that attempt
 - **AND** records that it did not succeed
 
+<!-- trace:scenario id=g10.shared-audit.SC-6pa rev=1 -->
 #### Scenario: shared-auth-audit-SC-03 - A revoke is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -50,6 +53,7 @@ the proof. A caller without that grant SHALL NOT.
 - **THEN** the identity audit trail records that actor, that subject, and
   the revoke
 
+<!-- trace:scenario id=g10.shared-audit.SC-pgv rev=1 -->
 #### Scenario: shared-auth-audit-SC-04 - A trail entry names people by user id
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -57,6 +61,7 @@ the proof. A caller without that grant SHALL NOT.
 - **THEN** the entry names the actor and the subject by user id
 - **AND** it does not name them by email
 
+<!-- trace:scenario id=g10.shared-audit.SC-31z rev=1 -->
 #### Scenario: shared-auth-audit-SC-05 - An auditor can read the trail
 **Serves:** shared-auth-audit-US-02 - Auditor reads the identity trail
 
@@ -64,6 +69,7 @@ the proof. A caller without that grant SHALL NOT.
 - **WHEN** they read the identity audit trail
 - **THEN** they receive the recorded identity actions
 
+<!-- trace:scenario id=g10.shared-audit.SC-ren rev=1 -->
 #### Scenario: shared-auth-audit-SC-06 - An auditor can check the trail is consistent
 **Serves:** shared-auth-audit-US-02 - Auditor reads the identity trail
 
@@ -72,6 +78,7 @@ the proof. A caller without that grant SHALL NOT.
 - **THEN** they receive whether it is internally consistent
 - **AND** they do not receive the proof of that check
 
+<!-- trace:scenario id=g10.shared-audit.SC-2ig rev=1 -->
 #### Scenario: shared-auth-audit-SC-07 - A caller without audit read is refused
 **Serves:** shared-auth-audit-US-02 - Auditor reads the identity trail
 
@@ -84,12 +91,14 @@ the proof. A caller without that grant SHALL NOT.
 A ban entry SHALL keep the operator's reason when one was given. An entry
 SHALL NOT keep secrets or fields that are not the reason for the action.
 
+<!-- trace:scenario id=g10.shared-audit.SC-m8q rev=1 -->
 #### Scenario: shared-auth-audit-SC-08 - A ban reason is on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator bans an account with a reason
 - **THEN** the trail entry keeps that reason
 
+<!-- trace:scenario id=g10.shared-audit.SC-qhl rev=1 -->
 #### Scenario: shared-auth-audit-SC-09 - Secrets stay off the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
@@ -103,6 +112,7 @@ WHEN the trail cannot accept an entry, the operator action SHALL NOT take
 effect. Listing or searching the directory, and listing sessions, SHALL
 NOT write an entry.
 
+<!-- trace:scenario id=g10.shared-audit.SC-r7d rev=1 -->
 #### Scenario: shared-auth-audit-SC-10 - An entry cannot be rewritten
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 
@@ -110,24 +120,28 @@ NOT write an entry.
 - **WHEN** anyone tries to edit or remove that entry
 - **THEN** the entry is unchanged
 
+<!-- trace:scenario id=g10.shared-audit.SC-1rb rev=1 -->
 #### Scenario: shared-auth-audit-SC-11 - An unrecorded action does not run
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 
 - **WHEN** the identity trail cannot accept an entry for a ban
 - **THEN** the account is not banned
 
+<!-- trace:scenario id=g10.shared-audit.SC-r4t rev=1 -->
 #### Scenario: shared-auth-audit-SC-12 - A directory list is not on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator lists accounts
 - **THEN** no identity trail entry is written for that list
 
+<!-- trace:scenario id=g10.shared-audit.SC-jbf rev=1 -->
 #### Scenario: shared-auth-audit-SC-13 - A session list is not on the trail
 **Serves:** shared-auth-audit-US-01 - Operator's identity action is recorded
 
 - **WHEN** an operator lists a person's sessions
 - **THEN** no identity trail entry is written for that list
 
+<!-- trace:scenario id=g10.shared-audit.SC-ci1 rev=1 -->
 #### Scenario: shared-auth-audit-SC-14 - An unrecorded revoke does not run
 **Serves:** shared-auth-audit-US-03 - Operator cannot act off the trail
 

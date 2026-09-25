@@ -11,6 +11,7 @@ before any script runs,
 **so that** I understand what the store sells and can move straight into
 browsing or bidding.
 
+<!-- trace:case id=g10.store-home.TC-efn rev=1 covers=g10.store-home.SC-uyl,g10.store-home.SC-udq,g10.store-home.SC-rav,g10.store-home.SC-obu,g10.store-home.SC-kom -->
 ### grade10-site-store-home-US1-TC1-1: Front door answers whole before scripts run
 
 **Classification:**
@@ -42,6 +43,7 @@ JavaScript disabled in the browser.
 * Page source carries the hero's eyebrow, headline, copy and image.
 * Page source carries both ways on — browse listing and auction.
 
+<!-- trace:case id=g10.store-home.TC-n19 rev=1 covers=g10.store-home.SC-uyl,g10.store-home.SC-udq,g10.store-home.SC-rav,g10.store-home.SC-obu,g10.store-home.SC-kom -->
 ### grade10-site-store-home-US1-TC2-1: Front door and browse listing are two surfaces
 
 **Classification:**
@@ -70,6 +72,7 @@ None.
 * Titles differ.
 * Meta descriptions differ.
 
+<!-- trace:case id=g10.store-home.TC-kee rev=1 covers=g10.store-home.SC-uyl,g10.store-home.SC-udq,g10.store-home.SC-rav,g10.store-home.SC-obu,g10.store-home.SC-kom -->
 ### grade10-site-store-home-US1-TC3-1: Shopping affordance opens the unscoped listing
 
 **Classification:**
@@ -99,6 +102,7 @@ Catalogue holds at least two collections.
 * The listing URL names no collection.
 * Cards from the whole catalogue are listed.
 
+<!-- trace:case id=g10.store-home.TC-due rev=1 covers=g10.store-home.SC-uyl,g10.store-home.SC-udq,g10.store-home.SC-rav,g10.store-home.SC-obu,g10.store-home.SC-kom -->
 ### grade10-site-store-home-US1-TC4-1: Auction button opens the auction surface
 
 **Classification:**
@@ -126,6 +130,7 @@ None.
 
 * The browser navigates to <grade10 auction url>.
 
+<!-- trace:case id=g10.store-home.TC-y35 rev=1 covers=g10.store-home.SC-uyl,g10.store-home.SC-udq,g10.store-home.SC-rav,g10.store-home.SC-obu,g10.store-home.SC-kom -->
 ### grade10-site-store-home-US1-TC5-1: Hero works while the catalogue is still loading
 
 **Classification:**
@@ -165,6 +170,7 @@ None.
 **so that** I can open a scoped browse listing without the application
 deciding which collections appear.
 
+<!-- trace:case id=g10.store-home.TC-5b6 rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4 -->
 ### grade10-site-store-home-US2-TC1-1: Every collection is a tile, in catalogue order
 
 **Classification:**
@@ -196,6 +202,7 @@ Catalogue holds at least three collections, each with a name and artwork.
 * Tile order matches the catalogue.
 * First collection fills the large cell.
 
+<!-- trace:case id=g10.store-home.TC-7r1 rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4 -->
 ### grade10-site-store-home-US2-TC2-1: Tile opens that collection's listing
 
 **Classification:**
@@ -225,6 +232,7 @@ Collector is on the front door, viewing the collection tiles.
 * The listing URL names that collection.
 * Only that collection's cards are listed.
 
+<!-- trace:case id=g10.store-home.TC-quh rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4 -->
 ### grade10-site-store-home-US2-TC3-1: Collection added to the shop appears with no deploy
 
 **Classification:**
@@ -254,6 +262,7 @@ Front door already seen without <a new collection>.
 * The new collection is a tile.
 * No application change was needed.
 
+<!-- trace:case id=g10.store-home.TC-zgj rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4 -->
 ### grade10-site-store-home-US2-TC4-1: Collection with no artwork still gets a tile
 
 **Classification:**
@@ -283,6 +292,7 @@ Catalogue holds <a collection with no artwork>.
 * Tile renders, named by its collection.
 * No gap where the artwork goes, and no missing tile.
 
+<!-- trace:case id=g10.store-home.TC-hc0 rev=1 covers=g10.store-home.SC-z40,g10.store-home.SC-uh3,g10.store-home.SC-wdv,g10.store-home.SC-j65,g10.store-home.SC-lc4 -->
 ### grade10-site-store-home-US2-TC5-1: Catalogue has no collections
 
 **Classification:**
@@ -321,6 +331,7 @@ Catalogue holds no collections.
 **so that** I can open a card's page or the rest of that collection from the
 front door.
 
+<!-- trace:case id=g10.store-home.TC-blu rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC1-1: Row shows the first collection's cards
 
 **Classification:**
@@ -351,6 +362,7 @@ Catalogue lists <a collection with cards> first.
 * Cards belong to that collection.
 * Each card shows name, image and price.
 
+<!-- trace:case id=g10.store-home.TC-o2z rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC2-1: Card opens its own page
 
 **Classification:**
@@ -377,6 +389,7 @@ Collector is on the front door, viewing the merchandised row.
 
 * That card's page opens.
 
+<!-- trace:case id=g10.store-home.TC-3e3 rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC3-1: Row reaches the rest of its collection
 
 **Classification:**
@@ -406,6 +419,7 @@ Collector is on the front door, viewing the merchandised row.
 * The listing URL names that collection.
 * Only that collection's cards are listed.
 
+<!-- trace:case id=g10.store-home.TC-24h rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC4-1: Row follows whichever collection is listed first
 
 **Classification:**
@@ -435,6 +449,7 @@ Front door already seen merchandising the current first collection.
 * Row is now the second collection's, titled as the catalogue names it.
 * No application change was needed.
 
+<!-- trace:case id=g10.store-home.TC-20k rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC5-1: No collection holds any cards
 
 **Classification:**
@@ -467,6 +482,7 @@ No collection in the catalogue holds cards.
 
 ---
 
+<!-- trace:case id=g10.store-home.TC-q25 rev=1 covers=g10.store-home.SC-vsc,g10.store-home.SC-mzp,g10.store-home.SC-o29,g10.store-home.SC-4sf,g10.store-home.SC-u8x,g10.store-home.SC-2ex -->
 ### grade10-site-store-home-US3-TC6-1: Row offers no way into the cart
 
 **Classification:**
@@ -505,6 +521,7 @@ The catalogue lists a collection holding cards the shop has stock of.
 to retry a failed read without a full page load,
 **so that** a slow or broken catalogue does not block the front door.
 
+<!-- trace:case id=g10.store-home.TC-j89 rev=1 covers=g10.store-home.SC-qh3,g10.store-home.SC-b68 -->
 ### grade10-site-store-home-US4-TC1-1: Sections show they are loading
 
 **Classification:**
@@ -534,6 +551,7 @@ to retry a failed read without a full page load,
 * Both sections show they are loading.
 * No empty grid and no empty row.
 
+<!-- trace:case id=g10.store-home.TC-y4a rev=1 covers=g10.store-home.SC-qh3,g10.store-home.SC-b68 -->
 ### grade10-site-store-home-US4-TC2-1: Failed read retries without a page load
 
 **Classification:**
@@ -573,6 +591,7 @@ Collections read mocked to fail, so the section shows its failure; mock then rem
 reach the front door or the unscoped listing,
 **so that** I can navigate the store without guessing destinations.
 
+<!-- trace:case id=g10.store-home.TC-jyh rev=1 covers=g10.store-home.SC-mhb,g10.store-home.SC-1ta,g10.store-home.SC-1ps -->
 ### grade10-site-store-home-US5-TC1-1: Chrome marks the store on the browse listing
 
 **Classification:**
@@ -600,6 +619,7 @@ None.
 
 * Chrome marks the store, as it does on the front door.
 
+<!-- trace:case id=g10.store-home.TC-vyq rev=1 covers=g10.store-home.SC-mhb,g10.store-home.SC-1ta,g10.store-home.SC-1ps -->
 ### grade10-site-store-home-US5-TC2-1: Chrome reaches the front door and the full listing
 
 **Classification:**
@@ -638,6 +658,7 @@ Catalogue holds at least two collections.
 **I want** a card to say whether it is sold out and whether it is marked down,
 **so that** I open the ones worth opening rather than finding out on the page.
 
+<!-- trace:case id=g10.store-home.TC-cw2 rev=1 covers=g10.store-home.SC-00a,g10.store-home.SC-q66 -->
 ### grade10-site-store-home-US6-TC1-1: Card the shop has sold out
 
 **Classification:**
@@ -669,6 +690,7 @@ The merchandised collection leads with <a card> nothing is left to buy of.
 
 ---
 
+<!-- trace:case id=g10.store-home.TC-uc0 rev=1 covers=g10.store-home.SC-00a,g10.store-home.SC-q66 -->
 ### grade10-site-store-home-US6-TC2-1: Card the shop has marked down
 
 **Classification:**

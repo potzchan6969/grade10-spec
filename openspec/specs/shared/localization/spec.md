@@ -50,6 +50,7 @@ Every user-facing string a brand's site renders SHALL come from that brand's
 message catalogs in the active locale. No surface SHALL carry its own
 hardcoded copy, including the surfaces both brands share.
 
+<!-- trace:scenario id=g10.shared-localization.SC-4ss rev=1 -->
 #### Scenario: shared-localization-SC-01 - A shared surface renders each brand's language
 **Serves:** Brand language sets - a shared surface renders each brand's language
 
@@ -58,12 +59,14 @@ hardcoded copy, including the surfaces both brands share.
 - **THEN** the grade10 page's copy is Traditional Chinese
 - **AND** the ZZZ page's copy is Korean
 
+<!-- trace:scenario id=g10.shared-localization.SC-5q6 rev=1 -->
 #### Scenario: shared-localization-SC-02 - Every ZZZ surface is Korean
 **Serves:** Brand language sets - every ZZZ surface is Korean
 
 - **WHEN** any page of the ZZZ site renders
 - **THEN** its copy is Korean
 
+<!-- trace:scenario id=g10.shared-localization.SC-by3 rev=1 -->
 #### Scenario: shared-localization-SC-03 - Commerce content stays in its source language
 **Serves:** Brand language sets - commerce content stays in its source language
 
@@ -91,6 +94,7 @@ For a brand with several locales, a non-default locale MAY omit a key it
 answers elsewhere, and the rendered string SHALL then be that brand's default
 locale's value. A raw message key SHALL never render.
 
+<!-- trace:scenario id=g10.shared-localization.SC-q9f rev=1 -->
 #### Scenario: shared-localization-SC-04 - A brand says nothing of its own
 **Serves:** Shared message vocabulary - a brand says nothing of its own
 
@@ -98,6 +102,7 @@ locale's value. A raw message key SHALL never render.
 - **WHEN** a page of any brand renders it in any of that brand's locales
 - **THEN** the vocabulary's own value in that locale renders
 
+<!-- trace:scenario id=g10.shared-localization.SC-r6f rev=1 -->
 #### Scenario: shared-localization-SC-05 - A brand names itself
 **Serves:** Shared message vocabulary - a brand names itself
 
@@ -106,6 +111,7 @@ locale's value. A raw message key SHALL never render.
 - **THEN** the brand's value renders
 - **AND** every other brand's page renders the vocabulary's value
 
+<!-- trace:scenario id=g10.shared-localization.SC-3k6 rev=1 -->
 #### Scenario: shared-localization-SC-06 - A brand leaves a key unanswered
 **Serves:** Shared message vocabulary - a brand leaves a key unanswered
 
@@ -113,6 +119,7 @@ locale's value. A raw message key SHALL never render.
 - **WHEN** a brand that does not answer it either is built
 - **THEN** the build fails naming the brand, the key, and the language
 
+<!-- trace:scenario id=g10.shared-localization.SC-syy rev=1 -->
 #### Scenario: shared-localization-SC-07 - A brand's own words are missing a language
 **Serves:** Shared message vocabulary - a brand's own words are missing a language
 
@@ -120,6 +127,7 @@ locale's value. A raw message key SHALL never render.
 - **WHEN** the build runs
 - **THEN** it fails naming the brand, the key, and the language
 
+<!-- trace:scenario id=g10.shared-localization.SC-mnr rev=1 -->
 #### Scenario: shared-localization-SC-08 - A single-locale brand is missing a string
 **Serves:** Shared message vocabulary - a single-locale brand is missing a string
 
@@ -127,6 +135,7 @@ locale's value. A raw message key SHALL never render.
 - **WHEN** the build runs
 - **THEN** it fails naming the gap, and no page ever renders it
 
+<!-- trace:scenario id=g10.shared-localization.SC-4wh rev=1 -->
 #### Scenario: shared-localization-SC-09 - A partial translation falls back key by key
 **Serves:** Shared message vocabulary - a partial translation falls back key by key
 
@@ -135,12 +144,14 @@ locale's value. A raw message key SHALL never render.
 - **THEN** the English value renders in its place
 - **AND** every key with a Simplified Chinese value still renders it
 
+<!-- trace:scenario id=g10.shared-localization.SC-jil rev=1 -->
 #### Scenario: shared-localization-SC-10 - No raw key on screen
 **Serves:** Shared message vocabulary - no raw key on screen
 
 - **WHEN** any page of either brand renders in any of its locales
 - **THEN** no message key renders as visible text
 
+<!-- trace:scenario id=g10.shared-localization.SC-u6t rev=1 -->
 #### Scenario: shared-localization-SC-11 - A new brand answers only for itself
 **Serves:** Shared message vocabulary - a new brand answers only for itself
 
@@ -161,6 +172,7 @@ An explicit pick in the site's locale switcher SHALL apply immediately,
 follow the collector across the site, and win over the browser's preferences
 on every return visit until they pick again.
 
+<!-- trace:scenario id=g10.shared-localization.SC-k8w rev=1 -->
 #### Scenario: shared-localization-SC-12 - A Hong Kong browser arrives
 **Serves:** Locale resolution - a Hong Kong browser arrives
 
@@ -168,6 +180,7 @@ on every return visit until they pick again.
 - **WHEN** the site renders
 - **THEN** the page is Traditional Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-wtz rev=1 -->
 #### Scenario: shared-localization-SC-13 - An explicit pick outlives the visit
 **Serves:** Locale resolution - an explicit pick outlives the visit
 
@@ -175,6 +188,7 @@ on every return visit until they pick again.
 - **WHEN** they return to the site later
 - **THEN** the page is Simplified Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-3q8 rev=1 -->
 #### Scenario: shared-localization-SC-14 - An unsupported language falls to the default
 **Serves:** Locale resolution - an unsupported language falls to the default
 
@@ -182,6 +196,7 @@ on every return visit until they pick again.
 - **WHEN** the site renders
 - **THEN** the page is English
 
+<!-- trace:scenario id=g10.shared-localization.SC-ez9 rev=1 -->
 #### Scenario: shared-localization-SC-15 - One language needs no switcher
 **Serves:** Locale resolution - one language needs no switcher
 
@@ -215,12 +230,14 @@ carries no remembered locale, so a crawler is answered in the default locale
 deterministically. Session-shaped surfaces SHALL stay unprefixed and render
 the remembered locale.
 
+<!-- trace:scenario id=g10.shared-localization.SC-uyb rev=1 -->
 #### Scenario: shared-localization-SC-16 - A Chinese address answers whole
 **Serves:** Localized public addresses - a Chinese address answers whole
 
 - **WHEN** the Traditional Chinese store address is fetched and no script executes
 - **THEN** the response HTML carries the store's title, meta description, headline, and static copy in Traditional Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-fa7 rev=1 -->
 #### Scenario: shared-localization-SC-17 - A card answers under a prefix as itself
 **Serves:** Localized public addresses - a card answers under a prefix as itself
 
@@ -229,6 +246,7 @@ the remembered locale.
 - **AND** the platform's own copy around it is Traditional Chinese
 - **AND** the storefront's page is not what answered
 
+<!-- trace:scenario id=g10.shared-localization.SC-q8w rev=1 -->
 #### Scenario: shared-localization-SC-18 - A lot answers under a prefix as itself
 **Serves:** Localized public addresses - a lot answers under a prefix as itself
 
@@ -236,6 +254,7 @@ the remembered locale.
 - **THEN** the response has status 200 and carries that lot's own identity
 - **AND** the platform's own copy around it is Simplified Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-ppq rev=1 -->
 #### Scenario: shared-localization-SC-19 - A prefixed address naming nothing is refused
 **Serves:** Localized public addresses - a prefixed address naming nothing is refused
 
@@ -243,12 +262,14 @@ the remembered locale.
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the not-found surface in Simplified Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-18g rev=1 -->
 #### Scenario: shared-localization-SC-20 - A variant declares its alternates
 **Serves:** Localized public addresses - a variant declares its alternates
 
 - **WHEN** any public address is fetched and no script executes
 - **THEN** the response names each language variant of that surface and its address, the default among them
 
+<!-- trace:scenario id=g10.shared-localization.SC-9ba rev=1 -->
 #### Scenario: shared-localization-SC-21 - The sitemap lists every variant
 **Serves:** Localized public addresses - the sitemap lists every variant
 
@@ -256,12 +277,14 @@ the remembered locale.
 - **THEN** each address the sitemap names appears once per grade10 locale
 - **AND** no session-shaped address appears
 
+<!-- trace:scenario id=g10.shared-localization.SC-ae7 rev=1 -->
 #### Scenario: shared-localization-SC-22 - A crawler reads an unprefixed address in the default locale
 **Serves:** Localized public addresses - a crawler reads an unprefixed address in the default locale
 
 - **WHEN** an unprefixed public address is fetched carrying no remembered locale and no script executes
 - **THEN** the response's own copy is English and the document declares it
 
+<!-- trace:scenario id=g10.shared-localization.SC-zhy rev=1 -->
 #### Scenario: shared-localization-SC-23 - The address wins over the memory
 **Serves:** Localized public addresses - the address wins over the memory
 
@@ -269,6 +292,7 @@ the remembered locale.
 - **WHEN** they open a `/tc` address
 - **THEN** the page is Traditional Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-zxy rev=1 -->
 #### Scenario: shared-localization-SC-24 - A prefixed visit stays in its language
 **Serves:** Localized public addresses - a prefixed visit stays in its language
 
@@ -276,6 +300,7 @@ the remembered locale.
 - **WHEN** they navigate to the auction
 - **THEN** they arrive at the auction's Traditional Chinese address
 
+<!-- trace:scenario id=g10.shared-localization.SC-5pk rev=1 -->
 #### Scenario: shared-localization-SC-25 - A prefixed catalogue opens a prefixed card
 **Serves:** Localized public addresses - a prefixed catalogue opens a prefixed card
 
@@ -283,6 +308,7 @@ the remembered locale.
 - **WHEN** they open a card from the grid
 - **THEN** they arrive at that card's Traditional Chinese address
 
+<!-- trace:scenario id=g10.shared-localization.SC-bc1 rev=1 -->
 #### Scenario: shared-localization-SC-26 - The memory redirects an unprefixed arrival
 **Serves:** Localized public addresses - the memory redirects an unprefixed arrival
 
@@ -290,6 +316,7 @@ the remembered locale.
 - **WHEN** they open the unprefixed marketing address, and then an unprefixed card address
 - **THEN** they end at the Traditional Chinese address of each
 
+<!-- trace:scenario id=g10.shared-localization.SC-yfv rev=1 -->
 #### Scenario: shared-localization-SC-27 - An unknown prefixed address is refused honestly
 **Serves:** Localized public addresses - an unknown prefixed address is refused honestly
 
@@ -303,12 +330,14 @@ Every page of either brand SHALL declare the active locale as the document's
 language, so assistive technology and text rendering follow the language on
 screen.
 
+<!-- trace:scenario id=g10.shared-localization.SC-5fn rev=1 -->
 #### Scenario: shared-localization-SC-28 - A Chinese page says so
 **Serves:** Language beyond the page - a Chinese page says so
 
 - **WHEN** a grade10 page renders in Traditional Chinese
 - **THEN** the document declares `zh-Hant`
 
+<!-- trace:scenario id=g10.shared-localization.SC-e75 rev=1 -->
 #### Scenario: shared-localization-SC-29 - The ZZZ document is Korean
 **Serves:** Language beyond the page - the ZZZ document is Korean
 
@@ -322,6 +351,7 @@ from, falling back to the brand's default locale when none was carried. The
 message vocabulary's email strings SHALL be answered in every locale of both
 brands.
 
+<!-- trace:scenario id=g10.shared-localization.SC-1f1 rev=1 -->
 #### Scenario: shared-localization-SC-30 - A Chinese sign-in gets a Chinese email
 **Serves:** Language beyond the page - a Chinese sign-in gets a Chinese email
 
@@ -329,6 +359,7 @@ brands.
 - **WHEN** they request a sign-in email
 - **THEN** the email's subject and body are Traditional Chinese
 
+<!-- trace:scenario id=g10.shared-localization.SC-8tq rev=1 -->
 #### Scenario: shared-localization-SC-31 - The ZZZ email is Korean
 **Serves:** Language beyond the page - the ZZZ email is Korean
 
@@ -342,6 +373,7 @@ language input the dates-and-times capability accepts, and nothing else about
 that capability changes: the shapes, the format, and the zone stay as
 specified there.
 
+<!-- trace:scenario id=g10.shared-localization.SC-nkk rev=1 -->
 #### Scenario: shared-localization-SC-32 - A month in Traditional Chinese
 **Serves:** Language beyond the page - a month in Traditional Chinese
 

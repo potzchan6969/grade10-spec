@@ -9,6 +9,7 @@
 **I want** a product a merchandiser marked down to charge me the marked-down price without needing a code,
 **so that** the advertised deal is the price I actually pay, plain and predictable.
 
+<!-- trace:case id=g10.store-site-discounts.TC-78a rev=1 covers=g10.store-site-discounts.SC-oi2,g10.store-site-discounts.SC-yel -->
 ### grade10-site-store-site-discounts-US1-TC1-1: Automatic discount reaches the online checkout order
 
 **Classification:**
@@ -45,6 +46,7 @@
 
 * The order carries <automatic_1>, taking HK$5.00.
 
+<!-- trace:case id=g10.store-site-discounts.TC-am6 rev=1 covers=g10.store-site-discounts.SC-oi2,g10.store-site-discounts.SC-yel -->
 ### grade10-site-store-site-discounts-US1-TC2-1: Discount total beside a code is what the shop priced
 
 Runs once per row of **Test data**.
@@ -95,6 +97,7 @@ Runs once per row of **Test data**.
 **I want** an active site discount to stay on a sale I am ringing up, even when I clear the discounts grade10 put on it,
 **so that** a counter customer gets the marked-down price without me remembering or retyping anything.
 
+<!-- trace:case id=g10.store-site-discounts.TC-pox rev=1 covers=g10.store-site-discounts.SC-rak -->
 ### grade10-site-store-site-discounts-US2-TC1-1: Clearing a till sale leaves the shop's automatic standing
 
 Runs once per row of **Test data**.

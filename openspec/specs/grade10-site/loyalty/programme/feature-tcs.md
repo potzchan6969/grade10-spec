@@ -10,6 +10,7 @@
 at my tier's rate in the programme's own currency,
 **so that** what I can redeem is exactly what my qualifying spend earned.
 
+<!-- trace:case id=g10.loyalty-programme.TC-0hf rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC1-1: Activity precedes joining
 
 **Classification:**
@@ -38,6 +39,7 @@ A user who has never joined.
 * A member record exists and holds those points.
 * The member is reported as not joined until they join.
 
+<!-- trace:case id=g10.loyalty-programme.TC-szz rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC2-1: Balance counts only unspent unexpired credits and never goes negative
 
 **Classification:**
@@ -65,6 +67,7 @@ A member with a mix of unspent, spent, and expired credits.
 * The balance counts only credits that are unspent and unexpired at that instant.
 * The debit draws only on credits that have points remaining, and the member is never below zero.
 
+<!-- trace:case id=g10.loyalty-programme.TC-f76 rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC3-1: Diamond purchase of HKD 1,000 earns 120 points, floored once
 
 **Classification:**
@@ -92,6 +95,7 @@ A Diamond member.
 * They earn 120 points.
 * The point total is floored once after applying the rate and the multiplier, not at each step.
 
+<!-- trace:case id=g10.loyalty-programme.TC-krs rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC4-1: Foreign currency spend is refused
 
 **Classification:**
@@ -118,6 +122,7 @@ None.
 * It is refused as invalid, naming both currencies.
 * No ledger entry is written.
 
+<!-- trace:case id=g10.loyalty-programme.TC-4ot rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC5-1: Backdated spend keeps its own date
 
 **Classification:**
@@ -145,6 +150,7 @@ A member whose current tier is known.
 * Expiry and tier contribution follow that date.
 * The multiplier applied is the tier the member holds when it is processed.
 
+<!-- trace:case id=g10.loyalty-programme.TC-owd rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC6-1: Future-dated spend is refused
 
 **Classification:**
@@ -170,6 +176,7 @@ None.
 
 * It is refused as invalid.
 
+<!-- trace:case id=g10.loyalty-programme.TC-eva rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC7-1: Retry under the same key records nothing twice
 
 **Classification:**
@@ -197,6 +204,7 @@ A caller that already used a mutation key.
 * The original answer is returned and no new entry is recorded.
 * The differing input is refused as a conflict.
 
+<!-- trace:case id=g10.loyalty-programme.TC-vid rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC8-1: Expired credit stops counting immediately
 
 **Classification:**
@@ -223,6 +231,7 @@ A member with a credit whose expiry instant is about to pass.
 
 * It stops counting toward the balance immediately.
 
+<!-- trace:case id=g10.loyalty-programme.TC-0er rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC9-1: Refunds claw back only what that money still holds
 
 **Classification:**
@@ -254,6 +263,7 @@ A member with a completed purchase that earned points.
 * A refund before earning is refused as not found, and a later retry claws back once earning lands.
 * Tier contribution of the earning is reduced by the same amount and leaves the qualifying window with that earning.
 
+<!-- trace:case id=g10.loyalty-programme.TC-u6v rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC10-1: Purchase still completes when loyalty is unreachable, and grants once
 
 **Classification:**
@@ -284,6 +294,7 @@ The programme is unreachable. A completed purchase is later delivered more than 
 * Points are granted once.
 * Each refund claws back only the points its own amount earned.
 
+<!-- trace:case id=g10.loyalty-programme.TC-dgw rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC11-1: Currency mismatch stops the product from starting
 
 **Classification:**
@@ -309,6 +320,7 @@ A product configured to sell in a currency the programme does not run in.
 
 * The product fails to start, naming both currencies.
 
+<!-- trace:case id=g10.loyalty-programme.TC-fxs rev=1 covers=g10.loyalty-programme.SC-amv,g10.loyalty-programme.SC-r8t,g10.loyalty-programme.SC-65a,g10.loyalty-programme.SC-8xw,g10.loyalty-programme.SC-t7x,g10.loyalty-programme.SC-w1x,g10.loyalty-programme.SC-5dr,g10.loyalty-programme.SC-gru,g10.loyalty-programme.SC-lfh,g10.loyalty-programme.SC-f4d,g10.loyalty-programme.SC-jvh,g10.loyalty-programme.SC-85n,g10.loyalty-programme.SC-buc,g10.loyalty-programme.SC-0ua -->
 ### grade10-site-loyalty-programme-US1-TC12-1: Refused recording is reported, not swallowed
 
 **Classification:**
@@ -346,6 +358,7 @@ expire,
 **so that** the rate I earn at reflects the standing I reached rather than what
 my balance happens to be today.
 
+<!-- trace:case id=g10.loyalty-programme.TC-ykd rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC1-1: Earned tier holds after those points expire
 
 **Classification:**
@@ -373,6 +386,7 @@ A member who reached a tier by earning.
 
 * The member keeps that tier.
 
+<!-- trace:case id=g10.loyalty-programme.TC-r5y rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC2-1: Invitation lapse drops the tier when next evaluated
 
 **Classification:**
@@ -400,6 +414,7 @@ A member holding a dated invitation that is about to end.
 * The member stops holding that tier from that instant.
 * The drop is recorded the next time that member is evaluated.
 
+<!-- trace:case id=g10.loyalty-programme.TC-89y rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC3-1: Tier history records each move
 
 **Classification:**
@@ -426,6 +441,7 @@ A member whose effective tier is about to change.
 
 * One entry records the move and what caused it.
 
+<!-- trace:case id=g10.loyalty-programme.TC-df0 rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC4-1: Invalid ladder stops the product from starting
 
 **Classification:**
@@ -452,6 +468,7 @@ A ladder that repeats a tier identifier, or has other than exactly one entry tie
 * The product fails to start, naming the identifier, how many entry tiers it found, both amounts, the periods, or the zone as the ladder is wrong.
 * No member can hold a tier they skipped past.
 
+<!-- trace:case id=g10.loyalty-programme.TC-v68 rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC5-1: 500 qualifying points reach Diamond, not Black
 
 **Classification:**
@@ -481,6 +498,7 @@ A member who can earn.
 
 ---
 
+<!-- trace:case id=g10.loyalty-programme.TC-79a rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC6-1: Operator points take the date the balance already names
 
 Runs once per row of **Test data**.
@@ -521,6 +539,7 @@ Runs once per row of **Test data**.
 * The member's expiry line still reads <balance expiry day>.
 * The added points expire on the day the row names.
 
+<!-- trace:case id=g10.loyalty-programme.TC-05i rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC7-1: Backdated grant joins the window already running
 
 **Classification:**
@@ -559,6 +578,7 @@ Runs once per row of **Test data**.
 * The 100 granted points expire on <balance expiry day>.
 * The member's expiry line has not moved.
 
+<!-- trace:case id=g10.loyalty-programme.TC-jdg rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC8-1: Operator points to an empty balance start the window
 
 **Classification:**
@@ -597,6 +617,7 @@ Runs once per row of **Test data**.
 * The balance reads 50 points, expiring twelve months after today.
 * The <lapsed amount> that lapsed on <lapse day> does not count again.
 
+<!-- trace:case id=g10.loyalty-programme.TC-zoy rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC9-1: A reward handed over outright is not the member's activity
 
 **Classification:**
@@ -628,6 +649,7 @@ Runs once per row of **Test data**.
 * The membership summary loads with one expiry line.
 * That line still reads <balance expiry day>.
 
+<!-- trace:case id=g10.loyalty-programme.TC-to5 rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC10-1: A reversal into a lapsed balance returns nothing spendable
 
 **Classification:**
@@ -665,6 +687,7 @@ Runs once per row of **Test data**.
 * The member has nothing to spend.
 * The answer names the <points paid> it could not return.
 
+<!-- trace:case id=g10.loyalty-programme.TC-hd9 rev=1 covers=g10.loyalty-programme.SC-4ri,g10.loyalty-programme.SC-s8t,g10.loyalty-programme.SC-jff,g10.loyalty-programme.SC-ehg,g10.loyalty-programme.SC-v4d,g10.loyalty-programme.SC-0nq,g10.loyalty-programme.SC-vif,g10.loyalty-programme.SC-uf6,g10.loyalty-programme.SC-gg6,g10.loyalty-programme.SC-c0x,g10.loyalty-programme.SC-8bq,g10.loyalty-programme.SC-4ir,g10.loyalty-programme.SC-6rj,g10.loyalty-programme.SC-16h,g10.loyalty-programme.SC-5yd,g10.loyalty-programme.SC-4mb,g10.loyalty-programme.SC-76g,g10.loyalty-programme.SC-ay5,g10.loyalty-programme.SC-nmo -->
 ### grade10-site-loyalty-programme-US2-TC11-1: A refund claws points back without moving the expiry date
 
 **Classification:**
@@ -704,6 +727,7 @@ redeemed it,
 **so that** a later reprice, a sell-out or a reversal never changes what that
 redemption cost me.
 
+<!-- trace:case id=g10.loyalty-programme.TC-m1l rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC1-1: Repricing does not rewrite an earlier redemption
 
 **Classification:**
@@ -731,6 +755,7 @@ A member who redeemed a reward.
 
 * The earlier redemption still records the price the member paid.
 
+<!-- trace:case id=g10.loyalty-programme.TC-p5o rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC2-1: Last unit is not oversold
 
 **Classification:**
@@ -756,6 +781,7 @@ A limited reward with one unit left. Two members redeem at once.
 
 * Exactly one succeeds and the other is refused as out of stock.
 
+<!-- trace:case id=g10.loyalty-programme.TC-yk2 rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC3-1: Reward outside its window cannot be redeemed
 
 **Classification:**
@@ -781,6 +807,7 @@ A reward that is archived, or outside its live window.
 
 * The redemption is refused.
 
+<!-- trace:case id=g10.loyalty-programme.TC-9i4 rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC4-1: Public menu shows only live unarchived rewards
 
 **Classification:**
@@ -807,6 +834,7 @@ The caller is not signed in.
 * It lists only live, unarchived rewards.
 * It does not disclose stock counts or edit history.
 
+<!-- trace:case id=g10.loyalty-programme.TC-hb9 rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC5-1: Reversal restores original expiry and returns stock only when consumed
 
 **Classification:**
@@ -834,6 +862,7 @@ A member who redeemed a limited reward and another who redeemed an unlimited rew
 * Each restored credit expires when the credit it came from would have.
 * No stock is returned for the unlimited reward.
 
+<!-- trace:case id=g10.loyalty-programme.TC-4id rev=1 covers=g10.loyalty-programme.SC-hp7,g10.loyalty-programme.SC-ixi,g10.loyalty-programme.SC-css,g10.loyalty-programme.SC-g01,g10.loyalty-programme.SC-g5s,g10.loyalty-programme.SC-elq,g10.loyalty-programme.SC-hgd,g10.loyalty-programme.SC-des,g10.loyalty-programme.SC-hlf,g10.loyalty-programme.SC-dcn,g10.loyalty-programme.SC-yob,g10.loyalty-programme.SC-4s4,g10.loyalty-programme.SC-jea,g10.loyalty-programme.SC-bwq,g10.loyalty-programme.SC-dqm,g10.loyalty-programme.SC-x8s,g10.loyalty-programme.SC-xyn -->
 ### grade10-site-loyalty-programme-US3-TC6-1: Double redemption costs one
 
 **Classification:**
@@ -869,6 +898,7 @@ the programme's own dates,
 **so that** I can join and read my own activity without being shown the
 operating record behind it.
 
+<!-- trace:case id=g10.loyalty-programme.TC-iye rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC1-1: Joining twice leaves the first join date
 
 **Classification:**
@@ -894,6 +924,7 @@ A member who can join.
 
 * The first join date stands and later attempts change nothing.
 
+<!-- trace:case id=g10.loyalty-programme.TC-irz rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC2-1: Never-joined member is invited and still sees points
 
 **Classification:**
@@ -921,6 +952,7 @@ A member with recorded activity but no join date.
 
 * They are shown how to join, and their existing points.
 
+<!-- trace:case id=g10.loyalty-programme.TC-vex rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC3-1: Member activity hides operator reasons, retry keys and pricing
 
 **Classification:**
@@ -949,6 +981,7 @@ An operator has corrected this member's balance with a written reason.
 * No entry carries a retry key, a request record, or the tier and money arithmetic the entry was priced from.
 * The archived-reward entry still names that reward.
 
+<!-- trace:case id=g10.loyalty-programme.TC-9v2 rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC4-1: Dates read in the programme's time zone
 
 **Classification:**
@@ -977,6 +1010,7 @@ A member whose browser is not in Asia/Hong_Kong.
 
 ---
 
+<!-- trace:case id=g10.loyalty-programme.TC-2dk rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC5-1: Membership summary names one expiry line
 
 **Classification:**
@@ -1012,6 +1046,7 @@ A member whose browser is not in Asia/Hong_Kong.
 * One line names <live balance> and <balance expiry day>.
 * No second expiry figure sits beside it.
 
+<!-- trace:case id=g10.loyalty-programme.TC-9tr rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC6-1: Member holding no points is shown no expiry line
 
 **Classification:**
@@ -1043,6 +1078,7 @@ A member whose browser is not in Asia/Hong_Kong.
 
 ---
 
+<!-- trace:case id=g10.loyalty-programme.TC-6f6 rev=1 covers=g10.loyalty-programme.SC-y12,g10.loyalty-programme.SC-7o9,g10.loyalty-programme.SC-wn3,g10.loyalty-programme.SC-xep,g10.loyalty-programme.SC-y8v,g10.loyalty-programme.SC-vlc,g10.loyalty-programme.SC-urv,g10.loyalty-programme.SC-axq,g10.loyalty-programme.SC-n7b,g10.loyalty-programme.SC-xur,g10.loyalty-programme.SC-evb,g10.loyalty-programme.SC-7zl,g10.loyalty-programme.SC-ftq,g10.loyalty-programme.SC-v0h,g10.loyalty-programme.SC-69a,g10.loyalty-programme.SC-b22,g10.loyalty-programme.SC-2t5,g10.loyalty-programme.SC-bwm,g10.loyalty-programme.SC-w02,g10.loyalty-programme.SC-ksg,g10.loyalty-programme.SC-5db,g10.loyalty-programme.SC-2hc,g10.loyalty-programme.SC-ir1,g10.loyalty-programme.SC-3y1,g10.loyalty-programme.SC-9k2,g10.loyalty-programme.SC-puq,g10.loyalty-programme.SC-x24,g10.loyalty-programme.SC-pt4,g10.loyalty-programme.SC-xig,g10.loyalty-programme.SC-lde,g10.loyalty-programme.SC-2fe,g10.loyalty-programme.SC-7vs,g10.loyalty-programme.SC-38k,g10.loyalty-programme.SC-nnv,g10.loyalty-programme.SC-qmv,g10.loyalty-programme.SC-99v,g10.loyalty-programme.SC-wu2,g10.loyalty-programme.SC-6kj,g10.loyalty-programme.SC-zdb,g10.loyalty-programme.SC-yh1,g10.loyalty-programme.SC-l3t,g10.loyalty-programme.SC-phf,g10.loyalty-programme.SC-5u1,g10.loyalty-programme.SC-y9e,g10.loyalty-programme.SC-lig,g10.loyalty-programme.SC-tzp,g10.loyalty-programme.SC-dml,g10.loyalty-programme.SC-q28,g10.loyalty-programme.SC-eol,g10.loyalty-programme.SC-j0k -->
 ### grade10-site-loyalty-programme-US4-TC7-1: Expiry line warns inside the last 30 days
 
 Runs once per row of **Test data**.
@@ -1090,6 +1126,7 @@ Runs once per row of **Test data**.
 **so that** I can correct, reward and invite without holding powers I was not
 given, and every change I made stays provable.
 
+<!-- trace:case id=g10.loyalty-programme.TC-ssz rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC1-1: Live grants can be listed; unknown and entry tiers are refused
 
 **Classification:**
@@ -1121,6 +1158,7 @@ Signed in as an operator who can grant invitations. Live grants exist.
 * An unknown tier is refused as not found and nothing is recorded.
 * An entry-tier grant is refused as invalid.
 
+<!-- trace:case id=g10.loyalty-programme.TC-6en rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC2-1: Action without permission is refused and stays recorded
 
 **Classification:**
@@ -1150,6 +1188,7 @@ Signed in as an operator without the action's permission. The operator log can a
 * Verifying the log reports the position at which a rewrite breaks.
 * An unrecordable action is refused rather than run unrecorded.
 
+<!-- trace:case id=g10.loyalty-programme.TC-1lu rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC3-1: Correction does not move a member up; campaign grant does
 
 **Classification:**
@@ -1177,6 +1216,7 @@ Signed in as an operator who can move points. A member below Diamond.
 * Corrected points are spendable and progress toward the next tier is unchanged.
 * Campaign or sign-up points count toward the next tier.
 
+<!-- trace:case id=g10.loyalty-programme.TC-1an rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC4-1: Console sections match permissions and a missing second factor opens the gate
 
 **Classification:**
@@ -1206,6 +1246,7 @@ An operator holding only the loyalty read permission. A second operator whose ro
 * The same member opens for the recipient of the shared address.
 * The console takes the second operator to verify, and the action completes afterwards.
 
+<!-- trace:case id=g10.loyalty-programme.TC-7u6 rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC5-1: Stale console reports the failed decode
 
 **Classification:**
@@ -1232,6 +1273,7 @@ The console reads a response whose shape it does not recognise.
 
 * It reports which call failed to decode, rather than showing missing values.
 
+<!-- trace:case id=g10.loyalty-programme.TC-6ar rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC6-1: Loyalty permission alone shows no identities
 
 **Classification:**
@@ -1258,6 +1300,7 @@ Signed in as an operator holding loyalty permissions but not the identity permis
 * The member's loyalty state is shown.
 * No name or email address is shown.
 
+<!-- trace:case id=g10.loyalty-programme.TC-84a rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC7-1: Service connection cannot read identities; a failed read does not blank them
 
 **Classification:**
@@ -1287,6 +1330,7 @@ A service holding a connection to the identity system, with no operator session 
 * The log records who read, which records, and how many, and does not record names or email addresses.
 * The console reports the failure and no member is shown with a blank identity.
 
+<!-- trace:case id=g10.loyalty-programme.TC-80a rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC8-1: Restart lands one window from today
 
 **Classification:**
@@ -1324,6 +1368,7 @@ A service holding a connection to the identity system, with no operator session 
 * The whole balance now expires twelve months after today.
 * The log carries the restart and the reason the operator gave.
 
+<!-- trace:case id=g10.loyalty-programme.TC-d9g rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC9-1: Restart writes off what already lapsed
 
 **Classification:**
@@ -1362,6 +1407,7 @@ A service holding a connection to the identity system, with no operator session 
 * The <lapsed amount> stays written off and does not return.
 * Only the <points after lapse> expire, twelve months after today.
 
+<!-- trace:case id=g10.loyalty-programme.TC-dol rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC10-1: Restart leaves a window already further out
 
 **Classification:**
@@ -1393,6 +1439,7 @@ A service holding a connection to the identity system, with no operator session 
 * The console takes the restart.
 * The expiry date still reads <far expiry day>.
 
+<!-- trace:case id=g10.loyalty-programme.TC-spz rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC11-1: Restart moves no points and reaches no activity
 
 **Classification:**
@@ -1431,6 +1478,7 @@ A service holding a connection to the identity system, with no operator session 
 * The balance still reads <live balance>.
 * The activity list still ends with <last activity>, and names no restart.
 
+<!-- trace:case id=g10.loyalty-programme.TC-xmn rev=1 covers=g10.loyalty-programme.SC-pgz,g10.loyalty-programme.SC-zl6,g10.loyalty-programme.SC-pft,g10.loyalty-programme.SC-6nn,g10.loyalty-programme.SC-qs7,g10.loyalty-programme.SC-qko,g10.loyalty-programme.SC-6ll,g10.loyalty-programme.SC-do3,g10.loyalty-programme.SC-64s,g10.loyalty-programme.SC-tje,g10.loyalty-programme.SC-fiu,g10.loyalty-programme.SC-svj,g10.loyalty-programme.SC-bnc,g10.loyalty-programme.SC-3vv,g10.loyalty-programme.SC-qia,g10.loyalty-programme.SC-bu3 -->
 ### grade10-site-loyalty-programme-US5-TC12-1: Form names the expiry day before the points are written
 
 Runs once per row of **Test data**.

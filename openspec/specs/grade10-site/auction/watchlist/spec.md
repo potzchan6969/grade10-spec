@@ -48,6 +48,7 @@ Grade10 SHALL NOT hold a watch only in the browser. Watching the same
 listing again SHALL leave one watch, and SHALL NOT create a second or
 change the Watched At of the first.
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-jux rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-01 - A collector watches a listing
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -57,6 +58,7 @@ change the Watched At of the first.
 - **AND** the listing shows as watched to them
 - **AND** email alerts for that listing are on
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-uiz rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-02 - A collector unwatches a listing
 **Serves:** grade10-site-auction-watchlist-US-02 - Collector unwatches a listing they no longer follow
 
@@ -66,6 +68,7 @@ change the Watched At of the first.
 - **AND** the listing shows as not watched to them
 - **AND** email alerts for that listing are off
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-qjq rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-03 - Watching twice leaves one watch
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -74,6 +77,7 @@ change the Watched At of the first.
 - **THEN** the collector watches that listing exactly once
 - **AND** the Watched At of the original watch is unchanged
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-n7n rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-04 - A signed-out viewer is offered sign-in
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -82,6 +86,7 @@ change the Watched At of the first.
 - **THEN** Grade10 does not record a watch
 - **AND** the viewer is offered sign-in
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-g1p rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-05 - A watch follows the collector, not the browser
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -103,6 +108,7 @@ be the collector's user id, per `shared/auth/session`.
 | Listing | The listing watched |
 | Watched At | When Grade10 accepted the first watch; a repeat does not change it |
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-ao4 rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-06 - A watch belongs to one collector
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -127,6 +133,7 @@ listing, in order to judge interest. That count SHALL include every
 watch on that listing across both brands. An operator SHALL NOT be shown
 a watch as a commitment to buy.
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-7nx rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-07 - A watch count is not public
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -134,6 +141,7 @@ a watch as a commitment to buy.
 - **WHEN** any collector or unauthenticated reader reads its public facts
 - **THEN** those facts carry no watch count and no watcher identity
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-zi2 rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-08 - One collector cannot see another's watch
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -141,6 +149,7 @@ a watch as a commitment to buy.
 - **WHEN** the other opens that listing
 - **THEN** it shows as not watched to them
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-qq2 rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-09 - Watching does not change the sale
 **Serves:** grade10-site-auction-watchlist-US-01 - Collector watches a listing to come back to it
 
@@ -149,6 +158,7 @@ a watch as a commitment to buy.
 - **THEN** the current bid, the leader, and the close are unchanged
 - **AND** no bid validity rule is affected
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-x1c rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-10 - An operator counts every watch on a listing
 **Serves:** grade10-site-auction-watchlist-US-04 - Operator judges interest from the watch count
 
@@ -167,6 +177,7 @@ A watch SHALL survive its listing's close, call-off, or being won by
 another collector. Grade10 SHALL NOT remove a watch for those reasons.
 A collector SHALL be able to unwatch such a listing.
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-li4 rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-11 - The list is ordered by when each watch was made
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 
@@ -174,6 +185,7 @@ A collector SHALL be able to unwatch such a listing.
 - **WHEN** they read the listings they watch
 - **THEN** the order is C, B, A
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-m4a rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-12 - A collector watching nothing
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 
@@ -182,6 +194,7 @@ A collector SHALL be able to unwatch such a listing.
 - **THEN** they are told they watch nothing
 - **AND** no error is shown
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-qb7 rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-13 - An entry leads to its listing
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 
@@ -189,6 +202,7 @@ A collector SHALL be able to unwatch such a listing.
 - **WHEN** they open an entry
 - **THEN** they arrive at that listing
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-ozh rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-14 - A collector unwatches a closed listing
 **Serves:** grade10-site-auction-watchlist-US-02 - Collector unwatches a listing they no longer follow
 
@@ -197,6 +211,7 @@ A collector SHALL be able to unwatch such a listing.
 - **THEN** the watch is removed
 - **AND** the listing no longer appears in the listings they watch
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-lfd rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-18 - A collector unwatches from the watched list
 **Serves:** grade10-site-auction-watchlist-US-02 - Collector unwatches a listing they no longer follow
 
@@ -207,6 +222,7 @@ A collector SHALL be able to unwatch such a listing.
 - **AND** email alerts for that listing are off
 - **AND** they did not have to open the listing's own page
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-ntf rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-19 - Muting alerts leaves the watch
 **Serves:** grade10-site-auction-watchlist-US-05 - Collector mutes email alerts without unwatching
 
@@ -230,6 +246,7 @@ close SHALL follow `dates-and-times`.
 | Closes At | Same shape as that listing's close |
 | Sale state | Open or closed |
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-n7p rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-15 - An entry carries the facts needed to act
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 
@@ -237,6 +254,7 @@ close SHALL follow `dates-and-times`.
 - **WHEN** they read the listings they watch
 - **THEN** that entry shows the listing's identity, its current bid, and its close
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-01q rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-16 - A closed listing stays in the list
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 
@@ -245,6 +263,7 @@ close SHALL follow `dates-and-times`.
 - **THEN** that listing is still listed
 - **AND** it is shown as closed
 
+<!-- trace:scenario id=g10.auction-watchlist.SC-31g rev=1 -->
 #### Scenario: grade10-site-auction-watchlist-SC-17 - A called-off listing is shown as called off
 **Serves:** grade10-site-auction-watchlist-US-03 - Collector reads the listings they watch
 

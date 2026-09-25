@@ -50,6 +50,7 @@ bookkeeping. Balance and tier SHALL be read from the loyalty programme at
 each refresh, never stored as the pass's own truth beyond what it last
 rendered.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-znb rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-01 - A pass renders the programme's current standing
 **Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
@@ -66,6 +67,7 @@ the other's by accident. Adding a pass in one wallet SHALL leave what the
 member holds in the other untouched, and the membership surface SHALL say
 which passes they are carrying.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-atm rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-02 - A second pass on the same wallet is refused while one is live
 **Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
@@ -74,6 +76,7 @@ which passes they are carrying.
 - **THEN** the pass they held is ended first and exactly one live pass for that wallet remains
 - **AND** the partial unique index `uq_wallet_passes_live_member` is the backstop that refuses a second live row on any path that forgets
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-4lv rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-03 - Ending one wallet's pass leaves the other's untouched
 **Serves:** `grade10-site-store-wallet-member-card-US-03`, `grade10-site-store-wallet-member-card-US-07` - ending one wallet's pass leaves the other's untouched
 
@@ -81,6 +84,7 @@ which passes they are carrying.
 - **WHEN** they end the Google Wallet pass alone
 - **THEN** the Apple Wallet pass stays live
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-sp1 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-21 - Adding one wallet's pass leaves the other alive
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -93,6 +97,7 @@ which passes they are carrying.
 A pass SHALL hold exactly one of `live`, `ended`, `erased`, held by a CHECK
 constraint, with `ended_at` present if and only if the pass is not live.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-sh7 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-04 - A non-live pass carries its ended timestamp
 **Serves:** grade10-site-store-wallet-member-card-US-03 - Member ends one pass and keeps the other
 
@@ -122,6 +127,7 @@ carrying what stands after the last of them. The pass SHALL say when what it
 shows was current, and a sweep with more due than it reads SHALL report how
 far behind its oldest due pass is.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-bj5 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-05 - A member whose balance moved is current by the end of the next lap
 **Serves:** grade10-site-store-wallet-member-card-US-02 - Member scans at the counter after their balance moved
 
@@ -129,6 +135,7 @@ far behind its oldest due pass is.
 - **WHEN** the next sweep lap runs
 - **THEN** the pass renders the new balance
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-jfa rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-06 - A dormant member's pass is read once a day and sends nothing
 **Serves:** grade10-site-store-wallet-member-card-US-05 - Operator reads what the sweep costs
 
@@ -136,6 +143,7 @@ far behind its oldest due pass is.
 - **WHEN** a day passes
 - **THEN** the pass is read once by the daily floor and no push is sent if nothing changed
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-hqf rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-25 - A recorded change reaches the wallet on the next sweep
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -144,6 +152,7 @@ far behind its oldest due pass is.
   points left after it
 - **AND** it does so whether or not the spend itself marked the pass due
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-szm rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-26 - A change nobody recorded is due at the instant it happens
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -153,6 +162,7 @@ far behind its oldest due pass is.
 - **AND** the first sweep after it sends the wallet the tier and points the
   member's own surfaces then read
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-41b rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-27 - A sweep that has fallen behind says so
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -160,6 +170,7 @@ far behind its oldest due pass is.
 - **WHEN** the sweep runs
 - **THEN** it reports the age of its oldest due pass
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-wl0 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-28 - A burst costs one update
 **Serves:** One sweep behind - a burst costs one update
 
@@ -167,6 +178,7 @@ far behind its oldest due pass is.
 - **THEN** the pass is updated once
 - **AND** it carries what stands after the last of those changes
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-3bj rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-29 - A pass says how current it is
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -179,6 +191,7 @@ Each sweep lap SHALL run the kick first and before any per-wallet laps; then,
 per wallet, the refresh arm; and only then what the vendor is owed for a
 non-live pass. The two arms SHALL never share one lap's budget.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-rrp rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-07 - A live member's refresh is not starved by the vendor-debt arm
 **Serves:** grade10-site-store-wallet-member-card-US-02 - Member scans at the counter after their balance moved
 
@@ -193,6 +206,7 @@ the member's name; `next_attempt_at` on a non-live row SHALL record that the
 copy is owed a call. There SHALL be no separate dueness column and no
 mark-due script. The sweep's expiry arm SHALL drain this debt.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-83a rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-08 - An ended pass's vendor copy is discharged by the sweep
 **Serves:** grade10-site-store-wallet-member-card-US-03 - Member ends one pass and keeps the other
 
@@ -216,6 +230,7 @@ owed until it does. A wallet that keeps none SHALL be discharged by the pass
 identifying nobody and the devices it was sent to being forgotten, with no
 acknowledgement to wait for.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-ft5 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-09 - An erased pass's secret is emptied
 **Serves:** grade10-site-store-wallet-member-card-US-04 - Member asks to be erased
 
@@ -223,6 +238,7 @@ acknowledgement to wait for.
 - **WHEN** their passes are erased
 - **THEN** the secret column on each is empty and no further code can be made from it
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-fxc rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-10 - A device fetching an erased pass sees nobody
 **Serves:** grade10-site-store-wallet-member-card-US-04 - Member asks to be erased
 
@@ -230,12 +246,14 @@ acknowledgement to wait for.
 - **WHEN** the device fetches it
 - **THEN** the answer names no member, tier or balance
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-tz6 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-30 - An erased member's pass identifies nobody
 **Serves:** Erasure - an erased member's pass identifies nobody
 
 - **WHEN** a member is erased and a code from their pass is presented
 - **THEN** it identifies nobody
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-blv rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-31 - An erasure the wallet has not confirmed is still owed
 **Serves:** Erasure - an erasure the wallet has not confirmed is still owed
 
@@ -244,6 +262,7 @@ acknowledgement to wait for.
 - **THEN** the erasure is retried until the wallet confirms it
 - **AND** it is reported as still owed until then
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-w9r rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-32 - An erasure with no wallet to confirm it is still discharged
 **Serves:** Erasure - an erasure with no wallet to confirm it is still discharged
 
@@ -265,6 +284,7 @@ table and the push credential to the store's wallet service (a directory,
 Apple adapter, and the cursor to the store's sweeps — plus the writers the
 registry exempts by name, each with a reason.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-xbm rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-11 - A write-surface check pins every wallet table's writer
 **Serves:** grade10-site-store-wallet-member-card-US-05 - Operator reads what the sweep costs
 
@@ -277,6 +297,7 @@ Issuing a pass on a wallet whose credentials are not fully configured SHALL
 refuse loudly, naming the missing secret, rather than issuing a pass nobody
 can read.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-58f rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-12 - A missing credential names itself
 **Serves:** grade10-site-store-wallet-member-card-US-01 - Member adds their card to a phone wallet
 
@@ -301,6 +322,7 @@ Identifying from a pass SHALL open the same session on the same terms as the
 card on the site, and removing a pass SHALL change nothing about the
 membership.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-4q3 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-13 - A member adds their card to their wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -308,12 +330,14 @@ membership.
 - **THEN** they are offered the pass, and adding it carries their name, tier,
   points to spend and a scannable code
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-7wr rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-14 - A pass identifies as the card does
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** staff scan a member's pass
 - **THEN** a session opens for that member on the same terms a scanned card opens
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-jmq rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-15 - A photographed code is worth nothing
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
@@ -321,12 +345,14 @@ membership.
 - **THEN** it identifies nobody
 - **AND** a code presented twice inside its own period is refused the second time
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-xeb rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-16 - A pass identifies with no signal
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
 - **WHEN** a member with no network on their phone presents their pass
 - **THEN** the code it shows is current and opens a session
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-e3j rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-17 - Removing a pass leaves the membership intact
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
@@ -352,6 +378,7 @@ SHALL be served by the card on the site, as they are today.
 
 Removing a pass SHALL change nothing about the membership.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-fjc rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-18 - A member adds their card to Apple Wallet
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -359,6 +386,7 @@ Removing a pass SHALL change nothing about the membership.
 - **THEN** they are offered the pass, and adding it carries their name, tier,
   points to spend and a scannable code
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-95t rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-19 - An Apple pass identifies every time
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -366,6 +394,7 @@ Removing a pass SHALL change nothing about the membership.
 - **WHEN** they present the same pass on two visits
 - **THEN** a session opens both times
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-g3f rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-20 - An Apple pass cannot move value
 **Serves:** grade10-site-store-wallet-member-card-US-08 - Member spends points when the pass they carry cannot
 
@@ -380,6 +409,7 @@ surface's own, offered in every language the surface speaks. A phone set to one
 of those languages SHALL be shown it; a phone set to any other SHALL read the
 surface's default.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-67b rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-22 - A pass speaks the phone's language
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -401,6 +431,7 @@ the card on the site, and SHALL be one of the ways that prove the member's own
 device was present. A pass whose code the programme made SHALL prove only that
 the pass reached a device once, and SHALL be neither.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-1ru rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-23 - Arriving by pass is countable
 **Serves:** The wallet pass - arriving by pass is countable
 
@@ -415,6 +446,7 @@ at once: every code the ended pass can make identifies nobody, whether or not
 the pass is still on the member's phone. A member SHALL be able to add a new
 pass afterwards.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-sys rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-24 - An ended pass identifies nobody
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 
@@ -448,6 +480,7 @@ drawn as an empty offer, which a member reads as carrying nothing.
 
 The consuming application is the Grade10 site.
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-yzv rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-33 - The save action is offered beside the card
 **Serves:** grade10-site-store-wallet-member-card-US-06 - Member carries their card in a phone wallet
 
@@ -455,6 +488,7 @@ The consuming application is the Grade10 site.
 - **THEN** the action that adds the pass is offered beside it
 - **AND** every word it shows came from the application
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-j7n rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-34 - A failure names the wallet it belongs to
 **Serves:** The wallet pass - a failure names the wallet it belongs to
 
@@ -462,6 +496,7 @@ The consuming application is the Grade10 site.
 - **WHEN** ending one fails and an act on the other then succeeds
 - **THEN** the failure is still shown, and it names the wallet it belongs to
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-mkl rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-35 - A standing that could not be read says so
 **Serves:** The wallet pass - a standing that could not be read says so
 
@@ -469,6 +504,7 @@ The consuming application is the Grade10 site.
 - **WHEN** the surface cannot read what they hold
 - **THEN** it says so, and the control that ends the pass is not taken away
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-oxb rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-36 - A deployment offers only the wallets it carries
 **Serves:** Configuration - a deployment offers only the wallets it carries
 
@@ -477,6 +513,7 @@ The consuming application is the Grade10 site.
 - **THEN** only the configured wallet is offered
 - **AND** nothing is asked of either wallet to find that out
 
+<!-- trace:scenario id=g10.store-wallet-member-card.SC-oc1 rev=1 -->
 #### Scenario: grade10-site-store-wallet-member-card-SC-37 - A member who returns still finds the passes they hold
 **Serves:** grade10-site-store-wallet-member-card-US-07 - Member ends a pass they no longer want
 

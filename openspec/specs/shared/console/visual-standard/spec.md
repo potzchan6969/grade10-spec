@@ -36,6 +36,7 @@ from it. Where a needed component has no counterpart in that vocabulary, the
 console package SHALL provide it composed from what the vocabulary does offer,
 so a gap never becomes a second supplier.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-f6s rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-01 - Two consoles render one vocabulary
 **Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
@@ -43,6 +44,7 @@ so a gap never becomes a second supplier.
 - **THEN** both render it from the same vocabulary
 - **AND THEN** no admin surface renders a component from a second vocabulary
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-r24 rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-02 - A vocabulary gap is filled once
 **Serves:** One vocabulary, admin-wide - a vocabulary gap is filled once
 
@@ -58,6 +60,7 @@ renders its own vocabulary. Where such a component appears inside an admin
 surface, that appearance SHALL be stated by this capability rather than left to
 whichever vocabulary the component happens to be written in.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-04e rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-03 - A shared surface appears as its console does
 **Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
@@ -73,6 +76,7 @@ claim to set the same visual value. Admin blocks SHALL remain brand-neutral:
 what distinguishes one brand's console from another's is what that mechanism
 supplies, never a value written into a block.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-aro rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-04 - Two brands render one console
 **Serves:** shared-console-visual-standard-US-02 - Operator recognises which brand they are administering
 
@@ -81,6 +85,7 @@ supplies, never a value written into a block.
 - **THEN** every visual difference between the two comes from the brand mechanism
 - **AND THEN** neither rendering carries a brand value written into a block
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-uk3 rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-05 - A brand's identity has one source
 **Serves:** shared-console-visual-standard-US-02 - Operator recognises which brand they are administering
 
@@ -98,6 +103,7 @@ filter announced as one segmented choice with its selected option announced, a
 tabular amount naming its ISO 4217 code, and a queue longer than its page
 offering the way on and back.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-cm9 rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-06 - An operator reads the same states after the swap
 **Serves:** shared-console-visual-standard-US-01 - Operator moves between consoles in one shift
 
@@ -105,6 +111,7 @@ offering the way on and back.
 - **THEN** the failure renders in the error tone, distinguishable from the empty state
 - **AND THEN** the loading, refused, and empty states remain three distinguishable answers
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-j6q rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-07 - Announced selection survives the swap
 **Serves:** Nothing already won is lost - announced selection survives the swap
 
@@ -112,6 +119,7 @@ offering the way on and back.
 - **THEN** the panel switch is announced as tabs and the filter as one choice
 - **AND THEN** the active panel and the selected option are announced as selected
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-41y rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-08 - A confirmation stays a rendered dialog
 **Serves:** Nothing already won is lost - a confirmation stays a rendered dialog
 
@@ -127,6 +135,7 @@ be a deliberate change that re-establishes this capability's scenarios before
 it lands. Where the runtime's own versioning does not promise compatibility
 between releases, the admin SHALL treat every upgrade as breaking.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-mln rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-09 - An upgrade is not silent
 **Serves:** The runtime is held to terms - an upgrade is not silent
 
@@ -141,6 +150,7 @@ and what it costs, and that statement SHALL be true when written rather than
 derived later under pressure. A surface SHALL NOT depend on the runtime in a
 way that makes the described route impossible.
 
+<!-- trace:scenario id=g10.shared-visual-standard.SC-top rev=1 -->
 #### Scenario: shared-console-visual-standard-SC-10 - The way back is known before it is needed
 **Serves:** The runtime is held to terms - the way back is known before it is needed
 

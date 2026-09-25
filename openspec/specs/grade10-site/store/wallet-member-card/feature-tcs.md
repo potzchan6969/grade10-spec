@@ -9,6 +9,7 @@
 **I want** to add my member card to Google Wallet or Apple Wallet,
 **so that** I can scan it at the counter without opening the site.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-1qq rev=1 covers=g10.store-wallet-member-card.SC-znb,g10.store-wallet-member-card.SC-atm,g10.store-wallet-member-card.SC-58f -->
 ### grade10-site-store-wallet-member-card-US1-TC1-1: Refreshed pass shows the tier the programme holds now
 
 Runs once per row of **Test data**.
@@ -47,6 +48,7 @@ Runs once per row of **Test data**.
 
 * The pass shows the member's current tier from the programme.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-plr rev=1 covers=g10.store-wallet-member-card.SC-znb,g10.store-wallet-member-card.SC-atm,g10.store-wallet-member-card.SC-58f -->
 ### grade10-site-store-wallet-member-card-US1-TC2-1: Adding a second Google Wallet pass ends the first
 
 **Classification:**
@@ -83,6 +85,7 @@ Runs once per row of **Test data**.
 * <google pass_1> is ended.
 * Exactly one Google Wallet pass is live: <google pass_2>.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-sb0 rev=1 covers=g10.store-wallet-member-card.SC-znb,g10.store-wallet-member-card.SC-atm,g10.store-wallet-member-card.SC-58f -->
 ### grade10-site-store-wallet-member-card-US1-TC3-1: Adding a pass with a missing credential names it
 
 Runs once per row of **Test data**.
@@ -130,6 +133,7 @@ Runs once per row of **Test data**.
 **I want** my wallet pass to show the current balance and tier,
 **so that** staff see the same standing the app would show me.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-3kt rev=1 covers=g10.store-wallet-member-card.SC-bj5,g10.store-wallet-member-card.SC-rrp -->
 ### grade10-site-store-wallet-member-card-US2-TC1-1: Due pass shows the new balance after the next lap
 
 Runs once per row of **Test data**.
@@ -169,6 +173,7 @@ Runs once per row of **Test data**.
 
 * The pass shows the member's new balance.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-2vk rev=1 covers=g10.store-wallet-member-card.SC-bj5,g10.store-wallet-member-card.SC-rrp -->
 ### grade10-site-store-wallet-member-card-US2-TC2-1: Vendor debt beyond its budget does not hold back a refresh
 
 **Classification:**
@@ -206,6 +211,7 @@ Runs once per row of **Test data**.
 **I want** ending one to leave the other untouched,
 **so that** losing a phone does not cost me both cards.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-a7s rev=1 covers=g10.store-wallet-member-card.SC-sh7,g10.store-wallet-member-card.SC-83a -->
 ### grade10-site-store-wallet-member-card-US3-TC1-1: Ended timestamp is present exactly when a pass is not live
 
 Runs once per row of **Test data**.
@@ -244,6 +250,7 @@ Runs once per row of **Test data**.
 
 * The ended timestamp is as the row states.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-n97 rev=1 covers=g10.store-wallet-member-card.SC-sh7,g10.store-wallet-member-card.SC-83a -->
 ### grade10-site-store-wallet-member-card-US3-TC2-1: Ending the Google Wallet pass alone keeps the Apple Wallet pass live
 
 **Classification:**
@@ -273,6 +280,7 @@ Runs once per row of **Test data**.
 
 * Step 2 identifies the member.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-mij rev=1 covers=g10.store-wallet-member-card.SC-sh7,g10.store-wallet-member-card.SC-83a -->
 ### grade10-site-store-wallet-member-card-US3-TC3-1: Sweep discharges an ended pass's vendor copy
 
 **Classification:**
@@ -310,6 +318,7 @@ Runs once per row of **Test data**.
 **so that** deleting my account actually removes what a pass could show
 about me.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-c0s rev=1 covers=g10.store-wallet-member-card.SC-ft5,g10.store-wallet-member-card.SC-fxc -->
 ### grade10-site-store-wallet-member-card-US4-TC1-1: Erased passes hold no secret and make no code
 
 **Classification:**
@@ -338,6 +347,7 @@ about me.
 
 * Each pass's secret is empty, so it makes no code.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-n45 rev=1 covers=g10.store-wallet-member-card.SC-ft5,g10.store-wallet-member-card.SC-fxc -->
 ### grade10-site-store-wallet-member-card-US4-TC2-1: Device fetching an erased pass gets nobody's facts
 
 **Classification:**
@@ -378,6 +388,7 @@ and observable,
 **so that** a slow vendor or a large dormant base cannot starve the members
 who are actively spending.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-xq7 rev=1 covers=g10.store-wallet-member-card.SC-jfa,g10.store-wallet-member-card.SC-xbm -->
 ### grade10-site-store-wallet-member-card-US5-TC1-1: Dormant member's passes are read once a day, nothing sent
 
 **Classification:**
@@ -418,6 +429,7 @@ who are actively spending.
 **I want** my card in the wallet my phone already has, scannable without signal,
 **so that** I am served from my lock screen instead of signing in and waiting for a code with a queue behind me.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-k5b rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC1-1: Member card page offers the pass and adding it carries the card
 
 Runs once per row of **Test data**.
@@ -459,6 +471,7 @@ Runs once per row of **Test data**.
 * Every word the action shows is the site's own.
 * Pass carries name, tier, points to spend, scannable code.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-bdf rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC2-1: Google Wallet pass with no signal opens a session as the card does
 
 **Classification:**
@@ -502,6 +515,7 @@ Runs once per row of **Test data**.
 * A session opens for the member.
 * Steps 3 and 4 succeed, as in a QR session.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-ghv rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC3-1: Apple Wallet pass with no signal opens a session every visit
 
 **Classification:**
@@ -533,6 +547,7 @@ Runs once per row of **Test data**.
 * Step 1 opens a session for the member.
 * Step 3 opens a session for the member.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-rk0 rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC4-1: Adding a pass in the other wallet keeps the first identifying
 
 Runs once per row of **Test data**.
@@ -573,6 +588,7 @@ Runs once per row of **Test data**.
 * Step 2 identifies the member.
 * Step 3 identifies the member.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-c4o rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC5-1: Pass words follow the phone's language or the default
 
 Runs once per row of **Test data**.
@@ -614,6 +630,7 @@ Runs once per row of **Test data**.
 
 * Those words read in the row's language.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-c1t rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC6-1: Pass says when what it shows was current
 
 Runs once per row of **Test data**.
@@ -651,6 +668,7 @@ Runs once per row of **Test data**.
 
 * The pass says when what it shows was current.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-kba rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC7-1: Paid till spend reaches both wallets on the next sweep
 
 Runs once per row of **Test data**.
@@ -699,6 +717,7 @@ Runs once per row of **Test data**.
 
 * Each wallet is sent the points left after the spend.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-qwt rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC8-1: Unrecorded change makes the pass due at its own instant
 
 Runs once per row of **Test data**.
@@ -741,6 +760,7 @@ Runs once per row of **Test data**.
 * Step 1 reads that change's instant, not the daily floor.
 * Step 3's tier and points match what step 4 shows.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-vfa rev=1 covers=g10.store-wallet-member-card.SC-sp1,g10.store-wallet-member-card.SC-hqf,g10.store-wallet-member-card.SC-szm,g10.store-wallet-member-card.SC-41b,g10.store-wallet-member-card.SC-3bj,g10.store-wallet-member-card.SC-4q3,g10.store-wallet-member-card.SC-7wr,g10.store-wallet-member-card.SC-xeb,g10.store-wallet-member-card.SC-fjc,g10.store-wallet-member-card.SC-95t,g10.store-wallet-member-card.SC-67b,g10.store-wallet-member-card.SC-yzv -->
 ### grade10-site-store-wallet-member-card-US6-TC9-1: Sweep with more due than it reads reports its oldest
 
 **Classification:**
@@ -777,6 +797,7 @@ Runs once per row of **Test data**.
 **I want** to end a pass and add a fresh one,
 **so that** a phone I no longer have, or a code somebody photographed, stops working the moment I say so.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-cyi rev=1 covers=g10.store-wallet-member-card.SC-jmq,g10.store-wallet-member-card.SC-e3j,g10.store-wallet-member-card.SC-sys,g10.store-wallet-member-card.SC-oc1 -->
 ### grade10-site-store-wallet-member-card-US7-TC1-1: Returning member sees the wallets they carry a pass in
 
 **Classification:**
@@ -807,6 +828,7 @@ Runs once per row of **Test data**.
 * The page says the member carries both wallets' passes.
 * The action that ends each pass is offered.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-uwa rev=1 covers=g10.store-wallet-member-card.SC-jmq,g10.store-wallet-member-card.SC-e3j,g10.store-wallet-member-card.SC-sys,g10.store-wallet-member-card.SC-oc1 -->
 ### grade10-site-store-wallet-member-card-US7-TC2-1: Photographed code presented after its period identifies nobody
 
 **Classification:**
@@ -843,6 +865,7 @@ Runs once per row of **Test data**.
 
 * Step 3 identifies nobody.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-h33 rev=1 covers=g10.store-wallet-member-card.SC-jmq,g10.store-wallet-member-card.SC-e3j,g10.store-wallet-member-card.SC-sys,g10.store-wallet-member-card.SC-oc1 -->
 ### grade10-site-store-wallet-member-card-US7-TC3-1: Code presented twice inside its period is refused the second time
 
 **Classification:**
@@ -874,6 +897,7 @@ Runs once per row of **Test data**.
 * Step 2 opens a session for the member.
 * Step 3 is refused.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-z8r rev=1 covers=g10.store-wallet-member-card.SC-jmq,g10.store-wallet-member-card.SC-e3j,g10.store-wallet-member-card.SC-sys,g10.store-wallet-member-card.SC-oc1 -->
 ### grade10-site-store-wallet-member-card-US7-TC4-1: Ended pass identifies nobody and a new pass does
 
 Runs once per row of **Test data**.
@@ -915,6 +939,7 @@ Runs once per row of **Test data**.
 * Step 2 identifies nobody.
 * Step 4 identifies the member.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-wk2 rev=1 covers=g10.store-wallet-member-card.SC-jmq,g10.store-wallet-member-card.SC-e3j,g10.store-wallet-member-card.SC-sys,g10.store-wallet-member-card.SC-oc1 -->
 ### grade10-site-store-wallet-member-card-US7-TC5-1: Deleting a pass from the wallet leaves the membership intact
 
 Runs once per row of **Test data**.
@@ -961,6 +986,7 @@ Runs once per row of **Test data**.
 **I want** the counter to identify me from the pass and take the spend from my card on the site,
 **so that** a code anybody could photograph never moves my points, and I still lose no time at the till.
 
+<!-- trace:case id=g10.store-wallet-member-card.TC-lmf rev=1 covers=g10.store-wallet-member-card.SC-g3f -->
 ### grade10-site-store-wallet-member-card-US8-TC1-1: Apple Wallet session reads the panel but moves no value
 
 **Classification:**

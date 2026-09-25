@@ -51,6 +51,7 @@ Grade10 SHALL select the tier with the greatest Price from that does not exceed
 the amount being raised from. It SHALL NOT retain a per-listing increment or
 apply a USD, HKD, or JPY schedule to another currency.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-vqb rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-01 - A first bid clears the starting-price tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -58,6 +59,7 @@ apply a USD, HKD, or JPY schedule to another currency.
 - **WHEN** a collector reads its minimum bid
 - **THEN** Grade10 reports 21000 minor units
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-mn9 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-02 - A boundary selects the higher tier
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -65,6 +67,7 @@ apply a USD, HKD, or JPY schedule to another currency.
 - **WHEN** Grade10 calculates its minimum bid
 - **THEN** the minimum bid is 10500 minor units
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-u6t rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-03 - A bid may exceed the minimum
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -72,6 +75,7 @@ apply a USD, HKD, or JPY schedule to another currency.
 - **WHEN** a collector bids 12000 minor units
 - **THEN** Grade10 accepts the bid
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-b2w rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-04 - A bid below the minimum is refused
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -79,6 +83,7 @@ apply a USD, HKD, or JPY schedule to another currency.
 - **WHEN** a collector bids 10499 minor units
 - **THEN** Grade10 refuses the bid and names 10500 minor units as the minimum
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-ijk rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-05 - An open listing publishes its next minimum
 **Serves:** grade10-site-auction-bid-increments-US-01 - Collector places a bid across a price tier
 
@@ -96,6 +101,7 @@ the result at the leader's maximum. The result is the minimum next amount.
 Grade10 SHALL accept any whole amount at or above the minimum next amount and
 refuse an amount below it. It SHALL not create intermediate bids.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-xjw rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-07 - A manual floor uses the current public price
 **Serves:** Minimum bid - a manual floor uses the current public price
 
@@ -109,6 +115,7 @@ Grade10 SHALL refuse an attempt to create, update, or schedule an Auction
 listing in a currency other than USD, HKD, or JPY. The refusal SHALL leave the
 listing and its schedule-derived pricing facts unchanged.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-60d rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-06 - An unsupported currency cannot be scheduled
 **Serves:** Currency schedules - an unsupported currency cannot be scheduled
 
@@ -134,6 +141,7 @@ and leave the listing's price, leader and every maximum unchanged. When the
 minimum next amount would exceed the ceiling, Grade10 SHALL refuse every
 further bid on that listing.
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-c1v rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-08 - A bid at the ceiling is accepted
 **Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
@@ -141,6 +149,7 @@ further bid on that listing.
 - **WHEN** a collector bids 1000000000 minor units
 - **THEN** Grade10 accepts the bid
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-hm3 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-09 - A bid above the ceiling is refused
 **Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
@@ -149,6 +158,7 @@ further bid on that listing.
 - **THEN** Grade10 refuses the bid and names 8000000000 minor units as the ceiling
 - **AND** the listing's price and leader are unchanged
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-xnb rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-10 - An auto-bid maximum above the ceiling is refused
 **Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 
@@ -157,6 +167,7 @@ further bid on that listing.
 - **THEN** Grade10 refuses the maximum and names 150000000000 minor units as the ceiling
 - **AND** no maximum is recorded for that collector
 
+<!-- trace:scenario id=g10.auction-bid-increments.SC-pd0 rev=1 -->
 #### Scenario: grade10-site-auction-bid-increments-SC-11 - A listing at the ceiling takes no further bid
 **Serves:** grade10-site-auction-bid-increments-US-02 - Collector bids up to the currency ceiling
 

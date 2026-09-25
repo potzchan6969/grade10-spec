@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { createHash } from "node:crypto";
 import {
   existsSync,
   readFileSync,
@@ -220,7 +221,7 @@ function formatReference(app, product, kind, capability, sequence) {
   return `${app}.${product}-${capability}.${kind}-${sequence}`;
 }
 
-function nextSequence(storeRoot, app, product, capability) {
+function nextSequence(storeRoot, app, product, capability, kind, target) {
   const scope = `${product}-${capability}`;
   const markdownRoots = [
     resolve(storeRoot, "openspec/specs"),
@@ -229,7 +230,7 @@ function nextSequence(storeRoot, app, product, capability) {
   const files = markdownRoots.flatMap((root) =>
     walk(root, (path) => extname(path) === ".md"),
   );
-  let highest = 0;
+  const used = new Set();
   for (const file of files) {
     const lines = readFileSync(file, "utf8").split(/\r?\n/);
     for (const line of lines) {
@@ -240,13 +241,18 @@ function nextSequence(storeRoot, app, product, capability) {
       const id = /(?:^|\s)id=([^\s]+)/.exec(marker[2] ?? "")?.[1];
       const parsed = parseReference(id);
       if (parsed?.app === app && parsed.scope === scope) {
-        highest = Math.max(highest, Number.parseInt(parsed.sequence, 36));
+        used.add(parsed.sequence);
       }
     }
   }
-  if (highest >= 36 ** 3 - 1)
-    fail(`no trace sequence remains for ${app}.${scope}`);
-  return (highest + 1).toString(36).padStart(3, "0");
+  const seed = `${app}.${scope}.${kind}\0${target}`;
+  const digest = createHash("sha256").update(seed).digest();
+  const start = digest.readUInt32BE(0) % (36 ** 3);
+  for (let offset = 0; offset < 36 ** 3; offset += 1) {
+    const candidate = ((start + offset) % (36 ** 3)).toString(36).padStart(3, "0");
+    if (!/^\d{3}$/.test(candidate) && !used.has(candidate)) return candidate;
+  }
+  fail(`no trace sequence remains for ${app}.${scope}`);
 }
 
 function checkMarkdownMarkerScope(value, currentScope, issue) {
@@ -888,7 +894,14 @@ function initialize(kind, values) {
   const index = exactTargetIndex(lines, target, file);
   ensureNoAdjacentTrace(lines, index);
   const markerKind = kind === "scenario" ? "SC" : "TC";
-  const sequence = nextSequence(storeRoot, app, product, capability);
+  const sequence = nextSequence(
+    storeRoot,
+    app,
+    product,
+    capability,
+    markerKind,
+    target,
+  );
   const id = formatReference(app, product, markerKind, capability, sequence);
   let marker;
   if (kind === "scenario") {

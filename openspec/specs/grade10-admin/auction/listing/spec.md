@@ -63,6 +63,7 @@ unchanged.
 The draft form and write contract SHALL NOT offer or accept a listing-level
 minimum increment.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xue rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-01 - Operator saves an empty draft
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -70,6 +71,7 @@ minimum increment.
 - **WHEN** they save a listing with no title, prices, or window
 - **THEN** Grade10 persists a draft that is absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-vnl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-02 - Operator saves a partial draft
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -77,6 +79,7 @@ minimum increment.
 - **WHEN** they save a draft with a title and no starting price
 - **THEN** Grade10 persists the title and leaves the listing a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-r6p rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-03 - Draft rejects a malformed price
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -84,6 +87,7 @@ minimum increment.
 - **WHEN** an operator sets its starting price to a non-positive or non-integer amount
 - **THEN** Grade10 refuses the write and leaves the starting price unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2pj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-04 - Draft rejects a malformed slug
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -91,6 +95,7 @@ minimum increment.
 - **WHEN** an operator sets its slug to `Charizard PSA 9`
 - **THEN** Grade10 refuses the write and leaves the slug unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bso rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-05 - Unauthorized draft save is refused
 **Serves:** grade10-admin-auction-listing-US-01 - Operator saves an unfinished listing and comes back to it
 
@@ -98,6 +103,7 @@ minimum increment.
 - **WHEN** they save a draft
 - **THEN** Grade10 refuses and persists no listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2ij rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-56 - Draft rejects an unsupported currency
 **Serves:** Draft save - draft rejects an unsupported currency
 
@@ -116,6 +122,7 @@ The form SHALL present USD, HKD, and JPY as its only currency choices and
 SHALL NOT display a minimum-increment field. The selected currency's Grade10
 schedule governs the listing's bid floor.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-mmr rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-06 - Operator creates a filled draft
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -124,6 +131,7 @@ schedule governs the listing's bid floor.
 - **THEN** Grade10 creates it
 - **AND** its bid floor uses the JPY schedule
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jr4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-07 - Create without a title is refused on the form and the API
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -131,6 +139,7 @@ schedule governs the listing's bid floor.
 - **WHEN** the operator creates it
 - **THEN** the form and API refuse it and the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-9v7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-08 - Create without a slug is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -138,6 +147,7 @@ schedule governs the listing's bid floor.
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-gm3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-09 - Create without a starting price is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -145,6 +155,7 @@ schedule governs the listing's bid floor.
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-neb rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-10 - Create without media is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -152,6 +163,7 @@ schedule governs the listing's bid floor.
 - **WHEN** the operator creates it
 - **THEN** Grade10 refuses and the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jne rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-11 - Created listing cannot clear a required field
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -159,6 +171,7 @@ schedule governs the listing's bid floor.
 - **WHEN** an operator clears the title
 - **THEN** Grade10 refuses and leaves the title unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-86p rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-12 - Create of a published listing is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -166,6 +179,7 @@ schedule governs the listing's bid floor.
 - **WHEN** an operator creates it
 - **THEN** Grade10 refuses and leaves it published
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-dal rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-57 - Create refuses an unsupported currency on the form and API
 **Serves:** Create and catalogue - create refuses an unsupported currency on the form and API
 
@@ -197,6 +211,7 @@ unchanged.
 An operator who may catalogue a listing and not operate its window SHALL
 still be able to write these fields on an existing editable listing.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-30a rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-13 - Operator updates copy on a published listing
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -206,6 +221,7 @@ still be able to write these fields on an existing editable listing.
 - **AND** a collector reading the listing sees the new copy
 - **AND** the title, prices, and window are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-9fl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-14 - Two categories from one taxonomy are refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -214,6 +230,7 @@ still be able to write these fields on an existing editable listing.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's categories are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-23q rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-15 - Canceled sale cannot receive a listing
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -246,6 +263,7 @@ listing's public address `/auction/listings/<slug>`.
   SHALL be not found. A `draft`, `created`, or `canceled` listing SHALL NOT
   answer at that address.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-9oe rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-16 - Collector opens a listing by slug
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -253,6 +271,7 @@ listing's public address `/auction/listings/<slug>`.
 - **WHEN** a collector opens `/auction/listings/charizard-psa-9`
 - **THEN** Grade10 returns that listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-4f0 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-17 - Unknown slug is not found
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -260,6 +279,7 @@ listing's public address `/auction/listings/<slug>`.
 - **WHEN** a collector opens `/auction/listings/no-such-lot`
 - **THEN** Grade10 answers as not found
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ng3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-18 - Duplicate slug is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -268,6 +288,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 refuses the write
 - **AND** the second listing's slug is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-g0h rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-19 - Two drafts cannot share a slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -276,6 +297,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 refuses the write
 - **AND** the second draft's slug is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hp2 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-20 - Empty slugs on drafts are not a collision
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -284,6 +306,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 accepts the save
 - **AND** neither draft occupies a slug
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-jx5 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-21 - Create can reuse a canceled listing's original slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -294,6 +317,7 @@ listing's public address `/auction/listings/<slug>`.
 - **THEN** Grade10 moves the draft to `created`
 - **AND** the canceled listing still does not hold `charizard-psa-9`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-4kw rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-22 - Create cannot reuse a closed listing's slug
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -305,6 +329,7 @@ listing's public address `/auction/listings/<slug>`.
 - **AND** the draft remains a draft
 - **AND** `/auction/listings/charizard-psa-9` still returns the closed listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2d5 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-23 - Published slug cannot change
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -359,6 +384,7 @@ test-mode payment credentials instead of live money, so the house can
 rehearse a sale. A write of sandbox on a `created` or later listing SHALL
 be refused.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rj8 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-24 - Operator corrects a created listing's starting price
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -367,6 +393,7 @@ be refused.
 - **THEN** Grade10 stores 150000 minor units `HKD`
 - **AND** the listing remains created
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-o1z rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-25 - Published listing refuses a price change
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -375,6 +402,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the starting price remains 100000 minor units
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-yly rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-26 - Scheduled close at in the past is refused at create
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -383,6 +411,7 @@ be refused.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-zr3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-27 - Extension window without a duration is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -391,6 +420,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's extension settings are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bvf rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-27a - Omitted extension fields default to 30 minutes
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -399,6 +429,7 @@ be refused.
 - **WHEN** an authorized operator creates the listing
 - **THEN** Grade10 stores an extension duration of 1800 seconds
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ynn rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-28 - Sandbox cannot change after create
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -407,6 +438,7 @@ be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains sandbox
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-8on rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-70 - A negative extension duration is refused
 **Serves:** grade10-admin-auction-listing-US-03 - Operator creates a listing that is ready to sell
 
@@ -435,6 +467,7 @@ timestamp that MUST be after now.
 - A `draft` listing SHALL NOT be published, by hand or when publish at
   arrives. Publish of a listing that is not `created` SHALL be refused.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-del rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-29 - Operator publishes a created listing immediately
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -443,6 +476,7 @@ timestamp that MUST be after now.
 - **THEN** Grade10 moves it to `published`
 - **AND** a collector can read it on the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7xn rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-30 - Created listing publishes at the scheduled time
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -452,6 +486,7 @@ timestamp that MUST be after now.
 - **AND** a collector can read it on the public catalogue
 - **AND** no further operator action was required
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-kr8 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-31 - A publish at in the past is refused
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -460,6 +495,7 @@ timestamp that MUST be after now.
 - **THEN** Grade10 refuses the write
 - **AND** the listing remains created and unpublished
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cdt rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-32 - Create with a past publish at is refused
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -470,6 +506,7 @@ timestamp that MUST be after now.
 - **AND** the listing remains a draft
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-yrj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-33 - Draft is not published when publish at arrives
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -480,6 +517,7 @@ timestamp that MUST be after now.
 - **AND** it remains a draft
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-83t rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-34 - Manual publish of a draft is refused
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -488,6 +526,7 @@ timestamp that MUST be after now.
 - **THEN** Grade10 refuses the publish
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-usa rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-35 - Publish at cannot change after publish
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -526,6 +565,7 @@ sale was canceled.
 Cancel from an operator who is not authorized to call a listing off SHALL
 be refused, and the listing and slug SHALL be unchanged.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-pfl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-36 - Operator calls off a draft
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -534,6 +574,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 moves it to `canceled`
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2px rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-37 - Operator calls off a created listing before publish at
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -543,6 +584,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** when that publish at arrives, Grade10 does not publish it
 - **AND** it stays absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-oc9 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-38 - Operator calls off a published listing that has bids
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -552,6 +594,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** it releases every live authorization standing against it
 - **AND** it is absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-e1b rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-39 - Closed listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -560,6 +603,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains closed
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-f4v rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-40 - Settled listing cannot be called off
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -568,6 +612,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains settled
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-j48 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-41 - Already canceled listing cannot be called off again
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -576,6 +621,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 refuses the cancel
 - **AND** the listing remains canceled
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ysx rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-42 - Cancel rewrites the slug and frees the original
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -588,6 +634,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **AND** `/auction/listings/charizard-psa-9` does not return that listing
 - **AND** a later listing may be created with slug `charizard-psa-9`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-lj7 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-43 - Cancel of a draft with no slug does not invent one
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -596,6 +643,7 @@ be refused, and the listing and slug SHALL be unchanged.
 - **THEN** Grade10 moves it to `canceled`
 - **AND** the listing still has no slug
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tjj rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-44 - Unauthorized cancel is refused
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -612,6 +660,7 @@ A listing in `closed`, `settled`, or `canceled` SHALL reject every catalogue,
 price, window, sandbox, publish at, and media write from this form. Its facts
 are the record of what was offered and sold.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ztg rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-45 - Closed listing rejects a title edit
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -653,6 +702,7 @@ A collector reading a published listing SHALL receive the gallery in that
 order. An image item SHALL display as an image. A video item SHALL play as a
 video from the uploaded bytes.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-slk rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-46 - Operator uploads an eighth file
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -660,6 +710,7 @@ video from the uploaded bytes.
 - **WHEN** the operator uploads an eighth JPEG
 - **THEN** Grade10 stores eight media items in the operator's order
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-51l rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-47 - A ninth file is refused
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -668,6 +719,7 @@ video from the uploaded bytes.
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery still has eight items
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-md4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-48 - Mixed images and videos are accepted
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -678,6 +730,7 @@ video from the uploaded bytes.
   MP4, and the WebP in that order
 - **AND** the MP4 plays as video from the uploaded bytes
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-v8v rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-49 - Upload is stored without processing
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -689,6 +742,7 @@ video from the uploaded bytes.
   `grade10-site/auction/listing-media`, not from a second stored object written
   at upload
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-qna rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-50 - Unsupported type is refused
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -698,6 +752,7 @@ video from the uploaded bytes.
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-vg4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-51 - File over 100 mebibytes is refused
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -706,6 +761,7 @@ video from the uploaded bytes.
 - **THEN** Grade10 refuses the upload
 - **AND** the gallery is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-gj3 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-52 - First item is the catalogue card
 **Serves:** grade10-admin-auction-listing-US-04 - Operator puts a listing in front of collectors
 
@@ -714,6 +770,7 @@ video from the uploaded bytes.
 - **THEN** that listing's card uses the video as its media
 - **AND** it does not require a named physical side such as `front`
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-h2e rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-53 - Operator reorders and removes media
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -722,6 +779,7 @@ video from the uploaded bytes.
 - **THEN** the gallery is C, A
 - **AND** a collector's catalogue card is C
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-49k rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-54 - Last media item cannot be removed after create
 **Serves:** grade10-admin-auction-listing-US-02 - Operator puts a gallery on a listing
 
@@ -730,6 +788,7 @@ video from the uploaded bytes.
 - **THEN** Grade10 refuses the remove
 - **AND** the gallery still has that JPEG
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-8zz rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-55 - Closed listing rejects a media upload
 **Serves:** grade10-admin-auction-listing-US-05 - Operator calls a listing off before it closes
 
@@ -758,6 +817,7 @@ An operator who may catalogue a listing SHALL be able to set or clear the
 campaign. The picker SHALL NOT block create or publish when no campaign is
 chosen.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-j23 rev=1 -->
 #### Scenario: Operator attaches a draft listing to a draft campaign
 
 - **GIVEN** a draft listing and a draft campaign titled "September Slabs"
@@ -766,6 +826,7 @@ chosen.
 - **THEN** Grade10 stores the listing under that campaign
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-c5u rev=1 -->
 #### Scenario: Operator attaches a listing to a created campaign
 
 - **GIVEN** a created listing and a created campaign
@@ -773,6 +834,7 @@ chosen.
   editor and clicks Save
 - **THEN** Grade10 stores the listing under that campaign
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-98c rev=1 -->
 #### Scenario: Operator clears the campaign on a listing
 
 - **GIVEN** a draft listing attached to a draft campaign
@@ -781,6 +843,7 @@ chosen.
 - **THEN** Grade10 stores the listing with no campaign
 - **AND** the listing remains a draft
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-u98 rev=1 -->
 #### Scenario: Published and canceled campaigns are not offered in the picker
 
 - **GIVEN** a published campaign, a canceled campaign, and a draft campaign
@@ -790,6 +853,7 @@ chosen.
 - **AND** the published campaign is not offered
 - **AND** the canceled campaign is not offered
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6hq rev=1 -->
 #### Scenario: Published campaign cannot receive a listing
 
 - **GIVEN** a draft listing and a published campaign
@@ -797,6 +861,7 @@ chosen.
 - **THEN** Grade10 refuses the attach
 - **AND** the listing’s campaign is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-b6z rev=1 -->
 #### Scenario: Listing without a campaign still creates
 
 - **GIVEN** a draft listing with every required create field set and no
@@ -805,6 +870,7 @@ chosen.
 - **THEN** Grade10 moves it to `created`
 - **AND** the listing has no campaign
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-3xw rev=1 -->
 #### Scenario: Listing editor campaign field is labeled Campaign
 
 - **GIVEN** an authorized operator on the listing editor
@@ -829,6 +895,7 @@ than re-validating picker eligibility.
 
 Campaign covers do **not** select a product — only listings do.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-m9b rev=1 -->
 #### Scenario: Product picker omits draft inventory products
 
 - **GIVEN** a draft inventory product with available stock and a created
@@ -838,6 +905,7 @@ Campaign covers do **not** select a product — only listings do.
 - **THEN** the created product is offered
 - **AND** the draft product is not offered
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-pvl rev=1 -->
 #### Scenario: Product picker omits out-of-stock inventory products
 
 - **GIVEN** a created inventory product with available zero and another
@@ -847,6 +915,7 @@ Campaign covers do **not** select a product — only listings do.
 - **THEN** the in-stock created product is offered
 - **AND** the out-of-stock product is not offered
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-uec rev=1 -->
 #### Scenario: Draft product id is refused on listing save
 
 - **GIVEN** a draft listing and a draft inventory product id
@@ -855,6 +924,7 @@ Campaign covers do **not** select a product — only listings do.
 - **THEN** Grade10 refuses the write
 - **AND** the listing's product id is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7zy rev=1 -->
 #### Scenario: Out-of-stock product id is refused on listing save
 
 - **GIVEN** a draft listing with quantity one and a created inventory
@@ -864,6 +934,7 @@ Campaign covers do **not** select a product — only listings do.
 - **THEN** Grade10 refuses the save
 - **AND** the listing's product id is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tvb rev=1 -->
 #### Scenario: Current product remains selectable when this listing holds the last units
 
 - **GIVEN** a draft listing with an active inventory hold of quantity three
@@ -883,6 +954,7 @@ inventory reserve, adjust, release, or product-change mutations.
 Auto-save, debounced save, or save-on-blur for catalogue fields SHALL NOT
 be used on the listing editor.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-22a rev=1 -->
 #### Scenario: Picking a product does not reserve stock until Save
 
 - **GIVEN** a draft listing with no active inventory hold
@@ -891,6 +963,7 @@ be used on the listing editor.
 - **THEN** Grade10 has not created an inventory reservation
 - **AND** the listing's stored product id is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-kil rev=1 -->
 #### Scenario: Changing quantity does not adjust the hold until Save
 
 - **GIVEN** a draft listing with an active inventory hold of quantity two
@@ -912,6 +985,7 @@ On explicit Save with both **productId** and **quantity** set, Grade10 SHALL
 synchronize inventory as defined below. Save with a product and no quantity
 SHALL NOT create or change an inventory hold.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-5ci rev=1 -->
 #### Scenario: Product selection defaults quantity to one in the form
 
 - **GIVEN** a draft listing with no product selected and empty quantity
@@ -948,6 +1022,7 @@ Clearing **productId** or **quantity** on Save SHALL release any active hold
 for this listing (full release of remaining) before persisting the cleared
 field(s).
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-v4t rev=1 -->
 #### Scenario: First explicit save with product and quantity reserves stock
 
 - **GIVEN** a draft listing with no active inventory hold
@@ -959,6 +1034,7 @@ field(s).
 - **AND** the product's inventory **reserved** increases by three
 - **AND** the listing stores product id and quantity three
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-1t5 rev=1 -->
 #### Scenario: Save increases quantity adjusts the same reservation
 
 - **GIVEN** a draft listing with an active hold of quantity three on product A
@@ -968,6 +1044,7 @@ field(s).
 - **AND** product A **reserved** increases by two
 - **AND** reservation **released** is unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-un6 rev=1 -->
 #### Scenario: Save decreases quantity frees stock without release counter
 
 - **GIVEN** a draft listing with an active hold of quantity five
@@ -976,6 +1053,7 @@ field(s).
 - **AND** inventory **reserved** decreases by three
 - **AND** reservation **released** remains zero
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-9zc rev=1 -->
 #### Scenario: Save changes product moves the hold atomically
 
 - **GIVEN** a draft listing with an active hold of quantity three on product A
@@ -988,6 +1066,7 @@ field(s).
 - **AND** product B **reserved** increases by three
 - **AND** the listing stores product B
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-z0g rev=1 -->
 #### Scenario: Save refused when quantity exceeds effective available
 
 - **GIVEN** a draft listing with an active hold of quantity three on product A
@@ -996,6 +1075,7 @@ field(s).
 - **THEN** Grade10 refuses the save
 - **AND** the hold and listing fields are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-mp6 rev=1 -->
 #### Scenario: Clearing product on Save releases the hold
 
 - **GIVEN** a draft listing with an active hold on a product
@@ -1004,6 +1084,7 @@ field(s).
 - **AND** inventory **reserved** decreases by the hold's remaining
 - **AND** the listing stores no product id
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-m8a rev=1 -->
 #### Scenario: Clearing quantity on Save releases the hold
 
 - **GIVEN** a draft listing with an active hold of quantity three
@@ -1012,6 +1093,7 @@ field(s).
 - **AND** inventory **reserved** decreases by three
 - **AND** the listing stores no quantity
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-i8l rev=1 -->
 #### Scenario: Save with product but no quantity creates no hold
 
 - **GIVEN** a draft listing with no active hold
@@ -1031,6 +1113,7 @@ Create SHALL **not** call inventory reserve, adjust, or product-change
 mutations. The operator MUST have saved the draft with product and quantity
 first so the hold already exists.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-mj9 rev=1 -->
 #### Scenario: Create succeeds when hold matches saved product and quantity
 
 - **GIVEN** a draft listing stored with product A and quantity three
@@ -1041,6 +1124,7 @@ first so the hold already exists.
 - **THEN** Grade10 moves the listing to **created**
 - **AND** the hold remains active with quantity three
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-f82 rev=1 -->
 #### Scenario: Create refused when no hold exists
 
 - **GIVEN** a draft listing stored with product A and quantity three
@@ -1049,6 +1133,7 @@ first so the hold already exists.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains **draft**
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-nf9 rev=1 -->
 #### Scenario: Create refused when hold quantity mismatches
 
 - **GIVEN** a draft listing stored with quantity five
@@ -1057,6 +1142,7 @@ first so the hold already exists.
 - **THEN** Grade10 refuses the create
 - **AND** the listing remains **draft**
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-tgf rev=1 -->
 #### Scenario: Create refused when hold product mismatches
 
 - **GIVEN** a draft listing stored with product B and quantity three
@@ -1083,6 +1169,7 @@ The dialog SHALL NOT appear when:
 
 Canceling the dialog SHALL leave the selected product unchanged in the form.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-bb3 rev=1 -->
 #### Scenario: Product change prompts when a hold already exists
 
 - **GIVEN** a draft listing with an active hold on product A from a prior Save
@@ -1091,6 +1178,7 @@ Canceling the dialog SHALL leave the selected product unchanged in the form.
   hold to product B and free reserved stock on product A
 - **AND** no inventory mutation runs until Save
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-68h rev=1 -->
 #### Scenario: First product selection does not prompt
 
 - **GIVEN** a draft listing with no active hold
@@ -1098,6 +1186,7 @@ Canceling the dialog SHALL leave the selected product unchanged in the form.
 - **THEN** no confirmation dialog is shown
 - **AND** quantity defaults to one in the form
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-rr1 rev=1 -->
 #### Scenario: Canceling the product-change dialog keeps the prior product
 
 - **GIVEN** a draft listing with an active hold on product A
@@ -1115,6 +1204,7 @@ error. The listing's stored **productId** and **quantity** SHALL remain the
 values from before that Save attempt, and the hold on the prior product SHALL
 be unchanged.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-x6v rev=1 -->
 #### Scenario: Save shows error when new product has insufficient stock
 
 - **GIVEN** a draft listing with an active hold on product A
@@ -1131,6 +1221,7 @@ When a listing is canceled through operator call-off or campaign fan-out,
 Grade10 SHALL release any **active** inventory reservation for that listing
 (full release of remaining) before or as part of the cancel transition.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cj4 rev=1 -->
 #### Scenario: Cancel releases remaining stock
 
 - **GIVEN** a created listing with an active hold of quantity three and
@@ -1158,6 +1249,7 @@ when a row has no campaign.
 An operator without the `auction:operate` grant SHALL NOT be offered Create
 listing. A draft save sent without that grant SHALL be refused.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-yhm rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-68 - Create listing is offered on the Listings section
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1165,6 +1257,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **WHEN** they read the section heading row
 - **THEN** a Create listing action is present
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-s6o rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-69 - Listing editor opens with no campaign selected
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1173,6 +1266,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **WHEN** the listing editor opens
 - **THEN** the Campaign control has no campaign selected
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-44k rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-58 - Draft saves with the campaign left empty
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1181,6 +1275,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **THEN** Grade10 persists a draft listing with no campaign
 - **AND** the listing is absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-toy rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-59 - Listing creates with no campaign
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1190,6 +1285,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **AND** the listing has no campaign
 - **AND** it is still absent from the public catalogue
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-8pr rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-60 - Listing publishes with no campaign
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1198,6 +1294,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **THEN** Grade10 moves it to `published`
 - **AND** the listing still has no campaign
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-5oo rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-61 - Collector opens the published listing by slug
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1206,6 +1303,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **WHEN** a collector opens `/auction/listings/standalone-lot-1`
 - **THEN** Grade10 returns that listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ssk rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-62 - Listings table shows an unattached listing
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1214,6 +1312,7 @@ listing. A draft save sent without that grant SHALL be refused.
 - **THEN** that row's campaign column shows "-"
 - **AND** it does not display a campaign id as a label
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-2ir rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-63 - Create listing is not offered to an unauthorized operator
 **Serves:** grade10-admin-auction-listing-US-06 - Operator creates and publishes a listing with no campaign
 
@@ -1245,6 +1344,7 @@ standalone fixture slug pattern and whose `campaign_id` is null.
 This surface and its backend procedures SHALL NOT be reachable outside a
 locally enabled dev environment (`assertDevEndpointsAllowed`).
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-wkl rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-64 - Listings tab is present in the Test panel
 **Serves:** Test fixture standalone seed - listings tab is present in the Test panel
 
@@ -1252,6 +1352,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **WHEN** a developer opens the Test panel
 - **THEN** a Listings tab is present beside the Campaign tab
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-41t rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-65 - Developer seeds fixture listings with no campaign
 **Serves:** Test fixture standalone seed - developer seeds fixture listings with no campaign
 
@@ -1261,6 +1362,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **AND** each listing has a reserved inventory product and a media item
 - **AND** the instance counts on the tab update
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-nec rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-66 - Seeded standalone listings appear in the Listings section with no campaign
 **Serves:** Test fixture standalone seed - seeded standalone listings appear in the Listings section with no campaign
 
@@ -1269,6 +1371,7 @@ locally enabled dev environment (`assertDevEndpointsAllowed`).
 - **THEN** that listing appears in the table
 - **AND** its campaign column shows "-"
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6q8 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-67 - Developer drops standalone fixture listings
 **Serves:** Test fixture standalone seed - developer drops standalone fixture listings
 
@@ -1293,6 +1396,7 @@ through `No Cert ID`.
 **Stored and required** - The choice SHALL be stored with the listing and
 SHALL be required at create even when the selected product has no Cert ID.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-t4s rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-84 - Product with Cert IDs offers an explicit choice
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1301,6 +1405,7 @@ SHALL be required at create even when the selected product has no Cert ID.
 - **THEN** the editor offers `PSA-123`, `BGS-456`, and `No Cert ID` as explicit choices
 - **AND** no blank or implicit certificate choice is used
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6ov rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-71 - Product without Cert IDs offers No Cert ID
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1309,6 +1414,7 @@ SHALL be required at create even when the selected product has no Cert ID.
 - **THEN** the editor offers `No Cert ID`
 - **AND** the operator can create a listing after selecting it
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-ea4 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-72 - Changing products clears the prior unit choice
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1335,6 +1441,7 @@ inventory in the same logical save operation.
 **No Cert ID** - The `No Cert ID` choice SHALL use the existing product-level
 quantity and reservation rules without allocating a certificate record.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-31p rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-73 - Wrong-product Cert ID is refused
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1343,6 +1450,7 @@ quantity and reservation rules without allocating a certificate record.
 - **THEN** Grade10 refuses the save
 - **AND** the listing and inventory holds are unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-z7s rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-74 - A Cert ID cannot be held twice
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1351,6 +1459,7 @@ quantity and reservation rules without allocating a certificate record.
 - **THEN** Grade10 refuses the save
 - **AND** the existing listing's hold remains unchanged
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-cew rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-75 - No Cert ID uses aggregate reservation
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1373,6 +1482,7 @@ hold SHALL also match that record and quantity one.
 **Editing** - Editing a listing SHALL preserve its selected Cert ID when the
 listing's own active hold makes that unit unavailable to other listings.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-xtc rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-76 - Create succeeds with a saved Cert ID hold
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
 
@@ -1382,6 +1492,7 @@ listing's own active hold makes that unit unavailable to other listings.
 - **THEN** Grade10 moves the listing to `created`
 - **AND** the selected Cert ID remains held by that listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-wkt rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-77 - Create succeeds with No Cert ID
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
 
@@ -1391,6 +1502,7 @@ listing's own active hold makes that unit unavailable to other listings.
 - **THEN** Grade10 moves the listing to `created`
 - **AND** no Cert ID is stored for the listing
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-muy rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-78 - Create without an explicit unit choice is refused
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
 
@@ -1414,6 +1526,7 @@ SHALL omit the Cert ID row.
 **Not from product metadata** - Product metadata SHALL NOT be returned as an
 alternative product display source.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-dqc rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-79 - Public listing displays selected Cert ID
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
 
@@ -1422,6 +1535,7 @@ alternative product display source.
 - **THEN** the listing displays `PSA-123` in the configured product-field position
 - **AND** it displays typed product attributes through the same product display
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-hch rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-80 - Public listing hides No Cert ID
 **Serves:** grade10-admin-auction-listing-US-71 - Operator creates and presents the selected unit
 
@@ -1436,6 +1550,7 @@ A created product with multiple available Cert IDs SHALL allow a separate live
 listing for each distinct Cert ID. One Cert ID SHALL belong to no more than one
 live listing at a time.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-6gt rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-85 - Distinct copies of one product can be listed separately
 **Serves:** grade10-admin-auction-listing-US-70 - Operator attaches one inventory unit to a listing
 
@@ -1461,6 +1576,7 @@ present the count as expected bidders.
 **Who sees it** - Every operator who may open Stats SHALL see the count; it
 needs no further grant.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-qlf rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-81 - Stats shows a listing's watchers
 **Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
@@ -1468,6 +1584,7 @@ needs no further grant.
 - **WHEN** an authorized operator opens Stats for that listing
 - **THEN** Stats shows 3 watchers
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-7qf rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-82 - An unwatched listing shows zero in Stats
 **Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
@@ -1475,6 +1592,7 @@ needs no further grant.
 - **WHEN** an authorized operator opens Stats for that listing
 - **THEN** Stats shows 0 watchers
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-sil rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-83 - A closed listing keeps its watchers in Stats
 **Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 
@@ -1487,6 +1605,7 @@ needs no further grant.
 The Listings table SHALL NOT show a Watchers column. The watch count SHALL
 reach the operator only through Stats.
 
+<!-- trace:scenario id=g10adm.auction-listing.SC-de9 rev=1 -->
 #### Scenario: grade10-admin-auction-listing-SC-86 - The Listings table has no Watchers column
 **Serves:** grade10-admin-auction-listing-US-08 - Operator checks a listing's watchers
 

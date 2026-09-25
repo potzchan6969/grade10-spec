@@ -9,6 +9,7 @@
 **I want** the minimum next bid to scale with the lot's price,
 **so that** I can enter an affordable opening bid and a sensible later bid.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-8e2 rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC1-1: First bid clears the starting-price tier
 
 **Classification:**
@@ -41,6 +42,7 @@ An open HKD listing has starting price <starting price> and no accepted bid.
 
 * The minimum next amount is <minimum next amount>.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-0lh rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC2-1: Boundary price takes the higher tier
 
 Runs once per row of **Test data**.
@@ -78,6 +80,7 @@ The collector is enrolled and can bid.
 
 * The new public price is <minimum next amount>.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-qui rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC3-1: Amount above the minimum is accepted
 
 **Classification:**
@@ -111,6 +114,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 * The bid is accepted.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-5ez rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC4-1: Amount below the minimum is refused
 
 **Classification:**
@@ -145,6 +149,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 * The bid is refused.
 * The refusal names <minimum> as the minimum.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-kyx rev=1 covers=g10.auction-bid-increments.SC-vqb,g10.auction-bid-increments.SC-mn9,g10.auction-bid-increments.SC-u6t,g10.auction-bid-increments.SC-b2w,g10.auction-bid-increments.SC-ijk -->
 ### grade10-site-auction-bid-increments-US1-TC5-1: Listing publishes the next minimum
 
 Runs once per row of **Test data**.
@@ -192,6 +197,7 @@ An open listing is available in <listing currency>.
 **I want** Grade10 to refuse an amount above the ceiling and tell me the limit,
 **so that** a mistyped bid or maximum never commits me to an amount I cannot settle.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-xdy rev=1 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
 ### grade10-site-auction-bid-increments-US2-TC1-1: Bid equal to the ceiling is accepted
 
 **Classification:**
@@ -225,6 +231,7 @@ The collector is enrolled on an open USD listing whose minimum bid is <minimum>.
 
 * The bid is accepted.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-d9d rev=1 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
 ### grade10-site-auction-bid-increments-US2-TC2-1: Bid above the ceiling is refused
 
 **Classification:**
@@ -259,6 +266,7 @@ The collector is enrolled on an open HKD listing whose minimum bid is <minimum>.
 * The bid is refused and the refusal names <ceiling> as the ceiling.
 * The listing's price and leader are unchanged.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-dfw rev=1 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
 ### grade10-site-auction-bid-increments-US2-TC3-1: Auto-bid maximum above the ceiling is refused
 
 **Classification:**
@@ -293,6 +301,7 @@ The collector is enrolled on an open JPY listing whose minimum bid is <minimum>.
 * The maximum is refused and the refusal names <ceiling> as the ceiling.
 * No maximum is recorded for the collector.
 
+<!-- trace:case id=g10.auction-bid-increments.TC-dlk rev=1 covers=g10.auction-bid-increments.SC-c1v,g10.auction-bid-increments.SC-hm3,g10.auction-bid-increments.SC-xnb,g10.auction-bid-increments.SC-pd0 -->
 ### grade10-site-auction-bid-increments-US2-TC4-1: Listing at the ceiling takes no further bid
 
 **Classification:**

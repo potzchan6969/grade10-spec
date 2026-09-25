@@ -11,6 +11,7 @@ HTML,
 **so that** I can read its name, its description and where its bidding stands
 without waiting for a script to run.
 
+<!-- trace:case id=g10.auction-listing-page.TC-zeh rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
 ### grade10-site-auction-listing-page-US1-TC1-1: Lot answers whole before scripts run
 
 **Classification:**
@@ -41,6 +42,7 @@ The catalogue publishes <a published lot>. JavaScript disabled in the browser.
 * URL contains <lang>.
 * Page source carries that lot's name, description, and bidding standing.
 
+<!-- trace:case id=g10.auction-listing-page.TC-82e rev=1 covers=g10.auction-listing-page.SC-vnl,g10.auction-listing-page.SC-4q9 -->
 ### grade10-site-auction-listing-page-US1-TC2-1: Two lots answer as two pages
 
 **Classification:**
@@ -78,6 +80,7 @@ The catalogue publishes two lots.
 **so that** a link I pass on names the lot it points at instead of the auction
 catalogue.
 
+<!-- trace:case id=g10.auction-listing-page.TC-89i rev=1 covers=g10.auction-listing-page.SC-mda -->
 ### grade10-site-auction-listing-page-US2-TC1-1: Shared lot link unfurls as that lot
 
 **Classification:**
@@ -115,6 +118,7 @@ JavaScript disabled in the browser.
 answer with the site's not-found surface,
 **so that** I am never shown an empty lot page or the catalogue in its place.
 
+<!-- trace:case id=g10.auction-listing-page.TC-3xv rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC1-1: Unknown lot address returns not-found
 
 **Classification:**
@@ -144,6 +148,7 @@ The catalogue publishes no lot for <a lot address naming no published lot>.
 * Response status is 404.
 * The site's not-found surface is on screen.
 
+<!-- trace:case id=g10.auction-listing-page.TC-6r8 rev=1 covers=g10.auction-listing-page.SC-s88,g10.auction-listing-page.SC-jj1,g10.auction-listing-page.SC-c13 -->
 ### grade10-site-auction-listing-page-US3-TC2-1: Published lot address returns the lot page
 
 **Classification:**
@@ -181,6 +186,7 @@ The catalogue publishes <a published lot>.
 **so that** nothing I was reading blanks into a placeholder and no value
 disagrees with what the document carried.
 
+<!-- trace:case id=g10.auction-listing-page.TC-wka rev=1 covers=g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j -->
 ### grade10-site-auction-listing-page-US4-TC1-1: Served lot stays on screen after scripts
 
 **Classification:**
@@ -211,6 +217,7 @@ disagrees with what the document carried.
 * The same lot is on screen with its served name, description and standing still present.
 * None of them is replaced by a loading placeholder.
 
+<!-- trace:case id=g10.auction-listing-page.TC-e6y rev=1 covers=g10.auction-listing-page.SC-c09,g10.auction-listing-page.SC-y8j -->
 ### grade10-site-auction-listing-page-US4-TC2-1: Clock value continues from the served document
 
 **Classification:**
@@ -248,6 +255,7 @@ a bidding countdown is shown on <a published lot>.
 **I want** to open a lot's own address from the catalogue without a page load,
 **so that** the lot I picked out of the list is the page I land on.
 
+<!-- trace:case id=g10.auction-listing-page.TC-fe3 rev=1 covers=g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
 ### grade10-site-auction-listing-page-US5-TC1-1: Catalogue opens the lot's own address
 
 **Classification:**
@@ -275,6 +283,7 @@ The collector is viewing the auction catalogue, which lists <a published lot>.
 
 * The browser is on that lot's address, showing that lot's page.
 
+<!-- trace:case id=g10.auction-listing-page.TC-edm rev=1 covers=g10.auction-listing-page.SC-fl9,g10.auction-listing-page.SC-aga -->
 ### grade10-site-auction-listing-page-US5-TC2-1: Sitemap names no lot address
 
 **Classification:**

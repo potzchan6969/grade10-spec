@@ -51,6 +51,7 @@ Once scripts run, the surface SHALL be the same one the HTML carried: the
 served content stays, and the page becomes interactive without rendering from
 blank.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-yel rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-01 - The marketing page answers whole
 **Serves:** grade10-site-site-crawlable-pages-US-01 - Collector reads a public surface before scripts run
 
@@ -58,6 +59,7 @@ blank.
 - **THEN** the response HTML contains the marketing page's title, meta
   description, headline, and its static copy
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-dro rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-02 - A catalogue answers its identity
 **Serves:** grade10-site-site-crawlable-pages-US-01 - Collector reads a public surface before scripts run
 
@@ -66,6 +68,7 @@ blank.
   headline, and static copy
 - **AND** the listings themselves may be absent until scripts run
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-kp1 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-03 - Scripts only add to the page
 **Serves:** grade10-site-site-crawlable-pages-US-01 - Collector reads a public surface before scripts run
 
@@ -80,12 +83,14 @@ Each public surface SHALL carry its own title and meta description, distinct
 from every other surface's. The document title SHALL follow client-side
 navigation, including a navigation the session forces.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-q67 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-04 - Two surfaces, two names
 **Serves:** grade10-site-site-crawlable-pages-US-02 - Collector tells one surface from another by name
 
 - **WHEN** any two public surfaces are compared
 - **THEN** their titles differ and their meta descriptions differ
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-pwn rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-05 - The title follows navigation
 **Serves:** grade10-site-site-crawlable-pages-US-02 - Collector tells one surface from another by name
 
@@ -98,6 +103,7 @@ navigation, including a navigation the session forces.
 Each public surface SHALL carry Open Graph title, description, and URL
 matching that surface, readable without executing scripts.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-mvm rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-06 - A preview fetcher reads the surface
 **Serves:** grade10-site-site-crawlable-pages-US-03 - Preview fetcher unfurls a shared link
 
@@ -119,6 +125,7 @@ being listed. The sitemap SHALL never list an address carrying an unfilled
 parameter in place of a card or a lot, and SHALL name no address the site
 would refuse.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-tbm rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-07 - robots points at the sitemap
 **Serves:** grade10-site-site-crawlable-pages-US-04 - Crawler discovers every public address
 
@@ -126,6 +133,7 @@ would refuse.
 - **THEN** it permits crawling the public surfaces and names the sitemap's
   absolute URL
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-6ts rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-08 - The sitemap is exact
 **Serves:** grade10-site-site-crawlable-pages-US-04 - Crawler discovers every public address
 
@@ -135,6 +143,7 @@ would refuse.
   serving environment
 - **AND** neither the profile nor sign-in appears
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-0ms rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-09 - The sitemap names no pattern
 **Serves:** grade10-site-site-crawlable-pages-US-04 - Crawler discovers every public address
 
@@ -143,6 +152,7 @@ would refuse.
 - **AND** none of them carries an unfilled parameter in place of a card or a
   lot
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-j7c rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-10 - The catalogue decides what is listed
 **Serves:** grade10-site-site-crawlable-pages-US-04 - Crawler discovers every public address
 
@@ -150,6 +160,7 @@ would refuse.
 - **WHEN** the sitemap is fetched after the catalogue gains it
 - **THEN** that card's address appears, with no deploy in between
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-opt rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-11 - Every listed address answers
 **Serves:** grade10-site-site-crawlable-pages-US-04 - Crawler discovers every public address
 
@@ -166,6 +177,7 @@ holds SHALL answer 404 when it holds no such thing. An address the site does
 not answer SHALL return status 404, while still showing the site's not-found
 surface to a collector.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-1bc rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-12 - A nested address belongs to its surface
 **Serves:** grade10-site-site-crawlable-pages-US-05 - Collector opens an address the site may not hold
 
@@ -173,6 +185,7 @@ surface to a collector.
   fetched
 - **THEN** the response has status 200 and carries the store's identity
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-wdx rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-13 - A nested surface answers for itself
 **Serves:** grade10-site-site-crawlable-pages-US-05 - Collector opens an address the site may not hold
 
@@ -181,6 +194,7 @@ surface to a collector.
 - **THEN** the response has status 200 and carries that lot's identity, not
   the auction's
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-in9 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-14 - A surface refuses an address of its own
 **Serves:** grade10-site-site-crawlable-pages-US-05 - Collector opens an address the site may not hold
 
@@ -189,6 +203,7 @@ surface to a collector.
 - **THEN** the response has status 404
 - **AND** a collector opening it still sees the site's not-found surface
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-zo0 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-15 - An unknown address is refused honestly
 **Serves:** grade10-site-site-crawlable-pages-US-05 - Collector opens an address the site may not hold
 
@@ -207,6 +222,7 @@ channel that offers it SHALL be fixed when the item is first published and
 SHALL NOT change while it is published. An address of any other channel naming
 that item SHALL answer with status 404, as an address the site does not hold.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-r39 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-16 - One item, one address
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -215,6 +231,7 @@ that item SHALL answer with status 404, as an address the site does not hold.
 - **THEN** exactly one address answers with it
 - **AND** it is an address of the channel the item was published to
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-odc rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-17 - Another channel does not hold it
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -223,6 +240,7 @@ that item SHALL answer with status 404, as an address the site does not hold.
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's not-found surface
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-d87 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-18 - The sitemap names it once
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -243,6 +261,7 @@ Every narrowed reading SHALL name the channel address without that query as its
 canonical address and as its `og:url`. The sitemap SHALL name no narrowed
 reading.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-s39 rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-19 - A narrowing has no path of its own
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -251,6 +270,7 @@ reading.
 - **THEN** the response carries no narrowed reading of that channel
 - **AND** it answers as the deepest surface naming that address
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-i2b rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-20 - Two narrowings name one address to keep
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -260,6 +280,7 @@ reading.
 - **THEN** both carry the same canonical address and the same `og:url`
 - **AND** that address is the channel's own, without a query
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-55t rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-21 - The sitemap names no narrowing
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -272,6 +293,7 @@ A person or a shop the site names — a seller among them — SHALL answer at
 exactly one public address, and every sales channel SHALL link to that address.
 A channel SHALL NOT answer an identity address of its own.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-68a rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-22 - A channel holds no identity surface of its own
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 
@@ -287,6 +309,7 @@ An address the site has replaced SHALL answer with status 301 and the address
 that replaced it, in one hop. The site SHALL NOT name a replaced address in a
 link it renders, in a canonical or `og:url` tag, or in a sitemap entry.
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-2mm rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-23 - A replaced address sends the reader on
 **Serves:** grade10-site-site-crawlable-pages-US-07 - Collector opens a link the site has replaced
 
@@ -295,6 +318,7 @@ link it renders, in a canonical or `og:url` tag, or in a sitemap entry.
 - **AND** it names the address that replaced it
 - **AND** fetching that address answers with status 200
 
+<!-- trace:scenario id=g10.site-crawlable-pages.SC-69y rev=1 -->
 #### Scenario: grade10-site-site-crawlable-pages-SC-24 - Nothing names a replaced address
 **Serves:** grade10-site-site-crawlable-pages-US-06 - Crawler holds one page per thing
 

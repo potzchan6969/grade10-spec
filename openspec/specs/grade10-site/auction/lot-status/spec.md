@@ -70,6 +70,7 @@ in the winner's My Auctions.
 **Where it shows** - The designer decides where and how pages show the external
 lot status.
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-wpp rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-01 - A lot whose bidding has not started is Upcoming
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -77,6 +78,7 @@ lot status.
 - **WHEN** Grade10 works out its external lot status
 - **THEN** the status is Upcoming
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-orm rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-02 - A lot open for bidding is Active
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -85,6 +87,7 @@ lot status.
 - **WHEN** Grade10 works out their external lot status
 - **THEN** both are Active
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-6aa rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-03 - A lot in extended bidding is Active
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -92,6 +95,7 @@ lot status.
 - **WHEN** Grade10 works out its external lot status
 - **THEN** the status is Active
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-pmn rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-04 - A lot with a winner is Ended whatever state its order is in
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -100,6 +104,7 @@ lot status.
 - **WHEN** Grade10 works out their external lot status
 - **THEN** all three are Ended
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-flh rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-12 - A lot that ended with no winner is Ended
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -107,6 +112,7 @@ lot status.
 - **WHEN** Grade10 works out its external lot status
 - **THEN** the status is Ended
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-eor rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-05 - The winner sees their order status separately
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -137,6 +143,7 @@ it in My Auctions. When that bid has a bid-time authorization, the row carries
 the note that its card hold was released, per
 `grade10-site/auction/account-record`. No other collector SHALL see it.
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-me0 rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-06 - A draft lot is not in the catalogue, but an unsold lot is
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
@@ -145,6 +152,7 @@ the note that its card hold was released, per
 - **THEN** the draft lot is not listed
 - **AND** the unsold lot is listed as Ended
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-pe2 rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-07 - A called-off lot is removed from the catalogue
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
@@ -152,6 +160,7 @@ the note that its card hold was released, per
 - **WHEN** a collector opens the auction catalogue
 - **THEN** the lot is not listed
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-cox rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-08 - A called-off lot is removed from the watchlist
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 
@@ -161,6 +170,7 @@ the note that its card hold was released, per
 - **THEN** the called-off lot is not listed
 - **AND** the unsold lot is listed as Ended
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-yoe rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-09 - A bidder still sees a called-off lot
 **Serves:** grade10-site-auction-lot-status-US-03 - Bidder sees what happened to a called-off lot
 
@@ -175,6 +185,7 @@ the note that its card hold was released, per
 The public listing data SHALL include the lot's external lot status: Upcoming,
 Active or Ended. It SHALL NOT include hidden lots.
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-l6k rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-10 - Listing data includes the external lot status
 **Serves:** grade10-site-auction-lot-status-US-01 - Collector sees whether a lot can still be bid on
 
@@ -182,6 +193,7 @@ Active or Ended. It SHALL NOT include hidden lots.
   for bidding
 - **THEN** the data includes the external lot status Active
 
+<!-- trace:scenario id=g10.auction-lot-status.SC-3yw rev=1 -->
 #### Scenario: grade10-site-auction-lot-status-SC-11 - Listing data leaves out called-off lots
 **Serves:** grade10-site-auction-lot-status-US-02 - Collector does not see draft or called-off lots
 

@@ -65,6 +65,7 @@ Auctions from that announcement. When they unwatch from a listing's own page,
 Grade10 SHALL announce the removal (email alerts off for that listing) and
 SHALL offer Undo.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-vwk rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-01 - A collector watches from a listing's page
 **Serves:** grade10-site-auction-account-record-US-05 - Watch from the lot with alerts toast
 
@@ -76,6 +77,7 @@ SHALL offer Undo.
 - **AND** a toast says email alerts are on for this lot with **View My
   Auctions**, which opens My Auctions
 
+<!-- trace:scenario id=g10.auction-account-record.SC-e7i rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-02 - A collector watches from the catalogue
 **Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
 
@@ -84,6 +86,7 @@ SHALL offer Undo.
 - **THEN** that listing is on My Auctions
 - **AND** they are still on the catalogue
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ewb rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-03 - Unwatching can be undone
 **Serves:** grade10-site-auction-account-record-US-05 - Watch from the lot with alerts toast
 
@@ -93,6 +96,7 @@ SHALL offer Undo.
 - **THEN** the listing is on My Auctions again
 - **AND** they did not have to find the listing a second time
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ub6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-04 - A watch without a session is not recorded
 **Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
 
@@ -101,6 +105,7 @@ SHALL offer Undo.
 - **THEN** Grade10 records no watch
 - **AND** no watch appears for any collector
 
+<!-- trace:scenario id=g10.auction-account-record.SC-w7y rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-05 - A watch is private
 **Serves:** grade10-site-auction-account-record-US-01 - Mark a listing now and find it again later
 
@@ -129,6 +134,7 @@ tell the collector the maximum has been reached. The maximum's value is a
 design decision and is not fixed by this requirement. A bid that enrolls the
 list SHALL count toward the same maximum.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-n3a rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-06 - The watch maximum refuses a further watch
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -137,6 +143,7 @@ list SHALL count toward the same maximum.
 - **THEN** Grade10 refuses it and records no watch
 - **AND** the collector is told the maximum has been reached
 
+<!-- trace:scenario id=g10.auction-account-record.SC-cba rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-07 - An unpublished listing stays on the page
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -145,6 +152,7 @@ list SHALL count toward the same maximum.
 - **WHEN** they open My Auctions
 - **THEN** that listing is not listed
 
+<!-- trace:scenario id=g10.auction-account-record.SC-bge rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-40 - A closed published listing stays on My Auctions
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -161,6 +169,7 @@ bidder standing. Status for that row SHALL be `--`. Close and open
 timing SHALL appear with the listing identity, not as Scheduled, Live, Ending
 soon, or Active values in Status.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-h9h rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-08 - A scheduled listing says when it opens
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -170,6 +179,7 @@ soon, or Active values in Status.
   identity
 - **AND** Status is `--`
 
+<!-- trace:scenario id=g10.auction-account-record.SC-myi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-09 - Ending soon begins at 60 minutes
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -179,6 +189,7 @@ soon, or Active values in Status.
 - **THEN** that listing's row carries the close with the listing identity
 - **AND** Status is `--` when they have not bid
 
+<!-- trace:scenario id=g10.auction-account-record.SC-w21 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-10 - Every way of ending reads as Ended
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -206,6 +217,7 @@ remain on My Auctions until Grade10 unpublishes or removes it, or until the
 collector no longer has a bid record that enrolls it — and SHALL NOT offer
 Unwatch while a bid stands.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-v08 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-11 - The next close is first
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -216,6 +228,7 @@ Unwatch while a bid stands.
   hours
 - **AND** the listing that closed yesterday is after both
 
+<!-- trace:scenario id=g10.auction-account-record.SC-oug rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-12 - A watched listing they bid on is marked
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -225,6 +238,7 @@ Unwatch while a bid stands.
 - **THEN** the bid listing appears before the watch-only listing
 - **AND** each listing appears once
 
+<!-- trace:scenario id=g10.auction-account-record.SC-93f rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-13 - Unwatching leaves the bid alone
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -256,6 +270,7 @@ urgency SHALL appear with the listing identity.
 Every amount SHALL be an integer count of minor units with an ISO 4217 currency
 code.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-2h8 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-14 - The highest bidder is Leading
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -263,6 +278,7 @@ code.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Leading
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ana rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-15 - Outbid carries the minimum next bid
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -273,6 +289,7 @@ code.
 - **AND** the row carries the minimum next valid bid as an integer count of
   minor units with its ISO 4217 currency code
 
+<!-- trace:scenario id=g10.auction-account-record.SC-3pi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-16 - A refused bid says why it was refused
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -282,6 +299,7 @@ code.
 - **THEN** that listing's Status is Bid not accepted
 - **AND** the row says the bid was below the minimum next bid
 
+<!-- trace:scenario id=g10.auction-account-record.SC-91l rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-17 - A bid awaiting acceptance is not a standing
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -298,6 +316,7 @@ present separate Active, Won, and Didn't win section groups. The durable
 Bidding History index remains the source for listing-level history and its
 Active/Completed filtering.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-44t rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-18 - A won listing sits under Won
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -305,6 +324,7 @@ Active/Completed filtering.
 - **WHEN** they open My Auctions
 - **THEN** that listing's Status is Won
 
+<!-- trace:scenario id=g10.auction-account-record.SC-5y1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-19 - A listing lost at close sits under Didn't win
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -352,6 +372,7 @@ Didn’t win hold being-released and released copy remains governed by the durab
 hold requirements folded with `redesign-my-auctions-table`; this change does not
 remove them.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-1lv rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-20 - Card capture reads as Paid
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -359,6 +380,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Processing
 
+<!-- trace:scenario id=g10.auction-account-record.SC-pu6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-21 - Manual collection reads as the same Paid
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -366,6 +388,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Processing
 
+<!-- trace:scenario id=g10.auction-account-record.SC-m3u rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-22 - An expired payment reads Payment Overdue
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -375,6 +398,7 @@ remove them.
 - **AND** the row offers View order into Winner Order
 - **AND** the row does not itself carry how to reach Grade10
 
+<!-- trace:scenario id=g10.auction-account-record.SC-byk rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-23 - Shipment states reach the winner
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -383,6 +407,7 @@ remove them.
 - **THEN** the first listing's state is Shipped
 - **AND** the second listing's state is Delivered
 
+<!-- trace:scenario id=g10.auction-account-record.SC-4sy rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-24 - The winner is offered no write
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -390,6 +415,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** no control on the surface records payment, uploads payment proof, requests a wire, records shipment, changes an address or payment method, or changes the order status
 
+<!-- trace:scenario id=g10.auction-account-record.SC-xi1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-35 - A cancelled order remains Cancelled
 **Serves:** After a close - a cancelled order remains Cancelled
 
@@ -397,6 +423,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Cancelled
 
+<!-- trace:scenario id=g10.auction-account-record.SC-91a rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-36 - A refunded order remains Refunded
 **Serves:** After a close - a refunded order remains Refunded
 
@@ -404,6 +431,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Refunded
 
+<!-- trace:scenario id=g10.auction-account-record.SC-uh6 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-47 - A won lot with no address reads Awaiting Setup
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -411,6 +439,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Awaiting Setup
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ahn rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-48 - A confirmed address with no invoice reads Preparing Invoice
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -418,6 +447,7 @@ remove them.
 - **WHEN** the winner opens their Bidding page
 - **THEN** that listing's state is Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-account-record.SC-pnn rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-56 - Every Won standing offers View order
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -425,6 +455,7 @@ remove them.
 - **WHEN** the winner opens My Auctions
 - **THEN** each of those rows offers View order into that lot's Winner Order
 
+<!-- trace:scenario id=g10.auction-account-record.SC-fn7 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-57 - Didn’t win offers no View order
 **Serves:** After a close - a lost listing does not open a Winner Order
 
@@ -432,6 +463,7 @@ remove them.
 - **WHEN** the winner opens My Auctions
 - **THEN** that row offers no View order entry to Winner Order
 
+<!-- trace:scenario id=g10.auction-account-record.SC-skc rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-58 - A Won row carries no secondary helper lines
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -440,6 +472,7 @@ remove them.
 - **THEN** neither row shows secondary helper detail under its standing
 - **AND** both rows still show their standing and View order
 
+<!-- trace:scenario id=g10.auction-account-record.SC-haw rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-60 - Proof waiting for an operator reads Payment Verifying
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -448,6 +481,7 @@ remove them.
 - **THEN** that listing's state is Payment Verifying
 - **AND** the row offers View order and no upload control
 
+<!-- trace:scenario id=g10.auction-account-record.SC-fgb rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-61 - The row follows the proof check
 **Serves:** grade10-site-auction-account-record-US-03 - Follow a listing I won through to delivery
 
@@ -468,6 +502,7 @@ A listing the collector bid on that was called off SHALL appear with Didn't
 win standing carrying the same statement about their authorization, while the
 listing remains published.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-uvr rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-25 - A release in flight says so
 **Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
@@ -477,6 +512,7 @@ listing remains published.
 - **THEN** the row says the hold is being released
 - **AND** it does not say the hold is released
 
+<!-- trace:scenario id=g10.auction-account-record.SC-dtm rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-26 - A completed release says so
 **Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
@@ -484,6 +520,7 @@ listing remains published.
 - **WHEN** the collector opens My Auctions
 - **THEN** the row says the hold is released
 
+<!-- trace:scenario id=g10.auction-account-record.SC-2e8 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-27 - A called-off listing tells the bidder about the hold
 **Serves:** grade10-site-auction-account-record-US-04 - Losing bidder sees the card hold released
 
@@ -499,6 +536,7 @@ Grade10 SHALL resolve an auction record from the caller's session and no other
 input. A request carrying no session SHALL be refused and SHALL return no
 record. No input a collector supplies SHALL select another collector's record.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-qmd rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-28 - A signed-out request is refused
 **Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
@@ -507,6 +545,7 @@ record. No input a collector supplies SHALL select another collector's record.
 - **THEN** Grade10 refuses it as unauthenticated
 - **AND** returns no watch and no bid
 
+<!-- trace:scenario id=g10.auction-account-record.SC-ogi rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-29 - A collector cannot address another record
 **Serves:** grade10-site-auction-account-record-US-02 - See where I stand across every listing I bid on
 
@@ -533,6 +572,7 @@ presented as current.
 The page title SHALL carry a badge whose count equals the number of rows on
 the table.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-cu5 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-30 - A bidder lands on Bidding
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -541,6 +581,7 @@ the table.
 - **THEN** they see one My Auctions table that includes that listing
 - **AND** they are not sent to a separate Bidding section
 
+<!-- trace:scenario id=g10.auction-account-record.SC-m7p rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-31 - A collector who has never bid lands on Watching
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -550,6 +591,7 @@ the table.
 - **THEN** they see one My Auctions table
 - **AND** each row's Status is `--`
 
+<!-- trace:scenario id=g10.auction-account-record.SC-20r rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-32 - An empty Watching page offers the catalogue
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -558,6 +600,7 @@ the table.
 - **THEN** the page offers a way into the auction catalogue
 - **AND** it does not report an error
 
+<!-- trace:scenario id=g10.auction-account-record.SC-c2n rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-33 - A failed read is not an empty record
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -566,6 +609,7 @@ the table.
 - **THEN** the page reports that the read failed and offers to retry
 - **AND** it does not show an empty record
 
+<!-- trace:scenario id=g10.auction-account-record.SC-1o1 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-34 - A value that could not be refreshed says so
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -574,6 +618,7 @@ the table.
 - **WHEN** the collector reads it
 - **THEN** that value is shown as not current
 
+<!-- trace:scenario id=g10.auction-account-record.SC-db4 rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-41 - The title badge matches the row count
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -598,6 +643,7 @@ most once per listing per collector**. That fact SHALL be stored on the
 account. A later bid, page view, or device SHALL NOT show the same announcement
 again for that pair.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-baj rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-45 - A bid bookmarks without a separate Watch
 **Serves:** grade10-site-auction-account-record-US-06 - A bid bookmarks and toasts alerts once
 
@@ -606,6 +652,7 @@ again for that pair.
 - **THEN** L is on My Auctions
 - **AND** they did not need a separate Watch for L to appear
 
+<!-- trace:scenario id=g10.auction-account-record.SC-6mu rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-46 - The bid-alerts toast is once per lot
 **Serves:** grade10-site-auction-account-record-US-06 - A bid bookmarks and toasts alerts once
 
@@ -621,6 +668,7 @@ When a signed-in collector places a bid on a listing, Grade10 SHALL enroll
 that listing on My Auctions as a bookmark if it is not already there. The
 collector SHALL NOT need a separate Watch for that listing to appear.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-7on rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-42 - A first bid enrolls My Auctions
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -639,6 +687,7 @@ application supplies that control.
 **Unwatch** - A row for a listing the collector has not bid on SHALL offer
 Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-5we rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-43 - Watch-only can be unwatched
 **Serves:** grade10-site-auction-account-record-US-01 - Collector bookmarks a listing and finds it on My Auctions
 
@@ -647,6 +696,7 @@ Unwatch. A row for a listing they have bid on SHALL NOT offer Unwatch.
 - **THEN** the listing leaves My Auctions
 - **AND** Email alerts for that listing turn off with the watch
 
+<!-- trace:scenario id=g10.auction-account-record.SC-wqw rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-44 - A bid row keeps Email alerts without Unwatch
 **Serves:** grade10-site-auction-account-record-US-02 - Collector sees standing across every lot they bid on
 
@@ -662,6 +712,7 @@ Status. A missed setup deadline SHALL render Setup Overdue and an expired
 invoice SHALL render Payment Overdue. Both rows SHALL retain View order and
 the same lot and winning-bid facts as the Won row.
 
+<!-- trace:scenario id=g10.auction-account-record.SC-zid rev=1 -->
 #### Scenario: grade10-site-auction-account-record-SC-63 - My Auctions names both overdue states
 **Serves:** grade10-site-auction-account-record-US-09 - Winner finds an overdue order in My Auctions
 

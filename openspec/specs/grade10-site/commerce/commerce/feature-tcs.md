@@ -9,6 +9,7 @@
 **I want** to be told before paying that a verified identity is needed, and where to get one,
 **so that** I am not charged for an order the store cannot complete, and I know what to do next.
 
+<!-- trace:case id=g10.commerce-commerce.TC-s62 rev=1 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
 ### grade10-site-commerce-commerce-US6-TC1-1: Verified buyer checks out at the bar as any other
 
 **Classification:**
@@ -47,6 +48,7 @@
 * The checkout proceeds as any other: the browser is handed to Shopify's checkout page.
 * No refusal names `<bar>`.
 
+<!-- trace:case id=g10.commerce-commerce.TC-01a rev=1 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
 ### grade10-site-commerce-commerce-US6-TC2-1: Buyer without a verified standing is sent to verify at and above the bar
 
 Runs once per row of **Test data**.
@@ -92,6 +94,7 @@ Runs once per row of **Test data**.
 * Step 4 opens `<grade10 account page url>`.
 * No order was made for the checkout — none appears at `<grade10 order history url>`.
 
+<!-- trace:case id=g10.commerce-commerce.TC-cb7 rev=1 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
 ### grade10-site-commerce-commerce-US6-TC3-1: Basket below the bar asks nothing of any buyer
 
 Runs once per row of **Test data**.
@@ -133,6 +136,7 @@ Runs once per row of **Test data**.
 * The checkout proceeds as any other: the browser is handed to Shopify's checkout page.
 * No standing was read.
 
+<!-- trace:case id=g10.commerce-commerce.TC-u8b rev=1 covers=g10.commerce-commerce.SC-fxd,g10.commerce-commerce.SC-pw2,g10.commerce-commerce.SC-7mb,g10.commerce-commerce.SC-ytc -->
 ### grade10-site-commerce-commerce-US6-TC4-1: Guest at the bar is asked to sign in and no order is made
 
 **Classification:**

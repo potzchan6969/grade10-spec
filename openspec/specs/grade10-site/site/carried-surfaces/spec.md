@@ -64,6 +64,7 @@ the shop's apart from the account's is work the shop's launch retires -
 **No setting, no request** - No setting a running build reads, and no request
 it receives, SHALL add a surface to the set or take one out of it.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-eln rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-01 - A running build cannot be told to carry more
 **Serves:** What a build carries - the set is settled before a build leaves the pipeline, so nothing in front of it can widen what the site answers
 
@@ -87,6 +88,7 @@ language: a collector holding a session reads the same refusal as one holding
 none and keeps their session, and the address under a language prefix is
 refused in that language.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-um4 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-08 - A store address on the public site is not found
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector following a bookmark or a link to a shop the build has no page for
 
@@ -95,6 +97,7 @@ refused in that language.
 - **THEN** the response has status 404 and the not-found surface renders,
   naming the address that failed
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-knk rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-09 - Every address beneath answers the same way
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector whose link points deep inside the shop rather than at its front
 
@@ -103,6 +106,7 @@ refused in that language.
   collection, a card's own page, the cart, the checkout or an order
 - **THEN** the response has status 404 and the not-found surface renders
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-8th rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-10 - An uncarried address is never redirected
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector who learns the page is absent rather than being moved elsewhere
 
@@ -111,6 +115,7 @@ refused in that language.
 - **THEN** the site sends them nowhere else, and the address they asked for is
   the address they are left on
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-q1o rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-18 - A session changes nothing about the refusal
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector who signed in on the site and still finds no shop
 
@@ -119,6 +124,7 @@ refused in that language.
 - **THEN** the response has status 404 and the not-found surface renders
 - **AND** they are neither asked to sign in nor signed out
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-g3w rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-19 - A prefixed store address is refused in its own language
 **Serves:** grade10-site-site-carried-surfaces-US-02 - the collector reading the site in their own language and following a shop link in it
 
@@ -128,6 +134,7 @@ refused in that language.
 - **THEN** the response has status 404 and the not-found surface renders in
   that language
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-34s rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-28 - A withheld product's address on the public site is not found
 **Serves:** grade10-site-site-carried-surfaces-US-06 - the collector following a vault or booking link the public build has no page for
 
@@ -137,6 +144,7 @@ refused in that language.
 - **THEN** the response has status 404 and the not-found surface renders,
   naming the address that failed
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-5p3 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-29 - A mailed link into a withheld product is refused like any other address
 **Serves:** grade10-site-site-carried-surfaces-US-06 - the collector opening a link a mail handed them rather than an address they typed
 
@@ -164,6 +172,7 @@ show a card for is withheld. A region dedicated to a single product's own
 control, such as the footer's shop column, is unaffected and keeps behaving
 as already specified.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-n1s rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-11 - The header names no shop
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector reading the header of a site with nothing to sell them
 
@@ -171,6 +180,7 @@ as already specified.
 - **WHEN** the header renders on any surface
 - **THEN** it offers no store navigation item and no cart control
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-2fu rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-12 - The footer drops the shop column
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector reading the foot of the page for what the site offers
 
@@ -178,6 +188,7 @@ as already specified.
 - **WHEN** the footer renders
 - **THEN** no shop column appears and no link leads to a store surface
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-4cr rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-13 - The front door offers no way into a shop
 **Serves:** grade10-site-site-carried-surfaces-US-01 - the collector meeting the first page of the site before the shop opens
 
@@ -186,6 +197,7 @@ as already specified.
 - **THEN** neither the store button nor the store card is there, and nothing
   in its place promises a shop
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-50x rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-30 - Nothing in the chrome leads to a withheld product
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading the header, the foot of the page and the front door for what the site offers
 
@@ -195,6 +207,7 @@ as already specified.
   front-door button and no front-door card leads to the store, the vault or
   booking
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-zcr rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-31 - The account menu names only what the build answers
 **Serves:** grade10-site-site-carried-surfaces-US-07 - the signed-in collector opening the account menu on a public page
 
@@ -203,6 +216,7 @@ as already specified.
 - **THEN** it names no page of a product the build does not carry
 - **AND** every item it does name opens an address the build answers
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-7os rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-33 - The front door's card row renders empty rather than being removed
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading a front door built to hold a card for each of the three waiting products
 
@@ -211,6 +225,7 @@ as already specified.
 - **THEN** the card row is present on the page and holds no card for the
   store, the vault or booking
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-r14 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-34 - No in-app link points at an absent profile
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector reading checkout, an order's detail, their order history or the auction winner's order breadcrumb, none of which sends them toward a profile the build does not carry
 
@@ -219,6 +234,7 @@ as already specified.
   history, or the auction winner's order breadcrumb
 - **THEN** none of them link to the profile
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-9vv rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-37 - In-app links reach the profile once it is carried
 **Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who reaches checkout, an order's detail, their order history or the auction winner's order breadcrumb, each still sending them to their account page where the profile is carried
 
@@ -238,6 +254,7 @@ only addresses of surfaces that build carries.
 fetched SHALL list a card or a collection only where the build carries the
 surface that answers it.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-k78 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-14 - A public build's crawl directory names no store address
 **Serves:** grade10-site-site-carried-surfaces-US-03 - the crawler building its list of what grade10.com holds
 
@@ -245,6 +262,7 @@ surface that answers it.
 - **WHEN** its sitemap and its robots.txt are fetched
 - **THEN** neither names a store address
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-ujp rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-15 - A catalogue adds nothing the build cannot answer
 **Serves:** grade10-site-site-carried-surfaces-US-03 - the crawler returning to a sitemap that grows with the catalogue behind it
 
@@ -252,6 +270,7 @@ surface that answers it.
 - **WHEN** the sitemap is fetched afterwards
 - **THEN** that card's address is not listed, and no collection's is
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-qxv rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-32 - A public build's crawl directory names no withheld product
 **Serves:** grade10-site-site-carried-surfaces-US-03 - the crawler listing grade10.com while the three products are shut
 
@@ -315,6 +334,7 @@ drafts nobody has approved.
 **Every other surface** - Every other surface — the auction, the front door,
 the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-w1o rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-20 - A public build carries none of the three waiting products
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before any of the three has opened
 
@@ -323,6 +343,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** no surface of the store, the vault or booking answers, at any of
   their addresses
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-0lq rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-21 - The preview host withholds what production withholds
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the same three shut products at the quieter address the preview host serves
 
@@ -331,6 +352,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** it answers as the production build does, carrying none of the
   three sets
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-neg rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-22 - Staging carries all three waiting products
 **Serves:** grade10-site-site-carried-surfaces-US-08 - the collector working a product on the lane it is open on
 
@@ -338,6 +360,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **WHEN** a collector opens each surface of the store, the vault and booking
 - **THEN** every one of them answers
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-6ym rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-23 - The labs answer on development and staging, and nowhere the public reaches
 **Serves:** What a build carries - the demonstration pages and the unapproved drafts reached only where they are worked on
 
@@ -346,6 +369,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** no labs surface answers
 - **AND** a development or a staging build answers each of them
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-d8a rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-24 - The holding site is carried on every lane
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who finds the rest of the site whole while the five products are shut
 
@@ -354,6 +378,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
   privacy page, or sign-in
 - **THEN** each answers as it does on every other lane
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-hx8 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-35 - The profile waits on the same lanes the store, the vault and booking wait on
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before the profile has opened
 
@@ -362,6 +387,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** no profile surface answers
 - **AND** a build made for development or staging answers it
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-lvd rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-36 - Order history and order detail answer without the profile
 **Serves:** grade10-site-site-carried-surfaces-US-06 - the collector whose account page is withheld but whose mailed order link still answers, because order history and order detail carry the store's gate alone
 
@@ -370,6 +396,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** the order history and the order detail answer
 - **AND** the profile's own address is not found
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-tfq rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-38 - Membership waits on the same lanes the other waiting products wait on
 **Serves:** grade10-site-site-carried-surfaces-US-05 - the collector who reaches grade10.com before membership has opened
 
@@ -378,6 +405,7 @@ the terms and the privacy page, and sign-in — SHALL be carried on every lane.
 - **THEN** neither surface answers
 - **AND** a build made for development or staging answers both
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-k9w rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-39 - Membership and join carry or withhold together
 **Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who follows the membership page's link to join, or the join page's link back, and finds the other side of that link exactly as carried as the page they left
 
@@ -401,6 +429,7 @@ SHALL start answering together, no surface outside it SHALL change the lanes
 it is carried on, and the other four waiting products SHALL stay on the
 lanes already stated for them.
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-hz5 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-25 - Staging works as it did before
 **Serves:** grade10-site-site-carried-surfaces-US-08 - the collector who buys a card, opens a case and books a visit in one sitting
 
@@ -410,6 +439,7 @@ lanes already stated for them.
 - **THEN** each surface behaves as its own capability requires, with nothing
   altered by the lanes that do not carry it
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-8tm rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-26 - A product opens for all of its surfaces at once
 **Serves:** Where a product is open - the day a product opens, one statement moves and its whole set follows it
 
@@ -418,6 +448,7 @@ lanes already stated for them.
 - **THEN** every surface in the vault's set answers on it
 - **AND** no surface outside the set changes the lanes it is carried on
 
+<!-- trace:scenario id=g10.site-carried-surfaces.SC-3r5 rev=1 -->
 #### Scenario: grade10-site-site-carried-surfaces-SC-27 - The other waiting products stay shut while one opens
 **Serves:** Where a product is open - the launches still to come, each waiting on its own line rather than on the first one
 
