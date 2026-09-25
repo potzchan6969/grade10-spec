@@ -1,3 +1,8 @@
 schema: grade10-planning
 promoted_by: "@seankcw"
 created: 2026-09-22
+reviewed:
+  decisions: d30e802f
+  user-journeys: 12aa2736
+  specs: caeaefe5
+  test-cases: caeaefe5
