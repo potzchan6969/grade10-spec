@@ -1,7 +1,7 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Status:** approved
+**Reviewed:** 2026-09-25, tcs-rules r4
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
@@ -153,7 +153,7 @@ customer is on <grade10 sign-in url>, signed out.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -292,13 +292,13 @@ customer is on <grade10 sign-in url>, signed out.
 * The surface states that the link was not sent.
 * The person is not signed in.
 
-### shared-auth-sign-in-US1-TC9-1: Link followed inside five minutes signs the collector in
+### shared-auth-sign-in-US1-TC9-1: A link expires at five minutes
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
@@ -320,6 +320,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | 4 minutes after the send | signs the collector in |
 | 4 minutes 59 seconds after the send | signs the collector in |
+| exactly 5 minutes after the send | creates no session |
+| 5 minutes 1 second after the send | creates no session |
+| 6 minutes after the send | creates no session |
 
 **Steps:**
 
@@ -329,7 +332,8 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Grade10 answers as the row states.
-* The signed-in account is the one for collector@example.com.
+* A sign-in row enters the account for collector@example.com.
+* A no-session row leaves the surface showing the person signed out.
 
 ### shared-auth-sign-in-US1-TC10-1: Resend countdown reaching zero leaves the sent link alive
 
@@ -337,7 +341,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -374,7 +378,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -412,7 +416,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -450,7 +454,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -488,7 +492,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -528,7 +532,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
@@ -566,7 +570,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression, release
@@ -600,13 +604,13 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * The surface still shows the person as signed out.
 
-### shared-auth-sign-in-US1-TC17-1: Used link stays refused inside its five minutes
+### shared-auth-sign-in-US1-TC17-1: Used link stays refused inside and past five minutes
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -618,23 +622,25 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out in a fresh browser session.
-* <used link> created a session two minutes after its send, and four minutes have passed since that send.
+* <used link> created a session two minutes after its send.
 
 **Test data:**
 
-| Field | Value |
+Runs once per row of **Test data**.
+
+| `<follow delay>` | Grade10 answers |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<used link>` | The sign-in link that already created a session |
+| 4 minutes after the send | creates no session |
+| 6 minutes after the send | creates no session |
 
 **Steps:**
 
-1. Follow <used link>.
-2. Read the signed-in state on the surface.
+1. Let `<follow delay>` pass after the send.
+2. Follow <used link>.
 
 **Expected Results:**
 
-* No session is created.
+* Grade10 answers as the row states.
 * The surface still shows the person as signed out.
 
 ### shared-auth-sign-in-US1-TC18-1: Device clock set back does not revive an expired link
@@ -643,7 +649,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -2107,7 +2113,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** security
 * **Suites:** smoke, regression
@@ -2145,7 +2151,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2181,7 +2187,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2217,7 +2223,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2253,7 +2259,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2276,7 +2282,9 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Leave the toast untouched for a period that would clear an ordinary toast.
+1. Do not activate Switch, Stay, or the close control.
+2. Wait ten seconds, long enough for an ordinary toast to clear.
+3. Read the mismatch toast.
 
 **Expected Results:**
 
@@ -2289,7 +2297,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** minor
 * **Priority:** low
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
@@ -2324,7 +2332,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
