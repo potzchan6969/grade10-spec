@@ -116,7 +116,10 @@ export const GroupExpandIsReported: Story = {
   },
 };
 
-/** Collapse reports when the consumer supplied a Show less label. */
+/**
+ * Scenario: shared-ui-store-product-listing-SC-86 - A group collapse is
+ * reported. Collapse reports when the consumer supplied a Show less label.
+ */
 export const GroupCollapseIsReported: Story = {
   args: {
     groups: {

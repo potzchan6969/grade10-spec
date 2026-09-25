@@ -8,3 +8,6 @@
 - [x] 1.6 Update ProductBrowse / FilterPanel / preview stories and play tests for pills
 - [x] 1.7 Mark Adaptive Filter on Product Listing PRDs; write `ui-design.md`; validate with
       `openspec validate adapt-listing-filter-drawer --strict`
+- [x] 1.8 Collapse an expanded filter group on the wide sidebar through a
+      supplied `collapseLabel`, reporting activation through
+      `onGroupCollapse` (`shared-ui-store-product-listing-SC-86`)
