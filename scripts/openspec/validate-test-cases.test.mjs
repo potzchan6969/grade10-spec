@@ -417,3 +417,45 @@ test("a Covered at domain line is refused when its domain case is missing or dep
   assert.match(out, /covered at domain by `demo-e2e-US1-TC9-1`, which no `domain-tcs.md` holds/);
   assert.match(out, /a \*\*Covered at domain\*\* line names no domain case/);
 });
+
+// Archived changes copied suites across without their cases before the carry
+// gate refused it. The validator warns on each archived case no live suite
+// holds under its id, `<v>` aside, and the durable suite does not name.
+test("warns on an archived case the fold left behind, and not on one held, re-versioned or named", () => {
+  const root = mkdtempSync(join(tmpdir(), "archived-cases-"));
+  const heading = (id) => `### ${id}: A case\n\n* **Status:** actual\n`;
+  const files = {
+    "openspec/specs/demo/alpha/feature-tcs.md": [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      heading("demo-alpha-US1-TC1-2"),
+      heading("demo-alpha-US1-TC20-1"),
+      "## Settled",
+      "",
+      "- `demo-alpha-US1-TC3` was folded into TC1 · 2026-09-25",
+      "",
+    ].join("\n"),
+    "openspec/changes/archive/2026-09-01-demo/specs/demo/alpha/feature-tcs.md": [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      heading("demo-alpha-US1-TC1-1"),
+      heading("demo-alpha-US1-TC2-1"),
+      heading("demo-alpha-US1-TC3-1"),
+    ].join("\n"),
+  };
+  for (const [name, content] of Object.entries(files)) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
+  // TC2 is one line, not a prefix hit on TC20.
+  const out = run(root).stdout;
+  assert.match(
+    out,
+    /1 case\(s\) archived with `2026-09-01-demo` were never folded here: `demo-alpha-US1-TC2-1` —/,
+  );
+});

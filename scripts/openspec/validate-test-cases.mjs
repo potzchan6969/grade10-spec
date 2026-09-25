@@ -70,6 +70,7 @@ import {
   revText,
   ROOT as STORE_ROOT,
   statusCounts,
+  SUITE_NAMES,
 } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -981,6 +982,60 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           );
       }
     }
+  }
+}
+
+// --- archived cases the fold left behind --------------------------------
+// Warned, never refused: the archive is history, and a case may have been
+// renamed or superseded since. A case an archived change's suite held, whose
+// id (without its `<v>`) no durable or active suite holds and the durable
+// suite does not name anywhere, was most likely left behind at the fold -
+// the carry gate that now refuses it did not exist then. A human decides each
+// one; a case found to be replaced is named in the durable suite, one line,
+// and the warning stops.
+{
+  const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
+  const live = new Set(
+    [...caseIndex(ROOT, findSuites(ROOT)).keys()].map(unversioned),
+  );
+  const archive = join(ROOT, "openspec", "changes", "archive");
+  const archived = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (SUITE_NAMES.includes(e.name)) archived.push(full);
+    }
+  };
+  if (existsSync(archive)) walk(archive);
+  for (const file of archived.sort()) {
+    const m = relative(archive, file).split(sep).join("/").match(
+      /^([^/]+)\/specs\/(.+)$/,
+    );
+    if (!m) continue;
+    const [, change, path] = m;
+    const target = join(ROOT, "openspec", "specs", path);
+    const rel = relative(ROOT, target);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    const named = existsSync(target) ? readFileSync(target, "utf8") : "";
+    // Named as a whole id: `…-US1-TC1` is not named by `…-US1-TC10`.
+    const namedHere = (id) =>
+      new RegExp(
+        `${unversioned(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\d)`,
+      ).test(named);
+    const left = [...caseIndex(ROOT, [file]).keys()].filter(
+      (id) => !live.has(unversioned(id)) && !namedHere(id),
+    );
+    if (left.length === 0) continue;
+    const shown = left.slice(0, 5).map((id) => `\`${id}\``).join(", ");
+    const more = left.length > 5 ? `, … and ${left.length - 5} more` : "";
+    record(
+      "warning",
+      rel,
+      1,
+      `${left.length} case(s) archived with \`${change}\` were never folded here: ${shown}${more} — ` +
+        "review them with `/tcs-review`, bringing each back as `draft` or naming what replaced it",
+    );
   }
 }
 
