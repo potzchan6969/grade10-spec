@@ -15,6 +15,11 @@ type CarouselProgressProps = ComponentProps<"nav">;
  * Figma `CarouselProgress` draws the item states (`inactive` | `active` |
  * `filling` | `complete`). Timed fill is driven in code by `durationMs`, not
  * a Figma prop. With no timer, `active` is solid `primary` like `complete`.
+ *
+ * Paint lives on an inner span. The button sizes to the track; a transparent
+ * `::after` expands the tap target without layout space. Keeping
+ * `overflow-hidden` off the button avoids the taller-track flash that hit
+ * when a stretched `::after` shared a clipped box with the width transition.
  */
 function CarouselProgress({
   className,
@@ -92,13 +97,10 @@ function CarouselProgressItem({
       aria-current={active ? "true" : undefined}
       aria-label={label}
       className={cn(
-        "relative inline-block shrink-0 appearance-none overflow-hidden rounded-full border-0 p-0 leading-none outline-none transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] focus-visible:ring-3 focus-visible:ring-ring/50 motion-reduce:transition-none",
-        TRACK_SIZE,
-        active
-          ? timed
-            ? "w-8 bg-background-strong"
-            : "w-8 bg-primary"
-          : "w-1.5 bg-background-strong opacity-80 hover:opacity-100",
+        "group relative inline-flex shrink-0 appearance-none items-center justify-center border-0 bg-transparent p-0 outline-none",
+        // Absolute hit target — layout stays track-sized (6px / 32px).
+        "after:absolute after:-inset-3 after:content-['']",
+        "focus-visible:ring-3 focus-visible:ring-ring/50",
         className,
       )}
       data-active={active ? "" : undefined}
@@ -106,23 +108,35 @@ function CarouselProgressItem({
       type={type}
       {...props}
     >
-      {timed ? (
-        <span
-          aria-hidden="true"
-          className="absolute top-0 left-0 h-full rounded-full bg-primary"
-          key={playKey}
-          onAnimationEnd={handleAnimationEnd}
-          style={
-            reduceMotion
-              ? { width: "100%" }
-              : {
-                  animation: `${FILL_ANIMATION} ${durationMs}ms linear forwards`,
-                  animationPlayState: paused ? "paused" : "running",
-                  width: "0%",
-                }
-          }
-        />
-      ) : null}
+      <span
+        aria-hidden="true"
+        className={cn(
+          "relative block overflow-hidden rounded-full transition-[width] duration-300 ease-[cubic-bezier(0.23,1,0.32,1)] motion-reduce:transition-none",
+          TRACK_SIZE,
+          active
+            ? timed
+              ? "w-8 bg-background-strong"
+              : "w-8 bg-primary"
+            : "w-1.5 bg-background-strong opacity-80 group-hover:opacity-100",
+        )}
+      >
+        {timed ? (
+          <span
+            className="absolute inset-y-0 left-0 h-full rounded-full bg-primary"
+            key={playKey}
+            onAnimationEnd={handleAnimationEnd}
+            style={
+              reduceMotion
+                ? { width: "100%" }
+                : {
+                    animation: `${FILL_ANIMATION} ${durationMs}ms linear forwards`,
+                    animationPlayState: paused ? "paused" : "running",
+                    width: "0%",
+                  }
+            }
+          />
+        ) : null}
+      </span>
     </button>
   );
 }
