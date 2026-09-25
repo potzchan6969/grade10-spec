@@ -2,6 +2,7 @@
 title: Sign-In
 spec: shared/auth/sign-in
 order: 1
+reviewed: 2026-09-25
 ---
 
 A person types their email and a sign-in link is emailed to it. Google appears
@@ -46,11 +47,11 @@ followed.
 A working unused link signs the person in. A link that cannot creates no
 session, and the person lands on the brand home with a toast.
 
-- 🚧 **Signed in** — the tab where the link was asked for shows the collector
+- **Signed in** — the tab where the link was asked for shows the collector
   signed in without being reloaded, and whatever they were stopped from doing
   carries on. It is tried once, and a card that sold out while they were in
   their inbox refuses the ordinary way — [Session](/p/shared/auth/session).
-- 🚧 **Settled on another device** — a surface still showing Check Your Email
+- **Settled on another device** — a surface still showing Check Your Email
   learns when that address signs in anywhere else, by any offered method, and
   ends its own wait with a message instead of counting toward a resend nobody
   needs. It gains no session of its own; only the device that actually signed
