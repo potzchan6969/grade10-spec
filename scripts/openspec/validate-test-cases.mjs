@@ -985,6 +985,32 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 }
 
+// --- a case's <v> and its trace rev are one number ----------------------
+// `<v>` in the case id and `rev` on its `trace:case` marker both count the
+// times what the case verifies has changed. Two counters for one fact drift -
+// the migration stamped `rev=1` over cases already at `-2` - so where a case
+// carries a marker, the two agree.
+{
+  for (const p of suites) {
+    const lines = readFileSync(p, "utf8").split("\n");
+    const rel = relative(ROOT, p);
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\b.*?\brev=(\d+)/.exec(lines[i]);
+      if (!marker) continue;
+      let j = i + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+      if (!heading || heading[2] === marker[1]) continue;
+      record(
+        "error",
+        rel,
+        j + 1,
+        `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      );
+    }
+  }
+}
+
 // --- archived cases the fold left behind --------------------------------
 // Warned, never refused: the archive is history, and a case may have been
 // renamed or superseded since. A case an archived change's suite held, whose

@@ -202,7 +202,8 @@ and are unchanged.
    coverage is the spec's**. What the skill adds:
 
    - **Id** — `<capability>-US<n>-TC<m>-<v>`; `n` from the journey, `TC`
-     from `1` under each journey, `<v>` from `1`
+     from `1` under each journey, `<v>` from `1`; a `trace:case` marker's
+     `rev` moves with `<v>`, never one without the other
    - **Order** — positive first, then empty, missing and failure, then
      destructive only where the scenarios state cancel, remove, withdraw or
      unwind

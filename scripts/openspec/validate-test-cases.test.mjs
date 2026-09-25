@@ -459,3 +459,30 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
     /1 case\(s\) archived with `2026-09-01-demo` were never folded here: `demo-alpha-US1-TC2-1` —/,
   );
 });
+
+// `<v>` and a trace marker's `rev` count the same changes; where a case
+// carries a marker the two agree.
+test("refuses a case whose trace marker rev differs from its <v>, and passes one that matches", () => {
+  const root = mkdtempSync(join(tmpdir(), "trace-rev-"));
+  const marked = (id, rev) =>
+    `<!-- trace:case id=g10.demo-alpha.TC-${id.slice(-4, -2)}x rev=${rev} covers=g10.demo-alpha.SC-abc -->\n### ${id}: A case\n\n* **Status:** draft\n`;
+  const file = join(root, "openspec/specs/demo/alpha/feature-tcs.md");
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(
+    file,
+    [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      marked("demo-alpha-US1-TC1-2", 1),
+      marked("demo-alpha-US1-TC2-2", 2),
+    ].join("\n"),
+  );
+  const out = run(root).stdout;
+  assert.match(
+    out,
+    /case `demo-alpha-US1-TC1-2` is at `<v>` 2 and its trace marker at `rev=1`/,
+  );
+  assert.doesNotMatch(out, /case `demo-alpha-US1-TC2-2` is at/);
+});

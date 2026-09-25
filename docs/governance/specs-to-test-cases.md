@@ -87,7 +87,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **A prefix never moves** — fixed at a capability's first ids; a renamed or moved capability goes on issuing what it issued. Read the ids that exist before issuing one; only a first id derives the prefix from the path
 - **Compact form in a suite** — the hyphen after `US` dropped, no zero-pad: `…-US-01` becomes the section `## …-US1: …` holding `…-US1-TC1-1`. The journeys file and the `**Trace:**` line keep the canonical `…-US-01`
 - **Cases number per journey from 1** — an issued id is permanent; a retired case is `deprecated`, never renumbered away; a new case takes the next unused `TC<m>`
-- **`<v>` tracks behaviour, not prose** — `1` as first written; it goes up only when the requirements change what the case verifies
+- **`<v>` tracks behaviour, not prose** — `1` as first written; it goes up only when the requirements change what the case verifies. A case under a `trace:case` marker ([`test-traceability.md`](test-traceability.md)) carries the same number as the marker's `rev`, and the two move together; `pnpm run tcs:validate` refuses a pair that differs
 
 | What happened | `<v>` | `Status` |
 | --- | --- | --- |
