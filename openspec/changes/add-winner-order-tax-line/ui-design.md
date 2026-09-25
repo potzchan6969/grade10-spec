@@ -58,21 +58,21 @@ that field yet.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Pre-invoice fees | Tax row present, value TBD (muted), Info tip with the Tax copy | `winner-order-US-01` |
-| Invoice with Tax | Tax row with a money value and the same Info tip, between Insurance and Payment Processing Fee | `winner-order-US-01` |
-| Invoice without Tax | No Tax row; other fee tips unchanged | `winner-order-US-01` |
+| Pre-invoice fees | Tax row present, value TBD (muted), Info tip with the Tax copy | `winner-order-SC-213` |
+| Invoice with Tax | Tax row with a money value and the same Info tip, between Insurance and Payment Processing Fee | `winner-order-SC-211` |
+| Invoice without Tax | No Tax row; other fee tips unchanged | `winner-order-SC-212` |
 
 ### Winner Order — Invoice and Receipt PDFs
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| PDF with Tax | Tax charge line between Insurance and Subtotal | `winner-order-US-01` |
-| PDF without Tax | No Tax charge line | `winner-order-US-01` |
+| PDF with Tax | Tax charge line between Insurance and Subtotal | `winner-order-SC-214` |
+| PDF without Tax | No Tax charge line | `winner-order-SC-209` |
 
 ### Operator quote and reissue
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Quote with Tax | Optional Tax amount entered, above zero | `post-sale-US-05` |
-| Quote without Tax | Tax field empty; send proceeds without a Tax line on the invoice | `post-sale-US-05` |
-| Tax of zero refused | Entering zero is refused (same shape as Insurance) | `post-sale-US-05` |
+| Quote with Tax | Optional Tax amount entered, above zero | `post-sale-SC-155` |
+| Quote without Tax | Tax field empty; send proceeds without a Tax line on the invoice | `post-sale-SC-156` |
+| Tax of zero refused | Entering zero is refused (same shape as Insurance) | `post-sale-SC-157` |

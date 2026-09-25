@@ -1,8 +1,7 @@
 schema: grade10-planning
+promoted_by: "@htonyl"
 created: 2026-09-24
 depends_on:
   - add-shipping-insurance-order-summary-tooltip
 hands:
   pm: "@jeffffej0909"
-awaiting:
-  specs: outline and requirements from /workflow-specify — Tax line on Order Summary, tip copy, pre-send TBD, omit when none, and operator quote field
