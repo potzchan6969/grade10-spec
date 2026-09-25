@@ -376,3 +376,44 @@ test("an approved file with a new draft reads reopened through its lapsed Review
     /carries a `\*\*Reviewed:\*\*` line but is not approved — a file that falls out/,
   );
 });
+
+// A feature run leaves a path a domain case walks to that case, and the
+// reconciliation's `**Covered at domain**` bullet names it; the domain case
+// has to exist and be live, or the scenario is walked by nothing.
+test("a Covered at domain line is refused when its domain case is missing or deprecated, and passes when it is live", () => {
+  const DOMAIN_CASE = (n, status) =>
+    [
+      `### demo-e2e-US1-TC${n}-1: The composed path, ${n}`,
+      "",
+      "**Classification:**",
+      "",
+      `* **Status:** ${status}`,
+      "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
+      "",
+    ].join("\n");
+  const root = store("// the story: demo-alpha-US1-TC1-1 demo-alpha-US1-TC3-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo-e2e-US1-TC1-1`",
+    "- **Covered at domain** — the thing is undone, walked by",
+    "  `demo-e2e-US1-TC2-1`",
+    "- **Covered at domain** — the thing is shared, walked by `demo-e2e-US1-TC9-1`",
+    "- **Covered at domain** — the thing is named, and no case",
+  ]);
+  const domain = join(root, "openspec/specs/demo/domain-tcs.md");
+  mkdirSync(dirname(domain), { recursive: true });
+  writeFileSync(
+    domain,
+    [
+      "# demo Test Cases",
+      "",
+      "## demo-e2e-US1: A path across the domain",
+      "",
+      DOMAIN_CASE(1, "actual"),
+      DOMAIN_CASE(2, "deprecated"),
+    ].join("\n"),
+  );
+  const out = run(root).stdout;
+  assert.doesNotMatch(out, /`demo-e2e-US1-TC1-1`, which/);
+  assert.match(out, /covered at domain by `demo-e2e-US1-TC2-1`, which is deprecated/);
+  assert.match(out, /covered at domain by `demo-e2e-US1-TC9-1`, which no `domain-tcs.md` holds/);
+  assert.match(out, /a \*\*Covered at domain\*\* line names no domain case/);
+});

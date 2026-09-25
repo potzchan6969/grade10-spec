@@ -922,6 +922,68 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   }
 }
 
+// --- covered at domain -------------------------------------------------
+// A feature run leaves a path a domain case already walks to that case, and
+// its reconciliation says so on a `- **Covered at domain** —` bullet naming
+// the domain case in full. The domain case is then the feature's verifier,
+// so it has to exist and still be live: an id no `domain-tcs.md` holds, or
+// one `deprecated`, leaves the scenario with no case at all.
+{
+  const domainCases = caseIndex(
+    ROOT,
+    findSuites(ROOT).filter((p) => levelOf(p) === "domain"),
+  );
+  const BULLET = /^\s*[-*]\s+/;
+  for (const p of suites) {
+    if (levelOf(p) !== "feature") continue;
+    const text = readFileSync(p, "utf8");
+    const span = sectionSpan(text, "Reconciliation");
+    if (!span) continue;
+    const rel = relative(ROOT, p);
+    const lines = text.split("\n");
+    for (let i = span.from; i < span.until; i++) {
+      if (!/^\s*[-*]\s+\*\*Covered at domain\*\*/.test(lines[i])) continue;
+      // A bullet may wrap: read on until a blank line or the next bullet.
+      let body = lines[i];
+      for (let j = i + 1; j < span.until; j++) {
+        const next = lines[j];
+        if (next.trim() === "" || BULLET.test(next) || /^[#|]/.test(next))
+          break;
+        body += ` ${next.trim()}`;
+      }
+      const ids = [
+        ...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g),
+      ].map((m) => m[1]);
+      if (ids.length === 0) {
+        record(
+          "error",
+          rel,
+          i + 1,
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+        );
+        continue;
+      }
+      for (const id of ids) {
+        const found = domainCases.get(id);
+        if (!found)
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which no \`domain-tcs.md\` holds — name the domain case that walks the path, or write the feature case back`,
+          );
+        else if (found.status === "deprecated")
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which is deprecated — the path is walked by nothing now; write the feature case back`,
+          );
+      }
+    }
+  }
+}
+
 if (args.requireSuites) {
   for (const d of specs) {
     if (existsSync(join(d, "feature-tcs.md"))) continue;
