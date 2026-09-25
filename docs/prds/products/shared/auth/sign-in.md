@@ -79,6 +79,9 @@ the page exactly as it was.
   dialog is already open, and opening the dialog dismisses it.
 - 🚧 **Every page** - the prompt can appear on any page a signed-out
   collector visits, not only a sign-in step.
+- 🚧 **Suppressed after a decline** - opening the sign-in dialog while the
+  prompt is showing counts as a decline once the dialog is closed with no
+  session; the prompt does not appear again for the rest of that visit.
 
 ::story{id="auth-sign-in-signinemailform--default" title="The email step"}
 
@@ -123,6 +126,7 @@ path, the link, beside Google.
 | Google One Tap and the sign-in dialog | Decided | The prompt yields to the dialog — suppressed while it is open, dismissed when it opens. | Product |
 | Google One Tap scope | Decided | Wherever Google sign-in is already brand-offered; a brand with no Google client id is unaffected until a separate change gives it one. | Product |
 | Google One Tap rollout | Decided | Ships to all eligible traffic at merge — no staged rollout, since the repository has no flag platform and the behavior reverts cleanly. | Product |
+| Google One Tap reappearance after a decline | Decided | Stays suppressed for the rest of the visit — re-popping it after an active decline reads as nagging. | Product |
 
 Measured on the share of email sign-ins that end in a session, from the send
 to the session.
