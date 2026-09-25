@@ -51,7 +51,7 @@
     grade10-site-auction-lot-status-SC-13.
   - Verification: lot-status and public-route tests, then `pnpm run test:backend`.
 
-## 5. Winner-order and payment references (grade10)
+## 5. Winner-order and payment references (grade10) (owner: @htonyl)
 
 - [ ] 5.1 Carry the stored listing code into the winner order as its payment
   reference, derive invoice IDs with a two-digit sequence that reaches `100`,
