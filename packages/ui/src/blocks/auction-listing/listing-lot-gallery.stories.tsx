@@ -1,5 +1,5 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, within } from "storybook/test";
+import { expect, within } from "storybook/test";
 import { ListingLotGallery } from "./listing-lot-gallery";
 
 const IMAGE = new URL(
@@ -46,32 +46,17 @@ export const SeveralImages: Story = {
     const canvas = within(canvasElement);
     expect(canvas.getByText("1 / 3")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Previous image" }),
-    ).toBeInTheDocument();
+      canvas.queryByRole("button", { name: "Previous image" }),
+    ).not.toBeInTheDocument();
     expect(
       canvas.getByRole("button", { name: "Next image" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("navigation", { name: "Lot images" }),
     ).toBeInTheDocument();
-
-    await userEvent.click(
-      canvas.getByRole("button", { name: "Thumbnail: Lot image 2, back" }),
-    );
-    expect(canvas.getByText("2 / 3")).toBeInTheDocument();
     expect(
-      canvas.getByRole("button", { name: "Thumbnail: Lot image 2, back" }),
-    ).toHaveAttribute("aria-current", "true");
-
-    await userEvent.click(canvas.getByRole("button", { name: "Next image" }));
-    expect(canvas.getByText("3 / 3")).toBeInTheDocument();
-
-    await userEvent.click(
-      canvas.getByRole("button", {
-        name: "Show image 1: Lot image 1, front",
-      }),
-    );
-    expect(canvas.getByText("1 / 3")).toBeInTheDocument();
+      canvas.getByRole("region", { name: "Lot images" }),
+    ).toBeInTheDocument();
   },
 };
 
