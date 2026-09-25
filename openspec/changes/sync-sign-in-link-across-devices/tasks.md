@@ -66,7 +66,7 @@ Needs `feature-tcs.md` reviewed (`/tcs-review sync-sign-in-link-across-devices`)
 - [x] 5.1 Walk `shared-auth-sign-in-US-10` end to end through the sign-in
       dialog on two browser contexts for one address, kept as the change's
       end-to-end suite
-- [ ] 5.2 Flip the cases the walk decides to automated with `pnpm run
+- [x] 5.2 Flip the cases the walk decides to automated with `pnpm run
       tcs:automated <case…> --decided-by <walk path>`, in the walk's own
       commit; name the ones that stay manual in the suite and in the walk's
       `rounds.md` row
