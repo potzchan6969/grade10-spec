@@ -3,7 +3,7 @@
 ### grade10-site-auction-auction-US-06: Collector reads Featured on the catalogue
 
 **As a** collector opening `/auction`,
-**I want** the operator's Featured slides when any are set — hero, title,
+**I want** the operator's Featured slides when any are set — front page image, title,
 status, countdown, current bid and Bid Now —
 **so that** the lots the house leads with are what I meet first.
 
