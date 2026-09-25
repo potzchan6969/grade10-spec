@@ -8,8 +8,10 @@ description: Plan and accept one OpenSpec change in one invocation: QA1 writes b
 `/planning-dev <change>` is the single planning entry point after the PM has
 settled the proposal, decisions and journeys, and the designer has added any
 needed UI design. It owns QA1, Dev, QA2, clarification, acceptance and
-publication. Durable specs hold the latest accepted contract; an immutable
-acceptance snapshot and fingerprint define what implementation delivers.
+publication. Durable specs hold the rolling latest accepted contract. The
+immutable acceptance snapshot and fingerprint preserve planning provenance;
+the first implementation claim records the durable contract baseline that
+archive will reconcile.
 
 Planning creates draft cases only. Human QA reviews and classifies them with
 `/tcs-review` after deployment makes the implementation available; manual
@@ -50,10 +52,11 @@ in fresh contexts. Patch non-anchor clarifications explicitly, then rerun QA2.
    --reviewed-by <human>`. An amendment names `--supersedes <fingerprint>`.
    Acceptance publishes the durable contract and preserves prior snapshots.
 
-`acceptance.json` version 1 records the change, baseline content fingerprint,
-reviewer, time and scoped artifact hashes. `implementation.json` version 1
-records the accepted fingerprint, repository commits and components. They are
-planning and engineering evidence, not QA execution evidence.
+`acceptance.json` version 2 records the change, baseline content fingerprint,
+reviewer, time, scoped artifact hashes and derived durable target paths and
+anchors. `implementation.json` version 2 records the accepted fingerprint, the
+first-claim durable commit and targets, repository commits and components. They
+are planning and engineering evidence, not QA execution evidence.
 
 ## Artifacts
 
@@ -72,12 +75,14 @@ implementation, verification, and a final end-to-end walk.
 
 ## After Implementation
 
-Implement the accepted snapshot and check compatibility with newer durable
-contracts. After engineering verification, record the accepted fingerprint,
-repository commits and components with `pnpm plan implementation`. Archive
-after that verification and before deployment. Archive preserves history and
-does not fold again or wait for human QA. After deployment, QA reviews with
-`/tcs-review` and executes manual cases with `/tcs-run-sheet` where needed.
+At the first task claim, `pnpm plan claim` records the published durable commit
+and derived targets. Implement against the rolling durable contract. After
+engineering verification, record repository commits and components with `pnpm
+plan implementation`. Archive compares the claim baseline with current targets:
+every difference needs a compatibility acknowledgement, and semantic changes
+name test or other evidence. Archive preserves history and does not fold again
+or wait for human QA. After deployment, QA reviews with `/tcs-review` and
+executes manual cases with `/tcs-run-sheet` where needed.
 
 ## Related
 

@@ -56,13 +56,13 @@ pnpm accept:preflight add-store-cross-sell
 pnpm spec:accept add-store-cross-sell --baseline <printed-fingerprint> --reviewed-by <human>
 ```
 
-Acceptance records the reviewer, timestamp, baseline fingerprint, and artifact
-hashes in `acceptance.json`; it also publishes the requirements and companion
-artifacts into `openspec/specs/` before implementation. The accepted snapshot is
-the implementation target for this change. If another change has since
-published, check the latest durable spec for compatibility and keep this
-change's accepted scope. An amendment names the prior fingerprint with
-`--supersedes <old-fingerprint>` and keeps earlier accepted snapshots.
+Acceptance records the reviewer, timestamp, baseline fingerprint, artifact
+hashes and derived contract targets in `acceptance.json`; it also publishes the
+requirements and companion artifacts into `openspec/specs/` before
+implementation. The accepted snapshot preserves planning evidence. The first
+task claim records the durable store commit and those targets. An amendment
+names the prior fingerprint with `--supersedes <old-fingerprint>` and keeps
+earlier accepted snapshots.
 
 New cases stay draft. Planning does not ask a human QA reviewer to approve or
 execute them. The same human's final acceptance covers the complete planning
@@ -71,9 +71,10 @@ output, including QA1 and QA2.
 ## Implement and Archive
 
 The application repository has no planning store of its own; it reads tasks and
-accepted contracts from this store. Claim and complete task groups there with
+accepted contracts from this store. The first claim records the durable baseline
+and target scope. Claim and complete task groups there with
 `/workflow-build add-store-cross-sell <group>`, keeping checks and implementation
-commits linked to the accepted fingerprint.
+commits linked to the historical accepted fingerprint and that baseline.
 
 After engineering verification, record implementation provenance in the app
 repository:
@@ -82,21 +83,23 @@ repository:
 pnpm plan implementation add-store-cross-sell --commit <sha> --component <deploy-component>
 ```
 
-The command writes `implementation.json` with the accepted fingerprint, repo
-commit and concrete deploy component. Archive the change after this verification
-and before deployment:
+The command completes `implementation.json` with the repository commit and
+concrete deploy component. Archive the change after this verification and before
+deployment:
 
 ```bash
 pnpm run archive:preflight add-store-cross-sell
 pnpm openspec archive add-store-cross-sell
 ```
 
-Archive preserves the accepted and implementation records. It does not fold
-requirements into durable specs a second time and does not wait for deployment.
-Deployment availability is tracked separately. After deployment makes the
-implementation available, human QA reviews the cases with `/tcs-review` and
-uses `/tcs-run-sheet` for manual execution where needed. A QA classification is
-not a test result.
+Archive compares the claim baseline with the current durable targets. Every
+difference needs a compatibility acknowledgement; a semantic difference names
+test or other evidence. Archive preserves the accepted and implementation
+records. It does not fold requirements into durable specs a second time and does
+not wait for deployment. Deployment availability is tracked separately. After
+deployment makes the implementation available, human QA reviews the cases with
+`/tcs-review` and uses `/tcs-run-sheet` for manual execution where needed. A QA
+classification is not a test result.
 
 ## Where This Goes Wrong
 
@@ -106,9 +109,9 @@ not a test result.
   restart them with fresh isolated agents.
 - **Accepting with open product or technical questions** - resolve them with
   the same human before `pnpm spec:accept`.
-- **Treating a later durable spec as this change's scope** - implement the
-  accepted snapshot and check it for compatibility with the latest durable
-  contract.
+- **Treating the accepted snapshot as an implementation lock** - preserve it as
+  planning evidence, record the baseline at first claim, and reconcile only the
+  claimed targets at archive.
 - **Waiting for deployment to archive** - archive after engineering
   verification and before deployment; QA review follows when the application is
   available.

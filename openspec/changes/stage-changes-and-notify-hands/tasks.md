@@ -68,9 +68,9 @@ Every group lands its tests in their own commit before its code, and its readers
 
 - [ ] 7.1 `pnpm plan hand <change> <role> @handle` writes `hands:` on the store's `main` as `claim` writes an owner, validating nothing: the store's rule refuses an unknown role or handle on the push
 - [ ] 7.2 Tests for `hand` in `grade10`: the commit it pushes, an unknown role passed through, and the board's link to the change's page
-- [ ] 7.3 `pnpm plan claim <change> <group>` verifies the accepted fingerprint and creates or preserves `implementation.json`; `pnpm plan implementation <change> [--commit <reachable-sha>] --component <app.name>[,...]` merges the app repository's reachable commit and exact component ids without replacing another repository's evidence
-- [ ] 7.4 `pnpm plan build-preflight <change>` reads the accepted fingerprint from the store's `origin/main`, compares it with the implementation target, and refuses a missing or changed acceptance before an app build
-- [ ] 7.5 Tests for claim, changed acceptance, implementation record merge, a commit not reachable from the app clone, and component ids outside the app registry
+- [ ] 7.3 `pnpm plan claim <change> <group>` verifies the accepted planning fingerprint and creates or preserves `implementation.json`; the first claim records the store's durable-spec commit and the accepted delta's derived target paths and anchors, and later claims preserve it. `pnpm plan implementation <change> [--commit <reachable-sha>] --component <app.name>[,...]` merges the app repository's reachable commit and exact component ids without replacing another repository's evidence
+- [ ] 7.4 `pnpm plan build-preflight <change>` reads the historical acceptance named by `implementation.json` and refuses missing or invalid evidence before an app build; a later accepted durable-spec update does not replace the first-claim baseline
+- [ ] 7.5 Tests for first-claim baseline capture, a later acceptance with changed target scope, implementation record merge, a commit not reachable from the app clone, and component ids outside the app registry
 
 ## 8. The walk (grade10-spec)
 
@@ -85,12 +85,13 @@ Needs `feature-tcs.md` reviewed (`/tcs-review stage-changes-and-notify-hands`) a
 ## 9. Acceptance, archive and deployment availability (grade10-spec)
 
 This group extends the completed stage plan while preserving its landed task
-history. Acceptance and implementation evidence are immutable inputs to the
-archive; deployment availability remains a separate projection.
+history. Acceptance remains immutable planning evidence. The first claim's durable-spec
+baseline is the archive comparison boundary; deployment availability remains a
+separate projection.
 
-- [ ] 9.1 `accept:preflight` and `spec:accept` compute a canonical fingerprint over scoped artifacts, record the review baseline and reviewer, write immutable snapshots, and preserve prior acceptances by fingerprint
+- [ ] 9.1 `accept:preflight` and `spec:accept` compute a canonical planning fingerprint over scoped artifacts and derived durable-spec targets, record the review baseline and reviewer, write immutable snapshots, and preserve prior acceptances by fingerprint
 - [ ] 9.2 Refuse acceptance while any Raised row is open or the review baseline changed; tests cover resolving every question and a later acceptance that names its superseded fingerprint
-- [ ] 9.3 `archive:preflight` verifies the current accepted fingerprint against `implementation.json` and reachable application commits, then archives the accepted fold without a second fold or deploy receipt
+- [ ] 9.3 `archive:preflight` verifies the historical acceptance named by `implementation.json`, reachable application commits, and the first-claim target scope against current durable specs. It requires a compatibility acknowledgement for every difference, with test or other evidence for semantic changes, then archives without a second fold or deploy receipt
 - [ ] 9.4 The GitHub Deployment reader projects newly, still, no longer, partial, unknown and stale status per component and environment for active and archived changes, with receipt freshness, actual ref and testing links
 - [ ] 9.5 `/availability` and the change detail render the same immutable receipt state; deployment id, environment, change, fingerprint and status deduplicate a replay
 - [ ] 9.6 Tests cover acceptance history, archive-before-deploy, partial and stale component evidence, and active and archived changes

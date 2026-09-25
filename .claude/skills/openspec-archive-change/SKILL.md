@@ -13,12 +13,15 @@ requirements a second time and does not wait for deployment.
    and verified. In the application repository, record the implemented
    contract and source commits with
    `pnpm plan implementation <change> [--commit <sha>] --component <deploy-component>...`.
-   The generated `implementation.json` identifies the accepted fingerprint,
+   The first claim records the durable contract baseline and target scope. The
+   generated `implementation.json` identifies the accepted fingerprint,
    repository commits and concrete components. A change implemented wholly in
    `grade10-spec` records its repository commit there.
 2. **Check acceptance and archive readiness.** Confirm `acceptance.json` names
-   the accepted content fingerprint and that the current artifacts still match
-   it. Run `pnpm run archive:preflight <change>` and resolve every refusal.
+   the accepted content fingerprint. Run `pnpm run archive:preflight <change>`.
+   It compares the claim baseline with the current durable target scope. Record
+   every difference in `compatibilityAcknowledgement`; an editorial entry names
+   its reason, and a semantic entry also names its test or other evidence.
 3. **Keep QA downstream.** Archive does not wait for human QA review or test
    execution. After deployment makes the implementation available, human QA
    reviews and classifies suites through `/tcs-review`; `/tcs-run-sheet` handles

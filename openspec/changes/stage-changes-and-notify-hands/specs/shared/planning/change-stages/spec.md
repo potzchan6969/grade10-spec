@@ -64,10 +64,10 @@ The stage says how far a change has got, and only what is on `main` proves it.
 | 2 | Designed | `ui-design.md` or `ui_waived:` · `tech-design.md` or `design_waived:` |
 | 3 | Specified | QA1 cases · independent Dev requirements, scenarios and technical design · QA2 reconciliation · every Raised row resolved |
 | 4 | Planned | `tasks.md` |
-| 5 | Accepted | `acceptance.json` records the immutable fingerprint of the reconciled plan after one human resolves every raised question |
-| 6 | Building | `implementation.json` carries the matching accepted fingerprint and a repository target |
+| 5 | Accepted | `acceptance.json` records the immutable planning fingerprint of the reconciled plan after one human resolves every raised question |
+| 6 | Building | `implementation.json` names that historical acceptance and the first-claim durable-spec baseline and target scope |
 | 7 | Implementation complete | every task is ticked · `implementation.json` records the repository commit and concrete application component ids |
-| 8 | Archived | the change's directory under the archive · archive preflight verifies the accepted fingerprint and implementation ancestry before folding |
+| 8 | Archived | the change's directory under the archive · archive preflight verifies historical acceptance, implementation ancestry and the claimed durable-spec scope, with acknowledgement for every difference, without folding |
 
 Deployment does not move a change between these stages. GitHub Deployment
 receipts are read separately for each environment and application component.
@@ -85,9 +85,10 @@ receipts are read separately for each environment and application component.
 The change SHALL reach Accepted only after QA2 has reconciled the independent
 QA1 and Dev readings and one human has resolved every raised question.
 
-- **Record** — `acceptance.json` SHALL name the change, canonical fingerprint,
-  review baseline, reviewer, acceptance time and the scoped artifacts whose
-  hashes form that fingerprint
+- **Record** — `acceptance.json` SHALL name the change, canonical planning
+  fingerprint, review baseline, reviewer, acceptance time, scoped artifacts
+  whose hashes form that fingerprint, and the durable paths and anchors the
+  accepted delta touches
 - **Immutable history** — each acceptance SHALL preserve its fingerprint and
   artifact snapshot; a later accepted revision SHALL name the fingerprint it
   supersedes and SHALL NOT rewrite earlier acceptance evidence
@@ -112,39 +113,48 @@ QA1 and Dev readings and one human has resolved every raised question.
 **WHEN** the plan is accepted again
 **THEN** the new immutable acceptance SHALL name the fingerprint it supersedes
 **AND** the earlier acceptance and its snapshot SHALL remain readable
-**AND** the stage SHALL be Accepted only when the current artifact hashes match the new fingerprint
+**AND** the new fingerprint SHALL be the current acceptance while both immutable snapshots remain readable
 
-### Requirement: Implementation is verified and archived before deployment
+### Requirement: A claim fixes archive scope while durable specs keep moving
 
-The implementation record SHALL preserve the accepted plan identity and prove
+The implementation record SHALL preserve immutable planning provenance, record
+the first implementation claim's durable-spec comparison boundary, and prove
 which application commit and components complete the change.
 
-- **Start** — `pnpm plan claim <change> <group>` SHALL verify acceptance and
-  create or preserve `implementation.json` with the accepted fingerprint
+- **Start** — `pnpm plan claim <change> <group>` SHALL verify acceptance and,
+  on the first claim, create `implementation.json` with the historical accepted
+  fingerprint, the store repository and commit, capture time, and the durable
+  paths and anchors the accepted delta touches. A later claim SHALL preserve
+  that baseline and target scope.
 - **Complete** — `implementation.json` SHALL record each repository, a
-  reachable commit and the exact application component ids built from the
-  accepted plan
-- **Archive** — preflight SHALL verify that record against the accepted
-  fingerprint and application repository ancestry before moving the change
-  into the archive; it SHALL NOT fold the specification a second time
+  reachable commit and the exact application component ids built for the
+  historical accepted plan.
+- **Archive** — preflight SHALL verify the named historical acceptance record
+  and application repository ancestry. It SHALL compare every claimed
+  durable-spec target with its current content. Every difference SHALL have a
+  compatibility acknowledgement that names the reviewer, time and reason and
+  lists every changed path and anchor once as editorial or semantic. A semantic
+  entry SHALL name test or other evidence. Preflight SHALL NOT infer that
+  distinction from Markdown and SHALL NOT fold the specification a second
+  time.
 - **Deployment order** — a GitHub Deployment receipt MAY arrive after archive
-  and SHALL NOT change the stage or rewrite either immutable record
+  and SHALL NOT change the stage or rewrite either immutable record.
 
-#### Scenario: shared-planning-change-stages-SC-81 - A stale implementation cannot be archived
-**Serves:** shared-planning-change-stages-US-02 - the engineer archives only the implementation built from the accepted plan
+#### Scenario: shared-planning-change-stages-SC-81 - An unacknowledged claimed contract change cannot be archived
+**Serves:** shared-planning-change-stages-US-02 - the engineer acknowledges a durable-spec change that affects the implementation scope
 
-**GIVEN** a change with checked tasks and an `implementation.json` fingerprint that differs from the current acceptance
-**WHEN** archive preflight runs
-**THEN** it SHALL refuse the archive and name the mismatch
+**GIVEN** a change with checked tasks, a valid historical acceptance record, and a claimed durable requirement whose current content differs from its first-claim baseline
+**WHEN** archive preflight runs without a compatibility acknowledgement for that requirement
+**THEN** it SHALL refuse the archive and name the changed target and missing acknowledgement
 **AND** the change SHALL remain outside the archive
 
-#### Scenario: shared-planning-change-stages-SC-82 - The archive is not folded again
-**Serves:** shared-planning-change-stages-US-02 - the engineer archives verified implementation without changing its accepted contract
+#### Scenario: shared-planning-change-stages-SC-82 - The archive preserves accepted evidence without another fold
+**Serves:** shared-planning-change-stages-US-02 - the engineer archives verified implementation while durable specs remain rolling facts
 
-**GIVEN** an accepted plan and a matching implementation record whose application commit is reachable
+**GIVEN** a historical accepted plan, a matching implementation record with its first-claim baseline, reachable application commit, and no target difference or an acknowledgement for every difference
 **WHEN** archive preflight and archive run
-**THEN** the archive SHALL contain the accepted specification and implementation record
-**AND** the fingerprint SHALL remain unchanged
+**THEN** the archive SHALL preserve the accepted snapshot and implementation record
+**AND** the historical fingerprint SHALL remain unchanged
 **AND** no second fold SHALL run
 
 ### Requirement: Deployment receipts describe component availability independently
@@ -797,8 +807,8 @@ Two moves that are not a stage landing still reach a person.
 - **Behind** — an artifact newly behind SHALL send one message to its hand,
   naming the artifact and what changed before it
 - **Implementation complete** — reaching this stage SHALL send one message to
-  QA naming the accepted fingerprint, completed application components and
-  the run sheet to walk
+  QA naming the historical accepted fingerprint, claimed durable-spec baseline,
+  completed application components and the run sheet to walk
 - **Deployment** — a receipt change SHALL post component availability to the
   configured planning channel, naming newly, still, no longer, partial,
   unknown or stale state with its receipt, resolved ref and testing links;
@@ -814,7 +824,7 @@ Two moves that are not a stage landing still reach a person.
 #### Scenario: shared-planning-change-stages-SC-45 - A change reaches Implementation complete
 **Serves:** shared-planning-change-stages-US-08 - QA verifies the completed implementation against the run sheet
 
-**GIVEN** a change with every task ticked and an `implementation.json` entry for the accepted fingerprint, repository commit and application components
+**GIVEN** a change with every task ticked and an `implementation.json` entry for the historical accepted fingerprint, first-claim durable-spec baseline, repository commit and application components
 **WHEN** a push moves the change to Implementation complete
 **THEN** one direct message SHALL be sent to its QA hand with the implementation identity and run sheet
 **AND** it SHALL NOT wait for a deployment receipt
@@ -967,8 +977,9 @@ The change page SHALL show, in this order down the reading column:
    and the handle that landed it
 5. on the pages: every 🚧 and ❓ line of each page section the proposal
    links, under its page's title and section, a ❓ line with its hand
-6. implementation: the accepted fingerprint, each repository commit and the
-   concrete application component ids recorded for the change
+6. implementation: the historical accepted fingerprint, first-claim
+   durable-spec baseline, each repository commit and the concrete application
+   component ids recorded for the change
 7. environment availability: each application's receipt-derived status,
    resolved deployed ref, component URL, manual and QA links, and receipt age;
    this row remains visible for archived changes
@@ -994,9 +1005,9 @@ The change page SHALL show, in this order down the reading column:
 #### Scenario: shared-planning-change-stages-SC-59 - Where the implementation is and where the days went
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads the implementation identity and where its days went
 
-**GIVEN** a change carrying an accepted fingerprint, an implementation record with one repository commit and two component ids, and a Proposed landing 3 days before its designer's first word
+**GIVEN** a change carrying a historical accepted fingerprint, an implementation record with a first-claim durable-spec baseline, one repository commit and two component ids, and a Proposed landing 3 days before its designer's first word
 **WHEN** the change page is read
-**THEN** implementation SHALL name the accepted fingerprint, repository commit and both component ids
+**THEN** implementation SHALL name the historical accepted fingerprint, claimed durable-spec baseline, repository commit and both component ids
 **AND** the handoff SHALL show 3 days against Proposed
 
 #### Scenario: shared-planning-change-stages-SC-71 - The change page lists the lines it marks

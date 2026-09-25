@@ -48,15 +48,19 @@ render is `shared/ui-*`. Adding a fifth application means a new top-level
 directory here plus a bullet in this list — and that is a product decision, not
 a filing one.
 
-These specs hold the latest accepted product contract. An active change carries
-its delta under
+These specs hold the rolling latest accepted product contract. An active change
+carries its delta under
 `openspec/changes/<change>/specs/<product>/<domain>/<capability>/`. Complete the
 isolated QA and Dev readings, reconcile the technical design and test plan, and
 resolve product questions before `spec:accept` folds the accepted contract here.
 
-Implementation targets the change's immutable acceptance fingerprint and
-artifact snapshot. Later accepted changes may advance this directory while that
-implementation continues. Archive preserves the verified implementation record
+Acceptance preserves the change's immutable planning fingerprint and artifact
+snapshot. The first implementation claim records that durable-spec commit and
+the paths and anchors the accepted delta touches. Later accepted changes may
+advance this directory while implementation continues. Archive compares only
+that claimed scope with the current durable specs. Every difference needs an
+explicit compatibility acknowledgement; a semantic acknowledgement names its
+test or other evidence. Archive preserves the verified implementation record
 and performs no second fold. The manual's environment availability view reads
 deployment evidence to show where an implementation is running.
 

@@ -254,13 +254,13 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 
 **Steps:**
 
-1. Land an `implementation.json` entry naming <change R>'s accepted fingerprint, repository commit and components on `main`.
+1. Land an `implementation.json` entry naming <change R>'s historical accepted fingerprint, first-claim durable-spec baseline, repository commit and components on `main`.
 2. Read <qa handle>'s direct messages.
 3. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* <qa handle> holds one implementation-complete message naming <change R>, its accepted fingerprint and the thread.
+* <qa handle> holds one implementation-complete message naming <change R>, its historical accepted fingerprint, claimed durable-spec baseline and the thread.
 * <qa handle> holds one staging message naming <change R>, the run sheet and build `1.4.0-rc2`.
 * Each of the two holds one message for that move, not two.
 
@@ -1584,7 +1584,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> has an accepted fingerprint, all tasks are ticked, and `implementation.json` names one reachable repository commit and two concrete application component ids. <qa handle> is its QA hand and the run sheet exists.
+<change R> has a historical accepted fingerprint, all tasks are ticked, and `implementation.json` names its first-claim durable-spec baseline, one reachable repository commit and two concrete application component ids. <qa handle> is its QA hand and the run sheet exists.
 
 **Steps:**
 
@@ -1594,7 +1594,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* One direct message names <change R>, Implementation complete, the accepted fingerprint, both components, the run sheet and its thread.
+* One direct message names <change R>, Implementation complete, the historical accepted fingerprint, claimed durable-spec baseline, both components, the run sheet and its thread.
 * The card sits in the Implementation complete lane.
 * The case suite remains draft until QA records a verdict after verification.
 
@@ -1643,7 +1643,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is Building with every task ticked but has no complete `implementation.json` record for the accepted fingerprint.
+<change R> is Building with every task ticked but has no complete `implementation.json` record for the historical accepted fingerprint and first-claim durable-spec baseline.
 
 **Steps:**
 
@@ -1671,7 +1671,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is Implementation complete and <qa handle> was told once for its accepted fingerprint.
+<change R> is Implementation complete and <qa handle> was told once for its historical accepted fingerprint.
 
 **Steps:**
 
@@ -1680,7 +1680,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 **Expected Results:**
 
-* <qa handle> holds one implementation-complete message for that fingerprint, not two.
+* <qa handle> holds one implementation-complete message for that historical fingerprint, not two.
 * The card stays in Implementation complete.
 
 ### shared-planning-change-stages-US8-TC5-1: Archive does not wait for a deployment receipt
@@ -1699,7 +1699,7 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> has an accepted fingerprint and a matching implementation record with reachable application commits and exact component ids. No GitHub Deployment receipt exists yet.
+<change R> has a historical accepted fingerprint and a matching implementation record with its first-claim durable-spec targets unchanged, reachable application commits and exact component ids. No GitHub Deployment receipt exists yet.
 
 **Steps:**
 
@@ -1710,8 +1710,38 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 **Expected Results:**
 
 * Archive preflight succeeds without a deployment receipt.
-* The change is Archived and its accepted fingerprint is unchanged.
+* The change is Archived and its historical accepted fingerprint is unchanged.
 * No second fold is run.
+
+### shared-planning-change-stages-US8-TC6-1: A changed claimed contract needs an acknowledgement before archive
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-08
+
+**Pre-conditions:**
+<change R> has a historical accepted fingerprint, a first-claim durable-spec baseline that targets one requirement, checked tasks, reachable application commits and exact component ids. The current durable requirement differs from that baseline.
+
+**Steps:**
+
+1. Run archive preflight with no `compatibilityAcknowledgement` in <change R>'s `implementation.json`.
+2. Add an acknowledgement for the changed requirement classified as semantic, with no evidence, and run archive preflight again.
+3. Name a test or other evidence for that semantic acknowledgement and run archive preflight again.
+
+**Expected Results:**
+
+* The first preflight refuses the archive and names the changed durable target and missing acknowledgement.
+* The second preflight refuses the archive because the semantic acknowledgement names no evidence.
+* The third preflight accepts the scoped difference. It does not infer whether the Markdown change is editorial or semantic.
 
 ## shared-planning-change-stages-US9: Hand learns an artifact of theirs is behind
 

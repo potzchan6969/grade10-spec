@@ -1,6 +1,6 @@
 # PRDs and OpenSpec: the PRD first, the accepted spec before implementation
 
-A capability's PRD under `docs/prds/` is written first, and it moves first: whoever learns a product detail writes it there before the artifact that depends on it. The product manager keeps the PRD whole. It holds what the product should be — what is accepted for delivery, what is being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` holds the latest accepted contract. The acceptance command publishes it before implementation, and records the immutable artifact snapshot and fingerprint that name each change's scope. An engineer implements that snapshot while checking it against the latest durable spec for compatibility. Deployment availability is tracked separately. Archive preserves history after implementation verification and before deployment; it does not fold requirements again.
+A capability's PRD under `docs/prds/` is written first, and it moves first: whoever learns a product detail writes it there before the artifact that depends on it. The product manager keeps the PRD whole. It holds what the product should be — what is accepted for delivery, what is being built, and what nobody has confirmed — each told apart by its mark. `openspec/specs/` holds the rolling latest accepted contract. Acceptance publishes it before implementation and preserves an immutable planning snapshot and fingerprint. The first implementation claim records the store commit and the affected contract paths and anchors. Archive compares that claimed surface with the current durable contract. Deployment availability is tracked separately.
 
 ## The rule
 
@@ -20,8 +20,8 @@ Every checkable requirement and every cross-repository contract lives in `opensp
 | --- | --- | --- | --- |
 | Primary question | What is this, what should it be, why, for whom, and what did we rule out? | What is changing, and how will it be delivered? | What is the latest accepted contract? |
 | Primary audience | Everyone who reads the manual; the decisions block is for product managers, designers, reviewers | Whoever is delivering the change | Engineers and implementation agents in consuming applications |
-| Authority | Canonical for what the product should be; its marks show accepted work and open decisions. Never restates a requirement. | Canonical for one proposed or accepted change and its immutable acceptance snapshot | Canonical for the latest accepted contract. The change's snapshot sets implementation scope; the latest spec supplies compatibility context |
-| Lifespan | Durable; written first, edited as intent changes, marks taken off after implementation verification | Archived after implementation is verified and before deployment | Durable; rewritten at acceptance, before implementation |
+| Authority | Canonical for what the product should be; its marks show accepted work and open decisions. Never restates a requirement. | Canonical for one proposed or accepted change and its immutable acceptance snapshot | Canonical for the rolling latest accepted contract. A claim baseline isolates the paths and anchors one implementation must reconcile |
+| Lifespan | Durable; written first, edited as intent changes, marks taken off after implementation verification | Archived after implementation is verified and before deployment | Durable; updated at acceptance and by later accepted refinement |
 | Typical content | The shape in prose with its marks, its values, the sets the reader meets, visuals; then users and jobs, non-goals, measurement, decisions, risks | Proposal, design, requirement deltas, journeys, suites, tasks | Requirements, scenarios, state behavior, accessibility obligations, content ownership, named component exports |
 | Content to keep out | Anything testable; a case, a state or a mechanism that only expands a stated line; today's gap and the intended fix, which belong to the proposal; a long draft, which belongs under `docs/references/` | The full product narrative | Class, hook, or library names — those are `tech-design.md`'s job |
 
@@ -49,11 +49,11 @@ A page over the budget is the expansion, not the essence: `pnpm check:manual` wa
 | A new problem, workflow, or idea is being explored | The page: ❓ lines and rows in its decisions block, a draft under `docs/references/` | Intent is on record before anything is confirmed |
 | A change is confirmed | The pages it touches first, each outcome a 🚧 line in the reader's words; then the change, whose deltas derive from those lines | The page is the roadmap the deltas are read against |
 | A requirement, state behavior, accessibility obligation, or export contract changes | The page's 🚧 line, then the delta in the change | The spec moves when the complete plan is accepted and published |
-| Another change has already accepted a requirement on the same capability | Accept an amendment against the recorded durable baseline, name its superseded fingerprint, and reconcile it with newer accepted content | The accepted snapshots preserve each change's own scope while the durable spec keeps the latest contract |
+| Another change has already accepted a requirement on the same capability | Accept an amendment against the recorded durable baseline, name its superseded fingerprint, and reconcile it with newer accepted content | The durable spec keeps the latest contract; a claimed implementation compares only its recorded paths and anchors |
 | A technical refactor changes no product-visible behavior | Change only, with no delta and no page edit | Nothing the product should be has changed |
 | The code does not do what is already settled | No change: a `fix` commit where the code is wrong, per [Bug Fixes](bug-fixes.md) | The fix restores what the product should be |
 | The rationale for a decision changes but the behavior does not | The page's product-decisions block | Nothing testable moved |
-| A change's implementation is verified | Record the implementation fingerprint and commits, take the delivered 🚧 marks off the page, then archive before deployment | Acceptance already published the contract; archive does not fold it again |
+| A change's implementation is verified | Complete the first-claim baseline with implementation commits and components, take the delivered 🚧 marks off the page, then archive before deployment | Acceptance already published the contract; archive compares the claimed scope without another fold |
 
 ## Maintenance workflow for future agents
 
@@ -103,11 +103,11 @@ For implementation work, create `openspec/changes/<kebab-case-name>/` with:
 - `tech-design.md` — implementation choices, interfaces, compatibility, and validation approach; and
 - `tasks.md` — small, checkable delivery steps.
 
-Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows.
+Update the active change when you learn an implementation constraint, split delivery, change a component export, or add or remove a validation step. When the constraint changes an outcome or a recorded product decision, the PRD moves first — a 🚧 or ❓ line — and the change follows. A small durable-spec or design refinement may land while implementation continues. It is reconciled at archive against the claim baseline; it does not rewrite the historical acceptance snapshot.
 
 The first three artifacts are written before planning-dev; `ui-design.md` is optional. `/planning-dev` writes `tech-design.md`, the spec outline and scenarios, `feature-tcs.md`, and `tasks.md` as one invocation. The same human clarifies open questions and accepts once after QA2. Run `pnpm accept:preflight <change>`; pass its `baselineFingerprint` to `pnpm spec:accept <change> --baseline <digest> --reviewed-by <human>`. Acceptance records the accepted snapshots and publishes the requirements into `openspec/specs/` before implementation. `tech-design.md` is owed by every change carrying a task group outside this store — the repository tag on the group heading says where the work lands, and an untagged group counts; `design_waived: <why>` in the manifest stands in for it, and `pnpm check:manual` refuses a change with neither. A later accepted amendment names the prior fingerprint with `--supersedes <old-fingerprint>` and retains its snapshot.
 
-That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there. Implement against the change's accepted snapshot and check it against the latest durable spec for compatibility. After implementation verification, run `pnpm plan implementation` to record the accepted fingerprint, repository commits and concrete deploy components. Archive before deployment; human QA review starts after deployment when the application is available.
+That is how the work reaches an engineer. The application repository has no planning shape of its own — its `openspec/` is config-only and resolves to this store — so nobody opens a change there. At the first task claim, `pnpm plan claim` records the published store commit and target paths and anchors in `implementation.json`. Implement against the rolling durable contract. After engineering verification, `pnpm plan implementation` records repository commits and concrete deploy components. Archive compares the claim baseline with current durable targets: each difference needs a compatibility acknowledgement, and a semantic difference names its test or other evidence. Archive before deployment; human QA review starts after deployment when the application is available.
 
 ### The change's record
 
@@ -131,7 +131,9 @@ That is how the work reaches an engineer. The application repository has no plan
 | `tasks_waived: "<who, why>"` | The owner, through `archive:preflight --tasks-waived` | At archive, with tasks still unchecked | `archive:preflight` |
 | `target`, `owner`, `owners`, `depends_on` | ❓ The manual reads them; no document says who writes them | ❓ | The boards |
 
-`acceptance.json` is a separate version 1 record, written by `pnpm spec:accept`. It carries the change id, baseline content fingerprint, `reviewedBy`, `acceptedAt`, and accepted artifact paths with SHA-256 digests. Each accepted snapshot is immutable; an amendment passes `--supersedes <old-fingerprint>` and keeps the prior snapshot. `implementation.json` is written by `pnpm plan implementation <change> [--commit <sha>] --component <deploy-component>...` after engineering verification. It carries version 1, the accepted fingerprint, and each repository, commit, and concrete component. The records identify which contract was reviewed and implemented. Neither is a deployment or QA verdict.
+`acceptance.json` is a separate version 2 record, written by `pnpm spec:accept`. It carries the change id, baseline content fingerprint, `reviewedBy`, `acceptedAt`, accepted artifact digests and the derived `contractTargets`: durable paths with their touched requirement headings, plus whole-file journey, suite and UI-design targets. Each accepted snapshot is immutable historical planning evidence; an amendment passes `--supersedes <old-fingerprint>` and keeps the prior snapshot.
+
+`implementation.json` version 2 is first created by `pnpm plan claim` and completed by `pnpm plan implementation <change> [--commit <sha>] --component <deploy-component>...`. It carries `acceptance.fingerprint`, `contractBaseline.repository`, `contractBaseline.commit`, `capturedAt`, the exact derived targets, and each repository, commit and concrete component. At archive, a difference in that scope needs `compatibilityAcknowledgement`: every changed path and anchor is classified `editorial` or `semantic`, with a reason; every semantic entry also names its test or other evidence. An unrelated durable change does not enter the comparison. Version 1 implementation records remain archivable under their accepted snapshot because their first claim predates baseline tracking. Neither record is a deployment or QA verdict.
 
 A question the record cannot answer belongs in `decisions.md`, whose `Decided` cell writes one open as `❓ <role> - recommended: <option>`: the ` - ` separator and the `recommended:` lead are the grammar the store reads, and a cell that opens ❓ without both is addressed to nobody and refuses the change's landings.
 
@@ -190,11 +192,12 @@ Component source lives in the application. This repository carries the contract 
 After implementation is verified and before deployment:
 
 1. complete the required task groups and validation; `pnpm run archive:preflight` refuses while a task is unchecked unless `tasks_waived: <who, why>` records the exception;
-2. write `implementation.json` from the application repository with the accepted fingerprint, repository commits and concrete deploy components;
-3. take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
-4. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records, tasks and `rounds.md`. Archive preserves planning and implementation history and does not fold requirements again;
-5. deploy from the accepted contract. After deployment makes the implementation available, human QA reviews cases with `/tcs-review` and uses `/tcs-run-sheet` for any manual execution. QA does not gate archive; case classification is not a pass/fail result;
-6. leave links between the durable spec, the page and the archive where they aid discovery.
+2. confirm the first task claim recorded `contractBaseline` in `implementation.json`; record the verified repository commits and concrete deploy components;
+3. run `pnpm run archive:preflight <change>`. It compares the claimed paths and anchors with the current durable contract. Add a compatibility acknowledgement for each difference; semantic entries name their evidence;
+4. take the 🚧 marks off outcomes this implementation verified. Deployment availability is recorded separately. Run `pnpm check:manual` after page changes;
+5. archive at `openspec/changes/archive/YYYY-MM-DD-<change-name>/`, keeping the accepted snapshot, acceptance and implementation records, tasks and `rounds.md`. Archive preserves planning and implementation history and does not fold requirements again;
+6. deploy from the accepted contract. After deployment makes the implementation available, human QA reviews cases with `/tcs-review` and uses `/tcs-run-sheet` for any manual execution. QA does not gate archive; case classification is not a pass/fail result;
+7. leave links between the durable spec, the page and the archive where they aid discovery.
 
 ## Fast decision guide
 
