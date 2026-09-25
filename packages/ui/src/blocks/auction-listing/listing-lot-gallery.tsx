@@ -354,7 +354,6 @@ function ListingLotGallery({
               {images.map((slide, slideIndex) => (
                 <CarouselProgressItem
                   active={slideIndex === safeIndex}
-                  className="after:absolute after:-inset-3 after:content-['']"
                   key={`${slide.src}:${slide.alt}`}
                   label={`Show image ${slideIndex + 1}: ${slide.alt}`}
                   onClick={() => goTo(slideIndex)}

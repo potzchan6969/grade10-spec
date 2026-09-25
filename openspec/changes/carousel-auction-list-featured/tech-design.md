@@ -85,11 +85,23 @@ Replace busy `CatalogueView` chrome on `/auction` with Featured + All
 auctions. Promote `FeaturedAuctionsBanner` into `@grade10/ui` when the export
 contract lands. Watch stays the existing watchlist control on cards.
 
-### Live bid on the banner
+### Live bid and clock on the banner
 
 Reuse public listing summary bid facts and
 `ListingRollingMoneyDisplay` / countdown on the same refetch cadence as
-catalogue cards; no banner websocket.
+catalogue cards; no banner websocket. On Active, roll the current bid only
+when the served amount **increases** after first paint. Relative **Ends in** /
+**Opens in** uses the list-card short remaining form (not the lot-page rolling
+digit countdown). Extended bidding keeps LIVE BIDDING and Ends in — no Extended
+label — and the recorded close moves with the same freshness as the live bid.
+Active slides offer **Bid Now**; Upcoming slides offer **View Auction**. Either
+opens that lot's details page.
+
+### Front page image display fallback
+
+Upload and storage stay slot-owned (never a gallery picker). If the front page
+image URL fails to load in the banner, fall back to the lot’s first gallery
+image, else the stage’s default background colour — no broken-image chrome.
 
 ## Database Schema
 

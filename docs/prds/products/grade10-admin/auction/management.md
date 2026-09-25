@@ -127,7 +127,9 @@ Operator-curated slides on the collector catalogue's Featured band —
   page image is not shown on `/auction`. Ended listings cannot fill a slot
 - 🚧 **Front page image** — one image per slot, uploaded for the carousel; not
   picked from the listing gallery and not the campaign cover. It is the banner
-  background and the slab on that slide
+  background and the slab on that slide. If it fails to load on the site, the
+  slide uses the lot’s first gallery image, or the stage’s default background
+  colour if that is missing too — no broken-image chrome
 
 ## Post-Sale Queue
 

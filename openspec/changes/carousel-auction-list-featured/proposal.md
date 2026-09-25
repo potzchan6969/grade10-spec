@@ -17,16 +17,20 @@ instrumented.
 ## What Changes
 
 - **Operator-curated Featured** — at most three ordered slots; each binds one
-  published Active or Upcoming lot and one front page image the operator uploads for
-  that slot.
+  published Active or Upcoming lot and one **front page image** the operator
+  uploads for that slot (banner background and slab as that single asset). A
+  failed load falls back to the lot’s first gallery image, else the stage’s
+  default background colour.
 - **Carousel banner on `/auction`** — when at least one slot is set: full-width
-  slide with that front page image as banner and slab, title, status, client countdown from
-  the served close or open, current bid with a rolling number when it changes,
-  Bid Now to the lot, and progress dots.
+  slide with that front page image, title, status (LIVE BIDDING + live dot when
+  Active; UPCOMING with no dot when Upcoming), relative Ends in / Opens in
+  (list-card short form; no Extended label; close moves with live bid
+  freshness), money (Active rolls on increase after first paint), Bid Now or
+  View Auction by status, and progress dots when more than one slide.
 - **Quiet catalogue only** — Featured (when present) then All auctions; no
   category tiles and no busy filter in this change.
 - **Watch from All auctions** — the same watch as the lot page and My Auctions;
-  no list-local watch rules.
+  no list-local watch rules. List cards do not live-roll the bid in this change.
 
 ## Non-Goals
 

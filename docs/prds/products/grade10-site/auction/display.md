@@ -67,12 +67,18 @@ the one a search engine keeps.
 
 - 🚧 **Featured** — a full-width carousel when at least one slide is set. Each
   slide is an operator-picked listing with one **front page image** uploaded
-  for that slot (not a gallery pick). The site loads Featured from its own
-  public read, separate from All auctions. The slide shows that image as the
-  banner and the lot slab, the lot title, its status, a client countdown from
-  the served close or open, the current bid with a rolling number when the
-  amount changes, and Bid Now to the lot. Progress dots advance the slides.
-  The section is headed Featured auctions —
+  for that slot (banner and slab as that single asset; not a gallery pick for
+  upload). The site loads Featured from its own public read, separate from All
+  auctions. The slide shows that image, the lot title, its status (LIVE BIDDING
+  with a live dot when Active; UPCOMING with no dot when Upcoming), a client
+  countdown from the served close or open as relative **Ends in** / **Opens in**
+  in the same short form as All auctions cards, the current or starting bid
+  (Active rolls when the amount increases after first paint), and Bid Now when
+  Active or View Auction otherwise — either opens that lot's details page.
+  Extended bidding keeps LIVE BIDDING and
+  Ends in to the recorded close — no Extended label — and that close moves with
+  the same freshness as the live current bid. Progress dots advance the slides
+  when more than one is set. The section is headed Featured auctions —
   [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
 - 🚧 **No category section** — category tiles and the busy filter stay off this
   page until a later change; quiet layout is the only layout

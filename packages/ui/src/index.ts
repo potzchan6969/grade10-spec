@@ -90,6 +90,10 @@ export {
   type AuctionCardWhen,
 } from "./blocks/auction-listing/auction-card";
 export {
+  ListingRollingMoneyDisplay,
+  type ListingRollingMoneyDisplayProps,
+} from "./blocks/auction-listing/listing-rolling-money-display";
+export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
   type ListingAgeVerificationDialogProps,

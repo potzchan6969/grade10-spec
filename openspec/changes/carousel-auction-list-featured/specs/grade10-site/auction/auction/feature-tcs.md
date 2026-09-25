@@ -46,9 +46,9 @@ status, countdown, current bid and Bid Now —,
 **Expected Results:**
 
 * Featured band is present with one slide.
-* The slide shows `<front page image>` as banner and slab, the lot title, status, a client countdown, the current bid, and Bid Now.
+* The slide shows `<front page image>` as banner and slab, the lot title, LIVE BIDDING with a live status dot, relative Ends in, the current bid, and Bid Now.
 
-### grade10-site-auction-auction-US6-TC02-1: Current bid rolls when the served amount changes
+### grade10-site-auction-auction-US6-TC02-1: Current bid rolls when the served amount increases
 
 **Classification:**
 
@@ -74,18 +74,18 @@ status, countdown, current bid and Bid Now —,
 | --- | --- |
 | `<featured lot>` | A published Active lot on a complete Featured slide |
 | `<bid before>` | The current bid amount shown on the slide |
-| `<bid after>` | A higher served current bid for the same lot |
+| `<bid after>` | A **higher** served current bid for the same lot after first paint |
 
 **Steps:**
 
-1. Read the current bid on the Featured slide.
+1. Read the current bid on the Featured slide after first paint.
 2. Let the served current bid for `<featured lot>` become `<bid after>`.
 3. Read the current bid on the Featured slide.
 
 **Expected Results:**
 
 * Step 1 shows `<bid before>`.
-* Step 3 shows `<bid after>` with a rolling number as the amount changes.
+* Step 3 shows `<bid after>` with a rolling number as the amount increases.
 
 ### grade10-site-auction-auction-US6-TC03-1: Client countdown uses served close or open by lot status
 
@@ -111,19 +111,20 @@ Runs once per row of **Test data**.
 
 **Test data:**
 
-| Lot status | Served time | Countdown target |
+| Lot status | Served time | Countdown |
 | --- | --- | --- |
-| Active | Served close | Counts down to the served close |
-| Upcoming | Served open | Counts down to the served open |
+| Active | Served close | Relative Ends in to the served close |
+| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction |
 
 **Steps:**
 
 1. Navigate to `<grade10 auction catalogue url>`.
-2. Read the countdown on the Featured slide.
+2. Read the countdown and status chrome on the Featured slide.
 
 **Expected Results:**
 
-* The countdown targets the row's served time as the row states.
+* The countdown matches the row (Ends in or Opens in).
+* Upcoming shows UPCOMING with no live status dot and View Auction.
 
 ### grade10-site-auction-auction-US6-TC04-1: Three Featured slides appear in operator order
 
@@ -309,13 +310,14 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-auction-auction-US8: Collector opens a Featured lot to bid
+## grade10-site-auction-auction-US8: Collector opens a Featured lot
 
 **As a** collector on a Featured slide,
-**I want** Bid Now to open that lot's page,
-**so that** I can bid from the lead the catalogue showed me.
+**I want** Bid Now when the lot is Active, or View Auction when it is Upcoming,
+to open that lot's details page,
+**so that** I land on the lot the catalogue led with.
 
-### grade10-site-auction-auction-US8-TC01-1: Bid Now opens the featured lot page
+### grade10-site-auction-auction-US8-TC01-1: Bid Now opens an Active lot details page
 
 **Classification:**
 
@@ -338,8 +340,8 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<featured lot>` | The published lot on the visible Featured slide |
-| `<lot page url>` | That lot's page address |
+| `<featured lot>` | A published **Active** lot on the visible Featured slide |
+| `<lot page url>` | That lot's details page address |
 
 **Steps:**
 
@@ -348,9 +350,44 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The browser opens `<lot page url>` for `<featured lot>`.
+* The browser opens `<lot page url>` — the details page for `<featured lot>`.
 
-### grade10-site-auction-auction-US8-TC02-1: Bid Now on a later slide opens that slide's lot
+### grade10-site-auction-auction-US8-TC03-1: View Auction opens an Upcoming lot details page
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-08
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>` with a complete Featured slide for `<upcoming lot>` visible.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<upcoming lot>` | A published Upcoming lot on the visible Featured slide |
+| `<lot page url>` | That lot's details page address |
+
+**Steps:**
+
+1. Activate View Auction on the Featured slide.
+2. Read the page that opens.
+
+**Expected Results:**
+
+* The browser opens `<lot page url>` — the details page for `<upcoming lot>`.
+
+### grade10-site-auction-auction-US8-TC02-1: Bid Now on a later Active slide opens that slide's lot
 
 **Classification:**
 
@@ -374,9 +411,9 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<lot A>` | Published lot in Featured slot 1 |
-| `<lot B>` | Published lot in Featured slot 2 |
-| `<lot B page url>` | `<lot B>`'s page address |
+| `<lot A>` | Published **Active** lot in Featured slot 1 |
+| `<lot B>` | Published **Active** lot in Featured slot 2 |
+| `<lot B page url>` | `<lot B>`'s details page address |
 
 **Steps:**
 
@@ -385,7 +422,7 @@ Runs once per row of **Test data**.
 
 **Expected Results:**
 
-* The browser opens `<lot B page url>`, not `<lot A>`'s page.
+* The browser opens `<lot B page url>` — the details page for `<lot B>`, not `<lot A>`.
 
 ---
 
@@ -689,6 +726,8 @@ Runs once per row of **Test data**.
 - Incomplete slot not shown → `grade10-admin-auction-featured-SC-02` (site coverage via SC-30)
 - Same lot in two slots refused → `grade10-admin-auction-featured-SC-06`
 - Replace in place → stated on fill requirement; covered by fill scenarios
+- View Auction on Upcoming Featured → `grade10-site-auction-auction-SC-58`
+- Bid rolls only on increase after first paint → `grade10-site-auction-auction-SC-32`
 
 ### Raised, rejected
 - Auto-advance as a required product behaviour — journey and decisions name the progress control; auto-play is CarouselProgress presentation only
