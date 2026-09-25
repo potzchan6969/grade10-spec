@@ -88,7 +88,9 @@ None yet.
 
 Lines scoped narrower than the store, one `###` per scope, by its path (`grade10-site/store`, `grade10-site/auction/auction`).
 
-None yet.
+### grade10-site/auction
+
+- 2026-09-25, grade10-site/auction/domain-tcs.md: Two bidders use separate sessions. A maximum is entered in the custom maximum on the bid panel.
 
 ## Refused
 
