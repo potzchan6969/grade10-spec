@@ -2,7 +2,7 @@
 title: Product Listing Blocks
 spec: shared/ui/store-product-listing
 order: 4
-reviewed: 2026-09-11
+reviewed: 2026-09-25
 ---
 
 This is the page a shopper browses a category on. A sidebar carries a heading, a
@@ -22,7 +22,7 @@ a sold-out tile still opens its product, sold-out treatment and all —
 [You May Also Like](/p/grade10-site/store/cross-sell), and the
 [Main Page](/p/grade10-site/store/home)'s row of cards
 
-🚧 **Cart on a small screen** — where the tile sells, the round cart control
+**Cart on a small screen** — where the tile sells, the round cart control
 stays visible without hover on a narrow viewport and on touch; on a wide
 viewport with a fine pointer it still appears on hover or keyboard focus.
 

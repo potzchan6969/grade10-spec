@@ -2,7 +2,7 @@
 title: Product Listing
 spec: grade10-site/store/product-listing
 order: 2
-reviewed: 2026-09-11
+reviewed: 2026-09-25
 ---
 
 The product listing lets collectors browse the catalogue and open a product.
@@ -35,7 +35,7 @@ The product listing lets collectors browse the catalogue and open a product.
 - 🚧 **Worlds and Types as tabs on a small screen** — inside the filter drawer
   the two facet groups sit as tabs so expanding worlds does not push types
   down the scroll; the wide sidebar still stacks them
-- 🚧 **Cart on a small screen** — where a tile sells, the cart control stays
+- **Cart on a small screen** — where a tile sells, the cart control stays
   visible without hover on a narrow viewport and on touch
 - **Search and sort** — both describe the whole catalogue, never the cards
   already on screen; the menu offers latest, lowest price and highest price
