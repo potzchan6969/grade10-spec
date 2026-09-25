@@ -654,7 +654,7 @@ hold is being let go.
 **Pre-conditions:**
 
 * customer A leads <listing_8> with maximum <user A maximum> and is on its lot page.
-* customer B is signed in with a linked card and is on <listing_8>.
+* customer B is signed in with a linked card, on a separate session, on the same lot page.
 * <listing_8> is in extended bidding, and the recorded close is <time left before bid> away.
 
 **Test data:**
@@ -670,14 +670,15 @@ hold is being let go.
 
 **Steps:**
 
-1. As customer A, read Time left.
-2. As customer B, commit a maximum of <user B maximum>.
+1. As customer A, read Time left on the lot page.
+2. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
 3. As customer A, read Time left on the open lot page.
-4. Wait one <extension duration> with no further bid.
+4. Wait <extension duration> with no further bid.
 
 **Expected Results:**
 
-* Grade10 raises customer A's bid, and Time left shows <extension duration>.
+* Highest bid is above <leader price>, and customer A still leads.
+* Time left shows <extension duration>.
 * The lot closes, and no further bid is placed.
 
 ## grade10-site-auction-e2e-US08: Collector's private bidding facts stay private
@@ -782,20 +783,20 @@ them.
 **Pre-conditions:**
 
 * Bid-time holds are off.
-* customer A is signed in with a linked card on an open listing.
-* customer B can commit a higher valid maximum on that listing.
+* customer A is signed in with a linked card and is on the lot page for an open listing.
+* customer B is signed in with a linked card, on a separate session, and can bid on that listing.
 
 **Steps:**
 
-1. As customer A, submit a valid first bid.
-2. As customer B, submit a higher maximum.
-3. Read the bid panel and the bid-time holds.
+1. As customer A, enter a valid first maximum in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter a higher maximum in the custom maximum on the same lot and confirm the bid.
+3. Read the bid panel.
 
 **Expected Results:**
 
-* The first bid is accepted, and Change is unavailable.
+* Step 1 accepts the bid, and Change is unavailable.
 * The two maxima resolve by the listing's bid rules.
-* No bid-time hold is created or awaited.
+* The bid stands at once, and no bid-time hold is created or awaited.
 
 ---
 
