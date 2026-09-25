@@ -12,3 +12,4 @@ Written by the landing, in the landing's own commit.
 | 5 | specs | simpler, verifier | Featured catalogue and Manage Featured requirements with dedicated publicList and front page image | - | - |
 | 6 | ui-design | simpler, verifier | Close Featured design states on issued scenario ids | - | - |
 | 7 | test-cases | simpler, verifier | Blind Featured suites reconciled to scenarios for site auction and admin featured | - | - |
+| 8 | tasks | order, tests-first, end-to-end, simpler, verifier | Delivery groups for Featured slots, publicList, Manage Featured, catalogue banner | - | - |
