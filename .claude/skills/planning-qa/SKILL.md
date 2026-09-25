@@ -246,14 +246,15 @@ sees nothing else.
 `user-journeys.md`, `decisions.md` - its `## Raised` table included, which says
 what earlier runs asked and what came of it - `ui-design.md` where the change
 has one, with its state dispositions stripped, the linked PRD sections, and the
-existing `feature-tcs.md` for id continuity, with `## Reconciliation` stripped.
+existing `feature-tcs.md` for id continuity and the domain suite above, both
+with `## Reconciliation` stripped.
 
 `decisions.md` and `ui-design.md` both go in for the same reason: neither holds
 a requirement, so neither costs blindness, and a reader who cannot see the
 non-goals writes cases for what the interview ruled out — which comes back as a
 finding against scenarios that were right.
 
-**Excluded:** `openspec/specs/` entirely, `openspec/changes/archive/` entirely,
+**Excluded:** `openspec/specs/` beyond the domain suite, `openspec/changes/archive/` entirely,
 and any `## Requirements` section anywhere.
 
 The archive exclusion is not housekeeping. An archived change keeps an
@@ -392,7 +393,7 @@ Two skills do the work, and they are the whole workflow:
 **Top down, both times.** Platform, then product, then domain, then feature.
 Writing, the higher file names the paths and the level below covers what they
 do not reach — the refusals, the empty states — rather than re-testing a path
-from underneath; a trim made before the file above exists is a guess.
+from underneath; the feature pass leaves the domain draft's paths to it.
 Reviewing, the same order, so a suite is trimmed against something approved and
 the higher level's approved cases are the house-style evidence the reviews
 below inherit.
@@ -413,9 +414,9 @@ or an `approved` file, and shows an existing suite before touching it.
 
 ## When each runs
 
-**The blind pass runs before the scenarios**: as soon as the journeys and the
-outline are written, so the second reading is taken from a suite that never saw
-them.
+**The blind pass runs before the scenarios**, after the levels above it: as
+soon as the journeys and the outline are written, so the second reading is
+taken from a suite that never saw them.
 
 ## What a suite owes its capability
 

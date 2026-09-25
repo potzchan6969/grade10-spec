@@ -24,6 +24,9 @@ nothing else is.
 
 ## The Blind Readings Are the Challenge
 
+- **Levels first** — a domain or product hit under the rulebook's **When a
+  Change Touches a Suite Above It** runs that level's `/spec-to-tcs` before
+  the readings, so the blind suite reads its draft
 - **Challenge** — the two independent readings of the change's anchors: the
   scenarios and the blind suite, neither reader seeing the other's output
 - **Verify** — their reconciliation, taken by the run that took both readings.

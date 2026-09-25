@@ -20,8 +20,8 @@ A **feature** suite is written **blind**: by a reader who cannot see the spec's 
 
 A feature run reads a bundle the caller assembles, and nothing outside it.
 
-- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` — the goals and the non-goals, so no case is written against something the interview ruled out, and its `## Raised` table, which is what earlier runs asked and what came of it — its `ui-design.md` where one exists — written before the requirements, with its states tied to anchors rather than scenario ids, and with the dispositions the second requirements pass wrote onto those bullets stripped — the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time
-- **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
+- **Included** — `## Purpose` and `## Feature set` from the capability's `spec.md`, its `user-journeys.md`, the change's `proposal.md`, its `decisions.md` — the goals and the non-goals, so no case is written against something the interview ruled out, and its `## Raised` table, which is what earlier runs asked and what came of it — its `ui-design.md` where one exists — written before the requirements, with its states tied to anchors rather than scenario ids, and with the dispositions the second requirements pass wrote onto those bullets stripped — the linked pages under `docs/prds/`, `openspec/config.yaml`'s `context`, the existing `feature-tcs.md` for id continuity with its `## Reconciliation` stripped, and that suite's `## Settled` — the questions earlier runs asked and had answered, which is what keeps a refused reading from being raised again every time — and the domain suite above the capability, the change's `domain-tcs.md` or else the durable one, with its `## Reconciliation` stripped: its cases are composed from journeys and name no scenario, so reading them costs no blindness, and it is how a feature run knows which paths are already walked (**Across levels**)
+- **Excluded** — every `## Requirements` section, `openspec/specs/` beyond the two included sections and the domain suite, and `openspec/changes/archive/` entirely. An archived change keeps an un-stripped `## Reconciliation` naming scenario ids, so reading archive reopens the leak invisibly on the next change to that capability
 - **Recorded** — the `## Reconciliation` Run line names the bundle: what the pass read, and what it was denied. Nothing in this store computes or verifies a digest of it, so the line is the run's own statement, not proof; a hash written there says only that somebody wrote a hash
 - **Assembled by hand where no caller built one** — a person running the skill directly assembles it and says so in the report. Reading the requirements "just to check" is how the property is lost, and nothing downstream can detect that it was
 - **An empty `## Raised`, run after run, is the failure signal** — and the only one this store can actually read. It sits in the change's `decisions.md`, and `pnpm check:manual` warns on an empty one. The Run line says what the reader saw, never how it read. A second reading that asks nothing, several runs running, has either stopped being blind or stopped being a different method, and the suite is not passed on that basis until someone has checked why
@@ -51,6 +51,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | A case carries behaviour **nobody ever decided** | Stop and ask the author |
 | A case carries behaviour **nobody present can settle** | Keep the case `draft` with `**Blocked:** <who settles it>` |
 | A scenario no case reaches | Add a case, or `**Out of suite:**` naming where it is verified instead |
+| A scenario a domain case already walks, and the feature run left to it | A `- **Covered at domain** —` bullet naming the domain case in backticks and in full, `` `grade10-site-auction-e2e-US1-TC1-1` ``, in place of a feature case; `pnpm run tcs:validate` refuses an id no `domain-tcs.md` holds, or one `deprecated` |
 | The two readings **state opposite things** | Stop and ask the author |
 
 - **A contradiction is never resolved by the run** — where a case and a scenario both describe the same behaviour and disagree, one of them is wrong and nothing in the material says which. Filing it as a misreading is how the blind reading gets overruled by the reading it exists to check, so it goes to the author like any undecided behaviour
@@ -59,6 +60,7 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **Blocked is not rejected** — a question nobody could answer is not a misreading, and filing it as one deletes the most valuable thing the pass produces. The case stays, a ❓ goes on the PRD, an open question goes on the proposal, and no scenario is written
 - **An escalated or deferred row is written here as well as in `decisions.md`** — that file archives with the change and is folded nowhere, so a row landing only there leaves the next blind pass with no record of what was asked. The landing says what was decided; this section says what the run did with the case, and `## Settled` carries the answer forward
 - **Out of suite names its verifier** — a consuming repository's build and type check, a database constraint, a design review, a higher-level suite. A scenario that can name no such place is a hole, not an exemption
+- **Covered at domain** — a scenario the feature run left to a domain case names that case, and the domain case is its verifier the way a higher-level suite is for **Out of suite**. It names a case, not a scenario, so the id survives the archive strip; if the domain case is later deprecated or rewritten, the feature suite owes the case back
 - **Manual names what a person drives** — `### Manual` carries a `| Manual | Why |` table, one row per case no automated test decides, and that row is where the reason lives. The row names the part a person walks — a message typed in a thread, a tab in the run spreadsheet, a deploy. Where a test already proves some of it, the row names that test and what the case walks beyond it. An automated case names its test on the case itself, on its Decided-by line, and is left off the run sheet
 - **A credited test carries the case id** — a legend above the table binds each name a row uses to a path, `` - <name> - `<path>`, in this store `` or `` in the application repository ``; a test in this store that a row credits cites the row's case id, and `pnpm run tcs:validate` refuses one that does not, and a legend path this store does not hold; a path in the application repository is checked where that repository ticks the group
 - **A row waiting on a walk names it** — a row whose walk nobody has run yet reads `to be walked in <the walk>`, and the run that runs the lane rewrites the rows to what the walk reached
@@ -101,13 +103,13 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 | `platform` | `openspec/specs/platform-tcs.md` | paths across products | every product's `user-journeys.md`, the pages under `docs/prds/` | nothing: a few curated smoke paths | two or more journeys, from two or more products |
 | `product` | `<product>/product-tcs.md` | paths across the domains of one product | every domain's `user-journeys.md` in it, its `docs/prds/` pages | nothing: a few curated smoke paths | two or more journeys, from two or more domains of that product |
 | `domain` | `<product>/<domain>/domain-tcs.md` | paths across the capabilities of one domain | every capability's `user-journeys.md` in it, the domain's `docs/prds/` pages | every cross-capability path its journeys imply | two or more journeys, from two or more capabilities of that domain |
-| `feature` | `<capability>/feature-tcs.md` | one capability's journeys, refusals and edge cases | that capability's `spec.md` and `user-journeys.md` | every scenario its journeys accept | one journey |
+| `feature` | `<capability>/feature-tcs.md` | one capability's journeys, refusals and edge cases | that capability's `spec.md` and `user-journeys.md`, and the domain suite above it | every scenario its journeys accept, by its own case or by a domain case its `## Reconciliation` records as **Covered at domain** | one journey |
 
 - **The file name carries the level** — `test-cases.md` is not a suite name
 - **`product` and `platform` are health checks** — every case `**Suites:** smoke`; a suite past a page has stopped being a smoke pass
 - **A suite exists only where a path exists** — a product with one domain has no `product-tcs.md`, a product with no specs has nothing, and `platform-tcs.md` starts with the first cross-product path; none of those absences is a gap
 - **`shared/` gets no product suite** — its capabilities get feature suites, and paths across them `shared/<domain>/domain-tcs.md`
-- **Levels run top down** — platform, product, domain, feature, deriving and reviewing alike; each level names the paths it owns and the level below covers what those do not reach
+- **Levels run top down** — platform, product, domain, feature, deriving and reviewing alike; each level names the paths it owns and the level below covers what those do not reach. A feature run reads the domain suite first, so a path a domain case walks is not written twice
 - **`/spec-to-tcs [platform|product|domain|feature] <target>`** — the level first, or inferred from the target's shape
 
 ### One purpose, one case
@@ -116,14 +118,17 @@ Once both readings land, the caller joins them on anchors and writes a `## Recon
 - **The levels above hold composed paths** — what no single spec states end to end; a composed case names every journey it walks, and one trace at a composed level fails `pnpm run tcs:validate`
 - **Compose from evidence** — a run reads every `user-journeys.md` and every `docs/prds/` page in its scope before writing: a domain run reads the changed capability's journeys, every sibling capability's, and the domain's `index.md` and each PRD under it for its words and seeded values; a platform run reads the same one scope wider
 - **Within a level** — two cases whose traces and outcomes say the same thing are one case; differing only in a value, one case with a row per run
+- **A case earns its place by a distinct risk** — before a case is written, name what it guards that no other case at its level does: a boundary, a partition, a state transition, a permission, an error. A case that names none is a row on the case it repeats, a result on the run it shares, or not written. Coverage is counted in anchors and scenarios reached, never in cases
 - **Across levels** — a `product` or `platform` case re-walks lower coverage on purpose, to ask whether the seam holds. Duplication is a lower case that exists only to re-test a higher path, or two composed cases at one level on the same path
+- **A feature case is not written for a path a domain case walks** — draft or not: the feature run reads the domain suite first, leaves the path to it, and the reconciliation records it as **Covered at domain**. The domain case has to assert the outcome, not only pass through it; a refusal, a boundary or an outcome it does not assert is still the feature's case
 - **The validator reports, a human decides** — identical trace sets among composed cases, and journeys traced at more than one level, are evidence, not proof
 
 ### When a Change Touches a Suite Above It
 
 1. Take the capabilities the change's `## Capabilities` names and the delta `spec.md` paths it carries
-2. Intersect their journeys with the `**Trace:**` lines in that domain's `domain-tcs.md` and in `platform-tcs.md`
+2. Intersect their journeys with the `**Trace:**` lines in that domain's `domain-tcs.md`, its product's `product-tcs.md` and `platform-tcs.md`
 3. A hit, or a capability new to a domain that has a `domain-tcs.md`, is an impact at that level
+4. A domain with no `domain-tcs.md` whose journeys the change touches in two or more capabilities is a hit too: the path across them may be new, and the domain run decides whether one exists
 
 On a hit the change carries an edit to that suite or one proposal line — `No domain impact: <why>`, `No platform impact: <why>`. No check parses it; the round's readers read for it. `## Impact` is not the signal: it records code, not paths.
 
@@ -148,6 +153,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 | In-flight: `openspec/changes/<change>/specs/<product>/<domain>/<capability>/` | `.../feature-tcs.md`, beside the same two |
 | Domain, durable: `openspec/specs/<product>/<domain>/` | `.../domain-tcs.md` |
 | Domain, in-flight: `openspec/changes/<change>/specs/<product>/<domain>/` | `.../domain-tcs.md`, folded into the durable file at archive |
+| Product, durable and in-flight: `openspec/specs/<product>/`, `openspec/changes/<change>/specs/<product>/` | `.../product-tcs.md`, folded the same way |
 | Platform | `openspec/specs/platform-tcs.md`, one for the store |
 
 - **One tree per run** — `/spec-to-tcs` writes only to the tree the argument names; when a capability is in both, ask, never prefer the delta
@@ -156,7 +162,7 @@ On a hit the change carries an edit to that suite or one proposal line — `No d
 
 ## When Suites Are Generated
 
-- **Automatic** — once the proposal, the journeys and the outline are written, `/workflow-specify` runs `/spec-to-tcs <change>` on the change's branch: every case `draft`, ahead of the scenarios. A draft carries no authority, so the product manager approves nothing by it; review is `/tcs-review`, later
+- **Automatic, top down** — once the proposal, the journeys and the outline are written, `/workflow-specify` runs on the change's branch, levels first: **When a Change Touches a Suite Above It** is checked, a domain or product hit runs `/spec-to-tcs <level> <target>` into the change's tree, a platform hit is an edit to `platform-tcs.md`, and a hit that needs no case is its `No <level> impact: <why>` line; then `/spec-to-tcs <change>` writes the feature suites, each reading the domain draft above it. Every case `draft`, ahead of the scenarios. A draft carries no authority, so the product manager approves nothing by it; review is `/tcs-review`, later
 - **Both files on one word** — `/workflow-specify` lands `spec.md` and `feature-tcs.md` together, so `main` never carries requirements with no suite beside them; CI's `pnpm run tcs:validate --require-suites` warns on a capability that still has journeys and no suite
 - **`skip_specs`** — nothing to generate
 - **Manual** — `/spec-to-tcs <capability-or-change>`, either tree:
@@ -316,8 +322,9 @@ Read the suite before adding a case, by agent or by hand: a duplicate is a defec
 
 - **A duplicate is identical claims** — the same outcomes on the same surface from the same starting state, however phrased; or one case's results a subset of the other's by the same route; or same steps with different data, which is one case with rows
 - **Distinct** — a different route where the spec states each outcome; the same assertion at another layer the spec states; a refusal beside the acceptance it mirrors
-- **When one is found** — show the existing case beside the proposed one and ask: update the existing case (a step, a row, a result, under its status's re-wording rules, no new id), add anyway (record what distinguishes it), or drop it (say which case covers it). Never add silently; never delete the older case — it is `deprecated` only when the spec no longer states the behaviour
-- **Across levels** — a feature case wholly covered by an `approved` domain case is a trim candidate; never trim against a domain file still holding drafts
+- **When one is found** — show the existing case beside the proposed one and ask: update the existing case (a step, a row, a result, under its status's re-wording rules, no new id), add anyway (record what distinguishes it), or drop it (say which case covers it). Never add silently; never delete the older case — it is `deprecated` only when the spec no longer states the behaviour. In `/workflow-specify` the product manager's word at the reconciliation is the answer
+- **A new assertion on the same run joins the case** — same starting state, same route, and the new result observed on it: the step or result goes into the existing case under its id, so a tester walks it once. A `draft` keeps its `<v>`; an `actual` case takes it as a behaviour change — `<v>` bumped, back to `draft`, its file `reopened` — carried in the change's delta suite. An `automated` one goes the same way, and the change's `tasks.md` owes a task updating its test and its acceptance link to the new revision. A long case is a signal to check, not a limit — `tcs-conventions.md`'s **Size and shape**
+- **Across levels** — at generation, a path a domain case already walks gets no feature case (**One purpose, one case**). An existing feature case wholly covered by an `approved` domain case is a trim candidate at review; never trim an existing case against a domain file still holding drafts
 
 ## Step 5: Classify the Case
 
@@ -464,7 +471,7 @@ Two pull requests: the spec PR carries the drafts, one commit per level, top dow
 
 | Tool | Does |
 | --- | --- |
-| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
+| `/spec-to-tcs [level] <target>` (`spec-to-tcs` skill) | writes missing journeys, reads the conventions, derives the level's file with every new case `draft`, restyles existing drafts; on a feature run reads the domain suite above and leaves the paths it walks to it, and joins a new assertion to the case whose run it shares; shows an existing suite and asks; regenerates the drafts of a suite below the rules revision, top down; refuses a whole-file regenerate over `actual` cases or an `approved` file |
 | `/tcs-review [<target>]` (`tcs-review` skill) | finds suites awaiting review, walks drafts one journey at a time, quotes scenarios on request, records verdicts |
 | `planning-qa` skill | QA's entry point: routes to the two commands and states what a suite owes |
 | `pnpm run tcs:validate` | header against cases, unique journey-scoped ids, traces resolving against `spec.md` and `user-journeys.md`, property vocabularies and order, no empty Expected Results, actors of a class, composed levels tracing what they compose; the Decided-by verdicts, and every path a Decided-by line names resolving inside the store to a file that exists; reports duplicate-purpose candidates and a case needing a mocked state that plans no automation; `--strict`, `--require-suites`, `--capture-baseline=<file>`, `--swept=<file>`; CI on every push |
