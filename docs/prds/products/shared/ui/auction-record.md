@@ -13,7 +13,7 @@ capability is the component contract underneath it.
 
 - **Page frame** — the title with its badge, whose number is the count of
   rows the application supplies
-- 🚧 **One table** — bid rows before watch-only, replacing the Bidding and
+- **One table** — bid rows before watch-only, replacing the Bidding and
   Watching sections; a row is Auction (image, title, close), Current Bid,
   Status (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
@@ -24,9 +24,9 @@ capability is the component contract underneath it.
 - **Watch control** — marks a lot wherever it is shown; each block renders
   on its own, so a lot page takes the watch control without adopting the
   frame
-- 🚧 **Locked watch control** — with a bid standing on the lot it shows the
+- **Locked watch control** — with a bid standing on the lot it shows the
   watching label, disabled, and reports no press
-- 🚧 **Watch confirmations** — the control announces only after the
+- **Watch confirmations** — the control announces only after the
   application has changed the value, and exposes the action the copy names:
   View My Auctions on watch, Undo on unwatch
 

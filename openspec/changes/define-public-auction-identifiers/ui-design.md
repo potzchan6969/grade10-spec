@@ -79,18 +79,18 @@ No new design-system primitive. No new `@grade10/ui` export.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Open with invoice ID | Subtext `Invoice: {invoice ID}`; payment-reference band is the listing code; rails unchanged | `winner-order-US-18` |
+| Open with invoice ID | Subtext `Invoice: {invoice ID}`; payment-reference band is the listing code; rails unchanged | `winner-order-SC-114` |
 
 ### Winner Order — Email Grade10
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Payment overdue | Subject `Auction order {invoice ID}: payment overdue` | `winner-order-US-17` |
-| Setup overdue | Subject quotes lot title; no invoice ID | `winner-order-US-17` |
-| Partial payment | Subject quotes invoice ID; receipt ids in body | `winner-order-US-17` |
+| Payment overdue | Subject `Auction order {invoice ID}: payment overdue` | **Out of suite:** Email Grade10 copy fixture |
+| Setup overdue | Subject quotes lot title; no invoice ID | **Out of suite:** Email Grade10 copy fixture |
+| Partial payment | Subject quotes invoice ID; receipt ids in body | **Out of suite:** Email Grade10 copy fixture |
 
 ### Public listing page
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Published lot | Title and URL; no labelled listing code on the page | `grade10-site-auction-listing-page-US-10` |
+| Published lot | Title and URL; no labelled listing code on the page | `grade10-site-auction-listing-page-SC-25` |

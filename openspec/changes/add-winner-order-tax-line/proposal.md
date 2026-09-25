@@ -82,13 +82,14 @@ See [Non-Goals](decisions.md#non-goals).
   moves all six in step, or names the set once and has the others refer to it.
   The fee rows that carry an info tip are a seventh such set, in the other
   capability. The requirements round decides both together
-- **`docs/prds/products/grade10-site/auction/post-bidding.md`** and
-  **`docs/prds/products/grade10-admin/auction/management.md`** — marked 🚧
-  ahead of this change
-
 **No new journey.** Tax is an amount inside `winner-order-US-01` and
 `post-sale-US-05`, not a new walk. The winner-order journeys delta is context
 only, deliberately.
+
+## References
+
+- [Post-Bidding · The Invoice](../../../docs/prds/products/grade10-site/auction/post-bidding.md#the-invoice)
+- [Auction Management · Payment](../../../docs/prds/products/grade10-admin/auction/management.md#payment)
 
 ## Follow-on changes
 
