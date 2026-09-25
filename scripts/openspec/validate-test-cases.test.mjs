@@ -376,3 +376,113 @@ test("an approved file with a new draft reads reopened through its lapsed Review
     /carries a `\*\*Reviewed:\*\*` line but is not approved — a file that falls out/,
   );
 });
+
+// A feature run leaves a path a domain case walks to that case, and the
+// reconciliation's `**Covered at domain**` bullet names it; the domain case
+// has to exist and be live, or the scenario is walked by nothing.
+test("a Covered at domain line is refused when its domain case is missing or deprecated, and passes when it is live", () => {
+  const DOMAIN_CASE = (n, status) =>
+    [
+      `### demo-e2e-US1-TC${n}-1: The composed path, ${n}`,
+      "",
+      "**Classification:**",
+      "",
+      `* **Status:** ${status}`,
+      "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
+      "",
+    ].join("\n");
+  const root = store("// the story: demo-alpha-US1-TC1-1 demo-alpha-US1-TC3-1\n", [
+    "- **Covered at domain** — the thing happens, walked by `demo-e2e-US1-TC1-1`",
+    "- **Covered at domain** — the thing is undone, walked by",
+    "  `demo-e2e-US1-TC2-1`",
+    "- **Covered at domain** — the thing is shared, walked by `demo-e2e-US1-TC9-1`",
+    "- **Covered at domain** — the thing is named, and no case",
+  ]);
+  const domain = join(root, "openspec/specs/demo/domain-tcs.md");
+  mkdirSync(dirname(domain), { recursive: true });
+  writeFileSync(
+    domain,
+    [
+      "# demo Test Cases",
+      "",
+      "## demo-e2e-US1: A path across the domain",
+      "",
+      DOMAIN_CASE(1, "actual"),
+      DOMAIN_CASE(2, "deprecated"),
+    ].join("\n"),
+  );
+  const out = run(root).stdout;
+  assert.doesNotMatch(out, /`demo-e2e-US1-TC1-1`, which/);
+  assert.match(out, /covered at domain by `demo-e2e-US1-TC2-1`, which is deprecated/);
+  assert.match(out, /covered at domain by `demo-e2e-US1-TC9-1`, which no `domain-tcs.md` holds/);
+  assert.match(out, /a \*\*Covered at domain\*\* line names no domain case/);
+});
+
+// Archived changes copied suites across without their cases before the carry
+// gate refused it. The validator warns on each archived case no live suite
+// holds under its id, `<v>` aside, and the durable suite does not name.
+test("warns on an archived case the fold left behind, and not on one held, re-versioned or named", () => {
+  const root = mkdtempSync(join(tmpdir(), "archived-cases-"));
+  const heading = (id) => `### ${id}: A case\n\n* **Status:** actual\n`;
+  const files = {
+    "openspec/specs/demo/alpha/feature-tcs.md": [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      heading("demo-alpha-US1-TC1-2"),
+      heading("demo-alpha-US1-TC20-1"),
+      "## Settled",
+      "",
+      "- `demo-alpha-US1-TC3` was folded into TC1 · 2026-09-25",
+      "",
+    ].join("\n"),
+    "openspec/changes/archive/2026-09-01-demo/specs/demo/alpha/feature-tcs.md": [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      heading("demo-alpha-US1-TC1-1"),
+      heading("demo-alpha-US1-TC2-1"),
+      heading("demo-alpha-US1-TC3-1"),
+    ].join("\n"),
+  };
+  for (const [name, content] of Object.entries(files)) {
+    const file = join(root, name);
+    mkdirSync(dirname(file), { recursive: true });
+    writeFileSync(file, content);
+  }
+  // TC2 is one line, not a prefix hit on TC20.
+  const out = run(root).stdout;
+  assert.match(
+    out,
+    /1 case\(s\) archived with `2026-09-01-demo` were never folded here: `demo-alpha-US1-TC2-1` —/,
+  );
+});
+
+// `<v>` and a trace marker's `rev` count the same changes; where a case
+// carries a marker the two agree.
+test("refuses a case whose trace marker rev differs from its <v>, and passes one that matches", () => {
+  const root = mkdtempSync(join(tmpdir(), "trace-rev-"));
+  const marked = (id, rev) =>
+    `<!-- trace:case id=g10.demo-alpha.TC-${id.slice(-4, -2)}x rev=${rev} covers=g10.demo-alpha.SC-abc -->\n### ${id}: A case\n\n* **Status:** draft\n`;
+  const file = join(root, "openspec/specs/demo/alpha/feature-tcs.md");
+  mkdirSync(dirname(file), { recursive: true });
+  writeFileSync(
+    file,
+    [
+      "# demo/alpha Test Cases",
+      "",
+      "## demo-alpha-US1: Collector does the thing",
+      "",
+      marked("demo-alpha-US1-TC1-2", 1),
+      marked("demo-alpha-US1-TC2-2", 2),
+    ].join("\n"),
+  );
+  const out = run(root).stdout;
+  assert.match(
+    out,
+    /case `demo-alpha-US1-TC1-2` is at `<v>` 2 and its trace marker at `rev=1`/,
+  );
+  assert.doesNotMatch(out, /case `demo-alpha-US1-TC2-2` is at/);
+});

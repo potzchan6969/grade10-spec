@@ -846,9 +846,12 @@ artifacts:
       `user-journeys.md` (context and deltas), `decisions.md` - its `## Raised`
       table included, which is what earlier runs asked and what came of it -
       `ui-design.md` where the change has one, with the state dispositions pass
-      two wrote on its bullets stripped, the linked PRD sections, and the
-      existing `feature-tcs.md` for id continuity, with `## Reconciliation`
-      stripped.
+      two wrote on its bullets stripped, the linked PRD sections, the
+      existing `feature-tcs.md` for id continuity, and the domain suite above
+      the capability - the change's `domain-tcs.md`, else the durable one -
+      both with `## Reconciliation` stripped. The domain suite is composed
+      from journeys and names no scenario; it is how the pass knows which
+      paths are already walked.
 
       `decisions.md` carries no requirement, so reading it costs no blindness -
       the property protected here is blindness to the requirements, and that
@@ -859,7 +862,7 @@ artifacts:
       finding in the one mechanism built to produce true ones is dearer than
       the blindness it pretends to protect.
 
-      Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
+      Excluded: `openspec/specs/` beyond the domain suite, `openspec/changes/archive/`
       entirely, and any `## Requirements` section anywhere. The archive
       exclusion is not housekeeping: an archived change keeps an un-stripped
       `## Reconciliation` naming scenario ids, so missing that path reopens the
@@ -879,6 +882,12 @@ artifacts:
       completeness, empty / one / many, null and missing, permission matrix,
       error taxonomy, SEO and indexability. Two readings that use the same
       method produce synonyms, and the reconciliation then finds nothing.
+
+      Fewer, sharper cases: each names the risk it guards that no other case
+      does; a path a domain case already walks is left to it and recorded as
+      **Covered at domain**; a result seen on a run an existing case walks is
+      joined to that case. The rulebook's **One purpose, one case** and **A
+      Case That Already Exists Is Not Written Twice** hold the rules.
 
       ## Anchors
 
@@ -934,9 +943,10 @@ artifacts:
 
       `test-cases.md` is not a suite name. A capability writes
       `feature-tcs.md`; a path across the capabilities of one domain writes
-      `domain-tcs.md` beside the durable specs; `product-tcs.md` and
-      `platform-tcs.md` are smoke passes written there too, never under a
-      change's deltas.
+      `domain-tcs.md`, and `product-tcs.md` is a smoke pass across a
+      product's domains - each in the change's tree when the change's levels
+      pass writes it, folded at archive; `platform-tcs.md` is a smoke pass
+      beside the durable specs only.
 
       A capability whose journeys file says `**Walked by:** nobody` still gets
       a suite, anchored on its feature set.
@@ -1034,6 +1044,11 @@ artifacts:
       commit flips each case the walks decide to automated with `pnpm run
       tcs:automated <case…> --decided-by <walk path>`; the cases that stay
       manual are named in the suite and named in the walk's `rounds.md` row.
+
+      - An `automated` case this change joined a result to - its `<v>` bumped,
+      back to `draft` - owes a task in the group that builds the behaviour:
+      its test asserts the new result, and its acceptance link names the new
+      revision.
 
       - End every group with its verification step - the checks that group
       runs - so an engineer ships and verifies one group at a time. Keep each

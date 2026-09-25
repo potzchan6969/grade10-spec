@@ -70,6 +70,7 @@ import {
   revText,
   ROOT as STORE_ROOT,
   statusCounts,
+  SUITE_NAMES,
 } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -919,6 +920,148 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
         `  ${journey.padEnd(52)}${dim([...m].map(([lvl, n]) => `${n} ${lvl}`).join(", "))}`,
       );
     console.log("");
+  }
+}
+
+// --- covered at domain -------------------------------------------------
+// A feature run leaves a path a domain case already walks to that case, and
+// its reconciliation says so on a `- **Covered at domain** —` bullet naming
+// the domain case in full. The domain case is then the feature's verifier,
+// so it has to exist and still be live: an id no `domain-tcs.md` holds, or
+// one `deprecated`, leaves the scenario with no case at all.
+{
+  const domainCases = caseIndex(
+    ROOT,
+    findSuites(ROOT).filter((p) => levelOf(p) === "domain"),
+  );
+  const BULLET = /^\s*[-*]\s+/;
+  for (const p of suites) {
+    if (levelOf(p) !== "feature") continue;
+    const text = readFileSync(p, "utf8");
+    const span = sectionSpan(text, "Reconciliation");
+    if (!span) continue;
+    const rel = relative(ROOT, p);
+    const lines = text.split("\n");
+    for (let i = span.from; i < span.until; i++) {
+      if (!/^\s*[-*]\s+\*\*Covered at domain\*\*/.test(lines[i])) continue;
+      // A bullet may wrap: read on until a blank line or the next bullet.
+      let body = lines[i];
+      for (let j = i + 1; j < span.until; j++) {
+        const next = lines[j];
+        if (next.trim() === "" || BULLET.test(next) || /^[#|]/.test(next))
+          break;
+        body += ` ${next.trim()}`;
+      }
+      const ids = [
+        ...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g),
+      ].map((m) => m[1]);
+      if (ids.length === 0) {
+        record(
+          "error",
+          rel,
+          i + 1,
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+        );
+        continue;
+      }
+      for (const id of ids) {
+        const found = domainCases.get(id);
+        if (!found)
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which no \`domain-tcs.md\` holds — name the domain case that walks the path, or write the feature case back`,
+          );
+        else if (found.status === "deprecated")
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which is deprecated — the path is walked by nothing now; write the feature case back`,
+          );
+      }
+    }
+  }
+}
+
+// --- a case's <v> and its trace rev are one number ----------------------
+// `<v>` in the case id and `rev` on its `trace:case` marker both count the
+// times what the case verifies has changed. Two counters for one fact drift -
+// the migration stamped `rev=1` over cases already at `-2` - so where a case
+// carries a marker, the two agree.
+{
+  for (const p of suites) {
+    const lines = readFileSync(p, "utf8").split("\n");
+    const rel = relative(ROOT, p);
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\b.*?\brev=(\d+)/.exec(lines[i]);
+      if (!marker) continue;
+      let j = i + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+      if (!heading || heading[2] === marker[1]) continue;
+      record(
+        "error",
+        rel,
+        j + 1,
+        `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      );
+    }
+  }
+}
+
+// --- archived cases the fold left behind --------------------------------
+// Warned, never refused: the archive is history, and a case may have been
+// renamed or superseded since. A case an archived change's suite held, whose
+// id (without its `<v>`) no durable or active suite holds and the durable
+// suite does not name anywhere, was most likely left behind at the fold -
+// the carry gate that now refuses it did not exist then. A human decides each
+// one; a case found to be replaced is named in the durable suite, one line,
+// and the warning stops.
+{
+  const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
+  const live = new Set(
+    [...caseIndex(ROOT, findSuites(ROOT)).keys()].map(unversioned),
+  );
+  const archive = join(ROOT, "openspec", "changes", "archive");
+  const archived = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (SUITE_NAMES.includes(e.name)) archived.push(full);
+    }
+  };
+  if (existsSync(archive)) walk(archive);
+  for (const file of archived.sort()) {
+    const m = relative(archive, file).split(sep).join("/").match(
+      /^([^/]+)\/specs\/(.+)$/,
+    );
+    if (!m) continue;
+    const [, change, path] = m;
+    const target = join(ROOT, "openspec", "specs", path);
+    const rel = relative(ROOT, target);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    const named = existsSync(target) ? readFileSync(target, "utf8") : "";
+    // Named as a whole id: `…-US1-TC1` is not named by `…-US1-TC10`.
+    const namedHere = (id) =>
+      new RegExp(
+        `${unversioned(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\d)`,
+      ).test(named);
+    const left = [...caseIndex(ROOT, [file]).keys()].filter(
+      (id) => !live.has(unversioned(id)) && !namedHere(id),
+    );
+    if (left.length === 0) continue;
+    const shown = left.slice(0, 5).map((id) => `\`${id}\``).join(", ");
+    const more = left.length > 5 ? `, … and ${left.length - 5} more` : "";
+    record(
+      "warning",
+      rel,
+      1,
+      `${left.length} case(s) archived with \`${change}\` were never folded here: ${shown}${more} — ` +
+        "review them with `/tcs-review`, bringing each back as `draft` or naming what replaced it",
+    );
   }
 }
 

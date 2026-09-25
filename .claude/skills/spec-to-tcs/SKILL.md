@@ -38,14 +38,17 @@ rulebook, assembled by the caller, and nothing outside it:
   continuity with its `## Reconciliation` stripped, and that suite's
   `## Settled` - the questions earlier runs asked and had answered. Reading
   those is what stops you raising a refused reading again, and it tells you
-  nothing about what the scenarios say.
+  nothing about what the scenarios say. The domain suite above the capability
+  comes too - the change's `domain-tcs.md`, else the durable one, with its
+  `## Reconciliation` stripped: composed from journeys, it tells you which
+  paths are already walked and nothing about the scenarios.
 
   **Write no case for a non-goal.** `decisions.md` names what this change
   deliberately does not do; a case against one of those is not a gap the
   scenarios left, and filing it as one spends the reconciliation's credibility
   on a question already closed.
 - **Excluded** - every `## Requirements` section, `openspec/specs/` beyond the
-  two included sections, and `openspec/changes/archive/` entirely. An archived
+  two included sections and the domain suite, and `openspec/changes/archive/` entirely. An archived
   change keeps an un-stripped `## Reconciliation` naming scenario ids, so
   reading archive reopens the leak invisibly on the next change.
 
@@ -83,7 +86,8 @@ and are unchanged.
   `platform`, an explicit file path is whatever its name says. Say which level
   you took; ask only when the target matches both a capability and a domain
 - **Run top down** — `platform`, `product`, `domain`, `feature` — when a change
-  touches more than one. When the user asks for a suite whose level above is
+  touches more than one, so a feature run reads the domain draft written
+  before it. When the user asks for a suite whose level above is
   missing or older than the change, say so and offer the higher run first
 - **One file per level** — `test-cases.md` is not a suite name; never write
   one, and never write a second file beside a suite that already exists
@@ -93,7 +97,8 @@ and are unchanged.
 - **Feature** — the isolated input above, and nothing else: `## Purpose` and
   `## Feature set` from `spec.md` but never its requirements,
   `user-journeys.md`, the change's `proposal.md` and `ui-design.md` when they
-  exist, the pages under `docs/prds/`, and `openspec/config.yaml`'s `context`. A platform fact
+  exist, the pages under `docs/prds/`, `openspec/config.yaml`'s `context`, and
+  the domain suite above the capability. A platform fact
   is checked where it matters (`URL contains <lang>`), never written as a
   pre-condition
 - **Domain** — **Compose from evidence** under **One purpose, one case**:
@@ -197,7 +202,8 @@ and are unchanged.
    coverage is the spec's**. What the skill adds:
 
    - **Id** — `<capability>-US<n>-TC<m>-<v>`; `n` from the journey, `TC`
-     from `1` under each journey, `<v>` from `1`
+     from `1` under each journey, `<v>` from `1`; a `trace:case` marker's
+     `rev` moves with `<v>`, never one without the other
    - **Order** — positive first, then empty, missing and failure, then
      destructive only where the scenarios state cancel, remove, withdraw or
      unwind
@@ -211,6 +217,20 @@ and are unchanged.
      `## Where Things Are`. A blind feature run cannot see the spec's flow, so
      a step it cannot place is written as far as the input goes and left for
      the review's preparation, never guessed
+   - **Left to the domain** — a path a case in the domain suite already walks,
+     asserting the outcome, is not written again; keep the domain case id for
+     step 10, where it becomes the reconciliation's **Covered at domain**. A
+     refusal, a boundary or an outcome the domain case does not assert is
+     still written
+   - **A distinct risk each** — **A case earns its place by a distinct risk**:
+     name what the case guards before writing it; one that names nothing new
+     becomes a row, a result on the run it shares, or nothing
+   - **Joined, not added** — **A new assertion on the same run joins the
+     case**: a result seen on a run an existing case walks, from the same
+     starting state by the same route, goes into that case under its id.
+     A `draft` keeps its `<v>`; an `actual` one is bumped and goes back to
+     `draft` in the delta suite, and an `automated` one is named in step 10
+     as owing a task for its test and its acceptance link
    - **Values** — **A value is the rule, or stands for it**: a value that is
      the rule is copied, one that stands for it is named and given its class;
      **Rows may add what the rule implies** — a row per value a stated rule
@@ -224,8 +244,8 @@ and are unchanged.
    `## Feature set` root group name matched verbatim. A case never traces a
    scenario id: on a feature run the scenarios do not exist yet.
    **A Case That Already Exists Is Not Written Twice**: extend the existing
-   case, report the pair, and name a feature case wholly covered by an
-   `approved` domain case as a trim candidate, never deleting it. A journey
+   case, report the pair, and name an existing feature case wholly covered by
+   an `approved` domain case as a trim candidate, never deleting it. A journey
    accepted by refusal, empty-state or failure scenarios does not ship with
    only `positive` cases.
 
@@ -278,7 +298,10 @@ and are unchanged.
    that contradicted the rulebook; then the drafts re-worded, with their
    `<v>`. Then what you wrote: each suite path and its tree, the
    journeys and their case counts, the ids added, re-worded and deprecated,
-   every `actual` case moved, and any `spec.md` step 3 rewrote. Separately,
+   every `actual` case moved, and any `spec.md` step 3 rewrote. Count what
+   the run chose not to add: results joined to existing cases (by id, and
+   each `automated` one owing a task), values made rows, and paths left to
+   the domain suite (feature anchor beside domain case id). Separately,
    as gaps for the spec's author: a requirement whose prose states a rule no
    scenario covers, a scenario under no journey, a journey naming an unknown
    scenario id. Point at `/tcs-review` next; the suite is not ready to hand on
@@ -362,7 +385,8 @@ misreading.
   spec, and never add a line to `docs/governance/tcs-conventions.md` yourself;
   lines land there only from a review, on the reviewer's word
 - Never restyle, renumber or re-word an `actual` case; restyling one is a
-  review's, on the reviewer's yes
+  review's, on the reviewer's yes. Joining a result to one is not a re-word:
+  it is a behaviour change, `<v>` bumped and back to `draft`
 - Never read a `## Requirements` section, a durable `spec.md` beyond its Purpose
   and feature set, or anything under `openspec/changes/archive/` on a feature
   run — the blind property cannot be recovered once lost, and nothing
