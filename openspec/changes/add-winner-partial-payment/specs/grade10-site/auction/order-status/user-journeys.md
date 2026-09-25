@@ -1,6 +1,6 @@
 ## Context user journeys
 
-### auction-status-US-01: Expired invoice reads Payment Overdue without winner card pay
+### auction-status-US-01: Expired invoice keeps Pending Payment without winner card pay
 
 **As a** winner or operator,
 **I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
