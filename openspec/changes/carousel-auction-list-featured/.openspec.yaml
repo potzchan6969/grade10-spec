@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-25
+hands:
+  design: "@tangconst"
+awaiting:
+  specs: outline, feature-tcs, and requirement deltas for grade10-site/auction/auction catalogue Featured and grade10-admin/auction/featured curation
