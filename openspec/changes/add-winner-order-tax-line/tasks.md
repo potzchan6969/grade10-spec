@@ -18,7 +18,7 @@ Needs `add-shipping-insurance-order-summary-tooltip`.
 - [ ] 1.4 Pass persisted Tax through the current-invoice read model and the existing invoice and receipt PDF Tax line, without deriving it from an address or adding a rate (`winner-order-SC-214`)
 - [ ] 1.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run test:backend`, `pnpm run check:migrations`
 
-## 2. Operator quote and reissue (grade10)
+## 2. Operator quote and reissue (grade10) (owner: @htonyl)
 
 Needs group 1.
 
