@@ -57,36 +57,46 @@ What a listing carries, from the operator's form to the card.
 
 ## Catalogue
 
-The Auction nav item opens `/auction`. A category is a query on that address,
-and the address without the query is the one a search engine keeps.
+The Auction nav item opens `/auction`. That address, with no category query, is
+the one a search engine keeps.
 
 | Rule | Value |
 | --- | --- |
-| Featured | At most **4** live lots, Active before Upcoming. Absent when none are live |
-| Busy | **12** or more live lots, and at least **2** categories with a live lot |
-| Live | Active and Upcoming. Ended lots stay in the list and fill neither Featured nor a category |
+| Featured | At most **3** operator-curated slides. Absent when none are set. Active and Upcoming lots only |
+| Live | Active and Upcoming. Ended lots stay in All auctions and fill no Featured slot |
 
-- **Featured** — a row that scrolls sideways, inside itself, on a full-width light gradient. A card grows while the pointer is on it. Watch keeps its colour. The picture stays flat. The row shows whole cards, and scrolls when they do not fit. Every card is the same size as the others in the row
-- **Categories** — only when the page is busy. Up to **3** live categories: one large tile and the others stacked. **4** or more: a row per category
-- **Filter** — only when the page is busy. A sidebar on a wide screen, pills on a narrow one. One group, the auction category. No search and no sort. A category with no live lot stays hidden
-- **Quiet and empty** — no Categories section and no filter. Two to four live categories put image tiles in the first cell of the list. With nothing to list, the list says there are no auctions
-- **The list** — every lot a collector can see, including those in Featured, in the resting order, on the page surface below the featured field. Each card follows the store product card: the image well, the title, the current bid, then a countdown. An active lot counts down to its close. An upcoming lot counts down to its open. A closed lot names when it ended. Watch sits at the bottom right of the image, and a closed lot shows none
-- **Headings** — one `h1`, Auctions, which is not shown, and which stays that word when a category is selected. `h2` for Featured auctions, Categories, Filter and All auctions, and only for a section that is on the page. A category name is an `h3`. A lot title is an `h3` in the list and a link in Featured, so each title is a heading once. The quiet tiles are links, not headings
-- **The document** — title and description belong to this page. Canonical and the share address are `/auction` with no query. Filtering does not change the title. An ItemList names the lots, their addresses, images and current bids, and only while the page is unfiltered. A closed lot's offer stays on the lot page
+- 🚧 **Featured** — a full-width carousel when at least one slide is set. Each
+  slide is an operator-picked lot with one hero image the operator uploaded for
+  that slot. The slide shows that image as the banner and the lot slab, the
+  lot title, its status, a client countdown from the served close or open, the
+  current bid with a rolling number when the amount changes, and Bid Now to the
+  lot. Progress dots advance the slides. The section is headed Featured
+  auctions — [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
+- 🚧 **No category section** — category tiles and the busy filter stay off this
+  page until a later change; quiet layout is the only layout
+- **All auctions** — every lot a collector can see, including those in Featured,
+  in the resting order, below Featured when Featured is present. Each card
+  follows the store product card: the image well, the title, the current bid,
+  then a countdown. An active lot counts down to its close. An upcoming lot
+  counts down to its open. A closed lot names when it ended. Watch sits at the
+  bottom right of the image, and a closed lot shows none — the same watch as
+  the lot page and My Auctions —
+  [Watchlist](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
+- **Headings** — one `h1`, Auctions, which is not shown. `h2` for Featured
+  auctions and All auctions, and only for a section that is on the page. A lot
+  title is an `h3` in the list
+- **The document** — title and description belong to this page. Canonical and
+  the share address are `/auction`. An ItemList names the lots, their
+  addresses, images and current bids. A closed lot's offer stays on the lot
+  page
 
-::story{id="auction-list-featured--scrolling" title="Scrolling row"}
+::story{id="pages-auction-list--carousel-banner" title="Carousel banner"}
 
 ::story{id="auction-list-lot-card--active" title="An active lot"}
 
 ::story{id="auction-list-lot-card--upcoming" title="An upcoming lot"}
 
 ::story{id="auction-list-lot-card--ended" title="A closed lot"}
-
-::story{id="pages-auction-list--one-featured" title="One featured lot"}
-
-::story{id="pages-auction-list--busy-many" title="Many categories"}
-
-::story{id="pages-auction-list--quiet-tiles" title="Category tiles"}
 
 ::story{id="pages-auction-list--empty" title="No auctions"}
 
@@ -207,7 +217,7 @@ Active and Completed filters in bidding history.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The catalogue page | Decided | `/auction` is this page: Featured, then Categories and a filter only when 12 or more live lots span at least two categories, then the full list. The card stays the one the catalogue already shows. | Design |
+| The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a lot plus one admin hero image, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
