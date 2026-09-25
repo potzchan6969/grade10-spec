@@ -181,7 +181,7 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 | --- | --- |
 | Update | new cases for untraced scenarios, re-worded cases for changed ones, `deprecated` for scenarios the spec lost; ids and reviewed properties survive |
 | Another target | leaves this suite untouched |
-| Regenerate the drafts | offered when `**Drafts styled:**` sits below `tcs_rules_rev`: every `draft` rewritten under the current rules, as **Rules Revisions** says; `actual` and `deprecated` cases kept; one yes |
+| Regenerate the drafts | offered when `**Drafts styled:**` sits below `tcs_rules_rev`: every `draft` rewritten under the current rules, as **Rules Revisions** says; `actual` and `deprecated` cases kept; no yes needed — an `actual` case the new rule moves is still asked about |
 | Regenerate | rewrites the whole file; destroys review history; explicit confirmation, and only when the guard allows |
 
 - **Regeneration guard** — a whole-file regenerate is refused when the file is `approved` or any case is `actual`. A reviewer who wants a clean rewrite moves those cases back to `draft` by hand first; an agent never does. Regenerating the drafts is not under the guard: it leaves every reviewed case as it is
@@ -191,9 +191,9 @@ A second run is never a silent overwrite: `/spec-to-tcs` shows the suite it foun
 
 The house style — titles, step and result shape, pre-condition and placeholder wording, classification starting shapes, setup recipes — is [`tcs-conventions.md`](tcs-conventions.md), not this document. This document is the contract; that file is how a case reads on top of it, and it moves without a rules revision.
 
-- **Generation writes to it** — `/spec-to-tcs` reads the conventions before it writes, the narrowest scope first; a draft is born in the current style
-- **Review restyles to it** — `/tcs-review` brings every `draft` to the conventions before the first journey: id kept, `<v>` unchanged, status `draft`, coverage untouched. `actual` and `deprecated` cases are never restyled; a manual `actual` case only on the reviewer's yes
-- **Review adds to it** — when a review ends, every edit the reviewer made is offered back as a candidate line; each is confirmed, reworded or refused, and lands in that file's scope or its `## Refused`. Nothing lands unasked
+- **Generation writes to it** — `/spec-to-tcs` reads the conventions before it writes, a narrower line over a store-wide one; a draft is born in the current style
+- **Review restyles to it** — `/tcs-review` brings every `draft` to the conventions before the first journey: id kept, `<v>` unchanged, status `draft`, coverage untouched. A manual `actual` case only on the reviewer's yes; `automated` and `deprecated` cases never
+- **Review adds to it, and applies what it adds** — when a review ends, every edit the reviewer made is offered back as a candidate line; each is confirmed, reworded or refused. A confirmed line applies everywhere by default and is applied at once to the reviewed file and to its domain's manual `actual` cases. Nothing lands unasked
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule this document; a contradicting line is reported and this document followed
 - **A convention that must hold everywhere is a contract** — it moves here with a rules revision
 
@@ -204,22 +204,24 @@ The house style — titles, step and result shape, pre-condition and placeholder
 | | |
 | --- | --- |
 | Branch | `tcs-review/<level>-<target>`, off `main`, before the first verdict; a second reviewer on the same suite appends `-US<n>-<m>` |
-| Commits | preparation first, each its own commit and pushed before the first journey: `test(<domain>): regenerate <target> test cases under tcs-rules r<n>` or `test(<domain>): restyle <target> test cases`, then `test(<domain>): fill in how to run <target> test cases`, then `test(<domain>): add test data to <target> test cases`; then `test(<domain>): approve <target> US<n> test cases`, one per journey; last, `docs(governance): conventions from the <target> review` |
+| Commits | preparation first, each part its own commit: `test(<domain>): regenerate <target> test cases under tcs-rules r<n>` or `test(<domain>): restyle <target> test cases`, `test(<domain>): cover <target> scenarios`, `test(<domain>): fill in how to run <target> test cases`, `test(<domain>): add test data to <target> test cases`. Then `test(<domain>): approve <target> US<n> test cases`, one per journey that changed, made on moving to the next journey. Then the follow-ups — `docs(governance): conventions from the <target> review` and `test(<domain>): apply conventions from the <target> review` — batched by purpose |
+| Pushes | once when preparation is done, before the reviewer sees a case; once when the process ends; and once if the reviewer leaves midway. Never between journeys |
 | PR title | `test(<domain>): approve <target> US<n>–<m> test cases` — the journeys the branch carries |
 | PR label | `documentation` |
-| Merges | at journey boundaries; a stopped review still opens a draft PR for what has verdicts |
+| Merges | one pull request, opened when the process ends, its description listing what the follow-ups changed; a review left midway pushes and opens the pull request with what it has |
 
 - **One journey at a time** — its three-line statement, then every `draft` case in full, with `actual` and `deprecated` cases listed by id; scenarios offered, and quoted in full on request
 - **Only a human approves** — verdicts approve, change, defer or retire, in the reviewer's words; ids are echoed back and only what was named is marked. Approve → `actual`, defer → `draft`, retire → `deprecated`; the file status follows on its own
 - **Questions are answered from the spec** — quoting the clause, never from an assumption about the product. A "how do I run this" is a case failing **Executable without asking**: the answer is offered as an edit to its steps
-- **Prepare first** — before the first journey, in order: a draft below the rules revision is regenerated, otherwise restyled to the conventions; the mechanism is filled in until every draft is **Executable without asking**; test data is proposed. An `actual` case still `manual` is touched only on the reviewer's yes; an `automated` case is left as it is. The reviewer gets one summary of what preparation changed, and each changed case carries its note again when its journey is walked
+- **Prepare first** — before the first journey, in order: a draft below the rules revision is regenerated, unasked and unnarrated, otherwise restyled to the conventions; coverage is checked by claim; the mechanism is filled in until every draft is **Executable without asking**; test data is proposed. An `actual` case still `manual` is touched only on the reviewer's yes; an `automated` case is left as it is. The reviewer gets one summary of what preparation changed, the regenerate aside, and each changed case carries its note again when its journey is walked
+- **Coverage is checked by claim** — every journey in the suite has a case, and every scenario serving it has a case whose expected results assert its THEN; a case merely tracing the journey does not count. A scenario no case asserts gets a new `draft` at the journey's next unused `TC<m>`, unasked, reviewed like any other. A scenario under `**Out of suite:**` is listed, and the reviewer is asked whether to write a case for it. A scenario under a live **Covered at domain** case counts as covered
 - **A flow that disagrees is classified, not fixed** — where the spec's flow, `ui-design.md` or the PRD disagrees with a case, the PRD, the Feature set, `decisions.md`, `## Reconciliation` and `## Settled` are read first: already settled → follow it; the case misread → a proposed change; the spec wrong or silent → a gap for its author; undecidable → both sides shown to the reviewer
 - **Journeys are the author's** — a doubt about a journey itself (two with one purpose, one too wide, a wrong actor) is a finding for the spec's author, landed on the PRD as a ❓ or in the next change's `decisions.md`; a review never edits `user-journeys.md`
-- **Teach at the end** — every edit the reviewer made is offered back as a candidate line for [`tcs-conventions.md`](tcs-conventions.md), one at a time; confirmed lines land in their scope, refused ones under `## Refused`
+- **Teach at the end** — every edit the reviewer made is offered back as a candidate line for [`tcs-conventions.md`](tcs-conventions.md), one at a time; a confirmed line applies everywhere unless it cannot, and only then is its scope asked; refused ones land under `## Refused`. A confirmed line is applied at once, as that file's **A confirmed line applies at once** says
 - **Finding suites** — any file holding a `draft`: none → say so and name where suites live; one → review it; more → list `reopened` first, then `in-review`, then `pending-review`, with pending counts, and ask
 - **Top down** — platform, product, domain, then feature; when a domain's last feature suite is approved, offer its `domain-tcs.md`, then `platform-tcs.md`
 - **Two reviewers is allowed** — open PRs on the file are reported as information; the file is re-read from disk before each verdict is written
-- **Push at the end of a session** — `/tcs-review` offers to commit and push what has a verdict
+- **Leaving midway still lands** — a reviewer who stops mid-review gets what is done committed, pushed and opened as the pull request
 
 ## The Suites This Store Does Not Yet Have
 
@@ -240,7 +242,7 @@ The anchors are gated accordingly: a suite is held to the new shape when it carr
 
 | Case | The sweep does |
 | --- | --- |
-| `draft` below the revision | regenerated, whole file, after one yes for the set: top down — platform, product, domain, then feature — and line 1 to the end within a file; never merely restyled |
+| `draft` below the revision | regenerated, whole file, without asking and without narrating the move: top down — platform, product, domain, then feature — and line 1 to the end within a file; never merely restyled |
 | `actual`, `manual` | restyled to the new rule at its next review, on the reviewer's yes — ids, `<v>`, status and claim unchanged |
 | `actual`, `automated` | left as it is; a rule it breaks is a behaviour change, `<v>` bumped back to `draft`, or nothing |
 | `deprecated` | never touched |
