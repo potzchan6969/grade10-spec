@@ -1,0 +1,7 @@
+schema: grade10-planning
+created: 2026-09-25
+hands:
+  design: "@tangconst"
+ui_waived: no new surfaces; drops a Profile menu story that named a page that does not exist
+awaiting:
+  specs: 2026-09-25, requirement and suite deltas for site-chrome and page-shell without Profile as a launch destination
