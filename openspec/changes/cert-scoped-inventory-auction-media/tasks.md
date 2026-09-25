@@ -57,7 +57,7 @@
 - [ ] 2.4 Verify: run Auction backend, editor, and listing-media regression
   coverage plus `pnpm run typecheck` and `pnpm run lint` in `grade10`.
 
-## 3. Cross-domain operator path (grade10)
+## 3. Cross-domain operator path (grade10) (owner: @htonyl)
 
 - [ ] 3.1 Add an end-to-end test that classifies source media in Inventory and
   uses it in a matching Cert listing (`grade10-admin-e2e-US1-TC1-1`,
