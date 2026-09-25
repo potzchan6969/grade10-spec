@@ -30,6 +30,7 @@ visitor. Which events a product records belong to that product.
 A signed-in read SHALL report the person's user id, email address, name,
 and roles. A signed-out read SHALL report no person.
 
+<!-- trace:scenario id=g10.shared-session.SC-xll rev=1 -->
 #### Scenario: shared-auth-session-SC-01 - Signed in
 **Serves:** shared-auth-session-US-01 - Collector is named on every surface they use
 
@@ -37,6 +38,7 @@ and roles. A signed-out read SHALL report no person.
 - **WHEN** a product of that brand reads who is calling
 - **THEN** it receives that person's user id, email, name, and roles
 
+<!-- trace:scenario id=g10.shared-session.SC-yja rev=1 -->
 #### Scenario: shared-auth-session-SC-02 - Signed out
 **Serves:** shared-auth-session-US-01 - Collector is named on every surface they use
 
@@ -49,6 +51,7 @@ and roles. A signed-out read SHALL report no person.
 A person signed in on one site of a brand SHALL be signed in on every site
 of that brand. A sign-in on one brand SHALL NOT sign them in on another.
 
+<!-- trace:scenario id=g10.shared-session.SC-pre rev=1 -->
 #### Scenario: shared-auth-session-SC-03 - One sign-in covers the brand
 **Serves:** shared-auth-session-US-02 - Collector stays signed in across the brand
 
@@ -56,6 +59,7 @@ of that brand. A sign-in on one brand SHALL NOT sign them in on another.
 - **WHEN** they open another site of the same brand
 - **THEN** they are signed in as the same person
 
+<!-- trace:scenario id=g10.shared-session.SC-hvi rev=1 -->
 #### Scenario: shared-auth-session-SC-04 - Sign-in does not cross brands
 **Serves:** shared-auth-session-US-02 - Collector stays signed in across the brand
 
@@ -68,6 +72,7 @@ of that brand. A sign-in on one brand SHALL NOT sign them in on another.
 Every product SHALL key account data by user id. Email SHALL NOT be that
 key. A product that presents another person SHALL identify them by user id.
 
+<!-- trace:scenario id=g10.shared-session.SC-4uk rev=1 -->
 #### Scenario: shared-auth-session-SC-05 - Account data is keyed by user id
 **Serves:** shared-auth-session-US-01 - Collector is named on every surface they use
 
@@ -75,6 +80,7 @@ key. A product that presents another person SHALL identify them by user id.
 - **THEN** it keys that data by user id
 - **AND** it does not key it by email
 
+<!-- trace:scenario id=g10.shared-session.SC-ol8 rev=1 -->
 #### Scenario: shared-auth-session-SC-06 - Another person is shown by user id
 **Serves:** shared-auth-session-US-01 - Collector is named on every surface they use
 
@@ -89,6 +95,7 @@ signed in, the event SHALL be attributed to the device and SHALL NOT be
 attributed to a user id. Identity SHALL come from who is signed in; the
 client SHALL NOT choose the user.
 
+<!-- trace:scenario id=g10.shared-session.SC-h04 rev=1 -->
 #### Scenario: shared-auth-session-SC-07 - A signed-in event is the user
 **Serves:** shared-auth-session-US-03 - Collector's visits are named as them, not as a device
 
@@ -96,6 +103,7 @@ client SHALL NOT choose the user.
 - **WHEN** a product records an analytics event for that visit
 - **THEN** the event is attributed to that person's user id
 
+<!-- trace:scenario id=g10.shared-session.SC-nhr rev=1 -->
 #### Scenario: shared-auth-session-SC-08 - An anonymous event is the device
 **Serves:** shared-auth-session-US-03 - Collector's visits are named as them, not as a device
 
@@ -104,6 +112,7 @@ client SHALL NOT choose the user.
 - **THEN** the event is attributed to the device
 - **AND** it is not attributed to a user id
 
+<!-- trace:scenario id=g10.shared-session.SC-qd6 rev=1 -->
 #### Scenario: shared-auth-session-SC-09 - A client cannot claim a user
 **Serves:** shared-auth-session-US-01 - Collector is named on every surface they use
 
@@ -117,6 +126,7 @@ WHEN a signed-in visit records an analytics event, that event SHALL also
 carry the device so earlier anonymous events for that device can join the
 person.
 
+<!-- trace:scenario id=g10.shared-session.SC-4e0 rev=1 -->
 #### Scenario: shared-auth-session-SC-10 - Sign-in links the device to the person
 **Serves:** shared-auth-session-US-03 - Collector's visits are named as them, not as a device
 
@@ -138,6 +148,7 @@ the surface SHALL keep up promptly, whether or not the person left it. In
 every other case it SHALL keep up no later than when they return to it.
 Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 
+<!-- trace:scenario id=g10.shared-session.SC-fnz rev=1 -->
 #### Scenario: shared-auth-session-SC-11 - A session that arrived elsewhere reaches an open surface
 **Serves:** shared-auth-session-US-04 - Collector returns to a tab they left and it knows they signed in
 
@@ -147,6 +158,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **THEN** the surface shows them signed in as that person
 - **AND** it does so without them reloading it
 
+<!-- trace:scenario id=g10.shared-session.SC-n9f rev=1 -->
 #### Scenario: shared-auth-session-SC-12 - A session ended elsewhere reaches an open surface
 **Serves:** shared-auth-session-US-05 - Collector returns to a tab they left and it knows they signed out
 
@@ -156,6 +168,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **THEN** the surface shows them signed out
 - **AND** it does so without them reloading it
 
+<!-- trace:scenario id=g10.shared-session.SC-lp3 rev=1 -->
 #### Scenario: shared-auth-session-SC-13 - A session that ran out reaches an open surface
 **Serves:** shared-auth-session-US-05 - Collector returns to a tab they left and it knows they signed out
 
@@ -165,6 +178,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **AND** it shows them signed out the same way as a session they ended
   themselves
 
+<!-- trace:scenario id=g10.shared-session.SC-pyv rev=1 -->
 #### Scenario: shared-auth-session-SC-14 - A session that became somebody else reaches an open surface
 **Serves:** shared-auth-session-US-06 - Collector who signs in after somebody else sees their own things
 
@@ -174,6 +188,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **THEN** the surface shows the person signed in now
 - **AND** it does not show the earlier person as signed in
 
+<!-- trace:scenario id=g10.shared-session.SC-fmt rev=1 -->
 #### Scenario: shared-auth-session-SC-15 - The surface does not announce that it kept up
 **Serves:** shared-auth-session-US-04 - Collector returns to a tab they left and it knows they signed in
 
@@ -183,6 +198,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **THEN** the surface shows them signed in
 - **AND** no message on it announces that the session changed
 
+<!-- trace:scenario id=g10.shared-session.SC-lgf rev=1 -->
 #### Scenario: shared-auth-session-SC-22 - A surface the person never left keeps up anyway
 **Serves:** shared-auth-session-US-04 - Collector returns to a tab they left and it knows they signed in
 
@@ -192,6 +208,7 @@ Keeping up only after the person reloads the surface SHALL NOT satisfy this.
 - **THEN** the other shows them signed in promptly
 - **AND** they did not have to leave it and come back for that
 
+<!-- trace:scenario id=g10.shared-session.SC-hc7 rev=1 -->
 #### Scenario: shared-auth-session-SC-23 - The same person signing in again changes nothing on an open surface
 **Serves:** shared-auth-session-US-04 - Collector returns to a tab they left and it knows they signed in
 
@@ -211,6 +228,7 @@ another brand SHALL NOT change who it shows as signed in. A surface open in
 another browser, or on another device, SHALL NOT change who it shows as
 signed in.
 
+<!-- trace:scenario id=g10.shared-session.SC-sqp rev=1 -->
 #### Scenario: shared-auth-session-SC-16 - Every open surface of the brand keeps up, not only the one that asked
 **Serves:** shared-auth-session-US-04 - Collector returns to a tab they left and it knows they signed in
 
@@ -219,6 +237,7 @@ signed in.
   other two
 - **THEN** each of them shows them signed in as that person
 
+<!-- trace:scenario id=g10.shared-session.SC-2te rev=1 -->
 #### Scenario: shared-auth-session-SC-17 - Another brand's open surface does not keep up
 **Serves:** Open tabs - a session on one brand leaves the other brand's open surface alone
 
@@ -228,6 +247,7 @@ signed in.
   ZZZ surface
 - **THEN** the ZZZ surface still shows them signed out
 
+<!-- trace:scenario id=g10.shared-session.SC-kiw rev=1 -->
 #### Scenario: shared-auth-session-SC-18 - Another browser's open surface does not keep up
 **Serves:** Open tabs - a session reaches no further than the browser it was created in
 
@@ -250,6 +270,7 @@ surface-owned cleanup a confirmed sign-out runs, which stays
 anything to show and its session ends, it SHALL answer the person exactly as
 it answers somebody arriving at it with no session.
 
+<!-- trace:scenario id=g10.shared-session.SC-4mx rev=1 -->
 #### Scenario: shared-auth-session-SC-19 - A surface shows the new person their own things
 **Serves:** shared-auth-session-US-06 - Collector who signs in after somebody else sees their own things
 
@@ -260,6 +281,7 @@ it answers somebody arriving at it with no session.
 - **THEN** the surface shows the cart, watchlist and orders of the person
   signed in now
 
+<!-- trace:scenario id=g10.shared-session.SC-ekp rev=1 -->
 #### Scenario: shared-auth-session-SC-20 - A surface keeps none of the earlier person's things
 **Serves:** shared-auth-session-US-06 - Collector who signs in after somebody else sees their own things
 
@@ -270,6 +292,7 @@ it answers somebody arriving at it with no session.
 - **THEN** nothing the earlier person had in their cart, watchlist or orders
   is shown on that surface
 
+<!-- trace:scenario id=g10.shared-session.SC-etz rev=1 -->
 #### Scenario: shared-auth-session-SC-21 - A surface whose session ended shows nobody's things
 **Serves:** shared-auth-session-US-05 - Collector returns to a tab they left and it knows they signed out
 
@@ -279,6 +302,7 @@ it answers somebody arriving at it with no session.
 - **THEN** the surface shows them signed out
 - **AND** it no longer shows that person's cart, watchlist or orders
 
+<!-- trace:scenario id=g10.shared-session.SC-bc8 rev=1 -->
 #### Scenario: shared-auth-session-SC-24 - A surface that needs a session asks for one when the session ends
 **Serves:** shared-auth-session-US-05 - Collector returns to a tab they left and it knows they signed out
 
@@ -295,6 +319,7 @@ cannot be reached, or the device is offline — it SHALL go on showing what it
 last knew, and SHALL ask again later. Only an answer that the caller is not
 signed in SHALL make a surface show them signed out.
 
+<!-- trace:scenario id=g10.shared-session.SC-k23 rev=1 -->
 #### Scenario: shared-auth-session-SC-25 - A read that fails leaves the surface as it was
 **Serves:** Open tabs - a surface that cannot reach the service shows what it last knew
 
@@ -303,6 +328,7 @@ signed in SHALL make a surface show them signed out.
 - **THEN** it still shows that person signed in
 - **AND** it does not show them signed out
 
+<!-- trace:scenario id=g10.shared-session.SC-35o rev=1 -->
 #### Scenario: shared-auth-session-SC-26 - A read answering that nobody is signed in signs the surface out
 **Serves:** shared-auth-session-US-05 - Collector returns to a tab they left and it knows they signed out
 

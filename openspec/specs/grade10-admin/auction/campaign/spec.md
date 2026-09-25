@@ -33,6 +33,7 @@ tab and page to **Campaigns** (singular **Campaign** where one item is named).
 Tab title, section heading, empty states, list actions, and the campaign
 editor chrome SHALL NOT use the words **Sale** or **Sales** for this entity.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-0ir rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-01 - Auction admin section is labeled Campaigns
 **Serves:** grade10-admin-auction-campaign-US-01 - Operator finds the catalogue cover called a campaign
 
@@ -41,6 +42,7 @@ editor chrome SHALL NOT use the words **Sale** or **Sales** for this entity.
 - **THEN** the tab and page are labeled Campaigns
 - **AND** they are not labeled Sales
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-qeg rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-02 - Campaign editor chrome says Campaign
 **Serves:** grade10-admin-auction-campaign-US-01 - Operator finds the catalogue cover called a campaign
 
@@ -62,6 +64,7 @@ wire field SHALL stay unchanged. Post-sale (`postSale`, `PostSalePanel`) and
 inventory sell/sold vocabulary SHALL stay unchanged — they name different
 domains.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-gsp rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-03 - Admin catalogue-cover code uses campaign identifiers
 **Serves:** Rename Sales to Campaigns - admin catalogue-cover code uses campaign identifiers
 
@@ -84,6 +87,7 @@ Opening a campaign SHALL require a **Title** — trimmed, 1 to 200 characters.
 Opening from an operator who is not authorized to catalogue a campaign SHALL
 be refused.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-gzn rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-04 - Operator opens a draft campaign
 **Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
@@ -92,6 +96,7 @@ be refused.
 - **THEN** Grade10 persists a draft campaign with that title
 - **AND** the campaign is absent from the public catalogue covers
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-coz rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-05 - Open without a title is refused
 **Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
@@ -100,6 +105,7 @@ be refused.
 - **THEN** Grade10 refuses the open
 - **AND** it persists no campaign
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-9bl rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-06 - Unauthorized open is refused
 **Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
@@ -118,6 +124,7 @@ campaign to still have a valid title.
 Create of a campaign that is not `draft` SHALL be refused. Create from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-99d rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-07 - Operator creates a draft campaign
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -126,6 +133,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **THEN** Grade10 moves it to `created`
 - **AND** the campaign remains absent from the public catalogue covers
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-f38 rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-08 - Create of a created campaign is refused
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -148,6 +156,7 @@ SHALL be refused.
 A `canceled` campaign SHALL reject every title and copy write. Edit from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-1xm rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-09 - Operator updates copy on a published campaign
 **Serves:** grade10-admin-auction-campaign-US-04 - Operator edits a campaign's cover
 
@@ -156,6 +165,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **THEN** Grade10 stores the new copy
 - **AND** the title and status are unchanged
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-h9c rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-10 - Clearing the title is refused
 **Serves:** grade10-admin-auction-campaign-US-04 - Operator edits a campaign's cover
 
@@ -164,6 +174,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **THEN** Grade10 refuses the write
 - **AND** the title is unchanged
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-p3b rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-11 - Canceled campaign rejects a title edit
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -182,6 +193,7 @@ under it — each listing publishes on its own.
 Publish of a campaign that is not `created` SHALL be refused. Publish from an
 operator who is not authorized to catalogue a campaign SHALL be refused.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-2n2 rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-12 - Operator publishes a created campaign
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -191,6 +203,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **AND** the campaign appears as a public catalogue cover
 - **AND** listings under it that are not published stay off the catalogue
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-k5l rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-13 - Publish of a draft campaign is refused
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -199,6 +212,7 @@ operator who is not authorized to catalogue a campaign SHALL be refused.
 - **THEN** Grade10 refuses the publish
 - **AND** the campaign remains a draft
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-ymm rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-14 - Publish of a published campaign is refused
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -219,6 +233,7 @@ A campaign that is already `canceled` SHALL reject a second cancel. Cancel
 from an operator who is not authorized to call a campaign off SHALL be
 refused.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-fwq rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-15 - Operator cancels a published campaign
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -227,6 +242,7 @@ refused.
 - **THEN** Grade10 moves the campaign to `canceled`
 - **AND** those listings move to `canceled` under the listing cancel rules
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-tka rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-16 - Operator cancels a draft campaign
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -234,6 +250,7 @@ refused.
 - **WHEN** an authorized operator cancels it
 - **THEN** Grade10 moves it to `canceled`
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-8dq rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-17 - Operator cancels a created campaign
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -241,6 +258,7 @@ refused.
 - **WHEN** an authorized operator cancels it
 - **THEN** Grade10 moves it to `canceled`
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-z8a rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-18 - Already canceled campaign cannot be canceled again
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -249,6 +267,7 @@ refused.
 - **THEN** Grade10 refuses the cancel
 - **AND** the campaign remains canceled
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-uv1 rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-19 - Unauthorized cancel is refused
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 
@@ -269,6 +288,7 @@ create (when the campaign is `draft`), publish (when the campaign is
 A `canceled` campaign SHALL open read-only: title and copy visible, create,
 publish, and edit controls absent, cancel absent.
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-vz3 rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-20 - Operator opens the editor for a new campaign
 **Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
@@ -278,6 +298,7 @@ publish, and edit controls absent, cancel absent.
 - **AND** create and publish are not offered until the campaign exists as a
   draft
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-5pd rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-21 - Operator opens the editor for a draft campaign
 **Serves:** grade10-admin-auction-campaign-US-02 - Operator opens a campaign as a draft
 
@@ -287,6 +308,7 @@ publish, and edit controls absent, cancel absent.
 - **AND** create and cancel are offered when the operator is authorized
 - **AND** publish is not offered
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-l3i rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-22 - Operator opens the editor for a created campaign
 **Serves:** grade10-admin-auction-campaign-US-03 - Operator takes a campaign from draft to published
 
@@ -296,6 +318,7 @@ publish, and edit controls absent, cancel absent.
 - **AND** publish and cancel are offered when the operator is authorized
 - **AND** create is not offered
 
+<!-- trace:scenario id=g10adm.auction-campaign.SC-2l6 rev=1 -->
 #### Scenario: grade10-admin-auction-campaign-SC-23 - Canceled campaign opens read-only
 **Serves:** grade10-admin-auction-campaign-US-05 - Operator calls a campaign off
 

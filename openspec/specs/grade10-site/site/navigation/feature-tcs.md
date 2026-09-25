@@ -11,6 +11,7 @@ it, or the not-found surface,
 **so that** a link I open lands me on the surface that owns it, and tells me
 which address failed when none does.
 
+<!-- trace:case id=g10.site-navigation.TC-07a rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
 ### grade10-site-site-navigation-US1-TC1-1: Nested address answers as its parent surface
 
 **Classification:**
@@ -38,6 +39,7 @@ None.
 
 * That parent surface renders.
 
+<!-- trace:case id=g10.site-navigation.TC-b4n rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
 ### grade10-site-site-navigation-US1-TC2-1: Nested lot address renders the lot, not the auction
 
 **Classification:**
@@ -64,6 +66,7 @@ The catalogue publishes <a published lot>.
 
 * The nested lot surface renders, not the auction above it.
 
+<!-- trace:case id=g10.site-navigation.TC-68k rev=1 covers=g10.site-navigation.SC-70e,g10.site-navigation.SC-p5e,g10.site-navigation.SC-jo4 -->
 ### grade10-site-site-navigation-US1-TC3-1: Unknown address resolves to not-found naming it
 
 **Classification:**
@@ -100,6 +103,7 @@ my own click modifiers and other origins stay the browser's,
 **so that** moving around the site is immediate without taking away the
 browser behavior I asked for.
 
+<!-- trace:case id=g10.site-navigation.TC-n38 rev=1 covers=g10.site-navigation.SC-jx8,g10.site-navigation.SC-4a8,g10.site-navigation.SC-xfo -->
 ### grade10-site-site-navigation-US2-TC1-1: Chrome link navigates in place
 
 **Classification:**
@@ -126,6 +130,7 @@ A collector is on any surface.
 
 * The destination surface renders without a full document load.
 
+<!-- trace:case id=g10.site-navigation.TC-nt8 rev=1 covers=g10.site-navigation.SC-jx8,g10.site-navigation.SC-4a8,g10.site-navigation.SC-xfo -->
 ### grade10-site-site-navigation-US2-TC2-1: Modified click stays the browser's
 
 **Classification:**
@@ -152,6 +157,7 @@ None.
 
 * The browser's own behavior happens, unaltered.
 
+<!-- trace:case id=g10.site-navigation.TC-djm rev=1 covers=g10.site-navigation.SC-jx8,g10.site-navigation.SC-4a8,g10.site-navigation.SC-xfo -->
 ### grade10-site-site-navigation-US2-TC3-1: Other-origin link is a normal page load
 
 **Classification:**
@@ -188,6 +194,7 @@ entry at, and a new entry to start at the top,
 **so that** I keep my place in a surface I return to instead of finding it
 from the beginning.
 
+<!-- trace:case id=g10.site-navigation.TC-3dz rev=1 covers=g10.site-navigation.SC-a0s,g10.site-navigation.SC-5ju -->
 ### grade10-site-site-navigation-US4-TC1-1: Back returns to the left scroll position
 
 **Classification:**
@@ -215,6 +222,7 @@ A collector who scrolled partway down a surface and followed a link from there.
 
 * The surface is scrolled to where they left it.
 
+<!-- trace:case id=g10.site-navigation.TC-d2e rev=1 covers=g10.site-navigation.SC-a0s,g10.site-navigation.SC-5ju -->
 ### grade10-site-site-navigation-US4-TC2-1: New surface starts at the top
 
 **Classification:**
@@ -251,6 +259,7 @@ it,
 **so that** opening one surface does not make me pay for the ones I did not
 open.
 
+<!-- trace:case id=g10.site-navigation.TC-kk4 rev=1 covers=g10.site-navigation.SC-8k5,g10.site-navigation.SC-36n -->
 ### grade10-site-site-navigation-US5-TC1-1: Cold marketing visit downloads no store or auction page code
 
 **Classification:**
@@ -278,6 +287,7 @@ A cold browser with an empty cache.
 
 * No script containing the store's or the auction's page code is downloaded.
 
+<!-- trace:case id=g10.site-navigation.TC-xkh rev=1 covers=g10.site-navigation.SC-8k5,g10.site-navigation.SC-36n -->
 ### grade10-site-site-navigation-US5-TC2-1: Store page code loads on arrival
 
 **Classification:**
@@ -315,6 +325,7 @@ surface first,
 **so that** dismissing the ask leaves me reading what I was reading, and
 signing in puts me on the surface I asked for.
 
+<!-- trace:case id=g10.site-navigation.TC-8kz rev=1 covers=g10.site-navigation.SC-ceg,g10.site-navigation.SC-32w,g10.site-navigation.SC-jzp,g10.site-navigation.SC-rrx -->
 ### grade10-site-site-navigation-US6-TC1-1: Link to the vault asks in place, then lands it
 
 **Classification:**
@@ -346,6 +357,7 @@ signing in puts me on the surface I asked for.
 * Step 2 shows the store's address, not the vault's.
 * The dialog closes and the vault renders at <grade10 vault url>.
 
+<!-- trace:case id=g10.site-navigation.TC-qei rev=1 covers=g10.site-navigation.SC-ceg,g10.site-navigation.SC-32w,g10.site-navigation.SC-jzp,g10.site-navigation.SC-rrx -->
 ### grade10-site-site-navigation-US6-TC2-1: Dismissing the ask leaves the collector reading the store
 
 **Classification:**
@@ -377,6 +389,7 @@ signing in puts me on the surface I asked for.
 * Step 2 shows the store's address.
 * The vault does not render.
 
+<!-- trace:case id=g10.site-navigation.TC-lbj rev=1 covers=g10.site-navigation.SC-ceg,g10.site-navigation.SC-32w,g10.site-navigation.SC-jzp,g10.site-navigation.SC-rrx -->
 ### grade10-site-site-navigation-US6-TC3-1: A dismissed ask leaves no entry to go back to
 
 **Classification:**
@@ -417,6 +430,7 @@ signing in puts me on the surface I asked for.
 **so that** what I came for is what renders the moment I have a session,
 without being sent anywhere else first.
 
+<!-- trace:case id=g10.site-navigation.TC-gpo rev=1 covers=g10.site-navigation.SC-b18,g10.site-navigation.SC-yjb,g10.site-navigation.SC-pih,g10.site-navigation.SC-1vk -->
 ### grade10-site-site-navigation-US7-TC1-1: The vault's own address asks there and renders there
 
 **Classification:**
@@ -448,6 +462,7 @@ without being sent anywhere else first.
 * Step 2 shows <grade10 vault url>, uncorrected.
 * The vault renders at that same address, with no navigation in between.
 
+<!-- trace:case id=g10.site-navigation.TC-3xk rev=1 covers=g10.site-navigation.SC-b18,g10.site-navigation.SC-yjb,g10.site-navigation.SC-pih,g10.site-navigation.SC-1vk -->
 ### grade10-site-site-navigation-US7-TC2-1: Back onto a surface that asks is answered there
 
 **Classification:**
@@ -478,6 +493,7 @@ without being sent anywhere else first.
 * Step 2 shows <grade10 vault url>.
 * The sign-in dialog opens over it.
 
+<!-- trace:case id=g10.site-navigation.TC-0qn rev=1 covers=g10.site-navigation.SC-b18,g10.site-navigation.SC-yjb,g10.site-navigation.SC-pih,g10.site-navigation.SC-1vk -->
 ### grade10-site-site-navigation-US7-TC3-1: Leaving the ask at the vault's address lands the brand home
 
 **Classification:**
@@ -519,6 +535,7 @@ words, or that my link's own secret opens, to render as asked,
 **so that** I am not stopped by a dialog in front of something I could already
 read.
 
+<!-- trace:case id=g10.site-navigation.TC-rnw rev=1 covers=g10.site-navigation.SC-clu,g10.site-navigation.SC-wnv,g10.site-navigation.SC-hxe -->
 ### grade10-site-site-navigation-US8-TC1-1: A collector's own visits opens and invites sign-in itself
 
 **Classification:**
@@ -549,6 +566,7 @@ read.
 * It invites the collector to sign in, in its own words.
 * No sign-in dialog opens in front of it.
 
+<!-- trace:case id=g10.site-navigation.TC-afw rev=1 covers=g10.site-navigation.SC-clu,g10.site-navigation.SC-wnv,g10.site-navigation.SC-hxe -->
 ### grade10-site-site-navigation-US8-TC2-1: A booking's private link opens for someone with no account
 
 **Classification:**
@@ -577,6 +595,7 @@ read.
 * The surface that link names renders.
 * No sign-in dialog opens before it.
 
+<!-- trace:case id=g10.site-navigation.TC-cts rev=1 covers=g10.site-navigation.SC-clu,g10.site-navigation.SC-wnv,g10.site-navigation.SC-hxe -->
 ### grade10-site-site-navigation-US8-TC3-1: A public surface renders before the session answers
 
 **Classification:**

@@ -42,6 +42,7 @@ by this repository's shared UI package, `@grade10/ui`, and a consuming
 application SHALL render those exports from the package rather than
 maintaining an application-local implementation of them.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-lp7 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-01 - Two stores render one source
 **Serves:** One shared implementation - two stores render one source
 
@@ -50,6 +51,7 @@ maintaining an application-local implementation of them.
 - **THEN** both render the same component source from the shared package
 - **AND** every difference between the two renderings is produced by the props and theme tokens each application supplies, not by diverging component copies
 
+<!-- trace:scenario id=g10.shared-component-package.SC-6du rev=1 -->
 #### Scenario: shared-ui-component-package-SC-02 - A contract change lands once
 **Serves:** One shared implementation - a contract change lands once
 
@@ -63,6 +65,7 @@ The shared UI package SHALL be consumable directly from its source files
 through the repository submodule, with no build step and no committed build
 artifact.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-bg8 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-03 - An application consumes without building
 **Serves:** One shared implementation - an application consumes without building
 
@@ -79,12 +82,14 @@ persist to browser storage, record analytics, read feature flags, import
 message catalogs, or import application code. Internal, transient
 presentation state and DOM-renderer lifecycle remain permitted.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-col rev=1 -->
 #### Scenario: shared-ui-component-package-SC-04 - Every state is reachable with props alone
 **Serves:** App-neutral components - every state is reachable with props alone
 
 - **WHEN** a package component is rendered in a story or test with props alone
 - **THEN** every consumer-observable state — loading, empty, error, resolved, selected, and disabled where they exist — can be produced without any application setup
 
+<!-- trace:scenario id=g10.shared-component-package.SC-rhb rev=1 -->
 #### Scenario: shared-ui-component-package-SC-05 - A forbidden integration is rejected
 **Serves:** App-neutral components - a forbidden integration is rejected
 
@@ -97,6 +102,7 @@ Shared UI components SHALL compose the design-system primitives and express
 every style through design-system token values, and the design system SHALL
 NOT depend on the shared UI package.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-tez rev=1 -->
 #### Scenario: shared-ui-component-package-SC-06 - Styling stays on tokens
 **Serves:** Design-system foundation - styling stays on tokens
 
@@ -104,6 +110,7 @@ NOT depend on the shared UI package.
 - **THEN** it uses a design-system token value rather than an ad-hoc literal
 - **AND** re-theming the token values re-brands the component without a source change
 
+<!-- trace:scenario id=g10.shared-component-package.SC-2vo rev=1 -->
 #### Scenario: shared-ui-component-package-SC-07 - The dependency does not invert
 **Serves:** Design-system foundation - the dependency does not invert
 
@@ -134,6 +141,7 @@ Where a Figma Code Connect template exists for such a component, the template
 SHALL emit every required prop, so the snippet a designer copies from Dev Mode
 compiles.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-gtn rev=1 -->
 #### Scenario: shared-ui-component-package-SC-08 - A second store renders the chrome
 **Serves:** No store's content built in - a second store renders the chrome
 
@@ -142,6 +150,7 @@ compiles.
 - **THEN** type checking fails, naming the props it must supply
 - **AND** no other store's brand name, navigation, or links can be displayed
 
+<!-- trace:scenario id=g10.shared-component-package.SC-a3n rev=1 -->
 #### Scenario: shared-ui-component-package-SC-09 - The store's own content is supplied
 **Serves:** No store's content built in - the store's own content is supplied
 
@@ -149,12 +158,14 @@ compiles.
 - **THEN** the component displays exactly what was supplied
 - **AND** the component's layout, spacing, and token-derived styling are unchanged from the design source
 
+<!-- trace:scenario id=g10.shared-component-package.SC-fbr rev=1 -->
 #### Scenario: shared-ui-component-package-SC-10 - A non-content default is kept
 **Serves:** No store's content built in - a non-content default is kept
 
 - **WHEN** a shared component offers a default for a variant, size, layout, accessibility behavior, or the accessible name of a standard control
 - **THEN** that default is permitted, because omitting it displays no store's content
 
+<!-- trace:scenario id=g10.shared-component-package.SC-ttb rev=1 -->
 #### Scenario: shared-ui-component-package-SC-11 - The design snippet still compiles
 **Serves:** No store's content built in - the design snippet still compiles
 
@@ -163,6 +174,7 @@ compiles.
 - **THEN** the snippet supplies every required prop
 - **AND** it compiles against the component's current types
 
+<!-- trace:scenario id=g10.shared-component-package.SC-olx rev=1 -->
 #### Scenario: shared-ui-component-package-SC-12 - Review catches a reintroduced default
 **Serves:** No store's content built in - review catches a reintroduced default
 
@@ -186,12 +198,14 @@ A component's copy type SHALL be composable — a surface assembled from
 several components SHALL be able to declare its own copy as theirs together,
 rather than restating the words each of them already declares.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-yn2 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-13 - A consumer reads what a block needs
 **Serves:** Typed copy contract - a consumer reads what a block needs
 
 - **WHEN** an engineer opens a shared component's exported copy type
 - **THEN** it lists every word that component renders, and nothing else
 
+<!-- trace:scenario id=g10.shared-component-package.SC-7s0 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-14 - A word can be an accessible name
 **Serves:** Typed copy contract - a word can be an accessible name
 
@@ -199,6 +213,7 @@ rather than restating the words each of them already declares.
 - **WHEN** that control needs an accessible name, a title, or a truncation
 - **THEN** the word itself serves, without a second prop carrying the same text
 
+<!-- trace:scenario id=g10.shared-component-package.SC-8z8 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-15 - A slot takes markup, a word does not
 **Serves:** Typed copy contract - a slot takes markup, a word does not
 
@@ -206,6 +221,7 @@ rather than restating the words each of them already declares.
 - **THEN** it is a type error
 - **AND** the slots the component does offer accept that element
 
+<!-- trace:scenario id=g10.shared-component-package.SC-kla rev=1 -->
 #### Scenario: shared-ui-component-package-SC-16 - A surface declares its words once
 **Serves:** Typed copy contract - a surface declares its words once
 
@@ -225,6 +241,7 @@ A utility that reads a token by name SHALL be interchangeable with the
 arbitrary-property form naming the same token: `rounded-md` and
 `rounded-(--radius-md)` SHALL render the same value.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-g77 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-17 - A designer changes a token value
 **Serves:** Design-system foundation - a designer changes a token value
 
@@ -232,6 +249,7 @@ arbitrary-property form naming the same token: `rounded-md` and
 - **THEN** every utility named after that token renders the new value
 - **AND** no component source changes
 
+<!-- trace:scenario id=g10.shared-component-package.SC-osq rev=1 -->
 #### Scenario: shared-ui-component-package-SC-18 - A utility is named after a token
 **Serves:** Design-system foundation - a utility is named after a token
 
@@ -239,6 +257,7 @@ arbitrary-property form naming the same token: `rounded-md` and
 - **THEN** the rendered value equals that token's value in `tokens.json`
 - **AND** it equals what the arbitrary-property form of the same token renders
 
+<!-- trace:scenario id=g10.shared-component-package.SC-83c rev=1 -->
 #### Scenario: shared-ui-component-package-SC-19 - A scale is projected
 **Serves:** Design-system foundation - a scale is projected
 
@@ -253,6 +272,7 @@ components and types named by `shared/ui/store-home`: `StoreHomeHero`,
 `StoreSectionHeader`, `StoreCollectionGrid`, `StoreCollectionTile`, and each
 of their prop and copy types.
 
+<!-- trace:scenario id=g10.shared-component-package.SC-1u8 rev=1 -->
 #### Scenario: shared-ui-component-package-SC-20 - An application imports a store-home block
 **Serves:** Package entry exports - an application imports a store-home block
 

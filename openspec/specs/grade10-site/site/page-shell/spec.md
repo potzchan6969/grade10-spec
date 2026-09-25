@@ -59,6 +59,7 @@ surface SHALL render into a single content region between them.
 The shell SHALL hold no opinion about what a surface renders inside that
 region.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-tme rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-01 - Every address is wrapped
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
@@ -66,6 +67,7 @@ region.
   does not recognize
 - **THEN** the header and the footer are present, with the surface between them
 
+<!-- trace:scenario id=g10.site-page-shell.SC-qm2 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-02 - The shell is not a page
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
@@ -73,6 +75,7 @@ region.
 - **THEN** the shell adds no heading, no copy, and no spacing decision of its
   own to that surface's content
 
+<!-- trace:scenario id=g10.site-page-shell.SC-kxh rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-03 - The page has one of each landmark
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
@@ -89,6 +92,7 @@ icon that opens the account menu. What the Cart control opens SHALL depend on
 it too, and nothing else in the chrome SHALL. No chrome control SHALL appear,
 disappear, or move when the session arrives.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-9ud rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-04 - A first paint while the session resolves
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
@@ -96,6 +100,7 @@ disappear, or move when the session arrives.
 - **THEN** the header and the footer are already rendered
 - **AND** the content region shows that the surface is loading
 
+<!-- trace:scenario id=g10.site-page-shell.SC-yxt rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-05 - No layout shift when the session arrives
 **Serves:** grade10-site-site-page-shell-US-02 - Collector sees the chrome before the session resolves
 
@@ -114,6 +119,7 @@ be the account icon that opens the account menu.
 
 Signing out SHALL be offered from the account menu and on the profile.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-m3w rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-06 - Signed in
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -121,6 +127,7 @@ Signing out SHALL be offered from the account menu and on the profile.
 - **WHEN** they activate the account control
 - **THEN** the account menu opens
 
+<!-- trace:scenario id=g10.site-page-shell.SC-0ao rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-07 - Signed out
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -128,6 +135,7 @@ Signing out SHALL be offered from the account menu and on the profile.
 - **WHEN** they activate Sign In
 - **THEN** they arrive at sign-in
 
+<!-- trace:scenario id=g10.site-page-shell.SC-e9z rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-08 - Sign-out has one home
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -150,6 +158,7 @@ the header bar. On a narrow viewport language SHALL be reachable from the
 compact menu's nested language drawer. The account entry SHALL remain in the
 bar at both widths once the session has resolved.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-ovr rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-09 - Absent surfaces are absent controls
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -161,6 +170,7 @@ bar at both widths once the session has resolved.
 - **AND** no Store navigation item appears when Store does not answer
 - **AND** no search or cart control appears
 
+<!-- trace:scenario id=g10.site-page-shell.SC-ql0 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-16 - Cart is global once Store answers
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -170,6 +180,7 @@ bar at both widths once the session has resolved.
 - **THEN** the Cart control appears
 - **AND** no search control appears
 
+<!-- trace:scenario id=g10.site-page-shell.SC-ond rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-19 - Language switch, not currency
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -188,6 +199,7 @@ Utility links SHALL follow the same rule for destinations on this site. An
 unanswered site utility destination SHALL stay omitted. The promotional bar
 SHALL wait for a page the site answers.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-7p3 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-10 - Navigation lists real surfaces
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -196,6 +208,7 @@ SHALL wait for a page the site answers.
   answers
 - **AND** Help, when present, leads to the documentation host Product names
 
+<!-- trace:scenario id=g10.site-page-shell.SC-fmx rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-11 - The footer drops what it cannot reach
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -203,6 +216,7 @@ SHALL wait for a page the site answers.
 - **THEN** every link leads to a surface the site answers, and a column left
   with no reachable link is absent entirely
 
+<!-- trace:scenario id=g10.site-page-shell.SC-cex rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-12 - The promo bar and utility row wait for their pages
 **Serves:** grade10-site-site-page-shell-US-04 - Collector follows only links the site answers
 
@@ -215,6 +229,7 @@ SHALL wait for a page the site answers.
 The site SHALL mark the navigation item matching the current surface, and
 SHALL mark none when the current address belongs to no navigation item.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-q3w rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-13 - A collector is on a listed surface
 **Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
 
@@ -222,6 +237,7 @@ SHALL mark none when the current address belongs to no navigation item.
 - **WHEN** the header renders
 - **THEN** that navigation item is marked as the current page
 
+<!-- trace:scenario id=g10.site-page-shell.SC-xiu rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-14 - A collector is on an unlisted surface
 **Serves:** grade10-site-site-page-shell-US-05 - Collector locates the current surface in the navigation
 
@@ -235,6 +251,7 @@ The site SHALL render the shell without horizontal overflow at a viewport 375
 CSS pixels wide, on every surface. Chrome and content SHALL reflow rather than
 be clipped, and every control SHALL remain reachable.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-o0j rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-15 - A narrow viewport
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
@@ -265,6 +282,7 @@ in a new browsing context. The current site surface SHALL remain open.
 **Isolated from the opener** - Help SHALL use the shared chrome's external link
 behaviour so the new tab is isolated from the opener.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-o1e rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-25 - Help on auction-only and full nav
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
@@ -275,6 +293,7 @@ behaviour so the new tab is isolated from the opener.
   nav, or after Store Locator when that item is present
 - **AND** activating it opens the documentation site in a new browsing context
 
+<!-- trace:scenario id=g10.site-page-shell.SC-53q rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-26 - Help in the compact menu
 **Serves:** grade10-site-site-page-shell-US-07 - Collector opens Help from the header
 
@@ -312,6 +331,7 @@ header.
 **Profile sign-out** - Wherever the profile is carried, it SHALL continue to
 offer sign-out as well.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-y2l rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-17 - Account menu lists auction-first destinations
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu once Store answers
 
@@ -321,6 +341,7 @@ offer sign-out as well.
 - **AND** the menu offers Profile, My Orders, My Auctions, Membership, and Sign Out, in that order
 - **AND** the menu does not offer KYC
 
+<!-- trace:scenario id=g10.site-page-shell.SC-04a rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-18 - Sign out from the menu
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -329,6 +350,7 @@ offer sign-out as well.
 - **THEN** sign-out starts
 - **AND** the profile still offers sign-out when they are signed in
 
+<!-- trace:scenario id=g10.site-page-shell.SC-u71 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-27 - Account menu omits My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - the collector's account menu before Store answers
 
@@ -338,6 +360,7 @@ offer sign-out as well.
 - **AND** the menu offers Profile, My Auctions, and Sign Out, in that order
 - **AND** the menu does not offer My Orders or Membership
 
+<!-- trace:scenario id=g10.site-page-shell.SC-agf rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-28 - Account menu omits Profile once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -346,6 +369,7 @@ offer sign-out as well.
 - **THEN** the menu offers My Orders, My Auctions, Membership, and Sign Out
 - **AND** the menu does not offer Profile
 
+<!-- trace:scenario id=g10.site-page-shell.SC-n9c rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-29 - Account menu omits Profile and My Orders before Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -354,6 +378,7 @@ offer sign-out as well.
 - **THEN** the menu offers My Auctions and Sign Out
 - **AND** the menu does not offer Profile, My Orders, or Membership
 
+<!-- trace:scenario id=g10.site-page-shell.SC-3y1 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-30 - Account menu shows the sign-in email and avatar
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
@@ -361,6 +386,7 @@ offer sign-out as well.
 - **WHEN** they activate the account control
 - **THEN** the menu shows their sign-in email with its small initial avatar above the items
 
+<!-- trace:scenario id=g10.site-page-shell.SC-qby rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-31 - Account menu falls back to the account label without a sign-in email
 **Serves:** grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
 
@@ -368,6 +394,7 @@ offer sign-out as well.
 - **WHEN** they activate the account control
 - **THEN** the menu shows the account label above the items in place of an email
 
+<!-- trace:scenario id=g10.site-page-shell.SC-q9i rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-32 - Account menu offers Membership after My Auctions once Store answers
 **Serves:** grade10-site-site-page-shell-US-03 - reaching Membership from the same menu once Store answers
 
@@ -375,6 +402,7 @@ offer sign-out as well.
 - **WHEN** they activate the account control
 - **THEN** Membership appears after My Auctions and before Sign Out
 
+<!-- trace:scenario id=g10.site-page-shell.SC-m6b rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-33 - Sign Out reads in Title Case
 **Serves:** grade10-site-site-page-shell-US-03 - Collector reaches account destinations from the header
 
@@ -382,6 +410,7 @@ offer sign-out as well.
 - **WHEN** they view the menu
 - **THEN** the last item reads "Sign Out"
 
+<!-- trace:scenario id=g10.site-page-shell.SC-x1n rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-34 - Activating Membership invokes its handler without a withheld route
 **Serves:** grade10-site-site-page-shell-US-03 - reaching Membership from the same menu once Store answers
 
@@ -409,6 +438,7 @@ the full viewport.
 
 **No currency switch** - The shell SHALL NOT rely on a currency switch.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-oq6 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-20 - Compact menu reaches nav and language
 **Serves:** grade10-site-site-page-shell-US-01 - Collector opens any surface inside the site shell
 
@@ -433,6 +463,7 @@ open, and the site SHALL NOT open one later.
 While a session is signed in, activating the Cart control SHALL open the cart
 drawer.
 
+<!-- trace:scenario id=g10.site-page-shell.SC-g63 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-21 - A signed-out collector presses Cart
 **Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
@@ -441,6 +472,7 @@ drawer.
 - **THEN** the sign-in dialog opens over the surface
 - **AND** the cart drawer does not open
 
+<!-- trace:scenario id=g10.site-page-shell.SC-ew2 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-22 - Sign-in opens the cart they asked for
 **Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
@@ -449,6 +481,7 @@ drawer.
 - **THEN** the cart drawer opens
 - **AND** the sign-in dialog is closed
 
+<!-- trace:scenario id=g10.site-page-shell.SC-d19 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-23 - Dismissing sign-in opens nothing
 **Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 
@@ -457,6 +490,7 @@ drawer.
 - **THEN** they remain signed out on that surface
 - **AND** no cart drawer is open
 
+<!-- trace:scenario id=g10.site-page-shell.SC-tj7 rev=1 -->
 #### Scenario: grade10-site-site-page-shell-SC-24 - A member presses Cart
 **Serves:** grade10-site-site-page-shell-US-06 - Collector opens their cart from the header
 

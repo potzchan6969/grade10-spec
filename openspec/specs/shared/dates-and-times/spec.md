@@ -64,6 +64,7 @@ produce a date by its own local formatting.
 - A **deadline** — a date, a time to the minute, and the name of the zone it
   is in — where the reader will act before the time arrives.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-z12 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-01 - Two operator tables show one moment the same way
 **Serves:** Reading shapes - two surfaces show one instant the same way
 
@@ -71,6 +72,7 @@ produce a date by its own local formatting.
 - **WHEN** each row is rendered for the same reader
 - **THEN** both show identical text
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-7tx rev=1 -->
 #### Scenario: shared-dates-and-times-SC-02 - The same shape across both brands
 **Serves:** Reading shapes - one shape across both brands
 
@@ -78,6 +80,7 @@ produce a date by its own local formatting.
 - **WHEN** each is rendered for the same reader
 - **THEN** both show identical text
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-8no rev=1 -->
 #### Scenario: shared-dates-and-times-SC-03 - A day carries no time
 **Serves:** Reading shapes - a day carries no time
 
@@ -86,6 +89,7 @@ produce a date by its own local formatting.
 - **THEN** it shows the calendar date
 - **AND** it shows no time of day
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-fwr rev=1 -->
 #### Scenario: shared-dates-and-times-SC-04 - An audit entry is ordered to the second
 **Serves:** Reading shapes - an audit entry ordered to the second
 
@@ -93,6 +97,7 @@ produce a date by its own local formatting.
 - **WHEN** the log is rendered
 - **THEN** the two entries show different times
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-e9f rev=1 -->
 #### Scenario: shared-dates-and-times-SC-05 - One reader, two browsers
 **Serves:** Reading shapes - the platform's shape, not the browser's
 
@@ -113,6 +118,7 @@ Collector-facing activity time and local moment renderings SHALL accept a
 shipped platform locale only; unsupported browser languages SHALL be resolved
 to the brand default before formatting.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-yw4 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-06 - A month name in another language
 **Serves:** Format and language - a month name in a named language
 
@@ -121,6 +127,7 @@ to the brand default before formatting.
 - **THEN** the month's wording is drawn from that language
 - **AND** the ordering and punctuation are unchanged from the platform's format
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-3iq rev=1 -->
 #### Scenario: shared-dates-and-times-SC-07 - No language named
 **Serves:** Format and language - English where no language is named
 
@@ -128,6 +135,7 @@ to the brand default before formatting.
 - **WHEN** it is rendered
 - **THEN** its words are English
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-dfo rev=1 -->
 #### Scenario: shared-dates-and-times-SC-08 - A language the platform does not ship
 **Serves:** Refusals - an unshipped language fails rather than degrading
 
@@ -139,6 +147,7 @@ to the brand default before formatting.
 An attempt to render an instant that is not a valid point in time SHALL fail
 with an error. No surface SHALL render placeholder text in place of a date.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-d40 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-09 - An invalid instant
 **Serves:** Refusals - an invalid instant fails rather than rendering placeholder text
 
@@ -157,6 +166,7 @@ local moments SHALL state the reader's stated `timeZone`.
 A surface that states a calendar day SHALL name the brand's zone, so the day
 it shows is the day the brand's own counter, paper and records are on.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-q9s rev=1 -->
 #### Scenario: shared-dates-and-times-SC-10 - Operator readers in different zones
 **Serves:** Stated zones - operator surfaces state UTC
 
@@ -164,6 +174,7 @@ it shows is the day the brand's own counter, paper and records are on.
 - **WHEN** each renders it in an operator table
 - **THEN** both show identical text
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-4uc rev=1 -->
 #### Scenario: shared-dates-and-times-SC-11 - An instant near midnight
 **Serves:** Stated zones - a stated zone near midnight
 
@@ -186,6 +197,7 @@ code that means a calendar day. It SHALL NOT be read from a reader's machine,
 and SHALL NOT be stored on a record: a record holds an instant, and which day
 it falls on is a question asked when it is read.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-4pe rev=1 -->
 #### Scenario: shared-dates-and-times-SC-25 - A term ends at the borrower's midnight
 **Serves:** Stated zones - the brand's day ends at its own midnight
 
@@ -193,6 +205,7 @@ it falls on is a question asked when it is read.
 - **WHEN** its term ends
 - **THEN** the due instant is the last moment of that calendar day in the brand's zone
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-egt rev=1 -->
 #### Scenario: shared-dates-and-times-SC-26 - A queue cut in the morning
 **Serves:** Stated zones - a queue cut on the brand's day
 
@@ -200,6 +213,7 @@ it falls on is a question asked when it is read.
 - **WHEN** the day's queue is cut
 - **THEN** the visit is in it, though UTC's date is still yesterday's
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-34o rev=1 -->
 #### Scenario: shared-dates-and-times-SC-27 - A birthday at the counter
 **Serves:** Stated zones - an age judged on the brand's day
 
@@ -207,6 +221,7 @@ it falls on is a question asked when it is read.
 - **WHEN** their identity is judged
 - **THEN** they are an adult
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-xyg rev=1 -->
 #### Scenario: shared-dates-and-times-SC-28 - A document expiring today
 **Serves:** Stated zones - an expiry judged on the brand's day
 
@@ -223,6 +238,7 @@ surface that shows it.
 The name SHALL be the one the language gives that zone, which for a zone
 English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-jjl rev=1 -->
 #### Scenario: shared-dates-and-times-SC-12 - The auction page shows a close
 **Serves:** Stated zones - a deadline names its zone
 
@@ -231,6 +247,7 @@ English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 - **THEN** the rendering names the zone it is stated in
 - **AND** a reader whose machine is set to another zone sees that same name
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-k76 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-13 - A page and a message agree
 **Serves:** Stated zones - a page and a message name one zone
 
@@ -239,6 +256,7 @@ English has no abbreviation for is its offset (`GMT+8` for Hong Kong).
 - **THEN** both name the zone they are stated in
 - **AND** both use the deadline shape
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-upi rev=1 -->
 #### Scenario: shared-dates-and-times-SC-14 - A closed listing
 **Serves:** Stated zones - a closed listing names its zone
 
@@ -256,6 +274,7 @@ A message is composed once and read anywhere, so it has no reader whose
 language could be used, and the zone it states is the brand's, so the date a
 borrower reads in a message is the date their shop's paper names.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-v5n rev=1 -->
 #### Scenario: shared-dates-and-times-SC-15 - An auction email states its zone
 **Serves:** Sent messages - a message states its zone
 
@@ -264,6 +283,7 @@ borrower reads in a message is the date their shop's paper names.
 - **THEN** the time is stated in one fixed zone
 - **AND** the rendering names that zone
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-ufn rev=1 -->
 #### Scenario: shared-dates-and-times-SC-16 - Two recipients read one time
 **Serves:** Sent messages - two recipients read one time
 
@@ -282,6 +302,7 @@ An instant shown back in such a field SHALL be the calendar day that instant
 falls on in the zone the surface states, so a day typed in and read back is the
 same day, from any machine.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-9og rev=1 -->
 #### Scenario: shared-dates-and-times-SC-17 - A window includes the last moment of its final day
 **Serves:** Typed calendar days - a window includes both days entirely
 
@@ -289,6 +310,7 @@ same day, from any machine.
 - **WHEN** it is stored
 - **THEN** an event in the final second of the final day falls inside the window
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-s90 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-18 - A day reads back as it was typed
 **Serves:** Typed calendar days - read-back symmetry
 
@@ -296,6 +318,7 @@ same day, from any machine.
 - **WHEN** the stored instant is shown in that field again
 - **THEN** the field shows the day that was typed
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-1v2 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-19 - A day typed from a machine set to another zone
 **Serves:** Typed calendar days - read-back from another machine
 
@@ -303,6 +326,7 @@ same day, from any machine.
 - **WHEN** each is stored
 - **THEN** both produce the same pair of instants
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-2zt rev=1 -->
 #### Scenario: shared-dates-and-times-SC-20 - An empty date field
 **Serves:** Typed calendar days - an empty field produces no instant
 
@@ -325,6 +349,7 @@ The `locale` argument SHALL be a shipped platform locale. Callers on collector
 surfaces MUST resolve unsupported browser languages to the brand default before
 invoking.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-7mm rev=1 -->
 #### Scenario: shared-dates-and-times-SC-21 - Just now does not show zero seconds
 **Serves:** Reading shapes - relative activity time tiers
 
@@ -332,6 +357,7 @@ invoking.
 - **WHEN** it is rendered as relative activity time in English
 - **THEN** the label is `Just now`
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-plq rev=1 -->
 #### Scenario: shared-dates-and-times-SC-22 - An unsupported browser language reads English
 **Serves:** Format and language - English where the browser names no shipped language
 
@@ -348,6 +374,7 @@ reader's stated `timeZone` with shape `DD Mon YYYY, HH:MM`, month names from
 Operator tables, admin surfaces, and sent messages SHALL continue to use the UTC
 moment and deadline shapes that name the zone.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-uu7 rev=1 -->
 #### Scenario: shared-dates-and-times-SC-23 - Two zones read different clocks
 **Serves:** Stated zones - a collector reads their stated zone
 
@@ -361,6 +388,7 @@ moment and deadline shapes that name the zone.
 **Activity time** SHALL apply relative tiers when elapsed is less than seven
 days and SHALL fall back to local moment otherwise.
 
+<!-- trace:scenario id=g10.shared-dates-and-times.SC-bhn rev=1 -->
 #### Scenario: shared-dates-and-times-SC-24 - Older activity uses a local moment
 **Serves:** Reading shapes - activity time falls back to a local moment
 

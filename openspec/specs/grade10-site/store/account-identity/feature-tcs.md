@@ -9,6 +9,7 @@
 **I want** to verify who I am from my own account page, on my own phone, after reading what will be checked,
 **so that** I am recognised wherever Grade10 asks, without a visit and without being asked twice.
 
+<!-- trace:case id=g10.store-account-identity.TC-25d rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC1-1: Unverified account names the bar and offers to verify
 
 **Classification:**
@@ -46,6 +47,7 @@
 * The card names `<bar>` as the order value and as the bid value at which a verified identity is asked for.
 * The card offers to verify — the agreement to tick and the verify button.
 
+<!-- trace:case id=g10.store-account-identity.TC-dbs rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC2-1: Verifying from the account is recognised at a checkout above the bar
 
 **Classification:**
@@ -92,6 +94,7 @@
 * The check records the instant the user agreed.
 * Step 8 proceeds as any other checkout: the browser is handed to Shopify's checkout page, with no refusal naming `<bar>`.
 
+<!-- trace:case id=g10.store-account-identity.TC-v73 rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC3-1: Account page carries no identity field in any standing
 
 Runs once per row of **Test data**.
@@ -133,6 +136,7 @@ Runs once per row of **Test data**.
 * The card shows no legal name, date of birth, document type, document number, mask, document image or provider finding.
 * None of those is answered to the page.
 
+<!-- trace:case id=g10.store-account-identity.TC-5ti rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC4-1: Verify is unavailable until the agreement is ticked
 
 **Classification:**
@@ -171,6 +175,7 @@ Runs once per row of **Test data**.
 * Step 2 starts no check.
 * The account holds no check, and nothing reached the provider.
 
+<!-- trace:case id=g10.store-account-identity.TC-1yp rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC5-1: Check the provider is deciding is not started twice
 
 Runs once per row of **Test data**.
@@ -211,6 +216,7 @@ Runs once per row of **Test data**.
 * The card says the provider is deciding and offers to check again.
 * Step 3 starts no second check: the account holds one check, still in the state the row names.
 
+<!-- trace:case id=g10.store-account-identity.TC-5h9 rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC6-1: Declined account is told the counter is another way, and not why
 
 **Classification:**
@@ -247,6 +253,7 @@ Runs once per row of **Test data**.
 * The card names the counter as another way, and offers to try again.
 * The card shows no reason for the decline.
 
+<!-- trace:case id=g10.store-account-identity.TC-3e4 rev=1 covers=g10.store-account-identity.SC-ymn,g10.store-account-identity.SC-zww,g10.store-account-identity.SC-ivu,g10.store-account-identity.SC-wjz,g10.store-account-identity.SC-btr,g10.store-account-identity.SC-hx7 -->
 ### grade10-site-store-account-identity-US1-TC7-1: Trying again after a decline raises a new check
 
 **Classification:**
@@ -290,6 +297,7 @@ Runs once per row of **Test data**.
 **I want** the site to recognise that verification on my account,
 **so that** I am not asked for my passport again to buy or bid.
 
+<!-- trace:case id=g10.store-account-identity.TC-k5a rev=1 covers=g10.store-account-identity.SC-9f4,g10.store-account-identity.SC-f7d,g10.store-account-identity.SC-wb2 -->
 ### grade10-site-store-account-identity-US2-TC1-1: Vault-verified account reads verified until the document's expiry
 
 **Classification:**
@@ -327,6 +335,7 @@ Runs once per row of **Test data**.
 * The card names `<document expiry>` as the day the document stops being valid.
 * The card offers no check to start.
 
+<!-- trace:case id=g10.store-account-identity.TC-zqc rev=1 covers=g10.store-account-identity.SC-9f4,g10.store-account-identity.SC-f7d,g10.store-account-identity.SC-wb2 -->
 ### grade10-site-store-account-identity-US2-TC2-1: Pressing verify on a vault-verified account raises no check
 
 **Classification:**
@@ -364,6 +373,7 @@ Runs once per row of **Test data**.
 * The answer says the user is verified.
 * No check is raised for the account, and nothing reached the provider.
 
+<!-- trace:case id=g10.store-account-identity.TC-vkf rev=1 covers=g10.store-account-identity.SC-9f4,g10.store-account-identity.SC-f7d,g10.store-account-identity.SC-wb2 -->
 ### grade10-site-store-account-identity-US2-TC3-1: Lapsed account verifies again on a current document
 
 **Classification:**

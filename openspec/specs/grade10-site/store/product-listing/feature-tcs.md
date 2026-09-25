@@ -11,6 +11,7 @@ title and metadata, before any script runs,
 **so that** I can link to, share and bookmark the catalogue rather than click
 into it.
 
+<!-- trace:case id=g10.store-product-listing.TC-xve rev=1 covers=g10.store-product-listing.SC-4mv,g10.store-product-listing.SC-eac -->
 ### grade10-site-store-product-listing-US1-TC1-1: Listing answers at its own address before scripts run
 
 **Classification:**
@@ -42,6 +43,7 @@ JavaScript disabled in the browser.
 * Tab title and meta description are the listing's own, not the store's.
 * Share metadata is present, so the link previews as the listing.
 
+<!-- trace:case id=g10.store-product-listing.TC-ttf rev=1 covers=g10.store-product-listing.SC-4mv,g10.store-product-listing.SC-eac -->
 ### grade10-site-store-product-listing-US1-TC2-1: Sitemap lists the listing in every language
 
 **Classification:**
@@ -80,6 +82,7 @@ narrowed to it,
 **so that** a way into the catalogue can be linked, shared and bookmarked
 rather than clicked into.
 
+<!-- trace:case id=g10.store-product-listing.TC-1an rev=1 covers=g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37 -->
 ### grade10-site-store-product-listing-US2-TC1-1: Address naming a collection opens narrowed
 
 **Classification:**
@@ -110,6 +113,7 @@ Catalogue carries <a collection>.
 * Narrowing in force is the collection the address names.
 * Only that collection's cards are listed.
 
+<!-- trace:case id=g10.store-product-listing.TC-x6e rev=1 covers=g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37 -->
 ### grade10-site-store-product-listing-US2-TC2-1: Address naming no collection lists everything
 
 **Classification:**
@@ -138,6 +142,7 @@ Catalogue carries at least two collections.
 * Whole catalogue is listed.
 * No collection narrowing in force.
 
+<!-- trace:case id=g10.store-product-listing.TC-dcw rev=1 covers=g10.store-product-listing.SC-aty,g10.store-product-listing.SC-ksc,g10.store-product-listing.SC-o37 -->
 ### grade10-site-store-product-listing-US2-TC3-1: Address names a collection the catalogue lacks
 
 **Classification:**
@@ -175,6 +180,7 @@ Catalogue has nothing for <an unknown collection>.
 **so that** I can search the whole catalogue without going back to where I came
 from.
 
+<!-- trace:case id=g10.store-product-listing.TC-dlj rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC1-2: Narrowing made in the page is linkable
 
 **Classification:**
@@ -210,6 +216,7 @@ from.
 * Address names the facet choice and no longer names the collection.
 * Step 4 shows the same narrowing and the same cards.
 
+<!-- trace:case id=g10.store-product-listing.TC-3vs rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC2-2: Back undoes a narrowing
 
 **Classification:**
@@ -242,6 +249,7 @@ from.
 * Listing is scoped to the collection again.
 * Only that collection's cards are listed.
 
+<!-- trace:case id=g10.store-product-listing.TC-oup rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC3-1: Collection in force can be dismissed
 
 **Classification:**
@@ -274,6 +282,7 @@ from.
 * Whole catalogue is listed, cards from outside the collection included.
 * Address no longer names the collection.
 
+<!-- trace:case id=g10.store-product-listing.TC-96q rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC4-1: Address naming a collection and a facet together
 
 **Classification:**
@@ -312,6 +321,7 @@ collectible it is, and to see how many cards sit behind each choice before I
 pick one,
 **so that** I reach the cards I collect without reading past the ones I do not.
 
+<!-- trace:case id=g10.store-product-listing.TC-grd rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC1-1: Filter panel is the catalogue's own facets
 
 **Classification:**
@@ -344,6 +354,7 @@ each carrying choices with cards counted behind them.
 * Each choice carries the count the catalogue puts behind it.
 * Group names are in <lang>; choice names are the shop's own words.
 
+<!-- trace:case id=g10.store-product-listing.TC-i6u rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC2-1: Facet narrowing is linkable and reversible
 
 **Classification:**
@@ -378,6 +389,7 @@ catalogue holds.
 * Step 4 shows the same narrowing and the same cards.
 * Step 5 lists the whole catalogue again.
 
+<!-- trace:case id=g10.store-product-listing.TC-o36 rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC3-1: Catalogue naming no facet group at all
 
 **Classification:**
@@ -410,6 +422,7 @@ group.
 * Search field and sort menu are both still offered.
 * Catalogue is listed as normal.
 
+<!-- trace:case id=g10.store-product-listing.TC-6ko rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC4-1: Facet groups with nothing counted behind them
 
 **Classification:**
@@ -443,6 +456,7 @@ counted behind any of them.
 * Search field and sort menu are both still offered.
 * Catalogue is listed as normal.
 
+<!-- trace:case id=g10.store-product-listing.TC-0ld rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC5-1: Worlds are capped and types are shown whole
 
 **Classification:**
@@ -474,6 +488,7 @@ Catalogue names more than five worlds and more than five collectible types.
 * Step 3 offers every collectible type the catalogue names, with no invitation.
 * Step 4 offers every world the catalogue names.
 
+<!-- trace:case id=g10.store-product-listing.TC-dq4 rev=1 covers=g10.store-product-listing.SC-c0e,g10.store-product-listing.SC-69a,g10.store-product-listing.SC-q1g,g10.store-product-listing.SC-yl8,g10.store-product-listing.SC-tbd -->
 ### grade10-site-store-product-listing-US4-TC6-1: Narrowing that leaves nothing behind any choice
 
 **Classification:**
@@ -515,6 +530,7 @@ nothing behind.
 than the ones already on screen,
 **so that** the cheapest card I could buy is the one I am shown first.
 
+<!-- trace:case id=g10.store-product-listing.TC-rtt rev=1 covers=g10.store-product-listing.SC-l5j,g10.store-product-listing.SC-7b0 -->
 ### grade10-site-store-product-listing-US5-TC1-1: Lowest-price order reaches past the loaded page
 
 **Classification:**
@@ -546,6 +562,7 @@ among those listed when the page first loads.
 * Step 4 lists <the cheapest card> first.
 * Order is applied without the collector loading more cards.
 
+<!-- trace:case id=g10.store-product-listing.TC-4a8 rev=1 covers=g10.store-product-listing.SC-l5j,g10.store-product-listing.SC-7b0 -->
 ### grade10-site-store-product-listing-US5-TC2-1: Search finds a card the page had not loaded
 
 **Classification:**
@@ -580,6 +597,7 @@ loads.
 * Address carries the words searched for.
 * Step 5 lists the same card for the same words.
 
+<!-- trace:case id=g10.store-product-listing.TC-2um rev=1 covers=g10.store-product-listing.SC-l5j,g10.store-product-listing.SC-7b0 -->
 ### grade10-site-store-product-listing-US5-TC3-1: Sort menu offers only orders the catalogue answers
 
 **Classification:**
@@ -618,6 +636,7 @@ how many are left when it does,
 **so that** I buy the number the shop will actually send me rather than
 finding out at the order.
 
+<!-- trace:case id=g10.store-product-listing.TC-az7 rev=1 covers=g10.store-product-listing.SC-54d,g10.store-product-listing.SC-38d,g10.store-product-listing.SC-c9d,g10.store-product-listing.SC-mcj -->
 ### grade10-site-store-product-listing-US6-TC1-1: Card's quantity stops at the shop's count
 
 **Classification:**
@@ -656,6 +675,7 @@ finding out at the order.
 * `<card_1>`'s quantity stays at `<low count>`.
 * The cart holds `<low count>` of `<card_1>`.
 
+<!-- trace:case id=g10.store-product-listing.TC-k7m rev=1 covers=g10.store-product-listing.SC-54d,g10.store-product-listing.SC-38d,g10.store-product-listing.SC-c9d,g10.store-product-listing.SC-mcj -->
 ### grade10-site-store-product-listing-US6-TC2-1: Card the shop counts nothing for is not capped
 
 **Classification:**
@@ -694,6 +714,7 @@ finding out at the order.
 * `<card_3>`'s quantity rises to `<asked quantity>`.
 * The cart holds `<asked quantity>` of `<card_3>`.
 
+<!-- trace:case id=g10.store-product-listing.TC-h5t rev=1 covers=g10.store-product-listing.SC-54d,g10.store-product-listing.SC-38d,g10.store-product-listing.SC-c9d,g10.store-product-listing.SC-mcj -->
 ### grade10-site-store-product-listing-US6-TC3-1: Nearly out is said, well stocked says nothing
 
 **Classification:**
@@ -733,6 +754,7 @@ finding out at the order.
 * `<card_1>` says `<low count>` are left.
 * `<card_2>` says nothing about what is left.
 
+<!-- trace:case id=g10.store-product-listing.TC-in4 rev=1 covers=g10.store-product-listing.SC-54d,g10.store-product-listing.SC-38d,g10.store-product-listing.SC-c9d,g10.store-product-listing.SC-mcj -->
 ### grade10-site-store-product-listing-US6-TC4-1: Asking for every one there is answered on the card
 
 **Classification:**
@@ -779,6 +801,7 @@ shown, without a page to pick,
 **so that** I can look through the whole catalogue in one run and come back to
 where a narrowing left off rather than to a page number.
 
+<!-- trace:case id=g10.store-product-listing.TC-llq rev=1 covers=g10.store-product-listing.SC-qj6,g10.store-product-listing.SC-d8r,g10.store-product-listing.SC-8ue,g10.store-product-listing.SC-elc,g10.store-product-listing.SC-k0m -->
 ### grade10-site-store-product-listing-US7-TC1-1: More cards arrive at the end of the list
 
 **Classification:**
@@ -811,6 +834,7 @@ where a narrowing left off rather than to a page number.
 * The cards noted at step 1 are still listed, in the same order.
 * No page number, next control or load-more button is on the surface.
 
+<!-- trace:case id=g10.store-product-listing.TC-kv0 rev=1 covers=g10.store-product-listing.SC-qj6,g10.store-product-listing.SC-d8r,g10.store-product-listing.SC-8ue,g10.store-product-listing.SC-elc,g10.store-product-listing.SC-k0m -->
 ### grade10-site-store-product-listing-US7-TC2-1: The end of the catalogue passes quietly
 
 **Classification:**
@@ -849,6 +873,7 @@ where a narrowing left off rather than to a page number.
 * No loading treatment appears below the last card.
 * Nothing is shown in place of further cards — no message, no control.
 
+<!-- trace:case id=g10.store-product-listing.TC-tbp rev=1 covers=g10.store-product-listing.SC-qj6,g10.store-product-listing.SC-d8r,g10.store-product-listing.SC-8ue,g10.store-product-listing.SC-elc,g10.store-product-listing.SC-k0m -->
 ### grade10-site-store-product-listing-US7-TC3-1: A new narrowing lists its own first page
 
 **Classification:**
@@ -887,6 +912,7 @@ where a narrowing left off rather than to a page number.
 * One page of cards is listed, not the three read at step 1.
 * Every card listed is in <stocked world>.
 
+<!-- trace:case id=g10.store-product-listing.TC-re7 rev=1 covers=g10.store-product-listing.SC-qj6,g10.store-product-listing.SC-d8r,g10.store-product-listing.SC-8ue,g10.store-product-listing.SC-elc,g10.store-product-listing.SC-k0m -->
 ### grade10-site-store-product-listing-US7-TC4-1: A shared address opens at the first page
 
 **Classification:**
@@ -925,6 +951,7 @@ where a narrowing left off rather than to a page number.
 * Step 3 lists one page of the same narrowing.
 * Step 4 lists the catalogue unnarrowed, not an earlier page of <stocked world>.
 
+<!-- trace:case id=g10.store-product-listing.TC-2vd rev=1 covers=g10.store-product-listing.SC-qj6,g10.store-product-listing.SC-d8r,g10.store-product-listing.SC-8ue,g10.store-product-listing.SC-elc,g10.store-product-listing.SC-k0m -->
 ### grade10-site-store-product-listing-US7-TC5-1: A page that fails keeps the cards already read
 
 **Classification:**
@@ -969,6 +996,7 @@ scrolled past,
 **so that** I can tell whether it is worth reading on before I have read to the
 end.
 
+<!-- trace:case id=g10.store-product-listing.TC-5io rev=1 covers=g10.store-product-listing.SC-rsf,g10.store-product-listing.SC-7i5,g10.store-product-listing.SC-wxo -->
 ### grade10-site-store-product-listing-US8-TC1-1: The count holds still while the collector scrolls
 
 **Classification:**
@@ -1007,6 +1035,7 @@ end.
 * Step 2 reads 100 products.
 * Step 4 reads 100 products, though more cards are now listed.
 
+<!-- trace:case id=g10.store-product-listing.TC-el1 rev=1 covers=g10.store-product-listing.SC-rsf,g10.store-product-listing.SC-7i5,g10.store-product-listing.SC-wxo -->
 ### grade10-site-store-product-listing-US8-TC2-1: The count follows the narrowing
 
 **Classification:**
@@ -1044,6 +1073,7 @@ end.
 * Step 1 reads 100 products.
 * Step 3 reads 12 products.
 
+<!-- trace:case id=g10.store-product-listing.TC-bx8 rev=1 covers=g10.store-product-listing.SC-rsf,g10.store-product-listing.SC-7i5,g10.store-product-listing.SC-wxo -->
 ### grade10-site-store-product-listing-US8-TC3-1: A world's count in the panel is the listing it opens
 
 **Classification:**
@@ -1093,6 +1123,7 @@ end.
 **I want** Add to cart to open sign-in instead of building a guest cart,
 **so that** I only hold lines I can take to members-only checkout.
 
+<!-- trace:case id=g10.store-product-listing.TC-43d rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
 ### grade10-site-store-product-listing-US12-TC1-1: Signed-out Add to cart opens sign-in
 
 **Classification:**
@@ -1124,6 +1155,7 @@ end.
 * The sign-in dialog opens over the listing.
 * No cart gains a line for <card_1>.
 
+<!-- trace:case id=g10.store-product-listing.TC-1rh rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
 ### grade10-site-store-product-listing-US12-TC2-1: Dismissing sign-in adds nothing
 
 **Classification:**
@@ -1155,6 +1187,7 @@ end.
 * customer remains signed out on the listing.
 * The cart is unchanged for <card_1>.
 
+<!-- trace:case id=g10.store-product-listing.TC-d3y rev=1 covers=g10.store-product-listing.SC-dhn,g10.store-product-listing.SC-xyt,g10.store-product-listing.SC-9gl -->
 ### grade10-site-store-product-listing-US12-TC3-1: Sign-in on the listing completes the add
 
 **Classification:**
@@ -1200,6 +1233,7 @@ end.
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
 
+<!-- trace:case id=g10.store-product-listing.TC-v56 rev=1 covers=g10.store-product-listing.SC-gj6 -->
 ### grade10-site-store-product-listing-US13-TC1-1: Add to cart sign-in title names why
 
 **Classification:**

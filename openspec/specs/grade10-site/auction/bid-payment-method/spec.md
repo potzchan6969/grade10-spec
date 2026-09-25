@@ -53,6 +53,7 @@ destructive message on or near the bid action. Exact English strings:
 These strings SHALL not use em dashes. Localized catalogs SHALL answer the same
 meanings under keys the consumer supplies to the bid surface.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-61r rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-12 - Decline copy on the bid action
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -60,6 +61,7 @@ meanings under keys the consumer supplies to the bid surface.
 - **WHEN** the provider declines the method or authorization
 - **THEN** the listing bid surface shows: Your card could not be authorized. Try another card.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-li6 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-13 - Provider-failure copy on the bid action
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -88,6 +90,7 @@ the method SHALL be locked for the listing, and Grade10 SHALL hide or disable
 Change for subsequent raises. The method committed for a collector and listing
 after the first accepted bid SHALL remain that listing's method for raises.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-s1o rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-01 - Commit without a linked method is refused
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -97,6 +100,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** it does not create an authorization
 - **AND** link-card setup remains available under bid-panel-enrollment
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-whx rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-02 - Linked method authorizes the maximum on commit
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -107,6 +111,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** it accepts the bid only after the authorization is confirmed
 - **AND** it does not open a payment-method or confirmation modal for that authorize step
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-joe rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-03 - Payment authentication stays on the bid surface
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -116,6 +121,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** Grade10 does not show the bid as accepted until authorization is confirmed
 - **AND** Grade10 does not open the enrollment setup modal for that pending state
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-le7 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-04 - A refused authorization does not place a bid
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -125,6 +131,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **AND** Grade10 records no accepted bid and no active authorization for that attempt
 - **AND** the collector may change card under bid-panel-enrollment before the first bid on that listing
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-4g4 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-09 - Provider failure on commit does not place a bid
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -133,6 +140,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **THEN** the listing bid surface shows: Your bid did not go through. The card was not authorized.
 - **AND** Grade10 records no accepted bid and no active authorization for that attempt
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-7z5 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-05 - A later bid retains the listing's payment method
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
@@ -141,6 +149,7 @@ after the first accepted bid SHALL remain that listing's method for raises.
 - **THEN** Grade10 uses the method already associated with that collector and listing
 - **AND** it does not open a payment-method step
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-c3a rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-10 - Linked method carries over to a new listing
 **Serves:** grade10-site-auction-bid-payment-method-US-01 - Collector authorizes a first bid on commit
 
@@ -172,6 +181,7 @@ Grade10. A repeated request or a repeated provider outcome SHALL return the
 already-recorded outcome and SHALL not create another active authorization,
 accepted bid, or provider charge.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-khw rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-06 - Raising a maximum raises the authorization
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
@@ -181,6 +191,7 @@ accepted bid, or provider charge.
 - **AND** it retains the existing provider payment reference
 - **AND** it accepts the raised bid only after the raised authorization is confirmed
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-oa0 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-11 - Raise authorization failure keeps the prior maximum
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 
@@ -192,6 +203,7 @@ accepted bid, or provider charge.
 - **AND** the prior maximum and active authorization remain unchanged
 - **AND** the attempted raise is no longer pending
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-lao rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-08 - Provider outcomes remain idempotent
 **Serves:** grade10-site-auction-bid-payment-method-US-03 - Collector is released when outbid
 
@@ -208,6 +220,7 @@ outcome against the stored provider payment reference. Cancellation or expiry
 of an authorization SHALL not capture funds or create a payment, order, or
 fulfilment outcome.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-33r rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-07 - An outbid cancels the authorization
 **Serves:** grade10-site-auction-bid-payment-method-US-03 - Collector is released when outbid
 
@@ -224,6 +237,7 @@ winning bid before a collector submits a bid. The panel SHALL show the rate in
 all supported auction currencies and SHALL not show a calculated premium amount,
 an invoice total, or a premium line amount before an invoice exists.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-x21 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-16 - Bid panel shows the premium rate
 **Serves:** grade10-site-auction-bid-payment-method-US-04 - Collector understands the buyer-premium rate before bidding
 
@@ -232,6 +246,7 @@ an invoice total, or a premium line amount before an invoice exists.
 - **THEN** it shows that the buyer's premium rate is 20% of the winning bid
 - **AND** it shows no calculated premium amount or invoice total
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-oeb rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-17 - Premium rate is consistent across currencies
 **Serves:** grade10-site-auction-bid-payment-method-US-04 - Collector understands the buyer-premium rate before bidding
 
@@ -258,6 +273,7 @@ offers that eligibility.
 authoritative for expiry and reauthorization; Grade10 SHALL NOT represent a
 shorter or unavailable window as a fourteen-day guarantee.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-gq7 rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-14 - An eligible hold requests an extended window
 **Serves:** Raised authorization - an eligible hold requests an extended window
 
@@ -284,6 +300,7 @@ surface.
 **Pending cleanup** - A later bid attempt SHALL not be blocked by the completed
 refusal.
 
+<!-- trace:scenario id=g10.auction-bid-payment-method.SC-1ff rev=1 -->
 #### Scenario: grade10-site-auction-bid-payment-method-SC-15 - An unsupported increment does not leave a pending bid
 **Serves:** grade10-site-auction-bid-payment-method-US-02 - Collector raises a bid on the same card
 

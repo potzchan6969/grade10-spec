@@ -9,6 +9,7 @@
 **I want** to see one account's sessions without their secrets,
 **so that** I can tell which device is signed in without becoming that person.
 
+<!-- trace:case id=g10.shared-sessions.TC-jes rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
 ### shared-auth-sessions-US1-TC1-1: Granted operator lists one account's sessions without secrets
 
 **Classification:**
@@ -37,6 +38,7 @@ Signed in as an operator who holds `session:list`. <a subject user id> has at le
 * That account's sessions are listed.
 * No session secret is in the result.
 
+<!-- trace:case id=g10.shared-sessions.TC-7dr rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
 ### shared-auth-sessions-US1-TC2-1: Caller without the list grant is refused
 
 **Classification:**
@@ -63,6 +65,7 @@ Signed in as a person who does not hold `session:list`.
 * The system refuses the request.
 * No sessions are returned.
 
+<!-- trace:case id=g10.shared-sessions.TC-97h rev=1 covers=g10.shared-sessions.SC-h95,g10.shared-sessions.SC-bo7,g10.shared-sessions.SC-jz2 -->
 ### shared-auth-sessions-US1-TC3-1: Support cannot list an admin's sessions
 
 **Classification:**
@@ -97,6 +100,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 **I want** to end one session or every session of an account,
 **so that** a stolen device is signed out, including my own if I revoke the current one.
 
+<!-- trace:case id=g10.shared-sessions.TC-ffj rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
 ### shared-auth-sessions-US2-TC1-1: Revoked session is no longer signed in
 
 **Classification:**
@@ -124,6 +128,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has a s
 
 * A product reading who is calling on that session reports no person.
 
+<!-- trace:case id=g10.shared-sessions.TC-oys rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
 ### shared-auth-sessions-US2-TC2-1: Every session of an account can be revoked
 
 **Classification:**
@@ -150,6 +155,7 @@ Signed in as an operator who holds `session:revoke`. <a subject user id> has mor
 
 * None of that account's sessions is signed in.
 
+<!-- trace:case id=g10.shared-sessions.TC-eau rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
 ### shared-auth-sessions-US2-TC3-1: Caller without the revoke grant is refused
 
 **Classification:**
@@ -176,6 +182,7 @@ Signed in as an operator who does not hold `session:revoke`. <a subject user id>
 * The system refuses the request.
 * The session remains signed in.
 
+<!-- trace:case id=g10.shared-sessions.TC-cuz rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
 ### shared-auth-sessions-US2-TC4-1: Support cannot revoke an admin's session
 
 **Classification:**
@@ -202,6 +209,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * The system refuses the request.
 * The session remains signed in.
 
+<!-- trace:case id=g10.shared-sessions.TC-i70 rev=1 covers=g10.shared-sessions.SC-4af,g10.shared-sessions.SC-lr6,g10.shared-sessions.SC-txa,g10.shared-sessions.SC-bcq,g10.shared-sessions.SC-ots -->
 ### shared-auth-sessions-US2-TC5-1: Revoking the current session signs the operator out
 
 **Classification:**

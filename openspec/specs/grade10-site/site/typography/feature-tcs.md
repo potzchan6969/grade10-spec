@@ -16,6 +16,7 @@ brand's Gibson sans,
 **so that** the type I see matches what the design system already commits
 to, not a generic fallback.
 
+<!-- trace:case id=g10.site-typography.TC-94a rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
 ### grade10-site-site-typography-US1-TC1-1: Document head requests the Adobe Fonts kit on load
 
 **Classification:**
@@ -47,6 +48,7 @@ to, not a generic fallback.
 
 ---
 
+<!-- trace:case id=g10.site-typography.TC-pal rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
 ### grade10-site-site-typography-US1-TC2-1: Body and heading text render in the brand sans
 
 **Classification:**
@@ -81,6 +83,7 @@ to, not a generic fallback.
 
 ---
 
+<!-- trace:case id=g10.site-typography.TC-55c rev=1 covers=g10.site-typography.SC-6z2 -->
 ### grade10-site-site-typography-US1-TC3-1: Same kit and family load across unrelated products
 
 **Classification:**
@@ -114,6 +117,7 @@ to, not a generic fallback.
 
 ---
 
+<!-- trace:case id=g10.site-typography.TC-y84 rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
 ### grade10-site-site-typography-US1-TC4-1: No second brand-sans stylesheet is present
 
 **Classification:**
@@ -147,6 +151,7 @@ to, not a generic fallback.
 
 ---
 
+<!-- trace:case id=g10.site-typography.TC-8jw rev=1 covers=g10.site-typography.SC-wxa,g10.site-typography.SC-6rg,g10.site-typography.SC-45e -->
 ### grade10-site-site-typography-US1-TC5-1: Blocked kit request falls back without an error surface
 
 **Classification:**

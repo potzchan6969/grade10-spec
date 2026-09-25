@@ -9,6 +9,7 @@
 **I want** my maximum to authorize in the background when I commit,
 **so that** I am not asked to confirm a hold in a separate modal.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-x2e rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC1-1: Missing card blocks the first bid
 
 **Classification:**
@@ -42,6 +43,7 @@
 * No authorization is created.
 * Link-card setup remains available under bid-panel-enrollment.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-tm1 rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC2-1: Linked card authorizes the committed maximum
 
 **Classification:**
@@ -75,6 +77,7 @@
 * The bid is accepted only after authorization is confirmed.
 * No payment-method or confirmation modal opens for authorization.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-heq rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC3-1: Pending authentication stays on the bid surface
 
 **Classification:**
@@ -107,6 +110,7 @@
 * The bid is not shown as accepted until authorization is confirmed.
 * The enrollment setup modal does not open for the pending state.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-h30 rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC4-1: Declined authorization leaves no accepted bid
 
 **Classification:**
@@ -139,6 +143,7 @@
 * No accepted bid or active authorization exists for the attempt.
 * The collector may change the card before the first bid on the listing.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-b9p rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC5-1: Provider failure explains that no card was authorized
 
 **Classification:**
@@ -170,6 +175,7 @@
 * The bid action shows: Your bid did not go through. The card was not authorized.
 * No accepted bid or active authorization exists for the attempt.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-d2o rev=1 covers=g10.auction-bid-payment-method.SC-61r,g10.auction-bid-payment-method.SC-li6,g10.auction-bid-payment-method.SC-s1o,g10.auction-bid-payment-method.SC-whx,g10.auction-bid-payment-method.SC-joe,g10.auction-bid-payment-method.SC-le7,g10.auction-bid-payment-method.SC-4g4,g10.auction-bid-payment-method.SC-c3a -->
 ### grade10-site-auction-bid-payment-method-US1-TC6-1: Linked card carries to a new listing
 
 **Classification:**
@@ -209,6 +215,7 @@
 **I want** a higher bid to use the card I already committed to that listing,
 **so that** I can raise my maximum without selecting a card again.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-x5g rev=1 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-khw,g10.auction-bid-payment-method.SC-oa0,g10.auction-bid-payment-method.SC-1ff -->
 ### grade10-site-auction-bid-payment-method-US2-TC1-1: Higher maximum reuses the listing authorization
 
 **Classification:**
@@ -242,6 +249,7 @@
 * The existing authorization covers the higher maximum.
 * The raised bid is accepted only after the raised authorization is confirmed.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-hk4 rev=1 covers=g10.auction-bid-payment-method.SC-7z5,g10.auction-bid-payment-method.SC-khw,g10.auction-bid-payment-method.SC-oa0,g10.auction-bid-payment-method.SC-1ff -->
 ### grade10-site-auction-bid-payment-method-US2-TC2-1: Rejected raise resolves without a pending bid
 
 **Classification:**
@@ -285,6 +293,7 @@
 **I want** the hold on my card cancelled,
 **so that** money is not held for a listing I cannot win.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-qo3 rev=1 covers=g10.auction-bid-payment-method.SC-lao,g10.auction-bid-payment-method.SC-33r -->
 ### grade10-site-auction-bid-payment-method-US3-TC1-1: Outbid authorization cancels once
 
 **Classification:**
@@ -324,6 +333,7 @@
 **so that** I understand the policy without being shown an invoice amount that
 does not exist yet.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-lbz rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
 ### grade10-site-auction-bid-payment-method-US-04-TC1-1: Active listing shows the rate without a premium amount
 
 **Classification:**
@@ -353,6 +363,7 @@ does not exist yet.
 * The panel shows no calculated premium amount.
 * The panel shows no invoice total.
 
+<!-- trace:case id=g10.auction-bid-payment-method.TC-nvs rev=1 covers=g10.auction-bid-payment-method.SC-x21,g10.auction-bid-payment-method.SC-oeb -->
 ### grade10-site-auction-bid-payment-method-US-04-TC2-1: Supported currencies use the same disclosed rate
 
 **Classification:**

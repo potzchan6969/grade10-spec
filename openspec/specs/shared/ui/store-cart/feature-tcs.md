@@ -13,6 +13,7 @@ that ignores sold-out items and an edge fade when there are more,
 **so that** I can see what I am buying without the drawer changing shape as
 the cart fills.
 
+<!-- trace:case id=g10.shared-store-cart.TC-nqc rev=1 covers=g10.shared-store-cart.SC-yux,g10.shared-store-cart.SC-awa,g10.shared-store-cart.SC-v66,g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-utr -->
 ### shared-ui-store-cart-US2-TC1-1: Fewer than five items fill with placeholder slots
 
 **Classification:**
@@ -40,6 +41,7 @@ A cart with 2 items.
 
 * It renders the 2 items followed by 3 placeholder slots.
 
+<!-- trace:case id=g10.shared-store-cart.TC-5iw rev=1 covers=g10.shared-store-cart.SC-yux,g10.shared-store-cart.SC-awa,g10.shared-store-cart.SC-v66,g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-utr -->
 ### shared-ui-store-cart-US2-TC2-1: Five or more items scroll with no placeholders
 
 **Classification:**
@@ -67,6 +69,7 @@ A cart with 6 items.
 * All 6 items render and no placeholder slots are shown.
 * Overflowing items apply the scroll-fade styling.
 
+<!-- trace:case id=g10.shared-store-cart.TC-kz7 rev=1 covers=g10.shared-store-cart.SC-yux,g10.shared-store-cart.SC-awa,g10.shared-store-cart.SC-v66,g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-utr -->
 ### shared-ui-store-cart-US2-TC3-1: Empty cart shows five slots and hides count and footer
 
 **Classification:**
@@ -95,6 +98,7 @@ A cart with 0 items.
 * The item count badge in the header is hidden.
 * The footer is hidden entirely.
 
+<!-- trace:case id=g10.shared-store-cart.TC-7h8 rev=1 covers=g10.shared-store-cart.SC-yux,g10.shared-store-cart.SC-awa,g10.shared-store-cart.SC-v66,g10.shared-store-cart.SC-9dd,g10.shared-store-cart.SC-utr -->
 ### shared-ui-store-cart-US2-TC4-1: Sold-out item is excluded from the count badge
 
 **Classification:**
@@ -130,6 +134,7 @@ A cart with 1 active item and 1 sold-out item.
 showing skeletons while that read is in flight,
 **so that** I decide against the current prices rather than stale ones.
 
+<!-- trace:case id=g10.shared-store-cart.TC-vgm rev=1 covers=g10.shared-store-cart.SC-dvb -->
 ### shared-ui-store-cart-US3-TC1-1: Opening cart shows skeletons and disables checkout
 
 **Classification:**
@@ -168,6 +173,7 @@ Escape key, with the page behind it held still,
 **so that** I can leave the cart without losing my place on the page beneath
 it.
 
+<!-- trace:case id=g10.shared-store-cart.TC-bj1 rev=1 covers=g10.shared-store-cart.SC-yb1 -->
 ### shared-ui-store-cart-US4-TC1-1: Backdrop or escape closes the drawer
 
 **Classification:**
@@ -204,6 +210,7 @@ application creates the session,
 **so that** I know the checkout is under way, and see the button return to
 its label if it fails.
 
+<!-- trace:case id=g10.shared-store-cart.TC-5qb rev=1 covers=g10.shared-store-cart.SC-ubk -->
 ### shared-ui-store-cart-US5-TC1-1: Checkout button shows redirecting and reports onCheckout
 
 **Classification:**
@@ -241,6 +248,7 @@ finishes loading, with one toast,
 **so that** I am not shown a sold-out row for something the store no longer
 sells.
 
+<!-- trace:case id=g10.shared-store-cart.TC-ea2 rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs -->
 ### shared-ui-store-cart-US6-TC1-1: Delisted items clear after loading with one toast
 
 **Classification:**
@@ -270,6 +278,7 @@ An open cart drawer whose status-and-price loading has finished. The cart includ
 * Exactly one toast appears with the `unavailableItemsRemoved` message.
 * Non-unavailable items remain in the cart.
 
+<!-- trace:case id=g10.shared-store-cart.TC-3oj rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs -->
 ### shared-ui-store-cart-US6-TC2-1: No unavailable items means no removal toast
 
 **Classification:**
@@ -297,6 +306,7 @@ An open cart drawer whose status-and-price loading has finished. No cart item ha
 * No toast with the `unavailableItemsRemoved` message is shown.
 * No item is removed solely for being unavailable.
 
+<!-- trace:case id=g10.shared-store-cart.TC-kiq rev=1 covers=g10.shared-store-cart.SC-sol,g10.shared-store-cart.SC-0wv,g10.shared-store-cart.SC-jbs,g10.shared-store-cart.SC-pvs -->
 ### shared-ui-store-cart-US6-TC3-1: Status values and toast copy are the named contract
 
 **Classification:**
@@ -332,6 +342,7 @@ None.
 **I want** the low-stock warning to hide after I change that line's quantity,
 **so that** it does not keep shouting after I have acted, and it returns if the line is adjusted again.
 
+<!-- trace:case id=g10.shared-store-cart.TC-hzl rev=1 covers=g10.shared-store-cart.SC-8f7,g10.shared-store-cart.SC-lju,g10.shared-store-cart.SC-7il -->
 ### shared-ui-store-cart-US7-TC1-1: Adjusted line shows the low-stock warning
 
 **Classification:**
@@ -358,6 +369,7 @@ A cart line with status `adjusted`.
 
 * The low-stock warning copy is visible.
 
+<!-- trace:case id=g10.shared-store-cart.TC-69y rev=1 covers=g10.shared-store-cart.SC-8f7,g10.shared-store-cart.SC-lju,g10.shared-store-cart.SC-7il -->
 ### shared-ui-store-cart-US7-TC2-1: Quantity change hides the warning
 
 **Classification:**
@@ -385,6 +397,7 @@ A cart line with status `adjusted` showing the low-stock warning. The stepper ca
 * The low-stock warning is no longer visible.
 * `onQuantityChange` is invoked with the new quantity.
 
+<!-- trace:case id=g10.shared-store-cart.TC-g4w rev=1 covers=g10.shared-store-cart.SC-8f7,g10.shared-store-cart.SC-lju,g10.shared-store-cart.SC-7il -->
 ### shared-ui-store-cart-US7-TC3-1: Warning returns when the line is adjusted again
 
 **Classification:**
@@ -420,6 +433,7 @@ say how many are left,
 **so that** I am not still raising a number the checkout will quietly put back
 down.
 
+<!-- trace:case id=g10.shared-store-cart.TC-uob rev=1 covers=g10.shared-store-cart.SC-zdl,g10.shared-store-cart.SC-27k,g10.shared-store-cart.SC-38a,g10.shared-store-cart.SC-0n8,g10.shared-store-cart.SC-pvg -->
 ### shared-ui-store-cart-US8-TC1-1: Stepper stops at the maximum and still counts down
 
 **Classification:**
@@ -459,6 +473,7 @@ down.
 * The increment control is inoperable and announced as unavailable.
 * Step 2 invokes `onQuantityChange` with `<line quantity>` less one.
 
+<!-- trace:case id=g10.shared-store-cart.TC-tpg rev=1 covers=g10.shared-store-cart.SC-zdl,g10.shared-store-cart.SC-27k,g10.shared-store-cart.SC-38a,g10.shared-store-cart.SC-0n8,g10.shared-store-cart.SC-pvg -->
 ### shared-ui-store-cart-US8-TC2-1: Line supplied no maximum counts on
 
 **Classification:**
@@ -494,6 +509,7 @@ down.
 
 * `onQuantityChange` is invoked with `<line quantity>` plus one.
 
+<!-- trace:case id=g10.shared-store-cart.TC-0lh rev=1 covers=g10.shared-store-cart.SC-zdl,g10.shared-store-cart.SC-27k,g10.shared-store-cart.SC-38a,g10.shared-store-cart.SC-0n8,g10.shared-store-cart.SC-pvg -->
 ### shared-ui-store-cart-US8-TC3-1: Remaining count is displayed only where supplied
 
 Runs once per row of **Test data**.

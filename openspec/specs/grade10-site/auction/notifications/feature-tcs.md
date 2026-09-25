@@ -11,6 +11,7 @@
 **I want** to be emailed when someone else wins it,
 **so that** I know the outcome without reopening the lot.
 
+<!-- trace:case id=g10.auction-notifications.TC-gqc rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
 ### grade10-site-auction-notifications-US6-TC1-1: Losing bidder receives did-not-win letter
 
 **Classification:**
@@ -41,6 +42,7 @@
 * A receives exactly one did-not-win close letter (campaign `lot_closed_didnt_win`).
 * When amounts are supplied, the letter names the winning bid and A's bid.
 
+<!-- trace:case id=g10.auction-notifications.TC-ris rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
 ### grade10-site-auction-notifications-US6-TC2-1: Watcher who also bid gets one close letter
 
 **Classification:**
@@ -71,6 +73,7 @@
 * A receives exactly one close-outcome letter.
 * It is the did-not-win letter (campaign `lot_closed_didnt_win`), not a watched sold or watched ended letter.
 
+<!-- trace:case id=g10.auction-notifications.TC-ua3 rev=1 covers=g10.auction-notifications.SC-70x,g10.auction-notifications.SC-tlj,g10.auction-notifications.SC-nzk -->
 ### grade10-site-auction-notifications-US6-TC3-1: Winner gets no close-outcome letter
 
 **Classification:**
@@ -105,6 +108,7 @@
 **I want** to be emailed when that lot ends with a winner,
 **so that** I know bidding is over on a lot I followed.
 
+<!-- trace:case id=g10.auction-notifications.TC-gz5 rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
 ### grade10-site-auction-notifications-US7-TC1-1: Watch-only sold letter names Sold for
 
 **Classification:**
@@ -135,6 +139,7 @@
 * W receives the watched sold letter (campaign `lot_watched_sold`).
 * The letter names the winning bid as Sold for.
 
+<!-- trace:case id=g10.auction-notifications.TC-icj rev=1 covers=g10.auction-notifications.SC-9ie,g10.auction-notifications.SC-kce -->
 ### grade10-site-auction-notifications-US7-TC2-1: Muted watcher gets no close letter
 
 **Classification:**
@@ -169,6 +174,7 @@
 **I want** to be emailed that the lot ended when nobody bid,
 **so that** I learn the close without being told the lot did not sell.
 
+<!-- trace:case id=g10.auction-notifications.TC-uzv rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
 ### grade10-site-auction-notifications-US8-TC1-1: Watcher no-bids letter is Ended-only
 
 **Classification:**
@@ -201,6 +207,7 @@
 * Copy does not contain unsold, did not sell, didn't sell, no sale, or no bids.
 * Letter has no Sold for, Winning bid, or Highest bid highlight.
 
+<!-- trace:case id=g10.auction-notifications.TC-7zp rev=1 covers=g10.auction-notifications.SC-hf1,g10.auction-notifications.SC-lbn -->
 ### grade10-site-auction-notifications-US8-TC2-1: No-bids close skips bidder letter and does not send lot_ended
 
 **Classification:**

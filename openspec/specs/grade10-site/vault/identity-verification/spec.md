@@ -69,12 +69,14 @@ politically-exposed-person screening, and no ongoing monitoring.
 Recording a check again on the same case SHALL replace the case's check rather
 than add a second, and the check it displaces SHALL be discarded durably.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-yx5 rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-01 - A check binds to the case
 **Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **WHEN** staff record a check against a case being valued
 - **THEN** the case names that check and the counter sees the verified name
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-axm rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-02 - Recording again rebinds rather than duplicating
 **Serves:** Reuse and duplicates - recording again rebinds rather than duplicating
 
@@ -82,6 +84,7 @@ than add a second, and the check it displaces SHALL be discarded durably.
 - **WHEN** staff record another
 - **THEN** the case carries exactly one check and the displaced one is discarded
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-h78 rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-03 - A case in custody takes no new check
 **Serves:** What it refuses - a case in custody takes no new check
 
@@ -99,12 +102,14 @@ Both SHALL be applied when the check is recorded, when a check is reused onto
 another case, and again when a packet is prepared from it. Neither SHALL be
 applied when the item is released: discharging an agreement asks neither.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-vts rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-04 - Under eighteen is refused
 **Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
 - **WHEN** a check is recorded for somebody whose eighteenth birthday has not passed on the shop's day
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-j0w rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-05 - A birthday is judged on the shop's day
 **Serves:** What it refuses - a birthday is judged on the shop's day
 
@@ -112,6 +117,7 @@ applied when the item is released: discharging an agreement asks neither.
 - **WHEN** their identity is judged
 - **THEN** they are an adult
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-p6q rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-06 - A document that lapsed before the signature is refused
 **Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
@@ -119,6 +125,7 @@ applied when the item is released: discharging an agreement asks neither.
 - **WHEN** a packet is prepared
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-zl6 rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-07 - A lapsed document does not hold somebody's property
 **Serves:** grade10-site-vault-identity-verification-US-04 - Collector collects an item on a passport that has since lapsed
 
@@ -137,6 +144,7 @@ Every case SHALL belong to an account, so every check SHALL be reachable from
 that account's erasure request. There SHALL be no identity keyed to a case
 alone.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-5by rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-08 - The case says nothing about the person
 **Serves:** grade10-site-vault-identity-verification-US-01 - Operator checks who is standing at the counter
 
@@ -151,6 +159,7 @@ reuse.
 
 A case with no account behind it SHALL have nothing to reuse from.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-h7o rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-09 - The last check binds to the new case
 **Serves:** grade10-site-vault-identity-verification-US-02 - Returning customer is not asked for their passport again
 
@@ -158,6 +167,7 @@ A case with no account behind it SHALL have nothing to reuse from.
 - **WHEN** staff reuse it on a new case
 - **THEN** the new case names that check and no new photograph was taken
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-ybg rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-10 - A check that has aged out cannot be reused
 **Serves:** grade10-site-vault-identity-verification-US-02 - Returning customer is not asked for their passport again
 
@@ -175,6 +185,7 @@ counter.
 Nothing SHALL be refused for it, and which accounts they are SHALL never leave
 the identity store.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-6li rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-11 - A duplicate document flags the case
 **Serves:** grade10-site-vault-identity-verification-US-03 - Operator is warned when one document is on several accounts
 
@@ -182,6 +193,7 @@ the identity store.
 - **WHEN** a check against it is bound to a case
 - **THEN** the case records the count for staff, the case is flagged, and the binding stands
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-14d rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-12 - The other accounts are never named
 **Serves:** grade10-site-vault-identity-verification-US-03 - Operator is warned when one document is on several accounts
 
@@ -194,6 +206,7 @@ A case that holds a sealed document SHALL refuse a new identity check by name.
 Where a seal lands between a check being taken and it being written down, the
 case's own binding SHALL stand and the check just taken SHALL be discarded.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-k6o rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-13 - A signed case refuses a re-record
 **Serves:** grade10-site-vault-identity-verification-US-04 - Collector collects an item on a passport that has since lapsed
 
@@ -207,12 +220,14 @@ The identity photograph SHALL be readable only by an operator holding the
 identity read grant, and every read SHALL be recorded on the case's audit
 trail naming who read it and when.
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-nov rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-14 - A read without the grant is refused
 **Serves:** Reading the photograph - a read without the grant is refused
 
 - **WHEN** an operator without the identity read grant asks for the photograph
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-identity-verification.SC-aun rev=1 -->
 #### Scenario: grade10-site-vault-identity-verification-SC-15 - A read leaves a trail
 **Serves:** Reading the photograph - a read leaves a trail
 

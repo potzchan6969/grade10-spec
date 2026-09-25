@@ -11,6 +11,7 @@ header and the footer, at the width I browse at,
 **so that** I get the site around whatever I opened, and never a surface that
 shipped without it.
 
+<!-- trace:case id=g10.site-page-shell.TC-5ah rev=1 covers=g10.site-page-shell.SC-tme,g10.site-page-shell.SC-qm2,g10.site-page-shell.SC-kxh,g10.site-page-shell.SC-o0j,g10.site-page-shell.SC-oq6 -->
 ### grade10-site-site-page-shell-US1-TC1-1: Every address is wrapped in header, main and footer
 
 **Classification:**
@@ -41,6 +42,7 @@ None.
 * The page carries exactly one banner, one main, and one contentinfo landmark, with the surface inside main.
 * The shell adds no heading, copy, or spacing of its own to that surface's content.
 
+<!-- trace:case id=g10.site-page-shell.TC-ban rev=1 covers=g10.site-page-shell.SC-tme,g10.site-page-shell.SC-qm2,g10.site-page-shell.SC-kxh,g10.site-page-shell.SC-o0j,g10.site-page-shell.SC-oq6 -->
 ### grade10-site-site-page-shell-US1-TC2-1: Narrow viewport reflows without clipping
 
 **Classification:**
@@ -70,6 +72,7 @@ A viewport 375 CSS pixels wide.
 * The page scrolls vertically only.
 * No content is clipped and no control is unreachable.
 
+<!-- trace:case id=g10.site-page-shell.TC-cnk rev=1 covers=g10.site-page-shell.SC-tme,g10.site-page-shell.SC-qm2,g10.site-page-shell.SC-kxh,g10.site-page-shell.SC-o0j,g10.site-page-shell.SC-oq6 -->
 ### grade10-site-site-page-shell-US1-TC3-1: A compact surface keeps its shell and navigation reachable
 
 **Classification:**
@@ -119,6 +122,7 @@ with only the account entry updating once it does,
 **so that** I can start navigating immediately without unrelated chrome
 shifting under me.
 
+<!-- trace:case id=g10.site-page-shell.TC-jc9 rev=1 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
 ### grade10-site-site-page-shell-US2-TC1-1: Header and footer render while the session resolves
 
 **Classification:**
@@ -148,6 +152,7 @@ shifting under me.
 * The header and footer are rendered.
 * The surface remains in the content region while it loads.
 
+<!-- trace:case id=g10.site-page-shell.TC-ev5 rev=1 covers=g10.site-page-shell.SC-9ud,g10.site-page-shell.SC-yxt -->
 ### grade10-site-site-page-shell-US2-TC2-1: The session changes only the account entry
 
 **Classification:**
@@ -197,6 +202,7 @@ Store answers,
 **so that** one place in the header takes me where I can go for this launch,
 without a second auction-orders link.
 
+<!-- trace:case id=g10.site-page-shell.TC-eek rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC1-1: A signed-out collector gets Sign In
 
 **Classification:**
@@ -226,6 +232,7 @@ without a second auction-orders link.
 * The account entry is a primary Sign In button, not an account icon.
 * Sign-in starts.
 
+<!-- trace:case id=g10.site-page-shell.TC-bs9 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC2-1: A signed-in collector reaches the account menu
 
 **Classification:**
@@ -255,6 +262,7 @@ without a second auction-orders link.
 * The menu offers, in order, Profile, My Orders, My Auctions, and Sign out.
 * The menu does not offer KYC.
 
+<!-- trace:case id=g10.site-page-shell.TC-obx rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC3-1: Sign out remains available from the account path
 
 **Classification:**
@@ -286,6 +294,7 @@ without a second auction-orders link.
 * Sign-out starts.
 * The profile also offers Sign out while the collector is signed in.
 
+<!-- trace:case id=g10.site-page-shell.TC-asx rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC4-1: Activating My Orders opens the collector's orders
 
 **Classification:**
@@ -314,6 +323,7 @@ without a second auction-orders link.
 
 * The collector is taken to `/profile/orders`.
 
+<!-- trace:case id=g10.site-page-shell.TC-5jl rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC5-1: Account menu omits My Orders before Store answers
 
 **Classification:**
@@ -343,6 +353,7 @@ without a second auction-orders link.
 * The menu offers Profile, My Auctions, and Sign out.
 * The menu does not offer My Orders.
 
+<!-- trace:case id=g10.site-page-shell.TC-1su rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC6-1: Auction-launch account menu shows email, avatar, and reduced items
 
 **Classification:**
@@ -378,6 +389,7 @@ without a second auction-orders link.
 * The menu lists only My Auctions and Sign Out, in that order.
 * The menu does not include Profile, My Orders, Membership, or Cart.
 
+<!-- trace:case id=g10.site-page-shell.TC-wll rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC7-1: Store-launch account menu adds My Orders and Membership ahead of Sign Out
 
 **Classification:**
@@ -413,6 +425,7 @@ without a second auction-orders link.
 * The menu lists My Orders, My Auctions, Membership, then Sign Out, in that order.
 * Cart is present in the header bar and the menu does not include Profile.
 
+<!-- trace:case id=g10.site-page-shell.TC-7s9 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC8-1: Sign Out item reads in Title Case
 
 **Classification:**
@@ -440,6 +453,7 @@ without a second auction-orders link.
 
 * The item reads "Sign Out" in Title Case, not "Sign out" or "SIGN OUT".
 
+<!-- trace:case id=g10.site-page-shell.TC-atw rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC9-1: Account menu label falls back when no sign-in email is supplied
 
 **Classification:**
@@ -467,6 +481,7 @@ without a second auction-orders link.
 
 * The menu label shows the configured account-menu fallback label instead of an email, still above My Auctions and Sign Out.
 
+<!-- trace:case id=g10.site-page-shell.TC-xbu rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC10-1: Activating Membership invokes its handler without opening a withheld route
 
 **Classification:**
@@ -496,6 +511,7 @@ without a second auction-orders link.
 * The supplied Membership handler is invoked.
 * The browser does not navigate to `/membership`, `/join`, or any other membership address.
 
+<!-- trace:case id=g10.site-page-shell.TC-fa4 rev=1 covers=g10.site-page-shell.SC-m3w,g10.site-page-shell.SC-0ao,g10.site-page-shell.SC-e9z,g10.site-page-shell.SC-y2l,g10.site-page-shell.SC-04a,g10.site-page-shell.SC-u71,g10.site-page-shell.SC-agf,g10.site-page-shell.SC-n9c,g10.site-page-shell.SC-3y1,g10.site-page-shell.SC-qby,g10.site-page-shell.SC-q9i,g10.site-page-shell.SC-m6b,g10.site-page-shell.SC-x1n -->
 ### grade10-site-site-page-shell-US3-TC11-1: Profile joins first, ahead of My Orders and Membership, once carried
 
 **Classification:**
@@ -533,6 +549,7 @@ its destination, with language options rather than currencies,
 **so that** nothing in the header or the footer leads me to a not-found page or
 implies a currency I cannot switch.
 
+<!-- trace:case id=g10.site-page-shell.TC-8rx rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
 ### grade10-site-site-page-shell-US4-TC1-1: Auction-first chrome omits unanswered destinations
 
 **Classification:**
@@ -564,6 +581,7 @@ implies a currency I cannot switch.
 * Language is reachable in the wide bar and from the compact menu.
 * The locale options are languages, not currencies.
 
+<!-- trace:case id=g10.site-page-shell.TC-ytf rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
 ### grade10-site-site-page-shell-US4-TC2-1: Navigation and footer link only to real surfaces
 
 **Classification:**
@@ -593,6 +611,7 @@ None.
 * Every navigation item leads to a surface the site answers.
 * Every footer link leads to a surface the site answers, and a column left with no reachable link is absent entirely.
 
+<!-- trace:case id=g10.site-page-shell.TC-azw rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
 ### grade10-site-site-page-shell-US4-TC3-1: Promo bar and utility row wait for their pages
 
 **Classification:**
@@ -620,6 +639,7 @@ The site answers none of the utility destinations.
 
 * Neither the promotional bar nor the utility row appears.
 
+<!-- trace:case id=g10.site-page-shell.TC-08v rev=1 covers=g10.site-page-shell.SC-ovr,g10.site-page-shell.SC-ql0,g10.site-page-shell.SC-ond,g10.site-page-shell.SC-7p3,g10.site-page-shell.SC-fmx,g10.site-page-shell.SC-cex -->
 ### grade10-site-site-page-shell-US4-TC4-1: Cart becomes global when Store answers
 
 **Classification:**
@@ -658,6 +678,7 @@ The site answers none of the utility destinations.
 none marked when no item owns it,
 **so that** I can tell where I am in the site without guessing.
 
+<!-- trace:case id=g10.site-page-shell.TC-19q rev=1 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-xiu -->
 ### grade10-site-site-page-shell-US5-TC1-1: Listed surface marks its navigation item
 
 **Classification:**
@@ -685,6 +706,7 @@ A collector is on a surface the navigation lists, or on any address beneath it.
 
 * That navigation item is marked as the current page.
 
+<!-- trace:case id=g10.site-page-shell.TC-pm3 rev=1 covers=g10.site-page-shell.SC-q3w,g10.site-page-shell.SC-xiu -->
 ### grade10-site-site-page-shell-US5-TC2-1: Unlisted surface marks no navigation item
 
 **Classification:**
@@ -720,6 +742,7 @@ I am not,
 **so that** the cart I open is the one holding what I picked, rather than an
 empty room, from any surface once Store answers the cart drawer.
 
+<!-- trace:case id=g10.site-page-shell.TC-6el rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
 ### grade10-site-site-page-shell-US06-TC1-1: A signed-out collector presses Cart
 
 **Classification:**
@@ -749,6 +772,7 @@ empty room, from any surface once Store answers the cart drawer.
 * The sign-in dialog opens over the surface.
 * The cart drawer does not open.
 
+<!-- trace:case id=g10.site-page-shell.TC-kv0 rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
 ### grade10-site-site-page-shell-US06-TC2-1: Sign-in opens the cart they asked for
 
 **Classification:**
@@ -780,6 +804,7 @@ empty room, from any surface once Store answers the cart drawer.
 * The sign-in dialog is closed.
 * The cart drawer is open.
 
+<!-- trace:case id=g10.site-page-shell.TC-wbo rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
 ### grade10-site-site-page-shell-US06-TC3-1: Dismissing sign-in opens nothing
 
 **Classification:**
@@ -817,6 +842,7 @@ empty room, from any surface once Store answers the cart drawer.
 * The customer remains signed out on that surface.
 * No cart drawer is open, and none opens later.
 
+<!-- trace:case id=g10.site-page-shell.TC-b8i rev=1 covers=g10.site-page-shell.SC-g63,g10.site-page-shell.SC-ew2,g10.site-page-shell.SC-d19,g10.site-page-shell.SC-tj7 -->
 ### grade10-site-site-page-shell-US06-TC4-1: A member presses Cart
 
 **Classification:**
@@ -854,6 +880,7 @@ empty room, from any surface once Store answers the cart drawer.
 **so that** I can read help without losing the page I was on, whether I am on
 auction-only or full primary nav.
 
+<!-- trace:case id=g10.site-page-shell.TC-ho3 rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC1-1: Help on auction-only header opens docs in a new tab
 
 **Classification:**
@@ -889,6 +916,7 @@ auction-only or full primary nav.
 * The documentation site opens in a new browsing context.
 * The auction page remains open in the original context.
 
+<!-- trace:case id=g10.site-page-shell.TC-wno rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC2-1: Help on full primary nav opens docs in a new tab
 
 **Classification:**
@@ -923,6 +951,7 @@ auction-only or full primary nav.
 * The documentation site opens in a new browsing context.
 * The store page remains open in the original context.
 
+<!-- trace:case id=g10.site-page-shell.TC-mgo rev=1 covers=g10.site-page-shell.SC-o1e,g10.site-page-shell.SC-53q -->
 ### grade10-site-site-page-shell-US07-TC3-1: Help in the compact menu opens docs in a new tab
 
 **Classification:**

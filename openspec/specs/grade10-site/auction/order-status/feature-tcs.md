@@ -9,6 +9,7 @@
 **I want** an unpaid invoice past its deadline to read Payment Overdue without winner card pay,
 **so that** the deadline ends self-service settlement while operators can still resolve the order.
 
+<!-- trace:case id=g10.auction-order-status.TC-87a rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-1o2,g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US1-TC1-1: Expired derives Payment Overdue
 
 **Classification:**
@@ -36,6 +37,7 @@
 
 * Order status is Payment Overdue.
 
+<!-- trace:case id=g10.auction-order-status.TC-7qi rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-1o2,g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US1-TC2-1: Winner card pay is refused when expired
 
 **Classification:**
@@ -65,6 +67,7 @@
 * Invoice remains `expired`.
 * Order status remains Payment Overdue.
 
+<!-- trace:case id=g10.auction-order-status.TC-usq rev=1 covers=g10.auction-order-status.SC-tc9,g10.auction-order-status.SC-i18,g10.auction-order-status.SC-wlf,g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-y48,g10.auction-order-status.SC-mej,g10.auction-order-status.SC-sx5,g10.auction-order-status.SC-fmg,g10.auction-order-status.SC-r6z,g10.auction-order-status.SC-d22,g10.auction-order-status.SC-j9x,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-wt0,g10.auction-order-status.SC-er6,g10.auction-order-status.SC-e4v,g10.auction-order-status.SC-q1w,g10.auction-order-status.SC-1o2,g10.auction-order-status.SC-ztl,g10.auction-order-status.SC-dq1,g10.auction-order-status.SC-x14,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US1-TC3-1: Operator manual settle pays an expired invoice
 
 **Classification:**
@@ -103,6 +106,7 @@
 **I want** a refunded order to remain terminal,
 **so that** later payment events cannot reopen it.
 
+<!-- trace:case id=g10.auction-order-status.TC-sq7 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US2-TC1-1: A refund is terminal after partial collection
 
 **Classification:**
@@ -131,6 +135,7 @@
 * The status is Refunded.
 * It does not return to Partially Paid or Processing.
 
+<!-- trace:case id=g10.auction-order-status.TC-ys1 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US2-TC2-1: An overpayment keeps the existing status
 
 **Classification:**
@@ -165,6 +170,7 @@
 **I want** an unpaid invoice past its deadline to read Payment Overdue,
 **so that** the status shows self-service Pay has closed.
 
+<!-- trace:case id=g10.auction-order-status.TC-5y9 rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US3-TC1-1: An expired invoice derives Payment Overdue
 
 **Classification:**
@@ -199,6 +205,7 @@
 **I want** incomplete setup past its deadline to read Setup Overdue,
 **so that** the status shows self-service Confirm has closed.
 
+<!-- trace:case id=g10.auction-order-status.TC-z6j rev=1 covers=g10.auction-order-status.SC-8qq,g10.auction-order-status.SC-xlj,g10.auction-order-status.SC-f7y,g10.auction-order-status.SC-aj3,g10.auction-order-status.SC-apb,g10.auction-order-status.SC-div,g10.auction-order-status.SC-h5p,g10.auction-order-status.SC-w76,g10.auction-order-status.SC-7zj,g10.auction-order-status.SC-12a,g10.auction-order-status.SC-agq,g10.auction-order-status.SC-kjm,g10.auction-order-status.SC-0sk,g10.auction-order-status.SC-yon,g10.auction-order-status.SC-0dn -->
 ### auction-status-US4-TC1-1: An incomplete setup derives Setup Overdue
 
 **Classification:**

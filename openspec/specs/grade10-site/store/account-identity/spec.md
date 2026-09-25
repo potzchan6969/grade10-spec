@@ -55,6 +55,7 @@ nothing about identity.
 | Declined | Try again, or bring the document to a visit |
 | Expired, Withdrawn | Verify again |
 
+<!-- trace:scenario id=g10.store-account-identity.SC-9f4 rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-01 - A verified collector sees they are verified and until when
 **Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
@@ -63,6 +64,7 @@ nothing about identity.
 - **THEN** it says they are verified and the day their document stops being
   valid, and offers no check to start
 
+<!-- trace:scenario id=g10.store-account-identity.SC-ymn rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-02 - A collector nobody verified sees the bar and how to verify
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -71,6 +73,7 @@ nothing about identity.
 - **THEN** it says they are not verified, names the order value and the bid
   value at which a verified identity is asked for, and offers to verify
 
+<!-- trace:scenario id=g10.store-account-identity.SC-zww rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-03 - The account page carries no identity field
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -79,6 +82,7 @@ nothing about identity.
 - **THEN** no legal name, date of birth, document type, document number, mask,
   document image or provider finding is shown or answered to the page
 
+<!-- trace:scenario id=g10.store-account-identity.SC-vwo rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-04 - A brand with no identity store shows nothing
 **Serves:** Where the collector stands - a brand with no identity store shows nothing
 
@@ -111,6 +115,7 @@ collector whose standing is `expired` SHALL be able to verify again, and the
 approved check SHALL displace the lapsed record. A declined collector SHALL be
 able to try again and SHALL be told the counter is another way.
 
+<!-- trace:scenario id=g10.store-account-identity.SC-ivu rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-05 - Nothing reaches the provider before the collector agrees
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -119,6 +124,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** the verify action is not available, and no check is started with the
   provider
 
+<!-- trace:scenario id=g10.store-account-identity.SC-wjz rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-06 - A collector verifies from their account and is recognised
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -128,6 +134,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** the check records when they agreed, their account page reads
   `verified`, and a checkout or a bid above the bar proceeds for them
 
+<!-- trace:scenario id=g10.store-account-identity.SC-f7d rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-07 - A collector verified at a vault visit is recognised without a ceremony
 **Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
@@ -136,6 +143,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** they are told they are verified, and no check is raised with the
   provider
 
+<!-- trace:scenario id=g10.store-account-identity.SC-wb2 rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-08 - A collector whose document lapsed verifies again
 **Serves:** grade10-site-store-account-identity-US-02 - Collector verified at a vault visit is recognised on the site
 
@@ -144,6 +152,7 @@ able to try again and SHALL be told the counter is another way.
   check on a current document
 - **THEN** their standing reads `verified` on the new document
 
+<!-- trace:scenario id=g10.store-account-identity.SC-btr rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-09 - A check the provider is deciding is not started twice
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -152,6 +161,7 @@ able to try again and SHALL be told the counter is another way.
 - **THEN** it says the provider is deciding and offers to check again, and
   pressing verify starts no second check
 
+<!-- trace:scenario id=g10.store-account-identity.SC-hx7 rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-10 - A declined collector may try again
 **Serves:** grade10-site-store-account-identity-US-01 - Collector verifies their identity from their account
 
@@ -169,6 +179,7 @@ the store's binding on the record so the identity store purges what nothing
 else binds, and command the provider to erase its copies — the same steps
 `grade10-site/e-kyc/identity-record` names for a case.
 
+<!-- trace:scenario id=g10.store-account-identity.SC-y9w rev=1 -->
 #### Scenario: grade10-site-store-account-identity-SC-11 - Erasing the account takes its check with it
 **Serves:** Erasure - erasing the account takes its check with it
 

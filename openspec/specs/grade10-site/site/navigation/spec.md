@@ -50,6 +50,7 @@ nested one renders. Where more than one surface could own an address, the
 deepest one naming it SHALL be the one that renders. An address under no
 surface SHALL resolve to the not-found surface.
 
+<!-- trace:scenario id=g10.site-navigation.SC-70e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-01 - A nested address answers as its surface
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -57,6 +58,7 @@ surface SHALL resolve to the not-found surface.
   its own names, such as an address beneath the store
 - **THEN** that surface renders
 
+<!-- trace:scenario id=g10.site-navigation.SC-p5e rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-02 - A nested surface renders for itself
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -64,6 +66,7 @@ surface SHALL resolve to the not-found surface.
   mailed lot link beneath the auction
 - **THEN** the nested surface renders, not the surface above it
 
+<!-- trace:scenario id=g10.site-navigation.SC-jo4 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** grade10-site-site-navigation-US-01 - Collector reaches the surface an address names
 
@@ -77,6 +80,7 @@ renders — SHALL navigate without a full document load. A click the collector
 modifies, a link that opens elsewhere by its own declaration, and a
 destination on another origin SHALL be left to the browser untouched.
 
+<!-- trace:scenario id=g10.site-navigation.SC-jx8 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-04 - A chrome link navigates in place
 **Serves:** grade10-site-site-navigation-US-02 - Collector moves between surfaces without a page load
 
@@ -84,6 +88,7 @@ destination on another origin SHALL be left to the browser untouched.
 - **WHEN** they click a header or footer link to another surface
 - **THEN** the destination surface renders without a full document load
 
+<!-- trace:scenario id=g10.site-navigation.SC-4a8 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-05 - A modified click is the browser's
 **Serves:** grade10-site-site-navigation-US-02 - Collector moves between surfaces without a page load
 
@@ -91,6 +96,7 @@ destination on another origin SHALL be left to the browser untouched.
   the one that opens a new tab
 - **THEN** the browser's own behavior happens, unaltered
 
+<!-- trace:scenario id=g10.site-navigation.SC-xfo rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-06 - Another origin is the browser's
 **Serves:** grade10-site-site-navigation-US-02 - Collector moves between surfaces without a page load
 
@@ -102,6 +108,7 @@ destination on another origin SHALL be left to the browser untouched.
 Going back or forward SHALL return the collector to the scroll position they
 left that entry at. A navigation to a new entry SHALL start at the top.
 
+<!-- trace:scenario id=g10.site-navigation.SC-a0s rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-11 - Back returns to where they were
 **Serves:** grade10-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
@@ -110,6 +117,7 @@ left that entry at. A navigation to a new entry SHALL start at the top.
 - **WHEN** they go back
 - **THEN** the surface is scrolled to where they left it
 
+<!-- trace:scenario id=g10.site-navigation.SC-5ju rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-12 - A new surface starts at the top
 **Serves:** grade10-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
@@ -122,6 +130,7 @@ left that entry at. A navigation to a new entry SHALL start at the top.
 Opening a surface SHALL NOT download another surface's page code. Navigating
 to a surface SHALL load that surface's code then.
 
+<!-- trace:scenario id=g10.site-navigation.SC-8k5 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-13 - The first visit pays for one surface
 **Serves:** grade10-site-site-navigation-US-05 - Collector downloads only the surface they open
 
@@ -129,6 +138,7 @@ to a surface SHALL load that surface's code then.
 - **THEN** no script containing the store's or the auction's page code is
   downloaded
 
+<!-- trace:scenario id=g10.site-navigation.SC-36n rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-14 - The destination loads on arrival
 **Serves:** grade10-site-site-navigation-US-05 - Collector downloads only the surface they open
 
@@ -151,6 +161,7 @@ A surface that opens as asked SHALL do so whether or not the collector has a
 session: its link carries the secret that opens it, or the surface invites
 sign-in in its own words, and an ask in front of it would hide what it is for.
 
+<!-- trace:scenario id=g10.site-navigation.SC-clu rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-15 - A surface that answers the signed-out opens as asked
 **Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 
@@ -159,6 +170,7 @@ sign-in in its own words, and an ask in front of it would hide what it is for.
 - **THEN** that surface renders at its own address, inviting them to sign in
 - **AND** no sign-in dialog opens in front of it
 
+<!-- trace:scenario id=g10.site-navigation.SC-wnv rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-16 - A secret in the link opens its surface
 **Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 
@@ -182,6 +194,7 @@ no history entry SHALL be left for it.
 A session arriving while the dialog is open SHALL close it and take the
 collector to the surface they asked for, with no further action from them.
 
+<!-- trace:scenario id=g10.site-navigation.SC-ceg rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-17 - A signed-out collector follows a link to a surface that asks
 **Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
@@ -190,6 +203,7 @@ collector to the surface they asked for, with no further action from them.
 - **THEN** the sign-in dialog opens over the store
 - **AND** the address still reads as the store
 
+<!-- trace:scenario id=g10.site-navigation.SC-32w rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-18 - Dismissing leaves the collector where they were
 **Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
@@ -199,6 +213,7 @@ collector to the surface they asked for, with no further action from them.
 - **THEN** they are left on the store with its state intact
 - **AND** the address still reads as the store
 
+<!-- trace:scenario id=g10.site-navigation.SC-jzp rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-19 - Signing in finishes the navigation
 **Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
@@ -208,6 +223,7 @@ collector to the surface they asked for, with no further action from them.
 - **THEN** the dialog closes
 - **AND** the vault renders at its own address, with nothing else to press
 
+<!-- trace:scenario id=g10.site-navigation.SC-rrx rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-20 - The dropped navigation leaves no entry behind
 **Serves:** grade10-site-site-navigation-US-06 - Collector follows a link to a surface that needs an account
 
@@ -233,6 +249,7 @@ rather than to the surface asking again. This is the one difference from a
 collector stopped before an in-app navigation, who still has the surface they
 were reading and is left on it.
 
+<!-- trace:scenario id=g10.site-navigation.SC-b18 rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-21 - A signed-out collector opens the address itself
 **Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
@@ -241,6 +258,7 @@ were reading and is left on it.
 - **THEN** the sign-in dialog opens over it
 - **AND** the address still reads as the vault
 
+<!-- trace:scenario id=g10.site-navigation.SC-yjb rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-22 - The session arrives and the surface renders
 **Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
@@ -249,6 +267,7 @@ were reading and is left on it.
 - **THEN** the vault renders at that same address, with no navigation in
   between
 
+<!-- trace:scenario id=g10.site-navigation.SC-pih rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-23 - Back onto a surface that asks is answered there
 **Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
@@ -257,6 +276,7 @@ were reading and is left on it.
 - **WHEN** they go back to the vault
 - **THEN** the address reads as the vault and the sign-in dialog opens over it
 
+<!-- trace:scenario id=g10.site-navigation.SC-1vk rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-25 - Leaving the ask at the address goes to the brand home
 **Serves:** grade10-site-site-navigation-US-07 - Collector opens a surface that needs an account at its own address
 
@@ -270,6 +290,7 @@ were reading and is left on it.
 A public surface SHALL render before the session has answered. Waiting for it
 SHALL be confined to the surfaces that have nothing to show without one.
 
+<!-- trace:scenario id=g10.site-navigation.SC-hxe rev=1 -->
 #### Scenario: grade10-site-site-navigation-SC-24 - A public surface does not wait
 **Serves:** grade10-site-site-navigation-US-08 - Collector opens a surface that asks nothing of them
 

@@ -73,6 +73,7 @@ Whether a case holds a visit and whether a loan is overdue SHALL NOT be
 statuses. A visit is a fact the diary owns and the case caches; overdue is the
 loan's arithmetic against a clock.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-tro rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-01 - A terminal case takes no move
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
@@ -92,6 +93,7 @@ balance.
 A financed case whose terms are agreed as custody alone SHALL walk the storage
 case's path from `under_valuation`, and SHALL hold no offer, advance or balance.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-ya9 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-02 - A storage case agrees terms without an offer
 **Serves:** The statuses - a storage case agrees terms without an offer
 
@@ -99,6 +101,7 @@ case's path from `under_valuation`, and SHALL hold no offer, advance or balance.
 - **WHEN** its custody terms are agreed at the counter
 - **THEN** the case is `accepted` with no offer against it
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-hp9 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-15 - A loan request stored on custody terms walks the storage path
 **Serves:** The statuses - a loan request stored on custody terms walks the storage path
 
@@ -106,6 +109,7 @@ case's path from `under_valuation`, and SHALL hold no offer, advance or balance.
 - **WHEN** its custody terms are agreed at the counter
 - **THEN** the case is `accepted` with no offer, signs the custody agreement alone, and is released from `vaulted` owing nothing
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-yda rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-03 - A storage case owes nothing
 **Serves:** The statuses - a storage case owes nothing
 
@@ -124,6 +128,7 @@ case's own history in the same transaction as the write it describes. The
 entry SHALL name what happened, who did it — the collector, a member of staff,
 or a sweep — and the statuses it moved between.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-vvb rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-04 - A case that moved under the caller is refused
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
@@ -131,6 +136,7 @@ or a sweep — and the statuses it moved between.
 - **WHEN** both send the same move
 - **THEN** one is applied and the other is refused by name
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-an5 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-05 - The history has no gaps
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
@@ -164,6 +170,7 @@ A case with a visit still ahead of it SHALL NOT be ended by an abandonment
 clock; a case whose ceremony is still open or whose signed set already covers
 its lane SHALL NOT be ended either.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-lz5 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-06 - An abandoned agreement ends after a month
 **Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
@@ -171,6 +178,7 @@ its lane SHALL NOT be ended either.
 - **WHEN** the clocks are read
 - **THEN** the case is `cancelled` and the collector is told
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-33a rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-07 - A collector who rebooked keeps their case
 **Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
@@ -178,6 +186,7 @@ its lane SHALL NOT be ended either.
 - **WHEN** the clocks are read
 - **THEN** the case is left exactly where it is
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-z0u rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-08 - A settled loan waits for its owner
 **Serves:** grade10-site-vault-case-lifecycle-US-02 - Collector who stops answering is not left with an open case
 
@@ -201,6 +210,7 @@ Once the item is in the vault, the case SHALL be callable off only by staff,
 and only while no advance stands against it; that unwind SHALL run the release
 machinery and sign no release document.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-0gz rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-09 - A collector cancels an offer they were made
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
@@ -208,6 +218,7 @@ machinery and sign no release document.
 - **WHEN** its owner cancels the case
 - **THEN** the case is `cancelled`, the offer is closed, the visit is cancelled and the collector is told
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-vch rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-10 - A case in the vault is not the collector's to cancel
 **Serves:** grade10-site-vault-case-lifecycle-US-01 - Collector calls off a request before the item is in the vault
 
@@ -225,6 +236,7 @@ A corrected advance SHALL return the case to `vaulted`, where it may be
 advanced against again. A corrected repayment on a settled loan SHALL reopen
 it to `active`. The machine SHALL hold no other move back.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-am3 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-11 - An unwind is refused past the advance
 **Serves:** grade10-site-vault-case-lifecycle-US-03 - Operator moves a case through the counter without stepping over a guard
 
@@ -232,6 +244,7 @@ it to `active`. The machine SHALL hold no other move back.
 - **WHEN** staff try to unwind it from the vault
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-act rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-12 - A corrected advance returns the case to the vault
 **Serves:** The exits - a corrected advance returns the case to the vault
 
@@ -239,6 +252,7 @@ it to `active`. The machine SHALL hold no other move back.
 - **WHEN** the correction is recorded
 - **THEN** the case is `vaulted` and may be advanced against again
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-dm6 rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-13 - A corrected repayment reopens the loan
 **Serves:** The exits - a corrected repayment reopens the loan
 
@@ -252,6 +266,7 @@ A case that has ended SHALL keep the visit it cached. The record of where the
 item went SHALL NOT be cleared by the ending, and clearing it SHALL NOT be
 read as a cancellation nobody made.
 
+<!-- trace:scenario id=g10.vault-case-lifecycle.SC-k7x rev=1 -->
 #### Scenario: grade10-site-vault-case-lifecycle-SC-14 - The visit outlives the case
 **Serves:** Moving a case - the visit outlives the case
 

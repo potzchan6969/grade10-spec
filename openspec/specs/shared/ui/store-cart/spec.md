@@ -52,12 +52,14 @@ components for the store cart surface: `CartDrawer`, `CartDrawerHeader`,
 `CartDrawerCopy` SHALL include `unavailableItemsRemoved` for the toast shown
 when unavailable lines are cleared after open loading.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-fcz rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-01 - An application imports the cart drawer
 **Serves:** Drawer export contract - an application imports the cart drawer
 
 - **WHEN** an application imports any export named above from the shared UI package's public entry
 - **THEN** the import resolves without error
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-sol rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-13 - Drawer copy carries the unavailable-removal toast message
 **Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
@@ -76,6 +78,7 @@ when unavailable lines are cleared after open loading.
 | `soldOut` | Variant has no stock; row stays visible with sold-out treatment |
 | `unavailable` | Product is no longer in the store catalogue; removed after open loading |
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-0wv rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-12 - Status values are the four named states
 **Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
@@ -90,6 +93,7 @@ When the cart holds fewer than 5 items, `CartDrawer` SHALL render empty
 When the cart holds 5 or more items, `CartDrawer` SHALL NOT render empty slot
 placeholders and SHALL scroll all items.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-yux rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-02 - Fewer than 5 items
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
@@ -97,6 +101,7 @@ placeholders and SHALL scroll all items.
 - **WHEN** `CartDrawer` renders
 - **THEN** it renders the 2 items followed by 3 `CartItemSlot` placeholders
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-awa rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-03 - 5 or more items
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
@@ -104,6 +109,7 @@ placeholders and SHALL scroll all items.
 - **WHEN** `CartDrawer` renders
 - **THEN** all 6 items render and no `CartItemSlot` placeholders are shown
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-v66 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-04 - Empty cart
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
@@ -118,6 +124,7 @@ placeholders and SHALL scroll all items.
 `CartDrawerHeader` SHALL display the count of active items in the cart and
 SHALL NOT count sold-out items towards the badge total.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-9dd rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-05 - Sold out item present
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
@@ -131,6 +138,7 @@ SHALL NOT count sold-out items towards the badge total.
 dimmed backdrop overlay, or presses the <kbd>Escape</kbd> key. When open,
 background body scrolling SHALL be prevented.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-yb1 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-06 - Backdrop tap or Escape key
 **Serves:** shared-ui-store-cart-US-04 - Shopper dismisses the cart drawer
 
@@ -143,6 +151,7 @@ background body scrolling SHALL be prevented.
 When cart items exceed the visible body container, `CartDrawerBody` SHALL display
 shadcn scroll-fade mask styling at the top and bottom edges to indicate scrollable content.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-utr rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-07 - Overflowing items hint scrollability
 **Serves:** shared-ui-store-cart-US-02 - Shopper reviews what the cart holds
 
@@ -158,6 +167,7 @@ badge, subtotal, discount amount, and estimated total SHALL render in a Boneyard
 skeleton loading state. Empty `CartItemSlot` placeholders SHALL NOT render while
 loading, and the checkout button SHALL be disabled.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-dvb rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-08 - Cart opened in loading state
 **Serves:** shared-ui-store-cart-US-03 - Shopper opens the cart on current prices
 
@@ -180,6 +190,7 @@ SHALL NOT show that toast.
 `unavailable` means the product is no longer in the store catalogue (taken off
 sale). It is not `soldOut` and not `adjusted`.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-jbs rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-10 - Delisted items clear after loading with one toast
 **Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
@@ -192,6 +203,7 @@ sale). It is not `soldOut` and not `adjusted`.
 - **AND** exactly one toast appears with the `unavailableItemsRemoved` message
 - **AND** non-unavailable items remain in the cart
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-pvs rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-11 - No unavailable items means no removal toast
 **Serves:** shared-ui-store-cart-US-06 - Shopper opens a cart that held a delisted product
 
@@ -211,6 +223,7 @@ and redirecting (for example to Shopify Checkout). While redirecting, the
 button SHALL remain in the loading state until navigation occurs or `onCheckout`
 rejects, in which case the button SHALL return to its enabled label.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-ubk rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-09 - Shopper proceeds to checkout
 **Serves:** shared-ui-store-cart-US-05 - Shopper proceeds from the cart to checkout
 
@@ -232,6 +245,7 @@ When the line’s status leaves `adjusted` and later becomes `adjusted` again,
 `adjusted`, it SHALL show the warning (a remount with status still `adjusted`
 shows the warning again).
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-8f7 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-14 - Adjusted line shows the low-stock warning
 **Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
@@ -239,6 +253,7 @@ shows the warning again).
 - **WHEN** `CartItem` renders
 - **THEN** the low-stock warning copy is visible
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-lju rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-15 - Quantity change hides the warning
 **Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
@@ -248,6 +263,7 @@ shows the warning again).
 - **THEN** the low-stock warning is no longer visible
 - **AND** `onQuantityChange` is invoked with the new quantity
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-7il rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-16 - New adjusted status shows the warning again
 **Serves:** shared-ui-store-cart-US-07 - Shopper edits a low-stock line and the warning quiets
 
@@ -270,6 +286,7 @@ from the line's quantity or its status.
 Decrement is unaffected at the maximum, and removal at quantity one SHALL go
 on being reported as it is today.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-zdl rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-17 - The stepper stops at the maximum
 **Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
@@ -278,6 +295,7 @@ on being reported as it is today.
 - **THEN** `onQuantityChange` is not invoked
 - **AND** the control is exposed as unavailable
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-27k rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-18 - No maximum supplied
 **Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
@@ -285,6 +303,7 @@ on being reported as it is today.
 - **WHEN** the shopper activates its increment control
 - **THEN** `onQuantityChange` is invoked with `3`
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-38a rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-19 - Decrement still works at the maximum
 **Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
@@ -302,6 +321,7 @@ from it that a line is nearly out.
 A line displaying the low-stock warning SHALL be able to display both, since
 one says what was already changed and the other says what is left.
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-0n8 rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-20 - A remaining count is displayed as supplied
 **Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 
@@ -310,6 +330,7 @@ one says what was already changed and the other says what is left.
 - **THEN** `Only 2 left` is displayed on that line
 - **AND** no other remaining-count copy is shown
 
+<!-- trace:scenario id=g10.shared-store-cart.SC-pvg rev=1 -->
 #### Scenario: shared-ui-store-cart-SC-21 - No remaining count supplied
 **Serves:** shared-ui-store-cart-US-08 - Shopper raises a line to the last unit the shop has
 

@@ -67,6 +67,7 @@ for the listing product page — `ListingGallery`, `ListingAuctionBidCard`, and
 Each of those components SHALL be renderable on its own, so a later surface can
 reuse the gallery without the bid panel.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-emk rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -74,6 +75,7 @@ reuse the gallery without the bid panel.
   public entry
 - **THEN** every import resolves
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-i3i rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-02 - A part is reused alone
 **Serves:** Surface exports - a part is reused alone
 
@@ -89,6 +91,7 @@ name, and optional `thumbLabel` as the thumbnail's accessible name (falling
 back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 `src`. The gallery SHALL NOT fetch, derive, or rewrite those addresses.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-v9a rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-03 - Distinct sources are used in each slot
 **Serves:** Gallery sources - distinct sources are used in each slot
 
@@ -100,6 +103,7 @@ back to `alt`). When `thumbSrc` or `zoomSrc` is omitted, that slot SHALL use
 - **AND** the main frame requests `src`
 - **AND** the zoom dialog requests `zoomSrc`
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-4sr rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-04 - Omitted sources fall back to src
 **Serves:** Gallery sources - omitted sources fall back to src
 
@@ -114,6 +118,7 @@ two or more items it SHALL show a thumbnail strip and enable previous/next.
 With exactly one item it SHALL hide the strip and disable previous/next. With
 none it SHALL render no item and SHALL NOT present previous/next as available.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-e6o rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-05 - Several gallery items show a strip
 **Serves:** Gallery strip - several gallery items show a strip
 
@@ -122,6 +127,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **THEN** a thumbnail exists for each item
 - **AND** previous and next are enabled
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-96b rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-06 - One gallery item has no strip
 **Serves:** Gallery strip - one gallery item has no strip
 
@@ -131,6 +137,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 - **AND** no thumbnail strip is shown
 - **AND** previous and next are disabled
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1a8 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-07 - No gallery items
 **Serves:** Gallery strip - no gallery items
 
@@ -145,6 +152,7 @@ none it SHALL render no item and SHALL NOT present previous/next as available.
 (`ListingGalleryCopy`) with `zoom`, `previous`, and `next` from the consumer.
 It SHALL NOT supply default user-visible copy for those slots.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ogg rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-08 - Labels come from the consumer
 **Serves:** Consumer labels - labels come from the consumer
 
@@ -169,6 +177,7 @@ given.
 When the listing is in extended bidding, consumer copy for the Time left label
 SHALL be **Time left (extended)** (or the locale equivalent).
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-0gu rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-14 - Extension copy comes from the consumer
 **Serves:** Consumer labels - extension copy comes from the consumer
 
@@ -179,6 +188,7 @@ SHALL be **Time left (extended)** (or the locale equivalent).
 - **AND** no hardcoded "30 minutes" window, and no extension-window minutes,
   appear in that slot
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ptk rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-14a - Extended label while in extended bidding
 **Serves:** Consumer labels - extended label while in extended bidding
 
@@ -195,6 +205,7 @@ SHALL be **Time left (extended)** (or the locale equivalent).
 `ListingUserBidHistoryRow` SHALL carry `acceptedAtMs: number` and MAY carry
 `timeOverride?: string`.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-as2 rev=1 -->
 #### Scenario: auction-listing-SC-22 - A bid row preserves its accepted instant
 **Serves:** Bid history - a bid row preserves its accepted instant
 
@@ -213,6 +224,7 @@ activity-time rules unless `timeOverride` is set.
 and `timeZone` and SHALL thread them to bid history and the collector deadline
 line.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-9gi rev=1 -->
 #### Scenario: auction-listing-SC-13 - Recent bids show localized activity time
 **Serves:** Bid history - recent bids show localized activity time
 
@@ -257,6 +269,7 @@ empty linked-card prompt that activates `onLink` when supplied.
 
 None of these blocks SHALL fetch, persist, or subscribe to product state.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-o4b rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-15 - Enrollment setup exports resolve
 **Serves:** Bid enrollment - enrollment setup exports resolve
 
@@ -265,6 +278,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
   package's public entry
 - **THEN** every import resolves
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-wri rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-16 - Setup continue respects card and attestation
 **Serves:** Bid enrollment - setup continue respects card and attestation
 
@@ -273,6 +287,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **WHEN** card entry is incomplete or age attestation is unchecked
 - **THEN** continue is disabled
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-1qn rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-17 - Change-card setup enables continue when pre-checked
 **Serves:** Bid enrollment - change-card setup enables continue when pre-checked
 
@@ -282,6 +297,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** continue is enabled without further attestation action
 - **AND** the provider field area uses the linked-card placeholder copy
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-89v rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-28 - Setup shows a link error under the card field
 **Serves:** Bid enrollment - setup shows a link error under the card field
 
@@ -290,6 +306,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **THEN** that message appears under the provider card field
 - **AND** continue remains available when card entry and attestation are satisfied
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-s3o rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-29 - Setup linking locks the sheet
 **Serves:** Bid enrollment - setup linking locks the sheet
 
@@ -299,6 +316,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** the provider field and age attestation are not interactive
 - **AND** dismiss is unavailable
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-srg rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-18 - Payment row hides change when not editable
 **Serves:** Bid enrollment - payment row hides change when not editable
 
@@ -308,6 +326,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **AND** no change control is shown
 - **AND** the row keeps the same height as with Change shown
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ji6 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-30 - Linked-card label exposes hold tooltip
 **Serves:** Bid enrollment - linked-card label exposes hold tooltip
 
@@ -315,6 +334,7 @@ None of these blocks SHALL fetch, persist, or subscribe to product state.
 - **WHEN** it renders
 - **THEN** an info control beside the linked-card label exposes that tooltip copy
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-b43 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-19 - Empty linked-card slot activates link
 **Serves:** Bid enrollment - empty linked-card slot activates link
 
@@ -336,6 +356,7 @@ consumer's place-bid or commit-maximum labels with enabled amount controls.
 Standing banners SHALL render only when `bidEnrollment` is not `signed-out`
 and the consumer supplies standing content.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-z9r rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-20 - Signed-out enrollment hides standing badges
 **Serves:** Bid enrollment - signed-out enrollment hides standing badges
 
@@ -344,6 +365,7 @@ and the consumer supplies standing content.
 - **WHEN** the card renders
 - **THEN** standing badges are not shown
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-92g rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-21 - Ready enrollment shows standing when supplied
 **Serves:** Bid enrollment - ready enrollment shows standing when supplied
 
@@ -352,6 +374,7 @@ and the consumer supplies standing content.
 - **WHEN** the card renders
 - **THEN** the outbid standing badge is shown
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-b9p rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-26 - Needs-card disables amount controls
 **Serves:** Bid enrollment - needs-card disables amount controls
 
@@ -360,6 +383,7 @@ and the consumer supplies standing content.
 - **THEN** quick-bid presets and the custom maximum field are visible and not interactive
 - **AND** the primary bid action uses the consumer's link-card label
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-7da rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-27 - Needs-card primary action opens setup
 **Serves:** Bid enrollment - needs-card primary action opens setup
 
@@ -388,6 +412,7 @@ The table SHALL NOT include a bid-type column. Long histories SHALL scroll
 inside the dialog body while the dialog title, description, and close control
 remain fixed.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ast rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-09 - A signed-in user opens personal bid history
 **Serves:** Personal bid history - a signed-in user opens personal bid history
 
@@ -398,6 +423,7 @@ remain fixed.
 - **AND** no bid-type column or type badge is shown
 - **AND** the dialog closes via the close control or Escape
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-h3u rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-10 - No rows means no link
 **Serves:** Personal bid history - no rows means no link
 
@@ -405,6 +431,7 @@ remain fixed.
 - **WHEN** it renders
 - **THEN** no link or dialog is shown
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-mm6 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-11 - Long history scrolls inside the dialog
 **Serves:** Personal bid history - long history scrolls inside the dialog
 
@@ -420,6 +447,7 @@ remain fixed.
 When supplied, it SHALL render that node on the trailing edge of the recent-bids
 section header. It SHALL NOT require `recentBidsAccessory` to render.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-8xx rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-12 - An accessory composes beside recent bids
 **Serves:** Bid card accessory - an accessory composes beside recent bids
 
@@ -435,6 +463,7 @@ section header. It SHALL NOT require `recentBidsAccessory` to render.
 viewer standing is lost, the card SHALL show the Did not win status treatment
 and SHALL NOT render authorization-release banner copy under that standing.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ik3 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-46 - Lost standing omits release banner
 **Serves:** Lost standing - lost standing omits the release banner
 
@@ -486,6 +515,7 @@ rules unless `timeOverride` is set.
 This requirement supersedes the single-table personal bid-history dialog shape
 previously proposed under `add-lot-user-bid-history`.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-yr9 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-31 - Collector opens Your bidding with both lists
 **Serves:** Personal bidding dialog - collector opens Your bidding with both lists
 
@@ -500,6 +530,7 @@ previously proposed under `add-lot-user-bid-history`.
   column
 - **AND** the dialog closes via the close control or Escape
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-c86 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-32 - Bid placed stays the default when no bids were placed
 **Serves:** Personal bidding dialog - bid placed stays the default when no bids were placed
 
@@ -510,6 +541,7 @@ previously proposed under `add-lot-user-bid-history`.
   with `copy.emptyBidsTitle` and `copy.emptyBidsDescription`
 - **AND** activating the maximums tab shows the supplied maximum rows
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-53a rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-33 - No personal rows means no link
 **Serves:** Personal bidding dialog - no personal rows means no link
 
@@ -518,6 +550,7 @@ previously proposed under `add-lot-user-bid-history`.
 - **WHEN** it renders
 - **THEN** no link or dialog is shown
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-6dn rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-34 - Active tab scrolls under a fixed chrome
 **Serves:** Personal bidding dialog - active tab scrolls under a fixed chrome
 
@@ -539,6 +572,7 @@ SHALL NOT be treated as an invalid amount.
 Committed amounts remain an integer count of minor units: each whole major
 unit maps by the currency's ISO 4217 exponent.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-ujz rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-24 - A typed decimal mark is refused
 **Serves:** Bid enrollment - a typed decimal mark is refused
 
@@ -547,6 +581,7 @@ unit maps by the currency's ISO 4217 exponent.
 - **THEN** the draft remains `100`
 - **AND** the decimal mark does not appear in the field
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-egd rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-25 - A pasted fractional amount falls back to the integer major units
 **Serves:** Bid enrollment - a pasted fractional amount falls back to the integer major units
 
@@ -567,6 +602,7 @@ the current bid plus those multiples.
 
 The first chip SHALL NOT be replaced by the typed raise floor.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-7o5 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-35 - A leader's chips step from the committed max
 **Serves:** Quick bids - a leader's chips step from the committed max
 
@@ -576,6 +612,7 @@ The first chip SHALL NOT be replaced by the typed raise floor.
 - **WHEN** the bid card renders quick-bid chips
 - **THEN** the three amounts are 204000, 208000, and 216000 HKD minor units
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-t9f rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-36 - A collector who does not lead steps from the current bid
 **Serves:** Quick bids - a collector who does not lead steps from the current bid
 
@@ -592,6 +629,7 @@ that maximum, `ListingAuctionBidCard` SHALL set the custom-maximum minimum to
 the greater of the listing's minimum next bid and that maximum plus 100
 minor units. That floor SHALL NOT be used as the first quick-bid amount.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-dv0 rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-37 - A leader's typed minimum stays max plus $1
 **Serves:** Raise floor - a leader's typed minimum stays max plus $1
 
@@ -619,6 +657,7 @@ the card SHALL NOT gate that rate behind an info tooltip.
 **Signed out** - When `bidEnrollment` is `signed-out`, the fee line SHALL be
 omitted with the bid action.
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-w7x rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-44 - Buyer fee shows inline at 20%
 **Serves:** Buyer-fee disclosure - the buyer fee shows inline at 20%
 
@@ -628,6 +667,7 @@ omitted with the bid action.
   added on top of the winning bid
 - **AND** no buyer-fee info tooltip is present
 
+<!-- trace:scenario id=g10.shared-auction-listing.SC-tzp rev=1 -->
 #### Scenario: shared-ui-auction-listing-SC-45 - Signed-out panel omits the fee line
 **Serves:** Buyer-fee disclosure - a signed-out panel omits the fee line
 

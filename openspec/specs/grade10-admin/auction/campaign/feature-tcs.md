@@ -9,6 +9,7 @@
 **I want** the catalogue cover called Campaign everywhere in the admin,
 **so that** I never mistake a cover for store checkout or sold stock.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-1bi rev=1 covers=g10adm.auction-campaign.SC-0ir,g10adm.auction-campaign.SC-qeg -->
 ### grade10-admin-auction-campaign-US1-TC1-1: Section and editor name the cover a campaign
 
 **Classification:**
@@ -48,6 +49,7 @@
 **I want** to start a campaign with a title and optional copy that no collector can see yet,
 **so that** I can prepare an event before anything is public.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-khb rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC1-1: New campaign editor opens empty and offers no create
 
 **Classification:**
@@ -77,6 +79,7 @@
 * The editor opens with empty title and copy.
 * Create and publish are not offered until the campaign exists as a draft.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-ppt rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC2-1: Operator opens a draft campaign with a title
 
 **Classification:**
@@ -114,6 +117,7 @@
 * Grade10 persists a draft campaign titled `<title>`.
 * The campaign is absent from the public catalogue covers.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-o3t rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC3-1: Draft campaign editor offers create and cancel, never publish
 
 **Classification:**
@@ -145,6 +149,7 @@
 * Create and cancel are offered.
 * Publish is not offered.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-qn0 rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC4-1: Open without a title is refused
 
 **Classification:**
@@ -174,6 +179,7 @@
 * Grade10 refuses the open.
 * No campaign is persisted.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-e8o rev=1 covers=g10adm.auction-campaign.SC-gzn,g10adm.auction-campaign.SC-coz,g10adm.auction-campaign.SC-9bl,g10adm.auction-campaign.SC-vz3,g10adm.auction-campaign.SC-5pd -->
 ### grade10-admin-auction-campaign-US2-TC5-1: Unauthorized open is refused
 
 **Classification:**
@@ -211,6 +217,7 @@
 **I want** to create a draft and then publish it as a public cover without publishing the listings under it,
 **so that** the event is announced while each lot publishes on its own.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-bkn rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC1-1: Draft becomes created and stays off the catalogue
 
 **Classification:**
@@ -241,6 +248,7 @@
 * Grade10 moves `<campaign_1>` to `created`.
 * It remains absent from the public catalogue covers.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-a8a rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC2-1: Created campaign editor offers publish and cancel, never create
 
 **Classification:**
@@ -272,6 +280,7 @@
 * Publish and cancel are offered.
 * Create is not offered.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-z1p rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC3-1: Publishing a created campaign covers its unpublished lots
 
 **Classification:**
@@ -303,6 +312,7 @@
 * It appears as a public catalogue cover.
 * `<listing_1>` stays off the catalogue.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-qvp rev=1 covers=g10adm.auction-campaign.SC-99d,g10adm.auction-campaign.SC-f38,g10adm.auction-campaign.SC-2n2,g10adm.auction-campaign.SC-k5l,g10adm.auction-campaign.SC-ymm,g10adm.auction-campaign.SC-l3i -->
 ### grade10-admin-auction-campaign-US3-TC4-1: Create and publish are refused out of state
 
 **Classification:**
@@ -350,6 +360,7 @@ Runs once per row of **Test data**.
 **I want** to change a campaign's title and copy while it is open,
 **so that** the public cover stays right without recreating the event.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-4lv rev=1 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
 ### grade10-admin-auction-campaign-US4-TC1-1: Copy changes on a published campaign
 
 **Classification:**
@@ -386,6 +397,7 @@ Runs once per row of **Test data**.
 * Grade10 stores `<new copy>`.
 * The title and status are unchanged.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-esv rev=1 covers=g10adm.auction-campaign.SC-1xm,g10adm.auction-campaign.SC-h9c -->
 ### grade10-admin-auction-campaign-US4-TC2-1: Clearing the title is refused
 
 **Classification:**
@@ -424,6 +436,7 @@ Runs once per row of **Test data**.
 **I want** to cancel a campaign in any open state and have its listings cancelled with it,
 **so that** a called-off event leaves nothing live and nothing more to do.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-x3q rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC1-1: Cancelling a published campaign cancels its listings
 
 **Classification:**
@@ -454,6 +467,7 @@ Runs once per row of **Test data**.
 * Grade10 moves `<campaign_3>` to `canceled`.
 * `<listing_2>` and `<listing_3>` move to `canceled` under the listing cancel rules.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-7ck rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC2-1: A campaign with no listings cancels from draft or created
 
 **Classification:**
@@ -491,6 +505,7 @@ Runs once per row of **Test data**.
 
 * Grade10 moves `<campaign>` to `canceled`.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-s0x rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC3-1: A canceled campaign refuses a second cancel and a title edit
 
 **Classification:**
@@ -522,6 +537,7 @@ Runs once per row of **Test data**.
 * Grade10 refuses the cancel and the campaign remains canceled.
 * Grade10 refuses the title write and the title is unchanged.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-52j rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC4-1: A canceled campaign opens read-only
 
 **Classification:**
@@ -552,6 +568,7 @@ Runs once per row of **Test data**.
 * The editor shows its title and copy.
 * Create, publish, edit save and cancel are not offered.
 
+<!-- trace:case id=g10adm.auction-campaign.TC-okx rev=1 covers=g10adm.auction-campaign.SC-p3b,g10adm.auction-campaign.SC-fwq,g10adm.auction-campaign.SC-tka,g10adm.auction-campaign.SC-8dq,g10adm.auction-campaign.SC-z8a,g10adm.auction-campaign.SC-uv1,g10adm.auction-campaign.SC-2l6 -->
 ### grade10-admin-auction-campaign-US5-TC5-1: Unauthorized cancel is refused
 
 **Classification:**

@@ -32,6 +32,7 @@ sale on its own cart, where the shop's automatic discounts already apply —
 so grade10 SHALL NOT disable them there. Clearing a sale's discounts SHALL
 remove what grade10 put on it and leave the shop's own automatics standing.
 
+<!-- trace:scenario id=g10.store-site-discounts.SC-oi2 rev=1 -->
 #### Scenario: grade10-site-store-site-discounts-SC-01 - An automatic discount reaches the online checkout
 **Serves:** grade10-site-store-site-discounts-US-01 - Collector buys a product carrying an active site discount
 
@@ -39,6 +40,7 @@ remove what grade10 put on it and leave the shop's own automatics standing.
 - **WHEN** the checkout's draft order is priced and created
 - **THEN** the automatic discount's cut is on the order Shopify returns
 
+<!-- trace:scenario id=g10.store-site-discounts.SC-rak rev=1 -->
 #### Scenario: grade10-site-store-site-discounts-SC-02 - A till sale keeps the shop's own automatic discount
 **Serves:** grade10-site-store-site-discounts-US-02 - Shop staff rings up the same discount at the till
 
@@ -62,6 +64,7 @@ place of the code, the sale SHALL complete at the shop's price and the
 coupon SHALL return to the member, under that capability's own rule; grade10
 SHALL NOT fail the sale for a code the shop set aside.
 
+<!-- trace:scenario id=g10.store-site-discounts.SC-yel rev=1 -->
 #### Scenario: grade10-site-store-site-discounts-SC-03 - Grade10 presents what the provider priced
 **Serves:** grade10-site-store-site-discounts-US-01 - Collector buys a product carrying an active site discount
 

@@ -33,6 +33,7 @@ A retried creation SHALL land on the same customer, never a duplicate. A
 re-runnable check SHALL be able to report every member's pairing state,
 so members from before this capability shipped can be verified paired.
 
+<!-- trace:scenario id=g10.store-membership.SC-z0r rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-01 - Sign-up never waits on the provider
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -40,12 +41,14 @@ so members from before this capability shipped can be verified paired.
 - **THEN** their account is created and usable at once
 - **AND** the pairing completes on its own once the provider answers
 
+<!-- trace:scenario id=g10.store-membership.SC-07a rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-02 - A lost response does not duplicate a customer
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
 - **WHEN** pairing retries after a creation whose response was lost
 - **THEN** the retry lands on the customer the first attempt created
 
+<!-- trace:scenario id=g10.store-membership.SC-sho rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-03 - A conflict parks visibly
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -70,6 +73,7 @@ An account created from a purchase SHALL pair with the customer record
 that purchase made. Nothing is being adopted there — the account and the
 customer are the same event, so there is no prior history to mis-attach.
 
+<!-- trace:scenario id=g10.store-membership.SC-g6t rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-04 - The account identifier never leaves Grade10
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -77,6 +81,7 @@ customer are the same event, so there is no prior history to mis-attach.
 - **THEN** it carries the opaque membership key and no platform account
   identifier
 
+<!-- trace:scenario id=g10.store-membership.SC-e9u rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-05 - An unverified email attaches nothing to a member who already existed
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -84,6 +89,7 @@ customer are the same event, so there is no prior history to mis-attach.
   never verified it
 - **THEN** that customer is not adopted as the member's pair
 
+<!-- trace:scenario id=g10.store-membership.SC-ppr rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-06 - A purchase that creates the account also pairs it
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -101,6 +107,7 @@ the member key. Any customer record the erasure race left behind SHALL be
 found and removed. A terminal pairing SHALL never return to any live
 state.
 
+<!-- trace:scenario id=g10.store-membership.SC-wyy rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-07 - A crash mid-erasure does not resurrect the customer
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -109,6 +116,7 @@ state.
 - **THEN** the removal is retried to completion
 - **AND** no automatic repair re-creates the customer in the meantime
 
+<!-- trace:scenario id=g10.store-membership.SC-2vf rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-08 - A racing creation is cleaned up
 **Serves:** grade10-site-store-membership-US-01 - Collector becomes a member without waiting on commerce
 
@@ -142,6 +150,7 @@ gives with nobody on the sale. A lookup that finds a member SHALL replace the
 one on the sale. An outdated till or membership switched off SHALL still take
 membership off the till, and the sale goes on as an ordinary sale.
 
+<!-- trace:scenario id=g10.store-membership.SC-a6l rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-09 - A replayed code is refused with its history
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -149,6 +158,7 @@ membership off the till, and the sale goes on as an ordinary sale.
 - **THEN** it is refused, naming where and when it was first used
 - **AND** the member's own card shows the same
 
+<!-- trace:scenario id=g10.store-membership.SC-6kj rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-10 - An email miss discloses nothing
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -156,6 +166,7 @@ membership off the till, and the sale goes on as an ordinary sale.
 - **THEN** the answer says only that no member was found
 - **AND** it does not distinguish an unknown address from an unpaired one
 
+<!-- trace:scenario id=g10.store-membership.SC-wv5 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-11 - A lookup is recorded
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -163,6 +174,7 @@ membership off the till, and the sale goes on as an ordinary sale.
 - **THEN** the lookup is recorded with the staff and location labels and
   how the member was identified
 
+<!-- trace:scenario id=g10.store-membership.SC-jnm rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-79 - A lookup that finds nobody keeps the member on the sale
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -173,6 +185,7 @@ membership off the till, and the sale goes on as an ordinary sale.
 - **AND** the panel shows the answer that lookup gives with nobody on the sale
 - **AND** a spend confirmed afterwards spends for that member
 
+<!-- trace:scenario id=g10.store-membership.SC-7hw rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-80 - A lookup that finds another member replaces the first
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -198,6 +211,7 @@ fell short meanwhile. An order abandoned, replaced, or undone before
 payment SHALL debit nothing. A promise larger than the order can carry
 SHALL be trimmed to what the order shows rather than refused.
 
+<!-- trace:scenario id=g10.store-membership.SC-qr3 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-16 - A promise larger than the cart is trimmed, not refused
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -205,6 +219,7 @@ SHALL be trimmed to what the order shows rather than refused.
 - **THEN** it is trimmed to what the order shows
 - **AND** the purchase completes at the trimmed amount
 
+<!-- trace:scenario id=g10.store-membership.SC-r53 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-72 - A points discount and a reward coupon apply together
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -212,6 +227,7 @@ SHALL be trimmed to what the order shows rather than refused.
 - **THEN** both apply
 - **AND** neither is refused for the other's presence
 
+<!-- trace:scenario id=g10.store-membership.SC-stn rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-73 - The balance moves once, when the order is paid
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -230,12 +246,14 @@ recorded rather than lost. Recording SHALL keep whatever money facts are
 known even when no owner is known yet, and a refund on an ownerless order
 SHALL be kept exactly-once for replay when an owner appears.
 
+<!-- trace:scenario id=g10.store-membership.SC-1h1 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-18 - Webhook and sweep converge
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
 - **WHEN** the same provider order arrives by webhook and by the sweep
 - **THEN** exactly one order is recorded
 
+<!-- trace:scenario id=g10.store-membership.SC-uj6 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-19 - The platform's own checkout is not re-ingested
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -243,6 +261,7 @@ SHALL be kept exactly-once for replay when an owner appears.
   checkout created
 - **THEN** no second record is created for it
 
+<!-- trace:scenario id=g10.store-membership.SC-fzf rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-20 - A refund before identity is not lost or doubled
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -262,6 +281,7 @@ Operator claims SHALL record the evidence and the operator. An order
 whose earnable amount is not yet known SHALL be refused attribution
 loudly, never guessed.
 
+<!-- trace:scenario id=g10.store-membership.SC-6ux rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-21 - A sale rung up before registration is not lost
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -271,6 +291,7 @@ loudly, never guessed.
   recorded
 - **AND** the earning lands as if the sale had been theirs
 
+<!-- trace:scenario id=g10.store-membership.SC-3rh rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-22 - A wrong attribution is one action to undo
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -278,6 +299,7 @@ loudly, never guessed.
 - **THEN** the points it granted are clawed back
 - **AND** a re-attribution to the right member earns correctly
 
+<!-- trace:scenario id=g10.store-membership.SC-gnr rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-23 - Two claimers cannot both win
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -293,6 +315,7 @@ not — identically for online and physical orders, so no channel is a way
 around it. An order whose eligible amount cannot be determined SHALL be
 refused earning loudly rather than priced from a guess.
 
+<!-- trace:scenario id=g10.store-membership.SC-8p9 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-24 - A gift card earns nothing anywhere
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -300,6 +323,7 @@ refused earning loudly rather than priced from a guess.
   till
 - **THEN** the gift card's amount earns no points
 
+<!-- trace:scenario id=g10.store-membership.SC-fqu rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-25 - Points spent lower the same order's earning
 **Serves:** grade10-site-store-membership-US-03 - Member's in-store order earns through attribution
 
@@ -315,6 +339,7 @@ block a sale: the sale completes as a guest sale, earning for an attached
 customer still arrives through order recording, and attribution repairs
 the rest later.
 
+<!-- trace:scenario id=g10.store-membership.SC-u06 rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-26 - The kill switch stops spending, not selling
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -322,6 +347,7 @@ the rest later.
 - **THEN** every till completes sales normally
 - **AND** orders with an attached customer still earn
 
+<!-- trace:scenario id=g10.store-membership.SC-wrc rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-27 - Email-assisted spending can be stopped alone
 **Serves:** grade10-site-store-membership-US-02 - Member identifies and spends at the till
 
@@ -353,6 +379,7 @@ unpaid SHALL send a correction notice, since the member was already told it
 landed; a sale that never reaches that pass SHALL send nothing. The
 notification SHALL never carry the code.
 
+<!-- trace:scenario id=g10.store-membership.SC-uae rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-77 - A double tap spends once
 **Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
@@ -360,6 +387,7 @@ notification SHALL never carry the code.
 - **THEN** exactly one redemption is recorded
 - **AND** both submissions answer the same
 
+<!-- trace:scenario id=g10.store-membership.SC-soj rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-75 - The member's phone is the monitor
 **Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 
@@ -368,6 +396,7 @@ notification SHALL never carry the code.
 - **THEN** the member is notified with points, amount, and location
 - **AND** the notification never contains the code
 
+<!-- trace:scenario id=g10.store-membership.SC-aar rev=1 -->
 #### Scenario: grade10-site-store-membership-SC-76 - A landed notice is corrected if the sale never pays
 **Serves:** grade10-site-store-membership-US-04 - Member is told once a staff-assisted spend or coupon lands at the till
 

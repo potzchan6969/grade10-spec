@@ -29,6 +29,7 @@ Define what a product's frontend package publishes so its features can be compos
 
 A frontend package that defines feature slices MUST publish every dependency-injection module those slices define as a single ordered list, reachable at one dedicated subpath of the package entry. The list MUST contain every such module the package defines and MUST NOT be filterable, reorderable, or parameterised by a consumer. A package that defines exactly one slice today MUST publish the list all the same, so the second slice joins a list that already exists rather than changing every consumer.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-bx5 rev=1 -->
 #### Scenario: shared-frontend-composition-SC-01 - A product gains a feature slice
 **Serves:** Published module lists - a product gains a feature slice
 
@@ -36,6 +37,7 @@ A frontend package that defines feature slices MUST publish every dependency-inj
 - **THEN** that module joins the package's published list
 - **AND THEN** every application composing that product resolves the new slice's bindings without its composition root changing
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-1ry rev=1 -->
 #### Scenario: shared-frontend-composition-SC-02 - A package defines a single feature slice
 **Serves:** Published module lists - a package defines a single feature slice
 
@@ -43,6 +45,7 @@ A frontend package that defines feature slices MUST publish every dependency-inj
 - **THEN** it still publishes the one-entry list at the dedicated subpath
 - **AND THEN** a consumer composing that product names the list, not the single module
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-djo rev=1 -->
 #### Scenario: shared-frontend-composition-SC-03 - An admin frontend package is composed
 **Serves:** Published module lists - an admin frontend package is composed
 
@@ -53,6 +56,7 @@ A frontend package that defines feature slices MUST publish every dependency-inj
 
 An application MUST load a product's published list in its composition root and MUST NOT name an individual feature slice's dependency-injection module there. A test that exercises one slice in isolation MAY load that slice's module directly; no other consumer may.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-5em rev=1 -->
 #### Scenario: shared-frontend-composition-SC-04 - An application composes a product
 **Serves:** Composition root rules - an application composes a product
 
@@ -60,6 +64,7 @@ An application MUST load a product's published list in its composition root and 
 - **THEN** it loads that product's published list
 - **AND THEN** no individual feature module of that product is named in the composition root
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-x5j rev=1 -->
 #### Scenario: shared-frontend-composition-SC-05 - An application composes several products
 **Serves:** Composition root rules - an application composes several products
 
@@ -67,6 +72,7 @@ An application MUST load a product's published list in its composition root and 
 - **THEN** its composition root reads as one core module and one published list per product
 - **AND THEN** the set of products the application shows is legible from that file alone
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-32a rev=1 -->
 #### Scenario: shared-frontend-composition-SC-06 - A test exercises one feature slice
 **Serves:** Composition root rules - a test exercises one feature slice
 
@@ -78,6 +84,7 @@ An application MUST load a product's published list in its composition root and 
 
 The exported name of a frontend package's core-module factory MUST identify the product it binds the shared ports of. A name that identifies only the layer, or that identifies nothing, MUST NOT be used, because a composition root installing several products would then read as repeated identical calls.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-25a rev=1 -->
 #### Scenario: shared-frontend-composition-SC-07 - A composition root installs several core modules
 **Serves:** Named core modules - a composition root installs several core modules
 
@@ -85,6 +92,7 @@ The exported name of a frontend package's core-module factory MUST identify the 
 - **THEN** each call names its product at the call site
 - **AND THEN** a reader identifies which product each set of client dependencies belongs to without opening the package
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-kl7 rev=1 -->
 #### Scenario: shared-frontend-composition-SC-08 - A package publishes a core-module factory
 **Serves:** Named core modules - a package publishes a core-module factory
 
@@ -95,6 +103,7 @@ The exported name of a frontend package's core-module factory MUST identify the 
 
 An application MUST construct every client it hands to a composition root in one dedicated directory, one module per client. The shared response cache MUST be its own module rather than an export of any single client's module, so cache-wide policy has a home that belongs to no one backend.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-z2a rev=1 -->
 #### Scenario: shared-frontend-composition-SC-09 - An application constructs its clients
 **Serves:** Client construction - an application constructs its clients
 
@@ -102,6 +111,7 @@ An application MUST construct every client it hands to a composition root in one
 - **THEN** each is defined in its own module inside the application's client directory
 - **AND THEN** the composition root's imports name the clients it wires and nothing else
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-2dd rev=1 -->
 #### Scenario: shared-frontend-composition-SC-10 - Cache-wide policy is added
 **Serves:** Client construction - cache-wide policy is added
 
@@ -119,6 +129,7 @@ omit it. A package a collector-facing application composes therefore declares
 no port that application cannot supply, and the published-list rule stays
 satisfiable for every package a composition root loads.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-jne rev=1 -->
 #### Scenario: shared-frontend-composition-SC-11 - A product gains a slice only an operator may reach
 **Serves:** Operator-only ports - a product gains a slice only an operator may reach
 
@@ -129,6 +140,7 @@ satisfiable for every package a composition root loads.
 - **AND THEN** the collector-facing package for that product declares neither
   the port nor the slice
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-2ky rev=1 -->
 #### Scenario: shared-frontend-composition-SC-12 - A collector-facing application composes the product
 **Serves:** Operator-only ports - a collector-facing application composes the product
 
@@ -138,6 +150,7 @@ satisfiable for every package a composition root loads.
 - **AND THEN** every port that package's core module declares is one the
   application supplies, and no token is left unbound
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-nsg rev=1 -->
 #### Scenario: shared-frontend-composition-SC-13 - A core module is offered a port only some consumers can supply
 **Serves:** Operator-only ports - a core module is offered a port only some consumers can supply
 
@@ -148,6 +161,7 @@ satisfiable for every package a composition root loads.
 - **AND THEN** no consumer distinguishes itself by which optional clients it
   passed
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-eww rev=1 -->
 #### Scenario: shared-frontend-composition-SC-14 - An operator-facing package is composed by a panel
 **Serves:** Operator-only ports - an operator-facing package is composed by a panel
 
@@ -170,6 +184,7 @@ operator-only client ports already assumes. An application MUST NOT define a
 product's browser data layer in its own source, whether or not that product has
 a package already.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-u3s rev=1 -->
 #### Scenario: A product gains an operator surface
 
 - **WHEN** a product that already publishes a collector-facing frontend package
@@ -178,6 +193,7 @@ a package already.
   frontend package
 - **AND THEN** the collector-facing package gains neither the slice nor its port
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-3gd rev=1 -->
 #### Scenario: A product's first surface serves operators
 
 - **WHEN** a product's only browser surface is one an operator reaches
@@ -185,6 +201,7 @@ a package already.
 - **AND THEN** no collector-facing package is created to hold work no collector
   reaches
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-p3w rev=1 -->
 #### Scenario: Only one brand shows the surface
 
 - **WHEN** a surface is shown by one brand's application and no other
@@ -202,6 +219,7 @@ which a backend's response is checked. A transport client MAY be constructed in
 the application's client directory and handed to a package's port at the
 composition root, and nowhere else may name it.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-mub rev=1 -->
 #### Scenario: A page renders data from a backend
 
 - **WHEN** an application's page shows data a backend answers with
@@ -209,6 +227,7 @@ composition root, and nowhere else may name it.
 - **AND THEN** no transport client, request, or response schema is named in the
   application's page code
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-9cp rev=1 -->
 #### Scenario: A page carries out an operator command
 
 - **WHEN** an operator's action changes state a backend owns
@@ -216,6 +235,7 @@ composition root, and nowhere else may name it.
 - **AND THEN** the decision the command protects lives in the package, not in
   the surface that triggered it
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-nqq rev=1 -->
 #### Scenario: An application constructs a transport client
 
 - **WHEN** an application builds a typed client for a product's backend
@@ -231,12 +251,14 @@ code for the same surface. Where a brand differs, the difference MUST be
 expressed as configuration the application supplies or as a value the surface is
 handed, not as a duplicated file.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-jve rev=1 -->
 #### Scenario: Two brands show the same operator surface
 
 - **WHEN** two brands' applications both show a surface for the same product
 - **THEN** one slice in that product's package serves both
 - **AND THEN** neither application holds a copy of the other's version of it
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-n3c rev=1 -->
 #### Scenario: A brand needs the surface to differ
 
 - **WHEN** one brand's version of a shared surface must differ from another's
@@ -254,6 +276,7 @@ rule on purpose MUST be named in that check with the reason it is exempt, and a
 named exemption that no longer matches a real path MUST fail the check rather
 than being ignored.
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-6nk rev=1 -->
 #### Scenario: Application code reaches a transport directly
 
 - **WHEN** page, view or component code in an application names a transport
@@ -262,6 +285,7 @@ than being ignored.
 - **THEN** the repository's checks fail, naming the file and the rule
 - **AND THEN** the failure is visible before review rather than during it
 
+<!-- trace:scenario id=g10.shared-frontend-composition.SC-bde rev=1 -->
 #### Scenario: A path is exempt on purpose
 
 - **WHEN** a path must reach a backend outside the container

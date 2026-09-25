@@ -9,6 +9,7 @@
 **I want** my account created even when the commerce provider is down,
 **so that** pairing completes on its own, a lost response does not duplicate me, and erasure cannot resurrect the customer.
 
+<!-- trace:case id=g10.store-membership.TC-mdv rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC1-1: Customer record carries the opaque key, never the account id
 
 Runs once per row of **Test data**.
@@ -53,6 +54,7 @@ Runs once per row of **Test data**.
 * The record carries <member>'s opaque membership key.
 * The record carries no platform account identifier.
 
+<!-- trace:case id=g10.store-membership.TC-6ey rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC2-1: Account created by a purchase pairs with that purchase's customer
 
 **Classification:**
@@ -89,6 +91,7 @@ Runs once per row of **Test data**.
 * An account for <unused email_1> exists once step 2 pays.
 * That account pairs with the customer record the purchase made.
 
+<!-- trace:case id=g10.store-membership.TC-y5j rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC3-1: Sign-up completes while the commerce provider is unreachable
 
 **Classification:**
@@ -128,6 +131,7 @@ Runs once per row of **Test data**.
 * Step 2 leaves the account usable at once.
 * Step 4 finds the member paired, nobody re-running pairing.
 
+<!-- trace:case id=g10.store-membership.TC-fje rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC4-1: Retry after a lost response lands on the same customer
 
 **Classification:**
@@ -165,6 +169,7 @@ Runs once per row of **Test data**.
 * The retry lands on the customer record step 1 created.
 * No second customer record exists for <member_2>.
 
+<!-- trace:case id=g10.store-membership.TC-x7o rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC5-1: Email already on another member's customer parks visibly
 
 **Classification:**
@@ -203,6 +208,7 @@ Runs once per row of **Test data**.
 * Step 1 lists <member_3> parked in a conflict.
 * Step 3's unpaired count includes <member_3>, with the oldest age.
 
+<!-- trace:case id=g10.store-membership.TC-k00 rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC6-1: Guest checkout with an unverified member's email adopts nothing
 
 **Classification:**
@@ -240,6 +246,7 @@ Runs once per row of **Test data**.
 * Step 2's order is paid.
 * <member_5> is not paired with that purchase's customer record.
 
+<!-- trace:case id=g10.store-membership.TC-6j2 rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC7-1: Crash mid-erasure finishes removal without re-creating the customer
 
 **Classification:**
@@ -277,6 +284,7 @@ Runs once per row of **Test data**.
 * The removal is retried to completion.
 * Step 2 re-creates no customer record for <member_1>.
 
+<!-- trace:case id=g10.store-membership.TC-a37 rev=1 covers=g10.store-membership.SC-z0r,g10.store-membership.SC-07a,g10.store-membership.SC-sho,g10.store-membership.SC-g6t,g10.store-membership.SC-e9u,g10.store-membership.SC-ppr,g10.store-membership.SC-wyy,g10.store-membership.SC-2vf -->
 ### grade10-site-store-membership-US1-TC8-1: Customer created by a retry racing erasure is removed
 
 **Classification:**
@@ -321,6 +329,7 @@ Runs once per row of **Test data**.
 **I want** a dynamic code or my email to identify me, and staff to spend my points once,
 **so that** a replayed code is refused, a miss discloses nothing, and points settle once whether paid online or at the till.
 
+<!-- trace:case id=g10.store-membership.TC-vqd rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC1-1: Paid online order debits the balance once, by what the shop applied
 
 Runs once per row of **Test data**.
@@ -368,6 +377,7 @@ Runs once per row of **Test data**.
 * Step 3's balance is step 1's less the row's amount.
 * Activity lists one Points put toward a purchase entry.
 
+<!-- trace:case id=g10.store-membership.TC-pu7 rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC10-1: Paid till sale debits the balance once, by what the cart took
 
 **Classification:**
@@ -408,6 +418,7 @@ Runs once per row of **Test data**.
 * Step 3's balance is step 1's less the sale's Points discount.
 * Activity lists one Points put toward a purchase entry.
 
+<!-- trace:case id=g10.store-membership.TC-ugc rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC2-1: Points discount and reward coupon apply to one sale together
 
 **Classification:**
@@ -452,6 +463,7 @@ Runs once per row of **Test data**.
 * The sale carries <reward coupon_1> and the Points discount together.
 * Neither is refused for the other's presence.
 
+<!-- trace:case id=g10.store-membership.TC-x48 rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC3-1: Points ask above the order total is trimmed, not refused
 
 **Classification:**
@@ -490,6 +502,7 @@ Runs once per row of **Test data**.
 * Step 2 trims the Points discount to the order, refusing nothing.
 * Step 3 completes the purchase at the trimmed amount.
 
+<!-- trace:case id=g10.store-membership.TC-29g rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC4-1: Typed email lookup is recorded with staff and location labels
 
 **Classification:**
@@ -529,6 +542,7 @@ Runs once per row of **Test data**.
 * One lookup is recorded with <staff label_1> and <location label_1>.
 * It records that <member_1> was identified by typed email.
 
+<!-- trace:case id=g10.store-membership.TC-2qh rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC5-1: Disabled membership surface still lets the till complete sales
 
 **Classification:**
@@ -568,6 +582,7 @@ Runs once per row of **Test data**.
 * Step 2 completes as a normal sale.
 * Activity shows Points earned for the sale.
 
+<!-- trace:case id=g10.store-membership.TC-aau rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC6-1: Stopping email-assisted spending leaves card spending and email lookup
 
 **Classification:**
@@ -611,6 +626,7 @@ Runs once per row of **Test data**.
 * Step 3 puts <points ask_1> Points off the sale.
 * Step 4 still finds <member_1> and reads their membership.
 
+<!-- trace:case id=g10.store-membership.TC-h40 rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC7-1: Replayed identification code is refused, naming its first use
 
 **Classification:**
@@ -650,6 +666,7 @@ Runs once per row of **Test data**.
 * Step 2 is refused, naming <shop_1> and the first use's time.
 * Step 3's card shows the same.
 
+<!-- trace:case id=g10.store-membership.TC-38j rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC8-1: Email lookup miss discloses only that no member was found
 
 **Classification:**
@@ -688,6 +705,7 @@ Runs once per row of **Test data**.
 * Both answers say only that no member was found.
 * The two answers are identical.
 
+<!-- trace:case id=g10.store-membership.TC-6ik rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC9-1: Abandoned online checkout leaves the points balance untouched
 
 **Classification:**
@@ -727,6 +745,7 @@ Runs once per row of **Test data**.
 * Step 3's balance matches step 1's.
 * Activity lists no Points put toward a purchase entry.
 
+<!-- trace:case id=g10.store-membership.TC-0ms rev=1 covers=g10.store-membership.SC-a6l,g10.store-membership.SC-6kj,g10.store-membership.SC-wv5,g10.store-membership.SC-jnm,g10.store-membership.SC-7hw,g10.store-membership.SC-qr3,g10.store-membership.SC-r53,g10.store-membership.SC-stn,g10.store-membership.SC-u06,g10.store-membership.SC-wrc -->
 ### grade10-site-store-membership-US2-TC11-1: Spend undone at the till before tender debits nothing
 
 **Classification:**
@@ -775,6 +794,7 @@ Runs once per row of **Test data**.
 **I want** a physical-store order recorded once and attributed by evidence,
 **so that** a sale before I registered is not lost, two claimers cannot both win, and a gift card earns nothing.
 
+<!-- trace:case id=g10.store-membership.TC-u7j rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC1-1: Guest sale before registration is attributed with evidence and earns
 
 **Classification:**
@@ -816,6 +836,7 @@ Runs once per row of **Test data**.
 * Step 2's claim records <evidence_1>.
 * Activity shows <earning_1> Points earned for <till order_1>.
 
+<!-- trace:case id=g10.store-membership.TC-od4 rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC2-1: Same till order by webhook and sweep is recorded once
 
 **Classification:**
@@ -852,6 +873,7 @@ Runs once per row of **Test data**.
 
 * Exactly one order is recorded for <provider order_1>.
 
+<!-- trace:case id=g10.store-membership.TC-9m7 rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC3-1: Platform's own checkout order is not recorded a second time
 
 Runs once per row of **Test data**.
@@ -893,6 +915,7 @@ Runs once per row of **Test data**.
 
 * No second record is created for <web order_1>.
 
+<!-- trace:case id=g10.store-membership.TC-qdb rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC7-1: Duplicate refund on an ownerless order lands once on attribution
 
 **Classification:**
@@ -933,6 +956,7 @@ Runs once per row of **Test data**.
 * <refund_1> is recorded once.
 * Step 2 applies <refund_1> to <member_6>.
 
+<!-- trace:case id=g10.store-membership.TC-j7p rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC4-1: Gift card bought online earns no points
 
 **Classification:**
@@ -970,6 +994,7 @@ Runs once per row of **Test data**.
 
 * <gift card line_1>'s amount earns no points.
 
+<!-- trace:case id=g10.store-membership.TC-gcq rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC9-1: Gift card sold at the till earns no points
 
 **Classification:**
@@ -1007,6 +1032,7 @@ Runs once per row of **Test data**.
 
 * <gift card line_1>'s amount earns no points.
 
+<!-- trace:case id=g10.store-membership.TC-2oq rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC5-1: Points spent at the till lower that sale's earning
 
 **Classification:**
@@ -1046,6 +1072,7 @@ Runs once per row of **Test data**.
 
 * Earning is priced on <line_1>'s amount less <points ask_1>.
 
+<!-- trace:case id=g10.store-membership.TC-jsz rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC6-1: Racing attributions leave one live claim, refusing the other
 
 **Classification:**
@@ -1084,6 +1111,7 @@ Runs once per row of **Test data**.
 * Exactly one claim lives.
 * The other attribution is refused, naming the claim's holder.
 
+<!-- trace:case id=g10.store-membership.TC-bqx rev=1 covers=g10.store-membership.SC-1h1,g10.store-membership.SC-uj6,g10.store-membership.SC-fzf,g10.store-membership.SC-6ux,g10.store-membership.SC-3rh,g10.store-membership.SC-gnr,g10.store-membership.SC-8p9,g10.store-membership.SC-fqu -->
 ### grade10-site-store-membership-US3-TC8-1: Revoked claim claws back points, re-attribution earns correctly
 
 **Classification:**
@@ -1133,6 +1161,7 @@ Runs once per row of **Test data**.
 **I want** to be notified once a staff-assisted spend or coupon at the till actually lands, not while it is still a claim that could be trimmed or walked away from,
 **so that** my phone stays the record of what actually happened, without ever showing the code.
 
+<!-- trace:case id=g10.store-membership.TC-76a rev=1 covers=g10.store-membership.SC-uae,g10.store-membership.SC-soj,g10.store-membership.SC-aar -->
 ### grade10-site-store-membership-US4-TC1-1: Applied till spend notifies the member before tender, without the code
 
 **Classification:**
@@ -1175,6 +1204,7 @@ Runs once per row of **Test data**.
 * It names the points, the amount and <shop_1>'s location.
 * It carries no code.
 
+<!-- trace:case id=g10.store-membership.TC-exa rev=1 covers=g10.store-membership.SC-uae,g10.store-membership.SC-soj,g10.store-membership.SC-aar -->
 ### grade10-site-store-membership-US4-TC4-1: Paid till sale notifies the member of a coupon without the code
 
 **Classification:**
@@ -1219,6 +1249,7 @@ Runs once per row of **Test data**.
 * It names the points, the amount and <shop_1>'s location.
 * It carries no code.
 
+<!-- trace:case id=g10.store-membership.TC-8zt rev=1 covers=g10.store-membership.SC-uae,g10.store-membership.SC-soj,g10.store-membership.SC-aar -->
 ### grade10-site-store-membership-US4-TC2-1: Same spend submitted twice records one redemption
 
 **Classification:**
@@ -1258,6 +1289,7 @@ Runs once per row of **Test data**.
 * Exactly one redemption is recorded.
 * Both submissions answer the same.
 
+<!-- trace:case id=g10.store-membership.TC-vwn rev=1 covers=g10.store-membership.SC-uae,g10.store-membership.SC-soj,g10.store-membership.SC-aar -->
 ### grade10-site-store-membership-US4-TC3-1: Landed notice is corrected when the sale is never paid
 
 **Classification:**

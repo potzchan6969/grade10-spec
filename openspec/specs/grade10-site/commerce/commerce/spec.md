@@ -27,6 +27,7 @@ checkout SHALL leave no order behind. Below the bar a checkout SHALL ask
 nothing about identity. On a brand that deploys no identity store the bar
 SHALL not exist.
 
+<!-- trace:scenario id=g10.commerce-commerce.SC-fxd rev=1 -->
 #### Scenario: grade10-site-commerce-commerce-SC-26 - An unverified buyer above the bar is sent to verify
 **Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
@@ -36,6 +37,7 @@ SHALL not exist.
 - **THEN** the checkout is refused naming the bar and the goods' value, no
   order is made, and they are sent to their account to verify
 
+<!-- trace:scenario id=g10.commerce-commerce.SC-pw2 rev=1 -->
 #### Scenario: grade10-site-commerce-commerce-SC-27 - A verified buyer above the bar checks out
 **Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
@@ -44,6 +46,7 @@ SHALL not exist.
 - **WHEN** they check out
 - **THEN** the checkout proceeds as any other
 
+<!-- trace:scenario id=g10.commerce-commerce.SC-7mb rev=1 -->
 #### Scenario: grade10-site-commerce-commerce-SC-28 - A basket below the bar asks nothing
 **Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 
@@ -51,6 +54,7 @@ SHALL not exist.
 - **WHEN** any buyer checks out
 - **THEN** no standing is read and the checkout proceeds as any other
 
+<!-- trace:scenario id=g10.commerce-commerce.SC-ytc rev=1 -->
 #### Scenario: grade10-site-commerce-commerce-SC-29 - A guest above the bar is asked to sign in
 **Serves:** grade10-site-commerce-commerce-US-06 - Shopper meets the identity bar at checkout
 

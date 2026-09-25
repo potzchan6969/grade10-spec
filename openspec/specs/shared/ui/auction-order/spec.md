@@ -30,6 +30,7 @@ or one-time address. Confirm SHALL report delivery and billing values
 separately, including address kind and phone for each reported address, while
 preserving application-owned copy and application-supplied field errors.
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-qop rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-05 - The billing form defaults to delivery
 **Serves:** Billing address form - the form starts with one shared address
 
@@ -39,6 +40,7 @@ preserving application-owned copy and application-supplied field errors.
 - **THEN** Same as delivery address is selected
 - **AND** no second billing address picker is required
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-wt8 rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-06 - The billing form reports two addresses
 **Serves:** Billing address form - the form collects a different address
 
@@ -47,6 +49,7 @@ preserving application-owned copy and application-supplied field errors.
 - **THEN** the form reveals the second address
 - **AND** Confirm reports the delivery and billing values separately
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-7db rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-12 - Confirm reports kind and phone with addresses
 **Serves:** Address form export - `AuctionAddressForm` carries kind and phone with the billing choice
 
@@ -76,6 +79,7 @@ value and SHALL NOT refuse it for format.
 **Unusual formats** — The form SHALL NOT refuse a phone value solely because it
 fails hard validity checks.
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-duw rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-07 - Phone refuses missing country or digits
 **Serves:** Address form fields - country-aware phone with empty starting country
 
@@ -84,6 +88,7 @@ fails hard validity checks.
 - **THEN** a refusal shows beside Phone
 - **AND** Confirm does not report a phone value
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-2id rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-08 - Phone accepts unusual formats and reports E.164 when parseable
 **Serves:** Address form fields - E.164 when parseable; unusual formats accepted
 
@@ -106,6 +111,7 @@ selected SHALL report an empty company name.
 **Recipient names** — First name and last name SHALL remain required for both
 Personal and Company.
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-02t rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-09 - Personal hides company name
 **Serves:** Address form fields - Personal or Company
 
@@ -114,6 +120,7 @@ Personal and Company.
 - **THEN** Company Name is not shown
 - **AND** Confirm does not report a company name
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-76f rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-10 - Company requires company name
 **Serves:** Address form fields - Personal or Company
 
@@ -132,6 +139,7 @@ Personal and Company.
 
 **Not collected** — Apt./Suite/Building SHALL NOT be shown.
 
+<!-- trace:scenario id=g10.shared-auction-order.SC-0cg rev=1 -->
 #### Scenario: shared-ui-auction-order-SC-11 - Locality fields stay optional
 **Serves:** Address form fields - optional locality
 

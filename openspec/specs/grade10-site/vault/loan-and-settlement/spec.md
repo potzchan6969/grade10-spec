@@ -73,6 +73,7 @@ later correction of another record.
 The case SHALL become `active` in the same act, and the borrower SHALL be told
 the calendar date in writing.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-3g8 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-01 - The offer's maker may not pay it out
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -80,6 +81,7 @@ the calendar date in writing.
 - **WHEN** that same operator records the advance
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-72r rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-02 - A value date before the signature is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -87,6 +89,7 @@ the calendar date in writing.
 - **WHEN** an advance is recorded with a value date of the 9th
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-6zm rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-03 - The term runs from the advance
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -94,6 +97,7 @@ the calendar date in writing.
 - **WHEN** the advance is recorded with a value date of 15 September
 - **THEN** the loan falls due at the end of 15 October on the brand's own calendar
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-0as rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-04 - An amount that is not the principal is refused
 **Serves:** grade10-site-vault-loan-and-settlement-US-01 - Treasurer records the advance that starts the loan
 
@@ -126,6 +130,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - repaid 10 days late — 10,400,000 owed, at 10,000 for each started day
 - 9,000,000 repaid on day 10 and the rest 10 days late — 1,313,000 still owed
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-t4w rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-05 - Early repayment owes the whole term's interest
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -133,6 +138,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted for day 10
 - **THEN** it owes 10,300,000 HKD minor units
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-3d7 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-06 - Overdue days charge the term's own daily rate
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -140,6 +146,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted for 10 days past the due date
 - **THEN** it owes 10,400,000 HKD minor units, and no fee has been added
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-xhh rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-07 - Interest stops at settlement
 **Serves:** What is owed - interest stops at settlement
 
@@ -147,6 +154,7 @@ Worked at a principal of 10,000,000 HKD minor units, 300 basis points for a
 - **WHEN** it is quoted a month later
 - **THEN** it owes nothing, and nothing accrued after the settlement
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-pdz rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-08 - Interest never passes the ceiling
 **Serves:** What is owed - interest never passes the ceiling
 
@@ -164,6 +172,7 @@ outstanding.
 A recording valued after the instant being asked about SHALL be left out of
 that answer rather than subtracted from it.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-1wl rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-09 - A part payment cuts the arrears it runs on
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -171,6 +180,7 @@ that answer rather than subtracted from it.
 - **WHEN** 9,000,000 HKD minor units are repaid on day 10 and the loan is quoted 10 days past due
 - **THEN** it owes 1,313,000 HKD minor units, the arrears having run on the 1,300,000 of principal left
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-xmt rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-10 - A payment takes its place in the walk
 **Serves:** Recording money - a payment takes its place in the walk
 
@@ -178,6 +188,7 @@ that answer rather than subtracted from it.
 - **WHEN** a repayment valued on the 5th is recorded afterwards
 - **THEN** the answer is the same as if they had been recorded in date order
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-o54 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-11 - A quote for a past date ignores later money
 **Serves:** Recording money - a quote for a past date ignores later money
 
@@ -212,6 +223,7 @@ correction has taken back SHALL be refused by name.
 A repayment that leaves nothing owed at its own value date SHALL settle the
 loan and move the case to `repaid`.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-ceb rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-12 - A stale quote is refused rather than part-paid
 **Serves:** Recording money - a stale quote is refused rather than part-paid
 
@@ -219,12 +231,14 @@ loan and move the case to `repaid`.
 - **WHEN** the repayment is recorded against that quote
 - **THEN** it is refused by name and nothing is written
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-z8d rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-13 - The same transfer cannot land twice
 **Serves:** Recording money - the same transfer cannot land twice
 
 - **WHEN** a repayment is recorded twice under one key
 - **THEN** the case carries one repayment and the second answers with the first
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-wnm rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-14 - A payment above the balance is refused
 **Serves:** Recording money - a payment above the balance is refused
 
@@ -232,6 +246,7 @@ loan and move the case to `repaid`.
 - **WHEN** 1,200,000 HKD minor units are recorded against it at that date
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-epv rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-15 - Settling moves the case
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -253,6 +268,7 @@ the advance is being taken back while repayments still stand against it.
 A correction SHALL restore the arithmetic to what it would have been had the
 row never been written; nothing SHALL be re-dated. The borrower SHALL be told.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-9ey rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-16 - Nobody takes back their own record
 **Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
@@ -260,6 +276,7 @@ row never been written; nothing SHALL be re-dated. The borrower SHALL be told.
 - **WHEN** that same operator tries to take it back
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-pbr rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-17 - The repayments come off before the advance
 **Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
@@ -267,6 +284,7 @@ row never been written; nothing SHALL be re-dated. The borrower SHALL be told.
 - **WHEN** the advance is taken back
 - **THEN** it is refused by name until both repayments have been
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-nfc rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-18 - A correction does not re-date the loan
 **Serves:** grade10-site-vault-loan-and-settlement-US-03 - Treasurer takes back a record the bank rejected
 
@@ -294,6 +312,7 @@ Forfeiting SHALL be a person's act. On it the item SHALL leave custody, the
 figure the item settled SHALL reach the case's audit trail, and the collector
 SHALL be told.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-4xb rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-19 - Nothing is taken without a notice
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
@@ -301,6 +320,7 @@ SHALL be told.
 - **WHEN** staff try to forfeit it
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-6xk rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-20 - Nothing is taken inside the cure period
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
@@ -308,6 +328,7 @@ SHALL be told.
 - **WHEN** staff try to forfeit the item
 - **THEN** it is refused by name, and the refusal names the earliest date it becomes possible
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-u4f rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-21 - A shortened notice period does not bring the date forward
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
@@ -315,6 +336,7 @@ SHALL be told.
 - **WHEN** staff try to forfeit before the date the borrower was given
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-ii8 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-22 - Forfeiture settles the debt with the item
 **Serves:** grade10-site-vault-loan-and-settlement-US-04 - Operator takes the collateral only after warning the borrower
 
@@ -328,6 +350,7 @@ The item SHALL be released only when the case owes nothing and no signing
 packet is open, and only against a signed release document. A storage case
 SHALL owe nothing, because storage carries no fee.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-yni rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-23 - A loan still owing keeps the item
 **Serves:** grade10-site-vault-loan-and-settlement-US-02 - Borrower repays and takes the item home
 
@@ -335,6 +358,7 @@ SHALL owe nothing, because storage carries no fee.
 - **WHEN** staff try to release the item
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-l3s rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-24 - A storage case owes nothing
 **Serves:** Ending the loan - a storage case owes nothing
 
@@ -351,6 +375,7 @@ SHALL follow the value date; a reader SHALL be able to see both.
 A bank reference SHALL be kept on the money record and SHALL NOT be written
 into the case's history or its audit trail, and SHALL be shown to staff only.
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-pj0 rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-25 - Two clocks on one record
 **Serves:** Recording money - two clocks on one record
 
@@ -358,6 +383,7 @@ into the case's history or its audit trail, and SHALL be shown to staff only.
 - **WHEN** the record is read
 - **THEN** it names Friday as the value date and Monday as when it was recorded, and the balance follows Friday
 
+<!-- trace:scenario id=g10.vault-loan-and-settlement.SC-mri rev=1 -->
 #### Scenario: grade10-site-vault-loan-and-settlement-SC-26 - The bank reference stays out of the trail
 **Serves:** Recording money - the bank reference stays out of the trail
 

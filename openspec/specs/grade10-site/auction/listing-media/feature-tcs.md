@@ -11,6 +11,7 @@ from a preview,
 **so that** only the file I meant to store is sent, and the gallery stays
 within the cap admin-listing sets.
 
+<!-- trace:case id=g10.auction-listing-media.TC-pzu rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC1-1: One-image listing publishes with no empty slots
 
 **Classification:**
@@ -50,6 +51,7 @@ within the cap admin-listing sets.
 * The details page shows that one image.
 * No empty gallery slots are invented.
 
+<!-- trace:case id=g10.auction-listing-media.TC-sga rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC2-1: Accepted JPEG becomes a gallery image
 
 **Classification:**
@@ -89,6 +91,7 @@ within the cap admin-listing sets.
 * <jpeg_ok> is stored in gallery order.
 * The admin listings surface can show it on <listing_2>.
 
+<!-- trace:case id=g10.auction-listing-media.TC-oyk rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC3-1: Choosing a file shows a preview without uploading
 
 **Classification:**
@@ -128,6 +131,7 @@ within the cap admin-listing sets.
 * The media manager shows a preview of <jpeg_ok>.
 * <listing_3> still has no new stored image for that slot.
 
+<!-- trace:case id=g10.auction-listing-media.TC-eq0 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC4-1: Confirming the preview stores the image
 
 **Classification:**
@@ -165,6 +169,7 @@ within the cap admin-listing sets.
 * That slot holds <jpeg_ok>.
 * The preview is cleared.
 
+<!-- trace:case id=g10.auction-listing-media.TC-h3k rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC5-1: Discarding the preview leaves the gallery unchanged
 
 **Classification:**
@@ -241,6 +246,7 @@ within the cap admin-listing sets.
 * The upload is refused.
 * The gallery still has eight items.
 
+<!-- trace:case id=g10.auction-listing-media.TC-ark rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC7-1: Unsupported type is refused
 
 **Classification:**
@@ -277,6 +283,7 @@ within the cap admin-listing sets.
 * The upload is refused.
 * The gallery is unchanged.
 
+<!-- trace:case id=g10.auction-listing-media.TC-brl rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC8-1: Oversized image is refused
 
 **Classification:**
@@ -313,6 +320,7 @@ within the cap admin-listing sets.
 * The upload is refused.
 * The gallery is unchanged.
 
+<!-- trace:case id=g10.auction-listing-media.TC-5c5 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC9-1: Published listing can gain another image
 
 **Classification:**
@@ -352,6 +360,7 @@ within the cap admin-listing sets.
 * The details page shows both images in gallery order.
 * The first image is unchanged.
 
+<!-- trace:case id=g10.auction-listing-media.TC-qd3 rev=1 covers=g10.auction-listing-media.SC-1uo,g10.auction-listing-media.SC-c93,g10.auction-listing-media.SC-dqz,g10.auction-listing-media.SC-99z,g10.auction-listing-media.SC-zlc,g10.auction-listing-media.SC-6ya,g10.auction-listing-media.SC-giq,g10.auction-listing-media.SC-gop,g10.auction-listing-media.SC-cnb,g10.auction-listing-media.SC-r6j -->
 ### grade10-site-auction-listing-media-US1-TC10-1: Adding after close is refused
 
 **Classification:**
@@ -399,6 +408,7 @@ within the cap admin-listing sets.
 reveal it at zoom size on hover,
 **so that** I can judge a card's condition without clicking through to it.
 
+<!-- trace:case id=g10.auction-listing-media.TC-92w rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
 ### grade10-site-auction-listing-media-US2-TC1-1: Media manager shows stored image at card size
 
 **Classification:**
@@ -435,6 +445,7 @@ reveal it at zoom size on hover,
 
 * That image shows at card size.
 
+<!-- trace:case id=g10.auction-listing-media.TC-sss rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
 ### grade10-site-auction-listing-media-US2-TC2-1: Hovering the magnify control shows zoom size
 
 **Classification:**
@@ -471,6 +482,7 @@ reveal it at zoom size on hover,
 * A zoom-size preview of that image is shown.
 * That preview is at least three-quarters of the viewport height.
 
+<!-- trace:case id=g10.auction-listing-media.TC-mkq rev=1 covers=g10.auction-listing-media.SC-ez7,g10.auction-listing-media.SC-wuz,g10.auction-listing-media.SC-qgb -->
 ### grade10-site-auction-listing-media-US2-TC3-1: Leaving the magnify control hides zoom
 
 **Classification:**
@@ -515,6 +527,7 @@ writable,
 **so that** I can fix a bad photograph without ever leaving a published
 listing with no image at all.
 
+<!-- trace:case id=g10.auction-listing-media.TC-8sq rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
 ### grade10-site-auction-listing-media-US3-TC1-1: Replacing a gallery image on a published listing
 
 **Classification:**
@@ -554,6 +567,7 @@ listing with no image at all.
 * That position holds <jpeg_replacement>.
 * Other gallery items are unchanged.
 
+<!-- trace:case id=g10.auction-listing-media.TC-2we rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
 ### grade10-site-auction-listing-media-US3-TC2-1: Removing the last image after create is refused
 
 **Classification:**
@@ -591,6 +605,7 @@ listing with no image at all.
 * The removal is refused.
 * The gallery still has that JPEG.
 
+<!-- trace:case id=g10.auction-listing-media.TC-c4i rev=1 covers=g10.auction-listing-media.SC-dgy,g10.auction-listing-media.SC-gj8,g10.auction-listing-media.SC-82s -->
 ### grade10-site-auction-listing-media-US3-TC3-1: Draft gallery image can be replaced and removed
 
 **Classification:**
@@ -638,6 +653,7 @@ listing with no image at all.
 **so that** each image has an accessible name, falling back to the listing
 title when I have written none.
 
+<!-- trace:case id=g10.auction-listing-media.TC-ygm rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
 ### grade10-site-auction-listing-media-US4-TC1-1: Missing alt uses the listing title
 
 **Classification:**
@@ -674,6 +690,7 @@ title when I have written none.
 
 * That image's accessible name is <listing title>.
 
+<!-- trace:case id=g10.auction-listing-media.TC-m2x rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
 ### grade10-site-auction-listing-media-US4-TC2-1: Supplied alt is shown
 
 **Classification:**
@@ -710,6 +727,7 @@ title when I have written none.
 
 * That image's accessible name is <alt text>.
 
+<!-- trace:case id=g10.auction-listing-media.TC-eeh rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
 ### grade10-site-auction-listing-media-US4-TC3-1: Alt can be edited on a published listing
 
 **Classification:**
@@ -749,6 +767,7 @@ title when I have written none.
 * The image bytes are unchanged.
 * The details page uses <alt text>.
 
+<!-- trace:case id=g10.auction-listing-media.TC-rn2 rev=1 covers=g10.auction-listing-media.SC-mo0,g10.auction-listing-media.SC-k31,g10.auction-listing-media.SC-46l,g10.auction-listing-media.SC-0b1 -->
 ### grade10-site-auction-listing-media-US4-TC4-1: Over-length alt is refused
 
 **Classification:**
@@ -795,6 +814,7 @@ title when I have written none.
 **so that** I can pick a listing off the catalogue and study its images on the
 details page.
 
+<!-- trace:case id=g10.auction-listing-media.TC-v1b rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC1-1: Catalogue shows the first gallery image at card size
 
 **Classification:**
@@ -833,6 +853,7 @@ details page.
 * It does not show image B on the card.
 * That listing's card image is requested at size `card`.
 
+<!-- trace:case id=g10.auction-listing-media.TC-3vh rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC2-1: Details gallery uses thumb, detail, and zoom
 
 **Classification:**
@@ -869,6 +890,7 @@ details page.
 * The main frame requests size `detail`.
 * Zoom requests size `zoom`.
 
+<!-- trace:case id=g10.auction-listing-media.TC-77a rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC3-1: Unknown size is not found
 
 **Classification:**
@@ -904,6 +926,7 @@ details page.
 
 * The unknown-size response matches a missing image.
 
+<!-- trace:case id=g10.auction-listing-media.TC-mu3 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC4-1: Listing without a catalogue image still lists
 
 **Classification:**
@@ -939,6 +962,7 @@ details page.
 * The listing appears with its title and price.
 * No image is shown for it by this capability.
 
+<!-- trace:case id=g10.auction-listing-media.TC-del rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC5-1: Several images appear in gallery order
 
 **Classification:**
@@ -973,6 +997,7 @@ details page.
 
 * The gallery shows three images in the order A, B, C.
 
+<!-- trace:case id=g10.auction-listing-media.TC-ic0 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC6-1: One image has no thumbnail strip
 
 **Classification:**
@@ -1008,6 +1033,7 @@ details page.
 * The gallery shows that image.
 * It does not show a thumbnail strip.
 
+<!-- trace:case id=g10.auction-listing-media.TC-l76 rev=1 covers=g10.auction-listing-media.SC-wbd,g10.auction-listing-media.SC-ds2,g10.auction-listing-media.SC-7si,g10.auction-listing-media.SC-78a,g10.auction-listing-media.SC-0nc,g10.auction-listing-media.SC-yei,g10.auction-listing-media.SC-iki,g10.auction-listing-media.SC-70a -->
 ### grade10-site-auction-listing-media-US5-TC7-1: No images still shows the listing
 
 **Classification:**

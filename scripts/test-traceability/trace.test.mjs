@@ -331,10 +331,11 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     ]);
     assert.equal(scenarioDryRun.status, 0, scenarioDryRun.stderr);
     assert.match(scenarioDryRun.stdout, /DRY RUN/);
-    assert.match(
-      scenarioDryRun.stdout,
-      /trace:scenario id=g10\.demo-sign-in\.SC-006 rev=1/,
-    );
+    const dryRunScenarioId =
+      /trace:scenario id=(g10\.demo-sign-in\.SC-(?!\d{3})[0-9a-z]{3}) rev=1/.exec(
+        scenarioDryRun.stdout,
+      )?.[1];
+    assert.ok(dryRunScenarioId);
     assert.equal(readFileSync(targetFile, "utf8"), originalSpec);
 
     const scenarioInit = runCli([
@@ -355,10 +356,11 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     ]);
     assert.equal(scenarioInit.status, 0, scenarioInit.stderr);
     const scenarioMarker =
-      /<!-- trace:scenario id=(g10\.demo-sign-in\.SC-006) rev=1 -->/.exec(
+      /<!-- trace:scenario id=(g10\.demo-sign-in\.SC-(?!\d{3})[0-9a-z]{3}) rev=1 -->/.exec(
         readFileSync(targetFile, "utf8"),
       );
     assert.ok(scenarioMarker);
+    assert.equal(scenarioMarker[1], dryRunScenarioId);
     assert.equal(
       readFileSync(targetFile, "utf8"),
       originalSpec.replace(targetScenario, `${scenarioMarker[0]}\n${targetScenario}`),
@@ -385,10 +387,11 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--dry-run",
     ]);
     assert.equal(caseDryRun.status, 0, caseDryRun.stderr);
-    assert.match(
-      caseDryRun.stdout,
-      /trace:case id=g10\.demo-sign-in\.TC-007 rev=1 covers=g10\.demo-sign-in\.SC-001/,
-    );
+    const dryRunCaseId =
+      /trace:case id=(g10\.demo-sign-in\.TC-(?!\d{3})[0-9a-z]{3}) rev=1 covers=g10\.demo-sign-in\.SC-001/.exec(
+        caseDryRun.stdout,
+      )?.[1];
+    assert.ok(dryRunCaseId);
     assert.equal(readFileSync(targetFile, "utf8"), beforeCaseDryRun);
 
     const caseInit = runCli([
@@ -411,10 +414,11 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     ]);
     assert.equal(caseInit.status, 0, caseInit.stderr);
     const caseMarker =
-      /<!-- trace:case id=(g10\.demo-sign-in\.TC-007) rev=1 covers=g10\.demo-sign-in\.SC-001 -->/.exec(
+      /<!-- trace:case id=(g10\.demo-sign-in\.TC-(?!\d{3})[0-9a-z]{3}) rev=1 covers=g10\.demo-sign-in\.SC-001 -->/.exec(
         readFileSync(targetFile, "utf8"),
       );
     assert.ok(caseMarker);
+    assert.equal(caseMarker[1], dryRunCaseId);
 
     const acceptanceDryRun = runCli([
       "link",
@@ -423,7 +427,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      "G10.DEMO-SIGN-IN.tc-007@1",
+      `${caseMarker[1]}@1`,
       "--store-root",
       storeRoot,
       "--dry-run",
@@ -438,14 +442,15 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
       "--target",
       targetTest,
       "--acceptance",
-      "G10.DEMO-SIGN-IN.tc-007@1",
+      `${caseMarker[1]}@1`,
       "--store-root",
       storeRoot,
     ]);
     assert.equal(acceptanceLink.status, 0, acceptanceLink.stderr);
-    assert.match(
-      readFileSync(appFile, "utf8"),
-      /trace:acceptance=g10\.demo-sign-in\.TC-007@1\n  test\("the visitor updates settings"/,
+    assert.ok(
+      readFileSync(appFile, "utf8").includes(
+        `trace:acceptance=${caseMarker[1]}@1\n  test("the visitor updates settings"`,
+      ),
     );
 
     const supportLink = runCli([
