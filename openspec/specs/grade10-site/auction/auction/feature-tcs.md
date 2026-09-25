@@ -392,7 +392,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -413,7 +413,7 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Read the public listing contract for `<listing_11>`.
+1. Read the API response for `<listing_11>`.
 
 **Expected Results:**
 
