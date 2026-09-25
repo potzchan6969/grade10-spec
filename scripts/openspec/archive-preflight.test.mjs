@@ -1,996 +1,108 @@
 import assert from "node:assert/strict";
+import { createHash } from "node:crypto";
 import { execFileSync, spawnSync } from "node:child_process";
 import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { parsePage } from "../../tools/manual/src/content/grammar.ts";
-import { sectionTextOf } from "../../tools/manual/src/content/sections.ts";
-import { contentIdOf } from "../../tools/manual/src/store/content-id.mts";
-import { ROUNDS_HEADER } from "./lib/rounds.mjs";
 
-const SCRIPTS = fileURLToPath(new URL(".", import.meta.url));
-const SCRIPT = join(SCRIPTS, "archive-preflight.mjs");
+const SCRIPT = join(fileURLToPath(new URL(".", import.meta.url)), "archive-preflight.mjs");
 const CHANGE = "build-alpha";
+const hash = (text) => createHash("sha256").update(text).digest("hex");
 
-/**
- * A throwaway store, committed with `origin/main` at that commit — no copy
- * of this checkout's own tree beside it: the BEHIND gate reads the store
- * through the manual's own change reader, so it stays where it is and takes
- * `--root`, the way `plan-land.mjs` and `round-scripts.test.mjs` already do,
- * rather than a copy that could not import `tools/manual/src/store/*`.
- * `files` are written under the change, `durable` under `openspec/specs`;
- * both take `a/b/c.md` keys. Returns the store to run against, the manifest
- * it writes, the change's `tasks.md`, and git in the store.
- *
- * `schemas` writes `openspec/schemas/<id>/schema.yaml`, keyed by id; a
- * change naming a schema this reads none for is read as owing nothing, the
- * way a store that has not landed the schema yet is. `pages` writes
- * store-relative files at the root — `docs/prds/…` — for the one case where
- * a proposal links a page section: the store's change reader reads pages
- * too, so a `reviewed:` id can only be reproduced by hashing the same
- * section text it hashed. `daysAgo` backdates the one commit this writes, so
- * a case that needs a second, later commit on top of it — the fallback that
- * dates an artifact from git history rather than a `reviewed:` line — has
- * room to date one after it with the returned `commit`.
- */
-function sandbox(files, durable = {}, schemas = {}, pages = {}, daysAgo = 0) {
+function sandbox({ implementation = true, openTasks = false } = {}) {
   const root = mkdtempSync(join(tmpdir(), "archive-preflight-"));
-  const dir = join(root, "openspec", "changes", CHANGE);
+  const dir = join(root, "openspec/changes", CHANGE);
   mkdirSync(dir, { recursive: true });
-  const write = (base, tree) => {
-    for (const [name, content] of Object.entries(tree)) {
-      const file = join(base, ...name.split("/"));
-      mkdirSync(dirname(file), { recursive: true });
-      writeFileSync(file, content);
-    }
-  };
-  write(dir, files);
-  write(join(root, "openspec", "specs"), durable);
-  write(root, pages);
-  for (const [id, yaml] of Object.entries(schemas)) {
-    write(join(root, "openspec", "schemas"), { [`${id}/schema.yaml`]: yaml });
-  }
-
-  const git = (...args) =>
-    execFileSync(
-      "git",
-      ["-c", "user.email=preflight@test", "-c", "user.name=preflight", ...args],
-      { cwd: root, stdio: "ignore" },
-    );
-  const dated = (args, ago) => {
-    const at = new Date(Date.now() - ago * 86_400_000).toISOString();
-    execFileSync(
-      "git",
-      ["-c", "user.email=preflight@test", "-c", "user.name=preflight", ...args],
-      {
-        cwd: root,
-        stdio: "ignore",
-        env: { ...process.env, GIT_AUTHOR_DATE: at, GIT_COMMITTER_DATE: at },
-      },
-    );
-  };
+  writeFileSync(join(dir, ".openspec.yaml"), "schema: grade10-planning\n");
+  writeFileSync(join(dir, "tasks.md"), `## 1. Build it (grade10-site)\n\n- [x] 1.1 Implement it\n${openTasks ? "- [ ] 1.2 Verify it\n" : "- [x] 1.2 Verify it\n"}`);
+  const git = (...args) => execFileSync("git", ["-c", "user.email=archive@test", "-c", "user.name=archive", ...args], { cwd: root, stdio: "ignore" });
   git("init", "--quiet", ".");
-  dated(["add", "-A"], daysAgo);
-  dated(["commit", "--quiet", "-m", "the store"], daysAgo);
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "store");
   git("update-ref", "refs/remotes/origin/main", "HEAD");
 
-  return {
-    root,
-    manifest: join(dir, ".openspec.yaml"),
-    tasks: join(dir, "tasks.md"),
-    git,
-    /** Writes more of the change's own files and commits them `ago` days
-     * ago (0 = now) — a second, later commit against the one `sandbox`
-     * already made. */
-    commit(tree, message, ago = 0) {
-      write(dir, tree);
-      dated(["add", "-A"], ago);
-      dated(["commit", "--quiet", "-m", message], ago);
-    },
+  const fingerprint = hash(`${JSON.stringify({ version: 1, change: CHANGE, artifacts: [] }, null, 2)}\n`);
+  const acceptance = {
+    version: 1,
+    change: CHANGE,
+    baseline: "b".repeat(64),
+    fingerprint,
+    reviewedBy: "@pm",
+    acceptedAt: "2026-09-25T00:00:00.000Z",
+    artifacts: [],
   };
+  const recordDir = join(dir, "acceptance");
+  mkdirSync(recordDir, { recursive: true });
+  writeFileSync(join(dir, "acceptance.json"), `${JSON.stringify(acceptance, null, 2)}\n`);
+  writeFileSync(join(recordDir, `${fingerprint}.json`), `${JSON.stringify(acceptance, null, 2)}\n`);
+  writeFileSync(join(recordDir, `${fingerprint}.snapshots.json`), `${JSON.stringify({ fingerprint, files: [] }, null, 2)}\n`);
+  if (implementation) writeFileSync(join(dir, "implementation.json"), `${JSON.stringify({
+    version: 1,
+    fingerprint,
+    repositories: [{ repository: "grade10-site", commit: "a".repeat(40), components: ["web"] }],
+  }, null, 2)}\n`);
+  git("add", "-A");
+  git("commit", "--quiet", "-m", "accepted implementation");
+  git("update-ref", "refs/remotes/origin/main", "HEAD");
+  return { root, dir, git, fingerprint };
 }
 
-const run = (root, ...args) =>
-  spawnSync(process.execPath, [SCRIPT, CHANGE, "--root", root, ...args], {
-    encoding: "utf8",
-    env: { ...process.env, NO_COLOR: "1", PLAN_NO_FETCH: "1" },
-  });
-
-const PROPOSAL = { "proposal.md": "# Build alpha\n\n## Why\n\nTo ship it.\n" };
-const SHIPPED = ["--deployed-at", "0f1e2d3", "--deployed-env", "production"];
-
-test("refuses a deployed sha naming no environment", () => {
-  const { root } = sandbox(PROPOSAL);
-  const result = run(root, "--deployed-at", "0f1e2d3");
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /--deployed-at needs --deployed-env/);
+const run = (root, ...args) => spawnSync(process.execPath, [SCRIPT, CHANGE, "--root", root, ...args], {
+  encoding: "utf8",
+  env: { ...process.env, NO_COLOR: "1", PLAN_NO_FETCH: "1" },
 });
 
-test("refuses an unchecked task until a waiver names the decision", () => {
-  const files = {
-    ...PROPOSAL,
-    "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n- [ ] 1.2 Log it\n",
-  };
-  const refused = run(sandbox(files).root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /1 task\(s\) unchecked/);
-  assert.match(refused.stderr, /- \[ \] 1\.2 Log it/);
+test("archive refuses without a durable acceptance record or implementation attestation", () => {
+  const missing = sandbox({ implementation: false });
+  const noImplementation = run(missing.root);
+  assert.equal(noImplementation.status, 1);
+  assert.match(noImplementation.stderr, /implementation.json is required/);
 
-  const waived = run(
-    sandbox(files).root,
-    ...SHIPPED,
-    "--tasks-waived",
-    "@echo, the logging ships separately",
-  );
-  assert.equal(waived.status, 0);
+  const accepted = sandbox();
+  writeFileSync(join(accepted.dir, "implementation.json"), JSON.stringify({
+    version: 1,
+    fingerprint: "f".repeat(64),
+    repositories: [{ repository: "grade10-site", commit: "a".repeat(40), components: ["web"] }],
+  }));
+  accepted.git("add", "-A");
+  accepted.git("commit", "--quiet", "-m", "stale implementation");
+  accepted.git("update-ref", "refs/remotes/origin/main", "HEAD");
+  const stale = run(accepted.root);
+  assert.equal(stale.status, 1);
+  assert.match(stale.stderr, /does not attest the current accepted fingerprint/);
 });
 
-const DONE = "## 1. Build it\n\n- [x] 1.1 Ship it\n- [x] 1.2 Log it\n";
-const OPEN = "## 1. Build it\n\n- [x] 1.1 Ship it\n- [ ] 1.2 Log it\n";
-
-test("reads the checkmarks on the store's main, not in this checkout", () => {
-  const behind = sandbox({ ...PROPOSAL, "tasks.md": DONE });
-  writeFileSync(behind.tasks, OPEN);
-  const passed = run(behind.root, ...SHIPPED);
-  assert.equal(passed.status, 0, passed.stderr);
-
-  const ticked = sandbox({ ...PROPOSAL, "tasks.md": OPEN });
-  writeFileSync(ticked.tasks, DONE);
-  const refused = run(ticked.root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /1 task\(s\) unchecked/);
-});
-
-test("refuses a plan main does not hold, and a store with no main", () => {
-  const unmerged = sandbox(PROPOSAL);
-  writeFileSync(unmerged.tasks, DONE);
-  const notOnMain = run(unmerged.root, ...SHIPPED);
-  assert.equal(notOnMain.status, 1);
-  assert.match(notOnMain.stderr, /tasks\.md is not on origin\/main/);
-
-  const orphan = sandbox({ ...PROPOSAL, "tasks.md": DONE });
-  orphan.git("update-ref", "-d", "refs/remotes/origin/main");
-  const noMain = run(orphan.root, ...SHIPPED);
-  assert.equal(noMain.status, 1);
-  assert.match(noMain.stderr, /no origin main/);
-});
-
-test("a clear run writes the record quoted, over the waiver it replaces", () => {
-  const { root, manifest } = sandbox({
-    ...PROPOSAL,
-    ".openspec.yaml":
-      'schema: grade10-planning\ndeploy_waived: "@echo, nothing shipped"\n',
-  });
-  const result = run(root, ...SHIPPED);
-
-  assert.equal(result.status, 0);
-  assert.equal(
-    readFileSync(manifest, "utf8"),
-    'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\n',
-  );
-});
-
-// shared-planning-change-stages-SC-45/Q68: the build QA walked, named beside
-// the deploy it rode - refused on its own, and dropped by the next write the
-// way every other record key is.
-test("refuses --deployed-build naming a build for no sha", () => {
-  const result = run(sandbox(PROPOSAL).root, "--deployed-build", "1.4.0-rc2");
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /--deployed-build names a build for no sha/);
-});
-
-test("a clear run writes the build the deploy carried, quoted beside it", () => {
-  const { root, manifest } = sandbox({
-    ...PROPOSAL,
-    ".openspec.yaml": "schema: grade10-planning\n",
-  });
-  const result = run(root, ...SHIPPED, "--deployed-build", "1.4.0-rc2");
-
-  assert.equal(result.status, 0);
-  assert.equal(
-    readFileSync(manifest, "utf8"),
-    'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\ndeployed_build: "1.4.0-rc2"\n',
-  );
-});
-
-test("a second write drops a stale build the first one recorded", () => {
-  const { root, manifest } = sandbox({
-    ...PROPOSAL,
-    ".openspec.yaml":
-      'schema: grade10-planning\ndeployed_at: "aaaaaaa"\ndeployed_env: "staging"\ndeployed_build: "1.3.0"\n',
-  });
-  const result = run(root, ...SHIPPED);
-
-  assert.equal(result.status, 0);
-  assert.equal(
-    readFileSync(manifest, "utf8"),
-    'schema: grade10-planning\ndeployed_at: "0f1e2d3"\ndeployed_env: "production"\n',
-  );
-  assert.doesNotMatch(readFileSync(manifest, "utf8"), /1\.3\.0/);
-});
-
-// ── The behind gate ──────────────────────────────────────────────────────────
-// shared-planning-change-stages-SC-31: the archive refuses a behind delta and
-// names what changed before it, the same `behindOf` comparison `check:manual`
-// and the manual read. `reviewed:` is set to a content id, so the case needs
-// no commit dates at all - a mismatch is enough to say the artifact moved.
-const BEHIND_SCHEMA = [
-  "name: demo-planning",
-  "version: 1",
-  "artifacts:",
-  "  - id: proposal",
-  "    required: true",
-  "    generates: proposal.md",
-  "    requires: []",
-  "    upstream: []",
-  "  - id: specs",
-  "    required: true",
-  "    generates: specs/**/spec.md",
-  "    requires:",
-  "      - proposal",
-  "    upstream:",
-  "      - proposal",
-  "",
-].join("\n");
-const BEHIND_TASKS = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
-const BEHIND_DELTA = [
-  "## ADDED Requirements",
-  "",
-  "### Requirement: A lane names its stage",
-  "",
-  "#### Scenario: It names it",
-  "",
-  "- **WHEN** read",
-  "- **THEN** it names it",
-  "",
-].join("\n");
-const FRESH_SPECS_ID = contentIdOf([PROPOSAL["proposal.md"]]);
-
-function behindSandbox(reviewed) {
-  return sandbox(
-    {
-      ...PROPOSAL,
-      ".openspec.yaml": `schema: demo-planning\n${reviewed}`,
-      "tasks.md": BEHIND_TASKS,
-      "specs/demo/alpha/spec.md": BEHIND_DELTA,
-    },
-    {},
-    { "demo-planning": BEHIND_SCHEMA },
-  );
-}
-
-test("refuses a delta behind what it was drawn from, naming it", () => {
-  const result = run(behindSandbox("reviewed:\n  specs: deadbeef\n").root);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /archives with 1 artifact\(s\) behind/);
-  assert.match(result.stderr, /specs — read again against proposal/);
-});
-
-test("is clear where the read record matches the tree", () => {
-  const result = run(
-    behindSandbox(`reviewed:\n  specs: ${FRESH_SPECS_ID}\n`).root,
-  );
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-// shared-planning-change-stages-SC-27: the gate reads pages the same way the
-// store's own reader does, so a `reviewed:` id hashed with a linked section's
-// text is reproduced here rather than read as a mismatch because the section
-// was never read at all.
-const PAGE = "docs/prds/products/demo/rules.md";
-const PAGE_TEXT = [
-  "---",
-  "title: Rules",
-  "---",
-  "",
-  "## Points",
-  "",
-  "A point is earned per dollar spent.",
-  "",
-].join("\n");
-const LINKED_PROPOSAL = [
-  "# Build alpha",
-  "",
-  "## Why",
-  "",
-  "To ship it.",
-  "",
-  "## References",
-  "",
-  `- [Rules · Points](../../../${PAGE}#points)`,
-  "",
-].join("\n");
-const POINTS_SECTION = sectionTextOf({ ast: parsePage(PAGE_TEXT) }, "points");
-
-test("is clear where a reviewed id was hashed with the page section it links", () => {
-  const reviewed = `reviewed:\n  specs: ${contentIdOf([POINTS_SECTION, LINKED_PROPOSAL])}\n`;
-  const result = run(
-    sandbox(
-      {
-        "proposal.md": LINKED_PROPOSAL,
-        ".openspec.yaml": `schema: demo-planning\n${reviewed}`,
-        "tasks.md": BEHIND_TASKS,
-        "specs/demo/alpha/spec.md": BEHIND_DELTA,
-      },
-      {},
-      { "demo-planning": BEHIND_SCHEMA },
-      { [PAGE]: PAGE_TEXT },
-    ).root,
-  );
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-// shared-planning-change-stages-SC-28: with no `reviewed:` line at all, an
-// artifact is behind where a commit dates what is before it later than the
-// artifact's own commit — real git history, not an injected date.
-test("reads the archive's own commit dates where no reviewed: line dates the read", () => {
-  const s = sandbox(
-    {
-      ...PROPOSAL,
-      ".openspec.yaml": "schema: demo-planning\n",
-      "tasks.md": BEHIND_TASKS,
-      "specs/demo/alpha/spec.md": BEHIND_DELTA,
-    },
-    {},
-    { "demo-planning": BEHIND_SCHEMA },
-    {},
-    2,
-  );
-  // The proposal is committed a second time, after the specs delta it is
-  // before — the schema's own commit is untouched, so only the proposal
-  // moves.
-  s.commit(
-    { "proposal.md": "# Build alpha\n\n## Why\n\nTo ship it, revised.\n" },
-    "touch the proposal",
-  );
-
-  const result = run(s.root);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /specs — proposal changed/);
-});
-
-// shared-planning-change-stages-SC-31: a `reviewed:` id is a hash of the text
-// before the artifact, so the comparison that reads it needs no commit dates
-// and no history at all. A shallow clone is where CI archives from, and the
-// gate is checked there too.
-test("shared-planning-change-stages-SC-31 - refuses a stale read on a shallow clone, which the content id needs no history to see", () => {
-  const source = behindSandbox("reviewed:\n  specs: deadbeef\n").root;
-  const shallow = mkdtempSync(join(tmpdir(), "archive-preflight-shallow-"));
-  // `--depth` is silently ignored on a local-path clone; `file://` is what
-  // makes git actually write `.git/shallow` rather than a full copy.
-  execFileSync(
-    "git",
-    ["clone", "--quiet", "--depth", "1", `file://${source}`, shallow],
-    { stdio: "ignore" },
-  );
-  const result = run(shallow);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /archives with 1 artifact\(s\) behind/);
-  assert.match(result.stderr, /specs — read again against proposal/);
-});
-
-test("treats a store-only plan with an owner tag as store-only", () => {
-  const result = run(
-    sandbox({
-      ...PROPOSAL,
-      "tasks.md":
-        "## 1. Store work (grade10-spec) (owner: @echo)\n\n- [x] 1.1 Ship it\n",
-    }).root,
-  );
-
-  assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /No deploy record is owed/);
-});
-
-// ── The carry gate ──────────────────────────────────────────────────────────
-// A capability that archives cleanly, and the pieces to break one at a time.
-const CAP = "site/store/listing";
-const PURPOSE = "## Purpose\n\nCollectors find a card and buy it.\n\n";
-const FEATURE_SET = "## Feature set\n\n- Search\n\n";
-const REQUIREMENTS =
-  "## Requirements\n\n### Requirement: Search\n\nIt searches.\n";
-const STORY =
-  "### listing-US-01: Collector searches the catalogue\n\n**As a** collector,\n**I want** to search,\n**so that** I find a card.\n";
-const SUITE =
-  "# Feature test cases\n\n## Settled\n\n- A sold listing is not an error state · refused 2026-09-01\n";
-
-const CARRIED = {
-  ...PROPOSAL,
-  [`specs/${CAP}/spec.md`]: PURPOSE + FEATURE_SET + REQUIREMENTS,
-  [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## ADDED User journeys\n\n${STORY}`,
-  [`specs/${CAP}/feature-tcs.md`]: SUITE,
-};
-const DURABLE = {
-  [`${CAP}/spec.md`]: PURPOSE + FEATURE_SET + REQUIREMENTS,
-  [`${CAP}/user-journeys.md`]: `# User journeys\n\n${STORY}`,
-  [`${CAP}/feature-tcs.md`]: SUITE,
-};
-
-const TRACE_SCENARIO = `<!-- trace:scenario id=g10.auction-listing-media.SC-001 rev=1 -->
-#### Scenario: listing-SC-04 - Search lists matching cards
-
-**Serves:** listing-US-01
-`;
-const TRACE_CASE = `<!-- trace:case id=g10.auction-listing-media.TC-002 rev=1 covers=g10.auction-listing-media.SC-001 -->
-### listing-US1-TC1-1: Search lists matching cards
-`;
-
-test("a change whose sections all landed is clear", () => {
-  const result = run(sandbox(CARRIED, DURABLE).root, ...SHIPPED);
-  assert.equal(result.status, 0);
-});
-
-test("refuses a traced case handover whose durable marker changed", () => {
-  const tracedChange = {
-    ...CARRIED,
-    [`specs/${CAP}/spec.md`]:
-      PURPOSE + FEATURE_SET + REQUIREMENTS + TRACE_SCENARIO,
-    [`specs/${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
-  };
-  const tracedDurable = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
-  };
-
-  const clear = run(sandbox(tracedChange, tracedDurable).root, ...SHIPPED);
-  assert.equal(clear.status, 0, clear.stderr);
-
-  const changed = {
-    ...tracedDurable,
-    [`${CAP}/feature-tcs.md`]: (SUITE + "\n" + TRACE_CASE).replace(
-      "rev=1",
-      "rev=2",
-    ),
-  };
-  const refused = run(sandbox(tracedChange, changed).root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /trace handover validation failed/);
-  assert.match(refused.stderr, /\[case-mismatch\]/);
-});
-
-// `rounds.md`'s own carry is checked after the archive exists, by
-// `pnpm check:manual`'s `round` rule (`tools/manual/test/check-round.test.ts`)
-// rather than by this preflight, which runs before it.
-
-// ── The walk gate ───────────────────────────────────────────────────────────
-// shared-planning-agent-rounds-SC-85 and -SC-60: a change on the round is
-// archived only once its last task group's row names the walks it left — a
-// `*.walk.ts` the suite runs, or a walk by hand — and one row reads `whole
-// change`, the one reader's pass over the whole. Neither is asked of a change
-// on the old flow, and no walk is asked of a change nobody walks.
-const WALKED_TASKS =
-  "## 1. Build it (grade10-spec)\n\n- [x] 1.1 Ship it\n\n## 2. The walk (grade10-spec)\n\n- [x] 2.1 Walk `listing-US-01`\n";
-/** `rounds.md` as the landings wrote it: one row per `[artifact, tests,
- * stood]`, numbered in the order given. */
-const rounds = (...rows) =>
-  `${ROUNDS_HEADER}${rows
-    .map(
-      ([artifact, tests = "-", stood = "nothing stood"], at) =>
-        `| ${at + 1} | ${artifact} | simpler | ${stood} | - | ${tests} |`,
-    )
-    .join("\n")}\n`;
-const WALK_FILE = "`listing-SC-01`: tools/manual/walk/listing.walk.ts";
-const BY_HAND = "`listing-SC-01`: walked by hand, its cases manual";
-const onTheRound = (rows, files = {}) =>
-  sandbox(
-    { ...CARRIED, "tasks.md": WALKED_TASKS, "rounds.md": rows, ...files },
-    DURABLE,
-  );
-
-test("shared-planning-agent-rounds-SC-85 - refuses a change on the round whose last group's row names no walk, naming the group", () => {
-  const result = run(onTheRound(rounds(["1"], ["2"], ["whole change"])).root);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /group 2/);
-  assert.match(result.stderr, /names no walk/);
-});
-
-test("shared-planning-agent-rounds-SC-85 - is clear where the last group's row names a walk file, or a walk by hand", () => {
-  for (const walk of [WALK_FILE, BY_HAND]) {
-    const result = run(
-      onTheRound(rounds(["1"], ["2", walk], ["whole change"])).root,
-    );
-    assert.equal(result.status, 0, result.stderr);
-  }
-});
-
-test("shared-planning-agent-rounds-SC-85 - refuses a change on the round with no row for the reading of the whole", () => {
-  const result = run(onTheRound(rounds(["1"], ["2", WALK_FILE])).root);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /whole change/);
-  assert.match(result.stderr, /plan:land .* --whole/);
-});
-
-test("shared-planning-agent-rounds-SC-85 - the walk row is the last group's, named in its Tests cell", () => {
-  // A walk on an earlier group's row answers nothing for the last; and the
-  // Stood cell is prose, so "by hand" there names no walk.
-  const earlier = run(
-    onTheRound(rounds(["1", WALK_FILE], ["2"], ["whole change"])).root,
-  );
-  assert.equal(earlier.status, 1);
-  assert.match(earlier.stderr, /group 2/);
-
-  const inStood = run(
-    onTheRound(
-      rounds(
-        ["1"],
-        ["2", "-", "the journeys walked by hand"],
-        ["whole change"],
-      ),
-    ).root,
-  );
-  assert.equal(inStood.status, 1);
-  assert.match(inStood.stderr, /group 2/);
-});
-
-test("shared-planning-agent-rounds-SC-85 - the reading of the whole comes after the last group's row", () => {
-  const before = run(
-    onTheRound(rounds(["whole change"], ["1"], ["2", WALK_FILE])).root,
-  );
-
-  assert.equal(before.status, 1);
-  assert.match(
-    before.stderr,
-    /reading of the whole is round 1, before group 2's row 3/,
-  );
-});
-
-test("shared-planning-agent-rounds-SC-85 - reads the rows on main, never a row the checkout alone holds", () => {
-  const store = onTheRound(rounds(["1"], ["2", WALK_FILE]));
-  // The whole-change row written on disk and committed nowhere: a landing
-  // writes the row on `main`, and a gate that read the checkout would take a
-  // row nobody landed.
-  writeFileSync(
-    join(store.root, "openspec", "changes", CHANGE, "rounds.md"),
-    rounds(["1"], ["2", WALK_FILE], ["whole change"]),
-  );
-  const result = run(store.root);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /whole change/);
-});
-
-test("shared-planning-agent-rounds-SC-85 - reads the capability's journeys where the delta restates none", () => {
-  // A change against a capability whose journeys are durable carries no
-  // journeys file of its own, and owes the walk all the same.
-  const { [`specs/${CAP}/user-journeys.md`]: _delta, ...leaning } = CARRIED;
-  const result = run(
-    sandbox(
-      {
-        ...leaning,
-        "tasks.md": WALKED_TASKS,
-        "rounds.md": rounds(["1"], ["2"], ["whole change"]),
-      },
-      DURABLE,
-    ).root,
-  );
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /group 2/);
-});
-
-test("shared-planning-agent-rounds-SC-85 - asks no walk of a change nobody walks, and nothing of one on the old flow", () => {
-  // The nobody line carries the journey it routes, so the id count alone
-  // would owe a walk: the line is what excuses it.
-  const nobody =
-    "# User journeys\n\n**Walked by:** nobody on their own - a policy, covered under `listing-US-01`\n";
-  const unwalked = run(
-    onTheRound(rounds(["1"], ["2"], ["whole change"]), {
-      [`specs/${CAP}/user-journeys.md`]: nobody,
-    }).root,
-  );
-  assert.equal(unwalked.status, 0, unwalked.stderr);
-
-  // No `rounds.md`, no `landed_by:` line: the change was worked on the old
-  // flow and owes no row of any kind.
-  const oldFlow = run(
-    sandbox({ ...CARRIED, "tasks.md": WALKED_TASKS }, DURABLE).root,
-  );
-  assert.equal(oldFlow.status, 0, oldFlow.stderr);
-});
-
-/** `decisions.md` is folded nowhere and the blind pass may not read archive,
- * so a rejected option recorded only there is lost to the one pass most likely
- * to raise it again. The owner says where it went. */
-test("refuses decisions the fold carries nowhere until the owner says where they went", () => {
-  const decided = {
-    ...CARRIED,
-    "decisions.md":
-      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
-  };
-  const refused = run(sandbox(decided, DURABLE).root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(
-    refused.stderr,
-    /records 1 decision\(s\) that the fold carries nowhere/,
-  );
-
-  const carried = run(
-    sandbox(decided, DURABLE).root,
-    ...SHIPPED,
-    "--decisions-carried",
-    "Q1 onto the listing page's Product decisions block",
-  );
-  assert.equal(carried.status, 0, carried.stderr);
-
-  const none = run(
-    sandbox(decided, DURABLE).root,
-    ...SHIPPED,
-    "--decisions-carried",
-    "none",
-  );
-  assert.equal(none.status, 0, none.stderr);
-});
-
-test("asks nothing of a change whose decisions table is empty", () => {
-  const empty = {
-    ...CARRIED,
-    "decisions.md":
-      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n",
-  };
-  const result = run(sandbox(empty, DURABLE).root, ...SHIPPED);
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test("refuses a scenario the fold would land with no anchor", () => {
-  const files = {
-    ...CARRIED,
-    [`specs/${CAP}/spec.md`]:
-      PURPOSE +
-      FEATURE_SET +
-      REQUIREMENTS +
-      "\n#### Scenario: listing-SC-01 - It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
-  };
-  const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /1 scenario\(s\) carrying no `\*\*Serves:\*\*` line/,
-  );
-  assert.match(result.stderr, /listing-SC-01/);
-});
-
-test("takes the anchor written as its own line or as a bullet", () => {
-  for (const serves of [
-    "**Serves:** listing-US-01 - Collector searches the catalogue",
-    "- **Serves:** `Search`",
-  ]) {
-    const files = {
-      ...CARRIED,
-      [`specs/${CAP}/spec.md`]:
-        PURPOSE +
-        FEATURE_SET +
-        REQUIREMENTS +
-        `\n#### Scenario: listing-SC-01 - It searches\n${serves}\n\n- **WHEN** asked\n- **THEN** it searches\n`,
-    };
-    const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
-    assert.equal(result.status, 0, `${serves} was refused: ${result.stderr}`);
-  }
-});
-
-test("says nothing about a scenario that predates permanent ids", () => {
-  const files = {
-    ...CARRIED,
-    [`specs/${CAP}/spec.md`]:
-      PURPOSE +
-      FEATURE_SET +
-      REQUIREMENTS +
-      "\n#### Scenario: It searches\n\n- **WHEN** asked\n- **THEN** it searches\n",
-  };
-  const result = run(sandbox(files, DURABLE).root, ...SHIPPED);
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test("refuses a durable purpose the change replaced and archive left behind", () => {
-  const stale = {
-    ...DURABLE,
-    [`${CAP}/spec.md`]:
-      "## Purpose\n\nCollectors browse.\n\n" + FEATURE_SET + REQUIREMENTS,
-  };
-  const result = run(sandbox(CARRIED, stale).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /`## Purpose`/);
-  assert.match(result.stderr, /still holds a different one/);
-});
-
-test("refuses a removed journey that leaves no tombstone, and takes one that does", () => {
-  const files = {
-    ...CARRIED,
-    [`specs/${CAP}/user-journeys.md`]: `# User journeys\n\n## REMOVED User journeys\n\n${STORY}\n**Reason:** search is gone.\n`,
-  };
-  const deleted = {
-    ...DURABLE,
-    [`${CAP}/user-journeys.md`]: "# User journeys\n",
-  };
-  const refused = run(sandbox(files, deleted).root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /listing-US-01` is removed and leaves no/);
-
-  const both = {
-    ...DURABLE,
-    [`${CAP}/user-journeys.md`]: `# User journeys\n\n${STORY}\n## Retired\n\n- \`listing-US-01\` - removed in \`build-alpha\`\n`,
-  };
-  const stillWritten = run(sandbox(files, both).root, ...SHIPPED);
-  assert.equal(stillWritten.status, 1);
-  assert.match(stillWritten.stderr, /still written above it/);
-
-  const tombstoned = {
-    ...DURABLE,
-    [`${CAP}/user-journeys.md`]:
-      "# User journeys\n\n## Retired\n\n- `listing-US-01` - Collector searches the catalogue · removed in `build-alpha` · 2026-09-15\n",
-  };
-  assert.equal(run(sandbox(files, tombstoned).root, ...SHIPPED).status, 0);
-});
-
-test("refuses a carried Reconciliation that keeps its scenario ids", () => {
-  const withIds = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]:
-      SUITE +
-      "\n## Reconciliation\n\n- `listing-SC-04` covers the empty result · accepted\n",
-  };
-  const result = run(sandbox(CARRIED, withIds).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /scenario id\(s\) not stripped \(listing-SC-04\)/,
-  );
-});
-
-test("shared-planning-agent-rounds-SC-103 - the strip covers a Manual row under the Reconciliation that keeps a scenario id", () => {
-  const withIds = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]:
-      SUITE +
-      "\n## Reconciliation\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `listing-US1-TC1-1` | `listing-SC-04` is proved by the story; a person reads the rest |\n",
-  };
-  const result = run(sandbox(CARRIED, withIds).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /scenario id\(s\) not stripped \(listing-SC-04\)/,
-  );
-});
-
-test("refuses a suite carried without its Settled lines, waiver or no waiver", () => {
-  const dropped = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: "# Feature test cases\n",
-  };
-  const result = run(sandbox(CARRIED, dropped).root, ...SHIPPED);
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /drops 1 `## Settled` line/);
-
-  const forced = run(
-    sandbox(CARRIED, dropped).root,
-    ...SHIPPED,
-    "--journeys-copied",
-  );
-  assert.equal(forced.status, 1);
-  assert.match(forced.stderr, /none of this is waivable/);
-});
-
-/** The same suite with one automated case, naming what decides it or naming
- * nothing: the `**Decided by:**` line travels with the suite at fold, and the
- * durable suites are not back-filled, so the fold is the only place a dropped
- * line is caught (`shared-planning-agent-rounds-SC-78`). */
-const SUITE_CASE = (decidedBy) =>
-  `${SUITE}
-## listing-US1: Collector searches the catalogue
-
-### listing-US1-TC1-1: Search finds a card
-
-**Classification:**
-
-* **Severity:** major
-* **Priority:** high
-* **Status:** actual
-* **Behaviour:** positive
-* **Type:** functional
-* **Suites:** regression
-* **Layer:** e2e
-* **Automation status:** automated
-* **Testability:** automation
-* **Trace:** listing-US-01
-${decidedBy === null ? "" : `\n**Decided by:** \`${decidedBy}\`\n`}
-**Pre-conditions:** None.
-`;
-
-const DECIDER = "tools/manual/test/listing.test.ts";
-const NAMED = {
-  ...CARRIED,
-  [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(DECIDER),
-};
-
-test("shared-planning-agent-rounds-SC-78 - refuses a fold that drops a case's `**Decided by:**` line", () => {
-  const dropped = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: SUITE_CASE(null),
-  };
-  const result = run(sandbox(NAMED, dropped).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /drops `listing-US1-TC1-1`'s `\*\*Decided by:\*\* tools\/manual\/test\/listing\.test\.ts`/,
-  );
-});
-
-test("shared-planning-agent-rounds-SC-78 - refuses a fold that lands a different deciding test", () => {
-  const other = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: SUITE_CASE("tools/manual/test/other.test.ts"),
-  };
-  const result = run(sandbox(NAMED, other).root, ...SHIPPED);
-
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /lands `listing-US1-TC1-1`'s `\*\*Decided by:\*\*` as `tools\/manual\/test\/other\.test\.ts`, where the change names `tools\/manual\/test\/listing\.test\.ts`/,
-  );
-});
-
-test("shared-planning-agent-rounds-SC-78 - a line that travels across is clear", () => {
-  const carried = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: SUITE_CASE(DECIDER),
-  };
-  const result = run(sandbox(NAMED, carried).root, ...SHIPPED);
-
-  assert.equal(result.status, 0, result.stderr);
-});
-
-// A durable suite that exists is not a suite that was carried: archived
-// changes copied the header and `## Settled` and left whole journeys of cases
-// behind. Every case lands under its id - `<v>` included - and its status.
-const MANUAL_CASE = {
-  ...CARRIED,
-  [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(null),
-};
-
-test("refuses a fold that leaves a case behind, waiver or no waiver", () => {
-  const result = run(sandbox(MANUAL_CASE, DURABLE).root, ...SHIPPED);
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /feature-tcs\.md leaves 1 case\(s\) behind — each lands under its id and `<v>`: listing-US1-TC1-1/,
-  );
-
-  const forced = run(
-    sandbox(MANUAL_CASE, DURABLE).root,
-    ...SHIPPED,
-    "--journeys-copied",
-  );
-  assert.equal(forced.status, 1);
-});
-
-test("refuses a case that lands under an older `<v>`", () => {
-  const bumped = {
-    ...CARRIED,
-    [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(null).replace(
-      "listing-US1-TC1-1",
-      "listing-US1-TC1-2",
-    ),
-  };
-  const older = { ...DURABLE, [`${CAP}/feature-tcs.md`]: SUITE_CASE(null) };
-  const result = run(sandbox(bumped, older).root, ...SHIPPED);
-  assert.equal(result.status, 1);
-  assert.match(result.stderr, /leaves 1 case\(s\) behind .*listing-US1-TC1-2/);
-});
-
-test("refuses a case that lands under another status", () => {
-  const drafted = {
-    ...DURABLE,
-    [`${CAP}/feature-tcs.md`]: SUITE_CASE(null).replace(
-      "* **Status:** actual",
-      "* **Status:** draft",
-    ),
-  };
-  const result = run(sandbox(MANUAL_CASE, drafted).root, ...SHIPPED);
-  assert.equal(result.status, 1);
-  assert.match(
-    result.stderr,
-    /lands `listing-US1-TC1-1` as `draft`, where the change holds it `actual`/,
-  );
-});
-
-test("a case carried under its id and status is clear", () => {
-  const carried = { ...DURABLE, [`${CAP}/feature-tcs.md`]: SUITE_CASE(null) };
-  const result = run(sandbox(MANUAL_CASE, carried).root, ...SHIPPED);
-  assert.equal(result.status, 0, result.stderr);
-});
-
-test("a suite with no durable file yet is a promise --journeys-copied can make", () => {
-  const { [`${CAP}/feature-tcs.md`]: _suite, ...missing } = DURABLE;
-  const refused = run(sandbox(CARRIED, missing).root, ...SHIPPED);
-  assert.equal(refused.status, 1);
-  assert.match(refused.stderr, /feature-tcs\.md` {2}· nothing durable yet/);
-
-  const acknowledged = run(
-    sandbox(CARRIED, missing).root,
-    ...SHIPPED,
-    "--journeys-copied",
-  );
-  assert.equal(acknowledged.status, 0);
-});
-
-test("a clear run records what it was told about the fold's DECIDE gates", () => {
-  const decided = {
-    ...CARRIED,
-    "decisions.md":
-      "## Goals\n\n- Collectors find a card.\n\n## Non-Goals\n\n- Stock per shop.\n\n## Decisions\n\n| Q | Asked | Decided | Instead of |\n| --- | --- | --- | --- |\n| Q1 | Where does search live? | The header | A dedicated page - one field is not a surface |\n",
-  };
-  const { [`${CAP}/feature-tcs.md`]: _suite, ...missingSuite } = DURABLE;
-  const { root, manifest } = sandbox(decided, missingSuite);
-  const result = run(
-    root,
-    ...SHIPPED,
-    "--decisions-carried",
-    "Q1 onto the listing page's Product decisions block",
-    "--journeys-copied",
-  );
-
-  assert.equal(result.status, 0, result.stderr);
-  const written = readFileSync(manifest, "utf8");
-  assert.match(
-    written,
-    /decisions_carried: "Q1 onto the listing page's Product decisions block"/,
-  );
-  assert.match(written, /journeys_copied: "true"/);
-});
-
-/** A change whose every task group lands in the store deploys nothing, so
- * there is no run to name and no waiver owed. `check:manual`'s `archived` rule
- * and the archive skill both already said so; this script did not, so the only
- * way to archive one was to waive a deploy it never had — and a waiver written
- * where none is owed is how the waiver becomes the default. */
-const STORE_ONLY = "## 1. Store checks (grade10-spec)\n\n- [x] 1.1 Ship it\n";
-
-test("a store-only plan needs no deploy evidence and records none", () => {
-  const { root, manifest } = sandbox({
-    ...PROPOSAL,
-    ".openspec.yaml": "schema: grade10-planning\n",
-    "tasks.md": STORE_ONLY,
-  });
+test("archive verifies implementation and prints a move without asking for deployment evidence or folding again", () => {
+  const { root, fingerprint } = sandbox();
   const result = run(root);
-
   assert.equal(result.status, 0, result.stderr);
-  assert.match(result.stdout, /No deploy record is owed/);
-  assert.equal(readFileSync(manifest, "utf8"), "schema: grade10-planning\n");
+  assert.match(result.stdout, new RegExp(fingerprint));
+  assert.match(result.stdout, /git -C .* mv openspec\/changes\/build-alpha openspec\/changes\/archive/);
+  assert.doesNotMatch(result.stdout, /openspec archive/);
+  assert.doesNotMatch(result.stdout, /deploy(?:ed|ment|_waived)/i);
 });
 
-test("a plan landing anywhere else still owes its deploy", () => {
-  const { root } = sandbox({
-    ...PROPOSAL,
-    "tasks.md": `${STORE_ONLY}\n## 2. The app (grade10)\n\n- [x] 2.1 Wire it\n`,
-  });
+test("archive refuses acceptance or implementation evidence that is only local to the checkout", () => {
+  const { root, git } = sandbox();
+  git("update-ref", "refs/remotes/origin/main", "HEAD~1");
   const result = run(root);
-
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /No deploy evidence/);
+  assert.match(result.stderr, /on origin\/main/);
+  assert.match(result.stderr, /acceptance\.json/);
 });
 
-test("an untagged group is not a store-only plan", () => {
-  const { root } = sandbox({
-    ...PROPOSAL,
-    "tasks.md": "## 1. Build it\n\n- [x] 1.1 Ship it\n",
-  });
+test("archive still refuses unfinished implementation tasks", () => {
+  const { root } = sandbox({ openTasks: true });
   const result = run(root);
-
   assert.equal(result.status, 1);
-  assert.match(result.stderr, /No deploy evidence/);
+  assert.match(result.stderr, /1 task\(s\) unchecked/);
+});
+
+test("unknown flags are refused by the store archive command", () => {
+  const { root } = sandbox();
+  const result = run(root, "--availability-receipt", "receipt-123");
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /Unknown argument: --availability-receipt/);
 });
