@@ -694,7 +694,8 @@ function CartDrawerFooter({
               render={<button type="button" />}
               disabled={tenderPending || isVerifyingPoints || isRedirecting}
               onClick={() => {
-                if (!tenderPending) onUseMaxPoints?.();
+                if (tenderPending || isVerifyingPoints || isRedirecting) return;
+                onUseMaxPoints?.();
               }}
             >
               {copy.useMaxPoints}
@@ -968,6 +969,7 @@ function CartDrawerFooter({
                             onClear={
                               pointsInput
                                 ? () => {
+                                    if (tenderPending) return;
                                     setPointsInput("");
                                     if (pointsErrorMessage) {
                                       onPointsStateChange?.({
@@ -978,6 +980,7 @@ function CartDrawerFooter({
                                 : undefined
                             }
                             onChange={(e) => {
+                              if (tenderPending) return;
                               setPointsInput(e.target.value);
                               if (pointsErrorMessage) {
                                 onPointsStateChange?.({ status: "expanded" });
@@ -1113,6 +1116,7 @@ function CartPromoSheet({
   };
 
   const handleKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (tenderPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApply();
@@ -1160,6 +1164,7 @@ function CartPromoSheet({
                 message={errorMessage}
                 disabled={tenderPending || isVerifying || !open}
                 onChange={(e) => {
+                  if (tenderPending) return;
                   setPromoInput(e.target.value);
                   if (errorMessage) {
                     onPromoStateChange?.({ status: "expanded" });
@@ -1244,8 +1249,10 @@ function CartPromoSheet({
                   <Button
                     size="md"
                     variant="secondary"
-                    disabled={!open}
-                    onClick={onBrowseLoyalty}
+                    disabled={tenderPending || !open}
+                    onClick={() => {
+                      if (!tenderPending) onBrowseLoyalty();
+                    }}
                   >
                     {copy.browseLoyaltyOffers}
                   </Button>
