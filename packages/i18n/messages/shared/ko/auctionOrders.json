@@ -14,6 +14,8 @@
   "viewDetail": "상세 보기",
   "contactUs": "문의하기",
   "insuranceTooltip": "운송 중 주문 금액의 0.9%입니다.",
+  "taxTooltip": "Grade10이 주문 배송지를 기준으로 세금을 설정합니다. 주문에 따라 세금이 없을 수도 있습니다.",
+  "taxLabel": "세금",
   "buyersPremiumTooltip": "낙찰가의 20%, 또는 해당 통화의 최소 금액 중 더 큰 값입니다.",
   "shippingHandlingTooltip": "확인한 배송지로의 포장, 운송, 취급 비용입니다.",
   "processingFeeTooltip": "이 청구서가 발송될 때 선택한 결제 수단에 따라 정해집니다.",

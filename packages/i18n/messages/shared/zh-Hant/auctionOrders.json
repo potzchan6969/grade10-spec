@@ -15,6 +15,7 @@
   "contactUs": "聯絡我們",
   "insuranceTooltip": "運輸途中按訂單金額的 0.9% 計算。",
   "taxTooltip": "由 Grade10 按訂單送貨地點設定。部分訂單不設稅項。",
+  "taxLabel": "稅項",
   "buyersPremiumTooltip": "得標價的 20%，或該貨幣的最低額（取較高者）。",
   "shippingHandlingTooltip": "依你確認的送貨地址計算的包裝、運送與處理費用。",
   "processingFeeTooltip": "依此發票送出時的付款方式而定。",

@@ -15,6 +15,7 @@
   "contactUs": "Contact Us",
   "insuranceTooltip": "0.9% of the order value during transit.",
   "taxTooltip": "Set by Grade10 for where your order ships. Some orders have none.",
+  "taxLabel": "Tax",
   "buyersPremiumTooltip": "20% of your winning bid, or the currency minimum if that is higher.",
   "shippingHandlingTooltip": "Packing, carrier, and handling for your confirmed delivery address.",
   "processingFeeTooltip": "Set by your payment method when this invoice was sent.",
