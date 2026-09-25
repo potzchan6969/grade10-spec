@@ -26,7 +26,6 @@ export const Default: Story = {
   args: {
     title: PRODUCT_DETAIL_STORY.title,
     saleItem: PRODUCT_DETAIL_STORY.saleItem,
-    availabilityCount: 3,
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -38,7 +37,7 @@ export const Default: Story = {
     ).toBeVisible();
     expect(canvas.getByText("HK$105.00")).toBeVisible();
     expect(canvas.queryByText("For sale")).toBeNull();
-    expect(canvas.getByText("Only 3 left")).toBeVisible();
+    expect(canvas.queryByText(/Only .* left/)).toBeNull();
   },
 };
 

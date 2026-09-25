@@ -3,7 +3,14 @@ import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Decorator, Meta, StoryObj } from "@storybook/react-vite";
 import { type ReactNode, useState } from "react";
-import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import {
+  expect,
+  fireEvent,
+  fn,
+  userEvent,
+  waitFor,
+  within,
+} from "storybook/test";
 import { CartDrawerFooter, CartPromoSheet } from "./cart-drawer";
 import {
   applyTypedPromoInStories,
@@ -20,6 +27,8 @@ import type { HeldPromoCode, PointsState, PromoState } from "./types";
 
 const heldPromoSelectionSpy = fn();
 const interactiveTypedPromoSpy = fn();
+const pendingDraftPromoSpy = fn();
+const pendingBrowseSpy = fn();
 
 function promoDiscountAmount(promo: PromoState): string | null {
   return promo.status === "applied" ? String(promo.discountAmount) : null;
@@ -1030,6 +1039,68 @@ export const TenderPendingPoints: Story = {
     expect(args.onPointsStateChange).not.toHaveBeenCalled();
     expect(args.onPromoStateChange).not.toHaveBeenCalled();
     expect(args.onCheckout).not.toHaveBeenCalled();
+  },
+};
+
+export const TenderPendingPreservesDrafts: Story = {
+  args: { pointsState: { status: "expanded" } },
+  render: (args) => {
+    const [pending, setPending] = useState(false);
+    return (
+      <>
+        <Button onClick={() => setPending(!pending)}>
+          {pending ? "Finish saving" : "Start saving"}
+        </Button>
+        <CartDrawerFooter {...args} tenderPending={pending} />
+        <CartPromoSheet
+          open
+          copy={DEFAULT_CART_COPY.footer}
+          promoState={{ status: "expanded" }}
+          tenderPending={pending}
+          onClose={() => {}}
+          heldPromoCodes={[]}
+          onApplyPromo={pendingDraftPromoSpy}
+          onBrowseLoyalty={pendingBrowseSpy}
+        />
+      </>
+    );
+  },
+  play: async ({ canvasElement }) => {
+    pendingDraftPromoSpy.mockClear();
+    pendingBrowseSpy.mockClear();
+    const canvas = within(canvasElement);
+    const points = canvas.getByPlaceholderText("0");
+    const promo = canvas.getByPlaceholderText("Enter promo code");
+    await userEvent.type(points, "120");
+    await userEvent.type(promo, "SAVE");
+    await userEvent.click(canvas.getByRole("button", { name: "Start saving" }));
+    expect(points).toBeDisabled();
+    expect(promo).toBeDisabled();
+    fireEvent.change(points, { target: { value: "999" } });
+    fireEvent.change(promo, { target: { value: "OTHER" } });
+    expect(points).toHaveValue(120);
+    expect(promo).toHaveValue("SAVE");
+    fireEvent.keyDown(promo, { key: "Enter" });
+    expect(pendingDraftPromoSpy).not.toHaveBeenCalled();
+    const browse = canvas.getByRole("button", {
+      name: DEFAULT_CART_COPY.footer.browseLoyaltyOffers,
+    });
+    expect(browse).toBeDisabled();
+    fireEvent.click(browse);
+    expect(pendingBrowseSpy).not.toHaveBeenCalled();
+    await userEvent.click(
+      canvas.getByRole("button", { name: "Finish saving" }),
+    );
+    expect(points).toBeEnabled();
+    expect(promo).toBeEnabled();
+    expect(points).toHaveValue(120);
+    expect(promo).toHaveValue("SAVE");
+    await userEvent.type(promo, "{Enter}");
+    await waitFor(() =>
+      expect(pendingDraftPromoSpy).toHaveBeenCalledWith("SAVE"),
+    );
+    await userEvent.click(browse);
+    expect(pendingBrowseSpy).toHaveBeenCalledTimes(1);
   },
 };
 

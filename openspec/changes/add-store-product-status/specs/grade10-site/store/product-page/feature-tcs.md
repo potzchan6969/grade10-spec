@@ -768,6 +768,12 @@ the buying happens, while keeping its price visible,
 
 ## Reconciliation
 
+**Run:** Implementation update on 2026-09-25. Kept the existing case IDs,
+draft statuses and review history. Confirmed US3 and US4 cover the one
+sellable item, internal sale identity, no shopper-facing variant choice,
+unbounded requested quantity and unavailable-item price retention; the retired
+US-05 stock-limit journey remains tombstoned in `user-journeys.md`.
+
 **Run:** Blind feature-TCS pass on 2026-09-24. Read the caller-supplied exact Purpose and Feature set for grade10-site/store/product-page; openspec/changes/add-store-product-status/proposal.md and decisions.md including Raised; ui-design.md state descriptions without following their scenario references; the product-page and product-listing change-local user-journeys.md files; docs/prds/products/grade10-site/store/index.md, store/product-page.md, store/product-listing.md, commerce/index.md and commerce/product-status.md; openspec/config.yaml context; the durable product-page feature suite for case-ID continuity only; docs/governance/specs-to-test-cases.md; and the current-major approved suite corpus (14 actual cases from shared/auth/sign-out and grade10-site/auction/bid-increments). Product-page US03 and US04 cases use version 2 for one-item, no-choice and no-stock-ceiling behavior.
 
 **Excluded:** Every spec.md file, all requirements and scenarios in openspec/specs/ and openspec/changes/add-store-product-status/specs/, and the archive tree. The Purpose and Feature set came from the caller; no spec file was opened. No scenario reference in ui-design was followed.

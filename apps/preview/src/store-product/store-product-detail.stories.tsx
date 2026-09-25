@@ -108,6 +108,43 @@ export const QuantityAndCart: Story = {
   },
 };
 
+export const UsesFirstAvailableSaleItem: Story = {
+  args: {
+    product: {
+      ...PRODUCT_DETAIL_PRODUCT,
+      variants: [
+        {
+          id: "retired-box",
+          title: "Retired box",
+          price: "HK$95.00",
+          availableForSale: false,
+          sku: "G10-M5-ABYSS-RETIRED",
+        },
+        {
+          id: "available-box",
+          title: "Available box",
+          price: "HK$105.00",
+          availableForSale: true,
+          sku: "G10-M5-ABYSS-STD",
+        },
+      ],
+    },
+  },
+  decorators: [content],
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("HK$105.00")).toBeVisible();
+    expect(canvas.getByText("SKU: G10-M5-ABYSS-STD")).toBeVisible();
+    expect(canvas.queryByText("HK$95.00")).toBeNull();
+    expect(canvas.queryByText("Retired box")).toBeNull();
+    expect(canvas.queryByText("Available box")).toBeNull();
+    expect(canvas.queryByRole("radiogroup")).toBeNull();
+
+    await userEvent.click(canvas.getByRole("button", { name: "Add to cart" }));
+    expect(canvas.getByRole("button", { name: "Added to cart" })).toBeVisible();
+  },
+};
+
 export const Narrow: Story = {
   args: { product: PRODUCT_DETAIL_PRODUCT },
   decorators: [content],

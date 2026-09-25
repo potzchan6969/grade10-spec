@@ -575,5 +575,6 @@ export const UnavailableItemsRemoved: Story = {
     expect(
       canvas.getByText(`No longer sold: ${DELISTED_PRODUCT_NAME}`),
     ).toBeInTheDocument();
+    expect(canvas.queryByText(DELISTED_PRODUCT_NAME)).not.toBeInTheDocument();
   },
 };

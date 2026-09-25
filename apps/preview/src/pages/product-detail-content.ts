@@ -6,7 +6,6 @@ type ProductDetailVariant = {
   price: string;
   compareAtPrice?: string;
   availableForSale: boolean;
-  quantityAvailable?: number;
   sku: string;
 };
 
@@ -40,7 +39,6 @@ const PRODUCT_DETAIL_PRODUCT: ProductDetailProduct = {
       price: "HK$105.00",
       compareAtPrice: "HK$123.00",
       availableForSale: true,
-      quantityAvailable: 3,
       sku: "G10-M5-ABYSS-STD",
     },
     {
@@ -48,7 +46,6 @@ const PRODUCT_DETAIL_PRODUCT: ProductDetailProduct = {
       title: "Collector case",
       price: "HK$1,050.00",
       availableForSale: false,
-      quantityAvailable: 0,
       sku: "G10-M5-ABYSS-CASE",
     },
     {
@@ -56,7 +53,6 @@ const PRODUCT_DETAIL_PRODUCT: ProductDetailProduct = {
       title: "Gift bundle",
       price: "HK$210.00",
       availableForSale: true,
-      quantityAvailable: 1,
       sku: "G10-M5-ABYSS-GIFT",
     },
   ],
@@ -67,7 +63,6 @@ const SOLD_OUT_PRODUCT: ProductDetailProduct = {
   variants: PRODUCT_DETAIL_PRODUCT.variants.map((variant) => ({
     ...variant,
     availableForSale: false,
-    quantityAvailable: 0,
   })),
 };
 
