@@ -333,6 +333,12 @@ export {
 } from "./blocks/payment-method/payment-method-card";
 // shared cross-capability types
 export type { AsyncAction, AsyncState } from "./blocks/shared/async";
+export {
+  GalleryCarousel,
+  type GalleryCarouselCopy,
+  type GalleryCarouselImage,
+  type GalleryCarouselProps,
+} from "./blocks/shared/gallery-carousel";
 // shared/ui/site-chrome
 export {
   SiteHeader,
