@@ -379,7 +379,6 @@ function contractOutputs(root, changeId) {
   const deltas = walkFiles(root, join(dir, "specs"))
     .filter((path) => path.endsWith("/spec.md"))
     .sort();
-  if (deltas.length === 0) throw new Error(`${changeId} has no delta specs to accept`);
   const outputs = new Map();
   const prior = previousDurableSnapshots(root, changeId);
   for (const path of deltas) {
@@ -404,20 +403,123 @@ function contractOutputs(root, changeId) {
   return outputs;
 }
 
+function targetPathOf(changeId, deltaSpecPath, filename = "spec.md") {
+  const capability = deltaSpecPath
+    .slice(`openspec/changes/${changeId}/specs/`.length)
+    .replace(/\/spec\.md$/, "");
+  return `openspec/specs/${capability}/${filename}`;
+}
+
+/**
+ * The accepted change declares the small part of the durable contract its
+ * implementation owns. A claim records this list beside the store commit it
+ * starts from, so an unrelated capability advance cannot make an archive
+ * ambiguous. `anchors: []` deliberately means the file as a whole: journeys,
+ * suites, and UI design have no requirement-level identity to compare.
+ */
+export function contractTargets(root, changeId) {
+  const changeDir = join(root, "openspec", "changes", changeId);
+  const targets = [];
+  const deltas = walkFiles(root, join(changeDir, "specs"))
+    .filter((path) => path.endsWith("/spec.md"))
+    .sort();
+  for (const deltaPath of deltas) {
+    const deltaText = readFileSync(join(root, deltaPath), "utf8");
+    const delta = outline(deltaText).find((section) => section.level === 1);
+    const anchors = new Set();
+    if (delta?.children.some((section) => section.heading === "Purpose")) anchors.add("Purpose");
+    if (delta?.children.some((section) => section.heading === "Feature set")) anchors.add("Feature set");
+    for (const section of deltaSections(deltaText)) {
+      const kind = deltaKindOf(section.heading);
+      if (!kind) continue;
+      if (kind === "renamed") {
+        for (const { from, to } of validatedRenamedPairs(section, deltaPath)) {
+          anchors.add(`Requirement: ${from}`);
+          anchors.add(`Requirement: ${to}`);
+        }
+        continue;
+      }
+      for (const { name } of deltaRequirementSections(section)) anchors.add(`Requirement: ${name}`);
+    }
+    targets.push({ path: targetPathOf(changeId, deltaPath), anchors: [...anchors].sort() });
+    for (const companion of COMPANIONS) {
+      if (existsSync(join(dirname(join(root, deltaPath)), companion))) {
+        targets.push({ path: targetPathOf(changeId, deltaPath, companion), anchors: [] });
+      }
+    }
+  }
+  if (existsSync(join(changeDir, "ui-design.md"))) {
+    targets.push({ path: `openspec/changes/${changeId}/ui-design.md`, anchors: [] });
+  }
+  return targets.sort((left, right) => left.path.localeCompare(right.path));
+}
+
+function validTargets(targets, changeId = null) {
+  if (!Array.isArray(targets)) return false;
+  const paths = new Set();
+  for (const target of targets) {
+    if (!target || typeof target.path !== "string" || target.path === "" || !Array.isArray(target.anchors)) return false;
+    const allowed = target.path.startsWith("openspec/specs/") || target.path === `openspec/changes/${changeId}/ui-design.md`;
+    if (paths.has(target.path) || !allowed || target.anchors.some((anchor) => typeof anchor !== "string" || anchor.trim() === "") || new Set(target.anchors).size !== target.anchors.length) return false;
+    paths.add(target.path);
+  }
+  return true;
+}
+
+function sectionNamed(text, name) {
+  const found = [];
+  const visit = (sections) => sections.forEach((section) => {
+    if (section.heading === name) found.push(section);
+    visit(section.children);
+  });
+  visit(outline(text));
+  if (found.length !== 1) return null;
+  return renderSection(found[0]);
+}
+
+/** The selected target content at one store revision. `null` also represents
+ * a removed selected heading, which makes a removal observable at archive. */
+export function targetContent(text, target) {
+  if (text === null) return null;
+  if (target.anchors.length === 0) return String(text);
+  return JSON.stringify(target.anchors.map((anchor) => ({
+    anchor,
+    content: sectionNamed(String(text), anchor),
+  })));
+}
+
+export function contractTargetDiffs(targets, baselineText, currentText) {
+  const differences = [];
+  for (const target of targets) {
+    const before = baselineText(target.path);
+    const after = currentText(target.path);
+    if (target.anchors.length === 0) {
+      if (targetContent(before, target) !== targetContent(after, target)) differences.push({ path: target.path, anchors: [] });
+      continue;
+    }
+    for (const anchor of target.anchors) {
+      const scoped = { ...target, anchors: [anchor] };
+      if (targetContent(before, scoped) !== targetContent(after, scoped)) differences.push({ path: target.path, anchors: [anchor] });
+    }
+  }
+  return differences;
+}
+
 export function acceptanceReadiness(root, changeId) {
   const dir = join(root, "openspec", "changes", changeId);
   const errors = [];
   const required = ["proposal.md", "decisions.md", "tasks.md", ".openspec.yaml"];
   for (const file of required) if (!existsSync(join(dir, file))) errors.push(`required artifact is missing: openspec/changes/${changeId}/${file}`);
   const record = existsSync(join(dir, ".openspec.yaml")) ? readFileSync(join(dir, ".openspec.yaml"), "utf8") : "";
+  let manifest = {};
   try {
-    const manifest = YAML.parse(record) ?? {};
+    manifest = YAML.parse(record) ?? {};
     if (manifest.awaiting && Object.values(manifest.awaiting).some((value) => value !== null && value !== "" && (!Array.isArray(value) || value.length > 0))) errors.push("the change still has an awaiting artifact");
   } catch { errors.push(".openspec.yaml cannot be parsed"); }
   if (!existsSync(join(dir, "tech-design.md")) && !/^design_waived:\s*\S/m.test(record)) errors.push("tech-design.md or an explicit design waiver is required before acceptance");
   const specDir = join(dir, "specs");
   const deltas = walkFiles(root, specDir).filter((path) => path.endsWith("/spec.md"));
-  if (deltas.length === 0) errors.push("there are no delta specs to accept");
+  if (deltas.length === 0 && manifest.skip_specs !== true) errors.push("there are no delta specs to accept");
   for (const path of deltas) {
     const capabilityDir = dirname(join(root, path));
     for (const file of ["user-journeys.md", "feature-tcs.md"]) {
@@ -501,7 +603,8 @@ export function prepareAcceptance(root, changeId) {
   if (readiness.length > 0) throw new Error(`Acceptance is blocked:\n${readiness.map((line) => `- ${line}`).join("\n")}`);
   const outputs = contractOutputs(root, changeId);
   const { artifacts, snapshots } = fingerprintArtifacts(root, changeId, outputs);
-  const identity = { version: 1, change: changeId, artifacts };
+  const targets = contractTargets(root, changeId);
+  const identity = { version: 2, change: changeId, artifacts, contractTargets: targets };
   return {
     root,
     changeId,
@@ -510,6 +613,7 @@ export function prepareAcceptance(root, changeId) {
     baselineFingerprint: baselineFingerprint(baselineOf(root, outputs)),
     artifacts,
     snapshots,
+    contractTargets: targets,
     fingerprint: HASH(json(identity)),
   };
 }
@@ -539,10 +643,13 @@ export function verifyAcceptance(root, changeId, { requireImplementation = false
   try { acceptance = JSON.parse(String(currentBytes)); }
   catch { return { ok: false, errors: ["acceptance.json is not valid JSON"], acceptance: null, fingerprint: null }; }
   const errors = [];
-  if (acceptance.version !== 1 || acceptance.change !== changeId || typeof acceptance.fingerprint !== "string") errors.push("acceptance.json has an unsupported or mismatched identity");
+  if (![1, 2].includes(acceptance.version) || acceptance.change !== changeId || typeof acceptance.fingerprint !== "string") errors.push("acceptance.json has an unsupported or mismatched identity");
   if (!/^[a-f0-9]{64}$/.test(acceptance.baseline ?? "")) errors.push("acceptance.json has an invalid review baseline");
   if (!Array.isArray(acceptance.artifacts) || acceptance.artifacts.some((artifact) => typeof artifact.path !== "string" || !/^[a-f0-9]{64}$/.test(artifact.sha256 ?? "") || !["change-input", "durable-result", "prd-source"].includes(artifact.role))) errors.push("acceptance artifact manifest is malformed");
-  const identity = { version: 1, change: changeId, artifacts: acceptance.artifacts };
+  if (acceptance.version === 2 && !validTargets(acceptance.contractTargets, changeId)) errors.push("acceptance.json has an invalid contract target list");
+  const identity = acceptance.version === 2
+    ? { version: 2, change: changeId, artifacts: acceptance.artifacts, contractTargets: acceptance.contractTargets }
+    : { version: 1, change: changeId, artifacts: acceptance.artifacts };
   const calculated = HASH(json(identity));
   if (calculated !== acceptance.fingerprint) errors.push("acceptance fingerprint does not match its artifact manifest");
   const historyPath = join(dir, "acceptance", `${acceptance.fingerprint}.json`);
@@ -564,10 +671,12 @@ export function verifyAcceptance(root, changeId, { requireImplementation = false
   }
   for (const artifact of acceptance.artifacts ?? []) {
     const absolute = resolve(root, artifact.path);
-    if (absolute !== resolve(root) && !absolute.startsWith(`${resolve(root)}/`)) {
-      errors.push(`accepted artifact path escapes the store: ${artifact.path}`);
-      continue;
-    }
+    if (absolute !== resolve(root) && !absolute.startsWith(`${resolve(root)}/`)) errors.push(`accepted artifact path escapes the store: ${artifact.path}`);
+  }
+  // v2 snapshots are provenance, not a lock on active planning artifacts.
+  // Archive compares the claimed durable-contract targets instead. Retain the
+  // v1 check so changes already in flight keep their original verification.
+  if (acceptance.version === 1) for (const artifact of acceptance.artifacts ?? []) {
     if (artifact.role !== "change-input") continue;
     let bytes = read(join(root, artifact.path));
     if (bytes === null && dir.includes(`${join("openspec", "changes", "archive")}`)) {
@@ -577,14 +686,58 @@ export function verifyAcceptance(root, changeId, { requireImplementation = false
     }
     if (bytes === null || HASH(canonicalPlanningContent(artifact.path, String(bytes))) !== artifact.sha256) errors.push(`accepted input changed: ${artifact.path}`);
   }
+  let implementation = null;
+  let implementationAcceptance = acceptance;
   if (requireImplementation) {
     const implementationPath = join(dir, "implementation.json");
     const implementationBytes = read(implementationPath);
     if (implementationBytes === null) errors.push("implementation.json is required before archive");
     else {
       try {
-        const implementation = JSON.parse(String(implementationBytes));
-        if (implementation.version !== 1 || implementation.fingerprint !== acceptance.fingerprint) errors.push("implementation.json does not attest the current accepted fingerprint");
+        implementation = JSON.parse(String(implementationBytes));
+        const implementationFingerprint = implementation.version === 2
+          ? implementation.acceptance?.fingerprint
+          : implementation.fingerprint;
+        if (![1, 2].includes(implementation.version) || typeof implementationFingerprint !== "string") errors.push("implementation.json does not attest an accepted fingerprint");
+        if (implementationFingerprint !== acceptance.fingerprint) {
+          const historicalBytes = read(join(dir, "acceptance", `${implementationFingerprint}.json`));
+          try {
+            implementationAcceptance = JSON.parse(String(historicalBytes));
+            const historicalIdentity = implementationAcceptance.version === 2
+              ? {
+                version: 2,
+                change: implementationAcceptance.change,
+                artifacts: implementationAcceptance.artifacts,
+                contractTargets: implementationAcceptance.contractTargets,
+              }
+              : {
+                version: 1,
+                change: implementationAcceptance.change,
+                artifacts: implementationAcceptance.artifacts,
+              };
+            const validHistorical = [1, 2].includes(implementationAcceptance.version) &&
+              implementationAcceptance.change === changeId &&
+              implementationAcceptance.fingerprint === implementationFingerprint &&
+              (implementationAcceptance.version === 1 || validTargets(implementationAcceptance.contractTargets, changeId)) &&
+              HASH(json(historicalIdentity)) === implementationFingerprint;
+            if (!validHistorical) {
+              errors.push("implementation.json names an invalid historical acceptance record");
+            }
+          } catch {
+            errors.push("implementation.json does not attest an available current or historical acceptance");
+          }
+        }
+        if (implementation.version === 2) {
+          const baseline = implementation.contractBaseline;
+          const validBaseline = baseline &&
+            typeof baseline.repository === "string" && baseline.repository.trim() !== "" &&
+            /^[0-9a-f]{40}$/i.test(baseline.commit ?? "") &&
+            typeof baseline.capturedAt === "string" && !Number.isNaN(Date.parse(baseline.capturedAt)) &&
+            validTargets(baseline.targets, changeId) &&
+            implementationAcceptance.version === 2 &&
+            JSON.stringify(baseline.targets) === JSON.stringify(implementationAcceptance.contractTargets);
+          if (!validBaseline) errors.push("implementation.json has no valid claimed contract baseline for the accepted target scope");
+        }
         if (!Array.isArray(implementation.repositories) || implementation.repositories.length === 0) errors.push("implementation.json must name at least one verified repository");
         for (const repository of implementation.repositories ?? []) {
           const noRuntime = Array.isArray(repository.components) && repository.components.length === 0;
@@ -601,7 +754,7 @@ export function verifyAcceptance(root, changeId, { requireImplementation = false
       } catch { errors.push("implementation.json is not valid JSON"); }
     }
   }
-  return { ok: errors.length === 0, errors, acceptance, fingerprint: acceptance.fingerprint };
+  return { ok: errors.length === 0, errors, acceptance, implementation, implementationAcceptance, fingerprint: acceptance.fingerprint };
 }
 
 export function writeAcceptance(root, prepared, { reviewedBy, supersedes = null }) {
@@ -617,7 +770,7 @@ export function writeAcceptance(root, prepared, { reviewedBy, supersedes = null 
   } else if (supersedes) throw new Error("--supersedes was supplied but no prior acceptance exists");
   const now = new Date().toISOString();
   const acceptance = {
-    version: 1,
+    version: 2,
     change: prepared.changeId,
     baseline: prepared.baselineFingerprint,
     fingerprint: prepared.fingerprint,
@@ -625,6 +778,7 @@ export function writeAcceptance(root, prepared, { reviewedBy, supersedes = null 
     acceptedAt: now,
     ...(supersedes ? { supersedes } : {}),
     artifacts: prepared.artifacts,
+    contractTargets: prepared.contractTargets,
   };
   const history = join(dir, "acceptance", `${prepared.fingerprint}.json`);
   const snapshotsFile = join(dir, "acceptance", `${prepared.fingerprint}.snapshots.json`);

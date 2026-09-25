@@ -5,8 +5,8 @@
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
-import { verifyAcceptance } from "./lib/acceptance.mjs";
-import { storeMain, textAt } from "./store-main.mjs";
+import { contractTargetDiffs, verifyAcceptance } from "./lib/acceptance.mjs";
+import { git, storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
 const c = (code, s) => (COLOR ? `\x1b[${code}m${s}\x1b[0m` : String(s));
@@ -96,6 +96,88 @@ function fail(...lines) {
   process.exitCode = 1;
 }
 
+const targetKey = ({ path, anchors }) => `${path}\0${anchors.join("\0")}`;
+
+function acknowledgementErrors(acknowledgement, differences) {
+  if (!acknowledgement || typeof acknowledgement !== "object" || Array.isArray(acknowledgement)) {
+    return ["compatibilityAcknowledgement is required because the claimed contract changed"];
+  }
+  const errors = [];
+  if (typeof acknowledgement.reviewedBy !== "string" || acknowledgement.reviewedBy.trim() === "") errors.push("compatibilityAcknowledgement.reviewedBy is required");
+  if (typeof acknowledgement.reviewedAt !== "string" || Number.isNaN(Date.parse(acknowledgement.reviewedAt))) errors.push("compatibilityAcknowledgement.reviewedAt must be an ISO timestamp");
+  if (!Array.isArray(acknowledgement.changes)) {
+    errors.push("compatibilityAcknowledgement.changes must list every scoped difference");
+    return errors;
+  }
+  const expected = new Set(differences.map(targetKey));
+  const seen = new Set();
+  for (const change of acknowledgement.changes) {
+    const valid = change && typeof change.path === "string" && Array.isArray(change.anchors) &&
+      change.anchors.every((anchor) => typeof anchor === "string" && anchor.trim() !== "") &&
+      ["editorial", "semantic"].includes(change.classification) &&
+      typeof change.reason === "string" && change.reason.trim() !== "";
+    if (!valid) {
+      errors.push("each compatibility acknowledgement needs path, anchors, classification and reason");
+      continue;
+    }
+    if (change.classification === "semantic" && (!Array.isArray(change.evidence) || change.evidence.length === 0 || change.evidence.some((item) => typeof item !== "string" || item.trim() === ""))) {
+      errors.push(`semantic acknowledgement for ${change.path} needs non-empty evidence`);
+    }
+    const entries = change.anchors.length === 0
+      ? [{ path: change.path, anchors: [] }]
+      : change.anchors.map((anchor) => ({ path: change.path, anchors: [anchor] }));
+    for (const entry of entries) {
+      const key = targetKey(entry);
+      const label = `${entry.path}${entry.anchors.length ? ` (${entry.anchors.join(", ")})` : ""}`;
+      if (!expected.has(key)) errors.push(`compatibility acknowledgement is outside the changed scope: ${label}`);
+      else if (seen.has(key)) errors.push(`compatibility acknowledgement repeats: ${label}`);
+      else seen.add(key);
+    }
+  }
+  for (const key of expected) if (!seen.has(key)) {
+    const difference = differences.find((entry) => targetKey(entry) === key);
+    errors.push(`compatibility acknowledgement is missing: ${difference.path}${difference.anchors.length ? ` (${difference.anchors.join(", ")})` : ""}`);
+  }
+  return errors;
+}
+
+function compatibilityGate({ changeId, acceptanceCheck, root, main }) {
+  const implementation = acceptanceCheck.implementation;
+  // Version 1 records are historical evidence from before a claim recorded a
+  // baseline. They remain archivable under their accepted snapshot; all new
+  // claims write version 2 and take this path instead.
+  if (implementation?.version === 1) {
+    console.log(yellow(`! ${changeId} uses a v1 implementation record; its first claim predates contract-baseline tracking.`));
+    console.log(dim("  Archive uses the accepted snapshot. New claims record contractBaseline and receive a scoped comparison."));
+    return true;
+  }
+  const baseline = implementation?.contractBaseline;
+  if (!baseline) return false;
+  if (git(root, ["cat-file", "-e", `${baseline.commit}^{commit}`]) === null) {
+    fail(yellow(`The claimed contract baseline ${baseline.commit} is not available in this store clone.`));
+    fail("Fetch that store commit, then re-run archive:preflight.");
+    return false;
+  }
+  const differences = contractTargetDiffs(
+    baseline.targets,
+    (path) => textAt(root, baseline.commit, path),
+    (path) => textAt(root, main.commit, path),
+  );
+  if (differences.length === 0) return true;
+  console.log(yellow(`${changeId} has ${differences.length} change(s) in its claimed contract scope since ${baseline.commit}:`));
+  for (const difference of differences) console.error(`  - ${difference.path}${difference.anchors.length ? ` - ${difference.anchors.join(", ")}` : " - whole file"}`);
+  const acknowledgementErrorsForDiff = acknowledgementErrors(implementation.compatibilityAcknowledgement, differences);
+  if (acknowledgementErrorsForDiff.length > 0) {
+    for (const error of acknowledgementErrorsForDiff) console.error(`  - ${error}`);
+    console.error("");
+    console.error("Record the scoped review in implementation.json. Editorial entries name the reason; semantic entries also name the test or other evidence that proves compatibility.");
+    process.exitCode = 1;
+    return false;
+  }
+  console.log(`${yellow("!")} ${changeId} archives with ${differences.length} acknowledged contract change(s) since ${baseline.commit}.`);
+  return true;
+}
+
 const changeId = argv[0];
 if (!changeId || changeId === "--help" || changeId === "-h") {
   help();
@@ -144,6 +226,7 @@ if (!acceptanceCheck.ok) {
   for (const error of acceptanceCheck.errors) console.error(`  - ${error}`);
   process.exit();
 }
+if (!compatibilityGate({ changeId, acceptanceCheck, root: ROOT, main })) process.exit();
 const tasksFile = `openspec/changes/${changeId}/tasks.md`;
 const tasks = textAt(ROOT, main.commit, tasksFile);
 if (tasks === null && existsSync(join(ROOT, tasksFile))) {
@@ -179,7 +262,7 @@ if (open.length > 0 && tasksWaived === null) {
 
 // ── Clear ─────────────────────────────────────────────────────────────────
 console.log(`${green("✓")} ${bold(changeId)} is clear to archive.`);
-console.log(`\nAccepted contract ${acceptanceCheck.fingerprint} matches the verified implementation.`);
+console.log(`\nImplementation attests ${acceptanceCheck.implementation?.version === 2 ? acceptanceCheck.implementation.acceptance.fingerprint : acceptanceCheck.fingerprint}.`);
 console.log(`\nArchive the change directory without folding it again:\n`);
 console.log(`  ${cyan(`git -C "${ROOT}" mv openspec/changes/${changeId} openspec/changes/archive/<YYYY-MM-DD>-${changeId}`)}`);
 console.log(`  ${cyan(`git -C "${ROOT}" commit -m "Archive ${changeId} after implementation verification"`)}`);

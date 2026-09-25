@@ -1,12 +1,13 @@
 import assert from "node:assert/strict";
 import { createHash } from "node:crypto";
-import { existsSync, mkdtempSync, mkdirSync, readFileSync, renameSync, writeFileSync } from "node:fs";
+import { existsSync, mkdtempSync, mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import {
   acceptChange,
   acceptanceReadiness,
+  contractTargetDiffs,
   prepareAcceptance,
   verifyAcceptance,
   writeAcceptance,
@@ -55,6 +56,11 @@ test("acceptance fingerprint is deterministic and binds the folded durable scope
   assert.match(durable, /## Feature set[\s\S]*The reader enters a query/);
   assert.match(durable, /Requirement: Search results/);
   assert.equal(first.outputs.get("openspec/specs/site/search/feature-tcs.md"), readFileSync(join(root, "openspec/changes/build-alpha/specs/site/search/feature-tcs.md"), "utf8"));
+  assert.deepEqual(first.contractTargets, [
+    { path: "openspec/specs/site/search/feature-tcs.md", anchors: [] },
+    { path: "openspec/specs/site/search/spec.md", anchors: ["Feature set", "Purpose", "Requirement: Search results"] },
+    { path: "openspec/specs/site/search/user-journeys.md", anchors: [] },
+  ]);
 });
 
 test("acceptance merges subset journeys and test cases without deleting the durable capability", () => {
@@ -79,6 +85,16 @@ test("acceptance merges subset journeys and test cases without deleting the dura
   assert.match(suite, /site-search-TC03-01/);
 });
 
+test("acceptance records ui-design as a whole-file claim target", () => {
+  const { root } = sandbox();
+  writeFileSync(join(root, `openspec/changes/${CHANGE}/ui-design.md`), "# Search\n\n## Screens\n\nThe reader sees a query.\n");
+  const prepared = prepareAcceptance(root, CHANGE);
+  assert.deepEqual(prepared.contractTargets.find((target) => target.path.endsWith("/ui-design.md")), {
+    path: `openspec/changes/${CHANGE}/ui-design.md`,
+    anchors: [],
+  });
+});
+
 test("acceptance rejects incomplete rename instructions and unresolved visible clarifications", () => {
   const { root } = sandbox();
   const spec = join(root, "openspec/changes/build-alpha/specs/site/search/spec.md");
@@ -88,6 +104,17 @@ test("acceptance rejects incomplete rename instructions and unresolved visible c
   const unresolved = sandbox();
   writeFileSync(join(unresolved.root, "openspec/changes/build-alpha/tech-design.md"), "# Technical design\n\nOne detail is TBC before acceptance.\n");
   assert.match(acceptanceReadiness(unresolved.root, CHANGE).join("\n"), /unresolved TBC/);
+});
+
+test("a skip_specs change accepts an empty contract target scope", () => {
+  const { root } = sandbox();
+  rmSync(join(root, `openspec/changes/${CHANGE}/specs`), { recursive: true });
+  writeFileSync(join(root, `openspec/changes/${CHANGE}/.openspec.yaml`), "schema: grade10-planning\nskip_specs: true\nskip_specs_why: The delivery changes no product behaviour.\n");
+  const prepared = prepareAcceptance(root, CHANGE);
+  assert.equal(prepared.outputs.size, 0);
+  assert.deepEqual(prepared.contractTargets, []);
+  writeAcceptance(root, prepared, { reviewedBy: "@pm" });
+  assert.equal(verifyAcceptance(root, CHANGE).ok, true);
 });
 
 test("a later acceptance preserves history and rebases an amendment only when its contract is unchanged", () => {
@@ -123,11 +150,11 @@ test("concurrent edits to the accepted requirement cause an explicit amendment c
   const delta = join(root, "openspec/changes/build-alpha/specs/site/search/spec.md");
   writeFileSync(delta, readFileSync(delta, "utf8").replace("return matching items", "return ranked matching items"));
   assert.throws(() => prepareAcceptance(root, CHANGE), /changed since this amendment began|changed since the accepted baseline/);
-  assert.equal(verifyAcceptance(root, CHANGE).ok, false);
+  assert.equal(verifyAcceptance(root, CHANGE).ok, true);
   assert.equal(accepted.fingerprint.length, 64);
 });
 
-test("verifier accepts QA disposition and automation metadata changes but rejects contract tampering", () => {
+test("v2 snapshots preserve planning provenance without locking later working-artifact edits", () => {
   const { root } = sandbox();
   const prepared = prepareAcceptance(root, CHANGE);
   applyOutputs(root, prepared);
@@ -137,13 +164,71 @@ test("verifier accepts QA disposition and automation metadata changes but reject
   const meta = verifyAcceptance(root, CHANGE);
   assert.equal(meta.ok, true, meta.errors.join("\n"));
   writeFileSync(suite, readFileSync(suite, "utf8").replace("blind reading agreed", "QA observed a changed result"));
-  const tampered = verifyAcceptance(root, CHANGE);
-  assert.equal(tampered.ok, false);
-  assert.match(tampered.errors.join("\n"), /accepted input changed/);
+  const changed = verifyAcceptance(root, CHANGE);
+  assert.equal(changed.ok, true, changed.errors.join("\n"));
   assert.equal(acceptance.fingerprint.length, 64);
 });
 
-test("archive requires a full implementation attestation for the current fingerprint", () => {
+test("v2 implementation attestation carries the claim baseline and exact accepted target scope", () => {
+  const { root } = sandbox();
+  const prepared = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, prepared);
+  const acceptance = writeAcceptance(root, prepared, { reviewedBy: "@pm" });
+  const record = join(root, `openspec/changes/${CHANGE}/implementation.json`);
+  writeFileSync(record, JSON.stringify({
+    version: 2,
+    acceptance: { fingerprint: acceptance.fingerprint },
+    contractBaseline: {
+      repository: "9gag/grade10-spec",
+      commit: "d".repeat(40),
+      capturedAt: "2026-09-25T01:00:00.000Z",
+      targets: acceptance.contractTargets,
+    },
+    repositories: [{ repository: "grade10-site", commit: "a".repeat(40), components: ["web"] }],
+  }));
+  assert.equal(verifyAcceptance(root, CHANGE, { requireImplementation: true }).ok, true);
+  const malformed = JSON.parse(readFileSync(record, "utf8"));
+  malformed.contractBaseline.targets[0].anchors = ["not accepted"];
+  writeFileSync(record, JSON.stringify(malformed));
+  assert.match(verifyAcceptance(root, CHANGE, { requireImplementation: true }).errors.join("\n"), /claimed contract baseline/);
+});
+
+test("v2 implementation continues to attest its historical acceptance after a later amendment", () => {
+  const { root } = sandbox();
+  const firstPrepared = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, firstPrepared);
+  const first = writeAcceptance(root, firstPrepared, { reviewedBy: "@pm" });
+  writeFileSync(join(root, `openspec/changes/${CHANGE}/implementation.json`), JSON.stringify({
+    version: 2,
+    acceptance: { fingerprint: first.fingerprint },
+    contractBaseline: {
+      repository: "9gag/grade10-spec",
+      commit: "e".repeat(40),
+      capturedAt: "2026-09-25T01:00:00.000Z",
+      targets: first.contractTargets,
+    },
+    repositories: [{ repository: "grade10-site", commit: "a".repeat(40), components: ["web"] }],
+  }));
+  const delta = join(root, "openspec/changes/build-alpha/specs/site/search/spec.md");
+  writeFileSync(delta, `${readFileSync(delta, "utf8").trim()}\n\n### Requirement: Result count\n\nThe system SHALL return a count.\n`);
+  const amended = prepareAcceptance(root, CHANGE);
+  applyOutputs(root, amended);
+  writeAcceptance(root, amended, { reviewedBy: "@pm", supersedes: first.fingerprint });
+  const check = verifyAcceptance(root, CHANGE, { requireImplementation: true });
+  assert.equal(check.ok, true, check.errors.join("\n"));
+  assert.equal(check.implementationAcceptance.fingerprint, first.fingerprint);
+});
+
+test("contract target comparison ignores a sibling requirement but reports the selected requirement", () => {
+  const targets = [{ path: "openspec/specs/site/search/spec.md", anchors: ["Requirement: Search results"] }];
+  const baseline = "# Search\n\n## Requirements\n\n### Requirement: Search results\n\nThe system SHALL return matching items.\n\n### Requirement: Other\n\nOther text.\n";
+  const siblingAdvance = baseline.replace("Other text.", "A sibling change advances it.");
+  assert.deepEqual(contractTargetDiffs(targets, () => baseline, () => siblingAdvance), []);
+  const selectedAdvance = baseline.replace("matching items.", "ranked matching items.");
+  assert.deepEqual(contractTargetDiffs(targets, () => baseline, () => selectedAdvance), targets);
+});
+
+test("archive requires a full implementation attestation for an accepted fingerprint", () => {
   const { root } = sandbox();
   const prepared = prepareAcceptance(root, CHANGE);
   applyOutputs(root, prepared);
