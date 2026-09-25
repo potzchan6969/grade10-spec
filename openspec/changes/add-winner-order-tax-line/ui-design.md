@@ -66,7 +66,7 @@ that field yet.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | Pre-invoice fees | Tax row present, value TBD (muted), Info tip with the Tax copy | `winner-order-SC-213` |
-| Invoice with Tax | Tax row with a money value and the same Info tip, between Insurance and Payment Processing Fee | `winner-order-SC-211` |
+| Invoice with Tax | Tax row with a money value and the same Info tip, between Insurance and Payment Processing Fee | `winner-order-SC-217` |
 | Invoice without Tax | No Tax row; other fee tips unchanged | `winner-order-SC-212` |
 
 ### Winner Order — Invoice and Receipt PDFs
@@ -74,7 +74,7 @@ that field yet.
 | State | Shows | Anchor |
 | --- | --- | --- |
 | PDF with Tax | Tax charge line between Insurance and Subtotal | `winner-order-SC-214` |
-| PDF without Tax | No Tax charge line | `winner-order-SC-209` |
+| PDF without Tax | No Tax charge line | `winner-order-SC-215` |
 
 ### Operator quote and reissue
 

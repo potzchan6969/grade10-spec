@@ -164,14 +164,14 @@ historical: a manually settled order keeps its payment processing fee.
 - **AND** the order total is 312000 minor units in HKD
 
 
-#### Scenario: winner-order-SC-209 - An invoice with no tax shows no Tax line
+#### Scenario: winner-order-SC-215 - An invoice with no tax shows no Tax line
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice without adding Tax
 - **WHEN** the winner reads the invoice, receipt, or Order Summary
 - **THEN** no Tax line is shown
 
-#### Scenario: winner-order-SC-210 - Tax is included in the card fee base
+#### Scenario: winner-order-SC-216 - Tax is included in the card fee base
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an invoice whose winning bid, buyer's premium, shipping, insurance,
@@ -201,7 +201,7 @@ Tax line is shown.
 **Copy** - The tooltip SHALL read `Set by Grade10 for where your order ships.
 Some orders have none.`
 
-#### Scenario: winner-order-SC-211 - A shown Tax line carries its info tooltip
+#### Scenario: winner-order-SC-217 - A shown Tax line carries its info tooltip
 **Serves:** winner-order-US-01 - Winner settles a won lot
 
 - **GIVEN** an operator sent an invoice with Tax of 6000 minor units in HKD

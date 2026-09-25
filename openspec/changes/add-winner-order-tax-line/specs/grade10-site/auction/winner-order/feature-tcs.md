@@ -138,7 +138,7 @@
 
 **Raised:**
 
-- The blind pass separated the pre-send, taxed, untaxed, and card-fee-base partitions. The scenario pass covers each one in `winner-order-SC-209` to `winner-order-SC-214`.
+- The blind pass separated the pre-send, taxed, untaxed, and card-fee-base partitions. The scenario pass covers each one across `winner-order-SC-212` through `-SC-217`.
 - The blind pass required the invoice and receipt to carry the amount. `winner-order-SC-214` and the modified Invoice fields requirement cover their shared itemisation rule; no new product decision was needed.
 
 **Out of suite:** none.
