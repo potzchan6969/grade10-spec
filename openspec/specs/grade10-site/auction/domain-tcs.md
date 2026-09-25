@@ -642,7 +642,7 @@ hold is being let go.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
