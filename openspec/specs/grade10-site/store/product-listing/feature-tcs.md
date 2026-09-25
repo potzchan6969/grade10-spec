@@ -180,7 +180,7 @@ Catalogue has nothing for <an unknown collection>.
 **so that** I can search the whole catalogue without going back to where I came
 from.
 
-<!-- trace:case id=g10.store-product-listing.TC-dlj rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
+<!-- trace:case id=g10.store-product-listing.TC-dlj rev=2 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC1-2: Narrowing made in the page is linkable
 
 **Classification:**
@@ -216,7 +216,7 @@ from.
 * Address names the facet choice and no longer names the collection.
 * Step 4 shows the same narrowing and the same cards.
 
-<!-- trace:case id=g10.store-product-listing.TC-3vs rev=1 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
+<!-- trace:case id=g10.store-product-listing.TC-3vs rev=2 covers=g10.store-product-listing.SC-9nu,g10.store-product-listing.SC-2oj,g10.store-product-listing.SC-3ya,g10.store-product-listing.SC-eqs -->
 ### grade10-site-store-product-listing-US3-TC2-2: Back undoes a narrowing
 
 **Classification:**

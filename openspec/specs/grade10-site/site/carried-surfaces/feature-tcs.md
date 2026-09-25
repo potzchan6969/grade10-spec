@@ -394,7 +394,7 @@ Runs once per row of **Test data**.
 * Every fetch returns status 404.
 * Step 2 renders the not-found surface in that language.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-5mi rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-5mi rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC7-2: The preview host answers as the public site does
 
 **Classification:**
@@ -426,7 +426,7 @@ Runs once per row of **Test data**.
 * Step 2's header, footer and front door name no store, vault or booking
   surface.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-heo rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-heo rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC8-2: A labs address is not held on preview or production
 
 **Classification:**
@@ -468,7 +468,7 @@ answers,
 **so that** I never index a page that answers not-found and never carry it
 into a search result.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-xjk rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-xjk rev=2 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC1-2: Sitemap names no store, vault or booking address
 
 **Classification:**
@@ -559,7 +559,7 @@ into a search result.
 * Every fetch returns status 200.
 * No fetch renders the not-found surface.
 
-<!-- trace:case id=g10.site-carried-surfaces.TC-24a rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
+<!-- trace:case id=g10.site-carried-surfaces.TC-24a rev=2 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC4-2: Crawler files name the store, the vault and booking where the build carries them
 
 **Classification:**
