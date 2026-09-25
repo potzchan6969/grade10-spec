@@ -17,10 +17,10 @@ instrumented.
 ## What Changes
 
 - **Operator-curated Featured** — at most three ordered slots; each binds one
-  published Active or Upcoming lot and one hero image the operator uploads for
+  published Active or Upcoming lot and one front page image the operator uploads for
   that slot.
 - **Carousel banner on `/auction`** — when at least one slot is set: full-width
-  slide with that hero as banner and slab, title, status, client countdown from
+  slide with that front page image as banner and slab, title, status, client countdown from
   the served close or open, current bid with a rolling number when it changes,
   Bid Now to the lot, and progress dots.
 - **Quiet catalogue only** — Featured (when present) then All auctions; no
@@ -37,7 +37,7 @@ See [Non-Goals](decisions.md#non-goals).
 ### New Capabilities
 
 - `grade10-admin/auction/featured` — ordered Featured slots (≤3), each a
-  published Active or Upcoming lot plus one hero image asset; who may curate
+  published Active or Upcoming lot plus one front page image asset; who may curate
   them.
 
 ### Modified Capabilities

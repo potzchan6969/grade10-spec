@@ -11,6 +11,7 @@ awaiting:
   specs: requirement deltas and feature-tcs landing with closed design states
 landed_by:
   ui-design: mason5991
+  proposal: mason5991
 reviewed:
   user-journeys: c27587b9
   ui-design: af926488
