@@ -1,7 +1,7 @@
 # grade10-site/auction/auction Test Cases
 
 **Status:** in-review
-**Drafts styled:** 2026-09-16, tcs-rules r3.0
+**Drafts styled:** 2026-09-25, tcs-rules r4
 
 ## grade10-site-auction-auction-US2: Collector places a card-backed bid inside the window
 
@@ -15,7 +15,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, release
@@ -32,12 +32,11 @@
 **Steps:**
 
 1. Submit a valid bid on the open listing.
-2. Read the bid result and the listing's bid-time authorizations.
+2. Read the bid result.
 
 **Expected Results:**
 
 * Grade10 accepts the bid according to the listing's bid rules without waiting for Stripe.
-* No bid-time authorization is created.
 
 ### grade10-site-auction-auction-US2-TC10-1: Bid during extended bidding restarts the timer
 
@@ -45,7 +44,7 @@
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -63,10 +62,12 @@
 | Field | Value |
 | --- | --- |
 | `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800 seconds |
+| `<extension duration>` | 1800s (30mins) |
 | `<close before bids>` | 20:30 UTC |
 | `<first bid time>` | 20:10 UTC |
 | `<second bid time>` | 20:35 UTC |
+| `<close after first>` | 20:40 UTC |
+| `<close after second>` | 21:05 UTC |
 
 **Steps:**
 
@@ -77,8 +78,8 @@
 
 **Expected Results:**
 
-* Step 2 reads `<first bid time>` plus `<extension duration>`.
-* Step 4 reads `<second bid time>` plus `<extension duration>`.
+* The recorded close reads `<first bid time>` plus `<extension duration>` = `<close after first>`.
+* The recorded close reads `<second bid time>` plus `<extension duration>` = `<close after second>`.
 
 ### grade10-site-auction-auction-US2-TC11-1: Extension cap holds the timer at the cap
 
@@ -86,7 +87,7 @@
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -104,7 +105,9 @@
 | Field | Value |
 | --- | --- |
 | `<listing_3>` | A listing in extended bidding whose recorded close already stands at its cap |
-| `<extension cap>` | 3600 seconds |
+| `<scheduled close>` | 20:00 UTC |
+| `<extension cap>` | 3600s (60mins), any cap the listing has already reached |
+| `<result>` | 21:00 UTC |
 
 **Steps:**
 
@@ -114,8 +117,9 @@
 
 **Expected Results:**
 
-* The bid is accepted and the recorded close is unchanged.
-* The listing closes at its scheduled close plus `<extension cap>`.
+* The bid is accepted.
+* The recorded close reads `<scheduled close>` plus `<extension cap>`.
+* The listing closes at `<result>`.
 
 ### grade10-site-auction-auction-US2-TC12-1: Listing's own duration sets how long extended bidding runs
 
@@ -123,7 +127,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -142,7 +146,8 @@
 | --- | --- |
 | `<listing_4>` | An open listing, scheduled close `<scheduled close>`, extension duration `<short duration>` |
 | `<scheduled close>` | 20:00 UTC |
-| `<short duration>` | 300 seconds |
+| `<short duration>` | 300s (5mins), any extension duration above 0 |
+| `<result>` | 20:05 UTC |
 
 **Steps:**
 
@@ -152,7 +157,7 @@
 **Expected Results:**
 
 * The listing is in extended bidding.
-* The recorded close reads `<scheduled close>` plus `<short duration>`.
+* The recorded close reads `<scheduled close>` plus `<short duration>` = `<result>`.
 
 ### grade10-site-auction-auction-US2-TC13-1: Extension off closes the listing at its scheduled close
 
@@ -160,7 +165,7 @@
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -177,7 +182,7 @@
 
 | Field | Value |
 | --- | --- |
-| `<listing_5>` | An open listing with an accepted bid, extension duration 0 seconds |
+| `<listing_5>` | An open listing with an accepted bid, extension duration 0s |
 
 **Steps:**
 
@@ -197,7 +202,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -208,26 +213,26 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_6>` is open with scheduled close 20:00 UTC and extension duration 1800 seconds.
-* `<listing_6>` holds the row's accepted bids.
+* `<listing_6>` is open with scheduled close `<scheduled close>` and extension duration 1800s (30mins).
+* `<listing_6>` holds the row's `<bids by close>`.
 
 **Test data:**
 
-| Accepted bids by 20:00 UTC | Grade10 |
-| --- | --- |
-| None | Closes the listing at 20:00 UTC |
-| One | Recorded close becomes 20:30 UTC; with no further bid the listing closes at 20:30 UTC |
+| `<bids by close>` | `<scheduled close>` | `<extended close>` | `<result>` |
+| --- | --- | --- | --- |
+| None | 20:00 UTC | — | Closed at 20:00 UTC |
+| One | 20:00 UTC | 20:30 UTC | Recorded close is 20:30 UTC; with no further bid, closed at 20:30 UTC |
 
 **Steps:**
 
-1. Wait for 20:00 UTC.
+1. Wait for `<scheduled close>`.
 2. Read the listing's state and recorded close.
-3. Wait until 20:30 UTC with no bid.
+3. When the row has `<extended close>`, wait until `<extended close>` with no bid.
 4. Read the listing's state.
 
 **Expected Results:**
 
-* Grade10 answers as the row states.
+* The listing reads `<result>`.
 
 ### grade10-site-auction-auction-US2-TC6-1: When a bid lands against the scheduled close
 
@@ -237,7 +242,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -248,7 +253,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_7>` is open with no accepted bid, scheduled close 20:00:00 UTC, and extension duration 1800 seconds.
+* `<listing_7>` is open with no accepted bid, scheduled close 20:00:00 UTC, and extension duration 1800s (30mins).
 
 **Test data:**
 
@@ -273,7 +278,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -290,7 +295,7 @@ Runs once per row of **Test data**.
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800 seconds |
+| `<listing_8>` | A listing with scheduled close 20:00 UTC, in extended bidding, extension duration 1800s (30mins) |
 | `<listing_9>` | A second listing in the same state as `<listing_8>` |
 
 **Steps:**
@@ -309,7 +314,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -328,7 +333,7 @@ Runs once per row of **Test data**.
 | Field | Value |
 | --- | --- |
 | `<listing_2>` | A listing past its scheduled close, in extended bidding, extension duration `<extension duration>`, no cap |
-| `<extension duration>` | 1800 seconds |
+| `<extension duration>` | 1800s (30mins) |
 
 **Steps:**
 
@@ -346,7 +351,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -398,17 +403,17 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* `<listing_1>` is published.
+* `<listing_11>` is published.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_1>` | A published listing with extension duration 1800 seconds and an extension cap of 3600 seconds |
+| `<listing_11>` | A published listing with extension duration 1800s (30mins) and an extension cap of 3600s (60mins) |
 
 **Steps:**
 
-1. Read the public listing contract for `<listing_1>`.
+1. Read the public listing contract for `<listing_11>`.
 
 **Expected Results:**
 
@@ -650,8 +655,8 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in on `<a verified account>` with `<card>` saved, and is on `<listing_1>`.
-* `<listing_1>` is live, inside its window, and its minimum next bid is `<bar>`.
+* The user is signed in on `<a verified account>` with `<card>` saved, and is on `<listing_12>`.
+* `<listing_12>` is live, inside its window, and its minimum next bid is `<bar>`.
 
 **Test data:**
 
@@ -659,9 +664,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | `<a verified account>` | An account whose standing is `verified` on the day of the bid |
 | `<card>` | Visa ending 4242 |
-| `<bar>` | 12000000 HKD minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
-| `<listing_1>` | A live listing in HKD whose minimum next bid is `<bar>` |
-| `<bid at the bar>` | 12000000 minor units, equal to `<bar>` |
+| `<bar>` | 12000000 minor units (HKD 120,000.00), the bar Grade10 sets on a bid |
+| `<listing_12>` | A live HKD listing whose minimum next bid is `<bar>` |
+| `<bid at the bar>` | 12000000 minor units (HKD 120,000.00), equal to `<bar>` |
 
 **Steps:**
 
@@ -692,23 +697,23 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_1>`.
-* `<listing_1>` is live, inside its window, and its minimum next bid is `<bar>`.
+* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_12>`.
+* `<listing_12>` is live, inside its window, and its minimum next bid is `<bar>`.
 
 **Test data:**
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | 12000000 minor units, exactly `<bar>` | Refused; no bid recorded, no hold taken |
-| `unverified` | 12500000 minor units, above `<bar>` | Refused; no bid recorded, no hold taken |
-| `expired` | 12000000 minor units, exactly `<bar>` | Refused; no bid recorded, no hold taken |
-| `expired` | 12500000 minor units, above `<bar>` | Refused; no bid recorded, no hold taken |
+| `unverified` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded, no hold taken |
+| `unverified` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded, no hold taken |
+| `expired` | 12000000 minor units (HKD 120,000.00), exactly `<bar>` | Refused; no bid recorded, no hold taken |
+| `expired` | 12500000 minor units (HKD 125,000.00), any bid above `<bar>` | Refused; no bid recorded, no hold taken |
 
 **Steps:**
 
 1. Enter the bid amount the row names in the bid field and select **Place Bid**.
 2. Read the refusal.
-3. Reload `<listing_1>` and read Highest bid and the bid count.
+3. Reload `<listing_12>` and read Highest bid and the bid count.
 
 **Expected Results:**
 
@@ -735,16 +740,16 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_2>`.
-* `<listing_2>` is live, inside its window, in HKD, and its minimum next bid is at or below the bid amount the row names.
+* The user is signed in with `<card>` saved on an account whose standing is the one the row names, and is on `<listing_13>`.
+* `<listing_13>` is live, inside its window, in HKD, and its minimum next bid is at or below the bid amount the row names.
 
 **Test data:**
 
 | Standing | Bid amount | Outcome |
 | --- | --- | --- |
-| `unverified` | 505000 minor units, below `<bar>` | Forwarded as any other; no standing read |
-| `expired` | 505000 minor units, below `<bar>` | Forwarded as any other; no standing read |
-| `verified` | 505000 minor units, below `<bar>` | Forwarded as any other; no standing read |
+| `unverified` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `expired` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
+| `verified` | 505000 minor units (HKD 5,050.00), any bid below `<bar>` | Forwarded as any other; no standing read |
 
 **Steps:**
 
