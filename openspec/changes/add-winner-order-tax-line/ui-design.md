@@ -2,26 +2,32 @@
 
 ### Winner Order — Order Summary
 
-Layout SoT: Storybook under `My Auctions/Winner Order/` —
+Layout SoT: Storybook under `My Auctions/Winner Order/` — Tax already ships
+on the page assembly (between Insurance and Payment Processing Fee; tip on
+hover, not auto-open):
 
-- pre-invoice TBD fees: `my-auctions-winner-order-setup--awaiting-setup`,
+- pre-invoice TBD: `my-auctions-winner-order-setup--awaiting-setup`,
   `my-auctions-winner-order-setup--preparing-invoice`
 - post-invoice with Tax: `my-auctions-winner-order-payment--pending-payment`,
   `my-auctions-winner-order-payment--pending-payment-bank-transfer`
 
 No new Figma frame — Order Summary already lists fee rows with an Info
-tooltip trigger; Tax joins that pattern between Insurance and Payment
-Processing Fee (the page omits Subtotal; invoice and receipt keep it).
+tooltip trigger; Tax joins that pattern. The page omits Subtotal; invoice
+and receipt keep it.
 
 ### Winner Order — Invoice and Receipt PDFs
 
 Layout SoT: Storybook —
 
-- `pages-winner-order-invoice-pdf--default`
-- `pages-winner-order-receipt-pdf--default`
+- with Tax: `my-auctions-winner-order-pdf-invoice--default`,
+  `my-auctions-winner-order-pdf-invoice--with-tax`,
+  `my-auctions-winner-order-pdf-receipt--default`,
+  `my-auctions-winner-order-pdf-receipt--with-tax`
 
-Tax is a charge `lineItems` row between Insurance and Subtotal when supplied.
-Absence is omitting the row, not a zero amount.
+Tax is an ordinary charge `lineItems` row between Insurance and Subtotal
+when supplied. Absence is omitting the row, not a zero amount. No dedicated
+without-Tax PDF story; product state still applies when the operator sends
+none.
 
 ### Operator quote and reissue (admin)
 
@@ -37,16 +43,17 @@ drawn or converted.
 | --- | --- | --- |
 | `Tooltip`, `TooltipContent`, `TooltipProvider`, `TooltipTrigger` | `@grade10/design-system` | Brief tip beside the Tax row label (`overlays/tooltip`) |
 | `Info` | `@grade10/design-system` (icon) | Tooltip trigger on Tax, same pattern as Insurance |
-| Page-local `SummaryRow` / `OrderSidebar` | `apps/preview` Winner Order assembly | Iterates invoice lines; optional `tooltip` on a line |
+| Page-local `SummaryRow` / `OrderSidebar` | `apps/preview` Winner Order assembly | Iterates invoice lines; optional `tooltip` on a line — Tax already wired |
 | `InvoicePdf` / `ReceiptPdf` | `@grade10/ui` | Charge lines via `lineItems`; Tax is an ordinary charge row when present — no new export |
 
-Nothing missing in this repository for the tip pattern or PDF charge rows. No
-new `@grade10/ui` export for Order Summary.
+Nothing missing in this repository for the Order Summary tip pattern, Tax
+preview fixtures, or PDF charge rows. No new `@grade10/ui` export for Order
+Summary.
 
-**Missing — copy for `tasks.md`:** preview fixtures hold `LINE_TOOLTIPS.tax`
-as stand-in English (`Set by Grade10 for where your order ships. Some orders
-have none.`). When `grade10-site` wires Winner Order, answer that tip in
-`@grade10/i18n` in every language of its layer.
+**Missing — copy for `tasks.md`:** preview fixtures already hold
+`LINE_TOOLTIPS.tax` as stand-in English (`Set by Grade10 for where your order
+ships. Some orders have none.`). When `grade10-site` wires Winner Order,
+answer that tip in `@grade10/i18n` in every language of its layer.
 
 **Missing — admin surface:** optional Tax amount on the operator quote and
 reissue forms (above zero when set, refused at zero). No preview story owns
