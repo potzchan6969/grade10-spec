@@ -111,6 +111,22 @@ deliberately no clocks and no money.
   offers draft and created campaigns only; a listing works without one, and
   the Listings table shows `-`
 
+## Featured
+
+Operator-curated slides on the collector catalogue's Featured band —
+[Auction Display · Catalogue](/p/grade10-site/auction/display#catalogue).
+
+| Rule | Value |
+| --- | --- |
+| Slots | At most **3**, in operator order |
+| Each slot | One published Active or Upcoming lot, and one hero image uploaded for that slot |
+
+- 🚧 **Curate** — an authorized operator fills, orders, replaces and clears
+  Featured slots; a slot without both a lot and its hero image is not shown on
+  `/auction`. Ended lots cannot fill a slot
+- 🚧 **Hero image** — one image per slot, separate from the lot gallery; it is
+  the banner background and the slab on that slide
+
 ## Post-Sale Queue
 
 The queue works every winner order from close through delivery: each row
@@ -359,6 +375,7 @@ settings.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
+| Catalogue Featured | 🚧 In flight | At most 3 ordered slots; each binds one published lot and one operator-uploaded hero image for the site carousel. Not auto Top-N live lots and not the campaign cover alone. | Design |
 | Supported currencies | Decided | USD, HKD or JPY only; the selected currency's shared schedule supplies the floor, with no listing-level override and no schedule editing. | Product |
 | Watch count placement | Decided | In the Listings Stats dialog with the bidder count, not a Watchers column on the table and not on the listing's own page. | Design |
 | Payment source | Decided | The queue distinguishes a fresh Stripe charge from manual settlement, and both release the bid-time hold rather than capturing it. | Product and Finance |
