@@ -5,13 +5,14 @@ How a case reads in this store. [`specs-to-test-cases.md`](specs-to-test-cases.m
 ## How This File Grows
 
 - **Every edit is a candidate** — when a `/tcs-review` ends, each change the reviewer made to a case is offered back as one line: what was changed, and the pattern it suggests. The reviewer confirms, rewords or refuses each one; nothing lands unasked
-- **Confirmed lines land under the narrowest scope that fits** — the capability's section unless the reviewer says it holds wider: domain, product, platform, or the whole store
+- **A confirmed line applies everywhere** — it lands under `## Store-wide` by default. Only a line that cannot hold everywhere — it names one domain's vocabulary or one capability's surface — is scoped narrower, and then the review says why and asks the reviewer which scope
 - **Refused lines land under `## Refused`** — the next review reads that section and does not offer the same pattern again
 - **One line per convention** — `- <YYYY-MM-DD>, <suite path>: <the pattern, as a rule>`. A line that needs an example names an approved case id rather than pasting one
 - **Narrower wins** — a capability line beats a store-wide one for that capability's suites
 - **It refines how, never what** — a convention cannot add coverage, loosen "mechanism is yours, coverage is the spec's", licence an invented label, or overrule the contract; a line that contradicts [`specs-to-test-cases.md`](specs-to-test-cases.md) is reported and the contract followed
 - **A convention that must hold everywhere is a contract** — it moves to `specs-to-test-cases.md` with a rules revision, and leaves this file
-- **`actual` and `deprecated` cases are never restyled to it** — a manual `actual` case only on the reviewer's yes, an `automated` one never
+- **A confirmed line applies at once** — when the review that confirmed it ends: to the reviewed file, its remaining drafts and its `actual` cases still `manual`; and to every other suite in the same domain folder, its `actual` cases still `manual`, unasked, in its own commit, skipping a suite with an open `tcs-review/*` branch or pull request. A suite outside the domain takes it at its next generation or review. The pull request's description lists every case it changed; the conversation does not
+- **`automated` and `deprecated` cases are never restyled to it** — an `automated` case changes only with its behaviour, a `deprecated` one never
 
 ## Store-wide
 
