@@ -95,6 +95,7 @@
  * `check:manual` and the manual already carry.
  */
 
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -203,6 +204,24 @@ function deltaFiles(changeId) {
       .slice(specs.length + 1)
       .replaceAll("\\", "/"),
   }));
+}
+
+/** Runs the trace handover check from this checkout against the store the
+ * preflight is inspecting. It is only needed when the change carries a trace
+ * case marker: ordinary suites have no transitional graph to preserve. */
+function traceFoldFailure(changeId) {
+  const script = join(HERE, "scripts", "test-traceability", "trace.mjs");
+  const result = spawnSync(
+    process.execPath,
+    [script, "fold", "--change", changeId, "--store-root", ROOT],
+    { encoding: "utf8" },
+  );
+  if (result.status === 0) return null;
+  const output = [result.stdout, result.stderr]
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+  return output || result.error?.message || `trace fold exited ${result.status}`;
 }
 
 /** The `## <name>` sections of one delta the fold would discard, with the
@@ -708,6 +727,7 @@ const uncarried = [];
 const wrong = [];
 const anchorless = [];
 const suitesSeen = new Set();
+let carriesTraceCase = false;
 
 for (const { file, capability } of deltaFiles(changeId)) {
   const delta = readFileSync(file, "utf8");
@@ -828,6 +848,8 @@ for (const { file, capability } of deltaFiles(changeId)) {
     }
 
     const delta = readFileSync(source, "utf8");
+    if (name === "feature-tcs.md" && delta.includes("<!-- trace:case"))
+      carriesTraceCase = true;
 
     // `## Settled` is a legal part of the next blind pass's isolated input:
     // what earlier readings asked and had answered. Left behind, the same
@@ -862,6 +884,16 @@ for (const { file, capability } of deltaFiles(changeId)) {
           what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
         });
     }
+  }
+}
+
+if (carriesTraceCase) {
+  const traceFailure = traceFoldFailure(changeId);
+  if (traceFailure !== null) {
+    wrong.push({
+      capability: "traceability",
+      what: `trace handover validation failed:\n${traceFailure}`,
+    });
   }
 }
 

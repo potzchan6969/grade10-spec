@@ -415,9 +415,45 @@ const DURABLE = {
   [`${CAP}/feature-tcs.md`]: SUITE,
 };
 
+const TRACE_SCENARIO = `<!-- trace:scenario id=g10.auction-listing-media.SC-001 rev=1 -->
+#### Scenario: listing-SC-04 - Search lists matching cards
+
+**Serves:** listing-US-01
+`;
+const TRACE_CASE = `<!-- trace:case id=g10.auction-listing-media.TC-002 rev=1 covers=g10.auction-listing-media.SC-001 -->
+### listing-US1-TC1-1: Search lists matching cards
+`;
+
 test("a change whose sections all landed is clear", () => {
   const result = run(sandbox(CARRIED, DURABLE).root, ...SHIPPED);
   assert.equal(result.status, 0);
+});
+
+test("refuses a traced case handover whose durable marker changed", () => {
+  const tracedChange = {
+    ...CARRIED,
+    [`specs/${CAP}/spec.md`]: PURPOSE + FEATURE_SET + REQUIREMENTS + TRACE_SCENARIO,
+    [`specs/${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
+  };
+  const tracedDurable = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
+  };
+
+  const clear = run(sandbox(tracedChange, tracedDurable).root, ...SHIPPED);
+  assert.equal(clear.status, 0, clear.stderr);
+
+  const changed = {
+    ...tracedDurable,
+    [`${CAP}/feature-tcs.md`]: (SUITE + "\n" + TRACE_CASE).replace(
+      "rev=1",
+      "rev=2",
+    ),
+  };
+  const refused = run(sandbox(tracedChange, changed).root, ...SHIPPED);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /trace handover validation failed/);
+  assert.match(refused.stderr, /\[case-mismatch\]/);
 });
 
 // `rounds.md`'s own carry is checked after the archive exists, by
