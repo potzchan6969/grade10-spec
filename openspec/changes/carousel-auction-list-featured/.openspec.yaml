@@ -7,8 +7,6 @@ hands:
   tech: "@mason5991"
   qa: "@mason5991"
   dev: "@mason5991"
-awaiting:
-  specs: requirement deltas and feature-tcs landing with closed design states
 landed_by:
   ui-design: mason5991
   proposal: mason5991
