@@ -1,6 +1,6 @@
 ---
 name: spec-to-tcs
-description: Write classified test cases from the anchors - a capability's feature-tcs.md as a blind pass that never reads the scenarios, or a domain's domain-tcs.md, a product's product-tcs.md, or the store's cross-product platform-tcs.md. Use when QA or a PM asks to turn a durable capability, a domain, or an OpenSpec change into test cases, or when a change's specs are finished and auto-generate suites. Invoke as /spec-to-tcs [platform|product|domain|feature] <target>.
+description: Internal test-case generator for planning-dev's isolated QA1 pass and suite refreshes - writes feature-tcs.md without reading scenarios, or derives domain, product and platform suites. Use only from planning-dev or an explicit suite refresh. Invoke as /spec-to-tcs [platform|product|domain|feature] <target>.
 ---
 
 # Generating Test Cases
@@ -10,8 +10,10 @@ workflow, automated. It holds the format, the vocabularies, the review
 lifecycle, and every rule this skill points at by section name in bold. Where
 the two differ, the document is correct.
 
-Invoke as `/spec-to-tcs [platform|product|domain|feature] <target>`. Reviewing
-a suite and moving its cases to `actual` is `/tcs-review`'s job
+Invoke as `/spec-to-tcs [platform|product|domain|feature] <target>`. For a
+change's initial feature cases, planning-dev calls this internally as QA1; it
+does not ask a human to approve or execute those draft cases. Human QA review
+and execution after implementation is `/tcs-review`'s job
 (`.claude/skills/tcs-review/SKILL.md`). Manual "peer review" is deprecated.
 
 ## A feature run is blind
@@ -343,8 +345,9 @@ author. Never write them into the suite instead.
 
 ## What happens to this suite next
 
-On a feature run inside `/workflow-specify`, the scenarios are being drafted in
-parallel by a sub-agent that cannot see this file. When both land, the caller
+On a feature run inside `/planning-dev`, Dev drafts scenarios independently in
+a fresh context that cannot see this file. QA2 compares both drafts on the same
+anchors. When both land, the caller
 joins them on anchors and writes a `## Reconciliation` section at the bottom of
 this suite: what was raised and folded into the spec, what was raised and
 rejected and why, what was escalated to the author, what was deferred because

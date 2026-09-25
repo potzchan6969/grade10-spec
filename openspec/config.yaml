@@ -1,7 +1,8 @@
 # The one workflow every change in this store records. AGENTS.md documents
-# it; the planning-pm, planning-qa, planning-design and planning-dev skills
-# under .claude/skills/ draft it, one per hand. Engineering reads and checks
-# off the plan from grade10, which points here with `store: grade10-spec`.
+# it; planning-pm writes the proposal, decisions and journeys, planning-design
+# adds optional UI design, and planning-dev runs QA1, Dev, QA2, acceptance and
+# publication as one planning invocation. Engineering implements and checks
+# off the accepted plan from grade10, which points here with `store: grade10-spec`.
 schema: grade10-planning
 
 # Project context (optional) - shown to AI when creating artifacts.
@@ -16,10 +17,10 @@ context: |
   (the compound components a spec names), `@grade10/i18n` (message catalogs).
   A component or token change is work here, in packages/design-system/,
   packages/ui/, or apps/preview/ (page assemblies supplying their own state).
-  Readers: the PM or designer writing proposal, specs, journeys and feature
-  suites, then stopping; QA reviewing those and deriving the wider suites; the
-  designer writing ui-design; the engineer writing tech-design and tasks; and
-  the engineer in grade10 building from it all.
+  Readers: the PM or designer writing proposal, decisions, journeys and optional
+  UI design; then one planning-dev invocation using isolated QA1, Dev and QA2
+  contexts to write and reconcile the remaining plan; one human accepts the
+  complete contract before implementation; human QA reviews after deployment.
   openspec/specs/ is the only source of every checkable requirement and
   component export contract; a change is the delta against it. A capability
   is openspec/specs/<product>/<domain>/<capability>/, and its id is that path.
@@ -44,16 +45,16 @@ context: |
 # Per-artifact rules (optional)
 rules:
   proposal:
-    - "Start with `**Author** - @handle, YYYY-MM-DD` above `## Why`. Ask for the handle. It names the creator and never changes; task-group owners in tasks.md are separate."
-    - "Keep every standard proposal section. Use compact titled bullets as `**Term** - detail`; retain every material decision, format, boundary and metric while removing only repetition and implementation detail owned by the specs or tech design."
-    - "Interview the author first with the `grilling` skill (`.claude/skills/grilling/SKILL.md`), as `.claude/skills/planning-pm/SKILL.md` says: find repository facts yourself, bring only decisions, challenge each answer before recording it, and draft once the frontier is empty. A deferred question goes under the proposal's open questions with who settles it."
+    - "Start with `**Author** - @handle, YYYY-MM-DD` above `## Why`. Ask for the handle; it never changes and differs from task owners."
+    - "Keep standard proposal sections. Use `**Term** - detail`; retain material decisions, boundaries and metrics, omitting repetition and implementation detail owned by specs or tech design."
+    - "Interview with `grilling` as `planning-pm` directs: research facts, bring decisions, challenge answers, then draft when settled. Put a deferred question in the proposal with its owner."
     - "Include a metric that would move if this change works."
     - "Mark the PRDs the change touches before the deltas. A change carrying a 🚧 line cannot also claim `skip_specs`, and `skip_specs: true` owes a `skip_specs_why` beside it."
   specs:
-    - "Two passes over one `spec.md`, with the blind suite between them: `## Purpose` and `## Feature set` first, then the suite, then the requirements. Both are `planning-qa`'s, or `planning-dev`'s on a change the engineer authored; the PM and the designer hand over and review. `check:manual`'s `outline` rule is the machine evidence of that order."
+    - "`/planning-dev` freezes journeys and feature-set roots as anchors. Isolated contexts run QA1 blind draft cases without scenarios, Dev technical design and scenarios, then QA2 reconciliation. An anchor change invalidates both readings and restarts them fresh. The same human resolves questions and accepts once."
     - "Write `## Purpose` only when the text composed from the durable Purpose and the PRD differs from the durable one. When written it replaces that Purpose whole, for an existing capability as much as a new one."
     - "Feature set root group names are machine-read anchors. Rename one deliberately and update every `**Serves:**` and `**Trace:**` naming it in the same change. Leaves carry no ids."
-    - "The fold carries `## Requirements` only. Archive copies Purpose, the feature set and `user-journeys.md` into the durable capability by hand."
+    - "`pnpm spec:accept` publishes accepted requirements and records the immutable accepted artifact snapshot before implementation. Archive preserves history after implementation verification and does not fold requirements again."
     - "Scenario heading: `#### Scenario: <product>-<domain>-<capability>-SC-<n> - <title>`. The prefix is the capability path with slashes as hyphens, so two capabilities of one name stay apart. Number from 01; an issued id is permanent - a removal retires it, nothing renumbers it, and a renamed or moved capability keeps issuing its first prefix."
     - "Every scenario carries `**Serves:** <anchor> - <prose>` under its heading and above GIVEN/WHEN/THEN. Three anchors resolve: this capability's journey id, another capability's as `<path>#<journey-id>`, or a Feature set root group matched verbatim - the group only for a rule with no actor, and its prose names the walk rather than the group. Several anchors are written as code spans, because a group name may hold a comma."
     - "Every `###` under a requirements section is a `### Requirement:` - never a group heading: the fold absorbs it into the requirement above, and an ATX `## Group` ends the section and drops every requirement after it."
@@ -68,7 +69,7 @@ rules:
     - "The schema instruction holds the rules; `pnpm check:manual` enforces the role, the `**Walked by:** nobody` routing declaration, the verbatim context copies and every anchor."
     - "Journey ids are `<capability prefix>-US-<n>`, permanent and never renumbered. There is no `**Accepted by:**` line, and no cap on the number of journeys."
   test-cases:
-    - "`docs/governance/specs-to-test-cases.md` governs the shape. Draft with `spec-to-tcs` as a blind pass against the anchors, never from the scenarios. `test-cases.md` is not a suite name."
+    - "`docs/governance/specs-to-test-cases.md` governs the shape. QA1 drafts blind cases from frozen anchors, never scenarios. New cases stay draft; preserve existing metadata. Human QA reviews after deployment with `tcs-review`; execution uses `tcs-run-sheet`."
   ui-design:
     - "Schema + `planning-design`: Figma link, exact exports, flag missing work, `## States` as one State / Shows / Anchor row per state for the requirements pass to close."
   tech-design:
@@ -87,8 +88,8 @@ operations:
       - "Commit to the current branch as tasks complete, atomically, per AGENTS.md § Pull Requests and Commits."
   archive:
     guidance:
-      - "Archive only after engineering confirms the change is deployed, not when the code merges. `.claude/skills/openspec-archive-change/SKILL.md` and `pnpm run archive:preflight <change>` carry the steps."
+      - "Archive after engineering verifies implementation and records `implementation.json`, before deployment. `.claude/skills/openspec-archive-change/SKILL.md` and `pnpm run archive:preflight <change>` carry the steps."
       - "Never archive with an unchecked task: finish it, or append its disposition (dropped, moved where, blocked on what) to the task text. A change that never grew a tasks.md is archived once its specs are confirmed deployed."
-      - "Copy the change's `## Purpose` where it wrote one, its `## Feature set` and its `user-journeys.md` into the durable capability by hand - the fold carries `## Requirements` alone, and a written Purpose replaces the durable one whole. Leave a one-line tombstone under the durable journeys' `## Retired` for every removed journey, and never delete the journey outright: archived suites still trace its id. Carry an approved `feature-tcs.md` beside the spec and a `domain-tcs.md` into the domain directory the same way, stripping the scenario ids from its `## Reconciliation` as you go and carrying its `## Settled` across whole - that section is what stops the next blind pass raising a reading this one already refused. Re-read the folded specs and confirm they describe the shipped behaviour. `pnpm run archive:preflight` reads all six of these and refuses while any is undone."
+      - "The accepted contract is already durable. Preserve the immutable accepted snapshot and acceptance/implementation records with the archived change; do not copy or fold requirements again. Leave a one-line tombstone under the durable journeys' `## Retired` for every removed journey, and never delete the journey outright: archived suites still trace its id. Preserve QA1/QA2 reconciliation history in the archived suite. `pnpm run archive:preflight` checks archive readiness."
       - "Put the decisions that outlive the change on the capability's PRD, in its `Product decisions` block, before archiving. `decisions.md` is folded nowhere: it archives with the change, and a rejected option readable only under `openspec/changes/archive/` is one the blind suite pass may not read, so the question returns next quarter answered the other way. `archive:preflight` asks for `--decisions-carried \"<what went where>\"`, or `none` where nothing outlived it."
-      - "Update the capability's PRD to what shipped before archiving - take the 🚧 marks off the lines this change delivered - and run `pnpm check:manual`."
+      - "After implementation verification and before archiving, take 🚧 marks off the lines this change delivered and run `pnpm check:manual`. Track deployment availability separately; human QA review and any manual execution happen after deployment."

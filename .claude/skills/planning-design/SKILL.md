@@ -23,7 +23,7 @@ it — the interview ([Round Summary and Landing](../../../docs/governance/round
 the PRD marks, the proposal, the decisions, the journeys.
 Its description says "a product manager or a designer" for this reason. Run it
 rather than working from memory, and stop where it stops: `spec.md` is not that
-lane's to write, in your hands any more than the PM's. `/workflow-specify` writes its
+lane's to write, in your hands any more than the PM's. `/planning-dev` writes its
 outline from your journeys and your marks, and the design reference is what
 makes those groups name what exists.
 
@@ -167,7 +167,7 @@ requirements. Leave them alone; they are not yours to fill in ahead of the pass,
 and a state you argue with is a conversation with that hand rather than an edit.
 
 **Never a scenario id.** The whole of `spec.md` is written after this file, by
-`/workflow-specify`, and `pnpm check:manual` refuses an id the store issues nowhere.
+`/planning-dev`, and `pnpm check:manual` refuses an id the store issues nowhere.
 The tie still does its work: a scenario serves the anchor your state named, so
 your edge case reaches the requirements rather than restating them.
 
@@ -194,7 +194,7 @@ move it off the planning board. Only `tasks.md` does.
 
 - `planning-pm` — your own lane on a new change, and the journeys your states
   hang off on somebody else's.
-- `planning-qa` — the scenarios written after yours, serving the same anchors.
+- `planning-dev` — the technical design, scenarios and tasks; QA1 and QA2 run in that same invocation.
 - `planning-dev` — the plan that carries the component and copy work you flagged.
 - `page-from-figma` — converting a drafted screen into composed code.
 - `design-system-primitives`, `design-tokens`, `design-sync-check` — the rails

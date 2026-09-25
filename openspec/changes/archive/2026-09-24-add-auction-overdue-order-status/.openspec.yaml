@@ -5,6 +5,4 @@ depends_on:
   - close-overdue-address-confirmation
 reviewed:
   user-journeys: a39351cc
-deployed_at: "415c3d657c936dbbec936b8ac49425b59a0e4ba9"
-deployed_env: "staging"
 decisions_carried: "post-bidding, bidding, auction-record and management product records"

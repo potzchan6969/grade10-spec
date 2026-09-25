@@ -6,7 +6,10 @@ order: 2
 
 How every artifact of a change is written: you say what is wanted, the
 change's agent drafts it and has the draft challenged, you answer what only
-you can, and your word lands it. Where a change stands is
+you can, and your word lands it. Planning uses one isolated QA reading before
+an independent Dev reading, then a reconciliation. One human resolves every
+open question and accepts the plan. Human QA reviews the implemented change
+after implementation is complete. Where a change stands is
 [Change Stages](change-stages); the artifacts are [How we plan](/guides/how-we-plan).
 
 ## The Round
@@ -39,16 +42,20 @@ One round per artifact, and one per task group while the change is building.
 - 🚧 **Sized by what it touches** — the simpler-thing reader runs on every
   round; a perspective joins only when the draft touches what it reads for; one
   reader verifies itself
-- 🚧 **The blind readings are their own challenge** — the requirements and the
-  cases are two readings of the same journeys, reconciled after both are
-  written, then read by the simpler thing like every other draft; what they
-  cannot settle stops on the product manager
+- 🚧 **QA1, Dev, QA2** — QA1 writes feature cases from the frozen anchors and
+  cannot read requirements, scenarios, raw Dev output or reconciliation; Dev
+  then independently writes the technical design, requirements, scenarios and
+  tasks from the same anchors; QA2 reads both outputs and reconciles coverage,
+  testability, task coverage and technical contradictions
+- 🚧 **One human resolves every question** — the same named human answers all
+  product questions QA2 raises before accepting the plan; a remaining question
+  holds acceptance
 - 🚧 **About three questions** — the first round asks what changes what is
   built, none of it trivial, one question whether to do it now, and lists the
   rest it decided as decided by the round
-- 🚧 **QA is asked when the requirements land** — the landing that puts the
-  suite up for review is a move to QA, and the walk needs it reviewed as its
-  input
+- 🚧 **No human QA before implementation** — planning leaves cases in draft
+  and does not set an execution verdict; human QA reviews after implementation
+  is complete, using a deployed environment where the check needs one
 
 ## Your Moves
 
@@ -159,8 +166,8 @@ An artifact is drawn from what is before it, the page's marks first.
 - 🚧 **The run sheet keeps what only staging proves** — a case the walk
   automates is marked so, and the run sheet leaves it out
 - 🚧 **One pass over the whole** — after the last group, one reader argues the
-  simpler shape for the whole change before it goes to staging; the archive
-  holds a change on the round to that row and to the last group's walk row
+  simpler shape for the whole change before implementation is recorded; the
+  archive holds a change on that reading and on the last group's walk row
 - 🚧 **Written, not run** — a group whose lane the environment could not start
   says so first in its row and keeps its tasks unticked
 - 🚧 **The record takes the application repository** — a group's repository
@@ -208,14 +215,14 @@ propose, and that every step passes through layers of checks. The brief is
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
 | Who drafts | Decided | The change's agent drafts every artifact from the proposal to the code; a person answers, remarks and lands. | Product, Engineering |
-| Challenge and verify | Decided | Every draft is read by named perspectives and each finding verified before a person sees it; the blind readings are their own challenge and reconciliation, and the simpler thing reads what they reconciled. | Product, QA, Engineering |
+| Challenge and verify | Decided | QA1 writes the blind cases; Dev independently writes design and requirements; QA2 reconciles their outputs; the simpler-thing reader checks each draft. | Product, QA, Engineering |
 | Questions | Decided | Numbered rows in the change's decisions, or `❓` lines on the page, with a recommendation; a question the round decides holds nothing, and a held question holds the landing until it is answered or waved through. | Product |
 | Read again | Decided | A landing reads every artifact after it, in order; 🚧 what moved and is major holds a landing and the fold, what is small only the fold, never a tick. | Product, Engineering |
 | Round size | Decided | The simpler-thing reader on every round; a reader whose subject the artifact is - the tech PIC's readings on the tech design, QA on the plan and every task group, the build's readings on a group that lands code - on every round of it; the others when the draft touches what they read for; no waiver. | Engineering |
 | The record | Decided | One row per round in the change, archived with it; a landing or a tick without its row is refused from the change's first landing on, and on every change once the old skills go. | Engineering |
-| The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards every deploy and cut. | QA, Engineering |
+| The walk | Decided | The last group demonstrates the journeys end to end and leaves the suite that guards each deployment and release. | QA, Engineering |
 | Runner | Decided | A custom Slack app, the relay in this repository and a hosted Routine; the relay checks the word before `main` moves and says when a run did not finish. | Operations, Engineering |
-| Who is asked, and when | Decided | Each hand reads a message that is theirs; QA on the landing that puts the suite up for review; the product manager on any line a build round puts on their page. | Product, QA |
+| Who is asked, and when | Decided | Each hand reads a message that is theirs; one human resolves all planning questions before plan acceptance; QA performs human verification only after implementation is complete; the product manager answers any line a build round puts on their page. | Product, QA |
 | The interview's size | Decided | About three questions, none trivial, that change what is built, one whether to do it now; the rest listed as decided. | Product |
 | Verified together | Decided | One verifier over a round's readings; a round of one reader verifies itself. | Engineering |
 | The record's paths | Decided | A group's repository tag says where its paths live, and the landing resolves them in the application clone beside it, so every row lands through the command. | Engineering |

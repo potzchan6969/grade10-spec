@@ -1,3 +1,5 @@
+> Workflow history: the acceptance and availability lifecycle in [PRDs and OpenSpec](../governance/prd-and-openspec.md) supersedes this draft's staging, release, and archive sequence.
+
 # Delivery Workflow Blueprint
 
 The owner's brief for the way a change moves from a product idea to a
@@ -140,7 +142,7 @@ change's agent drafts and the hand of the phase lands.
 | 2 | UI design | Proposes the screens and the states from the page and the journeys, challenged and verified | Designer: tweaks, lands | `ui-design.md`; a Storybook story per state, shown on the PRD | Every state has a story, or `ui_waived` says there is no surface |
 | 3 | Tech design | Proposes the system, the data flow and the rejected options, challenged against the principles | Tech PIC: challenges, lands | `tech-design.md` with charts; the engineer block links it | A design, or `design_waived` |
 | 4 | Implementation | Two blind readings reconciled; the plan; each group built test first, audited and verified; the walk | PM reads the requirements; engineer reads the plan and each landing | `spec.md`, `feature-tcs.md`, `tasks.md`, `rounds.md`, code and E2E on `main` | Every box ticked and the journeys walked |
-| 5 | Staging and release | The deploy, the run sheet, the cut | QA walks; release hand cuts | `deployed_env`, the run tab, `released_in`, the tag | Released, then archived |
+| 5 | Staging and release | The deploy, the run sheet, the cut | QA walks; release hand cuts | deployment receipts, the run tab, optional release tags | Released, then archived |
 
 Two loops leave the line:
 
@@ -173,8 +175,8 @@ set by hand.
 | 3 | Specified | `spec.md` with requirements; `feature-tcs.md`; every Raised row landed | Two blind readings, reconciled | PM: read the requirements and the cases together | Engineer, `/workflow-tasks <change>` |
 | 4 | Planned | `tasks.md`; `promoted_by`; `landed_by` | Writes the plan, challenged for order, tests first and size | Engineer: read the summary | Engineers, `/workflow-build <change> <group>` |
 | 5 | Building | Boxes ticking through `pnpm plan done`; a `rounds.md` row per group | Builds each group test first, audited and verified; the walk last | Engineer: read each landing | The deploy, on every green push |
-| 6 | On staging | Every box ticked; `deployed_env: staging` | The deploy; the run sheet, automated cases left out | QA: walk it | Release hand, `/release` |
-| 7 | Released | `released_in: <tag>` | The cut | Release hand: cut | Whoever archives, `/archive <change>` |
+| 6 | On staging | Verified component availability in staging | The deploy; the run sheet, automated cases left out | QA: walk it | Release hand, `/release` |
+| 7 | Released | A release tag | The cut | Release hand: cut | Whoever archives, `/archive <change>` |
 | 8 | Archived | The directory under `archive/`; the fold; the marks off | The fold | Whoever archives | — |
 
 Every stage from Proposed to Building wears the agent mark with the hand's
@@ -465,9 +467,9 @@ thread, and the change's stage says what happens:
 | Staging | `main`, on every green push |
 | Production | The `production` branch, fast-forward only, one tag per deploy |
 | Tag | ❓ `vYYYY.MM.DD`, a `.n` suffix for a second cut or a hotfix; the release hand confirms |
-| Cut | `pnpm release cut [sha]`: fast-forward, tag, deploy the preview, smoke suite, promote; `released_in` on every change carried |
+| Cut | `pnpm release cut [sha]`: fast-forward, tag, deploy the preview, smoke suite, promote; the release record names every change carried |
 | Hotfix | `pnpm release hotfix <tag>`: branch from the tag, fix, tag `<tag>.n`, deploy, merge into `main`; never a migration |
-| Record | `pnpm plan released <change> <tag>` writes `released_in:`; the archive reads it |
+| Record | The deployment system records the release tag; the archive does not read it |
 
 ### Migrations
 

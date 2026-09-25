@@ -247,10 +247,10 @@ test("shared-planning-change-stages-SC-70 - landedText names what landed, whose 
   );
 });
 
-test("shared-planning-change-stages-SC-70 - landedText names a role the change has no hand for as open", () => {
+test("shared-planning-change-stages-SC-70 - landedText names an unassigned implementation-complete role as open", () => {
   const line = landedText(
     at("probe", {
-      stage: "on-staging",
+      stage: "implementation-complete",
       roles: ["qa", "release"],
       hands: { qa: "hana" },
     }),
@@ -259,7 +259,7 @@ test("shared-planning-change-stages-SC-70 - landedText names a role the change h
 
   assert.equal(
     line,
-    "*Landed* — `tasks` by @erin · now at *On staging* · your turn: @hana (QA), release hand (open)",
+    "*Landed* — `tasks` by @erin · now at *Implementation complete* · your turn: @hana (QA), release hand (open)",
   );
 });
 

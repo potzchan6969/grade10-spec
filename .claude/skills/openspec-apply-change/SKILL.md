@@ -5,7 +5,7 @@ description: Implement the tasks in an approved OpenSpec change while preserving
 
 # Apply an OpenSpec change
 
-1. Read the change proposal, design, tasks, the affected capability in `openspec/specs/`, and the capability's PRD in `docs/prds/` before editing.
+1. Read `acceptance.json`, the accepted artifact snapshot for the change's fingerprint, its proposal, design and tasks, the latest affected capability in `openspec/specs/`, and the capability PRD before editing. The accepted snapshot sets this change's scope. When a later acceptance has advanced the durable spec, keep this scope intact and check implementation compatibility with the latest durable contract.
 2. Implement the smallest pending task.
 3. If an implementation choice changes required behavior, write it on the PRD first — a 🚧 line for the new outcome, ❓ for what nobody has confirmed — then update the delta spec before continuing. A choice that changes no outcome — a mechanism, a key, a metric — stays in `tech-design.md` and the architecture doc; the PRD's engineer block is a code map of names and links. Update the PRD's `Product decisions` block only when the product decision behind it changed.
 4. For design-system primitives, use `design-system-primitives`; run `pnpm run design-sync:check` and `pnpm run test:stories:design-system`.

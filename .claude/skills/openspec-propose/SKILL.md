@@ -26,20 +26,20 @@ goals, or inside a non-goal, is the artifact disagreeing with the change. A
 designer maps 4 onto the journeys where the change has a surface, working from
 them and the PRD rather than a `spec.md` nobody has written yet.
 
-**5 belongs to whoever takes the readings** - `/planning-qa`, or
-`/planning-dev` on a change an engineer authored - and neither the PM nor the
-designer opens it. That run writes its outline first, has the PM read the
-groups, then runs two independent readings from them: 6, blind to the
-scenarios, then 5's requirements, reconciled against it. Neither 5 nor 6 names a teammate or sits on
-a worklist - the PM reviews 5, QA reviews 6 later with `/tcs-review`. A
-capability nobody walks still carries 6, anchored on its feature set rather than
-its journeys.
+**5 through 8 are written in one `/planning-dev` invocation** after the PM's
+and designer's artifacts are ready. QA1 writes blind draft cases from the
+outline, Dev writes technical design and scenarios in a separate fresh context,
+and QA2 reconciles the two against the frozen anchors. The invoking human
+answers questions and accepts the complete plan once; the accepted contract is
+published before implementation. Neither 5 nor 6 asks for an initial human QA
+approval. Human QA reviews and executes the cases after deployment with
+`/tcs-review`. A capability nobody walks still carries cases anchored on its
+feature set rather than its journeys.
 
-**Write your part and stop.** Each role adds its artifacts to the one change;
-nobody opens a second one, and an implementation plan invented ahead of the
-person who will execute it is worse than none. A change with no `tasks.md`
-reads as still being planned on both boards — that is the handoff signal, and
-it is the only one.
+**Write your part and stop.** The PM adds the proposal, decisions and journeys;
+the designer adds UI design where needed. Then `/planning-dev` plans delivery
+and accepts the contract in one run. Implementation starts from the published
+durable spec, not from a pending planning delta.
 
 Take `planning-pm` when the change does not exist yet: the proposal, the
 decisions and the journeys are where every change starts.

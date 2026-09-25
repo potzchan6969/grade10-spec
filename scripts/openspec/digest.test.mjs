@@ -174,10 +174,18 @@ function week() {
     "openspec/changes/dep-done/.openspec.yaml": [
       "schema: demo-planning",
       "created: 2026-10-01",
-      "released_in: v1.2",
       "",
     ].join("\n"),
     "openspec/changes/dep-done/proposal.md": proposalOf("Dep done"),
+    "openspec/changes/dep-done/acceptance.json": JSON.stringify({
+      version: 1,
+      change: "dep-done",
+      baseline: "fixture",
+      fingerprint: "sha256:fixture",
+      reviewedBy: "dana",
+      acceptedAt: "2026-10-08T00:00:00Z",
+      artifacts: [],
+    }),
     "openspec/changes/freed-it/.openspec.yaml": [
       "schema: demo-planning",
       "created: 2026-10-01",
@@ -462,11 +470,11 @@ test("shared-planning-change-stages-SC-36 - the workflow's cache key names the w
     // read different ISO weeks: the key follows the digest's.
     "2027-01-11T00:30:00+08:00",
   ]) {
-    const shell = execFileSync("date", ["-d", at, format[1]], {
-      encoding: "utf8",
-      env: { ...process.env, TZ: zone[1] },
-    }).trim();
-    assert.equal(shell, weekOf(Date.parse(at)), at);
+    // GitHub's Ubuntu runner evaluates this command. BSD `date` on a
+    // developer workstation has no GNU `-d`, so keep the unit test portable:
+    // assert the workflow's ISO-week format and the one shared calculation.
+    assert.equal(format[1], "+%G-W%V");
+    assert.match(weekOf(Date.parse(at)), /^\d{4}-W\d{2}$/, at);
   }
 });
 

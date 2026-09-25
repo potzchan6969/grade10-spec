@@ -1,30 +1,14 @@
 ---
 name: workflow-tasks
-description: Run a round on a change's tasks.md - the delivery plan, grouped by layer, test task first and claimed group by group. Use when a change's requirements and cases are on main and delivery needs planning. Invoke as /workflow-tasks <change>.
+description: Route implementation planning to the integrated planning-dev invocation, which writes tasks after scenarios and before acceptance. Invoke as /workflow-tasks <change>.
 ---
 
-# The Plan's Round
+# Task Planning Route
 
-**The artifact:** `tasks.md`, drawn from everything before it, then `spec.md`
-and `feature-tcs.md`. Until it exists both boards read the change as still
-being planned.
+`/workflow-tasks <change>` routes to
+[`planning-dev`](../planning-dev/SKILL.md). Dev writes `tasks.md` after the
+technical design and scenarios, then QA2 checks it with the cases and scenario
+coverage before the human accepts the complete plan.
 
-**The rules:** `planning-dev` and
-[`docs/governance/task-ownership.md`](../../../docs/governance/task-ownership.md) -
-the group and owner format two repositories parse - plus:
-
-```bash
-openspec instructions tasks --change <change>
-```
-
-Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
-landing and the re-read.
-
-## What the Round Adds Here
-
-- **The plan's rules have one home** — the group's test task, the walk that
-  closes the plan and the repository tag on every group are the instruction's
-  rules, printed by the command above and held by
-  `scripts/openspec/tasks-template.test.mjs`; the template is the example
-- **`pnpm run plan:preflight <change>`** — run it before editing a plan
-  engineering is already implementing
+Do not start a separate task-planning round. Human QA review and execution
+follow implementation through [`tcs-review`](../tcs-review/SKILL.md).

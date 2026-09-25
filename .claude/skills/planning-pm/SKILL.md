@@ -1,6 +1,6 @@
 ---
 name: planning-pm
-description: Write the product manager's half of an OpenSpec change - the proposal, the decisions the interview settled, and the user journeys - then hand the change on to /workflow-specify, which writes spec.md, and answer what its two readings escalate. Use when a PM or designer is specifying a change, and stop before spec.md.
+description: Write the product manager's half of an OpenSpec change - proposal, decisions and journeys - then hand it to the single /planning-dev run for blind cases, technical design, scenarios, tasks and acceptance. Use when a PM or designer is specifying a change.
 ---
 
 # The product manager's artifacts
@@ -41,31 +41,30 @@ Storybook, `packages/design-system`, `packages/ui`, `packages/i18n` - over with
 them, so the outline is written against the inventory rather than an imagined
 one. `planning-design` routes here for that, and holds what the reference is.
 
-**You do not open `spec.md`.** Both of its passes belong to the run that takes
-the two readings - `/workflow-specify`, under `planning-qa`'s rules. Neither `spec.md`
-nor `feature-tcs.md` names a teammate in the schema: they sit on nobody's
-worklist, and you read them rather than write them.
+**You do not open `spec.md` or generate the feature suite.** They belong to
+the one `/planning-dev` run, which freezes your anchor groups, gets QA1 blind
+cases, writes scenarios in a separate Dev context, then reconciles both in QA2.
+You can be the same human who answers planning questions and accepts the final
+plan; acceptance happens once after the artifacts are complete.
 
 | Generated | File | Whose run |
 | --- | --- | --- |
-| `specs` — pass one | `specs/<capability>/spec.md` | `/workflow-specify`: `## Purpose` and `## Feature set`, from your journeys and your 🚧 lines |
-| `test-cases` | `specs/<capability>/feature-tcs.md` | `/workflow-specify`: a blind suite, drafted without sight of the scenarios |
-| `specs` — pass two | `specs/<capability>/spec.md` | `/workflow-specify`: the requirement deltas and their scenarios, reconciled against that suite |
+| `specs` — pass one | `specs/<capability>/spec.md` | `/planning-dev`: `## Purpose` and `## Feature set`, from your journeys and your 🚧 lines |
+| `test-cases` | `specs/<capability>/feature-tcs.md` | `/planning-dev`: QA1's blind draft cases, written without sight of scenarios |
+| `specs` — pass two | `specs/<capability>/spec.md` | `/planning-dev`: Dev's requirement scenarios, reconciled with QA1 cases in QA2 |
 
-Generated is not unreviewed. **You are the reader of record** for all three,
-and all three come back together. The root groups trace to your own 🚧 lines
-and every anchor downstream hangs off them, so you read them beside the
-scenarios and the suite built on them rather than on their own - the run does
-not stop to have the outline read. `/workflow-specify` stops at every contradiction
-it cannot settle, and those stops are yours to answer.
+The planning agents review their generated artifacts internally. **You are
+the human who clarifies unresolved questions and accepts the complete plan**;
+acceptance is not inferred from your earlier planning input or a generated
+review. The root groups trace to your own 🚧 lines and every anchor downstream
+hangs off them. `/planning-dev` stops at every contradiction it cannot settle,
+and those stops are yours to answer.
 
-**Stop at the journeys.** `/workflow-specify` writes the outline, then runs the two
-readings from it. A designer writes `ui-design.md` unless you already had the
-design, and the engineer who picks the change up writes `tech-design.md` and
-`tasks.md` - on this same change, never a second one. A change with no
-`tasks.md` reads as still being planned on both boards; that is the handoff
-signal, and it is the only one, so say the change needs picking up rather than
-assuming someone will find it.
+**Stop at the journeys.** Invoke `/planning-dev <change>` once the proposal,
+decisions and journeys are settled, and the UI design is ready where needed.
+That run writes the technical design, scenarios, tasks and case reconciliation,
+resolves questions with the same human, then accepts and publishes the contract
+before implementation. No separate QA or engineering planning handoff follows.
 
 The PRD under `docs/prds/` is yours to keep whole. Everyone writes on it - a
 designer's state, an engineer's constraint, a QA case that exposes a rule nobody
@@ -183,43 +182,24 @@ Everything this run produces is `draft`. Nothing in it claims review.
    what the manual's reader needs in the PRD, and an implementation choice in
    `tech-design.md`.
 
-6. **Leave `spec.md` alone.** Its outline is written by the run that takes the
-   readings, out of the journeys you just wrote and the 🚧 lines you marked,
-   and those two are the whole of what it has to go on - which is the reason
-   step 3 comes before step 5 rather than after it. Half the **anchor set** is
-   already fixed by the time you stop: the capability's full journey set once
-   this change folds, which `/workflow-specify` unions with the root groups it
-   derives. Those groups come back with the scenarios, not ahead of them: the
-   run goes straight from the outline to the readings. Read them there, against
-   your own 🚧 lines.
+6. **Hand the settled scope to planning-dev.** Once the proposal, decisions,
+   journeys and any required UI design are ready, run `/planning-dev <change>`.
+   That single run writes the spec outline and freezes anchors, then takes QA1,
+   independent Dev drafting and QA2 reconciliation through acceptance and
+   publication. You do not write the outline, cases, scenarios or tasks here.
 
-7. **A chain that stops here owes a wait line.** What is drafted has journeys
-   and no `spec.md` at all, and a change with no delta is one both gates refuse
-   without a line saying why: write `awaiting:` with
-   `specs: <what is still to come>` in the change's `.openspec.yaml`.
-   `validate:changes` then reports the change as waiting rather than failing
-   it, and the wait is not read as over until the requirements land.
-   `/workflow-specify` deletes the line as the requirements land.
+7. **Answer raised questions in the same planning run.** The invoking human may
+   also be the PM, engineer or designer. Product questions go on the PRD or in
+   `decisions.md` first; technical and case dispositions stay in their own
+   artifacts. Resolve every question that can change the accepted contract or
+   delivery plan before acceptance. If the anchor set changes, planning-dev
+   restarts the independent readings with fresh isolated contexts.
 
-   A requirement nobody can decide yet is the same line for a different
-   reason - a wait, not a guess - and it stays after `/workflow-specify` has run.
-
-8. **Answer what the readings escalate.** `/workflow-specify` pauses on a case
-   nobody ever decided, and on two readings that state opposite things. Those
-   pauses are grilling rounds, and they are yours: the run does not settle a
-   product question, and a ❓ on the PRD is how one that nobody present can
-   settle gets recorded. Read the scenarios against your journeys when they come
-   back - generated is not unreviewed, and you are the reader of record.
-
-9. **Land every raised row.** The blind pass writes what the input did not
-   settle into your `decisions.md`, under `## Raised` - `Capability | Raised |
-   Landed` - with `Landed` empty. Each one closes as a `Decisions` row in that
-   same file, or as a ❓ on the capability's PRD naming who owes the answer.
-   There is no third resting place, and `pnpm check:manual` refuses a row that
-   names neither, so the artifact does not land with the pass's findings
-   unread. A row you escalate or defer is also written into the suite's
-   `## Reconciliation`, with its answer in `## Settled`: `decisions.md`
-   archives with the change and is folded nowhere.
+8. **Accept once, then publish.** The complete planning output is accepted with
+   `pnpm spec:accept` after `pnpm accept:preflight` passes. Acceptance records
+   the reviewer's identity and publishes requirements to the durable specs;
+   it does not approve or execute QA cases. Human QA runs after deployment makes
+   the implementation available.
 
 ## Escape hatches
 
@@ -254,7 +234,7 @@ grilling round, not a self-service waiver.
 | A question the interview settled, and what it dropped | `decisions.md`'s `Decisions` table |
 | A question the blind pass could not settle | `decisions.md`'s `## Raised` table, landed before the requirements do |
 | A question nobody present could settle | The proposal's open questions, and a ❓ on the PRD |
-| Anything testable | The delta spec, and nowhere else - `/workflow-specify` writes it, you check it |
+| Anything testable | The accepted spec - `/planning-dev` writes it and publishes it |
 | Who walks it | `user-journeys.md` beside that spec |
 | Why this problem, for whom, what was ruled out, what will be measured | The PRD's `Product decisions` block |
 | How it will be built | `tech-design.md` - not yours |
@@ -262,8 +242,8 @@ grilling round, not a self-service waiver.
 ## Related
 
 - `grilling` - the escalation pauses in steps 8 and 9.
-- `planning-qa` - `spec.md`, both passes, and the two readings taken from your
-  journeys and marks.
-- `spec-to-tcs` - the blind pass and the isolated input it builds.
+- `planning-dev` - QA1 blind cases, technical design, scenarios, tasks, QA2,
+  acceptance and publication as one run.
+- `spec-to-tcs` - the internal generator planning-dev uses for QA1.
 - `prd-authoring` - for the product judgment a requirement will not preserve.
 - `planning-design`, `planning-dev` - the artifacts that come after yours.

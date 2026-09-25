@@ -7,7 +7,7 @@ description: Run a round on the product manager's three artifacts of a change - 
 
 **The artifacts:** `proposal.md`, `decisions.md` and
 `specs/<capability>/user-journeys.md`, in that order. They stop there: the
-requirements are `/workflow-specify`'s.
+planning and acceptance are `/planning-dev`'s.
 
 **The rules:** `planning-pm` - the interview, the PRD marks, what each file
 holds and where a statement belongs - plus, as you reach each artifact:
@@ -46,7 +46,7 @@ change**, and nothing beyond them is restated here:
 | Proposed or Designed, and the sentence is another hand's | Writes a held row on its product manager: extend, recommended |
 | Specified or Planned | Writes a held row on its product manager: extend where the moved part is smaller than a task group of work, split otherwise |
 | Building | Writes a held row on its product manager: split, recommended; supersede where the sentence contradicts what is built |
-| On staging, Released or Archived | Opens a new change, with `depends_on:` naming it |
+| Implementation complete or Archived | Opens a change with `depends_on:` |
 
 Where no change overlaps, or where the row above opens a new change, what the
 sentence opens:

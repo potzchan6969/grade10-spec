@@ -209,11 +209,6 @@ const RECORD_KEYS = [
   "landed_by",
   "reviewed",
   "thread:",
-  "released_in",
-  "deployed_at",
-  "deployed_env",
-  "deployed_build",
-  "deploy_waived",
   "round_waived",
   "tasks_waived",
 ];

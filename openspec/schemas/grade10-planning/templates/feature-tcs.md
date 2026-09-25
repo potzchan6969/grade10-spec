@@ -13,9 +13,9 @@
      from the scenarios, because a suite derived from them cannot find what
      they left out. The shape below is fixed by
      docs/governance/specs-to-test-cases.md - follow that document rather than
-     this sketch where the two ever part. Generate the draft with the
-     spec-to-tcs skill, review it with tcs-review, and check it with
-     `pnpm run tcs:validate`. -->
+     this sketch where the two ever part. Generate draft cases in QA1 within
+     planning-dev, reconcile with QA2, and check with `pnpm run tcs:validate`.
+     Human QA uses tcs-review after implementation is deployed and available. -->
 
 <!-- <capability> is the capability's path with slashes as hyphens:
      grade10-site/store/product-listing issues

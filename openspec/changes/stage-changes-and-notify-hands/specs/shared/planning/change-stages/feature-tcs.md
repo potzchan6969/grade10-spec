@@ -1,7 +1,7 @@
 # shared/planning/change-stages Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-19, tcs-rules r3.0
+**Drafts styled:** 2026-09-25, tcs-rules r3.0
 
 **Out of suite:**
 
@@ -234,7 +234,7 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * No digest reaches <release handle>.
 * <pm handle>'s digest arrives as usual.
 
-### shared-planning-change-stages-US1-TC8-1: Staging tells the release hand its turn
+### shared-planning-change-stages-US1-TC8-1: Implementation completion tells QA its turn
 
 **Classification:**
 
@@ -250,17 +250,17 @@ admin(product manager) <pm handle> holds <change B> at its current stage, owes t
 * **Trace:** shared-planning-change-stages-US-01
 
 **Pre-conditions:**
-<change R> is at Building with every task box ticked. <qa handle> is its `qa` hand and <release handle> its `release` hand, both known to the team map. <change R> has a thread.
+<change R> is at Building with every task box ticked. <qa handle> is its `qa` hand, known to the team map. <change R> has a thread.
 
 **Steps:**
 
-1. Land `deployed_env: staging` and `deployed_build: 1.4.0-rc2` for <change R> on `main`.
-2. Read <release handle>'s direct messages.
+1. Land an `implementation.json` entry naming <change R>'s accepted fingerprint, repository commit and components on `main`.
+2. Read <qa handle>'s direct messages.
 3. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* <release handle> holds one Your turn message naming <change R>, the stage On staging and the thread.
+* <qa handle> holds one implementation-complete message naming <change R>, its accepted fingerprint and the thread.
 * <qa handle> holds one staging message naming <change R>, the run sheet and build `1.4.0-rc2`.
 * Each of the two holds one message for that move, not two.
 
@@ -777,7 +777,7 @@ admin(product manager) has <change U> on `main` with a malformed record the stor
 **Decided by:** `tools/manual/test/stage-change-page.test.tsx`
 
 **Pre-conditions:**
-<change H> is at On staging, carrying `deployed_env: staging` with no `deployed_build:`.
+<change H> is at Implementation complete with an availability receipt whose resolved ref is unknown.
 
 **Steps:**
 
@@ -1562,13 +1562,13 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 
 ---
 
-## shared-planning-change-stages-US8: QA learns a change has reached staging
+## shared-planning-change-stages-US8: QA verifies a completed implementation
 
 **As a** QA teammate,
-**I want** to be told when a change reaches staging, with the run sheet,
-**so that** the manual pass starts the day it deploys.
+**I want** to receive the accepted implementation identity and run sheet after implementation is complete,
+**so that** I verify the built components and record the suite's verdict.
 
-### shared-planning-change-stages-US8-TC1-1: Staging tells QA with the run sheet
+### shared-planning-change-stages-US8-TC1-1: Implementation completion tells QA
 
 **Classification:**
 
@@ -1584,25 +1584,26 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is at Building with every task box ticked. <qa handle> is its QA hand and the team map knows it. The run sheet exists in the store.
+<change R> has an accepted fingerprint, all tasks are ticked, and `implementation.json` names one reachable repository commit and two concrete application component ids. <qa handle> is its QA hand and the run sheet exists.
 
 **Steps:**
 
-1. Land `deployed_env: staging` and `deployed_build: 1.4.0-rc2` for <change R> on `main`.
+1. Land the completed implementation record for <change R> on `main`.
 2. Read <qa handle>'s direct messages.
 3. Read <change R>'s card at <manual board url>.
 
 **Expected Results:**
 
-* One direct message names <change R>, the stage On staging, build `1.4.0-rc2`, and links the run sheet and its thread.
-* The card sits in the On staging lane.
+* One direct message names <change R>, Implementation complete, the accepted fingerprint, both components, the run sheet and its thread.
+* The card sits in the Implementation complete lane.
+* The case suite remains draft until QA records a verdict after verification.
 
-### shared-planning-change-stages-US8-TC2-1: Staging names the run sheet with no tab written for the change
+### shared-planning-change-stages-US8-TC2-1: Planning acceptance does not ask for human QA
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** blocker
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
@@ -1613,19 +1614,20 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change S> is at Building with every task box ticked, <qa handle> as its QA hand, and no tab written in the run sheet for <change S>.
+<change S> is Accepted with no implementation target, every Raised row is resolved, and <qa handle> is named.
 
 **Steps:**
 
-1. Land `deployed_env: staging` for <change S> on `main`.
+1. Read <change S>'s card and case-suite status.
 2. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* The message names <change S>, the stage On staging and the run sheet.
-* The message says nothing about a tab, and the thread link is shown.
+* The card stays in Accepted.
+* The suite remains draft and has no human execution verdict.
+* No implementation-complete message reaches <qa handle>.
 
-### shared-planning-change-stages-US8-TC3-1: Ticked boxes alone do not reach staging
+### shared-planning-change-stages-US8-TC3-1: Ticked boxes alone do not complete implementation
 
 **Classification:**
 
@@ -1641,20 +1643,19 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is at Building with every task box ticked and no `deployed_env:` on the change.
+<change R> is Building with every task ticked but has no complete `implementation.json` record for the accepted fingerprint.
 
 **Steps:**
 
-1. Navigate to <manual board url>.
-2. Read <change R>'s card.
-3. Read <qa handle>'s direct messages.
+1. Read <change R>'s card.
+2. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* The card stays in the Building lane.
-* No staging message reaches <qa handle>.
+* The card stays in Building.
+* No implementation-complete message reaches <qa handle>.
 
-### shared-planning-change-stages-US8-TC4-1: A second staging deploy tells QA once
+### shared-planning-change-stages-US8-TC4-1: Replaying implementation completion tells QA once
 
 **Classification:**
 
@@ -1670,24 +1671,24 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> sits at On staging and <qa handle> was told once.
+<change R> is Implementation complete and <qa handle> was told once for its accepted fingerprint.
 
 **Steps:**
 
-1. Deploy <change R> to staging again, leaving `deployed_env: staging` in place.
+1. Replay the same implementation record and push range.
 2. Read <qa handle>'s direct messages.
 
 **Expected Results:**
 
-* <qa handle> holds one staging message for <change R>, not two.
-* The card stays in the On staging lane.
+* <qa handle> holds one implementation-complete message for that fingerprint, not two.
+* The card stays in Implementation complete.
 
-### shared-planning-change-stages-US8-TC5-1: A deploy recording no build reads as before
+### shared-planning-change-stages-US8-TC5-1: Archive does not wait for a deployment receipt
 
 **Classification:**
 
-* **Severity:** normal
-* **Priority:** medium
+* **Severity:** major
+* **Priority:** high
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
@@ -1698,19 +1699,19 @@ admin(engineer) holds <change M> at Building. <tech handle> is its tech PIC and 
 * **Trace:** shared-planning-change-stages-US-08
 
 **Pre-conditions:**
-<change R> is at Building with every task box ticked, <qa handle> as its QA hand.
+<change R> has an accepted fingerprint and a matching implementation record with reachable application commits and exact component ids. No GitHub Deployment receipt exists yet.
 
 **Steps:**
 
-1. Land `deployed_env: staging` for <change R> on `main`, with no `deployed_build:`.
-2. Read <qa handle>'s direct messages.
+1. Run archive preflight for <change R>.
+2. Archive the verified change.
+3. Read its change detail.
 
 **Expected Results:**
 
-* The message names <change R>, the stage On staging and the run sheet.
-* The message names no build.
-
----
+* Archive preflight succeeds without a deployment receipt.
+* The change is Archived and its accepted fingerprint is unchanged.
+* No second fold is run.
 
 ## shared-planning-change-stages-US9: Hand learns an artifact of theirs is behind
 
@@ -1872,9 +1873,107 @@ Runs once per row of **Test data**.
 * The digest reads as the row states.
 * The behind chip on the card is unchanged either way.
 
+
+## shared-planning-change-stages-US12: Product manager reads component availability
+
+**As a** product manager,
+**I want** each application's status in each environment to link to its deployment receipt, component and testing page,
+**so that** I know what people can test or use after a change is archived.
+
+### shared-planning-change-stages-US12-TC1-1: Component status uses the receipt
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-12
+
+**Pre-conditions:**
+A change has two application components with receipts in <environment>. The receipt evidence covers Newly, Still, No longer, Partial, Unknown and Stale states across those components.
+
+**Steps:**
+
+1. Open `/availability` and select <environment>.
+2. Open the change detail for the same change.
+3. Follow each component's receipt, deployed-ref, component, manual and QA links.
+
+**Expected Results:**
+
+* Each component shows the status derived from its GitHub Deployment receipt.
+* Both surfaces agree on status, receipt freshness and resolved deployed ref.
+* Each component provides its receipt, URL, manual, QA and friendly testing-summary links.
+
+### shared-planning-change-stages-US12-TC2-1: Manual refresh uses the same receipt and deduplicates a replay
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-12
+
+**Pre-conditions:**
+A GitHub Deployment receipt changes one application's status in <environment>. The manual refresh has read the receipt.
+
+**Steps:**
+
+1. Open `/availability` and the change detail.
+2. Replay the same receipt event and refresh the manual.
+3. Read both manual surfaces again.
+
+**Expected Results:**
+
+* Both manual surfaces show the same component status, receipt and QA links.
+* The replay creates no duplicate availability record.
+* The change's stage does not change because availability changed.
+
+### shared-planning-change-stages-US12-TC3-1: Archived changes keep their environment history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-planning-change-stages-US-12
+
+**Pre-conditions:**
+<change T> is archived and has a deployment receipt for one application component in <environment>.
+
+**Steps:**
+
+1. Open `/availability` and search for <change T>.
+2. Open <change T>'s archived detail.
+3. Read its component receipt and testing summary.
+
+**Expected Results:**
+
+* Both surfaces show the archived change and its latest per-component status.
+* The receipt links to the actual deployed ref and environment.
+* The stage remains Archived.
+
+
 ## Settled
 
-None yet - the first blind pass.
+2026-09-25 product revision: QA1 cases precede Dev's independent requirements and scenarios; QA2 reconciles the two; one human resolves all questions before acceptance. Human QA follows implementation. The receipt cases cover component availability independently of the stage and remain visible after archive. This revision extends the earlier blind pass; it is not represented as a new blind reading.
 
 ## Reconciliation
 
@@ -1894,11 +1993,11 @@ Run: 2026-09-19, blind pass over the isolated input: the outline (Purpose and Fe
 - `shared-planning-change-stages-US7-TC4-1`, the pip carrying the stage number so no colour carries the meaning alone → `shared-planning-change-stages-SC-65`
 - `shared-planning-change-stages-US4-TC3-1`, a hand taken off a change showing the hand as open → `shared-planning-change-stages-SC-42`
 
-Five cases went the other way: the rulings settled behaviour no case walked, so the suite gained one case each.
+Five cases went the other way in the earlier pass: the rulings settled behaviour no case walked, so the suite gained one case each. The 2026-09-25 accepted revision supersedes the staging cases with implementation and availability coverage.
 
-- `shared-planning-change-stages-US1-TC8-1`, the release hand told its turn at staging, `Q18` → `shared-planning-change-stages-SC-45`
+- `shared-planning-change-stages-US8-TC1-1`, QA told after implementation completion, `Q81` → `shared-planning-change-stages-SC-45`
 - `shared-planning-change-stages-US2-TC9-1`, a record nothing can read shown in Proposed with its hands open, `Q23` → `shared-planning-change-stages-SC-03`
-- `shared-planning-change-stages-US2-TC11-1`, the delivery row naming no build when the deploy records none, `Q68` → `shared-planning-change-stages-SC-76`
+- `shared-planning-change-stages-US12-TC1-1`, per-component environment statuses and receipt links, `Q84` → `shared-planning-change-stages-SC-83`
 - `shared-planning-change-stages-US4-TC6-1`, a hand taken off a change telling the role's channel once, `Q25` → `shared-planning-change-stages-SC-42`
 - `shared-planning-change-stages-US6-TC4-1`, a wait written with no date shown undated, `Q20` → `shared-planning-change-stages-SC-21`
 
@@ -1909,14 +2008,14 @@ Five cases went the other way: the rulings settled behaviour no case walked, so 
 
 ### Escalated
 
-- On staging names two hands: is one message sent to each, or only to QA? → `Q18`
+- Implementation complete names QA: is it reached before a deployment receipt? → `Q81`
 - What does a message link before the change has a thread? → `Q19`
 - An `awaiting:` line with no date or no artifact named: shown, or refused? → `Q20`
 - Are the idle bounds inclusive: the chip at 7 days, the shelf at 30? → `Q21`
 - Does idle count calendar days or working days, and on which clock? → `Q21`
 - Is a 🚧 line whose change has archived left marked, or refused? → `Q22`
 - Does a change whose record the check refuses show with its hands open, or stay off the board? → `Q23`
-- Is `deployed_env: staging` enough for On staging on its own? → `Q24`
+- Does an implementation-complete change need a deployment receipt before archive? → `Q83`
 - Is the role's channel told when a hand is removed while the change sits on them? → `Q25`
 - Is "once per move" keyed for the life of the change, or per entry? → `Q26`
 - Does the weekly digest reach a handle the team map does not know? → `Q27`
@@ -1963,4 +2062,4 @@ What stays manual after the walk (task 8.3/8.5), and why.
 - **US5-TC2-1, US5-TC3-1** — one reads the direct messages a stage that did not move does not send, the other removes a waiver and pushes; neither is a browser's to drive, and `change-page-half-designed.walk.ts`'s `SC-08` decides the page's own half of `US5-TC2-1`'s first row alone — the design still owed while the other is waived
 - **US6** — `board-overlays.walk.ts`'s and `change-page-waits.walk.ts`'s `SC-21` walk the dated-and-undated pair, on the card and on the change page, and each case still needs something past them: `US6-TC1-1`'s and `US6-TC3-1`'s direct messages, `US6-TC2-1`'s three dated lines beside a change carrying none, and `US6-TC4-1`'s own change sitting at Building rather than Proposed
 - **US7-TC2-1** — an archived change's line wearing no pip has no fixture to reach it (`section-pip.walk.ts`'s own header names why); `test/section-pip.test.tsx` proves it at the block level instead
-- **US8, US9** — the run sheet, the digest and "no tick, claim or wait while behind" all read outside the rendered manual; `US9-TC1-1` and `US9-TC2-1` each turn on a direct message, so `board-overlays.walk.ts`'s `SC-26` decides their card's own half alone — the chip naming the earliest of two behind artifacts and its hand; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's
+- **US8, US9, US10** — the run sheet, the digest, deployment receipts and "no tick, claim or wait while behind" read outside the rendered manual; `US9-TC1-1` and `US9-TC2-1` each turn on a direct message, so `board-overlays.walk.ts`'s `SC-26` decides their card's own half alone — the chip naming the earliest of two behind artifacts and its hand; `US9-TC3-1`'s and `US9-TC4-1`'s refusals are the record reader's and the archive check's to prove, not a walk's

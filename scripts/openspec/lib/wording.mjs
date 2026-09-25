@@ -113,36 +113,13 @@ export function yourTurnText(at, role, linked) {
   return lines.join("\n");
 }
 
-/** QA reaches staging to walk a pass, so QA's message names the sheet, and
- * the build the deploy recorded where the record carries one (`Q68`): QA
- * walks one tagged build, and a message that names none leaves them asking. */
-export function stagingText(linked, { sheetUrl, build } = {}) {
-  const sheet = sheetUrl
-    ? `<${sheetUrl}|the run sheet>`
-    : // No per-change run tab exists in the store to link (decisions Q39), so
-      // an unconfigured sheet is named in words rather than as a dead link.
-      "the run sheet";
-  const where = build ? `on staging, build \`${build}\`` : "on staging";
-  return `*On staging* — ${linked} is ${where}. Walk ${sheet}.`;
-}
-
 /**
  * The body one hand of a stage is sent, and which of the two it is.
  *
- * The rule is part of the message, so it lives with the words: QA reaches
- * staging to walk a pass, so QA's own message names the run sheet, and every
- * other hand of that stage - the release hand - gets the ordinary Your turn
- * (decisions Q18). The kind rides back because the caller keys the message by
- * it; written a second time anywhere, the manual and Slack would differ about
- * which sentence a hand was sent.
+ * Deployment availability has its own evidence path. This message is only
+ * about the change's planning or implementation stage.
  */
 export function toldBodyOf(at, role, { linked, sheetUrl }) {
-  if (at.stage === "on-staging" && role === "qa") {
-    return {
-      kind: "staging",
-      text: stagingText(linked, { sheetUrl, build: at.deployedBuild }),
-    };
-  }
   const lines = [yourTurnText(at, role, linked)];
   // QA at Specified is asked to review the suite: the message names each
   // suite's path and case count, and says the walk needs it reviewed

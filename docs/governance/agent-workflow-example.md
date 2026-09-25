@@ -1,153 +1,122 @@
-# A change from proposal to archive, with an agent
+# A change from proposal to archive
 
-The commands one feature takes in `grade10`, from the first sentence to the
-archive: cross-sell on a card's page. Every command here is real. The feature
-itself, and what each hand says, is
-[Working a change](../prds/guides/working-a-change.md).
+This example follows one change in `grade10`, from the product brief through
+acceptance, implementation, verification, and archive. The product example is
+cross-sell on a card's page. See [Working a change](../prds/guides/working-a-change.md)
+for its product detail.
 
-## Where You Run This
+## Open the Change
 
 Everyone works in `grade10`, including PM and design. Its `openspec/` is
-config-only with `store: grade10-spec`, so every `openspec` command run there —
-`new change`, `status`, `instructions`, `validate` — prints
-`Using OpenSpec root: grade10-spec (…)` and writes into your store clone at its
-absolute path; the files it creates and the commits against them are the store clone's.
+config-only with `store: grade10-spec`. OpenSpec commands run from the app
+resolve to the store clone, where the change, durable specs and acceptance
+records live.
 
-- **The line commands live in the store clone.** A terminal run from `grade10`
-  reads `/workflow-plan`, `/workflow-design`, `/workflow-tech`,
-  `/workflow-specify`, `/workflow-tasks`, `/workflow-build` and
-  `/workflow-land`, the `workflow-round` skill, the schema's perspectives and
-  the reader definitions under `.claude/agents/` from the clone you add with
-  `/add-dir` — never from the submodule directory pinned to an older sha,
-  because a round read from a pin is held to last month's rules. `grade10`
-  ships its own skills (`tdd`, `testing-lanes`, and others), and those stay
-  its own
-- **`openspec instructions <artifact> --change <name>` substitutes for the
-  per-artifact rules, and for nothing else** — the same project context, that
-  artifact's rules and its template. The round, its readers and the landing are
-  the store clone's, so a session without it can draft an artifact and cannot
-  land one
-- **The rules are not commands.** `planning-pm` and `planning-dev`, which
-  `/workflow-plan`, `/workflow-tech` and `/workflow-tasks` load, carry every
-  artifact's rules; `planning-design` and `planning-qa` are
-  `/workflow-design`'s and `/workflow-specify`'s. Nobody types them
-- **An agent in `grade10` reads that repository's `AGENTS.md`**, not this
-  store's — what this store expects arrives with the skills and the
-  instructions read from the clone
-- **There is never a second change to open in `grade10`** — it has no
-  planning shape of its own to hold one
-- **Without Slack, the terminal is the whole line.** Every command below runs
-  the same round and lands the same way whether or not the Slack app, the
-  relay and the Routine are up: `/workflow-land` pushes `main` from your
-  terminal on the handle the team map gives your git e-mail, and the push
-  workflow posts the landing in the channel and in the change's thread, as it
-  does for every push. What Slack adds is the message that says it is your
-  turn, which `NOTIFY_DMS` gates, and a reply in the thread that wakes a run,
-  which the relay makes — [Each Way In](../prds/guides/working-a-change.md#each-way-in)
+Give the agent the store clone before drafting. Never edit the submodule pinned
+inside the app repository; it may be an older SHA and the change would be
+invisible to the store tools.
 
-### Give the Agent the Store Clone, and Only the Store Clone
-
-The CLI writes its own files from `grade10` untouched. Drafting is different: the
-agent writes `proposal.md` and the delta specs itself, into a path *outside*
-`grade10`. Add the store clone to its working directories first, or every write stops for a prompt:
-
-```bash
-/add-dir <path-to-your-store-clone>    # the one you registered, e.g. ../grade10-spec
-```
-
-To stop doing that every session, put it in `grade10`'s `.claude/settings.local.json`
-— local, because the path is per-machine and that file is gitignored. `openspec store list` prints the path to use:
-
-```json
-{
-  "permissions": {
-    "additionalDirectories": ["/absolute/path/to/your/grade10-spec"],
-    "deny": ["Edit(./external/grade10-spec/**)"]
-  }
-}
-```
-
-**Do not let it write to `external/grade10-spec/`.** That submodule is the same
-upstream repository at the SHA this repo pins, with a complete `openspec/` tree,
-inside the project root, so writing there draws no permission prompt — and a
-proposal written into it validates, reads correctly, and is invisible to the store,
-to `pnpm plan`, and to everyone else. If your agent cannot reach the store clone, fix the working directory; the `deny` entry above closes the trap.
-
-## The PM Lane
-
-**1. Say what is wanted.** One message to the app in the planning channel, or
-the same sentence after `/workflow-plan` in a terminal:
+The PM starts with one brief:
 
 ```text
-/workflow-plan cross-sell on a card's page: the products we pick per card in Shopify
-first, then similar cards by the tags and the facets they share, up to six.
-Customers-also-bought from orders is phase two, once this ships.
+/workflow-plan cross-sell on a card's page: complementary products picked per
+card in Shopify first, then similar cards by tags and shared facets, up to six.
+Customers-also-bought from orders is phase two.
 ```
 
-The run opens the change: `add-store-cross-sell`, `schema: grade10-planning`,
-the branch `claude/add-store-cross-sell`, `hands: pm: @ecchochan`, and the
-thread that message started. The capability is
-`grade10-site/store/cross-sell`, new, beside a delta on
-`grade10-site/store/product-page` for the rail's place on the page. Nobody
-creates the change by hand; a directory made by hand records nothing at all.
+The planning command creates a `grade10-planning` change, then writes the
+proposal, decisions and journeys. The capability is
+`grade10-site/store/cross-sell`, with a delta on
+`grade10-site/store/product-page` for the rail's placement. The PM answers the
+interview questions and records the decisions. A designer adds `ui-design.md`
+when the change alters a user-facing surface.
 
-**2. Read what it drafted.** The summary and the numbered questions are replies
-in that thread, and nothing has landed —
-[the sentence](../prds/guides/working-a-change.md#pm--the-sentence).
+## Plan and Accept
 
-**3. Answer, then land.** `Q1: Shopify`, `Q2: no cart`, then `land`, which puts
-the three files on `main` in order and tells the designer and the tech PIC —
-[the first word](../prds/guides/working-a-change.md#pm--the-first-word).
+Run `/planning-dev add-store-cross-sell` once the PM and designer artifacts are
+ready. The run fixes the anchor set, which combines the full journey set with
+the root groups of `## Feature set`.
 
-## The Engineer Lane
+1. **QA1** - A fresh isolated agent reads the approved planning input and writes
+   blind draft cases. It cannot read requirements, scenarios, technical design,
+   QA2 output or archived changes.
+2. **Dev** - A separate fresh agent writes `tech-design.md`, the requirement
+   scenarios and `tasks.md`. It does not see QA1's cases until this independent
+   draft is complete.
+3. **QA2** - A fresh reviewer compares cases and scenarios against the same
+   anchors, records each disposition in `feature-tcs.md`, and raises unsettled
+   questions. If an answer changes anchors, discard both readings and restart
+   them with fresh contexts. Other edits get a fresh QA2 comparison.
 
-**4. Pick it up, and plan the delivery.** The board in `grade10` shows it
-waiting, and `/workflow-tasks add-store-cross-sell` picks it up as @your-handle so
-`promoted_by` lands in the change's `.openspec.yaml` —
-[the plan, then the build](../prds/guides/working-a-change.md#engineer--the-plan-then-the-build).
+The same human answers questions that affect the product, design or plan. After
+the run resolves every such question, check and accept the completed artifacts:
 
 ```bash
-pnpm plan
-# add-store-cross-sell   no tasks.md yet — still being planned
+pnpm accept:preflight add-store-cross-sell
+pnpm spec:accept add-store-cross-sell --baseline <printed-fingerprint> --reviewed-by <human>
 ```
 
-**5. Claim and build.** A group can be claimed only once its `tasks.md` is on
-`main`, and `sync` refuses a store clone on any branch but `main`; then
-`/workflow-build add-store-cross-sell 1`, once per group —
-[the plan, then the build](../prds/guides/working-a-change.md#engineer--the-plan-then-the-build).
+Acceptance records the reviewer, timestamp, baseline fingerprint, and artifact
+hashes in `acceptance.json`; it also publishes the requirements and companion
+artifacts into `openspec/specs/` before implementation. The accepted snapshot is
+the implementation target for this change. If another change has since
+published, check the latest durable spec for compatibility and keep this
+change's accepted scope. An amendment names the prior fingerprint with
+`--supersedes <old-fingerprint>` and keeps earlier accepted snapshots.
+
+New cases stay draft. Planning does not ask a human QA reviewer to approve or
+execute them. The same human's final acceptance covers the complete planning
+output, including QA1 and QA2.
+
+## Implement and Archive
+
+The application repository has no planning store of its own; it reads tasks and
+accepted contracts from this store. Claim and complete task groups there with
+`/workflow-build add-store-cross-sell <group>`, keeping checks and implementation
+commits linked to the accepted fingerprint.
+
+After engineering verification, record implementation provenance in the app
+repository:
 
 ```bash
-pnpm plan claim add-store-cross-sell 1
-pnpm plan sync
+pnpm plan implementation add-store-cross-sell --commit <sha> --component <deploy-component>
 ```
 
-**6. Tick off after pushing, never before.** Each lands as a commit on this store's `main`, and the engineer's store clone is left untouched.
+The command writes `implementation.json` with the accepted fingerprint, repo
+commit and concrete deploy component. Archive the change after this verification
+and before deployment:
 
 ```bash
-pnpm plan done add-store-cross-sell 1.1 1.2
+pnpm run archive:preflight add-store-cross-sell
+pnpm openspec archive add-store-cross-sell
 ```
 
-**7. Archive once deployed**, not when the code merges.
-`pnpm run archive:preflight add-store-cross-sell` prints what still refuses and
-names `openspec archive add-store-cross-sell` as the step after it —
-[staging, the cut, the fold](../prds/guides/working-a-change.md#qa--release-hand--staging-the-cut-the-fold).
+Archive preserves the accepted and implementation records. It does not fold
+requirements into durable specs a second time and does not wait for deployment.
+Deployment availability is tracked separately. After deployment makes the
+implementation available, human QA reviews the cases with `/tcs-review` and
+uses `/tcs-run-sheet` for manual execution where needed. A QA classification is
+not a test result.
 
 ## Where This Goes Wrong
 
-- **Editing a live `tasks.md` from a stale clone.** Run
-  `pnpm run plan:preflight add-store-cross-sell` first; it refuses a stale or dirty
-  copy and prints the owners and counts you are about to edit on top of. It is a script in the store clone, not a `pnpm plan` subcommand — run it there
-- **Renumbering a claimed group.** A claim is recorded against a group number
-  and a checkmark against a task id, so renumbering repoints someone's claim
-  while every id still validates. Append instead
-- **A testable statement in the proposal or the PRD.** It belongs in the spec;
-  see [`prd-and-openspec.md`](prd-and-openspec.md)
-- **Asking the PM for a task list.** Their part finished at the journeys; pick
-  the change up and let `/workflow-tasks` draft the plan for your word
+- **Drafting from the pinned submodule** - give the agent the store clone and
+  edit only that clone.
+- **Changing an anchor after QA1 or Dev starts** - invalidate both readings and
+  restart them with fresh isolated agents.
+- **Accepting with open product or technical questions** - resolve them with
+  the same human before `pnpm spec:accept`.
+- **Treating a later durable spec as this change's scope** - implement the
+  accepted snapshot and check it for compatibility with the latest durable
+  contract.
+- **Waiting for deployment to archive** - archive after engineering
+  verification and before deployment; QA review follows when the application is
+  available.
 
 ## See Also
 
-- [Working a change](../prds/guides/working-a-change.md) — the feature end to end, the hand that lands each file, and how you know it is your turn
-- [`prd-and-openspec.md`](prd-and-openspec.md) — the lifecycle, and promotion in full
-- [`task-ownership.md`](task-ownership.md) — the `tasks.md` format both tools parse
-- [`ui-component-contracts.md`](ui-component-contracts.md) — before a public UI contract changes
+- [Working a change](../prds/guides/working-a-change.md) - artifacts, stages and
+  the human handoff
+- [PRDs and OpenSpec](prd-and-openspec.md) - sources of truth and lifecycle
+- [Task ownership](task-ownership.md) - parsed task-group and owner format
+- [UI component contracts](ui-component-contracts.md) - public component exports

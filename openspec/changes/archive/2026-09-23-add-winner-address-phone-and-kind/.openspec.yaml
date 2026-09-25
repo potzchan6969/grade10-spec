@@ -7,6 +7,4 @@ hands:
   tech: "@mason5991"
 reviewed:
   user-journeys: 7bf6a653
-deployed_at: "5656dd2045442e5efdd21658cb3523d2a51fb8f0"
-deployed_env: "production"
 decisions_carried: "Q1–Q15 soft phone, Personal/Company, locality, picker title/body, Order summary snapshot, and Raised closures → Post-Bidding Product decisions Phone on Add Address, Personal or company address, Add Address optional locality (Decided); billing country list parity stays Post-Bidding ❓"

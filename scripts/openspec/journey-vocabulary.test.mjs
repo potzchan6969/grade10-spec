@@ -14,7 +14,7 @@
  */
 import assert from "node:assert/strict";
 import { execFileSync } from "node:child_process";
-import { readFileSync } from "node:fs";
+import { existsSync, readFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
@@ -28,9 +28,14 @@ const BANNED = /user\s+stor(?:y|ies)/i;
 const TEXT = /\.(md|mts|ts|tsx|mjs|js|yaml|yml|json)$/;
 
 const tracked = () =>
-  execFileSync("git", ["ls-files"], { cwd: ROOT, encoding: "utf8" })
+  // The manual lifecycle fixtures are replaced as a coherent working-tree
+  // change. Read the files that exist now, including their replacement
+  // fixtures, rather than trying to open deleted entries still in Git's
+  // index while the suite is validating the migration.
+  execFileSync("git", ["ls-files", "--cached", "--others", "--exclude-standard"], { cwd: ROOT, encoding: "utf8" })
     .split("\n")
-    .filter((path) => path !== "" && path !== SELF && TEXT.test(path));
+    .filter((path) => path !== "" && path !== SELF && TEXT.test(path))
+    .filter((path) => existsSync(join(ROOT, path)));
 
 test("nothing in this store calls a journey a user story", () => {
   const found = [];

@@ -35,6 +35,7 @@ import {
   roundArtifactOf,
 } from "../../tools/manual/src/store/read-rounds.mts";
 import { fixPassFloor, planningSchema, SCHEMA } from "./lib/perspectives.mjs";
+import { verifyAcceptance } from "./lib/acceptance.mjs";
 import { readTextIfThere } from "./lib/read-text.mjs";
 import { perspectivesRefusals, roundsPath } from "./lib/rounds.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
@@ -221,6 +222,12 @@ export function main(root, strict, only) {
     if (main)
       for (const message of addedRowRefusals(root, main, item.id))
         left.push({ level: "ERROR", path: "rounds.md", message });
+    const acceptanceFile = join(changes, item.id, "acceptance.json");
+    if (existsSync(acceptanceFile)) {
+      const accepted = verifyAcceptance(root, item.id);
+      for (const message of accepted.errors)
+        left.push({ level: "ERROR", path: "acceptance.json", message });
+    }
     if (why !== undefined) waiting.push(`${item.id} — ${why}`);
     if (left.length > 0) {
       failed.push(

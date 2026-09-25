@@ -13,12 +13,11 @@ import type {
 } from "../../../tools/manual/src/api/types.ts";
 
 /** The change as a message reads it: the id a command is written with, the
- * stage the sentence names, the build the deploy recorded where the record
- * carries one, and the suites QA's turn at Specified names by path and case
- * count. */
+ * stage the sentence names and the suites QA's turn at Specified names by
+ * path and case count. */
 export type WordedChange = Pick<
   ChangeEntry,
-  "id" | "deployedBuild" | "suites"
+  "id" | "suites"
 > & { stage: Stage };
 
 /** The change as a landing reply reads it: the stage it is at now, the roles
@@ -60,15 +59,11 @@ export declare const yourTurnText: (
   role: Role,
   linked: string,
 ) => string;
-export declare const stagingText: (
-  linked: string,
-  options?: { sheetUrl?: string; build?: string },
-) => string;
 export declare const toldBodyOf: (
   at: WordedChange,
   role: Role,
   options: { linked: string; sheetUrl?: string },
-) => { kind: "your-turn" | "staging"; text: string };
+) => { kind: "your-turn"; text: string };
 export declare const behindText: (
   behind: WordedBehind,
   linked: string,

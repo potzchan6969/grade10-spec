@@ -4,8 +4,8 @@ Every group lands its tests in their own commit before its code, and its readers
 
 ## 1. The record's keys, the team map and the schema (grade10-spec)
 
-- [x] 1.1 Add `Role`, `Stage`, `OpenQuestion`, `BehindArtifact` and `TeamMap` to the manual's types, and the fields `hands`, `landedBy`, `reviewed`, `thread`, `uiWaived`, `releasedIn`, `lastLanded`, `questions` and `stage` to the change entry; nothing stores what is behind, which `behindOf` derives
-- [x] 1.2 Read `hands:`, `landed_by:`, `reviewed:`, `thread:`, `ui_waived:` and `released_in:` in the store's change reader, one handle per role and one content id per artifact id - `shared-planning-change-stages-SC-11`, `shared-planning-change-stages-SC-13`, `shared-planning-change-stages-SC-27`
+- [x] 1.1 Add `Role`, `Stage`, `OpenQuestion`, `BehindArtifact` and `TeamMap` to the manual's types, and the fields `hands`, `landedBy`, `reviewed`, `thread`, `uiWaived`, `lastLanded`, `questions` and `stage` to the change entry; nothing stores what is behind, which `behindOf` derives
+- [x] 1.2 Read `hands:`, `landed_by:`, `reviewed:`, `thread:` and `ui_waived:` in the store's change reader, one handle per role and one content id per artifact id - `shared-planning-change-stages-SC-11`, `shared-planning-change-stages-SC-13`, `shared-planning-change-stages-SC-27`
 - [x] 1.3 `waivedOf`: `ui_waived` stands for the UI design and `design_waived` for the tech design, beside what is written rather than counted as written, and the `awaiting` rule refuses a record that waives an artifact and writes a wait on it - `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-08`
 - [x] 1.4 Read `docs/prds/team.yaml` - one entry per handle with its e-mail, its Slack member and its roles, one channel per role - through `scripts/openspec/lib/team.mjs`, the one module the manual and the scripts both import, and write the first map - `shared-planning-change-stages-SC-18`
 - [x] 1.5 Move `tech-design` above `specs` in the planning schema, set its `requires` to `decisions` and `user-journeys`, add `upstream:` to every artifact, and carry `upstream` through `read-schema.mts` - `shared-planning-change-stages-SC-07`, `shared-planning-change-stages-SC-08`
@@ -34,7 +34,7 @@ Every group lands its tests in their own commit before its code, and its readers
 - [x] 3.6 The next action per stage in place of the four-lane one, read from `DRAFTED`'s command, and the page eyebrow naming the stage - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-58`
 - [x] 3.7 Component tests for every state `ui-design.md` lists for the board and the change page, the stepper below `sm` among them
 - [x] 3.8 On the pages on the change page, between the artifacts and the delivery: every section the change links under its page's title, each 🚧 and ❓ line as written and the ❓ with its hand, read through `marksOfPage` and `askedText` in `tools/manual/src/blocks/on-the-pages.tsx`, and the empty state where the change marks no section - `shared-planning-change-stages-SC-71`
-- [x] 3.9 The delivery row names the build the deploy recorded, `deployed_build:` read beside `deployed_env:` and shown as `staging · <tag>`; a record with no build reads as before - `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-76` (`Q68`)
+- [x] 3.9 Replace the delivery row with implementation identity and receipt-derived availability; a receipt with no resolved ref remains Unknown - `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-76` (`Q68`)
 
 ## 4. The record's rules and the gate at the fold (grade10-spec)
 
@@ -56,7 +56,7 @@ Every group lands its tests in their own commit before its code, and its readers
 
 - [x] 6.1 `changed-changes.mjs --stages`: one worktree of the push's base with its root passed explicitly, the store read there and in the checkout through the one reader, each moved change's stage, hands and behind set on both, the stage added to the channel post, an unreachable base failing the step, and no message computed for a push whose only record change is `reviewed:`, `thread:` or `landed_by:` - `shared-planning-change-stages-SC-40`, `shared-planning-change-stages-SC-47`
 - [x] 6.2 One direct message per new hand, the role's channel for an unnamed or a removed hand, the thread link or the change page, the command as text, and nothing to a handle the map gives no Slack member or the record rule refused - `shared-planning-change-stages-SC-14`, `shared-planning-change-stages-SC-18`, `shared-planning-change-stages-SC-41`, `shared-planning-change-stages-SC-42`, `shared-planning-change-stages-SC-43`
-- [x] 6.3 The Behind message to the hand of the earliest newly behind artifact, and the Staging message to QA naming the run sheet beside the Your turn message to the release hand - `shared-planning-change-stages-SC-44`, `shared-planning-change-stages-SC-45`
+- [x] 6.3 The Behind message to the hand of the earliest newly behind artifact, and the implementation-complete message to QA naming the run sheet - `shared-planning-change-stages-SC-44`, `shared-planning-change-stages-SC-45`
 - [x] 6.4 The five keys - `<change>:<stage>:<role>` for a turn, `<change>:behind:<artifact>` for an artifact, `<change>:landed:<head>` for the thread's landing reply, `channel:<head>` for the post and `<handle>:digest:<week>` for the digest - appended to the file `--sent-keys` names, restored and saved under the exact key `notify-sent-<run_id>` with no prefix fallback, so a re-run of one push sends nothing twice and a re-entered stage sends again; the script sends through the Slack API when told to - `shared-planning-change-stages-SC-36`, `shared-planning-change-stages-SC-37`, `shared-planning-change-stages-SC-38`, `shared-planning-change-stages-SC-39`
 - [x] 6.5 The push workflow: `actions/setup-node` at 24.14.1 with `pnpm install --frozen-lockfile`, `docs/prds/**` in its paths, the sent-key cache step, `vars.SLACK_PLANNING_CHANNEL_ID` and `vars.NOTIFY_DMS`, `contents: read` kept because nothing here commits, and a preflight step naming the unset secret or the missing workspace URL, the send reporting a channel the bot is not a member of
 - [x] 6.6 The digest: `digest.yml` on `cron: "0 1 * * 1"` behind `vars.DIGEST_ENABLED`, one direct message per person with a line to say, listing the six - what is on them now, their open questions, idle, behind after seven days, waiting and freed changes; nothing sent to a person with nothing to say - `shared-planning-change-stages-SC-48`, `shared-planning-change-stages-SC-49`, `shared-planning-change-stages-SC-50`
@@ -68,7 +68,9 @@ Every group lands its tests in their own commit before its code, and its readers
 
 - [ ] 7.1 `pnpm plan hand <change> <role> @handle` writes `hands:` on the store's `main` as `claim` writes an owner, validating nothing: the store's rule refuses an unknown role or handle on the push
 - [ ] 7.2 Tests for `hand` in `grade10`: the commit it pushes, an unknown role passed through, and the board's link to the change's page
-- [ ] 7.3 `pnpm plan shipped <change> --build <tag>` writes `deployed_build:` beside `deployed_env:` and `deployed_at:` on the store's `main`, and its test (`Q68`)
+- [ ] 7.3 `pnpm plan claim <change> <group>` verifies the accepted fingerprint and creates or preserves `implementation.json`; `pnpm plan implementation <change> [--commit <reachable-sha>] --component <app.name>[,...]` merges the app repository's reachable commit and exact component ids without replacing another repository's evidence
+- [ ] 7.4 `pnpm plan build-preflight <change>` reads the accepted fingerprint from the store's `origin/main`, compares it with the implementation target, and refuses a missing or changed acceptance before an app build
+- [ ] 7.5 Tests for claim, changed acceptance, implementation record merge, a commit not reachable from the app clone, and component ids outside the app registry
 
 ## 8. The walk (grade10-spec)
 
@@ -79,3 +81,16 @@ Needs `feature-tcs.md` reviewed (`/tcs-review stage-changes-and-notify-hands`) a
 - [x] 8.3 The walks of the board, My turn, the page's marked line and the hand's arrival on the change page - `shared-planning-change-stages-SC-05`, `shared-planning-change-stages-SC-10`, `shared-planning-change-stages-SC-51`, `shared-planning-change-stages-SC-52`, `shared-planning-change-stages-SC-53`, `shared-planning-change-stages-SC-54`, `shared-planning-change-stages-SC-55`, `shared-planning-change-stages-SC-56`, `shared-planning-change-stages-SC-57`, `shared-planning-change-stages-SC-58`, `shared-planning-change-stages-SC-59`, `shared-planning-change-stages-SC-60`, `shared-planning-change-stages-SC-61`, `shared-planning-change-stages-SC-62`, `shared-planning-change-stages-SC-63`, `shared-planning-change-stages-SC-65`, `shared-planning-change-stages-SC-66`, `shared-planning-change-stages-SC-67`, `shared-planning-change-stages-SC-69`
 - [x] 8.4 A `walk` job in `test.yml` on every push to `main` and every pull request, with the browser installed and the fixture built before it
 - [x] 8.5 Flip the cases the walk decides with `pnpm run tcs:automated`, in the walk's own commit, and say in the suite which stay manual: the Slack messages, the digest and anything read from git history
+
+## 9. Acceptance, archive and deployment availability (grade10-spec)
+
+This group extends the completed stage plan while preserving its landed task
+history. Acceptance and implementation evidence are immutable inputs to the
+archive; deployment availability remains a separate projection.
+
+- [ ] 9.1 `accept:preflight` and `spec:accept` compute a canonical fingerprint over scoped artifacts, record the review baseline and reviewer, write immutable snapshots, and preserve prior acceptances by fingerprint
+- [ ] 9.2 Refuse acceptance while any Raised row is open or the review baseline changed; tests cover resolving every question and a later acceptance that names its superseded fingerprint
+- [ ] 9.3 `archive:preflight` verifies the current accepted fingerprint against `implementation.json` and reachable application commits, then archives the accepted fold without a second fold or deploy receipt
+- [ ] 9.4 The GitHub Deployment reader projects newly, still, no longer, partial, unknown and stale status per component and environment for active and archived changes, with receipt freshness, actual ref and testing links
+- [ ] 9.5 `/availability` and the change detail render the same immutable receipt state; deployment id, environment, change, fingerprint and status deduplicate a replay
+- [ ] 9.6 Tests cover acceptance history, archive-before-deploy, partial and stale component evidence, and active and archived changes
