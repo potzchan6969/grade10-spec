@@ -1,6 +1,20 @@
 schema: grade10-planning
 created: 2026-09-25
+promoted_by: "@mason5991"
 hands:
-  design: "@tangconst"
+  pm: "@mason5991"
+  design: "@mason5991"
+  tech: "@mason5991"
+  qa: "@mason5991"
+  dev: "@mason5991"
 awaiting:
-  specs: outline, feature-tcs, and requirement deltas for grade10-site/auction/auction catalogue Featured and grade10-admin/auction/featured curation
+  specs: requirement deltas and feature-tcs landing with closed design states
+landed_by:
+  ui-design: mason5991
+reviewed:
+  user-journeys: c27587b9
+  ui-design: af926488
+  tech-design: af926488
+  specs: df7a38f8
+  test-cases: df7a38f8
+  tasks: 844432ef

@@ -66,12 +66,14 @@ the one a search engine keeps.
 | Live | Active and Upcoming. Ended lots stay in All auctions and fill no Featured slot |
 
 - 🚧 **Featured** — a full-width carousel when at least one slide is set. Each
-  slide is an operator-picked lot with one hero image the operator uploaded for
-  that slot. The slide shows that image as the banner and the lot slab, the
-  lot title, its status, a client countdown from the served close or open, the
-  current bid with a rolling number when the amount changes, and Bid Now to the
-  lot. Progress dots advance the slides. The section is headed Featured
-  auctions — [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
+  slide is an operator-picked listing with one **front page image** uploaded
+  for that slot (not a gallery pick). The site loads Featured from its own
+  public read, separate from All auctions. The slide shows that image as the
+  banner and the lot slab, the lot title, its status, a client countdown from
+  the served close or open, the current bid with a rolling number when the
+  amount changes, and Bid Now to the lot. Progress dots advance the slides.
+  The section is headed Featured auctions —
+  [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
 - 🚧 **No category section** — category tiles and the busy filter stay off this
   page until a later change; quiet layout is the only layout
 - **All auctions** — every lot a collector can see, including those in Featured,
@@ -217,7 +219,7 @@ Active and Completed filters in bidding history.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a lot plus one admin hero image, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
+| The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
 | Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
