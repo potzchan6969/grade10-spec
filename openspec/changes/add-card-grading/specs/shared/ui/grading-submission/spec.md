@@ -109,6 +109,15 @@ SHALL export neither.
 **Nothing console-shaped** - the package SHALL export no block drawing the
 operator's queue, runbooks, batches, receiving or settings.
 
+**Copy filling** - the package SHALL export `fillGradingCopy` and
+`GradingLocaleProps` from its public entry. `fillGradingCopy(template,
+values)` SHALL replace every `{name}` in a catalogue template with
+`values[name]`, and SHALL throw an error naming the placeholder where
+`values` carries no value for it, so no consumer shows a literal placeholder.
+This is the one filler for a flat template; a template that also carries a
+`{count, plural, …}` clause is outside its reach and is the consumer's own
+ICU translator's to fill.
+
 #### Scenario: shared-ui-grading-submission-SC-01 - An application imports the grading blocks
 **Serves:** The export contract - a brand builds its grading pages from one set rather than drawing its own
 
@@ -126,6 +135,13 @@ operator's queue, runbooks, batches, receiving or settings.
   public entry
 - **AND** no grading-named shop picker, day and time picker, details form,
   confirmation or manage card is exported
+
+#### Scenario: shared-ui-grading-submission-SC-71 - A template missing a value refuses by name
+**Serves:** Copy filling - a consumer never shows a collector a literal placeholder
+
+- **WHEN** a consumer fills a template naming `{shop}` with no `shop` value
+- **THEN** the fill throws naming `{shop}`
+- **AND** no text is returned
 
 ### Requirement: The fee sheet draws every grader's levels
 

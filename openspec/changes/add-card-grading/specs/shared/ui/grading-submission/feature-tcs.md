@@ -98,6 +98,35 @@
 
 * No export renders a console view; every export is collector-facing.
 
+### shared-ui-grading-submission-US1-TC70-1: A template missing a value refuses by name, never a literal placeholder
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The export contract
+
+**Pre-conditions:**
+
+* `fillGradingCopy` and `GradingLocaleProps` are read from the package's public entry.
+
+**Steps:**
+
+1. Call `fillGradingCopy` with a template naming `{shop}` and a `values` record with no `shop` key.
+2. Call `fillGradingCopy` again with a template naming only placeholders `values` answers.
+
+**Expected Results:**
+
+* The first call throws an error naming `{shop}` and returns no text.
+* The second call returns the template with every placeholder replaced.
+
 ### shared-ui-grading-submission-US1-TC4-1: The fee sheet lists one grader's levels and figures
 
 **Classification:**

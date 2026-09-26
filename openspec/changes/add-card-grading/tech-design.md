@@ -237,6 +237,15 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
 - Alternatives rejected: a second booking for the joiner — a case holds one
   live booking; the four cache columns copied onto the joiner — four facts
   nothing can keep true; a `visits` table — one column already names the owner
+- **The pickup card's own hours** — `AppointmentServiceApi.listShopHours(locationId)`
+  is a new cross-product method: the shop's own weekly rules
+  (`resource_id IS NULL`), ordered by weekday and start, the diary's read for
+  a shop's doors rather than one resource's. `pickupOf` (`submissions/read.ts`)
+  calls it through the same optional `shops` binding `counterDetail` already
+  takes. ❓ **Open**: it does not yet filter `effective_from`/`effective_to`
+  or read `availability_exceptions`, so a retired or future rule, or a
+  closure, still prints — the diary's own `deriveSlots` (`slots.ts`) already
+  filters both; `listShopHours` wants the same filter, at the caller's `asOf`
 
 ### The till: one line to one card, read back by the order's name
 

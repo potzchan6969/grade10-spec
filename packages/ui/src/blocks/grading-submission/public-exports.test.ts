@@ -196,4 +196,23 @@ describe("grading submission public entry", () => {
     );
     expect(consoleShaped).toEqual([]);
   });
+
+  // Copy filling: the export test checked only names starting `Grading`,
+  // so a helper function's export could slip past it unnoticed — as
+  // `fillGradingCopy` did until this capability's WhatsApp templates named
+  // it a real consumer (round 5). Widened to every export this capability
+  // names, not only the thirteen blocks.
+  it("exports fillGradingCopy and GradingLocaleProps beside the thirteen blocks", () => {
+    expect(publicEntry.fillGradingCopy).toEqual(expect.any(Function));
+    expect(
+      publicEntry.fillGradingCopy("Hi {name}", { name: "Ava" }),
+    ).toBe("Hi Ava");
+  });
+
+  // shared-ui-grading-submission-SC-71
+  it("fillGradingCopy throws naming a placeholder with no value, never a literal", () => {
+    expect(() =>
+      publicEntry.fillGradingCopy("Hi {name}, at {shop}", { name: "Ava" }),
+    ).toThrow(/shop/);
+  });
 });
