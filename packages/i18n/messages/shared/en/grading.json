@@ -379,6 +379,10 @@
       "confirm": "Yes, cancel",
       "back": "Go back"
     },
+    "actRefused": {
+      "conflict": "This page was reading an older version. We're reading it again — try that once more.",
+      "visitStarted": "The drop-off has already started, so this can no longer be changed here."
+    },
     "withdraw": {
       "title": "Changed your mind?",
       "body": "Until the batch closes on {cutOff} we can pull a card. Message us, then collect it at the counter: its fee comes back at the till, and the estimate drops to the cards that go on.",

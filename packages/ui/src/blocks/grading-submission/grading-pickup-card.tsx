@@ -30,8 +30,10 @@ type GradingPickupCardProps = GradingLocaleProps & {
   /** The slabs and the raw cards to be collected, in the consumer's words. */
   items: string;
   where: { shop: string; address: string };
-  /** The hours, in the zone the consumer gave. */
-  open: string;
+  /** The hours, in the zone the consumer gave. Omitted, or empty, where the
+   * shop names no rule — the row itself is omitted rather than printed
+   * with nothing after it. */
+  open?: string;
   /** One figure and the line that dresses it; the lines behind it are
    * `GradingMoneyBlock`'s. */
   due?: { total: GradingMoney; line: string };
@@ -82,7 +84,9 @@ function GradingPickupCard({
             slot="where"
             value={`${where.shop}, ${where.address}`}
           />
-          <Fact label={copy.openLabel} slot="open" value={open} />
+          {open ? (
+            <Fact label={copy.openLabel} slot="open" value={open} />
+          ) : null}
           <VStack
             data-slot="grading-pickup-card-due"
             gap="none"

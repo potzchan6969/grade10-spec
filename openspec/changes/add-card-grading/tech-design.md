@@ -238,14 +238,19 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   live booking; the four cache columns copied onto the joiner — four facts
   nothing can keep true; a `visits` table — one column already names the owner
 - **The pickup card's own hours** — `AppointmentServiceApi.listShopHours(locationId)`
-  is a new cross-product method: the shop's own weekly rules
+  is a cross-product method: the shop's own weekly rules
   (`resource_id IS NULL`), ordered by weekday and start, the diary's read for
   a shop's doors rather than one resource's. `pickupOf` (`submissions/read.ts`)
   calls it through the same optional `shops` binding `counterDetail` already
-  takes. ❓ **Open**: it does not yet filter `effective_from`/`effective_to`
-  or read `availability_exceptions`, so a retired or future rule, or a
-  closure, still prints — the diary's own `deriveSlots` (`slots.ts`) already
-  filters both; `listShopHours` wants the same filter, at the caller's `asOf`
+  takes. **Decided**: it filters `effective_from`/`effective_to` at the
+  worker's own clock, through `ruleEffectiveOn` — the one predicate
+  `deriveSlots`'s own day derivation (`slots.ts`) filters by too, now shared
+  rather than duplicated, so a retired or not-yet-begun rule is never
+  offered. `availability_exceptions` (a one-off closure or override day) is
+  a different table this method still does not read — ❓ **Open**: a shop
+  closed for a single day still prints its weekly hours as open on it;
+  raised for a later change, since the pickup card's own scope was the
+  weekly rule, not the exception calendar
 
 ### The till: one line to one card, read back by the order's name
 

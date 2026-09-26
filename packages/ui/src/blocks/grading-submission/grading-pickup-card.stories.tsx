@@ -84,6 +84,18 @@ export const NothingDue: Story = {
   },
 };
 
+/** A shop naming no rule shows no Open row, rather than one with nothing
+ * after it. */
+export const NoOpeningHours: Story = {
+  args: { open: undefined },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.queryByText(PICKUP_COPY.openLabel),
+    ).not.toBeInTheDocument();
+  },
+};
+
 /** One figure to settle, with the clause that dresses it
  * (shared-ui-grading-submission-SC-42). */
 export const StorageDue: Story = {

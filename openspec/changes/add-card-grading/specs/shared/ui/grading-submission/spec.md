@@ -812,7 +812,9 @@ What the collector reads when the cards are ready.
 **The items** - it SHALL show the slabs and the raw cards to be collected.
 
 **Where and when** - it SHALL show the shop, its address and the hours it is
-given, in the zone it is given.
+given, in the zone it is given. Given no hours - the shop names no rule - it
+SHALL show the shop and its address alone, never an hours row with nothing
+after it.
 
 **What is due** - where something is due it SHALL show one figure with the
 line that dresses it; where nothing is due it SHALL say so. It SHALL total
@@ -837,6 +839,13 @@ say nothing beyond the code is needed.
 
 - **WHEN** `GradingPickupCard` renders with no identity line
 - **THEN** it says nothing beyond the code is needed
+
+#### Scenario: shared-ui-grading-submission-SC-72 - A shop naming no hours shows no Open row
+**Serves:** Collecting the cards - a collector reading where and when to come, at a shop the diary names no weekly rule for
+
+- **WHEN** `GradingPickupCard` renders with `open` left out
+- **THEN** the shop and its address are shown
+- **AND** no Open row renders
 
 #### Scenario: shared-ui-grading-submission-SC-42 - One figure to settle, or none
 **Serves:** Collecting the cards - a collector reading what they must pay at the counter

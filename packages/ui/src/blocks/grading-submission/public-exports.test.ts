@@ -204,9 +204,9 @@ describe("grading submission public entry", () => {
   // names, not only the thirteen blocks.
   it("exports fillGradingCopy and GradingLocaleProps beside the thirteen blocks", () => {
     expect(publicEntry.fillGradingCopy).toEqual(expect.any(Function));
-    expect(
-      publicEntry.fillGradingCopy("Hi {name}", { name: "Ava" }),
-    ).toBe("Hi Ava");
+    expect(publicEntry.fillGradingCopy("Hi {name}", { name: "Ava" })).toBe(
+      "Hi Ava",
+    );
   });
 
   // shared-ui-grading-submission-SC-71
