@@ -546,7 +546,7 @@
       "title": "기록",
       "batch": "{grader} · {shipDay} 발송",
       "events": {
-        "plan_saved": "신청 작성: 카드 {count, plural, other {#장}}, {grader} {level}",
+        "plan_saved": "신청 작성: 카드 {count, plural, other {#장}}{grader, select, none {} other {, {grader}{level, select, none {} other { {level}}}}}",
         "plan_updated": "목록 변경됨",
         "plan_nudged": "방문 예약 안내 발송",
         "plan_expired": "방문 예약 없이 목록 만료됨",

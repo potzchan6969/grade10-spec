@@ -546,7 +546,7 @@
       "title": "History",
       "batch": "{grader} · ships {shipDay}",
       "events": {
-        "plan_saved": "Submission planned: {count, plural, one {# card} other {# cards}}, {grader} {level}",
+        "plan_saved": "Submission planned: {count, plural, one {# card} other {# cards}}{grader, select, none {} other {, {grader}{level, select, none {} other { {level}}}}}",
         "plan_updated": "List changed",
         "plan_nudged": "Reminded to book the drop-off",
         "plan_expired": "List expired unbooked",

@@ -546,7 +546,7 @@
       "title": "记录",
       "batch": "{grader} · {shipDay} 寄出",
       "events": {
-        "plan_saved": "建立清单：{count, plural, other {# 张卡}}，{grader} {level}",
+        "plan_saved": "建立清单：{count, plural, other {# 张卡}}{grader, select, none {} other {，{grader}{level, select, none {} other { {level}}}}}",
         "plan_updated": "清单已修改",
         "plan_nudged": "已提示预约交卡",
         "plan_expired": "清单未预约交卡而过期",
