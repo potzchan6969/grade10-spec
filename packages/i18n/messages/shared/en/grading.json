@@ -377,6 +377,7 @@
       "line": "Cancels the drop-off with it. The cards never left you, and nothing was paid.",
       "dialogTitle": "Cancel this submission?",
       "dialogBody": "The drop-off on {when} is cancelled with it. The cards never left you, and nothing was paid.",
+      "dialogBodyNoVisit": "The cards never left you, and nothing was paid.",
       "confirm": "Yes, cancel",
       "back": "Go back"
     },
@@ -535,6 +536,7 @@
     },
     "history": {
       "title": "History",
+      "batch": "{grader} · ships {shipDay}",
       "events": {
         "plan_saved": "Submission planned: {count, plural, one {# card} other {# cards}}, {grader} {level}",
         "plan_updated": "List changed",
@@ -549,7 +551,7 @@
         "dropoff_detached": "Drop-off closed by the submission that owned it",
         "dropoff_joined": "Joined the drop-off another submission booked",
         "agreement_signed": "Submission agreement signed",
-        "paid": "Paid {amount} by {method}",
+        "paid": "Paid {amount}{method, select, none {} other { by {method}}}",
         "checked_in": "Handed in: {count, plural, one {# card} other {# cards}}",
         "card_refused": "Card refused at the counter",
         "card_withdrawn": "Card withdrawn before the batch closed",
@@ -568,7 +570,7 @@
         "shipped_back": "Shipped back to us",
         "back_at_shop": "Back at the shop",
         "ready": "Ready to collect",
-        "collector_named": "Named {name} to collect",
+        "collector_named": "{who, select, current {Named {name} to collect} other {Named someone to collect}}",
         "collector_removed": "Removed the named collector",
         "uncollected_reminder": "Reminded to collect",
         "storage_started": "Storage fee started",

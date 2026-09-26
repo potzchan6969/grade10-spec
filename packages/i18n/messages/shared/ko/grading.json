@@ -377,6 +377,7 @@
       "line": "방문 예약도 함께 취소됩니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
       "dialogTitle": "이 신청을 취소할까요?",
       "dialogBody": "{when} 방문 예약도 함께 취소됩니다. 카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
+      "dialogBodyNoVisit": "카드는 계속 고객님 손에 있었고 결제된 금액도 없습니다.",
       "confirm": "네, 취소합니다",
       "back": "돌아가기"
     },
@@ -535,6 +536,7 @@
     },
     "history": {
       "title": "기록",
+      "batch": "{grader} · {shipDay} 발송",
       "events": {
         "plan_saved": "신청 작성: 카드 {count, plural, other {#장}}, {grader} {level}",
         "plan_updated": "목록 변경됨",
@@ -549,7 +551,7 @@
         "dropoff_detached": "방문을 소유한 신청이 예약을 종료함",
         "dropoff_joined": "다른 신청이 예약한 방문에 합류함",
         "agreement_signed": "감정 위탁 계약서 서명",
-        "paid": "{method}(으)로 {amount} 결제",
+        "paid": "{method, select, none {} other {{method}(으)로 }}{amount} 결제",
         "checked_in": "접수 완료: 카드 {count, plural, other {#장}}",
         "card_refused": "창구에서 카드 반려",
         "card_withdrawn": "배치 마감 전 카드 회수",
@@ -568,7 +570,7 @@
         "shipped_back": "저희에게 반송됨",
         "back_at_shop": "매장 도착",
         "ready": "찾아가실 수 있음",
-        "collector_named": "{name}을(를) 대리인으로 지정",
+        "collector_named": "{who, select, current {{name}을(를) 대리인으로 지정} other {대리인 지정}}",
         "collector_removed": "대리인 지정 해제",
         "uncollected_reminder": "수령 안내 발송",
         "storage_started": "보관료 시작",

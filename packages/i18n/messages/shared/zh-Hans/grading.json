@@ -377,6 +377,7 @@
       "line": "交卡预约会一并取消。卡牌一直在你手上，也没有付过款。",
       "dialogTitle": "取消这张清单？",
       "dialogBody": "{when} 的交卡预约会一并取消。卡牌一直在你手上，也没有付过款。",
+      "dialogBodyNoVisit": "卡牌一直在你手上，也没有付过款。",
       "confirm": "确定取消",
       "back": "返回"
     },
@@ -535,6 +536,7 @@
     },
     "history": {
       "title": "记录",
+      "batch": "{grader} · {shipDay} 寄出",
       "events": {
         "plan_saved": "建立清单：{count, plural, other {# 张卡}}，{grader} {level}",
         "plan_updated": "清单已修改",
@@ -549,7 +551,7 @@
         "dropoff_detached": "原本拥有该次到店的清单已结束预约",
         "dropoff_joined": "加入另一张清单预约的交卡",
         "agreement_signed": "已签署评级委托协议",
-        "paid": "以 {method} 付款 {amount}",
+        "paid": "{method, select, none {} other {以 {method} }}付款 {amount}",
         "checked_in": "已交收：{count, plural, other {# 张卡}}",
         "card_refused": "柜台拒收一张卡",
         "card_withdrawn": "批次截止前取回一张卡",
@@ -568,7 +570,7 @@
         "shipped_back": "已寄回给我们",
         "back_at_shop": "已回到门店",
         "ready": "可以领回",
-        "collector_named": "指定 {name} 代领",
+        "collector_named": "{who, select, current {指定 {name} 代领} other {指定他人代领}}",
         "collector_removed": "已移除代领人",
         "uncollected_reminder": "已发出取卡提示",
         "storage_started": "开始计保管费",
