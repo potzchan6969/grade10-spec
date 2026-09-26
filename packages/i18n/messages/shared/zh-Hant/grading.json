@@ -434,7 +434,7 @@
       "withdrawnRefund": "已取回 · 已退回 {amount}",
       "movedUpLine": "升級到 {level}，需補 {amount}",
       "heldUntil": "評級公司暫留 · 預計 {day}",
-      "payoutLine": "已按 {amount} 賠償，該張費用亦已退回",
+      "payoutLine": "已於 {day} 按 {amount} 賠償（{route}），該張費用亦已退回",
       "reversalLine": "卡牌其後尋回，賠償已撤回，該張卡回到這張清單。"
     },
     "pickup": {

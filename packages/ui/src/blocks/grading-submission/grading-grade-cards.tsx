@@ -30,6 +30,12 @@ type GradingGradeCard = {
    * one — `GradingCardRecord`'s own `slabPhotograph` slot, modelled the
    * same way here so a collected card reads it whichever block draws it. */
   slabPhotograph?: GradingPhoto;
+  /** The card's own payout, once made, or its reversal once reversed —
+   * `GradingCardRecord`'s own `outcomeLine` carries the same fact while
+   * the cards are still with the shop; a card that never comes back keeps
+   * this line once the submission is collected
+   * (`grade10-site-grading-submission-lifecycle-SC-41`, `SC-43`). */
+  payoutLine?: string;
 };
 
 type GradingGradeCardsCopy = {
@@ -148,6 +154,11 @@ function GradeCard({
           <Text size="sm" tone="secondary">
             {`${copy.graderLabel}: ${card.grader}`}
           </Text>
+          {!ungraded && card.payoutLine ? (
+            <Text data-slot="grading-grade-card-payout" size="sm">
+              {card.payoutLine}
+            </Text>
+          ) : null}
           {!ungraded && card.certificate ? (
             <HStack gap="sm" vAlign="center">
               <Text face="mono" size="sm">

@@ -174,8 +174,10 @@ export const Held: Story = {
   },
 };
 
-/** Not returned: no grade, and the badge
- * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
+/** Not returned: no grade, the badge, and its payout's own route and the day
+ * it was recorded (shared-ui-grading-submission-SC-39,
+ * shared-ui-grading-submission-SC-64,
+ * grade10-site-grading-submission-lifecycle-SC-41). */
 export const NotReturned: Story = {
   args: {
     cards: [
@@ -185,11 +187,41 @@ export const NotReturned: Story = {
         grader: "PSA",
         outcome: "not-returned",
         outcomeLabel: "Not returned",
+        payoutLine: "Settled at $800.00 on 1 Jun 2026, till, its fee refunded",
       },
     ],
   },
   play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
     expectBadges(canvasElement, args.cards);
+    expect(
+      canvas.getByText(
+        "Settled at $800.00 on 1 Jun 2026, till, its fee refunded",
+      ),
+    ).toBeInTheDocument();
+  },
+};
+
+/** A card that turned up after its payout was made carries the reversal on
+ * its own record, not a grade — the collected page's own reading of
+ * `grade10-site-grading-submission-lifecycle-SC-43`. */
+export const PayoutReversed: Story = {
+  args: {
+    cards: [
+      {
+        id: "card_lugia",
+        name: "Lugia first edition",
+        grader: "PSA",
+        outcome: "not-returned",
+        outcomeLabel: "Not returned",
+        payoutLine:
+          "The card turned up, so the settlement was reversed and the card is back on this submission.",
+      },
+    ],
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(/the settlement was reversed/)).toBeInTheDocument();
   },
 };
 

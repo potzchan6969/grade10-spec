@@ -2061,6 +2061,35 @@ Runs once per row of **Test data**.
 * The shop and its address are shown.
 * No Open row renders.
 
+### shared-ui-grading-submission-US1-TC72-1: A card's payout line shows once made, and its reversal once reversed
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The cards after hand-in
+
+**Pre-conditions:**
+
+* `GradingGradeCards` carries one card given a payout line, one given a reversal line, and one given neither.
+
+**Steps:**
+
+1. Open the `GradingGradeCards` story with the three cards.
+
+**Expected Results:**
+
+* The card given a payout line shows it.
+* The card given a reversal line shows it in place of a payout line.
+* The card given neither shows no such line.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -2093,6 +2122,7 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-SC-65` | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
 | `shared-ui-grading-submission-SC-70` | Case added | `shared-ui-grading-submission-US1-TC69-1` — the hand-back photograph beside a collected slab |
 | `shared-ui-grading-submission-SC-72` | Case added | `shared-ui-grading-submission-US1-TC71-1` — no Open row where the shop names no hours |
+| `shared-ui-grading-submission-SC-73` | Case added | `shared-ui-grading-submission-US1-TC72-1` — a card's payout or reversal line on the collected page |
 | `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as `shared-ui-grading-submission-SC-66`; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
 | A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67` |
 | A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68` |

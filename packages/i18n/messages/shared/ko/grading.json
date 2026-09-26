@@ -434,7 +434,7 @@
       "withdrawnRefund": "회수함 · {amount} 환불됨",
       "movedUpLine": "{level} 상향으로 {amount} 추가",
       "heldUntil": "감정사 보류 · {day} 예상",
-      "payoutLine": "{amount}으로 보상하고 그 카드의 요금도 환불했습니다",
+      "payoutLine": "{day}에 {amount}으로 보상 ({route}), 그 카드의 요금도 환불했습니다",
       "reversalLine": "카드를 다시 찾아 보상이 취소되었고, 이 카드는 신청으로 돌아왔습니다."
     },
     "pickup": {

@@ -434,7 +434,7 @@
       "withdrawnRefund": "Withdrawn · {amount} refunded",
       "movedUpLine": "{amount} due for {level}",
       "heldUntil": "Held by the grader · expected {day}",
-      "payoutLine": "Settled at {amount}, its fee refunded",
+      "payoutLine": "Settled at {amount} on {day}, {route}, its fee refunded",
       "reversalLine": "The card turned up, so the settlement was reversed and the card is back on this submission."
     },
     "pickup": {

@@ -768,6 +768,12 @@ the grader's code and note, drawn apart from a graded card.
 grade, not returned or damaged SHALL show the badge it is given, and SHALL
 show no grade where none was issued.
 
+**Its own payout** - a card carrying a payout line SHALL show it, and SHALL
+show no such line where it carries none — the one reading
+`GradingCardRecord`'s own outcome line shares, so a card that never came back
+still carries its settlement, or its reversal, once the submission is
+collected (`grade10-site-grading-submission-lifecycle-SC-41`, `SC-43`).
+
 **Given, not derived** - the block SHALL show the words the grader's reading
 gave it, and SHALL translate or re-word none of them.
 
@@ -846,6 +852,14 @@ say nothing beyond the code is needed.
 - **WHEN** `GradingPickupCard` renders with `open` left out
 - **THEN** the shop and its address are shown
 - **AND** no Open row renders
+
+#### Scenario: shared-ui-grading-submission-SC-73 - A card that never came back keeps its settlement on the collected page
+**Serves:** The cards after hand-in - a collector reading what happened to a card's money once the rest of the submission is home
+
+- **GIVEN** a card carrying a payout line, or none
+- **WHEN** `GradingGradeCards` renders it
+- **THEN** the card given a line shows it
+- **AND** the card given none shows no such line
 
 #### Scenario: shared-ui-grading-submission-SC-42 - One figure to settle, or none
 **Serves:** Collecting the cards - a collector reading what they must pay at the counter
