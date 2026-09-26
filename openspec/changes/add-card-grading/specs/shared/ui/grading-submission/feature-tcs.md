@@ -1974,6 +1974,36 @@ Runs once per row of **Test data**.
 * The card reads as matched, from its name alone.
 * Rendering the card raises no error.
 
+### shared-ui-grading-submission-US1-TC69-1: A collected slab carries its hand-back photograph
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** The cards after hand-in
+
+**Pre-conditions:**
+
+* `GradingGradeCards` carries one graded card given the photograph taken at
+  hand-back, and one graded card given none.
+
+**Steps:**
+
+1. Open the `GradingGradeCards` story with both cards.
+
+**Expected Results:**
+
+* The card given a photograph shows it beside its grade, grader and
+  certificate.
+* The card given none shows none.
+
 ## Reconciliation
 
 **Run:** the blind pass read the capability's `## Purpose` and `## Feature set`, its `user-journeys.md`, the change's `proposal.md` and `decisions.md` with its `## Raised` table, `ui-design.md` with the state dispositions stripped, the PRD pages the proposal links, and this file for id continuity with `## Reconciliation` stripped. It was denied every `## Requirements` section, `openspec/specs/`, `openspec/changes/archive/` and `tech-design.md`. The suite's ids were written short and were renamed to the capability's full prefix before the join; none had been issued anywhere else.
@@ -2004,6 +2034,7 @@ Runs once per row of **Test data**.
 | `shared-ui-grading-submission-SC-50` | Case added | `shared-ui-grading-submission-US1-TC67-1` — the paid line's method, instant and till reference |
 | `shared-ui-grading-submission-SC-57` | Case added | `shared-ui-grading-submission-US1-TC59-1` — a paste error that is not an empty list |
 | `shared-ui-grading-submission-SC-65` | Case added | `shared-ui-grading-submission-US1-TC68-1` — a matched card with no set or number |
+| `shared-ui-grading-submission-SC-70` | Case added | `shared-ui-grading-submission-US1-TC69-1` — the hand-back photograph beside a collected slab |
 | `shared-ui-grading-submission-US1-TC15-1` — the edit step | Fixed | The case's step and expected result named `onEdit` for the value it now carries; the value field's blur-or-Enter commit and its own reopen-with-the-kept-figure rule (added by the block change that split editing from declaring) named no scenario. Folded as `shared-ui-grading-submission-SC-66`; the case's step, pre-condition and expected result rewritten to name `onEdit` and `onDeclare` separately |
 | A cap given as none refuses no add | Folded | The block change's rule named no scenario; the `NoCap` story already proved it. Folded as `shared-ui-grading-submission-SC-67` |
 | A level with no figures reads the no-figure word, not nought | Folded | Named no scenario; the `UnpricedGrader` story already proved it. Folded as `shared-ui-grading-submission-SC-68` |

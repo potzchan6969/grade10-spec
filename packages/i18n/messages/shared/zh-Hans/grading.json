@@ -411,7 +411,8 @@
       "aboutGrades": "评级是评级公司的决定，不是我们的。如想再评一次，须以评级公司的复核收费另立一张清单；领回时可在柜台查询。",
       "cards": {
         "graderLabel": "评级公司",
-        "codeLabel": "评级公司代码"
+        "codeLabel": "评级公司代码",
+        "photoAlt": "{card}，返还时拍摄"
       }
     },
     "cards": {
@@ -784,6 +785,7 @@
     "cards": "{count, plural, other {# 张卡}}",
     "submissions": "{count, plural, other {# 份提交}}",
     "labels": "{count, plural, other {# 张标签}}",
+    "ungradedCards": "{count, plural, other {# 张卡未评级退回}}",
     "whatsapp": {
       "confirmDropoff": "{name} 你好，确认你于 {when} 在 {shop} 的评级交卡预约。请带同 {count} 张卡，每张放在卡套内。清单：{link}",
       "onTheirWay": "{name} 你好，你的 {count} 张卡今日已投保寄往 {grader}，预计 {estimate} 前回到门店。清单：{link}",

@@ -411,7 +411,8 @@
       "aboutGrades": "A grade is the grader’s decision, not ours. If you want a second look, a review is a new submission at the grader’s review fee; ask at the counter when you collect.",
       "cards": {
         "graderLabel": "Grader",
-        "codeLabel": "Grader's code"
+        "codeLabel": "Grader's code",
+        "photoAlt": "{card}, photographed at hand-back"
       }
     },
     "cards": {
@@ -784,9 +785,10 @@
     "cards": "{count, plural, one {# card} other {# cards}}",
     "submissions": "{count, plural, one {# submission} other {# submissions}}",
     "labels": "{count, plural, one {# label} other {# labels}}",
+    "ungradedCards": "{count, plural, one {# card} other {# cards}} back ungraded",
     "whatsapp": {
-      "confirmDropoff": "Hi {name}, confirming your grading drop-off on {when} at {shop}. Bring the {count} cards, each in a sleeve. Your submission: {link}",
-      "onTheirWay": "Hi {name}, your {count} cards left us today for {grader}, insured. Estimated back at the shop by {estimate}. Your submission: {link}",
+      "confirmDropoff": "Hi {name}, confirming your grading drop-off on {when} at {shop}. Bring the {count}, each in a sleeve. Your submission: {link}",
+      "onTheirWay": "Hi {name}, your {count} left us today for {grader}, insured. Estimated back at the shop by {estimate}. Your submission: {link}",
       "runningLate": "Hi {name}, {grader} is past the estimate we gave you on submission {id}. The new date is {estimate}; nothing changes at the counter. Your submission: {link}",
       "gradesIn": "Hi {name}, the grades are in for submission {id}. {summary}. We will message you again when the cards are ready to collect: {link}",
       "readyToCollect": "Hi {name}, your cards are ready to collect at {shop}. Pickup code {code}, {toSettle} to settle at the counter. Open {hours}. Your submission: {link}",

@@ -1853,7 +1853,7 @@ Stage (b).
 - [ ] 27.7 Offer each status its own acts and no others, through `useConfirm`
       where the act cannot be taken back
       (`grade10-site-grading-submission-lifecycle-SC-50`)
-- [ ] 27.8 Write the stories for `Grading/Submission/SubmissionView`, one per
+- [ ] 27.8 Write the stories for `Grading/Submission/Submission Page`, one per
       distinct layout, the varied value an args control, each with
       `surface: site`
 - [ ] 27.9 Verify: `pnpm run test`,

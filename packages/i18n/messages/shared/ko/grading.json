@@ -411,7 +411,8 @@
       "aboutGrades": "등급은 저희가 아니라 감정사의 판단입니다. 다시 보시려면 감정사의 재심 요금으로 새 신청을 하셔야 합니다. 찾아가실 때 창구에 문의해 주세요.",
       "cards": {
         "graderLabel": "감정사",
-        "codeLabel": "감정사 코드"
+        "codeLabel": "감정사 코드",
+        "photoAlt": "{card}, 반환 시 촬영"
       }
     },
     "cards": {
@@ -784,6 +785,7 @@
     "cards": "{count, plural, other {카드 #장}}",
     "submissions": "{count, plural, other {제출 #건}}",
     "labels": "{count, plural, other {라벨 #장}}",
+    "ungradedCards": "{count, plural, other {등급 미판정 카드 #장}}",
     "whatsapp": {
       "confirmDropoff": "{name}님, {when} {shop} 등급 감정 방문 예약을 확인해 드립니다. 카드 {count}장을 각각 슬리브에 넣어 가져와 주세요. 신청: {link}",
       "onTheirWay": "{name}님, 카드 {count}장이 오늘 보험을 들어 {grader}(으)로 발송되었습니다. 매장 도착 예정일은 {estimate}입니다. 신청: {link}",
