@@ -574,6 +574,8 @@ type CartDrawerFooterProps = {
   estimatedTotal: ReactNode;
   shippingEstimate?: ReactNode;
   loading?: boolean;
+  /** Show summary amount skeletons while keeping cart rows mounted. */
+  summaryLoading?: boolean;
   /** Disable tender controls and checkout while a tender choice is saving. */
   tenderPending?: boolean;
   checkoutDisabled?: boolean;
@@ -627,6 +629,7 @@ function CartDrawerFooter({
   estimatedTotal,
   shippingEstimate,
   loading = false,
+  summaryLoading = false,
   tenderPending = false,
   checkoutDisabled = false,
   promoState = { status: "collapsed" },
@@ -643,6 +646,7 @@ function CartDrawerFooter({
   onCheckout,
   className,
 }: CartDrawerFooterProps) {
+  const amountsLoading = loading || summaryLoading;
   const [pointsInput, setPointsInput] = useState("");
   const [isVerifyingPoints, setIsVerifyingPoints] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -744,8 +748,8 @@ function CartDrawerFooter({
 
   // Cart re-fetch disables checkout — clear a stale redirecting state.
   useEffect(() => {
-    if (loading) setIsRedirecting(false);
-  }, [loading]);
+    if (loading || summaryLoading) setIsRedirecting(false);
+  }, [loading, summaryLoading]);
 
   // Promo cleared — toast once per notice value (same rail as unavailable items).
   useEffect(() => {
@@ -781,7 +785,14 @@ function CartDrawerFooter({
   };
 
   const handleCheckout = async () => {
-    if (loading || tenderPending || checkoutDisabled || isRedirecting) return;
+    if (
+      loading ||
+      summaryLoading ||
+      tenderPending ||
+      checkoutDisabled ||
+      isRedirecting
+    )
+      return;
     setIsRedirecting(true);
     try {
       await onCheckout?.();
@@ -815,10 +826,10 @@ function CartDrawerFooter({
           <span className="text-sm font-normal leading-5 text-foreground">
             {copy.subtotalLabel}
           </span>
-          <CartAmountSkeleton loading={loading}>
+          <CartAmountSkeleton loading={amountsLoading}>
             {rollValue(subtotal, {
               className: "text-sm font-normal leading-5 text-foreground",
-              loading,
+              loading: amountsLoading,
             })}
           </CartAmountSkeleton>
         </HStack>
@@ -1027,10 +1038,10 @@ function CartDrawerFooter({
         <span className="text-base font-semibold leading-6 text-foreground">
           {copy.estimatedTotalLabel}
         </span>
-        <CartAmountSkeleton loading={loading} size="lg">
+        <CartAmountSkeleton loading={amountsLoading} size="lg">
           {rollValue(estimatedTotal, {
             className: "text-base font-semibold leading-6 text-foreground",
-            loading,
+            loading: amountsLoading,
           })}
         </CartAmountSkeleton>
       </HStack>
@@ -1038,7 +1049,13 @@ function CartDrawerFooter({
       <Button
         size="lg"
         variant="default"
-        disabled={loading || tenderPending || checkoutDisabled || isRedirecting}
+        disabled={
+          loading ||
+          summaryLoading ||
+          tenderPending ||
+          checkoutDisabled ||
+          isRedirecting
+        }
         loading={isRedirecting}
         onClick={handleCheckout}
         className="w-full"
@@ -1275,6 +1292,8 @@ type CartDrawerProps = {
   shippingEstimate?: ReactNode;
   copy: CartDrawerCopy;
   loading?: boolean;
+  /** Show only summary amount skeletons while keeping product rows available. */
+  summaryLoading?: boolean;
   /** Prevent overlapping tender writes; defaults to false for existing callers. */
   tenderPending?: boolean;
   /** Keep the cart visible while the consumer confirms an update. */
@@ -1343,6 +1362,7 @@ function CartDrawer({
   shippingEstimate,
   copy,
   loading,
+  summaryLoading = false,
   tenderPending = false,
   onFetchStatusAndPrice,
   checkoutDisabled,
@@ -1399,6 +1419,7 @@ function CartDrawer({
   }, [open]);
 
   const isLoading = loading ?? isFetching;
+  const isSummaryLoading = isLoading || summaryLoading;
 
   // After open loading ends, silently drop delisted catalogue lines and toast once per open.
   useEffect(() => {
@@ -1497,6 +1518,7 @@ function CartDrawer({
               estimatedTotal={estimatedTotal}
               shippingEstimate={shippingEstimate}
               loading={isLoading}
+              summaryLoading={isSummaryLoading}
               tenderPending={tenderPending}
               checkoutDisabled={checkoutDisabled}
               promoState={promoState}
