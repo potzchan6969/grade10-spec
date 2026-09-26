@@ -327,6 +327,7 @@
     },
     "lead": {
       "planned": "Not handed in yet. Book the drop-off and bring the cards; nothing is paid until they are checked in.",
+      "plannedKeptUntil": "Kept until {day}. Book a drop-off before then, or the list expires and nothing is owed.",
       "booked": "Bring the {count, plural, one {# card} other {# cards}} on {when}. Staff check each card against your list with you, you sign the submission agreement, and you pay {amount} at the counter. Change the list any time until then.",
       "checked_in": "Your cards are sealed in our intake bag and leave for {grader} with the batch that closes {cutOff} and ships {shipDay}. We email you when they are on their way, and the moment the grades are in.",
       "sent": "With {grader} since {when} — being graded. Nothing to do: we read the grader’s status most days and email you the moment the grades are in.",
