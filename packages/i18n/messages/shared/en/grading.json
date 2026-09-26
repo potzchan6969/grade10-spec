@@ -483,6 +483,14 @@
       "paid": "Paid",
       "paidAtCounter": "At the counter, once the cards are checked",
       "paidWith": "{method} · {when} · POS {reference}",
+      "method": {
+        "card": "Card",
+        "cash": "Cash",
+        "fps": "FPS",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "shop_pay": "Shop Pay"
+      },
       "movedUp": "Moved up a level",
       "movedUpLine": "{amount} · {card} → {level}",
       "due": "Due at the counter before collection",
@@ -551,7 +559,7 @@
         "dropoff_detached": "Drop-off closed by the submission that owned it",
         "dropoff_joined": "Joined the drop-off another submission booked",
         "agreement_signed": "Submission agreement signed",
-        "paid": "Paid {amount}{method, select, none {} other { by {method}}}",
+        "paid": "Paid {amount}{method, select, card { by card} cash { in cash} fps { by FPS} apple_pay { with Apple Pay} google_pay { with Google Pay} shop_pay { with Shop Pay} other {}}",
         "checked_in": "Handed in: {count, plural, one {# card} other {# cards}}",
         "card_refused": "Card refused at the counter",
         "card_withdrawn": "Card withdrawn before the batch closed",

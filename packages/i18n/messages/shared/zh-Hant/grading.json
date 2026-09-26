@@ -483,6 +483,14 @@
       "paid": "已付",
       "paidAtCounter": "卡牌核對好後，在櫃檯付款",
       "paidWith": "{method} · {when} · POS {reference}",
+      "method": {
+        "card": "銀行卡",
+        "cash": "現金",
+        "fps": "轉數快",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "shop_pay": "Shop Pay"
+      },
       "movedUp": "已升一級",
       "movedUpLine": "{amount} · {card} → {level}",
       "due": "領回前須在櫃檯付清",
@@ -551,7 +559,7 @@
         "dropoff_detached": "原本擁有該次到店的清單已結束預約",
         "dropoff_joined": "加入另一張清單預約的交卡",
         "agreement_signed": "已簽署評級委託協議",
-        "paid": "{method, select, none {} other {以 {method} }}付款 {amount}",
+        "paid": "{method, select, card {以銀行卡} cash {以現金} fps {以轉數快} apple_pay {以 Apple Pay } google_pay {以 Google Pay } shop_pay {以 Shop Pay } other {}}付款 {amount}",
         "checked_in": "已交收：{count, plural, other {# 張卡}}",
         "card_refused": "櫃檯拒收一張卡",
         "card_withdrawn": "批次截止前取回一張卡",

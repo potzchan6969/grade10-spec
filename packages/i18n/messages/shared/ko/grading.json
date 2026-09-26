@@ -483,6 +483,14 @@
       "paid": "결제함",
       "paidAtCounter": "카드를 모두 확인한 뒤 창구에서",
       "paidWith": "{method} · {when} · POS {reference}",
+      "method": {
+        "card": "카드",
+        "cash": "현금",
+        "fps": "FPS",
+        "apple_pay": "Apple Pay",
+        "google_pay": "Google Pay",
+        "shop_pay": "Shop Pay"
+      },
       "movedUp": "한 레벨 상향",
       "movedUpLine": "{amount} · {card} → {level}",
       "due": "찾아가시기 전 창구에서 정산",
@@ -551,7 +559,7 @@
         "dropoff_detached": "방문을 소유한 신청이 예약을 종료함",
         "dropoff_joined": "다른 신청이 예약한 방문에 합류함",
         "agreement_signed": "감정 위탁 계약서 서명",
-        "paid": "{method, select, none {} other {{method}(으)로 }}{amount} 결제",
+        "paid": "{method, select, card {카드로 } cash {현금으로 } fps {FPS로 } apple_pay {Apple Pay로 } google_pay {Google Pay로 } shop_pay {Shop Pay로 } other {}}{amount} 결제",
         "checked_in": "접수 완료: 카드 {count, plural, other {#장}}",
         "card_refused": "창구에서 카드 반려",
         "card_withdrawn": "배치 마감 전 카드 회수",
