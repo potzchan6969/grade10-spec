@@ -137,7 +137,7 @@ ICU translator's to fill.
   confirmation or manage card is exported
 
 #### Scenario: shared-ui-grading-submission-SC-71 - A template missing a value refuses by name
-**Serves:** Copy filling - a consumer never shows a collector a literal placeholder
+**Serves:** The export contract - a consumer never shows a collector a literal placeholder
 
 - **WHEN** a consumer fills a template naming `{shop}` with no `shop` value
 - **THEN** the fill throws naming `{shop}`
