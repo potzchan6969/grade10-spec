@@ -18,20 +18,20 @@ this layout and the management page marks are the source.
 
 | Export | Package | Exists | Composes |
 | --- | --- | --- | --- |
-| `FeaturedAuctionsBanner` | Preview today (`apps/preview/src/pages/auction-catalogue-card.tsx`); promote to `@grade10/ui` if this change owns the public block — **new work in this store when promoted** | Partly — page draft only | Full-width carousel: front page image background and slab, title, status, countdown, rolling current bid, Bid Now or View Auction by status, `CarouselProgress` dots |
+| `FeaturedAuctionsBanner` | `@grade10/ui`, `src/blocks/auction-listing/featured-auctions-banner.tsx` | Yes — local promotion pending store PR | Full-width carousel: one front page image as ground and slab (load failure → gallery → stage background), title, status, list-card short Ends in / Opens in, Active bid rolls on increase, Bid Now or View Auction by status, `CarouselProgress` dots |
 | `AuctionCataloguePage` | Preview (`apps/preview/src/pages/auction-catalogue-page.tsx`) | Partly — page composition, not a package export | Featured (when set) then All auctions grid; no category chrome in the carousel-banner layout |
 | `AuctionCard` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | All auctions list tile: image, title, bid, countdown, watch |
 | `WatchButton` | `@grade10/ui`, `src/blocks/auction-record/` | Yes | Watch on/off on an All auctions card (same control as lot page / My Auctions) |
 | `ListingRollingMoneyDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Rolling current bid on the Featured slide |
-| `ListingCountdownDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Client countdown on the Featured slide and on list cards |
+| `ListingCountdownDisplay` | `@grade10/ui`, `src/blocks/auction-listing/` | Yes | Client countdown on list cards; banner uses the same short remaining form inline |
 | `CarouselProgress`, `CarouselProgressItem` | `@grade10/design-system` | Yes | Featured slide progress / advance |
-| Admin Manage Featured | `grade10-admin` Listings sub-page | No — new work outside this store's package blocks | Ordered slots ≤3: listing pick, front page image upload (not gallery), reorder, clear |
+| Admin Manage Featured | `grade10-admin` Listings sub-page | Yes — application work outside this store's package blocks | Ordered slots ≤3: listing pick, front page image upload (not gallery), reorder, clear |
 
-**Copy.** Catalogue section words and Bid Now / CURRENT BID / LIVE BIDDING on
-the banner are draft strings in the preview page today. Promoting the banner
-into `@grade10/ui` needs shared-layer keys answered in every language the
-shared layer speaks (`en`, `ko`, `zh-Hans`, `zh-Hant`) — flag for `tasks.md`
-when the export lands. Admin curator labels are application copy.
+**Copy.** Banner words arrive as a `copy` prop on the block. Shared keys under
+`auction.featured` are answered in `en`, `ko`, `zh-Hans`, and `zh-Hant`
+(status, price captions including FINAL BID, Bid Now / View Auction, countdown
+leads, Ended stamp, progress, slide control). Catalogue section words and
+admin curator labels stay application copy.
 
 ## States
 

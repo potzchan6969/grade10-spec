@@ -1,13 +1,17 @@
 import { Footer } from "@grade10/design-system/components/layout/footer";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
-import { SiteHeader } from "@grade10/ui";
+import {
+  FeaturedAuctionsBanner,
+  type FeaturedAuctionsBannerCopy,
+  type FeaturedAuctionsBannerSlide,
+  SiteHeader,
+} from "@grade10/ui";
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import {
   AuctionCategoryButton,
   AuctionLotCard,
   FeaturedAuctions,
-  FeaturedAuctionsBanner,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
 import {
@@ -23,12 +27,63 @@ import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
 import { STORE_FOOTER } from "./store-content";
 
 const FEATURED_CAP = 4;
+/** Featured carousel holds at most three complete slides. */
+const FEATURED_BANNER_CAP = 3;
 /** Matches the Product List workbench filter refetch beat. */
 const FILTER_LOAD_MS = 450;
 const REVEAL_STAGGER_MS = 40;
 const REVEAL_STAGGER_CAP = 8;
 const DEFAULT_SKELETON_COUNT = 6;
 const SKELETON_FIXTURE_LOT = COLLECTION_LOTS[0];
+
+const FEATURED_BANNER_COPY: FeaturedAuctionsBannerCopy = {
+  active: "LIVE BIDDING",
+  upcoming: "UPCOMING",
+  ended: "ENDED",
+  currentBid: "CURRENT BID",
+  startingBid: "STARTING BID",
+  finalBid: "FINAL BID",
+  bidNow: "Bid Now",
+  viewAuction: "View Auction",
+  endsIn: "Ends in",
+  opensIn: "Opens in",
+  endedAt: "Ended",
+  progress: "Featured lots",
+  slide: "Show featured lot {position}: {title}",
+};
+
+function bidsLabel(count: number) {
+  return `${count} ${count === 1 ? "bid" : "bids"}`;
+}
+
+function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
+  const status =
+    lot.status === "Upcoming"
+      ? "upcoming"
+      : lot.status === "Ended"
+        ? "ended"
+        : "active";
+  return {
+    id: lot.id,
+    title: lot.title,
+    status,
+    imageSrc: lot.imageSrc,
+    imageAlt: lot.imageAlt,
+    href: lotAddress(lot),
+    currentBidMinor: lot.currentBidMinor,
+    currency: lot.currency,
+    bidCountLabel: bidsLabel(lot.bidCount),
+    countdown:
+      lot.status === "Ended"
+        ? undefined
+        : {
+            kind: lot.status === "Upcoming" ? "opens" : "ends",
+            atMs: Date.parse(
+              lot.status === "Upcoming" ? lot.startsAt : lot.closesAt,
+            ),
+          },
+  };
+}
 
 function prefersReducedMotion() {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -73,7 +128,17 @@ function AuctionCataloguePage({
 }: AuctionCataloguePageProps) {
   const ordered = useMemo(() => byCatalogueOrder(lots), [lots]);
   const live = ordered.filter((lot) => lot.status !== "Ended");
-  const featured = live.slice(0, FEATURED_CAP);
+  const featuredCap =
+    featuredLayout === "banner" ? FEATURED_BANNER_CAP : FEATURED_CAP;
+  const featured = live.slice(0, featuredCap);
+  const featuredSlides = useMemo(
+    () =>
+      ordered
+        .filter((lot) => lot.status !== "Ended")
+        .slice(0, featuredCap)
+        .map(toFeaturedSlide),
+    [ordered, featuredCap],
+  );
   const [selectedId, setSelectedId] = useState<string | null>(null);
   const [watched, setWatched] = useState<ReadonlySet<string>>(new Set());
   /** First paint + filter refetch — Product List workbench recipe. */
@@ -269,7 +334,10 @@ function AuctionCataloguePage({
 
         {featured.length > 0 ? (
           featuredLayout === "banner" ? (
-            <FeaturedAuctionsBanner lots={featured} />
+            <FeaturedAuctionsBanner
+              copy={FEATURED_BANNER_COPY}
+              slides={featuredSlides}
+            />
           ) : featuredLayout === "pair" ? (
             <FeaturedAuctionsPair
               lots={featured}

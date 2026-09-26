@@ -76,7 +76,7 @@ export const CarouselBanner: Story = {
     ).toBeInTheDocument();
     expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
     expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
     expect(
       canvas.getByRole("navigation", { name: "Featured lots" }),
     ).toBeInTheDocument();
@@ -92,13 +92,49 @@ export const CarouselBanner: Story = {
         name: FEW_FEATURED_LOTS[0].title,
       }),
     ).toBeInTheDocument();
-    // Stay on slide 1 — Storybook runs play on open; clicking through looked
-    // like the banner auto-advanced after a fraction of a second.
+
+    const second = canvas.getByRole("button", {
+      name: `Show featured lot 2: ${FEW_FEATURED_LOTS[1].title}`,
+    });
+    await userEvent.click(second);
+    await waitFor(() => {
+      expect(second).toHaveAttribute("aria-current", "true");
+    });
     expect(
-      canvas.getByRole("button", {
-        name: `Show featured lot 1: ${FEW_FEATURED_LOTS[0].title}`,
+      canvas.getByRole("heading", {
+        level: 2,
+        name: FEW_FEATURED_LOTS[1].title,
       }),
-    ).toHaveAttribute("aria-current", "true");
+    ).toBeInTheDocument();
+  },
+};
+
+/** One Featured slide — multi-dot progress is not required (SC-36). */
+export const CarouselBannerOne: Story = {
+  name: "Carousel banner one slide",
+  args: {
+    lots: ONE_FEATURED_LOTS,
+    featuredLayout: "banner",
+    showCategories: false,
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = await expectCatalogueHead(canvasElement);
+    await waitForPageEnter(canvas);
+    const live = ONE_FEATURED_LOTS.find((lot) => lot.status !== "Ended");
+    expect(live).toBeDefined();
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: live?.title,
+      }),
+    ).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("navigation", { name: "Featured lots" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
+    ).toBeInTheDocument();
   },
 };
 
@@ -130,7 +166,11 @@ export const OverlappingFeatured: Story = {
 
 export const OneFeatured: Story = {
   name: "One featured lot",
-  args: { lots: ONE_FEATURED_LOTS, featuredLayout: "row", showCategories: true },
+  args: {
+    lots: ONE_FEATURED_LOTS,
+    featuredLayout: "row",
+    showCategories: true,
+  },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -168,7 +208,11 @@ export const OneFeatured: Story = {
 
 export const FewFeatured: Story = {
   name: "A few featured lots",
-  args: { lots: FEW_FEATURED_LOTS, featuredLayout: "row", showCategories: true },
+  args: {
+    lots: FEW_FEATURED_LOTS,
+    featuredLayout: "row",
+    showCategories: true,
+  },
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);

@@ -21,6 +21,7 @@
   "fromBid": "From {amount}",
   "lotCount": "{count, plural, one {# lot} other {# lots}}",
   "listingsLabel": "Auction listings",
+  "allAuctions": "All auctions",
   "searchLots": "Search lots",
   "filter": "Filter",
   "filterStatus": "Status",
@@ -29,5 +30,20 @@
   "allLots": "All lots",
   "endingSoon": "Ending soon",
   "endsIn": "Ends in {remaining}",
-  "opensIn": "Opens in {remaining}"
+  "opensIn": "Opens in {remaining}",
+  "featured": {
+    "active": "LIVE BIDDING",
+    "upcoming": "UPCOMING",
+    "ended": "ENDED",
+    "currentBid": "CURRENT BID",
+    "startingBid": "STARTING BID",
+    "finalBid": "FINAL BID",
+    "bidNow": "Bid Now",
+    "viewAuction": "View Auction",
+    "endsIn": "Ends in",
+    "opensIn": "Opens in",
+    "endedAt": "Ended",
+    "progress": "Featured lots",
+    "slide": "Show featured lot {position}: {title}"
+  }
 }

@@ -38,11 +38,12 @@ export type CatalogueLot = {
   /** ISO 8601. Active lots order by this; Ended lots by the latest first. */
   closesAt: string;
   closeLabel: string;
+  /** @deprecated Prefer `currentBidMinor` + `currency` for Featured. */
   bidLabel: string;
-  /** Minor units for live roll; when set, Featured banner uses rolling digits. */
-  bidAmountMinor?: number;
-  /** ISO currency for `bidAmountMinor`. Defaults to HKD in fixtures. */
-  currency?: string;
+  /** Current or starting bid in minor units. */
+  currentBidMinor: number;
+  /** ISO 4217. */
+  currency: string;
   /** Live bid count shown beside the price. */
   bidCount: number;
   imageAlt: string;
@@ -61,6 +62,8 @@ function lot(
     closeLabel:
       partial.closeLabel ?? partial.closesAt.slice(0, 16).replace("T", " "),
     bidLabel: partial.bidLabel ?? "HK$1,200.00",
+    currentBidMinor: partial.currentBidMinor ?? 120_000,
+    currency: partial.currency ?? "HKD",
     bidCount: partial.bidCount ?? 0,
     imageAlt: partial.imageAlt ?? partial.title,
     imageSrc: partial.imageSrc ?? CATALOGUE_IMAGE,
@@ -214,6 +217,8 @@ export const COLLECTION_LOTS: CatalogueLot[] = COLLECTION.map((item, index) => {
       minimumFractionDigits: 2,
       maximumFractionDigits: 2,
     })}`,
+    currentBidMinor: (1200 + index * 350) * 100,
+    currency: "HKD",
     bidCount: 3 + index * 2,
   });
 });
@@ -247,7 +252,7 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-01T18:00:00+08:00",
     closeLabel: "1 Oct 2026, 6:00 pm",
     bidLabel: "HK$82,160.00",
-    bidAmountMinor: 8_216_000,
+    currentBidMinor: 8_216_000,
     currency: "HKD",
     bidCount: 12,
   }),
@@ -263,7 +268,7 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-02T18:00:00+08:00",
     closeLabel: "2 Oct 2026, 6:00 pm",
     bidLabel: "HK$147,064.00",
-    bidAmountMinor: 14_706_400,
+    currentBidMinor: 14_706_400,
     currency: "HKD",
     bidCount: 18,
   }),
@@ -280,7 +285,7 @@ export const FEW_FEATURED_LOTS: CatalogueLot[] = [
     closesAt: "2026-10-03T18:00:00+08:00",
     closeLabel: "3 Oct 2026, 6:00 pm",
     bidLabel: "HK$365,057.23",
-    bidAmountMinor: 36_505_723,
+    currentBidMinor: 36_505_723,
     currency: "HKD",
     bidCount: 27,
   }),

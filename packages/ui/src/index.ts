@@ -90,9 +90,13 @@ export {
   type AuctionCardWhen,
 } from "./blocks/auction-listing/auction-card";
 export {
-  ListingRollingMoneyDisplay,
-  type ListingRollingMoneyDisplayProps,
-} from "./blocks/auction-listing/listing-rolling-money-display";
+  FeaturedAuctionsBanner,
+  type FeaturedAuctionsBannerCopy,
+  type FeaturedAuctionsBannerCountdown,
+  type FeaturedAuctionsBannerProps,
+  type FeaturedAuctionsBannerSlide,
+  type FeaturedAuctionsBannerStatus,
+} from "./blocks/auction-listing/featured-auctions-banner";
 export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
@@ -139,6 +143,10 @@ export {
   validateCommittedMaximumMinor,
   wholeMajorDraftFromMinor,
 } from "./blocks/auction-listing/listing-bid-money";
+export {
+  ListingCountdownDisplay,
+  type ListingCountdownDisplayProps,
+} from "./blocks/auction-listing/listing-countdown-display";
 // shared/ui/auction-listing
 export {
   ListingDetails,
@@ -185,6 +193,10 @@ export {
   type ListingLotMetaFact,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
+export {
+  ListingRollingMoneyDisplay,
+  type ListingRollingMoneyDisplayProps,
+} from "./blocks/auction-listing/listing-rolling-money-display";
 export {
   ListingUserBidHistory,
   type ListingUserBidHistoryCopy,

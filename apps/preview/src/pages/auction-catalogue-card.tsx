@@ -1,4 +1,3 @@
-import { StepIndicator } from "@grade10/design-system/components/display/step-indicator";
 import {
   CarouselProgress,
   CarouselProgressItem,
@@ -7,15 +6,7 @@ import { buttonVariants } from "@grade10/design-system/components/forms/button";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { toast } from "@grade10/design-system/components/overlays/toast";
 import { cn } from "@grade10/design-system/lib/utils";
-import { ListingRollingMoneyDisplay } from "@grade10/ui";
-import {
-  ArrowRight,
-  Bell,
-  BellSlash,
-  CalendarBlank,
-  CaretLeft,
-  CaretRight,
-} from "@phosphor-icons/react";
+import { Bell, BellSlash, CaretLeft, CaretRight } from "@phosphor-icons/react";
 import { registerBones } from "boneyard-js";
 import { Skeleton } from "boneyard-js/react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
@@ -32,11 +23,6 @@ import { AUCTION_LOT_DETAILS_COPY } from "./auction-lot-details-content";
 registerBones({
   "auction-catalogue-lot-card": auctionLotCardBones,
 });
-
-const FEATURED_BANNER_BG = new URL(
-  "./auction-catalogue-featured-banner-bg.fixture.jpg",
-  import.meta.url,
-).href;
 
 const pressable =
   "cursor-pointer rounded-md outline-none transition-opacity duration-200 ease-out focus-visible:ring-3 focus-visible:ring-ring/50 active:opacity-80 motion-reduce:transition-none";
@@ -146,36 +132,6 @@ function bidsLabel(count: number) {
   return `${count} ${count === 1 ? "bid" : "bids"}`;
 }
 
-/** Banner countdown — same short remaining form as the lot cards. */
-function BannerCountdown({ lot }: { lot: CatalogueLot }) {
-  const opens = lot.status === "Upcoming";
-  const target = opens ? lot.startsAt : lot.closesAt;
-  const targetMs = Date.parse(target);
-  const now = useNow(targetMs);
-  const left = targetMs - now;
-  const parts = remainingParts(left);
-  const lead = opens ? "Opens in" : "Ends in";
-
-  if (lot.status === "Ended") {
-    return (
-      <span className="text-sm text-secondary-foreground">
-        Ended {lot.closeLabel}
-      </span>
-    );
-  }
-
-  return (
-    <time className="text-sm tabular-nums text-secondary-foreground" dateTime={target}>
-      <span className="sr-only">
-        {lead} {parts.long}
-      </span>
-      <span aria-hidden="true">
-        {lead} {parts.short}
-      </span>
-    </time>
-  );
-}
-
 function CatalogueWatch({
   lot,
   watched,
@@ -200,7 +156,10 @@ function CatalogueWatch({
       : WATCH_COPY.unwatchedToast;
     if (!message) return;
     toast(message.title, {
-      description: "description" in message ? message.description : undefined,
+      description:
+        "description" in message && typeof message.description === "string"
+          ? message.description
+          : undefined,
     });
   }, [lot.status, watched]);
 
@@ -625,19 +584,6 @@ type FeaturedAuctionsPairProps = {
 };
 
 const PAIR_AUTO_MS = 5000;
-/** Full-width banner dwell — slower than the overlapping pair. */
-const BANNER_AUTO_MS = 8000;
-/** Image slab crossfade — panel-scale reveal (`--duration-slow`). */
-const BANNER_IMAGE_FADE_S = 0.4;
-/** Copy swap — text reveal (`--duration-fast` + `--ease-in-out`). */
-const BANNER_COPY_DURATION_S = 0.25;
-/** Enter travel on X — matches CarouselProgress left→right (`--distance-medium`). */
-const BANNER_COPY_X_ENTER = 12;
-/** Exit travel on X — quieter than enter (open/close asymmetry). */
-const BANNER_COPY_X_EXIT = -6;
-/** Soften the swap on a shared muted ground (`--blur-small`). */
-const BANNER_COPY_BLUR_PX = 2;
-const BANNER_IMAGE_EASE = [0.22, 1, 0.36, 1] as const;
 const PAIR_EASE_ENTER = [0.16, 1, 0.3, 1] as const;
 const PAIR_EASE_EXIT = [0.4, 0, 1, 1] as const;
 const PAIR_EASE = PAIR_EASE_ENTER;
@@ -1149,263 +1095,6 @@ function FeaturedAuctionsPair({
   );
 }
 
-type FeaturedAuctionsBannerProps = {
-  lots: readonly CatalogueLot[];
-};
-
-/**
- * Full-width Figma carousel banner (`6945:12258`): copy on muted left,
- * staged lot image on the bronze right, with CarouselProgress under the copy
- * on desktop. Mobile stacks image → progress band → copy so the dots stay
- * clear of Ends and sit above LIVE BIDDING with room to breathe. The copy
- * column keeps a desktop minimum width so the title does not wrap early.
- */
-function FeaturedAuctionsBanner({ lots }: FeaturedAuctionsBannerProps) {
-  const [index, setIndex] = useState(0);
-  const [paused, setPaused] = useState(false);
-  const [playKey, setPlayKey] = useState(0);
-  const reduceMotion = useReducedMotion();
-  const directionRef = useRef(1);
-  const safeIndex = lots.length === 0 ? 0 : Math.min(index, lots.length - 1);
-  const lot = lots[safeIndex];
-  const direction = directionRef.current;
-  const imageFadeMs = reduceMotion ? 0.01 : BANNER_IMAGE_FADE_S;
-  const copyDurationS = reduceMotion ? 0.01 : BANNER_COPY_DURATION_S;
-  const imageTransition = {
-    duration: imageFadeMs,
-    ease: BANNER_IMAGE_EASE,
-  } as const;
-  const copyTransition = {
-    duration: copyDurationS,
-    ease: "ease-in-out" as const,
-  };
-
-  useEffect(() => {
-    if (index >= lots.length) setIndex(0);
-  }, [index, lots.length]);
-
-  useEffect(() => {
-    if (!reduceMotion || lots.length <= 1 || paused) return;
-    const timer = window.setTimeout(() => {
-      directionRef.current = 1;
-      setIndex((current) => (current + 1) % lots.length);
-      setPlayKey((key) => key + 1);
-    }, BANNER_AUTO_MS);
-    return () => window.clearTimeout(timer);
-  }, [lots.length, paused, playKey, reduceMotion, safeIndex]);
-
-  function goTo(nextIndex: number) {
-    if (nextIndex === safeIndex) {
-      setPlayKey((key) => key + 1);
-      return;
-    }
-    const last = lots.length - 1;
-    if (safeIndex === last && nextIndex === 0) directionRef.current = 1;
-    else if (safeIndex === 0 && nextIndex === last) directionRef.current = -1;
-    else directionRef.current = nextIndex > safeIndex ? 1 : -1;
-    setIndex(nextIndex);
-    setPlayKey((key) => key + 1);
-  }
-
-  function advanceFromTimer() {
-    if (paused || lots.length <= 1) return;
-    directionRef.current = 1;
-    setIndex((current) => (current + 1) % lots.length);
-    setPlayKey((key) => key + 1);
-  }
-
-  if (!lot) return null;
-
-  const statusLabel =
-    lot.status === "Upcoming"
-      ? "UPCOMING"
-      : lot.status === "Ended"
-        ? "ENDED"
-        : "LIVE BIDDING";
-  const bidCaption =
-    lot.status === "Upcoming"
-      ? "STARTING BID"
-      : lot.status === "Ended"
-        ? "FINAL BID"
-        : "CURRENT BID";
-  const ctaLabel = lot.status === "Active" ? "Bid Now" : "View Auction";
-  const showLiveBidRoll =
-    lot.status === "Active" && lot.bidAmountMinor != null;
-  const copyEnterX = reduceMotion ? 0 : BANNER_COPY_X_ENTER;
-  const copyExitX = reduceMotion ? 0 : BANNER_COPY_X_EXIT;
-  const copyBlur = reduceMotion ? "blur(0px)" : `blur(${BANNER_COPY_BLUR_PX}px)`;
-
-  return (
-    <section
-      aria-labelledby="featured-auctions-banner"
-      aria-roledescription="carousel"
-      className="w-full text-foreground"
-      onBlurCapture={(event: FocusEvent<HTMLElement>) => {
-        if (
-          !event.currentTarget.contains(event.relatedTarget as Node | null)
-        ) {
-          setPaused(false);
-        }
-      }}
-      onFocusCapture={() => setPaused(true)}
-      onMouseEnter={() => setPaused(true)}
-      onMouseLeave={() => setPaused(false)}
-    >
-      <div className="grid w-full grid-cols-1 md:h-[600px] md:grid-cols-[minmax(28rem,1fr)_minmax(0,2fr)] md:grid-rows-[minmax(0,1fr)_auto]">
-        {/* Image first on small screens; right column from md. */}
-        <div className="relative order-1 h-72 overflow-hidden sm:h-80 md:col-start-2 md:row-span-2 md:h-full md:order-none">
-          <img
-            alt=""
-            aria-hidden="true"
-            className="absolute inset-0 size-full object-cover"
-            height={805}
-            src={FEATURED_BANNER_BG}
-            width={1305}
-          />
-          <AnimatePresence initial={false} mode="sync">
-            <motion.div
-              key={lot.id}
-              animate={{ opacity: 1 }}
-              className="absolute inset-0"
-              exit={{ opacity: 0 }}
-              initial={{ opacity: 0 }}
-              transition={imageTransition}
-            >
-              <a
-                className={cn(
-                  pressable,
-                  "absolute top-1/2 left-1/2 h-[70%] -translate-x-1/2 -translate-y-1/2 overflow-hidden rounded-[16px] border border-[color-mix(in_oklab,var(--primary)_55%,transparent)] bg-background-subtle shadow-[0_24px_56px_-16px_rgb(0_0_0_/_45%)]",
-                )}
-                href={lotAddress(lot)}
-              >
-                <img
-                  alt={lot.imageAlt}
-                  className="block h-full w-auto max-w-none object-contain"
-                  height={800}
-                  loading="eager"
-                  src={lot.imageSrc}
-                  width={600}
-                />
-              </a>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-
-        {/*
-          Mobile: own band between image and copy — easy to spot, cannot
-          overlap Ends. md+: foot of the copy column (Figma).
-        */}
-        {lots.length > 1 ? (
-          <CarouselProgress
-            aria-label="Featured lots"
-            className="relative z-10 order-2 justify-center border-y border-border bg-background px-6 py-5 sm:px-10 md:order-none md:col-start-1 md:row-start-2 md:justify-start md:border-0 md:bg-muted md:px-16 md:pt-5 md:pb-10"
-          >
-            {lots.map((item, itemIndex) => (
-              <CarouselProgressItem
-                active={itemIndex === safeIndex}
-                durationMs={BANNER_AUTO_MS}
-                key={item.id}
-                label={`Show featured lot ${itemIndex + 1}: ${item.title}`}
-                onClick={() => goTo(itemIndex)}
-                onComplete={advanceFromTimer}
-                paused={paused}
-                playKey={playKey}
-                reduceMotion={Boolean(reduceMotion)}
-              />
-            ))}
-          </CarouselProgress>
-        ) : null}
-
-        <div
-          className={cn(
-            "relative order-3 min-h-[22rem] min-w-0 overflow-hidden bg-muted sm:min-h-[24rem] md:order-none md:col-start-1 md:row-start-1 md:h-full md:min-h-0 md:min-w-[28rem]",
-            lots.length > 1 ? null : "md:row-span-2",
-          )}
-        >
-          <AnimatePresence initial={false} mode="sync">
-            <motion.div
-              key={lot.id}
-              animate={{
-                opacity: 1,
-                x: 0,
-                filter: "blur(0px)",
-              }}
-              className="absolute inset-0 flex flex-col justify-start gap-5 overflow-y-auto px-6 pt-12 pb-10 sm:gap-6 sm:px-10 sm:pt-12 sm:pb-12 md:justify-center md:gap-8 md:overflow-hidden md:px-16 md:pt-12 md:pb-12"
-              exit={{
-                opacity: 0,
-                x: copyExitX * direction,
-                filter: copyBlur,
-              }}
-              initial={{
-                opacity: 0,
-                x: copyEnterX * direction,
-                filter: copyBlur,
-              }}
-              transition={copyTransition}
-            >
-              <div className="flex items-center gap-2">
-                {lot.status === "Active" ? (
-                  <StepIndicator state="progress" />
-                ) : null}
-                <p className="text-sm font-semibold tracking-wide text-foreground uppercase">
-                  {statusLabel}
-                </p>
-              </div>
-              <h2
-                className="max-w-xl text-2xl font-semibold leading-8 text-foreground sm:text-3xl sm:leading-10 md:text-4xl"
-                id="featured-auctions-banner"
-              >
-                <a
-                  className={cn(
-                    pressable,
-                    "line-clamp-3 underline-offset-2 hover:underline",
-                  )}
-                  href={lotAddress(lot)}
-                >
-                  {lot.title}
-                </a>
-              </h2>
-              <div className="flex w-full flex-col items-start">
-                <p className="text-sm font-medium tracking-wide text-secondary-foreground uppercase">
-                  {bidCaption}
-                </p>
-                <p className="text-xl font-semibold tabular-nums leading-7 text-foreground sm:text-2xl sm:leading-8">
-                  {showLiveBidRoll ? (
-                    <ListingRollingMoneyDisplay
-                      amountMinor={lot.bidAmountMinor!}
-                      currency={lot.currency ?? "HKD"}
-                    />
-                  ) : (
-                    lot.bidLabel
-                  )}
-                </p>
-              </div>
-              <div className="flex items-center gap-4">
-                <a
-                  className={buttonVariants({
-                    size: "lg",
-                    variant: "default",
-                  })}
-                  href={lotAddress(lot)}
-                >
-                  {ctaLabel}
-                  <ArrowRight aria-hidden size={16} weight="bold" />
-                </a>
-              </div>
-              <div className="flex flex-wrap items-center gap-x-4 gap-y-2 text-secondary-foreground">
-                <span className="inline-flex items-center gap-1">
-                  <CalendarBlank aria-hidden size={14} weight="bold" />
-                  <BannerCountdown lot={lot} />
-                </span>
-              </div>
-            </motion.div>
-          </AnimatePresence>
-        </div>
-      </div>
-    </section>
-  );
-}
-
 type AuctionCategoryButtonProps = {
   name: string;
   selected?: boolean;
@@ -1473,6 +1162,5 @@ export {
   AuctionCategoryButton,
   AuctionLotCard,
   FeaturedAuctions,
-  FeaturedAuctionsBanner,
   FeaturedAuctionsPair,
 };

@@ -1,15 +1,19 @@
+import {
+  FeaturedAuctionsBanner,
+  type FeaturedAuctionsBannerCopy,
+  type FeaturedAuctionsBannerSlide,
+} from "@grade10/ui";
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { expect, userEvent, waitFor, within } from "storybook/test";
-import { formatMoney } from "@grade10/ui";
 import {
   FeaturedAuctions,
-  FeaturedAuctionsBanner,
   FeaturedAuctionsPair,
 } from "./auction-catalogue-card";
 import {
   type CatalogueLot,
   FEW_FEATURED_LOTS,
+  ONE_FEATURED_LOTS,
 } from "./auction-catalogue-content";
 
 /**
@@ -26,38 +30,53 @@ type Story = StoryObj<typeof meta>;
 
 const featuredLots = FEW_FEATURED_LOTS;
 
-/** Preview-only: bump every Active featured bid so the visible slide can roll. */
-const LIVE_BID_TICK_MS = 2_800;
-const LIVE_BID_STEP_MINOR = 50_000;
+const FEATURED_BANNER_COPY: FeaturedAuctionsBannerCopy = {
+  active: "LIVE BIDDING",
+  upcoming: "UPCOMING",
+  ended: "ENDED",
+  currentBid: "CURRENT BID",
+  startingBid: "STARTING BID",
+  finalBid: "FINAL BID",
+  bidNow: "Bid Now",
+  viewAuction: "View Auction",
+  endsIn: "Ends in",
+  opensIn: "Opens in",
+  endedAt: "Ended",
+  progress: "Featured lots",
+  slide: "Show featured lot {position}: {title}",
+};
 
-function bumpFeaturedBids(lots: readonly CatalogueLot[]): CatalogueLot[] {
-  return lots.map((lot) => {
-    if (lot.status !== "Active" || lot.bidAmountMinor == null) return lot;
-    const currency = lot.currency ?? "HKD";
-    const bidAmountMinor = lot.bidAmountMinor + LIVE_BID_STEP_MINOR;
-    return {
-      ...lot,
-      bidAmountMinor,
-      bidLabel: formatMoney(bidAmountMinor, currency),
-    };
-  });
+function bidsLabel(count: number) {
+  return `${count} ${count === 1 ? "bid" : "bids"}`;
 }
 
-function LiveFeaturedAuctionsBanner({
-  initialLots,
-}: {
-  initialLots: readonly CatalogueLot[];
-}) {
-  const [lots, setLots] = useState(() => [...initialLots]);
-
-  useEffect(() => {
-    const timer = window.setInterval(() => {
-      setLots((current) => bumpFeaturedBids(current));
-    }, LIVE_BID_TICK_MS);
-    return () => window.clearInterval(timer);
-  }, []);
-
-  return <FeaturedAuctionsBanner lots={lots} />;
+function toFeaturedSlide(lot: CatalogueLot): FeaturedAuctionsBannerSlide {
+  const status =
+    lot.status === "Upcoming"
+      ? "upcoming"
+      : lot.status === "Ended"
+        ? "ended"
+        : "active";
+  return {
+    id: lot.id,
+    title: lot.title,
+    status,
+    imageSrc: lot.imageSrc,
+    imageAlt: lot.imageAlt,
+    href: `https://grade10.com/auction/listings/${lot.slug}`,
+    currentBidMinor: lot.currentBidMinor,
+    currency: lot.currency,
+    bidCountLabel: bidsLabel(lot.bidCount),
+    countdown:
+      lot.status === "Ended"
+        ? undefined
+        : {
+            kind: lot.status === "Upcoming" ? "opens" : "ends",
+            atMs: Date.parse(
+              lot.status === "Upcoming" ? lot.startsAt : lot.closesAt,
+            ),
+          },
+  };
 }
 
 function useWatchState() {
@@ -96,122 +115,6 @@ function FeaturedPair() {
     />
   );
 }
-
-/**
- * Full-width Figma carousel banner (`6945:12258`): muted copy column + bronze
- * staged image, as on the Auctions page frame. Default Featured story.
- * Current bid ticks up every few seconds so the rolling digits can be checked.
- */
-export const CarouselBanner: Story = {
-  name: "Carousel banner",
-  render: () => <LiveFeaturedAuctionsBanner initialLots={featuredLots} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(
-      canvas.getByRole("heading", {
-        level: 2,
-        name: featuredLots[0].title,
-      }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
-    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
-    expect(
-      canvas.getByRole("navigation", { name: "Featured lots" }),
-    ).toBeInTheDocument();
-    expect(canvas.queryByText(/\d+ bids?/)).toBeNull();
-    // Stay on slide 1 — do not click through slides here; Storybook runs play
-    // on open and that looked like an instant auto-advance.
-    expect(
-      canvas.getByRole("button", {
-        name: `Show featured lot 1: ${featuredLots[0].title}`,
-      }),
-    ).toHaveAttribute("aria-current", "true");
-  },
-};
-
-/** One curated Active slide — no progress dots. */
-export const CarouselBannerOneSlide: Story = {
-  name: "Carousel banner · one slide",
-  render: () => <FeaturedAuctionsBanner lots={[featuredLots[0]]} />,
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("navigation", { name: "Featured lots" }),
-    ).toBeNull();
-  },
-};
-
-/** Upcoming Featured slide: no live dot, STARTING BID, View Auction. */
-export const CarouselBannerUpcoming: Story = {
-  name: "Carousel banner · upcoming",
-  render: () => {
-    const upcoming: CatalogueLot = {
-      ...featuredLots[0],
-      id: "featured-upcoming",
-      status: "Upcoming",
-      startsAt: "2026-10-10T18:00:00+08:00",
-      closesAt: "2026-10-17T18:00:00+08:00",
-      closeLabel: "10 Oct 2026, 6:00 pm",
-      bidLabel: "HK$12,000.00",
-      bidAmountMinor: 1_200_000,
-      currency: "HKD",
-      bidCount: 0,
-    };
-    return <FeaturedAuctionsBanner lots={[upcoming]} />;
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("UPCOMING")).toBeInTheDocument();
-    expect(canvas.queryByText("LIVE BIDDING")).toBeNull();
-    expect(canvas.getByText("STARTING BID")).toBeInTheDocument();
-    expect(
-      canvas.getByRole("link", { name: "View Auction" }),
-    ).toBeInTheDocument();
-    expect(canvas.queryByRole("link", { name: "Bid Now" })).toBeNull();
-  },
-};
-
-/** Mixed Active + Upcoming in one carousel — chrome follows each slide. */
-export const CarouselBannerMixed: Story = {
-  name: "Carousel banner · mixed",
-  render: () => {
-    const upcoming: CatalogueLot = {
-      ...featuredLots[1],
-      id: "featured-mixed-upcoming",
-      status: "Upcoming",
-      startsAt: "2026-10-10T18:00:00+08:00",
-      closesAt: "2026-10-17T18:00:00+08:00",
-      closeLabel: "10 Oct 2026, 6:00 pm",
-      bidLabel: "HK$12,000.00",
-      bidAmountMinor: 1_200_000,
-      currency: "HKD",
-      bidCount: 0,
-    };
-    return (
-      <FeaturedAuctionsBanner lots={[featuredLots[0], upcoming, featuredLots[2]]} />
-    );
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Bid Now" })).toBeInTheDocument();
-
-    const second = canvas.getByRole("button", {
-      name: /Show featured lot 2:/,
-    });
-    await userEvent.click(second);
-    await waitFor(() => {
-      expect(canvas.getByText("UPCOMING")).toBeInTheDocument();
-    });
-    expect(
-      canvas.getByRole("link", { name: "View Auction" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("STARTING BID")).toBeInTheDocument();
-  },
-};
 
 /** Grade10 Auctions band with the four soonest lots in one scrolling row. */
 export const Scrolling: Story = {
@@ -282,5 +185,76 @@ export const OverlappingPair: Story = {
       ).toBeInTheDocument();
     });
     expect(second).toHaveAttribute("aria-current", "true");
+  },
+};
+
+/**
+ * Full-width Figma carousel banner (`6945:12258`): muted copy column + bronze
+ * staged image, as on the Auctions page frame. Promoted `FeaturedAuctionsBanner`
+ * from `@grade10/ui`.
+ */
+export const CarouselBanner: Story = {
+  name: "Carousel banner",
+  render: () => (
+    <FeaturedAuctionsBanner
+      copy={FEATURED_BANNER_COPY}
+      slides={featuredLots.map(toFeaturedSlide)}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: featuredLots[0].title,
+      }),
+    ).toBeInTheDocument();
+    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
+    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
+    expect(
+      canvas.getByRole("navigation", { name: "Featured lots" }),
+    ).toBeInTheDocument();
+
+    const second = canvas.getByRole("button", {
+      name: `Show featured lot 2: ${featuredLots[1].title}`,
+    });
+    await userEvent.click(second);
+    await waitFor(() => {
+      expect(
+        canvas.getByRole("heading", {
+          level: 2,
+          name: featuredLots[1].title,
+        }),
+      ).toBeInTheDocument();
+    });
+    expect(second).toHaveAttribute("aria-current", "true");
+  },
+};
+
+/** One Featured slide — progress multi-dot advance is not required (SC-36). */
+export const CarouselBannerOne: Story = {
+  name: "Carousel banner one slide",
+  render: () => (
+    <FeaturedAuctionsBanner
+      copy={FEATURED_BANNER_COPY}
+      slides={ONE_FEATURED_LOTS.filter((lot) => lot.status !== "Ended").map(
+        toFeaturedSlide,
+      )}
+    />
+  ),
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    const live = ONE_FEATURED_LOTS.find((lot) => lot.status !== "Ended");
+    expect(live).toBeDefined();
+    expect(
+      canvas.getByRole("heading", {
+        level: 2,
+        name: live?.title,
+      }),
+    ).toBeInTheDocument();
+    expect(
+      canvas.queryByRole("navigation", { name: "Featured lots" }),
+    ).not.toBeInTheDocument();
   },
 };
