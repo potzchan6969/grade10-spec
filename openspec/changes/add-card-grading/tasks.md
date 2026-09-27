@@ -1905,9 +1905,10 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       header, and a submission id that resolves to nothing saying so; the
       timeline words the kinds `STAFF_ONLY_EVENT_KINDS` holds in the
       console's own English, each marked Staff only: `reference_unavailable`
-      "Price reference unavailable: cards kept as typed",
+      "Price reference unavailable for N of the list: kept as typed",
       `booking_cache_repaired` "Booking copy put back in step with the diary"
-      and `card_checked` "Card checked at the desk: note and photographs"
+      and `card_checked` "<card> checked at the desk, declared <amount>:
+      note and photographs", with ", condition noted" where one was
       (`grade10-admin-grading-counter-SC-50`,
       `grade10-admin-grading-counter-SC-51`,
       `grade10-admin-grading-counter-SC-52`,
@@ -1935,8 +1936,10 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-61`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-97`)
-- [ ] 28.8 Build the documents tab's read-only list, each paper with its
-      fingerprint and Send again where its letter failed, and `ReversalDialog`,
+- [ ] 28.8 Build the documents tab's list, each paper with its fingerprint,
+      Send again where its letter failed, and a sealed copy shown on the iPad
+      or its link copied (`grade10-admin-grading-counter-SC-48`), and
+      `ReversalDialog`,
       which asks for a payout's reversal the way the payout is asked
       (`grade10-admin-grading-counter-SC-49`,
       `grade10-admin-grading-counter-SC-64`)
