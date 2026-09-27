@@ -129,6 +129,35 @@ export const Ungraded: Story = {
   },
 };
 
+/** Returned ungraded with no code: the note alone, and no code line drawn
+ * with nothing after its label (beside shared-ui-grading-submission-SC-38,
+ * which names a code and a note; no scenario names an empty code yet). */
+export const UngradedNoCode: Story = {
+  args: {
+    cards: [
+      {
+        id: "card_no_code",
+        name: "Umbreon holo, Japanese promo",
+        grader: "PSA",
+        outcome: "ungraded",
+        outcomeLabel: "Ungraded",
+        ungraded: {
+          code: "",
+          note: "Returned ungraded. The grader gave no reason.",
+        },
+      },
+    ],
+  },
+  play: async ({ args, canvasElement }) => {
+    const canvas = within(canvasElement);
+    expectBadges(canvasElement, args.cards);
+    expect(
+      canvas.getByText("Returned ungraded. The grader gave no reason."),
+    ).toBeInTheDocument();
+    expect(canvas.queryByText(/Grader’s code/)).toBeNull();
+  },
+};
+
 /** Below its minimum grade: the grade and the badge, and it comes back raw
  * (shared-ui-grading-submission-SC-39, shared-ui-grading-submission-SC-64). */
 export const MinimumNotMet: Story = {

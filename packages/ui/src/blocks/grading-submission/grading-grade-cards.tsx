@@ -24,7 +24,8 @@ type GradingGradeCard = {
   /** The outcome and its word, where the card carries a badge. */
   outcome?: GradingCardOutcome;
   outcomeLabel?: string;
-  /** What the grader said about a card it returned raw. */
+  /** What the grader said about a card it returned raw; an empty `code`
+   * draws no code line. */
   ungraded?: { code: string; note: string };
   /** The photograph taken at hand-back, where the collector's slab has
    * one — `GradingCardRecord`'s own `slabPhotograph` slot, modelled the
@@ -141,9 +142,11 @@ function GradeCard({
           </HStack>
           {ungraded ? (
             <>
-              <Text face="mono" size="sm" tone="error">
-                {`${copy.ungradedCodeLabel}: ${ungraded.code}`}
-              </Text>
+              {ungraded.code ? (
+                <Text face="mono" size="sm" tone="error">
+                  {`${copy.ungradedCodeLabel}: ${ungraded.code}`}
+                </Text>
+              ) : null}
               <Text size="sm" tone="secondary">
                 {ungraded.note}
               </Text>
