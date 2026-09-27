@@ -29,6 +29,10 @@ and the internal id never reaches the collector; `cancelled` is theirs before ha
 | `cancelled` | Cancelled | — | — | retention runs from this day |
 | `expired` | Expired | — | — | retention runs from this day |
 
+- ❓ **Each card's grade at Grades are in** — the grades reach the page when the
+  cards are checked back in at the shop; whether they show once the grader
+  posts them, before the cards are back — Product
+
 ## A Card's Outcome
 
 🚧 **The set** — Listed · Handed in · Refused at the counter · the grade in the
@@ -201,6 +205,7 @@ The balance is what the collector owes on that day.
 | Payout for a lost or damaged card | ❓ Open | Declared value on its own record with a second person's approval, at the till or by bank transfer, plus the fee refunded, within 14 days of the batch being received at the shop; a card that turns up reverses the payout; the window and where it goes | Operations |
 | ID at hand-back | ❓ Open | Above HKD 10,000 declared in total a glance at an ID matching the name, keeping nothing; below it the code and the name; no counter override, since the collector renames from their phone | Operations |
 | The threshold's own figure | Decided | Above the threshold is more than HKD 10,000 declared in total, so the figure itself is released on the code and the name | Operations |
+| Each card's grade before the cards are back | ❓ Open | The page shows a card's grade once the cards are checked back in at the shop; at Grades are in it shows the grader's stage alone. Showing grades when the grader posts them would mean entering the grader's list before the cards arrive | Product |
 | Grade and cert into a vault case | ❓ Open | A follow-on; the vault reads the record from the submission page meanwhile | Product |
 | Retention | ❓ Open | 2,555 days for the documents and the photographs in the vault's classes and for the submission record as its own class, each from the submission's end event; no identity class; a live submission blocks an erasure as a live case does | Legal |
 :::
