@@ -167,6 +167,11 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   submission at the desk through `admin.savePlan`, the same service as the
   collector's, and hands in from `planned`, `pinned_fee_sheet` pinned at
   `deskPlan` with the list
+- **The desk plan may take the visit's owner.** `admin.savePlan` takes an
+  optional `visitOwnerId` for a card the visit's level cannot carry, and
+  writes it as `visit_owner_id` under the owner's lock only while that visit
+  is at the desk — booked for today or being handed in, in the same shop,
+  under the same email — refusing `VISIT_NOT_AT_DESK` otherwise
 - **Grades in** — `admin.recordBatchStage({ batchId, stage })` over a closed
   `GraderStage` set, one member flagged as the move: under `lockBatch`,
   `grader_stage` set, `recordGrades` per submission in id order, one event
