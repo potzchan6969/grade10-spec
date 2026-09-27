@@ -446,14 +446,15 @@ Admin(holds `grading:operate`) is checking cards on a `booked` submission at Val
 | --- | --- |
 | Level | Value |
 | Ceiling | 390000 minor units (HKD 3,900.00) |
-| Card's declared value | 400000 minor units (HKD 4,000.00) |
+| Card's value on the list | 300000 minor units (HKD 3,000.00) |
+| Card's value declared at the desk | 400000 minor units (HKD 4,000.00) |
 
 **Pre-conditions:**
-Admin(holds `grading:operate`) is checking cards on a `booked` submission at Value level.
+Admin(holds `grading:operate`) is checking cards on a `booked` submission at Value level, its visit started at the desk.
 
 **Steps:**
 
-1. Check the card's declared value against the ceiling.
+1. Check the card, declaring HKD 4,000.00 against its reference.
 2. Read the level banner.
 
 **Expected Results:**
