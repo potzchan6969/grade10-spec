@@ -102,7 +102,7 @@ export const ReducedMotion: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     const active = canvas.getByRole("button", { name: SLIDES[1] });
-    const fill = active.querySelector('[aria-hidden="true"]');
+    const fill = active.querySelector('[aria-hidden="true"] > span');
     await expect(fill).toBeInstanceOf(HTMLElement);
     await expect((fill as HTMLElement).style.width).toBe("100%");
     await expect((fill as HTMLElement).style.animation).toBe("");
