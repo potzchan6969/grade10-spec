@@ -2105,9 +2105,10 @@ Both walks drive these routes, so it lands with stage (b).
 
 ## 33. The walk — the plan, the drop-off and the hand-in (grade10)
 
-Needs groups 31 and 32. `POST /dev/submissions/seed` stands in for what the
-walk cannot take at the counter: the paid POS order and its money lines, the
-dev-sealed agreement packet for a submission seeded past `checked_in`, the
+Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
+and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
+the walk cannot take at the counter: the paid POS order and its money lines,
+the dev-sealed agreement packet for a submission seeded past `checked_in`, the
 batch row with its manifest lines, and the past `created_at`, `appointment_at`
 and `ready_at` that stand in for waiting. Stage (b).
 
@@ -2158,9 +2159,10 @@ and `ready_at` that stand in for waiting. Stage (b).
 
 ## 34. The walk — the batch, the hand-back and what is left behind (grade10)
 
-Needs groups 31 and 32. `POST /dev/submissions/seed` stands in for what the
-walk cannot take at the counter: the paid POS order and its money lines, the
-dev-sealed agreement packet for a submission seeded past `checked_in`, the
+Needs `feature-tcs.md` reviewed (`/tcs-review add-card-grading`) as its input,
+and groups 31 and 32 landed. `POST /dev/submissions/seed` stands in for what
+the walk cannot take at the counter: the paid POS order and its money lines,
+the dev-sealed agreement packet for a submission seeded past `checked_in`, the
 batch row with its manifest lines, and the past `created_at`, `appointment_at`
 and `ready_at` that stand in for waiting. Stage (c).
 

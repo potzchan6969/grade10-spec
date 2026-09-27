@@ -846,6 +846,8 @@ Lands once every other group is green and the change is deployed.
 
 ## 21. The walk (grade10)
 
+Needs `feature-tcs.md` reviewed (`/tcs-review complete-vault-collector-flow`) as its input.
+
 - [x] 21.1 Walk the request in
       `apps/frontend/grade10/e2e/tests/vault/request.spec.ts`:
       `grade10-site-vault-case-intake-US-01`,
