@@ -2,10 +2,10 @@ import { Text } from "react-email";
 
 export type SubmissionLineProps = {
   submissionId: string;
-  /** What the submission holds: the cards, the grader and the level. */
+  /** What the submission holds: the cards, and the grader and level once picked. */
   cardCount: number;
-  grader: string;
-  level: string;
+  grader: string | null;
+  level: string | null;
 };
 
 /** The submission's own line, directly above the footer of every letter. */
@@ -18,7 +18,7 @@ export function SubmissionLine({
   return (
     <Text className="mb-0 mt-6 text-sm leading-base text-fg-2">
       Submission <span className="font-bold text-fg">{submissionId}</span> ·{" "}
-      {cardCount} cards to {grader} {level}
+      {cardCount} cards{grader && level ? ` to ${grader} ${level}` : ""}
     </Text>
   );
 }
