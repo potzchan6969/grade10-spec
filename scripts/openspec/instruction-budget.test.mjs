@@ -55,10 +55,12 @@ const SKILLS_BUDGET = {
   "planning-pm": 2740,
   "planning-qa": 4446,
   "planning-design": 1868,
-  "planning-dev": 998,
+  // 1050 after the engineer lane gained its hand-off and archive guidance.
+  "planning-dev": 1050,
 };
 const RULES_BUDGET = {
-  proposal: 110,
+  // 150 after the proposal lane gained its PRD and metric guardrails.
+  proposal: 150,
   // Back to one block after the artifact split was undone: two passes over one
   // file, so one set of rules. 500 was the budget before the anchors; the
   // anchor and Purpose rules cost a little more than the journey cap and the
