@@ -1772,8 +1772,8 @@ Stage (b).
       the visit as booked until the diary answers it missed
       (`grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.5 Write the stories for `Grading/Dropoff/DropoffBooking` and
-      `Grading/Dropoff/DropoffBooked`, each with `surface: site`
+- [ ] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
+      `Grading/Dropoff/Dropoff Booked`, each with `surface: site`
 - [ ] 26.6 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`

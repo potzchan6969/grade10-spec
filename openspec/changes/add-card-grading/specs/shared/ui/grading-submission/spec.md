@@ -820,7 +820,7 @@ What the collector reads when the cards are ready.
 **Where and when** - it SHALL show the shop, its address and the hours it is
 given, in the zone it is given. Given no hours - the shop names no rule - it
 SHALL show the shop and its address alone, never an hours row with nothing
-after it.
+after it. It SHALL say that no booking is needed.
 
 **What is due** - where something is due it SHALL show one figure with the
 line that dresses it; where nothing is due it SHALL say so. It SHALL total
