@@ -86,6 +86,8 @@ One intake label per card, the cards sealed into the intake bag with the printed
 - 🚧 **Exceptions on the card** — ungraded, with the grader's code and note, the fee standing; an upcharge, the sheet's
   difference between the two levels, the invoice reconciled against it and a gap Commercial's; a slab on the manifest
   not scanned, finished as held by the grader with its expected date or as not returned; damaged, photographed in the box
+- ❓ **An ungraded line with no code** — whether a manifest line with no grade must carry the grader's code, or may come
+  with neither code nor note, the card then reading ungraded with nothing more — Operations
 - 🚧 **Finish receiving** — `graded → returned → ready` for every submission in the batch, each collector emailed the
   pickup code and what is due, a card held, not returned or damaged the day it is recorded; a batch saved half scanned keeps its scans
 
@@ -207,4 +209,5 @@ reaches only submissions not yet booked:
 | When the section opens to the shop | ❓ Open | Grading is off the public site and behind a grant in the console until launch; the change that opens it removes the hold in the same commit, once the readiness list is complete | Product |
 | How many may still join today | ❓ Open | The batch closing tile counts the drop-offs booked today at its grader and level and not yet handed in, and only on the day the batch closes; on any other day it shows none | Product |
 | A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
+| An ungraded line with no code | ❓ Open | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; whether a line with neither is refused at entry | Operations |
 :::
