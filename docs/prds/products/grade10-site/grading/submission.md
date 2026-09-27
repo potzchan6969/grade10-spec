@@ -105,8 +105,7 @@ it changes; the rest of the cards carry on:
 - 🚧 **The pickup code** — four digits on the page and in the ready email,
   shown at the counter; with it the shop's hours, walk in, and what is due
 - ❓ **A shop closed for a single day** — the hours shown are the weekly
-  rule alone; a one-off closure (`availability_exceptions`) still prints as
-  open on it — Operations
+  ones; a one-off closure still shows the shop open that day — Operations
 - 🚧 **The ID glance** — above the threshold an ID matching the name, nothing
   kept and no identity check; at or below it the code and the name release
 - ❓ **The threshold** — HKD 10,000 declared in total — Operations

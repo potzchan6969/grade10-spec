@@ -490,10 +490,9 @@ Stories `grading-submission-submission-page--`, the Rail rows `grading-submissio
 | Acts by status | only the status's acts on the page; nothing from Sent to Back | `grade10-site-grading-submission-lifecycle-SC-50` |
 | Error | the message in the error tone; the page reads again | **Out of suite:** the view's colocated test |
 
-Erasure refused and Grading holds unanswered are group 23's own states — the
-Your data block reads them off `grade10-site-vault-retention-and-erasure`,
-never off this page, so they carry no `grading-submission-submission-page--`
-id and are not counted among this page's stories.
+Erasure refused and Grading holds unanswered are group 23's own states, on
+the vault's Your data block rather than this page: they are its rows, under
+"Your data" below.
 
 ### Cards on the submission page
 
@@ -585,6 +584,15 @@ Stories `grading-documents-sign-page--`.
 | Receipt, withdrawn card | one card, its fee refunded | `grade10-site-grading-counter-documents-SC-20` |
 | Receipt, paid out | what was paid out and how | `grade10-site-grading-counter-documents-SC-21` |
 | Placeholders outside production | the brackets, marked | `grade10-site-grading-counter-documents-SC-24` |
+
+### Your data
+
+Stories `vault-retention-your-data-view--`. Group 23's surface in `packages/vault/frontend`: the Your data block reads grading's holds (`erasure.holds`) beside the vault's own.
+
+| State | Shows | Anchor |
+| --- | --- | --- |
+| Erasure refused | Your data: the ask refused by name while the submission is live | `grade10-site-vault-retention-and-erasure-SC-33` |
+| Grading holds unanswered | Your data: the grading block that could not be answered is named, logged by name, and the ask stays held back | `grade10-site-vault-retention-and-erasure-SC-15` |
 
 ### Letters
 

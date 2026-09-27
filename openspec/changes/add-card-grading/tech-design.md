@@ -242,8 +242,10 @@ the same transaction, zero rows a named `SUBMISSION_CONFLICT`.
   (`resource_id IS NULL`), ordered by weekday and start, the diary's read for
   a shop's doors rather than one resource's. `pickupOf` (`submissions/read.ts`)
   calls it through the same optional `shops` binding `counterDetail` already
-  takes. **Decided**: it filters `effective_from`/`effective_to` at the
-  worker's own clock, through `ruleEffectiveOn` — the one predicate
+  takes. **Decided**: it filters `effective_from`/`effective_to` against the
+  shop's own day — the diary service's injected `clock()`, read in the
+  location's zone (`startOfLocalDay(clock(), location.timeZone)`), never
+  grading's `asOf` — through `ruleEffectiveOn`, both ends inclusive, the one predicate
   `deriveSlots`'s own day derivation (`slots.ts`) filters by too, now shared
   rather than duplicated, so a retired or not-yet-begun rule is never
   offered. `availability_exceptions` (a one-off closure or override day) is
@@ -834,6 +836,22 @@ erDiagram
   fee_sheet ||..o{ submissions : "pinned at book"
   settings ||..o{ submissions : "pinned at mint"
 ```
+
+- **What the page reads of the hand-in** — `handedIn` on the detail: the
+  instant off the `checked_in` event, the batch's shop and cut-off, and the
+  batch line `batchLineAt` counts from that cut-off — the day it is planned to
+  leave and the day back at the pinned level's weeks. `batch.shipDate` stays
+  null until the batch ships, so the hand-in lead never waits on it.
+  **Decided**.
+- **History in words** — `historyValues` (`@grade10/grading-contracts`) is the
+  one derivation from an entry and the detail to its message's values, read
+  by the collector's history and the console's timeline alike, each in its
+  own words. An entry's `details` carry every figure its message names —
+  `plan_saved` its count, grader and level — except the named person's name,
+  which `submission_events` never keeps: only the entry that named the person
+  still named (`namedCollectorAt`) prints it, from the detail. A POS method
+  folds to the methods the catalogue words (`paymentMethodOf`); one it does
+  not know is logged and left unnamed. **Decided**.
 
 Authoritative: the status, the card's exception, the pinned JSON, the lines,
 the records, the events. Derived, never stored: the standing and badges,

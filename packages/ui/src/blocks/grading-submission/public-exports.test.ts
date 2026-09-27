@@ -90,6 +90,38 @@ function blockSources(): readonly { name: string; source: string }[] {
     }));
 }
 
+/**
+ * Every module of this capability a consumer reaches through the public
+ * entry: each source beside this test that is not a story, a test or the
+ * stories' own fixtures.
+ */
+const capabilityModules = Object.fromEntries(
+  Object.entries(
+    import.meta.glob<Record<string, unknown>>("./*.{ts,tsx}", { eager: true }),
+  ).filter(
+    ([file]) =>
+      !/\.(stories|test)\.tsx?$/.test(file) && file !== "./fixtures.ts",
+  ),
+);
+
+/** The contract's runtime exports: the thirteen blocks and `fillGradingCopy`. */
+const CAPABILITY_EXPORTS = [
+  "GradingCardList",
+  "GradingCardRecord",
+  "GradingFeeSheet",
+  "GradingGradeCards",
+  "GradingLevelPicker",
+  "GradingMoneyBlock",
+  "GradingNamedCollector",
+  "GradingOwnershipChip",
+  "GradingPasteSheet",
+  "GradingPickupCard",
+  "GradingReview",
+  "GradingStatusRail",
+  "GradingUncollectedLadder",
+  "fillGradingCopy",
+].sort();
+
 describe("grading submission public entry", () => {
   // shared-ui-grading-submission-SC-01
   it("exports the thirteen named grading blocks and no other", () => {
@@ -108,25 +140,30 @@ describe("grading submission public entry", () => {
       GradingMoneyBlock,
       GradingUncollectedLadder,
     ]).toEqual(Array.from({ length: 13 }, () => expect.any(Function)));
-    expect(
-      Object.keys(publicEntry)
-        .filter((name) => name.startsWith("Grading"))
-        .sort(),
-    ).toEqual([
-      "GradingCardList",
-      "GradingCardRecord",
-      "GradingFeeSheet",
-      "GradingGradeCards",
-      "GradingLevelPicker",
-      "GradingMoneyBlock",
-      "GradingNamedCollector",
-      "GradingOwnershipChip",
-      "GradingPasteSheet",
-      "GradingPickupCard",
-      "GradingReview",
-      "GradingStatusRail",
-      "GradingUncollectedLadder",
-    ]);
+  });
+
+  // shared-ui-grading-submission-SC-01, SC-71: every value the public entry
+  // publishes from this capability's modules, found by identity rather than
+  // by name — no filter on `Grading` — so a helper, a constant or a block
+  // the entry starts publishing from here fails until the contract names
+  // it, and one it drops fails too.
+  it("publishes exactly the contract's values from this capability, whatever their names", () => {
+    // A function or an object is its own identity; a primitive is only
+    // itself under its own name, so an equal string elsewhere never matches.
+    const identity = (name: string, value: unknown) =>
+      typeof value === "function" || (typeof value === "object" && value)
+        ? value
+        : `${name}=${String(value)}`;
+    const own = new Set(
+      Object.values(capabilityModules).flatMap((module) =>
+        Object.entries(module).map(([name, value]) => identity(name, value)),
+      ),
+    );
+    const published = Object.entries(publicEntry)
+      .filter(([name, value]) => own.has(identity(name, value)))
+      .map(([name]) => name)
+      .sort();
+    expect(published).toEqual(CAPABILITY_EXPORTS);
   });
 
   // shared-ui-grading-submission-SC-02
