@@ -88,6 +88,9 @@ One intake label per card, the cards sealed into the intake bag with the printed
   not scanned, finished as held by the grader with its expected date or as not returned; damaged, photographed in the box
 - ❓ **An ungraded line with no code** — whether a manifest line with no grade must carry the grader's code, or may come
   with neither code nor note, the card then reading ungraded with nothing more — Operations
+- ❓ **A held card coming home** — taken to come back in a later box: its manifest line matches the card held from the
+  earlier batch by its intake id, and a second hand-back closes the submission; whether it may also come back on its
+  own, outside any batch — Operations
 - 🚧 **Finish receiving** — `graded → returned → ready` for every submission in the batch, each collector emailed the
   pickup code and what is due, a card held, not returned or damaged the day it is recorded; a batch saved half scanned keeps its scans
 
@@ -210,4 +213,5 @@ reaches only submissions not yet booked:
 | How many may still join today | ❓ Open | The batch closing tile counts the drop-offs booked today at its grader and level and not yet handed in, and only on the day the batch closes; on any other day it shows none | Product |
 | A diary outage during hand-in | ❓ Open | A letter names its shop from the diary, so a diary outage refuses the act and the counter tries again. Whether a letter may print from a kept copy of the shop, so the act stands | Operations |
 | An ungraded line with no code | ❓ Open | A manifest line with no grade records the card ungraded, and the code and the note are each taken where the grader gave one; whether a line with neither is refused at entry | Operations |
+| A held card coming home | ❓ Open | Taken to come back in a later box from the grader: receiving matches its manifest line to the card held from an earlier batch by its intake id, records what the grader gave, and a second hand-back closes the submission. Whether it may also come back on its own, outside any batch | Operations |
 :::
