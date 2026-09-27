@@ -528,7 +528,7 @@ Stories `grading-submission-gradingpickupcard--`, the naming rows `grading-submi
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Pickup, above the threshold (`G11`) | the code, the items, where, open, to settle as one figure, Bring an ID matching the name | `shared-ui-grading-submission-SC-40` |
+| Pickup, above the threshold (`G11`) | the code, the items, where, open, no booking needed, to settle as one figure, Bring an ID matching the name | `shared-ui-grading-submission-SC-40` |
 | Pickup, below the threshold | Bring: nothing; the code and the name release the cards | `shared-ui-grading-submission-SC-41` |
 | Pickup, someone named (`G18`) | Bring names an ID, yours or theirs | `shared-ui-grading-submission-SC-40` |
 | Pickup, nothing due | To settle: nothing | `shared-ui-grading-submission-SC-42` |
