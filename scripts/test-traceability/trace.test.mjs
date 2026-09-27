@@ -309,8 +309,8 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     const targetScenario =
       "#### Scenario: A visitor checks account preferences";
     const targetCase = "### The visitor updates settings";
-    const targetTest = '  test("the visitor updates settings", () => {});';
-    const targetSupportTest = '  test("supporting settings detail", () => {});';
+    const targetTest = 'test("the visitor updates settings", () => {});';
+    const targetSupportTest = 'test("supporting settings detail", () => {});';
     const appFile = resolve(appRoot, "apps/site/src/sign-in.test.ts");
     const otherAppMarker = resolve(
       storeRoot,
@@ -463,7 +463,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(acceptanceLink.status, 0, acceptanceLink.stderr);
     assert.ok(
       readFileSync(appFile, "utf8").includes(
-        `trace:acceptance=${caseMarker[1]}@1\n  test("the visitor updates settings"`,
+        `trace:acceptance=${caseMarker[1]}@1\ntest("the visitor updates settings"`,
       ),
     );
 
@@ -481,7 +481,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(supportLink.status, 0, supportLink.stderr);
     assert.match(
       readFileSync(appFile, "utf8"),
-      /trace:supports=g10\.demo-sign-in\.SC-001\n {2}test\("supporting settings detail"/,
+      /trace:supports=g10\.demo-sign-in\.SC-001\ntest\("supporting settings detail"/,
     );
   } finally {
     rmSync(root, { recursive: true, force: true });
