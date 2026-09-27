@@ -7,9 +7,9 @@ import { useState } from "react";
 import { expect, waitFor, within } from "storybook/test";
 import { WinnerOrderContactDialog } from "./winner-order-contact-dialog";
 import {
+  WINNER_ORDER_INVOICE_ID,
   type WinnerOrderContactMail,
   type WinnerOrderContactReason,
-  WINNER_ORDER_INVOICE_ID,
   winnerOrderContactMail,
 } from "./winner-order-contact-mail";
 import {
@@ -131,7 +131,9 @@ export const PaymentOverdue: Story = {
     const modal = within(dialog);
     expect(modal.getByText("support@grade10.com")).toBeVisible();
     expect(
-      modal.getByText(`Auction order ${WINNER_ORDER_INVOICE_ID}: payment overdue`),
+      modal.getByText(
+        `Auction order ${WINNER_ORDER_INVOICE_ID}: payment overdue`,
+      ),
     ).toBeVisible();
     const message = (modal.getByLabelText("Message") as HTMLTextAreaElement)
       .value;
@@ -176,7 +178,9 @@ export const PartialPayment: Story = {
     const dialog = await findVisibleDialog(page, "Email Grade10");
     const modal = within(dialog);
     expect(
-      modal.getByText(`Auction order ${WINNER_ORDER_INVOICE_ID}: partial payment`),
+      modal.getByText(
+        `Auction order ${WINNER_ORDER_INVOICE_ID}: partial payment`,
+      ),
     ).toBeVisible();
     const message = (modal.getByLabelText("Message") as HTMLTextAreaElement)
       .value;

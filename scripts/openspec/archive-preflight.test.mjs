@@ -432,7 +432,8 @@ test("a change whose sections all landed is clear", () => {
 test("refuses a traced case handover whose durable marker changed", () => {
   const tracedChange = {
     ...CARRIED,
-    [`specs/${CAP}/spec.md`]: PURPOSE + FEATURE_SET + REQUIREMENTS + TRACE_SCENARIO,
+    [`specs/${CAP}/spec.md`]:
+      PURPOSE + FEATURE_SET + REQUIREMENTS + TRACE_SCENARIO,
     [`specs/${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
   };
   const tracedDurable = {

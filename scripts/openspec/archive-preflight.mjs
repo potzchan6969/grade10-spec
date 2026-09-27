@@ -222,7 +222,9 @@ function traceFoldFailure(changeId) {
     .filter(Boolean)
     .join("\n")
     .trim();
-  return output || result.error?.message || `trace fold exited ${result.status}`;
+  return (
+    output || result.error?.message || `trace fold exited ${result.status}`
+  );
 }
 
 /** The `## <name>` sections of one delta the fold would discard, with the
