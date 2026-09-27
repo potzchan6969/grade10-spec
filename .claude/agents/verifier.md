@@ -53,7 +53,8 @@ none `falls`.
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `asks`, `stands`, `falls`, each Verdict cell's reason
+one sentence. Nothing else.
 
 | # | Where | Finding | Principle | Verdict |
 | --- | --- | --- | --- | --- |
@@ -62,5 +63,5 @@ One table, and nothing else.
 - **Where** — the file and the heading or the line, as its reader named it
 - **Finding** — the finding in one phrase, as the summary would carry it
 - **Principle** — the one it rests on, where the reading owes one
-- **Verdict** — `stands`, `falls` or `asks`, and after it, in the same cell,
-  one sentence saying why. An `asks` cell also names the option you recommend
+- **Verdict** — `stands`, `falls` or `asks`, with the reason in the same cell;
+  an `asks` cell also names the option you recommend

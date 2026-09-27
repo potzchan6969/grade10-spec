@@ -758,6 +758,13 @@ test("the readers are defined once, read-only, and see no other reader", () => {
       /never another reader's/i,
       `${path} says it is given no other reader's findings`,
     );
+    assert.match(
+      claims(path),
+      path.endsWith("verifier.md")
+        ? /One table, rows ordered `asks`, `stands`, `falls`, each Verdict cell's reason one sentence\. Nothing else\./
+        : /One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two sentences\. Nothing else\./,
+      `${path} carries the return contract this reader owes and nothing else`,
+    );
     assertPathsResolve(path);
     assertAnchorsResolve(path);
   }

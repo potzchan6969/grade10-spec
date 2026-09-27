@@ -48,7 +48,8 @@ before you write.
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two
+sentences. Nothing else.
 
 | # | Where | Finding | Severity |
 | --- | --- | --- | --- |

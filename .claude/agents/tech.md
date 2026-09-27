@@ -51,14 +51,15 @@ principle each finding rests on.
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two
+sentences. Nothing else.
 
 | # | Where | Finding | Principle | Severity |
 | --- | --- | --- | --- | --- |
 
 - **Where** — the heading and the decision, or the line
 - **Finding** — what the draft does, what breaks or what it costs, then the
-  fix, in one or two sentences
+  fix
 - **Principle** — the one of the eight it rests on
 - **Severity** — `blocks` where the mechanism does not work as drafted, `fix`
   where it works and another reaches the same result better, `note` where a

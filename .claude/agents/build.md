@@ -53,14 +53,14 @@ principle each finding rests on.
 
 ## What You Return
 
-One table, and nothing else.
+One table, rows ordered `blocks`, `fix`, `note`, each Finding cell at most two
+sentences. Nothing else.
 
 | # | Where | Finding | Principle | Severity |
 | --- | --- | --- | --- | --- |
 
 - **Where** — the file and the line, and the task or scenario id it belongs to
-- **Finding** — what is wrong or missing, then the fix, in one or two
-  sentences
+- **Finding** — what is wrong or missing, then the fix
 - **Principle** — the one of the eight it rests on
 - **Severity** — `blocks` where the group does not do what its tasks say,
   `fix` where it does and the code is weaker than it should be, `note` where a
