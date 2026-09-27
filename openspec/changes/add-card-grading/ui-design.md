@@ -672,6 +672,7 @@ Stories `grading-admin-intake-intake-runbook--`.
 | Card, condition noted | the note as typed in place of Nothing noted | `grade10-admin-grading-counter-SC-16` |
 | Level check | every declared value inside the ceiling: the banner | `grade10-admin-grading-counter-SC-88` |
 | Level check failed | a card above the ceiling: the row marked; move to a second submission or refuse | `grade10-admin-grading-counter-SC-17` |
+| Second submission offered | the card refused at this level; a second submission on the same visit, prefilled with the card and the collector, offering only the levels whose ceiling carries it | `grade10-admin-grading-counter-SC-17` |
 | Card added | a card not on the list added with the collector, one at a time | `grade10-admin-grading-counter-SC-15` |
 | Card refused | the row struck with the reason; the fee and the receipt drop | `grade10-admin-grading-counter-SC-25` |
 | Fee (`GA2`) | cards × fee, the fee, declared in total, insured to | `grade10-admin-grading-counter-SC-19` |
