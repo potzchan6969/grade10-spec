@@ -446,6 +446,7 @@
       "items": "{count, plural, other {#점}} · 슬랩 {slabs, plural, other {#개}}, 생카드 {raw, plural, other {#장}}",
       "where": "장소",
       "open": "영업시간",
+      "noBooking": "예약은 필요 없습니다. 영업시간 중 언제든 오세요.",
       "toSettle": "정산할 금액",
       "nothingDue": "없음",
       "bring": {

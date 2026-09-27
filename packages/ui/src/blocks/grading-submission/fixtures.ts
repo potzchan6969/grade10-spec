@@ -486,6 +486,7 @@ const PICKUP_COPY: GradingPickupCardCopy = {
   itemsLabel: "To collect",
   whereLabel: "Where",
   openLabel: "Open",
+  noBooking: "No booking needed. Come in any time we are open.",
   dueLabel: "To settle",
   nothingDue: "Nothing",
   bringLabel: "Bring",

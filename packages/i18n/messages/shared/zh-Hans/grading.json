@@ -446,6 +446,7 @@
       "items": "{count, plural, other {# 件}} · {slabs, plural, other {# 个卡壳}}、{raw, plural, other {# 张裸卡}}",
       "where": "地点",
       "open": "营业时间",
+      "noBooking": "无需预约，营业时间内随时来取。",
       "toSettle": "尚需结清",
       "nothingDue": "没有",
       "bring": {

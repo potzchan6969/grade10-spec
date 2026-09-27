@@ -42,6 +42,7 @@ export const AboveTheThreshold: Story = {
     expect(
       canvas.getByText("Monday to Saturday, 11:00 to 20:00, Hong Kong time"),
     ).toBeInTheDocument();
+    expect(canvas.getByText(PICKUP_COPY.noBooking)).toBeInTheDocument();
     expect(canvas.getByText("HK$330")).toBeInTheDocument();
     expect(
       canvas.getByText("Paid at the counter when you collect."),

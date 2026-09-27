@@ -15,6 +15,8 @@ type GradingPickupCardCopy = {
   itemsLabel: string;
   whereLabel: string;
   openLabel: string;
+  /** That the collector comes in without booking a visit. */
+  noBooking: string;
   dueLabel: string;
   /** Read where nothing is due. */
   nothingDue: string;
@@ -44,7 +46,8 @@ type GradingPickupCardProps = GradingLocaleProps & {
 
 /**
  * What the collector reads when the cards are ready: the code, the items,
- * where and when, what is due as one figure, and whether to bring an ID.
+ * where and when, that no booking is needed, what is due as one figure, and
+ * whether to bring an ID.
  * It totals nothing.
  */
 function GradingPickupCard({
@@ -87,6 +90,9 @@ function GradingPickupCard({
           {open ? (
             <Fact label={copy.openLabel} slot="open" value={open} />
           ) : null}
+          <Text data-slot="grading-pickup-card-no-booking" size="sm">
+            {copy.noBooking}
+          </Text>
           <VStack
             data-slot="grading-pickup-card-due"
             gap="none"

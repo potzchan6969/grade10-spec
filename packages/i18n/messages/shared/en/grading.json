@@ -446,6 +446,7 @@
       "items": "{count, plural, one {# item} other {# items}} · {slabs, plural, one {# slab} other {# slabs}}, {raw, plural, one {# raw card} other {# raw cards}}",
       "where": "Where",
       "open": "Open",
+      "noBooking": "No booking needed. Come in any time we are open.",
       "toSettle": "To settle",
       "nothingDue": "nothing",
       "bring": {
