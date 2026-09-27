@@ -820,7 +820,7 @@
 
 **Pre-conditions:**
 
-* admin(holds grading:operate) has scanned some, not all, of <a batch back from the grader, unchecked>'s slabs.
+* admin(holds grading:operate) has scanned some, not all, of <a batch back from the grader, unchecked>'s cards.
 
 **Steps:**
 

@@ -581,7 +581,7 @@ with the grader's code and its note.
 
 - **GIVEN** a manifest line carrying the grader's code and note against an
   intake id, with no grade
-- **WHEN** that line's slab is scanned
+- **WHEN** that line's card is scanned
 - **THEN** the card is recorded ungraded with the grader's code and its note
 
 ### Requirement: The counters read the batch as it is scanned
@@ -589,7 +589,7 @@ with the grader's code and its note.
 What is done and what is left, over the counter, while the box is being worked
 through.
 
-**The figures** - the counters SHALL read how many slabs are scanned of the
+**The figures** - the counters SHALL read how many cards are scanned of the
 batch's cards, how many are matched, how many came back ungraded, how many
 carry an upcharge and what those upcharges come to, and how many submissions
 become ready when the batch is finished.
@@ -601,7 +601,7 @@ become ready when the batch is finished.
 #### Scenario: grade10-admin-grading-batches-SC-29 - The counters read what the box has given up so far
 **Serves:** grade10-admin-grading-batches-US-02 - the operator half way down the box reads what is left without counting the slabs
 
-- **GIVEN** a batch of 10 cards across 3 submissions, with 6 slabs scanned, of
+- **GIVEN** a batch of 10 cards across 3 submissions, with 6 cards scanned, of
   which 1 came back ungraded and 2 were charged a level up at 25000 HKD minor
   units each
 - **WHEN** the receiving counters are read
@@ -627,7 +627,7 @@ the exceptions and the upcharge say.
 #### Scenario: grade10-admin-grading-batches-SC-30 - A half-scanned box is put down and taken up again
 **Serves:** grade10-admin-grading-batches-US-02 - the operator serves a customer in the middle of a box and comes back to it
 
-- **GIVEN** a batch of 10 cards with 6 slabs scanned
+- **GIVEN** a batch of 10 cards with 6 cards scanned
 - **WHEN** the operator saves and opens the batch again
 - **THEN** the 6 scans, their matches and the exceptions recorded stand, the
   batch reads Back, unchecked, and no collector has been told of a plain scan,
