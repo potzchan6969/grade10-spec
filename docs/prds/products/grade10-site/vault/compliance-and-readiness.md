@@ -15,9 +15,8 @@ it; no statute here is asserted.
   typed character for character, date of birth, document type (passport,
   national ID, driving licence, residence permit), number, expiry, one
   photograph; in person or from an upload
-- **Refused** — under **18**, or a document expired on the day of the check,
-  judged on the shop's own day; judged again when the paper is prepared and
-  when a check is reused, and never at release
+- **Refused** — under **18** or an expired document, judged on the shop's own
+  day at the check, when the paper is prepared and on reuse, never at release
 - **Stored** — the name, birth date, expiry, type, a masked number and a keyed
   digest of it, the photograph, who verified by id and name, and when; the
   raw number never lands
@@ -80,10 +79,9 @@ it; no statute here is asserted.
 
 ## Outside the code
 
-- **The regime** — the loan agreement states Hong Kong SAR governing law, the
-  annualised rate, `Fees: None` and the complaints contact; which regime
-  governs the loan is Legal's to name, and no licence line prints until
-  Legal writes one
+- **The regime** — Legal's to name; the loan agreement states Hong Kong SAR
+  governing law, the annualised rate, `Fees: None` and the complaints
+  contact; no licence line prints until Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
   still read “Being prepared” on the live site. An auction-launch draft for
   review lives in Storybook under Pages/Legal, not in the message catalogs
@@ -102,11 +100,10 @@ it; no statute here is asserted.
 Every item is a value or an act outside the code, with who closes it;
 `check:libs` in the application repository prints items 1 and 11 until they are done.
 
-1. *Legal* — **Name the two entities and their licence** — in
-   `packages/app-env/src/legalIdentity.ts`, each refusing its own act while
-   unset: the custodian's name a production deploy; the lender's an offer, the
-   licence the loan agreement and every money email, the complaints contact
-   every email, all in production; the paper prints the contact where set
+1. *Legal* — **Name the two entities and their licence** — each refuses its
+   own act while unset in production: the custodian's name a deploy, the
+   lender's an offer, the licence the loan agreement and every money email,
+   the complaints contact every email; the paper prints the contact where set
 2. *Legal* — **Confirm the postures** — the regime and any particular it
    prescribes, the e-sign ceremony's adequacy, an upload as a verification
    method, whether an AML duty applies, the retention windows, and whether
