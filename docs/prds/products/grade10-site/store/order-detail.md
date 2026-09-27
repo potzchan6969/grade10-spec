@@ -14,7 +14,17 @@ Payment method, address, discounts, shipping, tax, product images, and loyalty
 stay absent until the Store supplies them. Omitting those groups is more useful
 than filling the designed page with claims the frontend cannot prove.
 
-- **URL** — `grade10.com/profile/orders/<order-id>`
+## Order
+
+🚧 **Owner-only address** — a signed-in collector sees one order at
+`grade10.com/profile/orders/<order-id>`; an unknown order and another
+collector's order look the same
+
+🚧 **Known facts** — the page shows the supplied order identity, items, money,
+address, payment and refund facts, and leaves each missing fact absent
+
+🚧 **Progress and tracking** — a collector sees the Store-supplied fulfilment
+state and can follow a safe carrier address when one is supplied
 
 ## Order Summary
 

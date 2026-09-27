@@ -13,6 +13,17 @@ loyalty, and optional money rows therefore disappear independently when no fact
 is supplied. The block never fills a designed space with a value the application
 does not know.
 
+## Optional Sections
+
+🚧 **Composed detail** — applications can assemble the reusable Order Details
+body from supplied header, item, money, delivery, payment and address facts
+
+🚧 **Honest omission** — payment, address, delivery, loyalty and individual
+money rows disappear independently when the application has no fact to show
+
+🚧 **Supplied action** — tracking stays a display-only action until the
+application provides the callback that owns the navigation
+
 ## Designs
 
 ::story{id="store-order-detail-orderdetails--item-coupon" title="A complete order detail"}
