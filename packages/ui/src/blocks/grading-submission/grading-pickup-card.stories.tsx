@@ -90,9 +90,7 @@ export const NoOpeningHours: Story = {
   args: { open: undefined },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(
-      canvas.queryByText(PICKUP_COPY.openLabel),
-    ).not.toBeInTheDocument();
+    expect(canvas.queryByText(PICKUP_COPY.openLabel)).not.toBeInTheDocument();
   },
 };
 
