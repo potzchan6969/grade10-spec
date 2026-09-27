@@ -696,6 +696,7 @@ answering the question it was for.
   pickup card, naming a collector; the queue's cuts and badges, both
   runbooks' refusals, the receive table's counters, the settings table's
   second person. A render snapshot per drawn letter state, not per kind
+- **Answers come from the worker.** The collector's and console's jsdom tests run the production transports on the real router in-process, each opening a scenario from `grading-service/testing`; stories replay recordings of those runs. From this change's recorded-worker foundation on, a new counter or collector case is a scenario plus a worker test, never a fixture (`docs/architecture/testing.md` § Frontend in the application repository)
 - **E2E** — `apps/frontend/grade10/e2e/tests/grading/{plan,dropoff,handin,batch,handback,uncollected}.spec.ts`
   over `packages/grading/backend/src/routes/dev.ts` under `devOnly()`.
   `POST /dev/submissions/seed` replays `submissions/transitions.ts` to the
