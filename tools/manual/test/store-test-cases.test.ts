@@ -305,7 +305,7 @@ describe("a suite that states no status", () => {
       readTestCases(
         suite("draft", testCase("alpha-US1-TC1-1", "It happens", "draft")),
       ),
-    ).toThrow(/is not pending-review, in-review or approved/);
+    ).toThrow(/is not pending-review, in-review, reopened or approved/);
   });
 
   it("refuses a case with no `**Status:**`", () => {
