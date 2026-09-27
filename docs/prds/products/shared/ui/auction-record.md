@@ -13,20 +13,20 @@ capability is the component contract underneath it.
 
 - **Page frame** — the title with its badge, whose number is the count of
   rows the application supplies
-- 🚧 **One table** — bid rows before watch-only, replacing the Bidding and
+- **One table** — bid rows before watch-only, replacing the Bidding and
   Watching sections; a row is Auction (image, title, close), Current Bid,
-  Your Standing (a badge, or the application's no-standing placeholder),
+  Status (a badge, or the application's no-standing placeholder),
   Email alerts, and Unwatch only when the application supplies a watch toggle
-- **Your Standing** — Leading, Outbid, Bid submitted, Bid not accepted, Won,
-  Didn't win, or `--` for a watch-only row; close urgency stays with the
-  listing identity
+- **Status** — Leading, Outbid, Bid submitted or Bid not accepted while open;
+  the order's status once won; Won, Didn't win or `--` for a watch-only row;
+  close urgency stays with the listing identity
 - **Empty state** — one, for a collector who bookmarks nothing
 - **Watch control** — marks a lot wherever it is shown; each block renders
   on its own, so a lot page takes the watch control without adopting the
   frame
-- 🚧 **Locked watch control** — with a bid standing on the lot it shows the
+- **Locked watch control** — with a bid standing on the lot it shows the
   watching label, disabled, and reports no press
-- 🚧 **Watch confirmations** — the control announces only after the
+- **Watch confirmations** — the control announces only after the
   application has changed the value, and exposes the action the copy names:
   View My Auctions on watch, Undo on unwatch
 

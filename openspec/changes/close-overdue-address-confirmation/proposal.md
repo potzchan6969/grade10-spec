@@ -6,7 +6,7 @@ Product context: [Winner Order](../../../docs/prds/products/grade10-site/auction
 
 ## Why
 
-`revise-auction-winner-invoicing` gives the winner 48 hours from lot close to
+The durable Winner Order rules give the winner 48 hours from lot close to
 confirm a delivery address. When the deadline passes it hides Confirm and shows
 Contact Us, and says only that an operator follows up. Four things are left
 open:
@@ -39,6 +39,9 @@ too short.
   order never reopens.
 - **An operator can record an address the winner gives by phone**, without
   reopening the form.
+- **The Awaiting Setup queue Overdue mark follows the 48-hour address
+  deadline.** Preparing Invoice has no queue Overdue mark. Its payment Overdue
+  timer starts only after the invoice is sent and visible to the winner.
 - **The account address book stays open.** Only putting an address on this
   order is refused.
 - **The order status does not move.** A new condition gates the winner's write;
@@ -54,11 +57,12 @@ too short.
 
 ## Non-Goals
 
-- **The address deadline itself.** Its 48 hours, `Confirm by …`, the
-  `Missed address deadline` alert and Contact Us belong to
-  `revise-auction-winner-invoicing`, and are not restated here.
+- **The address deadline's duration and winner-facing copy.** Its 48 hours,
+  `Confirm by …`, the `Missed address deadline` alert and Contact Us are
+  inherited durable behavior; this change maps the settled deadline to the
+  Awaiting Setup queue mark and does not duplicate that copy.
 - **The expired invoice's own rules.** Writing `expired`, hiding card Pay, and
-  reissue and cancellation belong to that change.
+  reissue and cancellation remain existing durable behavior.
 - **Letters.** Address reminders are that change's. A reopen sends no letter;
   the operator tells the winner directly.
 - **Suspension and automatic cancellation.** A missed address deadline does
@@ -93,27 +97,24 @@ None.
 
 ## Ordering and dependencies
 
-- **Follows `revise-auction-winner-invoicing`.** Every requirement here builds on
-  that change's address deadline, `not_issued`, and address lock at send. This
-  change cannot be archived before it; `depends_on` records that.
-- **Edits none of that change's requirements.** Every delta here is ADDED.
-  `pnpm check:manual` refuses two unfinished changes editing one requirement.
+- **Builds on the durable address deadline, `not_issued` invoice state and
+  address lock at send.** This change has no dependency on an archived or
+  unfinished change.
+- **Owns the queue mark mapping, derived condition, audit entries and race
+  behavior.** It does not reopen the winner-facing deadline wording.
 - **Cumulative feature sets.** The delta files copy that change's feature set and
   add this change's leaves, because archive copies the feature set by hand.
 
-### To Update Once `revise-auction-winner-invoicing` Is Archived
+### Durable contract updates carried by this change
 
-Those requirements then become published specs, and this change edits them
-itself:
-
-- **Overdue mark** — should appear when the address deadline passes, not after
-  72 hours idle, in "The order detail shows how long an order has waited" and
-  "The queue shows one outcome per lot". Until then a winner can be locked out
-  for a day before an operator is told. ❓ on the Post-Sale Queue page.
-- **Expiry timing** — `expired` should wait for a card payment started in time,
-  in the payment-deadline rule and the order-status transition table.
-- **Invoice log** — the log types should name *address form reopened* and
-  *address recorded by an operator*.
+- **Overdue mark** — the Awaiting Setup queue mark appears when the persisted
+  48-hour address deadline passes. Preparing Invoice has no queue Overdue mark;
+  its payment Overdue timer starts only when the invoice is sent and visible to
+  the winner.
+- **Invoice log** — the log types name *address form reopened* and *address
+  recorded by an operator*, each with actor, timestamp and reason.
+- **Race behavior** — address writes, operator reopen/record, and invoice send
+  serialize under the order boundary.
 
 ## Assumptions
 

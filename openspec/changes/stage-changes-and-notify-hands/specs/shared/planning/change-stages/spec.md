@@ -264,7 +264,7 @@ Each change names who takes it at each stage.
 | Designer | `design` | Proposed, once the decisions and the journeys are on `main` |
 | Tech PIC | `tech` | Proposed, once the decisions and the journeys are on `main` |
 | Engineer | `dev` | Planned, and Building |
-| QA | `qa` | On staging; the suite's verdict at any time, as an overlay |
+| QA | `qa` | Specified, for the suite's review; On staging; the suite's verdict at any time, as an overlay |
 | Release hand | `release` | On staging |
 
 #### Scenario: shared-planning-change-stages-SC-13 - The hands are named at the interview's end
@@ -291,7 +291,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 | --- | --- | --- |
 | 1 | Proposed | `pm` until `decisions.md` and the journeys file are on `main` and `hands:` names every role the next stage needs - `design` unless `ui_waived`, `tech` unless `design_waived`; then those hands |
 | 2 | Designed | nobody: the requirements are drafted next and read at Specified |
-| 3 | Specified | `pm` |
+| 3 | Specified | `pm`; and `qa`, for the suite's review |
 | 4 | Planned | `dev` |
 | 5 | Building | `dev` |
 | 6 | On staging | `qa` and `release` |
@@ -312,7 +312,7 @@ move SHALL be the hands changing, whether or not the stage changed with them.
 **Serves:** shared-planning-change-stages-US-02 - the product manager reads across the lanes to see who each change waits on
 
 **WHEN** a change in Specified, Planned, Building and On staging is read in turn
-**THEN** the turns SHALL be the product manager's, the engineer's, the engineer's, and the QA hand's with the release hand's
+**THEN** the turns SHALL be the product manager's with the QA hand's, the engineer's, the engineer's, and the QA hand's with the release hand's
 **AND** a change in Designed, Released or Archived SHALL name nobody
 
 #### Scenario: shared-planning-change-stages-SC-17 - A hand nobody has named

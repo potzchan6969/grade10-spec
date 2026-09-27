@@ -2,7 +2,7 @@ import { Button } from "@grade10/design-system/components/forms/button";
 import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import { CartDrawer } from "./cart-drawer";
 import {
   applyTypedPromoInStories,
@@ -394,6 +394,70 @@ export const NestedPromoDismiss: Story = {
   },
 };
 
+export const TenderPendingWithOpenPromoSheet: Story = {
+  args: {
+    promoState: { status: "expanded" },
+    pointsState: { status: "applied", amountLabel: "HK$120.00" },
+    selectedHeldPromoId: "held-welcome",
+    onApplyPromo: fn(),
+    onSelectHeldPromo: fn(),
+    onRemovePromo: fn(),
+    onApplyPoints: fn(),
+    onUseMaxPoints: fn(),
+    onRemovePoints: fn(),
+    onCheckout: fn(),
+  },
+  render: (args) => {
+    const [tenderPending, setTenderPending] = useState(false);
+    return (
+      <CartDrawer
+        {...args}
+        tenderPending={tenderPending}
+        onApplyPromo={async (code) => {
+          args.onApplyPromo?.(code);
+          setTenderPending(true);
+          return false;
+        }}
+      />
+    );
+  },
+  play: async ({ args }) => {
+    const canvas = drawer();
+    const promo = within(canvas.getByRole("dialog", { name: "Promo code" }));
+    const input = promo.getByPlaceholderText("Enter promo code");
+    const apply = promo.getAllByRole("button", { name: "Apply" })[0];
+    const heldApply = within(
+      promo.getByRole("group", { name: "WELCOME100" }),
+    ).getByRole("button", { name: "Apply" });
+    const checkout = canvas.getByRole("button", {
+      name: "Proceed to Checkout",
+    });
+    const removePoints = canvas.getByRole("button", { name: "Remove" });
+
+    await userEvent.type(input, "SAVE");
+    await userEvent.click(apply);
+    await waitFor(() => expect(input).toBeDisabled());
+    expect(input).toBeDisabled();
+    expect(apply).toBeDisabled();
+    expect(heldApply).toBeDisabled();
+    expect(checkout).toBeDisabled();
+    expect(removePoints).toHaveAttribute("aria-disabled", "true");
+    expect(promo.getByRole("button", { name: "Back" })).toBeInTheDocument();
+
+    apply.click();
+    heldApply.click();
+    checkout.click();
+    removePoints.click();
+    input.dispatchEvent(
+      new KeyboardEvent("keydown", { key: "Enter", bubbles: true }),
+    );
+    expect(args.onApplyPromo).toHaveBeenCalledTimes(1);
+    expect(args.onSelectHeldPromo).not.toHaveBeenCalled();
+    expect(args.onCheckout).not.toHaveBeenCalled();
+    expect(args.onRemovePoints).not.toHaveBeenCalled();
+  },
+};
+
 /** Simulates initial status and price fetch on cart open with transition to ready */
 export const FetchingOnOpen: Story = {
   render: (args) => {
@@ -421,8 +485,8 @@ const DELISTED_PRODUCT_NAME =
   "1998 Japanese Base Set No Rarity Charmander PSA 10";
 
 /**
- * After open fetch, a delisted catalogue line is cleared silently and
- * one bottom-right toast explains the removal. Remaining lines stay.
+ * After open fetch, a delisted catalogue line is cleared and named in the
+ * bottom-right toast. Remaining lines stay.
  */
 export const UnavailableItemsRemoved: Story = {
   render: (args) => {
@@ -450,6 +514,10 @@ export const UnavailableItemsRemoved: Story = {
             {...args}
             open={open}
             onClose={() => setOpen(false)}
+            copy={{
+              ...args.copy,
+              unavailableItemsRemovedDescription: `No longer sold: ${DELISTED_PRODUCT_NAME}`,
+            }}
             items={items}
             subtotal="HK$24,500.00"
             estimatedTotal="HK$24,500.00"
@@ -479,6 +547,7 @@ export const UnavailableItemsRemoved: Story = {
     );
   },
   play: async ({ canvasElement }) => {
+    // Cart-validation SC-09: a withdrawn product is named as unavailable.
     await userEvent.click(
       within(canvasElement).getByRole("button", { name: "Open Cart" }),
     );
@@ -504,7 +573,8 @@ export const UnavailableItemsRemoved: Story = {
       expect(canvas.getByText("Items removed from cart")).toBeInTheDocument();
     });
     expect(
-      canvas.getByText("Some products are no longer available"),
+      canvas.getByText(`No longer sold: ${DELISTED_PRODUCT_NAME}`),
     ).toBeInTheDocument();
+    expect(canvas.queryByText(DELISTED_PRODUCT_NAME)).not.toBeInTheDocument();
   },
 };

@@ -20,6 +20,7 @@ checkout for something the store already knew.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** acceptance
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -52,6 +53,7 @@ network manipulation.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -81,6 +83,7 @@ the browse cache.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -115,6 +118,7 @@ The cart holds 5 of <a variant>; the shop then sets its inventory count to 2.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -145,6 +149,7 @@ stops selling it when out of stock.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -180,6 +185,7 @@ counted at 30>.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -210,6 +216,7 @@ sale.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -247,6 +254,7 @@ changes each variant's price to the current value.
 * **Status:** draft
 * **Behaviour:** positive
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -265,6 +273,74 @@ disclosed; the shop's price is unchanged since.
 
 * Line is confirmed at 12300 minor units HKD.
 * No price change is reported again.
+
+### grade10-site-store-cart-validation-US1-TC9-1: Failed cart review leaves lines unchecked and can retry
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-01
+
+**Pre-conditions:**
+The cart holds two lines; the cart review endpoint returns a 500 once, then
+returns the current line answers on the next request.
+
+**Steps:**
+
+1. Open the cart and wait for the failed review.
+2. Check both lines, the total, the error notice and the checkout control.
+3. Use Retry and wait for the review to return.
+4. Check the current line answers and the checkout control.
+
+**Expected Results:**
+
+* The persistent error notice names both lines and offers Retry.
+* Both lines are marked unchecked; neither recorded availability nor price is
+  shown as current, and the total is unchecked.
+* Checkout is unavailable until the later review returns.
+* After Retry, the returned availability and prices are shown and checkout is
+  available when every line is confirmed.
+
+### grade10-site-store-cart-validation-US1-TC10-1: Cart cannot be loaded before its lines are known
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-cart-validation-US-01
+
+**Pre-conditions:**
+The initial cart request returns a 500 before the drawer knows any lines; a
+retry returns a cart with one line.
+
+**Steps:**
+
+1. Open the cart and wait for the failed read.
+2. Check the drawer, total, Retry and checkout control.
+3. Use Retry and wait for the cart and its current line review.
+
+**Expected Results:**
+
+* The drawer says the cart could not be checked and offers Retry without
+  inventing or naming a line it has not loaded.
+* No total is shown as current and checkout remains unavailable.
+* After Retry, the line is reviewed before its availability, price and total
+  are presented as current.
 
 ---
 
@@ -313,6 +389,7 @@ The cart holds two lines the shop offers, each below its inventory count.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -348,6 +425,7 @@ stock.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -408,6 +486,7 @@ stock, and the cart is not reopened.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** security
+* **Suites:** regression
 * **Layer:** api
 * **Automation status:** manual
 * **Testability:** automation
@@ -482,6 +561,7 @@ resolve, not a dead end.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
+* **Suites:** smoke, regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -511,6 +591,7 @@ is mocked to refuse one of them as no longer sellable.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** integration
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
@@ -546,34 +627,49 @@ endpoint> is mocked to accept only 2 of it.
 * **Status:** draft
 * **Behaviour:** negative
 * **Type:** functional
+* **Suites:** regression
 * **Layer:** e2e
 * **Automation status:** manual
 * **Testability:** automation, manual
 * **Trace:** grade10-site-store-cart-validation-US-03
 
 **Pre-conditions:**
-The cart holds two lines; <the shop read endpoint> is mocked to return a
-`500 Internal Server Error`.
+The cart's open-time read confirmed two lines; the checkout-time read returns
+a `500 Internal Server Error` once, then returns the current line answers on
+the next request.
 
 **Steps:**
 
-1. Open the cart.
-2. Click the checkout button.
-3. Check the message, the lines and <the store's order list>.
+1. Click the checkout button in the cart.
+2. On the pre-checkout page, check the message, both lines, the total and Pay.
+3. Use Retry and wait for the checkout-time read to return.
+4. Check the current line answers and Pay.
 
 **Expected Results:**
 
 * No checkout order is created.
-* The message says the check could not be completed.
-* No line shows an availability or price as current.
+* The persistent message names both lines as unchecked and offers Retry.
+* Neither recorded availability nor price is shown as current; the total is
+  unchecked, and Pay remains unavailable until the later read returns.
+* After Retry, the current availability and prices are shown and Pay becomes
+  available when every line is confirmed.
 
 ## Reconciliation
+
+**Run:** Implementation update on 2026-09-25. Kept the existing case IDs,
+draft statuses and review history. Confirmed the active suite covers named
+withdrawn products, short fills, repricing, checkout refusal, unchecked
+cart-open and checkout review, and the drawer-level retry when the initial cart
+load fails before lines are known. No case was marked automated; the end-to-end
+walk decides that in task 4.2.
 
 **Run:** 2026-09-18 · the blind suite and the change's scenario reading were reconciled after the two read moments were settled.
 
 | Spec scenario | Suite coverage |
 | --- | --- |
 | grade10-site-store-cart-validation-SC-01, SC-03 | US1-TC1-1 |
+| grade10-site-store-cart-validation-SC-22 | US1-TC9-1 |
+| grade10-site-store-cart-validation-SC-23 | US1-TC10-1 |
 | grade10-site-store-cart-validation-SC-04 | US1-TC2-1 |
 | grade10-site-store-cart-validation-SC-05 | US1-TC3-1 |
 | grade10-site-store-cart-validation-SC-06 | US1-TC4-1 |

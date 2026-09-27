@@ -415,9 +415,46 @@ const DURABLE = {
   [`${CAP}/feature-tcs.md`]: SUITE,
 };
 
+const TRACE_SCENARIO = `<!-- trace:scenario id=g10.auction-listing-media.SC-001 rev=1 -->
+#### Scenario: listing-SC-04 - Search lists matching cards
+
+**Serves:** listing-US-01
+`;
+const TRACE_CASE = `<!-- trace:case id=g10.auction-listing-media.TC-002 rev=1 covers=g10.auction-listing-media.SC-001 -->
+### listing-US1-TC1-1: Search lists matching cards
+`;
+
 test("a change whose sections all landed is clear", () => {
   const result = run(sandbox(CARRIED, DURABLE).root, ...SHIPPED);
   assert.equal(result.status, 0);
+});
+
+test("refuses a traced case handover whose durable marker changed", () => {
+  const tracedChange = {
+    ...CARRIED,
+    [`specs/${CAP}/spec.md`]:
+      PURPOSE + FEATURE_SET + REQUIREMENTS + TRACE_SCENARIO,
+    [`specs/${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
+  };
+  const tracedDurable = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE + "\n" + TRACE_CASE,
+  };
+
+  const clear = run(sandbox(tracedChange, tracedDurable).root, ...SHIPPED);
+  assert.equal(clear.status, 0, clear.stderr);
+
+  const changed = {
+    ...tracedDurable,
+    [`${CAP}/feature-tcs.md`]: (SUITE + "\n" + TRACE_CASE).replace(
+      "rev=1",
+      "rev=2",
+    ),
+  };
+  const refused = run(sandbox(tracedChange, changed).root, ...SHIPPED);
+  assert.equal(refused.status, 1);
+  assert.match(refused.stderr, /trace handover validation failed/);
+  assert.match(refused.stderr, /\[case-mismatch\]/);
 });
 
 // `rounds.md`'s own carry is checked after the archive exists, by
@@ -713,6 +750,22 @@ test("refuses a carried Reconciliation that keeps its scenario ids", () => {
   );
 });
 
+test("shared-planning-agent-rounds-SC-103 - the strip covers a Manual row under the Reconciliation that keeps a scenario id", () => {
+  const withIds = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]:
+      SUITE +
+      "\n## Reconciliation\n\n### Manual\n\n| Manual | Why |\n| --- | --- |\n| `listing-US1-TC1-1` | `listing-SC-04` is proved by the story; a person reads the rest |\n",
+  };
+  const result = run(sandbox(CARRIED, withIds).root, ...SHIPPED);
+
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /scenario id\(s\) not stripped \(listing-SC-04\)/,
+  );
+});
+
 test("refuses a suite carried without its Settled lines, waiver or no waiver", () => {
   const dropped = {
     ...DURABLE,
@@ -827,6 +880,66 @@ test("shared-planning-agent-rounds-SC-78 - a line naming the application reposit
     bare.stderr,
     /lands `listing-US1-TC1-1`'s `\*\*Decided by:\*\*` as `apps\/frontend\/grade10\/e2e\/tests\/listing\.spec\.ts`, where the change names `grade10:apps\/frontend\/grade10\/e2e\/tests\/listing\.spec\.ts`/,
   );
+});
+
+// A durable suite that exists is not a suite that was carried: archived
+// changes copied the header and `## Settled` and left whole journeys of cases
+// behind. Every case lands under its id - `<v>` included - and its status.
+const MANUAL_CASE = {
+  ...CARRIED,
+  [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(null),
+};
+
+test("refuses a fold that leaves a case behind, waiver or no waiver", () => {
+  const result = run(sandbox(MANUAL_CASE, DURABLE).root, ...SHIPPED);
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /feature-tcs\.md leaves 1 case\(s\) behind — each lands under its id and `<v>`: listing-US1-TC1-1/,
+  );
+
+  const forced = run(
+    sandbox(MANUAL_CASE, DURABLE).root,
+    ...SHIPPED,
+    "--journeys-copied",
+  );
+  assert.equal(forced.status, 1);
+});
+
+test("refuses a case that lands under an older `<v>`", () => {
+  const bumped = {
+    ...CARRIED,
+    [`specs/${CAP}/feature-tcs.md`]: SUITE_CASE(null).replace(
+      "listing-US1-TC1-1",
+      "listing-US1-TC1-2",
+    ),
+  };
+  const older = { ...DURABLE, [`${CAP}/feature-tcs.md`]: SUITE_CASE(null) };
+  const result = run(sandbox(bumped, older).root, ...SHIPPED);
+  assert.equal(result.status, 1);
+  assert.match(result.stderr, /leaves 1 case\(s\) behind .*listing-US1-TC1-2/);
+});
+
+test("refuses a case that lands under another status", () => {
+  const drafted = {
+    ...DURABLE,
+    [`${CAP}/feature-tcs.md`]: SUITE_CASE(null).replace(
+      "* **Status:** actual",
+      "* **Status:** draft",
+    ),
+  };
+  const result = run(sandbox(MANUAL_CASE, drafted).root, ...SHIPPED);
+  assert.equal(result.status, 1);
+  assert.match(
+    result.stderr,
+    /lands `listing-US1-TC1-1` as `draft`, where the change holds it `actual`/,
+  );
+});
+
+test("a case carried under its id and status is clear", () => {
+  const carried = { ...DURABLE, [`${CAP}/feature-tcs.md`]: SUITE_CASE(null) };
+  const result = run(sandbox(MANUAL_CASE, carried).root, ...SHIPPED);
+  assert.equal(result.status, 0, result.stderr);
 });
 
 test("a suite with no durable file yet is a promise --journeys-copied can make", () => {

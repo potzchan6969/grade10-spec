@@ -21,6 +21,7 @@
   "fromBid": "起拍 {amount}",
   "lotCount": "{count, plural, one {# 件拍品} other {# 件拍品}}",
   "listingsLabel": "拍卖拍品列表",
+  "allAuctions": "全部拍卖",
   "searchLots": "搜索拍品",
   "filter": "筛选",
   "filterStatus": "状态",
@@ -29,5 +30,20 @@
   "allLots": "全部拍品",
   "endingSoon": "即将结拍",
   "endsIn": "剩余 {remaining}",
-  "opensIn": "{remaining}后开拍"
+  "opensIn": "{remaining}后开拍",
+  "featured": {
+    "active": "正在竞拍",
+    "upcoming": "即将开拍",
+    "ended": "已结束",
+    "currentBid": "当前出价",
+    "startingBid": "起拍价",
+    "finalBid": "最终出价",
+    "bidNow": "立即出价",
+    "viewAuction": "查看拍品",
+    "endsIn": "距结拍",
+    "opensIn": "距开拍",
+    "endedAt": "已结束",
+    "progress": "精选拍品",
+    "slide": "查看精选拍品 {position}：{title}"
+  }
 }

@@ -1,17 +1,17 @@
 import { EmptyState } from "@grade10/design-system/components/display/empty-state";
+import {
+  Autocomplete,
+  AutocompleteContent,
+  AutocompleteEmpty,
+  AutocompleteInput,
+  AutocompleteItem,
+  AutocompleteList,
+} from "@grade10/design-system/components/forms/autocomplete";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { CheckboxListInput } from "@grade10/design-system/components/forms/checkbox-list-input";
 import { IconButton } from "@grade10/design-system/components/forms/icon-button";
 import { RadioCard } from "@grade10/design-system/components/forms/radio-card";
 import { RadioList } from "@grade10/design-system/components/forms/radio-list";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@grade10/design-system/components/forms/select";
-import { TextInput } from "@grade10/design-system/components/forms/text-input";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   Dialog,
@@ -31,16 +31,26 @@ import {
   TooltipTrigger,
 } from "@grade10/design-system/components/overlays/tooltip";
 import { cn } from "@grade10/design-system/lib/utils";
+import { AuctionAddressForm, type AuctionAddressFormValues } from "@grade10/ui";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
-import { useEffect, useId, useRef, useState } from "react";
-import { COUNTRY_OPTIONS, COUNTRY_SELECT_ITEMS } from "./country-regions";
+import { type ReactNode, useEffect, useId, useRef, useState } from "react";
+import { COUNTRY_OPTIONS } from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
-  /** Recipient name — RadioCard title. */
+  /**
+   * RadioCard title. Personal addresses use the recipient name. Company
+   * addresses use the company name.
+   */
   label: string;
-  /** Street + locality + country — no name; one street line. */
+  /** Street + locality + country — no name, postal code, or phone. */
   lines: string;
+  /**
+   * Order summary / invoice snapshot — company (when company), recipient
+   * name, phone, street, locality with postal, country.
+   */
+  summary: string;
+  addressKind?: "personal" | "company";
 };
 
 /** Account shipping address book ceiling — shared across storefronts. */
@@ -53,14 +63,20 @@ export const WINNER_ORDER_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress[] =
   [
     {
       id: "wan-chai",
+      addressKind: "personal",
       label: "Alex Chan",
       lines: "12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "tst",
-      label: "Alex Chan",
+      addressKind: "company",
+      label: "Harbour View Ltd",
       lines:
         "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+      summary:
+        "Harbour View Ltd\nAlex Chan\n+852 9123 4568\nFlat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong, 000000\nHong Kong",
     },
   ] as const;
 
@@ -69,31 +85,46 @@ export const WINNER_ORDER_FULL_SAVED_ADDRESSES: readonly WinnerOrderSavedAddress
   [
     {
       id: "wan-chai",
+      addressKind: "personal",
       label: "Alex Chan",
       lines: "12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "tst",
+      addressKind: "personal",
       label: "Alex Chan",
       lines:
         "Flat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4568\nFlat 8B, Harbour View, Canton Road\nTsim Sha Tsui, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "central",
+      addressKind: "personal",
       label: "Alex Chan",
       lines:
         "Unit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong\nHong Kong",
+      summary:
+        "Alex Chan\n+852 9123 4569\nUnit 3, Chater House, 8 Connaught Road\nCentral, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "causeway",
+      addressKind: "personal",
       label: "Jordan Lee",
       lines: "15/F, 88 Percival Street\nCauseway Bay, Hong Kong\nHong Kong",
+      summary:
+        "Jordan Lee\n+852 9123 4570\n15/F, 88 Percival Street\nCauseway Bay, Hong Kong, 000000\nHong Kong",
     },
     {
       id: "kowloon-tong",
+      addressKind: "personal",
       label: "Sam Wong",
       lines:
         "Block A, Festival Walk Residences\nKowloon Tong, Hong Kong\nHong Kong",
+      summary:
+        "Sam Wong\n+852 9123 4571\nBlock A, Festival Walk Residences\nKowloon Tong, Hong Kong, 000000\nHong Kong",
     },
   ] as const;
 
@@ -102,27 +133,28 @@ const DRAFT_VALUE = "use_this_address";
 const ADDRESS_LIST_MOTION_MS = 200;
 const ADDRESS_LIST_EASE = "cubic-bezier(0.23, 1, 0.32, 1)";
 
-type NewAddressDraft = {
-  firstName: string;
-  lastName: string;
-  street: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  country: string;
-  saveForFuture: boolean;
-};
+const ADD_ADDRESS_COPY = {
+  personal: "Personal",
+  companyKind: "Company",
+  firstName: "First name",
+  lastName: "Last name",
+  phone: "Phone",
+  company: "Company Name",
+  country: "Country/Region",
+  city: "City",
+  addressLine1: "Address line 1",
+  addressLine2: "Address line 2",
+  apartment: "Apt./Suite/Building",
+  state: "State",
+  postalCode: "Postal code",
+  optional: "Optional",
+  confirm: "Use This Address",
+  cancel: "Cancel",
+  phonePlaceholder: "+852 12345678",
+  countrySearchPlaceholder: "e.g. United States",
+} as const;
 
-const EMPTY_DRAFT: NewAddressDraft = {
-  firstName: "",
-  lastName: "",
-  street: "",
-  city: "",
-  state: "",
-  postalCode: "",
-  country: "Hong Kong",
-  saveForFuture: true,
-};
+const ADD_ADDRESS_FORM_ID = "winner-order-add-address-form";
 
 type WinnerOrderSetupPaymentMethod = "card" | "bank_transfer";
 
@@ -154,7 +186,75 @@ type AddressSnapshot = {
   sourceId: string;
   label: string;
   lines: string;
+  summary: string;
 };
+
+const COUNTRY_ITEMS = [...COUNTRY_OPTIONS];
+const COUNTRY_NAMES = new Set<string>(COUNTRY_OPTIONS);
+
+/**
+ * Searchable country/region field. A full catalogue is too long to scroll on
+ * a phone; typing filters the list. Only a catalogue name is committed.
+ */
+function CountryRegionField({
+  value,
+  onChange,
+  error,
+  label,
+}: {
+  value: string;
+  onChange: (next: string) => void;
+  error?: ReactNode;
+  label: ReactNode;
+}) {
+  const errorId = useId();
+  const [query, setQuery] = useState(value);
+
+  function commit(next: string) {
+    setQuery(next);
+    onChange(COUNTRY_NAMES.has(next) ? next : "");
+  }
+
+  return (
+    <div className="flex w-full flex-col gap-2">
+      <Autocomplete
+        items={COUNTRY_ITEMS}
+        onValueChange={(next) => commit(next ?? "")}
+        openOnInputClick
+        value={query}
+      >
+        <AutocompleteInput
+          aria-describedby={error ? errorId : undefined}
+          aria-invalid={error ? true : undefined}
+          autoComplete="country-name"
+          label={label}
+          onClear={() => commit("")}
+          placeholder="Search country or region"
+          status={error ? "error" : "default"}
+        />
+        <AutocompleteContent>
+          <AutocompleteEmpty>No countries or regions found.</AutocompleteEmpty>
+          <AutocompleteList>
+            {(country: string) => (
+              <AutocompleteItem
+                className="min-h-11"
+                key={country}
+                value={country}
+              >
+                {country}
+              </AutocompleteItem>
+            )}
+          </AutocompleteList>
+        </AutocompleteContent>
+      </Autocomplete>
+      {error ? (
+        <span className="text-xs text-secondary-foreground" id={errorId}>
+          {error}
+        </span>
+      ) : null}
+    </div>
+  );
+}
 
 const FEE_RANGE_CARD = "Card fee applies. Exact amount on the invoice.";
 const FEE_RANGE_BANK =
@@ -173,11 +273,12 @@ function snapshotFromAddress(
     sourceId: address.id,
     label: address.label,
     lines: address.lines,
+    summary: address.summary,
   };
 }
 
 function snapshotPayload(snapshot: AddressSnapshot): string {
-  return [snapshot.label, snapshot.lines].filter(Boolean).join("\n");
+  return snapshot.summary;
 }
 
 function prefersReducedMotion() {
@@ -187,22 +288,55 @@ function prefersReducedMotion() {
   );
 }
 
-/** Street + locality + country — no recipient name. */
-function formatAddressLines(draft: NewAddressDraft): string {
-  const locality = [
-    draft.city.trim(),
-    draft.state.trim(),
-    draft.postalCode.trim(),
+/** Street + locality + country — no name, postal code, or phone (picker body). */
+function formatAddressLines(values: AuctionAddressFormValues): string {
+  const street = [
+    values.addressLine1.trim(),
+    values.addressLine2.trim(),
+    values.apartment.trim(),
   ]
     .filter(Boolean)
     .join(", ");
-  return [draft.street.trim(), locality, draft.country.trim()]
+  const locality = [values.city.trim(), values.state.trim()]
+    .filter(Boolean)
+    .join(", ");
+  return [street, locality, values.country.trim()].filter(Boolean).join("\n");
+}
+
+/**
+ * Full order summary / invoice snapshot — company when company, recipient
+ * name, phone, street, locality with postal, country.
+ */
+function formatOrderAddressSummary(values: AuctionAddressFormValues): string {
+  const name = [values.firstName.trim(), values.lastName.trim()]
+    .filter(Boolean)
+    .join(" ");
+  const company = values.addressKind === "company" ? values.company.trim() : "";
+  const phone = values.phone.trim();
+  const street = [
+    values.addressLine1.trim(),
+    values.addressLine2.trim(),
+    values.apartment.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+  const locality = [
+    values.city.trim(),
+    values.state.trim(),
+    values.postalCode.trim(),
+  ]
+    .filter(Boolean)
+    .join(", ");
+  return [company, name, phone, street, locality, values.country.trim()]
     .filter(Boolean)
     .join("\n");
 }
 
-function addressLabelFromDraft(draft: NewAddressDraft): string {
-  const name = [draft.firstName.trim(), draft.lastName.trim()]
+function addressLabelFromValues(values: AuctionAddressFormValues): string {
+  if (values.addressKind === "company" && values.company.trim()) {
+    return values.company.trim();
+  }
+  const name = [values.firstName.trim(), values.lastName.trim()]
     .filter(Boolean)
     .join(" ");
   if (name) return name;
@@ -210,18 +344,7 @@ function addressLabelFromDraft(draft: NewAddressDraft): string {
 }
 
 function confirmPayload(address: WinnerOrderSavedAddress): string {
-  return [address.label, address.lines].filter(Boolean).join("\n");
-}
-
-function newAddressReady(draft: NewAddressDraft): boolean {
-  return Boolean(
-    draft.firstName.trim() &&
-      draft.lastName.trim() &&
-      draft.street.trim() &&
-      draft.city.trim() &&
-      draft.postalCode.trim() &&
-      draft.country.trim(),
-  );
+  return address.summary;
 }
 
 /**
@@ -237,8 +360,6 @@ function WinnerOrderSetupDialog({
   initialNewAddressOpen = false,
   initialStep = 1,
 }: WinnerOrderSetupDialogProps) {
-  const formId = useId();
-  const countryId = useId();
   const [step, setStep] = useState<SetupStep>(initialStep);
   const [addresses, setAddresses] = useState<WinnerOrderSavedAddress[]>(() => [
     ...savedAddressesProp,
@@ -257,8 +378,8 @@ function WinnerOrderSetupDialog({
     useState<WinnerOrderSetupPaymentMethod | null>(null);
   const [sameAsDelivery, setSameAsDelivery] = useState(true);
   const [newAddressOpen, setNewAddressOpen] = useState(initialNewAddressOpen);
-  const [draft, setDraft] = useState<NewAddressDraft>(EMPTY_DRAFT);
-  const [attempted, setAttempted] = useState(false);
+  const [saveForFuture, setSaveForFuture] = useState(true);
+  const [addressFormKey, setAddressFormKey] = useState(0);
   const [exitingIds, setExitingIds] = useState(() => new Set<string>());
   const [enteringIds, setEnteringIds] = useState(() => new Set<string>());
   const exitTimersRef = useRef<Map<string, number>>(new Map());
@@ -288,8 +409,10 @@ function WinnerOrderSetupDialog({
     setSameAsDelivery(true);
     setStep(initialStep);
     setNewAddressOpen(initialNewAddressOpen);
-    setDraft(EMPTY_DRAFT);
-    setAttempted(false);
+    setSaveForFuture(
+      savedAddressesProp.length < WINNER_ORDER_SAVED_ADDRESS_CAP,
+    );
+    setAddressFormKey((key) => key + 1);
     setExitingIds(new Set());
     setEnteringIds(new Set());
   }, [open, savedAddressesProp, initialNewAddressOpen, initialStep]);
@@ -339,6 +462,7 @@ function WinnerOrderSetupDialog({
       id: DRAFT_VALUE,
       label: snapshot.label,
       lines: snapshot.lines,
+      summary: snapshot.summary,
     });
     setSelection(DRAFT_VALUE);
   }
@@ -411,13 +535,6 @@ function WinnerOrderSetupDialog({
     if (step === 3) setStep(2);
   }
 
-  function patchDraft<K extends keyof NewAddressDraft>(
-    key: K,
-    value: NewAddressDraft[K],
-  ) {
-    setDraft((held) => ({ ...held, [key]: value }));
-  }
-
   function commitRemove(id: string) {
     // Book remove only. Delivery/billing order snapshots stay until the winner
     // re-picks; picker selection is repaired for the live lists only.
@@ -475,26 +592,27 @@ function WinnerOrderSetupDialog({
   }
 
   function openNewAddress() {
-    setDraft({
-      ...EMPTY_DRAFT,
-      saveForFuture: addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP,
-    });
-    setAttempted(false);
+    setSaveForFuture(addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP);
+    setAddressFormKey((key) => key + 1);
     setNewAddressOpen(true);
   }
 
-  function saveNewAddress() {
-    setAttempted(true);
-    if (!newAddressReady(draft)) return;
-
-    const lines = formatAddressLines(draft);
-    const label = addressLabelFromDraft(draft);
+  function saveNewAddress(values: AuctionAddressFormValues) {
+    const lines = formatAddressLines(values);
+    const label = addressLabelFromValues(values);
+    const summary = formatOrderAddressSummary(values);
     const saveToBook =
-      draft.saveForFuture && addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
+      saveForFuture && addresses.length < WINNER_ORDER_SAVED_ADDRESS_CAP;
 
     if (saveToBook) {
       const id = `saved-${Date.now()}`;
-      const saved: WinnerOrderSavedAddress = { id, label, lines };
+      const saved: WinnerOrderSavedAddress = {
+        id,
+        label,
+        lines,
+        summary,
+        addressKind: values.addressKind,
+      };
       setAddresses((held) => [saved, ...held]);
       if (step === 3 && !sameAsDelivery) {
         setBillingSelection(id);
@@ -504,7 +622,13 @@ function WinnerOrderSetupDialog({
       setDraftOption(null);
       markEntering(id);
     } else {
-      setDraftOption({ id: DRAFT_VALUE, label, lines });
+      setDraftOption({
+        id: DRAFT_VALUE,
+        label,
+        lines,
+        summary,
+        addressKind: values.addressKind,
+      });
       if (step === 3 && !sameAsDelivery) {
         setBillingSelection(DRAFT_VALUE);
       } else {
@@ -514,8 +638,6 @@ function WinnerOrderSetupDialog({
     }
 
     setNewAddressOpen(false);
-    setDraft(EMPTY_DRAFT);
-    setAttempted(false);
   }
 
   function handleOuterOpenChange(next: boolean) {
@@ -846,158 +968,48 @@ function WinnerOrderSetupDialog({
       </Dialog>
 
       <Dialog onOpenChange={setNewAddressOpen} open={newAddressOpen}>
-        <DialogContent className="z-[60] max-w-lg" showCloseButton={false}>
+        <DialogContent
+          className="z-[60] flex max-h-[min(640px,calc(100dvh-2rem))] max-w-lg min-h-0 flex-col overflow-hidden"
+          showCloseButton={false}
+        >
           <DialogHeader showCloseButton={false}>
             <DialogTitle>Add Address</DialogTitle>
           </DialogHeader>
-          <DialogBody>
-            <VStack className="w-full" gap="sm" hAlign="stretch" id={formId}>
-              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-                <TextInput
-                  autoComplete="given-name"
-                  label="First name"
-                  message={
-                    attempted && !draft.firstName.trim()
-                      ? "Enter a first name."
-                      : undefined
-                  }
-                  onChange={(event) =>
-                    patchDraft("firstName", event.currentTarget.value)
-                  }
-                  status={
-                    attempted && !draft.firstName.trim() ? "error" : "default"
-                  }
-                  value={draft.firstName}
-                />
-                <TextInput
-                  autoComplete="family-name"
-                  label="Last name"
-                  message={
-                    attempted && !draft.lastName.trim()
-                      ? "Enter a last name."
-                      : undefined
-                  }
-                  onChange={(event) =>
-                    patchDraft("lastName", event.currentTarget.value)
-                  }
-                  status={
-                    attempted && !draft.lastName.trim() ? "error" : "default"
-                  }
-                  value={draft.lastName}
-                />
-              </div>
-
-              <TextInput
-                autoComplete="street-address"
-                label="Street address"
-                message={
-                  attempted && !draft.street.trim()
-                    ? "Enter a street address."
-                    : undefined
-                }
-                onChange={(event) =>
-                  patchDraft("street", event.currentTarget.value)
-                }
-                status={attempted && !draft.street.trim() ? "error" : "default"}
-                value={draft.street}
+          {/* scroll-fade on DialogBody clips the segmented-control pill shadow; fields own scroll. */}
+          <DialogBody className="flex min-h-0 flex-1 flex-col gap-4 overflow-visible [mask-image:none]">
+            <VStack
+              className="flex min-h-0 w-full flex-1 flex-col"
+              gap="md"
+              hAlign="stretch"
+            >
+              <AuctionAddressForm
+                className="min-h-0 flex-1"
+                copy={ADD_ADDRESS_COPY}
+                formId={ADD_ADDRESS_FORM_ID}
+                initialValues={{
+                  addressKind: "personal",
+                }}
+                key={addressFormKey}
+                onCancel={() => setNewAddressOpen(false)}
+                onConfirm={saveNewAddress}
+                renderCountry={({ value, onChange, error, label }) => (
+                  <CountryRegionField
+                    error={error}
+                    label={label}
+                    onChange={onChange}
+                    value={value}
+                  />
+                )}
+                showActions={false}
               />
-
-              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-                <TextInput
-                  autoComplete="address-level2"
-                  label="City"
-                  message={
-                    attempted && !draft.city.trim()
-                      ? "Enter a city."
-                      : undefined
-                  }
-                  onChange={(event) =>
-                    patchDraft("city", event.currentTarget.value)
-                  }
-                  status={attempted && !draft.city.trim() ? "error" : "default"}
-                  value={draft.city}
-                />
-                <TextInput
-                  autoComplete="address-level1"
-                  label="State"
-                  onChange={(event) =>
-                    patchDraft("state", event.currentTarget.value)
-                  }
-                  placeholder="Optional"
-                  value={draft.state}
-                />
-              </div>
-
-              <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-2">
-                <TextInput
-                  autoComplete="postal-code"
-                  label="Postal code"
-                  message={
-                    attempted && !draft.postalCode.trim()
-                      ? "Enter a postal code."
-                      : undefined
-                  }
-                  onChange={(event) =>
-                    patchDraft("postalCode", event.currentTarget.value)
-                  }
-                  status={
-                    attempted && !draft.postalCode.trim() ? "error" : "default"
-                  }
-                  value={draft.postalCode}
-                />
-                <div className="flex w-full flex-col gap-2">
-                  <label
-                    className="text-sm font-medium text-secondary-foreground"
-                    htmlFor={countryId}
-                  >
-                    Country/Region
-                  </label>
-                  <Select
-                    items={COUNTRY_SELECT_ITEMS}
-                    onValueChange={(value) => {
-                      if (typeof value === "string") {
-                        patchDraft("country", value);
-                      }
-                    }}
-                    value={draft.country}
-                  >
-                    <SelectTrigger
-                      aria-invalid={
-                        attempted && !draft.country.trim() ? true : undefined
-                      }
-                      className="w-full"
-                      id={countryId}
-                    >
-                      <SelectValue placeholder="Select a country or region" />
-                    </SelectTrigger>
-                    <SelectContent alignItemWithTrigger={false}>
-                      {COUNTRY_OPTIONS.map((country) => (
-                        <SelectItem
-                          key={country}
-                          label={country}
-                          value={country}
-                        >
-                          {country}
-                        </SelectItem>
-                      ))}
-                    </SelectContent>
-                  </Select>
-                  {attempted && !draft.country.trim() ? (
-                    <span className="text-xs text-secondary-foreground">
-                      Choose a country or region.
-                    </span>
-                  ) : null}
-                </div>
-              </div>
-
-              <div className="mt-4 flex w-full items-start gap-1">
+              <div className="flex w-full items-start gap-1">
                 <CheckboxListInput
-                  checked={canSaveForFuture && draft.saveForFuture}
+                  checked={canSaveForFuture && saveForFuture}
                   className="min-w-0 flex-1"
                   disabled={!canSaveForFuture}
                   onCheckedChange={(checked) => {
                     if (!canSaveForFuture) return;
-                    patchDraft("saveForFuture", checked === true);
+                    setSaveForFuture(checked === true);
                   }}
                   size="sm"
                 >
@@ -1036,9 +1048,9 @@ function WinnerOrderSetupDialog({
             </Button>
             <Button
               className="w-full sm:w-auto"
-              onClick={saveNewAddress}
+              form={ADD_ADDRESS_FORM_ID}
               size="md"
-              type="button"
+              type="submit"
             >
               Use This Address
             </Button>

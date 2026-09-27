@@ -6,16 +6,20 @@
  * `scripts/openspec/lib/` is. `handle.d.mts` and `team-parse.d.mts` are
  * beside it for the same reason.
  */
-import type { Role, Stage } from "../../../tools/manual/src/api/types.ts";
+import type {
+  ChangeEntry,
+  Role,
+  Stage,
+} from "../../../tools/manual/src/api/types.ts";
 
 /** The change as a message reads it: the id a command is written with, the
- * stage the sentence names, and the build the deploy recorded where the
- * record carries one. */
-export type WordedChange = {
-  id: string;
-  stage: Stage;
-  deployedBuild?: string;
-};
+ * stage the sentence names, the build the deploy recorded where the record
+ * carries one, and the suites QA's turn at Specified names by path and case
+ * count. */
+export type WordedChange = Pick<
+  ChangeEntry,
+  "id" | "deployedBuild" | "suites"
+> & { stage: Stage };
 
 /** The change as a landing reply reads it: the stage it is at now, the roles
  * of that stage and the hand each names, where one is named. */
@@ -69,6 +73,7 @@ export declare const behindText: (
   behind: WordedBehind,
   linked: string,
 ) => string;
+export declare const handText: (role: Role, hand?: string) => string;
 export declare const landedText: (
   at: WordedLanding,
   landed: WordedLanded[],

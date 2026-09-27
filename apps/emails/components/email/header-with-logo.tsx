@@ -116,59 +116,53 @@ const WithText = ({
   if (alignment === "center") {
     return (
       <Section width="100%">
-        <Fragment>
-          <Row>
-            <Column>
-              <Section style={{ textAlign: "center" }}>
-                <Logo props={props} />
-              </Section>
-              <Section style={{ lineHeight: "24px" }}>&zwj;</Section>
-              <Copy centered props={props} />
-            </Column>
-          </Row>
-        </Fragment>
+        <Row>
+          <Column>
+            <Section style={{ textAlign: "center" }}>
+              <Logo props={props} />
+            </Section>
+            <Section style={{ lineHeight: "24px" }}>&zwj;</Section>
+            <Copy centered props={props} />
+          </Column>
+        </Row>
       </Section>
     );
   }
   if (alignment === "right") {
     return (
       <Section className="header-logo-text-right-row" width="100%">
-        <Fragment>
-          <Row>
-            <Column
-              className="header-logo-text-right-copy-cell"
-              style={{ width: "50%" }}
-            >
-              <Section className="header-logo-text-right-copy">
-                <Copy props={props} />
-              </Section>
-            </Column>
-            <Column
-              className="header-logo-text-right-logo"
-              style={{ textAlign: "right", width: "50%" }}
-            >
-              <Logo props={props} />
-            </Column>
-          </Row>
-        </Fragment>
+        <Row>
+          <Column
+            className="header-logo-text-right-copy-cell"
+            style={{ width: "50%" }}
+          >
+            <Section className="header-logo-text-right-copy">
+              <Copy props={props} />
+            </Section>
+          </Column>
+          <Column
+            className="header-logo-text-right-logo"
+            style={{ textAlign: "right", width: "50%" }}
+          >
+            <Logo props={props} />
+          </Column>
+        </Row>
       </Section>
     );
   }
   return (
     <Section width="100%">
-      <Fragment>
-        <Row>
-          <Column
-            className="header-logo-text-stack header-logo-text-left-logo"
-            style={{ width: "50%" }}
-          >
-            <Logo props={props} />
-          </Column>
-          <Column className="header-logo-text-stack" style={{ width: "50%" }}>
-            <Copy props={props} />
-          </Column>
-        </Row>
-      </Fragment>
+      <Row>
+        <Column
+          className="header-logo-text-stack header-logo-text-left-logo"
+          style={{ width: "50%" }}
+        >
+          <Logo props={props} />
+        </Column>
+        <Column className="header-logo-text-stack" style={{ width: "50%" }}>
+          <Copy props={props} />
+        </Column>
+      </Row>
     </Section>
   );
 };
@@ -182,33 +176,29 @@ export const HeaderWithLogoSection = (props: SectionProps) => {
       style={{ backgroundColor: resolved.pageBackgroundColor }}
       width="100%"
     >
-      <Fragment>
-        <Row>
-          <Column>&zwj;</Column>
-          <Column style={{ maxWidth: "100%", width: "600px" }}>
-            <Section width="100%">
-              <Fragment>
-                <Row>
-                  <Column
-                    style={{
-                      backgroundColor: resolved.backgroundColor,
-                      padding: "24px",
-                      textAlign: variant === "minimal" ? alignment : undefined,
-                    }}
-                  >
-                    {variant === "minimal" ? (
-                      <Logo props={resolved} />
-                    ) : (
-                      <WithText alignment={alignment} props={resolved} />
-                    )}
-                  </Column>
-                </Row>
-              </Fragment>
-            </Section>
-          </Column>
-          <Column>&zwj;</Column>
-        </Row>
-      </Fragment>
+      <Row>
+        <Column>&zwj;</Column>
+        <Column style={{ maxWidth: "100%", width: "600px" }}>
+          <Section width="100%">
+            <Row>
+              <Column
+                style={{
+                  backgroundColor: resolved.backgroundColor,
+                  padding: "24px",
+                  textAlign: variant === "minimal" ? alignment : undefined,
+                }}
+              >
+                {variant === "minimal" ? (
+                  <Logo props={resolved} />
+                ) : (
+                  <WithText alignment={alignment} props={resolved} />
+                )}
+              </Column>
+            </Row>
+          </Section>
+        </Column>
+        <Column>&zwj;</Column>
+      </Row>
     </Section>
   );
 };

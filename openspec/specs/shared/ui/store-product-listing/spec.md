@@ -63,6 +63,7 @@ the next.
 `ProductCard`, and `ProductCardImage` SHALL each be renderable on their own,
 outside `ProductBrowse`, so a later surface can reuse one without the others.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-32i rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -70,12 +71,14 @@ outside `ProductBrowse`, so a later surface can reuse one without the others.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-eio rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-02 - A part is reused alone
 **Serves:** Surface exports - a part is reused alone
 
 - **WHEN** an application renders the product list, the filter panel, the product filter, the list header, a product card, or the product card image without the browse root
 - **THEN** it renders and behaves as specified, with no missing-context error and no requirement to supply browse-root props
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-vlj rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-03 - A tile is named once
 **Serves:** Surface exports - a tile is named once
 
@@ -104,6 +107,7 @@ button separate from the cart control.
 The list SHALL NOT format a price, compute a discount, decide whether a
 product is sold out, or hold a cart quantity.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-3ob rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-04 - Prices are displayed as supplied
 **Serves:** Tile contract - prices are displayed as supplied
 
@@ -111,6 +115,7 @@ product is sold out, or hold a cart quantity.
 - **THEN** the tile displays both exactly as supplied
 - **AND** the original price is shown with strikethrough treatment
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-9ml rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-05 - No original price
 **Serves:** Tile contract - no original price
 
@@ -118,6 +123,7 @@ product is sold out, or hold a cart quantity.
 - **THEN** only the current price is displayed
 - **AND** no strikethrough price is shown
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-vgm rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-06 - A cart quantity change is reported, not performed
 **Serves:** Tile contract - a cart quantity change is reported, not performed
 
@@ -125,18 +131,21 @@ product is sold out, or hold a cart quantity.
 - **THEN** the requested quantity is reported once, identifying that product
 - **AND** the tile's cart condition is unchanged until the consumer supplies a new one
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-bz2 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-07 - A sold-out product
 **Serves:** Tile contract - a sold-out product
 
 - **GIVEN** a product supplied as sold out
 - **THEN** its tile displays the sold-out treatment and its cart action cannot be activated
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-0cf rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-08 - No wishlist control on a tile
 **Serves:** Tile contract - no wishlist control on a tile
 
 - **WHEN** a product tile renders, whether available or sold out
 - **THEN** no wishlist control appears on it
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-oxx rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-09 - No metadata badges on a tile
 **Serves:** Tile contract - no metadata badges on a tile
 
@@ -151,6 +160,7 @@ count SHALL grow or shrink with the width remaining after the fixed sidebar.
 A tile SHALL remain fully readable and its controls fully operable at every
 column count.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-sdb rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-10 - Narrow viewport
 **Serves:** Responsive layout - narrow viewport
 
@@ -158,6 +168,7 @@ column count.
 - **THEN** the list displays one column
 - **AND** no content overflows the viewport horizontally
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-5rg rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-11 - Wide viewport
 **Serves:** Responsive layout - wide viewport
 
@@ -173,6 +184,7 @@ supplying a different message and an optional action for each.
 
 The sidebar SHALL remain displayed and usable in both conditions.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-o35 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-12 - Filters match nothing
 **Serves:** Browse states - filters match nothing
 
@@ -181,6 +193,7 @@ The sidebar SHALL remain displayed and usable in both conditions.
 - **AND** the sidebar is still displayed with the current search query and filter selection intact
 - **AND** a clear-filters action is offered when the consumer supplied one, reporting activation through a callback
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-1wv rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-13 - An empty catalog
 **Serves:** Browse states - an empty catalog
 
@@ -197,6 +210,7 @@ the clear-filters label, empty and error messages, accessible names, and every
 heading. The components SHALL contain no default, fallback, or built-in copy,
 and SHALL NOT read a message catalog.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-t8e rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-14 - Nothing renders unsupplied copy
 **Serves:** No defaulted content - nothing renders unsupplied copy
 
@@ -204,6 +218,7 @@ and SHALL NOT read a message catalog.
 - **THEN** every string displayed traces to a prop the consumer supplied
 - **AND** no store name, catalog term, currency, or locale appears that the consumer did not supply
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-z3m rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-15 - A second locale needs no source change
 **Serves:** No defaulted content - a second locale needs no source change
 
@@ -224,6 +239,7 @@ without moving focus.
 
 A change to the displayed result count SHALL be announced without moving focus.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-xip rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-16 - Keyboard-only operation
 **Serves:** Accessibility - keyboard-only operation
 
@@ -231,12 +247,14 @@ A change to the displayed result count SHALL be announced without moving focus.
 - **THEN** the search field, every filter option, every expand affordance, every utility link, the sort control, every applied-filter chip, the clear-filters control, and every tile action can be reached and activated
 - **AND** the focused element is visibly indicated at each step
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-nh0 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-17 - State is exposed natively
 **Serves:** Accessibility - state is exposed natively
 
 - **WHEN** assistive technology inspects a selected filter option, the active sort option, and an applied-filter chip
 - **THEN** each state is reported through native semantics rather than styling alone
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-sz8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-18 - Loading more is announced as busy
 **Serves:** Accessibility - loading more is announced as busy
 
@@ -244,6 +262,7 @@ A change to the displayed result count SHALL be announced without moving focus.
 - **THEN** the results region is exposed as busy
 - **AND** focus stays where the shopper left it
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ry5 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-19 - A result count change is announced
 **Serves:** Accessibility - a result count change is announced
 
@@ -259,6 +278,7 @@ in progress as props, and SHALL report every change to them through a named
 callback. It SHALL NOT hold any of those values as its own state, and SHALL
 NOT change what it displays until the consumer supplies a new value.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-8in rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-20 - A control does not move on its own
 **Serves:** Browse states - a control does not move on its own
 
@@ -267,12 +287,14 @@ NOT change what it displays until the consumer supplies a new value.
 - **THEN** the option is still displayed as unselected
 - **AND** the change was reported once, naming the filter group and the option
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ar8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-21 - The consumer drives the display
 **Serves:** Browse states - the consumer drives the display
 
 - **WHEN** the consumer supplies a new search query, filter selection, sort option, load-more state, or product list
 - **THEN** the surface displays that value without any further interaction
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-1ii rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-22 - Every state is reachable from props
 **Serves:** Browse states - every state is reachable from props
 
@@ -296,6 +318,7 @@ When `hasMore` is false or omitted, no load trigger SHALL be displayed.
 When results are loading, empty, or in error, the surface SHALL NOT report
 `onLoadMore`.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-qwz rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-23 - More products are reported on scroll
 **Serves:** Load more - more products are reported on scroll
 
@@ -304,6 +327,7 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 - **THEN** `onLoadMore` is reported once
 - **AND** the displayed products are unchanged until the consumer supplies a longer list
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-9t4 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-24 - Loading more shows skeleton tiles
 **Serves:** Load more - loading more shows skeleton tiles
 
@@ -311,6 +335,7 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 - **THEN** Boneyard skeleton tiles are displayed below the resolved products
 - **AND** the resolved products remain displayed above them
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-x9b rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-25 - The end of the catalog
 **Serves:** Load more - the end of the catalog
 
@@ -318,6 +343,7 @@ When results are loading, empty, or in error, the surface SHALL NOT report
 - **THEN** no load trigger is displayed
 - **AND** no further load is reported
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-04t rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-26 - Initial load does not report load more
 **Serves:** Load more - initial load does not report load more
 
@@ -331,6 +357,7 @@ an independent asynchronous boundary, each carrying its own loading, empty,
 error, and resolved condition. A condition on one SHALL NOT change what the
 other displays.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-cdy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-27 - Results fail while filter groups stand
 **Serves:** Browse states - results fail while filter groups stand
 
@@ -339,6 +366,7 @@ other displays.
 - **AND** the results region displays the supplied error message
 - **AND** a retry affordance is offered when the consumer supplied one, reporting activation through a callback
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-83y rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-28 - Filter groups load while results are ready
 **Serves:** Browse states - filter groups load while results are ready
 
@@ -346,6 +374,7 @@ other displays.
 - **THEN** the results and their count are displayed
 - **AND** the sidebar displays a loading treatment rather than an empty filter list
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-3rm rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-29 - One boundary is not inferred from the other
 **Serves:** Browse states - one boundary is not inferred from the other
 
@@ -383,6 +412,7 @@ Utility links SHALL be displayed in the order supplied, each with the
 supplied label and destination. When no utility links are supplied, that
 region SHALL occupy no space.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-cfw rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-30 - Search is displayed and reported as supplied
 **Serves:** Filters and sort - search is displayed and reported as supplied
 
@@ -392,6 +422,7 @@ region SHALL occupy no space.
 - **THEN** the field still displays `pika`
 - **AND** the change was reported once through the callback
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-xmk rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-31 - Search clear is offered only when appropriate
 **Serves:** Filters and sort - search clear is offered only when appropriate
 
@@ -401,12 +432,14 @@ region SHALL occupy no space.
 - **THEN** the clear handler is reported once
 - **AND** the field still displays the supplied query until the consumer supplies a new one
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-7lp rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-32 - No clear affordance without a handler
 **Serves:** No defaulted content - no clear affordance without a handler
 
 - **GIVEN** a non-empty supplied search query and no clear handler
 - **THEN** no clear affordance is displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-phu rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-33 - No filter selected is unrestricted
 **Serves:** Filters and sort - no filter selected is unrestricted
 
@@ -414,6 +447,7 @@ region SHALL occupy no space.
 - **THEN** every option is displayed as unselected
 - **AND** the supplied results are still displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-nqo rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-34 - A sidebar filter is reported
 **Serves:** Filters and sort - a sidebar filter is reported
 
@@ -423,18 +457,21 @@ region SHALL occupy no space.
 - **AND** every other option in the group stays unselected
 - **AND** the change was reported once, naming the group and the option
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-9mo rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-35 - Two filter options selected
 **Serves:** Filters and sort - two filter options selected
 
 - **GIVEN** a filter group whose supplied selection contains two options
 - **THEN** both options are displayed as selected together
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-0y8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-36 - An empty filter group
 **Serves:** Filters and sort - an empty filter group
 
 - **GIVEN** a resolved filter list that includes a group with no options
 - **THEN** that group is not displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-far rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-37 - A group expand is reported
 **Serves:** Filters and sort - a group expand is reported
 
@@ -442,6 +479,7 @@ region SHALL occupy no space.
 - **WHEN** a shopper activates the expand affordance
 - **THEN** the expand handler is reported once, naming the group
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-tdz rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-38 - No utility links
 **Serves:** No defaulted content - no utility links
 
@@ -470,12 +508,14 @@ callback. When no applied filter is supplied, the applied-filter region SHALL
 occupy no space. Sort and applied filters SHALL be selectable at the same
 time.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-le1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-39 - The count is not derived
 **Serves:** Filters and sort - the count is not derived
 
 - **GIVEN** a supplied result count of `38` and a page carrying 8 products
 - **THEN** the header displays the supplied `38`
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-6e5 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-40 - Sorting is reported
 **Serves:** Filters and sort - sorting is reported
 
@@ -484,12 +524,14 @@ time.
 - **AND** the option list is dismissed
 - **AND** the previously active option stays marked as selected until the consumer supplies a new one
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-sfk rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-41 - No sort options supplied
 **Serves:** Filters and sort - no sort options supplied
 
 - **GIVEN** an empty list of sort options
 - **THEN** the sort control is not displayed and the result count is still displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-5u5 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-42 - No applied filters
 **Serves:** Filters and sort - no applied filters
 
@@ -497,6 +539,7 @@ time.
 - **THEN** the applied-filter region is not displayed
 - **AND** the result count is still displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-kir rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-43 - An applied filter is removed
 **Serves:** Filters and sort - an applied filter is removed
 
@@ -505,6 +548,7 @@ time.
 - **THEN** the chip is still displayed
 - **AND** the change was reported once, naming the group and the option as unselected
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-4q8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-44 - Applied filters are cleared
 **Serves:** Filters and sort - applied filters are cleared
 
@@ -513,6 +557,7 @@ time.
 - **THEN** the clear handler is reported once
 - **AND** the chips are still displayed until the consumer supplies a new list
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-5vd rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-45 - Sort and applied filters combine
 **Serves:** Filters and sort - sort and applied filters combine
 
@@ -538,8 +583,13 @@ shopper's press and swallows it.
 Where one is supplied and the product is in the cart and not sold out, the
 image SHALL display the cart control with the supplied count collapsed on the
 control. Where one is supplied and the product is available and not in the
-cart, the cart control SHALL appear on pointer hover and when the image
-receives keyboard focus, and SHALL be hidden otherwise.
+cart:
+
+- on a wide viewport with a fine pointer and hover, the cart control SHALL
+  appear on pointer hover and when the image receives keyboard focus, and
+  SHALL be hidden otherwise
+- on a coarse pointer, where hover is not available, or below the wide
+  listing breakpoint, the cart control SHALL remain visible without hover
 
 Activating the add affordance SHALL expand the cart control into an inline
 quantity stepper on the same primary pill. While expanded, decrement and
@@ -557,6 +607,7 @@ image SHALL contain no default, fallback, or built-in copy.
 
 `ProductCardImage` SHALL be renderable on its own, outside `ProductCard`.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-uoy rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-46 - No image source
 **Serves:** Tile contract - no image source
 
@@ -564,6 +615,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the well is still displayed
 - **AND** no fallback photo is shown
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-la7 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-47 - A sale label is displayed as supplied
 **Serves:** Tile contract - a sale label is displayed as supplied
 
@@ -571,6 +623,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** that label is displayed on the image
 - **AND** no other sale copy is shown
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-exb rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-48 - A sold-out product
 **Serves:** Tile contract - a sold-out product
 
@@ -580,6 +633,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **AND** no sale label is displayed
 - **AND** no cart control is displayed or operable
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-eds rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-49 - An in-cart count is displayed as supplied
 **Serves:** Tile contract - an in-cart count is displayed as supplied
 
@@ -587,6 +641,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the collapsed cart control displays `1`
 - **AND** the image does not increment, format, or hold that count
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-0xx rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-50 - A cart quantity change is reported, not performed
 **Serves:** Tile contract - a cart quantity change is reported, not performed
 
@@ -594,6 +649,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the requested quantity is reported once
 - **AND** the in-cart condition is unchanged until the consumer supplies a new one
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-yv9 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-51 - Keyboard reveals the cart control
 **Serves:** Tile contract - keyboard reveals the cart control
 
@@ -602,12 +658,14 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the cart control is displayed and can be activated from the keyboard
 - **AND** the focused control is visibly indicated
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-3n1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-52 - The image is reused alone
 **Serves:** Tile contract - the image is reused alone
 
 - **WHEN** an application renders the product card image without a product card
 - **THEN** it renders and behaves as specified, with no missing-context error
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ck1 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-53 - The stepper collapses after blur or pointer leave
 **Serves:** Tile contract - the stepper collapses after blur or pointer leave
 
@@ -616,6 +674,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **THEN** the control collapses to display `2`
 - **AND** the add affordance is not shown
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-z64 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-54 - The collapsed control re-expands
 **Serves:** Tile contract - the collapsed control re-expands
 
@@ -623,6 +682,7 @@ image SHALL contain no default, fallback, or built-in copy.
 - **WHEN** a shopper activates the collapsed control
 - **THEN** the inline quantity stepper is displayed on the same pill
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-ezf rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-55 - A surface that does not sell
 **Serves:** Tile contract - a surface that does not sell
 
@@ -630,6 +690,22 @@ image SHALL contain no default, fallback, or built-in copy.
 - **WHEN** a shopper hovers the image and moves keyboard focus onto it
 - **THEN** no cart control is displayed at either moment
 - **AND** the product's own activation still reports
+
+#### Scenario: shared-ui-store-product-listing-SC-65 - Coarse pointer keeps the cart visible
+**Serves:** Responsive layout - coarse pointer keeps the cart visible
+
+- **GIVEN** an available product that is not in the cart, with a way to report a quantity change
+- **AND** the pointer is coarse or hover is not available
+- **THEN** the cart control is displayed without hover
+- **AND** it can be activated
+
+#### Scenario: shared-ui-store-product-listing-SC-66 - Narrow viewport keeps the cart visible
+**Serves:** Responsive layout - narrow viewport keeps the cart visible
+
+- **GIVEN** an available product that is not in the cart, with a way to report a quantity change
+- **AND** the surface is below the wide listing breakpoint
+- **THEN** the cart control is displayed without hover
+- **AND** it can be activated
 
 ### Requirement: The cart control stops at a supplied maximum
 
@@ -646,6 +722,7 @@ sold-out condition.
 Decrement is unaffected at the maximum, so a shopper who reaches it can still
 go back down.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-wrd rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-56 - The control stops at the maximum
 **Serves:** Stock is a ceiling - the control stops at the maximum
 
@@ -654,6 +731,7 @@ go back down.
 - **THEN** no quantity is reported
 - **AND** the affordance is exposed as unavailable
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-g0s rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-57 - Below the maximum the control counts on
 **Serves:** Stock is a ceiling - below the maximum the control counts on
 
@@ -661,6 +739,7 @@ go back down.
 - **WHEN** a shopper activates the increment affordance
 - **THEN** `2` is reported once
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-o5m rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-58 - No maximum supplied
 **Serves:** Stock is a ceiling - no maximum supplied
 
@@ -668,6 +747,7 @@ go back down.
 - **WHEN** a shopper activates the increment affordance
 - **THEN** `3` is reported once
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-w8w rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-59 - Decrement still works at the maximum
 **Serves:** Stock is a ceiling - decrement still works at the maximum
 
@@ -685,6 +765,7 @@ against a threshold, or decide from it that a product is scarce.
 A sold-out product SHALL NOT display a remaining count, because there is
 nothing left to be running out of.
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-6vf rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-60 - A remaining count is displayed as supplied
 **Serves:** What is left, said - a remaining count is displayed as supplied
 
@@ -693,6 +774,7 @@ nothing left to be running out of.
 - **THEN** `Only 3 left` is displayed on the card
 - **AND** no other remaining-count copy is shown
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-7mn rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-61 - No remaining count supplied
 **Serves:** What is left, said - no remaining count supplied
 
@@ -700,6 +782,7 @@ nothing left to be running out of.
 - **WHEN** the card is rendered
 - **THEN** no remaining count is displayed
 
+<!-- trace:scenario id=g10.shared-store-product-listing.SC-0l8 rev=1 -->
 #### Scenario: shared-ui-store-product-listing-SC-62 - A sold-out product says nothing about what is left
 **Serves:** What is left, said - a sold-out product says nothing about what is left
 

@@ -11,6 +11,7 @@ when a shipment is underway,
 **so that** I can follow a live order or reopen an older one without the
 surface inventing which orders belong where.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-szj rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC1-1: Active and past sections both render when non-empty
 
 **Classification:**
@@ -39,6 +40,7 @@ The consumer supplies a non-empty active list and a non-empty past list.
 * Both section headings and their order cards appear.
 * The empty state does not appear.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-zix rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC2-1: Empty section is omitted
 
 **Classification:**
@@ -67,6 +69,7 @@ The consumer supplies a non-empty active list and an empty past list.
 * The Past Orders heading does not appear.
 * The empty state does not appear.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-tu9 rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC3-1: Track order appears only when enabled
 
 **Classification:**
@@ -94,6 +97,7 @@ A card header is supplied with `trackOrder` true and Track copy.
 * The Track Order control appears.
 * Activating it reports through the Track callback.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-z7g rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC4-1: Track order is hidden when disabled
 
 **Classification:**
@@ -120,6 +124,7 @@ A card header is supplied with `trackOrder` false and a View Details handler.
 * No Track Order control appears.
 * View Details still appears.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-yqj rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC5-1: Card lists supplied lines with status labels
 
 **Classification:**
@@ -149,6 +154,7 @@ An order card is supplied with header props, a status label, and one or more lin
 * Each status displays the supplied label.
 * Each line shows image, product text, and total.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-yvg rev=1 covers=g10.shared-store-order-history.SC-gr1,g10.shared-store-order-history.SC-exr,g10.shared-store-order-history.SC-fem,g10.shared-store-order-history.SC-1rp,g10.shared-store-order-history.SC-unu,g10.shared-store-order-history.SC-iv2,g10.shared-store-order-history.SC-6b5,g10.shared-store-order-history.SC-5cs,g10.shared-store-order-history.SC-22a -->
 ### shared-ui-store-order-history-US1-TC6-1: Application imports the surface and reuses a part alone
 
 **Classification:**
@@ -184,6 +190,7 @@ None.
 **I want** an empty state that sends me to the store,
 **so that** I know where my first order will appear and can browse.
 
+<!-- trace:case id=g10.shared-store-order-history.TC-47f rev=1 covers=g10.shared-store-order-history.SC-g56 -->
 ### shared-ui-store-order-history-US2-TC1-1: Zero orders shows empty state with shop now
 
 **Classification:**

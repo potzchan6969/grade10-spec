@@ -9,6 +9,7 @@
 **I want** the bid panel to offer sign-in when I try to bid,
 **so that** I can authenticate before linking a card.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-53x rev=1 covers=g10.auction-bid-panel-enrollment.SC-sjy,g10.auction-bid-panel-enrollment.SC-o29 -->
 ### grade10-site-auction-bid-panel-enrollment-US1-TC1-1: Sign-in is offered instead of place bid
 
 **Classification:**
@@ -37,6 +38,7 @@ The collector is signed out on <a live lot page>.
 * The primary action offers sign-in to bid.
 * Place bid and link a card are not offered.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-dgs rev=1 covers=g10.auction-bid-panel-enrollment.SC-sjy,g10.auction-bid-panel-enrollment.SC-o29 -->
 ### grade10-site-auction-bid-panel-enrollment-US1-TC2-1: Standing badges stay hidden while signed out
 
 **Classification:**
@@ -73,6 +75,7 @@ The collector is signed out on <a live lot page> where recent bids are shown.
 **I want** amount entry disabled until I link a card and attest my age,
 **so that** I only choose a maximum after setup is done.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-lqi rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC1-1: Link CTA opens setup when no card is linked
 
 **Classification:**
@@ -104,6 +107,7 @@ The collector is signed in with no linked card on <an open listing>.
 * The setup modal opens.
 * No bid is placed.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-c5f rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC2-1: Setup requires card and attestation
 
 **Classification:**
@@ -135,6 +139,7 @@ The collector is signed in and the first-link setup modal is open on <an open li
 * Link Card is enabled when both are complete.
 * Continue is labeled Link Card, not Authorize.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-12t rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC3-1: Setup linking locks dismiss and controls
 
 **Classification:**
@@ -163,6 +168,7 @@ The collector submitted Link Card on <an open listing> and the provider link is 
 * The provider field and age attestation are not interactive.
 * The collector cannot dismiss the modal.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-b5y rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC4-1: Dismissing setup leaves no linked card
 
 **Classification:**
@@ -193,6 +199,7 @@ The collector is signed in with no linked card on <an open listing>.
 * The empty link prompt is shown.
 * Amount controls remain visible and disabled.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-e02 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC5-1: Completing setup unlocks amount controls
 
 **Classification:**
@@ -224,6 +231,7 @@ The collector is signed in with no linked card on <an open listing>.
 * Quick-bid presets and the custom maximum field are enabled.
 * The primary bid action offers set or raise maximum.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-3e2 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC6-1: Empty linked-card slot opens setup
 
 **Classification:**
@@ -253,6 +261,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * Disabled presets and the custom maximum field do not open setup.
 * The empty-slot link control opens the setup modal.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-y2d rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC7-1: Card linking leaves the collector ready to bid
 
 **Classification:**
@@ -284,6 +293,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * Quick-bid presets and the custom maximum field are enabled immediately.
 * The panel does not wait for a bid-time authorization.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-av0 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC8-1: An accepted bid moves directly to enrolled
 
 **Classification:**
@@ -316,6 +326,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * The panel does not add or display a client-side hold state.
 * The commitment proceeds under auto-bidding and payment authorization.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-0h4 rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC9-1: Default setup copy does not promise a bid-time hold
 
 **Classification:**
@@ -346,6 +357,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * The description is "Link a card for bidding. You're only charged if you win."
 * The description does not promise a bid-time hold.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-yrg rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC10-1: Enabled hold setup copy discloses the authorization
 
 **Classification:**
@@ -376,6 +388,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 * The description discloses that setting a maximum authorizes a hold.
 * Continue remains labeled Link Card.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-rik rev=1 covers=g10.auction-bid-panel-enrollment.SC-ju5,g10.auction-bid-panel-enrollment.SC-4ix,g10.auction-bid-panel-enrollment.SC-cic,g10.auction-bid-panel-enrollment.SC-cnv,g10.auction-bid-panel-enrollment.SC-pnc,g10.auction-bid-panel-enrollment.SC-htr,g10.auction-bid-panel-enrollment.SC-fho,g10.auction-bid-panel-enrollment.SC-kcm -->
 ### grade10-site-auction-bid-panel-enrollment-US2-TC11-1: Default payment-method tooltip does not promise a hold
 
 **Classification:**
@@ -413,6 +426,7 @@ The collector is signed in with no linked card and the empty linked-card slot is
 **I want** to change or link another card from the panel,
 **so that** I can update payment before my first bid without a separate flow.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-vr7 rev=1 covers=g10.auction-bid-panel-enrollment.SC-beq,g10.auction-bid-panel-enrollment.SC-ofn,g10.auction-bid-panel-enrollment.SC-1sa -->
 ### grade10-site-auction-bid-panel-enrollment-US3-TC1-1: Change opens the setup modal
 
 **Classification:**
@@ -441,6 +455,7 @@ The collector has a linked card on <an open listing> and has not bid on it.
 * The setup modal opens.
 * The linked-card row remains visible behind the modal.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-iih rev=1 covers=g10.auction-bid-panel-enrollment.SC-beq,g10.auction-bid-panel-enrollment.SC-ofn,g10.auction-bid-panel-enrollment.SC-1sa -->
 ### grade10-site-auction-bid-panel-enrollment-US3-TC2-1: Change reuses setup copy with prior card shown
 
 **Classification:**
@@ -470,6 +485,7 @@ The collector is changing the linked card before their first bid on <an open lis
 * Description discloses that setting a maximum authorizes a hold and that the collector is charged only if they win.
 * The provider field area indicates the previously linked card on file.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-shl rev=1 covers=g10.auction-bid-panel-enrollment.SC-beq,g10.auction-bid-panel-enrollment.SC-ofn,g10.auction-bid-panel-enrollment.SC-1sa -->
 ### grade10-site-auction-bid-panel-enrollment-US3-TC3-1: Attestation is pre-checked when already given
 
 **Classification:**
@@ -506,6 +522,7 @@ The collector already attested on a prior lot and is changing card on <a new ope
 **I want** the linked card to lock after my first bid on that lot,
 **so that** my committed payment method stays stable while I raise bids.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-74a rev=1 covers=g10.auction-bid-panel-enrollment.SC-ndg,g10.auction-bid-panel-enrollment.SC-y5h -->
 ### grade10-site-auction-bid-panel-enrollment-US4-TC1-1: Change is hidden after the first bid
 
 **Classification:**
@@ -534,6 +551,7 @@ The collector has a linked card on <an open listing> and has placed at least one
 * The linked card is shown.
 * Change is not offered.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-5vi rev=1 covers=g10.auction-bid-panel-enrollment.SC-ndg,g10.auction-bid-panel-enrollment.SC-y5h -->
 ### grade10-site-auction-bid-panel-enrollment-US4-TC2-1: First maximum does not reopen setup
 
 **Classification:**
@@ -569,6 +587,7 @@ The collector has a linked card on <an open listing> and has not placed a bid on
 **I want** that card and enabled amount controls on a new lot without setup,
 **so that** I am not asked to link again before I bid.
 
+<!-- trace:case id=g10.auction-bid-panel-enrollment.TC-c7l rev=1 covers=g10.auction-bid-panel-enrollment.SC-xwd -->
 ### grade10-site-auction-bid-panel-enrollment-US5-TC1-1: Card on file carries over to a new lot
 
 **Classification:**

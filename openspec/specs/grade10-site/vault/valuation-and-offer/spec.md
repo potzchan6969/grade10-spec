@@ -53,6 +53,7 @@ Withdrawing the offer is the way down.
 
 Terms SHALL NOT be agreed on either lane before a valuation exists.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-x56 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-01 - A re-valuation is appended
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -60,6 +61,7 @@ Terms SHALL NOT be agreed on either lane before a valuation exists.
 - **WHEN** staff record a second valuation of 8,000,000 HKD minor units
 - **THEN** both figures are readable and the later one is what an offer is judged against
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-9uy rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-02 - A valuation under a live offer is refused
 **Serves:** The valuation - a valuation under a live offer is refused
 
@@ -67,6 +69,7 @@ Terms SHALL NOT be agreed on either lane before a valuation exists.
 - **WHEN** staff record a valuation of 3,000,000 HKD minor units
 - **THEN** it is refused by name and the valuation is not written
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-ey2 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-03 - Terms need a valuation
 **Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
@@ -91,6 +94,7 @@ advanced, and nothing has been advanced when an offer is written.
 Outside the brand's own bounds, the outermost limits SHALL be interest of 0 to
 10,000 basis points and a term of 1 to 3,650 days.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-jsc rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-04 - An offer above the valuation is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -98,6 +102,7 @@ Outside the brand's own bounds, the outermost limits SHALL be interest of 0 to
 - **WHEN** an offer of 11,000,000 HKD minor units is written
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-bap rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-05 - An offer already expired is refused
 **Serves:** Answering the offer - an offer already expired is refused
 
@@ -121,6 +126,7 @@ one gate SHALL apply all of them:
 
 A bound nobody has set SHALL allow everything outside production.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-sgl rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-06 - A rate above the band is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -128,6 +134,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer of 600 basis points over a 60-day term is written
 - **THEN** it is refused by name, because 600 over 60 days is 300 per 30 days
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-3m0 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-07 - One band judges every term
 **Serves:** What the brand lends under - one band judges every term
 
@@ -135,6 +142,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer of 500 basis points over a 60-day term is written
 - **THEN** it is accepted, because 500 over 60 days is 250 per 30 days
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-lyt rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-08 - A term the brand does not write is refused
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -142,6 +150,7 @@ A bound nobody has set SHALL allow everything outside production.
 - **WHEN** an offer over 45 days is written
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-33m rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-09 - An expiry past the validity window is refused
 **Serves:** What the brand lends under - an expiry past the validity window is refused
 
@@ -162,6 +171,7 @@ whose lender is still being registered SHALL keep taking items into custody.
 Outside production both SHALL be allowed, so that a brand can rehearse the
 flow before its values are decided.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-do8 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-10 - A production offer under a null bound is refused
 **Serves:** What the brand lends under - a production offer under a null bound is refused
 
@@ -169,6 +179,7 @@ flow before its values are decided.
 - **WHEN** an offer is written
 - **THEN** it is refused by name, naming the bound
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-xk5 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-11 - A production offer with no lender named is refused
 **Serves:** What the brand lends under - a production offer with no lender named is refused
 
@@ -176,6 +187,7 @@ flow before its values are decided.
 - **WHEN** an offer is written
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-e9b rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-12 - Custody still opens
 **Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
@@ -206,6 +218,7 @@ written.
 An offer that reaches its expiry SHALL be closed, the collector SHALL be told,
 and the case SHALL stay where it is.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-r51 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-13 - A counter-offer replaces the first
 **Serves:** grade10-site-vault-valuation-and-offer-US-01 - Operator prices a loan against an item they have valued
 
@@ -213,6 +226,7 @@ and the case SHALL stay where it is.
 - **WHEN** staff write another
 - **THEN** the case holds exactly the new one and the first is superseded
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-pc4 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-14 - A declined offer leaves the request open
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
@@ -220,6 +234,7 @@ and the case SHALL stay where it is.
 - **WHEN** its owner declines it
 - **THEN** the offer is closed as declined by the collector, the case is being valued again, and another offer may be written
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-g0c rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-15 - A lapsed offer is closed and the case stays
 **Serves:** Answering the offer - a lapsed offer is closed and the case stays
 
@@ -240,6 +255,7 @@ offer was read.
 Accepting SHALL start nothing that costs the collector: no term begins and no
 interest accrues until the advance is recorded.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-08z rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-16 - A collector accepts from their own case
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
@@ -247,6 +263,7 @@ interest accrues until the advance is recorded.
 - **WHEN** its owner accepts it
 - **THEN** the case is `accepted`, the offer is accepted, and the collector is recorded as the actor
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-sin rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-17 - An offer that lapsed cannot be accepted
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
@@ -254,6 +271,7 @@ interest accrues until the advance is recorded.
 - **WHEN** anyone accepts it
 - **THEN** it is refused by name and the case stays where it is
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-w4b rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-18 - Accepting costs nothing yet
 **Serves:** grade10-site-vault-valuation-and-offer-US-02 - Collector answers an offer from their own phone
 
@@ -270,6 +288,7 @@ custody agreement alone and SHALL never hold an advance or a balance, so a loan
 request the shop is not yet lending against leaves valuation as stored rather
 than only as declined or cancelled.
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-rll rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-19 - Storage terms need only the valuation
 **Serves:** grade10-site-vault-valuation-and-offer-US-03 - Collector who only wants storage agrees terms
 
@@ -277,6 +296,7 @@ than only as declined or cancelled.
 - **WHEN** staff agree its custody terms
 - **THEN** the case is `accepted` and no offer exists on it
 
+<!-- trace:scenario id=g10.vault-valuation-and-offer.SC-6q6 rev=1 -->
 #### Scenario: grade10-site-vault-valuation-and-offer-SC-20 - A loan request is stored while the shop is not lending
 **Serves:** grade10-site-vault-valuation-and-offer-US-04 - Collector whose loan request the shop cannot yet price still gets the item stored
 

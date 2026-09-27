@@ -109,6 +109,70 @@ export function findSectionAnywhere(
   return undefined;
 }
 
+/** Every section of an outline, depth first, in file order. */
+export function everySection(sections: Section[]): Section[] {
+  return sections.flatMap((one) => [one, ...everySection(one.children)]);
+}
+
+export type SectionSpan = {
+  section: Section;
+  /** 0-based index of the first line under the heading. */
+  from: number;
+  /** 0-based index of the next heading at the section's level or above, or
+   * the file's line count. */
+  until: number;
+};
+
+/**
+ * One section by heading, and the lines of the file it holds: from the one
+ * after its heading to the one before the next heading at its level or above
+ * — the span `raw` covers, as line indexes for a reader that walks or writes
+ * lines. `heading` is the heading's text, or a pattern it matches.
+ *
+ * Searched among the file's top sections, under a `# Title` where it opens
+ * with one, so the title never answers for a section; `within` narrows the
+ * search to one section's children instead. Fence-aware, as `outline` is.
+ */
+export function sectionSpan(
+  text: string,
+  heading: string | RegExp,
+  within?: Section[],
+): SectionSpan | undefined {
+  const roots = outline(text);
+  const named = (one: Section) =>
+    typeof heading === "string"
+      ? one.heading === heading
+      : heading.test(one.heading);
+  const section = (
+    within ?? roots.flatMap((one) => (one.level === 1 ? one.children : [one]))
+  ).find(named);
+  if (!section) return undefined;
+  const next = everySection(roots).find(
+    (one) => one.line > section.line && one.level <= section.level,
+  );
+  return {
+    section,
+    // `line` is the 1-based line of the heading, which is the 0-based index
+    // of the line after it.
+    from: section.line,
+    until: next ? next.line - 1 : text.split("\n").length,
+  };
+}
+
+/** What a scenario id looks like: the capability, `-SC-`, its number, and a
+ * lower-case letter where a scenario was added beside one (`-SC-07a`). Named
+ * once; a reader that needs flags or anchors builds them over its `source`. */
+export const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+[a-z]?/;
+
+/** Every scenario id a text carries, bounded on both sides as `citesId`
+ * bounds one: `x-SC-07a` is never read as `x-SC-07`, nor `alpha-SC-1` inside
+ * `demo-alpha-SC-1`. */
+export function scenarioIdsIn(text: string): string[] {
+  return (
+    text.match(new RegExp(`(?<![\\w-])${SCENARIO_ID.source}(?!\\w)`, "g")) ?? []
+  );
+}
+
 export function trimBlank(lines: string[]): string {
   let start = 0;
   let end = lines.length;

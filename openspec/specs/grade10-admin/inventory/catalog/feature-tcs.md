@@ -10,6 +10,7 @@
 **so that** each numbered graded unit can be traced without preventing
 unnumbered stock from entering inventory.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-50a rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
 ### grade10-admin-inventory-catalog-US69-TC1-1: Intake records numbered and unnumbered stock
 
 **Classification:**
@@ -51,6 +52,7 @@ unnumbered stock from entering inventory.
 * The unnumbered intake creates no Cert ID record.
 * One intake history entry records the numbered identifiers.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-gvc rev=1 covers=g10adm.inventory-catalog.SC-fq8,g10adm.inventory-catalog.SC-irv,g10adm.inventory-catalog.SC-a57,g10adm.inventory-catalog.SC-skp,g10adm.inventory-catalog.SC-ah9,g10adm.inventory-catalog.SC-0ac -->
 ### grade10-admin-inventory-catalog-US69-TC2-1: Invalid Cert ID intake preserves inventory
 
 **Classification:**
@@ -94,6 +96,7 @@ ID appears in displayed attributes,
 **so that** product facts stay structured and each Auction presentation shows
 only the fields I choose.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-tzz rev=1 covers=g10adm.inventory-catalog.SC-sls,g10adm.inventory-catalog.SC-ux1,g10adm.inventory-catalog.SC-q36,g10adm.inventory-catalog.SC-u9i,g10adm.inventory-catalog.SC-6vy,g10adm.inventory-catalog.SC-rn5 -->
 ### grade10-admin-inventory-catalog-US70-TC1-1: Product display offers the hierarchy and Cert ID field
 
 **Classification:**
@@ -129,6 +132,7 @@ only the fields I choose.
 * Cert ID is available without creating an ordinary attribute key.
 * The listing shows `PSA-123` first in its configured product fields.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-peb rev=1 covers=g10adm.inventory-catalog.SC-sls,g10adm.inventory-catalog.SC-ux1,g10adm.inventory-catalog.SC-q36,g10adm.inventory-catalog.SC-u9i,g10adm.inventory-catalog.SC-6vy,g10adm.inventory-catalog.SC-rn5 -->
 ### grade10-admin-inventory-catalog-US70-TC2-1: Hiding Cert ID preserves typed attributes
 
 **Classification:**
@@ -172,6 +176,7 @@ I reserve stock,
 **so that** every reservation identifies whether it owns a physical numbered
 unit or only aggregate stock.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-q7e rev=1 covers=g10adm.inventory-catalog.SC-bck,g10adm.inventory-catalog.SC-63a,g10adm.inventory-catalog.SC-ol8 -->
 ### grade10-admin-inventory-catalog-US71-TC1-1: Reservation records the selected unit
 
 **Classification:**
@@ -205,6 +210,7 @@ unit or only aggregate stock.
 * The reservation quantity is one.
 * `PSA-123` is unavailable to another active reservation.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-tq8 rev=1 covers=g10adm.inventory-catalog.SC-bck,g10adm.inventory-catalog.SC-63a,g10adm.inventory-catalog.SC-ol8 -->
 ### grade10-admin-inventory-catalog-US71-TC2-1: Reservation requires an explicit unit choice
 
 **Classification:**
@@ -247,6 +253,7 @@ unit or only aggregate stock.
 product rows separately from stock, then mark valid products created,
 **so that** every product has a mapped identity and valid structured facts before inventory is added.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-lzo rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC1-2: Card schema uses one shared template
 
 **Classification:**
@@ -292,6 +299,7 @@ product rows separately from stock, then mark valid products created,
 * The Category-only `TCG` mapping is refused because its source rows resolve to multiple tuples.
 * The mapping uses existing tags and creates no taxonomy values.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-7vt rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC2-2: Manifest import creates drafts only
 
 **Classification:**
@@ -332,6 +340,7 @@ product rows separately from stock, then mark valid products created,
 * The current published schema remains active.
 * The imported revision is not published until the admin uses the publish flow.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-01d rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC3-2: Invalid manifest leaves schemas unchanged
 
 **Classification:**
@@ -372,6 +381,7 @@ product rows separately from stock, then mark valid products created,
 * No schema revision from the manifest is created.
 * Existing published schemas remain active.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-arw rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC4-2: Product upload separates products from stock
 
 **Classification:**
@@ -415,6 +425,7 @@ product rows separately from stock, then mark valid products created,
 * Newly created products use draft status until the admin marks each valid product `created`.
 * No inventory quantity, unit record, or Cert ID is created.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-ii9 rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC5-2: Incomplete product rows block every create
 
 **Classification:**
@@ -454,6 +465,7 @@ product rows separately from stock, then mark valid products created,
 * Validation identifies the unmapped label and invalid product row.
 * No product from the upload is created or changed.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-bdu rev=2 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC6-2: Same product name keeps distinct card identities
 
 **Classification:**
@@ -498,6 +510,7 @@ product rows separately from stock, then mark valid products created,
 
 ---
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-vud rev=1 covers=g10adm.inventory-catalog.SC-ml0,g10adm.inventory-catalog.SC-p05,g10adm.inventory-catalog.SC-30a,g10adm.inventory-catalog.SC-ikp,g10adm.inventory-catalog.SC-hqo,g10adm.inventory-catalog.SC-1d9,g10adm.inventory-catalog.SC-3c8,g10adm.inventory-catalog.SC-t1v -->
 ### grade10-admin-inventory-catalog-US72-TC7-1: Mapped values trim and omit blank placeholders
 
 **Classification:**
@@ -544,6 +557,7 @@ product rows separately from stock, then mark valid products created,
 **I want** to upload physical copy rows against existing products,
 **so that** inventory counts and copy-level facts are recorded together after I review the matches.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-4u2 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC1-2: Inventory preview shows matched copy facts
 
 **Classification:**
@@ -585,6 +599,7 @@ product rows separately from stock, then mark valid products created,
 * Inventory counts increase by the number of included rows.
 * The batch's inventory changes and history are committed together.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-i75 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC2-2: Blank status choices apply per row
 
 **Classification:**
@@ -624,6 +639,7 @@ product rows separately from stock, then mark valid products created,
 * The included RAW unit is accepted without Cert ID.
 * The excluded graded unit adds no unit or stock.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-rr6 rev=2 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC3-2: Unmatched products block inventory import
 
 **Classification:**
@@ -656,6 +672,7 @@ product rows separately from stock, then mark valid products created,
 * Validation identifies both the unmatched and ambiguous rows.
 * No inventory, unit, or history change from the upload is committed.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-9ou rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC4-1: Duplicate Cert IDs block every unit
 
 **Classification:**
@@ -695,6 +712,7 @@ product rows separately from stock, then mark valid products created,
 * The valid row is not committed with the duplicate row.
 * Inventory counts, unit records, and history remain unchanged.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-5r1 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC5-1: Invalid inventory values block the batch
 
 **Classification:**
@@ -733,6 +751,7 @@ product rows separately from stock, then mark valid products created,
 * Validation identifies the invalid Year value.
 * No row from the upload changes inventory counts, unit facts, or history.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-4v4 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC6-1: Inventory import normalizes copy facts
 
 **Classification:**
@@ -771,6 +790,7 @@ product rows separately from stock, then mark valid products created,
 * Blank and standalone `-` optional copy facts are absent rather than stored as text.
 * One unit is committed and the uploaded workbook remains unchanged.
 
+<!-- trace:case id=g10adm.inventory-catalog.TC-wz7 rev=1 covers=g10adm.inventory-catalog.SC-3ab,g10adm.inventory-catalog.SC-1c7,g10adm.inventory-catalog.SC-crr,g10adm.inventory-catalog.SC-dc8,g10adm.inventory-catalog.SC-bc7,g10adm.inventory-catalog.SC-4hn,g10adm.inventory-catalog.SC-sfn -->
 ### grade10-admin-inventory-catalog-US73-TC7-1: Cert ID requirements follow grading status
 
 **Classification:**

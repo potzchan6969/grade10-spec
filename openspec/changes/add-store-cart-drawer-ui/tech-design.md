@@ -1,3 +1,46 @@
+## Current Points Delivery
+
+The user-approved points integration below supersedes the read-only points and
+neutral estimated-total choices in the original delivery notes that follow.
+Those notes describe the original Groups 1–4. Group 7 supplies the shared
+pending guard before Group 5 integrates points; Group 6 follows delivery.
+
+- **State** — retain `CartDrawerHost`'s existing `useCartTender` choice passed
+  to `useBasketQuote`. Preserve existing promo callbacks and the coupon field;
+  this points increment neither adds nor removes promo editing.
+- **Acceptance** — parse finite positive whole numbers (Remove alone writes zero), ask `useBasketQuote.read` for
+  the proposed choice, persist the server-accepted points, then render the
+  accepted quote. Use the returned amounts rather than local arithmetic.
+- **Persistence** — extend `useCartTender` with observable completion, pending
+  and error state while keeping existing checkout callers compatible. A failed
+  mutation retains the accepted cached choice. Serialize writes so an older
+  completion cannot overwrite a newer choice.
+- **Races** — capture member scope, reviewed basket identity and open generation
+  for an operation. Check them before publishing a quote or starting persistence.
+  Closing cannot cancel a write already sent; scope its cache result to its
+  member and re-read on reopen. Invalidate quotes after cart edits and suppress
+  Checkout until the current basket is revalidated.
+- **Shared guard** — add optional `tenderPending` (default false) to existing
+  `CartDrawerProps` and `CartDrawerFooterProps`. Forward it through the compound;
+  disable existing points/promo inputs and action callbacks, including the open
+  promo sheet and Checkout. Preserve accepted values and callback guards.
+  The host keeps this guard true across quoting and persistence for a tender
+  change, including the existing promo flow, so points and promo actions cannot
+  overlap. Existing review and checkout guards still apply after it clears.
+- **UI** — reuse existing shared points callbacks, disclosure, input and applied
+  state. Pending tender state disables tender actions and Checkout. Preserve
+  last accepted same-basket totals on failures; once no operation is pending, Checkout can use
+  that still-current accepted quote. Use localized existing error
+  copy where it answers the failure. Any missing shared prop or copy belongs to
+  the spec store and needs the smallest compatible addition before integration.
+- **Checkout** — keep its route and creation owner; verify it re-quotes persisted
+  choice and sends accepted spendPoints. No new endpoint, schema or dependency.
+- **Alternatives** — local-only intent would lose reload/handoff; optimistic
+  applied totals would display an unaccepted saving; new backend pricing would
+  duplicate the existing combined quote. All are rejected.
+
+## Original Delivery Notes
+
 ## Context
 
 The proposal's motivation is in `proposal.md`. The

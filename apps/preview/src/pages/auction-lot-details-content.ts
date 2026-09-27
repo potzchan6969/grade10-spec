@@ -35,6 +35,14 @@ export {
 } from "../auction-listing/listing-auction-bid-fixtures";
 
 const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
+const IMAGE_CARDDASS = new URL(
+  "./auction-catalogue-carddass-starters.fixture.png",
+  import.meta.url,
+).href;
+const IMAGE_MEW = new URL(
+  "./auction-catalogue-mew-ex.fixture.png",
+  import.meta.url,
+).href;
 
 export const AUCTION_LOT_EXTENSION_POLICY = DEFAULT_LISTING_EXTENSION_POLICY;
 
@@ -86,12 +94,16 @@ export const AUCTION_LOT = {
     "Bandai Carddass checklist and starters slab from the Pocket Monsters set. Printed in 1997 for the early Bandai Carddass series, this PSA 10 example covers the starter trio and checklist art collectors look for when building a first-wave Japanese set. Surfaces stay sharp under the slab; corners and edges grade clean. A strong reference piece for Carddass-era Pokémon in top grade.",
   images: [
     {
-      src: IMAGE,
+      src: IMAGE_CARDDASS,
       alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, front",
     },
     {
       src: IMAGE,
-      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, back",
+      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, angle",
+    },
+    {
+      src: IMAGE_MEW,
+      alt: "1997 Pocket Monsters Carddass #000 Bandai Starters, PSA 10, detail",
     },
   ],
   ...BID_FIXTURE_LOT,
@@ -202,6 +214,11 @@ export const AUCTION_LOT_DETAILS_COPY = {
       description: "Email alerts for this lot are off too.",
       actionLabel: "Undo",
     },
+  },
+  gallery: {
+    previous: "Previous image",
+    next: "Next image",
+    images: "Lot images",
   },
   sidebar: {
     ...LISTING_AUCTION_BID_DEMO_SIDEBAR_COPY,

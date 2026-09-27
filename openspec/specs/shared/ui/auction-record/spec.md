@@ -21,6 +21,7 @@ application.
     the shared package.
   - Reporting, not acting: keeps product state and writes on the application's
     side of the boundary.
+  - Status column copy: names the mixed standing and order-state column plainly
 
 ## Requirements
 
@@ -62,6 +63,7 @@ the row SHALL omit the Unwatch control. When it does not supply a standing
 label, the row SHALL show the application-supplied no-standing placeholder
 rather than inventing a state badge.
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-v8o rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-01 - An application imports the surface
 **Serves:** The record surface exports - an application imports the surface
 
@@ -70,6 +72,7 @@ rather than inventing a state badge.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-ko6 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-02 - A part is reused alone
 **Serves:** The record surface exports - a part is reused alone
 
@@ -78,6 +81,7 @@ rather than inventing a state badge.
 - **THEN** it renders and behaves as specified, with no missing-context error
   and no requirement to supply page props
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-s5k rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-08 - Bidding is read before Watching
 **Serves:** The record surface exports - bidding is read before Watching
 
@@ -87,6 +91,7 @@ rather than inventing a state badge.
 - **THEN** the bidding rows appear before the watching-only rows in one table
 - **AND** no Bidding or Watching section heading appears
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-ea6 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-11 - The title badge shows the row count
 **Serves:** The record surface exports - the title badge shows the row count
 
@@ -94,6 +99,7 @@ rather than inventing a state badge.
 - **WHEN** it renders
 - **THEN** the badge beside the page title shows 4
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-zan rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-12 - Watch-only standing shows the placeholder
 **Serves:** The record surface exports - watch-only standing shows the placeholder
 
@@ -103,6 +109,7 @@ rather than inventing a state badge.
 - **THEN** Your Standing shows that placeholder
 - **AND** it does not invent a badge label
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-08a rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-13 - A bid row omits Unwatch when not supplied
 **Serves:** The record surface exports - a bid row omits Unwatch when not supplied
 
@@ -120,6 +127,7 @@ no label for a row's current bid or close, no wording for an email-alerts
 confirmation, and no default for any of them. A string not supplied SHALL be
 absent rather than replaced by a built-in value.
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-bab rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-03 - No label is invented
 **Serves:** Content ownership - no label is invented
 
@@ -155,6 +163,7 @@ includes an action label, the announcement SHALL expose it (View My Auctions
 on watch; Undo on unwatch). Absent confirmation copy, the control announces
 nothing.
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-l2l rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-04 - The watch control reports and waits
 **Serves:** The record surface exports - the watch control reports and waits
 
@@ -163,6 +172,7 @@ nothing.
 - **THEN** the component reports the collector's intent to the application
 - **AND** it still shows not watched until the application tells it otherwise
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-vjs rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-05 - A change in progress is shown when told
 **Serves:** The record surface exports - a change in progress is shown when told
 
@@ -170,6 +180,7 @@ nothing.
 - **WHEN** it renders
 - **THEN** it shows the change as in progress
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-8ki rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-07 - Email alerts report without unwatching
 **Serves:** The record surface exports - email alerts report without unwatching
 
@@ -179,6 +190,7 @@ nothing.
 - **THEN** the component reports the intended off value
 - **AND** it does not remove the row or invent an unwatch
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-riw rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-09 - One row's alerts stand alone
 **Serves:** The record surface exports - one row's alerts stand alone
 
@@ -189,6 +201,7 @@ nothing.
 - **THEN** only that row shows alerts off
 - **AND** every other row still shows alerts on
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-2o3 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-10 - A confirmed change is announced
 **Serves:** The record surface exports - a confirmed change is announced
 
@@ -197,6 +210,7 @@ nothing.
 - **THEN** the row announces the change once, in the supplied wording
 - **AND** a row supplied without that copy announces nothing
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-jun rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-14 - A locked watch control does not report
 **Serves:** Content ownership - a locked watch control does not report
 
@@ -205,6 +219,7 @@ nothing.
 - **THEN** it shows Watching and is not activatable
 - **AND** it does not report a press
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-tft rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-15 - Watch confirmation announces after the application confirms
 **Serves:** Content ownership - watch confirmation announces after the application confirms
 
@@ -220,9 +235,25 @@ nothing.
 supplied, the row SHALL show that image beside the listing identity. When not
 supplied, the image well SHALL remain without inventing a product photograph.
 
+<!-- trace:scenario id=g10.shared-auction-record.SC-xe3 rev=1 -->
 #### Scenario: shared-ui-auction-record-SC-06 - A row shows the key image when given
 **Serves:** Content ownership - a row shows the key image when given
 
 - **GIVEN** an `AuctionRecordRow` supplied with a key image
 - **WHEN** it renders
 - **THEN** that image is shown on the row
+
+### Requirement: The auction-record surface renders application-owned status copy
+
+The shared auction-record surface SHALL expose the Status column label and
+row status copy supplied by the application. It SHALL not infer whether a row
+is Setup Overdue or Payment Overdue, and SHALL preserve the supplied View order
+action.
+
+<!-- trace:scenario id=g10.shared-auction-record.SC-rup rev=1 -->
+#### Scenario: shared-ui-auction-record-SC-16 - The mixed column is named Status
+**Serves:** Content ownership - the mixed column is named Status
+
+- **WHEN** the application supplies Status and either overdue label
+- **THEN** the component renders the supplied column and row copy
+- **AND** it does not invent another status label

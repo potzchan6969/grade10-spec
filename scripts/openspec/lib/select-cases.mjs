@@ -47,10 +47,10 @@ export function readCandidates(root, scope = null) {
  * `actual` only unless `includeDraft`, and never `deprecated` - a deprecated
  * case is one the spec stopped stating, and walking it proves nothing.
  *
- * A case whose Automation status is `automated` is left out too, unless
- * `includeAutomated` says otherwise: a run sheet is where a case a script
- * cannot cover leaves the store, and an automated case is proved on every
- * push instead (`docs/governance/specs-to-test-cases.md`, "The Run Sheet").
+ * A case whose Automation status is `automated` is left out of this function
+ * unless `includeAutomated` is set. The writer turns that flag on by default
+ * (`--exclude-automated` turns it off): Auto web and Auto mobile are columns
+ * a tester marks, and an automated case is the one those columns can answer.
  */
 export function selectCases(candidates, options = {}) {
   const {
@@ -175,24 +175,65 @@ export function automatedGateOf({ picked, refused, includeAutomated = false }) {
 }
 
 /**
+ * Prefill for the four surfaces.
+ *
+ * **Testability** says which side can answer. **Automation status** only
+ * opens Auto when a person can also walk the case.
+ *
+ * - `manual` only: Web and Mobile `to_do`, Auto `n/a`.
+ * - `automation` only: Web and Mobile `n/a`, Auto `to_do` even when no
+ *   script has landed yet.
+ * - `automation, manual`: Web and Mobile `to_do`; Auto `to_do` if status is
+ *   `automated`, else `n/a`.
+ */
+export function surfacePrefill(tc) {
+  const parts = prop(tc, "Testability")
+    .toLowerCase()
+    .split(/[,\s]+/)
+    .filter(Boolean);
+  const byScript = parts.includes("automation");
+  const byHand = parts.includes("manual");
+  const automated = isAutomated(tc);
+
+  if (byScript && !byHand) {
+    return {
+      Web: "n/a",
+      Mobile: "n/a",
+      "Auto web": "to_do",
+      "Auto mobile": "to_do",
+    };
+  }
+  if (byHand && !byScript) {
+    return {
+      Web: "to_do",
+      Mobile: "to_do",
+      "Auto web": "n/a",
+      "Auto mobile": "n/a",
+    };
+  }
+  return {
+    Web: "to_do",
+    Mobile: "to_do",
+    "Auto web": automated ? "to_do" : "n/a",
+    "Auto mobile": automated ? "to_do" : "n/a",
+  };
+}
+
+/**
  * A case as its row, in `COLUMNS` order.
  *
  * The four surface cells arrive filled in, not empty. `to_do` is what makes the
  * Summary's progress honest: an empty cell is indistinguishable from a tab
- * nobody opened, where a column of `to_do` counts down as a tester works. The
- * automation columns of a case no automated test covers get `n/a` instead -
- * there is nothing there to do, and the case's `Automation status` is the only
- * record of that, so the prefill is where it reaches the sheet.
- *
- * Nothing carries the automation status as its own column any more. The pair of
- * `n/a`s says it, and a column saying it again would be a second place for it
- * to be wrong.
+ * nobody opened, where a column of `to_do` counts down as a tester works.
+ * `n/a` is a surface that cannot answer: a person cannot walk an
+ * automation-only case, and Auto cannot answer a manual-only case, or a mixed
+ * case whose **Automation status** is still `manual`.
  */
 export function caseRow({ read, tc }) {
   const { product, domain, capability } = splitCapability(read.capabilityId);
   const steps = tc.stepTexts.map((one, i) => `${i + 1}. ${one}`);
   if (tc.perRow) steps.unshift("Runs once per row of Test data.");
-  const automated = prop(tc, "Automation status").toLowerCase() === "automated";
+  const surfaces = surfacePrefill(tc);
   const cells = {
     "Case ID": tc.id,
     Title: tc.title,
@@ -200,10 +241,7 @@ export function caseRow({ read, tc }) {
     "Test data": tc.testData.map((r) => `${r.field}: ${r.value}`).join("\n"),
     Steps: steps.join("\n"),
     "Expected results": tc.expectedTexts.join("\n"),
-    Web: "to_do",
-    Mobile: "to_do",
-    "Auto web": automated ? "to_do" : "n/a",
-    "Auto mobile": automated ? "to_do" : "n/a",
+    ...surfaces,
     Product: product,
     Domain: domain,
     Capability: capability,
@@ -215,6 +253,12 @@ export function caseRow({ read, tc }) {
   return COLUMNS.map((name) => cells[name] ?? "");
 }
 
+/** A capability's banner row: the store path of the file, the rest empty so
+ *  the text overflows across them. */
+export function capabilityRow(capabilityId) {
+  return [capabilityId, ...Array(COLUMNS.length - 1).fill("")];
+}
+
 /** A journey's banner row: its id and title in the first cell, the rest empty
  *  so the text overflows across them. */
 export function journeyRow(journey) {
@@ -223,12 +267,14 @@ export function journeyRow(journey) {
 }
 
 /**
- * The grid a run tab is written from: a banner row per journey, then the cases
- * that walk it.
+ * The grid a run tab is written from: a banner row per capability file, a
+ * banner per journey, then the cases that walk it.
  *
  * The journey is a row rather than a repeated column because it repeats. A
  * `Journey title` column spent 200 pixels of the reading path restating the
  * same sentence on every row of a group, and the group already has a shape.
+ * The capability row is the file the tester would open - `shared/auth/sign-in`
+ * - and the journeys fold under it.
  *
  * `lines` runs parallel to `rows` and is what the formatting reads: a request
  * that bands a draft case or groups a journey needs to know which row is which,
@@ -237,12 +283,20 @@ export function journeyRow(journey) {
 export function buildGrid(picked) {
   const rows = [];
   const lines = [];
+  let lastFile = null;
   let last = null;
   for (const one of picked) {
+    const file = one.read.capabilityId ?? "";
+    if (file !== lastFile) {
+      rows.push(capabilityRow(file));
+      lines.push({ kind: "capability", key: file, capabilityId: file });
+      lastFile = file;
+      last = null;
+    }
     const key = one.tc.journey?.raw ?? "";
     if (key !== last) {
       rows.push(journeyRow(one.tc.journey));
-      lines.push({ kind: "journey", key });
+      lines.push({ kind: "journey", key, capabilityId: file });
       last = key;
     }
     rows.push(caseRow(one));

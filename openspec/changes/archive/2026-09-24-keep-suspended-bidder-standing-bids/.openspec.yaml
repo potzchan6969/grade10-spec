@@ -1,0 +1,11 @@
+schema: grade10-planning
+promoted_by: "@htonyl"
+created: 2026-09-14
+reviewed:
+  user-journeys: ad6fd27a
+  ui-design: 0935449e
+  specs: cb0679a7
+  test-cases: cb0679a7
+deployed_at: "415c3d657c936dbbec936b8ac49425b59a0e4ba9"
+deployed_env: "staging"
+decisions_carried: "post-bidding and user-directory product records"

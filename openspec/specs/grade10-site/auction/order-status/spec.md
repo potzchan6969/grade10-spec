@@ -11,6 +11,8 @@ derivation that resolves one status a buyer and an operator both read.
   - Invoice status gains `payment_verifying`: the winner uploaded payment proof and an operator has not checked it
   - Stopped deadline: while proof is checked the deadline does not run, and the time left is kept
 - Derived order status
+  - Refunded from partial collection: makes a refund terminal after any recorded payment
+  - Deadline-derived outcomes: distinguishes an overdue setup from an overdue payment
   - Payment Verifying: its own name, read by the winner and the operator alike
   - Replaced invoices hold no status: the order's invoice status is always its current invoice's
 
@@ -26,9 +28,7 @@ derivation that resolves one status a buyer and an operator both read.
   - Permitted transitions: every other move between states is refused
 - Independence from the store
   - Separate derivation: an auction order and a store order share label names and share no meaning
-
 ## Requirements
-
 ### Requirement: An auction order carries two writable status fields
 
 Each auction order SHALL carry exactly one invoice status and exactly one
@@ -64,6 +64,7 @@ expired invoice SHALL NOT accept winner card payment or proof upload. An
 operator SHALL reissue it to `pending` with a new deadline, settle it manually
 to `paid`, or cancel it.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-tc9 rev=1 -->
 #### Scenario: auction-status-SC-01 - A new auction order starts pending and unfulfilled
 **Serves:** Writable primitives - a new auction order starts pending and unfulfilled
 
@@ -71,6 +72,7 @@ to `paid`, or cancel it.
 - **THEN** its invoice status is `not_issued`
 - **AND** its fulfilment status is `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-i18 rev=1 -->
 #### Scenario: auction-status-SC-02 - Expiry writes no status
 **Serves:** Writable primitives - expiry writes no status
 
@@ -80,6 +82,7 @@ to `paid`, or cancel it.
 - **THEN** Grade10 sets the invoice status to `expired`
 - **AND** the fulfilment status is still `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-wlf rev=1 -->
 #### Scenario: auction-status-SC-03 - A reissue keeps the invoice pending
 **Serves:** Writable primitives - a reissue keeps the invoice pending
 
@@ -88,6 +91,7 @@ to `paid`, or cancel it.
 - **THEN** the invoice status is `pending`
 - **AND** the payment deadline is the new one the reissue set
 
+<!-- trace:scenario id=g10.auction-order-status.SC-8qq rev=1 -->
 #### Scenario: auction-status-SC-42 - A replaced invoice holds no status
 **Serves:** Derived order status - the order's invoice status is always its current invoice's
 
@@ -98,7 +102,7 @@ to `paid`, or cancel it.
 
 ### Requirement: Order status is derived, never written
 
-Grade10 SHALL compute order status from the two status fields and the two
+Grade10 SHALL compute order status from the two status fields and the three
 supplementary conditions, evaluating the rules below **in order** and taking
 the first match.
 
@@ -110,12 +114,13 @@ the first match.
 | 4 | `paid` | `fulfilled` | `delivery_confirmed` is false | **Shipped** |
 | 5 | `paid` | `unfulfilled` | — | **Processing** |
 | 6 | `payment_verifying` | `unfulfilled` | — | **Payment Verifying** |
-| 7 | `expired` | `unfulfilled` | — | **Pending Payment** |
+| 7 | `expired` | `unfulfilled` | — | **Payment Overdue** |
 | 8 | `pending` | `unfulfilled` | — | **Pending Payment** |
 | 9 | `not_issued` | `unfulfilled` | `address_confirmed` is true | **Preparing Invoice** |
-| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false | **Awaiting Setup** |
+| 10 | `not_issued` | `unfulfilled` | `address_confirmed` is false and `address_deadline_passed` is true | **Setup Overdue** |
+| 11 | `not_issued` | `unfulfilled` | `address_confirmed` is false and `address_deadline_passed` is false | **Awaiting Setup** |
 
-The derived order status vocabulary SHALL be these nine names, read the same
+The derived order status vocabulary SHALL be these eleven names, read the same
 by the winner and the operator.
 
 Grade10 SHALL compute order status at read time, or maintain it as a
@@ -127,6 +132,7 @@ Rules 1 and 2 precede fulfilment because a terminal financial outcome
 overrides where the goods are: a refunded order that already shipped is
 Refunded.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-xlj rev=1 -->
 #### Scenario: auction-status-SC-05 - An unpaid order inside its deadline is Pending Payment
 **Serves:** Derived order status - an unpaid order inside its deadline is Pending Payment
 
@@ -135,15 +141,16 @@ Refunded.
 - **WHEN** its order status is read
 - **THEN** it is Pending Payment
 
-#### Scenario: auction-status-SC-06 - The same order past its deadline is Expired
-**Serves:** Derived order status - an expired invoice keeps Pending Payment
+<!-- trace:scenario id=g10.auction-order-status.SC-f7y rev=1 -->
+#### Scenario: auction-status-SC-06 - The same order past its deadline is Payment Overdue
+**Serves:** Derived order status - an expired invoice derives Payment Overdue
 
 - **GIVEN** an auction order with invoice status `expired` and fulfilment
   status `unfulfilled`
 - **WHEN** its order status is read
-- **THEN** it is Pending Payment
-- **AND** no order status reads Expired
+- **THEN** it is Payment Overdue
 
+<!-- trace:scenario id=g10.auction-order-status.SC-aj3 rev=1 -->
 #### Scenario: auction-status-SC-07 - A paid, undispatched order is Processing
 **Serves:** Derived order status - a paid, undispatched order is Processing
 
@@ -152,6 +159,7 @@ Refunded.
 - **WHEN** its order status is read
 - **THEN** it is Processing
 
+<!-- trace:scenario id=g10.auction-order-status.SC-apb rev=1 -->
 #### Scenario: auction-status-SC-08 - Dispatch and delivery separate Shipped from Delivered
 **Serves:** Derived order status - dispatch and delivery separate Shipped from Delivered
 
@@ -160,6 +168,7 @@ Refunded.
 - **WHEN** their order statuses are read
 - **THEN** the first is Delivered and the second is Shipped
 
+<!-- trace:scenario id=g10.auction-order-status.SC-div rev=1 -->
 #### Scenario: auction-status-SC-09 - A refund overrides a shipped order
 **Serves:** Derived order status - a refund overrides a shipped order
 
@@ -169,6 +178,7 @@ Refunded.
 - **THEN** it is Refunded
 - **AND** it is neither Shipped nor Delivered
 
+<!-- trace:scenario id=g10.auction-order-status.SC-h5p rev=1 -->
 #### Scenario: auction-status-SC-10 - Order status refuses a direct write
 **Serves:** Derived order status - order status refuses a direct write
 
@@ -177,14 +187,16 @@ Refunded.
 - **THEN** Grade10 refuses the write
 - **AND** the order status is still Pending Payment
 
-#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Address
+<!-- trace:scenario id=g10.auction-order-status.SC-w76 rev=1 -->
+#### Scenario: auction-status-SC-19 - An order with no address is Awaiting Setup
 **Serves:** Derived order status - an order with no address is Awaiting Setup
 
 - **GIVEN** an auction order with invoice status `not_issued` whose winner has
-  confirmed no delivery address
+  confirmed no delivery address and whose address deadline has not passed
 - **WHEN** its order status is read
 - **THEN** it is Awaiting Setup
 
+<!-- trace:scenario id=g10.auction-order-status.SC-7zj rev=1 -->
 #### Scenario: auction-status-SC-20 - A confirmed address with no invoice is Preparing Invoice
 **Serves:** Derived order status - a confirmed address with no invoice is Preparing Invoice
 
@@ -193,6 +205,7 @@ Refunded.
 - **WHEN** its order status is read
 - **THEN** it is Preparing Invoice
 
+<!-- trace:scenario id=g10.auction-order-status.SC-12a rev=1 -->
 #### Scenario: auction-status-SC-43 - Proof waiting for an operator reads Payment Verifying
 **Serves:** Derived order status - Payment Verifying has its own name
 
@@ -200,6 +213,30 @@ Refunded.
 - **WHEN** its order status is read by the winner and by an operator
 - **THEN** both read Payment Verifying
 - **AND** neither reads Pending Payment
+
+### Requirement: Deadline-derived order status distinguishes setup and payment overdue
+
+An order whose address deadline has passed before an invoice is sent SHALL
+derive Setup Overdue. An order whose invoice is expired SHALL derive Payment
+Overdue. These names SHALL be derived from the authoritative deadline and
+invoice facts, not manually stored as a second status model, and SHALL not
+change the underlying address or payment records.
+
+<!-- trace:scenario id=g10.auction-order-status.SC-agq rev=1 -->
+#### Scenario: auction-status-SC-52 - An expired invoice derives Payment Overdue
+**Serves:** Derived order status - an expired invoice derives Payment Overdue
+
+- **GIVEN** an order whose invoice status is expired
+- **WHEN** its status is read
+- **THEN** the derived status is Payment Overdue
+
+<!-- trace:scenario id=g10.auction-order-status.SC-kjm rev=1 -->
+#### Scenario: auction-status-SC-53 - An incomplete setup derives Setup Overdue
+**Serves:** Derived order status - an incomplete setup derives Setup Overdue
+
+- **GIVEN** an order without a sent invoice whose address deadline has passed
+- **WHEN** its status is read
+- **THEN** the derived status is Setup Overdue
 
 ### Requirement: Invalid combinations are refused at write time
 
@@ -218,6 +255,7 @@ The dispatch action SHALL assert that invoice status is `paid` before it may
 set fulfilment status to `fulfilled`. That assertion SHALL live in the
 system, not in a warehouse operating procedure.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-y48 rev=1 -->
 #### Scenario: auction-status-SC-11 - Dispatch before payment is refused
 **Serves:** Writable primitives - dispatch before payment is refused
 
@@ -226,6 +264,7 @@ system, not in a warehouse operating procedure.
 - **THEN** Grade10 refuses it
 - **AND** the fulfilment status remains `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-mej rev=1 -->
 #### Scenario: auction-status-SC-12 - A shipped order cannot be cancelled
 **Serves:** Writable primitives - a shipped order cannot be cancelled
 
@@ -235,6 +274,7 @@ system, not in a warehouse operating procedure.
 - **THEN** Grade10 refuses it
 - **AND** the invoice status remains `paid`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-sx5 rev=1 -->
 #### Scenario: auction-status-SC-21 - An order with no invoice cannot be dispatched
 **Serves:** Writable primitives - an order with no invoice cannot be dispatched
 
@@ -243,6 +283,7 @@ system, not in a warehouse operating procedure.
 - **THEN** Grade10 refuses it
 - **AND** the fulfilment status remains `unfulfilled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-fmg rev=1 -->
 #### Scenario: auction-status-SC-44 - Dispatch while proof is checked is refused
 **Serves:** Writable primitives - proof is not payment
 
@@ -278,6 +319,7 @@ confirm or return. Grade10 SHALL refuse a cancel, a reissue, a manual
 settlement or a card payment on it. Proof upload SHALL enter
 `payment_verifying` only from `pending`.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-r6z rev=1 -->
 #### Scenario: auction-status-SC-13 - A paid invoice cannot return to pending
 **Serves:** Writable primitives - a paid invoice cannot return to pending
 
@@ -286,6 +328,7 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** Grade10 refuses the write
 - **AND** the invoice status is still `paid`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-d22 rev=1 -->
 #### Scenario: auction-status-SC-14 - A cancelled invoice is terminal
 **Serves:** Writable primitives - a cancelled invoice is terminal
 
@@ -294,6 +337,7 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** Grade10 refuses it
 - **AND** the invoice status is still `cancelled`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-j9x rev=1 -->
 #### Scenario: auction-status-SC-22 - An invoice cannot be sent without a confirmed address
 **Serves:** Writable primitives - an invoice cannot be sent without a confirmed address
 
@@ -303,15 +347,17 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** Grade10 refuses it
 - **AND** the invoice status is still `not_issued`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-0sk rev=1 -->
 #### Scenario: auction-status-SC-25 - An expired invoice refuses winner card payment
-**Serves:** Derived order status - an expired invoice keeps Pending Payment without winner card pay
+**Serves:** Derived order status - an expired invoice derives Payment Overdue without winner card pay
 
 - **GIVEN** an auction order whose invoice status is `expired`
 - **WHEN** the winner's card payment for it is attempted
 - **THEN** Grade10 refuses the payment
 - **AND** the invoice status remains `expired`
-- **AND** the order still derives as Pending Payment
+- **AND** the order still derives as Payment Overdue
 
+<!-- trace:scenario id=g10.auction-order-status.SC-wt0 rev=1 -->
 #### Scenario: auction-status-SC-45 - Proof moves the invoice to payment_verifying and back
 **Serves:** Writable primitives - `payment_verifying` is entered on upload and left by an operator
 
@@ -320,6 +366,7 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** the invoice is `payment_verifying` after the upload
 - **AND** `pending` after the return
 
+<!-- trace:scenario id=g10.auction-order-status.SC-er6 rev=1 -->
 #### Scenario: auction-status-SC-46 - A checked invoice refuses cancel, reissue, settlement and card payment
 **Serves:** Writable primitives - only confirm or return leaves `payment_verifying`
 
@@ -328,6 +375,7 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** Grade10 refuses each
 - **AND** the invoice status is still `payment_verifying`
 
+<!-- trace:scenario id=g10.auction-order-status.SC-e4v rev=1 -->
 #### Scenario: auction-status-SC-47 - Confirming proof writes paid
 **Serves:** Writable primitives - `payment_verifying` is left by an operator
 
@@ -336,6 +384,7 @@ settlement or a card payment on it. Proof upload SHALL enter
 - **THEN** the invoice status is `paid`
 - **AND** the order derives as Processing
 
+<!-- trace:scenario id=g10.auction-order-status.SC-q1w rev=1 -->
 #### Scenario: auction-status-SC-48 - Proof upload enters payment_verifying only from pending
 **Serves:** Writable primitives - `payment_verifying` is entered on upload
 
@@ -351,6 +400,7 @@ SHALL NOT merge them with, alias them to, or map them onto the badges in
 `grade10-site/store/order-status`. A label name the two sets share SHALL NOT
 imply shared meaning, and no surface SHALL derive one from the other.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-1o2 rev=1 -->
 #### Scenario: auction-status-SC-15 - A shared label name carries no shared meaning
 **Serves:** Independence from the store - either derivation read on its own, with no path between them
 
@@ -362,22 +412,26 @@ imply shared meaning, and no surface SHALL derive one from the other.
 
 ### Requirement: Supplementary conditions qualify the primitives
 
-Grade10 SHALL read these two conditions from data it already holds and
-SHALL NOT store either as a status enum.
+Grade10 SHALL read these three conditions from data it already holds and
+SHALL NOT store any as a status enum.
 
 | Condition | Source |
 | --- | --- |
 | `address_confirmed` | The winner has confirmed a delivery address on the auction order |
+| `address_deadline_passed` | The address deadline has passed while no invoice has been sent |
 | `delivery_confirmed` | The carrier has confirmed delivery and delivery proof is recorded |
 
-Whether the payment deadline has passed SHALL NOT be a condition of the
-derivation; invoice status `expired` carries it.
+Whether the payment deadline has passed SHALL NOT be a separate condition of
+the derivation; invoice status `expired` carries it. `address_deadline_passed`
+SHALL be read from the authoritative address deadline and SHALL not be stored
+as a second order status.
 `delivery_confirmed` SHALL be settable only on an auction order whose
 fulfilment status is `fulfilled`. Delivery is a confirmation event on an
 already-dispatched order rather than a third fulfilment status, because the
 warehouse reports dispatch and the carrier reports delivery — two parties
 reporting two events.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-ztl rev=1 -->
 #### Scenario: auction-status-SC-17 - Delivery cannot be confirmed before dispatch
 **Serves:** Guards - a carrier confirmation arriving against an order nobody has dispatched
 
@@ -410,6 +464,7 @@ longer applies.
 `payment_verifying` invoice can never become `expired`, and an `expired`
 invoice refuses proof upload, so the two states never meet.
 
+<!-- trace:scenario id=g10.auction-order-status.SC-dq1 rev=1 -->
 #### Scenario: auction-status-SC-40 - A checked invoice never expires
 **Serves:** Writable primitives - the deadline does not run while proof is checked
 
@@ -418,6 +473,7 @@ invoice refuses proof upload, so the two states never meet.
 - **THEN** the invoice status is still `payment_verifying`
 - **AND** the recorded time left is 2 days
 
+<!-- trace:scenario id=g10.auction-order-status.SC-x14 rev=1 -->
 #### Scenario: auction-status-SC-41 - A return restarts the deadline with the time left
 **Serves:** Writable primitives - the time left is kept across the check
 
@@ -425,3 +481,29 @@ invoice refuses proof upload, so the two states never meet.
 - **WHEN** an operator returns it to `pending` at 2026-09-25T09:00:00Z
 - **THEN** its payment deadline is 2026-09-27T09:00:00Z
 - **AND** Grade10 writes `expired` at that deadline if the invoice is still `pending`
+
+### Requirement: Refunded is a terminal auction order status
+
+An auction order with a recorded refund SHALL derive status Refunded whether
+the cumulative payment was full or partial. The status SHALL be terminal and
+SHALL not be replaced by a later payment or shipment event.
+
+<!-- trace:scenario id=g10.auction-order-status.SC-yon rev=1 -->
+#### Scenario: auction-status-SC-51 - A refund derives Refunded
+**Serves:** Derived order status - a refund derives Refunded
+
+- **GIVEN** an order with a recorded refund after partial collection
+- **WHEN** any order-status surface reads it
+- **THEN** the derived status is Refunded
+- **AND** a later payment event does not change that status
+
+<!-- trace:scenario id=g10.auction-order-status.SC-0dn rev=1 -->
+#### Scenario: auction-status-SC-54 - An overpayment does not derive Refunded
+**Serves:** Derived order status - an overpayment keeps the order status
+
+- **GIVEN** an order with a payment above its invoice total and a returned
+  difference
+- **WHEN** any order-status surface reads it
+- **THEN** the derived status remains the status before the overpayment return
+- **AND** it is not Refunded
+

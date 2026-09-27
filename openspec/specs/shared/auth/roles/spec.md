@@ -11,17 +11,17 @@ role is data; what a role grants is not.
 - Closed role set
   - Named roles: user, staff, support, auditor, admin; unknown names are dropped
 - Permission checks
+  - Refund permission: separates refund processing from payment settlement
   - Grants not names: a product checks permission, never the role string at the call site
   - Stacking: combined roles stack; an operator cannot widen what a role grants
-
 ## Requirements
-
 ### Requirement: A person holds roles from a closed set
 
 A signed-in person SHALL hold one or more of: `user`, `staff`, `support`,
 `auditor`, `admin`. A person with no operator role SHALL hold `user` only.
 Unknown role names SHALL be ignored.
 
+<!-- trace:scenario id=g10.shared-roles.SC-z89 rev=1 -->
 #### Scenario: shared-auth-roles-SC-01 - A collector is a user
 **Serves:** shared-auth-roles-US-01 - Collector holds the user role only
 
@@ -29,6 +29,7 @@ Unknown role names SHALL be ignored.
 - **WHEN** a product reads who is calling
 - **THEN** their roles are `user` only
 
+<!-- trace:scenario id=g10.shared-roles.SC-dqm rev=1 -->
 #### Scenario: shared-auth-roles-SC-02 - An unknown role is dropped
 **Serves:** shared-auth-roles-US-01 - Collector holds the user role only
 
@@ -44,6 +45,7 @@ the caller holds a particular role name. A person whose only role is `user`
 SHALL hold no operator permission. A permission name that is not in the
 vocabulary SHALL grant nothing.
 
+<!-- trace:scenario id=g10.shared-roles.SC-s2f rev=1 -->
 #### Scenario: shared-auth-roles-SC-03 - A user cannot act as an operator
 **Serves:** shared-auth-roles-US-01 - Collector holds the user role only
 
@@ -51,6 +53,7 @@ vocabulary SHALL grant nothing.
 - **WHEN** that person requests an operator action
 - **THEN** the system refuses it
 
+<!-- trace:scenario id=g10.shared-roles.SC-pq2 rev=1 -->
 #### Scenario: shared-auth-roles-SC-04 - Support cannot set roles
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -59,6 +62,7 @@ vocabulary SHALL grant nothing.
 - **THEN** the system refuses it
 - **AND** they can still list users, ban, and list and revoke sessions
 
+<!-- trace:scenario id=g10.shared-roles.SC-s22 rev=1 -->
 #### Scenario: shared-auth-roles-SC-05 - Staff cannot list or ban users
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -66,6 +70,7 @@ vocabulary SHALL grant nothing.
 - **WHEN** that person tries to list or ban users
 - **THEN** the system refuses it
 
+<!-- trace:scenario id=g10.shared-roles.SC-q3k rev=1 -->
 #### Scenario: shared-auth-roles-SC-06 - An unknown permission grants nothing
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -91,6 +96,7 @@ A person who holds several operator roles SHALL receive the union of those
 roles' grants. Operators SHALL change who holds a role, and SHALL NOT change
 what a role grants.
 
+<!-- trace:scenario id=g10.shared-roles.SC-xb7 rev=1 -->
 #### Scenario: shared-auth-roles-SC-07 - Staff can operate the store and auction catalog
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -98,6 +104,7 @@ what a role grants.
 - **WHEN** they take a store write or an auction operate action
 - **THEN** the system allows it
 
+<!-- trace:scenario id=g10.shared-roles.SC-pvk rev=1 -->
 #### Scenario: shared-auth-roles-SC-07a - Staff can write the auction catalogue
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -105,6 +112,7 @@ what a role grants.
 - **WHEN** they take an auction write action
 - **THEN** the system allows it
 
+<!-- trace:scenario id=g10.shared-roles.SC-qv7 rev=1 -->
 #### Scenario: shared-auth-roles-SC-08 - Auditor reads the trail and nothing else
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -113,6 +121,7 @@ what a role grants.
 - **THEN** the system allows it
 - **AND** a ban, a store write, or a role change is refused
 
+<!-- trace:scenario id=g10.shared-roles.SC-yjl rev=1 -->
 #### Scenario: shared-auth-roles-SC-09 - Combined roles stack
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -120,6 +129,7 @@ what a role grants.
 - **WHEN** they list users and write to the store
 - **THEN** both actions are allowed
 
+<!-- trace:scenario id=g10.shared-roles.SC-bye rev=1 -->
 #### Scenario: shared-auth-roles-SC-10 - An operator cannot widen a role's grants
 **Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
 
@@ -127,3 +137,26 @@ what a role grants.
 - **WHEN** they use the users directory
 - **THEN** they can change who holds a role
 - **AND** they cannot change what that role grants
+
+### Requirement: Refund permission follows the closed role vocabulary
+
+The permission vocabulary SHALL include `auction:refund`. `staff` and
+`admin` SHALL receive it; `finance` SHALL not receive it; and a role without
+the grant SHALL be refused when recording a refund. Reading refund records
+remains available wherever the existing auction read grant allows it.
+
+<!-- trace:scenario id=g10.shared-roles.SC-eny rev=1 -->
+#### Scenario: shared-auth-roles-SC-14 - Staff and admin can record refunds
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
+
+- **WHEN** the role matrix is read for `staff` and `admin`
+- **THEN** both roles include `auction:refund`
+
+<!-- trace:scenario id=g10.shared-roles.SC-xss rev=1 -->
+#### Scenario: shared-auth-roles-SC-15 - Finance cannot record refunds
+**Serves:** shared-auth-roles-US-02 - Operator's grants follow the closed vocabulary
+
+- **WHEN** finance attempts to record a refund
+- **THEN** Grade10 refuses the mutation
+- **AND** finance can still read a recorded refund
+

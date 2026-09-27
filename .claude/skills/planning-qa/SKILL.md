@@ -19,13 +19,12 @@ An engineer who authored the change runs the same passes in their own lane;
 | `specs/<capability>/spec.md` — pass one | In the change, beside the journeys | `## Purpose` and `## Feature set`: the outline, written from the journeys and the marked PRD |
 | `specs/<capability>/feature-tcs.md` | In the change, beside the journeys | The blind suite and its `## Reconciliation`; you generate both, and review them with `/tcs-review` |
 | `specs/<capability>/spec.md` — pass two | In the change, beside the journeys | The requirement deltas and their scenarios, reconciled against that suite |
-| `openspec/specs/<product>/<domain>/domain-tcs.md` | Beside the durable specs | The paths a person walks across that domain's capabilities |
-| `openspec/specs/<product>/product-tcs.md` | Beside the durable specs | The paths a person walks across that product's domains |
+| `<product>/<domain>/domain-tcs.md` | Beside the durable specs, or in the change | The paths a person walks across that domain's capabilities |
+| `<product>/product-tcs.md` | Beside the durable specs, or in the change | The paths a person walks across that product's domains |
 | `openspec/specs/platform-tcs.md` | Beside the durable specs | The paths a person walks across products |
 
-The upper three are written only where a path exists to hold them, never under
-a change's deltas, and carry no coverage obligation: `product` and `platform`
-are smoke passes.
+The upper three are written only where a path exists to hold them: `product`
+and `platform` are smoke passes.
 
 Neither `specs` nor `test-cases` names a teammate in the schema: they sit on
 nobody's worklist. **The PM is the reader of record for both** - you run the
@@ -39,6 +38,8 @@ like any other. That line routes the anchors; it does not excuse the testing.
 sections, the case ids, the classification block, the `**Trace:**` line, and
 the file header. Follow that document; this skill routes to it and adds
 nothing that contradicts it.
+
+For app-test links, use [Test Traceability](../../../docs/governance/test-traceability.md) once scenarios and cases exist; its markers supplement the suite's `**Trace:**` line and never replace the journey or case headings.
 
 ## Why this workflow has the shape it has
 
@@ -57,19 +58,17 @@ scenarios from it would be a relay, not a cross-check - whoever writes second
 copies the first.
 
 The schema cannot express that order — `requires` is advisory and has never
-stopped anyone writing the scenarios first. The split that used to try was
-undone because it bought nothing and cost three things: a status line that
-called the second pass done as soon as the first wrote the file, two viewer tabs
-over one document, and a change in another repository to fix the second.
+stopped anyone writing the scenarios first.
 
 ## The run
 
 `/workflow-specify` runs this as a round. `workflow-round` holds the steps,
-the readers and the landing; what follows is what the two files must hold,
-and the order they are written in.
+the readers and the landing, and [Round Summary and
+Landing](../../../docs/governance/round-summary.md) the conduct; what follows
+is what the two files must hold, and the order they are written in.
 
-Everything this run produces is `draft`. Nothing in it claims review;
-`/tcs-review` comes later, at its own pace.
+Everything here is `draft`: `/tcs-review` is QA's turn once the requirements
+land, told by the landing.
 
 ## Steps
 
@@ -244,14 +243,15 @@ sees nothing else.
 `user-journeys.md`, `decisions.md` - its `## Raised` table included, which says
 what earlier runs asked and what came of it - `ui-design.md` where the change
 has one, with its state dispositions stripped, the linked PRD sections, and the
-existing `feature-tcs.md` for id continuity, with `## Reconciliation` stripped.
+existing `feature-tcs.md` for id continuity and the domain suite above, both
+with `## Reconciliation` stripped.
 
 `decisions.md` and `ui-design.md` both go in for the same reason: neither holds
 a requirement, so neither costs blindness, and a reader who cannot see the
 non-goals writes cases for what the interview ruled out — which comes back as a
 finding against scenarios that were right.
 
-**Excluded:** `openspec/specs/` entirely, `openspec/changes/archive/` entirely,
+**Excluded:** `openspec/specs/` beyond the domain suite, `openspec/changes/archive/` entirely,
 and any `## Requirements` section anywhere.
 
 The archive exclusion is not housekeeping. An archived change keeps an
@@ -390,7 +390,7 @@ Two skills do the work, and they are the whole workflow:
 **Top down, both times.** Platform, then product, then domain, then feature.
 Writing, the higher file names the paths and the level below covers what they
 do not reach — the refusals, the empty states — rather than re-testing a path
-from underneath; a trim made before the file above exists is a guess.
+from underneath; the feature pass leaves the domain draft's paths to it.
 Reviewing, the same order, so a suite is trimmed against something approved and
 the higher level's approved cases are the house-style evidence the reviews
 below inherit.
@@ -404,16 +404,16 @@ values a pass is written against. A case there **composes**: it traces two or
 more journeys, from two or more capabilities, domains or products, and a single
 trace means it is a feature case written at the wrong level.
 
-`/spec-to-tcs` learns this store's conventions from every `actual` case in the
-corpus before it writes, so a hand-written suite is both more work and less
+`/spec-to-tcs` writes to this store's conventions
+(`docs/governance/tcs-conventions.md`), so a hand-written suite is both more work and less
 consistent than a generated one. It refuses to regenerate over `actual` cases
 or an `approved` file, and shows an existing suite before touching it.
 
 ## When each runs
 
-**The blind pass runs before the scenarios**: as soon as the journeys and the
-outline are written, so the second reading is taken from a suite that never saw
-them.
+**The blind pass runs before the scenarios**, after the levels above it: as
+soon as the journeys and the outline are written, so the second reading is
+taken from a suite that never saw them.
 
 ## What a suite owes its capability
 
@@ -469,8 +469,10 @@ pnpm run tcs:validate        # errors fail CI; an older shape is one of them
 pnpm run tcs:stale           # which suites' drafts sit below the current rules rev
 ```
 
-What a **minor** and a **major** each reach, and how, is
-`docs/governance/specs-to-test-cases.md`'s **Rules Revisions**.
+What a revision reaches, and how — drafts regenerated top down, reviewed
+cases restyled — is `docs/governance/specs-to-test-cases.md`'s **Rules
+Revisions**; how a case reads is `docs/governance/tcs-conventions.md`, which
+moves without one.
 
 ## Related
 

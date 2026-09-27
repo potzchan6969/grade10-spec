@@ -110,8 +110,13 @@ export type TestCase = {
 
 /** The suite file's own status — derived from its cases, never chosen:
  * `pending-review` while every case is a draft, `in-review` from the first
- * verdict, `approved` once no draft is left. */
-export type TestSuiteStatus = "pending-review" | "in-review" | "approved";
+ * verdict, `approved` once no draft is left, and `reopened` when a file that
+ * was approved holds a draft again. */
+export type TestSuiteStatus =
+  | "pending-review"
+  | "in-review"
+  | "reopened"
+  | "approved";
 
 export type SpecEntry = {
   /** `product/capability`, or a bare topic id. */
@@ -237,6 +242,8 @@ export type ChangeStatus = "in-flight" | "archived";
 export type ChangeSuite = {
   /** The spec id the suite belongs to. */
   spec: string;
+  /** The suite's own file, from the store's root. */
+  path: string;
   status?: TestSuiteStatus;
   cases: {
     draft: number;
@@ -608,7 +615,7 @@ export type SchemaArtifact = {
   required: boolean;
 };
 
-/** What in a draft summons a reader. `always` is every round; the other nine
+/** What in a draft summons a reader. `always` is every round; the others
  * answer to what the draft itself changed —
  * `openspec/specs/shared/planning/agent-rounds/spec.md`'s "A round's size is
  * read from the draft". Read by `scripts/openspec/lib/perspectives.mjs`,
@@ -626,6 +633,7 @@ export const TRIGGERS: readonly string[] = [
   "money",
   "deploy",
   "copy",
+  "code",
 ];
 
 /** One reader a round may dispatch: its perspective's name, what in a draft

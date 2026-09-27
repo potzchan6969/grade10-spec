@@ -13,9 +13,9 @@ product detail goes, and the checks each kind of work owes - plus
 [`docs/governance/system-design.md`](../../../docs/governance/system-design.md),
 which the group's readers hold the code to.
 
-Then follow `workflow-round`: it holds the six steps, the readers, the questions, the
-landing and the re-read. The group's readers come from the schema's `apply`
-block rather than an artifact's.
+Then follow `workflow-round`, and [Round Summary and
+Landing](../../../docs/governance/round-summary.md) for what a round owes its
+hand. The group's readers are the schema's `apply` block's.
 
 ## The Order Inside a Group
 

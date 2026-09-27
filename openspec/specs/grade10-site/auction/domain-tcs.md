@@ -1,7 +1,7 @@
 # grade10-site/auction Cross-Feature E2E Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-16, tcs-rules r3.0
+**Status:** approved
+**Reviewed:** 2026-09-25, tcs-rules r4
 
 ## grade10-site-auction-e2e-US01: Operator publishes a gallery a collector can shop
 
@@ -642,7 +642,7 @@ hold is being let go.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** regression
@@ -653,32 +653,33 @@ hold is being let go.
 
 **Pre-conditions:**
 
-* `<listing_8>` is past its scheduled close, in extended bidding, and its recorded close is `<time left before bid>` away.
-* customer A leads `<listing_8>` with a committed maximum of `<user A maximum>` and is on it.
-* customer B is signed in with a card saved and is on `<listing_8>`.
+* customer A leads <listing_8> with maximum <user A maximum> and is on its lot page.
+* customer B is signed in with a linked card, on a separate session, on the same lot page.
+* <listing_8> is in extended bidding, and the recorded close is <time left before bid> away.
 
 **Test data:**
 
 | Field | Value |
 | --- | --- |
-| `<listing_8>` | A listing in extended bidding led by customer A, current bid `<leader price>` |
-| `<extension duration>` | 1800 seconds |
-| `<time left before bid>` | 5 minutes |
-| `<leader price>` | 530000 HKD minor units |
-| `<user A maximum>` | 800000 HKD minor units |
-| `<user B maximum>` | 555000 HKD minor units, below `<user A maximum>` |
+| <listing_8> | A listing in extended bidding, led by customer A, current bid <leader price> |
+| <extension duration> | 1800 seconds |
+| <time left before bid> | 5 minutes |
+| <leader price> | 530000 HKD minor units |
+| <user A maximum> | 800000 HKD minor units |
+| <user B maximum> | 555000 HKD minor units, below <user A maximum> |
 
 **Steps:**
 
-1. As customer A, read Time left.
-2. As customer B, commit a maximum of `<user B maximum>`.
-3. As customer A, read Time left again on the open page.
-4. Wait one full `<extension duration>` with no further commitment.
+1. As customer A, read Time left on the lot page.
+2. As customer B, enter <user B maximum> in the custom maximum on the bid panel and confirm the bid.
+3. As customer A, read Time left on the open lot page.
+4. Wait <extension duration> with no further bid.
 
 **Expected Results:**
 
-* Grade10 raises customer A's bid on their behalf, and Time left reads one `<extension duration>` from that bid.
-* Step 4 closes the lot, and no further bid is placed on either maximum before it.
+* Highest bid is above <leader price>, and customer A still leads.
+* Time left shows <extension duration>.
+* The lot closes, and no further bid is placed.
 
 ## grade10-site-auction-e2e-US08: Collector's private bidding facts stay private
 
@@ -770,7 +771,7 @@ them.
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** integration
 * **Suites:** smoke, release
@@ -781,21 +782,33 @@ them.
 
 **Pre-conditions:**
 
-* A signed-in collector has linked a card on an open listing.
-* Bid-time authorization holds are disabled.
-* A challenger can commit a higher valid maximum on the same listing.
+* Bid-time holds are off.
+* customer A is signed in with a linked card and is on the lot page for <listing_14>.
+* customer B is signed in with a linked card, on a separate session, and can bid on <listing_14>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_14> | An open HKD listing with no bids, holds off, starting price <starting price> |
+| <starting price> | 20000 minor units, for example 200.00 HKD or 20000 JPY |
+| <increment> | 1000 minor units, the HKD step at <starting price> |
+| <user A maximum> | 50000 minor units |
+| <user B maximum> | 80000 minor units, above <user A maximum> |
+| <price after A> | <starting price> |
+| <price after B> | <user A maximum> plus <increment> |
 
 **Steps:**
 
-1. Submit the collector's valid first bid.
-2. Submit the challenger's higher maximum.
-3. Read the accepted bids, panel state, and bid-time authorizations.
+1. As customer A, enter <user A maximum> in the custom maximum on the bid panel and confirm the bid.
+2. As customer B, enter <user B maximum> in the custom maximum on the same lot and confirm the bid.
+3. Read the bid panel.
 
 **Expected Results:**
 
-* The first bid is accepted and the panel moves to enrolled with Change unavailable.
-* The two maxima resolve according to the listing's rules.
-* No bid-time authorization is created or awaited for either bid.
+* Step 1 accepts the bid at <price after A>, and Change is unavailable.
+* Highest bid reads <price after B>, and customer B leads.
+* The bid stands at once, and no bid-time hold is created or awaited.
 
 ---
 

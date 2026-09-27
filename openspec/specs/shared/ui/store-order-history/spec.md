@@ -38,6 +38,7 @@ components for the order history surface — `OrderHistoryStatus`,
 `OrderHistoryCard` SHALL each be renderable on their own, outside
 `OrderHistory`.
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-gr1 rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-06 - An application imports the surface
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -45,6 +46,7 @@ components for the order history surface — `OrderHistoryStatus`,
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-exr rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-07 - A part is reused alone
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -66,6 +68,7 @@ consumer-supplied label for that status. It SHALL NOT invent other status values
 | `canceled` | Canceled (online) |
 | `refunded` | Payment refunded (in-store or online) |
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-fem rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-08 - Each status renders its label
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -80,6 +83,7 @@ name), the consumer-formatted product text that already includes quantity
 (e.g. `Name × 2`), and the consumer-formatted line total. It SHALL NOT split
 quantity into a separate field and SHALL NOT navigate or fetch.
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-1rp rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-09 - Line item displays supplied fields
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -94,6 +98,7 @@ true, and SHALL report Track and View Details through named callbacks. It SHALL
 NOT open URLs itself except by calling the Track callback the application
 supplies.
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-unu rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-03 - Track Order appears only when enabled
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -102,6 +107,7 @@ supplies.
 - **THEN** the Track Order control appears
 - **AND** activating it reports through the Track callback
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-iv2 rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-10 - Track Order is hidden when disabled
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -117,6 +123,7 @@ summary props and SHALL render its children as the horizontally scrollable body
 slot. When line items overflow the body, the body SHALL apply scroll-fade mask
 styling on the overflow edges. The card SHALL NOT fetch orders or navigate.
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-6b5 rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-04 - Card lists supplied line items
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -142,6 +149,7 @@ Empty state SHALL use the design-system empty placeholder with consumer-supplied
 title, description, icon, and a Shop Now action that reports through a named
 callback.
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-5cs rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-01 - Active and Past both render when non-empty
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -150,6 +158,7 @@ callback.
 - **THEN** both section headings and their order cards appear
 - **AND** the empty state does not appear
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-22a rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-02 - An empty section is omitted
 **Serves:** shared-ui-store-order-history-US-01 - Collector reviews active and past orders
 
@@ -159,6 +168,7 @@ callback.
 - **AND** the Past Orders heading does not appear
 - **AND** the empty state does not appear
 
+<!-- trace:scenario id=g10.shared-store-order-history.SC-g56 rev=1 -->
 #### Scenario: shared-ui-store-order-history-SC-05 - Zero orders shows empty state
 **Serves:** shared-ui-store-order-history-US-02 - Collector starts shopping when there are no orders
 

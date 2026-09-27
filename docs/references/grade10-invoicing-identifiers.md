@@ -1,7 +1,7 @@
 # Grade10 Invoicing Identifiers
 
 The owner's requirements for auction invoice, receipt and payment reference
-identifiers, as of 2026-09. The identifier rules and retention are carried by
+identifiers, as of 2026-09-22. The identifier rules and retention are carried by
 the `add-winner-bank-transfer` change on
 [Post-Bidding · Winner Order](../prds/products/grade10-site/auction/post-bidding.md#winner-order). Partial
 payment is the source for a later change and is not yet specified. Read this
@@ -21,9 +21,9 @@ as the shape the product starts from, not as its requirements.
 
 | Identifier | Format | Example | Purpose |
 | --- | --- | --- | --- |
-| **Invoice ID** | `INV-[YYYYMM]-[LISTING_ID]-[SEQ]` | `INV-202609-L9482-01` | One invoice tied to one listing; hides platform volume |
-| **Receipt ID** | `REC-[YYYYMM]-[LISTING_ID]-[SEQ]-P[INDEX]` | `REC-202609-L9482-01-P1` | One per payment: `-P1`, `-P2` |
-| **Bank reference** | `[LISTING_ID][SEQ]` | `L948201` | Short text for FPS and bank transfer notes |
+| **Invoice ID** | `INV-[YYYYMM]-[LISTING_CODE]-[REVISION]` | `INV-202609-L9482A7-01` | One invoice tied to one listing; revision starts at `01` and increments on reissue |
+| **Receipt ID** | `REC-[YYYYMM]-[ORDER_ID]-P[n]-R[m]` | `REC-202609-ORD-L9482A7-P1-R1` | One order-based receipt per payment part and revision; refunds and reversals increment `R[m]` |
+| **Bank reference** | `[LISTING_CODE][SEQ]` | `L9482A701` | Short text for FPS and bank transfer notes; also written to Stripe metadata |
 
 ### Bank Reference
 
@@ -36,7 +36,8 @@ as the shape the product starts from, not as its requirements.
 
 ## Partial Payment
 
-The platform accepts several payments against one invoice.
+The platform accepts several payments against one order, even when an invoice
+is reissued.
 
 1. **Unpaid** — the invoice is issued and nothing is paid
 2. **Partially Paid** — some money is received; the payment is logged and a
@@ -57,4 +58,4 @@ Every receipt for a part payment shows:
 - **Internal** — a sequential number that customers never see, for example
   `#00010482`, logging every invoice and receipt in order
 - **Retention** — every invoice and receipt PDF is archived and retrievable
-  for at least 7 years
+  indefinitely for now

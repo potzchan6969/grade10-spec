@@ -16,6 +16,7 @@
   "differentAccountDescription": "Switch to {email}.",
   "switch": "Switch",
   "stay": "Stay",
+  "settledElsewhere": "Signed in on another device.",
   "legal": "By continuing, you agree to our <terms>Terms of Service</terms> & <privacy>Privacy Policy</privacy>.",
   "linkSentTitle": "Check Your Email"
 }

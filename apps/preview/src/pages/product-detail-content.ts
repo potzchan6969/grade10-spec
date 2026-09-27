@@ -2,10 +2,10 @@ const IMAGE = new URL("./product.fixture.png", import.meta.url).href;
 
 type ProductDetailVariant = {
   id: string;
+  title: string;
   price: string;
   compareAtPrice?: string;
   availableForSale: boolean;
-  quantityAvailable?: number;
   sku: string;
 };
 
@@ -34,12 +34,26 @@ const PRODUCT_DETAIL_PRODUCT: ProductDetailProduct = {
   badges: ["Booster Box", "Pokémon", "Japanese"],
   variants: [
     {
-      id: "sale-item",
+      id: "standard-box",
+      title: "Standard box",
       price: "HK$105.00",
       compareAtPrice: "HK$123.00",
       availableForSale: true,
-      quantityAvailable: 3,
       sku: "G10-M5-ABYSS-STD",
+    },
+    {
+      id: "collector-case",
+      title: "Collector case",
+      price: "HK$1,050.00",
+      availableForSale: false,
+      sku: "G10-M5-ABYSS-CASE",
+    },
+    {
+      id: "gift-bundle",
+      title: "Gift bundle",
+      price: "HK$210.00",
+      availableForSale: true,
+      sku: "G10-M5-ABYSS-GIFT",
     },
   ],
 };
@@ -49,7 +63,6 @@ const SOLD_OUT_PRODUCT: ProductDetailProduct = {
   variants: PRODUCT_DETAIL_PRODUCT.variants.map((variant) => ({
     ...variant,
     availableForSale: false,
-    quantityAvailable: 0,
   })),
 };
 

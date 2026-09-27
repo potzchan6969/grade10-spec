@@ -1,12 +1,12 @@
 import { Text } from "@grade10/design-system/components/display/text";
 import { Button } from "@grade10/design-system/components/forms/button";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
-import { Toast, toast } from "@grade10/design-system/components/overlays/toast";
+import { Toast } from "@grade10/design-system/components/overlays/toast";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
 import {
-  WINNER_ORDER_BANK_DETAILS,
+  PROOF_DIALOG_SUBTEXT,
   WINNER_ORDER_PROOF_FILE_HINT,
   WinnerOrderPaymentProofDialog,
 } from "./winner-order-payment-proof-dialog";
@@ -25,11 +25,11 @@ function SubmitPaymentProofDemo({
     <div className="flex min-h-svh w-full flex-col bg-background p-8">
       <VStack className="mx-auto w-full max-w-lg" gap="md" hAlign="start">
         <Text as="h2" className="text-xl font-semibold tracking-tight">
-          Pay by Bank Transfer
+          Submit Payment Proof
         </Text>
         <Text size="sm" tone="secondary">
-          Standalone preview of the bank-transfer proof dialog Winner Order
-          opens from Pending Payment. Page wiring and the verifying toast live
+          Standalone preview of the proof dialog Winner Order opens from Submit
+          Payment Proof. Rails live under View Bank Details; page wiring lives
           under My Auctions / Winner Order / Payment.
         </Text>
         {!open ? (
@@ -41,14 +41,12 @@ function SubmitPaymentProofDemo({
       </VStack>
 
       <WinnerOrderPaymentProofDialog
-        amountDue={WINNER_ORDER_BANK_DETAILS.totalAmountDue}
         onOpenChange={setOpen}
         onSubmit={() => {
           setSubmitted(true);
           onSubmit();
         }}
         open={open}
-        transferReference={WINNER_ORDER_BANK_DETAILS.transferReference}
       />
       <Toast position="bottom-right" />
     </div>
@@ -64,7 +62,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Standalone Storybook preview of Winner Order Submit Payment Proof — bank details with copy for account, amount, and reference; multi-file dropzone (PDF, PNG, JPG, HEIC); and confirm microcopy. Same dialog the Pending Payment (bank) page opens.",
+          "Standalone Storybook preview of Winner Order Submit Payment Proof — proof form only (no amount/reference chrome); multi-file dropzone (PDF, PNG, JPG, HEIC); and irreversible-submit microcopy. Bank rails live under View Bank Details.",
       },
     },
   },
@@ -84,33 +82,26 @@ async function findVisibleDialog(
   });
 }
 
-/** Bank details, reference copy, proof fields, confirm microcopy. */
+/** Proof fields only — no amount/reference box or Proof of Payment heading. */
 export const Form: Story = {
   name: "Form",
   play: async ({ canvasElement }) => {
     const page = within(canvasElement.ownerDocument.body);
-    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
     const modal = within(dialog);
+    expect(modal.getByText(PROOF_DIALOG_SUBTEXT)).toBeVisible();
+    expect(modal.queryByText("Total Amount Due")).not.toBeInTheDocument();
     expect(
-      modal.getByText(
-        "Copy the bank details, pay the amount due, then upload your receipt.",
-      ),
-    ).toBeVisible();
-    expect(modal.getByText("Bank Details")).toBeVisible();
-    expect(modal.getByText("Required Transfer Reference")).toBeVisible();
+      modal.queryByText("Required Transfer Reference"),
+    ).not.toBeInTheDocument();
     expect(
-      modal.getByRole("button", { name: "Copy account number" }),
-    ).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Copy amount due" }),
-    ).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Copy transfer reference" }),
-    ).toBeVisible();
+      modal.queryByText("Proof of Payment", { exact: true }),
+    ).not.toBeInTheDocument();
+    expect(modal.queryByRole("tab", { name: "FPS" })).not.toBeInTheDocument();
     expect(modal.getByLabelText("Sender Name")).toBeVisible();
     expect(modal.getByLabelText("Transfer Date")).toBeVisible();
     expect(modal.getByLabelText("Transaction Reference / ID")).toBeVisible();
-    expect(modal.getByText("Proof of Payment File")).toBeVisible();
+    expect(modal.queryByText("Proof of Payment File")).not.toBeInTheDocument();
     expect(modal.getByText(WINNER_ORDER_PROOF_FILE_HINT)).toBeVisible();
     expect(modal.getByRole("button", { name: "Choose Files" })).toBeVisible();
     expect(modal.getByLabelText("Additional Notes (optional)")).toBeVisible();
@@ -123,69 +114,6 @@ export const Form: Story = {
   },
 };
 
-/** Copy amount due → success toast + check icon (clipboard mocked for Storybook). */
-export const CopyAmountDue: Story = {
-  name: "Copy amount due",
-  play: async ({ canvasElement }) => {
-    const page = within(canvasElement.ownerDocument.body);
-    toast.dismiss();
-
-    const writeText = fn(async () => undefined);
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: { writeText },
-    });
-
-    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
-    const modal = within(dialog);
-    await userEvent.click(
-      modal.getByRole("button", { name: "Copy amount due" }),
-    );
-
-    await waitFor(() => {
-      expect(writeText).toHaveBeenCalledWith(
-        WINNER_ORDER_BANK_DETAILS.totalAmountDue,
-      );
-      expect(page.getByText("Amount due copied")).toBeVisible();
-    });
-    expect(
-      modal.getByRole("button", { name: "Amount due copied" }),
-    ).toBeVisible();
-  },
-};
-
-/** Copy reference → success toast + check icon (clipboard mocked for Storybook). */
-export const CopyReference: Story = {
-  name: "Copy reference",
-  play: async ({ canvasElement }) => {
-    const page = within(canvasElement.ownerDocument.body);
-    toast.dismiss();
-
-    const writeText = fn(async () => undefined);
-    Object.defineProperty(navigator, "clipboard", {
-      configurable: true,
-      value: { writeText },
-    });
-
-    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
-    const modal = within(dialog);
-    await userEvent.click(
-      modal.getByRole("button", { name: "Copy transfer reference" }),
-    );
-
-    await waitFor(() => {
-      expect(writeText).toHaveBeenCalled();
-      expect(page.getByText("Reference copied")).toBeVisible();
-    });
-    expect(
-      modal.getByRole("button", { name: "Reference copied" }),
-    ).toBeVisible();
-    expect(
-      page.queryByText("Copy the reference manually"),
-    ).not.toBeInTheDocument();
-  },
-};
-
 /** Required fields + one file → submit closes the dialog. */
 export const SubmitProof: Story = {
   name: "Submit proof",
@@ -193,7 +121,7 @@ export const SubmitProof: Story = {
   play: async ({ canvasElement, args }) => {
     const page = within(canvasElement.ownerDocument.body);
     const canvas = within(canvasElement);
-    const dialog = await findVisibleDialog(page, "Pay by Bank Transfer");
+    const dialog = await findVisibleDialog(page, "Submit Payment Proof");
     const modal = within(dialog);
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
@@ -217,7 +145,10 @@ export const SubmitProof: Story = {
       ?.querySelector('input[type="file"]');
     expect(fileInput).toBeTruthy();
     await userEvent.upload(fileInput as HTMLInputElement, file);
-    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
+    // The row fades in over 200ms, as the dropzone's own story waits for.
+    await waitFor(() => {
+      expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
+    });
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),

@@ -680,9 +680,10 @@ export function pendingByTeammate(
       (change.awaiting ?? []).map((wait) => [wait.artifact, wait.why]),
     );
     for (const artifact of artifacts) {
-      if (!artifact.teammate || written.has(artifact.id)) continue;
-      const settled = (id: string) => written.has(id) || waived.has(id);
       const why = declared.get(artifact.id);
+      if (!artifact.teammate || (written.has(artifact.id) && why === undefined))
+        continue;
+      const settled = (id: string) => written.has(id) || waived.has(id);
       const owed =
         why !== undefined ||
         (artifact.required &&

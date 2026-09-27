@@ -112,10 +112,6 @@ cancelled; when holds are on it also says the hold matches the maximum.
   window, and while the lot is in extended bidding the Time left label reads
   **Time left (extended)**
 
-::story{id="auction-listing-listinggallery--distinct-sources" title="One image with separate thumb, main and zoom sources"}
-
-::story{id="auction-listing-listinggallery--single-image" title="A single-image gallery, with no strip"}
-
 ::story{id="auction-listing-listingauctionbidcard--outbid" title="The bid panel after being outbid"}
 
 ::story{id="auction-listing-listingauctionbidcard--custom-maximum-ceiling" title="Custom maximum ceiling"}

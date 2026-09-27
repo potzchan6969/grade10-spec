@@ -1,10 +1,11 @@
 {
-  "generatedAt": "2026-09-18T10:08:11.307Z",
+  "generatedAt": "2026-09-25T03:23:42.874Z",
   "file": "GW2WL6JcWok5ypUrUFi9bU",
   "sets": {
     "AccordionItem": "warn",
     "Alert": "warn",
     "Auction": "warn",
+    "Auctions / Category Button": "warn",
     "Avatar": "skipped",
     "Badge": "skipped",
     "BreadcrumbEllipsis": "ok",
@@ -13,18 +14,24 @@
     "Breadcrumbs": "ok",
     "Button": "ok",
     "Card": "skipped",
+    "CarouselProgress": "warn",
+    "CarouselProgressGroup": "warn",
     "Checkbox Button": "skipped",
     "Checkbox List": "skipped",
     "Checkbox List Input": "ok",
     "Chip": "ok",
     "Collection Card": "warn",
     "Combobox": "warn",
+    "Container": "warn",
     "Dialog": "ok",
     "Dialog Header": "skipped",
     "Dropdown Menu": "ok",
     "Dropdown Menu Group Label": "warn",
     "Dropdown Menu Item": "skipped",
     "Empty State": "ok",
+    "Featured": "warn",
+    "Featured Auction": "warn",
+    "Featured Lot Card": "warn",
     "Footer": "skipped",
     "Google Icon": "warn",
     "Icon Button": "warn",
@@ -33,8 +40,9 @@
     "Link": "skipped",
     "List": "skipped",
     "List Item": "warn",
+    "ListingLotGallery": "warn",
     "Login Dialog": "warn",
-    "Nav": "skipped",
+    "Nav": "ok",
     "Navigation List": "skipped",
     "NavigationLink": "ok",
     "Number Input": "skipped",
@@ -811,6 +819,33 @@
     "6586-6383": "Tab List",
     "6610-6434": "PDP Filter",
     "6618-7019": "status_annotations",
+    "6905-3631": "Auctions",
+    "6905-4519": "Featured Lot Card",
+    "6929-4826": "Featured",
+    "6929-4864": "Auctions / Category Button",
+    "6929-4906": "Featured Auction",
+    "6929-4990": "Auctions / Category Button",
+    "6929-4991": "Auctions / Category Button",
+    "6940-5817": "Container",
+    "6945-12258": "Featured",
+    "6945-12695": "Carousel",
+    "6945-12900": "CarouselProgressGroup",
+    "6945-8948": "Featured",
+    "6945-8949": "Featured",
+    "6951-10": "Page description",
+    "6951-11": "Example / Default",
+    "6951-18": "Example / Timed",
+    "6951-2": "CarouselProgress",
+    "6951-26": "Example / Reduced motion",
+    "6951-3": "CarouselProgress",
+    "6951-4": "CarouselProgress",
+    "6951-6": "CarouselProgress",
+    "6951-8": "CarouselProgress",
+    "6951-9": "Page title",
+    "6959-13518": "Product Gallery",
+    "6965-5292": "ListingLotGallery",
+    "6965-5320": "ListingLotGallery",
+    "6965-5323": "ListingLotGallery",
     "86-3366": "Button",
     "86-3459": "Button",
     "86-3460": "Link",
@@ -849,14 +884,35 @@
     "Auction": [
       "Auction: no code component (looked for src/components/**/auction.tsx or auction.tsx)"
     ],
+    "Auctions / Category Button": [
+      "Auctions / Category Button: no code component (looked for src/components/**/auctionscategorybutton.tsx or categorybutton.tsx)"
+    ],
+    "CarouselProgress": [
+      "CarouselProgress.state: cannot tell which of inactive, active, filling, complete is the base state, so values are unchecked"
+    ],
+    "CarouselProgressGroup": [
+      "CarouselProgressGroup: no code component (looked for src/components/**/carouselprogressgroup.tsx or carouselprogressgroup.tsx)"
+    ],
     "Collection Card": [
       "Collection Card: no code component (looked for src/components/**/collectioncard.tsx or collectioncard.tsx)"
     ],
     "Combobox": [
       "Combobox: no code component (looked for src/components/**/combobox.tsx or combobox.tsx)"
     ],
+    "Container": [
+      "Container: no code component (looked for src/components/**/container.tsx or container.tsx)"
+    ],
     "Dropdown Menu Group Label": [
       "Dropdown Menu Group Label: no code component (looked for src/components/**/dropdownmenugrouplabel.tsx or dropdownmenugrouplabel.tsx)"
+    ],
+    "Featured": [
+      "Featured: no code component (looked for src/components/**/featured.tsx or featured.tsx)"
+    ],
+    "Featured Auction": [
+      "Featured Auction: no code component (looked for src/components/**/featuredauction.tsx or featuredauction.tsx)"
+    ],
+    "Featured Lot Card": [
+      "Featured Lot Card: no code component (looked for src/components/**/featuredlotcard.tsx or featuredlotcard.tsx)"
     ],
     "Google Icon": [
       "Google Icon: no code component (looked for src/components/**/googleicon.tsx or googleicon.tsx)"
@@ -869,6 +925,10 @@
     ],
     "List Item": [
       "List Item: no code component (looked for src/components/**/listitem.tsx or listitem.tsx)"
+    ],
+    "ListingLotGallery": [
+      "ListingLotGallery: description \"Auction lot media gallery.\" is not in packages/ui/src/blocks/auction-listing/listing-lot-gallery.tsx — carry it into the JSDoc, or fix the description in Figma",
+      "ListingLotGallery.images: cannot tell which of several, single is the base state, so values are unchecked"
     ],
     "Login Dialog": [
       "Login Dialog: no code component (looked for src/components/**/logindialog.tsx or logindialog.tsx)"

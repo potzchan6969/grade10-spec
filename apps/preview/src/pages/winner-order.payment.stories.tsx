@@ -7,8 +7,6 @@ import {
 } from "./winner-order.story-shared";
 import {
   BANK_TRANSFER_INVOICE_LINES,
-  INSURED_INVOICE_LINES,
-  LINE_TOOLTIPS,
   WINNER_ORDER_CONTENTS,
 } from "./winner-order-content";
 import type { WinnerOrderPage } from "./winner-order-page";
@@ -22,7 +20,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under My Auctions / Winner Order / Payment / Submit Payment Proof; these stories cover the page shell and CTA outcomes.",
+          "Winner Order payment stages (Pending Payment → Payment Verifying / Partially Paid / Processing). Dialog form coverage lives under View Bank Details, Submit Payment Proof and Email Grade10; these stories cover the page shell and CTA outcomes.",
       },
     },
   },
@@ -31,46 +29,11 @@ const meta = {
 export default meta;
 type Story = StoryObj<typeof meta>;
 
-const INSURED_PENDING_CONTENT = {
-  ...WINNER_ORDER_CONTENTS.pending_payment,
-  invoiceLines: INSURED_INVOICE_LINES,
-} as const;
-
-async function expectInsuranceTooltip(canvasElement: HTMLElement) {
-  const canvas = within(canvasElement);
-  await userEvent.hover(canvas.getByLabelText(LINE_TOOLTIPS.shippingInsurance));
-  await waitFor(() => {
-    const tooltip = canvasElement.ownerDocument.querySelector(
-      '[data-slot="tooltip-content"]',
-    );
-    expect(tooltip).toBeTruthy();
-    expect(tooltip).toHaveTextContent(LINE_TOOLTIPS.shippingInsurance);
-  });
-}
-
-/** Scenario: grade10-site-auction-winner-order-SC-169. */
-export const PendingPaymentWithInsurance: Story = {
-  name: "Pending Payment — With Insurance",
-  args: {
-    status: "pending_payment",
-    content: INSURED_PENDING_CONTENT,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = within(canvasElement);
-    await winnerOrderSettled(canvasElement);
-    expect(canvas.getByText("Order summary")).toBeVisible();
-    expect(canvas.getByText("Insurance")).toBeVisible();
-    expect(canvas.getByText("HK$480")).toBeVisible();
-    expect(canvas.queryByText("TBD")).not.toBeInTheDocument();
-    await expectInsuranceTooltip(canvasElement);
-  },
-};
-
 const BANK_PENDING_CONTENT = {
   ...WINNER_ORDER_CONTENTS.pending_payment,
   body: "Your invoice is ready. Pay by bank transfer before the deadline.",
   setupPaymentMethod: "Bank transfer",
-  primaryCta: "Pay by Bank Transfer",
+  primaryCta: "Submit Payment Proof",
   invoiceLines: BANK_TRANSFER_INVOICE_LINES,
 } as const;
 
@@ -94,9 +57,11 @@ export const PendingPayment: Story = {
     expect(canvas.getByText("19 Sep 2026")).toBeVisible();
     expect(canvas.getByText("Order summary")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,140")).toBeVisible();
+    expect(canvas.getByText("HK$16,460")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Insurance")).toBeVisible();
+    expect(canvas.getByText("Tax")).toBeVisible();
+    expect(canvas.getByText("HK$320")).toBeVisible();
     expect(canvas.getByText("Payment Processing Fee")).toBeVisible();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
@@ -109,6 +74,8 @@ export const PendingPayment: Story = {
     expect(sidebar.queryByText("Payment method")).not.toBeInTheDocument();
     const deliveryAddress = sidebar.getByText("Delivery address").parentElement;
     expect(deliveryAddress).toHaveTextContent(/Wan Chai/);
+    expect(deliveryAddress).toHaveTextContent(/Alex Chan/);
+    expect(deliveryAddress).toHaveTextContent(/\+852/);
     expect(
       canvas.queryByText(/Locked after invoice send/i),
     ).not.toBeInTheDocument();
@@ -123,9 +90,9 @@ export const PendingPayment: Story = {
   },
 };
 
-/** Bank transfer invoice — CTA is Pay by Bank Transfer, not card pay. */
+/** Bank transfer invoice — Pay + View Bank Details under it. */
 export const PendingPaymentBankTransfer: Story = {
-  name: "Pending Payment Bank Transfer",
+  name: "Pending Payment — Bank Transfer",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -135,7 +102,10 @@ export const PendingPaymentBankTransfer: Story = {
     await winnerOrderSettled(canvasElement);
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.getByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.getByRole("button", { name: "Submit Payment Proof" }),
+    ).toBeVisible();
+    expect(
+      sidebar.getByRole("button", { name: "View Bank Details" }),
     ).toBeVisible();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -145,16 +115,18 @@ export const PendingPaymentBankTransfer: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
-    expect(sidebar.getByText("HK$16,020")).toBeVisible();
+    expect(sidebar.getByText("Tax")).toBeVisible();
+    expect(sidebar.getByText("HK$320")).toBeVisible();
+    expect(sidebar.getByText("HK$16,340")).toBeVisible();
   },
 };
 
 /**
- * Opens Pay by Bank Transfer, fills required fields, submits → Payment
- * Verifying + toast.
+ * Submit Payment Proof → fill form → Payment Verifying + toast.
+ * Dialog field coverage lives under the Submit Payment Proof folder.
  */
 export const SubmitBankPaymentProof: Story = {
-  name: "Submit Bank Payment Proof",
+  name: "Submit Proof Flow",
   args: {
     status: "pending_payment",
     content: BANK_PENDING_CONTENT,
@@ -165,24 +137,13 @@ export const SubmitBankPaymentProof: Story = {
     await winnerOrderSettled(canvasElement);
 
     await userEvent.click(
-      canvas.getByRole("button", { name: "Pay by Bank Transfer" }),
+      canvas.getByRole("button", { name: "Submit Payment Proof" }),
     );
     const modal = await waitFor(() => {
-      const found = page.getByRole("dialog", { name: "Pay by Bank Transfer" });
+      const found = page.getByRole("dialog", { name: "Submit Payment Proof" });
       expect(found).toBeVisible();
       return within(found);
     });
-
-    expect(modal.getByText("Bank Details")).toBeVisible();
-    expect(modal.getByText("Required Transfer Reference")).toBeVisible();
-    expect(
-      modal.getByRole("button", { name: "Copy transfer reference" }),
-    ).toBeVisible();
-    expect(
-      modal.getByText(
-        "Copy the bank details, pay the amount due, then upload your receipt.",
-      ),
-    ).toBeVisible();
 
     await userEvent.type(modal.getByLabelText("Sender Name"), "Alex Chan");
     const transferDate = modal.getByLabelText("Transfer Date");
@@ -206,10 +167,6 @@ export const SubmitBankPaymentProof: Story = {
       ?.querySelector('input[type="file"]');
     expect(fileInput).toBeTruthy();
     await userEvent.upload(fileInput as HTMLInputElement, file);
-    expect(modal.getByText("transfer-receipt.pdf")).toBeVisible();
-    expect(
-      modal.getByText("You can’t add or change files after you submit."),
-    ).toBeVisible();
 
     await userEvent.click(
       modal.getByRole("button", { name: "Submit Payment Proof" }),
@@ -229,7 +186,10 @@ export const SubmitBankPaymentProof: Story = {
       ).toBeVisible();
     });
     expect(
-      canvas.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      canvas.queryByRole("button", { name: "Submit Payment Proof" }),
+    ).not.toBeInTheDocument();
+    expect(
+      canvas.queryByRole("button", { name: "View Bank Details" }),
     ).not.toBeInTheDocument();
     const verificationAlert = canvas.getByRole("alert");
     expect(verificationAlert).toBeVisible();
@@ -248,7 +208,7 @@ export const SubmitBankPaymentProof: Story = {
 
 /** Simulated card host return → Processing + Payment received toast. */
 export const PayWithCardCheckout: Story = {
-  name: "Pay with Card Checkout",
+  name: "Pay with Card",
   args: { status: "pending_payment" },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
@@ -299,7 +259,7 @@ export const PaymentVerifying: Story = {
     expect(canvas.queryByText("Pay by 26 Sep 2026")).not.toBeInTheDocument();
     const sidebar = within(canvas.getByRole("complementary"));
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(
       sidebar.queryByRole("button", { name: "Pay with Card" }),
@@ -364,7 +324,7 @@ export const PartiallyPaid: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByText("Bank transfer")).toBeVisible();
@@ -379,7 +339,7 @@ export const PartiallyPaid: Story = {
     expect(sidebar.getByText("Billing address")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
-      "Auction order INV-202609-LK7P2Q-01: partial payment",
+      "Auction order IN-LK7P2Q01: partial payment",
     );
   },
 };
@@ -412,7 +372,7 @@ export const ExpiredInvoice: Story = {
       sidebar.queryByRole("button", { name: "Pay with Card" }),
     ).not.toBeInTheDocument();
     expect(
-      sidebar.queryByRole("button", { name: "Pay by Bank Transfer" }),
+      sidebar.queryByRole("button", { name: "Submit Payment Proof" }),
     ).not.toBeInTheDocument();
     expect(sidebar.getByText("Delivery address")).toBeVisible();
     expect(sidebar.getByText("Billing address")).toBeVisible();
@@ -421,7 +381,7 @@ export const ExpiredInvoice: Story = {
     expect(canvas.getByText("Pending Payment (expired invoice)")).toBeVisible();
     await winnerOrderContactSheet(
       canvasElement,
-      "Auction order INV-202609-LK7P2Q-01: payment overdue",
+      "Auction order IN-LK7P2Q01: payment overdue",
     );
   },
 };

@@ -21,8 +21,47 @@ customer-facing term for one auctioned card.
   - Listing and extension terms: a consumer reads the scheduled close, the recorded close, the extension duration, and the cap
 - Stripe failures
   - Explicit handling: incomplete configuration and a missed webhook are repaired without double-charging
+- Identity bar on a bid
+  - Held at the storefront: a bid at or above the bar is held before the auction hears of it
+  - A verified bidder above the bar bids; another is sent to verify
 
 ## Requirements
+
+### Requirement: A bid at or above the identity bar needs a verified bidder
+
+The storefront that forwards a bid SHALL compare the bid's amount to the
+brand's bar before the auction hears of it. At or above the bar it SHALL
+forward the bid only for a bidder whose standing is `verified` on the day of
+the bid, and SHALL otherwise refuse the bid naming that a verified identity is
+needed and where to verify — no hold is taken and the auction records nothing.
+Below the bar a bid SHALL ask nothing about identity. On a brand that deploys
+no identity store the bar SHALL not exist.
+
+<!-- trace:scenario id=g10.auction-auction.SC-uhh rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-16 - An unverified bidder above the bar is held at the storefront
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `unverified` or `expired`
+- **WHEN** they place a bid of the bar or more
+- **THEN** the bid is refused as needing a verified identity, the auction
+  records no bid and takes no hold, and the bidder is told to verify from
+  their account
+
+<!-- trace:scenario id=g10.auction-auction.SC-d78 rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-17 - A verified bidder above the bar bids
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** a signed-in bidder whose standing is `verified`
+- **WHEN** they place a bid of the bar or more
+- **THEN** the bid is forwarded to the auction as any other
+
+<!-- trace:scenario id=g10.auction-auction.SC-ndj rev=1 -->
+#### Scenario: grade10-site-auction-auction-SC-18 - A bid below the bar asks nothing
+**Serves:** grade10-site-auction-auction-US-04 - Collector meets the identity bar on a high-value bid
+
+- **GIVEN** any signed-in bidder
+- **WHEN** they place a bid below the bar
+- **THEN** no standing is read and the bid is forwarded as any other
 
 ### Requirement: Auction listing facts are available
 
@@ -38,6 +77,7 @@ All money facts SHALL be an integer count of minor units paired with an ISO
 terms SHALL be an immutable snapshot of the operational policy effective when
 the listing becomes available for bidding.
 
+<!-- trace:scenario id=g10.auction-auction.SC-ian rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-01 - A collector browses Auction listings
 **Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
@@ -46,6 +86,7 @@ the listing becomes available for bidding.
 - **THEN** Grade10 returns those Auction listings grouped or identifiable by category
 - **AND** it returns no Buy Now listing or purchasable stock count
 
+<!-- trace:scenario id=g10.auction-auction.SC-fec rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-02 - A closed listing is absolute
 **Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
@@ -54,6 +95,7 @@ the listing becomes available for bidding.
 - **THEN** that highest accepted bidder wins the listing
 - **AND** no reserve condition changes the outcome
 
+<!-- trace:scenario id=g10.auction-auction.SC-djb rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-03 - Money facts use minor units and currency
 **Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
@@ -112,6 +154,7 @@ bidder, their committed maximum on that listing.
 Scenario `grade10-site-auction-auction-SC-07a` keeps its title with its id. The
 title is historical: a listing no longer carries an extension window.
 
+<!-- trace:scenario id=g10.auction-auction.SC-jsr rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-04 - A bid must meet the next increment
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -120,6 +163,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses the bid and names the minimum valid amount
 - **AND** it creates no accepted bid or card authorization for that attempt
 
+<!-- trace:scenario id=g10.auction-auction.SC-5ao rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-05 - A bid outside the window is refused
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -128,6 +172,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 refuses the bid
 - **AND** it does not create an accepted bid or change the recorded close
 
+<!-- trace:scenario id=g10.auction-auction.SC-2js rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-06 - A late valid bid extends the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -137,6 +182,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the recorded close becomes 20:40 UTC
 - **AND** a further valid bid accepted at 20:35 UTC moves it to 21:05 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-p70 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07 - An extension cap limits an otherwise eligible extension
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -146,6 +192,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** it accepts the bid without changing the recorded close
 - **AND** the listing closes at its scheduled close plus that cap
 
+<!-- trace:scenario id=g10.auction-auction.SC-n8w rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07a - Window and duration may differ
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -154,6 +201,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** 20:00 UTC arrives
 - **THEN** the listing is in extended bidding with recorded close 20:05 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-z62 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-07b - Extension off does not move the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -163,6 +211,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** it does not enter extended bidding
 
+<!-- trace:scenario id=g10.auction-auction.SC-dnt rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-08 - A bidder sees live bid facts
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -171,6 +220,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** Grade10 returns the current bid, bid count, and the bidder's highest accepted bid
 - **AND** it does not disclose another bidder's identity or card authorization facts
 
+<!-- trace:scenario id=g10.auction-auction.SC-a33 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-19 - A listing with no bid closes at its scheduled close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -180,6 +230,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing closes at its scheduled close
 - **AND** it does not enter extended bidding
 
+<!-- trace:scenario id=g10.auction-auction.SC-cib rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-20 - One bid is enough to enter extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -189,6 +240,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the listing is in extended bidding with recorded close 20:30 UTC
 - **AND** with no further bid it closes at 20:30 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-z5s rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-21 - A bid before the scheduled close does not move the close
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -197,6 +249,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** Grade10 accepts a valid bid at 19:59 UTC
 - **THEN** the recorded close is still 20:00 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-h4d rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-22 - A bid at the scheduled close counts toward entry
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -205,6 +258,7 @@ title is historical: a listing no longer carries an extension window.
 - **WHEN** Grade10 accepts a valid bid at exactly 20:00:00 UTC
 - **THEN** the listing is in extended bidding with recorded close 20:30:00 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-ch5 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-23a - Each listing runs its own extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -214,6 +268,7 @@ title is historical: a listing no longer carries an extension window.
 - **THEN** the first listing's recorded close is 20:40 UTC
 - **AND** the second listing's recorded close is still 20:30 UTC
 
+<!-- trace:scenario id=g10.auction-auction.SC-bz7 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-24 - A new bidder may bid during extended bidding
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a card-backed bid inside the window
 
@@ -240,6 +295,7 @@ raw body before processing; provider events and bid requests SHALL be
 idempotent. A delayed authorization for a bid that is no longer high enough
 SHALL be marked for release and SHALL NOT become an accepted bid.
 
+<!-- trace:scenario id=g10.auction-auction.SC-mrb rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-09 - An outbid authorization is released
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -249,6 +305,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **AND** the outbid bidder no longer has an eligible top authorization for that listing
 - **AND** Grade10 records the Stripe release outcome when it arrives
 
+<!-- trace:scenario id=g10.auction-auction.SC-uha rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-10 - Concurrent bids keep the highest valid outcome
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -258,6 +315,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **AND** the current bid is the highest valid accepted amount
 - **AND** no lower bid can overwrite that current bid
 
+<!-- trace:scenario id=g10.auction-auction.SC-8h7 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-11 - A delayed lower authorization cannot land
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -267,6 +325,7 @@ SHALL be marked for release and SHALL NOT become an accepted bid.
 - **THEN** Grade10 releases the lower authorization
 - **AND** it does not record that lower bid as accepted or change the current bid
 
+<!-- trace:scenario id=g10.auction-auction.SC-fna rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-12 - An invalid or duplicate Stripe event changes nothing twice
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -287,6 +346,7 @@ A public listing read SHALL expose the listing's scheduled close, its recorded
 close, its extension duration, and its optional extension cap in seconds,
 using `extension` terminology. It SHALL NOT expose an extension window.
 
+<!-- trace:scenario id=g10.auction-auction.SC-kg8 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-13 - A consumer reads a listing contract
 **Serves:** grade10-site-auction-auction-US-01 - Collector browses Auction listings
 
@@ -306,6 +366,7 @@ card data, or customer address data. A scheduled reconciliation SHALL query
 Stripe by the recorded provider reference to repair a delayed or missed valid
 webhook.
 
+<!-- trace:scenario id=g10.auction-auction.SC-lk6 rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-14 - Stripe configuration is incomplete
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -314,6 +375,7 @@ webhook.
 - **THEN** Grade10 fails that operation explicitly naming the unavailable capability
 - **AND** it does not silently create a bid or fixture-backed outcome
 
+<!-- trace:scenario id=g10.auction-auction.SC-9io rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-15 - A missed authorization webhook is repaired
 **Serves:** grade10-site-auction-auction-US-03 - Collector's card hold is released when they are outbid
 
@@ -329,6 +391,7 @@ bid without waiting for or creating a bid-time authorization. The existing
 hold-backed behavior remains governed by
 `grade10-site/auction/bid-payment-method` when enabled.
 
+<!-- trace:scenario id=g10.auction-auction.SC-t3k rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-23 - The default bid path creates no authorization hold
 **Serves:** grade10-site-auction-auction-US-02 - Collector places a bid inside the window
 
@@ -358,6 +421,7 @@ list no lot twice and skip none.
 A collector MAY ask for another order the catalogue can answer; it replaces the
 resting order and is settled on the lot record the same way.
 
+<!-- trace:scenario id=g10.auction-auction.SC-5vk rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-25 - Open lots lead the catalogue
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -367,6 +431,7 @@ resting order and is settled on the lot record the same way.
 - **THEN** every Active lot is listed before every Upcoming lot
 - **AND** every Upcoming lot is listed before every Ended lot
 
+<!-- trace:scenario id=g10.auction-auction.SC-c4r rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-26 - Each status has its own order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -377,6 +442,7 @@ resting order and is settled on the lot record the same way.
 - **AND** the Upcoming lots are listed soonest start first
 - **AND** the Ended lots are listed most recent close first
 
+<!-- trace:scenario id=g10.auction-auction.SC-icd rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-27 - A tie is settled the same way every read
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 
@@ -384,6 +450,7 @@ resting order and is settled on the lot record the same way.
 - **WHEN** the catalogue is read twice
 - **THEN** the two lots are in the same order both times
 
+<!-- trace:scenario id=g10.auction-auction.SC-zvy rev=1 -->
 #### Scenario: grade10-site-auction-auction-SC-28 - Paging does not change the order
 **Serves:** grade10-site-auction-auction-US-05 - Collector reads the catalogue in one order
 

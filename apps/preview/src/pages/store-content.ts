@@ -7,7 +7,12 @@ import type {
   SortOption,
 } from "@grade10/ui";
 import { createElement, type ReactNode } from "react";
-import { HELP_NAV_ITEM, STORE_LOCATOR_HREF } from "./workbench-story-nav";
+import {
+  HELP_NAV_ITEM,
+  PRIVACY_POLICY_HREF,
+  STORE_LOCATOR_HREF,
+  TERMS_OF_SERVICE_HREF,
+} from "./workbench-story-nav";
 
 /* Content this workbench owns, exactly as a store application owns its own.
  * None of it lives in `@grade10/ui` or `@grade10/design-system`: both packages
@@ -86,8 +91,8 @@ const STORE_FOOTER = {
     { label: "THREADS", href: "#threads" },
   ],
   legalLinks: [
-    { label: "PRIVACY", href: "#privacy" },
-    { label: "TERMS", href: "#terms" },
+    { label: "PRIVACY", href: PRIVACY_POLICY_HREF },
+    { label: "TERMS", href: TERMS_OF_SERVICE_HREF },
     { label: "SHIPPING", href: "#shipping" },
   ],
   columns: [
@@ -113,14 +118,13 @@ const STORE_FOOTER = {
     {
       heading: "LEGAL",
       links: [
-        { label: "PRIVACY POLICY", href: "#privacy" },
-        { label: "TERMS of SERVICE", href: "#terms" },
+        { label: "PRIVACY POLICY", href: PRIVACY_POLICY_HREF },
+        { label: "TERMS of SERVICE", href: TERMS_OF_SERVICE_HREF },
         { label: "ABOUT GRADE10", href: "#about" },
       ],
     },
   ],
 };
-
 const SORT_OPTIONS: SortOption[] = [
   { id: "new", label: "Latest product", shortLabel: "Latest" },
   { id: "price-asc", label: "Lowest price", shortLabel: "Lowest" },

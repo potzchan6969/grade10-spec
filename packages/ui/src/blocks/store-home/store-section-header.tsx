@@ -4,9 +4,11 @@ import { cn } from "@grade10/design-system/lib/utils";
 import { ArrowRight } from "@phosphor-icons/react";
 import type { ReactNode } from "react";
 
-/** Words the section header renders the same on every home section. */
+/** Words the section header renders the same on every home section. The
+ * browse-all word is optional because the link is: a heading over a set with
+ * nothing to browse draws no link and so names no word for one. */
 type StoreSectionHeaderCopy = {
-  browseAll: string;
+  browseAll?: string;
 };
 
 type StoreSectionHeaderProps = {
@@ -31,7 +33,9 @@ function StoreSectionHeader({
   onBrowseAllClick,
   className,
 }: StoreSectionHeaderProps) {
-  const showBrowseAll = browseAllHref != null || onBrowseAllClick != null;
+  const showBrowseAll =
+    copy.browseAll != null &&
+    (browseAllHref != null || onBrowseAllClick != null);
 
   return (
     <HStack

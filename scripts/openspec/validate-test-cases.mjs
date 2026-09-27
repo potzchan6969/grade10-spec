@@ -8,9 +8,9 @@
  *   pnpm run tcs:stale               # which suites' drafts are below the current rules rev
  *
  * A suite is a derived reading of the `spec.md` beside it, so almost everything
- * here is a cross-check against that file rather than a taste judgement:
- * a journey heading names a journey the spec defines, a case traces an id the
- * spec still issues, and the file's own `**Status:**` is the value its case
+ * here is a cross-check against the suite's source scope rather than a taste
+ * judgement: a feature suite names journeys from one spec, a composed suite
+ * reads journeys in the domains or products it crosses, and the file's own `**Status:**` is the value its case
  * statuses imply — never an independent claim a reviewer typed.
  *
  * Two severities, deliberately:
@@ -27,9 +27,21 @@
  * Zero dependencies: Node built-ins only, matching the other scripts here.
  */
 
-import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
-import { basename, dirname, join, relative, resolve } from "node:path";
+import {
+  existsSync,
+  readdirSync,
+  readFileSync,
+  statSync,
+  writeFileSync,
+} from "node:fs";
+import { basename, dirname, join, relative, resolve, sep } from "node:path";
+import {
+  everySection,
+  outline,
+  sectionSpan,
+} from "../../tools/manual/src/store/markdown.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
 import {
   checkDecidedPath,
   knownPrefixes,
@@ -37,6 +49,7 @@ import {
   repositoryRoots,
 } from "./lib/decided-by.mjs";
 import {
+  activeChangeSpecRoots,
   CASE_STATUSES,
   caseIndex,
   changeOf,
@@ -54,11 +67,15 @@ import {
   levelOf,
   PROPERTIES,
   parseSuite,
+  productPrefix,
   readDomainIds,
+  readPlatformIds,
+  readProductIds,
   readSpecIds,
   revCmp,
   revText,
   ROOT as STORE_ROOT,
+  SUITE_NAMES,
   statusCounts,
 } from "./lib/suites.mjs";
 
@@ -80,15 +97,16 @@ Flags:
                     under --strict, since --strict fails on them)
   --strict          Treat warnings as errors (legacy-shape suites fail too)
   --stale-report    Skip validation; list suites whose drafts sit below the
-                    current tcs-rules rev, for a per-capability update run
+                    current tcs-rules revision, each owed a regenerate
   --require-suites  Also report a capability that has journeys but no suite
                     beside it (warning)
   --capture-baseline <file>
-                    Write every case id and its traces to <file>, before a
-                    sweep, and exit
-  --swept <file>    Assert the store still holds exactly the case ids and
-                    traces <file> recorded. A sweep may re-word a draft; it
-                    may never change what a case claims
+                    Write every case id, its traces and its status to <file>,
+                    before a sweep, and exit
+  --swept <file>    Assert every case <file> recorded as reviewed (actual or
+                    deprecated) is still there with the same traces and status.
+                    A sweep regenerates drafts freely; it may never change what
+                    a reviewed case claims
   --root <dir>      Read a store other than this one, which is how the tests
                     read a fixture
   --app-root <repository>=<dir>[,…]
@@ -110,16 +128,109 @@ const problems = [];
 const record = (severity, file, line, message) =>
   problems.push({ severity, file, line, message });
 
+/**
+ * Where the Manual table sits. It belongs under `## Reconciliation`, where the
+ * archive's strip reads it; a `### Manual` anywhere else is refused where it
+ * is written (`shared-planning-agent-rounds-SC-103`). Returns the table's span
+ * inside the reconciliation, or undefined where there is none.
+ */
+function checkManualPlacement(text, err) {
+  const reconciliation = sectionSpan(text, "Reconciliation");
+  if (!reconciliation) return undefined;
+  const manual = sectionSpan(
+    text,
+    "Manual",
+    reconciliation.section.children.filter((one) => one.level === 3),
+  );
+  for (const one of everySection(outline(text))) {
+    if (one.level !== 3 || one.heading !== "Manual") continue;
+    if (one.line === manual?.section.line) continue;
+    err(
+      one.line,
+      "`### Manual` sits outside `## Reconciliation` — the table belongs under the reconciliation, where the fold reads it",
+    );
+  }
+  return manual;
+}
+
+/**
+ * The Manual table's rows, held to the tests they credit. A legend above the
+ * table binds each name a row uses to a path — `- <name> - \`<path>\`, in
+ * this store` — and a row's Why names the tests that prove part of its case
+ * in the legend's words. A legend path this store holds is read for the row's
+ * case id, and a row whose test cites no such id is refused naming the path
+ * and the id (`shared-planning-agent-rounds-SC-106`); a legend line that says
+ * `in this store` and names no file there is refused too, since a credit
+ * nobody can check is no credit. A path in the application repository is
+ * skipped: its ids are checked where that repository ticks the group.
+ */
+function checkManualRows(root, text, cases, err) {
+  const lines = text.split("\n");
+  const manual = checkManualPlacement(text, err);
+  if (!manual) return;
+  const legend = new Map();
+  const ids = new Set(cases.map((tc) => tc.id));
+  for (let i = manual.from; i < manual.until; i++) {
+    const line = lines[i];
+    const named = /^[-*]\s+(.+?)\s+-\s+`([^`]+)`,\s+in this store\b/.exec(line);
+    if (named) {
+      const full = resolve(root, named[2]);
+      if (!existsSync(full) || !statSync(full).isFile()) {
+        err(
+          i + 1,
+          `the Manual legend names \`${named[2]}\` in this store, and the store holds no file there — name the test's path, or say it is in the application repository`,
+        );
+        continue;
+      }
+      legend.set(named[1].trim(), {
+        path: named[2],
+        text: readFileSync(full, "utf8"),
+        // The name as a whole word in a row's Why, so `the test` is not
+        // found inside `the rule's test`.
+        pattern: new RegExp(
+          `(^|[^\\w'])${named[1].trim().replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?![\\w'])`,
+          "i",
+        ),
+      });
+      continue;
+    }
+    const row = /^\|\s*`?([\w-]+-US\d+-TC\d+-\d+)`?\s*\|(.*)\|\s*$/.exec(line);
+    if (!row || !ids.has(row[1])) continue;
+    for (const [name, test] of legend) {
+      if (!test.pattern.test(row[2])) continue;
+      if (citesId(test.text, row[1])) continue;
+      err(
+        i + 1,
+        `Manual row for \`${row[1]}\` credits ${name} (\`${test.path}\`), which cites no such case id — name the test that cites it, or say what a person walks instead`,
+      );
+    }
+  }
+}
+
 function checkSuite(root, filePath, rulesRev) {
   const rel = relative(root, filePath);
   const text = readFileSync(filePath, "utf8");
   const dir = dirname(filePath);
   const suite = parseSuite(text);
-  const domain = basename(filePath) === "domain-tcs.md";
-  const spec = domain ? readDomainIds(dir) : readSpecIds(join(dir, "spec.md"));
-  const capability = domain
-    ? domainPrefix(root, dir)
-    : (issuedPrefix(spec) ?? basename(dir));
+  const level = levelOf(filePath);
+  const domain = level === "domain";
+  const composed = level !== "feature";
+  const spec =
+    level === "platform"
+      ? readPlatformIds(dir, root)
+      : level === "product"
+        ? readProductIds(dir, root)
+        : level === "domain"
+          ? readDomainIds(dir, root)
+          : readSpecIds(join(dir, "spec.md"));
+  const capability =
+    level === "platform"
+      ? "platform-e2e"
+      : level === "product"
+        ? productPrefix(root, dir)
+        : level === "domain"
+          ? domainPrefix(root, dir)
+          : (issuedPrefix(spec) ?? basename(dir));
   const err = (line, msg) => record("error", rel, line, msg);
   const warn = (line, msg) => record("warning", rel, line, msg);
 
@@ -133,13 +244,19 @@ function checkSuite(root, filePath, rulesRev) {
    *  the run at, warned once per repository rather than once per case. */
   const unchecked = {};
 
-  if (!spec)
-    err(
-      1,
-      domain
-        ? "no capability with a spec.md under this domain — a domain suite reads the journeys its capabilities issue"
-        : "no spec.md beside this suite — a suite is a reading of a spec, not a standalone file",
-    );
+  if (!spec) {
+    const missingScope = {
+      feature:
+        "no spec.md beside this suite — a feature suite reads one capability",
+      domain:
+        "no capability with a spec.md under this domain — a domain suite reads its capabilities",
+      product:
+        "no capability with a spec.md under this product — a product suite reads its domains",
+      platform:
+        "no capability with a spec.md under this platform — a platform suite reads its products",
+    }[level];
+    err(1, missingScope);
+  }
 
   const cases = [];
   for (const j of suite.journeys) for (const tc of j.cases) cases.push(tc);
@@ -153,7 +270,11 @@ function checkSuite(root, filePath, rulesRev) {
     );
 
   const counts = statusCounts(cases);
-  const derived = deriveStatus(counts, cases.length);
+  const derived = deriveStatus(
+    counts,
+    cases.length,
+    Boolean(suite.reviewedLapsed),
+  );
   if (
     suite.status &&
     FILE_STATUSES.includes(suite.status) &&
@@ -231,8 +352,16 @@ function checkSuite(root, filePath, rulesRev) {
       suite.reviewedLine ?? 1,
       `claims it was approved under tcs-rules ${revText(suite.reviewedRev)}, but the store is at ${revText(rulesRev)}`,
     );
-  if (derived !== "approved" && suite.reviewed)
-    err(1, "carries a `**Reviewed:**` line but is not approved");
+  if (derived === "approved" && suite.reviewedLapsed)
+    err(
+      suite.reviewedLine ?? 1,
+      "is approved again but its `**Reviewed:**` line still reads lapsed — write it fresh: `**Reviewed:** <today>, tcs-rules r<n>`",
+    );
+  if (derived !== "approved" && suite.reviewed && !suite.reviewedLapsed)
+    err(
+      suite.reviewedLine ?? 1,
+      "carries a `**Reviewed:**` line but is not approved — a file that falls out of `approved` keeps the line and adds `, lapsed <YYYY-MM-DD>`",
+    );
 
   for (const shape of suite.legacy)
     err(1, `written in an older shape: ${shape}`);
@@ -256,7 +385,7 @@ function checkSuite(root, filePath, rulesRev) {
       err(j.line, `journey ${j.num} appears more than once`);
     seenJourneys.add(j.num);
     if (
-      !domain &&
+      level === "feature" &&
       spec &&
       !spec.unwalked &&
       spec.journeys.size > 0 &&
@@ -270,7 +399,7 @@ function checkSuite(root, filePath, rulesRev) {
     // A capability nobody walks carries exactly one section. More than one
     // would have to be numbered by a feature set group's position, and an
     // issued case id is permanent.
-    if (!domain && spec?.unwalked && j.num !== 1)
+    if (level === "feature" && spec?.unwalked && j.num !== 1)
       err(
         j.line,
         `\`${capability}\` says nobody walks it, so its suite carries one section, \`${capability}-US1\` — the feature set groups go on the cases' \`**Trace:**\` lines`,
@@ -474,12 +603,12 @@ function checkSuite(root, filePath, rulesRev) {
             `case \`${tc.id}\` traces \`${id}\`, which is neither a journey nor a feature set group of the spec beside it`,
           );
         }
-        if (ids.length > 1 && !domain)
+        if (ids.length > 1 && !composed)
           warn(
             at,
             `case \`${tc.id}\` traces ${ids.length} ids — one journey per case`,
           );
-        if (domain && ids.length === 1)
+        if (composed && ids.length === 1)
           warn(
             at,
             `case \`${tc.id}\` traces one journey — a domain case crosses capabilities, or it belongs in that capability's own suite`,
@@ -492,6 +621,19 @@ function checkSuite(root, filePath, rulesRev) {
           `case \`${tc.id}\` has no pre-conditions line (use \`None.\` when it needs nothing)`,
         );
       if (tc.steps === 0) err(at, `case \`${tc.id}\` has no numbered steps`);
+      // A state only a mock, a stub or a manipulated environment produces is
+      // one a script sets up; a case that needs one and plans no automation
+      // is raised, not refused (Step 3, Executable without asking).
+      if (
+        /\b(mock(?:ed|s)?|stub(?:bed|s)?|manipulated)\b/i.test(
+          tc.preconditions,
+        ) &&
+        !/\bautomation\b/.test(tc.props.get("Testability") ?? "")
+      )
+        warn(
+          at,
+          `case \`${tc.id}\` needs a mocked or manipulated state but its **Testability** plans no \`automation\``,
+        );
       if (tc.expected === 0)
         err(
           at,
@@ -500,7 +642,7 @@ function checkSuite(root, filePath, rulesRev) {
     }
   }
 
-  if (spec && !domain) {
+  if (spec && level === "feature") {
     for (const [id] of spec.journeys) {
       const num = Number(id.match(/-US-(\d+)$/)?.[1]);
       if (!seenJourneys.has(num))
@@ -515,6 +657,8 @@ function checkSuite(root, filePath, rulesRev) {
       `${paths.length} \`**Decided by:**\` path${paths.length === 1 ? "" : "s"} name${paths.length === 1 ? "s" : ""} the ${repo} repository, unchecked because no ${repo} clone is named — \`--app-root ${repo}=<dir>\` or \`${REPOSITORIES[repo].env}\`: ${files.map((one) => `\`${one}\``).join(", ")}`,
     );
   }
+
+  checkManualRows(root, text, cases, err);
 
   return { rel, suite, counts, derived, cases: cases.length };
 }
@@ -558,16 +702,33 @@ const inScope = (d) =>
  *  `<product>-<domain>-<capability>-US-<n>` and every segment may itself hold a
  *  hyphen, so the only safe parse is the longest known prefix. */
 const specsRoot = join(ROOT, "openspec", "specs");
-const PRODUCTS = existsSync(specsRoot)
-  ? readdirSync(specsRoot, { withFileTypes: true })
-      .filter((e) => e.isDirectory())
-      .map((e) => e.name)
-  : [];
-const DOMAINS = PRODUCTS.flatMap((prod) =>
-  readdirSync(join(specsRoot, prod), { withFileTypes: true })
-    .filter((e) => e.isDirectory())
-    .map((e) => `${prod}-${e.name}`),
+const specScopes = [specsRoot, ...activeChangeSpecRoots(ROOT)].filter(
+  existsSync,
 );
+const directories = (dir) =>
+  existsSync(dir)
+    ? readdirSync(dir, { withFileTypes: true }).filter((entry) =>
+        entry.isDirectory(),
+      )
+    : [];
+const PRODUCTS = [
+  ...new Set(
+    specScopes.flatMap((scope) =>
+      directories(scope).map((entry) => entry.name),
+    ),
+  ),
+];
+const DOMAINS = [
+  ...new Set(
+    specScopes.flatMap((scope) =>
+      directories(scope).flatMap((product) =>
+        directories(join(scope, product.name)).map(
+          (domain) => `${product.name}-${domain.name}`,
+        ),
+      ),
+    ),
+  ),
+];
 const longestPrefix = (id, list) =>
   list
     .filter((v) => id === v || id.startsWith(`${v}-`))
@@ -612,7 +773,7 @@ if (args.stale) {
     );
   }
   console.log(
-    `\n${dim("Update one at a time:")} /spec-to-tcs <capability-or-change>  ${dim("— never in one sweep")}`,
+    `\n${dim("Each is owed a regenerate, top down, after one yes:")} /spec-to-tcs <capability-or-change>  ${dim("— or /tcs-review, which regenerates on opening it")}`,
   );
   process.exit(0);
 }
@@ -628,7 +789,7 @@ const index = caseIndex(ROOT, suites);
 
 if (args.captureBaseline) {
   const out = {};
-  for (const [id, v] of index) out[id] = v.traces;
+  for (const [id, v] of index) out[id] = { traces: v.traces, status: v.status };
   writeFileSync(args.captureBaseline, JSON.stringify(out, null, 2) + "\n");
   console.log(
     `${green("✓")} baseline captured: ${index.size} cases across ${suites.length} suites ` +
@@ -640,23 +801,29 @@ if (args.captureBaseline) {
 if (args.swept) {
   const before = JSON.parse(readFileSync(args.swept, "utf8"));
   const drift = [];
-  for (const id of Object.keys(before))
-    if (!index.has(id)) drift.push(`case \`${id}\` disappeared`);
-  for (const [id, v] of index) {
-    if (!(id in before)) {
-      drift.push(`case \`${id}\` is new`);
+  // A baseline written before statuses were recorded holds bare trace lists;
+  // every case in it is held as reviewed, the safe reading.
+  for (const [id, was] of Object.entries(before)) {
+    const traces = Array.isArray(was) ? was : was.traces;
+    const status = Array.isArray(was) ? null : was.status;
+    if (status === "draft") continue;
+    if (!index.has(id)) {
+      drift.push(`case \`${id}\` disappeared`);
       continue;
     }
-    const a = before[id].join(", ");
-    const b = v.traces.join(", ");
+    const now = index.get(id);
+    const a = traces.join(", ");
+    const b = now.traces.join(", ");
     if (a !== b) drift.push(`case \`${id}\` traced "${a}", now traces "${b}"`);
+    if (status !== null && now.status !== status)
+      drift.push(`case \`${id}\` was ${status}, now ${now.status}`);
   }
   console.log(
     `${bold("Sweep check")}  ${dim(`${index.size} cases against ${args.swept}`)}\n`,
   );
   if (drift.length === 0) {
     console.log(
-      `${green("✓")} every case id and trace is unchanged — the sweep changed no claim.`,
+      `${green("✓")} every reviewed case keeps its id, trace and status — the sweep changed no reviewed claim.`,
     );
     process.exit(0);
   }
@@ -804,6 +971,152 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
         `  ${journey.padEnd(52)}${dim([...m].map(([lvl, n]) => `${n} ${lvl}`).join(", "))}`,
       );
     console.log("");
+  }
+}
+
+// --- covered at domain -------------------------------------------------
+// A feature run leaves a path a domain case already walks to that case, and
+// its reconciliation says so on a `- **Covered at domain** —` bullet naming
+// the domain case in full. The domain case is then the feature's verifier,
+// so it has to exist and still be live: an id no `domain-tcs.md` holds, or
+// one `deprecated`, leaves the scenario with no case at all.
+{
+  const domainCases = caseIndex(
+    ROOT,
+    findSuites(ROOT).filter((p) => levelOf(p) === "domain"),
+  );
+  const BULLET = /^\s*[-*]\s+/;
+  for (const p of suites) {
+    if (levelOf(p) !== "feature") continue;
+    const text = readFileSync(p, "utf8");
+    const span = sectionSpan(text, "Reconciliation");
+    if (!span) continue;
+    const rel = relative(ROOT, p);
+    const lines = text.split("\n");
+    for (let i = span.from; i < span.until; i++) {
+      if (!/^\s*[-*]\s+\*\*Covered at domain\*\*/.test(lines[i])) continue;
+      // A bullet may wrap: read on until a blank line or the next bullet.
+      let body = lines[i];
+      for (let j = i + 1; j < span.until; j++) {
+        const next = lines[j];
+        if (next.trim() === "" || BULLET.test(next) || /^[#|]/.test(next))
+          break;
+        body += ` ${next.trim()}`;
+      }
+      const ids = [...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g)].map(
+        (m) => m[1],
+      );
+      if (ids.length === 0) {
+        record(
+          "error",
+          rel,
+          i + 1,
+          "a **Covered at domain** line names no domain case — name it in backticks and in full, `<product>-<domain>-e2e-US<n>-TC<m>-<v>`",
+        );
+        continue;
+      }
+      for (const id of ids) {
+        const found = domainCases.get(id);
+        if (!found)
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which no \`domain-tcs.md\` holds — name the domain case that walks the path, or write the feature case back`,
+          );
+        else if (found.status === "deprecated")
+          record(
+            "error",
+            rel,
+            i + 1,
+            `covered at domain by \`${id}\`, which is deprecated — the path is walked by nothing now; write the feature case back`,
+          );
+      }
+    }
+  }
+}
+
+// --- a case's <v> and its trace rev are one number ----------------------
+// `<v>` in the case id and `rev` on its `trace:case` marker both count the
+// times what the case verifies has changed. Two counters for one fact drift -
+// the migration stamped `rev=1` over cases already at `-2` - so where a case
+// carries a marker, the two agree.
+{
+  for (const p of suites) {
+    const lines = readFileSync(p, "utf8").split("\n");
+    const rel = relative(ROOT, p);
+    for (let i = 0; i < lines.length; i++) {
+      const marker = /^<!--\s*trace:case\b.*?\brev=(\d+)/.exec(lines[i]);
+      if (!marker) continue;
+      let j = i + 1;
+      while (j < lines.length && lines[j].trim() === "") j++;
+      const heading = /^###\s+(\S+-TC\d+-(\d+)):/.exec(lines[j] ?? "");
+      if (!heading || heading[2] === marker[1]) continue;
+      record(
+        "error",
+        rel,
+        j + 1,
+        `case \`${heading[1]}\` is at \`<v>\` ${heading[2]} and its trace marker at \`rev=${marker[1]}\` — the two count the same changes; move them together`,
+      );
+    }
+  }
+}
+
+// --- archived cases the fold left behind --------------------------------
+// Warned, never refused: the archive is history, and a case may have been
+// renamed or superseded since. A case an archived change's suite held, whose
+// id (without its `<v>`) no durable or active suite holds and the durable
+// suite does not name anywhere, was most likely left behind at the fold -
+// the carry gate that now refuses it did not exist then. A human decides each
+// one; a case found to be replaced is named in the durable suite, one line,
+// and the warning stops.
+{
+  const unversioned = (id) => id.replace(/(-TC\d+)-\d+$/, "$1");
+  const live = new Set(
+    [...caseIndex(ROOT, findSuites(ROOT)).keys()].map(unversioned),
+  );
+  const archive = join(ROOT, "openspec", "changes", "archive");
+  const archived = [];
+  const walk = (dir) => {
+    for (const e of readdirSync(dir, { withFileTypes: true })) {
+      const full = join(dir, e.name);
+      if (e.isDirectory()) walk(full);
+      else if (SUITE_NAMES.includes(e.name)) archived.push(full);
+    }
+  };
+  if (existsSync(archive)) walk(archive);
+  for (const file of archived.sort()) {
+    const m = relative(archive, file)
+      .split(sep)
+      .join("/")
+      .match(/^([^/]+)\/specs\/(.+)$/);
+    if (!m) continue;
+    const [, change, path] = m;
+    const target = join(ROOT, "openspec", "specs", path);
+    const rel = relative(ROOT, target);
+    if (args.scope && !rel.includes(args.scope)) continue;
+    const named = existsSync(target) ? readFileSync(target, "utf8") : "";
+    // Named as a whole id: `…-US1-TC1` is not named by `…-US1-TC10`.
+    const namedHere = (id) =>
+      new RegExp(
+        `${unversioned(id).replace(/[.*+?^${}()|[\]\\]/g, "\\$&")}(?!\\d)`,
+      ).test(named);
+    const left = [...caseIndex(ROOT, [file]).keys()].filter(
+      (id) => !live.has(unversioned(id)) && !namedHere(id),
+    );
+    if (left.length === 0) continue;
+    const shown = left
+      .slice(0, 5)
+      .map((id) => `\`${id}\``)
+      .join(", ");
+    const more = left.length > 5 ? `, … and ${left.length - 5} more` : "";
+    record(
+      "warning",
+      rel,
+      1,
+      `${left.length} case(s) archived with \`${change}\` were never folded here: ${shown}${more} — ` +
+        "review them with `/tcs-review`, bringing each back as `draft` or naming what replaced it",
+    );
   }
 }
 

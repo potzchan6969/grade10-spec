@@ -568,6 +568,11 @@ type CartDrawerFooterProps = {
   estimatedTotal: ReactNode;
   shippingEstimate?: ReactNode;
   loading?: boolean;
+  /** Show summary amount skeletons while keeping cart rows mounted. */
+  summaryLoading?: boolean;
+  /** Disable tender controls and checkout while a tender choice is saving. */
+  tenderPending?: boolean;
+  checkoutDisabled?: boolean;
   promoState?: PromoState;
   /**
    * When set, shown once as a toast (e.g. promo cleared after the cart
@@ -618,6 +623,9 @@ function CartDrawerFooter({
   estimatedTotal,
   shippingEstimate,
   loading = false,
+  summaryLoading = false,
+  tenderPending = false,
+  checkoutDisabled = false,
   promoState = { status: "collapsed" },
   promoNotice,
   pointsState = null,
@@ -632,6 +640,7 @@ function CartDrawerFooter({
   onCheckout,
   className,
 }: CartDrawerFooterProps) {
+  const amountsLoading = loading || summaryLoading;
   const [pointsInput, setPointsInput] = useState("");
   const [isVerifyingPoints, setIsVerifyingPoints] = useState(false);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -681,8 +690,11 @@ function CartDrawerFooter({
               size="xs"
               variant="secondary"
               render={<button type="button" />}
-              disabled={isVerifyingPoints || isRedirecting}
-              onClick={onUseMaxPoints}
+              disabled={tenderPending || isVerifyingPoints || isRedirecting}
+              onClick={() => {
+                if (tenderPending || isVerifyingPoints || isRedirecting) return;
+                onUseMaxPoints?.();
+              }}
             >
               {copy.useMaxPoints}
             </Link>
@@ -730,8 +742,8 @@ function CartDrawerFooter({
 
   // Cart re-fetch disables checkout — clear a stale redirecting state.
   useEffect(() => {
-    if (loading) setIsRedirecting(false);
-  }, [loading]);
+    if (loading || summaryLoading) setIsRedirecting(false);
+  }, [loading, summaryLoading]);
 
   // Promo cleared — toast once per notice value (same rail as unavailable items).
   useEffect(() => {
@@ -747,7 +759,14 @@ function CartDrawerFooter({
   }, [promoNotice]);
 
   const handleApplyPoints = async () => {
-    if (!pointsInput.trim() || isVerifyingPoints || isRedirecting) return;
+    if (
+      tenderPending ||
+      !pointsInput.trim() ||
+      isVerifyingPoints ||
+      isRedirecting
+    ) {
+      return;
+    }
     setIsVerifyingPoints(true);
     try {
       const success = await onApplyPoints?.(pointsInput.trim());
@@ -760,7 +779,14 @@ function CartDrawerFooter({
   };
 
   const handleCheckout = async () => {
-    if (loading || isRedirecting) return;
+    if (
+      loading ||
+      summaryLoading ||
+      tenderPending ||
+      checkoutDisabled ||
+      isRedirecting
+    )
+      return;
     setIsRedirecting(true);
     try {
       await onCheckout?.();
@@ -794,10 +820,10 @@ function CartDrawerFooter({
           <span className="text-sm font-normal leading-5 text-foreground">
             {copy.subtotalLabel}
           </span>
-          <CartAmountSkeleton loading={loading}>
+          <CartAmountSkeleton loading={amountsLoading}>
             {rollValue(subtotal, {
               className: "text-sm font-normal leading-5 text-foreground",
-              loading,
+              loading: amountsLoading,
             })}
           </CartAmountSkeleton>
         </HStack>
@@ -821,7 +847,10 @@ function CartDrawerFooter({
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        onClick={onRemovePromo}
+                        disabled={tenderPending}
+                        onClick={() => {
+                          if (!tenderPending) onRemovePromo?.();
+                        }}
                       >
                         {copy.removePromo}
                       </Link>
@@ -841,7 +870,12 @@ function CartDrawerFooter({
                 <VStack gap="none" className="w-full pb-2">
                   <button
                     type="button"
-                    onClick={() => onPromoStateChange?.({ status: "expanded" })}
+                    disabled={tenderPending}
+                    onClick={() => {
+                      if (!tenderPending) {
+                        onPromoStateChange?.({ status: "expanded" });
+                      }
+                    }}
                     className="flex w-full cursor-pointer items-center justify-between gap-2 text-left text-sm font-normal leading-5 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                   >
                     <span>{copy.usePromoCode}</span>
@@ -875,7 +909,10 @@ function CartDrawerFooter({
                         size="sm"
                         variant="error"
                         render={<button type="button" />}
-                        onClick={onRemovePoints}
+                        disabled={tenderPending}
+                        onClick={() => {
+                          if (!tenderPending) onRemovePoints?.();
+                        }}
                       >
                         {copy.removePoints}
                       </Link>
@@ -897,11 +934,14 @@ function CartDrawerFooter({
                     <button
                       type="button"
                       aria-expanded={!!isPointsExpanded}
-                      onClick={() =>
-                        onPointsStateChange({
-                          status: isPointsExpanded ? "collapsed" : "expanded",
-                        })
-                      }
+                      disabled={tenderPending}
+                      onClick={() => {
+                        if (!tenderPending) {
+                          onPointsStateChange({
+                            status: isPointsExpanded ? "collapsed" : "expanded",
+                          });
+                        }
+                      }}
                       className="inline-flex w-fit cursor-pointer items-center gap-1 text-left text-sm font-normal leading-5 text-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring/50"
                     >
                       <span>{copy.usePoints}</span>
@@ -931,10 +971,11 @@ function CartDrawerFooter({
                             step={1}
                             status={pointsErrorMessage ? "error" : "default"}
                             message={pointsContext}
-                            disabled={isVerifyingPoints}
+                            disabled={tenderPending || isVerifyingPoints}
                             onClear={
                               pointsInput
                                 ? () => {
+                                    if (tenderPending) return;
                                     setPointsInput("");
                                     if (pointsErrorMessage) {
                                       onPointsStateChange?.({
@@ -945,6 +986,7 @@ function CartDrawerFooter({
                                 : undefined
                             }
                             onChange={(e) => {
+                              if (tenderPending) return;
                               setPointsInput(e.target.value);
                               if (pointsErrorMessage) {
                                 onPointsStateChange?.({ status: "expanded" });
@@ -956,7 +998,11 @@ function CartDrawerFooter({
                         <Button
                           size="md"
                           variant="outline"
-                          disabled={!pointsInput.trim() || isVerifyingPoints}
+                          disabled={
+                            tenderPending ||
+                            !pointsInput.trim() ||
+                            isVerifyingPoints
+                          }
                           loading={isVerifyingPoints}
                           onClick={handleApplyPoints}
                         >
@@ -987,10 +1033,10 @@ function CartDrawerFooter({
         <span className="text-base font-semibold leading-6 text-foreground">
           {copy.estimatedTotalLabel}
         </span>
-        <CartAmountSkeleton loading={loading} size="lg">
+        <CartAmountSkeleton loading={amountsLoading} size="lg">
           {rollValue(estimatedTotal, {
             className: "text-base font-semibold leading-6 text-foreground",
-            loading,
+            loading: amountsLoading,
           })}
         </CartAmountSkeleton>
       </HStack>
@@ -998,7 +1044,13 @@ function CartDrawerFooter({
       <Button
         size="lg"
         variant="default"
-        disabled={loading || isRedirecting}
+        disabled={
+          loading ||
+          summaryLoading ||
+          tenderPending ||
+          checkoutDisabled ||
+          isRedirecting
+        }
         loading={isRedirecting}
         onClick={handleCheckout}
         className="w-full"
@@ -1016,6 +1068,7 @@ type CartPromoSheetProps = {
   /** Live held codes only — omit expired/void; filtering is consumer-owned. */
   heldPromoCodes?: readonly HeldPromoCode[] | null;
   selectedHeldPromoId?: string | null;
+  tenderPending?: boolean;
   onClose: () => void;
   onPromoStateChange?: (next: PromoState) => void;
   onApplyPromo?: (code: string) => Promise<boolean> | boolean;
@@ -1035,6 +1088,7 @@ function CartPromoSheet({
   promoState,
   heldPromoCodes = null,
   selectedHeldPromoId = null,
+  tenderPending = false,
   onClose,
   onPromoStateChange,
   onApplyPromo,
@@ -1061,7 +1115,7 @@ function CartPromoSheet({
   }, [open]);
 
   const handleApply = async () => {
-    if (!promoInput.trim() || isVerifying) return;
+    if (tenderPending || !promoInput.trim() || isVerifying) return;
     setIsVerifying(true);
     try {
       const success = await onApplyPromo?.(promoInput.trim());
@@ -1074,6 +1128,7 @@ function CartPromoSheet({
   };
 
   const handleKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
+    if (tenderPending) return;
     if (e.key === "Enter") {
       e.preventDefault();
       handleApply();
@@ -1121,8 +1176,9 @@ function CartPromoSheet({
                 value={promoInput}
                 status={errorMessage ? "error" : "default"}
                 message={errorMessage}
-                disabled={isVerifying || !open}
+                disabled={tenderPending || isVerifying || !open}
                 onChange={(e) => {
+                  if (tenderPending) return;
                   setPromoInput(e.target.value);
                   if (errorMessage) {
                     onPromoStateChange?.({ status: "expanded" });
@@ -1134,7 +1190,9 @@ function CartPromoSheet({
             <Button
               size="md"
               variant="outline"
-              disabled={!promoInput.trim() || isVerifying || !open}
+              disabled={
+                tenderPending || !promoInput.trim() || isVerifying || !open
+              }
               loading={isVerifying}
               onClick={handleApply}
             >
@@ -1164,8 +1222,12 @@ function CartPromoSheet({
                               <Button
                                 size="sm"
                                 variant="secondary"
-                                disabled={isVerifying || !open}
-                                onClick={() => onSelectHeldPromo(code.id)}
+                                disabled={tenderPending || isVerifying || !open}
+                                onClick={() => {
+                                  if (!tenderPending) {
+                                    onSelectHeldPromo?.(code.id);
+                                  }
+                                }}
                               >
                                 {copy.applyHeldPromo}
                               </Button>
@@ -1201,8 +1263,10 @@ function CartPromoSheet({
                   <Button
                     size="md"
                     variant="secondary"
-                    disabled={!open}
-                    onClick={onBrowseLoyalty}
+                    disabled={tenderPending || !open}
+                    onClick={() => {
+                      if (!tenderPending) onBrowseLoyalty();
+                    }}
                   >
                     {copy.browseLoyaltyOffers}
                   </Button>
@@ -1225,6 +1289,12 @@ type CartDrawerProps = {
   shippingEstimate?: ReactNode;
   copy: CartDrawerCopy;
   loading?: boolean;
+  /** Show only summary amount skeletons while keeping product rows available. */
+  summaryLoading?: boolean;
+  /** Prevent overlapping tender writes; defaults to false for existing callers. */
+  tenderPending?: boolean;
+  /** Keep the cart visible while the consumer confirms an update. */
+  checkoutDisabled?: boolean;
   onFetchStatusAndPrice?: () => Promise<void> | void;
   promoState?: PromoState;
   /** Live held codes only — omit expired/void; filtering is consumer-owned. */
@@ -1289,7 +1359,10 @@ function CartDrawer({
   shippingEstimate,
   copy,
   loading,
+  summaryLoading = false,
+  tenderPending = false,
   onFetchStatusAndPrice,
+  checkoutDisabled,
   promoState,
   heldPromoCodes,
   selectedHeldPromoId,
@@ -1343,6 +1416,7 @@ function CartDrawer({
   }, [open]);
 
   const isLoading = loading ?? isFetching;
+  const isSummaryLoading = isLoading || summaryLoading;
 
   // After open loading ends, silently drop delisted catalogue lines and toast once per open.
   useEffect(() => {
@@ -1441,6 +1515,9 @@ function CartDrawer({
               estimatedTotal={estimatedTotal}
               shippingEstimate={shippingEstimate}
               loading={isLoading}
+              summaryLoading={isSummaryLoading}
+              tenderPending={tenderPending}
+              checkoutDisabled={checkoutDisabled}
               promoState={promoState}
               promoNotice={promoNotice}
               pointsState={pointsState}
@@ -1464,6 +1541,7 @@ function CartDrawer({
           promoState={promoState ?? { status: "collapsed" }}
           heldPromoCodes={heldPromoCodes}
           selectedHeldPromoId={selectedHeldPromoId}
+          tenderPending={tenderPending}
           onClose={() => onPromoStateChange?.({ status: "collapsed" })}
           onPromoStateChange={onPromoStateChange}
           onApplyPromo={onApplyPromo}

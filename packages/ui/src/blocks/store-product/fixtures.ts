@@ -1,3 +1,5 @@
+import type { ProductSummary } from "../store-product-listing/types";
+import type { StoreProductRelatedRailCopy } from "./store-product-related-rail";
 import type { StoreProductImage, StoreProductSaleItem } from "./types";
 
 const IMAGE = new URL(
@@ -20,7 +22,6 @@ const SALE_ITEM: StoreProductSaleItem = {
   price: "HK$105.00",
   compareAtPrice: "HK$123.00",
   availableForSale: true,
-  quantityAvailable: 3,
   sku: "G10-M5-ABYSS-STD",
 };
 
@@ -69,9 +70,31 @@ const SOLD_OUT_PRODUCT_STORY = {
   saleItem: {
     ...SALE_ITEM,
     availableForSale: false,
-    quantityAvailable: 0,
   },
 };
+
+const RELATED_RAIL_COPY = {
+  heading: "You may also like",
+  card: { soldOut: "SOLD OUT", sale: "SALE" },
+} satisfies StoreProductRelatedRailCopy;
+
+/** Seven cards: more than the rail's page ever hands over, to show the block
+ * draws what it is given; the second discounted, the last one sold out. */
+const RELATED_RAIL_STORY: readonly ProductSummary[] = Array.from(
+  { length: 7 },
+  (_, index) => ({
+    id: `related-${index + 1}`,
+    name: `Pokémon TCG Booster Box – Set ${index + 1}`,
+    imageSrc: IMAGE,
+    imageAlt: `Booster box ${index + 1}`,
+    price: `HK$${105 + index * 10}`,
+    originalPrice: index === 1 ? "HK$135" : undefined,
+    soldOut: index === 6,
+  }),
+);
+
+/** The rail's sold-out card: the last of the seven. */
+const RELATED_RAIL_SOLD_OUT: ProductSummary = RELATED_RAIL_STORY[6];
 
 export {
   DESCRIPTION_COPY,
@@ -79,5 +102,8 @@ export {
   METADATA_COPY,
   PRODUCT_DETAIL_STORY,
   PURCHASE_COPY,
+  RELATED_RAIL_COPY,
+  RELATED_RAIL_SOLD_OUT,
+  RELATED_RAIL_STORY,
   SOLD_OUT_PRODUCT_STORY,
 };

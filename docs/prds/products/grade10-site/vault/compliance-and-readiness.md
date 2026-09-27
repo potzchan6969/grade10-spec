@@ -85,8 +85,11 @@ it; no statute here is asserted.
   governs the loan is Legal's to name, and no licence line prints until
   Legal writes one
 - **Terms and privacy** — the site's Terms of Service and Privacy Policy pages
-  read "Being prepared", and the personal information collection statement
-  the wizard's tick links with them
+  still read “Being prepared” on the live site. An auction-launch draft for
+  review lives in Storybook under Pages/Legal, not in the message catalogs
+- ❓ **Counsel's wording on those pages** — Legal confirms the Terms, Privacy
+  Policy, and personal information collection statement the wizard's tick
+  links, before live catalogs and the app’s legal pages carry them
 - **Processors and residency** — Cloudflare, Neon in `ap-southeast-1`, Datadog
   in the US carrying no personal data, Resend; no processor register
 - **Disputes** — beyond the complaints contact the paper prints, no path to
@@ -184,7 +187,7 @@ the code holds until they do.
 | AML and customer due diligence | TBC Legal | Posture: name, birth date, document, photograph and a count of the other accounts holding the same document; as recalled, money lenders sit under licence conditions rather than the AMLO schedule, and screening is added the day a duty is named | Legal |
 | Retention windows | TBC Legal | Posture: the seeded review windows, flagging only, with no deletion act to build until the numbers are confirmed; the collector reads the seeded windows on Your data meanwhile | Legal |
 | Integrity artefacts | TBC Legal | Posture: the hash chain and the witnessed head export; RFC 3161 over the head is the first upgrade if counsel asks | Legal |
-| The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; the privacy page reads "Being prepared" until it exists, and the tick ships against that page | Legal |
+| The collection statement | TBC Legal | The personal information collection statement the wizard's tick links; live Terms and Privacy still read “Being prepared”, and the tick ships against the privacy page; auction-launch draft copy is in Storybook Pages/Legal until counsel confirms | Legal |
 | One rule for the complaints contact | ❓ Open | In production an email refuses to go without the complaints contact, while the paper prints it where set. Recommended: the paper refuses an unset contact in production too, so the field keeps one rule | Product |
 | Bilingual paper | TBC Legal | Templates and consent copy in Chinese, and which language governs; English governs meanwhile | Legal |
 | Your data is one page for every product | Decided | The collector reads what each product keeps, for how long, and their identity standing on one page under their account, and files the ask to be forgotten from there themselves, cancellable inside the window; the vault answers for its own classes and its own refusal | Product |

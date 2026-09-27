@@ -80,6 +80,7 @@ product status `created`. Intake SHALL require product status `created`.
 | Created by | Operator user id at create, immutable |
 | Remarks | Trimmed text, may be empty |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-t3x rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-01 - Operator creates a draft product with empty inventory
 **Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
@@ -89,6 +90,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** creates exactly one inventory snapshot whose counts are zero
 - **AND** created by is that operator
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ds5 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-02 - Product create without a name is refused
 **Serves:** Product stock - product create without a name is refused
 
@@ -97,6 +99,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **THEN** Grade10 refuses the create
 - **AND** no product or inventory is persisted
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pyl rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-52 - Operator marks a draft product created
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -106,6 +109,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **AND** updated at advances
 - **AND** one `product-update` history entry records the transition
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ilx rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-53 - Reserve requires a created product
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -120,6 +124,7 @@ product status `created`. Intake SHALL require product status `created`.
 - **THEN** Grade10 refuses for the same reason
 - **AND** no reservation is written
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-rdw rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-54 - Created to draft is refused
 **Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
@@ -159,6 +164,7 @@ mutation — not by database triggers that sync counters from reservations.
 Holder-facing available on a **`created`** product is that inventory's
 available.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-m2e rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-03 - Counts reconcile across current and terminal stock
 **Serves:** Product stock - counts reconcile across current and terminal stock
 
@@ -168,6 +174,7 @@ available.
 - **THEN** available is three
 - **AND** derived ledger is ten
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ndx rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-04 - Product owns only one inventory
 **Serves:** Product stock - product owns only one inventory
 
@@ -184,6 +191,7 @@ quantity in one transaction (derived ledger rises by the same amount). It
 SHALL NOT change reserved, vaulted, sold, or withdrawn. Intake for an unknown
 product SHALL be refused.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fiq rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-05 - Operator intakes three
 **Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
@@ -192,6 +200,7 @@ product SHALL be refused.
 - **THEN** the same inventory has stock five and derived ledger seven
 - **AND** reserved, vaulted, sold, and withdrawn are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w2g rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-06 - Repeated intakes accumulate in one inventory
 **Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
@@ -200,6 +209,7 @@ product SHALL be refused.
 - **THEN** the product still has one inventory
 - **AND** stock is five and derived ledger is five
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-qe8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-07 - Intake appends one quantity change
 **Serves:** grade10-admin-inventory-catalog-US-01 - Record received stock
 
@@ -208,6 +218,7 @@ product SHALL be refused.
 - **THEN** one `intake` change is appended with quantity ten
 - **AND** its before and after snapshots show stock increasing by ten
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-zn8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-08 - Invalid intake quantity is refused
 **Serves:** Product stock - invalid intake quantity is refused
 
@@ -216,6 +227,7 @@ product SHALL be refused.
 - **THEN** Grade10 refuses the intake
 - **AND** the inventory and history are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-c1e rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-09 - Intake for unknown product is refused
 **Serves:** Product stock - intake for unknown product is refused
 
@@ -237,6 +249,7 @@ A sale or withdrawal exceeding available SHALL be refused. Reserved quantity
 SHALL be settled through the reservation before it can leave stock via these
 free-pool transitions.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-f89 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-10 - Operator records a sale
 **Serves:** Product stock - operator records a sale
 
@@ -245,6 +258,7 @@ free-pool transitions.
 - **THEN** stock decreases to three and sold increases by two
 - **AND** reserved and derived ledger are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-0rc rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-11 - Operator records a withdrawal
 **Serves:** Product stock - operator records a withdrawal
 
@@ -253,6 +267,7 @@ free-pool transitions.
 - **THEN** stock decreases by one and withdrawn increases by one
 - **AND** derived ledger is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-h9y rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-12 - Terminal transition cannot consume reserved stock
 **Serves:** Product stock - terminal transition cannot consume reserved stock
 
@@ -269,6 +284,7 @@ SHALL update a product's name, description, and remarks without changing
 inventory counts, id, created at, created by, or status. An update SHALL
 refresh product updated at.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-d4r rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-13 - Operator lists products with aggregate counts
 **Serves:** Admin console - operator lists products with aggregate counts
 
@@ -278,6 +294,7 @@ refresh product updated at.
   available and ledger
 - **AND** each row's counts satisfy both reconciliation equations
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-cfb rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-57 - Operator edits product fields
 **Serves:** Admin console - operator edits product fields
 
@@ -326,6 +343,7 @@ SHALL be refused. For `admin`, each reserve SHALL mint a new unique
 reservation is `closed`, the same kind and reference MAY create a new
 reservation (holder apps only; admin references are not reused).
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pax rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-14 - Auction reserves a quantity
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -336,6 +354,7 @@ reservation (holder apps only; admin references are not reused).
 - **AND** reserved increases by two while stock and derived ledger remain
   unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w3w rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-15 - Same active reference retries idempotently
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -345,6 +364,7 @@ reservation (holder apps only; admin references are not reused).
 - **THEN** Grade10 returns the existing reservation
 - **AND** reserved count and history do not change
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hef rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-16 - Closed reference may reserve again
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -362,6 +382,7 @@ SHALL be refused. Inventory `reserved` SHALL equal the sum of `remaining` on
 active reservations for that product. Different `holder_kind` values MAY
 reserve the same product.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-b8e rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-17 - Auction and Vault reserve the same product
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -370,6 +391,7 @@ reserve the same product.
 - **THEN** both reservations succeed with their respective `holder_kind`
 - **AND** reserved is four and available is one
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-zty rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-18 - Concurrent reservations cannot oversubscribe stock
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -379,6 +401,7 @@ reserve the same product.
 - **AND** the other is refused for insufficient available inventory
 - **AND** reserved and the sum of active remaining are one
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-5ef rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-19 - Insufficient stock reserves nothing
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -404,6 +427,7 @@ also offer a listing's **current** product when that listing's active hold
 accounts for the product's remaining free pool (consumed by
 [`add-admin-auction-campaigns`](../../../../../add-admin-auction-campaigns/proposal.md)).
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-7dm rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-66 - Own reservation counts toward effective available on edit
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -414,6 +438,7 @@ accounts for the product's remaining free pool (consumed by
 - **THEN** effective available is three and the save is allowed
 - **AND** global available remains zero until the hold changes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-14b rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-20 - Vault cannot see Auction reservations
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -423,6 +448,7 @@ accounts for the product's remaining free pool (consumed by
   `holder_kind` `grade10-vault`
 - **AND** no Auction reservation, quantity, remarks, or reference is returned
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-22a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-21 - Another kind cannot release a reservation
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -431,6 +457,7 @@ accounts for the product's remaining free pool (consumed by
 - **THEN** Grade10 responds as though the reservation does not exist
 - **AND** the Auction reservation and reserved remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ata rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-61 - Auction eligibility list omits draft and out-of-stock
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -440,6 +467,7 @@ accounts for the product's remaining free pool (consumed by
 - **THEN** only the created in-stock product is returned
 - **AND** the draft and out-of-stock products are omitted
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-5tx rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-62 - Eligibility available matches inventory available
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -456,6 +484,7 @@ all remaining. Release SHALL atomically increase `released`, decrease
 derived ledger unchanged. When remaining reaches zero, the reservation SHALL
 become `closed`.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sge rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-22 - Vault releases a full remaining hold
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -465,6 +494,7 @@ become `closed`.
 - **AND** reserved decreases by two and available increases by two
 - **AND** stock and derived ledger remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-55o rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-35 - Partial release leaves remaining active
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -496,6 +526,7 @@ SHALL:
 Every successful adjust SHALL append one `adjust` changelog with the new
 quantity and before/after snapshots of inventory and reservation.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-8t3 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-47 - Increase listing reservation 3 to 5 acquires more stock
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -510,6 +541,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **AND** no second reservation is created for `listing-42`
 - **AND** `released` is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-cub rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-48 - Decrease listing reservation 5 to 2 frees remaining
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -521,6 +553,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **AND** `released` remains zero
 - **AND** the reservation is not closed
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-w8q rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-49 - Increase refused when not enough available stock
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -530,6 +563,7 @@ quantity and before/after snapshots of inventory and reservation.
 - **THEN** Grade10 refuses for insufficient available inventory
 - **AND** quantity, remaining, and reserved are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-yr3 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-50 - Cannot adjust below sold plus vaulted plus released
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -572,6 +606,7 @@ Under one database transaction the service SHALL:
 Auction listing explicit Saves call this RPC when product changes; quantity-only
 changes on the same product SHALL use `adjustReservation` instead.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-vi5 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-51 - Listing product change moves hold in one transaction
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -587,6 +622,7 @@ changes on the same product SHALL use `adjustReservation` instead.
 - **AND** stock and derived ledger on both products are unchanged
 - **AND** exactly one reservation remains active for `listing-42`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-np5 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-63 - Product change refused when new product lacks stock
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -598,6 +634,7 @@ changes on the same product SHALL use `adjustReservation` instead.
 - **AND** the reservation stays on product A with remaining three
 - **AND** both products' **reserved** counts are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-xig rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-64 - Product change refused for draft target product
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -606,6 +643,7 @@ changes on the same product SHALL use `adjustReservation` instead.
 - **THEN** Grade10 refuses
 - **AND** the reservation is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-91j rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-65 - Product change refused below settled floor
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -624,6 +662,7 @@ derived ledger unchanged; require price and currency. When remaining reaches
 zero, the reservation SHALL become `closed`. Vault entrypoints SHALL NOT
 expose sell-from-reservation.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-nxz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-36 - Auction partially sells from a reservation
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -635,6 +674,7 @@ expose sell-from-reservation.
 - **AND** inventory stock is three, reserved is three, sold is two
 - **AND** vaulted and derived ledger are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-l2k rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-37 - Partial sell then release closes the reservation
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -653,6 +693,7 @@ quantity; increase reservation vaulted and inventory vaulted; leave sold and
 derived ledger unchanged. When remaining reaches zero, the reservation SHALL
 become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ktl rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-38 - Vault partially vaults from a reservation
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -663,6 +704,7 @@ become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 - **AND** inventory stock is three, reserved is three, vaulted is two
 - **AND** sold and derived ledger are unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-9p1 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-39 - Vault cannot sell from reservation
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -670,6 +712,7 @@ become `closed`. Auction entrypoints SHALL NOT expose vault-from-reservation.
 - **WHEN** a caller uses the Vault entrypoint and attempts sell-from-reservation
 - **THEN** no sell-from-reservation method is exposed on that entrypoint
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-8j6 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-40 - Auction cannot vault from reservation
 **Serves:** grade10-admin-inventory-catalog-US-03 - Auction operator holds stock the vault cannot touch
 
@@ -709,6 +752,7 @@ An elevated operator request SHALL also append one platform audit entry.
 Failed, refused, and idempotent no-op writes SHALL append neither history nor
 audit.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-l3a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-23 - Product update records operator and snapshots
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -718,6 +762,7 @@ audit.
 - **AND** its changed entity is `product`
 - **AND** before contains `Card A` and after contains `Card B`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-y6f rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-24 - Intake history carries the added quantity
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -727,6 +772,7 @@ audit.
 - **AND** its changed entity is `inventory`
 - **AND** before and after show stock increasing by three
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-1i4 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-25 - Reserve history records hold and snapshot
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -735,6 +781,7 @@ audit.
 - **THEN** one `reserve` change records quantity two and the reservation id
 - **AND** before and after show reserved increasing by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-k0a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-26 - Release history records hold and snapshot
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -743,6 +790,7 @@ audit.
 - **THEN** one `release` change records quantity two and the reservation id
 - **AND** before and after show reserved decreasing by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-vgc rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-27 - Terminal history records action details
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -752,6 +800,7 @@ audit.
 - **THEN** one `sell` change records the sold quantity, price, and currency
 - **AND** one `withdraw` change records the withdrawn quantity and reason
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-cyf rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-28 - Refused write leaves history unchanged
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -759,6 +808,7 @@ audit.
 - **WHEN** Auction attempts to reserve quantity two and Grade10 refuses
 - **THEN** no new change is appended
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ses rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-41 - Sell-from-reservation history
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -769,6 +819,7 @@ audit.
 - **AND** before and after show inventory sold increasing by two and reserved
   decreasing by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-7oz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-42 - Vault-from-reservation history
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -779,6 +830,7 @@ audit.
 - **AND** before and after show inventory vaulted increasing by two and reserved
   decreasing by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-txu rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-43 - Adjust history records new quantity
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -788,6 +840,7 @@ audit.
 - **AND** before and after show reserved increasing by two and remaining
   increasing by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-pgg rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-44 - Adjust decrease records freed quantity
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -796,6 +849,7 @@ audit.
 - **THEN** one `adjust` change records quantity two and the reservation id
 - **AND** before and after show reserved decreasing by three
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-6lr rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-45 - Change-product history records both inventories
 **Serves:** grade10-admin-inventory-catalog-US-04 - Reconstruct stock changes
 
@@ -831,6 +885,7 @@ product page. Auction and Vault reservation rows on the product page are
 read-only oversight; only `admin` rows MAY offer Release on this page
 (grade10-admin-inventory-catalog-SC-68). Loading, empty, and error states SHALL be visible.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-clm rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-59 - Operator reserves admin hold from product page
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -842,6 +897,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **AND** reserved increases by two while stock and derived ledger remain
   unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-crz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-60 - Operator releases admin hold from product page
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -859,6 +915,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **THEN** remaining is three, released is two, and status stays `active`
 - **AND** reserved decreases by two
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-iv0 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-68 - Product page release is limited to admin holds
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -868,6 +925,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **THEN** only `admin` rows offer a Release action
 - **AND** Auction and Vault rows show no settlement actions on this page
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-kqn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-29 - Operator oversees inventory and holds on the product page
 **Serves:** Admin console - operator oversees inventory and holds on the product page
 
@@ -878,6 +936,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
   remaining, and change history appear
 - **AND** both count equations reconcile
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-s0h rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-30 - Empty products table
 **Serves:** Admin console - empty products table
 
@@ -885,6 +944,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **WHEN** an authorized inventory admin opens Inventory
 - **THEN** the products table shows an empty state
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-mdm rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-31 - Intake form updates the snapshot on the product page
 **Serves:** Admin console - intake form updates the snapshot on the product page
 
@@ -893,6 +953,7 @@ read-only oversight; only `admin` rows MAY offer Release on this page
 - **THEN** its stock increases by two (derived ledger likewise)
 - **AND** one intake entry appears in history
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ubw rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-58 - Operator creates a product from the products list
 **Serves:** Admin console - operator creates a product from the products list
 
@@ -910,6 +971,7 @@ procedures SHALL implement the same `admin` hold semantics as the product page
 `holder_kind` `admin` with a server-minted `holder_reference`. Each call SHALL
 create a new active reservation (no idempotent retry on reference).
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-axn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-67 - Elevated admin reserve mints holder reference
 **Serves:** grade10-admin-inventory-catalog-US-02 - Oversee holds and settle them from holder apps
 
@@ -934,6 +996,7 @@ signed-in person without those grants SHALL be refused and SHALL NOT see the
 Inventory section. Holder-scoped service entrypoints are machine-only
 capability grants and SHALL NOT be reachable through the public API gateway.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-erz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-32 - Unauthorized inventory read is refused
 **Serves:** Admin console - unauthorized inventory read is refused
 
@@ -941,6 +1004,7 @@ capability grants and SHALL NOT be reachable through the public API gateway.
 - **WHEN** they request the product list
 - **THEN** Grade10 refuses the request
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-io4 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-33 - Inventory section hidden without grants
 **Serves:** Admin console - inventory section hidden without grants
 
@@ -948,6 +1012,7 @@ capability grants and SHALL NOT be reachable through the public API gateway.
 - **WHEN** they use the Grade10 admin panel
 - **THEN** the Inventory section is not offered
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-oqk rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-34 - Public caller cannot reach holder methods
 **Serves:** Admin console - public caller cannot reach holder methods
 
@@ -971,6 +1036,7 @@ NOT carry a Collectible type or free-form product metadata.
 typed attributes governed by the product's schema, except for facts that
 describe an individual inventory unit.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sls rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-93 - Product form shows the complete hierarchy
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -979,6 +1045,7 @@ describe an individual inventory unit.
 - **THEN** IP, Category, and Item are available
 - **AND** no Collectible type field or product metadata editor is available
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ux1 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-94 - Product contract has no legacy identity fields
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -1018,6 +1085,7 @@ inventory facts rather than product attributes. Grade SHALL be stored as text.
 | Serial | Optional copy-level text |
 | Created at | Set when the record is received, immutable |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fq8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-95 - Inventory has no Cert ID records by default
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1027,6 +1095,7 @@ inventory facts rather than product attributes. Grade SHALL be stored as text.
 - **THEN** the inventory has zero Cert ID records
 - **AND** the product remains valid for ordinary unnumbered stock
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-irv rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-96 - Intake records a Cert ID under its product
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1035,6 +1104,7 @@ inventory facts rather than product attributes. Grade SHALL be stored as text.
 - **THEN** the inventory owns one record whose displayed identifier is `PSA-123`
 - **AND** that record belongs to the intaken product and no other product
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-a57 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-97 - Duplicate Cert ID is refused
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1073,6 +1143,7 @@ name, not to the Grade10 Item tag.
 SHALL be copy-level inventory facts and SHALL NOT be assigned as product
 attributes by this card template.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ml0 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-108 - Shared card template defines product facts
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1082,6 +1153,7 @@ attributes by this card template.
 - **AND** Card Number and Variety are optional text
 - **AND** Serial, Cert ID, Grade Issuer, Grade, and Autograph Grade are not product attributes
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-p05 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-109 - Source classification maps to existing tags
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1119,6 +1191,7 @@ revisions.
 through the existing publish flow, including its validation of affected
 products.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-30a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-110 - Schema manifest imports as drafts
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1127,6 +1200,7 @@ products.
 - **THEN** Grade10 creates draft schema revisions for the mapped tuples
 - **AND** the current published schemas remain active until each revision is published
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ikp rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-111 - Invalid schema manifest creates no revisions
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1150,6 +1224,7 @@ SHALL remain absent.
 
 **Uploaded file** - Import SHALL NOT modify the uploaded file.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hqo rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-115 - Mapped values trim and omit blank placeholders
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1194,6 +1269,7 @@ remain distinct.
 **Blocked** - Missing mappings, missing required values, or invalid values
 SHALL block the entire commit.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-1d9 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-112 - Product upload creates one draft per identity
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1204,6 +1280,7 @@ SHALL block the entire commit.
 - **WHEN** the admin marks each valid imported draft `created` through the existing product status flow
 - **THEN** only products with complete classification and valid required schema values become `created`
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-3c8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-114 - Same name keeps distinct card identities
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1213,6 +1290,7 @@ SHALL block the entire commit.
 - **AND** rows with repeated product name alone do not merge or block one another
 - **AND** no inventory quantity, unit record, or Cert ID is created
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-t1v rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-113 - Product upload refuses incomplete rows atomically
 **Serves:** grade10-admin-inventory-catalog-US-72 - Operator configures card schemas and imports products
 
@@ -1269,6 +1347,7 @@ history in one atomic operation.
 | Autograph Grade | Optional copy-level text |
 | Serial | Optional copy-level text |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-3ab rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-116 - Inventory upload previews matched copy facts
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1278,6 +1357,7 @@ history in one atomic operation.
 - **AND** Cert ID, Grade Issuer, Grade, Autograph Grade, and Serial are shown as copy-level facts
 - **AND** the rows are committed only after confirmation
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-1c7 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-117 - Blank status requires per-row choice and RAW has no Cert ID
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1288,6 +1368,7 @@ history in one atomic operation.
 - **THEN** the RAW row is valid without Cert ID
 - **AND** only the included RAW row adds a unit and stock
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-crr rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-118 - Missing or ambiguous product match blocks import
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1296,6 +1377,7 @@ history in one atomic operation.
 - **THEN** Grade10 identifies the unmatched or ambiguous row
 - **AND** no row in the upload changes inventory or history
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-dc8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-119 - Duplicate Cert ID blocks the whole upload
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1304,6 +1386,7 @@ history in one atomic operation.
 - **THEN** Grade10 reports the duplicate after trimming surrounding whitespace
 - **AND** no row in the upload changes inventory, unit records, or history
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-bc7 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-120 - Invalid inventory row leaves every unit unchanged
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1312,6 +1395,7 @@ history in one atomic operation.
 - **THEN** Grade10 reports the row and reason
 - **AND** no inventory count, unit fact, or history entry from that upload is committed
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-4hn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-121 - Copy facts trim and omit blank placeholders
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1321,6 +1405,7 @@ history in one atomic operation.
 - **AND** blank and standalone `-` optional facts are absent rather than stored as text
 - **AND** the uploaded workbook is unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-sfn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-122 - Graded rows require Cert ID and RAW rows forbid it
 **Serves:** grade10-admin-inventory-catalog-US-73 - Operator bulk imports matched inventory units
 
@@ -1350,6 +1435,7 @@ whole operation.
 **History** - A successful intake SHALL append one history entry whose after
 state carries the received unit records when any were supplied.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-skp rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-98 - Unnumbered intake increases stock
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1358,6 +1444,7 @@ state carries the received unit records when any were supplied.
 - **THEN** stock increases to five
 - **AND** no individually tracked unit record is created
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ah9 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-99 - Multiple Cert IDs match intake quantity
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1369,6 +1456,7 @@ state carries the received unit records when any were supplied.
 - **AND** both identifiers are recorded under that inventory
 - **AND** one intake history entry records the two received identifiers
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-0ac rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-100 - Too many Cert IDs refuse the intake
 **Serves:** grade10-admin-inventory-catalog-US-69 - Operator records a received graded unit
 
@@ -1393,6 +1481,7 @@ and place it at any position in the displayed order.
 **Other attributes unchanged** - Existing typed attribute display choices
 SHALL remain unchanged when Cert ID is added, moved, or removed.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-q36 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-101 - Admin adds Cert ID to displayed attributes
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -1401,6 +1490,7 @@ SHALL remain unchanged when Cert ID is added, moved, or removed.
 - **THEN** the saved display order contains Cert ID first
 - **AND** no ordinary Cert ID attribute key is created
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-u9i rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-102 - Admin hides Cert ID without changing attributes
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -1409,6 +1499,7 @@ SHALL remain unchanged when Cert ID is added, moved, or removed.
 - **THEN** the two typed attributes remain in their prior order
 - **AND** Cert ID is not returned as a displayed field
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-6vy rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-103 - Displayed Cert ID resolves the selected unit
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -1416,6 +1507,7 @@ SHALL remain unchanged when Cert ID is added, moved, or removed.
 - **WHEN** a collector reads the listing
 - **THEN** the displayed product fields include `PSA-123` in the configured position
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-rn5 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-104 - No Cert ID contributes no displayed value
 **Serves:** grade10-admin-inventory-catalog-US-70 - Operator configures the product identity and display
 
@@ -1438,6 +1530,7 @@ SHALL be exclusive to one active reservation.
 **No Cert ID** - `No Cert ID` SHALL use the existing product-level quantity
 reservation path without allocating a certificate record.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-bck rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-105 - Reservation selects a Cert ID
 **Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
@@ -1446,6 +1539,7 @@ reservation path without allocating a certificate record.
 - **THEN** the reservation stores the opaque Cert ID record identity
 - **AND** its quantity is one and `PSA-123` is unavailable to other active reservations
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-63a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-106 - Reservation selects No Cert ID
 **Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
@@ -1454,6 +1548,7 @@ reservation path without allocating a certificate record.
 - **THEN** the reservation uses product-level quantity three
 - **AND** no Cert ID record is allocated
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ol8 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-107 - Reservation without a unit choice is refused
 **Serves:** grade10-admin-inventory-catalog-US-71 - Holder reserves a specific inventory unit
 
@@ -1486,6 +1581,7 @@ SHALL be reported to the admin and SHALL fall back to English when displayed.
 | Options | Required for select fields; each option has a stable key and one English displayed value; non-English displayed values are optional |
 | Search/filter | Enabled for attributes assigned as required or optional product attributes |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-h69 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-69 - Operator defines a localized reusable field
 **Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
@@ -1495,6 +1591,7 @@ SHALL be reported to the admin and SHALL fall back to English when displayed.
 - **AND** each supplied locale returns its own displayed label
 - **AND** the attribute is available for assignment to product schemas
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-tmz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-70 - Invalid field definition is refused
 **Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
@@ -1513,6 +1610,7 @@ product editing. Saving the review target SHALL NOT itself change product
 attributes. Product-schema publication SHALL repeat compatibility validation
 and remain refused until the incompatible product attributes are corrected.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-rbs rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-91 - Admin corrects product attributes after a schema change
 **Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
@@ -1525,6 +1623,7 @@ and remain refused until the incompatible product attributes are corrected.
 - **THEN** the review no longer returns those product attributes
 - **AND** the product schema can publish when no other incompatibilities remain
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-n01 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-71 - Missing non-English translations are reported without blocking publish
 **Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
@@ -1554,6 +1653,7 @@ type.
 | Displayed labels | One English label per assigned attribute required; translations optional; a product schema may override the reusable attribute's labels |
 | Option values | Stable option keys with localized displayed values; English required, other supported locales optional |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-n2c rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-72 - Operator configures a Pokémon TCG product schema
 **Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
@@ -1563,6 +1663,7 @@ type.
 - **AND** PSA population can be assigned as an optional attribute
 - **AND** every assigned attribute has its own displayed label separate from its stable key
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-a78 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-73 - Duplicate published product schema for exact tuple is refused
 **Serves:** grade10-admin-inventory-catalog-US-05 - Inventory admin configures a localized product schema
 
@@ -1588,6 +1689,7 @@ key, and a multi-select value SHALL use a set of stable option keys. When a
 value is displayed, Grade10 SHALL use the active locale's value or fall back
 to English when that translation is missing.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hih rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-74 - Product without a matching product schema remains a draft
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1597,6 +1699,7 @@ to English when that translation is missing.
 - **AND** the product cannot be marked `created`
 - **AND** no Auction reservation or listing may use it
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-eoz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-75 - Operator saves localized Pokémon TCG values
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1605,6 +1708,7 @@ to English when that translation is missing.
 - **THEN** Grade10 stores the values under their stable field keys
 - **AND** each product read returns the field's displayed label and the value for the requested locale
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-hwd rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-76 - Invalid structured value is refused
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1613,6 +1717,7 @@ to English when that translation is missing.
 - **THEN** Grade10 refuses the product update
 - **AND** the product's previous structured values remain unchanged
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-kdl rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-77 - Missing required value blocks creation
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1621,6 +1726,7 @@ to English when that translation is missing.
 - **THEN** Grade10 refuses the status change
 - **AND** reports grading as a missing required value
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-44a rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-78 - Missing optional value remains valid
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1629,6 +1735,7 @@ to English when that translation is missing.
 - **THEN** Grade10 accepts the status change when all required values are valid
 - **AND** the missing optional value remains absent
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-e2o rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-79 - A missing locale falls back to English
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1637,6 +1744,7 @@ to English when that translation is missing.
 - **THEN** the English grading value is displayed
 - **AND** no stable field key or raw translation key is displayed
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-uv0 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-92 - Admin opens a product filter from an attribute
 **Serves:** grade10-admin-inventory-catalog-US-06 - Inventory admin enters a validated product
 
@@ -1658,6 +1766,7 @@ while matching SHALL preserve the stable field and option identity. A product
 without a value for an optional field SHALL be excluded when that field is
 filtered, and SHALL remain in an unfiltered result.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-eze rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-80 - Auction filters by universal and structured fields
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1666,6 +1775,7 @@ filtered, and SHALL remain in an unfiltered result.
 - **THEN** Auction returns only products whose stable tag or field value matches
 - **AND** the filter labels and values use the active locale
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-3qz rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-81 - Missing optional value is excluded from its filter
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1674,6 +1784,7 @@ filtered, and SHALL remain in an unfiltered result.
 - **THEN** only the product with that value matches
 - **AND** the product without a value remains available in an unfiltered result
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-dme rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-82 - Listing attribute cannot be filtered
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1710,6 +1821,7 @@ resolved. An Inventory schema, attribute, or translation change MAY update the
 product fields shown by a published Auction listing, but SHALL NOT make that
 listing fail to render.
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-74n rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-83 - Operator configures different Auction fields per product schema
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1719,6 +1831,7 @@ listing fail to render.
 - **AND** One Piece Auction listings show the card number and character, such as Luffy or Chopper
 - **AND** both product schemas retain grading for validation and search/filter when assigned
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-88u rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-84 - Auction shows localized labels and values in configured order
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1728,6 +1841,7 @@ listing fail to render.
 - **AND** each field uses its Traditional Chinese displayed label and value
 - **AND** a missing translation falls back to English
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-fkn rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-88 - Listing-specific PSA cert number does not change the product
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1737,6 +1851,7 @@ listing fail to render.
 - **AND** the product's grading and product attribute values remain unchanged
 - **AND** PSA cert number is not offered as an Auction search or filter criterion
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-o05 rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-89 - Flexible listing attribute falls back to English
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1745,6 +1860,7 @@ listing fail to render.
 - **THEN** Auction displays the English PSA cert number label and value
 - **AND** no stable listing attribute key or raw translation key is displayed
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-9wr rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-90 - Product schema change keeps an Auction listing renderable
 **Serves:** grade10-admin-inventory-catalog-US-07 - Collector finds and reads a card through Auction fields
 
@@ -1772,6 +1888,7 @@ and reasons.
 | Draft | Editable by an authorized inventory admin; not used for created-product eligibility or Auction output |
 | Published | One active configuration for an exact IP + Item + Category tuple; used for product validation and search/filter |
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-a1d rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-85 - Invalid existing product blocks product schema publish
 **Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
@@ -1781,6 +1898,7 @@ and reasons.
 - **AND** reports the product and missing value
 - **AND** the previously published product schema remains active
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-o0r rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-86 - Valid product schema publishes atomically
 **Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 
@@ -1789,6 +1907,7 @@ and reasons.
 - **THEN** the complete product schema configuration becomes active
 - **AND** its attributes and search/filter behavior take effect together
 
+<!-- trace:scenario id=g10adm.inventory-catalog.SC-ahs rev=1 -->
 #### Scenario: grade10-admin-inventory-catalog-SC-87 - Legacy product without a matching product schema stays visible but unavailable to Auction
 **Serves:** grade10-admin-inventory-catalog-US-08 - Inventory admin publishes a safe product-schema configuration
 

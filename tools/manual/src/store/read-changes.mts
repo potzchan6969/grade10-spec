@@ -31,7 +31,14 @@ import {
 } from "./disk.mts";
 import { type GitIndex, mainStateOf, type StoreMain } from "./git.mts";
 import { readIdleClaims } from "./idle.mts";
-import { leadingTitle, outline, type Section, tableRows } from "./markdown.mts";
+import {
+  leadingTitle,
+  outline,
+  type Section,
+  type SectionSpan,
+  sectionSpan,
+  tableRows,
+} from "./markdown.mts";
 import { readLandings } from "./read-landings.mts";
 import { readRounds, roundArtifactOf } from "./read-rounds.mts";
 import { schemaArtifacts } from "./read-schema.mts";
@@ -427,6 +434,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
       const suite = readTestCases(text);
       suites.push({
         spec,
+        path: casesFile,
         status: suite.status,
         cases: {
           draft: suite.cases.filter((one) => one.status === "draft").length,
@@ -442,6 +450,7 @@ function readSuites(root: string, dir: string): ChangeSuite[] {
     } catch (cause) {
       suites.push({
         spec,
+        path: casesFile,
         cases: { draft: 0, actual: 0, deprecated: 0, total: 0, automated: 0 },
         error: toItemError(casesFile, cause),
       });
@@ -520,7 +529,7 @@ function readIdMap(
 
 /** The `Q` column of a `## Decisions` row: the number the round gave the
  * question. */
-const DECISION_ROW = /^Q\d+$/;
+export const DECISION_ROW = /^Q\d+$/;
 
 /**
  * Which artifact or task group each open `Q<n>` was raised against, from
@@ -567,11 +576,7 @@ export function readQuestions(
 ): OpenQuestion[] {
   const open: OpenQuestion[] = [];
   const raisedAgainst = artifactRaisedAgainst(rounds);
-  const decisions = outline(text)
-    .flatMap((one) => (one.level === 1 ? one.children : [one]))
-    .find((one) => /^Decisions\b/.test(one.heading));
-  if (!decisions) return open;
-  for (const cells of tableRows(decisions.raw) ?? []) {
+  for (const cells of decisionRows(text)) {
     if (!DECISION_ROW.test(cells[0])) continue;
     const asked = ASKED_OF.exec(cells[2] ?? "");
     if (!asked) continue;
@@ -595,15 +600,44 @@ export function readQuestions(
  * regex over the file: two readers of one table drift the day a column moves.
  */
 export function questionIdsOf(text: string): Set<string> {
-  const decisions = outline(text)
-    .flatMap((one) => (one.level === 1 ? one.children : [one]))
-    .find((one) => /^Decisions\b/.test(one.heading));
-  if (!decisions) return new Set();
   return new Set(
-    (tableRows(decisions.raw) ?? [])
+    decisionRows(text)
       .map((cells) => cells[0])
       .filter((cell) => DECISION_ROW.test(cell ?? "")),
   );
+}
+
+/**
+ * The rows of one change's `## Decisions` table, header dropped — the one
+ * table `Q<n>` ids are issued from, found once for every reader of it: the
+ * open questions, the cited ids, and the reply a held row makes. A file with
+ * no such table has no rows.
+ */
+export function decisionRows(text: string): string[][] {
+  const decisions = decisionsSection(text);
+  return decisions ? (tableRows(decisions.section.raw) ?? []) : [];
+}
+
+/** The `## Decisions` section and the lines of the file it holds — where
+ * `decisionRows` reads its table, and the span a rewrite of a row stays
+ * inside. */
+export function decisionsSection(text: string): SectionSpan | undefined {
+  return sectionSpan(text, /^Decisions\b/);
+}
+
+/**
+ * The `hands:` block of one record's text, role to handle, through the same
+ * reader the store reads every record with — for a script that holds the file
+ * and no tree. Two readers of `hands:` normalizing a handle differently would
+ * disagree about whether the store knows a person.
+ */
+export function handsOfRecord(text: string): Record<string, string> {
+  const parsed = YAML.parse(text) ?? {};
+  if (typeof parsed !== "object" || Array.isArray(parsed)) {
+    throw new StoreFileError(1, "`.openspec.yaml` must be a mapping");
+  }
+  const fields = parsed as Record<string, unknown>;
+  return readIdMap("hands", fields.hands, handleOf) ?? {};
 }
 
 /**

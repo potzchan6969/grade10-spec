@@ -41,6 +41,7 @@ receive imagery, labels, and destinations through props.
 renderable on their own, outside `StoreCollectionGrid`, so a later surface can
 reuse one without the others.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-pfr rev=1 -->
 #### Scenario: shared-ui-store-home-SC-01 - An application imports the surface
 **Serves:** Surface exports - an application imports the surface
 
@@ -48,6 +49,7 @@ reuse one without the others.
 - **THEN** every import resolves
 - **AND** no other component or type is exported for this surface
 
+<!-- trace:scenario id=g10.shared-store-home.SC-qz4 rev=1 -->
 #### Scenario: shared-ui-store-home-SC-02 - A part is reused alone
 **Serves:** Surface exports - a part is reused alone
 
@@ -61,6 +63,7 @@ title, a description, and two call-to-action controls whose labels come from
 its copy prop. It SHALL report activation of each control through a named
 callback. It SHALL NOT navigate or fetch content.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-3dk rev=1 -->
 #### Scenario: shared-ui-store-home-SC-03 - Both controls are supplied
 **Serves:** Hero - both controls are supplied
 
@@ -69,6 +72,7 @@ callback. It SHALL NOT navigate or fetch content.
 - **THEN** both controls appear with the supplied labels
 - **AND** activating either reports through its callback
 
+<!-- trace:scenario id=g10.shared-store-home.SC-9vp rev=1 -->
 #### Scenario: shared-ui-store-home-SC-04 - A control has no handler
 **Serves:** Hero - a control has no handler
 
@@ -82,12 +86,14 @@ callback. It SHALL NOT navigate or fetch content.
 display a browse-all link only when the application supplies an `href` and the
 link label in copy. The link SHALL NOT appear when no `href` is supplied.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-rkl rev=1 -->
 #### Scenario: shared-ui-store-home-SC-05 - Browse link is supplied
 **Serves:** Section header - browse link is supplied
 
 - **WHEN** the header renders with a title, a browse label, and an href
 - **THEN** the title and the link both appear
 
+<!-- trace:scenario id=g10.shared-store-home.SC-fxb rev=1 -->
 #### Scenario: shared-ui-store-home-SC-06 - No browse destination
 **Serves:** Section header - no browse destination
 
@@ -105,6 +111,7 @@ least one affordance the application wires.
 
 The grid SHALL NOT decide which collections exist or their order.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-12a rev=1 -->
 #### Scenario: shared-ui-store-home-SC-07 - A featured and standard tile render
 **Serves:** Collection grid - a featured and standard tile render
 
@@ -113,6 +120,7 @@ The grid SHALL NOT decide which collections exist or their order.
 - **THEN** both labels appear
 - **AND** the featured tile occupies the larger bento cell
 
+<!-- trace:scenario id=g10.shared-store-home.SC-adp rev=1 -->
 #### Scenario: shared-ui-store-home-SC-08 - Activating a tile
 **Serves:** Collection grid - activating a tile
 
@@ -125,6 +133,7 @@ The grid SHALL NOT decide which collections exist or their order.
 Every store-home component SHALL render no visible copy, image, or collection
 the application did not supply.
 
+<!-- trace:scenario id=g10.shared-store-home.SC-cra rev=1 -->
 #### Scenario: shared-ui-store-home-SC-09 - Nothing is defaulted
 **Serves:** No defaulted content - nothing is defaulted
 

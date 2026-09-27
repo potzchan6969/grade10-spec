@@ -11,6 +11,7 @@ serve me from,
 **so that** I am never shown a price, a basket or a pay button for a shop
 nobody is ready to sell me from.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-0tx rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC1-1: Header names no store surface and carries no cart control
 
 **Deprecated:** superseded by `US5-TC1-1` and `US5-TC7-1`, which read the same
@@ -44,6 +45,7 @@ chrome for all three waiting products rather than the store alone.
   checkout or an order page.
 * The header carries no cart control.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-kv7 rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC2-1: Footer carries no shop column and no store link
 
 **Classification:**
@@ -73,6 +75,7 @@ chrome for all three waiting products rather than the store alone.
 * The footer carries no shop column.
 * No footer link names a store address.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-sc7 rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC3-1: Front door offers no store button and no store card
 
 **Classification:**
@@ -103,6 +106,7 @@ chrome for all three waiting products rather than the store alone.
 * The front door carries no store card.
 * Nothing on it opens a store address.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-cvr rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC4-1: No rendered link on the site names a store address
 
 **Classification:**
@@ -133,6 +137,7 @@ chrome for all three waiting products rather than the store alone.
 * No collected link names a store address.
 * Every collected link opens a surface the build carries.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-pu0 rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC5-1: Surfaces carried on every lane are still named
 
 **Deprecated:** superseded by `US5-TC1-1` and `US5-TC7-1` — the vault and
@@ -167,6 +172,7 @@ surfaces no longer keeps them open the way this case asserted.
   join and the profile.
 * Each opens its own surface, not the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-25r rev=1 covers=g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr -->
 ### grade10-site-site-carried-surfaces-US1-TC6-1: Nothing names the store before scripts run
 
 **Classification:**
@@ -207,6 +213,7 @@ to tell me the site does not hold it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-ynq rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC1-1: Every store address answers not-found with a 404
 
 Runs once per row of **Test data**.
@@ -252,6 +259,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface, not a store surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-0x1 rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC2-1: An address beneath a store surface answers the same way
 
 Runs once per row of **Test data**.
@@ -294,6 +302,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-uoa rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC3-1: A store address sends the collector nowhere else
 
 **Classification:**
@@ -324,6 +333,7 @@ Runs once per row of **Test data**.
 * Both responses return status 404.
 * Neither names an address to follow.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-lq8 rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC4-1: A signed-in collector meets the same answer
 
 **Classification:**
@@ -354,6 +364,7 @@ Runs once per row of **Test data**.
 * Both render the not-found surface and answer with status 404.
 * The collector is still signed in.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-tqp rev=1 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC5-1: A store address answers not-found under every language prefix
 
 **Classification:**
@@ -383,6 +394,7 @@ Runs once per row of **Test data**.
 * Every fetch returns status 404.
 * Step 2 renders the not-found surface in that language.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-5mi rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC7-2: The preview host answers as the public site does
 
 **Classification:**
@@ -414,6 +426,7 @@ Runs once per row of **Test data**.
 * Step 2's header, footer and front door name no store, vault or booking
   surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-heo rev=2 covers=g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w -->
 ### grade10-site-site-carried-surfaces-US2-TC8-2: A labs address is not held on preview or production
 
 **Classification:**
@@ -455,6 +468,7 @@ answers,
 **so that** I never index a page that answers not-found and never carry it
 into a search result.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-xjk rev=2 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC1-2: Sitemap names no store, vault or booking address
 
 **Classification:**
@@ -485,6 +499,7 @@ into a search result.
   checkout, an order page, the vault, a case's page or booking a visit.
 * Every entry names a surface the build carries.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-1i5 rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC2-1: robots.txt names no store address
 
 **Classification:**
@@ -514,6 +529,7 @@ into a search result.
 * No line names a store address.
 * Every sitemap it names answers with status 200.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-v00 rev=1 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC3-1: Every address the crawler files name answers
 
 **Classification:**
@@ -543,6 +559,7 @@ into a search result.
 * Every fetch returns status 200.
 * No fetch renders the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-24a rev=2 covers=g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv -->
 ### grade10-site-site-carried-surfaces-US3-TC4-2: Crawler files name the store, the vault and booking where the build carries them
 
 **Classification:**
@@ -583,6 +600,7 @@ into a search result.
 **so that** hiding the shop on the public site costs nothing to the lanes it
 is still sold on.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-weg rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
 ### grade10-site-site-carried-surfaces-US4-TC1-1: Every store address answers on a lane that carries the store
 
 Runs once per row of **Test data**.
@@ -629,6 +647,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 200.
 * Step 2 renders that store surface, not the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-wk5 rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
 ### grade10-site-site-carried-surfaces-US4-TC2-1: Collector reaches the checkout from a collection unchanged
 
 **Classification:**
@@ -663,6 +682,7 @@ Runs once per row of **Test data**.
 * The cart holds the card.
 * The checkout offers to pay.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-rjw rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
 ### grade10-site-site-carried-surfaces-US4-TC3-1: Chrome and front door name the store on a carrying lane
 
 **Deprecated:** superseded by `US8-TC5-1`, which reads the same chrome and
@@ -698,6 +718,7 @@ front door for all three waiting products on a carrying lane.
   and a store card.
 * Step 3 renders the store.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-y8k rev=1 covers=g10.site-carried-surfaces.SC-eln,g10.site-carried-surfaces.SC-um4,g10.site-carried-surfaces.SC-knk,g10.site-carried-surfaces.SC-8th,g10.site-carried-surfaces.SC-q1o,g10.site-carried-surfaces.SC-g3w,g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-n1s,g10.site-carried-surfaces.SC-2fu,g10.site-carried-surfaces.SC-4cr,g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-zcr,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-k78,g10.site-carried-surfaces.SC-ujp,g10.site-carried-surfaces.SC-qxv,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-6ym,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-lvd,g10.site-carried-surfaces.SC-tfq,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5,g10.site-carried-surfaces.SC-8tm,g10.site-carried-surfaces.SC-3r5 -->
 ### grade10-site-site-carried-surfaces-US4-TC4-1: Opening the store on a lane moves one stated line
 
 **Deprecated:** superseded by `US8-TC6-1`, which proves the same one-line
@@ -742,6 +763,7 @@ serve me from,
 **so that** I am never shown a case to open or a visit to book that nobody is
 ready to honour.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-azq rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC1-1: Header names no withheld product and carries no cart control
 
 **Classification:**
@@ -772,6 +794,7 @@ ready to honour.
 * No header item names the store, the vault or booking a visit.
 * The header carries no cart control.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-8km rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC2-1: Footer carries no shop column and no withheld product link
 
 **Classification:**
@@ -802,6 +825,7 @@ ready to honour.
 * The footer carries no shop column.
 * No footer link names a store, vault or booking address.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-04y rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC3-1: Front door offers no button and no card for any withheld product
 
 **Classification:**
@@ -834,6 +858,7 @@ ready to honour.
 * The front door's headline still renders.
 * Nothing on the front door opens a withheld address.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-g2n rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC4-1: No rendered link on the site names a withheld address
 
 **Classification:**
@@ -865,6 +890,7 @@ ready to honour.
 * No collected link names a store, vault or booking address.
 * Every collected link opens a surface the build carries.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-u8n rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC5-1: A carried page's head names no withheld address
 
 **Classification:**
@@ -897,6 +923,7 @@ ready to honour.
   store, vault or booking surface.
 * Every address the two heads name returns status 200.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-pwi rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC6-1: Nothing names a withheld product before scripts run
 
 **Classification:**
@@ -928,6 +955,7 @@ ready to honour.
 * No link in the response names a store, vault or booking address.
 * The response holds no cart control and no button for a withheld product.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-18i rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC7-1: Surfaces carried on every lane are still named and still open
 
 **Classification:**
@@ -959,6 +987,7 @@ ready to honour.
   privacy page.
 * Each opens its own surface, not the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-x0h rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC8-1: Preview host names no withheld product either
 
 **Classification:**
@@ -989,6 +1018,7 @@ ready to honour.
 * The header carries no cart control, and the front door's headline still
   renders.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-v80 rev=1 covers=g10.site-carried-surfaces.SC-50x,g10.site-carried-surfaces.SC-7os,g10.site-carried-surfaces.SC-r14,g10.site-carried-surfaces.SC-w1o,g10.site-carried-surfaces.SC-0lq,g10.site-carried-surfaces.SC-d8a,g10.site-carried-surfaces.SC-hx8,g10.site-carried-surfaces.SC-tfq -->
 ### grade10-site-site-carried-surfaces-US5-TC9-1: Chrome names no withheld product under any language prefix
 
 **Classification:**
@@ -1031,6 +1061,7 @@ public site to tell me the site does not hold it,
 **so that** I learn the page is not there instead of waiting on one that will
 never render.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-tvu rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC1-1: Every withheld product address answers not-found with a 404
 
 Runs once per row of **Test data**.
@@ -1075,6 +1106,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface, not a `<product>` surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-nse rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC2-1: An address beneath a withheld surface answers the same way
 
 Runs once per row of **Test data**.
@@ -1116,6 +1148,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 404.
 * Step 2 renders the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-tmt rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC3-1: A withheld address sends the collector nowhere else
 
 **Classification:**
@@ -1147,6 +1180,7 @@ Runs once per row of **Test data**.
 * Both responses return status 404.
 * Neither names an address to follow.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-g1t rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC4-1: A signed-in collector with records meets the same answer
 
 **Classification:**
@@ -1180,6 +1214,7 @@ Runs once per row of **Test data**.
 * Neither names the case or the visit.
 * The collector is still signed in.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-z5h rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC5-1: A withheld address answers not-found under every language prefix
 
 **Classification:**
@@ -1211,6 +1246,7 @@ Runs once per row of **Test data**.
 * Every fetch returns status 404.
 * Step 2 renders the not-found surface in that language.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-b1p rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC6-1: A mailed private link is not honoured on the public site
 
 **Classification:**
@@ -1244,6 +1280,7 @@ Runs once per row of **Test data**.
 * All three render the not-found surface and answer with status 404.
 * None names the visit, the case or the collector.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-q6f rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC7-1: No request opens an address the build was made without
 
 **Classification:**
@@ -1277,6 +1314,7 @@ Runs once per row of **Test data**.
 * No response renders a vault surface.
 * The answer never changes between requests.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-c07 rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC8-1: An operator on the public site meets the same answer
 
 **Classification:**
@@ -1309,6 +1347,7 @@ Runs once per row of **Test data**.
 * Neither names a case or a queue.
 * No grant the operator holds changes the answer.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-v42 rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC9-1: A labs address is not held on the public lanes
 
 **Classification:**
@@ -1339,6 +1378,7 @@ Runs once per row of **Test data**.
 * All three return status 404.
 * None renders a demonstration surface or a draft.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-l4m rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC10-1: Browser history through a withheld address still renders not-found
 
 **Classification:**
@@ -1373,6 +1413,7 @@ Runs once per row of **Test data**.
 * Step 3 renders the not-found surface again, not a blank page and not a
   loading state that never resolves.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-f6a rev=1 covers=g10.site-carried-surfaces.SC-34s,g10.site-carried-surfaces.SC-5p3,g10.site-carried-surfaces.SC-lvd -->
 ### grade10-site-site-carried-surfaces-US6-TC11-1: The not-found surface names no withheld product
 
 **Classification:**
@@ -1411,6 +1452,7 @@ Runs once per row of **Test data**.
 **I want** the account menu to name only the pages the site can open for me,
 **so that** no item in it takes me to a page the site refuses.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-lmp rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC1-1: Account menu names no withheld product page
 
 **Classification:**
@@ -1443,6 +1485,7 @@ Runs once per row of **Test data**.
 * The menu names the profile, the membership page, the auctions item and
   sign-out.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-0o1 rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC2-1: Every account menu item opens its own surface
 
 **Classification:**
@@ -1474,6 +1517,7 @@ Runs once per row of **Test data**.
 * Each item renders its own surface, not the not-found surface.
 * No item answers with status 404.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-rzw rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC3-1: A collector holding withheld records sees no item for them
 
 **Classification:**
@@ -1506,6 +1550,7 @@ Runs once per row of **Test data**.
 * No item names a case or a visit.
 * No count or badge in the header names one either.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-2nb rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC4-1: Account menu names the case and visit items on a carrying lane
 
 **Classification:**
@@ -1539,6 +1584,7 @@ Runs once per row of **Test data**.
 * The menu names both items.
 * Steps 2 and 3 each render their own surface, not the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-xs2 rev=1 covers=g10.site-carried-surfaces.SC-zcr -->
 ### grade10-site-site-carried-surfaces-US7-TC5-1: Account menu on the preview host names no withheld product
 
 **Classification:**
@@ -1578,6 +1624,7 @@ product is open,
 **so that** hiding a product on the public site costs nothing to the lanes it
 is still used on.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-n0x rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC1-1: Every withheld product address answers on a carrying lane
 
 Runs once per row of **Test data**.
@@ -1624,6 +1671,7 @@ Runs once per row of **Test data**.
 * Step 1 returns status 200.
 * Step 2 renders that `<product>` surface, not the not-found surface.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-4e6 rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC3-1: Collector opens a vault case and signs unchanged
 
 **Classification:**
@@ -1658,6 +1706,7 @@ Runs once per row of **Test data**.
 * The case page names the case.
 * The signing ceremony offers the documents to sign.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-jor rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC4-1: Collector books a visit and opens the private link unchanged
 
 **Classification:**
@@ -1691,6 +1740,7 @@ Runs once per row of **Test data**.
 * Step 3 renders the visit, not the not-found surface.
 * The private link offers to move or cancel the visit.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-81l rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC5-1: Chrome and front door name every product on a carrying lane
 
 **Classification:**
@@ -1726,6 +1776,7 @@ Runs once per row of **Test data**.
   card for each of the three.
 * Step 3 renders the vault.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-o4j rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC6-1: Opening one product leaves the other two shut
 
 **Classification:**
@@ -1760,6 +1811,7 @@ Runs once per row of **Test data**.
 * Step 4 returns status 404 for both.
 * No surface outside the vault's set changed.
 
+<!-- trace:case id=g10.site-carried-surfaces.TC-2wv rev=1 covers=g10.site-carried-surfaces.SC-9vv,g10.site-carried-surfaces.SC-neg,g10.site-carried-surfaces.SC-k9w,g10.site-carried-surfaces.SC-hz5 -->
 ### grade10-site-site-carried-surfaces-US8-TC7-1: Development and staging both carry the labs
 
 **Classification:**

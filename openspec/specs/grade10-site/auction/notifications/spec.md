@@ -67,6 +67,7 @@ default **on**. A collector who watches after a progress window has
 already opened, while they are still enrolled for that message, SHALL
 still receive it when alerts are on.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-rk1 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-01 - Bidding enrols without watching
 **Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
@@ -75,6 +76,7 @@ still receive it when alerts are on.
 - **WHEN** another collector bids on that lot
 - **THEN** Grade10 sends them the new-bid message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-61w rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-02 - A watcher who also bids receives one copy
 **Serves:** `grade10-site-auction-notifications-US-01`, `grade10-site-auction-notifications-US-02` - a watcher who also bids receives one copy
 
@@ -83,6 +85,7 @@ still receive it when alerts are on.
 - **WHEN** a message about that lot is sent
 - **THEN** they receive exactly one copy of it
 
+<!-- trace:scenario id=g10.auction-notifications.SC-dju rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-03 - Unwatching does not end bidder enrolment
 **Serves:** `grade10-site-auction-notifications-US-02`, `grade10-site-auction-notifications-US-04` - unwatching does not end bidder enrolment
 
@@ -92,6 +95,7 @@ still receive it when alerts are on.
 - **AND** another collector bids on that lot
 - **THEN** Grade10 still sends them the new-bid message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-7kd rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-04 - Unwatching ends watcher mail
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -100,6 +104,7 @@ still receive it when alerts are on.
 - **AND** bidding opens on that lot
 - **THEN** Grade10 does not send them the bidding-has-opened message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-km6 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-32 - Muting stops mail while watching continues
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -109,6 +114,7 @@ still receive it when alerts are on.
 - **THEN** the lot remains on their Watching list
 - **AND** Grade10 does not send them the bidding-has-opened message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-ga4 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-33 - Muting stops bidder mail without ending the bid
 **Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
@@ -139,6 +145,7 @@ the collector watches it, bid on it, or both. The last warnings before close
 SHALL be Bidding closes in 24 hours and, when the listing enters its
 extension window, Extended bidding has started.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-n5v rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-05 - A watcher is told bidding opens tomorrow
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -146,6 +153,7 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 reaches that point
 - **THEN** it sends them the bidding-opens-in-24-hours message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-r1s rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-06 - A watcher added inside the window still hears
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -154,6 +162,7 @@ extension window, Extended bidding has started.
 - **THEN** they are emailed that bidding opens in 24 hours
 - **AND** the message names the actual start instant, not a stale 24-hour remainder
 
+<!-- trace:scenario id=g10.auction-notifications.SC-io5 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-07 - A watcher is told bidding has opened
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -161,6 +170,7 @@ extension window, Extended bidding has started.
 - **WHEN** its bidding starts
 - **THEN** Grade10 sends them the bidding-has-opened message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-dit rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-08 - The closing warning uses the scheduled close
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -169,6 +179,7 @@ extension window, Extended bidding has started.
 - **THEN** it sends the closing-in-24-hours message
 - **AND** it does not recalculate that point from the moved close
 
+<!-- trace:scenario id=g10.auction-notifications.SC-cq8 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-09 - Extended bidding announces itself to watchers and bidders
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -176,6 +187,7 @@ extension window, Extended bidding has started.
 - **WHEN** the lot enters extended bidding
 - **THEN** Grade10 sends both of them the extended-bidding-has-started message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-4qb rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-10 - A progress message is sent once per lot
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -183,6 +195,7 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 evaluates that lot's mail again
 - **THEN** it does not send them that message a second time
 
+<!-- trace:scenario id=g10.auction-notifications.SC-e4m rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-44 - No one-hour closing reminder at scheduled close minus one hour
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -190,6 +203,7 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 reaches one hour before that scheduled close
 - **THEN** it does not send them a one-hour closing reminder
 
+<!-- trace:scenario id=g10.auction-notifications.SC-2oz rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-45 - Bidding closes in 24 hours still sends after the one-hour reminder is retired
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -197,6 +211,7 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 reaches 24 hours before that scheduled close
 - **THEN** it sends them the closing-in-24-hours message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-w1b rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-46 - Extended bidding still sends after the one-hour reminder is retired
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -204,6 +219,7 @@ extension window, Extended bidding has started.
 - **WHEN** the lot enters extended bidding
 - **THEN** Grade10 sends them the extended-bidding-has-started message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-9om rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-47 - A bidder is told bidding closes in 24 hours
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -212,6 +228,7 @@ extension window, Extended bidding has started.
 - **WHEN** Grade10 reaches 24 hours before that scheduled close
 - **THEN** it sends them the closing-in-24-hours message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-q6j rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-48 - No one-hour closing reminder before a moved close
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -254,6 +271,7 @@ per bid.
 Grade10 SHALL NOT send a new-bid or outbid message that invites a bid on
 a listing that has stopped taking bids.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-ktw rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-11 - A bidder hears about someone else's bid
 **Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
@@ -262,6 +280,7 @@ a listing that has stopped taking bids.
 - **THEN** it sends the new-bid message to the other
 - **AND** it does not send it to the bidder whose bid it was
 
+<!-- trace:scenario id=g10.auction-notifications.SC-vsu rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-12 - A collector is told they have been outbid
 **Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
@@ -271,6 +290,7 @@ a listing that has stopped taking bids.
 - **AND** the message carries the lot's current bid and its effective close
 - **AND** when their standing bid amount is supplied, the message names that amount as well (not their maximum)
 
+<!-- trace:scenario id=g10.auction-notifications.SC-7rk rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-13 - An outbid collector gets one message, not two
 **Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
@@ -279,6 +299,7 @@ a listing that has stopped taking bids.
 - **THEN** Grade10 sends them the outbid message
 - **AND** it does not also send them the new-bid message for that same bid
 
+<!-- trace:scenario id=g10.auction-notifications.SC-xzz rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-14 - A bid placed on a collector's behalf is still their own bid
 **Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
@@ -286,6 +307,7 @@ a listing that has stopped taking bids.
 - **WHEN** that bid is accepted
 - **THEN** Grade10 does not send them the new-bid message for it
 
+<!-- trace:scenario id=g10.auction-notifications.SC-yky rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-15 - Losing the lead without a new bid is not an outbid
 **Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
@@ -293,6 +315,7 @@ a listing that has stopped taking bids.
 - **WHEN** the lot is called off
 - **THEN** Grade10 does not send them the outbid message
 
+<!-- trace:scenario id=g10.auction-notifications.SC-jt3 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-31 - A challenge that leaves them leading is not an outbid
 **Serves:** `grade10-site-auction-notifications-US-03`, `grade10-site-auction-notifications-US-04` - a challenge that leaves them leading is not an outbid
 
@@ -301,6 +324,7 @@ a listing that has stopped taking bids.
 - **THEN** Grade10 does not send them the outbid message
 - **AND** Grade10 does not send them the new-bid message for the bid it placed on their behalf
 
+<!-- trace:scenario id=g10.auction-notifications.SC-gn8 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-16 - A snipe war does not mail every increment
 **Serves:** grade10-site-auction-notifications-US-04 - Collector hears a new bid on a lot they bid on
 
@@ -317,6 +341,7 @@ registered account email. Identity SHALL be the recipient's user id, per
 `shared/auth/session`. Money and times SHALL follow `money-amounts` and
 `dates-and-times`.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-4du rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-17 - Mail reaches the registered address
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -362,6 +387,7 @@ campaign tags as query parameters:
 Grade10 SHALL NOT require `utm_term`. The destination path SHALL stay the
 same; only these query parameters are added.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-yz5 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-18 - Two kinds share the layout
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -370,6 +396,7 @@ same; only these query parameters are added.
 - **THEN** both have a subject, a preheader, a heading, a body, a lot block, one listing action, and a footer
 - **AND** they differ in their words, not in a second structure
 
+<!-- trace:scenario id=g10.auction-notifications.SC-5o6 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-35 - The brand mark opens the storefront home
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -377,6 +404,7 @@ same; only these query parameters are added.
 - **WHEN** the collector activates the Grade10 brand mark
 - **THEN** the Grade10 website home opens
 
+<!-- trace:scenario id=g10.auction-notifications.SC-fxu rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-36 - Outbound links carry campaign tags
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -390,6 +418,7 @@ same; only these query parameters are added.
 - **AND** the **Manage alerts** URL carries the same source and medium with
   `utm_campaign=outbid` and `utm_content=manage_alerts`
 
+<!-- trace:scenario id=g10.auction-notifications.SC-vsw rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-29 - The lot block shows one primary image
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -398,6 +427,7 @@ same; only these query parameters are added.
 - **THEN** the lot block shows exactly one picture of that item
 - **AND** it does not show a second image or a gallery
 
+<!-- trace:scenario id=g10.auction-notifications.SC-aud rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-30 - A listing without an image still mails
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -424,6 +454,7 @@ The control SHALL be offered on progress letters, on bid-activity
 letters (outbid and new-bid), and on close-outcome letters whenever the
 recipient has email alerts on for that listing.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-yzf rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-19 - A start letter can be stopped
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -433,6 +464,7 @@ recipient has email alerts on for that listing.
 - **AND** activating it opens My Auctions when the collector is signed in
 - **AND** that way is not an unauthenticated one-click stop
 
+<!-- trace:scenario id=g10.auction-notifications.SC-02a rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-20 - An outbid letter can be stopped by muting
 **Serves:** grade10-site-auction-notifications-US-03 - Collector raises after being outbid
 
@@ -442,6 +474,7 @@ recipient has email alerts on for that listing.
 - **THEN** the letter includes **Manage alerts**
 - **AND** activating it opens My Auctions when the collector is signed in
 
+<!-- trace:scenario id=g10.auction-notifications.SC-acv rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-34 - Manage alerts from a letter when signed out
 **Serves:** `grade10-site-auction-notifications-US-01`, `grade10-site-auction-notifications-US-03` - manage alerts from a letter when signed out
 
@@ -475,6 +508,7 @@ and SHALL remember it as resolved so it is not retried as a late truth.
 An environment with no email provider configured SHALL NOT remember a
 letter as sent.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-wna rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-21 - A rate limit is retried
 **Serves:** grade10-site-auction-notifications-US-01 - Collector hears a watched lot is opening
 
@@ -484,6 +518,7 @@ letter as sent.
 - **THEN** it attempts that letter again
 - **AND** it has not remembered the letter as sent
 
+<!-- trace:scenario id=g10.auction-notifications.SC-h7t rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-22 - A refused address parks without burning the budget
 **Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
@@ -493,6 +528,7 @@ letter as sent.
 - **AND** an operator can put it back on the ladder
 - **AND** other owed letters in the same pass are still attempted
 
+<!-- trace:scenario id=g10.auction-notifications.SC-rc3 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-23 - A close that landed under the send is not mailed late
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -520,6 +556,7 @@ An authorized operator SHALL be able to filter this log by the
 collector's email. The filter SHALL match the address the message was
 sent to.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-2mh rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-24 - An operator can see what was sent
 **Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
@@ -527,6 +564,7 @@ sent to.
 - **WHEN** an authorized operator filters the send log by that collector's email
 - **THEN** they see each message sent to that address: its type, the lot, and its Sent At
 
+<!-- trace:scenario id=g10.auction-notifications.SC-48j rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-25 - The send log shows type, not content
 **Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
@@ -535,6 +573,7 @@ sent to.
 - **THEN** the row shows the message type
 - **AND** it does not show the body or any rendered content
 
+<!-- trace:scenario id=g10.auction-notifications.SC-9al rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-26 - The send log is filterable by email
 **Serves:** grade10-site-auction-notifications-US-05 - Operator looks up what a collector was sent
 
@@ -548,6 +587,7 @@ Grade10 SHALL NOT send any message about a listing that has been called
 off, from the moment it is called off. A message already sent SHALL NOT
 be recalled; only messages not yet sent are suppressed.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-66z rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-27 - A called-off lot sends nothing further
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -555,6 +595,7 @@ be recalled; only messages not yet sent are suppressed.
 - **WHEN** an operator calls it off
 - **THEN** Grade10 sends no further message about that lot
 
+<!-- trace:scenario id=g10.auction-notifications.SC-w78 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-28 - A scheduled message is suppressed by a call-off
 **Serves:** grade10-site-auction-notifications-US-02 - Collector returns before a lot closes
 
@@ -608,6 +649,7 @@ concerns. Money and times SHALL follow `money-amounts` and `dates-and-times`.
 Close-outcome letters SHALL use the shared letter shape and mute control this
 capability already defines.
 
+<!-- trace:scenario id=g10.auction-notifications.SC-70x rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-37 - A losing bidder is told the lot closed
 **Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
@@ -619,6 +661,7 @@ capability already defines.
 - **AND** when the winning bid and their bid amounts are supplied, the letter
   names both
 
+<!-- trace:scenario id=g10.auction-notifications.SC-9ie rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-38 - A watch-only collector is told a sold lot ended
 **Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
 
@@ -631,6 +674,7 @@ capability already defines.
 - **AND** it does not send them the watched ended letter
   (`lot_watched_ended`)
 
+<!-- trace:scenario id=g10.auction-notifications.SC-hf1 rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-39 - A watcher on a no-bids close hears ended only
 **Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
 
@@ -648,6 +692,7 @@ capability already defines.
   highlight
 - **AND** it does not send them the watched sold letter (`lot_watched_sold`)
 
+<!-- trace:scenario id=g10.auction-notifications.SC-lbn rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-40 - No-bids close skips bidder mail and retires lot_ended
 **Serves:** grade10-site-auction-notifications-US-08 - Collector hears a no-bids close as ended only
 
@@ -664,6 +709,7 @@ capability already defines.
 - **AND** its subject, preheader and body do not contain unsold, did not
   sell, didn't sell, no sale, or no bids
 
+<!-- trace:scenario id=g10.auction-notifications.SC-tlj rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-41 - A watcher who also bid gets one close letter
 **Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
@@ -676,6 +722,7 @@ capability already defines.
 - **AND** they do not also receive the watched sold letter or the watched
   ended letter
 
+<!-- trace:scenario id=g10.auction-notifications.SC-nzk rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-42 - The winner does not get a close-outcome letter
 **Serves:** grade10-site-auction-notifications-US-06 - Collector who lost hears the lot closed
 
@@ -685,6 +732,7 @@ capability already defines.
 - **THEN** Grade10 does not send them a close-outcome letter from this
   capability
 
+<!-- trace:scenario id=g10.auction-notifications.SC-kce rev=1 -->
 #### Scenario: grade10-site-auction-notifications-SC-43 - Muted alerts stop close-outcome mail
 **Serves:** grade10-site-auction-notifications-US-07 - Watcher hears a sold lot ended
 

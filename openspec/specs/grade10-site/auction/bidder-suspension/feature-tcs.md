@@ -1,16 +1,16 @@
 # grade10-site/auction/bidder-suspension Test Cases
 
-**Status:** pending-review
-**Drafts styled:** 2026-09-03, tcs-rules r1
+**Status:** in-review
+**Drafts styled:** 2026-09-14, tcs-rules r3.0
 
 ## suspension-US1: Collector who misses a deadline loses their auction standing
 
 **As a** collector who let a payment deadline pass,
 **I want** to be told plainly that I can no longer bid, what I still owe, and
 how to resolve it,
-**so that** I understand why my other bids have gone and what it takes to bid
-again.
+**so that** I understand what I can still do and what it takes to bid again.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-7ui rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC1-1: Elapsed deadline suspends the account
 
 **Classification:**
@@ -42,6 +42,7 @@ An auction order whose invoice is `pending` and whose payment deadline is one se
 * The winner was notified of the outstanding amount and how to resolve it.
 * The account record shows the suspension, its reason, and the causing order.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-0fv rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC2-1: Suspended account can still pay what it owes
 
 **Classification:**
@@ -71,13 +72,14 @@ A suspended account holding one outstanding invoice.
 * Grade10 accepts the payment.
 * The invoice status becomes `paid`.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-m3t rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC3-1: Standing maxima on open lots are retracted
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -101,6 +103,7 @@ A collector leading two open lots and holding a standing maximum on a third, wit
 * Each retraction is logged as a `bid_retracted_suspension` event.
 * Each lot the collector led has re-resolved to the next bidder at their own price.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-kz8 rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC4-1: A lot already won stays won
 
 **Classification:**
@@ -130,6 +133,7 @@ A collector who won a lot before being suspended, with a second unpaid auction o
 * The won lot is still won by that collector.
 * Its invoice is still payable.
 
+<!-- trace:case id=g10.auction-bidder-suspension.TC-o67 rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
 ### suspension-US1-TC5-1: Paying does not lift the suspension
 
 **Classification:**
@@ -159,3 +163,227 @@ A suspended account holding one outstanding invoice.
 * The invoice status becomes `paid`.
 * Grade10 refuses the maximum at step 2.
 * The account record still shows the suspension and its reason.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-80a rev=1 covers=g10.auction-bidder-suspension.SC-3hh,g10.auction-bidder-suspension.SC-rcj,g10.auction-bidder-suspension.SC-6hs,g10.auction-bidder-suspension.SC-def,g10.auction-bidder-suspension.SC-o11 -->
+### suspension-US1-TC6-1: Suspended account cannot bid or raise its maximum
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-01
+
+**Pre-conditions:**
+customer(suspended) holds a maximum of 50000 HKD minor units on <listing_1>
+and is signed in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| <listing_1> | An open lot where the customer holds a maximum of 50000 HKD minor units |
+| <listing_2> | A second open lot where the customer holds no bid |
+
+**Steps:**
+
+1. Navigate to <listing_1>.
+2. Try to raise the maximum.
+3. Navigate to <listing_2>.
+4. Try to place a bid.
+
+**Expected Results:**
+
+* Grade10 refuses the raise at step 2.
+* Grade10 refuses the bid at step 4.
+* The maximum on <listing_1> is still 50000 HKD minor units.
+
+---
+
+## suspension-US2: Bidder competes on a lot whose leader is suspended
+
+**As a** bidder on a lot led by an account that is then suspended,
+**I want** the lot's price, leader and bid history to stay as they were,
+**so that** the bids I placed against that account still count as I made them.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stk rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
+### suspension-US2-TC1-1: Suspension leaves an open lot and its history unchanged
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-02
+
+**Pre-conditions:**
+
+* <listing_3> is open, led by customer A at a current price of 30000 HKD minor units.
+* customer B holds a lower maximum on <listing_3>.
+* customer A has an auction order whose payment deadline is one second away.
+
+**Steps:**
+
+1. Navigate to <listing_3> and note its bid history.
+2. Wait for the payment deadline to pass.
+3. Reload <listing_3>.
+
+**Expected Results:**
+
+* customer A still leads at 30000 HKD minor units.
+* The bid history has the same entries as at step 1.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-bw8 rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
+### suspension-US2-TC2-1: Standing maximum keeps bidding after suspension
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-02
+
+**Pre-conditions:**
+
+* customer A is suspended and leads <listing_4> at 30000 HKD minor units with a maximum of 50000 HKD minor units.
+* customer B is signed in.
+
+**Steps:**
+
+1. As customer B, navigate to <listing_4>.
+2. Commit a maximum of 40000 HKD minor units.
+3. Read the lot's leader and current price.
+
+**Expected Results:**
+
+* customer A still leads <listing_4>.
+* The current price is what auto-bidding resolves for these two maximums.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-yp6 rev=1 covers=g10.auction-bidder-suspension.SC-tsa,g10.auction-bidder-suspension.SC-yn5,g10.auction-bidder-suspension.SC-1wb -->
+### suspension-US2-TC3-1: Suspended account wins through a standing maximum
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-02
+
+**Pre-conditions:**
+customer A is suspended and holds the highest maximum on <listing_5>, which is
+about to close.
+
+**Steps:**
+
+1. Wait for <listing_5> to close.
+2. Sign in as customer A.
+3. Open the auction order for <listing_5>.
+
+**Expected Results:**
+
+* customer A wins <listing_5>.
+* The auction order has its own invoice and payment deadline.
+
+---
+
+## suspension-US3: Collector suspended by an operator learns they can no longer bid
+
+**As a** collector an operator has suspended from auctions,
+**I want** to be told plainly that I can no longer bid and how to contact Grade10,
+**so that** I know where I stand without being refused on a lot first.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-stl rev=1 covers=g10.auction-bidder-suspension.SC-6y9,g10.auction-bidder-suspension.SC-nq6 -->
+### suspension-US3-TC1-1: Operator suspension notice leaves out the reason
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-03
+
+**Pre-conditions:**
+customer(suspended by an operator with <operator reason>) is signed in.
+
+**Steps:**
+
+1. Open the suspension notice.
+2. Navigate to <the collector's account record url>.
+
+**Expected Results:**
+
+* Notice and account record say they can no longer bid.
+* Both say how to contact Grade10.
+* Neither shows <operator reason>.
+
+<!-- trace:case id=g10.auction-bidder-suspension.TC-ao5 rev=1 covers=g10.auction-bidder-suspension.SC-6y9,g10.auction-bidder-suspension.SC-nq6 -->
+### suspension-US3-TC2-1: Missed deadline while suspended adds a second cause
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** suspension-US-03
+
+**Pre-conditions:**
+customer(suspended by an operator) has an auction order whose invoice is
+`pending` and whose payment deadline is one second away.
+
+**Steps:**
+
+1. Wait for the payment deadline to pass.
+2. Sign in as the collector.
+3. Navigate to <the collector's account record url>.
+
+**Expected Results:**
+
+* The account is suspended once.
+* The account record shows both causes.
+
+## Settled
+
+## Reconciliation
+
+| Finding | Disposition |
+| --- | --- |
+| Retracting an existing maximum would change another bidder's live lot | **Raised, folded into spec:** the standing-bid requirements |
+| Operator and deadline suspensions could create separate standing | **Raised, folded into spec:** the suspension-cause and reinstatement requirements |
+| A suspension could block settlement as well as bidding | **Raised, rejected:** paying an outstanding invoice remains available under the durable paying requirement |
+| Run | Read the bidder-suspension feature set, journeys, decisions, and Post-Bidding PRD; denied requirement deltas and archived changes |

@@ -33,7 +33,8 @@ type ProductCardProps = {
   originalPrice?: ReactNode;
   /**
    * Figma's `soldOut` axis. Swaps the sale badge for the sold-out treatment
-   * and hides the cart action. The tile is inert.
+   * and hides the cart action. The tile is inert where the surface sells —
+   * where a cart handler is supplied — and still opens where none is.
    */
   soldOut?: boolean;
   /**
@@ -59,7 +60,9 @@ type ProductCardProps = {
   /**
    * Fires when the image or the product name is activated. No navigation
    * target is wired here — the consumer decides what happens (route, modal,
-   * etc.). Omitted (or when sold out) leaves both inert.
+   * etc.). Omitted leaves both inert. A sold-out tile stays inert where the
+   * surface sells (a cart handler is supplied) and still opens where it does
+   * not — a rail that carries the shopper on rather than selling.
    */
   onClick?: () => void;
   className?: string;
@@ -106,7 +109,7 @@ function ProductCardContent({
   onClick,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
-  const nameActivates = onClick != null && !soldOut;
+  const opens = onClick != null && (!soldOut || onCartQuantityChange == null);
 
   return (
     <VStack
@@ -126,7 +129,7 @@ function ProductCardContent({
         maxCartQuantity={maxCartQuantity}
         name={name}
         onCartQuantityChange={onCartQuantityChange}
-        onClick={onClick}
+        onClick={opens ? onClick : undefined}
         soldOut={soldOut}
       />
 
@@ -135,7 +138,7 @@ function ProductCardContent({
         data-slot="product-card-content"
         gap="none"
       >
-        {nameActivates ? (
+        {opens ? (
           <button
             className="line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             onClick={onClick}
@@ -193,7 +196,7 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  * hover-revealed (fine pointer on a wide viewport) or always-visible (coarse
  * pointer, no-hover, or narrow viewport) add affordance into an inline
  * quantity stepper, collapsing to a quantity pill when in cart. Sold-out
- * tiles are inert and do not scale on hover.
+ * tiles do not scale on hover, and are inert where the surface sells.
  */
 function ProductCard({
   loading = false,

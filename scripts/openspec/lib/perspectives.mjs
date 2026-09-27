@@ -95,17 +95,33 @@ const heading = (text) => /^\s*#{1,6}\s+\S/.test(text);
 const under = (section, name) =>
   new RegExp(`^\\s*#{1,6}\\s+${name}\\b`, "i").test(section);
 
-/** What the file a line sits in says on its own: a page under `docs/prds/` is
- * words a reader sees, and a workflow is a deploy step. `ui-design.md` is not
- * here — its name would raise `surface` on every design round, an empty diff
+/** What the file a line sits in says on its own: a page under `docs/prds/` and
+ * a message catalog are words a reader sees, and a workflow is a deploy step.
+ * `code` is not here — it is a changed line, so a rename, a mode change or a
+ * binary diff raises nothing (`ofLine`). `ui-design.md` is not here either —
+ * its name would raise `surface` on every design round, an empty diff
  * included, and a screen, a state and a story each raise it from the line
  * itself. */
 const ofFile = (file, found) => {
-  if (file.startsWith("docs/prds/")) found.add("copy");
+  if (file.startsWith("docs/prds/") || isCatalog(file)) found.add("copy");
   if (/^\.github\/workflows\/.+\.ya?ml$/.test(file)) found.add("deploy");
 };
 
+/** The one boundary between words and code: a markdown file or a message
+ * catalog holds what a reader reads, and any other file is code. */
+const isWords = (file) => isMarkdown(file) || isCatalog(file);
+
+/** A markdown file: where `prose` looks for a sentence. */
+const isMarkdown = (file) => file.endsWith(".md");
+
+/** A message catalog: the words a surface shows, one layer and language each. */
+const isCatalog = (file) => file.startsWith("packages/i18n/messages/");
+
 const ofLine = (text, found, file, section) => {
+  // code — a changed line in any file that is neither markdown nor a catalog:
+  // a task group that lands code is read by the build's three readings, and
+  // one that lands words alone is not
+  if (file && !isWords(file)) found.add("code");
   const line = text.trim();
   if (!line) return;
   const place = `${section}\n${line}`;
@@ -184,7 +200,7 @@ const keyed = (line, name) =>
  * words is a label. Prose lives in markdown, so a code file's comment is not
  * a page's words. */
 const prose = (line, file) => {
-  if (file && !file.endsWith(".md")) return false;
+  if (file && !isMarkdown(file)) return false;
   if (heading(line) || line.startsWith("|") || line.startsWith("```"))
     return false;
   if (/^[-*+]\s*\[[ xX]\]/.test(line)) return false;

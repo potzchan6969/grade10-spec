@@ -19,6 +19,8 @@ contract for leaving a session.
   - One-time session: an unused unexpired link signs in once
   - Failed follow feedback: expired, dead, and banned links land on the brand home with a toast
   - Followed elsewhere: the surface that asked carries on once the session arrives
+  - Signed-in mismatch: a link follow while signed in as a different account offers Switch or Stay instead of replacing the session
+  - Settled elsewhere: a surface still waiting on its own request stops waiting, without gaining a session of its own, once that address signs in by any method on another device
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
 - Account identity
@@ -28,9 +30,7 @@ contract for leaving a session.
   - Trusted return: an untrusted redirect is ignored
 - Surface wording
   - Sign in with email: the email-step action and dialog copy never say magic link to the collector
-
 ## Requirements
-
 ### Requirement: A sign-in command in flight cannot be duplicated
 
 WHILE a sign-in command's request is running, activating the same command
@@ -39,6 +39,7 @@ reaches the auth service, and every activation settles with that one
 request's outcome. Input edited during the flight SHALL NOT be sent — the
 running request's input stands until it settles.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-wy5 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-01 - Activating again during flight does nothing
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -54,6 +55,7 @@ SHALL create a session for the account of that address when they follow a
 valid unused, unexpired link. A link SHALL sign in at most once. An expired
 or already-used link SHALL NOT create a session.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-h56 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-05 - A valid link creates a session
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -61,6 +63,7 @@ or already-used link SHALL NOT create a session.
 - **WHEN** they follow the unused, unexpired link from that email
 - **THEN** they are signed in as the account for that address
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-q8n rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-06 - A used link does not sign in again
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -68,6 +71,7 @@ or already-used link SHALL NOT create a session.
 - **WHEN** anyone follows that link again
 - **THEN** no new session is created
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-7vo rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-07 - An expired link does not sign in
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -75,6 +79,7 @@ or already-used link SHALL NOT create a session.
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-9nt rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-08 - A failed send is reported
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -82,6 +87,7 @@ or already-used link SHALL NOT create a session.
 - **THEN** the surface states that the link was not sent
 - **AND** the person is not signed in
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-wkc rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-09 - A first send does not disclose whether the address is new
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -99,6 +105,7 @@ account or a session when the provider did not verify the email. WHEN the
 brand does not have Google sign-in, the surface SHALL NOT show that
 control.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-eng rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-14 - A brand with Google sign-in offers it
 **Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
@@ -108,6 +115,7 @@ control.
 - **AND** completing Google sign-in with a verified email signs them in as
   the account for that address
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-erl rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-15 - An unverified Google email does not sign in
 **Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
@@ -117,6 +125,7 @@ control.
 - **THEN** no account is created from that request
 - **AND** they are not signed in
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-ddm rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-16 - A brand without Google sign-in hides it
 **Serves:** shared-auth-sign-in-US-03 - Collector signs in with Google when the brand offers it
 
@@ -133,6 +142,7 @@ SHALL NOT share an email address. Addresses that differ only by letter case
 SHALL be the same address. A plus-tag or a provider-specific alias SHALL NOT
 be folded into another address.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-kr7 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-17 - A first visit creates the account
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -141,6 +151,7 @@ be folded into another address.
 - **THEN** an account exists for that address
 - **AND** the person is signed in as it
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-nev rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-18 - A later visit is the same account
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -149,6 +160,7 @@ be folded into another address.
   with Google when the brand has it
 - **THEN** they enter the same account, not a second one
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-jqy rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-19 - Letter case does not create a second account
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -156,6 +168,7 @@ be folded into another address.
 - **WHEN** that person later signs in at `collector@example.com`
 - **THEN** they enter the same account, not a second one
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-z8l rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-20 - A plus-tag is a different address
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -171,6 +184,7 @@ when one does. It SHALL be able to sign that person in. The person SHALL
 NOT need to complete a link or Google sign-in for that to happen. The
 client SHALL NOT create an account or a session by naming an email.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-05p rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-21 - A new verified email creates the account
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -180,6 +194,7 @@ client SHALL NOT create an account or a session by naming an email.
 - **THEN** an account exists for that address
 - **AND** the product receives that account's user id
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-yal rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-22 - A known verified email is the same account
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -188,6 +203,7 @@ client SHALL NOT create an account or a session by naming an email.
   to create or enter the account
 - **THEN** they receive that same account, not a second one
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-aee rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-23 - A trusted product can sign the person in
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -195,6 +211,7 @@ client SHALL NOT create an account or a session by naming an email.
   that account in
 - **THEN** the person is signed in as that account on this brand
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-py9 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-24 - A client cannot claim an email
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -203,6 +220,7 @@ client SHALL NOT create an account or a session by naming an email.
 - **THEN** no account is created from that request
 - **AND** the person is not signed in
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-jnb rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-25 - Sign-in after a product-created account is the same person
 **Serves:** shared-auth-sign-in-US-04 - Collector keeps one account for one verified address
 
@@ -217,6 +235,7 @@ WHEN sign-in names no location, or would send the person to a location that
 is not this brand, the system SHALL ignore that location and SHALL leave
 them on this brand.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-fn7 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-31 - An untrusted redirect is ignored
 **Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
@@ -225,6 +244,7 @@ them on this brand.
 - **THEN** they are on this brand
 - **AND** they are not sent to that location
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-p8n rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-32 - A missing redirect stays on the brand
 **Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
@@ -239,6 +259,7 @@ the person submits. It SHALL NOT offer a sign-in code. The system SHALL NOT
 send a sign-in code, and a code from any earlier sign-in email SHALL NOT
 create a session.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-yp2 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-33 - The email step has no code control
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -246,6 +267,7 @@ create a session.
 - **THEN** the step offers sending a sign-in link
 - **AND** no control asks for or sends a sign-in code
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-8f8 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-34 - A code from an earlier email does not sign in
 **Serves:** Google - a code from an earlier email does not sign in
 
@@ -261,6 +283,7 @@ email. The surface SHALL tell the person to wait. It SHALL NOT use the copy
 of a failed send. After a send that went out, the resend control SHALL wait
 out the same window.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-eax rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-35 - A second link send in a minute is told to wait
 **Serves:** shared-auth-sign-in-US-05 - Collector is not spammed or sent off-brand
 
@@ -276,6 +299,7 @@ out the same window.
 WHEN a sign-in-link email is sent to an address, any earlier unused link for
 that address SHALL NOT create a session.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-juf rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-36 - A new link kills the earlier link
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -292,6 +316,7 @@ line is that address, and SHALL offer a Resend control. The confirmation
 SHALL NOT state whether the address was new. The surface SHALL NOT offer a
 control that returns to the entry step — leaving is dialog dismissal.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-y0g rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-42 - A successful send shows Check Your Email and the address on its own line
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -302,6 +327,7 @@ control that returns to the entry step — leaving is dialog dismissal.
 - **AND** the address appears on the line below that lead
 - **AND** it does not state whether an account already exists
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-66a rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-43 - Resend is offered after a successful send
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -312,6 +338,7 @@ control that returns to the entry step — leaving is dialog dismissal.
   address
 - **AND** the one-email-a-minute cap still applies
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-l77 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-44 - The link-sent surface has no Back control
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -329,6 +356,7 @@ example **Resend (45)**). WHEN the count reaches zero, Resend SHALL be enabled
 again and labelled **Resend**. The countdown is a change of the label, not an
 animation — `prefers-reduced-motion` does not remove it.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-i4n rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-46 - Resend is disabled with a countdown after a send
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -338,6 +366,7 @@ animation — `prefers-reduced-motion` does not remove it.
 - **AND** its label is **Resend (n)** with the whole seconds left in the
   sixty-second wait
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-4xi rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-47 - Resend re-enables when the countdown reaches zero
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -346,6 +375,7 @@ animation — `prefers-reduced-motion` does not remove it.
 - **THEN** Resend is enabled
 - **AND** its label is **Resend**
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-zss rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-48 - A successful resend restarts the countdown
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -359,6 +389,7 @@ animation — `prefers-reduced-motion` does not remove it.
 The email step's send action SHALL be labelled as signing in with email. The
 sign-in surface's user-facing copy SHALL NOT use the term magic link.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-fa4 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-45 - The email-step CTA says Sign In with Email
 **Serves:** shared-auth-sign-in-US-07 - Collector confirms the send and can resend
 
@@ -373,6 +404,7 @@ surface SHALL close the dialog and SHALL show the person signed in, on the
 terms `shared/auth/session` sets for keeping up. The person SHALL NOT have to
 dismiss the dialog or reload the surface. Nothing SHALL announce the close.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-neg rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-50 - The dialog on the surface that asked closes
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -384,6 +416,7 @@ dismiss the dialog or reload the surface. Nothing SHALL announce the close.
 - **AND** the surface shows them signed in
 - **AND** no message on it announces that the session arrived
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-24f rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-51 - A dialog on a surface that did not ask closes too
 **Serves:** Emailed link - a session arriving leaves no sign-in dialog open on the brand
 
@@ -405,6 +438,7 @@ be refused the way that action is ordinarily refused, and SHALL NOT be passed
 over in silence. WHEN nothing was refused on that surface, it SHALL carry out
 nothing beyond closing the dialog.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-wiy rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-52 - The refused action is carried out
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -415,6 +449,7 @@ nothing beyond closing the dialog.
 - **THEN** that item is in their cart
 - **AND** they did not activate the add a second time
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-laa rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-53 - The refused navigation is carried out
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -424,6 +459,7 @@ nothing beyond closing the dialog.
   surface that asked
 - **THEN** that surface is on the page they were stopped before
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-dyk rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-54 - A dialog with nothing behind it only closes
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -435,6 +471,7 @@ nothing beyond closing the dialog.
 - **AND** the surface shows them signed in
 - **AND** no action is carried out on their behalf
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-szm rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-55 - A link that creates no session leaves the asking surface as it was
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -446,6 +483,7 @@ nothing beyond closing the dialog.
 - **AND** the action it refused is not carried out
 - **AND** nothing on it announces that the follow failed
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-lws rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-56 - An action that can no longer be done is refused, not skipped
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -458,6 +496,7 @@ nothing beyond closing the dialog.
   with
 - **AND** it does not pass the action over in silence
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-m9z rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-57 - The refused action is carried out once, not once per return
 **Serves:** shared-auth-sign-in-US-08 - Collector follows the link and the tab that asked carries on
 
@@ -476,6 +515,7 @@ the lifetime SHALL be measured on our own clock. The lifetime SHALL be
 independent of the resend wait: the wait running out SHALL NOT end the life of
 the link already sent.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-jqc rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-58 - A link followed inside five minutes signs in
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -484,6 +524,7 @@ the link already sent.
 - **WHEN** the person follows that link
 - **THEN** they are signed in as the account for that address
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-lfj rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-59 - A link five minutes old does not sign in
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -491,6 +532,7 @@ the link already sent.
 - **WHEN** anyone follows that link
 - **THEN** no session is created
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-hs9 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-60 - The resend wait running out leaves the link alive
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -499,6 +541,7 @@ the link already sent.
 - **WHEN** the person follows that link
 - **THEN** they are signed in as the account for that address
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-etq rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-62 - A device clock does not revive an expired link
 **Serves:** shared-auth-sign-in-US-01 - Collector asks for and follows a sign-in link
 
@@ -512,6 +555,7 @@ the link already sent.
 The sign-in-link email SHALL state that the link lasts five minutes, in every
 language it is sent in, and SHALL NOT name another lifetime.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-dos rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-61 - The sign-in email says five minutes
 **Serves:** Emailed link - what the email promises about the link it carries
 
@@ -531,6 +575,7 @@ follow SHALL create no session, SHALL leave them on this brand's home, and
 SHALL use the cannot-sign-in announcement — not the expired or no-longer-works
 announcement.
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-4mo rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-37 - An expired link toasts on the brand home
 **Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
@@ -540,6 +585,7 @@ announcement.
 - **AND** they are on this brand's home
 - **AND** a toast states that the link has expired
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-66b rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-38 - A used link toasts that it no longer works
 **Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
@@ -549,6 +595,7 @@ announcement.
 - **AND** they are on this brand's home
 - **AND** a toast states that the link no longer works
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-i3d rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-39 - A superseded link toasts that it no longer works
 **Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
@@ -559,6 +606,7 @@ announcement.
 - **AND** they are on this brand's home
 - **AND** a toast states that the link no longer works
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-rt4 rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-40 - An invalid link toasts that it no longer works
 **Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
@@ -568,6 +616,7 @@ announcement.
 - **AND** they are on this brand's home
 - **AND** a toast states that the link no longer works
 
+<!-- trace:scenario id=g10.shared-sign-in.SC-lja rev=1 -->
 #### Scenario: shared-auth-sign-in-SC-41 - A banned account's link follow toasts cannot sign in
 **Serves:** shared-auth-sign-in-US-06 - Collector follows a link that cannot sign them in
 
@@ -577,3 +626,211 @@ announcement.
 - **AND** they are on this brand's home
 - **AND** a toast states that they cannot sign in
 - **AND** the toast does not invite them to request another link
+
+### Requirement: A signed-in mismatch prompts Switch or Stay instead of replacing the session
+
+A collector who is already signed in and follows a valid sign-in link for a
+different account meets a choice instead of an automatic session swap.
+
+- **Trigger** — WHEN a signed-in collector follows a valid sign-in link for a
+  different account, the system SHALL NOT replace the current session on its
+  own and SHALL show a warning toast offering Switch and Stay.
+- **Toast content** — The toast's title SHALL state that they are signed in
+  with a different account. Its description SHALL name the link's email and
+  SHALL NOT name the current session's email.
+- **Switch** — SHALL end the current session and enter the link's account.
+- **Stay** — SHALL keep the current session and SHALL NOT enter the link's
+  account.
+- **Dismiss** — Dismissing the toast SHALL have the same effect as Stay.
+- **Persistence** — The toast SHALL remain until Switch, Stay, or dismiss is
+  chosen.
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-vu9 rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-63 - A signed-in mismatch does not auto-switch
+**Serves:** shared-auth-sign-in-US-09 - a collector already signed in follows a link meant for another account
+
+- **GIVEN** a collector is signed in as one account
+- **WHEN** they follow a valid sign-in link for a different account
+- **THEN** the current session stays in place
+- **AND** no session is created for the link's account
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-9y1 rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-64 - The different-account toast names the mismatch and the link's email
+**Serves:** shared-auth-sign-in-US-09 - a collector reads the choice a mismatched link offers
+
+- **GIVEN** a collector is signed in as one account
+- **WHEN** they follow a valid sign-in link for a different account
+- **THEN** a warning toast appears
+- **AND** its title states they are signed in with a different account
+- **AND** its description names the link's email
+- **AND** its description does not name the current session's email
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-nnn rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-65 - Switch enters the link's account
+**Serves:** shared-auth-sign-in-US-09 - a collector chooses to leave their account for the link's
+
+- **GIVEN** the different-account toast is showing
+- **WHEN** the collector chooses Switch
+- **THEN** the current session ends
+- **AND** the link's account is entered
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-yxx rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-66 - Stay keeps the current session
+**Serves:** shared-auth-sign-in-US-09 - a collector chooses to keep the account they were using
+
+- **GIVEN** the different-account toast is showing
+- **WHEN** the collector chooses Stay
+- **THEN** the current session continues
+- **AND** the link's account is not entered
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-c6r rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-67 - Dismissing the toast keeps the current session, same as Stay
+**Serves:** shared-auth-sign-in-US-09 - a collector closes the toast without choosing
+
+- **GIVEN** the different-account toast is showing
+- **WHEN** the collector dismisses the toast
+- **THEN** the current session continues
+- **AND** the link's account is not entered
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-hy8 rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-68 - The different-account toast waits for a choice rather than auto-dismissing
+**Serves:** shared-auth-sign-in-US-09 - a collector takes time to decide between Switch and Stay
+
+- **GIVEN** the different-account toast is showing
+- **WHEN** no choice is made
+- **THEN** the toast remains visible
+- **AND** the current session is unaffected
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-fda rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-69 - A link for the signed-in account itself shows no mismatch toast
+**Serves:** shared-auth-sign-in-US-09 - a collector's own link is not treated as a mismatch
+
+- **GIVEN** a collector is signed in as one account
+- **WHEN** they follow a valid sign-in link for that same account
+- **THEN** no different-account toast is shown
+
+### Requirement: A surface still waiting stops waiting once its address settles elsewhere
+
+A surface can be left waiting for its own sign-in request after the person
+completes it somewhere else; this is what lets it stop.
+
+- **Ending the wait** — WHILE a surface is showing the sign-in dialog's wait
+  after asking for a sign-in link at an address, WHEN that address completes
+  sign-in by any offered method on another device, the waiting surface SHALL
+  end its wait without a reload and SHALL show a message that sign-in
+  completed on another device.
+- **No session hand-off** — The waiting surface SHALL NOT gain a session of
+  its own; only the device that completed sign-in holds one.
+- **Scoped to its own address** — A sign-in completed elsewhere for a
+  different address SHALL NOT end this wait.
+- **The pending link is unaffected** — A pending, unused, unexpired link for
+  that address SHALL still create a session if followed, on the terms this
+  capability already sets for that link, whether or not the address has
+  settled elsewhere by another method.
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-s9k rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-70 - The wait ends when the address follows the link elsewhere
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email after asking for a sign-in
+  link at an address
+- **WHEN** that address follows the link and signs in on another device
+- **THEN** the waiting surface stops waiting
+- **AND** it shows a message that sign-in completed on another device
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-4ki rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-71 - The wait ends when the address signs in by another method elsewhere
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email after asking for a sign-in
+  link at an address
+- **WHEN** that address completes Google sign-in on another device instead
+  of following the link
+- **THEN** the waiting surface stops waiting
+- **AND** it shows the same settled-elsewhere message
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-5yx rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-72 - The surface that stops waiting gains no session of its own
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface that stopped waiting because its address settled
+  elsewhere
+- **WHEN** the settled-elsewhere message is showing
+- **THEN** that surface is not signed in
+- **AND** no session was created for it
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-zsr rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-73 - A different address settling elsewhere leaves the wait running
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email after asking for a sign-in
+  link at an address
+- **WHEN** a different address completes sign-in on another device
+- **THEN** the waiting surface keeps waiting
+- **AND** its resend countdown is unaffected
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-rpa rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-74 - A failed attempt elsewhere leaves the wait running
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email after asking for a sign-in
+  link at an address
+- **WHEN** that address's link is followed elsewhere and creates no session
+  — expired, already used, or the account is banned
+- **THEN** the waiting surface keeps waiting
+- **AND** it shows no settled-elsewhere message
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-45a rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-75 - Every surface waiting on the address ends its wait
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** two surfaces each showing Check Your Email after asking for a
+  sign-in link at the same address
+- **WHEN** that address completes sign-in on another device
+- **THEN** both surfaces stop waiting and show the settled-elsewhere message
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-2ky rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-76 - A backgrounded waiting surface still learns once foregrounded
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email, backgrounded before its
+  address settles elsewhere
+- **WHEN** that surface is foregrounded again after the address has settled
+- **THEN** it shows the settled-elsewhere message without a reload
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-6ov rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-77 - The settle is independent of the resend countdown
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** a surface showing Check Your Email, whether Resend is still
+  counting down or already enabled
+- **WHEN** that address completes sign-in on another device
+- **THEN** the waiting surface stops waiting the same way regardless of the
+  countdown's state
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-j5r rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-78 - The pending link survives a settle by another method
+**Serves:** shared-auth-sign-in-US-10 - Collector sees the wait end when they sign in from another device
+
+- **GIVEN** an unused, unexpired sign-in link for an address
+- **WHEN** that address completes sign-in elsewhere by a different method
+- **THEN** the link still creates a session if followed before it expires or
+  a later send supersedes it
+
+### Requirement: The settled-elsewhere check is scoped to the requesting flow, not a bare address
+
+The check that decides whether a waiting surface's address has settled
+elsewhere SHALL be evaluated against that surface's own sign-in request and
+the secret its own flow holds. Naming an email address alone, without that
+flow's own secret, SHALL NOT reveal whether that address currently holds a
+session anywhere.
+
+<!-- trace:scenario id=g10.shared-sign-in.SC-pdz rev=1 -->
+#### Scenario: shared-auth-sign-in-SC-79 - A bare address does not disclose a session elsewhere
+**Serves:** Emailed link - naming an address alone does not disclose whether it holds a session
+
+- **GIVEN** an email address that currently holds a session
+- **WHEN** that address is checked without the secret of a flow that
+  requested a sign-in link for it
+- **THEN** the check does not reveal that the address holds a session
+

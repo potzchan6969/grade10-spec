@@ -118,7 +118,7 @@ That is how the work reaches an engineer. The application repository has no plan
 | `created` | The CLI, at `openspec new change` | Always | The boards, for the planning age |
 | `skip_specs: true` with `skip_specs_why: "<why>"` | The author | A change altering no product behaviour | `openspec validate`, `pnpm check:manual` rule `hatch` |
 | `promoted_by: @handle` | The engineer picking the change up | Before `tech-design.md` and `tasks.md` | The boards |
-| `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted when it writes it | The Pending page; `pnpm run validate:changes`; `pnpm check:manual`, rule `awaiting` |
+| `awaiting:` with `<artifact>: "<what is missing>"` | Whoever is held up | A change that cannot write its next artifact until somebody answers; deleted by its author when the wait is over | The Pending page; `pnpm run validate:changes`; `pnpm check:manual`, rule `awaiting` |
 | `page_waived: "<why>"` | The author | A change carrying deltas whose page is unmarked | `pnpm check:manual`, rule `unmarked` |
 | `decisions_waived: "<why>"` | The author | A change with genuinely nothing to settle, or one opened before `decisions.md` existed whose scope is in its proposal | `pnpm check:manual`, rule `decided`; the Pending page |
 | `design_waived: "<why>"` | The engineer planning delivery | A change with work outside this store and no `tech-design.md` | `pnpm check:manual`, rule `design` |
@@ -169,7 +169,7 @@ It is written by whoever is held up, and read two ways. The [Pending](/pending) 
 
 Every wait:
 
-- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. `pnpm check:manual` refuses a wait on an artifact the change has already written, so the line does not outlive the wait, and one naming an artifact the schema does not declare, which would reach no worklist at all.
+- **Ends when its author deletes the line.** A wait names a decision, a screen or an answer from outside, and no tool reads those. A wait may stand on an artifact the change has written - a design that waits on its frame - and ends only when its author deletes the line; `pnpm check:manual` refuses a wait that says nothing, and one naming an artifact the schema does not declare, which would reach no worklist at all.
 - **Carries the date it started.** Pending dates the change, not the wait, so a wait that has run for months is only visible in its own line. A proposal that has waited that long is one to drop or to answer.
 - **Lowers no bar.** The page the change marks still needs its 🚧 line, the proposal still needs its `## Why`, and the moment a delta exists the requirements are validated in full.
 

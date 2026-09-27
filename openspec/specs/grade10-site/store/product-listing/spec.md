@@ -58,6 +58,7 @@ appear in the sitemap as such.
 
 Nothing the listing shows or does SHALL change with the move.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-4mv rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-01 - The listing answers at its address
 **Serves:** grade10-site-store-product-listing-US-01 - Collector opens the listing at its own address
 
@@ -65,6 +66,7 @@ Nothing the listing shows or does SHALL change with the move.
 - **THEN** the response HTML contains the listing's title, meta description
   and static copy
 
+<!-- trace:scenario id=g10.store-product-listing.SC-eac rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-02 - The listing is offered to crawlers
 **Serves:** grade10-site-store-product-listing-US-01 - Collector opens the listing at its own address
 
@@ -106,6 +108,7 @@ Leaving a collection SHALL be reflected in the address, so the collector can
 link to what they are looking at, and going back SHALL return the listing to
 the previous narrowing.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-aty rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-03 - An address opens the listing narrowed
 **Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
@@ -114,12 +117,14 @@ the previous narrowing.
 - **THEN** the listing renders showing that collection's cards, with that
   collection shown as the narrowing in force
 
+<!-- trace:scenario id=g10.store-product-listing.SC-ksc rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-04 - No collection named
 **Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
 - **WHEN** a collector opens the listing at an address naming no collection
 - **THEN** the whole catalogue is listed
 
+<!-- trace:scenario id=g10.store-product-listing.SC-o37 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-05 - A collection the catalogue has nothing for
 **Serves:** grade10-site-store-product-listing-US-02 - Collector opens a collection from its address
 
@@ -128,6 +133,7 @@ the previous narrowing.
 - **THEN** the whole catalogue is listed and the surface answers as itself,
   not as not-found
 
+<!-- trace:scenario id=g10.store-product-listing.SC-9nu rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-06 - Narrowing in the page is linkable
 **Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
@@ -138,6 +144,7 @@ the previous narrowing.
 - **AND** the address names that narrowing and no longer names the collection,
   and opening it afresh renders the same narrowing
 
+<!-- trace:scenario id=g10.store-product-listing.SC-2oj rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-07 - Back undoes a narrowing
 **Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
@@ -146,6 +153,7 @@ the previous narrowing.
 - **WHEN** they go back
 - **THEN** the listing is scoped to that collection again
 
+<!-- trace:scenario id=g10.store-product-listing.SC-3ya rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-08 - The collection in force can be dismissed
 **Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
@@ -154,6 +162,7 @@ the previous narrowing.
 - **THEN** the whole catalogue is listed, and the address no longer names that
   collection
 
+<!-- trace:scenario id=g10.store-product-listing.SC-eqs rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-09 - An address carrying both
 **Serves:** grade10-site-store-product-listing-US-03 - Collector leaves the collection they arrived in
 
@@ -162,6 +171,7 @@ the previous narrowing.
 - **THEN** the listing renders narrowed by the facet choice or free text
 - **AND** the collection is not in force
 
+<!-- trace:scenario id=g10.store-product-listing.SC-pag rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-40 - An order holds the collection it was chosen in
 **Serves:** grade10-site-store-product-listing-US-11 - an order holds the collection it was chosen in
 
@@ -215,6 +225,7 @@ The facets in force SHALL be reflected in the address, so the collector can
 link to what they are looking at, and going back SHALL return the listing to
 the previous narrowing.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-c0e rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-10 - The panel is the catalogue's facets
 **Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
@@ -224,6 +235,7 @@ the previous narrowing.
   catalogue's order
 - **AND** each choice is shown with the count the catalogue puts behind it
 
+<!-- trace:scenario id=g10.store-product-listing.SC-69a rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-11 - A facet narrowing is linkable
 **Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
@@ -235,6 +247,7 @@ the previous narrowing.
 - **WHEN** they go back
 - **THEN** the listing is unnarrowed again
 
+<!-- trace:scenario id=g10.store-product-listing.SC-q1g rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-12 - A shop with no facets configured
 **Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
@@ -244,6 +257,7 @@ the previous narrowing.
 - **AND** nothing is said in place of the groups
 - **AND** the search field and the sort menu are still offered
 
+<!-- trace:scenario id=g10.store-product-listing.SC-yl8 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-16 - A long facet group is capped
 **Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
@@ -256,6 +270,7 @@ the previous narrowing.
 - **WHEN** the collector takes that invitation
 - **THEN** every world the catalogue names is offered
 
+<!-- trace:scenario id=g10.store-product-listing.SC-tbd rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-17 - A narrowing that starves the catalogue
 **Serves:** grade10-site-store-product-listing-US-04 - Collector narrows the catalogue to what they collect
 
@@ -269,6 +284,7 @@ the previous narrowing.
 - **WHEN** the collector unselects it
 - **THEN** the listing widens again
 
+<!-- trace:scenario id=g10.store-product-listing.SC-suf rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-42 - A choice with nothing counted behind it
 **Serves:** Facet narrowing - a choice with nothing counted behind it
 
@@ -279,6 +295,7 @@ the previous narrowing.
   unnarrowed catalogue, is left off it
 - **AND** every choice counted above zero is offered as before
 
+<!-- trace:scenario id=g10.store-product-listing.SC-qmi rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-43 - A narrowing cannot resurrect a choice the catalogue never carries
 **Serves:** Facet narrowing - a narrowing cannot resurrect a choice the catalogue never carries
 
@@ -317,6 +334,7 @@ The free text and the order in force SHALL be reflected in the address, so the
 collector can link to what they are looking at, and going back SHALL return the
 listing to the previous narrowing.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-l5j rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-13 - An order covers the whole catalogue
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
@@ -325,6 +343,7 @@ listing to the previous narrowing.
 - **WHEN** a collector orders the listing by lowest price
 - **THEN** that lowest-priced card is listed first
 
+<!-- trace:scenario id=g10.store-product-listing.SC-7b0 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-14 - Free text covers the whole catalogue
 **Serves:** grade10-site-store-product-listing-US-05 - Collector orders and searches the whole shop
 
@@ -334,6 +353,7 @@ listing to the previous narrowing.
 - **THEN** that card is listed
 - **AND** the address carries the words, so opening it afresh lists the same
 
+<!-- trace:scenario id=g10.store-product-listing.SC-0v2 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-15 - The menu offers only answerable orders
 **Serves:** `grade10-site-store-product-listing-US-05`, `grade10-site-store-product-listing-US-09` - the menu offers only answerable orders
 
@@ -342,6 +362,7 @@ listing to the previous narrowing.
 - **AND** latest product, lowest price, and highest price are offered
 - **AND** popularity is not offered
 
+<!-- trace:scenario id=g10.store-product-listing.SC-xvx rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-29 - At rest the order is latest
 **Serves:** grade10-site-store-product-listing-US-09 - at rest the order is latest
 
@@ -350,6 +371,7 @@ listing to the previous narrowing.
 - **AND** the sort trigger reads `Sort by` followed by the latest option's label
 - **AND** that option is marked selected in the menu
 
+<!-- trace:scenario id=g10.store-product-listing.SC-5kb rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-41 - The resting order is not named in the address
 **Serves:** grade10-site-store-product-listing-US-09 - the resting order is not named in the address
 
@@ -358,6 +380,7 @@ listing to the previous narrowing.
 - **THEN** the address names that choice and names no order
 - **AND** opening that address afresh lists the narrowing by latest product
 
+<!-- trace:scenario id=g10.store-product-listing.SC-x5i rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-39 - A collection opens on the resting order
 **Serves:** grade10-site-store-product-listing-US-11 - a collection opens on the resting order
 
@@ -379,6 +402,7 @@ The ceiling is what the shop last said, so it is advisory: the cart's own
 review remains what decides a quantity, and goes on reducing a line the shop
 can no longer fill.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-54d rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-18 - A card stops at what the shop has
 **Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
@@ -387,6 +411,7 @@ can no longer fill.
 - **THEN** the quantity stays at three
 - **AND** the cart holds three of that card
 
+<!-- trace:scenario id=g10.store-product-listing.SC-38d rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-19 - A shop that counts nothing stops nothing
 **Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
@@ -405,6 +430,7 @@ rather than as standing pressure to hurry.
 Three or fewer is what counts as nearly out across this store, and the
 listing SHALL NOT hold its own number.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-c9d rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-20 - Nearly out is said on the card
 **Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
@@ -413,6 +439,7 @@ listing SHALL NOT hold its own number.
 - **THEN** the card the shop has three of says three are left
 - **AND** the card the shop has forty-one of says nothing about what is left
 
+<!-- trace:scenario id=g10.store-product-listing.SC-mcj rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-21 - Asking for the last one is answered
 **Serves:** grade10-site-store-product-listing-US-06 - Collector takes the last of a card from the listing
 
@@ -449,6 +476,7 @@ A page the catalogue does not answer SHALL leave every card already listed
 standing, and the listing SHALL neither empty nor refuse. Reaching the end of
 what is shown again SHALL ask the catalogue for that page again.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-qj6 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-22 - The next cards arrive at the end
 **Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
@@ -459,6 +487,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **AND** the cards already shown stay listed, in the order they arrived
 - **AND** no page number, next control or load-more control is offered
 
+<!-- trace:scenario id=g10.store-product-listing.SC-d8r rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-23 - The end of the set
 **Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
@@ -467,6 +496,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **THEN** nothing further is read
 - **AND** nothing is said in place of the cards that would have followed
 
+<!-- trace:scenario id=g10.store-product-listing.SC-8ue rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-24 - A narrowing starts the walk again
 **Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
@@ -475,6 +505,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **THEN** the listing lists the first page of the new narrowing
 - **AND** no card read before that narrowing is listed
 
+<!-- trace:scenario id=g10.store-product-listing.SC-elc rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-25 - Depth is not carried in the address
 **Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
@@ -485,6 +516,7 @@ what is shown again SHALL ask the catalogue for that page again.
 - **THEN** the listing returns to the previous narrowing rather than to the
   previous page of this one
 
+<!-- trace:scenario id=g10.store-product-listing.SC-k0m rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-26 - A page the catalogue does not answer
 **Serves:** grade10-site-store-product-listing-US-07 - Collector reads past the first page of the listing
 
@@ -512,6 +544,7 @@ the number of cards the listing says when that choice is applied and nothing
 else about the query changes — whether or not the collector has searched for a
 word.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-rsf rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-27 - The count is the set, not what was read
 **Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
@@ -522,6 +555,7 @@ word.
 - **WHEN** the collector reads two further pages
 - **THEN** it still says one hundred cards
 
+<!-- trace:scenario id=g10.store-product-listing.SC-7i5 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-28 - The count follows the narrowing
 **Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
@@ -529,6 +563,7 @@ word.
 - **WHEN** a collector narrows the listing to that world
 - **THEN** the listing says twelve cards, before any further page is read
 
+<!-- trace:scenario id=g10.store-product-listing.SC-wxo rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-30 - A choice's count is the listing it opens
 **Serves:** grade10-site-store-product-listing-US-08 - Collector sees how large their narrowing is
 
@@ -553,6 +588,7 @@ signed-in member cart. When sign-in takes the collector away from the listing,
 or the intended product or quantity is no longer available, the listing SHALL
 NOT invent a later add.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-dhn rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-44 - Signed-out Add to cart opens sign-in
 **Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
@@ -562,6 +598,7 @@ NOT invent a later add.
 - **THEN** the sign-in dialog opens over the listing
 - **AND** no cart gains a line for that card
 
+<!-- trace:scenario id=g10.store-product-listing.SC-xyt rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-45 - Dismissing sign-in adds nothing
 **Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
@@ -571,6 +608,7 @@ NOT invent a later add.
 - **THEN** they remain signed out on the listing
 - **AND** the cart is unchanged
 
+<!-- trace:scenario id=g10.store-product-listing.SC-9gl rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-46 - Sign-in on the listing completes the add
 **Serves:** grade10-site-store-product-listing-US-12 - Collector signs in to add from the listing
 
@@ -588,6 +626,7 @@ listing card that offers a cart control, the dialog title SHALL be
 **Sign In to Add to Cart**. The listing SHALL pass that wording through the
 sign-in surface's consumer-owned title copy.
 
+<!-- trace:scenario id=g10.store-product-listing.SC-gj6 rev=1 -->
 #### Scenario: grade10-site-store-product-listing-SC-47 - Add to cart sign-in title names why
 **Serves:** grade10-site-store-product-listing-US-13 - Collector sees why sign-in is asked when adding from the listing
 

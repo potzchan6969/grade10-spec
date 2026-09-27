@@ -45,7 +45,17 @@ per card rather than per page.
 - Said when it is news
   - Few left: the page says how many remain once the shop is nearly out
   - All of them asked for: the page says the same when the collector has taken the last one
+- Shared link picture
+  - First image: a product address unfurls with the card's first catalogue
+    image
+  - Preview box: the picture is served at 1200×630 and the response says so
+  - Padded, not cropped: the card is fitted inside the box and the rest is
+    filled white
+  - Honest absence: a card with no image carries no `og:image`
+  - Named shape: the response says which card shape the picture is drawn in
+
 ## Requirements
+
 ### Requirement: A card answers at its own address
 
 The site SHALL answer a product address with that card's page: its name, its
@@ -55,6 +65,7 @@ bought — in the response HTML without any script executing.
 Two product addresses SHALL answer with their own card — the page a collector
 reads is the one the address names, not the catalogue it came from.
 
+<!-- trace:scenario id=g10.store-product-page.SC-b5k rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-01 - A card answers whole
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
@@ -62,6 +73,7 @@ reads is the one the address names, not the catalogue it came from.
 - **THEN** the response HTML contains that card's name, its description, and
   a price for every variant it lists
 
+<!-- trace:scenario id=g10.store-product-page.SC-ok3 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-02 - Two cards, two pages
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
@@ -76,6 +88,7 @@ address is asked for. An address under the store's products that names no
 card in the catalogue SHALL answer with status 404 and the site's not-found
 surface, never an empty product page.
 
+<!-- trace:scenario id=g10.store-product-page.SC-f3e rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-03 - A handle the catalogue has nothing for
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
@@ -83,6 +96,7 @@ surface, never an empty product page.
 - **THEN** the response has status 404
 - **AND** a collector opening it sees the site's not-found surface
 
+<!-- trace:scenario id=g10.store-product-page.SC-lk8 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-04 - A card added to the catalogue answers
 **Serves:** grade10-site-store-product-page-US-01 - Collector reads a card at its own address
 
@@ -100,6 +114,7 @@ not one of them: which addresses the catalogue answers is not known when the
 site is built. It SHALL never list an address carrying an unfilled parameter
 in place of them.
 
+<!-- trace:scenario id=g10.store-product-page.SC-wo0 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-05 - A card is opened from the grid
 **Serves:** grade10-site-store-product-page-US-02 - Collector opens a card from the storefront
 
@@ -107,6 +122,7 @@ in place of them.
 - **WHEN** they open a card in the grid
 - **THEN** that card's address is what they are on, showing that card's page
 
+<!-- trace:scenario id=g10.store-product-page.SC-21y rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-06 - The sitemap names no pattern
 **Serves:** grade10-site-store-product-page-US-02 - Collector opens a card from the storefront
 
@@ -127,6 +143,7 @@ chosen — never whichever the catalogue listed first.
 After a card is added the collector SHALL still be on that card, and what the
 site says the cart holds SHALL account for what was added.
 
+<!-- trace:scenario id=g10.store-product-page.SC-jt1 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-07 - A collector adds the grade they chose
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -135,6 +152,7 @@ site says the cart holds SHALL account for what was added.
   and adds it
 - **THEN** the cart holds that variant, and not the one the page opened with
 
+<!-- trace:scenario id=g10.store-product-page.SC-b7g rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-08 - A card with one thing to buy needs no choice
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -142,6 +160,7 @@ site says the cart holds SHALL account for what was added.
 - **WHEN** a collector adds it without choosing anything
 - **THEN** the cart holds that variant
 
+<!-- trace:scenario id=g10.store-product-page.SC-qmb rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-09 - The collector keeps their place
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -149,6 +168,7 @@ site says the cart holds SHALL account for what was added.
 - **THEN** they are still on that card's address, reading that card
 - **AND** what the site says the cart holds has changed to account for it
 
+<!-- trace:scenario id=g10.store-product-page.SC-tl5 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-10 - The same card twice
 **Serves:** grade10-site-store-product-page-US-03 - Collector adds a variant to the cart
 
@@ -168,6 +188,7 @@ A card listing some variants for sale and others not SHALL offer the ones for
 sale and refuse the ones not, each said per variant. A variant that cannot be
 bought SHALL NOT become what is added by being chosen.
 
+<!-- trace:scenario id=g10.store-product-page.SC-prx rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-11 - Nothing on the card is for sale
 **Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
@@ -177,6 +198,7 @@ bought SHALL NOT become what is added by being chosen.
 - **AND** every variant it lists is still priced
 - **AND** there is nothing to press that would add it
 
+<!-- trace:scenario id=g10.store-product-page.SC-1p0 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-12 - One grade sold, another still for sale
 **Serves:** grade10-site-store-product-page-US-04 - Collector meets a card with nothing for sale
 
@@ -199,6 +221,7 @@ can no longer fill.
 Choosing a different variant SHALL bring that variant's ceiling with it, since
 one grade of a card selling out says nothing about another.
 
+<!-- trace:scenario id=g10.store-product-page.SC-yw4 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-19 - The page stops at what the shop has
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -206,6 +229,7 @@ one grade of a card selling out says nothing about another.
 - **WHEN** a collector raises the quantity past three
 - **THEN** the quantity stays at three
 
+<!-- trace:scenario id=g10.store-product-page.SC-1e2 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-20 - A shop that counts nothing stops nothing
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -213,6 +237,7 @@ one grade of a card selling out says nothing about another.
 - **WHEN** a collector raises the quantity above three
 - **THEN** the quantity rises as asked
 
+<!-- trace:scenario id=g10.store-product-page.SC-yyk rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-21 - Another grade brings its own ceiling
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -229,6 +254,7 @@ there is. It SHALL say nothing about what is left at any other time.
 Three or fewer is what counts as nearly out across this store, and the page
 SHALL NOT hold its own number.
 
+<!-- trace:scenario id=g10.store-product-page.SC-vkx rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-22 - Nearly out is said on the page
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -236,6 +262,7 @@ SHALL NOT hold its own number.
 - **WHEN** the page renders
 - **THEN** the page says three are left
 
+<!-- trace:scenario id=g10.store-product-page.SC-hvy rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-23 - Asking for the last one is answered
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -244,6 +271,7 @@ SHALL NOT hold its own number.
 - **THEN** the page says forty-one are left
 - **AND** the quantity does not rise past forty-one
 
+<!-- trace:scenario id=g10.store-product-page.SC-82g rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-24 - A well-stocked card says nothing
 **Serves:** grade10-site-store-product-page-US-05 - Collector takes the last of a grade from its page
 
@@ -266,6 +294,7 @@ signed-in member cart. When sign-in takes the collector away from the page, or
 the intended variant or quantity is no longer available, the page SHALL NOT
 invent a later add.
 
+<!-- trace:scenario id=g10.store-product-page.SC-za5 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-26 - Signed-out Add to cart opens sign-in
 **Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
@@ -274,6 +303,7 @@ invent a later add.
 - **THEN** the sign-in dialog opens over the page
 - **AND** no cart gains a line for that product
 
+<!-- trace:scenario id=g10.store-product-page.SC-eeg rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-27 - Dismissing sign-in adds nothing
 **Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
@@ -283,6 +313,7 @@ invent a later add.
 - **THEN** they remain signed out on that product page
 - **AND** the cart is unchanged
 
+<!-- trace:scenario id=g10.store-product-page.SC-0j7 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-28 - Sign-in on the product page completes the add
 **Serves:** grade10-site-store-product-page-US-11 - Collector signs in to add from the product page
 
@@ -300,6 +331,7 @@ product page that offers Add to cart, the dialog title SHALL be
 **Sign In to Add to Cart**. The product page SHALL pass that wording through
 the sign-in surface's consumer-owned title copy.
 
+<!-- trace:scenario id=g10.store-product-page.SC-zl0 rev=1 -->
 #### Scenario: grade10-site-store-product-page-SC-29 - Add to cart sign-in title names why
 **Serves:** grade10-site-store-product-page-US-12 - Collector sees why sign-in is asked when adding from the product page
 
@@ -307,3 +339,52 @@ the sign-in surface's consumer-owned title copy.
 - **WHEN** they activate Add to cart and the sign-in dialog opens
 - **THEN** the dialog title is **Sign In to Add to Cart**
 
+### Requirement: A shared card link unfurls with the card's picture
+
+A product address whose card the catalogue pictures SHALL carry `og:image`,
+`og:image:width`, `og:image:height` and `og:image:alt` in the response HTML,
+readable without executing scripts. The picture SHALL be the card's first
+catalogue image, served at 1200 by 630 pixels, fitted inside that box with
+the remainder filled white and never cropped. The alt text SHALL be the
+image's own, or the card's name when the shop gave the image none.
+
+A product address whose card the catalogue pictures no way SHALL carry no
+`og:image`.
+
+The response SHALL name the card shape a preview is drawn in, because a
+fetcher that reads the picture may still size the card from that name alone:
+the wide shape where the response carries a picture, and the small shape where
+it carries none.
+
+<!-- trace:scenario id=g10.store-product-page.SC-vzq rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-30 - A preview fetcher reads the card's picture
+**Serves:** grade10-site-store-product-page-US-13 - Collector shares a card and the preview shows it
+
+- **GIVEN** a card the catalogue pictures
+- **WHEN** its product address is fetched and no script executes
+- **THEN** the response carries `og:image` naming the card's first image at
+  1200 by 630 pixels, padded white
+- **AND** `og:image:width` is `1200`, `og:image:height` is `630`, and
+  `og:image:alt` is the image's alt text or the card's name
+- **AND** `twitter:card` is `summary_large_image`
+
+<!-- trace:scenario id=g10.store-product-page.SC-sia rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-31 - A card with no picture unfurls without one
+**Serves:** grade10-site-store-product-page-US-13 - Collector shares a card and the preview shows it
+
+- **GIVEN** a card the catalogue lists no image for
+- **WHEN** its product address is fetched and no script executes
+- **THEN** the response carries its title, description and `og:url`
+- **AND** no `og:image`
+- **AND** `twitter:card` is `summary`
+
+<!-- trace:scenario id=g10.store-product-page.SC-eji rev=1 -->
+#### Scenario: grade10-site-store-product-page-SC-32 - A small original is enlarged to fill the box
+**Serves:** grade10-site-store-product-page-US-13 - Collector shares a card and the preview shows it
+
+- **GIVEN** a card whose first catalogue image is smaller than 1200 by 630
+  pixels in at least one dimension
+- **WHEN** its product address is fetched and no script executes
+- **THEN** the delivered `og:image` is exactly 1200 by 630 pixels, the
+  original enlarged to fill the box rather than left at its native size
+  inside more padding

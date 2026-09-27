@@ -9,6 +9,7 @@
 **I want** my roles to be `user` only,
 **so that** I cannot act as staff by accident.
 
+<!-- trace:case id=g10.shared-roles.TC-gda rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC1-1: Collector without an operator grant is user only
 
 **Classification:**
@@ -35,6 +36,7 @@ Signed in as a collector who has never been granted an operator role.
 
 * The caller's roles are `user` only.
 
+<!-- trace:case id=g10.shared-roles.TC-5hv rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC2-1: Unknown role name is dropped
 
 **Classification:**
@@ -60,6 +62,7 @@ A signed-in person whose stored roles include a name that is not in the closed s
 
 * That unknown name is not among the roles.
 
+<!-- trace:case id=g10.shared-roles.TC-l66 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f -->
 ### shared-auth-roles-US1-TC3-1: User role cannot take an operator action
 
 **Classification:**
@@ -93,6 +96,7 @@ Signed in as a person whose only role is `user`.
 **I want** each action allowed only when my role grants that permission,
 **so that** support cannot set roles, staff cannot ban, and an unknown permission grants nothing.
 
+<!-- trace:case id=g10.shared-roles.TC-m1b rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC1-1: Support cannot set roles but can still list and ban
 
 **Classification:**
@@ -120,6 +124,7 @@ Signed in as an operator whose role is `support`.
 * Setting roles is refused.
 * Listing users, banning, and listing and revoking sessions still work.
 
+<!-- trace:case id=g10.shared-roles.TC-cd2 rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC2-1: Staff cannot list or ban users
 
 **Classification:**
@@ -146,6 +151,7 @@ Signed in as an operator whose role is `staff`.
 
 * Both requests are refused.
 
+<!-- trace:case id=g10.shared-roles.TC-67z rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC3-1: Unknown permission grants nothing
 
 **Classification:**
@@ -171,6 +177,7 @@ A product checks a permission name that is not in the vocabulary.
 
 * The system refuses it.
 
+<!-- trace:case id=g10.shared-roles.TC-ni5 rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC4-1: Staff can write the store and operate the auction catalog
 
 **Classification:**
@@ -197,6 +204,7 @@ Signed in as an operator whose role is `staff`.
 
 * Both actions are allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-c1m rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC5-1: Auditor reads the trail and nothing else
 
 **Classification:**
@@ -224,6 +232,7 @@ Signed in as a person whose only operator role is `auditor`.
 * Reading the trail is allowed.
 * The ban, store write, and role change are refused.
 
+<!-- trace:case id=g10.shared-roles.TC-ozo rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC6-1: Combined roles stack their grants
 
 **Classification:**
@@ -250,6 +259,7 @@ Signed in as a person holding `support` and `staff`.
 
 * Both actions are allowed.
 
+<!-- trace:case id=g10.shared-roles.TC-8ru rev=1 covers=g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
 ### shared-auth-roles-US2-TC7-1: Operator cannot widen what a role grants
 
 **Classification:**
@@ -276,3 +286,61 @@ Signed in as an operator who holds `user:set-role`.
 
 * Who holds a role can be changed.
 * What that role grants cannot be changed.
+
+<!-- trace:case id=g10.shared-roles.TC-pp1 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
+### shared-auth-roles-US2-TC8-1: Refund processing is granted to staff and admin
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** Permission checks
+
+**Pre-conditions:**
+
+* One caller has role `staff`; another has role `admin`.
+
+**Steps:**
+
+1. Each caller requests the refund action.
+
+**Expected Results:**
+
+* Both callers are allowed by `auction:refund`.
+
+<!-- trace:case id=g10.shared-roles.TC-z15 rev=1 covers=g10.shared-roles.SC-z89,g10.shared-roles.SC-dqm,g10.shared-roles.SC-s2f,g10.shared-roles.SC-pq2,g10.shared-roles.SC-s22,g10.shared-roles.SC-q3k,g10.shared-roles.SC-xb7,g10.shared-roles.SC-pvk,g10.shared-roles.SC-qv7,g10.shared-roles.SC-yjl,g10.shared-roles.SC-bye,g10.shared-roles.SC-eny,g10.shared-roles.SC-xss -->
+### shared-auth-roles-US2-TC9-1: Settlement permission is not required for a refund
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Permission checks
+
+**Pre-conditions:**
+
+* A staff caller has refund processing but not payment settlement.
+
+**Steps:**
+
+1. Request the refund action.
+
+**Expected Results:**
+
+* The action is allowed.
+* The caller is not granted any settlement permission.
+

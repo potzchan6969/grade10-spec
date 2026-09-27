@@ -9,6 +9,7 @@
 **I want** to search and open accounts by user id,
 **so that** I can find a person without seeing records I am not granted.
 
+<!-- trace:case id=g10.shared-users.TC-oy8 rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC1-1: Granted operator lists accounts by user id
 
 **Classification:**
@@ -37,6 +38,7 @@ Signed in as an operator who holds `user:list`.
 * Accounts from this brand's identity system are listed.
 * Each account is named by user id.
 
+<!-- trace:case id=g10.shared-users.TC-caj rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC2-1: Caller without the list grant is refused
 
 **Classification:**
@@ -63,6 +65,7 @@ Signed in as a person who does not hold `user:list`.
 * The system refuses the request.
 * No account records are returned.
 
+<!-- trace:case id=g10.shared-users.TC-2wn rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC3-1: Search matches email without letter case
 
 **Classification:**
@@ -95,6 +98,7 @@ Signed in as an operator who can list users. An account email is known.
 
 * Results are accounts whose email contains that fragment.
 
+<!-- trace:case id=g10.shared-users.TC-b3k rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC4-1: Account opens by user id
 
 **Classification:**
@@ -121,6 +125,7 @@ Signed in as an operator who can list users.
 * That account is received.
 * A different account that shares an email attribute is not received.
 
+<!-- trace:case id=g10.shared-users.TC-jkd rev=1 covers=g10.shared-users.SC-cv3,g10.shared-users.SC-k1h,g10.shared-users.SC-0qd,g10.shared-users.SC-s50,g10.shared-users.SC-pik -->
 ### shared-auth-users-US1-TC5-1: Banned account stays in the directory
 
 **Classification:**
@@ -155,6 +160,7 @@ Signed in as an operator who can list users.
 **I want** a ban to stop money-moving and sign-in, and an unban to restore them,
 **so that** a person who must leave cannot keep acting, and a mistaken ban is reversible.
 
+<!-- trace:case id=g10.shared-users.TC-lde rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC1-1: Ban stops money-moving and sign-in
 
 **Classification:**
@@ -186,6 +192,7 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 * Completing a sign-in method does not sign them in.
 * A product reading who is calling reports no person.
 
+<!-- trace:case id=g10.shared-users.TC-v0p rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC2-1: Unban lets the person sign in again
 
 **Classification:**
@@ -212,6 +219,7 @@ Signed in as an operator who holds `user:ban`. <a subject user id> is unbanned a
 
 * That person can sign in again.
 
+<!-- trace:case id=g10.shared-users.TC-hx1 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC3-1: Caller without the ban grant is refused
 
 **Classification:**
@@ -238,6 +246,7 @@ Signed in as an operator who does not hold `user:ban`. <a subject user id> is un
 * The system refuses the request.
 * The account remains unbanned.
 
+<!-- trace:case id=g10.shared-users.TC-3i2 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC4-1: Operator cannot ban themselves
 
 **Classification:**
@@ -264,6 +273,7 @@ Signed in as an operator who holds `user:ban`.
 * The system refuses the request.
 * Their account remains unbanned.
 
+<!-- trace:case id=g10.shared-users.TC-wwa rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC5-1: Support cannot ban an admin
 
 **Classification:**
@@ -290,6 +300,7 @@ Signed in as an operator whose role is `support`. <an admin user id> holds `admi
 * The system refuses the request.
 * The account remains unbanned.
 
+<!-- trace:case id=g10.shared-users.TC-ka8 rev=1 covers=g10.shared-users.SC-bc9,g10.shared-users.SC-1m7,g10.shared-users.SC-57f,g10.shared-users.SC-qss,g10.shared-users.SC-s2t,g10.shared-users.SC-dbb,g10.shared-users.SC-v7f,g10.shared-users.SC-uoq,g10.shared-users.SC-y5y -->
 ### shared-auth-users-US2-TC6-1: Last admin cannot be banned
 
 **Classification:**
@@ -324,6 +335,7 @@ Signed in as an operator who can ban. <an admin user id> is the only account tha
 **I want** to set another person's roles without changing my own or stranding the last admin,
 **so that** grants stay a closed set I cannot widen from the call site.
 
+<!-- trace:case id=g10.shared-users.TC-g0n rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC1-1: Admin sets another account to staff
 
 **Classification:**
@@ -351,6 +363,7 @@ Signed in as an operator who holds `user:set-role`.
 
 * That account's roles include `staff`.
 
+<!-- trace:case id=g10.shared-users.TC-3wy rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC2-1: Clearing operator roles leaves a user
 
 **Classification:**
@@ -376,6 +389,7 @@ Signed in as an operator who can set roles. <a subject user id> holds an operato
 
 * That account's roles are `user` only.
 
+<!-- trace:case id=g10.shared-users.TC-g3z rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC3-1: Support cannot set roles
 
 **Classification:**
@@ -402,6 +416,7 @@ Signed in as an operator who holds `user:ban` but not `user:set-role`.
 * The system refuses the request.
 * The roles are unchanged.
 
+<!-- trace:case id=g10.shared-users.TC-j1l rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC4-1: Operator may change their own roles
 
 **Classification:**
@@ -427,6 +442,7 @@ Signed in as an operator who holds `user:set-role` and `admin`. At least one oth
 
 * Their account's roles include `staff` and `admin`.
 
+<!-- trace:case id=g10.shared-users.TC-60a rev=1 covers=g10.shared-users.SC-cg2,g10.shared-users.SC-3pf,g10.shared-users.SC-3br,g10.shared-users.SC-a8m,g10.shared-users.SC-xhl,g10.shared-users.SC-m57,g10.shared-users.SC-jw6 -->
 ### shared-auth-users-US3-TC5-1: Last admin keeps admin
 
 **Classification:**
@@ -460,6 +476,7 @@ accounts I mean,
 **so that** I can reach one person from a ticket, and answer who holds a role,
 without reading every account.
 
+<!-- trace:case id=g10.shared-users.TC-axp rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC1-1: Search matches a name without letter case
 
 **Classification:**
@@ -493,6 +510,7 @@ Signed in as admin(holds `user:list`). Directory holds <account whose name is no
 
 * That account is among the results.
 
+<!-- trace:case id=g10.shared-users.TC-1nn rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC2-1: Directory narrows to a role
 
 **Classification:**
@@ -521,6 +539,7 @@ Signed in as admin(holds `user:list`). Directory holds accounts with and without
 * Every listed account holds `admin`.
 * An account that holds no elevated role is not listed.
 
+<!-- trace:case id=g10.shared-users.TC-xq6 rev=1 covers=g10.shared-users.SC-r7i,g10.shared-users.SC-1kr,g10.shared-users.SC-kly,g10.shared-users.SC-u7q,g10.shared-users.SC-aqk,g10.shared-users.SC-a4z -->
 ### shared-auth-users-US4-TC3-1: Two narrowings and chosen order apply
 
 **Classification:**

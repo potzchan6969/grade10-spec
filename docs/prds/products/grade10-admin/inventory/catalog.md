@@ -77,23 +77,31 @@ product history.
 ## Intake
 
 - **Single product** — create or edit the card identity before stock arrives
-- **Cert ID per graded copy** — intake requires the certificate identifier
-  for each graded copy; RAW copies have no Cert ID
-- **Copy-level facts** — each inventory copy carries its Cert ID, issuer,
-  grade, autograph grade, and serial; grade remains source text. Graded copies
-  require a Cert ID, while RAW copies have none.
+- **Cert ID per certified copy** - each certified unit enters inventory with
+  one Cert ID and creates one Cert record; regular stock without a Cert ID is
+  intaken as product quantity and creates no Cert record
+- **Copy-level facts** - each Cert record carries its required Cert ID, issuer,
+  grade, autograph grade, and serial; grade remains source text. A unit without
+  a Cert ID is regular stock rather than a Cert record.
 - **Explicit reservation unit** — every reservation selects one Cert ID or
   explicitly selects `No Cert ID`; a numbered reservation is one unit
 - **Product bulk import** — upload product names and typed schema attributes
   separately from physical inventory, then review taxonomy mappings and row
   validation before committing. Trim surrounding whitespace from mapped text
   values and treat blank or standalone `-` cells as absent.
-- **Inventory bulk import** — upload individual copies against existing
-  products, review Cert IDs and copy-level facts, and explicitly include or
-  exclude each row whose Item Status is blank before committing. Trim
+- **Inventory bulk import** - upload stock against existing products, review
+  Cert IDs and copy-level facts for certified units, and explicitly include or
+  exclude each row whose Item Status is blank before committing. Rows without
+  a Cert ID contribute regular stock and do not create Cert records. Trim
   surrounding whitespace from mapped copy facts and treat blank or standalone
   `-` cells as absent.
 - **Provider product import** — upload a bounded CSV, review taxonomy and
   provider matches, confirm each row, and commit the batch as one operation
 - **Inventory ledger** — track stock, holds, sales, withdrawals, and vaulting
   without losing the arithmetic
+- 🚧 **Cert-scoped media** - an Inventory image or video stays product-level
+  when untagged, or is tagged to one same-product Cert record. Every Cert
+  record has a Cert ID; regular stock without a Cert ID has no Cert record or
+  tag target. Removing a media Cert tag or retagging leaves the originally tagged
+  source item untagged. Removing a physical unit removes its Cert record and
+  the source media tied to that record; Inventory records the unit as withdrawn

@@ -1,7 +1,8 @@
 <!-- The change's decided frontier, written by the product manager with the
-     `planning-pm` skill, out of the same `grilling` round that produced the
-     proposal. It lands before the journeys, the design and the requirements,
-     because all three are drawn from what it settles.
+     `planning-pm` skill, out of the interview that produced the proposal
+     (docs/governance/round-summary.md#interview). It lands before the
+     journeys, the design and the requirements, because all three are drawn
+     from what it settles.
 
      Confirmed decisions only. A question nobody present could settle is a
      deferral, not a decision: it goes under the proposal's open questions

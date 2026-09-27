@@ -1,0 +1,10 @@
+schema: grade10-planning
+promoted_by: "@seankcw"
+created: 2026-09-22
+reviewed:
+  decisions: d30e802f
+  user-journeys: 12aa2736
+  specs: caeaefe5
+  test-cases: caeaefe5
+deploy_waived: "sean — merge blocked from staging/production only by unrelated pending migrations on grade10-auction and grade10-inventory (3 failed deploy runs since PR #565 merged), not by this change; waiving rather than holding the archive on unrelated migration debt"
+decisions_carried: "Q1, Q2, Q3, Q5 folded into the 🚧 Settled-on-another-device line and its Product decisions row on docs/prds/products/shared/auth/sign-in.md; Q4 and Q6 confirm existing non-goals/behaviour already stated there, nothing new to carry"

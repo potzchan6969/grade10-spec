@@ -43,10 +43,13 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   request. A shop that exposes no count, or a count of zero while still
   offering the variant, bounds nothing.
 - **A card's tile reflects its most available variant.** Out of stock only when
-  every variant on it is; per-variant availability stays on the card's page.
+  every variant on it is. Its page presents one sellable item and reads
+  availability from that item's internal Shopify sale identity.
 - **Browse surfaces communicate no quantity.** No remaining count, no scarcity
-  treatment, no label separating one available variant from another. Scoped to
-  browsing, so the cart can still explain a quantity it changed.
+  treatment, no label separating one available variant from another. A
+  collector may still request a quantity while adding from a browse surface,
+  but the control does not expose or cap to the shop's count; the cart review
+  explains a short fill.
 - **Unavailable is not a browse condition.** An unpublished product is absent
   from the listing and its address already answers 404.
 
@@ -74,6 +77,9 @@ availability *means*; `cart-validation` governs when the store *acts* on it.
   after a passing read is reported with the line named, a cart the shop would
   fill short is refused rather than sold short, and a read that cannot complete
   blocks checkout rather than guessing.
+- **An initial cart read can fail before any lines are known.** The drawer
+  presents an unchecked cart with Retry, no current total and no checkout
+  action; it does not invent line names.
 
 No component contract changes. `shared/ui/store-product-listing` takes
 availability as a supplied condition and forbids deriving one;
@@ -116,26 +122,31 @@ states what the store puts into them.
 
 ### Modified Capabilities
 
-None. `shared/ui/store-product-listing` already takes a supplied condition and
-forbids deriving one, `shared/ui/store-cart` already carries the statuses and
-the open-time read these requirements feed, and
-`grade10-site/store/product-page`'s per-variant for-sale requirement is
-unchanged by stating where that condition
-comes from.
+- `grade10-site/store/product-listing`: remove stock-derived quantity limits
+  and low-stock counts from listing tiles.
+- `grade10-site/store/product-page`: remove stock-derived quantity limits and
+  low-stock counts from the product page while keeping its one sellable item
+  and internal Shopify sale identity; the page offers no variant choice.
 
 ## Impact
 
-No change to `packages/ui` or `packages/i18n`. The typed Store review already
-returns current availability and price per line. The work is the storefront
-mapping those answers onto the statuses the drawer and checkout page render.
-The cart drawer's statuses and warning lifecycle are durable in
-`shared/ui/store-cart`; this change owns what the storefront puts into them.
-No backend implementation or Figma change is part of this plan.
+No backend, database, or shared UI contract change is required. The typed
+Store product read already supplies each variant's availability, price and
+optional quantity, and the live cart review already returns the current
+answers used by the drawer and checkout. The frontend maps the product page's
+one sellable item's internal variant availability to the existing purchase
+states and stops exposing browse-time quantity information. The Shopify sale
+identifier remains internal to the cart add. On a failed cart review it
+marks affected lines unchecked, replaces their last availability and prices
+and the cart total with unchecked states, names them in a retryable notice, and
+withholds checkout.
 
-The change directory is named `add-store-product-status` and carries two
+The change directory is named `add-store-product-status` and carries four
 capabilities; the name is left alone so the open pull request keeps its
-history.
+history. Its standalone Storybook product-detail preview is updated to match
+the variant and availability behavior specified here.
 
-No domain impact: the new `cart-validation` capability does not yet join an
-existing Store cross-capability path; its journeys stay at feature level, and
-the existing Store domain suite remains unchanged.
+`product-status` walks the listing, product page and cart as one Store path;
+the Store domain test suite is updated with that path. The product-detail
+preview uses the same one-item presentation and keeps its Shopify sale
+identifier out of shopper-facing copy.

@@ -1,3 +1,4 @@
+import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
 
 export type WinnerOrderStatus =
@@ -86,14 +87,16 @@ export type WinnerOrderContent = {
   /**
    * Refund below Order Total — inline alert amount, details in a dialog.
    * Amount is positive; the word Refund carries the direction.
-   * Proof, provider reference and audit number stay with the operator.
    * Transfer to shows card payment marks or bank name + masked account (Q20).
+   * A bank refund also carries its provider reference (Q21). Proof, Stripe
+   * reference and audit number stay with the operator.
    */
   refund?: {
-    /** Positive amount — e.g. `HK$16,140`. */
+    /** Positive amount — e.g. `HK$16,460`. */
     amount: string;
     reason: string;
-    note: string;
+    /** Optional — omitted from Refund Details when empty (Q28). */
+    note?: string;
     transfer: WinnerOrderRefundTransfer;
   };
   /** Paid / recorded payment strip — method + optional masked number. */
@@ -114,9 +117,11 @@ const LOT = {
   endedAt: "Ended 17 Sep 2026, 21:30 HKT",
 } as const;
 
-const INVOICE_ID = "INV-202609-LK7P2Q-01" as const;
+/** Same collector-facing invoice ID as Email Grade10 / Contact Us. */
+const INVOICE_ID = WINNER_ORDER_INVOICE_ID;
 
-const ADDRESS = "12/F, Tower 1\nHarbour Road\nWan Chai, Hong Kong" as const;
+const ADDRESS =
+  "Alex Chan\n+852 9123 4567\n12/F, Tower 1, Harbour Road\nWan Chai, Hong Kong, 000000\nHong Kong" as const;
 
 /** Lot closed 17 Sep 2026, 21:30 HKT → complete setup within 48 hours. */
 const ADDRESS_DEADLINE = "Confirm by 19 Sep 2026, 21:30 HKT" as const;
@@ -150,6 +155,7 @@ export const LINE_TOOLTIPS = {
   shippingHandling:
     "Packing, carrier, and handling for your confirmed delivery address.",
   shippingInsurance: "0.9% of the order value during transit.",
+  tax: "Set by Grade10 for where your order ships. Some orders have none.",
   processingFee: "Set by your payment method when this invoice was sent.",
 } as const;
 
@@ -171,11 +177,16 @@ const INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,140" },
+  { label: "Order Total", value: "HK$16,460" },
 ];
 
 /** Sent invoice with Insurance for the tooltip coverage state. */
@@ -197,15 +208,20 @@ export const INSURED_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "HK$120",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,140" },
+  { label: "Order Total", value: "HK$16,460" },
 ];
 
 export const WINNER_ORDER_REFUND_CLOSING = {
-  amount: "HK$16,140",
+  amount: "HK$16,460",
   reason: "Not as described",
   note: "Card condition did not match the listing photos. Full amount returned.",
   transfer: {
@@ -218,11 +234,11 @@ export const WINNER_ORDER_REFUND_CLOSING = {
 export const WINNER_ORDER_REFUND_OVERPAID = {
   amount: "HK$500",
   reason: "Duplicate or overpayment",
-  note: "Bank transfer exceeded the invoice. Difference returned.",
   transfer: {
     kind: "bank_transfer",
     bankName: "HSBC",
     maskedAccount: "···· 8891",
+    reference: "G10-RF-LK7P2Q",
   },
 } as const;
 
@@ -248,11 +264,16 @@ export const BANK_TRANSFER_INVOICE_LINES: WinnerOrderInvoiceLine[] = [
     tooltip: LINE_TOOLTIPS.shippingInsurance,
   },
   {
+    label: "Tax",
+    value: "HK$320",
+    tooltip: LINE_TOOLTIPS.tax,
+  },
+  {
     label: "Payment Processing Fee",
     value: "Free",
     tooltip: LINE_TOOLTIPS.processingFee,
   },
-  { label: "Order Total", value: "HK$16,020" },
+  { label: "Order Total", value: "HK$16,340" },
 ];
 
 /** Shared progress dates once each milestone has happened. */

@@ -33,13 +33,13 @@ import {
 import { cn } from "@grade10/design-system/lib/utils";
 import { Info, MapPin, Trash } from "@phosphor-icons/react";
 import { useEffect, useId, useRef, useState } from "react";
-import { COUNTRY_OPTIONS, COUNTRY_SELECT_ITEMS } from "./country-regions";
+import { COUNTRY_SELECT_ITEMS } from "./country-regions";
 
 export type WinnerOrderSavedAddress = {
   id: string;
   /** Recipient name — RadioCard title. */
   label: string;
-  /** Street + locality + country — no name; one street line. */
+  /** Street + locality + country — no name, postal code, or phone. */
   lines: string;
 };
 
@@ -146,13 +146,9 @@ function prefersReducedMotion() {
   );
 }
 
-/** Street + locality + country — no recipient name. */
+/** Street + locality + country — no name, postal code, or phone. */
 function formatAddressLines(draft: NewAddressDraft): string {
-  const locality = [
-    draft.city.trim(),
-    draft.state.trim(),
-    draft.postalCode.trim(),
-  ]
+  const locality = [draft.city.trim(), draft.state.trim()]
     .filter(Boolean)
     .join(", ");
   return [draft.street.trim(), locality, draft.country.trim()]
@@ -621,13 +617,13 @@ function WinnerOrderAddressDialog({
                       data-highlighted work like DropdownMenu in the nested dialog.
                     */}
                     <SelectContent alignItemWithTrigger={false}>
-                      {COUNTRY_OPTIONS.map((country) => (
+                      {COUNTRY_SELECT_ITEMS.map((country) => (
                         <SelectItem
-                          key={country}
-                          label={country}
-                          value={country}
+                          key={country.value}
+                          label={country.label}
+                          value={country.value}
                         >
-                          {country}
+                          {country.label}
                         </SelectItem>
                       ))}
                     </SelectContent>

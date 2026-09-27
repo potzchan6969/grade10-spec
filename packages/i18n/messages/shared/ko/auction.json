@@ -21,6 +21,7 @@
   "fromBid": "시작가 {amount}",
   "lotCount": "{count, plural, one {출품 #건} other {출품 #건}}",
   "listingsLabel": "경매 출품작",
+  "allAuctions": "전체 경매",
   "searchLots": "출품작 검색",
   "filter": "필터",
   "filterStatus": "상태",
@@ -29,5 +30,20 @@
   "allLots": "전체 출품",
   "endingSoon": "마감 임박",
   "endsIn": "{remaining} 남음",
-  "opensIn": "{remaining} 후 시작"
+  "opensIn": "{remaining} 후 시작",
+  "featured": {
+    "active": "실시간 입찰",
+    "upcoming": "입찰 예정",
+    "ended": "종료",
+    "currentBid": "현재 입찰가",
+    "startingBid": "시작가",
+    "finalBid": "최종 입찰가",
+    "bidNow": "입찰하기",
+    "viewAuction": "출품 보기",
+    "endsIn": "마감까지",
+    "opensIn": "시작까지",
+    "endedAt": "종료",
+    "progress": "추천 출품작",
+    "slide": "추천 출품작 {position} 보기: {title}"
+  }
 }

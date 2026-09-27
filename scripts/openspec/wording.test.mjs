@@ -119,12 +119,48 @@ test("toldBodyOf gives every other hand of staging the ordinary Your turn", () =
 
 test("toldBodyOf gives QA at another stage the ordinary Your turn", () => {
   assert.deepEqual(
-    toldBodyOf({ id: "probe", stage: "specified" }, "qa", { linked: LINKED }),
+    toldBodyOf({ id: "probe", stage: "planned" }, "qa", { linked: LINKED }),
     {
       kind: "your-turn",
-      text: yourTurnText({ id: "probe", stage: "specified" }, "qa", LINKED),
+      text: yourTurnText({ id: "probe", stage: "planned" }, "qa", LINKED),
     },
   );
+});
+
+// Proves part of shared-planning-agent-rounds-US11-TC1-1.
+test("shared-planning-agent-rounds-SC-89 - QA's turn at Specified names the suite, its case count and the review command", () => {
+  const at = {
+    id: "probe",
+    stage: "specified",
+    suites: [
+      {
+        spec: "shared/planning/agent-rounds",
+        path: "openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md",
+        cases: { draft: 35, actual: 0, deprecated: 0, total: 35, automated: 0 },
+      },
+    ],
+  };
+  assert.deepEqual(toldBodyOf(at, "qa", { linked: LINKED }), {
+    kind: "your-turn",
+    text: [
+      `*Your turn* — ${LINKED} is at *Specified*.`,
+      "Review: `/tcs-review probe`",
+      "Suite: `openspec/changes/probe/specs/shared/planning/agent-rounds/feature-tcs.md`, 35 cases; the walk needs it reviewed as its input",
+    ].join("\n"),
+  });
+});
+
+test("shared-planning-agent-rounds-SC-89 - QA's turn names no suite already approved or unreadable", () => {
+  const cases = { draft: 0, actual: 3, deprecated: 0, total: 3, automated: 0 };
+  const at = {
+    id: "probe",
+    stage: "specified",
+    suites: [
+      { spec: "a/signed", status: "approved", cases },
+      { spec: "a/broken", error: "no cases", cases: { ...cases, total: 0 } },
+    ],
+  };
+  assert.doesNotMatch(toldBodyOf(at, "qa", { linked: LINKED }).text, /Suite:/);
 });
 
 test("behindText names the artifact and what changed before it", () => {

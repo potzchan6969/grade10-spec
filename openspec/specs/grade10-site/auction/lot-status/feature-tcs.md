@@ -9,6 +9,7 @@
 **I want** every lot to show whether it is Upcoming, Active or Ended,
 **so that** I can see at a glance whether I can still bid on it.
 
+<!-- trace:case id=g10.auction-lot-status.TC-1ik rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### grade10-site-auction-lot-status-US1-TC1-1: External lot status matches the lot
 
 Runs once per row of **Test data**.
@@ -51,6 +52,7 @@ Runs once per row of **Test data**.
 
 * The external lot status matches the row.
 
+<!-- trace:case id=g10.auction-lot-status.TC-bfm rev=1 covers=g10.auction-lot-status.SC-wpp,g10.auction-lot-status.SC-orm,g10.auction-lot-status.SC-6aa,g10.auction-lot-status.SC-pmn,g10.auction-lot-status.SC-flh,g10.auction-lot-status.SC-eor,g10.auction-lot-status.SC-l6k -->
 ### grade10-site-auction-lot-status-US1-TC2-1: Winner sees their order status separately
 
 **Classification:**
@@ -95,6 +97,7 @@ Runs once per row of **Test data**.
 **I want** lots that were never published or were called off to be hidden from me,
 **so that** I do not spend time on a lot that never went to auction.
 
+<!-- trace:case id=g10.auction-lot-status.TC-22a rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC1-1: Hidden lots are not in the catalogue
 
 Runs once per row of **Test data**.
@@ -133,6 +136,7 @@ Runs once per row of **Test data**.
 * `<lot>` is not listed.
 * The search does not find it.
 
+<!-- trace:case id=g10.auction-lot-status.TC-wlb rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC2-1: Called-off lot is removed from the watchlist, unsold lot stays
 
 **Classification:**
@@ -170,6 +174,7 @@ Runs once per row of **Test data**.
 * `<lot_3>` is not listed.
 * `<lot_2>` is listed as Ended.
 
+<!-- trace:case id=g10.auction-lot-status.TC-k90 rev=1 covers=g10.auction-lot-status.SC-me0,g10.auction-lot-status.SC-pe2,g10.auction-lot-status.SC-cox,g10.auction-lot-status.SC-3yw -->
 ### grade10-site-auction-lot-status-US2-TC3-1: Listing data leaves out called-off lots
 
 **Classification:**
@@ -213,6 +218,7 @@ Runs once per row of **Test data**.
 **I want** a called-off lot I bid on to stay in My Auctions,
 **so that** I can see my card hold was released.
 
+<!-- trace:case id=g10.auction-lot-status.TC-byf rev=1 covers=g10.auction-lot-status.SC-yoe -->
 ### grade10-site-auction-lot-status-US3-TC1-1: Only the bidder still sees a called-off lot
 
 **Classification:**

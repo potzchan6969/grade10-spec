@@ -32,15 +32,17 @@ describe("a wait on the change's record", () => {
     expect(found.reason).toContain("`ui-design`");
   });
 
-  it("names a wait the change has already answered", async () => {
-    const [found] = await waits(
-      "awaiting:\n  proposal: written already\n",
-      "awaiting",
-    );
-
-    expect(found.reason).toContain("the wait is over");
+  // Decides shared-planning-agent-rounds-US15-TC1-1.
+  it("shared-planning-agent-rounds-SC-101 - lets a wait stand on an artifact the change has written, since the wait names what is still missing", async () => {
+    expect(
+      await waits(
+        "awaiting:\n  proposal: 2026-09-24, the frame for the rail - @tangconst\n",
+        "awaiting",
+      ),
+    ).toEqual([]);
   });
 
+  // Decides shared-planning-agent-rounds-US15-TC2-1.
   it("refuses a wait that says nothing rather than dropping it", async () => {
     const found = await waits("awaiting:\n  proposal:\n", "store");
 
@@ -54,10 +56,10 @@ describe("a wait on the change's record", () => {
 });
 
 /** `spec.md` is two passes over one file: the outline fixes the anchors, and
- * the requirements come back after the blind suite. Read by presence, the file
- * ended the wait the moment the outline was written — and the reader refused
- * the outline as a delta naming no requirement. Between them, the one state
- * every change passes through failed two gates at once. */
+ * the requirements come back after the blind suite. The wait on `specs` now
+ * survives both — the outline and the written requirements — until its author
+ * lifts it (`shared-planning-agent-rounds-SC-101`); the one gate that still
+ * fires here is the store rule refusing an outline that declared no wait. */
 describe("a change stopped at the outline", () => {
   const OUTLINE = [
     "## Purpose",
@@ -120,9 +122,7 @@ describe("a change stopped at the outline", () => {
     );
   });
 
-  it("asks for the line back once the requirements land", async () => {
-    const [found] = await read(REQUIREMENTS, WAIT, "awaiting");
-
-    expect(found.reason).toContain("the wait is over");
+  it("shared-planning-agent-rounds-SC-101 - lets the wait stand once the requirements land, until its author lifts it", async () => {
+    expect(await read(REQUIREMENTS, WAIT, "awaiting")).toEqual([]);
   });
 });

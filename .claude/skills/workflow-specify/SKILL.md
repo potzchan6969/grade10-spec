@@ -9,9 +9,8 @@ description: Run a round on a change's requirements and cases - spec.md's outlin
 `specs/<capability>/feature-tcs.md`, together. Neither names a teammate: the
 product manager is the hand, and reads them side by side.
 
-**The rules:** `planning-qa` - the outline, the isolated input the blind pass
-reads, the dispositions and the reconciliation, all governed by
-[`docs/governance/specs-to-test-cases.md`](../../../docs/governance/specs-to-test-cases.md) -
+**The rules:** `planning-qa`, governed by
+[`docs/governance/specs-to-test-cases.md`](../../../docs/governance/specs-to-test-cases.md),
 plus:
 
 ```bash
@@ -24,13 +23,17 @@ nothing else is.
 
 ## The Blind Readings Are the Challenge
 
+- **Levels first** — the rulebook's **When a Change Touches a Suite Above
+  It** runs before the readings; the blind suite reads its draft
 - **Challenge** — the two independent readings of the change's anchors: the
   scenarios and the blind suite, neither reader seeing the other's output
 - **Verify** — their reconciliation, taken by the run that took both readings.
   No verifier agent reads them, and no agent decides between them
+- **Then the simpler thing** — once reconciled, dispatch `simpler` over both
+  files, as on every round; the run applies what stands to both, and never
+  folds a case into a scenario
 - **Stops on the product manager** — a disagreement or a question neither
-  reading can settle is a numbered `Q<n>` row for them; the blind pass's own
-  findings go to `decisions.md`'s `## Raised` table as `planning-qa` says
+  reading can settle is a numbered `Q<n>` row for them
 - **One word, both files** — the product manager's word at the reconciliation
   lands `spec.md` and `feature-tcs.md` together
 

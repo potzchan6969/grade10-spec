@@ -1,0 +1,12 @@
+schema: grade10-planning
+promoted_by: '@htonyl'
+created: 2026-09-10
+page_waived: "predates the page rule"
+decisions_waived: "opened before decisions.md existed; the scope is in the
+  proposal, and the requirements and suites are written"
+reviewed:
+  tech-design: 405de753
+  test-cases: e9bed024
+deployed_at: "415c3d657c936dbbec936b8ac49425b59a0e4ba9"
+deployed_env: "staging"
+decisions_carried: "none"

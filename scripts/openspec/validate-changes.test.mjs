@@ -1,11 +1,23 @@
 import assert from "node:assert/strict";
 import { spawnSync } from "node:child_process";
-import { cpSync, mkdirSync, mkdtempSync, writeFileSync } from "node:fs";
+import {
+  appendFileSync,
+  cpSync,
+  mkdirSync,
+  mkdtempSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
 import { fileURLToPath } from "node:url";
-import { cli, main, waitingOnSpecs } from "./validate-changes.mjs";
+import { ROUNDS_HEADER } from "./lib/rounds.mjs";
+import {
+  addedRowRefusals,
+  cli,
+  main,
+  waitingOnSpecs,
+} from "./validate-changes.mjs";
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), "..", "..");
 
@@ -267,4 +279,70 @@ test("a named change is the only one read, and a typo says so", () => {
   assert.doesNotMatch(run.said, /silent/);
   assert.equal(validate(root, "silent").status, 1);
   assert.throws(() => main(root, true, "no-such-change"), /no change named/);
+});
+
+// ── The rows a branch adds to `rounds.md` ───────────────────────────────────
+
+/** A store whose main carries one row the schema no longer issues, and a
+ * branch that appends `rows` after it. */
+function roundsOnMain(rows) {
+  const root = store({
+    demo: { ".openspec.yaml": "schema: grade10-planning\n" },
+  });
+  const rounds = join(root, "openspec", "changes", "demo", "rounds.md");
+  writeFileSync(
+    rounds,
+    `${ROUNDS_HEADER}| 1 | specs | the blind reading (qa) | old | - | - |\n`,
+  );
+  const git = (...args) =>
+    spawnSync("git", args, { cwd: root, encoding: "utf8" }).stdout.trim();
+  git("init", "--quiet", "--initial-branch=main");
+  git("add", ".");
+  git(
+    "-c",
+    "user.email=t@t",
+    "-c",
+    "user.name=t",
+    "commit",
+    "--quiet",
+    "-m",
+    "main",
+  );
+  const main = { ref: "origin/main", commit: git("rev-parse", "HEAD") };
+  appendFileSync(rounds, rows.map((one) => `${one}\n`).join(""));
+  return addedRowRefusals(root, main, "demo");
+}
+
+test("a row main already carries is not held again, and a row the branch adds is", () => {
+  assert.deepEqual(roundsOnMain([]), []);
+  const refused = roundsOnMain(["| 2 | specs | reader | new | - | - |"]);
+  assert.ok(
+    refused.some((one) =>
+      /round 2: `reader` is no perspective of specs/.test(one),
+    ),
+  );
+  assert.ok(!refused.some((one) => /round 1/.test(one)));
+});
+
+test("the requirements and the cases are read by the simpler thing", () => {
+  assert.deepEqual(
+    roundsOnMain([
+      "| 2 | specs | simpler | new | - | - |",
+      "| 3 | test-cases | simpler (fallback) | new | - | - |",
+    ]),
+    [],
+  );
+});
+
+test("a row is held to the floor, not every always reader, and owes a verifier past one reader", () => {
+  assert.deepEqual(
+    roundsOnMain([
+      "| 2 | 1 | simpler | a fix pass | - | - |",
+      "| 3 | whole change | simpler | the whole change | - | - |",
+    ]),
+    [],
+  );
+  const refused = roundsOnMain(["| 2 | 1 | qa; reader | new | - | - |"]);
+  assert.ok(refused.some((one) => /`simpler` reads every round/.test(one)));
+  assert.ok(refused.some((one) => /names no `verifier`/.test(one)));
 });

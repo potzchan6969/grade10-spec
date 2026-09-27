@@ -11,7 +11,7 @@ read again before anything lands after it, with one record row per round.
 ## Feature set
 
 - The round
-  - Six steps: ask, draft on the change's branch, challenge by one agent per perspective, verify by one agent per group of findings, read by the hand, land on their word
+  - Six steps: ask, draft on the change's branch, challenge by one agent per perspective, verify by one agent over every reader's findings, read by the hand, land on their word
   - Your word lands it: the landing writes `landed_by:` and the round's row, tells the next hand, and reads again what comes after
   - Blind readings exempt: the requirements' challenge is the two independent readings, its verify the reconciliation, with its stops on the product manager and no verifier over them
   - Sized by the diff: the perspectives summoned are read from what the draft touches, the simpler-thing reader always, and a round of one reader verifies itself
@@ -78,7 +78,7 @@ other route.
 | 1 | Ask | The hand | What is wanted, said in the thread, in a terminal, or as a push the hand makes |
 | 2 | Draft | The change's agent | The artifact on the change's branch, drawn from what is before it and from the ask |
 | 3 | Challenge | One agent per perspective summoned | One reader's findings: what is wrong, what is missing, what is simpler |
-| 4 | Verify | One agent per group of findings | A verdict per finding; what stands changes the draft |
+| 4 | Verify | One agent over every reader's findings | A verdict per finding; a finding several readers filed is one row naming them; what stands changes the draft |
 | 5 | Read | The hand | The draft's summary and its numbered questions in the thread; the hand answers, remarks, or says land |
 | 6 | Land | The change's agent | The artifact on `main`, the round's row, the next hand told, and every artifact after it read again |
 
@@ -178,6 +178,9 @@ land both files, together.
   requirements and the cases together
 - **The writer reconciles** — the run that took both readings joins them; it
   does not verify itself
+- **The simpler thing after** — once reconciled, the simpler thing reads both
+  files for size before the product manager's word, and the run applies what
+  stands to both; it never folds a case into a scenario
 
 #### Scenario: shared-planning-agent-rounds-SC-06 - The requirements' round takes two readings
 **Serves:** The round - the requirements of every change are drawn twice before anybody reads them
@@ -215,11 +218,15 @@ touches, and no key SHALL declare or waive them.
 | `money` | An amount in minor units |
 | `deploy` | A deploy step |
 | `copy` | A page's words, or words a reader sees |
+| `code` | A changed line in any file that is neither markdown nor a message catalog |
 
 - **The simpler thing, always** — the `always` reader runs on every round and
   is the floor when a round has one reader
 - **One reader verifies itself** — a round that dispatched one reader in all
   dispatches no verifier, and that reader argues its own findings
+- **One verifier over the round** — a round that dispatched two or more
+  readers dispatches one verifier with every reader's findings, so a finding
+  several readers filed is verified once, as one row naming each of them
 - **No waiver** — a round's size is computed from the draft alone; a record key
   neither adds a reader nor removes one, and a size somebody believes is wrong
   is a question for the interview
@@ -237,7 +244,7 @@ touches, and no key SHALL declare or waive them.
 
 - **WHEN** a draft's diff adds a public export and a migration task group
 - **THEN** the readers whose `when` is `export` and `migration` are dispatched, with the `always` reader
-- **AND** a verifier is dispatched per group of findings
+- **AND** one verifier is dispatched with every reader's findings
 
 #### Scenario: shared-planning-agent-rounds-SC-10 - No key changes a round's size
 **Serves:** The round - the size is computed on every draft and never read from the change's record
@@ -551,8 +558,8 @@ them from there.
 | `ui-design.md` | The journeys, walked; the design system's inventory and its parity with the design file; the words, as the reader would say them |
 | `tech-design.md` | Deterministic, resilient, observable; simple and clear; consistent, modular, built on later; testable and buildable |
 | `spec.md` and `feature-tcs.md` | The two blind readings, then the reconciliation |
-| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag; the simpler thing |
-| A task group | Missing pieces; simplicity; code smell; the repository's conventions; QA; operations on a migration or a flag; the simpler thing |
+| `tasks.md` | Order and dependencies; tests first; the end-to-end group; migration and flag |
+| A task group | Missing pieces, code smell and the repository's conventions where the group lands code; the reader of words where it lands a page's words; QA; operations on a migration or a flag |
 
 - **One entry, three facts** — each perspective carries its name, what in a
   draft summons it, and the reader it dispatches
@@ -585,8 +592,8 @@ Each perspective SHALL be read by one agent given the draft and what is before
 it, and SHALL NOT be given any other reader's findings or verdicts.
 
 - **One per perspective** — one challenger per perspective summoned, one
-  verifier per group of findings
-- **What a verifier sees** — the findings of its group and the draft
+  verifier over the round's readings
+- **What a verifier sees** — every reader's findings and the draft
 - **Held to the principles** — `tech-design.md`'s readers and a task group's
   readers hold the draft to the eight principles the store records —
   determinism, simplicity, clarity, flexibility, modularity, consistency,

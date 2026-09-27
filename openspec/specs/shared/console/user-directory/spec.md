@@ -8,7 +8,7 @@ from the console package, where admin UI lives. What an operator is *allowed*
 to do is `shared/auth/users` and `shared/auth/sessions`; this capability
 governs only what the components render and the contract they expose. It
 carries the requirements of `shared-ui/auth-user-directory` forward; only the
-home moved.
+home moved. It also carries the auction-standing moves the console supplies.
 
 ## Feature set
 
@@ -18,6 +18,8 @@ home moved.
   - Account panel: identity and actions, roles and grants, and timeline with sessions — each area only when the console supplies it
   - Roles in the panel: the selection is changed where the account is read, under the roles dialog's contract
   - Confirmations stay dialogs: a move that cannot be undone is reported, never confirmed in the panel
+- One account open
+  - Auction standing: suspend from auctions and reinstate appear only with a handler, and confirm in the moderation dialog
 - What an account can do
   - Grant rows: the grants the console resolved, elevated ones marked once for the account
   - Actions together: hand-offs and standing moves the console offered, hand-offs before ban, unban, or erase
@@ -40,7 +42,6 @@ home moved.
 - Confirmations and sessions
   - One moderation signature: one confirmation serves every irreversible move, reason collected or empty
   - No secrets: a session is named by a consumer-supplied identifier, never by what authenticates it
-
 ## Requirements
 ### Requirement: The user directory exports
 
@@ -57,6 +58,7 @@ components for the user directory surface: `UserTable`, `UserRolesDialog`,
 `UserSessionRow`, `UserFilterGroup`, `UserFilterOption`, `UserGrantRow`, and
 `UserDirectoryOrder`.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-2ch rev=1 -->
 #### Scenario: shared-console-user-directory-SC-01 - A console imports the directory
 **Serves:** The directory contract - a console imports the directory
 
@@ -72,6 +74,7 @@ by the roles dialog SHALL be ordered as the options were offered rather than as
 they were selected, and an empty selection SHALL be submitted as an empty list,
 leaving any default-role decision to the consumer.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-x9v rev=1 -->
 #### Scenario: shared-console-user-directory-SC-02 - A console offers its own role vocabulary
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
@@ -79,6 +82,7 @@ leaving any default-role decision to the consumer.
 - **THEN** each role is offered with the label and permission summary the console supplied
 - **AND THEN** no role the console did not supply is offered
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-7uu rev=1 -->
 #### Scenario: shared-console-user-directory-SC-03 - A selection is submitted
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
@@ -86,6 +90,7 @@ leaving any default-role decision to the consumer.
 - **THEN** the submitted list holds the selected roles in the order the options were offered
 - **AND THEN** an operator who selected none submits an empty list
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-uu6 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-04 - An account joined on a given day
 **Serves:** Consumer-owned vocabulary - an account joined on a given day
 
@@ -101,6 +106,7 @@ move, so a console can withhold a move the operator's grants do not allow. A
 row SHALL offer ban or unban according to whether the account is banned, and
 never both.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-l3n rev=1 -->
 #### Scenario: shared-console-user-directory-SC-05 - An operator without elevated grants opens the directory
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
@@ -108,6 +114,7 @@ never both.
 - **THEN** neither action appears on any row
 - **AND THEN** every move the console did supply a handler for still appears
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-lga rev=1 -->
 #### Scenario: shared-console-user-directory-SC-06 - A banned account is shown
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
@@ -115,6 +122,7 @@ never both.
 - **THEN** that row offers unban and does not offer ban
 - **AND THEN** a row for an account that is not banned offers ban and does not offer unban
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-pff rev=1 -->
 #### Scenario: shared-console-user-directory-SC-14 - A console withholds sessions and moderation
 **Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
@@ -122,6 +130,7 @@ never both.
 - **THEN** no row offers sessions
 - **AND THEN** no row offers ban or unban
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-xmw rev=1 -->
 #### Scenario: shared-console-user-directory-SC-15 - A row opens its account
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -143,6 +152,7 @@ A session SHALL be able to carry, beside its identifier, when it began, when
 it ends without a revocation, and where it was raised — each supplied by the
 consumer already in words, each rendered when supplied and omitted when not.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-uz8 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-07 - An operator reads where an account is signed in
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
@@ -150,6 +160,7 @@ consumer already in words, each rendered when supplied and omitted when not.
 - **THEN** each is named by its identifier
 - **AND THEN** no authenticating secret is rendered
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-6bz rev=1 -->
 #### Scenario: shared-console-user-directory-SC-08 - An account holds no sessions
 **Serves:** shared-console-user-directory-US-02 - Operator reviews where an account is signed in
 
@@ -157,6 +168,7 @@ consumer already in words, each rendered when supplied and omitted when not.
 - **THEN** it says so
 - **AND THEN** the control that ends every session is unavailable
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-4vh rev=1 -->
 #### Scenario: shared-console-user-directory-SC-16 - A session says where it was raised
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -172,19 +184,20 @@ whether it collects a reason are supplied by the consumer, and SHALL report the
 confirmation with the reason collected — or with an empty reason where none was
 collected — so a consumer reads one signature whichever move it asked for.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-12o rev=1 -->
 #### Scenario: shared-console-user-directory-SC-09 - A move that collects a reason is confirmed
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** an operator confirms a move the consumer said collects a reason
 - **THEN** the dialog reports the reason that was typed
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-lps rev=1 -->
 #### Scenario: shared-console-user-directory-SC-10 - A move that collects no reason is confirmed
 **Serves:** shared-console-user-directory-US-01 - Operator moderates an account from the directory
 
 - **WHEN** an operator confirms a move the consumer said collects no reason
 - **THEN** no reason field is rendered
 - **AND THEN** the dialog reports an empty reason
-
 
 ### Requirement: A role chip may link to that role's grants page
 
@@ -194,6 +207,7 @@ each matching role name on the account's identity as a link to that address.
 the account and never navigates away. When the console supplies no per-role
 address, identity role names SHALL render without links.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-0qx rev=1 -->
 #### Scenario: shared-console-user-directory-SC-11 - A role name on the account opens its address
 **Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
@@ -201,6 +215,7 @@ address, identity role names SHALL render without links.
 - **WHEN** the operator activates the `staff` name on the account's identity
 - **THEN** navigation uses the address supplied for `staff`
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-ryc rev=1 -->
 #### Scenario: shared-console-user-directory-SC-12 - The directory's Roles cell is never a link
 **Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
@@ -209,6 +224,7 @@ address, identity role names SHALL render without links.
 - **THEN** each role name is shown
 - **AND THEN** none of those names is a link
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-u5f rev=1 -->
 #### Scenario: shared-console-user-directory-SC-13 - Roles without addresses stay plain
 **Serves:** shared-console-user-directory-US-03 - Operator opens a role from the account
 
@@ -237,6 +253,7 @@ offered, and an empty selection as an empty list. When the console marks the
 account's roles as blocked, the panel SHALL show that mark and SHALL NOT
 offer changing roles.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-2r3 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-17 - An operator reads one account whole
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -244,6 +261,7 @@ offer changing roles.
 - **THEN** who the account is, its actions, the grants it holds, its timeline, and its sessions each render from what the console supplied
 - **AND THEN** an area the console supplied nothing for is not rendered
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-1iw rev=1 -->
 #### Scenario: shared-console-user-directory-SC-18 - Roles are saved from the panel
 **Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
@@ -251,6 +269,7 @@ offer changing roles.
 - **THEN** the submitted list holds the selected roles in the order the options were offered
 - **AND THEN** an operator who selected none submits an empty list
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-kmj rev=1 -->
 #### Scenario: shared-console-user-directory-SC-29 - Roles stay blocked when the console marks them
 **Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
@@ -259,6 +278,7 @@ offer changing roles.
 - **THEN** it shows that mark
 - **AND THEN** it does not offer changing roles
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-z5x rev=1 -->
 #### Scenario: shared-console-user-directory-SC-19 - A ban started in the panel is confirmed outside it
 **Serves:** shared-console-user-directory-US-05 - Operator changes an account's access from the panel
 
@@ -282,6 +302,7 @@ into Roles & Permissions, it does so through a role name on identity.
 | Label | What the console shows for it |
 | Elevated | Whether the console marks it elevated |
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-mne rev=1 -->
 #### Scenario: shared-console-user-directory-SC-20 - The grants an account holds are shown
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -290,12 +311,14 @@ into Roles & Permissions, it does so through a role name on identity.
 - **AND THEN** a row the console marked elevated is distinguishable from one it did not
 - **AND THEN** the elevated mark appears at most once for the account
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-g8w rev=1 -->
 #### Scenario: shared-console-user-directory-SC-21 - A grant is not a link
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
 - **WHEN** the panel renders grant rows
 - **THEN** none of those grant labels is a link
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-jnf rev=1 -->
 #### Scenario: shared-console-user-directory-SC-22 - An account holds no grants
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -311,6 +334,7 @@ detail — before the sessions list when both are supplied. It SHALL NOT invent
 a time or a milestone the consumer did not supply. A milestone without a time
 SHALL still render its label (and detail when supplied).
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-my2 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-27 - Timeline milestones are shown as supplied
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -330,6 +354,7 @@ SHALL offer the consumer's any-elevated option plus each elevated role option
 the consumer supplied. Status and Email SHALL each offer an Any choice that
 reports that narrowing as cleared, plus the options the consumer supplied.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-58a rev=1 -->
 #### Scenario: shared-console-user-directory-SC-23 - A console supplies the filter words
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -337,6 +362,7 @@ reports that narrowing as cleared, plus the options the consumer supplied.
 - **THEN** each control uses the labels and options that console supplied
 - **AND THEN** no option that console did not supply is offered
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-uwn rev=1 -->
 #### Scenario: shared-console-user-directory-SC-24 - An operator clears Status or Email
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -345,6 +371,7 @@ reports that narrowing as cleared, plus the options the consumer supplied.
 - **THEN** the reported selection for it is cleared
 - **AND THEN** the other controls' selections are unchanged
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-eo0 rev=1 -->
 #### Scenario: shared-console-user-directory-SC-28 - Roles is locked under Users
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -359,6 +386,7 @@ reports that narrowing as cleared, plus the options the consumer supplied.
 the column and direction the consumer supplied as the one in force, and SHALL
 report an operator's change to it. It SHALL NOT reorder the rows it was given.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-fyc rev=1 -->
 #### Scenario: shared-console-user-directory-SC-25 - An operator asks for a different order
 **Serves:** Narrowing and order - an operator asks for a different order
 
@@ -376,6 +404,7 @@ without the ban reason, so the row stays one line. Neither SHALL supply a
 reason of its own. When the consumer marks a row as erasing, the table SHALL
 show that standing and SHALL NOT offer unban for that row.
 
+<!-- trace:scenario id=g10.shared-user-directory.SC-geg rev=1 -->
 #### Scenario: shared-console-user-directory-SC-26 - A banned account says why
 **Serves:** shared-console-user-directory-US-04 - Operator reads one account beside the directory
 
@@ -384,3 +413,49 @@ show that standing and SHALL NOT offer unban for that row.
 - **THEN** the first shows the reason the console supplied
 - **AND THEN** the second shows that it is banned and no reason
 - **AND THEN** the table's Status cell for a banned row shows banned without that reason
+
+### Requirement: The panel offers auction suspension only with a handler
+
+The panel shows the moves and the standing the console supplies, and confirms
+nothing itself.
+
+**Only with a handler** - `UserAccountPanel` SHALL offer suspending the account
+from auctions only when the consumer supplies a handler for it, and reinstating
+only when the consumer supplies a handler for that.
+
+**One move at a time** - It SHALL offer suspend or reinstate according to the
+auction standing the consumer supplies, and never both.
+
+**Auction standing** - The panel SHALL render auction standing, and the reason
+the consumer supplied with it, apart from the account's platform standing.
+
+**Confirmed outside** - It SHALL NOT confirm either move itself: it reports the
+move to the console, which confirms it in `UserModerationDialog`.
+
+**Exports** - No export is added or renamed.
+
+<!-- trace:scenario id=g10.shared-user-directory.SC-icf rev=1 -->
+#### Scenario: shared-console-user-directory-SC-30 - Auction suspension appears only with a handler
+**Serves:** One account open - auction suspension appears only with a handler
+
+- **WHEN** a console renders the panel without a suspend handler or a reinstate handler
+- **THEN** the panel offers neither move
+- **AND THEN** a console that supplies both sees suspend for an account not suspended and reinstate for one that is, never both
+
+<!-- trace:scenario id=g10.shared-user-directory.SC-x0r rev=1 -->
+#### Scenario: shared-console-user-directory-SC-31 - Auction standing shows apart from a ban
+**Serves:** One account open - auction standing shows apart from a ban
+
+- **GIVEN** an account the console supplies as suspended from auctions with a reason, and not banned
+- **WHEN** the panel renders
+- **THEN** it shows the auction suspension and its reason
+- **AND THEN** it shows the account as not banned
+
+<!-- trace:scenario id=g10.shared-user-directory.SC-mzm rev=1 -->
+#### Scenario: shared-console-user-directory-SC-32 - A suspension started in the panel is confirmed outside it
+**Serves:** One account open - a suspension started in the panel is confirmed outside it
+
+- **WHEN** an operator starts suspending an account from auctions in the panel
+- **THEN** the panel reports the move and collects no confirmation of its own
+- **AND THEN** nothing is reported as confirmed until the moderation dialog reports it
+

@@ -21,12 +21,18 @@ surface, whatever specs that owns it.
   - Not-found fallback: an address under no surface renders a not-found
     surface naming it, never home
 - Session-decided addresses
-  - Session correction: home, sign-in, and the profile each answer with what
-    the session allows
+  - Session correction: home and sign-in each answer with what the session
+    allows
   - History replacement: a correction replaces the entry it corrects, so back
     never returns to it
-  - Everything else does not wait: only the session-decided addresses wait for
-    the session to resolve
+  - Everything else does not wait: only the session-decided addresses and the
+    profile wait for the session to resolve
+- The profile without a session
+  - Answered on its own address: arriving signed out asks there, uncorrected
+  - Carried on: a session arriving renders the profile there, with no
+    navigation in between
+  - Leaving goes home: dismissing takes the collector to home, replacing the
+    entry the profile holds
 - In-app navigation
   - No document load: moving between the site's surfaces stays in the page,
     and history steps back through it
@@ -43,6 +49,7 @@ surface, whatever specs that owns it.
     it
 
 ## Requirements
+
 ### Requirement: An address resolves to one surface
 
 The site SHALL answer home, sign-in, and the profile each at an address of
@@ -53,6 +60,7 @@ could own an address, the deepest one naming it SHALL be the one that
 renders. An address under no surface SHALL resolve to a not-found surface
 that names the address, never to home.
 
+<!-- trace:scenario id=zzz.site-navigation.SC-lm3 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-01 - Each view has an address
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -60,6 +68,7 @@ that names the address, never to home.
   refresh
 - **THEN** that surface renders at that address
 
+<!-- trace:scenario id=zzz.site-navigation.SC-epz rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-02 - A refresh keeps the collector's place
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
@@ -67,56 +76,12 @@ that names the address, never to home.
 - **WHEN** they refresh
 - **THEN** sign-in renders, not home
 
+<!-- trace:scenario id=zzz.site-navigation.SC-h76 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-03 - An unknown address resolves to not-found
 **Serves:** zzz-site-site-navigation-US-01 - Collector opens a ZZZ address directly
 
 - **WHEN** a collector opens an address under no surface the site answers
 - **THEN** the not-found surface renders, naming the address that failed
-
-### Requirement: The session corrects a session-decided address
-
-Home, sign-in, and the profile SHALL each answer with what the session
-allows: home and sign-in answer the profile for a signed-in collector, and
-the profile answers sign-in for a collector without a session. A correction
-SHALL move the address to the surface shown, replacing the history entry it
-corrects. Only these session-decided addresses SHALL wait for the session
-to resolve.
-
-#### Scenario: zzz-site-site-navigation-SC-04 - A signed-in collector lands on home
-**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
-
-- **GIVEN** a signed-in collector
-- **WHEN** they open the home address
-- **THEN** their profile renders and the address reads as the profile
-
-#### Scenario: zzz-site-site-navigation-SC-05 - A signed-in collector asks for sign-in
-**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
-
-- **GIVEN** a signed-in collector
-- **WHEN** they open the sign-in address
-- **THEN** their profile renders and the address reads as the profile
-
-#### Scenario: zzz-site-site-navigation-SC-06 - A signed-out collector asks for the profile
-**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
-
-- **GIVEN** a collector who is not signed in
-- **WHEN** they open the profile address
-- **THEN** the sign-in surface renders and the address reads as sign-in
-
-#### Scenario: zzz-site-site-navigation-SC-07 - Back never returns to a corrected address
-**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
-
-- **GIVEN** a collector whose navigation was just corrected
-- **WHEN** they go back
-- **THEN** they arrive where they were before asking, never at the address
-  that corrected them forward
-
-#### Scenario: zzz-site-site-navigation-SC-08 - Not-found does not wait
-**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
-
-- **GIVEN** the session has not yet resolved
-- **WHEN** a collector opens an address under no surface the site answers
-- **THEN** the not-found surface renders without waiting for it
 
 ### Requirement: In-app navigation stays in the page
 
@@ -125,6 +90,7 @@ load, and the browser's history SHALL step back through it. A click the
 collector modifies, a link that opens elsewhere by its own declaration, and
 a destination on another origin SHALL be left to the browser untouched.
 
+<!-- trace:scenario id=zzz.site-navigation.SC-guq rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-09 - Sign-in opens in place
 **Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
@@ -133,6 +99,7 @@ a destination on another origin SHALL be left to the browser untouched.
 - **THEN** the sign-in surface renders at its address without a full
   document load
 
+<!-- trace:scenario id=zzz.site-navigation.SC-9ws rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-10 - Back steps back into the site
 **Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
@@ -140,6 +107,7 @@ a destination on another origin SHALL be left to the browser untouched.
 - **WHEN** they go back
 - **THEN** home renders, still without a full document load
 
+<!-- trace:scenario id=zzz.site-navigation.SC-mbz rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-11 - A modified click is the browser's
 **Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
@@ -147,6 +115,7 @@ a destination on another origin SHALL be left to the browser untouched.
   the one that opens a new tab
 - **THEN** the browser's own behavior happens, unaltered
 
+<!-- trace:scenario id=zzz.site-navigation.SC-e3y rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-12 - Another origin is the browser's
 **Serves:** zzz-site-site-navigation-US-03 - Collector moves between surfaces without a page load
 
@@ -159,6 +128,7 @@ Going back or forward SHALL return the collector to the scroll position
 they left that entry at. A navigation to a new entry SHALL start at the
 top.
 
+<!-- trace:scenario id=zzz.site-navigation.SC-2ks rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-13 - Back returns to where they were
 **Serves:** zzz-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
@@ -167,6 +137,7 @@ top.
 - **WHEN** they go back
 - **THEN** the surface is scrolled to where they left it
 
+<!-- trace:scenario id=zzz.site-navigation.SC-kt9 rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-14 - A new surface starts at the top
 **Serves:** zzz-site-site-navigation-US-04 - Collector resumes a surface where they left it
 
@@ -179,6 +150,7 @@ top.
 Opening a surface SHALL NOT download another surface's page code.
 Navigating to a surface SHALL load that surface's code then.
 
+<!-- trace:scenario id=zzz.site-navigation.SC-ghb rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-15 - The first visit pays for one surface
 **Serves:** zzz-site-site-navigation-US-05 - Collector downloads only the surface they open
 
@@ -186,6 +158,7 @@ Navigating to a surface SHALL load that surface's code then.
 - **THEN** no script containing the profile's or sign-in's page code is
   downloaded
 
+<!-- trace:scenario id=zzz.site-navigation.SC-hgk rev=1 -->
 #### Scenario: zzz-site-site-navigation-SC-16 - The destination loads on arrival
 **Serves:** zzz-site-site-navigation-US-05 - Collector downloads only the surface they open
 
@@ -193,3 +166,86 @@ Navigating to a surface SHALL load that surface's code then.
 - **WHEN** they move to sign-in
 - **THEN** sign-in's page code loads and sign-in renders
 
+### Requirement: Home and sign-in answer with what the session allows
+
+Home and sign-in SHALL each answer with what the session allows: both answer
+the profile for a signed-in collector. A correction SHALL move the address to
+the surface shown, replacing the history entry it corrects. Only these
+session-decided addresses, and the profile, SHALL wait for the session to
+resolve.
+
+<!-- trace:scenario id=zzz.site-navigation.SC-wwn rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-17 - A signed-in collector lands on home
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
+
+- **GIVEN** a signed-in collector
+- **WHEN** they open the home address
+- **THEN** their profile renders and the address reads as the profile
+
+<!-- trace:scenario id=zzz.site-navigation.SC-i43 rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-18 - A signed-in collector asks for sign-in
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
+
+- **GIVEN** a signed-in collector
+- **WHEN** they open the sign-in address
+- **THEN** their profile renders and the address reads as the profile
+
+<!-- trace:scenario id=zzz.site-navigation.SC-q5b rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-19 - Back never returns to a corrected address
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
+
+- **GIVEN** a collector whose navigation was just corrected
+- **WHEN** they go back
+- **THEN** they arrive where they were before asking, never at the address
+  that corrected them forward
+
+<!-- trace:scenario id=zzz.site-navigation.SC-zrz rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-20 - Not-found does not wait
+**Serves:** zzz-site-site-navigation-US-02 - Collector asks for a session-decided address
+
+- **GIVEN** the session has not yet resolved
+- **WHEN** a collector opens an address under no surface the site answers
+- **THEN** the not-found surface renders without waiting for it
+
+---
+
+### Requirement: The profile answers on its own address, and leaving it goes home
+
+A collector who arrives at the profile address without a session — directly,
+by bookmark, or by going back or forward to it — SHALL land on that address.
+The site SHALL NOT correct it to another surface. The sign-in dialog SHALL
+open over it once the session has answered that there is none. A session
+arriving SHALL render the profile there, with no navigation in between.
+
+Dismissing that dialog SHALL take the collector to home, replacing the entry
+the profile holds so that going back leads where they came from rather than
+to the profile asking again.
+
+<!-- trace:scenario id=zzz.site-navigation.SC-wjt rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-21 - A signed-out collector opens the profile address
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
+
+- **GIVEN** a collector who is not signed in
+- **WHEN** they open the profile address directly
+- **THEN** the sign-in dialog opens over it
+- **AND** the address still reads as the profile
+
+<!-- trace:scenario id=zzz.site-navigation.SC-q90 rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-22 - The session arrives and the profile renders
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
+
+- **GIVEN** a signed-out collector asked to sign in at the profile's own
+  address
+- **WHEN** their session arrives
+- **THEN** the profile renders at that same address, with no navigation in
+  between
+
+<!-- trace:scenario id=zzz.site-navigation.SC-pan rev=1 -->
+#### Scenario: zzz-site-site-navigation-SC-23 - Leaving the ask at the profile's address goes home
+**Serves:** zzz-site-site-navigation-US-06 - Collector opens the profile with no session
+
+- **GIVEN** a signed-out collector asked to sign in at the profile's own
+  address
+- **WHEN** they dismiss the dialog
+- **THEN** home renders and the address reads as home
+- **AND** going back leads where they came from, never to the profile

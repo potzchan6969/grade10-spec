@@ -39,6 +39,7 @@ amount SHALL use the minor-unit exponent that ISO 4217 assigns to that
 amount's currency. No surface SHALL assume a fixed exponent for every
 currency.
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-2fp rev=1 -->
 #### Scenario: shared-money-amounts-SC-01 - A two-decimal currency
 **Serves:** Minor-unit conversion - a two-decimal currency
 
@@ -46,6 +47,7 @@ currency.
 - **WHEN** the amount is displayed
 - **THEN** the major amount shown is 2,490.00
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-a7w rev=1 -->
 #### Scenario: shared-money-amounts-SC-02 - A currency with no minor unit
 **Serves:** Minor-unit conversion - a currency with no minor unit
 
@@ -54,6 +56,7 @@ currency.
 - **THEN** the major amount shown is 249,000
 - **AND** no fractional digits are shown
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-qf0 rev=1 -->
 #### Scenario: shared-money-amounts-SC-03 - A three-decimal currency
 **Serves:** Minor-unit conversion - a three-decimal currency
 
@@ -61,6 +64,7 @@ currency.
 - **WHEN** the amount is displayed
 - **THEN** the major amount shown is 249.000
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-n6x rev=1 -->
 #### Scenario: shared-money-amounts-SC-04 - A decimal amount from an external system
 **Serves:** Minor-unit conversion - a decimal amount from an external system
 
@@ -69,6 +73,7 @@ currency.
 - **THEN** the result is exactly 115
 - **AND** converting 115 HKD minor units back yields the text `1.15`
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-fxm rev=1 -->
 #### Scenario: shared-money-amounts-SC-05 - A decimal amount too precise for its currency
 **Serves:** Minor-unit conversion - a decimal amount too precise for its currency
 
@@ -84,18 +89,21 @@ conversion or display to fail with an error naming that code. No surface
 SHALL fall back to a default exponent, render the digits unconverted, or
 substitute another currency.
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-d1o rev=1 -->
 #### Scenario: shared-money-amounts-SC-06 - Displaying an unrecognized currency
 **Serves:** Unrecognized currencies - displaying an unrecognized currency
 
 - **WHEN** an amount is displayed in a currency code the platform holds no exponent for
 - **THEN** the display fails with an error naming that currency code
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-e8z rev=1 -->
 #### Scenario: shared-money-amounts-SC-07 - Converting an unrecognized currency
 **Serves:** Unrecognized currencies - converting an unrecognized currency
 
 - **WHEN** a decimal amount in a currency code the platform holds no exponent for is converted to minor units
 - **THEN** the conversion fails with an error naming that currency code
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-v6r rev=1 -->
 #### Scenario: shared-money-amounts-SC-08 - The error does not name one integration
 **Serves:** Unrecognized currencies - the error does not name one integration
 
@@ -120,6 +128,7 @@ unambiguous where a symbol is not.
 Both shapes SHALL group thousands. Neither SHALL be produced by a surface's
 own local formatting.
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-fg6 rev=1 -->
 #### Scenario: shared-money-amounts-SC-09 - Two collector surfaces agree
 **Serves:** Audience shapes - two collector surfaces agree
 
@@ -127,6 +136,7 @@ own local formatting.
 - **WHEN** both are rendered for the same reader
 - **THEN** both show identical text
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-ba6 rev=1 -->
 #### Scenario: shared-money-amounts-SC-10 - An operator sees the currency code
 **Serves:** Audience shapes - an operator sees the currency code
 
@@ -135,6 +145,7 @@ own local formatting.
 - **THEN** it shows the ISO code `HKD` with the amount `2,490.00`
 - **AND** the thousands are grouped
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-c16 rev=1 -->
 #### Scenario: shared-money-amounts-SC-11 - Two operator tables agree
 **Serves:** Audience shapes - two operator tables agree
 
@@ -142,6 +153,7 @@ own local formatting.
 - **WHEN** each is rendered
 - **THEN** all three show identical text
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-01a rev=1 -->
 #### Scenario: shared-money-amounts-SC-12 - A collector reads their own locale
 **Serves:** Audience shapes - a collector reads their own locale
 
@@ -156,6 +168,7 @@ Money rendered into a message the platform sends â€” an email, a notification â€
 SHALL be formatted in English, independent of any reader's locale, so the
 amount matches the language the message is written in.
 
+<!-- trace:scenario id=g10.shared-money-amounts.SC-a62 rev=1 -->
 #### Scenario: shared-money-amounts-SC-13 - An auction email
 **Serves:** Sent messages - an auction email
 

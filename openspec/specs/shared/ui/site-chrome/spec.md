@@ -50,12 +50,14 @@ presentation, and an optional account slot — SHALL remain its own prop.
 `Nav` and `Footer` SHALL each be renderable on their own, in either order, and
 neither SHALL require the other.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-xvs rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-01 - An application imports the chrome
 **Serves:** Chrome exports - an application imports the chrome
 
 - **WHEN** an application imports each name above from the design system's public entry
 - **THEN** every import resolves
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-rfu rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-02 - A page renders one without the other
 **Serves:** Chrome exports - a page renders one without the other
 
@@ -63,6 +65,7 @@ neither SHALL require the other.
   without the header
 - **THEN** it renders as specified, with no missing-context error
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-v7l rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-03 - The chrome's words arrive as one group
 **Serves:** Chrome exports - the chrome's words arrive as one group
 
@@ -91,6 +94,7 @@ When the application supplies `onAccountClick` and no `accountSlot`, `Nav`
 SHALL render the account control as an icon by default, or as a primary Sign In
 button when `accountPresentation` is `"sign-in"`.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-5a2 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-04 - A storefront with no cart
 **Serves:** Header controls - a storefront with no cart
 
@@ -98,6 +102,7 @@ button when `accountPresentation` is `"sign-in"`.
 - **WHEN** the header renders
 - **THEN** no cart control appears in it, and no space is reserved for one
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-at6 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-05 - Only the supplied controls appear
 **Serves:** Header controls - only the supplied controls appear
 
@@ -106,12 +111,14 @@ button when `accountPresentation` is `"sign-in"`.
 - **THEN** the account control appears
 - **AND** the search and cart controls do not
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-aq6 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-06 - Wishlist is not a header control
 **Serves:** Header controls - wishlist is not a header control
 
 - **WHEN** the header renders
 - **THEN** no wishlist control appears, and no space is reserved for one
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-dti rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-07 - The locale label without a handler
 **Serves:** Header controls - the locale label without a handler
 
@@ -120,6 +127,7 @@ button when `accountPresentation` is `"sign-in"`.
 - **THEN** the label is displayed in the bar
 - **AND** nothing about it invites a click
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-bv8 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-19 - Sign In presentation
 **Serves:** Header controls - Sign In presentation
 
@@ -135,12 +143,14 @@ button when `accountPresentation` is `"sign-in"`.
 content, and SHALL omit the utility row when the application supplies no
 utility links. An omitted region SHALL occupy no height.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-76j rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-08 - No promo content
 **Serves:** Footer - no promo content
 
 - **WHEN** the header renders with no promo content
 - **THEN** no promotional bar appears and the header is shorter by its height
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-1hu rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-09 - No utility links
 **Serves:** Footer - no utility links
 
@@ -153,6 +163,7 @@ utility links. An omitted region SHALL occupy no height.
 both visually and to assistive technology, and SHALL mark no item when the
 application identifies none.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-qpt rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-10 - A surface is current
 **Serves:** Current surface - a surface is current
 
@@ -162,6 +173,7 @@ application identifies none.
   current page
 - **AND** no other item is
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-8vo rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-11 - No surface is current
 **Serves:** Current surface - no surface is current
 
@@ -175,6 +187,7 @@ copyright, legal links, and locale, and SHALL omit any of the columns, social
 links, or legal links the application supplies none of, rather than rendering
 an empty heading or an empty row.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-w1j rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-12 - Every section is supplied
 **Serves:** Footer - every section is supplied
 
@@ -182,6 +195,7 @@ an empty heading or an empty row.
   copyright, legal links, and a locale
 - **THEN** all of them are displayed
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-gqk rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-13 - A section has no content
 **Serves:** Footer - a section has no content
 
@@ -196,6 +210,7 @@ an empty heading or an empty row.
 supply — no brand name, no navigation label, no link text, and no fallback for
 an omitted value.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-7ls rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-14 - Nothing is defaulted
 **Serves:** No defaulted content - nothing is defaulted
 
@@ -220,6 +235,7 @@ the same browsing context.
 **Application decides** - The chrome SHALL NOT invent which links are external
 — the application supplies the flag with the link.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-cmm rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-27 - External link opens a new tab
 **Serves:** External links - new-tab destinations
 
@@ -228,6 +244,7 @@ the same browsing context.
   the compact menu
 - **THEN** the link carries `target="_blank"` and `rel="noopener noreferrer"`
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-80n rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-28 - Same-tab link stays in place
 **Serves:** External links - new-tab destinations
 
@@ -256,17 +273,27 @@ primary Sign In button (not the account icon) and SHALL invoke the supplied
 sign-in handler when that button is activated.
 
 **Signed in** - When `session` is `"signed-in"`, `SiteHeader` SHALL render the
-account icon and SHALL open a menu of My Auctions and Sign out. The menu
-SHALL NOT include KYC. Activating each item SHALL invoke the matching
-supplied handler.
+account icon and SHALL open a menu that shows `accountEmail` with a small
+(`xs`) initial avatar above the items, falling back to `copy.accountMenuLabel`
+when `accountEmail` is not supplied, followed at minimum by My Auctions and
+Sign Out. The menu SHALL NOT include KYC. Activating each item SHALL invoke
+the matching supplied handler.
 
-**Cart, search, Profile, and My Orders** - Cart, search, Profile, and My
-Orders SHALL remain absent unless the application supplies their handlers.
-The account menu's items SHALL follow the fixed order Profile, My Orders,
-My Auctions, Sign out, omitting Profile or My Orders wherever no matching
-handler is supplied and opening directly on whichever item is next.
-Activating Profile or My Orders SHALL invoke its matching handler.
+**Sign Out label** - The account menu's sign-out item SHALL read "Sign Out".
 
+**Profile, Cart, search, My Orders, and Membership** - Profile, Cart, search,
+My Orders, and Membership SHALL remain absent unless the application
+supplies their handlers; Membership additionally requires `copy.membership`.
+The account menu's items SHALL follow the fixed order Profile, My Orders, My
+Auctions, Membership, Sign Out, each of Profile, My Orders, and Membership
+omitted independently wherever its own handler (and, for Membership, its
+copy) is not supplied, opening directly on whichever item is next. Activating
+Profile SHALL invoke its matching handler. Activating My Orders SHALL invoke
+its matching handler. Activating Membership SHALL invoke the supplied
+`onMembership` handler and SHALL NOT navigate to a membership address the
+site withholds.
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-ff5 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-15 - An application imports SiteHeader
 **Serves:** Chrome exports - an application imports SiteHeader
 
@@ -275,6 +302,7 @@ Activating Profile or My Orders SHALL invoke its matching handler.
   entry
 - **THEN** every import resolves
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-7fd rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-16 - Signed out shows Sign In
 **Serves:** Chrome exports - signed out shows Sign In
 
@@ -283,16 +311,20 @@ Activating Profile or My Orders SHALL invoke its matching handler.
 - **THEN** a primary Sign In button appears
 - **AND** no account icon control appears
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-yiu rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-17 - Signed in shows the account menu
-**Serves:** Chrome exports - signed in shows the account menu
+**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu once the application's Store answers
 
-- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied, and
-  a My Orders handler is supplied
+- **GIVEN** `session` is `"signed-in"`, `accountEmail` is supplied, an
+  `onProfile` handler is supplied, a My Orders handler is supplied, and
+  `onMembership` with `copy.membership` are supplied
 - **WHEN** the collector activates the account control
-- **THEN** a menu offers Profile, My Orders, My Auctions, and Sign out, with
-  Profile first and ahead of My Orders
+- **THEN** the menu shows `accountEmail` with its `xs` avatar above the items
+- **AND** the menu offers Profile, My Orders, My Auctions, Membership, and
+  Sign Out, in that order, with Profile first
 - **AND** the menu does not offer KYC
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-i31 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-18 - Auction-first chrome omits cart
 **Serves:** Chrome exports - auction-first chrome omits cart
 
@@ -300,35 +332,39 @@ Activating Profile or My Orders SHALL invoke its matching handler.
 - **WHEN** it renders
 - **THEN** no cart control appears, and no space is reserved for one
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-xyv rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-29 - Signed in with no My Orders handler
-**Serves:** Chrome exports - signed in shows the account menu
+**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - the collector's account menu before the application's Store answers
 
-- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied, and
-  no My Orders handler is supplied
+- **GIVEN** `session` is `"signed-in"`, an `onProfile` handler is supplied,
+  and no My Orders handler is supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu offers Profile, My Auctions, and Sign out
+- **THEN** the menu offers Profile, My Auctions, and Sign Out
 - **AND** the menu does not offer My Orders
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-cp9 rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-30 - Signed in with no Profile handler
 **Serves:** Header controls - the account menu opens directly on My Orders when Profile has no handler
 
 - **GIVEN** `session` is `"signed-in"`, no `onProfile` handler is supplied, and
   a My Orders handler is supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu offers My Orders, My Auctions, and Sign out, opening
+- **THEN** the menu offers My Orders, My Auctions, and Sign Out, opening
   directly on My Orders
 - **AND** the menu does not offer Profile
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-y8d rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-31 - Signed in with neither Profile nor My Orders handler
 **Serves:** Header controls - the account menu opens directly on My Auctions when neither Profile nor My Orders has a handler
 
 - **GIVEN** `session` is `"signed-in"`, no `onProfile` handler is supplied, and
   no My Orders handler is supplied
 - **WHEN** the collector activates the account control
-- **THEN** the menu offers only My Auctions and Sign out, opening directly on
+- **THEN** the menu offers only My Auctions and Sign Out, opening directly on
   My Auctions
 - **AND** the menu does not offer Profile or My Orders
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-bjp rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-32 - Activating Profile invokes its handler
 **Serves:** Header controls - the account menu's Profile item takes the collector to the supplied destination
 
@@ -337,13 +373,86 @@ Activating Profile or My Orders SHALL invoke its matching handler.
 - **THEN** the supplied `onProfile` handler is invoked
 - **AND** no other account-menu handler is invoked
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-h0z rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-33 - Signed out ignores the Profile and My Orders handlers
 **Serves:** Chrome exports - signed out shows Sign In
 
-- **GIVEN** `session` is `"signed-out"`, an `onProfile` handler is supplied, and a My Orders handler is supplied
+- **GIVEN** `session` is `"signed-out"`, an `onProfile` handler is supplied,
+  a My Orders handler is supplied, and `onMembership` with `copy.membership`
+  are supplied
 - **WHEN** `SiteHeader` renders
 - **THEN** a primary Sign In button appears
-- **AND** no account icon, Profile item, or My Orders item appears
+- **AND** no account icon, Profile item, My Orders item, or Membership item
+  appears
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-hhb rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-34 - Account menu shows accountEmail with its avatar
+**Serves:** grade10-site/site/page-shell#grade10-site-site-page-shell-US-03 - identifying the signed-in collector at the top of the menu
+
+- **GIVEN** `session` is `"signed-in"` and `accountEmail` is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu shows `accountEmail` with a small (`xs`) initial avatar
+  above the items
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-bzz rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-35 - Account menu falls back to copy.accountMenuLabel without accountEmail
+**Serves:** Header controls - the menu falls back to the supplied label when no email is available
+
+- **GIVEN** `session` is `"signed-in"`, `accountEmail` is not supplied, and
+  `copy.accountMenuLabel` is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu shows `copy.accountMenuLabel` above the items in place of
+  an email
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-agk rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-36 - Membership requires both its handler and its copy
+**Serves:** Header controls - the account menu never opens a dead Membership control
+
+- **GIVEN** `session` is `"signed-in"`, `onMembership` is supplied, and
+  `copy.membership` is not supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu does not offer Membership
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-cl2 rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-37 - Sign Out reads in Title Case
+**Serves:** Header controls - the account menu's Sign Out label matches product direction
+
+- **GIVEN** `session` is `"signed-in"`
+- **WHEN** the collector activates the account control
+- **THEN** the last item reads "Sign Out"
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-w7p rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-38 - Membership joins after My Auctions without a My Orders handler
+**Serves:** Header controls - Membership's position holds independently of My Orders' own gating
+
+- **GIVEN** `session` is `"signed-in"`, `onMembership` and `copy.membership`
+  are supplied, and no My Orders handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers My Auctions, Membership, and Sign Out, in that
+  order
+- **AND** the menu does not offer My Orders
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-oe5 rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-39 - Activating Membership invokes its handler
+**Serves:** Header controls - the account menu's Membership item invokes the supplied handler
+
+- **GIVEN** `session` is `"signed-in"`, `onMembership` is supplied, and
+  `copy.membership` is supplied
+- **WHEN** the collector activates Membership in the account menu
+- **THEN** the supplied `onMembership` handler is invoked
+- **AND** no other account-menu handler is invoked
+- **AND** the browser does not navigate to a membership address the site
+  withholds
+
+<!-- trace:scenario id=g10.shared-site-chrome.SC-0eb rev=1 -->
+#### Scenario: shared-ui-site-chrome-SC-40 - Signed in with a My Orders handler but no Membership handler
+**Serves:** Header controls - the account menu omits Membership until its own handler is supplied
+
+- **GIVEN** `session` is `"signed-in"`, a My Orders handler is supplied, and
+  no `onMembership` handler is supplied
+- **WHEN** the collector activates the account control
+- **THEN** the menu offers My Orders, My Auctions, and Sign Out
+- **AND** the menu does not offer Membership
 
 ### Requirement: Compact viewports open navigation from a left menu drawer
 
@@ -370,6 +479,7 @@ rather than spanning the full viewport width.
 **Copy** - `copy.menu` names the menu trigger; `copy.menuTitle` names the
 drawer title; `copy.language` names the language nested drawer title.
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-79u rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-20 - Compact menu holds nav and language
 **Serves:** Header controls - compact menu holds nav and language
 
@@ -382,6 +492,7 @@ drawer title; `copy.language` names the language nested drawer title.
 - **AND** Account / Sign In and Cart remain in the bar when supplied
 - **AND** the menu panel leaves a visible gutter beside the viewport edge
 
+<!-- trace:scenario id=g10.shared-site-chrome.SC-ebi rev=1 -->
 #### Scenario: shared-ui-site-chrome-SC-21 - Wide viewport keeps the bar layout
 **Serves:** Header controls - wide viewport keeps the bar layout
 

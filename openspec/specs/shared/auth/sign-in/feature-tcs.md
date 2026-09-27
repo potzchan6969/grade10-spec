@@ -1,7 +1,8 @@
 # shared/auth/sign-in Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-15, tcs-rules r3.0
+**Status:** reopened
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
+**Reviewed:** 2026-09-25, tcs-rules r4, lapsed 2026-09-25
 **Out of suite:** shared-auth-sign-in-SC-34
 
 ## Background
@@ -15,6 +16,7 @@
 **I want** a link emailed to the address I submit to sign me in once,
 **so that** I reach my account without a password, and a used or expired link cannot.
 
+<!-- trace:case id=g10.shared-sign-in.TC-2hq rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC1-1: Valid unused link signs the collector in
 
 **Classification:**
@@ -49,6 +51,7 @@ customer is on <grade10 sign-in url>, signed out.
 * The link lands the collector on this brand, signed in.
 * The signed-in account is the one for <collector email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-vx5 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC2-1: Email step offers the link and no code control
 
 **Classification:**
@@ -77,6 +80,7 @@ customer is signed out.
 * The step offers sending a sign-in link.
 * No control asks for or sends a sign-in code.
 
+<!-- trace:case id=g10.shared-sign-in.TC-uto rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC3-1: Activating again during flight starts no second request
 
 **Classification:**
@@ -114,6 +118,7 @@ customer is signed out.
 * Only one send-link request reaches the auth service.
 * Both activations settle with that one request's outcome.
 
+<!-- trace:case id=g10.shared-sign-in.TC-v1z rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC4-1: First send does not disclose that the address is new
 
 **Classification:**
@@ -147,13 +152,14 @@ customer is on <grade10 sign-in url>, signed out.
 * The surface treats it as a sent link.
 * Nothing on the surface states that no account exists.
 
+<!-- trace:case id=g10.shared-sign-in.TC-ouf rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC5-1: Used link does not sign in again
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** actual
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -183,6 +189,7 @@ customer is on <grade10 sign-in url>, signed out.
 * No session is created.
 * The surface still shows the person as signed out.
 
+<!-- trace:case id=g10.shared-sign-in.TC-r9c rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC6-1: Expired link does not sign in
 
 **Classification:**
@@ -194,7 +201,7 @@ customer is on <grade10 sign-in url>, signed out.
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-01
 
@@ -219,6 +226,7 @@ customer is on <grade10 sign-in url>, signed out.
 * No session is created.
 * The surface still shows the person as signed out.
 
+<!-- trace:case id=g10.shared-sign-in.TC-6ku rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC7-1: New link kills the earlier unused link
 
 **Classification:**
@@ -257,6 +265,7 @@ customer is on <grade10 sign-in url>, signed out.
 * No session is created from <earlier link>.
 * The surface still shows the person as signed out.
 
+<!-- trace:case id=g10.shared-sign-in.TC-p0g rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC8-1: Failed send is reported and does not sign in
 
 **Classification:**
@@ -292,13 +301,14 @@ customer is on <grade10 sign-in url>, signed out.
 * The surface states that the link was not sent.
 * The person is not signed in.
 
-### shared-auth-sign-in-US1-TC9-1: Link followed inside five minutes signs the collector in
+<!-- trace:case id=g10.shared-sign-in.TC-vri rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
+### shared-auth-sign-in-US1-TC9-1: A link expires at five minutes
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression, release
@@ -320,6 +330,9 @@ Runs once per row of **Test data**.
 | --- | --- |
 | 4 minutes after the send | signs the collector in |
 | 4 minutes 59 seconds after the send | signs the collector in |
+| exactly 5 minutes after the send | creates no session |
+| 5 minutes 1 second after the send | creates no session |
+| 6 minutes after the send | creates no session |
 
 **Steps:**
 
@@ -329,15 +342,17 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Grade10 answers as the row states.
-* The signed-in account is the one for collector@example.com.
+* A sign-in row enters the account for collector@example.com.
+* A no-session row leaves the surface showing the person signed out.
 
+<!-- trace:case id=g10.shared-sign-in.TC-2zv rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC10-1: Resend countdown reaching zero leaves the sent link alive
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -368,13 +383,14 @@ Runs once per row of **Test data**.
 * The link signs the collector in.
 * The signed-in account is the one for <collector email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-uee rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC11-1: A resent link's five minutes run from its own send
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -406,13 +422,14 @@ Runs once per row of **Test data**.
 * The link signs the collector in, five minutes after the first send.
 * The signed-in account is the one for <collector email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-k9t rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC12-1: The session outlives the link that created it
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -444,13 +461,14 @@ Runs once per row of **Test data**.
 * Step 1 signs the collector in.
 * The collector is still signed in fifteen minutes after the send.
 
+<!-- trace:case id=g10.shared-sign-in.TC-fv6 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC13-1: Recorded link expiry is five minutes after the send
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -482,13 +500,14 @@ Runs once per row of **Test data**.
 * The recorded expiry is <send time> plus five minutes.
 * The expiry is unchanged at step 3.
 
+<!-- trace:case id=g10.shared-sign-in.TC-j99 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC14-1: The email promises five minutes in every locale
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** compatibility
 * **Suites:** regression
@@ -522,13 +541,14 @@ Runs once per row of **Test data**.
 * The body promises what the row states.
 * No row's body states fifteen minutes or any other duration.
 
+<!-- trace:case id=g10.shared-sign-in.TC-lw1 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC15-1: The promised duration is the enforced duration
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression, release
@@ -560,13 +580,14 @@ Runs once per row of **Test data**.
 * <promised duration> reads five minutes.
 * The link signs the collector in.
 
+<!-- trace:case id=g10.shared-sign-in.TC-7f8 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC16-1: Link followed past five minutes does not sign in
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** acceptance
 * **Suites:** regression, release
@@ -600,13 +621,14 @@ Runs once per row of **Test data**.
 * Grade10 answers as the row states.
 * The surface still shows the person as signed out.
 
-### shared-auth-sign-in-US1-TC17-1: Used link stays refused inside its five minutes
+<!-- trace:case id=g10.shared-sign-in.TC-7v1 rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
+### shared-auth-sign-in-US1-TC17-1: Used link stays refused inside and past five minutes
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -618,32 +640,35 @@ Runs once per row of **Test data**.
 **Pre-conditions:**
 
 * customer is signed out in a fresh browser session.
-* <used link> created a session two minutes after its send, and four minutes have passed since that send.
+* <used link> created a session two minutes after its send.
 
 **Test data:**
 
-| Field | Value |
+Runs once per row of **Test data**.
+
+| `<follow delay>` | Grade10 answers |
 | --- | --- |
-| `<collector email>` | collector@example.com, an address with an account |
-| `<used link>` | The sign-in link that already created a session |
+| 4 minutes after the send | creates no session |
+| 6 minutes after the send | creates no session |
 
 **Steps:**
 
-1. Follow <used link>.
-2. Read the signed-in state on the surface.
+1. Let `<follow delay>` pass after the send.
+2. Follow <used link>.
 
 **Expected Results:**
 
-* No session is created.
+* Grade10 answers as the row states.
 * The surface still shows the person as signed out.
 
+<!-- trace:case id=g10.shared-sign-in.TC-mem rev=1 covers=g10.shared-sign-in.SC-wy5,g10.shared-sign-in.SC-h56,g10.shared-sign-in.SC-q8n,g10.shared-sign-in.SC-7vo,g10.shared-sign-in.SC-9nt,g10.shared-sign-in.SC-wkc,g10.shared-sign-in.SC-yp2,g10.shared-sign-in.SC-juf,g10.shared-sign-in.SC-jqc,g10.shared-sign-in.SC-lfj,g10.shared-sign-in.SC-hs9,g10.shared-sign-in.SC-etq -->
 ### shared-auth-sign-in-US1-TC18-1: Device clock set back does not revive an expired link
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -682,6 +707,7 @@ Runs once per row of **Test data**.
 **I want** Google sign-in when this brand offers it,
 **so that** I can use an account I already have, and a brand that does not offer it does not show it.
 
+<!-- trace:case id=g10.shared-sign-in.TC-2dd rev=1 covers=g10.shared-sign-in.SC-eng,g10.shared-sign-in.SC-erl,g10.shared-sign-in.SC-ddm -->
 ### shared-auth-sign-in-US3-TC1-1: Brand with Google offers it and a verified email signs in
 
 **Classification:**
@@ -717,6 +743,7 @@ customer is signed out on a brand that has Google sign-in.
 * Step 1 shows the Google control on the sign-in surface.
 * The collector is signed in as the account for <verified google email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-rnu rev=1 covers=g10.shared-sign-in.SC-eng,g10.shared-sign-in.SC-erl,g10.shared-sign-in.SC-ddm -->
 ### shared-auth-sign-in-US3-TC2-1: Brand without Google hides the control
 
 **Classification:**
@@ -743,6 +770,7 @@ customer is signed out on a brand that does not have Google sign-in.
 
 * No Google sign-in control is shown.
 
+<!-- trace:case id=g10.shared-sign-in.TC-gw0 rev=1 covers=g10.shared-sign-in.SC-eng,g10.shared-sign-in.SC-erl,g10.shared-sign-in.SC-ddm -->
 ### shared-auth-sign-in-US3-TC3-1: Unverified Google email does not sign in
 
 **Classification:**
@@ -787,6 +815,7 @@ customer is signed out on a brand that does not have Google sign-in.
 **I want** every successful sign-in at an address to be the same person,
 **so that** a later visit, a product-created account, or letter case does not split me.
 
+<!-- trace:case id=g10.shared-sign-in.TC-ary rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC1-1: First sign-in at a new address creates the account
 
 **Classification:**
@@ -821,6 +850,7 @@ customer is on <grade10 sign-in url>, signed out.
 * An account exists for <new email>.
 * The person is signed in as that account.
 
+<!-- trace:case id=g10.shared-sign-in.TC-hrr rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC2-1: Later sign-in at the same address enters one account
 
 **Classification:**
@@ -864,6 +894,7 @@ Runs once per row of **Test data**.
 * The person enters <outcome>.
 * No second account exists for <link-created email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-9ep rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC3-1: Letter case does not create a second account
 
 **Classification:**
@@ -901,6 +932,7 @@ Runs once per row of **Test data**.
 * The person enters the account for Collector@example.com.
 * No second account exists for that address.
 
+<!-- trace:case id=g10.shared-sign-in.TC-4vq rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC4-1: Plus-tag is a different address
 
 **Classification:**
@@ -938,6 +970,7 @@ Runs once per row of **Test data**.
 * A second account exists for <plus-tag address>.
 * It is not the account for collector@example.com.
 
+<!-- trace:case id=g10.shared-sign-in.TC-4qd rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC5-1: Trusted product creates or enters by verified email
 
 **Classification:**
@@ -974,6 +1007,7 @@ A product of this brand has verified <address>.
 * The product receives <outcome>.
 * No second account exists for <address>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-kjy rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC6-1: Trusted product signs the person in on this brand
 
 **Classification:**
@@ -1012,6 +1046,7 @@ A product of this brand has verified <address>.
 * The person is signed in as the account for <product-verified email>.
 * No sign-in link or Google sign-in was completed for it.
 
+<!-- trace:case id=g10.shared-sign-in.TC-yvm rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC7-1: Sign-in after a product-created account is the same person
 
 **Classification:**
@@ -1049,6 +1084,7 @@ A product of this brand has verified <address>.
 * The person enters the product-created account.
 * No second account exists for <product-verified email>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-3pf rev=1 covers=g10.shared-sign-in.SC-kr7,g10.shared-sign-in.SC-nev,g10.shared-sign-in.SC-jqy,g10.shared-sign-in.SC-z8l,g10.shared-sign-in.SC-05p,g10.shared-sign-in.SC-yal,g10.shared-sign-in.SC-aee,g10.shared-sign-in.SC-py9,g10.shared-sign-in.SC-jnb -->
 ### shared-auth-sign-in-US4-TC8-1: Client cannot claim an email
 
 **Classification:**
@@ -1102,6 +1138,7 @@ Runs once per row of **Test data**.
 **I want** a second email within a minute to wait, and a return only to this brand,
 **so that** I am not flooded and not delivered to an untrusted address.
 
+<!-- trace:case id=g10.shared-sign-in.TC-wj2 rev=1 covers=g10.shared-sign-in.SC-fn7,g10.shared-sign-in.SC-p8n,g10.shared-sign-in.SC-eax -->
 ### shared-auth-sign-in-US5-TC1-1: Sign-in naming no location stays on the brand
 
 **Classification:**
@@ -1135,6 +1172,7 @@ customer opened <grade10 sign-in url> directly, so the sign-in names no return l
 
 * The collector lands on this brand.
 
+<!-- trace:case id=g10.shared-sign-in.TC-pri rev=1 covers=g10.shared-sign-in.SC-fn7,g10.shared-sign-in.SC-p8n,g10.shared-sign-in.SC-eax -->
 ### shared-auth-sign-in-US5-TC2-1: Second link send in a minute is told to wait
 
 **Classification:**
@@ -1171,6 +1209,7 @@ customer opened <grade10 sign-in url> directly, so the sign-in names no return l
 * The surface tells the collector to wait.
 * The surface does not state that the link was not sent.
 
+<!-- trace:case id=g10.shared-sign-in.TC-3ni rev=1 covers=g10.shared-sign-in.SC-fn7,g10.shared-sign-in.SC-p8n,g10.shared-sign-in.SC-eax -->
 ### shared-auth-sign-in-US5-TC3-1: Untrusted location is ignored
 
 **Classification:**
@@ -1220,144 +1259,196 @@ customer is on <grade10 sign-in url> naming <off-brand location>, signed out.
 **I want** a clear toast on the brand home when that link cannot create a session,
 **so that** I know whether to ask for a new link or that I cannot sign in at all.
 
+<!-- trace:case id=g10.shared-sign-in.TC-ryc rev=1 covers=g10.shared-sign-in.SC-4mo,g10.shared-sign-in.SC-66b,g10.shared-sign-in.SC-i3d,g10.shared-sign-in.SC-rt4,g10.shared-sign-in.SC-lja -->
 ### shared-auth-sign-in-US6-TC1-1: Expired link toasts on the brand home
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link whose time to live has ended.
+
+* customer is signed out.
+* <expired link> for <collector email> is past its time to live.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<expired link>` | A sign-in link whose time to live has ended |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <expired link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link has expired.
 
+<!-- trace:case id=g10.shared-sign-in.TC-bim rev=1 covers=g10.shared-sign-in.SC-4mo,g10.shared-sign-in.SC-66b,g10.shared-sign-in.SC-i3d,g10.shared-sign-in.SC-rt4,g10.shared-sign-in.SC-lja -->
 ### shared-auth-sign-in-US6-TC2-1: Used link toasts that it no longer works
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link that has already created a session.
+
+* A sign-in link for <collector email> has already created a session.
+* customer is signed out in a fresh browser session.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<used link>` | The sign-in link that already created a session |
 
 **Steps:**
 
-1. Follow that link again.
+1. Follow <used link>.
 
 **Expected Results:**
 
 * No new session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
+<!-- trace:case id=g10.shared-sign-in.TC-hdt rev=1 covers=g10.shared-sign-in.SC-4mo,g10.shared-sign-in.SC-66b,g10.shared-sign-in.SC-i3d,g10.shared-sign-in.SC-rt4,g10.shared-sign-in.SC-lja -->
 ### shared-auth-sign-in-US6-TC3-1: Superseded link toasts that it no longer works
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-An unused unexpired sign-in link that a later sign-in-link email for the same address replaced.
+
+* customer is signed out.
+* <earlier link> is unused and unexpired for <collector email>.
+* The sixty-second window since <earlier link> was sent has passed.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+| `<earlier link>` | The unused unexpired link from the first sign-in email |
 
 **Steps:**
 
-1. Follow the earlier link.
+1. Submit <collector email> at the email step to send a later sign-in email.
+2. Follow <earlier link>.
 
 **Expected Results:**
 
-* No session is created.
-* They are on this brand's home.
+* No session is created from <earlier link>.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
+<!-- trace:case id=g10.shared-sign-in.TC-5h7 rev=1 covers=g10.shared-sign-in.SC-4mo,g10.shared-sign-in.SC-66b,g10.shared-sign-in.SC-i3d,g10.shared-sign-in.SC-rt4,g10.shared-sign-in.SC-lja -->
 ### shared-auth-sign-in-US6-TC4-1: Invalid link toasts that it no longer works
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A sign-in link token that is malformed or unknown.
+
+* customer is signed out.
+* <invalid link> is a sign-in link whose token is malformed or unknown.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<invalid link>` | A sign-in link token that is malformed or unknown |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <invalid link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that the link no longer works.
 
+<!-- trace:case id=g10.shared-sign-in.TC-1s3 rev=1 covers=g10.shared-sign-in.SC-4mo,g10.shared-sign-in.SC-66b,g10.shared-sign-in.SC-i3d,g10.shared-sign-in.SC-rt4,g10.shared-sign-in.SC-lja -->
 ### shared-auth-sign-in-US6-TC5-1: Banned account link follow toasts cannot sign in
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-06
 
 **Pre-conditions:**
-A banned account and a sign-in link for that account's address.
+
+* customer is signed out.
+* The account for <banned email> is banned.
+* <banned link> is a sign-in link for <banned email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<banned email>` | banned@example.com, an address whose account is banned |
+| `<banned link>` | A sign-in link for <banned email> |
 
 **Steps:**
 
-1. Follow that link.
+1. Follow <banned link>.
 
 **Expected Results:**
 
 * No session is created.
-* They are on this brand's home.
+* The collector is on this brand's home.
 * A toast states that they cannot sign in.
 * The toast does not invite them to request another link.
 
@@ -1370,18 +1461,19 @@ A banned account and a sign-in link for that account's address.
 Resend after a short wait,
 **so that** I know where to look and can ask again without a Back control.
 
+<!-- trace:case id=g10.shared-sign-in.TC-v74 rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC1-1: Successful send shows Check Your Email and the address on its own line
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1410,18 +1502,19 @@ Resend after a short wait,
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-kxd rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC2-1: Link-sent surface has no Back control
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1432,26 +1525,29 @@ Resend after a short wait,
 **Steps:**
 
 1. Inspect the controls on the dialog body.
+2. Dismiss the dialog.
 
 **Expected Results:**
 
 * No Back control is present.
-* Leaving the dialog is by dismissing it.
+* The dialog is dismissed.
+* The collector stays on the same page.
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-7ve rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC3-1: Email-step CTA is Sign In with Email
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1471,18 +1567,19 @@ Resend after a short wait,
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-9nf rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC4-1: Resend is disabled with a countdown after a send
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** usability
 * **Suites:** smoke, regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1503,18 +1600,19 @@ Resend after a short wait,
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-5ex rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC5-1: Resend re-enables when the countdown reaches zero
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1535,18 +1633,19 @@ Resend after a short wait,
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-5w7 rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC6-1: A successful resend restarts the countdown
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** e2e
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation, manual
 * **Trace:** shared-auth-sign-in-US-07
 
@@ -1568,13 +1667,14 @@ Resend after a short wait,
 
 ---
 
+<!-- trace:case id=g10.shared-sign-in.TC-jb5 rev=1 covers=g10.shared-sign-in.SC-y0g,g10.shared-sign-in.SC-66a,g10.shared-sign-in.SC-l77,g10.shared-sign-in.SC-i4n,g10.shared-sign-in.SC-4xi,g10.shared-sign-in.SC-zss,g10.shared-sign-in.SC-fa4 -->
 ### shared-auth-sign-in-US7-TC7-1: A link older than sixty seconds does not sign in
 
 **Classification:**
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** deprecated
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1609,13 +1709,14 @@ Resend after a short wait,
 **I want** the tab I asked from to finish what it stopped me doing,
 **so that** I am not sent back to press the same thing a second time.
 
+<!-- trace:case id=g10.shared-sign-in.TC-oaf rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC1-1: Asking tab closes the dialog and shows the collector signed in
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** smoke, regression
@@ -1645,6 +1746,7 @@ Resend after a short wait,
 * Tab A shows the collector signed in, unreloaded.
 * The Check Your Email dialog is gone.
 
+<!-- trace:case id=g10.shared-sign-in.TC-wgf rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC2-1: Asking tab completes what the collector was refused
 
 Runs once per row of **Test data**.
@@ -1653,7 +1755,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** acceptance
 * **Suites:** regression
@@ -1693,13 +1795,14 @@ Runs once per row of **Test data**.
 * <refused action> is done in tab A.
 * The collector is not asked to do it again.
 
+<!-- trace:case id=g10.shared-sign-in.TC-gj2 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC3-1: Tab that asked for nothing completes no action
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1730,6 +1833,7 @@ Runs once per row of **Test data**.
 * Tab C shows the collector signed in.
 * Tab C adds nothing to the cart and places no bid.
 
+<!-- trace:case id=g10.shared-sign-in.TC-iyj rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC4-1: Failed link follow leaves the asking tab as it was
 
 Runs once per row of **Test data**.
@@ -1738,7 +1842,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1761,7 +1865,7 @@ Runs once per row of **Test data**.
 
 | `<failed link>` | What it is |
 | --- | --- |
-| expired | a link older than sixty seconds |
+| expired | a link older than five minutes |
 | already used | a link followed once already |
 | banned | a link for an account that is banned |
 
@@ -1773,16 +1877,18 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * Tab A shows nobody signed in.
+* Tab A still shows the Check Your Email dialog.
 * <listing> is in no cart.
 * Tab A says nothing about the link.
 
+<!-- trace:case id=g10.shared-sign-in.TC-zy9 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC5-1: Asking tab moved on before the link was followed
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1805,23 +1911,25 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Dismiss the dialog in tab A and navigate to <grade10 store url>.
-2. Follow the unused, unexpired link from that email in tab B.
-3. Return to tab A.
+1. In tab A, close the **Check Your Email** dialog.
+2. In tab A, go to the store home.
+3. In tab B, follow the unused, unexpired link from that email.
+4. Return to tab A.
 
 **Expected Results:**
 
 * Tab A shows the collector signed in.
-* The add is not carried out: dismissing the ask dropped it.
-* The cart holds no line for <listing>.
+* The add is not carried out.
+* The cart has no line for <listing>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-54a rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC6-1: Refused action is done once, not twice
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1846,20 +1954,21 @@ Runs once per row of **Test data**.
 
 1. Follow the unused, unexpired link from that email in tab B.
 2. Return to tab A, and confirm <listing> is in the cart once.
-3. Leave tab A and return to it again, without touching the add control.
+3. Leave tab A for tab B, then return to tab A, without touching the add control.
 
 **Expected Results:**
 
 * The cart still holds one line for <listing>, not a doubled line.
 * Returning a second time carries the add out no further times.
 
+<!-- trace:case id=g10.shared-sign-in.TC-3kv rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC7-1: Asking tab on another site of the brand carries on
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1892,13 +2001,14 @@ Runs once per row of **Test data**.
 * Tab A shows the collector signed in, unreloaded.
 * The bid of <bid amount> stands on <lot>.
 
+<!-- trace:case id=g10.shared-sign-in.TC-j4x rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC8-1: Another brand's dialog does not close
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** security
 * **Suites:** regression
@@ -1911,6 +2021,7 @@ Runs once per row of **Test data**.
 
 * customer is signed out on both brands.
 * Tab A is on <zzz store url> showing Check Your Email for a ZZZ link.
+* An unused, unexpired Grade10 sign-in link has been sent to <collector email>.
 
 **Test data:**
 
@@ -1928,13 +2039,14 @@ Runs once per row of **Test data**.
 * Tab A still shows Check Your Email.
 * Tab A shows nobody signed in.
 
+<!-- trace:case id=g10.shared-sign-in.TC-0m4 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC9-1: Two tabs asked for a link before either was followed
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1959,21 +2071,23 @@ Runs once per row of **Test data**.
 
 **Steps:**
 
-1. Follow the newest link from that address in tab B.
-2. Return to tab A, then to tab C.
+1. Ask for a sign-in link at <collector email> on tab B.
+2. Follow the newest link from that address in tab B.
+3. Return to tab A, then to tab C.
 
 **Expected Results:**
 
 * Both tabs show the collector signed in.
 * Tab A carries out its add and tab C carries out its bid: each surface that asked completes its own refusal, whether or not its own link was the one that worked.
 
+<!-- trace:case id=g10.shared-sign-in.TC-lnk rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC10-1: Refused action that can no longer be done is refused, not skipped
 
 **Classification:**
 
 * **Severity:** critical
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -2006,13 +2120,14 @@ Runs once per row of **Test data**.
 * Tab A reports the refusal an add is ordinarily refused with when the listing is gone.
 * Tab A does not pass the add over in silence.
 
+<!-- trace:case id=g10.shared-sign-in.TC-4z2 rev=1 covers=g10.shared-sign-in.SC-neg,g10.shared-sign-in.SC-wiy,g10.shared-sign-in.SC-laa,g10.shared-sign-in.SC-dyk,g10.shared-sign-in.SC-szm,g10.shared-sign-in.SC-lws,g10.shared-sign-in.SC-m9z -->
 ### shared-auth-sign-in-US8-TC11-1: Dialog on a tab that asked for nothing closes too
 
 **Classification:**
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -2042,6 +2157,630 @@ Runs once per row of **Test data**.
 * Neither tab still shows the sign-in dialog.
 * Both tabs show the collector signed in.
 
+## shared-auth-sign-in-US9: Collector follows a link meant for a different account
+
+**As a** collector already signed in,
+**I want** a clear choice when a sign-in link is meant for another account,
+**so that** I am not switched without asking, and can Switch or Stay.
+
+<!-- trace:case id=g10.shared-sign-in.TC-19a rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC1-1: Mismatch toast names the link's account and leaves the session untouched
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* A sign-in link for `<link account email>`, a different address with its own account, is unused and unexpired.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Follow the link for `<link account email>`.
+
+**Expected Results:**
+
+* The toast states the collector is signed in with a different account.
+* The description names `<link account email>`.
+* The description does not name `<current account email>`.
+* The current session is unaffected: still signed in as `<current account email>`.
+
+<!-- trace:case id=g10.shared-sign-in.TC-xyg rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC2-1: Switch ends the current session and enters the link's account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate Switch.
+
+**Expected Results:**
+
+* The session for `<current account email>` ends.
+* The collector is signed in as the account for `<link account email>`.
+
+<!-- trace:case id=g10.shared-sign-in.TC-evk rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC3-1: Stay keeps the current session and does not enter the link's account
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate Stay.
+
+**Expected Results:**
+
+* The collector remains signed in as `<current account email>`.
+* The account for `<link account email>` is not entered.
+
+<!-- trace:case id=g10.shared-sign-in.TC-0cv rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC4-1: Dismissing the toast has the same outcome as Stay
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Activate the toast's close control.
+
+**Expected Results:**
+
+* The collector remains signed in as `<current account email>`.
+* The account for `<link account email>` is not entered.
+
+<!-- trace:case id=g10.shared-sign-in.TC-dr6 rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC5-1: Mismatch toast stays until an explicit choice
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Do not activate Switch, Stay, or the close control.
+2. Wait ten seconds, long enough for an ordinary toast to clear.
+3. Read the mismatch toast.
+
+**Expected Results:**
+
+* The toast is still shown.
+* Switch and Stay are still offered.
+
+<!-- trace:case id=g10.shared-sign-in.TC-tpc rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC6-1: Mismatch toast is styled as a warning, not an error
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* The mismatch toast is shown, offering Switch and Stay, after following a sign-in link for `<link account email>`, a different address with its own account.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+| `<link account email>` | collector-other@example.com, a different address with its own account |
+
+**Steps:**
+
+1. Read the toast's visual type.
+
+**Expected Results:**
+
+* The toast uses the warning style, distinct from the error style of the failed-follow toasts.
+
+<!-- trace:case id=g10.shared-sign-in.TC-0gq rev=1 covers=g10.shared-sign-in.SC-vu9,g10.shared-sign-in.SC-9y1,g10.shared-sign-in.SC-nnn,g10.shared-sign-in.SC-yxx,g10.shared-sign-in.SC-c6r,g10.shared-sign-in.SC-hy8,g10.shared-sign-in.SC-fda -->
+### shared-auth-sign-in-US9-TC7-1: A link for the signed-in account itself shows no mismatch toast
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** actual
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-09
+
+**Pre-conditions:**
+
+* customer is signed in as `<current account email>`.
+* A sign-in link for `<current account email>` itself is unused and unexpired.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<current account email>` | collector@example.com, an address with an account, currently signed in |
+
+**Steps:**
+
+1. Follow that link.
+
+**Expected Results:**
+
+* No mismatch toast is shown.
+* The collector remains signed in as `<current account email>`.
+
+## shared-auth-sign-in-US10: Collector sees the wait end when they sign in from another device
+
+**As a** collector who asked for a sign-in link on one device,
+**I want** that device's wait to end once I sign in from another,
+**so that** I am not left resending for an address I already used to sign in
+elsewhere.
+
+<!-- trace:case id=g10.shared-sign-in.TC-uxi rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC1-1: Wait ends with a message when the link is followed on another device
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link from that email on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+* Only device B holds a session.
+
+<!-- trace:case id=g10.shared-sign-in.TC-6va rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC2-1: Wait ends the same way when the other device signs in with Google
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 sign-in url> showing Check Your Email for <collector email>.
+* Device A's brand has Google sign-in.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+
+<!-- trace:case id=g10.shared-sign-in.TC-jal rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC3-1: The asking device's own link followed on a different device still only closes the wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email after asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Follow the unused, unexpired link asked for on device A, but open it on device B instead.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* Device A is not signed in.
+* Device A does not carry on any action the way a same-device tab would.
+
+<!-- trace:case id=g10.shared-sign-in.TC-1jo rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC4-1: A failed attempt on the other device leaves the wait running
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<failed attempt>` | What it is |
+| --- | --- |
+| expired link | a link older than five minutes, followed on device B |
+| already used link | a link followed once already, followed again on device B |
+| banned account | a link for <collector email> after the account is banned, followed on device B |
+
+**Steps:**
+
+1. Attempt the <failed attempt> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A still shows Check Your Email, counting down toward Resend.
+* Device A is not signed in.
+
+<!-- trace:case id=g10.shared-sign-in.TC-nir rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC5-1: A settle for a different address leaves the wait running
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A on <grade10 store url> showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<other address>` | What it is |
+| --- | --- |
+| unrelated@example.com | an address with no relation to <collector email> |
+| collector+shop@example.com | the plus-tag variant of <collector email>, its own account |
+
+**Steps:**
+
+1. Sign in as <other address> on device B.
+2. Return to device A.
+
+**Expected Results:**
+
+* Device A still shows Check Your Email, counting down toward Resend.
+* Device A is not signed in.
+
+<!-- trace:case id=g10.shared-sign-in.TC-uje rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC6-1: Every surface waiting on the address ends its wait
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A and device C each showing Check Your Email after separately asking for a link at <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B.
+2. Return to device A, then to device C.
+
+**Expected Results:**
+
+* Both device A and device C end their wait with a message that sign-in completed on another device.
+* Neither device A nor device C is signed in.
+
+<!-- trace:case id=g10.shared-sign-in.TC-uhd rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC7-1: A backgrounded waiting surface shows the message once returned to
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A showing Check Your Email for <collector email>, left in the background.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+**Steps:**
+
+1. Complete Google sign-in with <collector email> on device B while device A stays backgrounded.
+2. Bring device A back to the foreground.
+
+**Expected Results:**
+
+* Device A shows the message that sign-in completed on another device.
+* Device A is not signed in.
+
+<!-- trace:case id=g10.shared-sign-in.TC-g9e rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC8-1: The wait ends the same way whether or not Resend has turned on
+
+Runs once per row of **Test data**.
+
+**Classification:**
+
+* **Severity:** normal
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** manual
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* customer is signed out, with device A showing Check Your Email for <collector email>.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<collector email>` | collector@example.com, an address with an account |
+
+| `<resend state>` | On device A |
+| --- | --- |
+| Resend disabled, counting down | less than sixty seconds since the send |
+| Resend enabled | sixty seconds or more since the send, Resend not yet activated |
+
+**Steps:**
+
+1. Reach <resend state> on device A.
+2. Complete Google sign-in with <collector email> on device B.
+3. Return to device A.
+
+**Expected Results:**
+
+* Device A ends its wait with a message that sign-in completed on another device.
+* No further resend email goes out from device A.
+
+<!-- trace:case id=g10.shared-sign-in.TC-pif rev=1 covers=g10.shared-sign-in.SC-s9k,g10.shared-sign-in.SC-4ki,g10.shared-sign-in.SC-5yx,g10.shared-sign-in.SC-zsr,g10.shared-sign-in.SC-rpa,g10.shared-sign-in.SC-45a,g10.shared-sign-in.SC-2ky,g10.shared-sign-in.SC-6ov,g10.shared-sign-in.SC-j5r -->
+### shared-auth-sign-in-US10-TC9-1: The check does not disclose whether an unrelated address is signed in
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** security
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** shared-auth-sign-in-US-10
+
+**Pre-conditions:**
+
+* <signed-in address> is signed in on device B.
+* customer is on <grade10 sign-in url> on device A, signed out, having asked for no link.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<signed-in address>` | collector@example.com, currently signed in on device B |
+
+**Steps:**
+
+1. Ask the auth service, from device A, whether <signed-in address> currently holds a session, naming no flow of device A's own.
+
+**Expected Results:**
+
+* The request is refused.
+* Nothing in the response states whether <signed-in address> holds a session.
+
 ## Settled
 
 * Whether a console tab carries on a refused action after its second factor
@@ -2053,3 +2792,15 @@ Runs once per row of **Test data**.
   promise lives in the email only.
 * A lifetime settable per environment or brand was rejected; one lifetime
   applies everywhere.
+* A pending, unused, unexpired link stays valid after its address settles
+  elsewhere by another method; only the link's own expiry or a later send
+  ends it, exactly as before this change.
+* A settle on a different brand does not close this brand's wait: grade10
+  and zzz run entirely separate auth deployments and databases (no shared
+  account, no shared check between them), so a settle on one brand
+  affecting the other's wait is not a reachable case for this capability's
+  mechanism to guard against.
+* Dismissing the wait and reopening sign-in starts fresh: already governed
+  by the existing dismiss/reopen contract (opening sign-in again starts at
+  the email step); nothing persists across a dismissal that would need
+  asserting separately.

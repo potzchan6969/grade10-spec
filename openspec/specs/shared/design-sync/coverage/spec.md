@@ -47,6 +47,7 @@ This applies to fill and stroke, which every frame and component states. It
 SHALL NOT apply to a property a node is permitted to leave unstated, where
 absence carries no meaning.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-doa rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-01 - The design fills a frame the code does not
 **Serves:** Omission as a finding - the design fills a frame the code does not
 
@@ -55,6 +56,7 @@ absence carries no meaning.
 - **THEN** it reports a finding naming the value the node draws
 - **AND** the run fails
 
+<!-- trace:scenario id=g10.shared-coverage.SC-qge rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-02 - One node rendered as two elements
 **Serves:** Omission as a finding - one node rendered as two elements
 
@@ -64,6 +66,7 @@ absence carries no meaning.
 - **WHEN** the audit runs
 - **THEN** it reports no unclaimed-stroke finding for that node
 
+<!-- trace:scenario id=g10.shared-coverage.SC-t0v rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-03 - The code paints a fill the design does not
 **Serves:** Omission as a finding - the code paints a fill the design does not
 
@@ -72,6 +75,7 @@ absence carries no meaning.
 - **THEN** it reports a finding
 - **AND** the run fails
 
+<!-- trace:scenario id=g10.shared-coverage.SC-y7p rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-04 - A stroke on one side only
 **Serves:** Omission as a finding - a stroke on one side only
 
@@ -80,6 +84,7 @@ absence carries no meaning.
 - **THEN** it reports a finding
 - **AND** the run fails
 
+<!-- trace:scenario id=g10.shared-coverage.SC-3sc rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-05 - Neither draws the value
 **Serves:** Omission as a finding - neither draws the value
 
@@ -87,6 +92,7 @@ absence carries no meaning.
 - **WHEN** the audit runs against an element whose classes name no background
 - **THEN** it reports no finding for the fill
 
+<!-- trace:scenario id=g10.shared-coverage.SC-iy1 rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-06 - A property the node may leave unstated
 **Serves:** Omission as a finding - a property the node may leave unstated
 
@@ -104,6 +110,7 @@ component SHALL NOT be excluded from the sweep by which package it lives in.
 A directory that carries no audit table SHALL be reported as uncovered rather
 than as passing, so an unaudited component reads as a gap.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-sup rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-07 - A design-system component carries an audit table
 **Serves:** Sweep coverage - a design-system component carries an audit table
 
@@ -112,6 +119,7 @@ than as passing, so an unaudited component reads as a gap.
 - **THEN** that component's elements are audited against their Figma nodes
 - **AND** a drifted or omitted value fails the run
 
+<!-- trace:scenario id=g10.shared-coverage.SC-nzu rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-08 - A component with no audit table
 **Serves:** Sweep coverage - a component with no audit table
 
@@ -119,6 +127,7 @@ than as passing, so an unaudited component reads as a gap.
 - **THEN** it names that directory as uncovered
 - **AND** the run does not report it as passing
 
+<!-- trace:scenario id=g10.shared-coverage.SC-kk4 rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-09 - The site chrome is covered
 **Serves:** Sweep coverage - the site chrome is covered
 
@@ -132,6 +141,7 @@ and SHALL NOT summarize a run as passing without naming the unchecked classes.
 A run in which nothing was checked SHALL NOT be reported the same way as a run
 in which every checked value matched.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-3kk rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-10 - A run with unchecked classes
 **Serves:** Honest reporting - a run with unchecked classes
 
@@ -139,6 +149,7 @@ in which every checked value matched.
 - **THEN** the unchecked ones are named individually in the output
 - **AND** the summary distinguishes what was verified from what was not
 
+<!-- trace:scenario id=g10.shared-coverage.SC-n56 rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-11 - Nothing could be checked
 **Serves:** Honest reporting - nothing could be checked
 
@@ -156,6 +167,7 @@ it. Where it defines none, an audit table SHALL own it. A component SHALL NOT
 be covered by both, so that one component never has two disagreeing sources of
 truth.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-8zm rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-12 - A standalone component drifts
 **Serves:** One rail per component - a standalone component drifts
 
@@ -165,6 +177,7 @@ truth.
 - **THEN** the unattended run reports it
 - **AND** the run fails
 
+<!-- trace:scenario id=g10.shared-coverage.SC-ydb rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-13 - A component with variant axes
 **Serves:** One rail per component - a component with variant axes
 
@@ -174,6 +187,7 @@ truth.
 - **THEN** the variant-set comparison reports on it
 - **AND** no audit table is required for it
 
+<!-- trace:scenario id=g10.shared-coverage.SC-h07 rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-14 - Coverage is reported by component
 **Serves:** One rail per component - coverage is reported by component
 
@@ -192,6 +206,7 @@ A finding that does not assert the code draws the wrong thing — a missing
 description, an unmapped axis option, a Figma component with no code
 counterpart — SHALL remain advisory and SHALL NOT fail the run.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-99l rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-15 - A variant's fill stops matching
 **Serves:** Run outcomes - a variant's fill stops matching
 
@@ -201,6 +216,7 @@ counterpart — SHALL remain advisory and SHALL NOT fail the run.
 - **THEN** it reports the disagreement, naming both values
 - **AND** the run fails
 
+<!-- trace:scenario id=g10.shared-coverage.SC-ulg rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-16 - A hygiene finding
 **Serves:** Run outcomes - a hygiene finding
 
@@ -216,6 +232,7 @@ draws that no class in the component's configuration names, on the same terms
 as the audit tables: a property the design draws and the code omits is a
 finding, not silence.
 
+<!-- trace:scenario id=g10.shared-coverage.SC-4un rev=1 -->
 #### Scenario: shared-design-sync-coverage-SC-17 - A variant fills what the code never names
 **Serves:** Omission as a finding - a variant fills what the code never names
 

@@ -23,24 +23,14 @@ export default defineConfig({
   test: {
     projects: [
       {
-        // Token-free freshness check: an audit.json `classes` column is a
-        // snapshot of its component's class strings, and this is what fails
-        // when an edit lets the two diverge — see the test's header comment.
+        // Every plain test runs here, in node, so a new block's test needs no
+        // registering. Among them is the token-free freshness check: an
+        // audit.json `classes` column is a snapshot of its component's class
+        // strings, and it fails when an edit lets the two diverge.
         test: {
           name: "audit",
           environment: "node",
-          include: [
-            "src/__tests__/audit-freshness.test.ts",
-            "src/lib/format-datetime.test.ts",
-            "src/lib/format-money.test.ts",
-            "src/blocks/auction-listing/listing-age-verification-form.test.ts",
-            "src/blocks/auction-listing/listing-bid-money.test.ts",
-            "src/blocks/auth-sign-in/public-exports.test.ts",
-            "src/blocks/grading-submission/grading-copy.test.ts",
-            "src/blocks/grading-submission/public-exports.test.ts",
-            "src/blocks/auction-order/public-exports.test.ts",
-            "src/blocks/store-order-detail/public-exports.test.ts",
-          ],
+          include: ["src/**/*.test.ts"],
         },
       },
       {

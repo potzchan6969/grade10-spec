@@ -1,0 +1,6 @@
+schema: grade10-planning
+created: 2026-09-24
+hands:
+  design: "@tangconst"
+skip_specs: true
+skip_specs_why: "Storybook review draft only — live Terms and Privacy stay Being prepared until wording is confirmed; no production behaviour moves"

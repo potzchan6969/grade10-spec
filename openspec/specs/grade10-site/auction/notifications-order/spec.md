@@ -32,6 +32,9 @@ lives.
   - The order-setup and payment letters describe the address, payment method, deadline, and settlement path for the winner's order
   - The payment-overdue letter explains that self-service payment has stopped and how to reach Grade10
   - The setup-overdue letter explains that self-service setup has stopped and that manual review is required
+- Contact Us destination
+  - Same ready email as Winner Order: setup overdue, payment overdue, cancelled, delivered and partial-payment Contact Us CTAs prefill the matching subject and body
+  - Address named in the letter: the letter body names `support@grade10.com` so a collector without a mail client still has the address
 
 ## Requirements
 
@@ -85,6 +88,7 @@ the tracking number with the shipped time, SHALL use the carrier
 track-and-trace URL as its primary action, and SHALL offer Winner Order as a
 secondary action on the same row.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-2d0 rev=1 -->
 #### Scenario: order-mail-SC-01 - Winning a lot is announced by email
 **Serves:** Post-close letters - winning a lot is announced by email
 
@@ -97,6 +101,7 @@ secondary action on the same row.
 - **AND** its primary action opens that lot's Winner Order
 - **AND** the lot image and lot title open that lot's Winner Order
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-kkg rev=1 -->
 #### Scenario: order-mail-SC-02 - Expiry is announced with what is owed
 **Serves:** Post-close letters - expiry is announced with what is owed
 
@@ -111,6 +116,7 @@ secondary action on the same row.
 - **AND** its secondary action is View order
 - **AND** it promises no automatic cancellation
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-s24 rev=1 -->
 #### Scenario: order-mail-SC-40 - Reissuing an invoice sends the payment reminder
 **Serves:** Post-close letters - reissuing an invoice sends the payment reminder
 
@@ -120,6 +126,7 @@ secondary action on the same row.
 - **THEN** Grade10 sends the winner the payment reminder for that new invoice
 - **AND** Grade10 sends no separate invoice-reissued letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-dv3 rev=1 -->
 #### Scenario: order-mail-SC-43 - A repeated reissue confirmation sends one payment reminder
 **Serves:** Post-close letters - a repeated reissue confirmation sends one payment reminder
 
@@ -129,6 +136,7 @@ secondary action on the same row.
 - **THEN** Grade10 sends no second payment reminder for that reissue
 - **AND** it sends no invoice-reissued letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-nrz rev=1 -->
 #### Scenario: order-mail-SC-03 - A manual settlement produces the payment-received letter
 **Serves:** Post-close letters - a manual settlement produces the payment-received letter
 
@@ -141,6 +149,7 @@ secondary action on the same row.
 - **AND** its primary action opens that lot's Winner Order for the receipt
 - **AND** the letter attaches the receipt PDF
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-7jz rev=1 -->
 #### Scenario: order-mail-SC-11 - Dispatch sends a shipped letter with track-and-trace
 **Serves:** Post-close letters - dispatch sends a shipped letter with track-and-trace
 
@@ -153,6 +162,7 @@ secondary action on the same row.
 - **AND** it offers Winner Order as a secondary action on the same row
 - **AND** the lot image and lot title open that lot's Winner Order
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-pnf rev=1 -->
 #### Scenario: order-mail-SC-09 - Sending the invoice tells the winner what to pay and by when
 **Serves:** Post-close letters - sending the invoice tells the winner what to pay and by when
 
@@ -167,6 +177,7 @@ secondary action on the same row.
 - **AND** the letter carries no invoice PDF attachment
 - **AND** the letter does not name a payment method
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-wmw rev=1 -->
 #### Scenario: order-mail-SC-10 - A card payment produces the payment-received letter
 **Serves:** Post-close letters - a card payment produces the payment-received letter
 
@@ -178,6 +189,7 @@ secondary action on the same row.
 - **AND** its primary action opens that lot's Winner Order for the receipt
 - **AND** the letter attaches the receipt PDF
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-y5o rev=1 -->
 #### Scenario: order-mail-SC-20 - Returned proof sends the reason and the new deadline
 **Serves:** Post-close letters - proof not accepted
 
@@ -189,6 +201,7 @@ secondary action on the same row.
 - **AND** it does not name the internal reason
 - **AND** its primary action opens that lot's Winner Order
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-3di rev=1 -->
 #### Scenario: order-mail-SC-21 - Uploading proof sends no letter
 **Serves:** Post-close letters - no letter on upload
 
@@ -196,6 +209,7 @@ secondary action on the same row.
 - **WHEN** the winner uploads payment proof
 - **THEN** Grade10 sends the winner no letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-18a rev=1 -->
 #### Scenario: order-mail-SC-22 - Confirmed proof sends the payment-received letter
 **Serves:** Post-close letters - confirmed proof is payment received
 
@@ -204,6 +218,7 @@ secondary action on the same row.
 - **THEN** Grade10 sends the winner the payment-received letter naming 317000 minor units in HKD and bank transfer
 - **AND** the letter attaches the receipt PDF
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-4u6 rev=1 -->
 #### Scenario: order-mail-SC-26 - Each return sends its own letter
 **Serves:** Post-close letters - proof not accepted
 
@@ -231,6 +246,7 @@ required, and SHALL NOT cancel the order by itself.
 **Park on confirm** — Setup reminder and setup overdue SHALL park once the
 winner confirms setup.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-jw9 rev=1 -->
 #### Scenario: order-mail-SC-50 - Setup reminder fires while setup is incomplete
 **Serves:** Post-close letters - setup reminder fires while setup is incomplete
 
@@ -238,6 +254,7 @@ winner confirms setup.
 - **WHEN** 24 hours after lot close arrive
 - **THEN** Grade10 sends the winner the setup-reminder letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-qsh rev=1 -->
 #### Scenario: order-mail-SC-54 - No second setup reminder at 72 hours
 **Serves:** Post-close letters - setup reminder fires while setup is incomplete
 
@@ -246,6 +263,7 @@ winner confirms setup.
 - **WHEN** 72 hours after lot close arrive
 - **THEN** Grade10 sends no second setup-reminder letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-qmq rev=1 -->
 #### Scenario: order-mail-SC-51 - Setup overdue fires at the setup deadline
 **Serves:** Post-close letters - setup overdue fires at the setup deadline
 
@@ -281,6 +299,7 @@ Where an operator reissues an invoice, Grade10 SHALL schedule reminders for
 the reissued invoice's issue time and SHALL not send reminders owed only by the
 replaced invoice.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-75a rev=1 -->
 #### Scenario: order-mail-SC-04 - Paying early cancels the reminders
 **Serves:** Reminder cadence - paying early cancels the reminders
 
@@ -290,6 +309,7 @@ replaced invoice.
 - **THEN** Grade10 sends no payment reminder for that invoice
 - **AND** sends none on day 6 or the final notice either
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-3bl rev=1 -->
 #### Scenario: order-mail-SC-05 - Reminders follow a reissued invoice
 **Serves:** Reminder cadence - reminders follow a reissued invoice
 
@@ -300,6 +320,7 @@ replaced invoice.
 - **THEN** Grade10 sends the reminder for the reissued invoice
 - **AND** sends no reminder owed only by the replaced invoice
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-xae rev=1 -->
 #### Scenario: order-mail-SC-52 - Final notice fires 24 hours before the payment deadline
 **Serves:** Reminder cadence - final notice fires 24 hours before the payment deadline
 
@@ -308,6 +329,7 @@ replaced invoice.
 - **THEN** Grade10 sends the winner the final-notice letter
 - **AND** it does not wait until the deadline transition itself
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-h6q rev=1 -->
 #### Scenario: order-mail-SC-23 - No reminder goes out while proof is checked
 **Serves:** Reminder cadence - held while proof is checked
 
@@ -315,6 +337,7 @@ replaced invoice.
 - **WHEN** 2026-09-15T09:00:00Z, 2026-09-18T09:00:00Z and 2026-09-19T09:00:00Z pass with the invoice still `payment_verifying`
 - **THEN** Grade10 sends no payment reminder and no final notice
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-1x0 rev=1 -->
 #### Scenario: order-mail-SC-24 - Reminders resume on the paused clock after a return
 **Serves:** Reminder cadence - the sequence resumes if the proof is returned
 
@@ -323,6 +346,7 @@ replaced invoice.
 - **THEN** Grade10 sends the day 3 reminder at 2026-09-18T09:00:00Z and the day 6 reminder at 2026-09-21T09:00:00Z
 - **AND** queues the final notice 24 hours before the new deadline of 2026-09-22T09:00:00Z
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-ekh rev=1 -->
 #### Scenario: order-mail-SC-25 - A reminder already sent is not repeated after a return
 **Serves:** Reminder cadence - held while proof is checked
 
@@ -331,6 +355,7 @@ replaced invoice.
 - **THEN** Grade10 sends no second day 3 reminder
 - **AND** sends the day 6 reminder at 2026-09-19T09:00:00Z
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-oc3 rev=1 -->
 #### Scenario: order-mail-SC-27 - A return sends no held reminder at once
 **Serves:** Reminder cadence - the sequence resumes if the proof is returned
 
@@ -349,6 +374,7 @@ per order and SHALL name the lot unambiguously in each. A letter SHALL never
 be the sole channel of record. Every fact a letter carries SHALL be visible on
 the auction order itself.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-mcc rev=1 -->
 #### Scenario: order-mail-SC-06 - A retried webhook sends nothing twice
 **Serves:** Delivery discipline - a retried webhook sends nothing twice
 
@@ -356,6 +382,7 @@ the auction order itself.
 - **WHEN** the payment confirmation webhook is delivered again
 - **THEN** Grade10 sends no second letter
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-pqi rev=1 -->
 #### Scenario: order-mail-SC-07 - Three won lots produce three identifiable letters
 **Serves:** Post-close letters - three won lots produce three identifiable letters
 
@@ -364,6 +391,7 @@ the auction order itself.
 - **THEN** Grade10 sends three auction-won letters
 - **AND** each names its own lot unambiguously
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-d23 rev=1 -->
 #### Scenario: order-mail-SC-08 - Every letter's facts are on the order
 **Serves:** Delivery discipline - every letter's facts are on the order
 
@@ -378,14 +406,20 @@ The delivered and cancelled letters carry settled facts and action order.
 **Delivered** — The delivered letter SHALL name the delivery address and the
 delivered time recorded on the order at carrier confirmation, SHALL use View
 order as its primary action, and SHALL offer Contact Us as its secondary
-action. Contact Us SHALL open the storefront's existing Contact Us destination.
+action. Contact Us SHALL open a `mailto:` to `support@grade10.com` whose
+subject and body match the ready email for a delivered order, as
+`grade10-site/auction/winner-order` defines it, and the letter body SHALL
+name `support@grade10.com`.
 
 **Cancelled** — The order-cancelled letter SHALL name when the order was
 cancelled, SHALL NOT name a reason and SHALL NOT say anything about payment,
 SHALL use Contact Us as its primary action, and SHALL offer View order as its
-secondary action. Contact Us SHALL open the storefront's existing Contact Us
-destination.
+secondary action. Contact Us SHALL open a `mailto:` to `support@grade10.com`
+whose subject and body match the ready email for a cancelled order, as
+`grade10-site/auction/winner-order` defines it, and the letter body SHALL
+name `support@grade10.com`.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-gec rev=1 -->
 #### Scenario: order-mail-SC-41 - Delivery confirmation names the address and time
 **Serves:** Post-close letters - delivery confirmation names the address and time
 
@@ -396,6 +430,7 @@ destination.
 - **AND** its primary action is View order
 - **AND** its secondary action is Contact Us
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-kas rev=1 -->
 #### Scenario: order-mail-SC-42 - Cancellation names when and leads with Contact Us
 **Serves:** Post-close letters - cancellation names when and leads with Contact Us
 
@@ -436,6 +471,7 @@ never the only record.
 **Sent once** - A payment confirmation delivered more than once SHALL send one
 letter and one attachment.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-mva rev=1 -->
 #### Scenario: order-mail-SC-28 - The letter shows the receipt and attaches it
 **Serves:** Post-close letters - receipt in the letter
 
@@ -444,6 +480,7 @@ letter and one attachment.
 - **THEN** the letter shows `REC-202609-LK7P2Q-01-P1`, the invoice ID, the lot, the itemised lines, the order total and the Visa ending 4242
 - **AND** a PDF is attached whose file name contains `REC-202609-LK7P2Q-01-P1` and which carries the same ID, lines, total and payment method
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-7pc rev=1 -->
 #### Scenario: order-mail-SC-29 - A manually recorded payment's PDF says so
 **Serves:** Post-close letters - receipt in the letter
 
@@ -452,6 +489,7 @@ letter and one attachment.
 - **THEN** the attached PDF is marked as manually settled and shows cash and the reference
 - **AND** neither the letter nor the PDF shows the proof file, its name, or the internal audit number
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-ek4 rev=1 -->
 #### Scenario: order-mail-SC-30 - The receipt PDF is in the letter's language
 **Serves:** Post-close letters - receipt in the letter
 
@@ -459,6 +497,7 @@ letter and one attachment.
 - **WHEN** the winner opens the attached PDF
 - **THEN** its labels are in Traditional Chinese
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-q85 rev=1 -->
 #### Scenario: order-mail-SC-31 - A repeated confirmation sends one receipt
 **Serves:** Post-close letters - receipt in the letter
 
@@ -477,6 +516,7 @@ list), SHALL say self-service setup is closed, SHALL use Contact Us as primary
 and View order as secondary, SHALL name manual review, and SHALL NOT cancel
 the order by itself.
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-n3n rev=1 -->
 #### Scenario: order-mail-SC-55 - Auction-won and setup-reminder name the setup bullets
 **Serves:** Post-close letters - setup letters name what setup asks for
 
@@ -487,6 +527,7 @@ the order by itself.
 - **AND** its primary action is Complete Order Setup
 - **AND** it names a Confirm-by deadline
 
+<!-- trace:scenario id=g10.auction-notifications-order.SC-dnr rev=1 -->
 #### Scenario: order-mail-SC-56 - Setup overdue stays generic and does not cancel
 **Serves:** Post-close letters - setup letters name what setup asks for
 
@@ -496,3 +537,90 @@ the order by itself.
 - **AND** its primary action is Contact Us
 - **AND** its secondary action is View order
 - **AND** it does not cancel the order
+
+### Requirement: Letter Contact Us carries the ready email
+
+Setup overdue, payment overdue, cancelled, delivered and partial-payment
+letters use the same ready email as Winner Order Contact Us, because a letter
+cannot offer the copy dialog.
+
+**Mailto** — Contact Us on those letters SHALL open a `mailto:` to
+`support@grade10.com` whose subject and body match the ready email for that
+order and reason, as `grade10-site/auction/winner-order` defines them — the
+order's current invoice id in the subject when one exists, lot title when
+none does.
+
+**Reasons** — The subject reason fragment SHALL be `setup overdue`,
+`payment overdue`, `cancelled`, `delivered`, or `partial payment` for those
+letters respectively.
+
+**Address in the letter** — Each of those letters' bodies SHALL name
+`support@grade10.com` so a collector without a mail client still has the
+address.
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-hhx rev=1 -->
+#### Scenario: order-mail-SC-57 - Setup overdue Contact Us prefills the lot subject and body
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a setup-overdue letter for lot title "Charizard Base Set PSA 10"
+  with no invoice issued
+- **WHEN** the winner chooses Contact Us on that letter
+- **THEN** the `mailto:` is to `support@grade10.com`
+- **AND** its subject is
+  `Auction lot Charizard Base Set PSA 10: setup overdue`
+- **AND** its body names that lot title and status Setup overdue
+- **AND** the letter body names `support@grade10.com`
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-xbe rev=1 -->
+#### Scenario: order-mail-SC-58 - Payment overdue Contact Us prefills the invoice subject and body
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a payment-overdue letter for invoice id `INV-202609-LK7P2Q-01`
+  and lot title "Charizard Base Set PSA 10"
+- **WHEN** the winner chooses Contact Us on that letter
+- **THEN** the `mailto:` is to `support@grade10.com`
+- **AND** its subject is
+  `Auction order INV-202609-LK7P2Q-01: payment overdue`
+- **AND** its body names that invoice id, that lot title, and status Payment
+  overdue
+- **AND** the letter body names `support@grade10.com`
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-fza rev=1 -->
+#### Scenario: order-mail-SC-59 - Cancelled Contact Us prefills the ready email and the letter names the address
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** an order-cancelled letter for invoice id `INV-202609-LK7P2Q-01`
+  and lot title "Charizard Base Set PSA 10"
+- **WHEN** the winner chooses Contact Us on that letter
+- **THEN** the `mailto:` subject is
+  `Auction order INV-202609-LK7P2Q-01: cancelled`
+- **AND** its body names that invoice id, that lot title, and status
+  Cancelled
+- **AND** the letter body names `support@grade10.com`
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-kn8 rev=1 -->
+#### Scenario: order-mail-SC-60 - Delivered Contact Us prefills the ready email and the letter names the address
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a delivered letter for invoice id `INV-202609-LK7P2Q-01` and lot
+  title "Charizard Base Set PSA 10"
+- **WHEN** the winner chooses Contact Us on that letter
+- **THEN** the `mailto:` subject is
+  `Auction order INV-202609-LK7P2Q-01: delivered`
+- **AND** its body names that invoice id, that lot title, and status
+  Delivered
+- **AND** the letter body names `support@grade10.com`
+
+<!-- trace:scenario id=g10.auction-notifications-order.SC-0sv rev=1 -->
+#### Scenario: order-mail-SC-61 - Partial-payment Contact Us prefills the ready email without the balance
+**Serves:** grade10-site/auction/winner-order#winner-order-US-16 - Winner emails Grade10 from a locked order
+
+- **GIVEN** a partial-payment letter for invoice id `INV-202609-LK7P2Q-01`,
+  lot title "Charizard Base Set PSA 10", and receipt ids
+  `REC-202609-LK7P2Q-01-P1`
+- **WHEN** the winner chooses Contact Us on that letter
+- **THEN** the `mailto:` subject is
+  `Auction order INV-202609-LK7P2Q-01: partial payment`
+- **AND** its body may list those receipt ids
+- **AND** its body names no remaining balance
+- **AND** the letter body names `support@grade10.com`

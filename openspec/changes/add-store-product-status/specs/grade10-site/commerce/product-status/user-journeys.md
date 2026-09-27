@@ -3,10 +3,9 @@
 ### grade10-site-commerce-product-status-US-01: Collector sees whether a card can be bought
 
 **As a** collector,
-**I want** every surface to tell me the same thing about whether a variant can
-be bought,
-**so that** a card I saw as available on the listing is available on its page
-and in my cart, and nothing on the way to buying it turns out to be for show.
+**I want** the listing tile to report whether any item on the card can be
+bought, and the product page and cart to report the same internal sale item,
+**so that** the availability I see before adding matches the item in my cart.
 
 ### grade10-site-commerce-product-status-US-02: Collector asks for more than the shop can fill
 

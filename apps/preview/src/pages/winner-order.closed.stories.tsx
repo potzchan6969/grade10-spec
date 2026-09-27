@@ -75,8 +75,8 @@ export const Refunded: Story = {
     expect(canvas.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(canvas.getByRole("link", { name: "Receipt PDF" })).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,140")).toBeVisible();
-    expect(canvas.getByText("Refund HK$16,140")).toBeVisible();
+    expect(canvas.getByText("HK$16,460")).toBeVisible();
+    expect(canvas.getByText("Refund HK$16,460")).toBeVisible();
     await userEvent.click(canvas.getByRole("button", { name: "View" }));
     const page = within(canvasElement.ownerDocument.body);
     const dialogElement = await waitFor(() => {
@@ -94,6 +94,7 @@ export const Refunded: Story = {
     expect(dialog.getByText("Transfer to")).toBeVisible();
     expect(dialog.getByLabelText("Visa")).toBeVisible();
     expect(dialog.getByText("···· 4242")).toBeVisible();
+    expect(dialog.queryByText("Reference")).not.toBeInTheDocument();
     expect(
       canvas.queryByText("Order refunded. Payment on this order was returned."),
     ).not.toBeInTheDocument();

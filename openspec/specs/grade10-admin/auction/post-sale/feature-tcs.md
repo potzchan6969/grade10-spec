@@ -9,6 +9,7 @@
 **I want** to reissue, settle, or cancel an unpaid order from the order itself,
 **so that** a lot whose winner did not pay stops being an open-ended obligation.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-6bv rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk -->
 ### post-sale-US7-TC1-1: Reissue returns an expired order to Pending Payment
 
 **Classification:**
@@ -46,6 +47,7 @@
 * The invoice status is still `pending`, with a new 7-day deadline.
 * The derived order status is Pending Payment.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-rjj rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk -->
 ### post-sale-US7-TC2-1: Manual settlement is available before expiry
 
 **Classification:**
@@ -77,6 +79,7 @@
 * Grade10 accepts the settlement.
 * `<order_2>` derives as Processing, without having expired first.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-4qr rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk -->
 ### post-sale-US7-TC3-1: Settlement is refused until the address is confirmed
 
 **Classification:**
@@ -108,6 +111,7 @@
 * Grade10 refuses the settlement.
 * The invoice status is still `pending`.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-2mh rev=1 covers=g10adm.auction-post-sale.SC-xod,g10adm.auction-post-sale.SC-em2,g10adm.auction-post-sale.SC-5aa,g10adm.auction-post-sale.SC-5qg,g10adm.auction-post-sale.SC-j3h,g10adm.auction-post-sale.SC-bb5,g10adm.auction-post-sale.SC-sjh,g10adm.auction-post-sale.SC-egc,g10adm.auction-post-sale.SC-8xm,g10adm.auction-post-sale.SC-21a,g10adm.auction-post-sale.SC-fbr,g10adm.auction-post-sale.SC-pvd,g10adm.auction-post-sale.SC-xba,g10adm.auction-post-sale.SC-d5u,g10adm.auction-post-sale.SC-e68,g10adm.auction-post-sale.SC-wdr,g10adm.auction-post-sale.SC-5km,g10adm.auction-post-sale.SC-dmi,g10adm.auction-post-sale.SC-oss,g10adm.auction-post-sale.SC-o4m,g10adm.auction-post-sale.SC-5sm,g10adm.auction-post-sale.SC-e28,g10adm.auction-post-sale.SC-vme,g10adm.auction-post-sale.SC-cu3,g10adm.auction-post-sale.SC-ysk -->
 ### post-sale-US7-TC4-1: Cancelling returns the lot to available and offers no runner-up
 
 **Classification:**
@@ -156,6 +160,7 @@
 payments that failed,
 **so that** I can tell a buyer who tried and could not from one who never engaged.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-i9j rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt -->
 ### post-sale-US8-TC1-1: Failed payment attempts distinguish a buyer who tried
 
 **Classification:**
@@ -187,6 +192,7 @@ payments that failed,
 * `<order_5>` shows three failed payment attempts with their timestamps.
 * `<order_6>` is distinguishable from it, holding only the issued log entry.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-uap rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt -->
 ### post-sale-US8-TC2-1: The address at dispatch survives a later correction
 
 **Classification:**
@@ -217,6 +223,7 @@ payments that failed,
 * The dispatch event still shows `<address at dispatch>` in full, as it stood at dispatch.
 * The correction is a separate later event carrying its own snapshot.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-uy0 rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt -->
 ### post-sale-US8-TC3-1: The detail names the rule behind a derived status
 
 **Classification:**
@@ -247,6 +254,7 @@ payments that failed,
 * The order status shows as Expired.
 * The detail names the rule that produced it — a pending invoice with an elapsed deadline — rather than the label alone.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-fph rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt -->
 ### post-sale-US8-TC4-1: A buyer's reissue history spans all their orders
 
 **Classification:**
@@ -277,12 +285,41 @@ payments that failed,
 * The detail shows `<buyer>`'s reissue history across all three orders.
 * It shows the reissue count for `<order_9>` itself.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-r9c rev=1 covers=g10adm.auction-post-sale.SC-ua0,g10adm.auction-post-sale.SC-j3o,g10adm.auction-post-sale.SC-hgz,g10adm.auction-post-sale.SC-k8l,g10adm.auction-post-sale.SC-jce,g10adm.auction-post-sale.SC-dgt -->
+### post-sale-US8-TC5-1: Refunds add to the order history
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-08
+
+**Pre-conditions:**
+
+* admin(holds refund-processing) is viewing an order with existing invoice and fulfilment history.
+
+**Steps:**
+
+1. Open the order history after a refund is recorded.
+
+**Expected Results:**
+
+* Existing invoice and fulfilment entries remain available beside the refund record.
+
 ## post-sale-US6: Operator sees which lots are still in extended bidding
 
 **As an** auction operator,
 **I want** the queue to label a lot still taking bids past its scheduled close,
 **so that** I can tell a lot running long from one that closed on time.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-vsq rev=1 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
 ### post-sale-US6-TC1-1: Queue labels only the lot in extended bidding
 
 **Classification:**
@@ -321,6 +358,7 @@ payments that failed,
 * `<listing_1>` shows "Extended bidding: ON" beside its outcome, not in place of it.
 * `<listing_2>` and `<listing_3>` show no Extended bidding label.
 
+<!-- trace:case id=g10adm.auction-post-sale.TC-v7u rev=1 covers=g10adm.auction-post-sale.SC-hvd,g10adm.auction-post-sale.SC-jck,g10adm.auction-post-sale.SC-bps -->
 ### post-sale-US6-TC2-1: Extended bidding is not an outcome filter
 
 **Classification:**
@@ -357,3 +395,216 @@ payments that failed,
 
 * No outcome named Extended bidding is offered.
 * `<listing_1>`'s row has no needs-action highlight from the label.
+
+## post-sale-US16: Operator records a refund a winner asked Customer Service for
+
+**As an** operator with refund processing,
+**I want** to record money sent back in Stripe or by bank transfer,
+**so that** the order and the lot agree with the refund.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-c92 rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs -->
+### post-sale-US16-TC1-1: A refund records the financial facts and closes the order
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** destructive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-16
+
+**Pre-conditions:**
+
+* `<paid order>` has 100000 minor units paid.
+* admin(holds refund-processing) is on the order detail.
+
+**Steps:**
+
+1. Record a 60000-minor-unit bank refund with a reason, note, reference, one proof file and return-to-stock selected.
+
+**Expected Results:**
+
+* The refund is accepted and gets the next audit number.
+* The order outcome is Refunded and cannot be refunded again.
+* The lot returns to stock.
+* The refund record names the operator and time.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-h64 rev=1 covers=g10adm.auction-post-sale.SC-7fc,g10adm.auction-post-sale.SC-dzs -->
+### post-sale-US16-TC2-1: A refund cannot return more than was paid
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** post-sale-US-16
+
+**Pre-conditions:**
+
+* `<partially-paid order>` has 40000 minor units paid.
+* admin(holds refund-processing) is on the order detail.
+
+**Steps:**
+
+1. Submit a refund of 40001 minor units.
+
+**Expected Results:**
+
+* The refund is refused and no audit number is consumed.
+* The order stays Partially Paid.
+
+## post-sale-US17: Finance reconciles auction refunds
+
+**As a** finance operator,
+**I want** to filter the queue to Refunded and read the full refund record,
+**so that** each external refund matches one Grade10 record.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-8st rev=1 covers=g10adm.auction-post-sale.SC-9zs -->
+### post-sale-US17-TC1-1: The queue and order detail expose one refund record
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-17
+
+**Pre-conditions:**
+
+* A Refunded order has a recorded amount, method, reference, reason, proof and audit number.
+* admin(holds refund-processing) is on the post-sale queue.
+
+**Steps:**
+
+1. Filter the queue to Refunded.
+2. Open the order and invoice log.
+
+**Expected Results:**
+
+* The order appears in the filter.
+* The order detail and invoice log show the same complete refund record.
+
+## post-sale-US1: Operator works the listing queue by outcome
+
+**As an** auction operator,
+**I want** the existing outcome queue to remain available with Refunded added,
+**so that** the new filter does not change other outcomes.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-tb3 rev=1 covers=g10adm.auction-post-sale.SC-r6h,g10adm.auction-post-sale.SC-1yv,g10adm.auction-post-sale.SC-fxm,g10adm.auction-post-sale.SC-r3o,g10adm.auction-post-sale.SC-05a,g10adm.auction-post-sale.SC-71a,g10adm.auction-post-sale.SC-9oe,g10adm.auction-post-sale.SC-88b,g10adm.auction-post-sale.SC-cnh,g10adm.auction-post-sale.SC-8dq -->
+### post-sale-US1-TC1-1: Other queue outcomes remain available
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** acceptance
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-01
+
+**Pre-conditions:**
+
+* admin(holds refund-processing) is on the post-sale queue with orders in existing outcomes and a Refunded order.
+
+**Steps:**
+
+1. Read the queue outcomes and filter options.
+
+**Expected Results:**
+
+* Existing outcomes remain available and Refunded is an additional outcome.
+
+## post-sale-US15: Operator filters Setup Overdue and Payment Overdue
+
+**As an** operator,
+**I want** Setup Overdue and Payment Overdue as queue outcomes,
+**so that** I find deadline-missed orders using the same names as the winner.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-gap rev=1 covers=g10adm.auction-post-sale.SC-vhw,g10adm.auction-post-sale.SC-bs6 -->
+### post-sale-US15-TC1-1: The queue uses the two overdue outcomes
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-15
+
+**Pre-conditions:**
+
+* The queue has one order past an incomplete setup deadline and one unpaid invoice past its payment deadline.
+
+**Steps:**
+
+1. Read both rows.
+2. Filter to Setup Overdue.
+3. Filter to Payment Overdue.
+
+**Expected Results:**
+
+* The rows read Setup Overdue and Payment Overdue.
+* Each filter returns only its matching order.
+
+<!-- trace:case id=g10adm.auction-post-sale.TC-n26 rev=1 covers=g10adm.auction-post-sale.SC-vhw,g10adm.auction-post-sale.SC-bs6 -->
+### post-sale-US15-TC2-1: Overdue outcomes do not erase the action context
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** post-sale-US-15
+
+**Pre-conditions:**
+
+* The queue contains a Setup Overdue and a Payment Overdue order.
+
+**Steps:**
+
+1. Read each row's needs-action treatment and open each order.
+
+**Expected Results:**
+
+* The queue uses one outcome per order.
+* The order details identify the missed setup or payment deadline and offer Contact Us to the winner rather than a self-service action.
+
+## Settled
+
+## Reconciliation
+
+| Finding | Disposition |
+| --- | --- |
+| Queue labels preserve the operator action context | **Folded in** |

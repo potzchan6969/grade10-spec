@@ -93,6 +93,8 @@ None.
 - `docs/prds/products/grade10-site/store/order-history.md` and
   `docs/prds/products/grade10-site/store/order-detail.md`: settled addresses
   and current in-flight capability links.
+- `docs/prds/products/shared/ui/store-order-detail.md`: the shared optional
+  sections and supplied tracking action used by the customer detail surface.
 
 This change contains no backend or admin implementation task. Frontend tests
 exercise the typed Store contract through fixtures; live integration evidence
@@ -100,8 +102,14 @@ belongs to the Grade10 application delivery, not to this planning store.
 
 ## References
 
+- [Your Orders · Orders](../../../docs/prds/products/grade10-site/store/order-history.md#orders)
+  — the private address, Active and Past groups, order actions and empty account.
+- [Order Details · Order](../../../docs/prds/products/grade10-site/store/order-detail.md#order)
+  — the owner-only address, supplied facts and fulfilment actions.
 - [Order Details · Order Summary](../../../docs/prds/products/grade10-site/store/order-detail.md#order-summary)
   — points credit row after Discount, with the deducted count in the label.
+- [Order Details Blocks · Optional Sections](../../../docs/prds/products/shared/ui/store-order-detail.md#optional-sections)
+  — reusable supplied facts, honest omission and callback-owned tracking.
 
 ## Follow-on changes
 

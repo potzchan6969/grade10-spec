@@ -16,13 +16,28 @@
  * directory. Keying on the directory meant the outline ended the wait the
  * moment it was written, and the one state the workflow passes through on
  * every change failed the run its own author was told to make.
+ *
+ * A row a branch adds to a change's `rounds.md` is held to the readers the
+ * schema issues for its artifact, as the landing holds the rows it writes: a
+ * row written by hand passes through here and nowhere else. The branch's rows
+ * are the ones the store's main does not carry; a checkout with no main to
+ * compare against — a clone with no `origin`, or a fixture — says so and holds
+ * no row, since every row would read as the branch's and old rows are not
+ * backfilled.
  */
 import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync } from "node:fs";
 import { join } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import YAML from "yaml";
+import {
+  readRounds,
+  roundArtifactOf,
+} from "../../tools/manual/src/store/read-rounds.mts";
+import { fixPassFloor, planningSchema, SCHEMA } from "./lib/perspectives.mjs";
 import { readTextIfThere } from "./lib/read-text.mjs";
+import { perspectivesRefusals, roundsPath } from "./lib/rounds.mjs";
+import { storeMain, textAt } from "./store-main.mjs";
 
 const ROOT = fileURLToPath(new URL("../..", import.meta.url));
 
@@ -77,6 +92,71 @@ function outlineOnly(specs) {
   return found.some((file) => !DELTA_HEADING.test(readFileSync(file, "utf8")));
 }
 
+/**
+ * What the rows a branch adds to one change's `rounds.md` are refused for: a
+ * row is the branch's where `main` (`storeMain`'s answer) carries no row
+ * reading the same. A row records no `--fix-pass`, so it is held only to the
+ * floor every perspectives list shares (`fixPassFloor`) — none where the lists
+ * share no `always` reader — to names the list of its artifact issues, and to
+ * a `verifier` wherever more than one reader ran.
+ */
+export function addedRowRefusals(root, main, id) {
+  const path = roundsPath(id);
+  const now = readTextIfThere(join(root, path));
+  if (now === undefined) return [];
+  const key = (row) => JSON.stringify(row);
+  const before = new Set(
+    readRounds(textAt(root, main.commit, path) ?? "").map(key),
+  );
+  const named = schemaOf(join(root, "openspec", "changes", id));
+  let schema;
+  try {
+    schema = planningSchema(root, named);
+  } catch (cause) {
+    return [`${path}: ${cause.message}`];
+  }
+  let floor = [];
+  try {
+    floor = fixPassFloor(schema);
+  } catch {
+    // No floor the lists share: a row owes no `always` reader here.
+  }
+  const refusals = [];
+  for (const row of readRounds(now)) {
+    const target = roundArtifactOf(row.artifact);
+    // A row with no artifact is `check:manual`'s `round` rule to refuse.
+    if (before.has(key(row)) || target === null) continue;
+    let found;
+    try {
+      found = perspectivesRefusals({
+        schema,
+        named,
+        target,
+        cell: row.perspectives,
+        floor,
+      });
+    } catch (cause) {
+      found = [cause.message];
+    }
+    for (const one of found)
+      refusals.push(`${path} round ${row.round}: ${one}`);
+  }
+  return refusals;
+}
+
+/** The schema a change's record names, or the store's own where it names
+ * none or cannot be read — the `store` rule reports a record that cannot. */
+function schemaOf(dir) {
+  try {
+    const fields = YAML.parse(
+      readTextIfThere(join(dir, ".openspec.yaml")) ?? "",
+    );
+    return typeof fields?.schema === "string" ? fields.schema : SCHEMA;
+  } catch {
+    return SCHEMA;
+  }
+}
+
 /** The pinned CLI, and only the pinned one: a binary that happens to be on
  * PATH is whatever version its owner installed, which is the divergence
  * `openspec-version.test.mjs` exists to prevent. */
@@ -120,6 +200,11 @@ export function main(root, strict, only) {
   if (run.error) throw new Error(`could not run the CLI: ${run.error.message}`);
 
   const items = report(run.stdout ?? "").items ?? [];
+  const main = storeMain(root);
+  if (!main)
+    console.log(
+      "rounds: no main to compare against, so no row is held to its readers here — plan:land holds each row it writes",
+    );
   const waiting = [];
   const failed = [];
   for (const item of items) {
@@ -133,6 +218,9 @@ export function main(root, strict, only) {
             issue.message.startsWith(NO_SECTIONS))
         ),
     );
+    if (main)
+      for (const message of addedRowRefusals(root, main, item.id))
+        left.push({ level: "ERROR", path: "rounds.md", message });
     if (why !== undefined) waiting.push(`${item.id} — ${why}`);
     if (left.length > 0) {
       failed.push(

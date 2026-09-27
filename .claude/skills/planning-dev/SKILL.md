@@ -92,16 +92,26 @@ tooling on both sides parses. Beyond them:
   check warns (`dense`) on an engineer block holding a paragraph.
 - **Engineers claim groups at pickup** with `pnpm plan claim`, which is why
   the groups are written without owner tags.
+- **Link selected app tests** - once a scenario and case have stable markers,
+  the test task adds its adjacent acceptance or support marker with the
+  [trace CLI](../../../docs/governance/test-traceability.md):
+  `acceptance=<app>.<product>-<capability>.TC-<sequence>@<revision>` or
+  `supports=<app>.<product>-<capability>.SC-<sequence>`. The CLI accepts
+  case-insensitive references and writes canonical casing. The app test
+  remains the evidence; the marker only identifies which record it decides.
 
 ## Finish
 
-A change that needs an artifact nobody has written yet says so: `awaiting:`
-with `<artifact>: <what is missing>` in its `.openspec.yaml`. That line is
-what puts it on [Pending](/pending) under the teammate who owes it.
+The round's conduct is [Round Summary and
+Landing](../../../docs/governance/round-summary.md)'s.
+
+A change that needs an artifact nobody has written yet says so: `awaiting:
+<artifact>: <what is missing>` in its `.openspec.yaml`, which puts it on
+[Pending](/pending) under the teammate who owes it.
 
 Then hand off: an engineer claims one group at a time from the application
-repository with `/workflow-build`. Archive belongs to whoever owns the change, **after
-it is deployed** — not when the code lands.
+repository with `/workflow-build`. Archive belongs to whoever owns the change,
+**after it is deployed**.
 
 ## Related
 

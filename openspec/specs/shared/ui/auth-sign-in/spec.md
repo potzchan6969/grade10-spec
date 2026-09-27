@@ -29,6 +29,7 @@ components for the sign-in surface: `SignInCard`, `SignInEmailForm`,
 The package SHALL NOT export `SignInCodeForm`, `SignInCodeFormProps`,
 `SignInCodeFormCopy`, or `SignInCardAction`.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-4im rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-01 - An application imports the sign-in surface
 **Serves:** Sign-in surface contract - an application imports the sign-in surface
 
@@ -45,6 +46,7 @@ Its visibility SHALL be controlled by the consumer through a required `open`
 prop and a required `onOpenChange` callback. `SignInCard` SHALL NOT hold open
 state of its own.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-bgr rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-02 - The triggering page stays mounted
 **Serves:** Sign-in surface contract - the triggering page stays mounted
 
@@ -53,6 +55,7 @@ state of its own.
 - **THEN** the sign-in dialog renders over that page behind a scrim
 - **AND** the page beneath remains mounted with its state intact
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-tjq rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-03 - Visibility is the consumer's
 **Serves:** Sign-in surface contract - visibility is the consumer's
 
@@ -72,6 +75,7 @@ Dismissal SHALL be the only way out of the dialog the block offers.
 `SignInCard` SHALL NOT accept an exit action, and SHALL draw no control that
 leaves the flow by any other route.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-0gn rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-04 - Dismissing returns the collector to what they were doing
 **Serves:** Sign-in surface contract - dismissing returns the collector to what they were doing
 
@@ -80,6 +84,7 @@ leaves the flow by any other route.
 - **THEN** `onOpenChange` is called with `false`
 - **AND** the collector is left on the page beneath with its state intact
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-yg6 rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-09 - The dialog offers no exit beside dismissal
 **Serves:** Sign-in surface contract - the dialog offers no exit beside dismissal
 
@@ -94,6 +99,7 @@ divider, and SHALL render the active step after the divider. When
 `providerSlot` is not supplied, `SignInCard` SHALL render neither the provider
 slot nor the divider.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-v7m rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-05 - A provider widget is supplied
 **Serves:** Sign-in body composition - a provider widget is supplied
 
@@ -102,6 +108,7 @@ slot nor the divider.
 - **THEN** the provider slot appears above the divider
 - **AND** the step appears below the divider
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-3xd rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-06 - No provider widget
 **Serves:** Sign-in body composition - no provider widget
 
@@ -121,6 +128,7 @@ render.
 `SignInCard` SHALL NOT supply legal wording of its own — the block carries no
 English.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-w6k rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-07 - Legal copy is supplied
 **Serves:** Sign-in body composition - legal copy is supplied
 
@@ -128,6 +136,7 @@ English.
 - **WHEN** the dialog renders
 - **THEN** that text renders as the last node in the dialog body
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-vb5 rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-08 - Legal copy is omitted
 **Serves:** Sign-in body composition - legal copy is omitted
 
@@ -152,6 +161,7 @@ disabled, SHALL NOT call `onResend`, and SHALL show `copy.resendCountdown`.
 WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unless
 `resending` is true) and SHALL show `copy.resend`.
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-f80 rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-10 - An application imports the link-sent step
 **Serves:** Sign-in surface contract - an application imports the link-sent step
 
@@ -159,6 +169,7 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
   `SignInLinkSentProps` from the public entry
 - **THEN** the import resolves without error
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-afr rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-11 - Resend reports activation
 **Serves:** Link-sent step - resend reports activation
 
@@ -168,6 +179,7 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
 - **WHEN** the person activates Resend
 - **THEN** `onResend` is called
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-pwu rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-12 - The link-sent step has no Back control
 **Serves:** Link-sent step - the link-sent step has no Back control
 
@@ -176,6 +188,7 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
 - **THEN** no Back control is shown
 - **AND** the props type does not require `onBack`
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-czw rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-13 - Confirmation puts the email on its own line
 **Serves:** Link-sent step - confirmation puts the email on its own line
 
@@ -185,6 +198,7 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
 - **AND** the email appears on the line below it
 - **AND** the step supplies no wording of its own
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-yql rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-14 - Resend is disabled during the cooldown
 **Serves:** Link-sent step - resend is disabled during the cooldown
 
@@ -195,6 +209,7 @@ WHEN `resendCooldownRemaining` is absent or zero, Resend SHALL be enabled (unles
 - **AND** it shows `copy.resendCountdown`
 - **AND** activating it does not call `onResend`
 
+<!-- trace:scenario id=g10.shared-auth-sign-in.SC-2st rev=1 -->
 #### Scenario: shared-ui-auth-sign-in-SC-15 - Resend uses the ready label when the cooldown is over
 **Serves:** Link-sent step - resend uses the ready label when the cooldown is over
 

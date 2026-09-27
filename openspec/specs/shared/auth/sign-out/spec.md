@@ -24,6 +24,7 @@ A signed-in surface's sign-out control SHALL show a busy state while the
 sign-out request runs and SHALL NOT accept another activation until the
 request settles.
 
+<!-- trace:scenario id=g10.shared-sign-out.SC-9oa rev=1 -->
 #### Scenario: shared-auth-sign-out-SC-01 - The control is busy while sign-out runs
 **Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
@@ -40,6 +41,7 @@ grade10 site's profile returns to the marketing page. Surface-owned cleanup
 (such as the storefront emptying this browser's cart) SHALL run only on a
 confirmed sign-out.
 
+<!-- trace:scenario id=g10.shared-sign-out.SC-vrp rev=1 -->
 #### Scenario: shared-auth-sign-out-SC-02 - An operator signs out of an admin panel
 **Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
@@ -47,6 +49,7 @@ confirmed sign-out.
 - **WHEN** they sign out and the auth service confirms
 - **THEN** the panel shows its sign-in page
 
+<!-- trace:scenario id=g10.shared-sign-out.SC-x67 rev=1 -->
 #### Scenario: shared-auth-sign-out-SC-03 - A collector signs out of the grade10 site
 **Serves:** shared-auth-sign-out-US-01 - Collector or operator signs out and lands signed out
 
@@ -61,6 +64,7 @@ SHALL stay in its signed-in presentation and SHALL show failure feedback
 beside the sign-out control. The control SHALL remain usable, and a retry
 SHALL clear the feedback while the new request runs.
 
+<!-- trace:scenario id=g10.shared-sign-out.SC-ud0 rev=1 -->
 #### Scenario: shared-auth-sign-out-SC-04 - A refused sign-out is reported
 **Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
 
@@ -70,6 +74,7 @@ SHALL clear the feedback while the new request runs.
 - **THEN** the surface stays signed in
 - **AND** failure feedback appears beside the control
 
+<!-- trace:scenario id=g10.shared-sign-out.SC-i5o rev=1 -->
 #### Scenario: shared-auth-sign-out-SC-05 - A retry clears the failure
 **Serves:** shared-auth-sign-out-US-02 - Collector or operator retries a refused sign-out
 

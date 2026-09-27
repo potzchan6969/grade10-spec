@@ -64,10 +64,16 @@ export const OnSale: Story = {
   },
 };
 
-/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert. */
+/** Figma `soldOut=true` — SOLD OUT badge, no cart action, tile inert where
+ * the surface sells. */
 export const SoldOut: Story = {
   args: { soldOut: true },
   decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(copy.soldOut)).toBeVisible();
+    expect(canvas.queryAllByRole("button")).toHaveLength(0);
+  },
 };
 
 /** Figma `inCart=true` — cart control with the supplied count. */
@@ -193,14 +199,14 @@ export const BelowCartMaximum: Story = {
 export const NoCartMaximum: Story = {
   args: {
     inCart: true,
-    cartCount: "2",
+    cartCount: "3",
     onCartQuantityChange: fn(),
   },
   decorators: well,
   play: async ({ args, canvasElement }) => {
     const canvas = within(canvasElement);
     await userEvent.click(
-      canvas.getByRole("button", { name: `2. ${copy.adjustQuantity}` }),
+      canvas.getByRole("button", { name: `3. ${copy.adjustQuantity}` }),
     );
 
     const increment = canvas.getByRole("button", {
@@ -210,7 +216,7 @@ export const NoCartMaximum: Story = {
 
     await userEvent.click(increment);
     expect(args.onCartQuantityChange).toHaveBeenCalledTimes(1);
-    expect(args.onCartQuantityChange).toHaveBeenCalledWith(3);
+    expect(args.onCartQuantityChange).toHaveBeenCalledWith(4);
   },
 };
 
@@ -277,5 +283,51 @@ export const SoldOutWithRemainingCount: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Only 3 left")).not.toBeInTheDocument();
     expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
+  },
+};
+
+/** shared-ui-store-product-listing-SC-91: a sold-out tile still opens where
+ * an activation handler is supplied and no cart handler is — a surface that
+ * carries the shopper on rather than selling. The suite's
+ * grade10-site-store-cross-sell-US1-TC6-1 credits this story with a sold-out
+ * pick's place, its words and its activation. */
+export const SoldOutOpensWhereNothingSells: Story = {
+  args: {
+    soldOut: true,
+    onClick: fn(),
+    onCartQuantityChange: undefined,
+  },
+  decorators: well,
+  play: async ({ canvasElement, args }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText(copy.soldOut)).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
+    ).toBeNull();
+    const controls = canvas.getAllByRole("button", { name: defaults.name });
+    expect(controls).toHaveLength(2);
+    const [photoWell, nameControl] = controls;
+    await userEvent.click(photoWell);
+    await userEvent.click(nameControl);
+    expect(args.onClick).toHaveBeenCalledTimes(2);
+  },
+};
+
+/** shared-ui-store-product-listing-SC-92: a tile drawn without a cart control
+ * needs no cart words. */
+export const NoCartWords: Story = {
+  args: { copy: {}, onCartQuantityChange: undefined },
+  decorators: well,
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-image-well"] img'),
+    ).toHaveAttribute("src", defaults.imageSrc);
+    expect(canvas.getByText(defaults.name)).toBeInTheDocument();
+    expect(canvas.getByText(defaults.price)).toBeInTheDocument();
+    expect(
+      canvasElement.querySelector('[data-slot="product-card-cart-control"]'),
+    ).toBeNull();
+    expect(canvas.queryByText(/cart/i)).toBeNull();
   },
 };

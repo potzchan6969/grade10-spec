@@ -75,8 +75,9 @@
  *          `--decisions-carried "<what went where>"`, or the same flag with
  *          `none` where nothing outlived the change.
  *
- *          A copy that did land is read for the four things only archive can
- *          get wrong: a written `## Purpose` replaces the durable one whole, a
+ *          A copy that did land is read for the five things only archive can
+ *          get wrong: every case of the change's suites lands under its id,
+ *          `<v>` and status, a written `## Purpose` replaces the durable one whole, a
  *          removed journey leaves a `## Retired` tombstone instead of vanishing
  *          (archived suites still trace its id), a carried `## Reconciliation`
  *          has its scenario ids stripped, and `## Settled` travels with the
@@ -95,6 +96,7 @@
  * `check:manual` and the manual already carry.
  */
 
+import { spawnSync } from "node:child_process";
 import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -103,13 +105,22 @@ import { behindLabelOf } from "../../tools/manual/src/api/stage-view.ts";
 import { behindOf } from "../../tools/manual/src/api/stages.ts";
 import { WHOLE_CHANGE } from "../../tools/manual/src/api/types.ts";
 import {
+  SCENARIO_ID,
+  scenarioIdsIn,
+  sectionSpan,
+} from "../../tools/manual/src/store/markdown.mts";
+import {
+  DECISION_ROW,
+  decisionRows,
+} from "../../tools/manual/src/store/read-changes.mts";
+import {
   readRounds,
   roundArtifactOf,
 } from "../../tools/manual/src/store/read-rounds.mts";
 import { walkedByNobody } from "../../tools/manual/src/store/read-specs.mts";
 import { roundsPath } from "./lib/rounds.mjs";
 import { readChangeEntry } from "./lib/store-read.mjs";
-import { parseSuite } from "./lib/suites.mjs";
+import { caseIndex, parseSuite } from "./lib/suites.mjs";
 import { storeMain, textAt } from "./store-main.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -136,11 +147,12 @@ const CHANGES = join(ROOT, "openspec", "changes");
 
 const DOOMED = ["Feature set"];
 const US_ID = /[a-z0-9][a-z0-9-]*-US-\d+/g;
-const SC_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 // The anchor line as `read-specs.mts` reads it: anywhere in the scenario's
 // body, bulleted or not, so this gate and the checker agree on what counts.
 const SERVES = /^\s*(?:[-*]\s+)?\*\*Serves:\*\*\s*\S/m;
-const SCENARIO_HEADING = /^####\s+Scenario:\s+([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
+const SCENARIO_HEADING = new RegExp(
+  `^####\\s+Scenario:\\s+(${SCENARIO_ID.source})\\b`,
+);
 const OPEN_TASK = /^\s*-\s*\[ \]\s*(.*)$/;
 /** A task group heading, and the repository tag `task-ownership.md` puts at the
  * end of it: `## 3. Store prose (grade10-spec)`. An owner tag is `(owner: …)`
@@ -193,6 +205,26 @@ function deltaFiles(changeId) {
       .slice(specs.length + 1)
       .replaceAll("\\", "/"),
   }));
+}
+
+/** Runs the trace handover check from this checkout against the store the
+ * preflight is inspecting. It is only needed when the change carries a trace
+ * case marker: ordinary suites have no transitional graph to preserve. */
+function traceFoldFailure(changeId) {
+  const script = join(HERE, "scripts", "test-traceability", "trace.mjs");
+  const result = spawnSync(
+    process.execPath,
+    [script, "fold", "--change", changeId, "--store-root", ROOT],
+    { encoding: "utf8" },
+  );
+  if (result.status === 0) return null;
+  const output = [result.stdout, result.stderr]
+    .filter(Boolean)
+    .join("\n")
+    .trim();
+  return (
+    output || result.error?.message || `trace fold exited ${result.status}`
+  );
 }
 
 /** The `## <name>` sections of one delta the fold would discard, with the
@@ -252,18 +284,9 @@ function anchorlessScenarios(text) {
  * such heading. Sections end at the next `## ` heading, so an empty string
  * means the heading is there and says nothing — which is not the same answer. */
 function sectionBody(text, name) {
-  const out = [];
-  let inside = false;
-  for (const line of text.split("\n")) {
-    const heading = line.match(/^##\s+(.+?)\s*$/);
-    if (heading) {
-      if (inside) break;
-      inside = heading[1] === name;
-      continue;
-    }
-    if (inside) out.push(line);
-  }
-  return inside ? out.join("\n").trim() : null;
+  const span = sectionSpan(text, name);
+  if (!span) return null;
+  return text.split("\n").slice(span.from, span.until).join("\n").trim();
 }
 
 /** The bullet lines of a section body, continuations folded in and whitespace
@@ -670,18 +693,17 @@ const decisions = existsSync(join(ROOT, decisionsFile))
 const rows =
   decisions === null
     ? []
-    : (sectionBody(decisions, "Decisions") ?? "")
-        .split("\n")
-        .filter((line) => /^\s*\|/.test(line) && !/^\s*\|\s*-{2,}/.test(line))
-        .slice(1);
+    : decisionRows(decisions).filter(
+        (cells) => DECISION_ROW.test(cells[0]) && !cells[1]?.startsWith("<!--"),
+      );
 if (rows.length > 0 && decisionsCarried === null) {
   fail(
     yellow(
       `${changeId} records ${rows.length} decision(s) that the fold carries nowhere:`,
     ),
   );
-  for (const row of rows.slice(0, SHOWN)) {
-    console.error(`  ${row.trim().slice(0, 100)}`);
+  for (const cells of rows.slice(0, SHOWN)) {
+    console.error(`  | ${cells.join(" | ")} |`.slice(0, 102));
   }
   if (rows.length > SHOWN) {
     console.error(dim(`  … and ${rows.length - SHOWN} more`));
@@ -708,6 +730,7 @@ const uncarried = [];
 const wrong = [];
 const anchorless = [];
 const suitesSeen = new Set();
+let carriesTraceCase = false;
 
 for (const { file, capability } of deltaFiles(changeId)) {
   const delta = readFileSync(file, "utf8");
@@ -794,11 +817,13 @@ for (const { file, capability } of deltaFiles(changeId)) {
   }
 
   // The suites travel beside the spec — `feature-tcs.md` into the capability,
-  // `domain-tcs.md` into the domain above it. Every capability under a domain
-  // reaches the same domain suite, so it is read once.
+  // `domain-tcs.md` into the domain above it, `product-tcs.md` into the
+  // product above that. Every capability under a domain reaches the same
+  // domain suite, so it is read once.
   for (const [name, dir] of [
     ["feature-tcs.md", capability],
     ["domain-tcs.md", dirname(capability)],
+    ["product-tcs.md", dirname(dirname(capability))],
   ]) {
     const source = join(CHANGES, changeId, "specs", dir, name);
     if (!existsSync(source) || suitesSeen.has(source)) continue;
@@ -818,7 +843,7 @@ for (const { file, capability } of deltaFiles(changeId)) {
     // Scenario ids belong to the change. A `## Reconciliation` that keeps
     // them past the fold points at a change that is about to stop existing.
     const ids = [
-      ...new Set(sectionBody(arrived, "Reconciliation")?.match(SC_ID) ?? []),
+      ...new Set(scenarioIdsIn(sectionBody(arrived, "Reconciliation") ?? "")),
     ];
     if (ids.length > 0) {
       wrong.push({
@@ -828,6 +853,8 @@ for (const { file, capability } of deltaFiles(changeId)) {
     }
 
     const delta = readFileSync(source, "utf8");
+    if (name === "feature-tcs.md" && delta.includes("<!-- trace:case"))
+      carriesTraceCase = true;
 
     // `## Settled` is a legal part of the next blind pass's isolated input:
     // what earlier readings asked and had answered. Left behind, the same
@@ -862,6 +889,42 @@ for (const { file, capability } of deltaFiles(changeId)) {
           what: `${name} lands \`${id}\`'s \`**Decided by:**\` as \`${landedPaths}\`, where the change names \`${paths}\``,
         });
     }
+
+    // Every case the change's suite holds lands under the same id - `<v>`
+    // included, since the id carries it - and the same status. Copying the
+    // file's header and its sections while leaving cases behind is how
+    // archived changes lost whole journeys of cases: the durable file existed,
+    // so nothing above noticed.
+    const landedCases = caseIndex(ROOT, [target]);
+    const missing = [];
+    for (const [id, one] of caseIndex(ROOT, [source])) {
+      const there = landedCases.get(id);
+      if (there === undefined) missing.push(id);
+      else if (there.status !== one.status)
+        wrong.push({
+          capability: dir,
+          what: `${name} lands \`${id}\` as \`${there.status}\`, where the change holds it \`${one.status}\``,
+        });
+    }
+    if (missing.length > 0) {
+      const shown = missing.slice(0, SHOWN).join(", ");
+      const more =
+        missing.length > SHOWN ? `, … and ${missing.length - SHOWN} more` : "";
+      wrong.push({
+        capability: dir,
+        what: `${name} leaves ${missing.length} case(s) behind — each lands under its id and \`<v>\`: ${shown}${more}`,
+      });
+    }
+  }
+}
+
+if (carriesTraceCase) {
+  const traceFailure = traceFoldFailure(changeId);
+  if (traceFailure !== null) {
+    wrong.push({
+      capability: "traceability",
+      what: `trace handover validation failed:\n${traceFailure}`,
+    });
   }
 }
 

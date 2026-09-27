@@ -51,6 +51,7 @@ SHALL be able to book one visit against one of their cases and bring the rest
 with them; a sibling case SHALL NOT need a visit of its own to reach the
 vault.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-arc rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-01 - A visit is booked after the offer
 **Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
@@ -58,6 +59,7 @@ vault.
 - **WHEN** its owner books a slot
 - **THEN** the visit is held and the case names it
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-96b rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-02 - A live loan books its pickup
 **Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
@@ -65,6 +67,7 @@ vault.
 - **WHEN** its owner books a slot to repay and collect
 - **THEN** the visit is held
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-uos rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-03 - A draft takes no visit
 **Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
@@ -72,6 +75,7 @@ vault.
 - **WHEN** a slot is asked for
 - **THEN** it is refused by name
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-79y rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-04 - A sibling case is vaulted without a visit
 **Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
@@ -99,6 +103,7 @@ act.
 Cancelling SHALL be idempotent: a case whose booking the diary no longer holds
 SHALL end with no live visit rather than a refusal.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-dlg rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-05 - The same slot asked for twice is one visit
 **Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
@@ -106,6 +111,7 @@ SHALL end with no live visit rather than a refusal.
 - **WHEN** the same slot is asked for again
 - **THEN** the case holds the one booking and no message is sent
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-9i6 rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-06 - Staff move a visit and the collector hears
 **Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
@@ -113,6 +119,7 @@ SHALL end with no live visit rather than a refusal.
 - **WHEN** a member of staff moves it to another slot
 - **THEN** the case names the new slot and the collector is told it moved
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-ui2 rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-07 - A slot in the past is refused
 **Serves:** grade10-site-vault-visit-booking-US-01 - Collector books the visit they hand the item over at
 
@@ -129,6 +136,7 @@ A clock that would end a case SHALL ask the diary first, and a case the diary
 says holds a visit still ahead of it SHALL be left where it is. Where no diary
 can be reached, no case SHALL be ended for want of a visit.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-pop rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-08 - A stale copy is repaired rather than acted on
 **Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
@@ -136,6 +144,7 @@ can be reached, no case SHALL be ended for want of a visit.
 - **WHEN** the abandonment clocks are read
 - **THEN** the case's copy is corrected and the case is left where it is
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-etl rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-09 - No diary, no expiry
 **Serves:** The diary and the copy - no diary, no expiry
 
@@ -152,6 +161,7 @@ A case that was still `submitted` SHALL end as `expired`, because nothing else
 was holding it. A case in any other bookable status SHALL keep its status, its
 item and its loan, and SHALL be free to book another visit.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-dnx rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-10 - A missed drop-off ends the request
 **Serves:** grade10-site-vault-visit-booking-US-03 - Collector moves a visit they cannot make
 
@@ -159,6 +169,7 @@ item and its loan, and SHALL be free to book another visit.
 - **WHEN** the missed visits are swept
 - **THEN** the case is `expired` and the collector is told the visit was missed
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-tyj rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-11 - A missed pickup keeps the case
 **Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
@@ -177,6 +188,7 @@ A case that ends while holding a visit still ahead of it SHALL have that visit
 cancelled in the diary. A case that is forfeited while holding a visit already
 past SHALL have it recorded as a no-show, never as completed.
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-63a rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-12 - A valuation from photographs leaves the visit open
 **Serves:** Missed and finished visits - a valuation from photographs leaves the visit open
 
@@ -184,6 +196,7 @@ past SHALL have it recorded as a no-show, never as completed.
 - **WHEN** staff start valuing it on Monday from its photographs
 - **THEN** the visit is still open for Friday
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-fxq rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-13 - Taking the item in closes the visit
 **Serves:** grade10-site-vault-visit-booking-US-02 - Borrower books the visit they repay and collect on
 
@@ -191,6 +204,7 @@ past SHALL have it recorded as a no-show, never as completed.
 - **WHEN** staff take the item into the vault
 - **THEN** the visit is recorded as completed
 
+<!-- trace:scenario id=g10.vault-visit-booking.SC-2lq rev=1 -->
 #### Scenario: grade10-site-vault-visit-booking-SC-14 - A forfeited case's past visit is not a completed one
 **Serves:** Missed and finished visits - a forfeited case's past visit is not a completed one
 

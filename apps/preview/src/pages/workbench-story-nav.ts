@@ -11,6 +11,11 @@ const ORDER_DETAILS_STORY_ID = "pages-order-details-page--filled";
 /** Storybook story id for the Store Locator page assembly. */
 const STORE_LOCATOR_STORY_ID = "pages-store-locator-page--default";
 
+/** Storybook story id for the Terms of Service page assembly. */
+const TERMS_OF_SERVICE_STORY_ID = "pages-legal--terms-of-service";
+
+/** Storybook story id for the Privacy Policy page assembly. */
+const PRIVACY_POLICY_STORY_ID = "pages-legal--privacy-policy";
 /** Storybook story id for the My Auctions page assembly (list → Winner Order). */
 const MY_AUCTIONS_PAGE_STORY_ID = "pages-my-auctions-page--post-auction";
 
@@ -41,6 +46,8 @@ const WINNER_ORDER_REFUNDED_STORY_ID =
   "my-auctions-winner-order-closed--refunded";
 const WINNER_ORDER_REFUND_DETAILS_STORY_ID =
   "my-auctions-winner-order-refund-details--closing-refund";
+const WINNER_ORDER_EMAIL_GRADE10_STORY_ID =
+  "my-auctions-winner-order-email-grade10--payment-overdue";
 
 /** Manager href that opens a story in the workbench (`?path=/story/…`). */
 function storyHref(storyId: string): string {
@@ -50,6 +57,11 @@ function storyHref(storyId: string): string {
 /** Chrome destination for Store Locator once the page story exists. */
 const STORE_LOCATOR_HREF = storyHref(STORE_LOCATOR_STORY_ID);
 
+/** Chrome destination for Terms of Service. */
+const TERMS_OF_SERVICE_HREF = storyHref(TERMS_OF_SERVICE_STORY_ID);
+
+/** Chrome destination for Privacy Policy. */
+const PRIVACY_POLICY_HREF = storyHref(PRIVACY_POLICY_STORY_ID);
 /** TBC — provisional docs host for collector Help in the primary nav. */
 const HELP_HREF = "https://grade10.mintlify.io/";
 
@@ -112,12 +124,17 @@ export {
   navigateToStory,
   ORDER_DETAILS_STORY_ID,
   ORDER_HISTORY_STORY_ID,
+  PRIVACY_POLICY_HREF,
+  PRIVACY_POLICY_STORY_ID,
   STORE_LOCATOR_HREF,
   STORE_LOCATOR_STORY_ID,
   storyHref,
+  TERMS_OF_SERVICE_HREF,
+  TERMS_OF_SERVICE_STORY_ID,
   WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
   WINNER_ORDER_CANCELLED_STORY_ID,
   WINNER_ORDER_DELIVERED_STORY_ID,
+  WINNER_ORDER_EMAIL_GRADE10_STORY_ID,
   WINNER_ORDER_EXPIRED_INVOICE_STORY_ID,
   WINNER_ORDER_EXPIRED_SETUP_STORY_ID,
   WINNER_ORDER_PARTIALLY_PAID_STORY_ID,

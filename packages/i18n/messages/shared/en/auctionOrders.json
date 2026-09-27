@@ -14,6 +14,11 @@
   "viewDetail": "View detail",
   "contactUs": "Contact Us",
   "insuranceTooltip": "0.9% of the order value during transit.",
+  "taxTooltip": "Set by Grade10 for where your order ships. Some orders have none.",
+  "taxLabel": "Tax",
+  "buyersPremiumTooltip": "20% of your winning bid, or the currency minimum if that is higher.",
+  "shippingHandlingTooltip": "Packing, carrier, and handling for your confirmed delivery address.",
+  "processingFeeTooltip": "Set by your payment method when this invoice was sent.",
   "contactDialog": {
     "title": "Email Grade10",
     "to": "To",
@@ -44,5 +49,24 @@
     "delivered": "Delivered",
     "cancelled": "Cancelled",
     "refunded": "Refunded"
+  },
+  "addAddress": {
+    "personal": "Personal",
+    "companyKind": "Company",
+    "phone": "Phone",
+    "company": "Company Name",
+    "phonePlaceholder": "+852 12345678",
+    "firstName": "First Name",
+    "lastName": "Last Name",
+    "country": "Country/Region",
+    "city": "Town/City",
+    "addressLine1": "Address Line 1",
+    "addressLine2": "Address Line 2",
+    "state": "State/Province/Region",
+    "postalCode": "Postal Code",
+    "optional": "Optional",
+    "confirm": "Confirm",
+    "cancel": "Cancel",
+    "countrySearchPlaceholder": "e.g. United States"
   }
 }

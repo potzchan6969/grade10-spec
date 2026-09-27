@@ -36,7 +36,8 @@ is live, not whether the branch is closed.
 A change passes through the hands
 [Change Stages](/p/shared/planning/change-stages) names, each landing their own
 artifacts on their word — [Working a change](/guides/working-a-change) walks one
-feature through them all.
+feature through them all. Each hand answers only what is theirs, in the
+change's thread — [Agent Rounds](/p/shared/planning/agent-rounds).
 
 ## The rules themselves
 

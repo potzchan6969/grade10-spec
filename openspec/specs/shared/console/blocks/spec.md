@@ -37,6 +37,7 @@ cursor pager — SHALL be provided by the console package, and an admin console
 surface SHALL render these shapes from the package rather than maintaining a
 local implementation of them.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-4z9 rev=1 -->
 #### Scenario: shared-console-blocks-SC-01 - Two consoles render one source
 **Serves:** One shared implementation - two consoles render one source
 
@@ -45,6 +46,7 @@ local implementation of them.
 - **THEN** both render the same block source from the console package
 - **AND** every difference between the two renderings is produced by the props and theme each surface supplies, not by diverging copies
 
+<!-- trace:scenario id=g10.shared-blocks.SC-ys6 rev=1 -->
 #### Scenario: shared-console-blocks-SC-02 - A contract change lands once
 **Serves:** One shared implementation - a contract change lands once
 
@@ -62,6 +64,7 @@ that takes props, named after it — together with its existing utility
 exports for debounced input and for keeping a command's refusal with the
 command.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-bz2 rev=1 -->
 #### Scenario: shared-console-blocks-SC-03 - A console imports the blocks
 **Serves:** One shared implementation - a console imports the blocks
 
@@ -75,6 +78,7 @@ render. A component serving customer surfaces as well — signing in,
 two-factor enrollment — stays a shared UI export even when an admin
 application also renders it.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-sk1 rev=1 -->
 #### Scenario: shared-console-blocks-SC-04 - The shared UI entry offers no admin-only component
 **Serves:** One shared implementation - the shared UI entry offers no admin-only component
 
@@ -91,6 +95,7 @@ persist, navigate, or import an application. A block SHALL carry no brand:
 what distinguishes one brand's console from another's is the theme its
 application supplies.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-aal rev=1 -->
 #### Scenario: shared-console-blocks-SC-12 - Two brands theme one block
 **Serves:** Built on the design system - two brands theme one block
 
@@ -106,12 +111,14 @@ one while the read is in flight, one when the read is refused, and one when
 the read succeeds with no rows. The refused state SHALL render in the error
 tone, distinct from the tone of secondary or empty text.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-fpd rev=1 -->
 #### Scenario: shared-console-blocks-SC-05 - A read is in flight
 **Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
 - **WHEN** a console surface's read has not yet resolved
 - **THEN** the surface says it is loading, and offers no rows and no empty message
 
+<!-- trace:scenario id=g10.shared-blocks.SC-s7q rev=1 -->
 #### Scenario: shared-console-blocks-SC-06 - A read is refused
 **Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
@@ -119,6 +126,7 @@ tone, distinct from the tone of secondary or empty text.
 - **THEN** the failure renders in the error tone
 - **AND** the rendering is distinguishable from the empty state at a glance
 
+<!-- trace:scenario id=g10.shared-blocks.SC-23e rev=1 -->
 #### Scenario: shared-console-blocks-SC-07 - A read returns no rows
 **Serves:** shared-console-blocks-US-01 - Operator distinguishes a failed read from an empty queue
 
@@ -131,6 +139,7 @@ An operator move that cannot be undone SHALL confirm through a dialog the
 surface renders — naming the move in words the console supplies, and
 offering cancel — and SHALL NOT use the platform's native confirmation.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-q1u rev=1 -->
 #### Scenario: shared-console-blocks-SC-08 - An operator cancels a confirmation
 **Serves:** shared-console-blocks-US-02 - Operator confirms an irreversible move deliberately
 
@@ -138,6 +147,7 @@ offering cancel — and SHALL NOT use the platform's native confirmation.
 - **THEN** the move is not reported to the console
 - **AND** the surface returns to where the operator was
 
+<!-- trace:scenario id=g10.shared-blocks.SC-8kz rev=1 -->
 #### Scenario: shared-console-blocks-SC-09 - No move uses the native confirm
 **Serves:** shared-console-blocks-US-02 - Operator confirms an irreversible move deliberately
 
@@ -151,6 +161,7 @@ A control that switches which panel of a surface is visible SHALL announce
 tab semantics: the group is announced as tabs, and the active panel's control
 is announced as selected.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-5dr rev=1 -->
 #### Scenario: shared-console-blocks-SC-10 - A panel switch is announced as tabs
 **Serves:** shared-console-blocks-US-03 - Operator narrows a queue with an announced control
 
@@ -164,6 +175,7 @@ A control that narrows which rows a surface shows SHALL present its options
 as one segmented choice whose selected option is announced, rather than as
 independent buttons distinguished only by styling.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-bjx rev=1 -->
 #### Scenario: shared-console-blocks-SC-11 - A filter announces its selected option
 **Serves:** shared-console-blocks-US-03 - Operator narrows a queue with an announced control
 
@@ -177,6 +189,7 @@ An amount a console table renders SHALL arrive as an integer count of minor
 units plus an ISO 4217 currency code, and SHALL render naming that code
 rather than a symbol two currencies could share.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-zea rev=1 -->
 #### Scenario: shared-console-blocks-SC-13 - Two currencies share a column
 **Serves:** Tables tell the truth - two currencies share a column
 
@@ -190,6 +203,7 @@ When more rows exist than a console surface's page shows, the surface SHALL
 offer moving to the next page and back, rather than only saying more rows
 exist.
 
+<!-- trace:scenario id=g10.shared-blocks.SC-9o7 rev=1 -->
 #### Scenario: shared-console-blocks-SC-14 - A queue exceeds its page
 **Serves:** Tables tell the truth - a queue exceeds its page
 

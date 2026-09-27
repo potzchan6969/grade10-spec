@@ -19,7 +19,8 @@ One of the eight artifacts in `grade10-planning` is yours on every change:
 | Picking up a change somebody specified | Supplement it | `ui-design.md`, and the design reference it stands on |
 
 **A new change is the same job the PM does**, and `/workflow-plan` is the run that opens
-it — the interview, the PRD marks, the proposal, the decisions, the journeys.
+it — the interview ([Round Summary and Landing](../../../docs/governance/round-summary.md#interview)),
+the PRD marks, the proposal, the decisions, the journeys.
 Its description says "a product manager or a designer" for this reason. Run it
 rather than working from memory, and stop where it stops: `spec.md` is not that
 lane's to write, in your hands any more than the PM's. `/workflow-specify` writes its

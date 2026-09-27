@@ -19,7 +19,7 @@ artifacts:
     hand: pm
     # The page's marks, `proposal.md`, `decisions.md` and the journeys share
     # one reader list — `agent-rounds/spec.md`'s table names the same six
-    # for all three — so it is written once here and aliased on the other
+    # for all four — so it is written once here and aliased on the other
     # two, never repeated by hand. QA is on none of them: it reads the plan
     # and the build, so a words-only draft of these three reaches the reader
     # of the words and the floor and nobody else.
@@ -131,7 +131,8 @@ artifacts:
     template: decisions.md
     instruction: >
       Written by the product manager, with the `planning-pm` skill, out of the
-      same `grilling` round that produced the proposal. It lands before the
+      interview that produced the proposal
+      (`docs/governance/round-summary.md#interview`). It lands before the
       journeys, the design and the requirements, because all three are drawn
       from what it settles.
 
@@ -558,6 +559,13 @@ artifacts:
   - id: specs
     required: true
     hand: pm
+    # The blind readings are the requirements' challenge and their
+    # reconciliation its verify; the simpler thing reads the reconciled file
+    # after them, before the product manager's word, never during them.
+    perspectives:
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: specs/**/spec.md
     description: The capability's purpose, the feature set, and the requirement deltas
     template: spec.md
@@ -809,6 +817,13 @@ artifacts:
   - id: test-cases
     required: true
     hand: pm
+    # The blind readings are the requirements' challenge and their
+    # reconciliation its verify; the simpler thing reads the reconciled file
+    # after them, before the product manager's word, never during them.
+    perspectives:
+      - name: simpler
+        when: [always]
+        agent: .claude/agents/simpler.md
     generates: specs/**/feature-tcs.md
     description: An independent blind reading of the anchors, written without sight of the scenarios
     template: feature-tcs.md
@@ -831,9 +846,12 @@ artifacts:
       `user-journeys.md` (context and deltas), `decisions.md` - its `## Raised`
       table included, which is what earlier runs asked and what came of it -
       `ui-design.md` where the change has one, with the state dispositions pass
-      two wrote on its bullets stripped, the linked PRD sections, and the
-      existing `feature-tcs.md` for id continuity, with `## Reconciliation`
-      stripped.
+      two wrote on its bullets stripped, the linked PRD sections, the
+      existing `feature-tcs.md` for id continuity, and the domain suite above
+      the capability - the change's `domain-tcs.md`, else the durable one -
+      both with `## Reconciliation` stripped. The domain suite is composed
+      from journeys and names no scenario; it is how the pass knows which
+      paths are already walked.
 
       `decisions.md` carries no requirement, so reading it costs no blindness -
       the property protected here is blindness to the requirements, and that
@@ -844,7 +862,7 @@ artifacts:
       finding in the one mechanism built to produce true ones is dearer than
       the blindness it pretends to protect.
 
-      Excluded: `openspec/specs/` entirely, `openspec/changes/archive/`
+      Excluded: `openspec/specs/` beyond the domain suite, `openspec/changes/archive/`
       entirely, and any `## Requirements` section anywhere. The archive
       exclusion is not housekeeping: an archived change keeps an un-stripped
       `## Reconciliation` naming scenario ids, so missing that path reopens the
@@ -864,6 +882,12 @@ artifacts:
       completeness, empty / one / many, null and missing, permission matrix,
       error taxonomy, SEO and indexability. Two readings that use the same
       method produce synonyms, and the reconciliation then finds nothing.
+
+      Fewer, sharper cases: each names the risk it guards that no other case
+      does; a path a domain case already walks is left to it and recorded as
+      **Covered at domain**; a result seen on a run an existing case walks is
+      joined to that case. The rulebook's **One purpose, one case** and **A
+      Case That Already Exists Is Not Written Twice** hold the rules.
 
       ## Anchors
 
@@ -919,9 +943,10 @@ artifacts:
 
       `test-cases.md` is not a suite name. A capability writes
       `feature-tcs.md`; a path across the capabilities of one domain writes
-      `domain-tcs.md` beside the durable specs; `product-tcs.md` and
-      `platform-tcs.md` are smoke passes written there too, never under a
-      change's deltas.
+      `domain-tcs.md`, and `product-tcs.md` is a smoke pass across a
+      product's domains - each in the change's tree when the change's levels
+      pass writes it, folded at archive; `platform-tcs.md` is a smoke pass
+      beside the durable specs only.
 
       A capability whose journeys file says `**Walked by:** nobody` still gets
       a suite, anchored on its feature set.
@@ -1012,12 +1037,18 @@ artifacts:
       those same ids: its tests land in their own commit before the group's
       code, and its box is ticked last. The walk is its own test task.
 
-      - The last group is the walk: it walks every journey of every capability
-      the change specifies, end to end through the interface each actor uses,
-      leaves the walks as the change's end-to-end suite, and its commit flips
-      each case the walks decide to automated with `pnpm run tcs:automated
-      <case…> --decided-by <walk path>`; the cases that stay manual are named
-      in the suite and named in the walk's `rounds.md` row.
+      - The last group is the walk: it names the suite's review
+      (`/tcs-review <change>`) as its input, walks every journey of every
+      capability the change specifies, end to end through the interface each
+      actor uses, leaves the walks as the change's end-to-end suite, and its
+      commit flips each case the walks decide to automated with `pnpm run
+      tcs:automated <case…> --decided-by <walk path>`; the cases that stay
+      manual are named in the suite and named in the walk's `rounds.md` row.
+
+      - An `automated` case this change joined a result to - its `<v>` bumped,
+      back to `draft` - owes a task in the group that builds the behaviour:
+      its test asserts the new result, and its acceptance link names the new
+      revision.
 
       - End every group with its verification step - the checks that group
       runs - so an engineer ships and verifies one group at a time. Keep each
@@ -1045,24 +1076,27 @@ apply:
   requires:
     - tasks
   tracks: tasks.md
-  # `agent-rounds/spec.md`'s "A task group" row names seven readings: missing
-  # pieces, simplicity, code smell and the repository's conventions, all
-  # `.claude/agents/build.md`'s; QA; operations on a migration or a flag; the
-  # simpler thing. A task group is squarely build's and qa's subject, so both
-  # run every round; operations stays conditional on a migration or a flag.
+  # `agent-rounds/spec.md`'s "A task group" row sizes a group by what it
+  # lands: missing pieces, code smell and the repository's conventions, all `.claude/agents/build.md`'s, where the group lands code
+  # (a changed line in any file that is neither markdown nor a message
+  # catalog); the reader of words where it lands copy (a page under
+  # docs/prds/, a sentence in any markdown file, or a catalog's line); QA
+  # every round, since a group's tests are its subject; operations on a migration or a flag; the simpler thing
+  # always. A group that lands prose alone is read by the reader of words, QA
+  # and the simpler thing.
   perspectives:
     - name: missing-pieces
-      when: [always]
-      agent: .claude/agents/build.md
-    - name: simplicity
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
     - name: code-smell
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
     - name: conventions
-      when: [always]
+      when: [code]
       agent: .claude/agents/build.md
+    - name: reader
+      when: [copy]
+      agent: .claude/agents/reader.md
     - name: qa
       when: [always]
       agent: .claude/agents/qa.md

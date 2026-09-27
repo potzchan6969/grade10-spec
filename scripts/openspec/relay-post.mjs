@@ -16,10 +16,11 @@
  *
  *   node scripts/openspec/relay-post.mjs --message-file <path>
  *     [--confirm <artifact|group>] [--held] [--root <dir>]
+ *   node scripts/openspec/relay-post.mjs --row <Q> --change <id> [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --done [--root <dir>]
  *   node scripts/openspec/relay-post.mjs --bind <change> [--root <dir>]
  *
- * One table below holds the three, keyed by the flag that names each: the
+ * One table below holds the four, keyed by the flag that names each: the
  * call it makes on the wake, the line a terminal round prints instead, and
  * what a call that went through says. A reply is the file the round wrote —
  * `.round/thread.txt` — and never a string on the command line: a summary
@@ -33,6 +34,13 @@
  * recommendations` instead, which is the button while a held row is open. A
  * terminal round prints the text and then the label on its own line.
  *
+ * `--row <Q>` is the round's reply to the hand a held row waits on, in the
+ * change's thread: the row, the sentence it would put on the page and the decision
+ * rows it touches, quoted, and the hand mentioned. It is keyed on the change,
+ * the round and the row in `.round/rows.txt`, read and appended through the
+ * same sent-keys helpers every message uses, so a re-run of one round posts
+ * it once and the next round posts it again while it is still held.
+ *
  * `--bind` is the plan's own call, made right after `openspec new change`: it
  * warms the room's mapping with the change the run opened, and never defines
  * it — the record's `thread:` at `main` is what a landing wake resolves.
@@ -44,17 +52,28 @@
  * request: the round found nothing to say. With `ROUND_WAKE=relay` in the
  * environment and no such file, every mode fails rather than prints.
  */
-import { existsSync, readFileSync } from "node:fs";
+import { existsSync, mkdirSync, readFileSync } from "node:fs";
+import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
+import {
+  decisionRows,
+  handsOfRecord,
+  readQuestions,
+} from "../../tools/manual/src/store/read-changes.mts";
 import { parseArgs } from "./lib/args.mjs";
+import { citesId } from "./lib/cites.mjs";
+import { appendSentKeys, readSentKeys } from "./lib/notify.mjs";
 import { confirmOf, readWake, relayOf } from "./lib/relay.mjs";
+import { nextRoundOf } from "./lib/rounds.mjs";
+import { handText } from "./lib/wording.mjs";
 
 /**
  * The modes, one row each: `read` takes the flag's value off the arguments,
  * `call` is what the wake is asked, `printed` is what a terminal round says
  * instead, `confirmed` is what a call that went through says, `nothing` is
- * the value that makes the whole run a no-op, and `button` is whether a
- * `--confirm` may ride this mode.
+ * the value that makes the whole run a no-op, `button` is whether a
+ * `--confirm` may ride this mode, and `key` names what is posted once, in the
+ * `ledger` file, which a post or a print appends it to.
  */
 const KINDS = {
   "message-file": {
@@ -78,11 +97,27 @@ const KINDS = {
     printed: (change) => `bind ${change}`,
     confirmed: (change) => `bound ${change}`,
   },
+  // A held row addressed to another hand: the round's own reply in the
+  // change's thread, mentioning that hand, with the row, the sentence already
+  // on the page and the decision rows it touches quoted — posted once per
+  // change, round and row (`shared-planning-agent-rounds-SC-86`).
+  //
+  // The key's round is the one this round's landing will write, so a re-run of
+  // one round posts nothing again and the next round posts a row still held
+  // once more.
+  row: {
+    read: (flags, root) => heldRowText(root, flags),
+    call: (relay, text) => relay.post(text),
+    printed: (text) => text,
+    confirmed: () => "posted row",
+    key: (root, f) => `${f.change}/${nextRoundOf(root, f.change)}/${f.row}`,
+    ledger: ".round/rows.txt",
+  },
 };
 
 const MODES = Object.keys(KINDS);
 const USAGE =
-  "usage: node relay-post.mjs --message-file <path> [--confirm <artifact|group>] [--held] | --done | --bind <change> [--root <dir>]";
+  "usage: node relay-post.mjs --message-file <path> [--confirm <artifact|group>] [--held] | --row <Q> --change <id> | --done | --bind <change> [--root <dir>]";
 
 /** The file's trimmed text, or the empty string where it is missing or
  * blank — a round posts only when it has something to say. */
@@ -93,7 +128,7 @@ function messageFileText(path) {
 
 async function main() {
   const { flags } = parseArgs(process.argv.slice(2), {
-    keys: ["message-file", "bind", "confirm", "root"],
+    keys: ["message-file", "bind", "confirm", "root", "row", "change"],
     booleans: ["done", "held"],
     usage: USAGE,
   });
@@ -103,13 +138,24 @@ async function main() {
     fail(`one of ${MODES.map((one) => `--${one}`).join(", ")}\n${USAGE}`);
   }
   const kind = KINDS[given[0]];
-  const value = kind.read(flags);
+  const value = await kind.read(flags, root);
   const confirm = buttonOf(flags, kind);
 
   if (kind.nothing?.(value)) {
     console.log("nothing to post");
     return;
   }
+  const key = kind.key?.(root, flags);
+  const ledger = kind.ledger && join(root, kind.ledger);
+  if (key && readSentKeys(ledger).has(key)) {
+    console.log("already posted");
+    return;
+  }
+  const remember = () => {
+    if (!key) return;
+    mkdirSync(dirname(ledger), { recursive: true });
+    appendSentKeys(ledger, [key]);
+  };
 
   let wake;
   try {
@@ -119,6 +165,7 @@ async function main() {
   }
   if (!wake) {
     console.log(kind.printed(value, confirm));
+    remember();
     return;
   }
 
@@ -134,7 +181,62 @@ async function main() {
     return;
   }
   console.log(kind.confirmed(value));
+  remember();
 }
+
+/**
+ * The reply a held row makes to the hand it waits on. The row, the hand and
+ * the recommendation are read through the store's own readers — the question
+ * reader, the `## Decisions` rows and the record's `hands:` — so they are the
+ * ones the change page shows; the sentence it would put on the page is its
+ * recommendation; the rows it touches are
+ * every other decision row that names it or that it names. A row that is not
+ * held is refused: a decided row asks nobody anything. A role the record
+ * names no hand for is written as its label and `(open)`, as a landing reply
+ * writes it (`handText`), never as a mention nobody answers to.
+ */
+async function heldRowText(root, flags) {
+  const change = flags.change;
+  if (!change) fail(`--row rides --change <id>\n${USAGE}`);
+  const id = flags.row;
+  const dir = join(root, "openspec", "changes", change);
+  const decisions = readTextOr(join(dir, "decisions.md"));
+  const held = readQuestions(
+    decisions,
+    handsOfRecord(readTextOr(join(dir, ".openspec.yaml"))),
+  ).find((one) => one.id === id);
+  if (!held) {
+    fail(
+      `${id} is not held: a row asks a hand only while its Decision cell opens ❓ — a decided row is nobody's question`,
+    );
+  }
+  const rows = decisionRows(decisions);
+  const own = rows.find((cells) => cells[0] === id) ?? [];
+  const ownText = own.join(" | ");
+  const touched = rows.filter(
+    (cells) =>
+      /^Q\d+$/.test(cells[0] ?? "") &&
+      cells[0] !== id &&
+      (citesId(ownText, cells[0]) || citesId(cells.join(" | "), id)),
+  );
+  const hand = handText(
+    held.role,
+    held.hand === held.role ? undefined : held.hand,
+  );
+  const text = [
+    `${hand} — ${id} waits on you.`,
+    `> ${own.join(" | ")}`,
+    `The sentence it would put on the page:\n> ${held.recommended.replace(/^recommended:\s*/i, "")}`,
+    touched.length > 0
+      ? `The rows it touches:\n${touched.map((cells) => `> ${cells.join(" | ")}`).join("\n")}`
+      : "It touches no other row.",
+    `Answer with \`${id}: <your answer>\`, or \`${id}\` to take the recommendation.`,
+  ].join("\n");
+  return text;
+}
+
+const readTextOr = (path) =>
+  existsSync(path) ? readFileSync(path, "utf8") : "";
 
 /**
  * The button this call carries, or nothing. A button rides a message: it is

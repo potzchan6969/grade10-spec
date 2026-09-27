@@ -60,6 +60,7 @@ import {
   type WinnerOrderReceipt,
   type WinnerOrderStatus,
 } from "./winner-order-content";
+import { WinnerOrderHowToPayDialog } from "./winner-order-how-to-pay-dialog";
 import { WinnerOrderPaymentProofDialog } from "./winner-order-payment-proof-dialog";
 import { WinnerOrderRefundDialog } from "./winner-order-refund-dialog";
 import type { WinnerOrderSetupResult } from "./winner-order-setup-dialog";
@@ -376,6 +377,12 @@ function summaryLinesFor(
       tooltip: LINE_TOOLTIPS.shippingInsurance,
     },
     {
+      label: "Tax",
+      value: "TBD",
+      muted: true,
+      tooltip: LINE_TOOLTIPS.tax,
+    },
+    {
       label: "Payment Processing Fee",
       value: "TBD",
       muted: true,
@@ -494,14 +501,12 @@ function WinnerOrderPaymentMethod({
     );
   }
 
-  const bankLabel =
-    method !== "Bank transfer" && masked
-      ? `${method}, ${masked}`
-      : (masked ?? method);
+  const bankName = method !== "Bank transfer" ? method : undefined;
 
   return (
     <PaymentMethodCard
-      label={bankLabel}
+      description={bankName}
+      label={masked ?? method}
       leading={<Bank aria-label="Bank" size={20} weight="regular" />}
     />
   );
@@ -639,10 +644,12 @@ function OrderSummary({
   lines,
   refund,
   payCta,
+  howToPayCta,
   deadline,
   overdue = false,
   settlementContact = null,
   onPay,
+  onHowToPay,
   onViewInvoicePdf,
   onViewRefundDetails,
   onContact,
@@ -650,11 +657,13 @@ function OrderSummary({
   lines: WinnerOrderInvoiceLine[];
   refund?: WinnerOrderContent["refund"];
   payCta?: string | null;
+  howToPayCta?: string | null;
   deadline?: string | null;
   overdue?: boolean;
   /** Partially Paid — Contact Us, no balance figure. */
   settlementContact?: string | null;
   onPay?: () => void;
+  onHowToPay?: () => void;
   onViewInvoicePdf?: () => void;
   onViewRefundDetails?: () => void;
   onContact?: () => void;
@@ -760,6 +769,16 @@ function OrderSummary({
           <Button className="w-full" onClick={onPay} size="md">
             {payCta}
           </Button>
+          {howToPayCta && onHowToPay ? (
+            <Button
+              className="w-full"
+              onClick={onHowToPay}
+              size="md"
+              variant="outline"
+            >
+              {howToPayCta}
+            </Button>
+          ) : null}
           {deadline ? (
             <p className="w-full text-center text-sm leading-5 text-secondary-foreground">
               {deadline}
@@ -842,7 +861,9 @@ function OrderSidebar({
   confirmAddressCta,
   onConfirmAddress,
   payCta,
+  howToPayCta,
   onPay,
+  onHowToPay,
   onViewInvoicePdf,
   receipts,
 }: {
@@ -850,7 +871,9 @@ function OrderSidebar({
   confirmAddressCta?: string | null;
   onConfirmAddress?: () => void;
   payCta?: string | null;
+  howToPayCta?: string | null;
   onPay?: () => void;
+  onHowToPay?: () => void;
   onViewInvoicePdf?: () => void;
   receipts?: WinnerOrderReceipt[];
 }) {
@@ -907,7 +930,9 @@ function OrderSidebar({
         >
           <OrderSummary
             deadline={paymentOverdue || payCta ? content.deadline : null}
+            howToPayCta={howToPayCta}
             lines={lines}
+            onHowToPay={onHowToPay}
             onPay={onPay}
             onViewInvoicePdf={onViewInvoicePdf}
             onViewRefundDetails={
@@ -1056,6 +1081,7 @@ function WinnerOrderPage({
   );
   const [setupDialogOpen, setSetupDialogOpen] = useState(false);
   const [proofDialogOpen, setProofDialogOpen] = useState(false);
+  const [howToPayDialogOpen, setHowToPayDialogOpen] = useState(false);
   const [cardCheckoutPending, setCardCheckoutPending] = useState(false);
   const revealed = useFirstPaintReveal();
 
@@ -1075,9 +1101,11 @@ function WinnerOrderPage({
   const payCta =
     content.status === "pending_payment" && !content.overdue
       ? content.setupPaymentMethod === "Bank transfer"
-        ? "Pay by Bank Transfer"
+        ? "Submit Payment Proof"
         : "Pay with Card"
       : null;
+  const howToPayCta =
+    payCta === "Submit Payment Proof" ? "View Bank Details" : null;
   const progress = showWinnerProgress(content.status)
     ? winnerProgressStepsFor(content.status, content)
     : null;
@@ -1253,7 +1281,11 @@ function WinnerOrderPage({
             <OrderSidebar
               confirmAddressCta={confirmAddressCta}
               content={content}
+              howToPayCta={howToPayCta}
               onConfirmAddress={handleConfirmAddressClick}
+              onHowToPay={
+                howToPayCta ? () => setHowToPayDialogOpen(true) : undefined
+              }
               onPay={payCta ? handlePayClick : undefined}
               onViewInvoicePdf={
                 hasIssuedInvoice(content)
@@ -1277,6 +1309,11 @@ function WinnerOrderPage({
         onConfirm={handleSetupConfirm}
         onOpenChange={setSetupDialogOpen}
         open={setupDialogOpen}
+      />
+      <WinnerOrderHowToPayDialog
+        invoiceId={content.invoiceId ?? undefined}
+        onOpenChange={setHowToPayDialogOpen}
+        open={howToPayDialogOpen}
       />
       <WinnerOrderPaymentProofDialog
         onOpenChange={setProofDialogOpen}

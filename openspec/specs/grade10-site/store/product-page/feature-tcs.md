@@ -1,7 +1,7 @@
 # grade10-site/store/product-page Test Cases
 
 **Status:** pending-review
-**Drafts styled:** 2026-09-14, tcs-rules r3.0
+**Drafts styled:** 2026-09-22, tcs-rules r3.0
 
 ## grade10-site-store-product-page-US1: Collector reads a card at its own address
 
@@ -11,6 +11,7 @@ when the catalogue holds no such card,
 **so that** the page I read is the card the address names rather than an empty
 product page.
 
+<!-- trace:case id=g10.store-product-page.TC-dg4 rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC1-1: Card answers whole before scripts run
 
 **Classification:**
@@ -41,6 +42,7 @@ The catalogue holds <a published card>. JavaScript disabled in the browser.
 * URL contains <lang>.
 * Page source carries that card's name, description, and a price for every variant it lists.
 
+<!-- trace:case id=g10.store-product-page.TC-2l8 rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC2-1: Two cards answer as two pages
 
 **Classification:**
@@ -68,6 +70,7 @@ The catalogue holds two cards.
 * Each response carries its own card's name and price.
 * Each response carries its own title, meta description and `og:url`.
 
+<!-- trace:case id=g10.store-product-page.TC-plg rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC3-1: Unknown handle answers 404 with not-found
 
 **Classification:**
@@ -95,6 +98,7 @@ None.
 * Response status is 404.
 * The site's not-found surface is shown, not an empty product page.
 
+<!-- trace:case id=g10.store-product-page.TC-bng rev=1 covers=g10.store-product-page.SC-b5k,g10.store-product-page.SC-ok3,g10.store-product-page.SC-f3e,g10.store-product-page.SC-lk8 -->
 ### grade10-site-store-product-page-US1-TC4-1: Card added to the catalogue answers
 
 **Classification:**
@@ -129,6 +133,7 @@ The catalogue holds <a newly added card>.
 **so that** the card I opened is the one I land on, at an address that answers
 on its own.
 
+<!-- trace:case id=g10.store-product-page.TC-3jw rev=1 covers=g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-product-page-US2-TC1-1: Card opens from the grid at its own address
 
 **Classification:**
@@ -156,6 +161,7 @@ A collector is on the storefront. The catalogue holds <a published card>.
 * That card's address is what they are on, showing that card's page.
 * The destination renders without a full document load.
 
+<!-- trace:case id=g10.store-product-page.TC-xjy rev=1 covers=g10.store-product-page.SC-wo0,g10.store-product-page.SC-21y -->
 ### grade10-site-store-product-page-US2-TC2-1: Sitemap names no unfilled product pattern
 
 **Classification:**
@@ -192,6 +198,7 @@ None.
 **so that** I can buy the grade I picked without leaving the card or returning
 to the grid.
 
+<!-- trace:case id=g10.store-product-page.TC-y9w rev=1 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC1-1: Chosen grade is added, not the opening variant
 
 **Classification:**
@@ -222,6 +229,7 @@ A card whose page lists more than one variant for sale.
 * The collector is still on that card's address.
 * What the site says the cart holds has changed to account for it.
 
+<!-- trace:case id=g10.store-product-page.TC-whz rev=1 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC2-1: Single-variant card needs no choice
 
 **Classification:**
@@ -249,6 +257,7 @@ A card whose page lists one variant for sale.
 * The cart holds that variant.
 * The collector is still on that card's address.
 
+<!-- trace:case id=g10.store-product-page.TC-4xf rev=1 covers=g10.store-product-page.SC-jt1,g10.store-product-page.SC-b7g,g10.store-product-page.SC-qmb,g10.store-product-page.SC-tl5 -->
 ### grade10-site-store-product-page-US3-TC3-1: Same variant twice is one line
 
 **Classification:**
@@ -284,6 +293,7 @@ A collector has already added a variant from a card's page.
 still carrying its prices,
 **so that** I can tell a card that sold from a page that failed.
 
+<!-- trace:case id=g10.store-product-page.TC-mgl rev=1 covers=g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
 ### grade10-site-store-product-page-US4-TC1-1: Sold-out card keeps prices and offers no add
 
 **Classification:**
@@ -312,6 +322,7 @@ A card the catalogue lists with no variant for sale.
 * Every variant it lists is still priced.
 * There is nothing to press that would add it.
 
+<!-- trace:case id=g10.store-product-page.TC-cdc rev=1 covers=g10.store-product-page.SC-prx,g10.store-product-page.SC-1p0 -->
 ### grade10-site-store-product-page-US4-TC2-1: Mixed availability is said per variant
 
 **Classification:**
@@ -348,6 +359,7 @@ A card listing one variant for sale and one sold out.
 to say how many that is,
 **so that** the quantity I take to the cart is one the shop can fill.
 
+<!-- trace:case id=g10.store-product-page.TC-cn0 rev=1 covers=g10.store-product-page.SC-yw4,g10.store-product-page.SC-1e2,g10.store-product-page.SC-yyk,g10.store-product-page.SC-vkx,g10.store-product-page.SC-hvy,g10.store-product-page.SC-82g -->
 ### grade10-site-store-product-page-US5-TC1-1: Nearly out is said and the quantity stops there
 
 **Classification:**
@@ -386,6 +398,7 @@ to say how many that is,
 * Step 1 says `<low count>` are left.
 * The quantity stays at `<low count>`.
 
+<!-- trace:case id=g10.store-product-page.TC-yzw rev=1 covers=g10.store-product-page.SC-yw4,g10.store-product-page.SC-1e2,g10.store-product-page.SC-yyk,g10.store-product-page.SC-vkx,g10.store-product-page.SC-hvy,g10.store-product-page.SC-82g -->
 ### grade10-site-store-product-page-US5-TC2-1: Grade the shop counts nothing for is not capped
 
 **Classification:**
@@ -422,6 +435,7 @@ to say how many that is,
 
 * The quantity rises to `<asked quantity>`.
 
+<!-- trace:case id=g10.store-product-page.TC-sr6 rev=1 covers=g10.store-product-page.SC-yw4,g10.store-product-page.SC-1e2,g10.store-product-page.SC-yyk,g10.store-product-page.SC-vkx,g10.store-product-page.SC-hvy,g10.store-product-page.SC-82g -->
 ### grade10-site-store-product-page-US5-TC3-1: Choosing another grade brings that grade's ceiling
 
 **Classification:**
@@ -461,6 +475,7 @@ to say how many that is,
 
 * The quantity rises to `<roomy count>`.
 
+<!-- trace:case id=g10.store-product-page.TC-ub9 rev=1 covers=g10.store-product-page.SC-yw4,g10.store-product-page.SC-1e2,g10.store-product-page.SC-yyk,g10.store-product-page.SC-vkx,g10.store-product-page.SC-hvy,g10.store-product-page.SC-82g -->
 ### grade10-site-store-product-page-US5-TC4-1: A well-stocked grade says nothing until every one is asked for
 
 **Classification:**
@@ -509,6 +524,7 @@ to say how many that is,
 **I want** Add to cart to open sign-in instead of building a guest cart,
 **so that** I only hold lines I can take to members-only checkout.
 
+<!-- trace:case id=g10.store-product-page.TC-7e1 rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC1-1: Signed-out Add to cart opens sign-in
 
 **Classification:**
@@ -540,6 +556,7 @@ to say how many that is,
 * The sign-in dialog opens over the product page.
 * No cart gains a line for that product.
 
+<!-- trace:case id=g10.store-product-page.TC-5er rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC2-1: Dismissing sign-in adds nothing
 
 **Classification:**
@@ -571,6 +588,7 @@ to say how many that is,
 * customer remains signed out on the product page.
 * The cart is unchanged for that product.
 
+<!-- trace:case id=g10.store-product-page.TC-maa rev=1 covers=g10.store-product-page.SC-za5,g10.store-product-page.SC-eeg,g10.store-product-page.SC-0j7 -->
 ### grade10-site-store-product-page-US11-TC3-1: Sign-in on the product page completes the add
 
 **Classification:**
@@ -616,6 +634,7 @@ to say how many that is,
 **I want** the sign-in dialog to say I am signing in to add to cart,
 **so that** I know why the shop stopped the add.
 
+<!-- trace:case id=g10.store-product-page.TC-ir3 rev=1 covers=g10.store-product-page.SC-zl0 -->
 ### grade10-site-store-product-page-US12-TC1-1: Add to cart sign-in title names why
 
 **Classification:**
@@ -644,3 +663,284 @@ to say how many that is,
 **Expected Results:**
 
 * The dialog title is **Sign In to Add to Cart**.
+
+---
+
+## grade10-site-store-product-page-US13: Collector shares a card and the preview shows it
+
+**As a** collector,
+**I want** a product link I pass on to unfurl with the card's own picture, whole,
+**so that** whoever receives it sees the card rather than a text-only preview
+or one with its edges cut off.
+
+<!-- trace:case id=g10.store-product-page.TC-kzr rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC1-1: Product address unfurls with the card's first catalogue image
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with two or more images in the shop's own order.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Check the response for `og:image`.
+
+**Expected Results:**
+
+* `og:image` names the card's first catalogue image, not a later one.
+* That image is the same photograph the card's own page shows first.
+
+<!-- trace:case id=g10.store-product-page.TC-num rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC2-1: Declared size matches what is actually delivered
+
+**Classification:**
+
+* **Severity:** critical
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** smoke
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card with at least one image exists.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `og:image:width` and `og:image:height`.
+3. Fetch the `og:image` URL and measure the delivered image.
+
+**Expected Results:**
+
+* `og:image:width` is `1200` and `og:image:height` is `630`.
+* The image actually delivered at that URL is 1200 by 630 pixels.
+
+<!-- trace:case id=g10.store-product-page.TC-05a rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC3-1: Card sits whole inside the box, padded white and never cropped
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists whose first image's own aspect ratio differs from
+1200 by 630.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Fetch the `og:image` and inspect the full frame.
+
+**Expected Results:**
+
+* The whole card is visible in the frame — no edge, corner, or label is cut off.
+* The leftover space is filled solid white, not a blurred or extended copy of
+  the photograph.
+
+<!-- trace:case id=g10.store-product-page.TC-8oe rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC4-1: Card with no catalogue image carries no og:image at all
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** smoke, regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with no image attached.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Check the response for `og:image`.
+
+**Expected Results:**
+
+* No `og:image` tag is present — not an empty value, not a placeholder URL.
+* Title, description and `og:url` are unaffected.
+
+<!-- trace:case id=g10.store-product-page.TC-vr6 rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC5-1: Card shape reads wide when a picture is present
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card with at least one image exists.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `twitter:card`.
+
+**Expected Results:**
+
+* `twitter:card` is `summary_large_image`.
+
+<!-- trace:case id=g10.store-product-page.TC-fpn rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC6-1: Card shape reads small when no picture is present
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists with no image attached.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Read `twitter:card`.
+
+**Expected Results:**
+
+* `twitter:card` is `summary`.
+
+<!-- trace:case id=g10.store-product-page.TC-3ch rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC7-1: Alt text names the card, and is absent when the picture is
+
+**Classification:**
+
+* **Severity:** minor
+* **Priority:** low
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** usability
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+Two catalogued cards exist: one whose image carries its own alt text, one
+whose image carries none.
+
+**Steps:**
+
+1. Navigate to each card's own address with JavaScript disabled.
+2. Read `og:image:alt` on each.
+
+**Expected Results:**
+
+* Where the image has its own alt text, `og:image:alt` is that text.
+* Where it has none, `og:image:alt` is the card's name.
+
+<!-- trace:case id=g10.store-product-page.TC-6n4 rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC8-1: Two cards each unfurl with their own picture, never the other's
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+Two catalogued cards exist, each with its own distinct first image.
+
+**Steps:**
+
+1. Navigate to card A's address with JavaScript disabled and note `og:image`.
+2. Navigate to card B's address with JavaScript disabled and note `og:image`.
+
+**Expected Results:**
+
+* Card A's `og:image` is card A's own first image; card B's is card B's own.
+* Neither response's picture, size, or shape declaration leaks into the
+  other's.
+
+<!-- trace:case id=g10.store-product-page.TC-21a rev=1 covers=g10.store-product-page.SC-vzq,g10.store-product-page.SC-sia,g10.store-product-page.SC-eji -->
+### grade10-site-store-product-page-US13-TC9-1: A small original is enlarged to fill the box
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** medium
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-store-product-page-US-13
+
+**Pre-conditions:**
+A catalogued card exists whose first image's native resolution is smaller
+than 1200 by 630 in at least one dimension.
+
+**Steps:**
+
+1. Navigate to <a card's own address> with JavaScript disabled.
+2. Fetch the `og:image` and measure the delivered pixel dimensions.
+
+**Expected Results:**
+
+* The delivered image is exactly 1200 by 630, enlarged from its native size
+  rather than left smaller inside more padding.
+
+## Settled
+
+* The share picture resolves through the same CDN address as the catalogue
+  image rather than a separately generated asset — an implementation
+  contract, not an externally observable product behaviour; the unit test's
+  job, not this suite's.

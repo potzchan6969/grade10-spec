@@ -24,9 +24,11 @@ the lot at its own address without a page load.
   the catalogue whole, never twice and never skipping one
 - ❓ **Sort index** — what the operator's sort index does to the resting
   order; Product confirms
-- **The card** — the first gallery item, the title, the current price and the
-  watch control; no Buy Now listing ever appears
-- **Hidden lots** — a draft or called-off lot is never listed —
+- **The card** — the first gallery item, the title, the status, the close,
+  the current price and the watch control; a closed lot shows no watch
+  control; no Buy Now listing ever appears
+- **Hidden lots** — a draft or called-off lot is never listed; a called-off
+  lot's canonical address remains directly accessible —
   [Lot Status](#auction-details)
 
 ### Listing Schema
@@ -42,13 +44,69 @@ What a listing carries, from the operator's form to the card.
 | Bidding window | A start, a close and the extension rule — [Bidding](/p/grade10-site/auction/bidding#auction-logic) | The close and the time left |
 | Category | One per taxonomy | Cards grouped or found by category |
 | Campaign | Optional, the cover a set of lots sells under | The campaign's title and copy |
-| Address | A slug, unique among every listing | `/auction/listings/<slug>` |
-| 🚧 Public listing ID | A stable opaque display identifier, pending PM confirmation | A collector-quotable reference; never the internal listing key |
+| Address | A slug, unique among every listing: lower-case title words followed by the lower-case listing code when an operator keeps the generated value | `/auction/listings/<slug>` |
+| 🚧 Listing code | A stable opaque 5-character code, always leading with 2 letters, allocated on the first saved draft and permanently reserved, including after deletion — [Auction Management · Listings](/p/grade10-admin/auction/management#listings) | Its lower-case form is visible only as the canonical address suffix, never as a labelled page field or a route on its own. Fresh metadata omits the separate code. A cached preview may remain stale without a purge guarantee. The code becomes the winner's payment reference once an order exists — [Post-Bidding · The Invoice](/p/grade10-site/auction/post-bidding#the-invoice) |
 | **Cert ID** | One graded unit of the product, or none | The configured Cert ID when the product's displayed fields include it |
 
 - ❓ **Listing facts** — grade, certificate, set and language on the card,
   once the unit's attributes reach the listing; Product confirms against
   [Auction Management](/p/grade10-admin/auction/management#listings)
+- ❓ **Cached shared-link previews** — whether an already cached preview
+  refreshes when the listing changes; until Product confirms, an old preview
+  may remain stale without a purge or regeneration guarantee
+
+## Catalogue
+
+The Auction nav item opens `/auction`. That address, with no category query, is
+the one a search engine keeps.
+
+| Rule | Value |
+| --- | --- |
+| Featured | At most **3** operator-curated slides. Absent when none are set. Active and Upcoming lots only |
+| Live | Active and Upcoming. Ended lots stay in All auctions and fill no Featured slot |
+
+- 🚧 **Featured** — a full-width carousel when at least one slide is set. Each
+  slide is an operator-picked listing with one **front page image** uploaded
+  for that slot (banner and slab as that single asset; not a gallery pick for
+  upload). The site loads Featured from its own public read, separate from All
+  auctions. The slide shows that image, the lot title, its status (LIVE BIDDING
+  with a live dot when Active; UPCOMING with no dot when Upcoming), a client
+  countdown from the served close or open as relative **Ends in** / **Opens in**
+  in the same short form as All auctions cards, the current or starting bid
+  (Active rolls when the amount increases after first paint), and Bid Now when
+  Active or View Auction otherwise — either opens that lot's details page.
+  Extended bidding keeps LIVE BIDDING and
+  Ends in to the recorded close — no Extended label — and that close moves with
+  the same freshness as the live current bid. Progress dots advance the slides
+  when more than one is set. The section is headed Featured auctions —
+  [Auction Management · Featured](/p/grade10-admin/auction/management#featured)
+- 🚧 **No category section** — category tiles and the busy filter stay off this
+  page until a later change; quiet layout is the only layout
+- **All auctions** — every lot a collector can see, including those in Featured,
+  in the resting order, below Featured when Featured is present. Each card
+  follows the store product card: the image well, the title, the current bid,
+  then a countdown. An active lot counts down to its close. An upcoming lot
+  counts down to its open. A closed lot names when it ended. Watch sits at the
+  bottom right of the image, and a closed lot shows none — the same watch as
+  the lot page and My Auctions —
+  [Watchlist](/p/grade10-site/auction/bidding#my-auctions-watchlist-and-notifications)
+- **Headings** — one `h1`, Auctions, which is not shown. `h2` for Featured
+  auctions and All auctions, and only for a section that is on the page. A lot
+  title is an `h3` in the list
+- **The document** — title and description belong to this page. Canonical and
+  the share address are `/auction`. An ItemList names the lots, their
+  addresses, images and current bids. A closed lot's offer stays on the lot
+  page
+
+::story{id="pages-auction-list--carousel-banner" title="Carousel banner"}
+
+::story{id="auction-list-lot-card--active" title="An active lot"}
+
+::story{id="auction-list-lot-card--upcoming" title="An upcoming lot"}
+
+::story{id="auction-list-lot-card--ended" title="A closed lot"}
+
+::story{id="pages-auction-list--empty" title="No auctions"}
 
 ## Auction Details
 
@@ -64,8 +122,9 @@ lot before any script runs.
   is built — [Crawlable Pages](/p/grade10-site/site/crawlable-pages)
 - **Not found** — an address naming no lot answers an honest 404 with the
   site's not-found surface, never an empty lot page
-- **Hidden** — the same 404 meets a lot that is now Draft or Called off,
-  even at the address it once answered from
+- **Hidden from browse/search** — a draft or called-off lot is absent from
+  catalogue and search. A called-off lot remains directly accessible at its
+  canonical address; a draft has no public address.
 - **After scripts load** — nothing on screen is replaced by a placeholder,
   and a value that follows the clock continues from what was served
 - **Watching** — a signed-in collector watches or unwatches the lot from its
@@ -100,8 +159,6 @@ lot before any script runs.
   item while the listing is draft, created or published, never after it
   closes — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
 
-::story{id="auction-listing-listinggallery--mixed-media" title="A gallery holding both images and video"}
-
 ### Lot Status
 
 Every lot a collector can see shows one status. It describes the lot,
@@ -111,13 +168,14 @@ never the collector's bid or order, and every page reads the same value.
 | --- | --- | --- |
 | **Upcoming** | Published; bidding has not started | Scheduled |
 | **Active** | Bidding is open, extended bidding included | Live |
-| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Address to Refunded |
-| Hidden | Never published, or withdrawn before a sale | Draft, Called off |
+| **Ended** | Bidding is over, with or without a winner, whatever the order's state | Unsold, and every order status from Awaiting Setup to Refunded |
+| Hidden | Never published | Draft |
+| Removed from browse/search | Called off before close; canonical address remains direct | Called off |
 
-- **Hidden lots** — not in the catalogue, search or filters; the lot page
-  is not found; the lot leaves the watched list; My Auctions shows it only to
-  a collector who bid on it, saying the card hold was released when there
-  was one
+- **Hidden lots** — drafts have no public address. Called-off lots are not in
+  the catalogue, search or filters but remain directly accessible at their
+  canonical address; My Auctions shows a called-off lot to a collector who bid
+  on it, saying the card hold was released when there was one
 
 ::changes{spec="grade10-site/auction/lot-status"}
 
@@ -134,7 +192,7 @@ and publishes it; from the close on, the sale is worked in the post-sale queue
 | Saves a draft | Nothing; a draft has no address |
 | Creates it — a title, a slug, a price, a window, one media item, the stock held | Nothing yet |
 | Publishes it, now or at Publish at | The lot as **Upcoming**, then **Active** from its start |
-| Calls it off, any time before the close | The lot disappears, and its address is not found |
+| Calls it off, any time before the close | The lot leaves browse and search, but its canonical address remains directly accessible |
 | Lets the close pass | **Ended**; the winner's order opens — [Post-Bidding](/p/grade10-site/auction/post-bidding) |
 | Reads Watchers on the Listings table | Nothing; a watch is private |
 
@@ -167,9 +225,9 @@ Active and Completed filters in bidding history.
 
 | Item | Status | Decision | Owner |
 | --- | --- | --- | --- |
-| The catalogue's own capability | ❓ Open | Its order is a requirement of Bidding's spec and its card ships as a shared block; no capability states the rest of the browse surface. Product confirms whether it is specified on its own or under [Listing Page Blocks](/p/shared/ui/auction-listing). | Product |
+| The catalogue page | 🚧 In flight | `/auction` is this page: an operator-curated Featured carousel (at most 3 slides, each a listing plus one front page image, loaded from a dedicated Featured read, with live rolling bid and a client countdown), then All auctions. Category tiles and the busy filter stay off until a later change. The list card stays the one the catalogue already shows. | Design |
 | Three statuses | Decided | Upcoming, Active, Ended; extended bidding reads Active, and Unsold reads Ended. The "Extended bidding: ON" label is the operator queue's alone. | Product |
-| Draft and Called off | Decided | Hidden on every collector page; the lot's address shows Page not found. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
+| Draft and Called off | Decided | Draft has no public address. A called-off lot is removed from browse and search but remains directly accessible at its canonical address. Explicit hard deletion is outside this capability, so its page accessibility is unspecified. A collector who bid on a called-off lot still sees it in My Auctions, with the hold note when the bid held one. | Product |
 | Where the status shows | Decided | The designer decides where and how each page shows it. | Design |
 | Watching a lot | Decided | Watching from the lot page is its own part of the capability's map, and the watchlist owns what a watch means. | Product |
 | Watching while a bid stands | Decided | A bid keeps the lot watched: the control reads Watching and is disabled until the lot closes, and a closed lot shows no control. | Product |

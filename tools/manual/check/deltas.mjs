@@ -15,7 +15,12 @@ import { existsSync } from "node:fs";
 import { join } from "node:path";
 import { findRequirement } from "../src/api/requirements.ts";
 import { readText, readTextIfExists, walkFiles } from "../src/store/disk.mts";
-import { findSection, outline } from "../src/store/markdown.mts";
+import {
+  findSection,
+  outline,
+  SCENARIO_ID,
+  scenarioIdsIn,
+} from "../src/store/markdown.mts";
 import {
   deltaKindOf,
   deltaRequirementSections,
@@ -43,10 +48,12 @@ import {
  * journeys are their own file beside the delta, and one written here is read
  * by nothing. */
 const CARRIED = new Set(["Purpose", "Feature set"]);
-const ISSUED_ID = /[a-z0-9][a-z0-9-]*-(?:SC|US|TC)-\d+/g;
-const LEADING_ID = /^([a-z0-9][a-z0-9-]*-SC-\d+)\b/;
+const ISSUED_ID = new RegExp(
+  `${SCENARIO_ID.source}|[a-z0-9][a-z0-9-]*-(?:US|TC)-\\d+`,
+  "g",
+);
+const LEADING_ID = new RegExp(`^(${SCENARIO_ID.source})\\b`);
 const SCENARIO_HEADING = /^Scenario:\s*/i;
-const SCENARIO_ID = /[a-z0-9][a-z0-9-]*-SC-\d+/g;
 const GWT = /^\s*(?:[-*]\s+)?\*\*(?:GIVEN|WHEN|THEN)\*\*/;
 const ARCHIVE_DATE = /^\d{4}-\d{2}-\d{2}-/;
 
@@ -54,7 +61,7 @@ export function checkDeltas(ctx, { changes, shape, pages }) {
   // Before the guard: a change can carry journeys and no delta at all — the
   // state the product manager hands over in — and the restated copies in it
   // are checkable without a `spec.md` anywhere near them.
-  checkContext(ctx, journeysOf(ctx.roots.store, changes));
+  checkContext(ctx, journeysOf(ctx, changes));
 
   const files = readDeltaFiles(ctx.roots.store, changes);
   if (files.length === 0) return;
@@ -295,7 +302,7 @@ function movesBehaviour(one, durable) {
 function behaviourOf(raw) {
   const text = raw ?? "";
   return {
-    ids: new Set(text.match(SCENARIO_ID) ?? []),
+    ids: new Set(scenarioIdsIn(text)),
     lines: text
       .split("\n")
       .filter((line) => GWT.test(line))
@@ -550,13 +557,16 @@ function checkFolded(ctx, files, shape) {
   }
 }
 
-/** RULE `overlap`: two changes folding one requirement is a silent revert —
- * both archive cleanly, and the second writes the first's text away. */
+/** RULE `overlap`: two changes folding one requirement. A MODIFIED or a
+ * REMOVED block archived second writes the first's text away, silently; an
+ * ADDED block archived second fails outright, since the fold refuses to add
+ * a name that exists. Either way each change is named to the other, with the
+ * other's heading, so a person reads both before building on either
+ * (`shared-planning-agent-rounds-SC-102`). */
 function checkOverlap(files, add) {
   const claims = new Map();
   for (const one of files) {
     for (const requirement of one.requirements) {
-      if (requirement.kind === "added") continue;
       const key = `${one.spec}\n${requirement.name}`;
       const held = claims.get(key) ?? [];
       held.push({ ...requirement, change: one.change, file: one.file });
@@ -573,7 +583,13 @@ function checkOverlap(files, add) {
       add(
         "overlap",
         claim.file,
-        `${label(claim)} is also folded by ${others.join(", ")} — whichever archives second reverts the first`,
+        `${label(claim)} is also folded by ${others.join(", ")} — ${
+          claim.kind === "added"
+            ? "archiving this one second fails outright, since the fold refuses to add a name that exists"
+            : held.some((one) => one.kind === "added")
+              ? "archiving this one first fails the other's fold, and second rewrites what it added"
+              : "whichever archives second reverts the first"
+        }`,
       );
     }
   }

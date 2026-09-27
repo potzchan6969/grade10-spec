@@ -76,7 +76,7 @@ export const ProcessingOverpaid: Story = {
     expect(canvas.getByText("Winning Bid")).toBeVisible();
     expect(canvas.getByText("Shipping & Handling")).toBeVisible();
     expect(canvas.getByText("Order Total")).toBeVisible();
-    expect(canvas.getByText("HK$16,140")).toBeVisible();
+    expect(canvas.getByText("HK$16,460")).toBeVisible();
     expect(canvas.getByText("Refund HK$500")).toBeVisible();
     expect(canvas.getByRole("button", { name: "View" })).toBeVisible();
     expect(canvas.queryByText("Refunded")).not.toBeInTheDocument();
@@ -90,7 +90,10 @@ export const ProcessingOverpaid: Story = {
     const dialog = within(dialogElement);
     expect(dialog.getByText("Transfer to")).toBeVisible();
     expect(dialog.getByLabelText("Bank")).toBeVisible();
-    expect(dialog.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(dialog.getByText("···· 8891")).toBeVisible();
+    expect(dialog.getByText("HSBC")).toBeVisible();
+    expect(dialog.getByText("Reference")).toBeVisible();
+    expect(dialog.getByText("G10-RF-LK7P2Q")).toBeVisible();
   },
 };
 
@@ -121,12 +124,15 @@ export const ProcessingBankTransfer: Story = {
     const sidebar = within(canvas.getByRole("complementary"));
     expect(sidebar.getByText("Payment method")).toBeVisible();
     expect(sidebar.getByLabelText("Bank")).toBeVisible();
-    expect(sidebar.getByText("HSBC, ···· 8891")).toBeVisible();
+    expect(sidebar.getByText("···· 8891")).toBeVisible();
+    expect(sidebar.getByText("HSBC")).toBeVisible();
     expect(sidebar.queryByText("Visa")).not.toBeInTheDocument();
     expect(sidebar.queryByText("···· 4242")).not.toBeInTheDocument();
     expect(sidebar.getByText("Payment Processing Fee")).toBeVisible();
     expect(sidebar.getByText("Free")).toBeVisible();
-    expect(sidebar.getByText("HK$16,020")).toBeVisible();
+    expect(sidebar.getByText("Tax")).toBeVisible();
+    expect(sidebar.getByText("HK$320")).toBeVisible();
+    expect(sidebar.getByText("HK$16,340")).toBeVisible();
     expect(sidebar.queryByText("HK$120")).not.toBeInTheDocument();
     expect(sidebar.getByRole("link", { name: "Invoice PDF" })).toBeVisible();
     expect(sidebar.getByRole("link", { name: "Receipt PDF" })).toBeVisible();

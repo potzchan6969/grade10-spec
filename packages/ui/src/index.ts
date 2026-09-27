@@ -59,6 +59,44 @@ export type {
   BookingSlot,
   BookingStep,
 } from "./blocks/appointment-booking/types";
+// shared/ui/invoice-and-receipt-pdf
+export {
+  InvoicePdf,
+  type InvoicePdfCopy,
+  type InvoicePdfData,
+  type InvoicePdfLineItem,
+  type InvoicePdfRenderOptions,
+} from "./blocks/auction-invoice-and-receipt-pdf/invoice-pdf";
+export type {
+  PdfDocumentCopy,
+  PdfLineItem,
+  PdfPartyAddress,
+} from "./blocks/auction-invoice-and-receipt-pdf/pdf-document";
+export {
+  addressLines,
+  type ReceiptPaymentBreakdown,
+  ReceiptPdf,
+  type ReceiptPdfCopy,
+  type ReceiptPdfData,
+  type ReceiptPdfLineItem,
+  type ReceiptPdfRenderOptions,
+  receiptBreakdown,
+} from "./blocks/auction-invoice-and-receipt-pdf/receipt-pdf";
+export {
+  AuctionCard,
+  type AuctionCardBadge,
+  type AuctionCardCopy,
+  type AuctionCardProps,
+  type AuctionCardWhen,
+} from "./blocks/auction-listing/auction-card";
+export {
+  FeaturedAuctionsBanner,
+  type FeaturedAuctionsBannerCopy,
+  type FeaturedAuctionsBannerCountdown,
+  type FeaturedAuctionsBannerProps,
+  type FeaturedAuctionsBannerSlide,
+  type FeaturedAuctionsBannerStatus,
+} from "./blocks/auction-listing/featured-auctions-banner";
 export {
   ListingAgeVerificationDialog,
   type ListingAgeVerificationDialogCopy,
@@ -105,6 +143,10 @@ export {
   validateCommittedMaximumMinor,
   wholeMajorDraftFromMinor,
 } from "./blocks/auction-listing/listing-bid-money";
+export {
+  ListingCountdownDisplay,
+  type ListingCountdownDisplayProps,
+} from "./blocks/auction-listing/listing-countdown-display";
 // shared/ui/auction-listing
 export {
   ListingDetails,
@@ -129,7 +171,11 @@ export {
   type ListingGalleryImage,
   type ListingGalleryProps,
 } from "./blocks/auction-listing/listing-gallery";
-export { ListingLotGallery } from "./blocks/auction-listing/listing-lot-gallery";
+export {
+  ListingLotGallery,
+  type ListingLotGalleryCopy,
+  type ListingLotGalleryProps,
+} from "./blocks/auction-listing/listing-lot-gallery";
 export {
   ListingLotHeader,
   type ListingLotHeaderCopy,
@@ -147,6 +193,10 @@ export {
   type ListingLotMetaFact,
   type ListingLotMetaProps,
 } from "./blocks/auction-listing/listing-lot-meta";
+export {
+  ListingRollingMoneyDisplay,
+  type ListingRollingMoneyDisplayProps,
+} from "./blocks/auction-listing/listing-rolling-money-display";
 export {
   ListingUserBidHistory,
   type ListingUserBidHistoryCopy,
@@ -167,6 +217,8 @@ export {
   AuctionAddressForm,
   type AuctionAddressFormCopy,
   type AuctionAddressFormProps,
+  auctionPhoneConfirmValue,
+  auctionPhoneSoftReady,
 } from "./blocks/auction-order/auction-address-form";
 export {
   AuctionOrderDetail,
@@ -186,7 +238,14 @@ export {
   type AuctionOrderRowCopy,
   type AuctionOrderRowProps,
 } from "./blocks/auction-order/auction-order-row";
-export type { AuctionAddressFormValues } from "./blocks/auction-order/types";
+export {
+  AuctionPhoneField,
+  type AuctionPhoneFieldProps,
+} from "./blocks/auction-order/auction-phone-field";
+export type {
+  AuctionAddressFormValues,
+  AuctionAddressKind,
+} from "./blocks/auction-order/types";
 // shared/ui/auction-record
 export { AuctionRecord } from "./blocks/auction-record/auction-record";
 export { AuctionRecordEmpty } from "./blocks/auction-record/auction-record-empty";
@@ -550,6 +609,11 @@ export {
   type StoreProductPurchasePanelCopy,
   type StoreProductPurchasePanelProps,
 } from "./blocks/store-product/store-product-purchase-panel";
+export {
+  StoreProductRelatedRail,
+  type StoreProductRelatedRailCopy,
+  type StoreProductRelatedRailProps,
+} from "./blocks/store-product/store-product-related-rail";
 export type {
   StoreProductImage,
   StoreProductPurchaseItem,

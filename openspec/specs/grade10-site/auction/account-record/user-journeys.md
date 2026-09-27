@@ -19,6 +19,12 @@
 
 **Walked by note:** the durable account-record journeys still own open-lot standing; this change journey covers the Storybook Won-entry and calm-row slice.
 
+### grade10-site-auction-account-record-US-09: Won Status shows Setup Overdue and Payment Overdue
+
+**As a** winner scanning My Auctions,
+**I want** overdue won lots to read Setup Overdue or Payment Overdue in Status,
+**so that** I can tell closed self-service from lots still inside their window.
+
 ### grade10-site-auction-account-record-US-01: Mark a listing now and find it again later
 
 As a collector, I want to watch listings I am interested in before bidding

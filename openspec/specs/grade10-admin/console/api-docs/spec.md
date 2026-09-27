@@ -43,6 +43,7 @@ Producing the document SHALL be deterministic: the same routers give
 byte-identical output, so a difference between two documents is always a
 difference between two routers.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-3c4 rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-01 - Every mounted procedure appears, and nothing else
 **Serves:** Derived, never written - every mounted procedure appears, and nothing else
 
@@ -51,6 +52,7 @@ difference between two routers.
 - **THEN** the document lists exactly that set, by dotted path
 - **AND** each entry carries its kind and its caller
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-5g7 rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-02 - A changed router fails the check until regenerated
 **Serves:** Derived, never written - a changed router fails the check until regenerated
 
@@ -59,6 +61,7 @@ difference between two routers.
 - **THEN** the repository's check fails, naming the service and the procedure
 - **AND** regenerating the document makes the check pass
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-t1u rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-13 - Reading the same routers twice gives one document
 **Serves:** Derived, never written - reading the same routers twice gives one document
 
@@ -82,6 +85,7 @@ have every ladder in its document, named apart.
 | Finance | The elevated ladder |
 | Inventory | The elevated ladder |
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-49a rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-03 - The rail names every service with its count
 **Serves:** Derived, never written - the rail names every service with its count
 
@@ -96,6 +100,7 @@ its own address. A production build SHALL carry neither the address nor the
 page behind it. In a build that carries it, the surface SHALL need no grant
 beyond what opens the console.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-knc rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-04 - A production build carries no API docs address
 **Serves:** The docs surface - a production build carries no API docs address
 
@@ -104,6 +109,7 @@ beyond what opens the console.
 - **THEN** the console answers with its not-found surface
 - **AND** the Dev heading offers no API docs entry
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-tjy rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-05 - A non-production build lists the surface under Dev
 **Serves:** The docs surface - a non-production build lists the surface under Dev
 
@@ -127,6 +133,7 @@ whether it accepts null. A nested object SHALL show its own fields beneath
 it. A shape that is one of several alternatives SHALL show each alternative,
 named by the value that tells them apart where there is one.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-4aa rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-06 - A router's procedures are listed with kind and caller
 **Serves:** The docs surface - a router's procedures are listed with kind and caller
 
@@ -135,6 +142,7 @@ named by the value that tells them apart where there is one.
 - **THEN** every procedure of that router is listed
 - **AND** each row shows its kind, its caller, a summary of its input fields, and a summary of its output
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-eun rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-07 - A procedure's detail shows its wire path and fields
 **Serves:** The docs surface - a procedure's detail shows its wire path and fields
 
@@ -143,6 +151,7 @@ named by the value that tells them apart where there is one.
 - **AND** the input table lists the three fields with required, type, and the bound
 - **AND** the output table lists the declared output's fields, each alternative apart where there are several
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-gst rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-08 - A filter narrows every service by path or grant
 **Serves:** The docs surface - a filter narrows every service by path or grant
 
@@ -151,6 +160,7 @@ named by the value that tells them apart where there is one.
 - **AND** the rail's counts follow the narrowed lists
 - **AND** typing part of a dotted path narrows the same way
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-9qy rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-15 - An audience narrows every service
 **Serves:** The docs surface - an audience narrows every service
 
@@ -185,6 +195,7 @@ procedure it lists is internal.
 | Console | elevated | This console, holding the grant beside the word |
 | Machine | a service principal | A service principal in place of a person; the till today |
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-58a rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-09 - An elevated procedure names its grant
 **Serves:** Honesty of the record - an elevated procedure names its grant
 
@@ -192,6 +203,7 @@ procedure it lists is internal.
 - **THEN** its caller reads elevated
 - **AND** the grant it requires is shown beside it, in the grant's own spelling
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-oou rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-10 - A fresh-session call is told apart from a session call
 **Serves:** Honesty of the record - a fresh-session call is told apart from a session call
 
@@ -199,6 +211,7 @@ procedure it lists is internal.
 - **WHEN** both are listed
 - **THEN** the first reads session and the second reads session · fresh
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-mlo rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-16 - The page says who each caller word means
 **Serves:** The docs surface - the page says who each caller word means
 
@@ -213,6 +226,7 @@ detail and in its list row. Each service SHALL show how many of its
 procedures declare no output. The document SHALL NOT infer an output shape
 from anything other than the declaration.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-pgc rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-11 - An undeclared output is said, not invented
 **Serves:** Honesty of the record - an undeclared output is said, not invented
 
@@ -230,6 +244,7 @@ service SHALL say so once above its list; a procedure's detail SHALL say it
 beside the caller. A procedure whose worker does its own work SHALL carry no
 such note.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-82e rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-14 - A forwarded procedure names the service that does its work
 **Serves:** Honesty of the record - a forwarded procedure names the service that does its work
 
@@ -244,6 +259,7 @@ such note.
 The surface SHALL name the commit its documents were read from, so a reader
 can tell whether the page describes the backend in front of them.
 
+<!-- trace:scenario id=g10adm.console-api-docs.SC-trp rev=1 -->
 #### Scenario: grade10-admin-console-api-docs-SC-12 - The page names the commit it was read from
 **Serves:** Honesty of the record - the page names the commit it was read from
 

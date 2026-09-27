@@ -402,8 +402,8 @@ describe("whose turn it is", () => {
     ).toEqual(["design", "tech"]);
   });
 
-  it("names each later stage's hands", () => {
-    expect(handsAt("specified")).toEqual(["pm"]);
+  it("shared-planning-agent-rounds-SC-89 - names each later stage's hands, QA among Specified's for the suite's review", () => {
+    expect(handsAt("specified")).toEqual(["pm", "qa"]);
     expect(handsAt("planned")).toEqual(["dev"]);
     expect(handsAt("building")).toEqual(["dev"]);
     expect(handsAt("on-staging")).toEqual(["qa", "release"]);
@@ -437,8 +437,8 @@ describe("the roles a change has not yet reached, for My turn's later list", () 
   const later = (rung: Stage, extra: Partial<ChangeEntry> = {}) =>
     laterRolesOf(at(rung, extra), rung, artifacts());
 
-  it("says the engineer is later while the change is still specified", () => {
-    expect(later("specified")).toEqual(["qa", "dev", "release"]);
+  it("says the engineer is later while the change is still specified, and QA is on it now", () => {
+    expect(later("specified")).toEqual(["dev", "release"]);
   });
 
   it("says nothing once that hand's own turn has come", () => {
@@ -552,7 +552,9 @@ describe("what the agent drafts and the hand moves", () => {
 
     expect(shown("proposed")).toBe("answer");
     expect(shown("designed")).toBe("tweak · challenge");
-    expect(shown("specified")).toBe("read");
+    // QA reviews the suite beside the product manager's read
+    // (`shared-planning-agent-rounds-SC-89`).
+    expect(shown("specified")).toBe("read · review");
     expect(shown("planned")).toBe("read");
     expect(shown("building")).toBe("read each landing");
   });
@@ -568,7 +570,10 @@ describe("what the agent drafts and the hand moves", () => {
       "/workflow-design pos",
       "/workflow-tech pos",
     ]);
-    expect(commands("specified")).toEqual(["/workflow-specify pos"]);
+    expect(commands("specified")).toEqual([
+      "/workflow-specify pos",
+      "/tcs-review pos",
+    ]);
     expect(commands("planned")).toEqual(["/workflow-tasks pos"]);
     expect(commands("building")).toEqual(["/workflow-build pos <group>"]);
   });
