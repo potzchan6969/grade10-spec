@@ -4,12 +4,12 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { useState } from "react";
 import { expect, fn, userEvent, waitFor, within } from "storybook/test";
+import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import {
   OUR_NOTE,
   REFERENCE_WARNING,
   WinnerOrderHowToPayDialog,
 } from "./winner-order-how-to-pay-dialog";
-import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
 import { WINNER_ORDER_BANK_DETAILS } from "./winner-order-payment-proof-dialog";
 
 type HowToPayDemoProps = {
@@ -94,7 +94,9 @@ export const Form: Story = {
     const page = within(canvasElement.ownerDocument.body);
     const dialog = await findVisibleDialog(page, "View Bank Details");
     const modal = within(dialog);
-    expect(modal.getByText(`Invoice: ${WINNER_ORDER_INVOICE_ID}`)).toBeVisible();
+    expect(
+      modal.getByText(`Invoice: ${WINNER_ORDER_INVOICE_ID}`),
+    ).toBeVisible();
     expect(
       modal.queryByText("Choose a transfer method and use the details below."),
     ).not.toBeInTheDocument();

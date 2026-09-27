@@ -14,3 +14,7 @@ Written by the landing, in the landing's own commit.
 | 7 | test-cases | simpler, verifier | Blind Featured suites reconciled to scenarios for site auction and admin featured | - | - |
 | 8 | tasks | order, tests-first, end-to-end, simpler, verifier | Delivery groups for Featured slots, publicList, Manage Featured, catalogue banner | - | - |
 | 9 | whole change | simpler, verifier | Featured catalogue on /auction with Manage Featured curation, dedicated publicList and front page images | - | - |
+| 10 | 1 | simpler, verifier | Featured persistence and admin API | - | - |
+| 11 | 2 | simpler, verifier | Manage Featured sub-page | - | - |
+| 12 | 3 | simpler, verifier | Featured banner block | - | - |
+| 13 | 4 | simpler, verifier | Quiet catalogue on /auction | - | - |

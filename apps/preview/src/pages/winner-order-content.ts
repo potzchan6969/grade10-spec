@@ -1,5 +1,5 @@
-import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
 import { WINNER_ORDER_INVOICE_ID } from "./winner-order-contact-mail";
+import type { WinnerOrderRefundTransfer } from "./winner-order-refund-dialog";
 
 export type WinnerOrderStatus =
   | "awaiting_address"

@@ -1,10 +1,16 @@
 import assert from "node:assert/strict";
-import { cpSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from "node:fs";
+import { spawnSync } from "node:child_process";
+import {
+  cpSync,
+  mkdtempSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, resolve } from "node:path";
-import { fileURLToPath } from "node:url";
-import { spawnSync } from "node:child_process";
 import test from "node:test";
+import { fileURLToPath } from "node:url";
 
 const here = dirname(fileURLToPath(import.meta.url));
 const cli = resolve(here, "trace.mjs");
@@ -13,14 +19,8 @@ const validAppFixture = resolve(here, "fixtures/app");
 const invalidStoreFixture = resolve(here, "fixtures/invalid/store");
 const invalidAppFixture = resolve(here, "fixtures/invalid/app");
 const foldStoreFixture = resolve(here, "fixtures/fold/valid");
-const sourceFile = resolve(
-  validStoreFixture,
-  "openspec/specs/demo/spec.md",
-);
-const appTestFile = resolve(
-  validAppFixture,
-  "apps/site/src/sign-in.test.ts",
-);
+const sourceFile = resolve(validStoreFixture, "openspec/specs/demo/spec.md");
+const appTestFile = resolve(validAppFixture, "apps/site/src/sign-in.test.ts");
 
 function runCli(args) {
   return spawnSync(process.execPath, [cli, ...args], {
@@ -116,7 +116,8 @@ test("fold reports a missing durable case marker", () => {
       "openspec/specs/auction/store/listing-media/feature-tcs.md",
     );
     const text = readFileSync(durableCases, "utf8");
-    const marker = "<!-- trace:case id=g10.auction-listing-media.TC-003 rev=2 covers=g10.auction-listing-media.SC-001,g10.auction-listing-media.SC-002,g10.e-kyc-identity-record.SC-005 -->\n";
+    const marker =
+      "<!-- trace:case id=g10.auction-listing-media.TC-003 rev=2 covers=g10.auction-listing-media.SC-001,g10.auction-listing-media.SC-002,g10.e-kyc-identity-record.SC-005 -->\n";
     assert.ok(text.includes(marker));
     writeFileSync(durableCases, text.replace(marker, ""));
 
@@ -202,9 +203,14 @@ test("fold rejects unresolved active covers and duplicate durable target markers
     ]);
     assert.equal(unresolved.status, 1, unresolved.stderr || unresolved.stdout);
     assert.match(unresolved.stdout, /\[unresolved-reference\]/);
-    assert.match(unresolved.stdout, new RegExp(missingScenario.replaceAll("/", "\\/")));
+    assert.match(
+      unresolved.stdout,
+      new RegExp(missingScenario.replaceAll("/", "\\/")),
+    );
 
-    const duplicateRoot = mkdtempSync(resolve(tmpdir(), "trace-fold-duplicate-"));
+    const duplicateRoot = mkdtempSync(
+      resolve(tmpdir(), "trace-fold-duplicate-"),
+    );
     try {
       const duplicateStore = resolve(duplicateRoot, "store");
       cpSync(foldStoreFixture, duplicateStore, { recursive: true });
@@ -213,7 +219,8 @@ test("fold rejects unresolved active covers and duplicate durable target markers
         "openspec/specs/shared/auth/sign-in/feature-tcs.md",
       );
       const targetText = readFileSync(target, "utf8");
-      const marker = "<!-- trace:case id=g10.shared-sign-in.TC-008 rev=3 covers=g10.shared-sign-in.SC-007 -->";
+      const marker =
+        "<!-- trace:case id=g10.shared-sign-in.TC-008 rev=3 covers=g10.shared-sign-in.SC-007 -->";
       const heading = "### The visitor is refused invalid details";
       assert.ok(targetText.includes(`${marker}\n${heading}`));
       writeFileSync(
@@ -263,7 +270,10 @@ test("validate reports duplicate ids, invalid Base36 ids, noncanonical casing, u
     assert.match(result.stdout, new RegExp(`\\[${code}\\]`));
   }
   assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-01/);
-  assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-1234/);
+  assert.match(
+    result.stdout,
+    /invalid scenario id: g10\.demo-sign-in\.SC-1234/,
+  );
   assert.match(result.stdout, /invalid scenario id: g10\.demo-sign-in\.SC-0!1/);
   assert.match(result.stdout, /unknown app nope/);
   assert.match(result.stdout, /noncanonical-id/);
@@ -296,10 +306,11 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
   const { root, storeRoot, appRoot } = copyFixtures();
   try {
     const targetFile = resolve(storeRoot, "openspec/specs/demo/spec.md");
-    const targetScenario = "#### Scenario: A visitor checks account preferences";
+    const targetScenario =
+      "#### Scenario: A visitor checks account preferences";
     const targetCase = "### The visitor updates settings";
-    const targetTest = '  test("the visitor updates settings", () => {});';
-    const targetSupportTest = '  test("supporting settings detail", () => {});';
+    const targetTest = 'test("the visitor updates settings", () => {});';
+    const targetSupportTest = 'test("supporting settings detail", () => {});';
     const appFile = resolve(appRoot, "apps/site/src/sign-in.test.ts");
     const otherAppMarker = resolve(
       storeRoot,
@@ -363,7 +374,10 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(scenarioMarker[1], dryRunScenarioId);
     assert.equal(
       readFileSync(targetFile, "utf8"),
-      originalSpec.replace(targetScenario, `${scenarioMarker[0]}\n${targetScenario}`),
+      originalSpec.replace(
+        targetScenario,
+        `${scenarioMarker[0]}\n${targetScenario}`,
+      ),
     );
 
     const beforeCaseDryRun = readFileSync(targetFile, "utf8");
@@ -449,7 +463,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(acceptanceLink.status, 0, acceptanceLink.stderr);
     assert.ok(
       readFileSync(appFile, "utf8").includes(
-        `trace:acceptance=${caseMarker[1]}@1\n  test("the visitor updates settings"`,
+        `trace:acceptance=${caseMarker[1]}@1\ntest("the visitor updates settings"`,
       ),
     );
 
@@ -467,7 +481,7 @@ test("init and link dry runs preserve files and real runs add only adjacent mark
     assert.equal(supportLink.status, 0, supportLink.stderr);
     assert.match(
       readFileSync(appFile, "utf8"),
-      /trace:supports=g10\.demo-sign-in\.SC-001\n  test\("supporting settings detail"/,
+      /trace:supports=g10\.demo-sign-in\.SC-001\ntest\("supporting settings detail"/,
     );
   } finally {
     rmSync(root, { recursive: true, force: true });

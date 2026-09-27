@@ -69,8 +69,8 @@ import {
   revCmp,
   revText,
   ROOT as STORE_ROOT,
-  statusCounts,
   SUITE_NAMES,
+  statusCounts,
 } from "./lib/suites.mjs";
 
 const COLOR = process.stdout.isTTY && !process.env.NO_COLOR;
@@ -595,7 +595,9 @@ function checkSuite(root, filePath, rulesRev) {
       // one a script sets up; a case that needs one and plans no automation
       // is raised, not refused (Step 3, Executable without asking).
       if (
-        /\b(mock(?:ed|s)?|stub(?:bed|s)?|manipulated)\b/i.test(tc.preconditions) &&
+        /\b(mock(?:ed|s)?|stub(?:bed|s)?|manipulated)\b/i.test(
+          tc.preconditions,
+        ) &&
         !/\bautomation\b/.test(tc.props.get("Testability") ?? "")
       )
         warn(
@@ -952,9 +954,9 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
           break;
         body += ` ${next.trim()}`;
       }
-      const ids = [
-        ...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g),
-      ].map((m) => m[1]);
+      const ids = [...body.matchAll(/`([\w-]+-e2e-US\d+-TC\d+-\d+)`/g)].map(
+        (m) => m[1],
+      );
       if (ids.length === 0) {
         record(
           "error",
@@ -1035,9 +1037,10 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
   };
   if (existsSync(archive)) walk(archive);
   for (const file of archived.sort()) {
-    const m = relative(archive, file).split(sep).join("/").match(
-      /^([^/]+)\/specs\/(.+)$/,
-    );
+    const m = relative(archive, file)
+      .split(sep)
+      .join("/")
+      .match(/^([^/]+)\/specs\/(.+)$/);
     if (!m) continue;
     const [, change, path] = m;
     const target = join(ROOT, "openspec", "specs", path);
@@ -1053,7 +1056,10 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
       (id) => !live.has(unversioned(id)) && !namedHere(id),
     );
     if (left.length === 0) continue;
-    const shown = left.slice(0, 5).map((id) => `\`${id}\``).join(", ");
+    const shown = left
+      .slice(0, 5)
+      .map((id) => `\`${id}\``)
+      .join(", ");
     const more = left.length > 5 ? `, … and ${left.length - 5} more` : "";
     record(
       "warning",

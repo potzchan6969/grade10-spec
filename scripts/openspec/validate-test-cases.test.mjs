@@ -9,12 +9,12 @@
  * (`shared-planning-agent-rounds-SC-106`).
  */
 import assert from "node:assert/strict";
-import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { spawnSync } from "node:child_process";
-import { fileURLToPath } from "node:url";
+import { mkdirSync, mkdtempSync, readFileSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { dirname, join } from "node:path";
 import { test } from "node:test";
+import { fileURLToPath } from "node:url";
 import { runValidator, specFiles } from "./test/suite-store.mjs";
 
 const CHANGE = "openspec/changes/demo/specs/demo/alpha";
@@ -359,18 +359,30 @@ test("an approved file with a new draft reads reopened through its lapsed Review
 
   writeFileSync(
     suite,
-    header("reopened", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+    header(
+      "reopened",
+      "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20",
+    ),
   );
   const reopened = run(root);
   assert.doesNotMatch(reopened.stdout, /file status is|Reviewed:\*\*` line/);
 
   writeFileSync(
     suite,
-    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20"),
+    header(
+      "in-review",
+      "**Reviewed:** 2026-09-10, tcs-rules r3, lapsed 2026-09-20",
+    ),
   );
-  assert.match(run(root).stdout, /file status is `in-review` but its cases imply `reopened`/);
+  assert.match(
+    run(root).stdout,
+    /file status is `in-review` but its cases imply `reopened`/,
+  );
 
-  writeFileSync(suite, header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"));
+  writeFileSync(
+    suite,
+    header("in-review", "**Reviewed:** 2026-09-10, tcs-rules r3"),
+  );
   assert.match(
     run(root).stdout,
     /carries a `\*\*Reviewed:\*\*` line but is not approved — a file that falls out/,
@@ -391,13 +403,16 @@ test("a Covered at domain line is refused when its domain case is missing or dep
       "* **Trace:** demo-alpha-US-01, demo-beta-US-01",
       "",
     ].join("\n");
-  const root = store("// the story: demo-alpha-US1-TC1-1 demo-alpha-US1-TC3-1\n", [
-    "- **Covered at domain** — the thing happens, walked by `demo-e2e-US1-TC1-1`",
-    "- **Covered at domain** — the thing is undone, walked by",
-    "  `demo-e2e-US1-TC2-1`",
-    "- **Covered at domain** — the thing is shared, walked by `demo-e2e-US1-TC9-1`",
-    "- **Covered at domain** — the thing is named, and no case",
-  ]);
+  const root = store(
+    "// the story: demo-alpha-US1-TC1-1 demo-alpha-US1-TC3-1\n",
+    [
+      "- **Covered at domain** — the thing happens, walked by `demo-e2e-US1-TC1-1`",
+      "- **Covered at domain** — the thing is undone, walked by",
+      "  `demo-e2e-US1-TC2-1`",
+      "- **Covered at domain** — the thing is shared, walked by `demo-e2e-US1-TC9-1`",
+      "- **Covered at domain** — the thing is named, and no case",
+    ],
+  );
   const domain = join(root, "openspec/specs/demo/domain-tcs.md");
   mkdirSync(dirname(domain), { recursive: true });
   writeFileSync(
@@ -413,8 +428,14 @@ test("a Covered at domain line is refused when its domain case is missing or dep
   );
   const out = run(root).stdout;
   assert.doesNotMatch(out, /`demo-e2e-US1-TC1-1`, which/);
-  assert.match(out, /covered at domain by `demo-e2e-US1-TC2-1`, which is deprecated/);
-  assert.match(out, /covered at domain by `demo-e2e-US1-TC9-1`, which no `domain-tcs.md` holds/);
+  assert.match(
+    out,
+    /covered at domain by `demo-e2e-US1-TC2-1`, which is deprecated/,
+  );
+  assert.match(
+    out,
+    /covered at domain by `demo-e2e-US1-TC9-1`, which no `domain-tcs.md` holds/,
+  );
   assert.match(out, /a \*\*Covered at domain\*\* line names no domain case/);
 });
 
@@ -437,15 +458,16 @@ test("warns on an archived case the fold left behind, and not on one held, re-ve
       "- `demo-alpha-US1-TC3` was folded into TC1 · 2026-09-25",
       "",
     ].join("\n"),
-    "openspec/changes/archive/2026-09-01-demo/specs/demo/alpha/feature-tcs.md": [
-      "# demo/alpha Test Cases",
-      "",
-      "## demo-alpha-US1: Collector does the thing",
-      "",
-      heading("demo-alpha-US1-TC1-1"),
-      heading("demo-alpha-US1-TC2-1"),
-      heading("demo-alpha-US1-TC3-1"),
-    ].join("\n"),
+    "openspec/changes/archive/2026-09-01-demo/specs/demo/alpha/feature-tcs.md":
+      [
+        "# demo/alpha Test Cases",
+        "",
+        "## demo-alpha-US1: Collector does the thing",
+        "",
+        heading("demo-alpha-US1-TC1-1"),
+        heading("demo-alpha-US1-TC2-1"),
+        heading("demo-alpha-US1-TC3-1"),
+      ].join("\n"),
   };
   for (const [name, content] of Object.entries(files)) {
     const file = join(root, name);

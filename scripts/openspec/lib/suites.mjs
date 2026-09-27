@@ -522,8 +522,7 @@ export function parseSuite(text) {
       );
       if (rv) {
         suite.reviewed = rv[1];
-        suite.reviewedRev =
-          rv[2] === undefined ? null : Number(rv[2]);
+        suite.reviewedRev = rv[2] === undefined ? null : Number(rv[2]);
         suite.reviewedLapsed = rv[4] ?? null;
         suite.reviewedLine = i + 1;
         continue;

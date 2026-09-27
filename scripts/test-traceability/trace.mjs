@@ -1,12 +1,7 @@
 #!/usr/bin/env node
 
 import { createHash } from "node:crypto";
-import {
-  existsSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync,
-} from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { dirname, extname, relative, resolve, sep } from "node:path";
 import { fileURLToPath, pathToFileURL } from "node:url";
 import { parseArgs } from "node:util";
@@ -139,7 +134,8 @@ function attributes(text, issue) {
 function checkFields(record, expected, issue) {
   const actual = Object.keys(record);
   for (const field of expected) {
-    if (!Object.hasOwn(record, field)) issue("marker-shape", `missing ${field}`);
+    if (!Object.hasOwn(record, field))
+      issue("marker-shape", `missing ${field}`);
   }
   for (const field of actual) {
     if (!expected.includes(field))
@@ -181,19 +177,20 @@ function canonicalMarkerReference(value, expectedKind, issue, label) {
       `${label} must use canonical form ${parsed.canonical}: ${value}`,
     );
   if (parsed.kind !== expectedKind)
-    issue(
-      "invalid-id-kind",
-      `${label} must use ${expectedKind}: ${value}`,
-    );
+    issue("invalid-id-kind", `${label} must use ${expectedKind}: ${value}`);
   return parsed.canonical;
 }
 
 function normalizeInputReference(value, expectedKind, option) {
   const parsed = parseReference(value);
   if (!parsed)
-    fail(`${option} must use <app>.<product>-<capability>.${expectedKind}-<3-character-base36-sequence>`);
+    fail(
+      `${option} must use <app>.<product>-<capability>.${expectedKind}-<3-character-base36-sequence>`,
+    );
   if (!allowedApps.has(parsed.app))
-    fail(`${option} app must be one of ${[...allowedApps].join(", ")}: ${parsed.app}`);
+    fail(
+      `${option} app must be one of ${[...allowedApps].join(", ")}: ${parsed.app}`,
+    );
   if (parsed.kind !== expectedKind)
     fail(`${option} must reference a ${expectedKind} id: ${value}`);
   return parsed.canonical;
@@ -206,7 +203,9 @@ function positiveRevision(value) {
 function normalizeSlug(value, option) {
   const normalized = value.toLowerCase();
   if (!/^[a-z][a-z0-9]*(?:-[a-z0-9]+)*$/.test(normalized))
-    fail(`${option} must be a lower-case slug made of letters, numbers, and single hyphens`);
+    fail(
+      `${option} must be a lower-case slug made of letters, numbers, and single hyphens`,
+    );
   return normalized;
 }
 
@@ -247,9 +246,11 @@ function nextSequence(storeRoot, app, product, capability, kind, target) {
   }
   const seed = `${app}.${scope}.${kind}\0${target}`;
   const digest = createHash("sha256").update(seed).digest();
-  const start = digest.readUInt32BE(0) % (36 ** 3);
+  const start = digest.readUInt32BE(0) % 36 ** 3;
   for (let offset = 0; offset < 36 ** 3; offset += 1) {
-    const candidate = ((start + offset) % (36 ** 3)).toString(36).padStart(3, "0");
+    const candidate = ((start + offset) % 36 ** 3)
+      .toString(36)
+      .padStart(3, "0");
     if (!/^\d{3}$/.test(candidate) && !used.has(candidate)) return candidate;
   }
   fail(`no trace sequence remains for ${app}.${scope}`);
@@ -268,7 +269,10 @@ function checkMarkdownMarkerScope(value, currentScope, issue) {
 }
 
 function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
-  const roots = { storeRoot: resolve(storeRoot), appRoot: appRoot && resolve(appRoot) };
+  const roots = {
+    storeRoot: resolve(storeRoot),
+    appRoot: appRoot && resolve(appRoot),
+  };
   const issues = [];
   const scenarios = [];
   const cases = [];
@@ -289,22 +293,34 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
 
       if (comment.syntax === "html") {
         if (source.kind !== "store" || extname(source.file) !== ".md") {
-          issue("marker-location", "scenario and case markers belong in store markdown");
+          issue(
+            "marker-location",
+            "scenario and case markers belong in store markdown",
+          );
           continue;
         }
         const marker = /^([a-z]+)(?:\s+([\s\S]*))?$/.exec(comment.body);
         if (!marker || !["scenario", "case"].includes(marker[1])) {
-          issue("marker-kind", `unknown markdown trace marker: ${comment.body}`);
+          issue(
+            "marker-kind",
+            `unknown markdown trace marker: ${comment.body}`,
+          );
           continue;
         }
         const [, type, rawFields = ""] = marker;
         const fields = attributes(rawFields, issue);
-        const expected = type === "scenario" ? ["id", "rev"] : ["id", "rev", "covers"];
+        const expected =
+          type === "scenario" ? ["id", "rev"] : ["id", "rev", "covers"];
         checkFields(fields, expected, issue);
         const kind = type === "scenario" ? "SC" : "TC";
         const record = {
           type,
-          id: canonicalMarkerReference(fields.id ?? "", kind, issue, `${type} id`),
+          id: canonicalMarkerReference(
+            fields.id ?? "",
+            kind,
+            issue,
+            `${type} id`,
+          ),
           revision: fields.rev ?? "",
           file: source.file,
           line,
@@ -312,37 +328,66 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
         };
         markerScope = checkMarkdownMarkerScope(fields.id, markerScope, issue);
         if (!positiveRevision(record.revision))
-          issue("invalid-revision", `revision must be a positive integer: ${record.revision || "(empty)"}`);
+          issue(
+            "invalid-revision",
+            `revision must be a positive integer: ${record.revision || "(empty)"}`,
+          );
 
         if (type === "scenario") {
           if (!/^\s*####\s+Scenario:\s+\S/.test(nextLine))
-            issue("marker-adjacency", "scenario marker must sit immediately above a scenario heading");
+            issue(
+              "marker-adjacency",
+              "scenario marker must sit immediately above a scenario heading",
+            );
           scenarios.push(record);
         } else {
           const rawCovers = fields.covers ?? "";
           const covers = rawCovers.split(",");
           if (!covers.length)
-            issue("marker-shape", "case marker must cover at least one scenario id");
+            issue(
+              "marker-shape",
+              "case marker must cover at least one scenario id",
+            );
           if (covers.some((id) => !id))
-            issue("marker-shape", "case marker covers must be non-empty comma-delimited scenario ids");
-          record.covers = covers.filter(Boolean).map((id) =>
-            canonicalMarkerReference(id, "SC", issue, "covered scenario id"),
-          );
+            issue(
+              "marker-shape",
+              "case marker covers must be non-empty comma-delimited scenario ids",
+            );
+          record.covers = covers
+            .filter(Boolean)
+            .map((id) =>
+              canonicalMarkerReference(id, "SC", issue, "covered scenario id"),
+            );
           if (new Set(record.covers).size !== record.covers.length)
-            issue("duplicate-cover", "case marker repeats a covered scenario id");
+            issue(
+              "duplicate-cover",
+              "case marker repeats a covered scenario id",
+            );
           if (!/^\s*###\s+\S/.test(nextLine))
-            issue("marker-adjacency", "case marker must sit immediately above a case heading");
+            issue(
+              "marker-adjacency",
+              "case marker must sit immediately above a case heading",
+            );
           cases.push(record);
         }
         continue;
       }
 
-      if (source.kind !== "app" || !sourceExtensions.has(extname(source.file))) {
-        issue("marker-location", "test link markers belong in application source comments");
+      if (
+        source.kind !== "app" ||
+        !sourceExtensions.has(extname(source.file))
+      ) {
+        issue(
+          "marker-location",
+          "test link markers belong in application source comments",
+        );
         continue;
       }
       if (!nextLine.trim() || /^\s*(?:\/\/|\/\*|\*|<!--)/.test(nextLine))
-        issue("marker-adjacency", "test marker must sit immediately above its test target");
+        issue(
+          "marker-adjacency",
+          "test marker must sit immediately above its test target",
+        );
       const [kind, ...rest] = comment.body.split("=");
       const value = rest.join("=");
       if (!["acceptance", "supports"].includes(kind) || !value) {
@@ -352,7 +397,10 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
       if (kind === "acceptance") {
         const match = /^(.+)@(\d+)$/.exec(value);
         if (!match) {
-          issue("invalid-reference", `acceptance must use <app>.<product>-<capability>.TC-<3-character-base36-sequence>@revision: ${value}`);
+          issue(
+            "invalid-reference",
+            `acceptance must use <app>.<product>-<capability>.TC-<3-character-base36-sequence>@revision: ${value}`,
+          );
           tests.push({ type: kind, value, file: source.file, line });
         } else {
           const caseId = canonicalMarkerReference(
@@ -362,7 +410,10 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
             "acceptance case id",
           );
           if (!positiveRevision(match[2]))
-            issue("invalid-revision", `acceptance revision must be positive: ${match[2]}`);
+            issue(
+              "invalid-revision",
+              `acceptance revision must be positive: ${match[2]}`,
+            );
           tests.push({
             type: kind,
             caseId,
@@ -391,7 +442,12 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
   for (const record of cases) {
     for (const id of record.covers) {
       if (!byScenario.has(id))
-        issues.push({ code: "unresolved-reference", message: `case ${record.id} covers unknown scenario ${id}`, file: record.file, line: record.line });
+        issues.push({
+          code: "unresolved-reference",
+          message: `case ${record.id} covers unknown scenario ${id}`,
+          file: record.file,
+          line: record.line,
+        });
     }
   }
 
@@ -399,13 +455,31 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
     if (test.type === "acceptance" && test.caseId) {
       const matches = byCase.get(test.caseId) ?? [];
       if (matches.length === 0) {
-        issues.push({ code: "unresolved-reference", message: `test accepts unknown case ${test.caseId}`, file: test.file, line: test.line });
-      } else if (matches.length === 1 && test.revision !== matches[0].revision) {
-        issues.push({ code: "stale-acceptance", message: `test accepts ${test.caseId}@${test.revision}, current case revision is ${matches[0].revision}`, file: test.file, line: test.line });
+        issues.push({
+          code: "unresolved-reference",
+          message: `test accepts unknown case ${test.caseId}`,
+          file: test.file,
+          line: test.line,
+        });
+      } else if (
+        matches.length === 1 &&
+        test.revision !== matches[0].revision
+      ) {
+        issues.push({
+          code: "stale-acceptance",
+          message: `test accepts ${test.caseId}@${test.revision}, current case revision is ${matches[0].revision}`,
+          file: test.file,
+          line: test.line,
+        });
       }
     }
     if (test.type === "supports" && !byScenario.has(test.scenarioId)) {
-      issues.push({ code: "unresolved-reference", message: `test supports unknown scenario ${test.scenarioId}`, file: test.file, line: test.line });
+      issues.push({
+        code: "unresolved-reference",
+        message: `test supports unknown scenario ${test.scenarioId}`,
+        file: test.file,
+        line: test.line,
+      });
     }
   }
 
@@ -421,7 +495,10 @@ function parseTraceGraph({ storeRoot = scriptRoot, appRoot = null } = {}) {
       .filter((test) => test.type === "acceptance" && test.caseId)
       .filter((test) => {
         const matchingCases = byCase.get(test.caseId) ?? [];
-        return matchingCases.length === 1 && test.revision === matchingCases[0].revision;
+        return (
+          matchingCases.length === 1 &&
+          test.revision === matchingCases[0].revision
+        );
       })
       .map((test) => test.caseId),
   );
@@ -462,8 +539,7 @@ function readCaseMarkers(file, issues) {
     }
 
     const line = index + 1;
-    const issue = (code, message) =>
-      issues.push({ code, message, file, line });
+    const issue = (code, message) => issues.push({ code, message, file, line });
     const fields = attributes(marker[2] ?? "", issue);
     checkFields(fields, ["id", "rev", "covers"], issue);
     const parsedId = parseReference(fields.id ?? "");
@@ -476,7 +552,10 @@ function readCaseMarkers(file, issues) {
     markerScope = checkMarkdownMarkerScope(fields.id, markerScope, issue);
     const revision = fields.rev ?? "";
     if (!positiveRevision(revision))
-      issue("invalid-revision", `revision must be a positive integer: ${revision || "(empty)"}`);
+      issue(
+        "invalid-revision",
+        `revision must be a positive integer: ${revision || "(empty)"}`,
+      );
 
     const covers = fields.covers ?? "";
     const coveredIds = covers.split(",");
@@ -488,7 +567,10 @@ function readCaseMarkers(file, issues) {
     if (new Set(canonicalCovers).size !== canonicalCovers.length)
       issue("duplicate-cover", "case marker repeats a covered scenario id");
     if (!/^\s*###\s+\S/.test(lines[index + 1] ?? ""))
-      issue("marker-adjacency", "case marker must sit immediately above a case heading");
+      issue(
+        "marker-adjacency",
+        "case marker must sit immediately above a case heading",
+      );
 
     records.push({
       id: parsedId?.canonical ?? id,
@@ -523,11 +605,7 @@ function scenarioIdsUnder(directory, issues = null) {
       const line = index + 1;
       const issue = (code, message) =>
         issues?.push({ code, message, file, line });
-      markerScope = checkMarkdownMarkerScope(
-        fields.id,
-        markerScope,
-        issue,
-      );
+      markerScope = checkMarkdownMarkerScope(fields.id, markerScope, issue);
       if (marker[1] !== "scenario") continue;
       const parsed = parseReference(fields.id);
       if (
@@ -571,7 +649,9 @@ function validateFoldHandover({ storeRoot = scriptRoot, changeId }) {
     changeId.includes("/") ||
     changeId.includes("\\")
   ) {
-    fail("--change must name one active change directory, not a path or archive directory");
+    fail(
+      "--change must name one active change directory, not a path or archive directory",
+    );
   }
   const changeRoot = resolve(changesRoot, changeId);
   if (!inside(changesRoot, changeRoot) || !existsSync(changeRoot))
@@ -582,7 +662,8 @@ function validateFoldHandover({ storeRoot = scriptRoot, changeId }) {
 
   const suiteFiles = walk(
     changeSpecsRoot,
-    (path) => extname(path) === ".md" && path.split(sep).at(-1) === "feature-tcs.md",
+    (path) =>
+      extname(path) === ".md" && path.split(sep).at(-1) === "feature-tcs.md",
   );
   if (!suiteFiles.length)
     fail(`no capability feature-tcs.md files found for change ${changeId}`);
@@ -596,7 +677,8 @@ function validateFoldHandover({ storeRoot = scriptRoot, changeId }) {
     if (capabilityParts.length !== 3) {
       issues.push({
         code: "capability-path",
-        message: "feature-tcs.md must be under specs/<product>/<domain>/<capability>",
+        message:
+          "feature-tcs.md must be under specs/<product>/<domain>/<capability>",
         file: activeSuite,
         line: 1,
       });
@@ -695,7 +777,10 @@ function summarizeFold(result) {
     `Case markers checked: ${result.caseCount}`,
   ];
   if (result.issues.length)
-    lines.push("Issues:", ...result.issues.map((issue) => issueLine(issue, result.roots)));
+    lines.push(
+      "Issues:",
+      ...result.issues.map((issue) => issueLine(issue, result.roots)),
+    );
   return lines.join("\n");
 }
 
@@ -713,7 +798,12 @@ function duplicateIssues(grouped, type, issues) {
   for (const [id, records] of grouped) {
     if (id && records.length > 1) {
       for (const record of records) {
-        issues.push({ code: "duplicate-id", message: `duplicate ${type} id ${id} (${records.length} records)`, file: record.file, line: record.line });
+        issues.push({
+          code: "duplicate-id",
+          message: `duplicate ${type} id ${id} (${records.length} records)`,
+          file: record.file,
+          line: record.line,
+        });
       }
     }
   }
@@ -728,7 +818,8 @@ function validLinkCount(scenarios, cases, tests, byScenario, byCase) {
     if (test.type === "supports" && byScenario.has(test.scenarioId)) count += 1;
     if (test.type === "acceptance" && test.caseId) {
       const records = byCase.get(test.caseId) ?? [];
-      if (records.length === 1 && test.revision === records[0].revision) count += 1;
+      if (records.length === 1 && test.revision === records[0].revision)
+        count += 1;
     }
   }
   return count;
@@ -749,10 +840,20 @@ function summarize(graph) {
     `Unlinked scenarios: ${unlinked.scenarios.length}`,
     `Unlinked cases: ${unlinked.cases.length}`,
   ];
-  if (issues.length) lines.push("Issues:", ...issues.map((issue) => issueLine(issue, graph.roots)));
+  if (issues.length)
+    lines.push(
+      "Issues:",
+      ...issues.map((issue) => issueLine(issue, graph.roots)),
+    );
   const unlinkedLines = [
-    ...unlinked.scenarios.map((record) => `  scenario ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`),
-    ...unlinked.cases.map((record) => `  case ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`),
+    ...unlinked.scenarios.map(
+      (record) =>
+        `  scenario ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+    ),
+    ...unlinked.cases.map(
+      (record) =>
+        `  case ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+    ),
   ];
   if (unlinkedLines.length) lines.push("Unlinked records:", ...unlinkedLines);
   return lines.join("\n");
@@ -790,17 +891,29 @@ function reportObject(graph) {
 }
 
 function renderReport(graph) {
-  const output = ["Trace report", summarize(graph).replace("Trace validation:", "Validation:")];
+  const output = [
+    "Trace report",
+    summarize(graph).replace("Trace validation:", "Validation:"),
+  ];
   output.push("Scenarios:");
   for (const record of graph.scenarios)
-    output.push(`  ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`);
+    output.push(
+      `  ${record.id} rev=${record.revision} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+    );
   output.push("Cases:");
   for (const record of graph.cases)
-    output.push(`  ${record.id} rev=${record.revision} covers=${record.covers.join(",")} at ${displayPath(record.file, graph.roots)}:${record.line}`);
+    output.push(
+      `  ${record.id} rev=${record.revision} covers=${record.covers.join(",")} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+    );
   output.push("Tests:");
   for (const record of graph.tests) {
-    const target = record.type === "acceptance" ? `${record.caseId ?? record.value}@${record.revision ?? "?"}` : record.scenarioId;
-    output.push(`  ${record.type} ${target} at ${displayPath(record.file, graph.roots)}:${record.line}`);
+    const target =
+      record.type === "acceptance"
+        ? `${record.caseId ?? record.value}@${record.revision ?? "?"}`
+        : record.scenarioId;
+    output.push(
+      `  ${record.type} ${target} at ${displayPath(record.file, graph.roots)}:${record.line}`,
+    );
   }
   return output.join("\n");
 }
@@ -814,13 +927,17 @@ function exactTargetIndex(lines, target, file) {
   }
   if (matches.length === 0) fail(`exact target was not found in ${file}`);
   if (matches.length > 1)
-    fail(`exact target is ambiguous in ${file} (${matches.length} matching lines)`);
+    fail(
+      `exact target is ambiguous in ${file} (${matches.length} matching lines)`,
+    );
   return matches[0];
 }
 
 function ensureNoAdjacentTrace(lines, index) {
   if (index > 0 && /\btrace:/.test(lines[index - 1]))
-    fail("target already has an adjacent trace marker; marker ids and links are immutable");
+    fail(
+      "target already has an adjacent trace marker; marker ids and links are immutable",
+    );
 }
 
 function markerLineForMarkdown(marker, target) {
@@ -839,7 +956,10 @@ function insertMarker({ file, target, marker, syntax, dryRun }) {
   const lines = oldText.split(/\r?\n/);
   const index = exactTargetIndex(lines, target, file);
   ensureNoAdjacentTrace(lines, index);
-  const rendered = syntax === "html" ? markerLineForMarkdown(marker, target) : markerLineForCode(marker, target);
+  const rendered =
+    syntax === "html"
+      ? markerLineForMarkdown(marker, target)
+      : markerLineForCode(marker, target);
   const nextLines = [...lines.slice(0, index), rendered, ...lines.slice(index)];
   const newText = nextLines.join(eol);
   const prefix = dryRun ? "DRY RUN" : "Updated";
@@ -853,28 +973,40 @@ function insertMarker({ file, target, marker, syntax, dryRun }) {
 
 function requireOption(values, key) {
   const value = values[key];
-  if (!value) fail(`--${key.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)} is required`);
+  if (!value)
+    fail(
+      `--${key.replace(/[A-Z]/g, (char) => `-${char.toLowerCase()}`)} is required`,
+    );
   return value;
 }
 
 function checkStoreMarkdownFile(file, storeRoot) {
-  if (extname(file) !== ".md") fail("scenario and case markers require a Markdown file");
-  if (!inside(storeRoot, file)) fail(`--file must be inside --store-root: ${storeRoot}`);
+  if (extname(file) !== ".md")
+    fail("scenario and case markers require a Markdown file");
+  if (!inside(storeRoot, file))
+    fail(`--file must be inside --store-root: ${storeRoot}`);
   const rel = relative(storeRoot, file).split(sep);
   if (rel[0] === "openspec" && rel[1] === "changes" && rel[2] === "archive")
-    fail("scenario and case markers cannot be initialized inside openspec/changes/archive");
+    fail(
+      "scenario and case markers cannot be initialized inside openspec/changes/archive",
+    );
   if (!(rel[0] === "openspec" && (rel[1] === "specs" || rel[1] === "changes")))
-    fail("scenario and case markers belong under openspec/specs or active openspec/changes");
+    fail(
+      "scenario and case markers belong under openspec/specs or active openspec/changes",
+    );
 }
 
 function validateReferencesForMutation(storeRoot, referenceType, ids) {
   const graph = parseTraceGraph({ storeRoot });
-  const collection = referenceType === "scenario" ? graph.scenarios : graph.cases;
+  const collection =
+    referenceType === "scenario" ? graph.scenarios : graph.cases;
   const index = groupBy(collection, (record) => record.id);
   for (const id of ids) {
     const matches = index.get(id) ?? [];
     if (matches.length !== 1)
-      fail(`${referenceType} reference ${id} must resolve to exactly one marker; found ${matches.length}`);
+      fail(
+        `${referenceType} reference ${id} must resolve to exactly one marker; found ${matches.length}`,
+      );
   }
   return graph;
 }
@@ -937,15 +1069,23 @@ function linkTest(values) {
   if (hasAcceptance) {
     const match = /^(.+)@(\d+)$/.exec(values.acceptance);
     if (!match || !positiveRevision(match[2]))
-      fail("--acceptance must be <app>.<product>-<capability>.TC-<3-character-base36-sequence>@positive-revision");
+      fail(
+        "--acceptance must be <app>.<product>-<capability>.TC-<3-character-base36-sequence>@positive-revision",
+      );
     const caseId = normalizeInputReference(match[1], "TC", "--acceptance");
     const graph = validateReferencesForMutation(storeRoot, "case", [caseId]);
     const record = graph.cases.find((item) => item.id === caseId);
     if (record.revision !== match[2])
-      fail(`--acceptance revision ${match[2]} is stale; current ${caseId} revision is ${record.revision}`);
+      fail(
+        `--acceptance revision ${match[2]} is stale; current ${caseId} revision is ${record.revision}`,
+      );
     marker = `trace:acceptance=${caseId}@${match[2]}`;
   } else {
-    const scenarioId = normalizeInputReference(values.supports, "SC", "--supports");
+    const scenarioId = normalizeInputReference(
+      values.supports,
+      "SC",
+      "--supports",
+    );
     validateReferencesForMutation(storeRoot, "scenario", [scenarioId]);
     marker = `trace:supports=${scenarioId}`;
   }
@@ -954,7 +1094,8 @@ function linkTest(values) {
 
 function parseCommand(argv) {
   const command = argv[0];
-  if (!command || command === "--help" || command === "-h") return { command: "help" };
+  if (!command || command === "--help" || command === "-h")
+    return { command: "help" };
   let kind = null;
   let args = argv.slice(1);
   if (command === "init") {
@@ -994,7 +1135,8 @@ function parseCommand(argv) {
     strict: true,
   });
   if (parsed.values.help) return { command: "help" };
-  if (parsed.positionals.length) fail(`unexpected arguments: ${parsed.positionals.join(" ")}`);
+  if (parsed.positionals.length)
+    fail(`unexpected arguments: ${parsed.positionals.join(" ")}`);
   return { command, kind, values: parsed.values };
 }
 
@@ -1028,7 +1170,11 @@ export function runCli(argv = process.argv.slice(2)) {
         appRoot: values.appRoot ?? null,
       });
       if (parsed.command === "report") {
-        console.log(values.json ? JSON.stringify(reportObject(graph), null, 2) : renderReport(graph));
+        console.log(
+          values.json
+            ? JSON.stringify(reportObject(graph), null, 2)
+            : renderReport(graph),
+        );
       } else {
         console.log(summarize(graph));
       }
@@ -1036,7 +1182,9 @@ export function runCli(argv = process.argv.slice(2)) {
     }
     fail(`unknown command: ${parsed.command}`);
   } catch (error) {
-    console.error(`✗ ${error instanceof Error ? error.message : String(error)}`);
+    console.error(
+      `✗ ${error instanceof Error ? error.message : String(error)}`,
+    );
     console.error(usage);
     return 2;
   }

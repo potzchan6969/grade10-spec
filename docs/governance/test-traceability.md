@@ -22,9 +22,9 @@ test("the gallery refuses a ninth media item", () => {});
 test("supporting gallery behavior", () => {});
 ```
 
-- **Reference** - `<app>.<product>-<capability>.<US|SC|TC>-<seq>`. Apps are `g10`, `zzz`, `g10adm`, and `zzzadm`. `US` identifies a user story, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
+- **Reference** - `<app>.<product>-<capability>.<US|SC|TC>-<seq>`. Apps are `g10`, `zzz`, `g10adm`, and `zzzadm`. `US` identifies a journey, `SC` a scenario, and `TC` a test case. The CLI creates `SC` and `TC` markers.
 - **Casing** - App, product, capability, and sequence are stored in lowercase. Product and capability are lowercase hyphenated slugs. The kind token is uppercase. CLI inputs are case-insensitive and are written in canonical casing. A stored marker with different casing fails validation as `noncanonical-id`.
-- **Capability slug** - The capability slug stays stable across its user stories, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
+- **Capability slug** - The capability slug stays stable across its journeys, scenarios, and cases. Put behavior-specific meaning in the heading, not in the identifier.
 - **Sequence** - Exactly three Base36 characters (`000` to `zzz`), stored in lowercase. Initialization derives a non-numeric candidate from the scope, kind, and exact heading, then advances only to avoid an existing scenario or case marker in that app, product, and capability. The sequence is shared by `SC` and `TC` markers. The scan includes durable specs, active changes, and archived changes so an archived marker does not free its suffix.
 - **Scenario id** - An `SC` reference identifies one scenario. A scenario marker carries its positive `rev`.
 - **Case id** - A `TC` reference identifies one case. `covers` lists one or more `SC` references separated by commas. A case can cover scenarios from any app, product, or capability, and a scenario can be covered by multiple cases.
