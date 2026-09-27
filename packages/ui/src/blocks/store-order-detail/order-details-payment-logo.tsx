@@ -1,9 +1,9 @@
 import { cn } from "@grade10/design-system/lib/utils";
 import {
-  AmericanExpressLogoIcon,
-  MastercardLogoIcon,
-  VisaLogoIcon,
-} from "react-svg-credit-card-payment-icons";
+  AmericanExpress,
+  Mastercard,
+  Visa,
+} from "react-svg-credit-card-payment-icons/icons/logo";
 import applePayLogo from "./order-details-apple-pay.logo.png";
 import googlePayLogo from "./order-details-google-pay.logo.png";
 import type { OrderDetailsPaymentBrand } from "./types";
@@ -29,7 +29,9 @@ type OrderDetailsPaymentLogoProps = {
  * line (20px tall). Figma payment card annotation (`5057:6854`): show the
  * provider logo alongside the masked card number.
  *
- * Card brands use `react-svg-credit-card-payment-icons` (`logo` format).
+ * Card brands use `react-svg-credit-card-payment-icons` (`logo` format),
+ * imported from that format's subpath: the package root keeps every brand in
+ * every format, over 500 KB, for these three.
  * Wallet brands use bundled brand marks from SVGRepo assets.
  */
 function OrderDetailsPaymentLogo({
@@ -42,7 +44,7 @@ function OrderDetailsPaymentLogo({
   switch (brand) {
     case "visa":
       return (
-        <VisaLogoIcon
+        <Visa
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}
@@ -51,7 +53,7 @@ function OrderDetailsPaymentLogo({
       );
     case "mastercard":
       return (
-        <MastercardLogoIcon
+        <Mastercard
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}
@@ -60,7 +62,7 @@ function OrderDetailsPaymentLogo({
       );
     case "amex":
       return (
-        <AmericanExpressLogoIcon
+        <AmericanExpress
           aria-label={label}
           className={shared}
           height={LOGO_HEIGHT}

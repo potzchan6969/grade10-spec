@@ -3,6 +3,10 @@
   "private": true,
   "version": "0.0.0",
   "type": "module",
+  "sideEffects": [
+    "*.css",
+    "./src/bones/registry.ts"
+  ],
   "scripts": {
     "typecheck": "tsc --project tsconfig.json --noEmit",
     "storybook": "storybook dev",
