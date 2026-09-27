@@ -7,12 +7,12 @@ import { IconButton } from "@grade10/design-system/components/forms/icon-button"
 import { cn } from "@grade10/design-system/lib/utils";
 import { CaretLeft, CaretRight } from "@phosphor-icons/react";
 import {
+  type KeyboardEvent as ReactKeyboardEvent,
+  type PointerEvent as ReactPointerEvent,
   useCallback,
   useEffect,
   useRef,
   useState,
-  type KeyboardEvent as ReactKeyboardEvent,
-  type PointerEvent as ReactPointerEvent,
 } from "react";
 import { LISTING_LOT_GALLERY_CLASS } from "./listing-lot-layout";
 import type { ListingLotGalleryImage } from "./types";
@@ -60,14 +60,13 @@ function ListingLotGallery({
   const [index, setIndex] = useState(0);
   const [dragPx, setDragPx] = useState(0);
   const [dragging, setDragging] = useState(false);
-  const stageRef = useRef<HTMLDivElement>(null);
+  const stageRef = useRef<HTMLElement>(null);
   const dragRef = useRef<DragSession | null>(null);
   const reduceMotionRef = useRef(false);
 
   const many = images.length > 1;
   const count = images.length;
-  const safeIndex =
-    count === 0 ? 0 : Math.min(Math.max(index, 0), count - 1);
+  const safeIndex = count === 0 ? 0 : Math.min(Math.max(index, 0), count - 1);
   const atStart = safeIndex <= 0;
   const atEnd = count === 0 || safeIndex >= count - 1;
   const canPrev = many && !atStart;
@@ -131,7 +130,7 @@ function ListingLotGallery({
     setDragPx(0);
   }
 
-  function onPointerDown(event: ReactPointerEvent<HTMLDivElement>) {
+  function onPointerDown(event: ReactPointerEvent<HTMLElement>) {
     if (!many || event.button !== 0) return;
     if (reduceMotionRef.current) return;
     if ((event.target as Element).closest("button")) return;
@@ -147,7 +146,7 @@ function ListingLotGallery({
     };
   }
 
-  function onPointerMove(event: ReactPointerEvent<HTMLDivElement>) {
+  function onPointerMove(event: ReactPointerEvent<HTMLElement>) {
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
 
@@ -175,13 +174,13 @@ function ListingLotGallery({
     setDragPx(clampDrag(dx));
   }
 
-  function onPointerUp(event: ReactPointerEvent<HTMLDivElement>) {
+  function onPointerUp(event: ReactPointerEvent<HTMLElement>) {
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
     endDrag(event.clientX);
   }
 
-  function onPointerCancel(event: ReactPointerEvent<HTMLDivElement>) {
+  function onPointerCancel(event: ReactPointerEvent<HTMLElement>) {
     const drag = dragRef.current;
     if (!drag || drag.pointerId !== event.pointerId) return;
     dragRef.current = null;
@@ -189,7 +188,7 @@ function ListingLotGallery({
     setDragPx(0);
   }
 
-  function onStageKeyDown(event: ReactKeyboardEvent<HTMLDivElement>) {
+  function onStageKeyDown(event: ReactKeyboardEvent<HTMLElement>) {
     if (!many) return;
     if (event.key === "ArrowLeft") {
       event.preventDefault();
@@ -243,7 +242,7 @@ function ListingLotGallery({
         ) : null}
 
         <div className="flex min-w-0 flex-1 flex-col gap-2">
-          <div
+          <section
             aria-label={copy.images}
             aria-roledescription={many ? "carousel" : undefined}
             className={cn(
@@ -257,7 +256,6 @@ function ListingLotGallery({
             onPointerMove={many ? onPointerMove : undefined}
             onPointerUp={many ? onPointerUp : undefined}
             ref={stageRef}
-            role={many ? "region" : undefined}
             tabIndex={many ? 0 : undefined}
           >
             <div
@@ -275,16 +273,10 @@ function ListingLotGallery({
               }}
             >
               {images.map((slide, slideIndex) => (
-                <div
+                <section
                   aria-hidden={slideIndex !== safeIndex}
-                  aria-roledescription={
-                    many && slideIndex === safeIndex ? "slide" : undefined
-                  }
                   className="relative h-full w-full shrink-0 grow-0 basis-full"
                   key={`${slide.src}:${slide.alt}`}
-                  role={
-                    many && slideIndex === safeIndex ? "group" : undefined
-                  }
                 >
                   <img
                     alt={slideIndex === safeIndex ? slide.alt : ""}
@@ -292,7 +284,7 @@ function ListingLotGallery({
                     draggable={false}
                     src={slide.src}
                   />
-                </div>
+                </section>
               ))}
             </div>
 
@@ -344,7 +336,7 @@ function ListingLotGallery({
                 </Badge>
               </>
             ) : null}
-          </div>
+          </section>
 
           {many ? (
             <CarouselProgress
