@@ -34,6 +34,15 @@ describe("a store that tells the truth", () => {
     ]);
   });
 
+  it("--quiet drops the note the default report keeps", async () => {
+    const root = fixture("clean");
+    const outcome = await runChecks(root, NO_GIT);
+    const loud = formatReport(root, outcome).text;
+    const quiet = formatReport(root, outcome, { quiet: true }).text;
+    expect(loud).toContain("note:");
+    expect(quiet).not.toContain("note:");
+  });
+
   it("exits 0 and counts nothing", async () => {
     const root = fixture("clean");
     const report = formatReport(root, await runChecks(root, NO_GIT));
@@ -130,6 +139,24 @@ describe("a store that has drifted", () => {
     expect(report.failures).toBe(12);
     expect(report.warnings).toBe(3);
     expect(report.text).toContain("12 failures, 3 warnings");
+  });
+
+  it("--quiet keeps only lines the default report already prints, and drops WARN", async () => {
+    const root = fixture("broken");
+    const outcome = await result;
+    const loudReport = formatReport(root, outcome);
+    const quietReport = formatReport(root, outcome, { quiet: true });
+    expect(quietReport.failures).toBe(12);
+    expect(quietReport.warnings).toBe(3);
+    expect(loudReport.text).toContain("WARN");
+    expect(quietReport.text).not.toContain("WARN");
+    expect(quietReport.text).toContain("FAIL");
+    expect(quietReport.text).toContain("12 failures, 3 warnings");
+    for (const line of quietReport.text
+      .split("\n")
+      .filter((one) => one.length > 0)) {
+      expect(loudReport.text).toContain(line);
+    }
   });
 });
 

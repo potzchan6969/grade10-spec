@@ -76,6 +76,8 @@ const USAGE = `Usage: node scripts/openspec/validate-test-cases.mjs [<scope>] [f
   <scope>   Only check suites whose repo-relative path contains this string.
 
 Flags:
+  --quiet           Print only what fails and the closing line (warnings too
+                    under --strict, since --strict fails on them)
   --strict          Treat warnings as errors (legacy-shape suites fail too)
   --stale-report    Skip validation; list suites whose drafts sit below the
                     current tcs-rules rev, for a per-capability update run
@@ -521,7 +523,7 @@ function checkSuite(root, filePath, rulesRev) {
 
 const { positional, flags } = parseArgs(process.argv.slice(2), {
   keys: ["app-root", "capture-baseline", "root", "swept"],
-  booleans: ["require-suites", "stale-report", "strict"],
+  booleans: ["require-suites", "stale-report", "strict", "quiet"],
   usage: USAGE,
 });
 const args = {
@@ -531,6 +533,7 @@ const args = {
   requireSuites: Boolean(flags["require-suites"]),
   captureBaseline: flags["capture-baseline"] ?? null,
   swept: flags.swept ?? null,
+  quiet: Boolean(flags.quiet),
 };
 // The store this run reads. `--root <dir>` names another one - a fixture a
 // test writes - the way `archive-preflight.mjs` and `tcs-automated.mjs` take
@@ -792,7 +795,7 @@ const summaries = suites.map((p) => checkSuite(ROOT, p, rulesRev));
       m.set(v.level, (m.get(v.level) ?? 0) + 1);
     }
   const crossed = [...levelsByJourney].filter(([, m]) => m.size > 1);
-  if (crossed.length > 0) {
+  if (crossed.length > 0 && !args.quiet) {
     console.log(
       `${bold("Traced at more than one level")}  ${dim("— check the lower cases do not re-test the path the higher one owns")}\n`,
     );
@@ -818,15 +821,17 @@ if (args.requireSuites) {
   }
 }
 
-console.log(
-  `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : revText(rulesRev)}`)}\n`,
-);
-const w = Math.max(...summaries.map((s) => s.rel.length));
-for (const s of summaries) {
-  const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
+if (!args.quiet) {
   console.log(
-    `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
+    `${bold("Test-case suites")}  ${dim(`${suites.length} file${suites.length === 1 ? "" : "s"}, tcs-rules ${rulesRev === null ? "unversioned" : revText(rulesRev)}`)}\n`,
   );
+  const w = Math.max(...summaries.map((s) => s.rel.length));
+  for (const s of summaries) {
+    const tally = `${s.counts.draft} draft, ${s.counts.actual} actual, ${s.counts.deprecated} deprecated`;
+    console.log(
+      `  ${s.rel.padEnd(w + 2)}${cyan(s.derived.padEnd(15))}${dim(tally)}`,
+    );
+  }
 }
 
 const errors = problems.filter((p) => p.severity === "error");
@@ -859,11 +864,12 @@ const print = (list, label, paint) => {
 };
 
 print(errors, `${errors.length} error${errors.length === 1 ? "" : "s"}`, red);
-print(
-  warnings,
-  `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`,
-  yellow,
-);
+if (!args.quiet || args.strict)
+  print(
+    warnings,
+    `${warnings.length} warning${warnings.length === 1 ? "" : "s"}`,
+    yellow,
+  );
 
 console.log("");
 if (errors.length > 0 || (args.strict && warnings.length > 0)) {
