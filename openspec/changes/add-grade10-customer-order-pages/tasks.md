@@ -43,7 +43,7 @@ webhook, reconciliation, deployment, or order-status rule.
 - [x] 5.6 Resolve the points-credit data boundary before claiming `grade10-site-store-order-detail-SC-17`: extend the typed Store order read in approved contract work and make the scenario pass, or mark the change awaiting that dependency rather than claiming completion; never derive the credit or deducted count from discount, eligible goods, or refund. Verify with contract fixtures and page projection tests.
 - [x] 5.7 Correct the application payment projection to preserve an unrecognized provider label and supplied mask without a guessed logo, then make `grade10-site-store-order-detail-SC-16` pass in application tests.
 
-## 6. Settlement row localization (grade10)
+## 6. Settlement row localization (grade10) (owner: @kinisworking)
 
 Uses the landed group 4 catalogs and completes the frontend copy boundary on the existing order pages. Page acceptance remains a separate owner-scheduled verification pass.
 
