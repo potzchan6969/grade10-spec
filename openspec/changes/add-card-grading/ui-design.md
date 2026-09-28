@@ -413,6 +413,7 @@ Stories `grading-submission-gradingreview--`, the Saved for later and Rail rows 
 | Booking | Book pending; both buttons disabled | `shared-ui-grading-submission-SC-27` |
 | Saved for later | the plan kept; its page opens at Planned, on the picker, asking for the statement first where the plan was kept unticked | `grade10-site-grading-submission-plan-SC-58` |
 | Plan expired meanwhile | the refusal by name; Start again | `shared-ui-grading-submission-SC-28` |
+| Kept plan editor | the editor's review: the schedule, the totals and any warning; no statement and no Book; Save changes | `shared-ui-grading-submission-SC-74` |
 | Rail, book | The cards and The service `completed`, Book `progress` | `grade10-site-grading-submission-plan-SC-08` |
 
 ### Plan wizard — a kept plan
@@ -854,7 +855,7 @@ Stories `grading-admin-submission-submission-panel--`.
 | Timeline tab | every event with its figures, the grader's stages in its words, staff-only entries marked | `grade10-admin-grading-counter-SC-56` |
 | Actions by status (`GA3`) | only the status's acts; Cancel absent once the visit starts, a card is checked or refused, or the cards have left | `grade10-admin-grading-counter-SC-82`, `grade10-admin-grading-counter-SC-83`, `grade10-admin-grading-counter-SC-107` |
 | Runbook, one press | where the hand-in or the hand-back is offered, the header's link back to its runbook | **Out of suite:** the route test of task 31.1 |
-| Cancel | `useConfirm`: the confirm names the drop-off that goes with it and says it is on the collector's word, and that the collector is sent nothing; Cancel and Go back | `grade10-admin-grading-counter-SC-106` |
+| Cancel | `useConfirm`: the confirm names the drop-off that goes with it and says it is on the collector's word, and that the collector is sent nothing; Yes, cancel and Go back | `grade10-admin-grading-counter-SC-106` |
 | Cancelled | the status word Cancelled; the drop-off block gone; the cancel on the Timeline with the operator; no act but Open | `grade10-admin-grading-counter-SC-106` |
 | Stale | an act refused because the submission moved; the panel reads again | `grade10-admin-grading-counter-SC-84` |
 | Read grant | the tabs with no act | `grade10-admin-grading-counter-SC-75` |

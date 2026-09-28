@@ -220,7 +220,8 @@
     },
     "withoutValue": "有 {count} 张卡仍未填申报价值。",
     "kept": "清单已保存。链接已发送到 {email}，你可以在任何设备继续。",
-    "keepFailed": "暂时未能保存清单，请稍后再试。"
+    "keepFailed": "暂时未能保存清单，请稍后再试。",
+    "backToSubmission": "返回清单"
   },
   "dropoff": {
     "title": "预约交卡",
@@ -384,7 +385,8 @@
     },
     "actRefused": {
       "conflict": "此页面读取的是旧版本。我们正在重新读取——请稍后再试一次。",
-      "visitStarted": "到店已经开始，无法在此更改。"
+      "visitStarted": "到店已经开始，无法在此更改。",
+      "listAtCounter": "柜台已开始核对你的卡，无法在此更改。请向柜台查询。"
     },
     "withdraw": {
       "title": "改变主意？",

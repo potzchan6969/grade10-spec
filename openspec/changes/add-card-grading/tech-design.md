@@ -646,10 +646,11 @@ answering the question it was for.
   has committed
 - **Booking in place.** `gradingSubmission`
   (`/grading/submissions/:submissionId`, `open`) books and joins a drop-off in
-  place, so no booking address exists and `bookHref` goes. The page opens
-  `DropoffBooking` wherever the submission holds no visit and `book` is
-  offered — a `planned` plan, and a `booked` one whose visit fell away — and
-  never for `join`, which opens no picker. The review's Book, Save for later
+  place, so no booking address exists and `bookHref` goes. Where the
+  submission holds no visit, a `planned` plan offered `book` opens
+  `DropoffBooking` at once; a `booked` one whose visit fell away keeps
+  `DropoffBooked`'s detached notice, and one press opens the picker; a `join`
+  waits on a press of Book the drop-off. The review's Book, Save for later
   and the emailed link all land there, and one `onKept(plan)`, carrying the
   `KeptPlan` with its access token, replaces `onBooked` and `onSaved`. A plan
   kept unticked shows the statement, in the review's words, before the picker

@@ -220,7 +220,8 @@
     },
     "withoutValue": "{count, plural, one {One card is} other {# cards are}} still without a declared value.",
     "kept": "Your list is kept. We emailed its link to {email}, so you can finish on any device.",
-    "keepFailed": "We could not keep your list just now. Try again in a moment."
+    "keepFailed": "We could not keep your list just now. Try again in a moment.",
+    "backToSubmission": "Back to the submission"
   },
   "dropoff": {
     "title": "Book the drop-off",
@@ -384,7 +385,8 @@
     },
     "actRefused": {
       "conflict": "This page was reading an older version. We're reading it again — try that once more.",
-      "visitStarted": "The drop-off has already started, so this can no longer be changed here."
+      "visitStarted": "The drop-off has already started, so this can no longer be changed here.",
+      "listAtCounter": "Our staff have started checking your cards, so this can no longer be changed here. Ask at the counter."
     },
     "withdraw": {
       "title": "Changed your mind?",

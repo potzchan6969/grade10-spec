@@ -2101,9 +2101,11 @@ Runs once per row of **Test data**.
 * **Type:** functional
 * **Suites:** regression
 * **Layer:** unit
-* **Automation status:** manual
+* **Automation status:** automated
 * **Testability:** automation
 * **Trace:** Reviewing before booking
+
+**Decided by:** `packages/ui/src/blocks/grading-submission/grading-review.stories.tsx`
 
 **Pre-conditions:**
 

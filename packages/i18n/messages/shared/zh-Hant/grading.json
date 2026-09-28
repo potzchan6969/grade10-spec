@@ -220,7 +220,8 @@
     },
     "withoutValue": "有 {count} 張卡仍未填申報價值。",
     "kept": "清單已保存。連結已電郵到 {email}，你可以在任何裝置繼續。",
-    "keepFailed": "暫時未能保存清單，請稍後再試。"
+    "keepFailed": "暫時未能保存清單，請稍後再試。",
+    "backToSubmission": "返回清單"
   },
   "dropoff": {
     "title": "預約交卡",
@@ -384,7 +385,8 @@
     },
     "actRefused": {
       "conflict": "此頁面讀取的是舊版本。我們正在重新讀取——請稍後再試一次。",
-      "visitStarted": "到店已經開始，無法在此變更。"
+      "visitStarted": "到店已經開始，無法在此變更。",
+      "listAtCounter": "櫃檯已開始核對你的卡，無法在此變更。請向櫃檯查詢。"
     },
     "withdraw": {
       "title": "改變主意？",
