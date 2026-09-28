@@ -36,7 +36,7 @@ confirmed override, from four known cases in five weeks to none.
   drawer, tabs, table, stepper, list, empty state, pagination, breadcrumbs or
   radio card from the design system, or a `className` on a store block. A
   page that does it on purpose is listed with its reason in the application's
-  layer check
+  block check
 - **The person confirms, not the agent** - a commit passes with
   `Design-Override: <what changes and why>` in its message, written only after
   the agent's person says yes
@@ -65,9 +65,8 @@ See [Non-Goals](decisions.md#non-goals).
   `prepare` script that sets the hooks path, a workflow on push to `main`,
   `AGENTS.md`, and the `workflow-build` and `fix-bug` skills
 - **Application** - `.githooks/` calling the store's check from
-  `external/grade10-spec` and the layer check on staged files,
-  `scripts/checks/check-frontend-layers.mjs` with the rebuilt-block rule and
-  today's rebuilt pages listed, a `prepare` script that sets the hooks path
+  `external/grade10-spec` and the block check,
+  `scripts/checks/check-store-blocks.mjs` with today's rebuilt pages listed, a `prepare` script that sets the hooks path
   for the repository and its submodule, a workflow on push to `main`,
   `AGENTS.md`, and the `frontend-structure` skill
 - **Consumer apps** - none; no component export changes

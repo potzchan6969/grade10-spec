@@ -11,9 +11,9 @@ order: 4
 | 🚧 Agreed look | What `main` renders in the store's blocks, primitives, preview pages and tokens |
 | 🚧 Runs | On every commit and every push, in the store and in the application repository |
 | 🚧 Stops | A commit that changes the agreed look, a merge that drops either side's work, and site page code that rebuilds a store block |
-| 🚧 Passes | A commit whose message ends with `Design-Override: <what changes and why>`; a page that rebuilds a block on purpose is listed with its reason in the application's layer check |
+| 🚧 Passes | A commit whose message ends with `Design-Override: <what changes and why>`; a page that rebuilds a block on purpose is listed with its reason in the application's block check |
 | 🚧 Confirmed by | The person the committer works for; an agent never writes the line on its own |
-| 🚧 Exempt | Commits the designer authored, committed or co-authored; a merge is never exempt |
+| 🚧 Exempt | Commits the designer authored, committed or co-authored; a merge or a rebuilt block never is |
 | 🚧 Told | The designer, on the commit, for every override that reaches `main` and every commit that reached it unchecked |
 
 ## Stops
@@ -25,10 +25,13 @@ order: 4
 | 🚧 Rebuilds a block | Site page code uses a card, dialog, drawer, tabs, table, stepper, list, empty state, pagination, breadcrumbs or radio card from the design system, or gives a store block a `className` | Application: the site frontends and the site packages' `frontend` folders |
 
 - 🚧 **What passes without a stop** — new lines, new files, new stories, code
-  moved unchanged, formatting, and lines that set no look
+  moved unchanged, whitespace, and lines that set no look; a reordered class
+  list stops
 - 🚧 **The stop names the lines** — each file, the line before and after, and
   who last set it and when, so the person asked can answer without opening
   the diff
+- 🚧 **A check that cannot run** — refuses the commit or the push, naming
+  what it could not read
 - **A missing state or variant** — the designer draws it, never a local
   addition — [Design Sync](/p/shared/design-sync)
 
@@ -52,7 +55,7 @@ order: 4
 :::detail{title="Code map" for="engineer"}
 - **The check** — `scripts/design-override/` in the store; the application
   runs it from its pinned copy of the store
-- **Rebuilt blocks** — `scripts/checks/check-frontend-layers.mjs` in the
+- **Rebuilt blocks** — `scripts/checks/check-store-blocks.mjs` in the
   application
 - **Hooks** — `.githooks/commit-msg` and `.githooks/pre-push` in both
   repositories, set by `pnpm install`

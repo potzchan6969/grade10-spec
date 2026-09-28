@@ -7,4 +7,12 @@ hands:
   dev: "@ecchochan"
 ui_waived: no surface a user meets; the stop is a message in a terminal
 awaiting:
-  specs: "2026-09-28, the outline, the blind suite and the requirements for shared/design-sync/design-override - @ecchochan"
+  specs: "2026-09-28, the outline, the blind suite and the requirements for
+    shared/design-sync/design-override - @ecchochan"
+landed_by:
+  proposal: ecchochan
+reviewed:
+  tech-design: c0784633
+  specs: 02b39c93
+  test-cases: 02b39c93
+  tasks: eff86fcf
