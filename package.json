@@ -6,6 +6,7 @@
     "pnpm": "11.21.0"
   },
   "scripts": {
+    "prepare": "sh scripts/design-override/install.sh",
     "agent:sync-parity": "bash scripts/agent-platform/sync-parity.sh",
     "agent:check-parity": "bash scripts/agent-platform/check-parity.sh",
     "cache:prime": "pnpm install --frozen-lockfile --prefer-offline",
@@ -21,7 +22,8 @@
     "code-connect:publish:ui": "pnpm --filter @grade10/ui run code-connect:publish",
     "setup:browsers": "pnpm --dir apps/preview exec playwright install chromium",
     "setup:worktree": "pnpm install --frozen-lockfile --prefer-offline",
-    "test": "pnpm -r --if-present run test && pnpm run test:design-sync && pnpm run test:traceability && pnpm run test:storybook && pnpm run test:diagrams && pnpm run test:openspec && pnpm run test:bug-fix",
+    "test": "pnpm -r --if-present run test && pnpm run test:design-sync && pnpm run test:traceability && pnpm run test:storybook && pnpm run test:diagrams && pnpm run test:openspec && pnpm run test:bug-fix && pnpm run test:design-override",
+    "test:design-override": "node --test scripts/design-override/*.test.mjs",
     "test:design-sync": "node --test scripts/design-sync/*.test.mjs",
     "test:traceability": "node --test scripts/test-traceability/*.test.mjs",
     "test:storybook": "node --test scripts/storybook/*.test.mjs",

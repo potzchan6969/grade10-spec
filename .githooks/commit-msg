@@ -1,0 +1,3 @@
+#!/bin/sh
+# Design Override: stop a commit that changes the agreed UI design until its person confirms.
+exec node "$(git rev-parse --show-toplevel)/scripts/design-override/check.mjs" --message "$1"
