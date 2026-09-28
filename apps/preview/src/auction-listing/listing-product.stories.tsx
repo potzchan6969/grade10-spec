@@ -50,7 +50,7 @@ export default meta;
 type Story = StoryObj<typeof meta>;
 
 const MARKET_COMPS = {
-  title: "Market price",
+  title: "Market Price",
   range: "HK$46,800–HK$171,600",
 } as const;
 
@@ -171,7 +171,7 @@ export const PreAuction: Story = {
     const canvas = within(canvasElement);
     expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
-    expect(canvas.getByText("About this auction")).toBeInTheDocument();
+    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
@@ -186,7 +186,7 @@ export const Default: Story = {
         name: /Carddass/,
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("About this auction")).toBeInTheDocument();
+    expect(canvas.getByText("About This Auction")).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(

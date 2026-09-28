@@ -17,7 +17,7 @@ function AuctionLotDetailsPageShell({
     <div className="flex min-h-svh flex-col bg-background">
       <SiteHeader {...AUCTION_SITE_HEADER} />
       <main className="mx-auto w-full max-w-[1280px] flex-1 px-4 pb-16 sm:px-8">
-        <div className="flex flex-col gap-8 pt-6 sm:gap-12">
+        <div className="flex flex-col gap-8 pt-8 sm:gap-12 lg:pt-12">
           {header}
           <div className={LISTING_LOT_GRID_CLASS}>{children}</div>
         </div>

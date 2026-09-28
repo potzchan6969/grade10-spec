@@ -57,7 +57,7 @@ export const Opens: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByText("Auction Details")).toBeVisible();
-    expect(canvas.getByText("About this auction")).toBeVisible();
+    expect(canvas.getByText("About This Auction")).toBeVisible();
     expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
     expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
     expect(canvas.queryByText("Opens soon")).not.toBeInTheDocument();
