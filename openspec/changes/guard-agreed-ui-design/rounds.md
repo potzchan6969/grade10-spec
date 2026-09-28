@@ -6,3 +6,4 @@ Written by the landing, in the landing's own commit.
 | Round | Artifact | Perspectives | Stood | Asked | Tests |
 | --- | --- | --- | --- | --- | --- |
 | 1 | proposal | simpler | the block check named as its own script | - | - |
+| 2 | proposal | simpler | the block check named as its own script | - | - |
