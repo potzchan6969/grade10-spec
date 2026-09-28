@@ -19,7 +19,7 @@ landed_by:
   tasks: ecchochan
 reviewed:
   tech-design: c0784633
-  specs: a35bc601
+  specs: 6b1b8126
   test-cases: a35bc601
   tasks: eff86fcf
   user-journeys: 4f0e2b73
