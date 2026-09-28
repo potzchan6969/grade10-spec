@@ -41,9 +41,13 @@
     "ended": "Ended"
   },
   "status": {
-    "awaitingSetup": "Awaiting setup",
-    "preparingInvoice": "Preparing invoice",
-    "pendingPayment": "Pending payment",
+    "awaitingSetup": "Awaiting Setup",
+    "setupOverdue": "Setup Overdue",
+    "preparingInvoice": "Preparing Invoice",
+    "pendingPayment": "Pending Payment",
+    "paymentOverdue": "Payment Overdue",
+    "paymentVerifying": "Payment Verifying",
+    "partiallyPaid": "Partially Paid",
     "processing": "Processing",
     "shipped": "Shipped",
     "delivered": "Delivered",

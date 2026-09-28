@@ -42,8 +42,12 @@
   },
   "status": {
     "awaitingSetup": "等待设置",
+    "setupOverdue": "设置逾期",
     "preparingInvoice": "准备发票中",
     "pendingPayment": "待付款",
+    "paymentOverdue": "付款逾期",
+    "paymentVerifying": "付款核实中",
+    "partiallyPaid": "已部分付款",
     "processing": "处理中",
     "shipped": "已发货",
     "delivered": "已送达",

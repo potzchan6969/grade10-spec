@@ -42,8 +42,12 @@
   },
   "status": {
     "awaitingSetup": "설정 대기",
+    "setupOverdue": "설정 기한 초과",
     "preparingInvoice": "청구서 준비 중",
     "pendingPayment": "결제 대기",
+    "paymentOverdue": "결제 기한 초과",
+    "paymentVerifying": "결제 확인 중",
+    "partiallyPaid": "부분 결제됨",
     "processing": "처리 중",
     "shipped": "배송 중",
     "delivered": "배송 완료",
