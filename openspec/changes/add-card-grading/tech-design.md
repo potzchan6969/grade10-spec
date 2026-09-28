@@ -671,7 +671,7 @@ answering the question it was for.
   offer — `COUNTER_ACTS.handIn` the hand-in, `COUNTER_ACTS.collect` the
   hand-back — and the record otherwise; `?view=record` opens the record, and
   without it the acts decide. Each runbook's `recordHref` and the panel's
-  `runbookHref` are the one press between the two, and the page branches on
+  `runbook` link are the one press between the two, and the page branches on
   the acts, never on a status literal, as `withheldActs.ts` does. A
   desk-written walk-in, reloaded or not, reaches the hand-in through it
 - **What the gate does, and what it does not.** `gatesFor` is read at build

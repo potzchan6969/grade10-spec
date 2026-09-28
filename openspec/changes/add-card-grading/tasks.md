@@ -693,7 +693,8 @@ Stage (b).
       in the booking's own commit; refused `CONSENT_REQUIRED` before the
       diary is asked only when neither the stored tick nor the input carries
       it; needs 11.10
-      (`grade10-site-grading-submission-plan-SC-61`)
+      (`grade10-site-grading-submission-plan-SC-61`,
+      `grade10-site-grading-submission-plan-SC-63`)
 
 ## 13. The hand-in, the till and the safe (grade10)
 
@@ -1932,7 +1933,8 @@ Stage (b).
       (`grade10-site-grading-submission-plan-SC-42`,
       `grade10-site-grading-dropoff-booking-SC-04`,
       `grade10-site-grading-dropoff-booking-SC-20`,
-      `grade10-site-grading-submission-plan-SC-61`)
+      `grade10-site-grading-submission-plan-SC-61`,
+      `grade10-site-grading-submission-plan-SC-63`)
 - [x] 27.8 Write the stories for `Grading/Submission/Submission Page`, one per
       distinct layout, the varied value an args control, each with
       `surface: site`
@@ -2031,7 +2033,7 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       first; needs 13.9: offered by `COUNTER_ACTS.cancel` and `cancellable`,
       behind `useConfirm` whose words name the drop-off and say it is on the
       collector's word, the Cancelled record after it, a stale refusal read
-      again, and `runbookHref` where a runbook is offered
+      again, and the `runbook` link where one is offered
       (`grade10-admin-grading-counter-SC-106`,
       `grade10-admin-grading-counter-SC-107`,
       `grade10-admin-grading-counter-SC-84`)
@@ -2225,7 +2227,7 @@ Follows groups 25 to 30; groups 33 and 34 open nothing until it lands. Stage
       only with that grant; the submission's address opening the runbook
       `COUNTER_ACTS.handIn` or `COUNTER_ACTS.collect` offers and the record
       otherwise, `?view=record` opening the record, and the runbooks'
-      `recordHref` and the panel's `runbookHref` routed to each other; the
+      `recordHref` and the panel's `runbook` routed to each other; the
       walk-in's `onStarted(id)` replacing the address with the bare
       submission address; and the appointments section's
       `CASE_ADDRESS.grading` set to `gradingSubmissionAddress`. Needs 28.10
@@ -2255,8 +2257,8 @@ Both walks drive these routes, so it lands with stage (b).
       past; a repeat answers the same submission
 - [ ] 32.3 Seed the unset money keys and the fee sheet in `/dev/setup`'s
       `seed` where nothing stands, as inventory's does, so `pnpm dev` and the
-      e2e stack open on the same settings; no spec and no global setup seeds
-      them
+      e2e stack open on the same settings; `POST /dev/settings` runs the same
+      seed; no spec and no global setup seeds them
 - [ ] 32.4 Add `POST /dev/sweep { lane }` running a pass now, and
       `GET /dev/outbox` over the shared dev outbox in `@grade10/worker`, a
       grading entry carrying the kind, the attachment names and the collector's
