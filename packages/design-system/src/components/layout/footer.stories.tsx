@@ -277,8 +277,10 @@ export const Narrow: Story = {
     // Squeezing four columns onto a phone is what the width alone does not
     // catch: a long brand line ends up one word per line inside an 80px column.
     const canvas = within(canvasElement);
+    // The column is measured, not the line: the paragraph is only as wide as
+    // its words, which fit in a line on their own.
     const attribution = canvas.getByText(/MemeStrategy/);
-    expect(attribution.clientWidth).toBeGreaterThan(240);
+    expect(attribution.parentElement?.clientWidth).toBeGreaterThan(240);
 
     const bar = footer.querySelector<HTMLElement>('[data-slot="footer-bar"]');
     expect(bar).not.toBeNull();
