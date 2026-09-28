@@ -12,8 +12,10 @@ item a collector can add.
   badges and compare-at price where the catalogue provides them
 - 🚧 **One item to buy** — the page offers no size, option or variant choice.
   Shopify's sale identifier stays internal to availability and cart handling
-- **Buy** — choose a quantity, add the product, and stay on the page while the
-  cart total updates; adding it again stays on one line
+- 🚧 **Buy** — choose a quantity, add the product, and stay on the page; while
+  the add is pending the controls show Adding…; after it settles the cart
+  drawer opens, the quantity resets, and the cart total updates; adding it
+  again stays on one line
 - **Description** — a long description shows collapsed to three lines with a
   button to read it in full, without leaving the page
 - 🚧 **Availability without stock pressure** — the page says whether its one

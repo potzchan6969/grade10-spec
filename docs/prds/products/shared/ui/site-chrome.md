@@ -100,7 +100,7 @@ count-agnostic.
 
 ::story{id="components-nav-overview--another-brand" title="Nav — another brand"}
 
-::story{id="components-footer--column-with-no-links" title="A footer section with nothing to link to stays empty"}
+::story{id="components-footer--auction-only" title="Footer — auction only"}
 
 The site's own rules for what the shell must do — the landmarks, the session
 timing, the small-width reflow — are [the page shell's](/p/grade10-site/site/page-shell).

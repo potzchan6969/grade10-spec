@@ -81,6 +81,6 @@ export const SoldOut: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
     expect(canvas.getByRole("button", { name: "Sold out" })).toBeDisabled();
-    expect(canvas.getByText("This product is not for sale.")).toBeVisible();
+    expect(canvas.queryByText("This product is not for sale.")).toBeNull();
   },
 };
