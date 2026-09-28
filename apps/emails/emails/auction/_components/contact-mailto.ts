@@ -9,13 +9,13 @@ export function supportMailto(subject: string, body: string): string {
 }
 
 export function setupOverdueMailto(lotTitle: string): string {
-  const subject = `Auction lot ${lotTitle}: setup overdue`;
+  const subject = `Auction ${lotTitle}: setup overdue`;
   const body = [
     "Hello Grade10,",
     "",
     "I need help with this auction order.",
     "",
-    `Lot: ${lotTitle}`,
+    `Auction: ${lotTitle}`,
     "Status: Setup overdue",
     "",
     "[Write your message here]",
@@ -34,7 +34,7 @@ export function paymentOverdueMailto(
     "I need help with this auction order.",
     "",
     `Invoice: ${invoiceId}`,
-    `Lot: ${lotTitle}`,
+    `Auction: ${lotTitle}`,
     "Status: Payment overdue",
     "",
     "[Write your message here]",
@@ -54,7 +54,7 @@ export function partialPaymentMailto(
     "I need help with this auction order.",
     "",
     `Invoice: ${invoiceId}`,
-    `Lot: ${lotTitle}`,
+    `Auction: ${lotTitle}`,
     "Status: Partially paid",
   ];
   if (receiptIds.length > 0) {
@@ -72,7 +72,7 @@ export function cancelledMailto(lotTitle: string, invoiceId: string): string {
     "I need help with this auction order.",
     "",
     `Invoice: ${invoiceId}`,
-    `Lot: ${lotTitle}`,
+    `Auction: ${lotTitle}`,
     "Status: Cancelled",
     "",
     "[Write your message here]",
@@ -88,7 +88,7 @@ export function deliveredMailto(lotTitle: string, invoiceId: string): string {
     "I need help with this auction order.",
     "",
     `Invoice: ${invoiceId}`,
-    `Lot: ${lotTitle}`,
+    `Auction: ${lotTitle}`,
     "Status: Delivered",
     "",
     "[Write your message here]",

@@ -22,11 +22,11 @@ export default function NewBidEmail({
 }: NewBidProps) {
   return (
     <AuctionLetter
-      body="Someone else bid on this lot."
+      body="Someone else bid on this auction."
       brandName={brandName}
       campaign="new_bid"
       canUnsubscribe
-      heading="A lot you bid on received a new bid"
+      heading="An auction you bid on received a new bid"
       highlight={{ label: "Leading bid", value: currentBid }}
       listingUrl={listingUrl}
       lotSubtext={`Closes ${effectiveClosesAt}`}
@@ -34,7 +34,7 @@ export default function NewBidEmail({
       muteUrl={muteUrl}
       preheader={`Leading bid is now ${currentBid}.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

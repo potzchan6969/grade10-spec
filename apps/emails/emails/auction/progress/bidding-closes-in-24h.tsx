@@ -24,7 +24,7 @@ export default function BiddingClosesIn24hEmail({
 }: BiddingClosesIn24hProps) {
   return (
     <AuctionLetter
-      body="This lot’s scheduled close is about a day away. If bidding extends, the close may move later. You will get a separate notice when extended bidding starts."
+      body="This auction’s scheduled close is about a day away. If bidding extends, the close may move later. You will get a separate notice when extended bidding starts."
       brandName={brandName}
       campaign="bidding_closes_in_24h"
       canUnsubscribe={canUnsubscribe}
@@ -36,7 +36,7 @@ export default function BiddingClosesIn24hEmail({
       muteUrl={muteUrl}
       preheader={`Scheduled close ${scheduledClosesAt}. The close can still move.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

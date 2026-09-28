@@ -20,7 +20,7 @@ export default function BiddingHasOpenedEmail({
 }: BiddingHasOpenedProps) {
   return (
     <AuctionLetter
-      body="This lot is now open for bids."
+      body="This auction is now open for bids."
       brandName={brandName}
       campaign="bidding_has_opened"
       canUnsubscribe
@@ -29,9 +29,9 @@ export default function BiddingHasOpenedEmail({
       listingUrl={listingUrl}
       lotTitle={lotTitle}
       muteUrl={muteUrl}
-      preheader="Place a bid while the lot is live."
+      preheader="Place a bid while the auction is live."
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }
