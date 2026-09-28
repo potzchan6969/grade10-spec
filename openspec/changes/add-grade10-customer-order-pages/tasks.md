@@ -24,9 +24,9 @@ tests against typed fixtures rather than a running backend.
 
 ## 4. Partial address and payment presentation (grade10-spec) (owner: @kinisworking)
 
-- [x] 4.1 Make `OrderDetailsAddress.name` optional and let `OrderDetailsPayment` accept an optional recognized brand, text label, and masked number; omit all-empty payment data while preserving existing consumers so `shared-ui-store-order-detail-SC-11` through `shared-ui-store-order-detail-SC-13` pass in component tests and stories.
+- [ ] 4.1 Make `OrderDetailsAddress.name` optional and let `OrderDetailsPayment` accept an optional recognized brand, text label, and masked number; omit all-empty payment data while preserving existing consumers so `shared-ui-store-order-detail-SC-11` through `shared-ui-store-order-detail-SC-13` pass in component tests and stories.
 - [x] 4.2 Add Discount, Shipping, and Tax labels to each supported Grade10 `orderDetail` catalog, and update the `orderHistory` and `orderDetail` order-label templates so a supplied shop number keeps its own prefix; make catalog resolution and type tests pass for `en`, `zh-Hant`, and `zh-Hans`.
-- [x] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
+- [ ] 4.3 Verify the widened shared contract and catalog additions with `pnpm --filter @grade10/ui run test:stories`, `pnpm --filter @grade10/ui run typecheck`, `pnpm --filter @grade10/i18n run test`, `pnpm --filter @grade10/i18n run typecheck`, and `pnpm run lint`.
 - [x] 4.4 Add an optional `points` summary row on `OrderDetailsSummary` after Discount, matching the cart drawer's Points credit label and success treatment; cover with and without points in Storybook so `shared-ui-store-order-detail-SC-14`, `shared-ui-store-order-detail-SC-15`, and `grade10-site-store-order-detail-SC-17` pass.
 
 ## 5. Rich customer order facts (grade10) (owner: @kinisworking)
@@ -37,8 +37,11 @@ webhook, reconciliation, deployment, or order-status rule.
 
 - [x] 5.1 Advance `external/grade10-spec` to the landed group 4 change while preserving unrelated nested work, and make `pnpm run check:submodules` pass.
 - [x] 5.2 Align the frontend `Order` model with `orderName`, `discountAppliedMinor`, `shippingMinor`, `taxMinor`, `shippingAddress`, and `paymentInstrument` from `StoreOrder`; keep the repository's direct decoded return and make typed fixture coverage fail on contract drift.
-- [x] 5.3 Extend the pure history and detail projections with the shop-number fallback, supplied settlement rows, partial shipping address, and truthful known, unknown, and wallet payment presentation so `grade10-site-store-order-history-SC-12`, `grade10-site-store-order-history-SC-13`, and `grade10-site-store-order-detail-SC-13` through `grade10-site-store-order-detail-SC-16` pass in unit tests.
+- [ ] 5.3 Extend the pure history and detail projections with the shop-number fallback, supplied settlement rows, partial shipping address, and truthful known, unknown, and wallet payment presentation so `grade10-site-store-order-history-SC-12`, `grade10-site-store-order-history-SC-13`, and `grade10-site-store-order-detail-SC-13` through `grade10-site-store-order-detail-SC-16` pass in unit tests.
 - [x] 5.4 Pass the new projections and localized copy through the existing owner pages, add or update the derived browser cases without exposing address or payment data outside detail, and verify the affected app with focused unit and browser tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:libs`, and `pnpm run check:submodules`.
+- [ ] 5.5 Reconcile the Grade10 detail projection with the published `OrderDetails` stories: map only typed Store facts, keep story-only image, line coupon, line issue, order promo code, pickup address, and earned-loyalty values absent when the read omits them, and record a parity review for `ItemCoupon`, `OrderDiscount`, `WithPointsCredit`, `Pickup`, `InStore`, `NoOptionalGroups`, and `PaidTotalWithoutSubtotal`.
+- [ ] 5.6 Resolve the points-credit data boundary before claiming `grade10-site-store-order-detail-SC-17`: extend the typed Store order read in approved contract work and make the scenario pass, or mark the change awaiting that dependency rather than claiming completion; never derive the credit or deducted count from discount, eligible goods, or refund. Verify with contract fixtures and page projection tests.
+- [ ] 5.7 Correct the application payment projection to preserve an unrecognized provider label and supplied mask without a guessed logo, then make `grade10-site-store-order-detail-SC-16` pass in application tests.
 
 ## 6. Settlement row localization (grade10)
 
