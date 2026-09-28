@@ -242,7 +242,9 @@ export const StoreLaunch: Story = {
     ).toBeInTheDocument();
     expect(canvas.queryByRole("link", { name: "Privacy" })).toBeNull();
     expect(canvas.queryByRole("link", { name: "Terms" })).toBeNull();
-    expect(canvasElement.querySelector('[data-slot="footer-legal"]')).toBeNull();
+    expect(
+      canvasElement.querySelector('[data-slot="footer-legal"]'),
+    ).toBeNull();
     expect(canvas.queryByText(/HONG KONG/)).toBeNull();
     expect(canvas.queryByRole("link", { name: "Order Status" })).toBeNull();
     expect(canvas.queryByRole("link", { name: "Card Submission" })).toBeNull();

@@ -80,6 +80,13 @@ const STORE_SITE_HEADER = {
   onCartClick: noop,
 };
 
+/** Each social icon is decorative: its link carries the name. */
+const SOCIAL_ICON_PROPS = {
+  "aria-hidden": true,
+  size: 16,
+  weight: "fill",
+} as const;
+
 const STORE_FOOTER = {
   copy: {
     attribution: "A division of MemeStrategy (HKEX: 2440)",
@@ -92,31 +99,19 @@ const STORE_FOOTER = {
       label: "Instagram",
       href: "https://www.instagram.com/grade10hk/",
       external: true,
-      icon: createElement(InstagramLogo, {
-        "aria-hidden": true,
-        size: 16,
-        weight: "fill",
-      }),
+      icon: createElement(InstagramLogo, SOCIAL_ICON_PROPS),
     },
     {
       label: "Facebook",
       href: "https://www.facebook.com/grade10hk/",
       external: true,
-      icon: createElement(FacebookLogo, {
-        "aria-hidden": true,
-        size: 16,
-        weight: "fill",
-      }),
+      icon: createElement(FacebookLogo, SOCIAL_ICON_PROPS),
     },
     {
       label: "Threads",
       href: "https://www.threads.com/@grade10hk",
       external: true,
-      icon: createElement(ThreadsLogo, {
-        "aria-hidden": true,
-        size: 16,
-        weight: "fill",
-      }),
+      icon: createElement(ThreadsLogo, SOCIAL_ICON_PROPS),
     },
   ],
   legalLinks: [

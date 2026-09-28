@@ -2,9 +2,9 @@ import { VStack } from "@grade10/design-system/components/layout/vstack";
 import {
   CartDrawer,
   type CartItemSummary,
-  type PromoState,
   LISTING_LOT_GALLERY_CLASS,
   ListingLotGallery,
+  type PromoState,
   StoreProductDescription,
   StoreProductHeader,
   StoreProductMetadata,
@@ -100,10 +100,7 @@ function StoreProductDetail({ product }: StoreProductDetailProps) {
   const cartTotal = useMemo(() => {
     const amount = cartItems.reduce((sum, item) => {
       if (item.status === "soldOut") return sum;
-      return (
-        sum +
-        parseDisplayAmount(String(item.price)) * item.quantity
-      );
+      return sum + parseDisplayAmount(String(item.price)) * item.quantity;
     }, 0);
     return formatHkd(amount);
   }, [cartItems]);
