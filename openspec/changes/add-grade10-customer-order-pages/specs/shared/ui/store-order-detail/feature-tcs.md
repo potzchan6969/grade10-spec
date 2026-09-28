@@ -317,6 +317,64 @@
 * Discount renders.
 * No Points row appears.
 
+### shared-ui-store-order-detail-US1-TC11-1: Payment can be omitted independently
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Optional sections
+
+**Pre-conditions:**
+
+* `OrderDetails` receives a summary and shipping address but no payment method.
+
+**Steps:**
+
+1. Render `OrderDetails` with the supplied summary and address.
+2. Inspect the sidebar.
+
+**Expected Results:**
+
+* The summary and shipping address render.
+* No Payment Method heading, card or placeholder appears.
+
+### shared-ui-store-order-detail-US1-TC12-1: A paid total renders without a subtotal
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** unit
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** Optional sections
+
+**Pre-conditions:**
+
+* The summary supplies a paid total but no subtotal.
+
+**Steps:**
+
+1. Render the summary.
+2. Inspect its money rows.
+
+**Expected Results:**
+
+* The paid total renders.
+* No Subtotal row, zero placeholder or inferred subtotal appears.
+
 ## Reconciliation
 
 **Run:** 2026-09-28. The blind feature reading used the shared capability's
@@ -328,7 +386,9 @@ scenarios to derive the cases.
 | Finding | Disposition |
 | --- | --- |
 | Detail composition needs independent public parts, supplied-group rendering, and honest omission | **Folded in:** TC1-1 through TC3-1 |
-| Optional sections need callback-owned tracking, independent money rows, partial addresses, truthful payment identity, and points-row states | **Folded in:** TC4-1 through TC10-1 |
+| Optional sections need callback-owned tracking, independent money rows, partial addresses, truthful payment identity, and points-row states | **Folded in:** TC4-1 through TC12-1 |
+| Payment can be omitted while other groups remain | **Folded in:** `shared-ui-store-order-detail-SC-08` -> TC11-1 |
+| A paid total can render without a subtotal | **Folded in:** `shared-ui-store-order-detail-SC-09` -> TC12-1 |
 | Store applications inherit the component contract rather than walking it alone | **Folded in:** one `US1` section with feature-set traces |
 | No unresolved product question in the isolated input | **None raised** |
 | Uncovered feature-set anchors | none |
