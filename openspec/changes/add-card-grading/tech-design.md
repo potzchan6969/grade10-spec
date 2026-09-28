@@ -653,9 +653,10 @@ answering the question it was for.
   and the emailed link all land there, and one `onKept(plan)`, carrying the
   `KeptPlan` with its access token, replaces `onBooked` and `onSaved`. A plan
   kept unticked shows the statement, in the review's words, before the picker
-  or the join; the tick reaches the plan through `submissions.update` with the
-  list as read, and `submissions.book` and `join` refuse an unticked plan
-  `CONSENT_REQUIRED`
+  or the join, and sends `consented: true` on the `book` or `join` it asked
+  for, which writes the tick in the booking's own commit; no update runs
+  first. `submissions.book` and `join` refuse `CONSENT_REQUIRED` only when
+  neither the stored tick nor the input carries it
 - **The console's addresses.** The console's `grading`, `gradingSubmission`,
   `gradingBatches`, `gradingBatch` and `gradingSettings` gain `gradingWalkIn`
   (`/grading/walk-in`), gated on `ADMIN_PERMISSIONS["admin.savePlan"]` and
@@ -790,7 +791,7 @@ stage read off PSA's order page can never sit on a CGC or BGS batch.
 | `grader`, `level` | `text CHECK` | `psa, cgc, bgs`; the sheet's levels |
 | `pinned_fee_sheet` | `jsonb` | the grader's active `fee_sheet` rows, keyed by level, at `book`, or at `deskPlan` for a walk-in |
 | `pinned_terms` | `jsonb` | the six terms at the agreement's mint |
-| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by the keep and the edit that carry the tick; `book` and `join` refuse `CONSENT_REQUIRED` while it is null |
+| `consented_at` | `timestamptz(3)` | the collection statement ticked, written by the keep that carries the tick, or by `book` or `join` given `consented: true`, in their own commit; they refuse `CONSENT_REQUIRED` only when neither it nor the input carries the tick |
 | `booking_ref`, `service_id`, `appointment_at`, `location_id` | cache, all-or-none CHECK | the owner's only |
 | `visit_owner_id` | `text FK submissions` | set on a joiner; the one resolver reads the visit through it |
 | `batch_id` | `text FK batches` | set at `handIn` |
@@ -990,7 +991,7 @@ receipt, the sealed agreement and the re-minted access link.
 
 | Surface | Change |
 | --- | --- |
-| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed) |
+| grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed); `book` and `join` take an optional `consented: true`, written on the plan in their own commit |
 | admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |

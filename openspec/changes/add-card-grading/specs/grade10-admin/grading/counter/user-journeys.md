@@ -81,7 +81,7 @@
 ### grade10-admin-grading-counter-US-14: Operator's acts follow the grant they hold and the status in front of them
 
 **As a** member of shop staff,
-**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel never once the cards have left, refused independently when the submission has moved under me,
+**I want** each tab to offer exactly the acts my grant and the submission's status allow, cancel only on the collector's word and never once the visit starts or a card is checked or refused, refused independently when the submission has moved under me,
 **so that** I am never shown a button that will only be refused, and two of us at one counter cannot leave a submission where neither meant.
 
 ### grade10-admin-grading-counter-US-15: Operations changes a default without a deploy

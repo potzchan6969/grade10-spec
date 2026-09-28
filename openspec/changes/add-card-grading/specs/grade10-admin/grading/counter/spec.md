@@ -108,9 +108,9 @@ the buttons follow is `grade10-site/grading/submission-lifecycle`.
     signal
 - Acts by grant and status
   - Shown only where they can run: an act absent is better than an act refused
-  - Cancel never once the cards have left
   - Cancel on the collector's word: only before the visit starts and before a
-    card is checked or refused, the drop-off going with it and nobody emailed
+    card is checked or refused, never once the cards have left, the drop-off
+    going with it and nobody emailed
   - The worker refuses independently: a submission that moved under the
     operator is refused by name rather than written over
 

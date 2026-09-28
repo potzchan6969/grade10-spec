@@ -576,8 +576,8 @@ Stage (b).
       output, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test:backend`
 - [ ] 11.10 Keep the plan's tick, its test red first: `submissions.consented_at`
       in a migration `pnpm run db:drizzle:generate` writes, set by the keep
-      and by `submissions.update` where the input carries the tick, left
-      null by a plan saved unticked and never cleared, and
+      that carries the tick, left null by a plan saved unticked and never
+      cleared, and
       `CONSENT_REQUIRED` added to
       `GRADING_FAILURE_CODES` for 12.12 to raise; then run 11.9's checks and
       `pnpm run check:migrations`
@@ -688,9 +688,11 @@ Stage (b).
       `VISIT_STARTED` or `LIST_AT_COUNTER` by name, as `withdrawable` is
       shared; then run 12.10's checks
       (`grade10-site-grading-submission-lifecycle-SC-61`)
-- [ ] 12.12 Refuse `submissions.book` and `submissions.join` for a plan whose
-      `consented_at` is null, `CONSENT_REQUIRED` before the diary is asked,
-      its test red first; needs 11.10
+- [ ] 12.12 Give `submissions.book` and `submissions.join` an optional
+      `consented: true`, its test red first: given, it writes `consented_at`
+      in the booking's own commit; refused `CONSENT_REQUIRED` before the
+      diary is asked only when neither the stored tick nor the input carries
+      it; needs 11.10
       (`grade10-site-grading-submission-plan-SC-61`)
 
 ## 13. The hand-in, the till and the safe (grade10)
@@ -1920,7 +1922,8 @@ Stage (b).
       `DropoffBooking` wherever the submission holds no visit and `book` is
       offered, never for `join`, and `bookHref` goes; a plan held unticked is
       asked for the statement, in the review's words, before the picker or
-      the join, the tick sent through `submissions.update`. Test red first;
+      the join, and sends `consented: true` on the `book` or `join` it asked
+      for. Test red first;
       needs 11.10 and 12.12
       (`grade10-site-grading-submission-plan-SC-42`,
       `grade10-site-grading-dropoff-booking-SC-04`,

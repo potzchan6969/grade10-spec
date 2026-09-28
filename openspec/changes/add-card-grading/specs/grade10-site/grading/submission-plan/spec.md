@@ -720,9 +720,11 @@ keeping the plan for later SHALL be offered with it unticked, and the plan
 SHALL be kept unticked.
 
 **The plan carries its tick** - a kept plan SHALL hold whether its statement
-was ticked. Booking or joining a drop-off for a plan held unticked SHALL be
-refused by name, and its page SHALL ask for the statement, in the review's
-words, before a drop-off is picked or joined.
+was ticked. For a plan held unticked, its page SHALL ask for the statement, in
+the review's words, before a drop-off is picked or joined, and the booking or
+the join SHALL carry that tick and write it on the plan in the same step. A
+booking or a join that neither finds the plan ticked nor carries the tick SHALL
+be refused by name.
 
 #### Scenario: grade10-site-grading-submission-plan-SC-31 - The review totals the declared value, the fee and the cover
 **Serves:** grade10-site-grading-submission-plan-US-07 - a collector reading the whole submission back before booking
@@ -797,10 +799,10 @@ words, before a drop-off is picked or joined.
 - **WHEN** the collector opens its page to book the drop-off
 - **THEN** the statement is asked for, in the review's words, before any day
   is offered
-- **AND** a booking or a join sent for the plan while it is unticked is
-  refused by name, and the plan holds no drop-off
-- **AND** once the statement is ticked the plan holds that tick and the days
-  are offered
+- **AND** a booking or a join sent for the plan carrying no tick is refused by
+  name, and the plan holds no drop-off
+- **AND** once the statement is ticked the days are offered, and the booking
+  made carries the tick, so the plan holds its drop-off and its tick together
 
 ### Requirement: A plan is priced on the fee sheet it was booked on
 

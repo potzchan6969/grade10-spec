@@ -14,7 +14,7 @@ reads not found.
 ## Statuses
 
 🚧 **Ten statuses** — the word is the badge, the chip says whose move it is,
-and the internal id never reaches the collector; `cancelled` is theirs before hand-in:
+and the internal id never reaches the collector; `cancelled` is theirs until the visit starts or a card is checked:
 
 | Status | Word | Whose move | Rail | Clock |
 | --- | --- | --- | --- | --- |

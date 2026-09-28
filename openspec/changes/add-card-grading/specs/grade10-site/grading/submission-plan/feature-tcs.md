@@ -1536,14 +1536,16 @@ Grade10's currency is HKD; every amount below is stated in minor units with its 
 **Steps:**
 
 1. Open the kept plan from its emailed link.
-2. In the second tab, send a booking of a free day and time for the plan without ticking the statement.
+2. In the second tab, send a booking of a free day and time for the plan carrying no tick.
 3. In the first tab, tick the statement.
+4. Book a free day and time.
 
 **Expected Results:**
 
 * Step 1: the statement is asked for in the review's words, and no day is offered.
 * Step 2: the booking is refused by name, and the plan holds no drop-off.
-* Step 3: the days are offered, and on reload the plan still holds the tick.
+* Step 3: the days are offered.
+* Step 4: the drop-off is booked, and on reload the plan holds the tick with it.
 
 ---
 

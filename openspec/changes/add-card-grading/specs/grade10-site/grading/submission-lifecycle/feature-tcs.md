@@ -1201,10 +1201,10 @@ Runs once per row of **Test data**.
 
 ---
 
-## grade10-site-grading-submission-lifecycle-US10: Collector cancels a submission before handing the cards in
+## grade10-site-grading-submission-lifecycle-US10: Collector cancels a submission before the visit starts
 
 **As a** collector who no longer wants the cards graded,
-**I want** to cancel the submission from the page any time before the cards are handed in, with the drop-off going with it,
+**I want** to cancel the submission from the page until the visit starts and until the counter checks or refuses a card, with the drop-off going with it, and after that to have the counter refuse the cards instead,
 **so that** nothing is left open in my name and nothing is owed.
 
 ### grade10-site-grading-submission-lifecycle-US10-TC1-1: Cancelling before hand-in closes the submission and its drop-off, with nothing owed
