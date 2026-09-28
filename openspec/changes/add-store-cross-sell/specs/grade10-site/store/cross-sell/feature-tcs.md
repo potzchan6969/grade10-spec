@@ -1,7 +1,7 @@
 # grade10-site/store/cross-sell Test Cases
 
-**Status:** in-review
-**Drafts styled:** 2026-09-28, tcs-rules r4
+**Status:** approved
+**Reviewed:** 2026-09-28, tcs-rules r4
 **Out of suite:** grade10-site-store-cross-sell-SC-25, grade10-site-store-cross-sell-SC-26, grade10-site-store-cross-sell-SC-34
 
 ## grade10-site-store-cross-sell-US1: Collector opens a card the stock keeper chose for this one
@@ -175,7 +175,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -366,7 +366,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -560,7 +560,7 @@ picks or no picks,
 
 * **Severity:** blocker
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** smoke, regression
@@ -673,7 +673,7 @@ picks or no picks,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -749,7 +749,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -787,7 +787,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -798,7 +798,7 @@ Runs once per row of **Test data**.
 
 **Pre-conditions:**
 
-* The cards in **Test data** are set up as the recipe "A card with chosen facts, on the staging shop" says.
+* `<card_14>` and the two cards sharing its world are set up as the recipe "A card with chosen facts, on the staging shop" says.
 * customer is on `<card_14>`'s page.
 * `<new sibling>` is created in the staging shop's admin after both cards, with `<card_14>`'s world, and not published to the store's sales channel.
 
@@ -938,7 +938,7 @@ Runs once per row of **Test data**.
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1022,7 +1022,7 @@ the card itself, and see them on its page,
 
 * **Severity:** major
 * **Priority:** high
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
@@ -1062,7 +1062,7 @@ the card itself, and see them on its page,
 
 * **Severity:** normal
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** destructive
 * **Type:** functional
 * **Suites:** regression
@@ -1103,7 +1103,7 @@ the card itself, and see them on its page,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** negative
 * **Type:** functional
 * **Suites:** regression
@@ -1146,7 +1146,7 @@ the card itself, and see them on its page,
 
 * **Severity:** major
 * **Priority:** medium
-* **Status:** draft
+* **Status:** actual
 * **Behaviour:** positive
 * **Type:** functional
 * **Suites:** regression
