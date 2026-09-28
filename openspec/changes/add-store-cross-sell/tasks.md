@@ -49,7 +49,7 @@ is rebuilding, so this group follows that change's page work.
 ## 5. The manual (grade10-spec)
 
 - [x] 5.1 Update `docs/prds/products/grade10-site/store/cross-sell.md`, the `You May Also Like` section of `docs/prds/products/grade10-site/store/product-page.md` and the `Product Tile` section of `docs/prds/products/shared/ui/store-product-listing.md` — whose "a sold-out tile's name stays inert" gains "where the tile sells" — to the shipped rail, with a `::story` card for the block, restating no requirement; `docs/prds/products/shared/ui/store-home.md` already reads that a header with no browse address renders a title alone and needs no line
-- [ ] 5.2 After the walk (group 6) has run, correct the suite's `### Manual` table in `openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md` to what the walk reached — the rows the walk did not reach say so, and are named in the walk's `rounds.md` row
+- [x] 5.2 After the walk (group 6) has run, correct the suite's `### Manual` table in `openspec/changes/add-store-cross-sell/specs/grade10-site/store/cross-sell/feature-tcs.md` to what the walk reached — the rows the walk did not reach say so, and are named in the walk's `rounds.md` row
 - [x] 5.3 Verify: `pnpm run tcs:validate`, `pnpm check:manual`
 
 ## 6. The walk (grade10)
@@ -68,8 +68,8 @@ skip per case, walked by hand on the dev shop with the page read after them
 within its minute. The walk waits on the card's own read, past the card's
 minute, never on a sleep.
 
-- [ ] 6.1 One test per case the fixture reaches, under a describe per journey, end to end through the collector's browser on the isolated stack's fixture catalogue, which seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
-- [ ] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
+- [x] 6.1 One test per case the fixture reaches, under a describe per journey, end to end through the collector's browser on the isolated stack's fixture catalogue, which seeds the picks, warmed by one listing read so the isolate holds a copy, kept as the change's end-to-end suite: `grade10-site-store-cross-sell-US-01`, `grade10-site-store-cross-sell-US-02`, `grade10-site-store-cross-sell-US-03`
+- [x] 6.2 Verify: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
 
 ## 7. The frame's follow-up and the tile as a link (grade10-spec)
 
@@ -100,6 +100,6 @@ buttons.
 Needs group 3 landed. `CROSS_SELL` in `packages/app-env`, on for every brand
 and environment, is the rail's off switch (Q55).
 
-- [ ] 9.1 The test `grade10-site-store-cross-sell-SC-34` names, in its own commit before its code: the card read's test drives `readCard` asked for the rail with the switch off and on, and not asked
-- [ ] 9.2 Make `grade10-site-store-cross-sell-SC-34` pass: `CROSS_SELL` in `packages/app-env`, read by `storeCrossSell` in `deps.ts` and carried on both catalog contexts as `crossSell`; `readCard` in the rail's module holds the card read's whole decision, answering an empty rail with no picks asked for where the switch is off, and the catalog router maps its outcome; the rail's own view, `ProductRelatedRail`, draws the rail apart from `ProductView`; the runbook's § Turning the You May Also Like rail off
-- [ ] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the cross-sell walk on the isolated stack: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
+- [x] 9.1 The test `grade10-site-store-cross-sell-SC-34` names, in its own commit before its code: the card read's test drives `readCard` asked for the rail with the switch off and on, and not asked
+- [x] 9.2 Make `grade10-site-store-cross-sell-SC-34` pass: `CROSS_SELL` in `packages/app-env`, read by `storeCrossSell` in `deps.ts` and carried on both catalog contexts as `crossSell`; `readCard` in the rail's module holds the card read's whole decision, answering an empty rail with no picks asked for where the switch is off, and the catalog router maps its outcome; the rail's own view, `ProductRelatedRail`, draws the rail apart from `ProductView`; the runbook's § Turning the You May Also Like rail off
+- [x] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the cross-sell walk on the isolated stack: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
