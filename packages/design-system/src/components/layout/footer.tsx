@@ -6,6 +6,18 @@ type FooterLink = {
   /** What the link is called — text, so it can name itself to a reader. */
   label: string;
   href: string;
+  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+  external?: boolean;
+};
+
+type FooterSocialLink = {
+  /** Accessible name for the icon link. */
+  label: string;
+  href: string;
+  /** Brand mark drawn in place of the label — Phosphor fill logos today. */
+  icon: ReactNode;
+  /** Opens in a new tab with `rel="noopener noreferrer"`. */
+  external?: boolean;
 };
 
 type FooterColumn = {
@@ -18,12 +30,13 @@ type FooterColumn = {
  * and stay their own props.
  */
 type FooterCopy = {
-  description: string;
+  /** Catalog blurb under the mark. Omit when the footer carries none. */
+  description?: string;
   attribution: string;
   copyright: string;
   /** What the site says it is being read in — a language, or a region and
-   * its currency. */
-  locale: string;
+   * its currency. Omit while country/currency selection is not offered. */
+  locale?: string;
 };
 
 type FooterProps = ComponentProps<"footer"> & {
@@ -33,7 +46,7 @@ type FooterProps = ComponentProps<"footer"> & {
   /** Homepage destination for the logo. Annotation on the set: click
    * redirects to the homepage. */
   logoHref?: string;
-  socialLinks: FooterLink[];
+  socialLinks: FooterSocialLink[];
   columns: FooterColumn[];
   legalLinks: FooterLink[];
 };
@@ -51,16 +64,19 @@ type FooterProps = ComponentProps<"footer"> & {
  * Grade10's mark is the consumer-owned `g10-logo_mono` instance, drawn at
  * `Size/size-5` inside a `Size/size-9` logo frame.
  *
- * Each `Link` carries the light tone as a `className`. Figma does the same
+ * Each text `Link` carries the light tone as a `className`. Figma does the same
  * thing by a different mechanism — the footer's link instances are the same
  * `secondary` `xs` variant used everywhere else, with the label fill
  * overridden per instance — because the `Link` component set defines no
  * inverse tonal axis. Until it does, a shared component may not offer one:
  * see docs/governance/design-code-sync.md.
  *
+ * Social destinations are icon links, not underlined text — the consumer
+ * supplies the mark; the footer names it through `aria-label`.
+ *
  * Inset matches page chrome (`px-4` below `sm`, `px-8` from there); column gap
  * follows `Gap/gap-6`. The legal row is centred on the bar, not spaced between
- * the copyright and locale.
+ * the copyright and an optional locale.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
@@ -71,7 +87,7 @@ type FooterProps = ComponentProps<"footer"> & {
  * a heading over nothing.
  *
  * The columns stack below the desktop rungs. Four columns on a phone is not a
- * layout: the catalog blurb ends up one word per line in an 80px column, wide
+ * layout: a long brand blurb ends up one word per line in an 80px column, wide
  * enough to pass a scroll-width check and unreadable all the same.
  *
  * The rungs are container queries, not viewport ones: this shell answers to
@@ -106,23 +122,26 @@ function Footer({
           >
             {logo}
           </a>
-          <p className="text-xs text-primary-foreground">{copy.description}</p>
+          {copy.description ? (
+            <p className="text-xs text-primary-foreground">{copy.description}</p>
+          ) : null}
           <p className="text-xs text-primary-foreground">{copy.attribution}</p>
           {socialLinks.length > 0 ? (
             <div
-              className="flex flex-wrap items-start gap-4 pt-3"
+              className="flex flex-wrap items-center gap-4 pt-3"
               data-slot="footer-social"
             >
               {socialLinks.map((link) => (
-                <Link
+                <a
+                  aria-label={link.label}
                   className="text-primary-foreground"
                   href={link.href}
-                  key={String(link.label)}
-                  size="xs"
-                  variant="secondary"
+                  key={link.label}
+                  rel={link.external ? "noopener noreferrer" : undefined}
+                  target={link.external ? "_blank" : undefined}
                 >
-                  {link.label}
-                </Link>
+                  {link.icon}
+                </a>
               ))}
             </div>
           ) : null}
@@ -142,7 +161,9 @@ function Footer({
                   className="text-primary-foreground"
                   href={link.href}
                   key={String(link.label)}
+                  rel={link.external ? "noopener noreferrer" : undefined}
                   size="xs"
+                  target={link.external ? "_blank" : undefined}
                   variant="secondary"
                 >
                   {link.label}
@@ -169,7 +190,9 @@ function Footer({
                 className="text-primary-foreground"
                 href={link.href}
                 key={String(link.label)}
+                rel={link.external ? "noopener noreferrer" : undefined}
                 size="xs"
+                target={link.external ? "_blank" : undefined}
                 variant="secondary"
               >
                 {link.label}
@@ -177,13 +200,21 @@ function Footer({
             ))}
           </div>
         ) : null}
-        <p className="text-xs font-medium text-primary-foreground">
-          {copy.locale}
-        </p>
+        {copy.locale ? (
+          <p className="text-xs font-medium text-primary-foreground">
+            {copy.locale}
+          </p>
+        ) : null}
       </div>
     </footer>
   );
 }
 
-export type { FooterColumn, FooterCopy, FooterLink, FooterProps };
+export type {
+  FooterColumn,
+  FooterCopy,
+  FooterLink,
+  FooterProps,
+  FooterSocialLink,
+};
 export { Footer };
