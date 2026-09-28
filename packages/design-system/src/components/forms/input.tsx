@@ -13,13 +13,17 @@ import type { ReactNode } from "react";
  * Placeholder copy is `Base/muted-foreground` (Text Input placeholder
  * `2132:2714`, Search Input `2132:2783`). Disabled keeps `Base/foreground` —
  * the shell's `opacity-50` and fill swap carry the disabled look.
+ *
+ * `text-base` below `md` keeps iOS Safari from zooming the page on focus
+ * (it zooms any focused field under 16px); `md:text-sm` restores Figma's
+ * Typeset size on wider viewports.
  */
 function Input({ className, ...props }: React.ComponentProps<"input">) {
   return (
     <InputPrimitive
       data-slot="input"
       className={cn(
-        "w-full min-w-0 bg-transparent text-sm text-foreground outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:text-foreground",
+        "w-full min-w-0 bg-transparent text-base text-foreground outline-none placeholder:text-muted-foreground disabled:pointer-events-none disabled:text-foreground md:text-sm",
         className,
       )}
       {...props}
