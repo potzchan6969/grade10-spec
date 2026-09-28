@@ -1,5 +1,8 @@
 {
+  "aboutThisAuction": "이 경매 정보",
   "auctionClosed": "경매 종료",
+  "auctionDetails": "경매 상세",
+  "auctionImages": "경매 이미지",
   "auctionStatus": "경매",
   "auctionWon": "낙찰되었습니다",
   "authorizationDeclined": "카드를 승인할 수 없습니다. 다른 카드로 다시 시도하세요.",
@@ -64,6 +67,7 @@
   "nextImage": "다음 이미지",
   "nextLot": "다음 로트",
   "noBidsYet": "아직 입찰이 없습니다",
+  "opensIn": "시작까지",
   "opensLabel": "시작",
   "opensSoon": "곧 시작",
   "outbid": "상위 입찰 발생",

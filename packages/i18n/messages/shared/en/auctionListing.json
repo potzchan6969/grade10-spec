@@ -1,5 +1,8 @@
 {
+  "aboutThisAuction": "About this auction",
   "auctionClosed": "Auction closed",
+  "auctionDetails": "Auction Details",
+  "auctionImages": "Auction images",
   "auctionStatus": "Auction",
   "auctionWon": "Auction won",
   "authorizationDeclined": "Your card could not be authorized. Try another card.",
@@ -64,6 +67,7 @@
   "nextImage": "Next image",
   "nextLot": "Next lot",
   "noBidsYet": "No bids yet",
+  "opensIn": "Opens in",
   "opensLabel": "Opens",
   "opensSoon": "Opens soon",
   "outbid": "Outbid",
