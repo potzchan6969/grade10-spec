@@ -24,10 +24,14 @@ Rules](/p/grade10-site/auction/bidding#auction-logic).
   zoom source, and falls back to the main source when a thumb or a zoom is
   not given, so one image can be a small file in the strip and a large one
   under the magnifier
-- **The strip** — one item shows no thumbnail strip; several do; no items
-  render nothing and offer no previous or next
+- **The strip** — one item shows no thumbnail strip; 🚧 several show a left
+  rail when the gallery is wide enough for it beside the main frame, and
+  otherwise step with previous/next and progress only; no items render
+  nothing and offer no previous or next
 - **On its own** — the gallery renders without the bid panel, so a lot can
   be shown before it can be bid on
+
+::changes{spec="shared/ui/auction-listing"}
 
 ## Bid History
 

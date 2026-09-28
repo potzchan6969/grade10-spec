@@ -158,13 +158,17 @@ lot before any script runs.
 - **One gallery** — no front and back slots; the first item is the card's
   picture, and a lot whose first item is a video still appears, with no
   placeholder
-- **The strip** — one image shows no thumbnail strip; several do
+- **The strip** — one image shows no thumbnail strip; 🚧 several show a left
+  rail when the gallery is wide enough for it beside the main frame, and
+  otherwise step with previous/next and progress only
 - **Made from the original** — a larger image is transformed to the size
   asked for and a smaller one answered as it is, never upscaled; videos keep
   their original path
 - **Until the close** — an operator adds, replaces, removes or re-captions an
   item while the listing is draft, created or published, never after it
   closes — [Auction Management · Listings](/p/grade10-admin/auction/management#listings)
+
+::changes{spec="grade10-site/auction/listing-media"}
 
 ### Lot Status
 
