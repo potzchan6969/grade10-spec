@@ -114,7 +114,7 @@ Runs once per row of **Test data**.
 | Lot status | Served time | Countdown |
 | --- | --- | --- |
 | Active | Served close | Relative Ends in to the served close |
-| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction |
+| Upcoming | Served open | Relative Opens in to the served open; UPCOMING with no live status dot; View Auction; no money |
 
 **Steps:**
 
@@ -124,7 +124,7 @@ Runs once per row of **Test data**.
 **Expected Results:**
 
 * The countdown matches the row (Ends in or Opens in).
-* Upcoming shows UPCOMING with no live status dot and View Auction.
+* Upcoming shows UPCOMING with no live status dot and View Auction, and shows no starting bid or money amount.
 
 ### grade10-site-auction-auction-US6-TC04-1: Three Featured slides appear in operator order
 
@@ -705,6 +705,76 @@ to open that lot's details page,
 
 * Canonical and share address are `/auction` with no category query.
 
+### grade10-site-auction-auction-US5-TC06-1: More All auctions lots load on scroll
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* All auctions holds more lots than the first batch shows.
+
+**Steps:**
+
+1. Read the first batch of All auctions cards.
+2. Scroll near the end of the shown lots.
+3. Wait for the next batch.
+
+**Expected Results:**
+
+* Step 2 shows Boneyard skeleton cards below the lots already shown, or the next batch lands without pagination controls.
+* Step 3 shows additional lots below the first batch.
+* Lots from step 1 stay visible.
+* The combined list stays in the catalogue resting order.
+* No pagination controls appear.
+
+### grade10-site-auction-auction-US5-TC07-1: An Upcoming All auctions card shows no money
+
+**Classification:**
+
+* **Severity:** major
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** positive
+* **Type:** functional
+* **Suites:** regression
+* **Layer:** e2e
+* **Automation status:** manual
+* **Testability:** automation, manual
+* **Trace:** grade10-site-auction-auction-US-05
+
+**Pre-conditions:**
+
+* customer is on `<grade10 auction catalogue url>`.
+* An Upcoming lot is among All auctions.
+
+**Test data:**
+
+| Field | Value |
+| --- | --- |
+| `<upcoming lot>` | A published Upcoming lot on All auctions |
+
+**Steps:**
+
+1. Find `<upcoming lot>` on All auctions.
+2. Read its card for money and countdown.
+
+**Expected Results:**
+
+* The card shows no starting bid and no money amount.
+* The card shows Opens in from the served open.
+
 ## Settled
 
 - Progress advances by the progress control; CarouselProgress auto-play is allowed presentation, not a separate product rule for this change
@@ -728,6 +798,8 @@ to open that lot's details page,
 - Replace in place → stated on fill requirement; covered by fill scenarios
 - View Auction on Upcoming Featured → `grade10-site-auction-auction-SC-58`
 - Bid rolls only on increase after first paint → `grade10-site-auction-auction-SC-32`
+- All auctions infinite scroll and load-more skeletons → `grade10-site-auction-auction-SC-59`, `SC-60`
+- Upcoming hides money on Featured and All auctions → `grade10-site-auction-auction-SC-33`, `SC-61`
 
 ### Raised, rejected
 - Auto-advance as a required product behaviour — journey and decisions name the progress control; auto-play is CarouselProgress presentation only

@@ -4,13 +4,13 @@ import { expect, userEvent, within } from "storybook/test";
 import { AuctionCategoryButton } from "./auction-catalogue-card";
 
 /**
- * Square category tile used as an exclusive filter above All Auctions on
- * small viewports, and in a sidebar grid on large ones. Selected uses the
- * primary border; idle tiles sit at reduced opacity. Click the selected
- * tile again to clear.
+ * Square category tile for the exclusive filter above All Auctions (sidebar
+ * grid on large viewports). Not on `/auction` at launch — kept under All
+ * Auctions/Later. Selected uses the primary border; idle tiles sit at reduced
+ * opacity. Click the selected tile again to clear.
  */
 const meta = {
-  title: "Auction List/Category Button",
+  title: "Auction List/All Auctions/Later/Category Button",
   component: AuctionCategoryButton,
   parameters: { layout: "padded" },
   decorators: [
