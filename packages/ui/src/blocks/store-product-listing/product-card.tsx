@@ -6,7 +6,7 @@ import { Skeleton } from "boneyard-js/react";
 import type { ReactNode } from "react";
 import skeletonImage from "./product-card.fixture.png";
 import type { ProductCardImageCopy } from "./product-card-image";
-import { ProductCardImage } from "./product-card-image";
+import { ProductCardImage, reportPlainPress } from "./product-card-image";
 
 /** What a tile says whichever product is in it. */
 type ProductCardCopy = ProductCardImageCopy;
@@ -60,11 +60,19 @@ type ProductCardProps = {
   /**
    * Fires when the image or the product name is activated. No navigation
    * target is wired here — the consumer decides what happens (route, modal,
-   * etc.). Omitted leaves both inert. A sold-out tile stays inert where the
-   * surface sells (a cart handler is supplied) and still opens where it does
-   * not — a rail that carries the shopper on rather than selling.
+   * etc.). Omitted, with no `href`, leaves both inert. A sold-out tile stays
+   * inert where the surface sells (a cart handler is supplied) and still
+   * opens where it does not — a rail that carries the shopper on rather than
+   * selling.
    */
   onClick?: () => void;
+  /**
+   * The product's own address. Given one, the image and the name are links
+   * to it, so a tile opens before any script runs, in a new tab, and its
+   * address can be copied. A plain press is still reported through `onClick`
+   * where one is supplied, and the link's own navigation gives way to it.
+   */
+  href?: string;
   className?: string;
 };
 
@@ -107,9 +115,14 @@ function ProductCardContent({
   remainingLabel,
   onCartQuantityChange,
   onClick,
+  href,
 }: ProductCardContentProps) {
   const onSale = originalPrice != null && !soldOut;
-  const opens = onClick != null && (!soldOut || onCartQuantityChange == null);
+  const opens =
+    (onClick != null || href != null) &&
+    (!soldOut || onCartQuantityChange == null);
+  const nameClassName =
+    "line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   return (
     <VStack
@@ -128,6 +141,7 @@ function ProductCardContent({
         inCart={inCart}
         maxCartQuantity={maxCartQuantity}
         name={name}
+        href={opens ? href : undefined}
         onCartQuantityChange={onCartQuantityChange}
         onClick={opens ? onClick : undefined}
         soldOut={soldOut}
@@ -138,12 +152,16 @@ function ProductCardContent({
         data-slot="product-card-content"
         gap="none"
       >
-        {opens ? (
-          <button
-            className="line-clamp-2 w-full cursor-pointer text-left text-base font-medium text-card-foreground underline-offset-2 hover:underline focus-visible:rounded-sm focus-visible:underline focus-visible:outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-            onClick={onClick}
-            type="button"
+        {opens && href != null ? (
+          <a
+            className={nameClassName}
+            href={href}
+            onClick={(event) => reportPlainPress(event, onClick)}
           >
+            {name}
+          </a>
+        ) : opens ? (
+          <button className={nameClassName} onClick={onClick} type="button">
             {name}
           </button>
         ) : (
@@ -196,7 +214,8 @@ const PRODUCT_CARD_FIXTURE = <ProductCardContent {...SKELETON_FIXTURE_PROPS} />;
  * hover-revealed (fine pointer on a wide viewport) or always-visible (coarse
  * pointer, no-hover, or narrow viewport) add affordance into an inline
  * quantity stepper, collapsing to a quantity pill when in cart. Sold-out
- * tiles do not scale on hover, and are inert where the surface sells.
+ * tiles are inert where the surface sells, and elsewhere open with the same
+ * grow on hover over their dim photo.
  */
 function ProductCard({
   loading = false,

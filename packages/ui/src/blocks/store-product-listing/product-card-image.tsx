@@ -1,10 +1,26 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { ReactNode } from "react";
+import type { MouseEvent, ReactNode } from "react";
 import {
   ProductCardCartControl,
   parseCartQuantity,
 } from "./product-card-cart-control";
+
+/**
+ * A tile's link, pressed. A plain press is the consumer's to report, so the
+ * link's own navigation gives way to it; a press with a modifier key opens
+ * the address where the browser puts it — a new tab or a new window — and
+ * reports nothing.
+ */
+function reportPlainPress(
+  event: MouseEvent<HTMLAnchorElement>,
+  onClick: (() => void) | undefined,
+) {
+  if (onClick == null || event.defaultPrevented || event.button !== 0) return;
+  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  event.preventDefault();
+  onClick();
+}
 
 /**
  * What the well says, whichever product is in it — supplied once for a whole
@@ -49,6 +65,9 @@ type ProductCardImageProps = {
   /** Tile activation for the photo well. The card passes none for a sold-out
    * tile on a surface that sells, so a well with a handler always opens. */
   onClick?: () => void;
+  /** The product's own address. Given one, the well is a link to it; the card
+   * passes none for a tile that does not open. */
+  href?: string;
   /** The product's own name, which names the well for a screen reader. */
   name?: string;
   className?: string;
@@ -58,6 +77,8 @@ type ProductCardImageProps = {
  * Product photo well. Figma set `Product / Product Card Image` (`4274:10074`)
  * has `state` (hover, CSS) and `soldOut`, plus the BOOLEAN `sale`. In-cart
  * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
+ * The set draws no hover on a sold-out well; one that opens takes the
+ * available well's grow over its dim photo, and the focus ring either way.
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * It is drawn only where a quantity-change handler was supplied, so a surface
@@ -78,17 +99,23 @@ function ProductCardImage({
   maxCartQuantity,
   onCartQuantityChange,
   onClick,
+  href,
   name,
 }: ProductCardImageProps) {
   const showCart = !soldOut && onCartQuantityChange != null;
   const quantity = parseCartQuantity(cartCount, inCart);
+  const opens = onClick != null || href != null;
 
+  /* A sold-out photo stays dim, and takes the hover wherever the well opens:
+     the grow says the tile leads somewhere, sold out or not. */
   const photoClassName = cn(
     "size-full rounded-(--radius-3xl) object-contain",
     soldOut && "opacity-50",
-    !soldOut &&
+    (!soldOut || opens) &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
   );
+  const activationClassName =
+    "absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   const well = (
     <>
@@ -98,8 +125,8 @@ function ProductCardImage({
       >
         {imageSrc ? (
           <img
-            alt={onClick ? "" : imageAlt}
-            aria-hidden={onClick ? true : undefined}
+            alt={opens ? "" : imageAlt}
+            aria-hidden={opens ? true : undefined}
             className={photoClassName}
             src={imageSrc}
           />
@@ -145,14 +172,23 @@ function ProductCardImage({
         className,
       )}
     >
-      {!onClick ? (
+      {!opens ? (
         <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
           {well}
         </div>
+      ) : href != null ? (
+        <a
+          aria-label={name}
+          className={activationClassName}
+          href={href}
+          onClick={(event) => reportPlainPress(event, onClick)}
+        >
+          {well}
+        </a>
       ) : (
         <button
           aria-label={name}
-          className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className={activationClassName}
           onClick={onClick}
           type="button"
         >
@@ -174,4 +210,4 @@ function ProductCardImage({
 }
 
 export type { ProductCardImageCopy, ProductCardImageProps };
-export { ProductCardImage };
+export { ProductCardImage, reportPlainPress };
