@@ -1,0 +1,74 @@
+## 1. Fee and Tax (grade10)
+
+- [ ] 1.1 Add `invoicePricing.ts` to `packages/grade10-auction/contracts` with `buyerPremiumMinor`, `priceInvoice`, `suggestProcessingFee`, `feeWording` and `maskAccount`, folding `buyerCharges.ts` into it; `packages/grade10-auction/contracts/test/invoicePricing.test.ts`
+- [ ] 1.2 Add the four fee columns with their pair and range checks to `auction_payment_settings`; the settings service and router save and read both rules, zero allowed, half a pair refused; `pnpm run check:migrations`, `apps/backend/grade10/auction/test/db/trpc/paymentSettings.spec.ts`
+- [ ] 1.3 Send and requote take `taxMinor`, `processingFeeMinor` and `expectedTotalMinor`, price under the lock and refuse `QUOTE_CHANGED`; delete `paymentProcessingFee.ts` and `readPaymentProcessingFees` from the Stripe ports and the E2E fake; `apps/backend/grade10/auction/test/db/trpc/postSaleCommands.spec.ts`
+- [ ] 1.4 The Payment Settings tab takes a card rule and a bank rule per currency with a live example line; the send and requote dialogs take tax and fee with a `priceInvoice` preview and carry the expected total; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
+- [ ] 1.5 Regenerate the API docs; `pnpm --dir packages/api-docs run generate` leaves a clean tree
+
+## 2. Contracts and Schema (grade10)
+
+- [ ] 2.1 Rename `Awaiting Address` to `Awaiting Setup`; `deriveAuctionOrderStatus` reads the fact columns; `orderRules.ts` with `OrderFacts`, `OPERATOR_ACTIONS`, `PRIMARY_ACTION`, `OPERATOR_ACTION_PERMISSIONS`, `operatorRefusal`, `winnerActions`, both next-step unions, `segmentOf`, `paymentOutcome`, `invoiceSearchKey` and `PROOF_LIMITS`; `packages/grade10-auction/contracts/test/orderRules.test.ts`
+- [ ] 2.2 `WinnerOrderView` and the winner inputs in `winnerOrder.ts`; `operatorOrder.ts` with `OperatorOrderRow`, `OperatorOrderView`, `TimelineEntry` and the operator inputs; the refusal list loses `PAYMENT_FEES_UNREADABLE`, gains the seven new codes and `WINNER_REFUSAL_CODES`; `packages/grade10-auction/contracts/test/winnerOrder.test.ts`, `packages/grade10-auction/contracts/test/operatorOrder.test.ts`
+- [ ] 2.3 Drizzle schema for the new columns, checks and `auction_order_comments`; migration `0007` with the backfills, the `paid_after_cancel` preflight, the rescoped operator-reason check and its `-- lock:` and `-- contract:` lines; `pnpm run check:migrations`, `packages/grade10-auction/backend/test/repositories/orders.drizzle.test.ts`
+
+## 3. Backend Split (grade10)
+
+- [ ] 3.1 Move `winnerInvoice.ts`, `invoiceLifecycle.ts`, `winnerPaymentProof.ts`, `orderStatus.ts` and the order half of `services/admin/fulfillment.ts` into `services/orders/*` at their exported seams with no behaviour change; `node scripts/test.mjs apps/backend/grade10/auction` stays green
+- [ ] 3.2 `repositories/orderQueue.ts` with `orderStatusSql`, `orderSinceSql`, `flagOpenSql` and the keyset worklist; `services/orders/queue.ts` with segments, counts, search and filters; `packages/grade10-auction/backend/test/repositories/orderQueue.repo.test.ts` holds the status and since matrix
+- [ ] 3.3 `services/orders/reads.ts` builds `WinnerOrderView` and `OperatorOrderView` with the timeline merge, and `loadOwnedOrder` answers `NOT_FOUND` to every non-owner; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`, `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`
+- [ ] 3.4 Delete the stored-status paths, the synthetic cancelled invoice, `amendAddress` and the winner amendment log; `expiredInvoices` expires the current invoice and suspends in one transaction and skips cancelled orders; `suspendedBidders` removed; `apps/backend/grade10/auction/test/db/sweeps/winnerInvoice.spec.ts`
+- [ ] 3.5 `stripeConfig` in mode `test` accepts only test keys; `createCheckoutSession` takes `expiresAt` and `paymentMethodTypes`; `retrieveCheckoutSession` and `expireCheckoutSession` on the port; the E2E fake session completes and expires; `packages/grade10-auction/backend/test/stripe/config.test.ts`, `apps/backend/grade10/auction/test/helpers/fakeStripe.ts`
+- [ ] 3.6 `orderProofReferences` feeds the orphan sweep; `repositories/orderComments.ts`; `packages/grade10-auction/backend/test/repositories/orderProofs.repo.test.ts`, `apps/backend/grade10/auction/test/db/sweeps/orphanedObjects.spec.ts`
+
+## 4. Money In and Proofs (grade10)
+
+- [ ] 4.1 `cardPayments.ts`: `prepareCheckout` with a fresh session per click, attempt-keyed idempotency and the compare-and-set; `recordCheckoutPaid` writes money on every invoice state and flags per the table; `recordCheckoutClosed`; `confirmCheckout` from the return URL; the webhook handler routes the four session events; `apps/backend/grade10/auction/test/db/webhooks/handleEvent.spec.ts`, `apps/backend/grade10/auction/test/db/webhooks/webhooks.spec.ts`
+- [ ] 4.2 `proofs.ts`: `uploadProofFile` sniffs bytes and writes the content-addressed key; `submitProof` HEADs each key, stores the reference and freezes the deadline; `reviewProof` returns with both reasons and the Proof not accepted letter, or confirms into `paid`; `readOrderProof`, `readDeliveryProof`; `apps/backend/grade10/auction/test/db/admin/proofs.spec.ts`
+- [ ] 4.3 `PUT /api/admin/orders/:orderId/proofs?kind=` granted by kind and `GET .../proofs/:key` served inline with `nosniff`, `Content-Security-Policy: sandbox` and `no-store`, audited, keys from the order's union only; the listing-level proof routes go; `apps/backend/grade10/auction/test/db/routes/uploads.spec.ts`
+- [ ] 4.4 `operatorPayments.recordPayment` with `paymentOutcome`, `received_at`, receipts and flags; `cancelRefund.ts`: `cancelOrder` writes the order facts, expires the open session, releases the hold and leaves the listing closed; `recordRefund` with `destination` and `refunded_at`; `clearPaymentFlag`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`, `apps/backend/grade10/auction/test/db/sweeps/winnerInvoiceRefundPartial.spec.ts`
+- [ ] 4.5 `fulfilment.ts` writes `dispatched_at` and `delivered_at` with their log rows and letters; `comments.addComment`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
+- [ ] 4.6 `quote.reissueInvoice`: one Reissue on `pending` or `expired` with no payment that counts toward the balance, a reason and at least one change (`NO_CHANGE`), the deadline kept or restarted, the setup snapshots moved and the open checkout session expired; `setup.ts`: `confirmSetup` once with `METHOD_UNAVAILABLE`, `reopenSetup`, `recordSetup`; `apps/backend/grade10/auction/test/db/trpc/orders.spec.ts`
+
+## 5. Operator Surface (grade10)
+
+- [ ] 5.1 `trpc/routers/orders.ts` with the grant per procedure, `auditDetails` on each and a cap on the audit row; `router.spec.ts` pins the grants to `OPERATOR_ACTION_PERMISSIONS`; `apps/backend/grade10/auction/test/db/trpc/router.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/auditTrail.spec.ts`, `apps/backend/grade10/auction/test/db/trpc/refusals.spec.ts`
+- [ ] 5.2 The winner entrypoint exposes the winner methods plus the one-release aliases and its prototype equals the allowlist; the store router forwards `confirmSetup`, `prepareCheckout`, `confirmCheckout`, `uploadProofFile`, `submitProof` and `readDeliveryProof` and ignores a client-sent `userId`; `apps/backend/grade10/auction/test/worker/rpc/AuctionService.spec.ts`, `apps/backend/grade10/store/test/db/auctionRouter.spec.ts`
+- [ ] 5.3 Delete the `postSale`, `settlements` and `fulfillment` routers, services and repositories, the `payment_settlements` fallback in `accountRecord.ts` and the operator members of `WinnerOrderServiceApi`; `pnpm run typecheck`, `node scripts/test.mjs apps/backend/grade10/auction`
+
+## 6. Test Winners (grade10)
+
+- [ ] 6.1 `PRE_PRODUCTION_ENVIRONMENTS` is the local lanes plus `DEPLOYED_ENVS` without `production`; `packages/utils/test/env.test.ts`
+- [ ] 6.2 `services/orders/testWinners.ts`: `createTestWinner` (plus-tag rule, `createUnverifiedAccount`, `ACCOUNT_EXISTS`, `ensureTestBidder`, `insertClosedSandboxLot`, `closeOne`, replay by account) and `listTestWinners`; `trpc/routers/testWinners.ts` on the `testBids` middleware; `apps/backend/grade10/auction/test/db/trpc/testWinners.spec.ts`
+- [ ] 6.3 `seedDevWinnerFixture` builds its lot with `insertClosedSandboxLot` and the real close and reaches each status through the order services; `packages/grade10-auction/backend/test/devFixtures/seedDevWinnerFixture.test.ts`
+
+## 7. Admin Workspace (grade10)
+
+- [ ] 7.1 Console: `ActionMenu`, `FormDialog.dismissLabel`, `CursorPager.labels`, `max` on `DateField` and `DateTimeField`, `Notice.actions`, `PromptDialog` moved in from the vault slice; `node scripts/test.mjs packages/frontend-console`
+- [ ] 7.2 `features/operations/orders` slice: models, repository, API service with the proof urls, `refusalCopy` over every operator code, the three hooks; `TrpcAuctionAdminProcedureClient` gains `orders` and `testWinners`; `node scripts/test.mjs packages/grade10-auction/admin-frontend`
+- [ ] 7.3 Worklist: segmented counts, search, status and category filters, the row's primary action, URL state, `CursorPager`; `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrdersWorklist.test.tsx`
+- [ ] 7.4 Order page: header with More and the primary action by grant, the status sentence, flag notices, summary strip, the two columns, shipment, timeline with the comment box; `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/views/OrderDetail.test.tsx`
+- [ ] 7.5 The ten dialogs with `keepRefusal`, the quote preview equal to `priceInvoice`, the `paymentOutcome` choices inline and the restated consequences; `packages/grade10-auction/admin-frontend/src/features/operations/orders/presentation/dialogs/*.test.tsx`
+- [ ] 7.6 Routes: the `auctionOrder` surface, `routes/auction-order.tsx`, the Orders tab, `queue` removed; the Test tab lazy-loaded behind the build constant with its files in `TEST_ONLY`; `pnpm run check:admin-bundle`, `apps/admin/grade10/src/pages/auction/AuctionPage.test.tsx`
+- [ ] 7.7 Test winners panel with create, list, Email sign-in link and Open order; the Accounts panel loses its password field; the winner fixtures panel and `WINNER_FIXTURE_STATUSES` go; `packages/grade10-auction/admin-frontend/src/features/test/winners/presentation/views/TestWinnersPanel.test.tsx`
+- [ ] 7.8 Delete the `post-sale`, `winner-orders`, `settlements` and `fulfillment` slices with their exports, DI modules and the fixture client's emulation; Payment Settings gated on `auction:payment`; Listings offer Open order; `pnpm run typecheck`, `node scripts/test.mjs packages/grade10-auction/admin-frontend`
+
+## 8. Winner Site (grade10)
+
+- [ ] 8.1 `features/orders/winner-order` slice: models, repository, API service on the new buyer procedures, `useTranslations("auctionOrders")` in presentation; `AuctionBuyerProcedureClient` drops `amendWinnerOrderAddress`; `docs/conventions/code-layout.md` corrected in the same commit; `node scripts/test.mjs packages/grade10-auction/frontend`
+- [ ] 8.2 Page: the next step panel with its live region and focus moves, the order summary with the Pay controls under Order Total, the stepper, `AuctionOrderDetail` below; Confirming payment and Payment was not completed from the return URL; `packages/grade10-auction/frontend/src/features/orders/winner-order/presentation/views/WinnerOrderPage.test.tsx`
+- [ ] 8.3 Setup wizard on `DialogFlow`: address book or Add Address, method with the fee sentence, billing, review, one confirm call, a dismiss that asks; `packages/grade10-auction/frontend/src/features/orders/winner-order/presentation/dialogs/SetupWizard.test.tsx`
+- [ ] 8.4 Proof dialog uploads one file per call and converts HEIC in the browser; bank details, contact and refund details dialogs; `packages/grade10-auction/frontend/src/features/orders/winner-order/presentation/dialogs/ProofDialog.test.tsx`
+- [ ] 8.5 `AuctionWinnerOrderPage.tsx` reads `orderId`, `checkout` and `session_id` and renders the slice; the old dialogs and hard-coded copy go; `apps/frontend/grade10/src/pages/auctions/AuctionWinnerOrderPage.test.tsx`
+
+## 9. Catalogs and Letter Template (grade10-spec)
+
+- [ ] 9.1 `auctionOrders` catalogs for `en`, `zh-Hant`, `zh-Hans` and `ko` under `messages/shared`, the lines naming Grade10 under `messages/grade10`; `pnpm run test`
+- [ ] 9.2 The Proof not accepted letter under `apps/emails/emails/auction/order/`; `pnpm --dir apps/emails run typecheck`
+- [ ] 9.3 Once `add-winner-order-tax-line` archives, MODIFY Invoice fields, the quote and the reissue to the fee from the schedule, REMOVE the provider-fee scenarios, and drop the precedence clause from the fee requirement; `pnpm check:manual`
+
+## 10. E2E and Docs (grade10)
+
+- [ ] 10.1 `post-sale-journey.spec.ts` with the card, bank and operator journeys, seeded through `testWinners.create` and signed in from `AuthDoor.readOutbox`; `pnpm run test:e2e`
+- [ ] 10.2 The winner-order, partial-payment, refund, account-record and suspension specs and their helpers read `Awaiting Setup`, open `/auction/orders/:orderId` and use the new dialogs; `pnpm run test:e2e`
+- [ ] 10.3 `docs/architecture/auction.md` takes the derived status, money in, proofs and test winners; `docs/conventions/development.md` takes the QA walk; `pnpm run lint`
