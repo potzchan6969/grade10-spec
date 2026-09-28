@@ -38,9 +38,10 @@ An item that sold out in the meantime is refused, with the item named.
 ## Shopify — Tell the store
 The order moves from pending to paid within seconds.
 
-## Collector — Open the Grade10 order link
-The Shopify Thank You and Order status page offers a Grade10 link for this
-purchase. The native Continue shopping button is not the return path.
+## Collector — Open Your Orders in Grade10
+The Shopify Thank You and Order status page offers a Grade10 Your Orders link.
+The matching purchase appears there. The native Continue shopping button is
+not the return path.
 
 ## Collector — Find the order
 In Your Orders.

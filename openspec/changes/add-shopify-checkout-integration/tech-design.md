@@ -189,10 +189,11 @@ total, goods, shipping, tax, order name, settled lines and payment instrument
 when supplied; ignores duplicate/cross-shop/invalid-signature events; and
 releases the matching member cart lines only inside the successful paid
 transition. The confirmation page uses a Shopify Thank You and Order status
-checkout UI extension to offer a Grade10 order link from the Shopify order
-identity. The extension is the return mechanism; the native Continue shopping
-button and a per-draft return URL are not relied on. The link is not a
-page-return signal that clears the cart.
+checkout UI extension to offer a static Grade10 Your Orders link. The member
+finds the matching purchase in that surface after returning. The extension is
+the return mechanism; the native Continue shopping button and a per-draft
+return URL are not relied on. The link is not a page-return signal that clears
+the cart.
 
 ### Reuse the carrier rule and current architecture records
 
@@ -299,7 +300,7 @@ ambiguous.
    complete.
 3. Configure staging Shopify credentials/scopes, the searchable correlation
    tag behavior, webhook topics, carrier service and the Thank You/Order status
-   extension that links back to Grade10.
+   extension that links to Grade10 Your Orders.
 4. Run the real staging walkthrough for the four journeys, including repeated
    Pay, terminal-intent replay, a crash before dispatch, response-loss recovery,
    an ambiguous recovery, sold-out refusal, missed webhook, served and

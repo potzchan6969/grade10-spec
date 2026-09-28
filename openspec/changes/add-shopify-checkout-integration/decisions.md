@@ -79,10 +79,11 @@ destinations receive no rate.
 ### Q10. Where does confirmation return?
 
 **Decided:** A Shopify Thank You and Order status checkout UI extension shows a
-Grade10 order link for the purchase, using the Shopify order identity and the
-existing Grade10 correlation. The native Continue shopping button and a
-per-draft return URL are not relied on. The extension is a staging gate, not a
-new embedded checkout return API.
+static link to Grade10 Your Orders. The matching purchase appears there after
+the member returns. A purchase-specific deep link is not required because
+Shopify has no per-draft return URL. The native Continue shopping button is not
+relied on. The extension is a staging gate, not a new embedded checkout return
+API.
 
 ## Raised by the blind feature reading
 

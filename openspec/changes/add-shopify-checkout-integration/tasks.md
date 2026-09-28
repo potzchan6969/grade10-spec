@@ -93,10 +93,10 @@
 - [ ] 4.4 Preserve the Overrider checkout-test page for signed-in and typed
   email staging exercises while ensuring the public route requires the member
   session and the identity/KYC outcome remains actionable.
-- [ ] 4.5 Add the Shopify Thank You and Order status extension and its Grade10
-  correlation resolver in the existing Shopify integration package; render the
-  order link and recovery/support states from `ui-design.md` without adding a
-  new `@grade10/ui` export.
+- [ ] 4.5 Add the Shopify Thank You and Order status extension in the existing
+  Shopify integration package; render the static Grade10 Your Orders link from
+  `ui-design.md` without adding a new `@grade10/ui` export or a
+  purchase-specific resolver.
 - [ ] 4.6 Verify the affected frontend with focused checkout/order tests,
   `pnpm run test`, `pnpm run typecheck`, `pnpm run lint`, `pnpm run build`,
   and the relevant Playwright smoke coverage.

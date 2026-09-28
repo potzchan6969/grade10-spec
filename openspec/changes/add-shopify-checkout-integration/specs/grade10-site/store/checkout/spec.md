@@ -247,11 +247,10 @@ after settlement.
 Shopify and SHALL release the paid lines only after the order is `paid`.
 
 **Return** - A Shopify Thank You and Order status checkout UI extension SHALL
-offer a Grade10 order link for that purchase using the Shopify order identity
-and the existing Grade10 correlation. While the correlation resolves, the
-extension SHALL show no guessed URL; if it cannot resolve, it SHALL show the
-support outcome. The native Continue shopping button and Shopify account path
-SHALL not be the required return destination.
+offer a static link to Grade10 Your Orders, where the matching purchase is
+visible after the member returns. The extension SHALL not promise a
+purchase-specific deep link. The native Continue shopping button and Shopify
+account path SHALL not be the required return destination.
 
 <!-- trace:scenario id=g10.store-checkout.SC-l12 rev=1 -->
 #### Scenario: grade10-site-store-checkout-SC-12 - A pending order remains visible while payment settles
@@ -288,9 +287,9 @@ SHALL not be the required return destination.
 **Serves:** grade10-site-store-checkout-US-03 - The collector continues from Shopify to the purchase in Grade10
 
 - **GIVEN** a member has completed payment on a Shopify invoice
-- **WHEN** the member activates the Grade10 order link on the Shopify
+- **WHEN** the member activates the Grade10 Your Orders link on the Shopify
   confirmation page
-- **THEN** the link opens the matching Grade10 order route
+- **THEN** the Grade10 orders surface opens and shows the matching purchase
 - **AND** it does not require the native Continue shopping button or send the
   member to a Shopify account page
 

@@ -4,9 +4,9 @@
 
 No Figma frame or Storybook story exists for Shopify's hosted confirmation
 surface. Shopify's Checkout UI extension editor is the layout source. The
-extension adds one Grade10 order link in the Thank You and Order status page
-extension slot; it does not retarget or depend on the native Continue shopping
-button.
+extension adds one static Grade10 Your Orders link in the Thank You and Order
+status page extension slot; it does not retarget or depend on the native
+Continue shopping button.
 
 ### Grade10 order route
 
@@ -17,9 +17,9 @@ new Grade10 page layout.
 
 | Export | Package | Role |
 | --- | --- | --- |
-| Shopify Checkout UI extension `Link` and layout primitives | Shopify checkout extension package in `integrations/shopify-pos/grade10` | Render the Grade10 order link on the hosted Thank You and Order status pages |
-| Existing Grade10 order route and order detail | `apps/frontend/grade10` | Resolve and show the matching local order |
-| Grade10 checkout and order copy | `@grade10/i18n` | The link label and recovery/support copy in every supported storefront locale |
+| Shopify Checkout UI extension `Link` and layout primitives | Shopify checkout extension package in `integrations/shopify-pos/grade10` | Render the static Grade10 Your Orders link on the hosted Thank You and Order status pages |
+| Existing Grade10 orders surface | `apps/frontend/grade10` | Show the matching local order after the member returns |
+| Grade10 checkout and order copy | `@grade10/i18n` | The link label in every supported storefront locale |
 
 No new `@grade10/ui` export or design-system primitive is needed. The
 extension package and its Shopify app configuration are implementation work in
@@ -31,6 +31,6 @@ the application repository.
 
 | State | Shows | Anchor |
 | --- | --- | --- |
-| Shopify order identity resolves | A visible Grade10 order link for the matching local order | `grade10-site-store-checkout-US-03` |
-| Link is resolving | The extension keeps the link unavailable until the local correlation resolves; it does not invent an order URL | `grade10-site-store-checkout-US-03` |
-| Correlation cannot resolve | A support outcome and no guessed Grade10 order URL | `Order settlement and return` |
+| Thank You page | A visible Grade10 Your Orders link | `grade10-site-store-checkout-US-03` |
+| Order status page revisit | The same Grade10 Your Orders link and the matching purchase in the orders surface | `grade10-site-store-checkout-US-03` |
+| Native Continue shopping action | Not relied on for the Grade10 return | `Order settlement and return` |

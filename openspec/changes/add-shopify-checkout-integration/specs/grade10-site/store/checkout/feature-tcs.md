@@ -523,12 +523,12 @@
 
 **Steps:**
 
-1. Activate the Grade10 order link in the Shopify Thank You or Order status extension.
+1. Activate the Grade10 Your Orders link in the Shopify Thank You or Order status extension.
 2. Read the destination.
 
 **Expected Results:**
 
-* The matching Grade10 order route opens.
+* The Grade10 orders surface opens and shows the matching purchase.
 * The link does not require the native Continue shopping button or open a native Shopify account page.
 
 ### grade10-site-store-checkout-US3-TC5-1: An invalid payment event stays unpaid
