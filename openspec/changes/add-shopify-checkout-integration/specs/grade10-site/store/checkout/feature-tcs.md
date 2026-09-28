@@ -161,6 +161,96 @@
 * The changed request has a new intent fingerprint.
 * The old open checkout is not returned as the changed purchase.
 
+### grade10-site-store-checkout-US1-TC8-1: A terminal intent is replayed safely
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) has an unchanged intent whose Grade10 order is paid, refunded, failed, canceled or expired
+
+**Steps:**
+
+1. Submit Pay again with the same intent.
+2. Read the checkout outcome.
+
+**Expected Results:**
+
+* The existing order's terminal outcome is returned.
+* No second Grade10 order or Shopify invoice is created.
+* A new intent is required before a changed basket can be paid.
+
+### grade10-site-store-checkout-US1-TC9-1: A crash before dispatch can retry
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) has an order claimed for checkout while its provider-dispatch state is `ready`
+
+**Steps:**
+
+1. Stop the worker before it sends the Shopify request.
+2. Run reconciliation.
+3. Read the checkout outcome.
+
+**Expected Results:**
+
+* The order can be dispatched once after the lease is reclaimed.
+* The retry creates no second order or invoice.
+
+### grade10-site-store-checkout-US1-TC10-1: An ambiguous dispatch requires operator recovery
+
+**Classification:**
+
+* **Severity:** blocker
+* **Priority:** high
+* **Status:** draft
+* **Behaviour:** negative
+* **Type:** integration
+* **Suites:** regression
+* **Layer:** api
+* **Automation status:** manual
+* **Testability:** automation
+* **Trace:** grade10-site-store-checkout-US-01
+
+**Pre-conditions:**
+
+* customer(member) has an order marked `dispatched` with no provider reference and no unique matching draft
+
+**Steps:**
+
+1. Run reconciliation through the recovery deadline.
+2. Read the checkout outcome.
+
+**Expected Results:**
+
+* The order enters `manual_review` and returns a recovery-required result.
+* No replacement Shopify invoice is created.
+* The member cannot start a new purchase until an operator binds or cancels the provider draft.
+
 ### grade10-site-store-checkout-US1-TC6-1: A served destination receives the preview rate
 
 **Classification:**
@@ -433,13 +523,13 @@
 
 **Steps:**
 
-1. Activate Continue shopping on Shopify confirmation.
+1. Activate the Grade10 order link in the Shopify Thank You or Order status extension.
 2. Read the destination.
 
 **Expected Results:**
 
 * The matching Grade10 order route opens.
-* The link does not open a native Shopify account or storefront page.
+* The link does not require the native Continue shopping button or open a native Shopify account page.
 
 ### grade10-site-store-checkout-US3-TC5-1: An invalid payment event stays unpaid
 
@@ -529,6 +619,6 @@ linked storefront/commerce architecture before reading the requirements.
 - US-03 covers pending visibility, paid settlement, cart release, reconciliation,
   confirmation return and invalid-event rejection.
 - US-04 covers the public signed-in boundary.
-- Q11, Q12 and Q13 from the blind reading are folded into SC-09 through SC-11
-  and SC-07/SC-10; no journey remains uncovered.
+- Q11, Q12, Q13 and Q14 from the blind reading are folded into SC-09 through
+  SC-11, SC-19 through SC-21 and SC-07/SC-10; no journey remains uncovered.
 - The suite does not rely on the Requirements section or any archived change.

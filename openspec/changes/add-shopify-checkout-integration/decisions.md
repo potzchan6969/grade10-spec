@@ -53,8 +53,10 @@ provider references before returning the hosted URL.
 
 **Decided:** The browser carries an opaque checkout-intent key. The server
 stores that key with a canonical fingerprint of the reviewed basket and
-tender. Repeating an unchanged open intent returns its existing order/invoice
-or settling state. A changed basket or tender starts a new intent.
+tender. One web order row owns the key for every status. Repeating an
+unchanged open intent returns its existing order/invoice or settling state;
+repeating a settled or closed intent returns a terminal replay outcome and
+never creates another order. A changed basket or tender starts a new intent.
 
 ### Q7. How is payment settled?
 
@@ -76,8 +78,10 @@ destinations receive no rate.
 
 ### Q10. Where does confirmation return?
 
-**Decided:** Shopify confirmation links back to the Grade10 order route for
-that purchase. The return link is a staging/Shopify configuration gate, not a
+**Decided:** A Shopify Thank You and Order status checkout UI extension shows a
+Grade10 order link for the purchase, using the Shopify order identity and the
+existing Grade10 correlation. The native Continue shopping button and a
+per-draft return URL are not relied on. The extension is a staging gate, not a
 new embedded checkout return API.
 
 ## Raised by the blind feature reading
@@ -86,4 +90,5 @@ new embedded checkout return API.
 | --- | --- | --- |
 | Q11. How long does an intent survive a reload? | Keep the same intent key and reviewed fingerprint in the active same-session checkout until the order is terminal; an edit invalidates it. | `grade10-site/store/checkout` |
 | Q12. What happens when Shopify refuses a line after draft creation? | Name the line, keep the local order recoverable but unpaid, and let the collector fix the basket and retry. | `grade10-site/store/checkout` |
-| Q13. What happens when the provider response is lost? | Reuse the local intent and provider read/reference; do not create another Draft Order. | `grade10-site/store/checkout` |
+| Q13. What happens when the provider response is lost? | Reuse the local intent and provider read/reference; do not create another Draft Order. A request marked dispatched stays recovery-only. | `grade10-site/store/checkout` |
+| Q14. What happens when the worker stops before the provider call? | A request still marked ready may be claimed again. Once dispatch is marked, recovery lookup runs until its deadline; an unresolved result becomes `manual_review` and blocks a new purchase until an operator binds or cancels the provider draft. | `grade10-site/store/checkout` |
