@@ -1,18 +1,22 @@
 /* PDP two-column shell — explicit grid so Storybook iframes get the layout
    even when Tailwind arbitrary grid utilities are not emitted.
 
+   Tablet (`md`): equal columns so the gallery and bid panel each take half.
+   Desktop (`lg`): flexible gallery beside a fixed 448px bid panel.
+
    Sidebar uses sticky + self-start without a max-height scroll box so the page
    is the only vertical scroll container — long sidebar content is not clipped
    when the document scrolls. */
 .pdp-grid {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
-  gap: 3rem;
+  gap: 2rem;
 }
 
 @media (min-width: 768px) {
   .pdp-grid {
-    grid-template-columns: minmax(0, 1fr) 448px;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 2rem;
   }
 
   .pdp-sidebar {
@@ -23,5 +27,12 @@
   .pdp-gallery {
     grid-column: 1;
     grid-row: 1;
+  }
+}
+
+@media (min-width: 1024px) {
+  .pdp-grid {
+    grid-template-columns: minmax(0, 1fr) 448px;
+    gap: 3rem;
   }
 }

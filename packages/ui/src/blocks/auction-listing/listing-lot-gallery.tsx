@@ -203,44 +203,18 @@ function ListingLotGallery({
 
   return (
     <div
-      className={cn(LISTING_LOT_GALLERY_CLASS, className)}
+      className={cn(LISTING_LOT_GALLERY_CLASS, "@container", className)}
       data-slot="listing-lot-gallery"
     >
+      {/* Stage first. Thumb rail only when there is room for it on the left
+          (~24rem); stacked layouts rely on chevrons and carousel progress. */}
       <div
         className={cn(
           "flex w-full flex-col gap-4",
-          many && "md:flex-row md:items-start md:gap-4",
+          many &&
+            "@min-[24rem]:flex-row @min-[24rem]:items-start @min-[24rem]:gap-4",
         )}
       >
-        {many ? (
-          <div className="flex shrink-0 gap-2 overflow-x-auto overscroll-x-contain md:flex-col md:overflow-visible">
-            {images.map((thumb, thumbIndex) => {
-              const selected = thumbIndex === safeIndex;
-              return (
-                <button
-                  aria-current={selected ? "true" : undefined}
-                  aria-label={`Thumbnail: ${thumb.alt}`}
-                  className={cn(
-                    "relative size-16 shrink-0 overflow-hidden rounded-(--radius-xl) bg-background-subtle outline-none transition-[border-color] focus-visible:ring-3 focus-visible:ring-ring/50 md:size-20",
-                    selected
-                      ? "border-2 border-primary-border"
-                      : "border border-border",
-                  )}
-                  key={`${thumb.src}:${thumb.alt}`}
-                  onClick={() => goTo(thumbIndex)}
-                  type="button"
-                >
-                  <img
-                    alt=""
-                    className="size-full object-contain"
-                    src={thumb.src}
-                  />
-                </button>
-              );
-            })}
-          </div>
-        ) : null}
-
         <div className="flex min-w-0 flex-1 flex-col gap-2">
           <section
             aria-label={copy.images}
@@ -354,6 +328,35 @@ function ListingLotGallery({
             </CarouselProgress>
           ) : null}
         </div>
+
+        {many ? (
+          <div className="hidden shrink-0 gap-2 overflow-x-auto overscroll-x-contain @min-[24rem]:order-first @min-[24rem]:flex @min-[24rem]:flex-col @min-[24rem]:overflow-visible">
+            {images.map((thumb, thumbIndex) => {
+              const selected = thumbIndex === safeIndex;
+              return (
+                <button
+                  aria-current={selected ? "true" : undefined}
+                  aria-label={`Thumbnail: ${thumb.alt}`}
+                  className={cn(
+                    "relative size-16 shrink-0 overflow-hidden rounded-(--radius-xl) bg-background-subtle outline-none transition-[border-color] focus-visible:ring-3 focus-visible:ring-ring/50 @min-[24rem]:size-20",
+                    selected
+                      ? "border-2 border-primary-border"
+                      : "border border-border",
+                  )}
+                  key={`${thumb.src}:${thumb.alt}`}
+                  onClick={() => goTo(thumbIndex)}
+                  type="button"
+                >
+                  <img
+                    alt=""
+                    className="size-full object-contain"
+                    src={thumb.src}
+                  />
+                </button>
+              );
+            })}
+          </div>
+        ) : null}
       </div>
     </div>
   );
