@@ -1641,7 +1641,7 @@ its globs over `packages/*/frontend/src/**` and
 `packages/*/admin-frontend/src/**` already read this group's stories. Stage
 (b).
 
-- [ ] 25.1 Cover the home and the three steps: the signed-out price read, the
+- [x] 25.1 Cover the home and the three steps: the signed-out price read, the
       home still reading and the home that cannot read, the wizard's step
       marker, the cards step's refusals, the cap and the ceiling, the level
       picker's closed reasons and the review's tick
@@ -1678,11 +1678,11 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-35`,
       `grade10-site-grading-submission-plan-SC-58`,
       `grade10-site-grading-submission-plan-SC-60`)
-- [ ] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
+- [x] 25.2 Write `core/api/GradingApi.ts` over the site's `gradingTrpcClient`,
       lifting the raw token out of the address's `#t=` fragment and sending it
       as a header, with the fixture transport and its fixture state beside it,
       so groups 25 to 30 run against no worker
-- [ ] 25.3 Build the grading home over `GradingFeeSheet`: the lead and the four
+- [x] 25.3 Build the grading home over `GradingFeeSheet`: the lead and the four
       how-it-works lines, every grader with active levels, the price read
       before a name is given, the counter line for a card above the top
       ceiling, the submissions list still reading, unreadable, or empty
@@ -1693,7 +1693,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-47`,
       `grade10-site-grading-submission-plan-SC-07`,
       `grade10-site-grading-submission-plan-SC-48`)
-- [ ] 25.4 Build the wizard over `WizardRail`'s three steps: the step marker,
+- [x] 25.4 Build the wizard over `WizardRail`'s three steps: the step marker,
       the contact details filled in for a signed-in collector, the cards step
       opening with nothing on it, a card removed leaving the rest, a card with
       no declared value and an empty list each holding the step, the minimum
@@ -1706,7 +1706,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-14`,
       `grade10-site-grading-submission-plan-SC-52`,
       `grade10-site-grading-submission-plan-SC-51`)
-- [ ] 25.5 Read the cap and the ceilings on the list: the twenty-first card
+- [x] 25.5 Read the cap and the ceilings on the list: the twenty-first card
       leaving Bulk the only level open, twenty leaving every level open, the
       hundredth added at Bulk's cap, the card past it refused rather than
       dropped, and a card above Bulk's ceiling moved into a second submission
@@ -1715,7 +1715,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-55`,
       `grade10-site-grading-submission-plan-SC-56`,
       `grade10-site-grading-submission-plan-SC-22`)
-- [ ] 25.6 Build the service step over `GradingLevelPicker`: one grader and one
+- [x] 25.6 Build the service step over `GradingLevelPicker`: one grader and one
       level for the whole list, a level closed by a declared value naming the
       card and one closed by the count naming the count, every level closed
       sending the collector to the counter, no estimate before a level is
@@ -1726,7 +1726,7 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-26`,
       `grade10-site-grading-submission-plan-SC-27`,
       `grade10-site-grading-submission-plan-SC-57`)
-- [ ] 25.7 Build the review step over `GradingReview`: the three totals, the
+- [x] 25.7 Build the review step over `GradingReview`: the three totals, the
       per-card warning with both prices and none where no card is above a
       ceiling, the five good-to-know lines, booking refused until the statement
       is ticked, and Save for later taking no tick
@@ -1738,9 +1738,9 @@ its globs over `packages/*/frontend/src/**` and
       `grade10-site-grading-submission-plan-SC-58`); the warning compares
       the paste's PSA 10 sale in HKD, 24.14's, with the ceiling
       (`grade10-site-grading-submission-plan-SC-60`)
-- [ ] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
+- [x] 25.8 Write the stories for `Grading/Home`, `Grading/Plan/PlanWizard` and
       the paste sheet, one per distinct layout, each with `surface: site`
-- [ ] 25.9 Verify: `pnpm run test`,
+- [x] 25.9 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
@@ -1749,7 +1749,7 @@ its globs over `packages/*/frontend/src/**` and
 Needs group 10's exports and group 25's `GradingApi` and fixture transport.
 Stage (b).
 
-- [ ] 26.1 Cover the picker and the booked page: the four Before you come
+- [x] 26.1 Cover the picker and the booked page: the four Before you come
       items, the Bulk duration, the vault line, the acts withdrawn once the
       visit has started, and the page that reads booked until the diary answers
       (`grade10-site-grading-dropoff-booking-SC-12`,
@@ -1757,24 +1757,24 @@ Stage (b).
       `grade10-site-grading-dropoff-booking-SC-14`,
       `grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.2 Compose the picker from `BookingLocationPicker` and
+- [x] 26.2 Compose the picker from `BookingLocationPicker` and
       `BookingSlotPicker` for a first booking and for a move alike, with
       `BatchLine` beside the picked day carrying the cut-off, the ship day and
       the day back
-- [ ] 26.3 Build the booked page over `BookingConfirmation` and
+- [x] 26.3 Build the booked page over `BookingConfirmation` and
       `BookingManageCard`: the visit, the four items to bring, the calendar
       file at `visit.ics`, the Bulk visit's about-45-minutes line, and the line
       saying a card that is not being graded can be vaulted on the same visit
       (`grade10-site-grading-dropoff-booking-SC-12`,
       `grade10-site-grading-dropoff-booking-SC-13`,
       `grade10-site-grading-dropoff-booking-SC-14`)
-- [ ] 26.4 Offer neither move nor cancel once the visit has started, and read
+- [x] 26.4 Offer neither move nor cancel once the visit has started, and read
       the visit as booked until the diary answers it missed
       (`grade10-site-grading-dropoff-booking-SC-17`,
       `grade10-site-grading-dropoff-booking-SC-26`)
-- [ ] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
+- [x] 26.5 Write the stories for `Grading/Dropoff/Dropoff Booking` and
       `Grading/Dropoff/Dropoff Booked`, each with `surface: site`
-- [ ] 26.6 Verify: `pnpm run test`,
+- [x] 26.6 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
 
@@ -1783,7 +1783,7 @@ Stage (b).
 Needs group 10's exports and group 25's `GradingApi` and fixture transport.
 Stage (b).
 
-- [ ] 27.1 Cover the page per status: the word, the chip and the rail, the
+- [x] 27.1 Cover the page per status: the word, the chip and the rail, the
       grader block, the cards, the pickup card, the named collector, the
       collected record, and the acts each status offers
       (`grade10-site-grading-submission-lifecycle-SC-02`,
@@ -1808,7 +1808,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-45`,
       `grade10-site-grading-submission-lifecycle-SC-50`,
       `grade10-site-grading-submission-lifecycle-SC-53`)
-- [ ] 27.2 Render `GradingOwnershipChip` and `GradingStatusRail` from
+- [x] 27.2 Render `GradingOwnershipChip` and `GradingStatusRail` from
       `submissionStanding`, deriving nothing on the page: the rail at the
       status's stage, the chip naming the grader while the cards are away, and
       an ended submission staying where it ended
@@ -1817,7 +1817,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-05`,
       `grade10-site-grading-submission-lifecycle-SC-06`,
       `grade10-site-grading-submission-lifecycle-SC-53`)
-- [ ] 27.3 Build `GraderStagesCard`: the grader's stage in its own words, the
+- [x] 27.3 Build `GraderStagesCard`: the grader's stage in its own words, the
       estimate counted from the day the batch left, the running-late line past
       it, a re-estimated day shown the day it is set, and nothing to do while
       the cards are away
@@ -1826,7 +1826,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-09`,
       `grade10-site-grading-submission-lifecycle-SC-10`,
       `grade10-site-grading-submission-lifecycle-SC-11`)
-- [ ] 27.4 Render the cards over `GradingCardRecord` and `GradingGradeCards` —
+- [x] 27.4 Render the cards over `GradingCardRecord` and `GradingGradeCards` —
       one outcome line per card, three ready while one did not come back — and
       offer a review as a new submission
       (`grade10-site-grading-submission-lifecycle-SC-12`,
@@ -1834,7 +1834,7 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-14`,
       `grade10-site-grading-submission-lifecycle-SC-17`,
       `grade10-site-grading-submission-lifecycle-SC-19`)
-- [ ] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
+- [x] 27.5 Render `GradingPickupCard` and `GradingNamedCollector` on a ready
       submission: the code, the hours and the one figure to settle or none, a
       name saved and replaced, an empty name naming nobody, Remove leaving
       nobody named, and naming refused once the cards are collected
@@ -1845,21 +1845,21 @@ Stage (b).
       `grade10-site-grading-submission-lifecycle-SC-33`,
       `grade10-site-grading-submission-lifecycle-SC-55`,
       `grade10-site-grading-submission-lifecycle-SC-56`)
-- [ ] 27.6 Build `WhatNextCard` and `YourDataLine` on the collected page, the
+- [x] 27.6 Build `WhatNextCard` and `YourDataLine` on the collected page, the
       record carrying the grade, the cert and the papers, and no collected slab
       reading as the shop's stock
       (`grade10-site-grading-submission-lifecycle-SC-44`,
       `grade10-site-grading-submission-lifecycle-SC-45`)
-- [ ] 27.7 Offer each status its own acts and no others, through `useConfirm`
+- [x] 27.7 Offer each status its own acts and no others, through `useConfirm`
       where the act cannot be taken back
       (`grade10-site-grading-submission-lifecycle-SC-50`)
-- [ ] 27.8 Write the stories for `Grading/Submission/Submission Page`, one per
+- [x] 27.8 Write the stories for `Grading/Submission/Submission Page`, one per
       distinct layout, the varied value an args control, each with
       `surface: site`
-- [ ] 27.9 Verify: `pnpm run test`,
+- [x] 27.9 Verify: `pnpm run test`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-- [ ] 27.10 Build grading's sign page at `/grading/sign`, mounting
+- [x] 27.10 Build grading's sign page at `/grading/sign`, mounting
       `CeremonyFlow` with `host: "grading"` and grading's ceremony words, one
       refusal per code: the postal address line on the agreement, the named
       person's name held and not taking an edit, and a used link pointing at
@@ -1868,11 +1868,11 @@ Stage (b).
       `grade10-site-grading-counter-documents-SC-11`,
       `grade10-site-grading-counter-documents-SC-17`,
       `grade10-site-grading-counter-documents-SC-29`)
-- [ ] 27.11 Show a payout on the card it pays for: the amount, the route, the
+- [x] 27.11 Show a payout on the card it pays for: the amount, the route, the
       day it was recorded, and a reversal once the card turns up
       (`grade10-site-grading-submission-lifecycle-SC-41`,
       `grade10-site-grading-submission-lifecycle-SC-43`)
-- [ ] 27.12 Build the page's own `SubmissionAccess` from the address's `#t=`
+- [x] 27.12 Build the page's own `SubmissionAccess` from the address's `#t=`
       fragment with `core/api/accessToken.ts`'s `accessFromHash`
       (`accessTokenFromHash` underneath it), sent as the access header on
       every read and act the page makes — the token group 25.2 lifts out is
@@ -1882,7 +1882,7 @@ Stage (b).
 
 Needs group 10's exports and group 25's fixture transport. Stage (b).
 
-- [ ] 28.1 Cover the console's reads and tabs: a view with nothing in it, the
+- [x] 28.1 Cover the console's reads and tabs: a view with nothing in it, the
       header and the four tabs, the money tab against the till, the id that
       resolves to nothing, and every act the operator's grants withhold
       (`grade10-admin-grading-counter-SC-05`,
@@ -1895,11 +1895,11 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-82`,
       `grade10-admin-grading-counter-SC-83`,
       `grade10-admin-grading-counter-SC-100`)
-- [ ] 28.2 Build `QueuePanel` over `@grade10/frontend-console`: the seven
+- [x] 28.2 Build `QueuePanel` over `@grade10/frontend-console`: the seven
       `Choice`s with their counts, the Today strip, the four `Figure` tiles,
       the table with the badge column and the collector's status word, and a
       cut with nothing in it saying so (`grade10-admin-grading-counter-SC-05`)
-- [ ] 28.3 Build `SubmissionPanel`: the header answering the phone, the cards
+- [x] 28.3 Build `SubmissionPanel`: the header answering the phone, the cards
       tab carrying each card's record, the money tab reading the till's figure,
       the documents and timeline tabs, staff reaching the collector from the
       header, and a submission id that resolves to nothing saying so; the
@@ -1914,19 +1914,19 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-52`,
       `grade10-admin-grading-counter-SC-53`,
       `grade10-admin-grading-counter-SC-94`)
-- [ ] 28.4 Offer only the acts the operator's grants and the submission's
+- [x] 28.4 Offer only the acts the operator's grants and the submission's
       status allow, keep Cancel off a submission whose cards have left, offer
       the acts of every grant an operator holds, and read the worker's refusal
       where a stale screen offered one (`grade10-admin-grading-counter-SC-75`,
       `grade10-admin-grading-counter-SC-82`,
       `grade10-admin-grading-counter-SC-83`,
       `grade10-admin-grading-counter-SC-100`)
-- [ ] 28.5 Write the stories for `Grading/Admin/Queue` and
+- [x] 28.5 Write the stories for `Grading/Admin/Queue` and
       `Grading/Admin/Submission`, each with `surface: console`
-- [ ] 28.6 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
+- [x] 28.6 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-- [ ] 28.7 Build `PayoutDialog`, `WaiveUpchargeDialog` and the approvals
+- [x] 28.7 Build `PayoutDialog`, `WaiveUpchargeDialog` and the approvals
       waiting on a second person: the recorder asks with a reason, a second
       `grading:approve` holder approves on their own console, the recorder's
       own request is never theirs to approve, and the card shows its payout,
@@ -1936,14 +1936,14 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-61`,
       `grade10-admin-grading-counter-SC-95`,
       `grade10-admin-grading-counter-SC-97`)
-- [ ] 28.8 Build the documents tab's list, each paper with its fingerprint,
+- [x] 28.8 Build the documents tab's list, each paper with its fingerprint,
       Send again where its letter failed, and a sealed copy shown on the iPad
       or its link copied (`grade10-admin-grading-counter-SC-48`), and
       `ReversalDialog`,
       which asks for a payout's reversal the way the payout is asked
       (`grade10-admin-grading-counter-SC-49`,
       `grade10-admin-grading-counter-SC-64`)
-- [ ] 28.9 Build `WithdrawDialog` on the submission's cards: a card withdrawn
+- [x] 28.9 Build `WithdrawDialog` on the submission's cards: a card withdrawn
       with its line refunded and its receipt issued, and the act gone once
       the batch closes (`grade10-admin-grading-counter-SC-54`,
       `grade10-admin-grading-counter-SC-55`)
@@ -1952,20 +1952,20 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
 
 Needs group 10's exports and group 25's fixture transport. Stage (b).
 
-- [ ] 29.1 Cover both runbooks: the day's booking opening its submission, the
+- [x] 29.1 Cover both runbooks: the day's booking opening its submission, the
       till step held until the agreement is sealed, a second submission on one
       visit running its own hand-in, and each step carrying its button or the
       reason it waits (`grade10-admin-grading-counter-SC-14`,
       `grade10-admin-grading-counter-SC-18`,
       `grade10-admin-grading-counter-SC-21`,
       `grade10-admin-grading-counter-SC-42`)
-- [ ] 29.2 Build `IntakeRunbook` as a `CheckList` of six `Check`s: the day's
+- [x] 29.2 Build `IntakeRunbook` as a `CheckList` of six `Check`s: the day's
       booking opening its submission, the cards table with Present, Condition,
       the photograph pair, the level check and Refuse per row, Add a card
       written at the desk with no paste, the fee panel, the sign panel and the
       check-in panel (`grade10-admin-grading-counter-SC-14`,
       `grade10-admin-grading-counter-SC-21`)
-- [ ] 29.3 Open the till step only on the sealed agreement, and hand the next
+- [x] 29.3 Open the till step only on the sealed agreement, and hand the next
       step on after each act; the sign step shows a decline and offers the
       agreement again, offers Show on iPad and Copy link, shows the sealed
       copies' fingerprints, and says when nothing has been sealed yet
@@ -1974,9 +1974,9 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-SC-47`,
       `grade10-admin-grading-counter-SC-48`,
       `grade10-admin-grading-counter-SC-93`)
-- [ ] 29.4 Build `RefuseCardDialog` with the three reasons, the
+- [x] 29.4 Build `RefuseCardDialog` with the three reasons, the
       collector's-words field and the consequence `Notice`
-- [ ] 29.5 Build `HandbackRunbook` as six `Check`s: the code and name step, the
+- [x] 29.5 Build `HandbackRunbook` as six `Check`s: the code and name step, the
       identity glance, the money panel, the items table with Handed over and
       Vault instead per row, the sign panel and the photographs
       (`grade10-admin-grading-counter-US4-TC1-1`,
@@ -1984,13 +1984,13 @@ Needs group 10's exports and group 25's fixture transport. Stage (b).
       `grade10-admin-grading-counter-US4-TC5-1`,
       `grade10-admin-grading-counter-US4-TC7-1`,
       `grade10-admin-grading-counter-US4-TC9-1`)
-- [ ] 29.6 Write the stories for `Grading/Admin/Intake` and
+- [x] 29.6 Write the stories for `Grading/Admin/Intake` and
       `Grading/Admin/Handback`, each with `surface: console`, one per States
       row of the intake and hand-back runbooks
-- [ ] 29.7 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
+- [x] 29.7 Verify: `pnpm run test`, `pnpm run check:admin-bundle`,
       `pnpm --filter @grade10/storybook run test:stories`,
       `pnpm run check:libs`, `pnpm run typecheck`, `pnpm run lint`
-- [ ] 29.8 Start a walk-in at the desk in `IntakeRunbook`: a submission opened
+- [x] 29.8 Start a walk-in at the desk in `IntakeRunbook`: a submission opened
       with the collector there, its cards added one at a time, and handed in
       from the same runbook with the fee sheet pinned at the hand-in
       (`grade10-admin-grading-counter-SC-15`)
