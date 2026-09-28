@@ -51,6 +51,7 @@ A page over the budget is the expansion, not the essence: `pnpm check:manual` wa
 | A requirement, state behavior, accessibility obligation, or export contract changes | The page's 🚧 line, then the delta in the change | The spec moves only at archive |
 | Another active change already folds the same requirement | That change is extended or superseded, never doubled | Whichever archives second reverts the first |
 | A technical refactor changes no product-visible behavior | Change only, with no delta and no page edit | Nothing the product should be has changed |
+| The code does not do what is already settled | No change: a `fix` commit where the code is wrong, per [Bug Fixes](bug-fixes.md) | The fix restores what the product should be |
 | The rationale for a decision changes but the behavior does not | The page's product-decisions block | Nothing testable moved |
 | A change is complete | Fold the deltas into `openspec/specs/`, take the 🚧 marks off the page, then archive | The spec must describe what runs once delivery history moves to archive |
 
