@@ -70,6 +70,10 @@ None.
   configuration and dashboard setup are release-gated.
 - **Packages** - No new production dependency is proposed.
 
+No domain impact: the checkout journeys do not intersect any existing trace
+in `grade10-site/store/domain-tcs.md`; checkout owns its payment lifecycle and
+carrier cases.
+
 ## Open questions
 
 None that change the product contract. Exact Shopify dashboard menu names and
