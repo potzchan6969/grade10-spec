@@ -39,11 +39,12 @@ imports, `yaml`, through the store's own `team-parse.mjs`, resolves from
 either repository's root. The store's four watched paths and the look
 patterns live in the engine, and are its look and merge paths when it runs
 in its own repository, the submodule included. The application's
-`design-override.config.json` holds one list of git pathspecs, `sites` -
+`design-override.config.json` holds a list of git pathspecs, `sites` -
 `apps/frontend/grade10`, `apps/frontend/zzz` and the `frontend` folders of
 `appointment`, `doc-sign`, `e-kyc`, `grade10-auction`, `grade10-auth`,
 `grade10-store`, `loyalty` and `vault` - read as the merge rule's paths
-there, with no look rule, and as the block check's roots. Anywhere else with
+there, with no look rule, and as the block check's roots, beside the block
+check's `exempt` listings. Anywhere else with
 no config, the engine exits 2, naming the file. The team map is the engine's own store's
 `docs/prds/team.yaml`, so the application reads its pinned copy. A copy per
 repository would drift the way the UI did.
@@ -136,18 +137,22 @@ for two rules: no import of a block-shaped primitive - `card`, `dialog`,
 `className` inside the opening tag of an element imported from
 `@grade10/ui`, found by scanning the tag to its closing `>` outside braces and strings, and
 through `import { X as Y }`. It
-exports its rule over `(path, text)` and its `EXEMPT` map, and walks files
+exports its rule over `(path, text)` and over the listings, and walks files
 only when run: the working tree in `check:libs`, and otherwise a tree with
 `--rev <tree-ish>` - `$(git write-tree)` from `commit-msg`, each pushed tip
-from `pre-push` - read through `git ls-tree -r` and `git cat-file`. A
-page that rebuilds a block on purpose is an `EXEMPT` entry with its reason,
+from `pre-push` - read through `git ls-tree -r -z` and `git cat-file`, the
+config at that tree included. A
+page that rebuilds a block on purpose is an `exempt` entry in
+`design-override.config.json` with its reason,
 covering the whole page; today's rebuilt pages, among them
 `AuctionWinnerOrderPage.tsx`, `OrderDetailsPage.tsx` and
 `AccountAuctionRecordPage.tsx`, are listed so each is visible debt. An entry
 with an empty reason, or naming a page that is gone or rebuilds nothing,
 fails the check. A block rebuilt from plain elements, as
 `ListingCatalogueCard.tsx` rebuilds a card, is not seen and stays with
-review. Measured on September's `main`, 24 commits added such an
+review. In `check:libs` the check also holds `sites` to exactly each
+`apps/frontend/*` and the `packages/*/frontend` packages those apps depend
+on, so a new site package cannot go unread. Measured on September's `main`, 24 commits added such an
 import. Folding it into `check-frontend-layers.mjs` was rejected: that
 check's roots are the apps, and widening them would hold the site packages
 to layer rules written for apps.
@@ -160,11 +165,11 @@ commits in CI are read by the report rather than stopped with no person to
 ask; the tests that install run with `CI` cleared. `.githooks/commit-msg` and `.githooks/pre-push` are POSIX `sh` calling
 Node. When the store's engine is missing under `external/grade10-spec`, the
 application's hooks fail and name `git submodule update --init
-external/grade10-spec`.
+external/grade10-spec`, then `pnpm install`.
 
 **`main` posts a commit comment.** The workflow on push to `main` in each
-repository checks out with `fetch-depth: 0` (and `submodules: true` in the
-application) and `permissions: contents: write`, then runs `report.mjs`. It
+repository checks out with `fetch-depth: 0` (the application's
+`setup-workspace` action fetching the store) and `permissions: contents: write`, then runs `report.mjs`. It
 posts on each commit that stops, with or without the line, mentioning every
 `design` handle and listing the lines. A comment carries the marker
 `<!-- design-override -->`, and a commit that already has one is skipped, so
@@ -174,7 +179,7 @@ a re-run posts nothing twice. The report refuses a shallow clone, naming
 **Instructions are one rule in each `AGENTS.md`.** Under the heading
 `Design Override`: implementation keeps the agreed look; a missing state or
 variant is the designer's; a stop is shown to the person, and the
-`Design-Override:` line or an `EXEMPT` reason is written only on their yes;
+`Design-Override:` line or an `exempt` reason is written only on their yes;
 `--no-verify` is never used. `workflow-build`, `fix-bug` and
 `frontend-structure` link that heading rather than restate it.
 
@@ -185,8 +190,10 @@ case, each a `git init` in a temporary directory with
 `GIT_CONFIG_GLOBAL=/dev/null`, `GIT_CONFIG_NOSYSTEM=1` and fixed people and
 dates. The report's tests put a stub `gh` first on `PATH`. #667, #185, #547
 and `c865b8565` are rebuilt as minimal commits. In the application,
-`scripts/checks/test/check-store-blocks.test.mjs` and
-`scripts/checks/test/githooks.test.mjs` run in `check:libs`.
+`scripts/checks/check-store-blocks.test.mjs` holds the block check's rule
+and listings, and `scripts/githooks/design-override.test.mjs` runs the hooks
+in a throwaway application with a throwaway store as its submodule, set by
+the application's own `prepare`.
 
 ## Migration Plan
 
