@@ -220,13 +220,15 @@ and item facts,
 4. Activate Add to cart.
 5. Inspect the purchase controls while the add is pending.
 6. Wait for the add to settle.
+7. Inspect the cart drawer and the quantity stepper.
 
 **Expected Results:**
 
-* While the add is pending, the stepper and add control are disabled and the action shows its loading state.
+* While the add is pending, the stepper and add control are disabled and the action shows its loading state labelled for adding.
 * The page remains at <product_5>'s product address.
 * The page offers no size, option or variant choice.
-* After the add settles, the cart records quantity <chosen quantity_5> for <product_5> and the action reports that the item was added.
+* After the add settles, the cart records quantity <chosen quantity_5> for <product_5>, the cart drawer opens, and the quantity stepper resets to one.
+* The page shows no on-page added confirmation.
 
 ---
 

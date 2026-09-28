@@ -147,11 +147,12 @@ SHALL restore the collapsed state without navigating away.
 The product page SHALL render a quantity stepper defaulting to one for the
 product's one sellable item. The stepper SHALL clamp to that item's finite
 available quantity when one is supplied. While an add is pending, the stepper
-and add action SHALL be disabled and the action SHALL show its loading state.
-After a successful add, the page SHALL remain on the product address, report
-the added state, and reflect the resulting cart quantity. If the product item
-is not available for sale, the action SHALL be disabled and labelled as sold
-out.
+and add action SHALL be disabled and the action SHALL show its loading state
+labelled for adding. After a successful add, the page SHALL remain on the
+product address, open the cart drawer, reset the quantity stepper to one, and
+reflect the resulting cart quantity. The page SHALL NOT show an on-page added
+confirmation. If the product item is not available for sale, the action SHALL
+be disabled and labelled as sold out.
 
 #### Scenario: grade10-site-store-product-page-SC-17 - A collector adds a chosen quantity in place
 **Serves:** grade10-site-store-product-page-US-08 - Collector adds a product quantity from the product page
@@ -159,9 +160,12 @@ out.
 - **GIVEN** a product with one available sellable item and finite quantity 3
 - **WHEN** a collector changes the stepper to 2 and activates Add to cart
 - **THEN** the pending action disables the stepper and add control
+- **AND** the add control shows its loading label
 - **AND** the page remains on the product address
 - **AND** the cart records quantity 2 for the product's sellable item after the add settles
-- **AND** the action reports that the item was added
+- **AND** the cart drawer opens
+- **AND** the quantity stepper resets to one
+- **AND** the page shows no on-page added confirmation
 
 #### Scenario: grade10-site-store-product-page-SC-18 - A sold-out product offers no add action
 **Serves:** grade10-site-store-product-page-US-09 - Collector meets a sold-out product
