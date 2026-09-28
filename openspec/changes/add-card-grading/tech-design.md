@@ -329,12 +329,12 @@ this is how the paid order reaches the submission.
   `storage/areas.ts` and the two guard migrations are the vault's files in
   the grading schema
 - **The SPA's client routes by host** — `createDocSignCoreModule` takes
-  `ceremonyClients: Record<Host, CeremonyClient>` and binds `CeremonyClient`
-  to a `RoutedCeremonyClient`. The key is the service id the container already
-  resolves `config.services.<id>` by, `"vault" | "grading"`, supplied by the
-  caller and generic inside `@grade10/doc-sign-frontend`, which depends on no
-  app-env. `CeremonyFlow` takes `host` once at mount and doc-sign's own React
-  context carries it to the use cases, so no `CeremonyClient` method gains a
+  `ceremonyClients: Record<CeremonyHost, CeremonyClient>` and binds
+  `CeremonyClient` to a `RoutedCeremonyClient`. `CeremonyHost` is a string key
+  the caller supplies — the service id the container already resolves
+  `config.services.<id>` by, `"vault"` or `"grading"` — so
+  `@grade10/doc-sign-frontend` depends on no app-env. `CeremonyFlow` takes
+  `host` once at mount and doc-sign's own React context carries it to the use cases, so no `CeremonyClient` method gains a
   parameter and the fixtures are unchanged. One container, one module list;
   `pages/grading/SignPage.tsx` is the vault's file with grading's
   `RefusalWords` over `grading.ceremony`
@@ -615,13 +615,34 @@ answering the question it was for.
   email must equal `submissions.email`. No TTL — the grant lives from
   `plan_saved` to `collected` — and revocation is a re-mint the `handed_in`
   and `ready` letters carry
-- Site surfaces: `grading` (`/grading`, session, `ask`), `gradingSubmission`
-  (`/grading/submissions/:submissionId`, `open`), `gradingSign`
-  (`/grading/sign`, `open`), each on a new `grading` gate at
-  `deployEnv !== "production"`, as the vault's
+- **Every grading address.** The site's `grading` (`/grading`) is session and
+  `open` first, then `prerendered` and public as `book` is: its head meta, the
+  `/tc` and `/sc` variants, a sitemap row and an anonymous smoke, landing after
+  the opened addresses. `gradingNew` (`/grading/new`, session, `open`) is the
+  wizard at its own address, as the vault's `vaultNew` is. `gradingEdit`
+  (`/grading/submissions/:submissionId/edit`, session, `open`) is the same
+  wizard opened on a kept plan, carrying `#t=` as the submission page does; it
+  saves the list in place with Save changes, never a second plan, at `planned`
+  and `booked`, and has no Book step at `booked`. `gradingSubmission`
+  (`/grading/submissions/:submissionId`, `open`) books and joins a drop-off in
+  place, so no booking address exists and `bookHref` goes; the home's Start,
+  `startHref`, `editHref` and the not-found link point at `gradingNew` and
+  `gradingEdit`. `gradingSign` is `/grading/sign`, `open`. Each sits on a new
+  `grading` gate, as the vault's: open on development, staging and staging-2,
+  shut on uat and production. The console's `grading`, `gradingSubmission`,
+  `gradingBatches`, `gradingBatch` and `gradingSettings` gain `gradingWalkIn`
+  (`/grading/walk-in`), which renders `IntakeRunbook` with no submission behind
+  a Walk-in desk; the runbook calls `onStarted(id)` once it mints the
+  submission, and the app replaces the address with the submission's at
+  `?view=runbook`, so a reload keeps it. The console's submission address
+  opens the runbook the counter acts offer — `COUNTER_ACTS.handIn` the
+  hand-in, `COUNTER_ACTS.collect` the hand-back — and the record otherwise;
+  `?view=record|runbook` switches, one press from either view, and the page
+  branches on the acts, never on a status literal, as `withheldActs.ts` does.
+  A `planned` list and a reloaded walk-in reach the hand-in through it
 - **What the gate does, and what it does not.** `gatesFor` is read at build
   time by `src/routes.ts`, `react-router.config.ts` and the serving worker, so
-  the site carries no grading address off production; the console declares no
+  the site carries no grading address where the gate is shut; the console declares no
   environment gate and its grading section is grant-gated only, on
   `ADMIN_PERMISSIONS["admin.queue"]`; the gateway routes `/grading/*` and
   `/api/sign` whatever the gate says, which is correct — the pages are
@@ -631,7 +652,8 @@ answering the question it was for.
   `gatesFor`, once Q48's readiness list is complete
 - `packages/grading/admin-frontend/src/features/{queue,handin,batches,receiving,handback,submission,settings,notice}`
   composing `@grade10/frontend-console`; admin surfaces `grading`,
-  `gradingSubmission`, `gradingBatches`, `gradingBatch`, `gradingSettings`
+  `gradingSubmission`, `gradingBatches`, `gradingBatch`, `gradingSettings`,
+  `gradingWalkIn`
 - **Which events a collector sees** is derived at the read, never stored:
   `STAFF_ONLY_EVENT_KINDS` and `isCustomerEvent` in
   `packages/grading/contracts`, as the vault's `vocabulary.ts` holds them
@@ -939,7 +961,7 @@ receipt, the sealed agreement and the re-minted access link.
 | Surface | Change |
 | --- | --- |
 | grading tRPC, session tier | `submissions.{plan,paste,update,book,reschedule,cancelVisit,join,cancel,detail,list,nameCollector,removeCollector,documents,history}`, `quotes.{feeSheet,estimate}` (public), `erasure.holds` (authed) |
-| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
+| admin tier, `elevatedProcedure` per grant | `admin.{savePlan,queue,queueCounts,tiles,batchTiles,batches,detail,shops,checkCard,addCard,refuseCard,mintAgreement,recordFeePaid,handIn,cancel,withdrawCard,recordRefund,openBatch,shipForm,shipBatch,recordBatchStage,reestimateBatch,receiving,receiveBatch,enterManifest,enterInvoice,resolveManifestLine,addManifestLine,scanCard,recordException,finishReceiving,matchPickupCode,recordSettlement,tickItem,mintHandBack,collect,noticeForm,recordNoticePosted,recordPayout,reversePayout,waiveUpcharge,vaultCard,settings,updateSetting,feeSheet,updateFeeSheet,diaryServices,requestApproval,pendingApprovals,approveRequest,resendNotification,resendDocument,documents,signingLink}`, `erasure.erase`, `audit.*`; `contracts/src/permissions.ts` holds each one's grant |
 | HTTP on the grading worker | `/api/sign/*`, `POST /api/submissions/:id/photos`, `GET /api/submissions/:id/photos/:photoId` (one photograph by its id, `no-store`, from `ITEM_PHOTOS`, on the collector's own access or `grading:read`), `GET /api/submissions/:id/documents/:documentId`, `GET /api/submissions/:id/visit.ics`, `GET /api/documents/verify/:sha256`, `/dev/*` |
 | `@grade10/store-contracts` | new `GradingStoreServiceApi.orderByName` and `getGradingStoreService` on `.`, beside the inventory precedent; `GradingStoreService` on the store worker, with the `orders.order_name` index |
 | `@grade10/inventory-contracts` | new `GradingInventoryServiceApi.{matchCards,referenceSales}`; `GradingInventoryService` |
@@ -948,6 +970,13 @@ receipt, the sealed agreement and the re-minted access link.
 | `@grade10/doc-sign-frontend` | **BREAKING** `createDocSignCoreModule({ ceremonyClients })`; `CeremonyFlow` takes `host` at mount |
 | `@grade10/app-env` | `ServiceId` and `BRAND_SERVICES.grade10` gain `grading`; `RETENTION_CLASSES` gains `case_records`; `consentCopy(brand)`, the e-sign wording the vault and grading both serve, lifted from the vault |
 | `@grade10/auth-contracts` | `grading:read`, `grading:operate`, `grading:approve` |
+
+`admin.cancel` is the console's Cancel: `{ submissionId }`, on
+`grading:operate`, running from `SUBMISSION_MOVES.cancel.from` through the
+collector's `cancelSubmission` with the operator acting, the drop-off going
+with it, and filed under the submission on the audit chain.
+`COUNTER_ACTS.cancel` is that same set, so `SubmissionPanel` offers Cancel,
+behind `useConfirm`, exactly where the worker runs it.
 
 ### The Batches, Receiving and Notice Procedures
 

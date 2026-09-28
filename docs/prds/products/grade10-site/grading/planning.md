@@ -109,6 +109,9 @@ to book later.
 - 🚧 **Finish later** — the plan is kept under the email given and its link
   is emailed the moment the collector leaves; it opens on any device with no
   account
+- 🚧 **Changing a kept list** — Edit the list opens the wizard on the kept
+  plan and saves the same submission, never a second one; once a drop-off is
+  booked the wizard has no Book step
 - 🚧 **Signed in** — the home lists every submission under the email, open
   and closed, each opening its page; signing in is the same email and no
   password

@@ -44,23 +44,23 @@ the pages carry is the product; this file carries the surface.
 | Screen | Board | Route | Composes |
 | --- | --- | --- | --- |
 | Grading home | `G16`, `G01` | `grade10.com/grading` | `GradingHome` → `GradingFeeSheet`, `GradingOwnershipChip`, `Card`, `List`, `EmptyState`, `Button`, `Link`, `Text` |
-| Plan wizard | `G02`, `G03`, `G04` | `/grading`, mounted by the home — ❓ the tech design fixes the step addresses | `PlanWizard` → `Stepper`, `Step`, `TextInput`, `GradingCardList`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `Alert`, `Button` |
+| Plan wizard | `G02`, `G03`, `G04` | `/grading/new`; a kept plan at `/grading/submissions/:submissionId/edit`, saved in place with Save changes, no Book step once booked | `PlanWizard` → `Stepper`, `Step`, `TextInput`, `GradingCardList`, `GradingPasteSheet`, `GradingLevelPicker`, `GradingReview`, `Alert`, `Button` |
 | Paste a list | `G17` | a sheet over the cards step | `GradingPasteSheet` → `Drawer`, `Textarea`, `List`, `Alert`, `Button` |
-| Book the drop-off | `G05` | from the review or the submission page — ❓ the tech design fixes the address | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Alert` for the batch line, `Text`, `Button` |
+| Book the drop-off | `G05` | in place on the submission page, reached from the review's Book | `DropoffBooking` → `BookingLocationPicker`, `BookingSlotPicker`, `Alert` for the batch line, `Text`, `Button` |
 | Drop-off booked | `G06` | on the submission page, after a booking | `DropoffBooked` → `BookingConfirmation`, `BookingManageCard`, `List`, `Alert`, `Link`, `Button` |
 | Submission page | `G07`–`G12`, `G13`, `G18` | `/grading/submissions/:submissionId` | `SubmissionPage` → `GradingStatusRail`, `GradingOwnershipChip`, `BookingManageCard`, `GradingCardRecord`, `GradingGradeCards`, `GradingPickupCard`, `GradingNamedCollector`, `GradingMoneyBlock`, `GradingUncollectedLadder`, `Card`, `Alert`, `Dialog`, `List`, `Link`, `Button`, `Text` |
 | Walk-in booking | none; `G00-Main` names it | `grade10.com/book` | the site's own booking flow, unchanged: the Grading visit is a listed service, and the visit it books is the diary's own, which grading never reads |
 | Submission agreement | `G14` | `/grading/sign#<token>` | `CeremonyFlow` → `PdfPageCanvas`, `SignatureField`, `RefusalNotice`; the template in `packages/grading/backend` |
 | Hand-back receipt | `G15`, `G18` | `/grading/sign#<token>` | the same ceremony with the receipt template |
 | Queue | `GA1` | `admin.grade10.com/grading` | `QueuePanel` → `SectionHeader`, `ChoiceList`, `Choice`, `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `StatusBadge`, `Badge`, `CursorPager`, `Button` |
-| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` at `booked` | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
+| Hand-in runbook | `GA2` | `/grading/submissions/:submissionId` while the hand-in is offered, or with `?view=runbook`; `/grading/walk-in` for a walk-in | `IntakeRunbook` → `CheckList`, `Check`, `Panel`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `TextField`, `Notice`, `Button`, `Link`, `Code` |
 | Refuse a card | `GA7` | dialog from the hand-in runbook | `RefuseCardDialog` → `FormDialog`, `ChoiceList`, `Choice`, `NotesField`, `Notice` |
 | Batches | `GA4` | `/grading/batches` | `BatchesPanel`, `ShipBatchForm`, `ReestimateDialog` → `Figure`, `Table`, `Row`, `Cell`, `At`, `Money`, `Status`, `CursorPager`, `CheckList`, `Check`, `ChoiceList`, `Choice`, `NotesField`, `TextField`, `DateField`, `MoneyField`, `FormDialog`, `Notice`, `Button` |
 | Receive a batch | `GA5` | `/grading/batches/:batchId/receive` | `ReceivePanel` → `SectionHeader`, `Figure`, `FilePicker`, `Search`, `Table`, `Row`, `Cell`, `Status`, `Notice`, `EntryList`, `Entry`, `FormDialog`, `Button` |
-| Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` at `ready` | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
-| One submission | `GA3` | `/grading/submissions/:submissionId` | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
+| Hand-back runbook | `GA6`, `G18` | `/grading/submissions/:submissionId` while the hand-back is offered, or with `?view=runbook` | `HandbackRunbook` → `CheckList`, `Check`, `Panel`, `TextField`, `Table`, `Row`, `Cell`, `Money`, `MediaFrame`, `Notice`, `Button`, `Link`, `Code` |
+| One submission | `GA3` | `/grading/submissions/:submissionId` while no runbook is offered, or with `?view=record`; one press from the runbook | `SubmissionPanel` → `Tabs`, `Tab`, `TabPanel`, `StatusBadge`, `Badge`, `Panel`, `EntryList`, `Entry`, `Table`, `Row`, `Cell`, `Money`, `At`, `FormDialog`, `MoneyField`, `DateField`, `NotesField`, `Notice`, `Button`, `Link` |
 | Written notice | none drawn; `GA1`'s Notice due badge and `M18` | dialog from the Ready view or the submission | `PostNoticeDialog` → `FormDialog`, `Text`, `DateField`, `TextField`, `Notice` |
-| Settings | none drawn; the console page's table | `/grading/settings` — ❓ the tech design fixes the address | `SettingsPanel` → `SectionHeader`, `Table`, `Row`, `Cell`, `SaveableField`, `MoneyField`, `PercentField`, `NumberField`, `FormDialog`, `Notice` |
+| Settings | none drawn; the console page's table | `/grading/settings` | `SettingsPanel` → `SectionHeader`, `Table`, `Row`, `Cell`, `SaveableField`, `MoneyField`, `PercentField`, `NumberField`, `FormDialog`, `Notice` |
 
 ## Components
 
@@ -669,7 +669,7 @@ Stories `grading-admin-intake-intake-runbook--`.
 | --- | --- | --- |
 | Header (`GA2`) | the summary, the id, the status word, declared in total, the visit in progress at the desk; the drop-off card with Move, Cancel visit, Open in diary | `grade10-admin-grading-counter-SC-14` |
 | Visit not started | step 1 offers Start at the desk; the rest wait | `grade10-admin-grading-counter-SC-14` |
-| Walk-in | no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-SC-15` |
+| Walk-in | the Walk-in desk at `/grading/walk-in`, no submission yet: the counter opens one at the desk and writes the list card by card with the collector, Add a card at a time and no paste, then hands it in from Not handed in yet | `grade10-admin-grading-counter-SC-15` |
 | Second submission on the visit | the other submission named under the visit; each runs its own runbook | `grade10-admin-grading-counter-SC-21` |
 | Cards table | per row: the card, declared with its reference, Present, Condition, the level check, Refuse; the photograph pair | `grade10-admin-grading-counter-SC-16` |
 | Card present | Present ticked; the photograph pair taken | `grade10-admin-grading-counter-SC-16` |
@@ -907,11 +907,7 @@ Stories `grading-admin-settings-settings-panel--`.
   owed (`decisions.md` Q75;
   `grade10-site-grading-submission-lifecycle-SC-58` and
   `grade10-admin-grading-counter-SC-89`)
-- **❓ Tech design** — the wizard's and the booking's addresses under
-  `/grading`, the settings page's address, the console feature that holds
-  the submission's tabs (`admin-frontend`'s code map names
-  `queue,intake,batches,receiving,handback,notice` and no `submission` or
-  `settings`), and the grading `RefusalWords` for the doc-sign codes grading
+- **❓ Tech design** — the grading `RefusalWords` for the doc-sign codes grading
   can meet
 - **❓ Operations** — the manifest and the invoice's entry (`GA5` draws
   Import and the read types the rest), and a batch above the courier's
