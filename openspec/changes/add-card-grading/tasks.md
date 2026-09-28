@@ -2091,7 +2091,7 @@ Needs group 10's exports and group 25's fixture transport; types against
 36.1 from the start, and its reads and acts answer once the rest of group 36
 lands. Stage (c).
 
-- [ ] 30.1 Cover the batch and settings screens: the scan counters as the box
+- [x] 30.1 Cover the batch and settings screens: the scan counters as the box
       gives cards up, a setting nobody has written marked with the owner who
       owes it, and a read holder who changes nothing; then the list's rows
       and Arrived, a new batch, a line resolved and an exception recorded
@@ -2106,7 +2106,7 @@ lands. Stage (c).
       `grade10-admin-grading-counter-SC-98`,
       `grade10-admin-grading-counter-SC-99`,
       `grade10-admin-grading-counter-SC-105`)
-- [ ] 30.2 Build `BatchesPanel` and `ShipBatchForm`: the batch list off
+- [x] 30.2 Build `BatchesPanel` and `ShipBatchForm`: the batch list off
       `admin.batches`, a row per state — open, closed and shipping today,
       closed with nothing to ship, with the grader, past the estimate, back
       unchecked, received — and empty, every batch not yet received listed
@@ -2129,7 +2129,7 @@ lands. Stage (c).
       `grade10-admin-grading-batches-US1-TC12-1`,
       `grade10-admin-grading-batches-US1-TC15-1`,
       `grade10-admin-grading-batches-US2-TC14-1`)
-- [ ] 30.3 Build `NewBatchDialog` and `ReestimateDialog`, the stage recorded
+- [x] 30.3 Build `NewBatchDialog` and `ReestimateDialog`, the stage recorded
       from the grader's own stages as a `ChoiceList` with one member the move
       to graded and the grader's words in a `NotesField` beside it, never free
       text; the new batch opens through `admin.openBatch`, the shop from
@@ -2140,7 +2140,7 @@ lands. Stage (c).
       `grade10-admin-grading-batches-US4-TC3-1`,
       `grade10-admin-grading-batches-US4-TC4-1`,
       `grade10-admin-grading-batches-US4-TC6-1`)
-- [ ] 30.4 Build `ReceivePanel`: the header off `admin.receiving`'s batch —
+- [x] 30.4 Build `ReceivePanel`: the header off `admin.receiving`'s batch —
       the shop named from `admin.shops`, grader · level, the day it went out,
       the grader's last stage with the day it was recorded, arrived — the
       manifest and invoice entry, the counters reading what the box has given
@@ -2158,12 +2158,12 @@ lands. Stage (c).
       `grade10-admin-grading-batches-US3-TC1-1`,
       `grade10-admin-grading-batches-US3-TC2-1`,
       `grade10-admin-grading-batches-US3-TC3-1`)
-- [ ] 30.5 Build `PostNoticeDialog` with the address off `admin.noticeForm`,
+- [x] 30.5 Build `PostNoticeDialog` with the address off `admin.noticeForm`,
       the posting date and the tracking, opened from the Notice due rung and
       recording nothing while either is
       missing (`grade10-admin-grading-counter-US12-TC2-1`,
       `grade10-admin-grading-counter-US12-TC3-1`)
-- [ ] 30.6 Build `SettingsPanel`: one `SaveableField` per row and a
+- [x] 30.6 Build `SettingsPanel`: one `SaveableField` per row and a
       `MoneyField` on a money row, the fee sheet
       and the diary services as their own tables, the second-person dialog on a
       money row, a row nobody has written marked unset with its owner, and
@@ -2176,7 +2176,7 @@ lands. Stage (c).
       `grade10-admin-grading-counter-SC-98`,
       `grade10-admin-grading-counter-SC-99`,
       `grade10-admin-grading-counter-SC-104`)
-- [ ] 30.7 Write the stories for `Grading/Admin/Batches`,
+- [x] 30.7 Write the stories for `Grading/Admin/Batches`,
       `Grading/Admin/Receiving` and `Grading/Admin/Settings`, each with
       `surface: console`
 - [ ] 30.8 Verify: `pnpm run test`, `pnpm run check:app-bundles`,
@@ -2396,7 +2396,7 @@ The worker's side of group 30, after groups 17 and 24. Its first task lands
 the types group 30 builds against; group 30's reads and acts answer once the
 rest lands. Stage (c).
 
-- [ ] 36.1 Land the contracts first: `BatchPage` and `BatchRow`, the
+- [x] 36.1 Land the contracts first: `BatchPage` and `BatchRow`, the
       reshaped `ReceivingRead` with the pure `manifestLineState`, the lifted
       `shipsToday`, the notice-due predicate, and the inputs and answers of
       `admin.batches`, `admin.openBatch`, `admin.addManifestLine` and
@@ -2407,7 +2407,7 @@ rest lands. Stage (c).
       `grade10-admin-grading-batches-SC-24`,
       `grade10-admin-grading-batches-SC-51`,
       `grade10-admin-grading-counter-SC-65`)
-- [ ] 36.2 Cover the worker's side next, before 36.3 to 36.8: the list's row
+- [x] 36.2 Cover the worker's side next, before 36.3 to 36.8: the list's row
       per state, `gradesIn` by `BATCH_NOT_GRADED`'s own rule, every batch
       not yet received on every answer in the spec's order, a closed batch
       with nothing to ship among the paged rest and offering no Ship, a page
@@ -2442,7 +2442,7 @@ rest lands. Stage (c).
       `grade10-admin-grading-counter-SC-66`,
       `grade10-admin-grading-counter-SC-69`,
       `grade10-admin-grading-counter-SC-105`)
-- [ ] 36.3 Add `admin.batches` under `grading:read`, its `limit` bounded as
+- [x] 36.3 Add `admin.batches` under `grading:read`, its `limit` bounded as
       `queueInputSchema` bounds the queue's: `unfinished`, every batch not
       yet received but those closed with nothing to ship, whole on every
       answer in the batches spec's order; `rows`, the rest, on
@@ -2464,7 +2464,7 @@ rest lands. Stage (c).
       `grade10-admin-grading-batches-SC-45`,
       `grade10-admin-grading-batches-SC-52`,
       `grade10-admin-grading-batches-SC-55`)
-- [ ] 36.4 Add `admin.openBatch` under `grading:operate` over `openBatchFor`
+- [x] 36.4 Add `admin.openBatch` under `grading:operate` over `openBatchFor`
       in its own transaction: `openBatchFor` reports whether it inserted,
       and the procedure answers `{ batchId, written }` as
       `BatchWriteAnswer.written` does, files its audit row under the batch
@@ -2472,7 +2472,7 @@ rest lands. Stage (c).
       `offeredLevel` over the grader's live sheet (`quotes/feeSheet.ts`),
       refusing `LEVEL_NOT_OFFERED`, and the input's `grader` the contracts'
       grader schema (`grade10-admin-grading-batches-SC-44`)
-- [ ] 36.5 Widen `admin.receiving`: `ReceivingRead.batch` built by the
+- [x] 36.5 Widen `admin.receiving`: `ReceivingRead.batch` built by the
       list's row builder plus `manifestEnteredAt` and the invoice, its last
       stage reading by `lastReadingOf`; each line's card resolved by
       `lineCardOrNull`'s rule from the travelled cards the read loads, never
@@ -2488,13 +2488,13 @@ rest lands. Stage (c).
       `grade10-admin-grading-batches-SC-34`,
       `grade10-admin-grading-batches-SC-51`,
       `grade10-admin-grading-batches-SC-53`)
-- [ ] 36.6 Add `admin.addManifestLine` under `grading:operate` over
+- [x] 36.6 Add `admin.addManifestLine` under `grading:operate` over
       `addManifestLine`: one line for a travelled card no line names, at the
       next line number, stamped resolved as the grader's omission and filed
       under the batch as a resolve is; refusing `NOT_IN_BATCH`,
       `LINE_RESOLVED` and `MANIFEST_DUPLICATE`; the slab's cert then scans
       onto it (`grade10-admin-grading-batches-SC-54`)
-- [ ] 36.7 Carry `{ keys, feeSheetRow? }` in the details at every site that
+- [x] 36.7 Carry `{ keys, feeSheetRow? }` in the details at every site that
       throws `SETTING_UNSET` or `SETTING_MALFORMED` — `settings/read.ts`,
       whose parse every write reuses, the till's fee-sheet row and the
       terms' ladder at the pin — and move `sweeps/rowError.ts`'s
@@ -2502,7 +2502,7 @@ rest lands. Stage (c).
       same test over them all, so production's stripped message loses
       nothing the console or a sweep names
       (`grade10-admin-grading-counter-SC-69`)
-- [ ] 36.8 Add `admin.noticeForm` under `grading:operate`, answering
+- [x] 36.8 Add `admin.noticeForm` under `grading:operate`, answering
       `{ postalAddress }` only, refused `NOTICE_NOT_DUE` unless the notice is
       due by the predicate lifted out of the badge — not posted, and
       `noticeOpen` — which the badge and `recordNoticePosted`
