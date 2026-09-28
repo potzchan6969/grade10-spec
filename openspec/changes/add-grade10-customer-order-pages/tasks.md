@@ -47,5 +47,5 @@ webhook, reconciliation, deployment, or order-status rule.
 
 Uses the landed group 4 catalogs and completes the frontend copy boundary on the existing order pages. Page acceptance remains a separate owner-scheduled verification pass.
 
-- [ ] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
-- [ ] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
+- [x] 6.1 Replace the literal Discount, Shipping and Tax summary labels in `OrderDetailsPage` with the existing `orderDetail.money` catalog keys, preserving zero and absent rows from `grade10-site-store-order-detail-SC-14`; cover `en`, `zh-Hant`, and `zh-Hans` with typed fixtures
+- [x] 6.2 Verify focused order projection, page and locale tests, `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, and `pnpm run check:submodules`
