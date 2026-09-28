@@ -252,7 +252,6 @@ function OpenLot({
   if (slide.href != null) {
     return (
       <a
-        aria-hidden={ariaHidden}
         className={cn(pressable, className)}
         href={slide.href}
         inert={inertProp}
@@ -642,9 +641,7 @@ function SlideCopy({
   return (
     <>
       <div className="flex items-center gap-2">
-        {slide.status === "active" ? (
-          <StepIndicator state="progress" />
-        ) : null}
+        {slide.status === "active" ? <StepIndicator state="progress" /> : null}
         <p className="font-semibold text-foreground text-sm tracking-wide uppercase">
           {statusLabel(slide.status, copy)}
         </p>
