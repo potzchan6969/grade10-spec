@@ -8,8 +8,10 @@ order: 3
 
 Every address resolves to at most one surface. A surface owns the addresses
 beneath it unless a nested surface names one, and the deepest surface naming an
-address is the one that renders. An address under no surface renders not-found,
-naming the address that failed.
+address is the one that renders. An address under no surface renders not-found.
+
+🚧 **Not-found words** — the page shows a static title and description with
+Back to Home; it does not name the failed path
 
 ## Following a Link
 
