@@ -90,10 +90,10 @@ Needs group 4 landed and group 7 in this store. The listing page and the
 store home's row give their tiles no address (Q52), so their tiles stay
 buttons.
 
-- [ ] 8.1 Bump `external/grade10-spec` to the commit carrying group 7
-- [ ] 8.2 The tests this group's scenarios name, in their own commit before its code, ticked last: the served document's test for `grade10-site-store-cross-sell-SC-33`, over every card under the fixture card, and the page's tests reading the rail by its region and its tiles as links
-- [ ] 8.3 Make `grade10-site-store-cross-sell-SC-33` pass: `productSummary` takes the site's address for a card, and the rail passes it for each tile; the e2e tile helpers read a tile's photo and name as a link or a button, whichever the surface draws
-- [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:submodules`, and the walks the tile helpers reach: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/catalog.spec.ts e2e/tests/store/home.spec.ts e2e/tests/store/cart-count.spec.ts e2e/tests/store/catalog-keeper.spec.ts`
+- [x] 8.1 Bump `external/grade10-spec` to the commit carrying group 7
+- [x] 8.2 The tests this group's scenarios name, in their own commit before its code, ticked last: the served document's test for `grade10-site-store-cross-sell-SC-33`, over every card under the fixture card, and the page's tests reading the rail by its region and its tiles as links
+- [x] 8.3 Make `grade10-site-store-cross-sell-SC-33` pass: `productSummary` takes the site's address for a card, and the rail passes it for each tile; the e2e tile helpers read a tile's photo and name as a link or a button, whichever the surface draws
+- [x] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:submodules`, and the walks the tile helpers reach: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/catalog.spec.ts e2e/tests/store/home.spec.ts e2e/tests/store/cart-count.spec.ts e2e/tests/store/catalog-keeper.spec.ts`
 
 ## 9. The rail's off switch (grade10)
 
