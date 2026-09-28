@@ -94,6 +94,56 @@ export const Mastercard: Story = {
   },
 };
 
+/** Address lines stay useful when the recipient name is unavailable. */
+export const PartialAddress: Story = {
+  args: {
+    shippingAddress: {
+      lines: ["Flat 12B, Tower 3", "Wan Chai, Hong Kong"],
+    },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Flat 12B, Tower 3")).toBeVisible();
+    expect(canvas.getByText("Wan Chai, Hong Kong")).toBeVisible();
+  },
+};
+
+/** An unrecognized provider stays text-only instead of receiving a guessed logo. */
+export const UnrecognizedPayment: Story = {
+  args: {
+    payment: { label: "UnionPay", maskedNumber: "···· 5678" },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("UnionPay")).toBeVisible();
+    expect(canvas.getByText("···· 5678")).toBeVisible();
+    expect(canvas.queryByRole("img")).not.toBeInTheDocument();
+  },
+};
+
+/** A wallet name remains associated with its device-account mask. */
+export const WalletPayment: Story = {
+  args: {
+    payment: { label: "Apple Pay", maskedNumber: "···· 1234" },
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.getByText("Apple Pay")).toBeVisible();
+    expect(canvas.getByText("···· 1234")).toBeVisible();
+  },
+};
+
+/** An empty payment object leaves no empty Payment Method section behind. */
+export const EmptyPayment: Story = {
+  args: {
+    payment: {},
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Payment Method")).not.toBeInTheDocument();
+  },
+};
+
 export const Minimal: Story = {
   args: {
     summary: {
