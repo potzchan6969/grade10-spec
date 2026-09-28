@@ -16,7 +16,7 @@ type ProductSummary = {
   id: string;
   /** The product's own name, and the name a screen reader reads the tile as. */
   name: string;
-  /** The product's own address. Given one, the tile is a link to it. */
+  /** The product's own address, which a tile that opens links to. */
   href?: string;
   /** `cardProps` slot — consumer-assembled badges, in order. */
   badges?: ReactNode;

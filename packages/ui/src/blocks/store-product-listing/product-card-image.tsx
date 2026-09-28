@@ -1,26 +1,11 @@
 import { Badge } from "@grade10/design-system/components/display/badge";
 import { cn } from "@grade10/design-system/lib/utils";
-import type { MouseEvent, ReactNode } from "react";
+import type { ReactNode } from "react";
+import { ProductCardActivation } from "./product-card-activation";
 import {
   ProductCardCartControl,
   parseCartQuantity,
 } from "./product-card-cart-control";
-
-/**
- * A tile's link, pressed. A plain press is the consumer's to report, so the
- * link's own navigation gives way to it; a press with a modifier key opens
- * the address where the browser puts it — a new tab or a new window — and
- * reports nothing.
- */
-function reportPlainPress(
-  event: MouseEvent<HTMLAnchorElement>,
-  onClick: (() => void) | undefined,
-) {
-  if (onClick == null || event.defaultPrevented || event.button !== 0) return;
-  if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-  event.preventDefault();
-  onClick();
-}
 
 /**
  * What the well says, whichever product is in it — supplied once for a whole
@@ -77,8 +62,8 @@ type ProductCardImageProps = {
  * Product photo well. Figma set `Product / Product Card Image` (`4274:10074`)
  * has `state` (hover, CSS) and `soldOut`, plus the BOOLEAN `sale`. In-cart
  * chrome is an annotation on the set, not an axis, so `inCart` is code-only.
- * The set draws no hover on a sold-out well; one that opens takes the
- * available well's grow over its dim photo, and the focus ring either way.
+ * The set draws no hover on a sold-out well; one that opens grows on hover
+ * like an available well, over its dim photo (Q50).
  *
  * Cart sits outside the well's activation target so nested buttons stay valid.
  * It is drawn only where a quantity-change handler was supplied, so a surface
@@ -106,16 +91,12 @@ function ProductCardImage({
   const quantity = parseCartQuantity(cartCount, inCart);
   const opens = onClick != null || href != null;
 
-  /* A sold-out photo stays dim, and takes the hover wherever the well opens:
-     the grow says the tile leads somewhere, sold out or not. */
   const photoClassName = cn(
     "size-full rounded-(--radius-3xl) object-contain",
     soldOut && "opacity-50",
     (!soldOut || opens) &&
       "transition-transform duration-200 ease-[ease] motion-reduce:transition-none [@media(hover:hover)_and_(pointer:fine)_and_(prefers-reduced-motion:no-preference)]:group-hover/product-card-image:scale-105",
   );
-  const activationClassName =
-    "absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50";
 
   const well = (
     <>
@@ -176,24 +157,15 @@ function ProductCardImage({
         <div className="absolute inset-0 overflow-hidden rounded-(--radius-3xl)">
           {well}
         </div>
-      ) : href != null ? (
-        <a
-          aria-label={name}
-          className={activationClassName}
-          href={href}
-          onClick={(event) => reportPlainPress(event, onClick)}
-        >
-          {well}
-        </a>
       ) : (
-        <button
+        <ProductCardActivation
           aria-label={name}
-          className={activationClassName}
+          className="absolute inset-0 cursor-pointer overflow-hidden rounded-(--radius-3xl) border-0 bg-transparent p-0 outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          href={href}
           onClick={onClick}
-          type="button"
         >
           {well}
-        </button>
+        </ProductCardActivation>
       )}
       {showCart ? (
         <ProductCardCartControl
@@ -210,4 +182,4 @@ function ProductCardImage({
 }
 
 export type { ProductCardImageCopy, ProductCardImageProps };
-export { ProductCardImage, reportPlainPress };
+export { ProductCardImage };

@@ -24,20 +24,21 @@ type StoreProductRelatedRailProps = {
    * to it. Given none, it draws the heading over nothing: the page renders no
    * rail where it has nothing to show. */
   cards: readonly ProductSummary[];
-  /** Fires when a tile is activated, identifying the card. */
-  onCardClick: (productId: string) => void;
+  /** Fires on a plain press of a tile, identifying the card, in place of the
+   * link's own navigation. A card with an address opens without it. */
+  onCardClick?: (productId: string) => void;
   className?: string;
 };
 
 /**
  * The cards shown under a card on its own page: a region named by its
  * heading, then one tile per card given, in a row. The row answers the width
- * it is given: six tiles fit side by side from 1152px, and below that the
- * row scrolls, each tile snapping to its start, with part of the next tile
- * showing so the reader can tell there is more. It composes the store home's
- * section header with no browse-all link and the listing's product card with
- * no cart control, and sells nothing; a sold-out card keeps its treatment and
- * still opens.
+ * it is given: six tiles fit side by side on a wide rail, and on a narrower
+ * one the row scrolls, each tile snapping to its start, with part of the next
+ * tile showing so the reader can tell there is more. It composes the store
+ * home's section header with no browse-all link and the listing's product
+ * card with no cart control, and sells nothing; a sold-out card keeps its
+ * treatment and still opens.
  */
 function StoreProductRelatedRail({
   copy,
@@ -59,6 +60,8 @@ function StoreProductRelatedRail({
           gap="md"
           vAlign="stretch"
         >
+          {/* Six across leaves room for the row's five gaps: `gap="md"` is
+              1rem each, so a change to the gap changes the 5rem. */}
           {cards.map((card) => (
             <ProductCard
               badges={card.badges}
@@ -69,7 +72,7 @@ function StoreProductRelatedRail({
               imageSrc={card.imageSrc}
               key={card.id}
               name={card.name}
-              onClick={() => onCardClick(card.id)}
+              onClick={onCardClick ? () => onCardClick(card.id) : undefined}
               originalPrice={card.originalPrice}
               price={card.price}
               soldOut={card.soldOut}
