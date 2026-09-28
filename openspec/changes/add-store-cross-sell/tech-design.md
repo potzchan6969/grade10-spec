@@ -155,13 +155,14 @@ in `@grade10/ui`, with the formatter the listing already uses —
 
 `CROSS_SELL` in the application's `packages/app-env`, a
 `Record<Brand, Record<DeployEnv, boolean>>` beside `POINTS_TENDER`, is on
-wherever the store runs. The rail's module owns it: `crossSellOn(env)` sits in
-`services/catalog/related.ts` with `readCardWithRail`, the card's read with its
-picks and the compose, so the catalog router only chooses between the card
-with its rail and the card alone. Off, the read never asks the shop for the
-picks, composes nothing and counts nothing, and answers the card with no
-`related`, which the contract's decoding default reads as an empty rail
-(Q40), the page as no rail (`grade10-site-store-cross-sell-SC-34`, Q55).
+wherever the store runs. `deps.ts` reads it beside the brand's other config,
+and both catalog contexts carry it as `crossSell`. The card's read,
+`readCard` in `services/catalog/related.ts`, holds the whole decision, so the
+catalog router only maps its outcome. Asked for the rail with the switch off,
+the read never asks the shop for the picks, composes nothing and counts
+nothing, and answers the card with an empty rail, which the page reads as no
+rail (`grade10-site-store-cross-sell-SC-34`, Q55). It never leans on the
+contract's decoding default, which goes with 3.2's deploy (Q40).
 
 - **Deployed as code** — a switch that changes on a deploy holds no state to
   repair; a database switch would still wait out the read's cached minute
@@ -250,8 +251,7 @@ picks, composes nothing and counts nothing, and answers the card with no
 ## Migration Plan
 
 - **Nothing to migrate** — no schema; the one switch, `CROSS_SELL`, is code
-  and on; the rail is on the
-  card's page, which the site's `store` gate keeps out of every production
+  and on; the rail is on the card's page, which the site's `store` gate keeps out of every production
   build until the shop opens
   ([Where It Is Open](../../../docs/prds/products/grade10-site/store/index.md#where-it-is-open)),
   and `related` rides a read only that page asks for, as the listing's does.

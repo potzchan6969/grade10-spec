@@ -1194,7 +1194,7 @@ None yet.
 
 ### Out of suite
 
-* `grade10-site-store-cross-sell-SC-34` - the rail switched off: the store's own switch, set in code and deployed, so no walk on a running stack can turn it. Its verifiers, in the application repository: `packages/app-env/test/store.test.ts` and `packages/grade10-store/backend/test/services/catalog/related.test.ts`; the router's switched-off test is named here once it lands.
+* `grade10-site-store-cross-sell-SC-34` - the rail switched off: the store's own switch, set in code and deployed, so no walk on a running stack can turn it. Its verifier, in the application repository: the card read's test, `packages/grade10-store/backend/test/services/catalog/related.test.ts` (`readCard`, cited by the id), which drives the decision the catalog router answers from, switched off and on.
 * `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` - the rail's exports: the block's own stories and public-exports test in this store, `packages/ui/src/blocks/store-product/`.
 
 ### Manual

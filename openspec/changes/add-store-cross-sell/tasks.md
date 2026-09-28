@@ -56,7 +56,7 @@ is rebuilding, so this group follows that change's page work.
 
 Needs `feature-tcs.md` reviewed (`/tcs-review add-store-cross-sell`) as its input.
 
-Needs groups 1 to 4, 7 and 8 landed. The walks live in
+Needs groups 1 to 4, 7, 8 and 9 landed. The walks live in
 `apps/frontend/grade10/e2e/tests/store/cross-sell.spec.ts` and run on the
 isolated stack, whose fixture catalogue seeds the stock keeper's picks as the
 app stores them (`packages/shopify/backend/src/testing/fixture.ts`); the lane
@@ -93,5 +93,13 @@ buttons.
 - [ ] 8.1 Bump `external/grade10-spec` to the commit carrying group 7
 - [ ] 8.2 The tests this group's scenarios name, in their own commit before its code, ticked last: the served document's test for `grade10-site-store-cross-sell-SC-33`, over every card under the fixture card, and the page's tests reading the rail by its region and its tiles as links
 - [ ] 8.3 Make `grade10-site-store-cross-sell-SC-33` pass: `productSummary` takes the site's address for a card, and the rail passes it for each tile; the e2e tile helpers read a tile's photo and name as a link or a button, whichever the surface draws
-- [ ] 8.4 Make `grade10-site-store-cross-sell-SC-34` pass: `CROSS_SELL` in `packages/app-env`, on for every brand and environment, read by `crossSellOn` in the rail's module beside `readCardWithRail`; the catalog router answers the card alone where the switch is off; the rail's own view, `ProductRelatedRail`, draws nothing for an empty rail; tested in the rule's test and the store config's test; the runbook's § Turning the You May Also Like rail off
-- [ ] 8.5 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:submodules`, and the walks the tile helpers reach: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/catalog.spec.ts e2e/tests/store/home.spec.ts e2e/tests/store/cart-count.spec.ts e2e/tests/store/catalog-keeper.spec.ts`
+- [ ] 8.4 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, `pnpm run build`, `pnpm run check:submodules`, and the walks the tile helpers reach: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/catalog.spec.ts e2e/tests/store/home.spec.ts e2e/tests/store/cart-count.spec.ts e2e/tests/store/catalog-keeper.spec.ts`
+
+## 9. The rail's off switch (grade10)
+
+Needs group 3 landed. `CROSS_SELL` in `packages/app-env`, on for every brand
+and environment, is the rail's off switch (Q55).
+
+- [ ] 9.1 The test `grade10-site-store-cross-sell-SC-34` names, in its own commit before its code: the card read's test drives `readCard` asked for the rail with the switch off and on, and not asked
+- [ ] 9.2 Make `grade10-site-store-cross-sell-SC-34` pass: `CROSS_SELL` in `packages/app-env`, read by `storeCrossSell` in `deps.ts` and carried on both catalog contexts as `crossSell`; `readCard` in the rail's module holds the card read's whole decision, answering an empty rail with no picks asked for where the switch is off, and the catalog router maps its outcome; the rail's own view, `ProductRelatedRail`, draws the rail apart from `ProductView`; the runbook's § Turning the You May Also Like rail off
+- [ ] 9.3 Verify: `pnpm run typecheck`, `pnpm run lint`, `pnpm run test`, and the cross-sell walk on the isolated stack: `pnpm --dir apps/frontend/grade10 run e2e -- e2e/tests/store/cross-sell.spec.ts`
