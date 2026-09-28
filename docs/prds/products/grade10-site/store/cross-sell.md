@@ -16,9 +16,9 @@ store shows other cards the collector may also like.
 - 🚧 **One rail** — under the card, headed **You may also like**: the stock
   keeper's picks first, in their order, then similar cards to fill; nothing
   names a card as chosen or computed
-- 🚧 **Opens the card** — a rail card is a link to that card's own page, so it
-  opens in a new tab and before the page's scripts run; nothing in the rail
-  adds to the cart
+- 🚧 **Opens the card** — a rail card is a
+  [link](/p/shared/ui/store-product-listing#product-tile) to that card's own
+  page; nothing in the rail adds to the cart
 - 🚧 **Nothing to show, no rail** — a card with no picks and nothing similar
   shows no rail and leaves no empty space
 - 🚧 **Sold out** — a chosen pick nobody can buy stays in the rail, says it is
@@ -92,6 +92,6 @@ curating the similar cards by hand. Auction lots.
 | Also bought | Decided | Phase two, its own change, once the store has orders to count. | Product |
 | One rail | Decided | One rail for picks and similar cards alike, unlabelled and shown even with one card. Not a rail per source, which labels a distinction no collector acts on; not hiding a one-card rail, since a pick is the stock keeper's deliberate act. | Product |
 | No cart in the rail | Decided | Adding is done on the card's own page, where the collector sees what they are buying. Not adding from the rail — a rail tile that sells is a card the collector has not opened. | Product |
-| Narrow layout | Decided | One row that answers its own width: six tiles side by side on a wide page; on a narrower one the row scrolls sideways and snaps to each tile, part of the next showing. Not a second row, which pushes the page's end down; not fewer tiles on a small screen, which makes the cap depend on the screen. | Design |
+| Narrow layout | Decided | One row: six cards side by side on a wide page; on a narrower one the row scrolls, part of the next card showing. Not a second row, which pushes the end of the page down; not fewer cards on a small screen, since a collector on a phone should see as many of the stock keeper's picks as one on a desktop. | Design |
 | Now, before launch | Decided | Picks are a stock keeper's work and can be loaded before the store opens. | Product |
 :::

@@ -174,7 +174,7 @@ in `@grade10/ui`, with the formatter the listing already uses —
 | Procedure | Change | Consumer |
 | --- | --- | --- |
 | `catalog.product` | Additive: an optional `related` input; set, the answer gains `related`, the per-tile shape `catalog.products` answers today, in rail order, empty where there is nothing to show; unset, the answer is today's | The card's page in `grade10`, the one caller that sets it |
-| `ProductSummary` (`@grade10/ui`) | Unchanged: the block's prop type; the page builds one per `related` entry with the listing's formatter | The rail block |
+| `ProductSummary` (`@grade10/ui`) | Additive: an optional `href`, the product's address, which `ProductList` and the rail pass to `ProductCard`'s own optional `href`, so a tile that opens is a link (Q52); the page builds one per `related` entry with the listing's formatter and the card's address | The rail block; `ProductList`, whose consumers give none yet |
 
 | Half | Where it lands |
 | --- | --- |

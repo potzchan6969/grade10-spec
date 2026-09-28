@@ -97,13 +97,13 @@
 
 1. Read the tile's photo and name.
 2. Click the tile's name.
-3. Ctrl-click (Cmd-click on a Mac) the tile's photo.
+3. Ctrl-click (Cmd-click on a Mac) the tile's photo, then its name.
 
 **Expected Results:**
 
 * The photo and the name are both links to the product's address.
-* Step 2 opens the product in the same tab.
-* Step 3 opens the product in a new tab, and the first tab stays where it was.
+* Step 2 reports the tile's activation once, and the link itself is not followed.
+* Step 3 opens the product in a new tab from each link and reports nothing, and the first tab stays where it was.
 
 ## Settled
 

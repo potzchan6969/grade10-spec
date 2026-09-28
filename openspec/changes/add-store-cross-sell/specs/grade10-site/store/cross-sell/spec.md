@@ -8,7 +8,7 @@ what fills the rail, in what order, and when it shows nothing.
 - The rail
   - Place and heading: under the card, headed You may also like, in the page's response
   - Order: the picks first in the stock keeper's order, then similar cards, up to six
-  - Opens the card: a tile is a link to its card's own page; nothing in the rail adds to the cart
+  - Opens the card: a card in the rail is a link to its own page; nothing in the rail adds to the cart
   - Nothing to show: no rail and no space where there are no picks and no similar cards
   - Never itself: the card being read is never in its own rail
 - Picks
@@ -109,8 +109,7 @@ nothing that adds to the cart.
 - **Opens the card** — activating a card in the rail lands the collector on
   that card's own page, reading that card.
 - **A link** — each card in the rail is a link to that card's own page, in
-  the page's response, so it opens before any script runs and in a new tab,
-  and its address can be copied.
+  the page's response.
 - **No cart control** — no card in the rail offers a control that adds to the
   cart, whether or not it is for sale.
 - **Buying is on the card's page** — adding is done on the page the rail
@@ -402,20 +401,20 @@ The shared UI package SHALL export, from its public entry,
 
 - **What it composes** — `StoreProductRelatedRail` draws the heading with
   `StoreSectionHeader` and one `ProductCard` per card it is given, in the order
-  given, and draws no cart control on any of them.
+  given, passing each card's address to its tile, and draws no cart control on
+  any of them.
 - **A named region** — the rail is a region named by its heading, so a reader
   reaches it by that name.
-- **Links where given** — a card given its address is drawn as a link to it.
 - **Words through copy** — it takes the words it renders in a single `copy`
   prop of its own copy type, and each card's own words with that card; it
   passes no browse-all word and no cart word.
 - **Nothing of its own** — it takes the cards and their order as given: it
   reads no catalogue, cuts no list, orders nothing and decides nothing about
   what a card is worth showing.
-- **What the tiles owe it** — a heading that needs no browse label and a
-  sold-out tile that still opens are `shared/ui/store-home`'s and
-  `shared/ui/store-product-listing`'s rules, carried by this change's deltas on
-  them.
+- **What the tiles owe it** — a heading that needs no browse label, a
+  sold-out tile that still opens and a tile given its address that is a link
+  to it are `shared/ui/store-home`'s and `shared/ui/store-product-listing`'s
+  rules, carried by this change's deltas on them.
 
 #### Scenario: grade10-site-store-cross-sell-SC-25 - An application imports the surface
 **Serves:** Rail block - an application builds the section under a card from the package rather than its own copy

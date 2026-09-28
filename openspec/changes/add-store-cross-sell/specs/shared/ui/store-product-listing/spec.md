@@ -63,11 +63,11 @@ so a surface that does not sell names no cart word.
 ### Requirement: A tile given its product's address is a link to it
 
 A tile that opens SHALL be a link to its product's address where the consumer
-supplies one, its photo and its name alike, so the product opens before any
-script runs, in a new tab, and its address can be copied. A plain press SHALL
-still report the tile's activation where a handler is supplied, in place of
-the link's own navigation; a press with a modifier key SHALL be left to the
-browser and report nothing. A tile that does not open — a sold-out tile where
+supplies one, its photo and its name alike, so its address can be copied and a
+press with a modifier key opens it where the browser puts it, a new tab or a
+new window, reporting nothing. A plain press SHALL still report the tile's
+activation where a handler is supplied, in place of the link's own
+navigation. A tile that does not open — a sold-out tile where
 the surface sells — SHALL be no link, address or not.
 
 #### Scenario: shared-ui-store-product-listing-SC-93 - A tile given its address is a link to it
