@@ -25,16 +25,19 @@ const SOCIAL_LINKS = [
   {
     label: "Instagram",
     href: "#instagram",
+    external: true,
     icon: <InstagramLogo aria-hidden size={16} weight="fill" />,
   },
   {
     label: "YouTube",
     href: "#youtube",
+    external: true,
     icon: <YoutubeLogo aria-hidden size={16} weight="fill" />,
   },
   {
     label: "Threads",
     href: "#threads",
+    external: true,
     icon: <ThreadsLogo aria-hidden size={16} weight="fill" />,
   },
 ];
@@ -141,9 +144,22 @@ export const AuctionOnly: Story = {
     expect(canvas.getByText("HELP")).toBeInTheDocument();
     expect(canvas.getByText("LEGAL")).toBeInTheDocument();
     expect(canvas.queryByText("SHOP")).toBeNull();
-    expect(canvas.getByRole("link", { name: "Instagram" })).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "YouTube" })).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: "Threads" })).toBeInTheDocument();
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Instagram" })).toHaveAttribute(
+      "rel",
+      "noopener noreferrer",
+    );
+    expect(canvas.getByRole("link", { name: "YouTube" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
+    expect(canvas.getByRole("link", { name: "Threads" })).toHaveAttribute(
+      "target",
+      "_blank",
+    );
     expect(canvas.getByRole("link", { name: "Docs" })).toHaveAttribute(
       "href",
       "/docs",

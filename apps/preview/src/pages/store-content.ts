@@ -91,6 +91,7 @@ const STORE_FOOTER = {
     {
       label: "Instagram",
       href: "#instagram",
+      external: true,
       icon: createElement(InstagramLogo, {
         "aria-hidden": true,
         size: 16,
@@ -100,6 +101,7 @@ const STORE_FOOTER = {
     {
       label: "YouTube",
       href: "#youtube",
+      external: true,
       icon: createElement(YoutubeLogo, {
         "aria-hidden": true,
         size: 16,
@@ -109,6 +111,7 @@ const STORE_FOOTER = {
     {
       label: "Threads",
       href: "#threads",
+      external: true,
       icon: createElement(ThreadsLogo, {
         "aria-hidden": true,
         size: 16,
