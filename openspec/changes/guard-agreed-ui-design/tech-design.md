@@ -188,12 +188,14 @@ and `c865b8565` are rebuilt as minimal commits. In the application,
 
 ## Migration Plan
 
-1. **Store** - the engine, its tests, the config, the hooks, `prepare`, the
-   workflow and the `AGENTS.md` rule land together
-2. **Application** - one commit bumps `external/grade10-spec` to that store
-   version and adds the hooks, the config, `prepare`, the workflow, the
-   block check with today's rebuilt pages listed, and the `AGENTS.md` rule, so its
-   hooks never call an engine its pin lacks
+1. **Store** - the engine, its tests, the hooks, `prepare`, the workflow and
+   the `AGENTS.md` rule land together
+2. **Application** - its first commit bumps `external/grade10-spec` to a
+   store `main` holding step 1, so its hooks never call an engine its pin
+   lacks; the tests, then the block check with today's rebuilt pages listed,
+   then the config, the hooks, `prepare` and the workflow, then the
+   `AGENTS.md` rule follow in their own commits, so no hook is turned on
+   before its check exists
 3. **Everyone** - runs `pnpm install` once in each repository to set the
    hooks path
 

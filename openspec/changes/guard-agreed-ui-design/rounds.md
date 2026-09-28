@@ -11,3 +11,4 @@ Written by the landing, in the landing's own commit.
 | 4 | tech-design | deterministic, simple, consistent, testable, simpler, verifier | merges compared with git's own merge under pinned settings; the evaluation reads one sha, built at commit; the report split out; one team reader; the app's one sites list; hooks off in CI | - | - |
 | 5 | specs | simpler | the blind suite and the scenarios reconciled; the simpler reader's ten edits applied | - | - |
 | 6 | test-cases | simpler | the blind suite reconciled against the scenarios; the simpler reader's edits applied | - | - |
+| 7 | tech-design | deterministic, simple, consistent, testable, simpler, verifier | the migration plan brought in line with the tasks' order, from the tasks round's order reading | - | - |
