@@ -10,7 +10,7 @@ block as the tile existed then.
 - [x] 1.4 Make `grade10-site-store-cross-sell-SC-25` and `grade10-site-store-cross-sell-SC-26` pass: `StoreProductRelatedRail`, `StoreProductRelatedRailProps` and `StoreProductRelatedRailCopy` in `packages/ui/src/blocks/store-product/store-product-related-rail.tsx`, re-exported from the public entry `packages/ui/src/index.ts`, composing `StoreSectionHeader` and one `ProductCard` per card given, in a row, passing no browse-all word and no cart word; stories for the picks-and-similar, one-card, sold-out-pick and narrow states
 - [x] 1.5 Answer `product.youMayAlsoLike` in the shared layer — `en`, `ko`, `zh-Hans`, `zh-Hant`
 - [x] 1.6 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm --dir packages/i18n test`, `pnpm run tcs:validate`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
-- [ ] 1.7 Make `grade10-site-store-cross-sell-SC-26`'s region pass (Q42): `StoreProductRelatedRail` draws a `region` named by its heading, so a walk reaches the rail by role and name, verified as 1.6 names
+- [x] 1.7 Make `grade10-site-store-cross-sell-SC-26`'s region pass (Q42): `StoreProductRelatedRail` draws a `region` named by its heading, so a walk reaches the rail by role and name, verified as 1.6 names
 
 ## 2. The rail's rule (grade10)
 
@@ -78,11 +78,11 @@ No frame came by 2026-09-24: the design is settled in code (Q49), as
 link in this change, for the rail. No other group in this store waits on it;
 group 8 builds on it.
 
-- [ ] 7.1 The sold-out tile's hover and focus state as `ui-design.md` draws it (Q50), in `ProductCard`'s stories and the block
-- [ ] 7.2 The rail's narrow layout as `ui-design.md` draws it (Q51, Q54), in the block and its `Narrow` and `Wide` stories, and the page's ❓ on the narrow layout closed; no `::figma` card, since the page carries the rail's `::story` cards
-- [ ] 7.3 The tests `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links name, in their own commit before its code, ticked last: stories under `packages/ui/src/blocks/`; the same commit flips `shared-ui-store-product-listing-US1-TC3-1` with `pnpm run tcs:automated <case> --decided-by <the story path in this store>`
-- [ ] 7.4 Make `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links pass: `ProductCard` takes an optional `href` and draws the photo and the name as links to it where the tile opens; a plain press reports the activation in place of the link's navigation, and a press with a modifier key is the browser's; `ProductSummary.href`, passed by `ProductList` and `StoreProductRelatedRail`, whose `onCardClick` becomes optional
-- [ ] 7.5 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm run tcs:validate`, `pnpm run validate:changes add-store-cross-sell`, `pnpm check:manual`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
+- [x] 7.1 The sold-out tile's hover and focus state as `ui-design.md` draws it (Q50), in `ProductCard`'s stories and the block
+- [x] 7.2 The rail's narrow layout as `ui-design.md` draws it (Q51, Q54), in the block and its `Narrow` and `Wide` stories, and the page's ❓ on the narrow layout closed; no `::figma` card, since the page carries the rail's `::story` cards
+- [x] 7.3 The tests `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links name, in their own commit before its code, ticked last: stories under `packages/ui/src/blocks/`; the same commit flips `shared-ui-store-product-listing-US1-TC3-1` with `pnpm run tcs:automated <case> --decided-by <the story path in this store>`
+- [x] 7.4 Make `shared-ui-store-product-listing-SC-93` and `grade10-site-store-cross-sell-SC-26`'s links pass: `ProductCard` takes an optional `href` and draws the photo and the name as links to it where the tile opens; a plain press reports the activation in place of the link's navigation, and a press with a modifier key is the browser's; `ProductSummary.href`, passed by `ProductList` and `StoreProductRelatedRail`, whose `onCardClick` becomes optional
+- [x] 7.5 Verify: `pnpm run lint`, `pnpm run typecheck`, `pnpm run test:stories:ui`, `pnpm run tcs:validate`, `pnpm run validate:changes add-store-cross-sell`, `pnpm check:manual`, and `pnpm run design-sync:check` where a Figma token is to hand, otherwise CI's
 
 ## 8. The rail's tiles as links (grade10)
 
