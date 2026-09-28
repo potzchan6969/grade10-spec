@@ -220,7 +220,7 @@ function ListingLotGallery({
             aria-label={copy.images}
             aria-roledescription={many ? "carousel" : undefined}
             className={cn(
-              "relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle outline-none",
+              "relative aspect-square w-full overflow-hidden rounded-(--radius-3xl) border border-border bg-background-subtle outline-none select-none",
               many &&
                 "touch-pan-y focus-visible:ring-3 focus-visible:ring-ring/50",
             )}
@@ -254,7 +254,7 @@ function ListingLotGallery({
                 >
                   <img
                     alt={slideIndex === safeIndex ? slide.alt : ""}
-                    className="pointer-events-none size-full object-contain"
+                    className="pointer-events-none size-full object-contain [-webkit-user-drag:none]"
                     draggable={false}
                     src={slide.src}
                   />
