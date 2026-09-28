@@ -58,8 +58,9 @@ type FooterProps = ComponentProps<"footer"> & {
  * inverse tonal axis. Until it does, a shared component may not offer one:
  * see docs/governance/design-code-sync.md.
  *
- * Inset and column gap follow `Gap/gap-8` and `Gap/gap-6`; the legal row is
- * centred on the bar, not spaced between the copyright and locale.
+ * Inset matches page chrome (`px-4` below `sm`, `px-8` from there); column gap
+ * follows `Gap/gap-6`. The legal row is centred on the bar, not spaced between
+ * the copyright and locale.
  *
  * Every content prop is required rather than defaulted: two stores render this
  * shell, and a default would let the second one ship the first one's link
@@ -96,7 +97,7 @@ function Footer({
       )}
       {...props}
     >
-      <div className="grid w-full grid-cols-1 gap-6 p-8 @xl:grid-cols-2 @3xl:grid-cols-4">
+      <div className="grid w-full grid-cols-1 gap-6 px-4 py-8 sm:px-8 @xl:grid-cols-2 @3xl:grid-cols-4">
         <div className="flex flex-col items-start gap-4">
           <a
             className="flex h-9 items-center text-primary-foreground"
@@ -152,7 +153,7 @@ function Footer({
         )}
       </div>
       <div
-        className="relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-[color:var(--gray-500-opacity-20)] px-8 py-3 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
+        className="relative flex w-full flex-wrap items-center justify-between gap-x-6 gap-y-2 border-t border-[color:var(--gray-500-opacity-20)] px-4 py-3 sm:px-8 @3xl:h-[60px] @3xl:flex-nowrap @3xl:py-0"
         data-slot="footer-bar"
       >
         <p className="text-xs font-medium text-primary-foreground">

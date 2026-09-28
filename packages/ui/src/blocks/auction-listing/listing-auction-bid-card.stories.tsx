@@ -19,10 +19,10 @@ const COPY = {
   auctionWon: "Auction won",
   completePurchase: "Confirm delivery address",
   completePurchaseBody:
-    "Confirm where we ship this lot. Grade10 prepares the invoice next — nothing is due yet.",
+    "Confirm where we ship this auction. Grade10 prepares the invoice next — nothing is due yet.",
   completePurchaseAction: "Confirm address",
   paid: "Paid",
-  paidBody: "Track shipping and delivery for this lot.",
+  paidBody: "Track shipping and delivery for this auction.",
   viewOrderDetails: "View order details",
   didNotWin: "Did not win",
   outbid: "Outbid",
@@ -346,6 +346,38 @@ export const ExtendedBidding: Story = {
         /After the scheduled close, each bid restarts a 30-minute timer/,
       ),
     ).toBeInTheDocument();
+  },
+};
+
+export const Opens: Story = {
+  args: {
+    history: [],
+    bidEnrollment: undefined,
+    view: liveView({
+      headerLabel: "Opens soon",
+      live: false,
+      opens: true,
+      hasBids: false,
+      showBidActions: false,
+      priceLabel: "",
+      currentBidMinor: 4_800_000,
+      bidCount: 0,
+      bidCountLabel: "0 bids",
+      countdown: "2D 4H 12M 0S",
+      countdownSeconds: 2 * 24 * 60 * 60 + 4 * 60 * 60 + 12 * 60,
+      countdownFormat: "long",
+      closesAtMs: null,
+      deadlineAtMs: NOW_MS + 2 * 24 * 60 * 60 * 1000,
+      standing: "none",
+      minBidMinor: 4_800_000,
+    }),
+  },
+  play: async ({ canvasElement }) => {
+    const canvas = within(canvasElement);
+    expect(canvas.queryByText("Opens soon")).not.toBeInTheDocument();
+    expect(canvas.getByText("Opens in")).toBeInTheDocument();
+    expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
+    expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
   },
 };
 

@@ -373,9 +373,11 @@ function TimeBlock({ copy, view, locale, timeZone }: TimeBlockProps) {
             <Tooltip>
               <TooltipTrigger
                 aria-label={copy.autoExtendedTooltip}
-                className="inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
-                render={<Info aria-hidden size={12} />}
-              />
+                className="relative inline-flex shrink-0 cursor-pointer text-secondary-foreground outline-none focus-visible:ring-3 focus-visible:ring-ring/50 after:absolute after:-inset-3 after:content-['']"
+                closeOnClick={false}
+              >
+                <Info aria-hidden size={12} />
+              </TooltipTrigger>
               <TooltipContent>{copy.autoExtendedTooltip}</TooltipContent>
             </Tooltip>
           </TooltipProvider>

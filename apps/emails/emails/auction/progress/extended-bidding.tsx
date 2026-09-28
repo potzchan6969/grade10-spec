@@ -24,7 +24,7 @@ export default function ExtendedBiddingEmail({
 }: ExtendedBiddingProps) {
   return (
     <AuctionLetter
-      body="A late bid moved this lot’s close. Bidding continues until no further bid lands in the extension window."
+      body="A late bid moved this auction’s close. Bidding continues until no further bid lands in the extension window."
       brandName={brandName}
       campaign="extended_bidding"
       canUnsubscribe={canUnsubscribe}
@@ -36,7 +36,7 @@ export default function ExtendedBiddingEmail({
       muteUrl={muteUrl}
       preheader={`The close has moved. Current close ${effectiveClosesAt}.`}
       primaryImageUrl={primaryImageUrl}
-      whyYouGotThis="Email alerts are on for this lot."
+      whyYouGotThis="Email alerts are on for this auction."
     />
   );
 }

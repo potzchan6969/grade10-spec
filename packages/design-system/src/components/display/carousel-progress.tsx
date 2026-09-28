@@ -97,7 +97,7 @@ function CarouselProgressItem({
       aria-current={active ? "true" : undefined}
       aria-label={label}
       className={cn(
-        "group relative inline-flex shrink-0 appearance-none items-center justify-center border-0 bg-transparent p-0 outline-none",
+        "group relative inline-flex shrink-0 cursor-pointer appearance-none items-center justify-center border-0 bg-transparent p-0 outline-none",
         // Absolute hit target — layout stays track-sized (6px / 32px).
         "after:absolute after:-inset-3 after:content-['']",
         "focus-visible:ring-3 focus-visible:ring-ring/50",

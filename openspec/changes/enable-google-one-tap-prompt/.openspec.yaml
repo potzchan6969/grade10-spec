@@ -3,3 +3,10 @@ created: 2026-09-25
 promoted_by: "@seankcw"
 hands:
   pm: "@seankcw"
+  dev: "@seankcw"
+reviewed:
+  user-journeys: 5204ac94
+  specs: 653ec210
+  test-cases: 653ec210
+landed_by:
+  tasks: seankcw

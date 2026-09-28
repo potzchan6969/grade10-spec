@@ -29,7 +29,7 @@ const MARKET_COMPS = {
 } as const;
 
 const COPY = {
-  aboutThisLot: "About this lot",
+  aboutThisLot: "About this auction",
   vaultShipping: "Vault shipping",
   showMore: "Show more",
   showLess: "Show less",
@@ -44,7 +44,7 @@ const meta = {
     docs: {
       description: {
         component:
-          "About-this-lot block under the auction bid card. Same content as Pages/Auction Lot Details. While live, market comps sit under About this lot; after sale they are omitted — the hammer price is on the bid card.",
+          "About-this-auction block under the auction bid card. Same content as Pages/Auction Lot Details. While live, market comps sit under About this auction; after sale they are omitted — the hammer price is on the bid card.",
       },
     },
   },
@@ -71,7 +71,7 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.getByText("Cert number")).toBeInTheDocument();
@@ -119,7 +119,7 @@ export const AfterSale: Story = {
   },
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Vault shipping")).toBeInTheDocument();
     expect(canvas.queryByText("Market price")).not.toBeInTheDocument();
     expect(canvas.queryByText("Result")).not.toBeInTheDocument();

@@ -43,7 +43,7 @@ const secondaryButtonStyle = {
 
 export function PrimaryCta({
   href,
-  label = "View lot",
+  label = "View auction",
   secondaryHref,
   secondaryLabel,
 }: PrimaryCtaProps) {

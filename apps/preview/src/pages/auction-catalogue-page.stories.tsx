@@ -1,21 +1,20 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { expect, userEvent, waitFor, within } from "storybook/test";
+import { expect, waitFor, within } from "storybook/test";
+import { PAGE_SIZE } from "./auction-catalogue-all-auctions";
 import {
-  BUSY_MANY_LOTS,
   CATALOGUE_CANONICAL,
   CATALOGUE_DESCRIPTION,
+  CATALOGUE_PAGE_LOTS,
   CATALOGUE_TITLE,
-  ENDED_ONLY_LOTS,
   FEW_FEATURED_LOTS,
-  ONE_FEATURED_LOTS,
-  QUIET_TILE_LOTS,
 } from "./auction-catalogue-content";
 import { AuctionCataloguePage } from "./auction-catalogue-page";
 
 /**
- * The Auction list as the site assembles it: the existing header and footer,
- * then featured lots, category tiles, and the full list. Every lot is from the
- * collection draw.
+ * Launch catalogue: header and footer, Featured carousel when set, then All
+ * auctions — no category tiles. Featured band:
+ * Auction List/Featured Auctions. All auctions grid:
+ * Auction List/All Auctions.
  */
 const meta = {
   title: "Pages/Auction List",
@@ -23,7 +22,7 @@ const meta = {
   tags: ["autodocs"],
   parameters: { layout: "fullscreen" },
   args: {
-    lots: FEW_FEATURED_LOTS,
+    lots: CATALOGUE_PAGE_LOTS,
     featuredLayout: "banner",
     showCategories: false,
   },
@@ -62,9 +61,9 @@ async function waitForPageEnter(canvas: ReturnType<typeof within>) {
   );
 }
 
-/** Full page with the Figma full-width carousel banner. Docs primary. */
-export const CarouselBanner: Story = {
-  name: "Carousel banner",
+/** Launch — Featured present, quiet All auctions (no category chrome). */
+export const Default: Story = {
+  name: "Default",
   play: async ({ canvasElement }) => {
     const canvas = await expectCatalogueHead(canvasElement);
     await waitForPageEnter(canvas);
@@ -73,12 +72,6 @@ export const CarouselBanner: Story = {
         level: 2,
         name: FEW_FEATURED_LOTS[0].title,
       }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("LIVE BIDDING")).toBeInTheDocument();
-    expect(canvas.getByText("CURRENT BID")).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
-    expect(
-      canvas.getByRole("navigation", { name: "Featured lots" }),
     ).toBeInTheDocument();
     expect(
       canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
@@ -92,265 +85,14 @@ export const CarouselBanner: Story = {
         name: FEW_FEATURED_LOTS[0].title,
       }),
     ).toBeInTheDocument();
-
-    const second = canvas.getByRole("button", {
-      name: `Show featured lot 2: ${FEW_FEATURED_LOTS[1].title}`,
-    });
-    await userEvent.click(second);
-    await waitFor(() => {
-      expect(second).toHaveAttribute("aria-current", "true");
-    });
-    expect(
-      canvas.getByRole("heading", {
-        level: 2,
-        name: FEW_FEATURED_LOTS[1].title,
-      }),
-    ).toBeInTheDocument();
-  },
-};
-
-/** One Featured slide — multi-dot progress is not required (SC-36). */
-export const CarouselBannerOne: Story = {
-  name: "Carousel banner one slide",
-  args: {
-    lots: ONE_FEATURED_LOTS,
-    featuredLayout: "banner",
-    showCategories: false,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    const live = ONE_FEATURED_LOTS.find((lot) => lot.status !== "Ended");
-    expect(live).toBeDefined();
-    expect(
-      canvas.getByRole("heading", {
-        level: 2,
-        name: live?.title,
-      }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("link", { name: /Bid Now/i })).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("navigation", { name: "Featured lots" }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
-    ).toBeInTheDocument();
-  },
-};
-
-/** Full page with the overlapping image + info featured band. */
-export const OverlappingFeatured: Story = {
-  name: "Overlapping featured",
-  args: { featuredLayout: "pair", showCategories: true },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    const featured = canvas.getByRole("region", { name: "Grade10 Auctions" });
-    expect(
-      within(featured).getByRole("heading", {
-        level: 2,
-        name: "Grade10 Auctions",
-      }),
-    ).toBeInTheDocument();
-    await waitFor(() => {
-      expect(within(featured).getByText("Bid Now")).toBeInTheDocument();
-    });
-    expect(
-      within(featured).getByRole("navigation", { name: "Featured lots" }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
-    ).toBeInTheDocument();
-  },
-};
-
-export const OneFeatured: Story = {
-  name: "One featured lot",
-  args: {
-    lots: ONE_FEATURED_LOTS,
-    featuredLayout: "row",
-    showCategories: true,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "Grade10 Auctions" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("New auctions every week")).toBeInTheDocument();
-    expect(
-      within(
-        canvas.getByRole("region", { name: "Grade10 Auctions" }),
-      ).queryByRole("heading", { level: 3 }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("navigation", { name: "Categories" }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("heading", {
-        level: 3,
-        name: ONE_FEATURED_LOTS[0].title,
-      }),
-    ).toBeInTheDocument();
-    expect(
-      within(
-        canvas.getByRole("region", { name: "Grade10 Auctions" }),
-      ).getAllByRole("link", { name: ONE_FEATURED_LOTS[0].title }).length,
-    ).toBeGreaterThan(0);
-    expect(
-      document.querySelector('script[type="application/ld+json"]'),
-    ).not.toBeNull();
-  },
-};
-
-export const FewFeatured: Story = {
-  name: "A few featured lots",
-  args: {
-    lots: FEW_FEATURED_LOTS,
-    featuredLayout: "row",
-    showCategories: true,
-  },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(
-      canvas.getByRole("heading", { level: 2, name: "Grade10 Auctions" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByText("New auctions every week")).toBeInTheDocument();
-    expect(
-      canvas.getByRole("navigation", { name: "Categories" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
-  },
-};
-
-export const BusyMany: Story = {
-  name: "Many categories",
-  args: { lots: BUSY_MANY_LOTS, featuredLayout: "row", showCategories: true },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(
-      canvas.getByRole("navigation", { name: "Categories" }),
-    ).toBeInTheDocument();
-    expect(
-      canvas.getByRole("button", { name: "Minecraft" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Pokémon" })).toBeInTheDocument();
-
     const allAuctions = canvas.getByRole("region", { name: "All Auctions" });
-    const pokemonLot = BUSY_MANY_LOTS.find(
-      (lot) => lot.categoryId === "pokemon",
-    );
-    const minecraftLot = BUSY_MANY_LOTS.find(
-      (lot) => lot.categoryId === "minecraft",
-    );
-    if (!pokemonLot || !minecraftLot) {
-      throw new Error("the fixture holds a Pokémon lot and a Minecraft lot");
-    }
-
-    const pokemon = canvas.getByRole("button", { name: "Pokémon" });
-    await userEvent.click(pokemon);
-    expect(pokemon).toHaveAttribute("aria-pressed", "true");
-    await waitFor(() => {
-      expect(
-        within(allAuctions).getByRole("heading", {
-          level: 3,
-          name: pokemonLot.title,
-        }),
-      ).toBeInTheDocument();
-    });
     expect(
-      within(allAuctions).queryByRole("heading", {
-        level: 3,
-        name: minecraftLot.title,
-      }),
-    ).not.toBeInTheDocument();
+      within(allAuctions).getAllByRole("heading", { level: 3 }),
+    ).toHaveLength(PAGE_SIZE);
     expect(
-      canvas.getByRole("heading", { level: 2, name: "All Auctions" }),
-    ).toBeInTheDocument();
-    expect(
-      document.querySelector('script[type="application/ld+json"]'),
-    ).toBeNull();
-
-    const lorcana = canvas.getByRole("button", { name: "Lorcana" });
-    await userEvent.click(lorcana);
-    expect(lorcana).toHaveAttribute("aria-pressed", "true");
-    expect(pokemon).toHaveAttribute("aria-pressed", "false");
-    await waitFor(() => {
-      expect(
-        within(allAuctions).queryByRole("heading", {
-          level: 3,
-          name: pokemonLot.title,
-        }),
-      ).not.toBeInTheDocument();
-    });
-
-    await userEvent.click(lorcana);
-    expect(lorcana).toHaveAttribute("aria-pressed", "false");
-    await waitFor(() => {
-      expect(
-        within(allAuctions).getByRole("heading", {
-          level: 3,
-          name: minecraftLot.title,
-        }),
-      ).toBeInTheDocument();
-    });
-  },
-};
-
-export const QuietTiles: Story = {
-  name: "Category tiles",
-  args: { lots: QUIET_TILE_LOTS, featuredLayout: "row", showCategories: true },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(
-      canvas.getByRole("navigation", { name: "Categories" }),
-    ).toBeInTheDocument();
-    expect(canvas.getByRole("button", { name: "Lorcana" })).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("heading", { name: "Categories" }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.queryByRole("heading", { name: "Filter" }),
-    ).not.toBeInTheDocument();
-  },
-};
-
-export const EndedOnly: Story = {
-  name: "Closed lots",
-  args: { lots: ENDED_ONLY_LOTS },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(
-      canvas.queryByRole("heading", { name: "Grade10 Auctions" }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.queryByRole("button", { name: /Watch / }),
-    ).not.toBeInTheDocument();
-    expect(
-      canvas.getByRole("heading", { level: 3, name: ENDED_ONLY_LOTS[0].title }),
-    ).toBeInTheDocument();
-  },
-};
-
-export const Empty: Story = {
-  name: "No auctions",
-  args: { lots: [] },
-  play: async ({ canvasElement }) => {
-    const canvas = await expectCatalogueHead(canvasElement);
-    await waitForPageEnter(canvas);
-    expect(canvas.getByText("There are no auctions.")).toBeInTheDocument();
-    expect(
-      canvas.queryByRole("heading", { name: "Grade10 Auctions" }),
-    ).not.toBeInTheDocument();
-    expect(
-      document.querySelector('script[type="application/ld+json"]'),
-    ).toBeNull();
+      allAuctions.querySelector(
+        '[data-slot="all-auctions-load-more-sentinel"]',
+      ),
+    ).not.toBeNull();
   },
 };

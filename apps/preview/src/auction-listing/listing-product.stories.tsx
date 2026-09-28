@@ -30,7 +30,7 @@ import {
 
 /**
  * Lot product composition used by Auction Lot Details — gallery, header, and
- * auction-card sidebar (bid card + About this lot). Site chrome lives on the
+ * auction-card sidebar (bid card + About this auction). Site chrome lives on the
  * page story.
  */
 const meta = {
@@ -80,16 +80,23 @@ function lotMetaLoading() {
 
 function galleryLoading() {
   return (
-    <VStack className="w-full" gap="lg">
-      <Skeleton className="aspect-square w-full rounded-4xl" />
-      <Skeleton className="aspect-square w-full rounded-4xl" />
-    </VStack>
+    <div className="@container flex w-full flex-col gap-4 @min-[24rem]:flex-row @min-[24rem]:items-start">
+      <div className="flex min-w-0 flex-1 flex-col gap-2">
+        <Skeleton className="aspect-square w-full rounded-4xl" />
+        <Skeleton className="mx-auto h-4 w-24" />
+      </div>
+      <div className="hidden shrink-0 gap-2 @min-[24rem]:order-first @min-[24rem]:flex @min-[24rem]:flex-col">
+        <Skeleton className="size-20 shrink-0 rounded-xl" />
+        <Skeleton className="size-20 shrink-0 rounded-xl" />
+        <Skeleton className="size-20 shrink-0 rounded-xl" />
+      </div>
+    </div>
   );
 }
 
 function lotShell(main: ReactNode, header?: ReactNode) {
   return (
-    <VStack className="mx-auto w-full max-w-[1280px]" gap="lg">
+    <VStack className="mx-auto w-full max-w-[1280px] px-4 sm:px-8" gap="lg">
       {header}
       <div className={LISTING_LOT_GRID_CLASS}>{main}</div>
     </VStack>
@@ -162,8 +169,9 @@ export const PreAuction: Story = {
   render: () => lotPage("opens"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
+    expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
@@ -178,7 +186,7 @@ export const Default: Story = {
         name: /Carddass/,
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(

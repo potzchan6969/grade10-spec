@@ -317,26 +317,28 @@ function AuctionLotCardContent({
           ) : (
             title
           )}
-          <div className="flex w-full flex-col items-start">
-            <p className="w-full text-sm text-secondary-foreground">
-              {lot.status === "Upcoming" ? "Starting bid" : "Current Bid"}
-            </p>
-            <div className="flex w-full items-baseline gap-2">
-              <p
-                className={cn(
-                  "min-w-0 flex-1 font-semibold tabular-nums text-card-foreground",
-                  lift ? "text-xl leading-7" : "text-lg leading-7",
-                )}
-              >
-                {lot.bidLabel}
+          {lot.status !== "Upcoming" ? (
+            <div className="flex w-full flex-col items-start">
+              <p className="w-full text-sm text-secondary-foreground">
+                Current Bid
               </p>
-              {lift && lot.status !== "Ended" ? (
-                <p className="shrink-0 whitespace-nowrap text-sm leading-5 text-secondary-foreground">
-                  {bidsLabel(lot.bidCount)}
+              <div className="flex w-full items-baseline gap-2">
+                <p
+                  className={cn(
+                    "min-w-0 flex-1 font-semibold tabular-nums text-card-foreground",
+                    lift ? "text-xl leading-7" : "text-lg leading-7",
+                  )}
+                >
+                  {lot.bidLabel}
                 </p>
-              ) : null}
+                {lift && lot.status !== "Ended" ? (
+                  <p className="shrink-0 whitespace-nowrap text-sm leading-5 text-secondary-foreground">
+                    {bidsLabel(lot.bidCount)}
+                  </p>
+                ) : null}
+              </div>
             </div>
-          </div>
+          ) : null}
           <LotCountdown lot={lot} />
         </div>
         {lift ? (
@@ -999,29 +1001,29 @@ function FeaturedAuctionsPair({
                       >
                         {lot.title}
                       </motion.a>
-                      <motion.div
-                        animate="rest"
-                        className="flex w-full flex-col items-center gap-1"
-                        initial={reduceMotion ? false : "enter"}
-                        transition={contentTransition(0.3)}
-                        variants={
-                          reduceMotion ? undefined : pairContentVariants
-                        }
-                      >
-                        <p className="text-sm text-secondary-foreground">
-                          {lot.status === "Upcoming"
-                            ? "Starting bid"
-                            : "Current Bid"}
-                        </p>
-                        <p className="text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
-                          {lot.bidLabel}
-                        </p>
-                        {lot.status !== "Ended" ? (
+                      {lot.status !== "Upcoming" ? (
+                        <motion.div
+                          animate="rest"
+                          className="flex w-full flex-col items-center gap-1"
+                          initial={reduceMotion ? false : "enter"}
+                          transition={contentTransition(0.3)}
+                          variants={
+                            reduceMotion ? undefined : pairContentVariants
+                          }
+                        >
                           <p className="text-sm text-secondary-foreground">
-                            {bidsLabel(lot.bidCount)}
+                            Current Bid
                           </p>
-                        ) : null}
-                      </motion.div>
+                          <p className="text-2xl font-semibold tabular-nums text-foreground sm:text-3xl">
+                            {lot.bidLabel}
+                          </p>
+                          {lot.status !== "Ended" ? (
+                            <p className="text-sm text-secondary-foreground">
+                              {bidsLabel(lot.bidCount)}
+                            </p>
+                          ) : null}
+                        </motion.div>
+                      ) : null}
                       <motion.div
                         animate="rest"
                         initial={reduceMotion ? false : "enter"}

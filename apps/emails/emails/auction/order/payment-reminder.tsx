@@ -64,8 +64,7 @@ export default function PaymentReminderEmail({
               heading: "Your invoice is ready",
               body: "Your invoice is ready. Open Winner Order to check the full invoice and pay. The payment window starts now.",
               preheader: `Pay ${invoiceTotal} by ${paymentDeadline}.`,
-              whyYouGotThis:
-                "You won this auction lot and completed order setup.",
+              whyYouGotThis: "You won this auction and completed order setup.",
             };
 
   return (
