@@ -30,7 +30,7 @@ import {
 
 /**
  * Lot product composition used by Auction Lot Details — gallery, header, and
- * auction-card sidebar (bid card + About this lot). Site chrome lives on the
+ * auction-card sidebar (bid card + About this auction). Site chrome lives on the
  * page story.
  */
 const meta = {
@@ -162,8 +162,9 @@ export const PreAuction: Story = {
   render: () => lotPage("opens"),
   play: async ({ canvasElement }) => {
     const canvas = within(canvasElement);
-    expect(canvas.getByText("Starting bid")).toBeInTheDocument();
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.queryByText("Starting bid")).not.toBeInTheDocument();
+    expect(canvas.queryByText("No bids yet")).not.toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Year")).toBeInTheDocument();
     expect(canvas.getByText("1997")).toBeInTheDocument();
     expect(canvas.queryByRole("button", { name: /^Set maximum/ })).toBeNull();
@@ -178,7 +179,7 @@ export const Default: Story = {
         name: /Carddass/,
       }),
     ).toBeInTheDocument();
-    expect(canvas.getByText("About this lot")).toBeInTheDocument();
+    expect(canvas.getByText("About this auction")).toBeInTheDocument();
     expect(canvas.getByText("Set your private maximum")).toBeInTheDocument();
     expect(canvas.getByText("Min. bid")).toBeInTheDocument();
     expect(

@@ -1,7 +1,7 @@
 {
   "control": {
     "title": "Push notifications",
-    "description": "An alert on this device the moment a lot needs you.",
+    "description": "An alert on this device the moment an auction needs you.",
     "emailStays": "Email arrives either way. This only adds an alert here.",
     "enable": "Turn on",
     "disable": "Turn off",
@@ -13,7 +13,7 @@
   },
   "auctionEmail": {
     "title": "Auction email alerts",
-    "description": "Mail about lots you watch or bid on. Turning this off stops every auction letter until you turn it back on.",
+    "description": "Mail about auctions you watch or bid on. Turning this off stops every auction letter until you turn it back on.",
     "on": "On for your account",
     "off": "Off for your account",
     "failed": "That did not work. Try again."
@@ -22,12 +22,12 @@
     "outbid": "Someone bid {amount}. Bid again to stay in.",
     "nowTop": "Your {amount} is the top bid.",
     "holdFailed": "Your bid did not go through. The card was not authorized.",
-    "lostAtClose": "This lot closed without you.",
-    "listingCanceled": "This lot was withdrawn.",
-    "winner": "You won this lot.",
+    "lostAtClose": "This auction closed without you.",
+    "listingCanceled": "This auction was withdrawn.",
+    "winner": "You won this auction.",
     "captureFailed": "Payment did not go through. Check your card.",
     "endingSoon": "Closing soon.",
-    "other": "There is news about this lot.",
+    "other": "There is news about this auction.",
     "spendLandedTitle": "Used at the counter",
     "spendLanded": "{amount} came off a sale just now.",
     "spendLandedPoints": "{amount} came off a sale just now, {points, plural, one {# point} other {# points}} of it.",
