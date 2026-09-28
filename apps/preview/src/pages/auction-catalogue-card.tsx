@@ -211,12 +211,13 @@ function AuctionLotCardContent({
   eager,
   lift,
 }: Omit<AuctionLotCardProps, "loading">) {
-  const imageRadius = "rounded-(--radius-3xl)";
+  const imageRadius =
+    "rounded-(--radius-2xl) md:rounded-(--radius-3xl)";
   const title = (
     <a
       className={cn(
         pressable,
-        "line-clamp-2 text-base font-medium leading-6 text-foreground underline-offset-2 hover:underline",
+        "line-clamp-3 text-base font-medium leading-6 text-foreground underline-offset-2 hover:underline md:line-clamp-2",
         lift && "min-h-12",
       )}
       href={lotAddress(lot)}

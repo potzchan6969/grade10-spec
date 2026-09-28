@@ -12,7 +12,8 @@ Bid Now or View Auction —
 ### grade10-site-auction-auction-US-07: Collector advances Featured slides
 
 **As a** collector on `/auction` with more than one Featured slide,
-**I want** to move between slides with the progress control (hidden when only
+**I want** to move between slides with the progress control, and on a small
+viewport also with stage previous/next or a horizontal swipe (hidden when only
 one slide), including mixed Active and Upcoming in one set,
 **so that** I can reach every curated lot without leaving the band.
 

@@ -2,7 +2,7 @@ import { Footer } from "@grade10/design-system/components/layout/footer";
 import { LISTING_LOT_GRID_CLASS, SiteHeader } from "@grade10/ui";
 import type { ReactNode } from "react";
 import { AUCTION_SITE_HEADER } from "./auction-lot-details-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 
 type AuctionLotDetailsPageShellProps = {
   children: ReactNode;
@@ -22,7 +22,7 @@ function AuctionLotDetailsPageShell({
           <div className={LISTING_LOT_GRID_CLASS}>{children}</div>
         </div>
       </main>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }

@@ -15,7 +15,7 @@ import {
   POST_AUCTION_BIDDING,
   POST_AUCTION_WATCHING,
 } from "./my-auctions-content";
-import { STORE_FOOTER } from "./store-content";
+import { AUCTION_FOOTER } from "./store-content";
 import {
   storyHref,
   WINNER_ORDER_AWAITING_ADDRESS_STORY_ID,
@@ -89,7 +89,7 @@ function MyAuctionsPage({
           }))}
         />
       </div>
-      <Footer {...STORE_FOOTER} />
+      <Footer {...AUCTION_FOOTER} />
     </div>
   );
 }

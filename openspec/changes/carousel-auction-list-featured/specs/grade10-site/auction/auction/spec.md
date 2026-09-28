@@ -5,7 +5,7 @@
   - Operator slides: when at least one complete slot is set, `/auction` leads with a full-width carousel of those slides in operator order
   - Slide facts: each slide shows the slot's front page image as banner and slab (load failure falls back to the lot's first gallery image, else the stage default background), lot title, status chrome by lot status, relative Ends in / Opens in from served close or open, and money on Active only (current bid rolls when the amount increases after first paint; Upcoming shows no money until the lot opens)
   - Open lot: Bid Now on Active or View Auction on Upcoming opens that lot's details page
-  - Progress: dots advance among two or three slides; a single slide needs no multi-dot advance
+  - Progress: dots advance among two or three slides; on a small viewport stage previous/next and swipe also advance; a single slide needs no multi-dot advance or stage previous/next
 - Quiet catalogue
   - Featured then All auctions: the only sections on `/auction` in this layout; Featured is absent when no complete slot is set
   - No category section: no Categories heading, tiles, or busy filter chrome
@@ -121,14 +121,17 @@ offer View Auction. Activating either SHALL open that lot's details page.
 ### Requirement: Progress advances among two or three Featured slides
 
 When Featured holds two or three complete slides, `/auction` SHALL show
-progress that advances among them. A single complete slide SHALL NOT require
-multi-dot advance. Progress MAY use `CarouselProgress`.
+progress that advances among them. On a small viewport the stage SHALL also
+offer previous/next and horizontal swipe to advance among those slides. A
+single complete slide SHALL NOT require multi-dot advance or stage previous/next.
+Progress MAY use `CarouselProgress`.
 
 #### Scenario: grade10-site-auction-auction-SC-35 - Progress advances among two or three slides
 **Serves:** grade10-site-auction-auction-US-07 - Collector advances Featured slides
 
 - **GIVEN** two or three complete Featured slides on `/auction`
-- **WHEN** the collector advances with the progress control
+- **WHEN** the collector advances with the progress control, or on a small
+  viewport with stage previous/next or a horizontal swipe
 - **THEN** each curated slide becomes visible in turn without leaving Featured
 
 #### Scenario: grade10-site-auction-auction-SC-36 - One Featured slide needs no multi-dot advance
@@ -138,6 +141,7 @@ multi-dot advance. Progress MAY use `CarouselProgress`.
 - **WHEN** a collector views Featured
 - **THEN** that slide is shown
 - **AND** multi-dot advance among slides is not required
+- **AND** stage previous/next is not required
 
 ### Requirement: The catalogue layout is Featured then All auctions only
 
