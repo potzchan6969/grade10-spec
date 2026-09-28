@@ -3,7 +3,6 @@ import {
   BreadcrumbSeparator,
   Breadcrumbs,
 } from "@grade10/design-system/components/display/breadcrumbs";
-import { HStack } from "@grade10/design-system/components/layout/hstack";
 import { VStack } from "@grade10/design-system/components/layout/vstack";
 import type { WatchButtonCopy } from "../auction-record/types";
 import { WatchButton } from "../auction-record/watch-button";
@@ -68,12 +67,7 @@ function ListingLotHeader({
         <BreadcrumbSeparator />
         <BreadcrumbItem current>{copy.lotBreadcrumb}</BreadcrumbItem>
       </Breadcrumbs>
-      <HStack
-        className="w-full"
-        gap="md"
-        hAlign="space-between"
-        vAlign="center"
-      >
+      <div className="flex w-full flex-col items-start gap-3 sm:flex-row sm:items-center sm:justify-between sm:gap-4">
         <h1 className="min-w-0 text-3xl font-semibold leading-9 text-foreground">
           {title}
         </h1>
@@ -88,7 +82,7 @@ function ListingLotHeader({
             watched={watched || watchLocked}
           />
         ) : null}
-      </HStack>
+      </div>
     </VStack>
   );
 }
