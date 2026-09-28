@@ -23,6 +23,11 @@ contract for leaving a session.
   - Settled elsewhere: a surface still waiting on its own request stops waiting, without gaining a session of its own, once that address signs in by any method on another device
 - Google
   - Brand-offered: a brand that enables Google shows it; an unverified email does not sign in
+  - Auto-prompt: Google's own corner prompt offers sign-in to a signed-out
+    visitor without opening the dialog first, wherever the brand already
+    offers Google sign-in
+  - One ask at a time: the prompt does not show while the sign-in dialog is
+    open, and opening the dialog dismisses it
 - Account identity
   - One person per address: first visit creates the account; later visits are the same person
 - Rate limits and redirects
