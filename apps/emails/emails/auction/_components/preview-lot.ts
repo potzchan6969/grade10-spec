@@ -15,7 +15,7 @@ export const previewLot = {
   lotTitle: "1999 Pokémon Base Set Charizard PSA 9",
   listingUrl: "https://grade10.com/auction/listings/demo-charizard",
   /** Signed-in Winner Order for this lot. */
-  orderUrl: "https://grade10.com/account/auction-orders/demo-charizard",
+  orderUrl: "https://grade10.com/auction/order?orderId=demo-charizard",
   /** Sent invoice id — omitted from setup-overdue (no invoice yet). */
   invoiceId: PREVIEW_INVOICE_ID,
   /**
