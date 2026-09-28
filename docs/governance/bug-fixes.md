@@ -19,15 +19,63 @@ A bug is code that does not do what is already settled. What its fix moves decid
 | An empty cart opens a blank drawer, and nothing says what it shows | Change | Somebody decides what the empty state says |
 | The spec lists five roles and the code enforces six | Change | The delta corrects the spec |
 
-## Fixing a Bug
+## Rounds
 
-A bug fix is a `fix` commit with a regression test and nothing else: no OpenSpec change, no delta, no page edit, no suite edit and no `pnpm plan` write.
+A bug fix is a `fix` commit with a regression test and nothing else: no OpenSpec change, no delta, no page edit, no suite edit and no `pnpm plan` write. It runs six rounds, each posted on the report. The readers of rounds 2 and 5 are the schema's `bug:` block, read by `node scripts/openspec/bug-readers.mjs`; each reader is its own call and never sees another's findings, and the verifier rules on all of them.
 
-1. **Report** - an issue in the repository whose code is wrong, or the pull request itself when the bug is found and fixed in one sitting
-2. **Root cause** - the mechanism that produces the symptom. Where a symptom shows is not always where its defect lives
-3. **Siblings** - every other place the same mechanism reaches. One that shares the root cause is fixed in the same pull request; one with its own root cause is reported as its own bug
-4. **Regression test** - written first and failing on `main` for the reported reason, then turned green by the fix. A scenario the spec already names gives the test its id
-5. **Pull request** - `fix(<domain>): <outcome>`, labelled `bug`, naming the symptom, the root cause, the siblings and the test, with a before and after image for anything a reader sees
+| Round | Who | Done when |
+| --- | --- | --- |
+| 1. Diagnose | One agent, changing no file | The diagnosis fills the template below |
+| 2. Challenge | The diagnosis round's readers, then the verifier | Nothing stands |
+| 3. Red | One agent, writing the test alone | The diagnosis's test command fails on the unfixed tree |
+| 4. Green | One agent, writing the fix | The test passes, the repository's checks pass, the test is untouched and no protected path moved |
+| 5. Review | The fix round's readers, then the verifier | Nothing stands |
+| 6. Verify | One agent, walking the report's own steps | It answers `Verified: yes` with its evidence |
+
+- **Stands** - the finding goes back to the round it came from, and that round runs again
+- **Asks** - the run stops, and the question waits on the report for the person it names
+- **Test name** - a scenario the spec already names gives the regression test its id
+- **Round cap** - 3 runs of round 2, and of round 5, before the run stops as `unsettled`
+- **Protected paths** - CI, manifests and lockfiles, agent instructions, `openspec/`, `docs/prds/` and a submodule's pin. A fix that needs one is not a bug fix run unattended
+
+## Diagnosis
+
+The four keyed lines lead, then the sections. `scripts/bug-fix/run.mjs` refuses a diagnosis missing any keyed line.
+
+```markdown
+Lane: bug
+Lands in: here
+Test: `<command that runs the regression test alone>`
+Commit: fix(<domain>): <outcome>
+
+## Symptom
+## Root Cause
+## Siblings
+## Evidence
+## Plan
+## Screens
+```
+
+- **Lane** - `bug`, or `change` by the table above, which ends the run
+- **Lands in** - `here`, or the `owner/repo` whose code is wrong, which ends the run as `moved`
+- **Siblings** - each path the same mechanism reaches, and whether this fix covers it or it is its own bug
+- **Screens** - only where a reader sees the symptom: the widths, states and themes it shows at. It summons the design reader in rounds 2 and 5
+
+## Outcomes
+
+| Outcome | Next |
+| --- | --- |
+| `fixed` | A draft pull request, `fix(<domain>): <outcome>`, labelled `bug`, that closes the report. A person reviews and merges it |
+| `change` | The report goes to planning, per Turning Into a Change |
+| `moved` | The report is filed in the repository the diagnosis names |
+| `asks`, `unsettled` | A person answers the question or the standing findings, then labels the report again |
+| `no-red`, `no-green`, `unverified`, `unreadable`, `agent-failed` | A person reads the posted rounds; the run left nothing on `main` |
+
+## Running It
+
+- **From a report** - the `agent-fix` label, added by whoever confirms it reads as a bug, runs `scripts/bug-fix/run.mjs` in the repository's `Bug fix` workflow and posts each round
+- **In a session** - `/fix-bug` runs the same rounds and the same gates, dispatching each reader itself
+- **By hand** - `node scripts/bug-fix/run.mjs --report <file> --agent scripts/bug-fix/claude-agent.sh --out <dir>`, or `cursor-agent.sh`: the agent is any command called as `<cmd> <read|write> <prompt-file>`
 
 ## Choosing the Repository
 
