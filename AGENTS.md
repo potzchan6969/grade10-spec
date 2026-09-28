@@ -70,6 +70,15 @@ Read [`docs/governance/agent-workflow-example.md`](docs/governance/agent-workflo
 
 Ask only questions that materially affect scope or an irreversible product choice. Otherwise state the assumption in the change proposal, or as a ❓ row in the PRD's decisions table when one exists.
 
+## Design Override
+
+The agreed UI design is what `main` holds in `packages/ui/src/blocks`, `packages/design-system/src/components`, `packages/design-system/tokens.json` and `apps/preview/src/pages`. The hooks set by `pnpm install` stop a commit that changes it, and a merge that drops either side's lines — [Design Override](docs/prds/products/shared/design-sync/design-override.md).
+
+- **Keep the agreed look** — implementation builds on it and never restyles it on the way.
+- **A missing state or variant is the designer's** — never a local addition.
+- **A stop is shown to your person** — show them its lines and wait. Write `Design-Override: <what changes and why>` as the message's last paragraph, or a page's reason in the application's block check, only on their yes.
+- **Never skip the check** — no `--no-verify`.
+
 ## Product UI component contracts
 
 This repository specifies product UI components and, since the `reinstate-shared-ui-package` change, hosts their shared implementations: a compound component named by a capability spec lives once in `packages/ui` (`@grade10/ui`) and every consuming application imports it rather than maintaining its own copy. The capability spec under `openspec/specs/` remains the export contract the implementation must satisfy.

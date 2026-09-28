@@ -50,5 +50,7 @@ the ticks that follow go through `pnpm plan done`.
   finding that asks for one is not carried
 - **Never edit the durable specs** — `openspec/specs/` moves at the fold, and
   the fold is the archive's
+- **Never change the agreed look on your own** — a stop is your person's to
+  answer, as [Design Override](../../../AGENTS.md#design-override) says
 - **Never invent a product policy** — a product detail lands on the page as a
   ❓ line, and the group stops for it

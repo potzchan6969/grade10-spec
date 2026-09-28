@@ -7,7 +7,7 @@ description: "Fix a reported bug in a primitive, a block, a token or a catalog t
 
 [Bug Fixes](../../../docs/governance/bug-fixes.md) owns the rounds, the diagnosis template, the gates and the outcomes; read it before anything else. This skill runs those rounds from a session. The `agent-fix` label runs the same rounds from a report, in `.github/workflows/bug-fix.yml`.
 
-**Done when:** the run ends `fixed` and its commits are on a branch. **Stop when:** it ends any other way - report the outcome and the posted rounds, and do not fix around the gate that stopped it.
+**Done when:** the run ends `fixed` and its commits are on a branch. **Stop when:** it ends any other way - report the outcome and the posted rounds, and do not fix around the gate that stopped it. A fix restores the agreed look and never moves it; a commit the Design Override check stops follows [Design Override](../../../AGENTS.md#design-override).
 
 ## 1. Write the report down
 
