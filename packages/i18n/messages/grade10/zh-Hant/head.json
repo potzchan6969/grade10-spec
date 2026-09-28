@@ -36,6 +36,10 @@
     "title": "預約到店 — Grade10",
     "description": "選擇服務、門市與時間，帶卡到店。無需帳戶。"
   },
+  "grading": {
+    "title": "卡片評級 — Grade10",
+    "description": "交由 PSA、CGC 或 BGS 評級。先列出卡片、查看費用，到店交卡，評級後回店取回評級卡。"
+  },
   "bookManage": {
     "title": "你的預約 — Grade10",
     "description": "查看、更改或取消你在 Grade10 的到店預約。"
