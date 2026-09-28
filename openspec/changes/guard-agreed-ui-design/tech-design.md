@@ -70,8 +70,8 @@ branch, a push to a URL and an unfetched remote. Exit codes: 0 passes, 1
 stops, 2 could not read something, naming it. The report exits 0 after
 posting every comment, and 2 on a read or a post that failed. Stops are
 sorted by file, then line. Every git call pins the settings whose output
-the engine parses - `merge.conflictStyle=merge`, `color.ui=never`,
-`core.quotePath=false`, `diff.noprefix=false`, `--no-ext-diff` - so a
+the engine parses - `merge.conflictStyle=merge`, `core.quotePath=false`,
+and on the diff `--no-color`, `--no-ext-diff` and fixed `a/` `b/` prefixes - so a
 person's own config cannot change an answer, and git older than 2.38, which
 lacks `merge-tree --write-tree`, exits 2. At commit, the hook reads the
 message as git will record it by default; the push reads the recorded
@@ -142,10 +142,12 @@ only when run: the working tree in `check:libs`, and otherwise a tree with
 from `pre-push` - read through `git ls-tree -r` and `git cat-file`. A
 page that rebuilds a block on purpose is an `EXEMPT` entry with its reason,
 covering the whole page; today's rebuilt pages, among them
-`AuctionWinnerOrderPage.tsx`, `ListingCatalogueCard.tsx` and
+`AuctionWinnerOrderPage.tsx`, `OrderDetailsPage.tsx` and
 `AccountAuctionRecordPage.tsx`, are listed so each is visible debt. An entry
 with an empty reason, or naming a page that is gone or rebuilds nothing,
-fails the check. Measured on September's `main`, 24 commits added such an
+fails the check. A block rebuilt from plain elements, as
+`ListingCatalogueCard.tsx` rebuilds a card, is not seen and stays with
+review. Measured on September's `main`, 24 commits added such an
 import. Folding it into `check-frontend-layers.mjs` was rejected: that
 check's roots are the apps, and widening them would hold the site packages
 to layer rules written for apps.

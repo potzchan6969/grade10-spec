@@ -13,3 +13,4 @@ Written by the landing, in the landing's own commit.
 | 6 | test-cases | simpler | the blind suite reconciled against the scenarios; the simpler reader's edits applied | - | - |
 | 7 | tech-design | deterministic, simple, consistent, testable, simpler, verifier | the migration plan brought in line with the tasks' order, from the tasks round's order reading | - | - |
 | 8 | tasks | order, tests-first, end-to-end, simpler, verifier | ids only where a test cites them; the app's setup in one task after its block check; fix-bug linked in both repositories | - | - |
+| 9 | tech-design | simpler, verifier | Group 1's reading: pin only the git settings the engine parses, and name OrderDetailsPage.tsx, which the block check can see, in place of ListingCatalogueCard.tsx, which it cannot | - | - |
